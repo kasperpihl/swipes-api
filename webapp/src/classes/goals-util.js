@@ -105,7 +105,11 @@ export default class GoalsUtil {
 
 
   getCurrentAssignees() {
-    const step = this.getCurrentStep();
+    const i = this.getCurrentStepIndex();
+    return this.getAssigneesForStepIndex(i);
+  }
+  getAssigneesForStepIndex(i) {
+    const step = this.getStepByIndex(i);
     if (!step) {
       return false;
     }

@@ -230,6 +230,7 @@ export const notify = (gId, handoff) => (d, getState) => {
   const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
   return d(a.api.request('goals.notify', {
     goal_id: gId,
+    type: handoff.get('target').substr(1),
     flags: handoff.get('flags'),
     message: handoff.get('message'),
     current_step_id: currentStepId,

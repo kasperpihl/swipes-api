@@ -14,7 +14,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import InputMenu from 'context-menus/input-menu/InputMenu';
 import HOCHistory from './HOCHistory';
-import GoalSide from '../goal-step/GoalSide';
+import GoalSide from './GoalSide';
 import './styles/goal-overview.scss';
 /* global msgGen */
 
@@ -27,7 +27,7 @@ class HOCGoalOverview extends PureComponent {
   }
   constructor(props, context) {
     super(props, context);
-    bindAll(this, ['onHandoff', 'onContext', 'onFeedback']);
+    bindAll(this, ['onHandoff', 'onContext']);
     this.state = {
       loadingSteps: fromJS({}),
     };
@@ -134,21 +134,30 @@ class HOCGoalOverview extends PureComponent {
       alignX: 'right',
     };
     const all = helper.getAllInvolvedAssignees().filter(uId => uId !== me.get('id'));
-    const inStep = helper.getCurrentAssignees().filter(uId => uId !== me.get('id'));
-
+    const inStep = helper.getCurrentAssignees()
+                          .filter(uId => uId !== me.get('id'));
+    const prevStep = helper.getAssigneesForStepIndex(helper.getNumberOfCompletedSteps() - 1)
+                          .filter(uId => uId !== me.get('id'));
     const items = [];
     if (all.size) {
       items.push({
-        title: 'Everyone in goal (not you)',
+        title: 'Everyone in goal',
         assignees: all,
-        subtitle: msgGen.getUserArrayString(all, { number: 3 }),
+        subtitle: msgGen.getUserArrayString(all, { number: 4 }),
+      });
+    }
+    if (prevStep.size) {
+      items.push({
+        title: 'Previous assignees',
+        assignees: prevStep,
+        subtitle: msgGen.getUserArrayString(prevStep, { number: 4 }),
       });
     }
     if (inStep.size) {
       items.push({
-        title: 'Current Assignees (not you)',
+        title: 'Current assignees',
         assignees: inStep,
-        subtitle: msgGen.getUserArrayString(inStep, { number: 3 }),
+        subtitle: msgGen.getUserArrayString(inStep, { number: 4 }),
       });
     }
     items.push({ title: 'Yourself', assignees: [me.get('id')] });

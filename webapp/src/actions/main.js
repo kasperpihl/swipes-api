@@ -25,11 +25,6 @@ export const setSlackUrl = url => ({ type: types.SET_SLACK_URL, payload: { url }
 export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 
 // ======================================================
-// Modal
-// ======================================================
-export const modal = (props, callback) => ({ type: types.MODAL, payload: { props, callback } });
-
-// ======================================================
 // Context Menu
 // ======================================================
 export const contextMenu = payload => (dp, getState) => {

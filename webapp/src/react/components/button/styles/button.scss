@@ -46,7 +46,7 @@ $borderColor: $deepBlue-10;
 
   &__text {
     @include font(12px, $mainColor, 15px, bold);
-    padding: 0 $btnSize;
+    padding: 0 24px;
     pointer-events: none;
     transition: all .15s ease, opacity .15s .3s ease, margin .5s ease, border-color .15s 0s;
 

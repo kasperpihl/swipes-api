@@ -36,33 +36,29 @@ class HOCAttachments extends PureComponent {
   onFlagClick(id) {
     this.callDelegate('onFlag', id);
   }
-  onDeleteClick(id) {
+  onDeleteClick(id, e) {
     const {
       goalId,
       removeFromCollection,
-      loadModal,
+      confirm,
     } = this.props;
 
-    loadModal(
-      {
-        title: 'Remove Attachment?',
-        data: {
-          message: 'Are you sure you want to remove this attachment?',
-          buttons: ['Yes', 'No'],
-        },
-        type: 'warning',
-      },
-      (res) => {
-        if (res && res.button === 0) {
-          if (goalId) {
-            removeFromCollection(goalId, id).then(() => {
-              window.analytics.sendEvent('Removed attachment');
-            });
-          }
-          this.callDelegate('onRemoveAttachment', id);
+    confirm({
+      boundingRect: e.target.getBoundingClientRect(),
+      alignY: 'center',
+      alignX: 'center',
+      title: 'Remove Attachment?',
+      message: 'Are you sure you want to remove this attachment?',
+    }, (res) => {
+      if (res === 1) {
+        if (goalId) {
+          removeFromCollection(goalId, id).then(() => {
+            window.analytics.sendEvent('Removed attachment');
+          });
         }
-      },
-    );
+        this.callDelegate('onRemoveAttachment', id);
+      }
+    });
   }
   onAdd(which, e) {
     const {
@@ -227,7 +223,7 @@ HOCAttachments.propTypes = {
   goalId: string,
   openFind: func,
   openSecondary: func,
-  loadModal: func,
+  confirm: func,
   previewLink: func,
   removeFromCollection: func,
   updateToasty: func,
@@ -246,7 +242,7 @@ export default connect(mapStateToProps, {
   addToasty: actions.toasty.add,
   addToCollection: actions.goals.addToCollection,
   addURL: actions.links.addURL,
-  loadModal: actions.main.modal,
+  confirm: actions.menus.confirm,
   openFind: actions.links.openFind,
   previewLink: actions.links.preview,
   removeFromCollection: actions.goals.removeFromCollection,
