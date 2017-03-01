@@ -99,7 +99,7 @@ HOCHeaderTitle.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    history: state.getIn(['navigation', ownProps.target]),
+    history: state.getIn(['navigation', ownProps.target, 'stack']),
   };
 }
 

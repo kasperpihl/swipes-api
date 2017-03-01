@@ -63,7 +63,7 @@ class HOCFind extends Component {
   onConnectService() {
     const { openSecondary } = this.props;
     openSecondary({
-      component: 'Services', title: 'Services',
+      id: 'Services', title: 'Services',
     });
   }
   navbarLoadedInput(input) {

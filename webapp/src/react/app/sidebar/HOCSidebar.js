@@ -13,12 +13,12 @@ class HOCSidebar extends PureComponent {
     super(props);
     this.state = {
       navItems: [
-        { id: 'goals', svg: 'Goals' },
-        // { id: 'milestones', svg: 'Milestones' },
-        { id: 'dashboard', svg: 'Notification' },
-        { id: 'find', svg: 'Find' },
-        { id: 'slack', svg: 'Hashtag' },
-        // { id: 'store', svg: 'Store' },
+        { id: 'GoalList', svg: 'Goals' },
+        // { id: 'MilestoneList', svg: 'Milestones' },
+        { id: 'Dashboard', svg: 'Notification' },
+        { id: 'Find', svg: 'Find' },
+        { id: 'Slack', svg: 'Hashtag' },
+        // { id: 'Store', svg: 'Store' },
       ],
       activeItem: 0,
     };
@@ -45,7 +45,20 @@ class HOCSidebar extends PureComponent {
     if (target === 'secondary' && id === 'slack') {
       return;
     }
-    navSet(target, id);
+    navSet(target, {
+      id,
+      title: id,
+    });
+  }
+  getTitleForId(id) {
+    switch (navId) {
+      case 'MilestoneList':
+        return 'Milestones (In Progress)';
+      case 'GoalList':
+        return 'Goals';
+      default:
+        return id;
+    }
   }
   renderItem(item) {
     const { navId, counters } = this.props;
@@ -64,7 +77,7 @@ class HOCSidebar extends PureComponent {
 
     let image = <Icon svg={item.svg} className="sidebar__icon" />;
 
-    if (item.id === 'profile') {
+    if (item.id === 'Profile') {
       image = <HOCAssigning assignees={[item.personId]} rounded size={44} />;
     }
 
@@ -111,7 +124,7 @@ class HOCSidebar extends PureComponent {
       return undefined;
     }
 
-    return this.renderItem({ id: 'profile', personId: me.get('id') });
+    return this.renderItem({ id: 'Profile', personId: me.get('id') });
   }
   renderStore() {
     // For later
@@ -136,7 +149,7 @@ class HOCSidebar extends PureComponent {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
-    navId: state.getIn(['navigation', 'id']),
+    navId: state.getIn(['navigation', 'primary', 'id']),
     counters: state.getIn(['navigation', 'counters']),
   };
 }

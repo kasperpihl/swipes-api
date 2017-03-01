@@ -2,9 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import * as actions from 'actions';
-import BrowserNavBar from './BrowserNavBar';
 import SWView from 'SWView';
+import BrowserNavBar from './BrowserNavBar';
 import './styles/browser';
 
 class HOCBrowser extends Component {
@@ -32,7 +31,7 @@ class HOCBrowser extends Component {
     webview.focus();
     const { onLoad } = this.props;
     if (onLoad) {
-      onLoad(webview, this.close.bind(this));
+      onLoad(webview);
     }
     webview.addEventListener('dom-ready', () => {
       // webview.openDevTools();
@@ -56,6 +55,18 @@ class HOCBrowser extends Component {
   componentWillUnmount() {
     this._unmounted = true;
   }
+  getWebview() {
+    return this.refs.container.childNodes[0];
+  }
+  getWebviewHtml() {
+    const { url, me } = this.props;
+    let html = `<webview src="${url}" `;
+    html += 'style="height: 100%;" ';
+    html += `partition="persist:browser${me.get('id')}"`;
+    html += '></webview>';
+
+    return html;
+  }
   updateUrl(url) {
     const updateObj = {
       currentUrl: url,
@@ -65,14 +76,9 @@ class HOCBrowser extends Component {
     updateObj.forwardEnabled = webview.canGoForward();
     this.setState(updateObj);
   }
-  getWebview() {
-    return this.refs.container.childNodes[0];
-  }
   navbarAction(action) {
     const webview = this.getWebview();
     switch (action) {
-      case 'close':
-        return this.close();
       case 'browser':
         return window.open(this.state.currentUrl);
       case 'back':
@@ -85,19 +91,7 @@ class HOCBrowser extends Component {
         return null;
     }
   }
-  close() {
-    const { popSecondary } = this.props;
-    popSecondary();
-  }
-  getWebviewHtml() {
-    const { url, me } = this.props;
-    let html = `<webview src="${url}" `;
-    html += 'style="height: 100%;" ';
-    html += `partition="persist:browser${me.get('id')}"`;
-    html += '></webview>';
 
-    return html;
-  }
   render() {
     const wHtml = this.getWebviewHtml();
     const {
@@ -128,7 +122,6 @@ class HOCBrowser extends Component {
 const { string, func } = PropTypes;
 HOCBrowser.propTypes = {
   url: string,
-  popSecondary: func,
   onLoad: func,
   me: map,
 };
@@ -140,5 +133,4 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  popSecondary: actions.navigation.popSecondary,
 })(HOCBrowser);

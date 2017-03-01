@@ -81,7 +81,7 @@ export const addURL = (options, callback) => (d) => {
 // Open find (and then add)
 // ======================================================
 export const openFind = (from, callback) => d => d(a.navigation.openSecondary(from, {
-  component: 'Find',
+  id: 'Find',
   placeholder: 'Search across Dropbox, Asana, Slack...',
   title: 'Find',
   props: {
@@ -94,7 +94,7 @@ export const openFind = (from, callback) => d => d(a.navigation.openSecondary(fr
 
 export const openPreview = (from, props) => (d) => {
   d(a.navigation.openSecondary(from, {
-    component: 'Preview',
+    id: 'Preview',
     title: 'Preview',
     props,
   }));
@@ -106,7 +106,7 @@ export const openPreview = (from, props) => (d) => {
 export const preview = (from, data) => (d) => {
   if (data.get('name') === 'swipes' && data.get('type') === 'note') {
     d(a.navigation.openSecondary(from, {
-      component: 'SideNote',
+      id: 'SideNote',
       title: 'Note',
       props: {
         id: data.get('id'),

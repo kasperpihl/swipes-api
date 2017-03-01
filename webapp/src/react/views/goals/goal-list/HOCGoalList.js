@@ -3,7 +3,7 @@ import * as a from 'actions';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate, bindAll } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
@@ -70,7 +70,7 @@ class HOCGoalList extends PureComponent {
     this.state.filteredGoals = this.filterGoals(filter);
     this.state.filterLabel = this.updateFilterLabel(filter, this.state.filteredGoals);
 
-    this.onAddGoal = this.onAddGoal.bind(this);
+    bindAll(this, ['onAddGoal', 'onScroll']);
   }
 
   componentDidMount() {
@@ -93,7 +93,7 @@ class HOCGoalList extends PureComponent {
         overrideAssignees = newAssignees;
       } else if (overrideAssignees) {
         navPush({
-          component: 'GoalHandoff',
+          id: 'GoalHandoff',
           title,
           props: {
             title,
@@ -105,27 +105,24 @@ class HOCGoalList extends PureComponent {
       }
     });
   }
-  onClickGoal(goalId, scrollTop) {
+  onScroll(e) {
+    this._scrollTop = e.target.scrollTop;
+  }
+  onClickGoal(goalId) {
     const {
       navPush,
       goals,
     } = this.props;
-    const {
-      tabIndex,
-    } = this.state;
-    const savedState = {
-      tabIndex,
-      scrollTop,
-    }; // state if this gets reopened
+
     const goal = goals.get(goalId);
+    this.saveState();
     navPush({
-      component: 'GoalOverview',
+      id: 'GoalOverview',
       title: goal.get('title'),
       props: {
         goalId,
       },
-    },
-    savedState);
+    });
   }
   onEditFilter() {
     this.setState({ showFilter: true });
@@ -173,7 +170,7 @@ class HOCGoalList extends PureComponent {
       tabIndex,
     };
     navPush({
-      component: 'AddGoal',
+      id: 'AddGoal',
       title: 'Add Goal',
       placeholder: 'Goal title',
     },
@@ -184,6 +181,15 @@ class HOCGoalList extends PureComponent {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
     };
+  }
+  saveState() {
+    const { saveState } = this.props;
+    const { tabIndex } = this.state;
+    const savedState = {
+      tabIndex,
+      scrollTop: this._scrollTop,
+    }; // state if this gets reopened
+    saveState(savedState);
   }
   updateFilter(mergeObj) {
     const { saveCache } = this.props;
@@ -297,9 +303,14 @@ class HOCGoalList extends PureComponent {
       filterLabel,
       filteredGoals,
     } = this.state;
+    const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
 
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView
+        header={this.renderHeader()}
+        onScroll={this.onScroll}
+        initialScroll={initialScroll}
+      >
         <GoalList
           me={me}
           tabIndex={tabIndex}

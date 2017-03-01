@@ -27,8 +27,7 @@ class HOCLastUpdate extends PureComponent {
   }
   clickedAssign() {
     const { handoff } = this.props;
-    const { openSlackIn, navSet } = this.props;
-    navSet('primary', 'slack');
+    const { openSlackIn } = this.props;
     openSlackIn(this.slackUserIdForUser(handoff.get('done_by')));
   }
   renderMessage(handoff) {
@@ -87,7 +86,6 @@ const { func } = PropTypes;
 HOCLastUpdate.propTypes = {
   handoff: map.isRequired,
   openSlackIn: func,
-  navSet: func,
 };
 
 function mapStateToProps() {
@@ -96,5 +94,4 @@ function mapStateToProps() {
 
 export default connect(mapStateToProps, {
   openSlackIn: a.main.openSlackIn,
-  navSet: a.navigation.set,
 })(HOCLastUpdate);

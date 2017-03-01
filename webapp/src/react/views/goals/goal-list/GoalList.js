@@ -23,15 +23,6 @@ class GoalList extends Component {
     this.onAssignClick = this.callDelegate.bind(null, 'onAssignClick');
     bindAll(this, ['clickedListItem', 'onFilterHeight']);
   }
-  componentDidMount() {
-    const { savedState } = this.props;
-    if (savedState) {
-      const scrollTop = savedState.get('scrollTop');
-      if (scrollTop > 0) {
-        this.refs.scroller.scrollTop = scrollTop;
-      }
-    }
-  }
   onFilterHeight(dim) {
     this.setState({ filterHeight: dim.height });
   }
@@ -40,7 +31,7 @@ class GoalList extends Component {
     return new GoalsUtil(goal, me.get('id'));
   }
   clickedListItem(id) {
-    this.callDelegate('onClickGoal', id, this.refs.scroller.scrollTop);
+    this.callDelegate('onClickGoal', id);
   }
 
   renderTabbar() {
@@ -114,7 +105,7 @@ class GoalList extends Component {
       className += ' goals-list--show-filters';
     }
     return (
-      <div className={className} style={style} ref="scroller" key={tabIndex}>
+      <div className={className} style={style} key={tabIndex}>
         {this.renderFilter()}
         {this.renderList()}
         {this.renderFilterFooter()}
@@ -131,7 +122,6 @@ GoalList.propTypes = {
   showFilter: bool,
   filterProp: list,
   filterLabel: string,
-  savedState: map,
   tabIndex: number,
   me: map.isRequired,
   delegate: obj,

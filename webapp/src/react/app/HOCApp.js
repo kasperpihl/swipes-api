@@ -24,8 +24,11 @@ class HOCApp extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
-    const { navInit } = this.props;
-    navInit();
+    const { navSet } = this.props;
+    navSet('primary', {
+      id: 'GoalList',
+      title: 'Goals',
+    });
     this.updateMaximizeClass(this.props.isMaximized);
     this.updateFullscreenClass(this.props.isFullscreen);
   }
@@ -94,8 +97,8 @@ class HOCApp extends Component {
 const { func, bool } = PropTypes;
 
 HOCApp.propTypes = {
-  navInit: func,
   hasLoaded: bool,
+  navSet: func,
   isFullscreen: bool,
   isMaximized: bool,
 };
@@ -109,6 +112,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHOCApp = connect(mapStateToProps, {
-  navInit: a.navigation.init,
+  navSet: a.navigation.set,
 })(HOCApp);
 export default ConnectedHOCApp;

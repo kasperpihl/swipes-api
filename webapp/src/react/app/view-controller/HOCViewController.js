@@ -26,6 +26,7 @@ class HOCViewController extends PureComponent {
     this.onPopCached = setupCachedCallback(props.pop, this);
     this.onPushCached = setupCachedCallback(props.push, this);
     this.onOpenSecondary = setupCachedCallback(props.openSecondary, this);
+    this.onSaveState = setupCachedCallback(props.saveState, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
     this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
     this.onClose = this.onClose.bind(this);
@@ -133,13 +134,13 @@ class HOCViewController extends PureComponent {
     const { width, onTop, fullscreen } = this.state;
 
     // Primary view
-    const pView = navigation.get('primary').last();
-    const PView = views[pView.get('component')];
+    const pView = navigation.getIn(['primary', 'stack']).last();
+    const PView = views[pView.get('id')];
     const pMinMax = this.getMinMaxForView(PView);
 
     // Secondary view
-    const sView = navigation.get('secondary').last();
-    const SView = sView ? views[sView.get('component')] : undefined;
+    const sView = navigation.getIn(['secondary', 'stack']).last();
+    const SView = sView ? views[sView.get('id')] : undefined;
     const sMinMax = sView ? this.getMinMaxForView(SView) : 0;
 
     const sizes = this.determineSizesForWidths(pMinMax, sMinMax);
@@ -179,7 +180,7 @@ class HOCViewController extends PureComponent {
       }
 
       // If currentView is slack, ignore here and set global settings to pick up
-      if (currentView && currentView.get('component') === 'Slack') {
+      if (currentView && currentView.get('id') === 'Slack') {
         this._slackOptions = {
           target,
           style,
@@ -194,7 +195,7 @@ class HOCViewController extends PureComponent {
     const { target, style, xClass } = this._slackOptions;
     const classes = xClass || ['view-container--hidden'];
     return this.renderContent(Map({
-      component: 'Slack',
+      id: 'Slack',
       title: 'Slack',
       props: Map({
         hidden: !target,
@@ -242,17 +243,16 @@ class HOCViewController extends PureComponent {
     );
   }
   renderContent(currentView, target, style, xClasses, slack) {
-    const View = views[currentView.get('component')];
+    const { navigation } = this.props;
+    const View = views[currentView.get('id')];
     if (!View) {
-      return `View (${currentView.get('component')}) not found!`;
+      return `View (${currentView.get('id')}) not found!`;
     }
     let props = {};
     if (currentView.get('props')) {
       props = currentView.get('props').toObject();
     }
-    if (currentView.get('savedState')) {
-      props.savedState = currentView.get('savedState');
-    }
+
     const className = ['view-container'].concat(xClasses).join(' ');
 
     let canFullscreen = false;
@@ -265,7 +265,7 @@ class HOCViewController extends PureComponent {
       onClick = this.onUnderlayCached(target);
     }
     return (
-      <ContextWrapper target={target} key={slack || target}>
+      <ContextWrapper target={target} key={slack || navigation.getIn([target, 'id'])}>
         <section
           className={className}
           style={style}
@@ -275,10 +275,12 @@ class HOCViewController extends PureComponent {
           <View
             navPop={this.onPopCached(target)}
             navPush={this.onPushCached(target)}
+            saveState={this.onSaveState(target)}
             openSecondary={this.onOpenSecondary(target)}
+            popSecondary={this.onPopCached('secondary')}
             delegate={this}
             target={target}
-            key={currentView.get('component')}
+            key={navigation.getIn([target, 'id'])}
             {...props}
           />
         </section>
@@ -314,6 +316,7 @@ const ConnectedHOCViewController = connect(mapStateToProps, {
   pop: actions.navigation.pop,
   push: actions.navigation.push,
   openSecondary: actions.navigation.openSecondary,
+  saveState: actions.navigation.saveState,
   navSet: actions.navigation.set,
 })(HOCViewController);
 export default ConnectedHOCViewController;

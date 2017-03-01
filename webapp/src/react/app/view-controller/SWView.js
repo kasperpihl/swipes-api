@@ -8,6 +8,12 @@ class SWView extends Component {
     this.state = {
     };
   }
+  componentDidMount() {
+    const { initialScroll } = this.props;
+    if (initialScroll > 0) {
+      this.refs.scroller.scrollTop = initialScroll;
+    }
+  }
   renderHeader() {
     const { header, maxWidth } = this.props;
 
@@ -43,7 +49,7 @@ class SWView extends Component {
     );
   }
   render() {
-    const { children, maxWidth, disableScroll, noframe } = this.props;
+    const { children, maxWidth, disableScroll, noframe, onScroll } = this.props;
     const styles = {};
     let className = 'sw-view';
 
@@ -62,7 +68,7 @@ class SWView extends Component {
     return (
       <div className={className}>
         {this.renderHeader()}
-        <div className="sw-view__scroll">
+        <div className="sw-view__scroll" ref="scroller" onScroll={onScroll}>
           <div className="sw-view__container">
             <div className="sw-view__content" style={styles}>
               {children}
@@ -77,9 +83,10 @@ class SWView extends Component {
 
 export default SWView;
 
-const { element, number, bool, arrayOf, oneOfType } = PropTypes;
+const { element, number, bool, arrayOf, oneOfType, func } = PropTypes;
 
 SWView.propTypes = {
+  onScroll: func,
   header: element,
   footer: element,
   children: oneOfType([element, arrayOf(element)]),

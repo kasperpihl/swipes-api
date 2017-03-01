@@ -99,7 +99,7 @@ class HOCAttachments extends PureComponent {
           }
           if (type === 'note' && obj.id) {
             openSecondary(this.context.target, {
-              component: 'SideNote',
+              id: 'SideNote',
               title: 'Note',
               props: {
                 id: obj.id,

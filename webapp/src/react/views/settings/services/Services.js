@@ -36,24 +36,24 @@ class Services extends Component {
   }
   clickedConnect(data) {
     this._handled = false;
-    const { browser, target } = this.props;
+    const { browser, target, popSecondary } = this.props;
     const serviceName = data.id;
     const url = `${window.location.origin}/v1/services.authorize?service_name=${serviceName}`;
 
-    browser(target, url, (webview, close) => {
+    browser(target, url, (webview) => {
       // .'did-get-redirect-request'
       webview.addEventListener('did-get-redirect-request', (e) => {
         if (authSuccess.find(u => e.newURL.startsWith(u))) {
           const params = queryStringToObject(e.newURL.split('?')[1]);
           this.handleOAuthSuccess(serviceName, params);
-          close();
+          popSecondary();
         }
       });
       webview.addEventListener('did-navigate', (e) => {
         if (authSuccess.find(u => e.url.startsWith(u))) {
           const params = queryStringToObject(e.url.split('?')[1]);
           this.handleOAuthSuccess(serviceName, params);
-          close();
+          popSecondary();
         }
       });
     });
@@ -148,6 +148,8 @@ const { func, string } = PropTypes;
 
 Services.propTypes = {
   disconnectService: func,
+  popSecondary: func,
+  target: string,
   myServices: list,
   confirm: func,
   browser: func,

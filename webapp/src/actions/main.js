@@ -65,7 +65,7 @@ export const updateRecentAssignees = payload => ({ type: types.UPDATE_RECENT_ASS
 // Browser
 // ======================================================
 export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondary(from, {
-  component: 'Browser',
+  id: 'Browser',
   props: {
     url,
     onLoad,

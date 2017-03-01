@@ -110,7 +110,7 @@ class HOCGoalOverview extends PureComponent {
   onHandoff(_target, title, assignees) {
     const { openSecondary, goal } = this.props;
     openSecondary({
-      component: 'GoalHandoff',
+      id: 'GoalHandoff',
       title,
       props: {
         _target,

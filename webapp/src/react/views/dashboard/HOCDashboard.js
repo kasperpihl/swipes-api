@@ -23,6 +23,7 @@ class HOCDashboard extends Component {
     // now use events as onClick: this.onClickCached(i)
     this.callDelegate = setupDelegate(props.delegate);
     this.onMarkCached = setupCachedCallback(this.onMark, this);
+    this.onScroll = this.onScroll.bind(this);
   }
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
@@ -47,6 +48,9 @@ class HOCDashboard extends Component {
       }
     }
   }
+  onScroll(e) {
+    this._scrollTop = e.target.scrollTop;
+  }
   onClickAttachment(nI, i) {
     const n = this.props.notifications.get(nI);
     const { goals, preview, target } = this.props;
@@ -63,8 +67,9 @@ class HOCDashboard extends Component {
       this._dontMark = true;
 
       if (goal) {
+        this.saveState();
         navPush({
-          component: 'GoalOverview',
+          id: 'GoalOverview',
           title: goal.get('title'),
           props: {
             goalId: goal.get('id'),
@@ -81,6 +86,13 @@ class HOCDashboard extends Component {
     }
     const at = flags.map(fId => (goal.getIn(['attachments', fId, 'title']))).filter(v => !!v);
     return fromJS(at);
+  }
+  saveState() {
+    const { saveState } = this.props;
+    const savedState = {
+      scrollTop: this._scrollTop,
+    }; // state if this gets reopened
+    saveState(savedState);
   }
   titleForGoalId(goalId) {
     const { goals } = this.props;
@@ -165,8 +177,16 @@ class HOCDashboard extends Component {
     if (notifications) {
       notifications = notifications.map(n => this.messageForNotification(n));
     }
+
+    const { savedState } = this.props;
+    const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
+
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView
+        header={this.renderHeader()}
+        onScroll={this.onScroll}
+        initialScroll={initialScroll}
+      >
         <Dashboard delegate={this} notifications={notifications} />
       </SWView>
     );

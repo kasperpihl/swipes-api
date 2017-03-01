@@ -2,10 +2,14 @@ import { fromJS } from 'immutable';
 import * as types from 'constants';
 
 const initialState = fromJS({
-  id: null,
-  primary: [],
-  secondary: [],
-  history: {},
+  primary: {
+    id: null,
+    stack: [],
+  },
+  secondary: {
+    id: null,
+    stack: [],
+  },
   counters: {},
 });
 
@@ -14,36 +18,27 @@ export default function history(state = initialState, action) {
   switch (type) {
     case types.NAVIGATION_SET: {
       return state.update((s) => {
-        if (payload.target === 'primary') {
-          s = s.setIn(['history', s.getIn(['id'])], s.getIn(['primary']));
-          s = s.set('id', payload.id);
-        }
-        return s.set(payload.target, fromJS(payload.stack || []));
+        s = s.setIn([payload.target, 'id'], payload.id);
+        return s.setIn([payload.target, 'stack'], fromJS(payload.stack));
       });
     }
     case types.NAVIGATION_SAVE_STATE: {
       return state.updateIn([
         payload.target,
-        (state.get(payload.target).size - 1),
-      ], s => s.set('savedState', payload.savedState));
+        'stack',
+        (state.getIn([payload.target, 'stack']).size - 1),
+      ], s => s.setIn(['props', 'savedState'], fromJS(payload.savedState)));
     }
     case types.NAVIGATION_PUSH: {
-      return state.updateIn([payload.target], s => s.push(fromJS(payload.obj)));
+      return state.updateIn([payload.target, 'stack'], s => s.push(fromJS(payload.obj)));
     }
     case types.NAVIGATION_POP: {
-      return state.updateIn([payload.target], (s) => {
+      return state.updateIn([payload.target, 'stack'], (s) => {
         if (payload && typeof payload.index === 'number') {
           return s.slice(0, payload.index + 1);
         }
         return s.butLast();
       });
-    }
-    case types.NAVIGATION_POP_SECONDARY: {
-      const stack = state.get('secondary');
-      if (stack.size > 1) {
-        return state.updateIn(['secondary'], s => (s.butLast()));
-      }
-      return state.set('secondary', fromJS([]));
     }
     case types.NAVIGATION_SET_COUNTER: {
       const { id, counter } = payload;

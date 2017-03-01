@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import Icon from 'Icon';
 import Button from 'Button';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { navigation, main, menus } from 'actions';
+import { main, menus } from 'actions';
 import { bindAll } from 'classes/utils';
 import './profile.scss';
 
@@ -21,7 +20,9 @@ class HOCProfile extends Component {
     confirm(Object.assign({}, options, {
       title: 'Log out',
       message: 'Do you want to log out?',
-    }), i => i === 1 ? logout() : null);
+    }), (i) => {
+      if (i === 1) logout();
+    });
   }
   getOptionsForE(e) {
     return {
@@ -32,7 +33,7 @@ class HOCProfile extends Component {
   clickedServices() {
     const { navPush } = this.props;
 
-    navPush({ component: 'Services', title: 'Services' });
+    navPush({ id: 'Services', title: 'Services' });
   }
   renderProfileImage() {
     const { me } = this.props;
