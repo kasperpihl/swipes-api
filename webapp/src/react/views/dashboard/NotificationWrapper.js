@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { mapContains, listOf } from 'react-immutable-proptypes';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 
@@ -22,8 +23,13 @@ class NotificationItem extends Component {
     }
 
     return (
-      <div className="notification__icon">
-        <Icon svg={n.get('icon')} className="notification__svg" />
+      <div className="notification__image">
+        <div className="notification__assigning">
+          <HOCAssigning assignees={[n.get('userId')]} rounded />
+        </div>
+        <div className="notification__icon">
+          <Icon svg={n.get('icon')} className="notification__svg" />
+        </div>
       </div>
     );
   }
@@ -41,7 +47,7 @@ class NotificationItem extends Component {
   renderAttachments() {
     const { notification: n } = this.props;
     const attachments = n.get('attachments');
-
+    console.log('this.props', n.get('userId'));
     if (!attachments) {
       return undefined;
     }
@@ -82,11 +88,15 @@ class NotificationItem extends Component {
     return <div className="notification__timeago">{n.get('timeago')}</div>;
   }
   render() {
-    const { notification: n } = this.props;
+    const { notification: n, delegate } = this.props;
     let className = 'notification';
 
     if (n.get('seen')) {
       className += ' notification--seen';
+    }
+
+    if (typeof delegate.onClickTitle === 'function') {
+      className += ' notification--clickable';
     }
 
     return (

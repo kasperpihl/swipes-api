@@ -50,11 +50,26 @@
 // Icon
 .notification {
 
+  &__image {
+    @include size(30px);
+  }
+
+  &__assigning {
+    @include size(30px);
+    @include centerAbsolute();
+    opacity: 0;
+    pointer-events: none;
+    transition: .2s ease;
+  }
+
   &__icon {
     @include size(30px);
+    @include centerAbsolute();
     @include flexContainer('row', center, center);
     background-color: $blue-100;
     border-radius: 50%;
+    overflow: hidden;
+    transition: .2s ease;
   }
 
   &__svg {
@@ -157,19 +172,36 @@
 .notification {
   $b: &;
 
-  &__click-area {
-    &:hover {
-      #{$b}__title {
-        @include font($c: $blue-100);
-      }
+  &:hover {
+    #{$b}__svg {
+      transform: translateY(-30px);
+      transition: .4s ease;
+    }
 
-      & + #{$b}__attachments {
-        .notif-attachment__title {
-          @include font($c: $deepBlue-50);
-        }
+    #{$b}__icon {
+      pointer-events: none;
+      opacity: 0;
+      transition: .4s .2s ease;
+    }
 
-        .notif-attachment__svg {
-          @include svg-color($deepBlue-50);
+    #{$b}__assigning {
+      pointer-events: all;
+      opacity: 1;
+      transition: .2s ease;
+    }
+  }
+}
+
+.notification {
+  $b: &;
+
+  &--clickable {
+
+    #{$b}__top {
+
+      &:hover {
+        #{$b}__title {
+          @include font($c: $blue-100);
         }
       }
     }
