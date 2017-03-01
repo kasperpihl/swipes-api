@@ -1,5 +1,22 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
+import Confirmation from 'src/react/context-menus/confirmation/Confirmation';
 import * as a from './';
+
+export const confirm = (options, callback) => (d) => {
+  d(a.main.contextMenu({
+    options,
+    component: Confirmation,
+    props: {
+      title: options.title,
+      message: options.message,
+      actions: options.actions,
+      onClick: (i) => {
+        d(a.main.contextMenu(null));
+        callback(i);
+      },
+    },
+  }));
+};
 
 export const selectGoalType = (options, callback) => (d) => {
   const delegate = {

@@ -188,6 +188,7 @@ class HOCGoalOverview extends PureComponent {
       archive,
       contextMenu,
       saveWay,
+      confirm,
     } = this.props;
     const options = this.getOptionsForE(e);
     const delegate = {
@@ -196,8 +197,10 @@ class HOCGoalOverview extends PureComponent {
           const helper = this.getHelper();
           saveWay(options, helper.getObjectForWay());
         } else {
-          archive(goal.get('id'));
-          contextMenu(null);
+          confirm(Object.assign({}, options, {
+            title: 'Archive goal',
+            message: 'This will make this goal inactive for all participants.',
+          }), i => i === 1 ? archive(goal.get('id')) : null);
         }
       },
     };
@@ -231,6 +234,11 @@ class HOCGoalOverview extends PureComponent {
         },
       },
     });
+  }
+  archiveGoal(index) {
+    if (index === 1) {
+      console.log('Archive goal 2');
+    }
   }
   getOptionsForE(e) {
     return {
@@ -375,4 +383,5 @@ export default connect(mapStateToProps, {
   renameStep: a.goals.renameStep,
   reassignStep: a.goals.reassignStep,
   selectAssignees: a.goals.selectAssignees,
+  confirm: a.menus.confirm,
 })(HOCGoalOverview);

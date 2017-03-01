@@ -88,23 +88,7 @@ export const addStep = (goalId, title) => (d, getState) => {
   }));
 };
 
-export const archive = goalId => (d) => {
-  d(a.main.modal(
-    {
-      title: 'Archive Goal?',
-      data: {
-        message: 'Are you sure you want to archive this goal?',
-        buttons: ['Yes', 'No'],
-      },
-      type: 'warning',
-    },
-    (res) => {
-      if (res && res.button === 0) {
-        d(a.api.request('goals.archive', { goal_id: goalId }));
-      }
-    },
-  ));
-};
+export const archive = goalId => d => d(a.api.request('goals.archive', { goal_id: goalId }));
 
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {
   assignees = assignees || [];

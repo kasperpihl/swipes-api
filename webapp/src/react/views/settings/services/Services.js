@@ -59,20 +59,33 @@ class Services extends Component {
     });
   }
   checkForDropboxFolder() {
-    const { myServices } = this.props;
+    const { myServices, confirm } = this.props;
     const db = myServices.find(s => s.get('service_name') === 'dropbox');
+    const options = this.getOptionsForE();
 
     if (db && !localStorage.getItem('dropbox-folder') && !localStorage.getItem('dropbox-did-ask')) {
-      this.props.loadModal({ title: 'Find Dropbox folder', data: { message: 'This will enable you to open files on your local dropbox folder', buttons: ['No', 'Yes'] } }, (res) => {
-        if (res && res.button) {
+      confirm(Object.assign({}, options, {
+        title: 'Find Dropbox folder',
+        message: 'This will enable you to open files on your local dropbox folder.',
+      }), (i) => {
+        if (i === 1) {
           const folder = window.ipcListener.openDialog({ properties: ['openDirectory'] });
+
           if (folder) {
             localStorage.setItem('dropbox-folder', folder);
           }
         }
+
         localStorage.setItem('dropbox-did-ask', true);
       });
     }
+  }
+  getOptionsForE() {
+    return {
+      boundingRect: document.body.getBoundingClientRect(),
+      alignX: 'center',
+      alignY: 'center',
+    };
   }
   renderConnectedServices() {
     const { myServices: my, services } = this.props;
@@ -136,7 +149,7 @@ const { func, string } = PropTypes;
 Services.propTypes = {
   disconnectService: func,
   myServices: list,
-  loadModal: func,
+  confirm: func,
   browser: func,
   handleOAuthSuccess: func,
   services: map,
@@ -156,6 +169,6 @@ const ConnectedServices = connect(mapStateToProps, {
   browser: actions.main.browser,
   handleOAuthSuccess: actions.me.handleOAuthSuccess,
   disconnectService: actions.me.disconnectService,
-  loadModal: actions.main.modal,
+  confirm: actions.menus.confirm,
 })(Services);
 export default ConnectedServices;

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { setupCachedCallback } from 'classes/utils';
-import Button from './Button';
+import Button from 'Button';
 
 import './styles/confirmation.scss';
 
@@ -34,10 +34,10 @@ class Confirmation extends Component {
     if (!actions) {
       actions = [
         {
-          title: 'No',
+          text: 'No',
         },
         {
-          title: 'Yes',
+          text: 'Yes',
         },
       ];
     }
@@ -47,7 +47,7 @@ class Confirmation extends Component {
         ...a,
       };
 
-      const isLast = (actions.size - 1) === i;
+      const isLast = (actions.length - 1) === i;
 
       return <Button primary={isLast} {...props} key={i} onClick={this.onClickCached(i)} className="confirmation__button" />;
     });

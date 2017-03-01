@@ -4,7 +4,7 @@ import Button from 'Button';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { navigation, main } from 'actions';
+import { navigation, main, menus } from 'actions';
 import { bindAll } from 'classes/utils';
 import './profile.scss';
 
@@ -15,14 +15,20 @@ class HOCProfile extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['clickedServices', 'onLogout']);
   }
-  onLogout() {
-    const { loadModal } = this.props;
+  onLogout(e) {
+    const { confirm, logout } = this.props;
+    const options = this.getOptionsForE(e);
 
-    loadModal({ title: 'Log out', data: { message: 'Do you want to log out?', buttons: ['No', 'Yes'] } }, (res) => {
-      if (res && res.button) {
-        this.props.logout();
-      }
-    });
+    confirm(Object.assign({}, options, {
+      title: 'Log out',
+      message: 'Do you want to log out?',
+    }), i => i === 1 ? logout() : null);
+  }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'center',
+    };
   }
   clickedServices() {
     const { navPush } = this.props;
@@ -75,7 +81,7 @@ function mapStateToProps(state) {
 const { func } = PropTypes;
 
 HOCProfile.propTypes = {
-  loadModal: func,
+  confirm: func,
   logout: func,
   navPush: func,
   me: map,
@@ -84,6 +90,7 @@ HOCProfile.propTypes = {
 const ConnectedHOCProfile = connect(mapStateToProps, {
   loadModal: main.modal,
   logout: main.logout,
+  confirm: menus.confirm,
 })(HOCProfile);
 
 export default ConnectedHOCProfile;
