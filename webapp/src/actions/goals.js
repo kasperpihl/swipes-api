@@ -1,5 +1,4 @@
-import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
-import SelectStep from 'src/react/context-menus/select-step/SelectStep';
+import TabMenu from 'context-menus/tab-menu/TabMenu';
 import { List, Map } from 'immutable';
 import GoalsUtil from 'classes/goals-util';
 import { randomString } from 'classes/utils';
@@ -105,37 +104,6 @@ export const archive = goalId => (d) => {
       }
     },
   ));
-};
-
-export const selectStep = (options, goalId, nextStepId, callback) => (d, getState) => {
-  const goal = getState().getIn(['goals', goalId]);
-  const helper = new GoalsUtil(goal);
-
-  let steps = goal.get('steps');
-  const sortedSteps = goal.get('step_order').map(sId => steps.get(sId));
-  const currentStepId = goal.getIn(['status', 'current_step_id']);
-
-  steps = sortedSteps.map(step => (Map({
-    id: step.get('id'),
-    title: step.get('title'),
-    current: (step.get('id') === currentStepId),
-    next: (step.get('id') === nextStepId),
-  })));
-  const numberOfCompleted = helper.getNumberOfCompletedSteps();
-  const onClick = (id) => {
-    d(a.main.contextMenu(null));
-    callback(id);
-  };
-
-  d(a.main.contextMenu({
-    options,
-    component: SelectStep,
-    props: {
-      numberOfCompleted,
-      steps,
-      onClick,
-    },
-  }));
 };
 
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {

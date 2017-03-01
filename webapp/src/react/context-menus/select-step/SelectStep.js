@@ -1,79 +1,46 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { listOf, mapContains } from 'react-immutable-proptypes';
-import { setupCachedCallback } from 'classes/utils';
+import StepList from 'components/step-list/StepList';
 
 import './styles/select-step.scss';
 
 class SelectStep extends PureComponent {
   constructor(props) {
     super(props);
-    this.onClickCached = setupCachedCallback(props.onClick, this);
   }
   componentDidMount() {
   }
-  getNextStepNumber() {
-    const { steps } = this.props;
-    let number;
-
-    steps.forEach((s, i) => {
-      if (s.get('next')) {
-        number = i;
-      }
-    });
-
-    return number;
+  onClick(i) {
+    const { onClick } = this.props;
+    if (onClick) {
+      onClick(i);
+    }
+  }
+  onStepCheck(i) {
+    this.onClick(i);
+  }
+  onStepClick(i) {
+    this.onClick(i);
+  }
+  clickedAssign(i) {
+    this.onClick(i);
   }
   renderSteps() {
     const { numberOfCompleted, steps } = this.props;
-
-    const stepsHTML = steps.map((s, i) => {
-      let stepClass = 'step-item';
-      let tooltipLabel = '';
-
-      if (i < numberOfCompleted) {
-        stepClass += ' step-item--completed';
-        tooltipLabel = `Make iteration on step ${i + 1}`;
-      } else if (i === numberOfCompleted) {
-        stepClass += ' step-item--current';
-        tooltipLabel = 'Reassign current step';
-      } else {
-        stepClass += ' step-item--future';
-        const diff = i - numberOfCompleted;
-        tooltipLabel = `Move ${diff} step${diff > 1 ? 's' : ''} forward`;
-      }
-
-      if (s.get('next')) {
-        stepClass += ' step-item--active';
-      }
-
-      return (
-        <div
-          className={stepClass}
-          data-id={i + 1}
-          key={s.get('id')}
-          onClick={this.onClickCached(s.get('id'), s)}
-        >
-          {s.get('title')}
-
-          <div className="step-item__tooltip">{tooltipLabel}</div>
-        </div>
-      );
-    });
-
-    return stepsHTML;
+    return (
+      <StepList
+        delegate={this}
+        steps={steps}
+        completed={numberOfCompleted}
+        fullHover
+      />
+    );
   }
   render() {
-    let completeClass = 'step-item step-item--complete';
-
-    if (typeof this.getNextStepNumber() !== 'number') {
-      completeClass += ' step-item--active';
-    }
-
     return (
       <div className="step-selection-menu">
         <div className="step-selection-menu__list">
           {this.renderSteps()}
-          <div className={completeClass} onClick={this.onClickCached(null)}>Complete goal</div>
         </div>
       </div>
     );
