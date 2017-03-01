@@ -1,5 +1,6 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import Confirmation from 'src/react/context-menus/confirmation/Confirmation';
+import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
 import * as a from './';
 
 export const confirm = (options, callback) => (d) => {
@@ -13,6 +14,22 @@ export const confirm = (options, callback) => (d) => {
       onClick: (i) => {
         d(a.main.contextMenu(null));
         callback(i);
+      },
+    },
+  }));
+};
+
+export const input = (options, callback) => (d) => {
+  d(a.main.contextMenu({
+    options,
+    component: InputMenu,
+    props: {
+      ...options,
+      onResult: (title) => {
+        d(a.main.contextMenu(null));
+        if (callback) {
+          callback(title);
+        }
       },
     },
   }));

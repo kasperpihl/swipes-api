@@ -104,7 +104,7 @@ class HOCDashboard extends Component {
     let m = Map({
       timeago: timeAgo(n.get('ts'), true),
       seen: !!n.get('seen'),
-      userId: n.get('done_by'),
+      userId: data.get('done_by'),
     });
 
     const from = msgGen.getUserString(data.get('done_by'));

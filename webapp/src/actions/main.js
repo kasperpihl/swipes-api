@@ -3,8 +3,8 @@ import * as a from './';
 
 export const setStatus = (status, nextRetry) => ({
   type: types.SET_STATUS,
-  payload: { status, nextRetry,
-  } });
+  payload: { status, nextRetry },
+});
 export const setMaximized = toggle => ({ type: types.SET_MAXIMIZED, payload: { toggle } });
 export const setFullscreen = toggle => ({ type: types.SET_FULLSCREEN, payload: { toggle } });
 

@@ -12,7 +12,6 @@ import Button from 'Button';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
-import InputMenu from 'context-menus/input-menu/InputMenu';
 import HOCHistory from './HOCHistory';
 import GoalSide from './GoalSide';
 import './styles/goal-overview.scss';
@@ -49,7 +48,7 @@ class HOCGoalOverview extends PureComponent {
   }
 
   onStepClick(i, e) {
-    const { contextMenu, goal, removeStep, renameStep } = this.props;
+    const { inputMenu, contextMenu, goal, removeStep, renameStep } = this.props;
     const helper = this.getHelper();
 
     const step = helper.getStepByIndex(i);
@@ -70,20 +69,15 @@ class HOCGoalOverview extends PureComponent {
     const delegate = {
       onItemAction: (item) => {
         if (item.title === 'Rename') {
-          contextMenu({
-            options,
-            component: InputMenu,
-            props: {
-              text: step.get('title'),
-              buttonLabel: 'Rename',
-              onResult: (title) => {
-                contextMenu(null);
-                if (title !== step.get('title') && title.length) {
-                  this.setStepLoading(step.get('id'), 'Renaming...');
-                  renameStep(goal.get('id'), step.get('id'), title).then(this.clearCB(step.get('id')));
-                }
-              },
-            },
+          inputMenu({
+            ...options,
+            text: step.get('title'),
+            buttonLabel: 'Rename',
+          }, (title) => {
+            if (title !== step.get('title') && title.length) {
+              this.setStepLoading(step.get('id'), 'Renaming...');
+              renameStep(goal.get('id'), step.get('id'), title).then(this.clearCB(step.get('id')));
+            }
           });
         } else {
           contextMenu(null);
@@ -210,7 +204,9 @@ class HOCGoalOverview extends PureComponent {
           confirm(Object.assign({}, options, {
             title: 'Archive goal',
             message: 'This will make this goal inactive for all participants.',
-          }), i => i === 1 ? archive(goal.get('id')) : null);
+          }), (i) => {
+            if (i === 1) archive(goal.get('id'));
+          });
         }
       },
     };
@@ -227,28 +223,18 @@ class HOCGoalOverview extends PureComponent {
     });
   }
   onAddStep(e) {
-    const { addStep, contextMenu, goal } = this.props;
+    const { addStep, inputMenu, goal } = this.props;
     const options = this.getOptionsForE(e);
-    contextMenu({
-      options,
-      component: InputMenu,
-      props: {
-        placeholder: 'Title for the step',
-        buttonLabel: 'Add',
-        onResult: (title) => {
-          contextMenu(null);
-          if (title && title.length) {
-            this.setStepLoading('add', 'Adding...');
-            addStep(goal.get('id'), title).then(this.clearCB('add'));
-          }
-        },
-      },
+    inputMenu({
+      ...options,
+      placeholder: 'Title for the step',
+      buttonLabel: 'Add',
+    }, (title) => {
+      if (title && title.length) {
+        this.setStepLoading('add', 'Adding...');
+        addStep(goal.get('id'), title).then(this.clearCB('add'));
+      }
     });
-  }
-  archiveGoal(index) {
-    if (index === 1) {
-      console.log('Archive goal 2');
-    }
   }
   getOptionsForE(e) {
     return {
@@ -368,6 +354,7 @@ HOCGoalOverview.propTypes = {
   me: map,
   navPop: func,
   target: string,
+  inputMenu: func,
   archive: func,
   saveWay: func,
   selectAssignees: func,
@@ -395,4 +382,5 @@ export default connect(mapStateToProps, {
   reassignStep: a.goals.reassignStep,
   selectAssignees: a.goals.selectAssignees,
   confirm: a.menus.confirm,
+  inputMenu: a.menus.input,
 })(HOCGoalOverview);
