@@ -27,11 +27,12 @@ class HOCGoalOverview extends PureComponent {
   }
   constructor(props, context) {
     super(props, context);
-    bindAll(this, ['onHandoff', 'onNotify', 'onContext']);
+    bindAll(this, ['onHandoff', 'onContext', 'onFeedback']);
     this.state = {
       loadingSteps: fromJS({}),
     };
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
+    this.onNotify = setupCachedCallback(this.onNotify, this);
   }
   componentDidMount() {
     const { goal, navPop } = this.props;
@@ -125,7 +126,7 @@ class HOCGoalOverview extends PureComponent {
     });
   }
 
-  onNotify(e) {
+  onNotify(target, title, e) {
     const helper = this.getHelper();
     const { contextMenu, me, selectAssignees } = this.props;
     const options = {
@@ -161,11 +162,11 @@ class HOCGoalOverview extends PureComponent {
             if (newAssignees) {
               overrideAssignees = newAssignees;
             } else if (overrideAssignees && overrideAssignees.length) {
-              this.onHandoff('_notify', 'Notify', overrideAssignees);
+              this.onHandoff(target, title, overrideAssignees);
             }
           });
         } else {
-          this.onHandoff('_notify', 'Notify', item.assignees);
+          this.onHandoff(target, title, item.assignees);
         }
       },
     };
@@ -291,8 +292,12 @@ class HOCGoalOverview extends PureComponent {
       <div className="add-goal__header">
         <HOCHeaderTitle target={target}>
           <Button
+            text="Give Feedback"
+            onClick={this.onNotify('_feedback', 'Give Feedback')}
+          />
+          <Button
             text="Notify"
-            onClick={this.onNotify}
+            onClick={this.onNotify('_notify', 'Notify')}
           />
           <Button
             icon="ThreeDots"

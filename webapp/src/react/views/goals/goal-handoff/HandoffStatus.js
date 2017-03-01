@@ -28,10 +28,10 @@ class HandoffStatus extends Component {
           <b onClick={this.onChange('step')}>{`"${goal.get('title')}"`}</b>
         </span>
       );
-    } else if (toId === '_notify') {
+    } else if (toId === '_notify' || toId === '_feedback') {
       status = (
         <span>
-          {'Send notification to '}
+          {`${(toId === '_notify') ? 'Send notification' : 'Give feedback'} to `}
           <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true, number: 3 })}"`}</b>
         </span>
       );

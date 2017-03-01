@@ -61,7 +61,7 @@ class HOCGoalHandoff extends PureComponent {
       }
     });
   }
-  onNotify() {
+  onNotify(target) {
     const { goalNotify, goal, navPop } = this.props;
     const { handoff } = this.state;
     this.setState({ isSubmitting: true, errorLabel: null });
@@ -79,8 +79,8 @@ class HOCGoalHandoff extends PureComponent {
   }
   onSubmit() {
     const { handoff } = this.state;
-    if (handoff.get('target') === '_notify') {
-      this.onNotify();
+    if (['_feedback', '_notify'].indexOf(handoff.get('target')) !== -1) {
+      this.onNotify(handoff.get('target'));
     } else {
       this.onCompleteStep();
     }
@@ -141,16 +141,6 @@ class HOCGoalHandoff extends PureComponent {
           },
         },
       });
-      /* selectStep(options, goal.get('id'), handoff.get('target'), (newStepId) => {
-        if (newStepId !== handoff.get('target')) {
-          this.setState({
-            handoff: handoff.set('assignees', null).set('target', newStepId || '_complete'),
-          });
-          if (newStepId === helper.getCurrentStepId()) {
-            this.onSelectAssignees(options, helper.getCurrentStep().get('assignees'));
-          }
-        }
-      });*/
     } else {
       const step = helper.getStepById(handoff.get('target'));
       let newAssignees = handoff.get('assignees');
@@ -186,6 +176,8 @@ class HOCGoalHandoff extends PureComponent {
       label = 'Complete Goal';
     } else if (handoff.get('target') === '_notify') {
       label = 'Send Notification';
+    } else if (handoff.get('target') === '_feedback') {
+      label = 'Give Feedback';
     } else {
       const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
       const currentStepIndex = helper.getCurrentStepIndex();
@@ -257,9 +249,11 @@ class HOCGoalHandoff extends PureComponent {
 
     let label = 'Complete step';
     if (handoff.get('target') === '_complete') {
-      label = 'Complete Goal';
+      label = 'Complete goal';
     } else if (handoff.get('target') === '_notify') {
-      label = 'Send Notification';
+      label = 'Send notification';
+    } else if (handoff.get('target') === '_feedback') {
+      label = 'Give feedback';
     } else {
       const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
       const currentStepIndex = helper.getCurrentStepIndex();
