@@ -173,9 +173,10 @@ class HOCContextMenu extends Component {
     }
     const Comp = contextMenu.component;
     const props = contextMenu.props || {};
+    const key = contextMenu.id;
     const styles = this.state.styles;
     return (
-      <div className="context-menu__content" ref="menu" style={styles}>
+      <div className="context-menu__content" ref="menu" style={styles} key={key}>
         <Comp hide={this.hideContextMenu} {...props} />
       </div>
     );

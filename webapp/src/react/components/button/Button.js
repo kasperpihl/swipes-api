@@ -86,10 +86,11 @@ class Button extends Component {
   }
   renderResultState() {
     const { successLabel, errorLabel } = this.props;
+    const { errorState, successState } = this.state;
     let label = '';
     let icon = '';
 
-    if (!successLabel && !errorLabel) {
+    if (!successState && !errorState) {
       return undefined;
     }
 
@@ -115,6 +116,8 @@ class Button extends Component {
       tabIndex: tabIndexProps,
       loading: lol,
       className: classNameFromButton,
+      errorLabel,
+      successLabel,
       ...rest
     } = this.props;
     const { loading, errorState, successState } = this.state;
@@ -182,6 +185,8 @@ const { string, bool, func } = PropTypes;
 
 Button.propTypes = {
   onClick: func,
+  errorLabel: string,
+  successLabel: string,
   className: string,
   primary: bool,
   icon: string,

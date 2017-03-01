@@ -6,6 +6,7 @@ import GoalsUtil from 'classes/goals-util';
 import { fromJS } from 'immutable';
 import SWView from 'SWView';
 import Button from 'Button';
+import SelectStep from 'context-menus/select-step/SelectStep';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import GoalHandoff from './GoalHandoff';
 import HandoffStatus from './HandoffStatus';
@@ -18,6 +19,7 @@ class HOCGoalHandoff extends PureComponent {
     super(props);
     this.state = {
       isSubmitting: false,
+      errorLabel: null,
       handoff: fromJS({
         flags: [],
         assignees: props.assignees || null,
@@ -45,25 +47,33 @@ class HOCGoalHandoff extends PureComponent {
     const { completeStep, goal, navPop } = this.props;
     const { handoff } = this.state;
 
-    this.setState({ isSubmitting: true });
+    this.setState({ isSubmitting: true, errorLabel: null });
     completeStep(goal.get('id'), handoff).then((res) => {
-      this.setState({ isSubmitting: false });
       if (res && res.ok) {
         const event = handoff.get('target') === '_complete' ? 'Complete goal' : 'Complete step';
         window.analytics.sendEvent(event);
         navPop();
+      } else {
+        this.setState({
+          isSubmitting: false,
+          errorLabel: 'Something went wrong',
+        });
       }
     });
   }
   onNotify() {
     const { goalNotify, goal, navPop } = this.props;
     const { handoff } = this.state;
-    this.setState({ isSubmitting: true });
+    this.setState({ isSubmitting: true, errorLabel: null });
     goalNotify(goal.get('id'), handoff).then((res) => {
-      this.setState({ isSubmitting: false });
       if (res && res.ok) {
         window.analytics.sendEvent('Notify');
         navPop();
+      } else {
+        this.setState({
+          isSubmitting: false,
+          errorLabel: 'Something went wrong',
+        });
       }
     });
   }
@@ -101,13 +111,37 @@ class HOCGoalHandoff extends PureComponent {
   onChangeClick(type, e) {
     const { handoff } = this.state;
     const helper = this.getHelper();
-    const { goal, selectStep } = this.props;
+    const { goal, contextMenu } = this.props;
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'center',
     };
     if (type === 'step') {
-      selectStep(options, goal.get('id'), handoff.get('target'), (newStepId) => {
+      let number = helper.getCurrentStepIndex();
+      // helper.getStepIndexForId(handoff.get('target'));
+      if (typeof number === 'undefined') {
+        number = goal.get('step_order').size;
+      }
+      contextMenu({
+        options,
+        component: SelectStep,
+        props: {
+          steps: helper.getOrderedSteps(),
+          numberOfCompleted: number,
+          onClick: (i) => {
+            if (i >= number) {
+              i += 1;
+            }
+            const step = helper.getStepByIndex(i);
+            const target = step && step.get('id');
+            contextMenu(null);
+            this.setState({
+              handoff: handoff.set('assignees', null).set('target', target || '_complete'),
+            });
+          },
+        },
+      });
+      /* selectStep(options, goal.get('id'), handoff.get('target'), (newStepId) => {
         if (newStepId !== handoff.get('target')) {
           this.setState({
             handoff: handoff.set('assignees', null).set('target', newStepId || '_complete'),
@@ -116,7 +150,7 @@ class HOCGoalHandoff extends PureComponent {
             this.onSelectAssignees(options, helper.getCurrentStep().get('assignees'));
           }
         }
-      });
+      });*/
     } else {
       const step = helper.getStepById(handoff.get('target'));
       let newAssignees = handoff.get('assignees');
@@ -217,6 +251,7 @@ class HOCGoalHandoff extends PureComponent {
     const {
       handoff,
       isSubmitting,
+      errorLabel,
     } = this.state;
     const helper = this.getHelper();
 
@@ -245,6 +280,8 @@ class HOCGoalHandoff extends PureComponent {
           <Button
             text={label}
             onClick={this.onSubmit}
+            loading={isSubmitting}
+            errorLabel={errorLabel}
             primary
           />
         </div>
@@ -288,6 +325,7 @@ HOCGoalHandoff.propTypes = {
   assignees: list,
   message: string,
   goalNotify: func,
+  contextMenu: func,
   selectAssignees: func,
   _target: string.isRequired,
   completeStep: func,
@@ -308,4 +346,5 @@ export default connect(mapStateToProps, {
   goalNotify: a.goals.notify,
   selectStep: a.goals.selectStep,
   completeStep: a.goals.completeStep,
+  contextMenu: a.main.contextMenu,
 })(HOCGoalHandoff);

@@ -127,7 +127,7 @@ class HOCGoalOverview extends PureComponent {
 
   onNotify(e) {
     const helper = this.getHelper();
-    const { contextMenu, me } = this.props;
+    const { contextMenu, me, selectAssignees } = this.props;
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
@@ -155,7 +155,18 @@ class HOCGoalOverview extends PureComponent {
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
-        this.onHandoff('_notify', 'Notify', item.assignees);
+        if (!item.assignees) {
+          let overrideAssignees;
+          selectAssignees(options, [], (newAssignees) => {
+            if (newAssignees) {
+              overrideAssignees = newAssignees;
+            } else if (overrideAssignees && overrideAssignees.length) {
+              this.onHandoff('_notify', 'Notify', overrideAssignees);
+            }
+          });
+        } else {
+          this.onHandoff('_notify', 'Notify', item.assignees);
+        }
       },
     };
 

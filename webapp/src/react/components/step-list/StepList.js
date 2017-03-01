@@ -73,16 +73,21 @@ class StepList extends PureComponent {
       }
     }
 
+    const { fullHover } = this.props;
+
+
     return (
       <div
         className={className}
         key={i}
+        onMouseEnter={fullHover ? this.onEnter(i) : undefined}
+        onMouseLeave={fullHover ? this.onLeave : undefined}
       >
         <div
           className="step-list-item__indicator"
           onClick={this.onCheck(i)}
-          onMouseEnter={this.onEnter(i)}
-          onMouseLeave={this.onLeave}
+          onMouseEnter={fullHover ? undefined : this.onEnter(i)}
+          onMouseLeave={fullHover ? undefined : this.onLeave}
         >
           <div className="step-list-item__icon">
             <Icon svg="CircleCheckmark" className="step-list-item__svg step-list-item__svg--transition" />
@@ -117,10 +122,11 @@ class StepList extends PureComponent {
 
 export default StepList;
 
-const { number, object } = PropTypes;
+const { number, object, bool } = PropTypes;
 
 StepList.propTypes = {
   steps: list,
+  fullHover: bool,
   completed: number,
   delegate: object,
 };
