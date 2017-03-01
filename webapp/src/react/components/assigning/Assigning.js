@@ -32,7 +32,6 @@ class Assigning extends Component {
   }
   onMouseEnter(e) {
     const target = getParentByClass(e.target, 'assignees');
-    console.log('tarbet', target);
     const { tooltip, assignees } = this.props;
     const data = {
       component: AssigneeTooltip,
@@ -41,7 +40,7 @@ class Assigning extends Component {
       },
       options: {
         boundingRect: target.getBoundingClientRect(),
-        position: 'left',
+        position: 'bottom',
       },
     };
 

@@ -8,7 +8,7 @@
   visibility: hidden;
   z-index: 10;
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none; 
 
   &__content {
     @include size(auto);

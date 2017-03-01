@@ -23,27 +23,130 @@ class HOCTooltip extends PureComponent {
       this.setState({ styles: this.getStyles(nextProps.tooltip) });
     }
   }
+  componentDidUpdate() {
+    this.fitToScreen();
+  }
   getStyles(tooltip) {
     const styles = {};
 
     if (tooltip) {
-      const ww = window.innerWidth;
-      const wh = window.innerHeight;
       const boundingRect = tooltip.options.boundingRect;
       const position = tooltip.options.position || 'left';
+      let transform = '';
 
-      if (['left', 'right'].indexOf(position) !== -1) {
+      if (position === 'left') {
+        styles.left = `${boundingRect.left - SPACING}px`;
+        styles.transform = transform += 'translateX(-100%) ';
+      } else if (position === 'top') {
+        styles.top = `${boundingRect.top - SPACING}px`;
+        styles.transform = transform += 'translateY(-100%) ';
+      } else if (position === 'right') {
+        styles.left = `${boundingRect.left + boundingRect.width + SPACING}px`;
+      } else {
+        styles.top = `${boundingRect.top + boundingRect.height + SPACING}px`;
+      }
+
+      if (position === 'left' || position === 'right') {
         styles.top = `${boundingRect.top + (boundingRect.height / 2)}px`;
-        styles.transform = 'translateY(-50%)';
-        if (position === 'left') {
-          styles.right = `${ww - boundingRect.left + SPACING}px`;
-        } else {
-          styles.left = `${boundingRect.left + boundingRect.width + SPACING}px`;
-        }
+        styles.transform = transform += 'translateY(-50%) ';
+      }
+
+      if (position === 'top' || position === 'bottom') {
+        styles.left = `${boundingRect.left + (boundingRect.width / 2)}px`;
+        styles.transform = transform += 'translateX(-50%) ';
       }
     }
 
     return styles;
+  }
+  fitToScreen() {
+    const { tooltip } = this.props;
+    const { styles } = this.state;
+    const { tooltip: tt } = this.refs;
+    const ww = window.innerWidth;
+    const wh = window.innerHeight;
+    const newStyles = {};
+
+    if (tt) {
+      const tooltipBoundingRect = tt.getBoundingClientRect();
+      const targetBoundingRect = tooltip.options.boundingRect;
+      const position = tooltip.options.position || 'left';
+
+      let left = tooltipBoundingRect.left;
+      let top = tooltipBoundingRect.top;
+
+      // Get correct positions
+      if (position === 'left') {
+        left -= tooltipBoundingRect.width;
+        top -= (tooltipBoundingRect.height / 2);
+      }
+
+      if (position === 'right') {
+        top -= (tooltipBoundingRect.height / 2);
+      }
+
+      if (position === 'top') {
+        top -= tooltipBoundingRect.height;
+        left -= (tooltipBoundingRect.width / 2);
+      }
+
+      if (position === 'bottom') {
+        left -= (tooltipBoundingRect.width / 2);
+      }
+
+
+      // Get new styles
+
+      if (position === 'left' || position === 'right') {
+        let transform = '';
+
+        if (left < SPACING) { // Outbounds to left
+          newStyles.left = `${targetBoundingRect.left + targetBoundingRect.width + SPACING}px`;
+          newStyles.transform = transform;
+        }
+
+        if ((left + tooltipBoundingRect.width) > (ww - SPACING)) { // Outbounds to right
+          newStyles.left = `${targetBoundingRect.left - tooltipBoundingRect.width - SPACING}px`;
+          newStyles.transform = transform;
+        }
+
+        if (top < SPACING) { // Outbounds to top
+          newStyles.top = `${SPACING}px`;
+        } else if ((top + tooltipBoundingRect.height) > (wh - SPACING)) { // Outbounds to bottom
+          newStyles.top = `${wh - tooltipBoundingRect.height - SPACING}px`;
+        } else {
+          newStyles.transform = transform += 'translateY(-50%) ';
+        }
+      } else if (position === 'top' || position === 'bottom') {
+        let transform = '';
+
+        if (top < SPACING) { // Outbounds to top
+          newStyles.top = `${targetBoundingRect.top + targetBoundingRect.height + SPACING}px`;
+          newStyles.transform = transform;
+        }
+
+        if ((top + tooltipBoundingRect.height) > (wh - SPACING)) { // Outbounds to bottom
+          newStyles.top = `${targetBoundingRect.top - tooltipBoundingRect.height - SPACING}px`;
+          newStyles.transform = transform;
+        }
+
+        if (left < SPACING) { // Outbounds to left
+          newStyles.left = `${SPACING}px`;
+        } else if ((left + tooltipBoundingRect.width) > (ww - SPACING)) { // Outbounds to right
+          newStyles.left = `${ww - tooltipBoundingRect.width - SPACING}px`;
+        } else {
+          newStyles.transform = transform += 'translateX(-50%) ';
+        }
+      }
+
+      if (newStyles.left || newStyles.right || newStyles.top || newStyles.bottom) {
+        if (newStyles.top !== styles.top || newStyles.bottom !== styles.bottom) {
+          this.setState({ styles: Object.assign({}, styles, newStyles) });
+        } else if (newStyles.left !== styles.left || newStyles.right !== styles.right) {
+          this.setState({ styles: Object.assign({}, styles, newStyles) });
+        }
+      }
+    }
   }
   renderTooltip() {
     const { tooltip } = this.props;
@@ -56,7 +159,7 @@ class HOCTooltip extends PureComponent {
     const props = tooltip.props || {};
 
     return (
-      <div className="g-tooltip__content" style={this.state.styles}>
+      <div className="g-tooltip__content" style={this.state.styles} ref="tooltip">
         <Comp {...props} />
       </div>
     );
