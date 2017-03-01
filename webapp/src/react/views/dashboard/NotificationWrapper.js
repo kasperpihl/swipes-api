@@ -24,11 +24,11 @@ class NotificationItem extends Component {
 
     return (
       <div className="notification__image">
-        <div className="notification__assigning">
-          <HOCAssigning assignees={[n.get('userId')]} rounded />
-        </div>
         <div className="notification__icon">
           <Icon svg={n.get('icon')} className="notification__svg" />
+        </div>
+        <div className="notification__assigning">
+          <HOCAssigning assignees={[n.get('userId')]} rounded />
         </div>
       </div>
     );
@@ -47,7 +47,7 @@ class NotificationItem extends Component {
   renderAttachments() {
     const { notification: n } = this.props;
     const attachments = n.get('attachments');
-    console.log('this.props', n.get('userId'));
+
     if (!attachments) {
       return undefined;
     }
