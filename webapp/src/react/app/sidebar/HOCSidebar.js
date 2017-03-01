@@ -25,22 +25,23 @@ class HOCSidebar extends PureComponent {
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onRightClickCached = setupCachedCallback(this.onClick, this);
   }
-  onClick(id, target) {
-    const { navSet } = this.props;
+  componentWillReceiveProps(nextProps) {
     const { navItems } = this.state;
 
-    if (target === 'primary') {
-      if (id === 'profile') {
+    if (nextProps.navId !== this.props.navId) {
+      if (nextProps.navId === 'profile') {
         this.setState({ activeItem: null });
       } else {
         navItems.forEach((item, i) => {
-          if (item.id === id) {
+          if (item.id === nextProps.navId) {
             this.setState({ activeItem: i });
           }
         });
       }
     }
-
+  }
+  onClick(id, target) {
+    const { navSet } = this.props;
     if (target === 'secondary' && id === 'slack') {
       return;
     }

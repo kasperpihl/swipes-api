@@ -1,13 +1,50 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
+// ======================================================
+// Block
+// ======================================================
+
+.ChecklistEditorBlock {
+  @include size(auto);
+  @include flexContainer('row', left, top);
+  min-width: 18px;
+  margin-left: -1.5em;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.ChecklistEditorBlock {
+  &__text {
+    @include font(15px, $deepBlue-80, 27px);
+    cursor: text;
+    word-wrap: break-word;
+  }
+}
+
+// ======================================================
+// Modifers
+// ======================================================
+
 .ChecklistEditorBlock {
   $b: &;
 
-  @include size(auto);
-  @include flex(flex-start, flex-start);
-  min-width: 18px;
-  margin-left: -1.5em;
+  &--checked {
+
+    #{$b}__text {
+      @include font(15px, $deepBlue-30, 27px);
+    }
+  }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.ChecklistEditorBlock {
+  $b: &;
 
   & > *:not(&__text) {
     cursor: pointer;
@@ -19,18 +56,5 @@
 
   & > .sw-checkbox {
     margin-top: 4px;
-  }
-
-  &__text {
-    @include font(15px, $deepBlue-80, 27px);
-    cursor: text;
-    word-wrap: break-word;
-  }
-
-  &--checked {
-
-    #{$b}__text {
-      @include font(15px, $deepBlue-30, 27px);
-    }
   }
 }
