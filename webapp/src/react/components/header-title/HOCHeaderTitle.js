@@ -50,7 +50,7 @@ class HOCHeaderTitle extends Component {
     );
   }
   renderContent() {
-    const { history, title } = this.props;
+    const { history, title, placeholder } = this.props;
     if (!history && title) {
       return this.renderTitle();
     }
@@ -62,10 +62,10 @@ class HOCHeaderTitle extends Component {
     return history.map((crumb, i) => {
       const isLast = (i + 1) === history.size;
 
-      if (isLast && !crumb.get('placeholder')) {
+      if (isLast && !placeholder) {
         return this.renderTitle(crumb, i);
-      } else if (isLast && crumb.get('placeholder')) {
-        return this.renderInputTitle(crumb.get('placeholder'));
+      } else if (isLast && placeholder) {
+        return this.renderInputTitle(placeholder);
       }
 
       return undefined;
@@ -90,6 +90,7 @@ const { object, func, string, array, oneOfType } = PropTypes;
 HOCHeaderTitle.propTypes = {
   target: string,
   title: string,
+  placeholder: string,
   subtitle: string,
   history: list,
   delegate: object,

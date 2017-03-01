@@ -292,6 +292,7 @@ class HOCAddGoal extends Component {
           target={target}
           delegate={this}
           value={title}
+          placeholder="Goal title"
         >
           {this.renderClearButton()}
           <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />

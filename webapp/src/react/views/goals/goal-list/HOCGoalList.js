@@ -172,7 +172,6 @@ class HOCGoalList extends PureComponent {
     navPush({
       id: 'AddGoal',
       title: 'Add Goal',
-      placeholder: 'Goal title',
     },
     savedState);
   }

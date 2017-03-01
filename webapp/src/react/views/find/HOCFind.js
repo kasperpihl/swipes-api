@@ -119,6 +119,7 @@ class HOCFind extends Component {
         onChange={this.onInputChange}
         onKeyUp={this.onInputKeyUp}
         delegate={this}
+        placeholder="Search across Dropbox, Slack etc."
         value={searchQ}
         target={target}
       />
