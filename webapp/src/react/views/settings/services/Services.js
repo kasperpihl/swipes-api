@@ -13,8 +13,8 @@ const authSuccess = [
 ].map(o => `${o}/oauth-success.html`);
 
 class Services extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     bindAll(this, ['clickedDisconnect', 'clickedConnect']);
   }
   componentDidMount() {
@@ -36,11 +36,11 @@ class Services extends Component {
   }
   clickedConnect(data) {
     this._handled = false;
-    const { browser } = this.props;
+    const { browser, target } = this.props;
     const serviceName = data.id;
     const url = `${window.location.origin}/v1/services.authorize?service_name=${serviceName}`;
 
-    browser(this.context.target, url, (webview, close) => {
+    browser(target, url, (webview, close) => {
       // .'did-get-redirect-request'
       webview.addEventListener('did-get-redirect-request', (e) => {
         if (authSuccess.find(u => e.newURL.startsWith(u))) {
@@ -153,9 +153,6 @@ Services.propTypes = {
   browser: func,
   handleOAuthSuccess: func,
   services: map,
-};
-Services.contextTypes = {
-  target: string,
 };
 
 function mapStateToProps(state) {

@@ -13,8 +13,8 @@ import Dashboard from './Dashboard';
 /* global msgGen */
 
 class HOCDashboard extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       loading: false,
     };
@@ -49,10 +49,10 @@ class HOCDashboard extends Component {
   }
   onClickAttachment(nI, i) {
     const n = this.props.notifications.get(nI);
-    const { goals, preview } = this.props;
+    const { goals, preview, target } = this.props;
     const aId = n.getIn(['data', 'flags', i]);
     const att = goals.getIn([n.getIn(['data', 'goal_id']), 'attachments', aId]);
-    preview(this.context.target, att);
+    preview(target, att);
   }
   onClickTitle(i) {
     const n = this.props.notifications.get(i);
@@ -104,6 +104,7 @@ class HOCDashboard extends Component {
     let m = Map({
       timeago: timeAgo(n.get('ts'), true),
       seen: !!n.get('seen'),
+      userId: n.get('done_by'),
     });
 
     const from = msgGen.getUserString(data.get('done_by'));
@@ -182,9 +183,6 @@ HOCDashboard.propTypes = {
   preview: func,
   goals: map,
   me: map,
-};
-HOCDashboard.contextTypes = {
-  target: string,
 };
 
 function mapStateToProps(state) {

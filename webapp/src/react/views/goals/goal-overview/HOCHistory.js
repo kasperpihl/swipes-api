@@ -41,6 +41,7 @@ class HOCHistory extends PureComponent {
     let m = Map({
       timeago: timeAgo(e.get('done_at'), true),
       seen: true,
+      userId: e.get('done_by'),
       message: e.get('message'),
       attachments: this.getAttachments(e.get('flags')),
     });

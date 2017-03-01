@@ -25,8 +25,8 @@ class HOCGoalOverview extends PureComponent {
   static maxWidth() {
     return 900;
   }
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     bindAll(this, ['onHandoff', 'onContext']);
     this.state = {
       loadingSteps: fromJS({}),
@@ -376,9 +376,6 @@ HOCGoalOverview.propTypes = {
   renameStep: func,
   removeStep: func,
   contextMenu: func,
-};
-HOCGoalOverview.contextTypes = {
-  target: string,
 };
 
 function mapStateToProps(state, ownProps) {

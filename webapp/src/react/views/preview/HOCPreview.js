@@ -21,8 +21,8 @@ class HOCPreviewModal extends PureComponent {
   static fullscreen() {
     return true;
   }
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = this.getDefaultState();
     this.fetch(props.loadPreview);
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
@@ -39,10 +39,10 @@ class HOCPreviewModal extends PureComponent {
   }
   onClickButton(i, e) {
     const { buttons } = this.state.preview;
-    const { browser } = this.props;
+    const { browser, target } = this.props;
     const button = buttons[i];
     if (button.url) {
-      browser(this.context.target, button.url);
+      browser(target, button.url);
     }
     e.target.blur();
   }

@@ -21,8 +21,8 @@ class HOCFind extends Component {
   static maxWidth() {
     return 1600;
   }
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       selectedId: 'search-results',
       accountId: null,
@@ -53,8 +53,8 @@ class HOCFind extends Component {
     }
   }
   onPreviewLink(obj) {
-    const { openPreview, onAttach, goalId } = this.props;
-    openPreview(this.context.target, {
+    const { openPreview, onAttach, goalId, target } = this.props;
+    openPreview(target, {
       loadPreview: obj,
       onAttach,
       goalId,
@@ -250,9 +250,6 @@ HOCFind.propTypes = {
   searchResults: list,
   me: map,
   services: map,
-};
-HOCFind.contextTypes = {
-  target: string,
 };
 
 function mapStateToProps(state) {

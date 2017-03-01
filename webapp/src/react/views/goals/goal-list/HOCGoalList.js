@@ -21,8 +21,8 @@ const defaultFilter = fromJS({
 });
 
 class HOCGoalList extends PureComponent {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.callDelegate = setupDelegate(props.delegate);
     this.state = {
       tabIndex: 0,
