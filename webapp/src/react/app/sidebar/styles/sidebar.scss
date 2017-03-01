@@ -12,8 +12,9 @@ $sidebarWidth: 84px;
   $flexIgnoreList: '#{$b}__bottom-section';
 
   @include size($sidebarWidth, 100%);
-  @include flexContainer('column', $selectorsToIgnoreFlex: $flexIgnoreList);
-  @include flex(none);
+  @include flexContainer('column', $selectorsToIgnoreFlex: $flexIgnoreList) {
+    flex: none;
+  };
   padding-bottom: 22px;
 }
 
@@ -45,6 +46,21 @@ $sidebarWidth: 84px;
   }
 }
 
+// Slider
+
+.sidebar {
+
+  &__slider {
+    @include size(54px);
+    background-color: $bg;
+    position: absolute;
+    left: 0; top: 0;
+    border-radius: 50px;
+    z-index: 1;
+    transition: .3s ease;
+  }
+}
+
 // Item
 
 .sidebar {
@@ -53,44 +69,10 @@ $sidebarWidth: 84px;
   &__item {
     @include size(54px);
     @include flexContainer('row', center, center);
-
-    &:after {
-      @include size(54px);
-      background-color: $bg;
-      border-radius: 50%;
-      content: '';
-      left: 0; top: 0;
-      position: absolute;
-      z-index: -1;
-      opacity: 0;
-      transition: .1s ease;
-    }
-
-    &--active {
-
-      &:after {
-        opacity: 1;
-        transition: .1s ease;
-      }
-
-      #{$b}__icon {
-        @include svg-color($deepBlue-100);
-      }
-
-      #{$b}__notification {
-        @include font($c: $bg);
-        background-color: $deepBlue-100;
-      }
-    }
+    z-index: 2;
 
     & > * {
       pointer-events: none;
-    }
-
-    &:hover {
-      #{$b}__icon {
-        @include svg-color($deepBlue-100);
-      }
     }
   }
 }
@@ -128,4 +110,67 @@ $sidebarWidth: 84px;
 
 // ======================================================
 // Modifiers
+// ======================================================
+
+.sidebar {
+  $b: &;
+
+  &__item--active {
+    #{$b}__icon {
+      @include svg-color($deepBlue-100);
+    }
+
+    #{$b}__notification {
+      @include font($c: $bg);
+      background-color: $deepBlue-100;
+    }
+  }
+}
+
+.sidebar {
+
+  &__slider--hidden {
+    left: 0; top: calc(100% - 54px);
+    opacity: 0;
+    transition: .3s ease;
+  }
+}
+
+.sidebar {
+  $b: &;
+
+  &__bottom-section {
+
+    #{$b}__item--active {
+      &:after {
+        @include size(54px);
+        background-color: $bg;
+        border-radius: 50%;
+        content: '';
+        left: 0; top: 0;
+        position: absolute;
+        z-index: -1;
+        opacity: 1;
+        transition: .1s ease;
+      }
+    }
+  }
+}
+
+// ======================================================
+// Hovers
+// ======================================================
+
+.sidebar {
+  $b: &;
+
+  &__item:hover {
+    #{$b}__icon {
+      @include svg-color($deepBlue-100);
+    }
+  }
+}
+
+// ======================================================
+// Targeting
 // ======================================================

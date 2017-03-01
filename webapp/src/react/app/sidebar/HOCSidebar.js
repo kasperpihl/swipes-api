@@ -11,8 +11,34 @@ import './styles/sidebar.scss';
 class HOCSidebar extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      navItems: [
+        { id: 'goals', svg: 'Goals' },
+        // { id: 'milestones', svg: 'Milestones' },
+        { id: 'dashboard', svg: 'Notification' },
+        { id: 'find', svg: 'Find' },
+        { id: 'slack', svg: 'Hashtag' },
+        // { id: 'store', svg: 'Store' },
+      ],
+      activeItem: 0,
+    };
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onRightClickCached = setupCachedCallback(this.onClick, this);
+  }
+  componentWillReceiveProps(nextProps) {
+    const { navItems } = this.state;
+
+    if (nextProps.navId !== this.props.navId) {
+      if (nextProps.navId === 'profile') {
+        this.setState({ activeItem: null });
+      } else {
+        navItems.forEach((item, i) => {
+          if (item.id === nextProps.navId) {
+            this.setState({ activeItem: i });
+          }
+        });
+      }
+    }
   }
   onClick(id, target) {
     const { navSet } = this.props;
@@ -57,14 +83,26 @@ class HOCSidebar extends PureComponent {
   }
   // render
   renderTopSection() {
-    return [
-      { id: 'goals', svg: 'Goals' },
-      // { id: 'milestones', svg: 'Milestones' },
-      { id: 'dashboard', svg: 'Notification' },
-      { id: 'find', svg: 'Find' },
-      { id: 'slack', svg: 'Hashtag' },
-      // { id: 'store', svg: 'Store' },
-    ].map(o => this.renderItem(o));
+    const { navItems } = this.state;
+
+    if (navItems) {
+      return navItems.map((o, i) => this.renderItem(o, i));
+    }
+
+    return undefined;
+  }
+  renderSlider() {
+    const { activeItem } = this.state;
+    const styles = {};
+    let className = 'sidebar__slider';
+
+    if (activeItem === null) {
+      className += ' sidebar__slider--hidden';
+    } else {
+      styles.transform = `translateY(${activeItem * 100}%)`;
+    }
+
+    return <div className={className} style={styles} />;
   }
   renderProfile() {
     const { me } = this.props;
@@ -79,11 +117,13 @@ class HOCSidebar extends PureComponent {
     // For later
   }
   render() {
+    console.log('this.state.activeItem', this.state.activeItem);
     return (
       <div className="sidebar">
         <div className="sidebar__top-section">
           <div className="sidebar__section">
             {this.renderTopSection()}
+            {this.renderSlider()}
           </div>
         </div>
         <div className="sidebar__bottom-section">
