@@ -7,7 +7,6 @@ import { setupDelegate } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
-import InputMenu from 'context-menus/input-menu/InputMenu';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
 import GoalList from './GoalList';
@@ -156,19 +155,15 @@ class HOCGoalList extends PureComponent {
       selectMilestone(options, res => this.updateFilter({ goalType: res.id }));
     }
     if (obj.id === 'matching') {
-      const { contextMenu } = this.props;
+      const { inputMenu } = this.props;
       const { tabs, tabIndex } = this.state;
-      contextMenu({
-        options,
-        component: InputMenu,
-        props: {
-          buttonLabel: 'Search',
-          placeholder: 'Search goal and step titles',
-          allowEmpty: true,
-          text: tabs.getIn([tabIndex, 'filter', 'matching']),
-          onResult: res => this.updateFilter({ matching: res }),
-        },
-      });
+      inputMenu({
+        ...options,
+        buttonLabel: 'Search',
+        placeholder: 'Search goal and step titles',
+        allowEmpty: true,
+        text: tabs.getIn([tabIndex, 'filter', 'matching']),
+      }, res => this.updateFilter({ matching: res }));
     }
   }
   onAddGoal() {
@@ -338,22 +333,20 @@ HOCGoalList.propTypes = {
   saveCache: func,
   navPush: func,
   delegate: object,
-  contextMenu: func,
+  inputMenu: func,
   me: map,
   selectUser: func,
+  selectAssignees: func,
   selectGoalType: func,
   selectMilestone: func,
   target: string,
   // removeThis: PropTypes.string.isRequired
 };
-HOCGoalList.contextTypes = {
-  target: string,
-};
 
 export default connect(mapStateToProps, {
   saveCache: a.main.cache.save,
   selectUser: a.menus.selectUser,
-  contextMenu: a.main.contextMenu,
+  inputMenu: a.menus.input,
   selectGoalType: a.menus.selectGoalType,
   selectAssignees: a.goals.selectAssignees,
 })(HOCGoalList);

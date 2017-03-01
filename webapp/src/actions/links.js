@@ -1,6 +1,5 @@
 import * as a from 'actions';
 import AddAttachment from 'context-menus/add-attachment/AddAttachment';
-import InputMenu from 'context-menus/input-menu/InputMenu';
 
 // ======================================================
 // Call links.create and pass back obj in form of attachment
@@ -15,15 +14,6 @@ export const addLinkAndCallback = (ty, lO, cb) => d => d(a.api.request('links.cr
   } else if (cb) {
     cb('error', ty, res);
   }
-});
-
-// ======================================================
-// Open up input menu for writing a title
-// ======================================================
-const inputMenu = (options, props) => a.main.contextMenu({
-  options,
-  component: InputMenu,
-  props,
 });
 
 // ======================================================
@@ -49,24 +39,24 @@ const getSwipesLinkObj = title => (d, getState) => {
 // Adding a note (open context menu and then add)
 // ======================================================
 export const addNote = (options, cb) => (d, getState) => {
-  d(inputMenu(options, {
+  d(a.menus.input({
+    ...options,
     placeholder: 'Enter note title',
     buttonLabel: 'Add',
-    onResult: (title) => {
-      cb('start', 'note');
-      const state = getState();
-      const orgId = state.getIn(['me', 'organizations', 0, 'id']);
-      d(a.main.note.create(orgId, title)).then((res) => {
-        if (res && res.ok) {
-          const linkObj = d(getSwipesLinkObj(title));
-          linkObj.service.type = 'note';
-          linkObj.service.id = res.id;
-          d(addLinkAndCallback('note', linkObj, cb));
-        } else if (cb) {
-          cb('error', 'note', res);
-        }
-      });
-    },
+  }, (title) => {
+    cb('start', 'note');
+    const state = getState();
+    const orgId = state.getIn(['me', 'organizations', 0, 'id']);
+    d(a.main.note.create(orgId, title)).then((res) => {
+      if (res && res.ok) {
+        const linkObj = d(getSwipesLinkObj(title));
+        linkObj.service.type = 'note';
+        linkObj.service.id = res.id;
+        d(addLinkAndCallback('note', linkObj, cb));
+      } else if (cb) {
+        cb('error', 'note', res);
+      }
+    });
   }));
 };
 
@@ -74,16 +64,16 @@ export const addNote = (options, cb) => (d, getState) => {
 // Adding a url (open context menu and then add)
 // ======================================================
 export const addURL = (options, callback) => (d) => {
-  d(inputMenu(options, {
+  d(a.menus.input({
+    ...options,
     placeholder: 'Enter a URL',
     buttonLabel: 'Add',
-    onResult: (url) => {
-      callback('start', 'url');
-      const linkObj = d(getSwipesLinkObj(url));
-      linkObj.service.type = 'url';
-      linkObj.service.id = url;
-      d(addLinkAndCallback('url', linkObj, callback));
-    },
+  }, (url) => {
+    callback('start', 'url');
+    const linkObj = d(getSwipesLinkObj(url));
+    linkObj.service.type = 'url';
+    linkObj.service.id = url;
+    d(addLinkAndCallback('url', linkObj, callback));
   }));
 };
 
