@@ -12,6 +12,7 @@ import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMe
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import Section from 'components/section/Section';
 import AddStepList from './AddStepList';
+import TemplateItem from './TemplateItem';
 
 import './styles/add-goal.scss';
 
@@ -40,6 +41,7 @@ class HOCAddGoal extends Component {
       'saveToCache',
       'onLoadWay',
       'onClear',
+      'clickedTemplate',
     ]);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -178,6 +180,9 @@ class HOCAddGoal extends Component {
     }
 
     return status;
+  }
+  clickedTemplate() {
+    console.log('to');
   }
   navbarLoadedInput(input) {
     this._input = input;
@@ -348,6 +353,39 @@ class HOCAddGoal extends Component {
       </Section>
     );
   }
+  renderTemplates() {
+    if (this.isReadyToCreate()) {
+      return undefined;
+    }
+
+    const templates = [
+      {
+        title: 'Design',
+        message: 'Weather it’s the next office party ',
+      },
+      {
+        title: 'Development',
+      },
+      {
+        title: 'Research',
+        message: 'Weather it’s the next office party or company interest meetup company. ',
+      },
+      {
+        title: 'Company event',
+        message: 'Weather it’s the next office party or company interest meetup company. This is a great way to get from A to Z.',
+      },
+    ];
+
+    const templatesHTML = templates.map((t, i) => <TemplateItem delegate={this} title={t.title} message={t.message} key={`template-${i}`} />);
+
+    return (
+      <Section title="Or choose a way">
+        <div className="add-goal__templates">
+          {templatesHTML}
+        </div>
+      </Section>
+    );
+  }
   renderFooter() {
     const status = this.getStatus();
     const disabled = !!status;
@@ -402,6 +440,7 @@ class HOCAddGoal extends Component {
             {this.renderAttachments()}
           </div>
           {this.renderHandoff()}
+          {this.renderTemplates()}
         </div>
       </SWView>
     );

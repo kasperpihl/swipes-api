@@ -2,27 +2,33 @@
 @import '~styles/_mixins.scss';
 @import '~styles/_functions.scss/';
 
+// ======================================================
+// Block
+// ======================================================
+
+.add-goal {
+  @include size(100%);
+  padding-bottom: 30px;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
 .add-goal {
   $b: &;
 
-  @include size(100%);
-  padding-bottom: 30px;
-
   &__header {
     @include size(100%, auto);
-    @include flex(column);
+    @include flexContainer('container');
   }
 
   &__title {
     @include size(100%, auto);
+    @include font(26px, $deepBlue-100, 36px, 400);
     border-bottom: 1px solid transparent;
-    color: $deepBlue-100;
-    font-size: 26px;
-    line-height: 36px;
     padding: 9px 0;
     transition: .2s ease-in-out;
-    font-weight: 400;
-    position: relative;
     padding-top: 45px;
 
     &:focus {
@@ -32,59 +38,40 @@
   }
 
   &__handoff {
-    color: $deepBlue-80;
-    font-size: 15px;
+    @include size(100%, initial);
+    @include font(15px, $deepBlue-80, 21px);
+    @include widthSpecifications(initial, 480px);
     padding: 15px 21px;
-    line-height: 21px;
     resize: none;
-    width: 100%;
-    max-width: 480px;
-    background-color: rgba($deepBlue-120, .04);
-    background-color: #FCFCFC;
-    border: 1px solid #E6E7EB;
+    background-color: $deepBlue-5;
+    border: 1px solid $deepBlue-10;
     border-radius: 3px;
-    font-size: 12px;
-    line-height: 15px;
-    color: $deepBlue-80;
 
     &:focus {
       outline: none;
     }
 
     &::-webkit-input-placeholder {
-      color: $deepBlue-40;
+      @include font($c: $deepBlue-40);
     }
   }
 
   &__info {
-    max-height: 0;
+    @include heightSpecifications(initial, 0);
     opacity: 0;
     overflow: hidden;
-
-    &--show {
-      max-height: 300px;
-      opacity: 1;
-      transition: all 1.5s .4s ease;
-    }
-
-    &--showing {
-      max-height: 9000px;
-    }
   }
 
   &__footer {
     @include size(100%, 60px);
-    @include flex(center, space-between);
+    @include flexContainer('row', between, center);
     border-top: 1px solid $deepBlue-10;
     padding: 0 30px;
-
-    #{$b}__status {
-
-    }
   }
 
   &__status {
     @include size(100%, auto);
+    @include font(12px, $deepBlue-70);
     font-size: 12px;
     color: $deepBlue-70;
 
@@ -95,8 +82,9 @@
 
   &__actions {
     @include size(100%, auto);
-    @include flex(center, flex-end);
-    @include flex(none);
+    @include flexContainer('row', right, center) {
+      flex: none;
+    };
   }
 
   &__btn {
@@ -110,5 +98,38 @@
     padding: 0;
     border: none;
     padding-top: 51px;
+  }
+}
+
+
+// tempaltes list
+
+.add-goal {
+  &__templates {
+    @include size(100%, auto);
+    @include flexContainer('row', between, start) {
+      flex-wrap: wrap;
+    };
+    margin-top: 48px;
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.add-goal {
+  $b: &;
+
+  &__info {
+    &--show {
+      @include heightSpecifications(initial, 300px);
+      opacity: 1;
+      transition: all 1.5s .4s ease;
+    }
+
+    &--showing {
+      @include heightSpecifications(initial, 9000px);
+    }
   }
 }

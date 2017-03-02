@@ -41,6 +41,14 @@
 	}
 }
 
+@mixin clampString($line: 1) {
+	overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
 //Pass nothing paramenters for simple centering
 @mixin flex($vertical:center, $horizontal:center, $direction:row) {
 	@if $vertical == flex {
@@ -102,6 +110,14 @@
     	@content;
     }
   }
+}
+
+@mixin styleAfterElementNumber($number: 1) {
+	$nth: $number + 1;
+
+	&:nth-child(n+#{$nth}) {
+		@content;
+	}
 }
 
 @mixin centerAbsolute($axis: null, $side: null, $addToTransform: null) {

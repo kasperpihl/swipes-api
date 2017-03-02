@@ -1,0 +1,32 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.template-item {
+  @include size(calc(50% - 6px), 99px);
+  border: 1px solid $deepBlue-5;
+  border-radius: 6px;
+  padding: 15px 21px;
+  transition: .25s ease;
+
+  &__title {
+    @include size(100%, auto);
+    @include font(15px, $deepBlue-100, 21px);
+    @include truncateString();
+  }
+
+  &__message {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-40, 15px, 500);
+    @include clampString(3);
+  }
+
+  &:hover {
+    border-color: $deepBlue-10;
+    box-shadow: 0 1px 20px 3px rgba($blue-160,0.1);
+    transition: .25s ease;
+  }
+
+  @include styleAfterElementNumber(2) {
+    margin-top: 12px;
+  }
+}
