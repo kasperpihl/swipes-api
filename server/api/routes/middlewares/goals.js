@@ -174,7 +174,7 @@ const goalsInsert = valLocals('goalsInsert', {
     .then((obj) => {
       setLocals({
         eventType: 'goal_created',
-        data: obj.changes[0].new_val,
+        goal: obj.changes[0].new_val,
       });
 
       return next();
@@ -455,7 +455,13 @@ const goalsNotify = valLocals('goalsNotify', {
   };
 
   dbGoalsPushToHistorySingle({ goal_id, historyItem })
-    .then(() => {
+    .then((results) => {
+      const goal = results.changes[0].new_val;
+
+      setLocals({
+        goal,
+      });
+
       return next();
     })
     .catch((err) => {
