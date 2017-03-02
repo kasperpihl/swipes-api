@@ -428,6 +428,7 @@ const goalsNotify = valLocals('goalsNotify', {
   goal_id: string.require(),
   current_step_id: string.require(),
   assignees: array.of(string).require(),
+  feedback: bool,
   flags: array.of(string),
   message: string,
 }, (req, res, next, setLocals) => {
@@ -436,6 +437,7 @@ const goalsNotify = valLocals('goalsNotify', {
     goal_id,
     assignees,
     current_step_id,
+    feedback,
     flags = [],
     message = '',
   } = res.locals;
@@ -444,6 +446,7 @@ const goalsNotify = valLocals('goalsNotify', {
     flags,
     message,
     assignees,
+    feedback,
     type: 'notified',
     from: null,
     to: current_step_id,
