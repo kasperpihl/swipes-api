@@ -13,6 +13,7 @@ class AddStepList extends Component {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
     this.onChangeCached = setupCachedCallback(this.onChange, this);
+    this.onKeyDownCached = setupCachedCallback(this.onKeyDown, this);
   }
   componentDidMount() {
   }
@@ -41,6 +42,31 @@ class AddStepList extends Component {
       this.callDelegate('onUpdatedStepTitle', stepId, title);
     }
   }
+  onKeyDown(i, e) {
+    const { stepOrder } = this.props;
+    if (e.keyCode === 8 && !e.target.value.length) {
+      const isNotLast = i < stepOrder.size;
+      if (isNotLast) {
+        e.preventDefault();
+        this.callDelegate('onDeletedStep', stepOrder.get(i));
+        const prevInput = this.refs[`input${i - 1}`];
+        if (prevInput) {
+          prevInput.focus();
+        }
+      }
+    }
+    if (e.keyCode === 13) {
+      const isNotLast = i < stepOrder.size;
+      if (isNotLast) {
+        e.preventDefault();
+        this.callDelegate('onAddedStep', '', i + 1);
+        const nextInput = this.refs[`input${i + 1}`];
+        if (nextInput) {
+          nextInput.focus();
+        }
+      }
+    }
+  }
   renderStep(i, step) {
     const { stepOrder, delegate } = this.props;
     const isLast = stepOrder.size === i;
@@ -66,6 +92,7 @@ class AddStepList extends Component {
       <div key={i} className={className}>
         <div className="step__header">
           <input
+            onKeyDown={this.onKeyDownCached(i)}
             ref={`input${i}`}
             className="step__title"
             placeholder={'Add a Step'}

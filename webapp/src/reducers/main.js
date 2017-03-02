@@ -215,9 +215,9 @@ export default function main(state = initialState, action) {
     }
     case 'token_revoked':
     case types.LOGOUT: {
-      if (payload && payload.token) {
+      if (payload && payload.data.token_to_revoke) {
         const currToken = state.get('token');
-        if (token !== currToken) {
+        if (payload.data.token_to_revoke !== currToken) {
           return state;
         }
       }

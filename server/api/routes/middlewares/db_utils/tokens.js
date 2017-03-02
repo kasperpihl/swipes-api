@@ -78,7 +78,8 @@ const dbTokensGetByUserId = funcWrap([
   const q =
     r.table('tokens')
       .getAll(user_id, { index: 'user_id' })
-      .filter({ revoked: false });
+      .filter({ revoked: false })
+      .without('token');
 
   return db.rethinkQuery(q);
 });

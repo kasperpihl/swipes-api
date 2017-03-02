@@ -188,7 +188,7 @@ const goalsNotifyNotificationData = (req, res, next) => {
     user_ids,
     flags,
     message,
-    feedback,
+    feedback = false,
     goal,
   } = res.locals;
 

@@ -15,7 +15,9 @@ export default class Socket {
     const token = state.getIn(['main', 'token']);
     if (token && !this.socket && state.getIn(['main', 'status']) !== 'connecting') {
       this.token = token;
+
       if (!this.timer) {
+        console.log(token);
         this.timedConnect(this.timerForAttempt());
       }
     }
