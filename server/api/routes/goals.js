@@ -62,7 +62,7 @@ authed.all('/goals.create',
 authed.all('/goals.completeStep',
     valBody({
       goal_id: string.require(),
-      current_step_id: string.require(),
+      current_step_id: string,
       next_step_id: string,
       message: string,
       flags: array.of(string),
