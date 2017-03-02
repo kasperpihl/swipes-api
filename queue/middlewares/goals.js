@@ -137,7 +137,7 @@ const goalsMilestoneAddedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal };
+  res.locals.eventData = goal;
 
   return next();
 };
@@ -153,7 +153,7 @@ const goalsMilestoneRemovedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal };
+  res.locals.eventData = goal;
 
   return next();
 };
