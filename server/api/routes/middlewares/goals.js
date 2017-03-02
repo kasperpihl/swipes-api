@@ -3,7 +3,7 @@ import {
   string,
   object,
   array,
-  any,
+  bool,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -463,7 +463,7 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   assignees: array.of(string).require(),
-  type: any.of('feedback', 'notify').require(),
+  feedback: bool.require(),
   flags: array.of(string),
   message: string,
 }, (req, res, next, setLocals) => {
@@ -471,7 +471,7 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
     user_id,
     goal_id,
     assignees,
-    type,
+    feedback = false,
     flags = [],
     message = '',
   } = res.locals;
@@ -480,7 +480,7 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
     goal_id,
     flags,
     message,
-    type,
+    feedback,
     user_ids: assignees,
     event_type: 'goal_notify',
   };

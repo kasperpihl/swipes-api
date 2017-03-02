@@ -188,14 +188,14 @@ const goalsNotifyNotificationData = (req, res, next) => {
     user_ids,
     flags,
     message,
-    type,
+    feedback,
     goal,
   } = res.locals;
 
   const notificationData = {
     goal_id,
     message,
-    type,
+    feedback,
     flags,
     assignees: user_ids,
     done_by: user_id,
