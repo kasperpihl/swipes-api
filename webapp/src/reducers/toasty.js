@@ -17,9 +17,6 @@ export default function toasty(state = initialState, action) {
       const { toastId } = action;
       return state.delete(toastId);
     }
-    case types.LOGOUT: {
-      return initialState;
-    }
     default:
       return state;
   }

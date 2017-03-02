@@ -280,7 +280,7 @@ class HOCViewController extends PureComponent {
             popSecondary={this.onPopCached('secondary')}
             delegate={this}
             target={target}
-            key={navigation.getIn([target, 'id'])}
+            key={slack || navigation.getIn([target, 'id'])}
             {...props}
           />
         </section>

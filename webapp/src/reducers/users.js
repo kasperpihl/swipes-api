@@ -1,5 +1,4 @@
 import { fromJS } from 'immutable';
-import * as types from 'constants';
 
 const initialState = fromJS({});
 
@@ -15,9 +14,6 @@ export default function usersReducer(state = initialState, action) {
         return fromJS(users);
       }
       return state;
-    }
-    case types.LOGOUT: {
-      return initialState;
     }
     default:
       return state;

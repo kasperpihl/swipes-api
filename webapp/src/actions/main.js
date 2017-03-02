@@ -81,9 +81,6 @@ export const logout = cb => dp => dp(a.api.request('users.signout')).then((res) 
   }
   if (res && res.ok) {
     dp({ type: types.LOGOUT });
-    window.analytics.logout();
-    localStorage.clear();
-    window.location.replace('/');
   }
 });
 

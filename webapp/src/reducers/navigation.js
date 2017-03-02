@@ -44,8 +44,6 @@ export default function history(state = initialState, action) {
       const { id, counter } = payload;
       return state.setIn(['counters', id], `${counter}`);
     }
-    case types.LOGOUT:
-      return initialState;
     default:
       return state;
   }

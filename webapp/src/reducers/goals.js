@@ -51,9 +51,6 @@ export default function goalsReducer(state = initialState, action) {
     case types.GOAL_DELETE: {
       return state;
     }
-    case types.LOGOUT: {
-      return initialState;
-    }
     default:
       return state;
   }

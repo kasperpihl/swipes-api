@@ -1,5 +1,4 @@
 import { fromJS } from 'immutable';
-import * as types from 'constants';
 
 const initialState = fromJS({});
 
@@ -33,9 +32,6 @@ export default function me(state = initialState, action) {
     }
     case 'service_removed': {
       return state.updateIn(['services'], services => services.filter(service => (service.get('id') !== payload.id)));
-    }
-    case types.LOGOUT: {
-      return initialState;
     }
     default:
       return state;

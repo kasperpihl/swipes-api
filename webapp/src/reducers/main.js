@@ -213,7 +213,17 @@ export default function main(state = initialState, action) {
       }
       return state.set('token', payload.token);
     }
+    case 'token_revoked':
     case types.LOGOUT: {
+      if (payload && payload.token) {
+        const currToken = state.get('token');
+        if (token !== currToken) {
+          return state;
+        }
+      }
+      window.analytics.logout();
+      localStorage.clear();
+      window.location.replace('/');
       return initialState;
     }
 

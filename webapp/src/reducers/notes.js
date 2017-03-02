@@ -1,5 +1,4 @@
 import { fromJS } from 'immutable';
-import * as types from 'constants';
 
 const initialState = fromJS({});
 
@@ -22,9 +21,6 @@ export default function notesReducer(state = initialState, action) {
     }
     case 'note_updated': {
       return state.set(payload.id, fromJS(payload));
-    }
-    case types.LOGOUT: {
-      return initialState;
     }
     default:
       return state;

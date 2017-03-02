@@ -26,9 +26,6 @@ export default function searchReducer(state = initialState, action) {
       return state.set('searching', false);
     }
     case types.SEARCH_CLEAR:
-    case types.LOGOUT: {
-      return initialState;
-    }
     default:
       return state;
   }
