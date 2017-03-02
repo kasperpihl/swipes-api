@@ -6,7 +6,7 @@ export function set(target, obj) {
     const payload = {
       id: target === 'primary' ? obj.id : randomString(5),
       target,
-      stack: [obj],
+      stack: obj ? [obj] : [],
     };
     dispatch({ type: types.NAVIGATION_SET, payload });
   };
