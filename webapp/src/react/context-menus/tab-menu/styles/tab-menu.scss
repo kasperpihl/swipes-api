@@ -117,7 +117,7 @@ $sectionHeight: 52px;
 		background-color: $bg;
 		left: calc(-1 * #{$mainPadding}); top: auto;
 		overflow-y: auto;
-		padding: $whiteSpacePadding $mainPadding 0 $mainPadding;
+		padding: $whiteSpacePadding 16px 0 16px;
 		transition: .25s ease-in-out;
     z-index: 12;
   }
@@ -133,7 +133,7 @@ $sectionHeight: 52px;
     @include size(100%, auto);
     @include flex();
     margin-bottom: 9px;
-    min-height: 50px;
+    min-height: 54px;
     position: relative;
     transition: .2s ease-in-out;
 
@@ -147,12 +147,6 @@ $sectionHeight: 52px;
       transition: .15s ease-in-out;
     }
 
-    &:hover {
-      &:before {
-        background-color: $deepBlue-5;
-      }
-    }
-
     &__data {
       @include size(100%, auto);
       position: relative;
@@ -160,7 +154,7 @@ $sectionHeight: 52px;
     }
 
     &__title {
-      @include font(15px, $deepBlue-50, 21px, 500);
+      @include font(15px, $deepBlue-50, 21px);
     }
 
     &__subtitle {
@@ -169,7 +163,7 @@ $sectionHeight: 52px;
 
     &--selected {
       & .result__title {
-        @include font(15px, $deepBlue-100, 21px, 4500);
+        @include font(15px, $deepBlue-100, 21px);
       }
 
       & .result__subtitle {
@@ -177,7 +171,7 @@ $sectionHeight: 52px;
       }
 
       &:before {
-        background-color: $blue-10;
+        background-color: $blue-5;
       }
     }
 
@@ -196,6 +190,14 @@ $sectionHeight: 52px;
         &:before {
           background-color: transparent;
         }
+      }
+    }
+
+
+    &:hover {
+
+      .result__title {
+        @include font($c: $blue-100);
       }
     }
   }
