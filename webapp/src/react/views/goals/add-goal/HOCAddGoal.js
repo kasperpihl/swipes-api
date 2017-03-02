@@ -38,6 +38,7 @@ class HOCAddGoal extends Component {
       'onHandoffChange',
       'onSave',
       'onInputChange',
+      'onTitleKeyUp',
       'saveToCache',
       'onLoadWay',
       'onClear',
@@ -106,6 +107,11 @@ class HOCAddGoal extends Component {
       alignY: 'center',
       alignX: 'right',
     }, goal);
+  }
+  onTitleKeyUp(e) {
+    if (e.keyCode === 13 && this.isReadyToCreate()) {
+      this.clickedAdd();
+    }
   }
   onAddedStep(title) {
     let { steps, stepOrder } = this.state;
@@ -230,48 +236,28 @@ class HOCAddGoal extends Component {
     }
   }
   isReadyToCreate() {
-    const { steps, title } = this.state;
-    return (steps.size && title.length);
+    const { title } = this.state;
+    return (title.length);
   }
 
   clickedAdd() {
-    const {
-      handoff,
-      title,
-    } = this.state;
+    const { handoff } = this.state;
     const {
       organization_id,
-      request,
+      addGoal,
       removeCache,
-      addToasty,
-      updateToasty,
       navPop,
     } = this.props;
 
     const goal = this.getGoal();
-    addToasty({ title: `Adding: ${title}`, loading: true }).then((toastId) => {
-      request('goals.create', {
-        message: handoff,
-        organization_id,
-        goal,
-      }).then((res) => {
-        if (res.ok) {
-          window.analytics.sendEvent('Created goal');
-          removeCache('add-goal');
-          updateToasty(toastId, {
-            title: 'Added goal',
-            completed: true,
-            duration: 3000,
-          });
-        } else {
-          updateToasty(toastId, {
-            title: 'Error adding goal',
-            loading: false,
-            duration: 3000,
-          });
-        }
-      });
-      navPop();
+    addGoal(goal, organization_id, handoff).then((res) => {
+      if (res.ok) {
+        window.analytics.sendEvent('Created goal');
+        removeCache('add-goal');
+        navPop();
+      } else {
+
+      }
     });
   }
   renderClearButton() {
@@ -296,6 +282,7 @@ class HOCAddGoal extends Component {
           onChange={this.onInputChange}
           target={target}
           delegate={this}
+          onKeyDown={this.onTitleKeyUp}
           value={title}
           placeholder="Goal title"
         >
@@ -307,6 +294,9 @@ class HOCAddGoal extends Component {
   }
   renderSteps() {
     const { steps, stepOrder } = this.state;
+    if (!this.isReadyToCreate()) {
+      return undefined;
+    }
     return (
       <Section title="Steps">
         <AddStepList
@@ -387,18 +377,9 @@ class HOCAddGoal extends Component {
     );
   }
   renderFooter() {
-    const status = this.getStatus();
-    const disabled = !!status;
-    let statusHtml;
-
-    if (status) {
-      statusHtml = (
-        <div className="add-goal__status">{status}</div>
-      );
-    }
-
+    const { steps } = this.state;
     let saveButton;
-    if (this.isReadyToCreate()) {
+    if (this.isReadyToCreate() && steps.size) {
       saveButton = (
         <Button
           text="Save as a Way"
@@ -410,13 +391,12 @@ class HOCAddGoal extends Component {
 
     return (
       <div className="add-goal__footer">
-        {statusHtml}
         <div className="add-goal__actions">
           {saveButton}
           <Button
             text="Create Goal"
             primary
-            disabled={disabled}
+            disabled={!this.isReadyToCreate()}
             className="add-goal__btn add-goal__btn--cta"
             onClick={this.clickedAdd}
           />
@@ -425,10 +405,9 @@ class HOCAddGoal extends Component {
     );
   }
   render() {
-    const { steps } = this.state;
     let infoClass = 'add-goal__info';
 
-    if (steps.size) {
+    if (this.isReadyToCreate()) {
       infoClass += ' add-goal__info--show';
     }
 
@@ -451,12 +430,10 @@ const { func, object, string } = PropTypes;
 
 HOCAddGoal.propTypes = {
   delegate: object,
-  addToasty: func,
-  updateToasty: func,
   navPop: func,
   target: string,
   removeCache: func,
-  request: func,
+  addGoal: func,
   organization_id: string,
   sideNoteId: string,
   saveCache: func,
@@ -482,9 +459,7 @@ export default connect(mapStateToProps, {
   saveCache: actions.main.cache.save,
   removeCache: actions.main.cache.remove,
   hideNote: actions.main.note.hide,
-  request: actions.api.request,
-  addToasty: actions.toasty.add,
-  updateToasty: actions.toasty.update,
+  addGoal: actions.goals.addGoal,
   loadWay: actions.ways.load,
   saveWay: actions.ways.save,
 })(HOCAddGoal);
