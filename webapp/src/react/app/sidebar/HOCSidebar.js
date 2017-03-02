@@ -29,14 +29,16 @@ class HOCSidebar extends PureComponent {
     const { navItems } = this.state;
 
     if (nextProps.navId !== this.props.navId) {
-      if (nextProps.navId === 'profile') {
-        this.setState({ activeItem: null });
-      } else {
+      const isNavitem = navItems.some(item => item.id === nextProps.navId);
+
+      if (isNavitem) {
         navItems.forEach((item, i) => {
           if (item.id === nextProps.navId) {
             this.setState({ activeItem: i });
           }
         });
+      } else {
+        this.setState({ activeItem: null });
       }
     }
   }
