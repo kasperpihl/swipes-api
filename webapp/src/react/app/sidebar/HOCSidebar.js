@@ -49,11 +49,11 @@ class HOCSidebar extends PureComponent {
     }
     navSet(target, {
       id,
-      title: id,
+      title: this.getTitleForId(id),
     });
   }
   getTitleForId(id) {
-    switch (navId) {
+    switch (id) {
       case 'MilestoneList':
         return 'Milestones (In Progress)';
       case 'GoalList':

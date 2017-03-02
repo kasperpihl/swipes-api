@@ -14,7 +14,7 @@ class Notifications {
       if (!counter) {
         counter = '';
       }
-      this.store.dispatch(a.navigation.setCounter('dashboard', counter));
+      this.store.dispatch(a.navigation.setCounter('Dashboard', counter));
     }
   }
 }

@@ -381,7 +381,7 @@ const usersRevokeToken = valLocals('usersRevokeToken', {
     dbToken,
   } = res.locals;
 
-  dbTokensRevoke({ user_id, dbToken })
+  dbTokensRevoke({ user_id, token: dbToken })
     .then(() => {
       return next();
     })
