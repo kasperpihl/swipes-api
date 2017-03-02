@@ -6,7 +6,10 @@ import bodyParser from 'body-parser';
 import winston from 'winston';
 import expressWinston from 'express-winston';
 import websocketStart from './websocket';
-import restAuth from './middlewares/jwt-auth-middleware';
+import {
+  authParseToken,
+  authCheckToken,
+} from './middlewares/jwt-auth-middleware';
 import checkForUpdates from './middlewares/check-updates-middleware';
 import handleJsonError from './middlewares/errors';
 import {
@@ -74,7 +77,7 @@ app.use('/v1', routes.v1NotAuthed);
 // Checking for updates
 app.use('/v1', checkForUpdates);
 // Validation of user's token
-app.use('/v1', restAuth);
+app.use('/v1', authParseToken, authCheckToken);
 // Authed routes goes here
 app.use('/v1', routes.v1Authed);
 

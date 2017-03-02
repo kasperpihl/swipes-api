@@ -1,32 +1,27 @@
 import url from 'url';
-import config from 'config';
 import ws from 'ws';
-import jwt from 'jwt-simple';
 import usersProfilePic from './users';
 import userServices from './services';
 import notes from './notes';
 import commonEvents from './common-events';
 import commonEventsMultiple from './common-events-multiple';
+import {
+  parseToken,
+} from '../api/utils';
 
 const auth = (token) => {
   if (token) {
-    const jwt_token_secret = config.get('jwtTokenSecret');
+    const parsedToken = parseToken(token);
 
-    try {
-      const decoded = jwt.decode(token, jwt_token_secret);
-
-      return decoded.iss;
-    } catch (err) {
-      console.log(err);
-      console.log('Can\'t parse the token!');
-
+    if (!parsedToken) {
       return false;
     }
-  } else {
-    console.log('No token passed!');
 
-    return false;
+    return parsedToken.content.iss;
   }
+
+  console.log('No token passed!');
+  return false;
 };
 
 const websocketStart = (server) => {

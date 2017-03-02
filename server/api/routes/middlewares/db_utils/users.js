@@ -137,6 +137,26 @@ const dbUsersGetSingleWithOrganizations = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbUsersGetByEmailForSignIn = funcWrap([
+  object.as({
+    email: string.require(),
+  }).require(),
+], (err, { email }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersGetByEmailForSignIn: ${err}`);
+  }
+
+  const q = r.table('users').filter({
+    email,
+  }).map((user) => {
+    return {
+      id: user('id'),
+      password: user('password'),
+    };
+  });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbUsersGetService,
@@ -145,4 +165,5 @@ export {
   dbUsersGetServiceWithAuth,
   dbUsersUpdateProfilePic,
   dbUsersGetSingleWithOrganizations,
+  dbUsersGetByEmailForSignIn,
 };

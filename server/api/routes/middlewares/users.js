@@ -1,16 +1,17 @@
-import config from 'config';
 import r from 'rethinkdb';
-import jwt from 'jwt-simple';
 import sha1 from 'sha1';
 import moment from 'moment';
+import Promise from 'bluebird';
 import {
   string,
   number,
   object,
 } from 'valjs';
 import {
+  getClientIp,
   valLocals,
   generateSlackLikeId,
+  createTokens,
 } from '../../utils';
 import * as services from '../../services';
 import db from '../../../db';
@@ -22,7 +23,12 @@ import {
   dbUsersRemoveService,
   dbUsersUpdateProfilePic,
   dbUsersGetSingleWithOrganizations,
+  dbUsersGetByEmailForSignIn,
 } from './db_utils/users';
+import {
+  dbTokensInsertSingle,
+  dbRevokeToken,
+} from './db_utils/tokens';
 import {
   dbXendoGetService,
   dbXendoRemoveService,
@@ -94,6 +100,7 @@ const userSignUp = valLocals('userSignUp', {
   last_name: string.require(),
   password: string.min(1).require(),
   organizationId: string.require(),
+  tokenInfo: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -102,6 +109,7 @@ const userSignUp = valLocals('userSignUp', {
     last_name,
     password,
     organizationId,
+    tokenInfo,
   } = res.locals;
   const userDoc = {
     id: user_id,
@@ -114,62 +122,84 @@ const userSignUp = valLocals('userSignUp', {
     password: sha1(password),
     created: moment().unix(),
   };
+  const tokens = createTokens(tokenInfo.user_id);
   const createUserQ = r.table('users').insert(userDoc);
-  const token = jwt.encode({
-    iss: user_id,
-  }, config.get('jwtTokenSecret'));
 
-  return db.rethinkQuery(createUserQ)
-    .then(() => {
-      setLocals({
-        token,
-        user_id,
-      });
-
-      return next();
-    }).catch((err) => {
-      return next(err);
+  Promise.all([
+    dbTokensInsertSingle({ token: tokens.token, tokenInfo }),
+    db.rethinkQuery(createUserQ),
+  ])
+  .then(() => {
+    setLocals({
+      user_id,
+      token: tokens.shortToken,
     });
+
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
 });
-const userSignIn = valLocals('userSignIn', {
+const usersGetByEmailSignIn = valLocals('usersGetByEmailSignIn', {
   email: string.format('email').require(),
-  password: string.min(1).require(),
 }, (req, res, next, setLocals) => {
   const {
     email,
-    password,
   } = res.locals;
-  const query = r.table('users').filter({
-    email,
-  }).map((user) => {
-    return {
-      id: user('id'),
-      password: user('password'),
-      is_admin: user('is_admin').default(false),
-    };
-  });
 
-  return db.rethinkQuery(query)
+  dbUsersGetByEmailForSignIn({ email })
     .then((users) => {
-      const user = users[0];
-      const sha1Password = sha1(password);
-
       if (users.length === 0) {
-        return next(new SwipesError('Wrong email or password'));
-      } else if (sha1Password !== user.password) {
         return next(new SwipesError('Wrong email or password'));
       }
 
-      const token = jwt.encode({
-        iss: user.id,
-      }, config.get('jwtTokenSecret'));
+      const user = users[0];
 
       setLocals({
-        token,
+        user,
       });
 
       return next();
-    }).catch((err) => {
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const usersComparePasswordSignIn = valLocals('usersComparePasswordSignIn', {
+  user: object.require(),
+  password: string.min(1).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user,
+    password,
+  } = res.locals;
+  const sha1Password = sha1(password);
+
+  if (sha1Password !== user.password) {
+    return next(new SwipesError('Wrong email or password'));
+  }
+
+  return next();
+});
+const userSignIn = valLocals('userSignIn', {
+  tokenInfo: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    tokenInfo,
+  } = res.locals;
+
+  const tokens = createTokens(tokenInfo.user_id);
+
+  setLocals({
+    token: tokens.shortToken,
+  });
+
+  dbTokensInsertSingle({ token: tokens.token, tokenInfo })
+    .then((results) => {
+      return next();
+    })
+    .catch((err) => {
       return next(err);
     });
 });
@@ -319,8 +349,50 @@ const usersGetSingleWithOrganizations = valLocals('usersGetSingleWithOrganizatio
       return next(err);
     });
 });
+const userGetInfoForToken = valLocals('userGetInfoForToken', {
+  user_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+  } = res.locals;
+  const platform = req.header('sw-platform');
+  const ip = getClientIp(req);
+  const revoked = false;
+
+  setLocals({
+    tokenInfo: {
+      user_id,
+      revoked,
+      info: {
+        platform,
+        ip,
+      },
+    },
+  });
+
+  return next();
+});
+const usersRevokeToken = valLocals('usersRevokeToken', {
+  user_id: string.require(),
+  dbToken: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    dbToken,
+  } = res.locals;
+
+  dbRevokeToken({ user_id, dbToken })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
 export {
+  usersComparePasswordSignIn,
+  usersGetByEmailSignIn,
   userAvailability,
   userAddToOrganization,
   userSignUp,
@@ -332,4 +404,6 @@ export {
   usersRemoveService,
   usersUpdateProfilePic,
   usersGetSingleWithOrganizations,
+  userGetInfoForToken,
+  usersRevokeToken,
 };

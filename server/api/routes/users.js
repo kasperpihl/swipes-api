@@ -18,6 +18,10 @@ import {
   usersRemoveXendoService,
   usersRemoveService,
   usersUpdateProfilePic,
+  userGetInfoForToken,
+  usersGetByEmailSignIn,
+  usersComparePasswordSignIn,
+  usersRevokeToken,
 } from './middlewares/users';
 import {
   xendoSignUpQueueMessage,
@@ -35,6 +39,18 @@ notAuthed.all('/users.signin',
     email: string.format('email').require(),
     password: string.min(1).require(),
   }),
+  usersGetByEmailSignIn,
+  usersComparePasswordSignIn,
+  (req, res, next) => {
+    const {
+      user,
+    } = res.locals;
+
+    res.locals.user_id = user.id;
+
+    return next();
+  },
+  userGetInfoForToken,
   userSignIn,
   valResponseAndSend({
     token: string.require(),
@@ -50,6 +66,7 @@ notAuthed.all('/users.signup',
   }),
   userAvailability,
   userAddToOrganization,
+  userGetInfoForToken,
   userSignUp,
   xendoSignUpQueueMessage,
   notificationsPushToQueue,
@@ -57,6 +74,11 @@ notAuthed.all('/users.signup',
     user_id: string.require(),
     token: string.require(),
   }));
+
+authed.all('/users.signout',
+    usersRevokeToken,
+    valResponseAndSend(),
+  );
 
 authed.post('/users.serviceDisconnect',
   valBody({

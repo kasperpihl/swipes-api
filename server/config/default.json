@@ -57,5 +57,6 @@
   "protocol": "http://",
   "cors": "*",
   "jwtTokenSecret": "swipy the dinocat",
-  "env": "dev"
+  "env": "dev",
+  "jwtTokenHead": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
 }

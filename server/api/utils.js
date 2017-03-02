@@ -1,15 +1,55 @@
 import config from 'config';
 import randomstring from 'randomstring';
 import valjs, { string, func, object } from 'valjs';
+import jwt from 'jwt-simple';
 
-const generateSlackLikeId = (type) => {
-  const id = randomstring.generate(8).toUpperCase();
+const generateSlackLikeId = (type = '', number = 8) => {
+  const id = randomstring.generate(number).toUpperCase();
 
   return type.toUpperCase() + id;
 };
 const camelCaseToUnderscore = (word) => {
   // http://stackoverflow.com/questions/30521224/javascript-convert-camel-case-to-underscore-case
   return word.replace(/([A-Z]+)/g, (x, y) => { return `_${y.toLowerCase()}`; }).replace(/^_/, '');
+};
+const getClientIp = (req) => {
+  const ip = req.headers['x-forwarded-for'] ?
+              req.headers['x-forwarded-for'].split(',')[0] :
+              req.connection.remoteAddress;
+
+  return ip;
+};
+const createTokens = (user_id) => {
+  const token = jwt.encode({
+    iss: user_id,
+    r: generateSlackLikeId('', 3),
+  }, config.get('jwtTokenSecret'));
+  const shortToken = token.split('.').splice(1, 2).join('.');
+  const prefix = 'sw.';
+
+  return {
+    token: `${prefix}${token}`,
+    shortToken: `${prefix}${shortToken}`,
+  };
+};
+const parseToken = (token) => {
+  const jwtHead = config.get('jwtTokenHead');
+  // removing the sw. in the beggining of the token
+  const tokenWithoutSw = token.split('.').splice(1, 2).join('.');
+  const constructedToken = `${jwtHead}.${tokenWithoutSw}`;
+  const dbToken = `sw.${constructedToken}`;
+
+  try {
+    const content = jwt.decode(constructedToken, config.get('jwtTokenSecret'));
+
+    return {
+      constructedToken,
+      dbToken,
+      content,
+    };
+  } catch (err) {
+    return null;
+  }
 };
 const sendResponse = (req, res) => {
   const {
@@ -117,4 +157,7 @@ export {
   valResponseAndSend,
   valLocals,
   valBody,
+  getClientIp,
+  createTokens,
+  parseToken,
 };
