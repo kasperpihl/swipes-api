@@ -116,6 +116,8 @@ authed.all('/goals.removeMilestone',
 
 // T_TODO think about how to overcome the 256KB limit of the message to the queue
 // K_SOLUTION limit message length (don't write a book to people :)
+// T_ANSWER uh.. I have to check the message size before send it to the queue
+// and throw a proper error :D
 authed.all('/goals.notify',
   valBody({
     goal_id: string.require(),
