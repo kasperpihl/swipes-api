@@ -49,13 +49,14 @@ export const addToCollection = (goalId, content) => (d, getState) => {
   }));
 };
 
-export const addGoal = (goal, organizationId, message) => (d, getState) => {
+export const addGoal = (goal, organizationId, message, flags) => (d, getState) => {
   if (!goal.step_order.length) {
     const myId = getState().getIn(['me', 'id']);
     const gId = randomString(6);
     goal.step_order.push(gId);
     goal.steps[gId] = {
       id: gId,
+      flags,
       title: goal.title,
       assignees: [myId],
     };

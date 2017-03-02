@@ -19,6 +19,7 @@ import './styles/add-goal.scss';
 const initialState = fromJS({
   title: '',
   handoff: '',
+  flags: [],
   steps: {},
   stepOrder: [],
   attachments: {},
@@ -78,6 +79,15 @@ class HOCAddGoal extends Component {
   onClear() {
     this.setState(initialState.toObject());
   }
+  onFlag(id) {
+    let { flags } = this.state;
+    if (flags.includes(id)) {
+      flags = flags.filter(f => f !== id);
+    } else {
+      flags = flags.push(id);
+    }
+    this.setState({ flags });
+  }
   onLoadWay(e) {
     const { loadWay } = this.props;
     loadWay({
@@ -91,6 +101,7 @@ class HOCAddGoal extends Component {
           steps: goal.get('steps'),
           stepOrder: goal.get('step_order'),
           attachments: goal.get('attachments'),
+          flags: goal.get('attachment_order'),
           attachmentOrder: goal.get('attachment_order'),
           title: way.get('title'),
         };
@@ -113,7 +124,7 @@ class HOCAddGoal extends Component {
       this.clickedAdd();
     }
   }
-  onAddedStep(title) {
+  onAddedStep(title, index) {
     let { steps, stepOrder } = this.state;
     const id = randomString(6);
     steps = steps.set(id, fromJS({
@@ -121,7 +132,18 @@ class HOCAddGoal extends Component {
       title,
       assignees: [],
     }));
-    stepOrder = stepOrder.push(id);
+    if (typeof index === 'number') {
+      stepOrder = stepOrder.insert(index, id);
+    } else {
+      stepOrder = stepOrder.push(id);
+    }
+
+    this.updateState({ steps, stepOrder });
+  }
+  onDeletedStep(stepId) {
+    let { steps, stepOrder } = this.state;
+    steps = steps.delete(stepId);
+    stepOrder = stepOrder.filter(id => id !== stepId);
     this.updateState({ steps, stepOrder });
   }
   onOpenAssignee(id, e) {
@@ -138,16 +160,18 @@ class HOCAddGoal extends Component {
     this.updateState({ steps });
   }
   onAddAttachment(obj) {
-    let { attachments, attachmentOrder } = this.state;
+    let { attachments, attachmentOrder, flags } = this.state;
     attachments = attachments.set(obj.shortUrl, fromJS(obj));
     attachmentOrder = attachmentOrder.push(obj.shortUrl);
+    flags = flags.push(obj.shortUrl);
     if (!this._unmounted) {
-      this.updateState({ attachments, attachmentOrder });
+      this.updateState({ attachments, attachmentOrder, flags });
     } else {
       const { saveCache } = this.props;
       saveCache('add-goal', fromJS(Object.assign({}, this.state, {
         attachments,
         attachmentOrder,
+        flags,
       })));
     }
   }
@@ -241,7 +265,10 @@ class HOCAddGoal extends Component {
   }
 
   clickedAdd() {
-    const { handoff } = this.state;
+    const {
+      handoff,
+      flags,
+    } = this.state;
     const {
       organization_id,
       addGoal,
@@ -250,7 +277,7 @@ class HOCAddGoal extends Component {
     } = this.props;
 
     const goal = this.getGoal();
-    addGoal(goal, organization_id, handoff).then((res) => {
+    addGoal(goal, organization_id, handoff, flags.toJS()).then((res) => {
       if (res.ok) {
         window.analytics.sendEvent('Created goal');
         removeCache('add-goal');
@@ -309,7 +336,7 @@ class HOCAddGoal extends Component {
     );
   }
   renderAttachments() {
-    const { attachments, attachmentOrder } = this.state;
+    const { attachments, attachmentOrder, flags } = this.state;
 
     if (!this.isReadyToCreate()) {
       return undefined;
@@ -320,8 +347,9 @@ class HOCAddGoal extends Component {
         <HOCAttachments
           attachments={attachments}
           attachmentOrder={attachmentOrder}
+          enableFlagging
+          flags={flags}
           delegate={this}
-          noFlagging
         />
       </Section>
     );
