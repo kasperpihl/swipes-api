@@ -29,7 +29,7 @@
 
   &__image {
     @include size(24px);
-    margin: 0 15px;
+    margin-left: 15px;
 
     img {
       @include size(24px);
@@ -41,11 +41,12 @@
     @include size(24px);
     @include font(12px, $deepBlue-90, 18px, bold);
     background-color: $bg;
-    margin: 0 15px;
+    margin-left: 15px;
   }
 
   &__name {
     @include font(12px, $deepBlue-20, 18px, 500);
     @include truncateString();
+    padding-left: 15px;
   }
 }

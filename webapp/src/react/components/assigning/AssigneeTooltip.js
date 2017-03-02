@@ -25,14 +25,22 @@ class AssigneeTooltip extends Component {
   renderPeople() {
     const { assignees } = this.props;
 
-    return assignees.map((a, i) => (
-      <div className="tooltip__item" key={i}>
-        {this.renderProfilePic(a)}
-        <div className="tooltip__name">
-          {a.get('first_name')} {a.get('last_name')}
+    if (assignees.size) {
+      return assignees.map((a, i) => (
+        <div className="tooltip__item" key={i}>
+          {this.renderProfilePic(a)}
+          <div className="tooltip__name">
+            {a.get('first_name')} {a.get('last_name')}
+          </div>
         </div>
-      </div>
       ));
+    } else {
+      return (
+        <div className="tooltip__item">
+          <div className="tooltip__name">Assign someone.</div>
+        </div>
+      );
+    }
   }
   render() {
     return (
