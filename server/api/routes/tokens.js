@@ -33,7 +33,7 @@ authed.all('/tokens.revoke',
   tokensRevokeQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    token: string.require(),
+    token_to_revoke: string.require(),
   }));
 
 export {
