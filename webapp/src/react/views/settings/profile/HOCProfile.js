@@ -1,17 +1,19 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import Button from 'Button';
 import { map } from 'react-immutable-proptypes';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { main, menus } from 'actions';
+import * as a from 'actions';
 import { bindAll } from 'classes/utils';
 import './profile.scss';
 
-class HOCProfile extends Component {
+class HOCProfile extends PureComponent {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     bindAll(this, ['clickedServices', 'onLogout']);
+    this.state = {
+      isLoggingOut: false,
+    };
   }
   onLogout(e) {
     const { confirm, logout } = this.props;
@@ -21,7 +23,12 @@ class HOCProfile extends Component {
       title: 'Log out',
       message: 'Do you want to log out?',
     }), (i) => {
-      if (i === 1) logout();
+      if (i === 1) {
+        this.setState({ isLoggingOut: true });
+        logout(() => {
+          this.setState({ isLoggingOut: false });
+        });
+      }
     });
   }
   getOptionsForE(e) {
@@ -48,7 +55,7 @@ class HOCProfile extends Component {
   }
   render() {
     const { me } = this.props;
-
+    const { isLoggingOut } = this.state;
     return (
       <div className="profile">
         <div className="profile__image">
@@ -64,6 +71,7 @@ class HOCProfile extends Component {
         />
         <Button
           icon="Logout"
+          loading={isLoggingOut}
           className="profile__button profile__button--logout"
           onClick={this.onLogout}
         />
@@ -88,8 +96,8 @@ HOCProfile.propTypes = {
 };
 
 const ConnectedHOCProfile = connect(mapStateToProps, {
-  logout: main.logout,
-  confirm: menus.confirm,
+  logout: a.main.logout,
+  confirm: a.menus.confirm,
 })(HOCProfile);
 
 export default ConnectedHOCProfile;

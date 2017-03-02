@@ -75,12 +75,17 @@ export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondar
 // ======================================================
 // Account related
 // ======================================================
-export const logout = () => (dp) => {
-  dp({ type: types.LOGOUT });
-  window.analytics.logout();
-  localStorage.clear();
-  window.location.replace('/');
-};
+export const logout = cb => dp => dp(a.api.request('users.signout')).then((res) => {
+  if (cb) {
+    cb(res);
+  }
+  if (res && res.ok) {
+    dp({ type: types.LOGOUT });
+    window.analytics.logout();
+    localStorage.clear();
+    window.location.replace('/');
+  }
+});
 
 // ======================================================
 // Notes
