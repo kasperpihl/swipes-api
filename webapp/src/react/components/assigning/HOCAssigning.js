@@ -57,6 +57,7 @@ class HOCAssigning extends PureComponent {
       rounded,
       tooltip,
       size,
+      tooltipAlign,
     } = this.props;
     const { stateAssignees } = this.state;
 
@@ -68,6 +69,7 @@ class HOCAssigning extends PureComponent {
         rounded={rounded}
         tooltip={tooltip}
         size={size}
+        tooltipAlign={tooltipAlign}
       />
     );
   }

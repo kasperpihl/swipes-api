@@ -28,7 +28,7 @@ class NotificationItem extends Component {
           <Icon svg={n.get('icon')} className="notification__svg" />
         </div>
         <div className="notification__assigning">
-          <HOCAssigning assignees={[n.get('userId')]} rounded />
+          <HOCAssigning assignees={[n.get('userId')]} rounded tooltipAlign="left" />
         </div>
       </div>
     );

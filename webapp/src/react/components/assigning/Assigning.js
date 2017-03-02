@@ -32,7 +32,9 @@ class Assigning extends Component {
   }
   onMouseEnter(e) {
     const target = getParentByClass(e.target, 'assignees');
-    const { tooltip, assignees } = this.props;
+    const { tooltip, assignees, tooltipAlign } = this.props;
+    const position = tooltipAlign || 'right';
+
     const data = {
       component: AssigneeTooltip,
       props: {
@@ -40,7 +42,7 @@ class Assigning extends Component {
       },
       options: {
         boundingRect: target.getBoundingClientRect(),
-        position: 'right',
+        position,
       },
     };
 
@@ -146,4 +148,5 @@ Assigning.propTypes = {
   rounded: bool,
   size: number,
   tooltip: func,
+  tooltipAlign: string,
 };
