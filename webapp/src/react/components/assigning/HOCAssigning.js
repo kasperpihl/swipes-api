@@ -1,29 +1,64 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
+import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { list } from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import * as actions from 'actions';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import Assigning from './Assigning';
 
-class HOCAssigning extends Component {
+class HOCAssigning extends PureComponent {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.state = {
+      stateAssignees: this.getStateAssignees(props),
+    };
     this.callDelegate = setupDelegate(props.delegate);
     this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'clickedAssign'), this);
+    /*
+      addgoal,
+      steplist,
+      goallist,
+      dashboard,
+    */
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.assignees !== this.props.assignees) {
+      this.setState({ stateAssignees: this.getStateAssignees(nextProps) });
+    }
+  }
+  getStateAssignees(props) {
+    const { users, me, goal, stepId, assignees } = props;
+    let stateAssignees = List([]);
+
+    if (goal && stepId) {
+      stateAssignees = goal.getIn(['steps', stepId, 'assignees']);
+
+      if (!stateAssignees) {
+        const helper = new GoalsUtil(goal);
+        stateAssignees = List(helper.getAllInvolvedAssignees());
+      }
+    } else if (assignees && !stateAssignees.size) {
+      stateAssignees = List(assignees);
+    }
+
+    if (stateAssignees.includes(me.get('id'))) {
+      stateAssignees = stateAssignees.filter(uId => uId !== me.get('id')).insert(0, me.get('id'));
+    }
+
+    stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
+
+    return stateAssignees;
   }
   render() {
     const {
-      stateAssignees,
       maxImages,
       index,
       rounded,
       tooltip,
       size,
     } = this.props;
+    const { stateAssignees } = this.state;
 
     return (
       <Assigning
@@ -39,31 +74,22 @@ class HOCAssigning extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const users = state.get('users');
-  const { goalId, stepId, assignees } = ownProps;
-  const goal = state.getIn(['goals', goalId]);
-  let stateAssignees = state.getIn(['goals', goalId, 'steps', stepId, 'assignees']);
-  if (!stateAssignees && goal) {
-    const helper = new GoalsUtil(goal);
-    stateAssignees = List(helper.getAllInvolvedAssignees());
-  } else if (!stateAssignees) {
-    stateAssignees = List(assignees);
-  }
-  const me = state.get('me');
-  if (stateAssignees.includes(me.get('id'))) {
-    stateAssignees = stateAssignees.filter(uId => uId !== me.get('id')).insert(0, me.get('id'));
-  }
-  stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
-
-
   return {
-    stateAssignees,
+    goal: state.getIn(['goals', ownProps.goalId]),
+    users: state.get('users'),
+    me: state.get('me'),
   };
 }
 
-const { object, oneOfType, number, string, bool } = PropTypes;
+const { object, oneOfType, number, string, bool, array, func } = PropTypes;
+
 HOCAssigning.propTypes = {
-  stateAssignees: list,
+  tooltip: func,
+  goal: map,
+  me: map,
+  users: map,
+  assignees: oneOfType([list, array]),
+  stepId: string,
   index: oneOfType([number, string]),
   delegate: object,
   maxImages: number,

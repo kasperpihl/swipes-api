@@ -75,13 +75,13 @@ class Assigning extends Component {
       if (i < maxImages || (i === maxImages && assignees.size === (maxImages + 1))) {
         if (pic) {
           return (
-            <div className="assignees__profile assignees__profile--image" key={i}>
+            <div className="assignees__profile assignees__profile--image" key={a.get('first_name')}>
               <img src={pic} alt="" />
             </div>
           );
         }
         return (
-          <div className="assignees__profile assignees__profile--name" key={i}>
+          <div className="assignees__profile assignees__profile--name" key={a.get('first_name')}>
             {firstLetter}
           </div>
         );
