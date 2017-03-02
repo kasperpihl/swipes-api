@@ -56,7 +56,7 @@ authed.all('/goals.create',
   goalsCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    data: object.require(),
+    goal: object.require(),
   }));
 
 authed.all('/goals.completeStep',
@@ -126,13 +126,13 @@ authed.all('/goals.notify',
     current_step_id: string,
     flags: array.of(string),
     message: string,
-
   }),
   goalsNotify,
   goalsNotifyQueueMessage,
   notificationsPushToQueue,
-  valResponseAndSend(),
-);
+  valResponseAndSend({
+    goal: object.require(),
+  }));
 
 // T_TODO warning: this endpoint is to be removed
 authed.all('/goals.update',

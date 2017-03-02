@@ -62,9 +62,12 @@ const dbGoalsPushToHistorySingle = funcWrap([
     throw new SwipesError(`dbGoalsPushToHistorySingle: ${err}`);
   }
 
-  const q = r.table('goals').get(goal_id).update({
-    history: r.row('history').append(historyItem),
-  });
+  const q =
+    r.table('goals')
+      .get(goal_id)
+      .update({
+        history: r.row('history').append(historyItem),
+      }, { returnChanges: true });
 
   return db.rethinkQuery(q);
 });
