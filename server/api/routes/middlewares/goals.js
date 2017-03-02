@@ -73,7 +73,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     history: array.of(object).require(),
   }).require(),
   goal_id: string.require(),
-  current_step_id: string.require(),
+  current_step_id: string,
   next_step_id: string,
   message: string,
   flags: array.of(string),
@@ -98,7 +98,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   }
 
   const type = next_step_id ? 'complete_step' : 'complete_goal';
-  const currentStep = goal.steps[current_step_id];
+  const currentStep = goal.steps[current_step_id] || {};
   const history = {
     type,
     flags,
@@ -130,13 +130,13 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
 
   return next();
 });
-const goalsProgressStatus = valLocals('goalsArchive', {
+const goalsProgressStatus = valLocals('goalsProgressStatus', {
   goal: object.as({
     status: object.require(),
     steps: object.require(),
     history: array.of(object).require(),
   }).require(),
-  current_step_id: string.require(),
+  current_step_id: string,
   next_step_id: string,
 }, (req, res, next, setLocals) => {
   const {
@@ -145,7 +145,12 @@ const goalsProgressStatus = valLocals('goalsArchive', {
     next_step_id,
   } = res.locals;
 
-  const currentStepPosision = goal.step_order.indexOf(current_step_id);
+  let currentStepPosision = goal.step_order.indexOf(current_step_id);
+
+  if (currentStepPosision === -1) {
+    currentStepPosision = goal.step_order.length;
+  }
+
   const nextStepPosision = goal.step_order.indexOf(next_step_id);
   let goalProgress = 'forward';
 
@@ -395,7 +400,7 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
   goal: object.as({
     id: string.require(),
   }).require(),
-  current_step_id: string.require(),
+  current_step_id: string,
   goalProgress: string.require(),
 }, (req, res, next, setLocals) => {
   const {
