@@ -38,8 +38,8 @@ class HandoffStatus extends Component {
     } else {
       const to = helper.getStepById(toId);
       const toIndex = helper.getStepIndexForId(toId);
-      const fromIndex = helper.getCurrentStepIndex();
-      const diff = toIndex - fromIndex;
+      const numberOfCompleted = helper.getNumberOfCompletedSteps();
+      const diff = toIndex - numberOfCompleted;
 
       const title = `"${to.get('title')}"`;
       let moveString = `Move ${diff} step${diff > 1 ? 's' : ''} forward to `;

@@ -40,7 +40,7 @@ class Assigning extends Component {
       },
       options: {
         boundingRect: target.getBoundingClientRect(),
-        position: 'bottom',
+        position: 'right',
       },
     };
 

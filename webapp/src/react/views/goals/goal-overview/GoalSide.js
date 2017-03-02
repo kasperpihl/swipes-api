@@ -40,7 +40,7 @@ class GoalSide extends Component {
     return (
       <StepList
         steps={helper.getOrderedSteps().map(s => s.set('loading', loadingSteps.get(s.get('id'))))}
-        completed={helper.getCurrentStepIndex()}
+        completed={helper.getNumberOfCompletedSteps()}
         delegate={this.props.delegate}
       />
     );

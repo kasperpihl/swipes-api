@@ -111,7 +111,7 @@ export default class GoalsUtil {
   getAssigneesForStepIndex(i) {
     const step = this.getStepByIndex(i);
     if (!step) {
-      return false;
+      return fromJS([]);
     }
     return step.get('assignees');
   }

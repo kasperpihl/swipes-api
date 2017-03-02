@@ -180,11 +180,11 @@ class HOCGoalHandoff extends PureComponent {
       label = 'Give Feedback';
     } else {
       const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
-      const currentStepIndex = helper.getCurrentStepIndex();
-      if (nextStepIndex === currentStepIndex) {
+      const numberOfCompleted = helper.getNumberOfCompletedSteps();
+      if (nextStepIndex === numberOfCompleted) {
         label = 'Reassign Step';
       }
-      if (nextStepIndex < currentStepIndex) {
+      if (nextStepIndex < numberOfCompleted) {
         label = 'Make Iteration';
       }
     }
