@@ -11,6 +11,7 @@ import * as find from './find';
 import * as milestones from './milestones';
 import * as ways from './ways';
 import * as stream from './stream';
+import * as tokens from './tokens';
 
 const v1NotAuthed = [
   users.notAuthed,
@@ -29,6 +30,7 @@ const v1Authed = [
   find.authed,
   milestones.authed,
   ways.authed,
+  tokens.authed,
 ];
 // const webhooksNotAuthed = [
 //   webhooks.notAuthed,

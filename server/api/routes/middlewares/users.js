@@ -27,7 +27,7 @@ import {
 } from './db_utils/users';
 import {
   dbTokensInsertSingle,
-  dbRevokeToken,
+  dbTokensRevoke,
 } from './db_utils/tokens';
 import {
   dbXendoGetService,
@@ -381,7 +381,7 @@ const usersRevokeToken = valLocals('usersRevokeToken', {
     dbToken,
   } = res.locals;
 
-  dbRevokeToken({ user_id, dbToken })
+  dbTokensRevoke({ user_id, dbToken })
     .then(() => {
       return next();
     })

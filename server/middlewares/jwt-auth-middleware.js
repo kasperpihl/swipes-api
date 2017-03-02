@@ -16,7 +16,7 @@ const authParseToken = (req, res, next) => {
     }
 
     res.locals.user_id = parsedToken.content.iss;
-    res.locals.token = parsedToken.constructedToken;
+    res.locals.constructedToken = parsedToken.constructedToken;
     res.locals.dbToken = parsedToken.dbToken;
 
     return next();

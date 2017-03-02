@@ -3,6 +3,7 @@ import * as milestones from './milestones';
 import * as ways from './ways';
 import * as users from './users';
 import * as xendo from './xendo';
+import * as tokens from './tokens';
 import * as notifications from './notifications';
 import * as notify from './notify';
 
@@ -117,6 +118,12 @@ const xendo_add_service_to_user = xendoWrapper([
   xendo.xendoAddServiceToUser,
 ]);
 
+const token_revoked = [
+  tokens.tokensRevokedNotificationData,
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
+
 export {
   goal_created,
   goal_completed,
@@ -134,4 +141,5 @@ export {
   xendo_user_signup,
   xendo_remove_service_from_user,
   xendo_add_service_to_user,
+  token_revoked,
 };

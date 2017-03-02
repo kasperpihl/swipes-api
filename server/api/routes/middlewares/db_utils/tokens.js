@@ -24,7 +24,7 @@ const dbCheckToken = funcWrap([
 
   return db.rethinkQuery(q);
 });
-const dbRevokeToken = funcWrap([
+const dbTokensRevoke = funcWrap([
   object.as({
     user_id: string.require(),
     token: string.require(),
@@ -66,9 +66,26 @@ const dbTokensInsertSingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbTokensGetByUserId = funcWrap([
+  object.as({
+    user_id: string.require(),
+  }).require(),
+], (err, { user_id }) => {
+  if (err) {
+    throw new SwipesError(`dbTokensGetByUserId: ${err}`);
+  }
+
+  const q =
+    r.table('tokens')
+      .getAll(user_id, { index: 'user_id' })
+      .filter({ revoked: false });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbTokensInsertSingle,
   dbCheckToken,
-  dbRevokeToken,
+  dbTokensRevoke,
+  dbTokensGetByUserId,
 };
