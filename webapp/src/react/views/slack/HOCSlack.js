@@ -69,7 +69,7 @@ class HOCSlack extends Component {
       if (!counter && arg.unread) {
         counter = '\u2022';
       }
-      setCounter('slack', counter);
+      setCounter('Slack', counter);
       window.ipcListener.setBadgeCount(counter);
     });
     webview.addEventListener('new-window', (e) => {

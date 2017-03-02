@@ -463,7 +463,7 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   assignees: array.of(string).require(),
-  feedback: bool.require(),
+  feedback: bool,
   flags: array.of(string),
   message: string,
 }, (req, res, next, setLocals) => {
