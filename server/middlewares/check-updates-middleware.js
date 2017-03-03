@@ -41,13 +41,13 @@ const checkForUpdates = (req, res, next) => {
   if (webVersion) {
     const latest = parseVersionString(version);
     const running = parseVersionString(webVersion);
-    if (latest.major > running.major) {
+    if (latest.major > running.major || latest.minor > running.minor) {
       return next(new SwipesError('reload_required', {
         reload_required: true,
         reload_available: version,
       }));
     }
-    if (latest.minor > running.minor || latest.patch > running.patch) {
+    if (latest.patch > running.patch) {
       res.locals.reload_available = version;
     }
   }

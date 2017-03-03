@@ -43,7 +43,6 @@ class HOCAddGoal extends Component {
       'saveToCache',
       'onLoadWay',
       'onClear',
-      'clickedTemplate',
     ]);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -61,7 +60,9 @@ class HOCAddGoal extends Component {
   }
 
   componentWillUnmount() {
-    this.saveToCache();
+    if (!this._didAdd) {
+      this.saveToCache();
+    }
     window.removeEventListener('beforeunload', this.saveToCache);
     this._unmounted = true;
     const { hideNote, sideNoteId } = this.props;
@@ -211,8 +212,28 @@ class HOCAddGoal extends Component {
 
     return status;
   }
-  clickedTemplate() {
+  onTemplateClick(template) {
     console.log('to');
+    const steps = {};
+    const stepOrder = [];
+    template.steps.forEach((title, i) => {
+      const id = `step-${i}`;
+      steps[id] = {
+        id,
+        title,
+        assignees: [],
+      };
+      stepOrder.push(id);
+    });
+    const newState = fromJS({
+      title: template.title,
+      steps,
+      flags: [],
+      stepOrder,
+      attachments: {},
+      attachmentOrder: [],
+    }).toObject();
+    this.updateState(newState);
   }
   navbarLoadedInput(input) {
     this._input = input;
@@ -232,13 +253,24 @@ class HOCAddGoal extends Component {
   }
   saveToCache() {
     const { saveCache } = this.props;
-    saveCache('add-goal', fromJS(this.state));
+    const { state } = this;
+    const cache = {
+      title: state.title,
+      handoff: state.handoff,
+      flags: state.flags,
+      steps: state.steps,
+      stepOrder: state.stepOrder,
+      attachments: state.attachments,
+      attachmentOrder: state.attachmentOrder,
+    };
+    saveCache('add-goal', fromJS(cache));
   }
   clickedAssign(id, e) {
     const { selectAssignees } = this.props;
     const { steps, stepOrder } = this.state;
     const i = stepOrder.findKey(v => v === id);
     return selectAssignees({
+      actionLabel: 'Done',
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'left',
     }, steps.getIn([id, 'assignees']).toJS(), (assignees) => {
@@ -277,13 +309,15 @@ class HOCAddGoal extends Component {
     } = this.props;
 
     const goal = this.getGoal();
+    this.setState({ isSubmitting: true, errorLabel: null });
     addGoal(goal, organization_id, handoff, flags.toJS()).then((res) => {
       if (res.ok) {
         window.analytics.sendEvent('Created goal');
+        this._didAdd = true;
         removeCache('add-goal');
         navPop();
       } else {
-
+        this.setState({ isSubmitting: false, errorLabel: 'Something went wrong' });
       }
     });
   }
@@ -311,7 +345,7 @@ class HOCAddGoal extends Component {
           delegate={this}
           onKeyDown={this.onTitleKeyUp}
           value={title}
-          placeholder="Goal title"
+          placeholder="Write the goal title"
         >
           {this.renderClearButton()}
           <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
@@ -378,34 +412,44 @@ class HOCAddGoal extends Component {
 
     const templates = [
       {
-        title: 'Design',
-        message: 'Weather it’s the next office party ',
+        title: 'Content',
+        steps: ['Idea', 'Research topic', 'Write content', 'Feedback', 'Publish'],
+        description: '',
       },
       {
-        title: 'Development',
+        title: 'Event',
+        steps: ['Idea', 'Attendees list', 'Agenda', 'Spread the word', 'Food and drinks'],
+        description: 'Weather it’s the next office party or company interest meetup company. This is a great way to get from A to Z.',
+      },
+      {
+        title: 'Design',
+        steps: ['Concept & specs', 'Visual research', 'Design mockup', 'Feedback', 'Production ready'],
+        description: 'Weather it’s the next office party ',
       },
       {
         title: 'Research',
-        message: 'Weather it’s the next office party or company interest meetup company. ',
+        steps: ['Topic of research', 'Existing information', 'Gather data', 'Analytize information', 'Share results', 'Get feedback'],
+        description: 'Weather it’s the next office party or company interest meetup company. ',
       },
       {
-        title: 'Company event',
-        message: 'Weather it’s the next office party or company interest meetup company. This is a great way to get from A to Z.',
+        title: 'Development',
+        steps: ['Specs', 'Development', 'Testing', 'QA'],
+        description: '',
       },
     ];
-
-    const templatesHTML = templates.map((t, i) => <TemplateItem delegate={this} title={t.title} message={t.message} key={`template-${i}`} />);
 
     return (
       <Section title="Or choose a way">
         <div className="add-goal__templates">
-          {templatesHTML}
+          {templates.map((t, i) => (
+            <TemplateItem delegate={this} template={t} key={i} />
+          ))}
         </div>
       </Section>
     );
   }
   renderFooter() {
-    const { steps } = this.state;
+    const { steps, isSubmitting, errorLabel } = this.state;
     let saveButton;
     if (this.isReadyToCreate() && steps.size) {
       saveButton = (
@@ -426,6 +470,8 @@ class HOCAddGoal extends Component {
             primary
             disabled={!this.isReadyToCreate()}
             className="add-goal__btn add-goal__btn--cta"
+            errorLabel={errorLabel}
+            loading={isSubmitting}
             onClick={this.clickedAdd}
           />
         </div>
@@ -473,7 +519,7 @@ HOCAddGoal.propTypes = {
   me: map,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     sideNoteId: state.getIn(['main', 'sideNoteId']),
     me: state.get('me'),

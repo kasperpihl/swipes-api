@@ -51,7 +51,7 @@ const notifyCommonRethinkdb = valLocals('notifyCommonRethinkdb', {
     user_ids: uniqueUsersToNotify,
     date,
     type,
-    data: eventData,
+    data: { goal: eventData },
   };
 
   commonMultipleEvents({ objToInsert })

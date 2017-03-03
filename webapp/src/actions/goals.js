@@ -186,6 +186,9 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     onTabMenuLoad: (tMenu) => {
       tabMenu = tMenu;
     },
+    onActionClick: () => {
+      callback();
+    },
     numberOfTabs: () => 3,
     nameForTab: i => [`Assigned (${assignees.length})`, 'Recent', 'All'][i],
     onItemAction: (item, side) => {
@@ -232,12 +235,12 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
       if (recent.length) {
         d(a.main.updateRecentAssignees(recent));
       }
-      callback();
     },
     props: {
       search: 'Search for name or email',
       delegate,
       initialTabIndex,
+      ...options,
     },
   }));
 };

@@ -27,7 +27,7 @@ const milestonesCreatedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = milestone;
+  res.locals.eventData = { milestone };
 
   return next();
 };

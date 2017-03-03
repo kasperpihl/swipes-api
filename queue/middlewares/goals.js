@@ -29,7 +29,7 @@ const goalsCreatedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = goal;
+  res.locals.eventData = { goal };
 
   return next();
 };
@@ -47,7 +47,7 @@ const goalsCompletedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = goal;
+  res.locals.eventData = { goal };
 
   return next();
 };
@@ -137,7 +137,7 @@ const goalsMilestoneAddedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = goal;
+  res.locals.eventData = { goal };
 
   return next();
 };
@@ -153,7 +153,7 @@ const goalsMilestoneRemovedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = goal;
+  res.locals.eventData = { goal };
 
   return next();
 };
@@ -177,7 +177,7 @@ const goalsStepCompletedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = goal;
+  res.locals.eventData = { goal };
 
   return next();
 };
@@ -202,7 +202,7 @@ const goalsNotifyNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = goal;
+  res.locals.eventData = { goal };
 
   return next();
 };

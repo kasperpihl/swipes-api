@@ -97,7 +97,7 @@ class HOCGoalHandoff extends PureComponent {
   onSelectAssignees(options, newAssignees) {
     const { selectAssignees } = this.props;
 
-    selectAssignees(options, newAssignees.toJS(), (assignees) => {
+    selectAssignees(Object.assign({ actionLabel: 'Done' }, options), newAssignees.toJS(), (assignees) => {
       const { handoff } = this.state;
       if (assignees) {
         this.setState({ handoff: handoff.set('assignees', fromJS(assignees)) });

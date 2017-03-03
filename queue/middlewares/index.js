@@ -61,6 +61,7 @@ const goal_notify = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsNotifyNotificationData,
   notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
 ]);
 
 const step_completed = notifyWrapper([
@@ -68,6 +69,7 @@ const step_completed = notifyWrapper([
   goals.goalsStepCompletedNotificationData,
   goals.goalsNextStepInterseptUsers,
   notify.notifyAllInGoal,
+  notify.notifySendEventToAllInCompany,
 ]);
 
 const milestone_created = notifyWrapper([

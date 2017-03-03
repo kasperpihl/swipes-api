@@ -27,7 +27,7 @@ const waysCreatedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = way;
+  res.locals.eventData = { way };
 
   return next();
 };

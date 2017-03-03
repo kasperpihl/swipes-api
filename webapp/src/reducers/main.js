@@ -114,7 +114,7 @@ export default function main(state = initialState, action) {
     }
     case 'notifications.markAsSeen.ids':
     case 'notifications_seen_ids': {
-      const { notification_ids: ids, last_marked: lastMarked } = payload.data || payload;
+      const { notification_ids: ids, last_marked: lastMarked } = payload;
       return state.updateIn(['notifications'], s => s.map((n) => {
         if (ids && ids.indexOf(n.get('id')) !== -1) {
           return n.set('seen', lastMarked);
@@ -124,7 +124,7 @@ export default function main(state = initialState, action) {
     }
     case 'notifications_seen_ts':
     case 'notifications.markAsSeen.ts': {
-      const { marked_at, last_marked: lastMarked } = payload.data || payload;
+      const { marked_at, last_marked: lastMarked } = payload;
       return state.updateIn(['notifications'], s => s.map((n) => {
         if (n.get('ts') <= lastMarked) {
           return n.set('seen', marked_at);
@@ -193,14 +193,18 @@ export default function main(state = initialState, action) {
     // ======================================================
     // Ways
     // ======================================================
-    case 'way_created': {
-      return state.setIn(['ways', payload.data.id], fromJS(payload.data));
-    }
+    case 'way_created':
     case 'ways.create': {
-      if (!payload.ok) {
-        return state;
+      if (payload.ok || typeof payload.ok === 'undefined') {
+        return state.setIn(['ways', payload.way.id], fromJS(payload.way));
       }
-      return state.setIn(['ways', payload.way.id], fromJS(payload.way));
+      return state;
+    }
+    case 'ways.archive': {
+      if (payload.ok || typeof payload.ok === 'undefined') {
+        return state.deleteIn(['ways', payload.id]);
+      }
+      return state;
     }
 
     // ======================================================
@@ -215,9 +219,9 @@ export default function main(state = initialState, action) {
     }
     case 'token_revoked':
     case types.LOGOUT: {
-      if (payload && payload.data.token_to_revoke) {
+      if (payload && payload.token_to_revoke) {
         const currToken = state.get('token');
-        if (payload.data.token_to_revoke !== currToken) {
+        if (payload.token_to_revoke !== currToken) {
           return state;
         }
       }
