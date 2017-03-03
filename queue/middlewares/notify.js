@@ -80,9 +80,28 @@ const notifyAllInCurrentStep = (req, res, next) => {
 
   return next();
 };
+const notifySendEventToAllInCompany = (req, res, next) => {
+  const {
+    user,
+  } = res.locals;
+
+  const usersIds = [];
+  const organization = user.organizations[0];
+
+  organization.users.forEach((userId) => {
+    usersIds.push(userId);
+  });
+
+  const uniqueUsersToNotifyWithEvent = Array.from(new Set(usersIds));
+
+  res.locals.uniqueUsersToNotifyWithEvent = uniqueUsersToNotifyWithEvent;
+
+  return next();
+};
 const notifyCommonRethinkdb = (req, res, next) => {
   const {
     uniqueUsersToNotify,
+    uniqueUsersToNotifyWithEvent = null,
     event_type,
     userNotificationMap = null,
     notificationData,
@@ -90,7 +109,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
   } = res.locals;
 
   const objToInsert = {
-    user_ids: uniqueUsersToNotify,
+    user_ids: uniqueUsersToNotifyWithEvent || uniqueUsersToNotify,
     type: event_type,
     ts: r.now(),
     data: eventData,
@@ -197,4 +216,5 @@ export {
   notifyAllInGoal,
   notifyAllInCurrentStep,
   notifyMultipleUsers,
+  notifySendEventToAllInCompany,
 };

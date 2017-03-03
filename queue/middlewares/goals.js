@@ -206,17 +206,6 @@ const goalsNotifyNotificationData = (req, res, next) => {
 
   return next();
 };
-const goalsNotifyDoneBy = (req, res, next) => {
-  const {
-    user_id,
-    uniqueUsersToNotify,
-  } = res.locals;
-
-  uniqueUsersToNotify.push(user_id);
-  res.locals.uniqueUsersToNotify = uniqueUsersToNotify;
-
-  return next();
-};
 
 export {
   goalsGetSingle,
@@ -230,5 +219,4 @@ export {
   goalsMilestoneAddedNotificationData,
   goalsMilestoneRemovedNotificationData,
   goalsNotifyNotificationData,
-  goalsNotifyDoneBy,
 };
