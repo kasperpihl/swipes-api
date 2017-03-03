@@ -61,6 +61,7 @@ const goal_notify = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsNotifyNotificationData,
   notify.notifyMultipleUsers,
+  goals.goalsNotifyDoneBy,
 ]);
 
 const step_completed = notifyWrapper([
