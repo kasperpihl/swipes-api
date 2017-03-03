@@ -62,6 +62,9 @@ class HOCHistory extends PureComponent {
           yourself,
         });
         m = m.set('subtitle', `${from} notified ${to} regarding`);
+        if (e.get('feedback')) {
+          m = m.set('subtitle', `${from} gave feedback to ${to} regarding`);
+        }
         m = m.set('title', stepTitle);
         m = m.set('icon', 'GotNotified');
         break;

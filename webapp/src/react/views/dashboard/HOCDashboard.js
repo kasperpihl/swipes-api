@@ -135,6 +135,9 @@ class HOCDashboard extends Component {
       }
       case 'goal_notify': {
         m = m.set('subtitle', `${from} notified ${to} in`);
+        if (data.get('feedback')) {
+          m = m.set('subtitle', `${from} gave ${to} feedback in`);
+        }
         m = m.set('icon', 'GotNotified');
         break;
       }
