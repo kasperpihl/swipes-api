@@ -4,7 +4,6 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 
-
 import './styles/notification-item';
 
 class NotificationItem extends Component {
