@@ -24,7 +24,7 @@ const usersProfilePic = (socket, userId) => {
         const type = 'profile_pic_updated';
         const payload = row.new_val;
 
-        socket.send(JSON.stringify({ type, payload }));
+        socket.send(JSON.stringify({ type, data: payload }));
       });
     })
     .catch((err) => {

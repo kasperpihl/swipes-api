@@ -84,7 +84,7 @@ const userServices = (socket, userId) => {
           payload = payload[0];
         }
 
-        socket.send(JSON.stringify({ type, payload }));
+        socket.send(JSON.stringify({ type, data: payload }));
       });
     });
 };
