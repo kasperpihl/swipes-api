@@ -414,27 +414,27 @@ class HOCAddGoal extends Component {
       {
         title: 'Content',
         steps: ['Idea', 'Research topic', 'Write content', 'Feedback', 'Publish'],
-        description: '',
+        description: 'New blog post in making? Easily collaborate on any content idea and get it out of the door.',
       },
       {
         title: 'Event',
         steps: ['Idea', 'Attendees list', 'Agenda', 'Spread the word', 'Food and drinks'],
-        description: 'Weather it’s the next office party or company interest meetup company. This is a great way to get from A to Z.',
+        description: 'Muffin Friday in the office? Or planning a teamwork event? 5 steps to get you started and involve the right people.',
       },
       {
         title: 'Design',
         steps: ['Concept & specs', 'Visual research', 'Design mockup', 'Feedback', 'Production ready'],
-        description: 'Weather it’s the next office party ',
+        description: 'Swiftly execute on a design idea with your team, get feedback and bring it to life.',
       },
       {
         title: 'Research',
         steps: ['Topic of research', 'Existing information', 'Gather data', 'Analytize information', 'Share results', 'Get feedback'],
-        description: 'Weather it’s the next office party or company interest meetup company. ',
+        description: 'Work together on new opportunities, research ideas and share them with the team.',
       },
       {
         title: 'Development',
         steps: ['Specs', 'Development', 'Testing', 'QA'],
-        description: '',
+        description: 'Make things happen with your team. Collaborate on product improvements and implement new solutions.',
       },
     ];
 

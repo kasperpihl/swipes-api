@@ -431,7 +431,7 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
 const goalsNotify = valLocals('goalsNotify', {
   user_id: string.require(),
   goal_id: string.require(),
-  current_step_id: string.require(),
+  current_step_id: string,
   assignees: array.of(string).require(),
   feedback: bool,
   flags: array.of(string),
