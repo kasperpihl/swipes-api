@@ -29,8 +29,13 @@ export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 // ======================================================
 export const contextMenu = payload => (dp, getState) => {
   const cMenu = getState().getIn(['main', 'contextMenu']);
-  if (!payload && cMenu && typeof cMenu.onClose === 'function') {
-    cMenu.onClose();
+  if (!payload && cMenu) {
+    const { onClose, props } = cMenu;
+    if (typeof onClose === 'function') {
+      onClose();
+    } else if (props && typeof props.onClose === 'function') {
+      props.onClose();
+    }
   }
   dp({ type: types.CONTEXT_MENU, payload });
 };

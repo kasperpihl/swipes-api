@@ -1,3 +1,5 @@
+import { fromJS } from 'immutable';
+
 export function isShareURL(url) {
   url = url || '';
   const shareURLPrefix = `${window.location.origin}/s/`;
@@ -346,4 +348,41 @@ export function throttle(func, wait) {
     }
   };
   return throttled;
+}
+
+
+export function setupLoadingHandlers(ctx) {
+  let _loadingStates = fromJS({});
+  if (!ctx.state) {
+    console.warn('setupLoadingHandlers should be in constructor after this.state = {}');
+    return;
+  }
+  ctx.state._loadingStates = _loadingStates;
+  function setLoadingState(name, label) {
+    const newState = { loading: true };
+    if (label) {
+      newState.loadingLabel = label;
+    }
+    _loadingStates = _loadingStates.set(name, newState);
+    this.setState({ _loadingStates });
+  }
+  function getLoadingState(name) {
+    return _loadingStates.get(name);
+  }
+  function clearLoadingState(name, label) {
+    const newState = { loading: false };
+    if (label && label.startsWith('!')) {
+      newState.errorLabel = label.substr(1);
+    } else if (label) {
+      newState.successLabel = label;
+    }
+
+    _loadingStates = _loadingStates.set(name, newState);
+    this.setState({ _loadingStates });
+  }
+  ctx.setLoadingState = setLoadingState;
+  ctx.getLoadingState = getLoadingState;
+  ctx.clearLoadingState = clearLoadingState;
+
+  bindAll(ctx, ['setLoadingState', 'getLoadingState', 'clearLoadingState']);
 }

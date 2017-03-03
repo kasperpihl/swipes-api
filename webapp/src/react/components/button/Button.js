@@ -162,7 +162,7 @@ class Button extends Component {
     }
 
     if (successState) {
-      className += ' g-button--result g-button--error';
+      className += ' g-button--result g-button--success';
     }
 
     if (classNameFromButton && typeof classNameFromButton === 'string') {

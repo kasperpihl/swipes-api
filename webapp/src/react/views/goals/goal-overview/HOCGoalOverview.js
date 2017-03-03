@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
-import { bindAll, setupCachedCallback } from 'classes/utils';
+import { bindAll, setupCachedCallback, setupLoadingHandlers } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
 
@@ -30,6 +30,9 @@ class HOCGoalOverview extends PureComponent {
     this.state = {
       loadingSteps: fromJS({}),
     };
+
+    setupLoadingHandlers(this);
+
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
     this.onNotify = setupCachedCallback(this.onNotify, this);
   }
@@ -193,19 +196,40 @@ class HOCGoalOverview extends PureComponent {
       contextMenu,
       saveWay,
       confirm,
+      inputMenu,
     } = this.props;
     const options = this.getOptionsForE(e);
     const delegate = {
       onItemAction: (item) => {
         if (item.id === 'way') {
-          const helper = this.getHelper();
-          saveWay(options, helper.getObjectForWay());
+          inputMenu(Object.assign({}, options, {
+            initialValue: goal.get('title'),
+            placeholder: 'Name your Way: Like Development, Design etc.',
+            buttonLabel: 'Save',
+          }), (title) => {
+            this.setLoadingState('dots');
+            const helper = this.getHelper();
+            saveWay(options, title, helper.getObjectForWay()).then((res) => {
+              if (res && res.ok) {
+                this.clearLoadingState('dots', 'Added way');
+              } else {
+                this.clearLoadingState('dots', '!Something went wrong');
+              }
+            });
+          });
         } else {
           confirm(Object.assign({}, options, {
             title: 'Archive goal',
             message: 'This will make this goal inactive for all participants.',
           }), (i) => {
-            if (i === 1) archive(goal.get('id'));
+            if (i === 1) {
+              this.setLoadingState('dots');
+              archive(goal.get('id')).then((res) => {
+                if (!res || !res.ok) {
+                  this.clearLoadingState('dots', '!Something went wrong');
+                }
+              });
+            }
           });
         }
       },
@@ -297,6 +321,7 @@ class HOCGoalOverview extends PureComponent {
           <Button
             icon="ThreeDots"
             onClick={this.onContext}
+            {...this.getLoadingState('dots')}
           />
         </HOCHeaderTitle>
       </div>

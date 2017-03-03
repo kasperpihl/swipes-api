@@ -200,6 +200,12 @@ export default function main(state = initialState, action) {
       }
       return state;
     }
+    case 'ways.archive': {
+      if (payload.ok || typeof payload.ok === 'undefined') {
+        return state.deleteIn(['ways', payload.id]);
+      }
+      return state;
+    }
 
     // ======================================================
     // Authorization methods

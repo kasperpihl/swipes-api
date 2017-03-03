@@ -26,10 +26,10 @@ export const input = (options, callback) => (d) => {
     props: {
       ...options,
       onResult: (title) => {
-        d(a.main.contextMenu(null));
         if (callback) {
           callback(title);
         }
+        d(a.main.contextMenu(null));
       },
     },
   }));
