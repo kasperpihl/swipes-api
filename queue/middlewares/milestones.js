@@ -27,7 +27,7 @@ const milestonesCreatedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = milestone;
+  res.locals.eventData = { milestone };
 
   return next();
 };
@@ -44,7 +44,11 @@ const milestonesArchivedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = { id: milestone.id };
+  res.locals.eventData = {
+    milestone: {
+      id: milestone.id,
+    },
+  };
 
   return next();
 };

@@ -27,7 +27,7 @@ const waysCreatedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = way;
+  res.locals.eventData = { way };
 
   return next();
 };
@@ -43,7 +43,11 @@ const waysArchivedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = { id: way.id };
+  res.locals.eventData = {
+    way: {
+      id: way.id,
+    },
+  };
 
   return next();
 };
