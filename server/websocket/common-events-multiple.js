@@ -34,15 +34,21 @@ const commonEventsMultiple = (socket, userId) => {
           if (n.user_notification_map) {
             const notification_map = n.user_notification_map[userId];
 
-            n.notification_data.id = notification_map.id;
-            n.notification_data.ts = notification_map.ts;
+            // We remove the notification_data for users
+            // that don't have notification map or created notification for them
+            if (!notification_map || !notification_map.id) {
+              delete n.notification_data;
+            } else {
+              n.notification_data.id = notification_map.id;
+              n.notification_data.ts = notification_map.ts;
 
-            if (notification_map.includes_me) {
-              n.notification_data.data.includes_me = notification_map.includes_me;
-            }
+              if (notification_map.includes_me) {
+                n.notification_data.data.includes_me = notification_map.includes_me;
+              }
 
-            if (notification_map.me_is_next) {
-              n.notification_data.data.me_is_next = notification_map.me_is_next;
+              if (notification_map.me_is_next) {
+                n.notification_data.data.me_is_next = notification_map.me_is_next;
+              }
             }
           }
 

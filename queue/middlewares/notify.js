@@ -27,16 +27,13 @@ const notifyMultipleUsers = (req, res, next) => {
 const notifyAllInCompany = (req, res, next) => {
   const {
     user,
-    user_id,
   } = res.locals;
 
   const usersIds = [];
   const organization = user.organizations[0];
 
   organization.users.forEach((userId) => {
-    if (user_id !== userId) {
-      usersIds.push(userId);
-    }
+    usersIds.push(userId);
   });
 
   const uniqueUsersToNotify = Array.from(new Set(usersIds));
@@ -48,16 +45,13 @@ const notifyAllInCompany = (req, res, next) => {
 const notifyAllInGoal = (req, res, next) => {
   const {
     goal,
-    user_id,
   } = res.locals;
 
   const usersIds = [];
 
   for (const [k, v] of Object.entries(goal.steps)) {
     v.assignees.forEach((assignee) => {
-      if (user_id !== assignee) {
-        usersIds.push(assignee);
-      }
+      usersIds.push(assignee);
     });
   }
 
@@ -71,16 +65,13 @@ const notifyAllInCurrentStep = (req, res, next) => {
   const {
     goal,
     step_id,
-    user_id,
   } = res.locals;
 
   const currentStep = goal.steps[step_id];
   const usersIds = [];
 
   currentStep.assignees.forEach((userId) => {
-    if (user_id !== userId) {
-      usersIds.push(userId);
-    }
+    usersIds.push(userId);
   });
 
   const uniqueUsersToNotify = Array.from(new Set(usersIds));
@@ -117,6 +108,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
 };
 const notifyInsertMultipleNotifications = (req, res, next) => {
   const {
+    user_id,
     event_type,
     uniqueUsersToNotify,
     notificationData,
@@ -160,7 +152,15 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     return next();
   }
 
-  dbInsertMultipleNotifications({ notifications })
+  const filteredNotifications = notifications.filter((notification) => {
+    if (event_type === 'goal_notify' && uniqueUsersToNotify.indexOf(user_id) > -1) {
+      return true;
+    }
+
+    return notification.user_id !== user_id;
+  });
+
+  dbInsertMultipleNotifications({ notifications: filteredNotifications })
     .then((dbResults) => {
       dbResults.changes.forEach((change) => {
         const newVal = change.new_val;
