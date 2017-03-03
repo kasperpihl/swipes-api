@@ -12,7 +12,6 @@ export default class Dashboard extends Component {
       notifications,
       delegate,
     } = this.props;
-    console.log('notifications', notifications.size);
 
     if (!notifications.size) {
       return (

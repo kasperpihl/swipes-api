@@ -19,12 +19,12 @@ $borderColor: $deepBlue-10;
   @include widthSpecifications($btnSize, initial);
   @include flexContainer('row', center, center) {
     flex: none;
+    display: inline-flex;
   };
   background-color: $bg;
   border-radius: 50px;
   border: 1px solid;
   border-color: $borderColor;
-  display: inline-flex;
   transition: all .15s, border-color .15s 0s;
   user-select: none;
   z-index: 2;
