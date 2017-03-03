@@ -43,7 +43,6 @@ class HOCAddGoal extends Component {
       'saveToCache',
       'onLoadWay',
       'onClear',
-      'clickedTemplate',
     ]);
     this.callDelegate = setupDelegate(props.delegate);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -213,8 +212,28 @@ class HOCAddGoal extends Component {
 
     return status;
   }
-  clickedTemplate() {
+  onTemplateClick(template) {
     console.log('to');
+    const steps = {};
+    const stepOrder = [];
+    template.steps.forEach((title, i) => {
+      const id = `step-${i}`;
+      steps[id] = {
+        id,
+        title,
+        assignees: [],
+      };
+      stepOrder.push(id);
+    });
+    const newState = fromJS({
+      title: template.title,
+      steps,
+      flags: [],
+      stepOrder,
+      attachments: {},
+      attachmentOrder: [],
+    }).toObject();
+    this.updateState(newState);
   }
   navbarLoadedInput(input) {
     this._input = input;
@@ -393,56 +412,38 @@ class HOCAddGoal extends Component {
 
     const templates = [
       {
-        title: 'Design',
-        steps: {
-          a12345: {
-            id: 'a12345',
-            title: '',
-            assignees: [],
-          },
-          b12345: {
-            id: 'b12345',
-            title: '',
-            assignees: [],
-          },
-          c12345: {
-            id: 'c12345',
-            title: '',
-            assignees: [],
-          },
-          d12345: {
-            id: 'd12345',
-            title: '',
-            assignees: [],
-          },
-          e12345: {
-            id: 'e12345',
-            title: '',
-            assignees: [],
-          },
-        },
-        stepOrder: ['a12345', 'b12345', 'c12345', 'd12345', 'e12345'],
-        message: 'Weather it’s the next office party ',
+        title: 'Content',
+        steps: ['Idea', 'Research topic', 'Write content', 'Feedback', 'Publish'],
+        description: '',
       },
       {
-        title: 'Development',
+        title: 'Event',
+        steps: ['Idea', 'Attendees list', 'Agenda', 'Spread the word', 'Food and drinks'],
+        description: 'Weather it’s the next office party or company interest meetup company. This is a great way to get from A to Z.',
+      },
+      {
+        title: 'Design',
+        steps: ['Concept & specs', 'Visual research', 'Design mockup', 'Feedback', 'Production ready'],
+        description: 'Weather it’s the next office party ',
       },
       {
         title: 'Research',
-        message: 'Weather it’s the next office party or company interest meetup company. ',
+        steps: ['Topic of research', 'Existing information', 'Gather data', 'Analytize information', 'Share results', 'Get feedback'],
+        description: 'Weather it’s the next office party or company interest meetup company. ',
       },
       {
-        title: 'Company event',
-        message: 'Weather it’s the next office party or company interest meetup company. This is a great way to get from A to Z.',
+        title: 'Development',
+        steps: ['Specs', 'Development', 'Testing', 'QA'],
+        description: '',
       },
     ];
-
-    const templatesHTML = templates.map((t, i) => <TemplateItem delegate={this} title={t.title} message={t.message} key={`template-${i}`} />);
 
     return (
       <Section title="Or choose a way">
         <div className="add-goal__templates">
-          {templatesHTML}
+          {templates.map((t, i) => (
+            <TemplateItem delegate={this} template={t} key={i} />
+          ))}
         </div>
       </Section>
     );
