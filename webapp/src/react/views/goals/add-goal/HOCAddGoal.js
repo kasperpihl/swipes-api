@@ -61,7 +61,9 @@ class HOCAddGoal extends Component {
   }
 
   componentWillUnmount() {
-    this.saveToCache();
+    if (!this._didAdd) {
+      this.saveToCache();
+    }
     window.removeEventListener('beforeunload', this.saveToCache);
     this._unmounted = true;
     const { hideNote, sideNoteId } = this.props;
@@ -232,7 +234,17 @@ class HOCAddGoal extends Component {
   }
   saveToCache() {
     const { saveCache } = this.props;
-    saveCache('add-goal', fromJS(this.state));
+    const { state } = this;
+    const cache = {
+      title: state.title,
+      handoff: state.handoff,
+      flags: state.flags,
+      steps: state.steps,
+      stepOrder: state.stepOrder,
+      attachments: state.attachments,
+      attachmentOrder: state.attachmentOrder,
+    };
+    saveCache('add-goal', fromJS(state));
   }
   clickedAssign(id, e) {
     const { selectAssignees } = this.props;
@@ -277,13 +289,15 @@ class HOCAddGoal extends Component {
     } = this.props;
 
     const goal = this.getGoal();
+    this.setState({ isSubmitting: true, errorLabel: null });
     addGoal(goal, organization_id, handoff, flags.toJS()).then((res) => {
       if (res.ok) {
         window.analytics.sendEvent('Created goal');
+        this._didAdd = true;
         removeCache('add-goal');
         navPop();
       } else {
-
+        this.setState({ isSubmitting: false, errorLabel: 'Something went wrong' });
       }
     });
   }
@@ -405,7 +419,7 @@ class HOCAddGoal extends Component {
     );
   }
   renderFooter() {
-    const { steps } = this.state;
+    const { steps, isSubmitting, errorLabel } = this.state;
     let saveButton;
     if (this.isReadyToCreate() && steps.size) {
       saveButton = (
@@ -426,6 +440,8 @@ class HOCAddGoal extends Component {
             primary
             disabled={!this.isReadyToCreate()}
             className="add-goal__btn add-goal__btn--cta"
+            errorLabel={errorLabel}
+            loading={isSubmitting}
             onClick={this.clickedAdd}
           />
         </div>
@@ -473,7 +489,7 @@ HOCAddGoal.propTypes = {
   me: map,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     sideNoteId: state.getIn(['main', 'sideNoteId']),
     me: state.get('me'),

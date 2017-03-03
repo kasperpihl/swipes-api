@@ -27,21 +27,19 @@ export default function goalsReducer(state = initialState, action) {
       return state;
     }
     case 'goal_archived': {
-      return state.delete(payload.data.id);
+      return state.delete(payload.id);
     }
     case 'goal_updated':
     case 'goal_created':
     case 'goal_completed':
     case 'goal_notify':
     case 'step_got_active':
-    case 'step_completed': {
-      return state.mergeIn([payload.data.id], fromJS(payload.data));
-    }
+    case 'step_completed':
     case 'goals.notify':
     case 'goals.completeStep':
     case 'goals.create':
     case 'goals.update': {
-      if (payload.ok) {
+      if (payload.ok || typeof payload.ok === 'undefined') {
         return state.mergeIn([payload.goal.id], fromJS(payload.goal));
       }
       return state;
