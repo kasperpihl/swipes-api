@@ -31,10 +31,12 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'goal_updated':
     case 'goal_completed':
+    case 'goal_notify':
     case 'step_got_active':
     case 'step_completed': {
       return state.mergeIn([payload.data.id], fromJS(payload.data));
     }
+    case 'goals.notify':
     case 'goals.completeStep':
     case 'goals.update': {
       if (payload.ok) {
