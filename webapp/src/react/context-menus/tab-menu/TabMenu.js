@@ -41,7 +41,9 @@ class TabMenu extends Component {
     this.qId = undefined;
   }
   handleClick() {
+    const { hide } = this.props;
     this.callDelegate('onActionClick');
+    hide();
   }
   onKeyDown(e) {
     if (e.keyCode === 13) {

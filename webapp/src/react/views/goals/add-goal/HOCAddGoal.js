@@ -244,13 +244,14 @@ class HOCAddGoal extends Component {
       attachments: state.attachments,
       attachmentOrder: state.attachmentOrder,
     };
-    saveCache('add-goal', fromJS(state));
+    saveCache('add-goal', fromJS(cache));
   }
   clickedAssign(id, e) {
     const { selectAssignees } = this.props;
     const { steps, stepOrder } = this.state;
     const i = stepOrder.findKey(v => v === id);
     return selectAssignees({
+      actionLabel: 'Done',
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'left',
     }, steps.getIn([id, 'assignees']).toJS(), (assignees) => {
@@ -325,7 +326,7 @@ class HOCAddGoal extends Component {
           delegate={this}
           onKeyDown={this.onTitleKeyUp}
           value={title}
-          placeholder="Goal title"
+          placeholder="Write the goal title"
         >
           {this.renderClearButton()}
           <Button text="Load a Way" tabIndex={-1} onClick={this.onLoadWay} />
@@ -393,6 +394,34 @@ class HOCAddGoal extends Component {
     const templates = [
       {
         title: 'Design',
+        steps: {
+          a12345: {
+            id: 'a12345',
+            title: '',
+            assignees: [],
+          },
+          b12345: {
+            id: 'b12345',
+            title: '',
+            assignees: [],
+          },
+          c12345: {
+            id: 'c12345',
+            title: '',
+            assignees: [],
+          },
+          d12345: {
+            id: 'd12345',
+            title: '',
+            assignees: [],
+          },
+          e12345: {
+            id: 'e12345',
+            title: '',
+            assignees: [],
+          },
+        },
+        stepOrder: ['a12345', 'b12345', 'c12345', 'd12345', 'e12345'],
         message: 'Weather it’s the next office party ',
       },
       {

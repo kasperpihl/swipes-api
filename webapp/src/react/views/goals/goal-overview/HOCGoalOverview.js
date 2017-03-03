@@ -164,6 +164,7 @@ class HOCGoalOverview extends PureComponent {
         contextMenu(null);
         if (!item.assignees) {
           let overrideAssignees;
+          options.actionLabel = 'Write message';
           selectAssignees(options, [], (newAssignees) => {
             if (newAssignees) {
               overrideAssignees = newAssignees;
@@ -290,6 +291,10 @@ class HOCGoalOverview extends PureComponent {
     const step = helper.getStepByIndex(i);
 
     const options = this.getOptionsForE(e);
+    options.actionLabel = 'Reassign';
+    if (step.get('id') === helper.getCurrentStepId()) {
+      options.actionLabel = 'Write message';
+    }
     let overrideAssignees;
     selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
       if (newAssignees) {

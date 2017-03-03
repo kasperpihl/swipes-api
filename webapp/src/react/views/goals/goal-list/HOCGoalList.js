@@ -82,17 +82,18 @@ class HOCGoalList extends PureComponent {
     }
   }
   onAssignClick(goalId, stepId, e) {
-    const { goals, selectAssignees, navPush } = this.props;
+    const { goals, selectAssignees, openSecondary } = this.props;
     const step = goals.getIn([goalId, 'steps', stepId]);
 
     const options = this.getOptionsForE(e);
+    options.actionLabel = 'Write message';
     let overrideAssignees;
     const title = 'Handoff';
     selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
       if (newAssignees) {
         overrideAssignees = newAssignees;
       } else if (overrideAssignees) {
-        navPush({
+        openSecondary({
           id: 'GoalHandoff',
           title,
           props: {
