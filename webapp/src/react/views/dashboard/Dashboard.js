@@ -12,9 +12,15 @@ export default class Dashboard extends Component {
       notifications,
       delegate,
     } = this.props;
+    console.log('notifications', notifications.size);
 
-    if (!notifications) {
-      return 'No notifications....';
+    if (!notifications.size) {
+      return (
+        <div className="notifications-empty-state">
+          <div className="notifications-empty-state__title">Notifications</div>
+          <div className="notifications-empty-state__message">Here you get notified on the newest and latest from your team. Never miss your turn to take action and stay up–to–date with your team's progress.</div>
+        </div>
+      );
     }
     return notifications.map((n, i) => {
       if (!n) {

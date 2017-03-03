@@ -3,6 +3,7 @@ import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
+import Button from 'Button';
 import Measure from 'react-measure';
 import GoalListItem from './GoalListItem';
 import FilterFooter from './FilterFooter';
@@ -72,18 +73,29 @@ class GoalList extends Component {
     );
   }
   renderList() {
-    const { goals, tabs, tabIndex } = this.props;
+    const { goals, tabs, tabIndex, addGoal } = this.props;
     const filter = tabs.getIn([tabIndex, 'filter']);
-    return goals.map(goal => (
-      <GoalListItem
-        onClick={this.clickedListItem}
-        onAssignClick={this.onAssignClick}
-        me={this.props.me}
-        filter={filter}
-        goal={goal}
-        key={`goal-list-item-${goal.get('id')}`}
-      />
-    ));
+
+    if (filter.get('goalType') === 'current' && !goals.length) {
+      return (
+        <div className="goals-empty-state">
+          <div className="goals-empty-state__title">Goals</div>
+          <div className="goals-empty-state__message">Here you can create new goals, track current ones and accomplish them with your team. Let's get started.</div>
+          <Button primary text="Create your first goal" className="goals-empty-state__button" onClick={addGoal} />
+        </div>
+      );
+    } else {
+      return goals.map(goal => (
+        <GoalListItem
+          onClick={this.clickedListItem}
+          onAssignClick={this.onAssignClick}
+          me={this.props.me}
+          filter={filter}
+          goal={goal}
+          key={`goal-list-item-${goal.get('id')}`}
+        />
+      ));
+    }
   }
   renderFilterFooter() {
     const { filterLabel, showFilter, delegate, tabs, tabIndex } = this.props;

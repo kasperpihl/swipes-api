@@ -7,11 +7,17 @@
 
 .dashboard {
   @include size(100%, auto);
-  @include flex(column);
+  @include flexContainer('column');
 }
 
 .notifications {
 
+}
+
+.notifications-empty-state {
+  @include size(100%, auto);
+  @include heightSpecifications(236px, initial);
+  @include flexContainer('column', center, center);
 }
 
 // ======================================================
@@ -22,7 +28,7 @@
 
   &__notifications {
     @include size(100%, auto);
-    @include flex(column);
+    @include flexContainer('column');
     padding-bottom: 120px;
   }
 }
@@ -36,5 +42,21 @@
     @include font(12px, $deepBlue-80, 15px, bold);
     border-top: 1px solid $deepBlue-20;
     color: $deepBlue-60;
+  }
+}
+
+
+.notifications-empty-state {
+
+  &__title {
+    @include font(27px, $deepBlue-80, 35px);
+  }
+
+  &__message {
+    @include size(100%, auto);
+    @include widthSpecifications(initial, 450px);
+    @include font(15px, $deepBlue-80, 24px);
+    text-align: center;
+    margin-top: 12px;
   }
 }

@@ -321,6 +321,7 @@ class HOCGoalList extends PureComponent {
           filterProp={filterProp}
           filterLabel={filterLabel}
           showFilter={showFilter}
+          addGoal={this.onAddGoal}
         />
       </SWView>
     );

@@ -1,12 +1,28 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
 .goals-list {
-  $b: &;
   @include size(100%, auto);
-  @include flex(column);
+  @include flexContainer('column');
   animation: fadeList .6s ease forwards;
   z-index: 3;
+}
+
+.goals-empty-state {
+  @include size(100%, auto);
+  @include heightSpecifications(236px, initial);
+  @include flexContainer('column', center, center);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.goals-list {
 
   &__header {
     @include size(100%, auto);
@@ -31,20 +47,45 @@
 
   &__filter-actions {
     @include size(100%, 48px);
-    @include flex(center, flex-end);
+    @include flexContainer('row', right, center);
   }
 
   &__filter-action {
     @include font(12px, $deepBlue-50, 18px, 500);
     padding-left: 15px;
+  }
+}
 
-    &:hover {
-      text-decoration: underline;
-    }
+.goals-empty-state {
 
-    &--main {
-      @include font($c: $blue-100);
-    }
+
+  &__title {
+    @include font(27px, $deepBlue-80, 35px);
+  }
+
+  &__message {
+    @include size(100%, auto);
+    @include widthSpecifications(initial, 450px);
+    @include font(15px, $deepBlue-80, 24px);
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  &__button {
+    margin-top: 30px;
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.goals-list {
+  $b: &;
+
+
+  &__filter-action--main {
+    @include font($c: $blue-100);
   }
 
   &--show-filters {
@@ -59,6 +100,23 @@
   }
 }
 
+// ======================================================
+// Hovers
+// ======================================================
+
+.goals-list {
+
+  &__filter-action {
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ======================================================
+// Animations
+// ======================================================
 
 @keyframes fadeList {
   from {
