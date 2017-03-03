@@ -120,11 +120,7 @@ const goalsArchivedNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = {
-    goal: {
-      id: goal.id,
-    },
-  };
+  res.locals.eventData = { id: goal.id };
 
   return next();
 };
