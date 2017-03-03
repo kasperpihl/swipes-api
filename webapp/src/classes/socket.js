@@ -17,7 +17,6 @@ export default class Socket {
       this.token = token;
 
       if (!this.timer) {
-        console.log(token);
         this.timedConnect(this.timerForAttempt());
       }
     }
