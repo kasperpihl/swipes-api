@@ -30,6 +30,7 @@ export default function goalsReducer(state = initialState, action) {
       return state.delete(payload.data.id);
     }
     case 'goal_updated':
+    case 'goal_created':
     case 'goal_completed':
     case 'goal_notify':
     case 'step_got_active':
@@ -38,18 +39,12 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'goals.notify':
     case 'goals.completeStep':
+    case 'goals.create':
     case 'goals.update': {
       if (payload.ok) {
         return state.mergeIn([payload.goal.id], fromJS(payload.goal));
       }
       return state;
-    }
-    case 'goals.create':
-    case 'goal_created': {
-      if (type === 'goals.create' && !payload.ok) {
-        return state;
-      }
-      return state.set(payload.data.id, fromJS(payload.data));
     }
     case types.GOAL_DELETE: {
       return state;
