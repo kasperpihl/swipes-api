@@ -22,6 +22,7 @@ export default class IpcListener {
   constructor(store) {
     this.platform = 'web';
     if (isElectron) {
+      remote.getCurrentWindow().removeAllListeners();
       this.isElectron = true;
       this.platform = window.process.platform;
       this.version = remote.getGlobal('version');
@@ -47,10 +48,12 @@ export default class IpcListener {
       // Deal with fullScreen
       store.dispatch(main.setFullscreen(remWin.isFullScreen()));
       remWin.on('enter-full-screen', () => {
-        store.dispatch(main.setFullscreen(true));
+        store.dispatch(main.setMaximized(remWin.isMaximized()));
+        store.dispatch(main.setFullscreen(remWin.isFullScreen()));
       });
       remWin.on('leave-full-screen', () => {
-        store.dispatch(main.setFullscreen(false));
+        store.dispatch(main.setMaximized(remWin.isMaximized()));
+        store.dispatch(main.setFullscreen(remWin.isFullScreen()));
       });
 
       // remWin.close();
