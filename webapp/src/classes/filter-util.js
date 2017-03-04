@@ -27,7 +27,7 @@ export default function filterGoals(goals, type, userId, milestoneId, matching) 
         }
       } else if (type === 'upcoming' || type === 'current') {
         const currentAssignees = helper.getCurrentAssignees();
-        if (currentAssignees === false) {
+        if (helper.getIsCompleted()) {
           return false; // goal is completed
         }
         const isCurrentlyAssigned = currentAssignees.find(uId => uId === userId);
