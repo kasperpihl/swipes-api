@@ -1,14 +1,42 @@
 import React, { Component } from 'react';
+import { Map } from 'immutable';
 import { EditorBlock, EditorState } from 'draft-js';
 import Checkbox from 'components/swipes-ui/Checkbox';
 import {
   resetBlockToType,
-} from './draft-utils';
+} from '../../draft-utils';
 
 import './styles/check-list';
 
-export default class ChecklistEditorBlock extends Component {
-  static onUpArrow(editorState, onChange, e) {
+export default class ChecklistBlock extends Component {
+  static blockRenderMap() {
+    return Map({
+      checklist: {
+        element: 'li',
+        wrapper: {
+          type: 'ul',
+          props: {
+            className: 'checklist-ul',
+          },
+        },
+      },
+    });
+  }
+  static blockRendererFn(ctx, contentBlock) {
+    const type = contentBlock.getType();
+    if (type === 'checklist') {
+      return {
+        component: this,
+        props: {
+          ctx,
+          checked: !!contentBlock.getData().get('checked'),
+        },
+      };
+    }
+    return null;
+  }
+  static onUpArrow(ctx, e) {
+    const editorState = ctx.getEditorState();
     const selection = editorState.getSelection();
     const startKey = selection.getStartKey();
     const contentState = editorState.getCurrentContent();
@@ -37,14 +65,15 @@ export default class ChecklistEditorBlock extends Component {
       const nextSelection = selection.merge(selectionChanges);
       const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
 
-      onChange(EditorState.push(updatedEditorState, contentState, 'move-selection-to-prev-block'));
+      ctx.setEditorState(EditorState.push(updatedEditorState, contentState, 'move-selection-to-prev-block'));
 
       return true;
     }
 
     return true;
   }
-  static onDownArrow(editorState, onChange, e) {
+  static onDownArrow(ctx, e) {
+    const editorState = ctx.getEditorState();
     const selection = editorState.getSelection();
     const startKey = selection.getStartKey();
     const contentState = editorState.getCurrentContent();
@@ -74,14 +103,15 @@ export default class ChecklistEditorBlock extends Component {
       const nextSelection = selection.merge(selectionChanges);
       const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
 
-      onChange(EditorState.push(updatedEditorState, contentState, 'move-selection-to-next-block'));
+      ctx.setEditorState(EditorState.push(updatedEditorState, contentState, 'move-selection-to-next-block'));
 
       return true;
     }
 
     return false;
   }
-  static keyBindingFn(editorState, onChange, e) {
+  static keyBindingFn(ctx, e) {
+    const editorState = ctx.getEditorState();
     // left key
     if (e.keyCode === 37) {
       const selection = editorState.getSelection();
@@ -96,7 +126,9 @@ export default class ChecklistEditorBlock extends Component {
 
     return false;
   }
-  static handleBeforeInput(editorState, onChange, str) {
+  static handleBeforeInput(ctx, str) {
+    const editorState = ctx.getEditorState();
+
     const selection = editorState.getSelection();
     const currentBlock = editorState.getCurrentContent()
       .getBlockForKey(selection.getStartKey());
@@ -105,17 +137,19 @@ export default class ChecklistEditorBlock extends Component {
 
     if (str === ' ' && blockType === 'unstyled') {
       if (blockLength === 2 && currentBlock.getText() === '[]') {
-        onChange(resetBlockToType(editorState, 'checklist', { checked: false }));
+        ctx.setEditorState(resetBlockToType(editorState, 'checklist', { checked: false }));
         return true;
       } else if (blockLength === 3 && currentBlock.getText() === '[x]') {
-        onChange(resetBlockToType(editorState, 'checklist', { checked: true }));
+        ctx.setEditorState(resetBlockToType(editorState, 'checklist', { checked: true }));
         return true;
       }
     }
 
     return false;
   }
-  static handleKeyCommand(editorState, onChange, keyCommand) {
+  static handleKeyCommand(ctx, keyCommand) {
+    const editorState = ctx.getEditorState();
+
     if (keyCommand === 'move-selection-to-end-of-prev-block') {
       const selection = editorState.getSelection();
       const startKey = selection.getStartKey();
@@ -143,7 +177,7 @@ export default class ChecklistEditorBlock extends Component {
       const nextSelection = selection.merge(selectionChanges);
       const updatedEditorState = EditorState.forceSelection(editorState, nextSelection);
 
-      onChange(EditorState.push(updatedEditorState, contentState, 'move-selection-to-end-of-prev-block'));
+      ctx.setEditorState(EditorState.push(updatedEditorState, contentState, 'move-selection-to-end-of-prev-block'));
 
       return true;
     }
@@ -154,13 +188,26 @@ export default class ChecklistEditorBlock extends Component {
     super(props);
     this.toggleChecked = this.toggleChecked.bind(this);
   }
+  updateBlockMetadata(ctx, blockKey, metadata) {
+    const editorState = ctx.getEditorState();
+    let contentState = editorState.getCurrentContent();
+    const updatedBlock = contentState
+      .getBlockForKey(blockKey)
+      .mergeIn(['data'], metadata);
 
+    let blockMap = contentState.getBlockMap();
+    blockMap = blockMap.merge({ [blockKey]: updatedBlock });
+    contentState = contentState.merge({ blockMap });
+
+    const newEditorState = EditorState.push(editorState, contentState, 'metadata-update');
+    ctx.setEditorState(newEditorState);
+  }
   toggleChecked() {
     const { blockProps, block } = this.props;
-    const { updateMetadataFn, returnFocusToEditor, checked } = blockProps;
+    const { ctx, returnFocusToEditor, checked } = blockProps;
     const newChecked = !checked;
 
-    updateMetadataFn(block.getKey(), { checked: newChecked });
+    this.updateBlockMetadata(ctx, block.getKey(), { checked: newChecked });
 
     // I also stop propagation, return focus to the editor and set some state here, but that's probably specific to my app
   }

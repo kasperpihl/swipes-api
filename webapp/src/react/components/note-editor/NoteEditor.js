@@ -6,19 +6,18 @@ import {
   getVisibleSelectionRect,
   getDefaultKeyBinding,
   CompositeDecorator,
-  DefaultDraftBlockRenderMap,
 } from 'draft-js';
-import Immutable from 'immutable';
 import MultiDecorator from 'draft-js-multidecorators';
 import { bindAll } from 'classes/utils';
 import StyleControl from './extensions/style-control/StyleControl';
 import NoteLink from './NoteLink';
-import NoteChecklist from './NoteChecklist';
-import DraftExt from './draft-ext';
-import DefaultBlocks from './extensions/default-blocks/DefaultBlocks';
-import CodeBlock from './extensions/code-block/CodeBlock';
+import ChecklistBlock from './blocks/checklist/ChecklistBlock';
+import DefaultBlocks from './blocks/default/DefaultBlocks';
+import CodeBlock from './blocks/code/CodeBlock';
 
-import './extensions/code-block/styles/index.scss';
+import DraftExt from './draft-ext';
+
+
 import './styles/note-editor.scss';
 
 class NoteEditor extends Component {
@@ -54,23 +53,8 @@ class NoteEditor extends Component {
       'onMouseUp',
       'handleKeyCommand',
       'onTab',
-      'blockRender',
       'keyBindingFn',
-      'updateBlockMetadata',
     ]);
-
-    const blockRenderMap = Immutable.Map({
-      checklist: {
-        element: 'li',
-        wrapper: {
-          type: 'ul',
-          props: {
-            className: 'checklist-ul',
-          },
-        },
-      },
-    });
-    this.blockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
     this.onChange = (editorState) => {
       const { onChange } = this.props;
@@ -88,10 +72,11 @@ class NoteEditor extends Component {
 
       this.setState({ hasSelected, styleControl });
     };
+    this.setEditorState = this.onChange;
 
     this.plugins = DraftExt([
       CodeBlock,
-      NoteChecklist,
+      ChecklistBlock,
       DefaultBlocks,
     ], this, this.onChange);
   }
@@ -101,7 +86,7 @@ class NoteEditor extends Component {
 
     e.preventDefault();
 
-    this.onChange(RichUtils.onTab(e, editorState, maxDepth));
+    this.setEditorState(RichUtils.onTab(e, editorState, maxDepth));
   }
   onKeyDown(e) {
     if (e.keyCode === 16) {
@@ -151,40 +136,11 @@ class NoteEditor extends Component {
     styleControl = { show: false };
     this.setState({ styleControl });
   }
-  updateBlockMetadata(blockKey, metadata) {
-    const { editorState } = this.props;
-    let contentState = editorState.getCurrentContent();
-    const updatedBlock = contentState
-      .getBlockForKey(blockKey)
-      .mergeIn(['data'], metadata);
-
-    let blockMap = contentState.getBlockMap();
-    blockMap = blockMap.merge({ [blockKey]: updatedBlock });
-    contentState = contentState.merge({ blockMap });
-
-    const newEditorState = EditorState.push(editorState, contentState, 'metadata-update');
-    this.onChange(newEditorState);
-  }
-  blockRender(contentBlock) {
-    const type = contentBlock.getType();
-    switch (type) {
-      case 'checklist':
-        return {
-          component: NoteChecklist,
-          props: {
-            updateMetadataFn: this.updateBlockMetadata,
-            checked: !!contentBlock.getData().get('checked'),
-          },
-        };
-      default:
-        return null;
-    }
-  }
   positionForStyleControls() {
     const selectionRect = getVisibleSelectionRect(window);
     return selectionRect;
   }
-  pluginsGetEditorState() {
+  getEditorState() {
     return this.props.editorState;
   }
   keyBindingFn(e) {
@@ -249,8 +205,6 @@ class NoteEditor extends Component {
         {this.renderStyleControls()}
         <Editor
           ref="editor"
-          blockRendererFn={this.blockRender}
-          blockRenderMap={this.blockRenderMap}
           readOnly={readOnly}
           editorState={editorState}
           {...this.plugins}

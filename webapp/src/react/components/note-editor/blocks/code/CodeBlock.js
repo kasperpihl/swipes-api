@@ -13,7 +13,8 @@ class CodeBlock extends PureComponent {
   static getDecorator() {
     return new PrismDecorator();
   }
-  static handleBeforeInput(editorState, onChange, str) {
+  static handleBeforeInput(ctx, str) {
+    const editorState = ctx.getEditorState();
     const selection = editorState.getSelection();
     const currentBlock = editorState.getCurrentContent()
       .getBlockForKey(selection.getStartKey());
@@ -22,40 +23,44 @@ class CodeBlock extends PureComponent {
 
     if (str === '`' && blockType === 'unstyled') {
       if (blockLength === 2 && currentBlock.getText() === '``') {
-        onChange(resetBlockToType(editorState, 'code-block'));
+        ctx.setEditorState(resetBlockToType(editorState, 'code-block'));
         return true;
       }
     }
 
     return false;
   }
-  static handleKeyCommand(editorState, onChange, command) {
+  static handleKeyCommand(ctx, command) {
+    const editorState = ctx.getEditorState();
     if (CodeUtils.hasSelectionInBlock(editorState)) {
       const newState = CodeUtils.handleKeyCommand(editorState, command);
       if (newState) {
-        onChange(newState);
+        ctx.setEditorState(newState);
         return true;
       }
     }
     return false;
   }
-  static keyBindingFn(editorState, onChange, e) {
+  static keyBindingFn(ctx, e) {
+    const editorState = ctx.getEditorState();
     if (CodeUtils.hasSelectionInBlock(editorState)) {
       return CodeUtils.getKeyBinding(e);
     }
     return false;
   }
 
-  static handleReturn(editorState, onChange, e) {
+  static handleReturn(ctx, e) {
+    const editorState = ctx.getEditorState();
     if (CodeUtils.hasSelectionInBlock(editorState)) {
-      onChange(CodeUtils.handleReturn(e, editorState));
+      ctx.setEditorState(CodeUtils.handleReturn(e, editorState));
       return true;
     }
     return false;
   }
-  static onTab(editorState, onChange, e) {
+  static onTab(ctx, e) {
+    const editorState = ctx.getEditorState();
     if (CodeUtils.hasSelectionInBlock(editorState)) {
-      onChange(CodeUtils.handleTab(e, editorState));
+      ctx.setEditorState(CodeUtils.handleTab(e, editorState));
       return true;
     }
     return false;

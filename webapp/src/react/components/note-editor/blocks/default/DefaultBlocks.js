@@ -4,7 +4,8 @@ import {
 } from '../../draft-utils';
 
 class DefaultBlocks {
-  static keyBindingFn(editorState, onChange, e) {
+  static keyBindingFn(ctx, e) {
+    const editorState = ctx.getEditorState();
     const selection = editorState.getSelection();
     const startKey = selection.getStartKey();
     const block = editorState.getCurrentContent().getBlockForKey(startKey);
@@ -13,17 +14,18 @@ class DefaultBlocks {
     const isHeaderBlock = ['header-one', 'header-two'].indexOf(blockType) !== -1;
 
     if (isHeaderBlock && e.keyCode === 13 && block.getLength() > 0 && (block.getLength() === selection.getStartOffset())) {
-      onChange(createNewEmptyBlock(editorState, startKey, 'unstyled'));
+      ctx.setEditorState(createNewEmptyBlock(editorState, startKey, 'unstyled'));
       return true;
     }
 
     if (blockType !== 'unstyled' && e.keyCode === 13 && !blockText.length) {
-      onChange(resetBlockToType(editorState, 'unstyled'));
+      ctx.setEditorState(resetBlockToType(editorState, 'unstyled'));
       return true;
     }
     return false;
   }
-  static handleBeforeInput(editorState, onChange, str) {
+  static handleBeforeInput(ctx, str) {
+    const editorState = ctx.getEditorState();
     if (str !== ' ') {
       return false;
     }
@@ -35,18 +37,18 @@ class DefaultBlocks {
     const blockLength = currentBlock.getLength();
     if (blockType === 'unstyled') {
       if (blockLength === 1 && currentBlock.getText() === '-') {
-        onChange(resetBlockToType(editorState, 'unordered-list-item'));
+        ctx.setEditorState(resetBlockToType(editorState, 'unordered-list-item'));
 
         return true;
       } else if (blockLength === 2 && currentBlock.getText() === '1.') {
-        onChange(resetBlockToType(editorState, 'ordered-list-item'));
+        ctx.setEditorState(resetBlockToType(editorState, 'ordered-list-item'));
 
         return true;
       } else if (blockLength === 1 && currentBlock.getText() === '#') {
-        onChange(resetBlockToType(editorState, 'header-one'));
+        ctx.setEditorState(resetBlockToType(editorState, 'header-one'));
         return true;
       } else if (blockLength === 2 && currentBlock.getText() === '##') {
-        onChange(resetBlockToType(editorState, 'header-two'));
+        ctx.setEditorState(resetBlockToType(editorState, 'header-two'));
         return true;
       }
     }
