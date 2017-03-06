@@ -181,6 +181,10 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
 
   dbInsertMultipleNotifications({ notifications: filteredNotifications })
     .then((dbResults) => {
+      if (!dbResults.changes) {
+        return next();
+      }
+
       dbResults.changes.forEach((change) => {
         const newVal = change.new_val;
         let notificationMap = userNotificationMap[newVal.user_id] || {};
