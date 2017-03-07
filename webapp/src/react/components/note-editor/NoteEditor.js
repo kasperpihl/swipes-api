@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import {
   Editor,
   EditorState,
-  RichUtils,
   getVisibleSelectionRect,
   getDefaultKeyBinding,
   CompositeDecorator,
@@ -15,8 +14,7 @@ import ChecklistBlock from './blocks/checklist/ChecklistBlock';
 import DefaultBlocks from './blocks/default/DefaultBlocks';
 import CodeBlock from './blocks/code/CodeBlock';
 
-import DraftExt, { SetupWithPlugins } from './draft-ext';
-
+import DraftExt from './draft-ext';
 
 import './styles/note-editor.scss';
 
@@ -80,12 +78,6 @@ class NoteEditor extends Component {
         DefaultBlocks,
       ],
     });
-    this.plugins.subscriber.add('onChange', (ctx, editorState) => {
-      console.log('subscribed', ctx, editorState);
-    });
-  }
-  onChange(editorState) {
-    this.setEditorState(editorState);
   }
   onKeyDown(e) {
     if (e.keyCode === 16) {

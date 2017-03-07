@@ -6,15 +6,15 @@ import {
 import Subscriber from 'classes/subscriber';
 
 const standardIterators = [
-  'keyBindingFn',
   'blockRendererFn',
   'handleBeforeInput',
-  'handleReturn',
   'handleKeyCommand',
-  'onUpArrow',
+  'handleReturn',
+  'keyBindingFn',
   'onChange',
-  'onTab',
   'onDownArrow',
+  'onTab',
+  'onUpArrow',
 ];
 
 const generateBlockRenderMaps = (blocks) => {
@@ -42,17 +42,17 @@ export default function Setup(ctx, plugins) {
     return function pluginIterator() {
       const args = [...arguments];
       let res;
-      const iterator = (funcVar) => {
-        if (!res && typeof funcVar === 'function') {
-          funcVar(ctx, ...args);
+      function iterator(obj) {
+        if (!res && typeof obj[funcName] === 'function') {
+          res = obj[funcName](ctx, ...args);
         }
-      };
+      }
       subscriber.notify(funcName, ctx, ...args);
       if (plugins.decorators) {
-        plugins.decorators.forEach(d => iterator(d[funcName]));
+        plugins.decorators.forEach(iterator);
       }
       if (plugins.blocks) {
-        plugins.blocks.forEach(b => iterator(b[funcName]));
+        plugins.blocks.forEach(iterator);
       }
       if (!res && typeof ctx[funcName] === 'function') {
         res = ctx[funcName](...args);

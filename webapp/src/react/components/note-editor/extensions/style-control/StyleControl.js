@@ -233,7 +233,7 @@ class StyleControl extends Component {
   renderButtons() {
     const styleOptions = {
       block: [
-        { label: 'HeaderOne', style: 'code-block' },
+        { label: 'HeaderOne', style: 'header-one' },
         { label: 'HeaderTwo', style: 'header-two' },
         { label: 'OrderedList', style: 'ordered-list-item' },
         { label: 'UnorderedList', style: 'unordered-list-item' },

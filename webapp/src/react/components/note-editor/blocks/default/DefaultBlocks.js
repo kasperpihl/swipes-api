@@ -7,7 +7,7 @@ import {
 } from '../../draft-utils';
 
 class DefaultBlocks {
-  static handleKeyCommand(keyCommand) {
+  static handleKeyCommand(ctx, keyCommand) {
     const editorState = ctx.getEditorState();
     const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
     if (newState) {
