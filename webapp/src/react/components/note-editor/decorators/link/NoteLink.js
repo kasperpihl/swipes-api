@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Entity } from 'draft-js';
+import './styles/link.scss';
 
 class NoteLink extends Component {
   static strategy(contentBlock, callback) {

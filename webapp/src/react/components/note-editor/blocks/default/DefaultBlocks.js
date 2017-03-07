@@ -1,9 +1,22 @@
 import {
+  RichUtils,
+} from 'draft-js';
+import {
   resetBlockToType,
   createNewEmptyBlock,
 } from '../../draft-utils';
 
 class DefaultBlocks {
+  static handleKeyCommand(keyCommand) {
+    const editorState = ctx.getEditorState();
+    const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
+    if (newState) {
+      ctx.setEditorState(newState);
+      return true;
+    }
+
+    return false;
+  }
   static keyBindingFn(ctx, e) {
     const editorState = ctx.getEditorState();
     const selection = editorState.getSelection();
@@ -13,7 +26,8 @@ class DefaultBlocks {
     const blockType = block.getType();
     const isHeaderBlock = ['header-one', 'header-two'].indexOf(blockType) !== -1;
 
-    if (isHeaderBlock && e.keyCode === 13 && block.getLength() > 0 && (block.getLength() === selection.getStartOffset())) {
+    if (isHeaderBlock && e.keyCode === 13 && block.getLength() > 0 &&
+        (block.getLength() === selection.getStartOffset())) {
       ctx.setEditorState(createNewEmptyBlock(editorState, startKey, 'unstyled'));
       return true;
     }
@@ -23,6 +37,14 @@ class DefaultBlocks {
       return true;
     }
     return false;
+  }
+  static onTab(ctx, e) {
+    const editorState = ctx.getEditorState();
+    const maxDepth = 4;
+
+    e.preventDefault();
+
+    ctx.setEditorState(RichUtils.onTab(e, editorState, maxDepth));
   }
   static handleBeforeInput(ctx, str) {
     const editorState = ctx.getEditorState();

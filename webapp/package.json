@@ -42,7 +42,7 @@
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
-    "valjs": "0.0.18"
+    "valjs": "0.0.23"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",

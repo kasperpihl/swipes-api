@@ -10,12 +10,12 @@ import {
 import MultiDecorator from 'draft-js-multidecorators';
 import { bindAll } from 'classes/utils';
 import StyleControl from './extensions/style-control/StyleControl';
-import NoteLink from './NoteLink';
+import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';
 import DefaultBlocks from './blocks/default/DefaultBlocks';
 import CodeBlock from './blocks/code/CodeBlock';
 
-import DraftExt from './draft-ext';
+import DraftExt, { SetupWithPlugins } from './draft-ext';
 
 
 import './styles/note-editor.scss';
@@ -51,9 +51,6 @@ class NoteEditor extends Component {
       'onKeyUp',
       'onMouseMove',
       'onMouseUp',
-      'handleKeyCommand',
-      'onTab',
-      'keyBindingFn',
     ]);
 
     this.onChange = (editorState) => {
@@ -73,20 +70,22 @@ class NoteEditor extends Component {
       this.setState({ hasSelected, styleControl });
     };
     this.setEditorState = this.onChange;
-
-    this.plugins = DraftExt([
-      CodeBlock,
-      ChecklistBlock,
-      DefaultBlocks,
-    ], this, this.onChange);
+    this.plugins = DraftExt(this, {
+      decorators: [
+        NoteLink,
+      ],
+      blocks: [
+        CodeBlock,
+        ChecklistBlock,
+        DefaultBlocks,
+      ],
+    });
+    this.plugins.subscriber.add('onChange', (ctx, editorState) => {
+      console.log('subscribed', ctx, editorState);
+    });
   }
-  onTab(e) {
-    const { editorState } = this.props;
-    const maxDepth = 4;
-
-    e.preventDefault();
-
-    this.setEditorState(RichUtils.onTab(e, editorState, maxDepth));
+  onChange(editorState) {
+    this.setEditorState(editorState);
   }
   onKeyDown(e) {
     if (e.keyCode === 16) {
@@ -146,16 +145,6 @@ class NoteEditor extends Component {
   keyBindingFn(e) {
     return getDefaultKeyBinding(e);
   }
-  handleKeyCommand(keyCommand) {
-    const { editorState } = this.props;
-    const newState = RichUtils.handleKeyCommand(editorState, keyCommand);
-    if (newState) {
-      this.onChange(newState);
-      return true;
-    }
-
-    return false;
-  }
   focus() {
     this.refs.editor.focus();
   }
@@ -207,8 +196,7 @@ class NoteEditor extends Component {
           ref="editor"
           readOnly={readOnly}
           editorState={editorState}
-          {...this.plugins}
-          onChange={this.onChange}
+          {...this.plugins.bind}
           onBlur={this.props.onBlur}
           placeholder={showPlaceholder ? 'Write something cool in me' : undefined}
 

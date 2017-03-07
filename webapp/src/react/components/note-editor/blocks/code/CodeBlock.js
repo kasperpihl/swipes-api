@@ -11,6 +11,7 @@ import './styles/index.scss';
 
 class CodeBlock extends PureComponent {
   static getDecorator() {
+    console.log(new PrismDecorator());
     return new PrismDecorator();
   }
   static handleBeforeInput(ctx, str) {
