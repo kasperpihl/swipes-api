@@ -56,13 +56,13 @@ export const addGoal = (goal, organizationId, message, flags) => (d, getState) =
     goal.step_order.push(gId);
     goal.steps[gId] = {
       id: gId,
-      flags,
       title: goal.title,
       assignees: [myId],
     };
   }
   return d(a.api.request('goals.create', {
     message,
+    flags,
     organization_id: organizationId,
     goal,
   }));
