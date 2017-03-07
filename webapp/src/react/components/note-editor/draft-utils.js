@@ -4,13 +4,13 @@ import {
   genKey,
 } from 'draft-js';
 
-export function resetBlockToType(editorState, newType = 'unstyled', blockData) {
+export function resetBlockToType(editorState, newType = 'unstyled', blockData, newText) {
   const contentState = editorState.getCurrentContent();
   const selectionState = editorState.getSelection();
   const key = selectionState.getStartKey();
   const blockMap = contentState.getBlockMap();
   const block = blockMap.get(key);
-  const newText = '';
+  newText = newText || '';
 
   const newBlock = block.merge({
     text: newText,

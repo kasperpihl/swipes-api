@@ -55,26 +55,21 @@ class DefaultBlocks {
     const selection = editorState.getSelection();
     const currentBlock = editorState.getCurrentContent()
       .getBlockForKey(selection.getStartKey());
-    const blockType = currentBlock.getType();
-    const blockLength = currentBlock.getLength();
-    if (blockType === 'unstyled') {
-      if (blockLength === 1 && currentBlock.getText() === '-') {
-        ctx.setEditorState(resetBlockToType(editorState, 'unordered-list-item'));
+    const text = currentBlock.getText();
+    if (text.startsWith('-')) {
+      ctx.setEditorState(resetBlockToType(editorState, 'unordered-list-item', {}, text.substr(1)));
+      return true;
+    } else if (text.startsWith('1.')) {
+      ctx.setEditorState(resetBlockToType(editorState, 'ordered-list-item', {}, text.substr(2)));
 
-        return true;
-      } else if (blockLength === 2 && currentBlock.getText() === '1.') {
-        ctx.setEditorState(resetBlockToType(editorState, 'ordered-list-item'));
-
-        return true;
-      } else if (blockLength === 1 && currentBlock.getText() === '#') {
-        ctx.setEditorState(resetBlockToType(editorState, 'header-one'));
-        return true;
-      } else if (blockLength === 2 && currentBlock.getText() === '##') {
-        ctx.setEditorState(resetBlockToType(editorState, 'header-two'));
-        return true;
-      }
+      return true;
+    } else if (text.startsWith('##')) {
+      ctx.setEditorState(resetBlockToType(editorState, 'header-two', {}, text.substr(2)));
+      return true;
+    } else if (text.startsWith('#')) {
+      ctx.setEditorState(resetBlockToType(editorState, 'header-one', {}, text.substr(1)));
+      return true;
     }
-
     return false;
   }
 }

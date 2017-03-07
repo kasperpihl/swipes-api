@@ -15,12 +15,20 @@ class NoteLink extends Component {
       callback,
     );
   }
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
+  }
+  onClick(e) {
+    const { ctx } = this.props;
+    // console.log(ctx.getEditorState);
+  }
   render() {
     const { entityKey, children } = this.props;
     const { url } = Entity.get(entityKey).get('data');
 
     return (
-      <a className="DraftEditor-link" href={url} target="_blank" rel="noreferrer noopener">
+      <a className="DraftEditor-link" href={url} onClick={this.onClick} rel="noreferrer noopener">
         {children}
       </a>
     );

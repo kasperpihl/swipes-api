@@ -4,14 +4,20 @@
 .RichEditor-controls {
   $b: &;
   @include size(auto, 42px);
-  position: fixed;
+  position: absolute;
   z-index: 2;
   background-color: $deepBlue-100;
   border-radius: 6px;
   overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
   box-sizing: border-box;
   animation: fadeUpControls .15s ease-out forwards;
+  &--show {
+    pointer-events: all;
+    visibility: visible;
 
+  }
   &--input {
     background-color: white;
     box-shadow: 0px 0px 10px 1px rgba($deepBlue-20,0.3);
@@ -19,8 +25,6 @@
 
   &__input-wrapper {
     @include size(100%);
-    position: absolute;
-    left: 0; top: 0;
     border-radius: 6px;
     border: 1px solid $deepBlue-10;
     overflow: hidden;

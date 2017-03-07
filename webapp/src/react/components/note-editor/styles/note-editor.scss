@@ -1,8 +1,10 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
+//@import "Draft";
 
-.sw-text-editor {
+.medium-editor {
   width: 100%;
+  height:100%;
 }
 
 .DraftEditor-root {

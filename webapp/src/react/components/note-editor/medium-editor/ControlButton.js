@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
 
-class StyleControlButton extends Component {
+class ControlButton extends Component {
   constructor(props) {
     super(props);
-    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
-  onMouseDown() {
+  onClick(e) {
     const {
       data,
       callback,
@@ -15,7 +15,7 @@ class StyleControlButton extends Component {
       style,
       type,
     } = data;
-
+    e.preventDefault();
     callback(style, type);
   }
   render() {
@@ -34,18 +34,18 @@ class StyleControlButton extends Component {
     }
 
     return (
-      <span className={className} onMouseDown={this.onMouseDown}>
+      <span className={className} onClick={this.onClick}>
         {RenderIcon}
       </span>
     );
   }
 }
 
-export default StyleControlButton;
+export default ControlButton;
 
 const { object, func } = PropTypes;
 
-StyleControlButton.propTypes = {
+ControlButton.propTypes = {
   data: object,
   callback: func,
 };
