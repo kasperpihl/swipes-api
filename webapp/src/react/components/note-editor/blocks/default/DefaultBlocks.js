@@ -52,20 +52,21 @@ class DefaultBlocks {
     }
 
     const selection = editorState.getSelection();
+    const offset = selection.get('focusOffset');
     const currentBlock = editorState.getCurrentContent()
       .getBlockForKey(selection.getStartKey());
     const text = currentBlock.getText();
-    if (text.startsWith('-')) {
+    if (text.startsWith('-') && offset === 1) {
       ctx.setEditorState(resetBlockToType(editorState, 'unordered-list-item', {}, text.substr(1)));
       return true;
-    } else if (text.startsWith('1.')) {
+    } else if (text.startsWith('1.') && offset === 2) {
       ctx.setEditorState(resetBlockToType(editorState, 'ordered-list-item', {}, text.substr(2)));
 
       return true;
-    } else if (text.startsWith('##')) {
+    } else if (text.startsWith('##') && offset === 2) {
       ctx.setEditorState(resetBlockToType(editorState, 'header-two', {}, text.substr(2)));
       return true;
-    } else if (text.startsWith('#')) {
+    } else if (text.startsWith('#') && offset === 1) {
       ctx.setEditorState(resetBlockToType(editorState, 'header-one', {}, text.substr(1)));
       return true;
     }

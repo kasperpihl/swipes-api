@@ -1,4 +1,8 @@
 import * as types from 'constants';
+import {
+  convertToRaw,
+  EditorState,
+} from 'draft-js';
 import * as a from './';
 
 export const setStatus = (status, nextRetry) => ({
@@ -93,16 +97,17 @@ export const logout = cb => dp => dp(a.api.request('users.signout')).then((res) 
 // Notes
 // ======================================================
 export const note = {
-  create: (oId, title) => dp => dp(a.api.request('notes.create', {
+  create: (oId, title, text) => dp => dp(a.api.request('notes.create', {
     organization_id: oId,
     title,
+    text: text || convertToRaw(EditorState.createEmpty().getCurrentContent()),
   })),
-  save: (oId, id, text, unlock) => (dp) => {
+  save: (oId, id, text, rev) => (dp) => {
     dp(a.api.request('notes.save', {
       organization_id: oId,
       id,
       text,
-      unlock,
+      rev,
     }));
   },
 };

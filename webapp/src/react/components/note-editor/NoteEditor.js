@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import {
   Editor,
-  EditorState,
   getDefaultKeyBinding,
-  CompositeDecorator,
+  convertFromRaw,
 } from 'draft-js';
 
-import MultiDecorator from 'draft-js-multidecorators';
 import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';
 import DefaultBlocks from './blocks/default/DefaultBlocks';
@@ -17,26 +15,8 @@ import DraftExt from './draft-ext';
 import './styles/note-editor.scss';
 
 class NoteEditor extends Component {
-  static decorator(DecoratorComponent) {
-    return {
-      strategy: DecoratorComponent.strategy,
-      component: DecoratorComponent,
-    };
-  }
-  static getEmptyEditorState() {
-    const decorators = new MultiDecorator([
-      CodeBlock.getDecorator(),
-      new CompositeDecorator([
-        NoteLink,
-      ].map(d => this.decorator(d))),
-    ]);
-
-    return EditorState.createEmpty(decorators);
-  }
   constructor(props) {
     super(props);
-
-    this.setEditorState = props.onChange;
 
     this.plugins = DraftExt(this, {
       decorators: [
@@ -48,9 +28,16 @@ class NoteEditor extends Component {
         DefaultBlocks,
       ],
     });
+    this.onChange = this.setEditorState;
   }
-  onChange(editorState) {
-    this.setEditorState(editorState);
+  componentDidMount() {
+    const { editorState, rawState } = this.props;
+    if (!editorState && rawState) {
+      this.setEditorState(this.plugins.getEditorStateWithDecorators(convertFromRaw(rawState)));
+    }
+  }
+  setEditorState(editorState) {
+    this.props.setEditorState(editorState);
   }
   getEditorState() {
     return this.props.editorState;
@@ -67,6 +54,9 @@ class NoteEditor extends Component {
       editorState,
       readOnly,
     } = this.props;
+    if (!editorState) {
+      return <div />;
+    }
 
     const contentState = editorState.getCurrentContent();
     const hasText = contentState.hasText();
@@ -99,8 +89,9 @@ export default NoteEditor;
 const { bool, func, object } = PropTypes;
 
 NoteEditor.propTypes = {
-  onChange: func,
+  setEditorState: func.isRequired,
   onBlur: func,
+  rawState: object,
   editorState: object,
   readOnly: bool,
 };
