@@ -37,7 +37,7 @@ class HOCDashboard extends Component {
       let arg = [id];
       if (id === 'all') {
         this.setState({ loading: true });
-        arg = notifications.getIn([0, 'ts']);
+        arg = notifications.getIn([0, 'updated_at']);
       }
       if (arg) {
         markNotifications(arg).then(() => {
