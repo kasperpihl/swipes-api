@@ -91,9 +91,16 @@ export default class MessageGenerator {
     const state = this.store.getState();
     const me = state.get('me');
     const helper = new GoalsUtil(goal, me.get('id'));
-    const lastHandoff = helper.getLastHandoff();
-    const doneBy = this.getUserString(lastHandoff.get('done_by'));
     const currentStep = helper.getCurrentStep();
+    const lastHandoff = helper.getLastHandoff();
+    if (!lastHandoff) {
+      if (currentStep) {
+        return currentStep.get('title');
+      }
+      return 'Goal completed';
+    }
+    const doneBy = this.getUserString(lastHandoff.get('done_by'));
+
     const lastUpdate = moment(lastHandoff.get('done_at') || helper.getLastUpdate());
     let type = 'all';
     if (filter) {
