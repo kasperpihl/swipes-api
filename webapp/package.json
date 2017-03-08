@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
+    "deep-equal": "^1.0.1",
     "draft-js": "^0.9.1",
     "draft-js-code": "^0.2.0",
     "draft-js-multidecorators": "^1.0.0",
