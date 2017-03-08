@@ -50,10 +50,8 @@ const getHistoryIndex = (historyArray, group_id) => {
 };
 const createNotificationTarget = (mainItem, historyIndex) => {
   return {
-    target: {
-      id: mainItem.id,
-      history_index: historyIndex,
-    },
+    id: mainItem.id,
+    history_index: historyIndex,
   };
 };
 

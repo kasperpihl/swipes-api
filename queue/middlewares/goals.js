@@ -9,10 +9,8 @@ import {
 
 const notificationMeta = (goal) => {
   return {
-    meta: {
-      type: 'goal',
-      title: goal.title,
-    },
+    type: 'goal',
+    title: goal.title,
   };
 };
 const goalsGetSingle = (req, res, next) => {
