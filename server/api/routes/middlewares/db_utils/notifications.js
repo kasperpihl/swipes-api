@@ -25,7 +25,7 @@ const dbNotificationsMarkAsSeenTs = funcWrap([
       .getAll(user_id, { index: 'user_id' })
       .filter(r.row('ts').le(timestamp))
       .update({
-        seen: new Date().toISOString(),
+        seen_at: new Date().toISOString(),
       });
 
   return db.rethinkQuery(q);
@@ -40,7 +40,7 @@ const dbNotificationsMarkAsSeenIds = funcWrap([
   }
 
   const q = r.table('notifications').getAll(r.args(notification_ids)).update({
-    seen: timestamp_now,
+    seen_at: timestamp_now,
   });
 
   return db.rethinkQuery(q);
@@ -57,7 +57,7 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
   const q =
     r.table('notifications')
       .getAll(user_id, { index: 'user_id' })
-      .orderBy(r.desc('ts'))
+      .orderBy(r.desc('created_at'))
       .limit(100);
 
   return db.rethinkQuery(q);

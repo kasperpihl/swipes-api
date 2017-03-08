@@ -17,14 +17,10 @@ const waysGetSingle = (req, res, next) => {
 };
 const waysCreatedNotificationData = (req, res, next) => {
   const {
-    user_id,
     way,
   } = res.locals;
 
-  const notificationData = {
-    done_by: user_id,
-    way_id: way.id,
-  };
+  const notificationData = null;
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = { way };
@@ -33,14 +29,10 @@ const waysCreatedNotificationData = (req, res, next) => {
 };
 const waysArchivedNotificationData = (req, res, next) => {
   const {
-    user_id,
     way,
   } = res.locals;
 
-  const notificationData = {
-    done_by: user_id,
-    way_id: way.id,
-  };
+  const notificationData = null;
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = { id: way.id };

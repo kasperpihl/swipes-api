@@ -1,5 +1,5 @@
 import config from 'config';
-// import request from 'request';
+import request from 'request';
 import AWS from 'aws-sdk';
 import hash from 'object-hash';
 import {
@@ -129,36 +129,36 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
   const message = queueMessage;
   const messageDeduplicationId = hash({ message });
 
-  AWS.config.update({ accessKeyId, secretAccessKey });
-
-  const sqs = new AWS.SQS({ region: 'us-west-2' });
-  const payload = { payload: message };
-  const sqsParams = {
-    MessageBody: JSON.stringify(payload),
-    QueueUrl: queueHost,
-    MessageGroupId: messageGroupId,
-    MessageDeduplicationId: messageDeduplicationId,
-  };
-
-  sqs.sendMessage(sqsParams, (err, data) => {
-    if (err) {
-      console.log('AMAZON QUEUE ERR', err);
-    }
-  });
+  // AWS.config.update({ accessKeyId, secretAccessKey });
+  //
+  // const sqs = new AWS.SQS({ region: 'us-west-2' });
+  // const payload = { payload: message };
+  // const sqsParams = {
+  //   MessageBody: JSON.stringify(payload),
+  //   QueueUrl: queueHost,
+  //   MessageGroupId: messageGroupId,
+  //   MessageDeduplicationId: messageDeduplicationId,
+  // };
+  //
+  // sqs.sendMessage(sqsParams, (err, data) => {
+  //   if (err) {
+  //     console.log('AMAZON QUEUE ERR', err);
+  //   }
+  // });
   // T
   // Leaving this here because it is easier to test with local queue when
   // adding new notifications
 
 
-  // request.post({
-  //   url: `${queueHost}/process`,
-  //   method: 'POST',
-  //   json: { payload: message },
-  // }, (error) => {
-  //   if (error) {
-  //     console.log(error, 'Error pushing to queue!');
-  //   }
-  // });
+  request.post({
+    url: `${queueHost}/process`,
+    method: 'POST',
+    json: { payload: message },
+  }, (error) => {
+    if (error) {
+      console.log(error, 'Error pushing to queue!');
+    }
+  });
 
   return next();
 });

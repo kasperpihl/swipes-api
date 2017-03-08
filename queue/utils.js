@@ -41,7 +41,25 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
 
   return next();
 };
+const getHistoryIndex = (historyArray, group_id) => {
+  const index = historyArray.findIndex((item) => {
+    return item.group_id === group_id;
+  });
+
+  return index;
+};
+const createNotificationTarget = (mainItem, historyIndex) => {
+  return {
+    target: {
+      id: mainItem.id,
+      history_index: historyIndex,
+    },
+  };
+};
 
 export {
   valLocals,
+  setLocals,
+  getHistoryIndex,
+  createNotificationTarget,
 };

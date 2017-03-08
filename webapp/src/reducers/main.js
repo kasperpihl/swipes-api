@@ -21,14 +21,14 @@ const shouldKeepNotification = (payload) => {
     case 'goal_notify':
       return true;
     case 'step_completed': {
-      if (payload.data.me_is_next) {
+      if (payload.me_is_next) {
         return true;
       }
       return false;
     }
     case 'goal_completed':
     case 'goal_created': {
-      if (payload.data.includes_me) {
+      if (payload.includes_me) {
         return true;
       }
       return false;

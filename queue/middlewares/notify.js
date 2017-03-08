@@ -111,7 +111,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
   const objToInsert = {
     user_ids: uniqueUsersToNotifyWithEvent || uniqueUsersToNotify,
     type: event_type,
-    ts: r.now(),
+    created_at: r.now(),
     data: eventData,
     notification_data: notificationData,
     user_notification_map: userNotificationMap,
@@ -128,12 +128,18 @@ const notifyCommonRethinkdb = (req, res, next) => {
 const notifyInsertMultipleNotifications = (req, res, next) => {
   const {
     user_id,
+    group_id,
     event_type,
     uniqueUsersToNotify,
     notificationData,
     interceptUsers,
     interceptNextStepUsers,
   } = res.locals;
+
+  if (notificationData === null) {
+    return next();
+  }
+
   const notifications = [];
   const userNotificationMap = {};
 
@@ -141,25 +147,29 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     const notification = {
       // because mutation is the root of all evil
       // we are mutating the data object few lines down
-      data: { ...notificationData },
+      group_id,
+      id: `${group_id}-${user_id}`,
       type: event_type,
       user_id: userId,
-      seen: false,
-      ts: r.now(),
+      done_by: user_id,
+      seen_at: null,
+      created_at: r.now(),
+      updated_at: r.now(),
+      ...notificationData,
     };
     let notificationMap = userNotificationMap[userId] || {};
 
     if (interceptUsers) {
       const includes_me = interceptUsers.has(userId);
 
-      notification.data.includes_me = includes_me;
+      notification.includes_me = includes_me;
       notificationMap = Object.assign({}, notificationMap, { includes_me });
     }
 
     if (interceptNextStepUsers) {
       const me_is_next = interceptNextStepUsers.has(userId);
 
-      notification.data.me_is_next = me_is_next;
+      notification.me_is_next = me_is_next;
       notificationMap = Object.assign({}, notificationMap, { me_is_next });
     }
 
@@ -171,12 +181,17 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     return next();
   }
 
-  const filteredNotifications = notifications.filter((notification) => {
+  const filteredNotifications = notifications.map((notification) => {
     if (event_type === 'goal_notify' && uniqueUsersToNotify.indexOf(user_id) > -1) {
-      return true;
+      return notification;
+    }
+    if (notification.user_id === notification.done_by) {
+      notification.sent = true;
+
+      return notification;
     }
 
-    return notification.user_id !== user_id;
+    return notification;
   });
 
   dbInsertMultipleNotifications({ notifications: filteredNotifications })
@@ -191,7 +206,8 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
 
         notificationMap = Object.assign({}, notificationMap, {
           id: newVal.id,
-          ts: newVal.ts,
+          created_at: newVal.created_at,
+          updated_at: newVal.updated_at,
         });
 
         userNotificationMap[newVal.user_id] = notificationMap;

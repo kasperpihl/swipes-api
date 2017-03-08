@@ -4,7 +4,7 @@ const notificationsSeenTsNotificationData = (req, res, next) => {
     last_marked,
   } = res.locals;
 
-  const notificationData = {};
+  const notificationData = null;
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = {
@@ -21,7 +21,7 @@ const notificationsSeenIdsNotificationData = (req, res, next) => {
     last_marked,
   } = res.locals;
 
-  const notificationData = {};
+  const notificationData = null;
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = {

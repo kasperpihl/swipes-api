@@ -40,7 +40,8 @@ const commonEventsMultiple = (socket, userId) => {
               delete n.notification_data;
             } else {
               n.notification_data.id = notification_map.id;
-              n.notification_data.ts = notification_map.ts;
+              n.notification_data.created_at = notification_map.created_at;
+              n.notification_data.updated_at = notification_map.updated_at;
 
               if (notification_map.includes_me) {
                 n.notification_data.data.includes_me = notification_map.includes_me;

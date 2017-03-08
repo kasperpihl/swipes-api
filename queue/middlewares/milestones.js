@@ -17,14 +17,10 @@ const milestonesGetSingle = (req, res, next) => {
 };
 const milestonesCreatedNotificationData = (req, res, next) => {
   const {
-    user_id,
     milestone,
   } = res.locals;
 
-  const notificationData = {
-    done_by: user_id,
-    milestone_id: milestone.id,
-  };
+  const notificationData = null;
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = { milestone };
@@ -33,15 +29,10 @@ const milestonesCreatedNotificationData = (req, res, next) => {
 };
 const milestonesArchivedNotificationData = (req, res, next) => {
   const {
-    user_id,
     milestone,
   } = res.locals;
 
-  const notificationData = {
-    done_by: user_id,
-    milestone_id: milestone.id,
-    milestone_title: milestone.title,
-  };
+  const notificationData = null;
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = { id: milestone.id };

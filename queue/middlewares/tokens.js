@@ -3,7 +3,7 @@ const tokensRevokedNotificationData = (req, res, next) => {
     token_to_revoke,
   } = res.locals;
 
-  const notificationData = {};
+  const notificationData = null;
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = {

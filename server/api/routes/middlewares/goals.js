@@ -4,6 +4,7 @@ import {
   object,
   array,
   bool,
+  any,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -24,6 +25,7 @@ import {
 
 const goalsCreate = valLocals('goalsCreate', {
   user_id: string.require(),
+  notificationGroupId: string.require(),
   goal: goalMoreStrict,
   organization_id: string.require(),
   message: string,
@@ -31,6 +33,7 @@ const goalsCreate = valLocals('goalsCreate', {
 }, (req, res, next) => {
   const {
     user_id,
+    notificationGroupId,
     goal,
     organization_id,
     message,
@@ -48,11 +51,12 @@ const goalsCreate = valLocals('goalsCreate', {
   goal.history = [{
     flags,
     message,
-    type: 'created',
+    type: 'goal_created',
     from: null,
     to: currentStepId,
     done_by: user_id,
     done_at: r.now(),
+    group_id: notificationGroupId,
   }];
   goal.status = {
     flags,
@@ -72,7 +76,8 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     steps: object.require(),
     history: array.of(object).require(),
   }).require(),
-  goal_id: string.require(),
+  notificationGroupId: string.require(),
+  goalProgress: string.require(),
   current_step_id: string,
   next_step_id: string,
   message: string,
@@ -82,6 +87,8 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   const {
     user_id,
     goal,
+    notificationGroupId,
+    goalProgress,
     current_step_id,
     next_step_id,
     message,
@@ -97,7 +104,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     return next(new SwipesError('Invalid next_step_id'));
   }
 
-  const type = next_step_id ? 'complete_step' : 'complete_goal';
+  const type = next_step_id ? 'step_completed' : 'goal_completed';
   const currentStep = goal.steps[current_step_id] || {};
   const history = {
     type,
@@ -107,7 +114,9 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     from: current_step_id,
     to: next_step_id,
     done_at: r.now(),
+    group_id: notificationGroupId,
     assignees: currentStep.assignees || [],
+    progress: goalProgress,
   };
 
   if (assignees && next_step_id) {
@@ -132,9 +141,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
 });
 const goalsProgressStatus = valLocals('goalsProgressStatus', {
   goal: object.as({
-    status: object.require(),
-    steps: object.require(),
-    history: array.of(object).require(),
+    step_order: array.require(),
   }).require(),
   current_step_id: string,
   next_step_id: string,
@@ -189,12 +196,25 @@ const goalsInsert = valLocals('goalsInsert', {
     });
 });
 const goalsArchive = valLocals('goalsArchive', {
+  user_id: string.require(),
   goal_id: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     goal_id,
+    notificationGroupId,
   } = res.locals;
-  const properties = { archived: true };
+  const historyItem = {
+    type: 'goal_archived',
+    done_by: user_id,
+    done_at: r.now(),
+    group_id: notificationGroupId,
+  };
+  const properties = {
+    archived: true,
+    history: r.row('history').append(historyItem),
+  };
 
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
@@ -210,21 +230,34 @@ const goalsArchive = valLocals('goalsArchive', {
     });
 });
 const goalsAddMilestone = valLocals('goalsAddMilestone', {
+  user_id: string.require(),
   id: string.require(),
   milestone_id: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     id,
     milestone_id,
+    notificationGroupId,
   } = res.locals;
-  const properties = { milestone_id };
+  const historyItem = {
+    milestone_id,
+    type: 'goal_milestone_added',
+    done_by: user_id,
+    done_at: r.now(),
+    group_id: notificationGroupId,
+  };
+  const properties = {
+    milestone_id,
+    history: r.row('history').append(historyItem),
+  };
 
   dbGoalsUpdateSingle({ goal_id: id, properties })
     .then(() => {
       setLocals({
         eventType: 'goal_milestone_added',
         id,
-        milestone_id,
       });
 
       return next();
@@ -234,12 +267,25 @@ const goalsAddMilestone = valLocals('goalsAddMilestone', {
     });
 });
 const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
+  user_id: string.require(),
   id: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     id,
+    notificationGroupId,
   } = res.locals;
-  const properties = { milestone_id: null };
+  const historyItem = {
+    type: 'goal_milestone_removed',
+    done_by: user_id,
+    done_at: r.now(),
+    group_id: notificationGroupId,
+  };
+  const properties = {
+    milestone_id: null,
+    history: r.row('history').append(historyItem),
+  };
 
   dbGoalsUpdateSingle({ goal_id: id, properties })
     .then(() => {
@@ -302,17 +348,20 @@ const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   goal: object.as({
     id: string.require(),
   }).require(),
+  notificationGroupId: string.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
+    notificationGroupId,
     eventType,
   } = res.locals;
   const goal_id = goal.id;
   const queueMessage = {
     user_id,
     goal_id,
+    group_id: notificationGroupId,
     event_type: eventType,
   };
 
@@ -326,16 +375,19 @@ const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
 const goalsArchiveQueueMessage = valLocals('goalsArchiveQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
+  notificationGroupId: string.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
+    notificationGroupId,
     eventType,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
+    group_id: notificationGroupId,
     event_type: eventType,
   };
 
@@ -349,19 +401,19 @@ const goalsArchiveQueueMessage = valLocals('goalsArchiveQueueMessage', {
 const goalsAddMilestoneQueueMessage = valLocals('goalsAddMilestoneQueueMessage', {
   user_id: string.require(),
   id: string.require(),
-  milestone_id: string.require(),
   eventType: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     id,
-    milestone_id,
+    notificationGroupId,
     eventType,
   } = res.locals;
   const queueMessage = {
     user_id,
-    milestone_id,
     goal_id: id,
+    group_id: notificationGroupId,
     event_type: eventType,
   };
 
@@ -375,16 +427,19 @@ const goalsAddMilestoneQueueMessage = valLocals('goalsAddMilestoneQueueMessage',
 const goalsRemoveMilestoneQueueMessage = valLocals('goalsRemoveMilestoneQueueMessage', {
   user_id: string.require(),
   id: string.require(),
+  notificationGroupId: string.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     id,
+    notificationGroupId,
     eventType,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id: id,
+    group_id: notificationGroupId,
     event_type: eventType,
   };
 
@@ -400,25 +455,23 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
   goal: object.as({
     id: string.require(),
   }).require(),
-  current_step_id: string,
+  next_step_id: any.of(null, string),
   goalProgress: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
-    current_step_id,
     next_step_id,
-    goalProgress,
+    notificationGroupId,
   } = res.locals;
   const goal_id = goal.id;
   const event_type = next_step_id ? 'step_completed' : 'goal_completed';
   const queueMessage = {
     user_id,
     goal_id,
+    group_id: notificationGroupId,
     event_type,
-    next_step_id,
-    step_id: current_step_id,
-    progress: goalProgress,
   };
 
   setLocals({
@@ -436,6 +489,7 @@ const goalsNotify = valLocals('goalsNotify', {
   feedback: bool,
   flags: array.of(string),
   message: string,
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -443,6 +497,7 @@ const goalsNotify = valLocals('goalsNotify', {
     assignees,
     current_step_id,
     feedback,
+    notificationGroupId,
     flags = [],
     message = '',
   } = res.locals;
@@ -452,11 +507,12 @@ const goalsNotify = valLocals('goalsNotify', {
     message,
     assignees,
     feedback,
-    type: 'notified',
+    type: 'goal_notify',
     from: null,
     to: current_step_id,
     done_by: user_id,
     done_at: r.now(),
+    group_id: notificationGroupId,
   };
 
   dbGoalsPushToHistorySingle({ goal_id, historyItem })
@@ -476,26 +532,17 @@ const goalsNotify = valLocals('goalsNotify', {
 const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
-  assignees: array.of(string).require(),
-  feedback: bool,
-  flags: array.of(string),
-  message: string,
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
-    assignees,
-    feedback = false,
-    flags = [],
-    message = '',
+    notificationGroupId,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
-    flags,
-    message,
-    feedback,
-    user_ids: assignees,
+    group_id: notificationGroupId,
     event_type: 'goal_notify',
   };
 
