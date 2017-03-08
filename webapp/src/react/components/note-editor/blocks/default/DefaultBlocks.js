@@ -43,7 +43,6 @@ class DefaultBlocks {
     const maxDepth = 4;
 
     e.preventDefault();
-
     ctx.setEditorState(RichUtils.onTab(e, editorState, maxDepth));
   }
   static handleBeforeInput(ctx, str) {

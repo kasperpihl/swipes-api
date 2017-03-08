@@ -14,7 +14,7 @@ class MediumEditor extends PureComponent {
     this.state = {
       showPanel: false,
     };
-    bindAll(this, ['onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp', 'hidePanel']);
+    bindAll(this, ['onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp']);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.editorState !== this.props.editorState) {
@@ -128,7 +128,10 @@ class MediumEditor extends PureComponent {
   }
   calculatePosition(mousePos) {
     let newStyles = Map({ top: 0, left: 0 });
-
+    const position = this.getSelectionPosition();
+    if (!position) {
+      return newStyles;
+    }
     newStyles = this.handleDefaultPosition(newStyles);
     newStyles = this.handleMousePosition(newStyles, mousePos);
     newStyles = this.handleBoundaries(newStyles);
