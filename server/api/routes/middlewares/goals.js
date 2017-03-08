@@ -4,7 +4,6 @@ import {
   object,
   array,
   bool,
-  any,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -455,7 +454,7 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
   goal: object.as({
     id: string.require(),
   }).require(),
-  next_step_id: any.of(null, string),
+  next_step_id: string,
   goalProgress: string.require(),
   notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
@@ -470,6 +469,7 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
   const queueMessage = {
     user_id,
     goal_id,
+    next_step_id,
     group_id: notificationGroupId,
     event_type,
   };
