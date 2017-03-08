@@ -97,19 +97,16 @@ export const logout = cb => dp => dp(a.api.request('users.signout')).then((res) 
 // Notes
 // ======================================================
 export const note = {
-  create: (oId, title, text) => dp => dp(a.api.request('notes.create', {
+  create: (oId, text) => dp => dp(a.api.request('notes.create', {
     organization_id: oId,
-    title,
     text: text || convertToRaw(EditorState.createEmpty().getCurrentContent()),
   })),
-  save: (oId, id, text, rev) => (dp) => {
-    dp(a.api.request('notes.save', {
-      organization_id: oId,
-      id,
-      text,
-      rev,
-    }));
-  },
+  save: (oId, id, text, rev) => dp => dp(a.api.request('notes.save', {
+    organization_id: oId,
+    id,
+    text,
+    rev,
+  })),
 };
 
 

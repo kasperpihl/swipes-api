@@ -18,7 +18,6 @@ const notAuthed = express.Router();
 
 authed.all('/notes.create',
   valBody({
-    title: string.require(),
     organization_id: string.require(),
     text: object.require(),
   }),
@@ -37,7 +36,7 @@ authed.all('/notes.save',
   }),
   notesSave,
   valResponseAndSend({
-    rev: number.require(),
+    note: object.require(),
   }),
 );
 

@@ -7,6 +7,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import {
   convertToRaw,
 } from 'draft-js';
+import diff from 'classes/draft-util';
 
 import { bindAll, debounce } from 'classes/utils';
 import * as actions from 'actions';
@@ -24,46 +25,57 @@ class HOCSideNote extends PureComponent {
   }
   constructor(props) {
     super(props);
-    // editorState = EditorState.push(editorState, convertFromRaw(raw));
     this.state = { hasChanged: false };
-
-    if (props.note) {
-      this.state.serverNote = props.note.toJS();
-    }
     bindAll(this, ['setEditorState', 'bouncedSaveNote', 'onBlur']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
+  }
+  componentWillUnmount() {
+
   }
   componentDidMount() {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.note !== this.props.note) {
-      console.log('new note', this.props.note.toJS());
+      console.log(this._lastSavedRev, nextProps.note.get('rev'));
     }
   }
 
   setEditorState(editorState) {
     const { hasChanged } = this.state;
     const newState = { editorState };
-    if (!hasChanged && editorState.getUndoStack().first()) {
+    const lastUndo = editorState.getUndoStack();
+    if (lastUndo.size !== (this._lastUndo || 0)) {
+      console.log('changed!');
+      this.bouncedSaveNote();
       newState.hasChanged = true;
     }
     this.setState(newState);
-    this.bouncedSaveNote();
+    this._lastUndo = lastUndo.size;
   }
 
-  saveNote(editorState) {
+  saveNote(editorState, rev) {
     const {
       saveNote,
       id,
       organizationId,
     } = this.props;
-    const { serverNote } = this.state;
-    console.log(serverNote);
-    saveNote(organizationId, id, convertToRaw(editorState.getCurrentContent()), serverNote.rev);
+    const raw = convertToRaw(editorState.getCurrentContent());
+    saveNote(organizationId, id, raw, rev).then((res) => {
+      if (res && res.ok) {
+        console.log(res.note.rev);
+        this._lastSavedRev = res.note.rev;
+      } else if (res && !res.ok) {
+        if (res.error && res.error.message === 'merge_needed') {
+
+        }
+      }
+      console.log('res', res);
+    });
   }
   bouncedSaveNote() {
     const { editorState } = this.state;
-    this.saveNote(editorState);
+    const { note } = this.props;
+    this.saveNote(editorState, note.get('rev'));
   }
 
   renderHeader() {
@@ -82,12 +94,13 @@ class HOCSideNote extends PureComponent {
   }
 
   render() {
-    const { editorState, serverNote } = this.state;
-    if (!editorState && !serverNote) {
+    const { note } = this.props;
+    const { editorState } = this.state;
+    if (!editorState && !note) {
       return null;
     }
 
-    const rawState = editorState ? undefined : serverNote.text;
+    const rawState = editorState ? undefined : note.toJS().text;
 
     return (
       <SWView header={this.renderHeader()} maxWidth={maxWidth}>

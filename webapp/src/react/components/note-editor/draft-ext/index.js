@@ -74,7 +74,7 @@ export default function Setup(ctx, plugins) {
       }));
       let edt = EditorState.createEmpty(new CompositeDecorator(decorators));
       if (editorState) {
-        edt = EditorState.push(edt, editorState);
+        edt = EditorState.createWithContent(editorState, new CompositeDecorator(decorators));
       }
       return edt;
     },

@@ -135,7 +135,7 @@ export default function diff(serverOrg, serverMod, clientMod) {
     } while (didInsert);
   };
 
-
+  let numberOfConflicts = 0;
   serverOrg.blocks.forEach((b, i) => {
     let deletedBlock = false;
     if (!serverChanges.allKeys[b.key] || !clientChanges.allKeys[b.key]) {
@@ -156,6 +156,7 @@ export default function diff(serverOrg, serverMod, clientMod) {
         if (isEqualBlocks(serEdit, cliEdit, serverChanges.entityMap, clientChanges.entityMap)) {
           addBlockToState(serEdit, serverChanges.entityMap);
         } else {
+          numberOfConflicts += 1;
           const serPre = '[CONFLICT]';
           serEdit.text = `${serPre} ${serEdit.text}`;
           bumpOffsets(serEdit, serPre.length + 1);
@@ -177,5 +178,8 @@ export default function diff(serverOrg, serverMod, clientMod) {
     addForKey(b.key);
   });
 
-  return newState;
+  return {
+    conflicts: numberOfConflicts,
+    editorState: newState,
+  };
 }

@@ -19,6 +19,9 @@ export default function notesReducer(state = initialState, action) {
       }
       return state;
     }
+    case 'notes.save': {
+      return state.set(payload.note.id, fromJS(payload.note));
+    }
     case 'note_updated': {
       return state.set(payload.id, fromJS(payload));
     }

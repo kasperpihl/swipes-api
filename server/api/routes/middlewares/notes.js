@@ -18,25 +18,22 @@ import {
 const notesCreate = valLocals('notesCreate', {
   user_id: string.require(),
   organization_id: string.require(),
-  title: string.require(),
   text: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     organization_id,
-    title,
     text,
   } = res.locals;
   const note_id = generateSlackLikeId('N');
   const note = {
-    user_id,
     organization_id,
     rev: 1,
     id: note_id,
-    title,
     text,
     created_at: r.now(),
     updated_at: r.now(),
+    updated_by: user_id,
     created_by: user_id,
   };
 
@@ -67,7 +64,7 @@ const notesSave = valLocals('notesSave', {
   } = res.locals;
 
   const note = {
-    user_id,
+    updated_by: user_id,
     organization_id,
     id,
     text,
@@ -85,7 +82,7 @@ const notesSave = valLocals('notesSave', {
       }));
     }
     setLocals({
-      rev: res.changes[0].new_val.rev,
+      note: res.changes[0].new_val,
     });
 
     return next();
