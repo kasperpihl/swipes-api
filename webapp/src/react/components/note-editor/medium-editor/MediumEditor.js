@@ -80,7 +80,7 @@ class MediumEditor extends PureComponent {
     return selectionRect;
   }
   getHasSelectionChanged(sel, oldSel) {
-    if (!oldSel && sel || !sel && oldSel) {
+    if ((!oldSel && sel) || (!sel && oldSel)) {
       return true;
     }
     if (sel && oldSel) {
@@ -134,8 +134,8 @@ class MediumEditor extends PureComponent {
     }
     newStyles = this.handleDefaultPosition(newStyles);
     newStyles = this.handleMousePosition(newStyles, mousePos);
-    newStyles = this.handleBoundaries(newStyles);
     newStyles = this.handleContentOverlap(newStyles);
+    newStyles = this.handleBoundaries(newStyles);
 
     return newStyles.toJS();
   }
@@ -170,6 +170,27 @@ class MediumEditor extends PureComponent {
 
     return styles;
   }
+  handleContentOverlap(styles) {
+    const position = this.getSelectionPosition();
+    const { h } = this.getControlPanelSize();
+    const { container } = this.refs;
+    const wh = container.clientHeight;
+
+    const bottomY = styles.get('top') + h;
+    const topY = styles.get('top');
+    const selTopY = position.top;
+    const selBottomY = position.top + position.height;
+
+    if (topY < 0 || bottomY > wh || (bottomY > selTopY && topY < selBottomY)) {
+      if ((selTopY - h - SPACING) >= SPACING) {
+        styles = styles.set('top', selTopY - h - SPACING);
+      } else {
+        styles = styles.set('top', selBottomY + SPACING);
+      }
+    }
+
+    return styles;
+  }
   handleBoundaries(styles) {
     const { w, h } = this.getControlPanelSize();
     const { container } = this.refs;
@@ -187,22 +208,6 @@ class MediumEditor extends PureComponent {
       styles = styles.set('top', wh - SPACING - h);
     }
 
-    return styles;
-  }
-  handleContentOverlap(styles) {
-    const position = this.getSelectionPosition();
-    const { h } = this.getControlPanelSize();
-    const { container } = this.refs;
-    const wh = container.clientHeight;
-    const bottomY = styles.get('top') + h;
-
-    if (
-        (bottomY) > position.top &&
-        (bottomY) < (position.top + position.height)) {
-      styles = styles.set('top', position.top + position.height + SPACING);
-    } else if ((styles.get('top') + h) > wh) {
-      styles = styles.set('top', position.top - h - SPACING);
-    }
     return styles;
   }
   renderControlPanel() {
