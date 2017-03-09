@@ -3,6 +3,27 @@ import * as types from 'constants';
 
 const initialState = fromJS({});
 
+const handleNoteUpdate = (state, note) => {
+  const id = note.get('id');
+
+  if (state.getIn(['server', id, 'rev']) < note.get('rev')) {
+    state = state.setIn(['server', id], note);
+  }
+
+  const saveId = state.getIn(['cache', id, '_saveId']);
+  if (saveId === note.get('last_save_id')) {
+    state = state.deleteIn(['cache', id, '_saveId']);
+
+    if (state.getIn(['cache', id, 'text'])) {
+      state = state.setIn(['cache', id, 'serverOrg'], note);
+      return state.deleteIn(['cache', id, '_savingText']);
+    }
+
+    return state.deleteIn(['cache', id]);
+  }
+  return state;
+};
+
 export default function notesReducer(state = initialState, action) {
   const {
     type,
@@ -14,7 +35,7 @@ export default function notesReducer(state = initialState, action) {
       if (payload.ok) {
         let server = Map();
         payload.notes.forEach((note) => {
-          server = server.set(note.id, Map(note));
+          server = server.set(note.id, fromJS(note));
         });
         return state.set('server', server);
       }
@@ -28,20 +49,12 @@ export default function notesReducer(state = initialState, action) {
     }
     case types.NOTE_SAVE_START: {
       state = state.setIn(['cache', payload.id, '_savingText'], payload.text);
+      state = state.setIn(['cache', payload.id, '_saveId'], payload.saveId);
       return state.deleteIn(['cache', payload.id, 'text']);
     }
     case types.NOTE_SAVE_SUCCESS: {
-      const id = payload.id;
-      const note = Map(payload.note);
-      if (state.getIn(['server', id, 'rev']) < note.get('rev')) {
-        state = state.setIn(['server', id], note);
-      }
-      if (state.getIn(['cache', id, 'text'])) {
-        state = state.setIn(['cache', id, 'serverOrg'], note);
-        return state.deleteIn(['cache', id, '_savingText']);
-      }
-
-      return state.deleteIn(['cache', id]);
+      const note = fromJS(payload.note);
+      return handleNoteUpdate(state, note);
     }
     case types.NOTE_SAVE_ERROR: {
       const id = payload.id;
@@ -59,10 +72,8 @@ export default function notesReducer(state = initialState, action) {
       return state.deleteIn(['cache', id, '_savingText']);
     }
     case 'note_updated': {
-      if (state.getIn(['server', payload.id, 'rev']) < payload.rev) {
-        return state.setIn(['server', payload.id], Map(payload));
-      }
-      return state;
+      const note = fromJS(payload);
+      return handleNoteUpdate(state, note);
     }
     default:
       return state;

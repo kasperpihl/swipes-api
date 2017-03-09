@@ -9,6 +9,8 @@ import {
   convertFromRaw,
   EditorState,
 } from 'draft-js';
+import Button from 'Button';
+import { timeAgo } from 'classes/time-utils';
 import diff from 'classes/draft-util';
 
 import { bindAll, debounce, randomString } from 'classes/utils';
@@ -28,11 +30,11 @@ class HOCSideNote extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ['setEditorState', 'bouncedSaveNote', 'saveToCache']);
+    bindAll(this, ['setEditorState', 'bouncedSaveNote', 'onBeforeUnload', 'onResolveConflict']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
   componentDidMount() {
-    window.addEventListener('beforeunload', this.saveToCache);
+    window.addEventListener('beforeunload', this.onBeforeUnload);
   }
   componentWillReceiveProps(nextProps) {
     const { editorState } = this.state;
@@ -41,45 +43,42 @@ class HOCSideNote extends PureComponent {
 
     // Check that the save wasn't done by us
     if (nextNote !== note && nextNote.get('last_save_id') !== this.saveId) {
-      let newContentState;
-
       // If this was an update made from the outside and I'm doing nothing!
       if (!this._needSave && !this._isSaving) {
         console.log('REPLACE. someone else saved this, and you have made no changes');
-        newContentState = convertFromRaw(nextNote.get('text'));
-        this.setState({
-          editorState: EditorState.push(
-            editorState,
-            newContentState,
-            'replace-state',
-          ),
-        });
-      }
-      if (this._needSave || this._isSaving) {
-        console.log('MERGING');
-        const rawText = convertToRaw(editorState.getCurrentContent());
-        const diffObj = diff(serverOrg.get('text'), nextNote.get('text'), rawText);
-        this.overrideRev = nextNote.get('rev');
-        newContentState = convertFromRaw(diffObj.editorState);
-        this.setEditorState(EditorState.push(
-          editorState,
-          newContentState,
-          'replace-state',
-        ));
+        this.setState({ overrideRaw: nextNote.get('text').toJS() });
       }
     }
-    console.log('note update', nextNote.get('rev'), latestRev);
+  }
+  componentDidUpdate() {
+    if (this.state.overrideRaw) {
+      this.setState({ overrideRaw: undefined });
+    }
   }
   componentWillUnmount() {
     this._unmounted = true;
-    window.removeEventListener('beforeunload', this.saveToCache);
+    window.removeEventListener('beforeunload', this.onBeforeUnload);
     this.saveToCache();
   }
   onLinkClick(url) {
     const { browser, target } = this.props;
     browser(target, url);
   }
-  setEditorState(editorState) {
+  onBeforeUnload() {
+    const { editorState } = this.state;
+    this.saveToCache(editorState);
+  }
+  onResolveConflict() {
+    const { editorState } = this.state;
+    const { serverOrg, note } = this.props;
+    const rawText = convertToRaw(editorState.getCurrentContent());
+    const diffObj = diff(serverOrg.get('text').toJS(), note.get('text').toJS(), rawText);
+    this.saveNote(convertFromRaw(diffObj.editorState), note.get('rev'));
+  }
+  setEditorState(editorState, reset) {
+    if (reset) {
+      this._content = undefined;
+    }
     const content = editorState.getCurrentContent();
     if (this._content && content !== this._content) {
       if (!this._needSave) {
@@ -91,6 +90,7 @@ class HOCSideNote extends PureComponent {
     this.setState({ editorState });
     this._content = content;
   }
+
   saveToCache(editorState, force) {
     const { cacheNote, note } = this.props;
     if (!editorState) {
@@ -106,7 +106,7 @@ class HOCSideNote extends PureComponent {
       this.saveNote(text);
     }
   }
-  saveNote(text) {
+  saveNote(text, rev) {
     const {
       saveNote,
       id,
@@ -122,7 +122,7 @@ class HOCSideNote extends PureComponent {
     this._needSave = false;
     this.saveId = randomString(6);
 
-    saveNote(id, organizationId, text, this.saveId, this.overrideRev).then((res) => {
+    saveNote(id, organizationId, text, this.saveId, rev).then((res) => {
       this._isSaving = false;
       if (res && res.ok) {
         this.overrideRev = undefined;
@@ -143,31 +143,48 @@ class HOCSideNote extends PureComponent {
   }
 
   renderHeader() {
-    const { target, note } = this.props;
-    const subtitle = 'Me is cool';
+    const { target, note, latestRev } = this.props;
+    const name = window.msgGen.getUserString(note.get('updated_by'), { yourself: true });
+    let subtitle = `Last updated ${timeAgo(note.get('updated_at'))} by ${name}`;
     const title = note && note.get('title');
+    let buttonHtml;
+    if (latestRev < note.get('rev')) {
+      subtitle = 'There is a conflicted version';
+      buttonHtml = (
+        <Button
+          primary
+          text="Resolve now"
+          onClick={this.onResolveConflict}
+        />
+      );
+    }
+
     return (
       <div className="side-note__header">
         <HOCHeaderTitle
           title={title}
           target={target}
           subtitle={subtitle}
-        />
+        >
+          {buttonHtml}
+        </HOCHeaderTitle>
       </div>
     );
   }
 
   render() {
     const { note, cachedText } = this.props;
-    const { editorState } = this.state;
+    const { editorState, overrideRaw } = this.state;
     if (!editorState && !note) {
       return null;
     }
-    let rawState;
+
+    let rawState = overrideRaw;
     if (!editorState) {
-      console.log(cachedText, note.get('text'));
       rawState = cachedText || note.get('text');
+      rawState = rawState.toJS();
     }
+
     return (
       <SWView header={this.renderHeader()} maxWidth={maxWidth}>
         <div className="side-note">

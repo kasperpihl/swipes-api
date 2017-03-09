@@ -27,16 +27,10 @@ export const cache = (id, text) => (dp, getState) => {
   dp({ type: types.NOTE_CACHE, payload: { id, text, serverOrg } });
 };
 
-export const updateFromServer = note => (dp, getState) => {
-  const id = note.id;
-  const text = note.text;
-  console.log('update from server', note);
-};
-
 export const save = (id, oId, text, saveId, rev) => (dp, getState) => new Promise((resolve) => {
   const serverOrg = getServerOrg(id, getState, true);
 
-  dp({ type: types.NOTE_SAVE_START, payload: { id, text } });
+  dp({ type: types.NOTE_SAVE_START, payload: { id, text, saveId } });
 
   dp(a.api.request('notes.save', {
     organization_id: oId,

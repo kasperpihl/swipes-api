@@ -20,6 +20,7 @@ const persist = () => state => Immutable.Map({
   },
   goals: state.get('goals'),
   users: state.get('users'),
+  notes: state.get('notes'),
   me: state.get('me'),
 });
 const localStorageConfig = {

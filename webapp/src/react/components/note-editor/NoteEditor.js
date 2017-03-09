@@ -36,14 +36,23 @@ class NoteEditor extends Component {
   componentDidMount() {
     const { editorState, rawState } = this.props;
     if (!editorState && rawState) {
+      console.log(rawState);
       this.setEditorState(this.plugins.getEditorStateWithDecorators(convertFromRaw(rawState)));
+    }
+  }
+  componentDidUpdate() {
+    const { rawState } = this.props;
+    if (rawState) {
+      const raw = convertFromRaw(rawState);
+      this.refs.editor.blur();
+      this.setEditorState(this.plugins.getEditorStateWithDecorators(raw), true);
     }
   }
   onLinkClick(url) {
     this.callDelegate('onLinkClick', url);
   }
-  setEditorState(editorState) {
-    this.props.setEditorState(editorState);
+  setEditorState(editorState, force) {
+    this.props.setEditorState(editorState, force);
   }
   getEditorState() {
     return this.props.editorState;

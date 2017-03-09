@@ -105,9 +105,6 @@ export default class Socket {
       return;
     }
     this.store.dispatch({ type, payload: payload && payload.data });
-    if (type === 'note_updated') {
-      this.store.dispatch(a.notes.updateFromServer(payload.data));
-    }
     if (payload && payload.notification_data && Object.keys(payload.notification_data).length) {
       this.store.dispatch({
         type: types.NOTIFICATION_ADD,

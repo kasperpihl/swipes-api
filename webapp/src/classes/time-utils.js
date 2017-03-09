@@ -32,8 +32,9 @@ export function dayStringForDate(date) {
 
 export function timeAgo(date, simple) {
   let agoString = moment(date).fromNow();
-  agoString = agoString.replace('a few seconds ago', 'Just now');
+
   if (simple) {
+    agoString = agoString.replace('a few seconds ago', 'Just now');
     agoString = agoString.replace('a minute', '1min')
       .replace(' minutes', 'min')
       .replace('an hour', '1h')
