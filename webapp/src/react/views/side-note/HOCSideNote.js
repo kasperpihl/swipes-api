@@ -47,6 +47,13 @@ class HOCSideNote extends PureComponent {
       if (!this._needSave && !this._isSaving) {
         console.log('REPLACE. someone else saved this, and you have made no changes');
         newContentState = convertFromRaw(nextNote.get('text'));
+        this.setState({
+          editorState: EditorState.push(
+            editorState,
+            newContentState,
+            'replace-state',
+          ),
+        });
       }
       if (this._needSave || this._isSaving) {
         console.log('MERGING');
@@ -54,8 +61,6 @@ class HOCSideNote extends PureComponent {
         const diffObj = diff(serverOrg.get('text'), nextNote.get('text'), rawText);
         this.overrideRev = nextNote.get('rev');
         newContentState = convertFromRaw(diffObj.editorState);
-      }
-      if (newContentState) {
         this.setEditorState(EditorState.push(
           editorState,
           newContentState,
