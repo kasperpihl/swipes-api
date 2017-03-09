@@ -1,5 +1,5 @@
 # Codename Swiss
-Syntactical winning (Charlie Sheen) style sheets 
+Syntactical winning (Charlie Sheen) style sheets
 ### Webpack plugin
 - [ ] Read swiss on div
 - [ ] Parse emmet to styles
@@ -15,11 +15,10 @@ Syntactical winning (Charlie Sheen) style sheets
 
 import Swiss from 'swiss'
 import React, { Component, PropTypes } from 'react'
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 class Tree extends Component {
   constructor(props) {
     super(props)
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
     this.swiss = new Swiss()
   }
   componentDidMount() {
@@ -35,5 +34,3 @@ class Tree extends Component {
     )
   }
 }
-
-

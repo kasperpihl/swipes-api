@@ -74,12 +74,14 @@ class ControlPanel extends Component {
 
 
     if (input.value.length) {
-      const entityKey = Entity.create(
+      let contentState = editorState.getCurrentContent();
+      contentState = contentState.createEntity(
         'LINK',
         'MUTABLE',
         { url: input.value },
       );
-      const contentState = editorState.getCurrentContent();
+      const entityKey = contentState.getLastCreatedEntityKey();
+
       const selection = editorState.getSelection();
       const newContentState = Modifier.applyEntity(
         contentState,

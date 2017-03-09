@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
@@ -26,7 +25,7 @@ const initialState = fromJS({
   attachmentOrder: [],
 });
 
-class HOCAddGoal extends Component {
+class HOCAddGoal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = initialState.toObject();
@@ -45,7 +44,6 @@ class HOCAddGoal extends Component {
       'onClear',
     ]);
     this.callDelegate = setupDelegate(props.delegate);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
   componentDidMount() {

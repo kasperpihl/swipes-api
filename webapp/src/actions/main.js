@@ -101,9 +101,10 @@ export const note = {
     organization_id: oId,
     text: text || convertToRaw(EditorState.createEmpty().getCurrentContent()),
   })),
-  save: (oId, id, text, rev) => dp => dp(a.api.request('notes.save', {
+  save: (oId, id, text, rev, saveId) => dp => dp(a.api.request('notes.save', {
     organization_id: oId,
     id,
+    save_id: saveId,
     text,
     rev,
   })),

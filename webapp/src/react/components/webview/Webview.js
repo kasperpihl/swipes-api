@@ -1,12 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 
-class Webview extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
+class Webview extends PureComponent {
 
   componentDidMount() {
     const { onLoad } = this.props;

@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 
@@ -18,11 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
   DevTools = require('src/DevTools'); // eslint-disable-line global-require
 }
 
-class HOCApp extends Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
+class HOCApp extends PureComponent {
   componentDidMount() {
     const { navSet } = this.props;
     navSet('primary', {

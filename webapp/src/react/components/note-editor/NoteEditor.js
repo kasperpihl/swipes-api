@@ -4,6 +4,7 @@ import {
   getDefaultKeyBinding,
   convertFromRaw,
 } from 'draft-js';
+import { setupDelegate } from 'classes/utils';
 
 import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';
@@ -28,6 +29,8 @@ class NoteEditor extends Component {
         DefaultBlocks,
       ],
     });
+    this.setEditorState = this.setEditorState.bind(this);
+    this.callDelegate = setupDelegate(props.delegate);
     this.onChange = this.setEditorState;
   }
   componentDidMount() {
@@ -35,6 +38,9 @@ class NoteEditor extends Component {
     if (!editorState && rawState) {
       this.setEditorState(this.plugins.getEditorStateWithDecorators(convertFromRaw(rawState)));
     }
+  }
+  onLinkClick(url) {
+    this.callDelegate('onLinkClick', url);
   }
   setEditorState(editorState) {
     this.props.setEditorState(editorState);
@@ -92,6 +98,7 @@ NoteEditor.propTypes = {
   setEditorState: func.isRequired,
   onBlur: func,
   rawState: object,
+  delegate: object,
   editorState: object,
   readOnly: bool,
 };

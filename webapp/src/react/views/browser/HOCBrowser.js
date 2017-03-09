@@ -1,12 +1,11 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import SWView from 'SWView';
 import BrowserNavBar from './BrowserNavBar';
 import './styles/browser';
 
-class HOCBrowser extends Component {
+class HOCBrowser extends PureComponent {
   static minWidth() {
     return 800;
   }
@@ -24,7 +23,6 @@ class HOCBrowser extends Component {
       title: '',
       currentUrl: props.url,
     };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
     const webview = this.getWebview();

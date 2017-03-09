@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
 import SWView from 'SWView';
 import Button from 'Button';
@@ -12,13 +11,12 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Dashboard from './Dashboard';
 /* global msgGen */
 
-class HOCDashboard extends Component {
+class HOCDashboard extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
     };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClickCached = setupCachedCallback(this.onClick, this);
     // now use events as onClick: this.onClickCached(i)
     this.callDelegate = setupDelegate(props.delegate);

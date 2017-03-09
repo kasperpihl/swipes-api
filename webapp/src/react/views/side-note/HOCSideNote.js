@@ -9,12 +9,12 @@ import {
 } from 'draft-js';
 import diff from 'classes/draft-util';
 
-import { bindAll, debounce } from 'classes/utils';
+import { bindAll, debounce, randomString } from 'classes/utils';
 import * as actions from 'actions';
 
 import './styles/side-note';
 
-const maxWidth = 740;
+const maxWidth = 820;
 
 class HOCSideNote extends PureComponent {
   static maxWidth() {
@@ -25,46 +25,65 @@ class HOCSideNote extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = { hasChanged: false };
-    bindAll(this, ['setEditorState', 'bouncedSaveNote', 'onBlur']);
+    this.state = {};
+    bindAll(this, ['setEditorState', 'bouncedSaveNote', 'saveToCache']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
   }
   componentWillUnmount() {
-
+    window.removeEventListener('beforeunload', this.saveToCache);
+    this.saveToCache();
   }
   componentDidMount() {
+    window.addEventListener('beforeunload', this.saveToCache);
   }
+
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.note !== this.props.note) {
-      console.log(this._lastSavedRev, nextProps.note.get('rev'));
+      if (this._saveId !== nextProps.note.get('last_save_id')) {
+      }
+      console.log(this._saveId, nextProps.note.get('last_save_id'));
     }
   }
-
+  onLinkClick(url) {
+    const { browser, target } = this.props;
+    browser(target, url);
+  }
   setEditorState(editorState) {
-    const { hasChanged } = this.state;
-    const newState = { editorState };
-    const lastUndo = editorState.getUndoStack();
-    if (lastUndo.size !== (this._lastUndo || 0)) {
-      console.log('changed!');
-      this.bouncedSaveNote();
-      newState.hasChanged = true;
-    }
-    this.setState(newState);
-    this._lastUndo = lastUndo.size;
-  }
+    const content = editorState.getCurrentContent();
+    if (this._content && content !== this._content) {
+      this._needSave = true;
+      if (!this._isSaving) {
 
+      }
+      this.bouncedSaveNote();
+    }
+    this.setState({ editorState });
+    this._lastContent = content;
+  }
+  saveToCache() {
+    const { editorState } = this.state;
+    if (this._needSave) {
+      this.saveNote(editorState);
+    }
+  }
   saveNote(editorState, rev) {
+    if (this._isSaving) {
+      return;
+    }
+    this._needSave = false;
     const {
       saveNote,
       id,
       organizationId,
     } = this.props;
     const raw = convertToRaw(editorState.getCurrentContent());
-    saveNote(organizationId, id, raw, rev).then((res) => {
-      if (res && res.ok) {
-        console.log(res.note.rev);
-        this._lastSavedRev = res.note.rev;
-      } else if (res && !res.ok) {
+    this._isSaving = true;
+    this._saveId = randomString(6);
+    saveNote(organizationId, id, raw, rev, this._saveId).then((res) => {
+      this._isSaving = false;
+      if (!res || !res.ok) {
+        this._needSave = true;
         if (res.error && res.error.message === 'merge_needed') {
 
         }
@@ -111,6 +130,7 @@ class HOCSideNote extends PureComponent {
             editorState={editorState}
             setEditorState={this.setEditorState}
             onBlur={this.onBlur}
+            delegate={this}
           />
         </div>
       </SWView>
@@ -122,6 +142,7 @@ const { string, func } = PropTypes;
 HOCSideNote.propTypes = {
   note: map,
   id: string,
+  browser: func,
   organizationId: string,
   saveNote: func,
   target: string,
@@ -136,4 +157,5 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   saveNote: actions.main.note.save,
+  browser: actions.main.browser,
 })(HOCSideNote);

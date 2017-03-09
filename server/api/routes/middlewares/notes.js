@@ -53,6 +53,7 @@ const notesSave = valLocals('notesSave', {
   organization_id: string.require(),
   id: string.require(),
   text: object.require(),
+  save_id: string.require(),
   rev: number.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -60,6 +61,7 @@ const notesSave = valLocals('notesSave', {
     organization_id,
     id,
     text,
+    save_id,
     rev,
   } = res.locals;
 
@@ -68,6 +70,7 @@ const notesSave = valLocals('notesSave', {
     organization_id,
     id,
     text,
+    last_save_id: save_id,
     updated_at: r.now(),
     rev,
   };
