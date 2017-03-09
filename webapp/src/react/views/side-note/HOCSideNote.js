@@ -116,7 +116,7 @@ class HOCSideNote extends PureComponent {
     this._needSave = false;
     this.saveId = randomString(6);
 
-    saveNote(id, organizationId, text, '1234').then((res) => {
+    saveNote(id, organizationId, text, this.saveId).then((res) => {
       this._isSaving = false;
       if (!res || !res.ok) {
         this._needSave = true;
