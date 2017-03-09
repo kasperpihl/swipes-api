@@ -33,7 +33,7 @@ export const updateFromServer = note => (dp, getState) => {
   console.log('update from server', note);
 };
 
-export const save = (id, oId, text, saveId) => (dp, getState) => new Promise((resolve) => {
+export const save = (id, oId, text, saveId, rev) => (dp, getState) => new Promise((resolve) => {
   const serverOrg = getServerOrg(id, getState, true);
 
   dp({ type: types.NOTE_SAVE_START, payload: { id, text } });
@@ -43,7 +43,7 @@ export const save = (id, oId, text, saveId) => (dp, getState) => new Promise((re
     id,
     save_id: saveId,
     text,
-    rev: serverOrg.get('rev') || 1,
+    rev: rev || serverOrg.get('rev') || 1,
   })).then((res) => {
     if (res && res.ok) {
       dp({ type: types.NOTE_SAVE_SUCCESS, payload: { id, note: res.note } });

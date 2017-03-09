@@ -48,10 +48,11 @@ class HOCSideNote extends PureComponent {
         console.log('REPLACE. someone else saved this, and you have made no changes');
         newContentState = convertFromRaw(nextNote.get('text'));
       }
-      if (this._needSave) {
+      if (this._needSave || this._isSaving) {
         console.log('MERGING');
         const rawText = convertToRaw(editorState.getCurrentContent());
         const diffObj = diff(serverOrg.get('text'), nextNote.get('text'), rawText);
+        this.overrideRev = nextNote.get('rev');
         newContentState = convertFromRaw(diffObj.editorState);
       }
       if (newContentState) {
@@ -116,8 +117,11 @@ class HOCSideNote extends PureComponent {
     this._needSave = false;
     this.saveId = randomString(6);
 
-    saveNote(id, organizationId, text, this.saveId).then((res) => {
+    saveNote(id, organizationId, text, this.saveId, this.overrideRev).then((res) => {
       this._isSaving = false;
+      if (res && res.ok) {
+        this.overrideRev = undefined;
+      }
       if (!res || !res.ok) {
         this._needSave = true;
       }
