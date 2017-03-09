@@ -13,7 +13,7 @@ import Button from 'Button';
 import { timeAgo } from 'classes/time-utils';
 import diff from 'classes/draft-util';
 
-import { bindAll, debounce, randomString } from 'classes/utils';
+import { bindAll, debounce, randomString, setupLoadingHandlers } from 'classes/utils';
 import * as actions from 'actions';
 
 import './styles/side-note';
@@ -32,14 +32,14 @@ class HOCSideNote extends PureComponent {
     this.state = {};
     bindAll(this, ['setEditorState', 'bouncedSaveNote', 'onBeforeUnload', 'onResolveConflict']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
+    setupLoadingHandlers(this);
   }
   componentDidMount() {
     window.addEventListener('beforeunload', this.onBeforeUnload);
   }
   componentWillReceiveProps(nextProps) {
-    const { editorState } = this.state;
     const { note } = this.props;
-    const { latestRev, note: nextNote, serverOrg } = nextProps;
+    const { note: nextNote, serverOrg } = nextProps;
 
     // Check that the save wasn't done by us
     if (nextNote !== note && nextNote.get('last_save_id') !== this.saveId) {
@@ -51,10 +51,9 @@ class HOCSideNote extends PureComponent {
     }
   }
   componentDidUpdate() {
-    if (this.state.overrideRaw) {
-      this.setState({ overrideRaw: undefined });
-    }
+    this.clearOverrideRaw();
   }
+
   componentWillUnmount() {
     this._unmounted = true;
     window.removeEventListener('beforeunload', this.onBeforeUnload);
@@ -73,7 +72,16 @@ class HOCSideNote extends PureComponent {
     const { serverOrg, note } = this.props;
     const rawText = convertToRaw(editorState.getCurrentContent());
     const diffObj = diff(serverOrg.get('text').toJS(), note.get('text').toJS(), rawText);
-    this.saveNote(convertFromRaw(diffObj.editorState), note.get('rev'));
+    console.log('diffObj', diffObj);
+    this.setLoadingState('conflict');
+    this.saveNote(diffObj.editorState, note.get('rev')).then((res) => {
+      if (res && res.ok) {
+        this.clearLoadingState('conflict');
+        this.setState({ overrideRaw: diffObj.editorState });
+      } else {
+        this.clearLoadingState('conflict', '!Something went wrong');
+      }
+    });
   }
   setEditorState(editorState, reset) {
     if (reset) {
@@ -90,7 +98,11 @@ class HOCSideNote extends PureComponent {
     this.setState({ editorState });
     this._content = content;
   }
-
+  clearOverrideRaw() {
+    if (this.state.overrideRaw) {
+      this.setState({ overrideRaw: undefined });
+    }
+  }
   saveToCache(editorState, force) {
     const { cacheNote, note } = this.props;
     if (!editorState) {
@@ -113,23 +125,27 @@ class HOCSideNote extends PureComponent {
       organizationId,
     } = this.props;
 
-    if (this._isSaving) {
-      return;
-    }
-
-    // Setting the flags for handling internally
-    this._isSaving = true;
-    this._needSave = false;
-    this.saveId = randomString(6);
-
-    saveNote(id, organizationId, text, this.saveId, rev).then((res) => {
-      this._isSaving = false;
-      if (res && res.ok) {
-        this.overrideRev = undefined;
+    return new Promise((resolve) => {
+      if (this._isSaving) {
+        resolve();
       }
-      if (!res || !res.ok) {
-        this._needSave = true;
-      }
+
+      // Setting the flags for handling internally
+      this._isSaving = true;
+      this._needSave = false;
+      this.saveId = randomString(6);
+
+      saveNote(id, organizationId, text, this.saveId, rev).then((res) => {
+        resolve(res);
+        this._isSaving = false;
+
+        if (res && res.ok) {
+          this.overrideRev = undefined;
+        }
+        if (!res || !res.ok) {
+          this._needSave = true;
+        }
+      });
     });
   }
   bouncedSaveNote() {
@@ -153,6 +169,7 @@ class HOCSideNote extends PureComponent {
       buttonHtml = (
         <Button
           primary
+          {...this.getLoadingState('conflict')}
           text="Resolve now"
           onClick={this.onResolveConflict}
         />
@@ -195,6 +212,7 @@ class HOCSideNote extends PureComponent {
             setEditorState={this.setEditorState}
             onBlur={this.onBlur}
             delegate={this}
+            disabled={this.getLoadingState('conflict').loading}
           />
         </div>
       </SWView>
