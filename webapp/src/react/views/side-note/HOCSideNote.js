@@ -161,11 +161,12 @@ class HOCSideNote extends PureComponent {
   renderHeader() {
     const { target, note, latestRev } = this.props;
     const name = window.msgGen.getUserString(note.get('updated_by'), { yourself: true });
-    let subtitle = `Last updated ${timeAgo(note.get('updated_at'))} by ${name}`;
+    const timeString = timeAgo(note.get('updated_at'));
+    let subtitle = `Updated by ${name} ${timeString}`;
     const title = note && note.get('title');
     let buttonHtml;
     if (latestRev < note.get('rev')) {
-      subtitle = 'There is a conflicted version';
+      subtitle = `CONFLICT. Updated by ${name} ${timeString}`;
       buttonHtml = (
         <Button
           primary
