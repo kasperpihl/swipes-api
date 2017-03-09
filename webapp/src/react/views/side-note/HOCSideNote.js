@@ -52,7 +52,7 @@ class HOCSideNote extends PureComponent {
         console.log('MERGING');
         const rawText = convertToRaw(editorState.getCurrentContent());
         const diffObj = diff(serverOrg.get('text'), nextNote.get('text'), rawText);
-        newContentState = diffObj.editorState;
+        newContentState = convertFromRaw(diffObj.editorState);
       }
       if (newContentState) {
         this.setEditorState(EditorState.push(

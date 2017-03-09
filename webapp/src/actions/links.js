@@ -47,7 +47,7 @@ export const addNote = (options, cb) => (d, getState) => {
     cb('start', 'note');
     const state = getState();
     const orgId = state.getIn(['me', 'organizations', 0, 'id']);
-    d(a.main.note.create(orgId, title)).then((res) => {
+    d(a.notes.create(orgId)).then((res) => {
       if (res && res.ok) {
         const linkObj = d(getSwipesLinkObj(title));
         linkObj.service.type = 'note';
