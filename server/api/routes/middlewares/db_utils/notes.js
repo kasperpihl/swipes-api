@@ -23,8 +23,8 @@ const dbNotesInsert = funcWrap([
         returnChanges: 'always',
         conflict: (id, oldDoc, newDoc) => {
           return r.branch(
-            oldDoc('rev').eq(newDoc('rev')),
-            oldDoc.merge(newDoc.merge({ rev: oldDoc('rev').add(1) })),
+            oldDoc('rev').default(1).eq(newDoc('rev')),
+            oldDoc.merge(newDoc.merge({ rev: newDoc('rev').add(1) })),
             oldDoc,
           );
         },
