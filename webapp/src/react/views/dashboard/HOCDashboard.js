@@ -34,7 +34,8 @@ class HOCDashboard extends PureComponent {
     if (notifications.size) {
       let arg = [id];
       if (id === 'all') {
-        arg = notifications.getIn([0, 'updated_at']);
+        // K_TODO: remove the ts from here. not needed after next deployment
+        arg = notifications.getIn([0, 'updated_at']) || notifications.getIn([0, 'ts']);
       }
       if (arg) {
         this.setState({ loading: true });
@@ -124,12 +125,13 @@ class HOCDashboard extends PureComponent {
 
   messageForNotification(n) {
     const { me, goals } = this.props;
-    if (!n.get('target')) {
-      return null;
-    }
+
     const id = n.getIn(['target', 'id']);
     const index = n.getIn(['target', 'history_index']);
     const h = goals.getIn([id, 'history', index]);
+    if (!h) {
+      return null;
+    }
     const type = h.get('type');
 
     let m = Map({

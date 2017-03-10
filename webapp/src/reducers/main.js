@@ -17,11 +17,13 @@ const initialState = fromJS({
 });
 
 const shouldKeepNotification = (payload) => {
+  return payload.important;
+
   switch (payload.type) {
     case 'goal_notify':
       return true;
     case 'step_completed': {
-      if (payload.me_is_next) {
+      if (payload.important) {
         return true;
       }
       return false;
@@ -117,7 +119,7 @@ export default function main(state = initialState, action) {
       const { notification_ids: ids, last_marked: lastMarked } = payload;
       return state.updateIn(['notifications'], s => s.map((n) => {
         if (ids && ids.indexOf(n.get('id')) !== -1) {
-          return n.set('seen', lastMarked);
+          return n.set('seen_at', lastMarked);
         }
         return n;
       }));
@@ -127,7 +129,7 @@ export default function main(state = initialState, action) {
       const { marked_at, last_marked: lastMarked } = payload;
       return state.updateIn(['notifications'], s => s.map((n) => {
         if (n.get('ts') <= lastMarked) {
-          return n.set('seen', marked_at);
+          return n.set('seen_at', marked_at);
         }
         return n;
       }));

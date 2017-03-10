@@ -44,7 +44,7 @@ export const setCounter = (id, counter) => (d, getState) => {
       const counters = getState().getIn(['navigation', 'counters']);
       const slackCount = counters.get('Slack');
       const swipesCount = counters.get('Dashboard');
-      if (swipesCount.length || slackCount.length) {
+      if (swipesCount || slackCount) {
         let totalCount = 0;
         if (swipesCount && swipesCount.length) {
           totalCount += parseInt(swipesCount, 10);
