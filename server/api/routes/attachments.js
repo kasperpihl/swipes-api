@@ -18,7 +18,11 @@ authed.all('/attachments.add',
     target: string.require(),
     attachment: object.require(),
   }),
-
+  /*
+    T_TODO:
+    [] add attachment to attachments object (indexed by id)
+    [] add id to attachment_order
+  */
   valResponseAndSend({
     target: string.require(),
     attachment: object.require(),
@@ -33,7 +37,10 @@ authed.all('/attachments.rename',
     attachment_id: string.require(),
     title: string.require().min(1),
   }),
-
+  /*
+    T_TODO:
+    [] rename attachments[attachment_id].title
+  */
   valResponseAndSend({
     target: string.require(),
     attachment_id: string.require(),
@@ -46,7 +53,11 @@ authed.all('/attachments.delete',
     target: string.require(),
     attachment_id: string.require(),
   }),
-
+  /*
+    T_TODO:
+    [] add deleted: true to attachments[attachment_id]
+    [] remove attachment_id from attachment_order
+  */
   valResponseAndSend({
     target: string.require(),
     attachment_id: string.require(),
@@ -58,7 +69,12 @@ authed.all('/attachments.reorder',
     target: string.require(),
     attachment_order: array.require(),
   }),
-
+  /*
+    T_TODO:
+    [] update the attachment_order array with new value
+    [] check that all attachments with !deleted is part of attachment_order array
+    [] insert any !deleted attachments that is not part to the end of the attachment_order array
+  */
   valResponseAndSend({
     target: string.require(),
     attachment_order: array.require(),

@@ -64,24 +64,41 @@ authed.all('/goals.create',
   }));
 
 authed.all('/goals.completeStep',
-    valBody({
-      goal_id: string.require(),
-      current_step_id: string,
-      next_step_id: string,
-      message: string,
-      flags: array.of(string),
-      assignees: array.of(string),
-    }),
-    notificationCreateGroupId,
-    goalsGet,
-    goalsProgressStatus,
-    goalsCompleteStep,
-    goalsUpdate,
-    goalsNextStepQueueMessage,
-    notificationsPushToQueue,
-    valResponseAndSend({
-      goal: object.require(),
-    }));
+  valBody({
+    goal_id: string.require(),
+    current_step_id: string,
+    next_step_id: string,
+    message: string,
+    flags: array.of(string),
+    assignees: array.of(string),
+  }),
+  notificationCreateGroupId,
+  goalsGet,
+  goalsProgressStatus,
+  goalsCompleteStep,
+  goalsUpdate,
+  goalsNextStepQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal: object.require(),
+  }));
+
+
+authed.all('/goals.rename',
+  valBody({
+    goal_id: string.require(),
+    title: string.require().min(1),
+  }),
+  /*
+    T_TODO:
+    [] rename goal.title
+  */
+  valResponseAndSend({
+    goal_id: string.require(),
+    title: string.require(),
+  }));
+// Event goal_renamed
+
 
 authed.all('/goals.archive',
   valBody({
