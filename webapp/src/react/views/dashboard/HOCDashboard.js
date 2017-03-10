@@ -145,7 +145,7 @@ class HOCDashboard extends PureComponent {
       m = m.set('attachments', this.getAttachments(id, h.get('flags')));
     } else {
       m = m.set('title', `${n.getIn(['meta', 'title'])} (archived)`);
-      m = m.set('noClickTitle', true);
+      m = m.set('noClickTitle', !!n.get('seen_at'));
     }
 
     switch (type) {
