@@ -106,7 +106,6 @@ const notifyCommonRethinkdb = (req, res, next) => {
     uniqueUsersToNotifyWithEvent = null,
     event_type,
     userNotificationMap = null,
-    notificationData,
     eventData,
   } = res.locals;
 
@@ -115,7 +114,6 @@ const notifyCommonRethinkdb = (req, res, next) => {
     type: event_type,
     created_at: r.now(),
     data: eventData,
-    notification_data: notificationData,
     user_notification_map: userNotificationMap,
   };
 
@@ -227,21 +225,13 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
         let notificationMap = userNotificationMap[newVal.user_id] || {};
 
         notificationMap = Object.assign({}, notificationMap, {
-          id: newVal.id,
-          created_at: newVal.created_at,
-          updated_at: newVal.updated_at,
+          ...newVal,
         });
 
         userNotificationMap[newVal.user_id] = notificationMap;
       });
 
-      const data = Object.assign({}, {
-        type: event_type,
-        ...notificationData,
-      });
-
       res.locals.userNotificationMap = userNotificationMap;
-      res.locals.notificationData = data;
 
       return next();
     })

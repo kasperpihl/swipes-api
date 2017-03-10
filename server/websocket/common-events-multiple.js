@@ -34,12 +34,8 @@ const commonEventsMultiple = (socket, userId) => {
           if (n.user_notification_map) {
             const notification_map = n.user_notification_map[userId];
 
-            // We remove the notification_data for users
-            // that don't have notification map or created notification for them
-            if (!notification_map || !notification_map.id) {
-              delete n.notification_data;
-            } else {
-              n.notification_data = Object.assign({}, n.notification_data, { ...notification_map });
+            if (notification_map || notification_map.id) {
+              n.notification_data = Object.assign({}, { ...notification_map });
             }
           }
 
