@@ -151,20 +151,20 @@ const goalsProgressStatus = valLocals('goalsProgressStatus', {
     next_step_id,
   } = res.locals;
 
-  let currentStepPosision = goal.step_order.indexOf(current_step_id);
+  let currentStepPosition = goal.step_order.indexOf(current_step_id);
 
-  if (currentStepPosision === -1) {
-    currentStepPosision = goal.step_order.length;
+  if (currentStepPosition === -1) {
+    currentStepPosition = goal.step_order.length;
   }
 
-  const nextStepPosision = goal.step_order.indexOf(next_step_id);
+  const nextStepPosition = goal.step_order.indexOf(next_step_id);
   let goalProgress = 'forward';
 
-  if (currentStepPosision === nextStepPosision) {
+  if (currentStepPosition === nextStepPosition) {
     goalProgress = 'reassign';
   }
 
-  if (nextStepPosision < currentStepPosision) {
+  if (nextStepPosition && nextStepPosition < currentStepPosition) {
     goalProgress = 'iteration';
   }
 
