@@ -167,7 +167,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       // because mutation is the root of all evil
       // we are mutating the data object few lines down
       group_id,
-      id: `${group_id}-${user_id}`,
+      id: `${group_id}-${userId}`,
       type: event_type,
       user_id: userId,
       done_by: user_id,
