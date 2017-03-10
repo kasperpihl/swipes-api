@@ -27,7 +27,8 @@ const initGetData = valLocals('initGetData', {
     initMe(user_id),
     servicesGetAll(),
     initActivities(user_id),
-    dbNotificationsGetAllByIdOrderByTs({ user_id }),
+    dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: false } }),
+    dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: true } }),
   ];
 
   Promise.all(promiseArrayQ)
@@ -94,7 +95,7 @@ const initGetData = valLocals('initGetData', {
         notes,
         services: data[1],
         activity: data[2],
-        notifications: data[3],
+        notifications: data[3].concat(data[4]),
       });
 
       return next();

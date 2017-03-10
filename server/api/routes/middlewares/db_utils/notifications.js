@@ -48,8 +48,9 @@ const dbNotificationsMarkAsSeenIds = funcWrap([
 const dbNotificationsGetAllByIdOrderByTs = funcWrap([
   object.as({
     user_id: string.require(),
+    filter: object.require(),
   }).require(),
-], (err, { user_id }) => {
+], (err, { user_id, filter = {} }) => {
   if (err) {
     throw new SwipesError(`dbNotificationsGetAllByIdOrderByTs: ${err}`);
   }
@@ -57,6 +58,7 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
   const q =
     r.table('notifications')
       .getAll(user_id, { index: 'user_id' })
+      .filter(filter, { default: true })
       .orderBy(r.desc('created_at'))
       .limit(100);
 
