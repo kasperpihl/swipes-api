@@ -236,8 +236,8 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       });
 
       const data = Object.assign({}, {
-        data: notificationData,
         type: event_type,
+        ...notificationData,
       });
 
       res.locals.userNotificationMap = userNotificationMap;
