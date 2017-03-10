@@ -37,7 +37,7 @@ const notificationsMarkAsSeenTs = valLocals('notificationsMarkAsSeen', {
     last_marked: timestamp_now,
   });
 
-  dbNotificationsMarkAsSeenTs({ user_id, timestamp, timestamp_now })
+  dbNotificationsMarkAsSeenTs({ user_id, timestamp })
     .then(() => {
       return next();
     })
@@ -80,12 +80,41 @@ const notificationsMarkAsSeenTsQueueMessage = valLocals('notificationsMarkAsSeen
     user_id,
     marked_at,
     last_marked,
-    event_type: 'notifications_seen_ts',
   };
 
   setLocals({
     queueMessage,
     messageGroupId: user_id,
+  });
+
+  return next();
+});
+const notificationsMarkAsSeenTsEventType = valLocals('notificationsMarkAsSeenTsEventType', {
+  queueMessage: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    queueMessage,
+  } = res.locals;
+
+  queueMessage.event_type = 'notifications_seen_ts';
+
+  setLocals({
+    queueMessage,
+  });
+
+  return next();
+});
+const notificationsMarkAsSeenTsHistoryUpdatedEventType = valLocals('notificationsMarkAsSeenTsEventType', {
+  queueMessage: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    queueMessage,
+  } = res.locals;
+
+  queueMessage.event_type = 'notifications_seen_ts_history_updated';
+
+  setLocals({
+    queueMessage,
   });
 
   return next();
@@ -165,6 +194,8 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
 
 export {
   notificationsMarkAsSeenTs,
+  notificationsMarkAsSeenTsEventType,
+  notificationsMarkAsSeenTsHistoryUpdatedEventType,
   notificationsMarkAsSeenIds,
   notificationsPushToQueue,
   notificationsMarkAsSeenTsQueueMessage,

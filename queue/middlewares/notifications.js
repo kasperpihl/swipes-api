@@ -1,3 +1,10 @@
+import r from 'rethinkdb';
+import Promise from 'bluebird';
+import {
+  dbGetNotificationsTs,
+  dbNotificationTargetHistorySeenByUpdate,
+} from '../db_utils/notifications';
+
 const notificationsSeenTsNotificationData = (req, res, next) => {
   const {
     marked_at,
@@ -15,6 +22,65 @@ const notificationsSeenTsNotificationData = (req, res, next) => {
   return next();
 };
 
+const notificationsGetTs = (req, res, next) => {
+  const {
+    user_id,
+    marked_at,
+  } = res.locals;
+
+  dbGetNotificationsTs({ user_id, timestamp: marked_at })
+    .then((notifications) => {
+      res.locals.notifications = notifications;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
+const noticationsUpdateTargetHistory = (req, res, next) => {
+  const {
+    user_id,
+    notifications = [],
+  } = res.locals;
+  const promiseArrayQ = [];
+
+  notifications.forEach((notification) => {
+    promiseArrayQ.push(dbNotificationTargetHistorySeenByUpdate({
+      user_id,
+      target: notification.target,
+    }));
+  });
+
+  Promise.all(promiseArrayQ)
+    .then((results) => {
+      const events = [];
+
+      results.filter((result) => {
+        return result.changes && result.changes.length > 0;
+      }).forEach((result, idx) => {
+        const target = notifications[idx].target;
+
+        events.push({
+          // we can use idx here because the order of the results should be same as notifications
+          user_ids: [notifications[idx].done_by],
+          type: 'history_updated',
+          created_at: r.now(),
+          data: {
+            target,
+            changes: result.changes[0].new_val.history[target.history_index],
+          },
+        });
+      });
+
+      res.locals.events = events;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
 const notificationsSeenIdsNotificationData = (req, res, next) => {
   const {
     notification_ids,
@@ -34,5 +100,7 @@ const notificationsSeenIdsNotificationData = (req, res, next) => {
 
 export {
   notificationsSeenTsNotificationData,
+  notificationsGetTs,
   notificationsSeenIdsNotificationData,
+  noticationsUpdateTargetHistory,
 };

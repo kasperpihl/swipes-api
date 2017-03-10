@@ -102,6 +102,12 @@ const notifications_seen_ts = [
   notify.notifyCommonRethinkdb,
 ];
 
+const notifications_seen_ts_history_updated = [
+  notifications.notificationsGetTs,
+  notifications.noticationsUpdateTargetHistory,
+  notify.notifyManyToMany,
+];
+
 const notifications_seen_ids = [
   notifications.notificationsSeenIdsNotificationData,
   notify.notifySingleUser,
@@ -139,6 +145,7 @@ export {
   way_created,
   way_archived,
   notifications_seen_ts,
+  notifications_seen_ts_history_updated,
   notifications_seen_ids,
   xendo_user_signup,
   xendo_remove_service_from_user,

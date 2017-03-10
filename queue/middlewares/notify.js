@@ -1,6 +1,8 @@
 import r from 'rethinkdb';
 import commonMultipleEvents from '../db_utils/events';
-import dbInsertMultipleNotifications from '../db_utils/notifications';
+import {
+  dbInsertMultipleNotifications,
+} from '../db_utils/notifications';
 
 const notifySingleUser = (req, res, next) => {
   const {
@@ -125,6 +127,23 @@ const notifyCommonRethinkdb = (req, res, next) => {
       return next(err);
     });
 };
+const notifyManyToMany = (req, res, next) => {
+  const {
+    events = [],
+  } = res.locals;
+
+  if (events.length === 0) {
+    return next();
+  }
+
+  return commonMultipleEvents({ objToInsert: events })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
 const notifyInsertMultipleNotifications = (req, res, next) => {
   const {
     user_id,
@@ -194,7 +213,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     return notification;
   });
 
-  dbInsertMultipleNotifications({ notifications: filteredNotifications })
+  return dbInsertMultipleNotifications({ notifications: filteredNotifications })
     .then((dbResults) => {
       if (!dbResults.changes) {
         return next();
@@ -237,4 +256,5 @@ export {
   notifyAllInCurrentStep,
   notifyMultipleUsers,
   notifySendEventToAllInCompany,
+  notifyManyToMany,
 };

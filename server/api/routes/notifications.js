@@ -5,6 +5,8 @@ import {
 } from 'valjs';
 import {
   notificationsMarkAsSeenTs,
+  notificationsMarkAsSeenTsEventType,
+  notificationsMarkAsSeenTsHistoryUpdatedEventType,
   notificationsMarkAsSeenIds,
   notificationsMarkAsSeenTsQueueMessage,
   notificationsMarkAsSeenIdsQueueMessage,
@@ -24,6 +26,9 @@ authed.all('/notifications.markAsSeen.ts',
   }),
   notificationsMarkAsSeenTs,
   notificationsMarkAsSeenTsQueueMessage,
+  notificationsMarkAsSeenTsEventType,
+  notificationsPushToQueue,
+  notificationsMarkAsSeenTsHistoryUpdatedEventType,
   notificationsPushToQueue,
   valResponseAndSend({
     marked_at: string.require(),
