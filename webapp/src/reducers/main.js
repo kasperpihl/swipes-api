@@ -16,7 +16,7 @@ const initialState = fromJS({
   activeGoal: null,
 });
 
-const shouldKeepNotification = payload => payload.important && !payload.sent;
+const shouldKeepNotification = payload => payload.important && !payload.sender;
 
 export default function main(state = initialState, action) {
   const { payload, type } = action;
