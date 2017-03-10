@@ -1,16 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Toast from './Toast';
 
 import './styles/toasty.scss';
 
-class HOCToasty extends Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
+class HOCToasty extends PureComponent {
+
   renderToasts() {
     const { toasts } = this.props;
     return toasts.map(toast => <Toast data={toast.toJS()} key={`toast-${toast.get('id')}`} />);

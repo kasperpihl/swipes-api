@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { EditorBlock, EditorState } from 'draft-js';
 import Checkbox from 'components/swipes-ui/Checkbox';
@@ -127,22 +127,25 @@ export default class ChecklistBlock extends Component {
     return false;
   }
   static handleBeforeInput(ctx, str) {
+    if (str !== ' ') {
+      return false;
+    }
+
     const editorState = ctx.getEditorState();
 
     const selection = editorState.getSelection();
+    const offset = selection.get('focusOffset');
     const currentBlock = editorState.getCurrentContent()
       .getBlockForKey(selection.getStartKey());
-    const blockType = currentBlock.getType();
-    const blockLength = currentBlock.getLength();
-
-    if (str === ' ' && blockType === 'unstyled') {
-      if (blockLength === 2 && currentBlock.getText() === '[]') {
-        ctx.setEditorState(resetBlockToType(editorState, 'checklist', { checked: false }));
-        return true;
-      } else if (blockLength === 3 && currentBlock.getText() === '[x]') {
-        ctx.setEditorState(resetBlockToType(editorState, 'checklist', { checked: true }));
-        return true;
-      }
+    let text = currentBlock.getText();
+    if (text.startsWith('[]') && offset === 2) {
+      text = text.substr(2);
+      ctx.setEditorState(resetBlockToType(editorState, 'checklist', { checked: false }, text));
+      return true;
+    } else if (text.startsWith('[x]') && offset === 3) {
+      text = text.substr(3);
+      ctx.setEditorState(resetBlockToType(editorState, 'checklist', { checked: true }, text));
+      return true;
     }
 
     return false;
@@ -204,7 +207,7 @@ export default class ChecklistBlock extends Component {
   }
   toggleChecked() {
     const { blockProps, block } = this.props;
-    const { ctx, returnFocusToEditor, checked } = blockProps;
+    const { ctx, checked } = blockProps;
     const newChecked = !checked;
 
     this.updateBlockMetadata(ctx, block.getKey(), { checked: newChecked });
@@ -230,3 +233,9 @@ export default class ChecklistBlock extends Component {
     );
   }
 }
+
+const { object } = PropTypes;
+ChecklistBlock.propTypes = {
+  blockProps: object,
+  block: object,
+};

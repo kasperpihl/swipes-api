@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { bindAll } from 'classes/utils';
 import Icon from 'Icon';
 
@@ -7,7 +6,7 @@ import PDFRender from './PDFRender';
 
 import './styles/pdf-viewer.scss';
 
-class PDFViewer extends Component {
+class PDFViewer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +34,6 @@ class PDFViewer extends Component {
         'handleMouseLeave',
       ],
     );
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentWillMount() {
     // const { page } = this.state;
@@ -47,11 +45,11 @@ class PDFViewer extends Component {
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }
-  onDocumentComplete(pages) {
+  onDocumentComplete({ total }) {
     const { fileLoaded } = this.props;
     const { loaded } = this.state;
 
-    this.setState({ pages });
+    this.setState({ pages: total });
     this.setState({ loaded: true });
 
     if (fileLoaded) {

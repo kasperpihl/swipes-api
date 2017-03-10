@@ -1,17 +1,15 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import Icon from 'Icon';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
 import './styles/goal-list-item.scss';
 /* global msgGen */
-class GoalListItem extends Component {
+class GoalListItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.clickedListItem = this.clickedListItem.bind(this);
   }
   getHelper() {

@@ -1,25 +1,26 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {
+  convertToRaw,
   convertFromRaw,
   EditorState,
-  convertToRaw,
 } from 'draft-js';
+import Button from 'Button';
+import { timeAgo } from 'classes/time-utils';
+import diff from 'classes/draft-util';
 
-import { bindAll, debounce } from 'classes/utils';
+import { bindAll, debounce, randomString, setupLoadingHandlers } from 'classes/utils';
 import * as actions from 'actions';
 
 import './styles/side-note';
 
-const maxWidth = 740;
-const UNLOCK_TIMER = 30000;
+const maxWidth = 820;
 
-class HOCSideNote extends Component {
+class HOCSideNote extends PureComponent {
   static maxWidth() {
     return maxWidth;
   }
@@ -28,200 +29,189 @@ class HOCSideNote extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      editorState: this.parseInitialData(),
-      locked: false,
-      editing: false,
-    };
-    this.state = Object.assign(this.state, this.handleNoteChange(null, props.note));
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    bindAll(this, ['onChange', 'bouncedSaveNote', 'onBlur']);
+    this.state = {};
+    bindAll(this, ['setEditorState', 'bouncedSaveNote', 'onBeforeUnload', 'onResolveConflict']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
+    setupLoadingHandlers(this);
   }
   componentDidMount() {
-  }
-  handleNoteChange(oldNote, newNote) {
-    const { me } = this.props;
-    let newState = {};
-    if (newNote !== oldNote) {
-      const newLock = newNote.get('locked_by');
-      if (newLock) {
-        const ts = parseInt(new Date(newNote.get('ts')).getTime(), 10);
-        newState = Object.assign(newState, this.lockUI(ts));
-      } else {
-        newState = Object.assign(newState, this.unlockUI());
-      }
-      if (
-        !oldNote ||
-        newNote.get('id') !== oldNote.get('id') ||
-        newNote.get('user_id') !== me.get('id')
-      ) {
-        const editorState = this.parseInitialData(newNote.get('text'));
-        this.lastUndo = editorState.getUndoStack().first();
-
-        this._justChanged = true;
-        newState = Object.assign(newState, { editorState, editing: false });
-        // Using the last undo item to check if something has actually changed
-      }
-    }
-    return newState;
+    window.addEventListener('beforeunload', this.onBeforeUnload);
   }
   componentWillReceiveProps(nextProps) {
-    const { note: oldNote } = this.props;
-    const { note: newNote } = nextProps;
-    this.setState(this.handleNoteChange(oldNote, newNote));
+    const { note } = this.props;
+    const { note: nextNote } = nextProps;
+
+    // Check that the save wasn't done by us
+    if (nextNote !== note && nextNote.get('last_save_id') !== this.saveId) {
+      // If this was an update made from the outside and I'm doing nothing!
+      if (!this._needSave && !this._isSaving) {
+        this.setState({ overrideRaw: nextNote.get('text').toJS() });
+      }
+    }
   }
   componentDidUpdate() {
-    if (this._justChanged) {
-      this.refs.editor.focus();
-      this._justChanged = false;
-    }
-  }
-  onBlur() {
-    this.setState(this.unlockUI());
-  }
-  onChange(editorState) {
-    const { editing } = this.state;
-    const changeObj = { editorState };
-    const lastUndo = editorState.getUndoStack().first();
-    // If you are editing or if not the last undo item has changed.
-    // This enables us to not lock the note for others on selection, focus etc.
-    if (!editing && this.lastUndo !== lastUndo) {
-      // Save immediately (with no changes to lock the doc)
-      this.saveNote(false, this.state.editorState);
-      // Call twice, to call immediately to lock, and on the timer with content
-      this.bouncedSaveNote();
-      changeObj.editing = true;
-    }
-    if (editing && editorState.getSelection().hasFocus) {
-      this.bouncedSaveNote();
-    }
-    this.setState(changeObj);
-
-    this.lastUndo = lastUndo;
+    this.clearOverrideRaw();
   }
 
-  clearTimer() {
-    if (this.lockTimer) {
-      clearTimeout(this.lockTimer);
-      this.lockTimer = null;
-    }
+  componentWillUnmount() {
+    this._unmounted = true;
+    window.removeEventListener('beforeunload', this.onBeforeUnload);
+    this.saveToCache();
   }
-  lockUI(ts) {
-    this.clearTimer();
-    const now = parseInt(new Date().getTime(), 10);
-    const timeleft = (ts + UNLOCK_TIMER) - now;
-    if (timeleft > 0) {
-      this.lockTimer = setTimeout(() => {
-        this.setState(this.unlockUI());
-      }, timeleft);
-      if (!this.state.locked) {
-        return { locked: true };
+  onLinkClick(url) {
+    const { browser, target } = this.props;
+    browser(target, url);
+  }
+  onBeforeUnload() {
+    const { editorState } = this.state;
+    this.saveToCache(editorState);
+  }
+  onResolveConflict() {
+    const { editorState } = this.state;
+    const { serverOrg, note } = this.props;
+    const rawText = convertToRaw(editorState.getCurrentContent());
+    const diffObj = diff(serverOrg.get('text').toJS(), note.get('text').toJS(), rawText);
+    this.setLoadingState('conflict');
+    this.saveNote(diffObj.editorState, note.get('rev')).then((res) => {
+      if (res && res.ok) {
+        this.clearLoadingState('conflict');
+        this.setState({ overrideRaw: diffObj.editorState });
+      } else {
+        this.clearLoadingState('conflict', '!Something went wrong');
       }
-    }
-    return {};
+    });
   }
-  unlockUI() {
-    this.clearTimer();
-    const { locked, editing, editorState } = this.state;
-    const newState = {};
-    if (editing) {
-      newState.editing = false;
-      if (this.bouncedSaveNote.isRunning()) {
-        this.bouncedSaveNote.clear();
-        this.saveNote(true, editorState);
+  setEditorState(editorState, reset) {
+    if (reset) {
+      this._content = undefined;
+    }
+    const content = editorState.getCurrentContent();
+    if (this._content && content !== this._content) {
+      if (!this._needSave) {
+        this.saveToCache(editorState, true); // Force caching
       }
+      this._needSave = true;
+      this.bouncedSaveNote();
     }
-    if (locked) {
-      newState.locked = false;
-    }
-    return newState;
+    this.setState({ editorState });
+    this._content = content;
   }
+  clearOverrideRaw() {
+    if (this.state.overrideRaw) {
+      this.setState({ overrideRaw: undefined });
+    }
+  }
+  saveToCache(editorState, force) {
+    const { cacheNote, note } = this.props;
+    if (!editorState) {
+      editorState = this.state.editorState;
+    }
 
-  saveNote(unlock, editorState) {
+    if (editorState && (this._needSave || force)) {
+      cacheNote(note.get('id'), convertToRaw(editorState.getCurrentContent()));
+    }
+
+    if (editorState && this._needSave) {
+      const text = convertToRaw(editorState.getCurrentContent());
+      this.saveNote(text);
+    }
+  }
+  saveNote(text, rev) {
     const {
       saveNote,
-      sideNoteId,
+      id,
       organizationId,
     } = this.props;
 
-    saveNote(organizationId, sideNoteId, this.convertDataToSave(editorState), unlock);
+    return new Promise((resolve) => {
+      if (this._isSaving) {
+        resolve();
+      }
+
+      // Setting the flags for handling internally
+      this._isSaving = true;
+      this._needSave = false;
+      this.saveId = randomString(6);
+
+      saveNote(id, organizationId, text, this.saveId, rev).then((res) => {
+        resolve(res);
+        this._isSaving = false;
+
+        if (res && res.ok) {
+          this.overrideRev = undefined;
+        }
+        if (!res || !res.ok) {
+          this._needSave = true;
+        }
+      });
+    });
   }
   bouncedSaveNote() {
     const { editorState } = this.state;
-    this.saveNote(true, editorState);
+    if (this._needSave && !this._unmounted) {
+      // Generating the data to save!
+      const text = convertToRaw(editorState.getCurrentContent());
+
+      this.saveNote(text);
+    }
   }
 
-  convertDataToSave(data) {
-    return convertToRaw(data.getCurrentContent());
-  }
-  parseInitialData(initialState) {
-    let editorState = NoteEditor.getEmptyEditorState();
-
-    if (initialState) {
-      const raw = JSON.parse(JSON.stringify(initialState.toJS()));
-      editorState = EditorState.push(editorState, convertFromRaw(raw));
+  renderHeader() {
+    const { target, note, latestRev } = this.props;
+    const name = window.msgGen.getUserString(note.get('updated_by'), { yourself: true });
+    const timeString = timeAgo(note.get('updated_at'));
+    let subtitle = `Updated by ${name} ${timeString}`;
+    const title = note && note.get('title');
+    let buttonHtml;
+    if (latestRev < note.get('rev')) {
+      subtitle = `CONFLICT. Updated by ${name} ${timeString}`;
+      buttonHtml = (
+        <Button
+          primary
+          {...this.getLoadingState('conflict')}
+          text="Resolve now"
+          onClick={this.onResolveConflict}
+        />
+      );
     }
 
-    return editorState;
-  }
-  renderHeader() {
-    const { target, note } = this.props;
-    const subtitle = this.getSubtitle();
-    const title = note && note.get('title');
     return (
       <div className="side-note__header">
         <HOCHeaderTitle
           title={title}
           target={target}
           subtitle={subtitle}
-        />
+        >
+          {buttonHtml}
+        </HOCHeaderTitle>
       </div>
     );
   }
-  getSubtitle() {
-    const { note, users, me } = this.props;
-    const { locked, editing } = this.state;
 
-    let message = '';
-    const title = note && note.get('title');
-    const lockedBy = note && note.get('locked_by');
-
-    if (editing) {
-      message = 'You are writing';
-    }
-
-    if (locked && lockedBy && lockedBy !== me.get('id')) {
-      const person = users.get(note.get('locked_by'));
-      message = `${person.get('first_name')} is writing`;
-    }
-
-    return message;
-  }
   render() {
-    const { sideNoteId } = this.props;
-    const { editorState, locked, editing } = this.state;
-
-    if (!sideNoteId || !editorState) {
+    const { note, cachedText } = this.props;
+    const { editorState, overrideRaw } = this.state;
+    if (!editorState && !note) {
       return null;
     }
 
-    const someoneElseEditing = (locked && !editing);
-    let className = 'side-note';
-
-    if (someoneElseEditing) {
-      className += ' side-note--locked';
+    let rawState = overrideRaw;
+    if (!editorState) {
+      rawState = cachedText || note.get('text');
+      rawState = rawState.toJS();
     }
 
     return (
       <SWView header={this.renderHeader()} maxWidth={maxWidth}>
-        <div className={className}>
+        <div className="side-note">
           <NoteEditor
+            rawState={rawState}
             ref="editor"
             editorState={editorState}
-            onChange={this.onChange}
-            readOnly={someoneElseEditing}
+            setEditorState={this.setEditorState}
             onBlur={this.onBlur}
+            delegate={this}
+            disabled={this.getLoadingState('conflict').loading}
           />
         </div>
       </SWView>
@@ -229,27 +219,43 @@ class HOCSideNote extends Component {
   }
 }
 
-const { string, func } = PropTypes;
+const { string, func, object, number } = PropTypes;
 HOCSideNote.propTypes = {
-  sideNoteId: string,
   note: map,
+  serverOrg: map,
+  latestRev: number,
+  id: string,
+  browser: func,
   organizationId: string,
-  me: map,
+  cacheNote: func,
   saveNote: func,
-  users: map,
+  cachedText: object,
   target: string,
 };
 
 function mapStateToProps(state, ownProps) {
+  let cachedText = state.getIn(['notes', 'cache', ownProps.id, 'text']);
+  if (!cachedText) {
+    cachedText = state.getIn(['notes', 'cache', ownProps.id, '_savingText']);
+  }
+
+  const note = state.getIn(['notes', 'server', ownProps.id]);
+  let serverOrg = state.getIn(['notes', 'cache', ownProps.id, 'serverOrg']);
+  serverOrg = serverOrg || note;
+
+  const latestRev = serverOrg.get('rev');
+
   return {
     organizationId: state.getIn(['me', 'organizations', 0, 'id']),
-    sideNoteId: ownProps.id,
-    me: state.get('me'),
-    note: state.getIn(['notes', ownProps.id]),
-    users: state.get('users'),
+    note,
+    latestRev,
+    serverOrg,
+    cachedText,
   };
 }
 
 export default connect(mapStateToProps, {
-  saveNote: actions.main.note.save,
+  saveNote: actions.notes.save,
+  cacheNote: actions.notes.cache,
+  browser: actions.main.browser,
 })(HOCSideNote);

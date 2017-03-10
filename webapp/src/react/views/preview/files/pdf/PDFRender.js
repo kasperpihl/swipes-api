@@ -1,11 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import PDF from 'react-pdf';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-class PDFRender extends Component {
+class PDFRender extends PureComponent {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   render() {
     const { file, scale, page, onDocumentComplete } = this.props;
@@ -14,8 +12,8 @@ class PDFRender extends Component {
       <PDF
         file={file}
         scale={scale}
-        onDocumentComplete={onDocumentComplete}
-        page={page}
+        onDocumentLoad={onDocumentComplete}
+        pageIndex={page}
         loading={(<span />)}
       />
     );

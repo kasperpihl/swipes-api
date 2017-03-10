@@ -12,27 +12,23 @@ const dbNotesInsert = funcWrap([
   object.as({
     note: object.require(),
   }).require(),
-], (err, { note }) => {
-  if (err) {
-    throw new SwipesError(`dbNotesInsert: ${err}`);
+], (valErr, { note }) => {
+  if (valErr) {
+    throw new SwipesError(`dbNotesInsert: ${valErr}`);
   }
 
   const q =
     r.table('notes')
       .insert(note, {
+        returnChanges: 'always',
         conflict: (id, oldDoc, newDoc) => {
           return r.branch(
-            oldDoc('locked_by').ne(null).and(oldDoc('locked_by').ne(newDoc('user_id'))),
-            r.branch(
-              oldDoc('ts').add(30).gt(newDoc('ts')),
-              oldDoc,
-              oldDoc.merge(newDoc),
-            ),
-            oldDoc.merge(newDoc),
+            oldDoc('rev').default(1).eq(newDoc('rev')),
+            oldDoc.merge(newDoc.merge({ rev: newDoc('rev').add(1) })),
+            oldDoc,
           );
         },
       });
-
   return db.rethinkQuery(q);
 });
 

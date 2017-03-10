@@ -1,19 +1,17 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import SWView from 'src/react/app/view-controller/SWView';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import MilestoneItem from './MilestoneItem';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import MilestoneItem from './MilestoneItem';
 
 import './styles/milestone-list.scss';
 
 
-class HOCMilestoneList extends Component {
+class HOCMilestoneList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
   }

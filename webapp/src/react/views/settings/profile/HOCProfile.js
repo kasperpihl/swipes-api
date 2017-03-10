@@ -1,7 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import Button from 'Button';
 import { map } from 'react-immutable-proptypes';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import { bindAll } from 'classes/utils';

@@ -353,6 +353,7 @@ export function throttle(func, wait) {
 
 export function setupLoadingHandlers(ctx) {
   let _loadingStates = fromJS({});
+  const defaultObj = {};
   if (!ctx.state) {
     console.warn('setupLoadingHandlers should be in constructor after this.state = {}');
     return;
@@ -367,7 +368,7 @@ export function setupLoadingHandlers(ctx) {
     this.setState({ _loadingStates });
   }
   function getLoadingState(name) {
-    return _loadingStates.get(name);
+    return _loadingStates.get(name) || defaultObj;
   }
   function clearLoadingState(name, label) {
     const newState = { loading: false };

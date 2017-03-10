@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import { debounce, bindAll } from 'classes/utils';
@@ -7,12 +6,11 @@ import { debounce, bindAll } from 'classes/utils';
 import './styles/context-menu';
 
 
-class HOCContextMenu extends Component {
+class HOCContextMenu extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { styles: {} };
     bindAll(this, ['clickedBackground', 'onKeyDown', 'hideContextMenu']);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.bouncedResize = debounce(this.fitToScreen.bind(this), 50);
   }
   componentDidMount() {

@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
@@ -26,7 +25,7 @@ const initialState = fromJS({
   attachmentOrder: [],
 });
 
-class HOCAddGoal extends Component {
+class HOCAddGoal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = initialState.toObject();
@@ -45,7 +44,6 @@ class HOCAddGoal extends Component {
       'onClear',
     ]);
     this.callDelegate = setupDelegate(props.delegate);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -65,10 +63,6 @@ class HOCAddGoal extends Component {
     }
     window.removeEventListener('beforeunload', this.saveToCache);
     this._unmounted = true;
-    const { hideNote, sideNoteId } = this.props;
-    if (sideNoteId) {
-      hideNote(sideNoteId);
-    }
   }
 
   onHandoffChange(handoff) {
@@ -182,6 +176,28 @@ class HOCAddGoal extends Component {
     attachmentOrder = attachmentOrder.filter(a => a !== id);
     this.updateState({ attachments, attachmentOrder });
   }
+  onTemplateClick(template) {
+    const steps = {};
+    const stepOrder = [];
+    template.steps.forEach((title, i) => {
+      const id = `step-${i}`;
+      steps[id] = {
+        id,
+        title,
+        assignees: [],
+      };
+      stepOrder.push(id);
+    });
+    const newState = fromJS({
+      title: template.title,
+      steps,
+      flags: [],
+      stepOrder,
+      attachments: {},
+      attachmentOrder: [],
+    }).toObject();
+    this.updateState(newState);
+  }
   getGoal() {
     const {
       steps,
@@ -212,29 +228,7 @@ class HOCAddGoal extends Component {
 
     return status;
   }
-  onTemplateClick(template) {
-    console.log('to');
-    const steps = {};
-    const stepOrder = [];
-    template.steps.forEach((title, i) => {
-      const id = `step-${i}`;
-      steps[id] = {
-        id,
-        title,
-        assignees: [],
-      };
-      stepOrder.push(id);
-    });
-    const newState = fromJS({
-      title: template.title,
-      steps,
-      flags: [],
-      stepOrder,
-      attachments: {},
-      attachmentOrder: [],
-    }).toObject();
-    this.updateState(newState);
-  }
+
   navbarLoadedInput(input) {
     this._input = input;
     this.focusNavInput();
@@ -509,19 +503,16 @@ HOCAddGoal.propTypes = {
   removeCache: func,
   addGoal: func,
   organization_id: string,
-  sideNoteId: string,
   saveCache: func,
   loadWay: func,
   saveWay: func,
-  hideNote: func,
   selectAssignees: func,
   cache: map,
   me: map,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
-    sideNoteId: state.getIn(['main', 'sideNoteId']),
     me: state.get('me'),
     cache: state.getIn(['main', 'cache', 'add-goal']),
     organization_id: state.getIn(['me', 'organizations', 0, 'id']),
@@ -532,7 +523,6 @@ export default connect(mapStateToProps, {
   selectAssignees: actions.goals.selectAssignees,
   saveCache: actions.main.cache.save,
   removeCache: actions.main.cache.remove,
-  hideNote: actions.main.note.hide,
   addGoal: actions.goals.addGoal,
   loadWay: actions.ways.load,
   saveWay: actions.ways.save,

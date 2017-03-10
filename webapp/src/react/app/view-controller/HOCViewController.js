@@ -253,7 +253,7 @@ class HOCViewController extends PureComponent {
       props = currentView.get('props').toObject();
     }
 
-    const className = ['view-container'].concat(xClasses).join(' ');
+    const className = ['view-container', `view-container--${target}`].concat(xClasses).join(' ');
 
     let canFullscreen = false;
     if (typeof View.fullscreen === 'function') {

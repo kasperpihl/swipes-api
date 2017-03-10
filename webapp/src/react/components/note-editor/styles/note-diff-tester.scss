@@ -1,0 +1,24 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.note-diff{
+  padding: 20px;
+  padding-top: 64px;
+  background: white;
+  @include size(100%);
+  @include flexContainer();
+
+  &__note {
+    @include size(100%);
+    border: 1px solid gray;
+  }
+
+  &__middle {
+    @include size(100%);
+    @include flexContainer('column');
+
+    .note-diff__note {
+      @include size(100%, 50%);
+    }
+  }
+}

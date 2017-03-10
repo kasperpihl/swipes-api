@@ -6,10 +6,13 @@ export default function Icon(props) {
     svg,
     png,
     src,
+    material,
     ...other
   } = props;
   let returnHtml = null;
-
+  if (material) {
+    return <i className="material-icons" {...other}>{material}</i>;
+  }
   if (svg && Icons[svg]) {
     const Comp = Icons[svg];
 

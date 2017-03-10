@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
@@ -9,7 +8,7 @@ import FloatingInput from 'components/swipes-ui/FloatingInput';
 import Button from 'Button';
 import './styles/slack-view';
 
-class HOCSlack extends Component {
+class HOCSlack extends PureComponent {
   static minWidth() {
     return 800;
   }
@@ -23,7 +22,6 @@ class HOCSlack extends Component {
       teamDomain: '',
     };
     bindAll(this, ['onKeyDown', 'onClick', 'onChange', 'onLoad']);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
   }

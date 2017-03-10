@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   string,
-  bool,
+  number,
   object,
 } from 'valjs';
 import {
@@ -18,9 +18,8 @@ const notAuthed = express.Router();
 
 authed.all('/notes.create',
   valBody({
-    title: string.require(),
     organization_id: string.require(),
-    unlock: bool,
+    text: object.require(),
   }),
   notesCreate,
   valResponseAndSend({
@@ -32,11 +31,14 @@ authed.all('/notes.save',
     id: string.require(),
     title: string,
     organization_id: string.require(),
+    save_id: string.require(),
+    rev: number.require(),
     text: object.require(),
-    unlock: bool,
   }),
   notesSave,
-  valResponseAndSend(),
+  valResponseAndSend({
+    note: object.require(),
+  }),
 );
 
 export {
