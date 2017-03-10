@@ -23,7 +23,7 @@ const dbNotificationsMarkAsSeenTs = funcWrap([
   const q =
     r.table('notifications')
       .getAll(user_id, { index: 'user_id' })
-      .filter(r.row('ts').le(timestamp))
+      .filter(r.row('updated_at').le(timestamp))
       .update({
         seen_at: new Date().toISOString(),
       });
