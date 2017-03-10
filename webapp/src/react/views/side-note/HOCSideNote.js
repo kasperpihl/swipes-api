@@ -198,6 +198,7 @@ class HOCSideNote extends PureComponent {
     let rawState = overrideRaw;
     if (!editorState) {
       rawState = cachedText || note.get('text');
+      console.log(note.toJS(), cachedText);
       rawState = rawState.toJS();
     }
 

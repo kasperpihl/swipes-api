@@ -39,6 +39,7 @@ export default function goalsReducer(state = initialState, action) {
     case 'goals.completeStep':
     case 'goals.create':
     case 'goals.update': {
+      console.log(payload);
       if (payload.ok || typeof payload.ok === 'undefined') {
         return state.mergeIn([payload.goal.id], fromJS(payload.goal));
       }

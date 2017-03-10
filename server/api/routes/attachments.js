@@ -21,6 +21,9 @@ authed.all('/attachments.add',
   /*
     T_TODO:
     [] add attachment to attachments object (indexed by id)
+    [] add created_at to the attachment object
+    [] add created_by to the attachment object
+    [] update goal.updated_at
     [] add id to attachment_order
   */
   valResponseAndSend({
@@ -40,6 +43,7 @@ authed.all('/attachments.rename',
   /*
     T_TODO:
     [] rename attachments[attachment_id].title
+    [] update goal.updated_at
   */
   valResponseAndSend({
     target: string.require(),
@@ -56,6 +60,7 @@ authed.all('/attachments.delete',
   /*
     T_TODO:
     [] add deleted: true to attachments[attachment_id]
+    [] update goal.updated_at
     [] remove attachment_id from attachment_order
   */
   valResponseAndSend({
@@ -72,6 +77,7 @@ authed.all('/attachments.reorder',
   /*
     T_TODO:
     [] update the attachment_order array with new value
+    [] update goal.updated_at
     [] check that all attachments with !deleted is part of attachment_order array
     [] insert any !deleted attachments that is not part to the end of the attachment_order array
   */

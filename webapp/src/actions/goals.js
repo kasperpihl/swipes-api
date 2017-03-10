@@ -26,7 +26,7 @@ export const removeFromCollection = (goalId, id) => (d, getState) => {
     id: goalId,
     attachment_order: attachmentOrder,
   };
-  d({ type: 'goal_updated', payload: { data: goal } });
+  d({ type: 'goal_updated', payload: { goal } });
   return d(updateGoal(goalId, goal));
 };
 
