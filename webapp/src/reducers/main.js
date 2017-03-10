@@ -16,29 +16,7 @@ const initialState = fromJS({
   activeGoal: null,
 });
 
-const shouldKeepNotification = (payload) => {
-  return payload.important;
-
-  switch (payload.type) {
-    case 'goal_notify':
-      return true;
-    case 'step_completed': {
-      if (payload.important) {
-        return true;
-      }
-      return false;
-    }
-    case 'goal_completed':
-    case 'goal_created': {
-      if (payload.includes_me) {
-        return true;
-      }
-      return false;
-    }
-    default:
-      return false;
-  }
-};
+const shouldKeepNotification = payload => payload.important;
 
 export default function main(state = initialState, action) {
   const { payload, type } = action;

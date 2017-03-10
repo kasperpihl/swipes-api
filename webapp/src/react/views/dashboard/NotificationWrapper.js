@@ -12,7 +12,13 @@ class NotificationItem extends Component {
     this.state = {};
     this.callDelegate = setupDelegate(props.delegate, props.i);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'onClickAttachment'));
-    this.onClick = this.callDelegate.bind(null, 'onClickTitle');
+    this.onClick = this.onClick.bind(this);
+  }
+  onClick(e) {
+    const { notification: n } = this.props;
+    if (!n.get('noClickTitle')) {
+      this.callDelegate('onClickTitle', e);
+    }
   }
   renderIcon() {
     const { notification: n } = this.props;
@@ -102,7 +108,7 @@ class NotificationItem extends Component {
       className += ' notification--seen';
     }
 
-    if (typeof delegate.onClickTitle === 'function') {
+    if (typeof delegate.onClickTitle === 'function' && !n.get('noClickTitle')) {
       className += ' notification--clickable';
     }
 
@@ -132,6 +138,7 @@ NotificationItem.propTypes = {
     seen: bool,
     icon: string,
     subtitle: string,
+    noClickTitle: bool,
     title: oneOfType([array, string]),
     message: string,
     attachments: listOf(string),

@@ -128,25 +128,35 @@ class HOCDashboard extends PureComponent {
     const id = n.getIn(['target', 'id']);
     const index = n.getIn(['target', 'history_index']);
     const h = goals.getIn([id, 'history', index]);
-    if (!h) {
-      return null;
-    }
-    const type = h.get('type');
+    const type = n.get('type');
 
     let m = Map({
-      timeago: timeAgo(h.get('done_at'), true),
+      timeago: timeAgo(n.get('updated_at'), true),
       seenAt: !!n.get('seen_at'),
-      userId: h.get('done_by'),
+      userId: n.get('done_by'),
     });
-    const from = msgGen.getUserString(h.get('done_by'));
-    const to = h.get('done_by') === me.get('id') ? 'yourself' : 'you';
+    const from = msgGen.getUserString(n.get('done_by'));
+    const to = n.get('done_by') === me.get('id') ? 'yourself' : 'you';
 
-    m = m.set('title', this.titleForGoalId(id));
-    m = m.set('message', h.get('message'));
-    m = m.set('attachments', this.getAttachments(id, h.get('flags')));
+
+    if (h) {
+      m = m.set('title', this.titleForGoalId(id));
+      m = m.set('message', h.get('message'));
+      m = m.set('attachments', this.getAttachments(id, h.get('flags')));
+    } else {
+      m = m.set('title', `${n.getIn(['meta', 'title'])} (archived)`);
+      m = m.set('noClickTitle', true);
+    }
+
     switch (type) {
+      case 'goal_archived': {
+        m = m.set('subtitle', `${from} archived`);
+        m = m.set('title', `${n.getIn(['meta', 'title'])}`);
+        m = m.set('icon', 'Minus');
+        break;
+      }
       case 'goal_created': {
-        m = m.set('subtitle', `${from} kicked off a new goal`);
+        m = m.set('subtitle', `${from} kicked off`);
         m = m.set('icon', 'Plus');
         break;
       }
@@ -159,8 +169,12 @@ class HOCDashboard extends PureComponent {
         break;
       }
       case 'step_completed': {
+        if (!h) {
+          m = m.set('subtitle', `${from} completed a step`);
+          m = m.set('icon', 'Handoff');
+          break;
+        }
         const progress = h.get('progress');
-        m = m.set('subtitle', `${from} completed the step`);
         m = m.set('icon', 'Handoff');
         if (progress === 'forward') {
           m = m.set('subtitle', `${from} completed a step in`);
