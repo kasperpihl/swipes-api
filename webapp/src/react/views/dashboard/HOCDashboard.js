@@ -116,7 +116,7 @@ class HOCDashboard extends PureComponent {
       seen: !!n.get('seen'),
       userId: data.get('done_by'),
     });
-
+    console.log(n.toJS());
     const from = msgGen.getUserString(data.get('done_by'));
     const to = data.get('done_by') === me.get('id') ? 'yourself' : 'you';
 

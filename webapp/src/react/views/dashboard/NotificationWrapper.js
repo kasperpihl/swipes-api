@@ -66,13 +66,21 @@ class NotificationItem extends Component {
       </div>
     );
   }
+  renderTitle(title) {
+    if (!Array.isArray(title)) {
+      title = [title];
+    }
+    return title.map((t, i) => (
+      <div key={i} className="notification__title">{t}</div>
+    ));
+  }
   renderContent() {
     const { notification: n } = this.props;
 
     return (
       <div className="notification__content">
         <div className="notification__subtitle">{n.get('subtitle')}</div>
-        <div className="notification__title">{n.get('title')}</div>
+        {this.renderTitle(n.get('title'))}
         {this.renderMessage()}
       </div>
     );

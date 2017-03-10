@@ -31,6 +31,18 @@ class HOCHistory extends PureComponent {
     const at = flags.map(fId => (goal.getIn(['attachments', fId, 'title']))).filter(v => !!v);
     return fromJS(at);
   }
+  getStepTitles(from, to) {
+    const { goal } = this.props;
+    const titles = [];
+    let show = false;
+    goal.get('step_order').forEach((sI) => {
+      if ([from, to].indexOf(sI) !== -1) show = !show;
+      if (show) {
+        titles.push(goal.getIn(['steps', sI, 'title']));
+      }
+    });
+    return titles;
+  }
   getStepTitle(stepId) {
     const { goal } = this.props;
     return goal.getIn(['steps', stepId, 'title']);
@@ -46,16 +58,19 @@ class HOCHistory extends PureComponent {
       attachments: this.getAttachments(e.get('flags')),
     });
     const stepTitle = this.getStepTitle(e.get('to'));
+    const fromStepTitle = this.getStepTitle(e.get('from'));
     const from = msgGen.getUserString(e.get('done_by'));
 
     switch (type) {
-      case 'created': {
+      case 'created':
+      case 'goal_created': {
         m = m.set('subtitle', `${from} kicked off this goal with`);
         m = m.set('title', stepTitle);
         m = m.set('icon', 'Plus');
         break;
       }
-      case 'notified': {
+      case 'notified':
+      case 'goal_notify': {
         const yourself = e.get('done_by') === me.get('id');
         const to = msgGen.getUserArrayString(e.get('assignees'), {
           number: 3,
@@ -69,13 +84,40 @@ class HOCHistory extends PureComponent {
         m = m.set('icon', 'GotNotified');
         break;
       }
-      case 'complete_step': {
+      case 'complete_step':
+      case 'step_completed': {
+        const progress = e.get('progress');
         m = m.set('subtitle', `${from} completed the step`);
-        m = m.set('title', stepTitle);
+        m = m.set('title', fromStepTitle);
+
+        if (progress === 'forward') {
+          m = m.set('subtitle', `${from} completed the step`);
+          const titles = this.getStepTitles(e.get('from'), e.get('to'));
+          if (titles.length > 0) {
+            m = m.set('subtitle', `${from} completed ${titles.length} steps`);
+          }
+          m = m.set('title', titles);
+        }
+
+        if (progress === 'reassign') {
+          m = m.set('subtitle', `${from} reassigned the step`);
+        }
+
+        if (progress === 'iteration') {
+          if (!e.get('from')) {
+            m = m.set('subtitle', `${from} started the goal again from`);
+            m = m.set('title', stepTitle);
+          } else {
+            m = m.set('subtitle', `${from} made an iteration from > to`);
+            m = m.set('title', [`${fromStepTitle}`, `${stepTitle}`]);
+          }
+        }
+
         m = m.set('icon', 'Handoff');
         break;
       }
-      case 'complete_goal': {
+      case 'complete_goal':
+      case 'goal_completed': {
         m = m.set('subtitle', `${from} completed this goal`);
         m = m.set('icon', 'Star');
         break;

@@ -68,7 +68,6 @@ class HOCSlack extends PureComponent {
         counter = '\u2022';
       }
       setCounter('Slack', counter);
-      window.ipcListener.setBadgeCount(counter);
     });
     webview.addEventListener('new-window', (e) => {
       const { browser } = this.props;
