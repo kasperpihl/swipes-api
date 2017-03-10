@@ -177,19 +177,18 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       ...notificationData,
     };
     let notificationMap = userNotificationMap[userId] || {};
+    let important = false;
 
     if (interceptUsers) {
-      const includes_me = interceptUsers.has(userId);
+      important = interceptUsers.has(userId);
 
-      notification.includes_me = includes_me;
-      notificationMap = Object.assign({}, notificationMap, { includes_me });
-    }
+      notification.important = important;
+      notificationMap = Object.assign({}, notificationMap, { important });
+    } else if (interceptNextStepUsers) {
+      important = interceptNextStepUsers.has(userId);
 
-    if (interceptNextStepUsers) {
-      const me_is_next = interceptNextStepUsers.has(userId);
-
-      notification.me_is_next = me_is_next;
-      notificationMap = Object.assign({}, notificationMap, { me_is_next });
+      notification.important = important;
+      notificationMap = Object.assign({}, notificationMap, { important });
     }
 
     userNotificationMap[userId] = notificationMap;
