@@ -50,7 +50,7 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
     user_id: string.require(),
     filter: object.require(),
   }).require(),
-], (err, { user_id, filter = {} }) => {
+], (err, { user_id, filter = {}, filterDefaultOption }) => {
   if (err) {
     throw new SwipesError(`dbNotificationsGetAllByIdOrderByTs: ${err}`);
   }
@@ -58,7 +58,7 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
   const q =
     r.table('notifications')
       .getAll(user_id, { index: 'user_id' })
-      .filter(filter, { default: true })
+      .filter(filter, { default: filterDefaultOption })
       .orderBy(r.desc('updated_at'))
       .limit(100);
 

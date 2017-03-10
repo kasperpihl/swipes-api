@@ -27,8 +27,8 @@ const initGetData = valLocals('initGetData', {
     initMe(user_id),
     servicesGetAll(),
     initActivities(user_id),
-    dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: false } }),
-    dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: true } }),
+    dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: false }, filterDefaultOption: true }),
+    dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: true }, filterDefaultOption: false }),
   ];
 
   Promise.all(promiseArrayQ)
