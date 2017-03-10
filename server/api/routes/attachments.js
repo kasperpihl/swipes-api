@@ -24,6 +24,7 @@ authed.all('/attachments.add',
     attachment: object.require(),
     attachment_order: array.require(),
   }));
+// Event: attachment_added
 
 
 authed.all('/attachments.rename',
@@ -38,6 +39,7 @@ authed.all('/attachments.rename',
     attachment_id: string.require(),
     title: string.require(),
   }));
+// Event: attachment_renamed
 
 authed.all('/attachments.delete',
   valBody({
@@ -49,6 +51,7 @@ authed.all('/attachments.delete',
     target: string.require(),
     attachment_id: string.require(),
   }));
+// Event: attachment_deleted
 
 authed.all('/attachments.reorder',
   valBody({
@@ -60,6 +63,7 @@ authed.all('/attachments.reorder',
     target: string.require(),
     attachment_order: array.require(),
   }));
+// Event: attachment_reordered
 
 export {
   authed,

@@ -19,13 +19,12 @@ authed.all('/steps.add',
     goal_id: string.require(),
     step: object.require(),
   }),
-
   valResponseAndSend({
     goal_id: string.require(),
     step: object.require(),
     step_order: array.require(),
   }));
-
+// Event: step_added
 
 authed.all('/steps.rename',
   valBody({
@@ -33,12 +32,12 @@ authed.all('/steps.rename',
     step_id: string.require(),
     title: string.require().min(1),
   }),
-
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
     title: string.require(),
   }));
+// Event step_renamed
 
 authed.all('/steps.delete',
   valBody({
@@ -50,6 +49,7 @@ authed.all('/steps.delete',
     goal_id: string.require(),
     step_id: string.require(),
   }));
+// Event: step_deleted
 
 authed.all('/steps.reorder',
   valBody({
@@ -61,6 +61,7 @@ authed.all('/steps.reorder',
     goal_id: string.require(),
     step_order: array.require(),
   }));
+// Event: step_reordered
 
 authed.all('/steps.assign',
   valBody({
@@ -74,6 +75,7 @@ authed.all('/steps.assign',
     step_id: string.require(),
     assignees: array.require(),
   }));
+// Event: step_assigned
 
 export {
   authed,
