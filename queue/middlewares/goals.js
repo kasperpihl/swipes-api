@@ -245,6 +245,20 @@ const goalsNotifyNotificationData = (req, res, next) => {
 
   return next();
 };
+const goalsNotifyAddSenderAlways = (req, res, next) => {
+  const {
+    user_id,
+    user_ids,
+  } = res.locals;
+
+  if (user_ids.indexOf(user_id) > -1) {
+    res.locals.notifyMyself = true;
+  }
+
+  res.locals.user_ids = [...new Set([...[user_id], ...user_ids])];
+
+  return next();
+};
 
 export {
   goalsGetSingle,
@@ -258,4 +272,5 @@ export {
   goalsMilestoneAddedNotificationData,
   goalsMilestoneRemovedNotificationData,
   goalsNotifyNotificationData,
+  goalsNotifyAddSenderAlways,
 };
