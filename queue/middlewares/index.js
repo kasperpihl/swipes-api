@@ -42,6 +42,8 @@ const goal_completed = notifyWrapper([
 const goal_archived = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsArchivedNotificationData,
+  goals.goalsStepsInterseptUsers,
+  goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 

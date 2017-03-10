@@ -201,6 +201,10 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
 
   const filteredNotifications = notifications.map((notification) => {
     if (event_type === 'goal_notify' && uniqueUsersToNotify.indexOf(user_id) > -1) {
+      if (notification.user_id !== notification.done_by) {
+        notification.important = true;
+      }
+
       return notification;
     }
     if (notification.user_id === notification.done_by) {
