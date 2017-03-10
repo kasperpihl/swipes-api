@@ -10,7 +10,7 @@ class Notifications {
     const notifications = state.getIn(['main', 'notifications']);
     if (notifications !== this.prevNotifications) {
       this.prevNotifications = notifications;
-      let counter = notifications.filter(n => n && !n.get('seen')).size;
+      let counter = notifications.filter(n => n && !n.get('seen_at')).size;
       if (!counter) {
         counter = '';
       }

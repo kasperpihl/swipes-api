@@ -40,7 +40,7 @@ const notesCreate = valLocals('notesCreate', {
   dbNotesInsert({ note })
   .then(() => {
     setLocals({
-      id: note_id,
+      note,
     });
     return next();
   })

@@ -23,7 +23,7 @@ authed.all('/notes.create',
   }),
   notesCreate,
   valResponseAndSend({
-    id: string.require(),
+    note: object.require(),
   }));
 
 authed.all('/notes.save',

@@ -135,7 +135,7 @@ class HOCDashboard extends PureComponent {
 
     let m = Map({
       timeago: timeAgo(h.get('done_at'), true),
-      seen: !!n.get('seen_at'),
+      seenAt: !!n.get('seen_at'),
       userId: h.get('done_by'),
     });
     const from = msgGen.getUserString(h.get('done_by'));

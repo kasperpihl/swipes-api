@@ -70,6 +70,12 @@ export default function notesReducer(state = initialState, action) {
       }
       return state.deleteIn(['cache', id, '_savingText']);
     }
+    case 'notes.create': {
+      if (payload && payload.ok) {
+        return state.setIn(['server', payload.note.id], fromJS(payload.note));
+      }
+      return state;
+    }
     case 'note_updated': {
       const note = fromJS(payload);
       return handleNoteUpdate(state, note);

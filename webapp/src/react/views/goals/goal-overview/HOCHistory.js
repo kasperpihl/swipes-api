@@ -52,7 +52,7 @@ class HOCHistory extends PureComponent {
     const type = e.get('type');
     let m = Map({
       timeago: timeAgo(e.get('done_at'), true),
-      seen: true,
+      seenAt: true,
       userId: e.get('done_by'),
       message: e.get('message'),
       attachments: this.getAttachments(e.get('flags')),
@@ -89,6 +89,7 @@ class HOCHistory extends PureComponent {
         const progress = e.get('progress');
         m = m.set('subtitle', `${from} completed the step`);
         m = m.set('title', fromStepTitle);
+        m = m.set('icon', 'Checkmark');
 
         if (progress === 'forward') {
           m = m.set('subtitle', `${from} completed the step`);
@@ -113,7 +114,6 @@ class HOCHistory extends PureComponent {
           }
         }
 
-        m = m.set('icon', 'Handoff');
         break;
       }
       case 'complete_goal':

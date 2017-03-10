@@ -51,7 +51,7 @@ export const addNote = (options, cb) => (d, getState) => {
       if (res && res.ok) {
         const linkObj = d(getSwipesLinkObj(title));
         linkObj.service.type = 'note';
-        linkObj.service.id = res.id;
+        linkObj.service.id = res.note.id;
         d(addLinkAndCallback('note', linkObj, cb));
       } else if (cb) {
         cb('error', 'note', res);
