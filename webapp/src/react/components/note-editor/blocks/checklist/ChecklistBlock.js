@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { EditorBlock, EditorState } from 'draft-js';
 import Checkbox from 'components/swipes-ui/Checkbox';
@@ -207,7 +207,7 @@ export default class ChecklistBlock extends Component {
   }
   toggleChecked() {
     const { blockProps, block } = this.props;
-    const { ctx, returnFocusToEditor, checked } = blockProps;
+    const { ctx, checked } = blockProps;
     const newChecked = !checked;
 
     this.updateBlockMetadata(ctx, block.getKey(), { checked: newChecked });
@@ -233,3 +233,9 @@ export default class ChecklistBlock extends Component {
     );
   }
 }
+
+const { object } = PropTypes;
+ChecklistBlock.propTypes = {
+  blockProps: object,
+  block: object,
+};

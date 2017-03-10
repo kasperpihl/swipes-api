@@ -39,13 +39,12 @@ class HOCSideNote extends PureComponent {
   }
   componentWillReceiveProps(nextProps) {
     const { note } = this.props;
-    const { note: nextNote, serverOrg } = nextProps;
+    const { note: nextNote } = nextProps;
 
     // Check that the save wasn't done by us
     if (nextNote !== note && nextNote.get('last_save_id') !== this.saveId) {
       // If this was an update made from the outside and I'm doing nothing!
       if (!this._needSave && !this._isSaving) {
-        console.log('REPLACE. someone else saved this, and you have made no changes');
         this.setState({ overrideRaw: nextNote.get('text').toJS() });
       }
     }
@@ -72,7 +71,6 @@ class HOCSideNote extends PureComponent {
     const { serverOrg, note } = this.props;
     const rawText = convertToRaw(editorState.getCurrentContent());
     const diffObj = diff(serverOrg.get('text').toJS(), note.get('text').toJS(), rawText);
-    console.log('diffObj', diffObj);
     this.setLoadingState('conflict');
     this.saveNote(diffObj.editorState, note.get('rev')).then((res) => {
       if (res && res.ok) {

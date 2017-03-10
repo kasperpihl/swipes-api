@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { setupDelegate, bindAll } from 'classes/utils';
 import {
   EditorState,
-  Entity,
   Modifier,
   RichUtils,
   SelectionState,
@@ -22,8 +21,13 @@ class ControlPanel extends Component {
     this.callDelegate = setupDelegate(props.delegate);
     bindAll(this, ['addLink', 'handleKeyUp', 'onToggle']);
   }
-  componentDidUpdate() {
-    if (this.refs.input) {
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.show && this.props.show) {
+      this.setState({ showInput: false });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.showInput && !prevState.showInput) {
       this.refs.input.focus();
     }
   }
@@ -62,6 +66,7 @@ class ControlPanel extends Component {
       this.addLink();
     }
     if (e.keyCode === 27) {
+      console.log('up', e.keyCode);
       this.setState({ showInput: false });
       this.callDelegate('focus');
     }

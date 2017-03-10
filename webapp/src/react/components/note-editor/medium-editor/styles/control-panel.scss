@@ -24,6 +24,9 @@
   }
 
   &__input-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
     @include size(100%);
     border-radius: 6px;
     border: 1px solid $deepBlue-10;

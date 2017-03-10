@@ -45,10 +45,10 @@ export default function notesReducer(state = initialState, action) {
       if (payload.serverOrg) {
         state = state.setIn(['cache', payload.id, 'serverOrg'], payload.serverOrg);
       }
-      return state.setIn(['cache', payload.id, 'text'], payload.text);
+      return state.setIn(['cache', payload.id, 'text'], fromJS(payload.text));
     }
     case types.NOTE_SAVE_START: {
-      state = state.setIn(['cache', payload.id, '_savingText'], payload.text);
+      state = state.setIn(['cache', payload.id, '_savingText'], fromJS(payload.text));
       state = state.setIn(['cache', payload.id, '_saveId'], payload.saveId);
       return state.deleteIn(['cache', payload.id, 'text']);
     }
@@ -58,7 +58,6 @@ export default function notesReducer(state = initialState, action) {
     }
     case types.NOTE_SAVE_ERROR: {
       const id = payload.id;
-      console.log(payload.error);
       if (payload.error && payload.error.message === 'merge_needed') {
         const note = payload.error.note;
         if (state.getIn(['server', id, 'rev']) < note.rev) {
