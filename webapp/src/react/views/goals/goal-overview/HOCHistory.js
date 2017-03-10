@@ -109,7 +109,7 @@ class HOCHistory extends PureComponent {
             m = m.set('title', stepTitle);
           } else {
             m = m.set('subtitle', `${from} made an iteration from > to`);
-            m = m.set('title', [`${fromStepTitle}`, `${stepTitle}`]);
+            m = m.set('title', `${fromStepTitle} > ${stepTitle}`);
           }
         }
 
