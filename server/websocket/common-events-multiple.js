@@ -34,7 +34,7 @@ const commonEventsMultiple = (socket, userId) => {
           if (n.user_notification_map) {
             const notification_map = n.user_notification_map[userId];
 
-            if (notification_map || notification_map.id) {
+            if (notification_map && notification_map.id) {
               n.notification_data = Object.assign({}, { ...notification_map });
             }
           }
