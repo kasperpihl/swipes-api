@@ -59,9 +59,9 @@ class HOCDashboard extends PureComponent {
   onClickTitle(i) {
     const n = this.props.notifications.get(i);
     this.onMarkCached(n.get('id'))();
-    if (n && n.getIn(['data', 'goal_id'])) {
+    if (n && n.getIn(['target', 'id'])) {
       const { goals, navPush } = this.props;
-      const goal = goals.get(n.getIn(['data', 'goal_id']));
+      const goal = goals.get(n.getIn(['target', 'id']));
       this._dontMark = true;
 
       if (goal) {
@@ -85,6 +85,22 @@ class HOCDashboard extends PureComponent {
     const at = flags.map(fId => (goal.getIn(['attachments', fId, 'title']))).filter(v => !!v);
     return fromJS(at);
   }
+  getStepTitles(goalId, from, to) {
+    const { goals } = this.props;
+    const goal = goals.get(goalId);
+    const titles = [];
+    if (!goal) {
+      return titles;
+    }
+    let show = false;
+    goal.get('step_order').forEach((sI) => {
+      if ([from, to].indexOf(sI) !== -1) show = !show;
+      if (show) {
+        titles.push(goal.getIn(['steps', sI, 'title']));
+      }
+    });
+    return titles;
+  }
   saveState() {
     const { saveState } = this.props;
     const savedState = {
@@ -100,52 +116,74 @@ class HOCDashboard extends PureComponent {
     }
     return title;
   }
+
   clickableNameForUserId(userId) {
     const name = msgGen.getUserString(userId);
     return <b onClick={this.onClickCached(userId, 'name')}>{name}</b>;
   }
 
   messageForNotification(n) {
-    const { me } = this.props;
-    let data = n.get('data');
-    data = data || Map();
-    const type = n.get('type');
+    const { me, goals } = this.props;
+    if (!n.get('target')) {
+      return null;
+    }
+    const id = n.getIn(['target', 'id']);
+    const index = n.getIn(['target', 'history_index']);
+    const h = goals.getIn([id, 'history', index]);
+    const type = h.get('type');
 
     let m = Map({
-      timeago: timeAgo(n.get('ts'), true),
+      timeago: timeAgo(h.get('done_at'), true),
       seen: !!n.get('seen'),
-      userId: data.get('done_by'),
+      userId: h.get('done_by'),
     });
-    console.log(n.toJS());
-    const from = msgGen.getUserString(data.get('done_by'));
-    const to = data.get('done_by') === me.get('id') ? 'yourself' : 'you';
+    const from = msgGen.getUserString(h.get('done_by'));
+    const to = h.get('done_by') === me.get('id') ? 'yourself' : 'you';
 
-    if (data.get('goal_id')) {
-      m = m.set('title', this.titleForGoalId(data.get('goal_id')));
-      m = m.set('message', data.get('message'));
-      m = m.set('attachments', this.getAttachments(data.get('goal_id'), data.get('flags')));
-    }
+    m = m.set('title', this.titleForGoalId(id));
+    m = m.set('message', h.get('message'));
+    m = m.set('attachments', this.getAttachments(id, h.get('flags')));
     switch (type) {
       case 'goal_created': {
-        m = m.set('subtitle', `${from} created a new goal with you in it`);
+        m = m.set('subtitle', `${from} kicked off a new goal`);
         m = m.set('icon', 'Plus');
         break;
       }
       case 'goal_notify': {
         m = m.set('subtitle', `${from} notified ${to} in`);
-        if (data.get('feedback')) {
+        if (h.get('feedback')) {
           m = m.set('subtitle', `${from} gave ${to} feedback in`);
         }
         m = m.set('icon', 'GotNotified');
         break;
       }
       case 'step_completed': {
-        m = m.set('subtitle', `${from} passed this on to ${to}`);
+        const progress = h.get('progress');
+        m = m.set('subtitle', `${from} completed the step`);
         m = m.set('icon', 'Handoff');
+        if (progress === 'forward') {
+          m = m.set('subtitle', `${from} completed a step in`);
+          const titles = this.getStepTitles(id, h.get('from'), h.get('to'));
+          if (titles.length > 1) {
+            m = m.set('subtitle', `${from} completed ${titles.length} steps in`);
+          }
+        }
+
+        if (progress === 'reassign') {
+          m = m.set('subtitle', `${from} reassigned the current step in`);
+        }
+
+        if (progress === 'iteration') {
+          if (!h.get('from')) {
+            m = m.set('subtitle', `${from} restarted the goal`);
+          } else {
+            m = m.set('subtitle', `${from} made an iteration in`);
+          }
+        }
         break;
       }
       case 'goal_completed': {
-        m = m.set('subtitle', `${from} completed this goal`);
+        m = m.set('subtitle', `${from} completed the goal`);
         m = m.set('icon', 'Star');
         break;
       }

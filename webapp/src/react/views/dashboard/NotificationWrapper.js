@@ -123,7 +123,7 @@ class NotificationItem extends Component {
 
 export default NotificationItem;
 
-const { string, object, number, bool } = PropTypes;
+const { string, object, number, bool, oneOfType, array } = PropTypes;
 
 NotificationItem.propTypes = {
   i: number,
@@ -132,7 +132,7 @@ NotificationItem.propTypes = {
     seen: bool,
     icon: string,
     subtitle: string,
-    title: string,
+    title: oneOfType([array, string]),
     message: string,
     attachments: listOf(string),
     timeago: string,

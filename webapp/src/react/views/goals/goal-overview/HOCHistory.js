@@ -93,7 +93,7 @@ class HOCHistory extends PureComponent {
         if (progress === 'forward') {
           m = m.set('subtitle', `${from} completed the step`);
           const titles = this.getStepTitles(e.get('from'), e.get('to'));
-          if (titles.length > 0) {
+          if (titles.length > 1) {
             m = m.set('subtitle', `${from} completed ${titles.length} steps`);
           }
           m = m.set('title', titles);
