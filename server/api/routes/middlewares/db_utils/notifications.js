@@ -59,7 +59,7 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
     r.table('notifications')
       .getAll(user_id, { index: 'user_id' })
       .filter(filter, { default: true })
-      .orderBy(r.desc('created_at'))
+      .orderBy(r.desc('updated_at'))
       .limit(100);
 
   return db.rethinkQuery(q);
