@@ -35,7 +35,7 @@ class HOCDashboard extends PureComponent {
       let arg = [id];
       if (id === 'all') {
         // K_TODO: remove the ts from here. not needed after next deployment
-        arg = notifications.getIn([0, 'updated_at']) || notifications.getIn([0, 'ts']);
+        arg = notifications.getIn([0, 'updated_at']);
       }
       if (arg) {
         this.setState({ loading: true });
@@ -53,8 +53,12 @@ class HOCDashboard extends PureComponent {
   onClickAttachment(nI, i) {
     const n = this.props.notifications.get(nI);
     const { goals, preview, target } = this.props;
-    const aId = n.getIn(['data', 'flags', i]);
-    const att = goals.getIn([n.getIn(['data', 'goal_id']), 'attachments', aId]);
+    const id = n.getIn(['target', 'id']);
+    const goal = goals.get(id);
+    const index = n.getIn(['target', 'history_index']);
+    const h = goal.getIn(['history', index]);
+    const aId = h.getIn(['flags', i]);
+    const att = goal.getIn(['attachments', aId]);
     preview(target, att);
   }
   onClickTitle(i) {

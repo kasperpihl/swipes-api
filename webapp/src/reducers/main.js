@@ -106,7 +106,7 @@ export default function main(state = initialState, action) {
     case 'notifications.markAsSeen.ts': {
       const { marked_at, last_marked: lastMarked } = payload;
       return state.updateIn(['notifications'], s => s.map((n) => {
-        if (n.get('ts') <= lastMarked) {
+        if (n.get('updated_at') <= lastMarked) {
           return n.set('seen_at', marked_at);
         }
         return n;
