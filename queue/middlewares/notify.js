@@ -173,7 +173,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       seen_at: null,
       created_at: r.now(),
       updated_at: r.now(),
-      receive: true,
+      receiver: true,
       ...notificationData,
     };
     let notificationMap = userNotificationMap[userId] || {};
@@ -205,11 +205,11 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
         notification.important = true;
       }
       if (notification.user_id === notification.done_by && !notifyMyself) {
-        notification.receive = false;
+        notification.receiver = false;
       }
     }
     if (notification.user_id === notification.done_by) {
-      notification.sent = true;
+      notification.sender = true;
     }
 
     return notification;
