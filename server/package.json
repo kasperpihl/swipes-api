@@ -1,6 +1,6 @@
 {
   "name": "SwipesAPI",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Swipes REST API",
   "author": "Tihomir Valkanov <tihomir@swipesapp.com>",
   "dependencies": {
