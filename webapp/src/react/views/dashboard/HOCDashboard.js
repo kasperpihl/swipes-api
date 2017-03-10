@@ -166,7 +166,7 @@ class HOCDashboard extends PureComponent {
       }
       case 'goal_notify': {
         m = m.set('subtitle', `${from} notified ${to} in`);
-        if (h.get('feedback')) {
+        if (h && h.get('feedback')) {
           m = m.set('subtitle', `${from} gave ${to} feedback in`);
         }
         m = m.set('icon', 'GotNotified');
