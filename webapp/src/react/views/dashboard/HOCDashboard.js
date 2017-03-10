@@ -63,7 +63,6 @@ class HOCDashboard extends PureComponent {
     if (n && n.getIn(['target', 'id'])) {
       const { goals, navPush } = this.props;
       const goal = goals.get(n.getIn(['target', 'id']));
-      this._dontMark = true;
 
       if (goal) {
         this.saveState();
@@ -136,7 +135,7 @@ class HOCDashboard extends PureComponent {
 
     let m = Map({
       timeago: timeAgo(h.get('done_at'), true),
-      seen: !!n.get('seen'),
+      seen: !!n.get('seen_at'),
       userId: h.get('done_by'),
     });
     const from = msgGen.getUserString(h.get('done_by'));
