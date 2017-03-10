@@ -164,7 +164,7 @@ const goalsProgressStatus = valLocals('goalsProgressStatus', {
     goalProgress = 'reassign';
   }
 
-  if (nextStepPosition && nextStepPosition < currentStepPosition) {
+  if (nextStepPosition !== null && nextStepPosition < currentStepPosition) {
     goalProgress = 'iteration';
   }
 
