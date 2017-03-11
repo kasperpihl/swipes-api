@@ -8,6 +8,11 @@ import {
   valBody,
   valResponseAndSend,
 } from '../utils';
+import {
+  service,
+  linkPermission,
+  linkMeta,
+} from '../validators';
 
 
 const authed = express.Router();
@@ -16,10 +21,15 @@ const notAuthed = express.Router();
 authed.all('/attachments.add',
   valBody({
     target: string.require(),
-    attachment: object.require(),
+    link: object.as({
+      service,
+      permission: linkPermission,
+      meta: linkMeta,
+    }).require(),
   }),
   /*
     T_TODO:
+    [] create link
     [] add attachment to attachments object (indexed by id)
     [] add created_at to the attachment object
     [] add created_by to the attachment object

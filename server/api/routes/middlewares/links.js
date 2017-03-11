@@ -112,8 +112,6 @@ const linksCreate = valLocals('linksCreate', {
         checksum: insertedObj.checksum,
       });
 
-      delete insertedObj.checksum;
-
       setLocals({
         link: insertedObj,
       });

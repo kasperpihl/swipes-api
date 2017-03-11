@@ -3,13 +3,11 @@ import {
   string,
   object,
   array,
-  bool,
 } from 'valjs';
 import {
   valBody,
   valResponseAndSend,
 } from '../utils';
-
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -18,7 +16,7 @@ authed.all('/steps.add',
   valBody({
     goal_id: string.require(),
     step: object.as({
-      id: string.require(),
+      id: string.format(/^[A-Za-z0-9]+$/g).min(6).max(6).require(),
       title: string.min(1).require(),
       assignees: array.require(),
     }).require(),
