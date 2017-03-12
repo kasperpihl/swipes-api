@@ -26,7 +26,7 @@ const initGetData = valLocals('initGetData', {
     dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: false }, filterDefaultOption: true }),
     dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: true }, filterDefaultOption: false }),
   ];
-
+  const ts = new Date().toISOString();
   Promise.all(promiseArrayQ)
     .then((data) => {
       const self = data[0];
@@ -71,24 +71,14 @@ const initGetData = valLocals('initGetData', {
         delete self.notes;
       }
 
-      const origin = config.get('origin');
-      const ws_origin = origin.replace(/http(s)?/, 'ws$1');
-      const port = config.get('clientPort');
-      const api_port = config.get('apiPort');
-      const https = port === '443';
-      const url = https ? origin : `${origin}:${port}`;
-      const ws_path = '/ws';
-      const ws_url = https ? ws_origin + ws_path : `${ws_origin}:${api_port}${ws_path}`;
-
       setLocals({
-        url,
-        ws_url,
         self,
         users,
         goals,
         milestones,
         ways,
         notes,
+        ts,
         services: data[1],
         notifications: data[2].concat(data[3]),
       });

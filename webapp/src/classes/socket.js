@@ -12,9 +12,13 @@ export default class Socket {
   storeChange() {
     const state = this.store.getState();
 
-    const token = state.getIn(['main', 'token']);
-    if (token && !this.socket && state.getIn(['main', 'status']) !== 'connecting') {
+    const token = state.getIn(['connection', 'token']);
+    if (token && !this.socket && state.getIn(['connection', 'status']) !== 'connecting') {
+      if (process.env.NODE_ENV !== 'production') {
+        window.token = token;
+      }
       this.token = token;
+
 
       if (!this.timer) {
         this.timedConnect(this.timerForAttempt());
@@ -60,7 +64,7 @@ export default class Socket {
         if (res && res.ok) {
           this.reconnect_attempts = 0;
           this.changeStatus('online');
-        } else {
+        } else if (res && res.err !== 'not_authed') {
           ws.close();
         }
       });

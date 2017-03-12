@@ -42,6 +42,7 @@ class HOCTopbar extends PureComponent {
     window.socket.connect();
   }
   updateSecondsLeft(nextRetry) {
+    console.log('update', nextRetry);
     nextRetry = nextRetry || this.props.nextRetry;
     const secUnrounded = this.secondsToTime(nextRetry) / 1000;
     const secRounded = parseInt(secUnrounded, 10);
@@ -55,7 +56,10 @@ class HOCTopbar extends PureComponent {
   }
 
   renderStatusIndicator() {
-    const { status, versionInfo } = this.props;
+    const { status, versionInfo, disableStatus } = this.props;
+    if (disableStatus) {
+      return undefined;
+    }
     const { secondsLeft } = this.state;
     let className = 'topbar__status';
     let statusMessage;
@@ -160,12 +164,12 @@ class HOCTopbar extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    nextRetry: state.getIn(['main', 'nextRetry']),
+    nextRetry: state.getIn(['connection', 'nextRetry']),
     versionInfo: state.getIn(['main', 'versionInfo']),
     isMaximized: state.getIn(['main', 'isMaximized']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
-    hasLoaded: state.getIn(['main', 'hasLoaded']),
-    status: state.getIn(['main', 'status']),
+    hasLoaded: state.getIn(['connection', 'lastConnect']),
+    status: state.getIn(['connection', 'status']),
   };
 }
 
@@ -174,6 +178,7 @@ export default connect(mapStateToProps, {
 
 const { object, string, bool } = PropTypes;
 HOCTopbar.propTypes = {
+  disableStatus: bool,
   nextRetry: object,
   versionInfo: map,
   status: string,

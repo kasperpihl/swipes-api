@@ -40,6 +40,8 @@
     "redux-immutable": "^3.0.8",
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^2.6.1",
+    "redux-persist": "^4.4.2",
+    "redux-persist-immutable": "^4.2.0",
     "redux-thunk": "^2.1.0",
     "valjs": "0.0.23"
   },

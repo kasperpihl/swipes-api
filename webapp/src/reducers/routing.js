@@ -10,7 +10,7 @@ const initialState = fromJS({
 export default (state = initialState, action) => {
   if (action.type === LOCATION_CHANGE) {
     return state.merge({
-      locationBeforeTransitions: action.payload,
+      locationBeforeTransitions: JSON.parse(JSON.stringify(action.payload)),
     });
   }
 

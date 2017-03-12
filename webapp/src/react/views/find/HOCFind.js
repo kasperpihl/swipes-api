@@ -258,7 +258,7 @@ function mapStateToProps(state) {
     searchResults: state.getIn(['search', 'searchResults']),
     searching: state.getIn(['search', 'searching']),
     searchQuery: state.getIn(['search', 'query']),
-    services: state.getIn(['main', 'services']),
+    services: state.get('services'),
     me: state.get('me'),
   };
 }

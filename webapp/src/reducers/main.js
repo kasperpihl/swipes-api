@@ -1,58 +1,19 @@
 import { fromJS, Map } from 'immutable';
 import * as types from 'constants';
+import { REHYDRATE } from 'redux-persist/constants';
 import { randomString } from 'classes/utils';
 
 const initialState = fromJS({
-  socketUrl: null,
-  token: null,
   overlay: null,
-  cache: {},
-  services: {},
-  milestones: {},
+  isHydrated: false,
   versionInfo: {},
-  notifications: [],
-  ways: {},
-  hasLoaded: false,
-  activeGoal: null,
 });
-
-const shouldKeepNotification = payload => payload.important && !payload.sender;
 
 export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
-    case 'rtm.start': {
-      if (!payload.ok) {
-        return state;
-      }
-      return state.withMutations((ns) => {
-        // ways
-        const ways = {};
-        payload.ways.forEach((w) => { ways[w.id] = w; });
-        ns.set('ways', fromJS(ways));
-
-        // milestones
-        const milestones = {};
-        payload.milestones.forEach((m) => { milestones[m.id] = m; });
-        ns.set('milestones', fromJS(milestones));
-
-        // services
-        const services = {};
-        payload.services.forEach((s) => { services[s.id] = s; });
-        ns.set('services', fromJS(services));
-        // notifications
-        ns.set('notifications', fromJS(payload.notifications.filter(n => shouldKeepNotification(n))));
-        // socket url
-        ns.set('socketUrl', payload.ws_url);
-      });
-    }
-
-    case types.SET_STATUS: {
-      const hasLoaded = (state.get('hasLoaded') || payload.status === 'online') ? true : null;
-      return state.withMutations(ns =>
-        ns.set('hasLoaded', hasLoaded).set('status', payload.status).set('nextRetry', payload.nextRetry),
-      );
-    }
+    case REHYDRATE:
+      return state.set('isHydrated', true);
     case types.SET_UPDATE_STATUS: {
       return state.mergeIn(['versionInfo'], fromJS(payload));
     }
@@ -63,19 +24,6 @@ export default function main(state = initialState, action) {
       return state.set('isFullscreen', payload.toggle);
     }
 
-    // ======================================================
-    // Caching
-    // ======================================================
-    case types.CACHE_SAVE: {
-      return state.setIn(['cache', payload.index], payload.data);
-    }
-    case types.CACHE_REMOVE: {
-      return state.deleteIn(['cache', payload.index]);
-    }
-    case types.CACHE_CLEAR: {
-      return state.set('cache', initialState.get('cache'));
-    }
-
     case types.SLACK_OPEN_IN: {
       return state.set('slackOpenIn', payload.id);
     }
@@ -83,35 +31,6 @@ export default function main(state = initialState, action) {
       return state.set('slackUrl', payload.url);
     }
 
-    // ======================================================
-    // Notifications
-    // ======================================================
-    case types.NOTIFICATION_ADD: {
-      if (!shouldKeepNotification(payload)) {
-        return state;
-      }
-      return state.updateIn(['notifications'], s => s.filter(n => n.get('id') !== payload.id).insert(0, fromJS(payload)));
-    }
-    case 'notifications.markAsSeen.ids':
-    case 'notifications_seen_ids': {
-      const { notification_ids: ids, last_marked: lastMarked } = payload;
-      return state.updateIn(['notifications'], s => s.map((n) => {
-        if (ids && ids.indexOf(n.get('id')) !== -1) {
-          return n.set('seen_at', lastMarked);
-        }
-        return n;
-      }));
-    }
-    case 'notifications_seen_ts':
-    case 'notifications.markAsSeen.ts': {
-      const { marked_at, last_marked: lastMarked } = payload;
-      return state.updateIn(['notifications'], s => s.map((n) => {
-        if (n.get('updated_at') <= lastMarked) {
-          return n.set('seen_at', marked_at);
-        }
-        return n;
-      }));
-    }
 
     // ======================================================
     // Tooltips
@@ -169,48 +88,6 @@ export default function main(state = initialState, action) {
     case types.NOTE_HIDE: {
       return state.set('sideNoteId', null);
     }
-
-    // ======================================================
-    // Ways
-    // ======================================================
-    case 'way_created':
-    case 'ways.create': {
-      if (payload.ok || typeof payload.ok === 'undefined') {
-        return state.setIn(['ways', payload.way.id], fromJS(payload.way));
-      }
-      return state;
-    }
-    case 'ways.archive': {
-      if (payload.ok || typeof payload.ok === 'undefined') {
-        return state.deleteIn(['ways', payload.id]);
-      }
-      return state;
-    }
-
-    // ======================================================
-    // Authorization methods
-    // ======================================================
-    case 'users.signin':
-    case 'users.signup': {
-      if (!action.payload || !payload.ok) {
-        return state;
-      }
-      return state.set('token', payload.token);
-    }
-    case 'token_revoked':
-    case types.LOGOUT: {
-      if (payload && payload.token_to_revoke) {
-        const currToken = state.get('token');
-        if (payload.token_to_revoke !== currToken) {
-          return state;
-        }
-      }
-      window.analytics.logout();
-      localStorage.clear();
-      window.location.replace('/');
-      return initialState;
-    }
-
 
     default:
       return state;

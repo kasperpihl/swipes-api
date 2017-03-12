@@ -1,5 +1,6 @@
 import { CALL_API } from 'redux-api-middleware';
 import * as types from 'constants';
+import * as a from 'actions';
 
 const apiUrl = `${window.location.origin}/v1/`;
 const handleUpdatesNeeded = (payload, state, dispatch) => {
@@ -47,7 +48,7 @@ const request = (options, data) => (dispatch, getState) => {
     types.API_ERROR,
   ];
 
-  const body = Object.assign({}, { token: getState().getIn(['main', 'token']) }, data);
+  const body = Object.assign({}, { token: getState().getIn(['connection', 'token']) }, data);
   const state = getState();
   const updateRequired = state.getIn(['main', 'versionInfo', 'updateRequired']);
   const reloadRequired = state.getIn(['main', 'versionInfo', 'reloadRequired']);
@@ -81,11 +82,8 @@ const request = (options, data) => (dispatch, getState) => {
       res.payload = Object.assign({}, res.payload.response, { data }, { ok: false });
     }
     if (res.payload.err && res.payload.err === 'not_authed') {
-      dispatch({
-        type: types.LOGOUT,
-      });
-      window.location.replace('/');
-      return Promise.reject({ ok: false });
+      dispatch(a.main.forceLogout);
+      return Promise.reject({ ok: false, err: 'not_authed' });
     }
     handleUpdatesNeeded(res.payload, state, dispatch);
 

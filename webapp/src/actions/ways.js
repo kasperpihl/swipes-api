@@ -55,7 +55,7 @@ export const load = (options, callback) => (d, getState) => {
         });
         tabMenu.reload();
       } else {
-        const way = getState().getIn(['main', 'ways', obj.id]);
+        const way = getState().getIn(['ways', obj.id]);
         callback(way);
         d(a.main.contextMenu(null));
       }

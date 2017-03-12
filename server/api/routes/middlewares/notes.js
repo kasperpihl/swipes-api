@@ -77,7 +77,6 @@ const notesSave = valLocals('notesSave', {
 
   dbNotesInsert({ note })
   .then((res) => {
-    console.log(res);
     if (res.unchanged === 1) {
       return next(new SwipesError({
         message: 'merged_needed',

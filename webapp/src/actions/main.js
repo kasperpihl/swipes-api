@@ -84,14 +84,19 @@ export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondar
 // ======================================================
 // Account related
 // ======================================================
-export const logout = cb => dp => dp(a.api.request('users.signout')).then((res) => {
+export const signout = cb => dp => dp(a.api.request('users.signout')).then((res) => {
   if (cb) {
     cb(res);
   }
   if (res && res.ok) {
-    dp({ type: types.LOGOUT });
+    dp(forceLogout);
   }
 });
+export const forceLogout = () => {
+  window.analytics.logout();
+  localStorage.clear();
+  window.location.replace('/');
+};
 
 
 // ======================================================

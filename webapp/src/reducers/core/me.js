@@ -11,7 +11,7 @@ export default function me(state = initialState, action) {
   switch (type) {
     case ('rtm.start'): {
       if (payload.ok) {
-        return state.merge(payload.self);
+        return fromJS(payload.self).merge({ token: state.get('token') });
       }
       return state;
     }
