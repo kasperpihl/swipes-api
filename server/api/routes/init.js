@@ -25,7 +25,6 @@ authed.all('/rtm.start',
     ways: array.of(object).require(),
     notes: array.of(object).require(),
     services: array.of(object).require(),
-    activity: array.of(object).require(),
     notifications: array.of(object).require(),
   }));
 

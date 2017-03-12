@@ -11,9 +11,6 @@ import {
   servicesGetAll,
 } from './db_utils/services';
 import {
-  initActivities,
-} from './db_utils/events';
-import {
   dbNotificationsGetAllByIdOrderByTs,
 } from './db_utils/notifications';
 
@@ -26,7 +23,6 @@ const initGetData = valLocals('initGetData', {
   const promiseArrayQ = [
     initMe(user_id),
     servicesGetAll(),
-    initActivities(user_id),
     dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: false }, filterDefaultOption: true }),
     dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: true }, filterDefaultOption: false }),
   ];
@@ -94,8 +90,7 @@ const initGetData = valLocals('initGetData', {
         ways,
         notes,
         services: data[1],
-        activity: data[2],
-        notifications: data[3].concat(data[4]),
+        notifications: data[2].concat(data[4]),
       });
 
       return next();
