@@ -90,7 +90,7 @@ const initGetData = valLocals('initGetData', {
         ways,
         notes,
         services: data[1],
-        notifications: data[2].concat(data[4]),
+        notifications: data[2].concat(data[3]),
       });
 
       return next();
