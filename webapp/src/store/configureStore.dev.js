@@ -1,5 +1,6 @@
-const ignoredActions = ['API_REQUEST', 'API_SUCCESS']; // Ignore actions from Logger
 import createLogger from 'redux-logger';
+
+const ignoredActions = ['API_REQUEST', 'API_SUCCESS']; // Ignore actions from Logger
 
 export default {
   middlewares: [

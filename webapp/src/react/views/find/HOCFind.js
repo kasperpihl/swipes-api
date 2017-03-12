@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
-import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import SWView from 'SWView';

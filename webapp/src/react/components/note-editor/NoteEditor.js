@@ -36,7 +36,6 @@ class NoteEditor extends Component {
   componentDidMount() {
     const { editorState, rawState } = this.props;
     if (!editorState && rawState) {
-      console.log(rawState);
       this.setEditorState(this.plugins.getEditorStateWithDecorators(convertFromRaw(rawState)));
     }
   }

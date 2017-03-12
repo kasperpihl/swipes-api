@@ -16,14 +16,14 @@ export default function me(state = initialState, action) {
 
   switch (type) {
     case ('rtm.start'): {
-      if (payload.ok) {
-        return state.set('lastConnect', payload.ts);
+      if (!payload.ok) {
+        return state;
       }
-      return state;
+      return state.set('lastConnect', payload.ts);
     }
     case REHYDRATE:
       if (action && action.payload && action.payload.connection) {
-        return action.payload.connection.set('lastConnect', null);
+        return action.payload.connection.set('lastConnect', null).set('status', 'offline');
       }
       return state;
     case types.SET_STATUS: {

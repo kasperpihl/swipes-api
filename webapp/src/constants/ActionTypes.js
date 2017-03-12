@@ -30,9 +30,6 @@ export const NAVIGATION_POP = 'NAVIGATION_POP';
 export const NAVIGATION_SAVE_STATE = 'NAVIGATION_SAVE_STATE';
 export const NAVIGATION_SET_COUNTER = 'NAVIGATION_SET_COUNTER';
 
-// Goals
-export const GOAL_DELETE = 'GOAL_DELETE';
-
 // Search
 export const SEARCH = 'SEARCH';
 export const SEARCH_RESULTS = 'SEARCH_RESULTS';
@@ -46,7 +43,6 @@ export const TOAST_UPDATE = 'TOAST_UPDATE';
 // Preview
 export const PREVIEW_LOADING = 'PREVIEW_LOADING';
 export const PREVIEW = 'PREVIEW';
-
 
 // Used internally for the API
 // listen in reducers directly to rest calls like: 'rtm.start'

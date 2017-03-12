@@ -10,10 +10,10 @@ export default function me(state = initialState, action) {
 
   switch (type) {
     case ('rtm.start'): {
-      if (payload.ok) {
-        return fromJS(payload.self).merge({ token: state.get('token') });
+      if (!payload.ok) {
+        return state;
       }
-      return state;
+      return fromJS(payload.self);
     }
     case ('profile_pic_update'): {
       return state;

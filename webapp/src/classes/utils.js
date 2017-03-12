@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import { funcWrap } from 'valjs';
 
 export function isShareURL(url) {
   url = url || '';
@@ -7,6 +8,16 @@ export function isShareURL(url) {
     return true;
   }
   return false;
+}
+
+export function valAction(actionName, arrayArgs, actionHandler) {
+  return funcWrap(arrayArgs, (valErr) => {
+    if (!valErr) {
+      return actionHandler(...Array.prototype.slice.call(arguments, 1));
+    }
+    console.warn(`Redux action [${actionName}]: ${valErr}`);
+    return () => {};
+  });
 }
 
 export function iconForService(service) {

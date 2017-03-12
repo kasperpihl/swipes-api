@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import * as types from 'constants';
 
 const initialState = fromJS({});
@@ -11,41 +11,35 @@ export default function goalsReducer(state = initialState, action) {
 
   switch (type) {
     case 'rtm.start': {
-      const { goals } = payload;
-      if (!goals) return state;
-
-      const tempG = {};
-      goals.forEach((goal) => {
-        tempG[goal.id] = goal;
+      if (!payload.ok) {
+        return state;
+      }
+      let goals = Map();
+      payload.goals.forEach((g) => {
+        goals = goals.set(g.id, fromJS(g));
       });
-      return fromJS(tempG);
+      return goals;
     }
+
+    case 'goal_archived':
     case 'goals.archive': {
-      if (payload.ok) {
+      if (payload.ok || typeof payload.ok === 'undefined') {
         return state.delete(payload.id);
       }
       return state;
-    }
-    case 'goal_archived': {
-      return state.delete(payload.id);
     }
     case 'goal_updated':
     case 'goal_created':
     case 'goal_completed':
     case 'goal_notify':
-    case 'step_got_active':
     case 'step_completed':
     case 'goals.notify':
     case 'goals.completeStep':
     case 'goals.create':
     case 'goals.update': {
-      console.log(payload);
       if (payload.ok || typeof payload.ok === 'undefined') {
         return state.mergeIn([payload.goal.id], fromJS(payload.goal));
       }
-      return state;
-    }
-    case types.GOAL_DELETE: {
       return state;
     }
     default:

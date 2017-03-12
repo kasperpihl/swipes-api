@@ -6,10 +6,6 @@ import routing from './routing';
 import toasty from './toasty';
 import search from './search';
 
-import users from './users';
-import goals from './goals';
-import notes from './notes';
-
 const rootReducer = combineReducers({
   ...core,
   main,
@@ -17,10 +13,6 @@ const rootReducer = combineReducers({
   toasty,
   routing,
   search,
-
-  goals,
-  notes,
-  users,
 });
 
 export default rootReducer;

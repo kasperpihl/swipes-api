@@ -1,13 +1,10 @@
 import * as a from 'actions';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
+import { ways } from 'actions/core';
 
 export const save = (options, title, goal) => (d, getState) => {
   const organizationId = getState().getIn(['me', 'organizations', 0, 'id']);
-  return d(a.api.request('ways.create', {
-    title,
-    goal,
-    organization_id: organizationId,
-  }));
+  return d(ways.create(title, organizationId, goal));
 };
 
 export const load = (options, callback) => (d, getState) => {
@@ -49,7 +46,7 @@ export const load = (options, callback) => (d, getState) => {
     onItemAction: (obj, side) => {
       if (side === 'right') {
         deletingIds[obj.id] = true;
-        d(a.api.request('ways.archive', { id: obj.id })).then(() => {
+        d(ways.archive(obj.id)).then(() => {
           delete deletingIds[obj.id];
           setTimeout(() => tabMenu.reload(), 1);
         });
