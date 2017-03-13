@@ -7,7 +7,7 @@ class Notifications {
   }
   storeChange() {
     const state = this.store.getState();
-    const notifications = state.getIn(['main', 'notifications']);
+    const notifications = state.getIn(['notifications']);
     if (notifications !== this.prevNotifications) {
       this.prevNotifications = notifications;
       let counter = notifications.filter(n => n && !n.get('seen_at')).size;

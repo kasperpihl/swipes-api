@@ -13,17 +13,6 @@ export const setMaximized = toggle => ({ type: types.SET_MAXIMIZED, payload: { t
 export const setFullscreen = toggle => ({ type: types.SET_FULLSCREEN, payload: { toggle } });
 
 // ======================================================
-// Simple persistent cache
-// ======================================================
-export const cache = {
-  save: (index, data) => ({ type: types.CACHE_SAVE, payload: { index, data } }),
-  remove: index => ({ type: types.CACHE_REMOVE, payload: { index } }),
-  clear: () => ({ type: types.CACHE_CLEAR }),
-};
-
-export const setSlackUrl = url => ({ type: types.SET_SLACK_URL, payload: { url } });
-
-// ======================================================
 // Tooltips
 // ======================================================
 export const tooltip = payload => ({ type: types.TOOLTIP, payload });

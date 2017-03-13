@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import { map, list } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
+import { setupLoadingHandlers } from 'classes/utils';
 import { fromJS } from 'immutable';
 import SWView from 'SWView';
 import Button from 'Button';
@@ -17,16 +18,16 @@ class HOCGoalHandoff extends PureComponent {
   }
   constructor(props) {
     super(props);
+    const savedState = props.savedState && props.savedState.get('handoff');
     this.state = {
-      isSubmitting: false,
-      errorLabel: null,
-      handoff: fromJS({
+      handoff: savedState || fromJS({
         flags: [],
         assignees: props.assignees || null,
         message: props.message || '',
         target: props._target,
       }),
     };
+    setupLoadingHandlers(this);
     this.onChangeClick = this.onChangeClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -47,33 +48,27 @@ class HOCGoalHandoff extends PureComponent {
     const { completeStep, goal, navPop } = this.props;
     const { handoff } = this.state;
 
-    this.setState({ isSubmitting: true, errorLabel: null });
+    this.setLoadingState('button');
     completeStep(goal.get('id'), handoff).then((res) => {
       if (res && res.ok) {
         const event = handoff.get('target') === '_complete' ? 'Complete goal' : 'Complete step';
         window.analytics.sendEvent(event);
         navPop();
       } else {
-        this.setState({
-          isSubmitting: false,
-          errorLabel: 'Something went wrong',
-        });
+        this.clearLoadingState('button', '!Something went wrong');
       }
     });
   }
-  onNotify(target) {
+  onNotify() {
     const { goalNotify, goal, navPop } = this.props;
     const { handoff } = this.state;
-    this.setState({ isSubmitting: true, errorLabel: null });
+    this.setLoadingState('button');
     goalNotify(goal.get('id'), handoff).then((res) => {
       if (res && res.ok) {
         window.analytics.sendEvent('Notify');
         navPop();
       } else {
-        this.setState({
-          isSubmitting: false,
-          errorLabel: 'Something went wrong',
-        });
+        this.clearLoadingState('button', '!Something went wrong');
       }
     });
   }
@@ -92,7 +87,7 @@ class HOCGoalHandoff extends PureComponent {
     } else {
       handoff = handoff.updateIn(['flags'], fl => fl.push(id));
     }
-    this.setState({ handoff });
+    this.updateHandoff(handoff);
   }
   onSelectAssignees(options, newAssignees) {
     const { selectAssignees } = this.props;
@@ -100,13 +95,13 @@ class HOCGoalHandoff extends PureComponent {
     selectAssignees(Object.assign({ actionLabel: 'Done' }, options), newAssignees.toJS(), (assignees) => {
       const { handoff } = this.state;
       if (assignees) {
-        this.setState({ handoff: handoff.set('assignees', fromJS(assignees)) });
+        this.updateHandoff(handoff.set('assignees', fromJS(assignees)));
       }
     });
   }
   onHandoffChange(handoffText) {
     const { handoff } = this.state;
-    this.setState({ handoff: handoff.set('message', handoffText) });
+    this.updateHandoff(handoff.set('message', handoffText));
   }
   onChangeClick(type, e) {
     const { handoff } = this.state;
@@ -135,9 +130,7 @@ class HOCGoalHandoff extends PureComponent {
             const step = helper.getStepByIndex(i);
             const target = step && step.get('id');
             contextMenu(null);
-            this.setState({
-              handoff: handoff.set('assignees', null).set('target', target || '_complete'),
-            });
+            this.updateHandoff(handoff.set('assignees', null).set('target', target || '_complete'));
           },
         },
       });
@@ -189,6 +182,11 @@ class HOCGoalHandoff extends PureComponent {
       }
     }
     return label;
+  }
+  updateHandoff(handoff) {
+    this.setState({ handoff });
+    const { saveState } = this.props;
+    // saveState({ handoff });
   }
   clickedAssign(index, e) {
     this.onChangeClick('assignees', e);
@@ -337,6 +335,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
+  saveCache: a.cache.save,
   goalNotify: a.goals.notify,
   selectStep: a.goals.selectStep,
   completeStep: a.goals.completeStep,

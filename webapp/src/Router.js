@@ -1,14 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { Router, Route } from 'react-router';
 
 import HOCRegistration from './react/registration/HOCRegistration';
 import HOCApp from './react/app/HOCApp';
 
-export default class Root extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+export default class Root extends PureComponent {
   render() {
     return (
       <Router history={this.props.history} >

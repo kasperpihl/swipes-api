@@ -36,6 +36,16 @@ export function iconForService(service) {
       return 'SwipesLogo';
   }
 }
+export function traverseElement(target, iterator) {
+  do {
+    if (target && !iterator(target)) {
+      target = target.parentNode;
+    } else {
+      target = undefined;
+    }
+  } while (target);
+  return target;
+}
 export function getParentByClass(target, className) {
   let node;
   do {

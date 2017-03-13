@@ -19,13 +19,13 @@ class HandoffWriteMessage extends Component {
     this.refs.textarea.focus();
   }
   renderTextfield() {
-    const { text, disabled } = this.props;
+    const { text, disabled, placeholder } = this.props;
     let className = 'handoff-write-message__textarea';
 
     if (disabled) {
       className += ' handoff-write-message__textarea--disabled';
     }
-
+    const ph = placeholder || 'What message should be passed on to them?';
     return (
       <ReactTextarea
         className={className}
@@ -35,7 +35,7 @@ class HandoffWriteMessage extends Component {
         maxRows={6}
         ref="textarea"
         onChange={this.onHandoffChange}
-        placeholder="What message should be passed on to them?"
+        placeholder={ph}
       />
     );
   }
@@ -58,7 +58,8 @@ const { string, func, bool } = PropTypes;
 
 HandoffWriteMessage.propTypes = {
   text: string,
-  imgSrc: string,
+  userId: string,
+  placeholder: string,
   disabled: bool,
   onChange: func,
 };

@@ -390,8 +390,9 @@ class HOCAddGoal extends PureComponent {
     }
 
     return (
-      <Section title="Create Goal">
+      <Section title="Goal Message">
         <HandoffWriteMessage
+          placeholder="Write a message to motivate everyone working on the goal. Add a goal description."
           text={handoff}
           userId={me.get('id')}
           onChange={this.onHandoffChange}
@@ -521,8 +522,8 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   selectAssignees: actions.goals.selectAssignees,
-  saveCache: actions.main.cache.save,
-  removeCache: actions.main.cache.remove,
+  saveCache: actions.cache.save,
+  removeCache: actions.cache.remove,
   addGoal: actions.goals.addGoal,
   loadWay: actions.ways.load,
   saveWay: actions.ways.save,

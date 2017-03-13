@@ -110,7 +110,11 @@ section.view-container {
   }
 
   &--overlay {
+    transition: transform .3s ease;
     transform: translateX(50%);
+  }
+  &--underlay {
+    transition: transform .3s ease;
   }
 
   &#{$b}--underlay > *:not(#{$b}__header) {

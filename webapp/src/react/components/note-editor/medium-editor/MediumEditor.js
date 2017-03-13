@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { Map } from 'immutable';
-import { bindAll } from 'classes/utils';
+import { bindAll, traverseElement } from 'classes/utils';
 import {
   getVisibleSelectionRect,
 } from 'draft-js';
@@ -54,8 +54,9 @@ class MediumEditor extends PureComponent {
   onMouseUp(e) {
     const { container } = this.refs;
     const br = container.getBoundingClientRect();
+    const scrollTop = this.getScrollTop();
     const x = e.pageX - br.left;
-    const y = e.pageY - br.top;
+    const y = e.pageY - br.top - scrollTop;
 
     setTimeout(() => {
       this.showPanel({ x, y });
@@ -66,13 +67,30 @@ class MediumEditor extends PureComponent {
       this.showPanel();
     }, 1);
   }
+  getScrollTop() {
+    const { container } = this.refs;
+
+    let scrollTop = 0;
+    if (container) {
+      traverseElement(container, (el) => {
+        if (el.scrollTop) {
+          scrollTop = el.scrollTop;
+          return true;
+        }
+        return false;
+      });
+    }
+
+    return scrollTop;
+  }
   getSelectionPosition() {
     const { container } = this.refs;
 
     const selectionRect = getVisibleSelectionRect(window);
     if (selectionRect && container) {
       const br = container.getBoundingClientRect();
-      selectionRect.top -= br.top;
+      const scrollTop = this.getScrollTop();
+      selectionRect.top -= br.top + scrollTop;
       selectionRect.bottom -= br.bottom;
       selectionRect.left -= br.left;
       selectionRect.right -= br.right;
@@ -137,6 +155,9 @@ class MediumEditor extends PureComponent {
     newStyles = this.handleContentOverlap(newStyles);
     newStyles = this.handleBoundaries(newStyles);
 
+    const scrollTop = this.getScrollTop();
+    newStyles = newStyles.set('top', newStyles.get('top') + scrollTop);
+
     return newStyles.toJS();
   }
 
@@ -151,7 +172,7 @@ class MediumEditor extends PureComponent {
     } else {
       styles = styles.set('top', position.top + position.height + SPACING);
     }
-
+    console.log('default', styles.get('top'));
     return styles;
   }
   handleMousePosition(styles, mousePos) {
@@ -160,6 +181,7 @@ class MediumEditor extends PureComponent {
     const position = this.getSelectionPosition();
 
     if (mousePos) {
+      console.log('mY', mousePos.y);
       styles = styles.set('left', this.getCenterFromX(mousePos.x, w));
       if (selection.get('isBackward')) {
         styles = styles.set('top', Math.min(mousePos.y, position.top) - h - SPACING);
@@ -167,7 +189,7 @@ class MediumEditor extends PureComponent {
         styles = styles.set('top', Math.max(mousePos.y, (position.top + position.height)) + SPACING);
       }
     }
-
+    console.log('mouse', styles.get('top'));
     return styles;
   }
   handleContentOverlap(styles) {
@@ -188,7 +210,7 @@ class MediumEditor extends PureComponent {
         styles = styles.set('top', selBottomY + SPACING);
       }
     }
-
+    console.log('overlap', styles.get('top'));
     return styles;
   }
   handleBoundaries(styles) {
@@ -207,7 +229,7 @@ class MediumEditor extends PureComponent {
     } else if ((styles.get('top') + h) > wh - SPACING) {
       styles = styles.set('top', wh - SPACING - h);
     }
-
+    console.log('boundaries', styles.get('top'));
     return styles;
   }
   renderControlPanel() {

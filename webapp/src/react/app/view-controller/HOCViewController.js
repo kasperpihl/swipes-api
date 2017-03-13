@@ -160,15 +160,19 @@ class HOCViewController extends PureComponent {
       };
       runningX += (w + SPACING);
       if (isOverlay) {
+        let top = 0;
+        let left = 0;
         if (target === onTop) {
           style.zIndex = 3;
           xClass.push('view-container--overlay');
         } else {
           xClass.push('view-container--underlay');
+          top = 20;
         }
         if (target === 'secondary') {
-          style.transform = `translate3d(${width - w - SPACING}px, 0px, 0px)`;
+          left = width - w - SPACING;
         }
+        style.transform = `translate3d(${left}px, ${top}px, 0px)`;
       }
       if (fullscreen) {
         if (fullscreen === target) {

@@ -1,3 +1,4 @@
+import { cache } from './core';
 import * as main from './main';
 import * as navigation from './navigation';
 import * as links from './links';
@@ -10,6 +11,7 @@ import * as ways from './ways';
 import * as menus from './menus';
 
 export {
+  cache,
   main,
   navigation,
   links,

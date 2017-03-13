@@ -356,7 +356,7 @@ HOCGoalList.propTypes = {
 };
 
 export default connect(mapStateToProps, {
-  saveCache: a.main.cache.save,
+  saveCache: a.cache.save,
   selectUser: a.menus.selectUser,
   inputMenu: a.menus.input,
   selectGoalType: a.menus.selectGoalType,

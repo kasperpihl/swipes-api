@@ -46,9 +46,9 @@ class HOCSlack extends PureComponent {
     if (e.keyCode === 13) this.onClick();
   }
   onClick() {
-    const { setSlackUrl } = this.props;
+    const { saveCache } = this.props;
     const { teamDomain } = this.state;
-    setSlackUrl(`https://${teamDomain}.slack.com/messages`);
+    saveCache('slackDomain', teamDomain);
   }
   onLoad(webview) {
     this._webview = webview;
@@ -75,8 +75,8 @@ class HOCSlack extends PureComponent {
     });
   }
   renderSetup() {
-    const { slackUrl } = this.props;
-    if (slackUrl) {
+    const { slackDomain } = this.props;
+    if (slackDomain) {
       return undefined;
     }
     const { teamDomain } = this.state;
@@ -105,18 +105,18 @@ class HOCSlack extends PureComponent {
     );
   }
   renderWebview() {
-    const { slackUrl } = this.props;
+    const { slackDomain } = this.props;
     const { persistId } = this.state;
-    if (!slackUrl) {
+    if (!slackDomain) {
       return undefined;
     }
     const preloadUrl = window.ipcListener.preloadUrl('slack-preload');
-
+    const url = `https://${slackDomain}.slack.com/messages`;
     return (
       <Webview
         ref="slack"
         preloadUrl={preloadUrl}
-        url={slackUrl}
+        url={url}
         persistId={persistId}
         onLoad={this.onLoad}
       />
@@ -143,10 +143,10 @@ HOCSlack.propTypes = {
   setCounter: func,
   browser: func,
   openSlackIn: func,
-  setSlackUrl: func,
+  saveCache: func,
   openIn: string,
   hidden: bool,
-  slackUrl: string,
+  slackDomain: string,
   me: map,
 };
 
@@ -154,13 +154,13 @@ function mapStateToProps(state) {
   return {
     me: state.get('me'),
     openIn: state.getIn(['main', 'slackOpenIn']),
-    slackUrl: state.getIn(['main', 'slackUrl']),
+    slackDomain: state.getIn(['cache', 'slackDomain']),
   };
 }
 
 export default connect(mapStateToProps, {
   browser: actions.main.browser,
   openSlackIn: actions.main.openSlackIn,
-  setSlackUrl: actions.main.setSlackUrl,
+  saveCache: actions.cache.save,
   setCounter: actions.navigation.setCounter,
 })(HOCSlack);

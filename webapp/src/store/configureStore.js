@@ -28,7 +28,7 @@ export default function configureStore(preloadedState) {
   );
 
   persistStore(store, {
-    blacklist: ['main'],
+    blacklist: ['main', 'navigation', 'search', 'toasty'],
   });
 
   return store;

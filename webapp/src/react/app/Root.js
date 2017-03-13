@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -31,7 +31,7 @@ window.msgGen = new MessageGenerator(store);
 window.analytics = new Analytics(store);
 window.analytics.sendEvent('App Loaded');
 
-class Root extends Component {
+class Root extends PureComponent {
   componentDidMount() {
     if (window.ipcListener.platform) {
       document.getElementById('content').classList.add(`platform-${window.ipcListener.platform}`);
