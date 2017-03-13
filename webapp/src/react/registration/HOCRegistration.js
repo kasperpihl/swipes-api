@@ -272,6 +272,7 @@ function mapStateToProps(state) {
   return {
     status: state.getIn(['connection', 'status']),
     token: state.getIn(['connection', 'token']),
+    isHydrated: state.getIn(['main', 'isHydrated']),
   };
 }
 
