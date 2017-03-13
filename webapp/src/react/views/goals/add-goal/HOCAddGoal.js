@@ -514,7 +514,7 @@ HOCAddGoal.propTypes = {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
-    cache: state.getIn(['main', 'cache', 'add-goal']),
+    cache: state.getIn(['cache', 'add-goal']),
     organization_id: state.getIn(['me', 'organizations', 0, 'id']),
   };
 }

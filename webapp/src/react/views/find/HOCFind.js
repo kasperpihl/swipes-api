@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
-import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import SWView from 'SWView';
@@ -258,7 +257,7 @@ function mapStateToProps(state) {
     searchResults: state.getIn(['search', 'searchResults']),
     searching: state.getIn(['search', 'searching']),
     searchQuery: state.getIn(['search', 'query']),
-    services: state.getIn(['main', 'services']),
+    services: state.get('services'),
     me: state.get('me'),
   };
 }

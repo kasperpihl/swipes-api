@@ -31,9 +31,9 @@ class HOCRegistration extends Component {
     bindAll(this, ['signin', 'signup', 'handleButtonClick', 'handleKeyDown']);
   }
   componentDidUpdate() {
-    const { token } = this.props;
+    const { token, isHydrated } = this.props;
 
-    if (token) {
+    if (isHydrated && token) {
       browserHistory.push('/');
     }
   }
@@ -81,18 +81,12 @@ class HOCRegistration extends Component {
 
       this.signin(data);
     } else {
-      const first_name = signupFirstName;
-      const last_name = signupLastName;
-      const email = signupEmail;
-      const password = signupPassword;
-      const invitation_code = signupInvCode;
-
       const data = {
-        first_name,
-        last_name,
-        email,
-        password,
-        invitation_code,
+        first_name: signupFirstName,
+        last_name: signupLastName,
+        email: signupEmail,
+        password: signupPassword,
+        invitation_code: signupInvCode,
       };
 
       this.signup(data);
@@ -263,7 +257,7 @@ class HOCRegistration extends Component {
     return (
       <div className="sign-in">
         <Gradient />
-        <Topbar />
+        <Topbar disableStatus />
         <div className="sign-in__card">
           <SWView header={this.renderHeader()} footer={this.renderFooter()}>
             {this.renderContent()}
@@ -276,16 +270,17 @@ class HOCRegistration extends Component {
 
 function mapStateToProps(state) {
   return {
-    token: state.getIn(['main', 'token']),
+    status: state.getIn(['connection', 'status']),
+    token: state.getIn(['connection', 'token']),
   };
 }
 
-const { string, func, object } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 HOCRegistration.propTypes = {
   token: string,
   request: func,
-  route: object,
+  isHydrated: bool,
 };
 
 const ConnectedHOCRegistration = connect(mapStateToProps, {

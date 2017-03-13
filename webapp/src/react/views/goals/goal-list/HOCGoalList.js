@@ -331,7 +331,7 @@ class HOCGoalList extends PureComponent {
 function mapStateToProps(state) {
   return {
     goals: state.get('goals'),
-    cache: state.getIn(['main', 'cache', 'list-filter']),
+    cache: state.getIn(['cache', 'list-filter']),
     me: state.get('me'),
   };
 }

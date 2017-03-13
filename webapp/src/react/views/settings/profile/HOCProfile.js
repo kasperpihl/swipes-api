@@ -15,7 +15,7 @@ class HOCProfile extends PureComponent {
     };
   }
   onLogout(e) {
-    const { confirm, logout } = this.props;
+    const { confirm, signout } = this.props;
     const options = this.getOptionsForE(e);
 
     confirm(Object.assign({}, options, {
@@ -24,7 +24,7 @@ class HOCProfile extends PureComponent {
     }), (i) => {
       if (i === 1) {
         this.setState({ isLoggingOut: true });
-        logout(() => {
+        signout(() => {
           this.setState({ isLoggingOut: false });
         });
       }
@@ -107,13 +107,13 @@ const { func, string } = PropTypes;
 HOCProfile.propTypes = {
   invitationCode: string,
   confirm: func,
-  logout: func,
+  signout: func,
   navPush: func,
   me: map,
 };
 
 const ConnectedHOCProfile = connect(mapStateToProps, {
-  logout: a.main.logout,
+  signout: a.main.signout,
   confirm: a.menus.confirm,
 })(HOCProfile);
 

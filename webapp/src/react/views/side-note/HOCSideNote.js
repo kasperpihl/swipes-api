@@ -1,12 +1,12 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import {
   convertToRaw,
-  convertFromRaw,
   EditorState,
 } from 'draft-js';
 import Button from 'Button';
@@ -18,6 +18,7 @@ import * as actions from 'actions';
 
 import './styles/side-note';
 
+const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
 
 class HOCSideNote extends PureComponent {
@@ -70,7 +71,7 @@ class HOCSideNote extends PureComponent {
     const { editorState } = this.state;
     const { serverOrg, note } = this.props;
     const rawText = convertToRaw(editorState.getCurrentContent());
-    const diffObj = diff(serverOrg.get('text').toJS(), note.get('text').toJS(), rawText);
+    const diffObj = diff((serverOrg.get('text') || emptyState).toJS(), note.get('text').toJS(), rawText);
     this.setLoadingState('conflict');
     this.saveNote(diffObj.editorState, note.get('rev')).then((res) => {
       if (res && res.ok) {
@@ -163,7 +164,7 @@ class HOCSideNote extends PureComponent {
     let subtitle = `Updated by ${name} ${timeString}`;
     const title = note && note.get('title');
     let buttonHtml;
-    if (latestRev < note.get('rev')) {
+    if (latestRev < (note.get('rev') || 1)) {
       subtitle = `CONFLICT. Updated by ${name} ${timeString}`;
       buttonHtml = (
         <Button
@@ -197,8 +198,9 @@ class HOCSideNote extends PureComponent {
 
     let rawState = overrideRaw;
     if (!editorState) {
-      rawState = cachedText || note.get('text');
-      console.log(note.toJS(), cachedText);
+      rawState = cachedText ||
+                  note.get('text') ||
+                  fromJS(emptyState);
       rawState = rawState.toJS();
     }
 
@@ -243,8 +245,7 @@ function mapStateToProps(state, ownProps) {
   const note = state.getIn(['notes', 'server', ownProps.id]);
   let serverOrg = state.getIn(['notes', 'cache', ownProps.id, 'serverOrg']);
   serverOrg = serverOrg || note;
-
-  const latestRev = serverOrg.get('rev');
+  const latestRev = serverOrg.get('rev') || 1;
 
   return {
     organizationId: state.getIn(['me', 'organizations', 0, 'id']),

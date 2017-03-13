@@ -13,6 +13,7 @@
   }
 
   &:hover {
+    cursor: pointer;
     text-decoration: underline;
 
     #{$b}__tooltip {

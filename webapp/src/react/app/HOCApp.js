@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-
+import { browserHistory } from 'react-router';
 import SwipesLoader from 'components/loaders/SwipesLoader';
 import Gradient from 'components/gradient/Gradient';
 import Topbar from './topbar/Topbar';
@@ -29,13 +29,18 @@ class HOCApp extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.isMaximized !== prevProps.isMaximized) {
-      this.updateMaximizeClass(this.props.isMaximized);
+    const { isMaximized, isFullscreen, token, isHydrated } = this.props;
+    if (isHydrated && !token) {
+      browserHistory.push('/login');
     }
-    if (this.props.isFullscreen !== prevProps.isFullscreen) {
-      this.updateFullscreenClass(this.props.isFullscreen);
+    if (isMaximized !== prevProps.isMaximized) {
+      this.updateMaximizeClass(isMaximized);
+    }
+    if (isFullscreen !== prevProps.isFullscreen) {
+      this.updateFullscreenClass(isFullscreen);
     }
   }
+
   updateFullscreenClass(isFullscreen) {
     const classList = document.getElementById('content').classList;
     if (isFullscreen) {
@@ -53,15 +58,15 @@ class HOCApp extends PureComponent {
     }
   }
   renderLoader() {
-    const { hasLoaded } = this.props;
-    if (hasLoaded) {
+    const { lastConnect } = this.props;
+    if (lastConnect) {
       return undefined;
     }
     return <SwipesLoader center text="Loading" size={90} />;
   }
   renderContent() {
-    const { hasLoaded } = this.props;
-    if (!hasLoaded) {
+    const { lastConnect } = this.props;
+    if (!lastConnect) {
       return undefined;
     }
     return (
@@ -89,10 +94,12 @@ class HOCApp extends PureComponent {
   }
 }
 
-const { func, bool } = PropTypes;
+const { func, bool, object, string } = PropTypes;
 
 HOCApp.propTypes = {
-  hasLoaded: bool,
+  lastConnect: string,
+  isHydrated: bool,
+  token: string,
   navSet: func,
   isFullscreen: bool,
   isMaximized: bool,
@@ -102,11 +109,13 @@ function mapStateToProps(state) {
   return {
     isMaximized: state.getIn(['main', 'isMaximized']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
-    hasLoaded: state.getIn(['main', 'hasLoaded']),
+    isHydrated: state.getIn(['main', 'isHydrated']),
+    status: state.getIn(['connection', 'status']),
+    lastConnect: state.getIn(['connection', 'lastConnect']),
+    token: state.getIn(['connection', 'token']),
   };
 }
 
-const ConnectedHOCApp = connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   navSet: a.navigation.set,
 })(HOCApp);
-export default ConnectedHOCApp;

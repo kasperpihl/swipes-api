@@ -265,7 +265,7 @@ HOCDashboard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    notifications: state.getIn(['main', 'notifications']),
+    notifications: state.get('notifications'),
     users: state.get('users'),
     goals: state.get('goals'),
     me: state.get('me'),
