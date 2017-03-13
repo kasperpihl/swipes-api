@@ -95,8 +95,9 @@ const dbStepsReorder = funcWrap([
   object.as({
     goal_id: string.require(),
     step_order: array.of(string).require(),
+    current_step_id: string.require(),
   }).require(),
-], (err, { goal_id, step_order }) => {
+], (err, { goal_id, step_order, current_step_id }) => {
   if (err) {
     throw new SwipesError(`dbStepsReorder: ${err}`);
   }
@@ -104,32 +105,38 @@ const dbStepsReorder = funcWrap([
   const q =
     r.table('goals')
       .get(goal_id)
-      .update({ step_order: r.row('steps')
-        // Find all the steps that are not deleted
-        // mark the deleted one with null because rethink does not support returning
-        // an empty value
-        .do((steps) => {
-          return steps.keys().map((key) => {
-            return r.branch(
-              steps(key)('deleted').default(false).ne(true),
-              steps(key),
-              null,
-            );
-          // Filter the null (deleted once)
-          }).filter((item) => {
-            return item.ne(null);
-          });
-        })
-        // Map the steps to an array with ids
-        .map((step) => {
-          return step('id');
-        })
-        // Doing setUinion on the new step_order with the array that we made so far
-        // will keep the order of the matching one and if there is some difference
-        // it would be pushed at the end of the step_order
-        .do((items) => {
-          return r.expr(step_order).setUnion(items);
-        }),
+      .update({
+        step_order: r.row('steps')
+          // Find all the steps that are not deleted
+          // mark the deleted one with null because rethink does not support returning
+          // an empty value
+          .do((steps) => {
+            return steps.keys().map((key) => {
+              return r.branch(
+                steps(key)('deleted').default(false).ne(true),
+                steps(key),
+                null,
+              );
+            // Filter the null (deleted once)
+            }).filter((item) => {
+              return item.ne(null);
+            });
+          })
+          // Map the steps to an array with ids
+          .map((step) => {
+            return step('id');
+          })
+          // Doing setUinion on the new step_order with the array that we made so far
+          // will keep the order of the matching one and if there is some difference
+          // it would be pushed at the end of the step_order
+          .do((items) => {
+            return r.expr(step_order).setUnion(items);
+          }),
+        status: {
+          current_step_id,
+        },
+      }, {
+        returnChanges: true,
       });
 
   return db.rethinkQuery(q);

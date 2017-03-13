@@ -65,11 +65,13 @@ authed.all('/steps.reorder',
   valBody({
     goal_id: string.require(),
     step_order: array.of(string).require(),
+    current_step_id: string.require(),
   }),
   stepsReorder,
   valResponseAndSend({
     goal_id: string.require(),
     step_order: array.require(),
+    status: object.require(),
   }));
 // Event: step_reordered
 

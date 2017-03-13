@@ -96,14 +96,27 @@ const stepsDelete = valLocals('stepsDelete', {
 const stepsReorder = valLocals('stepsReorder', {
   goal_id: string.require(),
   step_order: array.of(string).require(),
+  current_step_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     goal_id,
     step_order,
+    current_step_id,
   } = res.locals;
 
-  dbStepsReorder({ goal_id, step_order })
-    .then(() => {
+  dbStepsReorder({ goal_id, step_order, current_step_id })
+    .then((results) => {
+      const changes = results.changes[0];
+      let status = {};
+
+      if (changes) {
+        status = changes.new_val.status;
+      }
+
+      setLocals({
+        status,
+      });
+
       return next();
     })
     .catch((err) => {
