@@ -10,6 +10,7 @@ import {
   dbStepsReorder,
   dbStepsAssign,
 } from './db_utils/steps';
+
 import {
   valLocals,
   generateSlackLikeId,
@@ -31,7 +32,7 @@ const stepsAdd = valLocals('stepsAdd', {
   } = res.locals;
 
   step.id = generateSlackLikeId('', 6);
-  console.log(step);
+
   dbStepsAdd({ goal_id, step })
     .then((results) => {
       const changes = results.changes[0];
