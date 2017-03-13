@@ -42,12 +42,14 @@ class HOCTopbar extends PureComponent {
     window.socket.connect();
   }
   updateSecondsLeft(nextRetry) {
-    console.log('update', nextRetry);
     nextRetry = nextRetry || this.props.nextRetry;
     const secUnrounded = this.secondsToTime(nextRetry) / 1000;
     const secRounded = parseInt(secUnrounded, 10);
-    const remainder = ((secUnrounded - secRounded) * 1000) + 1;
-    this.setState({ secondsLeft: secRounded });
+    const remainder = Math.max(((secUnrounded - secRounded) * 1000) + 1, 10);
+    if (this.state.secondsLeft !== secRounded) {
+      this.setState({ secondsLeft: secRounded });
+    }
+    clearTimeout(this._retryTimer);
     this._retryTimer = setTimeout(this.updateSecondsLeft.bind(this), remainder);
   }
   secondsToTime(time) {

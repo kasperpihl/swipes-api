@@ -29,7 +29,7 @@ class HOCViewController extends PureComponent {
     this.onSaveState = setupCachedCallback(props.saveState, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
     this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
-    bindAll(this, ['onClose', 'updateWith', 'onToggleLock']);
+    bindAll(this, ['onClose', 'updateWidth', 'onToggleLock']);
     this.bouncedUpdate = debounce(this.updateWidth, 50);
   }
   componentDidMount() {
