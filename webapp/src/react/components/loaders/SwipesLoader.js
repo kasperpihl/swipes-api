@@ -10,7 +10,7 @@ class SwipesLoader extends Component {
   render() {
     return (
       <div className="sw-loader-wrap">
-        <Icon svg="SwipesLogoEmpty" className="sw-loader-wrap__svg" />
+        <Icon icon="SwipesLogoEmpty" className="sw-loader-wrap__svg" />
       </div>
     );
   }

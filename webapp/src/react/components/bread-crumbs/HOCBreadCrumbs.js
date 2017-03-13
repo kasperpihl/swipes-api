@@ -26,7 +26,7 @@ class HOCBreadCrumbs extends Component {
           {title}
         </div>
         <div className="bread-crumbs__seperator">
-          <Icon svg="Breadcrumb" className="bread-crumbs__icon" />
+          <Icon icon="Breadcrumb" className="bread-crumbs__icon" />
         </div>
       </div>
     );

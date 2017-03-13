@@ -24,14 +24,14 @@ class DownloadPage extends Component {
 
           <a rel="noopener noreferrer" href="https://www.dropbox.com/s/cxo9ifcvm2hhgbq/Swipes-win32-ia32.zip?dl=1" target="_blank">
             <button>
-              <Icon svg="Windows" />
+              <Icon icon="Windows" />
               Windows 32bit
             </button>
           </a>
 
           <a rel="noopener noreferrer" href="https://www.dropbox.com/s/mveq4y2lcvinu37/Swipes-win32-x64.zip?dl=1" target="_blank">
             <button>
-              <Icon svg="Windows" />
+              <Icon icon="Windows" />
               Windows 64bit
             </button>
           </a>
@@ -42,7 +42,7 @@ class DownloadPage extends Component {
 
           <a rel="noopener noreferrer" href="https://www.dropbox.com/s/3trq2udh5qdwdf9/SwipesInstaller.pkg?dl=1" target="_blank">
             <button>
-              <Icon svg="Apple" />
+              <Icon icon="Apple" />
               OS X
             </button>
           </a>
@@ -53,14 +53,14 @@ class DownloadPage extends Component {
 
           <a rel="noopener noreferrer" href="https://www.dropbox.com/s/wbbpqrml7m7ln7s/Swipes-linux-ia32.zip?dl=1" target="_blank">
             <button>
-              <Icon svg="Linux" />
+              <Icon icon="Linux" />
               Linux 32bit
             </button>
           </a>
 
           <a rel="noopener noreferrer" href="https://www.dropbox.com/s/qy3i8y4dxpxbosh/Swipes-linux-x64.zip?dl=1" target="_blank">
             <button>
-              <Icon svg="Linux" />
+              <Icon icon="Linux" />
               Linux 64bit
             </button>
           </a>
@@ -81,7 +81,7 @@ class DownloadPage extends Component {
 
     return (
       <div className="dl-card">
-        <Icon svg="SwipesLogoText" className="dl-card__svg" />
+        <Icon icon="SwipesLogoText" className="dl-card__svg" />
         <h6>Staging Environment</h6>
         {downloadOptions}
       </div>

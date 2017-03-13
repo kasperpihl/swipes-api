@@ -30,7 +30,7 @@ class NotificationItem extends Component {
     return (
       <div className="notification__image">
         <div className="notification__icon">
-          <Icon svg={n.get('icon')} className="notification__svg" />
+          <Icon icon={n.get('icon')} className="notification__svg" />
         </div>
         <div className="notification__assigning">
           <HOCAssigning assignees={[n.get('userId')]} rounded tooltipAlign="left" />
@@ -60,7 +60,7 @@ class NotificationItem extends Component {
     const HTMLAttachments = attachments.map((title, i) => (
       <div onClick={this.onAttachmentClick(i)} className="notif-attachment" key={i}>
         <div className="notif-attachment__icon">
-          <Icon svg="Flag" className="notif-attachment__svg" />
+          <Icon icon="Flag" className="notif-attachment__svg" />
         </div>
         <div className="notif-attachment__title">{title}</div>
       </div>

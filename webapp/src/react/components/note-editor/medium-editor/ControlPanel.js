@@ -175,7 +175,7 @@ class ControlPanel extends Component {
             onKeyUp={this.handleKeyUp}
           />
           <button className="RichEditor-controls__input-submit" onClick={this.addLink}>
-            <Icon svg="ArrowRightLine" className="RichEditor-controls__icon" />
+            <Icon icon="ArrowRightLine" className="RichEditor-controls__icon" />
           </button>
         </div>
       );

@@ -123,7 +123,7 @@ class HOCRegistration extends Component {
     return (
       <div className="sign-in__header">
         <div className="sign-in__logo">
-          <Icon svg="SwipesLogoText" className="sign-in__svg" />
+          <Icon icon="SwipesLogoText" className="sign-in__svg" />
         </div>
 
         <div className="sign-in__title">Welcome to your workspace</div>

@@ -2,7 +2,9 @@ import * as types from 'constants';
 import { randomString } from 'classes/utils';
 
 export function set(target, obj) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const isLocked = getState().getIn(['navigation', 'locked']);
+    target = isLocked ? 'primary' : target;
     const payload = {
       id: target === 'primary' ? obj.id : randomString(5),
       target,
@@ -17,16 +19,24 @@ export function saveState(target, savedState) {
   return { type: types.NAVIGATION_SAVE_STATE, payload };
 }
 
+export function toggleLock() {
+  return { type: types.NAVIGATION_TOGGLE_LOCK };
+}
+
 export function push(target, obj) {
   const payload = { obj, target };
   return { type: types.NAVIGATION_PUSH, payload };
 }
-export function openSecondary(from, obj) {
-  if (from === 'primary') {
-    return set('secondary', obj);
+export const openSecondary = (from, obj) => (d, getState) => {
+  const isLocked = getState().getIn(['navigation', 'locked']);
+  if (isLocked) {
+    return d(push('primary', obj));
   }
-  return push('secondary', obj);
-}
+  if (from === 'primary') {
+    return d(set('secondary', obj));
+  }
+  return d(push('secondary', obj));
+};
 
 export function pop(target, i) {
   const payload = { target };

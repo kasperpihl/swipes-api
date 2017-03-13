@@ -71,7 +71,7 @@ class Button extends Component {
       return undefined;
     }
 
-    return <Icon svg={icon} className="g-button__svg" />;
+    return <Icon icon={icon} className="g-button__svg" />;
   }
   renderText() {
     const { text } = this.props;
@@ -99,7 +99,7 @@ class Button extends Component {
 
     return (
       <div className="g-button__result-state">
-        <Icon svg={icon} className="g-button__svg" />
+        <Icon icon={icon} className="g-button__svg" />
         <div className="g-button__text">{label}</div>
       </div>
     );

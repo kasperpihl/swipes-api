@@ -11,6 +11,7 @@ const initialState = fromJS({
     stack: [],
   },
   counters: {},
+  locked: false,
 });
 
 export default function history(state = initialState, action) {
@@ -29,8 +30,12 @@ export default function history(state = initialState, action) {
         (state.getIn([payload.target, 'stack']).size - 1),
       ], s => s.setIn(['props', 'savedState'], fromJS(payload.savedState)));
     }
+    case types.NAVIGATION_TOGGLE_LOCK: {
+      return state.set('locked', !state.get('locked'));
+    }
     case types.NAVIGATION_PUSH: {
-      return state.updateIn([payload.target, 'stack'], s => s.push(fromJS(payload.obj)));
+      const target = state.get('locked') ? 'primary' : payload.target;
+      return state.updateIn([target, 'stack'], s => s.push(fromJS(payload.obj)));
     }
     case types.NAVIGATION_POP: {
       return state.updateIn([payload.target, 'stack'], (s) => {

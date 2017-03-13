@@ -17,7 +17,7 @@ class StoreCategories extends Component {
         <div className="store-content__category">
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#edf8f5' }}>
-              <Icon svg="ShapeOne" />
+              <Icon icon="ShapeOne" />
             </div>
             <div className="store-content__title store-content__title--item">
               Concept development
@@ -31,7 +31,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#ffebe0' }}>
-              <Icon svg="ShapeTwo" />
+              <Icon icon="ShapeTwo" />
             </div>
             <div className="store-content__title store-content__title--item">
               Rebranding strategy
@@ -45,7 +45,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#f4f9fc' }}>
-              <Icon svg="ShapeThree" />
+              <Icon icon="ShapeThree" />
             </div>
             <div className="store-content__title store-content__title--item">Campaign designs</div>
             <div className="store-content__author">By Nike <br /> Used by 78 companies</div>
@@ -58,7 +58,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#f0f6f4' }}>
-              <Icon svg="ShapeFour" />
+              <Icon icon="ShapeFour" />
             </div>
             <div className="store-content__title store-content__title--item">
               Brainstorming session
@@ -73,7 +73,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#f7fafe' }}>
-              <Icon svg="ShapeFive" />
+              <Icon icon="ShapeFive" />
             </div>
             <div className="store-content__title store-content__title--item">
               Set up design guidelines
@@ -90,7 +90,7 @@ class StoreCategories extends Component {
         <div className="store-content__category">
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#effafe' }}>
-              <Icon svg="ShapeSix" />
+              <Icon icon="ShapeSix" />
             </div>
             <div className="store-content__title store-content__title--item">2-weeks sprint</div>
             <div className="store-content__author">By Facebook <br /> Used by 1243 companies</div>
@@ -102,7 +102,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#f0f6f4' }}>
-              <Icon svg="ShapeSeven" />
+              <Icon icon="ShapeSeven" />
             </div>
             <div className="store-content__title store-content__title--item">Kanban workflow</div>
             <div className="store-content__author">By Amazon <br /> Used by 190 companies</div>
@@ -114,7 +114,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#d1e9ea' }}>
-              <Icon svg="ShapeEight" />
+              <Icon icon="ShapeEight" />
             </div>
             <div className="store-content__title store-content__title--item">Bug tracking</div>
             <div className="store-content__author">By Gigster <br /> Used by 31 companies</div>
@@ -126,7 +126,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#f2f3f4' }}>
-              <Icon svg="ShapeNine" />
+              <Icon icon="ShapeNine" />
             </div>
             <div className="store-content__title store-content__title--item">App Store update</div>
             <div className="store-content__author">By Zynga <br /> Used by 359 companies</div>
@@ -139,7 +139,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--small">
             <div className="store-content__image" style={{ backgroundColor: '#fffaee' }}>
-              <Icon svg="ShapeTen" />
+              <Icon icon="ShapeTen" />
             </div>
             <div className="store-content__title store-content__title--item">A/B test</div>
             <div className="store-content__author">By Optimizely <br /> Used by 43 companies</div>
@@ -157,7 +157,7 @@ class StoreCategories extends Component {
         <div className="store-content__category">
           <div className="store-content__item store-content__item--big">
             <div className="store-content__image">
-              <Icon png="oneCover" />
+              <Icon icon="oneCover" />
               <div className="store-content__title store-content__title--big">The Startup Pack</div>
             </div>
             <div className="store-content__description store-content__description--big">
@@ -169,7 +169,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--big">
             <div className="store-content__image">
-              <Icon png="twoCover" />
+              <Icon icon="twoCover" />
               <div className="store-content__title store-content__title--big">
                 Grow fast. Work fast.
               </div>
@@ -184,7 +184,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--big">
             <div className="store-content__image">
-              <Icon png="threeCover" />
+              <Icon icon="threeCover" />
               <div className="store-content__title store-content__title--big">Product Sprints</div>
             </div>
             <div className="store-content__description store-content__description--big">
@@ -196,7 +196,7 @@ class StoreCategories extends Component {
 
           <div className="store-content__item store-content__item--big">
             <div className="store-content__image">
-              <Icon png="fourCover" />
+              <Icon icon="fourCover" />
               <div className="store-content__title store-content__title--big">Conference Stand</div>
             </div>
             <div className="store-content__description store-content__description--big">

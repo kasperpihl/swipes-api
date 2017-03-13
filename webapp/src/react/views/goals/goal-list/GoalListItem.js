@@ -81,7 +81,7 @@ class GoalListItem extends PureComponent {
 
     return (
       <div className={className} onClick={this.clickedListItem}>
-        <Icon svg="Checkmark" className="goal-list-item__completed-icon" />
+        <Icon icon="Checkmark" className="goal-list-item__completed-icon" />
         <div className="goal-list-item__content">
           <div className="goal-list-item__title">{goal.get('title')}</div>
           <div className="goal-list-item__subtitle">

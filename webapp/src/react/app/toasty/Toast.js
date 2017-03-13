@@ -34,7 +34,7 @@ class Toast extends Component {
   }
   renderSuccess() {
     if (this.props.data.completed) {
-      return <Icon svg="Checkmark" className="toast__icon" />;
+      return <Icon icon="Checkmark" className="toast__icon" />;
     }
 
     return undefined;

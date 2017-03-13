@@ -28,7 +28,7 @@ const Attachment = (props) => {
     <div className={className}>
       <div className="attachment__title" onClick={onClick}>
         <div className="attachment__icon">
-          <Icon svg={icon} className="attachment__svg" />
+          <Icon icon={icon} className="attachment__svg" />
         </div>
         <div className="attachment__words">
           {title}
@@ -36,10 +36,10 @@ const Attachment = (props) => {
       </div>
       <div className="attachment__actions">
         <div className="attachment__button attachment__button--delete" onClick={onDelete}>
-          <Icon svg="Trash" className="attachment__svg" />
+          <Icon icon="Trash" className="attachment__svg" />
         </div>
         <div className="attachment__button attachment__button--flag" onClick={onFlag}>
-          <Icon svg="Flag" className="attachment__svg" />
+          <Icon icon="Flag" className="attachment__svg" />
         </div>
       </div>
     </div>

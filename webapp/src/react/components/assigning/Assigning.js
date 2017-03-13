@@ -54,7 +54,7 @@ class Assigning extends Component {
     tooltip(null);
   }
   renderIcon(icon) {
-    return <Icon svg={icon} className="assignees__icon" />;
+    return <Icon icon={icon} className="assignees__icon" />;
   }
   renderAddAssignees() {
     return (

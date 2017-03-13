@@ -1,37 +1,28 @@
 import React from 'react';
+import { string } from 'valjs';
 import * as Icons from './icons';
+import * as Images from './images';
 
 export default function Icon(props) {
   const {
-    svg,
-    png,
-    src,
-    material,
+    icon,
     ...other
   } = props;
-  let returnHtml = null;
-  if (material) {
-    return <i className="material-icons" {...other}>{material}</i>;
+  if (Icons[icon]) {
+    const Comp = Icons[icon];
+    return <Comp {...other} />;
   }
-  if (svg && Icons[svg]) {
-    const Comp = Icons[svg];
-
-    returnHtml = <Comp {...other} />;
+  if (Images[icon] || string.require().format('url').test(icon) === null) {
+    return <img src={Images[icon] || icon} {...other} role="presentation" />;
   }
-
-  if (png || src) {
-    let iSrc = Icons[png];
-    if (!iSrc) {
-      iSrc = src || png;
-    }
-    returnHtml = <img src={iSrc} {...other} role="presentation" />;
-  }
-
-  return returnHtml;
+  return (
+    <div {...other}>
+      <i className="material-icons">{icon}</i>
+    </div>
+  );
 }
 
-const { string } = React.PropTypes;
 
 Icon.propTypes = {
-  icon: string,
+  icon: React.PropTypes.string,
 };

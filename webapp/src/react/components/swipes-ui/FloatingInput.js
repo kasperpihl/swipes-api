@@ -91,7 +91,7 @@ class FloatingInput extends Component {
           onMouseUp={this.hidePassword}
           onMouseLeave={this.hidePassword}
         >
-          <Icon svg="Eye" className="floating-label__svg" />
+          <Icon icon="Eye" className="floating-label__svg" />
         </div>
       </div>
     );

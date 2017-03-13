@@ -27,8 +27,8 @@ class ControlButton extends Component {
       className += ' RichEditor-activeButton';
     }
 
-    if (<Icon svg={label} />) {
-      RenderIcon = <Icon svg={label} className="RichEditor-controls__icon" />;
+    if (<Icon icon={label} />) {
+      RenderIcon = <Icon icon={label} className="RichEditor-controls__icon" />;
     } else {
       RenderIcon = <span>{label}</span>;
     }

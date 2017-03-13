@@ -77,7 +77,7 @@ class HOCSidebar extends PureComponent {
       notif = <div className="sidebar__notification" key={counter}>{counter}</div>;
     }
 
-    let image = <Icon svg={item.svg} className="sidebar__icon" />;
+    let image = <Icon icon={item.svg} className="sidebar__icon" />;
 
     if (item.id === 'Profile') {
       image = <HOCAssigning assignees={[item.personId]} rounded size={44} />;

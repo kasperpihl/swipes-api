@@ -28,7 +28,7 @@ class AddAttachment extends Component {
     const { buttons } = this.state;
     return buttons.map((b, i) => (
       <div key={`button-${i}`} className="add-attachment__item" onClick={this.onMenuCached(i)}>
-        <Icon svg={b.svg} className="add-attachment__icon" />
+        <Icon icon={b.svg} className="add-attachment__icon" />
         {b.title}
       </div>
     ));

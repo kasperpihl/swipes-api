@@ -58,7 +58,7 @@ class GoalSide extends Component {
     return (
       <div className={className}>
         <div className="add-step__icon">
-          <Icon svg="Plus" className="add-step__svg" />
+          <Icon icon="Plus" className="add-step__svg" />
         </div>
         <button className="add-step__text" onClick={this.onClick}>{buttonTitle}</button>
       </div>

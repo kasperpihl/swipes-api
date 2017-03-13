@@ -182,7 +182,7 @@ class HOCAttachments extends PureComponent {
     return (
       <div className={className}>
         <div className="attachments__add-icon">
-          <Icon svg="Plus" className="attachments__svg" />
+          <Icon icon="Plus" className="attachments__svg" />
         </div>
         <button
           className="attachments__add-item"

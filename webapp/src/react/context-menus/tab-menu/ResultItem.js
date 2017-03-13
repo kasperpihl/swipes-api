@@ -28,7 +28,7 @@ class ResultItem extends Component {
       children = <img role="presentation" src={obj.src} />;
     } else if (obj.icon) {
       className += ' result__icon--svg';
-      children = <Icon svg={obj.icon} />;
+      children = <Icon icon={obj.icon} />;
     } else if (obj.button) {
       className += ' result__icon--btn';
       children = (

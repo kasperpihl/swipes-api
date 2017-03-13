@@ -5,7 +5,6 @@ import DropboxLogo from './svgs/dropbox-logo.svg';
 import GmailLogo from './svgs/gmail-logo.svg';
 import JiraLogo from './svgs/jira-logo.svg';
 import SlackLogo from './svgs/slack-logo.svg';
-import SwipesIcon from './pngs/swipes-icon.png';
 import SwipesLogo from './svgs/swipes-logo.svg';
 import SwipesLogoText from './svgs/swipes-logo-text.svg';
 import SwipesLogoEmpty from './svgs/swipes-logo-empty.svg';
@@ -94,23 +93,10 @@ import ShapeEight from './svgs/shape-8.svg';
 import ShapeNine from './svgs/shape-9.svg';
 import ShapeTen from './svgs/shape-10.svg';
 
-
-// Remove these soon
-import facebookCover from './pngs/facebook.png';
-import airbnbCover from './pngs/airbnb.png';
-import uberCover from './pngs/uber.png';
-import oneCover from './pngs/1.png';
-import twoCover from './pngs/2.png';
-import threeCover from './pngs/3.png';
-import fourCover from './pngs/4.png';
-import successState from './pngs/success-state.png';
-import designWorkflowCover from './pngs/design-template.png';
-
 import LoginIconOne from './svgs/login-background-1.svg';
 import LoginIconTwo from './svgs/login-background-2.svg';
 
 export {
-  SwipesIcon, /* SwipesLogo old, replace */
   AirbnbLogo,
   AsanaLogo,
   DriveLogo,
@@ -207,13 +193,4 @@ export {
   ShapeTen,
   LoginIconOne,
   LoginIconTwo,
-  facebookCover,
-  airbnbCover,
-  uberCover,
-  oneCover,
-  twoCover,
-  threeCover,
-  fourCover,
-  successState,
-  designWorkflowCover,
 };

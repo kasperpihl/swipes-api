@@ -18,21 +18,21 @@ class StoreHeader extends Component {
         <div className="store-header__section store-header__section--first">
           <div className="store-header__title">Ways of Working</div>
           <div className="store-header__search">
-            <Icon svg="Find" className="store-header__icon store-header__icon--find" />
+            <Icon icon="Find" className="store-header__icon store-header__icon--find" />
           </div>
         </div>
 
         <div className="store-header__section store-header__section--second">
           <div className="store-header__featured">
-            <Icon png="facebookCover" />
+            <Icon icon="facebookCover" />
             <div className="store-header__featured__title">Run product sprints faster</div>
           </div>
           <div className="store-header__featured">
-            <Icon png="airbnbCover" />
+            <Icon icon="airbnbCover" />
             <div className="store-header__featured__title">Get more done in your meetings</div>
           </div>
           <div className="store-header__featured">
-            <Icon png="uberCover" />
+            <Icon icon="uberCover" />
             <div className="store-header__featured__title">Get a project from A to Z</div>
           </div>
         </div>

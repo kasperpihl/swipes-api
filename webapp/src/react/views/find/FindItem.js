@@ -42,7 +42,7 @@ class FindItem extends Component {
 
     return (
       <div className="find-item__service">
-        <Icon svg={iconForService(service)} className="find-item__icon" />
+        <Icon icon={iconForService(service)} className="find-item__icon" />
       </div>
     );
   }

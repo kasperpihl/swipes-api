@@ -24,7 +24,7 @@ class DefaultRow extends PureComponent {
     } else if (icon.icon) {
       return (
         <div className="default-row__icon default-row__icon--svg">
-          <Icon svg={icon.icon} className="default-row__svg" />
+          <Icon icon={icon.icon} className="default-row__svg" />
         </div>
       );
     } else if (icon.color) {

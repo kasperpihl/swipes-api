@@ -134,19 +134,19 @@ class HOCTopbar extends PureComponent {
           onClick={this.onWinClickCached('minimize')}
           className="topbar__button topbar__button--minimize"
         >
-          <Icon svg="WindowsMinimize" className="topbar__svg" />
+          <Icon icon="WindowsMinimize" className="topbar__svg" />
         </div>
         <div
           onClick={this.onWinClickCached(toggleMaximizeFunc)}
           className="topbar__button topbar__button--unmaximize"
         >
-          <Icon svg={toggleMaximizeIcon} className="topbar__svg" />
+          <Icon icon={toggleMaximizeIcon} className="topbar__svg" />
         </div>
         <div
           onClick={this.onWinClickCached('close')}
           className="topbar__button topbar__button--close"
         >
-          <Icon svg="WindowsClose" className="topbar__svg" />
+          <Icon icon="WindowsClose" className="topbar__svg" />
         </div>
       </div>
     );
