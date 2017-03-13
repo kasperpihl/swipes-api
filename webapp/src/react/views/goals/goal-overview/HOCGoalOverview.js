@@ -5,7 +5,7 @@ import { fromJS } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoadingHandlers } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
-
+import { steps } from 'swipes-core-js';
 import Section from 'components/section/Section';
 import SWView from 'SWView';
 import Button from 'Button';
@@ -164,7 +164,7 @@ class HOCGoalOverview extends PureComponent {
         contextMenu(null);
         if (!item.assignees) {
           let overrideAssignees;
-          options.actionLabel = 'Write message';
+          options.actionLabel = 'Notify and write message';
           selectAssignees(options, [], (newAssignees) => {
             if (newAssignees) {
               overrideAssignees = newAssignees;
@@ -286,14 +286,14 @@ class HOCGoalOverview extends PureComponent {
   }
 
   clickedAssign(i, e) {
-    const { selectAssignees, reassignStep, goal } = this.props;
+    const { selectAssignees, assignStep, goal } = this.props;
     const helper = this.getHelper();
     const step = helper.getStepByIndex(i);
 
     const options = this.getOptionsForE(e);
     options.actionLabel = 'Reassign';
     if (step.get('id') === helper.getCurrentStepId()) {
-      options.actionLabel = 'Write message';
+      options.actionLabel = 'Reassign and write message';
     }
     let overrideAssignees;
     selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
@@ -304,7 +304,7 @@ class HOCGoalOverview extends PureComponent {
           this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
         } else {
           this.setStepLoading(step.get('id'), 'Assigning...');
-          reassignStep(goal.get('id'), step.get('id'), overrideAssignees).then(this.clearCB(step.get('id')));
+          assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(this.clearCB(step.get('id')));
         }
       }
     });
@@ -406,10 +406,10 @@ export default connect(mapStateToProps, {
   saveWay: a.ways.save,
   archive: a.goals.archive,
   contextMenu: a.main.contextMenu,
-  addStep: a.goals.addStep,
-  removeStep: a.goals.removeStep,
-  renameStep: a.goals.renameStep,
-  reassignStep: a.goals.reassignStep,
+  addStep: steps.add,
+  removeStep: steps.remove,
+  renameStep: steps.rename,
+  assignStep: steps.assign,
   selectAssignees: a.goals.selectAssignees,
   confirm: a.menus.confirm,
   inputMenu: a.menus.input,

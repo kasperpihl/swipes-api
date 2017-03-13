@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as actions from 'actions';
+import { cache } from 'swipes-core-js';
 import Button from 'Button';
 import SWView from 'SWView';
 import { fromJS } from 'immutable';
@@ -522,8 +523,8 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   selectAssignees: actions.goals.selectAssignees,
-  saveCache: actions.cache.save,
-  removeCache: actions.cache.remove,
+  saveCache: cache.save,
+  removeCache: cache.remove,
   addGoal: actions.goals.addGoal,
   loadWay: actions.ways.load,
   saveWay: actions.ways.save,

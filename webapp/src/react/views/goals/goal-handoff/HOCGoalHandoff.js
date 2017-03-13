@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
+import { cache } from 'swipes-core-js';
 import { map, list } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import { setupLoadingHandlers } from 'classes/utils';
@@ -335,7 +336,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
-  saveCache: a.cache.save,
+  saveCache: cache.save,
   goalNotify: a.goals.notify,
   selectStep: a.goals.selectStep,
   completeStep: a.goals.completeStep,

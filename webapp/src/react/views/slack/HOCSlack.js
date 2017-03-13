@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import { cache } from 'swipes-core-js';
 import { bindAll } from 'classes/utils';
 import Webview from 'components/webview/Webview';
 import FloatingInput from 'components/swipes-ui/FloatingInput';
@@ -161,6 +162,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   browser: actions.main.browser,
   openSlackIn: actions.main.openSlackIn,
-  saveCache: actions.cache.save,
+  saveCache: cache.save,
   setCounter: actions.navigation.setCounter,
 })(HOCSlack);

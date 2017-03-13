@@ -68,44 +68,6 @@ export const addGoal = (goal, organizationId, message, flags) => (d, getState) =
   }));
 };
 
-export const reassignStep = (goalId, stepId, assignees) => (d, getState) => {
-  let steps = getState().getIn(['goals', goalId, 'steps']);
-  steps = steps.setIn([stepId, 'assignees'], assignees).toJS();
-  return d(updateGoal(goalId, { steps }));
-};
-
-export const removeStep = (goalId, stepId) => (d, getState) => {
-  let steps = getState().getIn(['goals', goalId, 'steps']);
-  let stepOrder = getState().getIn(['goals', goalId, 'step_order']);
-  steps = steps.setIn([stepId, 'deleted'], true).toJS();
-  stepOrder = stepOrder.filter(sId => sId !== stepId).toJS();
-  return d(updateGoal(goalId, {
-    steps,
-    step_order: stepOrder,
-  }));
-};
-
-export const renameStep = (goalId, stepId, title) => (d, getState) => {
-  let steps = getState().getIn(['goals', goalId, 'steps']);
-  steps = steps.setIn([stepId, 'title'], title).toJS();
-  return d(updateGoal(goalId, { steps }));
-};
-
-export const addStep = (goalId, title) => (d, getState) => {
-  let steps = getState().getIn(['goals', goalId, 'steps']);
-  let stepOrder = getState().getIn(['goals', goalId, 'step_order']);
-  const step = {
-    id: randomString(6),
-    title,
-    assignees: [],
-  };
-  steps = steps.setIn([step.id], step).toJS();
-  stepOrder = stepOrder.push(step.id).toJS();
-  return d(updateGoal(goalId, {
-    steps,
-    step_order: stepOrder,
-  }));
-};
 
 export const archive = goalId => d => d(a.api.request('goals.archive', { goal_id: goalId }));
 

@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import * as a from 'actions';
+import { cache } from 'swipes-core-js';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
@@ -86,7 +87,7 @@ class HOCGoalList extends PureComponent {
     const step = goals.getIn([goalId, 'steps', stepId]);
 
     const options = this.getOptionsForE(e);
-    options.actionLabel = 'Write message';
+    options.actionLabel = 'Reassign and write message';
     let overrideAssignees;
     const title = 'Handoff';
     selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
@@ -356,7 +357,7 @@ HOCGoalList.propTypes = {
 };
 
 export default connect(mapStateToProps, {
-  saveCache: a.cache.save,
+  saveCache: cache.save,
   selectUser: a.menus.selectUser,
   inputMenu: a.menus.input,
   selectGoalType: a.menus.selectGoalType,

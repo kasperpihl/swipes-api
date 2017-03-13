@@ -20,7 +20,37 @@ export default function goalsReducer(state = initialState, action) {
       });
       return goals;
     }
-
+    case 'steps.add': {
+      if (payload.ok) {
+        state = state.setIn([payload.goal_id, 'step_order'],
+          fromJS(payload.step_order),
+        ).setIn([payload.goal_id, 'steps', payload.step.id], fromJS(payload.step));
+      }
+      return state;
+    }
+    case 'steps.delete': {
+      if (payload.ok) {
+        state = state.updateIn([payload.goal_id], (g) => {
+          g = g.updateIn(['step_order'], s => s.filter(id => id !== payload.step_id));
+          return g.setIn(['steps', payload.step_id, 'deleted'], true);
+        });
+      }
+      return state;
+    }
+    case 'steps.rename': {
+      if (payload.ok) {
+        return state.setIn([payload.goal_id, 'steps', payload.step_id, 'title'], payload.title);
+      }
+      return state;
+    }
+    case 'steps.assign': {
+      if (payload.ok) {
+        return state.setIn([
+          payload.goal_id, 'steps', payload.step_id, 'assignees',
+        ], fromJS(payload.assignees));
+      }
+      return state;
+    }
     case 'goal_archived':
     case 'goals.archive': {
       if (payload.ok || typeof payload.ok === 'undefined') {

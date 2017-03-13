@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { timeAgo } from 'classes/time-utils';
 import * as a from 'actions';
@@ -8,8 +8,8 @@ import NotificationWrapper from '../../dashboard/NotificationWrapper';
 /* global msgGen */
 
 class HOCHistory extends PureComponent {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {};
   }
   componentDidMount() {
@@ -19,7 +19,6 @@ class HOCHistory extends PureComponent {
     const flag = goal.getIn(['history', hI, 'flags', i]);
     const att = goal.getIn(['attachments', flag]);
     if (att) {
-      console.log(att.toJS());
       preview(this.context.target, att);
     }
   }
@@ -153,11 +152,15 @@ class HOCHistory extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
+const { string, func } = PropTypes;
 
 HOCHistory.propTypes = {
   goal: map,
+  preview: func,
   me: map,
+};
+HOCHistory.contextTypes = {
+  target: string,
 };
 
 function mapStateToProps(state) {

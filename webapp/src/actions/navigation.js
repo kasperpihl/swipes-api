@@ -54,8 +54,8 @@ export const setCounter = (id, counter) => (d, getState) => {
       const counters = getState().getIn(['navigation', 'counters']);
       const slackCount = counters.get('Slack');
       const swipesCount = counters.get('Dashboard');
+      let totalCount = 0;
       if (swipesCount || slackCount) {
-        let totalCount = 0;
         if (swipesCount && swipesCount.length) {
           totalCount += parseInt(swipesCount, 10);
         }
@@ -65,8 +65,8 @@ export const setCounter = (id, counter) => (d, getState) => {
         if (!totalCount && slackCount === '•') {
           totalCount = slackCount;
         }
-        window.ipcListener.setBadgeCount(`${totalCount}`);
       }
+      window.ipcListener.setBadgeCount(`${totalCount || ''}`);
     }
   });
 };

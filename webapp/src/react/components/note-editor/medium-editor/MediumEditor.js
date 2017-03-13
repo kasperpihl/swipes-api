@@ -172,7 +172,7 @@ class MediumEditor extends PureComponent {
     } else {
       styles = styles.set('top', position.top + position.height + SPACING);
     }
-    console.log('default', styles.get('top'));
+
     return styles;
   }
   handleMousePosition(styles, mousePos) {
@@ -181,7 +181,6 @@ class MediumEditor extends PureComponent {
     const position = this.getSelectionPosition();
 
     if (mousePos) {
-      console.log('mY', mousePos.y);
       styles = styles.set('left', this.getCenterFromX(mousePos.x, w));
       if (selection.get('isBackward')) {
         styles = styles.set('top', Math.min(mousePos.y, position.top) - h - SPACING);
@@ -189,7 +188,7 @@ class MediumEditor extends PureComponent {
         styles = styles.set('top', Math.max(mousePos.y, (position.top + position.height)) + SPACING);
       }
     }
-    console.log('mouse', styles.get('top'));
+
     return styles;
   }
   handleContentOverlap(styles) {
@@ -210,7 +209,7 @@ class MediumEditor extends PureComponent {
         styles = styles.set('top', selBottomY + SPACING);
       }
     }
-    console.log('overlap', styles.get('top'));
+
     return styles;
   }
   handleBoundaries(styles) {
@@ -229,7 +228,7 @@ class MediumEditor extends PureComponent {
     } else if ((styles.get('top') + h) > wh - SPACING) {
       styles = styles.set('top', wh - SPACING - h);
     }
-    console.log('boundaries', styles.get('top'));
+
     return styles;
   }
   renderControlPanel() {
