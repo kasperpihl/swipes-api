@@ -29,6 +29,7 @@ import {
   goalsProgressStatus,
   goalsNotifyQueueMessage,
   goalsNotify,
+  goalsRename,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -87,12 +88,9 @@ authed.all('/goals.completeStep',
 authed.all('/goals.rename',
   valBody({
     goal_id: string.require(),
-    title: string.require().min(1),
+    title: string.min(1).require(),
   }),
-  /*
-    T_TODO:
-    [] rename goal.title
-  */
+  goalsRename,
   valResponseAndSend({
     goal_id: string.require(),
     title: string.require(),

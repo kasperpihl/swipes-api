@@ -556,6 +556,26 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
 
   return next();
 });
+const goalsRename = valLocals('goalsRename', {
+  goal_id: string.require(),
+  title: string.min(1).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    goal_id,
+    title,
+  } = res.locals;
+  const properties = {
+    title,
+  };
+
+  dbGoalsUpdateSingle({ goal_id, properties })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
 export {
   goalsCreate,
@@ -574,4 +594,5 @@ export {
   goalsProgressStatus,
   goalsNotifyQueueMessage,
   goalsNotify,
+  goalsRename,
 };
