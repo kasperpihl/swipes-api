@@ -5,6 +5,13 @@ import {
   array,
 } from 'valjs';
 import {
+  stepsAdd,
+  stepsRename,
+  stepsDelete,
+  stepsReorder,
+  stepsAssign,
+} from './middlewares/steps';
+import {
   valBody,
   valResponseAndSend,
 } from '../utils';
@@ -16,16 +23,11 @@ authed.all('/steps.add',
   valBody({
     goal_id: string.require(),
     step: object.as({
-      id: string.format(/^[A-Za-z0-9]+$/g).min(6).max(6).require(),
       title: string.min(1).require(),
       assignees: array.require(),
     }).require(),
   }),
-  /*
-    T_TODO:
-    [] add step to steps object (indexed by id)
-    [] add id to step_order
-  */
+  stepsAdd,
   valResponseAndSend({
     goal_id: string.require(),
     step: object.require(),
@@ -39,10 +41,7 @@ authed.all('/steps.rename',
     step_id: string.require(),
     title: string.require().min(1),
   }),
-  /*
-    T_TODO:
-    [] rename steps[step_id].title
-  */
+  stepsRename,
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
@@ -55,11 +54,7 @@ authed.all('/steps.delete',
     goal_id: string.require(),
     step_id: string.require(),
   }),
-  /*
-    T_TODO:
-    [] add deleted: true to steps[step_id]
-    [] remove step_id from step_order
-  */
+  stepsDelete,
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
@@ -69,14 +64,9 @@ authed.all('/steps.delete',
 authed.all('/steps.reorder',
   valBody({
     goal_id: string.require(),
-    step_order: array.require(),
+    step_order: array.of(string).require(),
   }),
-  /*
-    T_TODO:
-    [] update the step_order array with new value
-    [] check that all steps with !deleted is part of step_order array
-    [] insert any !deleted steps that is not part to the end of the step_order array
-  */
+  stepsReorder,
   valResponseAndSend({
     goal_id: string.require(),
     step_order: array.require(),
@@ -87,12 +77,9 @@ authed.all('/steps.assign',
   valBody({
     goal_id: string.require(),
     step_id: string.require(),
-    assignees: array.require(),
+    assignees: array.of(string).require(),
   }),
-  /*
-    T_TODO:
-    [] set assignees object for step[step_id]
-  */
+  stepsAssign,
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
