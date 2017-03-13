@@ -40,7 +40,7 @@ class DownloadPage extends Component {
 
         <div className="btn-group">
 
-          <a rel="noopener noreferrer" href="https://www.dropbox.com/s/qbcv6oqeztfq992/Swipes.dmg?dl=1" target="_blank">
+          <a rel="noopener noreferrer" href="https://www.dropbox.com/s/3trq2udh5qdwdf9/SwipesInstaller.pkg?dl=1" target="_blank">
             <button>
               <Icon svg="Apple" />
               OS X

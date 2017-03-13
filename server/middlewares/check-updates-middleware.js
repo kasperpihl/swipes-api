@@ -8,7 +8,7 @@ import {
 const newestElectronVersion = '0.0.4';
 const electronUrls = {
   darwin: {
-    x64: 'https://www.dropbox.com/s/qbcv6oqeztfq992/Swipes.dmg?dl=1',
+    x64: 'https://www.dropbox.com/s/3trq2udh5qdwdf9/SwipesInstaller.pkg?dl=1',
   },
   win32: {
     ia32: 'https://www.dropbox.com/s/cxo9ifcvm2hhgbq/Swipes-win32-ia32.zip?dl=1',
