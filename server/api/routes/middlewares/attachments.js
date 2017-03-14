@@ -46,7 +46,7 @@ const attachmentsAdd = valLocals('attachmentsAdd', {
       const changes = results.changes[0];
 
       setLocals({
-        attachment,
+        attachment: changes.new_val.attachments[attachment.id],
         attachment_order: changes.new_val.attachment_order,
       });
 
