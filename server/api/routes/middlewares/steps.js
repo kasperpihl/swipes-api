@@ -45,18 +45,8 @@ const stepsAdd = valLocals('stepsAdd', {
     .then((results) => {
       const changes = results.changes[0];
 
-      if (!changes) {
-        return next(new SwipesError('No changes', {
-          middleware: 'stepsAddStep',
-          value: {
-            goal_id,
-            step,
-          },
-        }));
-      }
-
       setLocals({
-        step,
+        step: changes.new_val.steps[step.id],
         step_order: changes.new_val.step_order,
       });
 
