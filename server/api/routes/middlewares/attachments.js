@@ -27,6 +27,9 @@ const attachmentsAdd = valLocals('attachmentsAdd', {
     short_url,
     link,
   } = res.locals;
+  const title = link.meta.title;
+
+  delete link.meta;
 
   link.permission = {
     short_url,
@@ -34,6 +37,7 @@ const attachmentsAdd = valLocals('attachmentsAdd', {
 
   const attachment = {
     link,
+    title,
     id: generateSlackLikeId('', 6),
     created_by: user_id,
     created_at: r.now(),
