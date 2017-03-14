@@ -2,6 +2,7 @@ import hash from 'object-hash';
 import {
   string,
   array,
+  object,
 } from 'valjs';
 import {
   findLinkPermissionsById,
@@ -70,16 +71,16 @@ const linksFindPermissions = valLocals('linksFindPermissions', {
 
 const linksAddPermission = valLocals('linksAddPermission', {
   user_id: string.require(),
-  checksum: string.require(),
+  link: object.require(),
   permission: linkPermission,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     permission,
-    checksum,
+    link,
   } = res.locals;
 
-  addPermissionsToALink({ user_id, checksum, permission })
+  addPermissionsToALink({ user_id, checksum: link.checksum, permission })
     .then((result) => {
       setLocals({
         short_url: result.changes[0].new_val.id,
@@ -107,10 +108,6 @@ const linksCreate = valLocals('linksCreate', {
   createLink({ meta, insert_doc })
     .then((result) => {
       const insertedObj = result.changes[0].new_val;
-
-      setLocals({
-        checksum: insertedObj.checksum,
-      });
 
       setLocals({
         link: insertedObj,

@@ -5,6 +5,16 @@ import {
   array,
 } from 'valjs';
 import {
+  linksAddPermission,
+  linksCreate,
+} from './middlewares/links';
+import {
+  attachmentsAdd,
+  attachmentsRename,
+  attachmentsDelete,
+  attachmentsReorder,
+} from './middlewares/attachments';
+import {
   valBody,
   valResponseAndSend,
 } from '../utils';
@@ -20,24 +30,18 @@ const notAuthed = express.Router();
 
 authed.all('/attachments.add',
   valBody({
-    target: string.require(),
+    target_id: string.require(),
     link: object.as({
       service,
       permission: linkPermission,
       meta: linkMeta,
     }).require(),
   }),
-  /*
-    T_TODO:
-    [] create link
-    [] add attachment to attachments object (indexed by id)
-    [] add created_at to the attachment object
-    [] add created_by to the attachment object
-    [] update goal.updated_at
-    [] add id to attachment_order
-  */
+  linksCreate,
+  linksAddPermission,
+  attachmentsAdd,
   valResponseAndSend({
-    target: string.require(),
+    target_id: string.require(),
     attachment: object.require(),
     attachment_order: array.require(),
   }));
@@ -46,53 +50,38 @@ authed.all('/attachments.add',
 
 authed.all('/attachments.rename',
   valBody({
-    target: string.require(),
+    target_id: string.require(),
     attachment_id: string.require(),
-    title: string.require().min(1),
+    title: string.min(1).require(),
   }),
-  /*
-    T_TODO:
-    [] rename attachments[attachment_id].title
-    [] update goal.updated_at
-  */
+  attachmentsRename,
   valResponseAndSend({
-    target: string.require(),
+    target_id: string.require(),
     attachment_id: string.require(),
-    title: string.require(),
+    title: string.min(1).require(),
   }));
 // Event: attachment_renamed
 
 authed.all('/attachments.delete',
   valBody({
-    target: string.require(),
+    target_id: string.require(),
     attachment_id: string.require(),
   }),
-  /*
-    T_TODO:
-    [] add deleted: true to attachments[attachment_id]
-    [] update goal.updated_at
-    [] remove attachment_id from attachment_order
-  */
+  attachmentsDelete,
   valResponseAndSend({
-    target: string.require(),
+    target_id: string.require(),
     attachment_id: string.require(),
   }));
 // Event: attachment_deleted
 
 authed.all('/attachments.reorder',
   valBody({
-    target: string.require(),
+    target_id: string.require(),
     attachment_order: array.require(),
   }),
-  /*
-    T_TODO:
-    [] update the attachment_order array with new value
-    [] update goal.updated_at
-    [] check that all attachments with !deleted is part of attachment_order array
-    [] insert any !deleted attachments that is not part to the end of the attachment_order array
-  */
+  attachmentsReorder,
   valResponseAndSend({
-    target: string.require(),
+    target_id: string.require(),
     attachment_order: array.require(),
   }));
 // Event: attachment_reordered
