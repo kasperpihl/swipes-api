@@ -55,6 +55,8 @@ authed.all('/attachments.add',
       id: string.require(),
       created_at: string.format('iso8601').require(),
       created_by: string.require(),
+      updated_at: string.format('iso8601').require(),
+      updated_by: string.require(),
       link: object.as({
         service,
         permission: object.as({
