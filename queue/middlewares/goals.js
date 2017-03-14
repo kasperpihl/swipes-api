@@ -259,6 +259,20 @@ const goalsNotifyAddSenderAlways = (req, res, next) => {
 
   return next();
 };
+const goalsRenamedNotificationData = (req, res, next) => {
+  const {
+    goal_id,
+    title,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = {
+    goal_id,
+    title,
+  };
+
+  return next();
+};
 
 export {
   goalsGetSingle,
@@ -273,4 +287,5 @@ export {
   goalsMilestoneRemovedNotificationData,
   goalsNotifyNotificationData,
   goalsNotifyAddSenderAlways,
+  goalsRenamedNotificationData,
 };

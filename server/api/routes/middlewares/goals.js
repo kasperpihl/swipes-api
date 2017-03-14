@@ -576,6 +576,30 @@ const goalsRename = valLocals('goalsRename', {
       return next(err);
     });
 });
+const goalsRenameQueueMessage = valLocals('goalsRenameQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  title: string.min(1).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    title,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    goal_id,
+    title,
+    event_type: 'goal_renamed',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
 
 export {
   goalsCreate,
@@ -595,4 +619,5 @@ export {
   goalsNotifyQueueMessage,
   goalsNotify,
   goalsRename,
+  goalsRenameQueueMessage,
 };

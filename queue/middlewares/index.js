@@ -69,6 +69,11 @@ const goal_notify = notifyWrapper([
   notify.notifySendEventToAllInCompany,
 ]);
 
+const goal_renamed = notifyWrapper([
+  goals.goalsRenamedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsStepCompletedNotificationData,
@@ -189,6 +194,7 @@ export {
   goal_milestone_added,
   goal_milestone_removed,
   goal_notify,
+  goal_renamed,
   step_completed,
   milestone_created,
   milestone_archived,

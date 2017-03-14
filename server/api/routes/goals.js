@@ -30,6 +30,7 @@ import {
   goalsNotifyQueueMessage,
   goalsNotify,
   goalsRename,
+  goalsRenameQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -91,11 +92,12 @@ authed.all('/goals.rename',
     title: string.min(1).require(),
   }),
   goalsRename,
+  goalsRenameQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
     title: string.require(),
   }));
-// Event goal_renamed
 
 
 authed.all('/goals.archive',
