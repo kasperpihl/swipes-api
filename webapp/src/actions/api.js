@@ -49,7 +49,7 @@ const request = (options, data) => (dispatch, getState) => {
   ];
 
   const body = Object.assign({}, { token: getState().getIn(['connection', 'token']) }, data);
-  const state = getState();
+  let state = getState();
   const updateRequired = state.getIn(['main', 'versionInfo', 'updateRequired']);
   const reloadRequired = state.getIn(['main', 'versionInfo', 'reloadRequired']);
   if (updateRequired || reloadRequired) {
@@ -74,7 +74,7 @@ const request = (options, data) => (dispatch, getState) => {
       body: JSON.stringify(body),
     },
   }).then((res) => {
-    const state = getState();
+    state = getState();
 
     command = options.resultAction || command;
       // Dispatch an action with the command as type
@@ -87,11 +87,15 @@ const request = (options, data) => (dispatch, getState) => {
     }
     handleUpdatesNeeded(res.payload, state, dispatch);
 
-    dispatch({
-      type: command,
-      payload: res.payload,
-      meta: res.meta,
-    });
+    if (res.payload && res.payload.ok) {
+      dispatch({
+        type: command,
+        payload: res.payload,
+        meta: res.meta,
+      });
+    } else if (process.env.NODE_ENV !== 'production') {
+      console.warn(command, res.payload);
+    }
 
       // Let's return a promise for convenience.
     return Promise.resolve(res.payload);

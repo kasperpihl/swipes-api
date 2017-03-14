@@ -108,8 +108,8 @@ export default class Socket {
     if (!type) {
       return;
     }
-
-    this.store.dispatch({ type, payload: payload && payload.data });
+    const socketData = Object.assign({ ok: true }, payload && payload.data);
+    this.store.dispatch({ type, payload: socketData });
     if (payload && payload.notification_data && Object.keys(payload.notification_data).length) {
       this.store.dispatch({
         type: types.NOTIFICATION_ADD,

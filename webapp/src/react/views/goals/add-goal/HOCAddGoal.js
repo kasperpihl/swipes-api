@@ -189,7 +189,7 @@ class HOCAddGoal extends PureComponent {
   onRemoveAttachment(id) {
     let { attachments, attachmentOrder } = this.state;
     attachments = attachments.delete(id);
-    attachmentOrder = attachmentOrder.filter(a => a !== id);
+    attachmentOrder = attachmentOrder.filter(b => b !== id);
     this.updateState({ attachments, attachmentOrder });
   }
   onTemplateClick(template) {
@@ -264,7 +264,7 @@ class HOCAddGoal extends PureComponent {
   saveToCache() {
     const { saveCache } = this.props;
     const { state } = this;
-    const cache = {
+    const cache2 = {
       title: state.title,
       handoff: state.handoff,
       flags: state.flags,
@@ -273,7 +273,7 @@ class HOCAddGoal extends PureComponent {
       attachments: state.attachments,
       attachmentOrder: state.attachmentOrder,
     };
-    saveCache('add-goal', fromJS(cache));
+    saveCache('add-goal', fromJS(cache2));
   }
   clickedAssign(id, e) {
     const { selectAssignees } = this.props;
@@ -402,11 +402,11 @@ class HOCAddGoal extends PureComponent {
     if (!this.isReadyToCreate()) {
       return undefined;
     }
-
+    const pl = 'Write a message to motivate everyone working on the goal. Add a goal description.';
     return (
       <Section title="Goal Message">
         <HandoffWriteMessage
-          placeholder="Write a message to motivate everyone working on the goal. Add a goal description."
+          placeholder={pl}
           text={handoff}
           userId={me.get('id')}
           onChange={this.onHandoffChange}
