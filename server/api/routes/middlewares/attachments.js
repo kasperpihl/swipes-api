@@ -55,6 +55,33 @@ const attachmentsAdd = valLocals('attachmentsAdd', {
       return next(err);
     });
 });
+const attachmentsAddQueueMessage = valLocals('attachmentsAddQueueMessage', {
+  user_id: string.require(),
+  target_id: string.require(),
+  attachment: object.require(),
+  attachment_order: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    target_id,
+    attachment,
+    attachment_order,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    target_id,
+    attachment,
+    attachment_order,
+    event_type: 'attachment_added',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: target_id,
+  });
+
+  return next();
+});
 const attachmentsRename = valLocals('attachmentsRename', {
   user_id: string.require(),
   target_id: string.require(),
@@ -76,6 +103,33 @@ const attachmentsRename = valLocals('attachmentsRename', {
       return next(err);
     });
 });
+const attachmentsRenameQueueMessage = valLocals('attachmentsRenameQueueMessage', {
+  user_id: string.require(),
+  target_id: string.require(),
+  attachment_id: string.require(),
+  title: string.min(1).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    target_id,
+    attachment_id,
+    title,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    target_id,
+    attachment_id,
+    title,
+    event_type: 'attachment_renamed',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: target_id,
+  });
+
+  return next();
+});
 const attachmentsDelete = valLocals('attachmentsDelete', {
   user_id: string.require(),
   target_id: string.require(),
@@ -94,6 +148,30 @@ const attachmentsDelete = valLocals('attachmentsDelete', {
     .catch((err) => {
       return next(err);
     });
+});
+const attachmentsDeleteQueueMessage = valLocals('attachmentsDeleteQueueMessage', {
+  user_id: string.require(),
+  target_id: string.require(),
+  attachment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    target_id,
+    attachment_id,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    target_id,
+    attachment_id,
+    event_type: 'attachment_deleted',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: target_id,
+  });
+
+  return next();
 });
 const attachmentsReorder = valLocals('attachmentsReorder', {
   user_id: string.require(),
@@ -114,10 +192,38 @@ const attachmentsReorder = valLocals('attachmentsReorder', {
       return next(err);
     });
 });
+const attachmentsReorderQueueMessage = valLocals('attachmentsReorderQueueMessage', {
+  user_id: string.require(),
+  target_id: string.require(),
+  attachment_order: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    target_id,
+    attachment_order,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    target_id,
+    attachment_order,
+    event_type: 'attachment_reordered',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: target_id,
+  });
+
+  return next();
+});
 
 export {
   attachmentsAdd,
   attachmentsRename,
   attachmentsDelete,
   attachmentsReorder,
+  attachmentsAddQueueMessage,
+  attachmentsRenameQueueMessage,
+  attachmentsDeleteQueueMessage,
+  attachmentsReorderQueueMessage,
 };

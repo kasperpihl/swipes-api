@@ -1,4 +1,5 @@
 import * as goals from './goals';
+import * as attachments from './attachments';
 import * as milestones from './milestones';
 import * as ways from './ways';
 import * as users from './users';
@@ -117,6 +118,26 @@ const notifications_seen_ids = [
   notify.notifyCommonRethinkdb,
 ];
 
+const attachment_added = notifyWrapper([
+  attachments.attachmentsAddedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const attachment_renamed = notifyWrapper([
+  attachments.attachmentsRenamedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const attachment_deleted = notifyWrapper([
+  attachments.attachmentsDeletedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const attachment_reordered = notifyWrapper([
+  attachments.attachmentsReorderedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const xendo_user_signup = xendoWrapper([
   xendo.xendoUserSignUp,
 ]);
@@ -150,6 +171,10 @@ export {
   notifications_seen_ts,
   notifications_seen_ts_history_updated,
   notifications_seen_ids,
+  attachment_added,
+  attachment_renamed,
+  attachment_deleted,
+  attachment_reordered,
   xendo_user_signup,
   xendo_remove_service_from_user,
   xendo_add_service_to_user,

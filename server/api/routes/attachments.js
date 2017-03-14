@@ -13,7 +13,14 @@ import {
   attachmentsRename,
   attachmentsDelete,
   attachmentsReorder,
+  attachmentsAddQueueMessage,
+  attachmentsRenameQueueMessage,
+  attachmentsDeleteQueueMessage,
+  attachmentsReorderQueueMessage,
 } from './middlewares/attachments';
+import {
+  notificationsPushToQueue,
+} from './middlewares/notifications';
 import {
   valBody,
   valResponseAndSend,
@@ -40,13 +47,13 @@ authed.all('/attachments.add',
   linksCreate,
   linksAddPermission,
   attachmentsAdd,
+  attachmentsAddQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     target_id: string.require(),
     attachment: object.require(),
     attachment_order: array.require(),
   }));
-// Event: attachment_added
-
 
 authed.all('/attachments.rename',
   valBody({
@@ -55,12 +62,13 @@ authed.all('/attachments.rename',
     title: string.min(1).require(),
   }),
   attachmentsRename,
+  attachmentsRenameQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     target_id: string.require(),
     attachment_id: string.require(),
     title: string.min(1).require(),
   }));
-// Event: attachment_renamed
 
 authed.all('/attachments.delete',
   valBody({
@@ -68,11 +76,12 @@ authed.all('/attachments.delete',
     attachment_id: string.require(),
   }),
   attachmentsDelete,
+  attachmentsDeleteQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     target_id: string.require(),
     attachment_id: string.require(),
   }));
-// Event: attachment_deleted
 
 authed.all('/attachments.reorder',
   valBody({
@@ -80,11 +89,12 @@ authed.all('/attachments.reorder',
     attachment_order: array.require(),
   }),
   attachmentsReorder,
+  attachmentsReorderQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     target_id: string.require(),
     attachment_order: array.require(),
   }));
-// Event: attachment_reordered
 
 export {
   authed,
