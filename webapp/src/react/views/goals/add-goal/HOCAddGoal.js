@@ -329,14 +329,12 @@ class HOCAddGoal extends PureComponent {
     return undefined;
   }
   renderNavbar() {
-    const { target } = this.props;
     const { title } = this.state;
 
     return (
       <div className="add-goal__header">
         <HOCHeaderTitle
           onChange={this.onInputChange}
-          target={target}
           delegate={this}
           onKeyDown={this.onTitleKeyUp}
           value={title}

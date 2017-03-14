@@ -2,16 +2,17 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import * as a from 'actions';
-import { setupCachedCallback, setupDelegate } from 'classes/utils';
+import { setupDelegate } from 'classes/utils';
 
 import './styles/header-title.scss';
 
-class HOCHeaderTitle extends Component {
+export default class HOCHeaderTitle extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onClickCached = setupCachedCallback(this.onClick, this);
+
     this.callDelegate = setupDelegate(props.delegate);
+    this.onClick = this.callDelegate.bind(null, 'onTitleClick');
   }
   componentDidMount() {
     const { input } = this.refs;
@@ -19,8 +20,7 @@ class HOCHeaderTitle extends Component {
   }
   renderInputTitle(placeholder) {
     const {
-      history, // eslint-disable-line
-      target, // eslint-disable-line
+      title,
       pop, // eslint-disable-line
       children, // eslint-disable-line
       delegate, // eslint-disable-line
@@ -32,44 +32,27 @@ class HOCHeaderTitle extends Component {
         type="text"
         ref="input"
         {...rest}
-        placeholder={placeholder}
         className="header-title__input"
         key="header-input"
       />
     );
   }
-  renderTitle(crumb) {
+  renderTitle() {
     const { title, subtitle } = this.props;
-    const titleText = title || crumb.get('title');
 
     return (
-      <div className="header-title__title" key="header-title">
-        {titleText}
+      <div className="header-title__title" key="header-title" onClick={this.onClick}>
+        {title}
         <div className="header-title__subtitle">{subtitle}</div>
       </div>
     );
   }
   renderContent() {
-    const { history, title, placeholder } = this.props;
-    if (!history && title) {
-      return this.renderTitle();
+    const { title, placeholder } = this.props;
+    if (placeholder) {
+      return this.renderInputTitle(placeholder);
     }
-
-    if (!history) {
-      return undefined;
-    }
-
-    return history.map((crumb, i) => {
-      const isLast = (i + 1) === history.size;
-
-      if (isLast && !placeholder) {
-        return this.renderTitle(crumb, i);
-      } else if (isLast && placeholder) {
-        return this.renderInputTitle(placeholder);
-      }
-
-      return undefined;
-    });
+    return this.renderTitle();
   }
   render() {
     const { children } = this.props;
@@ -85,26 +68,12 @@ class HOCHeaderTitle extends Component {
   }
 }
 
-const { object, func, string, array, oneOfType } = PropTypes;
+const { object, string, array, oneOfType } = PropTypes;
 
 HOCHeaderTitle.propTypes = {
-  target: string,
   title: string,
   placeholder: string,
   subtitle: string,
-  history: list,
   delegate: object,
   children: oneOfType([object, array]),
-  pop: func,
 };
-
-function mapStateToProps(state, ownProps) {
-  return {
-    history: state.getIn(['navigation', ownProps.target, 'stack']),
-  };
-}
-
-
-export default connect(mapStateToProps, {
-  pop: a.navigation.pop,
-})(HOCHeaderTitle);

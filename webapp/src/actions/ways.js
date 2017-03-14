@@ -9,7 +9,6 @@ export const save = (options, title, goal) => (d, getState) => {
 
 export const load = (options, callback) => (d, getState) => {
   const loadWays = () => getState().getIn([
-    'main',
     'ways',
   ]).sort((b, c) => b.get('title').localeCompare(c.get('title'))).toArray();
   const deletingIds = {};

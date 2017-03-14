@@ -1,8 +1,8 @@
 import TabMenu from 'context-menus/tab-menu/TabMenu';
-import { List, Map } from 'immutable';
-import GoalsUtil from 'classes/goals-util';
+import { List, Map, fromJS } from 'immutable';
 import { randomString } from 'classes/utils';
 import * as a from './';
+import { cache } from './core';
 
 const updateGoal = (goalId, goal) => a.api.request('goals.update', {
   goal_id: goalId,
@@ -52,10 +52,10 @@ export const addToCollection = (goalId, content) => (d, getState) => {
 export const addGoal = (goal, organizationId, message, flags) => (d, getState) => {
   if (!goal.step_order.length) {
     const myId = getState().getIn(['me', 'id']);
-    const gId = randomString(6);
-    goal.step_order.push(gId);
-    goal.steps[gId] = {
-      id: gId,
+    const sId = randomString(6);
+    goal.step_order.push(sId);
+    goal.steps[sId] = {
+      id: sId,
       title: goal.title,
       assignees: [myId],
     };
@@ -68,6 +68,10 @@ export const addGoal = (goal, organizationId, message, flags) => (d, getState) =
   }));
 };
 
+export const rename = (goalId, title) => a.api.request('goals.rename', {
+  goal_id: goalId,
+  title,
+});
 
 export const archive = goalId => d => d(a.api.request('goals.archive', { goal_id: goalId }));
 
@@ -75,7 +79,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   assignees = assignees || [];
 
   const state = getState();
-  let currentRecent = state.getIn(['main', 'recentAssignees']) || [];
+  let currentRecent = state.getIn(['cache', 'recentAssignees']) || [];
   if (currentRecent.size) {
     currentRecent = currentRecent.toJS();
   }
@@ -195,7 +199,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     component: TabMenu,
     onClose: () => {
       if (recent.length) {
-        d(a.main.updateRecentAssignees(recent));
+        d(cache.save('recentAssignees', fromJS([...new Set(recent.concat(currentRecent))])));
       }
     },
     props: {
@@ -237,9 +241,4 @@ export const completeStep = (gId, handoff) => (d, getState) => {
     message: handoff.get('message'),
     assignees,
   }));
-};
-
-
-export const attachToGoal = (shareObj, goalId) => (d, getState) => {
-
 };

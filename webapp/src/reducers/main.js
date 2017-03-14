@@ -51,19 +51,6 @@ export default function main(state = initialState, action) {
     }
 
     // ======================================================
-    // Update Recent
-    // ======================================================
-    case types.UPDATE_RECENT_ASSIGNEES: {
-      let currentCache = state.get('recentAssignees');
-      if (currentCache) {
-        currentCache = currentCache.toJS();
-      }
-      currentCache = currentCache || [];
-
-      return state.set('recentAssignees', fromJS([...new Set(payload.concat(currentCache))]));
-    }
-
-    // ======================================================
     // Preview
     // ======================================================
     case types.PREVIEW_LOADING: {
@@ -71,18 +58,6 @@ export default function main(state = initialState, action) {
     }
     case types.PREVIEW: {
       return state.set('preview', Map(payload));
-    }
-
-    // ======================================================
-    // Note
-    // ======================================================
-    case types.NOTE_SHOW: {
-      const { id } = payload;
-      const newVal = (state.get('sideNoteId') === id) ? null : id;
-      return state.set('sideNoteId', newVal);
-    }
-    case types.NOTE_HIDE: {
-      return state.set('sideNoteId', null);
     }
 
     default:

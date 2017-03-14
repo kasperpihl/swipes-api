@@ -20,6 +20,12 @@ export default function goalsReducer(state = initialState, action) {
       });
       return goals;
     }
+    case 'goals.rename': {
+      if (payload.ok) {
+        state = state.setIn([payload.goal_id, 'title'], payload.title);
+      }
+      return state;
+    }
     case 'steps.add': {
       if (payload.ok) {
         state = state.setIn([payload.goal_id, 'step_order'],

@@ -49,7 +49,22 @@ class HOCGoalOverview extends PureComponent {
       navPop();
     }
   }
-
+  onTitleClick(e) {
+    const options = this.getOptionsForE(e);
+    const { goal, renameGoal, inputMenu } = this.props;
+    inputMenu({
+      ...options,
+      text: goal.get('title'),
+      buttonLabel: 'Rename',
+    }, (title) => {
+      if (title !== goal.get('title') && title.length) {
+        this.setLoadingState('title', 'Renaming...');
+        renameGoal(goal.get('id'), title).then(() => {
+          this.clearLoadingState('title');
+        });
+      }
+    });
+  }
   onStepClick(i, e) {
     const { inputMenu, contextMenu, goal, removeStep, renameStep } = this.props;
     const helper = this.getHelper();
@@ -99,7 +114,7 @@ class HOCGoalOverview extends PureComponent {
     });
   }
 
-  onStepCheck(i) {
+  onStepCheck(i, e) {
     const helper = this.getHelper();
     const currentI = helper.getCurrentStepIndex();
     if (i >= currentI) {
@@ -108,6 +123,7 @@ class HOCGoalOverview extends PureComponent {
     const step = helper.getStepByIndex(i);
     const _target = (step && step.get('id')) || '_complete';
     this.onHandoff(_target, 'Handoff');
+    e.stopPropagation();
   }
 
   onHandoff(_target, title, assignees) {
@@ -311,10 +327,14 @@ class HOCGoalOverview extends PureComponent {
   }
 
   renderHeader() {
-    const { target } = this.props;
+    const { goal } = this.props;
+
     return (
       <div className="add-goal__header">
-        <HOCHeaderTitle target={target}>
+        <HOCHeaderTitle
+          title={this.getLoadingState('title').loadingLabel || goal.get('title')}
+          delegate={this}
+        >
           <Button
             text="Give Feedback"
             onClick={this.onNotify('_feedback', 'Give Feedback')}
@@ -360,6 +380,7 @@ class HOCGoalOverview extends PureComponent {
   }
   render() {
     const { goal } = this.props;
+
     if (!goal) {
       return <div />;
     }
@@ -375,21 +396,21 @@ class HOCGoalOverview extends PureComponent {
   }
 }
 
-const { func, string } = PropTypes;
+const { func } = PropTypes;
 
 HOCGoalOverview.propTypes = {
   goal: map,
   addStep: func,
-  navPush: func,
+  confirm: func,
   me: map,
   navPop: func,
-  target: string,
   inputMenu: func,
   archive: func,
   saveWay: func,
   selectAssignees: func,
   openSecondary: func,
-  reassignStep: func,
+  renameGoal: func,
+  assignStep: func,
   renameStep: func,
   removeStep: func,
   contextMenu: func,
@@ -407,6 +428,7 @@ export default connect(mapStateToProps, {
   archive: a.goals.archive,
   contextMenu: a.main.contextMenu,
   addStep: steps.add,
+  renameGoal: a.goals.rename,
   removeStep: steps.remove,
   renameStep: steps.rename,
   assignStep: steps.assign,

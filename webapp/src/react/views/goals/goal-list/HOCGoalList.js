@@ -271,11 +271,9 @@ class HOCGoalList extends PureComponent {
     }
   }
   renderHeader() {
-    const { target } = this.props;
-
     return (
       <div className="goals-list__header">
-        <HOCHeaderTitle target={target}>
+        <HOCHeaderTitle title="Goals">
           <Button text="Add Goal" primary onClick={this.onAddGoal} />
         </HOCHeaderTitle>
         {this.renderTabbar()}
@@ -338,7 +336,7 @@ function mapStateToProps(state) {
 }
 
 
-const { func, object, string } = PropTypes;
+const { func, object } = PropTypes;
 HOCGoalList.propTypes = {
   goals: map,
   cache: map,
@@ -352,7 +350,6 @@ HOCGoalList.propTypes = {
   selectAssignees: func,
   selectGoalType: func,
   selectMilestone: func,
-  target: string,
   // removeThis: PropTypes.string.isRequired
 };
 

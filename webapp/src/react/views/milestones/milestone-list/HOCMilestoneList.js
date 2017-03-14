@@ -16,11 +16,9 @@ class HOCMilestoneList extends PureComponent {
   componentDidMount() {
   }
   renderHeader() {
-    const { target } = this.props;
-
     return (
       <div className="milestone-list__header">
-        <HOCHeaderTitle target={target} />
+        <HOCHeaderTitle title="Milestones" />
       </div>
     );
   }

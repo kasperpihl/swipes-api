@@ -217,7 +217,7 @@ class HOCViewController extends PureComponent {
     }
     const { fullscreen } = this.state;
     const { navigation } = this.props;
-    const closeButton = (target !== 'primary') ? (
+    const closeButton = (target !== 'primary' && !navigation.get('locked')) ? (
       <Button
         small
         frameless
@@ -248,14 +248,14 @@ class HOCViewController extends PureComponent {
       />
     ) : undefined;
 
-    const hideBreadCrumbs = !closeButton;
+    const hideBreadCrumbs = !closeButton && !lockButton && !fullscreenButton;
 
     return (
       <div className="view-container__header">
         <HOCBreadCrumbs target={target} hidden={hideBreadCrumbs} />
         <div className="view-container__actions">
-          {lockButton}
           {fullscreenButton}
+          {lockButton}
           {closeButton}
         </div>
       </div>

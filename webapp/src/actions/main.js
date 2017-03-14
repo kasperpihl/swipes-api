@@ -1,8 +1,4 @@
 import * as types from 'constants';
-import {
-  convertToRaw,
-  EditorState,
-} from 'draft-js';
 import * as a from './';
 
 export const setStatus = (status, nextRetry) => ({
@@ -55,11 +51,6 @@ export const markNotifications = payload => (dp) => {
 export const openSlackIn = id => ({ type: types.SLACK_OPEN_IN, payload: { id } });
 
 // ======================================================
-// Update Recent
-// ======================================================
-export const updateRecentAssignees = payload => ({ type: types.UPDATE_RECENT_ASSIGNEES, payload });
-
-// ======================================================
 // Browser
 // ======================================================
 export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondary(from, {
@@ -73,6 +64,11 @@ export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondar
 // ======================================================
 // Account related
 // ======================================================
+export const forceLogout = () => {
+  window.analytics.logout();
+  localStorage.clear();
+  window.location.replace('/');
+};
 export const signout = cb => dp => dp(a.api.request('users.signout')).then((res) => {
   if (cb) {
     cb(res);
@@ -81,11 +77,6 @@ export const signout = cb => dp => dp(a.api.request('users.signout')).then((res)
     dp(forceLogout);
   }
 });
-export const forceLogout = () => {
-  window.analytics.logout();
-  localStorage.clear();
-  window.location.replace('/');
-};
 
 
 // ======================================================

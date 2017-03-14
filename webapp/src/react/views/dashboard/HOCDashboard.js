@@ -16,6 +16,7 @@ class HOCDashboard extends PureComponent {
     super(props);
     this.state = {
       loading: false,
+      notifications: this.getFilteredNotifications(props.notifications),
     };
     this.onClickCached = setupCachedCallback(this.onClick, this);
     // now use events as onClick: this.onClickCached(i)
@@ -29,8 +30,17 @@ class HOCDashboard extends PureComponent {
   componentWillUnmount() {
     this._unmounted = true;
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.notifications !== this.props.notifications) {
+      this.setState({ notifications: this.getFilteredNotifications(nextProps.notifications) });
+    }
+  }
+  getFilteredNotifications(notifications) {
+    return notifications.filter(n => n.get('receiver'));
+  }
   onMark(id) {
-    const { markNotifications, notifications } = this.props;
+    const { markNotifications } = this.props;
+    const { notifications } = this.state;
     if (notifications.size) {
       let arg = [id];
       if (id === 'all') {
@@ -51,7 +61,7 @@ class HOCDashboard extends PureComponent {
     this._scrollTop = e.target.scrollTop;
   }
   onClickAttachment(nI, i) {
-    const n = this.props.notifications.get(nI);
+    const n = this.state.notifications.get(nI);
     const { goals, preview, target } = this.props;
     const id = n.getIn(['target', 'id']);
     const goal = goals.get(id);
@@ -62,13 +72,14 @@ class HOCDashboard extends PureComponent {
     preview(target, att);
   }
   onClickTitle(i) {
-    const n = this.props.notifications.get(i);
+    const n = this.state.notifications.get(i);
     this.onMarkCached(n.get('id'))();
     if (n && n.getIn(['target', 'id'])) {
       const { goals, navPush } = this.props;
       const goal = goals.get(n.getIn(['target', 'id']));
 
       if (goal) {
+        console.log('g', goal.toJS());
         this.saveState();
         navPush({
           id: 'GoalOverview',
@@ -165,7 +176,14 @@ class HOCDashboard extends PureComponent {
         break;
       }
       case 'goal_notify': {
-        m = m.set('subtitle', `${from} notified ${to} in`);
+        m = m.set('subtitle', `${from} sent a notification`);
+        if (h && h.get('assignees')) {
+          const userString = msgGen.getUserArrayString(h.get('assignees'), {
+            yourself: true,
+            number: 3,
+          });
+          m = m.set('subtitle', `${from} notified ${userString} in`);
+        }
         if (h && h.get('feedback')) {
           m = m.set('subtitle', `${from} gave ${to} feedback in`);
         }
@@ -216,12 +234,11 @@ class HOCDashboard extends PureComponent {
     return m;
   }
   renderHeader() {
-    const { target } = this.props;
     const { loading } = this.state;
 
     return (
       <div className="dashboard-header">
-        <HOCHeaderTitle target={target}>
+        <HOCHeaderTitle title="Dashboard">
           <Button loading={loading} text="Mark all" onClick={this.onMarkCached('all')} />
         </HOCHeaderTitle>
         <div className="notifications__header">Notifications</div>
@@ -229,13 +246,10 @@ class HOCDashboard extends PureComponent {
     );
   }
   render() {
-    let {
-      notifications,
-    } = this.props;
+    let { notifications } = this.state;
     if (notifications) {
       notifications = notifications.map(n => this.messageForNotification(n));
     }
-
     const { savedState } = this.props;
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
 

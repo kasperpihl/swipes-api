@@ -1,10 +1,9 @@
 import { fromJS } from 'immutable';
 import * as types from 'constants';
-import { KEY_PREFIX } from 'redux-persist/constants';
 
 const initialState = fromJS([]);
 
-const shouldKeepNotification = payload => payload && payload.important && !payload.sender;
+const sortFn = (b, c) => c.get('updated_at').localeCompare(b.get('updated_at'));
 
 export default function main(state = initialState, action) {
   const { payload, type } = action;
@@ -13,16 +12,13 @@ export default function main(state = initialState, action) {
       if (!payload.ok) {
         return state;
       }
-      return fromJS(payload.notifications.filter(n => shouldKeepNotification(n)));
+      return fromJS(payload.notifications).sort(sortFn);
     }
 
     // ======================================================
     // Notifications
     // ======================================================
     case types.NOTIFICATION_ADD: {
-      if (!shouldKeepNotification(payload)) {
-        return state;
-      }
       return state.filter(n => n.get('id') !== payload.id).insert(0, fromJS(payload));
     }
     case 'notifications.markAsSeen.ids':
