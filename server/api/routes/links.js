@@ -9,15 +9,8 @@ import {
   valResponseAndSend,
 } from '../utils';
 import {
-  service,
-  linkPermission,
-  linkMeta,
-} from '../validators';
-import {
   linksFindPermissions,
-  linksAddPermission,
   linksGetByIds,
-  linksCreate,
 } from './middlewares/links';
 import {
   serviceWithAuthFromLinkGet,
@@ -35,19 +28,6 @@ authed.all('/links.get',
   linksGetByIds,
   valResponseAndSend({
     links: array.of(object).require(),
-  }));
-
-authed.all('/links.create',
-  valBody({
-    service,
-    permission: linkPermission,
-    meta: linkMeta,
-  }),
-  linksCreate,
-  linksAddPermission,
-  valResponseAndSend({
-    short_url: string.require(),
-    link: object.require(),
   }));
 
 authed.all('/links.preview',

@@ -33,6 +33,7 @@ const attachmentsAdd = valLocals('attachmentsAdd', {
   };
 
   const attachment = {
+    link,
     id: generateSlackLikeId('', 6),
     created_by: user_id,
     created_at: r.now(),

@@ -94,13 +94,20 @@ const linksAddPermission = valLocals('linksAddPermission', {
 });
 
 const linksCreate = valLocals('linksCreate', {
-  service,
-  meta: linkMeta,
+  link: object.as({
+    service,
+    permission: linkPermission,
+    meta: linkMeta,
+  }).require(),
 }, (req, res, next, setLocals) => {
+  const {
+    link,
+  } = res.locals;
   const {
     service,
     meta,
-  } = res.locals;
+    permission,
+  } = link;
 
   const checksum = hash({ service });
   const insert_doc = Object.assign({ checksum }, { service, meta });
@@ -111,6 +118,7 @@ const linksCreate = valLocals('linksCreate', {
 
       setLocals({
         link: insertedObj,
+        permission,
       });
 
       return next();
