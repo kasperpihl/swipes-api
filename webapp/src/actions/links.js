@@ -110,6 +110,7 @@ export const preview = (from, data) => (d) => {
       title: 'Note',
       props: {
         id: data.get('id'),
+        title: data.get('title'),
       },
     }));
   } else if (data.get('name') === 'swipes' && data.get('type') === 'url') {

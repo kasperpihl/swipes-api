@@ -158,11 +158,10 @@ class HOCSideNote extends PureComponent {
   }
 
   renderHeader() {
-    const { target, note, latestRev } = this.props;
+    const { target, note, latestRev, title } = this.props;
     const name = window.msgGen.getUserString(note.get('updated_by'), { yourself: true });
     const timeString = timeAgo(note.get('updated_at'));
     let subtitle = `Updated by ${name} ${timeString}`;
-    const title = note && note.get('title');
     let buttonHtml;
     if (latestRev < (note.get('rev') || 1)) {
       subtitle = `CONFLICT. Updated by ${name} ${timeString}`;
@@ -231,6 +230,7 @@ HOCSideNote.propTypes = {
   browser: func,
   organizationId: string,
   cacheNote: func,
+  title: string,
   saveNote: func,
   cachedText: object,
   target: string,
