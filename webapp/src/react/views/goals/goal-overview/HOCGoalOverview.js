@@ -5,7 +5,7 @@ import { fromJS } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoadingHandlers } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
-import { steps } from 'swipes-core-js';
+import { steps, ways } from 'swipes-core-js';
 import Section from 'components/section/Section';
 import SWView from 'SWView';
 import Button from 'Button';
@@ -211,7 +211,7 @@ class HOCGoalOverview extends PureComponent {
       goal,
       archive,
       contextMenu,
-      saveWay,
+      createWay,
       confirm,
       inputMenu,
     } = this.props;
@@ -226,7 +226,7 @@ class HOCGoalOverview extends PureComponent {
           }), (title) => {
             this.setLoadingState('dots');
             const helper = this.getHelper();
-            saveWay(options, title, helper.getObjectForWay()).then((res) => {
+            createWay(title, helper.getObjectForWay()).then((res) => {
               if (res && res.ok) {
                 this.clearLoadingState('dots', 'Added way');
               } else {
@@ -406,7 +406,7 @@ HOCGoalOverview.propTypes = {
   navPop: func,
   inputMenu: func,
   archive: func,
-  saveWay: func,
+  createWay: func,
   selectAssignees: func,
   openSecondary: func,
   renameGoal: func,
@@ -424,7 +424,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  saveWay: a.ways.save,
+  createWay: ways.create,
   archive: a.goals.archive,
   contextMenu: a.main.contextMenu,
   addStep: steps.add,

@@ -109,7 +109,7 @@ class AddStepList extends Component {
     const { stepOrder, steps } = this.props;
     let renderedSteps = stepOrder.map((sId, i) => this.renderStep(i, steps.get(sId)));
     renderedSteps = renderedSteps.concat([
-      this.renderStep(steps.size, Map({ title: '' })),
+      this.renderStep(stepOrder.size, Map({ title: '' })),
     ]);
 
     return renderedSteps;

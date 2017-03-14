@@ -1,11 +1,5 @@
 import * as a from 'actions';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
-import { ways } from 'actions/core';
-
-export const save = (options, title, goal) => (d, getState) => {
-  const organizationId = getState().getIn(['me', 'organizations', 0, 'id']);
-  return d(ways.create(title, organizationId, goal));
-};
 
 export const load = (options, callback) => (d, getState) => {
   const loadWays = () => getState().getIn([

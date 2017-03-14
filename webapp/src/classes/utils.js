@@ -11,13 +11,14 @@ export function isShareURL(url) {
 }
 
 export function valAction(actionName, arrayArgs, actionHandler) {
-  return funcWrap(arrayArgs, (valErr) => {
+  function handler(valErr) {
     if (!valErr) {
       return actionHandler(...Array.prototype.slice.call(arguments, 1));
     }
     console.warn(`Redux action [${actionName}]: ${valErr}`);
     return () => {};
-  });
+  }
+  return funcWrap(arrayArgs, handler);
 }
 
 export function iconForService(service) {

@@ -7,13 +7,12 @@ import {
 } from 'valjs';
 
 export const create = valAction('ways.create', [
-  string.require(),
-  string.require(),
+  string.min(1).max(155).require(),
   object.require(),
-], (title, organizationId, goal) => d => d(a.api.request('ways.create', {
+], (title, goal) => (d, getState) => d(a.api.request('ways.create', {
   title,
   goal,
-  organization_id: organizationId,
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 })),
 );
 

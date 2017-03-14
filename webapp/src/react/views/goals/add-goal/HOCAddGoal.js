@@ -1,12 +1,12 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import * as actions from 'actions';
-import { cache } from 'swipes-core-js';
+import * as a from 'actions';
+import { cache, ways } from 'swipes-core-js';
 import Button from 'Button';
 import SWView from 'SWView';
 import { fromJS } from 'immutable';
-import { setupDelegate, bindAll, randomString } from 'classes/utils';
+import { setupDelegate, bindAll, randomString, setupLoadingHandlers } from 'classes/utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HOCAttachments from 'components/attachments/HOCAttachments';
@@ -33,7 +33,7 @@ class HOCAddGoal extends PureComponent {
     if (props.cache) {
       this.state = props.cache.toObject();
     }
-
+    setupLoadingHandlers(this);
     bindAll(this, [
       'clickedAdd',
       'onHandoffChange',
@@ -107,13 +107,28 @@ class HOCAddGoal extends PureComponent {
     });
   }
   onSave(e) {
-    const { saveWay } = this.props;
+    const { createWay, inputMenu } = this.props;
     const goal = this.getGoal();
-    saveWay({
+
+    const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
       alignX: 'right',
-    }, goal);
+    };
+    inputMenu(Object.assign({}, options, {
+      initialValue: goal.title,
+      placeholder: 'Name your Way: Like Development, Design etc.',
+      buttonLabel: 'Save',
+    }), (title) => {
+      this.setLoadingState('saveway');
+      createWay(title, goal).then((res) => {
+        if (res && res.ok) {
+          this.clearLoadingState('saveway', 'Added way');
+        } else {
+          this.clearLoadingState('saveway', '!Something went wrong');
+        }
+      });
+    });
   }
   onTitleKeyUp(e) {
     if (e.keyCode === 13 && this.isReadyToCreate()) {
@@ -304,7 +319,7 @@ class HOCAddGoal extends PureComponent {
     } = this.props;
 
     const goal = this.getGoal();
-    this.setState({ isSubmitting: true, errorLabel: null });
+    this.setLoadingState('create');
     addGoal(goal, organization_id, handoff, flags.toJS()).then((res) => {
       if (res.ok) {
         window.analytics.sendEvent('Created goal');
@@ -312,7 +327,7 @@ class HOCAddGoal extends PureComponent {
         removeCache('add-goal');
         navPop();
       } else {
-        this.setState({ isSubmitting: false, errorLabel: 'Something went wrong' });
+        this.clearLoadingState('create', '!Something went wrong');
       }
     });
   }
@@ -443,13 +458,14 @@ class HOCAddGoal extends PureComponent {
     );
   }
   renderFooter() {
-    const { steps, isSubmitting, errorLabel } = this.state;
+    const { steps } = this.state;
     let saveButton;
     if (this.isReadyToCreate() && steps.size) {
       saveButton = (
         <Button
           text="Save as a Way"
           className="add-goal__btn add-goal__btn--save"
+          {...this.getLoadingState('saveway')}
           onClick={this.onSave}
         />
       );
@@ -464,8 +480,7 @@ class HOCAddGoal extends PureComponent {
             primary
             disabled={!this.isReadyToCreate()}
             className="add-goal__btn add-goal__btn--cta"
-            errorLabel={errorLabel}
-            loading={isSubmitting}
+            {...this.getLoadingState('create')}
             onClick={this.clickedAdd}
           />
         </div>
@@ -499,13 +514,13 @@ const { func, object, string } = PropTypes;
 HOCAddGoal.propTypes = {
   delegate: object,
   navPop: func,
-  target: string,
   removeCache: func,
   addGoal: func,
   organization_id: string,
   saveCache: func,
+  inputMenu: func,
   loadWay: func,
-  saveWay: func,
+  createWay: func,
   selectAssignees: func,
   cache: map,
   me: map,
@@ -520,10 +535,11 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  selectAssignees: actions.goals.selectAssignees,
+  selectAssignees: a.goals.selectAssignees,
   saveCache: cache.save,
   removeCache: cache.remove,
-  addGoal: actions.goals.addGoal,
-  loadWay: actions.ways.load,
-  saveWay: actions.ways.save,
+  addGoal: a.goals.addGoal,
+  loadWay: a.ways.load,
+  createWay: ways.create,
+  inputMenu: a.menus.input,
 })(HOCAddGoal);
