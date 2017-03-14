@@ -34,8 +34,7 @@ class GoalHandoff extends PureComponent {
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
           flags={handoff.get('flags')}
-          goalId={goal.get('id')}
-          enableFlagging
+          targetId={goal.get('id')}
           delegate={delegate}
         />
       </Section>

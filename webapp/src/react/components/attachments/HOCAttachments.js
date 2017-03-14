@@ -1,9 +1,9 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
-import { List } from 'immutable';
-import * as actions from 'actions';
-import { setupCachedCallback, setupDelegate } from 'classes/utils';
+import * as a from 'actions';
+import { attachments as att } from 'swipes-core-js';
+import { setupCachedCallback, setupDelegate, setupLoadingHandlers } from 'classes/utils';
 import Icon from 'Icon';
 import Attachment from './Attachment';
 import './styles/attachments';
@@ -17,9 +17,7 @@ class HOCAttachments extends PureComponent {
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
-    this.state = {
-      loading: false,
-    };
+    setupLoadingHandlers(this);
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
@@ -38,8 +36,6 @@ class HOCAttachments extends PureComponent {
   }
   onDeleteClick(id, e) {
     const {
-      goalId,
-      removeFromCollection,
       confirm,
     } = this.props;
 
@@ -51,131 +47,121 @@ class HOCAttachments extends PureComponent {
       message: 'Are you sure you want to remove this attachment?',
     }, (res) => {
       if (res === 1) {
-        if (goalId) {
-          removeFromCollection(goalId, id).then(() => {
-            window.analytics.sendEvent('Removed attachment');
-          });
-        }
-        this.callDelegate('onRemoveAttachment', id);
+        this.getSwipesLinkObj();
       }
     });
   }
   onAdd(which, e) {
     const {
-      addToCollection,
-      addNote,
-      addToasty,
-      updateToasty,
-      addURL,
-      goalId,
-      openSecondary,
+      inputMenu,
+      targetId,
+      createNote,
       openFind,
     } = this.props;
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
       alignX: 'center',
-      goalId,
+      buttonLabel: 'Add',
     };
-    let toastId;
-    const callback = (progress, type, obj) => {
-      if (progress === 'start') {
-        if (!this._unmounted) {
-          this.setState({ loading: true });
-        }
-        if (type === 'find') {
-          addToasty({ title: 'Adding Attachment', loading: true }).then((tId) => {
-            toastId = tId;
-          });
-        }
-      }
-      if (progress === 'ready') {
-        const succCB = () => {
-          if (!this._unmounted) {
-            this.setState({ loading: false });
-          }
-          if (type === 'find' && toastId) {
-            updateToasty(toastId, { title: 'Added Attachment', completed: true, duration: 3000 });
-          }
-          if (type === 'note' && obj.id) {
-            openSecondary(this.context.target, {
-              id: 'SideNote',
-              title: 'Note',
-              props: {
-                id: obj.id,
-              },
-            });
-          }
-        };
-        if (goalId) {
-          addToCollection(goalId, obj).then(() => {
-            succCB();
-          });
+    if (which === 'find') {
+      openFind(this.context.target, targetId);
+      return;
+    }
+    if (which === 'url') {
+      options.placeholder = 'Enter a URL';
+    } else if (which === 'note') {
+      options.placeholder = 'Enter a URL';
+    }
+    inputMenu(options, (title) => {
+      if (title && title.length) {
+        this.setLoadingState('adding');
+        if (which === 'url') {
+          this.attachToTarget(which, title, title);
         } else {
-          succCB();
-          this.callDelegate('onAddAttachment', obj);
-        }
-        window.analytics.sendEvent('Added attachment', {
-          Type: type,
-        });
-      }
-      if (progress === 'error') {
-        if (!this._unmounted) {
-          this.setState({ loading: false });
-        }
-        if (type === 'find' && toastId) {
-          updateToasty(toastId, { title: 'Error adding attachment', loading: false, duration: 3000 });
+          createNote().then((res) => {
+            if (res && res.ok) {
+              this.attachToTarget(which, res.note.id, title);
+            } else {
+              this.clearLoadingState('adding');
+            }
+          });
         }
       }
+    });
+  }
+  getSwipesLinkObj(type, id, title) {
+    const { myId } = this.props;
+    return {
+      service: {
+        name: 'swipes',
+        type,
+        id,
+      },
+      permission: {
+        account_id: myId,
+      },
+      meta: {
+        title,
+      },
     };
-
-    switch (which) {
+  }
+  attachToTarget(type, id, title) {
+    const linkObj = this.getSwipesLinkObj(type, id, title);
+    const { targetId, addAttachment } = this.props;
+    addAttachment(targetId, linkObj).then(() => {
+      this.clearLoadingState('adding');
+    });
+  }
+  getIconForService(service) {
+    switch (service.get('type')) {
       case 'url':
-        return addURL(options, callback);
+        return 'Hyperlink';
       case 'note':
-        return addNote(options, callback);
-      case 'find':
-        return openFind(this.context.target, callback);
+        return 'Note';
       default:
-        return undefined;
+        return 'Hyperlink';
     }
   }
   renderEmpty() {
     return <div className="attachments__empty">No attachments yet</div>;
   }
+
   renderAttachments() {
     const {
       attachments,
       attachmentOrder: aOrder,
-      enableFlagging,
-      flags = List(),
+      flags,
     } = this.props;
+    const enableFlagging = !!flags;
 
     if (!aOrder.size) {
       return this.renderEmpty();
     }
     return aOrder.map((aId) => {
-      const a = attachments.get(aId);
+      const at = attachments.get(aId);
+      // K_TODO: Backward compatibility remove "|| at" and "|| at.get('title')"
+      const icon = this.getIconForService(at.getIn(['link', 'service']) || at);
+      const title = at.getIn(['link', 'meta', 'title']) || at.get('title');
       return (
         <Attachment
           key={aId}
-          flagged={(flags.indexOf(aId) !== -1)}
+          flagged={(enableFlagging && flags.indexOf(aId) !== -1)}
           onFlag={this.onFlagClickCached(aId)}
           onDelete={this.onDeleteClickCached(aId)}
           onClick={this.onPreviewCached(aId)}
-          icon={a.get('type') === 'note' ? 'Note' : 'Hyperlink'}
-          title={a.get('title')}
+
+          icon={icon}
+          title={title}
           enableFlagging={enableFlagging}
         />
       );
     });
   }
   renderAddAttachments() {
-    const { loading } = this.state;
-
     let className = 'attachments__add-list';
 
-    if (loading) {
+    if (this.getLoadingState('adding').loading) {
       className += ' attachments__add-list--loading';
     }
 
@@ -211,41 +197,36 @@ class HOCAttachments extends PureComponent {
 
 const { func, object, bool, string } = PropTypes;
 HOCAttachments.propTypes = {
-  addNote: func,
-  addToasty: func,
-  addToCollection: func,
-  addURL: func,
+  createNote: func,
+  addAttachment: func,
+  removeAttachment: func,
   attachmentOrder: list,
   attachments: map,
+  targetId: string,
   delegate: object,
-  enableFlagging: bool,
+  inputMenu: func,
+  myId: string,
   flags: list,
-  goalId: string,
   openFind: func,
-  openSecondary: func,
   confirm: func,
   previewLink: func,
-  removeFromCollection: func,
-  updateToasty: func,
 };
 HOCAttachments.contextTypes = {
   target: string,
 };
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    myId: state.getIn(['me', 'id']),
+  };
 }
 
 export default connect(mapStateToProps, {
-  addLinkMenu: actions.links.addMenu,
-  addNote: actions.links.addNote,
-  addToasty: actions.toasty.add,
-  addToCollection: actions.goals.addToCollection,
-  addURL: actions.links.addURL,
-  confirm: actions.menus.confirm,
-  openFind: actions.links.openFind,
-  previewLink: actions.links.preview,
-  removeFromCollection: actions.goals.removeFromCollection,
-  openSecondary: actions.navigation.openSecondary,
-  updateToasty: actions.toasty.update,
+  addAttachment: att.add,
+  removeAttachment: att.remove,
+  createNote: a.notes.create,
+  inputMenu: a.menus.input,
+  confirm: a.menus.confirm,
+  openFind: a.links.openFind,
+  previewLink: a.links.preview,
 })(HOCAttachments);

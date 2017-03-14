@@ -44,7 +44,6 @@ class HOCDashboard extends PureComponent {
     if (notifications.size) {
       let arg = [id];
       if (id === 'all') {
-        // K_TODO: remove the ts from here. not needed after next deployment
         arg = notifications.getIn([0, 'updated_at']);
       }
       if (arg) {

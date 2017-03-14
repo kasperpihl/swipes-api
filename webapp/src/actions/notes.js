@@ -17,8 +17,8 @@ const getServerOrg = (id, getState, include) => {
   return state.getIn(['notes', 'server', id]);
 };
 
-export const create = (oId, text) => dp => dp(a.api.request('notes.create', {
-  organization_id: oId,
+export const create = (text, oId) => (dp, getState) => dp(a.api.request('notes.create', {
+  organization_id: oId || getState().getIn(['me', 'organizations', 0, 'id']),
   text: text || convertToRaw(EditorState.createEmpty().getCurrentContent()),
 }));
 

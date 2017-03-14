@@ -16,7 +16,7 @@ export function valAction(actionName, arrayArgs, actionHandler) {
       return actionHandler(...Array.prototype.slice.call(arguments, 1));
     }
     console.warn(`Redux action [${actionName}]: ${valErr}`);
-    return () => {};
+    return () => Promise.resolve();
   }
   return funcWrap(arrayArgs, handler);
 }
@@ -377,8 +377,7 @@ export function setupLoadingHandlers(ctx) {
   let _loadingStates = fromJS({});
   const defaultObj = {};
   if (!ctx.state) {
-    console.warn('setupLoadingHandlers should be in constructor after this.state = {}');
-    return;
+    ctx.state = {};
   }
   ctx.state._loadingStates = _loadingStates;
   function setLoadingState(name, label) {

@@ -9,7 +9,7 @@ import {
   dbAttachmentsRename,
   dbAttachmentsDelete,
   dbAttachmentsReorder,
-} from './db_utils/steps';
+} from './db_utils/attachments';
 import {
   valLocals,
   generateSlackLikeId,

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import { attachments } from 'swipes-core-js';
 import SWView from 'SWView';
 import Button from 'Button';
 import { setupDelegate, bindAll } from 'classes/utils';
@@ -86,15 +87,11 @@ class HOCFind extends Component {
     });
   }
   findItemAttach(i, e) {
-    const { searchResults, onAttach, attachToGoal } = this.props;
+    const { searchResults, addAttachment, targetId } = this.props;
     const obj = searchResults.get(i);
     const { service, permission, title } = obj.toJS();
     const shareObj = { service, permission, meta: { title } };
-    if (onAttach) {
-      onAttach(shareObj, e);
-    } else {
-      attachToGoal(shareObj);
-    }
+    addAttachment(targetId, shareObj);
   }
   findSearch(query) {
     const { search } = this.props;
@@ -240,7 +237,7 @@ class HOCFind extends Component {
 const { func, bool, string, object } = PropTypes;
 
 HOCFind.propTypes = {
-  onAttach: func,
+  targetId: string,
   delegate: object,
   openPreview: func,
   search: func,
@@ -264,7 +261,7 @@ function mapStateToProps(state) {
 
 const ConnectedHOCFind = connect(mapStateToProps, {
   openPreview: actions.links.openPreview,
-  attachToGoal: actions.goals.attachToGoal,
+  addAttachment: attachments.add,
   request: actions.api.request,
   search: actions.main.search,
 })(HOCFind);
