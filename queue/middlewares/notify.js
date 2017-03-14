@@ -174,6 +174,8 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       created_at: r.now(),
       updated_at: r.now(),
       receiver: true,
+      sender: false,
+      important: false,
       ...notificationData,
     };
     let notificationMap = userNotificationMap[userId] || {};
@@ -199,14 +201,14 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     return next();
   }
 
-  const filteredNotifications = notifications.map((notification) => {
+  const mappedNotifications = notifications.map((notification) => {
     if (event_type === 'goal_notify') {
       if (notification.user_id !== notification.done_by) {
         notification.important = true;
       }
-      if (notification.user_id === notification.done_by && !notifyMyself) {
-        notification.receiver = false;
-      }
+    }
+    if (notification.user_id === notification.done_by && !notifyMyself) {
+      notification.receiver = false;
     }
     if (notification.user_id === notification.done_by) {
       notification.sender = true;
@@ -215,7 +217,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     return notification;
   });
 
-  return dbInsertMultipleNotifications({ notifications: filteredNotifications })
+  return dbInsertMultipleNotifications({ notifications: mappedNotifications })
     .then((dbResults) => {
       if (!dbResults.changes) {
         return next();
