@@ -15,9 +15,6 @@ import {
   valLocals,
   generateSlackLikeId,
 } from '../../utils';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
 
 const stepsAdd = valLocals('stepsAdd', {
   user_id: string.require(),

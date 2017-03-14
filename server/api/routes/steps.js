@@ -3,6 +3,7 @@ import {
   string,
   object,
   array,
+  date,
 } from 'valjs';
 import {
   stepsAdd,
@@ -40,7 +41,15 @@ authed.all('/steps.add',
   notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
-    step: object.require(),
+    step: object.as({
+      id: string.require(),
+      created_by: string.require(),
+      created_at: date.require(),
+      updated_at: date.require(),
+      updated_by: string.require(),
+      title: string.min(1).require(),
+      assignees: array.require(),
+    }).require(),
     step_order: array.require(),
   }));
 
