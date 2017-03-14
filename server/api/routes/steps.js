@@ -10,7 +10,15 @@ import {
   stepsDelete,
   stepsReorder,
   stepsAssign,
+  stepsAddQueueMessage,
+  stepsRenameQueueMessage,
+  stepsDeleteQueueMessage,
+  stepsReorderQueueMessage,
+  stepsAssignQueueMessage,
 } from './middlewares/steps';
+import {
+  notificationsPushToQueue,
+} from './middlewares/notifications';
 import {
   valBody,
   valResponseAndSend,
@@ -28,26 +36,28 @@ authed.all('/steps.add',
     }).require(),
   }),
   stepsAdd,
+  stepsAddQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
     step: object.require(),
     step_order: array.require(),
   }));
-// Event: step_added
 
 authed.all('/steps.rename',
   valBody({
     goal_id: string.require(),
     step_id: string.require(),
-    title: string.require().min(1),
+    title: string.min(1).require(),
   }),
   stepsRename,
+  stepsRenameQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
-    title: string.require(),
+    title: string.min(1).require(),
   }));
-// Event step_renamed
 
 authed.all('/steps.delete',
   valBody({
@@ -55,11 +65,12 @@ authed.all('/steps.delete',
     step_id: string.require(),
   }),
   stepsDelete,
+  stepsDeleteQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
   }));
-// Event: step_deleted
 
 authed.all('/steps.reorder',
   valBody({
@@ -68,12 +79,13 @@ authed.all('/steps.reorder',
     current_step_id: string.require(),
   }),
   stepsReorder,
+  stepsReorderQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
     step_order: array.require(),
     status: object.require(),
   }));
-// Event: step_reordered
 
 authed.all('/steps.assign',
   valBody({
@@ -82,12 +94,13 @@ authed.all('/steps.assign',
     assignees: array.of(string).require(),
   }),
   stepsAssign,
+  stepsAssignQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
     assignees: array.require(),
   }));
-// Event: step_assigned
 
 export {
   authed,

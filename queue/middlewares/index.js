@@ -1,4 +1,5 @@
 import * as goals from './goals';
+import * as steps from './steps';
 import * as attachments from './attachments';
 import * as milestones from './milestones';
 import * as ways from './ways';
@@ -138,6 +139,31 @@ const attachment_reordered = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const step_added = notifyWrapper([
+  steps.stepsAddedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const step_renamed = notifyWrapper([
+  steps.stepsRenamedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const step_deleted = notifyWrapper([
+  steps.stepsDeletedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const step_reordered = notifyWrapper([
+  steps.stepsReorderedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const step_assigned = notifyWrapper([
+  steps.stepsAssignedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const xendo_user_signup = xendoWrapper([
   xendo.xendoUserSignUp,
 ]);
@@ -175,6 +201,11 @@ export {
   attachment_renamed,
   attachment_deleted,
   attachment_reordered,
+  step_added,
+  step_renamed,
+  step_deleted,
+  step_reordered,
+  step_assigned,
   xendo_user_signup,
   xendo_remove_service_from_user,
   xendo_add_service_to_user,
