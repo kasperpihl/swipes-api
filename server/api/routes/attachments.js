@@ -51,7 +51,18 @@ authed.all('/attachments.add',
   notificationsPushToQueue,
   valResponseAndSend({
     target_id: string.require(),
-    attachment: object.require(),
+    attachment: object.as({
+      id: string.require(),
+      created_at: string.format('iso8601').require(),
+      created_by: string.require(),
+      link: object.as({
+        service,
+        permission: object.as({
+          short_url: string.require(),
+        }),
+        meta: linkMeta,
+      }).require(),
+    }).require(),
     attachment_order: array.require(),
   }));
 
