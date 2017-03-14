@@ -1,3 +1,4 @@
+import r from 'rethinkdb';
 import {
   string,
   array,
@@ -19,6 +20,7 @@ import {
 } from '../../../middlewares/swipes-error';
 
 const stepsAdd = valLocals('stepsAdd', {
+  user_id: string.require(),
   goal_id: string.require(),
   step: object.as({
     title: string.min(1).require(),
@@ -26,13 +28,20 @@ const stepsAdd = valLocals('stepsAdd', {
   }).require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     goal_id,
     step,
   } = res.locals;
 
-  step.id = generateSlackLikeId('', 6);
+  const mutatedStep = Object.assign({}, step, {
+    id: generateSlackLikeId('', 6),
+    created_by: user_id,
+    created_at: r.now(),
+    updated_at: r.now(),
+    updated_by: user_id,
+  });
 
-  dbStepsAdd({ goal_id, step })
+  dbStepsAdd({ user_id, goal_id, step: mutatedStep })
     .then((results) => {
       const changes = results.changes[0];
 
@@ -58,17 +67,19 @@ const stepsAdd = valLocals('stepsAdd', {
     });
 });
 const stepsRename = valLocals('stepsRename', {
+  user_id: string.require(),
   goal_id: string.require(),
   step_id: string.require(),
   title: string.require().min(1),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     goal_id,
     step_id,
     title,
   } = res.locals;
 
-  dbStepsRename({ goal_id, step_id, title })
+  dbStepsRename({ user_id, goal_id, step_id, title })
     .then(() => {
       return next();
     })
@@ -77,15 +88,17 @@ const stepsRename = valLocals('stepsRename', {
     });
 });
 const stepsDelete = valLocals('stepsDelete', {
+  user_id: string.require(),
   goal_id: string.require(),
   step_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     goal_id,
     step_id,
   } = res.locals;
 
-  dbStepsDelete({ goal_id, step_id })
+  dbStepsDelete({ user_id, goal_id, step_id })
     .then(() => {
       return next();
     })
@@ -94,17 +107,19 @@ const stepsDelete = valLocals('stepsDelete', {
     });
 });
 const stepsReorder = valLocals('stepsReorder', {
+  user_id: string.require(),
   goal_id: string.require(),
   step_order: array.of(string).require(),
   current_step_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     goal_id,
     step_order,
     current_step_id,
   } = res.locals;
 
-  dbStepsReorder({ goal_id, step_order, current_step_id })
+  dbStepsReorder({ user_id, goal_id, step_order, current_step_id })
     .then((results) => {
       const changes = results.changes[0];
       let status = {};
@@ -124,17 +139,19 @@ const stepsReorder = valLocals('stepsReorder', {
     });
 });
 const stepsAssign = valLocals('stepsAssign', {
+  user_id: string.require(),
   goal_id: string.require(),
   step_id: string.require(),
   assignees: array.of(string).require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     goal_id,
     step_id,
     assignees,
   } = res.locals;
 
-  dbStepsAssign({ goal_id, step_id, assignees })
+  dbStepsAssign({ user_id, goal_id, step_id, assignees })
     .then(() => {
       return next();
     })

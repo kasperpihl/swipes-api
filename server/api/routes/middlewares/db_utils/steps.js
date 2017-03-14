@@ -12,6 +12,7 @@ import {
 
 const dbStepsAdd = funcWrap([
   object.as({
+    user_id: string.require(),
     goal_id: string.require(),
     step: object.as({
       id: string.format(/^[A-Za-z0-9]+$/g).min(6).max(6).require(),
@@ -19,7 +20,7 @@ const dbStepsAdd = funcWrap([
       assignees: array.of(string).require(),
     }).require(),
   }).require(),
-], (err, { goal_id, step }) => {
+], (err, { user_id, goal_id, step }) => {
   if (err) {
     throw new SwipesError(`dbStepAdd: ${err}`);
   }
@@ -28,13 +29,13 @@ const dbStepsAdd = funcWrap([
     r.db('swipes')
       .table('goals')
       .get(goal_id)
-      .update((goal) => {
-        return goal.merge({
-          steps: goal('steps').merge({
-            [step.id]: step,
-          }),
-          step_order: goal('step_order').append(step.id),
-        });
+      .update({
+        steps: {
+          [step.id]: step,
+        },
+        step_order: r.row('step_order').append(step.id),
+        updated_at: r.now(),
+        updated_by: user_id,
       }, {
         returnChanges: true,
       });
@@ -43,11 +44,12 @@ const dbStepsAdd = funcWrap([
 });
 const dbStepsRename = funcWrap([
   object.as({
+    user_id: string.require(),
     goal_id: string.require(),
     step_id: string.require(),
     title: string.require().min(1),
   }).require(),
-], (err, { goal_id, step_id, title }) => {
+], (err, { user_id, goal_id, step_id, title }) => {
   if (err) {
     throw new SwipesError(`dbStepsRename: ${err}`);
   }
@@ -60,18 +62,23 @@ const dbStepsRename = funcWrap([
         steps: {
           [step_id]: {
             title,
+            updated_at: r.now(),
+            updated_by: user_id,
           },
         },
+        updated_at: r.now(),
+        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);
 });
 const dbStepsDelete = funcWrap([
   object.as({
+    user_id: string.require(),
     goal_id: string.require(),
     step_id: string.require(),
   }).require(),
-], (err, { goal_id, step_id }) => {
+], (err, { user_id, goal_id, step_id }) => {
   if (err) {
     throw new SwipesError(`dbStepsDelete: ${err}`);
   }
@@ -84,20 +91,25 @@ const dbStepsDelete = funcWrap([
         steps: {
           [step_id]: {
             deleted: true,
+            updated_at: r.now(),
+            updated_by: user_id,
           },
         },
         step_order: r.row('step_order').difference([step_id]),
+        updated_at: r.now(),
+        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);
 });
 const dbStepsReorder = funcWrap([
   object.as({
+    user_id: string.require(),
     goal_id: string.require(),
     step_order: array.of(string).require(),
     current_step_id: string.require(),
   }).require(),
-], (err, { goal_id, step_order, current_step_id }) => {
+], (err, { user_id, goal_id, step_order, current_step_id }) => {
   if (err) {
     throw new SwipesError(`dbStepsReorder: ${err}`);
   }
@@ -135,6 +147,8 @@ const dbStepsReorder = funcWrap([
         status: {
           current_step_id,
         },
+        updated_at: r.now(),
+        updated_by: user_id,
       }, {
         returnChanges: true,
       });
@@ -143,11 +157,12 @@ const dbStepsReorder = funcWrap([
 });
 const dbStepsAssign = funcWrap([
   object.as({
+    user_id: string.require(),
     goal_id: string.require(),
     step_id: string.require(),
     assignees: array.of(string).require(),
   }).require(),
-], (err, { goal_id, step_id, assignees }) => {
+], (err, { user_id, goal_id, step_id, assignees }) => {
   if (err) {
     throw new SwipesError(`dbStepsAssign: ${err}`);
   }
@@ -160,8 +175,12 @@ const dbStepsAssign = funcWrap([
         steps: {
           [step_id]: {
             assignees,
+            updated_at: r.now(),
+            updated_by: user_id,
           },
         },
+        updated_at: r.now(),
+        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);
