@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import * as actions from 'actions';
 import { attachments } from 'swipes-core-js';
 import SWView from 'SWView';
@@ -53,12 +54,8 @@ class HOCFind extends Component {
     }
   }
   onPreviewLink(obj) {
-    const { openPreview, onAttach, goalId, target } = this.props;
-    openPreview(target, {
-      loadPreview: obj,
-      onAttach,
-      goalId,
-    });
+    const { openPreview, targetId, target } = this.props;
+    openPreview(target, fromJS(obj), targetId);
   }
   onConnectService() {
     const { openSecondary } = this.props;
@@ -86,7 +83,7 @@ class HOCFind extends Component {
       accountId: entry.accountId,
     });
   }
-  findItemAttach(i, e) {
+  findItemAttach(i) {
     const { searchResults, addAttachment, targetId } = this.props;
     const obj = searchResults.get(i);
     const { service, permission, title } = obj.toJS();
@@ -138,8 +135,6 @@ class HOCFind extends Component {
     );
   }
   renderEmpty() {
-    const { me } = this.props;
-    const numberOfServices = me.get('services').size;
     return (
       <div className="find__setup">
         <h1>Search and Find</h1>
@@ -239,7 +234,9 @@ const { func, bool, string, object } = PropTypes;
 HOCFind.propTypes = {
   targetId: string,
   delegate: object,
+  addAttachment: func,
   openPreview: func,
+  openSecondary: func,
   search: func,
   searching: bool,
   searchQuery: string,
@@ -260,7 +257,7 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHOCFind = connect(mapStateToProps, {
-  openPreview: actions.links.openPreview,
+  openPreview: actions.links.preview,
   addAttachment: attachments.add,
   request: actions.api.request,
   search: actions.main.search,

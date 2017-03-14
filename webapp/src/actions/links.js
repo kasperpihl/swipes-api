@@ -15,10 +15,12 @@ export const openFind = (from, targetId) => d => d(a.navigation.openSecondary(fr
 // ======================================================
 // Preview attacment
 // ======================================================
-export const preview = (from, link, targetId) => (d) => {
+export const preview = (from, att, targetId) => (d) => {
   // K_TODO: Backward compatibility remove || link after database query
+  const link = att.get('link') || att;
   const service = link.get('service') || link;
   const meta = link.get('meta') || link;
+  const title = att.get('title') || meta.get('title');
   const permission = link.get('permission') || link;
 
   if (service.get('name') === 'swipes' && service.get('type') === 'note') {
@@ -27,7 +29,7 @@ export const preview = (from, link, targetId) => (d) => {
       title: 'Note',
       props: {
         id: service.get('id'),
-        title: meta.get('title'),
+        title,
       },
     }));
   } else if (service.get('name') === 'swipes' && service.get('type') === 'url') {
@@ -38,7 +40,7 @@ export const preview = (from, link, targetId) => (d) => {
       title: 'Preview',
       props: {
         // K_TODO: Backward compatibility remove || permission.get('shortUrl')
-        loadPreview: permission.get('short_url') || permission.get('shortUrl') || service.toJS(),
+        loadPreview: permission.get('short_url') || permission.get('shortUrl') || link.toJS(),
         targetId,
       },
     }));

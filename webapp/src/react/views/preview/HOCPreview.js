@@ -1,12 +1,13 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindAll, setupCachedCallback } from 'classes/utils';
+import { bindAll, setupCachedCallback, setupLoadingHandlers } from 'classes/utils';
 import Button from 'Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import * as a from 'actions';
+import { attachments } from 'swipes-core-js';
 import * as Files from './files';
 import * as Rows from './rows';
 import './preview.scss';
@@ -24,6 +25,7 @@ class HOCPreviewModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
+    setupLoadingHandlers(this);
     this.fetch(props.loadPreview);
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
     bindAll(this, ['onFileLoaded', 'onFileError', 'onAttach']);
@@ -55,17 +57,20 @@ class HOCPreviewModal extends PureComponent {
   onFileLoaded() {
     this.setState({ fileLoading: false });
   }
-  onAttach(e) {
+  onAttach() {
     const {
-      onAttach,
+      targetId,
       loadPreview,
-      attachToGoal,
+      addAttachment,
     } = this.props;
-    if (onAttach) {
-      onAttach(loadPreview.toJS(), e);
-    } else {
-      attachToGoal(loadPreview);
-    }
+    this.setLoadingState('attach');
+    addAttachment(targetId, loadPreview.toJS()).then((res) => {
+      if (res && res.ok) {
+        this.clearLoadingState('attach', 'Successfully attached');
+      } else {
+        this.clearLoadingState('attach', '!Something went wrong');
+      }
+    });
   }
   getDefaultState() {
     return {
@@ -107,6 +112,7 @@ class HOCPreviewModal extends PureComponent {
       params = { short_url: params };
     } else {
       params = params.toJS();
+      console.log('preview', params);
     }
     request(endpoint, params).then((res) => {
       if (this._unmounted) {
@@ -268,6 +274,7 @@ class HOCPreviewModal extends PureComponent {
           key="attach"
           text="Attach to Goal"
           primary
+          {...this.getLoadingState('attach')}
           onClick={this.onAttach}
           className="preview-footer__btn"
         />
@@ -291,9 +298,10 @@ const { object, func, oneOfType, string } = PropTypes;
 
 HOCPreviewModal.propTypes = {
   browser: func,
+  targetId: string,
+  addAttachment: func,
   request: func,
   loadPreview: oneOfType([object, string]),
-  onAttach: func,
 };
 HOCPreviewModal.contextTypes = {
   target: string,
@@ -305,6 +313,6 @@ function mapStateToProps() {
 
 export default connect(mapStateToProps, {
   request: a.api.request,
-  attachToGoal: a.goals.attachToGoal,
+  addAttachment: attachments.add,
   browser: a.main.browser,
 })(HOCPreviewModal);

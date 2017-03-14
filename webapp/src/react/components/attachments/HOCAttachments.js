@@ -37,6 +37,8 @@ class HOCAttachments extends PureComponent {
   onDeleteClick(id, e) {
     const {
       confirm,
+      targetId,
+      removeAttachment,
     } = this.props;
 
     confirm({
@@ -47,7 +49,7 @@ class HOCAttachments extends PureComponent {
       message: 'Are you sure you want to remove this attachment?',
     }, (res) => {
       if (res === 1) {
-        this.getSwipesLinkObj();
+        removeAttachment(targetId, id);
       }
     });
   }
@@ -195,7 +197,7 @@ class HOCAttachments extends PureComponent {
   }
 }
 
-const { func, object, bool, string } = PropTypes;
+const { func, object, string } = PropTypes;
 HOCAttachments.propTypes = {
   createNote: func,
   addAttachment: func,

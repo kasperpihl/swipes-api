@@ -1,5 +1,4 @@
 import { fromJS, Map } from 'immutable';
-import * as types from 'constants';
 
 const initialState = fromJS({});
 
@@ -17,23 +16,39 @@ export default function goalsReducer(state = initialState, action) {
       });
       return goals;
     }
+    case 'goal_renamed':
     case 'goals.rename': {
+      if (state.getIn([payload.goal_id, 'title']) === payload.title) {
+        return state;
+      }
       return state.setIn([payload.goal_id, 'title'], payload.title);
     }
+    case 'step_added':
     case 'steps.add': {
-      return state.setIn([payload.goal_id, 'step_order'],
-        fromJS(payload.step_order),
-      ).setIn([payload.goal_id, 'steps', payload.step.id], fromJS(payload.step));
+      if (state.getIn([payload.goal_id, 'steps', payload.step.id])) {
+        return state;
+      }
+      state = state.setIn([payload.goal_id, 'step_order'], fromJS(payload.step_order));
+      return state.setIn([payload.goal_id, 'steps', payload.step.id], fromJS(payload.step));
     }
+    case 'step_deleted':
     case 'steps.delete': {
+      if (!state.getIn([payload.goal_id, 'steps', payload.step_id])) {
+        return state;
+      }
       return state.updateIn([payload.goal_id], (g) => {
         g = g.updateIn(['step_order'], s => s.filter(id => id !== payload.step_id));
         return g.setIn(['steps', payload.step_id, 'deleted'], true);
       });
     }
+    case 'step_renamed':
     case 'steps.rename': {
+      if (state.getIn([payload.goal_id, 'steps', payload.step_id, 'title']) === payload.title) {
+        return state;
+      }
       return state.setIn([payload.goal_id, 'steps', payload.step_id, 'title'], payload.title);
     }
+    case 'step_assigned':
     case 'steps.assign': {
       return state.setIn([
         payload.goal_id, 'steps', payload.step_id, 'assignees',
@@ -41,20 +56,35 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'goal_archived':
     case 'goals.archive': {
+      if (!state.get(payload.id)) {
+        return state;
+      }
       return state.delete(payload.id);
     }
     case 'goals.create':
     case 'goal_created': {
+      if (state.get(payload.id)) {
+        return state;
+      }
       return state.mergeIn([payload.goal.id], fromJS(payload.goal));
     }
-    case 'goal_updated':
-    case 'goal_completed':
-    case 'goal_notify':
-    case 'step_completed':
-    case 'goals.notify':
-    case 'goals.completeStep':
-    case 'goals.update': {
-      return state.mergeIn([payload.goal.id], fromJS(payload.goal));
+    case 'attachment_deleted':
+    case 'attachments.delete': {
+      return state.updateIn([payload.target_id], (g) => {
+        const aId = payload.attachment_id;
+        if (!g || g.getIn(['attachments', aId, 'deleted'])) return g;
+        g = g.updateIn(['attachment_order'], ao => ao.filter(id => id !== aId));
+        return g.setIn(['attachments', aId, 'deleted'], true);
+      });
+    }
+    case 'attachments.add':
+    case 'attachment_added': {
+      return state.updateIn([payload.target_id], (g) => {
+        const aId = payload.attachment.id;
+        if (!g || g.getIn(['attachments', aId])) return g;
+        g = g.set('attachment_order', fromJS(payload.attachment_order));
+        return g.setIn(['attachments', aId], fromJS(payload.attachment));
+      });
     }
     default:
       return state;

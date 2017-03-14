@@ -3,6 +3,7 @@ import {
   string,
   object,
   array,
+  date,
 } from 'valjs';
 import {
   linksAddPermission,
@@ -54,9 +55,9 @@ authed.all('/attachments.add',
     attachment: object.as({
       id: string.require(),
       title: string.min(1).require(),
-      created_at: string.format('iso8601').require(),
+      created_at: date.require(),
       created_by: string.require(),
-      updated_at: string.format('iso8601').require(),
+      updated_at: date.require(),
       updated_by: string.require(),
       link: object.as({
         service,

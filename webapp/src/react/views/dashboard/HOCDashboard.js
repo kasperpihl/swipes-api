@@ -36,7 +36,7 @@ class HOCDashboard extends PureComponent {
     }
   }
   getFilteredNotifications(notifications) {
-    return notifications.filter(n => n.get('receiver'));
+    return notifications.filter(n => n.get('receiver') && n.get('important'));
   }
   onMark(id) {
     const { markNotifications } = this.props;
