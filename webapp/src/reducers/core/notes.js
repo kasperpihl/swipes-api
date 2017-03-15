@@ -32,14 +32,11 @@ export default function notesReducer(state = initialState, action) {
 
   switch (type) {
     case 'rtm.start': {
-      if (payload.ok) {
-        let server = Map();
-        payload.notes.forEach((note) => {
-          server = server.set(note.id, fromJS(note));
-        });
-        return state.set('server', server);
-      }
-      return state;
+      let server = Map();
+      payload.notes.forEach((note) => {
+        server = server.set(note.id, fromJS(note));
+      });
+      return state.set('server', server);
     }
     case types.NOTE_CACHE: {
       if (payload.serverOrg) {
@@ -71,10 +68,7 @@ export default function notesReducer(state = initialState, action) {
       return state.deleteIn(['cache', id, '_savingText']);
     }
     case 'notes.create': {
-      if (payload && payload.ok) {
-        return state.setIn(['server', payload.note.id], fromJS(payload.note));
-      }
-      return state;
+      return state.setIn(['server', payload.note.id], fromJS(payload.note));
     }
     case 'note_updated': {
       const note = fromJS(payload);

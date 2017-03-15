@@ -11,7 +11,7 @@ import SWView from 'SWView';
 import Button from 'Button';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
+import TabMenu from 'context-menus/tab-menu/TabMenu';
 import HOCHistory from './HOCHistory';
 import GoalSide from './GoalSide';
 import './styles/goal-overview.scss';

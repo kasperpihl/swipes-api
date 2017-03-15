@@ -5,6 +5,7 @@ import * as a from 'actions';
 import { attachments as att } from 'swipes-core-js';
 import { setupCachedCallback, setupDelegate, setupLoadingHandlers } from 'classes/utils';
 import Icon from 'Icon';
+import TabMenu from 'context-menus/tab-menu/TabMenu';
 import Attachment from './Attachment';
 import './styles/attachments';
 
@@ -13,7 +14,7 @@ class HOCAttachments extends PureComponent {
     super(props, context);
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
     this.onFlagClickCached = setupCachedCallback(this.onFlagClick, this);
-    this.onDeleteClickCached = setupCachedCallback(this.onDeleteClick, this);
+    this.onContextMenuCached = setupCachedCallback(this.onContextMenu, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
@@ -34,7 +35,51 @@ class HOCAttachments extends PureComponent {
   onFlagClick(id) {
     this.callDelegate('onFlag', id);
   }
-  onDeleteClick(id, e) {
+  onContextMenu(id, e) {
+    const { contextMenu, attachments } = this.props;
+    const at = attachments.get(id);
+    console.log(id, at.toJS());
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignY: 'center',
+      alignX: 'center',
+    };
+
+    const items = [{ title: 'Rename' }, { title: 'Remove' }];
+    const delegate = {
+      onItemAction: (item) => {
+        if (item.title === 'Rename') {
+          this.onRename(id, at.get('title'), options);
+        } else {
+          this.onDelete(id, options);
+        }
+      },
+    };
+    contextMenu({
+      options,
+      component: TabMenu,
+      props: {
+        delegate,
+        items,
+      },
+    });
+  }
+  onRename(id, currTitle, options) {
+    const { targetId, inputMenu, renameAttachment } = this.props;
+    inputMenu({
+      ...options,
+      text: currTitle,
+      buttonLabel: 'Rename',
+    }, (title) => {
+      if (title !== currTitle && title.length) {
+        this.setLoadingState(id, 'Renaming...');
+        renameAttachment(targetId, id, title).then(() => {
+          this.clearLoadingState(id);
+        });
+      }
+    });
+  }
+  onDelete(id, options) {
     const {
       confirm,
       targetId,
@@ -42,9 +87,7 @@ class HOCAttachments extends PureComponent {
     } = this.props;
 
     confirm({
-      boundingRect: e.target.getBoundingClientRect(),
-      alignY: 'center',
-      alignX: 'center',
+      ...options,
       title: 'Remove Attachment?',
       message: 'Are you sure you want to remove this attachment?',
     }, (res) => {
@@ -111,13 +154,6 @@ class HOCAttachments extends PureComponent {
       },
     };
   }
-  attachToTarget(type, id, title) {
-    const linkObj = this.getSwipesLinkObj(type, id, title);
-    const { targetId, addAttachment } = this.props;
-    addAttachment(targetId, linkObj).then(() => {
-      this.clearLoadingState('adding');
-    });
-  }
   getIconForService(service) {
     switch (service.get('type')) {
       case 'url':
@@ -128,6 +164,14 @@ class HOCAttachments extends PureComponent {
         return 'Hyperlink';
     }
   }
+  attachToTarget(type, id, title) {
+    const linkObj = this.getSwipesLinkObj(type, id, title);
+    const { targetId, addAttachment } = this.props;
+    addAttachment(targetId, linkObj).then(() => {
+      this.clearLoadingState('adding');
+    });
+  }
+
   renderEmpty() {
     return <div className="attachments__empty">No attachments yet</div>;
   }
@@ -153,7 +197,7 @@ class HOCAttachments extends PureComponent {
           key={aId}
           flagged={(enableFlagging && flags.indexOf(aId) !== -1)}
           onFlag={this.onFlagClickCached(aId)}
-          onDelete={this.onDeleteClickCached(aId)}
+          onContextMenu={this.onContextMenuCached(aId)}
           onClick={this.onPreviewCached(aId)}
           {...this.getLoadingState(aId)}
           icon={icon}
@@ -205,6 +249,8 @@ HOCAttachments.propTypes = {
   createNote: func,
   addAttachment: func,
   removeAttachment: func,
+  renameAttachment: func,
+  contextMenu: func,
   attachmentOrder: list,
   attachments: map,
   targetId: string,
@@ -229,6 +275,8 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addAttachment: att.add,
   removeAttachment: att.remove,
+  renameAttachment: att.rename,
+  contextMenu: a.main.contextMenu,
   createNote: a.notes.create,
   inputMenu: a.menus.input,
   confirm: a.menus.confirm,

@@ -68,15 +68,6 @@ export default function goalsReducer(state = initialState, action) {
       }
       return state.mergeIn([payload.goal.id], fromJS(payload.goal));
     }
-    case 'attachment_deleted':
-    case 'attachments.delete': {
-      return state.updateIn([payload.target_id], (g) => {
-        const aId = payload.attachment_id;
-        if (!g || g.getIn(['attachments', aId, 'deleted'])) return g;
-        g = g.updateIn(['attachment_order'], ao => ao.filter(id => id !== aId));
-        return g.setIn(['attachments', aId, 'deleted'], true);
-      });
-    }
     case 'attachments.add':
     case 'attachment_added': {
       return state.updateIn([payload.target_id], (g) => {
@@ -86,6 +77,24 @@ export default function goalsReducer(state = initialState, action) {
         return g.setIn(['attachments', aId], fromJS(payload.attachment));
       });
     }
+    case 'attachments.rename':
+    case 'attachment_renamed': {
+      return state.updateIn([payload.target_id], (g) => {
+        const aId = payload.attachment_id;
+        if (!g || g.getIn(['attachments', aId, 'title']) === payload.title) return g;
+        return g.setIn(['attachments', aId, 'title'], payload.title);
+      });
+    }
+    case 'attachment_deleted':
+    case 'attachments.delete': {
+      return state.updateIn([payload.target_id], (g) => {
+        const aId = payload.attachment_id;
+        if (!g || g.getIn(['attachments', aId, 'deleted'])) return g;
+        g = g.updateIn(['attachment_order'], ao => ao.filter(id => id !== aId));
+        return g.setIn(['attachments', aId, 'deleted'], true);
+      });
+    }
+
     default:
       return state;
   }

@@ -16,9 +16,6 @@ export default function me(state = initialState, action) {
 
   switch (type) {
     case ('rtm.start'): {
-      if (!payload.ok) {
-        return state;
-      }
       return state.set('lastConnect', payload.ts);
     }
     case REHYDRATE:
@@ -34,17 +31,12 @@ export default function me(state = initialState, action) {
     // ======================================================
     case 'users.signin':
     case 'users.signup': {
-      if (!action.payload || !payload.ok) {
-        return state;
-      }
       return state.set('token', payload.token);
     }
     case 'token_revoked': {
-      if (payload && payload.ok) {
-        const currToken = state.get('token');
-        if (payload.token_to_revoke !== currToken) {
-          return state;
-        }
+      const currToken = state.get('token');
+      if (payload.token_to_revoke !== currToken) {
+        return state;
       }
       return initialState;
     }

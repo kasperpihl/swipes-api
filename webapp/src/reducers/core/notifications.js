@@ -9,9 +9,6 @@ export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case 'rtm.start': {
-      if (!payload.ok) {
-        return state;
-      }
       return fromJS(payload.notifications).sort(sortFn);
     }
 
