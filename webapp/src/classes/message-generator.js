@@ -114,7 +114,10 @@ export default class MessageGenerator {
       const assignees = currentStep.get('assignees');
 
       if (assignees.size) {
-        const preferId = filter.get('user').startsWith('U') ? filter.get('user') : undefined;
+        let preferId;
+        if (filter.get('user')) {
+          preferId = filter.get('user').startsWith('U') ? filter.get('user') : undefined;
+        }
         const userString = this.getUserArrayString(assignees, { preferId });
 
         let hasHave = 'have';

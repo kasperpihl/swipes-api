@@ -12,6 +12,12 @@ export default function filterGoals(goals, type, userId, milestoneId, matching) 
         return false;
       }
     }
+    if (type === 'unstarted' && (helper.getIsStarted() || helper.getIsCompleted())) {
+      return false;
+    }
+    if (type !== 'unstarted' && !helper.getIsStarted()) {
+      return false;
+    }
     if (type === 'completed' && helper.getCurrentStep()) {
       return false;
     }

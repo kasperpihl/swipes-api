@@ -1,10 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
 import * as a from 'actions';
-import { cache } from 'swipes-core-js';
+import { cache, goals as goa } from 'swipes-core-js';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate, bindAll } from 'classes/utils';
+import { setupDelegate, bindAll, setupLoadingHandlers } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
@@ -43,6 +43,12 @@ class HOCGoalList extends PureComponent {
           matching: null,
         },
       }, {
+        title: 'Unstarted',
+        filter: {
+          goalType: 'unstarted',
+          milestone: null,
+        },
+      }, {
         title: 'Filter',
         filter: defaultFilter,
       }]),
@@ -55,6 +61,7 @@ class HOCGoalList extends PureComponent {
         { id: 'matching' },
       ]),
     };
+    setupLoadingHandlers(this);
     if (props.savedState) {
       this.state.tabIndex = props.savedState.get('tabIndex');
     }
@@ -165,17 +172,26 @@ class HOCGoalList extends PureComponent {
       }, res => this.updateFilter({ matching: res }));
     }
   }
-  onAddGoal() {
-    const { navPush } = this.props;
-    const { tabIndex } = this.state;
-    const savedState = {
-      tabIndex,
-    };
-    navPush({
-      id: 'AddGoal',
-      title: 'Add Goal',
-    },
-    savedState);
+  onAddGoal(e) {
+    const { inputMenu, createGoal } = this.props;
+    const options = this.getOptionsForE(e);
+    inputMenu({
+      ...options,
+      placeholder: 'Title of the goal',
+      buttonLabel: 'Add Goal',
+    }, (title) => {
+      if (title && title.length) {
+        this.setLoadingState('add');
+        createGoal(title).then((res) => {
+          if (res && res.ok) {
+            this.clearLoadingState('add');
+            this.tabDidChange(2);
+          } else {
+            this.clearLoadingState('add', '!Something went wrong');
+          }
+        });
+      }
+    });
   }
   getOptionsForE(e) {
     return {
@@ -250,7 +266,7 @@ class HOCGoalList extends PureComponent {
     return filterGoals(sortedGoals, filter.get('goalType'), user, filter.get('milestone'), filter.get('matching'));
   }
 
-  tabDidChange(nav, index) {
+  tabDidChange(index) {
     const { tabIndex, filterProp, tabs } = this.state;
     if (tabIndex !== index) {
       const filter = tabs.getIn([index, 'filter']);
@@ -274,7 +290,12 @@ class HOCGoalList extends PureComponent {
     return (
       <div className="goals-list__header">
         <HOCHeaderTitle title="Goals">
-          <Button text="Add Goal" primary onClick={this.onAddGoal} />
+          <Button
+            text="Add Goal"
+            primary
+            {...this.getLoadingState('add')}
+            onClick={this.onAddGoal}
+          />
         </HOCHeaderTitle>
         {this.renderTabbar()}
       </div>
@@ -342,6 +363,9 @@ HOCGoalList.propTypes = {
   cache: map,
   savedState: object,
   saveCache: func,
+  saveState: func,
+  createGoal: func,
+  openSecondary: func,
   navPush: func,
   delegate: object,
   inputMenu: func,
@@ -355,6 +379,7 @@ HOCGoalList.propTypes = {
 
 export default connect(mapStateToProps, {
   saveCache: cache.save,
+  createGoal: goa.create,
   selectUser: a.menus.selectUser,
   inputMenu: a.menus.input,
   selectGoalType: a.menus.selectGoalType,

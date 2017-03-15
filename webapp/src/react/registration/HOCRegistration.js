@@ -46,7 +46,7 @@ class HOCRegistration extends Component {
 
     this.setState({ [key]: value });
   }
-  tabDidChange(el, index) {
+  tabDidChange(index) {
     const { tabIndex } = this.state;
 
     if (index !== tabIndex) {

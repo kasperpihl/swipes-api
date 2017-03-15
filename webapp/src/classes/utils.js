@@ -99,17 +99,6 @@ export function queryStringToObject(query) {
   });
   return object;
 }
-export function getParameterByName(name, url) {
-  if (!url) {
-    url = window.location.href;
-  }
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-  const results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
 
 
 export function setupCachedCallback(method, ctx) {
@@ -375,33 +364,57 @@ export function throttle(func, wait) {
 
 export function setupLoadingHandlers(ctx) {
   let _loadingStates = fromJS({});
+  let unmounted = false;
   const defaultObj = {};
+  const timers = {};
   if (!ctx.state) {
     ctx.state = {};
   }
   ctx.state._loadingStates = _loadingStates;
-  function setLoadingState(name, label) {
+  const currComponentWillUnmount = ctx.componentWillUnmount;
+  ctx.componentWillUnmount = () => {
+    unmounted = true;
+    if (typeof currComponentWillUnmount === 'function') {
+      currComponentWillUnmount.bind(ctx)();
+    }
+  };
+  let setClearTimer;
+
+  function setLoadingState(name, label, duration) {
     const newState = { loading: true };
     if (label) {
       newState.loadingLabel = label;
     }
     _loadingStates = _loadingStates.set(name, newState);
     this.setState({ _loadingStates });
+    setClearTimer(name, duration);
   }
-  function getLoadingState(name) {
-    return _loadingStates.get(name) || defaultObj;
-  }
-  function clearLoadingState(name, label) {
+  function clearLoadingState(name, label, duration) {
     const newState = { loading: false };
     if (label && label.startsWith('!')) {
       newState.errorLabel = label.substr(1);
     } else if (label) {
       newState.successLabel = label;
     }
-
     _loadingStates = _loadingStates.set(name, newState);
     this.setState({ _loadingStates });
+    setClearTimer(name, duration);
   }
+  setClearTimer = (name, duration) => {
+    clearTimeout(timers[name]);
+    if (typeof duration === 'number') {
+      timers[name] = setTimeout(() => {
+        if (!unmounted) {
+          clearLoadingState(name);
+        }
+      }, duration);
+    }
+  };
+  function getLoadingState(name) {
+    return _loadingStates.get(name) || defaultObj;
+  }
+
+
   ctx.setLoadingState = setLoadingState;
   ctx.getLoadingState = getLoadingState;
   ctx.clearLoadingState = clearLoadingState;

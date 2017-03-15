@@ -60,7 +60,7 @@ class TabMenu extends Component {
       this.setState({ query });
     }
   }
-  tabDidChange(nav, index) {
+  tabDidChange(index) {
     if (this.state.tabIndex !== index) {
       this.setState({ tabIndex: index });
     }
