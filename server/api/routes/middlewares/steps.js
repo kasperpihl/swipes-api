@@ -30,8 +30,9 @@ const stepsAdd = valLocals('stepsAdd', {
     step,
   } = res.locals;
 
+  const step_id = generateSlackLikeId('', 6);
   const mutatedStep = Object.assign({}, step, {
-    id: generateSlackLikeId('', 6),
+    id: step_id,
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
@@ -43,7 +44,7 @@ const stepsAdd = valLocals('stepsAdd', {
       const changes = results.changes[0];
 
       setLocals({
-        step: changes.new_val.steps[step.id],
+        step: changes.new_val.steps[step_id],
         step_order: changes.new_val.step_order,
       });
 
