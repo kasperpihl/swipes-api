@@ -31,22 +31,17 @@ class HOCGoalList extends PureComponent {
         filter: {
           user: 'me',
           goalType: 'current',
-          milestone: 'any',
-          matching: null,
         },
       }, {
         title: 'Upcoming',
         filter: {
           user: 'me',
           goalType: 'upcoming',
-          milestone: 'any',
-          matching: null,
         },
       }, {
         title: 'Unstarted',
         filter: {
           goalType: 'unstarted',
-          milestone: null,
         },
       }, {
         title: 'Filter',
@@ -182,10 +177,10 @@ class HOCGoalList extends PureComponent {
     }, (title) => {
       if (title && title.length) {
         this.setLoadingState('add');
+        this.tabDidChange(2);
         createGoal(title).then((res) => {
           if (res && res.ok) {
             this.clearLoadingState('add');
-            this.tabDidChange(2);
           } else {
             this.clearLoadingState('add', '!Something went wrong');
           }

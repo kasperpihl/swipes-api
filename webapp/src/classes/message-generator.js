@@ -10,6 +10,7 @@ export default class MessageGenerator {
       current: 'Current goals',
       upcoming: 'Upcoming goals',
       completed: 'Completed goals',
+      unstarted: 'Unstarted goals',
     };
     return goalTypes[goalType] || 'All goals';
   }
@@ -106,7 +107,9 @@ export default class MessageGenerator {
     if (filter) {
       type = filter.get('goalType');
     }
-    if (!currentStep) {
+    if (!helper.getIsStarted()) {
+      status = `Created by ${doneBy} ${lastUpdate.fromNow()}`;
+    } else if (helper.getIsCompleted()) {
       status = `Completed by ${doneBy} ${lastUpdate.fromNow()}`;
       // Show last
     } else {

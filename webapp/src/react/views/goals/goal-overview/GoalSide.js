@@ -3,6 +3,7 @@ import { setupDelegate } from 'classes/utils';
 import StepList from 'components/step-list/StepList';
 import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
+import Section from 'components/section/Section';
 import Icon from 'Icon';
 
 class GoalSide extends Component {
@@ -20,6 +21,11 @@ class GoalSide extends Component {
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getTotalNumberOfSteps();
+    if (!totalSteps) {
+      return (
+        <Section title="Add steps" />
+      );
+    }
     const styles = {};
 
     const progressLength = 100 - ((numberOfCompleted * 100) / totalSteps);
@@ -49,7 +55,7 @@ class GoalSide extends Component {
     const { loadingSteps } = this.props;
     const isLoading = !!loadingSteps.get('add');
     let className = 'add-step';
-    const buttonTitle = loadingSteps.get('add') || 'Add new step';
+    const buttonTitle = loadingSteps.get('add') || 'Add step';
 
     if (isLoading) {
       className += ' add-step--loading';
@@ -61,6 +67,7 @@ class GoalSide extends Component {
           <Icon icon="Plus" className="add-step__svg" />
         </div>
         <button className="add-step__text" onClick={this.onClick}>{buttonTitle}</button>
+        <button className="add-step__text" onClick={this.onLoadWay}>Load steps</button>
       </div>
     );
   }

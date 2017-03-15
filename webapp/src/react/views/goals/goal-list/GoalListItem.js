@@ -52,7 +52,7 @@ class GoalListItem extends PureComponent {
   renderAssignees() {
     const { goal } = this.props;
     const helper = this.getHelper();
-    if (helper.getIsCompleted()) {
+    if (helper.getIsCompleted() || !helper.getIsStarted()) {
       return undefined;
     }
     return (

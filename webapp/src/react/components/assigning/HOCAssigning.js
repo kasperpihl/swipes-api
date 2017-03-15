@@ -15,12 +15,6 @@ class HOCAssigning extends PureComponent {
     };
     this.callDelegate = setupDelegate(props.delegate);
     this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'clickedAssign'), this);
-    /*
-      addgoal,
-      steplist,
-      goallist,
-      dashboard,
-    */
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.assignees !== this.props.assignees) {

@@ -24,8 +24,6 @@ class Assigning extends Component {
   }
   onClick(e) {
     const { onClick } = this.props;
-    e.stopPropagation();
-
     if (onClick) {
       onClick(e);
     }

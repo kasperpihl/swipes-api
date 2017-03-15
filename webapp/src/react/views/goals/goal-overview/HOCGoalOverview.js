@@ -83,10 +83,12 @@ class HOCGoalOverview extends PureComponent {
       remove.subtitle = 'Cannot remove the last step';
     }
 
-    const items = [{ title: 'Rename' }, remove];
+    const items = [{ title: 'Reassign' }, { title: 'Rename' }, remove];
     const delegate = {
       onItemAction: (item) => {
-        if (item.title === 'Rename') {
+        if (item.title === 'Reassign') {
+          this.onAssign(i, options);
+        } else if (item.title === 'Rename') {
           inputMenu({
             ...options,
             text: step.get('title'),
@@ -111,6 +113,29 @@ class HOCGoalOverview extends PureComponent {
         delegate,
         items,
       },
+    });
+  }
+  onAssign(i, options) {
+    const { selectAssignees, assignStep, goal } = this.props;
+    const helper = this.getHelper();
+    const step = helper.getStepByIndex(i);
+
+    options.actionLabel = 'Reassign';
+    if (step.get('id') === helper.getCurrentStepId()) {
+      options.actionLabel = 'Reassign and write message';
+    }
+    let overrideAssignees;
+    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
+      } else if (overrideAssignees) {
+        if (i === helper.getCurrentStepIndex()) {
+          this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
+        } else {
+          this.setStepLoading(step.get('id'), 'Assigning...');
+          assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(this.clearCB(step.get('id')));
+        }
+      }
     });
   }
 
@@ -301,30 +326,6 @@ class HOCGoalOverview extends PureComponent {
     this.setStepLoading(id, false);
   }
 
-  clickedAssign(i, e) {
-    const { selectAssignees, assignStep, goal } = this.props;
-    const helper = this.getHelper();
-    const step = helper.getStepByIndex(i);
-
-    const options = this.getOptionsForE(e);
-    options.actionLabel = 'Reassign';
-    if (step.get('id') === helper.getCurrentStepId()) {
-      options.actionLabel = 'Reassign and write message';
-    }
-    let overrideAssignees;
-    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        if (i === helper.getCurrentStepIndex()) {
-          this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
-        } else {
-          this.setStepLoading(step.get('id'), 'Assigning...');
-          assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(this.clearCB(step.get('id')));
-        }
-      }
-    });
-  }
 
   renderHeader() {
     const { goal } = this.props;
