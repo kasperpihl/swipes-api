@@ -50,13 +50,23 @@ authed.all('/goals.create',
   valBody({
     goal: object.as({
       title: string.min(1).require(),
-    }),
+    }).require(),
     organization_id: string.require(),
   }),
   goalsCreate,
   goalsInsert,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
+  valResponseAndSend({
+    goal: object.require(),
+  }));
+
+authed.all('/goals.start',
+  valBody({
+    goal: object.require(),
+    organization_id: string.require(),
+  }),
+  // TODO
   valResponseAndSend({
     goal: object.require(),
   }));
