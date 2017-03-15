@@ -11,6 +11,7 @@ const Attachment = (props) => {
     onDelete,
     onClick,
     flagged,
+    loadingLabel,
     enableFlagging,
   } = props;
 
@@ -23,6 +24,9 @@ const Attachment = (props) => {
   if (enableFlagging) {
     className += ' attachment--flagable';
   }
+  if (loadingLabel) {
+    className += ' attachment--loading';
+  }
 
   return (
     <div className={className}>
@@ -31,7 +35,7 @@ const Attachment = (props) => {
           <Icon icon={icon} className="attachment__svg" />
         </div>
         <div className="attachment__words">
-          {title}
+          {loadingLabel || title}
         </div>
       </div>
       <div className="attachment__actions">
@@ -54,6 +58,7 @@ Attachment.propTypes = {
   flagged: bool,
   icon: string,
   title: string,
+  loadingLabel: string,
   enableFlagging: bool,
   onFlag: func,
   onDelete: func,

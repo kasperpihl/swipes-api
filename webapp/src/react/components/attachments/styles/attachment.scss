@@ -107,7 +107,9 @@
 
 .attachment {
   $b: &;
-
+  &--loading {
+    pointer-events: none;
+  }
   &--flagged {
     #{$b}__button--flag {
       @include flexContainer();

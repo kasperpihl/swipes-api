@@ -49,7 +49,10 @@ class HOCAttachments extends PureComponent {
       message: 'Are you sure you want to remove this attachment?',
     }, (res) => {
       if (res === 1) {
-        removeAttachment(targetId, id);
+        this.setLoadingState(id, 'Removing...');
+        removeAttachment(targetId, id).then(() => {
+          this.clearLoadingState(id);
+        });
       }
     });
   }
@@ -142,9 +145,9 @@ class HOCAttachments extends PureComponent {
     }
     return aOrder.map((aId) => {
       const at = attachments.get(aId);
-      // K_TODO: Backward compatibility remove "|| at" and "|| at.get('title')"
+      // K_TODO: Backward compatibility remove "|| at"
       const icon = this.getIconForService(at.getIn(['link', 'service']) || at);
-      const title = at.getIn(['link', 'meta', 'title']) || at.get('title');
+
       return (
         <Attachment
           key={aId}
@@ -152,9 +155,9 @@ class HOCAttachments extends PureComponent {
           onFlag={this.onFlagClickCached(aId)}
           onDelete={this.onDeleteClickCached(aId)}
           onClick={this.onPreviewCached(aId)}
-
+          {...this.getLoadingState(aId)}
           icon={icon}
-          title={title}
+          title={at.get('title')}
           enableFlagging={enableFlagging}
         />
       );

@@ -20,26 +20,15 @@ class HOCSidebar extends PureComponent {
         { id: 'Slack', svg: 'Hashtag' },
         { id: 'Store', svg: 'Store' },
       ],
-      activeItem: 0,
     };
+    this.state.activeItem = this.getActiveItem(props.navId);
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onRightClickCached = setupCachedCallback(this.onClick, this);
   }
+
   componentWillReceiveProps(nextProps) {
-    const { navItems } = this.state;
-
     if (nextProps.navId !== this.props.navId) {
-      const isNavitem = navItems.some(item => item.id === nextProps.navId);
-
-      if (isNavitem) {
-        navItems.forEach((item, i) => {
-          if (item.id === nextProps.navId) {
-            this.setState({ activeItem: i });
-          }
-        });
-      } else {
-        this.setState({ activeItem: null });
-      }
+      this.setState({ activeItem: this.getActiveItem(nextProps.navId) });
     }
   }
   onClick(id, target) {
@@ -51,6 +40,19 @@ class HOCSidebar extends PureComponent {
       id,
       title: this.getTitleForId(id),
     });
+  }
+  getActiveItem(navId) {
+    const { navItems } = this.state;
+    const isNavitem = navItems.some(item => item.id === navId);
+    let activeItem = null;
+    if (isNavitem) {
+      navItems.forEach((item, i) => {
+        if (item.id === navId) {
+          activeItem = i;
+        }
+      });
+    }
+    return activeItem;
   }
   getTitleForId(id) {
     switch (id) {

@@ -49,9 +49,6 @@ export default class GoalsUtil {
   getIsCompleted() {
     return !this.getCurrentStep();
   }
-  getCurrentFlags() {
-    return this.goal.getIn(['status', 'flags']);
-  }
   amIAssigned() {
     const step = this.getCurrentStep();
     if (!step) {
@@ -135,7 +132,6 @@ export default class GoalsUtil {
     return fromJS([...assignees]);
   }
 
-
   getObjectForWay() {
     return {
       title: this.goal.get('title'),
@@ -143,15 +139,6 @@ export default class GoalsUtil {
       step_order: this.goal.get('step_order'),
       attachments: this.goal.get('attachments'),
       attachment_order: this.goal.get('attachment_order'),
-    };
-  }
-
-  getHandoffMessage() {
-    const status = this.goal.get('status');
-    return {
-      message: status.get('handoff_message'),
-      by: status.get('handoff_by'),
-      at: status.get('handoff_at'),
     };
   }
 }

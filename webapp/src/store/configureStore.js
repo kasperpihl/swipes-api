@@ -28,10 +28,11 @@ export default function configureStore(preloadedState) {
   );
 
   persistStore(store, {
-    blacklist: ['main', 'navigation', 'search', 'toasty'],
+    blacklist: ['main', 'search', 'toasty'],
   });
   if (!isProd) {
     window.getState = store.getState;
+    window.dispatch = store.dispatch;
   }
   return store;
 }
