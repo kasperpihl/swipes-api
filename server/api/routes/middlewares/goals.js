@@ -56,7 +56,6 @@ const goalsCreate = valLocals('goalsCreate', {
 
   return next();
 });
-
 const goalsCompleteStep = valLocals('goalsCompleteStep', {
   goal: object.as({
     status: object.require(),

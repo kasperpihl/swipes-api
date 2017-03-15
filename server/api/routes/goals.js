@@ -42,6 +42,16 @@ import {
   notifyAllInCompany,
   notifyCommonRethinkdb,
 } from './middlewares/notify';
+import {
+  notesCreate,
+} from './middlewares/notes';
+import {
+  linksAddPermission,
+  linksCreate,
+} from './middlewares/links';
+import {
+  attachmentsAdd,
+} from './middlewares/attachments';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -52,25 +62,55 @@ authed.all('/goals.create',
       title: string.min(1).require(),
     }).require(),
     organization_id: string.require(),
+    note_content: object.require(),
   }),
+  (req, res, next) => {
+    res.locals.text = res.locals.note_content;
+  },
   goalsCreate,
   goalsInsert,
+  notesCreate,
+  // Some mapping so we can add the note as an attachment to the goal
+  (req, res, next) => {
+    const {
+      user_id,
+      goal,
+      note,
+    } = res.locals;
+
+    res.locals.target_id = goal.id;
+    res.locals.link = {
+      service: {
+        id: note.id,
+        name: 'swipes',
+        type: 'note',
+      },
+      permission: {
+        account_id: user_id,
+      },
+      meta: {
+        title: 'Note',
+      },
+    };
+  },
+  linksCreate,
+  linksAddPermission,
+  attachmentsAdd,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
   }));
 
-authed.all('/goals.start',
-  valBody({
-    goal: object.require(),
-    organization_id: string.require(),
-  }),
-  // TODO
-  notificationCreateGroupId,
-  valResponseAndSend({
-    goal: object.require(),
-  }));
+// authed.all('/goals.start',
+//   valBody({
+//     goal: object.require(),
+//     organization_id: string.require(),
+//   }),
+//   notificationCreateGroupId,
+//   valResponseAndSend({
+//     goal: object.require(),
+//   }));
 
 authed.all('/goals.completeStep',
   valBody({
