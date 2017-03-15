@@ -29,7 +29,6 @@ const xendoWrapper = (middlewares) => {
 const goal_created = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsCreatedNotificationData,
-  goals.goalsStepsInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 

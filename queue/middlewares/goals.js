@@ -30,23 +30,10 @@ const goalsGetSingle = (req, res, next) => {
 };
 const goalsCreatedNotificationData = (req, res, next) => {
   const {
-    group_id,
     goal,
   } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
 
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsCreatedNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
+  res.locals.notificationData = null;
   res.locals.eventData = { goal };
 
   return next();

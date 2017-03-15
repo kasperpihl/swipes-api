@@ -16,54 +16,37 @@ import {
   valLocals,
 } from '../../utils';
 import {
-  goalMoreStrict,
-} from '../../validators';
-import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
 
 const goalsCreate = valLocals('goalsCreate', {
   user_id: string.require(),
-  notificationGroupId: string.require(),
-  goal: goalMoreStrict,
+  goal: object.as({
+    title: string.min(1).require(),
+  }),
   organization_id: string.require(),
-  message: string,
-  flags: array.of(string),
 }, (req, res, next) => {
   const {
     user_id,
-    notificationGroupId,
     goal,
     organization_id,
-    message,
-    flags = [],
   } = res.locals;
-  const goalId = generateSlackLikeId('G');
-  const currentStepId = goal.step_order[0];
 
-  goal.id = goalId;
+  goal.id = generateSlackLikeId('G');
   goal.organization_id = organization_id;
   goal.created_at = r.now();
   goal.updated_at = r.now();
   goal.created_by = user_id;
   goal.archived = false;
   goal.history = [{
-    flags,
-    message,
     type: 'goal_created',
     from: null,
-    to: currentStepId,
+    to: null,
     done_by: user_id,
     done_at: r.now(),
-    group_id: notificationGroupId,
   }];
   goal.status = {
-    flags,
-    current_step_id: currentStepId,
-    prev_step_id: null,
-    handoff_message: message,
-    handoff_by: user_id,
-    handoff_at: r.now(),
+    current_step_id: null,
   };
 
   return next();
@@ -184,7 +167,6 @@ const goalsInsert = valLocals('goalsInsert', {
   dbGoalsInsertSingle({ goal })
     .then((obj) => {
       setLocals({
-        eventType: 'goal_created',
         goal: obj.changes[0].new_val,
       });
 
@@ -344,24 +326,17 @@ const goalsUpdate = valLocals('goalsUpdate', {
 });
 const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
-  goal: object.as({
-    id: string.require(),
-  }).require(),
-  notificationGroupId: string.require(),
-  eventType: string.require(),
+  goal: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
-    notificationGroupId,
-    eventType,
   } = res.locals;
   const goal_id = goal.id;
   const queueMessage = {
     user_id,
     goal_id,
-    group_id: notificationGroupId,
-    event_type: eventType,
+    event_type: 'goal_created',
   };
 
   setLocals({

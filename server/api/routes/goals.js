@@ -10,9 +10,6 @@ import {
   valResponseAndSend,
 } from '../utils';
 import {
-  goalMoreStrict,
-} from '../validators';
-import {
   goalsUpdate,
   goalsCreate,
   goalsGet,
@@ -51,12 +48,11 @@ const notAuthed = express.Router();
 
 authed.all('/goals.create',
   valBody({
-    goal: goalMoreStrict,
+    goal: object.as({
+      title: string.min(1).require(),
+    }),
     organization_id: string.require(),
-    message: string,
-    flags: array.of(string),
   }),
-  notificationCreateGroupId,
   goalsCreate,
   goalsInsert,
   goalsCreateQueueMessage,
@@ -85,7 +81,6 @@ authed.all('/goals.completeStep',
     goal: object.require(),
   }));
 
-
 authed.all('/goals.rename',
   valBody({
     goal_id: string.require(),
@@ -98,7 +93,6 @@ authed.all('/goals.rename',
     goal_id: string.require(),
     title: string.require(),
   }));
-
 
 authed.all('/goals.archive',
   valBody({
