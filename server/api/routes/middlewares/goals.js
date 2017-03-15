@@ -45,6 +45,11 @@ const goalsCreate = valLocals('goalsCreate', {
     done_by: user_id,
     done_at: r.now(),
   }];
+  goal.steps = {};
+  goal.step_order = [];
+  goal.attachments = {};
+  goal.attachment_order = [];
+
   goal.status = {
     current_step_id: null,
   };
