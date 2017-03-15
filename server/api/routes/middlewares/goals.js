@@ -107,12 +107,8 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
 
   goal.history.push(history);
   goal.status = {
-    flags,
     current_step_id: next_step_id,
-    handoff_at: r.now(),
-    handoff_by: user_id,
-    handoff_message: message,
-    prev_step_id: current_step_id,
+    completed: type === 'goal_completed',
   };
 
   setLocals({

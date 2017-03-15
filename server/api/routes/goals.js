@@ -67,6 +67,7 @@ authed.all('/goals.start',
     organization_id: string.require(),
   }),
   // TODO
+  notificationCreateGroupId,
   valResponseAndSend({
     goal: object.require(),
   }));
