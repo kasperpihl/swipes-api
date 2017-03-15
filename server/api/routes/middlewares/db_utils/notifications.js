@@ -10,26 +10,6 @@ import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
 
-const dbNotificationsMarkAsSeenTs = funcWrap([
-  object.as({
-    user_id: string.require(),
-    timestamp: string.format('iso8601').require(),
-  }).require(),
-], (err, { user_id, timestamp, timestamp_now }) => {
-  if (err) {
-    throw new SwipesError(`dbNotificationsMarkAsSeen: ${err}`);
-  }
-
-  const q =
-    r.table('notifications')
-      .getAll(user_id, { index: 'user_id' })
-      .filter(r.row('updated_at').le(timestamp))
-      .update({
-        seen_at: new Date().toISOString(),
-      });
-
-  return db.rethinkQuery(q);
-});
 const dbNotificationsMarkAsSeenIds = funcWrap([
   object.as({
     notification_ids: array.require(),
@@ -66,7 +46,6 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
 });
 
 export {
-  dbNotificationsMarkAsSeenTs,
   dbNotificationsMarkAsSeenIds,
   dbNotificationsGetAllByIdOrderByTs,
 };

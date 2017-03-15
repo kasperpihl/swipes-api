@@ -4,12 +4,9 @@ import {
   array,
 } from 'valjs';
 import {
-  notificationsMarkAsSeenTs,
-  notificationsMarkAsSeenTsEventType,
-  notificationsMarkAsSeenTsHistoryUpdatedEventType,
   notificationsMarkAsSeenIds,
-  notificationsMarkAsSeenTsQueueMessage,
   notificationsMarkAsSeenIdsQueueMessage,
+  notificationsMarkAsSeenIdsHistoryUpdatedEventType,
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
@@ -20,27 +17,14 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/notifications.markAsSeen.ts',
-  valBody({
-    timestamp: string.format('iso8601').require(),
-  }),
-  notificationsMarkAsSeenTs,
-  notificationsMarkAsSeenTsQueueMessage,
-  notificationsMarkAsSeenTsEventType,
-  notificationsPushToQueue,
-  notificationsMarkAsSeenTsHistoryUpdatedEventType,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    marked_at: string.require(),
-    last_marked: string.require(),
-  }));
-
 authed.all('/notifications.markAsSeen.ids',
   valBody({
     notification_ids: array.of(string).require(),
   }),
   notificationsMarkAsSeenIds,
   notificationsMarkAsSeenIdsQueueMessage,
+  notificationsPushToQueue,
+  notificationsMarkAsSeenIdsHistoryUpdatedEventType,
   notificationsPushToQueue,
   valResponseAndSend({
     notification_ids: array.of(string).require(),

@@ -1,34 +1,17 @@
 import r from 'rethinkdb';
 import Promise from 'bluebird';
 import {
-  dbGetNotificationsTs,
+  dbGetNotificationsIds,
   dbNotificationTargetHistorySeenByUpdate,
 } from '../db_utils/notifications';
 
-const notificationsSeenTsNotificationData = (req, res, next) => {
-  const {
-    marked_at,
-    last_marked,
-  } = res.locals;
-
-  const notificationData = null;
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = {
-    marked_at,
-    last_marked,
-  };
-
-  return next();
-};
-
-const notificationsGetTs = (req, res, next) => {
+const notificationsGetIds = (req, res, next) => {
   const {
     user_id,
-    marked_at,
+    notification_ids,
   } = res.locals;
 
-  dbGetNotificationsTs({ user_id, timestamp: marked_at })
+  dbGetNotificationsIds({ user_id, notification_ids })
     .then((notifications) => {
       res.locals.notifications = notifications;
 
@@ -99,8 +82,7 @@ const notificationsSeenIdsNotificationData = (req, res, next) => {
 };
 
 export {
-  notificationsSeenTsNotificationData,
-  notificationsGetTs,
+  notificationsGetIds,
   notificationsSeenIdsNotificationData,
   noticationsUpdateTargetHistory,
 };

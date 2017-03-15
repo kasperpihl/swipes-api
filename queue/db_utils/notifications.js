@@ -3,6 +3,7 @@ import {
   string,
   number,
   object,
+  array,
   funcWrap,
 } from 'valjs';
 import db from '../db';
@@ -17,20 +18,19 @@ const dbInsertMultipleNotifications = ({ notifications }) => {
 
   return db.rethinkQuery(q);
 };
-const dbGetNotificationsTs = funcWrap([
+const dbGetNotificationsIds = funcWrap([
   object.as({
     user_id: string.require(),
-    timestamp: string.format('iso8601').require(),
+    notification_ids: array.require(),
   }).require(),
-], (err, { user_id, timestamp }) => {
+], (err, { user_id, notification_ids }) => {
   if (err) {
-    throw new SwipesError(`dbGetNotificationsTs: ${err}`);
+    throw new SwipesError(`dbGetNotificationsIds: ${err}`);
   }
 
   const q =
     r.table('notifications')
-      .getAll(user_id, { index: 'user_id' })
-      .filter(r.row('created_at').le(timestamp));
+      .getAll(notification_ids);
 
   return db.rethinkQuery(q);
 });
@@ -77,6 +77,6 @@ const dbNotificationTargetHistorySeenByUpdate = funcWrap([
 
 export {
   dbInsertMultipleNotifications,
-  dbGetNotificationsTs,
+  dbGetNotificationsIds,
   dbNotificationTargetHistorySeenByUpdate,
 };
