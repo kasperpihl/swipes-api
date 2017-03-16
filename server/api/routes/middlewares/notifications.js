@@ -14,6 +14,7 @@ import {
   dbNotificationsMarkAsSeenIds,
 } from './db_utils/notifications';
 
+const env = config.get('env');
 const {
   accessKeyId,
   secretAccessKey,
@@ -95,36 +96,34 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
   const message = queueMessage;
   const messageDeduplicationId = hash({ message });
 
-  // AWS.config.update({ accessKeyId, secretAccessKey });
-  //
-  // const sqs = new AWS.SQS({ region: 'us-west-2' });
-  // const payload = { payload: message };
-  // const sqsParams = {
-  //   MessageBody: JSON.stringify(payload),
-  //   QueueUrl: queueHost,
-  //   MessageGroupId: messageGroupId,
-  //   MessageDeduplicationId: messageDeduplicationId,
-  // };
-  //
-  // sqs.sendMessage(sqsParams, (err, data) => {
-  //   if (err) {
-  //     console.log('AMAZON QUEUE ERR', err);
-  //   }
-  // });
-  // T
-  // Leaving this here because it is easier to test with local queue when
-  // adding new notifications
+  if (env !== 'dev') {
+    AWS.config.update({ accessKeyId, secretAccessKey });
 
+    const sqs = new AWS.SQS({ region: 'us-west-2' });
+    const payload = { payload: message };
+    const sqsParams = {
+      MessageBody: JSON.stringify(payload),
+      QueueUrl: queueHost,
+      MessageGroupId: messageGroupId,
+      MessageDeduplicationId: messageDeduplicationId,
+    };
 
-  request.post({
-    url: `${queueHost}/process`,
-    method: 'POST',
-    json: { payload: message },
-  }, (error) => {
-    if (error) {
-      console.log(error, 'Error pushing to queue!');
-    }
-  });
+    sqs.sendMessage(sqsParams, (err, data) => {
+      if (err) {
+        console.log('AMAZON QUEUE ERR', err);
+      }
+    });
+  } else {
+    request.post({
+      url: `${queueHost}/process`,
+      method: 'POST',
+      json: { payload: message },
+    }, (error) => {
+      if (error) {
+        console.log(error, 'Error pushing to queue!');
+      }
+    });
+  }
 
   return next();
 });
