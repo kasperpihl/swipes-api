@@ -35,7 +35,7 @@ const dbAttachmentsAdd = funcWrap([
         attachments: {
           [attachment.id]: attachment,
         },
-        attachment_order: r.row('attachment_order').default([]).append(attachment.id),
+        attachment_order: r.row('attachment_order').default([]).setUnion([attachment.id]),
         updated_at: r.now(),
         updated_by: user_id,
       }, {
