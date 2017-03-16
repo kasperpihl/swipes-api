@@ -31,7 +31,6 @@ const goalsCreate = valLocals('goalsCreate', {
     user_id,
     goal,
     organization_id,
-    attachment,
   } = res.locals;
 
   goal.id = generateSlackLikeId('G');
