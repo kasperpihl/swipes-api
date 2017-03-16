@@ -109,10 +109,9 @@ authed.all('/goals.start',
   }),
   notificationCreateGroupId,
   goalsGet,
-  (req, res, next) => {
-    res.locals.goalProgress = 'start';
-    return next();
-  },
+  mapLocals([], (setLocals) => {
+    setLocals({ goalProgress: 'start' });
+  }),
   goalsCompleteStep,
   goalsUpdate,
   goalsNextStepQueueMessage,
