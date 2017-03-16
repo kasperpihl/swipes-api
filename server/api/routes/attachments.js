@@ -10,7 +10,8 @@ import {
   linksCreate,
 } from './middlewares/links';
 import {
-  attachmentsAdd,
+  attachmentsCreate,
+  attachmentsInsert,
   attachmentsRename,
   attachmentsDelete,
   attachmentsReorder,
@@ -47,7 +48,8 @@ authed.all('/attachments.add',
   }),
   linksCreate,
   linksAddPermission,
-  attachmentsAdd,
+  attachmentsCreate,
+  attachmentsInsert,
   attachmentsAddQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({

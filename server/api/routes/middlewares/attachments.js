@@ -15,15 +15,13 @@ import {
   generateSlackLikeId,
 } from '../../utils';
 
-const attachmentsAdd = valLocals('attachmentsAdd', {
+const attachmentsCreate = valLocals('attachmentsCreate', {
   user_id: string.require(),
-  target_id: string.require(),
   short_url: string.require(),
   link: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    target_id,
     short_url,
     link,
   } = res.locals;
@@ -44,6 +42,23 @@ const attachmentsAdd = valLocals('attachmentsAdd', {
     updated_at: r.now(),
     updated_by: user_id,
   };
+
+  setLocals({
+    attachment,
+  });
+
+  return next();
+});
+const attachmentsInsert = valLocals('attachmentsInsert', {
+  user_id: string.require(),
+  target_id: string.require(),
+  attachment: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    target_id,
+    attachment,
+  } = res.locals;
 
   dbAttachmentsAdd({ user_id, target_id, attachment })
     .then((results) => {
@@ -223,7 +238,8 @@ const attachmentsReorderQueueMessage = valLocals('attachmentsReorderQueueMessage
 });
 
 export {
-  attachmentsAdd,
+  attachmentsCreate,
+  attachmentsInsert,
   attachmentsRename,
   attachmentsDelete,
   attachmentsReorder,
