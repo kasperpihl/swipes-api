@@ -65,6 +65,12 @@ const rethinkdb = {
 
         return handleCursors(cursor)
           .then((results) => {
+            if (results.errors > 0) {
+              // From rethinkdb docs
+              // first_error: If errors were encountered, contains the text of the first error
+              return reject(results.first_error);
+            }
+
             return resolve(results);
           }).error((err) => {
             return reject(err);
