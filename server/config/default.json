@@ -42,7 +42,7 @@
   "amazonQueue": {
     "accessKeyId": "AKIAJYHNP3XSVYNJK7OA",
     "secretAccessKey": "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",
-    "queueHost": "https://sqs.us-west-2.amazonaws.com/745159268654/Swipes.fifo"
+    "queueHost": "http://localhost:5005"
   },
   "loggly": {
     "token": "a760d2ee-d576-466b-a8ff-53826455a13d",

@@ -32,6 +32,7 @@ const goalsCreatedNotificationData = (req, res, next) => {
   const {
     goal,
   } = res.locals;
+  console.log(goal);
 
   res.locals.notificationData = null;
   res.locals.eventData = { goal };
