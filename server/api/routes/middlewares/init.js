@@ -1,5 +1,4 @@
 import Promise from 'bluebird';
-import config from 'config';
 import {
   string,
 } from 'valjs';
@@ -23,8 +22,16 @@ const initGetData = valLocals('initGetData', {
   const promiseArrayQ = [
     initMe(user_id),
     servicesGetAll(),
-    dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: false }, filterDefaultOption: true }),
-    dbNotificationsGetAllByIdOrderByTs({ user_id, filter: { sent: true }, filterDefaultOption: false }),
+    dbNotificationsGetAllByIdOrderByTs({
+      user_id,
+      filter: { sent: false },
+      filterDefaultOption: true,
+    }),
+    dbNotificationsGetAllByIdOrderByTs({
+      user_id,
+      filter: { sent: true },
+      filterDefaultOption: false,
+    }),
   ];
   const ts = new Date().toISOString();
   Promise.all(promiseArrayQ)
