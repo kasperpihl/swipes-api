@@ -592,6 +592,58 @@ const goalsRenameQueueMessage = valLocals('goalsRenameQueueMessage', {
 
   return next();
 });
+const goalsLoadWay = valLocals('goalsLoadWay', {
+  goal_id: string.require(),
+  way: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    goal_id,
+    way,
+  } = res.locals;
+  const { goal } = way;
+  const {
+    steps,
+    step_order,
+    attachments,
+    attachment_order,
+  } = goal;
+  const properties = {
+    steps,
+    step_order,
+    attachments,
+    attachment_order,
+  };
+
+  dbGoalsUpdateSingle({ goal_id, properties })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const goalsLoadWayQueueMessage = valLocals('goalsLoadWayQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  way_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    goal_id,
+    event_type: 'goal_loaded_way',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
 
 export {
   goalsCreate,
@@ -612,4 +664,6 @@ export {
   goalsNotify,
   goalsRename,
   goalsRenameQueueMessage,
+  goalsLoadWay,
+  goalsLoadWayQueueMessage,
 };

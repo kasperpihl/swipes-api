@@ -9,6 +9,19 @@ import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
 
+const dbWaysGetSingle = funcWrap([
+  object.as({
+    way_id: string.require(),
+  }).require(),
+], (err, { way_id }) => {
+  if (err) {
+    throw new SwipesError(`dbWaysGetSingle: ${err}`);
+  }
+
+  const q = r.table('ways').get(way_id);
+
+  return db.rethinkQuery(q);
+});
 const dbWaysInsertSingle = funcWrap([
   object.as({
     way: object.require(),
@@ -22,7 +35,6 @@ const dbWaysInsertSingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
-
 const dbWaysUpdateSingle = funcWrap([
   object.as({
     id: string.require(),
@@ -39,6 +51,7 @@ const dbWaysUpdateSingle = funcWrap([
 });
 
 export {
+  dbWaysGetSingle,
   dbWaysInsertSingle,
   dbWaysUpdateSingle,
 };

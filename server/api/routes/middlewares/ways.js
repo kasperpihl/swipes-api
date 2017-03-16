@@ -6,6 +6,7 @@ import {
 import {
   dbWaysInsertSingle,
   dbWaysUpdateSingle,
+  dbWaysGetSingle,
 } from './db_utils/ways';
 import {
   generateSlackLikeId,
@@ -135,9 +136,30 @@ const waysArchiveQueueMessage = valLocals('waysArchiveQueueMessage', {
 
   return next();
 });
+const waysGetSingle = valLocals('waysArchiveQueueMessage', {
+  way_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    way_id,
+  } = res.locals;
+
+
+  dbWaysGetSingle({ way_id })
+    .then((way) => {
+      setLocals({
+        way,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
 export {
   waysCreate,
+  waysGetSingle,
   waysInsert,
   waysArchive,
   waysCreateQueueMessage,

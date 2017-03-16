@@ -30,6 +30,8 @@ import {
   goalsNotify,
   goalsRename,
   goalsRenameQueueMessage,
+  goalsLoadWay,
+  goalsLoadWayQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -47,6 +49,9 @@ import {
 import {
   notesCreate,
 } from './middlewares/notes';
+import {
+  waysGetSingle,
+} from './middlewares/ways';
 import {
   linksAddPermission,
   linksCreate,
@@ -204,6 +209,19 @@ authed.all('/goals.notify',
   notificationCreateGroupId,
   goalsNotify,
   goalsNotifyQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal: object.require(),
+  }));
+
+authed.all('/goals.loadWay',
+  valBody({
+    goal_id: string.require(),
+    way_id: string.require(),
+  }),
+  waysGetSingle,
+  goalsLoadWay,
+  goalsLoadWayQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),

@@ -123,6 +123,16 @@ const goalsRenamedNotificationData = (req, res, next) => {
 
   return next();
 };
+const goalsLoadedWayNotificationData = (req, res, next) => {
+  const {
+    goal,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = { goal };
+
+  return next();
+};
 const goalsGeneralWithHistoryNotificationData = (req, res, next) => {
   const {
     group_id,
@@ -156,4 +166,5 @@ export {
   goalsNotifyAddSenderAlways,
   goalsRenamedNotificationData,
   goalsGeneralWithHistoryNotificationData,
+  goalsLoadedWayNotificationData,
 };

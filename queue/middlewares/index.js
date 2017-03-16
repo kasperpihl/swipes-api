@@ -81,6 +81,12 @@ const goal_renamed = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const goal_loaded_way = notifyWrapper([
+  goals.goalsGetSingle,
+  goals.goalsLoadedWayNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
@@ -197,6 +203,7 @@ export {
   goal_milestone_removed,
   goal_notify,
   goal_renamed,
+  goal_loaded_way,
   step_completed,
   milestone_created,
   milestone_archived,
