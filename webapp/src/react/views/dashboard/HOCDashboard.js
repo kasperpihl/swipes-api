@@ -5,6 +5,7 @@ import Button from 'Button';
 import { Map, fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import * as core from 'swipes-core-js';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import { timeAgo } from 'classes/time-utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -14,10 +15,12 @@ import Dashboard from './Dashboard';
 class HOCDashboard extends PureComponent {
   constructor(props) {
     super(props);
+
     this.state = {
       loading: false,
-      notifications: this.getFilteredNotifications(props.notifications),
+      filter: n => n.get('receiver') && n.get('important'),
     };
+    this.state.notifications = this.getFilteredNotifications(props.notifications);
     this.onClickCached = setupCachedCallback(this.onClick, this);
     // now use events as onClick: this.onClickCached(i)
     this.callDelegate = setupDelegate(props.delegate);
@@ -36,17 +39,18 @@ class HOCDashboard extends PureComponent {
     }
   }
   getFilteredNotifications(notifications) {
-    return notifications.filter(n => n.get('receiver') && n.get('important'));
+    return notifications.filter(this.state.filter);
   }
   onMark(id) {
     const { markNotifications } = this.props;
-    const { notifications } = this.state;
+    const { notifications, filter } = this.state;
     if (notifications.size) {
       let arg = [id];
       if (id === 'all') {
-        arg = notifications.getIn([0, 'updated_at']);
+        arg = notifications.toArray().filter(filter).filter(n => !n.get('seen_at')).map(n => n.get('id'));
       }
-      if (arg) {
+      if (arg.length) {
+        console.log('marking!');
         this.setState({ loading: true });
         markNotifications(arg).then(() => {
           if (!this._unmounted) {
@@ -270,6 +274,7 @@ class HOCDashboard extends PureComponent {
 const { func, object, string } = PropTypes;
 HOCDashboard.propTypes = {
   navPush: func,
+  savedState: object,
   delegate: object,
   notifications: list,
   target: string,
@@ -289,6 +294,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  markNotifications: actions.main.markNotifications,
+  markNotifications: core.notifications.mark,
   preview: actions.links.preview,
 })(HOCDashboard);

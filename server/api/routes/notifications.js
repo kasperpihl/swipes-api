@@ -17,7 +17,7 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/notifications.markAsSeen.ids',
+authed.all('/notifications.markAsSeen',
   valBody({
     notification_ids: array.of(string).require(),
   }),

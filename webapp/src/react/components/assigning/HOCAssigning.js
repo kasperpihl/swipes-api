@@ -94,6 +94,5 @@ HOCAssigning.propTypes = {
 };
 
 export default connect(mapStateToProps, {
-  stepAssign: actions.goals.stepAssign,
   tooltip: actions.main.tooltip,
 })(HOCAssigning);

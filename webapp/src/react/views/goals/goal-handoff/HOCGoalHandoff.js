@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { cache } from 'swipes-core-js';
+import { cache, goals } from 'swipes-core-js';
 import { map, list } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import { setupLoadingHandlers } from 'classes/utils';
@@ -186,7 +186,7 @@ class HOCGoalHandoff extends PureComponent {
   }
   updateHandoff(handoff) {
     this.setState({ handoff });
-    const { saveState } = this.props;
+    // const { saveState } = this.props;
     // saveState({ handoff });
   }
   clickedAssign(index, e) {
@@ -241,8 +241,6 @@ class HOCGoalHandoff extends PureComponent {
   renderFooter() {
     const {
       handoff,
-      isSubmitting,
-      errorLabel,
     } = this.state;
     const helper = this.getHelper();
 
@@ -310,11 +308,11 @@ class HOCGoalHandoff extends PureComponent {
   }
 }
 
-const { func, string } = PropTypes;
+const { func, string, object } = PropTypes;
 HOCGoalHandoff.propTypes = {
   navPop: func,
-  selectStep: func,
   assignees: list,
+  savedState: object,
   message: string,
   goalNotify: func,
   contextMenu: func,
@@ -336,8 +334,7 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
   saveCache: cache.save,
-  goalNotify: a.goals.notify,
-  selectStep: a.goals.selectStep,
-  completeStep: a.goals.completeStep,
+  goalNotify: goals.notify,
+  completeStep: goals.completeStep,
   contextMenu: a.main.contextMenu,
 })(HOCGoalHandoff);

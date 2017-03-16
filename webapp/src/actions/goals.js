@@ -1,79 +1,8 @@
 import TabMenu from 'context-menus/tab-menu/TabMenu';
-import { List, Map, fromJS } from 'immutable';
-import { randomString } from 'classes/utils';
+import { fromJS } from 'immutable';
 import * as a from './';
 import { cache } from './core';
 
-const updateGoal = (goalId, goal) => a.api.request('goals.update', {
-  goal_id: goalId,
-  goal: Object.assign({ id: goalId }, goal),
-});
-
-export const removeFromCollection = (goalId, id) => (d, getState) => {
-  let attachments = getState().getIn(['goals', goalId, 'attachments']);
-  if (!attachments) {
-    attachments = Map();
-  }
-  attachments = attachments.delete(id).toJS();
-  let attachmentOrder = getState().getIn(['goals', goalId, 'attachment_order']);
-  if (!attachmentOrder) {
-    attachmentOrder = List();
-  }
-  attachmentOrder = attachmentOrder.filter(at => at !== id).toJS();
-
-  const goal = {
-    attachments,
-    id: goalId,
-    attachment_order: attachmentOrder,
-  };
-  d({ type: 'goal_updated', payload: { goal } });
-  return d(updateGoal(goalId, goal));
-};
-
-export const addToCollection = (goalId, content) => (d, getState) => {
-  let attachments = getState().getIn(['goals', goalId, 'attachments']);
-  if (!attachments) {
-    attachments = Map();
-  }
-
-  attachments = attachments.set(content.shortUrl, content).toJS();
-  let attachmentOrder = getState().getIn(['goals', goalId, 'attachment_order']);
-  if (!attachmentOrder) {
-    attachmentOrder = List();
-  }
-  attachmentOrder = attachmentOrder.push(content.shortUrl).toJS();
-
-  return d(updateGoal(goalId, {
-    attachments,
-    attachment_order: attachmentOrder,
-  }));
-};
-
-export const addGoal = (goal, organizationId, message, flags) => (d, getState) => {
-  if (!goal.step_order.length) {
-    const myId = getState().getIn(['me', 'id']);
-    const sId = randomString(6);
-    goal.step_order.push(sId);
-    goal.steps[sId] = {
-      id: sId,
-      title: goal.title,
-      assignees: [myId],
-    };
-  }
-  return d(a.api.request('goals.create', {
-    message,
-    flags,
-    organization_id: organizationId,
-    goal,
-  }));
-};
-
-export const rename = (goalId, title) => a.api.request('goals.rename', {
-  goal_id: goalId,
-  title,
-});
-
-export const archive = goalId => d => d(a.api.request('goals.archive', { goal_id: goalId }));
 
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {
   assignees = assignees || [];
@@ -208,37 +137,5 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
       initialTabIndex,
       ...options,
     },
-  }));
-};
-
-export const notify = (gId, handoff) => (d, getState) => {
-  let assignees = handoff.get('assignees');
-  assignees = assignees || assignees.toJS();
-
-  const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
-  return d(a.api.request('goals.notify', {
-    goal_id: gId,
-    feedback: (handoff.get('target') === '_feedback'),
-
-    flags: handoff.get('flags'),
-    message: handoff.get('message'),
-    current_step_id: currentStepId,
-    assignees,
-  }));
-};
-
-export const completeStep = (gId, handoff) => (d, getState) => {
-  const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
-  const target = handoff.get('target') === '_complete' ? null : handoff.get('target');
-
-  let assignees = handoff.get('assignees');
-  assignees = assignees && assignees.toJS();
-  return d(a.api.request('goals.completeStep', {
-    goal_id: gId,
-    flags: handoff.get('flags'),
-    next_step_id: target,
-    current_step_id: currentStepId,
-    message: handoff.get('message'),
-    assignees,
   }));
 };

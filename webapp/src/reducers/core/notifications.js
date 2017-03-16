@@ -28,16 +28,6 @@ export default function main(state = initialState, action) {
         return n;
       });
     }
-    case 'notifications_seen_ts':
-    case 'notifications.markAsSeen.ts': {
-      const { marked_at, last_marked: lastMarked } = payload;
-      return state.map((n) => {
-        if (n.get('updated_at') <= lastMarked) {
-          return n.set('seen_at', marked_at);
-        }
-        return n;
-      });
-    }
 
     default:
       return state;

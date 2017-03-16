@@ -1,11 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { fromJS } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoadingHandlers } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
-import { steps, ways } from 'swipes-core-js';
+import { steps, ways, goals } from 'swipes-core-js';
 
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import GoalOverview from './GoalOverview';
@@ -353,10 +352,10 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   createWay: ways.create,
-  archive: a.goals.archive,
+  archive: goals.archive,
   contextMenu: a.main.contextMenu,
   addStep: steps.add,
-  renameGoal: a.goals.rename,
+  renameGoal: goals.rename,
   removeStep: steps.remove,
   renameStep: steps.rename,
   assignStep: steps.assign,
