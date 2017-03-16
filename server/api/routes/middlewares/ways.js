@@ -137,12 +137,15 @@ const waysArchiveQueueMessage = valLocals('waysArchiveQueueMessage', {
   return next();
 });
 const waysGetSingle = valLocals('waysArchiveQueueMessage', {
-  way_id: string.require(),
+  way_id: string,
 }, (req, res, next, setLocals) => {
   const {
     way_id,
   } = res.locals;
 
+  if (!way_id) {
+    return next();
+  }
 
   dbWaysGetSingle({ way_id })
     .then((way) => {
