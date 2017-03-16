@@ -7,7 +7,9 @@ import {
 } from 'valjs';
 import {
   valBody,
+  mapLocals,
   valResponseAndSend,
+  getSwipesLinkObj,
 } from '../utils';
 import {
   goalsUpdate,
@@ -65,61 +67,31 @@ authed.all('/goals.create',
     organization_id: string.require(),
     note_content: object.require(),
   }),
-  (req, res, next) => {
-    res.locals.text = res.locals.note_content;
-
-    return next();
-  },
+  mapLocals('note_content', (setLocals, note_content) => {
+    setLocals({ text: note_content });
+  }),
   notesCreate,
   // Some mapping so we can add the note as an attachment to the goal
-  (req, res, next) => {
-    const {
-      user_id,
-      note,
-    } = res.locals;
-
-    res.locals.link = {
-      service: {
-        id: note.id,
-        name: 'swipes',
-        type: 'note',
-      },
-      permission: {
-        account_id: user_id,
-      },
-      meta: {
-        title: 'Note',
-      },
-    };
-
-    return next();
-  },
+  mapLocals(['note', 'user_id'], (setLocals, note, user_id) => {
+    setLocals({ link: getSwipesLinkObj('note', note.id, 'Note', user_id) });
+  }),
   linksCreate,
   linksAddPermission,
   attachmentsCreate,
   goalsCreate,
   goalsInsert,
-  (req, res, next) => {
-    const {
-      goal,
-    } = res.locals;
-    res.locals.target_id = goal.id;
-
-    return next();
-  },
+  mapLocals('goal', (setLocals, goal) => {
+    setLocals({ target_id: goal.id });
+  }),
   attachmentsInsert,
-  (req, res, next) => {
-    const {
-      attachment,
-      attachment_order,
-      goal,
-    } = res.locals;
-
-    goal.attachments[attachment.id] = attachment;
-    goal.attachment_order = attachment_order;
-
-    return next();
-  },
+  mapLocals(
+    ['attachment', 'attachment_order', 'goal'],
+    (setLocals, attachment, attachment_order, goal) => {
+      goal.attachments[attachment.id] = attachment;
+      goal.attachment_order = attachment_order;
+      setLocals({ goal });
+    },
+  ),
   goalsCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({

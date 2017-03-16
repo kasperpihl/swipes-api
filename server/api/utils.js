@@ -1,6 +1,6 @@
 import config from 'config';
 import randomstring from 'randomstring';
-import valjs, { string, func, object } from 'valjs';
+import valjs, { string, func, object, array, any } from 'valjs';
 import jwt from 'jwt-simple';
 
 const generateSlackLikeId = (type = '', number = 8) => {
@@ -19,6 +19,23 @@ const getClientIp = (req) => {
 
   return ip;
 };
+
+const getSwipesLinkObj = (type, id, title, account_id) => {
+  return {
+    service: {
+      id,
+      name: 'swipes',
+      type,
+    },
+    permission: {
+      account_id,
+    },
+    meta: {
+      title,
+    },
+  };
+};
+
 const createTokens = (user_id) => {
   const token = jwt.encode({
     iss: user_id,
@@ -84,6 +101,7 @@ const valResponseAndSend = schema => (req, res, next) => {
   return sendResponse(req, res);
 };
 
+
 const setLocals = (name, res, next, state) => {
   const error = valjs(state, object.require());
 
@@ -101,6 +119,29 @@ const setLocals = (name, res, next, state) => {
   });
 
   return null;
+};
+
+const mapLocals = (getLocals, handler) => (req, res, next) => {
+  // let's validate the params #inception! :D
+  const error = valjs({ getLocals, handler }, object.as({
+    getLocals: any.of(string.require(), array.of(string).require()).require(),
+    handler: func.require(),
+  }));
+
+  if (error) {
+    return next(`middleware input mapLocals: ${error}`);
+  }
+
+  let locals = getLocals;
+
+  if (!Array.isArray(getLocals)) {
+    locals = [getLocals];
+  }
+  locals = locals.map((l) => {
+    return res.locals[l];
+  });
+  handler(setLocals.bind(null, 'mapLocals', res, next), ...locals);
+  return next();
 };
 
 const valLocals = (name, schema, middleware) => (req, res, next) => {
@@ -156,8 +197,10 @@ export {
   sendResponse,
   valResponseAndSend,
   valLocals,
+  mapLocals,
   valBody,
   getClientIp,
+  getSwipesLinkObj,
   createTokens,
   parseToken,
 };
