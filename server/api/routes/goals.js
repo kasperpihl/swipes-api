@@ -66,6 +66,8 @@ authed.all('/goals.create',
   }),
   (req, res, next) => {
     res.locals.text = res.locals.note_content;
+
+    return next();
   },
   goalsCreate,
   goalsInsert,
@@ -92,6 +94,8 @@ authed.all('/goals.create',
         title: 'Note',
       },
     };
+
+    return next();
   },
   linksCreate,
   linksAddPermission,
@@ -115,6 +119,8 @@ authed.all('/goals.start',
   goalsGet,
   (req, res, next) => {
     res.locals.goalProgress = 'start';
+
+    return next();
   },
   goalsCompleteStep,
   goalsUpdate,
