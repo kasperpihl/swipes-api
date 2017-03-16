@@ -26,7 +26,7 @@ const goalsCreate = valLocals('goalsCreate', {
   }),
   organization_id: string.require(),
   attachment: object.require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
@@ -57,6 +57,10 @@ const goalsCreate = valLocals('goalsCreate', {
   goal.status = {
     current_step_id: null,
   };
+
+  setLocals({
+    goal,
+  });
 
   return next();
 });
