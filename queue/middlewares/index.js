@@ -34,7 +34,15 @@ const goal_created = notifyWrapper([
 
 const goal_completed = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsCompletedNotificationData,
+  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsStepsInterseptUsers,
+  goals.goalsHistoryInterseptUsers,
+  notify.notifyAllInCompany,
+]);
+
+const goal_started = notifyWrapper([
+  goals.goalsGetSingle,
+  goals.goalsGeneralWithHistoryNotificationData,
   goals.goalsStepsInterseptUsers,
   goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
@@ -42,7 +50,7 @@ const goal_completed = notifyWrapper([
 
 const goal_archived = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsArchivedNotificationData,
+  goals.goalsGeneralWithHistoryNotificationData,
   goals.goalsStepsInterseptUsers,
   goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
@@ -50,19 +58,19 @@ const goal_archived = notifyWrapper([
 
 const goal_milestone_added = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsMilestoneAddedNotificationData,
+  goals.goalsGeneralWithHistoryNotificationData,
   notify.notifyAllInCompany,
 ]);
 
 const goal_milestone_removed = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsMilestoneRemovedNotificationData,
+  goals.goalsGeneralWithHistoryNotificationData,
   notify.notifyAllInCompany,
 ]);
 
 const goal_notify = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsNotifyNotificationData,
+  goals.goalsGeneralWithHistoryNotificationData,
   goals.goalsNotifyAddSenderAlways,
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
@@ -75,7 +83,7 @@ const goal_renamed = notifyWrapper([
 
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsStepCompletedNotificationData,
+  goals.goalsGeneralWithHistoryNotificationData,
   goals.goalsNextStepInterseptUsers,
   notify.notifyAllInGoal,
   notify.notifySendEventToAllInCompany,
@@ -183,6 +191,7 @@ const token_revoked = [
 export {
   goal_created,
   goal_completed,
+  goal_started,
   goal_archived,
   goal_milestone_added,
   goal_milestone_removed,

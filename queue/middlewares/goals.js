@@ -38,29 +38,6 @@ const goalsCreatedNotificationData = (req, res, next) => {
 
   return next();
 };
-const goalsCompletedNotificationData = (req, res, next) => {
-  const {
-    group_id,
-    goal,
-  } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
-
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsCompletedNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal };
-
-  return next();
-};
 const goalsStepsInterseptUsers = (req, res, next) => {
   const {
     goal,
@@ -117,121 +94,6 @@ const goalsHistoryInterseptUsers = (req, res, next) => {
 
   return next();
 };
-const goalsArchivedNotificationData = (req, res, next) => {
-  const {
-    group_id,
-    goal,
-  } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
-
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsArchivedNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = { id: goal.id };
-
-  return next();
-};
-const goalsMilestoneAddedNotificationData = (req, res, next) => {
-  const {
-    group_id,
-    goal,
-  } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
-
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsMilestoneAddedNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal };
-
-  return next();
-};
-const goalsMilestoneRemovedNotificationData = (req, res, next) => {
-  const {
-    group_id,
-    goal,
-  } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
-
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsMilestoneRemovedNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal };
-
-  return next();
-};
-const goalsStepCompletedNotificationData = (req, res, next) => {
-  const {
-    group_id,
-    goal,
-  } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
-
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsStepCompletedNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal };
-
-  return next();
-};
-const goalsNotifyNotificationData = (req, res, next) => {
-  const {
-    group_id,
-    goal,
-  } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
-
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsNotifyNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal };
-
-  return next();
-};
 const goalsNotifyAddSenderAlways = (req, res, next) => {
   const {
     user_id,
@@ -260,19 +122,37 @@ const goalsRenamedNotificationData = (req, res, next) => {
 
   return next();
 };
+const goalsGeneralWithHistoryNotificationData = (req, res, next) => {
+  const {
+    group_id,
+    goal,
+  } = res.locals;
+  const historyIndex = getHistoryIndex(goal.history, group_id);
+
+  if (historyIndex === -1) {
+    return next(new SwipesError(`goalsGeneralNotificationData - history item with ${group_id} is not found`));
+  }
+
+  const target = createNotificationTarget(goal, historyIndex);
+  const meta = notificationMeta(goal);
+  const notificationData = {
+    target,
+    meta,
+  };
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = { goal };
+
+  return next();
+};
 
 export {
   goalsGetSingle,
   goalsCreatedNotificationData,
-  goalsCompletedNotificationData,
   goalsStepsInterseptUsers,
   goalsNextStepInterseptUsers,
   goalsHistoryInterseptUsers,
-  goalsArchivedNotificationData,
-  goalsStepCompletedNotificationData,
-  goalsMilestoneAddedNotificationData,
-  goalsMilestoneRemovedNotificationData,
-  goalsNotifyNotificationData,
   goalsNotifyAddSenderAlways,
   goalsRenamedNotificationData,
+  goalsGeneralWithHistoryNotificationData,
 };
