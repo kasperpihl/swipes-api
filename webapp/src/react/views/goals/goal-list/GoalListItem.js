@@ -19,6 +19,7 @@ class GoalListItem extends PureComponent {
   clickedAssign(stepId, e) {
     const { onAssignClick, goal } = this.props;
     const helper = this.getHelper();
+
     if (onAssignClick) {
       onAssignClick(goal.get('id'), helper.getCurrentStepId(), e);
     }

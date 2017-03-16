@@ -328,12 +328,17 @@ class HOCGoalOverview extends PureComponent {
 
 
   renderHeader() {
+    const helper = this.getHelper();
     const { goal } = this.props;
-
+    let subtitle;
+    if (!helper.getIsStarted()) {
+      subtitle = 'Unstarted goal';
+    }
     return (
       <div className="add-goal__header">
         <HOCHeaderTitle
           title={this.getLoadingState('title').loadingLabel || goal.get('title')}
+          subtitle={subtitle}
           delegate={this}
         >
           <Button

@@ -50,8 +50,7 @@ import {
   linksCreate,
 } from './middlewares/links';
 import {
-  attachmentsCreate,
-  attachmentsInsert,
+  attachmentsAdd,
 } from './middlewares/attachments';
 
 const authed = express.Router();
@@ -67,9 +66,10 @@ authed.all('/goals.create',
   }),
   (req, res, next) => {
     res.locals.text = res.locals.note_content;
-
     return next();
   },
+  goalsCreate,
+  goalsInsert,
   notesCreate,
   // Some mapping so we can add the note as an attachment to the goal
   (req, res, next) => {
@@ -78,7 +78,6 @@ authed.all('/goals.create',
       goal,
       note,
     } = res.locals;
-
     res.locals.target_id = goal.id;
     res.locals.link = {
       service: {
@@ -93,15 +92,11 @@ authed.all('/goals.create',
         title: 'Note',
       },
     };
-
     return next();
   },
   linksCreate,
   linksAddPermission,
-  attachmentsCreate,
-  goalsCreate,
-  goalsInsert,
-  attachmentsInsert,
+  attachmentsAdd,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
@@ -121,7 +116,6 @@ authed.all('/goals.start',
   goalsGet,
   (req, res, next) => {
     res.locals.goalProgress = 'start';
-
     return next();
   },
   goalsCompleteStep,

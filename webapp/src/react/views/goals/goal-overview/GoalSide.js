@@ -4,6 +4,7 @@ import StepList from 'components/step-list/StepList';
 import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import Section from 'components/section/Section';
+import Button from 'Button';
 import Icon from 'Icon';
 
 class GoalSide extends Component {
@@ -40,6 +41,22 @@ class GoalSide extends Component {
       </div>
     );
   }
+  renderUnstarted() {
+    const helper = this.getHelper();
+    const numberOfSteps = helper.getTotalNumberOfSteps();
+    if (helper.getIsStarted() || !numberOfSteps) {
+      return undefined;
+    }
+    return (
+      <div>
+        This goal hasn't been started yet
+        <Button
+          text="Start now"
+          primary
+        />
+      </div>
+    );
+  }
   renderStepList() {
     const helper = this.getHelper();
     const { loadingSteps } = this.props;
@@ -47,6 +64,7 @@ class GoalSide extends Component {
       <StepList
         steps={helper.getOrderedSteps().map(s => s.set('loading', loadingSteps.get(s.get('id'))))}
         completed={helper.getNumberOfCompletedSteps()}
+        noActive={!helper.getIsStarted()}
         delegate={this.props.delegate}
       />
     );
@@ -75,8 +93,11 @@ class GoalSide extends Component {
     return (
       <div className="goal-side">
         {this.renderProgress()}
+
         {this.renderStepList()}
         {this.renderAddStep()}
+
+        {this.renderUnstarted()}
       </div>
     );
   }

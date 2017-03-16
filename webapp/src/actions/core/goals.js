@@ -1,5 +1,6 @@
 import * as a from 'actions';
 import { valAction } from 'classes/utils';
+import { convertToRaw, EditorState } from 'draft-js';
 
 import {
   string,
@@ -11,6 +12,7 @@ export const create = valAction('goals.create', [
   goal: {
     title,
   },
+  note_content: convertToRaw(EditorState.createEmpty().getCurrentContent()),
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 })),
 );

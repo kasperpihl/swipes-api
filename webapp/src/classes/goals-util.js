@@ -94,10 +94,10 @@ export default class GoalsUtil {
     return this.getOrderedSteps().slice(this.getCurrentStepIndex());
   }
   getNumberOfCompletedSteps() {
-    if (!this.getCurrentStep()) {
+    if (this.getIsCompleted()) {
       return this.goal.get('step_order').size;
     }
-    return this.getCurrentStepIndex();
+    return this.getCurrentStepIndex() || 0;
   }
   getTotalNumberOfSteps() {
     return this.goal.get('step_order').size;

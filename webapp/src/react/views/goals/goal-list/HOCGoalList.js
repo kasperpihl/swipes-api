@@ -87,7 +87,7 @@ class HOCGoalList extends PureComponent {
   onAssignClick(goalId, stepId, e) {
     const { goals, selectAssignees, openSecondary } = this.props;
     const step = goals.getIn([goalId, 'steps', stepId]);
-
+    e.stopPropagation();
     const options = this.getOptionsForE(e);
     options.actionLabel = 'Reassign and write message';
     let overrideAssignees;
@@ -172,7 +172,7 @@ class HOCGoalList extends PureComponent {
     const options = this.getOptionsForE(e);
     inputMenu({
       ...options,
-      placeholder: 'Title of the goal',
+      placeholder: 'What do you need to do?',
       buttonLabel: 'Add Goal',
     }, (title) => {
       if (title && title.length) {

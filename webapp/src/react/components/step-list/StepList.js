@@ -31,7 +31,7 @@ class StepList extends PureComponent {
     });
   }
   renderStep(step, i) {
-    const { completed, delegate, steps } = this.props;
+    const { completed, delegate, steps, noActive } = this.props;
     const completedI = completed - 1;
     const { hoverIndex } = this.state;
 
@@ -39,7 +39,7 @@ class StepList extends PureComponent {
 
     if (i <= completedI) {
       className += ' step-list-item--completed';
-    } else if (i === completed) {
+    } else if (i === completed && !noActive) {
       className += ' step-list-item--current';
     } else {
       className += ' step-list-item--future';
@@ -130,6 +130,7 @@ const { number, object, bool } = PropTypes;
 
 StepList.propTypes = {
   steps: list,
+  noActive: bool,
   fullHover: bool,
   completed: number,
   delegate: object,
