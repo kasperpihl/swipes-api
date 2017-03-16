@@ -108,6 +108,18 @@ authed.all('/goals.create',
     return next();
   },
   attachmentsInsert,
+  (req, res, next) => {
+    const {
+      attachment,
+      attachment_order,
+      goal,
+    } = res.locals;
+
+    goal.attachments[attachment.id] = attachment;
+    goal.attachment_order = attachment_order;
+
+    return next();
+  },
   goalsCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({

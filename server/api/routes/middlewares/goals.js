@@ -49,10 +49,8 @@ const goalsCreate = valLocals('goalsCreate', {
   }];
   goal.steps = {};
   goal.step_order = [];
-  goal.attachments = {
-    [attachment.id]: attachment,
-  };
-  goal.attachment_order = [attachment.id];
+  goal.attachments = {};
+  goal.attachment_order = [];
 
   goal.status = {
     current_step_id: null,
