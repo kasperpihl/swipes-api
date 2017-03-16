@@ -38,9 +38,14 @@ $navbarH: 49px;
   &__title {
     @include font(11px, $blue-100, 19px, 500);
     text-transform: uppercase;
-
+    &.no-click{
+      color: $deepBlue-100;
+    }
     &:hover {
       text-decoration: underline;
+    }
+    &.no-click:hover{
+      text-decoration: none;
     }
   }
 

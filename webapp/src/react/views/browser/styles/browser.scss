@@ -3,6 +3,12 @@
 
 $navbarHeight: 60px;
 
+.browser-loader {
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translateX(-50%) translateY(-50%);
+}
 .browser-overlay {
   @include size(100%);
   overflow: hidden;

@@ -55,6 +55,8 @@ export const openSlackIn = id => ({ type: types.SLACK_OPEN_IN, payload: { id } }
 // ======================================================
 export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondary(from, {
   id: 'Browser',
+  showTitleInCrumb: true,
+  title: 'Browser',
   props: {
     url,
     onLoad,

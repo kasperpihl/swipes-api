@@ -38,6 +38,7 @@ export const preview = (from, att, targetId) => (d) => {
     d(a.navigation.openSecondary(from, {
       id: 'Preview',
       title: 'Preview',
+      showTitleInCrumb: true,
       props: {
         // K_TODO: Backward compatibility remove || permission.get('shortUrl')
         loadPreview: permission.get('short_url') || permission.get('shortUrl') || link.toJS(),

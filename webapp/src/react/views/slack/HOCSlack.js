@@ -120,6 +120,7 @@ class HOCSlack extends PureComponent {
         url={url}
         persistId={persistId}
         onLoad={this.onLoad}
+        style={{ height: '100%' }}
       />
     );
   }

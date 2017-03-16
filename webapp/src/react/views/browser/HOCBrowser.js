@@ -2,7 +2,10 @@ import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import SWView from 'SWView';
+import Webview from 'components/webview/Webview';
+import Loader from 'components/loaders/Loader';
 import BrowserNavBar from './BrowserNavBar';
+
 import './styles/browser';
 
 class HOCBrowser extends PureComponent {
@@ -22,16 +25,27 @@ class HOCBrowser extends PureComponent {
       forwardEnabled: false,
       title: '',
       currentUrl: props.url,
+      isLoading: true,
     };
+    this.onLoad = this.onLoad.bind(this);
   }
-  componentDidMount() {
-    const webview = this.getWebview();
+
+
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
+  onLoad(webview) {
     webview.focus();
+    this.webview = webview;
     const { onLoad } = this.props;
     if (onLoad) {
       onLoad(webview);
     }
     webview.addEventListener('dom-ready', () => {
+      const { isLoading } = this.state;
+      if (isLoading && !this._unmounted) {
+        this.setState({ isLoading: false });
+      }
       // webview.openDevTools();
     });
     webview.addEventListener('did-navigate', (e) => {
@@ -50,48 +64,43 @@ class HOCBrowser extends PureComponent {
       }
     });
   }
-  componentWillUnmount() {
-    this._unmounted = true;
-  }
-  getWebview() {
-    return this.refs.container.childNodes[0];
-  }
-  getWebviewHtml() {
-    const { url, me } = this.props;
-    let html = `<webview src="${url}" `;
-    html += 'style="height: 100%;" ';
-    html += `partition="persist:browser${me.get('id')}"`;
-    html += '></webview>';
 
-    return html;
-  }
   updateUrl(url) {
     const updateObj = {
       currentUrl: url,
     };
-    const webview = this.getWebview();
-    updateObj.backEnabled = webview.canGoBack();
-    updateObj.forwardEnabled = webview.canGoForward();
+
+    updateObj.backEnabled = this.webview.canGoBack();
+    updateObj.forwardEnabled = this.webview.canGoForward();
     this.setState(updateObj);
   }
   navbarAction(action) {
-    const webview = this.getWebview();
     switch (action) {
       case 'browser':
         return window.open(this.state.currentUrl);
       case 'back':
-        return webview.goBack();
+        return this.webview.goBack();
       case 'forward':
-        return webview.goForward();
+        return this.webview.goForward();
       case 'reload':
-        return webview.reload();
+        return this.webview.reload();
       default:
         return null;
     }
   }
-
+  renderLoader() {
+    const { isLoading } = this.state;
+    if (!isLoading) {
+      return undefined;
+    }
+    return (
+      <div className="browser-loader">
+        <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
+      </div>
+    );
+  }
   render() {
-    const wHtml = this.getWebviewHtml();
+    const { url, me } = this.props;
     const {
       forwardEnabled,
       backEnabled,
@@ -100,10 +109,12 @@ class HOCBrowser extends PureComponent {
     } = this.state;
     return (
       <SWView noframe>
-        <div
-          ref="container"
+
+        <Webview
           className="browser-overlay__webview-container"
-          dangerouslySetInnerHTML={{ __html: wHtml }}
+          url={url}
+          persistId={`browser${me.get('id')}`}
+          onLoad={this.onLoad}
         />
         <BrowserNavBar
           backEnabled={backEnabled}
@@ -112,6 +123,7 @@ class HOCBrowser extends PureComponent {
           title={title}
           url={currentUrl}
         />
+        {this.renderLoader()}
       </SWView>
     );
   }

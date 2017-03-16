@@ -12,25 +12,31 @@ class Webview extends PureComponent {
   getWebview() {
     return this.refs.container.childNodes[0];
   }
-  getWebviewHtml() {
-    const { persistId, url, preloadUrl } = this.props;
+  getWebviewHtml(url, persistId, preloadUrl) {
     let html = `<webview src="${url}" class="webview" `;
     if (preloadUrl) {
       html += `preload="${preloadUrl}" `;
     }
-
+    html += 'style="height: 100%;" ';
     html += `partition="persist:${persistId}"`;
     html += '></webview>';
 
     return html;
   }
   render() {
-    const wHtml = this.getWebviewHtml();
+    const {
+      persistId,
+      url,
+      preloadUrl,
+      onLoad, // eslint-disable-line
+      ...rest
+    } = this.props;
+    const wHtml = this.getWebviewHtml(url, persistId, preloadUrl);
     return (
       <div
         ref="container"
-        style={{ height: '100%' }}
         dangerouslySetInnerHTML={{ __html: wHtml }}
+        {...rest}
       />
     );
   }

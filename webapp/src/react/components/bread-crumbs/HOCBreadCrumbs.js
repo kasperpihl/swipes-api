@@ -21,12 +21,22 @@ class HOCBreadCrumbs extends Component {
     const title = crumb.get('title');
 
     return (
-      <div className="bread-crumbs__crumb" key={i} ref="container" onClick={this.onClickCached(i)}>
+      <div className="bread-crumbs__crumb" key={i} onClick={this.onClickCached(i)}>
         <div className="bread-crumbs__title">
           {title}
         </div>
         <div className="bread-crumbs__seperator">
           <Icon icon="Breadcrumb" className="bread-crumbs__icon" />
+        </div>
+      </div>
+    );
+  }
+  renderTitle(crumb) {
+    const title = crumb.get('title');
+    return (
+      <div className="bread-crumbs__crumb" key="title">
+        <div className="bread-crumbs__title no-click">
+          {title}
         </div>
       </div>
     );
@@ -45,6 +55,10 @@ class HOCBreadCrumbs extends Component {
         breadCrumbsHTML.push(this.renderCrumb(crumb, i));
       }
     });
+    if (history.size === 1 && history.last().get('showTitleInCrumb')) {
+      breadCrumbsHTML.push(this.renderTitle(history.last()));
+    }
+
 
     return breadCrumbsHTML;
   }
