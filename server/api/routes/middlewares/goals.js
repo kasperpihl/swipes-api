@@ -90,7 +90,12 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     return next(new SwipesError('Invalid next_step_id'));
   }
 
-  const type = next_step_id ? 'step_completed' : 'goal_completed';
+  let type = next_step_id ? 'step_completed' : 'goal_completed';
+
+  if (goalProgress === 'start') {
+    type = 'goal_started';
+  }
+
   const currentStep = goal.steps[current_step_id] || {};
   const history = {
     type,
@@ -109,14 +114,20 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     goal.steps[next_step_id].assignees = assignees;
   }
 
-  goal.history.push(history);
   goal.status = {
     current_step_id: next_step_id,
     completed: type === 'goal_completed',
   };
 
+  if (type === 'goal_started') {
+    goal.status.started = true;
+  }
+
+  goal.history.push(history);
+
   setLocals({
     goal,
+    type,
   });
 
   return next();
@@ -429,24 +440,25 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
   goal: object.as({
     id: string.require(),
   }).require(),
-  next_step_id: string,
-  goalProgress: string.require(),
+  type: string.require(),
   notificationGroupId: string.require(),
+  next_step_id: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
     next_step_id,
+    type,
     notificationGroupId,
   } = res.locals;
   const goal_id = goal.id;
-  const event_type = next_step_id ? 'step_completed' : 'goal_completed';
+
   const queueMessage = {
     user_id,
     goal_id,
     next_step_id,
     group_id: notificationGroupId,
-    event_type,
+    event_type: type,
   };
 
   setLocals({
