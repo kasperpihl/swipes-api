@@ -67,6 +67,7 @@ authed.all('/goals.create',
   }),
   (req, res, next) => {
     res.locals.text = res.locals.note_content;
+
     return next();
   },
   notesCreate,
@@ -74,10 +75,9 @@ authed.all('/goals.create',
   (req, res, next) => {
     const {
       user_id,
-      goal,
       note,
     } = res.locals;
-    res.locals.target_id = goal.id;
+
     res.locals.link = {
       service: {
         id: note.id,
@@ -91,6 +91,7 @@ authed.all('/goals.create',
         title: 'Note',
       },
     };
+
     return next();
   },
   linksCreate,
@@ -98,6 +99,14 @@ authed.all('/goals.create',
   attachmentsCreate,
   goalsCreate,
   goalsInsert,
+  (req, res, next) => {
+    const {
+      goal,
+    } = res.locals;
+    res.locals.target_id = goal.id;
+
+    return next();
+  },
   attachmentsInsert,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
