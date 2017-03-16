@@ -1,7 +1,6 @@
 import * as a from 'actions';
 import { valAction } from 'classes/utils';
 import { convertToRaw, EditorState } from 'draft-js';
-
 import {
   string,
 } from 'valjs';
