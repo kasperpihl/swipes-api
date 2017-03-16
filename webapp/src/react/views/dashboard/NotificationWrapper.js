@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { mapContains, listOf } from 'react-immutable-proptypes';
+import { mapContains, list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
-import { setupDelegate, setupCachedCallback } from 'classes/utils';
+import { setupDelegate, setupCachedCallback, attachmentIconForService } from 'classes/utils';
 
 import './styles/notification-item';
 
@@ -57,12 +57,15 @@ class NotificationItem extends Component {
       return undefined;
     }
 
-    const HTMLAttachments = attachments.map((title, i) => (
+    const HTMLAttachments = attachments.map((att, i) => (
       <div onClick={this.onAttachmentClick(i)} className="notif-attachment" key={i}>
         <div className="notif-attachment__icon">
-          <Icon icon="Flag" className="notif-attachment__svg" />
+          <Icon
+            icon={attachmentIconForService(att.getIn(['link', 'service']) || att)}
+            className="notif-attachment__svg"
+          />
         </div>
-        <div className="notif-attachment__title">{title}</div>
+        <div className="notif-attachment__title">{att.get('title')}</div>
       </div>
       ));
 
@@ -141,7 +144,7 @@ NotificationItem.propTypes = {
     noClickTitle: bool,
     title: oneOfType([array, string]),
     message: string,
-    attachments: listOf(string),
+    attachments: list,
     timeago: string,
   }),
 };

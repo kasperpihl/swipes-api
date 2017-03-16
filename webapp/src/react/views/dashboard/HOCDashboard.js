@@ -96,7 +96,7 @@ class HOCDashboard extends PureComponent {
     if (!goal || !flags || !goal.get('attachments')) {
       return undefined;
     }
-    const at = flags.map(fId => (goal.getIn(['attachments', fId, 'title']))).filter(v => !!v);
+    const at = flags.map(fId => (goal.getIn(['attachments', fId]))).filter(v => !!v);
     return fromJS(at);
   }
   getStepTitles(goalId, from, to) {

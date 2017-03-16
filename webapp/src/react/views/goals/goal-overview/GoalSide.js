@@ -41,28 +41,16 @@ class GoalSide extends Component {
       </div>
     );
   }
-  renderUnstarted() {
-    const helper = this.getHelper();
-    const numberOfSteps = helper.getTotalNumberOfSteps();
-    if (helper.getIsStarted() || !numberOfSteps) {
-      return undefined;
-    }
-    return (
-      <div>
-        This goal hasn't been started yet
-        <Button
-          text="Start now"
-          primary
-        />
-      </div>
-    );
-  }
   renderStepList() {
     const helper = this.getHelper();
-    const { loadingSteps } = this.props;
+    const { loadingState } = this.props;
     return (
       <StepList
-        steps={helper.getOrderedSteps().map(s => s.set('loading', loadingSteps.get(s.get('id'))))}
+        steps={helper.getOrderedSteps().map((s) => {
+          const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;
+          s = s.set('loading', l);
+          return s;
+        })}
         completed={helper.getNumberOfCompletedSteps()}
         noActive={!helper.getIsStarted()}
         delegate={this.props.delegate}
@@ -70,13 +58,14 @@ class GoalSide extends Component {
     );
   }
   renderAddStep() {
-    const { loadingSteps } = this.props;
-    const isLoading = !!loadingSteps.get('add');
+    const { loadingState } = this.props;
+    const loading = loadingState.get('add');
     let className = 'add-step';
-    const buttonTitle = loadingSteps.get('add') || 'Add step';
+    let buttonTitle = 'Add step';
 
-    if (isLoading) {
+    if (loading && loading.loadingLabel) {
       className += ' add-step--loading';
+      buttonTitle = loading.loadingLabel;
     }
 
     return (
@@ -85,7 +74,6 @@ class GoalSide extends Component {
           <Icon icon="Plus" className="add-step__svg" />
         </div>
         <button className="add-step__text" onClick={this.onClick}>{buttonTitle}</button>
-        <button className="add-step__text" onClick={this.onLoadWay}>Load steps</button>
       </div>
     );
   }
@@ -96,8 +84,6 @@ class GoalSide extends Component {
 
         {this.renderStepList()}
         {this.renderAddStep()}
-
-        {this.renderUnstarted()}
       </div>
     );
   }
@@ -110,5 +96,5 @@ const { object } = PropTypes;
 GoalSide.propTypes = {
   goal: map,
   delegate: object,
-  loadingSteps: map,
+  loadingState: map,
 };

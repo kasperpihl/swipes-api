@@ -1,0 +1,10 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.sw-ways{
+  @include size(100%, auto);
+  @include flexContainer('row', between, start) {
+    flex-wrap: wrap;
+  };
+  margin-top: 48px;
+}

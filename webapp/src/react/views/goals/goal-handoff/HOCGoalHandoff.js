@@ -273,8 +273,7 @@ class HOCGoalHandoff extends PureComponent {
           <Button
             text={label}
             onClick={this.onSubmit}
-            loading={isSubmitting}
-            errorLabel={errorLabel}
+            {...this.getLoadingState('button')}
             primary
           />
         </div>

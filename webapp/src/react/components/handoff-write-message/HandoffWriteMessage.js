@@ -25,7 +25,7 @@ class HandoffWriteMessage extends Component {
     if (disabled) {
       className += ' handoff-write-message__textarea--disabled';
     }
-    const ph = placeholder || 'What message should be passed on to them?';
+    const ph = placeholder || 'What message should be passed on to the next person?';
     return (
       <ReactTextarea
         className={className}

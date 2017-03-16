@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
 import * as a from 'actions';
 import { attachments as att } from 'swipes-core-js';
-import { setupCachedCallback, setupDelegate, setupLoadingHandlers } from 'classes/utils';
+import {
+  setupCachedCallback,
+  setupDelegate,
+  setupLoadingHandlers,
+  attachmentIconForService,
+} from 'classes/utils';
 import Icon from 'Icon';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import Attachment from './Attachment';
@@ -154,16 +159,7 @@ class HOCAttachments extends PureComponent {
       },
     };
   }
-  getIconForService(service) {
-    switch (service.get('type')) {
-      case 'url':
-        return 'Hyperlink';
-      case 'note':
-        return 'Note';
-      default:
-        return 'Hyperlink';
-    }
-  }
+
   attachToTarget(type, id, title) {
     const linkObj = this.getSwipesLinkObj(type, id, title);
     const { targetId, addAttachment } = this.props;
@@ -190,7 +186,7 @@ class HOCAttachments extends PureComponent {
     return aOrder.map((aId) => {
       const at = attachments.get(aId);
       // K_TODO: Backward compatibility remove "|| at"
-      const icon = this.getIconForService(at.getIn(['link', 'service']) || at);
+      const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
 
       return (
         <Attachment
@@ -237,8 +233,9 @@ class HOCAttachments extends PureComponent {
   render() {
     return (
       <div className="attachments">
-        {this.renderAttachments()}
         {this.renderAddAttachments()}
+        {this.renderAttachments()}
+
       </div>
     );
   }

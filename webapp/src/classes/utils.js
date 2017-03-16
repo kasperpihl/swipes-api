@@ -37,6 +37,18 @@ export function iconForService(service) {
       return 'SwipesLogo';
   }
 }
+
+export function attachmentIconForService(service) {
+  switch (service.get('type')) {
+    case 'url':
+      return 'Hyperlink';
+    case 'note':
+      return 'Note';
+    default:
+      return 'Hyperlink';
+  }
+}
+
 export function traverseElement(target, iterator) {
   do {
     if (target && !iterator(target)) {
@@ -379,7 +391,9 @@ export function setupLoadingHandlers(ctx) {
     }
   };
   let setClearTimer;
-
+  function getAllLoadingStates() {
+    return _loadingStates;
+  }
   function setLoadingState(name, label, duration) {
     const newState = { loading: true };
     if (label) {
@@ -415,9 +429,10 @@ export function setupLoadingHandlers(ctx) {
   }
 
 
-  ctx.setLoadingState = setLoadingState;
-  ctx.getLoadingState = getLoadingState;
-  ctx.clearLoadingState = clearLoadingState;
+  ctx.setLoadingState = setLoadingState.bind(ctx);
+  ctx.getLoadingState = getLoadingState.bind(ctx);
+  ctx.clearLoadingState = clearLoadingState.bind(ctx);
+  ctx.getAllLoadingStates = getAllLoadingStates.bind(ctx);
 
   bindAll(ctx, ['setLoadingState', 'getLoadingState', 'clearLoadingState']);
 }

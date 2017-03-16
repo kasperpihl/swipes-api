@@ -6,30 +6,22 @@ import { bindAll, setupCachedCallback, setupLoadingHandlers } from 'classes/util
 import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
 import { steps, ways } from 'swipes-core-js';
-import Section from 'components/section/Section';
-import SWView from 'SWView';
-import Button from 'Button';
-import HOCAttachments from 'components/attachments/HOCAttachments';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+
 import TabMenu from 'context-menus/tab-menu/TabMenu';
-import HOCHistory from './HOCHistory';
-import GoalSide from './GoalSide';
-import './styles/goal-overview.scss';
+import GoalOverview from './GoalOverview';
+
 /* global msgGen */
 
 class HOCGoalOverview extends PureComponent {
   static minWidth() {
-    return 650;
+    return 800;
   }
   static maxWidth() {
-    return 900;
+    return 1000;
   }
   constructor(props) {
     super(props);
     bindAll(this, ['onHandoff', 'onContext']);
-    this.state = {
-      loadingSteps: fromJS({}),
-    };
 
     setupLoadingHandlers(this);
 
@@ -48,6 +40,9 @@ class HOCGoalOverview extends PureComponent {
     if (goal && !nextGoal) {
       navPop();
     }
+  }
+  onLoadWay(wayId) {
+
   }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
@@ -86,6 +81,7 @@ class HOCGoalOverview extends PureComponent {
     const items = [{ title: 'Reassign' }, { title: 'Rename' }, remove];
     const delegate = {
       onItemAction: (item) => {
+        const clearCB = this.clearLoadingState.bind(this, step.get('id'));
         if (item.title === 'Reassign') {
           this.onAssign(i, options);
         } else if (item.title === 'Rename') {
@@ -95,14 +91,16 @@ class HOCGoalOverview extends PureComponent {
             buttonLabel: 'Rename',
           }, (title) => {
             if (title !== step.get('title') && title.length) {
-              this.setStepLoading(step.get('id'), 'Renaming...');
-              renameStep(goal.get('id'), step.get('id'), title).then(this.clearCB(step.get('id')));
+              this.setLoadingState(step.get('id'), 'Renaming...');
+              renameStep(goal.get('id'), step.get('id'), title).then(() => {
+                this.clearLoadingState(step.get('id'));
+              });
             }
           });
         } else {
           contextMenu(null);
-          this.setStepLoading(step.get('id'), 'Removing...');
-          removeStep(goal.get('id'), step.get('id')).then(this.clearCB(step.get('id')));
+          this.setLoadingState(step.get('id'), 'Removing...');
+          removeStep(goal.get('id'), step.get('id')).then(() => clearCB());
         }
       },
     };
@@ -132,8 +130,9 @@ class HOCGoalOverview extends PureComponent {
         if (i === helper.getCurrentStepIndex()) {
           this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
         } else {
-          this.setStepLoading(step.get('id'), 'Assigning...');
-          assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(this.clearCB(step.get('id')));
+          const clearCB = this.clearLoadingState.bind(null, step.get('id'));
+          this.setLoadingState(step.get('id'), 'Assigning...');
+          assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(() => clearCB());
         }
       }
     });
@@ -297,8 +296,8 @@ class HOCGoalOverview extends PureComponent {
       buttonLabel: 'Add',
     }, (title) => {
       if (title && title.length) {
-        this.setStepLoading('add', 'Adding...');
-        addStep(goal.get('id'), title).then(this.clearCB('add'));
+        this.setLoadingState('add', 'Adding...');
+        addStep(goal.get('id'), title).then(() => this.clearLoadingState('add'));
       }
     });
   }
@@ -312,92 +311,15 @@ class HOCGoalOverview extends PureComponent {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
-  setStepLoading(id, flag) {
-    let { loadingSteps } = this.state;
-    loadingSteps = loadingSteps.set(id, flag);
-    if (!flag) {
-      loadingSteps = loadingSteps.delete(id);
-    }
-    this.setState({
-      loadingSteps,
-    });
-  }
-  clearLoadingForStep(id) {
-    this.setStepLoading(id, false);
-  }
-
-
-  renderHeader() {
-    const helper = this.getHelper();
-    const { goal } = this.props;
-    let subtitle;
-    if (!helper.getIsStarted()) {
-      subtitle = 'Unstarted goal';
-    }
-    return (
-      <div className="add-goal__header">
-        <HOCHeaderTitle
-          title={this.getLoadingState('title').loadingLabel || goal.get('title')}
-          subtitle={subtitle}
-          delegate={this}
-        >
-          <Button
-            text="Give Feedback"
-            onClick={this.onNotify('_feedback', 'Give Feedback')}
-          />
-          <Button
-            text="Notify"
-            onClick={this.onNotify('_notify', 'Notify')}
-          />
-          <Button
-            icon="ThreeDots"
-            onClick={this.onContext}
-            {...this.getLoadingState('dots')}
-          />
-        </HOCHeaderTitle>
-      </div>
-    );
-  }
-  renderLeft() {
-    const { goal } = this.props;
-
-    return (
-      <div className="goal-overview__column goal-overview__column--left">
-        <Section title="Activity" />
-        <HOCHistory goal={goal} />
-      </div>
-    );
-  }
-  renderRight() {
-    const { goal } = this.props;
-    const { loadingSteps } = this.state;
-    return (
-      <div className="goal-overview__column goal-overview__column--right">
-        <GoalSide goal={goal} delegate={this} loadingSteps={loadingSteps} />
-        <Section title="Attachments" />
-        <HOCAttachments
-          attachments={goal.get('attachments')}
-          attachmentOrder={goal.get('attachment_order')}
-          targetId={goal.get('id')}
-          delegate={this}
-        />
-      </div>
-    );
-  }
   render() {
-    const { goal } = this.props;
-
-    if (!goal) {
-      return <div />;
-    }
-
+    const { goal, me } = this.props;
     return (
-      <SWView header={this.renderHeader()}>
-        <div className="goal-overview">
-          {this.renderLeft()}
-          {this.renderRight()}
-        </div>
-      </SWView>
+      <GoalOverview
+        goal={goal}
+        myId={me.get('id')}
+        delegate={this}
+        loadingState={this.getAllLoadingStates()}
+      />
     );
   }
 }

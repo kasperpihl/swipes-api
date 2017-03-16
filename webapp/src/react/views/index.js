@@ -1,4 +1,3 @@
-import AddGoal from './goals/add-goal/HOCAddGoal';
 import Browser from './browser/HOCBrowser';
 import Find from './find/HOCFind';
 import GoalHandoff from './goals/goal-handoff/HOCGoalHandoff';
@@ -14,7 +13,6 @@ import Slack from './slack/HOCSlack';
 import Store from './store/HOCStore';
 
 export {
-  AddGoal,
   Browser,
   Find,
   GoalHandoff,

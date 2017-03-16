@@ -38,6 +38,9 @@ export default function history(state = initialState, action) {
       return state.updateIn([target, 'stack'], s => s.push(fromJS(payload.obj)));
     }
     case types.NAVIGATION_POP: {
+      if (payload.target === 'secondary' && state.get('locked')) {
+        state = state.set('locked', false);
+      }
       return state.updateIn([payload.target, 'stack'], (s) => {
         if (payload && typeof payload.index === 'number') {
           return s.slice(0, payload.index + 1);
