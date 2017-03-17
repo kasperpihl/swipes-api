@@ -11,7 +11,7 @@ import {
   valLocals,
 } from '../../utils';
 import {
-  dbNotificationsMarkAsSeenIds,
+  dbNotificationsMarkAsSeen,
 } from './db_utils/notifications';
 
 const env = config.get('env');
@@ -21,7 +21,7 @@ const {
   queueHost,
 } = config.get('amazonQueue');
 
-const notificationsMarkAsSeenIds = valLocals('notificationsMarkAsSeenIds', {
+const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
   notification_ids: array.of(string).require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -34,7 +34,7 @@ const notificationsMarkAsSeenIds = valLocals('notificationsMarkAsSeenIds', {
     last_marked: timestamp_now,
   });
 
-  dbNotificationsMarkAsSeenIds({ notification_ids, timestamp_now })
+  dbNotificationsMarkAsSeen({ notification_ids, timestamp_now })
     .then(() => {
       return next();
     })
@@ -42,14 +42,14 @@ const notificationsMarkAsSeenIds = valLocals('notificationsMarkAsSeenIds', {
       return next(err);
     });
 });
-const notificationsMarkAsSeenIdsHistoryUpdatedEventType = valLocals('notificationsMarkAsSeenIdsEventType', {
+const notificationsMarkAsSeenHistoryUpdatedEventType = valLocals('notificationsMarkAsSeenEventType', {
   queueMessage: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     queueMessage,
   } = res.locals;
 
-  queueMessage.event_type = 'notifications_seen_ids_history_updated';
+  queueMessage.event_type = 'notifications_seen_history_updated';
 
   setLocals({
     queueMessage,
@@ -57,7 +57,7 @@ const notificationsMarkAsSeenIdsHistoryUpdatedEventType = valLocals('notificatio
 
   return next();
 });
-const notificationsMarkAsSeenIdsQueueMessage = valLocals('notificationsMarkAsSeenIdsQueueMessage', {
+const notificationsMarkAsSeenQueueMessage = valLocals('notificationsMarkAsSeenQueueMessage', {
   user_id: string.require(),
   notification_ids: array.of(string).require(),
   last_marked: string.require(),
@@ -71,7 +71,7 @@ const notificationsMarkAsSeenIdsQueueMessage = valLocals('notificationsMarkAsSee
     user_id,
     notification_ids,
     last_marked,
-    event_type: 'notifications_seen_ids',
+    event_type: 'notifications_seen',
   };
 
   setLocals({
@@ -130,7 +130,7 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
 
 export {
   notificationsPushToQueue,
-  notificationsMarkAsSeenIds,
-  notificationsMarkAsSeenIdsQueueMessage,
-  notificationsMarkAsSeenIdsHistoryUpdatedEventType,
+  notificationsMarkAsSeen,
+  notificationsMarkAsSeenQueueMessage,
+  notificationsMarkAsSeenHistoryUpdatedEventType,
 };

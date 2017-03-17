@@ -16,7 +16,7 @@ class HOCGoalOverview extends PureComponent {
     return 800;
   }
   static maxWidth() {
-    return 1000;
+    return 900;
   }
   constructor(props) {
     super(props);

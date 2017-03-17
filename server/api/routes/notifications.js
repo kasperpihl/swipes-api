@@ -4,9 +4,9 @@ import {
   array,
 } from 'valjs';
 import {
-  notificationsMarkAsSeenIds,
-  notificationsMarkAsSeenIdsQueueMessage,
-  notificationsMarkAsSeenIdsHistoryUpdatedEventType,
+  notificationsMarkAsSeen,
+  notificationsMarkAsSeenQueueMessage,
+  notificationsMarkAsSeenHistoryUpdatedEventType,
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
@@ -21,10 +21,10 @@ authed.all('/notifications.markAsSeen',
   valBody({
     notification_ids: array.of(string).require(),
   }),
-  notificationsMarkAsSeenIds,
-  notificationsMarkAsSeenIdsQueueMessage,
+  notificationsMarkAsSeen,
+  notificationsMarkAsSeenQueueMessage,
   notificationsPushToQueue,
-  notificationsMarkAsSeenIdsHistoryUpdatedEventType,
+  notificationsMarkAsSeenHistoryUpdatedEventType,
   notificationsPushToQueue,
   valResponseAndSend({
     notification_ids: array.of(string).require(),

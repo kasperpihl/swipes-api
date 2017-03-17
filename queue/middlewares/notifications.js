@@ -64,7 +64,7 @@ const noticationsUpdateTargetHistory = (req, res, next) => {
       return next(err);
     });
 };
-const notificationsSeenIdsNotificationData = (req, res, next) => {
+const notificationsSeenNotificationData = (req, res, next) => {
   const {
     notification_ids,
     last_marked,
@@ -83,6 +83,6 @@ const notificationsSeenIdsNotificationData = (req, res, next) => {
 
 export {
   notificationsGetIds,
-  notificationsSeenIdsNotificationData,
+  notificationsSeenNotificationData,
   noticationsUpdateTargetHistory,
 };

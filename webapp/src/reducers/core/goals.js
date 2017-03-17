@@ -23,6 +23,11 @@ export default function goalsReducer(state = initialState, action) {
       }
       return state.setIn([payload.goal_id, 'title'], payload.title);
     }
+    case 'goals.completeStep':
+    case 'step_completed':
+    case 'goal_completed':
+    case 'goal_notify':
+    case 'goals.notify':
     case 'goal_started':
     case 'goals.start': {
       return state.mergeIn([payload.goal.id], payload.goal);

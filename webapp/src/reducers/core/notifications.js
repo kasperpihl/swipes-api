@@ -18,8 +18,8 @@ export default function main(state = initialState, action) {
     case types.NOTIFICATION_ADD: {
       return state.filter(n => n.get('id') !== payload.id).insert(0, fromJS(payload));
     }
-    case 'notifications.markAsSeen.ids':
-    case 'notifications_seen_ids': {
+    case 'notifications.markAsSeen':
+    case 'notifications_seen': {
       const { notification_ids: ids, last_marked: lastMarked } = payload;
       return state.map((n) => {
         if (ids && ids.indexOf(n.get('id')) !== -1) {
