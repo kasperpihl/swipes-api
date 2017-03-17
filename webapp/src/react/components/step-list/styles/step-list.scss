@@ -63,21 +63,10 @@
 
   &__tooltip {
     @include font(12px, $bg, 500);
-    @include centerAbsolute(vertical, $addToTransform: translateX(-110%));
     background-color: $deepBlue-100;
     padding: 10px 15px;
-    opacity: 0;
     pointer-events: none;
-    transition: .05s ease;
-
-    &:before {
-      @include size(10px);
-      @include centerAbsolute(vertical, right, rotate(45deg));
-      background-color: $deepBlue-100;
-      content: '';
-      right: -5px;
-      z-index: -1;
-    }
+    white-space: nowrap;
   }
 }
 

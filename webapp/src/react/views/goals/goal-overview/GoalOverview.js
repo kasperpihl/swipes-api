@@ -139,14 +139,15 @@ class GoalOverview extends PureComponent {
       statusLabel = 'Add steps before you start the goal';
     }
     return (
-      <div className="add-goal__footer">
-        <div className="add-goal__actions">
+      <div className="handoff-bar">
+        <div className="handoff-bar__label">
           {statusLabel}
+        </div>
+        <div className="handoff-bar__actions">
           <Button
             text="Start Goal"
             primary
             disabled={!helper.getTotalNumberOfSteps()}
-            className="add-goal__btn add-goal__btn--cta"
             onClick={this.onStart}
           />
         </div>

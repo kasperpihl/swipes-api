@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import { list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { setupCachedCallback, setupDelegate } from 'classes/utils';
+import { setupCachedCallback, setupDelegate, getParentByClass } from 'classes/utils';
 import Icon from 'Icon';
+import StepTooltip from './StepTooltip';
 
 import './styles/step-list.scss';
 
@@ -22,12 +23,36 @@ class HOCStepList extends PureComponent {
   }
   componentDidMount() {
   }
-  onEnter(i) {
+  onEnter(i, tooltipText, e) {
+    const target = getParentByClass(e.target, 'step-list-item__indicator');
+
+    if (target) {
+      const { tooltip, tooltipAlign } = this.props;
+      const position = tooltipAlign || 'left';
+
+      const data = {
+        component: StepTooltip,
+        props: {
+          tooltipText,
+        },
+        options: {
+          boundingRect: target.getBoundingClientRect(),
+          position,
+        },
+      };
+
+      tooltip(data);
+    }
+
     this.setState({
       hoverIndex: i,
     });
   }
   onLeave() {
+    const { tooltip } = this.props;
+
+    tooltip(null);
+    
     this.setState({
       hoverIndex: -1,
     });
@@ -89,7 +114,7 @@ class HOCStepList extends PureComponent {
         <div
           className="step-list-item__indicator"
           onClick={this.onCheck(i)}
-          onMouseEnter={fullHover ? undefined : this.onEnter(i)}
+          onMouseEnter={fullHover ? undefined : this.onEnter(i, tooltip)}
           onMouseLeave={fullHover ? undefined : this.onLeave}
         >
           <div className="step-list-item__icon">
@@ -99,7 +124,6 @@ class HOCStepList extends PureComponent {
             />
           </div>
         </div>
-        <div className="step-list-item__tooltip">{tooltip}</div>
         <div className="step-list-item__title">
           {title}
         </div>
@@ -130,7 +154,7 @@ export default connect(null, {
   tooltip: a.main.tooltip,
 })(HOCStepList);
 
-const { number, object, bool, func } = PropTypes;
+const { string, number, object, bool, func } = PropTypes;
 
 HOCStepList.propTypes = {
   steps: list,
@@ -139,4 +163,5 @@ HOCStepList.propTypes = {
   fullHover: bool,
   completed: number,
   delegate: object,
+  tooltipAlign: string,
 };
