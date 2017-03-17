@@ -180,7 +180,6 @@ class HOCGoalOverview extends PureComponent {
   }
 
   onNotify(target, title, e) {
-    console.log('on notif');
     const helper = this.getHelper();
     const { contextMenu, me, selectAssignees } = this.props;
     const options = {
@@ -309,6 +308,8 @@ class HOCGoalOverview extends PureComponent {
     const options = this.getOptionsForE(e);
     inputMenu({
       ...options,
+      alignX: 'left',
+      alignY: 'center',
       placeholder: 'Title for the step',
       buttonLabel: 'Add',
     }, (title) => {

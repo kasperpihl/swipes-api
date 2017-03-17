@@ -47,6 +47,9 @@ class GoalOverview extends PureComponent {
     ];
     if (!helper.getIsStarted()) {
       subtitle = 'Unstarted goal';
+      if (!helper.getTotalNumberOfSteps()) {
+        subtitle += ' - add steps below.';
+      }
       buttons = (
         <Button
           text="Start goal"
@@ -74,11 +77,11 @@ class GoalOverview extends PureComponent {
     );
   }
   renderWays() {
+    const { goal } = this.props;
+
     return [
       <Section title="Or choose a way" key="sect" />,
-      <HOCWays
-        key="ways"
-      />,
+      <HOCWays key="ways" goalId={goal.get('id')} />,
     ];
   }
   renderAttachments() {
