@@ -203,9 +203,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
 
   const mappedNotifications = notifications.map((notification) => {
     if (event_type === 'goal_notify') {
-      if (notification.user_id !== notification.done_by) {
-        notification.important = true;
-      }
+      notification.important = true;
     }
     if (notification.user_id === notification.done_by && !notifyMyself) {
       notification.receiver = false;
