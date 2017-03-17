@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { listOf, mapContains } from 'react-immutable-proptypes';
-import StepList from 'components/step-list/StepList';
+import HOCStepList from 'components/step-list/HOCStepList';
 
 import './styles/select-step.scss';
 
@@ -28,7 +28,7 @@ class SelectStep extends PureComponent {
   renderSteps() {
     const { numberOfCompleted, steps } = this.props;
     return (
-      <StepList
+      <HOCStepList
         delegate={this}
         steps={steps}
         completed={numberOfCompleted}

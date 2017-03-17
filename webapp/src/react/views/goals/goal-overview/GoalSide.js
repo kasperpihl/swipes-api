@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { setupDelegate } from 'classes/utils';
-import StepList from 'components/step-list/StepList';
+import HOCStepList from 'components/step-list/HOCStepList';
 import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import Section from 'components/section/Section';
-import Button from 'Button';
 import Icon from 'Icon';
 
 class GoalSide extends Component {
@@ -45,7 +44,7 @@ class GoalSide extends Component {
     const helper = this.getHelper();
     const { loadingState } = this.props;
     return (
-      <StepList
+      <HOCStepList
         steps={helper.getOrderedSteps().map((s) => {
           const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;
           s = s.set('loading', l);

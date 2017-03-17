@@ -1,4 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import * as a from 'actions';
 import { list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import { setupCachedCallback, setupDelegate } from 'classes/utils';
@@ -6,7 +8,7 @@ import Icon from 'Icon';
 
 import './styles/step-list.scss';
 
-class StepList extends PureComponent {
+class HOCStepList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -124,12 +126,15 @@ class StepList extends PureComponent {
   }
 }
 
-export default StepList;
+export default connect(null, {
+  tooltip: a.main.tooltip,
+})(HOCStepList);
 
-const { number, object, bool } = PropTypes;
+const { number, object, bool, func } = PropTypes;
 
-StepList.propTypes = {
+HOCStepList.propTypes = {
   steps: list,
+  tooltip: func,
   noActive: bool,
   fullHover: bool,
   completed: number,
