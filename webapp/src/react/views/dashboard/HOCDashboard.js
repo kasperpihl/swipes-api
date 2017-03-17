@@ -166,7 +166,7 @@ class HOCDashboard extends PureComponent {
       case 'goal_archived': {
         m = m.set('subtitle', `${from} archived`);
         m = m.set('title', `${n.getIn(['meta', 'title'])}`);
-        m = m.set('icon', 'Minus');
+        m = m.set('icon', 'Archived');
         break;
       }
       case 'goal_created': {
@@ -199,6 +199,7 @@ class HOCDashboard extends PureComponent {
         m = m.set('icon', 'Handoff');
         if (progress === 'forward') {
           m = m.set('subtitle', `${from} completed a step in`);
+          m = m.set('icon', 'ActivityCheckmark');
           const titles = this.getStepTitles(id, h.get('from'), h.get('to'));
           if (titles.length > 1) {
             m = m.set('subtitle', `${from} completed ${titles.length} steps in`);
@@ -207,9 +208,11 @@ class HOCDashboard extends PureComponent {
 
         if (progress === 'reassign') {
           m = m.set('subtitle', `${from} reassigned the current step in`);
+          m = m.set('icon', 'Iteration');
         }
 
         if (progress === 'iteration') {
+          m = m.set('icon', 'Iteration');
           if (!h.get('from')) {
             m = m.set('subtitle', `${from} restarted the goal`);
           } else {

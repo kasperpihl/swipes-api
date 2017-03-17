@@ -9,9 +9,11 @@ import SwipesLogo from './svgs/swipes-logo.svg';
 import SwipesLogoText from './svgs/swipes-logo-text.svg';
 import SwipesLogoEmpty from './svgs/swipes-logo-empty.svg';
 
+import ActivityCheckmark from './svgs/activity-checkmark.svg';
 import AddPerson from './svgs/add-person.svg';
 import AddToCollection from './svgs/add-to-collection.svg';
 import Apple from './svgs/apple.svg';
+import Archive from './svgs/archive.svg';
 import ArrowLeftLine from './svgs/arrow-left-line.svg';
 import ArrowRightFull from './svgs/arrow-right-full.svg';
 import ArrowRightLine from './svgs/arrow-right-line.svg';
@@ -53,6 +55,7 @@ import HeaderOne from './svgs/header-one.svg';
 import HeaderTwo from './svgs/header-two.svg';
 import Hyperlink from './svgs/hyperlink.svg';
 import Itallic from './svgs/itallic.svg';
+import Iteration from './svgs/iteration.svg';
 import LargeList from './svgs/large-list.svg';
 import Linux from './svgs/linux.svg';
 import LogoLoader from './svgs/logo-loader.svg';
@@ -76,6 +79,8 @@ import Underline from './svgs/underline.svg';
 import UnorderedList from './svgs/unordered-list.svg';
 import Upload from './svgs/upload.svg';
 import Vote from './svgs/vote.svg';
+import WindowLock from './svgs/window-lock.svg';
+import WindowUnlock from './svgs/window-unlock.svg';
 import Windows from './svgs/windows.svg';
 import WindowsClose from './svgs/windows-close.svg';
 import WindowsMaximize from './svgs/windows-maximize.svg';
@@ -108,9 +113,11 @@ export {
   SwipesLogoText,
   SwipesLogoEmpty,
 
+  ActivityCheckmark,
   AddPerson,
   AddToCollection,
   Apple,
+  Archive,
   ArrowLeftLine,
   ArrowRightFull,
   ArrowRightLine,
@@ -152,6 +159,7 @@ export {
   HeaderTwo,
   Hyperlink,
   Itallic,
+  Iteration,
   LargeList,
   Linux,
   LogoLoader,
@@ -175,6 +183,8 @@ export {
   UnorderedList,
   Upload,
   Vote,
+  WindowLock,
+  WindowUnlock,
   Windows,
   WindowsClose,
   WindowsMaximize,

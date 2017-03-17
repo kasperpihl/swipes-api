@@ -232,7 +232,7 @@ class HOCViewController extends PureComponent {
         small
         frameless
         onClick={this.onToggleLock}
-        icon={navigation.get('locked') ? 'lock_outline' : 'lock_open'}
+        icon={navigation.get('locked') ? 'WindowLock' : 'WindowUnlock'}
         className="view-container__lock-button"
         key="lock-button"
       />

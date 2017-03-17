@@ -88,7 +88,7 @@ class HOCHistory extends PureComponent {
         const progress = e.get('progress');
         m = m.set('subtitle', `${from} completed the step`);
         m = m.set('title', fromStepTitle);
-        m = m.set('icon', 'Checkmark');
+        m = m.set('icon', 'ActivityCheckmark');
 
         if (progress === 'forward') {
           m = m.set('subtitle', `${from} completed the step`);
@@ -100,10 +100,12 @@ class HOCHistory extends PureComponent {
         }
 
         if (progress === 'reassign') {
+          m = m.set('icon', 'Iteration');
           m = m.set('subtitle', `${from} reassigned the step`);
         }
 
         if (progress === 'iteration') {
+          m = m.set('icon', 'Iteration');
           if (!e.get('from')) {
             m = m.set('subtitle', `${from} started the goal again from`);
             m = m.set('title', stepTitle);
