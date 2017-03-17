@@ -6,12 +6,11 @@ import { map, list } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
 import { setupLoadingHandlers } from 'classes/utils';
 import { fromJS } from 'immutable';
-import SWView from 'SWView';
-import Button from 'Button';
+
 import SelectStep from 'context-menus/select-step/SelectStep';
-import HOCAssigning from 'components/assigning/HOCAssigning';
+
 import GoalHandoff from './GoalHandoff';
-import HandoffStatus from './HandoffStatus';
+
 
 class HOCGoalHandoff extends PureComponent {
   static maxWidth() {
@@ -60,6 +59,20 @@ class HOCGoalHandoff extends PureComponent {
       }
     });
   }
+  onStartGoal() {
+    const { goalStart, goal, navPop } = this.props;
+    const { handoff } = this.state;
+
+    this.setLoadingState('button');
+    goalStart(goal.get('id'), handoff).then((res) => {
+      if (res && res.ok) {
+        window.analytics.sendEvent('Start goal');
+        navPop();
+      } else {
+        this.clearLoadingState('button', '!Something went wrong');
+      }
+    });
+  }
   onNotify() {
     const { goalNotify, goal, navPop } = this.props;
     const { handoff } = this.state;
@@ -77,6 +90,8 @@ class HOCGoalHandoff extends PureComponent {
     const { handoff } = this.state;
     if (['_feedback', '_notify'].indexOf(handoff.get('target')) !== -1) {
       this.onNotify(handoff.get('target'));
+    } else if (['_start'].indexOf(handoff.get('target')) !== -1) {
+      this.onStartGoal();
     } else {
       this.onCompleteStep();
     }
@@ -161,29 +176,7 @@ class HOCGoalHandoff extends PureComponent {
     }
     return assignees;
   }
-  getTitle() {
-    const { handoff } = this.state;
-    const helper = this.getHelper();
 
-    let label = 'Complete Step';
-    if (handoff.get('target') === '_complete') {
-      label = 'Complete Goal';
-    } else if (handoff.get('target') === '_notify') {
-      label = 'Send Notification';
-    } else if (handoff.get('target') === '_feedback') {
-      label = 'Give Feedback';
-    } else {
-      const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
-      const numberOfCompleted = helper.getNumberOfCompletedSteps();
-      if (nextStepIndex === numberOfCompleted) {
-        label = 'Reassign Step';
-      }
-      if (nextStepIndex < numberOfCompleted) {
-        label = 'Make Iteration';
-      }
-    }
-    return label;
-  }
   updateHandoff(handoff) {
     this.setState({ handoff });
     // const { saveState } = this.props;
@@ -192,92 +185,7 @@ class HOCGoalHandoff extends PureComponent {
   clickedAssign(index, e) {
     this.onChangeClick('assignees', e);
   }
-  renderAssignees() {
-    const { handoff } = this.state;
-    if (handoff.get('target') === '_complete') {
-      return undefined;
-    }
 
-    const assignees = this.getAssignees();
-
-    return (
-      <div className="goal-handoff__assignees">
-        <HOCAssigning
-          delegate={this}
-          assignees={assignees}
-          rounded
-        />
-      </div>
-    );
-  }
-  renderHeader() {
-    return (
-      <div className="goal-handoff__header">
-        <div className="goal-handoff__content">
-          <div className="goal-handoff__title">{this.getTitle()}</div>
-          <div className="goal-handoff__subtitle">
-            {this.renderStatus()}
-          </div>
-        </div>
-        {this.renderAssignees()}
-
-      </div>
-    );
-  }
-  renderStatus() {
-    const { goal } = this.props;
-    const { handoff } = this.state;
-    const assignees = this.getAssignees();
-
-    return (
-      <HandoffStatus
-        goal={goal}
-        assignees={assignees}
-        toId={handoff.get('target')}
-        onChangeClick={this.onChangeClick}
-      />
-    );
-  }
-  renderFooter() {
-    const {
-      handoff,
-    } = this.state;
-    const helper = this.getHelper();
-
-    let label = 'Complete step';
-    if (handoff.get('target') === '_complete') {
-      label = 'Complete goal';
-    } else if (handoff.get('target') === '_notify') {
-      label = 'Send notification';
-    } else if (handoff.get('target') === '_feedback') {
-      label = 'Give feedback';
-    } else {
-      const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
-      const numberOfCompleted = helper.getNumberOfCompletedSteps();
-      if (nextStepIndex === numberOfCompleted) {
-        label = 'Reassign Step';
-      }
-      if (nextStepIndex < numberOfCompleted) {
-        label = 'Make Iteration';
-      }
-    }
-
-    return (
-      <div className="handoff-footer">
-        <div className="handoff-footer__status">
-          {this.renderStatus()}
-        </div>
-        <div className="handoff-footer__actions">
-          <Button
-            text={label}
-            onClick={this.onSubmit}
-            {...this.getLoadingState('button')}
-            primary
-          />
-        </div>
-      </div>
-    );
-  }
   render() {
     const {
       goal,
@@ -285,7 +193,6 @@ class HOCGoalHandoff extends PureComponent {
       users,
     } = this.props;
     const {
-      isSubmitting,
       handoff,
     } = this.state;
 
@@ -294,16 +201,17 @@ class HOCGoalHandoff extends PureComponent {
     }
 
     return (
-      <SWView header={this.renderHeader()} footer={this.renderFooter()}>
-        <GoalHandoff
-          goal={goal}
-          me={me}
-          users={users}
-          delegate={this}
-          handoff={handoff}
-          isSubmitting={isSubmitting}
-        />
-      </SWView>
+
+      <GoalHandoff
+        goal={goal}
+        assignees={this.getAssignees()}
+        me={me}
+        users={users}
+        delegate={this}
+        handoff={handoff}
+        loadingState={this.getAllLoadingStates()}
+      />
+
     );
   }
 }
@@ -315,6 +223,7 @@ HOCGoalHandoff.propTypes = {
   savedState: object,
   message: string,
   goalNotify: func,
+  goalStart: func,
   contextMenu: func,
   selectAssignees: func,
   _target: string.isRequired,
@@ -335,6 +244,7 @@ export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
   saveCache: cache.save,
   goalNotify: goals.notify,
+  goalStart: goals.start,
   completeStep: goals.completeStep,
   contextMenu: a.main.contextMenu,
 })(HOCGoalHandoff);

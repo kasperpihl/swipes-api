@@ -59,12 +59,17 @@ class HOCHistory extends PureComponent {
     const stepTitle = this.getStepTitle(e.get('to'));
     const fromStepTitle = this.getStepTitle(e.get('from'));
     const from = msgGen.getUserString(e.get('done_by'));
-
+    console.log(e.toJS());
     switch (type) {
-      case 'created':
-      case 'goal_created': {
+      case 'goal_started': {
         m = m.set('subtitle', `${from} kicked off this goal with`);
         m = m.set('title', stepTitle);
+        m = m.set('icon', 'Plus');
+        break;
+      }
+      case 'created':
+      case 'goal_created': {
+        m = m.set('subtitle', `${from} created this goal`);
         m = m.set('icon', 'Plus');
         break;
       }

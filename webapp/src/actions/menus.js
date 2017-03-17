@@ -13,7 +13,9 @@ export const confirm = (options, callback) => (d) => {
       actions: options.actions,
       onClick: (i) => {
         d(a.main.contextMenu(null));
-        callback(i);
+        if (callback) {
+          callback(i);
+        }
       },
     },
   }));

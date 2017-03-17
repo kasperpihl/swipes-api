@@ -53,16 +53,17 @@
       @include size(100%, auto);
     }
     &--left {
-      @include size(50%, auto);
-      padding-right: 20px;
-      // @include size(400px, auto);
+      // @include size(50%, auto);
+      // padding-right: 20px;
+      padding-right: 60px;
+      @include size(400px, auto);
     }
 
     &--right {
-      @include size(50%, auto);
-      padding-left: 20px;
-      // $width: calc(100% - 400px);
-      // @include size($width,  auto);
+      // @include size(50%, auto);
+      // padding-left: 20px;
+      $width: calc(100% - 400px);
+      @include size($width,  auto);
     }
   }
 }

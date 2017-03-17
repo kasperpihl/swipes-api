@@ -71,10 +71,11 @@ class Confirmation extends Component {
 
 export default Confirmation;
 
-const { string, array } = PropTypes;
+const { string, array, func } = PropTypes;
 
 Confirmation.propTypes = {
   title: string,
+  onClick: func,
   message: string,
   actions: array,
 };

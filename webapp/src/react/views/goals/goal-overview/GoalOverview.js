@@ -20,11 +20,10 @@ class GoalOverview extends PureComponent {
     super(props);
     this.state = {};
     this.callDelegate = setupDelegate(props.delegate);
+
     this.onNotify = setupCachedCallback(this.callDelegate.bind(null, 'onNotify'));
     this.onContext = this.callDelegate.bind(null, 'onContext');
-  }
-  componentDidMount() {
-
+    this.onStart = this.callDelegate.bind(null, 'onStart');
   }
   getHelper() {
     const { goal, myId } = this.props;
@@ -32,7 +31,7 @@ class GoalOverview extends PureComponent {
   }
   renderHeader() {
     const helper = this.getHelper();
-    const { goal, loadingState } = this.props;
+    const { goal, loadingState, delegate } = this.props;
     let subtitle;
     let buttons = [
       <Button
@@ -62,7 +61,7 @@ class GoalOverview extends PureComponent {
         <HOCHeaderTitle
           title={title || goal.get('title')}
           subtitle={subtitle}
-          delegate={this}
+          delegate={delegate}
         >
           {buttons}
           <Button

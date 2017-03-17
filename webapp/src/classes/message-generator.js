@@ -15,6 +15,30 @@ export default class MessageGenerator {
     return goalTypes[goalType] || 'All goals';
   }
 
+  getButtonTitleFromHandoffAndGoal(handoff, goal) {
+    const helper = new GoalsUtil(goal);
+    let label = 'Complete Step';
+    if (handoff.get('target') === '_start') {
+      label = 'Start Goal';
+    } else if (handoff.get('target') === '_complete') {
+      label = 'Complete Goal';
+    } else if (handoff.get('target') === '_notify') {
+      label = 'Send Notification';
+    } else if (handoff.get('target') === '_feedback') {
+      label = 'Give Feedback';
+    } else {
+      const nextStepIndex = helper.getStepIndexForId(handoff.get('target'));
+      const numberOfCompleted = helper.getNumberOfCompletedSteps();
+      if (nextStepIndex === numberOfCompleted) {
+        label = 'Reassign Step';
+      }
+      if (nextStepIndex < numberOfCompleted) {
+        label = 'Make Iteration';
+      }
+    }
+    return label;
+  }
+
   getUserString(userId, options) {
     options = options || {};
     const state = this.store.getState();

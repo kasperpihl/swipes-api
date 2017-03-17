@@ -25,7 +25,6 @@ class HOCGoalOverview extends PureComponent {
     setupLoadingHandlers(this);
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
-    this.onNotify = setupCachedCallback(this.onNotify, this);
   }
   componentDidMount() {
     const { goal, navPop } = this.props;
@@ -149,6 +148,24 @@ class HOCGoalOverview extends PureComponent {
     e.stopPropagation();
   }
 
+  onStart(e) {
+    const helper = this.getHelper();
+    const options = this.getOptionsForE(e);
+    const { confirm } = this.props;
+
+    if (!helper.getTotalNumberOfSteps()) {
+      confirm(Object.assign({}, options, {
+        title: 'Add steps first',
+        actions: [{ text: 'Got it' }],
+        message: 'Before starting a goal, you have to add steps to it. You can do it manually or load a way below.',
+      }));
+      return;
+    }
+
+    const assignees = helper.getStepByIndex(0).get('assignees');
+    this.onHandoff('_start', 'Start Goal', assignees);
+  }
+
   onHandoff(_target, title, assignees) {
     const { openSecondary, goal } = this.props;
     openSecondary({
@@ -163,6 +180,7 @@ class HOCGoalOverview extends PureComponent {
   }
 
   onNotify(target, title, e) {
+    console.log('on notif');
     const helper = this.getHelper();
     const { contextMenu, me, selectAssignees } = this.props;
     const options = {
