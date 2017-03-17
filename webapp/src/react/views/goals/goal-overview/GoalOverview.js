@@ -87,23 +87,24 @@ class GoalOverview extends PureComponent {
   renderAttachments() {
     const { goal, delegate } = this.props;
 
-    return [
-      <Section title="Add attachments" key="sect" />,
-      <HOCAttachments
-        key="attachments"
-        attachments={goal.get('attachments')}
-        attachmentOrder={goal.get('attachment_order')}
-        targetId={goal.get('id')}
-        delegate={delegate}
-      />,
-    ];
+    return (
+      <Section className="goal-overview__attachments" title="Add attachments" key="sect">
+        <HOCAttachments
+          key="attachments"
+          attachments={goal.get('attachments')}
+          attachmentOrder={goal.get('attachment_order')}
+          targetId={goal.get('id')}
+          delegate={delegate}
+        />
+      </Section>
+    );
   }
   renderLeft() {
     const { goal, delegate, loadingState } = this.props;
     const helper = this.getHelper();
 
     let className = 'goal-overview__column';
-    className += ` goal-overview__column--${helper.getIsStarted() ? 'left' : 'lonely'}`;
+    className += ` goal-overview__column--${helper.getIsStarted() ? 'left' : 'left-lonely'}`;
     let contentHtml = this.renderWays();
     if (helper.getIsStarted() || helper.getTotalNumberOfSteps()) {
       contentHtml = this.renderAttachments();
@@ -119,13 +120,21 @@ class GoalOverview extends PureComponent {
   renderRight() {
     const { goal } = this.props;
     const helper = this.getHelper();
+    let className = 'goal-overview__column';
+    className += ` goal-overview__column--${helper.getIsStarted() ? 'right' : 'right-lonely'}`;
+
+    let contentHtml = [
+      <Section title="Activity" key="sec-23" />,
+      <HOCHistory goal={goal} key="history" />,
+    ];
+
     if (!helper.getIsStarted()) {
-      return undefined;
+      contentHtml = '';
     }
+
     return (
-      <div className="goal-overview__column goal-overview__column--right">
-        <Section title="Activity" />
-        <HOCHistory goal={goal} />
+      <div className={className}>
+        {contentHtml}
       </div>
     );
   }

@@ -76,6 +76,10 @@ class NotificationItem extends Component {
     );
   }
   renderTitle(title) {
+    if (!title) {
+      return undefined;
+    }
+
     if (!Array.isArray(title)) {
       title = [title];
     }

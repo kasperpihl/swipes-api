@@ -49,22 +49,38 @@
   $b: &;
 
   &__column {
-    &--lonely {
+    will-change: width, padding;
+
+    &--left-lonely {
       @include size(100%, auto);
     }
+
     &--left {
-      // @include size(50%, auto);
-      // padding-right: 20px;
-      padding-right: 60px;
       @include size(400px, auto);
+      padding-right: 60px;
+      transition: width .5s ease, padding .5s ease;
+    }
+
+    &--right-lonely {
+      @include size(0%, auto);
+      opacity: 0;
     }
 
     &--right {
-      // @include size(50%, auto);
-      // padding-left: 20px;
       $width: calc(100% - 400px);
       @include size($width,  auto);
+      opacity: 1;
+      transition: .5s ease;
     }
+  }
+
+  &__attachments {
+    animation: fadeUpAttachments .5s ease forwards;
+    opacity: 0;
+    padding: 0;
+    border: none;
+    padding-top: 51px;
+    transform: translateY(50px)
   }
 }
 
@@ -204,5 +220,17 @@
 
   to {
     transform: translateY(0px);
+  }
+}
+
+@keyframes fadeUpAttachments {
+  from {
+    opacity: 0;
+    transform: translateY(50px)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px)
   }
 }
