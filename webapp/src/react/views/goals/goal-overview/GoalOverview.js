@@ -47,16 +47,7 @@ class GoalOverview extends PureComponent {
     ];
     if (!helper.getIsStarted()) {
       subtitle = 'Unstarted goal';
-      if (!helper.getTotalNumberOfSteps()) {
-        subtitle += ' - add steps below.';
-      }
-      buttons = (
-        <Button
-          text="Start goal"
-          primary
-          onClick={this.onStart}
-        />
-      );
+      buttons = [];
     }
     const title = loadingState.get('title') && loadingState.get('title').loadingLabel;
     return (
@@ -138,6 +129,30 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
+  renderFooter() {
+    const helper = this.getHelper();
+    if (helper.getIsStarted()) {
+      return undefined;
+    }
+    let statusLabel;
+    if (!helper.getTotalNumberOfSteps()) {
+      statusLabel = 'Add steps before you start the goal';
+    }
+    return (
+      <div className="add-goal__footer">
+        <div className="add-goal__actions">
+          {statusLabel}
+          <Button
+            text="Start Goal"
+            primary
+            disabled={!helper.getTotalNumberOfSteps()}
+            className="add-goal__btn add-goal__btn--cta"
+            onClick={this.onStart}
+          />
+        </div>
+      </div>
+    );
+  }
   render() {
     const { goal } = this.props;
 
@@ -146,7 +161,7 @@ class GoalOverview extends PureComponent {
     }
 
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView header={this.renderHeader()} footer={this.renderFooter()}>
         <div className="goal-overview">
           {this.renderLeft()}
           {this.renderRight()}

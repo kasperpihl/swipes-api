@@ -184,7 +184,7 @@ HOCTopbar.propTypes = {
   nextRetry: object,
   versionInfo: map,
   status: string,
-  lastConnect: object,
+  lastConnect: string,
   isMaximized: bool,
   isFullscreen: bool,
 };
