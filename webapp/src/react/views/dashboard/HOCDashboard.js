@@ -170,7 +170,7 @@ class HOCDashboard extends PureComponent {
       case 'goal_archived': {
         m = m.set('subtitle', `${from} archived`);
         m = m.set('title', `${n.getIn(['meta', 'title'])}`);
-        m = m.set('icon', 'Archived');
+        m = m.set('icon', 'Archive');
         break;
       }
       case 'goal_created': {
