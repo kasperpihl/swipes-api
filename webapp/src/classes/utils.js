@@ -404,6 +404,9 @@ export function setupLoading(ctx) {
     setClearTimer(name, duration);
   }
   function clearLoading(name, label, duration) {
+    if (unmounted) {
+      return;
+    }
     const newState = { loading: false };
     if (label && label.startsWith('!')) {
       newState.errorLabel = label.substr(1);

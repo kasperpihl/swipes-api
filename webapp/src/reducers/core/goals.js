@@ -23,6 +23,8 @@ export default function goalsReducer(state = initialState, action) {
       }
       return state.setIn([payload.goal_id, 'title'], payload.title);
     }
+    case 'goals.loadWay':
+    case 'goal_load_way':
     case 'goals.completeStep':
     case 'step_completed':
     case 'goal_completed':
