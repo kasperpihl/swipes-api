@@ -185,6 +185,7 @@ export default class MessageGenerator {
       current: 'current ',
       upcoming: 'upcoming ',
       completed: 'completed ',
+      unstarted: 'unstarted ',
     };
 
     const typeLabel = goalTypes[filter.get('goalType')] || '';
@@ -192,10 +193,10 @@ export default class MessageGenerator {
     if (number !== 1) {
       label += 's';
     }
-    if (filter.get('user') !== 'any') {
+    if (filter.get('user') && filter.get('user') !== 'any') {
       label += ` assigned to ${this.getUserString(filter.get('user'))}`;
     }
-    if (filter.get('milestone') !== 'any') {
+    if (filter.get('milestone') && filter.get('milestone') !== 'any') {
       label += ` with ${this.getMilestoneString(filter.get('milestone'))}`;
     }
     if (filter.get('matching') && filter.get('matching').length) {
