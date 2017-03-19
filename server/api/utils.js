@@ -20,7 +20,7 @@ const getClientIp = (req) => {
   return ip;
 };
 
-const getSwipesLinkObj = (type, id, title, account_id) => {
+const getSwipesLinkObj = ({ type, id, title, account_id }) => {
   return {
     service: {
       id,
