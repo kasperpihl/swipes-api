@@ -32,6 +32,8 @@ const goalsCreate = valLocals('goalsCreate', {
     goal,
     organization_id,
   } = res.locals;
+  const step_one_id = generateSlackLikeId('', 6);
+  const step_two_id = generateSlackLikeId('', 6);
 
   goal.id = generateSlackLikeId('G');
   goal.organization_id = organization_id;
@@ -46,8 +48,22 @@ const goalsCreate = valLocals('goalsCreate', {
     done_by: user_id,
     done_at: r.now(),
   }];
-  goal.steps = {};
-  goal.step_order = [];
+  goal.steps = {
+    [step_one_id]: {
+      id: step_one_id,
+      assignees: [],
+      title: 'What is the first step? Enter it here...',
+    },
+    [step_two_id]: {
+      id: step_two_id,
+      assignees: [],
+      title: 'What is the next one? Add it here...',
+    },
+  };
+  goal.step_order = [
+    step_one_id,
+    step_two_id,
+  ];
   goal.attachments = {};
   goal.attachment_order = [];
 
