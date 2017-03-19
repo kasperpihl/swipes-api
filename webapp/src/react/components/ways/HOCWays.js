@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
 // import { map, list } from 'react-immutable-proptypes';
@@ -41,6 +41,9 @@ class HOCWays extends PureComponent {
   }
   componentDidMount() {
   }
+  onTemplateClick(tpl) {
+    console.log(tpl);
+  }
   render() {
     return (
       <div className="sw-ways">
@@ -51,9 +54,11 @@ class HOCWays extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
+const { string } = PropTypes;
 
-HOCWays.propTypes = {};
+HOCWays.propTypes = {
+  goalId: string,
+};
 
 function mapStateToProps() {
   return {};
