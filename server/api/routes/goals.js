@@ -78,7 +78,7 @@ authed.all('/goals.create',
   notesCreate,
   // Some mapping so we can add the note as an attachment to the goal
   mapLocals(['note', 'user_id'], (setLocals, note, user_id) => {
-    setLocals({ link: getSwipesLinkObj('note', note.id, 'Note', user_id) });
+    setLocals({ link: getSwipesLinkObj('note', note.id, 'Description', user_id) });
   }),
   linksCreate,
   linksAddPermission,
