@@ -625,7 +625,6 @@ const goalsLoadWay = valLocals('goalsLoadWay', {
 const goalsLoadWayQueueMessage = valLocals('goalsLoadWayQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
-  way_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
