@@ -615,7 +615,14 @@ const goalsLoadWay = valLocals('goalsLoadWay', {
   };
 
   dbGoalsUpdateSingle({ goal_id, properties })
-    .then(() => {
+    .then((results) => {
+      const changes = results.changes[0];
+      const goal = changes.new_val || changes.old_val;
+
+      setLocals({
+        goal,
+      });
+
       return next();
     })
     .catch((err) => {

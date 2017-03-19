@@ -35,7 +35,12 @@ const dbGoalsUpdateSingle = funcWrap([
     throw new SwipesError(`dbGoalsUpdateSingle: ${err}`);
   }
 
-  const q = r.table('goals').get(goal_id).update(properties);
+  const q =
+    r.table('goals')
+      .get(goal_id)
+      .update(properties, {
+        returnChanges: true,
+      });
 
   return db.rethinkQuery(q);
 });
