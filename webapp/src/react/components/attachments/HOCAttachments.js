@@ -6,7 +6,7 @@ import { attachments as att } from 'swipes-core-js';
 import {
   setupCachedCallback,
   setupDelegate,
-  setupLoadingHandlers,
+  setupLoading,
   attachmentIconForService,
 } from 'classes/utils';
 import Icon from 'Icon';
@@ -23,7 +23,7 @@ class HOCAttachments extends PureComponent {
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onAdd = this.onAdd.bind(this);
-    setupLoadingHandlers(this);
+    setupLoading(this);
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
@@ -77,9 +77,9 @@ class HOCAttachments extends PureComponent {
       buttonLabel: 'Rename',
     }, (title) => {
       if (title !== currTitle && title.length) {
-        this.setLoadingState(id, 'Renaming...');
+        this.setLoading(id, 'Renaming...');
         renameAttachment(targetId, id, title).then(() => {
-          this.clearLoadingState(id);
+          this.clearLoading(id);
         });
       }
     });
@@ -97,9 +97,9 @@ class HOCAttachments extends PureComponent {
       message: 'Are you sure you want to remove this attachment?',
     }, (res) => {
       if (res === 1) {
-        this.setLoadingState(id, 'Removing...');
+        this.setLoading(id, 'Removing...');
         removeAttachment(targetId, id).then(() => {
-          this.clearLoadingState(id);
+          this.clearLoading(id);
         });
       }
     });
@@ -128,7 +128,7 @@ class HOCAttachments extends PureComponent {
     }
     inputMenu(options, (title) => {
       if (title && title.length) {
-        this.setLoadingState('adding');
+        this.setLoading('adding');
         if (which === 'url') {
           this.attachToTarget(which, title, title);
         } else {
@@ -136,7 +136,7 @@ class HOCAttachments extends PureComponent {
             if (res && res.ok) {
               this.attachToTarget(which, res.note.id, title);
             } else {
-              this.clearLoadingState('adding');
+              this.clearLoading('adding');
             }
           });
         }
@@ -164,7 +164,7 @@ class HOCAttachments extends PureComponent {
     const linkObj = this.getSwipesLinkObj(type, id, title);
     const { targetId, addAttachment } = this.props;
     addAttachment(targetId, linkObj).then(() => {
-      this.clearLoadingState('adding');
+      this.clearLoading('adding');
     });
   }
 
@@ -195,7 +195,7 @@ class HOCAttachments extends PureComponent {
           onFlag={this.onFlagClickCached(aId)}
           onContextMenu={this.onContextMenuCached(aId)}
           onClick={this.onPreviewCached(aId)}
-          {...this.getLoadingState(aId)}
+          {...this.getLoading(aId)}
           icon={icon}
           title={at.get('title')}
           enableFlagging={enableFlagging}
@@ -206,7 +206,7 @@ class HOCAttachments extends PureComponent {
   renderAddAttachments() {
     let className = 'attachments__add-list';
 
-    if (this.getLoadingState('adding').loading) {
+    if (this.getLoading('adding').loading) {
       className += ' attachments__add-list--loading';
     }
 

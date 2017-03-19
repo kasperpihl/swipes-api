@@ -374,7 +374,7 @@ export function throttle(func, wait) {
 }
 
 
-export function setupLoadingHandlers(ctx) {
+export function setupLoading(ctx) {
   let _loadingStates = fromJS({});
   let unmounted = false;
   const defaultObj = {};
@@ -391,10 +391,10 @@ export function setupLoadingHandlers(ctx) {
     }
   };
   let setClearTimer;
-  function getAllLoadingStates() {
+  function getAllLoading() {
     return _loadingStates;
   }
-  function setLoadingState(name, label, duration) {
+  function setLoading(name, label, duration) {
     const newState = { loading: true };
     if (label) {
       newState.loadingLabel = label;
@@ -403,7 +403,7 @@ export function setupLoadingHandlers(ctx) {
     this.setState({ _loadingStates });
     setClearTimer(name, duration);
   }
-  function clearLoadingState(name, label, duration) {
+  function clearLoading(name, label, duration) {
     const newState = { loading: false };
     if (label && label.startsWith('!')) {
       newState.errorLabel = label.substr(1);
@@ -419,20 +419,20 @@ export function setupLoadingHandlers(ctx) {
     if (typeof duration === 'number') {
       timers[name] = setTimeout(() => {
         if (!unmounted) {
-          clearLoadingState(name);
+          clearLoading(name);
         }
       }, duration);
     }
   };
-  function getLoadingState(name) {
+  function getLoading(name) {
     return _loadingStates.get(name) || defaultObj;
   }
 
 
-  ctx.setLoadingState = setLoadingState.bind(ctx);
-  ctx.getLoadingState = getLoadingState.bind(ctx);
-  ctx.clearLoadingState = clearLoadingState.bind(ctx);
-  ctx.getAllLoadingStates = getAllLoadingStates.bind(ctx);
+  ctx.setLoading = setLoading.bind(ctx);
+  ctx.getLoading = getLoading.bind(ctx);
+  ctx.clearLoading = clearLoading.bind(ctx);
+  ctx.getAllLoading = getAllLoading.bind(ctx);
 
-  bindAll(ctx, ['setLoadingState', 'getLoadingState', 'clearLoadingState']);
+  bindAll(ctx, ['setLoading', 'getLoading', 'clearLoading']);
 }

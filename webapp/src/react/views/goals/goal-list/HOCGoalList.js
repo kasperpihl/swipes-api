@@ -4,7 +4,7 @@ import { cache, goals as goa } from 'swipes-core-js';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate, bindAll, setupLoadingHandlers } from 'classes/utils';
+import { setupDelegate, bindAll, setupLoading } from 'classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
@@ -56,7 +56,7 @@ class HOCGoalList extends PureComponent {
         { id: 'matching' },
       ]),
     };
-    setupLoadingHandlers(this);
+    setupLoading(this);
     if (props.savedState) {
       this.state.tabIndex = props.savedState.get('tabIndex');
     }
@@ -176,13 +176,13 @@ class HOCGoalList extends PureComponent {
       buttonLabel: 'Add Goal',
     }, (title) => {
       if (title && title.length) {
-        this.setLoadingState('add');
+        this.setLoading('add');
         this.tabDidChange(2);
         createGoal(title).then((res) => {
           if (res && res.ok) {
-            this.clearLoadingState('add');
+            this.clearLoading('add');
           } else {
-            this.clearLoadingState('add', '!Something went wrong');
+            this.clearLoading('add', '!Something went wrong');
           }
         });
       }
@@ -288,7 +288,7 @@ class HOCGoalList extends PureComponent {
           <Button
             text="Add Goal"
             primary
-            {...this.getLoadingState('add')}
+            {...this.getLoading('add')}
             onClick={this.onAddGoal}
           />
         </HOCHeaderTitle>

@@ -4,6 +4,8 @@ import { convertToRaw, EditorState } from 'draft-js';
 
 import {
   string,
+  any,
+  object,
 } from 'valjs';
 
 export const create = valAction('goals.create', [
@@ -16,6 +18,23 @@ export const create = valAction('goals.create', [
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 })),
 );
+
+export const loadWay = valAction('goals.loadWay', [
+  string.require(),
+  any.of(string, object).require(),
+], (goalId, wayOrId) => (d) => {
+  let way = wayOrId;
+  let wayId;
+  if (typeof wayOrId === 'string') {
+    way = undefined;
+    wayId = wayOrId;
+  }
+  return d(a.api.request('goals.loadWay', {
+    goal_id: goalId,
+    way_id: wayId,
+    way,
+  }));
+});
 
 export const rename = (goalId, title) => a.api.request('goals.rename', {
   goal_id: goalId,

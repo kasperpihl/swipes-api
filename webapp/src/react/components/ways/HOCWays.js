@@ -1,8 +1,11 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
+import { goals } from 'swipes-core-js';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import { setupLoading } from 'classes/utils';
+import Loader from 'components/loaders/Loader';
 import TemplateItem from './TemplateItem';
 import './styles/ways.scss';
 
@@ -37,27 +40,61 @@ const templates = [
 class HOCWays extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    setupLoading(this);
   }
   componentDidMount() {
   }
+
   onTemplateClick(tpl) {
-    console.log(tpl);
+    const { loadWay, goalId } = this.props;
+    const steps = {};
+    const stepOrder = tpl.steps.map((title, i) => {
+      const id = `step-${i}`;
+      steps[id] = {
+        id,
+        title,
+        assignees: [],
+      };
+      return id;
+    });
+    this.setLoading('way');
+    loadWay(goalId, { goal: {
+      step_order: stepOrder,
+      steps,
+      attachments: {},
+      attachment_order: [],
+    } }).then(() => {
+      this.clearLoading('way');
+    });
+  }
+  renderLoader() {
+    if (!this.getLoading('way').loading) {
+      return undefined;
+    }
+    return <Loader center size={60} />;
+  }
+  renderTemplates() {
+    if (this.getLoading('way').loading) {
+      return undefined;
+    }
+    return templates.map((t, i) => (
+      <TemplateItem delegate={this} template={t} key={i} />
+    ));
   }
   render() {
     return (
       <div className="sw-ways">
-        {templates.map((t, i) => (
-          <TemplateItem delegate={this} template={t} key={i} />
-        ))}
+        {this.renderLoader()}
+        {this.renderTemplates()}
       </div>
     );
   }
 }
-const { string } = PropTypes;
+const { string, func } = PropTypes;
 
 HOCWays.propTypes = {
   goalId: string,
+  loadWay: func,
 };
 
 function mapStateToProps() {
@@ -65,4 +102,5 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps, {
+  loadWay: goals.loadWay,
 })(HOCWays);

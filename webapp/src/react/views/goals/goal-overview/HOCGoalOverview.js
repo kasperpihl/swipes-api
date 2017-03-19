@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { bindAll, setupCachedCallback, setupLoadingHandlers } from 'classes/utils';
+import { bindAll, setupCachedCallback, setupLoading } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
 import { steps, ways, goals } from 'swipes-core-js';
@@ -22,7 +22,7 @@ class HOCGoalOverview extends PureComponent {
     super(props);
     bindAll(this, ['onHandoff', 'onContext']);
 
-    setupLoadingHandlers(this);
+    setupLoading(this);
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
   }
@@ -51,9 +51,9 @@ class HOCGoalOverview extends PureComponent {
       buttonLabel: 'Rename',
     }, (title) => {
       if (title !== goal.get('title') && title.length) {
-        this.setLoadingState('title', 'Renaming...');
+        this.setLoading('title', 'Renaming...');
         renameGoal(goal.get('id'), title).then(() => {
-          this.clearLoadingState('title');
+          this.clearLoading('title');
         });
       }
     });
@@ -79,7 +79,7 @@ class HOCGoalOverview extends PureComponent {
     const items = [{ title: 'Reassign' }, { title: 'Rename' }, remove];
     const delegate = {
       onItemAction: (item) => {
-        const clearCB = this.clearLoadingState.bind(this, step.get('id'));
+        const clearCB = this.clearLoading.bind(this, step.get('id'));
         if (item.title === 'Reassign') {
           this.onAssign(i, options);
         } else if (item.title === 'Rename') {
@@ -89,15 +89,15 @@ class HOCGoalOverview extends PureComponent {
             buttonLabel: 'Rename',
           }, (title) => {
             if (title !== step.get('title') && title.length) {
-              this.setLoadingState(step.get('id'), 'Renaming...');
+              this.setLoading(step.get('id'), 'Renaming...');
               renameStep(goal.get('id'), step.get('id'), title).then(() => {
-                this.clearLoadingState(step.get('id'));
+                this.clearLoading(step.get('id'));
               });
             }
           });
         } else {
           contextMenu(null);
-          this.setLoadingState(step.get('id'), 'Removing...');
+          this.setLoading(step.get('id'), 'Removing...');
           removeStep(goal.get('id'), step.get('id')).then(() => clearCB());
         }
       },
@@ -128,8 +128,8 @@ class HOCGoalOverview extends PureComponent {
         if (i === helper.getCurrentStepIndex()) {
           this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
         } else {
-          const clearCB = this.clearLoadingState.bind(null, step.get('id'));
-          this.setLoadingState(step.get('id'), 'Assigning...');
+          const clearCB = this.clearLoading.bind(null, step.get('id'));
+          this.setLoading(step.get('id'), 'Assigning...');
           assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(() => clearCB());
         }
       }
@@ -264,13 +264,13 @@ class HOCGoalOverview extends PureComponent {
             placeholder: 'Name your Way: Like Development, Design etc.',
             buttonLabel: 'Save',
           }), (title) => {
-            this.setLoadingState('dots');
+            this.setLoading('dots');
             const helper = this.getHelper();
             createWay(title, helper.getObjectForWay()).then((res) => {
               if (res && res.ok) {
-                this.clearLoadingState('dots', 'Added way');
+                this.clearLoading('dots', 'Added way');
               } else {
-                this.clearLoadingState('dots', '!Something went wrong');
+                this.clearLoading('dots', '!Something went wrong');
               }
             });
           });
@@ -280,10 +280,10 @@ class HOCGoalOverview extends PureComponent {
             message: 'This will make this goal inactive for all participants.',
           }), (i) => {
             if (i === 1) {
-              this.setLoadingState('dots');
+              this.setLoading('dots');
               archive(goal.get('id')).then((res) => {
                 if (!res || !res.ok) {
-                  this.clearLoadingState('dots', '!Something went wrong');
+                  this.clearLoading('dots', '!Something went wrong');
                 }
               });
             }
@@ -314,8 +314,8 @@ class HOCGoalOverview extends PureComponent {
       buttonLabel: 'Add',
     }, (title) => {
       if (title && title.length) {
-        this.setLoadingState('add', 'Adding...');
-        addStep(goal.get('id'), title).then(() => this.clearLoadingState('add'));
+        this.setLoading('add', 'Adding...');
+        addStep(goal.get('id'), title).then(() => this.clearLoading('add'));
       }
     });
   }
@@ -336,7 +336,7 @@ class HOCGoalOverview extends PureComponent {
         goal={goal}
         myId={me.get('id')}
         delegate={this}
-        loadingState={this.getAllLoadingStates()}
+        loadingState={this.getAllLoading()}
       />
     );
   }

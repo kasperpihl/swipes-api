@@ -4,7 +4,7 @@ import * as a from 'actions';
 import { cache, goals } from 'swipes-core-js';
 import { map, list } from 'react-immutable-proptypes';
 import GoalsUtil from 'classes/goals-util';
-import { setupLoadingHandlers } from 'classes/utils';
+import { setupLoading } from 'classes/utils';
 import { fromJS } from 'immutable';
 
 import SelectStep from 'context-menus/select-step/SelectStep';
@@ -27,7 +27,7 @@ class HOCGoalHandoff extends PureComponent {
         target: props._target,
       }),
     };
-    setupLoadingHandlers(this);
+    setupLoading(this);
     this.onChangeClick = this.onChangeClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -48,14 +48,14 @@ class HOCGoalHandoff extends PureComponent {
     const { completeStep, goal, navPop } = this.props;
     const { handoff } = this.state;
 
-    this.setLoadingState('button');
+    this.setLoading('button');
     completeStep(goal.get('id'), handoff).then((res) => {
       if (res && res.ok) {
         const event = handoff.get('target') === '_complete' ? 'Complete goal' : 'Complete step';
         window.analytics.sendEvent(event);
         navPop();
       } else {
-        this.clearLoadingState('button', '!Something went wrong');
+        this.clearLoading('button', '!Something went wrong');
       }
     });
   }
@@ -63,26 +63,26 @@ class HOCGoalHandoff extends PureComponent {
     const { goalStart, goal, navPop } = this.props;
     const { handoff } = this.state;
 
-    this.setLoadingState('button');
+    this.setLoading('button');
     goalStart(goal.get('id'), handoff).then((res) => {
       if (res && res.ok) {
         window.analytics.sendEvent('Start goal');
         navPop();
       } else {
-        this.clearLoadingState('button', '!Something went wrong');
+        this.clearLoading('button', '!Something went wrong');
       }
     });
   }
   onNotify() {
     const { goalNotify, goal, navPop } = this.props;
     const { handoff } = this.state;
-    this.setLoadingState('button');
+    this.setLoading('button');
     goalNotify(goal.get('id'), handoff).then((res) => {
       if (res && res.ok) {
         window.analytics.sendEvent('Notify');
         navPop();
       } else {
-        this.clearLoadingState('button', '!Something went wrong');
+        this.clearLoading('button', '!Something went wrong');
       }
     });
   }
@@ -209,7 +209,7 @@ class HOCGoalHandoff extends PureComponent {
         users={users}
         delegate={this}
         handoff={handoff}
-        loadingState={this.getAllLoadingStates()}
+        loadingState={this.getAllLoading()}
       />
 
     );

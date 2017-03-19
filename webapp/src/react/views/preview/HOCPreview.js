@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindAll, setupCachedCallback, setupLoadingHandlers } from 'classes/utils';
+import { bindAll, setupCachedCallback, setupLoading } from 'classes/utils';
 import Button from 'Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
@@ -25,7 +25,7 @@ class HOCPreviewModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
-    setupLoadingHandlers(this);
+    setupLoading(this);
     this.fetch(props.loadPreview);
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
     bindAll(this, ['onFileLoaded', 'onFileError', 'onAttach']);
@@ -63,12 +63,12 @@ class HOCPreviewModal extends PureComponent {
       loadPreview,
       addAttachment,
     } = this.props;
-    this.setLoadingState('attach');
+    this.setLoading('attach');
     addAttachment(targetId, loadPreview.toJS()).then((res) => {
       if (res && res.ok) {
-        this.clearLoadingState('attach', 'Successfully attached');
+        this.clearLoading('attach', 'Successfully attached');
       } else {
-        this.clearLoadingState('attach', '!Something went wrong');
+        this.clearLoading('attach', '!Something went wrong');
       }
     });
   }
@@ -274,7 +274,7 @@ class HOCPreviewModal extends PureComponent {
           key="attach"
           text="Attach to Goal"
           primary
-          {...this.getLoadingState('attach')}
+          {...this.getLoading('attach')}
           onClick={this.onAttach}
           className="preview-footer__btn"
         />

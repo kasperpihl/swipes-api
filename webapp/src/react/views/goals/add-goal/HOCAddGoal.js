@@ -6,7 +6,7 @@ import { cache, ways } from 'swipes-core-js';
 import Button from 'Button';
 import SWView from 'SWView';
 import { fromJS } from 'immutable';
-import { setupDelegate, bindAll, randomString, setupLoadingHandlers } from 'classes/utils';
+import { setupDelegate, bindAll, randomString, setupLoading } from 'classes/utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HOCAttachments from 'components/attachments/HOCAttachments';
@@ -33,7 +33,7 @@ class HOCAddGoal extends PureComponent {
     if (props.cache) {
       this.state = props.cache.toObject();
     }
-    setupLoadingHandlers(this);
+    setupLoading(this);
     bindAll(this, [
       'clickedAdd',
       'onHandoffChange',
@@ -120,12 +120,12 @@ class HOCAddGoal extends PureComponent {
       placeholder: 'Name your Way: Like Development, Design etc.',
       buttonLabel: 'Save',
     }), (title) => {
-      this.setLoadingState('saveway');
+      this.setLoading('saveway');
       createWay(title, goal).then((res) => {
         if (res && res.ok) {
-          this.clearLoadingState('saveway', 'Added way');
+          this.clearLoading('saveway', 'Added way');
         } else {
-          this.clearLoadingState('saveway', '!Something went wrong');
+          this.clearLoading('saveway', '!Something went wrong');
         }
       });
     });
@@ -319,7 +319,7 @@ class HOCAddGoal extends PureComponent {
     } = this.props;
 
     const goal = this.getGoal();
-    this.setLoadingState('create');
+    this.setLoading('create');
     addGoal(goal, organization_id, handoff, flags.toJS()).then((res) => {
       if (res.ok) {
         window.analytics.sendEvent('Created goal');
@@ -327,7 +327,7 @@ class HOCAddGoal extends PureComponent {
         removeCache('add-goal');
         navPop();
       } else {
-        this.clearLoadingState('create', '!Something went wrong');
+        this.clearLoading('create', '!Something went wrong');
       }
     });
   }
@@ -465,7 +465,7 @@ class HOCAddGoal extends PureComponent {
         <Button
           text="Save as a Way"
           className="add-goal__btn add-goal__btn--save"
-          {...this.getLoadingState('saveway')}
+          {...this.getLoading('saveway')}
           onClick={this.onSave}
         />
       );
@@ -480,7 +480,7 @@ class HOCAddGoal extends PureComponent {
             primary
             disabled={!this.isReadyToCreate()}
             className="add-goal__btn add-goal__btn--cta"
-            {...this.getLoadingState('create')}
+            {...this.getLoading('create')}
             onClick={this.clickedAdd}
           />
         </div>

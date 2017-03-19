@@ -13,7 +13,7 @@ import Button from 'Button';
 import { timeAgo } from 'classes/time-utils';
 import diff from 'classes/draft-util';
 
-import { bindAll, debounce, randomString, setupLoadingHandlers } from 'classes/utils';
+import { bindAll, debounce, randomString, setupLoading } from 'classes/utils';
 import * as actions from 'actions';
 
 import './styles/side-note';
@@ -33,7 +33,7 @@ class HOCSideNote extends PureComponent {
     this.state = {};
     bindAll(this, ['setEditorState', 'bouncedSaveNote', 'onBeforeUnload', 'onResolveConflict']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
-    setupLoadingHandlers(this);
+    setupLoading(this);
   }
   componentDidMount() {
     window.addEventListener('beforeunload', this.onBeforeUnload);
@@ -72,13 +72,13 @@ class HOCSideNote extends PureComponent {
     const { serverOrg, note } = this.props;
     const rawText = convertToRaw(editorState.getCurrentContent());
     const diffObj = diff((serverOrg.get('text') || emptyState).toJS(), note.get('text').toJS(), rawText);
-    this.setLoadingState('conflict');
+    this.setLoading('conflict');
     this.saveNote(diffObj.editorState, note.get('rev')).then((res) => {
       if (res && res.ok) {
-        this.clearLoadingState('conflict');
+        this.clearLoading('conflict');
         this.setState({ overrideRaw: diffObj.editorState });
       } else {
-        this.clearLoadingState('conflict', '!Something went wrong');
+        this.clearLoading('conflict', '!Something went wrong');
       }
     });
   }
@@ -168,7 +168,7 @@ class HOCSideNote extends PureComponent {
       buttonHtml = (
         <Button
           primary
-          {...this.getLoadingState('conflict')}
+          {...this.getLoading('conflict')}
           text="Resolve now"
           onClick={this.onResolveConflict}
         />
@@ -213,7 +213,7 @@ class HOCSideNote extends PureComponent {
             setEditorState={this.setEditorState}
             onBlur={this.onBlur}
             delegate={this}
-            disabled={this.getLoadingState('conflict').loading}
+            disabled={this.getLoading('conflict').loading}
           />
         </div>
       </SWView>
