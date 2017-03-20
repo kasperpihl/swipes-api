@@ -20,10 +20,12 @@ class HandoffStatus extends Component {
     const { toId, goal, assignees } = this.props;
     const helper = this.getHelper();
     let status = '';
-    if (toId === '_start') {
+    if (!helper.getIsStarted() && toId !== '_complete') {
+      const i = helper.getStepIndexForId(toId) + 1;
+
       status = (
         <span>
-          {'Start goal and assign first step to '}
+          {`Start goal at step ${i} and assign it to `}
           <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true, number: 3 })}"`}</b>
         </span>
       );

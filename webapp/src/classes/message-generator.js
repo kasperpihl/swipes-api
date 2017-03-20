@@ -18,7 +18,8 @@ export default class MessageGenerator {
   getButtonTitleFromHandoffAndGoal(handoff, goal) {
     const helper = new GoalsUtil(goal);
     let label = 'Complete Step';
-    if (handoff.get('target') === '_start') {
+
+    if (!helper.getIsStarted() && handoff.get('target') !== '_complete') {
       label = 'Start Goal';
     } else if (handoff.get('target') === '_complete') {
       label = 'Complete Goal';

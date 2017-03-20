@@ -88,9 +88,10 @@ class HOCGoalHandoff extends PureComponent {
   }
   onSubmit() {
     const { handoff } = this.state;
+    const helper = this.getHelper();
     if (['_feedback', '_notify'].indexOf(handoff.get('target')) !== -1) {
       this.onNotify(handoff.get('target'));
-    } else if (['_start'].indexOf(handoff.get('target')) !== -1) {
+    } else if (!helper.getIsStarted()) {
       this.onStartGoal();
     } else {
       this.onCompleteStep();

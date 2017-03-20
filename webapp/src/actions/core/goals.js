@@ -43,15 +43,15 @@ export const rename = (goalId, title) => a.api.request('goals.rename', {
 
 export const start = (gId, handoff) => (d, getState) => {
   let assignees = handoff.get('assignees');
-  assignees = assignees || assignees.toJS();
+  assignees = assignees && assignees.toJS();
 
-  const nextStepId = getState().getIn(['goals', gId, 'step_order', 0]);
+  const nextStepId = getState().getIn(['goals', gId, 'steps', handoff.get('target'), 'id']);
+  const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
   return d(a.api.request('goals.start', {
     goal_id: gId,
-
     flags: handoff.get('flags'),
     message: handoff.get('message'),
-    current_step_id: null,
+    current_step_id: currentStepId || null,
     next_step_id: nextStepId,
     assignees,
   }));

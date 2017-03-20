@@ -162,7 +162,7 @@ class HOCGoalOverview extends PureComponent {
     }
 
     const assignees = helper.getStepByIndex(0).get('assignees');
-    this.onHandoff('_start', 'Start Goal', assignees);
+    this.onHandoff(helper.getStepByIndex(0).get('id'), 'Start Goal', assignees);
   }
 
   onHandoff(_target, title, assignees) {

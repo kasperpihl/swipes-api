@@ -96,8 +96,8 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     goal,
     notificationGroupId,
     goalProgress,
-    current_step_id,
-    next_step_id,
+    current_step_id = null,
+    next_step_id = null,
     message,
     flags = [],
     assignees = null,
@@ -111,10 +111,13 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     return next(new SwipesError('Invalid next_step_id'));
   }
 
-  let type = next_step_id ? 'step_completed' : 'goal_completed';
+  let type = 'step_completed';
 
   if (goalProgress === 'start') {
     type = 'goal_started';
+  }
+  if (!next_step_id) {
+    type = 'goal_completed';
   }
 
   const currentStep = goal.steps[current_step_id] || {};
@@ -140,7 +143,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     completed: type === 'goal_completed',
   };
 
-  if (type === 'goal_started') {
+  if (!goal.status.started) {
     goal.status.started = true;
   }
 

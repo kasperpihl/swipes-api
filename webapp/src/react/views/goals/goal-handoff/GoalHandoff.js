@@ -34,6 +34,7 @@ class GoalHandoff extends PureComponent {
   renderHeader() {
     const { handoff, goal } = this.props;
     const title = msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
+
     return (
       <div className="goal-handoff__header">
         <div className="goal-handoff__content">

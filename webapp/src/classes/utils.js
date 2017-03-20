@@ -66,7 +66,7 @@ export function getParentByClass(target, className) {
       node = target;
     }
     target = target.parentNode;
-  } while (!node && typeof target.getAttribute === 'function');
+  } while (!node && target && typeof target.getAttribute === 'function');
   return node;
 }
 export function nearestAttribute(target, attribute) {
