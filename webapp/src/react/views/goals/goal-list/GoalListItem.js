@@ -27,8 +27,12 @@ class GoalListItem extends PureComponent {
   clickedListItem() {
     const { onClick, goal } = this.props;
 
-    if (onClick) {
-      onClick(goal.get('id'));
+    const selection = window.getSelection();
+
+    if (selection.toString().length === 0) {
+      if (onClick) {
+        onClick(goal.get('id'));
+      }
     }
   }
   renderProgressBar() {

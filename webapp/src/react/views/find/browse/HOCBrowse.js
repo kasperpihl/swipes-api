@@ -85,20 +85,24 @@ class HOCBrowse extends PureComponent {
     const { queries, results, selectedIndexes } = this.state;
 
     const r = results.get(depth).items[i];
-    if (r && r.on_click.type === 'query') {
-      const query = r.on_click.query;
-      this.setState({
-        queries: queries.setSize(depth + 1).push(query),
-        results: results.setSize(depth + 1),
-        selectedIndexes: selectedIndexes.setSize(depth).push(i),
-      });
-    } else if (r && r.on_click.type === 'preview') {
-      this.callDelegate('onPreviewLink', Object.assign({}, r.on_click.preview, {
-        meta: {
-          title: r.title,
-        },
-      }));
-    }
+    const selection = window.getSelection();
+
+    if (selection.toString().length === 0) {
+      if (r && r.on_click.type === 'query') {
+        const query = r.on_click.query;
+        this.setState({
+          queries: queries.setSize(depth + 1).push(query),
+          results: results.setSize(depth + 1),
+          selectedIndexes: selectedIndexes.setSize(depth).push(i),
+        });
+      } else if (r && r.on_click.type === 'preview') {
+        this.callDelegate('onPreviewLink', Object.assign({}, r.on_click.preview, {
+          meta: {
+            title: r.title,
+          },
+        }));
+      }
+  	}
   }
   mapResults(items) {
     return items.map((item, i) => ({

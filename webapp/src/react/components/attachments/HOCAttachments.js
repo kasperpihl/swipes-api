@@ -34,7 +34,11 @@ class HOCAttachments extends PureComponent {
       previewLink,
       attachments,
     } = this.props;
+    const selection = window.getSelection();
+
+  	if (selection.toString().length === 0) {
     previewLink(this.context.target, attachments.get(id));
+  	}
   }
 
   onFlagClick(id) {
