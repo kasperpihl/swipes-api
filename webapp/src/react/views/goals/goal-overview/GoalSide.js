@@ -12,6 +12,7 @@ class GoalSide extends Component {
     this.state = {};
     this.callDelegate = setupDelegate(props.delegate);
     this.onClick = this.callDelegate.bind(null, 'onAddStep');
+    this.onLoad = this.callDelegate.bind(null, 'onLoadSteps');
   }
   getHelper() {
     const { goal } = this.props;
@@ -73,6 +74,7 @@ class GoalSide extends Component {
           <Icon icon="Plus" className="add-step__svg" />
         </div>
         <button className="add-step__text" onClick={this.onClick}>{buttonTitle}</button>
+        <button className="add-step__text" onClick={this.onLoad}>Load steps</button>
       </div>
     );
   }

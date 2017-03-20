@@ -81,7 +81,7 @@ authed.all('/goals.create',
     const options = {
       type: 'note',
       id: note.id,
-      title: 'Description',
+      title: 'Goal description',
       account_id: user_id,
     };
 

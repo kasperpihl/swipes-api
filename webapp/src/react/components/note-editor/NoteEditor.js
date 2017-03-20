@@ -79,6 +79,7 @@ class NoteEditor extends Component {
     if (showPlaceholder && firstBlock && firstBlock.getType() !== 'unstyled') {
       showPlaceholder = false;
     }
+    const placeHolder = 'Write down any tips and information that will your team get started';
     return (
       <MediumEditor
         editorState={editorState}
@@ -90,7 +91,7 @@ class NoteEditor extends Component {
           editorState={editorState}
           {...this.plugins.bind}
           onBlur={this.props.onBlur}
-          placeholder={showPlaceholder ? 'Write something cool in me' : undefined}
+          placeholder={showPlaceholder ? placeHolder : undefined}
 
         />
       </MediumEditor>

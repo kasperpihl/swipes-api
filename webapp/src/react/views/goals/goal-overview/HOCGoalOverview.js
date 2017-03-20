@@ -71,18 +71,17 @@ class HOCGoalOverview extends PureComponent {
       remove.disabled = true;
       remove.subtitle = 'Cannot remove current step';
     }
-    if (helper.getTotalNumberOfSteps() === 1) {
+    if (helper.getIsStarted() && helper.getTotalNumberOfSteps() === 1) {
       remove.disabled = true;
       remove.subtitle = 'Cannot remove the last step';
     }
 
-    const items = [{ title: 'Reassign' }, { title: 'Rename' }, remove];
+    const items = [{ title: 'Rename' }, remove];
+
     const delegate = {
       onItemAction: (item) => {
         const clearCB = this.clearLoading.bind(this, step.get('id'));
-        if (item.title === 'Reassign') {
-          this.onAssign(i, options);
-        } else if (item.title === 'Rename') {
+        if (item.title === 'Rename') {
           inputMenu({
             ...options,
             text: step.get('title'),
@@ -328,6 +327,11 @@ class HOCGoalOverview extends PureComponent {
   getHelper() {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
+  }
+  clickedAssign(i, e) {
+    e.stopPropagation();
+    const options = this.getOptionsForE(e);
+    this.onAssign(i, options);
   }
   render() {
     const { goal, me } = this.props;

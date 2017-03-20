@@ -33,7 +33,7 @@ class GoalOverview extends PureComponent {
     const helper = this.getHelper();
     const { goal, loadingState, delegate } = this.props;
     let subtitle;
-    let buttons = [
+    const buttons = [
       <Button
         key="feedback"
         text="Give Feedback"
@@ -47,7 +47,9 @@ class GoalOverview extends PureComponent {
     ];
     if (!helper.getIsStarted()) {
       subtitle = 'Unstarted goal';
-      buttons = [];
+      if (!helper.getTotalNumberOfSteps()) {
+        subtitle = 'You need to add steps before starting this goal';
+      }
     }
     const title = loadingState.get('title') && loadingState.get('title').loadingLabel;
     return (
@@ -66,14 +68,6 @@ class GoalOverview extends PureComponent {
         </HOCHeaderTitle>
       </div>
     );
-  }
-  renderWays() {
-    const { goal } = this.props;
-
-    return [
-      <Section title="Or choose a way" key="sect" />,
-      <HOCWays key="ways" goalId={goal.get('id')} />,
-    ];
   }
   renderAttachments() {
     const { goal, delegate } = this.props;
@@ -96,15 +90,11 @@ class GoalOverview extends PureComponent {
 
     let className = 'goal-overview__column';
     className += ` goal-overview__column--${helper.getIsStarted() ? 'left' : 'left-lonely'}`;
-    let contentHtml = this.renderWays();
-    if (helper.getIsStarted() || helper.getTotalNumberOfSteps()) {
-      contentHtml = this.renderAttachments();
-    }
 
     return (
       <div className={className}>
         <GoalSide goal={goal} delegate={delegate} loadingState={loadingState} />
-        {contentHtml}
+        {this.renderAttachments()}
       </div>
     );
   }

@@ -43,9 +43,7 @@ class GoalListItem extends PureComponent {
 
     return (
       <div className="progress-bar">
-        <div className="progress-bar__frame">
-          <div className="progress-bar__fill" style={styles} />
-        </div>
+
         <div className="progress-bar__status">{numberOfCompletedSteps} of {numberOfAllSteps} step{numberOfAllSteps > 1 ? 's' : ''} completed</div>
       </div>
     );

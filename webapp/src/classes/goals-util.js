@@ -77,6 +77,7 @@ export default class GoalsUtil {
   getLastHandoff() {
     return this.goal.get('history').findLast((h) => {
       switch (h.get('type')) {
+        case 'goal_created':
         case 'goal_started':
         case 'step_completed':
         case 'goal_completed':
