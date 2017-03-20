@@ -36,9 +36,9 @@ class HOCAttachments extends PureComponent {
     } = this.props;
     const selection = window.getSelection();
 
-  	if (selection.toString().length === 0) {
-    previewLink(this.context.target, attachments.get(id));
-  	}
+    if (selection.toString().length === 0) {
+      previewLink(this.context.target, attachments.get(id));
+    }
   }
 
   onFlagClick(id) {
@@ -128,7 +128,7 @@ class HOCAttachments extends PureComponent {
     if (which === 'url') {
       options.placeholder = 'Enter a URL';
     } else if (which === 'note') {
-      options.placeholder = 'Enter a URL';
+      options.placeholder = 'Title of the note';
     }
     inputMenu(options, (title) => {
       if (title && title.length) {
