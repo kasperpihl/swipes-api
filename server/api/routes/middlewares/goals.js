@@ -51,7 +51,7 @@ const goalsCreate = valLocals('goalsCreate', {
   goal.steps = {
     [step_one_id]: {
       id: step_one_id,
-      assignees: [],
+      assignees: [user_id],
       title: 'What is the first step? Enter it here...',
     },
     [step_two_id]: {
