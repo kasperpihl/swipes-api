@@ -13,8 +13,12 @@
   }
 
   &:hover {
-    cursor: pointer;
+    cursor: pointer !important;
     text-decoration: underline;
+
+    span {
+      cursor: pointer !important;
+    }
 
     #{$b}__tooltip {
       opacity: 1;
