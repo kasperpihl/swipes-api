@@ -79,7 +79,14 @@ class NoteEditor extends Component {
     if (showPlaceholder && firstBlock && firstBlock.getType() !== 'unstyled') {
       showPlaceholder = false;
     }
-    const placeHolder = 'Write down any tips and information that will your team get started';
+    const placeHolder = (
+      <div>
+        Write down any tips and information that will help your team get started.
+        <br />
+        <br />
+        Write [] to create a checklist or mark the text to edit and style it.
+      </div>
+    );
     return (
       <MediumEditor
         editorState={editorState}
