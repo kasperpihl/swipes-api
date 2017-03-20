@@ -50,7 +50,7 @@ const goal_started = notifyWrapper([
 
 const goal_archived = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsArchiveWithHistoryNotificationData,
   goals.goalsStepsInterseptUsers,
   goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,

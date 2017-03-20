@@ -156,6 +156,29 @@ const goalsGeneralWithHistoryNotificationData = (req, res, next) => {
 
   return next();
 };
+const goalsArchiveWithHistoryNotificationData = (req, res, next) => {
+  const {
+    group_id,
+    goal,
+  } = res.locals;
+  const historyIndex = getHistoryIndex(goal.history, group_id);
+
+  if (historyIndex === -1) {
+    return next(new SwipesError(`goalsArchiveWithHistoryNotificationData - history item with ${group_id} is not found`));
+  }
+
+  const target = createNotificationTarget(goal, historyIndex);
+  const meta = notificationMeta(goal);
+  const notificationData = {
+    target,
+    meta,
+  };
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = { id: goal.id };
+
+  return next();
+};
 
 export {
   goalsGetSingle,
@@ -167,4 +190,5 @@ export {
   goalsRenamedNotificationData,
   goalsGeneralWithHistoryNotificationData,
   goalsLoadedWayNotificationData,
+  goalsArchiveWithHistoryNotificationData,
 };
