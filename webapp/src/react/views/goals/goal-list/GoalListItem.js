@@ -31,7 +31,6 @@ class GoalListItem extends PureComponent {
       onClick(goal.get('id'));
     }
   }
-
   renderProgressBar() {
     const helper = this.getHelper();
     const numberOfCompletedSteps = helper.getNumberOfCompletedSteps();
@@ -41,9 +40,19 @@ class GoalListItem extends PureComponent {
       width: `${completedProgressFill}%`,
     };
 
+    if (numberOfAllSteps === 0) {
+      return (
+        <div className="progress-bar  progress-bar--empty">
+          <div className="progress-bar__status">No steps added</div>
+        </div>
+      );
+    }
+
     return (
       <div className="progress-bar">
-
+        <div className="progress-bar__frame">
+          <div className="progress-bar__fill" style={styles} />
+        </div>
         <div className="progress-bar__status">{numberOfCompletedSteps} of {numberOfAllSteps} step{numberOfAllSteps > 1 ? 's' : ''} completed</div>
       </div>
     );

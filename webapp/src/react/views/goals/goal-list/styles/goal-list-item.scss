@@ -85,9 +85,6 @@ $imgContHeight: 66px;
   }
 
   &--completed {
-    #{$b}__subtitle {
-      display: none;
-    }
 
     #{$b}__completed-icon {
       display: block;
@@ -135,6 +132,12 @@ $imgContHeight: 66px;
     &__status {
       @include font(12px, $deepBlue-60);
       margin-left: 18px;
+    }
+
+    &--empty {
+       .progress-bar__status {
+         margin-left: 0;
+       }
     }
   }
 
