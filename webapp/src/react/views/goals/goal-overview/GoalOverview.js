@@ -33,7 +33,7 @@ class GoalOverview extends PureComponent {
     const helper = this.getHelper();
     const { goal, loadingState, delegate } = this.props;
     let subtitle;
-    const buttons = [
+    let buttons = [
       <Button
         key="feedback"
         text="Give Feedback"
@@ -46,6 +46,7 @@ class GoalOverview extends PureComponent {
       />,
     ];
     if (!helper.getIsStarted()) {
+      buttons = [];
       subtitle = 'Unstarted goal';
       if (!helper.getTotalNumberOfSteps()) {
         subtitle = 'You need to add steps before starting this goal';
