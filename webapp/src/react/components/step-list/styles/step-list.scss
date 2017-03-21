@@ -19,6 +19,16 @@
   transition: .15s ease;
 }
 
+.add-step {
+    $b: &;
+    $flexIgnoreList: '#{$b}__indicator';
+
+    @include size(100%, 67px);
+    @include flexContainer('row', left, center, $flexIgnoreList);
+    border-top: 1px solid $deepBlue-5;
+    transition: .15s ease;
+}
+
 // ======================================================
 // Elements
 // ======================================================
@@ -71,6 +81,69 @@
     padding: 10px 15px;
     pointer-events: none;
     white-space: nowrap;
+  }
+}
+
+.step-list {
+
+  .add-step {
+    $b: &;
+
+    &__input {
+      @include size(100%, auto);
+      @include font(15px, $deepBlue-100, 24px);
+      order: 2;
+
+      &::-webkit-input-placeholder {
+        @include font(15px, $deepBlue-30, 24px);
+        font-style: italic;
+      }
+
+      &:not(:placeholder-shown) + .add-step__indicator {
+        border: 2px solid $deepBlue-100;
+        color: rgba($deepBlue-100, 1);
+        transition: .3s ease;
+      }
+    }
+
+    &__indicator {
+      @include size(30px);
+      @include flexContainer('row', center, center);
+      border: 2px solid $deepBlue-20;
+      border-radius: 50%;
+      color: rgba($deepBlue-100, 0);
+      transition: .3s ease;
+      margin-right: 18px;
+      order: 1;
+    }
+
+    &__loader {
+      @include size(24px);
+      border-radius: 50%;
+
+      &:before {
+        @include size(24px);
+        position: absolute;
+        left: 0; top: 0;
+        content: '';
+        border-radius: 50%;
+        background-color: $blue-100;
+        -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
+        opacity: 0;
+        transition: .2s ease;
+      }
+
+      &:after {
+        @include size(18px);
+        position: absolute;
+        left: 3px; top: 3px;
+        content: '';
+        border-radius: 50%;
+        background-color: $bg;
+        opacity: 0;
+        transition: .2s .2s ease;
+      }
+    }
   }
 }
 
@@ -147,6 +220,32 @@
   }
 }
 
+.add-step {
+  $b: &;
+
+  &--loading {
+
+    #{$b}__indicator {
+      border: 0px solid transparent !important;
+      transition: .2s;
+    }
+
+    #{$b}__loader {
+      animation: rotateAddLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
+
+      &:before {
+        opacity: 1;
+        transition: .2s .2s ease;
+      }
+
+      &:after {
+        opacity: 1;
+        transition: 0s .2s ease;
+      }
+    }
+  }
+}
+
 // ======================================================
 // Targeting
 // ======================================================
@@ -172,5 +271,15 @@
       opacity: 1;
       transition: .15s ease;
     }
+  }
+}
+
+@keyframes rotateAddLoader {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -13,9 +13,12 @@ class HOCStepList extends PureComponent {
     super(props);
     this.state = {
       hoverIndex: -1,
+      addStepValue: ''
     };
     this.onEnter = setupCachedCallback(this.onEnter, this);
     this.onLeave = this.onLeave.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.addStep = this.addStep.bind(this);
     this.callDelegate = setupDelegate(props.delegate);
     this.onCheck = setupCachedCallback(this.callDelegate.bind(null, 'onStepCheck'));
     this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onStepClick'));
@@ -55,6 +58,17 @@ class HOCStepList extends PureComponent {
     this.setState({
       hoverIndex: -1,
     });
+  }
+  onChange(e) {
+    const value = e.target.value;
+
+    this.setState({ addStepValue: value });
+  }
+  addStep(e) {
+    if (e.keyCode === 13 && e.target.value.length > 0) {
+      this.callDelegate('onAddStep', e.target.value);
+      this.setState({ addStepValue: '' });
+    }
   }
   renderStep(step, i) {
     const { completed, delegate, steps, noActive } = this.props;
@@ -136,11 +150,30 @@ class HOCStepList extends PureComponent {
     );
   }
   render() {
-    const { steps } = this.props;
+    const { steps, addLoading } = this.props;
+    let addClass = 'add-step';
+
+    if (addLoading && addLoading.loading) {
+      addClass += ' add-step--loading';
+    }
 
     return (
       <div className="step-list">
         {steps.map((s, i) => this.renderStep(s, i))}
+        <div className={addClass}>
+          <input
+            ref="addStepInput"
+            type="text"
+            className="add-step__input"
+            value={this.state.addStepValue}
+            onChange={this.onChange}
+            onKeyDown={this.addStep}
+            placeholder="Add new step"
+          />
+          <div className="add-step__indicator">
+            <div className="add-step__loader"></div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -159,5 +192,6 @@ HOCStepList.propTypes = {
   fullHover: bool,
   completed: number,
   delegate: object,
+  addLoading: object,
   tooltipAlign: string,
 };
