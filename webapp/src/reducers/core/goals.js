@@ -67,10 +67,10 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'goal_archived':
     case 'goals.archive': {
-      if (!state.get(payload.id)) {
+      if (!state.get(payload.goal_id)) {
         return state;
       }
-      return state.delete(payload.id);
+      return state.delete(payload.goal_id);
     }
     case 'goals.create':
     case 'goal_created': {

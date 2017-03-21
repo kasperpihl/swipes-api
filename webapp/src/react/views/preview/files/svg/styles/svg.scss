@@ -1,0 +1,19 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.preview-svg {
+  @include size(100%);
+  max-height: 99%;
+  max-width: 90vw;
+
+  img {
+    @include size(100px);
+    position: absolute;
+    left: 50%; top: 50%;
+    max-height: 100%;
+    max-width: 100%;
+    transform: translateX(-50%) translateY(-50%);
+    user-select: none;
+  }
+
+}
