@@ -236,7 +236,6 @@ const goalsArchive = valLocals('goalsArchive', {
     .then(() => {
       setLocals({
         eventType: 'goal_archived',
-        id: goal_id,
       });
 
       return next();

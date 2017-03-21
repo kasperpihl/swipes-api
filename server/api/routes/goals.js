@@ -174,7 +174,7 @@ authed.all('/goals.archive',
   goalsArchiveQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    id: string.require(),
+    goal_id: string.require(),
   }));
 
 authed.all('/goals.addMilestone',

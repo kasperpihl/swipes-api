@@ -175,7 +175,7 @@ const goalsArchiveWithHistoryNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = { id: goal.id };
+  res.locals.eventData = { goal_id: goal.id };
 
   return next();
 };
