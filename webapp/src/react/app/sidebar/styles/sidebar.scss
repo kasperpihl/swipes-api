@@ -42,7 +42,7 @@ $sidebarWidth: 84px;
     @include size(54px, auto);
     @include flexContainer('column', center, center);
     border-radius: 50px;
-    background-color: rgba($bg, .6);
+    background-color: rgba($deepBlue-100, .05);
   }
 }
 
@@ -87,7 +87,7 @@ $sidebarWidth: 84px;
     @include flexContainer('row', center, center);
     @include font(10px, $bg, 12px, bold);
     animation: newNotification 1s ease forwards;
-    background: $red-80;
+    background: $red-100;
     border-radius: 20px;
     left: 55%; top: 45%;
     padding-bottom: 1px;
@@ -103,7 +103,7 @@ $sidebarWidth: 84px;
 
   &__icon {
     @include size(24px);
-    @include svg-color(rgba($deepBlue-100, .3));
+    @include svg-color(rgba($deepBlue-120, .4));
     pointer-events: none;
   }
 }

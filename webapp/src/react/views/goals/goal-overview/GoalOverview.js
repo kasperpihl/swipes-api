@@ -100,16 +100,21 @@ class GoalOverview extends PureComponent {
     );
   }
   renderLeft() {
-    const { goal, delegate, loadingState } = this.props;
+    const { delegate, loadingState } = this.props;
     const helper = this.getHelper();
+    const numberOfCompleted = helper.getNumberOfCompletedSteps();
+    const totalSteps = helper.getTotalNumberOfSteps();
+
     return (
       <div className="goal-overview__column goal-overview__column--left">
+        <div className="goal-overview__progress">Steps {numberOfCompleted}/{totalSteps}</div>
         <HOCStepList
           steps={helper.getOrderedSteps().map((s) => {
             const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;
             s = s.set('loading', l);
             return s;
           })}
+          editabel={true}
           addLoading={loadingState.get('add')}
           completed={helper.getNumberOfCompletedSteps()}
           noActive={!helper.getIsStarted()}

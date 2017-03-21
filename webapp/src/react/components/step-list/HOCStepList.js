@@ -149,8 +149,13 @@ class HOCStepList extends PureComponent {
       </div>
     );
   }
-  render() {
-    const { steps, addLoading } = this.props;
+  renderAddStep() {
+    const { addLoading, editable } = this.props;
+
+    if (!editable) {
+      return undefined;
+    }
+
     let addClass = 'add-step';
 
     if (addLoading && addLoading.loading) {
@@ -158,22 +163,29 @@ class HOCStepList extends PureComponent {
     }
 
     return (
+      <div className={addClass}>
+        <input
+          ref="addStepInput"
+          type="text"
+          className="add-step__input"
+          value={this.state.addStepValue}
+          onChange={this.onChange}
+          onKeyDown={this.addStep}
+          placeholder="Add new step"
+        />
+        <div className="add-step__indicator">
+          <div className="add-step__loader"></div>
+        </div>
+      </div>
+    )
+  }
+  render() {
+    const { steps } = this.props;
+
+    return (
       <div className="step-list">
         {steps.map((s, i) => this.renderStep(s, i))}
-        <div className={addClass}>
-          <input
-            ref="addStepInput"
-            type="text"
-            className="add-step__input"
-            value={this.state.addStepValue}
-            onChange={this.onChange}
-            onKeyDown={this.addStep}
-            placeholder="Add new step"
-          />
-          <div className="add-step__indicator">
-            <div className="add-step__loader"></div>
-          </div>
-        </div>
+        {this.renderAddStep()}
       </div>
     );
   }

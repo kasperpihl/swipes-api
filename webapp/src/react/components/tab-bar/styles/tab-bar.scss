@@ -4,7 +4,7 @@
 .tab-bar {
   $b: &;
 
-  @include size(100%, 40px);
+  @include size(100%, 48px);
 	@include flex(center, flex-start);
   @include flex(none);
   background-color: $bg;
@@ -14,7 +14,7 @@
   z-index: 2;
 
   &__tab {
-    @include size(auto, 40px);
+    @include size(auto, 48px);
     @include flex(center);
     @include font(12px, $deepBlue-30, 15px, bold);
     margin: 0;

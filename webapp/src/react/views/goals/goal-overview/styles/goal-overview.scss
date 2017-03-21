@@ -80,6 +80,13 @@
     padding-top: 51px;
     transform: translateY(50px)
   }
+
+  &__progress {
+    @include size(100%, 48px);
+    @include flexContainer('row', left, center);
+    @include font(12px, $deepBlue-80, 15px, bold);
+    border-top: 1px solid $deepBlue-20;
+  }
 }
 
 .handoff-bar {

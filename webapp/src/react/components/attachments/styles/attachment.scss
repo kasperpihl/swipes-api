@@ -9,9 +9,10 @@
   $b: &;
   $flexIgnoreList: '#{$b}__actions';
 
-  @include size(100%, 55px);
+  @include size(100%, 60px);
   @include flexContainer('row', left, center, $flexIgnoreList);
   border-top: 1px solid darken($deepBlue-5, 3%);
+  transition: .2s ease;
 }
 
 // ======================================================
@@ -26,7 +27,7 @@
 
     @include size($width, 100%);
     @include flexContainer('row', left, center);
-    @include font(12px, $deepBlue-80, 18px, 500);
+    @include font(15px, $deepBlue-80, 24px);
     transition: .1s ease;
 
     &:hover {
@@ -50,7 +51,7 @@
     margin-right: 18px;
 
     #{$b}__svg {
-      @include svg-color($deepBlue-20);
+      @include svg-color($deepBlue-50);
       transition: .2s ease;
     }
   }
@@ -111,6 +112,10 @@
     pointer-events: none;
   }
   &--flagged {
+    background-color: $blue-5;
+    padding: 0 6px;
+    transition: .2s ease;
+
     #{$b}__button--flag {
       @include flexContainer();
       border-color: transparent;
