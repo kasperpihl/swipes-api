@@ -6,7 +6,7 @@
   max-height: 99%;
   max-width: 90vw;
 
-  img {
+  svg {
     @include size(100px);
     position: absolute;
     left: 50%; top: 50%;

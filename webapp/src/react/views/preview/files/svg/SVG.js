@@ -21,6 +21,9 @@ class SVG extends Component {
         props.onError();
       }
     }).then((svg) => {
+      svg = svg.replace('<script>', '');
+      svg = svg.replace('</script>', '');
+      console.log(svg); // es-lint-disable-line
       props.onLoad();
       this.setState({ renderedSVG: svg });
     });
