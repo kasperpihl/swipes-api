@@ -13,9 +13,9 @@
   $b: &;
   $flexIgnoreList: '#{$b}__indicator', '#{$b}__assignees';
 
-  @include size(100%, 54px);
+  @include size(100%, 67px);
   @include flexContainer('row', left, center, $flexIgnoreList);
-  border-bottom: 1px solid $deepBlue-5;
+  border-top: 1px solid $deepBlue-5;
   transition: .15s ease;
 }
 
@@ -28,32 +28,35 @@
   &__indicator {
     @include size(39px, 100%);
     @include flexContainer('row', left, center);
-  }
-
-  &__icon {
-    @include size(24px);
     transition: .15s ease;
-  }
-
-  &__svg {
-    @include centerAbsolute();
-    transition: .15s ease;
-
-    &--transition {
-      @include size();
-      @include svg-color($green-color);
-      padding: 2px;
-      stroke-dashoffset: 0;
-      stroke-dasharray: 19px 100px;
-      stroke-miterlimit: 10;
-      stroke-width: 2;
-      transition: .7s ease;
-    }
   }
 
   &__title {
     @include size(100%, auto);
     @include font(12px, $deepBlue-80, 18px, 500);
+    transition: .15s ease;
+  }
+
+  &__assignees {
+    transition: .15s ease;
+  }
+}
+
+// step list number indicator
+
+.step-list-item {
+  
+  .indicator {
+    @include size(30px);
+    @include flexContainer('row', center, center);
+    background-color: $green-color;
+    border-radius: 50%;
+    transition: .15s ease;
+
+    &__number {
+      @include font(13px, $bg, 16px, bold);
+      transition: .15s ease;
+    }
   }
 }
 
@@ -78,64 +81,52 @@
   $b: &;
 
   &--completed {
-    opacity: .5;
-    transition: .15s ease;
+
+    #{$b}__title, #{$b}__assignees {
+      opacity: .5;
+    }
   }
 
   &--current {
 
-    #{$b}__svg--transition {
-      @include svg-color($deepBlue-50);
-      stroke-dashoffset: 0;
-      stroke-dashoffset: -23px;
-      stroke-dasharray: 69px 26px;
+    .indicator {
+      background-color: $bg;
+      border: 2px solid $deepBlue-100;
+
+      &__number {
+        @include font($c: $deepBlue-100);
+      }
     }
   }
 
   &--future {
     opacity: .5;
-    transition: .15s ease;
 
-    #{$b}__svg--transition {
-      @include svg-color($deepBlue-50);
-      stroke-dashoffset: 0;
-      stroke-dashoffset: -23px;
-      stroke-dasharray: 69px 26px;
+    .indicator {
+      background-color: $bg;
+      border: 2px solid $deepBlue-100;
+
+      &__number {
+        @include font($c: $deepBlue-100);
+      }
     }
   }
 
   &:not(&--completed)#{&}--hover {
-
-    #{$b}__svg--transition {
-      @include svg-color($green-color);
-      stroke-dashoffset: 0;
-      stroke-dasharray: 19px 100px;
-    }
+    opacity: 1;
   }
 
   &:not(&--current):not(&--future)#{&}--hover {
-    #{$b}__svg--transition {
-      @include svg-color($deepBlue-50);
-      stroke-dashoffset: 0;
-      stroke-dashoffset: -23px;
-      stroke-dasharray: 69px 26px;
-    }
+    
   }
 
   &--loading {
     opacity: 1;
-
-    #{$b}__svg--transition {
-      @include svg-color($blue-100);
-      animation: rotateIconLoader 1s .4s linear infinite;
-      stroke-dashoffset: 0;
-      stroke-dashoffset: -50px;
-      stroke-dasharray: 20px 100px;
-    }
   }
 
   &--hover {
     opacity: 1;
+
   }
 }
 
@@ -159,22 +150,10 @@
 
   &:hover {
     opacity: 1;
-  }
-  &__indicator:hover + &__tooltip {
-    opacity: 1;
-    transition: .3s ease;
-  }
-}
 
-// ======================================================
-// Animation
-// ======================================================
-
-@keyframes rotateIconLoader {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
+    #{$b}__title, #{$b}__assignees {
+      opacity: 1;
+      transition: .15s ease;
+    }
   }
 }

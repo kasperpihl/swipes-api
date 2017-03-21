@@ -4,7 +4,6 @@ import * as a from 'actions';
 import { list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import { setupCachedCallback, setupDelegate, getParentByClass } from 'classes/utils';
-import Icon from 'Icon';
 import StepTooltip from './StepTooltip';
 
 import './styles/step-list.scss';
@@ -117,11 +116,8 @@ class HOCStepList extends PureComponent {
           onMouseEnter={fullHover ? undefined : this.onEnter(i, tooltip)}
           onMouseLeave={fullHover ? undefined : this.onLeave}
         >
-          <div className="step-list-item__icon">
-            <Icon
-              icon="CircleCheckmark"
-              className="step-list-item__svg step-list-item__svg--transition"
-            />
+          <div className="indicator">
+            <div className="indicator__number">{i + 1}</div>
           </div>
         </div>
         <div className="step-list-item__title">
