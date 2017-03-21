@@ -16,7 +16,7 @@
   &__tab {
     @include size(auto, 40px);
     @include flex(center);
-    @include font(12px, $deepBlue-30, 18px, bold);
+    @include font(12px, $deepBlue-30, 15px, bold);
     margin: 0;
     padding-right: 30px;
     transition: .1s;
@@ -31,11 +31,11 @@
     }
 
     &--active {
-      color: $blue-100;
+      color: $deepBlue-80;
       transition: .1s;
 
       &:hover {
-        color: $blue-120;
+        color: $deepBlue-100;
       }
     }
   }
@@ -43,8 +43,8 @@
   &__slider {
     @include size(100%, 2px);
     @include flex();
-    background: $blue-30;
-    left: 0; bottom: 6px;
+    background-color: $deepBlue-70;
+    left: 0; top: -1px;
     position: absolute;
     transition: -webkit-clip-path .2s ease-in-out;
     z-index: 2;
