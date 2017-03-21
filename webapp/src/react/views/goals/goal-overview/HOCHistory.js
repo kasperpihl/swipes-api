@@ -66,13 +66,11 @@ class HOCHistory extends PureComponent {
       case 'goal_started': {
         m = m.set('subtitle', `${from} kicked off this goal with`);
         m = m.set('title', stepTitle);
-        m = m.set('icon', 'Plus');
         break;
       }
       case 'created':
       case 'goal_created': {
         m = m.set('subtitle', `${from} created this goal`);
-        m = m.set('icon', 'Plus');
         break;
       }
       case 'notified':
@@ -87,7 +85,6 @@ class HOCHistory extends PureComponent {
           m = m.set('subtitle', `${from} gave feedback to ${to} regarding`);
         }
         m = m.set('title', stepTitle);
-        m = m.set('icon', 'GotNotified');
         break;
       }
       case 'complete_step':
@@ -95,7 +92,6 @@ class HOCHistory extends PureComponent {
         const progress = e.get('progress');
         m = m.set('subtitle', `${from} completed the step`);
         m = m.set('title', fromStepTitle);
-        m = m.set('icon', 'ActivityCheckmark');
 
         if (progress === 'forward') {
           m = m.set('subtitle', `${from} completed the step`);
@@ -107,12 +103,10 @@ class HOCHistory extends PureComponent {
         }
 
         if (progress === 'reassign') {
-          m = m.set('icon', 'Iteration');
           m = m.set('subtitle', `${from} reassigned the step`);
         }
 
         if (progress === 'iteration') {
-          m = m.set('icon', 'Iteration');
           if (!e.get('from')) {
             m = m.set('subtitle', `${from} started the goal again from`);
             m = m.set('title', stepTitle);
@@ -127,7 +121,6 @@ class HOCHistory extends PureComponent {
       case 'complete_goal':
       case 'goal_completed': {
         m = m.set('subtitle', `${from} completed this goal`);
-        m = m.set('icon', 'Star');
         break;
       }
       default:
