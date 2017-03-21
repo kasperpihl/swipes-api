@@ -29,6 +29,7 @@
     "eslint-loader": "^1.6.1",
     "eslint-plugin-import": "^2.2.0",
     "npm-run-all": "^3.1.0",
+    "pm2": "^2.4.2",
     "rimraf": "^2.5.4",
     "webpack": "^1.13.0"
   },
@@ -36,7 +37,7 @@
     "prebuild": "rimraf dist",
     "build": "webpack --progress",
     "watch": "webpack --progress --watch",
-    "server": "pm2-dev start pm2_config.json",
+    "server": "./node_modules/pm2/bin/pm2-dev start pm2_config.json",
     "start": "npm run build && npm-run-all --parallel watch server",
     "server-staging": "node ./dist/index.js",
     "staging": "npm run server-staging",
