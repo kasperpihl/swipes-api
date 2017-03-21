@@ -121,6 +121,10 @@ class NotificationItem extends Component {
       className += ' notification--clickable';
     }
 
+    if (!n.get('icon')) {
+      className += ' notification--small';
+    }
+
     return (
       <div className={className}>
         <div className="notification__top" onClick={this.onClick}>

@@ -163,6 +163,16 @@
       background-color: $deepBlue-30;
     }
   }
+
+  &--small {
+    #{$b}__content {
+      padding-left: 0;
+    }
+
+    #{$b}__bottom {
+      padding-left: 0;
+    }
+  }
 }
 
 // ======================================================
