@@ -25,6 +25,10 @@ class HOCStepList extends PureComponent {
   }
   componentDidMount() {
   }
+  componentWillUnmount() {
+    const { tooltip } = this.props;
+    tooltip(null);
+  }
   onEnter(i, tooltipText, e) {
     const target = getParentByClass(e.target, 'step-list-item__indicator');
 
@@ -54,7 +58,7 @@ class HOCStepList extends PureComponent {
     const { tooltip } = this.props;
 
     tooltip(null);
-    
+
     this.setState({
       hoverIndex: -1,
     });
@@ -73,13 +77,14 @@ class HOCStepList extends PureComponent {
   renderStep(step, i) {
     const { completed, delegate, steps, noActive } = this.props;
     const completedI = completed - 1;
+    const currentStepIndex = completed;
     const { hoverIndex } = this.state;
 
     let className = 'step-list-item';
 
     if (i <= completedI) {
       className += ' step-list-item--completed';
-    } else if (i === completed && !noActive) {
+    } else if (i === currentStepIndex && !noActive) {
       className += ' step-list-item--current';
     } else {
       className += ' step-list-item--future';
@@ -87,8 +92,8 @@ class HOCStepList extends PureComponent {
 
 
     if (hoverIndex !== -1) {
-      if (hoverIndex > completedI) {
-        if (i > completedI && i <= hoverIndex) {
+      if (hoverIndex >= currentStepIndex) {
+        if (i >= currentStepIndex && i < hoverIndex) {
           className += ' step-list-item--hover';
         }
       } else if (i <= completedI && i >= hoverIndex) {
@@ -102,16 +107,20 @@ class HOCStepList extends PureComponent {
       className += ' step-list-item--loading';
     }
 
-    let tooltip = 'Make iteration to this step';
-    if (i > completedI) {
-      tooltip = 'Complete this step';
-      if (i > completed) {
-        tooltip = `Complete ${i - completedI} step${(i > (completedI + 1)) ? 's' : ''}`;
-      }
-      if (i === (steps.size - 1)) {
-        tooltip = 'Complete goal';
-      }
+    let tooltip = 'Go back to this step';
+    if (i === currentStepIndex) {
+      tooltip = 'Redo current step';
     }
+    if (i > currentStepIndex) {
+      tooltip = 'Go forward to this step';
+    }
+    /* if (i > completedI) {
+      tooltip = 'Reassign current step';
+      if (i > completed) {
+        const numberOfComplete = i - completedI - 1;
+        tooltip = `Complete ${numberOfComplete} step${numberOfComplete > 1 ? 's' : ''}`;
+      }
+    }*/
 
     const { fullHover } = this.props;
 

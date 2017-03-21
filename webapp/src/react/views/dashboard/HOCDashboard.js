@@ -73,10 +73,10 @@ class HOCDashboard extends PureComponent {
     const aId = h.getIn(['flags', i]);
     const att = goal.getIn(['attachments', aId]);
     const selection = window.getSelection();
-    
-    if (selection.toString().length) {
+
+    if (selection.toString().length === 0) {
       preview(target, att);
-  	}
+    }
   }
   onClickTitle(i) {
     const n = this.state.notifications.get(i);

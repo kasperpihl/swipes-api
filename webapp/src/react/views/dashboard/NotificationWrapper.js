@@ -18,9 +18,9 @@ class NotificationItem extends Component {
     const { notification: n } = this.props;
     const selection = window.getSelection();
 
-  	if (selection.toString().length === 0 && !n.get('noClickTitle')) {
-    this.callDelegate('onClickTitle', e);
-  	}
+    if (selection.toString().length === 0 && !n.get('noClickTitle')) {
+      this.callDelegate('onClickTitle', e);
+    }
   }
   renderIcon() {
     const { notification: n } = this.props;

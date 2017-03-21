@@ -15,7 +15,6 @@ import HOCWays from 'components/ways/HOCWays';
 import Button from 'Button';
 import HOCHistory from './HOCHistory';
 import GoalSide from './GoalSide';
-
 import './styles/goal-overview.scss';
 
 class GoalOverview extends PureComponent {

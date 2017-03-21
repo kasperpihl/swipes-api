@@ -18,7 +18,9 @@ class HOCHistory extends PureComponent {
     const { goal, preview } = this.props;
     const flag = goal.getIn(['history', hI, 'flags', i]);
     const att = goal.getIn(['attachments', flag]);
-    if (att) {
+    const selection = window.getSelection();
+
+    if (att && selection.toString().length === 0) {
       preview(this.context.target, att);
     }
   }

@@ -137,10 +137,7 @@ class HOCGoalOverview extends PureComponent {
 
   onStepCheck(i, e) {
     const helper = this.getHelper();
-    const currentI = helper.getCurrentStepIndex();
-    if (i >= currentI) {
-      i += 1;
-    }
+    // const currentI = helper.getCurrentStepIndex();
     const step = helper.getStepByIndex(i);
     const _target = (step && step.get('id')) || '_complete';
     this.onHandoff(_target, 'Handoff');
@@ -265,7 +262,10 @@ class HOCGoalOverview extends PureComponent {
     const options = this.getOptionsForE(e);
     const delegate = {
       onItemAction: (item) => {
-        if (item.id === 'way') {
+        if (item.id === '_complete') {
+          this.onHandoff(item.id, 'Handoff');
+          contextMenu(null);
+        } else if (item.id === 'way') {
           inputMenu(Object.assign({}, options, {
             initialValue: goal.get('title'),
             placeholder: 'Name your Way: Like Development, Design etc.',
@@ -303,6 +303,7 @@ class HOCGoalOverview extends PureComponent {
       component: TabMenu,
       props: {
         items: [
+          { id: '_complete', title: 'Complete goal' },
           { id: 'way', title: 'Save as a Way' },
           { title: 'Archive Goal' },
         ],
