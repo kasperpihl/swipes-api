@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <g>
-    <rect x="10" y="9" width="4" height="2" stroke="none" />
-    <rect x="4" y="5" width="16" height="2" stroke="none" />
-    <polygon points="17 17 7 17 7 8 5 8 5 17 5 19 19 19 19 17 19 8 17 8 17 17" stroke="none" />
+    <path d="M5,18H19V8H5Zm4-8h6v2H9Z" stroke="none"/>
+      <rect x="4" y="5" width="16" height="2" stroke="none"/>
   </g>
 </svg>
