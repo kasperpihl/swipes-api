@@ -6,9 +6,11 @@ import GoalsUtil from 'classes/goals-util';
 
 import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
+import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 import Section from 'components/section/Section';
+import Icon from 'Icon';
 import HOCWays from 'components/ways/HOCWays';
 import Button from 'Button';
 import HOCHistory from './HOCHistory';
@@ -99,10 +101,20 @@ class GoalOverview extends PureComponent {
   }
   renderLeft() {
     const { goal, delegate, loadingState } = this.props;
-
+    const helper = this.getHelper();
     return (
       <div className="goal-overview__column goal-overview__column--left">
-        <GoalSide goal={goal} delegate={delegate} loadingState={loadingState} />
+        <HOCStepList
+          steps={helper.getOrderedSteps().map((s) => {
+            const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;
+            s = s.set('loading', l);
+            return s;
+          })}
+          addLoading={loadingState.get('add')}
+          completed={helper.getNumberOfCompletedSteps()}
+          noActive={!helper.getIsStarted()}
+          delegate={delegate}
+        />
       </div>
     );
   }
@@ -119,10 +131,20 @@ class GoalOverview extends PureComponent {
   }
   renderFooter() {
     const helper = this.getHelper();
-    const buttonLabel = '';
+    let buttonLabel = 'Start goal';
     let statusLabel;
     if (!helper.getTotalNumberOfSteps()) {
       statusLabel = 'Add steps before you start the goal';
+    }
+    if (helper.getIsStarted()) {
+      const currentStep = helper.getCurrentStep();
+      if (currentStep) {
+        buttonLabel = `Complete "${currentStep.get('title')}"`;
+      }
+      const nextStep = helper.getNextStep();
+      if (!nextStep) {
+        buttonLabel = 'Complete goal';
+      }
     }
     return (
       <div className="handoff-bar">
@@ -131,7 +153,7 @@ class GoalOverview extends PureComponent {
         </div>
         <div className="handoff-bar__actions">
           <Button
-            text="Start Goal"
+            text={buttonLabel}
             primary
             disabled={!helper.getTotalNumberOfSteps()}
             onClick={this.onStart}

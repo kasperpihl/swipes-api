@@ -146,23 +146,31 @@ class HOCGoalOverview extends PureComponent {
     this.onHandoff(_target, 'Handoff');
     e.stopPropagation();
   }
-
   onStart(e) {
     const helper = this.getHelper();
-    const options = this.getOptionsForE(e);
-    const { confirm } = this.props;
+    let step = helper.getNextStep();
+    let assignees;
+    let target = '_complete';
+    if (!helper.getIsStarted()) {
+      const options = this.getOptionsForE(e);
+      const { confirm } = this.props;
 
-    if (!helper.getTotalNumberOfSteps()) {
-      confirm(Object.assign({}, options, {
-        title: 'Add steps first',
-        actions: [{ text: 'Got it' }],
-        message: 'Before starting a goal, you have to add steps to it. You can do it manually or load a way below.',
-      }));
-      return;
+      if (!helper.getTotalNumberOfSteps()) {
+        confirm(Object.assign({}, options, {
+          title: 'Add steps first',
+          actions: [{ text: 'Got it' }],
+          message: 'Before starting a goal, you have to add steps to it. You can do it manually or load a way below.',
+        }));
+        return;
+      }
+      step = helper.getStepByIndex(0);
+    }
+    if (step) {
+      assignees = step.get('assignees');
+      target = step.get('id');
     }
 
-    const assignees = helper.getStepByIndex(0).get('assignees');
-    this.onHandoff(helper.getStepByIndex(0).get('id'), 'Start Goal', assignees);
+    this.onHandoff(target, '', assignees);
   }
 
   onHandoff(_target, title, assignees) {
@@ -302,21 +310,10 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onAddStep(e) {
-    const { addStep, inputMenu, goal } = this.props;
-    const options = this.getOptionsForE(e);
-    inputMenu({
-      ...options,
-      alignX: 'left',
-      alignY: 'center',
-      placeholder: 'Title for the step',
-      buttonLabel: 'Add',
-    }, (title) => {
-      if (title && title.length) {
-        this.setLoading('add', 'Adding...');
-        addStep(goal.get('id'), title).then(() => this.clearLoading('add'));
-      }
-    });
+  onAddStep(title, e) {
+    const { addStep, goal } = this.props;
+    this.setLoading('add', 'Adding...');
+    addStep(goal.get('id'), title).then(() => this.clearLoading('add'));
   }
   getOptionsForE(e) {
     return {
