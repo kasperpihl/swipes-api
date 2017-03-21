@@ -41,6 +41,7 @@ import Earth2x from './svgs/earth2x.svg';
 import Email from './svgs/email.svg';
 import Eye from './svgs/eye.svg';
 import Find from './svgs/find.svg';
+import File from './svgs/file.svg';
 import Flag from './svgs/flag.svg';
 import Folder from './svgs/folder.svg';
 import FromFullscreen from './svgs/from-fullscreen.svg';
@@ -145,6 +146,7 @@ export {
   Email,
   Eye,
   Find,
+  File,
   Flag,
   Folder,
   FromFullscreen,
