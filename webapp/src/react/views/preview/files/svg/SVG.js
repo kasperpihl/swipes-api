@@ -24,9 +24,14 @@ class SVG extends Component {
       svg = svg.replace('<script>', '');
       svg = svg.replace('</script>', '');
       console.log(svg); // es-lint-disable-line
-      props.onLoad();
-      this.setState({ renderedSVG: svg });
+      if (!this._unmounted) {
+        props.onLoad();
+        this.setState({ renderedSVG: svg });
+      }
     });
+  }
+  componentWillUnmount() {
+    this._unmounted = true;
   }
   renderSVG() {
     const { renderedSVG } = this.state;

@@ -45,7 +45,7 @@ export function attachmentIconForService(service) {
     case 'note':
       return 'Note';
     default:
-      return 'Hyperlink';
+      return 'File';
   }
 }
 
