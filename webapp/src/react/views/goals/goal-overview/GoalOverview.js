@@ -113,7 +113,7 @@ class GoalOverview extends PureComponent {
             s = s.set('loading', l);
             return s;
           })}
-          editabel={true}
+          editable={true}
           addLoading={loadingState.get('add')}
           completed={helper.getNumberOfCompletedSteps()}
           noActive={!helper.getIsStarted()}
