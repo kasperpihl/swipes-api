@@ -26,14 +26,14 @@
 .step-list-item {
 
   &__indicator {
-    @include size(39px, 100%);
+    @include size(49px, 100%);
     @include flexContainer('row', left, center);
     transition: .15s ease;
   }
 
   &__title {
     @include size(100%, auto);
-    @include font(12px, $deepBlue-80, 18px, 500);
+    @include font(15px, $deepBlue-80, 24px, 500);
     transition: .15s ease;
   }
 
@@ -50,6 +50,7 @@
     @include size(30px);
     @include flexContainer('row', center, center);
     background-color: $green-color;
+    border: 2px solid $green-color;
     border-radius: 50%;
     transition: .15s ease;
 
@@ -114,10 +115,26 @@
 
   &:not(&--completed)#{&}--hover {
     opacity: 1;
+
+    .indicator {
+      background-color: $green-color;
+      border: 2px solid $green-color;
+
+      &__number {
+        @include font($c: $bg);
+      }
+    }
   }
 
   &:not(&--current):not(&--future)#{&}--hover {
-    
+    .indicator {
+      background-color: $bg;
+      border: 2px solid $deepBlue-100;
+
+      &__number {
+        @include font($c: $deepBlue-100);
+      }
+    }
   }
 
   &--loading {

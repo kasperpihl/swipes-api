@@ -34,10 +34,7 @@ class GoalSide extends Component {
 
     return (
       <div className="goal-side__progress-bar">
-        <div className="progress-bar">
-          <div className="progress-bar__fill" style={styles} />
-          <div className="progress-bar__status">{numberOfCompleted}/{totalSteps} Steps</div>
-        </div>
+        <div className="progress-bar__status">{numberOfCompleted}/{totalSteps} Steps</div>
       </div>
     );
   }
