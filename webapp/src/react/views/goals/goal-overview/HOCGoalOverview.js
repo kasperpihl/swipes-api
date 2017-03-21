@@ -21,7 +21,7 @@ class HOCGoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     bindAll(this, ['onHandoff', 'onContext']);
-
+    this.state = { tabIndex: 0 };
     setupLoading(this);
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
@@ -328,6 +328,12 @@ class HOCGoalOverview extends PureComponent {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
+  tabDidChange(index) {
+    const { tabIndex } = this.state;
+    if (tabIndex !== index) {
+      this.setState({ tabIndex: index });
+    }
+  }
   clickedAssign(i, e) {
     e.stopPropagation();
     const options = this.getOptionsForE(e);
@@ -335,10 +341,13 @@ class HOCGoalOverview extends PureComponent {
   }
   render() {
     const { goal, me } = this.props;
+    const { tabIndex } = this.state;
+
     return (
       <GoalOverview
         goal={goal}
         myId={me.get('id')}
+        tabIndex={tabIndex}
         delegate={this}
         loadingState={this.getAllLoading()}
       />

@@ -237,9 +237,9 @@ class HOCAttachments extends PureComponent {
   render() {
     return (
       <div className="attachments">
-        {this.renderAddAttachments()}
-        {this.renderAttachments()}
 
+        {this.renderAttachments()}
+        {this.renderAddAttachments()}
       </div>
     );
   }

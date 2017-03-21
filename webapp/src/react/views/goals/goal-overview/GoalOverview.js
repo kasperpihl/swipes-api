@@ -7,6 +7,7 @@ import GoalsUtil from 'classes/goals-util';
 import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import TabBar from 'components/tab-bar/TabBar';
 import Section from 'components/section/Section';
 import HOCWays from 'components/ways/HOCWays';
 import Button from 'Button';
@@ -71,60 +72,54 @@ class GoalOverview extends PureComponent {
     );
   }
   renderAttachments() {
-    const { goal, delegate } = this.props;
+    const { goal, delegate, tabIndex } = this.props;
+    if (tabIndex !== 0) {
+      return undefined;
+    }
 
     return (
-      <Section className="goal-overview__attachments" title="Add attachments" key="sect">
-        <HOCAttachments
-          key="attachments"
-          attachments={goal.get('attachments')}
-          attachmentOrder={goal.get('attachment_order')}
-          targetId={goal.get('id')}
-          delegate={delegate}
-        />
-      </Section>
+      <HOCAttachments
+        key="attachments"
+        attachments={goal.get('attachments')}
+        attachmentOrder={goal.get('attachment_order')}
+        targetId={goal.get('id')}
+        delegate={delegate}
+      />
+    );
+  }
+  renderHistory() {
+    const { goal, tabIndex } = this.props;
+    if (tabIndex !== 1) {
+      return undefined;
+    }
+
+    return (
+      <HOCHistory goal={goal} />
     );
   }
   renderLeft() {
     const { goal, delegate, loadingState } = this.props;
-    const helper = this.getHelper();
-
-    let className = 'goal-overview__column';
-    className += ` goal-overview__column--${helper.getIsStarted() ? 'left' : 'left-lonely'}`;
 
     return (
-      <div className={className}>
+      <div className="goal-overview__column goal-overview__column--left">
         <GoalSide goal={goal} delegate={delegate} loadingState={loadingState} />
-        {this.renderAttachments()}
       </div>
     );
   }
   renderRight() {
-    const { goal } = this.props;
-    const helper = this.getHelper();
-    let className = 'goal-overview__column';
-    className += ` goal-overview__column--${helper.getIsStarted() ? 'right' : 'right-lonely'}`;
-
-    let contentHtml = [
-      <Section title="Activity" key="sec-23" />,
-      <HOCHistory goal={goal} key="history" />,
-    ];
-
-    if (!helper.getIsStarted()) {
-      contentHtml = '';
-    }
+    const { goal, tabIndex, delegate } = this.props;
 
     return (
-      <div className={className}>
-        {contentHtml}
+      <div className="goal-overview__column goal-overview__column--right">
+        <TabBar tabs={['Attachments', 'Activity']} delegate={delegate} activeTab={tabIndex} />
+        {this.renderAttachments()}
+        {this.renderHistory()}
       </div>
     );
   }
   renderFooter() {
     const helper = this.getHelper();
-    if (helper.getIsStarted()) {
-      return undefined;
-    }
+    const buttonLabel = '';
     let statusLabel;
     if (!helper.getTotalNumberOfSteps()) {
       statusLabel = 'Add steps before you start the goal';
