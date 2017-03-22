@@ -1,5 +1,5 @@
-import { me, toasty, main } from 'actions';
-
+import { main } from 'actions';
+import { me } from 'swipes-core-js/actions';
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
@@ -16,11 +16,11 @@ if (isElectron) {
   path = nodeRequire('path');
   os = nodeRequire('os');
 }
-const toasts = {};
 
 export default class IpcListener {
   constructor(store) {
     this.platform = 'web';
+    window.getHeaders = this.getHeaders.bind(this);
     if (isElectron) {
       remote.getCurrentWindow().removeAllListeners();
       this.isElectron = true;
@@ -55,35 +55,15 @@ export default class IpcListener {
         store.dispatch(main.setMaximized(remWin.isMaximized()));
         store.dispatch(main.setFullscreen(remWin.isFullScreen()));
       });
-
-      // remWin.close();
-      ipcRenderer.on('toasty', (event, arg) => {
-        const options = {
-          title: arg.filename,
-          progress: arg.percentage,
-        };
-
-        if (arg.state === 'completed') {
-          options.completed = true;
-          options.duration = 3000;
-        }
-
-        if (toasts[arg.id]) {
-          if (arg.state !== 'completed') {
-            store.dispatch(toasty.update(toasts[arg.id], options));
-          } else {
-            setTimeout(() => {
-              store.dispatch(toasty.update(toasts[arg.id], options));
-              delete toasts[arg.id];
-            }, 1000);
-          }
-        } else {
-          store.dispatch(toasty.add(options)).then((toastId) => {
-            toasts[arg.id] = toastId;
-          });
-        }
-      });
     }
+  }
+  getHeaders() {
+    return {
+      'sw-web-version': window.__VERSION__,
+      'sw-electron-version': this.version,
+      'sw-electron-arch': this.arch,
+      'sw-platform': this.platform,
+    };
   }
   preloadUrl(script) {
     if (!isElectron) {

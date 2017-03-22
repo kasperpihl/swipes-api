@@ -57,10 +57,6 @@ export const request = (options, data) => (d, getState) => {
   const headers = new Headers({
     'Content-Type': 'application/json',
     ...extraHeaders,
-    /*'sw-web-version': window.__VERSION__,
-    'sw-electron-version': window.ipcListener.version,
-    'sw-electron-arch': window.ipcListener.arch,
-    'sw-platform': window.ipcListener.platform,*/
   });
 
   const serData = {

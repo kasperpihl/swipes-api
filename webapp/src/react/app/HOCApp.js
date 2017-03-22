@@ -7,7 +7,6 @@ import Gradient from 'components/gradient/Gradient';
 import Topbar from './topbar/Topbar';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
-import HOCToasty from './toasty/HOCToasty';
 import HOCContextMenu from './context-menu/HOCContextMenu';
 import HOCTooltip from './tooltip/HOCTooltip';
 
@@ -75,7 +74,6 @@ class HOCApp extends PureComponent {
           <HOCSidebar />
           <HOCViewController />
         </div>
-        <HOCToasty />
         <HOCContextMenu />
         <HOCTooltip />
         <DevTools />
@@ -94,7 +92,7 @@ class HOCApp extends PureComponent {
   }
 }
 
-const { func, bool, object, string } = PropTypes;
+const { func, bool, string } = PropTypes;
 
 HOCApp.propTypes = {
   lastConnect: string,
