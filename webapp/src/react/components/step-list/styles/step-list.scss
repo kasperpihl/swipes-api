@@ -43,7 +43,7 @@
 
   &__title {
     @include size(100%, auto);
-    @include font(15px, $deepBlue-80, 24px, 500);
+    @include font(15px, $deepBlue-80, 24px);
     transition: .15s ease;
   }
 
