@@ -4,7 +4,7 @@ import {
   getDefaultKeyBinding,
   convertFromRaw,
 } from 'draft-js';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 
 import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';

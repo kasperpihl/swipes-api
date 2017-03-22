@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { Map } from 'immutable';
-import { bindAll, traverseElement } from 'classes/utils';
+import { bindAll, traverseElement } from 'swipes-core-js/classes/utils';
 import {
   getVisibleSelectionRect,
 } from 'draft-js';

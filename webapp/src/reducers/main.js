@@ -1,7 +1,7 @@
 import { fromJS, Map } from 'immutable';
 import * as types from 'constants';
 import { REHYDRATE } from 'redux-persist/constants';
-import { randomString } from 'classes/utils';
+import { randomString } from 'swipes-core-js/classes/utils';
 
 const initialState = fromJS({
   overlay: null,

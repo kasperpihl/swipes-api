@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindAll, setupCachedCallback, setupLoading } from 'classes/utils';
+import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import Button from 'Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';

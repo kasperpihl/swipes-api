@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { debounce, bindAll } from 'classes/utils';
+import { debounce, bindAll } from 'swipes-core-js/classes/utils';
 
 import './styles/context-menu';
 

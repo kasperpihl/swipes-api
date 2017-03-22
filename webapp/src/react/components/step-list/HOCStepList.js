@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import { list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { setupCachedCallback, setupDelegate, getParentByClass } from 'classes/utils';
+import { setupCachedCallback, setupDelegate, getParentByClass } from 'swipes-core-js/classes/utils';
 import StepTooltip from './StepTooltip';
 
 import './styles/step-list.scss';

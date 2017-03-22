@@ -6,7 +6,7 @@ import { Map, fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import * as core from 'swipes-core-js/actions';
-import { setupDelegate, setupCachedCallback } from 'classes/utils';
+import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'classes/time-utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Dashboard from './Dashboard';

@@ -1,4 +1,4 @@
-import { bindAll } from 'classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 
 export default class Subscriber {
   constructor() {

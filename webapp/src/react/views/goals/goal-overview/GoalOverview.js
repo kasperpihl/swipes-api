@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 
-import { setupDelegate, setupCachedCallback } from 'classes/utils';
+import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';

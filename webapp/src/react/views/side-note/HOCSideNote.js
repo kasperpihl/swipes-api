@@ -13,7 +13,7 @@ import Button from 'Button';
 import { timeAgo } from 'classes/time-utils';
 import diff from 'classes/draft-util';
 
-import { bindAll, debounce, randomString, setupLoading } from 'classes/utils';
+import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
 import * as actions from 'actions';
 import * as ca from 'swipes-core-js/actions';
 

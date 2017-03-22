@@ -3,7 +3,7 @@ import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import * as actions from 'actions';
-import { setupDelegate, setupCachedCallback } from 'classes/utils';
+import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Assigning from './Assigning';
 

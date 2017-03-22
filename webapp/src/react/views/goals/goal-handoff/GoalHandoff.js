@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';

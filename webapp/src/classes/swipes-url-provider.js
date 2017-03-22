@@ -1,4 +1,4 @@
-import { bindAll, debounce } from 'classes/utils';
+import { bindAll, debounce } from 'swipes-core-js/classes/utils';
 import Subscriber from 'classes/subscriber';
 import { api } from 'swipes-core-js/actions';
 

@@ -6,7 +6,7 @@ import { cache, ways } from 'swipes-core-js/actions';
 import Button from 'Button';
 import SWView from 'SWView';
 import { fromJS } from 'immutable';
-import { setupDelegate, bindAll, randomString, setupLoading } from 'classes/utils';
+import { setupDelegate, bindAll, randomString, setupLoading } from 'swipes-core-js/classes/utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 import HOCAttachments from 'components/attachments/HOCAttachments';

@@ -4,7 +4,7 @@ import { map } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import * as a from 'actions';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 import './styles/sidebar.scss';
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { goals } from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-import { setupLoading } from 'classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import Loader from 'components/loaders/Loader';
 import TemplateItem from './TemplateItem';
 import './styles/ways.scss';

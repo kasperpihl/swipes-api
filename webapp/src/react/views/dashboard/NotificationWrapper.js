@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { mapContains, list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
-import { setupDelegate, setupCachedCallback, attachmentIconForService } from 'classes/utils';
+import { setupDelegate, setupCachedCallback, attachmentIconForService } from 'swipes-core-js/classes/utils';
 
 import './styles/notification-item';
 

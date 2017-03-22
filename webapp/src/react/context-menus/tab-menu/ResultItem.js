@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
 import Button from 'Button';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 // now use events as onClick:
 

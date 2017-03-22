@@ -4,7 +4,7 @@ import { cache, goals as goa } from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate, bindAll, setupLoading } from 'classes/utils';
+import { setupDelegate, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';

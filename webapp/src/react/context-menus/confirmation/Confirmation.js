@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import Button from 'Button';
 
 import './styles/confirmation.scss';

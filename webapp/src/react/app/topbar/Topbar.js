@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-import { bindAll, setupCachedCallback } from 'classes/utils';
+import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 // now use events as onClick: this.onWinClickCached(i)
 import Icon from 'Icon';

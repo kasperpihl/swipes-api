@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 import Button from 'Button';
 import * as a from 'actions';
 import * as views from 'views';
-import { setupCachedCallback, debounce, bindAll } from 'classes/utils';
+import { setupCachedCallback, debounce, bindAll } from 'swipes-core-js/classes/utils';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';

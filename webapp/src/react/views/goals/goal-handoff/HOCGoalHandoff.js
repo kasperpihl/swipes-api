@@ -4,7 +4,7 @@ import * as a from 'actions';
 import { cache, goals } from 'swipes-core-js/actions';
 import { map, list } from 'react-immutable-proptypes';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import { setupLoading } from 'classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import { fromJS } from 'immutable';
 
 import SelectStep from 'context-menus/select-step/SelectStep';

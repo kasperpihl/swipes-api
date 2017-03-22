@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { bindAll, queryStringToObject } from 'classes/utils';
+import { bindAll, queryStringToObject } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import SWView from 'SWView';

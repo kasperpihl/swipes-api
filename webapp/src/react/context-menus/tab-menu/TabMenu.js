@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate, randomString, bindAll } from 'classes/utils';
+import { setupDelegate, randomString, bindAll } from 'swipes-core-js/classes/utils';
 import Button from 'Button';
 import TabBar from 'components/tab-bar/TabBar';
 import ResultList from './ResultList';

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
-import { setupCachedCallback, bindAll } from 'classes/utils';
+import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
 import Gradient from 'components/gradient/Gradient';
 import Topbar from 'src/react/app/topbar/Topbar';
 import SWView from 'SWView';

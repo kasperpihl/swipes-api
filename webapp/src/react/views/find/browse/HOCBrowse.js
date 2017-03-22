@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
-import { setupDelegate, randomString } from 'classes/utils';
+import { setupDelegate, randomString } from 'swipes-core-js/classes/utils';
 import BrowseSectionList from './BrowseSectionList';
 
 import './styles/browse.scss';

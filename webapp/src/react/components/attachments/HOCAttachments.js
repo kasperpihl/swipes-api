@@ -12,7 +12,7 @@ import {
   setupDelegate,
   setupLoading,
   attachmentIconForService,
-} from 'classes/utils';
+} from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import Attachment from './Attachment';

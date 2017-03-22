@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { bindAll } from 'classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 
 import './styles/office.scss';
 

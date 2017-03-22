@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import HOCStepList from 'components/step-list/HOCStepList';
 import { map } from 'react-immutable-proptypes';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';

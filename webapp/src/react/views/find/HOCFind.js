@@ -6,7 +6,7 @@ import * as actions from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import SWView from 'SWView';
 import Button from 'Button';
-import { setupDelegate, bindAll } from 'classes/utils';
+import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCBrowse from './browse/HOCBrowse';
 import SearchResults from './SearchResults';

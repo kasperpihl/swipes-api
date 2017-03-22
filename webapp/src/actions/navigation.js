@@ -1,5 +1,5 @@
 import * as types from 'constants';
-import { randomString } from 'classes/utils';
+import { randomString } from 'swipes-core-js/classes/utils';
 
 export function set(target, obj) {
   return (dispatch, getState) => {

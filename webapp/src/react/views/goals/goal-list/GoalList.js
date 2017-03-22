@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate } from 'classes/utils';
+import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
 import Button from 'Button';
