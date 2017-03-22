@@ -16,9 +16,11 @@ const transformState = (state) => {
         const cachedValue = cachedSect.get(indexKey);
         if (indexValue !== cachedValue) {
           if (indexValue && typeof indexValue.toJS === 'function') {
-            cacheObject[sectKey][indexKey] = indexValue.toJS();
+            const sectObj = Object.assign({}, cacheObject[sectKey], { [indexKey]: indexValue.toJS() });
+            cacheObject = Object.assign({}, cacheObject, { [sectKey]: sectObj });
           } else {
-            cacheObject[sectKey][indexKey] = indexValue;
+            const sectObj = Object.assign({}, cacheObject[sectKey], { [indexKey]: indexValue });
+            cacheObject = Object.assign({}, cacheObject, { [sectKey]: sectObj });
           }
         }
       });

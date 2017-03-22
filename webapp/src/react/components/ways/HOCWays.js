@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
-import { goals } from 'swipes-core-js';
+import { goals } from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import { setupLoading } from 'classes/utils';

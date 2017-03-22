@@ -8,7 +8,7 @@ import Router from 'src/Router';
 import configureStore from 'src/store/configureStore';
 
 // Get classes that needs socket
-import Socket from 'classes/socket';
+import { init } from 'swipes-core-js';
 import Analytics from 'classes/analytics';
 import IpcListener from 'classes/ipc-listener';
 import SwipesUrlProvider from 'classes/swipes-url-provider';
@@ -23,8 +23,9 @@ const history = syncHistoryWithStore(browserHistory, store, {
   },
 });
 
+init(store);
 window.swipesUrlProvider = new SwipesUrlProvider(store);
-window.socket = new Socket(store);
+
 window.notifications = new Notifications(store);
 window.ipcListener = new IpcListener(store);
 window.msgGen = new MessageGenerator(store);

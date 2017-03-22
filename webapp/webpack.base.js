@@ -13,6 +13,11 @@ const apiRedirect = {
 module.exports = {
   context: __dirname,
   devtool: 'eval',
+  resolveLoader: {
+    modulesDirectories: [
+      path.resolve(__dirname, 'node_modules'),
+    ],
+  },
   resolve: {
     root: path.resolve(__dirname),
     alias: {
@@ -23,7 +28,7 @@ module.exports = {
       'context-menus': 'src/react/context-menus',
       components: 'src/react/components',
       styles: 'src/react/global-styles',
-      'swipes-core-js': 'src/actions/core',
+      'swipes-core-js': 'src/../../mobile/swipes-core-js',
       icons: 'src/react/icons',
       actions: 'src/actions',
       views: 'src/react/views',
@@ -65,8 +70,12 @@ module.exports = {
       {
         test: /\.js$/,
         loaders: [ 'babel' ],
-        exclude: /node_modules/,
-        include: path.join(__dirname, 'src')
+        include: path.join(__dirname, 'src'),
+      },
+      {
+        test: /\.js$/,
+        loaders: [ 'babel' ],
+        include: path.resolve(__dirname, '../mobile/swipes-core-js')
       },
       {
         test: /\.svg(\?.*)?$/,

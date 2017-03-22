@@ -15,6 +15,7 @@ import diff from 'classes/draft-util';
 
 import { bindAll, debounce, randomString, setupLoading } from 'classes/utils';
 import * as actions from 'actions';
+import * as ca from 'swipes-core-js/actions';
 
 import './styles/side-note';
 
@@ -257,7 +258,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  saveNote: actions.notes.save,
-  cacheNote: actions.notes.cache,
+  saveNote: ca.notes.save,
+  cacheNote: ca.notes.cache,
   browser: actions.main.browser,
 })(HOCSideNote);

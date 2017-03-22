@@ -2,7 +2,11 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
 import * as a from 'actions';
-import { attachments as att } from 'swipes-core-js';
+import * as ca from 'swipes-core-js/actions';
+import {
+  EditorState,
+  convertToRaw,
+} from 'draft-js';
 import {
   setupCachedCallback,
   setupDelegate,
@@ -47,7 +51,6 @@ class HOCAttachments extends PureComponent {
   onContextMenu(id, e) {
     const { contextMenu, attachments } = this.props;
     const at = attachments.get(id);
-    console.log(id, at.toJS());
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
@@ -136,7 +139,7 @@ class HOCAttachments extends PureComponent {
         if (which === 'url') {
           this.attachToTarget(which, title, title);
         } else {
-          createNote().then((res) => {
+          createNote(convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
             if (res && res.ok) {
               this.attachToTarget(which, res.note.id, title);
             } else {
@@ -274,11 +277,11 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  addAttachment: att.add,
-  removeAttachment: att.remove,
-  renameAttachment: att.rename,
+  addAttachment: ca.attachments.add,
+  removeAttachment: ca.attachments.remove,
+  renameAttachment: ca.attachments.rename,
   contextMenu: a.main.contextMenu,
-  createNote: a.notes.create,
+  createNote: ca.notes.create,
   inputMenu: a.menus.input,
   confirm: a.menus.confirm,
   openFind: a.links.openFind,

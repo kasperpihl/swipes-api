@@ -5,7 +5,7 @@ import Button from 'Button';
 import { Map, fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
-import * as core from 'swipes-core-js';
+import * as core from 'swipes-core-js/actions';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
 import { timeAgo } from 'classes/time-utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -178,6 +178,11 @@ class HOCDashboard extends PureComponent {
         break;
       }
       case 'goal_created': {
+        m = m.set('subtitle', `${from} created`);
+        m = m.set('icon', 'Plus');
+        break;
+      }
+      case 'goal_started': {
         m = m.set('subtitle', `${from} kicked off`);
         m = m.set('icon', 'Plus');
         break;
@@ -235,7 +240,6 @@ class HOCDashboard extends PureComponent {
         break;
       }
       default:
-        m = Map();
         break;
     }
     if (!m.get('title')) {

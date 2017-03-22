@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import * as a from 'actions';
-import { cache, goals as goa } from 'swipes-core-js';
+import { cache, goals as goa } from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
@@ -10,7 +10,13 @@ import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
+import {
+  EditorState,
+  convertToRaw,
+} from 'draft-js';
+
 import GoalList from './GoalList';
+
 
 /* global msgGen*/
 const defaultFilter = fromJS({
@@ -178,7 +184,7 @@ class HOCGoalList extends PureComponent {
       if (title && title.length) {
         this.setLoading('add');
         this.tabDidChange(2);
-        createGoal(title).then((res) => {
+        createGoal(title, convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
           if (res && res.ok) {
             this.clearLoading('add');
           } else {

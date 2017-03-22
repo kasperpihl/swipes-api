@@ -7,7 +7,7 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import * as a from 'actions';
-import { attachments } from 'swipes-core-js';
+import * as ca from 'swipes-core-js/actions';
 import * as Files from './files';
 import * as Rows from './rows';
 import './preview.scss';
@@ -311,7 +311,7 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps, {
-  request: a.api.request,
-  addAttachment: attachments.add,
+  request: ca.api.request,
+  addAttachment: ca.attachments.add,
   browser: a.main.browser,
 })(HOCPreviewModal);

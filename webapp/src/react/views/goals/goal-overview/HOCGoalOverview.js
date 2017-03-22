@@ -4,7 +4,7 @@ import { map } from 'react-immutable-proptypes';
 import { bindAll, setupCachedCallback, setupLoading } from 'classes/utils';
 import GoalsUtil from 'classes/goals-util';
 import * as a from 'actions';
-import { steps, ways, goals } from 'swipes-core-js';
+import { steps, ways, goals } from 'swipes-core-js/actions';
 
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import GoalOverview from './GoalOverview';
