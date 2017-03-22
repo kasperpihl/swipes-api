@@ -1,6 +1,7 @@
 package com.swipes;
 
 import com.facebook.react.ReactActivity;
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.horcrux.svg.SvgPackage;
 
 public class MainActivity extends ReactActivity {

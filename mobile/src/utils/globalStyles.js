@@ -52,6 +52,6 @@ export const colors = {
   redColor: '#FC461E',
   yellowColor: '#FFD776',
   bgColor: '#fff',
-  bgGradientFrom: '#330867',
-  bgGradientTo: '#30cfd0',
+  bgGradientFrom: '#72bbee',
+  bgGradientTo: '#4e70c5',
 }

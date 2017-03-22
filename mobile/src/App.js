@@ -1,19 +1,21 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { request } from './actions';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import Swiper from 'react-native-swiper';
+import LinearGradient from 'react-native-linear-gradient';
 import ViewController from './navigation/view-controller/ViewController';
-import Profile from './views/profile/Profile';
+import HOCProfile from './views/profile/HOCProfile';
 import GoalList from './views/goallist/GoalList';
 import Dashboard from './views/dashboard/Dashboard';
 import Login from './views/login/Login';
+import Icon from './components/icons/Icon';
 import { colors, viewSize } from './utils/globalStyles';
 
 const profile = {
   key: '1',
   title: 'Profile',
-  component: Profile,
+  component: HOCProfile,
 }
 
 const dashboard = {
@@ -29,12 +31,31 @@ const goalList = {
 }
 
 class App extends PureComponent {
+  constructor() {
+    super();
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
+  }
   renderLoader() {
     const { isHydrated } = this.props;
     if(isHydrated){
       return undefined;
     }
-    return <Text>Loading</Text>
+    return (
+      <LinearGradient
+        start={{ x: 0.0, y: 0.0 }}
+        end={{ x: 1.0, y: 0.0 }}
+        colors={[colors.bgGradientFrom, colors.bgGradientTo]}
+        style={styles.gradient}
+      >
+        <Icon name="SwipesLogoText" fill={colors.bgColor} width="90"/>
+      </LinearGradient>
+    )
   }
   renderLogin(){
     const { token, isHydrated } = this.props;
@@ -80,13 +101,27 @@ export default connect(mapStateToProps, {})(App);
 const styles = StyleSheet.create({
   app: {
     flex: 1,
-    backgroundColor: 'red'
+    backgroundColor: colors.bgColor
   },
   gradient: {
     position: 'absolute',
     left: 0,
     top: 0,
     width: viewSize.width,
-    height: viewSize.height
+    height: viewSize.height,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
+
+const fadeInOut = {
+  0: {
+    opacity: 1,
+  },
+  0.5: {
+    opacity: .5,
+  },
+  1: {
+    opacity: 1,
+  }
+};
