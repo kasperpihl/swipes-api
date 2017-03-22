@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 
 import App from './App';
 import configureStore from './store/configureStore';
-import { init, actions } from './core';
+import { init, actions } from '../swipes-core-js';
 
 const store = configureStore();
 window.__API_URL__ = 'https://staging.swipesapp.com';
