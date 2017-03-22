@@ -13,6 +13,8 @@ if (!regeneratorRuntime.default) {
 }
 
 window.__VERSION__ = version;
+window.__DEV__ = (process.env.NODE_ENV !== 'production');
+window.__API_URL__ = `${location.origin}`;
 
 let Page;
 let RenderedComp;

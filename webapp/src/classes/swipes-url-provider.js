@@ -1,6 +1,6 @@
 import { bindAll, debounce } from 'classes/utils';
 import Subscriber from 'classes/subscriber';
-import { api } from 'actions';
+import { api } from 'swipes-core-js/actions';
 
 export default class SwipesUrlProvider {
   constructor(store) {

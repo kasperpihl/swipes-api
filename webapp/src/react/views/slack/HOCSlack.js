@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
-import { cache } from 'swipes-core-js';
+import { cache } from 'swipes-core-js/actions';
 import { bindAll } from 'classes/utils';
 import Webview from 'components/webview/Webview';
 import FloatingInput from 'components/swipes-ui/FloatingInput';

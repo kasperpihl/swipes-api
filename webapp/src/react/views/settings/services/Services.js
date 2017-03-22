@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { bindAll, queryStringToObject } from 'classes/utils';
-import * as actions from 'actions';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 import SWView from 'SWView';
 import ConnectRow from './ConnectRow';
 import './services.scss';
@@ -22,6 +23,13 @@ class Services extends Component {
   }
   componentDidUpdate() {
     // this.checkForDropboxFolder();
+  }
+  getOptionsForE() {
+    return {
+      boundingRect: document.body.getBoundingClientRect(),
+      alignX: 'center',
+      alignY: 'center',
+    };
   }
   handleOAuthSuccess(serviceName, params) {
     if (this._handled) {
@@ -80,17 +88,11 @@ class Services extends Component {
       });
     }
   }
-  getOptionsForE() {
-    return {
-      boundingRect: document.body.getBoundingClientRect(),
-      alignX: 'center',
-      alignY: 'center',
-    };
-  }
+
   renderConnectedServices() {
     const { myServices: my, services } = this.props;
-    const sortedServices = my.sort((a, b) => {
-      const res = (a.get('service_name') < b.get('service_name')) ? -1 : 1;
+    const sortedServices = my.sort((c, b) => {
+      const res = (c.get('service_name') < b.get('service_name')) ? -1 : 1;
       return res;
     });
 
@@ -165,9 +167,9 @@ function mapStateToProps(state) {
 }
 
 const ConnectedServices = connect(mapStateToProps, {
-  browser: actions.main.browser,
-  handleOAuthSuccess: actions.me.handleOAuthSuccess,
-  disconnectService: actions.me.disconnectService,
-  confirm: actions.menus.confirm,
+  browser: a.main.browser,
+  handleOAuthSuccess: ca.me.handleOAuthSuccess,
+  disconnectService: ca.me.disconnectService,
+  confirm: a.menus.confirm,
 })(Services);
 export default ConnectedServices;

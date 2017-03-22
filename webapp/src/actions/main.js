@@ -1,4 +1,5 @@
 import * as types from 'constants';
+import * as ca from 'swipes-core-js/actions';
 import * as a from './';
 
 export const setStatus = (status, nextRetry) => ({
@@ -55,7 +56,7 @@ export const forceLogout = () => {
   localStorage.clear();
   window.location.replace('/');
 };
-export const signout = cb => dp => dp(a.api.request('users.signout')).then((res) => {
+export const signout = cb => dp => dp(ca.api.request('users.signout')).then((res) => {
   if (cb) {
     cb(res);
   }
@@ -73,7 +74,7 @@ export const search = query => (dp) => {
   if (!query || !query.length) {
     return dp({ type: types.SEARCH_RESULTS, result: null });
   }
-  return dp(a.api.request('search', { q: query })).then((res) => {
+  return dp(ca.api.request('search', { q: query })).then((res) => {
     if (res && res.ok) {
       dp({ type: types.SEARCH_RESULTS, result: res.mappedResults });
     } else {

@@ -1,4 +1,5 @@
 import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 
 export const load = (options, callback) => (d, getState) => {
@@ -39,7 +40,7 @@ export const load = (options, callback) => (d, getState) => {
     onItemAction: (obj, side) => {
       if (side === 'right') {
         deletingIds[obj.id] = true;
-        d(ways.archive(obj.id)).then(() => {
+        d(ca.ways.archive(obj.id)).then(() => {
           delete deletingIds[obj.id];
           setTimeout(() => tabMenu.reload(), 1);
         });

@@ -1,5 +1,6 @@
 import { fromJS } from 'immutable';
 import * as types from '../constants/ActionTypes';
+import { REHYDRATE } from 'redux-persist/constants';
 
 const initialState = fromJS([]);
 
@@ -8,6 +9,11 @@ const sortFn = (b, c) => c.get('updated_at').localeCompare(b.get('updated_at'));
 export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
+    case REHYDRATE:
+      if (action && action.payload && action.payload.notifications) {
+        return action.payload.notifications.toList();
+      }
+      return state;
     case 'rtm.start': {
       return fromJS(payload.notifications).sort(sortFn);
     }

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux-immutable';
-import core from './core';
+import * as coreReducers from 'swipes-core-js/reducers';
 import main from './main';
 import navigation from './navigation';
 import routing from './routing';
@@ -7,7 +7,7 @@ import toasty from './toasty';
 import search from './search';
 
 const rootReducer = combineReducers({
-  ...core,
+  ...coreReducers,
   main,
   navigation,
   toasty,

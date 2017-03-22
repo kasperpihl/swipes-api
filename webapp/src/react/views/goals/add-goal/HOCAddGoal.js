@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import * as a from 'actions';
-import { cache, ways } from 'swipes-core-js';
+import { cache, ways } from 'swipes-core-js/actions';
 import Button from 'Button';
 import SWView from 'SWView';
 import { fromJS } from 'immutable';

@@ -3,7 +3,7 @@ import { list, map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import * as actions from 'actions';
-import { attachments } from 'swipes-core-js';
+import * as ca from 'swipes-core-js/actions';
 import SWView from 'SWView';
 import Button from 'Button';
 import { setupDelegate, bindAll } from 'classes/utils';
@@ -258,8 +258,8 @@ function mapStateToProps(state) {
 
 const ConnectedHOCFind = connect(mapStateToProps, {
   openPreview: actions.links.preview,
-  addAttachment: attachments.add,
-  request: actions.api.request,
+  addAttachment: ca.attachments.add,
+  request: ca.api.request,
   search: actions.main.search,
 })(HOCFind);
 export default ConnectedHOCFind;

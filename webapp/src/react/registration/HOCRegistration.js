@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { api } from 'actions';
+import * as ca from 'swipes-core-js/actions';
 import { setupCachedCallback, bindAll } from 'classes/utils';
 import Gradient from 'components/gradient/Gradient';
 import Topbar from 'src/react/app/topbar/Topbar';
@@ -285,6 +285,6 @@ HOCRegistration.propTypes = {
 };
 
 const ConnectedHOCRegistration = connect(mapStateToProps, {
-  request: api.request,
+  request: ca.api.request,
 })(HOCRegistration);
 export default ConnectedHOCRegistration;

@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes';
 
-import { bindAll } from '../classes/utils';
+import { bindAll } from './utils';
 import * as a from '../actions';
 
 export default class Socket {
@@ -13,11 +13,8 @@ export default class Socket {
   storeChange() {
     const state = this.store.getState();
 
-    let token = state.getIn(['connection', 'token']);
-    if (token && !this.socket && state.getIn(['connection', 'status']) !== 'connecting') {
-      this.token = token;
-
-
+    this.token = state.getIn(['connection', 'token']);
+    if (this.token && !this.socket && state.getIn(['connection', 'status']) !== 'connecting') {
       if (!this.timer) {
         this.timedConnect(this.timerForAttempt());
       }
@@ -39,6 +36,10 @@ export default class Socket {
   }
   connect() {
     let url = window.__API_URL__;
+    if(!url){
+      console.warn('Socket requires window.__API_URL__ to be set');
+      return;
+    }
 
     if (url.includes('localhost')) {
       url = 'http://localhost:5000';
@@ -49,12 +50,12 @@ export default class Socket {
     this.isConnecting = true;
 
     const wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
-    console.log(wsUrl);
+
     const ws = new WebSocket(`${wsUrl}?token=${this.token}`);
     this.changeStatus('connecting');
-    console.log('connecting');
+
     ws.onopen = () => {
-      console.log('success');
+
       this.socket = true;
       this._pingTimer = setInterval(() => {
         this.sendPing(ws);
@@ -73,12 +74,10 @@ export default class Socket {
     ws.onmessage = this.message;
 
     ws.onclose = () => {
-      console.log('error');
       this.isConnecting = false;
       clearInterval(this._pingTimer);
       this.reconnect_attempts += 1;
       const time = this.timerForAttempt();
-      console.log('timer', time);
       const nextRetry = new Date();
       nextRetry.setSeconds(nextRetry.getSeconds() + (time / 1000));
       this.changeStatus('offline', nextRetry);
