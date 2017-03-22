@@ -13,7 +13,6 @@ import Analytics from 'classes/analytics';
 import IpcListener from 'classes/ipc-listener';
 import SwipesUrlProvider from 'classes/swipes-url-provider';
 import Notifications from 'classes/notifications';
-import MessageGenerator from 'classes/message-generator';
 
 const store = configureStore();
 
@@ -28,7 +27,6 @@ window.swipesUrlProvider = new SwipesUrlProvider(store);
 
 window.notifications = new Notifications(store);
 window.ipcListener = new IpcListener(store);
-window.msgGen = new MessageGenerator(store);
 window.analytics = new Analytics(store);
 window.analytics.sendEvent('App Loaded');
 

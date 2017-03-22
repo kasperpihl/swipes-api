@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import { bindAll, setupCachedCallback, setupLoading } from 'classes/utils';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
 import { steps, ways, goals } from 'swipes-core-js/actions';
 

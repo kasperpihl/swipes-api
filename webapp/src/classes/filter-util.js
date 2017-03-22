@@ -1,4 +1,4 @@
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 export default function filterGoals(goals, type, userId, milestoneId, matching) {
   return goals.filter((goal) => {

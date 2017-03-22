@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { setupCachedCallback } from 'classes/utils';
 import { list } from 'react-immutable-proptypes';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import './styles/handoff-status.scss';
 /* global msgGen */
 

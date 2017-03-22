@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { List } from 'immutable';
 import * as actions from 'actions';
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Assigning from './Assigning';
 
 class HOCAssigning extends PureComponent {

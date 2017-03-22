@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { setupDelegate } from 'classes/utils';
 import HOCStepList from 'components/step-list/HOCStepList';
 import { map } from 'react-immutable-proptypes';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Section from 'components/section/Section';
 import Icon from 'Icon';
 

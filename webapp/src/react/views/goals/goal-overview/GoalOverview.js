@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 
 import { setupDelegate, setupCachedCallback } from 'classes/utils';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';

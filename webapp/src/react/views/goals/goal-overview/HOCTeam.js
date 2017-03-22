@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 /* global msgGen */
 
 import './styles/team.scss';

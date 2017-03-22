@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate } from 'classes/utils';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
 import Button from 'Button';
 import Measure from 'react-measure';
