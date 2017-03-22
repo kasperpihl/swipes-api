@@ -10,7 +10,7 @@ import {
   EditorState,
 } from 'draft-js';
 import Button from 'Button';
-import { timeAgo } from 'classes/time-utils';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import diff from 'classes/draft-util';
 
 import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';

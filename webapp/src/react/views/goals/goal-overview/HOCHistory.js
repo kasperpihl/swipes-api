@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { timeAgo } from 'classes/time-utils';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
