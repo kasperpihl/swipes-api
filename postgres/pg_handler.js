@@ -162,6 +162,7 @@ PGHandler.prototype.sync = function ( body, userId, callback ){
       data.data.syncId = self.syncId
 
     Parse.Push.send(data, {
+      useMasterKey: true,
       success:function(){
       },
       error: function(error){
