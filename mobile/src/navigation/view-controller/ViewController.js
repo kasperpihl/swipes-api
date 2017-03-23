@@ -4,7 +4,7 @@ import Navigator from './Navigator';
 
 const {
   CardStack: NavigationCardStack,
-  StateUtils: NavigationStateUtils,
+  StateUtils: NavigationStateUtils
 } = NavigationExperimental;
 
 class StackNavigator extends Component {

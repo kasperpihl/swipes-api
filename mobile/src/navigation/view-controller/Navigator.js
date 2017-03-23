@@ -33,8 +33,10 @@ class Navigator extends Component {
     )
   }
   render() {
+    
     return (
       <NavigationCardStack
+        direction="vertical"  
         onNavigateBack={this.onPopRoute}
         navigationState={this.props.navigationState}
         renderScene={this.renderScene}

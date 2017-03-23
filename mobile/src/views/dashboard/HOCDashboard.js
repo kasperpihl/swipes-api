@@ -26,15 +26,16 @@ class HOCDashboard extends PureComponent {
   }
   openLink(att) {
     const { onPushRoute } = this.props;
-
-    if (att && att.getIn(['link', 'service', 'type']) === 'url') {
+    const link = att.get('link') || att;
+    const service = link.get('service') || link;
+    if (att && service.get('type') === 'url') {
       const webView = {
         component: InternalWebview,
-        title: att.get('title'),
-        key: att.get('id'),
+        title: service.get('id'),
+        key: service.get('id'),
         props: {
-          url: att.getIn(['link', 'service', 'id']),
-          title: att.get('title')
+          url: service.get('id'),
+          title: service.get('id')
         }
       };
 
