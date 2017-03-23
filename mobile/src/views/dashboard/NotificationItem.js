@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
-import { attachmentIconForService } from '../../../swipes-core-js/classes/utils';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, WebView  } from 'react-native';
+import { setupDelegate, setupCachedCallback, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
+import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import Icon from '../../components/icons/Icon';
 
 import { colors, viewSize } from '../../utils/globalStyles'
 
 class NotificationItem extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+
+    this.callDelegate = setupDelegate(props.delegate);
+    this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -53,15 +57,17 @@ class NotificationItem extends Component {
       const iconName = attachmentIconForService(att.getIn(['link', 'service']) || att);
 
       return (
-        <View style={styles.attachment} key={'attachment-' + i}>
-          <Icon
-            name={iconName}
-            width="24"
-            height="24"
-            fill={colors.blue100}
-          />
-          <Text style={styles.attachmentTitle} numberOfLines={1}>{att.get('title')}</Text>
-        </View>
+        <FeedbackButton key={'attachment-' + i} onPress={this.onAttachmentClick(att)}>
+          <View style={styles.attachment}>
+            <Icon
+              name={iconName}
+              width="24"
+              height="24"
+              fill={colors.blue100}
+            />
+            <Text style={styles.attachmentTitle} numberOfLines={1}>{att.get('title')}</Text>
+          </View>
+        </FeedbackButton>
       )
     })
 
@@ -105,6 +111,7 @@ class NotificationItem extends Component {
     return <Text style={styles.timestamp}>{n.get('timeago')}</Text>;
   }
   render() {
+
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>

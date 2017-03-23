@@ -1,4 +1,4 @@
-import React, { PureComponent, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { View, NavigationExperimental, StyleSheet } from 'react-native';
 import Navigator from './Navigator';
 
@@ -7,7 +7,7 @@ const {
   StateUtils: NavigationStateUtils,
 } = NavigationExperimental;
 
-class StackNavigator extends PureComponent {
+class StackNavigator extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -24,13 +24,6 @@ class StackNavigator extends PureComponent {
     }
     this.onNavigationChange = this.onNavigationChange.bind(this);
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props !== nextProps) {
-      return true
-    }
-
-    return false;
-  }
   onNavigationChange(type, view) {
     let { navigationState } = this.state;
 
@@ -39,7 +32,8 @@ class StackNavigator extends PureComponent {
         const route = {
           key: view.key,
           title: view.title,
-          component: view.component
+          component: view.component,
+          props: view.props
         };
 
         navigationState = NavigationStateUtils.push(navigationState, route);

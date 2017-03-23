@@ -34,12 +34,12 @@ class Dashboard extends Component {
     return (
       <ImmutableListView
         immutableData={ notifications }
-        renderRow = { this.renderRow }
+        renderRow = {(rowData) => this.renderRow(rowData, delegate)}
       />
     )
   }
-  renderRow(rowData) {
-    return <NotificationItem notification={rowData} />
+  renderRow(rowData, delegate) {
+    return <NotificationItem notification={rowData} delegate={delegate}/>
   }
   render() {
     return (

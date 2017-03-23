@@ -5,6 +5,8 @@ import { Map, fromJS } from 'immutable';
 import { timeAgo } from '../../../swipes-core-js/classes/time-utils';
 import { viewSize } from '../../utils/globalStyles';
 import Dashboard from './Dashboard';
+import InternalWebview from '../webview/InternalWebview';
+import HOCGoalList from '../goallist/HOCGoalList';
 
 class HOCDashboard extends PureComponent {
   constructor(props) {
@@ -20,6 +22,23 @@ class HOCDashboard extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.notifications !== this.props.notifications) {
       this.setState({ notifications: this.getFilteredNotifications(nextProps.notifications) });
+    }
+  }
+  openLink(att) {
+    const { onPushRoute } = this.props;
+
+    if (att && att.getIn(['link', 'service', 'type']) === 'url') {
+      const webView = {
+        component: InternalWebview,
+        title: att.get('title'),
+        key: att.get('id'),
+        props: {
+          url: att.getIn(['link', 'service', 'id']),
+          title: att.get('title')
+        }
+      };
+
+      onPushRoute(webView);
     }
   }
   getAttachments(goalId, flags) {
@@ -170,7 +189,7 @@ class HOCDashboard extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <Dashboard notifications={n} />
+        <Dashboard notifications={n} delegate={this} />
       </View>
     );
   }
