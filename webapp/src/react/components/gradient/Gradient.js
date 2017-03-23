@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import gradient from 'classes/gradient';
+import React, { Component } from 'react';
+import gradient from 'swipes-core-js/classes/gradient';
 
 class Gradient extends Component {
   constructor(props) {
@@ -41,9 +41,3 @@ class Gradient extends Component {
 }
 
 export default Gradient;
-
-const { string } = PropTypes;
-
-Gradient.propTypes = {
-
-};

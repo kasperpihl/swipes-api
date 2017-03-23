@@ -5,6 +5,9 @@ export const CACHE_SAVE = 'CACHE_SAVE';
 export const CACHE_REMOVE = 'CACHE_REMOVE';
 export const CACHE_CLEAR = 'CACHE_CLEAR';
 
+// filters
+export const UPDATE_FILTERS = 'UPDATE_FILTERS';
+
 // Notification
 export const NOTIFICATION_ADD = 'NOTIFICATION_ADD';
 

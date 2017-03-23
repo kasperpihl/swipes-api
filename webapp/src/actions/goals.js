@@ -3,7 +3,6 @@ import { fromJS } from 'immutable';
 import { cache } from 'swipes-core-js/actions';
 import * as a from './';
 
-
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {
   assignees = assignees || [];
 

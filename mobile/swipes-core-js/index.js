@@ -3,11 +3,13 @@ import * as reducers from './reducers';
 import * as utils from './classes/utils';
 
 import Socket from './classes/socket';
+import FilterHandler from './classes/filter-handler';
 import MessageGenerator from './classes/message-generator';
 
 const init = (store, apiUrl) => {
   window.socket = new Socket(store);
   window.msgGen = new MessageGenerator(store);
+  window.filterHandler = new FilterHandler(store);
 }
 
 export {

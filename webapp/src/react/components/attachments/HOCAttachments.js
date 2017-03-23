@@ -230,10 +230,10 @@ class HOCAttachments extends PureComponent {
           className="attachments__add-item"
           onClick={this.onAddCached('note')}
         >New Note</button>
-        <button
+        {/* <button
           className="attachments__add-item"
           onClick={this.onAddCached('find')}
-        >Find</button>
+        >Find</button> */}
       </div>
     );
   }
