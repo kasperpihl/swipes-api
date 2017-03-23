@@ -80,22 +80,23 @@ class GoalList extends Component {
       return (
         <div className="goals-empty-state">
           <div className="goals-empty-state__title">Goals</div>
-          <div className="goals-empty-state__message">Here you can create new goals, track current ones and accomplish them with your team. Let's get started.</div>
+          <div className="goals-empty-state__message">
+            Here you can create new goals, track current ones and accomplish them with your team. Let's get started.
+          </div>
           <Button primary text="Create your first goal" className="goals-empty-state__button" onClick={addGoal} />
         </div>
       );
-    } else {
-      return goals.map(goal => (
-        <GoalListItem
-          onClick={this.clickedListItem}
-          onAssignClick={this.onAssignClick}
-          me={this.props.me}
-          filter={filter}
-          goal={goal}
-          key={`goal-list-item-${goal.get('id')}`}
-        />
-      ));
     }
+    return goals.map(goal => (
+      <GoalListItem
+        onClick={this.clickedListItem}
+        onAssignClick={this.onAssignClick}
+        me={this.props.me}
+        filter={filter}
+        goal={goal}
+        key={`goal-list-item-${goal.get('id')}`}
+      />
+      ));
   }
   renderFilterFooter() {
     const { filterLabel, showFilter, delegate, tabs, tabIndex } = this.props;
