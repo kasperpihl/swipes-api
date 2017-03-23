@@ -46,5 +46,3 @@ class Root extends PureComponent {
 }
 
 export default Root;
-
-module.exports = Root;

@@ -1,6 +1,5 @@
 import createLogger from 'redux-logger';
 
-const ignoredActions = ['API_REQUEST', 'API_SUCCESS']; // Ignore actions from Logger
 let cacheImmutable = null;
 let cacheObject = null;
 const transformState = (state) => {
@@ -36,8 +35,6 @@ export default {
         stateTransformer: transformState, // state => state.toJS(),
         collapsed: true,
         duration: true,
-        // diff: true,
-        predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1),
       },
     ),
   ],

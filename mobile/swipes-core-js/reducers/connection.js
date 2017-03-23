@@ -6,6 +6,7 @@ const initialState = fromJS({
   lastConnect: null,
   token: null,
   status: 'offline',
+  versionInfo: {}
 });
 
 export default function me(state = initialState, action) {
@@ -19,10 +20,15 @@ export default function me(state = initialState, action) {
       return state.set('lastConnect', payload.ts);
     }
     case REHYDRATE:
+
       if (action && action.payload && action.payload.connection) {
-        return action.payload.connection.set('lastConnect', null).set('status', 'offline');
+        let { connection } = action.payload;
+        return initialState.set('token', connection.get('token'));
       }
       return state;
+    case types.SET_UPDATE_STATUS: {
+      return state.mergeIn(['versionInfo'], fromJS(payload));
+    }
     case types.SET_STATUS: {
       return state.set('status', payload.status).set('nextRetry', payload.nextRetry);
     }

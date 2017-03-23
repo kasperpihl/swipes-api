@@ -25,7 +25,6 @@ export default function searchReducer(state = initialState, action) {
     case types.SEARCH_ERROR: {
       return state.set('searching', false);
     }
-    case types.SEARCH_CLEAR:
     default:
       return state;
   }

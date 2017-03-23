@@ -167,7 +167,7 @@ class HOCTopbar extends PureComponent {
 function mapStateToProps(state) {
   return {
     nextRetry: state.getIn(['connection', 'nextRetry']),
-    versionInfo: state.getIn(['main', 'versionInfo']),
+    versionInfo: state.getIn(['connection', 'versionInfo']),
     isMaximized: state.getIn(['main', 'isMaximized']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
     lastConnect: state.getIn(['connection', 'lastConnect']),

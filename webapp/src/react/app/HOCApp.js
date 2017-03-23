@@ -13,7 +13,7 @@ import HOCTooltip from './tooltip/HOCTooltip';
 let DevTools = 'div';
 
 if (process.env.NODE_ENV !== 'production') {
-  DevTools = require('src/DevTools'); // eslint-disable-line global-require
+  DevTools = require('src/DevTools').default; // eslint-disable-line global-require
 }
 
 class HOCApp extends PureComponent {

@@ -4,11 +4,11 @@ const handleUpdatesNeeded = (payload, state, dispatch) => {
   if (!payload) {
     return;
   }
-  const updateRequired = state.getIn(['main', 'versionInfo', 'updateRequired']);
-  const updateAvailable = state.getIn(['main', 'versionInfo', 'updateAvailable']);
-  const updateUrl = state.getIn(['main', 'versionInfo', 'updateUrl']);
-  const reloadAvailable = state.getIn(['main', 'versionInfo', 'reloadAvailable']);
-  const reloadRequired = state.getIn(['main', 'versionInfo', 'reloadRequired']);
+  const updateRequired = state.getIn(['connection', 'versionInfo', 'updateRequired']);
+  const updateAvailable = state.getIn(['connection', 'versionInfo', 'updateAvailable']);
+  const updateUrl = state.getIn(['connection', 'versionInfo', 'updateUrl']);
+  const reloadAvailable = state.getIn(['connection', 'versionInfo', 'reloadAvailable']);
+  const reloadRequired = state.getIn(['connection', 'versionInfo', 'reloadRequired']);
 
   if (
     payload.update_required !== updateRequired ||
@@ -43,8 +43,8 @@ export const request = (options, data) => (d, getState) => {
     token: getState().getIn(['connection', 'token'])
   }, data);
   let state = getState();
-  const updateRequired = state.getIn(['main', 'versionInfo', 'updateRequired']);
-  const reloadRequired = state.getIn(['main', 'versionInfo', 'reloadRequired']);
+  const updateRequired = state.getIn(['connection', 'versionInfo', 'updateRequired']);
+  const reloadRequired = state.getIn(['connection', 'versionInfo', 'reloadRequired']);
   if (updateRequired || reloadRequired) {
     return Promise.resolve({
       ok: false,
