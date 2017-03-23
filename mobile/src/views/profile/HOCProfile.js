@@ -1,13 +1,17 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton';
+import Header from '../../components/header/Header';
 import { viewSize, colors } from '../../utils/globalStyles';
 
 class HOCProfile extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {};
+  }
+  renderHeader() {
+
+    return <Header title="Profile" />
   }
   renderProfile() {
     const { me } = this.props
@@ -35,10 +39,13 @@ class HOCProfile extends PureComponent {
 
     return (
       <View style={styles.container}>
-        {this.renderProfile()}
-        <Text style={styles.name}>{me.get('first_name')} {me.get('last_name')}</Text>
-        <View style={styles.seperator}/>
-        <Text style={styles.orgName}>{me.getIn(['organizations', 0, 'name'])}</Text>
+        {this.renderHeader()}
+        <View style={styles.profile}>
+          {this.renderProfile()}
+          <Text style={styles.name}>{me.get('first_name')} {me.get('last_name')}</Text>
+          <View style={styles.seperator}/>
+          <Text style={styles.orgName}>{me.getIn(['organizations', 0, 'name'])}</Text>
+        </View>
       </View>
     );
   }
@@ -47,9 +54,13 @@ class HOCProfile extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.bgColor,
+  },
+  profile: {
+    flex: 1,
     alignItems: 'center',
     backgroundColor: colors.bgColor,
-    paddingTop: (viewSize.height * 25) / 100
+    paddingTop: (viewSize.height * 15) / 100
   },
   profileImage: {
     width: 96,

@@ -6,8 +6,8 @@ import Swiper from 'react-native-swiper';
 import LinearGradient from 'react-native-linear-gradient';
 import ViewController from './navigation/view-controller/ViewController';
 import HOCProfile from './views/profile/HOCProfile';
-import GoalList from './views/goallist/GoalList';
-import Dashboard from './views/dashboard/Dashboard';
+import HOCGoalList from './views/goallist/HOCGoalList';
+import HOCDashboard from './views/dashboard/HOCDashboard';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
 import { colors, viewSize } from './utils/globalStyles';
@@ -21,13 +21,13 @@ const profile = {
 const dashboard = {
   key: '2',
   title: 'dashboard',
-  component: Dashboard,
+  component: HOCDashboard,
 }
 
 const goalList = {
   key: '3',
   title: 'goalList',
-  component: GoalList,
+  component: HOCGoalList,
 }
 
 class App extends PureComponent {
@@ -42,8 +42,8 @@ class App extends PureComponent {
     LayoutAnimation.easeInEaseOut();
   }
   renderLoader() {
-    const { isHydrated } = this.props;
-    if(isHydrated){
+    const { isHydrated, lastConnect } = this.props;
+    if(isHydrated && lastConnect){
       return undefined;
     }
     return (
@@ -66,12 +66,12 @@ class App extends PureComponent {
     return <Login />;
   }
   renderApp() {
-    const { token, isHydrated } = this.props;
-    if(!token || !isHydrated){
+    const { token, isHydrated, lastConnect } = this.props;
+    if(!token || !isHydrated || !lastConnect){
       return undefined;
     }
     return (
-      <Swiper style={styles.app} loop={false} showsPagination={false}>
+      <Swiper style={styles.app} loop={false} showsPagination={false} index={1}>
         <ViewController scene={profile} navId="Profile"/>
         <ViewController scene={dashboard} navId="Dashboard"/>
         <ViewController scene={goalList} navId="Goallist"/>
@@ -92,6 +92,7 @@ class App extends PureComponent {
 function mapStateToProps(state) {
   return {
     token: state.getIn(['connection', 'token']),
+    lastConnect: state.getIn(['connection', 'lastConnect']),
     isHydrated: state.getIn(['main', 'isHydrated']),
   };
 }

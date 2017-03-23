@@ -1,20 +1,51 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton';
-import { viewSize } from '../../utils/globalStyles';
+import { View, Text, StyleSheet, ListView } from 'react-native';
+import NotificationItem from './NotificationItem';
+import { colors, viewSize } from '../../utils/globalStyles';
+import ImmutableListView from 'react-native-immutable-list-view';
+import Header from '../../components/header/Header';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props)
-    this.state = {};
+
+    this.state = {
+    };
+  }
+  renderHeader() {
+
+    return <Header title="Dashboard" />
+  }
+  renderNotifications() {
+    const {
+      notifications,
+      delegate,
+    } = this.props;
+
+    if (!notifications.size) {
+      return (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyStateTitle}>Notifications</Text>
+          <Text style={styles.emptyStateMessage}>Here you get notified on the newest and latest from your team. Never miss your turn to take action and stay up–to–date with your team's progress.</Text>
+        </View>
+      );
+    }
+
+    return (
+      <ImmutableListView
+        immutableData={ notifications }
+        renderRow = { this.renderRow }
+      />
+    )
+  }
+  renderRow(rowData) {
+    return <NotificationItem notification={rowData} />
   }
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/img/dashboard.png')}
-        />
+        {this.renderHeader()}
+        {this.renderNotifications()}
       </View>
     );
   }
@@ -23,23 +54,24 @@ class Dashboard extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: colors.bgColor,
+    paddingBottom: 24
   },
-  button: {
-    width: 200,
-    height: 50,
-    backgroundColor: '#333ddd',
-    justifyContent: 'center',
+  emptyState: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyStateTitle: {
+    fontSize: 30,
+    color: colors.deepBlue80,
+    fontWeight: '700'
+  },
+  emptyStateMessage: {
+    paddingHorizontal: 30,
     marginTop: 15,
-  },
-  buttonLabel: {
-    color: 'white'
-  },
-  image: {
-    width: viewSize.width,
-    height: viewSize.height
+    fontSize: 15,
+    color: colors.deepBlue30
   }
 });
 
