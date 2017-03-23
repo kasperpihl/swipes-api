@@ -58,6 +58,8 @@
     "prebuild": "rimraf dist",
     "build": "webpack --progress",
     "watch": "webpack --progress --watch",
+    "staging": "pm2 kill && pm2 start pm2_config.json --env staging && pm2 save",
+    "production": "pm2 kill && pm2 start pm2_config.json --env production && pm2 save",
     "server": "pm2-dev start pm2_config.json",
     "start": "npm run build && npm-run-all --parallel watch server"
   }
