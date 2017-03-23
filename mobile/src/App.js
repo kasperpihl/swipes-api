@@ -43,9 +43,11 @@ class App extends PureComponent {
   }
   renderLoader() {
     const { isHydrated, lastConnect } = this.props;
+
     if(isHydrated && lastConnect){
       return undefined;
     }
+
     return (
       <LinearGradient
         start={{ x: 0.0, y: 0.0 }}
@@ -59,17 +61,20 @@ class App extends PureComponent {
   }
   renderLogin(){
     const { token, isHydrated } = this.props;
-    console.log(token);
+
     if(token || !isHydrated){
       return undefined;
     }
+
     return <Login />;
   }
   renderApp() {
     const { token, isHydrated, lastConnect } = this.props;
+
     if(!token || !isHydrated || !lastConnect){
       return undefined;
     }
+
     return (
       <Swiper style={styles.app} loop={false} showsPagination={false} index={1}>
         <ViewController scene={profile} navId="Profile"/>
@@ -114,15 +119,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-
-const fadeInOut = {
-  0: {
-    opacity: 1,
-  },
-  0.5: {
-    opacity: .5,
-  },
-  1: {
-    opacity: 1,
-  }
-};
