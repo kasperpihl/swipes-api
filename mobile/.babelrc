@@ -1,9 +1,7 @@
 {
   "presets": ["react-native"],
   "plugins": [
-    ["module-alias", [
-      { "src": "./swipes-core-js", "expose": "swipes-core-js" },
-      { "src": "./src/components", "expose": "components" }
-    ]]
+    "transform-object-rest-spread",
+    "transform-object-entries"
   ]
 }

@@ -151,46 +151,6 @@ export function immuCompare(o1, o2, attr) {
   return (o1[getMethod](attr) === o2[getMethod](attr));
 }
 
-export function shadeColor(color, percent) {
-  let R = parseInt(color.substring(1, 3), 16);
-  let G = parseInt(color.substring(3, 5), 16);
-  let B = parseInt(color.substring(5, 7), 16);
-
-  R = parseInt(((R * (100 + percent)) / 100), 10);
-  G = parseInt(((G * (100 + percent)) / 100), 10);
-  B = parseInt(((B * (100 + percent)) / 100), 10);
-
-  R = (R < 255) ? R : 255;
-  G = (G < 255) ? G : 255;
-  B = (B < 255) ? B : 255;
-
-  const RR = ((R.toString(16).length === 1) ? `0${R.toString(16)}` : R.toString(16));
-  const GG = ((G.toString(16).length === 1) ? `0${G.toString(16)}` : G.toString(16));
-  const BB = ((B.toString(16).length === 1) ? `0${B.toString(16)}` : B.toString(16));
-
-  return `#${RR}${GG}${BB}`;
-}
-
-export function hexToRgb(hex) {
-  if (hex.startsWith('#')) {
-    hex = hex.substring(1);
-  }
-  const bigint = parseInt(hex, 16);
-  const r = (bigint >> 16) & 255; // eslint-disable-line
-  const g = (bigint >> 8) & 255; // eslint-disable-line
-  const b = bigint & 255; // eslint-disable-line
-
-  return `${r},${g},${b}`;
-}
-
-export function isImage(file) {
-  if (!file) {
-    return false;
-  }
-
-  return (file.match(/\.(jpeg|jpg|gif|png)$/) != null);
-}
-
 export function bindAll(context, methodNames) {
   methodNames.forEach((methodName) => {
     if (typeof context[methodName] !== 'function') {
@@ -214,18 +174,6 @@ export function randomString(length) {
   return text;
 }
 
-export function autoscroll(element, to, duration) {
-  if (duration <= 0) return;
-  const difference = to - element.scrollTop;
-  const perTick = (difference / duration) * 10;
-
-  setTimeout(() => {
-    element.scrollTop += perTick;
-    if (element.scrollTop === to) return;
-    autoscroll(element, to, duration - 10);
-  }, 10);
-}
-
 export function indexBy(arr, iterator) {
   const object = {};
   arr.forEach((val, i) => {
@@ -244,43 +192,6 @@ export function indexBy(arr, iterator) {
   });
   return object;
 }
-
-export function decodeHtml(text) {
-  const replacements = [
-    ['amp', '&'],
-    ['apos', '\''],
-    ['lt', '<'],
-    ['gt', '>'],
-  ];
-
-  replacements.forEach((replace) => {
-    text = text.replace(new RegExp(`&${replace[0]};`, 'g'), replace[1]);
-  });
-
-  return text;
-}
-
-export function transitions(enter, leave, appear) {
-  const returnObj = {};
-  if (typeof enter === 'string') {
-    returnObj.enter = `${enter}-enter`;
-    returnObj.enterActive = `${enter}-enter-active`;
-    returnObj.leave = `${enter}-leave`;
-    returnObj.leaveActive = `${enter}-leave-active`;
-    returnObj.appear = `${enter}-appear`;
-    returnObj.appearActive = `${enter}-appear-active`;
-  }
-  if (typeof leave === 'string') {
-    returnObj.leave = `${leave}-leave`;
-    returnObj.leaveActive = `${leave}-leave-active`;
-  }
-  if (typeof appear === 'string') {
-    returnObj.appear = `${appear}-appear`;
-    returnObj.appearActive = `${appear}-appear-active`;
-  }
-  return returnObj;
-}
-
 
 export function debounce(func, wait, immediate) {
   let timeout;

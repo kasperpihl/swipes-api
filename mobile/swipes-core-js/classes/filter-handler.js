@@ -10,7 +10,7 @@ export default class FilterHandler {
     store.subscribe(this.storeChange);
   }
   removeGoalFromFilters(filters, g) {
-    return filters.map((f) => f.updateIn(['goals'], goals => goals && goals.delete(g.get('id'))));
+    return filters.map((f) => f.updateIn(['goals'], (goals) => goals && goals.delete(g.get('id'))));
   }
   checkAndApplyFiltersForGoal(filters, g){
     return filters.map((f) => {
@@ -38,13 +38,13 @@ export default class FilterHandler {
       goals.forEach((g, k) => {
         const prev = this.previousGoals.get(k);
         if(prev !== g){
-          console.log('goal changed', g.get('title'));
+          // console.log('goal changed', g.get('title'));
           filters = this.checkAndApplyFiltersForGoal(filters, g);
         }
       })
       this.previousGoals.forEach((g, k) => {
         if(!goals.get(k)){
-          console.log('goal removed', g.get('title'));
+          // console.log('goal removed', g.get('title'));
           filters = this.removeGoalFromFilters(filters, g);
         }
       })

@@ -1,6 +1,5 @@
 import * as actions from './actions';
 import * as reducers from './reducers';
-import * as utils from './classes/utils';
 
 import Socket from './classes/socket';
 import FilterHandler from './classes/filter-handler';
@@ -15,6 +14,5 @@ const init = (store, apiUrl) => {
 export {
   actions,
   init,
-  utils,
   reducers,
 }

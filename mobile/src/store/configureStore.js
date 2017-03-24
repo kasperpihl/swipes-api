@@ -28,7 +28,7 @@ export default function configureStore(preloadedState) {
 
   persistStore(store, {
     storage: AsyncStorage,
-    blacklist: [],
+    blacklist: ['notes'],
   });
 
   return store;

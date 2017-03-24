@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
     "immutable": "^3.8.1",
     "moment": "^2.18.1",
     "react": "~15.4.1",
@@ -19,17 +20,20 @@
     "react-native-svg": "^5.1.5",
     "react-native-svg-icon": "^0.4.0",
     "react-native-swiper": "^1.5.4",
+    "react-native-tabs": "^1.0.9",
     "react-redux": "^5.0.3",
     "redux": "^3.6.0",
     "redux-immutable": "^4.0.0",
     "redux-logger": "^2.8.2",
     "redux-persist-immutable": "^4.2.0",
     "redux-thunk": "^2.2.0",
-    "valjs": "0.0.24"
+    "valjs": "0.0.25"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
     "babel-plugin-module-alias": "^1.6.0",
+    "babel-plugin-transform-object-entries": "^1.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-react-native": "1.9.1",
     "jest": "19.0.2",
     "react-test-renderer": "~15.4.1"
