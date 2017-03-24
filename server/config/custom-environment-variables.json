@@ -6,6 +6,10 @@
     "user": "SW_DATABASE_USER",
     "password": "SW_DATABASE_PASSWORD"
   },
+  "xendo": {
+    "clientId": "SW_XENDO_CLIENT_ID",
+    "clientSecret": "SW_XENDO_CLIENT_SECRET"
+  },
   "dropbox": {
     "appId": "SW_DROPBOX_APP_ID",
     "appSecret": "SW_DROPBOX_APP_SECRET",
@@ -45,5 +49,6 @@
   "apiPort": "SW_API_PORT",
   "clientPort": "SW_CLIENT_PORT",
   "webhooksHost": "SW_WEBHOOKS_HOST",
-  "env": "SW_ENV"
+  "env": "SW_ENV",
+  "jwtTokenSecret": "SW_JWT_TOKEN_SECRET"
 }

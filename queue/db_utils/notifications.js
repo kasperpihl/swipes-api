@@ -30,7 +30,7 @@ const dbGetNotificationsIds = funcWrap([
 
   const q =
     r.table('notifications')
-      .getAll(notification_ids);
+      .getAll(...notification_ids);
 
   return db.rethinkQuery(q);
 });
