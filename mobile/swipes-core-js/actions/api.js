@@ -65,7 +65,6 @@ export const request = (options, data) => (d, getState) => {
     body: JSON.stringify(body),
   };
   return new Promise((resolve, reject) => {
-    console.log(apiUrl + command);
     fetch(apiUrl + command, serData)
     .then((r) => {
       if (r && r.ok) return r.json();

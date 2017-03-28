@@ -1,5 +1,6 @@
 import * as a from './';
 import { valAction } from '../classes/utils';
+import GoalsUtil from '../classes/goals-util';
 
 import {
   string,
@@ -44,15 +45,15 @@ export const rename = (goalId, title) => a.api.request('goals.rename', {
 export const start = (gId, handoff) => (d, getState) => {
   let assignees = handoff.get('assignees');
   assignees = assignees && assignees.toJS();
-
-  const nextStepId = getState().getIn(['goals', gId, 'steps', handoff.get('target'), 'id']);
-  const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
+  const goal = getState().getIn(['goals', gId]);
+  const helper = new GoalsUtil(goal);
+  const currentStepId = helper.getCurrentStepId();
   return d(a.api.request('goals.start', {
     goal_id: gId,
     flags: handoff.get('flags'),
     message: handoff.get('message'),
     current_step_id: currentStepId || null,
-    next_step_id: nextStepId,
+    next_step_id: handoff.get('target'),
     assignees,
   }));
 };
@@ -62,7 +63,10 @@ export const notify = (gId, handoff) => (d, getState) => {
   let assignees = handoff.get('assignees');
   assignees = assignees || assignees.toJS();
 
-  const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
+  const goal = getState().getIn(['goals', gId]);
+  const helper = new GoalsUtil(goal);
+  const currentStepId = helper.getCurrentStepId();
+
   return d(a.api.request('goals.notify', {
     goal_id: gId,
     feedback: (handoff.get('target') === '_feedback'),
@@ -75,7 +79,9 @@ export const notify = (gId, handoff) => (d, getState) => {
 };
 
 export const completeStep = (gId, handoff) => (d, getState) => {
-  const currentStepId = getState().getIn(['goals', gId, 'status', 'current_step_id']);
+  const goal = getState().getIn(['goals', gId]);
+  const helper = new GoalsUtil(goal);
+  const currentStepId = helper.getCurrentStepId();
   const target = handoff.get('target') === '_complete' ? null : handoff.get('target');
 
   let assignees = handoff.get('assignees');
