@@ -311,7 +311,7 @@ class HOCViewController extends PureComponent {
     return (
       <div ref="controller" className="view-controller">
         {this.renderViewControllers()}
-        {this.renderSlack()}
+        {/* {this.renderSlack()} */}
       </div>
     );
   }

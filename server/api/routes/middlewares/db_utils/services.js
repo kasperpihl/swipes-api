@@ -9,7 +9,7 @@ import {
 } from '../../../../middlewares/swipes-error';
 
 const servicesGetAll = () => {
-  const q = r.table('services');
+  const q = r.table('services').filter({ hidden: false });
 
   return db.rethinkQuery(q);
 };

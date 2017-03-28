@@ -304,14 +304,14 @@ class HOCGoalOverview extends PureComponent {
       props: {
         items: [
           { id: '_complete', title: 'Complete goal' },
-          { id: 'way', title: 'Save as a Way' },
+          // { id: 'way', title: 'Save as a Way' },
           { title: 'Archive Goal' },
         ],
         delegate,
       },
     });
   }
-  onAddStep(title, e) {
+  onAddStep(title) {
     const { addStep, goal } = this.props;
     this.setLoading('add', 'Adding...');
     addStep(goal.get('id'), title).then(() => this.clearLoading('add'));

@@ -24,12 +24,12 @@ const initGetData = valLocals('initGetData', {
     servicesGetAll(),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
-      filter: { sent: false },
+      filter: { sender: false },
       filterDefaultOption: true,
     }),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
-      filter: { sent: true },
+      filter: { sender: true },
       filterDefaultOption: false,
     }),
   ];

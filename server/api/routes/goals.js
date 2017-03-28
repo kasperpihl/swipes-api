@@ -3,7 +3,7 @@ import {
   string,
   object,
   array,
-  bool,
+  any,
 } from 'valjs';
 import {
   valBody,
@@ -208,10 +208,10 @@ authed.all('/goals.notify',
   valBody({
     goal_id: string.require(),
     assignees: array.of(string).min(1).require(),
-    feedback: bool,
-    current_step_id: string,
+    message: string.min(1).require(),
     flags: array.of(string),
-    message: string,
+    request: any.of('feedback', 'status', 'assets', 'decision'),
+    reply_to: string,
   }),
   notificationCreateGroupId,
   goalsNotify,

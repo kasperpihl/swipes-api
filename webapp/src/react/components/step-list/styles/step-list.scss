@@ -55,7 +55,7 @@
 // step list number indicator
 
 .step-list-item {
-  
+
   .indicator {
     @include size(30px);
     @include flexContainer('row', center, center);

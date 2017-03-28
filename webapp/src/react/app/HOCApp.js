@@ -20,8 +20,8 @@ class HOCApp extends PureComponent {
   componentDidMount() {
     const { navSet } = this.props;
     navSet('primary', {
-      id: 'GoalList',
-      title: 'Goals',
+      id: 'Dashboard',
+      title: 'Dashboar',
     });
     this.updateMaximizeClass(this.props.isMaximized);
     this.updateFullscreenClass(this.props.isFullscreen);
