@@ -13,9 +13,10 @@ class HOCSidebar extends PureComponent {
     super(props);
     this.state = {
       navItems: [
+        { id: 'Dashboard', svg: 'Notification' },
         { id: 'GoalList', svg: 'Goals' },
         // { id: 'MilestoneList', svg: 'Milestones' },
-        { id: 'Dashboard', svg: 'Notification' },
+
         // { id: 'Find', svg: 'Find' },
         // { id: 'Slack', svg: 'Hashtag' },
         // { id: 'Store', svg: 'Store' },

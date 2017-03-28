@@ -311,7 +311,7 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onAddStep(title, e) {
+  onAddStep(title) {
     const { addStep, goal } = this.props;
     this.setLoading('add', 'Adding...');
     addStep(goal.get('id'), title).then(() => this.clearLoading('add'));

@@ -74,6 +74,10 @@ export default class GoalsUtil {
   getOrderedAttachments() {
     return this.goal.get('attachment_order').map(id => this.goal.getIn(['attachments', id]));
   }
+  getAttachmentsForFlags(flags) {
+    flags = fromJS(flags || []);
+    return flags.map(fId => (this.goal.getIn(['attachments', fId]))).filter(v => !!v);
+  }
   getLastHandoff() {
     return this.goal.get('history').findLast((h) => {
       switch (h.get('type')) {
@@ -103,7 +107,17 @@ export default class GoalsUtil {
   getTotalNumberOfSteps() {
     return this.goal.get('step_order').size;
   }
-
+  getStepTitlesBetween(from, to) {
+    let show = false;
+    let titles = fromJS([]);
+    this.goal.get('step_order').forEach((sId) => {
+      if ([from, to].indexOf(sId) !== -1) show = !show;
+      if (show) {
+        titles = titles.push(this.goal.getIn(['steps', sId, 'title']));
+      }
+    })
+    return titles;
+  }
 
   getCurrentAssignees() {
     const i = this.getCurrentStepIndex();

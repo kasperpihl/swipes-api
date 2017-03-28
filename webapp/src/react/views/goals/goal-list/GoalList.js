@@ -81,9 +81,15 @@ class GoalList extends Component {
         <div className="goals-empty-state">
           <div className="goals-empty-state__title">Goals</div>
           <div className="goals-empty-state__message">
-            Here you can create new goals, track current ones and accomplish them with your team. Let's get started.
+            Here you can create new goals,&nbsp;
+            {'track current ones and accomplish them with your team. Let\'s get started.'}
           </div>
-          <Button primary text="Create your first goal" className="goals-empty-state__button" onClick={addGoal} />
+          <Button
+            primary
+            text="Create your first goal"
+            className="goals-empty-state__button"
+            onClick={addGoal}
+          />
         </div>
       );
     }
@@ -127,11 +133,12 @@ class GoalList extends Component {
   }
 }
 
-const { object: obj, number, array, bool, string } = PropTypes;
+const { object: obj, number, array, bool, string, func } = PropTypes;
 
 GoalList.propTypes = {
   goals: array.isRequired,
   tabs: list,
+  addGoal: func,
   showFilter: bool,
   filterProp: list,
   filterLabel: string,

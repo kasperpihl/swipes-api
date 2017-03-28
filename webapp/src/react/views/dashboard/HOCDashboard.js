@@ -1,26 +1,33 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
-import SWView from 'SWView';
-import Button from 'Button';
-import { Map, fromJS } from 'immutable';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as core from 'swipes-core-js/actions';
-import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+
 import Dashboard from './Dashboard';
 /* global msgGen */
+const filters = [
+  n => n.get('request'),
+  n => n.get('receiver') && n.get('important'),
+  n => n.get('receiver') && !n.get('important'),
+  n => n.get('sender'),
+];
 
 class HOCDashboard extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      loading: false,
-      filter: n => n.get('receiver') && n.get('important'),
+      tabs: ['Requests', 'Important', 'Standard', 'Sent'],
+      tabIndex: 0,
+      notifications: this.getFilteredNotifications(0),
     };
-    this.state.notifications = this.getFilteredNotifications(props.notifications);
+    setupLoading(this);
+
     this.onClickCached = setupCachedCallback(this.onClick, this);
     // now use events as onClick: this.onClickCached(i)
     this.callDelegate = setupDelegate(props.delegate);
@@ -30,31 +37,32 @@ class HOCDashboard extends PureComponent {
   componentDidMount() {
     this.callDelegate('viewDidLoad', this);
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.notifications !== this.props.notifications) {
+      this.setState({
+        notifications: this.getFilteredNotifications(this.state.tabIndex),
+      });
+    }
+  }
   componentWillUnmount() {
     this._unmounted = true;
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.notifications !== this.props.notifications) {
-      this.setState({ notifications: this.getFilteredNotifications(nextProps.notifications) });
-    }
-  }
-  getFilteredNotifications(notifications) {
-    return notifications.filter(this.state.filter);
-  }
   onMark(id) {
     const { markNotifications } = this.props;
-    const { notifications, filter } = this.state;
+    const { notifications } = this.state;
     if (notifications.size) {
       let arg = [id];
       if (id === 'all') {
-        arg = notifications.toArray().filter(filter).filter(n => !n.get('seen_at')).map(n => n.get('id'));
+        arg = notifications.toArray().filter(n => !n.get('seen_at')).map(n => n.get('id'));
       }
       if (arg.length) {
-        console.log('marking!');
-        this.setState({ loading: true });
+        if (id === 'all') {
+          this.setLoading('all');
+        }
         markNotifications(arg).then(() => {
           if (!this._unmounted) {
-            this.setState({ loading: false });
+            this.clearLoading('all');
           }
         });
       }
@@ -86,7 +94,6 @@ class HOCDashboard extends PureComponent {
       const goal = goals.get(n.getIn(['target', 'id']));
 
       if (goal) {
-        console.log('g', goal.toJS());
         this.saveState();
         navPush({
           id: 'GoalOverview',
@@ -98,30 +105,26 @@ class HOCDashboard extends PureComponent {
       }
     }
   }
-  getAttachments(goalId, flags) {
-    const { goals } = this.props;
-    const goal = goals.get(goalId);
-    if (!goal || !flags || !goal.get('attachments')) {
-      return undefined;
-    }
-    const at = flags.map(fId => (goal.getIn(['attachments', fId]))).filter(v => !!v);
-    return fromJS(at);
+  getHelperForId(goalId) {
+    const { me, goals } = this.props;
+    return new GoalsUtil(goals.get(goalId), me.get('id'));
   }
-  getStepTitles(goalId, from, to) {
-    const { goals } = this.props;
-    const goal = goals.get(goalId);
-    const titles = [];
-    if (!goal) {
-      return titles;
+  getFilteredNotifications(fI) {
+    return this.props.notifications.filter(filters[fI]);
+  }
+  getAttachments(goalId, flags) {
+    const helper = this.getHelperForId(goalId);
+    return helper.getAttachmentsForFlags(flags);
+  }
+  tabDidChange(index) {
+    const { tabIndex } = this.state;
+
+    if (tabIndex !== index) {
+      this.setState({
+        tabIndex: index,
+        notifications: this.getFilteredNotifications(index),
+      });
     }
-    let show = false;
-    goal.get('step_order').forEach((sI) => {
-      if ([from, to].indexOf(sI) !== -1) show = !show;
-      if (show) {
-        titles.push(goal.getIn(['steps', sI, 'title']));
-      }
-    });
-    return titles;
   }
   saveState() {
     const { saveState } = this.props;
@@ -150,6 +153,7 @@ class HOCDashboard extends PureComponent {
     const id = n.getIn(['target', 'id']);
     const index = n.getIn(['target', 'history_index']);
     const h = goals.getIn([id, 'history', index]);
+    const helper = this.getHelperForId(id);
     const type = n.get('type');
 
     let m = Map({
@@ -213,9 +217,9 @@ class HOCDashboard extends PureComponent {
         if (progress === 'forward') {
           m = m.set('subtitle', `${from} completed a step in`);
           m = m.set('icon', 'ActivityCheckmark');
-          const titles = this.getStepTitles(id, h.get('from'), h.get('to'));
-          if (titles.length > 1) {
-            m = m.set('subtitle', `${from} completed ${titles.length} steps in`);
+          const titles = helper.getStepTitlesBetween(h.get('from'), h.get('to'));
+          if (titles.size > 1) {
+            m = m.set('subtitle', `${from} completed ${titles.size} steps in`);
           }
         }
 
@@ -247,19 +251,9 @@ class HOCDashboard extends PureComponent {
     }
     return m;
   }
-  renderHeader() {
-    const { loading } = this.state;
 
-    return (
-      <div className="dashboard-header">
-        <HOCHeaderTitle title="Dashboard">
-          <Button loading={loading} text="Mark all" onClick={this.onMarkCached('all')} />
-        </HOCHeaderTitle>
-        <div className="notifications__header">Notifications</div>
-      </div>
-    );
-  }
   render() {
+    const { tabs, tabIndex } = this.state;
     let { notifications } = this.state;
     if (notifications) {
       notifications = notifications.map(n => this.messageForNotification(n));
@@ -268,13 +262,14 @@ class HOCDashboard extends PureComponent {
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
 
     return (
-      <SWView
-        header={this.renderHeader()}
-        onScroll={this.onScroll}
+      <Dashboard
+        delegate={this}
+        loadingState={this.getAllLoading()}
+        notifications={notifications}
+        tabs={tabs}
+        tabIndex={tabIndex}
         initialScroll={initialScroll}
-      >
-        <Dashboard delegate={this} notifications={notifications} />
-      </SWView>
+      />
     );
   }
 }
@@ -283,6 +278,7 @@ const { func, object, string } = PropTypes;
 HOCDashboard.propTypes = {
   navPush: func,
   savedState: object,
+  saveState: func,
   delegate: object,
   notifications: list,
   target: string,
