@@ -87,8 +87,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   goalProgress: string.require(),
   current_step_id: string,
   next_step_id: string,
-  message: string,
-  flags: array.of(string),
   assignees: array.of(string),
 }, (req, res, next, setLocals) => {
   const {
@@ -98,8 +96,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     goalProgress,
     current_step_id = null,
     next_step_id = null,
-    message,
-    flags = [],
     assignees = null,
   } = res.locals;
 
@@ -123,8 +119,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   const currentStep = goal.steps[current_step_id] || {};
   const history = {
     type,
-    flags,
-    message,
     done_by: user_id,
     from: current_step_id,
     to: next_step_id,

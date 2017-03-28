@@ -35,24 +35,18 @@ const goal_created = notifyWrapper([
 const goal_completed = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
-  goals.goalsStepsInterseptUsers,
-  goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 
 const goal_started = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
-  goals.goalsStepsInterseptUsers,
-  goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 
 const goal_archived = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsArchiveWithHistoryNotificationData,
-  goals.goalsStepsInterseptUsers,
-  goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 
@@ -90,7 +84,6 @@ const goal_loaded_way = notifyWrapper([
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
-  goals.goalsNextStepInterseptUsers,
   notify.notifyAllInGoal,
   notify.notifySendEventToAllInCompany,
 ]);
