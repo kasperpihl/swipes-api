@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { connect } from 'react-redux';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
+import { viewSize } from '../../utils/globalStyles';
 import Header from '../../components/header/Header';
+import HOCHistory from './HOCHistory';
 
 
 class HOCGoalOverview extends PureComponent {
@@ -10,9 +13,24 @@ class HOCGoalOverview extends PureComponent {
     super(props);
     this.state = {
       tabIndex: 0,
+      hideButton: false,
     };
+  
+    this.closeView = this.closeView.bind(this);
 
-    this.closeView = this.closeView.bind(this)
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
+  }
+  onDirectionChange(direction) {
+    const { hideButton } = this.state;
+    const newHideButton = (direction === 'down');
+    if (hideButton !== newHideButton) {
+      this.setState({ hideButton: newHideButton });
+    }
   }
   getHelper() {
     const { goal } = this.props;
@@ -39,15 +57,50 @@ class HOCGoalOverview extends PureComponent {
       <Header title={goal.get('title')} tabs={tabs} currentTab={this.state.tabIndex} delegate={this}/>
     )
   }
+  renderActivity() {
+    const { goal } = this.props;
+    
+    return (
+      <HOCHistory goal={goal} delegate={this}/>
+    )
+  }
+  renderStepList() {
+
+  }
+  renderAttachments() {
+
+  }
+  renderContextButton() {
+    const { hideButton } = this.state
+    let buttonStyles = hideButton ? styles.buttonHidden : styles.buttonShown;
+
+    return (
+      <FeedbackButton onPress={this.closeView}>
+        <View style={[styles.button, buttonStyles]}>
+          <Text style={styles.buttonLabel}>Go back</Text>
+        </View>
+      </FeedbackButton>
+    )
+  }
+  renderContent() {
+    const { tabIndex } = this.state;
+
+    if (tabIndex === 0) {
+      return this.renderActivity()
+    } else if (tabIndex === 1) {
+      return this.renderStepList()
+    } else if (tabIndex === 2) {
+      return this.renderAttachments()
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
-        <FeedbackButton onPress={this.closeView}>
-          <View style={styles.button}>
-            <Text style={styles.buttonLabel}>Go back</Text>
-          </View>
-        </FeedbackButton>
+        <View style={styles.content}>
+          {this.renderContent()}
+        </View>
+        {this.renderContextButton()}
       </View>
     );
   }
@@ -58,17 +111,36 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  content: {
+    flex: 1,
+    paddingBottom: 24
+  },
   button: {
-    paddingVertical: 14,
-    paddingHorizontal: 30,
+    width: viewSize.width * .6,
+    height: 60,
+    position: 'absolute',
+    left: (viewSize.width / 2) - ((viewSize.width * .6) / 2),
     backgroundColor: '#333ddd',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 15
+  },
+  buttonShown: {
+    bottom: 39,
+  },
+  buttonHidden: {
+    bottom: -60,
   },
   buttonLabel: {
     color: 'white'
   }
 });
 
-export default HOCGoalOverview;
+
+function mapStateToProps(state) {
+  return {
+    me: state.get('me'),
+  };
+}
+
+export default connect(mapStateToProps, {
+})(HOCGoalOverview);

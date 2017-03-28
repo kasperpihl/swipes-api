@@ -49,7 +49,7 @@ class NotificationItem extends Component {
     const { notification: n } = this.props;
     const attachments = n.get('attachments');
 
-    if (!attachments.size) {
+    if (!attachments || !attachments.size) {
       return undefined;
     }
 
@@ -71,8 +71,10 @@ class NotificationItem extends Component {
       )
     })
 
+    const attachmentStyles = n.get('icon') ? styles.attachments : styles.smallAttachments;
+    
     return (
-      <View style={styles.attachments}>
+      <View style={attachmentStyles}>
         {HTMLAttachments}
       </View>
     )
@@ -182,6 +184,10 @@ const styles = StyleSheet.create({
   attachments: {
     paddingTop: 15,
     paddingLeft: 55
+  },
+  smallAttachments: {
+    paddingTop: 15,
+    paddingLeft: 15
   },
   attachment: {
     flex: 1,
