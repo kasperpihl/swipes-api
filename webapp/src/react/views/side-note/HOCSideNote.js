@@ -21,6 +21,7 @@ import './styles/side-note';
 
 const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
+/* global msgGen */
 
 class HOCSideNote extends PureComponent {
   static maxWidth() {
@@ -160,7 +161,7 @@ class HOCSideNote extends PureComponent {
 
   renderHeader() {
     const { target, note, latestRev, title } = this.props;
-    const name = window.msgGen.getUserString(note.get('updated_by'), { yourself: true });
+    const name = msgGen.users.getName(note.get('updated_by'), { yourself: true });
     const timeString = timeAgo(note.get('updated_at'));
     let subtitle = `Updated by ${name} ${timeString}`;
     let buttonHtml;

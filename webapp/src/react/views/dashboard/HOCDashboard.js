@@ -22,7 +22,7 @@ class HOCDashboard extends PureComponent {
     super(props);
 
     this.state = {
-      tabs: ['Requests', 'Important', 'Standard', 'Sent'],
+      tabs: ['Requests', 'Important', 'Notifications', 'Sent'],
       tabIndex: 0,
       notifications: this.getFilteredNotifications(0),
     };
@@ -143,7 +143,7 @@ class HOCDashboard extends PureComponent {
   }
 
   clickableNameForUserId(userId) {
-    const name = msgGen.getUserString(userId);
+    const name = msgGen.users.getName(userId);
     return <b onClick={this.onClickCached(userId, 'name')}>{name}</b>;
   }
 
@@ -161,7 +161,7 @@ class HOCDashboard extends PureComponent {
       seenAt: !!n.get('seen_at'),
       userId: n.get('done_by'),
     });
-    const from = msgGen.getUserString(n.get('done_by'));
+    const from = msgGen.users.getName(n.get('done_by'));
     const to = n.get('done_by') === me.get('id') ? 'yourself' : 'you';
 
 
@@ -194,8 +194,9 @@ class HOCDashboard extends PureComponent {
       case 'goal_notify': {
         m = m.set('subtitle', `${from} sent a notification`);
         if (h && h.get('assignees')) {
-          const userString = msgGen.getUserArrayString(h.get('assignees'), {
-            yourself: true,
+          const yourself = h.get('done_by') === me.get('id');
+          const userString = msgGen.users.getNames(h.get('assignees'), {
+            yourself,
             number: 3,
           });
           m = m.set('subtitle', `${from} notified ${userString} in`);

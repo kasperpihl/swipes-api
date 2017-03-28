@@ -30,7 +30,7 @@ class HOCGoalItem extends PureComponent {
   }
   renderContent() {
     const { goal, filter } = this.props;
-    const status = msgGen.getGoalSubtitle(goal, filter);
+    const status = msgGen.goals.getSubtitle(goal, filter);
 
     return (
       <View style={styles.content}>

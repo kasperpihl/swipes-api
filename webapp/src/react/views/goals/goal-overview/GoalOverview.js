@@ -9,12 +9,8 @@ import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
-import Section from 'components/section/Section';
-import Icon from 'Icon';
-import HOCWays from 'components/ways/HOCWays';
 import Button from 'Button';
 import HOCHistory from './HOCHistory';
-import GoalSide from './GoalSide';
 import './styles/goal-overview.scss';
 
 class GoalOverview extends PureComponent {
@@ -24,6 +20,8 @@ class GoalOverview extends PureComponent {
     this.callDelegate = setupDelegate(props.delegate);
 
     this.onNotify = setupCachedCallback(this.callDelegate.bind(null, 'onNotify'));
+    this.onAskFor = this.callDelegate.bind(null, 'onAskFor');
+    this.onGive = this.callDelegate.bind(null, 'onGive');
     this.onContext = this.callDelegate.bind(null, 'onContext');
     this.onStart = this.callDelegate.bind(null, 'onStart');
   }
@@ -37,14 +35,14 @@ class GoalOverview extends PureComponent {
     let subtitle;
     let buttons = [
       <Button
-        key="feedback"
-        text="Give Feedback"
-        onClick={this.onNotify('_feedback', 'Give Feedback')}
+        key="askfor"
+        text="Ask for..."
+        onClick={this.onAskFor}
       />,
       <Button
-        key="notify"
+        key="give"
         text="Notify"
-        onClick={this.onNotify('_notify', 'Notify')}
+        onClick={this.onGive}
       />,
     ];
     if (!helper.getIsStarted()) {
@@ -113,7 +111,7 @@ class GoalOverview extends PureComponent {
             s = s.set('loading', l);
             return s;
           })}
-          editable={true}
+          editable
           addLoading={loadingState.get('add')}
           completed={helper.getNumberOfCompletedSteps()}
           noActive={!helper.getIsStarted()}
@@ -186,10 +184,11 @@ class GoalOverview extends PureComponent {
 
 export default GoalOverview;
 
-const { string, object } = PropTypes;
+const { string, object, number } = PropTypes;
 
 GoalOverview.propTypes = {
   goal: map,
+  tabIndex: number,
   myId: string,
   loadingState: map,
   delegate: object,

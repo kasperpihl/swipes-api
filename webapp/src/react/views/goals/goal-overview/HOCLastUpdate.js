@@ -46,7 +46,7 @@ class HOCLastUpdate extends PureComponent {
     );
   }
   renderLabel(handoff) {
-    let string = msgGen.getUserString(handoff.get('done_by'));
+    let string = msgGen.users.getName(handoff.get('done_by'));
     switch (handoff.get('type')) {
       case 'complete_goal':
         string += ' completed this goal';
