@@ -2,15 +2,31 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
+import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
+import HOCGoalOverview from '../goal-overview/HOCGoalOverview';
 import { colors, viewSize } from '../../utils/globalStyles';
-// import * as a from 'actions';
-// import { fromJS } from 'immutable';
 
 class HOCGoalItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+
+    this.openOverview = this.openOverview.bind(this)
+  }
+  openOverview() {
+    const { onPushRoute, goalId, goal } = this.props;
+
+    const overview = {
+      component: HOCGoalOverview,
+      title: goal.get('title'),
+      key: goalId,
+      props: {
+        goal: goal
+      }
+    };
+
+    onPushRoute(overview);
   }
   renderContent() {
     const { goal, filter } = this.props;
@@ -36,10 +52,12 @@ class HOCGoalItem extends PureComponent {
   }
   render() {
     return (
-      <View style={styles.row}>
-        {this.renderContent()}
-        {this.renderAssignees()}
-      </View>
+      <FeedbackButton onPress={this.openOverview}>
+        <View style={styles.row}>
+          {this.renderContent()}
+          {this.renderAssignees()}
+        </View>
+      </FeedbackButton>
     );
   }
 }
@@ -57,27 +75,30 @@ export default connect(mapStateToProps, {
 const styles = StyleSheet.create({
   row: {
     flex: 1,
-    minHeight: 66,
+    minHeight: 72,
     marginHorizontal: 15,
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: colors.deepBlue5,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'stretch'
   },
   assignees: {
-    
+    justifyContent: 'center',
   },
   content: {
-    flex: 1
+    flex: 1,
+    justifyContent: 'center'
   },
   title: {
-    fontSize: 16,
+    fontSize: 16.5,
     lineHeight: 21,
-    color: colors.deepBlue100
+    color: colors.deepBlue100,
   },
   status: {
     fontSize: 12,
     lineHeight: 18,
-    color: colors.deepBlue40
+    color: colors.deepBlue40,
   }
 })

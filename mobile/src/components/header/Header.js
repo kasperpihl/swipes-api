@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { setupDelegate, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
+import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import Tabs from 'react-native-tabs';
 import { colors } from '../../utils/globalStyles';
 
@@ -38,8 +38,6 @@ class Header extends Component {
         <Text name={i} key={i} style={styles.tabTitle}>{t}</Text>
       )
     })
-
-    console.log('page', this.state.page)
 
     return (
       <Tabs

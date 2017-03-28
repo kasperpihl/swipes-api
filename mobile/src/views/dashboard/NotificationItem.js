@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 66,
     marginHorizontal: 15,
-    paddingVertical: 15,
+    paddingVertical: 18,
     borderBottomWidth: 1,
     borderBottomColor: colors.deepBlue5
   },
@@ -165,13 +165,13 @@ const styles = StyleSheet.create({
     color: colors.deepBlue40
   },
   title: {
-    fontSize: 16,
+    fontSize: 16.5,
     color: colors.deepBlue90,
     marginTop: 3
   },
   message: {
     flexWrap: 'wrap',
-    fontSize: 13,
+    fontSize: 13.5,
     marginTop: 15,
     color: colors.deepBlue50
   },
@@ -180,14 +180,14 @@ const styles = StyleSheet.create({
     color: colors.deepBlue40
   },
   attachments: {
-    paddingTop: 18,
+    paddingTop: 15,
     paddingLeft: 55
   },
   attachment: {
     flex: 1,
     flexDirection: 'row',
-    height: 30,
-    alignItems: 'center',
+    height: 40,
+    alignItems: 'center'
   },
   attachmentTitle: {
     paddingLeft: 9,

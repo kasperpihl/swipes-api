@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { timeAgo } from '../../../swipes-core-js/classes/time-utils';
@@ -29,17 +29,23 @@ class HOCDashboard extends PureComponent {
     const link = att.get('link') || att;
     const service = link.get('service') || link;
     if (att && service.get('type') === 'url') {
-      const webView = {
-        component: InternalWebview,
-        title: service.get('id'),
-        key: service.get('id'),
-        props: {
-          url: service.get('id'),
-          title: service.get('id')
-        }
-      };
 
-      onPushRoute(webView);
+      // Using linking instead of webview at the moment;
+
+      Linking.openURL(service.get('id'));
+
+      // const webView = {
+      //   component: InternalWebview,
+      //   title: service.get('id'),
+      //   key: service.get('id'),
+      //   props: {
+      //     url: service.get('id'),
+      //     title: service.get('id')
+      //   }
+      // };
+
+      // onPushRoute(webView);
+
     }
   }
   getAttachments(goalId, flags) {

@@ -28,13 +28,14 @@ class HOCGoalList extends Component {
     }
   }
   renderHeader() {
+
     return <Header title="Goal list" tabs={this.state.tabs} currentTab={this.state.tabIndex} delegate={this} />
   }
-  renderGoal(gId, filterId) {
-    return <HOCGoalItem goalId={gId} filterId={filterId} />
+  renderGoal(gId, filterId, onPopRoute, onPushRoute, sceneProps) {
+    return <HOCGoalItem goalId={gId} filterId={filterId} onPopRoute={onPopRoute} onPushRoute={onPushRoute} sceneProps={sceneProps} />
   }
   render() {
-    const { filters } = this.props;
+    const { filters, onPopRoute, onPushRoute, sceneProps } = this.props;
     const { tabIndex, tabs } = this.state;
     const goals = filters.getIn([ tabs[tabIndex], 'goals']);
 
@@ -44,7 +45,7 @@ class HOCGoalList extends Component {
         <View style={styles.list}>
           <ImmutableListView
             immutableData={goals}
-            renderRow={(gId) => this.renderGoal(gId, tabs[tabIndex])}
+            renderRow={(gId) => this.renderGoal(gId, tabs[tabIndex], onPopRoute, onPushRoute, sceneProps)}
           />
         </View>
       </View>

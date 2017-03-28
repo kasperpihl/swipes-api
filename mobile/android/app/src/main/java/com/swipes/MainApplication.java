@@ -3,6 +3,7 @@ package com.swipes;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.burnweb.rnsendintent.RNSendIntentPackage;
 import com.horcrux.svg.SvgPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.ReactNativeHost;
@@ -25,6 +26,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSendIntentPackage(),
             new SvgPackage(),
             new LinearGradientPackage()
       );

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { request } from './actions';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
 import Swiper from 'react-native-swiper';
 import LinearGradient from 'react-native-linear-gradient';
 import ViewController from './navigation/view-controller/ViewController';
@@ -86,6 +86,11 @@ class App extends PureComponent {
   render() {
     return (
       <View style={styles.app}>
+        <StatusBar
+          translucent
+          backgroundColor="rgba(0, 0, 0, 0.20)"
+          animated
+        />
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
@@ -107,14 +112,15 @@ export default connect(mapStateToProps, {})(App);
 const styles = StyleSheet.create({
   app: {
     flex: 1,
-    backgroundColor: colors.bgColor
+    backgroundColor: colors.bgColor,
+    paddingTop: 24,
   },
   gradient: {
     position: 'absolute',
     left: 0,
     top: 0,
     width: viewSize.width,
-    height: viewSize.height,
+    height: viewSize.height + 24,
     alignItems: 'center',
     justifyContent: 'center'
   }
