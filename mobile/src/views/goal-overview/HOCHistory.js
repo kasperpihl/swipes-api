@@ -72,7 +72,7 @@ class HOCHistory extends PureComponent {
     });
     const stepTitle = this.getStepTitle(e.get('to'));
     const fromStepTitle = this.getStepTitle(e.get('from'));
-    const from = msgGen.getUserString(e.get('done_by'));
+    const from = msgGen.users.getName(e.get('done_by'));
 
     switch (type) {
       case 'goal_started': {
@@ -88,7 +88,7 @@ class HOCHistory extends PureComponent {
       case 'notified':
       case 'goal_notify': {
         const yourself = e.get('done_by') === me.get('id');
-        const to = msgGen.getUserArrayString(e.get('assignees'), {
+        const to = msgGen.users.getNames(e.get('assignees'), {
           number: 3,
           yourself,
         });
@@ -157,7 +157,7 @@ class HOCHistory extends PureComponent {
     return (
       <View style={styles.container}>
         <ImmutableListView
-          onScroll={this.handleScroll}  
+          onScroll={this.handleScroll}
           immutableData={events}
           renderRow={(event) => this.renderEvent(event, me, this)}
         />

@@ -230,7 +230,7 @@ class PDFViewer extends PureComponent {
             file={file}
             scale={this.state.scale}
             onDocumentComplete={this.onDocumentComplete}
-            page={page}
+            page={page - 1}
           />
         </div>
         {this.renderActions()}

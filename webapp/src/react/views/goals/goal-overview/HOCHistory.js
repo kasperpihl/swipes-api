@@ -60,8 +60,8 @@ class HOCHistory extends PureComponent {
     });
     const stepTitle = this.getStepTitle(e.get('to'));
     const fromStepTitle = this.getStepTitle(e.get('from'));
-    const from = msgGen.getUserString(e.get('done_by'));
-    console.log(e.toJS());
+    const from = msgGen.users.getName(e.get('done_by'));
+
     switch (type) {
       case 'goal_started': {
         m = m.set('subtitle', `${from} kicked off this goal with`);
@@ -76,7 +76,7 @@ class HOCHistory extends PureComponent {
       case 'notified':
       case 'goal_notify': {
         const yourself = e.get('done_by') === me.get('id');
-        const to = msgGen.getUserArrayString(e.get('assignees'), {
+        const to = msgGen.users.getNames(e.get('assignees'), {
           number: 3,
           yourself,
         });

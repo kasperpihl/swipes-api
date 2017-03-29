@@ -3,7 +3,7 @@ import {
   string,
   object,
   array,
-  bool,
+  any,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -87,8 +87,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   goalProgress: string.require(),
   current_step_id: string,
   next_step_id: string,
-  message: string,
-  flags: array.of(string),
   assignees: array.of(string),
 }, (req, res, next, setLocals) => {
   const {
@@ -98,8 +96,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     goalProgress,
     current_step_id = null,
     next_step_id = null,
-    message,
-    flags = [],
     assignees = null,
   } = res.locals;
 
@@ -123,8 +119,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   const currentStep = goal.steps[current_step_id] || {};
   const history = {
     type,
-    flags,
-    message,
     done_by: user_id,
     from: current_step_id,
     to: next_step_id,
@@ -494,32 +488,34 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
 const goalsNotify = valLocals('goalsNotify', {
   user_id: string.require(),
   goal_id: string.require(),
-  current_step_id: string,
   assignees: array.of(string).require(),
-  feedback: bool,
   flags: array.of(string),
   message: string,
   notificationGroupId: string.require(),
+  request: any.of('feedback', 'status', 'assets', 'decision'),
+  reply_to: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     assignees,
-    current_step_id,
     feedback,
     notificationGroupId,
     flags = [],
     message = '',
+    request = null,
+    reply_to = null,
   } = res.locals;
 
   const historyItem = {
     flags,
     message,
     assignees,
-    feedback,
+    request,
+    reply_to,
     type: 'goal_notify',
     from: null,
-    to: current_step_id,
+    to: null,
     done_by: user_id,
     done_at: r.now(),
     group_id: notificationGroupId,

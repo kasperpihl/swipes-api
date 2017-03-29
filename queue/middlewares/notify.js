@@ -149,8 +149,6 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     event_type,
     uniqueUsersToNotify,
     notificationData,
-    interceptUsers,
-    interceptNextStepUsers,
     notifyMyself,
   } = res.locals;
 
@@ -178,22 +176,8 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       important: false,
       ...notificationData,
     };
-    let notificationMap = userNotificationMap[userId] || {};
-    let important = false;
 
-    if (interceptUsers) {
-      important = interceptUsers.has(userId);
-
-      notification.important = important;
-      notificationMap = Object.assign({}, notificationMap, { important });
-    } else if (interceptNextStepUsers) {
-      important = interceptNextStepUsers.has(userId);
-
-      notification.important = important;
-      notificationMap = Object.assign({}, notificationMap, { important });
-    }
-
-    userNotificationMap[userId] = notificationMap;
+    userNotificationMap[userId] = {};
     notifications.push(notification);
   });
 

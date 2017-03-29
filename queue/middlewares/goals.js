@@ -39,62 +39,6 @@ const goalsCreatedNotificationData = (req, res, next) => {
 
   return next();
 };
-const goalsStepsInterseptUsers = (req, res, next) => {
-  const {
-    goal,
-    interceptUsers = [],
-  } = res.locals;
-  let additionalInterceptUsers = [];
-
-  for (const [k, v] of Object.entries(goal.steps)) {
-    additionalInterceptUsers = additionalInterceptUsers.concat(v.assignees);
-  }
-
-  res.locals.interceptUsers = new Set([...additionalInterceptUsers, ...interceptUsers]);
-
-  return next();
-};
-const goalsNextStepInterseptUsers = (req, res, next) => {
-  const {
-    goal,
-    next_step_id,
-    interceptNextStepUsers = [],
-  } = res.locals;
-  const nextStep = goal.steps[next_step_id];
-  const additionalInterceptNextStepUsers = [];
-
-  if (nextStep.assignees) {
-    nextStep.assignees.forEach((assignee) => {
-      additionalInterceptNextStepUsers.push(assignee);
-    });
-  }
-
-  res.locals.interceptNextStepUsers = new Set([
-    ...additionalInterceptNextStepUsers,
-    ...interceptNextStepUsers,
-  ]);
-
-  return next();
-};
-const goalsHistoryInterseptUsers = (req, res, next) => {
-  const {
-    goal,
-    interceptUsers = [],
-  } = res.locals;
-  const additionalInterceptUsers = [];
-
-  goal.history.forEach((item) => {
-    if (item.assignees && item.assignees.length > 0) {
-      item.assignees.forEach((assignee) => {
-        additionalInterceptUsers.push(assignee);
-      });
-    }
-  });
-
-  res.locals.interceptUsers = new Set([...additionalInterceptUsers, ...interceptUsers]);
-
-  return next();
-};
 const goalsNotifyAddSenderAlways = (req, res, next) => {
   const {
     user_id,
@@ -183,9 +127,6 @@ const goalsArchiveWithHistoryNotificationData = (req, res, next) => {
 export {
   goalsGetSingle,
   goalsCreatedNotificationData,
-  goalsStepsInterseptUsers,
-  goalsNextStepInterseptUsers,
-  goalsHistoryInterseptUsers,
   goalsNotifyAddSenderAlways,
   goalsRenamedNotificationData,
   goalsGeneralWithHistoryNotificationData,

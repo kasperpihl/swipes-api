@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
@@ -38,9 +39,6 @@ class HOCGoalOverview extends PureComponent {
     if (goal && !nextGoal) {
       navPop();
     }
-  }
-  onLoadWay(wayId) {
-
   }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
@@ -182,41 +180,52 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-
-  onNotify(target, title, e) {
+  onSelectAssigneesAndNotify(target, options) {
     const helper = this.getHelper();
     const { contextMenu, me, selectAssignees } = this.props;
-    const options = {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
     const all = helper.getAllInvolvedAssignees().filter(uId => uId !== me.get('id'));
     const inStep = helper.getCurrentAssignees()
                           .filter(uId => uId !== me.get('id'));
     const prevStep = helper.getAssigneesForStepIndex(helper.getNumberOfCompletedSteps() - 1)
                           .filter(uId => uId !== me.get('id'));
     const items = [];
-    if (all.size) {
+    const shouldShow = (from, arrayTo) => {
+      if (!from.size) {
+        return false;
+      }
+      let show = true;
+      arrayTo.forEach((to) => {
+        if (to.size === from.size) {
+          const hasDifferent = from.find(id => !to.includes(id));
+          if (show && !hasDifferent) {
+            show = false;
+          }
+        }
+      });
+      return show;
+    };
+    if (shouldShow(all, [])) {
       items.push({
-        title: 'Everyone in goal',
+        subtitle: 'Everyone in goal',
         assignees: all,
-        subtitle: msgGen.getUserArrayString(all, { number: 4 }),
+        title: msgGen.users.getNames(all, { number: 4 }),
       });
     }
-    if (prevStep.size) {
+    if (shouldShow(inStep, [all])) {
       items.push({
-        title: 'Previous assignees',
-        assignees: prevStep,
-        subtitle: msgGen.getUserArrayString(prevStep, { number: 4 }),
-      });
-    }
-    if (inStep.size) {
-      items.push({
-        title: 'Current assignees',
+        subtitle: `Current assignee${prevStep.size > 1 ? 's' : ''}`,
         assignees: inStep,
-        subtitle: msgGen.getUserArrayString(inStep, { number: 4 }),
+        title: msgGen.users.getNames(inStep, { number: 4 }),
       });
     }
+    if (shouldShow(prevStep, [inStep, all])) {
+      items.push({
+        subtitle: `Previous assignee${prevStep.size > 1 ? 's' : ''}`,
+        assignees: prevStep,
+        title: msgGen.users.getNames(prevStep, { number: 4 }),
+      });
+    }
+
     items.push({ title: 'Yourself', assignees: [me.get('id')] });
     items.push({ title: 'Choose people' });
     const delegate = {
@@ -224,16 +233,16 @@ class HOCGoalOverview extends PureComponent {
         contextMenu(null);
         if (!item.assignees) {
           let overrideAssignees;
-          options.actionLabel = 'Notify and write message';
+          options.actionLabel = 'Choose people';
           selectAssignees(options, [], (newAssignees) => {
             if (newAssignees) {
               overrideAssignees = newAssignees;
             } else if (overrideAssignees && overrideAssignees.length) {
-              this.onHandoff(target, title, overrideAssignees);
+              this.onOpenNotify(target, fromJS(overrideAssignees));
             }
           });
         } else {
-          this.onHandoff(target, title, item.assignees);
+          this.onOpenNotify(target, item.assignees);
         }
       },
     };
@@ -246,8 +255,42 @@ class HOCGoalOverview extends PureComponent {
         items,
       },
     });
+  }
+  onOpenNotify(request, assignees) {
+    const { openSecondary, goal } = this.props;
+    openSecondary({
+      id: 'Notify',
+      title: 'Notify',
+      props: {
+        request,
+        assignees,
+        goalId: goal.get('id'),
+      },
+    });
+  }
+  onAskFor(e) {
+    const { contextMenu } = this.props;
+    const options = this.getOptionsForE(e);
+    const items = ['Feedback', 'Assets', 'Decision', 'Status'].map(title => ({ title }));
 
-    //
+    const delegate = {
+      onItemAction: (item) => {
+        contextMenu(null);
+        this.onSelectAssigneesAndNotify(item.title.toLowerCase(), options);
+      },
+    };
+    contextMenu({
+      options,
+      component: TabMenu,
+      props: {
+        delegate,
+        items,
+      },
+    });
+  }
+  onGive(e) {
+    const options = this.getOptionsForE(e);
+    this.onSelectAssigneesAndNotify('_notify', 'Ask for', options);
   }
 
   onContext(e) {

@@ -37,7 +37,7 @@ class HOCTeam extends PureComponent {
     string += 'this goal';
     return (
       <div className="team__label">
-        {msgGen.getUserArrayString(assignees)}{string}
+        {msgGen.users.getNames(assignees)}{string}
       </div>
     );
   }

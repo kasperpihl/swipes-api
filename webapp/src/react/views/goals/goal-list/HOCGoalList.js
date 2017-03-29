@@ -237,11 +237,11 @@ class HOCGoalList extends PureComponent {
       let newString;
 
       if (p.get('id') === 'goalType') {
-        newString = msgGen.getGoalType(filter.get('goalType'));
+        newString = msgGen.goals.getType(filter.get('goalType'));
       } else if (p.get('id') === 'user') {
-        newString = msgGen.getUserString(filter.get('user'));
+        newString = msgGen.users.getName(filter.get('user'));
       } else if (p.get('id') === 'milestone') {
-        return p.set('string', msgGen.getMilestoneString(filter.get('milestone')));
+        return p.set('string', msgGen.milestones.getName(filter.get('milestone')));
       } else if (p.get('id') === 'matching') {
         if (!filter.get('matching') || !filter.get('matching').length) {
           return p.set('string', 'anything');
@@ -256,7 +256,7 @@ class HOCGoalList extends PureComponent {
     });
   }
   updateFilterLabel(filter, filteredGoals) {
-    return msgGen.getFilterLabel(filteredGoals.length, filter);
+    return msgGen.goals.getFilterLabel(filteredGoals.length, filter);
   }
   filterGoals(filter) {
     const { goals, me } = this.props;

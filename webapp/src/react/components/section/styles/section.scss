@@ -20,7 +20,6 @@
     @include font(12px, $deepBlue-80, 15px, bold);
     position: absolute;
     left: 0; top: 12px;
-    text-transform: capitalize;;
 
     &:empty {
       display: none;

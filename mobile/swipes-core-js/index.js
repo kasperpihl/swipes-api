@@ -3,7 +3,7 @@ import * as reducers from './reducers';
 
 import Socket from './classes/socket';
 import FilterHandler from './classes/filter-handler';
-import MessageGenerator from './classes/message-generator';
+import MessageGenerator from './message-generator';
 
 const init = (store, apiUrl) => {
   window.socket = new Socket(store);
