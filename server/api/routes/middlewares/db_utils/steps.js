@@ -34,11 +34,11 @@ const dbStepsAdd = funcWrap([
           [step.id]: step,
         },
         step_order: r.row('step_order').append(step.id),
-        status: r.merge((row) => {
+        status: r.row('status').merge((row) => {
           return r.branch(
-            row('step_order').count().gt(0),
+            row('current_step_id').eq(null),
             { current_step_id: step.id },
-            { current_step_id: row('id') },
+            { current_step_id: row('current_step_id') },
           );
         }),
         updated_at: r.now(),
