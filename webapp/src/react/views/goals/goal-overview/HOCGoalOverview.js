@@ -134,38 +134,38 @@ class HOCGoalOverview extends PureComponent {
   }
 
   onStepCheck(i, e) {
+    const { completeStep, goal } = this.props;
     const helper = this.getHelper();
     // const currentI = helper.getCurrentStepIndex();
     const step = helper.getStepByIndex(i);
-    const _target = (step && step.get('id')) || '_complete';
-    this.onHandoff(_target, 'Handoff');
+    const nextStepId = (step && step.get('id')) || null;
+
+    completeStep(goal.get('id'), nextStepId).then(() => {
+      console.log('completed!!!!');
+    });
     e.stopPropagation();
   }
   onStart(e) {
+    const { confirm, goalStart, goal } = this.props;
     const helper = this.getHelper();
-    let step = helper.getNextStep();
-    let assignees;
-    let target = '_complete';
-    if (!helper.getIsStarted()) {
+    if (!helper.getIsStarted() && !helper.getTotalNumberOfSteps()) {
       const options = this.getOptionsForE(e);
-      const { confirm } = this.props;
-
-      if (!helper.getTotalNumberOfSteps()) {
-        confirm(Object.assign({}, options, {
-          title: 'Add steps first',
-          actions: [{ text: 'Got it' }],
-          message: 'Before starting a goal, you have to add steps to it. You can do it manually or load a way below.',
-        }));
-        return;
+      confirm(Object.assign({}, options, {
+        title: 'Add steps first',
+        actions: [{ text: 'Got it' }],
+        message: 'Before starting a goal, you have to add steps to it.',
+      }));
+      return;
+    }
+    this.setLoading('button');
+    goalStart(goal.get('id')).then((res) => {
+      if (res && res.ok) {
+        this.clearLoading('button');
+        window.analytics.sendEvent('Start goal');
+      } else {
+        this.clearLoading('button', '!Something went wrong');
       }
-      step = helper.getStepByIndex(0);
-    }
-    if (step) {
-      assignees = step.get('assignees');
-      target = step.get('id');
-    }
-
-    this.onHandoff(target, '', assignees);
+    });
   }
 
   onHandoff(_target, title, assignees) {
@@ -290,7 +290,7 @@ class HOCGoalOverview extends PureComponent {
   }
   onGive(e) {
     const options = this.getOptionsForE(e);
-    this.onSelectAssigneesAndNotify('_notify', 'Ask for', options);
+    this.onSelectAssigneesAndNotify(null, options);
   }
 
   onContext(e) {
@@ -408,8 +408,10 @@ HOCGoalOverview.propTypes = {
   archive: func,
   createWay: func,
   selectAssignees: func,
+  goalStart: func,
   openSecondary: func,
   renameGoal: func,
+  completeStep: func,
   assignStep: func,
   renameStep: func,
   removeStep: func,
@@ -428,6 +430,8 @@ export default connect(mapStateToProps, {
   archive: goals.archive,
   contextMenu: a.main.contextMenu,
   addStep: steps.add,
+  completeStep: goals.completeStep,
+  goalStart: goals.start,
   renameGoal: goals.rename,
   removeStep: steps.remove,
   renameStep: steps.rename,

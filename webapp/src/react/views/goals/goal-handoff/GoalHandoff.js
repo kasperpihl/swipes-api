@@ -33,7 +33,7 @@ class GoalHandoff extends PureComponent {
 
   renderHeader() {
     const { handoff, goal } = this.props;
-    const title = msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
+    const title = 'hi'; // msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
 
     return (
       <div className="goal-handoff__header">
@@ -78,7 +78,7 @@ class GoalHandoff extends PureComponent {
   }
   renderFooter() {
     const { handoff, goal, loadingState } = this.props;
-    const title = msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
+    const title = 'hi'; // msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
 
     return (
       <div className="handoff-footer">

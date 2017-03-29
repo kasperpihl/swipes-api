@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import { list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { setupCachedCallback, setupDelegate, getParentByClass } from 'swipes-core-js/classes/utils';
+import {
+  setupCachedCallback,
+  setupDelegate,
+  getParentByClass,
+  bindAll,
+} from 'swipes-core-js/classes/utils';
 import StepTooltip from './StepTooltip';
 
 import './styles/step-list.scss';
@@ -13,12 +18,11 @@ class HOCStepList extends PureComponent {
     super(props);
     this.state = {
       hoverIndex: -1,
-      addStepValue: ''
+      addStepValue: '',
+      addFocus: false,
     };
     this.onEnter = setupCachedCallback(this.onEnter, this);
-    this.onLeave = this.onLeave.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.addStep = this.addStep.bind(this);
+    bindAll(this, ['onLeave', 'onChange', 'addStep', 'onBlur', 'onFocus']);
     this.callDelegate = setupDelegate(props.delegate);
     this.onCheck = setupCachedCallback(this.callDelegate.bind(null, 'onStepCheck'));
     this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onStepClick'));
@@ -28,6 +32,12 @@ class HOCStepList extends PureComponent {
   componentWillUnmount() {
     const { tooltip } = this.props;
     tooltip(null);
+  }
+  onFocus() {
+    this.setState({ addFocus: true });
+  }
+  onBlur() {
+    this.setState({ addFocus: false });
   }
   onEnter(i, tooltipText, e) {
     const target = getParentByClass(e.target, 'step-list-item__indicator');
@@ -68,6 +78,14 @@ class HOCStepList extends PureComponent {
 
     this.setState({ addStepValue: value });
   }
+  getPlaceholder() {
+    let placeholder = 'What is the next step? Add it here...';
+    const { steps } = this.props;
+    if (!steps.size) {
+      placeholder = 'What is the first step? Enter it here...';
+    }
+    return placeholder;
+  }
   addStep(e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {
       this.callDelegate('onAddStep', e.target.value);
@@ -75,7 +93,7 @@ class HOCStepList extends PureComponent {
     }
   }
   renderStep(step, i) {
-    const { completed, delegate, steps, noActive } = this.props;
+    const { completed, delegate, noActive } = this.props;
     const completedI = completed - 1;
     const currentStepIndex = completed;
     const { hoverIndex } = this.state;
@@ -160,6 +178,7 @@ class HOCStepList extends PureComponent {
   }
   renderAddStep() {
     const { addLoading, editable } = this.props;
+    const { addFocus, addStepValue } = this.state;
 
     if (!editable) {
       return undefined;
@@ -170,23 +189,29 @@ class HOCStepList extends PureComponent {
     if (addLoading && addLoading.loading) {
       addClass += ' add-step--loading';
     }
+    if (addFocus || addStepValue.length) {
+      addClass += ' add-step--focused';
+    }
+    const placeholder = this.getPlaceholder();
 
     return (
       <div className={addClass}>
         <input
           ref="addStepInput"
           type="text"
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
           className="add-step__input"
           value={this.state.addStepValue}
           onChange={this.onChange}
           onKeyDown={this.addStep}
-          placeholder="Add new step"
+          placeholder={placeholder}
         />
         <div className="add-step__indicator">
-          <div className="add-step__loader"></div>
+          <div className="add-step__loader" />
         </div>
       </div>
-    )
+    );
   }
   render() {
     const { steps } = this.props;

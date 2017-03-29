@@ -109,12 +109,19 @@
     &__indicator {
       @include size(30px);
       @include flexContainer('row', center, center);
-      border: 2px solid $deepBlue-20;
+      border: 5px solid $deepBlue-20;
       border-radius: 50%;
       color: rgba($deepBlue-100, 0);
       transition: .3s ease;
       margin-right: 18px;
+      transform: scale(.4);
       order: 1;
+    }
+    &--focused {
+      .add-step__indicator {
+        transform: scale(1.0);
+        border: 2px solid $deepBlue-20;
+      }
     }
 
     &__loader {

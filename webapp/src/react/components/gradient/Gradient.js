@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import gradient from 'swipes-core-js/classes/gradient';
 
-class Gradient extends Component {
+class Gradient extends PureComponent {
   constructor(props) {
     super(props);
     const gradientPos = gradient.getGradientPos();

@@ -91,11 +91,13 @@ class HOCNotify extends PureComponent {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
-
+  willOpenPreview() {
+    const { notify } = this.state;
+    const { saveState } = this.props;
+    saveState({ notify });
+  }
   updateHandoff(notify) {
     this.setState({ notify });
-    // const { saveState } = this.props;
-    // saveState({ notify });
   }
   clickedAssign(index, e) {
     this.onChangeClick('assignees', e);
@@ -121,6 +123,7 @@ const { func, string, object } = PropTypes;
 HOCNotify.propTypes = {
   navPop: func,
   assignees: list,
+  saveState: func,
   savedState: object,
   message: string,
   goalNotify: func,

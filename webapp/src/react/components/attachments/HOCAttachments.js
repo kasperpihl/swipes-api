@@ -33,7 +33,7 @@ class HOCAttachments extends PureComponent {
     clearTimeout(this._timer);
     this._unmounted = true;
   }
-  onPreview(id) {
+  onPreview(id, e) {
     const {
       previewLink,
       attachments,
@@ -41,6 +41,7 @@ class HOCAttachments extends PureComponent {
     const selection = window.getSelection();
 
     if (selection.toString().length === 0) {
+      this.callDelegate('willOpenPreview', attachments.get(id), e);
       previewLink(this.context.target, attachments.get(id));
     }
   }

@@ -101,10 +101,13 @@ class GoalOverview extends PureComponent {
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getTotalNumberOfSteps();
-
+    let title = `Steps ${numberOfCompleted}/${totalSteps}`;
+    if (!totalSteps) {
+      title = 'Add steps';
+    }
     return (
       <div className="goal-overview__column goal-overview__column--left">
-        <div className="goal-overview__progress">Steps {numberOfCompleted}/{totalSteps}</div>
+        <div className="goal-overview__progress">{title}</div>
         <HOCStepList
           steps={helper.getOrderedSteps().map((s) => {
             const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;

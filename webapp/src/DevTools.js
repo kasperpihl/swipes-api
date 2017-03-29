@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 /* global Perf*/
 
 window.Perf = require('react-addons-perf');
 // Exported from redux-devtools
 
-class DevTools extends Component {
+class DevTools extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { recording: false };

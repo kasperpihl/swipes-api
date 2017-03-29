@@ -42,19 +42,13 @@ export const rename = (goalId, title) => a.api.request('goals.rename', {
   title,
 });
 
-export const start = (gId, handoff) => (d, getState) => {
-  let assignees = handoff.get('assignees');
-  assignees = assignees && assignees.toJS();
+export const start = (gId) => (d, getState) => {
   const goal = getState().getIn(['goals', gId]);
   const helper = new GoalsUtil(goal);
-  const currentStepId = helper.getCurrentStepId();
+  const step = helper.getStepByIndex(0);
   return d(a.api.request('goals.start', {
     goal_id: gId,
-    flags: handoff.get('flags'),
-    message: handoff.get('message'),
-    current_step_id: currentStepId || null,
-    next_step_id: handoff.get('target'),
-    assignees,
+    next_step_id: step.get('id'),
   }));
 };
 
@@ -78,21 +72,15 @@ export const notify = (gId, handoff) => (d, getState) => {
   }));
 };
 
-export const completeStep = (gId, handoff) => (d, getState) => {
+export const completeStep = (gId, nextStepId) => (d, getState) => {
   const goal = getState().getIn(['goals', gId]);
   const helper = new GoalsUtil(goal);
   const currentStepId = helper.getCurrentStepId();
-  const target = handoff.get('target') === '_complete' ? null : handoff.get('target');
 
-  let assignees = handoff.get('assignees');
-  assignees = assignees && assignees.toJS();
   return d(a.api.request('goals.completeStep', {
     goal_id: gId,
-    flags: handoff.get('flags'),
-    next_step_id: target,
+    next_step_id: nextStepId,
     current_step_id: currentStepId,
-    message: handoff.get('message'),
-    assignees,
   }));
 };
 
