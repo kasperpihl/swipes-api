@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: colors.deepBlue20,
+    marginRight: -9,
   },
   profileImage: {
     width: 30,

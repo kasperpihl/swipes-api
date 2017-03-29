@@ -6,6 +6,7 @@ import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import { viewSize } from '../../utils/globalStyles';
 import Header from '../../components/header/Header';
 import HOCHistory from './HOCHistory';
+import HOCStepList from './HOCStepList';
 
 
 class HOCGoalOverview extends PureComponent {
@@ -65,7 +66,15 @@ class HOCGoalOverview extends PureComponent {
     )
   }
   renderStepList() {
+    const helper = this.getHelper();
 
+    return (
+      <HOCStepList
+        steps={helper.getOrderedSteps()}
+        completed={helper.getNumberOfCompletedSteps()}
+        delegate={this}
+      />
+    )
   }
   renderAttachments() {
 
@@ -125,7 +134,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonShown: {
-    bottom: 39,
+    bottom: 30,
   },
   buttonHidden: {
     bottom: -60,

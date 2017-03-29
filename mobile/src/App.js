@@ -76,7 +76,7 @@ class App extends PureComponent {
     }
 
     return (
-      <Swiper style={styles.app} loop={false} showsPagination={false} index={1}>
+      <Swiper style={styles.app} loop={false} showsPagination={false} index={1} bounces={true}>
         <ViewController scene={profile} navId="Profile"/>
         <ViewController scene={dashboard} navId="Dashboard"/>
         <ViewController scene={goalList} navId="Goallist"/>

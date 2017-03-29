@@ -140,20 +140,6 @@ class HOCHistory extends PureComponent {
     }
     return m;
   }
-  /*renderEvent(e, i) {
-    const { me } = this.props;
-    if (e.get('type') === 'notified') {
-      if (e.get('assignees').indexOf(me.get('id')) === -1 && e.get('done_by') !== me.get('id')) {
-        return undefined;
-      }
-    }
-    return (
-      <NotificationWrapper
-        delegate={this}
-        notification={this.getNotificationForEvent(e)}
-      />
-    );
-  }*/
   renderEvent(event, me, ctx) {
     if (event.get('type') === 'notified') {
       if (event.get('assignees').indexOf(me.get('id')) === -1 && event.get('done_by') !== me.get('id')) {
