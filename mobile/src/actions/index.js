@@ -1,1 +1,5 @@
-export const request = () => (d, getState) => Promise.resolve(d({ type: 'HELLO' }));
+import * as navigation from './navigation';
+
+export {
+  navigation,
+};

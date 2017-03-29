@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { request } from './actions';
+import * as a from './actions';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
 import Swiper from 'react-native-swiper';
 import LinearGradient from 'react-native-linear-gradient';
@@ -13,26 +13,27 @@ import Icon from './components/icons/Icon';
 import { colors, viewSize } from './utils/globalStyles';
 
 const profile = {
-  key: '1',
+  key: '0',
   title: 'Profile',
   component: HOCProfile,
 }
 
 const dashboard = {
-  key: '2',
+  key: '1',
   title: 'dashboard',
   component: HOCDashboard,
 }
 
 const goalList = {
-  key: '3',
+  key: '2',
   title: 'goalList',
   component: HOCGoalList,
 }
 
 class App extends PureComponent {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.state = { initialIndex: props.index };
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -76,7 +77,10 @@ class App extends PureComponent {
     }
 
     return (
-      <Swiper style={styles.app} loop={false} showsPagination={false} index={1} bounces={true}>
+      <Swiper style={styles.app} loop={false} renderPagination={(index) => {
+        const { navChange } = this.props;
+        setTimeout(() => navChange(index), 1);
+      }} index={this.state.initialIndex} bounces={true}>
         <ViewController scene={profile} navId="Profile"/>
         <ViewController scene={dashboard} navId="Dashboard"/>
         <ViewController scene={goalList} navId="Goallist"/>
@@ -102,12 +106,15 @@ class App extends PureComponent {
 function mapStateToProps(state) {
   return {
     token: state.getIn(['connection', 'token']),
+    index: state.getIn(['navigation', 'index']),
     lastConnect: state.getIn(['connection', 'lastConnect']),
     isHydrated: state.getIn(['main', 'isHydrated']),
   };
 }
 
-export default connect(mapStateToProps, {})(App);
+export default connect(mapStateToProps, {
+  navChange: a.navigation.change,
+})(App);
 
 const styles = StyleSheet.create({
   app: {

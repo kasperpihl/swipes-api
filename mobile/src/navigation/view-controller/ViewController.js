@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PureComponent } from 'react'
 import { View, NavigationExperimental, StyleSheet } from 'react-native';
 import Navigator from './Navigator';
 
@@ -7,7 +7,7 @@ const {
   StateUtils: NavigationStateUtils
 } = NavigationExperimental;
 
-class StackNavigator extends Component {
+class StackNavigator extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -48,6 +48,7 @@ class StackNavigator extends Component {
     }
   }
   render() {
+    console.log(this.props)
     return (
       <Navigator
         navigationState={this.state.navigationState}
