@@ -12,12 +12,7 @@ export default function filterGoals(goals, type, userId, milestoneId, matching) 
         return false;
       }
     }
-    if (type === 'unstarted' && (helper.getIsStarted() || helper.getIsCompleted())) {
-      return false;
-    }
-    if (type !== 'unstarted' && !helper.getIsStarted()) {
-      return false;
-    }
+
     if (type === 'completed' && !helper.getIsCompleted()) {
       return false;
     }
@@ -43,7 +38,7 @@ export default function filterGoals(goals, type, userId, milestoneId, matching) 
               return false;
             }
           } else if (userId === 'none') {
-            if (currentAssignees.size) {
+            if (currentAssignees.size && helper.getTotalNumberOfSteps()) {
               return false;
             }
           } else if (!isCurrentlyAssigned) {

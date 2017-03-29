@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 
-import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';
@@ -19,48 +19,33 @@ class GoalOverview extends PureComponent {
     this.state = {};
     this.callDelegate = setupDelegate(props.delegate);
 
-    this.onNotify = setupCachedCallback(this.callDelegate.bind(null, 'onNotify'));
     this.onAskFor = this.callDelegate.bind(null, 'onAskFor');
     this.onGive = this.callDelegate.bind(null, 'onGive');
     this.onContext = this.callDelegate.bind(null, 'onContext');
-    this.onStart = this.callDelegate.bind(null, 'onStart');
+    this.onBarClick = this.callDelegate.bind(null, 'onBarClick');
   }
   getHelper() {
     const { goal, myId } = this.props;
     return new GoalsUtil(goal, myId);
   }
   renderHeader() {
-    const helper = this.getHelper();
     const { goal, loadingState, delegate } = this.props;
-    let subtitle;
-    let buttons = [
-      <Button
-        key="askfor"
-        text="Ask for..."
-        onClick={this.onAskFor}
-      />,
-      <Button
-        key="give"
-        text="Notify"
-        onClick={this.onGive}
-      />,
-    ];
-    if (!helper.getIsStarted()) {
-      buttons = [];
-      subtitle = 'Unstarted goal';
-      if (!helper.getTotalNumberOfSteps()) {
-        subtitle = 'You need to add steps before starting this goal';
-      }
-    }
+
     const title = loadingState.get('title') && loadingState.get('title').loadingLabel;
     return (
       <div className="add-goal__header">
         <HOCHeaderTitle
           title={title || goal.get('title')}
-          subtitle={subtitle}
           delegate={delegate}
         >
-          {buttons}
+          <Button
+            text="Ask for..."
+            onClick={this.onAskFor}
+          />
+          <Button
+            text="Notify"
+            onClick={this.onGive}
+          />
           <Button
             icon="ThreeDots"
             onClick={this.onContext}
@@ -117,7 +102,6 @@ class GoalOverview extends PureComponent {
           editable
           addLoading={loadingState.get('add')}
           completed={helper.getNumberOfCompletedSteps()}
-          noActive={!helper.getIsStarted()}
           delegate={delegate}
         />
       </div>
@@ -137,31 +121,23 @@ class GoalOverview extends PureComponent {
   renderFooter() {
     const helper = this.getHelper();
     let buttonLabel = 'Start goal';
-    let statusLabel;
-    if (!helper.getTotalNumberOfSteps()) {
-      statusLabel = 'Add steps before you start the goal';
+
+    const currentStep = helper.getCurrentStep();
+    if (currentStep) {
+      buttonLabel = `Complete "${currentStep.get('title')}"`;
     }
-    if (helper.getIsStarted()) {
-      const currentStep = helper.getCurrentStep();
-      if (currentStep) {
-        buttonLabel = `Complete "${currentStep.get('title')}"`;
-      }
-      const nextStep = helper.getNextStep();
-      if (!nextStep) {
-        buttonLabel = 'Complete goal';
-      }
+    const nextStep = helper.getNextStep();
+    if (!nextStep) {
+      buttonLabel = 'Complete goal';
     }
     return (
       <div className="handoff-bar">
-        <div className="handoff-bar__label">
-          {statusLabel}
-        </div>
+        <div className="handoff-bar__label" />
         <div className="handoff-bar__actions">
           <Button
             text={buttonLabel}
             primary
-            disabled={!helper.getTotalNumberOfSteps()}
-            onClick={this.onStart}
+            onClick={this.onBarClick}
           />
         </div>
       </div>
@@ -176,7 +152,7 @@ class GoalOverview extends PureComponent {
 
     return (
       <SWView header={this.renderHeader()} footer={this.renderFooter()}>
-        <div className="goal-overview">
+        <div className="goal-overview" data-id={goal.get('id')}>
           {this.renderLeft()}
           {this.renderRight()}
         </div>

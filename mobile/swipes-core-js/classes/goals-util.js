@@ -46,9 +46,6 @@ export default class GoalsUtil {
     return this.goal.getIn(['steps', id]);
   }
 
-  getIsStarted() {
-    return this.goal.getIn(['status', 'started']);
-  }
   getIsCompleted() {
     return this.goal.getIn(['status', 'completed']);
   }

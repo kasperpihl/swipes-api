@@ -45,9 +45,10 @@ class HOCGoalList extends PureComponent {
           goalType: 'upcoming',
         },
       }, {
-        title: 'Unstarted',
+        title: 'Unassigned',
         filter: {
-          goalType: 'unstarted',
+          goalType: 'current',
+          user: 'none',
         },
       }, {
         title: 'Filter',

@@ -13,8 +13,8 @@ import Dashboard from './Dashboard';
 const filters = [
   n => n.get('request'),
   n => n.get('receiver') && n.get('important'),
-  n => n.get('receiver') && !n.get('important'),
   n => n.get('sender'),
+  n => n.get('receiver') && !n.get('important'),
 ];
 
 class HOCDashboard extends PureComponent {
@@ -22,7 +22,7 @@ class HOCDashboard extends PureComponent {
     super(props);
 
     this.state = {
-      tabs: ['Requests', 'Important', 'Notifications', 'Sent'],
+      tabs: ['Requests', 'Notifications', 'Sent', 'Activity'],
       tabIndex: 0,
       notifications: this.getFilteredNotifications(0),
     };

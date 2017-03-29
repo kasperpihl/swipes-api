@@ -29,6 +29,7 @@ export default class Goals {
       }
       return 'Goal completed';
     }
+
     const doneBy = this.parent.users.getName(lastHandoff.get('done_by'));
 
     const lastUpdate = moment(lastHandoff.get('done_at') || helper.getLastUpdate());
@@ -36,7 +37,7 @@ export default class Goals {
     if (filter) {
       type = filter.get('goalType');
     }
-    if (!helper.getIsStarted()) {
+    if (!helper.getTotalNumberOfSteps()) {
       status = `Created by ${doneBy} ${lastUpdate.fromNow()}`;
     } else if (helper.getIsCompleted()) {
       status = `Completed by ${doneBy} ${lastUpdate.fromNow()}`;

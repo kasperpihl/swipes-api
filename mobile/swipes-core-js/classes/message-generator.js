@@ -19,9 +19,7 @@ export default class MessageGenerator {
     const helper = new GoalsUtil(goal);
     let label = 'Complete Step';
 
-    if (!helper.getIsStarted() && handoff.get('target') !== '_complete') {
-      label = 'Start Goal';
-    } else if (handoff.get('target') === '_complete') {
+    if (handoff.get('target') === '_complete') {
       label = 'Complete Goal';
     } else if (handoff.get('target') === '_notify') {
       label = 'Send Notification';
@@ -132,7 +130,7 @@ export default class MessageGenerator {
     if (filter) {
       type = filter.get('goalType');
     }
-    if (!helper.getIsStarted()) {
+    if (!helper.getTotalNumberOfSteps()) {
       status = `Created by ${doneBy} ${lastUpdate.fromNow()}`;
     } else if (helper.getIsCompleted()) {
       status = `Completed by ${doneBy} ${lastUpdate.fromNow()}`;

@@ -2,7 +2,6 @@ import GoalsUtil from './goals-util';
 
 export default function filterGoal(goal, filter) {
   const helper = new GoalsUtil(goal);
-  const isStarted = helper.getIsStarted();
   const isCompleted = helper.getIsCompleted();
 
   const milestoneId = filter.get('milestoneId');
@@ -24,12 +23,6 @@ export default function filterGoal(goal, filter) {
     return false;
   }
   if (goalType && goalType !== 'completed' && isCompleted){
-    return false;
-  }
-  if (goalType === 'unstarted' && isStarted) {
-    return false;
-  }
-  if (goalType && goalType !== 'unstarted' && !isStarted) {
     return false;
   }
 
@@ -75,7 +68,7 @@ export default function filterGoal(goal, filter) {
           return false;
         }
       } else if (userId === 'none') {
-        if (currentAssignees.size) {
+        if (currentAssignees.size && helper.getTotalNumberOfSteps()) {
           return false;
         }
       } else if (!isCurrentlyAssigned) {

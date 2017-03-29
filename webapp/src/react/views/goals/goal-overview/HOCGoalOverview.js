@@ -69,7 +69,7 @@ class HOCGoalOverview extends PureComponent {
       remove.disabled = true;
       remove.subtitle = 'Cannot remove current step';
     }
-    if (helper.getIsStarted() && helper.getTotalNumberOfSteps() === 1) {
+    if (helper.getTotalNumberOfSteps() === 1) {
       remove.disabled = true;
       remove.subtitle = 'Cannot remove the last step';
     }
@@ -144,28 +144,6 @@ class HOCGoalOverview extends PureComponent {
       console.log('completed!!!!');
     });
     e.stopPropagation();
-  }
-  onStart(e) {
-    const { confirm, goalStart, goal } = this.props;
-    const helper = this.getHelper();
-    if (!helper.getIsStarted() && !helper.getTotalNumberOfSteps()) {
-      const options = this.getOptionsForE(e);
-      confirm(Object.assign({}, options, {
-        title: 'Add steps first',
-        actions: [{ text: 'Got it' }],
-        message: 'Before starting a goal, you have to add steps to it.',
-      }));
-      return;
-    }
-    this.setLoading('button');
-    goalStart(goal.get('id')).then((res) => {
-      if (res && res.ok) {
-        this.clearLoading('button');
-        window.analytics.sendEvent('Start goal');
-      } else {
-        this.clearLoading('button', '!Something went wrong');
-      }
-    });
   }
 
   onHandoff(_target, title, assignees) {

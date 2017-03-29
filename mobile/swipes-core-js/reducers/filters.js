@@ -50,8 +50,8 @@ export default function filtersReducer(state = initialState, action) {
       return action.payload.filters;
     }
     case REHYDRATE: {
-      if(action.payload && action.payload.filters){
-        //return action.payload.filters.map((f) => f.set('goals', f.get('goals').toOrderedSet()));
+      if (action.payload && action.payload.filters) {
+        // return action.payload.filters.map((f) => f.set('goals', f.get('goals').toOrderedSet()));
       }
       return state;
     }

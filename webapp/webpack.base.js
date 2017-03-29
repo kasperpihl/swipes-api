@@ -71,7 +71,12 @@ module.exports = {
       },
       {
         test: /\.svg(\?.*)?$/,
-        use: [ 'babel-loader', 'svg-react-loader' ]
+        use: [ 'babel-loader', {
+          loader: 'react-svg-loader',
+          options: {
+            jsx: true
+          }
+        } ]
       },
       {
         test: /\.woff2$/,
