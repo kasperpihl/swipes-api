@@ -5,7 +5,7 @@
             <stop stop-color="#2641F6" offset="100%"></stop>
         </linearGradient>
     </defs>
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g stroke="transparent" stroke-width="1" fill="transparent" fill-rule="evenodd">
         <g transform="translate(-380.000000, -380.000000)">
             <g transform="translate(380.000000, 380.000000)">
                 <path d="M240,120 C240,186.274219 186.274219,240 120,240 C53.7257813,240 0,186.274219 0,120 C0,53.7257813 53.7257813,0 120,0 C186.274219,0 240,53.7257813 240,120" fill="#FFFFFF"></path>

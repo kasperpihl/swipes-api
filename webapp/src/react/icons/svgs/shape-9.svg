@@ -4,7 +4,7 @@
     <title>Group 6</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Store" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Store" stroke="transparent" stroke-width="1" fill="transparent" fill-rule="evenodd">
         <g id="Group-6" fill="#000C2F">
             <path d="M45,30 C36.716,30 30,36.716 30,45 C30,53.284 36.716,60 45,60 C53.284,60 60,53.284 60,45 C60,36.716 53.284,30 45,30 L45,30 Z M45,33 C51.617,33 57,38.383 57,45 C57,51.617 51.617,57 45,57 C38.383,57 33,51.617 33,45 C33,38.383 38.383,33 45,33 L45,33 Z" id="Fill-1"></path>
             <path d="M45,15 C28.432,15 15,28.432 15,45 C15,61.568 28.432,75 45,75 C61.568,75 75,61.568 75,45 C75,28.432 61.568,15 45,15 M45,18 C59.888,18 72,30.112 72,45 C72,59.888 59.888,72 45,72 C30.112,72 18,59.888 18,45 C18,30.112 30.112,18 45,18" id="Fill-3"></path>

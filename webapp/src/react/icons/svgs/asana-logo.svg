@@ -10,7 +10,7 @@
   </defs>
   <title>Asset 138</title>
   <g>
-    <rect width="24" height="24" fill="none"/>
+    <rect width="24" height="24" fill="transparent"/>
     <g>
       <circle cx="7.42857" cy="16" r="3.42857" transform="translate(-9.13793 9.93908) rotate(-45)" fill="url(#a)"/>
       <circle cx="16.57143" cy="16" r="3.42857" transform="translate(-6.46005 16.40406) rotate(-45)" fill="url(#b)"/>
