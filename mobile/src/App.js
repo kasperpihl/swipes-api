@@ -16,19 +16,19 @@ const profile = {
   key: '0',
   title: 'Profile',
   component: HOCProfile,
-}
+};
 
 const dashboard = {
   key: '1',
   title: 'dashboard',
   component: HOCDashboard,
-}
+};
 
 const goalList = {
   key: '2',
   title: 'goalList',
   component: HOCGoalList,
-}
+};
 
 class App extends PureComponent {
   constructor(props) {
@@ -45,7 +45,7 @@ class App extends PureComponent {
   renderLoader() {
     const { isHydrated, lastConnect } = this.props;
 
-    if(isHydrated && lastConnect){
+    if (isHydrated && lastConnect) {
       return undefined;
     }
 
@@ -56,14 +56,14 @@ class App extends PureComponent {
         colors={[colors.bgGradientFrom, colors.bgGradientTo]}
         style={styles.gradient}
       >
-        <Icon name="SwipesLogoText" fill={colors.bgColor} width="90"/>
+        <Icon name="SwipesLogoText" fill={colors.bgColor} width="90" />
       </LinearGradient>
-    )
+    );
   }
-  renderLogin(){
+  renderLogin() {
     const { token, isHydrated } = this.props;
 
-    if(token || !isHydrated){
+    if (token || !isHydrated) {
       return undefined;
     }
 
@@ -72,18 +72,20 @@ class App extends PureComponent {
   renderApp() {
     const { token, isHydrated, lastConnect } = this.props;
 
-    if(!token || !isHydrated || !lastConnect){
+    if (!token || !isHydrated || !lastConnect) {
       return undefined;
     }
 
     return (
-      <Swiper style={styles.app} loop={false} renderPagination={(index) => {
-        const { navChange } = this.props;
-        setTimeout(() => navChange(index), 1);
-      }} index={this.state.initialIndex} bounces={true}>
-        <ViewController scene={profile} navId="Profile"/>
-        <ViewController scene={dashboard} navId="Dashboard"/>
-        <ViewController scene={goalList} navId="Goallist"/>
+      <Swiper
+        style={styles.app} loop={false} renderPagination={(index) => {
+          const { navChange } = this.props;
+          setTimeout(() => navChange(index), 1);
+        }} index={this.state.initialIndex} bounces
+      >
+        <ViewController scene={profile} navId="Profile" />
+        <ViewController scene={dashboard} navId="Dashboard" />
+        <ViewController scene={goalList} navId="Goallist" />
       </Swiper>
     );
   }
@@ -129,6 +131,6 @@ const styles = StyleSheet.create({
     width: viewSize.width,
     height: viewSize.height + 24,
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });

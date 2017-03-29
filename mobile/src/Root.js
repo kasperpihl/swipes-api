@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { Provider } from 'react-redux';
-import { Platform, View, Text } from 'react-native';
+import { Platform } from 'react-native';
 
 import App from './App';
 import configureStore from './store/configureStore';
-import { init, actions } from '../swipes-core-js';
+import { init } from '../swipes-core-js';
 
 const store = configureStore();
 

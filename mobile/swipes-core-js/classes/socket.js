@@ -14,7 +14,7 @@ export default class Socket {
     const state = this.store.getState();
 
     this.token = state.getIn(['connection', 'token']);
-    if (this.token && !this.socket && state.getIn(['connection', 'status']) !== 'connecting') {
+    if (this.token && !this.socket && !this.isConnecting) {
       if (!this.timer) {
         this.timedConnect(this.timerForAttempt());
       }
@@ -53,14 +53,13 @@ export default class Socket {
 
     const ws = new WebSocket(`${wsUrl}?token=${this.token}`);
     this.changeStatus('connecting');
-
     ws.onopen = () => {
-
       this.socket = true;
       this._pingTimer = setInterval(() => {
         this.sendPing(ws);
       }, 30000);
       this.store.dispatch(a.api.request('rtm.start')).then((res) => {
+
         this.isConnecting = false;
         if (res && res.ok) {
           this.reconnect_attempts = 0;
