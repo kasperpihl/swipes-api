@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Provider } from 'react-redux';
-import { Platform } from 'react-native';
+import { Platform, View, Text } from 'react-native';
 
 import App from './App';
 import configureStore from './store/configureStore';
@@ -9,11 +9,9 @@ import { init, actions } from '../swipes-core-js';
 const store = configureStore();
 
 window.__API_URL__ = 'https://staging.swipesapp.com';
-window.getHeaders = () => {
-  return {
-    'sw-platform': Platform.OS,
-  }
-}
+window.getHeaders = () => ({
+  'sw-platform': Platform.OS,
+});
 
 init(store);
 
