@@ -10,6 +10,7 @@ import {
   bindAll,
 } from 'swipes-core-js/classes/utils';
 import StepTooltip from './StepTooltip';
+import Icon from 'Icon';
 
 import './styles/step-list.scss';
 
@@ -159,6 +160,7 @@ class HOCStepList extends PureComponent {
         >
           <div className="indicator">
             <div className="indicator__number">{i + 1}</div>
+            <div className="indicator__icon"><Icon icon="ArrowRightLine" className="indicator__svg" /></div>
           </div>
         </div>
         <div className="step-list-item__title">
