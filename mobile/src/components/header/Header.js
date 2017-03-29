@@ -6,7 +6,7 @@ import { colors } from '../../utils/globalStyles';
 
 class Header extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {};
 
     this.callDelegate = setupDelegate(props.delegate);
@@ -17,14 +17,14 @@ class Header extends Component {
     if (tabs) {
       tabs.forEach((t, i) => {
         if (i === currentTab) {
-          this.setState({page: i})
+          this.setState({ page: i });
         }
-      })
+      });
     }
   }
   componentWillReceiveProps(nextProps) {
     const { currentTab } = this.props;
-    this.setState({ page: nextProps.currentTab })
+    this.setState({ page: nextProps.currentTab });
   }
   renderTabs() {
     const { tabs } = this.props;
@@ -33,26 +33,25 @@ class Header extends Component {
       return undefined;
     }
 
-    const renderTabs = tabs.map((t, i) => {
-      return (
-        <Text name={i} key={i} style={styles.tabTitle}>{t}</Text>
-      )
-    })
+    const renderTabs = tabs.map((t, i) => (
+      <Text name={i} key={i} style={styles.tabTitle}>{t}</Text>
+      ));
 
     return (
       <Tabs
         selected={this.state.page}
         style={{ backgroundColor: 'white', height: 50 }}
         selectedStyle={{ color: colors.deepBlue100 }}
-        onSelect={(el) => this.callDelegate('onChangeTab', el.props.name)}>
+        onSelect={el => this.callDelegate('onChangeTab', el.props.name)}
+      >
         {renderTabs}
       </Tabs>
-    )
+    );
   }
   render() {
-    const { tabs } = this.props
+    const { tabs } = this.props;
 
-    let containerStyles = tabs ? styles.containerWithtabs : styles.container;
+    const containerStyles = tabs ? styles.containerWithtabs : styles.container;
 
     return (
       <View style={containerStyles}>
@@ -67,6 +66,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 30,
     marginHorizontal: 15,
+    paddingTop: 54,
     borderBottomWidth: 1,
     borderBottomColor: colors.deepBlue20,
     backgroundColor: colors.bgColor,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.deepBlue20,
     backgroundColor: colors.bgColor,
-    paddingBottom: 60
+    paddingBottom: 60,
   },
   title: {
     color: colors.deepBlue100,
@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
   },
   tabTitle: {
     color: colors.deepBlue30,
-    fontWeight: '500'
-  }
+    fontWeight: '500',
+  },
 });
 
 export default Header;

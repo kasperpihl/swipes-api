@@ -1,33 +1,53 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Linking } from 'react-native';
+import { View, Text, StyleSheet, Linking, Dimensions } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { fromJS, Map } from 'immutable';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils'
+import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import { timeAgo } from '../../../swipes-core-js/classes/time-utils';
 import NotificationItem from '../dashboard/NotificationItem';
 import { viewSize, colors } from '../../utils/globalStyles';
 
+const { width: ww, height: wh } = Dimensions.get('window');
+
 class HOCHistory extends PureComponent {
   constructor(props, context) {
     super(props, context);
-    this.state = {};
+    this.state = {
+      contentHeight: 0,
+      containerheight: 0,
+    };
     this.lastY = 0;
     this.direction = 'up';
     this.callDelegate = setupDelegate(props.delegate);
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleContentSizeChange = this.handleContentSizeChange.bind(this);
+    this.getContainerHeight = this.getContainerHeight.bind(this);
+  }
+  componentWillUnmount() {
+    this.callDelegate('onDirectionChange', 'up');
+  }
+  getContainerHeight(containerheight) {
+    this.setState({ containerheight: containerheight.height });
+  }
+  handleContentSizeChange(cw, ch) {
+    this.setState({ contentHeight: ch });
   }
   handleScroll(event) {
-    const currentOffset = Math.max(0, event.nativeEvent.contentOffset.y);
+    let currentOffset = Math.max(0, event.nativeEvent.contentOffset.y);
+    currentOffset = Math.min(this.state.contentHeight - this.state.containerheight, currentOffset);
     let direction = 'up';
-    if (currentOffset > this.lastY) {
+
+    if (currentOffset >= this.lastY && currentOffset !== 0) {
       direction = 'down';
     }
+
     if (direction !== this.direction) {
       this.callDelegate('onDirectionChange', direction);
       this.direction = direction;
     }
+
     this.lastY = currentOffset;
   }
   getHelper() {
@@ -50,9 +70,6 @@ class HOCHistory extends PureComponent {
     return goal.getIn(['steps', stepId, 'title']);
   }
   openLink(att) {
-
-    console.log('wtf')
-
     const link = att.get('link') || att;
     const service = link.get('service') || link;
     if (att && service.get('type') === 'url') {
@@ -147,7 +164,7 @@ class HOCHistory extends PureComponent {
       }
     }
 
-    return <NotificationItem notification={event} delegate={ctx}/>
+    return <NotificationItem notification={event} delegate={ctx} />;
   }
   render() {
     const { goal, me } = this.props;
@@ -155,11 +172,15 @@ class HOCHistory extends PureComponent {
     const events = history.map((e, i) => this.getNotificationForEvent(e)).reverse();
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={e => this.getContainerHeight(e.nativeEvent.layout)}>
         <ImmutableListView
+          ref="listView"
+          onContentSizeChange={(contentWidth, contentHeight) => this.handleContentSizeChange(contentWidth, contentHeight)}
           onScroll={this.handleScroll}
+          scrollEventThrottle={0}
+          removeClippedSubviews={false}
           immutableData={events}
-          renderRow={(event) => this.renderEvent(event, me, this)}
+          renderRow={event => this.renderEvent(event, me, this)}
         />
       </View>
     );
@@ -170,7 +191,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.bgColor,
-  }
+  },
 });
 
 function mapStateToProps(state) {

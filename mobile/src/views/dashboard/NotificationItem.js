@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, WebView  } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, WebView } from 'react-native';
 import { setupDelegate, setupCachedCallback, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import Icon from '../../components/icons/Icon';
 
-import { colors, viewSize } from '../../utils/globalStyles'
+import { colors, viewSize } from '../../utils/globalStyles';
 
 class NotificationItem extends Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class NotificationItem extends Component {
 
     return (
       <View style={iconStyles}>
-        <Icon name={n.get('icon')} width="24" height="24" fill="white"/>
+        <Icon name={n.get('icon')} width="24" height="24" fill="white" />
       </View>
     );
   }
@@ -57,7 +57,7 @@ class NotificationItem extends Component {
       const iconName = attachmentIconForService(att.getIn(['link', 'service']) || att);
 
       return (
-        <FeedbackButton key={'attachment-' + i} onPress={this.onAttachmentClick(att)}>
+        <FeedbackButton key={`attachment-${i}`} onPress={this.onAttachmentClick(att)}>
           <View style={styles.attachment}>
             <Icon
               name={iconName}
@@ -68,16 +68,16 @@ class NotificationItem extends Component {
             <Text style={styles.attachmentTitle} numberOfLines={1}>{att.get('title')}</Text>
           </View>
         </FeedbackButton>
-      )
-    })
+      );
+    });
 
     const attachmentStyles = n.get('icon') ? styles.attachments : styles.smallAttachments;
-    
+
     return (
       <View style={attachmentStyles}>
         {HTMLAttachments}
       </View>
-    )
+    );
   }
   renderTitle(title) {
     if (!title) {
@@ -113,14 +113,13 @@ class NotificationItem extends Component {
     return <Text style={styles.timestamp}>{n.get('timeago')}</Text>;
   }
   render() {
-
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
           {this.renderIcon()}
           {this.renderContent()}
           {this.renderTimestamp()}
-          </View>
+        </View>
         <View style={styles.bottomSection}>
           {this.renderAttachments()}
         </View>
@@ -136,7 +135,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     paddingVertical: 18,
     borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue5
+    borderBottomColor: colors.deepBlue5,
   },
   topSection: {
     flexDirection: 'row',
@@ -164,42 +163,42 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 12,
-    color: colors.deepBlue40
+    color: colors.deepBlue40,
   },
   title: {
     fontSize: 16.5,
     color: colors.deepBlue90,
-    marginTop: 3
+    marginTop: 3,
   },
   message: {
     flexWrap: 'wrap',
     fontSize: 13.5,
     marginTop: 15,
-    color: colors.deepBlue50
+    color: colors.deepBlue50,
   },
   timestamp: {
     fontSize: 12,
-    color: colors.deepBlue40
+    color: colors.deepBlue40,
   },
   attachments: {
     paddingTop: 15,
-    paddingLeft: 55
+    paddingLeft: 55,
   },
   smallAttachments: {
     paddingTop: 15,
-    paddingLeft: 15
+    paddingLeft: 15,
   },
   attachment: {
     flex: 1,
     flexDirection: 'row',
     height: 40,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   attachmentTitle: {
     paddingLeft: 9,
     color: colors.blue100,
     fontSize: 13,
-  }
+  },
 });
 
 export default NotificationItem;

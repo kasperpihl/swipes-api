@@ -7,14 +7,13 @@ import Header from '../../components/header/Header';
 
 class Dashboard extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
     };
   }
   renderHeader() {
-
-    return <Header title="Dashboard" />
+    return <Header title="Dashboard" />;
   }
   renderNotifications() {
     const {
@@ -33,13 +32,13 @@ class Dashboard extends Component {
 
     return (
       <ImmutableListView
-        immutableData={ notifications }
-        renderRow = {(rowData) => this.renderRow(rowData, delegate)}
+        immutableData={notifications}
+        renderRow={rowData => this.renderRow(rowData, delegate)}
       />
-    )
+    );
   }
   renderRow(rowData, delegate) {
-    return <NotificationItem notification={rowData} delegate={delegate}/>
+    return <NotificationItem notification={rowData} delegate={delegate} />;
   }
   render() {
     return (
@@ -55,7 +54,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.bgColor,
-    paddingBottom: 24
   },
   emptyState: {
     flex: 1,
@@ -65,14 +63,14 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 30,
     color: colors.deepBlue80,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   emptyStateMessage: {
     paddingHorizontal: 30,
     marginTop: 15,
     fontSize: 15,
-    color: colors.deepBlue30
-  }
+    color: colors.deepBlue30,
+  },
 });
 
 export default Dashboard;

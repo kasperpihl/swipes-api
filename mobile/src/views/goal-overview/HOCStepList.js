@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
-import HOCAssigning from '../../components/assignees/HOCAssigning'
+import HOCAssigning from '../../components/assignees/HOCAssigning';
 import { colors } from '../../utils/globalStyles';
 
 class HOCStepList extends Component {
@@ -20,7 +20,7 @@ class HOCStepList extends Component {
       indicatorStyles = styles.indicatorCurrent;
       indicatorLabelStyles = styles.indicatorLabelCurrent;
       titleStyles = styles.titleCurrent;
-    } else{
+    } else {
       indicatorStyles = styles.indicatorFuture;
       indicatorLabelStyles = styles.indicatorLabelFuture;
       titleStyles = styles.titleFuture;
@@ -38,7 +38,7 @@ class HOCStepList extends Component {
           <HOCAssigning assignees={step.get('assignees')} />
         </View>
       </View>
-    )
+    );
   }
   render() {
     const { steps, completed, delegate } = this.props;
@@ -57,7 +57,6 @@ class HOCStepList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 24
   },
   step: {
     flex: 1,
@@ -66,14 +65,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue5 
+    borderBottomColor: colors.deepBlue5,
   },
   indicator: {
     width: 33,
     height: 33,
     borderRadius: 50,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   indicatorCompleted: {
     backgroundColor: colors.greenColor,
@@ -81,16 +80,16 @@ const styles = StyleSheet.create({
   indicatorCurrent: {
     backgroundColor: 'white',
     borderWidth: 2,
-    borderColor: colors.deepBlue90
+    borderColor: colors.deepBlue90,
   },
   indicatorFuture: {
     backgroundColor: 'white',
     borderWidth: 2,
-    borderColor: colors.deepBlue30
+    borderColor: colors.deepBlue30,
   },
   indicatorLabel: {
     fontSize: 15,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   indicatorLabelCompleted: {
     color: 'white',
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     color: colors.deepBlue90,
   },
   indicatorLabelFuture: {
-    color: colors.deepBlue30
+    color: colors.deepBlue30,
   },
   title: {
     flex: 1,
@@ -109,14 +108,14 @@ const styles = StyleSheet.create({
     fontSize: 16.5,
   },
   titleCompleted: {
-    color: colors.deepBlue30
+    color: colors.deepBlue30,
   },
   titleCurrent: {
-    color: colors.deepBlue90
+    color: colors.deepBlue90,
   },
   titleFuture: {
-    color: colors.deepBlue30
-  }
+    color: colors.deepBlue30,
+  },
 });
 
 export default HOCStepList;

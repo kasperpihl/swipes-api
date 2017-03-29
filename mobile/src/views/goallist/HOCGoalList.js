@@ -9,7 +9,7 @@ import HOCGoalItem from './HOCGoalItem';
 
 class HOCGoalList extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       tabs: ['current', 'upcoming', 'unstarted'],
       tabIndex: 0,
@@ -24,20 +24,19 @@ class HOCGoalList extends Component {
   }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
-      this.setState({tabIndex: index})
+      this.setState({ tabIndex: index });
     }
   }
   renderHeader() {
-
-    return <Header title="Goal list" tabs={this.state.tabs} currentTab={this.state.tabIndex} delegate={this} />
+    return <Header title="Goal list" tabs={this.state.tabs} currentTab={this.state.tabIndex} delegate={this} />;
   }
   renderGoal(gId, filterId, onPopRoute, onPushRoute, sceneProps) {
-    return <HOCGoalItem goalId={gId} filterId={filterId} onPopRoute={onPopRoute} onPushRoute={onPushRoute} sceneProps={sceneProps} />
+    return <HOCGoalItem goalId={gId} filterId={filterId} onPopRoute={onPopRoute} onPushRoute={onPushRoute} sceneProps={sceneProps} />;
   }
   render() {
     const { filters, onPopRoute, onPushRoute, sceneProps } = this.props;
     const { tabIndex, tabs } = this.state;
-    const goals = filters.getIn([ tabs[tabIndex], 'goals']);
+    const goals = filters.getIn([tabs[tabIndex], 'goals']);
 
     return (
       <View style={styles.container}>
@@ -45,7 +44,7 @@ class HOCGoalList extends Component {
         <View style={styles.list}>
           <ImmutableListView
             immutableData={goals}
-            renderRow={(gId) => this.renderGoal(gId, tabs[tabIndex], onPopRoute, onPushRoute, sceneProps)}
+            renderRow={gId => this.renderGoal(gId, tabs[tabIndex], onPopRoute, onPushRoute, sceneProps)}
           />
         </View>
       </View>
@@ -57,16 +56,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.bgColor,
-    paddingBottom: 24
   },
   list: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 function mapStateToProps(state) {
   return {
     filters: state.get('filters'),
-  }
+  };
 }
 
 export default connect(mapStateToProps, {

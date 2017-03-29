@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
 import {
   NavigationExperimental,
   View,
@@ -21,22 +21,22 @@ class Navigator extends Component {
   renderScene(sceneProps) {
     const actions = {
       onPushRoute: this.onPushRoute,
-      onPopRoute: this.onPopRoute
-    }
+      onPopRoute: this.onPopRoute,
+    };
 
     return React.createElement(sceneProps.scene.route.component,
       {
         ...sceneProps.scene.route.props,
         ...actions,
-        sceneProps
-      }
-    )
+        sceneProps,
+      },
+    );
   }
   render() {
-    
     return (
       <NavigationCardStack
-        direction="vertical"  
+        enableGestures={false}
+        direction="vertical"
         onNavigateBack={this.onPopRoute}
         navigationState={this.props.navigationState}
         renderScene={this.renderScene}
@@ -45,4 +45,4 @@ class Navigator extends Component {
   }
 }
 
-export default Navigator
+export default Navigator;

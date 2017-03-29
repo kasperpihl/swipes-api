@@ -16,7 +16,7 @@ class HOCGoalOverview extends PureComponent {
       tabIndex: 0,
       hideButton: false,
     };
-  
+
     this.closeView = this.closeView.bind(this);
 
     if (Platform.OS === 'android') {
@@ -44,7 +44,7 @@ class HOCGoalOverview extends PureComponent {
   }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index })
+      this.setState({ tabIndex: index });
     }
   }
   renderHeader() {
@@ -53,17 +53,17 @@ class HOCGoalOverview extends PureComponent {
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getTotalNumberOfSteps();
     const tabs = ['Activity', `Steps(${numberOfCompleted}/${totalSteps})`, 'Attachments'];
-    
+
     return (
-      <Header title={goal.get('title')} tabs={tabs} currentTab={this.state.tabIndex} delegate={this}/>
-    )
+      <Header title={goal.get('title')} tabs={tabs} currentTab={this.state.tabIndex} delegate={this} />
+    );
   }
   renderActivity() {
     const { goal } = this.props;
-    
+
     return (
-      <HOCHistory goal={goal} delegate={this}/>
-    )
+      <HOCHistory goal={goal} delegate={this} />
+    );
   }
   renderStepList() {
     const helper = this.getHelper();
@@ -74,14 +74,14 @@ class HOCGoalOverview extends PureComponent {
         completed={helper.getNumberOfCompletedSteps()}
         delegate={this}
       />
-    )
+    );
   }
   renderAttachments() {
 
   }
   renderContextButton() {
-    const { hideButton } = this.state
-    let buttonStyles = hideButton ? styles.buttonHidden : styles.buttonShown;
+    const { hideButton } = this.state;
+    const buttonStyles = hideButton ? styles.buttonHidden : styles.buttonShown;
 
     return (
       <FeedbackButton onPress={this.closeView}>
@@ -89,17 +89,17 @@ class HOCGoalOverview extends PureComponent {
           <Text style={styles.buttonLabel}>Go back</Text>
         </View>
       </FeedbackButton>
-    )
+    );
   }
   renderContent() {
     const { tabIndex } = this.state;
 
     if (tabIndex === 0) {
-      return this.renderActivity()
+      return this.renderActivity();
     } else if (tabIndex === 1) {
-      return this.renderStepList()
+      return this.renderStepList();
     } else if (tabIndex === 2) {
-      return this.renderAttachments()
+      return this.renderAttachments();
     }
   }
   render() {
@@ -122,13 +122,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingBottom: 24
   },
   button: {
-    width: viewSize.width * .6,
+    width: viewSize.width * 0.6,
     height: 60,
     position: 'absolute',
-    left: (viewSize.width / 2) - ((viewSize.width * .6) / 2),
+    left: (viewSize.width / 2) - ((viewSize.width * 0.6) / 2),
     backgroundColor: '#333ddd',
     alignItems: 'center',
     justifyContent: 'center',
@@ -140,8 +139,8 @@ const styles = StyleSheet.create({
     bottom: -60,
   },
   buttonLabel: {
-    color: 'white'
-  }
+    color: 'white',
+  },
 });
 
 

@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { 
+import {
   View,
   StyleSheet,
   Image,
-  Text
+  Text,
 } from 'react-native';
 import Icon from '../icons/Icon';
 import { colors } from '../../utils/globalStyles';
@@ -38,9 +38,9 @@ class Assignees extends Component {
         if (pic) {
           return (
             <View style={[styles.profileImageWrapper, { zIndex: 0 - i }]} key={i}>
-              <Image style={styles.profileImage} source={{ uri: pic }}/>
+              <Image style={styles.profileImage} source={{ uri: pic }} />
             </View>
-          ) 
+          );
         }
         return (
           <View key={i}>
@@ -54,7 +54,7 @@ class Assignees extends Component {
     let morePeople;
 
     if (assignees.size > (maxImages + 1)) {
-      morePeople = <View style={[styles.morePeople, {zIndex: 1}]}><Text style={styles.morePeopleText}>+{assignees.size - maxImages}</Text></View>;
+      morePeople = <View style={[styles.morePeople, { zIndex: 1 }]}><Text style={styles.morePeopleText}>+{assignees.size - maxImages}</Text></View>;
     }
 
     return (
@@ -80,10 +80,10 @@ export default Assignees;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginRight: 9
+    marginRight: 9,
   },
   profiles: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   icon: {
     width: 32,
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 30,
     height: 30,
-    borderRadius: 50,
-    
+    borderRadius: 15,
+
   },
   profileImageWrapper: {
     width: 33,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginRight: -9,
   },
   people: {
-    flexDirection: 'row'
+    flexDirection: 'row',
 
   },
   morePeople: {
@@ -124,11 +124,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'white',
     marginRight: -9,
-    paddingBottom: 1
+    paddingBottom: 1,
 
   },
   morePeopleText: {
     fontSize: 12,
     color: colors.deepBlue80,
-  }
-})
+  },
+});

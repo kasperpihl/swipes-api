@@ -78,10 +78,17 @@ class App extends PureComponent {
 
     return (
       <Swiper
-        style={styles.app} loop={false} renderPagination={(index) => {
+        loop={false}
+        index={this.state.initialIndex}
+        bounces
+        renderPagination={(index) => {
           const { navChange } = this.props;
-          setTimeout(() => navChange(index), 1);
-        }} index={this.state.initialIndex} bounces
+          const { initialIndex } = this.state;
+
+          if (index !== initialIndex) {
+            setTimeout(() => navChange(index), 1);
+          }
+        }}
       >
         <ViewController scene={profile} navId="Profile" />
         <ViewController scene={dashboard} navId="Dashboard" />
@@ -100,6 +107,15 @@ class App extends PureComponent {
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
+
+        {/* <Swiper>
+          <View style={styles.app1}>
+            <Text style={styles.label}>1</Text>
+          </View>
+          <View style={styles.app1}>
+            <Text style={styles.label}>2</Text>
+          </View>
+        </Swiper> */}
       </View>
     );
   }
@@ -122,7 +138,17 @@ const styles = StyleSheet.create({
   app: {
     flex: 1,
     backgroundColor: colors.bgColor,
-    paddingTop: 24,
+    flexDirection: 'row',
+  },
+  app1: {
+    flex: 1,
+    backgroundColor: colors.bgColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  label: {
+    fontSize: 40,
+    color: '#333ddd',
   },
   gradient: {
     position: 'absolute',
