@@ -499,7 +499,6 @@ const goalsNotify = valLocals('goalsNotify', {
     user_id,
     goal_id,
     assignees,
-    feedback,
     notificationGroupId,
     flags = [],
     message = '',
