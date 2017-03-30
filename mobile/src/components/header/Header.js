@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgColor,
   },
   containerWithtabs: {
-    paddingVertical: 30,
     marginHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: colors.deepBlue20,
     backgroundColor: colors.bgColor,
+    paddingTop: 54,
     paddingBottom: 60,
   },
   title: {

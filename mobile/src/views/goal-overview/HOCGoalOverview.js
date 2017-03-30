@@ -7,6 +7,7 @@ import { viewSize } from '../../utils/globalStyles';
 import Header from '../../components/header/Header';
 import HOCHistory from './HOCHistory';
 import HOCStepList from './HOCStepList';
+import HOCAttachments from './HOCAttachments';
 
 
 class HOCGoalOverview extends PureComponent {
@@ -52,7 +53,7 @@ class HOCGoalOverview extends PureComponent {
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getTotalNumberOfSteps();
-    const tabs = ['Activity', `Steps(${numberOfCompleted}/${totalSteps})`, 'Attachments'];
+    const tabs = ['Activity', `Steps(${numberOfCompleted}/${totalSteps})`, `Attachments(${goal.get('attachment_order').size})`];
 
     return (
       <Header title={goal.get('title')} tabs={tabs} currentTab={this.state.tabIndex} delegate={this} />
@@ -77,7 +78,14 @@ class HOCGoalOverview extends PureComponent {
     );
   }
   renderAttachments() {
+    const { goal } = this.props;
 
+    return (
+      <HOCAttachments
+        attachments={goal.get('attachments')}
+        attachmentOrder={goal.get('attachment_order')}
+      />
+    );
   }
   renderContextButton() {
     const { hideButton } = this.state;

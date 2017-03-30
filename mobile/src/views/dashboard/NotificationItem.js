@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    flexWrap: 'wrap',
+    flexDirection: 'column',
     paddingHorizontal: 15,
   },
   subtitle: {

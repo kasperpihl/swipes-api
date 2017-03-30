@@ -107,15 +107,6 @@ class App extends PureComponent {
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
-
-        {/* <Swiper>
-          <View style={styles.app1}>
-            <Text style={styles.label}>1</Text>
-          </View>
-          <View style={styles.app1}>
-            <Text style={styles.label}>2</Text>
-          </View>
-        </Swiper> */}
       </View>
     );
   }

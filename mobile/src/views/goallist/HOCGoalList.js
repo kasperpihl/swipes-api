@@ -28,7 +28,18 @@ class HOCGoalList extends Component {
     }
   }
   renderHeader() {
-    return <Header title="Goal list" tabs={this.state.tabs} currentTab={this.state.tabIndex} delegate={this} />;
+    const { filters } = this.props;
+    const { tabIndex, tabs } = this.state;
+    const newTabs = [];
+
+    tabs.forEach((t, i) => {
+      const goals = filters.getIn([tabs[i], 'goals']);
+      const tabName = `${t} (${goals.size})`;
+
+      newTabs.push(tabName);
+    });
+
+    return <Header title="Goal list" tabs={newTabs} currentTab={this.state.tabIndex} delegate={this} />;
   }
   renderGoal(gId, filterId, onPopRoute, onPushRoute, sceneProps) {
     return <HOCGoalItem goalId={gId} filterId={filterId} onPopRoute={onPopRoute} onPushRoute={onPushRoute} sceneProps={sceneProps} />;
