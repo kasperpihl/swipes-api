@@ -217,7 +217,7 @@ class TabMenu extends Component {
     );
   }
   render() {
-    const { search } = this.props;
+    const { search, initialTabIndex, items, delegate, actionLabel, ...rest } = this.props;
     const { query } = this.state;
     let className = 'tab-menu';
 
@@ -232,7 +232,7 @@ class TabMenu extends Component {
     }
 
     return (
-      <div className={className}>
+      <div className={className} {...rest}>
         {this.renderHeader()}
         {this.renderResultList()}
         {this.renderFooter()}

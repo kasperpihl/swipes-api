@@ -122,7 +122,6 @@ class HOCGoalOverview extends PureComponent {
   }
   onHandoffMessage(handoff, options) {
     const { confirm } = this.props;
-    return;
     confirm(Object.assign({}, options, {
       title: 'Send handoff',
       message: 'Let Kasper know that you passed this on to him.',
@@ -255,12 +254,15 @@ class HOCGoalOverview extends PureComponent {
   onAskFor(e) {
     const { contextMenu } = this.props;
     const options = this.getOptionsForE(e);
-    const items = ['Feedback', 'Assets', 'Decision', 'Status'].map(title => ({ title }));
+    options.alignY = 'top';
+    options.positionY = 6;
+    options.excludeY = true;
+    const items = ['Feedback', 'Assets', 'Decision', 'Status'].map(title => ({ title, leftIcon: { icon: 'Checkmark' } }));
 
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
-        this.onSelectAssigneesAndNotify(item.title.toLowerCase(), options);
+        this.onOpenNotify(item.title.toLowerCase(), fromJS([]));
       },
     };
     contextMenu({
@@ -269,6 +271,9 @@ class HOCGoalOverview extends PureComponent {
       props: {
         delegate,
         items,
+        style: {
+          width: '210px',
+        },
       },
     });
   }
