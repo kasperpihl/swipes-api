@@ -51,6 +51,7 @@ authed.all('/steps.add',
       assignees: array.require(),
     }).require(),
     step_order: array.require(),
+    status: object.require(),
   }));
 
 authed.all('/steps.rename',
@@ -79,6 +80,7 @@ authed.all('/steps.delete',
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
+    status: object.require(),
   }));
 
 authed.all('/steps.reorder',

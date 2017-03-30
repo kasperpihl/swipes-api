@@ -46,6 +46,7 @@ const stepsAdd = valLocals('stepsAdd', {
       setLocals({
         step: changes.new_val.steps[step_id],
         step_order: changes.new_val.step_order,
+        status: changes.new_val.status,
       });
 
       return next();
@@ -141,7 +142,13 @@ const stepsDelete = valLocals('stepsDelete', {
   } = res.locals;
 
   dbStepsDelete({ user_id, goal_id, step_id })
-    .then(() => {
+    .then((results) => {
+      const changes = results.changes[0];
+
+      setLocals({
+        status: changes.new_val.status,
+      });
+
       return next();
     })
     .catch((err) => {
