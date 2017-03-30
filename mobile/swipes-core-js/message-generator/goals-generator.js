@@ -16,8 +16,48 @@ export default class Goals {
     return goalTypes[goalType] || 'All goals';
   }
 
-  getSubtitle(goal, filter) {
-    let status = ' '; // TODO: Include default status msg
+  getSubtitle(goal) {
+    const helper = new GoalsUtil(goal);
+    const currentStep = helper.getCurrentStep();
+    if (helper.getIsCompleted() || !currentStep) {
+      return 'All done.';
+    }
+    if (!helper.getTotalNumberOfSteps()) {
+      return 'No steps added.';
+    }
+
+    const currentStepIndex = helper.getCurrentStepIndex();
+    return `${currentStepIndex + 1}. ${currentStep.get('title')}`;
+  }
+
+  getFilterLabel(number, filter) {
+    const goalTypes = {
+      current: 'current ',
+      upcoming: 'upcoming ',
+      completed: 'completed ',
+      unstarted: 'unstarted ',
+    };
+
+    const typeLabel = goalTypes[filter.get('goalType')] || '';
+    let label = `${number} ${typeLabel}goal`;
+    if (number !== 1) {
+      label += 's';
+    }
+    if (filter.get('user') && filter.get('user') !== 'any') {
+      label += ` assigned to ${this.parent.users.getName(filter.get('user'))}`;
+    }
+    if (filter.get('milestone') && filter.get('milestone') !== 'any') {
+      label += ` with ${this.parent.milestones.getName(filter.get('milestone'))}`;
+    }
+    if (filter.get('matching') && filter.get('matching').length) {
+      label += ` matching "${filter.get('matching')}"`;
+    }
+    return label;
+  }
+
+
+  oldGetSubtitle(goal, filter) {
+    let status = ' ';
     const state = this.store.getState();
     const me = state.get('me');
     const helper = new GoalsUtil(goal, me.get('id'));
@@ -86,28 +126,4 @@ export default class Goals {
     return status.charAt(0).toUpperCase() + status.slice(1);
   }
 
-  getFilterLabel(number, filter) {
-    const goalTypes = {
-      current: 'current ',
-      upcoming: 'upcoming ',
-      completed: 'completed ',
-      unstarted: 'unstarted ',
-    };
-
-    const typeLabel = goalTypes[filter.get('goalType')] || '';
-    let label = `${number} ${typeLabel}goal`;
-    if (number !== 1) {
-      label += 's';
-    }
-    if (filter.get('user') && filter.get('user') !== 'any') {
-      label += ` assigned to ${this.parent.users.getName(filter.get('user'))}`;
-    }
-    if (filter.get('milestone') && filter.get('milestone') !== 'any') {
-      label += ` with ${this.parent.milestones.getName(filter.get('milestone'))}`;
-    }
-    if (filter.get('matching') && filter.get('matching').length) {
-      label += ` matching "${filter.get('matching')}"`;
-    }
-    return label;
-  }
 }

@@ -10,6 +10,10 @@ export default class GoalsUtil {
     this.goal = goal;
   }
 
+  getId() {
+    return this.goal.get('id');
+  }
+
   // ======================================================
   // Get stepIndex
   // ======================================================
@@ -26,6 +30,11 @@ export default class GoalsUtil {
   // ======================================================
   getCurrentStepId() {
     return this.goal.getIn(['status', 'current_step_id']);
+  }
+  getNextStepId() {
+    const nextIndex = this.getCurrentStepIndex() + 1;
+    const nextStep = this.getStepByIndex(nextIndex);
+    return (nextStep && nextStep.get('id')) || null;
   }
 
   // ======================================================
@@ -112,13 +121,17 @@ export default class GoalsUtil {
       if (show) {
         titles = titles.push(this.goal.getIn(['steps', sId, 'title']));
       }
-    })
+    });
     return titles;
   }
 
   getCurrentAssignees() {
     const i = this.getCurrentStepIndex();
     return this.getAssigneesForStepIndex(i);
+  }
+  getAssigneesForStepId(id) {
+    const stepIndex = this.getStepIndexForId(id);
+    return this.getAssigneesForStepIndex(stepIndex);
   }
   getAssigneesForStepIndex(i) {
     const step = this.getStepByIndex(i);

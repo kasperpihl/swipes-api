@@ -83,7 +83,7 @@ class GoalListItem extends PureComponent {
   render() {
     const { goal, filter } = this.props;
     const helper = this.getHelper();
-    const status = 'none';// msgGen.goals.getSubtitle(goal, filter);
+    const status = msgGen.goals.getSubtitle(goal, filter);
     const isActive = !helper.getIsCompleted();
     let className = 'goal-list-item';
 

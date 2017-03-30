@@ -42,17 +42,6 @@ export const rename = (goalId, title) => a.api.request('goals.rename', {
   title,
 });
 
-export const start = (gId) => (d, getState) => {
-  const goal = getState().getIn(['goals', gId]);
-  const helper = new GoalsUtil(goal);
-  const step = helper.getStepByIndex(0);
-  return d(a.api.request('goals.start', {
-    goal_id: gId,
-    next_step_id: step.get('id'),
-  }));
-};
-
-
 export const notify = (gId, handoff) => (d, getState) => {
   let assignees = handoff.get('assignees');
   assignees = assignees || assignees.toJS();

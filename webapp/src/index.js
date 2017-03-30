@@ -15,6 +15,8 @@ if (!regeneratorRuntime.default) {
 window.__VERSION__ = version;
 window.__DEV__ = (process.env.NODE_ENV !== 'production');
 window.__API_URL__ = `${location.origin}`;
+window.__AWS_KEY__ = 'AKIAJ7OR4Q4MA5VBPTKA';
+window.__AWS_SECRECT__ = '1Y4j3QuBg1mDmEtQQ+zNzIpsZ1B+n4d0XSuLkxF5';
 
 let Page;
 let RenderedComp;

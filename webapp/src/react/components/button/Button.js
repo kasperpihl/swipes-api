@@ -118,6 +118,7 @@ class Button extends Component {
       className: classNameFromButton,
       errorLabel,
       successLabel,
+      loadingLabel,
       ...rest
     } = this.props;
     const { loading, errorState, successState } = this.state;
