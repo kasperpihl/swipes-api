@@ -60,18 +60,21 @@ const stepsAddQueueMessage = valLocals('stepsAddQueueMessage', {
   goal_id: string.require(),
   step: object.require(),
   step_order: array.require(),
+  status: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     step,
     step_order,
+    status,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
     step,
     step_order,
+    status,
     event_type: 'step_added',
   };
 
@@ -159,16 +162,19 @@ const stepsDeleteQueueMessage = valLocals('stepsDeleteQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   step_id: string.require(),
+  status: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     step_id,
+    status,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
     step_id,
+    status,
     event_type: 'step_deleted',
   };
 

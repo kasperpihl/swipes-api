@@ -3,6 +3,7 @@ const stepsAddedNotificationData = (req, res, next) => {
     goal_id,
     step,
     step_order,
+    status,
   } = res.locals;
 
   res.locals.notificationData = null;
@@ -10,6 +11,7 @@ const stepsAddedNotificationData = (req, res, next) => {
     goal_id,
     step,
     step_order,
+    status,
   };
 
   return next();
@@ -34,12 +36,14 @@ const stepsDeletedNotificationData = (req, res, next) => {
   const {
     goal_id,
     step_id,
+    status,
   } = res.locals;
 
   res.locals.notificationData = null;
   res.locals.eventData = {
     goal_id,
     step_id,
+    status,
   };
 
   return next();
