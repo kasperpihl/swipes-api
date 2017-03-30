@@ -110,26 +110,6 @@ authed.all('/goals.create',
     goal: object.require(),
   }));
 
-authed.all('/goals.start',
-  valBody({
-    goal_id: string.require(),
-    current_step_id: string,
-    next_step_id: string,
-    assignees: array.of(string),
-  }),
-  notificationCreateGroupId,
-  goalsGet,
-  mapLocals([], (setLocals) => {
-    setLocals({ goalProgress: 'start' });
-  }),
-  goalsCompleteStep,
-  goalsUpdate,
-  goalsNextStepQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    goal: object.require(),
-  }));
-
 authed.all('/goals.completeStep',
   valBody({
     goal_id: string.require(),

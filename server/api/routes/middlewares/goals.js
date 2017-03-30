@@ -93,9 +93,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
 
   let type = 'step_completed';
 
-  if (goalProgress === 'start') {
-    type = 'goal_started';
-  }
   if (!next_step_id) {
     type = 'goal_completed';
   }
@@ -120,10 +117,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     current_step_id: next_step_id,
     completed: type === 'goal_completed',
   };
-
-  if (!goal.status.started) {
-    goal.status.started = true;
-  }
 
   goal.history.push(history);
 
