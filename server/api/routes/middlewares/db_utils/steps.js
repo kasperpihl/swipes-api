@@ -94,7 +94,7 @@ const dbStepsDelete = funcWrap([
     r.db('swipes')
       .table('goals')
       .get(goal_id)
-      .update({
+      .update(goal => goal.merge({
         steps: {
           [step_id]: {
             deleted: true,
@@ -102,10 +102,26 @@ const dbStepsDelete = funcWrap([
             updated_by: user_id,
           },
         },
-        step_order: r.row('step_order').difference([step_id]),
+        step_order: goal('step_order').difference([step_id]),
+        status: goal('status').merge(row => r.branch(
+          row('current_step_id').eq(step_id), // Check if this step is the current?
+          r.branch( // If it IS the current, check if it exists in the step order.. SHOULD DO THAT!
+            goal('step_order').offsetsOf(step_id).count().gt(0),
+            r.branch( // If it exists as expected...
+              goal('step_order').offsetsOf(step_id).nth(0).add(1) // Check if there is a step after.
+                                .lt(r.expr(goal('step_order').count())),
+              // Then set it to that ffs.
+              { current_step_id: goal('step_order').nth(goal('step_order').offsetsOf(step_id).nth(0).add(1)) },
+              // Otherwise set it to null with completed true if there are more steps before.
+              { current_step_id: null, completed: r.expr(goal('step_order').count().gt(1)) },
+            ),
+            { current_step_id: null },
+          ),
+          { current_step_id: row('current_step_id') },
+        )),
         updated_at: r.now(),
         updated_by: user_id,
-      });
+      }));
 
   return db.rethinkQuery(q);
 });

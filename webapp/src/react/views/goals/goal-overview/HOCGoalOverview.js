@@ -65,14 +65,6 @@ class HOCGoalOverview extends PureComponent {
     const remove = {
       title: 'Remove',
     };
-    if (i === helper.getCurrentStepIndex()) {
-      remove.disabled = true;
-      remove.subtitle = 'Cannot remove current step';
-    }
-    if (helper.getTotalNumberOfSteps() === 1) {
-      remove.disabled = true;
-      remove.subtitle = 'Cannot remove the last step';
-    }
 
     const items = [{ title: 'Rename' }, remove];
 
