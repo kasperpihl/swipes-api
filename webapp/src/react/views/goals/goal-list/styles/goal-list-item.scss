@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$imgContHeight: 66px;
+$imgContHeight: 40px;
 
 .goal-list-item {
   $b: &;
@@ -10,8 +10,8 @@ $imgContHeight: 66px;
   @include flex(center, flex-start);
   min-height: $imgContHeight;
   position: relative;
-  padding: 15px 21px;
-  padding-bottom: 9px;
+  padding: 12px 21px;
+  padding-bottom: 12px;
   padding-left: 0px;
   border-bottom: 1px solid $deepBlue-10;
 
@@ -53,6 +53,7 @@ $imgContHeight: 66px;
     @include flex(center, flex-start);
     position: relative;
     overflow: hidden;
+    display: none;
   }
 
   &__label {
