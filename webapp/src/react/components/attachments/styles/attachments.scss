@@ -60,16 +60,26 @@
   }
 
   &__add-list {
-    @include size(100%, 54px);
+    @include size(100%, 66px);
     @include flexContainer('row', right, center);
     background-color: $bg;
-    border-top: 1px solid darken($deepBlue-5, 3%);
   }
 
   &__add-item {
     @include font(12px, $blue-100, 18px, 500);
     padding-left: 18px;
+    user-select: none;
     transition: .5s ease;
+
+    & [type=file] {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
 
     &:hover, &:focus {
       text-decoration: underline;

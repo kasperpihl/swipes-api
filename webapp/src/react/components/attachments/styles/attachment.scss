@@ -9,9 +9,9 @@
   $b: &;
   $flexIgnoreList: '#{$b}__actions';
 
-  @include size(100%, 60px);
+  @include size(100%, 66px);
   @include flexContainer('row', left, center, $flexIgnoreList);
-  border-top: 1px solid darken($deepBlue-5, 3%);
+  border-bottom: 1px solid $deepBlue-6;
   transition: .2s ease;
 }
 
@@ -27,7 +27,7 @@
 
     @include size($width, 100%);
     @include flexContainer('row', left, center);
-    @include font(15px, $deepBlue-80, 24px);
+    @include font(15px, $deepBlue-100, 24px);
     transition: .1s ease;
 
     &:hover {
@@ -51,7 +51,7 @@
     margin-right: 18px;
 
     #{$b}__svg {
-      @include svg-color($deepBlue-50);
+      @include svg-color($deepBlue-80);
       transition: .2s ease;
     }
   }

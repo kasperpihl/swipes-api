@@ -17,19 +17,19 @@
   @include flexContainer('row', left, center, $flexIgnoreList);
   min-height: 66px;
   border-top: 1px solid $deepBlue-5;
-  transition: .15s ease;
+  transition: 0s;
   padding: 18px 0;
 }
 
 .add-step {
-    $b: &;
-    $flexIgnoreList: '#{$b}__indicator';
+  $b: &;
+  $flexIgnoreList: '#{$b}__indicator';
 
-    @include size(100%, 67px);
-    @include flexContainer('row', left, center, $flexIgnoreList);
-    border-top: 1px solid $deepBlue-5;
-    border-bottom: 1px solid $deepBlue-5;
-    transition: .15s ease;
+  @include size(100%, 67px);
+  @include flexContainer('row', left, center, $flexIgnoreList);
+  border-top: 1px solid $deepBlue-5;
+  border-bottom: 1px solid $deepBlue-5;
+  transition: .15s ease;
 }
 
 // ======================================================
@@ -321,7 +321,7 @@
     $flexIgnoreList: '#{$b}__remove', '#{$b}__assignees';
 
     @include flexContainer('row', left, center, $flexIgnoreList);
-    padding: 10px 0;
+    padding: 12px 0;
     transition: 0s;
 
     #{$b}__remove {
