@@ -220,21 +220,22 @@ class HOCAttachments extends PureComponent {
 
     return (
       <div className={className}>
-        <div className="attachments__add-icon">
-          <Icon icon="Plus" className="attachments__svg" />
-        </div>
         <button
           className="attachments__add-item"
           onClick={this.onAddCached('url')}
-        >Add URL</button>
+        >
+          Add URL
+        </button>
         <button
           className="attachments__add-item"
           onClick={this.onAddCached('note')}
-        >New Note</button>
-        {/* <button
-          className="attachments__add-item"
-          onClick={this.onAddCached('find')}
-        >Find</button> */}
+        >
+          New Note
+        </button>
+
+        <div className="attachments__add-icon">
+          <Icon icon="Plus" className="attachments__svg" />
+        </div>
       </div>
     );
   }

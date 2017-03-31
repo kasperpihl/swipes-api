@@ -23,8 +23,11 @@
 
   &__add-icon {
     @include size(24px);
-    margin-right: 18px;
     border-radius: 50%;
+    opacity: 0;
+    transition: .2s;    
+    position: absolute;
+    pointer-events: none;
 
     &:before {
       @include size(24px);
@@ -58,14 +61,14 @@
 
   &__add-list {
     @include size(100%, 54px);
-    @include flex(center, flex-start);
+    @include flexContainer('row', right, center);
     background-color: $bg;
     border-top: 1px solid darken($deepBlue-5, 3%);
   }
 
   &__add-item {
     @include font(12px, $blue-100, 18px, 500);
-    padding-right: 18px;
+    padding-left: 18px;
     transition: .5s ease;
 
     &:hover, &:focus {
@@ -112,6 +115,8 @@
       }
 
       #{$b}__add-icon {
+        opacity: 1;
+        transition: .2s;
         animation: rotateAddLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
 
         &:before {

@@ -9,6 +9,7 @@ import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
+import Section from 'components/section/Section';
 import Button from 'Button';
 import HOCHistory from './HOCHistory';
 import './styles/goal-overview.scss';
@@ -36,6 +37,7 @@ class GoalOverview extends PureComponent {
       <div className="add-goal__header">
         <HOCHeaderTitle
           title={title || goal.get('title')}
+          subtitle="Started 2 days ago"
           delegate={delegate}
         >
           <Button
@@ -56,10 +58,7 @@ class GoalOverview extends PureComponent {
     );
   }
   renderAttachments() {
-    const { goal, delegate, tabIndex } = this.props;
-    if (tabIndex !== 0) {
-      return undefined;
-    }
+    const { goal, delegate } = this.props;
 
     return (
       <HOCAttachments
@@ -92,19 +91,20 @@ class GoalOverview extends PureComponent {
     }
     return (
       <div className="goal-overview__column goal-overview__column--left">
-        <div className="goal-overview__progress">{title}</div>
-        <HOCStepList
-          steps={helper.getOrderedSteps().map((s) => {
-            const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;
-            s = s.set('loading', l);
-            return s;
-          })}
-          editable
-          loadingI={loadingState.get('completing') && loadingState.get('completing').loadingLabel}
-          addLoading={loadingState.get('add')}
-          currentStepIndex={helper.getNumberOfCompletedSteps()}
-          delegate={delegate}
-        />
+        <Section title={title}>
+          <HOCStepList
+            steps={helper.getOrderedSteps().map((s) => {
+              const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;
+              s = s.set('loading', l);
+              return s;
+            })}
+            editable
+            loadingI={loadingState.get('completing') && loadingState.get('completing').loadingLabel}
+            addLoading={loadingState.get('add')}
+            currentStepIndex={helper.getNumberOfCompletedSteps()}
+            delegate={delegate}
+          />
+        </Section>
       </div>
     );
   }
@@ -113,9 +113,10 @@ class GoalOverview extends PureComponent {
 
     return (
       <div className="goal-overview__column goal-overview__column--right">
-        <TabBar tabs={['Attachments', 'Activity']} delegate={delegate} activeTab={tabIndex} />
-        {this.renderAttachments()}
-        {this.renderHistory()}
+        <Section title="Latest Activity" className="goal-overview__last-activity" />
+        <Section title="Attachments">
+          {this.renderAttachments()}
+        </Section>
       </div>
     );
   }

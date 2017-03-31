@@ -13,10 +13,12 @@
   $b: &;
   $flexIgnoreList: '#{$b}__indicator', '#{$b}__assignees';
 
-  @include size(100%, 67px);
+  @include size(100%, auto);
   @include flexContainer('row', left, center, $flexIgnoreList);
+  min-height: 66px;
   border-top: 1px solid $deepBlue-5;
   transition: .15s ease;
+  padding: 18px 0;
 }
 
 .add-step {
@@ -40,15 +42,9 @@
     @include flexContainer('row', left, center);
     transition: .15s ease;
 
-
     #{$b}--target {
       .indicator__number {
         transform: translateX(30px);
-        transition: .3s ease;
-      }
-
-      .indicator__icon {
-        transform: translateX(2px);
         transition: .3s ease;
       }
     }
@@ -61,6 +57,7 @@
   }
 
   &__assignees {
+    padding-left: 6px;
     transition: .15s ease;
   }
 }
@@ -86,15 +83,16 @@
 
     &__icon {
       @include size(30px);
+      @include flexContainer('row', center, center);
       position: absolute;
-      left: 0; top: 0px;
-      transform: translateX(-100%);
+      left: 0; top: -2px;
+      transform: translateX(-32px);
       transition: .3s ease;
     }
 
     &__svg {
       @include size(24px);
-      @include svg-color($deepBlue-100)
+      @include svg-color(white);
     }
   }
 }
@@ -235,14 +233,7 @@
   }
 
   &:not(&--current):not(&--future)#{&}--hover {
-    // .indicator {
-    //   background-color: $bg;
-    //   border: 2px solid $deepBlue-100;
-    //
-    //   &__number {
-    //     @include font($c: $deepBlue-100);
-    //   }
-    // }
+
     .indicator__svg {
       @include svg-color(white);
     }
@@ -260,7 +251,7 @@
     }
 
     .indicator__icon {
-      transform: translateX(2px);
+      transform: translateX(-2px);
       transition: .3s ease;
     }
 
@@ -300,7 +291,7 @@
 .step-list-item {
 
   &:first-child {
-    border-top: 1px solid $deepBlue-5;
+    border-top: 0px solid red;
   }
 }
 

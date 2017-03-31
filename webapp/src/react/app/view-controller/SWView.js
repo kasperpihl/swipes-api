@@ -10,52 +10,40 @@ class SWView extends Component {
   }
   componentDidMount() {
     const { initialScroll } = this.props;
+
     if (initialScroll > 0) {
       this.refs.scroller.scrollTop = initialScroll;
     }
   }
   renderHeader() {
-    const { header, maxWidth } = this.props;
+    const { header } = this.props;
 
     if (!header) {
       return undefined;
     }
 
-    const styles = {};
-
     return (
-      <div className="sw-view__header" style={styles}>
+      <div className="sw-view__header">
         {header}
       </div>
     );
   }
   renderFooter() {
-    const { footer, maxWidth } = this.props;
+    const { footer } = this.props;
 
     if (!footer) {
       return undefined;
     }
 
-    const styles = {};
-
-    if (maxWidth) {
-      styles.maxWidth = `${maxWidth}px`;
-    }
-
     return (
-      <div className="sw-view__footer" style={styles}>
+      <div className="sw-view__footer">
         {footer}
       </div>
     );
   }
   render() {
-    const { children, maxWidth, disableScroll, noframe, onScroll } = this.props;
-    const styles = {};
+    const { children, disableScroll, noframe, onScroll } = this.props;
     let className = 'sw-view';
-
-    if (maxWidth) {
-      styles.maxWidth = `${maxWidth}px`;
-    }
 
     if (disableScroll) {
       className += ' sw-view--no-scroll';
@@ -70,7 +58,7 @@ class SWView extends Component {
         {this.renderHeader()}
         <div className="sw-view__scroll" ref="scroller" onScroll={onScroll}>
           <div className="sw-view__container">
-            <div className="sw-view__content" style={styles}>
+            <div className="sw-view__content">
               {children}
             </div>
           </div>
@@ -90,6 +78,6 @@ SWView.propTypes = {
   header: element,
   footer: element,
   children: oneOfType([element, arrayOf(element)]),
-  maxWidth: number,
+  noframe: bool,
   disableScroll: bool,
 };

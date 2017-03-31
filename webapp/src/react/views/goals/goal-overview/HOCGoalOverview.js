@@ -14,7 +14,7 @@ import GoalOverview from './GoalOverview';
 
 class HOCGoalOverview extends PureComponent {
   static minWidth() {
-    return 800;
+    return 840;
   }
   static maxWidth() {
     return 900;

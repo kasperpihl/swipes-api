@@ -54,7 +54,8 @@
     }
 
     &--left {
-      @include size(400px, auto);
+      $width: calc(100% - 330px);      
+      @include size($width, auto);
       padding-right: 60px;
       transition: width .5s ease, padding .5s ease;
     }
@@ -65,8 +66,7 @@
     }
 
     &--right {
-      $width: calc(100% - 400px);
-      @include size($width,  auto);
+      @include size(330px,  auto);
       opacity: 1;
       transition: .5s ease;
     }
@@ -86,6 +86,10 @@
     @include flexContainer('row', left, center);
     @include font(12px, $deepBlue-80, 15px, bold);
     border-top: 1px solid $deepBlue-20;
+  }
+
+  &__last-activity {
+    padding-bottom: 30px;
   }
 }
 
