@@ -8,17 +8,28 @@ export default class HistoryGenerator {
     switch (h.get('type')) {
       case 'goal_created':
         return `${from} kicked off this goal`;
-      case 'step_completed':
       case 'goal_completed':
         return `${from} completed this goal`;
       case 'goal_archived':
         return `${from} archived this goal`;
+      case 'step_completed': {
+
+      }
+      case 'goal_notify': {
+        return `${from} notified you about this goal`;
+      }
       default:
         return h.get('type');
     }
   }
   getSubtitle(h) {
+    switch (h.get('type')) {
+      case 'step_completed': {
 
+      }
+      default:
+        return undefined;
+    }
   }
   getMessage(h) {
 

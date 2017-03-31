@@ -33,6 +33,7 @@ class GoalOverview extends PureComponent {
     const { goal, loadingState, delegate } = this.props;
 
     const title = loadingState.get('title') && loadingState.get('title').loadingLabel;
+    const askSelected = loadingState.get('ask-for-menu') && loadingState.get('ask-for-menu').loading;
     return (
       <div className="add-goal__header">
         <HOCHeaderTitle
@@ -42,6 +43,7 @@ class GoalOverview extends PureComponent {
         >
           <Button
             text="Ask for..."
+            selected={askSelected}
             onClick={this.onAskFor}
           />
           <Button

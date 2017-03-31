@@ -6,7 +6,7 @@ import TabBar from 'components/tab-bar/TabBar';
 import Button from 'Button';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 
-import NotificationWrapper from './NotificationWrapper';
+import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
 import './styles/dashboard';
 
 export default class Dashboard extends Component {

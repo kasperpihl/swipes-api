@@ -4,7 +4,7 @@ import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
-import NotificationWrapper from '../../dashboard/NotificationWrapper';
+import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
 /* global msgGen */
 
 class HOCHistory extends PureComponent {

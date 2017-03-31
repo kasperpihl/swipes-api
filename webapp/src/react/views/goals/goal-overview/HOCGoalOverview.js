@@ -21,7 +21,7 @@ class HOCGoalOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    bindAll(this, ['onHandoff', 'onContext']);
+    bindAll(this, ['onContext']);
     this.state = {
       tabIndex: 0,
       editMode: false,
@@ -101,9 +101,11 @@ class HOCGoalOverview extends PureComponent {
         }));
       },
     };
+    this.setLoading('ask-for-menu');
     contextMenu({
       options,
       component: TabMenu,
+      onClose: () => this.clearLoading('ask-for-menu'),
       props: {
         delegate,
         items,
@@ -125,60 +127,31 @@ class HOCGoalOverview extends PureComponent {
       goal,
       archive,
       contextMenu,
-      createWay,
       confirm,
-      inputMenu,
     } = this.props;
     const options = this.getOptionsForE(e);
     const delegate = {
-      onItemAction: (item) => {
-        if (item.title === 'Complete goal') {
-          const helper = this.getHelper();
-          const totalSteps = helper.getTotalNumberOfSteps();
-          this.onStepCheck(totalSteps, options);
-          contextMenu(null);
-        } else if (item.id === 'way') {
-          inputMenu(Object.assign({}, options, {
-            initialValue: goal.get('title'),
-            placeholder: 'Name your Way: Like Development, Design etc.',
-            buttonLabel: 'Save',
-          }), (title) => {
+      onItemAction: () => {
+        confirm(Object.assign({}, options, {
+          title: 'Archive goal',
+          message: 'This will make this goal inactive for all participants.',
+        }), (i) => {
+          if (i === 1) {
             this.setLoading('dots');
-            const helper = this.getHelper();
-            createWay(title, helper.getObjectForWay()).then((res) => {
-              if (res && res.ok) {
-                this.clearLoading('dots', 'Added way');
-              } else {
+            archive(goal.get('id')).then((res) => {
+              if (!res || !res.ok) {
                 this.clearLoading('dots', '!Something went wrong');
               }
             });
-          });
-        } else {
-          confirm(Object.assign({}, options, {
-            title: 'Archive goal',
-            message: 'This will make this goal inactive for all participants.',
-          }), (i) => {
-            if (i === 1) {
-              this.setLoading('dots');
-              archive(goal.get('id')).then((res) => {
-                if (!res || !res.ok) {
-                  this.clearLoading('dots', '!Something went wrong');
-                }
-              });
-            }
-          });
-        }
+          }
+        });
       },
     };
     contextMenu({
       options,
       component: TabMenu,
       props: {
-        items: [
-          { title: 'Complete goal' },
-          // { id: 'way', title: 'Save as a Way' },
-          { title: 'Archive Goal' },
-        ],
+        items: [{ title: 'Archive Goal' }],
         delegate,
       },
     });
