@@ -1,6 +1,5 @@
 import Browser from './browser/HOCBrowser';
 import Find from './find/HOCFind';
-import GoalHandoff from './goals/goal-handoff/HOCGoalHandoff';
 import GoalList from './goals/goal-list/HOCGoalList';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import Notify from './notify/HOCNotify';
@@ -16,7 +15,6 @@ import Store from './store/HOCStore';
 export {
   Browser,
   Find,
-  GoalHandoff,
   GoalList,
   GoalOverview,
   Notify,

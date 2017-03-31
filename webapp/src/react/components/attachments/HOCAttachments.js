@@ -12,6 +12,7 @@ import {
   setupDelegate,
   setupLoading,
   attachmentIconForService,
+  bindAll,
 } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
@@ -26,7 +27,7 @@ class HOCAttachments extends PureComponent {
     this.onContextMenuCached = setupCachedCallback(this.onContextMenu, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
-    this.onAdd = this.onAdd.bind(this);
+    bindAll(this, ['onChangeFiles']);
     setupLoading(this);
   }
   componentWillUnmount() {
@@ -167,7 +168,10 @@ class HOCAttachments extends PureComponent {
       },
     };
   }
-
+  onChangeFiles(e) {
+    const { uploadFiles } = this.props;
+    uploadFiles(e.target.files);
+  }
   attachToTarget(type, id, title) {
     const linkObj = this.getSwipesLinkObj(type, id, title);
     const { targetId, addAttachment } = this.props;
@@ -213,7 +217,6 @@ class HOCAttachments extends PureComponent {
   }
   renderAddAttachments() {
     let className = 'attachments__add-list';
-
     if (this.getLoading('adding').loading) {
       className += ' attachments__add-list--loading';
     }
@@ -232,7 +235,7 @@ class HOCAttachments extends PureComponent {
         >
           New Note
         </button>
-
+        <input type="file" multiple onChange={this.onChangeFiles} />
         <div className="attachments__add-icon">
           <Icon icon="Plus" className="attachments__svg" />
         </div>
@@ -284,6 +287,7 @@ export default connect(mapStateToProps, {
   renameAttachment: ca.attachments.rename,
   contextMenu: a.main.contextMenu,
   createNote: ca.notes.create,
+  uploadFiles: ca.files.upload,
   inputMenu: a.menus.input,
   confirm: a.menus.confirm,
   openFind: a.links.openFind,
