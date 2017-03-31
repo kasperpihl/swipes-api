@@ -121,7 +121,9 @@ const dbStepsDelete = funcWrap([
         )),
         updated_at: r.now(),
         updated_by: user_id,
-      }));
+      }), {
+        returnChanges: true,
+      });
 
   return db.rethinkQuery(q);
 });
