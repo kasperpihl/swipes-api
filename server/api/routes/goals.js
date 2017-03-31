@@ -4,6 +4,7 @@ import {
   object,
   array,
   any,
+  bool,
 } from 'valjs';
 import {
   valBody,
@@ -186,7 +187,8 @@ authed.all('/goals.notify',
     assignees: array.of(string).min(1).require(),
     message: string.min(1).require(),
     flags: array.of(string),
-    request: any.of('feedback', 'status', 'assets', 'decision'),
+    notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+    request: bool,
     reply_to: string,
   }),
   notificationCreateGroupId,
