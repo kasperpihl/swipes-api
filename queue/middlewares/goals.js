@@ -62,7 +62,13 @@ const goalsNotifyAdditionalData = (req, res, next) => {
   const historyItem = goal.history[historyIndex];
   const request = historyItem.request;
 
-  res.locals.notificationData = Object.assign({}, notificationData, { request });
+  if (request) {
+    notificationData.request = true;
+  } else {
+    notificationData.notification = true;
+  }
+
+  res.locals.notificationData = notificationData;
 
   return next();
 };
