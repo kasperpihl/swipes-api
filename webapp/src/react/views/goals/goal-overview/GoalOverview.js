@@ -84,13 +84,22 @@ class GoalOverview extends PureComponent {
     const { editMode } = this.props;
     let title = 'Edit';
     let className = 'step-list__edit-button';
+
     if (editMode) {
       title = 'Done';
       className += ' step-list__edit-button--done';
     }
+
     return (
       <div className={className} onClick={this.onEditSteps}>
         {title}
+      </div>
+    );
+  }
+  renderActivitySeeAllButton() {
+    return (
+      <div className="step-list__edit-button">
+        See all
       </div>
     );
   }
@@ -117,7 +126,7 @@ class GoalOverview extends PureComponent {
   renderRight() {
     return (
       <div className="goal-overview__column goal-overview__column--right">
-        <Section title="Latest Activity" className="goal-overview__last-activity" />
+        <Section title="Latest Activity" className="goal-overview__last-activity" actions={this.renderActivitySeeAllButton()} />
         <Section title="Attachments">
           {this.renderAttachments()}
         </Section>

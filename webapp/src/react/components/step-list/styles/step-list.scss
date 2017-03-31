@@ -40,8 +40,14 @@
 
   &__edit-button {
     @include font(12px, $deepBlue-30, 15px, 500);
+    user-select: none;
 
     &:hover {
+      @include font($c: $blue-100);
+      text-decoration: underline;
+    }
+
+    &--done {
       @include font($c: $blue-100)
     }
   }
@@ -262,6 +268,7 @@
 
   &--hover {
     opacity: 1;
+
     .indicator__number {
       transform: translateX(30px);
       transition: .3s ease;
@@ -272,6 +279,10 @@
       transition: .3s ease;
     }
 
+    #{$b}__title, #{$b}__assignees {
+      opacity: 1;
+      transition: .15s ease;
+    }
   }
 }
 
@@ -310,9 +321,11 @@
     $flexIgnoreList: '#{$b}__remove', '#{$b}__assignees';
 
     @include flexContainer('row', left, center, $flexIgnoreList);
+    padding: 10px 0;
+    transition: 0s;
 
     #{$b}__remove {
-      padding-right: 12px;
+      padding-right: 13px;
     }
 
     input#{$b}__input {
