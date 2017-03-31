@@ -5,7 +5,7 @@ import { fromJS } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
-import { steps, ways, goals } from 'swipes-core-js/actions';
+import * as ca from 'swipes-core-js/actions';
 
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import GoalOverview from './GoalOverview';
@@ -56,70 +56,7 @@ class HOCGoalOverview extends PureComponent {
       }
     });
   }
-  onStepClick(i, e) {
-    const { inputMenu, contextMenu, goal, removeStep, renameStep } = this.props;
-    const helper = this.getHelper();
 
-    const step = helper.getStepByIndex(i);
-    const options = this.getOptionsForE(e);
-    const remove = {
-      title: 'Remove',
-    };
-
-    const items = [{ title: 'Rename' }, remove];
-
-    const delegate = {
-      onItemAction: (item) => {
-        const clearCB = this.clearLoading.bind(this, step.get('id'));
-        if (item.title === 'Rename') {
-          inputMenu({
-            ...options,
-            text: step.get('title'),
-            buttonLabel: 'Rename',
-          }, (title) => {
-            if (title !== step.get('title') && title.length) {
-              this.setLoading(step.get('id'), 'Renaming...');
-              renameStep(goal.get('id'), step.get('id'), title).then(() => {
-                this.clearLoading(step.get('id'));
-              });
-            }
-          });
-        } else {
-          contextMenu(null);
-          this.setLoading(step.get('id'), 'Removing...');
-          removeStep(goal.get('id'), step.get('id')).then(() => clearCB());
-        }
-      },
-    };
-    contextMenu({
-      options,
-      component: TabMenu,
-      props: {
-        delegate,
-        items,
-      },
-    });
-  }
-  onAssign(i, options) {
-    const { selectAssignees, assignStep, goal } = this.props;
-    const helper = this.getHelper();
-    const step = helper.getStepByIndex(i);
-
-    options.actionLabel = 'Reassign';
-    if (step.get('id') === helper.getCurrentStepId()) {
-      options.actionLabel = 'Reassign and write message';
-    }
-    let overrideAssignees;
-    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        const clearCB = this.clearLoading.bind(null, step.get('id'));
-        this.setLoading(step.get('id'), 'Assigning...');
-        assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(() => clearCB());
-      }
-    });
-  }
   onHandoffMessage(handoff) {
     const helper = this.getHelper();
     let assignees = helper.getAllInvolvedAssignees();
@@ -128,30 +65,6 @@ class HOCGoalOverview extends PureComponent {
     }
     // console.log(i, handoff);
     this.onOpenNotify(undefined, assignees);
-  }
-  onStepCheck(i, e) {
-    const { completeStep, goal } = this.props;
-    const options = this.getOptionsForE(e);
-    const helper = this.getHelper();
-    const currentI = helper.getCurrentStepIndex();
-    const handoff = { backward: (i < currentI), fromId: helper.getCurrentStepId() };
-    this.setLoading('completing', `${i}`);
-    if (i >= currentI) {
-      i += 1;
-    }
-
-    const step = helper.getStepByIndex(i);
-    const nextStepId = (step && step.get('id')) || null;
-    handoff.toId = nextStepId;
-    completeStep(goal.get('id'), nextStepId).then((res) => {
-      if (res && res.ok) {
-        this.onHandoffMessage(handoff, options);
-        this.clearLoading('completing');
-      } else {
-        this.clearLoading('completing', '!Something went wrong');
-      }
-    });
-    e.stopPropagation();
   }
 
   onOpenNotify(notify) {
@@ -264,11 +177,6 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onAddStep(title) {
-    const { addStep, goal } = this.props;
-    this.setLoading('add', 'Adding...');
-    addStep(goal.get('id'), title).then(() => this.clearLoading('add'));
-  }
   getOptionsForE(e) {
     if (e && e.boundingRect) {
       return e;
@@ -287,11 +195,6 @@ class HOCGoalOverview extends PureComponent {
     if (tabIndex !== index) {
       this.setState({ tabIndex: index });
     }
-  }
-  clickedAssign(i, e) {
-    e.stopPropagation();
-    const options = this.getOptionsForE(e);
-    this.onAssign(i, options);
   }
   render() {
     const { goal, me } = this.props;
@@ -313,20 +216,14 @@ const { func } = PropTypes;
 
 HOCGoalOverview.propTypes = {
   goal: map,
-  addStep: func,
   confirm: func,
   me: map,
   navPop: func,
   inputMenu: func,
   archive: func,
   createWay: func,
-  selectAssignees: func,
   openSecondary: func,
   renameGoal: func,
-  completeStep: func,
-  assignStep: func,
-  renameStep: func,
-  removeStep: func,
   contextMenu: func,
 };
 
@@ -338,15 +235,10 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  createWay: ways.create,
-  archive: goals.archive,
+  createWay: ca.ways.create,
+  archive: ca.goals.archive,
   contextMenu: a.main.contextMenu,
-  addStep: steps.add,
-  completeStep: goals.completeStep,
-  renameGoal: goals.rename,
-  removeStep: steps.remove,
-  renameStep: steps.rename,
-  assignStep: steps.assign,
+  renameGoal: ca.goals.rename,
   selectAssignees: a.goals.selectAssignees,
   confirm: a.menus.confirm,
   inputMenu: a.menus.input,

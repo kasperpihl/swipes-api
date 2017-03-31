@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { list } from 'react-immutable-proptypes';
+import { list, map } from 'react-immutable-proptypes';
 import {
   bindAll,
   setupCachedCallback,
@@ -8,6 +8,7 @@ import {
   truncateString,
 } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
+import Button from 'Button';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import StepTooltip from './StepTooltip';
 
@@ -24,7 +25,9 @@ class StepList extends PureComponent {
     this.tooltips = [];
     this.callDelegate = setupDelegate(props.delegate);
     this.onEnter = setupCachedCallback(this.onEnter, this);
-    bindAll(this, ['onKeyDown', 'onLeave', 'onChange', 'onBlur', 'onFocus']);
+    this.onKeyDownCached = setupCachedCallback(this.onKeyDown, this);
+    this.onRemoveCached = setupCachedCallback(this.callDelegate.bind(null, 'onStepRemove'));
+    bindAll(this, ['onLeave', 'onChange', 'onBlur', 'onFocus']);
     this.onCheck = setupCachedCallback(this.callDelegate.bind(null, 'onStepCheck'));
   }
   componentDidMount() {
@@ -60,12 +63,11 @@ class StepList extends PureComponent {
   }
   onChange(e) {
     const value = e.target.value;
-
     this.setState({ addStepValue: value });
   }
-  onKeyDown(e) {
+  onKeyDown(i, e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {
-      this.callDelegate('onAddStep', e.target.value);
+      this.callDelegate('onStepAdd', e.target.value);
       this.setState({ addStepValue: '' });
     }
   }
@@ -92,16 +94,59 @@ class StepList extends PureComponent {
     }
     return placeholder;
   }
+  renderEditStep(step, i) {
+    const { delegate, loadingState } = this.props;
+    let className = 'step-list-item';
+    let title = step.get('title');
+    if (loadingState.get(step.get('id')) && loadingState.get(step.get('id')).loading) {
+      title = loadingState.get(step.get('id')).loadingLabel;
+      className += ' step-list-item--loading';
+    }
+
+    return (
+      <div
+        className={className}
+        key={i}
+      >
+        <div className="step-list-item__remove" >
+          <Button
+            icon="Trash"
+            className="step-list-item__remove--button"
+            onClick={this.onRemoveCached(i)}
+          />
+        </div>
+        <input
+          type="text"
+          className="step-list-item__input"
+          onKeyDown={this.onKeyDownCached(i)}
+          defaultValue={title}
+          placeholder="Enter the step title"
+        />
+        <div className="step-list-item__assignees">
+          <HOCAssigning
+            delegate={delegate}
+            index={i}
+            assignees={step.get('assignees')}
+            rounded
+            size={24}
+          />
+        </div>
+      </div>
+    );
+  }
   renderStep(step, i) {
-    const { currentStepIndex, delegate, steps, loadingI } = this.props;
+    const { currentStepIndex, delegate, steps, loadingState, editMode } = this.props;
+    if (editMode) {
+      return this.renderEditStep(step, i);
+    }
     const completedI = currentStepIndex - 1;
     const { hoverIndex } = this.state;
     let hoverIcon = 'ActivityCheckmark';
     let className = 'step-list-item';
 
     let title = step.get('title');
-    if (step.get('loading')) {
-      title = step.get('loading');
+    if (loadingState.get(step.get('id')) && loadingState.get(step.get('id')).loading) {
+      title = loadingState.get(step.get('id')).loadingLabel;
       className += ' step-list-item--loading';
     }
 
@@ -121,8 +166,8 @@ class StepList extends PureComponent {
       }
     }
     this.tooltips[i] = tooltip;
-    if (typeof loadingI !== 'undefined') {
-      const lI = parseInt(loadingI, 10);
+    if (loadingState.get('completing') && loadingState.get('completing').loadingLabel) {
+      const lI = parseInt(loadingState.get('completing').loadingLabel, 10);
       if (lI < currentStepIndex) {
         if (i < currentStepIndex && i >= lI) {
           title = 'Going back...';
@@ -177,13 +222,14 @@ class StepList extends PureComponent {
     );
   }
   renderAddStep() {
-    const { addLoading } = this.props;
+    const { loadingState } = this.props;
     const { addFocus, addStepValue } = this.state;
 
     let addClass = 'add-step';
-
-    if (addLoading && addLoading.loading) {
+    let value = addStepValue;
+    if (loadingState.get('add') && loadingState.get('add').loading) {
       addClass += ' add-step--loading';
+      value = loadingState.get('add').loadingLabel;
     }
     if (addFocus || addStepValue.length) {
       addClass += ' add-step--focused';
@@ -198,9 +244,9 @@ class StepList extends PureComponent {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           className="add-step__input"
-          value={this.state.addStepValue}
+          value={value}
           onChange={this.onChange}
-          onKeyDown={this.onKeyDown}
+          onKeyDown={this.onKeyDownCached('add')}
           placeholder={placeholder}
         />
         <div className="add-step__indicator">
@@ -222,13 +268,13 @@ class StepList extends PureComponent {
 
 export default StepList;
 
-const { func, string, number, object } = PropTypes;
+const { func, number, object, bool } = PropTypes;
 
 StepList.propTypes = {
   steps: list,
+  editMode: bool,
   tooltip: func,
-  loadingI: string,
   delegate: object,
   currentStepIndex: number,
-  addLoading: object,
+  loadingState: map,
 };

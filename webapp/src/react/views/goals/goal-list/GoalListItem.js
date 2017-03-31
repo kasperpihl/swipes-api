@@ -12,17 +12,17 @@ class GoalListItem extends PureComponent {
     this.state = {};
     this.clickedListItem = this.clickedListItem.bind(this);
   }
-  getHelper() {
-    const { goal } = this.props;
-    return new GoalsUtil(goal);
-  }
-  clickedAssign(stepId, e) {
+  onAssign(stepId, e) {
     const { onAssignClick, goal } = this.props;
     const helper = this.getHelper();
 
     if (onAssignClick) {
       onAssignClick(goal.get('id'), helper.getCurrentStepId(), e);
     }
+  }
+  getHelper() {
+    const { goal } = this.props;
+    return new GoalsUtil(goal);
   }
   clickedListItem() {
     const { onClick, goal } = this.props;

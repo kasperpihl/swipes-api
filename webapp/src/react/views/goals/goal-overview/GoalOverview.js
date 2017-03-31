@@ -8,7 +8,6 @@ import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import TabBar from 'components/tab-bar/TabBar';
 import Section from 'components/section/Section';
 import Button from 'Button';
 import HOCHistory from './HOCHistory';
@@ -86,7 +85,7 @@ class GoalOverview extends PureComponent {
     );
   }
   renderLeft() {
-    const { delegate, loadingState } = this.props;
+    const { delegate } = this.props;
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getTotalNumberOfSteps();
@@ -96,26 +95,15 @@ class GoalOverview extends PureComponent {
     }
     return (
       <div className="goal-overview__column goal-overview__column--left">
-        <Section title={title} actions={this.renderStepListEditButton()}>
-          <HOCStepList
-            steps={helper.getOrderedSteps().map((s) => {
-              const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;
-              s = s.set('loading', l);
-              return s;
-            })}
-            editable
-            loadingI={loadingState.get('completing') && loadingState.get('completing').loadingLabel}
-            addLoading={loadingState.get('add')}
-            currentStepIndex={helper.getNumberOfCompletedSteps()}
-            delegate={delegate}
-          />
-        </Section>
+        <Section title={title} actions={this.renderStepListEditButton()} />
+        <HOCStepList
+          goalId={helper.getId()}
+          delegate={delegate}
+        />
       </div>
     );
   }
   renderRight() {
-    const { goal, tabIndex, delegate } = this.props;
-
     return (
       <div className="goal-overview__column goal-overview__column--right">
         <Section title="Latest Activity" className="goal-overview__last-activity" />

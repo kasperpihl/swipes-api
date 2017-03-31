@@ -22,7 +22,7 @@ class HOCNotify extends PureComponent {
       notify: savedState || fromJS({
         flags: notify.get('flags') || [],
         reply_to: notify.get('reply_to') || null,
-        assignees: notify.get('assignees') || null,
+        assignees: notify.get('assignees') || [],
         message: notify.get('message') || '',
         request: notify.get('request') || false,
         notification_type: notify.get('notification_type') || 'default',
@@ -102,7 +102,7 @@ class HOCNotify extends PureComponent {
   updateHandoff(notify) {
     this.setState({ notify });
   }
-  clickedAssign(index, e) {
+  onAssign(index, e) {
     this.onChangeClick('assignees', e);
   }
 
