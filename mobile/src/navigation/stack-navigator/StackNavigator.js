@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import { View, NavigationExperimental, StyleSheet } from 'react-native';
+import { View, StyleSheet, NavigationExperimental } from 'react-native';
 import Navigator from './Navigator';
+import ViewController from '../../view-controller/ViewController';
 
 const {
-  CardStack: NavigationCardStack,
   StateUtils: NavigationStateUtils,
 } = NavigationExperimental;
 
@@ -22,7 +22,11 @@ class StackNavigator extends PureComponent {
         ],
       },
     };
+
     this.onNavigationChange = this.onNavigationChange.bind(this);
+  }
+  componentWillMount() {
+    console.log(<ViewController navId={this.props.navId} />);
   }
   onNavigationChange(type, view) {
     let { navigationState } = this.state;
@@ -35,8 +39,9 @@ class StackNavigator extends PureComponent {
           component: view.component,
           props: view.props,
         };
-
+        console.log('navi1', navigationState);
         navigationState = NavigationStateUtils.push(navigationState, route);
+        console.log('navi2', navigationState);
         break;
       case 'pop':
         navigationState = NavigationStateUtils.pop(navigationState);

@@ -4,35 +4,31 @@ import { Platform, TouchableNativeFeedback, TouchableHighlight } from 'react-nat
 
 class FeedbackButton extends Component {
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
   renderFeedbackButton() {
-
     return (
       <TouchableNativeFeedback {...this.props}>
         {this.props.children}
       </TouchableNativeFeedback>
-    )
+    );
   }
   renderHighlightButton() {
-
     return (
-      <TouchableHighlight  {...this.props}>
+      <TouchableHighlight {...this.props}>
         {this.props.children}
       </TouchableHighlight >
-    )
+    );
   }
   renderButton() {
-
     if (Platform.OS === 'android') {
-      return this.renderFeedbackButton()
-    } else {
-      return this.renderHighlightButton()
+      return this.renderFeedbackButton();
     }
+    return this.renderHighlightButton();
   }
   render() {
-    return this.renderButton()
+    return this.renderButton();
   }
 }
 

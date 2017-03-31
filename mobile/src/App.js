@@ -3,13 +3,16 @@ import { connect } from 'react-redux';
 import * as a from './actions';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
 import Swiper from 'react-native-swiper';
+import AndroidBackButton from 'react-native-android-back-button';
 import LinearGradient from 'react-native-linear-gradient';
-import ViewController from './navigation/view-controller/ViewController';
+import StackNavigator from './navigation/stack-navigator/StackNavigator';
 import HOCProfile from './views/profile/HOCProfile';
 import HOCGoalList from './views/goallist/HOCGoalList';
 import HOCDashboard from './views/dashboard/HOCDashboard';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
+import DevTools from './components/dev-tools/DevTools';
+import HOCContextButton from './components/context-button/HOCContextButton';
 import { colors, viewSize } from './utils/globalStyles';
 
 const profile = {
@@ -33,7 +36,9 @@ const goalList = {
 class App extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { initialIndex: props.index };
+    this.state = { initialIndex: 1 };
+
+    this.backNavigation = this.backNavigation.bind(this);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -41,6 +46,17 @@ class App extends PureComponent {
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
+  }
+  backNavigation() {
+    if (this.refs.swiper.state.index > 1) {
+      this.refs.swiper.scrollBy(-1);
+      return true;
+    } else if (this.refs.swiper.state.index < 1) {
+      this.refs.swiper.scrollBy(1);
+      return true;
+    }
+
+    return false;
   }
   renderLoader() {
     const { isHydrated, lastConnect } = this.props;
@@ -77,23 +93,26 @@ class App extends PureComponent {
     }
 
     return (
-      <Swiper
-        loop={false}
-        index={this.state.initialIndex}
-        bounces
-        renderPagination={(index) => {
-          const { navChange } = this.props;
-          const { initialIndex } = this.state;
+      <View style={styles.app}>
+        <AndroidBackButton onPress={this.backNavigation} />
+        <Swiper
+          loop={false}
+          index={this.state.initialIndex}
+          bounces
+          ref="swiper"
+          showsPagination={false}
+          onMomentumScrollEnd={(e, state) => {
+            const { navChange } = this.props;
+            setTimeout(() => navChange(state.index), 1);
+          }}
+        >
+          <StackNavigator scene={profile} navId="Profile" />
+          <StackNavigator scene={dashboard} navId="Dashboard" />
+          <StackNavigator scene={goalList} navId="Goallist" />
+        </Swiper>
 
-          if (index !== initialIndex) {
-            setTimeout(() => navChange(index), 1);
-          }
-        }}
-      >
-        <ViewController scene={profile} navId="Profile" />
-        <ViewController scene={dashboard} navId="Dashboard" />
-        <ViewController scene={goalList} navId="Goallist" />
-      </Swiper>
+        {/* <HOCContextButton />*/}
+      </View>
     );
   }
   render() {
@@ -107,6 +126,7 @@ class App extends PureComponent {
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
+        <DevTools />
       </View>
     );
   }
@@ -115,7 +135,6 @@ class App extends PureComponent {
 function mapStateToProps(state) {
   return {
     token: state.getIn(['connection', 'token']),
-    index: state.getIn(['navigation', 'index']),
     lastConnect: state.getIn(['connection', 'lastConnect']),
     isHydrated: state.getIn(['main', 'isHydrated']),
   };
@@ -130,16 +149,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bgColor,
     flexDirection: 'row',
-  },
-  app1: {
-    flex: 1,
-    backgroundColor: colors.bgColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  label: {
-    fontSize: 40,
-    color: '#333ddd',
   },
   gradient: {
     position: 'absolute',

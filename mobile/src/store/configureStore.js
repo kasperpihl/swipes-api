@@ -1,5 +1,5 @@
 import { compose, applyMiddleware, createStore } from 'redux';
-import {AsyncStorage} from 'react-native'
+import { AsyncStorage } from 'react-native';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import thunk from 'redux-thunk';
 import { Map } from 'immutable';
@@ -28,7 +28,7 @@ export default function configureStore(preloadedState) {
 
   persistStore(store, {
     storage: AsyncStorage,
-    blacklist: ['notes'],
+    blacklist: ['notes', 'navigation'],
   });
 
   return store;
