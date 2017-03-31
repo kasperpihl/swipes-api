@@ -236,9 +236,7 @@ class HOCAttachments extends PureComponent {
           New Note
         </button>
         <input type="file" multiple onChange={this.onChangeFiles} />
-        <div className="attachments__add-icon">
-          <Icon icon="Plus" className="attachments__svg" />
-        </div>
+        <div className="attachments__loader" />
       </div>
     );
   }

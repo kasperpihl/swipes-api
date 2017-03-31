@@ -5,14 +5,14 @@
   $b: &;
   @include size(100%, auto);
   background-color: $bg;
-  padding-top: 39px;
+
+  &__header {
+    @include size(100%, 39px);
+    @include flexContainer('row', between, center);
+    border-bottom: 1px solid $deepBlue-100;
+  }
 
   &__title {
-    @include size(100%, 39px);
-    @include flexContainer('row', left, center);
     @include font(12px, $deepBlue-100, 15px, 500);
-    position: absolute;
-    left: 0; top: 0;
-    border-bottom: 1px solid $deepBlue-100;
   }
 }

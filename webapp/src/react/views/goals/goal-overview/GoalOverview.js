@@ -80,6 +80,11 @@ class GoalOverview extends PureComponent {
       <HOCHistory goal={goal} />
     );
   }
+  renderStepListEditButton() {
+    return (
+      <div className="step-list__edit-button">Edit</div>
+    );
+  }
   renderLeft() {
     const { delegate, loadingState } = this.props;
     const helper = this.getHelper();
@@ -91,7 +96,7 @@ class GoalOverview extends PureComponent {
     }
     return (
       <div className="goal-overview__column goal-overview__column--left">
-        <Section title={title}>
+        <Section title={title} actions={this.renderStepListEditButton()}>
           <HOCStepList
             steps={helper.getOrderedSteps().map((s) => {
               const l = loadingState.get(s.get('id')) && loadingState.get(s.get('id')).loadingLabel;

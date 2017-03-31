@@ -36,6 +36,17 @@
 // Elements
 // ======================================================
 
+.step-list {
+
+  &__edit-button {
+    @include font(12px, $deepBlue-30, 15px, 500);
+
+    &:hover {
+      @include font($c: $blue-100)
+    }
+  }
+}
+
 .step-list-item {
   $b: &;
   &__indicator {

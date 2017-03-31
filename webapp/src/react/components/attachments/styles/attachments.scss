@@ -21,7 +21,7 @@
 
 .attachments {
 
-  &__add-icon {
+  &__loader {
     @include size(24px);
     border-radius: 50%;
     opacity: 0;
@@ -114,7 +114,7 @@
         transition: .5s ease;
       }
 
-      #{$b}__add-icon {
+      #{$b}__loader {
         opacity: 1;
         transition: .2s;
         animation: rotateAddLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
