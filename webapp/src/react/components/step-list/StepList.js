@@ -119,7 +119,7 @@ class StepList extends PureComponent {
     const { stepTitles } = this.state;
     const step = steps.get(i);
     const title = stepTitles.get(step.get('id'));
-    if (title && title.length) {
+    if (title && title.length && title !== step.get('title')) {
       this.callDelegate('onStepRename', i, title);
       this.setState({ stepTitles: stepTitles.remove(step.get('id')) });
     }
@@ -150,6 +150,7 @@ class StepList extends PureComponent {
           type="text"
           className="step-list-item__input"
           onKeyDown={this.onKeyDownCached(i)}
+          onBlur={this.onBlurCached(i)}
           value={title}
           onChange={this.onChangeCached(i)}
           placeholder="Enter the step title"
