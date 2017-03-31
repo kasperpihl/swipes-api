@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate, truncateString } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';
@@ -20,7 +20,7 @@ class GoalOverview extends PureComponent {
     this.callDelegate = setupDelegate(props.delegate);
 
     this.onAskFor = this.callDelegate.bind(null, 'onAskFor');
-    this.onGive = this.callDelegate.bind(null, 'onGive');
+    this.onNotify = this.callDelegate.bind(null, 'onNotify');
     this.onContext = this.callDelegate.bind(null, 'onContext');
     this.onBarClick = this.callDelegate.bind(null, 'onBarClick');
   }
@@ -44,7 +44,7 @@ class GoalOverview extends PureComponent {
           />
           <Button
             text="Notify"
-            onClick={this.onGive}
+            onClick={this.onNotify}
           />
           <Button
             icon="ThreeDots"
@@ -100,8 +100,9 @@ class GoalOverview extends PureComponent {
             return s;
           })}
           editable
+          loadingI={loadingState.get('completing') && loadingState.get('completing').loadingLabel}
           addLoading={loadingState.get('add')}
-          completed={helper.getNumberOfCompletedSteps()}
+          currentStepIndex={helper.getNumberOfCompletedSteps()}
           delegate={delegate}
         />
       </div>
@@ -120,11 +121,15 @@ class GoalOverview extends PureComponent {
   }
   renderFooter() {
     const helper = this.getHelper();
+    if (helper.getIsCompleted()) {
+      return undefined;
+    }
+    const { loadingState } = this.props;
     let buttonLabel = 'Start goal';
 
     const currentStep = helper.getCurrentStep();
     if (currentStep) {
-      buttonLabel = `Complete "${currentStep.get('title')}"`;
+      buttonLabel = `Complete "${truncateString(currentStep.get('title'), 19)}"`;
     }
     const nextStep = helper.getNextStep();
     if (!nextStep) {
@@ -136,6 +141,7 @@ class GoalOverview extends PureComponent {
         <div className="handoff-bar__actions">
           <Button
             text={buttonLabel}
+            {...loadingState.get('completing')}
             primary
             onClick={this.onBarClick}
           />

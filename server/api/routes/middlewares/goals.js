@@ -4,6 +4,7 @@ import {
   object,
   array,
   any,
+  bool,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -93,9 +94,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
 
   let type = 'step_completed';
 
-  if (goalProgress === 'start') {
-    type = 'goal_started';
-  }
   if (!next_step_id) {
     type = 'goal_completed';
   }
@@ -120,10 +118,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     current_step_id: next_step_id,
     completed: type === 'goal_completed',
   };
-
-  if (!goal.status.started) {
-    goal.status.started = true;
-  }
 
   goal.history.push(history);
 
@@ -476,7 +470,8 @@ const goalsNotify = valLocals('goalsNotify', {
   flags: array.of(string),
   message: string,
   notificationGroupId: string.require(),
-  request: any.of('feedback', 'status', 'assets', 'decision'),
+  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  request: bool,
   reply_to: string,
 }, (req, res, next, setLocals) => {
   const {
@@ -486,7 +481,8 @@ const goalsNotify = valLocals('goalsNotify', {
     notificationGroupId,
     flags = [],
     message = '',
-    request = null,
+    notification_type = 'default',
+    request = false,
     reply_to = null,
   } = res.locals;
 
@@ -494,6 +490,7 @@ const goalsNotify = valLocals('goalsNotify', {
     flags,
     message,
     assignees,
+    notification_type,
     request,
     reply_to,
     type: 'goal_notify',

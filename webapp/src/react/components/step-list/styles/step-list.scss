@@ -34,19 +34,19 @@
 // ======================================================
 
 .step-list-item {
-
+  $b: &;
   &__indicator {
     @include size(49px, 100%);
     @include flexContainer('row', left, center);
     transition: .15s ease;
 
 
-    &:hover {
+    #{$b}--target {
       .indicator__number {
         transform: translateX(30px);
         transition: .3s ease;
       }
-      
+
       .indicator__icon {
         transform: translateX(2px);
         transition: .3s ease;
@@ -87,7 +87,7 @@
     &__icon {
       @include size(30px);
       position: absolute;
-      left: 0; top: 1px;
+      left: 0; top: 0px;
       transform: translateX(-100%);
       transition: .3s ease;
     }
@@ -226,23 +226,25 @@
     opacity: 1;
 
     .indicator {
-      background-color: $green-color;
-      border: 2px solid $green-color;
+      border-color: $green-color;
+    }
 
-      &__number {
-        @include font($c: $bg);
-      }
+    .indicator__svg {
+      @include svg-color($green-color)
     }
   }
 
   &:not(&--current):not(&--future)#{&}--hover {
-    .indicator {
-      background-color: $bg;
-      border: 2px solid $deepBlue-100;
-
-      &__number {
-        @include font($c: $deepBlue-100);
-      }
+    // .indicator {
+    //   background-color: $bg;
+    //   border: 2px solid $deepBlue-100;
+    //
+    //   &__number {
+    //     @include font($c: $deepBlue-100);
+    //   }
+    // }
+    .indicator__svg {
+      @include svg-color(white);
     }
   }
 
@@ -252,6 +254,15 @@
 
   &--hover {
     opacity: 1;
+    .indicator__number {
+      transform: translateX(30px);
+      transition: .3s ease;
+    }
+
+    .indicator__icon {
+      transform: translateX(2px);
+      transition: .3s ease;
+    }
 
   }
 }

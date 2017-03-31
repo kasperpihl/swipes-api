@@ -114,42 +114,55 @@ class HOCGoalOverview extends PureComponent {
       if (newAssignees) {
         overrideAssignees = newAssignees;
       } else if (overrideAssignees) {
-        if (i === helper.getCurrentStepIndex()) {
-          this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
-        } else {
-          const clearCB = this.clearLoading.bind(null, step.get('id'));
-          this.setLoading(step.get('id'), 'Assigning...');
-          assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(() => clearCB());
-        }
+        const clearCB = this.clearLoading.bind(null, step.get('id'));
+        this.setLoading(step.get('id'), 'Assigning...');
+        assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(() => clearCB());
       }
     });
   }
-
+  onHandoffMessage(handoff, options) {
+    const { confirm } = this.props;
+    confirm(Object.assign({}, options, {
+      title: 'Send handoff',
+      message: 'Let Kasper know that you passed this on to him.',
+      actions: [{ text: 'No message' }, { text: 'Write message' }],
+    }), (i) => {
+      if (i === 1) {
+        const helper = this.getHelper();
+        let assignees = helper.getAllInvolvedAssignees();
+        if (handoff.toId) {
+          assignees = helper.getAssigneesForStepId(handoff.toId);
+        }
+        // console.log(i, handoff);
+        this.onOpenNotify(undefined, assignees);
+      }
+    });
+  }
   onStepCheck(i, e) {
     const { completeStep, goal } = this.props;
+    const options = this.getOptionsForE(e);
     const helper = this.getHelper();
-    // const currentI = helper.getCurrentStepIndex();
+    const currentI = helper.getCurrentStepIndex();
+    const handoff = { backward: (i < currentI), fromId: helper.getCurrentStepId() };
+    this.setLoading('completing', `${i}`);
+    if (i >= currentI) {
+      i += 1;
+    }
+
     const step = helper.getStepByIndex(i);
     const nextStepId = (step && step.get('id')) || null;
-
-    completeStep(goal.get('id'), nextStepId).then(() => {
-      console.log('completed!!!!');
+    handoff.toId = nextStepId;
+    completeStep(goal.get('id'), nextStepId).then((res) => {
+      if (res && res.ok) {
+        this.onHandoffMessage(handoff, options);
+        this.clearLoading('completing');
+      } else {
+        this.clearLoading('completing', '!Something went wrong');
+      }
     });
     e.stopPropagation();
   }
 
-  onHandoff(_target, title, assignees) {
-    const { openSecondary, goal } = this.props;
-    openSecondary({
-      id: 'GoalHandoff',
-      title,
-      props: {
-        _target,
-        assignees,
-        goalId: goal.get('id'),
-      },
-    });
-  }
   onSelectAssigneesAndNotify(target, options) {
     const helper = this.getHelper();
     const { contextMenu, me, selectAssignees } = this.props;
@@ -241,12 +254,15 @@ class HOCGoalOverview extends PureComponent {
   onAskFor(e) {
     const { contextMenu } = this.props;
     const options = this.getOptionsForE(e);
-    const items = ['Feedback', 'Assets', 'Decision', 'Status'].map(title => ({ title }));
+    options.alignY = 'top';
+    options.positionY = 6;
+    options.excludeY = true;
+    const items = ['Feedback', 'Assets', 'Decision', 'Status'].map(title => ({ title, leftIcon: { icon: 'Checkmark' } }));
 
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
-        this.onSelectAssigneesAndNotify(item.title.toLowerCase(), options);
+        this.onOpenNotify(item.title.toLowerCase(), fromJS([]));
       },
     };
     contextMenu({
@@ -255,14 +271,20 @@ class HOCGoalOverview extends PureComponent {
       props: {
         delegate,
         items,
+        style: {
+          width: '210px',
+        },
       },
     });
   }
-  onGive(e) {
+  onNotify(e) {
     const options = this.getOptionsForE(e);
     this.onSelectAssigneesAndNotify(null, options);
   }
-
+  onBarClick(e) {
+    const helper = this.getHelper();
+    this.onStepCheck(helper.getCurrentStepIndex(), e);
+  }
   onContext(e) {
     const {
       goal,
@@ -275,8 +297,10 @@ class HOCGoalOverview extends PureComponent {
     const options = this.getOptionsForE(e);
     const delegate = {
       onItemAction: (item) => {
-        if (item.id === '_complete') {
-          this.onHandoff(item.id, 'Handoff');
+        if (item.title === 'Complete goal') {
+          const helper = this.getHelper();
+          const totalSteps = helper.getTotalNumberOfSteps();
+          this.onStepCheck(totalSteps, options);
           contextMenu(null);
         } else if (item.id === 'way') {
           inputMenu(Object.assign({}, options, {
@@ -316,7 +340,7 @@ class HOCGoalOverview extends PureComponent {
       component: TabMenu,
       props: {
         items: [
-          { id: '_complete', title: 'Complete goal' },
+          { title: 'Complete goal' },
           // { id: 'way', title: 'Save as a Way' },
           { title: 'Archive Goal' },
         ],
@@ -330,6 +354,9 @@ class HOCGoalOverview extends PureComponent {
     addStep(goal.get('id'), title).then(() => this.clearLoading('add'));
   }
   getOptionsForE(e) {
+    if (e && e.boundingRect) {
+      return e;
+    }
     return {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
@@ -378,7 +405,6 @@ HOCGoalOverview.propTypes = {
   archive: func,
   createWay: func,
   selectAssignees: func,
-  goalStart: func,
   openSecondary: func,
   renameGoal: func,
   completeStep: func,
@@ -401,7 +427,6 @@ export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
   addStep: steps.add,
   completeStep: goals.completeStep,
-  goalStart: goals.start,
   renameGoal: goals.rename,
   removeStep: steps.remove,
   renameStep: steps.rename,

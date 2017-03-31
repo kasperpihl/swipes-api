@@ -8,9 +8,10 @@ import {
   setupDelegate,
   getParentByClass,
   bindAll,
+  truncateString,
 } from 'swipes-core-js/classes/utils';
-import StepTooltip from './StepTooltip';
 import Icon from 'Icon';
+import StepTooltip from './StepTooltip';
 
 import './styles/step-list.scss';
 
@@ -22,6 +23,7 @@ class HOCStepList extends PureComponent {
       addStepValue: '',
       addFocus: false,
     };
+    this.tooltips = [];
     this.onEnter = setupCachedCallback(this.onEnter, this);
     bindAll(this, ['onLeave', 'onChange', 'addStep', 'onBlur', 'onFocus']);
     this.callDelegate = setupDelegate(props.delegate);
@@ -40,12 +42,13 @@ class HOCStepList extends PureComponent {
   onBlur() {
     this.setState({ addFocus: false });
   }
-  onEnter(i, tooltipText, e) {
-    const target = getParentByClass(e.target, 'step-list-item__indicator');
+  onEnter(i, e) {
+    const target = getParentByClass(e.target, 'step-list-item');
 
     if (target) {
+      const tooltipText = this.tooltips[i];
       const { tooltip, tooltipAlign } = this.props;
-      const position = tooltipAlign || 'left';
+      const position = tooltipAlign || 'right';
 
       const data = {
         component: StepTooltip,
@@ -94,31 +97,11 @@ class HOCStepList extends PureComponent {
     }
   }
   renderStep(step, i) {
-    const { completed, delegate, noActive } = this.props;
-    const completedI = completed - 1;
-    const currentStepIndex = completed;
+    const { currentStepIndex, delegate, steps, loadingI } = this.props;
+    const completedI = currentStepIndex - 1;
     const { hoverIndex } = this.state;
-
+    let hoverIcon = 'ActivityCheckmark';
     let className = 'step-list-item';
-
-    if (i <= completedI) {
-      className += ' step-list-item--completed';
-    } else if (i === currentStepIndex && !noActive) {
-      className += ' step-list-item--current';
-    } else {
-      className += ' step-list-item--future';
-    }
-
-
-    if (hoverIndex !== -1) {
-      if (hoverIndex >= currentStepIndex) {
-        if (i >= currentStepIndex && i < hoverIndex) {
-          className += ' step-list-item--hover';
-        }
-      } else if (i <= completedI && i >= hoverIndex) {
-        className += ' step-list-item--hover';
-      }
-    }
 
     let title = step.get('title');
     if (step.get('loading')) {
@@ -126,41 +109,60 @@ class HOCStepList extends PureComponent {
       className += ' step-list-item--loading';
     }
 
-    let tooltip = 'Go back to this step';
-    if (i === currentStepIndex) {
-      tooltip = 'Redo current step';
-    }
-    if (i > currentStepIndex) {
-      tooltip = 'Go forward to this step';
-    }
-    /* if (i > completedI) {
-      tooltip = 'Reassign current step';
-      if (i > completed) {
-        const numberOfComplete = i - completedI - 1;
-        tooltip = `Complete ${numberOfComplete} step${numberOfComplete > 1 ? 's' : ''}`;
+    let tooltip;
+    if (i <= completedI) {
+      tooltip = `Go back to "${truncateString(step.get('title'), 19)}"`;
+      className += ' step-list-item--completed';
+      hoverIcon = 'Iteration';
+    } else if (i === currentStepIndex) {
+      tooltip = `Complete "${truncateString(step.get('title'), 19)}"`;
+      className += ' step-list-item--current';
+    } else {
+      tooltip = `Complete ${i - completedI} steps`;
+      className += ' step-list-item--future';
+      if (i === steps.size - 1) {
+        tooltip = 'Complete goal';
       }
-    }*/
+    }
+    this.tooltips[i] = tooltip;
+    if (typeof loadingI !== 'undefined') {
+      const lI = parseInt(loadingI, 10);
+      if (lI < currentStepIndex) {
+        if (i < currentStepIndex && i >= lI) {
+          title = 'Going back...';
+          className += ' step-list-item--hover';
+        }
+      } else if (i >= currentStepIndex && i <= lI) {
+        title = 'Completing...';
+        className += ' step-list-item--hover';
+      }
+    }
 
-    const { fullHover } = this.props;
+    if (hoverIndex !== -1) {
+      if (hoverIndex >= currentStepIndex) {
+        if (i >= currentStepIndex && i <= hoverIndex) {
+          className += ' step-list-item--hover';
+        }
+      } else if (i < currentStepIndex && i >= hoverIndex) {
+        className += ' step-list-item--hover';
+      }
+    }
 
 
     return (
       <div
         className={className}
         key={i}
-        onMouseEnter={fullHover ? this.onEnter(i) : undefined}
-        onMouseLeave={fullHover ? this.onLeave : undefined}
-        onClick={this.onClick(i)}
+        onMouseEnter={this.onEnter(i)}
+        onMouseLeave={this.onLeave}
+        onClick={this.onCheck(i)}
       >
-        <div
-          className="step-list-item__indicator"
-          onClick={this.onCheck(i)}
-          onMouseEnter={fullHover ? undefined : this.onEnter(i, tooltip)}
-          onMouseLeave={fullHover ? undefined : this.onLeave}
-        >
+        <div className="step-list-item__indicator">
           <div className="indicator">
             <div className="indicator__number">{i + 1}</div>
-            <div className="indicator__icon"><Icon icon="ArrowRightLine" className="indicator__svg" /></div>
+            <div className="indicator__icon">
+              <Icon icon={hoverIcon} className="indicator__svg" />
+            </div>
           </div>
         </div>
         <div className="step-list-item__title">
@@ -236,9 +238,7 @@ const { string, number, object, bool, func } = PropTypes;
 HOCStepList.propTypes = {
   steps: list,
   tooltip: func,
-  noActive: bool,
-  fullHover: bool,
-  completed: number,
+  currentStepIndex: number,
   delegate: object,
   addLoading: object,
   tooltipAlign: string,

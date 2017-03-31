@@ -53,6 +53,19 @@ const goalsNotifyAddSenderAlways = (req, res, next) => {
 
   return next();
 };
+const goalsNotifyAdditionalData = (req, res, next) => {
+  const {
+    goal,
+    historyIndex,
+    notificationData,
+  } = res.locals;
+  const historyItem = goal.history[historyIndex];
+  const request = historyItem.request;
+
+  res.locals.notificationData = Object.assign({}, notificationData, { request });
+
+  return next();
+};
 const goalsRenamedNotificationData = (req, res, next) => {
   const {
     goal_id,
@@ -97,6 +110,7 @@ const goalsGeneralWithHistoryNotificationData = (req, res, next) => {
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = { goal };
+  res.locals.historyIndex = historyIndex;
 
   return next();
 };
@@ -128,6 +142,7 @@ export {
   goalsGetSingle,
   goalsCreatedNotificationData,
   goalsNotifyAddSenderAlways,
+  goalsNotifyAdditionalData,
   goalsRenamedNotificationData,
   goalsGeneralWithHistoryNotificationData,
   goalsLoadedWayNotificationData,

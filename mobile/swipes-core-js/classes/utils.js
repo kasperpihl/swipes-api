@@ -140,6 +140,14 @@ export function requireParams() {
   // });
 }
 
+export function truncateString(string, maxLength) {
+  if (typeof string === 'string' && maxLength < string.length) {
+    string = string.substr(0, maxLength);
+    return `${string}...`;
+  }
+  return string;
+}
+
 export function shortUrlFromShareUrl(url) {
   return url.split('/s/')[1].split('/')[0];
 }
