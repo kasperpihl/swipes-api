@@ -28,6 +28,7 @@
     @include size(100%, 67px);
     @include flexContainer('row', left, center, $flexIgnoreList);
     border-top: 1px solid $deepBlue-5;
+    border-bottom: 1px solid $deepBlue-5;
     transition: .15s ease;
 }
 
@@ -74,11 +75,11 @@
     border: 2px solid $green-color;
     border-radius: 50%;
     overflow: hidden;
-    transition: .15s ease;
+    transition: .3s ease;
 
     &__number {
       @include font(13px, $bg, 16px, bold);
-      transition: .15s ease;
+      transition: .3s ease;
     }
 
     &__icon {
@@ -92,7 +93,7 @@
 
     &__svg {
       @include size(24px);
-      @include svg-color(white);
+      @include svg-color($deepBlue-100);
     }
   }
 }
@@ -234,8 +235,13 @@
 
   &:not(&--current):not(&--future)#{&}--hover {
 
+    .indicator {
+      border-color: $deepBlue-100;
+      background-color: white;
+    }
+
     .indicator__svg {
-      @include svg-color(white);
+      @include svg-color($deepBlue-100);
     }
   }
 

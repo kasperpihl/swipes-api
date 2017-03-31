@@ -3,7 +3,7 @@
 @import '~styles/_functions.scss/';
 
 $contentOverflowPadding: 30px;
-$innercContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
+$innerContentWidth: calc(100% - (#{$contentOverflowPadding} * 2));
 
 // ======================================================
 // Block
@@ -67,7 +67,7 @@ section.view-container {
   }
 
   &__header {
-    @include size($innercContentWidth, auto);
+    @include size($innerContentWidth, auto);
     margin: 0 $contentOverflowPadding;
     will-change: width;
   }
@@ -85,7 +85,7 @@ section.view-container {
   }
 
   &__container {
-    @include size($innercContentWidth, 100%);
+    @include size($innerContentWidth, 100%);
     @include heightSpecifications(100%, initial);
     margin: 0 $contentOverflowPadding;
     will-change: width;

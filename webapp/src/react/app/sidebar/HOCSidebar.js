@@ -109,19 +109,6 @@ class HOCSidebar extends PureComponent {
 
     return undefined;
   }
-  renderSlider() {
-    const { activeItem } = this.state;
-    const styles = {};
-    let className = 'sidebar__slider';
-
-    if (activeItem === null) {
-      className += ' sidebar__slider--hidden';
-    } else {
-      styles.transform = `translateY(${activeItem * 100}%)`;
-    }
-
-    return <div className={className} style={styles} />;
-  }
   renderProfile() {
     const { me } = this.props;
 
@@ -140,7 +127,6 @@ class HOCSidebar extends PureComponent {
         <div className="sidebar__top-section">
           <div className="sidebar__section">
             {this.renderTopSection()}
-            {this.renderSlider()}
           </div>
         </div>
         <div className="sidebar__bottom-section">

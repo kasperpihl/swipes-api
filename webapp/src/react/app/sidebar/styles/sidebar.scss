@@ -15,6 +15,7 @@ $sidebarWidth: 84px;
   @include flexContainer('column', $selectorsToIgnoreFlex: $flexIgnoreList) {
     flex: none;
   };
+
   padding-bottom: 22px;
 }
 
@@ -36,13 +37,15 @@ $sidebarWidth: 84px;
     @include size(100%, auto);
     @include flexContainer('column', center, center);
     @include flex(none);
+
+    & > .sidebar__item {
+      background-color: transparent;
+    }
   }
 
   &__section {
     @include size(54px, auto);
     @include flexContainer('column', center, center);
-    border-radius: 50px;
-    background-color: rgba($deepBlue-100, .05);
   }
 }
 
@@ -70,6 +73,22 @@ $sidebarWidth: 84px;
     @include size(54px);
     @include flexContainer('row', center, center);
     z-index: 2;
+    overflow: hidden;
+    background-color: rgba($bg, .3);
+    transition: .2s ease;
+
+    &:first-child {
+      border-radius: 4px 4px 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 4px 4px;
+    }
+    
+
+    &:not(:first-child) {
+      margin-top: 3px
+    }
 
     & > * {
       pointer-events: none;
@@ -82,18 +101,16 @@ $sidebarWidth: 84px;
 .sidebar {
 
   &__notification {
-    @include size(auto, 18px);
-    @include widthSpecifications(18px, 30px);
+    @include size(auto, 16px);
+    @include widthSpecifications(16px, 30px);
     @include flexContainer('row', center, center);
     @include font(10px, $bg, 12px, bold);
     animation: newNotification 1s ease forwards;
     background: $red-100;
-    border-radius: 20px;
-    left: 55%; top: 45%;
+    right: 1px; top: 1px;
     padding-bottom: 1px;
     pointer-events: none;
     position: absolute;
-    transform: translateY(-110%);
   }
 }
 
@@ -105,6 +122,7 @@ $sidebarWidth: 84px;
     @include size(24px);
     @include svg-color(rgba($deepBlue-120, .4));
     pointer-events: none;
+    transition: .2s ease;
   }
 }
 
@@ -118,12 +136,16 @@ $sidebarWidth: 84px;
   &__item--active {
     #{$b}__icon {
       @include svg-color($deepBlue-100);
+      transition: .2s ease;
     }
 
     #{$b}__notification {
       @include font($c: $bg);
       background-color: $deepBlue-100;
+      transition: .2s ease;
     }
+
+    background-color: white;
   }
 }
 
@@ -167,6 +189,7 @@ $sidebarWidth: 84px;
   &__item:hover {
     #{$b}__icon {
       @include svg-color($deepBlue-100);
+      transition: .2s ease;
     }
   }
 }

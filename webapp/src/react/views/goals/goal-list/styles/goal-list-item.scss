@@ -1,19 +1,25 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$imgContHeight: 66px;
+$imgContHeight: 79px;
 
 .goal-list-item {
   $b: &;
 
-  @include size(100%, auto);
+  @include size(100%, $imgContHeight);
   @include flex(center, flex-start);
-  min-height: $imgContHeight;
-  position: relative;
-  padding: 15px 21px;
-  padding-bottom: 9px;
-  padding-left: 0px;
-  border-bottom: 1px solid $deepBlue-10;
+  border-bottom: 1px solid $deepBlue-6;
+  padding-left: 42px;
+
+  &:before {
+    content: '';
+    @include size(6px);
+    border-radius: 50%;
+    background-color: $deepBlue-30;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+  }
 
   &:hover {
 
@@ -40,7 +46,7 @@ $imgContHeight: 66px;
   }
 
   &__title {
-    @include font(17px, $deepBlue-100, 24px, 400);
+    @include font(18px, $deepBlue-80, 24px);
     width: calc(100% - 50px);
     transition: color .1s ease;
     white-space: nowrap;
@@ -57,7 +63,7 @@ $imgContHeight: 66px;
 
   &__label {
     @include size(100%, 20px);
-    @include font(12px, $deepBlue-40, 400);
+    @include font(12px, $deepBlue-50, 15px, 500);
     margin-top: 3px;
     letter-spacing: .5px;
     transition: .25s ease;
