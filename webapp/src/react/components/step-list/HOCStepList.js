@@ -121,7 +121,7 @@ class HOCStepList extends PureComponent {
         delegate={this}
         steps={steps}
         tooltip={tooltip}
-        editMode
+        editMode={editMode}
       />
     );
   }

@@ -23,6 +23,7 @@ class GoalOverview extends PureComponent {
     this.onNotify = this.callDelegate.bind(null, 'onNotify');
     this.onContext = this.callDelegate.bind(null, 'onContext');
     this.onBarClick = this.callDelegate.bind(null, 'onBarClick');
+    this.onEditSteps = this.callDelegate.bind(null, 'onEditSteps');
   }
   getHelper() {
     const { goal, myId } = this.props;
@@ -81,11 +82,13 @@ class GoalOverview extends PureComponent {
   }
   renderStepListEditButton() {
     return (
-      <div className="step-list__edit-button">Edit</div>
+      <div className="step-list__edit-button" onClick={this.onEditSteps}>
+        Edit
+      </div>
     );
   }
   renderLeft() {
-    const { delegate } = this.props;
+    const { delegate, editMode } = this.props;
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getTotalNumberOfSteps();
@@ -99,6 +102,7 @@ class GoalOverview extends PureComponent {
         <HOCStepList
           goalId={helper.getId()}
           delegate={delegate}
+          editMode={editMode}
         />
       </div>
     );
@@ -163,12 +167,13 @@ class GoalOverview extends PureComponent {
 
 export default GoalOverview;
 
-const { string, object, number } = PropTypes;
+const { string, object, number, bool } = PropTypes;
 
 GoalOverview.propTypes = {
   goal: map,
   tabIndex: number,
   myId: string,
+  editMode: bool,
   loadingState: map,
   delegate: object,
 };

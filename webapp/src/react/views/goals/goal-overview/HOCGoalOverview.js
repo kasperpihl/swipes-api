@@ -22,7 +22,10 @@ class HOCGoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     bindAll(this, ['onHandoff', 'onContext']);
-    this.state = { tabIndex: 0 };
+    this.state = {
+      tabIndex: 0,
+      editMode: false,
+    };
     setupLoading(this);
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
@@ -39,6 +42,9 @@ class HOCGoalOverview extends PureComponent {
     if (goal && !nextGoal) {
       navPop();
     }
+  }
+  onEditSteps() {
+    this.setState({ editMode: !this.state.editMode });
   }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
@@ -198,11 +204,12 @@ class HOCGoalOverview extends PureComponent {
   }
   render() {
     const { goal, me } = this.props;
-    const { tabIndex } = this.state;
+    const { tabIndex, editMode } = this.state;
 
     return (
       <GoalOverview
         goal={goal}
+        editMode={editMode}
         myId={me.get('id')}
         tabIndex={tabIndex}
         delegate={this}
