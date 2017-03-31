@@ -44,7 +44,7 @@ class GoalListItem extends PureComponent {
       width: `${completedProgressFill}%`,
     };
 
-    if (numberOfAllSteps === 0) {
+    if (!numberOfAllSteps) {
       return (
         <div className="progress-bar  progress-bar--empty">
           <div className="progress-bar__status">No steps added</div>
@@ -64,9 +64,10 @@ class GoalListItem extends PureComponent {
   renderAssignees() {
     const { goal } = this.props;
     const helper = this.getHelper();
-    if (helper.getIsCompleted()) {
+    if (helper.getIsCompleted() || !helper.getTotalNumberOfSteps()) {
       return undefined;
     }
+
     return (
       <div className="goal-list-item__assigning">
         <HOCAssigning

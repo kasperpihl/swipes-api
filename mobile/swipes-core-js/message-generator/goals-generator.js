@@ -19,11 +19,14 @@ export default class Goals {
   getSubtitle(goal) {
     const helper = new GoalsUtil(goal);
     const currentStep = helper.getCurrentStep();
-    if (helper.getIsCompleted() || !currentStep) {
+    if (helper.getIsCompleted()) {
       return 'All done.';
     }
     if (!helper.getTotalNumberOfSteps()) {
       return 'No steps added.';
+    }
+    if (!currentStep) {
+      return 'All done';
     }
 
     const currentStepIndex = helper.getCurrentStepIndex();
