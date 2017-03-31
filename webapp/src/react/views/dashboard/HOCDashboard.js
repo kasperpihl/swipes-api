@@ -12,9 +12,9 @@ import Dashboard from './Dashboard';
 /* global msgGen */
 const filters = [
   n => n.get('request'),
-  n => n.get('receiver') && n.get('important'),
+  n => n.get('receiver') && n.get('important') && !n.get('request'),
   n => n.get('sender'),
-  n => n.get('receiver') && !n.get('important'),
+  n => n.get('receiver') && !n.get('important') && !n.get('request'),
 ];
 
 class HOCDashboard extends PureComponent {
@@ -183,11 +183,6 @@ class HOCDashboard extends PureComponent {
       }
       case 'goal_created': {
         m = m.set('subtitle', `${from} created`);
-        m = m.set('icon', 'Plus');
-        break;
-      }
-      case 'goal_started': {
-        m = m.set('subtitle', `${from} kicked off`);
         m = m.set('icon', 'Plus');
         break;
       }

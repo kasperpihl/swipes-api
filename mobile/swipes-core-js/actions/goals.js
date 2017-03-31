@@ -1,12 +1,13 @@
-import * as a from './';
-import { valAction } from '../classes/utils';
-import GoalsUtil from '../classes/goals-util';
-
 import {
   string,
   any,
   object,
 } from 'valjs';
+
+import * as a from './';
+import { valAction } from '../classes/utils';
+import GoalsUtil from '../classes/goals-util';
+
 
 export const create = valAction('goals.create', [
   string.min(1).max(155).require(),
@@ -42,24 +43,10 @@ export const rename = (goalId, title) => a.api.request('goals.rename', {
   title,
 });
 
-export const notify = (gId, handoff) => (d, getState) => {
-  let assignees = handoff.get('assignees');
-  assignees = assignees || assignees.toJS();
-
-  const goal = getState().getIn(['goals', gId]);
-  const helper = new GoalsUtil(goal);
-  const currentStepId = helper.getCurrentStepId();
-
-  return d(a.api.request('goals.notify', {
-    goal_id: gId,
-    feedback: (handoff.get('target') === '_feedback'),
-
-    flags: handoff.get('flags'),
-    message: handoff.get('message'),
-    current_step_id: currentStepId,
-    assignees,
-  }));
-};
+export const notify = (gId, notification) => d => d(a.api.request('goals.notify', {
+  goal_id: gId,
+  ...notification.toJS(),
+}));
 
 export const completeStep = (gId, nextStepId) => (d, getState) => {
   const goal = getState().getIn(['goals', gId]);

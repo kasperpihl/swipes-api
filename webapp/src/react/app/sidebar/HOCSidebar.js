@@ -15,13 +15,12 @@ class HOCSidebar extends PureComponent {
       navItems: [
         { id: 'GoalList', svg: 'Goals' },
         { id: 'Dashboard', svg: 'Notification' },
-
         // { id: 'MilestoneList', svg: 'Milestones' },
 
         // { id: 'Find', svg: 'Find' },
         // { id: 'Slack', svg: 'Hashtag' },
         // { id: 'Store', svg: 'Store' },
-      ],
+      ].filter(v => !!v),
     };
     this.state.activeItem = this.getActiveItem(props.navId);
     this.onClickCached = setupCachedCallback(this.onClick, this);

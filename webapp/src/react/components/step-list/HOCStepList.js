@@ -233,10 +233,11 @@ export default connect(null, {
   tooltip: a.main.tooltip,
 })(HOCStepList);
 
-const { string, number, object, bool, func } = PropTypes;
+const { string, number, object, func } = PropTypes;
 
 HOCStepList.propTypes = {
   steps: list,
+  loadingI: string,
   tooltip: func,
   currentStepIndex: number,
   delegate: object,

@@ -1,15 +1,18 @@
-import Goals from './goals-generator';
-import Users from './users-generator';
-import Milestones from './milestones-generator';
-import Notifications from './notifications-generator';
-import Notify from './notify-generator';
+import GoalsGenerator from './goals-generator';
+import HistoryGenerator from './history-generator';
+import MilestonesGenerator from './milestones-generator';
+import NotificationsGenerator from './notifications-generator';
+import NotifyGenerator from './notify-generator';
+import UsersGenerator from './users-generator';
 
 export default class MessageGenerator {
   constructor(store) {
     this.store = store;
-    this.goals = new Goals(store, this);
-    this.notifications = new Notifications(store, this);
-    this.users = new Users(store, this);
-    this.milestones = new Milestones(store, this);
+    this.goals = new GoalsGenerator(store, this);
+    this.history = new HistoryGenerator(store, this);
+    this.milestones = new MilestonesGenerator(store, this);
+    this.notifications = new NotificationsGenerator(store, this);
+    this.notify = new NotifyGenerator(store, this);
+    this.users = new UsersGenerator(store, this);
   }
 }

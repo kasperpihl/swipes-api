@@ -17,12 +17,15 @@ class HOCNotify extends PureComponent {
   constructor(props) {
     super(props);
     const savedState = props.savedState && props.savedState.get('notify');
+    const notify = props.notify || fromJS({});
     this.state = {
       notify: savedState || fromJS({
-        flags: [],
-        assignees: props.assignees || null,
-        message: props.message || '',
-        request: props.request,
+        flags: notify.get('flags') || [],
+        reply_to: notify.get('reply_to') || null,
+        assignees: notify.get('assignees') || null,
+        message: notify.get('message') || '',
+        request: notify.get('request') || false,
+        notification_type: notify.get('notification_type') || 'default',
       }),
     };
     setupLoading(this);
@@ -119,16 +122,14 @@ class HOCNotify extends PureComponent {
   }
 }
 
-const { func, string, object } = PropTypes;
+const { func, object } = PropTypes;
 HOCNotify.propTypes = {
   navPop: func,
-  assignees: list,
+  notify: map,
   saveState: func,
   savedState: object,
-  message: string,
   goalNotify: func,
   selectAssignees: func,
-  request: string,
   goal: map,
   me: map,
 };

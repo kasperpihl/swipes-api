@@ -120,23 +120,14 @@ class HOCGoalOverview extends PureComponent {
       }
     });
   }
-  onHandoffMessage(handoff, options) {
-    const { confirm } = this.props;
-    confirm(Object.assign({}, options, {
-      title: 'Send handoff',
-      message: 'Let Kasper know that you passed this on to him.',
-      actions: [{ text: 'No message' }, { text: 'Write message' }],
-    }), (i) => {
-      if (i === 1) {
-        const helper = this.getHelper();
-        let assignees = helper.getAllInvolvedAssignees();
-        if (handoff.toId) {
-          assignees = helper.getAssigneesForStepId(handoff.toId);
-        }
-        // console.log(i, handoff);
-        this.onOpenNotify(undefined, assignees);
-      }
-    });
+  onHandoffMessage(handoff) {
+    const helper = this.getHelper();
+    let assignees = helper.getAllInvolvedAssignees();
+    if (handoff.toId) {
+      assignees = helper.getAssigneesForStepId(handoff.toId);
+    }
+    // console.log(i, handoff);
+    this.onOpenNotify(undefined, assignees);
   }
   onStepCheck(i, e) {
     const { completeStep, goal } = this.props;
@@ -163,90 +154,13 @@ class HOCGoalOverview extends PureComponent {
     e.stopPropagation();
   }
 
-  onSelectAssigneesAndNotify(target, options) {
-    const helper = this.getHelper();
-    const { contextMenu, me, selectAssignees } = this.props;
-    const all = helper.getAllInvolvedAssignees().filter(uId => uId !== me.get('id'));
-    const inStep = helper.getCurrentAssignees()
-                          .filter(uId => uId !== me.get('id'));
-    const prevStep = helper.getAssigneesForStepIndex(helper.getNumberOfCompletedSteps() - 1)
-                          .filter(uId => uId !== me.get('id'));
-    const items = [];
-    const shouldShow = (from, arrayTo) => {
-      if (!from.size) {
-        return false;
-      }
-      let show = true;
-      arrayTo.forEach((to) => {
-        if (to.size === from.size) {
-          const hasDifferent = from.find(id => !to.includes(id));
-          if (show && !hasDifferent) {
-            show = false;
-          }
-        }
-      });
-      return show;
-    };
-    if (shouldShow(all, [])) {
-      items.push({
-        subtitle: 'Everyone in goal',
-        assignees: all,
-        title: msgGen.users.getNames(all, { number: 4 }),
-      });
-    }
-    if (shouldShow(inStep, [all])) {
-      items.push({
-        subtitle: `Current assignee${prevStep.size > 1 ? 's' : ''}`,
-        assignees: inStep,
-        title: msgGen.users.getNames(inStep, { number: 4 }),
-      });
-    }
-    if (shouldShow(prevStep, [inStep, all])) {
-      items.push({
-        subtitle: `Previous assignee${prevStep.size > 1 ? 's' : ''}`,
-        assignees: prevStep,
-        title: msgGen.users.getNames(prevStep, { number: 4 }),
-      });
-    }
-
-    items.push({ title: 'Yourself', assignees: [me.get('id')] });
-    items.push({ title: 'Choose people' });
-    const delegate = {
-      onItemAction: (item) => {
-        contextMenu(null);
-        if (!item.assignees) {
-          let overrideAssignees;
-          options.actionLabel = 'Choose people';
-          selectAssignees(options, [], (newAssignees) => {
-            if (newAssignees) {
-              overrideAssignees = newAssignees;
-            } else if (overrideAssignees && overrideAssignees.length) {
-              this.onOpenNotify(target, fromJS(overrideAssignees));
-            }
-          });
-        } else {
-          this.onOpenNotify(target, item.assignees);
-        }
-      },
-    };
-
-    contextMenu({
-      options,
-      component: TabMenu,
-      props: {
-        delegate,
-        items,
-      },
-    });
-  }
-  onOpenNotify(request, assignees) {
+  onOpenNotify(notify) {
     const { openSecondary, goal } = this.props;
     openSecondary({
       id: 'Notify',
       title: 'Notify',
       props: {
-        request,
-        assignees,
+        notify,
         goalId: goal.get('id'),
       },
     });
@@ -262,7 +176,10 @@ class HOCGoalOverview extends PureComponent {
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
-        this.onOpenNotify(item.title.toLowerCase(), fromJS([]));
+        this.onOpenNotify(fromJS({
+          request: true,
+          notification_type: item.title.toLowerCase(),
+        }));
       },
     };
     contextMenu({
@@ -277,9 +194,8 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onNotify(e) {
-    const options = this.getOptionsForE(e);
-    this.onSelectAssigneesAndNotify(null, options);
+  onNotify() {
+    this.onOpenNotify();
   }
   onBarClick(e) {
     const helper = this.getHelper();
