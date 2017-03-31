@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
 import {
   bindAll,
   setupCachedCallback,
@@ -21,14 +22,17 @@ class StepList extends PureComponent {
       addFocus: false,
       addStepValue: '',
       hoverIndex: -1,
+      stepTitles: fromJS({}),
     };
     this.tooltips = [];
     this.callDelegate = setupDelegate(props.delegate);
     this.onEnter = setupCachedCallback(this.onEnter, this);
     this.onKeyDownCached = setupCachedCallback(this.onKeyDown, this);
+    this.onChangeCached = setupCachedCallback(this.onChange, this);
+    this.onBlurCached = setupCachedCallback(this.onBlur, this);
     this.onRemoveCached = setupCachedCallback(this.callDelegate.bind(null, 'onStepRemove'));
-    bindAll(this, ['onLeave', 'onChange', 'onBlur', 'onFocus']);
     this.onCheck = setupCachedCallback(this.callDelegate.bind(null, 'onStepCheck'));
+    bindAll(this, ['onLeave', 'onFocus']);
   }
   componentDidMount() {
   }
@@ -61,14 +65,26 @@ class StepList extends PureComponent {
       hoverIndex: i,
     });
   }
-  onChange(e) {
+  onChange(i, e) {
+    const { steps } = this.props;
+    const { stepTitles } = this.state;
     const value = e.target.value;
-    this.setState({ addStepValue: value });
+    if (i === 'add') {
+      this.setState({ addStepValue: value });
+    } else {
+      const step = steps.get(i);
+      this.setState({ stepTitles: stepTitles.set(step.get('id'), value) });
+    }
   }
   onKeyDown(i, e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {
-      this.callDelegate('onStepAdd', e.target.value);
-      this.setState({ addStepValue: '' });
+      if (i === 'add') {
+        this.callDelegate('onStepAdd', e.target.value);
+        this.setState({ addStepValue: '' });
+      } else {
+        e.target.blur();
+        this.saveTitle(i);
+      }
     }
   }
   onLeave() {
@@ -83,8 +99,12 @@ class StepList extends PureComponent {
   onFocus() {
     this.setState({ addFocus: true });
   }
-  onBlur() {
-    this.setState({ addFocus: false });
+  onBlur(i) {
+    if (i === 'add') {
+      this.setState({ addFocus: false });
+    } else {
+      this.saveTitle(i);
+    }
   }
   getPlaceholder() {
     let placeholder = 'What is the next step? Add it here...';
@@ -94,11 +114,21 @@ class StepList extends PureComponent {
     }
     return placeholder;
   }
+  saveTitle(i) {
+    const { steps } = this.props;
+    const { stepTitles } = this.state;
+    const step = steps.get(i);
+    const title = stepTitles.get(step.get('id'));
+    if (title && title.length) {
+      this.callDelegate('onStepRename', i, title);
+      this.setState({ stepTitles: stepTitles.remove(step.get('id')) });
+    }
+  }
   renderEditStep(step, i) {
     const { delegate, loadingState } = this.props;
+    const { stepTitles } = this.state;
     let className = 'step-list-item step-list-item--editing';
-    let title = step.get('title');
-
+    let title = stepTitles.get(step.get('id')) || step.get('title');
     if (loadingState.get(step.get('id')) && loadingState.get(step.get('id')).loading) {
       title = loadingState.get(step.get('id')).loadingLabel;
       className += ' step-list-item--loading';
@@ -120,7 +150,8 @@ class StepList extends PureComponent {
           type="text"
           className="step-list-item__input"
           onKeyDown={this.onKeyDownCached(i)}
-          defaultValue={title}
+          value={title}
+          onChange={this.onChangeCached(i)}
           placeholder="Enter the step title"
         />
         <div className="step-list-item__assignees">
@@ -243,10 +274,10 @@ class StepList extends PureComponent {
           ref="addStepInput"
           type="text"
           onFocus={this.onFocus}
-          onBlur={this.onBlur}
+          onBlur={this.onBlurCached('add')}
           className="add-step__input"
           value={value}
-          onChange={this.onChange}
+          onChange={this.onChangeCached('add')}
           onKeyDown={this.onKeyDownCached('add')}
           placeholder={placeholder}
         />
