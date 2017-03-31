@@ -301,6 +301,33 @@
   }
 }
 
+// editing
+
+.step-list-item {
+  $b: &;
+
+  &--editing {
+    $flexIgnoreList: '#{$b}__remove', '#{$b}__assignees';
+
+    @include flexContainer('row', left, center, $flexIgnoreList);
+
+    #{$b}__remove {
+      padding-right: 12px;
+    }
+
+    input#{$b}__input {
+      @include size(100%, auto);
+      @include font(15px, $deepBlue-60, 24px);
+      padding: 9px 0;
+      padding-right: 9px;
+
+      &:focus {
+        @include font($c: $deepBlue-100);
+      }
+    }
+  }
+}
+
 // ======================================================
 // Targeting
 // ======================================================

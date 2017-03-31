@@ -96,7 +96,7 @@ class StepList extends PureComponent {
   }
   renderEditStep(step, i) {
     const { delegate, loadingState } = this.props;
-    let className = 'step-list-item';
+    let className = 'step-list-item step-list-item--editing';
     let title = step.get('title');
     if (loadingState.get(step.get('id')) && loadingState.get(step.get('id')).loading) {
       title = loadingState.get(step.get('id')).loadingLabel;
