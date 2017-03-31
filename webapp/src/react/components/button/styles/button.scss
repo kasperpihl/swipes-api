@@ -5,7 +5,8 @@ $bigBtn: 36px;
 $smallBtn: 30px;
 
 $btnSize: $bigBtn;
-$mainColor: $deepBlue-50;
+$primaryColor: $blue-100;
+$mainColor: $deepBlue-60;
 $borderColor: $deepBlue-10;
 
 // ======================================================
@@ -45,7 +46,7 @@ $borderColor: $deepBlue-10;
   }
 
   &__text {
-    @include font(12px, $mainColor, 15px, bold);
+    @include font(12px, $mainColor, 18px, 500);
     padding: 0 24px;
     pointer-events: none;
     transition: all .15s ease, opacity .15s .3s ease, margin .5s ease, border-color .15s 0s;
@@ -73,8 +74,8 @@ $borderColor: $deepBlue-10;
 
   &:not(&--disabled):not(&--frameless):not(&--loading):focus, {
     outline:none;
-    box-shadow: 0 0 2px 1px $blue-100;
-    border: 1px solid $blue-100;
+    box-shadow: 0 0 2px 1px $primaryColor;
+    border: 1px solid $primaryColor;
     transition: all .15s ease, border-color .15s 0s;
   }
 
@@ -127,7 +128,7 @@ $borderColor: $deepBlue-10;
   $b: &;
 
   &--primary {
-    $mainColor: $blue-100;
+    $mainColor: $primaryColor;
 
     border-color: $mainColor;
     transition: all .15s ease, border-color .15s 0s;
@@ -194,6 +195,22 @@ $borderColor: $deepBlue-10;
   }
 }
 
+// selected states 
+
+.g-button {
+  $b: &;
+
+  &--selected:not(&--primary):not(&--disabled) {
+    background-color: $mainColor;
+  }
+
+  &--primary#{&}--selected {
+    $mainColor: $primaryColor;
+
+    background-color: $mainColor;
+  }
+}
+
 // ======================================================
 // Hover
 // ======================================================
@@ -223,7 +240,7 @@ $borderColor: $deepBlue-10;
   $b: &;
 
   &--primary:hover {
-    $mainColor: $blue-100;
+    $mainColor: $primaryColor;
     background-color: $mainColor;
 
     #{$b}__svg {
@@ -240,7 +257,6 @@ $borderColor: $deepBlue-10;
 
 .g-button {
   $b: &;
-
 
   &--icon-and-text:hover {
 
@@ -294,7 +310,7 @@ $borderColor: $deepBlue-10;
     position: absolute;
     left: 0; top: 0;
     @include size($btnSize);
-    border: 0px solid $blue-100;
+    border: 0px solid $primaryColor;
     border-radius: 50%;
     border-width: 3px;
     border-color: $deepBlue-10;
@@ -307,7 +323,7 @@ $borderColor: $deepBlue-10;
     position: absolute;
     left: 0; top: 0;
     @include size($btnSize);
-    border: 0px solid $blue-100;
+    border: 0px solid $primaryColor;
     border-radius: 50%;
     transform: rotate(-45deg);
     -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
@@ -335,7 +351,7 @@ $borderColor: $deepBlue-10;
       position: absolute;
       left: 0; top: 0;
       @include size($btnSize);
-      border: 3px solid $blue-100;
+      border: 3px solid $primaryColor;
       border-radius: 50%;
       transform: rotate(-45deg);
       -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);

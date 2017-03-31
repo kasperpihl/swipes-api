@@ -113,6 +113,7 @@ class Button extends Component {
       small,
       alignIcon,
       frameless,
+      selected,
       tabIndex: tabIndexProps,
       loading: lol,
       className: classNameFromButton,
@@ -164,6 +165,10 @@ class Button extends Component {
 
     if (successState) {
       className += ' g-button--result g-button--success';
+    }
+
+    if (selected) {
+      className += ' g-button--selected';
     }
 
     if (classNameFromButton && typeof classNameFromButton === 'string') {
