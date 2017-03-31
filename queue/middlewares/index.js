@@ -65,6 +65,7 @@ const goal_milestone_removed = notifyWrapper([
 const goal_notify = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsNotifyAdditionalData,
   goals.goalsNotifyAddSenderAlways,
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
