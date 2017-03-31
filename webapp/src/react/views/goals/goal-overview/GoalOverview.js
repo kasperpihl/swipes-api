@@ -81,9 +81,16 @@ class GoalOverview extends PureComponent {
     );
   }
   renderStepListEditButton() {
+    const { editMode } = this.props;
+    let title = 'Edit';
+    let className = 'step-list__edit-button';
+    if (editMode) {
+      title = 'Done';
+      className += ' step-list__edit-button--done';
+    }
     return (
-      <div className="step-list__edit-button" onClick={this.onEditSteps}>
-        Edit
+      <div className={className} onClick={this.onEditSteps}>
+        {title}
       </div>
     );
   }
