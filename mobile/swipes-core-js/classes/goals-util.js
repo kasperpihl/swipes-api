@@ -143,6 +143,9 @@ export default class GoalsUtil {
     }
     return step.get('assignees');
   }
+  getLastActivity() {
+    return this.goal.get('history').last();
+  }
   getAllInvolvedAssignees() {
     const assignees = new Set();
     this.goal.get('steps').forEach((s) => {

@@ -12,9 +12,9 @@ import Dashboard from './Dashboard';
 /* global msgGen */
 const filters = [
   n => n.get('request'),
-  n => n.get('receiver') && n.get('important') && !n.get('request'),
+  n => n.get('notification'),
   n => n.get('sender'),
-  n => n.get('receiver') && !n.get('important') && !n.get('request'),
+  n => n.get('activity'),
 ];
 
 class HOCDashboard extends PureComponent {

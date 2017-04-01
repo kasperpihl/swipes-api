@@ -25,7 +25,7 @@ class HOCNotify extends PureComponent {
         assignees: notify.get('assignees') || [],
         message: notify.get('message') || '',
         request: notify.get('request') || false,
-        notification_type: notify.get('notification_type') || 'default',
+        notification_type: notify.get('notification_type') || 'status',
       }),
     };
     setupLoading(this);
@@ -90,6 +90,9 @@ class HOCNotify extends PureComponent {
 
     this.onSelectAssignees(options, notify.get('assignees'));
   }
+  onAssign(index, e) {
+    this.onChangeClick('assignees', e);
+  }
   getHelper() {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
@@ -102,9 +105,7 @@ class HOCNotify extends PureComponent {
   updateHandoff(notify) {
     this.setState({ notify });
   }
-  onAssign(index, e) {
-    this.onChangeClick('assignees', e);
-  }
+
 
   render() {
     const { goal, me } = this.props;
