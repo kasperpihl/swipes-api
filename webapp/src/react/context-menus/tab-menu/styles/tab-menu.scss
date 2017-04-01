@@ -133,7 +133,7 @@ $sectionHeight: 52px;
     @include size(100%, auto);
     @include flex();
     min-height: 54px;
-    position: relative;
+    border-radius: 3px;
     transition: .2s ease-in-out;
 
     &:before {
@@ -228,7 +228,7 @@ $sectionHeight: 52px;
 
       svg {
         @include size(24px);
-        @include svg-color($blue-100);
+        @include svg-color($deepBlue-80);
       }
     }
 
@@ -307,5 +307,15 @@ $sectionHeight: 52px;
     max-height: $containerHeight;
     padding-bottom: 10px;
     padding-top: 10px;
+
+    .tab-menu__list .result {
+
+      &:hover {
+
+        &:before {
+          background-color: $blue-5;
+        }
+      }
+    }
   }
 }

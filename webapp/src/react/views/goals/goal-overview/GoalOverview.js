@@ -3,11 +3,13 @@ import { map } from 'react-immutable-proptypes';
 
 import { setupDelegate, truncateString } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
 
 import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
 import Section from 'components/section/Section';
 import Button from 'Button';
 import Icon from 'Icon';
@@ -133,13 +135,22 @@ class GoalOverview extends PureComponent {
     );
   }
   renderRight() {
+    const helper = this.getHelper();
+
+    console.log(helper.getLastActivity().toJS());
+
     return (
       <div className="goal-overview__column goal-overview__column--right">
         <Section
           title="Latest Activity"
           className="goal-overview__last-activity"
           actions={this.renderActivitySeeAllButton()}
-        />
+        >
+          {/* <NotificationWrapper
+            delegate={this}
+            notification={lastActivity}
+          />*/}
+        </Section>
         <Section title="Attachments">
           {this.renderAttachments()}
         </Section>
@@ -169,7 +180,7 @@ class GoalOverview extends PureComponent {
 
     return this.renderSuccessFooter();
 
-    if (helper.getIsCompleted()) {
+    /* if (helper.getIsCompleted()) {
       return undefined;
     }
     const { loadingState } = this.props;
@@ -195,7 +206,7 @@ class GoalOverview extends PureComponent {
           />
         </div>
       </div>
-    );
+    );*/
   }
   render() {
     const { goal } = this.props;
