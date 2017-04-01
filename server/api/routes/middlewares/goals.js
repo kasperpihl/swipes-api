@@ -520,16 +520,19 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   goal_id: string.require(),
   assignees: array.of(string).require(),
   notificationGroupId: string.require(),
+  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     assignees,
     notificationGroupId,
+    notification_type,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
+    notification_type,
     user_ids: assignees,
     group_id: notificationGroupId,
     event_type: 'goal_notify',

@@ -55,6 +55,7 @@ const goalsNotifyAddSenderAlways = (req, res, next) => {
 const goalsNotifyAdditionalData = (req, res, next) => {
   const {
     goal,
+    notification_type,
     historyIndex,
     notificationData,
   } = res.locals;
@@ -66,6 +67,8 @@ const goalsNotifyAdditionalData = (req, res, next) => {
   } else {
     notificationData.notification = true;
   }
+
+  notificationData.meta.notification_type = notification_type;
 
   res.locals.notificationData = notificationData;
 
