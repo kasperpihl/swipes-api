@@ -55,7 +55,7 @@ export default class HistoryGenerator {
     switch (h.get('type')) {
       case 'step_completed': {
         const stepTitle = helper.getStepTitleFromId(h.get('to'));
-        const fromStepTitle = this.getStepTitleFromId(h.get('from'));
+        const fromStepTitle = helper.getStepTitleFromId(h.get('from'));
       }
       default:
         return undefined;
