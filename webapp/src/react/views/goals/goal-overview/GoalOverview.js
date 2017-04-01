@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-
+import { Map } from 'immutable';
 import { setupDelegate, truncateString } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
@@ -15,7 +15,7 @@ import Button from 'Button';
 import Icon from 'Icon';
 import HOCHistory from './HOCHistory';
 import './styles/goal-overview.scss';
-
+/* global msgGen */
 class GoalOverview extends PureComponent {
   constructor(props) {
     super(props);
@@ -77,16 +77,6 @@ class GoalOverview extends PureComponent {
       />
     );
   }
-  renderHistory() {
-    const { goal, tabIndex } = this.props;
-    if (tabIndex !== 1) {
-      return undefined;
-    }
-
-    return (
-      <HOCHistory goal={goal} />
-    );
-  }
   renderStepListEditButton() {
     const helper = this.getHelper();
     if (!helper.getTotalNumberOfSteps()) {
@@ -136,7 +126,16 @@ class GoalOverview extends PureComponent {
   }
   renderRight() {
     const helper = this.getHelper();
-
+    const history = helper.getLastActivity();
+    const notification = Map({
+      timeago: timeAgo(history.get('updated_at'), true),
+      title: msgGen.history.getTitle(helper.getId(), history),
+      subtitle: msgGen.history.getSubtitle(helper.getId(), history),
+      seen: !!history.get('seen_at'),
+      userId: history.get('done_by'),
+      message: history.get('message'),
+      attachments: msgGen.history.getAttachments(helper.getId(), history),
+    });
     console.log(helper.getLastActivity().toJS());
 
     return (
@@ -146,10 +145,10 @@ class GoalOverview extends PureComponent {
           className="goal-overview__last-activity"
           actions={this.renderActivitySeeAllButton()}
         >
-          {/* <NotificationWrapper
+          <NotificationWrapper
             delegate={this}
-            notification={lastActivity}
-          />*/}
+            notification={notification}
+          />
         </Section>
         <Section title="Attachments">
           {this.renderAttachments()}

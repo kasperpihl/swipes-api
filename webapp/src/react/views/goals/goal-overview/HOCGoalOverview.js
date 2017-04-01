@@ -92,7 +92,7 @@ class HOCGoalOverview extends PureComponent {
     options.positionY = 6;
     options.excludeY = true;
     const items = [
-      { title: 'Status', icon: 'Status' },
+      { title: 'Status', icon: 'Status', subtitle: 'Ask your colleague for an update' },
       { title: 'Feedback', icon: 'Feedback' },
       { title: 'Assets', icon: 'Assets' },
       { title: 'Decision', icon: 'Decision' },
@@ -117,7 +117,7 @@ class HOCGoalOverview extends PureComponent {
         delegate,
         items,
         style: {
-          width: '210px',
+          width: '300px',
         },
       },
     });
