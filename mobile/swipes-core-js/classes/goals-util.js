@@ -113,7 +113,10 @@ export default class GoalsUtil {
   getTotalNumberOfSteps() {
     return this.goal.get('step_order').size;
   }
-  getStepTitlesBetween(from, to) {
+  getStepTitleFromId(id) {
+    return this.goal.getIn(['steps', id, 'title']);
+  }
+  getStepTitlesBetweenIds(from, to) {
     let show = false;
     let titles = fromJS([]);
     this.goal.get('step_order').forEach((sId) => {
