@@ -50,7 +50,19 @@ class HOCDashboard extends PureComponent {
     this._unmounted = true;
   }
   onReply(i) {
-    console.log('clicked reply', i);
+    const n = this.state.notifications.get(i);
+    const { navPush } = this.props;
+    navPush({
+      id: 'Notify',
+      title: 'Notify',
+      props: {
+        notify: Map({
+          reply_to: n.getIn(['target', 'history_index']),
+          notification_type: n.getIn(['meta', 'notification_type']),
+        }),
+        goalId: n.getIn(['target', 'id']),
+      },
+    });
   }
   onMark(id) {
     const { markNotifications } = this.props;

@@ -8,6 +8,7 @@ import Button from 'Button';
 import Section from 'components/section/Section';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import HOCAttachments from 'components/attachments/HOCAttachments';
+import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
 import HandoffWriteMessage from 'components/handoff-write-message/HandoffWriteMessage';
 
 import './styles/notify.scss';
@@ -83,6 +84,27 @@ class Notify extends PureComponent {
       </div>
     );
   }
+  renderRequest() {
+    const { replyObj, goal, delegate } = this.props;
+    if (!replyObj) {
+      return undefined;
+    }
+    const title = `Request from ${msgGen.users.getName(replyObj.get('done_by'))}`;
+    const notif = msgGen.history.getNotificationWrapperForHistory(goal.get('id'), replyObj, {
+      title: false,
+      subtitle: false,
+      icon: false,
+      timeago: false,
+    });
+    return (
+      <Section title={title}>
+        <NotificationWrapper
+          delegate={delegate}
+          notification={notif}
+        />
+      </Section>
+    );
+  }
   renderAttachments() {
     const { goal, delegate, notify } = this.props;
 
@@ -116,6 +138,7 @@ class Notify extends PureComponent {
     return (
       <SWView header={this.renderHeader()} footer={this.renderFooter()}>
         <div className="notify">
+          {this.renderRequest()}
           {this.renderWriteMessage()}
           {this.renderAttachments()}
         </div>
@@ -130,6 +153,7 @@ const { object } = PropTypes;
 
 Notify.propTypes = {
   delegate: object.isRequired,
+  replyObj: map,
   goal: map,
   me: map,
   loadingState: map,

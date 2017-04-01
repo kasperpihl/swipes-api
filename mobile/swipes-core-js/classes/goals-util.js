@@ -143,6 +143,9 @@ export default class GoalsUtil {
     }
     return step.get('assignees');
   }
+  getActivityByIndex(index) {
+    return this.goal.getIn(['history', index]);
+  }
   getLastActivity() {
     return this.goal.get('history').last();
   }

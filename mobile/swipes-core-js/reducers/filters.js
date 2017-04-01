@@ -5,37 +5,61 @@ import * as types from '../constants/ActionTypes';
 const defaultFilter = {};
 
 const initialState = fromJS({
-  current: {
-    id: 'current',
-    title: 'Current',
-    filter: {
-      userId: 'me',
-      goalType: 'current',
+  goals: {
+    current: {
+      id: 'current',
+      title: 'Current',
+      filter: {
+        userId: 'me',
+        goalType: 'current',
+      },
+      goals: OrderedSet(),
     },
-    goals: OrderedSet(),
-  },
-  upcoming: {
-    id: 'upcoming',
-    title: 'Upcoming',
-    filter: {
-      userId: 'me',
-      goalType: 'upcoming',
+    upcoming: {
+      id: 'upcoming',
+      title: 'Upcoming',
+      filter: {
+        userId: 'me',
+        goalType: 'upcoming',
+      },
+      goals: OrderedSet(),
     },
-    goals: OrderedSet(),
-  },
-  unstarted: {
-    id: 'unstarted',
-    title: 'Unstarted',
-    filter: {
-      goalType: 'unstarted',
+    unstarted: {
+      id: 'unstarted',
+      title: 'Unstarted',
+      filter: {
+        goalType: 'unstarted',
+      },
+      goals: OrderedSet(),
     },
-    goals: OrderedSet(),
+    default: {
+      id: 'default',
+      title: 'Filter',
+      filter: defaultFilter,
+      goals: OrderedSet(),
+    },
   },
-  default: {
-    id: 'default',
-    title: 'Filter',
-    filter: defaultFilter,
-    goals: OrderedSet(),
+  notifications: {
+    requests: {
+      title: 'Requests',
+      filter: n => n.get('request'),
+      notifications: OrderedSet(),
+    },
+    notifications: {
+      title: 'Notifications',
+      filter: n => n.get('notification'),
+      notifications: OrderedSet(),
+    },
+    sender: {
+      title: 'Sent',
+      filter: n => n.get('sender'),
+      notifications: OrderedSet(),
+    },
+    activity: {
+      title: 'Activity',
+      filter: n => n.get('activity'),
+      notifications: OrderedSet(),
+    },
   },
 });
 

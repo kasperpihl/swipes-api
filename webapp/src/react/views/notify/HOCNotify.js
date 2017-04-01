@@ -18,6 +18,7 @@ class HOCNotify extends PureComponent {
     super(props);
     const savedState = props.savedState && props.savedState.get('notify');
     const notify = props.notify || fromJS({});
+
     this.state = {
       notify: savedState || fromJS({
         flags: notify.get('flags') || [],
@@ -28,6 +29,11 @@ class HOCNotify extends PureComponent {
         notification_type: notify.get('notification_type') || 'status',
       }),
     };
+
+    const helper = this.getHelper();
+    if (typeof notify.get('reply_to') === 'number') {
+      this.state.replyObj = helper.getActivityByIndex(notify.get('reply_to'));
+    }
     setupLoading(this);
     this.onChangeClick = this.onChangeClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -109,13 +115,14 @@ class HOCNotify extends PureComponent {
 
   render() {
     const { goal, me } = this.props;
-    const { notify } = this.state;
+    const { notify, replyObj } = this.state;
 
     return (
       <Notify
         goal={goal}
         me={me}
         delegate={this}
+        replyObj={replyObj}
         notify={notify}
         loadingState={this.getAllLoading()}
       />
