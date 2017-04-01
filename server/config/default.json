@@ -44,6 +44,11 @@
     "secretAccessKey": "ERXLaiG3AUZIPWQeOMQKcGjpcY7lnyXcGcfpaOhj",
     "queueHost": "http://localhost:5005"
   },
+  "awsS3": {
+    "accessKey": "AKIAJ7OR4Q4MA5VBPTKA",
+    "secretKey": "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",
+    "bucketName": "staging.swipesapp.com"
+  },
   "loggly": {
     "token": "a760d2ee-d576-466b-a8ff-53826455a13d",
     "tags": "swipesapp-staging-nodejs-errors",
