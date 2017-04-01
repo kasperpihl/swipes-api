@@ -10,6 +10,7 @@ import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import Button from 'Button';
+import Icon from 'Icon';
 import HOCHistory from './HOCHistory';
 import './styles/goal-overview.scss';
 
@@ -139,8 +140,29 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
+  renderSuccessFooter() {
+    return (
+      <div className="success-footer">
+        <div className="success-footer__icon">
+          <Icon icon="ActivityCheckmark" className="success-footer__svg" />
+        </div>
+        <div className="success-footer__content">
+          Awesome, you just completed <span>“3. Design Elements”.</span> Do you want to leave a message to <span>Yana?</span>
+        </div>
+        <div className="success-footer__actions">
+          <Button primary text="Write Message" className="success-footer__action" />
+        </div>
+        <div className="success-footer__close">
+          <Icon icon="Close" className="success-footer__svg" />
+        </div>
+      </div>
+    );
+  }
   renderFooter() {
     const helper = this.getHelper();
+
+    return this.renderSuccessFooter();
+
     if (helper.getIsCompleted()) {
       return undefined;
     }

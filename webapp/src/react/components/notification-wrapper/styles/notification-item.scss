@@ -6,14 +6,10 @@
 // ======================================================
 
 .notification {
-  $b: &;
-  // $flexIgnoreList: '#{$b}__icon', '#{$b}__timeago';
-
   @include size(100%, auto);
   @include heightSpecifications(66px, initial);
-  // @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
-  padding: 15px 9px;
-  border-top: 1px solid $deepBlue-5;
+  padding: 21px 0;
+  border-bottom: 1px solid $deepBlue-5;
   overflow: hidden;
 }
 
@@ -84,8 +80,8 @@
 
   &__content {
     @include size(100%, auto);
-    padding-left: 21px;
-    margin-top: -2px;
+    padding-left: 15px;
+    margin-top: -4px;
   }
 
   &__subtitle {
@@ -95,14 +91,14 @@
 
   &__title {
     @include size(100%, auto);
-    @include font(15px, $deepBlue-90, 21px);
+    @include font(15px, $deepBlue-90, 24px);
   }
 
   &__message {
     @include size(100%, auto);
     @include font(12px, $deepBlue-50, 18px, 500);
     font-style: italic;
-    margin-top: 6px;
+    margin-top: 9px;
   }
 
   &__attachments {

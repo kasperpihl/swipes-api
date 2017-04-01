@@ -69,7 +69,7 @@ class NotificationItem extends Component {
         </div>
         <div className="notif-attachment__title">{att.get('title')}</div>
       </div>
-      ));
+    ));
 
     return (
       <div className="notification__attachments">
@@ -94,8 +94,8 @@ class NotificationItem extends Component {
 
     return (
       <div className="notification__content">
-        <div className="notification__subtitle">{n.get('subtitle')}</div>
         {this.renderTitle(n.get('title'))}
+        <div className="notification__subtitle">{n.get('subtitle')}</div>
         {this.renderMessage()}
       </div>
     );
