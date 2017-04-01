@@ -39,6 +39,11 @@
     "secretAccessKey": "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY",
     "queueHost": "SW_AMAZON_QUEUE_HOST"
   },
+  "awsS3": {
+    "accessKey": "SW_AWSS3_ACCESS_KEY",
+    "secretKey": "SW_AWSS3_SECRET_KEY",
+    "bucketName": "SW_AWSS3_BUCKET_NAME"
+  },
   "loggly": {
     "token": "SW_LOGGLY_TOKEN",
     "tags": "SW_LOGGLY_TAGS",
