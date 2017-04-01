@@ -56,6 +56,7 @@ const goalsNotifyAdditionalData = (req, res, next) => {
   const {
     goal,
     notification_type,
+    reply_to,
     historyIndex,
     notificationData,
   } = res.locals;
@@ -69,6 +70,7 @@ const goalsNotifyAdditionalData = (req, res, next) => {
   }
 
   notificationData.meta.notification_type = notification_type;
+  notificationData.reply_to = reply_to;
 
   res.locals.notificationData = notificationData;
 

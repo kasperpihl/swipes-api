@@ -11,6 +11,7 @@ import {
   dbGoalsUpdateSingle,
   dbGoalsGetSingle,
   dbGoalsPushToHistorySingle,
+  dbGoalsRepliesHistoryUpdate,
 } from './db_utils/goals';
 import {
   generateSlackLikeId,
@@ -521,6 +522,7 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   assignees: array.of(string).require(),
   notificationGroupId: string.require(),
   notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  reply_to: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -528,11 +530,13 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
     assignees,
     notificationGroupId,
     notification_type,
+    reply_to = null,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
     notification_type,
+    reply_to,
     user_ids: assignees,
     group_id: notificationGroupId,
     event_type: 'goal_notify',
@@ -544,6 +548,43 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   });
 
   return next();
+});
+const goalsHistoryUpdateIfReply = valLocals('goalsUpdateIfReply', {
+  goal_id: string.require(),
+  goal: string.require(),
+  reply_to: string,
+}, (req, res, next, setLocals) => {
+  const {
+    goal_id,
+    goal,
+    reply_to = null,
+  } = res.locals;
+
+  if (reply_to === null) {
+    return next();
+  }
+
+  const replyIndex = goal.history.length - 1;
+
+  return dbGoalsRepliesHistoryUpdate({
+    reply_index: replyIndex,
+    target: {
+      id: goal_id,
+      history_index: reply_to,
+    },
+  })
+  .then((results) => {
+    const goal = results.changes[0].new_val;
+
+    setLocals({
+      goal,
+    });
+
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
 });
 const goalsRename = valLocals('goalsRename', {
   goal_id: string.require(),
@@ -663,8 +704,9 @@ export {
   goalsRemoveMilestoneQueueMessage,
   goalsCompleteStep,
   goalsProgressStatus,
-  goalsNotifyQueueMessage,
   goalsNotify,
+  goalsNotifyQueueMessage,
+  goalsHistoryUpdateIfReply,
   goalsRename,
   goalsRenameQueueMessage,
   goalsLoadWay,
