@@ -18,19 +18,25 @@ export default class HistoryGenerator {
   getNotificationWrapperForHistory(id, h, options) {
     let def = {
       icon: true,
+      timeago: true,
+      title: true,
+      subtitle: true,
+      attachments: true,
+      message: true,
+      seen: true,
     };
     def = Object.assign(def, options);
 
     const helper = this._getHelper(id);
     return Map({
-      timeago: timeAgo(h.get('done_at'), true),
-      title: this.parent.history.getTitle(helper.getId(), h),
-      subtitle: this.parent.history.getSubtitle(helper.getId(), h),
-      seen: !!h.get('seen_at'),
+      timeago: def.timeago ? timeAgo(h.get('done_at'), true) : null,
+      title: def.title ? this.parent.history.getTitle(helper.getId(), h) : null,
+      subtitle: def.subtitle ? this.parent.history.getSubtitle(helper.getId(), h) : null,
+      seen: def.seen ? !!h.get('seen_at') : null,
       userId: h.get('done_by'),
-      message: h.get('message'),
+      message: def.message ? h.get('message') : null,
       icon: def.icon ? this.getIcon(h) : null,
-      attachments: this.parent.history.getAttachments(helper.getId(), h),
+      attachments: def.attachments ? this.parent.history.getAttachments(helper.getId(), h) : null,
     });
   }
   getTitle(id, h) {
