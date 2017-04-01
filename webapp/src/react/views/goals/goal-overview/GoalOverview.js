@@ -34,7 +34,8 @@ class GoalOverview extends PureComponent {
     const { goal, loadingState, delegate } = this.props;
 
     const title = loadingState.get('title') && loadingState.get('title').loadingLabel;
-    const askSelected = loadingState.get('ask-for-menu') && loadingState.get('ask-for-menu').loading;
+    const askSel = loadingState.get('ask-for-menu') && loadingState.get('ask-for-menu').loading;
+    const notifySel = loadingState.get('notify-menu') && loadingState.get('notify-menu').loading;
     return (
       <div className="add-goal__header">
         <HOCHeaderTitle
@@ -44,11 +45,12 @@ class GoalOverview extends PureComponent {
         >
           <Button
             text="Ask for..."
-            selected={askSelected}
+            selected={askSel}
             onClick={this.onAskFor}
           />
           <Button
             text="Notify"
+            selected={notifySel}
             onClick={this.onNotify}
           />
           <Button
@@ -133,7 +135,11 @@ class GoalOverview extends PureComponent {
   renderRight() {
     return (
       <div className="goal-overview__column goal-overview__column--right">
-        <Section title="Latest Activity" className="goal-overview__last-activity" actions={this.renderActivitySeeAllButton()} />
+        <Section
+          title="Latest Activity"
+          className="goal-overview__last-activity"
+          actions={this.renderActivitySeeAllButton()}
+        />
         <Section title="Attachments">
           {this.renderAttachments()}
         </Section>

@@ -95,7 +95,7 @@ class HOCGoalOverview extends PureComponent {
       { title: 'Feedback', icon: 'Checkmark' },
       { title: 'Assets', icon: 'Checkmark' },
       { title: 'Decision', icon: 'Checkmark' },
-    ];
+    ].map((i) => { i.leftIcon = { icon: i.icon }; return i; });
 
     const delegate = {
       onItemAction: (item) => {
@@ -106,11 +106,12 @@ class HOCGoalOverview extends PureComponent {
         }));
       },
     };
-    this.setLoading('ask-for-menu');
+    const loadingId = request ? 'ask-for-menu' : 'notify-menu';
+    this.setLoading(loadingId);
     contextMenu({
       options,
       component: TabMenu,
-      onClose: () => this.clearLoading('ask-for-menu'),
+      onClose: () => this.clearLoading(loadingId),
       props: {
         delegate,
         items,
@@ -209,7 +210,6 @@ HOCGoalOverview.propTypes = {
   navPop: func,
   inputMenu: func,
   archive: func,
-  createWay: func,
   openSecondary: func,
   renameGoal: func,
   contextMenu: func,
@@ -223,7 +223,6 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  createWay: ca.ways.create,
   archive: ca.goals.archive,
   contextMenu: a.main.contextMenu,
   renameGoal: ca.goals.rename,
