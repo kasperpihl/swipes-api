@@ -1,4 +1,6 @@
+import { Map } from 'immutable';
 import GoalsUtil from '../classes/goals-util';
+import { timeAgo } from '../classes/time-utils';
 
 export default class HistoryGenerator {
   constructor(store, parent) {
@@ -12,6 +14,24 @@ export default class HistoryGenerator {
     const me = this.store.getState().get('me');
     const goal = this._getGoal(goalId);
     return new GoalsUtil(goal, me.get('id'));
+  }
+  getNotificationWrapperForHistory(id, h, options) {
+    let def = {
+      icon: true,
+    };
+    def = Object.assign(def, options);
+
+    const helper = this._getHelper(id);
+    return Map({
+      timeago: timeAgo(h.get('done_at'), true),
+      title: this.parent.history.getTitle(helper.getId(), h),
+      subtitle: this.parent.history.getSubtitle(helper.getId(), h),
+      seen: !!h.get('seen_at'),
+      userId: h.get('done_by'),
+      message: h.get('message'),
+      icon: def.icon ? this.getIcon(h) : null,
+      attachments: this.parent.history.getAttachments(helper.getId(), h),
+    });
   }
   getTitle(id, h) {
     const me = this.store.getState().get('me');

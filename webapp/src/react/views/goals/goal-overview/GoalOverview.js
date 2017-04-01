@@ -1,9 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-import { Map } from 'immutable';
-import { setupDelegate, truncateString } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
 
 import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
@@ -13,7 +11,6 @@ import NotificationWrapper from 'components/notification-wrapper/NotificationWra
 import Section from 'components/section/Section';
 import Button from 'Button';
 import Icon from 'Icon';
-import HOCHistory from './HOCHistory';
 import './styles/goal-overview.scss';
 /* global msgGen */
 class GoalOverview extends PureComponent {
@@ -127,14 +124,8 @@ class GoalOverview extends PureComponent {
   renderRight() {
     const helper = this.getHelper();
     const history = helper.getLastActivity();
-    const notification = Map({
-      timeago: timeAgo(history.get('updated_at'), true),
-      title: msgGen.history.getTitle(helper.getId(), history),
-      subtitle: msgGen.history.getSubtitle(helper.getId(), history),
-      seen: !!history.get('seen_at'),
-      userId: history.get('done_by'),
-      message: history.get('message'),
-      attachments: msgGen.history.getAttachments(helper.getId(), history),
+    const nf = msgGen.history.getNotificationWrapperForHistory(helper.getId(), history, {
+      icon: false,
     });
     console.log(helper.getLastActivity().toJS());
 
@@ -147,7 +138,7 @@ class GoalOverview extends PureComponent {
         >
           <NotificationWrapper
             delegate={this}
-            notification={notification}
+            notification={nf}
           />
         </Section>
         <Section title="Attachments">
