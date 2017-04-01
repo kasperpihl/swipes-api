@@ -41,6 +41,11 @@
     @include size(100%, auto);
     padding-left: 51px;
   }
+
+  &__actions {
+    @include size(100%, auto);
+    @include flexContainer('row', right);
+  }
 }
 
 // Icon

@@ -147,7 +147,7 @@ class GoalOverview extends PureComponent {
           <Icon icon="ActivityCheckmark" className="success-footer__svg" />
         </div>
         <div className="success-footer__content">
-          Awesome, you just completed <span>“3. Design Elements”.</span> Do you want to leave a message to <span>Yana?</span>
+          Awesome, you just completed <span>“3. Design Elements”</span>. Do you want to leave a message to <span>Yana</span>?
         </div>
         <div className="success-footer__actions">
           <Button primary text="Write Message" className="success-footer__action" />

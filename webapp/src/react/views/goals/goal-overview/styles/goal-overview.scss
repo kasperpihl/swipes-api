@@ -153,7 +153,11 @@
     padding: 0 30px;
 
     span {
-      @include font(15px, $deepBlue-80, 24px, bold);      
+      @include font(15px, $deepBlue-80, 24px, bold);
+
+      &:hover {
+        @include font($c: $blue-100)
+      }   
     }
   }
 

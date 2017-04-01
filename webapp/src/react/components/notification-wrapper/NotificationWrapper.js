@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { mapContains, list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
+import Button from 'Button';
 import { setupDelegate, setupCachedCallback, attachmentIconForService } from 'swipes-core-js/classes/utils';
 
 import './styles/notification-item';
@@ -109,6 +110,19 @@ class NotificationItem extends Component {
 
     return <div className="notification__timeago">{n.get('timeago')}</div>;
   }
+  renderReplyAction() {
+    const { reply } = this.props;
+
+    if (!reply) {
+      return undefined;
+    }
+
+    return (
+      <div className="notification__actions">
+        <Button text="Reply" />
+      </div>
+    );
+  }
   render() {
     const { notification: n, delegate } = this.props;
     let className = 'notification';
@@ -135,6 +149,7 @@ class NotificationItem extends Component {
         <div className="notification__bottom">
           {this.renderAttachments()}
         </div>
+        {this.renderReplyAction()}
       </div>
     );
   }
