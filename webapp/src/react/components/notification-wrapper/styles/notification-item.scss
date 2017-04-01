@@ -86,7 +86,7 @@
 
   &__subtitle {
     @include size(100%, auto);
-    @include font(12px, $deepBlue-30, 15px, 500);
+    @include font(12px, $deepBlue-30, 15px, 400);
   }
 
   &__title {
@@ -96,7 +96,7 @@
 
   &__message {
     @include size(100%, auto);
-    @include font(12px, $deepBlue-50, 18px, 500);
+    @include font(13px, $deepBlue-50, 18px, 400);
     font-style: italic;
     margin-top: 9px;
   }
@@ -117,7 +117,7 @@
 
   &__timeago {
     @include size(auto);
-    @include font(12px, $deepBlue-30, 18px, 500);
+    @include font(12px, $deepBlue-30, 15px, 400);
     white-space: nowrap;
   }
 }
