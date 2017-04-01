@@ -18,6 +18,7 @@ import ArrowLeftLine from './svgs/arrow-left-line.svg';
 import ArrowRightFull from './svgs/arrow-right-full.svg';
 import ArrowRightLine from './svgs/arrow-right-line.svg';
 import Assign from './svgs/assign.svg';
+import Assets from './svgs/assets.svg';
 import Bold from './svgs/bold.svg';
 import Breadcrumb from './svgs/breadcrumb.svg';
 import Calendar from './svgs/calendar.svg';
@@ -30,6 +31,7 @@ import Close from './svgs/close.svg';
 import CloseSmall from './svgs/close-small.svg';
 import Collection from './svgs/collection.svg';
 import CreateNote from './svgs/create-note.svg';
+import Decision from './svgs/decision.svg';
 import Deliver from './svgs/deliver.svg';
 import Desktop from './svgs/desktop.svg';
 import Desktop2x from './svgs/desktop2x.svg';
@@ -40,18 +42,19 @@ import Earth from './svgs/earth.svg';
 import Earth2x from './svgs/earth2x.svg';
 import Email from './svgs/email.svg';
 import Eye from './svgs/eye.svg';
-import Find from './svgs/find.svg';
+import Feedback from './svgs/feedback.svg';
 import File from './svgs/file.svg';
+import Find from './svgs/find.svg';
 import Flag from './svgs/flag.svg';
 import Folder from './svgs/folder.svg';
 import FromFullscreen from './svgs/from-fullscreen.svg';
-import Goals from './svgs/goals.svg';
 import Goal from './svgs/goal.svg';
+import Goals from './svgs/goals.svg';
 import GotAssigned from './svgs/got-assigned.svg';
 import GotNotified from './svgs/got-notified.svg';
 import GotUnassigned from './svgs/got-unassigned.svg';
-import Hashtag from './svgs/hashtag.svg';
 import Handoff from './svgs/handoff.svg';
+import Hashtag from './svgs/hashtag.svg';
 import HeaderOne from './svgs/header-one.svg';
 import HeaderTwo from './svgs/header-two.svg';
 import Hyperlink from './svgs/hyperlink.svg';
@@ -71,6 +74,7 @@ import Plus from './svgs/plus.svg';
 import Reload from './svgs/reload.svg';
 import SmallList from './svgs/small-list.svg';
 import Star from './svgs/star.svg';
+import Status from './svgs/status.svg';
 import Store from './svgs/store.svg';
 import ThreeDots from './svgs/three-dots.svg';
 import ToFullscreen from './svgs/to-fullscreen.svg';
@@ -123,6 +127,7 @@ export {
   ArrowRightFull,
   ArrowRightLine,
   Assign,
+  Assets,
   Bold,
   Breadcrumb,
   Calendar,
@@ -135,6 +140,7 @@ export {
   CloseSmall,
   Collection,
   CreateNote,
+  Decision,
   Deliver,
   Desktop,
   Desktop2x,
@@ -145,8 +151,9 @@ export {
   Earth2x,
   Email,
   Eye,
-  Find,
+  Feedback,
   File,
+  Find,
   Flag,
   Folder,
   FromFullscreen,
@@ -155,8 +162,8 @@ export {
   GotAssigned,
   GotNotified,
   GotUnassigned,
-  Hashtag,
   Handoff,
+  Hashtag,
   HeaderOne,
   HeaderTwo,
   Hyperlink,
@@ -176,6 +183,7 @@ export {
   Reload,
   SmallList,
   Star,
+  Status,
   Store,
   ThreeDots,
   ToFullscreen,

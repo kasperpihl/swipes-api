@@ -88,13 +88,14 @@ class HOCGoalOverview extends PureComponent {
     const { contextMenu } = this.props;
     const options = this.getOptionsForE(e);
     options.alignY = 'top';
+    options.alignX = 'center';
     options.positionY = 6;
     options.excludeY = true;
     const items = [
-      { title: 'Status', icon: 'Checkmark' },
-      { title: 'Feedback', icon: 'Checkmark' },
-      { title: 'Assets', icon: 'Checkmark' },
-      { title: 'Decision', icon: 'Checkmark' },
+      { title: 'Status', icon: 'Status' },
+      { title: 'Feedback', icon: 'Feedback' },
+      { title: 'Assets', icon: 'Assets' },
+      { title: 'Decision', icon: 'Decision' },
     ].map((i) => { i.leftIcon = { icon: i.icon }; return i; });
 
     const delegate = {
