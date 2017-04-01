@@ -51,6 +51,7 @@ export default class HistoryGenerator {
     }
   }
   getSubtitle(id, h) {
+    const helper = this._getHelper(id);
     switch (h.get('type')) {
       case 'step_completed': {
         const stepTitle = helper.getStepTitleFromId(h.get('to'));
