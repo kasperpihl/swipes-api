@@ -84,19 +84,24 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onAskFor(e) {
+  onChooseNotificationType(e, request) {
     const { contextMenu } = this.props;
     const options = this.getOptionsForE(e);
     options.alignY = 'top';
     options.positionY = 6;
     options.excludeY = true;
-    const items = ['Feedback', 'Assets', 'Decision', 'Status'].map(title => ({ title, leftIcon: { icon: 'Checkmark' } }));
+    const items = [
+      { title: 'Status', icon: 'Checkmark' },
+      { title: 'Feedback', icon: 'Checkmark' },
+      { title: 'Assets', icon: 'Checkmark' },
+      { title: 'Decision', icon: 'Checkmark' },
+    ];
 
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
         this.onOpenNotify(fromJS({
-          request: true,
+          request,
           notification_type: item.title.toLowerCase(),
         }));
       },
@@ -115,8 +120,11 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onNotify() {
-    this.onOpenNotify();
+  onAskFor(e) {
+    this.onChooseNotificationType(e, true);
+  }
+  onNotify(e) {
+    this.onChooseNotificationType(e, false);
   }
   onBarClick(e) {
     const helper = this.getHelper();

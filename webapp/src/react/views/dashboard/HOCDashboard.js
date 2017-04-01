@@ -48,6 +48,9 @@ class HOCDashboard extends PureComponent {
   componentWillUnmount() {
     this._unmounted = true;
   }
+  onReply(i) {
+    console.log('clicked reply', i);
+  }
   onMark(id) {
     const { markNotifications } = this.props;
     const { notifications } = this.state;
@@ -161,6 +164,7 @@ class HOCDashboard extends PureComponent {
       icon: msgGen.notifications.getIcon(notification),
       seen: !!notification.get('seen_at'),
       userId: notification.get('done_by'),
+      reply: true,
     });
 
     if (history) {

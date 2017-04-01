@@ -13,6 +13,7 @@ class NotificationItem extends Component {
     this.state = {};
     this.callDelegate = setupDelegate(props.delegate, props.i);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'onClickAttachment'));
+    this.onReply = this.callDelegate.bind(null, 'onReply');
     this.onClick = this.onClick.bind(this);
   }
   onClick(e) {
@@ -111,15 +112,15 @@ class NotificationItem extends Component {
     return <div className="notification__timeago">{n.get('timeago')}</div>;
   }
   renderReplyAction() {
-    const { reply } = this.props;
+    const { notification: n } = this.props;
 
-    if (!reply) {
+    if (!n.get('reply')) {
       return undefined;
     }
 
     return (
       <div className="notification__actions">
-        <Button text="Reply" />
+        <Button text="Reply" onClick={this.onReply} />
       </div>
     );
   }

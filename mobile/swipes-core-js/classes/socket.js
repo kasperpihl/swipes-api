@@ -36,7 +36,7 @@ export default class Socket {
   }
   connect() {
     let url = window.__API_URL__;
-    if(!url){
+    if (!url) {
       console.warn('Socket requires window.__API_URL__ to be set');
       return;
     }
@@ -59,7 +59,6 @@ export default class Socket {
         this.sendPing(ws);
       }, 30000);
       this.store.dispatch(a.api.request('rtm.start')).then((res) => {
-
         this.isConnecting = false;
         if (res && res.ok) {
           this.reconnect_attempts = 0;
