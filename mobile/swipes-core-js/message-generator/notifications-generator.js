@@ -3,10 +3,15 @@ export default class NotificationsGenerator {
     this.store = store;
     this.parent = parent;
   }
-  getTitle(notification) {
-
+  getTitle(n, h) {
+    return this.parent.history.getTitle(n.getIn(['target', 'id']), h || n);
   }
-  getIcon() {
-
+  getSubtitle(n, h) {
+    if (!h) {
+      return n.getIn(['meta', 'title']);
+    }
+  }
+  getIcon(n) {
+    return this.parent.history.getIcon(n);
   }
 }
