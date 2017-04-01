@@ -201,13 +201,21 @@ $borderColor: $deepBlue-10;
   $b: &;
 
   &--selected:not(&--primary):not(&--disabled) {
-    background-color: $mainColor;
+    background-color: $borderColor;
   }
 
   &--primary#{&}--selected {
     $mainColor: $primaryColor;
 
     background-color: $mainColor;
+
+    #{&}__text {
+      @include font($c: white);
+    }
+
+    #{&}__svg {
+      @include svg-color(white);
+    }
   }
 }
 
