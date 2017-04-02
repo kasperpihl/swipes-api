@@ -70,15 +70,15 @@ export default class IpcListener {
 
     desktopNotification.onclick = (e) => {
       const title = this.store.getState().getIn(['goals', notification.target.id, 'title']);
-      console.log(title, notification.target);
-      this.store.dispatch(navigation.openSecondary('secondary', {
+      this.store.dispatch(navigation.openSecondary('primary', {
         id: 'GoalOverview',
         title,
         props: {
           goalId: notification.target.id,
         },
       }));
-      console.log('notification clicked', e);
+      const remWin = remote.getCurrentWindow();
+      remWin.focus();
     };
   }
   getHeaders() {
