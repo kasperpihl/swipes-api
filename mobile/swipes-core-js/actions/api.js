@@ -1,4 +1,4 @@
-import * as types from '../constants/ActionTypes';
+import * as types from '../constants';
 
 const handleUpdatesNeeded = (payload, state, dispatch) => {
   if (!payload) {

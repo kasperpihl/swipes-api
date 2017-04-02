@@ -1,5 +1,5 @@
 import { Map, List } from 'immutable';
-import * as types from '../constants/ActionTypes';
+import * as types from '../constants';
 import { bindAll } from './utils';
 import filterGoal from './filter-goals';
 
@@ -64,16 +64,34 @@ export default class FilterHandler {
     const notifications = state.get('notifications');
     if (notifications !== this.prevNotifications) {
       this.prevNotifications = this.prevNotifications || List();
-      let notifFilters = filters.get('notifications').map(f => f.set('notifications', List()));
+      let notifFilters = filters.get('notifications')
+                                .map(f => f.set('unread', 0).set('notifications', List()));
+      let counter = 0;
       notifications.forEach((n, i) => {
         notifFilters.forEach((f, k) => {
           if (f.get('filter')(n)) {
             notifFilters = notifFilters.updateIn([k, 'notifications'], notifs => notifs.push(i));
+            if (['notifications', 'requests'].indexOf(k) !== -1) {
+              const curr = notifFilters.getIn([k, 'unread']);
+              if (!n.get('seen_at')) {
+                notifFilters = notifFilters.setIn([k, 'unread'], curr + 1);
+                counter += 1;
+              }
+            }
           }
         });
       });
       filters = filters.set('notifications', notifFilters);
+      const currUnread = state.getIn(['navigation', 'counters', 'Dashboard']);
+
       this.prevNotifications = notifications;
+      if (currUnread !== counter) {
+        console.log('updating counter', counter);
+        this.store.dispatch({ type: types.UPDATE_NOTIFICATION_COUNTER, payload: { counter } });
+        if (window.ipcListener) {
+          window.ipcListener.setBadgeCount(`${counter || ''}`);
+        }
+      }
     }
 
     if (filters !== orgFilters) {

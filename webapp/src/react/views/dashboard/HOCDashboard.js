@@ -10,12 +10,6 @@ import { timeAgo } from 'swipes-core-js/classes/time-utils';
 
 import Dashboard from './Dashboard';
 /* global msgGen */
-const filters = [
-  n => n.get('request'),
-  n => n.get('notification'),
-  n => n.get('sender'),
-  n => n.get('activity'),
-];
 
 class HOCDashboard extends PureComponent {
   constructor(props) {
@@ -170,37 +164,11 @@ class HOCDashboard extends PureComponent {
     return <b onClick={this.onClickCached(userId, 'name')}>{name}</b>;
   }
 
-  messageForNotification(notification) {
-    const { goals } = this.props;
-
-    const id = notification.getIn(['target', 'id']);
-    const index = notification.getIn(['target', 'history_index']);
-    const history = goals.getIn([id, 'history', index]);
-
-    let m = Map({
-      timeago: timeAgo(notification.get('updated_at'), true),
-      title: msgGen.notifications.getTitle(notification, history),
-      subtitle: msgGen.notifications.getSubtitle(notification, history),
-      icon: msgGen.notifications.getIcon(notification),
-      seen: !!notification.get('seen_at'),
-      userId: notification.get('done_by'),
-      reply: true,
-    });
-
-    if (history) {
-      m = m.set('message', history.get('message'));
-      m = m.set('attachments', msgGen.history.getAttachments(id, history));
-    } else {
-      m = m.set('noClickTitle', !!notification.get('seen_at'));
-    }
-    return m;
-  }
-
   render() {
     const { tabs, tabIndex } = this.state;
     let { notifications } = this.state;
     if (notifications) {
-      notifications = notifications.map(n => this.messageForNotification(n));
+      notifications = notifications.map(n => msgGen.notifications.getNotificationWrapper(n));
     }
     const { savedState, filters } = this.props;
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
@@ -209,10 +177,10 @@ class HOCDashboard extends PureComponent {
         delegate={this}
         loadingState={this.getAllLoading()}
         notifications={notifications}
-        tabs={tabs.map((t, i) => {
+        tabs={tabs.map((t) => {
           let title = filters.getIn([t, 'title']);
-          if (i < 2 && filters.getIn([t, 'notifications']).size) {
-            title += ` (${filters.getIn([t, 'notifications']).size})`;
+          if (filters.getIn([t, 'unread'])) {
+            title += ` (${filters.getIn([t, 'unread'])})`;
           }
           return title;
         })}
@@ -231,6 +199,7 @@ HOCDashboard.propTypes = {
   delegate: object,
   notifications: list,
   target: string,
+  filters: map,
   markNotifications: func,
   preview: func,
   goals: map,

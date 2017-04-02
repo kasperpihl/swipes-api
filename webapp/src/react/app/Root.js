@@ -12,7 +12,6 @@ import { init } from 'swipes-core-js';
 import Analytics from 'classes/analytics';
 import IpcListener from 'classes/ipc-listener';
 import SwipesUrlProvider from 'classes/swipes-url-provider';
-import Notifications from 'classes/notifications';
 
 const store = configureStore();
 
@@ -22,12 +21,12 @@ const history = syncHistoryWithStore(browserHistory, store, {
   },
 });
 
-init(store);
+
 window.swipesUrlProvider = new SwipesUrlProvider(store);
 
-window.notifications = new Notifications(store);
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
+init(store);
 window.analytics.sendEvent('App Loaded');
 
 class Root extends PureComponent {

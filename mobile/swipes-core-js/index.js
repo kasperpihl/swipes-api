@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import * as reducers from './reducers';
+import * as constants from './constants';
 
 import Socket from './classes/socket';
 import FilterHandler from './classes/filter-handler';
@@ -15,4 +16,5 @@ export {
   actions,
   init,
   reducers,
+  constants,
 };

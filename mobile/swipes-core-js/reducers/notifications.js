@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import * as types from '../constants/ActionTypes';
+import * as types from '../constants';
 import { REHYDRATE } from 'redux-persist/constants';
 
 const initialState = fromJS([]);

@@ -1,5 +1,5 @@
 import * as a from './';
-import * as types from '../constants/ActionTypes';
+import * as types from '../constants';
 
 // ======================================================
 // Notes

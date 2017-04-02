@@ -17,12 +17,16 @@ export default class Dashboard extends Component {
     this.onScroll = this.callDelegate.bind(null, 'onScroll');
   }
   renderHeader() {
-    const { loadingState } = this.props;
+    const { loadingState, tabIndex } = this.props;
     const loading = loadingState.get('all') && loadingState.get('all').loading;
+    const button = tabIndex === 1 ? (
+      <Button loading={loading} text="Mark all" onClick={this.onMarkAll} />
+    ) : null;
+
     return (
       <div className="dashboard-header">
         <HOCHeaderTitle title="Dashboard">
-          <Button loading={loading} text="Mark all" onClick={this.onMarkAll} />
+          {button}
         </HOCHeaderTitle>
         {this.renderTabbar()}
       </div>

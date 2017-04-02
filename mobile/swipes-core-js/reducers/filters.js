@@ -1,6 +1,6 @@
 import { fromJS, OrderedSet, List } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
-import * as types from '../constants/ActionTypes';
+import * as types from '../constants';
 
 const defaultFilter = {};
 
