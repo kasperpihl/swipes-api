@@ -68,7 +68,7 @@ export default class IpcListener {
       icon: path.join(app.getAppPath(), 'icons/logo.png'),
     });
 
-    desktopNotification.onclick = (e) => {
+    desktopNotification.onclick = () => {
       const title = this.store.getState().getIn(['goals', notification.target.id, 'title']);
       this.store.dispatch(navigation.openSecondary('primary', {
         id: 'GoalOverview',
