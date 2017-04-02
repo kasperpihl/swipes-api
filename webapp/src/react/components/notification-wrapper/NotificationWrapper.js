@@ -133,6 +133,7 @@ class NotificationItem extends Component {
     } else if (n.get('seen_at')) {
       className += ' notification--seen';
     }
+    console.log("n.get('seen_at')", n.get('seen_at'));
 
     if (typeof delegate.onClickTitle === 'function' && !n.get('noClickTitle')) {
       className += ' notification--clickable';
@@ -166,7 +167,6 @@ NotificationItem.propTypes = {
   i: number,
   delegate: object,
   notification: mapContains({
-    seen: bool,
     icon: string,
     subtitle: string,
     noClickTitle: bool,

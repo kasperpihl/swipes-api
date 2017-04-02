@@ -17,6 +17,7 @@ export default class NotificationsGenerator {
       timeago: timeAgo(notification.get('updated_at'), true),
       title: this.getTitle(notification, history),
       subtitle: this.getSubtitle(notification, history),
+      request: !!notification.get('request'),
       icon: this.getIcon(notification),
       seen_at: notification.get('seen_at'),
       userId: notification.get('done_by'),
