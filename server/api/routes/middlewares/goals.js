@@ -551,7 +551,7 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
 });
 const goalsHistoryUpdateIfReply = valLocals('goalsUpdateIfReply', {
   goal_id: string.require(),
-  goal: string.require(),
+  goal: object.require(),
   reply_to: string,
 }, (req, res, next, setLocals) => {
   const {
