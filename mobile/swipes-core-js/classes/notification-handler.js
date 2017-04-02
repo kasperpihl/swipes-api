@@ -10,6 +10,7 @@ const handleNotification = (notification) => {
     const notif = {
       title: msgGen.notifications.getTitle(n),
       message: msgGen.notifications.getMessage(n),
+      target: notification.target,
     };
     window.ipcListener.sendNotification(notif);
   }

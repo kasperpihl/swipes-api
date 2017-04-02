@@ -19,6 +19,7 @@ if (isElectron) {
 
 export default class IpcListener {
   constructor(store) {
+    this.store = store;
     this.platform = 'web';
     window.getHeaders = this.getHeaders.bind(this);
     if (isElectron) {
