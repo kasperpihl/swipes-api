@@ -103,11 +103,17 @@ class HOCGoalOverview extends PureComponent {
     options.alignX = 'center';
     options.positionY = 6;
     options.excludeY = true;
+    const subtitles = [
+      request ? 'Ask your teammates for an update' : 'Give your teammates an update',
+      request ? 'Ask your teammates for a comment' : 'Share your feedback on this goal',
+      request ? 'Ask your teammates for additional information' : 'Notify your teammates about new information',
+      request ? 'Ask your teammates to make a choice' : 'Let your teammates know about a decisions',
+    ];
     const items = [
-      { title: 'Status', icon: 'Status', subtitle: 'Ask your colleague for an update' },
-      { title: 'Feedback', icon: 'Feedback' },
-      { title: 'Assets', icon: 'Assets' },
-      { title: 'Decision', icon: 'Decision' },
+      { title: 'Status', icon: 'Status', subtitle: subtitles[0] },
+      { title: 'Feedback', icon: 'Feedback', subtitle: subtitles[1] },
+      { title: 'Assets', icon: 'Assets', subtitle: subtitles[2] },
+      { title: 'Decision', icon: 'Decision', subtitle: subtitles[3] },
     ].map((i) => { i.leftIcon = { icon: i.icon }; return i; });
 
     const delegate = {
@@ -129,7 +135,7 @@ class HOCGoalOverview extends PureComponent {
         delegate,
         items,
         style: {
-          width: '300px',
+          width: '360px',
         },
       },
     });
