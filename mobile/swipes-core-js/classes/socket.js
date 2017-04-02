@@ -2,6 +2,7 @@ import * as types from '../constants/ActionTypes';
 
 import { bindAll } from './utils';
 import * as a from '../actions';
+import sendNotification from './notification-handler';
 
 export default class Socket {
   constructor(store) {
@@ -114,6 +115,8 @@ export default class Socket {
         type: types.NOTIFICATION_ADD,
         payload: payload.notification_data,
       });
+
+      sendNotification(payload.notification_data);
     }
   }
 }

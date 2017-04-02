@@ -24,6 +24,7 @@ class Notify extends PureComponent {
   }
   componentDidMount() {
     this.refs.handoffWriteMessageTextarea.focus();
+    // console.log(__dirname);
   }
   getHelper() {
     const { goal, me } = this.props;
