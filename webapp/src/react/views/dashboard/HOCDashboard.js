@@ -6,7 +6,6 @@ import * as actions from 'actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as core from 'swipes-core-js/actions';
 import { setupDelegate, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
 
 import Dashboard from './Dashboard';
 /* global msgGen */
@@ -177,9 +176,11 @@ class HOCDashboard extends PureComponent {
         delegate={this}
         loadingState={this.getAllLoading()}
         notifications={notifications}
-        tabs={tabs.map((t) => {
+        tabs={tabs.map((t, i) => {
           let title = filters.getIn([t, 'title']);
-          if (filters.getIn([t, 'unread'])) {
+          if (i === 0 && filters.getIn([t, 'notifications']).size) {
+            title += ` (${filters.getIn([t, 'notifications']).size})`;
+          } else if (filters.getIn([t, 'unread'])) {
             title += ` (${filters.getIn([t, 'unread'])})`;
           }
           return title;

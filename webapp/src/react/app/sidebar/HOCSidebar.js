@@ -76,8 +76,8 @@ class HOCSidebar extends PureComponent {
     }
 
     let notif = null;
-    if (counter && counter.length) {
-      notif = <div className="sidebar__notification" key={counter}>{counter}</div>;
+    if (counter) {
+      notif = <div className="sidebar__notification">{counter}</div>;
     }
 
     let image = <Icon icon={item.svg} className="sidebar__icon" />;

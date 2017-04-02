@@ -67,7 +67,7 @@
     @include size(30px);
     @include centerAbsolute();
     @include flexContainer('row', center, center);
-    background-color: $red-80;
+    background-color: $blue-80;
     border-radius: 50%;
     overflow: hidden;
     transition: .2s ease;
@@ -158,12 +158,6 @@
 
 .notification {
   $b: &;
-
-  &--request {
-    #{$b}__icon {
-      background-color: $blue-80;
-    }
-  }
 
   &--seen {
     #{$b}__icon {

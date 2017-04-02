@@ -71,12 +71,10 @@ export default class FilterHandler {
         notifFilters.forEach((f, k) => {
           if (f.get('filter')(n)) {
             notifFilters = notifFilters.updateIn([k, 'notifications'], notifs => notifs.push(i));
-            if (['notifications', 'requests'].indexOf(k) !== -1) {
+            if (!n.get('seen_at') && (k === 'requests' || k === 'notifications')) {
               const curr = notifFilters.getIn([k, 'unread']);
-              if (!n.get('seen_at')) {
-                notifFilters = notifFilters.setIn([k, 'unread'], curr + 1);
-                counter += 1;
-              }
+              notifFilters = notifFilters.setIn([k, 'unread'], curr + 1);
+              counter += 1;
             }
           }
         });
@@ -86,7 +84,6 @@ export default class FilterHandler {
 
       this.prevNotifications = notifications;
       if (currUnread !== counter) {
-        console.log('updating counter', counter);
         this.store.dispatch({ type: types.UPDATE_NOTIFICATION_COUNTER, payload: { counter } });
         if (window.ipcListener) {
           window.ipcListener.setBadgeCount(`${counter || ''}`);
