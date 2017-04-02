@@ -1,4 +1,4 @@
-import { main } from 'actions';
+import { main, navigation } from 'actions';
 import { me } from 'swipes-core-js/actions';
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
@@ -69,6 +69,15 @@ export default class IpcListener {
     });
 
     desktopNotification.onclick = (e) => {
+      const title = this.store.getState().getIn(['goals', notification.target.id, 'title']);
+      console.log(title, notification.target);
+      this.store.dispatch(navigation.openSecondary('secondary', {
+        id: 'GoalOverview',
+        title,
+        props: {
+          goalId: notification.target.id,
+        },
+      }));
       console.log('notification clicked', e);
     };
   }
