@@ -1,4 +1,4 @@
-import { fromJS, OrderedSet } from 'immutable';
+import { fromJS, OrderedSet, List } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
 import * as types from '../constants/ActionTypes';
 
@@ -43,22 +43,22 @@ const initialState = fromJS({
     requests: {
       title: 'Requests',
       filter: n => n.get('request'),
-      notifications: OrderedSet(),
+      notifications: List(),
     },
     notifications: {
       title: 'Notifications',
       filter: n => n.get('notification'),
-      notifications: OrderedSet(),
+      notifications: List(),
     },
-    sender: {
+    sent: {
       title: 'Sent',
       filter: n => n.get('sender'),
-      notifications: OrderedSet(),
+      notifications: List(),
     },
     activity: {
       title: 'Activity',
       filter: n => n.get('activity'),
-      notifications: OrderedSet(),
+      notifications: List(),
     },
   },
 });

@@ -20,12 +20,15 @@ const filters = [
 class HOCDashboard extends PureComponent {
   constructor(props) {
     super(props);
-
+    let tabIndex = 0;
+    if (props.savedState) {
+      tabIndex = props.savedState.get('tabIndex') || 0;
+    }
     this.state = {
-      tabs: ['Requests', 'Notifications', 'Sent', 'Activity'],
-      tabIndex: 0,
-      notifications: this.getFilteredNotifications(0),
+      tabs: ['requests', 'notifications', 'sent', 'activity'],
+      tabIndex,
     };
+    this.state.notifications = this.getFilteredNotifications(tabIndex);
     setupLoading(this);
 
     this.onClickCached = setupCachedCallback(this.onClick, this);
@@ -41,7 +44,6 @@ class HOCDashboard extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.notifications !== this.props.notifications) {
       this.setState({
-        ...this.getCountersForNotifications(nextProps.notifications),
         notifications: this.getFilteredNotifications(this.state.tabIndex, nextProps.notifications),
       });
     }
@@ -125,26 +127,11 @@ class HOCDashboard extends PureComponent {
     const { me, goals } = this.props;
     return new GoalsUtil(goals.get(goalId), me.get('id'));
   }
-  getCountersForNotifications(notifications) {
-    notifications = notifications || this.props.notifications;
-    const obj = {
-      requestCounter: 0,
-      notificationsCounter: 0,
-    };
-    const tabs = this.state.tabs;
-    notifications.forEach((n) => {
-      if (filters[0](n)) {
-        obj.requestCounter += 1;
-      }
-      if (filters[1](n)) {
-        obj.notificationsCounter += 1;
-      }
-    });
-    return obj;
-  }
   getFilteredNotifications(fI, notifications) {
     notifications = notifications || this.props.notifications;
-    return notifications.filter(filters[fI]);
+    const { filters } = this.props;
+    const filterId = this.state.tabs[fI];
+    return filters.getIn([filterId, 'notifications']).map(i => notifications.get(i));
   }
   getAttachments(goalId, flags) {
     const helper = this.getHelperForId(goalId);
@@ -156,14 +143,15 @@ class HOCDashboard extends PureComponent {
     if (tabIndex !== index) {
       this.setState({
         tabIndex: index,
-        ...this.getCountersForNotifications(),
         notifications: this.getFilteredNotifications(index),
       });
     }
   }
   saveState() {
     const { saveState } = this.props;
+    const { tabIndex } = this.state;
     const savedState = {
+      tabIndex,
       scrollTop: this._scrollTop,
     }; // state if this gets reopened
     saveState(savedState);
@@ -214,15 +202,20 @@ class HOCDashboard extends PureComponent {
     if (notifications) {
       notifications = notifications.map(n => this.messageForNotification(n));
     }
-    const { savedState } = this.props;
+    const { savedState, filters } = this.props;
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
-
     return (
       <Dashboard
         delegate={this}
         loadingState={this.getAllLoading()}
         notifications={notifications}
-        tabs={tabs}
+        tabs={tabs.map((t, i) => {
+          let title = filters.getIn([t, 'title']);
+          if (i < 2 && filters.getIn([t, 'notifications']).size) {
+            title += ` (${filters.getIn([t, 'notifications']).size})`;
+          }
+          return title;
+        })}
         tabIndex={tabIndex}
         initialScroll={initialScroll}
       />
@@ -247,6 +240,7 @@ HOCDashboard.propTypes = {
 function mapStateToProps(state) {
   return {
     notifications: state.get('notifications'),
+    filters: state.getIn(['filters', 'notifications']),
     users: state.get('users'),
     goals: state.get('goals'),
     me: state.get('me'),

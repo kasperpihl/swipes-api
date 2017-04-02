@@ -63,17 +63,17 @@ export default class FilterHandler {
 
     const notifications = state.get('notifications');
     if (notifications !== this.prevNotifications) {
-      const orgNotifFilters = filters.get('notifications');
-      const notifFilters = orgNotifFilters;
-
       this.prevNotifications = this.prevNotifications || List();
+      let notifFilters = filters.get('notifications').map(f => f.set('notifications', List()));
       notifications.forEach((n, i) => {
-
+        notifFilters.forEach((f, k) => {
+          if (f.get('filter')(n)) {
+            notifFilters = notifFilters.updateIn([k, 'notifications'], notifs => notifs.push(i));
+          }
+        });
       });
-      if (notifFilters !== orgNotifFilters) {
-        this.prevNotifications = notifications;
-        filters = filters.set('notifications', notifFilters);
-      }
+      filters = filters.set('notifications', notifFilters);
+      this.prevNotifications = notifications;
     }
 
     if (filters !== orgFilters) {
