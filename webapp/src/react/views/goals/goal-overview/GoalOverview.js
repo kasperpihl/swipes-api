@@ -122,12 +122,12 @@ class GoalOverview extends PureComponent {
     );
   }
   renderRight() {
+    const { delegate } = this.props;
     const helper = this.getHelper();
     const history = helper.getLastActivity();
     const nf = msgGen.history.getNotificationWrapperForHistory(helper.getId(), history, {
       icon: false,
     });
-    console.log(helper.getLastActivity().toJS());
 
     return (
       <div className="goal-overview__column goal-overview__column--right">
@@ -137,7 +137,7 @@ class GoalOverview extends PureComponent {
           actions={this.renderActivitySeeAllButton()}
         >
           <NotificationWrapper
-            delegate={this}
+            delegate={delegate}
             notification={nf}
           />
         </Section>

@@ -6,7 +6,6 @@
   @include flexContainer();
   margin-top: 21px;
   margin-bottom: 60px;
-  border-bottom: 1px solid $deepBlue-6;
 
   &__image {
     padding-right: 15px;
@@ -20,12 +19,15 @@
   &__textarea {
     @include size(100%, auto);
     @include font(15px, $deepBlue-80, 24px);
+    padding: 9px 0;
     max-width: 510px;
     resize: none;
+    box-sizing: content-box;
+    border-bottom: 1px solid $deepBlue-6;
+    margin-top: -9px;
 
     &::-webkit-input-placeholder {
-      @include font(15px, $deepBlue-50, 24px);
-      font-style: italic;
+      @include font(15px, $deepBlue-40, 24px);
     }
 
     &:focus {

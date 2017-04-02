@@ -330,12 +330,14 @@
 
     input#{$b}__input {
       @include size(100%, auto);
-      @include font(15px, $deepBlue-60, 24px);
+      @include font(15px, $blue-100, 24px);
+      text-shadow: 0px 0px 0px $deepBlue-60;
+      -webkit-text-fill-color: transparent;
       padding: 9px 0;
       padding-right: 9px;
 
       &:focus {
-        @include font($c: $deepBlue-100);
+      text-shadow: 0px 0px 0px $deepBlue-100;
       }
     }
   }

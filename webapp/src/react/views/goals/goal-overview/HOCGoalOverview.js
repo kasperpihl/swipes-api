@@ -46,6 +46,18 @@ class HOCGoalOverview extends PureComponent {
   onEditSteps() {
     this.setState({ editMode: !this.state.editMode });
   }
+  onClickAttachment(hI, i) {
+    const { goal, preview, target } = this.props;
+    const helper = this.getHelper();
+    const lastActivty = helper.getLastActivity();
+    const flag = lastActivty.getIn(['flags', i]);
+    const att = goal.getIn(['attachments', flag]);
+    const selection = window.getSelection();
+
+    if (att && selection.toString().length === 0) {
+      preview(target, att);
+    }
+  }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
     const { goal, renameGoal, inputMenu } = this.props;
@@ -230,4 +242,5 @@ export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
   confirm: a.menus.confirm,
   inputMenu: a.menus.input,
+  preview: a.links.preview,
 })(HOCGoalOverview);
