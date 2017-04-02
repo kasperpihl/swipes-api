@@ -61,12 +61,11 @@ export default class IpcListener {
     if (!isElectron) {
       return;
     }
-    console.log(notification);
-    this.sendEvent('notification', Object.assign({
+
+    const myNotification = new Notification(notification.title, {
+      body: notification.message,
       icon: path.join(app.getAppPath(), 'icons/logo.png'),
-      wait: true,
-      sound: true,
-    }, notification));
+    });
   }
   getHeaders() {
     return {
