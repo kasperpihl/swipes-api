@@ -58,6 +58,14 @@
     @include size(auto, 39px);
     @include flexContainer('row', left, center);
   }
+
+  &__request {
+    padding-bottom: 40px;
+
+    & > *:last-child {
+      border: none
+    }
+  }
 }
 
 .notify-footer {

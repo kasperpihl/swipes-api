@@ -97,7 +97,7 @@ class Notify extends PureComponent {
       timeago: false,
     });
     return (
-      <Section title={title}>
+      <Section title={title} className="notify__request">
         <NotificationWrapper
           delegate={delegate}
           notification={notif}
@@ -109,7 +109,7 @@ class Notify extends PureComponent {
     const { goal, delegate, notify } = this.props;
 
     return (
-      <Section title="Flag attachments" className="goal-step__attachment">
+      <Section title="Flag attachments">
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
@@ -124,7 +124,7 @@ class Notify extends PureComponent {
     const { me, notify } = this.props;
 
     return (
-      <Section title="Write message" className="section--show">
+      <Section title="Write message">
         <HandoffWriteMessage
           ref="handoffWriteMessageTextarea"
           onChange={this.onHandoffChange}
