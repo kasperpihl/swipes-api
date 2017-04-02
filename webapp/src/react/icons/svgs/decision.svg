@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <g>
-      <path d="M17,8a4,4,0,1,0,4,4A4.00427,4.00427,0,0,0,17,8Zm0,6a2,2,0,1,1,2-2A2.00261,2.00261,0,0,1,17,14Z" stroke="transparent"/>
-      <polygon points="9.293 8.293 7 10.586 4.707 8.293 3.293 9.707 5.586 12 3.293 14.293 4.707 15.707 7 13.414 9.293 15.707 10.707 14.293 8.414 12 10.707 9.707 9.293 8.293" stroke="transparent"/>
+      <circle cx="17" cy="12" r="3" fill="transparent" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="4" y1="15" x2="10" y2="9" fill="transparent" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="10" y1="15" x2="4" y2="9" fill="transparent" stroke-miterlimit="10" stroke-width="2"/>
     </g>
 </svg>
 
