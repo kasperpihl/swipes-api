@@ -35,9 +35,11 @@ class HOCDashboard extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.notifications !== this.props.notifications) {
+    if (nextProps.filters !== this.props.filters) {
+      const tabIndex = this.state.tabIndex;
+      const { notifications, filters } = nextProps;
       this.setState({
-        notifications: this.getFilteredNotifications(this.state.tabIndex, nextProps.notifications),
+        notifications: this.getFilteredNotifications(tabIndex, notifications, filters),
       });
     }
   }
@@ -120,9 +122,9 @@ class HOCDashboard extends PureComponent {
     const { me, goals } = this.props;
     return new GoalsUtil(goals.get(goalId), me.get('id'));
   }
-  getFilteredNotifications(fI, notifications) {
+  getFilteredNotifications(fI, notifications, filters) {
     notifications = notifications || this.props.notifications;
-    const { filters } = this.props;
+    filters = filters || this.props.filters;
     const filterId = this.state.tabs[fI];
     return filters.getIn([filterId, 'notifications']).map(i => notifications.get(i));
   }
