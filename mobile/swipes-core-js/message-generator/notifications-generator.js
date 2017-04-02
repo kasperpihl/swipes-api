@@ -20,7 +20,7 @@ export default class NotificationsGenerator {
       icon: this.getIcon(notification),
       seen_at: notification.get('seen_at'),
       userId: notification.get('done_by'),
-      reply: true,
+      reply: notification.get('request'),
     });
 
     if (history) {
