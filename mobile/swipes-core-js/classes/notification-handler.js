@@ -1,14 +1,18 @@
-const app = nodeRequire('electron').remote.app;
-const path = nodeRequire('path');
+import { fromJS } from 'immutable';
+/* global msgGen */
 
-const sendNotification = (notif) => {
-  window.ipcListener.sendEvent('notification', {
-    title: 'you have it',
-    message: 'you got it',
-    icon: path.join(app.getAppPath(), 'icons/logo.png'),
-    sound: true, // Only Notification Center or Windows Toasters
-    wait: false, // Wait with callback, until user action is taken against notification
-  });
+const handleNotification = (notification) => {
+  if (window.ipcListener) {
+    if (!notification.request && !notification.notification) {
+      return;
+    }
+    const n = fromJS(notification);
+    const notif = {
+      title: msgGen.notifications.getTitle(n),
+      message: msgGen.notifications.getMessage(n),
+    };
+    window.ipcListener.sendNotification(notif);
+  }
 };
 
-export default sendNotification;
+export default handleNotification;

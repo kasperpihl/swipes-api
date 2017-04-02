@@ -12,7 +12,6 @@ export default class NotificationsGenerator {
     const id = notification.getIn(['target', 'id']);
     const index = notification.getIn(['target', 'history_index']);
     const history = goals.getIn([id, 'history', index]);
-    console.log(notification.get('seen_at'));
     let m = Map({
       timeago: timeAgo(notification.get('updated_at'), true),
       title: this.getTitle(notification, history),
@@ -33,11 +32,26 @@ export default class NotificationsGenerator {
     return m;
   }
   getTitle(n, h) {
+    if (!h) {
+      const goals = this.store.getState().get('goals');
+      const id = n.getIn(['target', 'id']);
+      const index = n.getIn(['target', 'history_index']);
+      h = goals.getIn([id, 'history', index]);
+    }
     return this.parent.history.getTitle(n.getIn(['target', 'id']), h || n);
   }
   getSubtitle(n, h) {
     if (!h) {
       return n.getIn(['meta', 'title']);
+    }
+  }
+  getMessage(n) {
+    const goals = this.store.getState().get('goals');
+    const id = n.getIn(['target', 'id']);
+    const index = n.getIn(['target', 'history_index']);
+    const h = goals.getIn([id, 'history', index]);
+    if (h) {
+      return h.get('message');
     }
   }
   getIcon(n) {

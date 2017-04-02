@@ -57,6 +57,17 @@ export default class IpcListener {
       });
     }
   }
+  sendNotification(notification) {
+    if (!isElectron) {
+      return;
+    }
+    console.log(notification);
+    this.sendEvent('notification', Object.assign({
+      icon: path.join(app.getAppPath(), 'icons/logo.png'),
+      wait: true,
+      sound: true,
+    }, notification));
+  }
   getHeaders() {
     return {
       'sw-web-version': window.__VERSION__,
