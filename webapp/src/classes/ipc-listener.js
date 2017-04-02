@@ -62,10 +62,14 @@ export default class IpcListener {
       return;
     }
 
-    const myNotification = new Notification(notification.title, {
+    const desktopNotification = new Notification(notification.title, {
       body: notification.message,
       icon: path.join(app.getAppPath(), 'icons/logo.png'),
     });
+
+    desktopNotification.onclick = (e) => {
+      console.log('notification clicked', e);
+    };
   }
   getHeaders() {
     return {
