@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { list, map } from 'react-immutable-proptypes';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
@@ -56,6 +56,7 @@ class HOCDashboard extends PureComponent {
         notify: Map({
           reply_to: n.getIn(['target', 'history_index']),
           notification_type: n.getIn(['meta', 'notification_type']),
+          assignees: List([n.get('done_by')]),
         }),
         goalId: n.getIn(['target', 'id']),
       },
