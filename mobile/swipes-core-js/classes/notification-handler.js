@@ -7,7 +7,7 @@ const sendNotification = (notif) => {
     message: 'you got it',
     icon: path.join(app.getAppPath(), 'icons/logo.png'),
     sound: true, // Only Notification Center or Windows Toasters
-    wait: true, // Wait with callback, until user action is taken against notification
+    wait: false, // Wait with callback, until user action is taken against notification
   });
 };
 
