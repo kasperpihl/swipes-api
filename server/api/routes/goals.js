@@ -34,6 +34,7 @@ import {
   goalsRenameQueueMessage,
   goalsLoadWay,
   goalsLoadWayQueueMessage,
+  goalsNotifyEmailQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -196,6 +197,8 @@ authed.all('/goals.notify',
   goalsNotify,
   goalsHistoryUpdateIfReply,
   goalsNotifyQueueMessage,
+  notificationsPushToQueue,
+  goalsNotifyEmailQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),

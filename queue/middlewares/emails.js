@@ -57,7 +57,6 @@ const goalsNotifySendEmails = (req, res, next) => {
     template_content,
     message,
   }, (result) => {
-    console.log(result);
     return next();
   }, (e) => {
     return next(new SwipesError(`goalsNotifySendEmails - A mandrill error occurred: ${e.name} - ${e.message}`));
