@@ -14,10 +14,12 @@ class ActivityFeed extends PureComponent {
     const { goal, delegate } = this.props;
     const opts = {
     };
-    return goal.get('history').map(h => (
+    return goal.get('history').reverse().map((h, i) => (
       <NotificationWrapper
         notification={msgGen.history.getNotificationWrapperForHistory(goal.get('id'), h, opts)}
         delegate={delegate}
+        key={i}
+        i={i}
       />
     ));
   }
