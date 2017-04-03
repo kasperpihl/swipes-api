@@ -146,6 +146,9 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+  onStepDidComplete(handoff) {
+    console.log('complete!!!', handoff);
+  }
   onAskFor(e) {
     this.onChooseNotificationType(e, true);
   }

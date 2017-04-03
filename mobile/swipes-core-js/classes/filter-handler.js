@@ -71,7 +71,7 @@ export default class FilterHandler {
         notifFilters.forEach((f, k) => {
           if (f.get('filter')(n)) {
             notifFilters = notifFilters.updateIn([k, 'notifications'], notifs => notifs.push(i));
-            if (!n.get('seen_at') && (k === 'requests' || k === 'notifications')) {
+            if (!n.get('seen_at') && (k === 'notifications')) {
               const curr = notifFilters.getIn([k, 'unread']);
               notifFilters = notifFilters.setIn([k, 'unread'], curr + 1);
               counter += 1;

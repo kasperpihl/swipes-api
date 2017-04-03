@@ -15,7 +15,7 @@ export default class Notify {
           return 'Ask for decision';
         case 'status':
         default:
-          return 'Ask for status';
+          return 'Ask for status update';
       }
     }
     switch (type) {
@@ -27,7 +27,7 @@ export default class Notify {
         return 'Give a decision';
       case 'status':
       default:
-        return 'Give status';
+        return 'Give status update';
     }
   }
   getNotifyPopupSubtitle(isRequest, type) {

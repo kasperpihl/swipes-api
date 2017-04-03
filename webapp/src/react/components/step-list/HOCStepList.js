@@ -87,9 +87,14 @@ class HOCStepList extends PureComponent {
     const step = helper.getStepByIndex(i);
     const nextStepId = (step && step.get('id')) || null;
     handoff.toId = nextStepId;
+    if (handoff.toId && !handoff.fromId) {
+      // If the goal was completed, and undo some steps.
+      handoff.backward = true;
+    }
     completeStep(goal.get('id'), nextStepId).then((res) => {
       if (res && res.ok) {
         this.clearLoading('completing');
+        this.callDelegate('onStepDidComplete', handoff);
       } else {
         this.clearLoading('completing', '!Something went wrong');
       }

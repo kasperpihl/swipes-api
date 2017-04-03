@@ -40,11 +40,6 @@ const initialState = fromJS({
     },
   },
   notifications: {
-    requests: {
-      title: 'Requests',
-      filter: n => n.get('request'),
-      notifications: List(),
-    },
     notifications: {
       title: 'Notifications',
       filter: n => n.get('notification') || n.get('request'),

@@ -44,7 +44,8 @@
 
   &__actions {
     @include size(100%, auto);
-    @include flexContainer('row', right);
+    padding-left: 51px;
+    @include flexContainer('row', left);
   }
 }
 
