@@ -155,7 +155,7 @@ $borderColor: $deepBlue-10;
     min-width: $btnSize;
 
     #{$b}__text {
-      padding: 0 $btnSize;
+      padding: 0 calc(#{$btnSize} / 2);
     }
 
     &#{$b}--icon-and-text {

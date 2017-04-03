@@ -6,8 +6,12 @@
 // ======================================================
 
 .notification {
+  $b: &;
+  $flexIgnoreList: '#{$b}__column--right';
+
   @include size(100%, auto);
   @include heightSpecifications(66px, initial);
+  @include flexContainer('row', left, stretch, $flexIgnoreList);  
   padding: 21px 0;
   border-bottom: 1px solid $deepBlue-5;
   overflow: hidden;
@@ -30,6 +34,13 @@
 .notification {
   $b: &;
 
+  &__column{
+
+    &--left {
+      @include size(100%, auto);
+    }
+  }
+
   &__top {
     $flexIgnoreList: '#{$b}__image', '#{$b}__timeago';
 
@@ -39,13 +50,12 @@
 
   &__bottom {
     @include size(100%, auto);
-    padding-left: 51px;
+    padding-left: 39px;
   }
 
-  &__actions {
-    @include size(100%, auto);
-    padding-left: 51px;
-    @include flexContainer('row', left);
+  &__right {
+    @include size(auto, 100%);    
+    @include flexContainer('column', right, between);
   }
 }
 
@@ -225,7 +235,7 @@
     #{$b}__top {
 
       &:hover {
-        #{$b}__title {
+        #{$b}__subtitle {
           @include font($c: $blue-100);
         }
       }

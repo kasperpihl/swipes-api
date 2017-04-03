@@ -102,6 +102,14 @@ class NotificationItem extends Component {
       </div>
     );
   }
+  renderRight() {
+    return (
+      <div className="notification__right">
+        {this.renderTimestamp()}
+        {this.renderReplyAction()}
+      </div>
+    );
+  }
   renderTimestamp() {
     const { notification: n } = this.props;
 
@@ -118,11 +126,7 @@ class NotificationItem extends Component {
       return undefined;
     }
 
-    return (
-      <div className="notification__actions">
-        <Button text="Reply" onClick={this.onReply} />
-      </div>
-    );
+    return <Button text="Give" primary small onClick={this.onReply} />;
   }
   render() {
     const { notification: n, delegate } = this.props;
@@ -142,15 +146,19 @@ class NotificationItem extends Component {
 
     return (
       <div className={className}>
-        <div className="notification__top" onClick={this.onClick}>
-          {this.renderIcon()}
-          {this.renderContent()}
-          {this.renderTimestamp()}
+        <div className="notification__column notification__column--left">
+          <div className="notification__top" onClick={this.onClick}>
+            {this.renderIcon()}
+            {this.renderContent()}
+          </div>
+          <div className="notification__bottom">
+            {this.renderAttachments()}
+          </div>
         </div>
-        <div className="notification__bottom">
-          {this.renderAttachments()}
+
+        <div className="notification__column notification__column--right">
+          {this.renderRight()}
         </div>
-        {this.renderReplyAction()}
       </div>
     );
   }

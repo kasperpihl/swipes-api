@@ -192,9 +192,9 @@
       justify-content: center;
     } @else if $directionVertical == bottom {
       justify-content: flex-end;
-    } @else if $directionHorizontal == between {
+    } @else if $directionVertical == between {
       justify-content: space-between;
-    } @else if $directionHorizontal == around {
+    } @else if $directionVertical == around {
       justify-content: space-around;
     }
   }
