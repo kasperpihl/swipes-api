@@ -25,6 +25,7 @@ class HOCGoalOverview extends PureComponent {
     this.state = {
       tabIndex: 0,
       editMode: false,
+      handoff: null,
     };
     setupLoading(this);
 
@@ -148,6 +149,10 @@ class HOCGoalOverview extends PureComponent {
   }
   onStepDidComplete(handoff) {
     console.log('complete!!!', handoff);
+    this.setState({ handoff });
+  }
+  onWriteMessage(e) {
+
   }
   onAskFor(e) {
     this.onChooseNotificationType(e, true);
@@ -214,12 +219,13 @@ class HOCGoalOverview extends PureComponent {
   }
   render() {
     const { goal, me } = this.props;
-    const { tabIndex, editMode } = this.state;
+    const { tabIndex, editMode, handoff } = this.state;
 
     return (
       <GoalOverview
         goal={goal}
         editMode={editMode}
+        handoff={handoff}
         myId={me.get('id')}
         tabIndex={tabIndex}
         delegate={this}

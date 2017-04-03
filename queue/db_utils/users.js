@@ -15,5 +15,16 @@ const dbUsersGetSingleWithOrganizations = ({ user_id }) => {
 
   return db.rethinkQuery(q);
 };
+const dbUsersGetMultipleWithFields = ({ user_ids, fields }) => {
+  const q =
+    r.table('users')
+      .getAll(...user_ids)
+      .pluck(...fields);
 
-export default dbUsersGetSingleWithOrganizations;
+  return db.rethinkQuery(q);
+};
+
+export {
+  dbUsersGetSingleWithOrganizations,
+  dbUsersGetMultipleWithFields,
+};

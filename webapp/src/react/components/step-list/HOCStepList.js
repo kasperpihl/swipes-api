@@ -78,7 +78,11 @@ class HOCStepList extends PureComponent {
     const { completeStep, goal } = this.props;
     const helper = this.getHelper();
     const currentI = helper.getCurrentStepIndex();
-    const handoff = { backward: (i < currentI), fromId: helper.getCurrentStepId() };
+    const handoff = {
+      goalId: helper.getId(),
+      backward: (i < currentI),
+      fromId: helper.getCurrentStepId(),
+    };
     this.setLoading('completing', `${i}`);
     if (i >= currentI) {
       i += 1;

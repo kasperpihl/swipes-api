@@ -1,3 +1,6 @@
 {
-  "valjs_debug": "SW_VALJS_DEBUG"
+  "valjs_debug": "SW_VALJS_DEBUG",
+  "mandrill": {
+    "apiKey": "SW_MANDRILL_API_KEY"
+  }
 }

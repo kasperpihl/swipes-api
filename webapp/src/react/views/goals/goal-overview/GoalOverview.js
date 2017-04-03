@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate, truncateString } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';
@@ -148,14 +148,14 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
-  renderSuccessFooter() {
+  renderSuccessFooter(handoff) {
     return (
       <div className="success-footer">
         <div className="success-footer__icon">
           <Icon icon="ActivityCheckmark" className="success-footer__svg" />
         </div>
         <div className="success-footer__content">
-          Awesome, you just completed <span>“3. Design Elements”</span>. Do you want to leave a message to <span>Yana</span>?
+          {msgGen.notify.getFooterForHandoff(handoff)}
         </div>
         <div className="success-footer__actions">
           <Button primary text="Write Message" className="success-footer__action" />
@@ -167,14 +167,15 @@ class GoalOverview extends PureComponent {
     );
   }
   renderFooter() {
+    const { handoff, loadingState } = this.props;
+    if (handoff) {
+      return this.renderSuccessFooter(handoff);
+    }
     const helper = this.getHelper();
 
-    return this.renderSuccessFooter();
-
-    /* if (helper.getIsCompleted()) {
+    if (helper.getIsCompleted()) {
       return undefined;
     }
-    const { loadingState } = this.props;
     let buttonLabel = 'Start goal';
 
     const currentStep = helper.getCurrentStep();
@@ -197,7 +198,7 @@ class GoalOverview extends PureComponent {
           />
         </div>
       </div>
-    );*/
+    );
   }
   render() {
     const { goal } = this.props;
@@ -219,11 +220,11 @@ class GoalOverview extends PureComponent {
 
 export default GoalOverview;
 
-const { string, object, number, bool } = PropTypes;
+const { string, object, bool } = PropTypes;
 
 GoalOverview.propTypes = {
   goal: map,
-  tabIndex: number,
+  handoff: object,
   myId: string,
   editMode: bool,
   loadingState: map,
