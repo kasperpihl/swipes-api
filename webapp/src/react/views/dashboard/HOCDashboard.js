@@ -18,7 +18,7 @@ class HOCDashboard extends PureComponent {
       tabIndex = props.savedState.get('tabIndex') || 0;
     }
     this.state = {
-      tabs: ['requests', 'notifications', 'sent', 'activity'],
+      tabs: ['notifications', 'sent', 'activity'],
       tabIndex,
     };
     this.state.notifications = this.getFilteredNotifications(tabIndex);
@@ -181,9 +181,7 @@ class HOCDashboard extends PureComponent {
         notifications={notifications}
         tabs={tabs.map((t, i) => {
           let title = filters.getIn([t, 'title']);
-          if (i === 0 && filters.getIn([t, 'notifications']).size) {
-            title += ` (${filters.getIn([t, 'notifications']).size})`;
-          } else if (filters.getIn([t, 'unread'])) {
+          if (filters.getIn([t, 'unread'])) {
             title += ` (${filters.getIn([t, 'unread'])})`;
           }
           return title;

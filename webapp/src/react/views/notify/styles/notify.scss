@@ -53,6 +53,21 @@
   &__subtitle {
     @include font(12px, $deepBlue-40, 18px, 500);
   }
+  &__status {
+    @include size(100%, auto);
+
+    span {
+      @include font(12px, $deepBlue-40, 18px, 500);
+
+      b {
+        @include font($c: $blue-100);
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 
   &__assignees {
     @include size(auto, 39px);

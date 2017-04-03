@@ -52,27 +52,27 @@ export default class Socket {
 
     const wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
 
-    const ws = new WebSocket(`${wsUrl}?token=${this.token}`);
+    this.ws = new WebSocket(`${wsUrl}?token=${this.token}`);
     this.changeStatus('connecting');
-    ws.onopen = () => {
+    this.ws.onopen = () => {
       this.socket = true;
       this._pingTimer = setInterval(() => {
-        this.sendPing(ws);
-      }, 30000);
+        this.sendPing();
+      }, 20000);
       this.store.dispatch(a.api.request('rtm.start')).then((res) => {
         this.isConnecting = false;
         if (res && res.ok) {
           this.reconnect_attempts = 0;
           this.changeStatus('online');
         } else if (res && res.err !== 'not_authed') {
-          ws.close();
+          this.ws.close();
         }
       });
     };
 
-    ws.onmessage = this.message;
+    this.ws.onmessage = this.message;
 
-    ws.onclose = () => {
+    this.ws.onclose = () => {
       this.isConnecting = false;
       clearInterval(this._pingTimer);
       this.reconnect_attempts += 1;
@@ -83,9 +83,9 @@ export default class Socket {
       this.timedConnect(time);
     };
   }
-  sendPing(ws) {
-    if (this.status === 'online' && ws) {
-      ws.send(JSON.stringify({ type: 'ping', id: 1 }));
+  sendPing() {
+    if (this.ws.readyState == this.ws.OPEN) {
+      this.ws.send(JSON.stringify({ type: 'ping', id: 1 }));
     }
   }
   changeStatus(status, nextRetry) {

@@ -103,17 +103,13 @@ class HOCGoalOverview extends PureComponent {
     options.alignX = 'center';
     options.positionY = 6;
     options.excludeY = true;
-    const subtitles = [
-      request ? 'Ask your teammates for an update' : 'Give your teammates an update',
-      request ? 'Ask your teammates for a comment' : 'Share your feedback on this goal',
-      request ? 'Ask your teammates for additional information' : 'Notify your teammates about new information',
-      request ? 'Ask your teammates to make a choice' : 'Let your teammates know about a decisions',
-    ];
+    const getSub = msgGen.notify.getNotifyPopupSubtitle.bind(null, request);
+
     const items = [
-      { title: 'Status', icon: 'Status', subtitle: subtitles[0] },
-      { title: 'Feedback', icon: 'Feedback', subtitle: subtitles[1] },
-      { title: 'Assets', icon: 'Assets', subtitle: subtitles[2] },
-      { title: 'Decision', icon: 'Decision', subtitle: subtitles[3] },
+      { title: 'Status', icon: 'Status', subtitle: getSub('status') },
+      { title: 'Feedback', icon: 'Feedback', subtitle: getSub('feedback') },
+      { title: 'Assets', icon: 'Assets', subtitle: getSub('assets') },
+      { title: 'Decision', icon: 'Decision', subtitle: getSub('decision') },
     ].map((i) => { i.leftIcon = { icon: i.icon }; return i; });
 
     const delegate = {

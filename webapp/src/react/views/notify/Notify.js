@@ -33,7 +33,7 @@ class Notify extends PureComponent {
 
   renderHeader() {
     const { notify } = this.props;
-    const title = notify.get('request') ? 'Ask for' : 'Notify';
+    const title = msgGen.notify.getNotifyTitle(notify);
 
     return (
       <div className="notify__header">
@@ -61,25 +61,51 @@ class Notify extends PureComponent {
       </div>
     );
   }
-  renderStatus() {
+  renderStatus(isFooter) {
+    const { notify } = this.props;
+    const assignees = notify.get('assignees');
+
+    let innerHtml = (
+      <span>
+        <b onClick={this.onChangeClick}>
+          Select whom to {notify.get('request') ? 'ask' : 'write to'}
+        </b>
+      </span>
+    );
+    if (assignees.size) {
+      innerHtml = (
+        <span>
+          {isFooter ? `${msgGen.notify.getNotifyTitle(notify)} ` : ''}
+          {notify.get('request') ? 'from ' : 'to '}
+          <b onClick={this.onChangeClick}>
+            {`"${msgGen.users.getNames(assignees, { yourself: true, number: 3 })}"`}
+          </b>
+        </span>
+      );
+    }
+
     return (
-      'Notify'
+      <div className="notify__status">
+        {innerHtml}
+      </div>
     );
   }
   renderFooter() {
-    const { loadingState } = this.props;
+    const { loadingState, notify } = this.props;
+
 
     return (
       <div className="notify-footer">
         <div className="notify-footer__status">
-          {this.renderStatus()}
+          {this.renderStatus(true)}
         </div>
         <div className="notify-footer__actions">
           <Button
-            text="Send notification"
+            text="Send now"
             onClick={this.onSubmit}
             {...loadingState.get('button')}
             primary
+            disabled={!notify.get('assignees').size}
           />
         </div>
       </div>
@@ -90,7 +116,7 @@ class Notify extends PureComponent {
     if (!replyObj) {
       return undefined;
     }
-    const title = `Request from ${msgGen.users.getName(replyObj.get('done_by'))}`;
+    const title = `${msgGen.users.getName(replyObj.get('done_by'))} asked`;
     const notif = msgGen.history.getNotificationWrapperForHistory(goal.get('id'), replyObj, {
       title: false,
       subtitle: false,
@@ -123,6 +149,7 @@ class Notify extends PureComponent {
   }
   renderWriteMessage() {
     const { me, notify } = this.props;
+    const placeholder = msgGen.notify.getWriteMessagePlaceholder(notify);
 
     return (
       <Section title="Write message">
@@ -131,6 +158,7 @@ class Notify extends PureComponent {
           onChange={this.onHandoffChange}
           userId={me.get('id')}
           text={notify.get('message')}
+          placeholder={placeholder}
         />
       </Section>
     );
