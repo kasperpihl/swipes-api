@@ -46,6 +46,16 @@ class HOCGoalOverview extends PureComponent {
   onEditSteps() {
     this.setState({ editMode: !this.state.editMode });
   }
+  onSeeAll() {
+    const { openSecondary, goal } = this.props;
+    openSecondary({
+      id: 'ActivityFeed',
+      title: 'ActivityFeed',
+      props: {
+        goalId: goal.get('id'),
+      },
+    });
+  }
   onClickAttachment(hI, i) {
     const { goal, preview, target } = this.props;
     const helper = this.getHelper();

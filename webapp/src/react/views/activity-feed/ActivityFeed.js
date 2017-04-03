@@ -13,7 +13,6 @@ class ActivityFeed extends PureComponent {
   renderActivity() {
     const { goal, delegate } = this.props;
     const opts = {
-      icon: false,
     };
     return goal.get('history').map(h => (
       <NotificationWrapper

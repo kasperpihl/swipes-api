@@ -23,6 +23,7 @@ class GoalOverview extends PureComponent {
     this.onNotify = this.callDelegate.bind(null, 'onNotify');
     this.onContext = this.callDelegate.bind(null, 'onContext');
     this.onBarClick = this.callDelegate.bind(null, 'onBarClick');
+    this.onSeeAll = this.callDelegate.bind(null, 'onSeeAll');
     this.onEditSteps = this.callDelegate.bind(null, 'onEditSteps');
   }
   getHelper() {
@@ -96,7 +97,7 @@ class GoalOverview extends PureComponent {
   }
   renderActivitySeeAllButton() {
     return (
-      <div className="step-list__edit-button">
+      <div className="step-list__edit-button" onClick={this.onSeeAll}>
         See all
       </div>
     );
