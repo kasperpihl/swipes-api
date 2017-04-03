@@ -12,16 +12,17 @@ export default class Users {
     if (userId === 'none') {
       return 'no one';
     }
-    if (userId === 'me') {
+    if (userId === 'me' && !options.disableYou) {
       return options.yourself ? 'yourself' : 'you';
     }
     if (users) {
       const user = users.get(userId);
       if (user) {
-        if (user.get('id') === me.get('id')) {
+        if (user.get('id') === me.get('id') && !options.disableYou) {
           return options.yourself ? 'yourself' : 'you';
         }
-        return user.get('first_name').toLowerCase();
+        const string = user.get('first_name').toLowerCase();
+        return string.charAt(0).toUpperCase() + string.slice(1);
       }
     }
 

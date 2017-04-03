@@ -94,4 +94,13 @@ export default class Notify {
         return 'Give your teammates an update. What is the latest on this step and the goal?';
     }
   }
+
+  getFooterForHandoff(handoff) {
+    const state = this.store.getState();
+    const myName = this.parent.users.getName(state.getIn(['me', 'id']), { disableYou: true });
+    if (!handoff.toId) {
+    }
+    return myName;
+    // Awesome, you just completed <span>“3. Design Elements”</span>. Do you want to leave a message to <span>Yana</span>?
+  }
 }

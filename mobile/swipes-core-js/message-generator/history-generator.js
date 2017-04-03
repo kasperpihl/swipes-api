@@ -41,7 +41,8 @@ export default class HistoryGenerator {
   }
   getTitle(id, h) {
     const me = this.store.getState().get('me');
-    const from = this.parent.users.getName(h.get('done_by'));
+    let from = this.parent.users.getName(h.get('done_by'));
+    from = from.charAt(0).toUpperCase() + from.slice(1);
     const helper = this._getHelper(id);
 
     switch (h.get('type')) {
@@ -64,15 +65,16 @@ export default class HistoryGenerator {
       case 'goal_notify': {
         const yourself = h.get('done_by') === me.get('id');
 
-        const to = this.parent.users.getName(me.get('id'), {
+        const to = this.parent.users.getNames(h.get('assignees'), {
           yourself,
+          number: 1,
         });
         const type = h.get('notification_type');
         if (h.get('request')) {
-          if (type === 'status') return `${from} asked for a status update`;
-          else if (type === 'feedback') return `${from} asked for your feedback`;
-          else if (type === 'assets') return `${from} asked for some assets`;
-          else if (type === 'decision') return `${from} asked for your decision`;
+          if (type === 'status') return `${from} asked ${to} for a status update`;
+          else if (type === 'feedback') return `${from} asked ${to} for feedback`;
+          else if (type === 'assets') return `${from} asked ${to} for assets`;
+          else if (type === 'decision') return `${from} asked ${to} for a decision`;
         }
         if (type === 'status') return `${from} gave ${to} a status update`;
         else if (type === 'feedback') return `${from} gave ${to} feedback`;
