@@ -20,10 +20,10 @@ export default class NotificationsGenerator {
       icon: this.getIcon(notification),
       seen_at: notification.get('seen_at'),
       userId: notification.get('done_by'),
-      reply: notification.get('request'),
     });
 
     if (history) {
+      m = m.set('reply', history.get('request'));
       m = m.set('message', history.get('message'));
       m = m.set('attachments', this.parent.history.getAttachments(id, history));
     } else {
@@ -41,9 +41,7 @@ export default class NotificationsGenerator {
     return this.parent.history.getTitle(n.getIn(['target', 'id']), h || n);
   }
   getSubtitle(n, h) {
-    if (!h) {
-      return n.getIn(['meta', 'title']);
-    }
+    return `on ${n.getIn(['meta', 'title'])}`;
   }
   getMessage(n) {
     const goals = this.store.getState().get('goals');

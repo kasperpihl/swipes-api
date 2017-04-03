@@ -64,10 +64,20 @@ export default class HistoryGenerator {
       case 'goal_notify': {
         const yourself = h.get('done_by') === me.get('id');
 
-        const to = this.parent.users.getNames(h.get('assignees'), {
-          number: 3,
+        const to = this.parent.users.getName(me.get('id'), {
           yourself,
         });
+        const type = h.get('notification_type');
+        if (h.get('request')) {
+          if (type === 'status') return `${from} asked for a status`;
+          else if (type === 'feedback') return `${from} asked for your feedback`;
+          else if (type === 'assets') return `${from} asked for some assets`;
+          else if (type === 'decision') return `${from} asked for your decision`;
+        }
+        if (type === 'status') return `${from} gave ${to} a status`;
+        else if (type === 'feedback') return `${from} gave ${to} feedback`;
+        else if (type === 'assets') return `${from} gave ${to} assets`;
+        else if (type === 'decision') return `${from} gave ${to} a decision`;
 
         return `${from} notified ${to}`;
       }
