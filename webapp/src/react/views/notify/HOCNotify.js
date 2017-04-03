@@ -87,7 +87,7 @@ class HOCNotify extends PureComponent {
     const { notify } = this.state;
     this.updateHandoff(notify.set('message', text));
   }
-  onChangeClick(type, e) {
+  onChangeClick(e) {
     const { notify } = this.state;
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
@@ -97,7 +97,7 @@ class HOCNotify extends PureComponent {
     this.onSelectAssignees(options, notify.get('assignees'));
   }
   onAssign(index, e) {
-    this.onChangeClick('assignees', e);
+    this.onChangeClick(e);
   }
   getHelper() {
     const { goal, me } = this.props;
