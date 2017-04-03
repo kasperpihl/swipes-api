@@ -8,6 +8,7 @@ import * as xendo from './xendo';
 import * as tokens from './tokens';
 import * as notifications from './notifications';
 import * as notify from './notify';
+import * as emails from './emails';
 
 const notifyWrapper = (middlewares) => {
   return [
@@ -70,6 +71,11 @@ const goal_notify = notifyWrapper([
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
 ]);
+
+const goal_notify_email = [
+  users.usersGetMultipleEmails,
+  emails.goalsNotifySendEmails,
+];
 
 const goal_renamed = notifyWrapper([
   goals.goalsRenamedNotificationData,
@@ -196,6 +202,7 @@ export {
   goal_milestone_added,
   goal_milestone_removed,
   goal_notify,
+  goal_notify_email,
   goal_renamed,
   goal_loaded_way,
   step_completed,

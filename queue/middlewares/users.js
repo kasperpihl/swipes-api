@@ -1,4 +1,7 @@
-import dbUsersGetSingleWithOrganizations from '../db_utils/users';
+import {
+  dbUsersGetSingleWithOrganizations,
+  dbUsersGetMultipleWithFields,
+} from '../db_utils/users';
 
 const usersGetSingleWithOrganizations = (req, res, next) => {
   const {
@@ -15,7 +18,28 @@ const usersGetSingleWithOrganizations = (req, res, next) => {
       return next(err);
     });
 };
+const usersGetMultipleEmails = (req, res, next) => {
+  const {
+    user_ids,
+  } = res.locals;
+  const fields = [
+    'email',
+    'first_name',
+    'last_name',
+  ];
+
+  return dbUsersGetMultipleWithFields({ user_ids, fields })
+    .then((usersWithFields) => {
+      res.locals.usersWithFields = usersWithFields;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
 
 export {
   usersGetSingleWithOrganizations,
+  usersGetMultipleEmails,
 };

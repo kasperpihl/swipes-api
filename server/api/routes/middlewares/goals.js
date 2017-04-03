@@ -549,6 +549,36 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
 
   return next();
 });
+const goalsNotifyEmailQueueMessage = valLocals('goalsNotifyEmailQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  assignees: array.of(string).require(),
+  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  reply_to: string,
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    assignees,
+    notification_type,
+    reply_to = null,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    goal_id,
+    notification_type,
+    reply_to,
+    user_ids: assignees,
+    event_type: 'goal_notify_email',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
 const goalsHistoryUpdateIfReply = valLocals('goalsUpdateIfReply', {
   goal_id: string.require(),
   goal: object.require(),
@@ -706,6 +736,7 @@ export {
   goalsProgressStatus,
   goalsNotify,
   goalsNotifyQueueMessage,
+  goalsNotifyEmailQueueMessage,
   goalsHistoryUpdateIfReply,
   goalsRename,
   goalsRenameQueueMessage,
