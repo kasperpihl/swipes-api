@@ -1,37 +1,16 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from './actions';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
+import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
 import Swiper from 'react-native-swiper';
 import AndroidBackButton from 'react-native-android-back-button';
 import LinearGradient from 'react-native-linear-gradient';
-import StackNavigator from './navigation/stack-navigator/StackNavigator';
-import HOCProfile from './views/profile/HOCProfile';
-import HOCGoalList from './views/goallist/HOCGoalList';
-import HOCDashboard from './views/dashboard/HOCDashboard';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
 import DevTools from './components/dev-tools/DevTools';
 import HOCContextButton from './components/context-button/HOCContextButton';
+import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
-
-const profile = {
-  key: '0',
-  title: 'Profile',
-  component: HOCProfile,
-};
-
-const dashboard = {
-  key: '1',
-  title: 'dashboard',
-  component: HOCDashboard,
-};
-
-const goalList = {
-  key: '2',
-  title: 'goalList',
-  component: HOCGoalList,
-};
 
 class App extends PureComponent {
   constructor(props) {
@@ -102,16 +81,16 @@ class App extends PureComponent {
           ref="swiper"
           showsPagination={false}
           onMomentumScrollEnd={(e, state) => {
-            const { navChange } = this.props;
-            setTimeout(() => navChange(state.index), 1);
+            const { sliderChange } = this.props;
+            setTimeout(() => sliderChange(state.index), 1);
           }}
         >
-          <StackNavigator scene={profile} navId="Profile" />
-          <StackNavigator scene={dashboard} navId="Dashboard" />
-          <StackNavigator scene={goalList} navId="Goallist" />
+          <HOCViewController sliderIndex={0} />
+          <HOCViewController sliderIndex={1} />
+          <HOCViewController sliderIndex={2} />
         </Swiper>
 
-        {/* <HOCContextButton />*/}
+        <HOCContextButton />
       </View>
     );
   }
@@ -141,7 +120,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  navChange: a.navigation.change,
+  sliderChange: a.navigation.sliderChange,
 })(App);
 
 const styles = StyleSheet.create({

@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
+import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCGoalOverview from '../goal-overview/HOCGoalOverview';
 import { colors, viewSize } from '../../utils/globalStyles';
 
@@ -12,21 +13,20 @@ class HOCGoalItem extends PureComponent {
     super(props);
     this.state = {};
 
-    this.openOverview = this.openOverview.bind(this)
+    this.openOverview = this.openOverview.bind(this);
+    this.callDelegate = setupDelegate(props.delegate);
   }
   openOverview() {
-    const { onPushRoute, goalId, goal } = this.props;
+    const { goal } = this.props;
 
     const overview = {
-      component: HOCGoalOverview,
-      title: goal.get('title'),
-      key: goalId,
+      id: 'GoalOverview',
       props: {
-        goal: goal
-      }
+        goal,
+        title: goal.get('title'),
+      },
     };
-
-    onPushRoute(overview);
+    this.callDelegate('onPushStack', overview);
   }
   renderContent() {
     const { goal, filter } = this.props;
@@ -37,7 +37,7 @@ class HOCGoalItem extends PureComponent {
         <Text style={styles.title}>{goal.get('title')}</Text>
         <Text style={styles.status} numberOfLines={2}>{status}</Text>
       </View>
-    )
+    );
   }
   renderAssignees() {
     const { goal } = this.props;
@@ -48,7 +48,7 @@ class HOCGoalItem extends PureComponent {
       <View style={styles.assignees}>
         <HOCAssigning assignees={currentAssignees} />
       </View>
-    )
+    );
   }
   render() {
     return (
@@ -65,7 +65,7 @@ class HOCGoalItem extends PureComponent {
 function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
-    filter: state.getIn(['filters', ownProps.filterId, 'filter'])
+    filter: state.getIn(['filters', ownProps.filterId, 'filter']),
   };
 }
 
@@ -82,14 +82,14 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.deepBlue5,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   assignees: {
     justifyContent: 'center',
   },
   content: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   title: {
     fontSize: 16.5,
@@ -100,5 +100,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: colors.deepBlue40,
-  }
-})
+  },
+});

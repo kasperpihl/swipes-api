@@ -19,9 +19,20 @@ class HOCGoalOverview extends PureComponent {
     };
 
     this.closeView = this.closeView.bind(this);
+    this.onActionButton = this.onActionButton.bind(this);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+  componentDidMount() {
+    if (this.props.isActive) {
+      this.renderActionButtons();
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (!prevProps.isActive && this.props.isActive) {
+      this.renderActionButtons();
     }
   }
   componentWillUpdate() {
@@ -39,14 +50,26 @@ class HOCGoalOverview extends PureComponent {
     return new GoalsUtil(goal);
   }
   closeView() {
-    const { onPopRoute } = this.props;
+    const { navPop } = this.props;
 
-    onPopRoute();
+    navPop();
+  }
+  onActionButton(i) {
+    console.log(' 2222 action!', i);
   }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
       this.setState({ tabIndex: index });
     }
+  }
+  renderActionButtons() {
+    this.props.setActionButtons({
+      onClick: this.onActionButton,
+      buttons: [
+        { text: 'Add a goal' },
+        { icon: 'ThreeDots' },
+      ],
+    });
   }
   renderHeader() {
     const { goal } = this.props;
@@ -87,18 +110,6 @@ class HOCGoalOverview extends PureComponent {
       />
     );
   }
-  renderContextButton() {
-    const { hideButton } = this.state;
-    const buttonStyles = hideButton ? styles.buttonHidden : styles.buttonShown;
-
-    return (
-      <FeedbackButton onPress={this.closeView}>
-        <View style={[styles.button, buttonStyles]}>
-          <Text style={styles.buttonLabel}>Go back</Text>
-        </View>
-      </FeedbackButton>
-    );
-  }
   renderContent() {
     const { tabIndex } = this.state;
 
@@ -118,7 +129,6 @@ class HOCGoalOverview extends PureComponent {
         <View style={styles.content}>
           {this.renderContent()}
         </View>
-        {this.renderContextButton()}
       </View>
     );
   }
@@ -131,24 +141,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-  },
-  button: {
-    width: viewSize.width * 0.6,
-    height: 60,
-    position: 'absolute',
-    left: (viewSize.width / 2) - ((viewSize.width * 0.6) / 2),
-    backgroundColor: '#333ddd',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonShown: {
-    bottom: 30,
-  },
-  buttonHidden: {
-    bottom: -60,
-  },
-  buttonLabel: {
-    color: 'white',
   },
 });
 

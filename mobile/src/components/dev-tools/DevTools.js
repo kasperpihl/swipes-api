@@ -1,22 +1,20 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
 import FeedbackButton from '../feedback-button/FeedbackButton';
-/* global Perf*/
 import PrefMonitor from 'react-native/Libraries/Performance/RCTRenderingPerf';
-// Exported from redux-devtools
 
 class DevTools extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { recording: false };
     this.toggleRecording = this.toggleRecording.bind(this);
+    PrefMonitor.toggle();
   }
   toggleRecording() {
     if (this.state.recording) {
       PrefMonitor.stop();
       this.setState({ recording: false });
     } else {
-      PrefMonitor.toggle();
       PrefMonitor.start();
       this.setState({ recording: true });
     }

@@ -1,9 +1,17 @@
 import * as types from '../constants/ActionTypes';
 
-export function change(index) {
-  return { type: types.NAVIGATION_CHANGE, payload: { index } };
+export function setActionButtons(payload) {
+  return { type: types.SET_ACTION_BUTTONS, payload };
+}
+
+export function sliderChange(sliderIndex) {
+  return { type: types.SLIDER_CHANGE, payload: { sliderIndex } };
 }
 
 export function push(sliderIndex, scene) {
-  return { type: types.NAVIGATION_STACK_PUSH, payload: { sliderIndex, scene } };
+  return { type: types.NAVIGATION_PUSH, payload: { sliderIndex, scene } };
+}
+
+export function pop(sliderIndex) {
+  return { type: types.NAVIGATION_POP, payload: { sliderIndex } };
 }

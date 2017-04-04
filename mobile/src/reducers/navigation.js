@@ -1,12 +1,12 @@
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import * as types from '../constants/ActionTypes';
 
 const initialState = fromJS({
-  index: 1,
-  slider: [
+  actionButtons: {},
+  sliderIndex: 1,
+  sliders: [
     {
-      id: 'Profile',
-      stack: [
+      routes: [
         {
           id: 'Profile',
           title: 'Profile',
@@ -14,8 +14,7 @@ const initialState = fromJS({
       ],
     },
     {
-      id: 'Dashboard',
-      stack: [
+      routes: [
         {
           id: 'Dashboard',
           title: 'Dashboard',
@@ -23,8 +22,7 @@ const initialState = fromJS({
       ],
     },
     {
-      id: 'GoalList',
-      stack: [
+      routes: [
         {
           id: 'GoalList',
           title: 'Goal list',
@@ -37,11 +35,20 @@ const initialState = fromJS({
 export default function navigation(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
-    case types.NAVIGATION_CHANGE: {
-      return state.set('index', payload.index);
+    case types.SET_ACTION_BUTTONS: {
+      return state.set('actionButtons', Map(payload));
     }
-    case types.NAVIGATION_STACK_PUSH: {
-      return state.updateIn(['slider', payload.sliderIndex, 'stack'], stack => stack.push(payload.scene));
+    case types.SLIDER_CHANGE: {
+      state = state.set('actionButtons', initialState.get('actionButtons'));
+      return state.set('sliderIndex', payload.sliderIndex);
+    }
+    case types.NAVIGATION_PUSH: {
+      state = state.set('actionButtons', initialState.get('actionButtons'));
+      return state.updateIn(['sliders', payload.sliderIndex, 'routes'], routes => routes.push(Map(payload.scene)));
+    }
+    case types.NAVIGATION_POP: {
+      state = state.set('actionButtons', initialState.get('actionButtons'));
+      return state.updateIn(['sliders', payload.sliderIndex, 'routes'], routes => routes.butLast());
     }
     default:
       return state;

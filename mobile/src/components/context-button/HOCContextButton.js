@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-// import * as a from './actions';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+
+import * as a from '../../actions';
+import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import Icon from '../icons/Icon';
 import FeedbackButton from '../feedback-button/FeedbackButton';
-import { colors, viewSize } from '../../utils//globalStyles';
+import { colors, viewSize } from '../../utils/globalStyles';
 
 class HOCContextButton extends PureComponent {
   constructor(props) {
@@ -14,46 +16,86 @@ class HOCContextButton extends PureComponent {
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+    this.onPop = this.onPop.bind(this);
+    this.onActionClick = setupCachedCallback(this.onActionClick, this);
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
-  renderTextButton(text) {
+  onPop() {
+    const { activeSliderIndex, navPop } = this.props;
+    navPop(activeSliderIndex);
+  }
+  onActionClick(i, e) {
+    const { actionButtons } = this.props;
+    if (actionButtons.get('onClick')) {
+      actionButtons.get('onClick')(i, e);
+    }
+  }
+  renderTextButton(key, button, onPress) {
     return (
-      <FeedbackButton>
+      <FeedbackButton onPress={onPress} key={key} >
         <View style={styles.textButton}>
-          <Text style={styles.textButtonLabel}>{text}</Text>
+          <Text style={styles.textButtonLabel}>{button.text}</Text>
         </View>
       </FeedbackButton>
     );
   }
-  renderIconButton(icon) {
+  renderIconButton(key, button, onPress) {
+    console.log(button);
     return (
-      <FeedbackButton>
+      <FeedbackButton onPress={onPress} key={key} >
         <View style={styles.iconButton}>
-          <Icon name={icon} width="24" height="24" fill={colors.blue100} />
+          <Icon name={button.icon} width="24" height="24" fill={colors.blue100} />
         </View>
       </FeedbackButton>
     );
+  }
+  renderLeftIcon() {
+    const { activeRoutes, actionButtons } = this.props;
+    if (actionButtons.get('disableLeft')) {
+      return undefined;
+    }
+    if (activeRoutes.size > 1) {
+      return this.renderIconButton('nav', { icon: 'ArrowLeftLine' }, this.onPop);
+    }
+    return this.renderIconButton('nav', { icon: 'Close' });
+  }
+  renderButtons() {
+    const { actionButtons } = this.props;
+    if (actionButtons && actionButtons.get('buttons')) {
+      return actionButtons.get('buttons').map((b, i) => {
+        if (b.text) {
+          return this.renderTextButton(i, b, this.onActionClick(i));
+        }
+
+        if (b.icon) {
+          return this.renderIconButton(i, b, this.onActionClick(i));
+        }
+      });
+    }
   }
   render() {
     return (
       <View style={styles.container}>
-        {/* {this.renderIconButton('ArrowLeftLine')}*/}
-        {this.renderTextButton('Add a Goal')}
+        {this.renderLeftIcon()}
+        {this.renderButtons()}
       </View>
     );
   }
 }
 
 function mapStateToProps(state) {
+  const sliderIndex = state.getIn(['navigation', 'sliderIndex']);
   return {
-
+    actionButtons: state.getIn(['navigation', 'actionButtons']),
+    activeSliderIndex: sliderIndex,
+    activeRoutes: state.getIn(['navigation', 'sliders', sliderIndex, 'routes']),
   };
 }
 
 export default connect(mapStateToProps, {
-
+  navPop: a.navigation.pop,
 })(HOCContextButton);
 
 const styles = StyleSheet.create({
