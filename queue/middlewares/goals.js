@@ -54,7 +54,8 @@ const goalsNotifyAddSenderAlways = (req, res, next) => {
 };
 const goalsNotifyAdditionalData = (req, res, next) => {
   const {
-    notification_type,
+    // T_TODO delete the default value.. it's only for backward compatibility for now
+    notification_type = null,
     reply_to,
     notificationData,
   } = res.locals;
