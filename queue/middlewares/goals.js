@@ -60,14 +60,6 @@ const goalsNotifyAdditionalData = (req, res, next) => {
     historyIndex,
     notificationData,
   } = res.locals;
-  const historyItem = goal.history[historyIndex];
-  const request = historyItem.request;
-
-  if (request) {
-    notificationData.request = true;
-  } else {
-    notificationData.notification = true;
-  }
 
   notificationData.meta.notification_type = notification_type;
   notificationData.meta.reply_to = reply_to;
