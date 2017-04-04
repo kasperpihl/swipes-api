@@ -651,37 +651,44 @@
   .notification-title {
       padding: 10px 0; height: 0px; height: auto;
   }
-  .notification-icon-wrapper {
-  		width: 42px;
+  div.notification-icon-wrapper {
+  		width: 42px !important;
       display: inline-block;
-      height: 42px;
+      height: 100%;
       padding-left: 18px;
       padding-right: 24px;
+      vertical-align: top !important;
   }
-  .notification-icon {
+  img.notification-icon {
   border: 0px;
   width: 42px;
   height: 42px;
-  vertical-align: bottom !important;
+  vertical-align: top !important;
   }
-  .notification-label {
-      display: inline-block;
+  p.notification-label {
+  width: 80%;
+      display: inline-block !important;
       font-size: 24px !important;
       vertical-align: center !important;
       margin: 0 !important;
       line-height: 42px !important;
   }
   @media (max-width: 414px) {
-  .notification-title {
+  div.notification-title {
       padding: 10px 0; height: 0px; height: auto
   }
-      .notification-icon {
-          display: block;
+  div.mcnImage.notification-icon-wrapper {
+  		display: block !important;
+     	 padding: 0 !important;
+  }
+      img.notification-icon {
+          display: block !important;
           padding: 0 !important;
       }
-      .notification-label {
-          display: block;
-          text-align: center;
+      p.notification-label {
+       width: 100% !important;
+          display: block !important;
+          text-align: left !important;
           line-height: 150% !important;
           padding-top: 15px !important;
       }
