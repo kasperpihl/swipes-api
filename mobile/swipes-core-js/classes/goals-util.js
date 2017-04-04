@@ -154,6 +154,9 @@ export default class GoalsUtil {
     this.goal.get('steps').forEach((s) => {
       s.get('assignees').forEach(aId => assignees.add(aId));
     });
+    this.goal.get('history').forEach((h) => {
+      assignees.add(h.get('done_by'));
+    });
     return fromJS([...assignees]);
   }
   hasEmptyStepsLater() {

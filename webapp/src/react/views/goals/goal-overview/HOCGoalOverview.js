@@ -148,11 +148,27 @@ class HOCGoalOverview extends PureComponent {
     });
   }
   onStepDidComplete(handoff) {
-    console.log('complete!!!', handoff);
     this.setState({ handoff });
   }
-  onWriteMessage(e) {
+  onCloseHandoff() {
+    this.setState({ handoff: null });
+  }
+  onHandoff() {
+    const { handoff } = this.state;
+    const { me } = this.props;
 
+    if (handoff) {
+      const helper = this.getHelper();
+      let assignees = helper.getAllInvolvedAssignees();
+      if (handoff.toId) {
+        assignees = helper.getAssigneesForStepId(handoff.toId);
+      }
+      this.onOpenNotify(fromJS({
+        notification_type: 'status',
+        assignees: assignees || [me.get('id')],
+      }));
+      this.setState({ handoff: null });
+    }
   }
   onAskFor(e) {
     this.onChooseNotificationType(e, true);

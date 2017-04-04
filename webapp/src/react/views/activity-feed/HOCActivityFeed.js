@@ -12,9 +12,12 @@ class HOCActivityFeed extends PureComponent {
     super(props);
     this.state = {};
   }
-  getHelper() {
-    const { goal, me } = this.props;
-    return new GoalsUtil(goal, me.get('id'));
+  componentWillReceiveProps(nextProps) {
+    const { goal, navPop } = this.props;
+    const nextGoal = nextProps.goal;
+    if (goal && !nextGoal) {
+      navPop();
+    }
   }
   onClickAttachment(hI, i) {
     const { goal, preview } = this.props;
@@ -27,6 +30,11 @@ class HOCActivityFeed extends PureComponent {
       preview(this.context.target, att);
     }
   }
+  getHelper() {
+    const { goal, myId } = this.props;
+    return new GoalsUtil(goal, myId);
+  }
+
   renderHeader() {
     return (
       <HOCHeaderTitle title="Activity feed" />
@@ -53,7 +61,7 @@ HOCActivityFeed.propTypes = {
 function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
-    me: state.get('me'),
+    myId: state.getIn(['me', 'id']),
   };
 }
 

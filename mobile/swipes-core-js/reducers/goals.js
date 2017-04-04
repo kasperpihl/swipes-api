@@ -39,6 +39,9 @@ export default function goalsReducer(state = initialState, action) {
       if (state.getIn([payload.goal_id, 'steps', payload.step.id])) {
         return state;
       }
+      if (payload.status) {
+        state = state.setIn([payload.goal_id, 'status'], fromJS(payload.status));
+      }
       state = state.setIn([payload.goal_id, 'step_order'], fromJS(payload.step_order));
       return state.setIn([payload.goal_id, 'steps', payload.step.id], fromJS(payload.step));
     }
@@ -46,6 +49,9 @@ export default function goalsReducer(state = initialState, action) {
     case 'steps.delete': {
       if (!state.getIn([payload.goal_id, 'steps', payload.step_id])) {
         return state;
+      }
+      if (payload.status) {
+        state = state.setIn([payload.goal_id, 'status'], fromJS(payload.status));
       }
       return state.updateIn([payload.goal_id], (g) => {
         g = g.updateIn(['step_order'], s => s.filter(id => id !== payload.step_id));
@@ -78,6 +84,13 @@ export default function goalsReducer(state = initialState, action) {
         return state;
       }
       return state.mergeIn([payload.goal.id], fromJS(payload.goal));
+    }
+    case 'history_updated': {
+      return state.updateIn([payload.target.id], (g) => {
+        const hIndex = payload.target.history_index;
+        if (!g || g.getIn(['history', hIndex])) return g;
+        return g.setIn(['history', hIndex], fromJS(payload.changes));
+      });
     }
     case 'attachments.add':
     case 'attachment_added': {

@@ -48,7 +48,7 @@
     }
 
     &--left {
-      $width: calc(100% - 330px);      
+      $width: calc(100% - 330px);
       @include size($width, auto);
       padding-right: 60px;
       transition: width .5s ease, padding .5s ease;
@@ -142,7 +142,9 @@
     @include flexContainer('row', center, center);
     background-color: $green-color;
     border-radius: 50%;
-
+    &--backward {
+      background-color: $blue-100;
+    }
     #{$b}__svg {
       @include svg-color($bg);
     }
@@ -153,11 +155,9 @@
     padding: 0 30px;
 
     span {
-      @include font(15px, $deepBlue-80, 24px, bold);
-
-      &:hover {
-        @include font($c: $blue-100)
-      }   
+      b{
+        @include font(15px, $deepBlue-80, 24px, bold);
+      }
     }
   }
 

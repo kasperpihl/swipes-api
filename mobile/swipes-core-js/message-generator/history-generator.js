@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import GoalsUtil from '../classes/goals-util';
 import { timeAgo } from '../classes/time-utils';
 
@@ -65,7 +65,7 @@ export default class HistoryGenerator {
       case 'goal_notify': {
         const yourself = h.get('done_by') === me.get('id');
 
-        const to = this.parent.users.getNames(h.get('assignees'), {
+        const to = this.parent.users.getNames(h.get('assignees') || List([me.get('id')]), {
           yourself,
           number: 1,
         });

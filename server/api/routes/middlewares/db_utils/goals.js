@@ -79,7 +79,7 @@ const dbGoalsPushToHistorySingle = funcWrap([
 });
 const dbGoalsRepliesHistoryUpdate = funcWrap([
   object.as({
-    reply_index: string.require(),
+    reply_index: number.require(),
     target: object.as({
       id: string.require(),
       history_index: number.int().gte(0).require(),
