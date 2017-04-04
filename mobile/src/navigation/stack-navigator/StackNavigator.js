@@ -25,9 +25,6 @@ class StackNavigator extends PureComponent {
 
     this.onNavigationChange = this.onNavigationChange.bind(this);
   }
-  componentWillMount() {
-    console.log(<ViewController navId={this.props.navId} />);
-  }
   onNavigationChange(type, view) {
     let { navigationState } = this.state;
 
@@ -39,9 +36,7 @@ class StackNavigator extends PureComponent {
           component: view.component,
           props: view.props,
         };
-        console.log('navi1', navigationState);
         navigationState = NavigationStateUtils.push(navigationState, route);
-        console.log('navi2', navigationState);
         break;
       case 'pop':
         navigationState = NavigationStateUtils.pop(navigationState);

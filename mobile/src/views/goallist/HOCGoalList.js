@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import Tabs from 'react-native-tabs';
 import Header from '../../components/header/Header';
@@ -14,13 +14,8 @@ class HOCGoalList extends Component {
       tabs: ['current', 'upcoming', 'unstarted'],
       tabIndex: 0,
     };
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
   }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+  componentDidMount() {
   }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
@@ -74,7 +69,7 @@ const styles = StyleSheet.create({
 });
 function mapStateToProps(state) {
   return {
-    filters: state.get('filters'),
+    filters: state.getIn(['filters', 'goals']),
   };
 }
 

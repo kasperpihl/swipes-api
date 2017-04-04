@@ -27,13 +27,13 @@ class HOCGoalOverview extends PureComponent {
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
-  onDirectionChange(direction) {
-    const { hideButton } = this.state;
-    const newHideButton = (direction === 'down');
-    if (hideButton !== newHideButton) {
-      this.setState({ hideButton: newHideButton });
-    }
-  }
+  // onDirectionChange(direction) {
+  //   const { hideButton } = this.state;
+  //   const newHideButton = (direction === 'down');
+  //   if (hideButton !== newHideButton) {
+  //     this.setState({ hideButton: newHideButton });
+  //   }
+  // }
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);
@@ -104,11 +104,12 @@ class HOCGoalOverview extends PureComponent {
 
     if (tabIndex === 0) {
       return this.renderActivity();
-    } else if (tabIndex === 1) {
-      return this.renderStepList();
-    } else if (tabIndex === 2) {
-      return this.renderAttachments();
     }
+    // else if (tabIndex === 1) {
+    //   return this.renderStepList();
+    // } else if (tabIndex === 2) {
+    //   return this.renderAttachments();
+    // }
   }
   render() {
     return (
@@ -159,4 +160,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+
 })(HOCGoalOverview);

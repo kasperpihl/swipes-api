@@ -65,7 +65,7 @@ export default class FilterHandler {
     if (notifications !== this.prevNotifications) {
       this.prevNotifications = this.prevNotifications || List();
       let notifFilters = filters.get('notifications')
-                                .map(f => f.set('unread', 0).set('notifications', List()));
+        .map(f => f.set('unread', 0).set('notifications', List()));
       let counter = 0;
       notifications.forEach((n, i) => {
         notifFilters.forEach((f, k) => {

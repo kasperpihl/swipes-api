@@ -126,7 +126,7 @@ class App extends PureComponent {
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
-        <DevTools />
+        {/* <DevTools />*/}
       </View>
     );
   }

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Provider } from 'react-redux';
-import { Platform } from 'react-native';
+import { Platform, View, Text } from 'react-native';
 
 import App from './App';
 import configureStore from './store/configureStore';

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Text } from 'react-native';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton'
-import { colors, viewSize } from '../../utils/globalStyles'
+import FeedbackButton from '../../components/feedback-button/FeedbackButton';
+import { colors, viewSize } from '../../utils/globalStyles';
 import { api } from '../../../swipes-core-js/actions';
 
 class Login extends PureComponent {
@@ -16,15 +16,13 @@ class Login extends PureComponent {
     this.signIn = this.signIn.bind(this);
   }
   signIn() {
-    console.log('signin')
     const { request } = this.props;
     const { email, password } = this.state;
     request('users.signin', {
       email: email.toLowerCase(),
       password,
     }).then((res) => {
-      console.log('hello', res);
-    })
+    });
   }
   render() {
     return (
@@ -32,17 +30,17 @@ class Login extends PureComponent {
         <KeyboardAvoidingView behavior="height" style={styles.container}>
           <TextInput
             style={styles.input}
-            onChangeText={(email) => this.setState({ email })}
+            onChangeText={email => this.setState({ email })}
             value={this.state.email}
             placeholder="fuck"
             returnKeyType="next"
           />
           <TextInput
             style={styles.input}
-            onChangeText={(password) => this.setState({ password })}
+            onChangeText={password => this.setState({ password })}
             value={this.state.password}
             returnKeyType="go"
-            secureTextEntry={true}
+            secureTextEntry
             onSubmitEditing={this.signIn}
           />
           <FeedbackButton onPress={this.signIn}>
@@ -65,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bgColor,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   input: {
     width: 250,
@@ -76,9 +74,9 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#333ddd',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   buttonLabel: {
-    color: 'white'
-  }
-})
+    color: 'white',
+  },
+});

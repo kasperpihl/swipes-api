@@ -97,8 +97,8 @@ class NotificationItem extends Component {
 
     return (
       <View style={styles.content}>
-        <Text style={styles.subtitle}>{n.get('subtitle')}</Text>
         {this.renderTitle(n.get('title'))}
+        <Text style={styles.subtitle}>{n.get('subtitle')}</Text>
         {this.renderMessage()}
       </View>
     );
