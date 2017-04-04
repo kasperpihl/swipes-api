@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate } from 'classes/utils';
-import GoalsUtil from 'classes/goals-util';
+import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
 import Button from 'Button';
 import Measure from 'react-measure';
@@ -80,22 +80,29 @@ class GoalList extends Component {
       return (
         <div className="goals-empty-state">
           <div className="goals-empty-state__title">Goals</div>
-          <div className="goals-empty-state__message">Here you can create new goals, track current ones and accomplish them with your team. Let's get started.</div>
-          <Button primary text="Create your first goal" className="goals-empty-state__button" onClick={addGoal} />
+          <div className="goals-empty-state__message">
+            Here you can create new goals,&nbsp;
+            {'track current ones and accomplish them with your team. Let\'s get started.'}
+          </div>
+          <Button
+            primary
+            text="Create your first goal"
+            className="goals-empty-state__button"
+            onClick={addGoal}
+          />
         </div>
       );
-    } else {
-      return goals.map(goal => (
-        <GoalListItem
-          onClick={this.clickedListItem}
-          onAssignClick={this.onAssignClick}
-          me={this.props.me}
-          filter={filter}
-          goal={goal}
-          key={`goal-list-item-${goal.get('id')}`}
-        />
-      ));
     }
+    return goals.map(goal => (
+      <GoalListItem
+        onClick={this.clickedListItem}
+        onAssignClick={this.onAssignClick}
+        me={this.props.me}
+        filter={filter}
+        goal={goal}
+        key={`goal-list-item-${goal.get('id')}`}
+      />
+      ));
   }
   renderFilterFooter() {
     const { filterLabel, showFilter, delegate, tabs, tabIndex } = this.props;
@@ -126,11 +133,12 @@ class GoalList extends Component {
   }
 }
 
-const { object: obj, number, array, bool, string } = PropTypes;
+const { object: obj, number, array, bool, string, func } = PropTypes;
 
 GoalList.propTypes = {
   goals: array.isRequired,
   tabs: list,
+  addGoal: func,
   showFilter: bool,
   filterProp: list,
   filterLabel: string,

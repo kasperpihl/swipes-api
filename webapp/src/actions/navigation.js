@@ -1,5 +1,5 @@
 import * as types from 'constants';
-import { randomString } from 'classes/utils';
+import { randomString } from 'swipes-core-js/classes/utils';
 
 export function set(target, obj) {
   return (dispatch, getState) => {
@@ -48,8 +48,9 @@ export function pop(target, i) {
 
 export const setCounter = (id, counter) => (d, getState) => {
   // window.ipcListener.setBadgeCount(counter);
+  d({ type: types.NAVIGATION_SET_COUNTER, payload: { id, counter } });
 
-  d({ type: types.NAVIGATION_SET_COUNTER, payload: { id, counter } }).then(() => {
+  setTimeout(() => {
     if (window.ipcListener) {
       const counters = getState().getIn(['navigation', 'counters']);
       const slackCount = counters.get('Slack');
@@ -68,5 +69,5 @@ export const setCounter = (id, counter) => (d, getState) => {
       }
       window.ipcListener.setBadgeCount(`${totalCount || ''}`);
     }
-  });
+  }, 10);
 };

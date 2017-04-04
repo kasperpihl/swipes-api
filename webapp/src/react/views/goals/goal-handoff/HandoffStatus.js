@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { list } from 'react-immutable-proptypes';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import './styles/handoff-status.scss';
 /* global msgGen */
 
@@ -26,7 +26,7 @@ class HandoffStatus extends Component {
       status = (
         <span>
           {`Start goal at step ${i} and assign it to `}
-          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true, number: 3 })}"`}</b>
+          <b onClick={this.onChange('assignees')}>{`"${msgGen.users.getNames(assignees, { yourself: true, number: 3 })}"`}</b>
         </span>
       );
     } else if (toId === '_complete') {
@@ -40,7 +40,7 @@ class HandoffStatus extends Component {
       status = (
         <span>
           {`${(toId === '_notify') ? 'Send notification' : 'Give feedback'} to `}
-          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true, number: 3 })}"`}</b>
+          <b onClick={this.onChange('assignees')}>{`"${msgGen.users.getNames(assignees, { yourself: true, number: 3 })}"`}</b>
         </span>
       );
     } else {
@@ -62,7 +62,7 @@ class HandoffStatus extends Component {
           {moveString}
           <b onClick={this.onChange('step')}>{title}</b>
           {diff === 0 ? ' to ' : ' and assign '}
-          <b onClick={this.onChange('assignees')}>{`"${msgGen.getUserArrayString(assignees, { yourself: true, number: 3 })}"`}</b>
+          <b onClick={this.onChange('assignees')}>{`"${msgGen.users.getNames(assignees, { yourself: true, number: 3 })}"`}</b>
         </span>
       );
     }

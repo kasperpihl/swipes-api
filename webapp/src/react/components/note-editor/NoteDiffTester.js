@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { setupCachedCallback, bindAll } from 'classes/utils';
+import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
 import diff from 'classes/draft-util';
 import Button from 'Button';
 import {

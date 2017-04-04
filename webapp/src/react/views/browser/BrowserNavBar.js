@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import Button from 'Button';
 
 class BrowserNavBar extends Component {

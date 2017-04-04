@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate } from 'classes/utils';
-import GoalsUtil from 'classes/goals-util';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';
 import Button from 'Button';
@@ -33,7 +33,7 @@ class GoalHandoff extends PureComponent {
 
   renderHeader() {
     const { handoff, goal } = this.props;
-    const title = msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
+    const title = 'hi'; // msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
 
     return (
       <div className="goal-handoff__header">
@@ -78,7 +78,7 @@ class GoalHandoff extends PureComponent {
   }
   renderFooter() {
     const { handoff, goal, loadingState } = this.props;
-    const title = msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
+    const title = 'hi'; // msgGen.getButtonTitleFromHandoffAndGoal(handoff, goal);
 
     return (
       <div className="handoff-footer">

@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
-import GoalsUtil from 'classes/goals-util';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
@@ -12,17 +12,17 @@ class GoalListItem extends PureComponent {
     this.state = {};
     this.clickedListItem = this.clickedListItem.bind(this);
   }
-  getHelper() {
-    const { goal } = this.props;
-    return new GoalsUtil(goal);
-  }
-  clickedAssign(stepId, e) {
+  onAssign(stepId, e) {
     const { onAssignClick, goal } = this.props;
     const helper = this.getHelper();
 
     if (onAssignClick) {
       onAssignClick(goal.get('id'), helper.getCurrentStepId(), e);
     }
+  }
+  getHelper() {
+    const { goal } = this.props;
+    return new GoalsUtil(goal);
   }
   clickedListItem() {
     const { onClick, goal } = this.props;
@@ -44,7 +44,7 @@ class GoalListItem extends PureComponent {
       width: `${completedProgressFill}%`,
     };
 
-    if (numberOfAllSteps === 0) {
+    if (!numberOfAllSteps) {
       return (
         <div className="progress-bar  progress-bar--empty">
           <div className="progress-bar__status">No steps added</div>
@@ -64,9 +64,10 @@ class GoalListItem extends PureComponent {
   renderAssignees() {
     const { goal } = this.props;
     const helper = this.getHelper();
-    if (helper.getIsCompleted() || !helper.getIsStarted()) {
+    if (helper.getIsCompleted() || !helper.getTotalNumberOfSteps()) {
       return undefined;
     }
+
     return (
       <div className="goal-list-item__assigning">
         <HOCAssigning
@@ -83,7 +84,7 @@ class GoalListItem extends PureComponent {
   render() {
     const { goal, filter } = this.props;
     const helper = this.getHelper();
-    const status = msgGen.getGoalSubtitle(goal, filter);
+    const status = msgGen.goals.getSubtitle(goal, filter);
     const isActive = !helper.getIsCompleted();
     let className = 'goal-list-item';
 

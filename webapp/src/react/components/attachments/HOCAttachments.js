@@ -2,13 +2,18 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
 import * as a from 'actions';
-import { attachments as att } from 'swipes-core-js';
+import * as ca from 'swipes-core-js/actions';
+import {
+  EditorState,
+  convertToRaw,
+} from 'draft-js';
 import {
   setupCachedCallback,
   setupDelegate,
   setupLoading,
   attachmentIconForService,
-} from 'classes/utils';
+  bindAll,
+} from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import Attachment from './Attachment';
@@ -22,14 +27,14 @@ class HOCAttachments extends PureComponent {
     this.onContextMenuCached = setupCachedCallback(this.onContextMenu, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
-    this.onAdd = this.onAdd.bind(this);
+    bindAll(this, ['onChangeFiles']);
     setupLoading(this);
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
     this._unmounted = true;
   }
-  onPreview(id) {
+  onPreview(id, e) {
     const {
       previewLink,
       attachments,
@@ -37,6 +42,7 @@ class HOCAttachments extends PureComponent {
     const selection = window.getSelection();
 
     if (selection.toString().length === 0) {
+      this.callDelegate('willOpenPreview', attachments.get(id), e);
       previewLink(this.context.target, attachments.get(id));
     }
   }
@@ -47,7 +53,6 @@ class HOCAttachments extends PureComponent {
   onContextMenu(id, e) {
     const { contextMenu, attachments } = this.props;
     const at = attachments.get(id);
-    console.log(id, at.toJS());
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'center',
@@ -136,7 +141,7 @@ class HOCAttachments extends PureComponent {
         if (which === 'url') {
           this.attachToTarget(which, title, title);
         } else {
-          createNote().then((res) => {
+          createNote(convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
             if (res && res.ok) {
               this.attachToTarget(which, res.note.id, title);
             } else {
@@ -163,7 +168,10 @@ class HOCAttachments extends PureComponent {
       },
     };
   }
-
+  onChangeFiles(e) {
+    const { uploadFiles } = this.props;
+    uploadFiles(e.target.files);
+  }
   attachToTarget(type, id, title) {
     const linkObj = this.getSwipesLinkObj(type, id, title);
     const { targetId, addAttachment } = this.props;
@@ -209,37 +217,38 @@ class HOCAttachments extends PureComponent {
   }
   renderAddAttachments() {
     let className = 'attachments__add-list';
-
     if (this.getLoading('adding').loading) {
       className += ' attachments__add-list--loading';
     }
 
     return (
       <div className={className}>
-        <div className="attachments__add-icon">
-          <Icon icon="Plus" className="attachments__svg" />
-        </div>
         <button
           className="attachments__add-item"
           onClick={this.onAddCached('url')}
-        >Add URL</button>
+        >
+          Add URL
+        </button>
         <button
           className="attachments__add-item"
           onClick={this.onAddCached('note')}
-        >New Note</button>
-        <button
-          className="attachments__add-item"
-          onClick={this.onAddCached('find')}
-        >Find</button>
+        >
+          New Note
+        </button>
+        {/* <label className="attachments__add-item">
+          Upload
+          <input type="file" multiple onChange={this.onChangeFiles} />
+        </label>*/}
+        <div className="attachments__loader" />
       </div>
     );
   }
   render() {
     return (
       <div className="attachments">
-        {this.renderAddAttachments()}
-        {this.renderAttachments()}
 
+        {this.renderAttachments()}
+        {this.renderAddAttachments()}
       </div>
     );
   }
@@ -274,11 +283,12 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  addAttachment: att.add,
-  removeAttachment: att.remove,
-  renameAttachment: att.rename,
+  addAttachment: ca.attachments.add,
+  removeAttachment: ca.attachments.remove,
+  renameAttachment: ca.attachments.rename,
   contextMenu: a.main.contextMenu,
-  createNote: a.notes.create,
+  createNote: ca.notes.create,
+  uploadFiles: ca.files.upload,
   inputMenu: a.menus.input,
   confirm: a.menus.confirm,
   openFind: a.links.openFind,

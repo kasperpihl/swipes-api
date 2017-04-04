@@ -4,7 +4,8 @@
 .handoff-write-message {
   @include size(100%, auto);
   @include flexContainer();
-  margin-top: 50px;
+  margin-top: 21px;
+  margin-bottom: 60px;
 
   &__image {
     padding-right: 15px;
@@ -18,12 +19,14 @@
   &__textarea {
     @include size(100%, auto);
     @include font(15px, $deepBlue-80, 24px);
+    padding: 9px 0;
     max-width: 510px;
     resize: none;
+    box-sizing: content-box;
+    margin-top: -9px;
 
     &::-webkit-input-placeholder {
-      @include font(15px, $deepBlue-50, 24px);
-      font-style: italic;
+      @include font(15px, $deepBlue-40, 24px);
     }
 
     &:focus {

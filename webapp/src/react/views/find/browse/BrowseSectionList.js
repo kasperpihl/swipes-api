@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate, setupCachedCallback } from 'classes/utils';
+import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import Loader from 'components/loaders/Loader';
 import Button from 'Button';
 import BrowseSectionItem from './BrowseSectionItem';

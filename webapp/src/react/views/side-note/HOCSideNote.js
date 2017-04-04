@@ -10,16 +10,18 @@ import {
   EditorState,
 } from 'draft-js';
 import Button from 'Button';
-import { timeAgo } from 'classes/time-utils';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import diff from 'classes/draft-util';
 
-import { bindAll, debounce, randomString, setupLoading } from 'classes/utils';
+import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
 import * as actions from 'actions';
+import * as ca from 'swipes-core-js/actions';
 
 import './styles/side-note';
 
 const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
+/* global msgGen */
 
 class HOCSideNote extends PureComponent {
   static maxWidth() {
@@ -159,7 +161,7 @@ class HOCSideNote extends PureComponent {
 
   renderHeader() {
     const { target, note, latestRev, title } = this.props;
-    const name = window.msgGen.getUserString(note.get('updated_by'), { yourself: true });
+    const name = msgGen.users.getName(note.get('updated_by'), { yourself: true });
     const timeString = timeAgo(note.get('updated_at'));
     let subtitle = `Updated by ${name} ${timeString}`;
     let buttonHtml;
@@ -257,7 +259,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  saveNote: actions.notes.save,
-  cacheNote: actions.notes.cache,
+  saveNote: ca.notes.save,
+  cacheNote: ca.notes.cache,
   browser: actions.main.browser,
 })(HOCSideNote);

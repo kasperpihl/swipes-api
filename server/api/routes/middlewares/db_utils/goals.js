@@ -3,6 +3,7 @@ import {
   string,
   object,
   funcWrap,
+  number,
 } from 'valjs';
 import db from '../../../../db';
 import {
@@ -76,10 +77,50 @@ const dbGoalsPushToHistorySingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbGoalsRepliesHistoryUpdate = funcWrap([
+  object.as({
+    reply_index: number.require(),
+    target: object.as({
+      id: string.require(),
+      history_index: number.int().gte(0).require(),
+    }).require(),
+  }).require(),
+], (err, { reply_index, target }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsRepliesHistoryUpdate: ${err}`);
+  }
+
+  let table = '';
+
+  if (target.id.startsWith('G')) {
+    table = 'goals';
+  }
+
+  const q =
+    r.table(table)
+      .get(target.id)
+      .update({
+        history: r.row('history')
+          .changeAt(target.history_index,
+            r.row('history')
+              .nth(target.history_index)
+              .merge((item) => {
+                return {
+                  replies: item('replies').default([]).setUnion([reply_index]),
+                };
+              }),
+          ),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbGoalsInsertSingle,
   dbGoalsUpdateSingle,
   dbGoalsGetSingle,
   dbGoalsPushToHistorySingle,
+  dbGoalsRepliesHistoryUpdate,
 };

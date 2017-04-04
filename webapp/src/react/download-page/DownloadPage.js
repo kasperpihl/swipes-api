@@ -3,7 +3,7 @@ import Icon from 'Icon';
 import Gradient from 'components/gradient/Gradient';
 import './download-page.scss';
 
-class DownloadPage extends Component {
+export default class DownloadPage extends Component {
   componentDidMount() {
     /* if (browser.name === 'safari') {
       const dLink = document.getElementById('safari-download-link');
@@ -96,5 +96,3 @@ class DownloadPage extends Component {
     );
   }
 }
-
-module.exports = DownloadPage;

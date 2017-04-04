@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 import './styles/filter.scss';
 // now use events as onClick:

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'Icon';
 import Button from 'Button';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 // now use events as onClick:
 
@@ -28,7 +28,7 @@ class ResultItem extends Component {
       children = <img role="presentation" src={obj.src} />;
     } else if (obj.icon) {
       className += ' result__icon--svg';
-      children = <Icon icon={obj.icon} />;
+      children = <Icon {...obj} />;
     } else if (obj.button) {
       className += ' result__icon--btn';
       children = (

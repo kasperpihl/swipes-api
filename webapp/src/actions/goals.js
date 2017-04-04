@@ -1,8 +1,7 @@
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import { fromJS } from 'immutable';
+import { cache } from 'swipes-core-js/actions';
 import * as a from './';
-import { cache } from './core';
-
 
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {
   assignees = assignees || [];

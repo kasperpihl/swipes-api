@@ -1,16 +1,22 @@
 import React, { PureComponent, PropTypes } from 'react';
 import * as a from 'actions';
-import { cache, goals as goa } from 'swipes-core-js';
+import { cache, goals as goa } from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate, bindAll, setupLoading } from 'classes/utils';
+import { setupDelegate, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
 import filterGoals from 'classes/filter-util';
 import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
+import {
+  EditorState,
+  convertToRaw,
+} from 'draft-js';
+
 import GoalList from './GoalList';
+
 
 /* global msgGen*/
 const defaultFilter = fromJS({
@@ -27,21 +33,22 @@ class HOCGoalList extends PureComponent {
     this.state = {
       tabIndex: 0,
       tabs: fromJS([{
-        title: 'Current',
+        title: 'My current',
         filter: {
           user: 'me',
           goalType: 'current',
         },
       }, {
-        title: 'Upcoming',
+        title: 'Next',
         filter: {
           user: 'me',
           goalType: 'upcoming',
         },
       }, {
-        title: 'Unstarted',
+        title: 'Unassigned',
         filter: {
-          goalType: 'unstarted',
+          goalType: 'current',
+          user: 'none',
         },
       }, {
         title: 'Filter',
@@ -178,7 +185,7 @@ class HOCGoalList extends PureComponent {
       if (title && title.length) {
         this.setLoading('add');
         this.tabDidChange(2);
-        createGoal(title).then((res) => {
+        createGoal(title, convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
           if (res && res.ok) {
             this.clearLoading('add');
           } else {
@@ -231,11 +238,11 @@ class HOCGoalList extends PureComponent {
       let newString;
 
       if (p.get('id') === 'goalType') {
-        newString = msgGen.getGoalType(filter.get('goalType'));
+        newString = msgGen.goals.getType(filter.get('goalType'));
       } else if (p.get('id') === 'user') {
-        newString = msgGen.getUserString(filter.get('user'));
+        newString = msgGen.users.getName(filter.get('user'));
       } else if (p.get('id') === 'milestone') {
-        return p.set('string', msgGen.getMilestoneString(filter.get('milestone')));
+        return p.set('string', msgGen.milestones.getName(filter.get('milestone')));
       } else if (p.get('id') === 'matching') {
         if (!filter.get('matching') || !filter.get('matching').length) {
           return p.set('string', 'anything');
@@ -250,7 +257,7 @@ class HOCGoalList extends PureComponent {
     });
   }
   updateFilterLabel(filter, filteredGoals) {
-    return msgGen.getFilterLabel(filteredGoals.length, filter);
+    return msgGen.goals.getFilterLabel(filteredGoals.length, filter);
   }
   filterGoals(filter) {
     const { goals, me } = this.props;
@@ -284,9 +291,9 @@ class HOCGoalList extends PureComponent {
   renderHeader() {
     return (
       <div className="goals-list__header">
-        <HOCHeaderTitle title="Goals">
+        <HOCHeaderTitle title="Team goals">
           <Button
-            text="Add Goal"
+            text="Add a goal"
             primary
             {...this.getLoading('add')}
             onClick={this.onAddGoal}

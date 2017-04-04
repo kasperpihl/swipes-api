@@ -3,8 +3,8 @@ import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import * as actions from 'actions';
-import { setupDelegate, setupCachedCallback } from 'classes/utils';
-import GoalsUtil from 'classes/goals-util';
+import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Assigning from './Assigning';
 
 class HOCAssigning extends PureComponent {
@@ -14,7 +14,7 @@ class HOCAssigning extends PureComponent {
       stateAssignees: this.getStateAssignees(props),
     };
     this.callDelegate = setupDelegate(props.delegate);
-    this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'clickedAssign'), this);
+    this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onAssign'), this);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.assignees !== this.props.assignees) {

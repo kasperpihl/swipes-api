@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
   <g>
-    <rect stroke="none" opacity="0"/>
-    <path d="M12,22,14.8692,8.4336h2.5835L14.584,22Z" stroke="none"/>
+    <rect stroke="transparent" opacity="0"/>
+    <path d="M12,22,14.8692,8.4336h2.5835L14.584,22Z" stroke="transparent"/>
   </g>
 </svg>

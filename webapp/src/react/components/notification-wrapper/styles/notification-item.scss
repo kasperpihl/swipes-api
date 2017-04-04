@@ -1,0 +1,254 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Blocks
+// ======================================================
+
+.notification {
+  $b: &;
+  $flexIgnoreList: '#{$b}__column--right';
+
+  @include size(100%, auto);
+  @include heightSpecifications(66px, initial);
+  @include flexContainer('row', left, stretch, $flexIgnoreList);  
+  padding: 21px 0;
+  border-bottom: 1px solid $deepBlue-5;
+  overflow: hidden;
+}
+
+.notif-attachment {
+  $b: &;
+  $flexIgnoreList: '#{$b}__icon';
+
+  @include size(100%, 24px);
+  @include flexContainer('row', left, center, $flexIgnoreList);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+// Containers
+
+.notification {
+  $b: &;
+
+  &__column{
+
+    &--left {
+      @include size(100%, auto);
+    }
+  }
+
+  &__top {
+    $flexIgnoreList: '#{$b}__image', '#{$b}__timeago';
+
+    @include size(100%, auto);
+    @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
+  }
+
+  &__bottom {
+    @include size(100%, auto);
+    padding-left: 39px;
+  }
+
+  &__right {
+    @include size(auto, 100%);    
+    @include flexContainer('column', right, between);
+  }
+}
+
+// Icon
+.notification {
+
+  &__image {
+    @include size(30px);
+  }
+
+  &__assigning {
+    @include size(30px);
+    @include centerAbsolute();
+    opacity: 0;
+    pointer-events: none;
+    transition: .2s ease;
+  }
+
+  &__icon {
+    @include size(30px);
+    @include centerAbsolute();
+    @include flexContainer('row', center, center);
+    background-color: $blue-80;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: .2s ease;
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($bg);
+  }
+}
+
+// Content
+
+.notification {
+
+  &__content {
+    @include size(100%, auto);
+    padding-left: 15px;
+    margin-top: -4px;
+  }
+
+  &__subtitle {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-30, 15px, 400);
+  }
+
+  &__title {
+    @include size(100%, auto);
+    @include font(15px, $deepBlue-90, 24px);
+  }
+
+  &__message {
+    @include size(100%, auto);
+    @include font(13px, $deepBlue-50, 18px, 400);
+    font-style: italic;
+    margin-top: 9px;
+  }
+
+  &__attachments {
+    @include size(100%, auto);
+    padding-top: 9px;
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+// Timestamp
+
+.notification {
+
+  &__timeago {
+    @include size(auto);
+    @include font(12px, $deepBlue-30, 15px, 400);
+    white-space: nowrap;
+  }
+}
+
+// Attachment
+
+.notif-attachment {
+
+  &__icon {
+    @include size(24px);
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($blue-100);
+    transition: .15s ease;
+  }
+
+  &__title {
+    @include size(100%, auto);
+    @include font(12px, $blue-100, 18px, 500);
+    padding-left: 6px;
+    transition: .15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.notification {
+  $b: &;
+
+  &--seen {
+    #{$b}__icon {
+      background-color: $deepBlue-30;
+    }
+  }
+
+  &--small {
+    #{$b}__content {
+      padding-left: 0;
+    }
+
+    #{$b}__bottom {
+      padding-left: 0;
+    }
+  }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.notification {
+
+  &__subtitle:only-child {
+    @include size(100%, auto);
+    @include font(15px, $deepBlue-90, 21px, 400);
+    margin-top: 6px;
+  }
+}
+
+// ======================================================
+// Hover
+// ======================================================
+
+.notification {
+  $b: &;
+
+  &:hover {
+    #{$b}__svg {
+      transform: translateY(-30px);
+      transition: .4s ease;
+    }
+
+    #{$b}__icon {
+      pointer-events: none;
+      opacity: 0;
+      transition: .4s .2s ease;
+    }
+
+    #{$b}__assigning {
+      pointer-events: all;
+      opacity: 1;
+      transition: .4s .2s ease;
+    }
+  }
+}
+
+.notification {
+  $b: &;
+
+  &--clickable {
+
+    #{$b}__top {
+
+      &:hover {
+        #{$b}__subtitle {
+          @include font($c: $blue-100);
+        }
+      }
+    }
+  }
+}
+
+.notif-attachment {
+  $b: &;
+
+  &:hover {
+    #{$b}__title {
+      text-decoration: underline;
+    }
+  }
+}

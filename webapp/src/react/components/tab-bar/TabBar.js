@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Measure from 'react-measure';
 
-import { bindAll, debounce, setupDelegate } from 'classes/utils';
+import { bindAll, debounce, setupDelegate } from 'swipes-core-js/classes/utils';
 
 import './styles/tab-bar';
 

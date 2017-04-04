@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 /* global Perf*/
 
 window.Perf = require('react-addons-perf');
 // Exported from redux-devtools
 
-class DevTools extends Component {
+class DevTools extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { recording: false };
@@ -49,27 +49,3 @@ class DevTools extends Component {
 }
 
 export default DevTools;
-module.exports = DevTools;
-
-/*
-import { createDevTools } from 'redux-devtools';
-// Monitors are separate packages, and you can make a custom one
-import LogMonitor from 'redux-devtools-log-monitor';
-import DockMonitor from 'redux-devtools-dock-monitor';
-
-// createDevTools takes a monitor and produces a DevTools component
-const DevTools = createDevTools(
-  // Monitors are individually adjustable with props.
-  // Consult their repositories to learn about those props.
-  // Here, we put LogMonitor inside a DockMonitor.
-  // Note: DockMonitor is visible by default.
-  <DockMonitor toggleVisibilityKey='ctrl-h'
-               changePositionKey='ctrl-q'
-               defaultIsVisible={false}>
-    <LogMonitor theme='tomorrow' />
-  </DockMonitor>
-);
-
-export default DevTools;
-module.exports = DevTools;
-*/

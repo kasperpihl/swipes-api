@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import FloatingInput from 'components/swipes-ui/FloatingInput';
 import Button from 'Button';
-import { setupCachedCallback, bindAll } from 'classes/utils';
+import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
 
 import './styles/jira-auth.scss';
 

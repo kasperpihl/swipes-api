@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import * as a from 'actions';
-import { setupDelegate } from 'classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 
 import './styles/header-title.scss';
 

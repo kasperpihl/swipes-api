@@ -1,167 +1,190 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { list } from 'react-immutable-proptypes';
-import HOCAssigning from 'components/assigning/HOCAssigning';
-import { setupCachedCallback, setupDelegate, getParentByClass } from 'classes/utils';
-import Icon from 'Icon';
-import StepTooltip from './StepTooltip';
-
-import './styles/step-list.scss';
+import * as ca from 'swipes-core-js/actions';
+import { setupDelegate, setupLoading } from 'swipes-core-js/classes/utils';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import { map } from 'react-immutable-proptypes';
+import StepList from './StepList';
 
 class HOCStepList extends PureComponent {
   constructor(props) {
     super(props);
+    const helper = this.getHelper();
     this.state = {
-      hoverIndex: -1,
+      steps: helper.getOrderedSteps(),
     };
-    this.onEnter = setupCachedCallback(this.onEnter, this);
-    this.onLeave = this.onLeave.bind(this);
+    setupLoading(this);
     this.callDelegate = setupDelegate(props.delegate);
-    this.onCheck = setupCachedCallback(this.callDelegate.bind(null, 'onStepCheck'));
-    this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onStepClick'));
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.goal !== this.props.goal) {
+      const helper = this.getHelper(nextProps.goal);
+      this.setState({ steps: helper.getOrderedSteps() });
+    }
   }
   componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
   }
-  onEnter(i, tooltipText, e) {
-    const target = getParentByClass(e.target, 'step-list-item__indicator');
-
-    if (target) {
-      const { tooltip, tooltipAlign } = this.props;
-      const position = tooltipAlign || 'left';
-
-      const data = {
-        component: StepTooltip,
-        props: {
-          tooltipText,
-        },
-        options: {
-          boundingRect: target.getBoundingClientRect(),
-          position,
-        },
-      };
-
-      tooltip(data);
-    }
-
-    this.setState({
-      hoverIndex: i,
+  onStepAdd(title) {
+    const { addStep, goal } = this.props;
+    this.setLoading('add', 'Adding...');
+    addStep(goal.get('id'), title).then(() => this.clearLoading('add'));
+  }
+  onStepRemove(i, e) {
+    const { confirm, removeStep, goal } = this.props;
+    const options = this.getOptionsForE(e);
+    const helper = this.getHelper();
+    const step = helper.getStepByIndex(i);
+    confirm(Object.assign({}, options, {
+      title: 'Remove step',
+      message: 'This can\'t be undone.',
+    }), (res) => {
+      if (res === 1) {
+        this.setLoading(step.get('id'), 'Removing...');
+        removeStep(goal.get('id'), step.get('id')).then(() => {
+          this.clearLoading(step.get('id'));
+        });
+        // remove step
+      }
     });
   }
-  onLeave() {
-    const { tooltip } = this.props;
-
-    tooltip(null);
-    
-    this.setState({
-      hoverIndex: -1,
+  onStepRename(i, title) {
+    const { goal, renameStep } = this.props;
+    const helper = this.getHelper();
+    const step = helper.getStepByIndex(i);
+    this.setLoading(step.get('id'), 'Renaming...');
+    renameStep(goal.get('id'), step.get('id'), title).then(() => {
+      this.clearLoading(step.get('id'));
     });
   }
-  renderStep(step, i) {
-    const { completed, delegate, steps, noActive } = this.props;
-    const completedI = completed - 1;
-    const { hoverIndex } = this.state;
+  onAssign(i, e) {
+    const options = this.getOptionsForE(e);
+    const { selectAssignees, assignStep, goal } = this.props;
+    const helper = this.getHelper();
+    const step = helper.getStepByIndex(i);
 
-    let className = 'step-list-item';
-
-    if (i <= completedI) {
-      className += ' step-list-item--completed';
-    } else if (i === completed && !noActive) {
-      className += ' step-list-item--current';
-    } else {
-      className += ' step-list-item--future';
+    options.actionLabel = 'Reassign';
+    let overrideAssignees;
+    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
+      } else if (overrideAssignees) {
+        const clearCB = this.clearLoading.bind(null, step.get('id'));
+        this.setLoading(step.get('id'), 'Assigning...');
+        assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(() => clearCB());
+      }
+    });
+    e.stopPropagation();
+  }
+  onStepCheck(i, e) {
+    const { completeStep, goal, confirm } = this.props;
+    const options = this.getOptionsForE(e);
+    const helper = this.getHelper();
+    const currentI = helper.getCurrentStepIndex();
+    const handoff = {
+      goalId: helper.getId(),
+      backward: (i < currentI),
+      fromId: helper.getCurrentStepId(),
+    };
+    const loadingI = i;
+    if (i >= currentI) {
+      i += 1;
     }
 
-
-    if (hoverIndex !== -1) {
-      if (hoverIndex > completedI) {
-        if (i > completedI && i <= hoverIndex) {
-          className += ' step-list-item--hover';
+    const step = helper.getStepByIndex(i);
+    const nextStepId = (step && step.get('id')) || null;
+    handoff.toId = nextStepId;
+    if (handoff.toId && !handoff.fromId) {
+      // If the goal was completed, and undo some steps.
+      handoff.backward = true;
+    }
+    const completeHandler = () => {
+      this.setLoading('completing', `${loadingI}`);
+      this.callDelegate('onStepWillComplete', handoff);
+      completeStep(goal.get('id'), nextStepId).then((res) => {
+        if (res && res.ok) {
+          this.clearLoading('completing');
+          this.callDelegate('onStepDidComplete', handoff);
+        } else {
+          this.callDelegate('onStepDidFailComplete', handoff);
+          this.clearLoading('completing', '!Something went wrong');
         }
-      } else if (i <= completedI && i >= hoverIndex) {
-        className += ' step-list-item--hover';
-      }
+      });
+    };
+
+    if (handoff.backward) {
+      confirm(Object.assign({}, options, {
+        title: 'Make an iteration',
+        message: 'Do you want uncheck these steps and redo them',
+      }), (res) => {
+        if (res === 1) {
+          completeHandler();
+        }
+      });
+    } else {
+      completeHandler();
     }
-
-    let title = step.get('title');
-    if (step.get('loading')) {
-      title = step.get('loading');
-      className += ' step-list-item--loading';
-    }
-
-    let tooltip = 'Make iteration to this step';
-    if (i > completedI) {
-      tooltip = 'Complete this step';
-      if (i > completed) {
-        tooltip = `Complete ${i - completedI} step${(i > (completedI + 1)) ? 's' : ''}`;
-      }
-      if (i === (steps.size - 1)) {
-        tooltip = 'Complete goal';
-      }
-    }
-
-    const { fullHover } = this.props;
-
-
-    return (
-      <div
-        className={className}
-        key={i}
-        onMouseEnter={fullHover ? this.onEnter(i) : undefined}
-        onMouseLeave={fullHover ? this.onLeave : undefined}
-        onClick={this.onClick(i)}
-      >
-        <div
-          className="step-list-item__indicator"
-          onClick={this.onCheck(i)}
-          onMouseEnter={fullHover ? undefined : this.onEnter(i, tooltip)}
-          onMouseLeave={fullHover ? undefined : this.onLeave}
-        >
-          <div className="step-list-item__icon">
-            <Icon
-              icon="CircleCheckmark"
-              className="step-list-item__svg step-list-item__svg--transition"
-            />
-          </div>
-        </div>
-        <div className="step-list-item__title">
-          {title}
-        </div>
-        <div className="step-list-item__assignees">
-          <HOCAssigning
-            delegate={delegate}
-            index={i}
-            assignees={step.get('assignees')}
-            rounded
-            size={24}
-          />
-        </div>
-      </div>
-    );
+  }
+  getHelper(overrideGoal) {
+    const { goal, myId } = this.props;
+    overrideGoal = overrideGoal || goal;
+    return new GoalsUtil(overrideGoal, myId);
+  }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
   }
   render() {
-    const { steps } = this.props;
+    const helper = this.getHelper();
+    const {
+      tooltip,
+      editMode,
+    } = this.props;
+    const { steps } = this.state;
 
     return (
-      <div className="step-list">
-        {steps.map((s, i) => this.renderStep(s, i))}
-      </div>
+      <StepList
+        currentStepIndex={helper.getNumberOfCompletedSteps()}
+        loadingState={this.getAllLoading()}
+        delegate={this}
+        steps={steps}
+        tooltip={tooltip}
+        editMode={editMode}
+      />
     );
   }
 }
 
-export default connect(null, {
+export default connect((state, oP) => ({
+  goal: state.getIn(['goals', oP.goalId]),
+  myId: state.getIn(['me', 'id']),
+}), {
   tooltip: a.main.tooltip,
+  addStep: ca.steps.add,
+  selectAssignees: a.goals.selectAssignees,
+  completeStep: ca.goals.completeStep,
+  confirm: a.menus.confirm,
+  removeStep: ca.steps.remove,
+  renameStep: ca.steps.rename,
+  assignStep: ca.steps.assign,
 })(HOCStepList);
 
-const { string, number, object, bool, func } = PropTypes;
+const { string, object, func, bool } = PropTypes;
 
 HOCStepList.propTypes = {
-  steps: list,
+  goal: map,
+  completeStep: func,
+  addStep: func,
+  renameStep: func,
+  removeStep: func,
+  confirm: func,
+  myId: string,
+  editMode: bool,
   tooltip: func,
-  noActive: bool,
-  fullHover: bool,
-  completed: number,
   delegate: object,
-  tooltipAlign: string,
+  selectAssignees: func,
+  assignStep: func,
 };

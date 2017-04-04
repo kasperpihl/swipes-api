@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll } from 'classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import './styles/floating-input.scss';
 

@@ -21,10 +21,13 @@
 
 .attachments {
 
-  &__add-icon {
+  &__loader {
     @include size(24px);
-    margin-right: 18px;
     border-radius: 50%;
+    opacity: 0;
+    transition: .2s;    
+    position: absolute;
+    pointer-events: none;
 
     &:before {
       @include size(24px);
@@ -57,16 +60,26 @@
   }
 
   &__add-list {
-    @include size(100%, 54px);
-    @include flex(center, flex-start);
+    @include size(100%, 66px);
+    @include flexContainer('row', right, center);
     background-color: $bg;
-    border-top: 1px solid darken($deepBlue-5, 3%);
   }
 
   &__add-item {
     @include font(12px, $blue-100, 18px, 500);
-    padding-right: 18px;
+    padding-left: 18px;
+    user-select: none;
     transition: .5s ease;
+
+    & [type=file] {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
 
     &:hover, &:focus {
       text-decoration: underline;
@@ -111,7 +124,9 @@
         transition: .5s ease;
       }
 
-      #{$b}__add-icon {
+      #{$b}__loader {
+        opacity: 1;
+        transition: .2s;
         animation: rotateAddLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
 
         &:before {
