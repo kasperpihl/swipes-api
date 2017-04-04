@@ -36,7 +36,7 @@ const notificationReplyLabels = {
 };
 const attachmentIcons = {
   note: `${s3BucketUrl}email_icons/swipes-email-icon-attachment-note.png`,
-  link: `${s3BucketUrl}email_icons/swipes-email-icon-attachment-link.png`,
+  url: `${s3BucketUrl}email_icons/swipes-email-icon-attachment-link.png`,
   file: `${s3BucketUrl}email_icons/swipes-email-icon-attachment-file.png`,
 };
 const getNotificationLabelIconContent = (notification_type) => {
@@ -60,6 +60,32 @@ const getNotificationLabel = ({ notification_type, request, reply_to, user, goal
 
   return `${user.first_name} ${notificationLabels[notification_type]} in <strong>${goal.title}</strong>`;
 };
+const getNotificationAttachmentsList = ({ goal, flags = [] }) => {
+  const list = [];
+
+  flags.forEach((flag) => {
+    const attachment = goal.attachments[flag];
+
+    // T_TODO delete this check some day!
+    if (!attachment.link) {
+      throw new SwipesError('getNotificationAttachmentsList - old formated data... we should fix that');
+    }
+
+    const attachmentIconUrl = attachmentIcons[attachment.link.service.type];
+
+    list.push(`
+      <div class="mcnTextContent attachment">
+        <div class="mcnImage attachment-icon-wrapper">
+            <img class="attachment-icon" src="${attachmentIconUrl}"/>
+          </div>
+        <p class="attachment-label">${attachment.title}</p>
+      </div>
+    `);
+  });
+
+  return list.join('');
+};
+
 const goalsNotifySendEmails = (req, res, next) => {
   const {
     notification_type,
@@ -100,9 +126,16 @@ const goalsNotifySendEmails = (req, res, next) => {
   {
     name: 'notification_label',
     content: notificationLabel,
+  },
+  {
+    name: 'notification_message',
+    content: `"${history.message}"`,
+  },
+  {
+    name: 'notification_attachments',
+    content: getNotificationAttachmentsList({ goal, flags: history.flags }),
   }];
   const to = [];
-  console.log(template_content);
 
   usersWithFields.forEach((user) => {
     to.push({
@@ -139,25 +172,3 @@ const goalsNotifySendEmails = (req, res, next) => {
 export {
   goalsNotifySendEmails,
 };
-
-/*
-<div class="mcnTextContent notification-title">
-  	<div class="mcnImage notification-icon" mc:edit="notification_label_icon">
-    	<img data-file-id="1767869" src="https://gallery.mailchimp.com/f8e1c80a8803750f97d569541/images/de821b45-7fb7-43cd-81ae-b6af2c362d20.png" style="border: 0px; width: 42px; height: 42px; vertical-align: bottom !important;">
-  	</div>
-  	<p class="notification-label" mc:edit="notification_label">
-      Yana asks for your feedback in <strong>Notify</strong>
-    </p>
-</div>
-
-<p class="padding body-content-text" mc:edit="notification_message"><em>&quot;Stefan, can you please take a look at this copy and examples I have flagged and let me know what you think?&quot;</em></p>
-
-<div mc:edit="attachments">
-<div class="mcnTextContent attachment">
-	<div class="mcnImage attachment-icon-wrapper">
-    	<img class="attachment-icon" src="https://gallery.mailchimp.com/dd9b38ccf11cd4f6879609c8b/images/9a25fc54-cac3-4e44-b8a2-6896ae4dbf9f.png"/>
-    </div>
-	<p class="attachment-label">Use your own custom HTML</p>
-</div>
-</div>
-*/
