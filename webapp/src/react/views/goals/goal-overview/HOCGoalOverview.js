@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
@@ -58,6 +58,7 @@ class HOCGoalOverview extends PureComponent {
     });
   }
   onReply(i) {
+    const helper = this.getHelper();
     const lastActivity = helper.getLastActivity();
     const lastActivityIndex = helper.getLastActivityIndex();
     const { navPush } = this.props;
@@ -70,7 +71,7 @@ class HOCGoalOverview extends PureComponent {
           notification_type: lastActivity.get('notification_type'),
           assignees: List([lastActivity.get('done_by')]),
         }),
-        goalId: n.getIn(['target', 'id']),
+        goalId: helper.getId(),
       },
     });
   }
