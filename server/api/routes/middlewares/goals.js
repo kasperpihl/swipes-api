@@ -5,6 +5,7 @@ import {
   array,
   any,
   bool,
+  number,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -473,7 +474,7 @@ const goalsNotify = valLocals('goalsNotify', {
   notificationGroupId: string.require(),
   notification_type: any.of('feedback', 'status', 'assets', 'decision'),
   request: bool,
-  reply_to: string,
+  reply_to: number,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -522,7 +523,7 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   assignees: array.of(string).require(),
   notificationGroupId: string.require(),
   notification_type: any.of('feedback', 'status', 'assets', 'decision'),
-  reply_to: string,
+  reply_to: number,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -554,7 +555,7 @@ const goalsNotifyEmailQueueMessage = valLocals('goalsNotifyEmailQueueMessage', {
   goal_id: string.require(),
   assignees: array.of(string).require(),
   notification_type: any.of('feedback', 'status', 'assets', 'decision'),
-  reply_to: string,
+  reply_to: number,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -582,7 +583,7 @@ const goalsNotifyEmailQueueMessage = valLocals('goalsNotifyEmailQueueMessage', {
 const goalsHistoryUpdateIfReply = valLocals('goalsUpdateIfReply', {
   goal_id: string.require(),
   goal: object.require(),
-  reply_to: string,
+  reply_to: number,
 }, (req, res, next, setLocals) => {
   const {
     goal_id,

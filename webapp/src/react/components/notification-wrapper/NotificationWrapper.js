@@ -126,7 +126,7 @@ class NotificationItem extends Component {
       return undefined;
     }
 
-    return <Button text="Give" primary small onClick={this.onReply} />;
+    return <Button text="Reply" primary small onClick={this.onReply} />;
   }
   render() {
     const { notification: n, delegate } = this.props;

@@ -41,7 +41,11 @@ export default class NotificationsGenerator {
     return this.parent.history.getTitle(n.getIn(['target', 'id']), h || n);
   }
   getSubtitle(n, h) {
-    return `on ${n.getIn(['meta', 'title'])}`;
+    let extra = '';
+    if (!h) {
+      extra = ' (archived)';
+    }
+    return `on ${n.getIn(['meta', 'title'])}${extra}`;
   }
   getMessage(n) {
     const goals = this.store.getState().get('goals');

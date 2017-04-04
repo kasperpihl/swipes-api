@@ -22,6 +22,8 @@ class GoalOverview extends PureComponent {
     this.onAskFor = this.callDelegate.bind(null, 'onAskFor');
     this.onNotify = this.callDelegate.bind(null, 'onNotify');
     this.onContext = this.callDelegate.bind(null, 'onContext');
+    this.onHandoff = this.callDelegate.bind(null, 'onHandoff');
+    this.onCloseHandoff = this.callDelegate.bind(null, 'onCloseHandoff');
     this.onBarClick = this.callDelegate.bind(null, 'onBarClick');
     this.onSeeAll = this.callDelegate.bind(null, 'onSeeAll');
     this.onEditSteps = this.callDelegate.bind(null, 'onEditSteps');
@@ -29,6 +31,47 @@ class GoalOverview extends PureComponent {
   getHelper() {
     const { goal, myId } = this.props;
     return new GoalsUtil(goal, myId);
+  }
+  getFooterForHandoff(handoff) {
+    const { goal, myId } = this.props;
+    const helper = this.getHelper();
+
+    const myName = msgGen.users.getName(myId, { disableYou: true });
+    if (!handoff.toId) {
+      return (
+        <span>
+          Great work {myName}! {"You've"} just completed the goal{' '}
+          <b>“{truncateString(goal.get('title'), 19)}”</b>.<br />
+          Send a message to the team to congratulate them for the achievement.
+        </span>
+      );
+    }
+    const toStep = helper.getStepById(handoff.toId);
+    let personString = 'the next person';
+    const assignees = helper.getAssigneesForStepId(handoff.toId);
+    if (assignees.size) {
+      personString = msgGen.users.getNames(assignees, {
+        yourself: true,
+        number: 3,
+      });
+    }
+    if (handoff.backward) {
+      const title = truncateString(toStep.get('title'), 19);
+      return (
+        <span>
+          Alright {myName}, <b>“{title}”</b> needs some changes.<br />
+          Send a message to <b>“{personString}”</b> about what needs to be done.
+        </span>
+      );
+    }
+    const titles = helper.getStepTitlesBetweenIds(handoff.fromId, handoff.toId);
+    const title = titles.size > 1 ? `${titles.size} steps` : truncateString(titles.get(0), 19);
+    return (
+      <span>
+        Great progress {myName}! You completed <b>“{title}”</b><br />
+        Send a message to <b>“{personString}”</b>, about how to take it from here.
+      </span>
+    );
   }
   renderHeader() {
     const { goal, loadingState, delegate } = this.props;
@@ -149,18 +192,29 @@ class GoalOverview extends PureComponent {
     );
   }
   renderSuccessFooter(handoff) {
+    let icon = handoff.toId ? 'ActivityCheckmark' : 'Star';
+    let iconClass = 'success-footer__icon';
+    if (handoff.backward) {
+      iconClass += ' success-footer__icon--backward';
+      icon = 'Iteration';
+    }
     return (
       <div className="success-footer">
-        <div className="success-footer__icon">
-          <Icon icon="ActivityCheckmark" className="success-footer__svg" />
+        <div className={iconClass}>
+          <Icon icon={icon} className="success-footer__svg" />
         </div>
         <div className="success-footer__content">
-          {msgGen.notify.getFooterForHandoff(handoff)}
+          {this.getFooterForHandoff(handoff)}
         </div>
         <div className="success-footer__actions">
-          <Button primary text="Write Message" className="success-footer__action" />
+          <Button
+            primary
+            onClick={this.onHandoff}
+            text="Write Message"
+            className="success-footer__action"
+          />
         </div>
-        <div className="success-footer__close">
+        <div className="success-footer__close" onClick={this.onCloseHandoff}>
           <Icon icon="Close" className="success-footer__svg" />
         </div>
       </div>
