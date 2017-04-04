@@ -23,6 +23,9 @@ class HOCStepList extends PureComponent {
       this.setState({ steps: helper.getOrderedSteps() });
     }
   }
+  componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
+  }
   onStepAdd(title) {
     const { addStep, goal } = this.props;
     this.setLoading('add', 'Adding...');
@@ -98,11 +101,13 @@ class HOCStepList extends PureComponent {
     }
     const completeHandler = () => {
       this.setLoading('completing', `${loadingI}`);
+      this.callDelegate('onStepWillComplete', handoff);
       completeStep(goal.get('id'), nextStepId).then((res) => {
         if (res && res.ok) {
           this.clearLoading('completing');
           this.callDelegate('onStepDidComplete', handoff);
         } else {
+          this.callDelegate('onStepDidFailComplete', handoff);
           this.clearLoading('completing', '!Something went wrong');
         }
       });

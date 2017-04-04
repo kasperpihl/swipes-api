@@ -165,8 +165,21 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+  onStepWillComplete(handoff) {
+    this.setLoading('completing');
+  }
+  onStepDidFailComplete(handoff) {
+    this.clearLoading('completing');
+  }
   onStepDidComplete(handoff) {
+    this.clearLoading('completing');
     this.setState({ handoff });
+  }
+  onBarClick(e) {
+    const helper = this.getHelper();
+    if (this.stepList) {
+      this.stepList.onStepCheck(helper.getCurrentStepIndex(), e);
+    }
   }
   onCloseHandoff() {
     this.setState({ handoff: null });
@@ -193,10 +206,6 @@ class HOCGoalOverview extends PureComponent {
   }
   onNotify(e) {
     this.onChooseNotificationType(e, false);
-  }
-  onBarClick(e) {
-    const helper = this.getHelper();
-    this.onStepCheck(helper.getCurrentStepIndex(), e);
   }
   onContext(e) {
     const {
@@ -231,6 +240,9 @@ class HOCGoalOverview extends PureComponent {
         delegate,
       },
     });
+  }
+  viewDidLoad(stepList) {
+    this.stepList = stepList;
   }
   getOptionsForE(e) {
     if (e && e.boundingRect) {

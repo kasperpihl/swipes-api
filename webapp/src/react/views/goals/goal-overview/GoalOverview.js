@@ -160,6 +160,7 @@ class GoalOverview extends PureComponent {
       <div className="goal-overview__column goal-overview__column--left">
         <Section title={title} actions={this.renderStepListEditButton()} />
         <HOCStepList
+          ref="stepList"
           goalId={helper.getId()}
           delegate={delegate}
           editMode={editMode}
