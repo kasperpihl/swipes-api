@@ -122,6 +122,7 @@ class Notify extends PureComponent {
       subtitle: false,
       icon: false,
       timeago: false,
+      reply: false,
     });
     return (
       <Section title={title} className="notify__request">

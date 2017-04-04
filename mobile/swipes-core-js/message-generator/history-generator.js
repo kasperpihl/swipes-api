@@ -24,6 +24,7 @@ export default class HistoryGenerator {
       attachments: true,
       message: true,
       seen: true,
+      reply: true,
     };
     def = Object.assign(def, options);
 
@@ -34,7 +35,7 @@ export default class HistoryGenerator {
       subtitle: def.subtitle ? this.getSubtitle(helper.getId(), h) : null,
       seen: def.seen ? !!h.get('seen_at') : null,
       userId: h.get('done_by'),
-      reply: this.getReplyButtonForHistory(helper.getId(), h),
+      reply: def.reply ? this.getReplyButtonForHistory(helper.getId(), h) : null,
       message: def.message ? h.get('message') : null,
       icon: def.icon ? this.getIcon(h) : null,
       attachments: def.attachments ? this.getAttachments(helper.getId(), h) : null,
