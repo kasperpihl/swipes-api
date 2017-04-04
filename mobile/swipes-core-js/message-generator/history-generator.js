@@ -33,7 +33,7 @@ export default class HistoryGenerator {
       timeago: def.timeago ? timeAgo(h.get('done_at'), true) : null,
       title: def.title ? this.getTitle(helper.getId(), h) : null,
       subtitle: def.subtitle ? this.getSubtitle(helper.getId(), h) : null,
-      seen: def.seen ? !!h.get('seen_at') : null,
+      seen: def.seen ? h.get('notification') && !!h.get('seen_at') : null,
       userId: h.get('done_by'),
       reply: def.reply ? this.getReplyButtonForHistory(helper.getId(), h) : null,
       message: def.message ? h.get('message') : null,

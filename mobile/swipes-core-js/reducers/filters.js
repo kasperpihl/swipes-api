@@ -51,7 +51,7 @@ const initialState = fromJS({
       notifications: List(),
     },
     activity: {
-      title: 'Activity',
+      title: 'Team activity',
       filter: n => n.get('activity'),
       notifications: List(),
     },

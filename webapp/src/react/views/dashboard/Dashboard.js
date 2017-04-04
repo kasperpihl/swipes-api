@@ -19,7 +19,7 @@ export default class Dashboard extends Component {
   renderHeader() {
     const { loadingState, tabIndex } = this.props;
     const loading = loadingState.get('all') && loadingState.get('all').loading;
-    const button = tabIndex <= 1 ? (
+    const button = tabIndex === 0 ? (
       <Button loading={loading} text="Mark all" onClick={this.onMarkAll} />
     ) : null;
 
