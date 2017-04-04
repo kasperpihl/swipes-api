@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import * as a from 'actions';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 import './styles/bread-crumbs.scss';
 

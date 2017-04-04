@@ -7,22 +7,21 @@ import Gradient from 'components/gradient/Gradient';
 import Topbar from './topbar/Topbar';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
-import HOCToasty from './toasty/HOCToasty';
 import HOCContextMenu from './context-menu/HOCContextMenu';
 import HOCTooltip from './tooltip/HOCTooltip';
 
 let DevTools = 'div';
 
 if (process.env.NODE_ENV !== 'production') {
-  DevTools = require('src/DevTools'); // eslint-disable-line global-require
+  DevTools = require('src/DevTools').default; // eslint-disable-line global-require
 }
 
 class HOCApp extends PureComponent {
   componentDidMount() {
     const { navSet } = this.props;
     navSet('primary', {
-      id: 'GoalList',
-      title: 'Goals',
+      id: 'Dashboard',
+      title: 'Dashboard',
     });
     this.updateMaximizeClass(this.props.isMaximized);
     this.updateFullscreenClass(this.props.isFullscreen);
@@ -75,7 +74,6 @@ class HOCApp extends PureComponent {
           <HOCSidebar />
           <HOCViewController />
         </div>
-        <HOCToasty />
         <HOCContextMenu />
         <HOCTooltip />
         <DevTools />
@@ -94,7 +92,7 @@ class HOCApp extends PureComponent {
   }
 }
 
-const { func, bool, object, string } = PropTypes;
+const { func, bool, string } = PropTypes;
 
 HOCApp.propTypes = {
   lastConnect: string,

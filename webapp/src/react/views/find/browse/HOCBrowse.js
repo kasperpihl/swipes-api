@@ -2,8 +2,8 @@ import React, { PureComponent, PropTypes } from 'react';
 import { fromJS } from 'immutable';
 
 import { connect } from 'react-redux';
-import * as actions from 'actions';
-import { setupDelegate, randomString } from 'classes/utils';
+import * as ca from 'swipes-core-js/actions';
+import { setupDelegate, randomString } from 'swipes-core-js/classes/utils';
 import BrowseSectionList from './BrowseSectionList';
 
 import './styles/browse.scss';
@@ -102,7 +102,7 @@ class HOCBrowse extends PureComponent {
           },
         }));
       }
-  	}
+    }
   }
   mapResults(items) {
     return items.map((item, i) => ({
@@ -163,5 +163,5 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps, {
-  request: actions.api.request,
+  request: ca.api.request,
 })(HOCBrowse);

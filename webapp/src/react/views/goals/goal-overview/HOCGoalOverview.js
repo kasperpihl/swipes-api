@@ -1,10 +1,11 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { bindAll, setupCachedCallback, setupLoading } from 'classes/utils';
-import GoalsUtil from 'classes/goals-util';
+import { fromJS, List, Map } from 'immutable';
+import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
-import { steps, ways, goals } from 'swipes-core-js';
+import * as ca from 'swipes-core-js/actions';
 
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import GoalOverview from './GoalOverview';
@@ -13,15 +14,19 @@ import GoalOverview from './GoalOverview';
 
 class HOCGoalOverview extends PureComponent {
   static minWidth() {
-    return 800;
+    return 840;
   }
   static maxWidth() {
     return 900;
   }
   constructor(props) {
     super(props);
-    bindAll(this, ['onHandoff', 'onContext']);
-
+    bindAll(this, ['onContext']);
+    this.state = {
+      tabIndex: 0,
+      editMode: false,
+      handoff: null,
+    };
     setupLoading(this);
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
@@ -39,8 +44,48 @@ class HOCGoalOverview extends PureComponent {
       navPop();
     }
   }
-  onLoadWay(wayId) {
+  onEditSteps() {
+    this.setState({ editMode: !this.state.editMode });
+  }
+  onSeeAll() {
+    const { openSecondary, goal } = this.props;
+    openSecondary({
+      id: 'ActivityFeed',
+      title: 'ActivityFeed',
+      props: {
+        goalId: goal.get('id'),
+      },
+    });
+  }
+  onReply(i) {
+    const helper = this.getHelper();
+    const lastActivity = helper.getLastActivity();
+    const lastActivityIndex = helper.getLastActivityIndex();
+    const { navPush } = this.props;
+    navPush({
+      id: 'Notify',
+      title: 'Notify',
+      props: {
+        notify: Map({
+          reply_to: lastActivityIndex,
+          notification_type: lastActivity.get('notification_type'),
+          assignees: List([lastActivity.get('done_by')]),
+        }),
+        goalId: helper.getId(),
+      },
+    });
+  }
+  onClickAttachment(hI, i) {
+    const { goal, preview, target } = this.props;
+    const helper = this.getHelper();
+    const lastActivity = helper.getLastActivity();
+    const flag = lastActivity.getIn(['flags', i]);
+    const att = goal.getIn(['attachments', flag]);
+    const selection = window.getSelection();
 
+    if (att && selection.toString().length === 0) {
+      preview(target, att);
+    }
   }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
@@ -58,267 +103,151 @@ class HOCGoalOverview extends PureComponent {
       }
     });
   }
-  onStepClick(i, e) {
-    const { inputMenu, contextMenu, goal, removeStep, renameStep } = this.props;
+
+  onHandoffMessage(handoff) {
     const helper = this.getHelper();
-
-    const step = helper.getStepByIndex(i);
-    const options = this.getOptionsForE(e);
-    const remove = {
-      title: 'Remove',
-    };
-    if (i === helper.getCurrentStepIndex()) {
-      remove.disabled = true;
-      remove.subtitle = 'Cannot remove current step';
+    let assignees = helper.getAllInvolvedAssignees();
+    if (handoff.toId) {
+      assignees = helper.getAssigneesForStepId(handoff.toId);
     }
-    if (helper.getIsStarted() && helper.getTotalNumberOfSteps() === 1) {
-      remove.disabled = true;
-      remove.subtitle = 'Cannot remove the last step';
-    }
-
-    const items = [{ title: 'Rename' }, remove];
-
-    const delegate = {
-      onItemAction: (item) => {
-        const clearCB = this.clearLoading.bind(this, step.get('id'));
-        if (item.title === 'Rename') {
-          inputMenu({
-            ...options,
-            text: step.get('title'),
-            buttonLabel: 'Rename',
-          }, (title) => {
-            if (title !== step.get('title') && title.length) {
-              this.setLoading(step.get('id'), 'Renaming...');
-              renameStep(goal.get('id'), step.get('id'), title).then(() => {
-                this.clearLoading(step.get('id'));
-              });
-            }
-          });
-        } else {
-          contextMenu(null);
-          this.setLoading(step.get('id'), 'Removing...');
-          removeStep(goal.get('id'), step.get('id')).then(() => clearCB());
-        }
-      },
-    };
-    contextMenu({
-      options,
-      component: TabMenu,
-      props: {
-        delegate,
-        items,
-      },
-    });
-  }
-  onAssign(i, options) {
-    const { selectAssignees, assignStep, goal } = this.props;
-    const helper = this.getHelper();
-    const step = helper.getStepByIndex(i);
-
-    options.actionLabel = 'Reassign';
-    if (step.get('id') === helper.getCurrentStepId()) {
-      options.actionLabel = 'Reassign and write message';
-    }
-    let overrideAssignees;
-    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        if (i === helper.getCurrentStepIndex()) {
-          this.onHandoff(helper.getCurrentStepId(), 'Handoff', overrideAssignees);
-        } else {
-          const clearCB = this.clearLoading.bind(null, step.get('id'));
-          this.setLoading(step.get('id'), 'Assigning...');
-          assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(() => clearCB());
-        }
-      }
-    });
+    // console.log(i, handoff);
+    this.onOpenNotify(undefined, assignees);
   }
 
-  onStepCheck(i, e) {
-    const helper = this.getHelper();
-    const currentI = helper.getCurrentStepIndex();
-    if (i >= currentI) {
-      i += 1;
-    }
-    const step = helper.getStepByIndex(i);
-    const _target = (step && step.get('id')) || '_complete';
-    this.onHandoff(_target, 'Handoff');
-    e.stopPropagation();
-  }
-
-  onStart(e) {
-    const helper = this.getHelper();
-    const options = this.getOptionsForE(e);
-    const { confirm } = this.props;
-
-    if (!helper.getTotalNumberOfSteps()) {
-      confirm(Object.assign({}, options, {
-        title: 'Add steps first',
-        actions: [{ text: 'Got it' }],
-        message: 'Before starting a goal, you have to add steps to it. You can do it manually or load a way below.',
-      }));
-      return;
-    }
-
-    const assignees = helper.getStepByIndex(0).get('assignees');
-    this.onHandoff(helper.getStepByIndex(0).get('id'), 'Start Goal', assignees);
-  }
-
-  onHandoff(_target, title, assignees) {
+  onOpenNotify(notify) {
     const { openSecondary, goal } = this.props;
     openSecondary({
-      id: 'GoalHandoff',
-      title,
+      id: 'Notify',
+      title: 'Notify',
       props: {
-        _target,
-        assignees,
+        notify,
         goalId: goal.get('id'),
       },
     });
   }
+  onChooseNotificationType(e, request) {
+    const { contextMenu } = this.props;
+    const options = this.getOptionsForE(e);
+    options.alignY = 'top';
+    options.alignX = 'center';
+    options.positionY = 6;
+    options.excludeY = true;
+    const getSub = msgGen.notify.getNotifyPopupSubtitle.bind(null, request);
 
-  onNotify(target, title, e) {
-    const helper = this.getHelper();
-    const { contextMenu, me, selectAssignees } = this.props;
-    const options = {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
-    const all = helper.getAllInvolvedAssignees().filter(uId => uId !== me.get('id'));
-    const inStep = helper.getCurrentAssignees()
-                          .filter(uId => uId !== me.get('id'));
-    const prevStep = helper.getAssigneesForStepIndex(helper.getNumberOfCompletedSteps() - 1)
-                          .filter(uId => uId !== me.get('id'));
-    const items = [];
-    if (all.size) {
-      items.push({
-        title: 'Everyone in goal',
-        assignees: all,
-        subtitle: msgGen.getUserArrayString(all, { number: 4 }),
-      });
-    }
-    if (prevStep.size) {
-      items.push({
-        title: 'Previous assignees',
-        assignees: prevStep,
-        subtitle: msgGen.getUserArrayString(prevStep, { number: 4 }),
-      });
-    }
-    if (inStep.size) {
-      items.push({
-        title: 'Current assignees',
-        assignees: inStep,
-        subtitle: msgGen.getUserArrayString(inStep, { number: 4 }),
-      });
-    }
-    items.push({ title: 'Yourself', assignees: [me.get('id')] });
-    items.push({ title: 'Choose people' });
+    const items = [
+      { title: 'Status', icon: 'Status', subtitle: getSub('status') },
+      { title: 'Feedback', icon: 'Feedback', subtitle: getSub('feedback') },
+      { title: 'Assets', icon: 'Assets', subtitle: getSub('assets') },
+      { title: 'Decision', icon: 'Decision', subtitle: getSub('decision') },
+    ].map((i) => { i.leftIcon = { icon: i.icon }; return i; });
+
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
-        if (!item.assignees) {
-          let overrideAssignees;
-          options.actionLabel = 'Notify and write message';
-          selectAssignees(options, [], (newAssignees) => {
-            if (newAssignees) {
-              overrideAssignees = newAssignees;
-            } else if (overrideAssignees && overrideAssignees.length) {
-              this.onHandoff(target, title, overrideAssignees);
-            }
-          });
-        } else {
-          this.onHandoff(target, title, item.assignees);
-        }
+        this.onOpenNotify(fromJS({
+          request,
+          notification_type: item.title.toLowerCase(),
+        }));
       },
     };
-
+    const loadingId = request ? 'ask-for-menu' : 'notify-menu';
+    this.setLoading(loadingId);
     contextMenu({
       options,
       component: TabMenu,
+      onClose: () => this.clearLoading(loadingId),
       props: {
         delegate,
         items,
+        style: {
+          width: '360px',
+        },
       },
     });
-
-    //
   }
+  onStepWillComplete() {
+    this.setLoading('completing');
+  }
+  onStepDidFailComplete() {
+    this.clearLoading('completing');
+  }
+  onStepDidComplete(handoff) {
+    this.clearLoading('completing');
+    this.setState({ handoff });
+  }
+  onBarClick(e) {
+    const helper = this.getHelper();
+    if (this.stepList) {
+      this.stepList.onStepCheck(helper.getCurrentStepIndex(), e);
+    }
+  }
+  onCloseHandoff() {
+    this.setState({ handoff: null });
+  }
+  onHandoff() {
+    const { handoff } = this.state;
+    const { me } = this.props;
 
+    if (handoff) {
+      const helper = this.getHelper();
+      let assignees = helper.getAllInvolvedAssignees();
+      if (handoff.toId) {
+        assignees = helper.getAssigneesForStepId(handoff.toId);
+      }
+      this.onOpenNotify(fromJS({
+        notification_type: 'status',
+        assignees: assignees || [me.get('id')],
+      }));
+      this.setState({ handoff: null });
+    }
+  }
+  onAskFor(e) {
+    this.onChooseNotificationType(e, true);
+  }
+  onNotify(e) {
+    this.onChooseNotificationType(e, false);
+  }
   onContext(e) {
     const {
       goal,
       archive,
       contextMenu,
-      createWay,
       confirm,
-      inputMenu,
     } = this.props;
     const options = this.getOptionsForE(e);
     const delegate = {
-      onItemAction: (item) => {
-        if (item.id === 'way') {
-          inputMenu(Object.assign({}, options, {
-            initialValue: goal.get('title'),
-            placeholder: 'Name your Way: Like Development, Design etc.',
-            buttonLabel: 'Save',
-          }), (title) => {
+      onItemAction: () => {
+        confirm(Object.assign({}, options, {
+          title: 'Archive goal',
+          message: 'This will make this goal inactive for all participants.',
+        }), (i) => {
+          if (i === 1) {
             this.setLoading('dots');
-            const helper = this.getHelper();
-            createWay(title, helper.getObjectForWay()).then((res) => {
-              if (res && res.ok) {
-                this.clearLoading('dots', 'Added way');
-              } else {
+            archive(goal.get('id')).then((res) => {
+              if (!res || !res.ok) {
                 this.clearLoading('dots', '!Something went wrong');
               }
             });
-          });
-        } else {
-          confirm(Object.assign({}, options, {
-            title: 'Archive goal',
-            message: 'This will make this goal inactive for all participants.',
-          }), (i) => {
-            if (i === 1) {
-              this.setLoading('dots');
-              archive(goal.get('id')).then((res) => {
-                if (!res || !res.ok) {
-                  this.clearLoading('dots', '!Something went wrong');
-                }
-              });
-            }
-          });
-        }
+          }
+        });
       },
     };
     contextMenu({
       options,
       component: TabMenu,
       props: {
-        items: [
-          { id: 'way', title: 'Save as a Way' },
-          { title: 'Archive Goal' },
-        ],
+        items: [{ title: 'Archive Goal' }],
         delegate,
       },
     });
   }
-  onAddStep(e) {
-    const { addStep, inputMenu, goal } = this.props;
-    const options = this.getOptionsForE(e);
-    inputMenu({
-      ...options,
-      alignX: 'left',
-      alignY: 'center',
-      placeholder: 'Title for the step',
-      buttonLabel: 'Add',
-    }, (title) => {
-      if (title && title.length) {
-        this.setLoading('add', 'Adding...');
-        addStep(goal.get('id'), title).then(() => this.clearLoading('add'));
-      }
-    });
+  viewDidLoad(stepList) {
+    this.stepList = stepList;
   }
   getOptionsForE(e) {
+    if (e && e.boundingRect) {
+      return e;
+    }
     return {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
@@ -328,17 +257,23 @@ class HOCGoalOverview extends PureComponent {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
-  clickedAssign(i, e) {
-    e.stopPropagation();
-    const options = this.getOptionsForE(e);
-    this.onAssign(i, options);
+  tabDidChange(index) {
+    const { tabIndex } = this.state;
+    if (tabIndex !== index) {
+      this.setState({ tabIndex: index });
+    }
   }
   render() {
     const { goal, me } = this.props;
+    const { tabIndex, editMode, handoff } = this.state;
+
     return (
       <GoalOverview
         goal={goal}
+        editMode={editMode}
+        handoff={handoff}
         myId={me.get('id')}
+        tabIndex={tabIndex}
         delegate={this}
         loadingState={this.getAllLoading()}
       />
@@ -350,19 +285,13 @@ const { func } = PropTypes;
 
 HOCGoalOverview.propTypes = {
   goal: map,
-  addStep: func,
   confirm: func,
   me: map,
   navPop: func,
   inputMenu: func,
   archive: func,
-  createWay: func,
-  selectAssignees: func,
   openSecondary: func,
   renameGoal: func,
-  assignStep: func,
-  renameStep: func,
-  removeStep: func,
   contextMenu: func,
 };
 
@@ -374,15 +303,11 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  createWay: ways.create,
-  archive: goals.archive,
+  archive: ca.goals.archive,
   contextMenu: a.main.contextMenu,
-  addStep: steps.add,
-  renameGoal: goals.rename,
-  removeStep: steps.remove,
-  renameStep: steps.rename,
-  assignStep: steps.assign,
+  renameGoal: ca.goals.rename,
   selectAssignees: a.goals.selectAssignees,
   confirm: a.menus.confirm,
   inputMenu: a.menus.input,
+  preview: a.links.preview,
 })(HOCGoalOverview);

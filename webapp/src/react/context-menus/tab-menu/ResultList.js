@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Loader from 'components/loaders/Loader';
-import { setupCachedCallback, setupDelegate } from 'classes/utils';
+import { setupCachedCallback, setupDelegate } from 'swipes-core-js/classes/utils';
 import ResultItem from './ResultItem';
 
 

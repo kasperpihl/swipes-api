@@ -3,13 +3,16 @@ import {
   string,
   object,
   array,
+  any,
   bool,
+  number,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
   dbGoalsUpdateSingle,
   dbGoalsGetSingle,
   dbGoalsPushToHistorySingle,
+  dbGoalsRepliesHistoryUpdate,
 } from './db_utils/goals';
 import {
   generateSlackLikeId,
@@ -32,8 +35,6 @@ const goalsCreate = valLocals('goalsCreate', {
     goal,
     organization_id,
   } = res.locals;
-  const step_one_id = generateSlackLikeId('', 6);
-  const step_two_id = generateSlackLikeId('', 6);
 
   goal.id = generateSlackLikeId('G');
   goal.organization_id = organization_id;
@@ -48,22 +49,8 @@ const goalsCreate = valLocals('goalsCreate', {
     done_by: user_id,
     done_at: r.now(),
   }];
-  goal.steps = {
-    [step_one_id]: {
-      id: step_one_id,
-      assignees: [user_id],
-      title: 'What is the first step? Enter it here...',
-    },
-    [step_two_id]: {
-      id: step_two_id,
-      assignees: [],
-      title: 'What is the next one? Add it here...',
-    },
-  };
-  goal.step_order = [
-    step_one_id,
-    step_two_id,
-  ];
+  goal.steps = {};
+  goal.step_order = [];
   goal.attachments = {};
   goal.attachment_order = [];
 
@@ -87,8 +74,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   goalProgress: string.require(),
   current_step_id: string,
   next_step_id: string,
-  message: string,
-  flags: array.of(string),
   assignees: array.of(string),
 }, (req, res, next, setLocals) => {
   const {
@@ -98,8 +83,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     goalProgress,
     current_step_id = null,
     next_step_id = null,
-    message,
-    flags = [],
     assignees = null,
   } = res.locals;
 
@@ -113,9 +96,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
 
   let type = 'step_completed';
 
-  if (goalProgress === 'start') {
-    type = 'goal_started';
-  }
   if (!next_step_id) {
     type = 'goal_completed';
   }
@@ -123,8 +103,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   const currentStep = goal.steps[current_step_id] || {};
   const history = {
     type,
-    flags,
-    message,
     done_by: user_id,
     from: current_step_id,
     to: next_step_id,
@@ -142,10 +120,6 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     current_step_id: next_step_id,
     completed: type === 'goal_completed',
   };
-
-  if (!goal.status.started) {
-    goal.status.started = true;
-  }
 
   goal.history.push(history);
 
@@ -494,32 +468,36 @@ const goalsNextStepQueueMessage = valLocals('goalsNextStepQueueMessage', {
 const goalsNotify = valLocals('goalsNotify', {
   user_id: string.require(),
   goal_id: string.require(),
-  current_step_id: string,
   assignees: array.of(string).require(),
-  feedback: bool,
   flags: array.of(string),
   message: string,
   notificationGroupId: string.require(),
+  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  request: bool,
+  reply_to: number,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     assignees,
-    current_step_id,
-    feedback,
     notificationGroupId,
     flags = [],
     message = '',
+    notification_type = 'default',
+    request = false,
+    reply_to = null,
   } = res.locals;
 
   const historyItem = {
     flags,
     message,
     assignees,
-    feedback,
+    notification_type,
+    request,
+    reply_to,
     type: 'goal_notify',
     from: null,
-    to: current_step_id,
+    to: null,
     done_by: user_id,
     done_at: r.now(),
     group_id: notificationGroupId,
@@ -544,16 +522,22 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   goal_id: string.require(),
   assignees: array.of(string).require(),
   notificationGroupId: string.require(),
+  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  reply_to: number,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     assignees,
     notificationGroupId,
+    notification_type,
+    reply_to = null,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
+    notification_type,
+    reply_to,
     user_ids: assignees,
     group_id: notificationGroupId,
     event_type: 'goal_notify',
@@ -565,6 +549,73 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   });
 
   return next();
+});
+const goalsNotifyEmailQueueMessage = valLocals('goalsNotifyEmailQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  assignees: array.of(string).require(),
+  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  reply_to: number,
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    assignees,
+    notification_type,
+    reply_to = null,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    goal_id,
+    notification_type,
+    reply_to,
+    user_ids: assignees,
+    event_type: 'goal_notify_email',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
+const goalsHistoryUpdateIfReply = valLocals('goalsUpdateIfReply', {
+  goal_id: string.require(),
+  goal: object.require(),
+  reply_to: number,
+}, (req, res, next, setLocals) => {
+  const {
+    goal_id,
+    goal,
+    reply_to = null,
+  } = res.locals;
+
+  if (reply_to === null) {
+    return next();
+  }
+
+  const replyIndex = goal.history.length - 1;
+
+  return dbGoalsRepliesHistoryUpdate({
+    reply_index: replyIndex,
+    target: {
+      id: goal_id,
+      history_index: reply_to,
+    },
+  })
+  .then((results) => {
+    const goal = results.changes[0].new_val;
+
+    setLocals({
+      goal,
+    });
+
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
 });
 const goalsRename = valLocals('goalsRename', {
   goal_id: string.require(),
@@ -684,8 +735,10 @@ export {
   goalsRemoveMilestoneQueueMessage,
   goalsCompleteStep,
   goalsProgressStatus,
-  goalsNotifyQueueMessage,
   goalsNotify,
+  goalsNotifyQueueMessage,
+  goalsNotifyEmailQueueMessage,
+  goalsHistoryUpdateIfReply,
   goalsRename,
   goalsRenameQueueMessage,
   goalsLoadWay,

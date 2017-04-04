@@ -26,8 +26,6 @@
 
   &__header {
     @include size(100%, auto);
-    padding-bottom: 10px;
-    border-bottom: 1px solid $deepBlue-10;
   }
 
   &__tab-bar {

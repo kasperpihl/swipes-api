@@ -1,6 +1,5 @@
 import createLogger from 'redux-logger';
 
-const ignoredActions = ['API_REQUEST', 'API_SUCCESS']; // Ignore actions from Logger
 let cacheImmutable = null;
 let cacheObject = null;
 const transformState = (state) => {
@@ -16,9 +15,11 @@ const transformState = (state) => {
         const cachedValue = cachedSect.get(indexKey);
         if (indexValue !== cachedValue) {
           if (indexValue && typeof indexValue.toJS === 'function') {
-            cacheObject[sectKey][indexKey] = indexValue.toJS();
+            const sectObj = Object.assign({}, cacheObject[sectKey], { [indexKey]: indexValue.toJS() });
+            cacheObject = Object.assign({}, cacheObject, { [sectKey]: sectObj });
           } else {
-            cacheObject[sectKey][indexKey] = indexValue;
+            const sectObj = Object.assign({}, cacheObject[sectKey], { [indexKey]: indexValue });
+            cacheObject = Object.assign({}, cacheObject, { [sectKey]: sectObj });
           }
         }
       });
@@ -34,8 +35,6 @@ export default {
         stateTransformer: transformState, // state => state.toJS(),
         collapsed: true,
         duration: true,
-        // diff: true,
-        predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1),
       },
     ),
   ],

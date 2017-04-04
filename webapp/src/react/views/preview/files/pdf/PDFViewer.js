@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { bindAll } from 'classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 
 import PDFRender from './PDFRender';
@@ -230,7 +230,7 @@ class PDFViewer extends PureComponent {
             file={file}
             scale={this.state.scale}
             onDocumentComplete={this.onDocumentComplete}
-            page={page}
+            page={page - 1}
           />
         </div>
         {this.renderActions()}

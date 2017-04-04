@@ -1,13 +1,13 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindAll, setupCachedCallback, setupLoading } from 'classes/utils';
+import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import Button from 'Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import * as a from 'actions';
-import { attachments } from 'swipes-core-js';
+import * as ca from 'swipes-core-js/actions';
 import * as Files from './files';
 import * as Rows from './rows';
 import './preview.scss';
@@ -217,7 +217,6 @@ class HOCPreviewModal extends PureComponent {
       className += ' preview-file--hidden';
     }
 
-    console.log('file', file);
     return (
       <div className={className}>
         <Comp
@@ -312,7 +311,7 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps, {
-  request: a.api.request,
-  addAttachment: attachments.add,
+  request: ca.api.request,
+  addAttachment: ca.attachments.add,
   browser: a.main.browser,
 })(HOCPreviewModal);

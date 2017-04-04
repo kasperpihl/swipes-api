@@ -149,8 +149,6 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     event_type,
     uniqueUsersToNotify,
     notificationData,
-    interceptUsers,
-    interceptNextStepUsers,
     notifyMyself,
   } = res.locals;
 
@@ -173,27 +171,12 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       seen_at: null,
       created_at: r.now(),
       updated_at: r.now(),
-      receiver: true,
       sender: false,
-      important: false,
+      activity: false,
       ...notificationData,
     };
-    let notificationMap = userNotificationMap[userId] || {};
-    let important = false;
 
-    if (interceptUsers) {
-      important = interceptUsers.has(userId);
-
-      notification.important = important;
-      notificationMap = Object.assign({}, notificationMap, { important });
-    } else if (interceptNextStepUsers) {
-      important = interceptNextStepUsers.has(userId);
-
-      notification.important = important;
-      notificationMap = Object.assign({}, notificationMap, { important });
-    }
-
-    userNotificationMap[userId] = notificationMap;
+    userNotificationMap[userId] = {};
     notifications.push(notification);
   });
 
@@ -202,14 +185,15 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
   }
 
   const mappedNotifications = notifications.map((notification) => {
-    if (event_type === 'goal_notify') {
-      notification.important = true;
-    }
     if (notification.user_id === notification.done_by && !notifyMyself) {
-      notification.receiver = false;
+      notification.notification = false;
     }
-    if (notification.user_id === notification.done_by) {
+    if (notification.user_id === notification.done_by && event_type === 'goal_notify') {
       notification.sender = true;
+    }
+    if (event_type !== 'goal_notify') {
+      notification.activity = true;
+      notification.seen_at = r.now();
     }
 
     return notification;

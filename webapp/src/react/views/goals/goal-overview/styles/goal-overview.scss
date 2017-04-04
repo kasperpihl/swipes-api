@@ -32,13 +32,7 @@
   margin-bottom: 60px;
 }
 
-.add-step {
-  $b: &;
-  $flexIgnoreList: '#{$b}__icon';
 
-  @include size(100%, 54px);
-  @include flexContainer('row', left, center, $flexIgnoreList);
-}
 // ======================================================
 // Element
 // ======================================================
@@ -54,7 +48,8 @@
     }
 
     &--left {
-      @include size(400px, auto);
+      $width: calc(100% - 330px);
+      @include size($width, auto);
       padding-right: 60px;
       transition: width .5s ease, padding .5s ease;
     }
@@ -65,8 +60,7 @@
     }
 
     &--right {
-      $width: calc(100% - 400px);
-      @include size($width,  auto);
+      @include size(330px,  auto);
       opacity: 1;
       transition: .5s ease;
     }
@@ -79,6 +73,17 @@
     border: none;
     padding-top: 51px;
     transform: translateY(50px)
+  }
+
+  &__progress {
+    @include size(100%, 48px);
+    @include flexContainer('row', left, center);
+    @include font(12px, $deepBlue-80, 15px, bold);
+    border-top: 1px solid $deepBlue-20;
+  }
+
+  &__last-activity {
+    padding-bottom: 60px;
   }
 }
 
@@ -121,89 +126,65 @@
   }
 }
 
-.add-step {
+
+.success-footer {
   $b: &;
+  $flexIgnoreList: '#{$b}__icon', '#{$b}__actions';
+
+  @include size(100%, 121px);
+  @include flexContainer('row', left, center, $flexIgnoreList);
+  background-color: $blue-5;
+  border-top: 1px solid $deepBlue-10;
+  padding: 0 30px;
 
   &__icon {
-    @include size(24px);
-    @include flexContainer('row', left, center);
+    @include size(60px);
+    @include flexContainer('row', center, center);
+    background-color: $green-color;
     border-radius: 50%;
-    margin-right: 15px;
-
-    &:before {
-      @include size(24px);
-      position: absolute;
-      left: 0; top: 0;
-      content: '';
-      border-radius: 50%;
+    &--backward {
       background-color: $blue-100;
-      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-      opacity: 0;
-      transition: .2s ease;
+    }
+    #{$b}__svg {
+      @include svg-color($bg);
+    }
+  }
+
+  &__content {
+    @include font(15px, $deepBlue-80, 24px);
+    padding: 0 30px;
+
+    span {
+      b{
+        @include font(15px, $deepBlue-80, 24px, bold);
+      }
+    }
+  }
+
+  &__action {
+    background-color: $blue-5;
+  }
+
+  &__close {
+    @include size(24px);
+    position: absolute;
+    right: 9px; top: 9px;
+
+    #{$b}__svg {
+      @include svg-color($deepBlue-40);
+      transition: .15s ease;
     }
 
-    &:after {
-      @include size(18px);
-      position: absolute;
-      left: 3px; top: 3px;
-      content: '';
-      border-radius: 50%;
-      background-color: $bg;
-      opacity: 0;
-      transition: .2s .2s ease;
+    &:hover {
+      #{$b}__svg {
+        @include svg-color($deepBlue-100);
+        transition: .15s ease;
+      }
     }
   }
 
   &__svg {
     @include size(24px);
-    @include svg-color($blue-100);
-    transition: .2s .2s ease;
-  }
-
-  button#{$b}__text {
-    @include font(12px, $blue-100, 18px, 500);
-    padding-right: 18px;
-    transition: .5s ease;
-
-    &:hover, &:focus {
-      text-decoration: underline;
-    }
-  }
-}
-
-// ======================================================
-// Modifiers
-// ======================================================
-
-.add-step {
-  $b: &;
-
-  &--loading {
-
-    button#{$b}__text {
-      @include font($c: $deepBlue-80);
-      pointer-events: none;
-      transition: .2s ease;
-    }
-
-    #{$b}__icon {
-      animation: rotateAddLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
-
-      &:before {
-        opacity: 1;
-        transition: .2s .2s ease;
-      }
-
-      &:after {
-        opacity: 1;
-        transition: 0s .2s ease;
-      }
-    }
-
-    #{$b}__svg {
-      opacity: 0;
-      transition: .2s ease;
-    }
   }
 }
 

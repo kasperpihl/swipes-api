@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupCachedCallback, setupDelegate } from 'classes/utils';
+import { setupCachedCallback, setupDelegate } from 'swipes-core-js/classes/utils';
 
 class Browse extends Component {
   constructor(props) {

@@ -1,7 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$navbarH: 49px;
+$navbarH: 51px;
 
 // ======================================================
 // Block
@@ -12,7 +12,6 @@ $navbarH: 49px;
   @include size(100%, $navbarH);
   @include flexContainer();
   padding-top: 4px;
-  border-bottom: 1px solid $deepBlue-20;
 }
 
 // ======================================================
@@ -36,14 +35,17 @@ $navbarH: 49px;
   $b: &;
 
   &__title {
-    @include font(11px, $blue-100, 19px, 500);
+    @include font(11px, $blue-100, 18px, 500);
     text-transform: uppercase;
+
     &.no-click{
       color: $deepBlue-100;
     }
+
     &:hover {
       text-decoration: underline;
     }
+
     &.no-click:hover{
       text-decoration: none;
     }
@@ -61,17 +63,5 @@ $navbarH: 49px;
 
   &__icon {
     @include size(24px);
-  }
-}
-
-// ======================================================
-// Modifiers
-// ======================================================
-
-.bread-crumbs {
-
-  &--small:empty {
-    @include size($height: 15px);
-    border: none;
   }
 }

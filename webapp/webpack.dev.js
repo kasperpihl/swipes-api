@@ -3,8 +3,7 @@ const webpack = require('webpack');
 const config = require('./webpack.base.js');
 
 config.entry.app = [
-  'webpack-dev-server/client?http://localhost:3000',
-  'webpack/hot/dev-server',
+  'react-hot-loader/patch',
 ].concat(config.entry.app);
 config.output.filename = 'js/[name].[hash:8].js';
 
@@ -15,8 +14,8 @@ config.plugins = config.plugins.concat([
 ]);
 
 // Add the hot reloader to dev environ
-const currentJS = config.module.loaders[0].loaders;
-config.module.loaders[0].loaders = ['react-hot-loader/webpack'].concat(currentJS); //.concat(['eslint-loader']);
+const currentJS = config.module.rules[0].use;
+// config.module.rules[0].use = ['react-hot-loader'].concat(currentJS); //.concat(['eslint-loader']);
 config.devServer.hot = true;
 
 

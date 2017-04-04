@@ -8,7 +8,7 @@
 	@include flex(center, flex-start);
   @include flex(none);
   background-color: $bg;
-  border-top: 1px solid $deepBlue-20;
+  border-bottom: 1px solid $deepBlue-100;
   padding: 12px 0;
   position: relative;
   z-index: 2;
@@ -16,7 +16,7 @@
   &__tab {
     @include size(auto, 40px);
     @include flex(center);
-    @include font(12px, $deepBlue-30, 18px, bold);
+    @include font(12px, $deepBlue-30, 15px, 500);
     margin: 0;
     padding-right: 30px;
     transition: .1s;
@@ -27,24 +27,24 @@
     }
 
     &:hover {
-      color: darken($deepBlue-40, 5%);
+      color: $deepBlue-100;
     }
 
     &--active {
-      color: $blue-100;
+      color: $deepBlue-100;
       transition: .1s;
 
       &:hover {
-        color: $blue-120;
+        color: $deepBlue-120;
       }
     }
   }
 
   &__slider {
-    @include size(100%, 2px);
+    @include size(100%, 3px);
     @include flex();
-    background: $blue-30;
-    left: 0; bottom: 6px;
+    background-color: $deepBlue-100;
+    left: 0; bottom: -1px;
     position: absolute;
     transition: -webkit-clip-path .2s ease-in-out;
     z-index: 2;

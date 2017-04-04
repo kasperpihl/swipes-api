@@ -8,6 +8,7 @@ import * as xendo from './xendo';
 import * as tokens from './tokens';
 import * as notifications from './notifications';
 import * as notify from './notify';
+import * as emails from './emails';
 
 const notifyWrapper = (middlewares) => {
   return [
@@ -35,24 +36,18 @@ const goal_created = notifyWrapper([
 const goal_completed = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
-  goals.goalsStepsInterseptUsers,
-  goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 
 const goal_started = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
-  goals.goalsStepsInterseptUsers,
-  goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 
 const goal_archived = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsArchiveWithHistoryNotificationData,
-  goals.goalsStepsInterseptUsers,
-  goals.goalsHistoryInterseptUsers,
   notify.notifyAllInCompany,
 ]);
 
@@ -71,10 +66,16 @@ const goal_milestone_removed = notifyWrapper([
 const goal_notify = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsNotifyAdditionalData,
   goals.goalsNotifyAddSenderAlways,
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
 ]);
+
+const goal_notify_email = [
+  users.usersGetMultipleEmails,
+  emails.goalsNotifySendEmails,
+];
 
 const goal_renamed = notifyWrapper([
   goals.goalsRenamedNotificationData,
@@ -90,7 +91,6 @@ const goal_loaded_way = notifyWrapper([
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
-  goals.goalsNextStepInterseptUsers,
   notify.notifyAllInGoal,
   notify.notifySendEventToAllInCompany,
 ]);
@@ -202,6 +202,7 @@ export {
   goal_milestone_added,
   goal_milestone_removed,
   goal_notify,
+  goal_notify_email,
   goal_renamed,
   goal_loaded_way,
   step_completed,

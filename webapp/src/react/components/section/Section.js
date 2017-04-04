@@ -7,44 +7,34 @@ class Section extends Component {
     super(props);
     this.state = {};
   }
+  renderActions() {
+    const { actions } = this.props;
+
+    if (!actions) {
+      return undefined;
+    }
+
+    return actions;
+  }
   render() {
     const {
       title,
       children,
-      first,
-      style,
-      maxWidth,
-      noframe,
       className: classNameFromButton,
     } = this.props;
 
     let className = 'section';
-    let styles = {};
-
-    if (first) {
-      className += ' section--first';
-    }
-
-    if (noframe) {
-      className += ' section--no-frame';
-    }
-
-    if (style) {
-      styles = style;
-    }
-
-    if (maxWidth) {
-      styles.maxWidth = maxWidth;
-    }
 
     if (classNameFromButton && typeof classNameFromButton === 'string') {
       className += ` ${classNameFromButton}`;
     }
 
     return (
-      <div ref="section" className={className} style={styles}>
-        <div className="section__title">{title}</div>
-
+      <div ref="section" className={className}>
+        <div className="section__header">
+          <div className="section__title">{title}</div>
+          {this.renderActions()}
+        </div>
         {children}
       </div>
     );
@@ -53,14 +43,11 @@ class Section extends Component {
 
 export default Section;
 
-const { string, oneOfType, array, object, bool, number } = PropTypes;
+const { string, oneOfType, array, object, element } = PropTypes;
 
 Section.propTypes = {
   title: string,
   children: oneOfType([array, object]),
-  first: bool,
-  style: object,
-  maxWidth: number,
   className: string,
-  noframe: bool,
+  actions: element,
 };

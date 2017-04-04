@@ -3,7 +3,7 @@ import Button from 'Button';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { bindAll } from 'classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import './profile.scss';
 
 class HOCProfile extends PureComponent {

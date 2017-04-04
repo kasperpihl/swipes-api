@@ -1,5 +1,4 @@
 import { compose, applyMiddleware, createStore } from 'redux';
-import { apiMiddleware } from 'redux-api-middleware';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import thunk from 'redux-thunk';
 import { Map } from 'immutable';
@@ -15,7 +14,6 @@ export default function configureStore(preloadedState) {
   const enhancer = compose(
     applyMiddleware(
       thunk,
-      apiMiddleware,
       ...middlewares,
     ),
     autoRehydrate(),
@@ -28,7 +26,7 @@ export default function configureStore(preloadedState) {
   );
 
   persistStore(store, {
-    blacklist: ['main', 'search', 'toasty'],
+    blacklist: ['main', 'search', 'toasty', 'filters'],
   });
   if (!isProd) {
     window.getState = store.getState;

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll, getParentByClass } from 'classes/utils';
+import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
 import { map, mapContains, listOf } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import AssigneeTooltip from './AssigneeTooltip';

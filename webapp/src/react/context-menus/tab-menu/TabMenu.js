@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { setupDelegate, randomString, bindAll } from 'classes/utils';
+import { setupDelegate, randomString, bindAll } from 'swipes-core-js/classes/utils';
 import Button from 'Button';
 import TabBar from 'components/tab-bar/TabBar';
 import ResultList from './ResultList';
@@ -217,9 +217,9 @@ class TabMenu extends Component {
     );
   }
   render() {
-    const { search } = this.props;
+    const { search, style, className: cN } = this.props;
     const { query } = this.state;
-    let className = 'tab-menu';
+    let className = `tab-menu ${cN}`;
 
     if (query.length) {
       className += ' tab-menu--is-searching';
@@ -232,7 +232,7 @@ class TabMenu extends Component {
     }
 
     return (
-      <div className={className}>
+      <div className={className} style={style}>
         {this.renderHeader()}
         {this.renderResultList()}
         {this.renderFooter()}
@@ -246,6 +246,8 @@ export default TabMenu;
 const { object, string, arrayOf, number } = PropTypes;
 
 TabMenu.propTypes = {
+  style: object,
+  className: string,
   search: string,
   initialTabIndex: number,
   items: arrayOf(object),

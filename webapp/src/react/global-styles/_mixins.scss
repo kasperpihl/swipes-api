@@ -3,46 +3,46 @@
 
 // if no parameters are passed, the size is inherited
 @mixin size($width:null, $height:null) {
-	@if $width {
-		width: $width;
-	} @else {
-		width: inherit;
-		height: inherit
-	}
+  @if $width {
+    width: $width;
+  } @else {
+    width: inherit;
+    height: inherit
+  }
 
-	@if $height {
-		height: $height;
-	} @else if $width {
-		height: $width;
-	}
+  @if $height {
+    height: $height;
+  } @else if $width {
+    height: $width;
+  }
 }
 
 @mixin widthSpecifications($minW: null, $maxW: null) {
-	min-width: $minW;
-	max-width: $maxW;
+  min-width: $minW;
+  max-width: $maxW;
 }
 
 @mixin heightSpecifications($minH: null, $maxH: null) {
-	min-height: $minH;
-	max-height: $maxH;
+  min-height: $minH;
+  max-height: $maxH;
 }
 
 @mixin truncateString($secondLine: 'false') {
-	@if $secondLine == true {
-	  &:not(:first-line) {
-	    white-space: nowrap;
+  @if $secondLine == true {
+    &:not(:first-line) {
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-	  }
-	} @else {
-	  white-space: nowrap;
+    }
+  } @else {
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-	}
+  }
 }
 
 @mixin clampString($line: 1) {
-	overflow : hidden;
+  overflow : hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: $line;
@@ -51,45 +51,45 @@
 
 //Pass nothing paramenters for simple centering
 @mixin flex($vertical:center, $horizontal:center, $direction:row) {
-	@if $vertical == flex {
-		display: flex;
-	} @else if $vertical == column {
-		display: flex;
-		flex-direction: column;
-	}	@else if $vertical == none {
-		flex: none;
-	} @else {
-		align-items: $vertical;
-		display: flex;
-		flex-direction: $direction;
-		justify-content: $horizontal;
-	}
+  @if $vertical == flex {
+    display: flex;
+  } @else if $vertical == column {
+    display: flex;
+    flex-direction: column;
+  }	@else if $vertical == none {
+    flex: none;
+  } @else {
+    align-items: $vertical;
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $horizontal;
+  }
 }
 
 @mixin svg-color($fill:$deepBlue-100, $stroke:$fill) {
-	fill: $fill;
-	stroke: $stroke;
+  fill: $fill;
+  stroke: $stroke;
 }
 
 @mixin font($fz:null, $c:null, $lh:null, $fw:null) {
-	font-size: $fz;
-	color: $c;
-	font-weight: $fw;
+  font-size: $fz;
+  color: $c;
+  font-weight: $fw;
 
-	@if $lh {
-		$getNum: $lh / 100;
+  @if $lh {
+    $getNum: $lh / 100;
 
-		@if round($getNum) == $getNum {
-			font-weight: $lh;
-		} @else {
+    @if round($getNum) == $getNum {
+      font-weight: $lh;
+    } @else {
 
-			@if strip-unit($lh) > 2 {
-				line-height: strip-unit($lh) / strip-unit($fz);
-			} @else {
-				line-height: $lh;
-			}
-		}
-	}
+      @if strip-unit($lh) > 2 {
+        line-height: strip-unit($lh) / strip-unit($fz);
+      } @else {
+        line-height: $lh;
+      }
+    }
+  }
 }
 
 @mixin border-radius($topLeft:50%, $topRight:50%, $botLeft:50%, $botRight:50%) {
@@ -102,108 +102,108 @@
 @mixin styleIfNumberOfElements($numberOfElements) {
   @if $numberOfElements == 1 {
     &:first-of-type:nth-last-of-type(1) {
-    	@content;
+      @content;
     }
   } @else if $numberOfElements > 1 {
     &:first-of-type:nth-last-of-type(#{$numberOfElements}),
     &:first-of-type:nth-last-of-type(#{$numberOfElements}) ~ & {
-    	@content;
+      @content;
     }
   }
 }
 
 @mixin styleAfterElementNumber($number: 1) {
-	$nth: $number + 1;
+  $nth: $number + 1;
 
-	&:nth-child(n+#{$nth}) {
-		@content;
-	}
+  &:nth-child(n+#{$nth}) {
+    @content;
+  }
 }
 
 @mixin centerAbsolute($axis: null, $side: null, $addToTransform: null) {
-	position: absolute;
+  position: absolute;
 
-	@if $axis == null {
-	  left: 50%; top: 50%;
-	  transform: translate(-50%, -50%) #{$addToTransform};
-	} @else {
-	  @if $axis == horizontal {
-	    left: 50%;
-			@if $side {
-	      #{$side}: 0;
-	    } @else {
-	      top: 0;
-	    }
-	    transform: translateX(-50%) #{$addToTransform};
-	  } @else if $axis == vertical {
-	    top: 50%;
-			@if $side {
-	      #{$side}: 0;
-	    } @else {
-	      left: 0;
-	    }
-	    transform: translateY(-50%) #{$addToTransform};
-	  }
-	}
+  @if $axis == null {
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%) #{$addToTransform};
+  } @else {
+    @if $axis == horizontal {
+      left: 50%;
+      @if $side {
+        #{$side}: 0;
+      } @else {
+        top: 0;
+      }
+      transform: translateX(-50%) #{$addToTransform};
+    } @else if $axis == vertical {
+      top: 50%;
+      @if $side {
+        #{$side}: 0;
+      } @else {
+        left: 0;
+      }
+      transform: translateY(-50%) #{$addToTransform};
+    }
+  }
 }
 
 @mixin flexContainer($direction: 'row', $directionHorizontal: null, $directionVertical: null, $selectorsToIgnoreFlex: null) {
 
-	@if $direction != null {
+  @if $direction != null {
    display: flex;
   }
 
-	@if $direction == row {
-		@if $directionHorizontal == left {
-	    justify-content: flex-start;
-	  } @else if $directionHorizontal == center {
-	    justify-content: center;
-	  } @else if $directionHorizontal == right {
-	    justify-content: flex-end;
-	  } @else if $directionHorizontal == between {
-			justify-content: space-between;
-		} @else if $directionHorizontal == around {
-			justify-content: space-around;
-		}
+  @if $direction == row {
+    @if $directionHorizontal == left {
+      justify-content: flex-start;
+    } @else if $directionHorizontal == center {
+      justify-content: center;
+    } @else if $directionHorizontal == right {
+      justify-content: flex-end;
+    } @else if $directionHorizontal == between {
+      justify-content: space-between;
+    } @else if $directionHorizontal == around {
+      justify-content: space-around;
+    }
 
-	  @if $directionVertical == top {
-	    align-items: flex-start;
-	  } @else if $directionVertical == center {
-	    align-items: center;
-	  } @else if $directionVertical == bottom {
-	    align-items: flex-end;
-	  } @else if $directionVertical == stretch {
-			align-items: stretch;
-		}
-	} @else if $direction == column {
-		flex-direction: column;
+    @if $directionVertical == top {
+      align-items: flex-start;
+    } @else if $directionVertical == center {
+      align-items: center;
+    } @else if $directionVertical == bottom {
+      align-items: flex-end;
+    } @else if $directionVertical == stretch {
+      align-items: stretch;
+    }
+  } @else if $direction == column {
+    flex-direction: column;
 
-		@if $directionHorizontal == left {
-	    align-items: flex-start;
-	  } @else if $directionHorizontal == center {
-	    align-items: center;
-	  } @else if $directionHorizontal == right {
-	    align-items: flex-end;
-	  }
+    @if $directionHorizontal == left {
+      align-items: flex-start;
+    } @else if $directionHorizontal == center {
+      align-items: center;
+    } @else if $directionHorizontal == right {
+      align-items: flex-end;
+    }
 
-	  @if $directionVertical == top {
-	    justify-content: flex-start;
-	  } @else if $directionVertical == center {
-	    justify-content: center;
-	  } @else if $directionVertical == bottom {
-	    justify-content: flex-end;
-	  } @else if $directionHorizontal == between {
-			justify-content: space-between;
-		} @else if $directionHorizontal == around {
-			justify-content: space-around;
-		}
-	}
+    @if $directionVertical == top {
+      justify-content: flex-start;
+    } @else if $directionVertical == center {
+      justify-content: center;
+    } @else if $directionVertical == bottom {
+      justify-content: flex-end;
+    } @else if $directionVertical == between {
+      justify-content: space-between;
+    } @else if $directionVertical == around {
+      justify-content: space-around;
+    }
+  }
 
-	@if  $selectorsToIgnoreFlex {
+  @if  $selectorsToIgnoreFlex {
     @if length($selectorsToIgnoreFlex) == 1 {
       & > #{$selectorsToIgnoreFlex} {
-  			flex: none;
-  		}
+        flex: none;
+      }
     } @else {
       @each $item in $selectorsToIgnoreFlex {
         & > #{$item} {
@@ -211,7 +211,7 @@
         }
       }
     }
-	}
+  }
 
   @content;
 }

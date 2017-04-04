@@ -4,7 +4,7 @@ import { map } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import * as a from 'actions';
-import { setupCachedCallback } from 'classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 import './styles/sidebar.scss';
 
@@ -14,12 +14,13 @@ class HOCSidebar extends PureComponent {
     this.state = {
       navItems: [
         { id: 'GoalList', svg: 'Goals' },
-        // { id: 'MilestoneList', svg: 'Milestones' },
         { id: 'Dashboard', svg: 'Notification' },
-        { id: 'Find', svg: 'Find' },
-        { id: 'Slack', svg: 'Hashtag' },
-        { id: 'Store', svg: 'Store' },
-      ],
+        // { id: 'MilestoneList', svg: 'Milestones' },
+
+        // { id: 'Find', svg: 'Find' },
+        // { id: 'Slack', svg: 'Hashtag' },
+        // { id: 'Store', svg: 'Store' },
+      ].filter(v => !!v),
     };
     this.state.activeItem = this.getActiveItem(props.navId);
     this.onClickCached = setupCachedCallback(this.onClick, this);
@@ -75,8 +76,8 @@ class HOCSidebar extends PureComponent {
     }
 
     let notif = null;
-    if (counter && counter.length) {
-      notif = <div className="sidebar__notification" key={counter}>{counter}</div>;
+    if (counter) {
+      notif = <div className="sidebar__notification">{counter}</div>;
     }
 
     let image = <Icon icon={item.svg} className="sidebar__icon" />;
@@ -108,19 +109,6 @@ class HOCSidebar extends PureComponent {
 
     return undefined;
   }
-  renderSlider() {
-    const { activeItem } = this.state;
-    const styles = {};
-    let className = 'sidebar__slider';
-
-    if (activeItem === null) {
-      className += ' sidebar__slider--hidden';
-    } else {
-      styles.transform = `translateY(${activeItem * 100}%)`;
-    }
-
-    return <div className={className} style={styles} />;
-  }
   renderProfile() {
     const { me } = this.props;
 
@@ -139,7 +127,6 @@ class HOCSidebar extends PureComponent {
         <div className="sidebar__top-section">
           <div className="sidebar__section">
             {this.renderTopSection()}
-            {this.renderSlider()}
           </div>
         </div>
         <div className="sidebar__bottom-section">

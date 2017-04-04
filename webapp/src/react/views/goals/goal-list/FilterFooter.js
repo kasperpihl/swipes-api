@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindAll, setupDelegate } from 'classes/utils';
+import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
 import './styles/filter-footer.scss';
 
 class FilterFooter extends Component {

@@ -1,10 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { cache, goals } from 'swipes-core-js';
+import { cache, goals } from 'swipes-core-js/actions';
 import { map, list } from 'react-immutable-proptypes';
-import GoalsUtil from 'classes/goals-util';
-import { setupLoading } from 'classes/utils';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import { fromJS } from 'immutable';
 
 import SelectStep from 'context-menus/select-step/SelectStep';

@@ -25,8 +25,10 @@ const enableTester = false;
 // =========================================
 
 
-module.exports = enableTester ? view : undefined;
+const exportedObj = enableTester ? view : undefined;
 
 if(enableTester){
   console.log('Component Tester enabled in src/Tester.js');
 }
+
+export default exportedObj;

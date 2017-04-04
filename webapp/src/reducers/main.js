@@ -1,7 +1,7 @@
 import { fromJS, Map } from 'immutable';
 import * as types from 'constants';
 import { REHYDRATE } from 'redux-persist/constants';
-import { randomString } from 'classes/utils';
+import { randomString } from 'swipes-core-js/classes/utils';
 
 const initialState = fromJS({
   overlay: null,
@@ -14,9 +14,6 @@ export default function main(state = initialState, action) {
   switch (type) {
     case REHYDRATE:
       return state.set('isHydrated', true);
-    case types.SET_UPDATE_STATUS: {
-      return state.mergeIn(['versionInfo'], fromJS(payload));
-    }
     case types.SET_MAXIMIZED: {
       return state.set('isMaximized', payload.toggle);
     }
@@ -33,13 +30,6 @@ export default function main(state = initialState, action) {
     // ======================================================
     case types.TOOLTIP: {
       return state.set('tooltip', payload);
-    }
-
-    // ======================================================
-    // Modals
-    // ======================================================
-    case types.MODAL: {
-      return state.set('modal', payload);
     }
 
     // ======================================================
