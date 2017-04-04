@@ -173,7 +173,6 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       updated_at: r.now(),
       sender: false,
       activity: false,
-      notification: true,
       ...notificationData,
     };
 
