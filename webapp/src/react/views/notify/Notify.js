@@ -101,7 +101,7 @@ class Notify extends PureComponent {
         </div>
         <div className="notify-footer__actions">
           <Button
-            text={notify.get('request') ? 'Ask now' : 'Give now'}
+            text="Send"
             onClick={this.onSubmit}
             {...loadingState.get('button')}
             primary
