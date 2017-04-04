@@ -11,6 +11,16 @@ export function getDayWithoutTime(day) {
   return fullStr;
 }
 
+export function getDaysAgo(date) {
+  const now = moment();
+  const oldDate = moment(date);
+  const diff = now.diff(oldDate, 'days');
+  if (!diff) {
+    return 'today';
+  }
+  return `${diff} day${diff > 1 ? 's' : ''} ago`;
+}
+
 export function dayStringForDate(date) {
   let result;
   const now = moment();

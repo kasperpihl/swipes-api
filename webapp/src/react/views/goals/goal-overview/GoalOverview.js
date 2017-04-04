@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate, truncateString } from 'swipes-core-js/classes/utils';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';
@@ -85,7 +86,7 @@ class GoalOverview extends PureComponent {
       <div className="add-goal__header">
         <HOCHeaderTitle
           title={title || goal.get('title')}
-          subtitle="Started 2 days ago"
+          subtitle={`Started ${timeAgo(goal.get('created_at'))} by ${msgGen.users.getName(goal.get('created_by'))}`}
           delegate={delegate}
         >
           <Button

@@ -165,10 +165,10 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onStepWillComplete(handoff) {
+  onStepWillComplete() {
     this.setLoading('completing');
   }
-  onStepDidFailComplete(handoff) {
+  onStepDidFailComplete() {
     this.clearLoading('completing');
   }
   onStepDidComplete(handoff) {
