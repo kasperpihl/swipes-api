@@ -61,7 +61,7 @@ class GoalOverview extends PureComponent {
       const title = truncateString(toStep.get('title'), 19);
       return (
         <span>
-          Alright {myName}, <b>“{title}”</b> needs some changes.<br />
+          Alright, {myName}. <b>“{title}”</b> needs some changes.<br />
           Send a message to {personString} about what needs to be done.
         </span>
       );
@@ -70,8 +70,8 @@ class GoalOverview extends PureComponent {
     const title = titles.size > 1 ? `${titles.size} steps` : truncateString(titles.get(0), 19);
     return (
       <span>
-        Great progress {myName}! You completed <b>“{title}”</b><br />
-        Send a message to {personString}, about how to take it from here.
+        Great progress, {myName}! You completed <b>“{title}”</b><br />
+        Send a message to {personString} about how to take it from here.
       </span>
     );
   }
