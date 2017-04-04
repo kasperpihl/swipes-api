@@ -57,11 +57,28 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+  onReply(i) {
+    const lastActivity = helper.getLastActivity();
+    const lastActivityIndex = helper.getLastActivityIndex();
+    const { navPush } = this.props;
+    navPush({
+      id: 'Notify',
+      title: 'Notify',
+      props: {
+        notify: Map({
+          reply_to: lastActivityIndex,
+          notification_type: lastActivity.get('notification_type'),
+          assignees: List([lastActivity.get('done_by')]),
+        }),
+        goalId: n.getIn(['target', 'id']),
+      },
+    });
+  }
   onClickAttachment(hI, i) {
     const { goal, preview, target } = this.props;
     const helper = this.getHelper();
-    const lastActivty = helper.getLastActivity();
-    const flag = lastActivty.getIn(['flags', i]);
+    const lastActivity = helper.getLastActivity();
+    const flag = lastActivity.getIn(['flags', i]);
     const att = goal.getIn(['attachments', flag]);
     const selection = window.getSelection();
 
