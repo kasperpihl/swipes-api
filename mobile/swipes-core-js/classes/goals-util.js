@@ -159,6 +159,11 @@ export default class GoalsUtil {
     });
     return fromJS([...assignees]);
   }
+  hasIRepliedToHistory(hE) {
+    const history = this.goal.get('history');
+    const index = history.findIndex(h => h.get('group_id') === hE.get('group_id'));
+    return history.find(h => h.get('reply_to') === index);
+  }
   hasEmptyStepsLater() {
     const steps = this.getRemainingSteps();
     return (steps.filter(s => !s.get('assignees').size).size > 0);

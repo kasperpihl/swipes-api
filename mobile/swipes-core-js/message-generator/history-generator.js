@@ -30,13 +30,14 @@ export default class HistoryGenerator {
     const helper = this._getHelper(id);
     return Map({
       timeago: def.timeago ? timeAgo(h.get('done_at'), true) : null,
-      title: def.title ? this.parent.history.getTitle(helper.getId(), h) : null,
-      subtitle: def.subtitle ? this.parent.history.getSubtitle(helper.getId(), h) : null,
+      title: def.title ? this.getTitle(helper.getId(), h) : null,
+      subtitle: def.subtitle ? this.getSubtitle(helper.getId(), h) : null,
       seen: def.seen ? !!h.get('seen_at') : null,
       userId: h.get('done_by'),
+      reply: this.getReplyButtonForHistory(helper.getId(), h),
       message: def.message ? h.get('message') : null,
       icon: def.icon ? this.getIcon(h) : null,
-      attachments: def.attachments ? this.parent.history.getAttachments(helper.getId(), h) : null,
+      attachments: def.attachments ? this.getAttachments(helper.getId(), h) : null,
     });
   }
   getTitle(id, h) {
@@ -47,8 +48,8 @@ export default class HistoryGenerator {
 
     switch (h.get('type')) {
       case 'goal_created':
+      case 'goal_started':
         return `${from} kicked off this goal`;
-
       case 'goal_completed':
         return `${from} completed this goal`;
 
@@ -69,7 +70,7 @@ export default class HistoryGenerator {
           yourself,
           number: 1,
         });
-        const type = h.get('notification_type');
+        const type = h.get('notification_type') || h.getIn(['meta', 'notification_type']);
         if (h.get('request')) {
           if (type === 'status') return `${from} asked ${to} for a status update`;
           else if (type === 'feedback') return `${from} asked ${to} for feedback`;
@@ -98,6 +99,17 @@ export default class HistoryGenerator {
       default:
         return undefined;
     }
+  }
+  getReplyButtonForHistory(id, h) {
+    const myId = this.store.getState().getIn(['me', 'id']);
+    const helper = this._getHelper(id);
+    if (!h || !h.get('request') || !h.get('assignees').contains(myId)) {
+      return false;
+    }
+    if (helper.hasIRepliedToHistory(h)) {
+      return 'replied';
+    }
+    return true;
   }
   getAttachments(id, h) {
     const helper = this._getHelper(id);

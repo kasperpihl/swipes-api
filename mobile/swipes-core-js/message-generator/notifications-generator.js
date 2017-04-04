@@ -23,7 +23,7 @@ export default class NotificationsGenerator {
     });
 
     if (history) {
-      m = m.set('reply', history.get('request'));
+      m = m.set('reply', this.parent.history.getReplyButtonForHistory(id, history));
       m = m.set('message', history.get('message'));
       m = m.set('attachments', this.parent.history.getAttachments(id, history));
     } else {
