@@ -199,8 +199,8 @@ authed.all('/goals.notify',
   goalsHistoryUpdateIfReply,
   goalsNotifyQueueMessage,
   notificationsPushToQueue,
-  // goalsNotifyEmailQueueMessage,
-  // notificationsPushToQueue,
+  goalsNotifyEmailQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
   }));
