@@ -50,17 +50,19 @@ class GoalOverview extends PureComponent {
     let personString = 'the next person';
     const assignees = helper.getAssigneesForStepId(handoff.toId);
     if (assignees.size) {
-      personString = msgGen.users.getNames(assignees, {
-        yourself: true,
-        number: 3,
-      });
+      personString = (
+        <b>“{msgGen.users.getNames(assignees, {
+          yourself: true,
+          number: 3,
+        })}”</b>
+    );
     }
     if (handoff.backward) {
       const title = truncateString(toStep.get('title'), 19);
       return (
         <span>
           Alright {myName}, <b>“{title}”</b> needs some changes.<br />
-          Send a message to <b>“{personString}”</b> about what needs to be done.
+          Send a message to {personString} about what needs to be done.
         </span>
       );
     }
@@ -69,7 +71,7 @@ class GoalOverview extends PureComponent {
     return (
       <span>
         Great progress {myName}! You completed <b>“{title}”</b><br />
-        Send a message to <b>“{personString}”</b>, about how to take it from here.
+        Send a message to {personString}, about how to take it from here.
       </span>
     );
   }
