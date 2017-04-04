@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { fromJS } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
@@ -57,11 +57,29 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+  onReply(i) {
+    const helper = this.getHelper();
+    const lastActivity = helper.getLastActivity();
+    const lastActivityIndex = helper.getLastActivityIndex();
+    const { navPush } = this.props;
+    navPush({
+      id: 'Notify',
+      title: 'Notify',
+      props: {
+        notify: Map({
+          reply_to: lastActivityIndex,
+          notification_type: lastActivity.get('notification_type'),
+          assignees: List([lastActivity.get('done_by')]),
+        }),
+        goalId: helper.getId(),
+      },
+    });
+  }
   onClickAttachment(hI, i) {
     const { goal, preview, target } = this.props;
     const helper = this.getHelper();
-    const lastActivty = helper.getLastActivity();
-    const flag = lastActivty.getIn(['flags', i]);
+    const lastActivity = helper.getLastActivity();
+    const flag = lastActivity.getIn(['flags', i]);
     const att = goal.getIn(['attachments', flag]);
     const selection = window.getSelection();
 
@@ -147,8 +165,21 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+  onStepWillComplete() {
+    this.setLoading('completing');
+  }
+  onStepDidFailComplete() {
+    this.clearLoading('completing');
+  }
   onStepDidComplete(handoff) {
+    this.clearLoading('completing');
     this.setState({ handoff });
+  }
+  onBarClick(e) {
+    const helper = this.getHelper();
+    if (this.stepList) {
+      this.stepList.onStepCheck(helper.getCurrentStepIndex(), e);
+    }
   }
   onCloseHandoff() {
     this.setState({ handoff: null });
@@ -175,10 +206,6 @@ class HOCGoalOverview extends PureComponent {
   }
   onNotify(e) {
     this.onChooseNotificationType(e, false);
-  }
-  onBarClick(e) {
-    const helper = this.getHelper();
-    this.onStepCheck(helper.getCurrentStepIndex(), e);
   }
   onContext(e) {
     const {
@@ -213,6 +240,9 @@ class HOCGoalOverview extends PureComponent {
         delegate,
       },
     });
+  }
+  viewDidLoad(stepList) {
+    this.stepList = stepList;
   }
   getOptionsForE(e) {
     if (e && e.boundingRect) {

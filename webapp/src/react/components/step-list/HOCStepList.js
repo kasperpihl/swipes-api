@@ -23,6 +23,9 @@ class HOCStepList extends PureComponent {
       this.setState({ steps: helper.getOrderedSteps() });
     }
   }
+  componentDidMount() {
+    this.callDelegate('viewDidLoad', this);
+  }
   onStepAdd(title) {
     const { addStep, goal } = this.props;
     this.setLoading('add', 'Adding...');
@@ -74,8 +77,9 @@ class HOCStepList extends PureComponent {
     });
     e.stopPropagation();
   }
-  onStepCheck(i) {
-    const { completeStep, goal } = this.props;
+  onStepCheck(i, e) {
+    const { completeStep, goal, confirm } = this.props;
+    const options = this.getOptionsForE(e);
     const helper = this.getHelper();
     const currentI = helper.getCurrentStepIndex();
     const handoff = {
@@ -83,7 +87,7 @@ class HOCStepList extends PureComponent {
       backward: (i < currentI),
       fromId: helper.getCurrentStepId(),
     };
-    this.setLoading('completing', `${i}`);
+    const loadingI = i;
     if (i >= currentI) {
       i += 1;
     }
@@ -95,14 +99,32 @@ class HOCStepList extends PureComponent {
       // If the goal was completed, and undo some steps.
       handoff.backward = true;
     }
-    completeStep(goal.get('id'), nextStepId).then((res) => {
-      if (res && res.ok) {
-        this.clearLoading('completing');
-        this.callDelegate('onStepDidComplete', handoff);
-      } else {
-        this.clearLoading('completing', '!Something went wrong');
-      }
-    });
+    const completeHandler = () => {
+      this.setLoading('completing', `${loadingI}`);
+      this.callDelegate('onStepWillComplete', handoff);
+      completeStep(goal.get('id'), nextStepId).then((res) => {
+        if (res && res.ok) {
+          this.clearLoading('completing');
+          this.callDelegate('onStepDidComplete', handoff);
+        } else {
+          this.callDelegate('onStepDidFailComplete', handoff);
+          this.clearLoading('completing', '!Something went wrong');
+        }
+      });
+    };
+
+    if (handoff.backward) {
+      confirm(Object.assign({}, options, {
+        title: 'Make an iteration',
+        message: 'Do you want uncheck these steps and redo them',
+      }), (res) => {
+        if (res === 1) {
+          completeHandler();
+        }
+      });
+    } else {
+      completeHandler();
+    }
   }
   getHelper(overrideGoal) {
     const { goal, myId } = this.props;

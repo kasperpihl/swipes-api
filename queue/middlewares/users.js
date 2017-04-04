@@ -18,7 +18,7 @@ const usersGetSingleWithOrganizations = (req, res, next) => {
       return next(err);
     });
 };
-const usersGetMultipleEmails = (req, res, next) => {
+const usersGetMultipleWithFields = (req, res, next) => {
   const {
     user_ids,
   } = res.locals;
@@ -41,5 +41,5 @@ const usersGetMultipleEmails = (req, res, next) => {
 
 export {
   usersGetSingleWithOrganizations,
-  usersGetMultipleEmails,
+  usersGetMultipleWithFields,
 };

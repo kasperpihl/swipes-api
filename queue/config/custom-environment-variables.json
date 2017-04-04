@@ -2,5 +2,6 @@
   "valjs_debug": "SW_VALJS_DEBUG",
   "mandrill": {
     "apiKey": "SW_MANDRILL_API_KEY"
-  }
+  },
+  "s3BucketUrl": "SW_S3_BUCKET_URL"
 }

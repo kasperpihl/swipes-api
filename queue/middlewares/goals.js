@@ -54,21 +54,13 @@ const goalsNotifyAddSenderAlways = (req, res, next) => {
 };
 const goalsNotifyAdditionalData = (req, res, next) => {
   const {
-    goal,
-    notification_type,
+    // T_TODO delete the default value.. it's only for backward compatibility for now
+    notification_type = null,
     reply_to,
-    historyIndex,
     notificationData,
   } = res.locals;
-  const historyItem = goal.history[historyIndex];
-  const request = historyItem.request;
 
-  if (request) {
-    notificationData.request = true;
-  } else {
-    notificationData.notification = true;
-  }
-
+  notificationData.meta.notification = true;
   notificationData.meta.notification_type = notification_type;
   notificationData.meta.reply_to = reply_to;
 

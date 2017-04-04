@@ -555,6 +555,7 @@ const goalsNotifyEmailQueueMessage = valLocals('goalsNotifyEmailQueueMessage', {
   goal_id: string.require(),
   assignees: array.of(string).require(),
   notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  notificationGroupId: string.require(),
   reply_to: number,
 }, (req, res, next, setLocals) => {
   const {
@@ -562,6 +563,7 @@ const goalsNotifyEmailQueueMessage = valLocals('goalsNotifyEmailQueueMessage', {
     goal_id,
     assignees,
     notification_type,
+    notificationGroupId,
     reply_to = null,
   } = res.locals;
   const queueMessage = {
@@ -569,6 +571,7 @@ const goalsNotifyEmailQueueMessage = valLocals('goalsNotifyEmailQueueMessage', {
     goal_id,
     notification_type,
     reply_to,
+    group_id: notificationGroupId,
     user_ids: assignees,
     event_type: 'goal_notify_email',
   };

@@ -125,7 +125,9 @@ class NotificationItem extends Component {
     if (!n.get('reply')) {
       return undefined;
     }
-
+    if (n.get('reply') === 'replied') {
+      return 'Replied';
+    }
     return <Button text="Reply" primary small onClick={this.onReply} />;
   }
   render() {

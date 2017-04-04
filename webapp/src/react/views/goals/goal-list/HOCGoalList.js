@@ -33,13 +33,13 @@ class HOCGoalList extends PureComponent {
     this.state = {
       tabIndex: 0,
       tabs: fromJS([{
-        title: 'Current',
+        title: 'My current',
         filter: {
           user: 'me',
           goalType: 'current',
         },
       }, {
-        title: 'Upcoming',
+        title: 'Next',
         filter: {
           user: 'me',
           goalType: 'upcoming',
@@ -291,9 +291,9 @@ class HOCGoalList extends PureComponent {
   renderHeader() {
     return (
       <div className="goals-list__header">
-        <HOCHeaderTitle title="Goals">
+        <HOCHeaderTitle title="Team goals">
           <Button
-            text="Add Goal"
+            text="Add a goal"
             primary
             {...this.getLoading('add')}
             onClick={this.onAddGoal}

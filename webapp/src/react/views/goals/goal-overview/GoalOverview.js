@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate, truncateString } from 'swipes-core-js/classes/utils';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import SWView from 'SWView';
@@ -50,17 +51,19 @@ class GoalOverview extends PureComponent {
     let personString = 'the next person';
     const assignees = helper.getAssigneesForStepId(handoff.toId);
     if (assignees.size) {
-      personString = msgGen.users.getNames(assignees, {
-        yourself: true,
-        number: 3,
-      });
+      personString = (
+        <b>“{msgGen.users.getNames(assignees, {
+          yourself: true,
+          number: 3,
+        })}”</b>
+    );
     }
     if (handoff.backward) {
       const title = truncateString(toStep.get('title'), 19);
       return (
         <span>
-          Alright {myName}, <b>“{title}”</b> needs some changes.<br />
-          Send a message to <b>“{personString}”</b> about what needs to be done.
+          Alright, {myName}. <b>“{title}”</b> needs some changes.<br />
+          Send a message to {personString} on what needs to be done.
         </span>
       );
     }
@@ -68,8 +71,8 @@ class GoalOverview extends PureComponent {
     const title = titles.size > 1 ? `${titles.size} steps` : truncateString(titles.get(0), 19);
     return (
       <span>
-        Great progress {myName}! You completed <b>“{title}”</b><br />
-        Send a message to <b>“{personString}”</b>, about how to take it from here.
+        Great progress, {myName}! You completed <b>“{title}”</b><br />
+        Send a message to {personString} on how to take it from here.
       </span>
     );
   }
@@ -83,7 +86,7 @@ class GoalOverview extends PureComponent {
       <div className="add-goal__header">
         <HOCHeaderTitle
           title={title || goal.get('title')}
-          subtitle="Started 2 days ago"
+          subtitle={`Started ${timeAgo(goal.get('created_at'))} by ${msgGen.users.getName(goal.get('created_by'))}`}
           delegate={delegate}
         >
           <Button
@@ -158,6 +161,7 @@ class GoalOverview extends PureComponent {
       <div className="goal-overview__column goal-overview__column--left">
         <Section title={title} actions={this.renderStepListEditButton()} />
         <HOCStepList
+          ref="stepList"
           goalId={helper.getId()}
           delegate={delegate}
           editMode={editMode}

@@ -235,10 +235,10 @@ class HOCAttachments extends PureComponent {
         >
           New Note
         </button>
-        <label className="attachments__add-item">
+        {/* <label className="attachments__add-item">
           Upload
           <input type="file" multiple onChange={this.onChangeFiles} />
-        </label>
+        </label>*/}
         <div className="attachments__loader" />
       </div>
     );

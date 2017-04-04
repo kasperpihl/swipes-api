@@ -73,7 +73,9 @@ const goal_notify = notifyWrapper([
 ]);
 
 const goal_notify_email = [
-  users.usersGetMultipleEmails,
+  users.usersGetSingleWithOrganizations,
+  goals.goalsGetSingle,
+  users.usersGetMultipleWithFields,
   emails.goalsNotifySendEmails,
 ];
 
