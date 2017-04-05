@@ -148,10 +148,10 @@ const goalsNotifySendEmails = (req, res, next) => {
   const message = {
     to,
     subject,
-    from_email: 'team@swipesapp.com',
+    from_email: 'noreply@swipesapp.com',
     from_name: 'Swipes Team',
     headers: {
-      'Reply-To': 'team@swipesapp.com',
+      'Reply-To': 'noreply@swipesapp.com',
     },
     important: false,
     merge: true,
