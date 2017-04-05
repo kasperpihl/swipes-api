@@ -472,7 +472,7 @@ const goalsNotify = valLocals('goalsNotify', {
   flags: array.of(string),
   message: string,
   notificationGroupId: string.require(),
-  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  notification_type: any.of('feedback', 'update', 'assets', 'decision'),
   request: bool,
   reply_to: number,
 }, (req, res, next, setLocals) => {
@@ -522,7 +522,7 @@ const goalsNotifyQueueMessage = valLocals('goalsNotifyQueueMessage', {
   goal_id: string.require(),
   assignees: array.of(string).require(),
   notificationGroupId: string.require(),
-  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  notification_type: any.of('feedback', 'update', 'assets', 'decision'),
   reply_to: number,
 }, (req, res, next, setLocals) => {
   const {
@@ -554,7 +554,7 @@ const goalsNotifyEmailQueueMessage = valLocals('goalsNotifyEmailQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   assignees: array.of(string).require(),
-  notification_type: any.of('feedback', 'status', 'assets', 'decision'),
+  notification_type: any.of('feedback', 'update', 'assets', 'decision'),
   notificationGroupId: string.require(),
   reply_to: number,
 }, (req, res, next, setLocals) => {

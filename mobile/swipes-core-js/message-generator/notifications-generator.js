@@ -55,6 +55,7 @@ export default class NotificationsGenerator {
     if (h) {
       return h.get('message');
     }
+    return undefined;
   }
   getIcon(n) {
     return this.parent.history.getIcon(n);

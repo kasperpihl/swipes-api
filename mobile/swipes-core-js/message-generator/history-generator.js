@@ -73,12 +73,12 @@ export default class HistoryGenerator {
         });
         const type = h.get('notification_type') || h.getIn(['meta', 'notification_type']);
         if (h.get('request')) {
-          if (type === 'status') return `${from} asked ${to} for a status update`;
+          if (type === 'update') return `${from} asked ${to} for an update`;
           else if (type === 'feedback') return `${from} asked ${to} for feedback`;
           else if (type === 'assets') return `${from} asked ${to} for assets`;
           else if (type === 'decision') return `${from} asked ${to} for a decision`;
         }
-        if (type === 'status') return `${from} gave ${to} a status update`;
+        if (type === 'update') return `${from} gave ${to} an update`;
         else if (type === 'feedback') return `${from} gave ${to} feedback`;
         else if (type === 'assets') return `${from} gave ${to} assets`;
         else if (type === 'decision') return `${from} gave ${to} a decision`;
@@ -131,7 +131,14 @@ export default class HistoryGenerator {
         return 'ActivityCheckmark';
 
       case 'goal_notify':
-        return 'GotNotified';
+        switch (h.get('notification_type') || h.getIn(['meta', 'notification_type'])) {
+          case 'update': return 'Status';
+          case 'feedback': return 'Feedback';
+          case 'assets': return 'Assets';
+          case 'decision': return 'Decision';
+          default: return 'GotNotified';
+        }
+
 
       default:
         return 'GotNotified';
