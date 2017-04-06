@@ -43,8 +43,8 @@ class HOCAssigning extends PureComponent {
   render() {
     const { maxImages } = this.props;
     const { stateAssignees } = this.state;
-
-    return <Assignees maxImages={maxImages} assignees={stateAssignees} />
+    console.log(stateAssignees.toJS());
+    return <Assignees maxImages={maxImages} assignees={stateAssignees} />;
   }
 }
 

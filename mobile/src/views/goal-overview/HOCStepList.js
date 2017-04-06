@@ -1,11 +1,20 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import { colors } from '../../utils/globalStyles';
+import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
+import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 
-class HOCStepList extends Component {
-  renderSteps(step, secI, i, completed, delegate) {
+class HOCStepList extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  completeStep() {
+    console.log('complete step');
+  }
+  renderSteps(step, secI, i, completed) {
     const completedI = completed - 1;
     const currentStepIndex = completed;
     let indicatorStyles;
@@ -27,18 +36,23 @@ class HOCStepList extends Component {
     }
 
     return (
-      <View style={styles.step}>
-        <View style={[styles.indicator, indicatorStyles]}>
-          <Text style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
+      <FeedbackButton onPress={this.completeStep}>
+        <View style={styles.step}>
+          <View style={[styles.indicator, indicatorStyles]}>
+            <Text style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
+          </View>
+          <View style={styles.title}>
+            <Text style={[styles.titleLabel, titleStyles]}>{step.get('title')}</Text>
+          </View>
+          <View style={styles.assignees}>
+            <HOCAssigning assignees={step.get('assignees')} />
+          </View>
         </View>
-        <View style={styles.title}>
-          <Text style={[styles.titleLabel, titleStyles]}>{step.get('title')}</Text>
-        </View>
-        <View style={styles.assignees}>
-          <HOCAssigning assignees={step.get('assignees')} />
-        </View>
-      </View>
+      </FeedbackButton>
     );
+  }
+  renderFooter() {
+    return <EmptyListFooter />;
   }
   render() {
     const { steps, completed, delegate } = this.props;
@@ -48,6 +62,7 @@ class HOCStepList extends Component {
         <ImmutableListView
           immutableData={steps}
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex, completed, delegate)}
+          renderFooter={this.renderFooter}
         />
       </View>
     );

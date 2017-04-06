@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 're
 import { connect } from 'react-redux';
 import { attachmentIconForService } from '../../../swipes-core-js/classes/utils';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
+import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 import Icon from '../../components/icons/Icon';
 import { colors, viewSize } from '../../utils/globalStyles';
 

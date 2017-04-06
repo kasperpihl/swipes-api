@@ -4,6 +4,7 @@ import NotificationItem from './NotificationItem';
 import { colors, viewSize } from '../../utils/globalStyles';
 import ImmutableListView from 'react-native-immutable-list-view';
 import Header from '../../components/header/Header';
+import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -34,11 +35,15 @@ class Dashboard extends Component {
       <ImmutableListView
         immutableData={notifications}
         renderRow={rowData => this.renderRow(rowData, delegate)}
+        renderFooter={this.renderFooter}
       />
     );
   }
   renderRow(rowData, delegate) {
     return <NotificationItem notification={rowData} delegate={delegate} />;
+  }
+  renderFooter() {
+    return <EmptyListFooter />;
   }
   render() {
     return (

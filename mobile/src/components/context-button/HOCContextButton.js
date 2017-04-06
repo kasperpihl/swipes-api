@@ -42,7 +42,6 @@ class HOCContextButton extends PureComponent {
     );
   }
   renderIconButton(key, button, onPress) {
-    console.log(button);
     return (
       <FeedbackButton onPress={onPress} key={key} >
         <View style={styles.iconButton}>
@@ -59,7 +58,7 @@ class HOCContextButton extends PureComponent {
     if (activeRoutes.size > 1) {
       return this.renderIconButton('nav', { icon: 'ArrowLeftLine' }, this.onPop);
     }
-    return this.renderIconButton('nav', { icon: 'Close' });
+    return this.renderIconButton('nav', { icon: 'Burger' });
   }
   renderButtons() {
     const { actionButtons } = this.props;

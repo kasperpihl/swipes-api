@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton';
-import { viewSize } from '../../utils/globalStyles';
 import Header from '../../components/header/Header';
 import HOCHistory from './HOCHistory';
 import HOCStepList from './HOCStepList';
@@ -45,6 +43,29 @@ class HOCGoalOverview extends PureComponent {
   //     this.setState({ hideButton: newHideButton });
   //   }
   // }
+  openNotify() {
+    const { navPush, goal } = this.props;
+
+    const notify = {
+      id: 'Notify',
+      props: {
+        title: 'Ask for',
+        goalId: goal.get('id'),
+      },
+    };
+
+    navPush(notify);
+  }
+  onActionButton(i) {
+    if (i === 0) {
+      this.openNotify();
+    }
+  }
+  onChangeTab(index) {
+    if (index !== this.state.tabIndex) {
+      this.setState({ tabIndex: index });
+    }
+  }
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);
@@ -54,20 +75,12 @@ class HOCGoalOverview extends PureComponent {
 
     navPop();
   }
-  onActionButton(i) {
-    console.log(' 2222 action!', i);
-  }
-  onChangeTab(index) {
-    if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index });
-    }
-  }
   renderActionButtons() {
     this.props.setActionButtons({
       onClick: this.onActionButton,
       buttons: [
-        { text: 'Add a goal' },
-        { icon: 'ThreeDots' },
+        { text: 'Ask for' },
+        { text: 'Give' },
       ],
     });
   }
@@ -76,7 +89,7 @@ class HOCGoalOverview extends PureComponent {
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getTotalNumberOfSteps();
-    const tabs = ['Activity', `Steps(${numberOfCompleted}/${totalSteps})`, `Attachments(${goal.get('attachment_order').size})`];
+    const tabs = [`Steps(${numberOfCompleted}/${totalSteps})`, 'Activity', `Attachments(${goal.get('attachment_order').size})`];
 
     return (
       <Header title={goal.get('title')} tabs={tabs} currentTab={this.state.tabIndex} delegate={this} />
@@ -90,10 +103,12 @@ class HOCGoalOverview extends PureComponent {
     );
   }
   renderStepList() {
+    const { goal } = this.props;
     const helper = this.getHelper();
 
     return (
       <HOCStepList
+        goal={goal}
         steps={helper.getOrderedSteps()}
         completed={helper.getNumberOfCompletedSteps()}
         delegate={this}
@@ -114,13 +129,12 @@ class HOCGoalOverview extends PureComponent {
     const { tabIndex } = this.state;
 
     if (tabIndex === 0) {
+      return this.renderStepList();
+    } else if (tabIndex === 1) {
       return this.renderActivity();
+    } else if (tabIndex === 2) {
+      return this.renderAttachments();
     }
-    // else if (tabIndex === 1) {
-    //   return this.renderStepList();
-    // } else if (tabIndex === 2) {
-    //   return this.renderAttachments();
-    // }
   }
   render() {
     return (

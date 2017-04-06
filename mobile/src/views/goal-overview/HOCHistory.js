@@ -1,13 +1,12 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Linking, Dimensions } from 'react-native';
+import { View, StyleSheet, Linking, Dimensions, ActivityIndicator } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
-import { fromJS, Map } from 'immutable';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import { timeAgo } from '../../../swipes-core-js/classes/time-utils';
 import NotificationItem from '../dashboard/NotificationItem';
-import { viewSize, colors } from '../../utils/globalStyles';
+import { colors } from '../../utils/globalStyles';
+import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
 const { width: ww, height: wh } = Dimensions.get('window');
 
@@ -67,6 +66,13 @@ class HOCHistory extends PureComponent {
       Linking.openURL(service.get('id'));
     }
   }
+  renderListLoader() {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
+  }
   renderEvent(event, me, ctx) {
     if (event.get('type') === 'notified') {
       if (event.get('assignees').indexOf(me.get('id')) === -1 && event.get('done_by') !== me.get('id')) {
@@ -76,10 +82,13 @@ class HOCHistory extends PureComponent {
 
     return <NotificationItem notification={event} delegate={ctx} />;
   }
+  renderFooter() {
+    return <EmptyListFooter />;
+  }
   renderList() {
     const { hasRendered } = this.state;
     if (!hasRendered) {
-      return undefined;
+      return this.renderListLoader();
     }
     const { goal, me } = this.props;
     const history = goal.get('history');
@@ -98,6 +107,7 @@ class HOCHistory extends PureComponent {
         removeClippedSubviews={false}
         immutableData={events}
         renderRow={event => this.renderEvent(event, me, this)}
+        renderFooter={this.renderFooter}
       />
     );
   }
@@ -114,6 +124,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.bgColor,
+  },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loader: {
+    marginTop: -60,
   },
 });
 

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
-import Tabs from 'react-native-tabs';
 import Header from '../../components/header/Header';
-import { viewSize, colors } from '../../utils/globalStyles';
+import { colors } from '../../utils/globalStyles';
 import HOCGoalItem from './HOCGoalItem';
+import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
 class HOCGoalList extends Component {
   constructor(props) {
@@ -13,17 +13,27 @@ class HOCGoalList extends Component {
     this.state = {
       tabs: ['current', 'upcoming', 'unstarted'],
       tabIndex: 0,
+      hasLoaded: false,
     };
 
     this.renderGoal = this.renderGoal.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
   }
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+
     if (this.props.isActive) {
       this.renderActionButtons();
     }
   }
   componentDidUpdate(prevProps) {
+    if (!this.state.hasLoaded) {
+      setTimeout(() => {
+        this.setState({ hasLoaded: true });
+      }, 1);
+    }
     if (!prevProps.isActive && this.props.isActive) {
       this.renderActionButtons();
     }
@@ -35,7 +45,7 @@ class HOCGoalList extends Component {
   }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index });
+      this.setState({ tabIndex: index, hasLoaded: false });
     }
   }
   onActionButton(i) {
@@ -65,22 +75,39 @@ class HOCGoalList extends Component {
     return <HOCGoalItem goalId={gId} filterId={filterId} delegate={this} />;
   }
   renderFooter() {
-    return <View style={styles.footer} />;
+    return <EmptyListFooter />;
   }
-  render() {
-    const { filters, onPopRoute, onPushRoute, sceneProps } = this.props;
-    const { tabIndex, tabs } = this.state;
+  renderListLoader() {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
+  }
+  renderList() {
+    const { tabIndex, tabs, hasLoaded } = this.state;
+    const { filters } = this.props;
+
+    if (!hasLoaded) {
+      return this.renderListLoader();
+    }
+
     const goals = filters.getIn([tabs[tabIndex], 'goals']);
 
+    return (
+      <ImmutableListView
+        immutableData={goals}
+        renderRow={gId => this.renderGoal(gId, tabs[tabIndex])}
+        renderFooter={this.renderFooter}
+      />
+    );
+  }
+  render() {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
         <View style={styles.list}>
-          <ImmutableListView
-            immutableData={goals}
-            renderRow={gId => this.renderGoal(gId, tabs[tabIndex])}
-            renderFooter={this.renderFooter}
-          />
+          {this.renderList()}
         </View>
       </View>
     );
@@ -95,9 +122,13 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
-  footer: {
-    width: viewSize.width,
-    height: 112,
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loader: {
+    marginTop: -60,
   },
 });
 

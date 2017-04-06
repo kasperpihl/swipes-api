@@ -1,13 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Linking } from 'react-native';
 import { connect } from 'react-redux';
-import { Map, fromJS } from 'immutable';
-import { timeAgo } from '../../../swipes-core-js/classes/time-utils';
-import { viewSize } from '../../utils/globalStyles';
 import Dashboard from './Dashboard';
-import InternalWebview from '../webview/InternalWebview';
-import HOCGoalList from '../goallist/HOCGoalList';
-
 
 const styles = StyleSheet.create({
   container: {
@@ -25,36 +19,42 @@ class HOCDashboard extends PureComponent {
     if (props.notifications) {
       this.state.notifications = this.getFilteredNotifications(props.notifications);
     }
+
+    this.onActionButton = this.onActionButton.bind(this);
+  }
+  componentDidMount() {
+    if (this.props.isActive) {
+      this.renderActionButtons();
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.isActive && this.props.isActive) {
+      this.renderActionButtons();
+    }
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.notifications !== this.props.notifications) {
       this.setState({ notifications: this.getFilteredNotifications(nextProps.notifications) });
     }
   }
+  onActionButton(i) {
+    console.log('action!', i);
+  }
   openLink(att) {
-    const { onPushRoute } = this.props;
     const link = att.get('link') || att;
     const service = link.get('service') || link;
     if (att && service.get('type') === 'url') {
-      // Using linking instead of webview at the moment;
-
       Linking.openURL(service.get('id'));
-
-      // const webView = {
-      //   component: InternalWebview,
-      //   title: service.get('id'),
-      //   key: service.get('id'),
-      //   props: {
-      //     url: service.get('id'),
-      //     title: service.get('id')
-      //   }
-      // };
-
-      // onPushRoute(webView);
     }
   }
   getFilteredNotifications(notifications) {
     return notifications.filter(this.state.filter);
+  }
+  renderActionButtons() {
+    this.props.setActionButtons({
+      onClick: this.onActionButton,
+      buttons: [{ text: 'Mark All as Read' }],
+    });
   }
   render() {
     let { notifications: n } = this.state;

@@ -5,8 +5,7 @@ import HOCAssigning from '../../components/assignees/HOCAssigning';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import HOCGoalOverview from '../goal-overview/HOCGoalOverview';
-import { colors, viewSize } from '../../utils/globalStyles';
+import { colors } from '../../utils/globalStyles';
 
 class HOCGoalItem extends PureComponent {
   constructor(props) {
@@ -26,6 +25,7 @@ class HOCGoalItem extends PureComponent {
         title: goal.get('title'),
       },
     };
+
     this.callDelegate('onPushStack', overview);
   }
   renderContent() {
