@@ -60,7 +60,7 @@ const goalsNotifyAdditionalData = (req, res, next) => {
     notificationData,
   } = res.locals;
 
-  notificationData.meta.notification = true;
+  notificationData.notification = true;
   notificationData.meta.notification_type = notification_type;
   notificationData.meta.reply_to = reply_to;
 

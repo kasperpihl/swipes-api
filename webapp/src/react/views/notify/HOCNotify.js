@@ -26,7 +26,7 @@ class HOCNotify extends PureComponent {
         assignees: notify.get('assignees') || [],
         message: notify.get('message') || '',
         request: notify.get('request') || false,
-        notification_type: notify.get('notification_type') || 'status',
+        notification_type: notify.get('notification_type') || 'update',
       }),
     };
 

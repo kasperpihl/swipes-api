@@ -135,7 +135,7 @@ class HOCGoalOverview extends PureComponent {
     const getSub = msgGen.notify.getNotifyPopupSubtitle.bind(null, request);
 
     const items = [
-      { title: 'Status', icon: 'Status', subtitle: getSub('status') },
+      { title: 'Update', icon: 'Status', subtitle: getSub('update') },
       { title: 'Feedback', icon: 'Feedback', subtitle: getSub('feedback') },
       { title: 'Assets', icon: 'Assets', subtitle: getSub('assets') },
       { title: 'Decision', icon: 'Decision', subtitle: getSub('decision') },
@@ -195,7 +195,7 @@ class HOCGoalOverview extends PureComponent {
         assignees = helper.getAssigneesForStepId(handoff.toId);
       }
       this.onOpenNotify(fromJS({
-        notification_type: 'status',
+        notification_type: 'update',
         assignees: assignees || [me.get('id')],
       }));
       this.setState({ handoff: null });

@@ -12,25 +12,25 @@ const mandrillConfig = config.get('mandrill');
 const mandrill_client = new mandrill.Mandrill(mandrillConfig.apiKey);
 const notificationIconsMap = {
   feedback: `${s3BucketUrl}email_icons/swipes-email-icon-feedback.png`,
-  status: `${s3BucketUrl}email_icons/swipes-email-icon-status.png`,
+  update: `${s3BucketUrl}email_icons/swipes-email-icon-status.png`,
   assets: `${s3BucketUrl}email_icons/swipes-email-icon-assets.png`,
   decision: `${s3BucketUrl}email_icons/swipes-email-icon-decision.png`,
 };
 const notificationRequestLabels = {
   feedback: 'asks for your feedback',
-  status: 'asks you for status',
+  update: 'asks you for an update',
   assets: 'asks you for assets',
   decision: 'asks you for a decision',
 };
 const notificationGiveLabels = {
   feedback: 'gave you feedback',
-  status: 'sent you status',
+  update: 'sent you an update',
   assets: 'sent you assets',
   decision: 'sent you a decision',
 };
 const notificationReplyLabels = {
   feedback: 'sent you back feedback',
-  status: 'sent you back status',
+  update: 'sent you back an update',
   assets: 'sent you back assets',
   decision: 'sent you back a decision',
 };
@@ -148,10 +148,10 @@ const goalsNotifySendEmails = (req, res, next) => {
   const message = {
     to,
     subject,
-    from_email: 'team@swipesapp.com',
+    from_email: 'noreply@swipesapp.com',
     from_name: 'Swipes Team',
     headers: {
-      'Reply-To': 'team@swipesapp.com',
+      'Reply-To': 'noreply@swipesapp.com',
     },
     important: false,
     merge: true,

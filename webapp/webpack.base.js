@@ -23,7 +23,7 @@ module.exports = {
       'context-menus': path.resolve(__dirname, 'src/react/context-menus'),
       components: path.resolve(__dirname, 'src/react/components'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),
-      'swipes-core-js': path.resolve(__dirname, 'src/swipes-core-js'),
+      'swipes-core-js': path.resolve(__dirname, 'src/../../mobile/swipes-core-js'),
       icons: path.resolve(__dirname, 'src/react/icons'),
       actions: path.resolve(__dirname, 'src/actions'),
       views: path.resolve(__dirname, 'src/react/views'),

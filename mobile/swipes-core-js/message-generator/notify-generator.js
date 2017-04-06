@@ -13,9 +13,9 @@ export default class Notify {
           return 'Ask for information';
         case 'decision':
           return 'Ask for decision';
-        case 'status':
+        case 'update':
         default:
-          return 'Ask for status update';
+          return 'Ask for an update';
       }
     }
     switch (type) {
@@ -25,22 +25,22 @@ export default class Notify {
         return 'Give assets';
       case 'decision':
         return 'Give a decision';
-      case 'status':
+      case 'update':
       default:
-        return 'Give status update';
+        return 'Give an update';
     }
   }
   getNotifyPopupSubtitle(isRequest, type) {
     if (isRequest) {
       return {
-        status: 'Ask your teammates for an update',
+        update: 'Ask your teammates for an update',
         feedback: 'Gather feedback from the team',
         assets: 'Request additional information',
         decision: 'Ask for a choice or a decision',
       }[type];
     }
     return {
-      status: 'Give your teammates an update',
+      update: 'Give your teammates an update',
       feedback: 'Share your feedback on this goal',
       assets: 'Notify your teammates about new information',
       decision: 'Let your teammates know about a decisions',
@@ -53,7 +53,7 @@ export default class Notify {
         case 'feedback':
         case 'assets':
         case 'decision':
-        case 'status':
+        case 'update':
         default:
       }
     }
@@ -61,7 +61,7 @@ export default class Notify {
       case 'feedback':
       case 'assets':
       case 'decision':
-      case 'status':
+      case 'update':
       default:
     }
   }
@@ -75,7 +75,7 @@ export default class Notify {
           return 'Ask your teammates for additional information. Let them know why you need this file or document and how it will help you move forward.';
         case 'decision':
           return 'Share your work and ask your teammates to take a decision.';
-        case 'status':
+        case 'update':
         default:
           return 'Ask your teammates for an update and if you refer to a file.';
 
@@ -89,7 +89,7 @@ export default class Notify {
         return 'Notify your teammates if you have updated a note or added any new uploads and files. This will help everyone stay aligned on the latest progress.';
       case 'decision':
         return 'Let your teammates know about a decision.';
-      case 'status':
+      case 'update':
       default:
         return 'Give your teammates an update. What is the latest on this step and the goal?';
     }
