@@ -78,12 +78,12 @@ class HOCProfile extends PureComponent {
           className="profile__button profile__button--services"
           onClick={this.onInvite}
         />
-        <Button
+        {/*<Button
           primary
           text="Services"
           className="profile__button profile__button--services"
           onClick={this.clickedServices}
-        />
+        />*/}
         <Button
           icon="Logout"
           loading={isLoggingOut}

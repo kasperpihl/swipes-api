@@ -134,8 +134,8 @@ class NotificationItem extends Component {
     const { notification: n, delegate } = this.props;
     let className = 'notification';
 
-    if (n.get('seen_at')) {
-      className += ' notification--seen';
+    if (n.get('unseen')) {
+      className += ' notification--unseen';
     }
 
     if (typeof delegate.onClickTitle === 'function' && !n.get('noClickTitle')) {

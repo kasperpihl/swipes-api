@@ -11,7 +11,7 @@
 
   @include size(100%, auto);
   @include heightSpecifications(66px, initial);
-  @include flexContainer('row', left, stretch, $flexIgnoreList);  
+  @include flexContainer('row', left, stretch, $flexIgnoreList);
   padding: 21px 0;
   border-bottom: 1px solid $deepBlue-5;
   overflow: hidden;
@@ -54,7 +54,7 @@
   }
 
   &__right {
-    @include size(auto, 100%);    
+    @include size(auto, 100%);
     @include flexContainer('column', right, between);
   }
 }
@@ -78,7 +78,7 @@
     @include size(30px);
     @include centerAbsolute();
     @include flexContainer('row', center, center);
-    background-color: $blue-80;
+    background-color: $deepBlue-30;
     border-radius: 50%;
     overflow: hidden;
     transition: .2s ease;
@@ -170,9 +170,9 @@
 .notification {
   $b: &;
 
-  &--seen {
+  &--unseen {
     #{$b}__icon {
-      background-color: $deepBlue-30;
+      background-color: $blue-80;
     }
   }
 

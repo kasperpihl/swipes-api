@@ -18,7 +18,7 @@ export default class NotificationsGenerator {
       subtitle: this.getSubtitle(notification, history),
       request: !!notification.get('request'),
       icon: this.getIcon(notification),
-      seen_at: notification.get('seen_at'),
+      unseen: notification.get('notification') && !notification.get('seen_at'),
       userId: notification.get('done_by'),
     });
 
