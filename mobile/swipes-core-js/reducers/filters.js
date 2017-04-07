@@ -8,7 +8,7 @@ const initialState = fromJS({
   goals: {
     current: {
       id: 'current',
-      title: 'Current',
+      title: 'My current',
       filter: {
         userId: 'me',
         goalType: 'current',
@@ -17,18 +17,19 @@ const initialState = fromJS({
     },
     upcoming: {
       id: 'upcoming',
-      title: 'Upcoming',
+      title: 'Next',
       filter: {
         userId: 'me',
         goalType: 'upcoming',
       },
       goals: OrderedSet(),
     },
-    unstarted: {
-      id: 'unstarted',
-      title: 'Unstarted',
+    unassigned: {
+      id: 'unassigned',
+      title: 'Unassigned',
       filter: {
-        goalType: 'unstarted',
+        goalType: 'current',
+        user: 'none',
       },
       goals: OrderedSet(),
     },
