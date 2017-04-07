@@ -1,13 +1,18 @@
 import aws from 'aws-sdk';
 import config from 'config';
+import mime from 'mime-types';
 import {
   string,
 } from 'valjs';
+import {
+  dbFilesAdd,
+} from './db_utils/files';
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
 import {
   valLocals,
+  generateSlackLikeId,
 } from '../../utils';
 
 const awsConfig = config.get('awsS3');
@@ -48,6 +53,52 @@ const filesGetSignedUrl = valLocals('filesGetSignedUrl', {
   });
 });
 
+const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
+  user_id: string.require(),
+  organization_id: string.require(),
+  file_name: string.require(),
+  s3_name: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization_id,
+    file_name,
+    s3_name,
+  } = res.locals;
+  const fileId = generateSlackLikeId('F', 10);
+  const nameArr = file_name.split('.');
+  const ext = nameArr[nameArr.length - 1];
+  const contentType = mime.lookup(ext) || null;
+
+  dbFilesAdd({ user_id, organization_id, file_name, s3_name, fileId, contentType })
+    .then((results) => {
+      const changes = results.changes[0];
+
+      setLocals({
+        file_id: changes.new_val.id,
+        link: {
+          service: {
+            id: fileId,
+            name: 'swipes',
+            type: 'file',
+          },
+          permission: {
+            account_id: user_id,
+          },
+          meta: {
+            title: file_name,
+          },
+        },
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+
 export {
   filesGetSignedUrl,
+  filesAddToFilesTable,
 };

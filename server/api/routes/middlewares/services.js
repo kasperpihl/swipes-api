@@ -76,7 +76,7 @@ const serviceWithAuthGet = valLocals('serviceWithAuthGet', {
 });
 const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
   link_with_permission: object.as({
-    user_id: string.require(),
+    done_by: string.require(),
     service,
     permission: linkPermission,
   }).require(),
@@ -84,9 +84,21 @@ const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
   const {
     link_with_permission,
   } = res.locals;
-  const user_id = link_with_permission.user_id;
+  const user_id = link_with_permission.done_by;
   const service_name = link_with_permission.service.name;
   const account_id = link_with_permission.permission.account_id;
+
+  setLocals({
+    service_name,
+  });
+
+  if (service_name === 'swipes') {
+    setLocals({
+      service_auth_data: { user_id },
+    });
+
+    return next();
+  }
 
   return dbUsersGetServiceWithAuth({ user_id, service_name, account_id })
     .then((results) => {
@@ -97,7 +109,6 @@ const serviceWithAuthFromLinkGet = valLocals('serviceWithAuthFromLinkGet', {
       const service = results[0];
 
       setLocals({
-        service_name,
         service_auth_data: service.auth_data,
       });
 
@@ -240,7 +251,7 @@ const servicePreview = valLocals('servicePreview', {
   service_auth_data: object.require(),
   service: object.require(),
   link_with_permission: object.as({
-    user_id: string.require(),
+    done_by: string.require(),
     service,
   }).require(),
 }, (req, res, next, setLocals) => {
@@ -254,7 +265,7 @@ const servicePreview = valLocals('servicePreview', {
     auth_data: service_auth_data,
     type: link_with_permission.service.type,
     itemId: link_with_permission.service.id,
-    user: { user_id: link_with_permission.user_id },
+    user: { user_id: link_with_permission.done_by },
   };
 
   return service.preview(options, (err, result) => {

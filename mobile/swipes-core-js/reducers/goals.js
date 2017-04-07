@@ -92,6 +92,7 @@ export default function goalsReducer(state = initialState, action) {
         return g.setIn(['history', hIndex], fromJS(payload.changes));
       });
     }
+    case 'files.upload':
     case 'attachments.add':
     case 'attachment_added': {
       return state.updateIn([payload.target_id], (g) => {

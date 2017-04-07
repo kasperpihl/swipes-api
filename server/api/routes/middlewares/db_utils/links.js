@@ -57,10 +57,11 @@ const addPermissionsToALink = funcWrap([
 
   const permissionPart = shortid.generate();
   const q = r.table('links_permissions').insert({
-    user_id,
     permission,
     id: permissionPart,
     link_id: checksum,
+    created_at: r.now(),
+    done_by: user_id,
   }, {
     returnChanges: true,
   });
@@ -77,7 +78,8 @@ const createLink = funcWrap([
     throw new SwipesError(`createLink: ${err}`);
   }
 
-  insert_doc.last_updated = r.now();
+  insert_doc.created_at = r.now();
+  insert_doc.updated_at = r.now();
 
   const q =
     r.table('links')

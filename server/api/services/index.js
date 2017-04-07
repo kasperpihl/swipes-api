@@ -4,6 +4,7 @@ import * as asana from './asana';
 import * as gmail from './gmail';
 import * as drive from './drive';
 import * as jira from './jira';
+import * as swipes from './swipes';
 
 export {
   slack,
@@ -12,4 +13,5 @@ export {
   gmail,
   drive,
   jira,
+  swipes,
 };

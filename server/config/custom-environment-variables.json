@@ -42,7 +42,8 @@
   "awsS3": {
     "accessKey": "SW_AWSS3_ACCESS_KEY",
     "secretKey": "SW_AWSS3_SECRET_KEY",
-    "bucketName": "SW_AWSS3_BUCKET_NAME"
+    "bucketName": "SW_AWSS3_BUCKET_NAME",
+    "url": "SW_AWSS3_URL"
   },
   "loggly": {
     "token": "SW_LOGGLY_TOKEN",
