@@ -170,7 +170,14 @@ class HOCAttachments extends PureComponent {
   }
   onChangeFiles(e) {
     const { uploadFiles } = this.props;
-    uploadFiles(e.target.files);
+    this.setLoading('adding');
+    uploadFiles(e.target.files).then((res) => {
+      if(res.ok){
+        this.clearLoading('adding')
+      } else {
+        this.clearLoading('adding', '!Something went wrong');
+      }
+    });
   }
   attachToTarget(type, id, title) {
     const linkObj = this.getSwipesLinkObj(type, id, title);
