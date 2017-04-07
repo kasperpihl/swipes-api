@@ -3,7 +3,7 @@ import {
   EditorState,
   CompositeDecorator,
 } from 'draft-js';
-import Subscriber from 'classes/subscriber';
+import Subscriber from 'swipes-core-js/classes/subscriber';
 
 const standardIterators = [
   'blockRendererFn',

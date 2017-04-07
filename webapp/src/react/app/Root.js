@@ -11,7 +11,6 @@ import configureStore from 'src/store/configureStore';
 import { init } from 'swipes-core-js';
 import Analytics from 'classes/analytics';
 import IpcListener from 'classes/ipc-listener';
-import SwipesUrlProvider from 'classes/swipes-url-provider';
 
 const store = configureStore();
 
@@ -22,7 +21,6 @@ const history = syncHistoryWithStore(browserHistory, store, {
 });
 
 
-window.swipesUrlProvider = new SwipesUrlProvider(store);
 
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);

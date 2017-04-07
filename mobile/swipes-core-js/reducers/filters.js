@@ -9,6 +9,7 @@ const initialState = fromJS({
     current: {
       id: 'current',
       title: 'My current',
+      description: 'Goals that is which current current step is assigned to you',
       filter: {
         userId: 'me',
         goalType: 'current',
@@ -18,6 +19,7 @@ const initialState = fromJS({
     upcoming: {
       id: 'upcoming',
       title: 'Next',
+      description: 'Goals that is assigned to you in an upcoming step',
       filter: {
         userId: 'me',
         goalType: 'upcoming',
@@ -27,6 +29,7 @@ const initialState = fromJS({
     unassigned: {
       id: 'unassigned',
       title: 'Unassigned',
+      description: 'Goals that has no steps or is not currently assigned to anyone',
       filter: {
         goalType: 'current',
         userId: 'none',
@@ -36,6 +39,7 @@ const initialState = fromJS({
     default: {
       id: 'default',
       title: 'Filter',
+      description: 'Filter goals to your needs',
       filter: defaultFilter,
       goals: OrderedSet(),
     },

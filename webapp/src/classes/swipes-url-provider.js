@@ -1,5 +1,5 @@
 import { bindAll, debounce } from 'swipes-core-js/classes/utils';
-import Subscriber from 'classes/subscriber';
+import Subscriber from 'swipes-core-js/classes/subscriber';
 import { api } from 'swipes-core-js/actions';
 
 export default class SwipesUrlProvider {

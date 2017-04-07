@@ -31,24 +31,25 @@ class HOCGoalList extends PureComponent {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
     this.state = {
+      tabs: ['current', 'upcoming', 'unassigned', 'default'],
       tabIndex: 0,
       tabs: fromJS([{
         title: 'My current',
         filter: {
-          user: 'me',
+          userId: 'me',
           goalType: 'current',
         },
       }, {
         title: 'Next',
         filter: {
-          user: 'me',
+          userId: 'me',
           goalType: 'upcoming',
         },
       }, {
         title: 'Unassigned',
         filter: {
           goalType: 'current',
-          user: 'none',
+          userId: 'none',
         },
       }, {
         title: 'Filter',
@@ -58,7 +59,7 @@ class HOCGoalList extends PureComponent {
       filterProp: fromJS([
         { id: 'goalType' },
         ' assigned to ',
-        { id: 'user' },
+        { id: 'userId' },
         ' matching ',
         { id: 'matching' },
       ]),
@@ -154,9 +155,9 @@ class HOCGoalList extends PureComponent {
       const { selectGoalType } = this.props;
       selectGoalType(options, res => this.updateFilter({ goalType: res.id }));
     }
-    if (obj.id === 'user') {
+    if (obj.id === 'userId') {
       const { selectUser } = this.props;
-      selectUser(options, res => this.updateFilter({ user: res.id }));
+      selectUser(options, res => this.updateFilter({ userId: res.id }));
     }
     if (obj.id === 'milestone') {
       const { selectMilestone } = this.props;
@@ -239,8 +240,8 @@ class HOCGoalList extends PureComponent {
 
       if (p.get('id') === 'goalType') {
         newString = msgGen.goals.getType(filter.get('goalType'));
-      } else if (p.get('id') === 'user') {
-        newString = msgGen.users.getName(filter.get('user'));
+      } else if (p.get('id') === 'userId') {
+        newString = msgGen.users.getName(filter.get('userId'));
       } else if (p.get('id') === 'milestone') {
         return p.set('string', msgGen.milestones.getName(filter.get('milestone')));
       } else if (p.get('id') === 'matching') {
@@ -262,7 +263,7 @@ class HOCGoalList extends PureComponent {
   filterGoals(filter) {
     const { goals, me } = this.props;
 
-    const user = filter.get('user') === 'me' ? me.get('id') : filter.get('user');
+    const user = filter.get('userId') === 'me' ? me.get('id') : filter.get('userId');
     const sortedGoals = goals.sort((c, b) => b.get('created_at').localeCompare(c.get('created_at'))).toArray();
 
     return filterGoals(sortedGoals, filter.get('goalType'), user, filter.get('milestone'), filter.get('matching'));
