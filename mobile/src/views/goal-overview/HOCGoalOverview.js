@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import Header from '../../components/header/Header';
+import HOCHeader from '../../components/header/HOCHeader';
 import HOCHistory from './HOCHistory';
 import HOCStepList from './HOCStepList';
 import HOCAttachments from './HOCAttachments';
@@ -28,33 +28,13 @@ class HOCGoalOverview extends PureComponent {
       this.renderActionButtons();
     }
   }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
+  }
   componentDidUpdate(prevProps) {
     if (!prevProps.isActive && this.props.isActive) {
       this.renderActionButtons();
     }
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
-  }
-  // onDirectionChange(direction) {
-  //   const { hideButton } = this.state;
-  //   const newHideButton = (direction === 'down');
-  //   if (hideButton !== newHideButton) {
-  //     this.setState({ hideButton: newHideButton });
-  //   }
-  // }
-  openNotify() {
-    const { navPush, goal } = this.props;
-
-    const notify = {
-      id: 'Notify',
-      props: {
-        title: 'Ask for',
-        goalId: goal.get('id'),
-      },
-    };
-
-    navPush(notify);
   }
   onActionButton(i) {
     if (i === 0) {
@@ -69,6 +49,20 @@ class HOCGoalOverview extends PureComponent {
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);
+  }
+  openNotify() {
+    const { navPush, goal } = this.props;
+
+    const notify = {
+      id: 'Notify',
+      title: 'Notify',
+      props: {
+        title: 'Ask for',
+        goalId: goal.get('id'),
+      },
+    };
+
+    navPush(notify);
   }
   closeView() {
     const { navPop } = this.props;
@@ -92,7 +86,12 @@ class HOCGoalOverview extends PureComponent {
     const tabs = [`Steps(${numberOfCompleted}/${totalSteps})`, 'Activity', `Attachments(${goal.get('attachment_order').size})`];
 
     return (
-      <Header title={goal.get('title')} tabs={tabs} currentTab={this.state.tabIndex} delegate={this} />
+      <HOCHeader
+        title={goal.get('title')}
+        tabs={tabs}
+        currentTab={this.state.tabIndex}
+        delegate={this}
+      />
     );
   }
   renderActivity() {
@@ -159,12 +158,12 @@ const styles = StyleSheet.create({
 });
 
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
+    goal: state.getIn(['goals', ownProps.goalId]),
     me: state.get('me'),
   };
 }
-
 export default connect(mapStateToProps, {
 
 })(HOCGoalOverview);

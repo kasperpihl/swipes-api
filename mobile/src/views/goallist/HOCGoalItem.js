@@ -20,9 +20,9 @@ class HOCGoalItem extends PureComponent {
 
     const overview = {
       id: 'GoalOverview',
+      title: 'Goal overview',
       props: {
-        goal,
-        title: goal.get('title'),
+        goalId: goal.get('id'),
       },
     };
 

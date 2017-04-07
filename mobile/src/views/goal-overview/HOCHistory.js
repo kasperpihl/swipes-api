@@ -21,43 +21,15 @@ class HOCHistory extends PureComponent {
     this.lastY = 0;
     this.direction = 'up';
     this.callDelegate = setupDelegate(props.delegate);
-    this.handleScroll = this.handleScroll.bind(this);
-    this.handleContentSizeChange = this.handleContentSizeChange.bind(this);
-    this.getContainerHeight = this.getContainerHeight.bind(this);
   }
   componentDidMount() {
     setTimeout(() => {
       this.setState({ hasRendered: true });
     }, 1);
   }
-  componentWillUnmount() {
-    this.callDelegate('onDirectionChange', 'up');
-  }
-  getContainerHeight(containerheight) {
-    this.setState({ containerheight: containerheight.height });
-  }
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);
-  }
-  handleContentSizeChange(cw, ch) {
-    this.setState({ contentHeight: ch });
-  }
-  handleScroll(event) {
-    let currentOffset = Math.max(0, event.nativeEvent.contentOffset.y);
-    currentOffset = Math.min(this.state.contentHeight - this.state.containerheight, currentOffset);
-    let direction = 'up';
-
-    if (currentOffset >= this.lastY && currentOffset !== 0) {
-      direction = 'down';
-    }
-
-    if (direction !== this.direction) {
-      this.callDelegate('onDirectionChange', direction);
-      this.direction = direction;
-    }
-
-    this.lastY = currentOffset;
   }
   openLink(att) {
     const link = att.get('link') || att;
@@ -101,9 +73,6 @@ class HOCHistory extends PureComponent {
     return (
       <ImmutableListView
         ref="listView"
-        onContentSizeChange={(contentWidth, contentHeight) => this.handleContentSizeChange(contentWidth, contentHeight)}
-        onScroll={this.handleScroll}
-        scrollEventThrottle={0}
         removeClippedSubviews={false}
         immutableData={events}
         renderRow={event => this.renderEvent(event, me, this)}
@@ -113,7 +82,7 @@ class HOCHistory extends PureComponent {
   }
   render() {
     return (
-      <View style={styles.container} onLayout={e => this.getContainerHeight(e.nativeEvent.layout)}>
+      <View style={styles.container}>
         {this.renderList()}
       </View>
     );

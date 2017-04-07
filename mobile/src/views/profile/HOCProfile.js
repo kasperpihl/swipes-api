@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
-import Header from '../../components/header/Header';
+import HOCHeader from '../../components/header/HOCHeader';
 import { viewSize, colors } from '../../utils/globalStyles';
 
 class HOCProfile extends PureComponent {
@@ -31,7 +31,7 @@ class HOCProfile extends PureComponent {
     });
   }
   renderHeader() {
-    return <Header title="Profile" />;
+    return <HOCHeader title="Profile" />;
   }
   renderProfile() {
     const { me } = this.props;

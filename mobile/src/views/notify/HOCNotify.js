@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TextInput, Image } from 'react-native';
-import Header from '../../components/header/Header';
+import HOCHeader from '../../components/header/HOCHeader';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import { colors } from '../../utils/globalStyles';
 
@@ -11,7 +11,7 @@ class HOCNotify extends Component {
     this.state = { text: '', height: 162 };
   }
   renderHeader() {
-    return <Header title={this.props.title} />;
+    return <HOCHeader title={this.props.title} />;
   }
   renderWriteHandoff() {
     const { me } = this.props;

@@ -12,6 +12,6 @@ export function push(sliderIndex, scene) {
   return { type: types.NAVIGATION_PUSH, payload: { sliderIndex, scene } };
 }
 
-export function pop(sliderIndex) {
-  return { type: types.NAVIGATION_POP, payload: { sliderIndex } };
+export function pop(sliderIndex, targetIndex) {
+  return { type: types.NAVIGATION_POP, payload: { sliderIndex, targetIndex } };
 }

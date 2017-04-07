@@ -48,7 +48,13 @@ export default function navigation(state = initialState, action) {
     }
     case types.NAVIGATION_POP: {
       state = state.set('actionButtons', initialState.get('actionButtons'));
-      return state.updateIn(['sliders', payload.sliderIndex, 'routes'], routes => routes.butLast());
+      return state.updateIn(['sliders', payload.sliderIndex, 'routes'], (routes) => {
+        if (typeof payload.targetIndex === 'number') {
+          return routes.slice(0, payload.targetIndex + 1);
+        } else {
+          return routes.butLast();
+        }
+      });
     }
     default:
       return state;

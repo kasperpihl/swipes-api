@@ -58,7 +58,6 @@ class HOCDashboard extends PureComponent {
   }
   render() {
     let { notifications: n } = this.state;
-
     if (n) {
       n = n.map(n => msgGen.notifications.getNotificationWrapper(n));
     }

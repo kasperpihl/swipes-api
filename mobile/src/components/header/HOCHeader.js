@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import Tabs from 'react-native-tabs';
+import Tabs from '../tabs/Tabs';
 import { colors } from '../../utils/globalStyles';
 
 class Header extends Component {
@@ -12,7 +12,7 @@ class Header extends Component {
     this.callDelegate = setupDelegate(props.delegate);
   }
   componentWillMount() {
-    const { tabs, currentTab } = this.props;
+    const { tabs, currentTab, routes } = this.props;
 
     if (tabs) {
       tabs.forEach((t, i) => {
@@ -35,12 +35,11 @@ class Header extends Component {
 
     const renderTabs = tabs.map((t, i) => (
       <Text name={i} key={i} style={styles.tabTitle}>{t}</Text>
-      ));
+    ));
 
     return (
       <Tabs
         selected={this.state.page}
-        style={{ backgroundColor: 'white', height: 50 }}
         selectedStyle={{ color: colors.deepBlue100 }}
         onSelect={el => this.callDelegate('onChangeTab', el.props.name)}
       >
@@ -77,7 +76,6 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.deepBlue20,
     backgroundColor: colors.bgColor,
     paddingTop: 54,
-    paddingBottom: 60,
   },
   title: {
     color: colors.deepBlue100,
@@ -86,6 +84,23 @@ const styles = StyleSheet.create({
   tabTitle: {
     color: colors.deepBlue30,
     fontWeight: '500',
+  },
+  breadcrumbs: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: 33,
+    // backgroundColor: 'yellow',
+  },
+  breadcrumb: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  breadcrumbLabel: {
+    flexDirection: 'row',
+    marginTop: -2,
+    color: colors.deepBlue30,
+    fontSize: 12,
   },
 });
 

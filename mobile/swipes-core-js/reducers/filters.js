@@ -29,7 +29,7 @@ const initialState = fromJS({
       title: 'Unassigned',
       filter: {
         goalType: 'current',
-        user: 'none',
+        userId: 'none',
       },
       goals: OrderedSet(),
     },

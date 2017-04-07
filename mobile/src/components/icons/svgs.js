@@ -34,7 +34,8 @@ export default {
 
   },
   Breadcrumb: {
-
+    svg: <Polygon points="10,9,10,15,14,12,10,9" />,
+    viewBox: DEF_VIEWBOX,
   },
   Calendar: {
 

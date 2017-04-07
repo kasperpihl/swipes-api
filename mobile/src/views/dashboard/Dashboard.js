@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ListView } from 'react-native';
 import NotificationItem from './NotificationItem';
 import { colors, viewSize } from '../../utils/globalStyles';
 import ImmutableListView from 'react-native-immutable-list-view';
-import Header from '../../components/header/Header';
+import HOCHeader from '../../components/header/HOCHeader';
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
 class Dashboard extends Component {
@@ -14,7 +14,7 @@ class Dashboard extends Component {
     };
   }
   renderHeader() {
-    return <Header title="Dashboard" />;
+    return <HOCHeader title="Dashboard" />;
   }
   renderNotifications() {
     const {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
-import Header from '../../components/header/Header';
+import HOCHeader from '../../components/header/HOCHeader';
 import { colors } from '../../utils/globalStyles';
 import HOCGoalItem from './HOCGoalItem';
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
@@ -11,7 +11,7 @@ class HOCGoalList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['current', 'upcoming', 'unstarted'],
+      tabs: ['current', 'upcoming', 'unassigned'],
       tabIndex: 0,
       hasLoaded: false,
     };
@@ -69,7 +69,14 @@ class HOCGoalList extends Component {
       newTabs.push(tabName);
     });
 
-    return <Header title="Goal list" tabs={newTabs} currentTab={this.state.tabIndex} delegate={this} />;
+    return (
+      <HOCHeader
+        title="Goal list"
+        tabs={newTabs}
+        currentTab={this.state.tabIndex}
+        delegate={this}
+      />
+    );
   }
   renderGoal(gId, filterId) {
     return <HOCGoalItem goalId={gId} filterId={filterId} delegate={this} />;

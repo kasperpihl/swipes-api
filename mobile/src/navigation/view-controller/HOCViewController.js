@@ -1,12 +1,22 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from '../../actions';
-import { NavigationExperimental } from 'react-native';
+import { NavigationExperimental, View, StyleSheet } from 'react-native';
 import * as views from '../../views';
+import HOCBreadCrumbs from '../../components/breadcrumbs/HOCBreadCrumbs';
 
 const {
   CardStack: NavigationCardStack,
 } = NavigationExperimental;
+
+const styles = StyleSheet.create({
+  viewController: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+  },
+});
 
 class HOCViewController extends PureComponent {
   constructor(props, context) {
@@ -27,17 +37,24 @@ class HOCViewController extends PureComponent {
     const { activeSliderIndex, sliderIndex, routes, setActionButtons } = this.props;
     const Comp = views[route.id];
     let isActive = sliderIndex === activeSliderIndex;
+
     if (isActive && sceneProps.scene.index !== routes.size - 1) {
       isActive = false;
     }
+
     return (
-      <Comp
-        navPush={this.navPush}
-        navPop={this.navPop}
-        isActive={isActive}
-        setActionButtons={setActionButtons}
-        {...route.props}
-      />
+      <View style={styles.viewController}>
+        <HOCBreadCrumbs sliderIndex={sliderIndex} />
+        <View style={styles.content}>
+          <Comp
+            navPush={this.navPush}
+            navPop={this.navPop}
+            isActive={isActive}
+            setActionButtons={setActionButtons}
+            {...route.props}
+          />
+        </View>
+      </View>
     );
   }
   render() {
