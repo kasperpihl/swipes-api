@@ -169,9 +169,9 @@ class HOCAttachments extends PureComponent {
     };
   }
   onChangeFiles(e) {
-    const { uploadFiles } = this.props;
+    const { uploadFiles, targetId } = this.props;
     this.setLoading('adding');
-    uploadFiles(e.target.files).then((res) => {
+    uploadFiles(targetId, e.target.files).then((res) => {
       if(res.ok){
         this.clearLoading('adding')
       } else {
