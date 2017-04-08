@@ -6,6 +6,7 @@ import me from './me';
 import milestones from './milestones';
 import notes from './notes';
 import notifications from './notifications';
+import onboarding from './onboarding';
 import services from './services';
 import users from './users';
 import ways from './ways';

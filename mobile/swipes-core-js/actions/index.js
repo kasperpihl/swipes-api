@@ -7,6 +7,7 @@ import * as goals from './goals';
 import * as me from './me';
 import * as notes from './notes';
 import * as notifications from './notifications';
+import * as onboarding from './onboarding';
 import * as steps from './steps';
 import * as ways from './ways';
 
@@ -20,6 +21,7 @@ export {
   me,
   notes,
   notifications,
+  onboarding,
   steps,
   ways,
 };
