@@ -20,6 +20,7 @@ export {
   milestones,
   notes,
   notifications,
+  onboarding,
   services,
   users,
   ways,

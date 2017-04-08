@@ -10,7 +10,7 @@ export default function me(state = initialState, action) {
 
   switch (type) {
     case ('init'): {
-      return fromJS(payload.self);
+      return fromJS(payload.me);
     }
     case ('profile_pic_update'): {
       return state;
