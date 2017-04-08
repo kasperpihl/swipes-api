@@ -1,5 +1,5 @@
 import React from 'react';
-import { G, Path, Polygon, Circle, Rect } from 'react-native-svg';
+import { G, Path, Polygon, Circle, Rect, Polyline } from 'react-native-svg';
 
 const DEF_VIEWBOX = '0 0 24 24';
 
@@ -29,6 +29,17 @@ export default {
   },
   ArrowRightLine: {
 
+  },
+  Assets: {
+    svg: (
+      <G>
+        <Rect x="4" y="12" width="16" height="2" />
+        <Rect x="4" y="15" width="16" height="2" />
+        <Rect x="4" y="18" width="16" height="2" />
+        <Polygon points="4,4,4,6,4,11,6,11,6,6,18,6,18,11,20,11,20,6,20,4,4,4" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
   },
   Assign: {
 
@@ -79,6 +90,15 @@ export default {
   },
   Eye: {
 
+  },
+  Feedback: {
+    svg: (
+      <G>
+        <Path d="M11.5,10.7666a3.046,3.046,0,0,0-3-3,3.49986,3.49986,0,0,0-3.5,3.5A5.74521,5.74521,0,0,0,10.42212,17l.4353-1.30615a3.0256,3.0256,0,0,1-2.1792-1.94531A2.9915,2.9915,0,0,0,11.5,10.7666Z" />
+        <Path d="M16.7168,14.69189a2.969,2.969,0,0,1-.53857-.94336A2.99389,2.99389,0,0,0,16,7.7666a3.49986,3.49986,0,0,0-3.5,3.5A5.74521,5.74521,0,0,0,17.92212,17l.4353-1.30615A2.98291,2.98291,0,0,1,16.7168,14.69189Z" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
   },
   File: {
     svg: (
@@ -200,6 +220,10 @@ export default {
   },
   Star: {
     svg: <Polygon points="12,5,13.652,9.966,19,9.966,14.674,13.034,16.326,18,12,14.931,7.674,18,9.326,13.034,5,9.966,10.347,9.966,12,5" />,
+    viewBox: DEF_VIEWBOX,
+  },
+  Status: {
+    svg: <Polygon points="14,19,8.92,9.077,6.566,13,2,13,2,11,5.434,11,9,5,14.08,14.923,16.434,11,22,11,22,13,17.566,13,14,19" />,
     viewBox: DEF_VIEWBOX,
   },
   SwipesLogoText: {

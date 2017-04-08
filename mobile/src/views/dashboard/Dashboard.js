@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ListView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import NotificationItem from './NotificationItem';
 import { colors, viewSize } from '../../utils/globalStyles';
 import ImmutableListView from 'react-native-immutable-list-view';
@@ -9,18 +9,34 @@ import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter'
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-    };
   }
   renderHeader() {
-    return <HOCHeader title="Dashboard" />;
+    return (
+      <HOCHeader
+        title="Dashboard"
+        tabs={this.props.tabs}
+        currentTab={this.props.tabIndex}
+        delegate={this.props.delegate}
+      />
+    );
+  }
+  renderListLoader() {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
   }
   renderNotifications() {
     const {
       notifications,
       delegate,
+      hasLoaded,
     } = this.props;
+
+    if (!hasLoaded) {
+      return this.renderListLoader();
+    }
 
     if (!notifications.size) {
       return (
@@ -36,6 +52,7 @@ class Dashboard extends Component {
         immutableData={notifications}
         renderRow={rowData => this.renderRow(rowData, delegate)}
         renderFooter={this.renderFooter}
+        removeClippedSubviews={false}
       />
     );
   }
@@ -75,6 +92,14 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontSize: 15,
     color: colors.deepBlue30,
+  },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loader: {
+    marginTop: -60,
   },
 });
 

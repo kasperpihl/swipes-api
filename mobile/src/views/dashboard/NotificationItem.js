@@ -16,6 +16,7 @@ class NotificationItem extends Component {
 
     this.callDelegate = setupDelegate(props.delegate);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
+    this.onNotificationPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationPress'));
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -26,7 +27,8 @@ class NotificationItem extends Component {
     if (!n.get('icon')) {
       return undefined;
     }
-    const iconStyles = n.get('seenAt') ? styles.iconRead : styles.iconUnread;
+
+    const iconStyles = n.get('unseen') ? styles.iconUnread : styles.iconRead;
 
     return (
       <View style={iconStyles}>
@@ -115,14 +117,17 @@ class NotificationItem extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.topSection}>
-          {this.renderIcon()}
-          {this.renderContent()}
-          {this.renderTimestamp()}
-        </View>
+        <FeedbackButton onPress={this.onNotificationPress(this.props.notification)}>
+          <View style={styles.topSection}>
+            {this.renderIcon()}
+            {this.renderContent()}
+            {this.renderTimestamp()}
+          </View>
+        </FeedbackButton>
         <View style={styles.bottomSection}>
           {this.renderAttachments()}
         </View>
+        <View style={styles.seperator} />
       </View>
     );
   }
@@ -132,13 +137,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     minHeight: 66,
+  },
+  seperator: {
+    width: viewSize.width - 30,
+    height: 1,
+    backgroundColor: colors.deepBlue5,
     marginHorizontal: 15,
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue5,
   },
   topSection: {
     flexDirection: 'row',
+    paddingHorizontal: 15,
+    paddingVertical: 18,
   },
   iconRead: {
     width: 40,
@@ -181,8 +190,7 @@ const styles = StyleSheet.create({
     color: colors.deepBlue40,
   },
   attachments: {
-    paddingTop: 15,
-    paddingLeft: 55,
+    paddingBottom: 18,
   },
   smallAttachments: {
     paddingTop: 15,
@@ -193,6 +201,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 40,
     alignItems: 'center',
+    paddingLeft: 55,
   },
   attachmentTitle: {
     paddingLeft: 9,

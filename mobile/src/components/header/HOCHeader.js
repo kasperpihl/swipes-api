@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils';
+import { setupDelegate, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import Tabs from '../tabs/Tabs';
 import { colors } from '../../utils/globalStyles';
 
@@ -10,6 +10,7 @@ class Header extends Component {
     this.state = {};
 
     this.callDelegate = setupDelegate(props.delegate);
+    this.onSelect = this.onSelect.bind(this);
   }
   componentWillMount() {
     const { tabs, currentTab, routes } = this.props;
@@ -26,6 +27,9 @@ class Header extends Component {
     const { currentTab } = this.props;
     this.setState({ page: nextProps.currentTab });
   }
+  onSelect(el) {
+    this.callDelegate('onChangeTab', el.props.name);
+  }
   renderTabs() {
     const { tabs } = this.props;
 
@@ -41,7 +45,7 @@ class Header extends Component {
       <Tabs
         selected={this.state.page}
         selectedStyle={{ color: colors.deepBlue100 }}
-        onSelect={el => this.callDelegate('onChangeTab', el.props.name)}
+        onSelect={this.onSelect}
       >
         {renderTabs}
       </Tabs>

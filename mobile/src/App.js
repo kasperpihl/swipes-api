@@ -11,6 +11,7 @@ import DevTools from './components/dev-tools/DevTools';
 import HOCContextButton from './components/context-button/HOCContextButton';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
+import ActionModal from './modals/ActionModal';
 
 class App extends PureComponent {
   constructor(props) {
@@ -91,6 +92,7 @@ class App extends PureComponent {
         </Swiper>
 
         <HOCContextButton />
+        <ActionModal />
       </View>
     );
   }

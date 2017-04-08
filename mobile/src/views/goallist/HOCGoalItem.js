@@ -5,7 +5,7 @@ import HOCAssigning from '../../components/assignees/HOCAssigning';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import { colors } from '../../utils/globalStyles';
+import { colors, viewSize } from '../../utils/globalStyles';
 
 class HOCGoalItem extends PureComponent {
   constructor(props) {
@@ -56,6 +56,7 @@ class HOCGoalItem extends PureComponent {
         <View style={styles.row}>
           {this.renderContent()}
           {this.renderAssignees()}
+          <View style={styles.seperator} />
         </View>
       </FeedbackButton>
     );
@@ -76,13 +77,19 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     minHeight: 72,
-    marginHorizontal: 15,
+    paddingHorizontal: 15,
     paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue5,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'stretch',
+  },
+  seperator: {
+    width: viewSize.width - 30,
+    height: 1,
+    backgroundColor: colors.deepBlue5,
+    position: 'absolute',
+    left: 15,
+    bottom: 0,
   },
   assignees: {
     justifyContent: 'center',
