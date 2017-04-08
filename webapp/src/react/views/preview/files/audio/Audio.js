@@ -1,14 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import './styles/video';
+import './styles/audio';
 
-class Video extends Component {
+class Audio extends Component {
   static supportContentType(contentType) {
     return ([
-      'video/mp4',
-      'video/quicktime',
-      'video/webm',
-      'video/ogg',
     ].indexOf(contentType) !== -1);
   }
   constructor(props) {
@@ -16,16 +12,15 @@ class Video extends Component {
   }
   render() {
     const { file } = this.props;
-    const className = 'preview-video';
+    let className = 'preview-audio';
 
     return (
       <div className={className}>
-        <video
+        <audio
           autoPlay
           onLoadedData={this.props.onLoad}
           onError={this.props.onError}
           src={file.url}
-          className="preview-video__player"
           controls
         />
       </div>
@@ -33,11 +28,11 @@ class Video extends Component {
   }
 }
 
-export default Video;
+export default Audio;
 
 const { object, func } = PropTypes;
 
-Video.propTypes = {
+Audio.propTypes = {
   file: object,
   onError: func,
   onLoad: func,
