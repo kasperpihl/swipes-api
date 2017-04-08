@@ -273,14 +273,14 @@ class HOCPreviewModal extends PureComponent {
             onClick={b.force_download ? undefined : this.onClickButtonCached(i)}
           />
         ))}
-        <Button
+        {/* <Button
           key="attach"
           text="Attach to Goal"
           primary
           {...this.getLoading('attach')}
           onClick={this.onAttach}
           className="preview-footer__btn"
-        />
+        /> */}
       </div>
     );
   }

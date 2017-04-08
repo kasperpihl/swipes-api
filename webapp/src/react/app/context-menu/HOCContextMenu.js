@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
+import Measure from 'react-measure';
 import { debounce, bindAll } from 'swipes-core-js/classes/utils';
 
 import './styles/context-menu';
@@ -174,9 +175,11 @@ class HOCContextMenu extends PureComponent {
     const key = contextMenu.id;
     const styles = this.state.styles;
     return (
-      <div className="context-menu__content" ref="menu" style={styles} key={key}>
-        <Comp hide={this.hideContextMenu} {...props} />
-      </div>
+      <Measure onMeasure={this.bouncedResize}>
+        <div className="context-menu__content" ref="menu" style={styles} key={key}>
+          <Comp hide={this.hideContextMenu} {...props} />
+        </div>
+      </Measure>
     );
   }
   render() {
