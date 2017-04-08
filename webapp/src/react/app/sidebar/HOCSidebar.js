@@ -93,6 +93,7 @@ class HOCSidebar extends PureComponent {
         className={className}
         key={item.id}
         data-id={item.id}
+        data-title={item.id}
       >
         {image}
         {notif}

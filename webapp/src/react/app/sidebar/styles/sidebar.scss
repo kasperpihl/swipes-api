@@ -73,9 +73,24 @@ $sidebarWidth: 84px;
     @include size(54px);
     @include flexContainer('row', center, center);
     z-index: 2;
-    overflow: hidden;
     background-color: rgba($bg, .3);
     transition: .2s ease;
+
+    &:after {
+      @include font(15px, $deepBlue-60);
+      @include size(auto, auto);
+      min-width: 100px;
+      background-color: white;
+      border-radius: 2px;
+      box-shadow: 0 6px 6px 1px rgba(0,12,47,0.1);
+      content: attr(data-title);
+      opacity: 0;
+      padding: 9px 15px;
+      position: absolute;
+      right: -15px;
+      transform: translateX(110%);
+      transition: .2s ease;
+    }
 
     &:first-child {
       border-radius: 4px 4px 0 0;
@@ -190,6 +205,17 @@ $sidebarWidth: 84px;
     #{$b}__icon {
       @include svg-color($deepBlue-100);
       transition: .2s ease;
+    }
+  }
+
+  &:hover {
+
+    #{$b}__item {
+      &:after {
+        opacity: 1;
+        transform: translateX(100%);
+        transition: .2s ease;
+      } 
     }
   }
 }
