@@ -76,7 +76,7 @@ $sidebarWidth: 84px;
     background-color: rgba($bg, .3);
     transition: .2s ease;
 
-    &:after {
+    &:before {
       @include font(15px, $deepBlue-60);
       @include size(auto, auto);
       min-width: 100px;
@@ -87,7 +87,7 @@ $sidebarWidth: 84px;
       opacity: 0;
       padding: 9px 15px;
       position: absolute;
-      right: -15px;
+      right: -9px;
       transform: translateX(110%);
       transition: .2s ease;
     }
@@ -206,17 +206,12 @@ $sidebarWidth: 84px;
       @include svg-color($deepBlue-100);
       transition: .2s ease;
     }
-  }
 
-  &:hover {
-
-    #{$b}__item {
-      &:after {
-        opacity: 1;
-        transform: translateX(100%);
-        transition: .2s ease;
-      } 
-    }
+    &:before {
+      opacity: 1;
+      transform: translateX(100%);
+      transition: .2s ease;
+    } 
   }
 }
 
