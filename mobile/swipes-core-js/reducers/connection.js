@@ -16,7 +16,7 @@ export default function me(state = initialState, action) {
   } = action;
 
   switch (type) {
-    case ('rtm.start'): {
+    case ('init'): {
       return state.set('lastConnect', payload.ts);
     }
     case REHYDRATE:

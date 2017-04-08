@@ -5,7 +5,7 @@ const initialState = fromJS({});
 export default function usersReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
-    case 'rtm.start': {
+    case 'init': {
       let users = Map();
       payload.users.forEach((u) => {
         users = users.set(u.id, fromJS(u));
