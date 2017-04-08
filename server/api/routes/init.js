@@ -12,8 +12,7 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-// !T_TODO Change rtm.start to init before shipping the new server
-authed.all('/rtm.start',
+authed.all('/init',
   initGetData,
   valResponseAndSend({
     self: object.require(),
