@@ -12,6 +12,9 @@ import {
 import {
   dbNotificationsGetAllByIdOrderByTs,
 } from './db_utils/notifications';
+import {
+  dbOnboardingGetAll,
+} from './db_utils/onboarding';
 
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
@@ -32,6 +35,7 @@ const initGetData = valLocals('initGetData', {
       filter: { sender: true },
       filterDefaultOption: false,
     }),
+    dbOnboardingGetAll(),
   ];
   const ts = new Date().toISOString();
   Promise.all(promiseArrayQ)
@@ -88,6 +92,7 @@ const initGetData = valLocals('initGetData', {
         ts,
         services: data[1],
         notifications: data[2].concat(data[3]),
+        onboarding: data[4],
       });
 
       return next();

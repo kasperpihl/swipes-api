@@ -24,6 +24,7 @@ authed.all('/init',
     notes: array.of(object).require(),
     services: array.of(object).require(),
     notifications: array.of(object).require(),
+    onboarding: array.of(object).require(),
   }));
 
 export {
