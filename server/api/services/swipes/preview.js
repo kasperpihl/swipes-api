@@ -30,6 +30,7 @@ const buttonsData = (url) => {
       icon: 'Download',
       title: 'Download',
       url,
+      force_download: true,
     },
   ];
 
