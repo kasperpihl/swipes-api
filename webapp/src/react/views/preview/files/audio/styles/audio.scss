@@ -2,5 +2,8 @@
 @import '~styles/_mixins.scss';
 
 .preview-audio {
-  
+  @include size(100%);
+  @include flexContainer('row', center, center);
+  max-height: 99%;
+  max-width: 90vw;
 }
