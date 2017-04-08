@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
 import * as a from 'actions';
@@ -22,18 +23,24 @@ import './styles/attachments';
 class HOCAttachments extends PureComponent {
   constructor(props, context) {
     super(props, context);
+    this.state = { fileVal: '' };
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
     this.onFlagClickCached = setupCachedCallback(this.onFlagClick, this);
     this.onContextMenuCached = setupCachedCallback(this.onContextMenu, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
     this.callDelegate = setupDelegate(props.delegate);
-    bindAll(this, ['onChangeFiles']);
+    bindAll(this, ['onChangeFiles', 'onPaste']);
     setupLoading(this);
+  }
+  componentDidMount(){
+    document.addEventListener('paste', this.onPaste);
   }
   componentWillUnmount() {
     clearTimeout(this._timer);
     this._unmounted = true;
+    document.removeEventListener('paste', this.onPaste);
   }
+
   onPreview(id, e) {
     const {
       previewLink,
@@ -77,6 +84,22 @@ class HOCAttachments extends PureComponent {
         items,
       },
     });
+  }
+  onPaste(event) {
+    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    let uploaded;
+    for (var index in items){
+      const item = items[index];
+      if (item.kind === 'file') {
+        const blob = item.getAsFile();
+        const ts = moment().format('MMMM Do YYYY, h:mm:ss a');
+        blob.name = `Screenshot from (${ts}).png`;
+        this.onUploadFiles([blob]);
+        console.log(blob.name, blob.type);
+        break;
+
+      };
+    }
   }
   onRename(id, currTitle, options) {
     const { targetId, inputMenu, renameAttachment } = this.props;
@@ -168,16 +191,21 @@ class HOCAttachments extends PureComponent {
       },
     };
   }
-  onChangeFiles(e) {
+  onUploadFiles(files){
     const { uploadFiles, targetId } = this.props;
     this.setLoading('adding');
-    uploadFiles(targetId, e.target.files).then((res) => {
+    uploadFiles(targetId, files).then((res) => {
       if(res.ok){
-        this.clearLoading('adding')
+        this.clearLoading('adding');
+        this.setState({fileVal: ''});
       } else {
         this.clearLoading('adding', '!Something went wrong');
       }
     });
+  }
+  onChangeFiles(e) {
+    this.setState({fileVal: e.target.value});
+    this.onUploadFiles(e.target.files);
   }
   attachToTarget(type, id, title) {
     const linkObj = this.getSwipesLinkObj(type, id, title);
@@ -227,6 +255,7 @@ class HOCAttachments extends PureComponent {
     if (this.getLoading('adding').loading) {
       className += ' attachments__add-list--loading';
     }
+    const { fileVal } = this.state;
 
     return (
       <div className={className}>
@@ -244,7 +273,7 @@ class HOCAttachments extends PureComponent {
         </button>
         <label className="attachments__add-item">
           Upload
-          <input type="file" multiple onChange={this.onChangeFiles} />
+          <input value={fileVal} type="file" multiple onChange={this.onChangeFiles} />
          </label>
         <div className="attachments__loader" />
       </div>

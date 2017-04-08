@@ -2,7 +2,7 @@ import { fromJS, OrderedSet, List } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
 import * as types from '../constants';
 
-const defaultFilter = {};
+const defaultFilter = fromJS({});
 
 const initialState = fromJS({
   goals: {
@@ -71,7 +71,13 @@ export default function filtersReducer(state = initialState, action) {
 
   switch (type) {
     case types.UPDATE_FILTERS: {
-      return action.payload.filters;
+      return payload.filters;
+    }
+    case types.FILTER_UPDATE: {
+      return state.setIn([payload.type, payload.id, 'filter'], payload.filter);
+    }
+    case types.FILTER_CLEAR: {
+      return state.setIn([payload.type, payload.id, 'filter'], defaultFilter);
     }
     case REHYDRATE: {
       if (action.payload && action.payload.filters) {

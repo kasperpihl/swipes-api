@@ -2,6 +2,7 @@
 @import '~styles/_mixins.scss/';
 
 $h: 99px;
+$noSubH: 60px;
 
 // ======================================================
 // Block
@@ -12,6 +13,9 @@ $h: 99px;
   $flexIgnoreList: '#{$b}__actions';
 
   @include size(100%, $h);
+  &--no-subtitle{
+    height: $noSubH;
+  }
   @include flexContainer('row', left, top, $flexIgnoreList);
 }
 

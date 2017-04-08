@@ -55,10 +55,14 @@ export default class HOCHeaderTitle extends Component {
     return this.renderTitle();
   }
   render() {
-    const { children } = this.props;
+    const { children, subtitle } = this.props;
+    let className = 'header-title';
+    if(!subtitle || !subtitle.length) {
+      className += ' header-title--no-subtitle';
+    }
 
     return (
-      <div className="header-title">
+      <div className={className}>
         {this.renderContent()}
         <div className="header-title__actions">
           {children}

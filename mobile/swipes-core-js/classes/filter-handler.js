@@ -12,8 +12,11 @@ export default class FilterHandler {
   removeGoalFromFilters(filters, g) {
     return filters.map(f => f.updateIn(['goals'], goals => goals && goals.delete(g.get('id'))));
   }
-  checkAndApplyFiltersForGoal(filters, g) {
+  checkAndApplyFiltersForGoal(filters, g, limit) {
     return filters.map((f) => {
+      if(limit && !limit.get(f.get('id'))){
+        return f;
+      }
       let filter = f.get('filter');
       if (filter.get('userId') && filter.get('userId') === 'me') {
         filter = filter.set('userId', this.myId);
@@ -27,19 +30,23 @@ export default class FilterHandler {
       return f;
     });
   }
-  checkAndApplyFiltersForNotification(filters, n) {
-
-  }
   storeChange() {
     const state = this.store.getState();
     this.myId = state.getIn(['me', 'id']);
 
     const orgFilters = state.get('filters');
     let filters = orgFilters;
+    const orgGoalFilters = filters.get('goals');
+    let diffFilters;
+    if(this.prevFilters && filters !== this.prevFilters){
 
+      diffFilters = filters.get('goals').filter(
+        (f, k) => f.get('filter') !== this.prevFilters.getIn(['goals', k, 'filter'])
+      ).map(f => f.get('id'));
+      console.log('difference!!!', diffFilters.toJS());
+    }
     const goals = state.get('goals');
-    if (goals !== this.previousGoals) {
-      const orgGoalFilters = filters.get('goals');
+    if (goals !== this.previousGoals || (diffFilters && diffFilters.size)) {
       let goalFilters = orgGoalFilters;
       this.previousGoals = this.previousGoals || Map();
       goals.forEach((g, k) => {
@@ -47,6 +54,8 @@ export default class FilterHandler {
         if (prev !== g) {
           // console.log('goal changed', g.get('title'));
           goalFilters = this.checkAndApplyFiltersForGoal(goalFilters, g);
+        } else if(diffFilters && diffFilters.size){
+          goalFilters = this.checkAndApplyFiltersForGoal(goalFilters, g, diffFilters);
         }
       });
       this.previousGoals.forEach((g, k) => {
@@ -92,6 +101,7 @@ export default class FilterHandler {
     }
 
     if (filters !== orgFilters) {
+      this.prevFilters = filters;
       this.store.dispatch({ type: types.UPDATE_FILTERS, payload: { filters } });
     }
   }

@@ -1,39 +1,58 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
 import './styles/goal-list-item.scss';
 /* global msgGen */
-class GoalListItem extends PureComponent {
+class HOCGoalListItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    this.clickedListItem = this.clickedListItem.bind(this);
+    this.callDelegate = setupDelegate(props.delegate, props.goalId);
+    this.onClick = this.onClickItem.bind(this);
   }
-  onAssign(stepId, e) {
-    const { onAssignClick, goal } = this.props;
+  onAssign(id, e){
+    const { goalId, selectAssignees, assignStep } = this.props;
     const helper = this.getHelper();
+    const step = helper.getCurrentStep();
+    e.stopPropagation();
+    const options = this.getOptionsForE(e);
+    options.actionLabel = 'Assign';
+    if(step.get('assignees').size){
+      options.actionLabel = 'Reassign';
+    }
+    let overrideAssignees;
+    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
+      } else if (overrideAssignees) {
+        assignStep(goalId, step.get('id'), overrideAssignees);
+        console.log('lets do this!');
+      }
+    });
+  }
+  onClickItem() {
+    const selection = window.getSelection();
 
-    if (onAssignClick) {
-      onAssignClick(goal.get('id'), helper.getCurrentStepId(), e);
+    if (selection.toString().length === 0) {
+      this.callDelegate('onGoalClick');
     }
   }
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);
   }
-  clickedListItem() {
-    const { onClick, goal } = this.props;
-
-    const selection = window.getSelection();
-
-    if (selection.toString().length === 0) {
-      if (onClick) {
-        onClick(goal.get('id'));
-      }
-    }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
   }
   renderProgressBar() {
     const helper = this.getHelper();
@@ -71,7 +90,6 @@ class GoalListItem extends PureComponent {
     return (
       <div className="goal-list-item__assigning">
         <HOCAssigning
-          index={helper.getCurrentStepId()}
           stepId={helper.getCurrentStepId()}
           goalId={goal.get('id')}
           maxImages={2}
@@ -93,7 +111,7 @@ class GoalListItem extends PureComponent {
     }
 
     return (
-      <div className={className} onClick={this.clickedListItem}>
+      <div className={className} onClick={this.onClick}>
         <Icon icon="Checkmark" className="goal-list-item__completed-icon" />
         <div className="goal-list-item__content">
           <div className="goal-list-item__title">{goal.get('title')}</div>
@@ -108,13 +126,18 @@ class GoalListItem extends PureComponent {
   }
 }
 
-const { func } = PropTypes;
+const mapStateToProps = (state, ownProps) => ({
+  goal: state.getIn(['goals', ownProps.goalId]),
+})
 
-GoalListItem.propTypes = {
+const { object, string } = PropTypes;
+
+HOCGoalListItem.propTypes = {
   goal: map,
-  filter: map,
-  onAssignClick: func,
-  onClick: func,
+  delegate: object,
 };
 
-export default GoalListItem;
+export default connect(mapStateToProps, {
+  selectAssignees: a.goals.selectAssignees,
+  assignStep: ca.steps.assign,
+})(HOCGoalListItem);

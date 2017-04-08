@@ -1,14 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
-import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import TabBar from 'components/tab-bar/TabBar';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import Filter from 'components/filter/Filter';
+import SWView from 'SWView';
 import Button from 'Button';
 import Measure from 'react-measure';
-import GoalListItem from './GoalListItem';
+import HOCGoalListItem from './HOCGoalListItem';
 import FilterFooter from './FilterFooter';
 
-import Filter from './Filter';
+
 
 import './styles/goals-list.scss';
 
@@ -21,15 +23,12 @@ class GoalList extends Component {
     this.clearFilter = this.callDelegate.bind(null, 'onClearFilter');
     this.hideFilter = this.callDelegate.bind(null, 'onHideFilter');
     this.editFilter = this.callDelegate.bind(null, 'onEditFilter');
-    this.onAssignClick = this.callDelegate.bind(null, 'onAssignClick');
+    this.onScroll = this.callDelegate.bind(null, 'onScroll');
+    this.onAddGoal = this.callDelegate.bind(null, 'onAddGoal');
     bindAll(this, ['clickedListItem', 'onFilterHeight']);
   }
   onFilterHeight(dim) {
     this.setState({ filterHeight: dim.height });
-  }
-  getHelper(goal) {
-    const { me } = this.props;
-    return new GoalsUtil(goal, me.get('id'));
   }
   clickedListItem(id) {
     this.callDelegate('onClickGoal', id);
@@ -43,12 +42,54 @@ class GoalList extends Component {
     } = this.props;
     return (
       <div className="goals-list__tab-bar">
-        <TabBar tabs={tabs.map(t => t.get('title')).toArray()} delegate={delegate} activeTab={tabIndex} />
+        <TabBar tabs={tabs} delegate={delegate} activeTab={tabIndex} />
+      </div>
+    );
+  }
+  renderHeader() {
+    const { loadingState } = this.props;
+    return (
+      <div className="goals-list__header">
+        <HOCHeaderTitle title="Team goals">
+          <Button
+            text="Add a goal"
+            primary
+            {...loadingState.get('add')}
+            onClick={this.onAddGoal}
+          />
+        </HOCHeaderTitle>
+        {this.renderTabbar()}
       </div>
     );
   }
   renderFilter() {
-    const { filterProp } = this.props;
+    const { filterProp, goalFilter } = this.props;
+    const filter = goalFilter.get('filter');
+    const filterArray = filterProp.map((p) => {
+      if (typeof p === 'string') {
+        return p;
+      }
+      let newString;
+
+      if (p.get('id') === 'goalType') {
+        newString = msgGen.goals.getType(filter.get('goalType'));
+      } else if (p.get('id') === 'userId') {
+        newString = msgGen.users.getName(filter.get('userId'));
+      } else if (p.get('id') === 'milestone') {
+        return p.set('string', msgGen.milestones.getName(filter.get('milestone')));
+      } else if (p.get('id') === 'matching') {
+        if (!filter.get('matching') || !filter.get('matching').length) {
+          return p.set('string', 'anything');
+        }
+        return p.set('string', `"${filter.get('matching')}"`);
+      }
+      if (newString !== p.get('string')) {
+        return p.set('string', newString);
+      }
+
+      return p;
+    }).toJS();
+
     return (
       <Measure onMeasure={this.onFilterHeight}>
         <div className="goals-list__filter">
@@ -56,7 +97,7 @@ class GoalList extends Component {
             onClick={(id, obj, e) => {
               this.callDelegate('onChangeFilter', obj, e);
             }}
-            filter={filterProp.toJS()}
+            filter={filterArray}
           />
 
           <div className="goals-list__filter-actions">
@@ -73,10 +114,11 @@ class GoalList extends Component {
     );
   }
   renderList() {
-    const { goals, tabs, tabIndex, addGoal } = this.props;
-    const filter = tabs.getIn([tabIndex, 'filter']);
+    const { goalFilter, delegate } = this.props;
+    const goals = goalFilter.get('goals');
+    const filter = goalFilter.get('filter');
 
-    if (filter.get('goalType') === 'current' && !goals.length) {
+    if (filter.get('goalType') === 'current' && !goals.size) {
       return (
         <div className="goals-empty-state">
           <div className="goals-empty-state__title">Goals</div>
@@ -88,34 +130,31 @@ class GoalList extends Component {
             primary
             text="Create your first goal"
             className="goals-empty-state__button"
-            onClick={addGoal}
+            onClick={this.onAddGoal}
           />
         </div>
       );
     }
-    return goals.map(goal => (
-      <GoalListItem
-        onClick={this.clickedListItem}
-        onAssignClick={this.onAssignClick}
-        me={this.props.me}
-        filter={filter}
-        goal={goal}
-        key={`goal-list-item-${goal.get('id')}`}
+    return goals.map(goalId => (
+      <HOCGoalListItem
+        goalId={goalId}
+        delegate={delegate}
+        key={goalId}
       />
       ));
   }
   renderFilterFooter() {
-    const { filterLabel, showFilter, delegate, tabs, tabIndex } = this.props;
+    const { goalFilter, showFilter, delegate, tabs, tabIndex } = this.props;
     return (
       <FilterFooter
-        status={filterLabel}
+        status={msgGen.goals.getFilterLabel(goalFilter.get('goals').size, goalFilter.get('filter'))}
         delegate={delegate}
-        disableEdit={showFilter || (tabIndex !== (tabs.size - 1))}
+        disableEdit={showFilter || (tabIndex !== (tabs.length - 1))}
       />
     );
   }
   render() {
-    const { showFilter, tabIndex } = this.props;
+    const { showFilter, tabIndex, savedState } = this.props;
     const { filterHeight } = this.state;
     let className = 'goals-list';
     const style = {};
@@ -123,12 +162,19 @@ class GoalList extends Component {
       style.paddingTop = `${filterHeight}px`;
       className += ' goals-list--show-filters';
     }
+    const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
     return (
-      <div className={className} style={style} key={tabIndex}>
-        {this.renderFilter()}
-        {this.renderList()}
-        {this.renderFilterFooter()}
+      <SWView
+        header={this.renderHeader()}
+        onScroll={this.onScroll}
+        initialScroll={initialScroll}
+      >
+        <div className={className} style={style} key={tabIndex}>
+          {this.renderFilter()}
+          {this.renderFilterFooter()}
+          {this.renderList()}
       </div>
+      </SWView>
     );
   }
 }
@@ -136,14 +182,11 @@ class GoalList extends Component {
 const { object: obj, number, array, bool, string, func } = PropTypes;
 
 GoalList.propTypes = {
-  goals: array.isRequired,
-  tabs: list,
-  addGoal: func,
+  tabs: array,
   showFilter: bool,
   filterProp: list,
   filterLabel: string,
   tabIndex: number,
-  me: map.isRequired,
   delegate: obj,
 };
 

@@ -9,6 +9,19 @@ export function isShareURL(url) {
   }
   return false;
 }
+export function setupTimer(string){
+  let startTime = new Date().getTime();
+  return function toggleTimer() {
+    if(!startTime) {
+      startTime = new Date().getTime();
+    } else {
+      const now = new Date().getTime();
+      const diff = now - startTime;
+      console.log(string || 'timer', `${diff}ms`);
+      startTime = undefined;
+    }
+  }
+}
 
 export function valAction(actionName, arrayArgs, actionHandler) {
   function handler(valErr) {

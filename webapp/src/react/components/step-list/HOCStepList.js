@@ -64,7 +64,10 @@ class HOCStepList extends PureComponent {
     const helper = this.getHelper();
     const step = helper.getStepByIndex(i);
 
-    options.actionLabel = 'Reassign';
+    options.actionLabel = 'Assign';
+    if(step.get('assignees').size){
+      options.actionLabel = 'Reassign';
+    }
     let overrideAssignees;
     selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
       if (newAssignees) {

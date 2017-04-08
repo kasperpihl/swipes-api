@@ -176,11 +176,11 @@ class Button extends Component {
     }
 
     return (
-      <button ref="button" className={className} {...rest} onClick={this.onClick} {...tabIndex}>
+      <a ref="button" className={className} {...rest} onClick={this.onClick} {...tabIndex}>
         {this.renderIcon()}
         {this.renderText()}
         {this.renderResultState()}
-      </button>
+      </a>
     );
   }
 }

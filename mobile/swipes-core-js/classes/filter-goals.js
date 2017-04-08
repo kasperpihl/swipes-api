@@ -18,7 +18,7 @@ export default function filterGoal(goal, filter) {
 
   // Check goal types
   const goalType = filter.get('goalType');
-  // Supported: unstarted, current, upcoming, completed
+  // Supported: current, upcoming, completed
   if(goalType === 'completed' && !isCompleted){
     return false;
   }

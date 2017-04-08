@@ -43,8 +43,10 @@ class HOCPreviewModal extends PureComponent {
     const { buttons } = this.state.preview;
     const { browser, target } = this.props;
     const button = buttons[i];
-    if (button.url) {
+    if (button.url && !button.force_external) {
       browser(target, button.url);
+    } else if(button.url && button.force_external){
+      window.open(button.url);
     }
     e.target.blur();
   }
@@ -265,8 +267,10 @@ class HOCPreviewModal extends PureComponent {
           <Button
             key={i}
             className="preview-footer__btn"
+            download={b.force_download}
+            href={b.force_download ? b.url : undefined}
             text={b.title}
-            onClick={this.onClickButtonCached(i)}
+            onClick={b.force_download ? undefined : this.onClickButtonCached(i)}
           />
         ))}
         <Button

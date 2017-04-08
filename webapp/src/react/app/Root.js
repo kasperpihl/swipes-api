@@ -20,8 +20,6 @@ const history = syncHistoryWithStore(browserHistory, store, {
   },
 });
 
-
-
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
 init(store);
