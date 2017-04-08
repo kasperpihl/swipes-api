@@ -1,0 +1,149 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.onboarding {
+  @include size(100%, auto);
+  border-top: 1px solid $deepBlue-100;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.onboarding {
+  $b: &;
+
+  &__item {
+    $flexIgnoreList: '#{$b}__indicator', '#{$b}__button';
+
+    @include size(100%, 85px);
+    @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+  }
+
+  &__indicator {
+    @include size(36px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-5;
+    border-radius: 50%;
+    margin-left: 12px; margin-right: 21px;
+    overflow: hidden;
+
+    &:after {
+      @include size(100%);
+      background-color: $green-color;
+      border-radius: 50%;
+      content: '';
+      left: 0; top: 0;
+      position: absolute;
+      transform: scale(0);
+      transition: .3s .3s ease;
+    }
+
+    #{$b}__svg {
+      @include svg-color(white);
+      opacity: 1;
+      stroke-dasharray: 18.48540687561035;
+      stroke-dashoffset: 18.48540687561035;
+      transition: .3s ease;
+      z-index: 2;
+    }
+  }
+
+  &__content {
+    @include size(100%, auto);
+  }
+
+  &__title {
+    @include font(18px, $deepBlue-90, 24px);
+  }
+
+  &__subtitle {
+    @include font(12px, $deepBlue-50, 15px, 500);
+    margin-top: 3px;
+  }
+
+  &__button {
+    @include size(24px);
+    margin: 0 21px;
+    opacity: 0;
+    transform: translateX(-10px);
+
+    #{$b}__svg {
+      @include svg-color($deepBlue-80);
+      transition: .2s ease;
+    }
+  }
+}
+
+// svg
+
+.onboarding {
+
+  &__svg {
+    @include size(24px);
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.onboarding {
+  $b: &;
+
+  &__item {
+    &--completed {
+
+      #{$b}__indicator {
+        &:after {
+          transform: scale(1);
+          transition: .3s ease;
+        }
+      }
+
+      #{$b}__svg {
+        stroke-dashoffset: 0;
+        transition: .3s .3s ease;
+      }
+    }
+  }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.onboarding {
+  $b: &;
+
+  &__item:not(:last-child) {
+    border-bottom: 1px solid $deepBlue-6;
+  }
+
+  &__subtitle:empty {
+    margin-top: 0;
+  }
+}
+
+// ======================================================
+// Hovers
+// ======================================================
+
+.onboarding {
+  $b: &;
+
+  &__item:hover {
+    background-color: $blue-5;
+    transition: .1s ease;
+
+    #{$b}__button {
+      opacity: 1;
+      transform: translateX(0px);
+      transition: .2s ease;
+    }
+  }
+}
