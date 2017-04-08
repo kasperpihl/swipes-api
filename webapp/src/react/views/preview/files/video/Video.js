@@ -5,6 +5,7 @@ import './styles/video';
 class Video extends Component {
   static supportContentType(contentType) {
     return ([
+      'video/mp4',
     ].indexOf(contentType) !== -1);
   }
   constructor(props) {
@@ -12,17 +13,12 @@ class Video extends Component {
   }
   render() {
     const { file } = this.props;
-    const { rawSize } = this.state;
     let className = 'preview-video';
-
-    if (rawSize) {
-      className += ' preview-video--full-size';
-    }
 
     return (
       <div className={className}>
         <video
-          onLoad={this.props.onLoad}
+          onLoadedData={this.props.onLoad}
           onError={this.props.onError}
           src={file.url}
           controls
