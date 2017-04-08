@@ -73,7 +73,7 @@ const initMe = funcWrap([
               users:
                 r.table('users')
                   .getAll(r.args(organization('users')))
-                  .without('password', 'organizations', 'services', 'xendoCredentials')
+                  .without('password', 'organizations', 'services', 'xendoCredentials', 'settings')
                   .coerceTo('ARRAY'),
             });
           }),
