@@ -14,6 +14,9 @@
   @include flexContainer('row', left, stretch, $flexIgnoreList);
   padding: 21px 0;
   border-bottom: 1px solid $deepBlue-5;
+  &--no-border{
+    border-bottom: 0px;
+  }
   overflow: hidden;
 }
 

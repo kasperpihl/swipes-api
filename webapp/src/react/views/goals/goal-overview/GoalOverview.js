@@ -173,9 +173,10 @@ class GoalOverview extends PureComponent {
     const { delegate } = this.props;
     const helper = this.getHelper();
     const history = helper.getLastActivity();
-    const nf = msgGen.history.getNotificationWrapperForHistory(helper.getId(), history, {
+    let nf = msgGen.history.getNotificationWrapperForHistory(helper.getId(), history, {
       icon: false,
     });
+    nf = nf.set('noBorder', true);
 
     return (
       <div className="goal-overview__column goal-overview__column--right">

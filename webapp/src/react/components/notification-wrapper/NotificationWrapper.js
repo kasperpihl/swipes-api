@@ -142,6 +142,10 @@ class NotificationItem extends Component {
       className += ' notification--clickable';
     }
 
+    if(n.get('noBorder')){
+      className += ' notification--no-border';
+    }
+
     if (!n.get('icon')) {
       className += ' notification--small';
     }
@@ -177,6 +181,7 @@ NotificationItem.propTypes = {
     icon: string,
     subtitle: string,
     noClickTitle: bool,
+    noBorder: bool,
     title: oneOfType([array, string]),
     message: string,
     attachments: list,
