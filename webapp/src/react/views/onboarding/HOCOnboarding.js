@@ -14,7 +14,13 @@ class HOCOnboarding extends PureComponent {
   }
   render() {
     return (
-      <Onboarding />
+      <Onboarding
+        items={[
+          { id: 'create-account', title: 'Create account', completed: true },
+          { id: 'personalize-swipes', title: 'Personalize Swipes', subtitle: 'Make Swipes your own with profile image and more info for your colleagues'},
+          { id: 'create-goals', title: 'Create 3 goals' },
+        ]}
+      />
     );
   }
 }

@@ -8,9 +8,14 @@ class Onboarding extends PureComponent {
   }
   componentDidMount() {
   }
+  renderItem(item) {
+    const { title, subtitle, completed } = item;
+  }
   render() {
+    const { items } = this.props;
     return (
-      <div className="onboarding" />
+      <div className="onboarding">
+      </div>
     )
   }
 }
