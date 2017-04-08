@@ -25,6 +25,7 @@ const buttonsData = (title, url) => {
       icon: 'Earth',
       title: 'Open in browser',
       url,
+      force_external: true,
     },
     {
       icon: 'Download',
