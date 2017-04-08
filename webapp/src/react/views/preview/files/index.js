@@ -7,6 +7,7 @@ import Video from './video/Video';
 
 export {
   PDF,
+  Audio,
   Image,
   Office,
   SVG,

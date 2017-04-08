@@ -5,6 +5,12 @@ import './styles/audio';
 class Audio extends Component {
   static supportContentType(contentType) {
     return ([
+      'audio/webm',
+      'audio/ogg',
+      'audio/wave',
+      'audio/wav',
+      'audio/mpeg',
+
     ].indexOf(contentType) !== -1);
   }
   constructor(props) {
