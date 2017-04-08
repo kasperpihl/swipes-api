@@ -19,7 +19,7 @@ const fileData = (content_type, url) => {
 
   return file;
 };
-const buttonsData = (url) => {
+const buttonsData = (title, url) => {
   const buttons = [
     {
       icon: 'Earth',
@@ -30,7 +30,7 @@ const buttonsData = (url) => {
       icon: 'Download',
       title: 'Download',
       url,
-      force_download: true,
+      force_download: title,
     },
   ];
 
@@ -44,7 +44,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
         const url = `${s3Url}uploads/${file.organization_id}/${file.s3_name}`;
         const mapElements = elementsData(file.file_name);
         const mapFile = fileData(file.content_type, url);
-        const mapButtons = buttonsData(url);
+        const mapButtons = buttonsData(file.file_name, url);
 
         return callback(null, {
           buttons: mapButtons,
