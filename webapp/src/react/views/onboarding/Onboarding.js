@@ -5,15 +5,36 @@ import Icon from 'Icon';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import './styles/onboarding.scss';
 
+const CIRCLE_LENGTH = 190;
+
 class Onboarding extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
   }
-  componentDidMount() {
-  }
   renderProgressBar() {
-    return undefined;
+    const { items } = this.props;
+    const completedItems = [];
+    const numberOfAllItems = items.length;
+
+    items.forEach((item) => {
+      if (item.completed) {
+        completedItems.push(item);
+      }
+    });
+
+    const numberOfCompletedItems = completedItems.length;
+
+    const completedPercentage = parseInt((numberOfCompletedItems * 100) / numberOfAllItems, 10);
+
+    const svgDashOffset = CIRCLE_LENGTH - ((CIRCLE_LENGTH * completedPercentage) / 100);
+
+    return (
+      <div className="onboarding__progress">
+        <Icon icon="Circle" className="onboarding__svg" strokeDasharray={CIRCLE_LENGTH} strokeDashoffset={svgDashOffset} />
+        <div className="onboarding__progress-number">{completedPercentage}%</div>
+      </div>
+    );
   }
   renderHeader() {
     return (

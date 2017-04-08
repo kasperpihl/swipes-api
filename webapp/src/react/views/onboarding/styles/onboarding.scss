@@ -88,6 +88,43 @@
   }
 }
 
+// Progress
+
+.onboarding {
+  $b: &;
+
+  &__progress {
+    @include size(66px);
+    @include flexContainer('row', center, center);
+    border-radius: 50%;
+    overflow: hidden;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 2px; top: 2px;
+      @include size(62px);
+      border-radius: 50%;
+      border: 2px solid $deepBlue-5;
+    }
+
+    #{$b}__svg {
+      @include size(66px);
+      @include svg-color($green-color);
+      position: absolute;
+      left: 0; top: 0;
+      stroke-width: 1;
+      transform: rotate(-90deg);
+      z-index: 2;
+    }
+
+  }
+
+  &__progress-number {
+    @include font(18px, $deepBlue-100, 23px);
+  }
+}
+
 // ======================================================
 // Modifiers
 // ======================================================
