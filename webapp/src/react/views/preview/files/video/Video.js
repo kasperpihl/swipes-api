@@ -14,7 +14,7 @@ class Video extends Component {
   }
   render() {
     const { file } = this.props;
-    let className = 'preview-video';
+    const className = 'preview-video';
 
     return (
       <div className={className}>
@@ -22,6 +22,7 @@ class Video extends Component {
           onLoadedData={this.props.onLoad}
           onError={this.props.onError}
           src={file.url}
+          className="preview-video__player"
           controls
         />
       </div>
