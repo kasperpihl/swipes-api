@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
   },
   breadcrumbLabel: {
     flexDirection: 'row',
-    marginTop: -2,
     color: colors.deepBlue30,
     fontSize: 12,
   },

@@ -64,7 +64,7 @@ class HOCDashboard extends PureComponent {
     }
   }
   onActionButton(i) {
-    console.log('action!', i);
+    // console.log('action!', i);
   }
   onModal(i, props) {
     const { showModal, navPush } = this.props;

@@ -22,7 +22,7 @@ class HOCProfile extends PureComponent {
     }
   }
   onActionButton(i) {
-    console.log('action!', i);
+    // console.log('action!', i);
   }
   renderActionButtons() {
     this.props.setActionButtons({

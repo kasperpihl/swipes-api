@@ -12,7 +12,7 @@ class HOCStepList extends PureComponent {
     this.state = {};
   }
   completeStep() {
-    console.log('complete step');
+    // console.log('complete step');
   }
   renderSteps(step, secI, i, completed) {
     const completedI = completed - 1;
