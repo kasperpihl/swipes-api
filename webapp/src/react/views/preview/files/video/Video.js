@@ -6,6 +6,7 @@ class Video extends Component {
   static supportContentType(contentType) {
     return ([
       'video/mp4',
+      'video/quicktime',
     ].indexOf(contentType) !== -1);
   }
   constructor(props) {
