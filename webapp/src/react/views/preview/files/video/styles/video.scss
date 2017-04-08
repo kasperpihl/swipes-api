@@ -2,5 +2,7 @@
 @import '~styles/_mixins.scss';
 
 .preview-video {
-  
+  @include size(100%);
+  max-height: 99%;
+  max-width: 90vw;
 }

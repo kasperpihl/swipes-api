@@ -21,12 +21,11 @@ class Video extends Component {
 
     return (
       <div className={className}>
-        <img
+        <video
           onLoad={this.props.onLoad}
           onError={this.props.onError}
           src={file.url}
-          className="preview-video__video"
-          role="presentation"
+          controls
         />
       </div>
     );
