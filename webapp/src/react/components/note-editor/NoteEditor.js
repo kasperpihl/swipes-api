@@ -94,6 +94,7 @@ class NoteEditor extends Component {
       >
         <Editor
           ref="editor"
+          spellCheck
           readOnly={readOnly}
           editorState={editorState}
           {...this.plugins.bind}

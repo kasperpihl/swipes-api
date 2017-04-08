@@ -226,7 +226,10 @@
   }
 
   &--future {
-    opacity: .5;
+
+    & > * {
+      opacity: .5;
+    }
 
     .indicator {
       background-color: $bg;
@@ -239,7 +242,9 @@
   }
 
   &:not(&--completed)#{&}--hover {
-    opacity: 1;
+    & > * {
+      opacity: 1;
+    }
 
     .indicator {
       border-color: $green-color;
@@ -337,7 +342,7 @@
       padding-right: 9px;
 
       &:focus {
-      text-shadow: 0px 0px 0px $deepBlue-100;
+        text-shadow: 0px 0px 0px $deepBlue-100;
       }
     }
   }

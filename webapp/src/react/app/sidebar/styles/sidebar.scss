@@ -15,7 +15,7 @@ $sidebarWidth: 84px;
   @include flexContainer('column', $selectorsToIgnoreFlex: $flexIgnoreList) {
     flex: none;
   };
-
+  z-index: 5;
   padding-bottom: 22px;
 }
 
