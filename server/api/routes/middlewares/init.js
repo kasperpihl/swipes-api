@@ -5,7 +5,7 @@ import {
 import {
   valLocals,
 } from '../../utils';
-import initMe from './db_utils/me';
+import initMe from './db_utils/init';
 import {
   servicesGetAll,
 } from './db_utils/services';

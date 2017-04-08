@@ -9,6 +9,7 @@ import * as tokens from './tokens';
 import * as notifications from './notifications';
 import * as notify from './notify';
 import * as emails from './emails';
+import * as me from './me';
 
 const notifyWrapper = (middlewares) => {
   return [
@@ -196,6 +197,12 @@ const token_revoked = [
   notify.notifyCommonRethinkdb,
 ];
 
+const settings_updated = [
+  me.meSettingsUpdatedNotificationData,
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
+
 export {
   goal_created,
   goal_completed,
@@ -227,4 +234,5 @@ export {
   xendo_remove_service_from_user,
   xendo_add_service_to_user,
   token_revoked,
+  settings_updated,
 };
