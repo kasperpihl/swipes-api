@@ -5,7 +5,7 @@ const initialState = fromJS({});
 export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
-    case 'rtm.start': {
+    case 'init': {
       let services = Map();
       payload.services.forEach((s) => {
         services = services.set(s.id, fromJS(s));

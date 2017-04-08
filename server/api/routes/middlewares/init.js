@@ -12,6 +12,9 @@ import {
 import {
   dbNotificationsGetAllByIdOrderByTs,
 } from './db_utils/notifications';
+import {
+  dbOnboardingGetAll,
+} from './db_utils/onboarding';
 
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
@@ -32,54 +35,55 @@ const initGetData = valLocals('initGetData', {
       filter: { sender: true },
       filterDefaultOption: false,
     }),
+    dbOnboardingGetAll(),
   ];
   const ts = new Date().toISOString();
   Promise.all(promiseArrayQ)
     .then((data) => {
-      const self = data[0];
+      const me = data[0];
       let users = [];
       let goals = [];
       let milestones = [];
       let ways = [];
       let notes = [];
 
-      if (self.organizations.length > 0) {
-        users = self.organizations[0].users;
+      if (me.organizations.length > 0) {
+        users = me.organizations[0].users;
 
         // We don't want duplication of that data served on the client;
-        delete self.organizations[0].users;
+        delete me.organizations[0].users;
       }
 
-      if (self.goals.length > 0) {
-        goals = self.goals;
+      if (me.goals.length > 0) {
+        goals = me.goals;
 
         // We don't want duplication of that data served on the client;
-        delete self.goals;
+        delete me.goals;
       }
 
-      if (self.milestones.length > 0) {
-        milestones = self.milestones;
+      if (me.milestones.length > 0) {
+        milestones = me.milestones;
 
         // We don't want duplication of that data served on the client;
-        delete self.milestones;
+        delete me.milestones;
       }
 
-      if (self.ways.length > 0) {
-        ways = self.ways;
+      if (me.ways.length > 0) {
+        ways = me.ways;
 
         // We don't want duplication of that data served on the client;
-        delete self.ways;
+        delete me.ways;
       }
 
-      if (self.notes.length > 0) {
-        notes = self.notes;
+      if (me.notes.length > 0) {
+        notes = me.notes;
 
         // We don't want duplication of that data served on the client;
-        delete self.notes;
+        delete me.notes;
       }
 
       setLocals({
-        self,
+        me,
         users,
         goals,
         milestones,
@@ -88,6 +92,7 @@ const initGetData = valLocals('initGetData', {
         ts,
         services: data[1],
         notifications: data[2].concat(data[3]),
+        onboarding: data[4],
       });
 
       return next();

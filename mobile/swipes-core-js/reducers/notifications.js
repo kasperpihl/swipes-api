@@ -14,7 +14,7 @@ export default function main(state = initialState, action) {
         return action.payload.notifications.toList();
       }
       return state;
-    case 'rtm.start': {
+    case 'init': {
       return fromJS(payload.notifications).sort(sortFn);
     }
 

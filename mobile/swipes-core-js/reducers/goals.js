@@ -9,7 +9,7 @@ export default function goalsReducer(state = initialState, action) {
   } = action;
 
   switch (type) {
-    case 'rtm.start': {
+    case 'init': {
       let goals = Map();
       payload.goals.forEach((g) => {
         goals = goals.set(g.id, fromJS(g));

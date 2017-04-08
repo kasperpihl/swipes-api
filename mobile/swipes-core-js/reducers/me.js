@@ -9,8 +9,8 @@ export default function me(state = initialState, action) {
   } = action;
 
   switch (type) {
-    case ('rtm.start'): {
-      return fromJS(payload.self);
+    case ('init'): {
+      return fromJS(payload.me);
     }
     case ('profile_pic_update'): {
       return state;

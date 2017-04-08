@@ -5,7 +5,7 @@ const initialState = fromJS({});
 export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
-    case 'rtm.start': {
+    case 'init': {
       let ways = Map();
       payload.ways.forEach((w) => {
         ways = ways.set(w.id, fromJS(w));

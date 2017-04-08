@@ -31,7 +31,7 @@ export default function notesReducer(state = initialState, action) {
   } = action;
 
   switch (type) {
-    case 'rtm.start': {
+    case 'init': {
       let server = Map();
       payload.notes.forEach((note) => {
         server = server.set(note.id, fromJS(note));

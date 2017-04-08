@@ -11,6 +11,14 @@ class HOCOnboarding extends PureComponent {
     this.state = {};
   }
   componentDidMount() {
+    const settings = {
+      onboarding: {
+        initial: {
+          order: ['create-account', ''],
+          completed: ['welcome'],
+        },
+      }
+    }
   }
   render() {
     return (
@@ -28,8 +36,11 @@ class HOCOnboarding extends PureComponent {
 
 HOCOnboarding.propTypes = {};
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    onboarding: state.get('onboarding'),
+    userOnboarding: state.getIn(['me', 'settings', 'onboarding']),
+  };
 }
 
 export default connect(mapStateToProps, {
