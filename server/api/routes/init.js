@@ -15,7 +15,7 @@ const notAuthed = express.Router();
 authed.all('/init',
   initGetData,
   valResponseAndSend({
-    self: object.require(),
+    me: object.require(),
     ts: string.format('iso8601').require(),
     users: array.of(object).require(),
     goals: array.of(object).require(),
