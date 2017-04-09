@@ -14,7 +14,7 @@ const dbMeUpdateSettings = funcWrap([
     user_id: string.require(),
     settings: object.require(),
   }).require(),
-], (err, user_id, settings) => {
+], (err, { user_id, settings }) => {
   if (err) {
     throw new SwipesError(`dbMeUpdateSettings: ${err}`);
   }
