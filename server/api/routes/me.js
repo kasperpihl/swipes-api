@@ -17,7 +17,7 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-notAuthed.all('/me.updateSettings',
+authed.all('/me.updateSettings',
   valBody({
     settings: object.require(),
   }),
