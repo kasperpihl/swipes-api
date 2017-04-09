@@ -24,6 +24,7 @@ const dbMeUpdateSettings = funcWrap([
       .get(user_id)
       .update({
         settings,
+        updated_at: r.now(),
       });
 
   return db.rethinkQuery(q);
