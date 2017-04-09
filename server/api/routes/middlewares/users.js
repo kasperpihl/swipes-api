@@ -113,14 +113,28 @@ const userSignUp = valLocals('userSignUp', {
   } = res.locals;
   const userDoc = {
     id: user_id,
-    apps: [],
     services: [],
     organizations: [organizationId],
     email,
     first_name,
     last_name,
     password: sha1(password),
-    created: moment().unix(),
+    created_at: r.now(),
+    updated_at: r.now(),
+    settings: {
+      onboarding: {
+        order: [
+          'create-account',
+          'personalize-swipes',
+          'create-goal',
+          'watch-introduction-video',
+          'invite-team',
+        ],
+        completed: {
+          'create-account': true,
+        },
+      },
+    },
   };
   const tokens = createTokens(tokenInfo.user_id);
   const createUserQ = r.table('users').insert(userDoc);
