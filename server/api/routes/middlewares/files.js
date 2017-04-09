@@ -23,16 +23,17 @@ aws.config.update({
 });
 
 const filesCreateS3Path = valLocals('filesCreateS3Name', {
+  user_id: string.require(),
   organization_id: string.require(),
   file_name: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     organization_id,
     file_name,
   } = res.locals;
   const seconds = Date.now() / 1000 | 0;
-  const randomString = generateSlackLikeId('', 8);
-  const s3Path = `uploads/${organization_id}/${seconds}-${randomString}/${file_name}`;
+  const s3Path = `uploads/${organization_id}/${seconds}-${user_id}/${file_name}`;
 
   setLocals({
     s3Path,
