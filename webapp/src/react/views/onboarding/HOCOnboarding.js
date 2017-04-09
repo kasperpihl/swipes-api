@@ -13,21 +13,26 @@ class HOCOnboarding extends PureComponent {
   componentDidMount() {
     const settings = {
       onboarding: {
-        initial: {
-          order: ['create-account', ''],
-          completed: ['welcome'],
-        },
+        initial: ['create-account', ''],
+        completed: {
+
+        }
+
       }
     }
   }
+  onClick(i, e) {
+    console.log('i', i, e);
+  }
   render() {
+    const { onboarding, userOnboarding } = this.props;
+    const items = userOnboarding.get('order').map(
+      (id) => onboarding.get(id).set('completed', !!userOnboarding.getIn(['completed',id]))
+    );
     return (
       <Onboarding
-        items={[
-          { id: 'create-account', title: 'Create account', completed: true },
-          { id: 'personalize-swipes', title: 'Personalize Swipes', subtitle: 'Make Swipes your own with profile image and more info for your colleagues'},
-          { id: 'create-goals', title: 'Create 3 goals' },
-        ]}
+        items={items}
+        delegate={this}
       />
     );
   }

@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import './styles/onboarding.scss';
 
 const CIRCLE_LENGTH = 190;
@@ -11,6 +12,8 @@ class Onboarding extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+    this.callDelegate = setupDelegate(props.delegate);
+    this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onClick'));
   }
   renderProgressBar() {
     const { items } = this.props;
@@ -49,18 +52,18 @@ class Onboarding extends PureComponent {
     const itemsHTML = items.map((item, i) => {
       let className = 'onboarding__item';
 
-      if (item.completed) {
+      if (item.get('completed')) {
         className += ' onboarding__item--completed';
       }
 
       return (
-        <div className={className} key={`onboarding-${i}`}>
+        <div className={className} key={`onboarding-${i}`} onClick={this.onClick(i)}>
           <div className="onboarding__indicator">
             <Icon icon="Checkmark" className="onboarding__svg" />
           </div>
           <div className="onboarding__content">
-            <div className="onboarding__title">{item.title}</div>
-            <div className="onboarding__subtitle">{item.subtitle}</div>
+            <div className="onboarding__title">{item.get('title')}</div>
+            <div className="onboarding__subtitle">{item.get('subtitle')}</div>
           </div>
           <div className="onboarding__button">
             <Icon icon="ArrowRightLine" className="onboarding__svg" />

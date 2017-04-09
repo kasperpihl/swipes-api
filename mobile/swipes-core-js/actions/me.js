@@ -1,8 +1,8 @@
 import { request } from './api';
 
-const disconnectService = accountId => request('users.serviceDisconnect', { account_id: accountId });
+export const disconnectService = accountId => request('users.serviceDisconnect', { account_id: accountId });
 
-const handleOAuthSuccess = (serviceName, query) => {
+export const handleOAuthSuccess = (serviceName, query) => {
   if (typeof query === 'string') {
     query = JSON.parse(query);
   }
@@ -15,7 +15,4 @@ const handleOAuthSuccess = (serviceName, query) => {
   return request('services.authsuccess', options);
 };
 
-export {
-  disconnectService,
-  handleOAuthSuccess,
-};
+export const updateSettings = (s) => request('me.updateSettings', { settings: s.toJS() });
