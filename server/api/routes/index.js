@@ -15,6 +15,7 @@ import * as milestones from './milestones';
 import * as ways from './ways';
 import * as stream from './stream';
 import * as tokens from './tokens';
+import * as me from './me';
 
 const v1NotAuthed = [
   users.notAuthed,
@@ -37,6 +38,7 @@ const v1Authed = [
   milestones.authed,
   ways.authed,
   tokens.authed,
+  me.authed,
 ];
 // const webhooksNotAuthed = [
 //   webhooks.notAuthed,
