@@ -12,6 +12,7 @@ import {
 import {
   filesGetSignedUrl,
   filesAddToFilesTable,
+  filesCreateS3Path,
 } from './middlewares/files';
 import {
   linksAddPermission,
@@ -34,11 +35,14 @@ const notAuthed = express.Router();
 
 authed.all('/files.signedUrl',
   valBody({
+    organization_id: string.require(),
     file_name: string.require(),
     file_type: string.require(),
   }),
+  filesCreateS3Path,
   filesGetSignedUrl,
   valResponseAndSend({
+    s3_path: string.require(),
     signed_url: string.require(),
   }));
 
@@ -47,7 +51,7 @@ authed.all('/files.upload',
     target_id: string.require(),
     organization_id: string.require(),
     file_name: string.require(),
-    s3_name: string.require(),
+    s3_path: string.require(),
   }),
   filesAddToFilesTable,
   linksCreate,

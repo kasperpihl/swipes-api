@@ -42,7 +42,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
     return dbFilesGetSingle({ id: itemId })
       .then((file) => {
         const s3Url = s3Congig.url;
-        const url = `${s3Url}uploads/${file.organization_id}/${file.s3_name}`;
+        const url = `${s3Url}${file.s3_path}`;
         const mapElements = elementsData(file.file_name);
         const mapFile = fileData(file.content_type, url);
         const mapButtons = buttonsData(file.file_name, url);

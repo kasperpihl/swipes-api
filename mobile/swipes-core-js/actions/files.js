@@ -1,17 +1,18 @@
 import * as a from './';
-import { randomString } from '../classes/utils';
 
 export const upload = (targetId, files) => (dispatch, getState) => new Promise((resolve) => {
   // First do S3 upload
   const file = files[0];
   const fileName = file.name;
   const orgId = getState().getIn(['me', 'organizations', 0, 'id']);
-  const s3FileName = randomString(32);
+  let s3Path = '';
   dispatch(a.api.request('files.signedUrl', {
-    file_name: `uploads/${orgId}/${s3FileName}`,
+    organization_id: orgId,
+    file_name: fileName,
     file_type: file.type,
   })).then((res) => {
     const signedUrl = res.signed_url;
+    s3Path = res.s3_path;
 
     return fetch(signedUrl, {
       method: 'PUT',
@@ -27,7 +28,7 @@ export const upload = (targetId, files) => (dispatch, getState) => new Promise((
         target_id: targetId,
         organization_id: orgId,
         file_name: fileName,
-        s3_name: s3FileName,
+        s3_path: s3Path,
       }))
       .then((res) => {
         resolve(res);

@@ -30,11 +30,11 @@ const dbFilesAdd = funcWrap([
     user_id: string.require(),
     organization_id: string.require(),
     file_name: string.require(),
-    s3_name: string.require(),
+    s3_path: string.require(),
     fileId: string.require(),
     contentType: string.require(),
   }).require(),
-], (err, { user_id, organization_id, file_name, s3_name, fileId, contentType }) => {
+], (err, { user_id, organization_id, file_name, s3_path, fileId, contentType }) => {
   if (err) {
     throw new SwipesError(`dbFilesAdd: ${err}`);
   }
@@ -45,7 +45,7 @@ const dbFilesAdd = funcWrap([
       .insert({
         organization_id,
         file_name,
-        s3_name,
+        s3_path,
         id: fileId,
         content_type: contentType,
         created_at: r.now(),

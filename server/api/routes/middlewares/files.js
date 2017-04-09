@@ -22,12 +22,30 @@ aws.config.update({
   secretAccessKey: awsConfig.secretKey,
 });
 
-const filesGetSignedUrl = valLocals('filesGetSignedUrl', {
+const filesCreateS3Path = valLocals('filesCreateS3Name', {
+  organization_id: string.require(),
   file_name: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    file_name,
+  } = res.locals;
+  const seconds = Date.now() / 1000 | 0;
+  const randomString = generateSlackLikeId('', 8);
+  const s3Path = `uploads/${organization_id}/${seconds}-${randomString}/${file_name}`;
+
+  setLocals({
+    s3Path,
+  });
+
+  return next();
+});
+const filesGetSignedUrl = valLocals('filesGetSignedUrl', {
+  s3Path: string.require(),
   file_type: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    file_name,
+    s3Path,
     file_type,
   } = res.locals;
   const s3 = new aws.S3({
@@ -35,7 +53,7 @@ const filesGetSignedUrl = valLocals('filesGetSignedUrl', {
   });
   const params = {
     Bucket: awsConfig.bucketName,
-    Key: file_name,
+    Key: s3Path,
     Expires: 60,
     ContentType: file_type,
   };
@@ -46,31 +64,31 @@ const filesGetSignedUrl = valLocals('filesGetSignedUrl', {
     }
 
     setLocals({
+      s3_path: s3Path,
       signed_url: data,
     });
 
     return next();
   });
 });
-
 const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
   user_id: string.require(),
   organization_id: string.require(),
   file_name: string.require(),
-  s3_name: string.require(),
+  s3_path: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     organization_id,
     file_name,
-    s3_name,
+    s3_path,
   } = res.locals;
   const fileId = generateSlackLikeId('F', 10);
   const nameArr = file_name.split('.');
   const ext = nameArr[nameArr.length - 1];
   const contentType = mime.lookup(ext) || null;
 
-  dbFilesAdd({ user_id, organization_id, file_name, s3_name, fileId, contentType })
+  dbFilesAdd({ user_id, organization_id, file_name, s3_path, fileId, contentType })
     .then((results) => {
       const changes = results.changes[0];
 
@@ -99,6 +117,7 @@ const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
 });
 
 export {
+  filesCreateS3Path,
   filesGetSignedUrl,
   filesAddToFilesTable,
 };
