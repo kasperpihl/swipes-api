@@ -17,16 +17,10 @@ class Onboarding extends PureComponent {
   }
   renderProgressBar() {
     const { items } = this.props;
-    const completedItems = [];
-    const numberOfAllItems = items.length;
 
-    items.forEach((item) => {
-      if (item.completed) {
-        completedItems.push(item);
-      }
-    });
-
-    const numberOfCompletedItems = completedItems.length;
+    const completedItems = items.filter(i => i.get('completed'));
+    const numberOfAllItems = items.size;
+    const numberOfCompletedItems = completedItems.size;
 
     const completedPercentage = parseInt((numberOfCompletedItems * 100) / numberOfAllItems, 10);
 

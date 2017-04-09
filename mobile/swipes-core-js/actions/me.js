@@ -15,4 +15,4 @@ export const handleOAuthSuccess = (serviceName, query) => {
   return request('services.authsuccess', options);
 };
 
-export const updateSettings = (s) => request('me.updateSettings', { settings: s.toJS() });
+export const updateSettings = (s) => request('me.updateSettings', { settings: s });

@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import { map, list } from 'react-immutable-proptypes';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
+import { map } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import Onboarding from './Onboarding';
 
@@ -10,19 +11,11 @@ class HOCOnboarding extends PureComponent {
     super(props);
     this.state = {};
   }
-  componentDidMount() {
-    const settings = {
-      onboarding: {
-        initial: ['create-account', ''],
-        completed: {
-
-        }
-
-      }
-    }
-  }
   onClick(i, e) {
     console.log('i', i, e);
+    const { browser, target, userOnboarding, complete } = this.props;
+    browser(target, 'http://youtube.com');
+    complete(userOnboarding.getIn(['order', i]));
   }
   render() {
     const { onboarding, userOnboarding } = this.props;
@@ -37,9 +30,13 @@ class HOCOnboarding extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
+const { func } = PropTypes;
 
-HOCOnboarding.propTypes = {};
+HOCOnboarding.propTypes = {
+  onboarding: map,
+  userOnboarding: map,
+  complete : func,
+};
 
 function mapStateToProps(state) {
   return {
@@ -49,4 +46,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  complete: ca.onboarding.complete,
+  browser: a.main.browser,
 })(HOCOnboarding);

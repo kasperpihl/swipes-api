@@ -53,8 +53,7 @@ export default function history(state = initialState, action) {
       return state.setIn(['counters', 'Dashboard'], payload.counter);
     }
     case types.NAVIGATION_SET_COUNTER: {
-      const { id, counter } = payload;
-      return state.setIn(['counters', id], `${counter}`);
+      return state.setIn(['counters', payload.id], payload.counter);
     }
     default:
       return state;

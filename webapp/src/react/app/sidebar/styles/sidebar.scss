@@ -77,6 +77,7 @@ $sidebarWidth: 84px;
     transition: .2s ease;
 
     &:before {
+      pointer-events: none;
       @include font(15px, $deepBlue-60);
       @include size(auto, auto);
       min-width: 100px;
@@ -99,7 +100,7 @@ $sidebarWidth: 84px;
     &:last-child {
       border-radius: 0 0 4px 4px;
     }
-    
+
 
     &:not(:first-child) {
       margin-top: 3px
@@ -211,7 +212,7 @@ $sidebarWidth: 84px;
       opacity: 1;
       transform: translateX(100%);
       transition: .2s ease;
-    } 
+    }
   }
 }
 
