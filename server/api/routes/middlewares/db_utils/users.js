@@ -157,6 +157,25 @@ const dbUsersGetByEmailForSignIn = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbUsersAddOrganization = funcWrap([
+  object.as({
+    user_id: string.require(),
+    organizationId: string.require(),
+  }).require(),
+], (err, { user_id, organizationId }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersAddOrganization: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organizationId)
+      .update({
+        users: r.row('users').append(user_id),
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbUsersGetService,
@@ -166,4 +185,5 @@ export {
   dbUsersUpdateProfilePic,
   dbUsersGetSingleWithOrganizations,
   dbUsersGetByEmailForSignIn,
+  dbUsersAddOrganization,
 };
