@@ -1,6 +1,5 @@
 import r from 'rethinkdb';
 import sha1 from 'sha1';
-import moment from 'moment';
 import Promise from 'bluebird';
 import {
   string,
@@ -36,7 +35,7 @@ import {
 
 const userAvailability = valLocals('userAvailability', {
   email: string.format('email').require(),
-}, (req, res, next) => {
+}, (req, res, next, setLocals) => {
   const {
     email,
   } = res.locals;
@@ -49,6 +48,12 @@ const userAvailability = valLocals('userAvailability', {
         return next(new SwipesError('There is a user with that email'));
       }
 
+      const user_id = generateSlackLikeId('U');
+
+      setLocals({
+        user_id,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -57,11 +62,12 @@ const userAvailability = valLocals('userAvailability', {
 });
 const userAddToOrganization = valLocals('userAddToOrganization', {
   invitation_code: string.require(),
+  user_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     invitation_code,
+    user_id,
   } = res.locals;
-  const user_id = generateSlackLikeId('U');
   const checkQ = r.table('organizations').getAll(invitation_code, { index: 'invitation_code' });
 
   db.rethinkQuery(checkQ)
@@ -78,7 +84,6 @@ const userAddToOrganization = valLocals('userAddToOrganization', {
 
         setLocals({
           organizationId,
-          user_id,
         });
 
         return db.rethinkQuery(updateQ);
@@ -99,7 +104,6 @@ const userSignUp = valLocals('userSignUp', {
   first_name: string.require(),
   last_name: string.require(),
   password: string.min(1).require(),
-  organizationId: string.require(),
   tokenInfo: object.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -108,13 +112,12 @@ const userSignUp = valLocals('userSignUp', {
     first_name,
     last_name,
     password,
-    organizationId,
     tokenInfo,
   } = res.locals;
   const userDoc = {
     id: user_id,
     services: [],
-    organizations: [organizationId],
+    organizations: [],
     email,
     first_name,
     last_name,
