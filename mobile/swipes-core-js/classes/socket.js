@@ -1,12 +1,13 @@
 import * as types from '../constants';
 
-import { bindAll } from './utils';
+import { bindAll, setupDelegate } from './utils';
 import * as a from '../actions';
 import sendNotification from './notification-handler';
 
 export default class Socket {
-  constructor(store) {
+  constructor(store, delegate) {
     this.store = store;
+    this.callDelegate = setupDelegate(delegate);
     this.reconnect_attempts = 0;
     bindAll(this, ['message', 'changeStatus', 'storeChange']);
     store.subscribe(this.storeChange);
@@ -64,8 +65,12 @@ export default class Socket {
         if (res && res.ok) {
           this.reconnect_attempts = 0;
           this.changeStatus('online');
-        } else if (res && res.err !== 'not_authed') {
-          this.ws.close();
+        } else if (res && res.error) {
+          if(res.error.message === 'not_authed'){
+            this.callDelegate('forceLogout');
+          } else {
+            this.ws.close();
+          }
         }
       });
     };

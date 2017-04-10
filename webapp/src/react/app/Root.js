@@ -9,6 +9,7 @@ import configureStore from 'src/store/configureStore';
 
 // Get classes that needs socket
 import { init } from 'swipes-core-js';
+import * as a from 'actions';
 import Analytics from 'classes/analytics';
 import IpcListener from 'classes/ipc-listener';
 
@@ -19,10 +20,14 @@ const history = syncHistoryWithStore(browserHistory, store, {
     return state.get('routing').toJS();
   },
 });
-
+const delegate = {
+  forceLogout: () => {
+    store.dispatch(a.main.forceLogout);
+  }
+}
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
-init(store);
+init(store, delegate);
 window.analytics.sendEvent('App Loaded');
 
 class Root extends PureComponent {
