@@ -34,8 +34,9 @@ class Onboarding extends PureComponent {
     );
   }
   renderHeader() {
+    const title = `Let's get started, ${msgGen.users.getName('me', {disableYou: true})}`;
     return (
-      <HOCHeaderTitle title="Getting started" subtitle="Welcome to your workspace. There are couple of things to learn before you start." >
+      <HOCHeaderTitle title={title} subtitle="We have added 5 easy steps that will set you up for success." >
         {this.renderProgressBar()}
       </HOCHeaderTitle>
     );

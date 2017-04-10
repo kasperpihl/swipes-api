@@ -12,8 +12,8 @@ export default class Users {
     if (userId === 'none') {
       return 'no one';
     }
-    if (userId === 'me' && !options.disableYou) {
-      return options.yourself ? 'yourself' : 'you';
+    if (userId === 'me') {
+      userId = me.get('id');
     }
     if (users) {
       const user = users.get(userId);

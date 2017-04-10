@@ -22,10 +22,8 @@ class HOCRegistration extends Component {
       signinEmail: '',
       signinPassword: '',
       signupFirstName: '',
-      signupLastName: '',
       signupEmail: '',
       signupPassword: '',
-      signupInvCode: '',
     };
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
     bindAll(this, ['signin', 'signup', 'handleButtonClick', 'handleKeyDown']);
@@ -64,10 +62,8 @@ class HOCRegistration extends Component {
       signinEmail,
       signinPassword,
       signupFirstName,
-      signupLastName,
       signupEmail,
       signupPassword,
-      signupInvCode,
    } = this.state;
 
     if (tabIndex === 0) {
@@ -83,10 +79,8 @@ class HOCRegistration extends Component {
     } else {
       const data = {
         first_name: signupFirstName,
-        last_name: signupLastName,
         email: signupEmail,
         password: signupPassword,
-        invitation_code: signupInvCode,
       };
 
       this.signup(data);
@@ -190,7 +184,6 @@ class HOCRegistration extends Component {
       signupLastName,
       signupEmail,
       signupPassword,
-      signupInvCode,
     } = this.state;
 
     return (
@@ -202,15 +195,6 @@ class HOCRegistration extends Component {
           key="signupFirstName"
           value={signupFirstName}
           onChange={this.cachedOnChange('signupFirstName')}
-          error={!!errorLabel}
-        />
-        <FloatingInput
-          label="Your Last Name"
-          type="text"
-          id="lastname"
-          key="signupLastName"
-          value={signupLastName}
-          onChange={this.cachedOnChange('signupLastName')}
           error={!!errorLabel}
         />
         <FloatingInput
@@ -229,15 +213,6 @@ class HOCRegistration extends Component {
           key="signupPassword"
           value={signupPassword}
           onChange={this.cachedOnChange('signupPassword')}
-          error={!!errorLabel}
-        />
-        <FloatingInput
-          label="Invitation Code"
-          type="text"
-          id="invitation"
-          key="signupInvCode"
-          value={signupInvCode}
-          onChange={this.cachedOnChange('signupInvCode')}
           error={!!errorLabel}
         />
         <div className="sign-in__error-status">{errorLabel}</div>
