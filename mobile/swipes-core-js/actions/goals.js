@@ -12,14 +12,17 @@ import GoalsUtil from '../classes/goals-util';
 export const create = valAction('goals.create', [
   string.min(1).max(155).require(),
   object,
-], (title, noteContent) => (d, getState) => d(a.api.request('goals.create', {
-  goal: {
-    title,
-  },
-  note_content: noteContent,
-  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
-})),
-);
+], (title, noteContent) => (d, getState) => {
+  d(a.onboarding.complete('create-goal'));
+  return d(a.api.request('goals.create', {
+    goal: {
+      title,
+    },
+    note_content: noteContent,
+    organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  }));
+});
+
 
 export const loadWay = valAction('goals.loadWay', [
   string.require(),

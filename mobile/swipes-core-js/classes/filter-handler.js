@@ -43,7 +43,6 @@ export default class FilterHandler {
       diffFilters = filters.get('goals').filter(
         (f, k) => f.get('filter') !== this.prevFilters.getIn(['goals', k, 'filter'])
       ).map(f => f.get('id'));
-      console.log('difference!!!', diffFilters.toJS());
     }
     const goals = state.get('goals');
     if (goals !== this.previousGoals || (diffFilters && diffFilters.size)) {

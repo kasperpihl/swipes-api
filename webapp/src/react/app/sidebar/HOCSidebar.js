@@ -59,9 +59,11 @@ class HOCSidebar extends PureComponent {
   getTitleForId(id) {
     switch (id) {
       case 'MilestoneList':
-        return 'Milestones (In Progress)';
+        return 'Milestones';
       case 'GoalList':
         return 'Goals';
+      case 'Profile':
+        return 'Account';
       default:
         return id;
     }
@@ -94,7 +96,7 @@ class HOCSidebar extends PureComponent {
         className={className}
         key={item.id}
         data-id={item.id}
-        data-title={item.id}
+        data-title={this.getTitleForId(item.id)}
       >
         {image}
         {notif}

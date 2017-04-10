@@ -9,10 +9,14 @@ export default function me(state = initialState, action) {
   } = action;
 
   switch (type) {
-    case ('init'): {
+    case 'init': {
       return fromJS(payload.me);
     }
-    case ('profile_pic_update'): {
+    case 'me.updateSettings':
+    case 'settings_updated': {
+      return state.mergeIn(['settings'], fromJS(payload.settings));
+    }
+    case 'profile_pic_update': {
       return state;
     }
     case 'service_added': {
