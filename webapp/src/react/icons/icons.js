@@ -68,6 +68,7 @@ import Milestones from './svgs/milestones.svg';
 import Minus from './svgs/minus.svg';
 import Note from './svgs/note.svg';
 import Notification from './svgs/notification.svg';
+import Onboarding from './svgs/onboarding.svg';
 import OrderedList from './svgs/ordered-list.svg';
 import Person from './svgs/person.svg';
 import Plus from './svgs/plus.svg';
@@ -177,6 +178,7 @@ export {
   Minus,
   Note,
   Notification,
+  Onboarding,
   OrderedList,
   Person,
   Plus,

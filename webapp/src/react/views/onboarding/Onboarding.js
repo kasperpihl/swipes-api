@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-// import { map, list } from 'react-immutable-proptypes';
+import React, { PureComponent, PropTypes } from 'react';
+import { list } from 'react-immutable-proptypes';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -17,25 +17,38 @@ class Onboarding extends PureComponent {
   }
   renderProgressBar() {
     const { items } = this.props;
-
     const completedItems = items.filter(i => i.get('completed'));
     const numberOfAllItems = items.size;
     const numberOfCompletedItems = completedItems.size;
-
     const completedPercentage = parseInt((numberOfCompletedItems * 100) / numberOfAllItems, 10);
-
     const svgDashOffset = CIRCLE_LENGTH - ((CIRCLE_LENGTH * completedPercentage) / 100);
+    let className = 'onboarding__progress';
+
+    if (completedPercentage === 100) {
+      className += ' onboarding__progress--completed';
+    }
 
     return (
-      <div className="onboarding__progress">
-        <Icon icon="Circle" className="onboarding__svg" strokeDasharray={CIRCLE_LENGTH} strokeDashoffset={svgDashOffset} />
+      <div className={className}>
+        <Icon
+          icon="Circle"
+          className="onboarding__svg"
+          strokeDasharray={CIRCLE_LENGTH}
+          strokeDashoffset={svgDashOffset}
+        />
         <div className="onboarding__progress-number">{completedPercentage}%</div>
+        <div className="onboarding__splash">
+          <div className="onboarding__progress-number">{completedPercentage}%</div>
+        </div>
       </div>
     );
   }
   renderHeader() {
     return (
-      <HOCHeaderTitle title="Getting started" subtitle="Welcome to your workspace. There are couple of things to learn before you start." >
+      <HOCHeaderTitle
+        title="Getting started"
+        subtitle="Welcome to your workspace. There are couple of things to learn before you start."
+      >
         {this.renderProgressBar()}
       </HOCHeaderTitle>
     );
@@ -73,7 +86,6 @@ class Onboarding extends PureComponent {
     );
   }
   render() {
-    const { items } = this.props;
     return (
       <SWView header={this.renderHeader()}>
         {this.renderItems()}
@@ -84,6 +96,9 @@ class Onboarding extends PureComponent {
 
 export default Onboarding;
 
-// const { string } = PropTypes;
+const { object } = PropTypes;
 
-Onboarding.propTypes = {};
+Onboarding.propTypes = {
+  delegate: object,
+  items: list,
+};
