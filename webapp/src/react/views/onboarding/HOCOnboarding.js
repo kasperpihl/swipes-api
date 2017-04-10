@@ -13,9 +13,24 @@ class HOCOnboarding extends PureComponent {
   }
   onClick(i, e) {
     console.log('i', i, e);
-    const { browser, target, userOnboarding, complete } = this.props;
-    browser(target, 'http://youtube.com');
-    complete(userOnboarding.getIn(['order', i]));
+    const { browser, target, userOnboarding, complete, openSecondary } = this.props;
+    openSecondary({
+      id: 'Preview',
+      title: 'Preview',
+      props: {
+        preview: {
+          header: {
+            title: 'Welcome video',
+          },
+          file: {
+            content_type: 'video/quicktime',
+            url: 'https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1491855333-UVZWCJDHK/Thread%20concept.mov'
+          }
+        }
+      }
+    })
+    //browser(target, 'http://youtube.com');
+    //complete(userOnboarding.getIn(['order', i]));
   }
   render() {
     const { onboarding, userOnboarding } = this.props;

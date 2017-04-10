@@ -26,7 +26,14 @@ class HOCPreviewModal extends PureComponent {
     super(props);
     this.state = this.getDefaultState();
     setupLoading(this);
-    this.fetch(props.loadPreview);
+    if(props.preview) {
+      this.state.preview = props.preview.toJS();
+      console.log('prev', props.preview);
+      this.state.loading = false;
+    } else {
+      this.fetch(props.loadPreview);
+    }
+
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
     bindAll(this, ['onFileLoaded', 'onFileError', 'onAttach']);
   }
@@ -257,8 +264,8 @@ class HOCPreviewModal extends PureComponent {
     const { preview } = this.state;
     let { buttons } = preview || {};
 
-    if (!buttons) {
-      buttons = [];
+    if (!buttons || !buttons.length) {
+      return undefined;
     }
 
     return (

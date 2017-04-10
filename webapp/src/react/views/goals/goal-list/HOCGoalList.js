@@ -114,7 +114,7 @@ class HOCGoalList extends PureComponent {
     if (obj.id === 'matching') {
       const { inputMenu } = this.props;
       const { tabs, tabIndex } = this.state;
-      const text = filters.getIn([tabs[tabIndex], 'filter', 'matching']);
+      const text = this.props.filters.getIn([tabs[tabIndex], 'filter', 'matching']);
       inputMenu({
         ...options,
         buttonLabel: 'Search',
