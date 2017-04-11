@@ -46,7 +46,7 @@ const initialState = fromJS({
   },
   notifications: {
     notifications: {
-      title: 'Notifications',
+      title: 'Received',
       filter: n => n.get('notification'),
       notifications: List(),
     },

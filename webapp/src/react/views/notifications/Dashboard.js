@@ -9,7 +9,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
 import './styles/dashboard';
 
-export default class Dashboard extends Component {
+export default class Notifications extends Component {
   constructor(props) {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
@@ -25,7 +25,7 @@ export default class Dashboard extends Component {
 
     return (
       <div className="dashboard-header">
-        <HOCHeaderTitle title="Dashboard">
+        <HOCHeaderTitle title="Notifications">
           {button}
         </HOCHeaderTitle>
         {this.renderTabbar()}
@@ -103,7 +103,7 @@ export default class Dashboard extends Component {
 }
 const { object, number, array } = PropTypes;
 
-Dashboard.propTypes = {
+Notifications.propTypes = {
   initialScroll: number,
   tabIndex: number,
   tabs: array,

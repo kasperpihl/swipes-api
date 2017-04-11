@@ -50,7 +50,7 @@ export default function history(state = initialState, action) {
       });
     }
     case UPDATE_NOTIFICATION_COUNTER: {
-      return state.setIn(['counters', 'Dashboard'], payload.counter);
+      return state.setIn(['counters', 'Notifications'], payload.counter);
     }
     case types.NAVIGATION_SET_COUNTER: {
       return state.setIn(['counters', payload.id], payload.counter);

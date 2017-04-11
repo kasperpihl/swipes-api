@@ -88,7 +88,7 @@ export default class FilterHandler {
         });
       });
       filters = filters.set('notifications', notifFilters);
-      const currUnread = state.getIn(['navigation', 'counters', 'Dashboard']);
+      const currUnread = state.getIn(['navigation', 'counters', 'Notifications']);
 
       this.prevNotifications = notifications;
       if (currUnread !== counter) {

@@ -54,7 +54,7 @@ export const setCounter = (id, counter) => (d, getState) => {
     if (window.ipcListener) {
       const counters = getState().getIn(['navigation', 'counters']);
       const slackCount = counters.get('Slack');
-      const swipesCount = counters.get('Dashboard');
+      const swipesCount = counters.get('Notifications');
       let totalCount = 0;
       if (swipesCount || slackCount) {
         if (swipesCount && swipesCount.length) {
