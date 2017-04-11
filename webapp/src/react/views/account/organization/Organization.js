@@ -17,6 +17,7 @@ class Organization extends PureComponent {
     this.onInvite = this.callDelegate.bind(null, 'onInvite');
     this.onKeyDown = this.callDelegate.bind(null, 'onKeyDown');
     this.onChangeCached = setupCachedCallback(this.onChange, this);
+    this.onContextCached = setupCachedCallback(this.callDelegate.bind(null, 'onContext'));
   }
   componentDidMount() {
   }
@@ -50,7 +51,7 @@ class Organization extends PureComponent {
             {userLevel}
           </div>
           <div className="organization__user-actions">
-            <Button icon="ThreeDots" />
+            <Button icon="ThreeDots" onClick={this.onContextCached(u.get('id'))}/>
           </div>
         </div>
       )

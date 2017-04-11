@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { fromJS } from 'immutable';
+import TabMenu from 'context-menus/tab-menu/TabMenu';
 import Organization from './Organization';
 
 class HOCOrganization extends PureComponent {
@@ -42,6 +43,48 @@ class HOCOrganization extends PureComponent {
       }
     });
   }
+  onContext(uId, e) {
+    console.log('uId', uId, e);
+    const { contextMenu, organization } = this.props;
+    const options = this.getOptionsForE(e);
+
+    const items = [
+      { id: 'promote', title: 'Promote to admin' },
+    ];
+    if(organization.get('admins').contains(uId)){
+      items[0] = { id: 'demote', title: 'Demote as admin' };
+    }
+    if(!uId.activated){
+      items.push({ id: 'email', title: 'Resend email' });
+    }
+
+    const delegate = {
+      onItemAction: (item) => {
+        contextMenu(null);
+        console.log('chose item', item);
+      },
+    };
+
+    this.setLoading(uId);
+    contextMenu({
+      options,
+      component: TabMenu,
+      onClose: () => this.clearLoading(uId),
+      props: {
+        delegate,
+        items,
+        style: {
+          width: '360px',
+        },
+      },
+    });
+  }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
+  }
   render() {
     const { users, organization } = this.props;
     const { firstNameVal, emailVal } = this.state;
@@ -71,4 +114,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   invite: ca.users.invite,
+  contextMenu: a.main.contextMenu,
 })(HOCOrganization);
