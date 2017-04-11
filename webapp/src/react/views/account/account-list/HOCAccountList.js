@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 import AccountList from './AccountList';
 
 class HOCAccountList extends PureComponent {
+  static minWidth() {
+    return 900;
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -14,24 +17,24 @@ class HOCAccountList extends PureComponent {
         {
           id: 'Profile',
           title: 'My Profile',
-          subtitle: 'get your best looks out',
+          subtitle: 'Change your profile picture and correct your surname',
         },
         {
           id: 'Organization',
           title: 'My Team',
-          subtitle: 'manage here and there',
+          subtitle: 'Invite new team members and manage current ones',
         },
         {
           id: 'Settings',
           title: 'Change Settings',
-          subtitle: 'yalla yalla settings',
+          subtitle: 'Manage integrations',
         },
         {
           id: 'Payment',
-          title: 'Manage Payment',
-          subitle: 'Hello payment'
-        }
-      ]
+          title: 'Payment',
+          subtitle: 'Manage payment',
+        },
+      ],
     };
   }
   componentDidMount() {
@@ -42,7 +45,7 @@ class HOCAccountList extends PureComponent {
     navPush({
       id: section.id,
       title: section.title,
-    })
+    });
   }
   render() {
     const { sections } = this.state;

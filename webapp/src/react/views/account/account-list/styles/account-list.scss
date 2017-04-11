@@ -1,6 +1,108 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
 .account-list {
-  
+  @include size(100%, auto);
+  @include flexContainer('row', between, top) {
+    flex-wrap: wrap;
+  };
+}
+
+.account-item {
+  @include size(278px, 150px);
+  padding: 15px;
+  // padding-left: 0;
+  margin-left: -15px;
+  transition: .25s ease-out;
+
+
+  &:before {
+    @include size(100%);
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    background-color: $blue-5;
+    z-index: -1;
+    -webkit-clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    // transition: .25s ease-out;
+
+  }
+
+  &:after {
+    @include size(100%);
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    // background-color: $blue-20;
+    z-index: -1;
+    -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    transition: .25s ease-out;
+
+  }
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.account-item {
+
+  &__title {
+    @include size(100%, 38px);
+    @include font(15px, $deepBlue-100, 20px, 500);
+    @include flexContainer('row', between, center);
+    border-bottom: 1px solid $deepBlue-100;
+  }
+
+  &__description {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-30, 15px, 500);
+    margin-top: 12px;
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-100);
+    opacity: 0;
+    transition: .3s ease;
+    transform: translateX(-15px);
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+
+// ======================================================
+// Hovers
+// ======================================================
+
+.account-item {
+  $b: &;
+
+  &:hover {
+    box-shadow: 0 6px 12px 1px rgba(0,12,47, 0.15);
+    transition: .25s ease-in;
+
+    &:before {
+      -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+      transition: .25s ease-in;
+    }
+
+    &:after {
+      // -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+      transition: .25s ease-out;
+    }
+
+    #{$b}__svg {
+      opacity: 1;
+      transition: .25s .15s ease;
+      transform: translateX(0px);
+    }
+  }
 }
