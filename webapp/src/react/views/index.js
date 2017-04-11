@@ -6,7 +6,7 @@ import ActivityFeed from './goals/activity-feed/HOCActivityFeed';
 import Notify from './notify/HOCNotify';
 import Onboarding from './onboarding/HOCOnboarding';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
-import Notifications from './notifications/HOCDashboard';
+import Notifications from './notifications/HOCNotifications';
 import Preview from './preview/HOCPreview';
 import Profile from './account/profile/HOCProfile';
 import Organization from './account/organization/HOCOrganization';

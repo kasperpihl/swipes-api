@@ -7,7 +7,7 @@ import Button from 'Button';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 
 import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
-import './styles/dashboard';
+import './styles/notifications';
 
 export default class Notifications extends Component {
   constructor(props) {
@@ -20,11 +20,11 @@ export default class Notifications extends Component {
     const { loadingState, tabIndex } = this.props;
     const loading = loadingState.get('all') && loadingState.get('all').loading;
     const button = tabIndex === 0 ? (
-      <Button loading={loading} text="Mark all" onClick={this.onMarkAll} />
+      <Button loading={loading} text="Mark all as read" onClick={this.onMarkAll} />
     ) : null;
 
     return (
-      <div className="dashboard-header">
+      <div className="notifications-header">
         <HOCHeaderTitle title="Notifications">
           {button}
         </HOCHeaderTitle>
@@ -40,7 +40,7 @@ export default class Notifications extends Component {
     } = this.props;
 
     return (
-      <div className="dashboard__tab-bar" key="tabbar">
+      <div className="notifications__tab-bar" key="tabbar">
         <TabBar tabs={tabs} delegate={delegate} activeTab={tabIndex} />
       </div>
     );
@@ -92,10 +92,8 @@ export default class Notifications extends Component {
         onScroll={this.onScroll}
         initialScroll={initialScroll}
       >
-        <div className="dashboard">
-          <div className="dashboard__notifications">
-            {this.renderNotifications()}
-          </div>
+        <div className="notifications">
+          {this.renderNotifications()}
         </div>
       </SWView>
     );

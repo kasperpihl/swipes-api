@@ -13,7 +13,7 @@ class TabMenu extends Component {
       tabIndex: -1,
       query: '',
       loading: false,
-      results: [],
+      results: props.items || [],
     };
     if (typeof props.initialTabIndex === 'number') {
       this.state.tabIndex = props.initialTabIndex;

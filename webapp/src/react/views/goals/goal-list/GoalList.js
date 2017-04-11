@@ -50,7 +50,7 @@ class GoalList extends Component {
     const { loadingState } = this.props;
     return (
       <div className="goals-list__header">
-        <HOCHeaderTitle title="Team goals">
+        <HOCHeaderTitle title="Goals">
           <Button
             text="Add a goal"
             primary

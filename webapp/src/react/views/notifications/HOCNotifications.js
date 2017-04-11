@@ -7,10 +7,10 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as core from 'swipes-core-js/actions';
 import { setupDelegate, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 
-import Dashboard from './Dashboard';
+import Notifications from './Notifications';
 /* global msgGen */
 
-class HOCDashboard extends PureComponent {
+class HOCNotifications extends PureComponent {
   constructor(props) {
     super(props);
     let tabIndex = 0;
@@ -18,7 +18,7 @@ class HOCDashboard extends PureComponent {
       tabIndex = props.savedState.get('tabIndex') || 0;
     }
     this.state = {
-      tabs: ['notifications', 'sent', 'activity'],
+      tabs: ['received', 'sent', 'activity'],
       tabIndex,
     };
     this.state.notifications = this.getFilteredNotifications(tabIndex);
@@ -175,7 +175,7 @@ class HOCDashboard extends PureComponent {
     const { savedState, filters } = this.props;
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
     return (
-      <Dashboard
+      <Notifications
         delegate={this}
         loadingState={this.getAllLoading()}
         notifications={notifications}
@@ -194,7 +194,7 @@ class HOCDashboard extends PureComponent {
 }
 
 const { func, object, string } = PropTypes;
-HOCDashboard.propTypes = {
+HOCNotifications.propTypes = {
   navPush: func,
   savedState: object,
   saveState: func,
@@ -221,4 +221,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   markNotifications: core.notifications.mark,
   preview: actions.links.preview,
-})(HOCDashboard);
+})(HOCNotifications);

@@ -5,13 +5,11 @@
 // Block
 // ======================================================
 
-.dashboard {
-  @include size(100%, auto);
-  @include flexContainer('column');
-}
 
 .notifications {
-
+  @include size(100%, auto);
+  @include flexContainer('column');
+  padding-bottom: 60px;
 }
 
 .notifications-empty-state {
@@ -23,15 +21,6 @@
 // ======================================================
 // Elements
 // ======================================================
-
-.dashboard {
-
-  &__notifications {
-    @include size(100%, auto);
-    @include flexContainer('column');
-    padding-bottom: 60px;
-  }
-}
 
 .notifications {
 
