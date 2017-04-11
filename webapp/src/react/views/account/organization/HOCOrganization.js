@@ -24,6 +24,11 @@ class HOCOrganization extends PureComponent {
   onChange(key, val) {
     this.setState({ [key]: val});
   }
+  onKeyDown(e) {
+    if(e.keyCode === 13){
+      this.onInvite();
+    }
+  }
   onInvite() {
     const { firstNameVal, emailVal } = this.state;
     const { invite } = this.props;

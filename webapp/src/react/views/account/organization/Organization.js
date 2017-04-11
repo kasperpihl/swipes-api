@@ -15,6 +15,7 @@ class Organization extends PureComponent {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
     this.onInvite = this.callDelegate.bind(null, 'onInvite');
+    this.onKeyDown = this.callDelegate.bind(null, 'onKeyDown');
     this.onChangeCached = setupCachedCallback(this.onChange, this);
   }
   componentDidMount() {
@@ -23,28 +24,37 @@ class Organization extends PureComponent {
     this.callDelegate('onChange', key, val);
   }
   renderUsers() {
-    const { users } = this.props;
+    const { users, organization } = this.props;
 
-    const usersHTML = users.map(u => (
-      <div className="organization__user" key={u.get('id')}>
-        <div className="organization__user-image">
-          <HOCAssigning assignees={[u.get('id')]} rounded size={42} />
+    const usersHTML = users.map(u => {
+      let userLevel = 'MEMBER';
+      if(organization.get('admins') && organization.get('admins').indexOf(u.get('id')) !== -1){
+        userLevel = 'ADMIN';
+      }
+      if(u.get('id') === organization.get('owner_id')){
+        userLevel = 'OWNER';
+       }
+
+      return (
+        <div className="organization__user" key={u.get('id')}>
+          <div className="organization__user-image">
+            <HOCAssigning assignees={[u.get('id')]} rounded size={30} />
+          </div>
+          <div className="organization__user-name">
+            {msgGen.users.getFullName(u.get('id'))}{u.get('activated') ? null : ` (pending)`}
+          </div>
+          <div className="organization__user-email">
+            {u.get('email')}
+          </div>
+          <div className="organization__user-type">
+            {userLevel}
+          </div>
+          <div className="organization__user-actions">
+            <Button icon="ThreeDots" />
+          </div>
         </div>
-        <div className="organization__user-name">
-          {msgGen.users.getFullName(u.get('id'))}
-          <div className="organization__user-status">Pending</div>
-        </div>
-        <div className="organization__user-email">
-          {u.get('email')}
-        </div>
-        <div className="organization__user-type">
-          ADMIN
-        </div>
-        <div className="organization__user-actions">
-          <Button icon="ThreeDots" />
-        </div>
-      </div>
-      )).toArray();
+      )
+    }).toArray();
 
     return (
       <div className="organization__user-list">
@@ -76,6 +86,7 @@ class Organization extends PureComponent {
               type="email"
               value={emailVal}
               disabled={isLoading}
+              onKeyDown={this.onKeyDown}
               onChange={this.onChangeCached('emailVal')}
             />
           </div>
