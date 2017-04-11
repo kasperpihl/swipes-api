@@ -2,7 +2,25 @@ export default class Users {
   constructor(store) {
     this.store = store;
   }
-
+  getFullName(userId) {
+    const state = this.store.getState();
+    const users = state.get('users');
+    const me = state.get('me');
+    if (userId === 'me') {
+      userId = me.get('id');
+    }
+    if (users) {
+      const user = users.get(userId);
+      if (user) {
+        const firstName = user.get('first_name') || '';
+        const lastName = user.get('last_name') || '';
+        return firstName.split(' ').concat(lastName.split(' ')).map(
+          (s) => s.charAt(0).toUpperCase() + s.slice(1)
+        ).join(' ');
+      }
+    }
+    return '';
+  }
   getName(userId, options) {
     options = options || {};
     const state = this.store.getState();

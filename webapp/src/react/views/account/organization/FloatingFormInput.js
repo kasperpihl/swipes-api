@@ -14,23 +14,24 @@ class FloatingInput extends Component {
 
     bindAll(this, ['floatFocus', 'floatBlur', 'onChange', 'showPassword', 'hidePassword']);
   }
+  componentWillReceiveProps(nextProps) {
+    const currVal = this.props.value || '';
+    const nextVal = nextProps.value || '';
+  }
   onChange(e) {
-    this.props.onChange(e.target.value, e);
+    const { onChange } = this.props;
+    if(onChange){
+      onChange(e.target.value, e);
+    }
   }
   floatFocus() {
+    this.setState({ focus: true });
     if (!this.state.float) {
       this.setState({ float: !this.state.float });
     }
   }
   floatBlur() {
-    const input = this.refs.floatingInput;
-    const inputVal = input.value.length;
-
-    if (this.state.float) {
-      this.setState({ float: !this.state.float });
-    }
-
-    this.setState({ floatValue: inputVal });
+    this.setState({ focus: false });
   }
   showPassword() {
     const { visiblePassword } = this.state;
@@ -48,16 +49,17 @@ class FloatingInput extends Component {
   }
   render() {
     const { label, type, id, error, value } = this.props;
-    const { visiblePassword } = this.state;
+
+    const { focus, visiblePassword } = this.state;
     let floatingClass = 'floating-form-label--inactive';
     let iconClass = 'floating-form-label__icon';
     let newType = type;
 
-    if (this.state.float) {
+    if (focus) {
       floatingClass = 'floating-form-label--active';
     }
 
-    if (this.state.floatValue > 0) {
+    if (value.length > 0) {
       floatingClass += ' floating-form-label--standby';
     }
 

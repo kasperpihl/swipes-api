@@ -13,22 +13,14 @@ import './styles/organization.scss';
 class Organization extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      firstName: '',
-      email: '',
-    };
-    this.onInvite = this.onInvite.bind(this);
     this.callDelegate = setupDelegate(props.delegate);
+    this.onInvite = this.callDelegate.bind(null, 'onInvite');
     this.onChangeCached = setupCachedCallback(this.onChange, this);
   }
   componentDidMount() {
   }
   onChange(key, val) {
-    this.setState({ [key]: val });
-  }
-  onInvite(e) {
-    const { firstName, email } = this.state;
-    this.callDelegate('onInvite', firstName, email, e);
+    this.callDelegate('onChange', key, val);
   }
   renderUsers() {
     const { users } = this.props;
@@ -39,7 +31,7 @@ class Organization extends PureComponent {
           <HOCAssigning assignees={[u.get('id')]} rounded size={42} />
         </div>
         <div className="organization__user-name">
-          {`${u.get('first_name')} ${u.get('last_name')}`}
+          {msgGen.users.getFullName(u.get('id'))}
           <div className="organization__user-status">Pending</div>
         </div>
         <div className="organization__user-email">
@@ -61,22 +53,38 @@ class Organization extends PureComponent {
     );
   }
   renderInvite() {
-    const { firstName, email } = this.state;
+    const { loadingState, firstNameVal, emailVal } = this.props;
+    const isLoading = loadingState.get('invite') && loadingState.get('invite').loading;
     return (
       <div className="organization__form">
 
         <div className="organization__input-wrapper">
           <div className="organization__input">
-            <FloatingFormInput id="org-first-name" label="First name" type="text" value={firstName} onChange={this.onChangeCached('firstName')} />
+            <FloatingFormInput
+              id="org-first-name"
+              label="First name"
+              type="text"
+              disabled={isLoading}
+              value={firstNameVal}
+              onChange={this.onChangeCached('firstNameVal')}
+            />
           </div>
           <div className="organization__input">
-            <FloatingFormInput id="org-email" label="name@company.com" type="email" value={email} onChange={this.onChangeCached('email')} />
+            <FloatingFormInput
+              id="org-email"
+              label="name@company.com"
+              type="email"
+              value={emailVal}
+              disabled={isLoading}
+              onChange={this.onChangeCached('emailVal')}
+            />
           </div>
         </div>
 
         <Button
           onClick={this.onInvite}
           text="Invite"
+          {...loadingState.get('invite')}
           primary
         />
       </div>

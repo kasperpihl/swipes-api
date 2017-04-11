@@ -332,7 +332,7 @@ export function setupLoading(ctx) {
       newState.loadingLabel = label;
     }
     _loadingStates = _loadingStates.set(name, newState);
-    this.setState({ _loadingStates });
+    ctx.setState({ _loadingStates });
     setClearTimer(name, duration);
   }
   function clearLoading(name, label, duration) {
@@ -346,7 +346,7 @@ export function setupLoading(ctx) {
       newState.successLabel = label;
     }
     _loadingStates = _loadingStates.set(name, newState);
-    this.setState({ _loadingStates });
+    ctx.setState({ _loadingStates });
     setClearTimer(name, duration);
   }
   setClearTimer = (name, duration) => {
