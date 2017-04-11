@@ -23,6 +23,7 @@ class AccountList extends PureComponent {
       console.log('sect', s);
       return (
         <Button
+          key={i}
           onClick={this.onClickCached(i)}
           text={s.title}
         />

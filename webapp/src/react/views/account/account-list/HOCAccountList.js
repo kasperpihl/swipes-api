@@ -38,6 +38,11 @@ class HOCAccountList extends PureComponent {
   }
   onClick(section) {
     console.log('section', section);
+    const { navPush } = this.props;
+    navPush({
+      id: section.id,
+      title: section.title,
+    })
   }
   render() {
     const { sections } = this.state;
