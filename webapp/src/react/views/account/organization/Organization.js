@@ -33,7 +33,7 @@ class Organization extends PureComponent {
       }
       if(u.get('id') === organization.get('owner_id')){
         userLevel = 'OWNER';
-       }
+      }
 
       return (
         <div className="organization__user" key={u.get('id')}>
