@@ -1,4 +1,4 @@
-import AccountList from './account/account-list/AccountList';
+import AccountList from './account/account-list/HOCAccountList';
 import Browser from './browser/HOCBrowser';
 import Find from './find/HOCFind';
 import GoalList from './goals/goal-list/HOCGoalList';

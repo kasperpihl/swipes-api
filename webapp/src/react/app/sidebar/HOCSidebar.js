@@ -62,7 +62,7 @@ class HOCSidebar extends PureComponent {
         return 'Milestones';
       case 'GoalList':
         return 'Goals';
-      case 'Organization':
+      case 'AccountList':
         return 'Account';
       default:
         return id;
@@ -85,7 +85,7 @@ class HOCSidebar extends PureComponent {
 
     let image = <Icon icon={item.svg} className="sidebar__icon" />;
 
-    if (item.id === 'Organization') {
+    if (item.id === 'AccountList') {
       image = <HOCAssigning assignees={[item.personId]} rounded size={44} />;
     }
 
@@ -120,7 +120,7 @@ class HOCSidebar extends PureComponent {
       return undefined;
     }
 
-    return this.renderItem({ id: 'Organization', personId: me.get('id') });
+    return this.renderItem({ id: 'AccountList', personId: me.get('id') });
   }
   renderStore() {
     // For later

@@ -9,13 +9,44 @@ import AccountList from './AccountList';
 class HOCAccountList extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      sections: [
+        {
+          id: 'Profile',
+          title: 'My Profile',
+          subtitle: 'get your best looks out',
+        },
+        {
+          id: 'Organization',
+          title: 'My Team',
+          subtitle: 'manage here and there',
+        },
+        {
+          id: 'Settings',
+          title: 'Change Settings',
+          subtitle: 'yalla yalla settings',
+        },
+        {
+          id: 'Payment',
+          title: 'Manage Payment',
+          subitle: 'Hello payment'
+        }
+      ]
+    };
   }
   componentDidMount() {
   }
+  onClick(section) {
+    console.log('section', section);
+  }
   render() {
+    const { sections } = this.state;
+    console.log(sections);
     return (
-      <AccountList />
+      <AccountList
+        sections={sections}
+        delegate={this}
+      />
     );
   }
 }
