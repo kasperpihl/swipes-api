@@ -46,8 +46,8 @@ class Organization extends PureComponent {
           {u.get('email')}
         </div>
         <div className="organization__user-type">
-            ADMIN
-          </div>
+          ADMIN
+        </div>
         <div className="organization__user-actions">
           <Button icon="ThreeDots" />
         </div>

@@ -1,3 +1,4 @@
+import AccountList from './account/account-list/AccountList';
 import Browser from './browser/HOCBrowser';
 import Find from './find/HOCFind';
 import GoalList from './goals/goal-list/HOCGoalList';
@@ -16,6 +17,7 @@ import Slack from './slack/HOCSlack';
 import Store from './store/HOCStore';
 
 export {
+  AccountList,
   ActivityFeed,
   Browser,
   Find,

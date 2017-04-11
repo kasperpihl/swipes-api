@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { fromJS } from 'immutable';
 import Organization from './Organization';
 
@@ -11,20 +13,25 @@ class HOCOrganization extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = {};
+    setupLoading(this);
   }
   componentDidMount() {
   }
   onInvite(firstName, email, e) {
     console.log(firstName, email, e);
+    const { invite } = this.props;
+    this.setLoading('invite');
+    invite(firstName, email).then((res) => {
+      this.clearLoading('invite');
+    });
   }
   render() {
     const { users, organization } = this.props;
 
-    console.log('users', users.toJS(), organization.toJS());
     return (
       <Organization
         delegate={this}
+        loadingState={this.getAllLoading()}
         organization={organization}
         users={users.sort((u1, u2) => u1.get('first_name').localeCompare(u2.get('first_name')))}
       />
@@ -43,4 +50,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  invite: ca.users.invite,
 })(HOCOrganization);

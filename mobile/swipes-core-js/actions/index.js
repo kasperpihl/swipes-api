@@ -9,6 +9,7 @@ import * as notes from './notes';
 import * as notifications from './notifications';
 import * as onboarding from './onboarding';
 import * as steps from './steps';
+import * as users from './users';
 import * as ways from './ways';
 
 export {
@@ -23,5 +24,6 @@ export {
   notifications,
   onboarding,
   steps,
+  users,
   ways,
 };
