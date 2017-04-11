@@ -68,10 +68,18 @@ class HOCSidebar extends PureComponent {
         return id;
     }
   }
+  getRemainingOnboarding(){
+    const { me } = this.props;
+    const order = me.getIn(['settings', 'onboarding', 'order']);
+    const completed = me.getIn(['settings', 'onboarding', 'completed']);
+    return order.filter(id => !completed.get(id)).size;
+  }
   renderItem(item) {
     const { navId, counters } = this.props;
-    const counter = counters.get(item.id);
-
+    let counter = counters.get(item.id);
+    if(item.id === 'Onboarding') {
+      counter = this.getRemainingOnboarding();
+    }
     let className = 'sidebar__item';
 
     if (item.id === navId) {
