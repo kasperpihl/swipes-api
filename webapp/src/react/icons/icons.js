@@ -8,6 +8,8 @@ import SlackLogo from './svgs/slack-logo.svg';
 import SwipesLogo from './svgs/swipes-logo.svg';
 import SwipesLogoText from './svgs/swipes-logo-text.svg';
 import SwipesLogoEmpty from './svgs/swipes-logo-empty.svg';
+import SwipesLogoFull from './svgs/swipes-full-icon.svg';
+import SwipesSignature from './svgs/signature.svg';
 
 import ActivityCheckmark from './svgs/activity-checkmark.svg';
 import AddPerson from './svgs/add-person.svg';
@@ -17,6 +19,7 @@ import Archive from './svgs/archive.svg';
 import ArrowLeftLine from './svgs/arrow-left-line.svg';
 import ArrowRightFull from './svgs/arrow-right-full.svg';
 import ArrowRightLine from './svgs/arrow-right-line.svg';
+import ArrowRightLong from './svgs/arrow-right-long.svg';
 import Assign from './svgs/assign.svg';
 import Assets from './svgs/assets.svg';
 import Bold from './svgs/bold.svg';
@@ -118,6 +121,8 @@ export {
   SwipesLogo,
   SwipesLogoText,
   SwipesLogoEmpty,
+  SwipesLogoFull,
+  SwipesSignature,
 
   ActivityCheckmark,
   AddPerson,
@@ -127,6 +132,7 @@ export {
   ArrowLeftLine,
   ArrowRightFull,
   ArrowRightLine,
+  ArrowRightLong,
   Assign,
   Assets,
   Bold,

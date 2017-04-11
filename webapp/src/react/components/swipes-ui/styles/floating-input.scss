@@ -1,7 +1,7 @@
 @import "~styles/_vars.scss";
 @import "~styles/_mixins.scss";
 
-$idleLight: $deepBlue-30;
+$idleLight: $deepBlue-50;
 $idleDark: $deepBlue-100;
 $activeColor: $blue-100;
 $errorColor: $red-80;
@@ -12,8 +12,7 @@ $errorColor: $red-80;
 
 .floating-label {
   @include size(100%, auto);
-  padding: 15px 30px;
-  padding-left: 0;
+  padding: 15px 0;
 }
 
 // ======================================================
@@ -25,12 +24,12 @@ $errorColor: $red-80;
 
   &__input {
     @include size(inherit, auto);
-    @include font(16px, $idleDark, 400);
+    @include font(16px, $idleDark, 27px, 400);
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid $deepBlue-5;
-    margin-top: 27px;
+    border-bottom: 1px solid $deepBlue-10;
     padding: 5px 0;
+    padding-top: 27px;
     transition: .2s ease-in-out;
 
     &:focus {
@@ -45,7 +44,7 @@ $errorColor: $red-80;
   &__label {
     @include font(15px, $idleLight, 21px, 400);
     position: absolute;
-    left: 0; bottom: calc(50% - (27px / 2));
+    left: 0; bottom: calc(50% - (21px / 2));
     transform: translateY(50%);
     transition: .2s ease-in-out;
     user-select: none;
@@ -56,7 +55,7 @@ $errorColor: $red-80;
     @include size(30px);
     @include flexContainer('row', center, center);
     position: absolute;
-    right: 30px; bottom: 16px;
+    right: 0; bottom: 16px;
     user-select: none;
     display: none;
 
@@ -94,7 +93,7 @@ $errorColor: $red-80;
 
     &__label {
       @include font(11px, $blue-100);
-      transform: translate3d(0px, -13px, 0px);
+      transform: translate3d(0px, -18px, 0px);
       transition: .2s ease-in-out;
     }
   }
@@ -103,7 +102,7 @@ $errorColor: $red-80;
 
     &__label {
       @include font($fz: 11px);
-      transform: translate3d(0px,-13px, 0px);
+      transform: translate3d(0px,-18px, 0px);
       transition: .2s ease-in-out;
     }
   }

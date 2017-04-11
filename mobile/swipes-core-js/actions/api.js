@@ -40,7 +40,7 @@ export const request = (options, data) => (d, getState) => {
   options = options || {};
 
   const body = Object.assign({}, {
-    token: getState().getIn(['connection', 'token'])
+    token: getState().getIn(['connection', 'token']),
   }, data);
   let state = getState();
   const updateRequired = state.getIn(['connection', 'versionInfo', 'updateRequired']);

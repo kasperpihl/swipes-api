@@ -1,0 +1,51 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.sign-in {
+  @include size(100%, auto);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.sign-in {
+  $b: &;
+
+  &__title {
+    @include font(36px, $deepBlue-100, 48px, 300);
+    margin-bottom: 59px;
+    animation: signInFade .55s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+
+  }
+
+  & > *:not(#{$b}__title) {
+    opacity: 0;
+    animation: signInFade .55s .4s ease forwards;
+    transform: translateY(20px);
+
+  }
+
+  &__error-status {
+		@include font(12px, $red-80);
+		margin-bottom: 8px;
+	}
+}
+
+@keyframes signInFade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}

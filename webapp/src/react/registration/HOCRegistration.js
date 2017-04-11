@@ -6,27 +6,24 @@ import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
 import Gradient from 'components/gradient/Gradient';
 import Topbar from 'src/react/app/topbar/Topbar';
 import SWView from 'SWView';
-import TabBar from 'components/tab-bar/TabBar';
-import FloatingInput from 'components/swipes-ui/FloatingInput';
 import Icon from 'Icon';
-import Button from 'Button';
+import Signin from './Signin';
+import WelcomeMessage from './WelcomeMessage';
 
-import './registration.scss';
+import './styles/registration.scss';
 
 class HOCRegistration extends Component {
   constructor(props) {
     super(props);
     this.state = {
       errorLabel: null,
-      tabIndex: 0,
-      signinEmail: '',
-      signinPassword: '',
-      signupFirstName: '',
-      signupEmail: '',
-      signupPassword: '',
+      email: '',
+      password: '',
+      showWelcomeMessage: true,
     };
+
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
-    bindAll(this, ['signin', 'signup', 'handleButtonClick', 'handleKeyDown']);
+    bindAll(this, ['signin', 'handleContinue', 'handleButtonClick', 'handleKeyDown']);
   }
   componentDidUpdate() {
     const { token, isHydrated } = this.props;
@@ -35,20 +32,31 @@ class HOCRegistration extends Component {
       browserHistory.push('/');
     }
   }
-  onChange(key, value) {
+  handleEmailChange(value) {
     const { loading } = this.state;
 
     if (loading) {
       return;
     }
 
-    this.setState({ [key]: value });
+    this.setState({ email: value });
   }
-  tabDidChange(index) {
-    const { tabIndex } = this.state;
+  handlePasswordChange(value) {
+    const { loading } = this.state;
 
-    if (index !== tabIndex) {
-      this.setState({ tabIndex: index });
+    if (loading) {
+      return;
+    }
+
+    this.setState({ password: value });
+  }
+  handleContinue() {
+    const { showWelcomeMessage } = this.state;
+
+    if (showWelcomeMessage) {
+      this.setState({ showWelcomeMessage: false });
+    } else if (!showWelcomeMessage) {
+      this.handleButtonClick();
     }
   }
   handleKeyDown(e) {
@@ -58,39 +66,19 @@ class HOCRegistration extends Component {
   }
   handleButtonClick() {
     const {
-      tabIndex,
-      signinEmail,
-      signinPassword,
-      signupFirstName,
-      signupEmail,
-      signupPassword,
+      email,
+      password,
    } = this.state;
 
-    if (tabIndex === 0) {
-      const email = signinEmail;
-      const password = signinPassword;
+    const data = {
+      email,
+      password,
+    };
 
-      const data = {
-        email,
-        password,
-      };
-
-      this.signin(data);
-    } else {
-      const data = {
-        first_name: signupFirstName,
-        email: signupEmail,
-        password: signupPassword,
-      };
-
-      this.signup(data);
-    }
+    this.signin(data);
   }
   signin(data) {
     this.signinOrUp('users.signin', data);
-  }
-  signup(data) {
-    this.signinOrUp('users.signup', data);
   }
   signinOrUp(endpoint, data) {
     if (this.state.err !== null) {
@@ -115,125 +103,63 @@ class HOCRegistration extends Component {
   }
   renderHeader() {
     return (
-      <div className="sign-in__header">
-        <div className="sign-in__logo">
-          <Icon icon="SwipesLogoText" className="sign-in__svg" />
+      <div className="welcome__header">
+        <div className="welcome__logo">
+          <Icon icon="SwipesLogoFull" className="welcome__svg" />
         </div>
-
-        <div className="sign-in__title">Welcome to your workspace</div>
-        <div
-          className="sign-in__subtitle"
-        >
-          The place where you join your team on the mission of creating great work together.
-        </div>
-        {this.renderTabs()}
       </div>
     );
-  }
-  renderTabs() {
-    const { tabIndex } = this.state;
-    const tabs = ['Sign in', 'Sign up'];
-
-    return <TabBar tabs={tabs} activeTab={tabIndex} delegate={this} />;
   }
   renderContent() {
-    const { tabIndex } = this.state;
+    const { email, password, errorLabel, showWelcomeMessage } = this.state;
 
     return (
-      <div className="sign-in__content">
-        {tabIndex === 0 ? this.renderSignin() : this.renderSignup()}
-      </div>
-    );
-  }
-  renderSignin() {
-    const {
-      errorLabel,
-      signinEmail,
-      signinPassword,
-    } = this.state;
-
-    return (
-      <div className="sign-in__form">
-        <FloatingInput
-          label="Email"
-          type="email"
-          id="email"
-          key="signinEmail"
-          value={signinEmail}
-          onChange={this.cachedOnChange('signinEmail')}
-          error={!!errorLabel}
-        />
-        <FloatingInput
-          label="Password"
-          type="password"
-          id="password"
-          key="signinPassword"
-          value={signinPassword}
-          onChange={this.cachedOnChange('signinPassword')}
-          onKeyDown={this.handleKeyDown}
-          error={!!errorLabel}
-        />
-        <div className="sign-in__error-status">{errorLabel}</div>
-      </div>
-    );
-  }
-  renderSignup() {
-    const {
-      errorLabel,
-      signupFirstName,
-      signupLastName,
-      signupEmail,
-      signupPassword,
-    } = this.state;
-
-    return (
-      <div className="sign-in__form">
-        <FloatingInput
-          label="Your First Name"
-          type="text"
-          id="firstname"
-          key="signupFirstName"
-          value={signupFirstName}
-          onChange={this.cachedOnChange('signupFirstName')}
-          error={!!errorLabel}
-        />
-        <FloatingInput
-          label="Email"
-          type="email"
-          id="email"
-          key="signupEmail"
-          value={signupEmail}
-          onChange={this.cachedOnChange('signupEmail')}
-          error={!!errorLabel}
-        />
-        <FloatingInput
-          label="Password"
-          type="password"
-          id="password"
-          key="signupPassword"
-          value={signupPassword}
-          onChange={this.cachedOnChange('signupPassword')}
-          error={!!errorLabel}
-        />
-        <div className="sign-in__error-status">{errorLabel}</div>
+      <div className="welcome__content">
+        {showWelcomeMessage ? (
+          <WelcomeMessage delegate={this} />
+        ) : (
+          <Signin email={email} password={password} delegate={this} errorLabel={errorLabel} />
+        )}
       </div>
     );
   }
   renderFooter() {
-    const { tabIndex, loading } = this.state;
+    const { showWelcomeMessage } = this.state;
+    let resetClass = 'welcome__reset';
+    let continueClass = 'welcome__continue';
+
+    if (!showWelcomeMessage) {
+      resetClass += ' welcome__reset--show';
+      continueClass += ' welcome__continue--sign-in';
+    } else {
+      continueClass += ' welcome__continue--continue';
+    }
 
     return (
-      <div className="sign-in__footer">
-        <Button primary text={tabIndex === 0 ? 'Sign in' : 'Sign up'} loading={loading} onClick={this.handleButtonClick} />
+      <div className="welcome__footer">
+        <div className="welcome__actions welcome__actions--reset">
+          <div className={resetClass}>Reset my password</div>
+        </div>
+        <div className="welcome__actions welcome__actions--continue" onClick={this.handleContinue}>
+          <div
+            className={continueClass}
+            data-title="Take me to my Workspace"
+          >
+            Let’s get started
+          </div>
+          <div className="welcome__icon">
+            <Icon icon="ArrowRightLong" className="welcome__svg" />
+          </div>
+        </div>
       </div>
     );
   }
   render() {
     return (
-      <div className="sign-in">
+      <div className="welcome">
         <Gradient />
         <Topbar disableStatus />
-        <div className="sign-in__card">
+        <div className="welcome__card">
           <SWView header={this.renderHeader()} footer={this.renderFooter()}>
             {this.renderContent()}
           </SWView>

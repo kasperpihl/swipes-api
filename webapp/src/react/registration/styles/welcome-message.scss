@@ -1,0 +1,36 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.welcome-message {
+  @include size(100%, auto);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.welcome-message {
+
+  &__title {
+    @include font(36px, $deepBlue-100, 48px, 300);
+    margin-bottom: 45px;
+  }
+
+  &__paragraph {
+    @include font(15px, $deepBlue-80, 27px);
+    margin-bottom: 30px;
+  }
+
+  &__signature {
+    margin-top: 60px;
+  }
+
+  &__svg {
+    @include size(180px, 39px);
+    @include svg-color($deepBlue-100);
+  }
+}
