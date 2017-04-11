@@ -1,17 +1,32 @@
 import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
+import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Button from 'Button';
+
 import './styles/organization.scss';
 
 class Organization extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      firstName: '',
+      email: '',
+    };
+    this.onInvite = this.onInvite.bind(this);
+    this.callDelegate = setupDelegate(props.delegate);
+    this.onChangeCached = setupCachedCallback(this.onChange, this);
   }
   componentDidMount() {
+  }
+  onChange(key, e){
+    this.setState({[key]: e.target.value});
+  }
+  onInvite(e) {
+    const { firstName, email } = this.state;
+    this.callDelegate('onInvite', firstName, email, e);
   }
   renderUsers() {
     const { users } = this.props;
@@ -47,10 +62,26 @@ class Organization extends PureComponent {
     );
   }
   renderInvite() {
+    const { firstName, email } = this.state;
     return (
       <div>
-        <input type="text" placeholder="First name" />
-        <input type="text" placeholder="Email" />
+        <input
+          type="text"
+          placeholder="First name"
+          value={firstName}
+          onChange={this.onChangeCached('firstName')}
+        />
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={this.onChangeCached('email')}
+        />
+        <Button
+          onClick={this.onInvite}
+          text="Invite"
+          primary
+        />
       </div>
     );
   }

@@ -12,12 +12,16 @@ class HOCOrganization extends PureComponent {
   }
   componentDidMount() {
   }
+  onInvite(firstName, email, e) {
+    console.log(firstName, email, e);
+  }
   render() {
     const { users, organization } = this.props;
 
     console.log('users', users.toJS(), organization.toJS());
     return (
       <Organization
+        delegate={this}
         organization={organization}
         users={users.sort((u1, u2) => u1.get('first_name').localeCompare(u2.get('first_name')))}
       />
