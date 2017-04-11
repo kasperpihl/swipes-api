@@ -5,6 +5,8 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Button from 'Button';
+import Section from 'components/section/Section';
+import FloatingFormInput from './FloatingFormInput';
 
 import './styles/organization.scss';
 
@@ -21,8 +23,8 @@ class Organization extends PureComponent {
   }
   componentDidMount() {
   }
-  onChange(key, e){
-    this.setState({[key]: e.target.value});
+  onChange(key, val) {
+    this.setState({ [key]: val });
   }
   onInvite(e) {
     const { firstName, email } = this.state;
@@ -31,29 +33,26 @@ class Organization extends PureComponent {
   renderUsers() {
     const { users } = this.props;
 
-    const usersHTML = users.map((u) => {
-      console.log('user', u.toJS());
-      return (
-        <div className="organization__user" key={u.get('id')}>
-          <div className="organization__user-image">
-            <HOCAssigning assignees={[u.get('id')]} rounded size={42} />
-          </div>
-          <div className="organization__user-name">
-            {`${u.get('first_name')} ${u.get('last_name')}`}
-            <div className="organization__user-status">Pending</div>
-          </div>
-          <div className="organization__user-email">
-            {u.get('email')}
-          </div>
-          <div className="organization__user-type">
+    const usersHTML = users.map(u => (
+      <div className="organization__user" key={u.get('id')}>
+        <div className="organization__user-image">
+          <HOCAssigning assignees={[u.get('id')]} rounded size={42} />
+        </div>
+        <div className="organization__user-name">
+          {`${u.get('first_name')} ${u.get('last_name')}`}
+          <div className="organization__user-status">Pending</div>
+        </div>
+        <div className="organization__user-email">
+          {u.get('email')}
+        </div>
+        <div className="organization__user-type">
             ADMIN
           </div>
-          <div className="organization__user-actions">
-            <Button icon="ThreeDots" />
-          </div>
+        <div className="organization__user-actions">
+          <Button icon="ThreeDots" />
         </div>
-      );
-    }).toArray();
+      </div>
+      )).toArray();
 
     return (
       <div className="organization__user-list">
@@ -64,19 +63,17 @@ class Organization extends PureComponent {
   renderInvite() {
     const { firstName, email } = this.state;
     return (
-      <div>
-        <input
-          type="text"
-          placeholder="First name"
-          value={firstName}
-          onChange={this.onChangeCached('firstName')}
-        />
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={this.onChangeCached('email')}
-        />
+      <div className="organization__form">
+
+        <div className="organization__input-wrapper">
+          <div className="organization__input">
+            <FloatingFormInput id="org-first-name" label="First name" type="text" value={firstName} onChange={this.onChangeCached('firstName')} />
+          </div>
+          <div className="organization__input">
+            <FloatingFormInput id="org-email" label="name@company.com" type="email" value={email} onChange={this.onChangeCached('email')} />
+          </div>
+        </div>
+
         <Button
           onClick={this.onInvite}
           text="Invite"
@@ -89,15 +86,17 @@ class Organization extends PureComponent {
     const { organization } = this.props;
     const title = `Manage ${organization.get('name')}`;
 
-    return <HOCHeaderTitle title={title} />;
+    return <HOCHeaderTitle title={title} subtitle="Invite people in" />;
   }
   render() {
     return (
       <SWView header={this.renderHeader()}>
-        <div className="organization">
-          {this.renderInvite()}
-          {this.renderUsers()}
-        </div>
+        <Section title="Manage team">
+          <div className="organization">
+            {this.renderInvite()}
+            {this.renderUsers()}
+          </div>
+        </Section>
       </SWView>
     );
   }

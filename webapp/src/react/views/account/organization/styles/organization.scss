@@ -59,3 +59,42 @@
     padding-right: 33px;
   }
 }
+
+// Form
+
+.organization {
+
+  &__form {
+    @include size(100%, 90px);
+    @include flexContainer('row', between, center);
+  }
+
+  &__input-wrapper {
+    @include size(auto, 48px);
+    @include flexContainer('row');
+    border: 1px solid $deepBlue-20;
+    border-radius: 3px;
+  }
+
+  &__input {
+    box-sizing: content-box;
+    padding: 0 18px;
+
+    &:first-child {
+      @include size(240px, 100%);
+    }
+
+    &:last-child {
+      @include size(289px, 100%);
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0; top: 50%;
+        @include size(1px, 42px);
+        transform: translateY(-50%);
+        background-color: $deepBlue-20;
+      }
+    }
+  }
+}

@@ -6,6 +6,9 @@ import { connect } from 'react-redux';
 import Organization from './Organization';
 
 class HOCOrganization extends PureComponent {
+  static minWidth() {
+    return 900;
+  }
   constructor(props) {
     super(props);
     this.state = {};

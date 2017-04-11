@@ -1,0 +1,112 @@
+@import "~styles/_vars.scss";
+@import "~styles/_mixins.scss";
+
+$idleLight: $deepBlue-50;
+$idleDark: $deepBlue-100;
+$activeColor: $blue-100;
+$errorColor: $red-80;
+
+// ======================================================
+// Block
+// ======================================================
+
+.floating-form-label {
+  @include size(100%);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.floating-form-label {
+  $b: &;
+
+  &__input {
+    @include size(100%);
+    @include font(16px, $idleDark, 27px, 400);
+    background-color: transparent;
+    border: none;
+    transition: .2s ease-in-out;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:not([type="password"]) {
+      user-select: none;
+    }
+  }
+
+  &__label {
+    @include font(15px, $idleLight, 21px, 400);
+    position: absolute;
+    left: 0; bottom: 50%;
+    transform: translateY(50%);
+    transition: .2s ease-in-out;
+    user-select: none;
+    cursor: text;
+    background-color: #fff;
+    padding: 0 6px;
+  }
+
+  &__icon {
+    @include size(30px);
+    @include flexContainer('row', center, center);
+    position: absolute;
+    right: 0; bottom: 16px;
+    user-select: none;
+    display: none;
+
+    &--visible {
+      display: block;
+    }
+
+    &:hover {
+      #{$b}__svg {
+        @include svg-color($deepBlue-50);
+        transition: .15s ease;
+      }
+    }
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-20);
+    transition: .15s ease;
+  }
+}
+
+// ======================================================
+// Modifier
+// ======================================================
+.floating-form-label {
+  $b: &;
+
+  &--active & {
+
+    &__input {
+      transition: .2s ease-in-out;
+    }
+
+    &__label {
+      @include font(11px, $blue-100);
+      transform: translate3d(-6px, -16px, 0px);
+      transition: .2s ease-in-out;
+    }
+  }
+
+  &--standby & {
+
+    &__label {
+      @include font($fz: 11px);
+      transform: translate3d(-6px,-16px, 0px);
+      transition: .2s ease-in-out;
+    }
+  }
+
+  &--error {
+    #{$b}__input {
+      border-color: $errorColor;
+    }
+  }
+}
