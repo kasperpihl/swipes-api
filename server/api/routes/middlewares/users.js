@@ -1,10 +1,12 @@
 import r from 'rethinkdb';
 import sha1 from 'sha1';
 import Promise from 'bluebird';
+import jwt from 'jwt-simple';
 import {
   string,
   number,
   object,
+  array,
 } from 'valjs';
 import {
   getClientIp,
@@ -22,7 +24,8 @@ import {
   dbUsersRemoveService,
   dbUsersUpdateProfilePic,
   dbUsersGetSingleWithOrganizations,
-  dbUsersGetByEmailForSignIn,
+  dbUsersGetByEmailWithFields,
+  dbUsersCreate,
 } from './db_utils/users';
 import {
   dbTokensInsertSingle,
@@ -140,11 +143,10 @@ const userSignUp = valLocals('userSignUp', {
     },
   };
   const tokens = createTokens(tokenInfo.user_id);
-  const createUserQ = r.table('users').insert(userDoc);
 
   Promise.all([
     dbTokensInsertSingle({ token: tokens.token, tokenInfo }),
-    db.rethinkQuery(createUserQ),
+    dbUsersCreate({ user: userDoc }),
   ])
   .then(() => {
     setLocals({
@@ -158,19 +160,17 @@ const userSignUp = valLocals('userSignUp', {
     return next(err);
   });
 });
-const usersGetByEmailSignIn = valLocals('usersGetByEmailSignIn', {
+const usersGetByEmailWithFields = valLocals('usersGetByEmailWithFields', {
   email: string.format('email').require(),
+  fields: array.of(string).require(),
 }, (req, res, next, setLocals) => {
   const {
     email,
+    fields,
   } = res.locals;
 
-  dbUsersGetByEmailForSignIn({ email })
+  dbUsersGetByEmailWithFields({ email, fields })
     .then((users) => {
-      if (users.length === 0) {
-        return next(new SwipesError('Wrong email or password'));
-      }
-
       const user = users[0];
 
       setLocals({
@@ -184,7 +184,7 @@ const usersGetByEmailSignIn = valLocals('usersGetByEmailSignIn', {
     });
 });
 const usersComparePasswordSignIn = valLocals('usersComparePasswordSignIn', {
-  user: object.require(),
+  user: object,
   password: string.min(1).require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -193,7 +193,7 @@ const usersComparePasswordSignIn = valLocals('usersComparePasswordSignIn', {
   } = res.locals;
   const sha1Password = sha1(password);
 
-  if (sha1Password !== user.password) {
+  if (!user || sha1Password !== user.password) {
     return next(new SwipesError('Wrong email or password'));
   }
 
@@ -406,10 +406,101 @@ const usersRevokeToken = valLocals('usersRevokeToken', {
       return next(err);
     });
 });
+const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser', {
+  first_name: string.require(),
+  email: string.require(),
+  user: object,
+}, (req, res, next, setLocals) => {
+  const {
+    first_name,
+    email,
+    user,
+  } = res.locals;
+  const userDoc = {
+    id: generateSlackLikeId('U'),
+    services: [],
+    organizations: [],
+    email,
+    first_name,
+    created_at: r.now(),
+    updated_at: r.now(),
+    activated: false,
+  };
+
+  if (!user) {
+    return dbUsersCreate({ user: userDoc })
+      .then((results) => {
+        const changes = results.changes[0];
+        const user = changes.new_val;
+
+        setLocals({
+          user,
+        });
+
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
+      });
+  }
+
+  return next();
+});
+const usersCreateInvitationToken = valLocals('usersCreateInvitationToken', {
+  organization_id: string.require(),
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user,
+  } = res.locals;
+  const user_id = user.id;
+  const invitationToken = jwt.encode({
+    user_id,
+    organization_id,
+  }, 'very_s3cret_invit@tion_secr3t');
+
+  setLocals({
+    invitationToken,
+  });
+
+  return next();
+});
+const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessage', {
+  email: string.require(),
+  invitationToken: string.require(),
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    email,
+    invitationToken,
+    user,
+  } = res.locals;
+
+  if (user.activated === true) {
+    return next(new SwipesError('This user is already in another organization.'));
+  }
+
+  const user_id = user.id;
+  const first_name = user.first_name;
+  const queueMessage = {
+    email,
+    invitationToken,
+    first_name,
+    event_type: 'user_invitation_email',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: user_id,
+  });
+
+  return next();
+});
 
 export {
   usersComparePasswordSignIn,
-  usersGetByEmailSignIn,
+  usersGetByEmailWithFields,
   userAvailability,
   userAddToOrganization,
   userSignUp,
@@ -423,4 +514,7 @@ export {
   usersGetSingleWithOrganizations,
   userGetInfoForToken,
   usersRevokeToken,
+  usersCreateInvitationToken,
+  usersCreateTempUnactivatedUser,
+  usersSendInvitationQueueMessage,
 };

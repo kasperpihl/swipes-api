@@ -168,7 +168,51 @@ const goalsNotifySendEmails = (req, res, next) => {
     return next(new SwipesError(`goalsNotifySendEmails - A mandrill error occurred: ${e.name} - ${e.message}`));
   });
 };
+const usersInvitationEmail = (req, res, next) => {
+  const {
+    email,
+    invitationToken,
+    first_name,
+  } = res.locals;
+  const host = config.get('host');
+  const template_name = 'fake-invitation';
+  const template_content = [{
+    name: 'invitation_link',
+    content: `<a href=${host}signup?invitation_token=${invitationToken}>CLIK FOR A CAKE</a>`,
+  }];
+  const to = [
+    {
+      email,
+      name: first_name,
+      type: 'to',
+    },
+  ];
+  const subject = 'Fake invitation email';
+  const message = {
+    to,
+    subject,
+    from_email: 'noreply@swipesapp.com',
+    from_name: 'Swipes Team',
+    headers: {
+      'Reply-To': 'noreply@swipesapp.com',
+    },
+    important: false,
+    merge: true,
+    merge_language: 'mailchimp',
+  };
+
+  return mandrill_client.messages.sendTemplate({
+    template_name,
+    template_content,
+    message,
+  }, (result) => {
+    return next();
+  }, (e) => {
+    return next(new SwipesError(`usersInvitationEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
+  });
+};
 
 export {
   goalsNotifySendEmails,
+  usersInvitationEmail,
 };

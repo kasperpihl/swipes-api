@@ -21,5 +21,6 @@
   "s3BucketUrl": "https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/",
   "port": 5005,
   "cors": "*",
-  "valjs_debug": true
+  "valjs_debug": true,
+  "host": "https://staging.swipesapp.com/"
 }

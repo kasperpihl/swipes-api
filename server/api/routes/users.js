@@ -1,15 +1,17 @@
 import express from 'express';
 import {
   string,
+  object,
 } from 'valjs';
 import {
   valBody,
   sendResponse,
   valResponseAndSend,
+  mapLocals,
 } from '../utils';
 import {
   userAvailability,
-  userAddToOrganization,
+  // userAddToOrganization,
   userSignUp,
   userSignIn,
   usersGetService,
@@ -19,9 +21,12 @@ import {
   usersRemoveService,
   usersUpdateProfilePic,
   userGetInfoForToken,
-  usersGetByEmailSignIn,
+  usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   usersRevokeToken,
+  usersCreateInvitationToken,
+  usersCreateTempUnactivatedUser,
+  usersSendInvitationQueueMessage,
 } from './middlewares/users';
 import {
   xendoSignUpQueueMessage,
@@ -39,7 +44,14 @@ notAuthed.all('/users.signin',
     email: string.format('email').require(),
     password: string.min(1).require(),
   }),
-  usersGetByEmailSignIn,
+  mapLocals(
+  [],
+  (setLocals) => {
+    const fields = ['id', 'password'];
+    setLocals({ fields });
+  },
+),
+  usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   (req, res, next) => {
     const {
@@ -91,6 +103,29 @@ authed.post('/users.serviceDisconnect',
   xendoRemoveServiceFromUserQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend(),
+);
+
+authed.post('/users.invite',
+  valBody({
+    organization_id: string.require(),
+    first_name: string.require(),
+    email: string.require(),
+  }),
+  mapLocals(
+    [],
+    (setLocals) => {
+      const fields = [];
+      setLocals({ fields });
+    },
+  ),
+  usersGetByEmailWithFields,
+  usersCreateTempUnactivatedUser,
+  usersCreateInvitationToken,
+  usersSendInvitationQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    user: object.require(),
+  }),
 );
 
 // T_TODO

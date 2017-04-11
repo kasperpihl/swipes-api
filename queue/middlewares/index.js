@@ -80,6 +80,10 @@ const goal_notify_email = [
   emails.goalsNotifySendEmails,
 ];
 
+const user_invitation_email = [
+  emails.usersInvitationEmail,
+];
+
 const goal_renamed = notifyWrapper([
   goals.goalsRenamedNotificationData,
   notify.notifyAllInCompany,
@@ -235,4 +239,5 @@ export {
   xendo_add_service_to_user,
   token_revoked,
   settings_updated,
+  user_invitation_email,
 };

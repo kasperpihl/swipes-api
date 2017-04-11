@@ -2,6 +2,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -137,23 +138,23 @@ const dbUsersGetSingleWithOrganizations = funcWrap([
 
   return db.rethinkQuery(q);
 });
-const dbUsersGetByEmailForSignIn = funcWrap([
+const dbUsersGetByEmailWithFields = funcWrap([
   object.as({
     email: string.require(),
+    fields: array.of(string).require(),
   }).require(),
-], (err, { email }) => {
+], (err, { email, fields }) => {
   if (err) {
-    throw new SwipesError(`dbUsersGetByEmailForSignIn: ${err}`);
+    throw new SwipesError(`dbUsersGetByEmailWithFields: ${err}`);
   }
 
-  const q = r.table('users').filter({
+  let q = r.table('users').filter({
     email,
-  }).map((user) => {
-    return {
-      id: user('id'),
-      password: user('password'),
-    };
   });
+
+  if (fields.length > 0) {
+    q = q.pluck(...fields);
+  }
 
   return db.rethinkQuery(q);
 });
@@ -176,6 +177,19 @@ const dbUsersAddOrganization = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbUsersCreate = funcWrap([
+  object.as({
+    user: object.require(),
+  }).require(),
+], (err, { user }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersCreate: ${err}`);
+  }
+
+  const q = r.table('users').insert(user, { returnChanges: true });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbUsersGetService,
@@ -184,6 +198,7 @@ export {
   dbUsersGetServiceWithAuth,
   dbUsersUpdateProfilePic,
   dbUsersGetSingleWithOrganizations,
-  dbUsersGetByEmailForSignIn,
+  dbUsersGetByEmailWithFields,
   dbUsersAddOrganization,
+  dbUsersCreate,
 };

@@ -3,5 +3,6 @@
   "mandrill": {
     "apiKey": "SW_MANDRILL_API_KEY"
   },
-  "s3BucketUrl": "SW_S3_BUCKET_URL"
+  "s3BucketUrl": "SW_S3_BUCKET_URL",
+  "host": "SW_HOST"
 }
