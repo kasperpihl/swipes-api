@@ -138,12 +138,12 @@ class HOCViewController extends PureComponent {
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
-    const PView = views[pView.get('id')];
+    const PView = views[pView.get('id')] || views['NotFound'];
     const pMinMax = this.getMinMaxForView(PView);
 
     // Secondary view
     const sView = navigation.getIn(['secondary', 'stack']).last();
-    const SView = sView ? views[sView.get('id')] : undefined;
+    const SView = sView ? (views[sView.get('id')] || views['NotFound']) : undefined;
     const sMinMax = sView ? this.getMinMaxForView(SView) : 0;
 
     const sizes = this.determineSizesForWidths(pMinMax, sMinMax);
@@ -263,10 +263,7 @@ class HOCViewController extends PureComponent {
   }
   renderContent(currentView, target, style, xClasses, slack) {
     const { navigation } = this.props;
-    const View = views[currentView.get('id')];
-    if (!View) {
-      return `View (${currentView.get('id')}) not found!`;
-    }
+    const View = views[currentView.get('id')] || views['NotFound'];
     let props = {};
     if (currentView.get('props')) {
       props = currentView.get('props').toObject();

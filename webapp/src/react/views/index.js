@@ -7,6 +7,7 @@ import ActivityFeed from './goals/activity-feed/HOCActivityFeed';
 import Notify from './notify/HOCNotify';
 import Onboarding from './onboarding/HOCOnboarding';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
+import NotFound from './not-found/NotFound';
 import Notifications from './notifications/HOCNotifications';
 import Preview from './preview/HOCPreview';
 import Profile from './account/profile/HOCProfile';
@@ -26,6 +27,7 @@ export {
   Notify,
   Onboarding,
   MilestoneList,
+  NotFound,
   Notifications,
   Preview,
   Profile,
