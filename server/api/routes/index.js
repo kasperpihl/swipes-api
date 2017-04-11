@@ -16,6 +16,7 @@ import * as ways from './ways';
 import * as stream from './stream';
 import * as tokens from './tokens';
 import * as me from './me';
+import * as organizations from './organizations';
 
 const v1NotAuthed = [
   users.notAuthed,
@@ -39,6 +40,7 @@ const v1Authed = [
   ways.authed,
   tokens.authed,
   me.authed,
+  organizations.authed,
 ];
 // const webhooksNotAuthed = [
 //   webhooks.notAuthed,
