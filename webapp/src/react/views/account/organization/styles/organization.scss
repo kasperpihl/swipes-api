@@ -1,6 +1,61 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.account-organization {
-  
+// ======================================================
+// Block
+// ======================================================
+
+.organization {
+  @include size(100%, auto);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.organization {
+  $b: &;
+
+  &__header {
+
+  }
+
+  &__user-List {
+    @include size(100%, auto);
+  }
+
+  &__user {
+    $flexIgnoreList: '#{$b}__user-image', '#{$b}__user-type', '#{$b}__user-actions';
+
+    @include size(100%, 85px);
+    @include flexContainer('row', left, center);
+    border-top: 1px solid $deepBlue-6;
+  }
+
+  &__user-image {
+    padding-right: 21px;
+  }
+
+  &__user-name {
+    @include size(100%);
+    @include flexContainer('column', left, center);
+    @include font(15px, $deepBlue-80, 24px);
+  }
+
+  &__user-status {
+    @include font(10px, $deepBlue-20, 15px, bold);
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  &__user-email {
+    @include size(100%);
+    @include flexContainer('row', left, center);
+    @include font(12px, $deepBlue-50, 18px);
+  }
+
+  &__user-type {
+    @include font(10px, $deepBlue-40, 18px);
+    padding-right: 33px;
+  }
 }
