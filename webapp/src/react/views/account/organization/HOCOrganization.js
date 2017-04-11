@@ -13,25 +13,45 @@ class HOCOrganization extends PureComponent {
   }
   constructor(props) {
     super(props);
+    this.state = {
+      firstNameVal: '',
+      emailVal: '',
+    };
     setupLoading(this);
   }
   componentDidMount() {
   }
-  onInvite(firstName, email, e) {
-    console.log(firstName, email, e);
+  onChange(key, val) {
+    this.setState({ [key]: val});
+  }
+  onKeyDown(e) {
+    if(e.keyCode === 13){
+      this.onInvite();
+    }
+  }
+  onInvite() {
+    const { firstNameVal, emailVal } = this.state;
     const { invite } = this.props;
     this.setLoading('invite');
-    invite(firstName, email).then((res) => {
-      this.clearLoading('invite');
+    invite(firstNameVal, emailVal).then((res) => {
+      if(res.ok) {
+        this.setState({ emailVal: '', firstNameVal: ''});
+        this.clearLoading('invite', `Invited ${firstNameVal}`, 3000);
+      } else {
+        this.clearLoading('invite', '!Something went wrong', 3000);
+      }
     });
   }
   render() {
     const { users, organization } = this.props;
+    const { firstNameVal, emailVal } = this.state;
 
     return (
       <Organization
         delegate={this}
         loadingState={this.getAllLoading()}
+        firstNameVal={firstNameVal}
+        emailVal={emailVal}
         organization={organization}
         users={users.sort((u1, u2) => u1.get('first_name').localeCompare(u2.get('first_name')))}
       />
