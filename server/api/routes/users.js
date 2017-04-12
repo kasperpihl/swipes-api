@@ -134,7 +134,7 @@ authed.post('/users.invite',
   notificationsPushToQueue,
   valResponseAndSend({
     user: object.require(),
-    organization: object.require(),
+    organization: object,
   }),
 );
 
