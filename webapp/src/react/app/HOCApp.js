@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
@@ -16,26 +17,27 @@ if (process.env.NODE_ENV !== 'production') {
 
 class HOCApp extends PureComponent {
   componentDidMount() {
-    const { navSet } = this.props;
-    navSet('primary', {
-      id: 'Notifications',
-      title: 'Notifications',
-    });
+
     this.updateMaximizeClass(this.props.isMaximized);
     this.updateFullscreenClass(this.props.isFullscreen);
   }
-
+  componentDidMount(){
+    this.checkIsLoggedIn();
+  }
   componentDidUpdate(prevProps) {
-    const { isMaximized, isFullscreen, token, isHydrated } = this.props;
-    if (isHydrated && !token) {
-      console.log('hello');
-      //browserHistory.push('/login');
-    }
+    const { isMaximized, isFullscreen } = this.props;
+    this.checkIsLoggedIn();
     if (isMaximized !== prevProps.isMaximized) {
       this.updateMaximizeClass(isMaximized);
     }
     if (isFullscreen !== prevProps.isFullscreen) {
       this.updateFullscreenClass(isFullscreen);
+    }
+  }
+  checkIsLoggedIn(){
+    const { token, isHydrated, history } = this.props;
+    if (isHydrated && !token) {
+      history.push('/login');
     }
   }
 
@@ -100,6 +102,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   navSet: a.navigation.set,
-})(HOCApp);
+})(HOCApp));

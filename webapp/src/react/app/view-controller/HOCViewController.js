@@ -139,7 +139,7 @@ class HOCViewController extends PureComponent {
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
-    const PView = views[pView.get('id')] || views['NotFound'];
+    const PView = views[(pView && pView.get('id'))] || views['NotFound'];
     const pMinMax = this.getMinMaxForView(PView);
 
     // Secondary view

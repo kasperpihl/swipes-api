@@ -24,7 +24,13 @@ class HOCRegistration extends Component {
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
     bindAll(this, ['signin', 'handleContinue', 'handleButtonClick', 'handleKeyDown']);
   }
+  componentDidMount() {
+    this.checkIsLoggedIn();
+  }
   componentDidUpdate() {
+    this.checkIsLoggedIn();
+  }
+  checkIsLoggedIn(){
     const { token, isHydrated, history } = this.props;
 
     if (isHydrated && token) {
@@ -77,9 +83,6 @@ class HOCRegistration extends Component {
     this.signin(data);
   }
   signin(data) {
-    const { history } = this.props;
-    history.push('/');
-    return;
     this.signinOrUp('users.signin', data);
   }
   signinOrUp(endpoint, data) {
