@@ -68,7 +68,7 @@ const organizationsGetAllUsers = valLocals('organizationsGetAllUsers', {
   const {
     organizationId,
   } = res.locals;
-  const fields = ['id', 'first_name', 'last_name', 'avatar'];
+  const fields = ['id', 'profile'];
 
   dbOrganizationsGetAllUsersWithFields({ organization_id: organizationId, fields })
     .then((users) => {

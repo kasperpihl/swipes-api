@@ -131,11 +131,14 @@ const usersActivateUserSignUp = valLocals('usersActivateUserSignUp', {
     return next();
   }
 
+  const profile = {
+    first_name,
+    last_name,
+  };
   const passwordSha1 = sha1(password);
 
   return dbUsersActivateAfterSignUp({
-    first_name,
-    last_name,
+    profile,
     user_id: userId,
     password: passwordSha1,
   })
@@ -174,8 +177,10 @@ const userSignUp = valLocals('userSignUp', {
     services: [],
     organizations: [],
     email,
-    first_name,
-    last_name,
+    profile: {
+      first_name,
+      last_name,
+    },
     password: sha1(password),
     created_at: r.now(),
     updated_at: r.now(),
@@ -492,7 +497,9 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
     services: [],
     organizations: [organization_id],
     email,
-    first_name,
+    profile: {
+      first_name,
+    },
     created_at: r.now(),
     updated_at: r.now(),
     settings: defaultOnBoardingSettings,
@@ -559,7 +566,7 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
   } = res.locals;
 
   const userId = user.id;
-  const first_name = user.first_name;
+  const first_name = user.profile.first_name;
   const queueMessage = {
     email,
     invitationToken,

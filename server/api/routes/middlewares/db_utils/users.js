@@ -192,20 +192,18 @@ const dbUsersCreate = funcWrap([
 });
 const dbUsersActivateAfterSignUp = funcWrap([
   object.as({
+    profile: object.require(),
     user_id: object.require(),
     password: string.require(),
-    first_name: string.require(),
-    last_name: string.require(),
   }).require(),
-], (err, { user_id, password, first_name, last_name }) => {
+], (err, { profile, user_id, password }) => {
   if (err) {
     throw new SwipesError(`dbUsersActivateAfterSignUp: ${err}`);
   }
 
   const q = r.table('users').get(user_id).update({
     password,
-    first_name,
-    last_name,
+    profile,
     activated: true,
     updated_at: r.now(),
   });

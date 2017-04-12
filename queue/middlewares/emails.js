@@ -55,10 +55,10 @@ const getNotificationLabel = ({ notification_type, request, reply_to, user, goal
   }
 
   if (subject) {
-    return `${user.first_name} ${notificationLabels[notification_type]} in ${goal.title}`;
+    return `${user.profile.first_name} ${notificationLabels[notification_type]} in ${goal.title}`;
   }
 
-  return `${user.first_name} ${notificationLabels[notification_type]} in <strong>${goal.title}</strong>`;
+  return `${user.profile.first_name} ${notificationLabels[notification_type]} in <strong>${goal.title}</strong>`;
 };
 const getNotificationAttachmentsList = ({ goal, flags = [] }) => {
   const list = [];
@@ -138,9 +138,11 @@ const goalsNotifySendEmails = (req, res, next) => {
   const to = [];
 
   usersWithFields.forEach((user) => {
+    const profile = user.profile;
+
     to.push({
       email: user.email,
-      name: `${user.first_name} ${user.last_name}`,
+      name: `${profile.first_name} ${profile.last_name}`,
       type: 'to',
     });
   });
