@@ -8,7 +8,10 @@ import AccountList from './AccountList';
 
 class HOCAccountList extends PureComponent {
   static minWidth() {
-    return 900;
+    return 600;
+  }
+  static maxWidth() {
+    return 600;
   }
   constructor(props) {
     super(props);
@@ -22,7 +25,7 @@ class HOCAccountList extends PureComponent {
         },
         {
           id: 'Organization',
-          title: 'My Team',
+          title: 'Manage Team',
           subtitle: 'Invite new team members and manage current ones',
         },
         {

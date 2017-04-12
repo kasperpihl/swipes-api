@@ -22,6 +22,7 @@ const v1NotAuthed = [
   users.notAuthed,
   services.notAuthed,
   stream.notAuthed,
+  organizations.notAuthed,
 ];
 const v1Authed = [
   init.authed,

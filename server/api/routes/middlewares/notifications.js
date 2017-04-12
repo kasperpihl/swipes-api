@@ -85,13 +85,17 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
   queueMessage: object.as({
     user_id: string,
     event_type: string.require(),
-  }).require(),
-  messageGroupId: string.require(),
-}, (req, res, next) => {
+  }),
+  messageGroupId: string,
+}, (req, res, next, setLocals) => {
   const {
     queueMessage,
     messageGroupId,
   } = res.locals;
+
+  if (!queueMessage || !messageGroupId) {
+    return next();
+  }
 
   const message = queueMessage;
   const messageDeduplicationId = hash({ message });
@@ -124,6 +128,11 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
       }
     });
   }
+
+  setLocals({
+    queueMessage: null,
+    messageGroupId: null,
+  });
 
   return next();
 });
