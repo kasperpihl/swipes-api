@@ -10,7 +10,9 @@ class SignupPage extends PureComponent {
   }
   render() {
     return (
-      <div className="className" />
+      <div className="className">
+        Hello!
+      </div>
     )
   }
 }

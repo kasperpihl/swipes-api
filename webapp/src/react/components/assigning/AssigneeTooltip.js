@@ -17,7 +17,7 @@ class AssigneeTooltip extends Component {
         </div>
       );
     } else {
-      const firstLetter = person.get('first_name').charAt(0);
+      const firstLetter = msgGen.users.getFirstName(person).charAt(0);
 
       return <div className="tooltip__initial">{firstLetter}</div>;
     }
@@ -30,7 +30,7 @@ class AssigneeTooltip extends Component {
         <div className="tooltip__item" key={i}>
           {this.renderProfilePic(a)}
           <div className="tooltip__name">
-            {a.get('first_name')} {a.get('last_name')}
+            {msgGen.users.getFullName(a.get('id'))}
           </div>
         </div>
       ));

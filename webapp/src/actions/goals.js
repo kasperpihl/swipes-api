@@ -18,7 +18,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     }
     const obj = {
       id: user.get('id'),
-      title: `${user.get('first_name')} ${user.get('last_name')}`,
+      title: msgGen.users.getFullName(user.get('id')),
       subtitle: user.get('job_title'),
       rightIcon: {
         button: {
@@ -43,7 +43,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
         initials: {
           color: 'white',
           backgroundColor: '#000C2F',
-          letters: user.get('first_name').slice(0, 1),
+          letters: msgGen.users.getFirstName(user).slice(0, 1),
         },
       };
     }
@@ -56,15 +56,15 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   };
 
   const sortedUsers = users => users.sort(
-    (b, c) => b.get('first_name').localeCompare(c.get('first_name')),
+    (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
   ).toArray();
 
   const allUsers = () => sortedUsers(state.get('users')).map(u => resultForUser(u));
 
   const searchForUser = q => sortedUsers(state.get('users')).map((u) => {
     if (
-      u.get('first_name').toLowerCase().startsWith(q.toLowerCase()) ||
-      u.get('last_name').toLowerCase().startsWith(q.toLowerCase())
+      msgGen.users.getFirstName(u).toLowerCase().startsWith(q.toLowerCase()) ||
+      msgGen.users.getLastName(u).toLowerCase().startsWith(q.toLowerCase())
     ) {
       return resultForUser(u);
     }

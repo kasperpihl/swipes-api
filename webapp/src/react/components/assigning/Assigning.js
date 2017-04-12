@@ -70,18 +70,18 @@ class Assigning extends Component {
 
     const renderPeople = assignees.map((a, i) => {
       const pic = a.get('profile_pic');
-      const firstLetter = a.get('first_name').charAt(0);
+      const firstLetter = msgGen.users.getFirstName(a).charAt(0);
 
       if (i < maxImages || (i === maxImages && assignees.size === (maxImages + 1))) {
         if (pic) {
           return (
-            <div className="assignees__profile assignees__profile--image" key={a.get('first_name')}>
+            <div className="assignees__profile assignees__profile--image" key={a.get('id')}>
               <img src={pic} alt="" />
             </div>
           );
         }
         return (
-          <div className="assignees__profile assignees__profile--name" key={a.get('first_name')}>
+          <div className="assignees__profile assignees__profile--name" key={a.get('id')}>
             {firstLetter}
           </div>
         );

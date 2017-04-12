@@ -2,24 +2,44 @@ export default class Users {
   constructor(store) {
     this.store = store;
   }
+  getUser(user) {
+    if(typeof user === 'string'){
+      const state = this.store.getState();
+      const users = state.get('users');
+      if(user === 'me')
+        return state.get('me');
+      return users.get(user);
+    }
+    return user;
+  }
+  getFirstName(userId) {
+    const user = this.getUser(userId);
+    const firstName = user.get('first_name') || '';
+    return firstName.split(' ').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+  }
+  getLastName(userId) {
+    const user = this.getUser(userId);
+    const lastName = user.get('last_name') || '';
+    return lastName.split(' ').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+  }
+  getInitials(userId){
+    const user = this.getUser(userId);
+    let initials = this.getFirstName(user).substring(0, 1);
+    const lastName = this.getLastName(user);
+    if(lastName.length) {
+      initials += lastName.substring(0, 1);
+    }
+    return initials;
+  }
   getFullName(userId) {
-    const state = this.store.getState();
-    const users = state.get('users');
-    const me = state.get('me');
-    if (userId === 'me') {
-      userId = me.get('id');
+    const user = this.getUser(userId);
+    const firstName = this.getFirstName(user);
+    const lastName = this.getLastName(user);
+    let fullName = firstName;
+    if(lastName.length){
+      fullName += ` ${lastName}`;
     }
-    if (users) {
-      const user = users.get(userId);
-      if (user) {
-        const firstName = user.get('first_name') || '';
-        const lastName = user.get('last_name') || '';
-        return firstName.split(' ').concat(lastName.split(' ')).map(
-          (s) => s.charAt(0).toUpperCase() + s.slice(1)
-        ).join(' ');
-      }
-    }
-    return '';
+    return fullName
   }
   getName(userId, options) {
     options = options || {};

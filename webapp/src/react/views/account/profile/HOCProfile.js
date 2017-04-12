@@ -9,13 +9,14 @@ class HOCProfile extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: props.me.get('first_name') || '',
-      lastName: props.me.get('last_name') || '',
+      firstName: msgGen.users.getFirstName(props.me),
+      lastName: msgGen.users.getLastName(props.me),
       role: props.me.get('role') || '',
       bio: props.me.get('bio') || '',
       email: props.me.get('email') || '',
     };
   }
+
   onChange(key, val) {
     this.setState({ [key]: val });
   }

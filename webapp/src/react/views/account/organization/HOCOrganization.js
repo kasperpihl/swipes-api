@@ -46,7 +46,7 @@ class HOCOrganization extends PureComponent {
   onResend(uId) {
     const { users, invite } = this.props;
     const user = users.get(uId);
-    const firstName = user.get('first_name');
+    const firstName = msgGen.users.getFirstName(user);
     const email = user.get('email');
     this.setLoading(uId);
     invite(firstName, email).then((res) => {
@@ -135,7 +135,9 @@ class HOCOrganization extends PureComponent {
         firstNameVal={firstNameVal}
         emailVal={emailVal}
         organization={organization}
-        users={users.sort((u1, u2) => u1.get('first_name').localeCompare(u2.get('first_name')))}
+        users={users.sort(
+          (u1, u2) => msgGen.users.getFirstName(u1).localeCompare(msgGen.users.getFirstName(u2))
+        )}
       />
     );
   }

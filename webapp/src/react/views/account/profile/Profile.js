@@ -42,7 +42,7 @@ class Profile extends PureComponent {
           </div>
         );
       } else {
-        const initials = me.get('first_name').substring(0, 1) + me.get('last_name').substring(0, 1);
+        const initials = msgGen.users.getInitals(me);
 
         return <div className="profile-header__initials">{initials}</div>;
       }

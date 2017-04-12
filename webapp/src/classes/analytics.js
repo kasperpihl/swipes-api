@@ -1,10 +1,10 @@
-/* global amplitude */
+/* global amplitude, Intercom */
 import { bindAll } from 'swipes-core-js/classes/utils';
 
 export default class Analytics {
   constructor(store) {
     amplitude.getInstance().init('862d696479638f16c727cf7dcbcd67d5');
-    window.Intercom("boot", {
+    Intercom("boot", {
       app_id: "q8xibmac",
     });
     this.store = store;
@@ -25,12 +25,13 @@ export default class Analytics {
     return defs;
   }
   logout() {
+    Intercom('shutdown');
     amplitude.getInstance().setUserId(null);
     amplitude.getInstance().regenerateDeviceId();
   }
   sendEvent(name, data) {
     const defs = this.getDefaultEventProps();
-    window.Intercom("trackEvent", name, Object.assign(defs, data));
+    Intercom("trackEvent", name, Object.assign(defs, data));
     amplitude.getInstance().logEvent(name, Object.assign(defs, data));
   }
   storeChange() {
@@ -43,7 +44,7 @@ export default class Analytics {
       const orgId = me.getIn(['organizations', 0, 'id']);
       const orgName = me.getIn(['organizations', 0, 'name']);
       this.userId = me.get('id');
-      window.Intercom('update', {
+      Intercom('update', {
         name: msgGen.users.getFullName('me'),
         email: me.get('email'),
         created_at: me.get('created_at'),
@@ -55,8 +56,8 @@ export default class Analytics {
       });
       amplitude.getInstance().setUserId(me.get('id'));
       amplitude.getInstance().setUserProperties({
-        'First name': me.get('first_name'),
-        'Last name': me.get('last_name'),
+        'First name': msgGen.users.getFirstName(me),
+        'Last name': msgGen.users.getLastName(me),
         Email: me.get('email'),
         'Number of services': me.get('services').size,
         'Company id': orgId,
