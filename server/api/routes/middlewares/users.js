@@ -518,6 +518,8 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
     .catch((err) => {
       return next(err);
     });
+  } else if (user.organizations.length > 0 && user.organizations[0] !== organization_id) {
+    return next(new SwipesError('This user is already in another organization.'));
   }
 
   return next();
@@ -553,10 +555,6 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
     user,
   } = res.locals;
 
-  if (user.organizations.length > 0) {
-    return next(new SwipesError('This user is already in another organization.'));
-  }
-
   const user_id = user.id;
   const first_name = user.first_name;
   const queueMessage = {
@@ -575,12 +573,16 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
 });
 const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
   user: object.require(),
-  organization: object.require(),
+  organization: object,
 }, (req, res, next, setLocals) => {
   const {
     user,
     organization,
   } = res.locals;
+
+  if (!organization) {
+    return next();
+  }
 
   const user_id = user.id;
   const queueMessage = {
