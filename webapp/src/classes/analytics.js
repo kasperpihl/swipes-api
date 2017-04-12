@@ -4,11 +4,14 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 export default class Analytics {
   constructor(store) {
     amplitude.getInstance().init('862d696479638f16c727cf7dcbcd67d5');
-
+    window.Intercom("boot", {
+      app_id: "q8xibmac",
+    });
     this.store = store;
     this.userId = null;
     bindAll(this, ['storeChange']);
     store.subscribe(this.storeChange);
+
   }
   getDefaultEventProps() {
     const defs = {
@@ -27,7 +30,7 @@ export default class Analytics {
   }
   sendEvent(name, data) {
     const defs = this.getDefaultEventProps();
-
+    window.Intercom("trackEvent", name, Object.assign(defs, data));
     amplitude.getInstance().logEvent(name, Object.assign(defs, data));
   }
   storeChange() {
@@ -35,9 +38,21 @@ export default class Analytics {
     const me = state.get('me');
 
     if (me && me.get('id') && me.get('id') !== this.userId) {
+
+      const org = me.getIn(['organizations', 0]);
       const orgId = me.getIn(['organizations', 0, 'id']);
       const orgName = me.getIn(['organizations', 0, 'name']);
       this.userId = me.get('id');
+      window.Intercom('update', {
+        name: msgGen.users.getFullName('me'),
+        email: me.get('email'),
+        created_at: me.get('created_at'),
+        company: {
+          id: orgId,
+          name: orgName,
+          created_at: org.get('created_at'),
+        }
+      });
       amplitude.getInstance().setUserId(me.get('id'));
       amplitude.getInstance().setUserProperties({
         'First name': me.get('first_name'),

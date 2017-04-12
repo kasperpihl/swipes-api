@@ -82,12 +82,17 @@ export default class IpcListener {
     };
   }
   getHeaders() {
-    return {
+    const headers = {
       'sw-web-version': window.__VERSION__,
-      'sw-electron-version': this.version,
-      'sw-electron-arch': this.arch,
       'sw-platform': this.platform,
     };
+    if(this.version) {
+      headers['sw-electron-version'] = this.version;
+    }
+    if(this.arch) {
+      headers['sw-electron-arch'] = this.arch;
+    }
+    return headers;
   }
   preloadUrl(script) {
     if (!isElectron) {
