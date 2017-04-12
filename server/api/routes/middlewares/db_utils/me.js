@@ -29,7 +29,28 @@ const dbMeUpdateSettings = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbMeUpdateProfile = funcWrap([
+  object.as({
+    user_id: string.require(),
+    profile: object.require(),
+  }).require(),
+], (err, { user_id, profile }) => {
+  if (err) {
+    throw new SwipesError(`dbMeUpdateProfile: ${err}`);
+  }
+
+  const q =
+    r.table('users')
+      .get(user_id)
+      .update({
+        profile,
+        updated_at: r.now(),
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbMeUpdateSettings,
+  dbMeUpdateProfile,
 };

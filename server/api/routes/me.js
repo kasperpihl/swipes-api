@@ -9,6 +9,8 @@ import {
 import {
   meUpdateSettings,
   meUpdateSettingsQueueMessage,
+  meUpdateProfile,
+  meUpdateProfileQueueMessage,
 } from './middlewares/me';
 import {
   notificationsPushToQueue,
@@ -26,6 +28,17 @@ authed.all('/me.updateSettings',
   notificationsPushToQueue,
   valResponseAndSend({
     settings: object.require(),
+  }));
+
+authed.all('/me.updateProfile',
+  valBody({
+    profile: object.require(),
+  }),
+  meUpdateProfile,
+  meUpdateProfileQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    profile: object.require(),
   }));
 
 export {

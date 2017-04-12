@@ -217,6 +217,12 @@ const settings_updated = [
   notify.notifyCommonRethinkdb,
 ];
 
+const profile_updated = [
+  me.meProfileUpdatedNotificationData,
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
+
 export {
   goal_created,
   goal_completed,
@@ -252,4 +258,5 @@ export {
   user_invitation_email,
   user_activated,
   user_invited,
+  profile_updated,
 };
