@@ -16,7 +16,7 @@ export default class Users {
     const user = this.getUser(userId);
     return user.get('email');
   }
-  getProfilePic(userId) {
+  getPhoto(userId) {
     const user = this.getUser(userId);
     return user.getIn(['profile', 'photo']);
   }

@@ -76,7 +76,7 @@ export const selectUser = (options, callback) => (d, getState) => {
       title: msgGen.users.getFullName(id),
       subtitle,
     };
-    const profilePic = msgGen.users.getProfilePic(user);
+    const profilePic = msgGen.users.getPhoto(user);
     if (profilePic) {
       obj.leftIcon = {
         src: profilePic,

@@ -9,7 +9,7 @@ class AssigneeTooltip extends Component {
     this.state = {};
   }
   renderProfilePic(person) {
-    const pic = msgGen.users.getProfilePic(person);
+    const pic = msgGen.users.getPhoto(person);
 
     if (pic) {
       return (

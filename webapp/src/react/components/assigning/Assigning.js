@@ -70,7 +70,7 @@ class Assigning extends Component {
     }
 
     const renderPeople = assignees.map((a, i) => {
-      const pic = msgGen.users.getProfilePic(a);
+      const pic = msgGen.users.getPhoto(a);
       const firstLetter = msgGen.users.getInitials(a);
 
       if (i < maxImages || (i === maxImages && assignees.size === (maxImages + 1))) {

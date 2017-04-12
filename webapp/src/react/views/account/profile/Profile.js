@@ -36,7 +36,7 @@ class Profile extends PureComponent {
     const { editing } = this.state;
 
     if (!editing) {
-      const profilePic = msgGen.users.getProfilePic(me);
+      const profilePic = msgGen.users.getPhoto(me);
       if (profilePic) {
         return (
           <div className="profile-header__profile-image">
@@ -49,7 +49,7 @@ class Profile extends PureComponent {
         return <div className="profile-header__initials">{initials}</div>;
       }
     }
-    const profilePic = msgGen.users.getProfilePic(me);
+    const profilePic = msgGen.users.getPhoto(me);
     if (profilePic) {
       return (
         <div className="profile-header__profile-image">

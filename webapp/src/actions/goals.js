@@ -34,7 +34,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
         },
       };
     }
-    const profilePic = msgGen.users.getProfilePic(user);
+    const profilePic = msgGen.users.getPhoto(user);
     if (profilePic) {
       obj.leftIcon = {
         src: profilePic,
