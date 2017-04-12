@@ -18,16 +18,16 @@ export default class Users {
   }
   getProfilePic(userId) {
     const user = this.getUser(userId);
-    return user.get('profile_pic');
+    return user.getIn(['profile', 'photo']);
   }
   getFirstName(userId) {
     const user = this.getUser(userId);
-    const firstName = user.get('first_name') || '';
+    const firstName = user.getIn(['profile', 'first_name']) || '';
     return firstName.split(' ').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
   }
   getLastName(userId) {
     const user = this.getUser(userId);
-    const lastName = user.get('last_name') || '';
+    const lastName = user.getIn(['profile', 'last_name']) || '';
     return lastName.split(' ').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
   }
   getInitials(userId){
@@ -67,8 +67,8 @@ export default class Users {
         if (user.get('id') === me.get('id') && !options.disableYou) {
           return options.yourself ? 'yourself' : 'you';
         }
-        const string = user.get('first_name').toLowerCase();
-        return string.charAt(0).toUpperCase() + string.slice(1);
+
+        return this.getFirstName(user);
       }
     }
 
