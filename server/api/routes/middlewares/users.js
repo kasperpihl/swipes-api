@@ -76,10 +76,10 @@ const userAvailability = valLocals('userAvailability', {
         return next(new SwipesError('There is a user with that email'));
       }
 
-      const user_id = generateSlackLikeId('U');
+      const userId = generateSlackLikeId('U');
 
       setLocals({
-        user_id,
+        userId,
       });
 
       return next();
@@ -103,8 +103,8 @@ const usersParseInvitationToken = valLocals('usersParseInvitationToken', {
     const content = jwt.decode(invitation_token, invitationTokenSecret);
 
     setLocals({
-      user_id: content.user_id,
-      organization_id: content.organization_id,
+      userId: content.user_id,
+      organizationId: content.organization_id,
     });
 
     return next();
@@ -113,14 +113,14 @@ const usersParseInvitationToken = valLocals('usersParseInvitationToken', {
   }
 });
 const usersActivateUserSignUp = valLocals('usersActivateUserSignUp', {
-  user_id: string.require(),
+  userId: string.require(),
   password: string.min(1).require(),
   first_name: string.max(32).require(),
   last_name: string.max(32).require(),
   invitation_token: string,
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
+    userId,
     password,
     first_name,
     last_name,
@@ -134,9 +134,9 @@ const usersActivateUserSignUp = valLocals('usersActivateUserSignUp', {
   const passwordSha1 = sha1(password);
 
   return dbUsersActivateAfterSignUp({
-    user_id,
     first_name,
     last_name,
+    user_id: userId,
     password: passwordSha1,
   })
   .then(() => {
@@ -147,7 +147,7 @@ const usersActivateUserSignUp = valLocals('usersActivateUserSignUp', {
   });
 });
 const userSignUp = valLocals('userSignUp', {
-  user_id: string.require(),
+  userId: string.require(),
   email: string.format('email').require(),
   first_name: string.require(),
   last_name: string.require(),
@@ -156,7 +156,7 @@ const userSignUp = valLocals('userSignUp', {
   invitation_token: string,
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
+    userId,
     email,
     first_name,
     last_name,
@@ -170,7 +170,7 @@ const userSignUp = valLocals('userSignUp', {
   }
 
   const userDoc = {
-    id: user_id,
+    id: userId,
     services: [],
     organizations: [],
     email,
@@ -190,7 +190,7 @@ const userSignUp = valLocals('userSignUp', {
   ])
   .then(() => {
     setLocals({
-      user_id,
+      user_id: userId,
       token: tokens.shortToken,
     });
 
@@ -214,15 +214,15 @@ const userActivatedUserSignUpQueueMessage = valLocals('userActivatedUserSignUpQu
     return next();
   }
 
-  const user_id = user.id;
+  const userId = user.id;
   const queueMessage = {
-    user_id,
+    user_id: userId,
     event_type: 'user_activated',
   };
 
   setLocals({
     queueMessage,
-    messageGroupId: user_id,
+    messageGroupId: userId,
   });
 
   return next();
@@ -434,10 +434,10 @@ const usersGetSingleWithOrganizations = valLocals('usersGetSingleWithOrganizatio
     });
 });
 const userGetInfoForToken = valLocals('userGetInfoForToken', {
-  user_id: string.require(),
+  userId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
+    userId,
   } = res.locals;
   const platform = req.header('sw-platform');
   const ip = getClientIp(req);
@@ -445,8 +445,8 @@ const userGetInfoForToken = valLocals('userGetInfoForToken', {
 
   setLocals({
     tokenInfo: {
-      user_id,
       revoked,
+      user_id: userId,
       info: {
         platform,
         ip,
@@ -558,7 +558,7 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
     user,
   } = res.locals;
 
-  const user_id = user.id;
+  const userId = user.id;
   const first_name = user.first_name;
   const queueMessage = {
     email,
@@ -569,7 +569,7 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
 
   setLocals({
     queueMessage,
-    messageGroupId: user_id,
+    messageGroupId: userId,
   });
 
   return next();
@@ -587,16 +587,16 @@ const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
     return next();
   }
 
-  const user_id = user.id;
+  const userId = user.id;
   const queueMessage = {
-    user_id,
     organization,
+    user_id: userId,
     event_type: 'user_invited',
   };
 
   setLocals({
     queueMessage,
-    messageGroupId: user_id,
+    messageGroupId: userId,
   });
 
   return next();
