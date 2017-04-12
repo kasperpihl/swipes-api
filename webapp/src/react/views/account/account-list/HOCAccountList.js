@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
@@ -13,6 +13,7 @@ class HOCAccountList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      isLoggingOut: false,
       sections: [
         {
           id: 'Profile',
@@ -39,6 +40,22 @@ class HOCAccountList extends PureComponent {
   }
   componentDidMount() {
   }
+  onLogout(e) {
+    const { confirm, signout } = this.props;
+    const options = this.getOptionsForE(e);
+
+    confirm(Object.assign({}, options, {
+      title: 'Log out',
+      message: 'Do you want to log out?',
+    }), (i) => {
+      if (i === 1) {
+        this.setState({ isLoggingOut: true });
+        signout(() => {
+          this.setState({ isLoggingOut: false });
+        });
+      }
+    });
+  }
   onClick(section) {
     console.log('section', section);
     const { navPush } = this.props;
@@ -47,13 +64,20 @@ class HOCAccountList extends PureComponent {
       title: section.title,
     });
   }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'center',
+    };
+  }
   render() {
-    const { sections } = this.state;
-    console.log(sections);
+    const { sections, isLoggingOut } = this.state;
+
     return (
       <AccountList
         sections={sections}
         delegate={this}
+        isLoggingOut={isLoggingOut}
       />
     );
   }
@@ -67,4 +91,6 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps, {
+  signout: a.main.signout,
+  confirm: a.menus.confirm,
 })(HOCAccountList);

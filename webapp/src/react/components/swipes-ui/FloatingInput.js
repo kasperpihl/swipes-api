@@ -14,6 +14,12 @@ class FloatingInput extends Component {
 
     bindAll(this, ['floatFocus', 'floatBlur', 'onChange', 'showPassword', 'hidePassword']);
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.focus !== this.props.focus && !this.props.focus) {
+      this.refs.floatingInput.focus();
+      this.setState({ float: true });
+    }
+  }
   onChange(e) {
     this.props.onChange(e.target.value, e);
   }

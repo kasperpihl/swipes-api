@@ -7,12 +7,22 @@ import './styles/signin.scss';
 class Signin extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      emailFocus: false,
+    };
 
     this.callDelegate = setupDelegate(props.delegate);
     this.onEmailChange = this.onEmailChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+  componentDidMount() {
+    this.focusInput = setTimeout(() => {
+      this.setState({ emailFocus: true });
+    }, 1000);
+  }
+  componentWillUnmount() {
+    clearTimeout(this.focusInput);
   }
   onEmailChange(val) {
     this.callDelegate('handleEmailChange', val);
@@ -25,11 +35,13 @@ class Signin extends Component {
   }
   render() {
     const { email, password, errorLabel } = this.props;
+    const { emailFocus } = this.state;
 
     return (
       <div className="sign-in">
         <div className="sign-in__title">Sign in to your Workspace</div>
         <FloatingInput
+          ref="emailInput"
           label="Email"
           type="email"
           id="email"
@@ -37,6 +49,7 @@ class Signin extends Component {
           value={email}
           onChange={this.onEmailChange}
           error={!!errorLabel}
+          focus={emailFocus}
         />
         <FloatingInput
           label="Password"

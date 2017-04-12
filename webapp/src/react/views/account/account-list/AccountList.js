@@ -4,6 +4,7 @@ import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/clas
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Icon from 'Icon';
+import Button from 'Button';
 
 import './styles/account-list.scss';
 
@@ -13,8 +14,12 @@ class AccountList extends PureComponent {
 
     this.callDelegate = setupDelegate(props.delegate);
     this.onClickCached = setupCachedCallback(this.onClick, this);
+    this.onLogout = this.onLogout.bind(this);
   }
   componentDidMount() {
+  }
+  onLogout(e) {
+    this.callDelegate('onLogout', e);
   }
   onClick(i, e) {
     const { sections } = this.props;
@@ -39,11 +44,19 @@ class AccountList extends PureComponent {
     ));
   }
   render() {
+    const { isLoggingOut } = this.props;
+
     return (
       <SWView header={this.renderHeader()}>
         <div className="account-list">
           {this.renderSections()}
         </div>
+        <Button
+          icon="Logout"
+          loading={isLoggingOut}
+          className="profile__button profile__button--logout"
+          onClick={this.onLogout}
+        />
       </SWView>
     );
   }
