@@ -4,7 +4,7 @@ import {
 } from 'valjs';
 import {
   dbOrganizationsCreate,
-  dbOrganizationsGetAllUsersWithFields,
+  dbOrganizationsGetInfoFromInvitationToken,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -62,17 +62,28 @@ const organizationsAddToUser = valLocals('organizationsAddToUser', {
       return next(err);
     });
 });
-const organizationsGetAllUsers = valLocals('organizationsGetAllUsers', {
+const organizationsGetInfoFromInvitationToken = valLocals('organizationsGetInfoFromInvitationToken', {
+  userId: string.require(),
   organizationId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    userId,
     organizationId,
   } = res.locals;
-  const fields = ['id', 'profile'];
+  const fields = ['id', 'profile', 'activated'];
 
-  dbOrganizationsGetAllUsersWithFields({ organization_id: organizationId, fields })
-    .then((users) => {
+  dbOrganizationsGetInfoFromInvitationToken({ user_id: userId, organization_id: organizationId, fields })
+    .then((results) => {
+      console.log(results);
+      const {
+        me,
+        organization,
+        users,
+      } = results;
+
       setLocals({
+        me,
+        organization,
         users,
       });
 
@@ -86,5 +97,5 @@ const organizationsGetAllUsers = valLocals('organizationsGetAllUsers', {
 export {
   organizationsCreate,
   organizationsAddToUser,
-  organizationsGetAllUsers,
+  organizationsGetInfoFromInvitationToken,
 };

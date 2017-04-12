@@ -2,11 +2,12 @@ import express from 'express';
 import {
   string,
   array,
+  object,
 } from 'valjs';
 import {
   organizationsCreate,
   organizationsAddToUser,
-  organizationsGetAllUsers,
+  organizationsGetInfoFromInvitationToken,
 } from './middlewares/organizations';
 import {
   usersParseInvitationToken,
@@ -29,13 +30,15 @@ authed.all('/organizations.create',
   valResponseAndSend(),
 );
 
-notAuthed.all('/organizations.getUsersFromInvitationToken',
+notAuthed.all('/organizations.getInfoFromInvitationToken',
   valBody({
     invitation_token: string.require(),
   }),
   usersParseInvitationToken,
-  organizationsGetAllUsers,
+  organizationsGetInfoFromInvitationToken,
   valResponseAndSend({
+    me: object.require(),
+    organization: object.require(),
     users: array.require(),
   }),
 );

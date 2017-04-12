@@ -45,22 +45,31 @@ const dbOrganizationsAddUser = funcWrap([
 
   return db.rethinkQuery(q);
 });
-const dbOrganizationsGetAllUsersWithFields = funcWrap([
+const dbOrganizationsGetInfoFromInvitationToken = funcWrap([
   object.as({
+    user_id: string.require(),
     organization_id: string.require(),
     fields: array.require(),
   }).require(),
-], (err, { organization_id, fields }) => {
+], (err, { user_id, organization_id, fields }) => {
   if (err) {
-    throw new SwipesError(`dbOrganizationsGetAllUsersWithFields: ${err}`);
+    throw new SwipesError(`dbOrganizationsGetInfoFromInvitationToken: ${err}`);
   }
 
+  console.log(user_id);
   const q =
-    r.table('organizations')
-      .get(organization_id)('users')
-      .map((user) => {
-        return r.table('users').get(user).pluck(...fields);
-      });
+    r.expr({}).merge({
+      me: r.table('users').get(user_id).pluck('invited_by', 'email', 'profile'),
+      organization: r.table('organizations').get(organization_id).pluck('name'),
+      users: r.table('organizations')
+        .get(organization_id)('users')
+        .map((user) => {
+          return r.table('users').get(user).pluck(...fields);
+        })
+        .filter((user) => {
+          return user('activated').eq(true);
+        }),
+    });
 
   return db.rethinkQuery(q);
 });
@@ -68,5 +77,5 @@ const dbOrganizationsGetAllUsersWithFields = funcWrap([
 export {
   dbOrganizationsCreate,
   dbOrganizationsAddUser,
-  dbOrganizationsGetAllUsersWithFields,
+  dbOrganizationsGetInfoFromInvitationToken,
 };
