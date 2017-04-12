@@ -101,7 +101,7 @@ class Profile extends PureComponent {
     );
   }
   renderForm() {
-    const { role, bio, email, loadingState } = this.props;
+    const { role, bio, email, getLoading } = this.props;
     const { bioCounter, editing } = this.state;
     let counterClass = 'profile-form__counter';
     let disabled = true;
@@ -113,8 +113,11 @@ class Profile extends PureComponent {
     if (bioCounter < 0) {
       counterClass += ' profile-form__counter--limit';
     }
-    const roleLoader = loadingState.get('role') && loadingState.get('role').loading;
-    const roleErrorLabel = loadingState.get('role') && loadingState.get('role').errorLabel;
+    const roleLoader = getLoading('role').loading;
+    console.log('roleLoader', roleLoader);
+    const roleErrorLabel = getLoading('role').errorLabel;
+    console.log('roleErrorLabel', roleErrorLabel);
+    console.log('firstNameError', getLoading('firstName').errorLabel);
     return (
       <div className="profile-form">
         <div className="profile-form__row">

@@ -20,7 +20,7 @@ class HOCProfile extends PureComponent {
   componentDidMount(){
     this.setLoading('role', 'Loading role');
     this.setLoading('firstName');
-    this.clearLoading('firstName', '!Something went wrong');
+    this.clearLoading('firstName', '!Something went wrong', 3000);
   }
   onChange(key, val) {
     this.setState({ [key]: val });
@@ -33,6 +33,7 @@ class HOCProfile extends PureComponent {
       me={me}
       delegate={this}
       loadingState={this.getAllLoading()}
+      getLoading={this.getLoading}
       firstName={firstName}
       lastName={lastName}
       role={role}
