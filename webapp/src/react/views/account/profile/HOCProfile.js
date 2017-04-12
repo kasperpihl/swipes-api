@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
-// import { bindAll } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import Profile from './Profile';
 
 class HOCProfile extends PureComponent {
@@ -15,8 +15,13 @@ class HOCProfile extends PureComponent {
       bio: props.me.get('bio') || '',
       email: props.me.get('email') || '',
     };
+    setupLoading(this);
   }
-
+  componentDidMount(){
+    this.setLoading('role', 'Loading role');
+    this.setLoading('firstName');
+    this.clearLoading('firstName', '!Something went wrong');
+  }
   onChange(key, val) {
     this.setState({ [key]: val });
   }
@@ -27,6 +32,7 @@ class HOCProfile extends PureComponent {
     return (<Profile
       me={me}
       delegate={this}
+      loadingState={this.getAllLoading()}
       firstName={firstName}
       lastName={lastName}
       role={role}
