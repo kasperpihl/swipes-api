@@ -6,7 +6,7 @@ import {
 import {
   notificationsMarkAsSeen,
   notificationsMarkAsSeenQueueMessage,
-  notificationsMarkAsSeenHistoryUpdatedEventType,
+  notificationsMarkAsSeenHistoryUpdatedQueueMessage,
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
@@ -24,7 +24,7 @@ authed.all('/notifications.markAsSeen',
   notificationsMarkAsSeen,
   notificationsMarkAsSeenQueueMessage,
   notificationsPushToQueue,
-  notificationsMarkAsSeenHistoryUpdatedEventType,
+  notificationsMarkAsSeenHistoryUpdatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     notification_ids: array.of(string).require(),
