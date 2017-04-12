@@ -28,8 +28,6 @@ if (process.env.NODE_ENV !== 'production') {
 if (typeof Tester !== 'undefined') {
   console.log('tester', Tester);
   RenderedComp = Tester;
-} else if (!window.process || !window.process.versions.electron) {
-  Page = require('./react/download-page/DownloadPage').default; // eslint-disable-line
 } else {
   Page = require('./react/app/Root').default; // eslint-disable-line
 }

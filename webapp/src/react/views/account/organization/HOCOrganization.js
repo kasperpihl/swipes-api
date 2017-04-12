@@ -43,33 +43,72 @@ class HOCOrganization extends PureComponent {
       }
     });
   }
+  onResend(uId) {
+    const { users, invite } = this.props;
+    const user = users.get(uId);
+    const firstName = user.get('first_name');
+    const email = user.get('email');
+    this.setLoading(uId);
+    invite(firstName, email).then((res) => {
+      if(res.ok) {
+        this.clearLoading(uId, `Sent`, 3000);
+      } else {
+        this.clearLoading(uId, '!Something went wrong', 3000);
+      }
+    });
+  }
   onContext(uId, e) {
     console.log('uId', uId, e);
-    const { contextMenu, organization } = this.props;
+    const { contextMenu, organization, users } = this.props;
+    const user = users.get(uId);
     const options = this.getOptionsForE(e);
 
     const items = [
-      { id: 'promote', title: 'Promote to admin' },
+      {
+        id: 'promote',
+        title: 'Make an admin',
+        subtitle: 'Admins have full access to the account including deactivate accounts and handle billing'
+      },
     ];
     if(organization.get('admins').contains(uId)){
-      items[0] = { id: 'demote', title: 'Demote as admin' };
+      items[0] = {
+        id: 'demote',
+        title: 'Demote to user',
+        subtitle: 'Users cannot deactive accounts or handle billing',
+      };
     }
-    if(!uId.activated){
-      items.push({ id: 'email', title: 'Resend email' });
+    if(organization.get('owner_id') === uId){
+      items[0].subtitle = "You can't demote the owner.";
+      items[0].disabled = true;
+    }
+    items.push({
+      id: 'deactive',
+      title: 'Deactivate account',
+      subtitle: 'If a user no longer needs an account, you can close it from here',
+    })
+    if(!user.get('activated')){
+
+      items.push({
+        id: 'resend',
+        title: 'Resend invitation',
+        subtitle: `Remind ${msgGen.users.getName(uId)} about the invitation to join in`,
+      });
     }
 
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
         console.log('chose item', item);
+        if(item.id === 'resend') {
+          this.onResend(uId);
+        }
+
       },
     };
 
-    this.setLoading(uId);
     contextMenu({
       options,
       component: TabMenu,
-      onClose: () => this.clearLoading(uId),
       props: {
         delegate,
         items,

@@ -25,10 +25,10 @@ class Organization extends PureComponent {
     this.callDelegate('onChange', key, val);
   }
   renderUsers() {
-    const { users, organization } = this.props;
+    const { users, organization, loadingState } = this.props;
 
     const usersHTML = users.map(u => {
-      let userLevel = 'MEMBER';
+      let userLevel = 'USER';
       if(organization.get('admins') && organization.get('admins').indexOf(u.get('id')) !== -1){
         userLevel = 'ADMIN';
       }
@@ -51,7 +51,11 @@ class Organization extends PureComponent {
             {userLevel}
           </div>
           <div className="organization__user-actions">
-            <Button icon="ThreeDots" onClick={this.onContextCached(u.get('id'))}/>
+            <Button
+              icon="ThreeDots"
+              onClick={this.onContextCached(u.get('id'))}
+              {...loadingState.get(u.get('id'))}
+            />
           </div>
         </div>
       )
@@ -106,12 +110,12 @@ class Organization extends PureComponent {
     const { organization } = this.props;
     const title = `Manage ${organization.get('name')}`;
 
-    return <HOCHeaderTitle title={title} subtitle="Invite people in" />;
+    return <HOCHeaderTitle title={title} subtitle="Invite your team and manage access" />;
   }
   render() {
     return (
       <SWView header={this.renderHeader()}>
-        <Section title="Manage team">
+        <Section title="Manage team" >
           <div className="organization">
             {this.renderInvite()}
             {this.renderUsers()}

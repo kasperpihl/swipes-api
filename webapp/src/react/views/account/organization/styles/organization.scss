@@ -27,7 +27,7 @@
   &__user {
     $flexIgnoreList: '#{$b}__user-image', '#{$b}__user-type', '#{$b}__user-actions';
 
-    @include size(100%, 85px);
+    @include size(100%, 60px);
     @include flexContainer('row', left, center);
     border-top: 1px solid $deepBlue-6;
   }
