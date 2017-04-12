@@ -2,6 +2,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -44,8 +45,28 @@ const dbOrganizationsAddUser = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOrganizationsGetAllUsersWithFields = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    fields: array.require(),
+  }).require(),
+], (err, { organization_id, fields }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsGetAllUsersWithFields: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)('users')
+      .map((user) => {
+        return r.table('users').get(user).pluck(...fields);
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbOrganizationsCreate,
   dbOrganizationsAddUser,
+  dbOrganizationsGetAllUsersWithFields,
 };

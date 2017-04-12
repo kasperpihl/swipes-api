@@ -4,6 +4,7 @@ import {
 } from 'valjs';
 import {
   dbOrganizationsCreate,
+  dbOrganizationsGetAllUsersWithFields,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -61,9 +62,29 @@ const organizationsAddToUser = valLocals('organizationsAddToUser', {
       return next(err);
     });
 });
+const organizationsGetAllUsers = valLocals('organizationsGetAllUsers', {
+  organizationId: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organizationId,
+  } = res.locals;
+  const fields = ['id', 'first_name', 'last_name', 'avatar'];
 
+  dbOrganizationsGetAllUsersWithFields({ organization_id: organizationId, fields })
+    .then((users) => {
+      setLocals({
+        users,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
 export {
   organizationsCreate,
   organizationsAddToUser,
+  organizationsGetAllUsers,
 };
