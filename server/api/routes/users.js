@@ -11,7 +11,6 @@ import {
 } from '../utils';
 import {
   userAvailability,
-  // userAddToOrganization,
   userSignUp,
   userSignIn,
   usersGetService,
@@ -27,6 +26,10 @@ import {
   usersCreateInvitationToken,
   usersCreateTempUnactivatedUser,
   usersSendInvitationQueueMessage,
+  usersActivateUserSignUp,
+  usersParseInvitationToken,
+  userActivatedUserSignUpQueueMessage,
+  usersInvitedUserQueueMessage,
 } from './middlewares/users';
 import {
   xendoSignUpQueueMessage,
@@ -74,9 +77,13 @@ notAuthed.all('/users.signup',
     password: string.min(1).require(),
     first_name: string.max(32).require(),
     last_name: string.max(32).require(),
+    invitation_token: string,
   }),
   userAvailability,
-  // userAddToOrganization, T_TODO I need this one but different
+  usersParseInvitationToken,
+  usersActivateUserSignUp,
+  userActivatedUserSignUpQueueMessage,
+  notificationsPushToQueue,
   userGetInfoForToken,
   userSignUp,
   xendoSignUpQueueMessage,
@@ -121,10 +128,13 @@ authed.post('/users.invite',
   usersGetByEmailWithFields,
   usersCreateTempUnactivatedUser,
   usersCreateInvitationToken,
+  usersInvitedUserQueueMessage,
+  notificationsPushToQueue,
   usersSendInvitationQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     user: object.require(),
+    organization: object.require(),
   }),
 );
 

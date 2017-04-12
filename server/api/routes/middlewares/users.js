@@ -26,7 +26,11 @@ import {
   dbUsersGetSingleWithOrganizations,
   dbUsersGetByEmailWithFields,
   dbUsersCreate,
+  dbUsersActivateAfterSignUp,
 } from './db_utils/users';
+import {
+  dbOrganizationsAddUser,
+} from './db_utils/organizations';
 import {
   dbTokensInsertSingle,
   dbTokensRevoke,
@@ -36,16 +40,37 @@ import {
   dbXendoRemoveService,
 } from './db_utils/xendo';
 
+const invitationTokenSecret = 'very_s3cret_invit@tion_secr3t';
+const defaultOnBoardingSettings = {
+  onboarding: {
+    order: [
+      'create-account',
+      'personalize-swipes',
+      'create-goal',
+      'watch-introduction-video',
+      'invite-team',
+    ],
+    completed: {
+      'create-account': true,
+    },
+  },
+};
 const userAvailability = valLocals('userAvailability', {
   email: string.format('email').require(),
+  invitation_token: string,
 }, (req, res, next, setLocals) => {
   const {
     email,
+    invitation_token,
   } = res.locals;
+
+  if (invitation_token) {
+    return next();
+  }
 
   const query = r.table('users').getAll(email, { index: 'email' }).isEmpty();
 
-  db.rethinkQuery(query)
+  return db.rethinkQuery(query)
     .then((result) => {
       if (!result) {
         return next(new SwipesError('There is a user with that email'));
@@ -63,43 +88,63 @@ const userAvailability = valLocals('userAvailability', {
       return next(err);
     });
 });
-const userAddToOrganization = valLocals('userAddToOrganization', {
-  invitation_code: string.require(),
-  user_id: string.require(),
+const usersParseInvitationToken = valLocals('usersParseInvitationToken', {
+  invitation_token: string,
 }, (req, res, next, setLocals) => {
   const {
-    invitation_code,
-    user_id,
+    invitation_token,
   } = res.locals;
-  const checkQ = r.table('organizations').getAll(invitation_code, { index: 'invitation_code' });
 
-  db.rethinkQuery(checkQ)
-    .then((organizations) => {
-      if (organizations.length > 0) {
-        const organization = organizations[0];
-        const organizationId = organization.id;
-        const updateQ =
-          r.table('organizations')
-            .get(organizationId)
-            .update({
-              users: r.row('users').append(user_id),
-            });
+  if (!invitation_token) {
+    return next();
+  }
 
-        setLocals({
-          organizationId,
-        });
+  try {
+    const content = jwt.decode(invitation_token, invitationTokenSecret);
 
-        return db.rethinkQuery(updateQ);
-      }
-
-      return next(new SwipesError('Invalid invitation code'));
-    })
-    .then(() => {
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
+    setLocals({
+      user_id: content.user_id,
+      organization_id: content.organization_id,
     });
+
+    return next();
+  } catch (err) {
+    return next(new SwipesError('Invalid invitation token'));
+  }
+});
+const usersActivateUserSignUp = valLocals('usersActivateUserSignUp', {
+  user_id: string.require(),
+  password: string.min(1).require(),
+  first_name: string.max(32).require(),
+  last_name: string.max(32).require(),
+  invitation_token: string,
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    password,
+    first_name,
+    last_name,
+    invitation_token,
+  } = res.locals;
+
+  if (!invitation_token) {
+    return next();
+  }
+
+  const passwordSha1 = sha1(password);
+
+  return dbUsersActivateAfterSignUp({
+    user_id,
+    first_name,
+    last_name,
+    password: passwordSha1,
+  })
+  .then(() => {
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
 });
 const userSignUp = valLocals('userSignUp', {
   user_id: string.require(),
@@ -108,6 +153,7 @@ const userSignUp = valLocals('userSignUp', {
   last_name: string.require(),
   password: string.min(1).require(),
   tokenInfo: object.require(),
+  invitation_token: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -116,7 +162,13 @@ const userSignUp = valLocals('userSignUp', {
     last_name,
     password,
     tokenInfo,
+    invitation_token,
   } = res.locals;
+
+  if (invitation_token) {
+    return next();
+  }
+
   const userDoc = {
     id: user_id,
     services: [],
@@ -127,24 +179,12 @@ const userSignUp = valLocals('userSignUp', {
     password: sha1(password),
     created_at: r.now(),
     updated_at: r.now(),
-    settings: {
-      onboarding: {
-        order: [
-          'create-account',
-          'personalize-swipes',
-          'create-goal',
-          'watch-introduction-video',
-          'invite-team',
-        ],
-        completed: {
-          'create-account': true,
-        },
-      },
-    },
+    settings: defaultOnBoardingSettings,
+    activated: true,
   };
   const tokens = createTokens(tokenInfo.user_id);
 
-  Promise.all([
+  return Promise.all([
     dbTokensInsertSingle({ token: tokens.token, tokenInfo }),
     dbUsersCreate({ user: userDoc }),
   ])
@@ -159,6 +199,33 @@ const userSignUp = valLocals('userSignUp', {
   .catch((err) => {
     return next(err);
   });
+});
+const userActivatedUserSignUpQueueMessage = valLocals('userActivatedUserSignUpQueueMessage', {
+  user: object.require(),
+  invitation_token: string,
+  organization_id: string,
+}, (req, res, next, setLocals) => {
+  const {
+    user,
+    invitation_token,
+  } = res.locals;
+
+  if (!invitation_token) {
+    return next();
+  }
+
+  const user_id = user.id;
+  const queueMessage = {
+    user_id,
+    event_type: 'user_activated',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: user_id,
+  });
+
+  return next();
 });
 const usersGetByEmailWithFields = valLocals('usersGetByEmailWithFields', {
   email: string.format('email').require(),
@@ -407,11 +474,13 @@ const usersRevokeToken = valLocals('usersRevokeToken', {
     });
 });
 const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser', {
+  organization_id: string.require(),
   first_name: string.require(),
   email: string.require(),
   user: object,
 }, (req, res, next, setLocals) => {
   const {
+    organization_id,
     first_name,
     email,
     user,
@@ -419,29 +488,36 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
   const userDoc = {
     id: generateSlackLikeId('U'),
     services: [],
-    organizations: [],
+    organizations: [organization_id],
     email,
     first_name,
     created_at: r.now(),
     updated_at: r.now(),
+    settings: defaultOnBoardingSettings,
     activated: false,
   };
 
   if (!user) {
-    return dbUsersCreate({ user: userDoc })
-      .then((results) => {
-        const changes = results.changes[0];
-        const user = changes.new_val;
+    return Promise.all([
+      dbUsersCreate({ user: userDoc }),
+      dbOrganizationsAddUser({ user_id: userDoc.id, organization_id }),
+    ])
+    .then((results) => {
+      const userChanges = results[0].changes[0];
+      const organizationChanges = results[1].changes[0];
+      const user = userChanges.new_val;
+      const organization = organizationChanges.new_val || organizationChanges.old_val;
 
-        setLocals({
-          user,
-        });
-
-        return next();
-      })
-      .catch((err) => {
-        return next(err);
+      setLocals({
+        user,
+        organization,
       });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
   }
 
   return next();
@@ -458,7 +534,7 @@ const usersCreateInvitationToken = valLocals('usersCreateInvitationToken', {
   const invitationToken = jwt.encode({
     user_id,
     organization_id,
-  }, 'very_s3cret_invit@tion_secr3t');
+  }, invitationTokenSecret);
 
   setLocals({
     invitationToken,
@@ -477,7 +553,7 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
     user,
   } = res.locals;
 
-  if (user.activated === true) {
+  if (user.organizations.length > 0) {
     return next(new SwipesError('This user is already in another organization.'));
   }
 
@@ -497,12 +573,34 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
 
   return next();
 });
+const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
+  user: object.require(),
+  organization: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user,
+    organization,
+  } = res.locals;
+
+  const user_id = user.id;
+  const queueMessage = {
+    user_id,
+    organization,
+    event_type: 'user_invited',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: user_id,
+  });
+
+  return next();
+});
 
 export {
   usersComparePasswordSignIn,
   usersGetByEmailWithFields,
   userAvailability,
-  userAddToOrganization,
   userSignUp,
   userSignIn,
   usersGetService,
@@ -517,4 +615,8 @@ export {
   usersCreateInvitationToken,
   usersCreateTempUnactivatedUser,
   usersSendInvitationQueueMessage,
+  usersActivateUserSignUp,
+  usersParseInvitationToken,
+  userActivatedUserSignUpQueueMessage,
+  usersInvitedUserQueueMessage,
 };

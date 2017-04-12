@@ -84,6 +84,16 @@ const user_invitation_email = [
   emails.usersInvitationEmail,
 ];
 
+const user_activated = notifyWrapper([
+  users.usersActivatedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const user_invited = notifyWrapper([
+  users.usersInvitedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const goal_renamed = notifyWrapper([
   goals.goalsRenamedNotificationData,
   notify.notifyAllInCompany,
@@ -240,4 +250,6 @@ export {
   token_revoked,
   settings_updated,
   user_invitation_email,
+  user_activated,
+  user_invited,
 };

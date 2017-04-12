@@ -38,8 +38,31 @@ const usersGetMultipleWithFields = (req, res, next) => {
       return next(err);
     });
 };
+const usersActivatedNotificationData = (req, res, next) => {
+  const {
+    user,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = { user };
+
+  return next();
+};
+const usersInvitedNotificationData = (req, res, next) => {
+  const {
+    user,
+    organization,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = { user, organization };
+
+  return next();
+};
 
 export {
   usersGetSingleWithOrganizations,
   usersGetMultipleWithFields,
+  usersActivatedNotificationData,
+  usersInvitedNotificationData,
 };

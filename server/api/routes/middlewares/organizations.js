@@ -25,7 +25,9 @@ const organizationsCreate = valLocals('organizationsCreate', {
   const organization = {
     id: organizationId,
     name: organization_name,
-    done_by: user_id,
+    owner_id: user_id,
+    admins: [],
+    users: [user_id],
     created_at: r.now(),
     updated_at: r.now(),
   };
