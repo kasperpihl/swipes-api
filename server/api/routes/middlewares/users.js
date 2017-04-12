@@ -474,12 +474,14 @@ const usersRevokeToken = valLocals('usersRevokeToken', {
     });
 });
 const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser', {
+  user_id: string.require(),
   organization_id: string.require(),
   first_name: string.require(),
   email: string.require(),
   user: object,
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     organization_id,
     first_name,
     email,
@@ -494,6 +496,7 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
     created_at: r.now(),
     updated_at: r.now(),
     settings: defaultOnBoardingSettings,
+    invited_by: user_id,
     activated: false,
   };
 
