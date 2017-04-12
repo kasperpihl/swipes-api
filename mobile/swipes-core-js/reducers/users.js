@@ -12,6 +12,7 @@ export default function usersReducer(state = initialState, action) {
       });
       return users;
     }
+    case 'user_invited':
     case 'users.invite':{
       return state.set(payload.user.id, fromJS(payload.user));
     }
