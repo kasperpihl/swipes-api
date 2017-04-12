@@ -15,12 +15,20 @@ class HOCProfile extends PureComponent {
       bio: props.me.get('bio') || '',
       email: msgGen.users.getEmail(props.me),
     };
+
     setupLoading(this);
   }
-  componentDidMount(){
-    this.setLoading('role', 'Loading role');
+  componentDidMount() {
+    this.setLoading('role');
+    this.setLoading('bio');
+    this.setLoading('bio');
     this.setLoading('firstName');
-    this.clearLoading('firstName', '!Something went wrong', 3000);
+    this.setLoading('lastName');
+    this.setLoading('image');
+    setTimeout(() => {
+      this.clearLoading('firstName', '!Something went wrong');
+      this.clearLoading('lastName', 'Something went wrong', 3000);
+    }, 1000);
   }
   onChange(key, val) {
     this.setState({ [key]: val });

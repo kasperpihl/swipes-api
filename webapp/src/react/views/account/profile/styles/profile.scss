@@ -28,12 +28,28 @@
 // Elements
 // ======================================================
 
+// Loader
+
+.spinner {
+	@include size(25px);
+	@include svg-color($blue-100);
+	animation: rotateSpinner 2s linear infinite;
+
+	&__path {
+		stroke-linecap: round;
+    animation: dashSpinner 1.5s ease infinite;
+    stroke-width: 4;
+	}
+}
+
 // wrappers
 
 .profile {
+  $b: &;
 
   &__wrapper {
     @include size(432px, auto);
+    z-index: 2;
   }
 
   &__edit-button {
@@ -43,6 +59,53 @@
     position: absolute;
     right: 0;
     padding-right: 60px;
+  }
+
+  &__error-icon {
+    @include size(36px);
+    @include flexContainer('row', center, center);
+    border: 2px solid $red-100;
+    border-radius: 50%;
+    animation: fadeLableOut .5s ease reverse forwards;
+
+    &:after {
+      @include font(12px, white, 16px);
+      content: attr(data-error);
+      position: absolute;
+      top: -14px; left: 50%;
+      background-color: $red-100;
+      transform: translateX(-50%) translateY(-100%);
+      padding: 6px 9px;
+      border-radius: 3px;
+      white-space: nowrap;
+      animation: fadeLableOut .5s 3s ease forwards;
+    }
+
+    &:before {
+      @include size(12px);
+      content: '';
+      position: absolute;
+      top: -22px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      background-color: $red-100;
+      animation: fadeLableOut .5s 3s ease forwards;
+    }
+
+    #{$b}__svg {
+      @include size(24px);
+      @include svg-color($red-100);
+    }
+  }
+
+  &__success-icon {
+    @include size(36px);
+    @include flexContainer('row', center, center);
+    animation: fadeLableOut .5s ease reverse forwards;
+
+    #{$b}__svg {
+      @include size(24px);
+      @include svg-color($green-color);
+    }
   }
 }
 
@@ -69,6 +132,17 @@
     padding-left: 15px;
   }
 
+  &__row {
+    // background-color: red;
+  }
+
+  &__loader {
+    @include size(36px);
+    @include flexContainer('row', center, center);
+    position: absolute;
+    right: -36px; top: 0px;
+  }
+
   &__input {
     @include size(100%, 36px);
     @include font(27px, $deepBlue-100, 36px, 800);
@@ -90,6 +164,13 @@
     @include size(100%, auto);
     @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
     padding-top: 33px;
+  }
+
+  &__loader {
+    @include size(36px);
+    @include flexContainer('row', center, center);
+    position: absolute;
+    right: -42px; top: 33px;
   }
 
   &__title {
@@ -209,7 +290,48 @@
 
 .profile {
 
-  &__edit-button:hover {
+  &__edit-button span:hover {
     @include font($c: $blue-100);
+  }
+
+  &__error-icon:hover {
+    &:after, &:before {
+      animation: fadeLableOut 1s ease reverse forwards;
+    }
+  }
+}
+
+
+// ======================================================
+// Animations
+// ======================================================
+
+@keyframes rotateSpinner {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dashSpinner {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+@keyframes fadeLableOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
