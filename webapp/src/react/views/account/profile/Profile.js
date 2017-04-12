@@ -35,10 +35,11 @@ class Profile extends PureComponent {
     const { editing } = this.state;
 
     if (!editing) {
-      if (me.get('profile_pic')) {
+      const profilePic = msgGen.users.getProfilePic(me);
+      if (profilePic) {
         return (
           <div className="profile-header__profile-image">
-            <img src={me.get('profile_pic')} role="presentation" />
+            <img src={profilePic} role="presentation" />
           </div>
         );
       } else {
@@ -47,11 +48,11 @@ class Profile extends PureComponent {
         return <div className="profile-header__initials">{initials}</div>;
       }
     }
-
-    if (me.get('profile_pic')) {
+    const profilePic = msgGen.users.getProfilePic(me);
+    if (profilePic) {
       return (
         <div className="profile-header__profile-image">
-          <img src={me.get('profile_pic')} role="presentation" />
+          <img src={profilePic} role="presentation" />
           <div className="profile-header__upload-overlay">
             <Icon icon="Plus" className="profile-header__svg" />
           </div>
@@ -134,7 +135,8 @@ class Profile extends PureComponent {
         <div className="profile-form__row">
           <div className="profile-form__title">BIO</div>
           <ReactTextarea
-            rows={6}
+            minRows={1}
+            maxRows={6}
             value={bio}
             onChange={this.onChangeCached('bio')}
             className="profile-form__textarea"

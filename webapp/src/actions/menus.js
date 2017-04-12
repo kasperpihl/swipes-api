@@ -76,16 +76,17 @@ export const selectUser = (options, callback) => (d, getState) => {
       title: msgGen.users.getFullName(id),
       subtitle,
     };
-    if (user.get('profile_pic')) {
+    const profilePic = msgGen.users.getProfilePic(user);
+    if (profilePic) {
       obj.leftIcon = {
-        src: user.get('profile_pic'),
+        src: profilePic,
       };
     } else {
       obj.leftIcon = {
         initials: {
           color: 'white',
           backgroundColor: '#000C2F',
-          letters: msgGen.users.getFirstName(user).slice(0, 1),
+          letters: msgGen.users.getInitials(user),
         },
       };
     }

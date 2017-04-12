@@ -47,7 +47,7 @@ class HOCOrganization extends PureComponent {
     const { users, invite } = this.props;
     const user = users.get(uId);
     const firstName = msgGen.users.getFirstName(user);
-    const email = user.get('email');
+    const email = msgGen.users.getEmail(user);
     this.setLoading(uId);
     invite(firstName, email).then((res) => {
       if(res.ok) {

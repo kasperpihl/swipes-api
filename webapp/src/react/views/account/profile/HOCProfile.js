@@ -13,7 +13,7 @@ class HOCProfile extends PureComponent {
       lastName: msgGen.users.getLastName(props.me),
       role: props.me.get('role') || '',
       bio: props.me.get('bio') || '',
-      email: props.me.get('email') || '',
+      email: msgGen.users.getEmail(props.me),
     };
     setupLoading(this);
   }

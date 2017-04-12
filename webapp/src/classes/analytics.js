@@ -45,8 +45,8 @@ export default class Analytics {
       const orgName = me.getIn(['organizations', 0, 'name']);
       this.userId = me.get('id');
       Intercom('update', {
-        name: msgGen.users.getFullName('me'),
-        email: me.get('email'),
+        name: msgGen.users.getFullName(me),
+        email: msgGen.users.getEmail(me),
         created_at: me.get('created_at'),
         company: {
           id: orgId,
@@ -58,7 +58,7 @@ export default class Analytics {
       amplitude.getInstance().setUserProperties({
         'First name': msgGen.users.getFirstName(me),
         'Last name': msgGen.users.getLastName(me),
-        Email: me.get('email'),
+        Email: msgGen.users.getEmail(me),
         'Number of services': me.get('services').size,
         'Company id': orgId,
         'Company name': orgName,

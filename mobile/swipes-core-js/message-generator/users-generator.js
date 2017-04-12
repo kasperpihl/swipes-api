@@ -12,6 +12,14 @@ export default class Users {
     }
     return user;
   }
+  getEmail(userId) {
+    const user = this.getUser(userId);
+    return user.get('email');
+  }
+  getProfilePic(userId) {
+    const user = this.getUser(userId);
+    return user.get('profile_pic');
+  }
   getFirstName(userId) {
     const user = this.getUser(userId);
     const firstName = user.get('first_name') || '';

@@ -69,8 +69,8 @@ class Assigning extends Component {
     }
 
     const renderPeople = assignees.map((a, i) => {
-      const pic = a.get('profile_pic');
-      const firstLetter = msgGen.users.getFirstName(a).charAt(0);
+      const pic = msgGen.users.getProfilePic(a);
+      const firstLetter = msgGen.users.getInitials(a);
 
       if (i < maxImages || (i === maxImages && assignees.size === (maxImages + 1))) {
         if (pic) {
