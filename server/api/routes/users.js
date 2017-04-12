@@ -61,7 +61,7 @@ notAuthed.all('/users.signin',
       user,
     } = res.locals;
 
-    res.locals.user_id = user.id;
+    res.locals.userId = user.id;
 
     return next();
   },
