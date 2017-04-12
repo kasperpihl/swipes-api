@@ -1,34 +1,16 @@
 import React, { PureComponent } from 'react';
+import { Route, withRouter } from 'react-router-dom';
 
-import { Provider } from 'react-redux';
-import { browserHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
+import Gradient from 'components/gradient/Gradient';
+import HOCApp from 'src/react/app/HOCApp';
+import HOCRegistration from 'src/react/registration/HOCRegistration';
+import HOCSignupPage from 'src/react/signup-page/HOCSignupPage';
 
-import Router from 'src/Router';
-import configureStore from 'src/store/configureStore';
+import 'src/react/global-styles/reset.scss';
+import 'src/react/global-styles/app.scss';
+import 'src/react/global-styles/transitions.scss';
 
-// Get classes that needs socket
-import { init } from 'swipes-core-js';
-import * as a from 'actions';
-import Analytics from 'classes/analytics';
-import IpcListener from 'classes/ipc-listener';
-
-const store = configureStore();
-
-const history = syncHistoryWithStore(browserHistory, store, {
-  selectLocationState(state) {
-    return state.get('routing').toJS();
-  },
-});
-const delegate = {
-  forceLogout: () => {
-    store.dispatch(a.main.forceLogout);
-  }
-}
-window.ipcListener = new IpcListener(store);
-window.analytics = new Analytics(store);
-init(store, delegate);
-window.analytics.sendEvent('App Loaded');
+import HOCTopbar from './topbar/HOCTopbar';
 
 class Root extends PureComponent {
   componentDidMount() {
@@ -38,11 +20,15 @@ class Root extends PureComponent {
   }
   render() {
     return (
-      <Provider store={store}>
-        <Router history={history} store={store} />
-      </Provider>
+      <div className="app">
+        <Gradient />
+        <HOCTopbar />
+        <Route path="/" exact={true} component={HOCApp} />
+        <Route path="/login" component={HOCRegistration} />
+        <Route path="/signup" component={HOCSignupPage} />
+      </div>
     );
   }
 }
 
-export default Root;
+export default withRouter(Root);

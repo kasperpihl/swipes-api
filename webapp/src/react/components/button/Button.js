@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Icon from 'Icon';
 const MIN_TIME = 1000;
 const SUCCESS_TIMER = 3000;

@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate, truncateString } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';

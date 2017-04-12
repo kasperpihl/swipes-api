@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import SWView from 'src/react/app/view-controller/SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import { connect } from 'react-redux';

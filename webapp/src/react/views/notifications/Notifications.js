@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { list, map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';

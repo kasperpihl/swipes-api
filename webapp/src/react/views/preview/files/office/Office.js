@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { bindAll } from 'swipes-core-js/classes/utils';
 
 import './styles/office.scss';

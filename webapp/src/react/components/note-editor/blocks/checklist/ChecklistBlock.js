@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { EditorBlock, EditorState } from 'draft-js';
 import Checkbox from 'components/swipes-ui/Checkbox';

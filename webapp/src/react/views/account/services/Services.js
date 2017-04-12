@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { bindAll, queryStringToObject } from 'swipes-core-js/classes/utils';

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactTextarea from 'react-textarea-autosize';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 

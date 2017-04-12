@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
 import { map, mapContains, listOf } from 'react-immutable-proptypes';
 import Icon from 'Icon';

@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { list } from 'react-immutable-proptypes';
 import SWView from 'SWView';
 import Icon from 'Icon';

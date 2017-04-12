@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { mapContains, list } from 'react-immutable-proptypes';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Measure from 'react-measure';
 
 import { bindAll, debounce, setupDelegate } from 'swipes-core-js/classes/utils';

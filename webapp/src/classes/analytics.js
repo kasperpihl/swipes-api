@@ -11,6 +11,7 @@ export default class Analytics {
     this.userId = null;
     bindAll(this, ['storeChange']);
     store.subscribe(this.storeChange);
+    this.sendEvent('App Loaded');
 
   }
   getDefaultEventProps() {

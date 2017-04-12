@@ -1,10 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import { browserHistory } from 'react-router';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
-import Gradient from 'components/gradient/Gradient';
-import Topbar from 'src/react/app/topbar/Topbar';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import Signin from './Signin';
@@ -26,10 +25,10 @@ class HOCRegistration extends Component {
     bindAll(this, ['signin', 'handleContinue', 'handleButtonClick', 'handleKeyDown']);
   }
   componentDidUpdate() {
-    const { token, isHydrated } = this.props;
+    const { token, isHydrated, history } = this.props;
 
     if (isHydrated && token) {
-      browserHistory.push('/');
+      history.push('/');
     }
   }
   handleEmailChange(value) {
@@ -78,6 +77,9 @@ class HOCRegistration extends Component {
     this.signin(data);
   }
   signin(data) {
+    const { history } = this.props;
+    history.push('/');
+    return;
     this.signinOrUp('users.signin', data);
   }
   signinOrUp(endpoint, data) {
@@ -156,14 +158,10 @@ class HOCRegistration extends Component {
   }
   render() {
     return (
-      <div className="welcome">
-        <Gradient />
-        <Topbar disableStatus />
-        <div className="welcome__card">
-          <SWView header={this.renderHeader()} footer={this.renderFooter()}>
-            {this.renderContent()}
-          </SWView>
-        </div>
+      <div className="welcome__card">
+        <SWView header={this.renderHeader()} footer={this.renderFooter()}>
+          {this.renderContent()}
+        </SWView>
       </div>
     );
   }
@@ -185,7 +183,6 @@ HOCRegistration.propTypes = {
   isHydrated: bool,
 };
 
-const ConnectedHOCRegistration = connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   request: ca.api.request,
-})(HOCRegistration);
-export default ConnectedHOCRegistration;
+})(HOCRegistration));

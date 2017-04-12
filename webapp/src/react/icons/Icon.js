@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { string } from 'valjs';
 import * as Icons from './icons';
 import * as Images from './images';
@@ -30,7 +31,7 @@ class Icon extends Component {
 
 
 Icon.propTypes = {
-  icon: React.PropTypes.string,
+  icon: PropTypes.string,
 };
 
 export default Icon;

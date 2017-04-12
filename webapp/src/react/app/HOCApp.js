@@ -1,10 +1,8 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { browserHistory } from 'react-router';
 import SwipesLoader from 'components/loaders/SwipesLoader';
-import Gradient from 'components/gradient/Gradient';
-import Topbar from './topbar/Topbar';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
 import HOCContextMenu from './context-menu/HOCContextMenu';
@@ -30,7 +28,8 @@ class HOCApp extends PureComponent {
   componentDidUpdate(prevProps) {
     const { isMaximized, isFullscreen, token, isHydrated } = this.props;
     if (isHydrated && !token) {
-      browserHistory.push('/login');
+      console.log('hello');
+      //browserHistory.push('/login');
     }
     if (isMaximized !== prevProps.isMaximized) {
       this.updateMaximizeClass(isMaximized);
@@ -57,16 +56,12 @@ class HOCApp extends PureComponent {
     }
   }
   renderLoader() {
-    const { lastConnect } = this.props;
-    if (lastConnect) {
-      return undefined;
-    }
     return <SwipesLoader center text="Loading" size={90} />;
   }
-  renderContent() {
+  render() {
     const { lastConnect } = this.props;
     if (!lastConnect) {
-      return undefined;
+      return this.renderLoader();
     }
     return (
       <div className="content-wrapper">
@@ -74,19 +69,10 @@ class HOCApp extends PureComponent {
           <HOCSidebar />
           <HOCViewController />
         </div>
+
         <HOCContextMenu />
         <HOCTooltip />
         <DevTools />
-      </div>
-    );
-  }
-  render() {
-    return (
-      <div className="app">
-        <Gradient />
-        <Topbar />
-        {this.renderLoader()}
-        {this.renderContent()}
       </div>
     );
   }

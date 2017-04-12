@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';

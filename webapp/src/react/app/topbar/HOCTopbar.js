@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
@@ -58,8 +59,8 @@ class HOCTopbar extends PureComponent {
   }
 
   renderStatusIndicator() {
-    const { status, versionInfo, disableStatus, lastConnect } = this.props;
-    if (disableStatus) {
+    const { status, versionInfo, lastConnect, token } = this.props;
+    if (!token) {
       return undefined;
     }
     const { secondsLeft } = this.state;
@@ -172,6 +173,7 @@ function mapStateToProps(state) {
     isFullscreen: state.getIn(['main', 'isFullscreen']),
     lastConnect: state.getIn(['connection', 'lastConnect']),
     status: state.getIn(['connection', 'status']),
+    token: state.getIn(['connection', 'token']),
   };
 }
 
