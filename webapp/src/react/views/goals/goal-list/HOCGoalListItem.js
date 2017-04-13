@@ -52,6 +52,10 @@ class HOCGoalListItem extends PureComponent {
   }
   onPin() {
     console.log('pinning!!!!');
+    const { togglePinGoal, goal } = this.props;
+    togglePinGoal(goal.get('id')).then((res) => {
+      console.log('pinned', res);
+    })
   }
   getHelper() {
     const { goal } = this.props;
@@ -161,4 +165,5 @@ HOCGoalListItem.propTypes = {
 export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
   assignStep: ca.steps.assign,
+  togglePinGoal: ca.me.togglePinGoal,
 })(HOCGoalListItem);
