@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Set } from 'immutable';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
 import {
@@ -186,7 +186,7 @@ class HOCGoalList extends PureComponent {
     }
   }
   render() {
-    const { me, savedState, filters, goals, pinnedGoals } = this.props;
+    const { me, savedState, filters, goals, pinnedGoals: pG } = this.props;
     const {
       tabIndex,
       tabs,
@@ -194,14 +194,26 @@ class HOCGoalList extends PureComponent {
       filterProp,
     } = this.state;
     let goalFilter = filters.get(tabs[tabIndex]);
+    let pinsFound = Set();
     goalFilter = goalFilter.set('goals', goalFilter.get('goals').sort((g1, g2) => {
+      const g1PinI = pG.indexOf(g1);
+      const g2PinI = pG.indexOf(g2);
+      pinsFound = pinsFound.add(g1PinI);
+      pinsFound = pinsFound.add(g2PinI);
+      if(g1PinI > g2PinI){
+        return -1;
+      }
+      if(g2PinI > g1PinI){
+        return 1;
+      }
       return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']))
     }));
+    pinsFound = pinsFound.delete(-1);
 
     return (
       <GoalList
         goalFilter={goalFilter}
-        pinnedGoals={pinnedGoals}
+        numberOfPins={pinsFound.size}
         tabIndex={tabIndex}
         savedState={savedState}
         loadingState={this.getAllLoading()}
