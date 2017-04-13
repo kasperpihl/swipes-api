@@ -21,6 +21,9 @@ class HOCGoalListItem extends PureComponent {
     this.onClick = this.onClickItem.bind(this);
     this.onPin = this.onPin.bind(this);
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   onAssign(id, e) {
     const { goalId, selectAssignees, assignStep } = this.props;
     const helper = this.getHelper();
@@ -53,10 +56,13 @@ class HOCGoalListItem extends PureComponent {
     }
   }
   onPin() {
-    this.setState({ animateToPinned: true });
     const { togglePinGoal, goal } = this.props;
+    this.setState({ animateToPinned: true });
+
     togglePinGoal(goal.get('id')).then((res) => {
-      this.setState({ animateToPinned: false });
+      if (!this._unmounted) {
+        this.setState({ animateToPinned: false });
+      }
     });
   }
   getHelper() {
