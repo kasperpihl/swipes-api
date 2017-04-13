@@ -48,7 +48,7 @@ export const selectGoalType = (options, callback) => (d) => {
       { id: 'completed', title: 'Completed goals' },
       { id: 'current', title: 'Current goals' },
       { id: 'upcoming', title: 'Upcoming goals' },
-      { id: 'pinned', title: 'Pinned goals' },
+      { id: 'starred', title: 'Starred goals' },
     ],
   };
 

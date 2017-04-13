@@ -111,7 +111,7 @@ module.exports = {
           {
             loader: 'autoprefixer-loader',
             options: {
-              browsers: 'last 2 version'
+              browsers: '> 1%'
             }
           },
           {

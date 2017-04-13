@@ -15,7 +15,7 @@ class HOCGoalListItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      animateToPinned: false,
+      animateToStarred: false,
     };
     this.callDelegate = setupDelegate(props.delegate, props.goalId);
     this.onClick = this.onClickItem.bind(this);
@@ -57,11 +57,11 @@ class HOCGoalListItem extends PureComponent {
   }
   onPin() {
     const { togglePinGoal, goal } = this.props;
-    this.setState({ animateToPinned: true });
+    this.setState({ animateToStarred: true });
 
     togglePinGoal(goal.get('id')).then((res) => {
       if (!this._unmounted) {
-        this.setState({ animateToPinned: false });
+        this.setState({ animateToStarred: false });
       }
     });
   }
@@ -142,22 +142,22 @@ class HOCGoalListItem extends PureComponent {
     );
   }
   render() {
-    const { pinned, goal } = this.props;
-    const { animateToPinned, animateFromPinned } = this.state;
+    const { starred, goal } = this.props;
+    const { animateToStarred, animateFromStarred } = this.state;
     const helper = this.getHelper();
     const isActive = !helper.getIsCompleted();
     let className = 'goal-list-item';
 
-    if (pinned) {
-      className += ' goal-list-item--pinned';
+    if (starred) {
+      className += ' goal-list-item--starred';
     }
 
     if (!isActive) {
       className += ' goal-list-item--completed';
     }
 
-    if (animateToPinned) {
-      className += ' goal-list-item--to-pinned';
+    if (animateToStarred) {
+      className += ' goal-list-item--to-starred';
     }
 
     return (

@@ -16,11 +16,11 @@ const initialState = fromJS({
       },
       goals: OrderedSet(),
     },
-    pinned: {
-      id: 'pinned',
-      title: 'Pinned',
+    starred: {
+      id: 'starred',
+      title: 'Starred',
       filter: {
-        goalType: 'pinned',
+        goalType: 'starred',
       },
       goals: OrderedSet(),
     },

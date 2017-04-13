@@ -114,11 +114,8 @@ class GoalList extends Component {
       </Measure>
     );
   }
-  renderPinned() {
-
-  }
   renderList() {
-    const { goalFilter, delegate, numberOfPins } = this.props;
+    const { goalFilter, delegate, numberOfStars } = this.props;
     const filter = goalFilter.get('filter');
     const goals = goalFilter.get('goals');
 
@@ -143,7 +140,7 @@ class GoalList extends Component {
     let i = 0;
     return goals.map(goalId => (
       <HOCGoalListItem
-        pinned={(i++ < numberOfPins)} // eslint-disable-line
+        starred={(i++ < numberOfStars)} // eslint-disable-line
         goalId={goalId}
         delegate={delegate}
         key={goalId}
@@ -190,7 +187,7 @@ const { object: obj, number, array, bool, string, func } = PropTypes;
 
 GoalList.propTypes = {
   tabs: array,
-  numberOfPins: number,
+  numberOfStars: number,
   showFilter: bool,
   filterProp: list,
   filterLabel: string,

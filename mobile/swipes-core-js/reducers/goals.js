@@ -11,9 +11,9 @@ export default function goalsReducer(state = initialState, action) {
   switch (type) {
     case 'init': {
       let goals = Map();
-      const pins = payload.me.settings.pinned_goals;
+      const stars = payload.me.settings.starred_goals;
       payload.goals.forEach((g) => {
-        goals = goals.set(g.id, fromJS(g).set('pinned', pins.indexOf(g.id) > -1));
+        goals = goals.set(g.id, fromJS(g).set('starred', stars.indexOf(g.id) > -1));
       });
       return goals;
     }
@@ -122,9 +122,9 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'me.updateSettings':
     case 'settings_updated': {
-      const pins = payload.settings.pinned_goals;
-      if(pins){
-        return state.map((g) => g.set('pinned', pins.indexOf(g.get('id')) > -1));
+      const stars = payload.settings.starred_goals;
+      if(stars){
+        return state.map((g) => g.set('starred', stars.indexOf(g.get('id')) > -1));
       }
       return state;
     }

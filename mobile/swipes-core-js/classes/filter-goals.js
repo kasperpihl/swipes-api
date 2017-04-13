@@ -18,14 +18,14 @@ export default function filterGoal(goal, filter) {
 
   // Check goal types
   const goalType = filter.get('goalType');
-  // Supported: current, upcoming, completed, pinned
+  // Supported: current, upcoming, completed, starred
   if(goalType === 'completed' && !isCompleted){
     return false;
   }
   if (goalType && goalType !== 'completed' && isCompleted){
     return false;
   }
-  if(goalType === 'pinned' && !goal.get('pinned')){
+  if(goalType === 'starred' && !goal.get('starred')){
     return false;
   }
 

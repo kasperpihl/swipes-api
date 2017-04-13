@@ -134,7 +134,7 @@ $contHeight: 79px;
     }
   }
 
-  &--pinned {
+  &--starred {
     background-color: $blue-5;
 
     #{$b}__dot {
@@ -151,7 +151,7 @@ $contHeight: 79px;
     }
   }
 
-  &--to-pinned {
+  &--to-starred {
     @include size(100%, 0px);
     opacity: 0;
     transition: height .5s ease, opacity .4s ease;
@@ -166,7 +166,7 @@ $contHeight: 79px;
 .goal-list-item {
   $b: &;
 
-  &:not(#{&}--to-pinned) {
+  &:not(#{&}--to-starred) {
     &:hover {
 
       #{$b}__title {

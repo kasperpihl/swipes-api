@@ -20,7 +20,7 @@ class HOCGoalList extends PureComponent {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
     this.state = {
-      tabs: ['current', 'pinned', 'upcoming', 'unassigned', 'default'],
+      tabs: ['current', 'starred', 'upcoming', 'unassigned', 'default'],
       tabIndex: 0,
       showFilter: false,
       filterProp: fromJS([
@@ -185,7 +185,7 @@ class HOCGoalList extends PureComponent {
     }
   }
   render() {
-    const { me, savedState, filters, goals, pinnedGoals: pG } = this.props;
+    const { me, savedState, filters, goals, starredGoals: pG } = this.props;
     const {
       tabIndex,
       tabs,
@@ -193,12 +193,12 @@ class HOCGoalList extends PureComponent {
       filterProp,
     } = this.state;
     let goalFilter = filters.get(tabs[tabIndex]);
-    let pinsFound = Set();
+    let starsFound = Set();
     goalFilter = goalFilter.set('goals', goalFilter.get('goals').sort((g1, g2) => {
       const g1PinI = pG.indexOf(g1);
       const g2PinI = pG.indexOf(g2);
-      pinsFound = pinsFound.add(g1PinI);
-      pinsFound = pinsFound.add(g2PinI);
+      starsFound = starsFound.add(g1PinI);
+      starsFound = starsFound.add(g2PinI);
       if (g1PinI > g2PinI) {
         return -1;
       }
@@ -207,12 +207,12 @@ class HOCGoalList extends PureComponent {
       }
       return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']));
     }));
-    pinsFound = pinsFound.delete(-1);
+    starsFound = starsFound.delete(-1);
 
     return (
       <GoalList
         goalFilter={goalFilter}
-        numberOfPins={pinsFound.size}
+        numberOfStars={starsFound.size}
         tabIndex={tabIndex}
         savedState={savedState}
         loadingState={this.getAllLoading()}
@@ -237,7 +237,7 @@ function mapStateToProps(state) {
     goals: state.get('goals'),
     filters: state.getIn(['filters', 'goals']),
     cache: state.getIn(['cache', 'list-filter']),
-    pinnedGoals: state.getIn(['me', 'settings', 'pinned_goals']),
+    starredGoals: state.getIn(['me', 'settings', 'starred_goals']),
   };
 }
 
