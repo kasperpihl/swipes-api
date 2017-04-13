@@ -14,7 +14,9 @@ import './styles/goal-list-item.scss';
 class HOCGoalListItem extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      animateToPinned: false,
+    };
     this.callDelegate = setupDelegate(props.delegate, props.goalId);
     this.onClick = this.onClickItem.bind(this);
     this.onPin = this.onPin.bind(this);
@@ -51,11 +53,11 @@ class HOCGoalListItem extends PureComponent {
     }
   }
   onPin() {
-    console.log('pinning!!!!');
+    this.setState({ animateToPinned: true });
     const { togglePinGoal, goal } = this.props;
     togglePinGoal(goal.get('id')).then((res) => {
-      console.log('pinned', res);
-    })
+      this.setState({ animateToPinned: false });
+    });
   }
   getHelper() {
     const { goal } = this.props;
@@ -69,7 +71,9 @@ class HOCGoalListItem extends PureComponent {
   }
   renderIndicator() {
     return (
-      <div className="goal-list-item__indicator" onClick={this.onPin} />
+      <div className="goal-list-item__indicator" onClick={this.onPin}>
+        <div className="goal-list-item__dot" />
+      </div>
     );
   }
   renderContent() {
@@ -132,12 +136,22 @@ class HOCGoalListItem extends PureComponent {
     );
   }
   render() {
+    const { pinned, goal } = this.props;
+    const { animateToPinned, animateFromPinned } = this.state;
     const helper = this.getHelper();
     const isActive = !helper.getIsCompleted();
     let className = 'goal-list-item';
 
+    if (pinned) {
+      className += ' goal-list-item--pinned';
+    }
+
     if (!isActive) {
       className += ' goal-list-item--completed';
+    }
+
+    if (animateToPinned) {
+      className += ' goal-list-item--to-pinned';
     }
 
     return (

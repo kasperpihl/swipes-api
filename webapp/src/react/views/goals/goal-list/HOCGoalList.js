@@ -51,7 +51,6 @@ class HOCGoalList extends PureComponent {
     }
   }
   onAssignClick(goalId, e) {
-
     const { goals, selectAssignees } = this.props;
     const helper = this.getHelper();
     const stepId = helper.getCurrentStepId();
@@ -200,13 +199,13 @@ class HOCGoalList extends PureComponent {
       const g2PinI = pG.indexOf(g2);
       pinsFound = pinsFound.add(g1PinI);
       pinsFound = pinsFound.add(g2PinI);
-      if(g1PinI > g2PinI){
+      if (g1PinI > g2PinI) {
         return -1;
       }
-      if(g2PinI > g1PinI){
+      if (g2PinI > g1PinI) {
         return 1;
       }
-      return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']))
+      return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']));
     }));
     pinsFound = pinsFound.delete(-1);
 
@@ -219,9 +218,9 @@ class HOCGoalList extends PureComponent {
         loadingState={this.getAllLoading()}
         delegate={this}
         tabs={tabs.map((tId, i) => {
-          let title = filters.getIn([tId, 'title'])
+          let title = filters.getIn([tId, 'title']);
           const size = filters.getIn([tId, 'goals']).size;
-          if(i < (tabs.length - 1) && size){
+          if (i < (tabs.length - 1) && size) {
             title += ` (${size})`;
           }
           return title;

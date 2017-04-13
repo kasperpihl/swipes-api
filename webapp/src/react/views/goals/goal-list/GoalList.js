@@ -13,7 +13,6 @@ import HOCGoalListItem from './HOCGoalListItem';
 import FilterFooter from './FilterFooter';
 
 
-
 import './styles/goals-list.scss';
 
 class GoalList extends Component {
@@ -141,14 +140,15 @@ class GoalList extends Component {
       );
     }
 
-    return goals.map((goalId, i) => (
+    let i = 0;
+    return goals.map(goalId => (
       <HOCGoalListItem
-        pinned={i < numberOfPins}
+        pinned={(i++ < numberOfPins)} // eslint-disable-line
         goalId={goalId}
         delegate={delegate}
         key={goalId}
       />
-    ));
+      ));
   }
   renderFilterFooter() {
     const { goalFilter, showFilter, delegate, tabs, tabIndex } = this.props;
@@ -180,7 +180,7 @@ class GoalList extends Component {
           {this.renderFilter()}
           {this.renderFilterFooter()}
           {this.renderList()}
-      </div>
+        </div>
       </SWView>
     );
   }

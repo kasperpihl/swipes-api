@@ -15,6 +15,9 @@ $contHeight: 79px;
   @include size(100%, $contHeight);
   @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
   border-bottom: 1px solid $deepBlue-6;
+  overflow: hidden;
+  transition: .5s ease;
+  will-change: height;
 }
 
 // ======================================================
@@ -25,14 +28,18 @@ $contHeight: 79px;
 
   &__indicator {
     @include size(42px, 100%);
+    @include flexContainer('row', center, center);
+    transform-origin: 50% 50%;
+    z-index: 100;
+  }
 
-    &:after {
-      @include size(6px);
-      @include centerAbsolute();
-      background-color: $deepBlue-20;
-      border-radius: 50%;
-      content: '';
-    }
+  &__dot {
+    @include size(6px);
+    background-color: $deepBlue-20;
+    border-radius: 50%;
+    transform-origin: 50% 50%;
+    transition: .3s ease;
+    pointer-events: none;
   }
 
   &__content {
@@ -77,7 +84,7 @@ $contHeight: 79px;
   .progress-bar {
     @include size(100%, 20px);
     @include flexContainer('row', left, center);
-    background-color: $bg;
+    // background-color: $bg;
     left: 1px; bottom: -20px;
     position: absolute;
     transition: .2s ease;
@@ -120,17 +127,35 @@ $contHeight: 79px;
   &--completed {
 
     #{$b}__indicator {
-      .progress-bar__status {
-        margin-left: 0;
+
+      &:after {
+        background-color: $green-color;
       }
+    }
+  }
+
+  &--pinned {
+    background-color: $blue-5;
+
+    #{$b}__dot {
+      background-color: $blue-100;
     }
   }
 
   .progress-bar {
 
     &--empty {
-
+      .progress-bar__status {
+          margin-left: 0;
+       }
     }
+  }
+
+  &--to-pinned {
+    @include size(100%, 0px);
+    opacity: 0;
+    transition: height .5s ease, opacity .4s ease;
+    will-change: height;
   }
 }
 
@@ -141,26 +166,52 @@ $contHeight: 79px;
 .goal-list-item {
   $b: &;
 
-  &:hover {
+  &:not(#{&}--to-pinned) {
+    &:hover {
 
-    #{$b}__title {
-      color: $blue-100;
-      transition: color .15s ease;
-    }
+      #{$b}__title {
+        color: $blue-100;
+        transition: color .15s ease;
+      }
 
-    .progress-bar {
-      bottom: 5px;
-      transition: .2s .2s ease;
-
-      & > * {
-        opacity: 1;
-        transition: .2s .2s ease;
+      #{$b}__dot {
+        transform-origin: 50% 50%;
+        transform: scale3d(2,2,1);
+        transition: .25s cubic-bezier(1,0,.47,.59);
       }
     }
 
-    #{$b}__label {
-      transform: translateY(-26px);
-      transition: .2s .2s ease;
+    #{$b}__indicator {
+
+      &:hover {
+
+        #{$b}__dot {
+          background-color: $blue-100;
+          transform-origin: 50% 50%;
+          transform: scale3d(3,3,1);
+          transition: .25s cubic-bezier(1,0,.47,.59);
+        }
+      }
+    }
+  }
+
+
+  &__content {
+    &:hover {
+      .progress-bar {
+        bottom: 5px;
+        transition: .2s ease;
+
+        & > * {
+          opacity: 1;
+          transition: .2s ease;
+        }
+      }
+
+      #{$b}__label {
+        transform: translateY(-26px);
+        transition: .2s ease;
+      }
     }
   }
 }
