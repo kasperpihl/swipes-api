@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import SignupPage from './SignupPage';
@@ -13,7 +14,7 @@ class HOCSignupPage extends PureComponent {
   }
   componentDidMount() {
     const { request } = this.props;
-    request('organizations.getUsersFromInvitationToken', {
+    request('organizations.getInfoFromInvitationToken', {
       invitation_token: window.getURLParameter('invitation_token'),
     }).then((res) => {
       console.log('ressy', res);

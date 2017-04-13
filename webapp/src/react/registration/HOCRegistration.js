@@ -24,19 +24,6 @@ class HOCRegistration extends Component {
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
     bindAll(this, ['signin', 'handleContinue', 'handleButtonClick', 'handleKeyDown']);
   }
-  componentDidMount() {
-    this.checkIsLoggedIn();
-  }
-  componentDidUpdate() {
-    this.checkIsLoggedIn();
-  }
-  checkIsLoggedIn(){
-    const { token, isHydrated, history } = this.props;
-
-    if (isHydrated && token) {
-      history.push('/');
-    }
-  }
   handleEmailChange(value) {
     const { loading } = this.state;
 
@@ -170,20 +157,14 @@ class HOCRegistration extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    status: state.getIn(['connection', 'status']),
-    token: state.getIn(['connection', 'token']),
-    isHydrated: state.getIn(['main', 'isHydrated']),
-  };
+function mapStateToProps() {
+  return {};
 }
 
-const { string, func, bool } = PropTypes;
+const { func } = PropTypes;
 
 HOCRegistration.propTypes = {
-  token: string,
   request: func,
-  isHydrated: bool,
 };
 
 export default withRouter(connect(mapStateToProps, {
