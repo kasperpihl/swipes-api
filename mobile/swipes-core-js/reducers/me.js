@@ -16,8 +16,9 @@ export default function me(state = initialState, action) {
     case 'settings_updated': {
       return state.mergeIn(['settings'], fromJS(payload.settings));
     }
-    case 'profile_pic_update': {
-      return state;
+    case 'me.updateProfile':
+    case 'profile_updated': {
+      return state.mergeIn(['profile'], fromJS(payload.profile));
     }
     case 'service_added': {
       const service = fromJS(payload);

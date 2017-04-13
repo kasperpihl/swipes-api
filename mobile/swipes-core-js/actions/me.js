@@ -16,3 +16,5 @@ export const handleOAuthSuccess = (serviceName, query) => {
 };
 
 export const updateSettings = (s) => request('me.updateSettings', { settings: s });
+
+export const updateProfile = (p) => request('me.updateProfile', { profile: p });

@@ -9,7 +9,6 @@ import HOCSignupPage from 'src/react/signup-page/HOCSignupPage';
 
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
-import 'src/react/global-styles/transitions.scss';
 
 import HOCTopbar from './topbar/HOCTopbar';
 

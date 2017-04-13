@@ -18,6 +18,7 @@ class Profile extends PureComponent {
 
     this.callDelegate = setupDelegate(props.delegate);
     this.onChangeCached = setupCachedCallback(this.onChange, this);
+    this.onBlurCached = setupCachedCallback(this.callDelegate.bind(null, 'onBlur'));
     this.handleEditState = this.handleEditState.bind(this);
   }
   onChange(key, e) {
@@ -88,7 +89,7 @@ class Profile extends PureComponent {
               onChange={this.onChangeCached('firstName')}
               className="profile-header__input"
               placeholder="First name"
-
+              onBlur={this.onBlurCached('firstName')}
               disabled={disabled}
             />
             <div className="profile-header__loader">
@@ -100,6 +101,7 @@ class Profile extends PureComponent {
               type="text"
               value={lastName}
               onChange={this.onChangeCached('lastName')}
+              onBlur={this.onBlurCached('lastName')}
               className="profile-header__input"
               placeholder="Last name"
               disabled={disabled}
@@ -157,6 +159,7 @@ class Profile extends PureComponent {
             type="text"
             value={role}
             onChange={this.onChangeCached('role')}
+            onBlur={this.onBlurCached('role')}
             className="profile-form__input"
             placeholder="Write your role"
             disabled={disabled}
@@ -172,6 +175,7 @@ class Profile extends PureComponent {
             maxRows={6}
             value={bio}
             onChange={this.onChangeCached('bio')}
+            onBlur={this.onBlurCached('bio')}
             className="profile-form__textarea"
             placeholder="What are you doing at Swipes?"
             disabled={disabled}
@@ -187,6 +191,7 @@ class Profile extends PureComponent {
             type="email"
             value={email}
             onChange={this.onChangeCached('email')}
+            onBlur={this.onBlurCached('email')}
             className="profile-form__input"
             placeholder="stefan@swipesapp.com"
             disabled

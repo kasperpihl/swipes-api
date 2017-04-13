@@ -12,6 +12,7 @@ export default class Users {
     }
     return user;
   }
+
   getEmail(userId) {
     const user = this.getUser(userId);
     return user.get('email');
@@ -29,6 +30,14 @@ export default class Users {
     const user = this.getUser(userId);
     const lastName = user.getIn(['profile', 'last_name']) || '';
     return lastName.split(' ').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+  }
+  getRole(userId) {
+    const user = this.getUser(userId);
+    return user.getIn(['profile', 'role']) || '';
+  }
+  getBio(userId){
+    const user = this.getUser(userId);
+    return user.getIn(['profile', 'bio']) || '';
   }
   getInitials(userId){
     const user = this.getUser(userId);

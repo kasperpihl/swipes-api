@@ -3,33 +3,53 @@ import PropTypes from 'prop-types';
 import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import Profile from './Profile';
 
 class HOCProfile extends PureComponent {
   constructor(props) {
     super(props);
+
     this.state = {
-      firstName: msgGen.users.getFirstName(props.me),
-      lastName: msgGen.users.getLastName(props.me),
-      role: props.me.get('role') || '',
-      bio: props.me.get('bio') || '',
-      email: msgGen.users.getEmail(props.me),
+      firstName: this.valueForKey('firstName'),
+      lastName: this.valueForKey('lastName'),
+      role: this.valueForKey('role'),
+      bio: this.valueForKey('bio'),
+      email: this.valueForKey('email'),
     };
 
     setupLoading(this);
   }
-  componentDidMount() {
-    this.setLoading('role');
-    this.setLoading('bio');
-    this.setLoading('bio');
-    this.setLoading('firstName');
-    this.setLoading('lastName');
-    this.setLoading('image');
-    setTimeout(() => {
-      this.clearLoading('firstName', '!Something went wrong');
-      this.clearLoading('lastName', 'Something went wrong', 3000);
-    }, 1000);
+  valueForKey(key) {
+    const { me } = this.props;
+    switch(key) {
+      case 'firstName': return msgGen.users.getFirstName(me);
+      case 'lastName': return msgGen.users.getLastName(me);
+      case 'role': return msgGen.users.getRole(me);
+      case 'bio': return msgGen.users.getBio(me);
+      case 'email': return msgGen.users.getEmail(me);
+      default:
+        return ''
+    }
+  }
+  onBlur(key) {
+    const { updateProfile } = this.props;
+    const value = this.state[key];
+    const orgVal = this.valueForKey(key);
+    if(value !== orgVal){
+      this.setLoading(key);
+      updateProfile({ [key]: value }).then((res) => {
+        if(res && res.ok) {
+          this.clearLoading(key, 'success', 1500);
+        } else {
+          this.clearLoading(key, '!Something went wrong');
+        }
+      })
+      console.log('fucking change!!!', key);
+    }
+    console.log('blur', key);
+
   }
   onChange(key, val) {
     this.setState({ [key]: val });
@@ -65,6 +85,7 @@ HOCProfile.propTypes = {
 };
 
 const ConnectedHOCProfile = connect(mapStateToProps, {
+  updateProfile: ca.me.updateProfile,
 })(HOCProfile);
 
 export default ConnectedHOCProfile;
