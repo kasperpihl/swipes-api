@@ -193,7 +193,7 @@ const dbUsersCreate = funcWrap([
 const dbUsersActivateAfterSignUp = funcWrap([
   object.as({
     profile: object.require(),
-    user_id: object.require(),
+    user_id: string.require(),
     password: string.require(),
   }).require(),
 ], (err, { profile, user_id, password }) => {

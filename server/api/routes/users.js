@@ -89,7 +89,6 @@ notAuthed.all('/users.signup',
   xendoSignUpQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    user_id: string.require(),
     token: string.require(),
   }));
 

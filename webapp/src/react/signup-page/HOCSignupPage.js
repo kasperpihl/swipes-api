@@ -43,6 +43,20 @@ class HOCSignupPage extends PureComponent {
     const { formData } = this.state;
     this.setState({formData: formData.set(key, e.target.value)});
   }
+  onClick() {
+    console.log('clicky!');
+    const { formData, invitationToken } = this.state;
+    const { signup } = this.props;
+    signup({
+      first_name: formData.get('firstName'),
+      last_name: formData.get('lastName'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+      invitation_token: invitationToken,
+    }).then((res) => {
+      console.log('ressy', res);
+    });
+  }
   render() {
     const { formData } = this.state;
 
@@ -64,4 +78,5 @@ function mapStateToProps() {
 
 export default connect(mapStateToProps, {
   request: ca.api.request,
+  signup: ca.users.signup,
 })(HOCSignupPage);

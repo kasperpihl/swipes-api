@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { setupCachedCallback, setupDelegate } from 'swipes-core-js/classes/utils';
+import Button from 'Button';
 // import { map, list } from 'react-immutable-proptypes';
 
 class SignupPage extends PureComponent {
@@ -12,24 +13,24 @@ class SignupPage extends PureComponent {
   }
   componentDidMount() {
   }
-  renderInputField(key, placeholder) {
+  renderInputField(key, props) {
     const value = this.props.formData.get(key) || '';
     return (
       <input
         type="text"
         value={value}
         onChange={this.onChangeCached(key)}
-        placeholder={placeholder}
+        {...props}
       />
     )
   }
   render() {
     return (
       <div className="signup-page">
-        {this.renderInputField('email', 'name@example.com')}
-        {this.renderInputField('firstName', 'First name')}
-        {this.renderInputField('lastName', 'Last name')}
-        {this.renderInputField('password', 'Password')}
+        {this.renderInputField('email', { placeholder: 'name@example.com' })}
+        {this.renderInputField('firstName', { placeholder: 'First name' })}
+        {this.renderInputField('lastName', { placeholder: 'Last name' })}
+        {this.renderInputField('password', { placeholder: 'Password', type: 'password' })}
         <Button
           text="Sign up"
           primary

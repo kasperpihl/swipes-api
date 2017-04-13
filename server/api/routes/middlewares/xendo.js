@@ -139,13 +139,13 @@ const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
     });
 });
 const xendoSignUpQueueMessage = valLocals('xendoSignUpQueueMessage', {
-  user_id: string.require(),
+  userId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
+    userId,
   } = res.locals;
   const queueMessage = {
-    user_id,
+    user_id: userId,
     event_type: 'xendo_user_signup',
   };
 

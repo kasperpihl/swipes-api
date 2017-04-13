@@ -216,7 +216,7 @@ class HOCGoalList extends PureComponent {
           let title = filters.getIn([tId, 'title']);
           const size = filters.getIn([tId, 'goals']).size;
           if (i < (tabs.length - 1) && size) {
-            //title += ` (${size})`;
+            title += ` (${size})`;
           }
           return title;
         })}

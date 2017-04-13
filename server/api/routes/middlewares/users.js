@@ -206,12 +206,12 @@ const userSignUp = valLocals('userSignUp', {
   });
 });
 const userActivatedUserSignUpQueueMessage = valLocals('userActivatedUserSignUpQueueMessage', {
-  user: object.require(),
+  userId: string.require(),
   invitation_token: string,
   organization_id: string,
 }, (req, res, next, setLocals) => {
   const {
-    user,
+    userId,
     invitation_token,
   } = res.locals;
 
@@ -219,7 +219,6 @@ const userActivatedUserSignUpQueueMessage = valLocals('userActivatedUserSignUpQu
     return next();
   }
 
-  const userId = user.id;
   const queueMessage = {
     user_id: userId,
     event_type: 'user_activated',
