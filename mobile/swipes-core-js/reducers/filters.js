@@ -16,6 +16,14 @@ const initialState = fromJS({
       },
       goals: OrderedSet(),
     },
+    pinned: {
+      id: 'pinned',
+      title: 'Pinned',
+      filter: {
+        goalType: 'pinned',
+      },
+      goals: OrderedSet(),
+    },
     upcoming: {
       id: 'upcoming',
       title: 'Next',

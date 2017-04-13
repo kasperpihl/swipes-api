@@ -20,7 +20,7 @@ class HOCGoalList extends PureComponent {
     super(props);
     this.callDelegate = setupDelegate(props.delegate);
     this.state = {
-      tabs: ['current', 'upcoming', 'unassigned', 'default'],
+      tabs: ['current', 'pinned', 'upcoming', 'unassigned', 'default'],
       tabIndex: 0,
       showFilter: false,
       filterProp: fromJS([

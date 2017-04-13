@@ -11,8 +11,9 @@ export default function goalsReducer(state = initialState, action) {
   switch (type) {
     case 'init': {
       let goals = Map();
+      const pins = payload.me.settings.pinned_goals;
       payload.goals.forEach((g) => {
-        goals = goals.set(g.id, fromJS(g));
+        goals = goals.set(g.id, fromJS(g).set('pinned', pins.indexOf(g.id) > -1));
       });
       return goals;
     }
@@ -119,7 +120,14 @@ export default function goalsReducer(state = initialState, action) {
         return g.setIn(['attachments', aId, 'deleted'], true);
       });
     }
-
+    case 'me.updateSettings':
+    case 'settings_updated': {
+      const pins = payload.settings.pinned_goals;
+      if(pins){
+        return state.map((g) => g.set('pinned', pins.indexOf(g.get('id')) > -1));
+      }
+      return state;
+    }
     default:
       return state;
   }

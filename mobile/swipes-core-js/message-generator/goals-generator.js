@@ -11,6 +11,7 @@ export default class Goals {
       current: 'Current goals',
       upcoming: 'Upcoming goals',
       completed: 'Completed goals',
+      pinned: 'Pinned goals',
     };
     return goalTypes[goalType] || 'All goals';
   }
@@ -37,6 +38,7 @@ export default class Goals {
       current: 'current ',
       upcoming: 'upcoming ',
       completed: 'completed ',
+      pinned: 'pinned ',
     };
 
     const typeLabel = goalTypes[filter.get('goalType')] || '';

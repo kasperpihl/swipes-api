@@ -36,7 +36,10 @@ export default class FilterHandler {
 
     const orgFilters = state.get('filters');
     let filters = orgFilters;
+
     const orgGoalFilters = filters.get('goals');
+    let goalFilters = orgGoalFilters;
+
     let diffFilters;
     if(this.prevFilters && filters !== this.prevFilters){
 
@@ -44,9 +47,9 @@ export default class FilterHandler {
         (f, k) => f.get('filter') !== this.prevFilters.getIn(['goals', k, 'filter'])
       ).map(f => f.get('id'));
     }
+
     const goals = state.get('goals');
     if (goals !== this.previousGoals || (diffFilters && diffFilters.size)) {
-      let goalFilters = orgGoalFilters;
       this.previousGoals = this.previousGoals || Map();
       goals.forEach((g, k) => {
         const prev = this.previousGoals.get(k);

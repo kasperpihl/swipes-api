@@ -1,7 +1,7 @@
 import { compose, applyMiddleware, createStore } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import thunk from 'redux-thunk';
-import { Map } from 'immutable';
+import Immutable, { Map } from 'immutable';
 import rootReducer from 'reducers';
 import dev from './configureStore.dev';
 
@@ -31,6 +31,7 @@ export default function configureStore(preloadedState) {
   if (!isProd) {
     window.getState = store.getState;
     window.dispatch = store.dispatch;
+    window.Immutable = Immutable;
   }
   return store;
 }
