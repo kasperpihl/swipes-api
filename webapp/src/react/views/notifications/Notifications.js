@@ -13,7 +13,7 @@ import './styles/notifications';
 export default class Notifications extends Component {
   constructor(props) {
     super(props);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onMarkAll = this.callDelegate.bind(null, 'onMark', 'all');
     this.onScroll = this.callDelegate.bind(null, 'onScroll');
   }

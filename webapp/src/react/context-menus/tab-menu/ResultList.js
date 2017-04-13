@@ -11,7 +11,7 @@ class ResultList extends Component {
     super(props);
     this.state = {};
     this.onActionCached = setupCachedCallback(this.onAction, this);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
   }
   componentDidMount() {
   }

@@ -19,7 +19,7 @@ class ControlPanel extends Component {
     this.state = {
       showInput: false,
     };
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     bindAll(this, ['addLink', 'handleKeyUp', 'onToggle']);
   }
   componentWillReceiveProps(nextProps) {

@@ -8,7 +8,7 @@ class TemplateItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = setupDelegate(props.delegate, props.template);
+    setupDelegate(this, props.template);
     this.onClick = this.callDelegate.bind(null, 'onTemplateClick');
   }
   render() {

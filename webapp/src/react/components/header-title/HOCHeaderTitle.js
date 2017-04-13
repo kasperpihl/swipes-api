@@ -12,7 +12,7 @@ export default class HOCHeaderTitle extends Component {
     super(props);
     this.state = {};
 
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onClick = this.callDelegate.bind(null, 'onTitleClick');
   }
   componentDidMount() {

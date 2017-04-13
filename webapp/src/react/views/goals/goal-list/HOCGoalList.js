@@ -18,7 +18,7 @@ import GoalList from './GoalList';
 class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.state = {
       tabs: ['current', 'starred', 'upcoming', 'unassigned', 'default'],
       tabIndex: 0,
@@ -216,7 +216,7 @@ class HOCGoalList extends PureComponent {
           let title = filters.getIn([tId, 'title']);
           const size = filters.getIn([tId, 'goals']).size;
           if (i < (tabs.length - 1) && size) {
-            title += ` (${size})`;
+            //title += ` (${size})`;
           }
           return title;
         })}

@@ -11,7 +11,7 @@ class BrowseSectionList extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = setupDelegate(props.delegate, props.depth);
+    setupDelegate(this, props.depth);
     this.onContextClick = this.callDelegate.bind(null, 'onContextClick');
     this.clickedItemCached = setupCachedCallback(this.callDelegate.bind(null, 'clickedItem'));
     // now use events as onClick: this.clickedItemCached(i)

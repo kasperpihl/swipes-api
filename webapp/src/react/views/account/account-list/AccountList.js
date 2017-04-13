@@ -12,7 +12,7 @@ class AccountList extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onLogout = this.onLogout.bind(this);
   }

@@ -7,7 +7,7 @@ class BrowserNavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
 
     this.actions = {};
     ['back', 'forward', 'reload', 'browser', 'close'].forEach((act) => {

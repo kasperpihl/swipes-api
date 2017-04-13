@@ -13,7 +13,7 @@ import './styles/organization.scss';
 class Organization extends PureComponent {
   constructor(props) {
     super(props);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onInvite = this.callDelegate.bind(null, 'onInvite');
     this.onKeyDown = this.callDelegate.bind(null, 'onKeyDown');
     this.onChangeCached = setupCachedCallback(this.onChange, this);

@@ -17,7 +17,7 @@ class HOCGoalListItem extends PureComponent {
     this.state = {
       animateToStarred: false,
     };
-    this.callDelegate = setupDelegate(props.delegate, props.goalId);
+    setupDelegate(this, props.goalId);
     this.onClick = this.onClickItem.bind(this);
     this.onPin = this.onPin.bind(this);
   }

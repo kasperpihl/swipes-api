@@ -31,7 +31,7 @@ class NoteEditor extends Component {
       ],
     });
     this.setEditorState = this.setEditorState.bind(this);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onChange = this.setEditorState;
   }
   componentDidMount() {

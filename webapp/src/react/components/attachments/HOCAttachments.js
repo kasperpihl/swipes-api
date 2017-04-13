@@ -29,7 +29,7 @@ class HOCAttachments extends PureComponent {
     this.onFlagClickCached = setupCachedCallback(this.onFlagClick, this);
     this.onContextMenuCached = setupCachedCallback(this.onContextMenu, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     bindAll(this, ['onChangeFiles', 'onPaste']);
     setupLoading(this);
   }

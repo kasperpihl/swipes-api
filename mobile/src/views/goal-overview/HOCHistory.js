@@ -20,7 +20,7 @@ class HOCHistory extends PureComponent {
     };
     this.lastY = 0;
     this.direction = 'up';
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
   }
   componentDidMount() {
     setTimeout(() => {

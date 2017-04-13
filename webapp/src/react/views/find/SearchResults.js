@@ -9,7 +9,7 @@ import './styles/search-results.scss';
 class SearchResults extends Component {
   constructor(props) {
     super(props);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
   }
   renderLoader() {
     const {

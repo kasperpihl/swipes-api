@@ -10,7 +10,7 @@ import './styles/find-item.scss';
 class FindItem extends Component {
   constructor(props) {
     super(props);
-    this.callDelegate = setupDelegate(props.delegate, props.index);
+    setupDelegate(this, props.index);
     bindAll(this, ['onClick', 'onAttach']);
   }
   onClick() {

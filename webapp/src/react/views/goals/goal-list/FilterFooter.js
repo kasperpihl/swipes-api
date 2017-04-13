@@ -8,7 +8,7 @@ class FilterFooter extends Component {
     super(props);
     this.state = {};
     bindAll(this, ['toggleCompleted']);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.editFilter = this.callDelegate.bind(null, 'onEditFilter');
   }
   toggleCompleted() {

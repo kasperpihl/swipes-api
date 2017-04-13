@@ -13,7 +13,7 @@ class Onboarding extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onClick'));
   }
   renderProgressBar() {

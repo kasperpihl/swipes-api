@@ -8,7 +8,7 @@ class Browse extends Component {
     this.state = {};
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onBack = this.onBack.bind(this);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
   }
   componentDidMount() {
   }

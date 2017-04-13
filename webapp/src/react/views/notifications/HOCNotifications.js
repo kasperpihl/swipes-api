@@ -27,7 +27,7 @@ class HOCNotifications extends PureComponent {
 
     this.onClickCached = setupCachedCallback(this.onClick, this);
     // now use events as onClick: this.onClickCached(i)
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onMarkCached = setupCachedCallback(this.onMark, this);
     this.onScroll = this.onScroll.bind(this);
   }

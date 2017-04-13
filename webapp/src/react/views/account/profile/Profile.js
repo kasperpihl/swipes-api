@@ -18,7 +18,7 @@ class Profile extends PureComponent {
       bioCounter: 300,
     };
 
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onChangeCached = setupCachedCallback(this.onChange, this);
     this.onBlurCached = setupCachedCallback(this.callDelegate.bind(null, 'onBlur'));
     this.handleEditState = this.handleEditState.bind(this);

@@ -16,7 +16,7 @@ class HOCStepList extends PureComponent {
       steps: helper.getOrderedSteps(),
     };
     setupLoading(this);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.goal !== this.props.goal) {

@@ -26,7 +26,7 @@ class StepList extends PureComponent {
       stepTitles: fromJS({}),
     };
     this.tooltips = [];
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onEnter = setupCachedCallback(this.onEnter, this);
     this.onKeyDownCached = setupCachedCallback(this.onKeyDown, this);
     this.onChangeCached = setupCachedCallback(this.onChange, this);

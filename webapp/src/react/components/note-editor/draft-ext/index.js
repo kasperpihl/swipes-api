@@ -69,7 +69,7 @@ export default function Setup(ctx, plugins) {
         strategy: d.strategy,
         component: d,
         props: {
-          ctx,
+          delegate: ctx,
         },
       }));
       let edt = EditorState.createEmpty(new CompositeDecorator(decorators));

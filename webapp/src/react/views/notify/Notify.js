@@ -18,7 +18,7 @@ import './styles/notify.scss';
 class Notify extends PureComponent {
   constructor(props) {
     super(props);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onChangeClick = this.callDelegate.bind(null, 'onChangeClick');
     this.onHandoffChange = this.callDelegate.bind(null, 'onHandoffChange');
     this.onSubmit = this.callDelegate.bind(null, 'onSubmit');

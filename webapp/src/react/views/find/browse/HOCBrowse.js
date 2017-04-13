@@ -17,7 +17,7 @@ class HOCBrowse extends PureComponent {
       results: fromJS([]),
       selectedIndexes: fromJS([]),
     };
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
   }
 
   componentDidMount() {

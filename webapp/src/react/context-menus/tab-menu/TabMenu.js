@@ -20,7 +20,7 @@ class TabMenu extends Component {
       this.state.tabIndex = props.initialTabIndex;
     }
     bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyDown', 'handleClick']);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
   }
   componentDidMount() {
     this.callDelegate('onTabMenuLoad', this);

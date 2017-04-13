@@ -26,7 +26,7 @@ const initialState = fromJS({
     },
     upcoming: {
       id: 'upcoming',
-      title: 'Next',
+      title: 'Upcoming',
       description: 'Goals that is assigned to you in an upcoming step',
       filter: {
         userId: 'me',

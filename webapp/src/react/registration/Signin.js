@@ -12,7 +12,7 @@ class Signin extends Component {
       emailFocus: false,
     };
 
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onEmailChange = this.onEmailChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);

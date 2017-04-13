@@ -19,7 +19,7 @@ class GoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
 
     this.onAskFor = this.callDelegate.bind(null, 'onAskFor');
     this.onNotify = this.callDelegate.bind(null, 'onNotify');

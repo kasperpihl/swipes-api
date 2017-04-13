@@ -7,7 +7,8 @@ import sendNotification from './notification-handler';
 export default class Socket {
   constructor(store, delegate) {
     this.store = store;
-    this.callDelegate = setupDelegate(delegate);
+    this.delegate = delegate;
+    setupDelegate(this);
     this.reconnect_attempts = 0;
     bindAll(this, ['message', 'changeStatus', 'storeChange']);
     store.subscribe(this.storeChange);

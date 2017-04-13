@@ -9,7 +9,7 @@ class Header extends Component {
     super(props);
     this.state = {};
 
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onSelect = this.onSelect.bind(this);
   }
   componentWillMount() {

@@ -14,7 +14,7 @@ class NotificationItem extends Component {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
     this.onNotificationPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationPress'));
   }

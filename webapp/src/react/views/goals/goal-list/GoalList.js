@@ -20,7 +20,7 @@ class GoalList extends Component {
     super(props);
     this.state = { filterHeight: 0 };
 
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     this.clearFilter = this.callDelegate.bind(null, 'onClearFilter');
     this.hideFilter = this.callDelegate.bind(null, 'onHideFilter');
     this.editFilter = this.callDelegate.bind(null, 'onEditFilter');

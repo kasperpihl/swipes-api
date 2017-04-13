@@ -12,7 +12,7 @@ class NotificationItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.callDelegate = setupDelegate(props.delegate, props.i);
+    setupDelegate(this, props.i);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'onClickAttachment'));
     this.onReply = this.callDelegate.bind(null, 'onReply');
     this.onClick = this.onClick.bind(this);

@@ -31,7 +31,7 @@ class NoteLink extends Component {
   }
   constructor(props) {
     super(props);
-    this.callDelegate = setupDelegate(props.ctx);
+    setupDelegate(this);
     this.onClick = this.onClick.bind(this);
   }
   onClick() {
@@ -60,7 +60,7 @@ const { string, arrayOf, object } = PropTypes;
 NoteLink.propTypes = {
   entityKey: string,
   decoratedText: string,
-  ctx: object,
+  delegate: object,
   contentState: object,
   children: arrayOf(object),
 };

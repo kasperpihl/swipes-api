@@ -91,10 +91,10 @@ export function nearestAttribute(target, attribute) {
   return value;
 }
 
-export function setupDelegate(delegate) {
+export function setupDelegate(obj) {
+  const delegate = obj && (obj.delegate || (obj.props && obj.props.delegate));
   const orgArgs = Array.prototype.slice.call(arguments, 1);
-
-  return function callDelegate(name) {
+  obj.callDelegate = function callDelegate(name) {
     if (delegate && typeof delegate[name] === 'function') {
       return delegate[name](...orgArgs.concat(Array.prototype.slice.call(arguments, 1)));
     }

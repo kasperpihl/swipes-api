@@ -13,7 +13,7 @@ class HOCGoalItem extends PureComponent {
     this.state = {};
 
     this.openOverview = this.openOverview.bind(this);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
   }
   openOverview() {
     const { goal } = this.props;

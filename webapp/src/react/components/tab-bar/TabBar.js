@@ -15,7 +15,7 @@ class TabBar extends Component {
     };
     this.calculateSliderClips = this.calculateSliderClips.bind(this);
     this.bouncedCalc = debounce(this.calculateSliderClips, 1);
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     bindAll(this, ['onChange']);
   }
   onChange(e) {

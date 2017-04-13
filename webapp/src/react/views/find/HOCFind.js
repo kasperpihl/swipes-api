@@ -32,7 +32,7 @@ class HOCFind extends Component {
       searchQ: '',
     };
     this.unhandledDocs = [];
-    this.callDelegate = setupDelegate(props.delegate);
+    setupDelegate(this);
     bindAll(this, ['onInputChange', 'onInputKeyUp', 'onConnectService']);
   }
   onInputChange(e) {
