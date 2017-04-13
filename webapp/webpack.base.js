@@ -79,14 +79,12 @@ module.exports = {
         } ]
       },
       {
-        test: /\.woff2$/,
+        test: /\.(eot|ttf|woff|woff2)$/,
         // Inline small woff files and output them below font/.
         use: [{
-          loader: 'url-loader',
+          loader: 'file-loader',
           options: {
-            name: 'fonts/[name].[hash:6].[ext]',
-            limit: 50000,
-            mimetype: 'application/font-woff'
+            name: 'fonts/[name].[hash:6].[ext]'
           }
         }],
       },

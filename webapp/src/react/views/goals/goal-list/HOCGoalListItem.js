@@ -142,13 +142,13 @@ class HOCGoalListItem extends PureComponent {
     );
   }
   render() {
-    const { starred, goal } = this.props;
-    const { animateToStarred, animateFromStarred } = this.state;
+    const { goal } = this.props;
+    const { animateToStarred } = this.state;
     const helper = this.getHelper();
     const isActive = !helper.getIsCompleted();
     let className = 'goal-list-item';
 
-    if (starred) {
+    if (goal.get('starred')) {
       className += ' goal-list-item--starred';
     }
 

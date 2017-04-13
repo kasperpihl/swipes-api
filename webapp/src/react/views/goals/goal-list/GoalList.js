@@ -140,7 +140,6 @@ class GoalList extends Component {
     let i = 0;
     return goals.map(goalId => (
       <HOCGoalListItem
-        starred={(i++ < numberOfStars)} // eslint-disable-line
         goalId={goalId}
         delegate={delegate}
         key={goalId}
