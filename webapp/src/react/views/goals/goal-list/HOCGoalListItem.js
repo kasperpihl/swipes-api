@@ -17,24 +17,29 @@ class HOCGoalListItem extends PureComponent {
     this.state = {};
     this.callDelegate = setupDelegate(props.delegate, props.goalId);
     this.onClick = this.onClickItem.bind(this);
+    this.onPin = this.onPin.bind(this);
   }
-  onAssign(id, e){
+  onAssign(id, e) {
     const { goalId, selectAssignees, assignStep } = this.props;
     const helper = this.getHelper();
     const step = helper.getCurrentStep();
+
     e.stopPropagation();
+
     const options = this.getOptionsForE(e);
     options.actionLabel = 'Assign';
-    if(step.get('assignees').size){
+
+    if (step.get('assignees').size) {
       options.actionLabel = 'Reassign';
     }
+
     let overrideAssignees;
+
     selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
       if (newAssignees) {
         overrideAssignees = newAssignees;
       } else if (overrideAssignees) {
         assignStep(goalId, step.get('id'), overrideAssignees);
-        console.log('lets do this!');
       }
     });
   }
@@ -45,6 +50,9 @@ class HOCGoalListItem extends PureComponent {
       this.callDelegate('onGoalClick');
     }
   }
+  onPin() {
+    console.log('pinning!!!!');
+  }
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);
@@ -54,6 +62,25 @@ class HOCGoalListItem extends PureComponent {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
     };
+  }
+  renderIndicator() {
+    return (
+      <div className="goal-list-item__indicator" onClick={this.onPin} />
+    );
+  }
+  renderContent() {
+    const { goal, filter } = this.props;
+    const status = msgGen.goals.getSubtitle(goal, filter);
+
+    return (
+      <div className="goal-list-item__content" onClick={this.onClick}>
+        <div className="goal-list-item__title">{goal.get('title')}</div>
+        <div className="goal-list-item__subtitle">
+          <div className="goal-list-item__label">{status}</div>
+          {this.renderProgressBar()}
+        </div>
+      </div>
+    );
   }
   renderProgressBar() {
     const helper = this.getHelper();
@@ -101,9 +128,7 @@ class HOCGoalListItem extends PureComponent {
     );
   }
   render() {
-    const { goal, filter } = this.props;
     const helper = this.getHelper();
-    const status = msgGen.goals.getSubtitle(goal, filter);
     const isActive = !helper.getIsCompleted();
     let className = 'goal-list-item';
 
@@ -112,15 +137,9 @@ class HOCGoalListItem extends PureComponent {
     }
 
     return (
-      <div className={className} onClick={this.onClick}>
-        <Icon icon="Checkmark" className="goal-list-item__completed-icon" />
-        <div className="goal-list-item__content">
-          <div className="goal-list-item__title">{goal.get('title')}</div>
-          <div className="goal-list-item__subtitle">
-            <div className="goal-list-item__label">{status}</div>
-            {this.renderProgressBar()}
-          </div>
-        </div>
+      <div className={className}>
+        {this.renderIndicator()}
+        {this.renderContent()}
         {this.renderAssignees()}
       </div>
     );
@@ -129,13 +148,14 @@ class HOCGoalListItem extends PureComponent {
 
 const mapStateToProps = (state, ownProps) => ({
   goal: state.getIn(['goals', ownProps.goalId]),
-})
+});
 
-const { object, string } = PropTypes;
+const { object } = PropTypes;
 
 HOCGoalListItem.propTypes = {
   goal: map,
   delegate: object,
+  filter: map,
 };
 
 export default connect(mapStateToProps, {

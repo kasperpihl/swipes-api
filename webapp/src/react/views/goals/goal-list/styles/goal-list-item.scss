@@ -1,116 +1,85 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-$imgContHeight: 79px;
+$contHeight: 79px;
+
+
+// ======================================================
+// Block
+// ======================================================
 
 .goal-list-item {
   $b: &;
+  $flexIgnoreList: '#{$b}__indicator', '#{$b}__assigning';
 
-  @include size(100%, $imgContHeight);
-  @include flex(center, flex-start);
+  @include size(100%, $contHeight);
+  @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
   border-bottom: 1px solid $deepBlue-6;
-  padding-left: 42px;
+}
 
-  &:before {
-    content: '';
-    @include size(6px);
-    border-radius: 50%;
-    background-color: $deepBlue-30;
-    left: 12px; top: 50%;
-    transform: translateY(-50%);
-    position: absolute;
-  }
+// ======================================================
+// Elements
+// ======================================================
 
-  &:hover {
+.goal-list-item {
 
-    #{$b}__title {
-      color: $blue-100;
-      transition: color .1s ease;
-    }
-  }
+  &__indicator {
+    @include size(42px, 100%);
 
-  &__image {
-    @include size($imgContHeight);
-    @include flex();
-
-    #{$b}__icon {
-      @include size(24px);
+    &:after {
+      @include size(6px);
+      @include centerAbsolute();
+      background-color: $deepBlue-20;
+      border-radius: 50%;
+      content: '';
     }
   }
 
   &__content {
-    @include flex(flex-start, center, column);
     @include size(100%);
-    min-height: $imgContHeight;
-    position: relative;
+    @include flexContainer('column', left, center);
+    @include heightSpecifications($contHeight, auto);
   }
 
   &__title {
+    @include size(calc(100% - 50px), auto);
     @include font(17px, $deepBlue-80, 24px);
-    width: calc(100% - 50px);
+    @include truncateString();
     transition: color .1s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   &__subtitle {
     @include size(calc(100% - 50px), 30px);
     @include flex(center, flex-start);
-    position: relative;
+    @include flexContainer('row', left, center);
     overflow: hidden;
   }
 
   &__label {
     @include size(100%, 20px);
     @include font(12px, $deepBlue-50, 15px, 500);
-    margin-top: 3px;
+    @include truncateString();
     letter-spacing: .5px;
+    margin-top: 3px;
     transition: .25s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   &__assigning {
     @include size(auto, 30px);
-    @include flex(none);
-    position: absolute;
-    right: 0px; top: 50%;
-    transform: translateY(-50%);
-  }
-
-  &__completed-icon {
-    @include size(30px);
-    @include svg-color($green-color);
-    @include flex(none);
-    border-radius: 50%;
-    border: 2px solid $green-color;
-    display: none;
-    padding: 4px;
-  }
-
-  &--completed {
-
-    #{$b}__completed-icon {
-      display: block;
-    }
-
-    #{$b}__content {
-      padding-left: 21px;
-    }
   }
 }
+
+// progress-bar
 
 .goal-list-item {
   $b: &;
 
   .progress-bar {
     @include size(100%, 20px);
-    @include flex(center, flex-center);
-    position: absolute;
-    left: 1px; bottom: -20px;
+    @include flexContainer('row', left, center);
     background-color: $bg;
+    left: 1px; bottom: -20px;
+    position: absolute;
     transition: .2s ease;
 
     & > * {
@@ -122,35 +91,66 @@ $imgContHeight: 79px;
       @include size(180px, 9px);
       border: 1px solid $deepBlue-20;
       border-radius: 100px;
-      position: relative;
     }
 
     &__fill {
-      height: 5px;
-      max-width: 176px;
-      min-width: 3%;
+      @include size(initial, 5px);
+      @include widthSpecifications(3%, 176px);
       background-color: $deepBlue-100;
+      border-radius: 100px;
       margin-top: 1px;
       margin-left: 1px;
-      border-radius: 100px;
     }
 
     &__status {
       @include font(12px, $deepBlue-60);
       margin-left: 18px;
     }
+  }
+}
 
-    &--empty {
-       .progress-bar__status {
-         margin-left: 0;
-       }
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.goal-list-item {
+  $b: &;
+
+  &--completed {
+
+    #{$b}__indicator {
+      .progress-bar__status {
+        margin-left: 0;
+      }
     }
   }
 
+  .progress-bar {
+
+    &--empty {
+
+    }
+  }
+}
+
+// ======================================================
+// Hovers
+// ======================================================
+
+.goal-list-item {
+  $b: &;
+
   &:hover {
+
+    #{$b}__title {
+      color: $blue-100;
+      transition: color .15s ease;
+    }
+
     .progress-bar {
-      transition: .2s .2s ease;
       bottom: 5px;
+      transition: .2s .2s ease;
 
       & > * {
         opacity: 1;

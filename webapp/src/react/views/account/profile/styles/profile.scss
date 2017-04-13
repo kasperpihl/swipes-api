@@ -111,6 +111,7 @@
 
 // header
 .profile-header {
+  $b: &;
 
   &__profile-image {
     @include size(72px);
@@ -129,11 +130,28 @@
   &__form {
     @include size(100%);
     @include flexContainer('column');
-    padding-left: 15px;
   }
 
   &__row {
     // background-color: red;
+
+    &:first-child {
+      #{$b}__input {
+        @include size(100%, 37px);
+        @include border-radius(3px, 3px, 0px, 0px);
+        border-bottom: 1px solid $deepBlue-20;
+
+        &:disabled {
+          border-bottom: 1px solid transparent !important;
+          transition: .15s ease;
+        }
+      }
+    }
+
+    #{$b}__input {
+      @include size(100%, 36px);
+        @include border-radius(0px, 0px, 3px, 3px);
+      }
   }
 
   &__loader {
@@ -144,11 +162,18 @@
   }
 
   &__input {
-    @include size(100%, 36px);
+    @include size(100%, 37px);
     @include font(27px, $deepBlue-100, 36px, 800);
+    background-color: $deepBlue-5;
+    padding-left: 15px;
 
     &::-webkit-input-placeholder {
       @include font(27px, $deepBlue-30, 36px, 800);
+    }
+
+    &:disabled {
+      background-color: transparent;
+      transition: .15s ease;
     }
   }
 }
