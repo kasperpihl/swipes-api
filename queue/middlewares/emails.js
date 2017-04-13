@@ -42,7 +42,7 @@ const attachmentIcons = {
 const getNotificationLabelIconContent = (notification_type) => {
   const icon = notificationIconsMap[notification_type];
 
-  return `<img class="notification-icon" src="${icon}">`;
+  return `<img style="border: 0px; width: 42px; height: 42px;" src="${icon}">`;
 };
 const getNotificationLabel = ({ notification_type, request, reply_to, user, goal, subject = false }) => {
   let notificationLabels = notificationGiveLabels;
@@ -74,17 +74,17 @@ const getNotificationAttachmentsList = ({ goal, flags = [] }) => {
     const attachmentIconUrl = attachmentIcons[attachment.link.service.type];
 
     list.push(`
-      <div class="mcnTextContent attachment">
+      <div class="mcnTextContent" style="height: 24px; padding-left: 90px; padding-top: 10px; padding-bottom: 10px;">
         <table style="float: left">
           <tbody>
             <tr>
               <td>
-                <div class="mcnImage attachment-icon-wrapper">
-                  <img class="attachment-icon" src="${attachmentIconUrl}"/>
+                <div class="mcnImage" style="display: inline-block;">
+                  <img style="display: inline-block; vertical-align: bottom; padding-right: 9px;" src="${attachmentIconUrl}"/>
                 </div>
               </td>
               <td>
-                <p class="attachment-label">${attachment.title}</p>
+                <p style="display: inline-block; margin: 0 !important;">${attachment.title}</p>
               </td>
             </tr>
           </tbody>
