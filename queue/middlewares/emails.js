@@ -75,10 +75,20 @@ const getNotificationAttachmentsList = ({ goal, flags = [] }) => {
 
     list.push(`
       <div class="mcnTextContent attachment">
-        <div class="mcnImage attachment-icon-wrapper">
-            <img class="attachment-icon" src="${attachmentIconUrl}"/>
-          </div>
-        <p class="attachment-label">${attachment.title}</p>
+        <table style="float: left">
+          <tbody>
+            <tr>
+              <td>
+                <div class="mcnImage attachment-icon-wrapper">
+                  <img class="attachment-icon" src="${attachmentIconUrl}"/>
+                </div>
+              </td>
+              <td>
+                <p class="attachment-label">${attachment.title}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     `);
   });
