@@ -186,7 +186,7 @@ class HOCGoalList extends PureComponent {
     }
   }
   render() {
-    const { me, savedState, filters, goals } = this.props;
+    const { me, savedState, filters, goals, pinnedGoals } = this.props;
     const {
       tabIndex,
       tabs,
@@ -201,6 +201,7 @@ class HOCGoalList extends PureComponent {
     return (
       <GoalList
         goalFilter={goalFilter}
+        pinnedGoals={pinnedGoals}
         tabIndex={tabIndex}
         savedState={savedState}
         loadingState={this.getAllLoading()}
@@ -225,6 +226,7 @@ function mapStateToProps(state) {
     goals: state.get('goals'),
     filters: state.getIn(['filters', 'goals']),
     cache: state.getIn(['cache', 'list-filter']),
+    pinnedGoals: state.getIn(['me', 'settings', 'pinned_goals']),
   };
 }
 

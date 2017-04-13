@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { List } from 'immutable';
 import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
 import TabBar from 'components/tab-bar/TabBar';
@@ -114,12 +115,14 @@ class GoalList extends Component {
       </Measure>
     );
   }
+  renderPinned() {
+
+  }
   renderList() {
-    const { goalFilter, delegate } = this.props;
-    const goals = goalFilter.get('goals');
+    const { goalFilter, delegate, pinnedGoals: pG } = this.props;
     const filter = goalFilter.get('filter');
 
-    if (filter.get('goalType') === 'current' && !goals.size) {
+    if (filter.get('goalType') === 'current' && !goalFilter.get('goals').size) {
       return (
         <div className="goals-empty-state">
           <div className="goals-empty-state__title">Goals</div>
@@ -136,8 +139,19 @@ class GoalList extends Component {
         </div>
       );
     }
-    return goals.map(goalId => (
+    const group = goalFilter.get('goals').groupBy((gId) => pG.contains(gId) ? 'pinned' : 'not');
+    let goals = List();
+    let pinnedSize = 0;
+    if(group.get('pinned')){
+      goals = goals.concat(group.get('pinned'));
+      pinnedSize = group.get('pinned').size;
+    }
+    if(group.get('not')){
+      goals = goals.concat(group.get('not'));
+    }
+    return goals.map((goalId, i) => (
       <HOCGoalListItem
+        pinned={i < pinnedSize}
         goalId={goalId}
         delegate={delegate}
         key={goalId}
@@ -184,6 +198,7 @@ const { object: obj, number, array, bool, string, func } = PropTypes;
 
 GoalList.propTypes = {
   tabs: array,
+  pinnedGoals: list,
   showFilter: bool,
   filterProp: list,
   filterLabel: string,

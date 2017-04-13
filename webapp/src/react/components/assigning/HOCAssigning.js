@@ -23,7 +23,7 @@ class HOCAssigning extends PureComponent {
     }
   }
   getStateAssignees(props) {
-    const { users, me, goal, stepId, assignees } = props;
+    const { users, myId, goal, stepId, assignees } = props;
     let stateAssignees = List([]);
 
     if (goal && stepId) {
@@ -37,8 +37,8 @@ class HOCAssigning extends PureComponent {
       stateAssignees = List(assignees);
     }
 
-    if (stateAssignees.includes(me.get('id'))) {
-      stateAssignees = stateAssignees.filter(uId => uId !== me.get('id')).insert(0, me.get('id'));
+    if (stateAssignees.includes(myId)) {
+      stateAssignees = stateAssignees.filter(uId => uId !== myId).insert(0, myId);
     }
 
     stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
@@ -74,7 +74,7 @@ function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
     users: state.get('users'),
-    me: state.get('me'),
+    myId: state.getIn(['me', 'id']),
   };
 }
 
@@ -83,7 +83,7 @@ const { object, oneOfType, number, string, bool, array, func } = PropTypes;
 HOCAssigning.propTypes = {
   tooltip: func,
   goal: map,
-  me: map,
+  myId: string,
   users: map,
   assignees: oneOfType([list, array]),
   stepId: string,
