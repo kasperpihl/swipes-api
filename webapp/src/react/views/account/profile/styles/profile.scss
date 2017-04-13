@@ -8,7 +8,7 @@
 .profile {
   @include size(100%, auto);
   @include flexContainer('row', center, top);
-  padding-top: 99px;
+  padding-top: 30px;
 }
 
 .profile-header {
@@ -247,6 +247,7 @@
 }
 
 .profile {
+  $b: &;
 
   &:not(#{&}--editing) {
     .profile-form__counter {
@@ -279,6 +280,17 @@
       .profile-header__svg {
         @include size(24px);
         @include svg-color(white);
+      }
+    }
+
+    #{$b}__edit-button {
+
+      span {
+        @include font($c: $blue-100);
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

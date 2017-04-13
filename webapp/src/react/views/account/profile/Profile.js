@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import ReactTextarea from 'react-textarea-autosize';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Icon from 'Icon';
+import Button from 'Button';
 
 import './styles/Profile.scss';
 
@@ -32,6 +34,40 @@ class Profile extends PureComponent {
 
     this.setState({ editing: !editing });
   }
+  renderLoaderForKey(key) {
+    const { getLoading } = this.props;
+
+    if (getLoading(key).loading) {
+      return (
+        <svg className="spinner" viewBox="0 0 50 50">
+          <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
+        </svg>
+      );
+    } else if (getLoading(key).errorLabel) {
+      return (
+        <div className="profile__error-icon" data-error={getLoading(key).errorLabel}>
+          <Icon icon="Close" className="profile__svg" />
+        </div>
+      );
+    } else if (getLoading(key).successLabel) {
+      return (
+        <div className="profile__success-icon">
+          <Icon icon="ActivityCheckmark" className="profile__svg" />
+        </div>
+      );
+    }
+
+    return undefined;
+  }
+  renderHeader() {
+    const { editing } = this.state;
+
+    return (
+      <HOCHeaderTitle title="Profile">
+        <Button text={editing ? 'Done' : 'Edit'} onClick={this.handleEditState} />
+      </HOCHeaderTitle>
+    );
+  }
   renderProfileImage() {
     const { me } = this.props;
     const { editing } = this.state;
@@ -44,11 +80,10 @@ class Profile extends PureComponent {
             <img src={profilePic} role="presentation" />
           </div>
         );
-      } else {
-        const initials = msgGen.users.getInitals(me);
-
-        return <div className="profile-header__initials">{initials}</div>;
       }
+      const initials = msgGen.users.getInitals(me);
+
+      return <div className="profile-header__initials">{initials}</div>;
     }
     const profilePic = msgGen.users.getPhoto(me);
     if (profilePic) {
@@ -68,7 +103,7 @@ class Profile extends PureComponent {
       </div>
     );
   }
-  renderHeader() {
+  renderProfileHeader() {
     const { firstName, lastName } = this.props;
     const { editing } = this.state;
     let disabled = true;
@@ -114,31 +149,8 @@ class Profile extends PureComponent {
       </div>
     );
   }
-  renderLoaderForKey(key) {
-    const { getLoading } = this.props;
-    if (getLoading(key).loading) {
-      return (
-        <svg className="spinner" viewBox="0 0 50 50">
-          <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
-        </svg>
-      );
-    } else if (getLoading(key).errorLabel) {
-      return (
-        <div className="profile__error-icon" data-error={getLoading(key).errorLabel}>
-          <Icon icon="Close" className="profile__svg" />
-        </div>
-      );
-    } else if (getLoading(key).successLabel) {
-      return (
-        <div className="profile__success-icon">
-          <Icon icon="ActivityCheckmark" className="profile__svg" />
-        </div>
-      );
-    }
-    return undefined;
-  }
   renderForm() {
-    const { role, bio, email, getLoading } = this.props;
+    const { role, bio, email } = this.props;
     const { bioCounter, editing } = this.state;
     let counterClass = 'profile-form__counter';
     let disabled = true;
@@ -209,19 +221,11 @@ class Profile extends PureComponent {
     }
 
     return (
-      <SWView>
+      <SWView header={this.renderHeader()}>
         <div className={className}>
           <div className="profile__wrapper">
-            {this.renderHeader()}
+            {this.renderProfileHeader()}
             {this.renderForm()}
-          </div>
-          <div
-            className="profile__edit-button"
-            onClick={this.handleEditState}
-          >
-            <span>
-              {editing ? 'Done' : 'Edit'}
-            </span>
           </div>
         </div>
       </SWView>

@@ -40,7 +40,6 @@ class Signin extends Component {
 
     return (
       <div className="sign-in">
-        <div className="sign-in__title">Sign in to your Workspace</div>
         <FloatingInput
           ref="emailInput"
           label="Email"

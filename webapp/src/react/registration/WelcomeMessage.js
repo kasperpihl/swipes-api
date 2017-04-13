@@ -12,7 +12,6 @@ class WelcomeMessage extends Component {
   render() {
     return (
       <div className="welcome-message">
-        <div className="welcome-message__title">Welcome to your Workspace</div>
         <div className="welcome-message__paragraph">We are thrilled to have you join in and are committed to make this a great experience for you and your team! </div>
         <div className="welcome-message__paragraph">Swipes brings together your team, communication, and files, all in one place. You can see what to work on next, you can pass on work to one another, give feedback and see how your part adds up to the big team effort.</div>
         <div className="welcome-message__signature">

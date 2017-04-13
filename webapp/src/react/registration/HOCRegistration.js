@@ -94,11 +94,14 @@ class HOCRegistration extends Component {
     });
   }
   renderHeader() {
+    const { showWelcomeMessage } = this.state;
+
     return (
       <div className="welcome__header">
         <div className="welcome__logo">
           <Icon icon="SwipesLogoFull" className="welcome__svg" />
         </div>
+        <div className="welcome-message__title">{showWelcomeMessage ? 'Welcome to your Workspace' : 'Sign in to your Workspace'}</div>
       </div>
     );
   }
@@ -111,7 +114,7 @@ class HOCRegistration extends Component {
           <WelcomeMessage delegate={this} />
         ) : (
           <Signin email={email} password={password} delegate={this} errorLabel={errorLabel} />
-        )}
+          )}
       </div>
     );
   }
@@ -148,10 +151,12 @@ class HOCRegistration extends Component {
   }
   render() {
     return (
-      <div className="welcome__card">
-        <SWView header={this.renderHeader()} footer={this.renderFooter()}>
-          {this.renderContent()}
-        </SWView>
+      <div className="welcome">
+        <div className="welcome__card">
+          <SWView header={this.renderHeader()} footer={this.renderFooter()}>
+            {this.renderContent()}
+          </SWView>
+        </div>
       </div>
     );
   }

@@ -18,7 +18,7 @@
 .welcome {
 
 	&__card {
-		@include size(100%, calc(100% - 60px));
+		@include size(100%);
 		@include widthSpecifications(initial, 660px);
 		@include border-radius(6px, 6px, 0px, 0px);
 		animation: showSignIn 1s ease forwards;
@@ -26,13 +26,12 @@
 		border: 1px solid $deepBlue-10;
 		box-shadow: 0 6px 12px 1px rgba(0,12,47,0.3);
 		margin: 0 auto;
-		margin-top: calc(60px - 38px);
 	}
 
 	&__header {
 		@include size(100%, auto);
-		padding: 60px 60px;
-		padding-top: 90px;
+		padding: 0 60px;
+		padding-top: 8.5vh;
 	}
 
 	&__content {
@@ -41,7 +40,7 @@
 	}
 
 	&__footer {
-		@include size(100%, 120px);
+		@include size(100%, 11vh);
 		@include flexContainer('row', between, center);
 		padding: 0 90px;
 	}
@@ -116,7 +115,7 @@
 .welcome {
 
 	&__logo {
-
+		padding-bottom: 5.8vh;
 	}
 
 	&__svg {
