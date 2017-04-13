@@ -8,13 +8,14 @@ import Gradient from 'components/gradient/Gradient';
 import HOCApp from 'src/react/app/HOCApp';
 import HOCRegistration from 'src/react/registration/HOCRegistration';
 import HOCSignupPage from 'src/react/signup-page/HOCSignupPage';
-import HOCContextMenu from 'src/react/app/context-menu/HOCContextMenu';
-import HOCTooltip from 'src/react/app/tooltip/HOCTooltip';
+import HOCContextMenu from 'components/context-menu/HOCContextMenu';
+import HOCTooltip from 'components/tooltip/HOCTooltip';
+import HOCTopbar from 'components/topbar/HOCTopbar';
 
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
 
-import HOCTopbar from './topbar/HOCTopbar';
+
 
 let DevTools = 'div';
 

@@ -11,7 +11,7 @@ import IpcListener from 'classes/ipc-listener';
 import { init } from 'swipes-core-js';
 import * as a from 'actions';
 import { version } from '../package.json';
-import Root from './react/app/Root';
+import Root from './react/Root';
 
 const regeneratorRuntime = require('babel-runtime/regenerator'); // eslint-disable-line
 if (!regeneratorRuntime.default) {
