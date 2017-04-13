@@ -17,23 +17,12 @@ if (process.env.NODE_ENV !== 'production') {
 
 class HOCApp extends PureComponent {
   componentDidMount() {
-
-    this.updateMaximizeClass(this.props.isMaximized);
-    this.updateFullscreenClass(this.props.isFullscreen);
+    this.checkIsLoggedIn();
   }
   componentDidMount(){
     this.checkIsLoggedIn();
   }
-  componentDidUpdate(prevProps) {
-    const { isMaximized, isFullscreen } = this.props;
-    this.checkIsLoggedIn();
-    if (isMaximized !== prevProps.isMaximized) {
-      this.updateMaximizeClass(isMaximized);
-    }
-    if (isFullscreen !== prevProps.isFullscreen) {
-      this.updateFullscreenClass(isFullscreen);
-    }
-  }
+
   checkIsLoggedIn(){
     const { token, isHydrated, history } = this.props;
     if (isHydrated && !token) {
@@ -41,22 +30,6 @@ class HOCApp extends PureComponent {
     }
   }
 
-  updateFullscreenClass(isFullscreen) {
-    const classList = document.getElementById('content').classList;
-    if (isFullscreen) {
-      classList.add('window-is-fullscreen');
-    } else {
-      classList.remove('window-is-fullscreen');
-    }
-  }
-  updateMaximizeClass(isMaximized) {
-    const classList = document.getElementById('content').classList;
-    if (isMaximized) {
-      classList.add('window-is-maximized');
-    } else {
-      classList.remove('window-is-maximized');
-    }
-  }
   renderLoader() {
     return <SwipesLoader center text="Loading" size={90} />;
   }
@@ -80,21 +53,16 @@ class HOCApp extends PureComponent {
   }
 }
 
-const { func, bool, string } = PropTypes;
+const { bool, string } = PropTypes;
 
 HOCApp.propTypes = {
   lastConnect: string,
   isHydrated: bool,
   token: string,
-  navSet: func,
-  isFullscreen: bool,
-  isMaximized: bool,
 };
 
 function mapStateToProps(state) {
   return {
-    isMaximized: state.getIn(['main', 'isMaximized']),
-    isFullscreen: state.getIn(['main', 'isFullscreen']),
     isHydrated: state.getIn(['main', 'isHydrated']),
     status: state.getIn(['connection', 'status']),
     lastConnect: state.getIn(['connection', 'lastConnect']),
@@ -103,5 +71,4 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
-  navSet: a.navigation.set,
 })(HOCApp));

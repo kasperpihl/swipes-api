@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
 
 import * as a from 'actions';
@@ -13,15 +15,14 @@ import 'src/react/global-styles/app.scss';
 import HOCTopbar from './topbar/HOCTopbar';
 
 class Root extends PureComponent {
-  componentDidMount() {
-    if (window.ipcListener.platform) {
-      document.getElementById('content').classList.add(`platform-${window.ipcListener.platform}`);
-    }
-
-  }
   render() {
+    const { isMaximized, isFullscreen } = this.props;
+    let className = `platform-${window.ipcListener.platform}`;
+    if(isMaximized) className += ' window-is-maximized';
+    if(isFullscreen) className += ' window-is-fullscreen';
+
     return (
-      <div className="app">
+      <div id="app" className={className}>
         <Gradient />
         <HOCTopbar />
         <Route path="/" exact={true} component={HOCApp} />
@@ -32,4 +33,18 @@ class Root extends PureComponent {
   }
 }
 
-export default withRouter(Root);
+const mapStateToProps = (state) => ({
+  isMaximized: state.getIn(['main', 'isMaximized']),
+  isFullscreen: state.getIn(['main', 'isFullscreen']),
+})
+
+export default withRouter(connect(mapStateToProps, {
+
+})(Root));
+
+const { bool } = PropTypes;
+
+HOCApp.propTypes = {
+  isFullscreen: bool,
+  isMaximized: bool,
+};
