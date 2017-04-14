@@ -16,6 +16,8 @@ import {
   organizationsUpdatedQueueMessage,
   organizationsCheckOwnerRights,
   organizationsTransferOwnership,
+  organizationsDisableUser,
+  organizationsEnableUser,
 } from './middlewares/organizations';
 import {
   usersGetByEmailWithFields,
@@ -104,7 +106,41 @@ authed.all('/organizations.transferOwnership',
   notificationsPushToQueue,
   valResponseAndSend({
     organization_id: string.require(),
+    owner_id: string.require(),
     admins: array.require(),
+    updated_at: date.require(),
+  }),
+);
+
+authed.all('/organizations.disableUser',
+  valBody({
+    user_to_disable_id: string.require(),
+    organization_id: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsDisableUser,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization_id: string.require(),
+    disabled_users: array.require(),
+    updated_at: date.require(),
+  }),
+);
+authed.all('/organizations.enableUser',
+  valBody({
+    user_to_enable_id: string.require(),
+    organization_id: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsEnableUser,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization_id: string.require(),
+    disabled_users: array.require(),
     updated_at: date.require(),
   }),
 );

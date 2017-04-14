@@ -154,6 +154,28 @@ const dbOrganizationsTransferOwnership = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOrganizationsDisableUser = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    user_id: string.require(),
+  }).require(),
+], (err, { organization_id, user_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsDisableUser: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        disabled_users: r.row('disabled_users').default([]).setUnion([user_id]),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbOrganizationsCreate,
@@ -163,4 +185,5 @@ export {
   dbOrganizationsPromoteToAdmin,
   dbOrganizationsDemoteAnAdmin,
   dbOrganizationsTransferOwnership,
+  dbOrganizationsDisableUser,
 };

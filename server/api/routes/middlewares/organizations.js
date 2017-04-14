@@ -11,6 +11,8 @@ import {
   dbOrganizationsPromoteToAdmin,
   dbOrganizationsDemoteAnAdmin,
   dbOrganizationsTransferOwnership,
+  dbOrganizationsDisableUser,
+  dbOrganizationsEnableUser,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -255,6 +257,68 @@ const organizationsTransferOwnership = valLocals('organizationsTransferOwnership
       return next(err);
     });
 });
+const organizationsDisableUser = valLocals('organizationsDisableUser', {
+  organization_id: string.require(),
+  user_to_disable_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_to_disable_id,
+  } = res.locals;
+
+  dbOrganizationsDisableUser({ organization_id, user_id: user_to_disable_id })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+      const {
+        disabled_users,
+        updated_at,
+      } = organization;
+      const updatedFields = ['disabled_users'];
+
+      setLocals({
+        disabled_users,
+        updated_at,
+        updatedFields,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsEnableUser = valLocals('organizationsEnableUser', {
+  organization_id: string.require(),
+  user_to_enable_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_to_enable_id,
+  } = res.locals;
+
+  dbOrganizationsEnableUser({ organization_id, user_id: user_to_enable_id })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+      const {
+        disabled_users,
+        updated_at,
+      } = organization;
+      const updatedFields = ['disabled_users'];
+
+      setLocals({
+        disabled_users,
+        updated_at,
+        updatedFields,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 const organizationsUpdatedQueueMessage = valLocals('organizationsPromoteToAdminQueueMessage', {
   organization_id: string.require(),
   updatedFields: array.require(),
@@ -288,4 +352,6 @@ export {
   organizationsUpdatedQueueMessage,
   organizationsCheckOwnerRights,
   organizationsTransferOwnership,
+  organizationsDisableUser,
+  organizationsEnableUser,
 };
