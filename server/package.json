@@ -29,6 +29,7 @@
     "rethinkdb": "^2.3.1",
     "rethinkdb-init": "0.0.5",
     "sha1": "^1.1.1",
+    "sharp": "^0.17.3",
     "shortid": "^2.2.6",
     "underscore": "1.8.x",
     "valjs": "0.0.24",
