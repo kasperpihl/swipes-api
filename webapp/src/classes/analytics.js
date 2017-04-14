@@ -1,6 +1,9 @@
 /* global amplitude, Intercom */
 import mixpanel from 'mixpanel-browser';
 import { bindAll } from 'swipes-core-js/classes/utils';
+const blockedMixpanelEvents = [
+
+];
 
 export default class Analytics {
   constructor(store) {
@@ -17,7 +20,6 @@ export default class Analytics {
     this.userId = null;
     bindAll(this, ['storeChange']);
     store.subscribe(this.storeChange);
-    this.sendEvent('App loaded');
 
   }
   getDefaultEventProps() {
@@ -41,9 +43,15 @@ export default class Analytics {
   sendEvent(name, data) {
     const defs = this.getDefaultEventProps();
     if(this.enable){
-      Intercom("trackEvent", name, Object.assign(defs, data));
-      amplitude.getInstance().logEvent(name, Object.assign(defs, data));
-      mixpanel.track(name, data);
+      const props = Object.assign(defs, data);
+      Intercom("trackEvent", name, props);
+      amplitude.getInstance().logEvent(name, props);
+      if(blockedMixpanelEvents.indexOf(name) === -1){
+        mixpanel.track(name, props);
+      } else {
+        console.log('blocked mixpanel event', name);
+      }
+
     }
 
   }

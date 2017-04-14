@@ -75,6 +75,7 @@ class HOCGoalList extends PureComponent {
     const { navPush } = this.props;
 
     this.saveState();
+    window.analytics.sendEvent('Goal opened', {});
     navPush({
       id: 'GoalOverview',
       title: 'Goal overview',

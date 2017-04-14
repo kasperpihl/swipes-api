@@ -58,8 +58,11 @@ class HOCGoalListItem extends PureComponent {
   onPin() {
     const { togglePinGoal, goal } = this.props;
     this.setState({ animateToStarred: true });
-
+    const event = goal.get('pinned') ? 'Goal unpinned' : 'Goal pinned'
     togglePinGoal(goal.get('id')).then((res) => {
+      if(res && res.ok){
+        window.analytics.sendEvent(event, {});
+      }
       if (!this._unmounted) {
         this.setState({ animateToStarred: false });
       }

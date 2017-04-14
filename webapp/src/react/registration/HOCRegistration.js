@@ -20,9 +20,11 @@ class HOCRegistration extends Component {
       password: '',
       showWelcomeMessage: true,
     };
-
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
-    bindAll(this, ['signin', 'handleContinue', 'handleButtonClick', 'handleKeyDown']);
+    bindAll(this, ['onSignin', 'handleContinue', 'handleButtonClick', 'handleKeyDown']);
+  }
+  componentDidMount() {
+    window.analytics.sendEvent('Login opened', {});
   }
   handleEmailChange(value) {
     const { loading } = this.state;
@@ -67,16 +69,13 @@ class HOCRegistration extends Component {
       password,
     };
 
-    this.signin(data);
+    this.onSignin(data);
   }
-  signin(data) {
-    this.signinOrUp('users.signin', data);
-  }
-  signinOrUp(endpoint, data) {
+  onSignin(data) {
     if (this.state.err !== null) {
       this.setState({ errorLabel: null });
     }
-    this.props.request(endpoint, data).then((res) => {
+    this.props.request('users.signin', data).then((res) => {
       if (!res.ok) {
         let label = 'Something went wrong :/';
 
@@ -88,8 +87,7 @@ class HOCRegistration extends Component {
         }
         this.setState({ errorLabel: label });
       } else {
-        const event = endpoint === 'users.signup' ? 'Signed up' : 'Signed in';
-        window.analytics.sendEvent(event);
+        window.analytics.sendEvent('Logged in', {});
       }
     });
   }

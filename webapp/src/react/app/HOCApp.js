@@ -7,8 +7,10 @@ import SwipesLoader from 'components/loaders/SwipesLoader';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
 
-
 class HOCApp extends PureComponent {
+  componentDidMount() {
+    window.analytics.sendEvent('App loaded', {});
+  }
   renderLoader() {
     return <SwipesLoader center text="Loading" size={90} />;
   }

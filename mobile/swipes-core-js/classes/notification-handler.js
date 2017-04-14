@@ -11,6 +11,7 @@ const handleNotification = (notification) => {
       title: msgGen.notifications.getTitle(n),
       message: msgGen.notifications.getMessage(n),
       target: notification.target,
+      id: notification.id,
     };
     window.ipcListener.sendNotification(notif);
   }

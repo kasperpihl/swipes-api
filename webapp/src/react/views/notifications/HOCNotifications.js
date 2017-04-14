@@ -5,7 +5,7 @@ import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import * as core from 'swipes-core-js/actions';
+import * as ca from 'swipes-core-js/actions';
 import { setupDelegate, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 
 import Notifications from './Notifications';
@@ -99,17 +99,26 @@ class HOCNotifications extends PureComponent {
 
     if (selection.toString().length === 0) {
       preview(target, att);
+      this.onMark(n.get('id'));
+      window.analytics.sendEvent('Flag opened', {
+        From: 'Notification Feed',
+        Type: att.getIn([id, 'link', 'service', 'type']),
+        Service: att.getIn([id, 'link', 'service', 'name']),
+      });
     }
   }
   onClickTitle(i) {
     const n = this.state.notifications.get(i);
-    this.onMarkCached(n.get('id'))();
+    this.onMark(n.get('id'));
     if (n && n.getIn(['target', 'id'])) {
       const { goals, navPush } = this.props;
       const goal = goals.get(n.getIn(['target', 'id']));
 
       if (goal) {
         this.saveState();
+        window.analytics.sendEvent('Notification opened', {
+          Type: n.get('type'),
+        });
         navPush({
           id: 'GoalOverview',
           title: goal.get('title'),
@@ -220,6 +229,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  markNotifications: core.notifications.mark,
+  markNotifications: ca.notifications.mark,
   preview: actions.links.preview,
 })(HOCNotifications);
