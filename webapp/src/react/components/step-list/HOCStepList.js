@@ -30,7 +30,12 @@ class HOCStepList extends PureComponent {
   onStepAdd(title) {
     const { addStep, goal } = this.props;
     this.setLoading('add', 'Adding...');
-    addStep(goal.get('id'), title).then(() => this.clearLoading('add'));
+    addStep(goal.get('id'), title).then((res) => {
+      this.clearLoading('add');
+      if(res.ok){
+        window.analytics.sendEvent('Step added', {});
+      }
+    });
   }
   onStepRemove(i, e) {
     const { confirm, removeStep, goal } = this.props;
@@ -43,8 +48,11 @@ class HOCStepList extends PureComponent {
     }), (res) => {
       if (res === 1) {
         this.setLoading(step.get('id'), 'Removing...');
-        removeStep(goal.get('id'), step.get('id')).then(() => {
+        removeStep(goal.get('id'), step.get('id')).then((res) => {
           this.clearLoading(step.get('id'));
+          if(res.ok){
+            window.analytics.sendEvent('Step removed', {});
+          }
         });
         // remove step
       }
@@ -55,8 +63,11 @@ class HOCStepList extends PureComponent {
     const helper = this.getHelper();
     const step = helper.getStepByIndex(i);
     this.setLoading(step.get('id'), 'Renaming...');
-    renameStep(goal.get('id'), step.get('id'), title).then(() => {
+    renameStep(goal.get('id'), step.get('id'), title).then((res) => {
       this.clearLoading(step.get('id'));
+      if(res.ok){
+        window.analytics.sendEvent('Step renamed', {});
+      }
     });
   }
   onAssign(i, e) {
@@ -76,7 +87,14 @@ class HOCStepList extends PureComponent {
       } else if (overrideAssignees) {
         const clearCB = this.clearLoading.bind(null, step.get('id'));
         this.setLoading(step.get('id'), 'Assigning...');
-        assignStep(goal.get('id'), step.get('id'), overrideAssignees).then(() => clearCB());
+        assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res) => {
+          clearCB();
+          if(res.ok){
+            window.analytics.sendEvent('Step assigned', {
+              'Number of assignees': overrideAssignees.length,
+            });
+          }
+        });
       }
     });
     e.stopPropagation();
@@ -110,6 +128,9 @@ class HOCStepList extends PureComponent {
         if (res && res.ok) {
           this.clearLoading('completing');
           this.callDelegate('onStepDidComplete', handoff);
+          window.analytics.sendEvent('Step completed', {
+            'Iteration': handoff.backward,
+          });
         } else {
           this.callDelegate('onStepDidFailComplete', handoff);
           this.clearLoading('completing', '!Something went wrong');

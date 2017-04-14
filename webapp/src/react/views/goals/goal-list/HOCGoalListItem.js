@@ -91,7 +91,7 @@ class HOCGoalListItem extends PureComponent {
         <div className="goal-list-item__title">{goal.get('title')}</div>
         <div className="goal-list-item__subtitle">
           <div className="goal-list-item__label">{status}</div>
-          {this.renderProgressBar()}
+          {/*this.renderProgressBar()*/}
         </div>
       </div>
     );

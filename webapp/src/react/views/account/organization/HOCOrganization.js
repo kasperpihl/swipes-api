@@ -38,6 +38,9 @@ class HOCOrganization extends PureComponent {
       if(res.ok) {
         this.setState({ emailVal: '', firstNameVal: ''});
         this.clearLoading('invite', `Invited ${firstNameVal}`, 3000);
+        window.analytics.sendEvent('Invitation sent', {
+          'User': res.user.id,
+        })
       } else {
         this.clearLoading('invite', '!Something went wrong', 3000);
       }
@@ -52,6 +55,9 @@ class HOCOrganization extends PureComponent {
     invite(firstName, email).then((res) => {
       if(res.ok) {
         this.clearLoading(uId, `Sent`, 3000);
+        window.analytics.sendEvent('Invitation resent', {
+          'User': uId,
+        })
       } else {
         this.clearLoading(uId, '!Something went wrong', 3000);
       }

@@ -225,6 +225,9 @@ class HOCGoalOverview extends PureComponent {
           if (i === 1) {
             this.setLoading('dots');
             archive(goal.get('id')).then((res) => {
+              if(res.ok){
+                window.analytics.sendEvent('Goal archived', {});
+              }
               if (!res || !res.ok) {
                 this.clearLoading('dots', '!Something went wrong');
               }

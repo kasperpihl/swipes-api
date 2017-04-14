@@ -59,7 +59,11 @@ class HOCNotify extends PureComponent {
     this.setLoading('button');
     goalNotify(goal.get('id'), notify).then((res) => {
       if (res && res.ok) {
-        window.analytics.sendEvent('Notify');
+        window.analytics.sendEvent('Notification sent', {
+          request: !!notify.get('request'),
+          type: notify.get('notification_type'),
+          reply: !!(typeof notify.get('reply_to') === 'number'),
+        });
         navPop();
       } else {
         this.clearLoading('button', '!Something went wrong');

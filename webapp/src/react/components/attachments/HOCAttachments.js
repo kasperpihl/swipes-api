@@ -111,8 +111,11 @@ class HOCAttachments extends PureComponent {
     }, (title) => {
       if (title !== currTitle && title.length) {
         this.setLoading(id, 'Renaming...');
-        renameAttachment(targetId, id, title).then(() => {
+        renameAttachment(targetId, id, title).then((res) => {
           this.clearLoading(id);
+          if(res.ok){
+            window.analytics.sendEvent('Attachment renamed', {});
+          }
         });
       }
     });
@@ -131,8 +134,13 @@ class HOCAttachments extends PureComponent {
     }, (res) => {
       if (res === 1) {
         this.setLoading(id, 'Removing...');
-        removeAttachment(targetId, id).then(() => {
+        removeAttachment(targetId, id).then((res) => {
           this.clearLoading(id);
+          if(res.ok){
+            window.analytics.sendEvent('Attachment removed', {
+
+            });
+          }
         });
       }
     });
@@ -211,8 +219,13 @@ class HOCAttachments extends PureComponent {
   attachToTarget(type, id, title) {
     const linkObj = this.getSwipesLinkObj(type, id, title);
     const { targetId, addAttachment } = this.props;
-    addAttachment(targetId, linkObj).then(() => {
+    addAttachment(targetId, linkObj).then((res) => {
       this.clearLoading('adding');
+      if(res.ok){
+        window.analytics.sendEvent('Attachment added', {
+          type,
+        });
+      }
     });
   }
 

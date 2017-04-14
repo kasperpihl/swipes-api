@@ -5,17 +5,22 @@ import { Route, withRouter } from 'react-router-dom';
 
 import * as a from 'actions';
 import Gradient from 'components/gradient/Gradient';
-import HOCApp from 'src/react/app/HOCApp';
+//import HOCApp from 'src/react/app/HOCApp';
 import HOCRegistration from 'src/react/registration/HOCRegistration';
 import HOCSignupPage from 'src/react/signup-page/HOCSignupPage';
 import HOCContextMenu from 'components/context-menu/HOCContextMenu';
 import HOCTooltip from 'components/tooltip/HOCTooltip';
-import HOCTopbar from 'components/topbar/HOCTopbar';
 
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
 
-
+const loadedViews = {}
+const requireView = (path) => {
+  if(!loadedViews[path]){
+    loadedViews[path] = require(path).default;
+  }
+  return loadedViews[path];
+}
 
 let DevTools = 'div';
 
@@ -40,6 +45,13 @@ class Root extends PureComponent {
       history.push('/');
     }
   }
+  renderTopbar() {
+    if(window.ipcListener.isElectron){
+      const HOCTopbar = requireView('components/topbar/HOCTopbar');
+      return <HOCTopbar />;
+    }
+    return undefined;
+  }
   render() {
     const { isMaximized, isFullscreen, lastConnect } = this.props;
     let className = `platform-${window.ipcListener.platform}`;
@@ -49,12 +61,15 @@ class Root extends PureComponent {
     return (
       <div id="app" className={className}>
         <Gradient />
-        <HOCTopbar />
+        {this.renderTopbar()}
         <HOCContextMenu />
         <HOCTooltip />
         <DevTools />
         <div className="content-wrapper">
-          <Route path="/" exact={true} component={HOCApp} />
+          <Route path="/" exact={true} render={() => {
+            const HOCApp = requireView('src/react/app/HOCApp');
+            return <HOCApp />;
+          }} />
           <Route path="/login" component={HOCRegistration} />
           <Route path="/signup" component={HOCSignupPage} />
         </div>
@@ -76,7 +91,7 @@ export default withRouter(connect(mapStateToProps, {
 
 const { bool } = PropTypes;
 
-HOCApp.propTypes = {
+Root.propTypes = {
   isFullscreen: bool,
   isMaximized: bool,
 };

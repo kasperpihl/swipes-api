@@ -1,17 +1,23 @@
 /* global amplitude, Intercom */
+import mixpanel from 'mixpanel-browser';
 import { bindAll } from 'swipes-core-js/classes/utils';
 
 export default class Analytics {
   constructor(store) {
-    amplitude.getInstance().init('862d696479638f16c727cf7dcbcd67d5');
-    Intercom("boot", {
-      app_id: "q8xibmac",
-    });
+    this.enable = !window.__DEV__;
+    // this.enable = true; // for testing on dev. turn off when done.
+    if(this.enable){
+      mixpanel.init("a1b6f31fc988c7e4a7f40c267e315f5d");
+      amplitude.getInstance().init('862d696479638f16c727cf7dcbcd67d5');
+      Intercom("boot", {
+        app_id: "q8xibmac",
+      });
+    }
     this.store = store;
     this.userId = null;
     bindAll(this, ['storeChange']);
     store.subscribe(this.storeChange);
-    this.sendEvent('App Loaded');
+    this.sendEvent('App loaded');
 
   }
   getDefaultEventProps() {
@@ -26,14 +32,20 @@ export default class Analytics {
     return defs;
   }
   logout() {
-    Intercom('shutdown');
-    amplitude.getInstance().setUserId(null);
-    amplitude.getInstance().regenerateDeviceId();
+    if(this.enable){
+      Intercom('shutdown');
+      amplitude.getInstance().setUserId(null);
+      amplitude.getInstance().regenerateDeviceId();
+    }
   }
   sendEvent(name, data) {
     const defs = this.getDefaultEventProps();
-    Intercom("trackEvent", name, Object.assign(defs, data));
-    amplitude.getInstance().logEvent(name, Object.assign(defs, data));
+    if(this.enable){
+      Intercom("trackEvent", name, Object.assign(defs, data));
+      amplitude.getInstance().logEvent(name, Object.assign(defs, data));
+      mixpanel.track(name, data);
+    }
+
   }
   storeChange() {
     const state = this.store.getState();
@@ -45,27 +57,30 @@ export default class Analytics {
       const orgId = me.getIn(['organizations', 0, 'id']);
       const orgName = me.getIn(['organizations', 0, 'name']);
       this.userId = me.get('id');
-      Intercom('update', {
-        name: msgGen.users.getFullName(me),
-        email: msgGen.users.getEmail(me),
-        created_at: me.get('created_at'),
-        company: {
-          id: orgId,
-          name: orgName,
-          created_at: org.get('created_at'),
-        }
-      });
-      amplitude.getInstance().setUserId(me.get('id'));
-      amplitude.getInstance().setUserProperties({
-        'First name': msgGen.users.getFirstName(me),
-        'Last name': msgGen.users.getLastName(me),
-        Email: msgGen.users.getEmail(me),
-        'Number of services': me.get('services').size,
-        'Company id': orgId,
-        'Company name': orgName,
-        'Company size': state.get('users').size,
-        'Services connected': me.get('services').map(s => s.get('service_name')).toArray(),
-      });
+      if(this.enable){
+        Intercom('update', {
+          name: msgGen.users.getFullName(me),
+          email: msgGen.users.getEmail(me),
+          created_at: me.get('created_at'),
+          company: {
+            id: orgId,
+            name: orgName,
+            created_at: org.get('created_at'),
+          }
+        });
+        mixpanel.identify(me.get('id'));
+        amplitude.getInstance().setUserId(me.get('id'));
+        amplitude.getInstance().setUserProperties({
+          'First name': msgGen.users.getFirstName(me),
+          'Last name': msgGen.users.getLastName(me),
+          Email: msgGen.users.getEmail(me),
+          'Number of services': me.get('services').size,
+          'Company id': orgId,
+          'Company name': orgName,
+          'Company size': state.get('users').size,
+          'Services connected': me.get('services').map(s => s.get('service_name')).toArray(),
+        });
+      }
     }
   }
 

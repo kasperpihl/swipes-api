@@ -19,12 +19,14 @@ class HOCSignupPage extends PureComponent {
   componentDidMount() {
     const { request } = this.props;
     const { formData, invitationToken } = this.state;
-
     request('organizations.getInfoFromInvitationToken', {
       invitation_token: invitationToken,
     }).then((res) => {
       if(res && res.ok){
         const me = fromJS(res.me);
+        if(me && me.get('invited_by')){
+          window.analytics.sendEvent('Invitation opened', {});
+        }
         const firstName = msgGen.users.getFirstName(me);
         const email = msgGen.users.getEmail(me);
         this.setState({
@@ -45,7 +47,7 @@ class HOCSignupPage extends PureComponent {
   }
   onClick() {
     console.log('clicky!');
-    const { formData, invitationToken } = this.state;
+    const { formData, invitationToken, me } = this.state;
     const { signup } = this.props;
     signup({
       first_name: formData.get('firstName'),
@@ -54,6 +56,15 @@ class HOCSignupPage extends PureComponent {
       password: formData.get('password'),
       invitation_token: invitationToken,
     }).then((res) => {
+      if(res.ok && me && me.get('invited_by')){
+        window.analytics.sendEvent('Invitation accepted', {
+          distinct_id: me.get('invited_by'),
+          // 'Minutes since invite':
+        })
+      }
+      if (res.ok) {
+        window.analytics.sendEvent('Signed up', {})
+      }
       console.log('ressy', res);
     });
   }

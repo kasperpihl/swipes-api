@@ -142,6 +142,7 @@ class HOCSideNote extends PureComponent {
         this._isSaving = false;
 
         if (res && res.ok) {
+          window.analytics.sendEvent('Note edited', {});
           this.overrideRev = undefined;
         }
         if (!res || !res.ok) {
