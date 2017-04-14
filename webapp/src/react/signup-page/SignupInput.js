@@ -17,9 +17,6 @@ class SignupInput extends PureComponent {
     this.onClick = this.callDelegate.bind(null, 'onClick');
     this.onChangeCached = setupCachedCallback(this.callDelegate.bind(null, 'onChange'));
   }
-  componentDidMount() {
-    console.log(this.props.value);
-  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.focus !== this.props.focus && !this.props.focus) {
       this.refs.floatingInput.focus();
