@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import SignupInput from './SignupInput';
+import { setupDelegate } from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
 
 import './styles/signup.scss';
@@ -8,9 +9,8 @@ class SignupPage extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    // setupDelegate(this);
-    // this.onClick = this.callDelegate.bind(null, 'onClick');
-    // this.onChangeCached = setupCachedCallback(this.callDelegate.bind(null, 'onChange'));
+    setupDelegate(this);
+    this.onClick = this.callDelegate.bind(null, 'onClick');
   }
   componentDidMount() {
   }
