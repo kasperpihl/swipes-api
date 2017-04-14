@@ -56,7 +56,6 @@ const dbOrganizationsGetInfoFromInvitationToken = funcWrap([
     throw new SwipesError(`dbOrganizationsGetInfoFromInvitationToken: ${err}`);
   }
 
-  console.log(user_id);
   const q =
     r.expr({}).merge({
       me: r.table('users').get(user_id).pluck('invited_by', 'email', 'profile'),
