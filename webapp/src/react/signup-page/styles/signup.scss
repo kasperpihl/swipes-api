@@ -110,56 +110,8 @@ h3.subtitle {
 	margin-top: 12px;
 }
 
-$idleLight: $deepBlue-50;
-$idleDark: $deepBlue-100;
-$activeColor: $blue-100;
-$errorColor: $red-80;
-
 .form {
 	margin-top: 81px;
-}
-
-.floating-input {
-	@include size(100%, auto);
-	padding: 15px 0;
-
-	&__input {
-		@include size(inherit, auto);
-    @include font(16px, $idleDark, 27px, 400);
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid $deepBlue-10;
-    padding: 5px 0;
-    padding-top: 27px;
-		user-select: auto;
-		-webkit-user-select: auto;
-    transition: .2s ease-in-out;
-		-ms-transition: .2s ease-in-out;
-
-		&:focus {
-      outline: none;
-			border-bottom: 1px solid $blue-100;
-      transition: .2s ease-in-out;
-			-ms-transition: .2s ease-in-out;
-
-			& + label {
-				@include font(11px, $blue-100);
-				top: 28px;
-				transition: .2s ease-in-out;
-				-ms-transition: .2s ease-in-out;
-			}
-    }
-	}
-
-	label {
-		@include font(15px, $idleLight, 21px, 400);
-    position: absolute;
-    left: 0; top: 46px;
-    transition: .2s ease-in-out;
-		-ms-transition: .2s ease-in-out;
-    user-select: none;
-    cursor: text;
-	}
 }
 
 .footer {

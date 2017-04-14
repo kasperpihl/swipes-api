@@ -1,15 +1,16 @@
 import React, { PureComponent } from 'react';
-import { setupCachedCallback, setupDelegate } from 'swipes-core-js/classes/utils';
-import Button from 'Button';
+import SignupInput from './SignupInput';
 // import { map, list } from 'react-immutable-proptypes';
+
+import './styles/signup.scss';
 
 class SignupPage extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this);
-    this.onClick = this.callDelegate.bind(null, 'onClick');
-    this.onChangeCached = setupCachedCallback(this.callDelegate.bind(null, 'onChange'));
+    // setupDelegate(this);
+    // this.onClick = this.callDelegate.bind(null, 'onClick');
+    // this.onChangeCached = setupCachedCallback(this.callDelegate.bind(null, 'onChange'));
   }
   componentDidMount() {
   }
@@ -32,20 +33,23 @@ class SignupPage extends PureComponent {
     );
   }
   renderInputField(key, type, placeholder) {
+    const { delegate } = this.props;
     const value = this.props.formData.get(key) || '';
 
-    return (
-      <div className="floating-input">
-        <input
-          type={type}
-          value={value}
-          id={key}
-          onChange={this.onChangeCached(key)}
-          className="floating-input__input"
-        />
-        <label htmlFor={key}>{placeholder}</label>
-      </div>
-    );
+    return <SignupInput key={key} inputKey={key} type={type} placeholder={placeholder} delegate={delegate} value={value} />;
+
+    // return (
+    //   <div className="floating-input">
+    //     <input
+    //       type={type}
+    //       value={value}
+    //       id={key}
+    //       onChange={this.onChangeCached(key)}
+    //       className="floating-input__input"
+    //     />
+    //     <label htmlFor={key}>{placeholder}</label>
+    //   </div>
+    // );
   }
   render() {
     return (
