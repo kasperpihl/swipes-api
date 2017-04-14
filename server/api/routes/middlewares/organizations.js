@@ -10,6 +10,7 @@ import {
   dbOrganizationsGetSingle,
   dbOrganizationsPromoteToAdmin,
   dbOrganizationsDemoteAnAdmin,
+  dbOrganizationsTransferOwnership,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -134,7 +135,25 @@ const organizationsCheckAdminRights = valLocals('organizationsCheckAdminRights',
   } = organization;
 
   if (owner_id !== user_id && !admins.includes(user_id)) {
-    return next(new SwipesError('Only owners and admins can promote other users to admins'));
+    return next(new SwipesError('Only owners and admins can do this action'));
+  }
+
+  return next();
+});
+const organizationsCheckOwnerRights = valLocals('organizationsCheckOwnerRights', {
+  user_id: string.require(),
+  organization: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization,
+  } = res.locals;
+  const {
+    owner_id,
+  } = organization;
+
+  if (owner_id !== user_id) {
+    return next(new SwipesError('Only owners can do this action'));
   }
 
   return next();
@@ -201,6 +220,41 @@ const organizationsDemoteAnAdmin = valLocals('organizationsDemoteAnAdmin', {
       return next(err);
     });
 });
+const organizationsTransferOwnership = valLocals('organizationsTransferOwnership', {
+  user_id: string.require(),
+  organization_id: string.require(),
+  user_to_transfer_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization_id,
+    user_to_transfer_id,
+  } = res.locals;
+
+  dbOrganizationsTransferOwnership({ organization_id, user_id, user_to_transfer_id })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+      const {
+        owner_id,
+        admins,
+        updated_at,
+      } = organization;
+      const updatedFields = ['owner_id', 'admins'];
+
+      setLocals({
+        owner_id,
+        admins,
+        updated_at,
+        updatedFields,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 const organizationsUpdatedQueueMessage = valLocals('organizationsPromoteToAdminQueueMessage', {
   organization_id: string.require(),
   updatedFields: array.require(),
@@ -232,4 +286,6 @@ export {
   organizationsPromoteToAdmin,
   organizationsDemoteAnAdmin,
   organizationsUpdatedQueueMessage,
+  organizationsCheckOwnerRights,
+  organizationsTransferOwnership,
 };

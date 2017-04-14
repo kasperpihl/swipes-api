@@ -48,12 +48,16 @@ notAuthed.all('/users.signin',
     password: string.min(1).require(),
   }),
   mapLocals(
-  [],
-  (setLocals) => {
-    const fields = ['id', 'password'];
-    setLocals({ fields });
-  },
-),
+    [],
+    (setLocals) => {
+      const fields = ['id', 'password'];
+      const passwordError = 'Wrong email or password';
+      setLocals({
+        fields,
+        passwordError,
+      });
+    },
+  ),
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   (req, res, next) => {

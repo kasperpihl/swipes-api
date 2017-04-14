@@ -14,8 +14,12 @@ import {
   organizationsPromoteToAdmin,
   organizationsDemoteAnAdmin,
   organizationsUpdatedQueueMessage,
+  organizationsCheckOwnerRights,
+  organizationsTransferOwnership,
 } from './middlewares/organizations';
 import {
+  usersGetByEmailWithFields,
+  usersComparePasswordSignIn,
   usersParseInvitationToken,
 } from './middlewares/users';
 import {
@@ -24,6 +28,7 @@ import {
 import {
   valBody,
   valResponseAndSend,
+  mapLocals,
 } from '../utils';
 
 const authed = express.Router();
@@ -55,6 +60,7 @@ authed.all('/organizations.promoteToAdmin',
     updated_at: date.require(),
   }),
 );
+
 authed.all('/organizations.demoteAnAdmin',
   valBody({
     user_to_demote_id: string.require(),
@@ -63,6 +69,37 @@ authed.all('/organizations.demoteAnAdmin',
   organizationsGetSingle,
   organizationsCheckAdminRights,
   organizationsDemoteAnAdmin,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization_id: string.require(),
+    admins: array.require(),
+    updated_at: date.require(),
+  }),
+);
+
+authed.all('/organizations.transferOwnership',
+  valBody({
+    user_to_transfer_id: string.require(),
+    organization_id: string.require(),
+    password: string.min(1).require(),
+  }),
+  mapLocals(
+    [],
+    (setLocals) => {
+      const fields = ['id', 'password'];
+      const passwordError = 'Invalid password';
+      setLocals({
+        fields,
+        passwordError,
+      });
+    },
+  ),
+  usersGetByEmailWithFields,
+  usersComparePasswordSignIn,
+  organizationsGetSingle,
+  organizationsCheckOwnerRights,
+  organizationsTransferOwnership,
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({

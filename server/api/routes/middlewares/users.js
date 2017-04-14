@@ -259,15 +259,17 @@ const usersGetByEmailWithFields = valLocals('usersGetByEmailWithFields', {
 const usersComparePasswordSignIn = valLocals('usersComparePasswordSignIn', {
   user: object,
   password: string.min(1).require(),
+  passwordError: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user,
     password,
+    passwordError,
   } = res.locals;
   const sha1Password = sha1(password);
 
   if (!user || sha1Password !== user.password) {
-    return next(new SwipesError('Wrong email or password'));
+    return next(new SwipesError(passwordError));
   }
 
   return next();

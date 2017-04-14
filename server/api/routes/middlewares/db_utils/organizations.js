@@ -130,6 +130,30 @@ const dbOrganizationsDemoteAnAdmin = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOrganizationsTransferOwnership = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    user_id: string.require(),
+    user_to_transfer_id: string.require(),
+  }).require(),
+], (err, { organization_id, user_id, user_to_transfer_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsTransferOwnership: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        owner_id: user_to_transfer_id,
+        admins: r.row('admins').default([]).setUnion([user_id]).difference([user_to_transfer_id]),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbOrganizationsCreate,
@@ -138,4 +162,5 @@ export {
   dbOrganizationsGetSingle,
   dbOrganizationsPromoteToAdmin,
   dbOrganizationsDemoteAnAdmin,
+  dbOrganizationsTransferOwnership,
 };
