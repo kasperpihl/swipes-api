@@ -58,7 +58,7 @@ const dbOrganizationsGetInfoFromInvitationToken = funcWrap([
 
   const q =
     r.expr({}).merge({
-      me: r.table('users').get(user_id).pluck('invited_by', 'email', 'profile'),
+      me: r.table('users').get(user_id).pluck('invited_by', 'email', 'profile', 'activated'),
       organization: r.table('organizations').get(organization_id).pluck('name'),
     })
     .do((result) => {

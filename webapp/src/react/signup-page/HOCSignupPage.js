@@ -77,7 +77,12 @@ class HOCSignupPage extends PureComponent {
   }
   renderContent() {
     const { formData, organization, invitedBy } = this.state;
-
+    const { token } = this.props;
+    if(token) {
+      return (
+        <DownloadPage />
+      )
+    }
     return (
       <SignupPage
         formData={formData}

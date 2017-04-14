@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
-// import './styles/Download.scss';
+import './styles/download-page.scss';
 
-class Download extends PureComponent {
+class DownloadPage extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -12,13 +12,15 @@ class Download extends PureComponent {
   }
   render() {
     return (
-      <div className="className" />
+      <div className="download-page">
+        Download me!
+      </div>
     );
   }
 }
 
-export default Download;
+export default DownloadPage;
 
 // const { string } = PropTypes;
 
-Download.propTypes = {};
+DownloadPage.propTypes = {};
