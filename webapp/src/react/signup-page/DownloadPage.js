@@ -20,28 +20,28 @@ class DownloadPage extends PureComponent {
     if (this.mobileCheck()) {
       return (
         <div className="device-wrapper">
-          <div className="device">
+          <a className="device">
             <Icon icon="MacDevice" className="device-svg" />
             <p>We just sent you an email with a direct link to download Swipes on your desktop.</p>
-          </div>
+          </a>
         </div>
       );
     }
 
     return (
       <div className="device-wrapper">
-        <div className="device">
+        <a href="#" className="device">
           <Icon icon="WindowsDevice" className="device-svg" />
           <p>Windows (64-bit)</p>
-        </div>
-        <div className="device">
+        </a>
+        <a href="#" className="device">
           <Icon icon="MacDevice" className="device-svg" />
           <p>MacOS</p>
-        </div>
-        <div className="device">
+        </a>
+        <a href="#" className="device">
           <Icon icon="LinuxDevice" className="device-svg" />
           <p>Linux (64-bit)</p>
-        </div>
+        </a>
       </div>
     );
   }
