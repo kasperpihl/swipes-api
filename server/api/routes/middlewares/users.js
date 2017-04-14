@@ -64,15 +64,17 @@ const userAvailability = valLocals('userAvailability', {
     invitation_token,
   } = res.locals;
 
-  if (invitation_token) {
-    return next();
-  }
-
-  const query = r.table('users').getAll(email, { index: 'email' }).isEmpty();
+  const query = r.table('users').getAll(email, { index: 'email' });
 
   return db.rethinkQuery(query)
     .then((result) => {
-      if (!result) {
+      const user = result[0];
+
+      if (invitation_token && user.activated === false) {
+        return next();
+      }
+
+      if (user) {
         return next(new SwipesError('There is a user with that email'));
       }
 
