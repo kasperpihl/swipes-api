@@ -14,14 +14,6 @@ import HOCTooltip from 'components/tooltip/HOCTooltip';
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
 
-const loadedViews = {}
-const requireView = (path) => {
-  if(!loadedViews[path]){
-    loadedViews[path] = require(path).default;
-  }
-  return loadedViews[path];
-}
-
 let DevTools = 'div';
 
 if (process.env.NODE_ENV !== 'production') {
@@ -47,7 +39,7 @@ class Root extends PureComponent {
   }
   renderTopbar() {
     if(window.ipcListener.isElectron){
-      const HOCTopbar = requireView('components/topbar/HOCTopbar');
+      const HOCTopbar = require('components/topbar/HOCTopbar').default;
       return <HOCTopbar />;
     }
     return undefined;
@@ -67,7 +59,7 @@ class Root extends PureComponent {
         <DevTools />
         <div className="content-wrapper">
           <Route path="/" exact={true} render={() => {
-            const HOCApp = requireView('src/react/app/HOCApp');
+            const HOCApp = require('src/react/app/HOCApp').default;
             return <HOCApp />;
           }} />
           <Route path="/login" component={HOCRegistration} />
