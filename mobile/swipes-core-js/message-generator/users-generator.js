@@ -12,6 +12,10 @@ export default class Users {
     }
     return user;
   }
+  isAdmin(userId) {
+    const user = this.getUser(userId);
+    return user.getIn(['organizations', 0, 'admins']).contains(user.get('id'))
+  }
 
   getEmail(userId) {
     const user = this.getUser(userId);

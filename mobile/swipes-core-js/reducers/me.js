@@ -20,6 +20,12 @@ export default function me(state = initialState, action) {
     case 'profile_updated': {
       return state.mergeIn(['profile'], fromJS(payload.profile));
     }
+    case 'organizations.promoteToAdmin':
+    case 'organizations.demoteAnAdmin': {
+      return state.updateIn(['organizations', 0], (org) => {
+        return org.set('admins', fromJS(payload.admins)).set('updated_at', payload.updated_at);
+      })
+    }
     case 'service_added': {
       const service = fromJS(payload);
       return state.updateIn(['services'], services => services.push(service));

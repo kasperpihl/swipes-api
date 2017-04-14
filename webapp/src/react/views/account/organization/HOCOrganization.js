@@ -63,6 +63,28 @@ class HOCOrganization extends PureComponent {
       }
     });
   }
+  onPromoteUser(uId) {
+    const { promoteToAdmin, organization } = this.props;
+    this.setLoading(uId);
+    promoteToAdmin(organization.get('id'), uId).then((res) => {
+      if(res.ok){
+        this.clearLoading(uId, `Promoted`, 3000);
+      } else {
+        this.clearLoading(uId, '!Something went wrong', 3000);
+      }
+    });
+  }
+  onDemoteUser(uId) {
+    const { demoteAnAdmin, organization } = this.props;
+    this.setLoading(uId);
+    demoteAnAdmin(organization.get('id'), uId).then((res) => {
+      if(res.ok){
+        this.clearLoading(uId, `Demoted`, 3000);
+      } else {
+        this.clearLoading(uId, '!Something went wrong', 3000);
+      }
+    });
+  }
   onContext(uId, e) {
     console.log('uId', uId, e);
     const { contextMenu, organization, users } = this.props;
@@ -90,7 +112,8 @@ class HOCOrganization extends PureComponent {
     items.push({
       id: 'deactive',
       title: 'Deactivate account',
-      subtitle: 'If a user no longer needs an account, you can close it from here',
+      disabled: true,
+      subtitle: 'Coming soon.', //'If a user no longer needs an account, you can close it from here',
     })
     if(!user.get('activated')){
 
@@ -105,7 +128,16 @@ class HOCOrganization extends PureComponent {
       onItemAction: (item) => {
         contextMenu(null);
         console.log('chose item', item);
-        if(item.id === 'resend') {
+        if (item.id === 'promote') {
+          this.onPromoteUser(uId);
+        }
+        if (item.id === 'demote') {
+          this.onDemoteUser(uId);
+        }
+        if (item.id === 'deactivate') {
+          this.onDeactiveUser(uId);
+        }
+        if (item.id === 'resend') {
           this.onResend(uId);
         }
 
@@ -131,7 +163,7 @@ class HOCOrganization extends PureComponent {
     };
   }
   render() {
-    const { users, organization } = this.props;
+    const { users, organization, me } = this.props;
     const { firstNameVal, emailVal } = this.state;
 
     return (
@@ -141,6 +173,7 @@ class HOCOrganization extends PureComponent {
         firstNameVal={firstNameVal}
         emailVal={emailVal}
         organization={organization}
+        isAdmin={msgGen.users.isAdmin(me)}
         users={users.sort(
           (u1, u2) => msgGen.users.getFirstName(u1).localeCompare(msgGen.users.getFirstName(u2))
         )}
@@ -155,11 +188,14 @@ HOCOrganization.propTypes = {};
 function mapStateToProps(state) {
   return {
     users: state.get('users'),
+    me: state.get('me'),
     organization: state.getIn(['me', 'organizations', 0]),
   };
 }
 
 export default connect(mapStateToProps, {
   invite: ca.users.invite,
+  demoteAnAdmin: ca.organizations.demoteAnAdmin,
+  promoteToAdmin: ca.organizations.promoteToAdmin,
   contextMenu: a.main.contextMenu,
 })(HOCOrganization);

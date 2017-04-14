@@ -24,6 +24,21 @@ class Organization extends PureComponent {
   onChange(key, val) {
     this.callDelegate('onChange', key, val);
   }
+  renderActionButton(u, loadingState) {
+    const { isAdmin } = this.props;
+    if(!isAdmin){
+      return undefined;
+    }
+    return (
+      <div className="organization__user-actions">
+        <Button
+          icon="ThreeDots"
+          onClick={this.onContextCached(u.get('id'))}
+          {...loadingState.get(u.get('id'))}
+        />
+      </div>
+    )
+  }
   renderUsers() {
     const { users, organization, loadingState } = this.props;
 
@@ -50,13 +65,7 @@ class Organization extends PureComponent {
           <div className="organization__user-type">
             {userLevel}
           </div>
-          <div className="organization__user-actions">
-            <Button
-              icon="ThreeDots"
-              onClick={this.onContextCached(u.get('id'))}
-              {...loadingState.get(u.get('id'))}
-            />
-          </div>
+          {this.renderActionButton(u, loadingState)}
         </div>
       );
     }).toArray();
