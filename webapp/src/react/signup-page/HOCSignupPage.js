@@ -33,7 +33,6 @@ class HOCSignupPage extends PureComponent {
         const firstName = msgGen.users.getFirstName(me);
         const email = msgGen.users.getEmail(me);
         this.setState({
-          users: res.users,
           organization: fromJS(res.organization),
           me,
           formData: formData.set('email', email).set('firstName', firstName),
@@ -75,9 +74,16 @@ class HOCSignupPage extends PureComponent {
     });
   }
   renderContent() {
-    const { formData, users } = this.state;
+    const { formData, organization } = this.state;
 
-    return <SignupPage formData={formData} delegate={this} users={users} />;
+    return (
+      <SignupPage
+        formData={formData}
+        delegate={this}
+        organization={organization}
+
+      />
+    );
   }
   render() {
     return (

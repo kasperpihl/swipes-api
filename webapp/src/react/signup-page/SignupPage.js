@@ -14,20 +14,26 @@ class SignupPage extends PureComponent {
   }
   componentDidMount() {
   }
+  generateTitle() {
+    const { organization, inviter } = this.props;
+    if(!inviter){
+      return undefined;
+    }
+    return `Join ${msgGen.users.getFirstName(inviter)} and the ${organization.get('name')} team`;
+  }
   renderPeople() {
-    const { users } = this.props;
-
-    console.log('users', users);
+    const { inviter } = this.props;
+    if(!inviter){
+      return undefined;
+    }
+    const photoSrc = msgGen.users.getPhoto(inviter);
+    if(!photoSrc){
+      return undefined;
+    }
     return (
       <div className="assignees">
         <div className="assignee">
-          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/128.jpg" alt="" />
-        </div>
-        <div className="assignee">
-          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/128.jpg" alt="" />
-        </div>
-        <div className="assignee">
-          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/128.jpg" alt="" />
+          <img src={photoSrc} alt="" />
         </div>
       </div>
     );
@@ -56,7 +62,7 @@ class SignupPage extends PureComponent {
       <div className="singup-wrapper">
         <div className="title-container">
           {this.renderPeople()}
-          <h1 className="title">Join the Telenor team</h1>
+          <h1 className="title">{this.generateTitle()}</h1>
         </div>
         <h3 className="subtitle">Your team is waiting for you. Sign up to join them</h3>
 
