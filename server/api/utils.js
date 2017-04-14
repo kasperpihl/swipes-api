@@ -2,6 +2,9 @@ import config from 'config';
 import randomstring from 'randomstring';
 import valjs, { string, func, object, array, any } from 'valjs';
 import jwt from 'jwt-simple';
+import {
+  SwipesError,
+} from '../middlewares/swipes-error';
 
 const generateSlackLikeId = (type = '', number = 8) => {
   const id = randomstring.generate(number).toUpperCase();
@@ -91,7 +94,7 @@ const valResponseAndSend = schema => (req, res, next) => {
     const error = valjs(res.locals, object.as(schema));
 
     if (error) {
-      return next(`output ${req.route.path}: ${error}`);
+      return next(new SwipesError(`output ${req.route.path}: ${error}`));
     }
     Object.entries(schema).forEach(([key, value]) => {
       res.locals.returnObj[key] = res.locals[key];
@@ -106,7 +109,7 @@ const setLocals = (name, res, next, state) => {
   const error = valjs(state, object.require());
 
   if (error) {
-    return next(`middleware setLocals ${name}: ${error}`);
+    return next(new SwipesError(`middleware setLocals ${name}: ${error}`));
   }
 
   const debug = config.get('valjs_debug');
@@ -129,7 +132,7 @@ const mapLocals = (getLocals, handler) => (req, res, next) => {
   }));
 
   if (error) {
-    return next(`middleware input mapLocals: ${error}`);
+    return next(new SwipesError(`middleware input mapLocals: ${error}`));
   }
 
   let locals = getLocals;
@@ -157,7 +160,7 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
   }
 
   if (error) {
-    return next(`middleware input ${name}: ${error}`);
+    return next(new SwipesError(`middleware input ${name}: ${error}`));
   }
 
   if (middleware) {
@@ -181,7 +184,7 @@ const valBody = (schema, middleware) => (req, res, next) => {
   }
 
   if (error) {
-    return next(`body ${req.route.path}: ${error}`);
+    return next(new SwipesError(`body ${req.route.path}: ${error}`));
   }
 
   if (middleware) {
