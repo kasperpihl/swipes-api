@@ -16,18 +16,18 @@ class SignupPage extends PureComponent {
   }
   generateTitle() {
     const { organization, inviter } = this.props;
-    if(!inviter){
+    if (!inviter) {
       return undefined;
     }
     return `Join ${msgGen.users.getFirstName(inviter)} and the ${organization.get('name')} team`;
   }
   renderPeople() {
     const { inviter } = this.props;
-    if(!inviter){
+    if (!inviter) {
       return undefined;
     }
     const photoSrc = msgGen.users.getPhoto(inviter);
-    if(!photoSrc){
+    if (!photoSrc) {
       return undefined;
     }
     return (
@@ -43,19 +43,6 @@ class SignupPage extends PureComponent {
     const value = this.props.formData.get(key) || '';
 
     return <SignupInput key={key} inputKey={key} type={type} placeholder={placeholder} delegate={delegate} value={value} />;
-
-    // return (
-    //   <div className="floating-input">
-    //     <input
-    //       type={type}
-    //       value={value}
-    //       id={key}
-    //       onChange={this.onChangeCached(key)}
-    //       className="floating-input__input"
-    //     />
-    //     <label htmlFor={key}>{placeholder}</label>
-    //   </div>
-    // );
   }
   render() {
     return (

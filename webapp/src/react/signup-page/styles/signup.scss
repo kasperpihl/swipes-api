@@ -61,6 +61,7 @@ html, body {
 	svg {
 		@include size(24px);
 		@include svg-color($deepBlue-20)
+		margin-right: 3px;
 	}
 }
 
@@ -76,10 +77,11 @@ html, body {
 .assignees {
 	@include size(auto, 48px);
 	float: right;
+	margin-left: 15px;
 }
 
 .assignee {
-	@include size(33px);
+	@include size(32px);
 	border: 1px solid white;
 	background-color: white;
 	border-radius: 50%;
@@ -89,7 +91,7 @@ html, body {
 	-ms-transform: translateY(-50%);
 
 	img {
-		@include size(31px);
+		@include size(30px);
 		border-radius: 50%;
 	}
 
