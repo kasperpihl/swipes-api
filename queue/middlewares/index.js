@@ -10,6 +10,7 @@ import * as notifications from './notifications';
 import * as notify from './notify';
 import * as emails from './emails';
 import * as me from './me';
+import * as organizations from './organizations';
 
 const notifyWrapper = (middlewares) => {
   return [
@@ -27,6 +28,13 @@ const xendoWrapper = (middlewares) => {
     xendo.xendoRefreshSwipesToken,
   ]
   .concat(middlewares);
+};
+const noUserNotifyWrapper = (middlewares) => {
+  middlewares
+  .concat([
+    notify.notifyInsertMultipleNotifications,
+    notify.notifyCommonRethinkdb,
+  ]);
 };
 const goal_created = notifyWrapper([
   goals.goalsGetSingle,
@@ -223,6 +231,11 @@ const profile_updated = [
   notify.notifyCommonRethinkdb,
 ];
 
+const organization_updated = noUserNotifyWrapper([
+  organizations.organizationsGetSingle,
+  organizations.organizationsUpdatedNotificationData,
+]);
+
 export {
   goal_created,
   goal_completed,
@@ -259,4 +272,5 @@ export {
   user_activated,
   user_invited,
   profile_updated,
+  organization_updated,
 };

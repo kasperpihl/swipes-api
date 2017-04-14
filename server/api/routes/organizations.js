@@ -3,15 +3,24 @@ import {
   string,
   array,
   object,
+  date,
 } from 'valjs';
 import {
   organizationsCreate,
   organizationsAddToUser,
   organizationsGetInfoFromInvitationToken,
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsPromoteToAdmin,
+  organizationsDemoteAnAdmin,
+  organizationsUpdatedQueueMessage,
 } from './middlewares/organizations';
 import {
   usersParseInvitationToken,
 } from './middlewares/users';
+import {
+  notificationsPushToQueue,
+} from './middlewares/notifications';
 import {
   valBody,
   valResponseAndSend,
@@ -28,6 +37,39 @@ authed.all('/organizations.create',
   organizationsCreate,
   organizationsAddToUser,
   valResponseAndSend(),
+);
+
+authed.all('/organizations.promoteToAdmin',
+  valBody({
+    user_to_promote_id: string.require(),
+    organization_id: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsPromoteToAdmin,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization_id: string.require(),
+    admins: array.require(),
+    updated_at: date.require(),
+  }),
+);
+authed.all('/organizations.demoteAnAdmin',
+  valBody({
+    user_to_demote_id: string.require(),
+    organization_id: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsDemoteAnAdmin,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization_id: string.require(),
+    admins: array.require(),
+    updated_at: date.require(),
+  }),
 );
 
 notAuthed.all('/organizations.getInfoFromInvitationToken',

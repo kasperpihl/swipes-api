@@ -73,9 +73,69 @@ const dbOrganizationsGetInfoFromInvitationToken = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOrganizationsGetSingle = funcWrap([
+  object.as({
+    organization_id: string.require(),
+  }).require(),
+], (err, { organization_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsGetSingle: ${err}`);
+  }
+
+  const q = r.table('organizations').get(organization_id);
+
+  return db.rethinkQuery(q);
+});
+const dbOrganizationsPromoteToAdmin = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    user_id: string.require(),
+  }).require(),
+], (err, { organization_id, user_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsPromoteToAdmin: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        admins: r.row('admins').default([]).setUnion([user_id]),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
+const dbOrganizationsDemoteAnAdmin = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    user_id: string.require(),
+  }).require(),
+], (err, { organization_id, user_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsDemoteAnAdmin: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        admins: r.row('admins').default([]).difference([user_id]),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbOrganizationsCreate,
   dbOrganizationsAddUser,
   dbOrganizationsGetInfoFromInvitationToken,
+  dbOrganizationsGetSingle,
+  dbOrganizationsPromoteToAdmin,
+  dbOrganizationsDemoteAnAdmin,
 };

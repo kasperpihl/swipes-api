@@ -1,10 +1,15 @@
 import r from 'rethinkdb';
 import {
   string,
+  object,
+  array,
 } from 'valjs';
 import {
   dbOrganizationsCreate,
   dbOrganizationsGetInfoFromInvitationToken,
+  dbOrganizationsGetSingle,
+  dbOrganizationsPromoteToAdmin,
+  dbOrganizationsDemoteAnAdmin,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -13,6 +18,9 @@ import {
   valLocals,
   generateSlackLikeId,
 } from '../../utils';
+import {
+  SwipesError,
+} from '../../../middlewares/swipes-error';
 
 const organizationsCreate = valLocals('organizationsCreate', {
   user_id: string.require(),
@@ -93,9 +101,135 @@ const organizationsGetInfoFromInvitationToken = valLocals('organizationsGetInfoF
       return next(err);
     });
 });
+const organizationsGetSingle = valLocals('organizationsGetSingle', {
+  organization_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+  } = res.locals;
+
+  dbOrganizationsGetSingle({ organization_id })
+    .then((organization) => {
+      setLocals({
+        organization,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsCheckAdminRights = valLocals('organizationsCheckAdminRights', {
+  user_id: string.require(),
+  organization: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization,
+  } = res.locals;
+  const {
+    owner_id,
+    admins,
+  } = organization;
+
+  if (owner_id !== user_id && !admins.includes(user_id)) {
+    return next(new SwipesError('Only owners and admins can promote other users to admins'));
+  }
+
+  return next();
+});
+const organizationsPromoteToAdmin = valLocals('organizationsPromoteToAdmin', {
+  organization_id: string.require(),
+  user_to_promote_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_to_promote_id,
+  } = res.locals;
+
+  dbOrganizationsPromoteToAdmin({ organization_id, user_id: user_to_promote_id })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+      const {
+        admins,
+        updated_at,
+      } = organization;
+      const updatedFields = ['admins'];
+
+      setLocals({
+        admins,
+        updated_at,
+        updatedFields,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsDemoteAnAdmin = valLocals('organizationsDemoteAnAdmin', {
+  organization_id: string.require(),
+  user_to_demote_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_to_demote_id,
+  } = res.locals;
+
+  dbOrganizationsDemoteAnAdmin({ organization_id, user_id: user_to_demote_id })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+      const {
+        admins,
+        updated_at,
+      } = organization;
+      const updatedFields = ['admins'];
+
+      setLocals({
+        admins,
+        updated_at,
+        updatedFields,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsUpdatedQueueMessage = valLocals('organizationsPromoteToAdminQueueMessage', {
+  organization_id: string.require(),
+  updatedFields: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    updatedFields,
+  } = res.locals;
+  const queueMessage = {
+    organization_id,
+    updated_fields: updatedFields,
+    event_type: 'organization_updated',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: organization_id,
+  });
+
+  return next();
+});
 
 export {
   organizationsCreate,
   organizationsAddToUser,
   organizationsGetInfoFromInvitationToken,
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsPromoteToAdmin,
+  organizationsDemoteAnAdmin,
+  organizationsUpdatedQueueMessage,
 };
