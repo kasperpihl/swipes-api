@@ -24,9 +24,11 @@ class HOCSignupPage extends PureComponent {
     window.analytics.sendEvent('Signup opened', {});
     const { request } = this.props;
     const { formData, invitationToken } = this.state;
+    this.setLoading('signup');
     request('organizations.getInfoFromInvitationToken', {
       invitation_token: invitationToken,
     }).then((res) => {
+      this.clearLoading('signup');
       if (res && res.ok) {
         const me = fromJS(res.me);
         if (me && me.get('invited_by')) {
