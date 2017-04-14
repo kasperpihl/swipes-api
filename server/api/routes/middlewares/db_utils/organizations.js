@@ -176,6 +176,28 @@ const dbOrganizationsDisableUser = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOrganizationsEnableUser = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    user_id: string.require(),
+  }).require(),
+], (err, { organization_id, user_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsEnableUser: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        disabled_users: r.row('disabled_users').default([]).difference([user_id]),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbOrganizationsCreate,
@@ -186,4 +208,5 @@ export {
   dbOrganizationsDemoteAnAdmin,
   dbOrganizationsTransferOwnership,
   dbOrganizationsDisableUser,
+  dbOrganizationsEnableUser,
 };
