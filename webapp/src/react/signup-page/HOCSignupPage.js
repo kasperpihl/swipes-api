@@ -17,10 +17,16 @@ class HOCSignupPage extends PureComponent {
     this.state = {
       formData: Map(),
       invitationToken: window.getURLParameter('invitation_token'),
+      hasLoaded: false,
     };
+
     setupLoading(this);
   }
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+
     window.analytics.sendEvent('Signup opened', {});
     const { request } = this.props;
     const { formData, invitationToken } = this.state;
@@ -79,9 +85,18 @@ class HOCSignupPage extends PureComponent {
     });
   }
   renderContent() {
-    const { formData, organization, invitedBy } = this.state;
+    const { formData, organization, invitedBy, hasLoaded } = this.state;
     const { token } = this.props;
-    if (true) {
+
+    if (this.getLoading('signup').loading || !hasLoaded) {
+      return (
+        <div className="signup__loader">
+          <img src="https://media.giphy.com/media/cZDRRGVuNMLOo/giphy.gif" alt="" />
+        </div>
+      );
+    }
+
+    if (token) {
       return (
         <DownloadPage />
       );

@@ -10,6 +10,15 @@ html, body {
 	background-color: rgba(56,149,252, 1);
   padding-top: 30px;
   overflow-y: auto;
+
+	&__loader {
+		@include size(50%, auto);
+		margin: 0 auto;
+
+		img {
+			width: 100%;
+		}
+	}
 }
 
 .card {
