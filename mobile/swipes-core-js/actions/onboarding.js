@@ -12,7 +12,7 @@ export const complete = (id) => (d, getState) => {
   if(onboarding !== orgOnboarding) {
     if(window.delegate && typeof window.delegate.sendEvent === 'function'){
       window.delegate.sendEvent('Onboarding step completed', {
-        type: id,
+        Type: id,
       });
     }
     d(ca.me.updateSettings({ onboarding: onboarding.toJS() }));

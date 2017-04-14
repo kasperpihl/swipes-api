@@ -27,6 +27,11 @@ class HOCActivityFeed extends PureComponent {
     const selection = window.getSelection();
 
     if (att && selection.toString().length === 0) {
+      window.analytics.sendEvent('Flag opened', {
+        From: 'Activity Feed',
+        Type: att.getIn([id, 'link', 'service', 'type']),
+        Service: att.getIn([id, 'link', 'service', 'name']),
+      });
       preview(this.context.target, att);
     }
   }

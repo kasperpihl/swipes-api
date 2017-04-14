@@ -52,6 +52,10 @@ class HOCAttachments extends PureComponent {
     if (selection.toString().length === 0) {
       this.callDelegate('willOpenPreview', attachments.get(id), e);
       previewLink(this.context.target, attachments.get(id));
+      window.analytics.sendEvent('Attachment opened', {
+        Type: attachments.getIn([id, 'link', 'service', 'type']),
+        Service: attachments.getIn([id, 'link', 'service', 'name']),
+      });
     }
   }
 
@@ -223,7 +227,8 @@ class HOCAttachments extends PureComponent {
       this.clearLoading('adding');
       if(res.ok){
         window.analytics.sendEvent('Attachment added', {
-          type,
+          Type: type,
+          Service: 'swipes',
         });
       }
     });

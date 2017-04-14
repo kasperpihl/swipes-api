@@ -41,7 +41,7 @@ import {
 } from './db_utils/xendo';
 
 const invitationTokenSecret = 'very_s3cret_invit@tion_secr3t';
-const defaultOnBoardingSettings = {
+const defaultSettings = {
   onboarding: {
     order: [
       'create-account',
@@ -54,6 +54,8 @@ const defaultOnBoardingSettings = {
       'create-account': true,
     },
   },
+  pinned_goals: [],
+  starred_goals: [],
 };
 const userAvailability = valLocals('userAvailability', {
   email: string.format('email').require(),
@@ -186,7 +188,7 @@ const userSignUp = valLocals('userSignUp', {
     password: sha1(password),
     created_at: r.now(),
     updated_at: r.now(),
-    settings: defaultOnBoardingSettings,
+    settings: defaultSettings,
     activated: true,
   };
   const tokens = createTokens(tokenInfo.user_id);
@@ -505,7 +507,7 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
     },
     created_at: r.now(),
     updated_at: r.now(),
-    settings: defaultOnBoardingSettings,
+    settings: defaultSettings,
     invited_by: user_id,
     activated: false,
   };

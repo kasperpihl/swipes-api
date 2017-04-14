@@ -1,5 +1,5 @@
 import { main, navigation } from 'actions';
-import { me } from 'swipes-core-js/actions';
+import * as ca from 'swipes-core-js/actions';
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
@@ -29,7 +29,7 @@ export default class IpcListener {
       this.version = remote.getGlobal('version');
       this.arch = window.process.arch;
       ipcRenderer.on('oauth-success', (event, arg) => {
-        store.dispatch(me.handleOAuthSuccess(arg.serviceName, arg.queryString));
+        store.dispatch(ca.me.handleOAuthSuccess(arg.serviceName, arg.queryString));
       });
       ipcRenderer.on('alert-message', (event, arg) => {
         alert(arg.message);
@@ -77,6 +77,7 @@ export default class IpcListener {
           goalId: notification.target.id,
         },
       }));
+      this.store.dispatch(ca.notifications.mark([notification.id]));
       const remWin = remote.getCurrentWindow();
       remWin.focus();
     };
