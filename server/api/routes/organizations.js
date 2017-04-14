@@ -154,7 +154,7 @@ notAuthed.all('/organizations.getInfoFromInvitationToken',
   valResponseAndSend({
     me: object.require(),
     organization: object.require(),
-    users: array.require(),
+    invited_by: object.require(),
   }),
 );
 

@@ -85,17 +85,16 @@ const organizationsGetInfoFromInvitationToken = valLocals('organizationsGetInfoF
 
   dbOrganizationsGetInfoFromInvitationToken({ user_id: userId, organization_id: organizationId, fields })
     .then((results) => {
-      console.log(results);
       const {
         me,
         organization,
-        users,
+        invited_by,
       } = results;
 
       setLocals({
         me,
         organization,
-        users,
+        invited_by,
       });
 
       return next();
