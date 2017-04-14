@@ -19,6 +19,7 @@ class HOCSignupPage extends PureComponent {
     setupLoading(this);
   }
   componentDidMount() {
+    window.analytics.sendEvent('Signup opened', {});
     const { request } = this.props;
     const { formData, invitationToken } = this.state;
     request('organizations.getInfoFromInvitationToken', {
@@ -65,7 +66,10 @@ class HOCSignupPage extends PureComponent {
         });
       }
       if (res.ok) {
-        window.analytics.sendEvent('Signed up', {});
+        if(res.user_id) {
+          window.analytics.signedUp(res.user_id);
+        }
+        window.analytics.sendEvent('Signed up', {})
       }
       console.log('ressy', res);
     });

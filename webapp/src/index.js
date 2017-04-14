@@ -25,13 +25,15 @@ window.getURLParameter = name => decodeURIComponent((new RegExp(`[?|&]${name}=` 
 
 const store = configureStore();
 
+
+window.ipcListener = new IpcListener(store);
+window.analytics = new Analytics(store);
 const delegate = {
   forceLogout: () => {
     store.dispatch(a.main.forceLogout);
-  }
+  },
+  sendEvent: analytics.sendEvent,
 }
-window.ipcListener = new IpcListener(store);
-window.analytics = new Analytics(store);
 init(store, delegate);
 
 let Tester;

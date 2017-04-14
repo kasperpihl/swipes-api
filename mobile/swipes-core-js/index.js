@@ -7,6 +7,7 @@ import FilterHandler from './classes/filter-handler';
 import MessageGenerator from './message-generator';
 
 const init = (store, delegate) => {
+  window.delegate = delegate;
   window.socket = new Socket(store, delegate);
   window.msgGen = new MessageGenerator(store);
   window.filterHandler = new FilterHandler(store);

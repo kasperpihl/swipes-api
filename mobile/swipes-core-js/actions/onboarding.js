@@ -10,6 +10,11 @@ export const complete = (id) => (d, getState) => {
     return completed;
   });
   if(onboarding !== orgOnboarding) {
+    if(window.delegate && typeof window.delegate.sendEvent === 'function'){
+      window.delegate.sendEvent('Onboarding step completed', {
+        type: id,
+      });
+    }
     d(ca.me.updateSettings({ onboarding: onboarding.toJS() }));
   }
 }

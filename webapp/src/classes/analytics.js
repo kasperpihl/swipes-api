@@ -47,6 +47,9 @@ export default class Analytics {
     }
 
   }
+  signedUp(uId) {
+    mixpanel.alias(uId);
+  }
   storeChange() {
     const state = this.store.getState();
     const me = state.get('me');
