@@ -6,8 +6,6 @@ import { Route, withRouter } from 'react-router-dom';
 import * as a from 'actions';
 import Gradient from 'components/gradient/Gradient';
 //import HOCApp from 'src/react/app/HOCApp';
-import HOCRegistration from 'src/react/registration/HOCRegistration';
-import HOCSignupPage from 'src/react/signup-page/HOCSignupPage';
 import HOCContextMenu from 'components/context-menu/HOCContextMenu';
 import HOCTooltip from 'components/tooltip/HOCTooltip';
 
@@ -62,8 +60,14 @@ class Root extends PureComponent {
             const HOCApp = require('src/react/app/HOCApp').default;
             return <HOCApp />;
           }} />
-          <Route path="/login" component={HOCRegistration} />
-          <Route path="/signup" component={HOCSignupPage} />
+          <Route path="/login" render={() => {
+            const HOCRegistration = require('src/react/registration/HOCRegistration').default;
+            return <HOCRegistration />;
+          }} />
+          <Route path="/signup" render={() => {
+            const HOCSignupPage = require('src/react/signup-page/HOCSignupPage').default;
+            return <HOCSignupPage />
+          }} />
         </div>
       </div>
     );

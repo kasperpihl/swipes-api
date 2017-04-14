@@ -67,7 +67,7 @@ class SignupPage extends PureComponent {
         <h3 className="subtitle">Your team is waiting for you. Sign up to join them</h3>
 
         <div className="form">
-          {this.renderInputField('email', 'email', 'name@example.com')}
+          {this.renderInputField('email', 'email', 'Email')}
           {this.renderInputField('firstName', 'text', 'First name')}
           {this.renderInputField('lastName', 'text', 'Last name')}
           {this.renderInputField('password', 'password', 'Password')}
