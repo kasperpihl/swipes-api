@@ -1,0 +1,281 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+html, body {
+	@include size(100%);
+	background-color: rgba(56,149,252, 1);
+}
+
+body {
+
+  .gradient-bg {
+    display: none;
+  }
+}
+
+.signup {
+  @include size(100%);
+  padding-top: 30px;
+  overflow-y: auto;
+}
+
+.card {
+	@include size(100%, auto);
+	@include heightSpecifications(100%, initial);
+	@include widthSpecifications(initial, 600px);
+	@include border-radius(3px, 3px, 0px, 0px);
+	background-color: white;
+	box-shadow: 0 6px 12px 1px rgba(0,12,47,0.3);
+	margin: 0 auto;
+	padding: 0 60px;
+}
+
+.header {
+	@include size(100%, 90px);
+	vertical-align: center;
+
+	&--mobile {
+		padding: 0 24px;
+		display: none;
+	}
+}
+
+.breadcrumbs {
+	@include size(auto, 90px);
+	float: left;
+}
+
+.breadcrumb {
+	@include font(11px, $deepBlue-20, 24px, 500);
+	display: inline-block;
+	margin-right: 12px;
+	top: 50%;
+  transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	text-transform: uppercase;
+
+	&--active {
+		@include font($c: $deepBlue-60)
+	}
+}
+
+.logo {
+	float: right;
+	top: 50%;
+  transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+
+	svg {
+		@include size(24px);
+		@include svg-color($deepBlue-20)
+	}
+}
+
+.title-container {
+	@include size(100%, auto);
+}
+
+.title {
+	@include font(36px, $deepBlue-90, 48px, 300);
+	display: table-cell;
+}
+
+.assignees {
+	@include size(auto, 48px);
+	float: right;
+}
+
+.assignee {
+	@include size(33px);
+	border: 1px solid white;
+	background-color: white;
+	border-radius: 50%;
+	float: right;
+	top: 50%;
+  transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+
+	img {
+		@include size(31px);
+		border-radius: 50%;
+	}
+
+	&:not(:last-child) {
+		margin-left: -9px;
+	}
+}
+
+h3.subtitle {
+	@include font(15px, $deepBlue-60, 24px, 400);
+	margin-top: 12px;
+}
+
+$idleLight: $deepBlue-50;
+$idleDark: $deepBlue-100;
+$activeColor: $blue-100;
+$errorColor: $red-80;
+
+.form {
+	margin-top: 81px;
+}
+
+.floating-input {
+	@include size(100%, auto);
+	padding: 15px 0;
+
+	&__input {
+		@include size(inherit, auto);
+    @include font(16px, $idleDark, 27px, 400);
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid $deepBlue-10;
+    padding: 5px 0;
+    padding-top: 27px;
+		user-select: auto;
+		-webkit-user-select: auto;
+    transition: .2s ease-in-out;
+		-ms-transition: .2s ease-in-out;
+
+		&:focus {
+      outline: none;
+			border-bottom: 1px solid $blue-100;
+      transition: .2s ease-in-out;
+			-ms-transition: .2s ease-in-out;
+
+			& + label {
+				@include font(11px, $blue-100);
+				top: 28px;
+				transition: .2s ease-in-out;
+				-ms-transition: .2s ease-in-out;
+			}
+    }
+	}
+
+	label {
+		@include font(15px, $idleLight, 21px, 400);
+    position: absolute;
+    left: 0; top: 46px;
+    transition: .2s ease-in-out;
+		-ms-transition: .2s ease-in-out;
+    user-select: none;
+    cursor: text;
+	}
+}
+
+.footer {
+	@include size(100%, auto);
+	padding: 69px 0;
+}
+
+.footer-sentence {
+	@include font(12px, $deepBlue-40, 18px, 500);
+	text-align: right;
+	margin-top: 9px;
+
+	a {
+		@include font(12px, $blue-100, 18px, 500);
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+	}
+}
+
+.button {
+	@include font(12px, white, 18px, 500);
+	background-color: $blue-100;
+	border-radius: 100px;
+	padding: 9px 21px;
+	float: right;
+	margin-left: 21px;
+	cursor: pointer;
+	z-index: 2;
+
+	&:hover {
+		background-color: $blue-80;
+	}
+}
+
+
+@media (max-width: 600px) {
+  .signup {
+    padding-top: 0px;
+  }
+
+	.card {
+		padding: 0 24px;
+	}
+
+	.header {
+		display: none;
+	}
+
+	.header.header--mobile {
+		display: block;
+		padding-bottom: 12px;
+
+		.breadcrumb {
+			@include font($c: white);
+			opacity: .3;
+			top: 100%;
+			transform: translateY(-36px);
+			-ms-transform: translateY(-36px);
+
+			&--active {
+				@include font($c: white);
+				opacity: 1;
+			}
+		}
+
+		.logo {
+			top: 100%;
+			transform: translateY(-26px);
+			-ms-transform: translateY(-26px);
+
+			svg {
+				@include svg-color(white);
+			}
+		}
+	}
+
+	.assignees {
+		@include size(initial, 48px);
+		float: initial;
+		left: 50%;
+		display: inline-block;
+		transform: translateX(-50%);
+		-ms-transform: translateX(-50%);
+		margin-top: 29px;
+		margin-bottom: 17px;
+	}
+
+	h1.title {
+		@include font(30px, $deepBlue-90, 39px, 300);
+		display: block;
+		text-align: center;
+	}
+
+	h3.subtitle {
+		display: block;
+		text-align: center;
+	}
+
+	.form {
+		margin-top: 51px;
+	}
+
+	.footer-sentence {
+		text-align: center;
+	}
+	.footer {
+		.button {
+			float: initial;
+			left: 50%;
+			transform: translateX(-50%) !important;
+				-ms-transform: translateX(-50%) !important;
+			margin: 0;
+			display: inline-block;
+		}
+	}
+}
