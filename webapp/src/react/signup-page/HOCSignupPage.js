@@ -7,6 +7,7 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import { fromJS, Map } from 'immutable';
 import SignupPage from './SignupPage';
 import SignupHeader from './SignupHeader';
+import DownloadPage from './DownloadPage';
 
 import './styles/signup.scss';
 
@@ -67,10 +68,10 @@ class HOCSignupPage extends PureComponent {
         });
       }
       if (res.ok) {
-        if(res.user_id) {
+        if (res.user_id) {
           window.analytics.signedUp(res.user_id);
         }
-        window.analytics.sendEvent('Signed up', {})
+        window.analytics.sendEvent('Signed up', {});
       }
       console.log('ressy', res);
     });
@@ -78,10 +79,10 @@ class HOCSignupPage extends PureComponent {
   renderContent() {
     const { formData, organization, invitedBy } = this.state;
     const { token } = this.props;
-    if(token) {
+    if (true) {
       return (
         <DownloadPage />
-      )
+      );
     }
     return (
       <SignupPage

@@ -96,6 +96,12 @@ import WindowsMaximize from './svgs/windows-maximize.svg';
 import WindowsMinimize from './svgs/windows-minimize.svg';
 import WindowsUnmaximize from './svgs/windows-unmaximize.svg';
 
+import WindowsDevice from './svgs/windows-device.svg';
+import MacDevice from './svgs/mac-device.svg';
+import LinuxDevice from './svgs/linux-device.svg';
+import IphoneDevice from './svgs/iphone-device.svg';
+import AndroidDevice from './svgs/android-device.svg';
+
 import ShapeOne from './svgs/shape-1.svg';
 import ShapeTwo from './svgs/shape-2.svg';
 import ShapeThree from './svgs/shape-3.svg';
@@ -208,6 +214,12 @@ export {
   WindowsMaximize,
   WindowsMinimize,
   WindowsUnmaximize,
+
+  WindowsDevice,
+  MacDevice,
+  LinuxDevice,
+  IphoneDevice,
+  AndroidDevice,
 
   ShapeOne,
   ShapeTwo,

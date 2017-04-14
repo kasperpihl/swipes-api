@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <g>
+    <rect x="48.99998" y="22" width="2" height="10" rx="1" ry="1" transform="translate(76.99998 -22.99999) rotate(90)" stroke="transparent" />
+    <path d="M61,81H39a7.00786,7.00786,0,0,1-7-7V26a7.00786,7.00786,0,0,1,7-7H61a7.00786,7.00786,0,0,1,7,7V74A7.00786,7.00786,0,0,1,61,81ZM39,21a5.00589,5.00589,0,0,0-5,5V74a5.00589,5.00589,0,0,0,5,5H61a5.00589,5.00589,0,0,0,5-5V26a5.00589,5.00589,0,0,0-5-5Z" stroke="transparent" />
+    <circle cx="50" cy="73" r="2" stroke="transparent" />
+  </g>
+</svg>

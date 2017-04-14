@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="device-svg">
+  <g>
+    <path d="M90,78H10a4.00458,4.00458,0,0,1-4-4V26a4.00458,4.00458,0,0,1,4-4H90a4.00458,4.00458,0,0,1,4,4V74A4.00458,4.00458,0,0,1,90,78ZM10,24a2.002,2.002,0,0,0-2,2V74a2.002,2.002,0,0,0,2,2H90a2.002,2.002,0,0,0,2-2V26a2.002,2.002,0,0,0-2-2Z" stroke="transparent" />
+    <rect x="48" y="69" width="4" height="4" rx="2" ry="2" transform="translate(121 21) rotate(90)" stroke="transparent" />
+  </g>
+</svg>
