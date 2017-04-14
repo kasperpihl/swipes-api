@@ -226,3 +226,30 @@ h3.subtitle {
 		}
 	}
 }
+
+
+@media (max-height: 800px) {
+	.signup {
+		padding-top: 0px;
+	}
+
+	.card {
+		@include border-radius(0px, 0px, 0px, 0px);
+	}
+
+	.header {
+		@include size(100%, 60px);
+	}
+
+	.breadcrumbs {
+		@include size(auto, 60px);
+	}
+
+	.form {
+		margin-top: 30px;
+	}
+
+	.footer {
+		padding: 42px 0;
+	}
+}
