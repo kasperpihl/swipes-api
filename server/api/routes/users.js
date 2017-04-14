@@ -92,7 +92,14 @@ notAuthed.all('/users.signup',
   userSignUp,
   xendoSignUpQueueMessage,
   notificationsPushToQueue,
+  mapLocals(
+    ['userId'],
+    (setLocals, userId) => {
+      setLocals({ user_id: userId });
+    },
+  ),
   valResponseAndSend({
+    user_id: string.require(),
     token: string.require(),
   }));
 

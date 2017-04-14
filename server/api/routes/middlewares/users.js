@@ -197,7 +197,7 @@ const userSignUp = valLocals('userSignUp', {
   ])
   .then(() => {
     setLocals({
-      user_id: userId,
+      userId,
       token: tokens.shortToken,
     });
 
