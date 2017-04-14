@@ -99,6 +99,13 @@
     transition: .35s ease;
     -ms-transition: .35s ease;
 	}
+
+  @include styleIfNumberOfElements(1) {
+    padding: 0 9px;
+    @include size(100%, auto);
+		float: initial !important;
+    padding-bottom: 15px;
+	}
 }
 
 .device-svg {
