@@ -173,38 +173,35 @@ const userSignUp = valLocals('userSignUp', {
   } = res.locals;
 
   const tokens = createTokens(tokenInfo.user_id);
+  const promises = [
+    dbTokensInsertSingle({ token: tokens.token, tokenInfo }),
+  ];
 
-  setLocals({
-    token: tokens.shortToken,
-  });
+  if (!invitation_token) {
+    const userDoc = {
+      id: userId,
+      services: [],
+      organizations: [],
+      email,
+      profile: {
+        first_name,
+        last_name,
+      },
+      password: sha1(password),
+      created_at: r.now(),
+      updated_at: r.now(),
+      settings: defaultSettings,
+      activated: true,
+    };
 
-  if (invitation_token) {
-    return next();
+    promises.push(dbUsersCreate({ user: userDoc }));
   }
 
-  const userDoc = {
-    id: userId,
-    services: [],
-    organizations: [],
-    email,
-    profile: {
-      first_name,
-      last_name,
-    },
-    password: sha1(password),
-    created_at: r.now(),
-    updated_at: r.now(),
-    settings: defaultSettings,
-    activated: true,
-  };
-
-  return Promise.all([
-    dbTokensInsertSingle({ token: tokens.token, tokenInfo }),
-    dbUsersCreate({ user: userDoc }),
-  ])
+  return Promise.all(promises)
   .then(() => {
     setLocals({
       userId,
+      token: tokens.shortToken,
     });
 
     return next();
