@@ -140,6 +140,24 @@
     position: absolute;
   }
 
+  &__loading {
+    @include size(72px);
+    @include flexContainer('row', center, center);
+    background-color: rgba($deepBlue-100, .6);
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0; top: 0;
+
+    .spinner {
+      @include size(50px);
+    }
+
+    &--show {
+      opacity: 1;
+    }
+  }
+
   &__form {
     @include size(100%);
     @include flexContainer('column');

@@ -76,6 +76,7 @@ class Profile extends PureComponent {
   renderProfileImage() {
     const { me } = this.props;
     const { editing } = this.state;
+    const isLoading = this.getLoading('uploadImage').loading;
 
     if (!editing) {
       const profilePic = msgGen.users.getPhoto(me);
@@ -100,6 +101,12 @@ class Profile extends PureComponent {
           </div>
 
           <input type="file" className="profile-header__file-input" ref="imageUpload" />
+
+          <div className={`profile-header__upload ${isLoading ? 'profile-header__upload--show' : ''}`}>
+            <svg className="spinner" viewBox="0 0 50 50">
+              <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
+            </svg>
+          </div>
         </div>
       );
     }
@@ -108,10 +115,15 @@ class Profile extends PureComponent {
     return (
       <div className="profile-header__profile-image">
         <div className="profile-header__initials">{initials}</div>
-        <div className="profile-header__upload-overlay">
+        <div className="profile-header__upload-overlay" onClick={this.onUploadClick}>
           <Icon icon="Plus" className="profile-header__svg" />
         </div>
         <input type="file" className="profile-header__file-input" ref="imageUpload" />
+        <div className={`profile-header__upload ${isLoading ? 'profile-header__upload--show' : ''}`}>
+          <svg className="spinner" viewBox="0 0 50 50">
+            <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
+          </svg>
+        </div>
       </div>
     );
   }
