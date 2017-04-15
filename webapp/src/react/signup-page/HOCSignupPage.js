@@ -43,6 +43,7 @@ class HOCSignupPage extends PureComponent {
         const firstName = msgGen.users.getFirstName(me);
         const email = msgGen.users.getEmail(me);
         this.setState({
+          forceDownload: !!me.get('activated'),
           organization: fromJS(res.organization),
           invitedBy: fromJS(res.invited_by),
           me,
@@ -52,14 +53,12 @@ class HOCSignupPage extends PureComponent {
 
       console.log('ressy', res);
     });
-    console.log(window.getURLParameter('invitation_token'));
   }
   onChange(key, e) {
     const { formData } = this.state;
     this.setState({ formData: formData.set(key, e.target.value) });
   }
   onClick() {
-    console.log('clicky!');
     const { formData, invitationToken, me } = this.state;
     const { signup } = this.props;
     signup({
@@ -76,16 +75,13 @@ class HOCSignupPage extends PureComponent {
         });
       }
       if (res.ok) {
-        if (res.user_id) {
-          window.analytics.signedUp(res.user_id);
-        }
         window.analytics.sendEvent('Signed up', {});
       }
       console.log('ressy', res);
     });
   }
   renderContent() {
-    const { formData, organization, invitedBy, hasLoaded } = this.state;
+    const { formData, organization, invitedBy, hasLoaded, forceDownload } = this.state;
     const { token } = this.props;
 
     if (this.getLoading('signup').loading || !hasLoaded) {
@@ -96,7 +92,7 @@ class HOCSignupPage extends PureComponent {
       );
     }
 
-    if (token) {
+    if (forceDownload || token) {
       return (
         <DownloadPage />
       );
@@ -111,10 +107,11 @@ class HOCSignupPage extends PureComponent {
     );
   }
   render() {
+    const { forceDownload } = this.state;
     const { token } = this.props;
     const headerProps = {
       crumbs: ['SIGNUP', 'DOWNLOAD'],
-      activeCrumb: token ? 1 : 0,
+      activeCrumb: (token || forceDownload) ? 1 : 0,
     };
     return (
       <div className="signup">
@@ -131,8 +128,10 @@ class HOCSignupPage extends PureComponent {
 
 HOCSignupPage.propTypes = {};
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    token: state.getIn(['connection', 'token']),
+  };
 }
 
 export default connect(mapStateToProps, {

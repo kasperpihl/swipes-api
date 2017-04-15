@@ -43,6 +43,9 @@ const v1Authed = [
   me.authed,
   organizations.authed,
 ];
+const v1Multipart = [
+  me.multipart,
+];
 // const webhooksNotAuthed = [
 //   webhooks.notAuthed,
 // ];
@@ -50,5 +53,6 @@ const v1Authed = [
 export {
   v1NotAuthed,
   v1Authed,
+  v1Multipart,
   // webhooksNotAuthed,
 };

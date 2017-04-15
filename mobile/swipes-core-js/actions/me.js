@@ -15,6 +15,17 @@ export const handleOAuthSuccess = (serviceName, query) => {
   return request('services.authsuccess', options);
 };
 
+export const uploadProfilePhoto = photo => (d, getState) => {
+  const token = getState().getIn(['connection', 'token']);
+  const formData = new FormData();
+  formData.append('token', token);
+  formData.append('photo', photo);
+  return fetch(`${window.__API_URL__}/v1/me.uploadProfilePhoto`, {
+    method: 'POST',
+    body: formData
+  });
+}
+
 export const updateSettings = s => request('me.updateSettings', { settings: s });
 
 export const updateProfile = p => request('me.updateProfile', { profile: p });

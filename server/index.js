@@ -65,7 +65,9 @@ app.use('/workflows', express.static(`${__dirname}/../workflows`));
 // Webhooks route
 app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed*/);
 
-// Everything for v1 path is parsed as json
+app.use('/v1', routes.v1Multipart);
+
+// Everything on v1 path (which is not multipart form data) is parsed as json
 app.use('/v1', bodyParser.json(), handleJsonError);
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {

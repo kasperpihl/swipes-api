@@ -11,13 +11,21 @@ import {
   meUpdateSettingsQueueMessage,
   meUpdateProfile,
   meUpdateProfileQueueMessage,
+  meUploadProfilePhoto,
+  meProfilePhotoResize,
+  meUploadProfilePhotoToS3,
 } from './middlewares/me';
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
+import {
+  authParseToken,
+  authCheckToken,
+} from '../../middlewares/jwt-auth-middleware';
 
 const authed = express.Router();
 const notAuthed = express.Router();
+const multipart = express.Router();
 
 authed.all('/me.updateSettings',
   valBody({
@@ -41,7 +49,20 @@ authed.all('/me.updateProfile',
     profile: object.require(),
   }));
 
+multipart.post('/me.uploadProfilePhoto',
+  meUploadProfilePhoto,
+  authParseToken,
+  authCheckToken,
+  meProfilePhotoResize,
+  meUploadProfilePhotoToS3,
+  meUpdateProfile,
+  meUpdateProfileQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend(),
+);
+
 export {
   notAuthed,
   authed,
+  multipart,
 };
