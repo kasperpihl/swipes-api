@@ -22,12 +22,17 @@ class Profile extends PureComponent {
     this.onChangeCached = setupCachedCallback(this.onChange, this);
     this.onBlurCached = setupCachedCallback(this.callDelegate.bind(null, 'onBlur'));
     this.handleEditState = this.handleEditState.bind(this);
+
+    this.onUploadClick = this.onUploadClick.bind(this);
   }
   onChange(key, e) {
     if (key === 'bio') {
       this.setState({ bioCounter: 300 - e.target.value.length });
     }
     this.callDelegate('onChange', key, e.target.value);
+  }
+  onUploadClick() {
+    this.refs.imageUpload.click();
   }
   handleEditState() {
     const { editing } = this.state;
@@ -81,7 +86,7 @@ class Profile extends PureComponent {
           </div>
         );
       }
-      const initials = msgGen.users.getInitals(me);
+      const initials = msgGen.users.getInitials(me);
 
       return <div className="profile-header__initials">{initials}</div>;
     }
@@ -90,16 +95,23 @@ class Profile extends PureComponent {
       return (
         <div className="profile-header__profile-image">
           <img src={profilePic} role="presentation" />
-          <div className="profile-header__upload-overlay">
+          <div className="profile-header__upload-overlay" onClick={this.onUploadClick}>
             <Icon icon="Plus" className="profile-header__svg" />
           </div>
+
+          <input type="file" className="profile-header__file-input" ref="imageUpload" />
         </div>
       );
     }
 
+    const initials = msgGen.users.getInitials(me);
     return (
       <div className="profile-header__profile-image">
-        <Icon icon="plus" className="profile-header__svg" />
+        <div className="profile-header__initials">{initials}</div>
+        <div className="profile-header__upload-overlay">
+          <Icon icon="Plus" className="profile-header__svg" />
+        </div>
+        <input type="file" className="profile-header__file-input" ref="imageUpload" />
       </div>
     );
   }

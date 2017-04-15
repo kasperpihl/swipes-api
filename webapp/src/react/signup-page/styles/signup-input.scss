@@ -43,7 +43,7 @@ $errorColor: $red-80;
   &__icon {
     @include size(30px);
     position: absolute;
-    right: 0; bottom: 16px;
+    right: 0; bottom: 4px;
     user-select: none;
     display: none;
 

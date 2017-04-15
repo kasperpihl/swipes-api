@@ -127,6 +127,19 @@
     }
   }
 
+  &__initials {
+    @include size(72px);
+    @include flexContainer('row', center, center);
+    @include font(21px, $deepBlue-100, 500);
+  }
+
+  &__file-input {
+    opacity: 0;
+    width: 0; height: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
   &__form {
     @include size(100%);
     @include flexContainer('column');
@@ -301,6 +314,8 @@
       background-color: rgba($deepBlue-100, .6);
       position: absolute;
       left: 0; top: 0;
+      opacity: 0;
+      transition: .25s ease;
 
       .profile-header__svg {
         @include size(24px);
@@ -334,6 +349,16 @@
   &__error-icon:hover {
     &:after, &:before {
       animation: fadeLableOut 1s ease reverse forwards;
+    }
+  }
+
+  &--editing {
+
+    .profile-header__profile-image:hover {
+      .profile-header__upload-overlay {
+        opacity: 1;
+        transition: .25s ease;
+      }
     }
   }
 }
