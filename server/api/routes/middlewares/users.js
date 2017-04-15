@@ -172,6 +172,12 @@ const userSignUp = valLocals('userSignUp', {
     invitation_token,
   } = res.locals;
 
+  const tokens = createTokens(tokenInfo.user_id);
+
+  setLocals({
+    token: tokens.shortToken,
+  });
+
   if (invitation_token) {
     return next();
   }
@@ -191,7 +197,6 @@ const userSignUp = valLocals('userSignUp', {
     settings: defaultSettings,
     activated: true,
   };
-  const tokens = createTokens(tokenInfo.user_id);
 
   return Promise.all([
     dbTokensInsertSingle({ token: tokens.token, tokenInfo }),
@@ -200,7 +205,6 @@ const userSignUp = valLocals('userSignUp', {
   .then(() => {
     setLocals({
       userId,
-      token: tokens.shortToken,
     });
 
     return next();
