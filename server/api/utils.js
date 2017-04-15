@@ -177,7 +177,7 @@ const valBody = (schema, middleware) => (req, res, next) => {
     middleware: func,
   }), true);
 
-  const params = Object.assign({}, req.params, req.query, req.body);
+  const params = Object.assign({}, req.params, req.query, req.body, req.file);
 
   if (!error) {
     error = valjs(params, object.as(schema));
