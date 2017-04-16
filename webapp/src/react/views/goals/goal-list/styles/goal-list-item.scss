@@ -194,24 +194,4 @@ $contHeight: 79px;
       }
     }
   }
-
-
-  &__content {
-    &:hover {
-      .progress-bar {
-        bottom: 5px;
-        transition: .2s ease;
-
-        & > * {
-          opacity: 1;
-          transition: .2s ease;
-        }
-      }
-
-      #{$b}__label {
-        transform: translateY(-26px);
-        transition: .2s ease;
-      }
-    }
-  }
 }

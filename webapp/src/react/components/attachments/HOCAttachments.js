@@ -33,7 +33,7 @@ class HOCAttachments extends PureComponent {
     bindAll(this, ['onChangeFiles', 'onPaste']);
     setupLoading(this);
   }
-  componentDidMount(){
+  componentDidMount() {
     document.addEventListener('paste', this.onPaste);
   }
   componentWillUnmount() {
@@ -91,9 +91,9 @@ class HOCAttachments extends PureComponent {
     });
   }
   onPaste(event) {
-    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    const items = (event.clipboardData || event.originalEvent.clipboardData).items;
     let uploaded;
-    for (var index in items){
+    for (const index in items) {
       const item = items[index];
       if (item.kind === 'file') {
         const blob = item.getAsFile();
@@ -102,8 +102,7 @@ class HOCAttachments extends PureComponent {
         this.onUploadFiles([blob]);
         console.log(blob.name, blob.type);
         break;
-
-      };
+      }
     }
   }
   onRename(id, currTitle, options) {
@@ -117,7 +116,7 @@ class HOCAttachments extends PureComponent {
         this.setLoading(id, 'Renaming...');
         renameAttachment(targetId, id, title).then((res) => {
           this.clearLoading(id);
-          if(res.ok){
+          if (res.ok) {
             window.analytics.sendEvent('Attachment renamed', {});
           }
         });
@@ -140,7 +139,7 @@ class HOCAttachments extends PureComponent {
         this.setLoading(id, 'Removing...');
         removeAttachment(targetId, id).then((res) => {
           this.clearLoading(id);
-          if(res.ok){
+          if (res.ok) {
             window.analytics.sendEvent('Attachment removed', {
 
             });
@@ -204,20 +203,20 @@ class HOCAttachments extends PureComponent {
       },
     };
   }
-  onUploadFiles(files){
+  onUploadFiles(files) {
     const { uploadFiles, targetId } = this.props;
     this.setLoading('adding');
     uploadFiles(targetId, files).then((res) => {
-      if(res.ok){
+      if (res.ok) {
         this.clearLoading('adding');
-        this.setState({fileVal: ''});
+        this.setState({ fileVal: '' });
       } else {
         this.clearLoading('adding', '!Something went wrong');
       }
     });
   }
   onChangeFiles(e) {
-    this.setState({fileVal: e.target.value});
+    this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
   }
   attachToTarget(type, id, title) {
@@ -225,7 +224,7 @@ class HOCAttachments extends PureComponent {
     const { targetId, addAttachment } = this.props;
     addAttachment(targetId, linkObj).then((res) => {
       this.clearLoading('adding');
-      if(res.ok){
+      if (res.ok) {
         window.analytics.sendEvent('Attachment added', {
           Type: type,
           Service: 'swipes',
@@ -292,8 +291,8 @@ class HOCAttachments extends PureComponent {
         </button>
         <label className="attachments__add-item">
           Upload
-          <input value={fileVal} type="file" multiple onChange={this.onChangeFiles} />
-         </label>
+          <input value={fileVal} type="file" onChange={this.onChangeFiles} />
+        </label>
         <div className="attachments__loader" />
       </div>
     );

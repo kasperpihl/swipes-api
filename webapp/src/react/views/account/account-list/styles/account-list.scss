@@ -12,6 +12,11 @@
   };
 }
 
+.account-button {
+  position: fixed;
+  right: 30px; bottom: 30px;
+}
+
 .account-item {
   @include size(278px, 150px);
   padding: 15px;

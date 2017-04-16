@@ -40,8 +40,10 @@
   &__initial {
     @include size(24px);
     @include font(12px, $deepBlue-90, 18px, bold);
+    @include flexContainer('row', center, center);
     background-color: $bg;
     margin-left: 15px;
+    border-radius: 50%;
   }
 
   &__name {

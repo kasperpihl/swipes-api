@@ -54,7 +54,7 @@ class AccountList extends PureComponent {
         <Button
           icon="Logout"
           loading={isLoggingOut}
-          className="profile__button profile__button--logout"
+          className="account-button"
           onClick={this.onLogout}
         />
       </SWView>
