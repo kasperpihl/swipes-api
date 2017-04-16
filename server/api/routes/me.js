@@ -58,7 +58,9 @@ multipart.post('/me.uploadProfilePhoto',
   meUpdateProfile,
   meUpdateProfileQueueMessage,
   notificationsPushToQueue,
-  valResponseAndSend(),
+  valResponseAndSend({
+    profile: object.require(),
+  }),
 );
 
 export {
