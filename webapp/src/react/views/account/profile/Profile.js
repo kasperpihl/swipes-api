@@ -22,6 +22,7 @@ class Profile extends PureComponent {
     this.onChangeCached = setupCachedCallback(this.onChange, this);
     this.onBlurCached = setupCachedCallback(this.callDelegate.bind(null, 'onBlur'));
     this.handleEditState = this.handleEditState.bind(this);
+    this.onImageChange = this.callDelegate.bind(null, 'onImageChange')
 
     this.onUploadClick = this.onUploadClick.bind(this);
   }
@@ -32,7 +33,9 @@ class Profile extends PureComponent {
     this.callDelegate('onChange', key, e.target.value);
   }
   onUploadClick() {
+    console.log('clicky');
     this.refs.imageUpload.click();
+
   }
   handleEditState() {
     const { editing } = this.state;
@@ -99,9 +102,13 @@ class Profile extends PureComponent {
           <div className="profile-header__upload-overlay" onClick={this.onUploadClick}>
             <Icon icon="Plus" className="profile-header__svg" />
           </div>
-
-          <input type="file" className="profile-header__file-input" ref="imageUpload" />
-
+          <input
+            onChange={this.onImageChange}
+            type="file"
+            accept="image/x-png,image/jpeg"
+            className="profile-header__file-input"
+            ref="imageUpload"
+          />
           <div className={`profile-header__upload ${isLoading ? 'profile-header__upload--show' : ''}`}>
             <svg className="spinner" viewBox="0 0 50 50">
               <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />

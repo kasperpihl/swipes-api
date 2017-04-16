@@ -51,6 +51,14 @@ class HOCProfile extends PureComponent {
     console.log('blur', key);
 
   }
+  onImageChange(e) {
+    const { uploadProfilePhoto } = this.props;
+    const file = e.target.files[0];
+    if(file){
+      uploadProfilePhoto(file);
+    }
+    console.log(e.target.files[0]);
+  }
   onChange(key, val) {
     this.setState({ [key]: val });
   }
@@ -86,6 +94,7 @@ HOCProfile.propTypes = {
 
 const ConnectedHOCProfile = connect(mapStateToProps, {
   updateProfile: ca.me.updateProfile,
+  uploadProfilePhoto: ca.me.uploadProfilePhoto,
 })(HOCProfile);
 
 export default ConnectedHOCProfile;

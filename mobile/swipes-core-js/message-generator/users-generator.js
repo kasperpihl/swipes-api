@@ -23,9 +23,15 @@ export default class Users {
     const user = this.getUser(userId);
     return user.get('email');
   }
-  getPhoto(userId) {
+  getPhoto(userId, size) {
+    const sizes = [192, 96, 64];
+    if(sizes.indexOf(size) === -1){
+      size = 192;
+    }
+    const sizeString = `${size}x${size}`;
+
     const user = this.getUser(userId);
-    return user.getIn(['profile', 'photo']);
+    return user.getIn(['profile', 'photos', sizeString]);
   }
   getFirstName(userId) {
     const user = this.getUser(userId);
