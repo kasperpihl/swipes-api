@@ -71,7 +71,7 @@ app.use('/v1', routes.v1Multipart);
 app.use('/v1', bodyParser.json(), handleJsonError);
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {
-  res.locals = Object.assign({}, req.params, req.query, req.body, res.locals, { returnObj: {} });
+  res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
   return next();
 });
 // No authed routes goes here

@@ -96,6 +96,11 @@ const valResponseAndSend = schema => (req, res, next) => {
     if (error) {
       return next(new SwipesError(`output ${req.route.path}: ${error}`));
     }
+
+    if (!res.locals.returnObj) {
+      res.locals.returnObj = {};
+    }
+
     Object.entries(schema).forEach(([key, value]) => {
       res.locals.returnObj[key] = res.locals[key];
     });
