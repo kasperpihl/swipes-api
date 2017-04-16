@@ -46,18 +46,16 @@ class HOCProfile extends PureComponent {
           this.clearLoading(key, '!Something went wrong');
         }
       })
-      console.log('fucking change!!!', key);
     }
-    console.log('blur', key);
-
   }
   onImageChange(e) {
+    console.log('hi', e);
+    console.log(e.target.files[0]);
     const { uploadProfilePhoto } = this.props;
     const file = e.target.files[0];
     if(file){
       uploadProfilePhoto(file);
     }
-    console.log(e.target.files[0]);
   }
   onChange(key, val) {
     this.setState({ [key]: val });

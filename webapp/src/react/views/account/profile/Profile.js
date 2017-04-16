@@ -22,7 +22,7 @@ class Profile extends PureComponent {
     this.onChangeCached = setupCachedCallback(this.onChange, this);
     this.onBlurCached = setupCachedCallback(this.callDelegate.bind(null, 'onBlur'));
     this.handleEditState = this.handleEditState.bind(this);
-    this.onImageChange = this.callDelegate.bind(null, 'onImageChange')
+    this.onImageChange = this.callDelegate.bind(null, 'onImageChange');
 
     this.onUploadClick = this.onUploadClick.bind(this);
   }
@@ -77,9 +77,9 @@ class Profile extends PureComponent {
     );
   }
   renderProfileImage() {
-    const { me } = this.props;
+    const { me, getLoading } = this.props;
     const { editing } = this.state;
-    const isLoading = this.getLoading('uploadImage').loading;
+    const isLoading = getLoading('uploadImage').loading;
 
     if (!editing) {
       const profilePic = msgGen.users.getPhoto(me);
@@ -125,7 +125,13 @@ class Profile extends PureComponent {
         <div className="profile-header__upload-overlay" onClick={this.onUploadClick}>
           <Icon icon="Plus" className="profile-header__svg" />
         </div>
-        <input type="file" className="profile-header__file-input" ref="imageUpload" />
+        <input
+          onChange={this.onImageChange}
+          type="file"
+          className="profile-header__file-input"
+          accept="image/x-png,image/jpeg"
+          ref="imageUpload"
+        />
         <div className={`profile-header__upload ${isLoading ? 'profile-header__upload--show' : ''}`}>
           <svg className="spinner" viewBox="0 0 50 50">
             <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
