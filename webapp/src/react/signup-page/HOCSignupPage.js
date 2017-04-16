@@ -61,6 +61,7 @@ class HOCSignupPage extends PureComponent {
   onClick() {
     const { formData, invitationToken, me } = this.state;
     const { signup } = this.props;
+    this.setLoading('signupButton');
     signup({
       first_name: formData.get('firstName'),
       last_name: formData.get('lastName'),
@@ -68,6 +69,7 @@ class HOCSignupPage extends PureComponent {
       password: formData.get('password'),
       invitation_token: invitationToken,
     }).then((res) => {
+      this.clearLoading('signupButton');
       if (res.ok && me && me.get('invited_by')) {
         window.analytics.sendEvent('Invitation accepted', {
           distinct_id: me.get('invited_by'),
@@ -103,6 +105,8 @@ class HOCSignupPage extends PureComponent {
         delegate={this}
         organization={organization}
         inviter={invitedBy}
+        loadingState={this.getAllLoading()}
+        getLoading={this.getLoading}
       />
     );
   }

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import SignupInput from './SignupInput';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
-
+import Icon from 'Icon';
 import './styles/signup.scss';
 
 class SignupPage extends PureComponent {
@@ -42,9 +42,20 @@ class SignupPage extends PureComponent {
     const { delegate } = this.props;
     const value = this.props.formData.get(key) || '';
 
-    return <SignupInput key={key} inputKey={key} type={type} placeholder={placeholder} delegate={delegate} value={value} />;
+    return (
+      <SignupInput
+        key={key}
+        inputKey={key}
+        type={type}
+        placeholder={placeholder}
+        delegate={delegate}
+        value={value}
+      />
+    );
   }
   render() {
+    const isLoading = this.props.getLoading('signupButton').loading;
+
     return (
       <div className="singup-wrapper">
         <div className="title-container">
@@ -61,7 +72,15 @@ class SignupPage extends PureComponent {
         </div>
 
         <div className="footer">
-          <div className="button" onClick={this.onClick}>Sign up</div>
+          <div className="button" onClick={this.onClick}>
+            {
+              isLoading ? (
+                <Icon icon="loader" width="12" height="12" />
+              ) : (
+                'Sign up'
+              )
+            }
+          </div>
           <div className="footer-sentence">
             By signing up you, agree to the <a href="#">Terms & Conditions</a>
           </div>

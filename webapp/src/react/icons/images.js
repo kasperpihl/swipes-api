@@ -5,6 +5,7 @@ import oneCover from './pngs/1.png';
 import twoCover from './pngs/2.png';
 import threeCover from './pngs/3.png';
 import fourCover from './pngs/4.png';
+import loader from './gifs/loader.gif';
 
 export {
   facebookCover,
@@ -14,4 +15,5 @@ export {
   twoCover,
   threeCover,
   fourCover,
+  loader,
 };
