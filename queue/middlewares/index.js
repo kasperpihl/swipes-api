@@ -225,11 +225,10 @@ const settings_updated = [
   notify.notifyCommonRethinkdb,
 ];
 
-const profile_updated = [
+const profile_updated = noUserNotifyWrapper([
   me.meProfileUpdatedNotificationData,
-  notify.notifySingleUser,
-  notify.notifyCommonRethinkdb,
-];
+  notify.notifyAllInCompany,
+]);
 
 const organization_updated = noUserNotifyWrapper([
   organizations.organizationsGetSingle,

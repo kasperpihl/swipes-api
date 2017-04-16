@@ -46,6 +46,7 @@ authed.all('/me.updateProfile',
   meUpdateProfileQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
+    user_id: string.require(),
     profile: object.require(),
   }));
 
@@ -59,6 +60,7 @@ multipart.post('/me.uploadProfilePhoto',
   meUpdateProfileQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
+    user_id: string.require(),
     profile: object.require(),
   }),
 );

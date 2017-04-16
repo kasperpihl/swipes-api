@@ -14,6 +14,7 @@ const meSettingsUpdatedNotificationData = (req, res, next) => {
 };
 const meProfileUpdatedNotificationData = (req, res, next) => {
   const {
+    user_id,
     profile,
   } = res.locals;
 
@@ -21,6 +22,7 @@ const meProfileUpdatedNotificationData = (req, res, next) => {
 
   res.locals.notificationData = notificationData;
   res.locals.eventData = {
+    user_id,
     profile,
   };
 
