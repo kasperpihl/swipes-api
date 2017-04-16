@@ -52,7 +52,9 @@ class HOCProfile extends PureComponent {
     const { uploadProfilePhoto, completeOnboarding } = this.props;
     const file = e.target.files[0];
     if(file){
+      this.setLoading('uploadImage');
       uploadProfilePhoto(file).then((res) => {
+        this.clearLoading('uploadImage');
         if(res.ok) {
           completeOnboarding('personalize-swipes');
           window.analytics.sendEvent('Profile photo updated', {});
