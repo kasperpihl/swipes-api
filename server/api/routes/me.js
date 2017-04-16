@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   object,
+  string,
 } from 'valjs';
 import {
   valBody,

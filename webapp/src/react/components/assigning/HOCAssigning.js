@@ -11,29 +11,14 @@ import Assigning from './Assigning';
 class HOCAssigning extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      stateAssignees: this.getStateAssignees(props),
-    };
     setupDelegate(this);
     this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onAssign'), this);
-  }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.assignees !== this.props.assignees) {
-      this.setState({ stateAssignees: this.getStateAssignees(nextProps) });
-    }
   }
   getStateAssignees(props) {
     const { users, myId, goal, stepId, assignees } = props;
     let stateAssignees = List([]);
 
-    if (goal && stepId) {
-      stateAssignees = goal.getIn(['steps', stepId, 'assignees']);
-
-      if (!stateAssignees) {
-        const helper = new GoalsUtil(goal);
-        stateAssignees = List(helper.getAllInvolvedAssignees());
-      }
-    } else if (assignees && !stateAssignees.size) {
+    if (assignees && !stateAssignees.size) {
       stateAssignees = List(assignees);
     }
 
@@ -52,14 +37,15 @@ class HOCAssigning extends PureComponent {
       rounded,
       tooltip,
       size,
+      users,
       tooltipAlign,
     } = this.props;
-    const { stateAssignees } = this.state;
+    // const { stateAssignees } = this.state;
 
     return (
       <Assigning
         maxImages={maxImages}
-        assignees={stateAssignees}
+        assignees={users}
         onClick={this.onClick(index)}
         rounded={rounded}
         tooltip={tooltip}
@@ -71,10 +57,10 @@ class HOCAssigning extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
+  const users = List(ownProps.assignees).map((aId) => state.getIn(['users', aId]));
+
   return {
-    goal: state.getIn(['goals', ownProps.goalId]),
-    users: state.get('users'),
-    me: state.get('me'),
+    users,
     myId: state.getIn(['me', 'id']),
   };
 }
@@ -83,11 +69,9 @@ const { object, oneOfType, number, string, bool, array, func } = PropTypes;
 
 HOCAssigning.propTypes = {
   tooltip: func,
-  goal: map,
   myId: string,
   users: map,
-  assignees: oneOfType([list, array]),
-  stepId: string,
+  assignees: oneOfType([list, array]).isRequired,
   index: oneOfType([number, string]),
   delegate: object,
   maxImages: number,

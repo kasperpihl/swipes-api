@@ -18,7 +18,7 @@ export default class Analytics {
     }
     this.store = store;
     this.userId = null;
-    bindAll(this, ['storeChange']);
+    bindAll(this, ['storeChange', 'sendEvent']);
     store.subscribe(this.storeChange);
 
   }
@@ -54,9 +54,6 @@ export default class Analytics {
 
     }
 
-  }
-  signedUp(uId) {
-    mixpanel.alias(uId);
   }
   storeChange() {
     const state = this.store.getState();

@@ -55,7 +55,7 @@ class HOCProfile extends PureComponent {
       uploadProfilePhoto(file).then((res) => {
         if(res.ok) {
           completeOnboarding('personalize-swipes');
-          window.analytics.sendEvent('Profile photo updated');
+          window.analytics.sendEvent('Profile photo updated', {});
         }
       });
     }
@@ -96,6 +96,7 @@ HOCProfile.propTypes = {
 const ConnectedHOCProfile = connect(mapStateToProps, {
   updateProfile: ca.me.updateProfile,
   uploadProfilePhoto: ca.me.uploadProfilePhoto,
+  completeOnboarding: ca.onboarding.complete,
 })(HOCProfile);
 
 export default ConnectedHOCProfile;

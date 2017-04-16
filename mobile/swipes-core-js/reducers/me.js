@@ -19,7 +19,10 @@ export default function me(state = initialState, action) {
     case 'me.uploadProfilePhoto':
     case 'me.updateProfile':
     case 'profile_updated': {
-      return state.mergeIn(['profile'], fromJS(payload.profile));
+      if(payload.user_id === state.get('id')){
+        return state.mergeIn(['profile'], fromJS(payload.profile));
+      }
+      return state;
     }
     case 'organizations.promoteToAdmin':
     case 'organizations.demoteAnAdmin': {
