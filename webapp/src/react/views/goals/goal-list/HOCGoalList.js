@@ -135,7 +135,7 @@ class HOCGoalList extends PureComponent {
     }, (title) => {
       if (title && title.length) {
         this.setLoading('add');
-        this.tabDidChange(2);
+        this.tabDidChange(3);
         createGoal(title, convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
           if (res && res.ok) {
             this.clearLoading('add');
