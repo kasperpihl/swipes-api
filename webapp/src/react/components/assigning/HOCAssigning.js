@@ -70,7 +70,7 @@ const { object, oneOfType, number, string, bool, array, func } = PropTypes;
 HOCAssigning.propTypes = {
   tooltip: func,
   myId: string,
-  users: map,
+  users: list,
   assignees: oneOfType([list, array]).isRequired,
   index: oneOfType([number, string]),
   delegate: object,

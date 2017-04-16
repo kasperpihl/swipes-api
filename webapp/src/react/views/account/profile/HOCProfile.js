@@ -33,13 +33,22 @@ class HOCProfile extends PureComponent {
         return ''
     }
   }
+  getKeyForServer(key) {
+    switch(key){
+      case 'firstName': return 'first_name';
+      case 'lastName': return 'last_name';
+      default:
+        return key;
+    }
+  }
   onBlur(key) {
     const { updateProfile } = this.props;
     const value = this.state[key];
     const orgVal = this.valueForKey(key);
     if(value !== orgVal){
       this.setLoading(key);
-      updateProfile({ [key]: value }).then((res) => {
+      const serverKey = this.getKeyForServer(key);
+      updateProfile({ [serverKey]: value }).then((res) => {
         if(res && res.ok) {
           this.clearLoading(key, 'success', 1500);
         } else {
