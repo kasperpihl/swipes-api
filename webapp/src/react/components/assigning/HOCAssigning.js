@@ -74,6 +74,7 @@ function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
     users: state.get('users'),
+    me: state.get('me'),
     myId: state.getIn(['me', 'id']),
   };
 }

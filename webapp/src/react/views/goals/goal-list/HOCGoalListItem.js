@@ -135,8 +135,7 @@ class HOCGoalListItem extends PureComponent {
     return (
       <div className="goal-list-item__assigning">
         <HOCAssigning
-          stepId={helper.getCurrentStepId()}
-          goalId={goal.get('id')}
+          assignees={helper.getCurrentAssignees()}
           maxImages={2}
           rounded
           delegate={this}

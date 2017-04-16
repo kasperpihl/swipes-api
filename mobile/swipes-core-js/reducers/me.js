@@ -16,6 +16,7 @@ export default function me(state = initialState, action) {
     case 'settings_updated': {
       return state.mergeIn(['settings'], fromJS(payload.settings));
     }
+    case 'me.uploadProfilePhoto':
     case 'me.updateProfile':
     case 'profile_updated': {
       return state.mergeIn(['profile'], fromJS(payload.profile));

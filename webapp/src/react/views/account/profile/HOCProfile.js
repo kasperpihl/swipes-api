@@ -49,13 +49,14 @@ class HOCProfile extends PureComponent {
     }
   }
   onImageChange(e) {
-    console.log('hi', e);
-    console.log(e.target.files[0]);
-    const { uploadProfilePhoto } = this.props;
+    const { uploadProfilePhoto, completeOnboarding } = this.props;
     const file = e.target.files[0];
     if(file){
       uploadProfilePhoto(file).then((res) => {
-        console.log('response', res);
+        if(res.ok) {
+          completeOnboarding('personalize-swipes');
+          window.analytics.sendEvent('Profile photo updated');
+        }
       });
     }
   }
