@@ -13,6 +13,18 @@
 // Element
 // ======================================================
 
+.spinner {
+	@include size(25px);
+	@include svg-color($blue-100);
+	animation: rotateSpinner 2s linear infinite;
+
+	&__path {
+		stroke-linecap: round;
+    animation: dashSpinner 1.5s ease infinite;
+    stroke-width: 4;
+	}
+}
+
 // containers
 
 .welcome {
@@ -211,4 +223,29 @@
 		#{$b}__continue {
 		}
 	}
+}
+
+// ======================================================
+// Animations
+// ======================================================
+
+@keyframes rotateSpinner {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dashSpinner {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
 }

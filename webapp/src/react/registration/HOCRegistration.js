@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
-import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import Signin from './Signin';
@@ -22,6 +22,7 @@ class HOCRegistration extends Component {
     };
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
     bindAll(this, ['onSignin', 'handleContinue', 'handleButtonClick', 'handleKeyDown']);
+    setupLoading(this);
   }
   componentDidMount() {
     window.analytics.sendEvent('Login opened', {});
@@ -75,19 +76,21 @@ class HOCRegistration extends Component {
     if (this.state.err !== null) {
       this.setState({ errorLabel: null });
     }
+    this.setLoading('signInButton');
     this.props.request('users.signin', data).then((res) => {
       if (!res.ok) {
-        let label = 'Something went wrong :/';
+        let label = '!Something went wrong :/';
 
         if (res.err === "body /users.signup: Invalid object['invitation_code']: Invalid invitation code") {
-          label = 'Invalid invitation code';
+          label = '!Invalid invitation code';
         }
         if (res.err === "body /users.signup: Invalid object['email']: did not match format") {
-          label = 'Not a valid email';
+          label = '!Not a valid email';
         }
-        this.setState({ errorLabel: label });
+        this.clearLoading('signInButton', label);
       } else {
         window.analytics.sendEvent('Logged in', {});
+        this.clearLoading('signInButton');
       }
     });
   }
@@ -104,7 +107,8 @@ class HOCRegistration extends Component {
     );
   }
   renderContent() {
-    const { email, password, errorLabel, showWelcomeMessage } = this.state;
+    const { email, password, showWelcomeMessage } = this.state;
+    const errorLabel = this.getLoading('signInButton').errorLabel;
 
     return (
       <div className="welcome__content">
@@ -118,6 +122,7 @@ class HOCRegistration extends Component {
   }
   renderFooter() {
     const { showWelcomeMessage } = this.state;
+    const isLoading = this.getLoading('signInButton').loading;
     let resetClass = 'welcome__reset';
     let continueClass = 'welcome__continue';
 
@@ -140,9 +145,18 @@ class HOCRegistration extends Component {
           >
             Let’s get started
           </div>
-          <div className="welcome__icon">
-            <Icon icon="ArrowRightLong" className="welcome__svg" />
-          </div>
+
+          {
+            isLoading ? (
+              <svg className="spinner" viewBox="0 0 50 50">
+                <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
+              </svg>
+            ) : (
+              <div className="welcome__icon">
+                <Icon icon="ArrowRightLong" className="welcome__svg" />
+              </div>
+            )
+          }
         </div>
       </div>
     );
