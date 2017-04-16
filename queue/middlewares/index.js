@@ -225,7 +225,7 @@ const settings_updated = [
   notify.notifyCommonRethinkdb,
 ];
 
-const profile_updated = noUserNotifyWrapper([
+const profile_updated = notifyWrapper([
   me.meProfileUpdatedNotificationData,
   notify.notifyAllInCompany,
 ]);
