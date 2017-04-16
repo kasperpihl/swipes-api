@@ -36,10 +36,12 @@ export const request = (options, data) => (d, getState) => {
   if (typeof options !== 'object') {
     command = `${options}`;
     options = null;
+  } else {
+    command = options.command;
   }
   options = options || {};
 
-  const body = Object.assign({}, {
+  let body = Object.assign({}, {
     token: getState().getIn(['connection', 'token']),
   }, data);
   let state = getState();
@@ -55,14 +57,24 @@ export const request = (options, data) => (d, getState) => {
   const extraHeaders = (window.getHeaders && window.getHeaders()) || {};
 
   const headers = new Headers({
-    'Content-Type': 'application/json',
     ...extraHeaders,
   });
+
+  if(!options.formData) {
+    body = JSON.stringify(body);
+    headers.append('Content-Type', 'application/json');
+  } else {
+    const values = Object.entries(body);
+    body = new FormData();
+    values.forEach(([k, v]) => {
+      body.append(k, v);
+    })
+  }
 
   const serData = {
     method: 'POST',
     headers,
-    body: JSON.stringify(body),
+    body,
   };
   return new Promise((resolve, reject) => {
     fetch(apiUrl + command, serData)

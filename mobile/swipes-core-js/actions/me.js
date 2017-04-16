@@ -20,10 +20,12 @@ export const uploadProfilePhoto = photo => (d, getState) => {
   const formData = new FormData();
   formData.append('token', token);
   formData.append('photo', photo);
-  return fetch(`${window.__API_URL__}/v1/me.uploadProfilePhoto`, {
-    method: 'POST',
-    body: formData
-  });
+  return d(request({
+    command: 'me.uploadProfilePhoto',
+    formData: true,
+  }, {
+    photo,
+  }));
 }
 
 export const updateSettings = s => request('me.updateSettings', { settings: s });

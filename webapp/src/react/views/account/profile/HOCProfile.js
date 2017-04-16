@@ -54,7 +54,9 @@ class HOCProfile extends PureComponent {
     const { uploadProfilePhoto } = this.props;
     const file = e.target.files[0];
     if(file){
-      uploadProfilePhoto(file);
+      uploadProfilePhoto(file).then((res) => {
+        console.log('response', res);
+      });
     }
   }
   onChange(key, val) {
