@@ -5,6 +5,16 @@ import jwt from 'jwt-simple';
 import {
   SwipesError,
 } from '../middlewares/swipes-error';
+const getNewestElectronVersion = () => '0.0.5';
+const getDownloadLinks = () => {
+  if(config.get('env') === 'staging'){
+  }
+  return {
+    darwin: 'https://www.dropbox.com/s/wbdmnfbvxjn19gz/SwipesInstaller.pkg?dl=1',
+    win32: 'https://www.dropbox.com/s/cxo9ifcvm2hhgbq/Swipes-win32-ia32.zip?dl=1',
+    linux: 'https://www.dropbox.com/s/jngyb7q1zc1lq8c/Swipes-linux-ia32.zip?dl=1',
+  };
+}
 
 const generateSlackLikeId = (type = '', number = 8) => {
   const id = randomstring.generate(number).toUpperCase();
@@ -202,6 +212,8 @@ const valBody = (schema, middleware) => (req, res, next) => {
 export {
   generateSlackLikeId,
   camelCaseToUnderscore,
+  getNewestElectronVersion,
+  getDownloadLinks,
   sendResponse,
   valResponseAndSend,
   valLocals,
