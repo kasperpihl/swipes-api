@@ -212,6 +212,8 @@ const valBody = (schema, middleware) => (req, res, next) => {
 export {
   generateSlackLikeId,
   camelCaseToUnderscore,
+  getNewestElectronVersion,
+  getDownloadLinks,
   sendResponse,
   valResponseAndSend,
   valLocals,

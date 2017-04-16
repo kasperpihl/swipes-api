@@ -8,7 +8,7 @@ import {
 import {
   getNewestElectronVersion,
   getDownloadLinks,
-} from '../utils';
+} from '../api/utils';
 
 const parseVersionString = (version) => {
   const x = version.split('.');
