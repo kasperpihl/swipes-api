@@ -14,22 +14,6 @@ class HOCAssigning extends PureComponent {
     setupDelegate(this);
     this.onClick = setupCachedCallback(this.callDelegate.bind(null, 'onAssign'), this);
   }
-  getStateAssignees(props) {
-    const { users, myId, goal, stepId, assignees } = props;
-    let stateAssignees = List([]);
-
-    if (assignees && !stateAssignees.size) {
-      stateAssignees = List(assignees);
-    }
-
-    if (stateAssignees.includes(myId)) {
-      stateAssignees = stateAssignees.filter(uId => uId !== myId).insert(0, myId);
-    }
-
-    stateAssignees = stateAssignees.map(uID => users.get(uID)).filter(u => !!u);
-
-    return stateAssignees;
-  }
   render() {
     const {
       maxImages,
@@ -57,11 +41,15 @@ class HOCAssigning extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  const users = List(ownProps.assignees).map((aId) => state.getIn(['users', aId]));
+  let users = List(ownProps.assignees);
+  const myId = state.getIn(['me', 'id']);
+  if(users.contains(myId)){
+    users = users.filter(uId => uId !== myId).insert(0, myId);
+  }
+  users = users.map((aId) => state.getIn(['users', aId]));
 
   return {
     users,
-    myId: state.getIn(['me', 'id']),
   };
 }
 
