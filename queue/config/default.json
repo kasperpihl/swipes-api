@@ -19,7 +19,7 @@
     "apiKey": "HUs9tnqPhIvJgEXDFAXgrw"
   },
   "s3BucketUrl": "https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/",
-  "port": 5005,
+  "port": 6000,
   "cors": "*",
   "valjs_debug": true,
   "host": "https://staging.swipesapp.com/"

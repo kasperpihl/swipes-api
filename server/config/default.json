@@ -42,7 +42,7 @@
   "amazonQueue": {
     "accessKeyId": "AKIAJYHNP3XSVYNJK7OA",
     "secretAccessKey": "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",
-    "queueHost": "http://localhost:5005"
+    "queueHost": "http://localhost:6000"
   },
   "awsS3": {
     "accessKey": "AKIAJ7OR4Q4MA5VBPTKA",
