@@ -131,6 +131,24 @@
     @include size(72px);
     @include flexContainer('row', center, center);
     @include font(21px, $deepBlue-100, 500);
+    border-radius: 50%;
+  }
+
+  .profile-header__upload-overlay {
+    @include size(100%);
+    @include flexContainer('row', center, center);
+    border-radius: 50%;
+    background-color: rgba($deepBlue-100, .6);
+    position: absolute;
+    left: 0; top: 0;
+    opacity: 0;
+    transition: .25s ease;
+    pointer-events: none;
+
+    .profile-header__svg {
+      @include size(24px);
+      @include svg-color(white);
+    }
   }
 
   &__file-input {
@@ -144,6 +162,7 @@
     @include size(72px);
     @include flexContainer('row', center, center);
     background-color: rgba($deepBlue-100, .6);
+    border-radius: 50%;
     opacity: 0;
     pointer-events: none;
     position: absolute;
@@ -203,6 +222,7 @@
     }
 
     &:disabled {
+      pointer-events: all !important;
       background-color: transparent;
       transition: .15s ease;
     }
@@ -325,22 +345,6 @@
       @include svg-color($deepBlue-80);
     }
 
-    .profile-header__upload-overlay {
-      @include size(100%);
-      @include flexContainer('row', center, center);
-      border-radius: 50%;
-      background-color: rgba($deepBlue-100, .6);
-      position: absolute;
-      left: 0; top: 0;
-      opacity: 0;
-      transition: .25s ease;
-
-      .profile-header__svg {
-        @include size(24px);
-        @include svg-color(white);
-      }
-    }
-
     #{$b}__edit-button {
 
       span {
@@ -370,13 +374,11 @@
     }
   }
 
-  &--editing {
-
-    .profile-header__profile-image:hover {
-      .profile-header__upload-overlay {
-        opacity: 1;
-        transition: .25s ease;
-      }
+  .profile-header__profile-image:hover {
+    .profile-header__upload-overlay {
+      opacity: 1;
+      transition: .25s ease;
+      pointer-events: all;
     }
   }
 }

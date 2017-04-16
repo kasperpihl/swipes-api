@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import ReactTextarea from 'react-textarea-autosize';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
@@ -20,11 +20,13 @@ class Profile extends PureComponent {
 
     setupDelegate(this);
     this.onChangeCached = setupCachedCallback(this.onChange, this);
+    this.onEditCached = setupCachedCallback(this.enableEditMode, this);
     this.onBlurCached = setupCachedCallback(this.callDelegate.bind(null, 'onBlur'));
     this.handleEditState = this.handleEditState.bind(this);
     this.onImageChange = this.callDelegate.bind(null, 'onImageChange');
 
-    this.onUploadClick = this.onUploadClick.bind(this);
+
+    bindAll(this, ['enableEditMode', 'onUploadClick']);
   }
   onChange(key, e) {
     if (key === 'bio') {
@@ -35,7 +37,17 @@ class Profile extends PureComponent {
   onUploadClick() {
     console.log('clicky');
     this.refs.imageUpload.click();
+  }
+  enableEditMode(refKey) {
+    const { editing } = this.state;
 
+    if (!editing) {
+      this.setState({ editing: true }, () => {
+        if (this.refs[refKey]) {
+          this.refs[refKey].focus();
+        }
+      });
+    }
   }
   handleEditState() {
     const { editing } = this.state;
@@ -78,61 +90,30 @@ class Profile extends PureComponent {
   }
   renderProfileImage() {
     const { me, getLoading } = this.props;
-    const { editing } = this.state;
     const isLoading = getLoading('uploadImage').loading;
-
-    if (!editing) {
-      const profilePic = msgGen.users.getPhoto(me);
-      if (profilePic) {
-        return (
-          <div className="profile-header__profile-image">
-            <img src={profilePic} role="presentation" />
-          </div>
-        );
-      }
-      const initials = msgGen.users.getInitials(me);
-
-      return <div className="profile-header__initials">{initials}</div>;
-    }
-    const profilePic = msgGen.users.getPhoto(me);
-    if (profilePic) {
-      return (
-        <div className="profile-header__profile-image">
-          <img src={profilePic} role="presentation" />
-          <div className="profile-header__upload-overlay" onClick={this.onUploadClick}>
-            <Icon icon="Plus" className="profile-header__svg" />
-          </div>
-          <input
-            onChange={this.onImageChange}
-            type="file"
-            accept="image/x-png,image/jpeg"
-            className="profile-header__file-input"
-            ref="imageUpload"
-          />
-          <div className={`profile-header__upload ${isLoading ? 'profile-header__upload--show' : ''}`}>
-            <svg className="spinner" viewBox="0 0 50 50">
-              <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
-            </svg>
-          </div>
-        </div>
-      );
-    }
-
     const initials = msgGen.users.getInitials(me);
+    const profilePic = msgGen.users.getPhoto(me);
+
     return (
       <div className="profile-header__profile-image">
-        <div className="profile-header__initials">{initials}</div>
+
+        { profilePic ? (
+          <img src={profilePic} role="presentation" />
+        ) : (
+          <div className="profile-header__initials">{initials}</div>
+        )}
+
         <div className="profile-header__upload-overlay" onClick={this.onUploadClick}>
           <Icon icon="Plus" className="profile-header__svg" />
         </div>
         <input
           onChange={this.onImageChange}
           type="file"
-          className="profile-header__file-input"
           accept="image/x-png,image/jpeg"
+          className="profile-header__file-input"
           ref="imageUpload"
         />
-        <div className={`profile-header__upload ${isLoading ? 'profile-header__upload--show' : ''}`}>
+        <div className={`profile-header__loading ${isLoading ? 'profile-header__loading--show' : ''}`}>
           <svg className="spinner" viewBox="0 0 50 50">
             <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
           </svg>
@@ -154,8 +135,9 @@ class Profile extends PureComponent {
       <div className="profile-header">
         {this.renderProfileImage()}
         <div className="profile-header__form">
-          <div className="profile-header__row">
+          <div className="profile-header__row" onClick={this.onEditCached('firstNameInput')}>
             <input
+              ref="firstNameInput"
               type="text"
               value={firstName}
               onChange={this.onChangeCached('firstName')}
@@ -168,8 +150,9 @@ class Profile extends PureComponent {
               {this.renderLoaderForKey('firstName')}
             </div>
           </div>
-          <div className="profile-header__row">
+          <div className="profile-header__row" onClick={this.onEditCached('lastNameInput')}>
             <input
+              ref="lastNameInput"
               type="text"
               value={lastName}
               onChange={this.onChangeCached('lastName')}
@@ -202,9 +185,10 @@ class Profile extends PureComponent {
 
     return (
       <div className="profile-form">
-        <div className="profile-form__row">
+        <div className="profile-form__row" onClick={this.onEditCached('roleInput')}>
           <div className="profile-form__title">ROLE</div>
           <input
+            ref="roleInput"
             type="text"
             value={role}
             onChange={this.onChangeCached('role')}
@@ -217,9 +201,10 @@ class Profile extends PureComponent {
             {this.renderLoaderForKey('role')}
           </div>
         </div>
-        <div className="profile-form__row">
+        <div className="profile-form__row" onClick={this.onEditCached('bioInput')}>
           <div className="profile-form__title">BIO</div>
           <ReactTextarea
+            ref="bioInput"
             minRows={1}
             maxRows={6}
             value={bio}
