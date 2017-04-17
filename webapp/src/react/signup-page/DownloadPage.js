@@ -34,33 +34,36 @@ class DownloadPage extends PureComponent {
     return this[type]();
   }
   renderWindows(firstType) {
+    const { downloadLinks } = this.props;
     if(firstType === 'renderWindows') {
       return undefined;
     }
     return (
-      <a href="#" className="device">
+      <a href={downloadLinks.win32} target="_blank" className="device">
         <Icon icon="WindowsDevice" className="device-svg" />
         <p>Windows</p>
       </a>
     );
   }
   renderMac(firstType) {
+    const { downloadLinks } = this.props;
     if(firstType === 'renderMac') {
       return undefined;
     }
     return (
-      <a href="#" className="device">
+      <a href={downloadLinks.darwin} target="_blank" className="device">
         <Icon icon="MacDevice" className="device-svg" />
         <p>MacOS</p>
       </a>
     );
   }
   renderLinux(firstType) {
+    const { downloadLinks } = this.props;
     if(firstType === 'renderLinux') {
       return undefined;
     }
     return (
-      <a href="#" className="device">
+      <a href={downloadLinks.linux} target="_blank" className="device">
         <Icon icon="LinuxDevice" className="device-svg" />
         <p>Linux</p>
       </a>

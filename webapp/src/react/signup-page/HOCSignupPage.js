@@ -44,6 +44,7 @@ class HOCSignupPage extends PureComponent {
         const email = msgGen.users.getEmail(me);
         this.setState({
           forceDownload: !!me.get('activated'),
+          downloadLinks: res.downloadLinks,
           organization: fromJS(res.organization),
           invitedBy: fromJS(res.invited_by),
           me,
@@ -83,7 +84,7 @@ class HOCSignupPage extends PureComponent {
     });
   }
   renderContent() {
-    const { formData, organization, invitedBy, hasLoaded, forceDownload } = this.state;
+    const { formData, organization, invitedBy, hasLoaded, forceDownload, downloadLinks } = this.state;
     const { token } = this.props;
 
     if (this.getLoading('signup').loading || !hasLoaded) {
@@ -96,7 +97,9 @@ class HOCSignupPage extends PureComponent {
 
     if (forceDownload || token) {
       return (
-        <DownloadPage />
+        <DownloadPage
+          downloadLinks={downloadLinks}
+        />
       );
     }
     return (

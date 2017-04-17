@@ -20,6 +20,7 @@ import {
 import {
   valLocals,
   generateSlackLikeId,
+  getDownloadLinks,
 } from '../../utils';
 import {
   SwipesError,
@@ -95,6 +96,7 @@ const organizationsGetInfoFromInvitationToken = valLocals('organizationsGetInfoF
         me,
         organization,
         invited_by,
+        downloadLinks: getDownloadLinks(),
       });
 
       return next();

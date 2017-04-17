@@ -11,7 +11,7 @@ const getDownloadLinks = () => {
   }
   return {
     darwin: 'https://www.dropbox.com/s/wbdmnfbvxjn19gz/SwipesInstaller.pkg?dl=1',
-    win32: 'https://www.dropbox.com/s/cxo9ifcvm2hhgbq/Swipes-win32-ia32.zip?dl=1',
+    win32: 'https://www.dropbox.com/s/9zjvzmgsevhaipv/Swipes-win32-ia32.zip?dl=1',
     linux: 'https://www.dropbox.com/s/jngyb7q1zc1lq8c/Swipes-linux-ia32.zip?dl=1',
   };
 }

@@ -153,6 +153,7 @@ notAuthed.all('/organizations.getInfoFromInvitationToken',
   organizationsGetInfoFromInvitationToken,
   valResponseAndSend({
     me: object.require(),
+    downloadLinks: object.require(),
     organization: object.require(),
     invited_by: object.require(),
   }),
