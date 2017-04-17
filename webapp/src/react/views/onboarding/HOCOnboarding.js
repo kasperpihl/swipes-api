@@ -13,7 +13,6 @@ class HOCOnboarding extends PureComponent {
     this.state = {};
   }
   onClick(i, e) {
-    console.log('i', i, e);
     const { browser, target, userOnboarding, complete, openSecondary } = this.props;
     openSecondary({
       id: 'Preview',

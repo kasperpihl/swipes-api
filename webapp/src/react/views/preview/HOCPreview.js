@@ -29,7 +29,6 @@ class HOCPreviewModal extends PureComponent {
     setupLoading(this);
     if(props.preview) {
       this.state.preview = props.preview.toJS();
-      console.log('prev', props.preview);
       this.state.loading = false;
     } else {
       this.fetch(props.loadPreview);
