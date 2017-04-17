@@ -30,7 +30,9 @@ export default function me(state = initialState, action) {
       return state.mergeIn(['versionInfo'], fromJS(payload));
     }
     case types.SET_STATUS: {
-      return state.set('status', payload.status).set('nextRetry', payload.nextRetry);
+      return state.set('status', payload.status)
+                  .set('nextRetry', payload.nextRetry)
+                  .set('reconnectAttempt', payload.reconnectAttempt);
     }
     // ======================================================
     // Authorization methods

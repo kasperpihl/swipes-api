@@ -59,7 +59,7 @@ class HOCTopbar extends PureComponent {
   }
 
   renderStatusIndicator() {
-    const { status, versionInfo, lastConnect, token } = this.props;
+    const { status, versionInfo, lastConnect, token, reconnectAttempt } = this.props;
     if (!token) {
       return undefined;
     }
@@ -81,10 +81,15 @@ class HOCTopbar extends PureComponent {
       statusMessage = 'New version available';
       btn = this.renderReloadBtn();
     } else if (status === 'offline' && lastConnect) {
-      statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
-      btn = this.renderRetryBtn();
+      if(reconnectAttempt > 4) {
+        statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
+        btn = this.renderRetryBtn();
+      }
+
     } else if (status === 'connecting' && lastConnect) {
-      statusMessage = 'Connecting...';
+      if(reconnectAttempt > 4) {
+        statusMessage = 'Connecting...';
+      }
     }
 
     if (statusMessage) {
@@ -169,6 +174,7 @@ function mapStateToProps(state) {
   return {
     nextRetry: state.getIn(['connection', 'nextRetry']),
     versionInfo: state.getIn(['connection', 'versionInfo']),
+    reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),
     isMaximized: state.getIn(['main', 'isMaximized']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
     lastConnect: state.getIn(['connection', 'lastConnect']),
