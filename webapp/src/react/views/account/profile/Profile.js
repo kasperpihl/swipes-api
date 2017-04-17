@@ -8,7 +8,7 @@ import SWView from 'SWView';
 import Icon from 'Icon';
 import Button from 'Button';
 
-import './styles/Profile.scss';
+import './styles/profile.scss';
 
 class Profile extends PureComponent {
   constructor(props) {
