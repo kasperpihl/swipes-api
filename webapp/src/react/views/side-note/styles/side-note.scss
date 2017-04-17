@@ -4,8 +4,7 @@
 .side-note {
   $b: &;
   @include size(100%);
-  @include flex(center, flex-start);
-  @include flex(column);
+  @include flexContainer('column', center, top);
 
   &__header {
     @include size(100%, auto);

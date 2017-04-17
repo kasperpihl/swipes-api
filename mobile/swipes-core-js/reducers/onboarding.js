@@ -1,8 +1,8 @@
-import * as types from 'constants'
-import { fromJS, Map } from 'immutable'
+import * as types from '../constants';
+import { fromJS, Map } from 'immutable';
 const initialState = fromJS({});
 
-export default function onboarding (state = initialState, action) {
+export default function onboarding(state = initialState, action) {
   const { payload, type } = action;
   switch (action.type) {
     case 'init': {
@@ -13,6 +13,6 @@ export default function onboarding (state = initialState, action) {
       return onboarding;
     }
     default:
-      return state
+      return state;
   }
 }

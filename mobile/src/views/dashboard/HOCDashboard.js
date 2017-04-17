@@ -14,7 +14,7 @@ class HOCDashboard extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['notifications', 'sent', 'activity'],
+      tabs: ['received', 'sent', 'activity'],
       tabIndex: 0,
       hasLoaded: false,
     };
@@ -152,6 +152,7 @@ class HOCDashboard extends PureComponent {
   }
   render() {
     let { notifications: n } = this.state;
+
     if (n) {
       n = n.map((n, i) => msgGen.notifications.getNotificationWrapper(n).set('i', i));
     }

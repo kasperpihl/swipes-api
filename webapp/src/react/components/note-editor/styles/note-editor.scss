@@ -8,6 +8,8 @@
 }
 
 .DraftEditor-root {
+  @include widthSpecifications(initial, 650px);
+  margin: 0 auto;
   position: relative;
   text-align: initial;
 
