@@ -20,7 +20,7 @@ class HOCGoalList extends PureComponent {
     super(props);
     setupDelegate(this);
     this.state = {
-      tabs: ['current', 'starred', 'upcoming', 'unassigned', 'default'],
+      tabs: ['current', 'starred', 'unassigned', 'default'],
       tabIndex: 0,
       showFilter: false,
       filterProp: fromJS([
@@ -135,7 +135,7 @@ class HOCGoalList extends PureComponent {
     }, (title) => {
       if (title && title.length) {
         this.setLoading('add');
-        this.tabDidChange(3);
+        this.tabDidChange(this.state.tabs.indexOf('unassigned'));
         createGoal(title, convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
           if (res && res.ok) {
             this.clearLoading('add');

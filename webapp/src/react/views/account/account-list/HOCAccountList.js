@@ -39,6 +39,11 @@ class HOCAccountList extends PureComponent {
           title: 'Payment',
           subtitle: 'Manage payment',
         },
+        {
+          id: 'FAQ',
+          title: 'FAQ',
+          subtitle: 'Get help from our FAQ'
+        }
       ],
     };
   }
@@ -61,9 +66,11 @@ class HOCAccountList extends PureComponent {
     });
   }
   onClick(section) {
-    console.log('section', section);
-    const { navPush } = this.props;
-    navPush({
+    const { navPush, browser, target } = this.props;
+    if(section.id === 'FAQ'){
+      return browser(target, 'http://support.swipesapp.com');
+    }
+    return navPush({
       id: section.id,
       title: section.title,
     });
@@ -96,5 +103,6 @@ function mapStateToProps() {
 
 export default connect(mapStateToProps, {
   signout: a.main.signout,
+  browser: a.main.browser,
   confirm: a.menus.confirm,
 })(HOCAccountList);

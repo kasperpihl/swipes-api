@@ -107,7 +107,7 @@ export const selectUser = (options, callback) => (d, getState) => {
   ).toArray();
 
   const allUsers = () => [
-    { id: 'any', title: 'Any one assigned' },
+    { id: null, title: 'Any one assigned' },
     { id: 'none', title: 'No one assigned' },
   ].concat(sortedUsers(state.get('users')).map(u => resultForUser(u)));
 
