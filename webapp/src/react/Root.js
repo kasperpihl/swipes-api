@@ -28,6 +28,9 @@ class Root extends PureComponent {
   checkLoginStatus() {
     const { location, token, isHydrated, history } = this.props;
     const path = location.pathname;
+    if(path !== '/signup' && !window.ipcListener.isElectron && isHydrated && token) {
+      history.push('/signup');
+    }
     if (path === '/' && isHydrated && !token) {
       history.push('/login');
     }

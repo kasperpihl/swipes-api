@@ -34,15 +34,21 @@ export const openSlackIn = id => ({ type: types.SLACK_OPEN_IN, payload: { id } }
 // ======================================================
 // Browser
 // ======================================================
-export const browser = (from, url, onLoad) => dp => dp(a.navigation.openSecondary(from, {
-  id: 'Browser',
-  showTitleInCrumb: true,
-  title: 'Browser',
-  props: {
-    url,
-    onLoad,
-  },
-}));
+export const browser = (from, url, onLoad) => (dp) => {
+  if(!window.ipcListener.isElectron){
+    return window.open(url);
+  }
+  return dp(a.navigation.openSecondary(from, {
+    id: 'Browser',
+    showTitleInCrumb: true,
+    title: 'Browser',
+    props: {
+      url,
+      onLoad,
+    },
+  }))
+
+};
 
 // ======================================================
 // Account related
