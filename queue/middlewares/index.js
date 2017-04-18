@@ -89,6 +89,18 @@ const goal_notify_email = [
 ];
 
 const user_invitation_email = [
+  (req, res, next) => {
+    const {
+      inviter_user_id,
+    } = res.locals;
+
+    res.locals.user_ids = [inviter_user_id];
+    res.locals.fields = ['profile'];
+
+    return next();
+  },
+  users.usersGetMultipleWithFields,
+  organizations.organizationsGetSingle,
   emails.usersInvitationEmail,
 ];
 
