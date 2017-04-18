@@ -45,10 +45,10 @@ class HOCMilestoneList extends PureComponent {
 
   render() {
     const { milestones } = this.props;
-    console.log(milestones.toJS());
     return (
       <MilestoneList
         delegate={this}
+        {...this.bindLoading()}
       />
     );
   }

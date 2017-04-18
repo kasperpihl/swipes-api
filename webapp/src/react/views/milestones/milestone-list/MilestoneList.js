@@ -19,12 +19,14 @@ class MilestoneList extends PureComponent {
   componentDidMount() {
   }
   renderHeader() {
+    const { getLoading } = this.props;
     return (
       <div className="milestone-list__header">
         <HOCHeaderTitle title="Milestone">
           <Button
-            text="Create milestone"
+            text="Create"
             primary
+            {...getLoading('add')}
             onClick={this.onAddMilestone}
           />
         </HOCHeaderTitle>

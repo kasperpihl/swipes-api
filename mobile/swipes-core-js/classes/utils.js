@@ -335,7 +335,7 @@ export function setupLoading(ctx) {
     }
   };
   let setClearTimer;
-  function getAllLoading() {
+  function bindLoading() {
     return {
       isLoading: this.isLoading,
       getLoading: this.getLoading,
@@ -386,6 +386,6 @@ export function setupLoading(ctx) {
   ctx.isLoading = isLoading.bind(ctx);
   ctx.getLoading = getLoading.bind(ctx);
   ctx.clearLoading = clearLoading.bind(ctx);
-  ctx.getAllLoading = getAllLoading.bind(ctx);
+  ctx.bindLoading = bindLoading.bind(ctx);
 
 }
