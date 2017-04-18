@@ -4,10 +4,10 @@ import { UPDATE_NOTIFICATION_COUNTER } from 'swipes-core-js/constants';
 
 const initialState = fromJS({
   primary: {
-    id: 'Goals',
+    id: 'Onboarding',
     stack: [{
-      id: 'Goals',
-      title: 'Goals',
+      id: 'Onboarding',
+      title: 'Onboarding',
     }],
   },
   secondary: {
