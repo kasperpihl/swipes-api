@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
@@ -12,8 +12,15 @@ class HOCGoalItem extends PureComponent {
     super(props);
     this.state = {};
 
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+
     this.openOverview = this.openOverview.bind(this);
     setupDelegate(this);
+  }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
   }
   openOverview() {
     const { goal } = this.props;
@@ -51,9 +58,16 @@ class HOCGoalItem extends PureComponent {
     );
   }
   render() {
+    const { goal } = this.props;
+    let rowStyles = styles.row;
+
+    if (goal.get('starred')) {
+      rowStyles = [styles.row, styles.starredRow];
+    }
+
     return (
       <FeedbackButton onPress={this.openOverview}>
-        <View style={styles.row}>
+        <View style={rowStyles}>
           {this.renderContent()}
           {this.renderAssignees()}
           <View style={styles.seperator} />
@@ -82,6 +96,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'stretch',
+  },
+  starredRow: {
+    backgroundColor: colors.blue5,
   },
   seperator: {
     width: viewSize.width - 30,

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from './actions';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
+import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar, ScrollView, Text } from 'react-native';
 import Swiper from 'react-native-swiper';
 import AndroidBackButton from 'react-native-android-back-button';
 import LinearGradient from 'react-native-linear-gradient';
@@ -9,6 +9,7 @@ import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
 import DevTools from './components/dev-tools/DevTools';
 import HOCContextButton from './components/context-button/HOCContextButton';
+import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
 import ActionModal from './modals/ActionModal';
@@ -72,7 +73,7 @@ class App extends PureComponent {
       return undefined;
     }
 
-    return (
+    /* return (
       <View style={styles.app}>
         <AndroidBackButton onPress={this.backNavigation} />
         <Swiper
@@ -93,6 +94,25 @@ class App extends PureComponent {
 
         <HOCContextButton />
         <ActionModal />
+      </View>
+    );*/
+
+    return (
+      <View style={styles.app}>
+        <View style={styles.scroller}>
+          <ScrollView
+            horizontal
+            pagingEnabled
+            ref={(snapScroll) => { this.snapScroll = snapScroll; }}
+            showsHorizontalScrollIndicator={false}
+            style={styles.scroller}
+          >
+            <HOCViewController sliderIndex={0} />
+            <HOCViewController sliderIndex={1} />
+            <HOCViewController sliderIndex={2} />
+          </ScrollView>
+        </View>
+        <View style={styles.bottomBar} />
       </View>
     );
   }
@@ -129,7 +149,24 @@ const styles = StyleSheet.create({
   app: {
     flex: 1,
     backgroundColor: colors.bgColor,
+    flexDirection: 'column',
+  },
+  scroller: {
+    flex: 1,
+    backgroundColor: colors.bgColor,
     flexDirection: 'row',
+  },
+  bottomBar: {
+    width: viewSize.width,
+    height: 60,
+    backgroundColor: 'green',
+  },
+  page: {
+    width: viewSize.width,
+    backgroundColor: 'red',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   gradient: {
     position: 'absolute',

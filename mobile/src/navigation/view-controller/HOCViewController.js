@@ -4,6 +4,7 @@ import * as a from '../../actions';
 import { NavigationExperimental, View, StyleSheet } from 'react-native';
 import * as views from '../../views';
 import HOCBreadCrumbs from '../../components/breadcrumbs/HOCBreadCrumbs';
+import { viewSize } from '../../utils/globalStyles';
 
 const {
   CardStack: NavigationCardStack,
@@ -11,12 +12,14 @@ const {
 
 const styles = StyleSheet.create({
   viewController: {
+    width: viewSize.width,
     flex: 1,
   },
   content: {
     flex: 1,
   },
 });
+
 
 class HOCViewController extends PureComponent {
   constructor(props, context) {
@@ -60,6 +63,7 @@ class HOCViewController extends PureComponent {
   render() {
     return (
       <NavigationCardStack
+        style={styles.viewController}
         enableGestures={false}
         direction="vertical"
         onNavigateBack={this.navPop}

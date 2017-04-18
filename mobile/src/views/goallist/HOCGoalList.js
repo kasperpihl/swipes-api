@@ -11,7 +11,7 @@ class HOCGoalList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['current', 'upcoming', 'unassigned'],
+      tabs: ['current', 'starred', 'unassigned'],
       tabIndex: 0,
       hasLoaded: false,
     };
@@ -27,6 +27,8 @@ class HOCGoalList extends Component {
     if (this.props.isActive) {
       this.renderActionButtons();
     }
+
+    console.log('didmount');
   }
   componentDidUpdate(prevProps) {
     if (!this.state.hasLoaded) {
@@ -61,19 +63,18 @@ class HOCGoalList extends Component {
     const { filters } = this.props;
     const { tabIndex, tabs } = this.state;
     const newTabs = [];
-
-    tabs.forEach((t, i) => {
-      const goals = filters.getIn([tabs[i], 'goals']);
-      const tabName = `${t} (${goals.size})`;
-
-      newTabs.push(tabName);
-    });
-
     return (
       <HOCHeader
-        title="Goal list"
-        tabs={newTabs}
-        currentTab={this.state.tabIndex}
+        title="Goals"
+        tabs={tabs.map((tId, i) => {
+          let title = filters.getIn([tId, 'title']);
+          const size = filters.getIn([tId, 'goals']).size;
+          if (i < (tabs.length - 1) && size) {
+            title += ` (${size})`;
+          }
+          return title;
+        })}
+        currentTab={tabIndex}
         delegate={this}
       />
     );
@@ -92,18 +93,34 @@ class HOCGoalList extends Component {
     );
   }
   renderList() {
+    const { filters, goals, starredGoals: pG } = this.props;
     const { tabIndex, tabs, hasLoaded } = this.state;
-    const { filters } = this.props;
 
     if (!hasLoaded) {
       return this.renderListLoader();
     }
 
-    const goals = filters.getIn([tabs[tabIndex], 'goals']);
+    let goalFilter = filters.get(tabs[tabIndex]);
+
+    goalFilter = goalFilter.set('goals', goalFilter.get('goals').sort((g1, g2) => {
+      const g1PinI = pG.indexOf(g1);
+      const g2PinI = pG.indexOf(g2);
+
+      if (g1PinI > g2PinI) {
+        return -1;
+      }
+
+      if (g2PinI > g1PinI) {
+        return 1;
+      }
+
+      return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']));
+    }));
 
     return (
       <ImmutableListView
-        immutableData={goals}
+        style={styles.list}
+        immutableData={goalFilter.get('goals')}
         renderRow={gId => this.renderGoal(gId, tabs[tabIndex])}
         renderFooter={this.renderFooter}
       />
@@ -141,7 +158,9 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
+    goals: state.get('goals'),
     filters: state.getIn(['filters', 'goals']),
+    starredGoals: state.getIn(['me', 'settings', 'starred_goals']),
   };
 }
 

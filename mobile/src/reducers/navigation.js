@@ -17,7 +17,7 @@ const initialState = fromJS({
       routes: [
         {
           id: 'Dashboard',
-          title: 'Dashboard',
+          title: 'Notifications',
         },
       ],
     },
@@ -25,7 +25,7 @@ const initialState = fromJS({
       routes: [
         {
           id: 'GoalList',
-          title: 'Goal list',
+          title: 'Goals',
         },
       ],
     },
@@ -51,9 +51,8 @@ export default function navigation(state = initialState, action) {
       return state.updateIn(['sliders', payload.sliderIndex, 'routes'], (routes) => {
         if (typeof payload.targetIndex === 'number') {
           return routes.slice(0, payload.targetIndex + 1);
-        } else {
-          return routes.butLast();
         }
+        return routes.butLast();
       });
     }
     default:

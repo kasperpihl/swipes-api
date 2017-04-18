@@ -151,7 +151,8 @@ class HOCDashboard extends PureComponent {
     });
   }
   render() {
-    let { notifications: n } = this.state;
+    const { filters } = this.props;
+    let { notifications: n, tabs } = this.state;
 
     if (n) {
       n = n.map((n, i) => msgGen.notifications.getNotificationWrapper(n).set('i', i));
@@ -163,7 +164,13 @@ class HOCDashboard extends PureComponent {
         <Dashboard
           notifications={n}
           delegate={this}
-          tabs={this.state.tabs}
+          tabs={tabs.map((t, i) => {
+            let title = filters.getIn([t, 'title']);
+            if (filters.getIn([t, 'unread'])) {
+              title += ` (${filters.getIn([t, 'unread'])})`;
+            }
+            return title;
+          })}
           tabIndex={this.state.tabIndex}
           hasLoaded={this.state.hasLoaded}
         />
