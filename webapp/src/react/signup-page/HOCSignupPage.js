@@ -44,7 +44,7 @@ class HOCSignupPage extends PureComponent {
         const email = msgGen.users.getEmail(me);
         this.setState({
           forceDownload: !!me.get('activated'),
-          downloadLinks: res.downloadLinks,
+          downloadLinks: res.download_links,
           organization: fromJS(res.organization),
           invitedBy: fromJS(res.invited_by),
           me,

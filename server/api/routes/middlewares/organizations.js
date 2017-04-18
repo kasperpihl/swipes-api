@@ -96,7 +96,7 @@ const organizationsGetInfoFromInvitationToken = valLocals('organizationsGetInfoF
         me,
         organization,
         invited_by,
-        downloadLinks: getDownloadLinks(),
+        download_links: getDownloadLinks(),
       });
 
       return next();
