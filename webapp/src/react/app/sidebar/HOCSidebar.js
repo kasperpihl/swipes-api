@@ -16,8 +16,8 @@ class HOCSidebar extends PureComponent {
       navItems: [
         { id: 'GoalList', svg: 'Goals' },
         { id: 'Notifications', svg: 'Notification' },
-        // { id: 'Onboarding', svg: 'Onboarding' },
-        { id: 'MilestoneList', svg: 'Milestones' },
+        { id: 'Onboarding', svg: 'Onboarding' },
+        // { id: 'MilestoneList', svg: 'Milestones' },
 
         // { id: 'Find', svg: 'Find' },
         // { id: 'Slack', svg: 'Hashtag' },

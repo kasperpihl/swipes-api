@@ -38,7 +38,6 @@ const notAuthed = express.Router();
 
 authed.all('/organizations.create',
   valBody({
-    user_id: string.require(),
     organization_name: string.require(),
   }),
   organizationsCreate,

@@ -66,7 +66,7 @@ class Onboarding extends PureComponent {
       }
 
       return (
-        <div className={className} key={`onboarding-${i}`} onClick={this.onClick(i)}>
+        <div className={className} key={`onboarding-${i}`} onClick={this.onClick(i, item)}>
           <div className="onboarding__indicator">
             <Icon icon="Checkmark" className="onboarding__svg" />
           </div>

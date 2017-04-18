@@ -16,26 +16,23 @@ const milestonesCreate = valLocals('milestonesCreate', {
   user_id: string.require(),
   title: string.require(),
   organization_id: string.require(),
-  description: string,
   due_date: string.format('iso8601'),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     title,
     organization_id,
-    description,
     due_date,
   } = res.locals;
   const milestone = {
     id: generateSlackLikeId('M'),
     title,
     organization_id,
-    description: description || '',
     due_date: due_date || null,
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
-    archived: false,
+    closed: false,
   };
 
   setLocals({
@@ -58,10 +55,6 @@ const milestonesInsert = valLocals('milestonesInsert', {
     .then((obj) => {
       setLocals({
         eventType: 'milestone_created',
-        milestone: {
-          id: milestone.id,
-          title: milestone.title,
-        },
       });
 
       return next();

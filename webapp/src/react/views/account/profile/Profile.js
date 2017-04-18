@@ -169,7 +169,7 @@ class Profile extends PureComponent {
     );
   }
   renderForm() {
-    const { role, bio, email } = this.props;
+    const { role, bio, email, me } = this.props;
     const { bioCounter, editing } = this.state;
     let counterClass = 'profile-form__counter';
     let disabled = true;
@@ -193,7 +193,7 @@ class Profile extends PureComponent {
             onChange={this.onChangeCached('role')}
             onBlur={this.onBlurCached('role')}
             className="profile-form__input"
-            placeholder="Write your role"
+            placeholder={`What is your role at ${msgGen.users.getOrganizationName(me)}?`}
             disabled={disabled}
           />
           <div className="profile-form__loader">
@@ -210,7 +210,7 @@ class Profile extends PureComponent {
             onChange={this.onChangeCached('bio')}
             onBlur={this.onBlurCached('bio')}
             className="profile-form__textarea"
-            placeholder="What are you doing at Swipes?"
+            placeholder="Share with the team a bit about yourself - What are you working on? What do you love doing?"
             disabled={disabled}
           />
           <div className="profile-form__loader">

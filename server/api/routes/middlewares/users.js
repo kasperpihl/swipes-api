@@ -54,7 +54,6 @@ const defaultSettings = {
       'create-account': true,
     },
   },
-  pinned_goals: [],
   starred_goals: [],
 };
 const userAvailability = valLocals('userAvailability', {
@@ -450,7 +449,7 @@ const userGetInfoForToken = valLocals('userGetInfoForToken', {
   const {
     userId,
   } = res.locals;
-  const platform = req.header('sw-platform');
+  const platform = req.header('sw-platform') || 'browser';
   const ip = getClientIp(req);
   const revoked = false;
 

@@ -169,10 +169,10 @@ const dbUsersAddOrganization = funcWrap([
   }
 
   const q =
-    r.table('organizations')
-      .get(organizationId)
+    r.table('users')
+      .get(user_id)
       .update({
-        users: r.row('users').append(user_id),
+        organizations: r.row('organizations').default([]).setUnion([organizationId]),
       });
 
   return db.rethinkQuery(q);

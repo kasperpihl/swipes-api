@@ -25,7 +25,6 @@ authed.all('/milestones.create',
   valBody({
     title: string.require(),
     organization_id: string.require(),
-    description: string,
     due_date: string.format('iso8601'),
   }),
   milestonesCreate,
@@ -33,10 +32,7 @@ authed.all('/milestones.create',
   milestonesCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    milestone: object.as({
-      id: string.require(),
-      title: string.require(),
-    }).require(),
+    milestone: object.require(),
   }));
 
 authed.all('/milestones.archive',

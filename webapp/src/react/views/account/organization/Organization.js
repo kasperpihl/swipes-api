@@ -117,12 +117,12 @@ class Organization extends PureComponent {
   }
   renderHeader() {
     const { organization } = this.props;
-    const title = `Manage ${organization.get('name')}`;
+    const title = `Team account`;
 
     return (
       <div className="orgnization__header">
         <HOCHeaderTitle title={title} subtitle="Invite your team and manage access" />
-        <Section title="Manage team" />
+        <Section title="Manage account" />
       </div>
     );
   }

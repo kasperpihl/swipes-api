@@ -51,6 +51,10 @@ export default class Users {
     const user = this.getUser(userId);
     return user.getIn(['profile', 'bio']) || '';
   }
+  getOrganizationName(userId) {
+    const user = this.getUser(userId);
+    return user.getIn(['organizations', 0, 'name']);
+  }
   getInitials(userId){
     const user = this.getUser(userId);
     let initials = this.getFirstName(user).substring(0, 1);

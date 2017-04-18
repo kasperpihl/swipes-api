@@ -21,28 +21,28 @@ class HOCAccountList extends PureComponent {
       sections: [
         {
           id: 'Profile',
-          title: 'My Profile',
-          subtitle: 'Change your profile picture and correct your surname',
+          title: 'My profile',
+          subtitle: 'Customize your profile with a photo, share your role in the team and edit your information',
         },
         {
           id: 'Organization',
-          title: 'Manage Team',
-          subtitle: 'Invite new team members and manage current ones',
+          title: 'Team account',
+          subtitle: 'Invite new team members and manage user permissions',
         },
         {
           id: 'Settings',
-          title: 'Change Settings',
-          subtitle: 'Manage integrations',
+          title: 'My settings',
+          subtitle: 'Set up your email preferences and other settings in the app',
         },
         {
           id: 'Payment',
-          title: 'Payment',
-          subtitle: 'Manage payment',
+          title: 'Billing',
+          subtitle: 'Set up and manage the payment card for the account',
         },
         {
           id: 'FAQ',
-          title: 'FAQ',
-          subtitle: 'Get help from our FAQ'
+          title: 'Help Center',
+          subtitle: 'See answers to frequently asked questions and learn more about using the Swipes Workspace'
         }
       ],
     };

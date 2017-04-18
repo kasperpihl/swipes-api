@@ -87,8 +87,8 @@ class HOCGoalOverview extends PureComponent {
     if (att && selection.toString().length === 0) {
       window.analytics.sendEvent('Flag opened', {
         From: 'Latest Update',
-        Type: att.getIn([id, 'link', 'service', 'type']),
-        Service: att.getIn([id, 'link', 'service', 'name']),
+        Type: att.getIn(['link', 'service', 'type']),
+        Service: att.getIn(['link', 'service', 'name']),
       });
       preview(target, att);
     }

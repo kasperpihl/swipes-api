@@ -12,25 +12,31 @@ class HOCOnboarding extends PureComponent {
     super(props);
     this.state = {};
   }
-  onClick(i, e) {
-    const { browser, target, userOnboarding, complete, openSecondary } = this.props;
-    openSecondary({
-      id: 'Preview',
-      title: 'Preview',
-      props: {
-        preview: {
-          header: {
-            title: 'Welcome video',
-          },
-          file: {
-            content_type: 'video/quicktime',
-            url: 'https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1491855333-UVZWCJDHK/Thread%20concept.mov'
-          }
-        }
-      }
-    })
-    //browser(target, 'http://youtube.com');
-    //complete(userOnboarding.getIn(['order', i]));
+  onClick(i, item, e) {
+    const { browser, target, navPush, complete } = this.props;
+
+    if(item.get('id') === 'personalize-swipes') {
+      openSecondary({
+        id: 'Profile',
+        title: 'Profile',
+      });
+    } else if(item.get('id') === 'create-goal') {
+      openSecondary({
+        id: 'GoalList',
+        title: 'Goals',
+      });
+    } else if(item.get('id') === 'invite-team') {
+      openSecondary({
+        id: 'Organization',
+        title: 'Team account',
+      });
+    }
+    else if(item.get('id') === 'watch-introduction-video') {
+      complete(item.get('id'));
+      const videoUrl = 'https://youtu.be/X0VZOCBZhik?autoplay=1';
+      browser(target, videoUrl);
+    }
+
   }
   render() {
     const { onboarding, userOnboarding } = this.props;
