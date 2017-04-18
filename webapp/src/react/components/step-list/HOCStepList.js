@@ -176,7 +176,7 @@ class HOCStepList extends PureComponent {
     return (
       <StepList
         currentStepIndex={helper.getNumberOfCompletedSteps()}
-        loadingState={this.getAllLoading()}
+        {...this.getAllLoading()}
         delegate={this}
         steps={steps}
         tooltip={tooltip}

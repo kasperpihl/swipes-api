@@ -284,7 +284,7 @@ class HOCGoalOverview extends PureComponent {
         myId={me.get('id')}
         tabIndex={tabIndex}
         delegate={this}
-        loadingState={this.getAllLoading()}
+        {...this.getAllLoading()}
       />
     );
   }

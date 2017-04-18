@@ -92,7 +92,7 @@ class Notify extends PureComponent {
     );
   }
   renderFooter() {
-    const { loadingState, notify } = this.props;
+    const { getLoading, notify } = this.props;
 
 
     return (
@@ -104,7 +104,7 @@ class Notify extends PureComponent {
           <Button
             text="Send"
             onClick={this.onSubmit}
-            {...loadingState.get('button')}
+            {...getLoading('button')}
             primary
             disabled={!notify.get('assignees').size}
           />

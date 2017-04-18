@@ -202,7 +202,7 @@ class HOCNotify extends PureComponent {
         delegate={this}
         replyObj={replyObj}
         notify={notify}
-        loadingState={this.getAllLoading()}
+        {...this.getAllLoading()}
       />
     );
   }

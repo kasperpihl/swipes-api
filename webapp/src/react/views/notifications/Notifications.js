@@ -18,10 +18,10 @@ export default class Notifications extends Component {
     this.onScroll = this.callDelegate.bind(null, 'onScroll');
   }
   renderHeader() {
-    const { loadingState, tabIndex } = this.props;
-    const loading = loadingState.get('all') && loadingState.get('all').loading;
+    const { isLoading, tabIndex } = this.props;
+
     const button = tabIndex === 0 ? (
-      <Button loading={loading} text="Mark all as read" onClick={this.onMarkAll} />
+      <Button loading={isLoading('all')} text="Mark all as read" onClick={this.onMarkAll} />
     ) : null;
 
     return (

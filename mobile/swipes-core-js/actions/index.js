@@ -5,6 +5,7 @@ import * as files from './files';
 import * as filters from './filters';
 import * as goals from './goals';
 import * as me from './me';
+import * as milestones from './milestones';
 import * as notes from './notes';
 import * as notifications from './notifications';
 import * as onboarding from './onboarding';
@@ -21,6 +22,7 @@ export {
   filters,
   goals,
   me,
+  milestones,
   notes,
   notifications,
   onboarding,

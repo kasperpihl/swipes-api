@@ -1,136 +1,66 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import SWView from 'src/react/app/view-controller/SWView';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import { connect } from 'react-redux';
-import * as actions from 'actions';
-import Button from 'Button';
-import MilestoneItem from './MilestoneItem';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import { Creatable } from 'react-select';
 import 'react-select/dist/react-select.css';
-import './styles/milestone-list.scss';
-
+import MilestoneList from './MilestoneList';
 
 class HOCMilestoneList extends PureComponent {
   constructor(props) {
     super(props);
-    this.onAddGoals = this.onAddGoals.bind(this);
-    const { goals } = props;
-    this.state = {
-      options: goals.map((g) => ({label: g.get('title'), value: g.get('id')})).toArray(),
-      value: undefined
-    };
+    setupLoading(this);
   }
   componentDidMount() {
   }
-  onAddGoals(e) {
-    console.log('here baby!');
-
-  }
-  renderSelect(){
-    const { value, options } = this.state;
-    return (
-      <Creatable
-        options={options}
-        value={value}
-        isLoading={true}
-        isOptionUnique={() => true}
-        isValidNewOption={() => true}
-        promptTextCreator={(string) => {
-          if(!string || !string.length) {
-            return 'Close this menu';
+  onAddMilestone(e) {
+    const { inputMenu, createMilestone } = this.props;
+    const options = this.getOptionsForE(e);
+    inputMenu({
+      ...options,
+      placeholder: 'Name of the milestone',
+      buttonLabel: 'Create Milestone',
+    }, (title) => {
+      if (title && title.length) {
+        this.setLoading('add');
+        createMilestone(title).then((res) => {
+          if (res && res.ok) {
+            this.clearLoading('add', 'Added milestone', 3000);
+            window.analytics.sendEvent('Milestone created', {});
           } else {
-            return `Create new goal "${string}"`;
+            this.clearLoading('add', '!Something went wrong');
           }
-        }}
-      />
-    );
+        });
+      }
+    });
   }
-  renderHeader() {
-    return (
-      <div className="milestone-list__header">
-        {this.renderSelect()}
-      </div>
-    );
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
   }
-  renderMilestones() {
-    const { users } = this.props;
-    const kasper = users.get('UVZWCJDHK');
-    const yana = users.get('UB9BXJ1JB');
-    const stefan = users.get('URU3EUPOE');
 
-    const milestones = [
-      {
-        title: 'Design Trips App',
-        daysLeft: '30d left',
-        goals: {
-          total: 4,
-          completed: 3,
-        },
-        status: {
-          src: msgGen.users.getPhoto(kasper),
-          message: 'Kasper completed goal "Notifications"',
-          timeAgo: '2d ago',
-        },
-      },
-      {
-        title: 'Launch Trips',
-        daysLeft: '60d left',
-        goals: {
-          total: 5,
-          completed: 1,
-        },
-        status: {
-          src: msgGen.users.getPhoto(yana),
-          message: 'Yana completed goal "Launch strategy"',
-          timeAgo: 'Just now',
-        },
-      },
-      {
-        title: 'Release Trips iOS v1.0',
-        daysLeft: '60d left',
-        goals: {
-          total: 6,
-          completed: 1,
-        },
-        status: {
-          src: msgGen.users.getPhoto(stefan),
-          message: 'Stefan completed steps "Specs"',
-          timeAgo: '33d ago',
-        },
-      },
-    ];
-
-    const renderMilestoneItems = milestones.map((m, i) => (
-      <MilestoneItem
-        key={i}
-        title={m.title}
-        daysLeft={m.daysLeft}
-        goals={m.goals}
-        status={m.status}
-      />
-    ));
-
-    return renderMilestoneItems;
-  }
   render() {
+    const { milestones } = this.props;
+    console.log(milestones.toJS());
     return (
-      <SWView header={this.renderHeader()}>
-        <div className="milestone-list">
-          {this.renderMilestones()}
-        </div>
-      </SWView>
+      <MilestoneList
+        delegate={this}
+      />
     );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    users: state.get('users'),
-    goals: state.get('goals'),
+    milestones: state.get('milestones'),
   };
 }
 
 export default connect(mapStateToProps, {
-  setStatus: actions.main.setStatus,
+  inputMenu: a.menus.input,
+  createMilestone: ca.milestones.create,
 })(HOCMilestoneList);
