@@ -260,7 +260,7 @@ export {
   goal_loaded_way,
   step_completed,
   milestone_created,
-  milestone_archived,
+  milestone_closed,
   way_created,
   way_archived,
   notifications_seen_history_updated,
