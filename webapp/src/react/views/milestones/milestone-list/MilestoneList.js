@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
@@ -11,8 +11,8 @@ import './styles/milestone-list.scss';
 
 class MilestoneList extends PureComponent {
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
     setupDelegate(this);
     this.callDelegate.bindAll('onAddGoal', 'onAddMilestone');
   }
@@ -40,11 +40,11 @@ class MilestoneList extends PureComponent {
           {/* {this.renderMilestones()} */}
         </div>
       </SWView>
-    )
+    );
   }
 }
 
-export default MilestoneList
+export default MilestoneList;
 
 // const { string } = PropTypes;
 
