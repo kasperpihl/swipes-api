@@ -75,6 +75,7 @@ authed.all('/goals.create',
     }).require(),
     organization_id: string.require(),
     note_content: object.require(),
+    milestone_id: string,
   }),
   mapLocals('note_content', (setLocals, note_content) => {
     setLocals({ text: note_content });

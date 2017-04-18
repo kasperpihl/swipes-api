@@ -28,12 +28,13 @@ const goalsCreate = valLocals('goalsCreate', {
     title: string.min(1).require(),
   }),
   organization_id: string.require(),
-  attachment: object.require(),
+  milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
     organization_id,
+    milestone_id = null,
   } = res.locals;
 
   goal.id = generateSlackLikeId('G');
@@ -53,6 +54,7 @@ const goalsCreate = valLocals('goalsCreate', {
   goal.step_order = [];
   goal.attachments = {};
   goal.attachment_order = [];
+  goal.milestone_id = milestone_id;
 
   goal.status = {
     current_step_id: null,
