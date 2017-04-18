@@ -27,7 +27,7 @@ const milestonesCreatedNotificationData = (req, res, next) => {
 
   return next();
 };
-const milestonesArchivedNotificationData = (req, res, next) => {
+const milestonesClosedNotificationData = (req, res, next) => {
   const {
     milestone,
   } = res.locals;
@@ -43,5 +43,5 @@ const milestonesArchivedNotificationData = (req, res, next) => {
 export {
   milestonesGetSingle,
   milestonesCreatedNotificationData,
-  milestonesArchivedNotificationData,
+  milestonesClosedNotificationData,
 };

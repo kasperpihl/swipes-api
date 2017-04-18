@@ -63,21 +63,21 @@ const milestonesInsert = valLocals('milestonesInsert', {
       return next(err);
     });
 });
-const milestonesArchive = valLocals('milestonesArchive', {
+const milestonesClose = valLocals('milestonesClose', {
   id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     id,
   } = res.locals;
   const properties = {
-    archived: true,
+    closed: true,
     updated_at: r.now(),
   };
 
   dbMilestonesUpdateSingle({ id, properties })
     .then(() => {
       setLocals({
-        eventType: 'milestone_archived',
+        eventType: 'milestone_closed',
         id,
       });
 
@@ -113,7 +113,7 @@ const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
 
   return next();
 });
-const milestonesArchiveQueueMessage = valLocals('milestonesArchiveQueueMessage', {
+const milestonesCloseQueueMessage = valLocals('milestonesCloseQueueMessage', {
   user_id: string.require(),
   id: string.require(),
   eventType: string.require(),
@@ -140,7 +140,7 @@ const milestonesArchiveQueueMessage = valLocals('milestonesArchiveQueueMessage',
 export {
   milestonesCreate,
   milestonesInsert,
-  milestonesArchive,
+  milestonesClose,
   milestonesCreateQueueMessage,
-  milestonesArchiveQueueMessage,
+  milestonesCloseQueueMessage,
 };

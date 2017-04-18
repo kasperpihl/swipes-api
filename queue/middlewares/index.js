@@ -138,9 +138,9 @@ const milestone_created = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const milestone_archived = notifyWrapper([
+const milestone_closed = notifyWrapper([
   milestones.milestonesGetSingle,
-  milestones.milestonesArchivedNotificationData,
+  milestones.milestonesClosedNotificationData,
   notify.notifyAllInCompany,
 ]);
 
