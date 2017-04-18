@@ -17,7 +17,7 @@ class HOCSidebar extends PureComponent {
         { id: 'GoalList', svg: 'Goals' },
         { id: 'Notifications', svg: 'Notification' },
         // { id: 'Onboarding', svg: 'Onboarding' },
-        { id: 'MilestoneList', svg: 'Milestones' },
+        // { id: 'MilestoneList', svg: 'Milestones' },
 
         // { id: 'Find', svg: 'Find' },
         // { id: 'Slack', svg: 'Hashtag' },
@@ -69,7 +69,7 @@ class HOCSidebar extends PureComponent {
         return id;
     }
   }
-  getRemainingOnboarding(){
+  getRemainingOnboarding() {
     const { me } = this.props;
     const order = me.getIn(['settings', 'onboarding', 'order']);
     const completed = me.getIn(['settings', 'onboarding', 'completed']);
@@ -78,7 +78,7 @@ class HOCSidebar extends PureComponent {
   renderItem(item) {
     const { navId, counters } = this.props;
     let counter = counters.get(item.id);
-    if(item.id === 'Onboarding') {
+    if (item.id === 'Onboarding') {
       counter = this.getRemainingOnboarding();
     }
     let className = 'sidebar__item';
