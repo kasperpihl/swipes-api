@@ -90,8 +90,6 @@ notAuthed.all('/users.signup',
   notificationsPushToQueue,
   userGetInfoForToken,
   userSignUp,
-  xendoSignUpQueueMessage,
-  notificationsPushToQueue,
   mapLocals(
     ['userId'],
     (setLocals, userId) => {
