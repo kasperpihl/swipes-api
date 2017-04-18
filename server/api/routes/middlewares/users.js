@@ -561,11 +561,15 @@ const usersCreateInvitationToken = valLocals('usersCreateInvitationToken', {
   return next();
 });
 const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessage', {
+  user_id: string.require(),
+  organization_id: string.require(),
   email: string.require(),
   invitationToken: string.require(),
   user: object.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
+    organization_id,
     email,
     invitationToken,
     user,
@@ -574,9 +578,11 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
   const userId = user.id;
   const first_name = user.profile.first_name;
   const queueMessage = {
+    organization_id,
     email,
     invitationToken,
     first_name,
+    inviter_user_id: user_id,
     event_type: 'user_invitation_email',
   };
 

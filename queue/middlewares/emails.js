@@ -185,12 +185,32 @@ const usersInvitationEmail = (req, res, next) => {
     email,
     invitationToken,
     first_name,
+    usersWithFields,
+    organization,
   } = res.locals;
+  const inviter = usersWithFields[0];
+  const inviterFirstName = inviter.profile.first_name;
   const host = config.get('host');
-  const template_name = 'fake-invitation';
+  const template_name = 'welcome-invitation';
   const template_content = [{
-    name: 'invitation_link',
-    content: `<a href=${host}signup?invitation_token=${invitationToken}>CLIK FOR A CAKE</a>`,
+    name: '',
+    content: '',
+  }];
+  const merge_vars = [{
+    rcpt: email,
+    vars: [{
+      name: 'NAME',
+      content: first_name,
+    }, {
+      name: 'NAME_INVITER',
+      content: inviterFirstName,
+    }, {
+      name: 'COMPANY_NAME',
+      content: organization.name,
+    }, {
+      name: 'INVITATION_LINK',
+      content: `${host}signup?invitation_token=${invitationToken}`,
+    }],
   }];
   const to = [
     {
@@ -199,10 +219,11 @@ const usersInvitationEmail = (req, res, next) => {
       type: 'to',
     },
   ];
-  const subject = 'Fake invitation email';
+  const subject = `${inviterFirstName} invited you to join the team on Swipes Workspace`;
   const message = {
     to,
     subject,
+    merge_vars,
     from_email: 'noreply@swipesapp.com',
     from_name: 'Swipes Team',
     headers: {
