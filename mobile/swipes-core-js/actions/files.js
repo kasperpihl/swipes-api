@@ -5,14 +5,14 @@ export const upload = (targetId, files) => (dispatch, getState) => new Promise((
   const file = files[0];
   const fileName = file.name;
   const orgId = getState().getIn(['me', 'organizations', 0, 'id']);
-  let s3Path = '';
+  let s3Url = '';
   dispatch(a.api.request('files.signedUrl', {
     organization_id: orgId,
     file_name: fileName,
     file_type: file.type,
   })).then((res) => {
     const signedUrl = res.signed_url;
-    s3Path = res.s3_path;
+    s3Url = res.s3_url;
 
     return fetch(signedUrl, {
       method: 'PUT',
@@ -28,7 +28,7 @@ export const upload = (targetId, files) => (dispatch, getState) => new Promise((
         target_id: targetId,
         organization_id: orgId,
         file_name: fileName,
-        s3_path: s3Path,
+        s3_url: s3Url,
       }))
       .then((res) => {
         resolve(res);

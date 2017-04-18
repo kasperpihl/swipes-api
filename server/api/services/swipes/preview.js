@@ -1,9 +1,7 @@
-import config from 'config';
 import {
   dbFilesGetSingle,
 } from '../../routes/middlewares/db_utils/files';
 
-const s3Congig = config.get('awsS3');
 const elementsData = (title) => {
   return {
     header: {
@@ -41,8 +39,7 @@ const preview = ({ auth_data, type, itemId, user }, callback) => {
   if (type === 'file') {
     return dbFilesGetSingle({ id: itemId })
       .then((file) => {
-        const s3Url = s3Congig.url;
-        const url = `${s3Url}${file.s3_path}`;
+        const url = file.s3_url;
         const mapElements = elementsData(file.file_name);
         const mapFile = fileData(file.content_type, url);
         const mapButtons = buttonsData(file.file_name, url);

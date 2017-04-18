@@ -42,7 +42,7 @@ authed.all('/files.signedUrl',
   filesCreateS3Path,
   filesGetSignedUrl,
   valResponseAndSend({
-    s3_path: string.require(),
+    s3_url: string.require(),
     signed_url: string.require(),
   }));
 
@@ -51,7 +51,7 @@ authed.all('/files.upload',
     target_id: string.require(),
     organization_id: string.require(),
     file_name: string.require(),
-    s3_path: string.require(),
+    s3_url: string.require(),
   }),
   filesAddToFilesTable,
   linksCreate,

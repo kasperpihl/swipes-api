@@ -65,7 +65,7 @@ const filesGetSignedUrl = valLocals('filesGetSignedUrl', {
     }
 
     setLocals({
-      s3_path: s3Path,
+      s3_url: `${awsConfig.url}${s3Path}`,
       signed_url: data,
     });
 
@@ -76,20 +76,20 @@ const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
   user_id: string.require(),
   organization_id: string.require(),
   file_name: string.require(),
-  s3_path: string.require(),
+  s3_url: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     organization_id,
     file_name,
-    s3_path,
+    s3_url,
   } = res.locals;
   const fileId = generateSlackLikeId('F', 10);
   const nameArr = file_name.split('.');
   const ext = nameArr[nameArr.length - 1];
   const contentType = mime.lookup(ext) || null;
 
-  dbFilesAdd({ user_id, organization_id, file_name, s3_path, fileId, contentType })
+  dbFilesAdd({ user_id, organization_id, file_name, s3_url, fileId, contentType })
     .then((results) => {
       const changes = results.changes[0];
 
