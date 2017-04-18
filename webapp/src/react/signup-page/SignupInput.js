@@ -87,6 +87,7 @@ class SignupInput extends PureComponent {
           onBlur={this.floatBlur}
           onChange={this.onChangeCached(inputKey)}
           className="floating-input__input"
+          autoComplete="off"
         />
         <label htmlFor={inputKey}>{placeholder}</label>
 
