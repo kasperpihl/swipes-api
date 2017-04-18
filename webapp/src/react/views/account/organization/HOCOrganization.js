@@ -169,7 +169,7 @@ class HOCOrganization extends PureComponent {
     return (
       <Organization
         delegate={this}
-        {...this.getAllLoading()}
+        {...this.bindLoading()}
         firstNameVal={firstNameVal}
         emailVal={emailVal}
         organization={organization}

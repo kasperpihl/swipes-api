@@ -81,7 +81,7 @@ class HOCProfile extends PureComponent {
     return (<Profile
       me={me}
       delegate={this}
-      {...this.getAllLoading()}
+      {...this.bindLoading()}
       firstName={firstName}
       lastName={lastName}
       role={role}
