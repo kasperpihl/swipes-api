@@ -23,7 +23,7 @@ class MilestoneList extends PureComponent {
     const { getLoading } = this.props;
     return (
       <div className="milestone-list__header">
-        <HOCHeaderTitle title="Milestone">
+        <HOCHeaderTitle title="Milestones">
           <Button
             text="Create"
             primary
@@ -32,29 +32,25 @@ class MilestoneList extends PureComponent {
           />
         </HOCHeaderTitle>
 
-        <TabBar tabs={['Open', 'Closed']} activeTab={0} />
+        <TabBar tabs={['Open', 'Closed (coming soon)']} activeTab={0} />
       </div>
     );
+  }
+  renderList() {
+    const { milestones, delegate } = this.props;
+    return milestones.map((m) => (
+      <HOCMilestoneItem
+        key={m.get('id')}
+        milestone={m}
+        delegate={delegate}
+      />
+    )).toArray();
   }
   render() {
     return (
       <SWView noframe header={this.renderHeader()}>
         <div className="milestone-list">
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
-          <HOCMilestoneItem />
+          {this.renderList()}
         </div>
       </SWView>
     );

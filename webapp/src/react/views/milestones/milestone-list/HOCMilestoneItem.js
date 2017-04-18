@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import Icon from 'Icon';
@@ -12,14 +12,17 @@ class HOCMilestoneItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+    setupDelegate(this, props.milestone.get('id'));
+    this.callDelegate.bindAll('onOpenMilestone');
   }
   componentDidMount() {
   }
   render() {
+    const { milestone } = this.props;
     return (
-      <div className="milestone">
+      <div className="milestone" onClick={this.onOpenMilestone}>
         <div className="milestone__seperator" />
-        <div className="milestone__title">A milestone with many words in the title</div>
+        <div className="milestone__title">{milestone.get('title')}</div>
         <div className="milestone__subtitle">6/9</div>
         <div className="milestone__progress">
           <Icon icon="MilestoneProgress" className="milestone__svg milestone__svg--bg" />
@@ -51,7 +54,8 @@ class HOCMilestoneItem extends PureComponent {
 HOCMilestoneItem.propTypes = {};
 
 function mapStateToProps() {
-  return {};
+  return {
+  };
 }
 
 export default connect(mapStateToProps, {

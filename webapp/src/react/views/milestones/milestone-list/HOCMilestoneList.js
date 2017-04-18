@@ -22,6 +22,17 @@ class HOCMilestoneList extends PureComponent {
   }
   componentDidMount() {
   }
+  onOpenMilestone(milestoneId) {
+    const { navPush } = this.props;
+    navPush({
+      id: 'MilestoneOverview',
+      title: 'Milestone overview',
+      props: {
+        milestoneId,
+      }
+    });
+    console.log('open', milestoneId);
+  }
   onAddMilestone(e) {
     const { inputMenu, createMilestone } = this.props;
     const options = this.getOptionsForE(e);
