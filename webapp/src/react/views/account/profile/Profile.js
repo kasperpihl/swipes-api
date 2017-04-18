@@ -35,7 +35,6 @@ class Profile extends PureComponent {
     this.callDelegate('onChange', key, e.target.value);
   }
   onUploadClick() {
-    console.log('clicky');
     this.refs.imageUpload.click();
   }
   enableEditMode(refKey) {

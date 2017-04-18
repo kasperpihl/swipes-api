@@ -134,7 +134,6 @@ class HOCViewController extends PureComponent {
   }
   renderViewControllers() {
     const { navigation } = this.props;
-    this._slackOptions = {};
     const { width, onTop, fullscreen } = this.state;
 
     // Primary view
@@ -187,35 +186,10 @@ class HOCViewController extends PureComponent {
         }
       }
 
-      // If currentView is slack, ignore here and set global settings to pick up
-      if (currentView && currentView.get('id') === 'Slack') {
-        this._slackOptions = {
-          target,
-          style,
-          xClass,
-        };
-        return undefined;
-      }
       return currentView ? this.renderContent(currentView, target, style, xClass) : undefined;
     });
   }
-  renderSlack() {
-    const { target, style, xClass } = this._slackOptions;
-    const classes = xClass || ['view-container--hidden'];
-    return this.renderContent(Map({
-      id: 'Slack',
-      title: 'Slack',
-      props: Map({
-        hidden: !target,
-      }),
-    }), target, style, classes, 'slack');
-  }
-  renderCardHeader(target, canFullscreen, slack) {
-    if (slack) {
-      return (
-        <div className="view-container__header" />
-      );
-    }
+  renderCardHeader(target, canFullscreen) {
     const { fullscreen } = this.state;
     const { navigation } = this.props;
     const closeButton = (target !== 'primary' && !navigation.get('locked')) ? (
@@ -262,7 +236,7 @@ class HOCViewController extends PureComponent {
       </div>
     );
   }
-  renderContent(currentView, target, style, xClasses, slack) {
+  renderContent(currentView, target, style, xClasses) {
     const { navigation } = this.props;
     const View = views[currentView.get('id')] || views['NotFound'];
     let props = {};
@@ -282,13 +256,13 @@ class HOCViewController extends PureComponent {
       onClick = this.onUnderlayCached(target);
     }
     return (
-      <ContextWrapper target={target} key={slack || navigation.getIn([target, 'id'])}>
+      <ContextWrapper target={target} key={navigation.getIn([target, 'id'])}>
         <section
           className={className}
           style={style}
           onClick={onClick}
         >
-          {this.renderCardHeader(target, canFullscreen, slack)}
+          {this.renderCardHeader(target, canFullscreen)}
           <View
             navPop={this.onPopCached(target)}
             navPush={this.onPushCached(target)}
@@ -297,7 +271,7 @@ class HOCViewController extends PureComponent {
             popSecondary={this.onPopCached('secondary')}
             delegate={this}
             target={target}
-            key={slack || navigation.getIn([target, 'id'])}
+            key={navigation.getIn([target, 'id'])}
             {...props}
           />
         </section>
@@ -309,7 +283,6 @@ class HOCViewController extends PureComponent {
     return (
       <div ref="controller" className="view-controller">
         {this.renderViewControllers()}
-        {/* {this.renderSlack()} */}
       </div>
     );
   }

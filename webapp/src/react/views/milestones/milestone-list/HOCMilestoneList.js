@@ -4,22 +4,52 @@ import SWView from 'src/react/app/view-controller/SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
+import Button from 'Button';
 import MilestoneItem from './MilestoneItem';
-
+import { Creatable } from 'react-select';
+import 'react-select/dist/react-select.css';
 import './styles/milestone-list.scss';
 
 
 class HOCMilestoneList extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.onAddGoals = this.onAddGoals.bind(this);
+    const { goals } = props;
+    this.state = {
+      options: goals.map((g) => ({label: g.get('title'), value: g.get('id')})).toArray(),
+      value: undefined
+    };
   }
   componentDidMount() {
+  }
+  onAddGoals(e) {
+    console.log('here baby!');
+
+  }
+  renderSelect(){
+    const { value, options } = this.state;
+    return (
+      <Creatable
+        options={options}
+        value={value}
+        isLoading={true}
+        isOptionUnique={() => true}
+        isValidNewOption={() => true}
+        promptTextCreator={(string) => {
+          if(!string || !string.length) {
+            return 'Close this menu';
+          } else {
+            return `Create new goal "${string}"`;
+          }
+        }}
+      />
+    );
   }
   renderHeader() {
     return (
       <div className="milestone-list__header">
-        <HOCHeaderTitle title="Milestones" />
+        {this.renderSelect()}
       </div>
     );
   }
@@ -38,7 +68,7 @@ class HOCMilestoneList extends PureComponent {
           completed: 3,
         },
         status: {
-          src: kasper.get('profile_pic'),
+          src: msgGen.users.getPhoto(kasper),
           message: 'Kasper completed goal "Notifications"',
           timeAgo: '2d ago',
         },
@@ -51,7 +81,7 @@ class HOCMilestoneList extends PureComponent {
           completed: 1,
         },
         status: {
-          src: yana.get('profile_pic'),
+          src: msgGen.users.getPhoto(yana),
           message: 'Yana completed goal "Launch strategy"',
           timeAgo: 'Just now',
         },
@@ -64,7 +94,7 @@ class HOCMilestoneList extends PureComponent {
           completed: 1,
         },
         status: {
-          src: stefan.get('profile_pic'),
+          src: msgGen.users.getPhoto(stefan),
           message: 'Stefan completed steps "Specs"',
           timeAgo: '33d ago',
         },
@@ -97,6 +127,7 @@ class HOCMilestoneList extends PureComponent {
 function mapStateToProps(state) {
   return {
     users: state.get('users'),
+    goals: state.get('goals'),
   };
 }
 
