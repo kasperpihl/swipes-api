@@ -54,7 +54,6 @@ const defaultSettings = {
       'create-account': true,
     },
   },
-  pinned_goals: [],
   starred_goals: [],
 };
 const userAvailability = valLocals('userAvailability', {
