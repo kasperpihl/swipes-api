@@ -5,8 +5,9 @@ import { setupDelegate } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import Button from 'Button';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import TabBar from 'components/tab-bar/TabBar';
 // import Icon from 'Icon';
-import MilestoneItem from './MilestoneItem';
+import HOCMilestoneItem from './HOCMilestoneItem';
 import './styles/milestone-list.scss';
 
 class MilestoneList extends PureComponent {
@@ -30,14 +31,30 @@ class MilestoneList extends PureComponent {
             onClick={this.onAddMilestone}
           />
         </HOCHeaderTitle>
+
+        <TabBar tabs={['Open', 'Closed']} activeTab={0} />
       </div>
     );
   }
   render() {
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView noframe header={this.renderHeader()}>
         <div className="milestone-list">
-          {/* {this.renderMilestones()} */}
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
+          <HOCMilestoneItem />
         </div>
       </SWView>
     );

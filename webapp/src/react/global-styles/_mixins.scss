@@ -112,6 +112,18 @@
   }
 }
 
+@mixin styleNumberOfFirstElements($numberOfElements) {
+  &:nth-child(-n+#{$numberOfElements}) {
+    @content;
+  }
+}
+
+@mixin styleElementsAfter($numberOfElements) {
+  &:nth-child(n+#{$numberOfElements}) {
+    @content;
+  }
+}
+
 @mixin styleAfterElementNumber($number: 1) {
   $nth: $number + 1;
 

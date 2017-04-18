@@ -3,17 +3,12 @@
 
 .milestone-list {
   @include size(100%, auto);
-  @include flex(flex);
-  @include flex($horizontal: space-around);
-  flex-wrap: wrap;
-  padding-top: 1px;
-  position: relative;
+  @include flexContainer('row', between, top) {
+    flex-wrap: wrap;
+  };
+  padding: 15px;
 
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0;
-    @include size(100%, 1px);
-    background-color: $deepBlue-10;
+  &__header {
+    padding: 0 30px;
   }
 }

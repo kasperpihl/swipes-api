@@ -9,6 +9,12 @@ import 'react-select/dist/react-select.css';
 import MilestoneList from './MilestoneList';
 
 class HOCMilestoneList extends PureComponent {
+  static minWidth() {
+    return 954;
+  }
+  static maxWidth() {
+    return 954;
+  }
   constructor(props) {
     super(props);
 
@@ -46,9 +52,11 @@ class HOCMilestoneList extends PureComponent {
 
   render() {
     const { milestones } = this.props;
+
     return (
       <MilestoneList
         delegate={this}
+        milestones={milestones}
         {...this.bindLoading()}
       />
     );
