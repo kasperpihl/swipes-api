@@ -1,27 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-<<<<<<< Updated upstream
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import { Creatable } from 'react-select';
 import 'react-select/dist/react-select.css';
 import MilestoneList from './MilestoneList';
-=======
-import * as actions from 'actions';
-import Button from 'Button';
-import { Creatable } from 'react-select';
-import 'react-select/dist/react-select.css';
-import './styles/milestone-list.scss';
-import MilestoneItem from './MilestoneItem';
-
->>>>>>> Stashed changes
 
 class HOCMilestoneList extends PureComponent {
   constructor(props) {
     super(props);
-<<<<<<< Updated upstream
+
     setupLoading(this);
   }
   componentDidMount() {
@@ -46,37 +36,6 @@ class HOCMilestoneList extends PureComponent {
         });
       }
     });
-=======
-    this.onAddGoals = this.onAddGoals.bind(this);
-    const { goals } = props;
-    this.state = {
-      options: goals.map(g => ({ label: g.get('title'), value: g.get('id') })).toArray(),
-      value: undefined,
-    };
-  }
-  componentDidMount() {
-  }
-  onAddGoals(e) {
-    console.log('here baby!');
-  }
-  renderSelect() {
-    const { value, options } = this.state;
-    return (
-      <Creatable
-        options={options}
-        value={value}
-        isLoading
-        isOptionUnique={() => true}
-        isValidNewOption={() => true}
-        promptTextCreator={(string) => {
-          if (!string || !string.length) {
-            return 'Close this menu';
-          }
-          return `Create new goal "${string}"`;
-        }}
-      />
-    );
->>>>>>> Stashed changes
   }
   getOptionsForE(e) {
     return {
