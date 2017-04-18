@@ -126,12 +126,12 @@ class StepList extends PureComponent {
     }
   }
   renderEditStep(step, i) {
-    const { delegate, loadingState } = this.props;
+    const { delegate, getLoading } = this.props;
     const { stepTitles } = this.state;
     let className = 'step-list-item step-list-item--editing';
     let title = stepTitles.get(step.get('id')) || step.get('title');
-    if (loadingState.get(step.get('id')) && loadingState.get(step.get('id')).loading) {
-      title = loadingState.get(step.get('id')).loadingLabel;
+    if (getLoading(step.get('id')).loading) {
+      title = getLoading(step.get('id')).loadingLabel;
       className += ' step-list-item--loading';
     }
 
@@ -169,7 +169,7 @@ class StepList extends PureComponent {
     );
   }
   renderStep(step, i) {
-    const { currentStepIndex, delegate, steps, loadingState, editMode } = this.props;
+    const { currentStepIndex, delegate, steps, getLoading, isLoading, editMode } = this.props;
     if (editMode) {
       return this.renderEditStep(step, i);
     }
@@ -179,8 +179,8 @@ class StepList extends PureComponent {
     let className = 'step-list-item';
 
     let title = step.get('title');
-    if (loadingState.get(step.get('id')) && loadingState.get(step.get('id')).loading) {
-      title = loadingState.get(step.get('id')).loadingLabel;
+    if (isLoading(step.get('id'))) {
+      title = getLoading(step.get('id')).loadingLabel;
       className += ' step-list-item--loading';
     }
 
@@ -200,8 +200,8 @@ class StepList extends PureComponent {
       }
     }
     this.tooltips[i] = tooltip;
-    if (loadingState.get('completing') && loadingState.get('completing').loadingLabel) {
-      const lI = parseInt(loadingState.get('completing').loadingLabel, 10);
+    if (getLoading('completing').loadingLabel) {
+      const lI = parseInt(getLoading('completing').loadingLabel, 10);
       if (lI < currentStepIndex) {
         if (i < currentStepIndex && i >= lI) {
           title = 'Going back...';
@@ -256,14 +256,14 @@ class StepList extends PureComponent {
     );
   }
   renderAddStep() {
-    const { loadingState } = this.props;
+    const { isLoading, getLoading } = this.props;
     const { addFocus, addStepValue } = this.state;
 
     let addClass = 'add-step';
     let value = addStepValue;
-    if (loadingState.get('add') && loadingState.get('add').loading) {
+    if (isLoading('add')) {
       addClass += ' add-step--loading';
-      value = loadingState.get('add').loadingLabel;
+      value = getLoading('add').loadingLabel;
     }
     if (addFocus || addStepValue.length) {
       addClass += ' add-step--focused';
@@ -310,5 +310,6 @@ StepList.propTypes = {
   tooltip: func,
   delegate: object,
   currentStepIndex: number,
-  loadingState: map,
+  getLoading: func,
+  isLoading: func,
 };

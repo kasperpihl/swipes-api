@@ -212,7 +212,7 @@ class HOCGoalList extends PureComponent {
         goalFilter={goalFilter}
         tabIndex={tabIndex}
         savedState={savedState}
-        loadingState={this.getAllLoading()}
+        {...this.getAllLoading()}
         delegate={this}
         tabs={tabs.map((tId, i) => {
           let title = filters.getIn([tId, 'title']);

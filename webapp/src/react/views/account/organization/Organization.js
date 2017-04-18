@@ -24,8 +24,8 @@ class Organization extends PureComponent {
   onChange(key, val) {
     this.callDelegate('onChange', key, val);
   }
-  renderActionButton(u, loadingState) {
-    const { isAdmin } = this.props;
+  renderActionButton(u) {
+    const { isAdmin, getLoading } = this.props;
     if(!isAdmin){
       return undefined;
     }
@@ -34,13 +34,13 @@ class Organization extends PureComponent {
         <Button
           icon="ThreeDots"
           onClick={this.onContextCached(u.get('id'))}
-          {...loadingState.get(u.get('id'))}
+          {...getLoading(u.get('id'))}
         />
       </div>
     )
   }
   renderUsers() {
-    const { users, organization, loadingState } = this.props;
+    const { users, organization } = this.props;
 
     const usersHTML = users.map((u) => {
       let userLevel = 'USER';
@@ -65,7 +65,7 @@ class Organization extends PureComponent {
           <div className="organization__user-type">
             {userLevel}
           </div>
-          {this.renderActionButton(u, loadingState)}
+          {this.renderActionButton(u)}
         </div>
       );
     }).toArray();
@@ -77,8 +77,8 @@ class Organization extends PureComponent {
     );
   }
   renderInvite() {
-    const { loadingState, firstNameVal, emailVal } = this.props;
-    const isLoading = loadingState.get('invite') && loadingState.get('invite').loading;
+    const { getLoading, isLoading, firstNameVal, emailVal } = this.props;
+
     return (
       <div className="organization__form">
 
@@ -88,7 +88,7 @@ class Organization extends PureComponent {
               id="org-first-name"
               label="First name"
               type="text"
-              disabled={isLoading}
+              disabled={isLoading('invite')}
               value={firstNameVal}
               onChange={this.onChangeCached('firstNameVal')}
             />
@@ -99,7 +99,7 @@ class Organization extends PureComponent {
               label="name@company.com"
               type="email"
               value={emailVal}
-              disabled={isLoading}
+              disabled={isLoading('invite')}
               onKeyDown={this.onKeyDown}
               onChange={this.onChangeCached('emailVal')}
             />
@@ -109,7 +109,7 @@ class Organization extends PureComponent {
         <Button
           onClick={this.onInvite}
           text="Invite"
-          {...loadingState.get('invite')}
+          {...getLoading('invite')}
           primary
         />
       </div>

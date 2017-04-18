@@ -78,11 +78,11 @@ class GoalOverview extends PureComponent {
     );
   }
   renderHeader() {
-    const { goal, loadingState, delegate } = this.props;
+    const { goal, getLoading, isLoading, delegate } = this.props;
 
-    const title = loadingState.get('title') && loadingState.get('title').loadingLabel;
-    const askSel = loadingState.get('ask-for-menu') && loadingState.get('ask-for-menu').loading;
-    const notifySel = loadingState.get('notify-menu') && loadingState.get('notify-menu').loading;
+    const title = getLoading('title').loadingLabel;
+    const askSel = isLoading('ask-for-menu');
+    const notifySel = isLoading('notify-menu');
     return (
       <div className="add-goal__header">
         <HOCHeaderTitle
@@ -103,7 +103,7 @@ class GoalOverview extends PureComponent {
           <Button
             icon="ThreeDots"
             onClick={this.onContext}
-            {...loadingState.get('dots')}
+            {...getLoading('dots')}
           />
         </HOCHeaderTitle>
       </div>
@@ -227,7 +227,7 @@ class GoalOverview extends PureComponent {
     );
   }
   renderFooter() {
-    const { handoff, loadingState } = this.props;
+    const { handoff, getLoading } = this.props;
     if (handoff) {
       return this.renderSuccessFooter(handoff);
     }
@@ -252,7 +252,7 @@ class GoalOverview extends PureComponent {
         <div className="handoff-bar__actions">
           <Button
             text={buttonLabel}
-            {...loadingState.get('completing')}
+            {...getLoading('completing')}
             primary
             onClick={this.onBarClick}
           />
@@ -280,13 +280,14 @@ class GoalOverview extends PureComponent {
 
 export default GoalOverview;
 
-const { string, object, bool } = PropTypes;
+const { string, object, bool, func } = PropTypes;
 
 GoalOverview.propTypes = {
   goal: map,
   handoff: object,
   myId: string,
   editMode: bool,
-  loadingState: map,
+  isLoading: func,
+  getLoading: func,
   delegate: object,
 };

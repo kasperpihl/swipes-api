@@ -45,7 +45,7 @@ const milestonesCreate = valLocals('milestonesCreate', {
   return next();
 });
 const milestonesInsert = valLocals('milestonesInsert', {
-  milestone: object.of({
+  milestone: object.as({
     id: string.require(),
     title: string.require(),
   }).require(),
@@ -96,7 +96,7 @@ const milestonesArchive = valLocals('milestonesArchive', {
 });
 const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
   user_id: string.require(),
-  milestone: object.of({
+  milestone: object.as({
     id: string.require(),
   }).require(),
   eventType: string.require(),

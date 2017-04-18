@@ -48,14 +48,14 @@ class GoalList extends Component {
     );
   }
   renderHeader() {
-    const { loadingState } = this.props;
+    const { getLoading } = this.props;
     return (
       <div className="goals-list__header">
         <HOCHeaderTitle title="Goals">
           <Button
             text="Add a goal"
             primary
-            {...loadingState.get('add')}
+            {...getLoading('add')}
             onClick={this.onAddGoal}
           />
         </HOCHeaderTitle>
@@ -190,6 +190,7 @@ GoalList.propTypes = {
   showFilter: bool,
   filterProp: list,
   filterLabel: string,
+  getLoading: func,
   tabIndex: number,
   delegate: obj,
 };

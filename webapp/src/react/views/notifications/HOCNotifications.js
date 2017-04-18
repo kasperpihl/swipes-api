@@ -187,7 +187,7 @@ class HOCNotifications extends PureComponent {
     return (
       <Notifications
         delegate={this}
-        loadingState={this.getAllLoading()}
+        {...this.getAllLoading()}
         notifications={notifications}
         tabs={tabs.map((t, i) => {
           let title = filters.getIn([t, 'title']);

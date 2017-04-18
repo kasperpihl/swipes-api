@@ -91,16 +91,28 @@ export function nearestAttribute(target, attribute) {
   return value;
 }
 
-export function setupDelegate(obj) {
+export function setupDelegate(obj, ...globalArgs) {
+  const defOptions = {
+    globals: [],
+    prefix: '',
+  };
+  let options = defOptions;
   const delegate = obj && (obj.delegate || (obj.props && obj.props.delegate));
-  const orgArgs = Array.prototype.slice.call(arguments, 1);
-  obj.callDelegate = function callDelegate(name) {
+  obj.callDelegate = function callDelegate(name, ...rest) {
     if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...orgArgs.concat(Array.prototype.slice.call(arguments, 1)));
+      return delegate[name](...globalArgs.concat(rest));
     }
 
     return undefined;
   };
+  obj.callDelegate.bindAll = function bindAllDelegates(...bindArgs) {
+    bindArgs.forEach((funcName) => {
+      if(typeof funcName === 'string'){
+        obj[funcName] = obj.callDelegate.bind(null, funcName);
+        obj[`${funcName}Cached`] = setupCachedCallback(obj[funcName]);
+      }
+    })
+  }
 }
 
 export function queryStringToObject(query) {
@@ -324,7 +336,11 @@ export function setupLoading(ctx) {
   };
   let setClearTimer;
   function getAllLoading() {
-    return _loadingStates;
+    return {
+      isLoading: this.isLoading,
+      getLoading: this.getLoading,
+      _loadingStates,
+    }
   }
   function setLoading(name, label, duration) {
     const newState = { loading: true };
@@ -362,12 +378,14 @@ export function setupLoading(ctx) {
   function getLoading(name) {
     return _loadingStates.get(name) || defaultObj;
   }
-
+  function isLoading(name) {
+    return (_loadingStates.get(name) || defaultObj).loading;
+  }
 
   ctx.setLoading = setLoading.bind(ctx);
+  ctx.isLoading = isLoading.bind(ctx);
   ctx.getLoading = getLoading.bind(ctx);
   ctx.clearLoading = clearLoading.bind(ctx);
   ctx.getAllLoading = getAllLoading.bind(ctx);
 
-  bindAll(ctx, ['setLoading', 'getLoading', 'clearLoading']);
 }

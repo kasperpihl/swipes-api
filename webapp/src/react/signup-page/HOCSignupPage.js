@@ -108,8 +108,7 @@ class HOCSignupPage extends PureComponent {
         delegate={this}
         organization={organization}
         inviter={invitedBy}
-        loadingState={this.getAllLoading()}
-        getLoading={this.getLoading}
+        {...this.getAllLoading()}
       />
     );
   }
