@@ -35,7 +35,19 @@ const milestonesClosedNotificationData = (req, res, next) => {
   const notificationData = null;
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = { id: milestone.id };
+  res.locals.eventData = { milestone_id: milestone.id };
+
+  return next();
+};
+const milestonesOpenedNotificationData = (req, res, next) => {
+  const {
+    milestone,
+  } = res.locals;
+
+  const notificationData = null;
+
+  res.locals.notificationData = notificationData;
+  res.locals.eventData = { milestone_id: milestone.id };
 
   return next();
 };
