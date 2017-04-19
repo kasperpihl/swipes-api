@@ -13,13 +13,9 @@ const GoalRow = (props) => {
   } = props;
   let className = 'goal-row';
 
-  if (props.isFocused) {
-    className += ' goal-row--selected';
-  }
-
   return (
     <div className={className} onClick={onClick}>
-      {props.option.title}
+      {props.title}
     </div>
   );
 };
