@@ -23,20 +23,17 @@ class HOCGoalSelector extends PureComponent {
   render() {
     const { milestoneId, goals } = this.props;
     const props = {
-      options: goals.sort((g1, g2) => {
-        return g1.get('title').localeCompare(g2.get('title'));
-      }).map((g) => {
-        const helper = new GoalsUtil(g)
+      options: goals.sort((g1, g2) => g1.get('title').localeCompare(g2.get('title'))).map((g) => {
+        const helper = new GoalsUtil(g);
         return {
           ...this.getLoading(g.get('id')),
           title: g.get('title'),
           completed: !!helper.getIsCompleted(),
           hasThisMilestone: (g.get('milestone_id') === milestoneId),
         };
-
       }).toArray(),
       optionComponent: GoalRow,
-    }
+    };
     return (
       <div className="goal-selector">
         <Creatable
@@ -52,7 +49,7 @@ HOCGoalSelector.propTypes = {};
 
 function mapStateToProps(state) {
   return {
-    goals: state.get('goals')
+    goals: state.get('goals'),
   };
 }
 

@@ -88,8 +88,6 @@ class HOCMilestoneItem extends PureComponent {
 
     const userId = lastActivity && lastActivity.get('done_by');
 
-    console.log('userId', userId);
-
     return (
       <div className="last-activity">
         <div className="last-activity__left">
@@ -111,7 +109,6 @@ class HOCMilestoneItem extends PureComponent {
   render() {
     return (
       <div className="milestone" onClick={this.onOpenMilestone}>
-        <div className="milestone__seperator" />
         {this.renderHeader()}
         {this.renderProgress()}
         {this.renderLastActivity()}

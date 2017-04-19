@@ -2,5 +2,10 @@
 @import '~styles/_mixins.scss';
 
 .goal-selector {
-  
+  @include size(300px, auto);
+  background-color: $bg;
+  border-radius: 3px;
+  box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+  padding: 0 16px;
+  padding-top: 10px;
 }

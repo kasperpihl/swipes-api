@@ -15,7 +15,7 @@ const GoalRow = (props) => {
   console.log(props.option);
   return (
     <div className="goal-row" onClick={onClick}>
-      {props.option.label}
+      {props.option.title}
     </div>
   );
 };
