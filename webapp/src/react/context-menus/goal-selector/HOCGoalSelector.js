@@ -8,7 +8,7 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import { Creatable } from 'react-select';
-import 'react-select/dist/react-select.css';
+import './styles/react-select.scss';
 
 import GoalRow from './GoalRow';
 import './styles/goal-selector.scss';

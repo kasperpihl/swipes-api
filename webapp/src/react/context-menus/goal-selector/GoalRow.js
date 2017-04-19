@@ -5,16 +5,20 @@ import PropTypes from 'prop-types';
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
-// import './styles/goal-row.scss';
+import './styles/goal-row.scss';
 
 const GoalRow = (props) => {
   const {
-    title,
     onClick,
   } = props;
-  console.log(props.option);
+  let className = 'goal-row';
+
+  if (props.isFocused) {
+    className += ' goal-row--selected';
+  }
+
   return (
-    <div className="goal-row" onClick={onClick}>
+    <div className={className} onClick={onClick}>
       {props.option.title}
     </div>
   );
