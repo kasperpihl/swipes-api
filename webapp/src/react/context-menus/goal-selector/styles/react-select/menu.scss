@@ -1,0 +1,86 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+//
+// Select Menu
+// ------------------------------
+
+
+// wrapper around the menu
+
+.Select-menu-outer {
+	// Unfortunately, having both border-radius and allows scrolling using overflow defined on the same
+	// element forces the browser to repaint on scroll.  However, if these definitions are split into an
+	// outer and an inner element, the browser is able to optimize the scrolling behavior and does not
+	// have to repaint on scroll.
+	@include border-bottom-radius( $select-input-border-radius );
+	background-color: $select-input-bg;
+	// border: 1px solid $select-input-border-color;
+	// border-top-color: mix($select-input-bg, $select-input-border-color, 50%);
+	// box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+	box-sizing: border-box;
+	margin-top: -1px;
+	max-height: $select-menu-max-height;
+	// position: absolute;
+	top: 100%;
+	width: 100%;
+	z-index: $select-menu-zindex;
+	-webkit-overflow-scrolling: touch;
+
+	&:after {
+		@include size(310px, 1px);
+		position: absolute;
+		left: 16px; top: 0;
+		content: '';
+		background-color: $deepBlue-20;
+	}
+}
+
+
+// wrapper
+
+.Select-menu {
+	max-height: ($select-menu-max-height - 2px);
+	overflow-y: auto;
+}
+
+
+// options
+
+.Select-option {
+	@include size(100%, 54px);
+	@include flexContainer('row', lefy, center);
+	@include font(15px, $deepBlue-90, 24px);
+	box-sizing: border-box;
+	background-color: $bg;
+	padding: 0 16px;
+
+	&:last-child {
+		@include border-bottom-radius( $select-input-border-radius );
+	}
+
+	&.is-selected {
+		background-color: $blue-10;
+	}
+
+	&.is-focused {
+		background-color: $blue-10;
+	}
+
+	&.is-disabled {
+		color: $select-option-disabled-color;
+		cursor: default;
+	}
+
+}
+
+
+// no results
+
+.Select-noresults {
+	box-sizing: border-box;
+	color: $select-noresults-color;
+	cursor: default;
+	display: block;
+	padding: $select-padding-vertical $select-padding-horizontal;
+}
