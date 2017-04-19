@@ -122,19 +122,19 @@ const step_completed = notifyWrapper([
 
 const milestone_created = notifyWrapper([
   milestones.milestonesGetSingle,
-  milestones.milestonesCreatedNotificationData,
+  milestones.milestonesGeneralWithHistoryNotificationData,
   notify.notifyAllInCompany,
 ]);
 
 const milestone_closed = notifyWrapper([
   milestones.milestonesGetSingle,
-  milestones.milestonesClosedNotificationData,
+  milestones.milestoneOpenCloseWithHistoryNotificationData,
   notify.notifyAllInCompany,
 ]);
 
-const milestone_opened = notifyWrapper([
+const milestones_opened = notifyWrapper([
   milestones.milestonesGetSingle,
-  milestones.milestonesOpenedNotificationData,
+  milestones.milestoneOpenCloseWithHistoryNotificationData,
   notify.notifyAllInCompany,
 ]);
 
@@ -263,6 +263,7 @@ export {
   step_completed,
   milestone_created,
   milestone_closed,
+  milestones_opened,
   milestone_goal_added,
   milestone_goal_removed,
   way_created,
