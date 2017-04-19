@@ -31,6 +31,7 @@ const milestonesCreate = valLocals('milestonesCreate', {
     id: generateSlackLikeId('M'),
     title,
     organization_id,
+    goal_order: [],
     due_date: due_date || null,
     created_by: user_id,
     created_at: r.now(),
