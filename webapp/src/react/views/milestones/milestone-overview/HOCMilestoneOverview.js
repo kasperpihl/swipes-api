@@ -11,13 +11,24 @@ import MilestoneOverview from './MilestoneOverview';
 class HOCMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      goals: this.getFilteredGoals(props.milestone),
+    };
   }
   componentDidMount() {
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      goals: this.getFilteredGoals(nextProps.milestone),
+    })
+  }
+  getFilteredGoals(milestone) {
+    return msgGen.milestones.getGoals(milestone);
+  }
   render() {
-    const { milestone } = this.props;
-
+    const { milestone, goals } = this.props;
+    const filteredGoals = msgGen.milestones.getGoals(milestone);
+    
     return (
       <MilestoneOverview milestone={milestone} />
     );
@@ -29,6 +40,7 @@ HOCMilestoneOverview.propTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
+    goals: state.get('goals'),
     milestone: state.getIn(['milestones', ownProps.milestoneId]),
   };
 }

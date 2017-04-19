@@ -3,7 +3,21 @@ export default class Milestones {
     this.store = store;
     this.parent = parent;
   }
+  getMilestone(milestone) {
+    if(typeof milestone === 'string'){
+      const state = this.store.getState();
+      return state.getIn(['milestones', milestone]);
+    }
+    return milestone;
+  }
   getName() {
 
+  }
+  getGoals(milestoneId, overrideGoals) {
+    const milestone = this.getMilestone(milestoneId);
+    const state = this.store.getState();
+    const goals = overrideGoals || state.get('goals');
+    return milestone.get('goal_order')
+                    .map(gId => goals.get(gId));
   }
 }
