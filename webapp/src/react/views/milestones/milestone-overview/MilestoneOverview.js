@@ -12,6 +12,8 @@ import Icon from 'Icon';
 
 import './styles/milestone-overview.scss';
 
+const PROGRESS_DASH = 320.4876403808594;
+
 class MilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
@@ -33,6 +35,7 @@ class MilestoneOverview extends PureComponent {
   }
   renderLeftSection() {
     const { milestone, delegate, tabs, tabIndex } = this.props;
+
     return (
       <section>
         <TabBar
@@ -51,13 +54,27 @@ class MilestoneOverview extends PureComponent {
     );
   }
   renderRightSection() {
+    const { milestone, goals } = this.props;
+
+    const numberOfGoals = goals.size;
+    const numberOfCompletedGoals = goals.filter(g => g.getIn(['status', 'completed'])).size;
+
+    const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
+
+    const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
+
     return (
       <section>
         <Section title="Progress">
           <div className="milestone-progress">
-            <div className="milestone-progress__subtitle">6/9</div>
+            <div className="milestone-progress__subtitle">{`${numberOfCompletedGoals} / ${numberOfGoals}`}</div>
             <Icon icon="MilestoneProgress" className="milestone-progress__svg milestone-progress__svg--bg" />
-            <Icon icon="MilestoneProgress" className="milestone-progress__svg milestone-progress__svg--fg" />
+            <Icon
+              icon="MilestoneProgress"
+              className="milestone__svg milestone__svg--fg"
+              strokeDasharray={PROGRESS_DASH}
+              strokeDashoffset={svgDashOffset}
+            />
 
             <div className="milestone-progress__inner">
               <div className="milestone-progress__dot" />
