@@ -149,6 +149,9 @@ export default class GoalsUtil {
   getLastActivity() {
     return this.goal.get('history').last();
   }
+  getLastActivityByType(type) {
+    return this.goal.get('history').findLast((a) => a.get('type') === type);
+  }
   getLastActivityIndex() {
     return this.goal.get('history').size - 1;
   }

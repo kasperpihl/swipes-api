@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
@@ -18,6 +18,8 @@ class MilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+    setupDelegate(this);
+    this.callDelegate.bindAll('onAddGoals');
   }
   componentDidMount() {
   }
@@ -27,8 +29,14 @@ class MilestoneOverview extends PureComponent {
     return (
       <div className="milestone-overview__header">
         <HOCHeaderTitle title={m.get('title')}>
-          <Button primary text="Add goal to this milestone" />
-          <Button icon="ThreeDots" />
+          <Button
+            primary
+            onClick={this.onAddGoals}
+            text="Add goal to this milestone"
+          />
+          <Button
+            icon="ThreeDots"
+          />
         </HOCHeaderTitle>
       </div>
     );

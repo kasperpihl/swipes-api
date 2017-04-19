@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-import { Creatable } from 'react-select';
-import 'react-select/dist/react-select.css';
 import MilestoneList from './MilestoneList';
 
 class HOCMilestoneList extends PureComponent {
@@ -17,7 +15,6 @@ class HOCMilestoneList extends PureComponent {
   }
   constructor(props) {
     super(props);
-
     setupLoading(this);
   }
   componentDidMount() {
@@ -39,7 +36,7 @@ class HOCMilestoneList extends PureComponent {
     inputMenu({
       ...options,
       placeholder: 'Name of the milestone',
-      buttonLabel: 'Create Milestone',
+      buttonLabel: 'Create',
     }, (title) => {
       if (title && title.length) {
         this.setLoading('add');

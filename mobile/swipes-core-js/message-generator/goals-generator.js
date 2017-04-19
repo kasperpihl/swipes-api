@@ -1,5 +1,6 @@
 import moment from 'moment';
 import GoalsUtil from '../classes/goals-util';
+import { timeAgo } from '../classes/time-utils';
 
 export default class Goals {
   constructor(store, parent) {
@@ -20,6 +21,12 @@ export default class Goals {
     const helper = new GoalsUtil(goal);
     const currentStep = helper.getCurrentStep();
     if (helper.getIsCompleted()) {
+      const completedEvent = helper.getLastActivityByType('goal_completed');
+      if(completedEvent){
+        const ts = timeAgo(completedEvent.get('done_at'));
+        const name = msgGen.users.getName(completedEvent.get('done_by'));
+        return `Completed by ${name} ${ts}`;
+      }
       return 'All done.';
     }
     if (!helper.getTotalNumberOfSteps()) {

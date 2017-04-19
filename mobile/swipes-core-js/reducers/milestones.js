@@ -12,6 +12,10 @@ export default function main(state = initialState, action) {
       });
       return milestones;
     }
+    case 'milestones.create':
+    case 'milestone_created': {
+      return state.set(payload.milestone.id, fromJS(payload.milestone));
+    }
 
     default:
       return state;

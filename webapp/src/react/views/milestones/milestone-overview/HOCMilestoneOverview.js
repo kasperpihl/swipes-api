@@ -1,12 +1,14 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import HOCGoalSelector from 'context-menus/goal-selector/HOCGoalSelector';
 // import { map, list } from 'react-immutable-proptypes';
 import { List } from 'immutable';
+
 import MilestoneOverview from './MilestoneOverview';
 
 class HOCMilestoneOverview extends PureComponent {
@@ -31,9 +33,20 @@ class HOCMilestoneOverview extends PureComponent {
       goals: this.getFilteredGoals(nextProps.milestone, nextProps.starredGoals),
     })
   }
+  onAddGoals(e) {
+    const { contextMenu, milestone } = this.props;
+    const options = this.getOptionsForE(e);
+    contextMenu({
+      component: HOCGoalSelector,
+      options,
+      props: {
+        milestoneId: milestone.get('id'),
+        delegate: this,
+      },
+    })
+  }
   onGoalClick(goalId) {
     const { navPush } = this.props;
-    console.log('hello');
     window.analytics.sendEvent('Goal opened', {});
     navPush({
       id: 'GoalOverview',
@@ -53,7 +66,7 @@ class HOCMilestoneOverview extends PureComponent {
   }
   getFilteredGoals(milestone, starredGoals) {
     const goals = msgGen.milestones.getGoals(milestone);
-    let grouped = goals.sort((g1, g2) => {
+    let gg = goals.sort((g1, g2) => {
       const g1StarI = starredGoals.indexOf(g1.get('id'));
       const g2StarI = starredGoals.indexOf(g2.get('id'));
       if (g1StarI > g2StarI) {
@@ -64,13 +77,11 @@ class HOCMilestoneOverview extends PureComponent {
       }
       return 0;
     }).groupBy(g => new GoalsUtil(g).getIsCompleted() ? 'Completed' : 'Current');
-    if(!grouped.get('Current')){
-      grouped = grouped.set('Current', List())
-    }
-    if(!grouped.get('Completed')){
-      grouped = grouped.set('Completed', List())
-    }
-    return grouped;
+
+    // Make sure there if no current or completed to add an empty list
+    gg = gg.set('Current', gg.get('Current') || List())
+    gg = gg.set('Completed', gg.get('Completed') || List());
+    return gg;
   }
   getGoalListProps() {
     const { tabIndex, tabs } = this.state;
@@ -79,6 +90,14 @@ class HOCMilestoneOverview extends PureComponent {
       tabIndex,
       tabs,
     }
+  }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+      excludeY: true,
+      positionY: 10,
+    };
   }
   render() {
     const { milestone } = this.props;
@@ -108,4 +127,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
+  contextMenu: a.main.contextMenu,
 })(HOCMilestoneOverview);

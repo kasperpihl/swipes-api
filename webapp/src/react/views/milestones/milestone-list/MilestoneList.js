@@ -25,7 +25,7 @@ class MilestoneList extends PureComponent {
       <div className="milestone-list__header">
         <HOCHeaderTitle title="Milestones">
           <Button
-            text="Create"
+            text="Create milestone"
             primary
             {...getLoading('add')}
             onClick={this.onAddMilestone}
