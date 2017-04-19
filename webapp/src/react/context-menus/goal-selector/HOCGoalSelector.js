@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 // import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import { Creatable } from 'react-select';
@@ -15,26 +16,26 @@ import './styles/goal-selector.scss';
 class HOCGoalSelector extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      options: fromJS([
-        { value: 'one', label: 'One' },
-        { value: 'two', label: 'Two' }
-      ]),
-    };
     setupLoading(this);
   }
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        options: this.state.options.setIn([0, 'loading'], true),
-      });
-    }, 5000);
   }
   render() {
+    const { milestoneId, goals } = this.props;
     const props = {
-      options: this.state.options.toJS(),
+      options: goals.sort((g1, g2) => {
+        return g1.get('title').localeCompare(g2.get('title'));
+      }).map((g) => {
+        const helper = new GoalsUtil(g)
+        return {
+          ...this.getLoading(g.get('id')),
+          title: g.get('title'),
+          completed: !!helper.getIsCompleted(),
+          hasThisMilestone: (g.get('milestone_id') === milestoneId),
+        };
+
+      }).toArray(),
       optionComponent: GoalRow,
-      optionClassName: 'Select-goal-row',
     }
     return (
       <div className="goal-selector">
