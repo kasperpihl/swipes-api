@@ -126,11 +126,8 @@ $contHeight: 79px;
 
   &--completed {
 
-    #{$b}__indicator {
-
-      &:after {
-        background-color: $green-color;
-      }
+    #{$b}__dot {
+      background-color: $green-color;
     }
   }
 
