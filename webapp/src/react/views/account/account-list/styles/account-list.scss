@@ -7,7 +7,7 @@
 
 .account-list {
   @include size(100%, auto);
-  @include flexContainer('row', between, top) {
+  @include flexContainer('row') {
     flex-wrap: wrap;
   };
 }
@@ -18,9 +18,13 @@
 }
 
 .account-item {
-  @include size(278px, 150px);
+  @include size(calc(33% - 30px), 150px);
   padding: 15px;
   // padding-left: 0;
+  flex-grow: 1;
+	flex-shrink: 0;
+	flex-basis: calc(33% - 30px);
+	flex-basis: 200px;
   margin-left: -15px;
   transition: .25s ease-out;
 
