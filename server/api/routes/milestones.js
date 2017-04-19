@@ -2,6 +2,7 @@ import express from 'express';
 import {
   string,
   object,
+  array,
 } from 'valjs';
 import {
   milestonesCreate,
@@ -9,10 +10,21 @@ import {
   milestonesClose,
   milestonesCreateQueueMessage,
   milestonesCloseQueueMessage,
+  milestonesAddGoal,
+  milestonesAddGoalQueueMessage,
+  milestonesRemoveGoal,
+  milestonesRemoveGoalQueueMessage,
 } from './middlewares/milestones';
+import {
+  goalsAddMilestone,
+  goalsRemoveMilestone,
+} from './middlewares/goals';
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
+import {
+  notificationCreateGroupId,
+} from './middlewares/util_middlewares';
 import {
   valBody,
   valResponseAndSend,
@@ -45,6 +57,40 @@ authed.all('/milestones.close',
   valResponseAndSend({
     id: string.require(),
   }));
+
+authed.all('/milestones.addGoal',
+  valBody({
+    goal_id: string.require(),
+    milestone_id: string.require(),
+  }),
+  notificationCreateGroupId,
+  goalsAddMilestone,
+  milestonesAddGoal,
+  milestonesAddGoalQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal_id: string.require(),
+    milestone_id: string.require(),
+    goal_order: array.require(),
+  }),
+);
+
+authed.all('/milestones.removeGoal',
+  valBody({
+    goal_id: string.require(),
+    milestone_id: string.require(),
+  }),
+  notificationCreateGroupId,
+  goalsRemoveMilestone,
+  milestonesRemoveGoal,
+  milestonesRemoveGoalQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal_id: string.require(),
+    milestone_id: string.require(),
+    goal_order: array.require(),
+  }),
+);
 
 export {
   authed,

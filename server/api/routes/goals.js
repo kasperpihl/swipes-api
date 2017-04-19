@@ -18,13 +18,9 @@ import {
   goalsCreate,
   goalsGet,
   goalsArchive,
-  goalsAddMilestone,
-  goalsRemoveMilestone,
   goalsInsert,
   goalsCreateQueueMessage,
   goalsArchiveQueueMessage,
-  goalsAddMilestoneQueueMessage,
-  goalsRemoveMilestoneQueueMessage,
   goalsCompleteStep,
   goalsNextStepQueueMessage,
   goalsProgressStatus,
@@ -156,33 +152,6 @@ authed.all('/goals.archive',
   notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
-  }));
-
-authed.all('/goals.addMilestone',
-  valBody({
-    id: string.require(),
-    milestone_id: string.require(),
-  }),
-  notificationCreateGroupId,
-  goalsAddMilestone,
-  goalsAddMilestoneQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    id: string.require(),
-    milestone_id: string.require(),
-  }));
-
-authed.all('/goals.removeMilestone',
-  valBody({
-    id: string.require(),
-  }),
-  notificationCreateGroupId,
-  goalsRemoveMilestone,
-  goalsRemoveMilestoneQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    id: string.require(),
-    milestone_id: string.require(),
   }));
 
 authed.all('/goals.notify',

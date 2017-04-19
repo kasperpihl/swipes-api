@@ -2,10 +2,13 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
 } from 'valjs';
 import {
   dbMilestonesInsertSingle,
   dbMilestonesUpdateSingle,
+  dbMilestonesAddGoal,
+  dbMilestonesRemoveGoal,
 } from './db_utils/milestones';
 import {
   generateSlackLikeId,
@@ -136,6 +139,122 @@ const milestonesCloseQueueMessage = valLocals('milestonesCloseQueueMessage', {
 
   return next();
 });
+const milestonesAddGoal = valLocals('milestonesAddGoal', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  milestone_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    milestone_id,
+  } = res.locals;
+
+  dbMilestonesAddGoal({ user_id, goal_id, milestone_id })
+    .then((result) => {
+      const changes = result.changes[0].new_val || result.changes[0].old_val;
+
+      setLocals({
+        goal_order: changes.goal_order,
+        eventType: 'milestone_goal_added',
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  milestone_id: string.require(),
+  goal_order: array.require(),
+  notificationGroupId: string.require(),
+  eventType: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    milestone_id,
+    goal_order,
+    notificationGroupId,
+    eventType,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    goal_id,
+    goal_order,
+    milestone_id,
+    group_id: notificationGroupId,
+    event_type: eventType,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
+const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  milestone_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+  user_id,
+  goal_id,
+  milestone_id,
+} = res.locals;
+
+  dbMilestonesRemoveGoal({ user_id, goal_id, milestone_id })
+  .then((result) => {
+    const changes = result.changes[0].new_val || result.changes[0].old_val;
+
+    setLocals({
+      goal_order: changes.goal_order,
+      eventType: 'milestone_goal_removed',
+    });
+
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
+});
+const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  milestone_id: string.require(),
+  goal_order: array.require(),
+  notificationGroupId: string.require(),
+  eventType: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    milestone_id,
+    goal_order,
+    notificationGroupId,
+    eventType,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    goal_id,
+    goal_order,
+    milestone_id,
+    group_id: notificationGroupId,
+    event_type: eventType,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
 
 export {
   milestonesCreate,
@@ -143,4 +262,8 @@ export {
   milestonesClose,
   milestonesCreateQueueMessage,
   milestonesCloseQueueMessage,
+  milestonesAddGoal,
+  milestonesAddGoalQueueMessage,
+  milestonesRemoveGoal,
+  milestonesRemoveGoalQueueMessage,
 };

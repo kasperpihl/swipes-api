@@ -60,18 +60,6 @@ const goal_archived = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const goal_milestone_added = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
-  notify.notifyAllInCompany,
-]);
-
-const goal_milestone_removed = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
-  notify.notifyAllInCompany,
-]);
-
 const goal_notify = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
@@ -141,6 +129,16 @@ const milestone_created = notifyWrapper([
 const milestone_closed = notifyWrapper([
   milestones.milestonesGetSingle,
   milestones.milestonesClosedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const milestone_goal_added = notifyWrapper([
+  milestones.milestonesGoalAddedRemovedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const milestone_goal_removed = notifyWrapper([
+  milestones.milestonesGoalAddedRemovedNotificationData,
   notify.notifyAllInCompany,
 ]);
 
@@ -252,8 +250,6 @@ export {
   goal_completed,
   goal_started,
   goal_archived,
-  goal_milestone_added,
-  goal_milestone_removed,
   goal_notify,
   goal_notify_email,
   goal_renamed,
@@ -261,6 +257,8 @@ export {
   step_completed,
   milestone_created,
   milestone_closed,
+  milestone_goal_added,
+  milestone_goal_removed,
   way_created,
   way_archived,
   notifications_seen_history_updated,
