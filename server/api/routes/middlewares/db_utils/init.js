@@ -41,9 +41,6 @@ const initMe = funcWrap([
           milestones:
             r.table('milestones')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
-              .filter({
-                archived: false,
-              })
               .coerceTo('ARRAY'),
         });
       })
