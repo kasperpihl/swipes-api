@@ -20,12 +20,14 @@ const milestonesCreate = valLocals('milestonesCreate', {
   user_id: string.require(),
   title: string.require(),
   organization_id: string.require(),
+  notificationGroupId: string.require(),
   due_date: string.format('iso8601'),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     title,
     organization_id,
+    notificationGroupId,
     due_date,
   } = res.locals;
   const milestone = {
@@ -42,6 +44,7 @@ const milestonesCreate = valLocals('milestonesCreate', {
       type: 'milestone_created',
       done_by: user_id,
       done_at: r.now(),
+      group_id: notificationGroupId,
     }],
   };
 
@@ -75,14 +78,17 @@ const milestonesInsert = valLocals('milestonesInsert', {
 });
 const milestonesClose = valLocals('milestonesClose', {
   user_id: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    notificationGroupId,
   } = res.locals;
   const historyItem = {
     type: 'milestone_closed',
     done_by: user_id,
     done_at: r.now(),
+    group_id: notificationGroupId,
   };
   const properties = {
     closed: true,
@@ -99,14 +105,17 @@ const milestonesClose = valLocals('milestonesClose', {
 });
 const milestonesOpen = valLocals('milestonesOpen', {
   user_id: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    notificationGroupId,
   } = res.locals;
   const historyItem = {
     type: 'milestone_opened',
     done_by: user_id,
     done_at: r.now(),
+    group_id: notificationGroupId,
   };
   const properties = {
     closed: false,
@@ -161,17 +170,20 @@ const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
     id: string.require(),
   }).require(),
   eventType: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     milestone,
     eventType,
+    notificationGroupId,
   } = res.locals;
   const milestone_id = milestone.id;
   const queueMessage = {
     user_id,
     milestone_id,
     event_type: eventType,
+    group_id: notificationGroupId,
   };
 
   setLocals({
@@ -185,16 +197,19 @@ const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessa
   user_id: string.require(),
   milestone_id: string.require(),
   eventType: string.require(),
+  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     milestone_id,
     eventType,
+    notificationGroupId,
   } = res.locals;
   const queueMessage = {
     user_id,
     milestone_id,
     event_type: eventType,
+    group_id: notificationGroupId,
   };
 
   setLocals({
@@ -235,7 +250,6 @@ const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage',
   goal_id: string.require(),
   milestone_id: string.require(),
   goal_order: array.require(),
-  notificationGroupId: string.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -243,7 +257,6 @@ const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage',
     goal_id,
     milestone_id,
     goal_order,
-    notificationGroupId,
     eventType,
   } = res.locals;
   const queueMessage = {
@@ -251,7 +264,6 @@ const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage',
     goal_id,
     goal_order,
     milestone_id,
-    group_id: notificationGroupId,
     event_type: eventType,
   };
 
@@ -297,7 +309,6 @@ const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMes
   goal_id: string.require(),
   milestone_id: string.require(),
   goal_order: array.require(),
-  notificationGroupId: string.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -305,7 +316,6 @@ const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMes
     goal_id,
     milestone_id,
     goal_order,
-    notificationGroupId,
     eventType,
   } = res.locals;
   const queueMessage = {
@@ -313,7 +323,6 @@ const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMes
     goal_id,
     goal_order,
     milestone_id,
-    group_id: notificationGroupId,
     event_type: eventType,
   };
 
