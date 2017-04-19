@@ -51,26 +51,26 @@ authed.all('/milestones.create',
 
 authed.all('/milestones.close',
   valBody({
-    id: string.require(),
+    milestone_id: string.require(),
   }),
   milestonesClose,
   milestonesUpdateSingle,
   milestonesOpenCloseQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    id: string.require(),
+    milestone_id: string.require(),
   }));
 
 authed.all('/milestones.open',
   valBody({
-    id: string.require(),
+    milestone_id: string.require(),
   }),
   milestonesOpen,
   milestonesUpdateSingle,
   milestonesOpenCloseQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    id: string.require(),
+    milestone_id: string.require(),
   }));
 
 authed.all('/milestones.addGoal',

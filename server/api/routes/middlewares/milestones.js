@@ -74,11 +74,9 @@ const milestonesInsert = valLocals('milestonesInsert', {
 });
 const milestonesClose = valLocals('milestonesClose', {
   user_id: string.require(),
-  id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    id,
   } = res.locals;
   const historyItem = {
     type: 'milestone_closed',
@@ -93,7 +91,6 @@ const milestonesClose = valLocals('milestonesClose', {
 
   setLocals({
     properties,
-    id,
     eventType: 'milestone_closed',
   });
 
@@ -101,11 +98,9 @@ const milestonesClose = valLocals('milestonesClose', {
 });
 const milestonesOpen = valLocals('milestonesOpen', {
   user_id: string.require(),
-  id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    id,
   } = res.locals;
   const historyItem = {
     type: 'milestone_opened',
@@ -120,7 +115,6 @@ const milestonesOpen = valLocals('milestonesOpen', {
 
   setLocals({
     properties,
-    id,
     eventType: 'milestone_closed',
   });
 
@@ -128,14 +122,14 @@ const milestonesOpen = valLocals('milestonesOpen', {
 });
 const milestonesUpdateSingle = valLocals('milestonesUpdateSingle', {
   properties: string.require(),
-  id: string.require(),
+  milestone_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     properties,
-    id,
+    milestone_id,
   } = res.locals;
 
-  dbMilestonesUpdateSingle({ id, properties })
+  dbMilestonesUpdateSingle({ milestone_id, properties })
     .then(() => {
       return next();
     })
@@ -171,23 +165,23 @@ const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
 });
 const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessage', {
   user_id: string.require(),
-  id: string.require(),
+  milestone_id: string.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    id,
+    milestone_id,
     eventType,
   } = res.locals;
   const queueMessage = {
     user_id,
-    milestone_id: id,
+    milestone_id,
     event_type: eventType,
   };
 
   setLocals({
     queueMessage,
-    messageGroupId: id,
+    messageGroupId: milestone_id,
   });
 
   return next();

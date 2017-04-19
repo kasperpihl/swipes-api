@@ -24,15 +24,15 @@ const dbMilestonesInsertSingle = funcWrap([
 });
 const dbMilestonesUpdateSingle = funcWrap([
   object.as({
-    id: string.require(),
+    milestone_id: string.require(),
     properties: object.require(),
   }).require(),
-], (err, { id, properties }) => {
+], (err, { milestone_id, properties }) => {
   if (err) {
     throw new SwipesError(`dbMilestonesUpdateSingle: ${err}`);
   }
 
-  const q = r.table('milestones').get(id).update(properties);
+  const q = r.table('milestones').get(milestone_id).update(properties);
 
   return db.rethinkQuery(q);
 });
