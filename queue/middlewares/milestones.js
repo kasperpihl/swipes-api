@@ -71,4 +71,5 @@ export {
   milestonesCreatedNotificationData,
   milestonesClosedNotificationData,
   milestonesGoalAddedRemovedNotificationData,
+  milestonesOpenedNotificationData,
 };
