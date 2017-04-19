@@ -8,8 +8,10 @@ import {
   milestonesCreate,
   milestonesInsert,
   milestonesClose,
+  milestonesOpen,
+  milestonesUpdateSingle,
   milestonesCreateQueueMessage,
-  milestonesCloseQueueMessage,
+  milestonesOpenCloseQueueMessage,
   milestonesAddGoal,
   milestonesAddGoalQueueMessage,
   milestonesRemoveGoal,
@@ -52,7 +54,20 @@ authed.all('/milestones.close',
     id: string.require(),
   }),
   milestonesClose,
-  milestonesCloseQueueMessage,
+  milestonesUpdateSingle,
+  milestonesOpenCloseQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    id: string.require(),
+  }));
+
+authed.all('/milestones.open',
+  valBody({
+    id: string.require(),
+  }),
+  milestonesOpen,
+  milestonesUpdateSingle,
+  milestonesOpenCloseQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     id: string.require(),

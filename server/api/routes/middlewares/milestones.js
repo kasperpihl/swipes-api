@@ -91,13 +91,52 @@ const milestonesClose = valLocals('milestonesClose', {
     updated_at: r.now(),
   };
 
+  setLocals({
+    properties,
+    id,
+    eventType: 'milestone_closed',
+  });
+
+  return next();
+});
+const milestonesOpen = valLocals('milestonesOpen', {
+  user_id: string.require(),
+  id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    id,
+  } = res.locals;
+  const historyItem = {
+    type: 'milestone_opened',
+    done_by: user_id,
+    done_at: r.now(),
+  };
+  const properties = {
+    closed: false,
+    history: r.row('history').append(historyItem),
+    updated_at: r.now(),
+  };
+
+  setLocals({
+    properties,
+    id,
+    eventType: 'milestone_closed',
+  });
+
+  return next();
+});
+const milestonesUpdateSingle = valLocals('milestonesUpdateSingle', {
+  properties: string.require(),
+  id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    properties,
+    id,
+  } = res.locals;
+
   dbMilestonesUpdateSingle({ id, properties })
     .then(() => {
-      setLocals({
-        eventType: 'milestone_closed',
-        id,
-      });
-
       return next();
     })
     .catch((err) => {
@@ -130,7 +169,7 @@ const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
 
   return next();
 });
-const milestonesCloseQueueMessage = valLocals('milestonesCloseQueueMessage', {
+const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessage', {
   user_id: string.require(),
   id: string.require(),
   eventType: string.require(),
@@ -278,8 +317,10 @@ export {
   milestonesCreate,
   milestonesInsert,
   milestonesClose,
+  milestonesOpen,
+  milestonesUpdateSingle,
   milestonesCreateQueueMessage,
-  milestonesCloseQueueMessage,
+  milestonesOpenCloseQueueMessage,
   milestonesAddGoal,
   milestonesAddGoalQueueMessage,
   milestonesRemoveGoal,
