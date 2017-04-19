@@ -36,6 +36,11 @@ const milestonesCreate = valLocals('milestonesCreate', {
     created_at: r.now(),
     updated_at: r.now(),
     closed: false,
+    history: [{
+      type: 'milestone_created',
+      done_by: user_id,
+      done_at: r.now(),
+    }],
   };
 
   setLocals({
@@ -67,13 +72,21 @@ const milestonesInsert = valLocals('milestonesInsert', {
     });
 });
 const milestonesClose = valLocals('milestonesClose', {
+  user_id: string.require(),
   id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     id,
   } = res.locals;
+  const historyItem = {
+    type: 'milestone_closed',
+    done_by: user_id,
+    done_at: r.now(),
+  };
   const properties = {
     closed: true,
+    history: r.row('history').append(historyItem),
     updated_at: r.now(),
   };
 
