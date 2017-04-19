@@ -32,6 +32,15 @@ class HOCGoalSelector extends PureComponent {
           hasThisMilestone: (g.get('milestone_id') === milestoneId),
         };
       }).toArray(),
+      ref: function setValue(selectInstance) {
+        const originalSetValue = selectInstance.setValue;
+        selectInstance.setValue = function() {
+          originalSetValue.apply(this, arguments);
+          selectInstance.setState({
+            isOpen: true,
+          });
+        }
+      },
       optionComponent: GoalRow,
     };
     return (
