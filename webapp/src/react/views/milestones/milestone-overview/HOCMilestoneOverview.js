@@ -26,9 +26,9 @@ class HOCMilestoneOverview extends PureComponent {
     return msgGen.milestones.getGoals(milestone);
   }
   render() {
-    const { milestone, goals } = this.props;
-    const filteredGoals = msgGen.milestones.getGoals(milestone);
-    
+    const { milestone } = this.props;
+    const { goals } = this.state;
+
     return (
       <MilestoneOverview milestone={milestone} />
     );
