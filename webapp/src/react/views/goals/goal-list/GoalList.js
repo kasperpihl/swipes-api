@@ -9,7 +9,7 @@ import Filter from 'components/filter/Filter';
 import SWView from 'SWView';
 import Button from 'Button';
 import Measure from 'react-measure';
-import HOCGoalListItem from './HOCGoalListItem';
+import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import FilterFooter from './FilterFooter';
 
 
@@ -64,8 +64,7 @@ class GoalList extends Component {
     );
   }
   renderFilter() {
-    const { filterProp, goalFilter } = this.props;
-    const filter = goalFilter.get('filter');
+    const { filterProp, filter } = this.props;
     const filterArray = filterProp.map((p) => {
       if (typeof p === 'string') {
         return p;
@@ -115,9 +114,7 @@ class GoalList extends Component {
     );
   }
   renderList() {
-    const { goalFilter, delegate, numberOfStars } = this.props;
-    const filter = goalFilter.get('filter');
-    const goals = goalFilter.get('goals');
+    const { filter, goals, delegate, numberOfStars } = this.props;
 
     if (filter.get('goalType') === 'current' && !goals.size) {
       return (
@@ -144,13 +141,13 @@ class GoalList extends Component {
         delegate={delegate}
         key={goalId}
       />
-      ));
+    ));
   }
   renderFilterFooter() {
-    const { goalFilter, showFilter, delegate, tabs, tabIndex } = this.props;
+    const { filter, goals, showFilter, delegate, tabs, tabIndex } = this.props;
     return (
       <FilterFooter
-        status={msgGen.goals.getFilterLabel(goalFilter.get('goals').size, goalFilter.get('filter'))}
+        status={msgGen.goals.getFilterLabel(goals.size, filter)}
         delegate={delegate}
         disableEdit={showFilter || (tabIndex !== (tabs.length - 1))}
       />

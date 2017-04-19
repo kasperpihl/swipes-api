@@ -209,7 +209,8 @@ class HOCGoalList extends PureComponent {
 
     return (
       <GoalList
-        goalFilter={goalFilter}
+        goals={goalFilter.get('goals')}
+        filter={goalFilter.get('filter')}
         tabIndex={tabIndex}
         savedState={savedState}
         {...this.bindLoading()}

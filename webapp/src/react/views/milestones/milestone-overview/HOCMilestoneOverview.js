@@ -12,6 +12,8 @@ class HOCMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      tabIndex: 0,
+      tabs: ['Current', 'Completed'],
       goals: this.getFilteredGoals(props.milestone),
     };
   }
@@ -22,15 +24,37 @@ class HOCMilestoneOverview extends PureComponent {
       goals: this.getFilteredGoals(nextProps.milestone),
     })
   }
+  tabDidChange(index) {
+    const { tabIndex } = this.state;
+    if (tabIndex !== index) {
+      this.setState({
+        tabIndex: index,
+      });
+    }
+  }
   getFilteredGoals(milestone) {
     return msgGen.milestones.getGoals(milestone);
   }
+  getGoalListProps() {
+    const { tabIndex, tabs } = this.state;
+    return {
+      delegate: this,
+      tabIndex,
+      tabs,
+    }
+  }
   render() {
     const { milestone } = this.props;
-    const { goals } = this.state;
+    const { goals, tabs, tabIndex } = this.state;
 
     return (
-      <MilestoneOverview milestone={milestone} />
+      <MilestoneOverview
+        milestone={milestone}
+        tabs={tabs}
+        goals={goals}
+        tabIndex={tabIndex}
+        delegate={this}
+      />
     );
   }
 }

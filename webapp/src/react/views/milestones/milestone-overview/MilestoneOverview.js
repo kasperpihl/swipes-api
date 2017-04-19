@@ -5,9 +5,11 @@ import React, { PureComponent } from 'react';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
+import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import Section from 'components/section/Section';
 import Button from 'Button';
 import Icon from 'Icon';
+
 import './styles/milestone-overview.scss';
 
 class MilestoneOverview extends PureComponent {
@@ -30,10 +32,21 @@ class MilestoneOverview extends PureComponent {
     );
   }
   renderLeftSection() {
+    const { milestone, delegate, tabs, tabIndex } = this.props;
     return (
       <section>
-        <TabBar tabs={['current', 'Completed']} activeTab={0} />
-        <div className="goal-list" />
+        <TabBar
+          tabs={tabs}
+          activeTab={tabIndex}
+          delegate={delegate}
+        />
+        {milestone.get('goal_order').map(gId => (
+          <HOCGoalListItem
+            goalId={gId}
+            key={gId}
+            delegate={delegate}
+          />
+        ))}
       </section>
     );
   }
