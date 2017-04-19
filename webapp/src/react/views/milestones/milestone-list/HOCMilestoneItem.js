@@ -6,6 +6,7 @@ import { setupDelegate } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
 import './styles/milestone-item.scss';
 
@@ -13,7 +14,7 @@ class HOCMilestoneItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      goals: this.getFilteredGoals(props.milestone)
+      goals: this.getFilteredGoals(props.milestone),
     };
     setupDelegate(this, props.milestone.get('id'));
     this.callDelegate.bindAll('onOpenMilestone');
@@ -23,7 +24,7 @@ class HOCMilestoneItem extends PureComponent {
   componentWillReceiveProps(nextProps) {
     this.setState({
       goals: this.getFilteredGoals(nextProps.milestone),
-    })
+    });
   }
   getFilteredGoals(milestone) {
     return msgGen.milestones.getGoals(milestone);
@@ -45,9 +46,9 @@ class HOCMilestoneItem extends PureComponent {
   renderProgress() {
     const { goals } = this.state;
     const numberOfGoals = goals.size;
-    const numberOfCompletedGoals = goals.filter((g) => g.getIn(['status', 'completed'])).size;
+    const numberOfCompletedGoals = goals.filter(g => g.getIn(['status', 'completed'])).size;
 
-    const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals/numberOfGoals)*100, 10) : 0;
+    const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
     console.log('percentage', percentage, 'prog', numberOfCompletedGoals, '/', numberOfGoals);
     return (
       <div className="milestone__progress">
@@ -65,20 +66,30 @@ class HOCMilestoneItem extends PureComponent {
     const { goals } = this.state;
     let lastActivity;
     let goalId;
+
     goals.forEach((g) => {
       const helper = new GoalsUtil(g);
       const last = helper.getLastActivity();
-      if(!lastActivity || last.get('done_at') > lastActivity.get('done_at')){
+      if (!lastActivity || last.get('done_at') > lastActivity.get('done_at')) {
         lastActivity = last;
         goalId = helper.getId();
       }
     });
 
     const userId = lastActivity && lastActivity.get('done_by');
+
+    console.log('userId', userId);
+
     return (
       <div className="last-activity">
         <div className="last-activity__left">
-
+          {
+            userId ? (
+              <HOCAssigning assignees={[userId]} />
+            ) : (
+              undefined
+            )
+          }
         </div>
         <div className="last-activity__right">
           <div className="last-activity__name">Kasper</div>

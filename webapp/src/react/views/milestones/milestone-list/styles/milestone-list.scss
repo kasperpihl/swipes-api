@@ -3,7 +3,7 @@
 
 .milestone-list {
   // @include size(100%, auto);
-  @include flexContainer('row') {
+  @include flexContainer('row', between, top) {
     flex-wrap: wrap;
   };
   padding: 15px;

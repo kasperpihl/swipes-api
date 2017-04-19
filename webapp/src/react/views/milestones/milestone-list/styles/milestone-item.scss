@@ -7,10 +7,9 @@
 // ======================================================
 
 .milestone {
-  @include size(300px, auto);
+  @include size(calc(33% - 30px), auto);
   border-radius: 6px;
   padding: 30px 15px;
-  margin-right: 30px;
 
   &:before {
     @include size(100%);
