@@ -132,6 +132,12 @@ const milestone_closed = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const milestone_opened = notifyWrapper([
+  milestones.milestonesGetSingle,
+  milestones.milestonesOpenedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const milestone_goal_added = notifyWrapper([
   milestones.milestonesGoalAddedRemovedNotificationData,
   notify.notifyAllInCompany,
