@@ -10,6 +10,7 @@
   @include size(300px, auto);
   border-radius: 6px;
   padding: 30px 15px;
+  margin-right: 30px;
 
   &:before {
     @include size(100%);
@@ -46,6 +47,14 @@
     @include size(100%, auto);
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
   }
+
+  .header {
+    $b: &;
+    $flexIgnoreList: '#{$b}__icon}';
+
+    @include size(100%, auto);
+    @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+  }
 }
 
 // ======================================================
@@ -54,22 +63,16 @@
 
 .milestone {
 
-  &__seperator {
-    @include size(100%, 1px);
-    background-color: $deepBlue-100;
-    display: none;
-  }
-
-  &__title {
-    @include size(100%, auto);
-    @include font(21px, $deepBlue-100, 27px);
-    @include truncateString();
-  }
-
   &__subtitle {
     @include size(100%, auto);
     @include font(11px, $deepBlue-50, 15px, 500);
     margin-top: 6px;
+  }
+
+  &__seperator {
+    @include size(100%, 1px);
+    background-color: $deepBlue-100;
+    display: none;
   }
 
   &__progress {
@@ -77,7 +80,8 @@
     border-top: 1px solid $deepBlue-5;
     border-bottom: 1px solid $deepBlue-5;
     margin-bottom: 12px;
-    margin-top: 24px;
+    margin-top: 15px;
+    transition: .25s ease;
   }
 
   &__svg {
@@ -87,7 +91,8 @@
 
     path {
       stroke-miterlimit: 10;
-      stroke-width: 48px;
+      stroke-width: 36px;
+      transition: .4s ease;
     }
 
     &--bg {
@@ -97,8 +102,35 @@
     &--fg {
       @include svg-color($tisho-green);
       stroke-dasharray: 320.4876403808594;
-    	stroke-dashoffset: 160;
+    	stroke-dashoffset: 50;
     }
+  }
+}
+
+.milestone .header {
+  $b: getElementSelectorInBlock(#{&}, '.milestone');
+
+  #{$b}__left {
+    @include size(100%, auto);
+    @include flexContainer('column', left, center);
+  }
+
+  #{$b}__title {
+    @include size(100%, auto);
+    @include font(21px, $deepBlue-100, 27px);
+    @include truncateString();
+  }
+
+  #{$b}__icon {
+    @include size(24px);
+  }
+
+  #{$b}__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-100);
+    opacity: 0;
+    transition: .3s ease;
+    transform: translateX(-15px);
   }
 }
 
@@ -128,18 +160,6 @@
     @include size(100%, auto);
     @include font(12px, $deepBlue-50, 15px);
   }
-
-  #{$b}__icon {
-    @include size(24px);
-  }
-
-  #{$b}__svg {
-    @include size(24px);
-    @include svg-color($deepBlue-100);
-    opacity: 0;
-    transition: .3s ease;
-    transform: translateX(-15px);
-  }
 }
 
 .milestone .progress {
@@ -149,17 +169,21 @@
     @include size(6px);
     background-color: $deepBlue-100;
     border-radius: 50%;
+    transition: .4s ease;
   }
 
   #{$b}__number {
-    @include size(100%);
-    @include centerAbsolute();
+    @include size(54px);
+    // @include centerAbsolute(scale(0));
+    position: absolute;
+    left: calc(50% - (54px / 2)); top: calc(50% - (54px / 2));
     @include flexContainer('row', center, center);
-    @include font(12px, $deepBlue-100, 15px, 500);
+    @include font(12px, $deepBlue-100, 15px, 300);
     background-color: $bg;
     border-radius: 50%;
-    -webkit-clip-path: circle(0% at 50% 50%);
-    transition: .25s ease-out;
+    opacity: 0;
+    transform: scale(1);
+    transition: .4s ease;
   }
 }
 
@@ -172,6 +196,7 @@
 
   @include styleElementsAfter(4) {
     padding-top: 45px;
+
     #{$b}__seperator {
       display: block;
       transform: translateY(-15px)
@@ -187,34 +212,58 @@
   $b: &;
 
   &:hover {
-    box-shadow: 0 3px 4px 0 rgba(0,12,47,0.3);
-    transition: .25s ease-in;
+    box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+    transition: .25s ease;
 
-    &:before {
-      -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-      transition: .25s ease-in;
-    }
-
-    &:after {
-      transition: .25s ease-out;
+    #{$b}__progress {
+      border-top: 1px solid $deepBlue-20;
+      transition: .25s ease;
     }
 
     #{$b}__svg {
+
       &--bg {
-        @include svg-color($deepBlue-20);
-        transition: .25s .15s ease-out;
+        path {
+          stroke-width: 30px;
+          transition: .4s ease;
+        }
+
+      }
+
+      &--fg {
+        // @include svg-color($green-color);
+        transition: .4s ease;
+
+        path {
+          stroke-width: 48px;
+          transition: .4s ease;
+        }
       }
     }
 
-    .progress__number {
-      -webkit-clip-path: circle(50.0% at 50% 50%);
-      transition: .5s .15s ease-out;
+    .header__title {
+      @include font($c: $blue-100);
+      transition: .25s ease;
     }
 
-    .last-activity__svg {
+    .header__svg {
       opacity: 1;
-      transition: .25s .15s ease;
+      transition: .25s ease;
       transform: translateX(0px);
+    }
+
+    .progress__dot {
+      opacity: 0;
+      background-color: $tisho-green;
+      // transform: scale(5);
+      // transition: .2s ease;
+
+    }
+
+    .progress__number {
+      opacity: 1;
+      transform: scale(2);
+      transition: transform .4s ease, opacity .2s ease;
     }
   }
 }

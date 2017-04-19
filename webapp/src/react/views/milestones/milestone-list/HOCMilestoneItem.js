@@ -22,9 +22,16 @@ class HOCMilestoneItem extends PureComponent {
     return (
       <div className="milestone" onClick={this.onOpenMilestone}>
         <div className="milestone__seperator" />
-        <div className="milestone__title">{milestone.get('title')}</div>
-        <div className="milestone__subtitle">6/9</div>
+        <div className="header">
+          <div className="header__left">
+            <div className="header__title">{milestone.get('title')}</div>
+          </div>
+          <div className="header__icon">
+            <Icon icon="ArrowRightLong" className="header__svg" />
+          </div>
+        </div>
         <div className="milestone__progress">
+          <div className="milestone__subtitle">6/9</div>
           <Icon icon="MilestoneProgress" className="milestone__svg milestone__svg--bg" />
           <Icon icon="MilestoneProgress" className="milestone__svg milestone__svg--fg" />
 
@@ -40,9 +47,6 @@ class HOCMilestoneItem extends PureComponent {
           <div className="last-activity__right">
             <div className="last-activity__name">Kasper</div>
             <div className="last-activity__label">completed goal “Notifications”</div>
-          </div>
-          <div className="last-activity__icon">
-            <Icon icon="ArrowRightLong" className="last-activity__svg" />
           </div>
         </div>
       </div>

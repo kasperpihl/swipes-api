@@ -10,7 +10,7 @@ import MilestoneList from './MilestoneList';
 
 class HOCMilestoneList extends PureComponent {
   static minWidth() {
-    return 954;
+    return 654;
   }
   static maxWidth() {
     return 954;
@@ -29,7 +29,7 @@ class HOCMilestoneList extends PureComponent {
       title: 'Milestone overview',
       props: {
         milestoneId,
-      }
+      },
     });
     console.log('open', milestoneId);
   }

@@ -2,8 +2,8 @@
 @import '~styles/_mixins.scss/';
 
 .milestone-list {
-  @include size(100%, auto);
-  @include flexContainer('row', between, top) {
+  // @include size(100%, auto);
+  @include flexContainer('row') {
     flex-wrap: wrap;
   };
   padding: 15px;
