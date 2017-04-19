@@ -17,9 +17,9 @@ class HOCMilestoneOverview extends PureComponent {
   }
   render() {
     const { milestone } = this.props;
-    console.log(milestone.get('title'));
+
     return (
-      <MilestoneOverview />
+      <MilestoneOverview milestone={milestone} />
     );
   }
 }
