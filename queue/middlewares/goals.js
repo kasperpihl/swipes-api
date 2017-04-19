@@ -120,6 +120,8 @@ const goalsArchiveWithHistoryNotificationData = (req, res, next) => {
   const {
     group_id,
     goal,
+    milestone_id,
+    goal_order,
   } = res.locals;
   const historyIndex = getHistoryIndex(goal.history, group_id);
 
@@ -135,7 +137,7 @@ const goalsArchiveWithHistoryNotificationData = (req, res, next) => {
   };
 
   res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal_id: goal.id };
+  res.locals.eventData = { goal_id: goal.id, milestone_id, goal_order };
 
   return next();
 };

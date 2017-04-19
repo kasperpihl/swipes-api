@@ -34,6 +34,9 @@ import {
   goalsNotifyEmailQueueMessage,
 } from './middlewares/goals';
 import {
+  milestonesRemoveGoal,
+} from './middlewares/milestones';
+import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
@@ -148,10 +151,13 @@ authed.all('/goals.archive',
   }),
   notificationCreateGroupId,
   goalsArchive,
+  milestonesRemoveGoal,
   goalsArchiveQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
+    milestone_id: string,
+    goal_order: array,
   }));
 
 authed.all('/goals.notify',

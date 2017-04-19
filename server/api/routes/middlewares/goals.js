@@ -205,12 +205,16 @@ const goalsArchive = valLocals('goalsArchive', {
   };
   const properties = {
     archived: true,
+    milestone_id: null,
     history: r.row('history').append(historyItem),
   };
 
   dbGoalsUpdateSingle({ goal_id, properties })
-    .then(() => {
+    .then((results) => {
+      const changes = results.changes[0].old_val;
+
       setLocals({
+        milestone_id: changes.milestone_id,
         eventType: 'goal_archived',
       });
 
@@ -353,18 +357,24 @@ const goalsArchiveQueueMessage = valLocals('goalsArchiveQueueMessage', {
   goal_id: string.require(),
   notificationGroupId: string.require(),
   eventType: string.require(),
+  milestone_id: string,
+  goal_order: array,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     notificationGroupId,
     eventType,
+    milestone_id,
+    goal_order,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
     group_id: notificationGroupId,
     event_type: eventType,
+    milestone_id,
+    goal_order,
   };
 
   setLocals({
