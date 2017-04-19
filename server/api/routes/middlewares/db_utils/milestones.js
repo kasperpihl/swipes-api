@@ -84,10 +84,41 @@ const dbMilestonesRemoveGoal = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbMilestonesMigrateIncompleteGoals = funcWrap([
+  object.as({
+    milestone_id: string.require(),
+    migrate_to_milestone_id: string,
+  }).require(),
+], (err, { milestone_id, migrate_to_milestone_id }) => {
+  if (err) {
+    throw new SwipesError(`dbMilestonesMigrateIncompleteGoals: ${err}`);
+  }
+
+  const q =
+    r.db('swipes')
+      .table('milestones')
+      .get(milestone_id)('goal_order').do((goal_ids) => {
+        return r.db('swipes')
+          .table('goals')
+          .getAll(r.args(goal_ids))
+          .filter({
+            archived: false,
+            status: { completed: false },
+          }, {
+            default: true,
+          });
+      })
+      .update({
+        milestone_id: migrate_to_milestone_id,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbMilestonesInsertSingle,
   dbMilestonesUpdateSingle,
   dbMilestonesAddGoal,
   dbMilestonesRemoveGoal,
+  dbMilestonesMigrateIncompleteGoals,
 };

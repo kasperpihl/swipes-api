@@ -16,6 +16,7 @@ import {
   milestonesAddGoalQueueMessage,
   milestonesRemoveGoal,
   milestonesRemoveGoalQueueMessage,
+  milestoneMigrateIncompleteGoals,
 } from './middlewares/milestones';
 import {
   goalsAddMilestone,
@@ -52,9 +53,11 @@ authed.all('/milestones.create',
 authed.all('/milestones.close',
   valBody({
     milestone_id: string.require(),
+    migrate_to_milestone_id: string,
   }),
   milestonesClose,
   milestonesUpdateSingle,
+  milestoneMigrateIncompleteGoals,
   milestonesOpenCloseQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({

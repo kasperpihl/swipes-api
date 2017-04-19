@@ -9,6 +9,7 @@ import {
   dbMilestonesUpdateSingle,
   dbMilestonesAddGoal,
   dbMilestonesRemoveGoal,
+  dbMilestonesMigrateIncompleteGoals,
 } from './db_utils/milestones';
 import {
   generateSlackLikeId,
@@ -119,6 +120,23 @@ const milestonesOpen = valLocals('milestonesOpen', {
   });
 
   return next();
+});
+const milestoneMigrateIncompleteGoals = valLocals('milestoneMigrateIncompleteGoals', {
+  milestone_id: string.require(),
+  migrate_to_milestone_id: string,
+}, (req, res, next, setLocals) => {
+  const {
+    milestone_id,
+    migrate_to_milestone_id = null,
+  } = res.locals;
+
+  dbMilestonesMigrateIncompleteGoals({ milestone_id, migrate_to_milestone_id })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
 });
 const milestonesUpdateSingle = valLocals('milestonesUpdateSingle', {
   properties: string.require(),
@@ -319,4 +337,5 @@ export {
   milestonesAddGoalQueueMessage,
   milestonesRemoveGoal,
   milestonesRemoveGoalQueueMessage,
+  milestoneMigrateIncompleteGoals,
 };
