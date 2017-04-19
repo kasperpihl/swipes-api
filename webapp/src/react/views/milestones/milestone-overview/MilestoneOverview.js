@@ -34,19 +34,26 @@ class MilestoneOverview extends PureComponent {
     );
   }
   renderLeftSection() {
-    const { milestone, delegate, tabs, tabIndex } = this.props;
-
+    const { milestone, delegate, tabs, tabIndex, goals } = this.props;
+    const tab = tabs[tabIndex];
+    const goalList = goals.get(tab);
     return (
       <section>
         <TabBar
-          tabs={tabs}
+          tabs={tabs.map((t) => {
+            const size = goals.get(t).size;
+            if (size) {
+              t += ` (${size})`;
+            }
+            return t;
+          })}
           activeTab={tabIndex}
           delegate={delegate}
         />
-        {milestone.get('goal_order').map(gId => (
+        {goalList.map(g => (
           <HOCGoalListItem
-            goalId={gId}
-            key={gId}
+            goalId={g.get('id')}
+            key={g.get('id')}
             delegate={delegate}
           />
         ))}
@@ -56,10 +63,9 @@ class MilestoneOverview extends PureComponent {
   renderRightSection() {
     const { milestone, goals } = this.props;
 
-    const numberOfGoals = goals.size;
-    const numberOfCompletedGoals = goals.filter(g => g.getIn(['status', 'completed'])).size;
-
-    const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
+    const noCompleted = goals.get('Completed').size;
+    const noGoals = noCompleted + goals.get('Current').size;
+    const percentage = noGoals ? parseInt((noCompleted / noGoals) * 100, 10) : 0;
 
     const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
 
@@ -67,7 +73,7 @@ class MilestoneOverview extends PureComponent {
       <section>
         <Section title="Progress">
           <div className="milestone-progress">
-            <div className="milestone-progress__subtitle">{`${numberOfCompletedGoals} / ${numberOfGoals}`}</div>
+            <div className="milestone-progress__subtitle">{`${noCompleted} / ${noGoals}`}</div>
             <Icon icon="MilestoneProgress" className="milestone-progress__svg milestone-progress__svg--bg" />
             <Icon
               icon="MilestoneProgress"
@@ -78,7 +84,7 @@ class MilestoneOverview extends PureComponent {
 
             <div className="milestone-progress__inner">
               <div className="milestone-progress__dot" />
-              <div className="milestone-progress__number">25%</div>
+              <div className="milestone-progress__number">{`${percentage}%`}</div>
             </div>
           </div>
         </Section>

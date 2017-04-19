@@ -187,7 +187,7 @@ class HOCGoalList extends PureComponent {
     }
   }
   render() {
-    const { me, savedState, filters, goals, starredGoals: pG } = this.props;
+    const { me, savedState, filters, goals, starredGoals: sG } = this.props;
     const {
       tabIndex,
       tabs,
@@ -196,12 +196,12 @@ class HOCGoalList extends PureComponent {
     } = this.state;
     let goalFilter = filters.get(tabs[tabIndex]);
     goalFilter = goalFilter.set('goals', goalFilter.get('goals').sort((g1, g2) => {
-      const g1PinI = pG.indexOf(g1);
-      const g2PinI = pG.indexOf(g2);
-      if (g1PinI > g2PinI) {
+      const g1StarI = sG.indexOf(g1);
+      const g2StarI = sG.indexOf(g2);
+      if (g1StarI > g2StarI) {
         return -1;
       }
-      if (g2PinI > g1PinI) {
+      if (g2StarI > g1StarI) {
         return 1;
       }
       return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']));

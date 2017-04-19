@@ -72,6 +72,7 @@ class HOCMilestoneItem extends PureComponent {
     );
   }
   renderLastActivity() {
+    return undefined;
     const { goals } = this.state;
     let lastActivity;
     let goalId;
