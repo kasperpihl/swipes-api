@@ -9,6 +9,12 @@ import { connect } from 'react-redux';
 import MilestoneOverview from './MilestoneOverview';
 
 class HOCMilestoneOverview extends PureComponent {
+  static minWidth() {
+    return 840;
+  }
+  static maxWidth() {
+    return 900;
+  }
   constructor(props) {
     super(props);
     this.state = {
