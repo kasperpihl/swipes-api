@@ -8,10 +8,10 @@ export default function filterGoal(goal, filter) {
   // Supported: none || milestone.id
   if (milestoneId) {
     if (milestoneId === 'none') {
-      if (goal.get('milestoneId')) {
+      if (goal.get('milestone_id')) {
         return false;
       }
-    } else if (goal.get('milestoneId') !== milestoneId) {
+    } else if (goal.get('milestone_id') !== milestoneId) {
       return false;
     }
   }

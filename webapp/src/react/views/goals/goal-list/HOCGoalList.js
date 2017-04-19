@@ -27,13 +27,13 @@ class HOCGoalList extends PureComponent {
         { id: 'goalType' },
         ' assigned to ',
         { id: 'userId' },
-        ' matching ',
-        { id: 'matching' },
+        ' with ',
+        { id: 'milestoneId' },
       ]),
     };
     setupLoading(this);
     if (props.savedState) {
-      this.state.tabIndex = props.savedState.get('tabIndex');
+      this.state.tabIndex = Math.min(this.state.tabs.length - 1, props.savedState.get('tabIndex'));
     }
     const { tabIndex, tabs } = this.state;
 
@@ -110,7 +110,7 @@ class HOCGoalList extends PureComponent {
     }
     if (obj.id === 'milestoneId') {
       const { selectMilestone } = this.props;
-      selectMilestone(options, res => this.updateFilter({ goalType: res.id }));
+      selectMilestone(options, res => this.updateFilter({ milestoneId: res.id }));
     }
     if (obj.id === 'matching') {
       const { inputMenu } = this.props;
@@ -195,6 +195,7 @@ class HOCGoalList extends PureComponent {
       filterProp,
     } = this.state;
     let goalFilter = filters.get(tabs[tabIndex]);
+    console.log(filters.toJS(), tabs[tabIndex]);
     goalFilter = goalFilter.set('goals', goalFilter.get('goals').sort((g1, g2) => {
       const g1StarI = sG.indexOf(g1);
       const g2StarI = sG.indexOf(g2);
@@ -263,6 +264,7 @@ export default connect(mapStateToProps, {
   saveCache: ca.cache.save,
   createGoal: ca.goals.create,
   selectUser: a.menus.selectUser,
+  selectMilestone: a.menus.selectMilestone,
   clearFilter: ca.filters.clear,
   updateFilter: ca.filters.update,
   inputMenu: a.menus.input,

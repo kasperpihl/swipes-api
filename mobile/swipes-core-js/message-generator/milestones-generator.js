@@ -10,8 +10,15 @@ export default class Milestones {
     }
     return milestone;
   }
-  getName() {
-
+  getName(milestoneId) {
+    if(milestoneId === 'none'){
+      return 'no milestone';
+    }
+    const milestone = this.getMilestone(milestoneId);
+    if(milestone){
+      return milestone.get('title');
+    }
+    return 'any milestone';
   }
   getGoals(milestoneId, overrideGoals) {
     const milestone = this.getMilestone(milestoneId);

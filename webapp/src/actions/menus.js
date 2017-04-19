@@ -139,3 +139,47 @@ export const selectUser = (options, callback) => (d, getState) => {
     },
   }));
 };
+
+export const selectMilestone = (options, callback) => (d, getState) => {
+
+  const state = getState();
+  const milestones = state.get('milestones');
+
+  const resultForMilestone = (milestone) => {
+    const obj = {
+      id: milestone.get('id'),
+      title: msgGen.milestones.getName(milestone),
+    };
+    return obj;
+  };
+
+  const sortedMilestones = () => milestones.sort((m1, m2) => {
+    return msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c));
+  }).toArray();
+
+  const allMilestones = () => [
+    { id: null, title: 'Any milestone' },
+    { id: 'none', title: 'No milestone' },
+  ].concat(sortedMilestones().map(m => resultForMilestone(m)));
+
+  const searchForMilestone = q => sortedMilestones().filter((m) => {
+    return (msgGen.milestones.getName(m).toLowerCase().startsWith(q.toLowerCase()))
+  }).map(m => resultForMilestone(m));
+
+  const delegate = {
+    onItemAction: (item) => {
+      callback(item);
+      d(a.main.contextMenu(null));
+    },
+    resultsForAll: () => allMilestones(),
+    resultsForSearch: query => searchForMilestone(query),
+  };
+  d(a.main.contextMenu({
+    options,
+    component: TabMenu,
+    props: {
+      search: 'Search for milestone',
+      delegate,
+    },
+  }));
+};

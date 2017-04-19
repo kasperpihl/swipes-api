@@ -63,6 +63,9 @@ class GoalList extends Component {
       </div>
     );
   }
+  renderSearch() {
+    return <input type="text" />;
+  }
   renderFilter() {
     const { filterProp, filter } = this.props;
     const filterArray = filterProp.map((p) => {
@@ -75,8 +78,8 @@ class GoalList extends Component {
         newString = msgGen.goals.getType(filter.get('goalType'));
       } else if (p.get('id') === 'userId') {
         newString = msgGen.users.getName(filter.get('userId'));
-      } else if (p.get('id') === 'milestone') {
-        return p.set('string', msgGen.milestones.getName(filter.get('milestone')));
+      } else if (p.get('id') === 'milestoneId') {
+        return p.set('string', msgGen.milestones.getName(filter.get('milestoneId')));
       } else if (p.get('id') === 'matching') {
         if (!filter.get('matching') || !filter.get('matching').length) {
           return p.set('string', 'anything');
