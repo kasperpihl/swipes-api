@@ -21,13 +21,13 @@ class HOCGoalSelector extends PureComponent {
   componentDidMount() {
   }
   onChange(val) {
-    const { goals, milestoneId } = this.props;
+    const { goals, milestoneId, hide } = this.props;
     if(val.id) {
       this.callDelegate('onAddGoalToMilestone', val.id);
-      this.props.hide();
     } else {
       this.callDelegate('onCreateGoal', val.value);
     }
+    hide();
   }
   renderGoalItem(option) {
     return (

@@ -83,6 +83,7 @@ authed.all('/milestones.addGoal',
   valBody({
     goal_id: string.require(),
     milestone_id: string.require(),
+    current_milestone_id: string,
   }),
   goalsAddMilestone,
   milestonesAddGoal,

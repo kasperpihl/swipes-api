@@ -58,6 +58,7 @@ class HOCMilestoneOverview extends PureComponent {
     const { milestone, createGoal } = this.props;
     const noteContent = convertToRaw(EditorState.createEmpty().getCurrentContent());
     this.setLoading('add');
+    this.tabDidChange(0);
     createGoal(title, noteContent, milestone.get('id')).then((res) => {
       if (res && res.ok) {
         this.clearLoading('add', 'Goal added', 3000);

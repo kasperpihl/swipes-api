@@ -19,8 +19,10 @@ export const addGoal = valAction('milestones.addGoal', [
   string.require(),
   string.require(),
 ], (milestoneId, goalId) => (d, getState) => {
+  const currentMilestoneId = getState().getIn(['goals', goalId, 'milestone_id']);
   return d(a.api.request('milestones.addGoal', {
     goal_id: goalId,
+    current_milestone_id: currentMilestoneId,
     milestone_id: milestoneId,
     organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
   }));
