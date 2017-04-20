@@ -236,16 +236,19 @@ const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessa
   return next();
 });
 const milestonesRenameQueueMessage = valLocals('milestonesRenameQueueMessage', {
+  user_id: string.require(),
   milestone_id: string.require(),
   title: string.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     milestone_id,
     title,
     eventType,
   } = res.locals;
   const queueMessage = {
+    user_id,
     milestone_id,
     title,
     event_type: eventType,
