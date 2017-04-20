@@ -12,6 +12,9 @@ export default function main(state = initialState, action) {
       });
       return milestones;
     }
+    case 'milestones.rename': {
+      return state.setIn([payload.milestone_id, 'title'], payload.title);
+    }
     case 'goal_created':
     case 'goals.create':
     case 'goals.archive':

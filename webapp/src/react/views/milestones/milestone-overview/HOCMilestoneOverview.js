@@ -60,10 +60,11 @@ class HOCMilestoneOverview extends PureComponent {
             this.setLoading('dots');
             closeMilestone(milestone.get('id')).then((res) => {
               if(res.ok){
+                this.clearLoading('dots', 'Milestone closed', 1000);
                 window.analytics.sendEvent('Milestone closed', {});
               }
               if (!res || !res.ok) {
-                this.clearLoading('dots', '!Something went wrong');
+                this.clearLoading('dots', '!Something went wrong', 3000);
               }
             });
           }
@@ -79,6 +80,25 @@ class HOCMilestoneOverview extends PureComponent {
       },
     });
   }
+  onTitleClick(e) {
+    const options = this.getOptionsForE(e);
+    const { milestone, renameMilestone, inputMenu } = this.props;
+    inputMenu({
+      ...options,
+      text: milestone.get('title'),
+      buttonLabel: 'Rename',
+    }, (title) => {
+      if (title !== milestone.get('title') && title.length) {
+        this.setLoading('title', 'Renaming...');
+        renameMilestone(milestone.get('id'), title).then(() => {
+          this.clearLoading('title');
+        });
+      }
+    });
+  }
+  onClose() {
+
+  }
   onAddGoalToMilestone(goalId) {
     const { goals, milestone, addGoalToMilestone } = this.props;
     const goal = goals.get(goalId);
@@ -88,7 +108,7 @@ class HOCMilestoneOverview extends PureComponent {
       this.setLoading('add');
       addGoalToMilestone(milestone.get('id'), goalId).then((res) => {
         if(res && res.ok){
-          this.clearLoading('add', 'Goal added', 3000);
+          this.clearLoading('add', 'Goal added', 1000);
         } else {
           this.clearLoading('add', '!Something went wrong', 3000);
         }
@@ -102,7 +122,7 @@ class HOCMilestoneOverview extends PureComponent {
     this.tabDidChange(0);
     createGoal(title, noteContent, milestone.get('id')).then((res) => {
       if (res && res.ok) {
-        this.clearLoading('add', 'Goal added', 3000);
+        this.clearLoading('add', 'Goal added', 1000);
         window.analytics.sendEvent('Goal added', {});
       } else {
         this.clearLoading('add', '!Something went wrong', 3000);
@@ -205,7 +225,9 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
+  inputMenu: a.menus.input,
   closeMilestone: ca.milestones.close,
+  renameMilestone: ca.milestones.rename,
   confirm: a.menus.confirm,
   addGoalToMilestone: ca.milestones.addGoal,
   createGoal: ca.goals.create,
