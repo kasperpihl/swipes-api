@@ -222,7 +222,7 @@ const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessa
 const milestonesAddGoal = valLocals('milestonesAddGoal', {
   user_id: string.require(),
   goal_id: string.require(),
-  milestone_id: string.require(),
+  milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -230,7 +230,11 @@ const milestonesAddGoal = valLocals('milestonesAddGoal', {
     milestone_id,
   } = res.locals;
 
-  dbMilestonesAddGoal({ user_id, goal_id, milestone_id })
+  if (!milestone_id) {
+    return next();
+  }
+
+  return dbMilestonesAddGoal({ user_id, goal_id, milestone_id })
     .then((result) => {
       const changes = result.changes[0].new_val || result.changes[0].old_val;
 

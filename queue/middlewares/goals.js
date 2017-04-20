@@ -31,10 +31,16 @@ const goalsGetSingle = (req, res, next) => {
 const goalsCreatedNotificationData = (req, res, next) => {
   const {
     goal,
+    milestone_id,
+    goal_order,
   } = res.locals;
 
   res.locals.notificationData = null;
-  res.locals.eventData = { goal };
+  res.locals.eventData = {
+    goal,
+    milestone_id,
+    goal_order,
+  };
 
   return next();
 };

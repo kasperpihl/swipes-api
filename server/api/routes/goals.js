@@ -35,6 +35,7 @@ import {
 } from './middlewares/goals';
 import {
   milestonesRemoveGoal,
+  milestonesAddGoal,
 } from './middlewares/milestones';
 import {
   notificationsPushToQueue,
@@ -105,13 +106,19 @@ authed.all('/goals.create',
     (setLocals, attachment, attachment_order, goal) => {
       goal.attachments[attachment.id] = attachment;
       goal.attachment_order = attachment_order;
-      setLocals({ goal });
+      setLocals({
+        goal_id: goal.id,
+        goal,
+      });
     },
   ),
+  milestonesAddGoal,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
+    milestone_id: string,
+    goal_order: array,
   }));
 
 authed.all('/goals.completeStep',
