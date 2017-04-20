@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
+import { propsOrPop } from 'classes/react-utils';
 import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
@@ -23,6 +24,7 @@ class HOCGoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     bindAll(this, ['onContext']);
+    propsOrPop(this, 'goal');
     this.state = {
       tabIndex: 0,
       editMode: false,
@@ -31,19 +33,6 @@ class HOCGoalOverview extends PureComponent {
     setupLoading(this);
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
-  }
-  componentDidMount() {
-    const { goal, navPop } = this.props;
-    if (!goal) {
-      navPop();
-    }
-  }
-  componentWillReceiveProps(nextProps) {
-    const { goal, navPop } = this.props;
-    const nextGoal = nextProps.goal;
-    if (goal && !nextGoal) {
-      navPop();
-    }
   }
   onEditSteps() {
     this.setState({ editMode: !this.state.editMode });

@@ -164,7 +164,7 @@ const milestoneRename = valLocals('milestoneRename', {
   return next();
 });
 const milestonesUpdateSingle = valLocals('milestonesUpdateSingle', {
-  properties: string.require(),
+  properties: object.require(),
   milestone_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {

@@ -19,7 +19,7 @@ class MilestoneOverview extends PureComponent {
     super(props);
     this.state = {};
     setupDelegate(this);
-    this.callDelegate.bindAll('onAddGoals');
+    this.callDelegate.bindAll('onAddGoals', 'onContext');
   }
   componentDidMount() {
   }
@@ -37,6 +37,8 @@ class MilestoneOverview extends PureComponent {
           />
           <Button
             icon="ThreeDots"
+            onClick={this.onContext}
+            {...getLoading('dots')}
           />
         </HOCHeaderTitle>
       </div>
