@@ -17,6 +17,8 @@ import {
   milestonesRemoveGoal,
   milestonesRemoveGoalQueueMessage,
   milestoneMigrateIncompleteGoals,
+  milestoneRename,
+  milestonesRenameQueueMessage,
 } from './middlewares/milestones';
 import {
   goalsAddMilestone,
@@ -110,6 +112,21 @@ authed.all('/milestones.removeGoal',
     goal_id: string.require(),
     milestone_id: string.require(),
     goal_order: array.require(),
+  }),
+);
+
+authed.all('/milestones.rename',
+  valBody({
+    milestone_id: string.require(),
+    title: string.require(),
+  }),
+  milestoneRename,
+  milestonesUpdateSingle,
+  milestonesRenameQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    milestone_id: string.require(),
+    title: string.require(),
   }),
 );
 

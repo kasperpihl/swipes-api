@@ -147,6 +147,22 @@ const milestoneMigrateIncompleteGoals = valLocals('milestoneMigrateIncompleteGoa
       return next(err);
     });
 });
+const milestoneRename = valLocals('milestoneRename', {
+  title: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    title,
+  } = res.locals;
+
+  setLocals({
+    properties: {
+      title,
+      eventType: 'milestone_renamed',
+    },
+  });
+
+  return next();
+});
 const milestonesUpdateSingle = valLocals('milestonesUpdateSingle', {
   properties: string.require(),
   milestone_id: string.require(),
@@ -210,6 +226,29 @@ const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessa
     milestone_id,
     event_type: eventType,
     group_id: notificationGroupId,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: milestone_id,
+  });
+
+  return next();
+});
+const milestonesRenameQueueMessage = valLocals('milestonesRenameQueueMessage', {
+  milestone_id: string.require(),
+  title: string.require(),
+  eventType: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    milestone_id,
+    title,
+    eventType,
+  } = res.locals;
+  const queueMessage = {
+    milestone_id,
+    title,
+    eventType,
   };
 
   setLocals({
@@ -357,4 +396,6 @@ export {
   milestonesRemoveGoal,
   milestonesRemoveGoalQueueMessage,
   milestoneMigrateIncompleteGoals,
+  milestoneRename,
+  milestonesRenameQueueMessage,
 };

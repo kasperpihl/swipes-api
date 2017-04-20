@@ -89,10 +89,25 @@ const milestoneOpenCloseWithHistoryNotificationData = (req, res, next) => {
 
   return next();
 };
+const milestonesRenamedNotificationData = (req, res, next) => {
+  const {
+    milestone_id,
+    title,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = {
+    milestone_id,
+    title,
+  };
+
+  return next();
+};
 
 export {
   milestonesGetSingle,
   milestonesGeneralWithHistoryNotificationData,
   milestonesGoalAddedRemovedNotificationData,
   milestoneOpenCloseWithHistoryNotificationData,
+  milestonesRenamedNotificationData,
 };
