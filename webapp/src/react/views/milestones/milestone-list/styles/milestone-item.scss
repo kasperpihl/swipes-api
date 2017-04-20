@@ -100,6 +100,10 @@
     &--fg {
       @include svg-color($tisho-green);
     }
+
+    &--closed {
+      @include svg-color($deepBlue-30);
+    }
   }
 }
 

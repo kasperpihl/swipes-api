@@ -46,6 +46,7 @@ class HOCMilestoneItem extends PureComponent {
     );
   }
   renderProgress() {
+    const { milestone } = this.props;
     const { goals } = this.state;
     const numberOfGoals = goals.size;
     const numberOfCompletedGoals = goals.filter(g => g.getIn(['status', 'completed'])).size;
@@ -54,13 +55,19 @@ class HOCMilestoneItem extends PureComponent {
 
     const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
 
+    let progressClassName = 'milestone__svg milestone__svg--fg';
+
+    if (milestone.get('closed')) {
+      progressClassName += ' milestone__svg--closed';
+    }
+
     return (
       <div className="milestone__progress">
         <div className="milestone__subtitle">{`${numberOfCompletedGoals} / ${numberOfGoals}`}</div>
         <Icon icon="MilestoneProgress" className="milestone__svg milestone__svg--bg" />
         <Icon
           icon="MilestoneProgress"
-          className="milestone__svg milestone__svg--fg"
+          className={progressClassName}
           strokeDasharray={PROGRESS_DASH}
           strokeDashoffset={svgDashOffset}
         />
@@ -72,7 +79,6 @@ class HOCMilestoneItem extends PureComponent {
     );
   }
   renderLastActivity() {
-    return undefined;
     const { goals } = this.state;
     let lastActivity;
     let goalId;
@@ -111,7 +117,7 @@ class HOCMilestoneItem extends PureComponent {
       <div className="milestone" onClick={this.onOpenMilestone}>
         {this.renderHeader()}
         {this.renderProgress()}
-        {this.renderLastActivity()}
+        {/* {this.renderLastActivity()} */}
       </div>
     );
   }

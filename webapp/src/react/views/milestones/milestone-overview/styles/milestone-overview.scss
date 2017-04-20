@@ -109,6 +109,10 @@
         transition: .4s ease;
       }
     }
+
+    &--closed {
+      @include svg-color($deepBlue-30);
+    }
   }
 }
 

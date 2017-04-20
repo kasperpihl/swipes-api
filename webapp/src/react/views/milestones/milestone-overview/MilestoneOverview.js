@@ -78,6 +78,12 @@ class MilestoneOverview extends PureComponent {
 
     const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
 
+    let progressClassName = 'milestone__svg milestone__svg--fg';
+
+    if (milestone.get('closed')) {
+      progressClassName += ' milestone__svg--closed';
+    }
+
     return (
       <section>
         <Section title="Progress">
@@ -86,7 +92,7 @@ class MilestoneOverview extends PureComponent {
             <Icon icon="MilestoneProgress" className="milestone-progress__svg milestone-progress__svg--bg" />
             <Icon
               icon="MilestoneProgress"
-              className="milestone__svg milestone__svg--fg"
+              className={progressClassName}
               strokeDasharray={PROGRESS_DASH}
               strokeDashoffset={svgDashOffset}
             />
