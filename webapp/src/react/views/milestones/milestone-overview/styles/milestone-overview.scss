@@ -102,7 +102,6 @@
     &--fg {
       @include svg-color($tisho-green);
       stroke-dasharray: 320.4876403808594;
-    	stroke-dashoffset: 50;
 
       path {
         stroke-width: 48px;
