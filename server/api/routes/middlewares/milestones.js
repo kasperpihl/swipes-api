@@ -248,7 +248,7 @@ const milestonesRenameQueueMessage = valLocals('milestonesRenameQueueMessage', {
   const queueMessage = {
     milestone_id,
     title,
-    eventType,
+    event_type: eventType,
   };
 
   setLocals({
