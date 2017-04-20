@@ -78,10 +78,10 @@ class MilestoneOverview extends PureComponent {
 
     const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
 
-    let progressClassName = 'milestone__svg milestone__svg--fg';
+    let progressClassName = 'milestone-progress__svg milestone-progress__svg--fg';
 
     if (milestone.get('closed')) {
-      progressClassName += ' milestone__svg--closed';
+      progressClassName += ' milestone-progress__svg--closed';
     }
 
     return (

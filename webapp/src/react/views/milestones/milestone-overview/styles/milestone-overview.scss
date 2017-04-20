@@ -86,7 +86,7 @@
 
     path {
       stroke-miterlimit: 10;
-      stroke-width: 36px;
+      stroke-width: 48px;
       transition: .4s ease;
     }
 
@@ -94,7 +94,7 @@
       @include svg-color($deepBlue-5);
 
       path {
-        stroke-width: 30px;
+        stroke-width: 48px;
         transition: .4s ease;
       }
     }
@@ -120,33 +120,3 @@
 // ======================================================
 // Hover
 // ======================================================
-
-.milestone-overview .milestone-progress {
-  $b: getElementSelectorInBlock(#{&}, '.milestone-overview');
-
-  &:hover {
-    #{$b}__svg {
-
-      &--bg path {
-        stroke-width: 30px;
-        transition: .4s ease;
-      }
-
-      &--fg path {
-        stroke-width: 48px;
-        transition: .4s ease;
-      }
-    }
-
-    #{$b}__dot {
-      opacity: 0;
-      background-color: $tisho-green;
-    }
-
-    #{$b}__number {
-      opacity: 1;
-      transform: scale(2);
-      transition: transform .4s ease, opacity .2s ease;
-    }
-  }
-}
