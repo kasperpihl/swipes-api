@@ -25,6 +25,7 @@ export default class Milestones {
     const state = this.store.getState();
     const goals = overrideGoals || state.get('goals');
     return milestone.get('goal_order')
+                    .reverse()
                     .map(gId => goals.get(gId));
   }
 }

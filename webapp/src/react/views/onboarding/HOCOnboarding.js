@@ -13,7 +13,7 @@ class HOCOnboarding extends PureComponent {
     this.state = {};
   }
   onClick(i, item, e) {
-    const { browser, target, navPush, complete } = this.props;
+    const { browser, target, complete, openSecondary } = this.props;
 
     if(item.get('id') === 'personalize-swipes') {
       openSecondary({

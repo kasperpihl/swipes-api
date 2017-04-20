@@ -24,7 +24,7 @@ class MilestoneOverview extends PureComponent {
   componentDidMount() {
   }
   renderHeader() {
-    const { milestone: m } = this.props;
+    const { milestone: m, getLoading } = this.props;
 
     return (
       <div className="milestone-overview__header">
@@ -32,6 +32,7 @@ class MilestoneOverview extends PureComponent {
           <Button
             primary
             onClick={this.onAddGoals}
+            {...getLoading('add')}
             text="Add goal to this milestone"
           />
           <Button

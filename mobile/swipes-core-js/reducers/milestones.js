@@ -12,6 +12,10 @@ export default function main(state = initialState, action) {
       });
       return milestones;
     }
+    case 'milestones.addGoal':
+    case 'milestone_goal_added': {
+      return state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));
+    }
     case 'milestones.create':
     case 'milestone_created': {
       return state.set(payload.milestone.id, fromJS(payload.milestone));

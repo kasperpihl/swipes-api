@@ -14,3 +14,14 @@ export const create = valAction('milestones.create', [
     organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
   }));
 });
+
+export const addGoal = valAction('milestones.addGoal', [
+  string.require(),
+  string.require(),
+], (milestoneId, goalId) => (d, getState) => {
+  return d(a.api.request('milestones.addGoal', {
+    goal_id: goalId,
+    milestone_id: milestoneId,
+    organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  }));
+});

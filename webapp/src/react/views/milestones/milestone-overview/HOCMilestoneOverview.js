@@ -2,12 +2,16 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import * as ca from 'swipes-core-js/actions';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCGoalSelector from 'context-menus/goal-selector/HOCGoalSelector';
 // import { map, list } from 'react-immutable-proptypes';
 import { List } from 'immutable';
+import {
+  EditorState,
+  convertToRaw,
+} from 'draft-js';
 
 import MilestoneOverview from './MilestoneOverview';
 
@@ -25,6 +29,7 @@ class HOCMilestoneOverview extends PureComponent {
       tabs: ['Current', 'Completed'],
       goals: this.getFilteredGoals(props.milestone, props.starredGoals),
     };
+    setupLoading(this);
   }
   componentDidMount() {
   }
@@ -32,6 +37,35 @@ class HOCMilestoneOverview extends PureComponent {
     this.setState({
       goals: this.getFilteredGoals(nextProps.milestone, nextProps.starredGoals),
     })
+  }
+  onAddGoalToMilestone(goalId) {
+    const { goals, milestone, addGoalToMilestone } = this.props;
+    const goal = goals.get(goalId);
+    if(goal.get('milestone_id') !== milestone.get('id')) {
+      const isCompleted = new GoalsUtil(goal).getIsCompleted();
+      this.tabDidChange(isCompleted ? 1 : 0);
+      this.setLoading('add');
+      addGoalToMilestone(milestone.get('id'), goalId).then((res) => {
+        if(res && res.ok){
+          this.clearLoading('add', 'Goal added', 3000);
+        } else {
+          this.clearLoading('add', '!Something went wrong', 3000);
+        }
+      });
+    }
+  }
+  onCreateGoal(title) {
+    const { milestone, createGoal } = this.props;
+    const noteContent = convertToRaw(EditorState.createEmpty().getCurrentContent());
+    this.setLoading('add');
+    createGoal(title, noteContent, milestone.get('id')).then((res) => {
+      if (res && res.ok) {
+        this.clearLoading('add', 'Goal added', 3000);
+        window.analytics.sendEvent('Goal added', {});
+      } else {
+        this.clearLoading('add', '!Something went wrong', 3000);
+      }
+    });
   }
   onAddGoals(e) {
     const { contextMenu, milestone } = this.props;
@@ -105,6 +139,7 @@ class HOCMilestoneOverview extends PureComponent {
 
     return (
       <MilestoneOverview
+        {...this.bindLoading()}
         milestone={milestone}
         tabs={tabs}
         goals={goals}
@@ -128,4 +163,6 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
+  addGoalToMilestone: ca.milestones.addGoal,
+  createGoal: ca.goals.create,
 })(HOCMilestoneOverview);

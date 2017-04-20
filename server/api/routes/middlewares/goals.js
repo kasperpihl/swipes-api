@@ -228,20 +228,17 @@ const goalsAddMilestone = valLocals('goalsAddMilestone', {
   user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string.require(),
-  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     milestone_id,
-    notificationGroupId,
   } = res.locals;
   const historyItem = {
     milestone_id,
     type: 'milestone_added',
     done_by: user_id,
     done_at: r.now(),
-    group_id: notificationGroupId,
   };
   const properties = {
     milestone_id,
@@ -260,18 +257,15 @@ const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
   user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string.require(),
-  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
-    notificationGroupId,
   } = res.locals;
   const historyItem = {
     type: 'milestone_removed',
     done_by: user_id,
     done_at: r.now(),
-    group_id: notificationGroupId,
   };
   const properties = {
     milestone_id: null,
