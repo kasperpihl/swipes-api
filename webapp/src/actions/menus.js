@@ -154,7 +154,7 @@ export const selectMilestone = (options, callback) => (d, getState) => {
   };
 
   const sortedMilestones = () => milestones.sort((m1, m2) => {
-    return msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c));
+    return msgGen.users.getFirstName(m1).localeCompare(msgGen.users.getFirstName(m2));
   }).toArray();
 
   const allMilestones = () => [
