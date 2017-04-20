@@ -157,8 +157,8 @@ const milestoneRename = valLocals('milestoneRename', {
   setLocals({
     properties: {
       title,
-      eventType: 'milestone_renamed',
     },
+    eventType: 'milestone_renamed',
   });
 
   return next();
