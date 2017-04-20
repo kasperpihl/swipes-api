@@ -282,16 +282,22 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string,
+  current_milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
   user_id,
   goal_id,
+  current_milestone_id,
+} = res.locals;
+  let {
   milestone_id,
 } = res.locals;
 
-  if (!milestone_id) {
+  if (!milestone_id && !current_milestone_id) {
     return next();
   }
+
+  milestone_id = current_milestone_id || milestone_id;
 
   return dbMilestonesRemoveGoal({ user_id, goal_id, milestone_id })
   .then((result) => {
