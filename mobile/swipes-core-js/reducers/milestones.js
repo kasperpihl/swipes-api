@@ -28,6 +28,8 @@ export default function main(state = initialState, action) {
     case 'goals.create':
     case 'goals.archive':
     case 'goal_archived':
+    case 'milestones.removeGoal':
+    case 'milestone_goal_removed':
     case 'milestones.addGoal':
     case 'milestone_goal_added': {
       if(payload.milestone_id){

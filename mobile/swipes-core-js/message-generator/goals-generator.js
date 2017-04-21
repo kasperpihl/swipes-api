@@ -16,8 +16,23 @@ export default class Goals {
     };
     return goalTypes[goalType] || 'All goals';
   }
-
   getSubtitle(goal) {
+    const helper = new GoalsUtil(goal);
+    let event = helper.getLastActivityByType('goal_completed');
+    if(!event) {
+      event = helper.getLastActivityByType('goal_created');
+    }
+    const ts = timeAgo(event.get('done_at'));
+    const name = this.parent.users.getName(event.get('done_by'));
+    const start = event.get('type') === 'goal_completed' ? 'Completed' : 'Started';
+    let milestonePrefix = '';
+    if(goal.get('milestone_id')){
+      const msName = this.parent.milestones.getName(goal.get('milestone_id'));
+      milestonePrefix = `${msName} // `;
+    }
+    return `${milestonePrefix}${start} by ${name} ${ts}`;
+  }
+  getListSubtitle(goal) {
     const helper = new GoalsUtil(goal);
     const currentStep = helper.getCurrentStep();
     if (helper.getIsCompleted()) {

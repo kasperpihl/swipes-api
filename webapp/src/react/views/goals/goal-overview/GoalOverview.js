@@ -87,7 +87,7 @@ class GoalOverview extends PureComponent {
       <div className="add-goal__header">
         <HOCHeaderTitle
           title={title || goal.get('title')}
-          subtitle={`Started ${timeAgo(goal.get('created_at'))} by ${msgGen.users.getName(goal.get('created_by'))}`}
+          subtitle={msgGen.goals.getSubtitle(goal)}
           delegate={delegate}
         >
           <Button

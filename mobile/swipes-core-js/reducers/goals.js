@@ -120,6 +120,10 @@ export default function goalsReducer(state = initialState, action) {
         return g.setIn(['attachments', aId, 'deleted'], true);
       });
     }
+    case 'milestones.removeGoal':
+    case 'milestone_goal_removed':{
+      return state.setIn([payload.goal_id, 'milestone_id'], null);
+    }
     case 'milestones.addGoal':
     case 'milestone_goal_added': {
       return state.setIn([payload.goal_id, 'milestone_id'], payload.milestone_id);

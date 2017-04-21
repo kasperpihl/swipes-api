@@ -87,7 +87,7 @@ class HOCGoalListItem extends PureComponent {
   }
   renderContent() {
     const { goal, filter } = this.props;
-    const status = msgGen.goals.getSubtitle(goal, filter);
+    const status = msgGen.goals.getListSubtitle(goal, filter);
 
     return (
       <div className="goal-list-item__content" onClick={this.onClick}>

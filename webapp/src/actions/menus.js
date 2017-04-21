@@ -149,6 +149,7 @@ export const selectMilestone = (options, callback) => (d, getState) => {
     const obj = {
       id: milestone.get('id'),
       title: msgGen.milestones.getName(milestone),
+      selected: options.selectedId === milestone.get('id'),
     };
     return obj;
   };
@@ -157,10 +158,12 @@ export const selectMilestone = (options, callback) => (d, getState) => {
     return msgGen.users.getFirstName(m1).localeCompare(msgGen.users.getFirstName(m2));
   }).toArray();
 
-  const allMilestones = () => [
-    { id: null, title: 'Any milestone' },
-    { id: 'none', title: 'No milestone' },
-  ].concat(sortedMilestones().map(m => resultForMilestone(m)));
+  const defItems = [];
+  if(!options.disableAny){
+    defItems.push({ id: null, title: 'Any milestone' });
+  }
+  defItems.push({ id: 'none', title: 'No milestone' });
+  const allMilestones = () => defItems.concat(sortedMilestones().map(m => resultForMilestone(m)));
 
   const searchForMilestone = q => sortedMilestones().filter((m) => {
     return (msgGen.milestones.getName(m).toLowerCase().startsWith(q.toLowerCase()))

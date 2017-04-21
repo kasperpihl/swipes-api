@@ -196,6 +196,54 @@ class HOCGoalOverview extends PureComponent {
       this.setState({ handoff: null });
     }
   }
+  onArchive(options) {
+    const { goal, confirm, archive } = this.props;
+    confirm(Object.assign({}, options, {
+      title: 'Archive goal',
+      message: 'This will make this goal inactive for all participants.',
+    }), (i) => {
+      if (i === 1) {
+        this.setLoading('dots');
+        archive(goal.get('id')).then((res) => {
+          if(res.ok){
+            window.analytics.sendEvent('Goal archived', {});
+          }
+          if (!res || !res.ok) {
+            this.clearLoading('dots', '!Something went wrong');
+          }
+        });
+      }
+    });
+  }
+  onEditMilestone(options) {
+    const { selectMilestone, goal, addGoalToMilestone, removeGoalFromMilestone } = this.props;
+    selectMilestone(Object.assign(options, {
+      disableAny: true,
+      selectedId: goal.get('milestone_id') || 'none',
+    }), (milestoneRes) => {
+      let funcToCall;
+      let action = 'added';
+      let milestoneId = goal.get('milestone_id');
+      if(milestoneRes.id === 'none' && goal.get('milestone_id')){
+        funcToCall = removeGoalFromMilestone;
+        action = 'removed';
+      } else if(milestoneRes.id !== 'none' && milestoneRes.id !== goal.get('milestone_id')){
+        funcToCall = addGoalToMilestone;
+        milestoneId = milestoneRes.id;
+      }
+      if(funcToCall){
+        this.setLoading('dots');
+        funcToCall(milestoneId, goal.get('id')).then((res) => {
+          if(res.ok) {
+            this.clearLoading('dots', `Milestone ${action}`, 3000);
+            window.analytics.sendEvent(`Milestone ${action}`, {});
+          } else {
+            this.clearLoading('dots', '!Something went wrong', 3000);
+          }
+        })
+      }
+    })
+  }
   onAskFor(e) {
     this.onChooseNotificationType(e, true);
   }
@@ -205,36 +253,24 @@ class HOCGoalOverview extends PureComponent {
   onContext(e) {
     const {
       goal,
-      archive,
       contextMenu,
-      confirm,
     } = this.props;
     const options = this.getOptionsForE(e);
     const delegate = {
-      onItemAction: () => {
-        confirm(Object.assign({}, options, {
-          title: 'Archive goal',
-          message: 'This will make this goal inactive for all participants.',
-        }), (i) => {
-          if (i === 1) {
-            this.setLoading('dots');
-            archive(goal.get('id')).then((res) => {
-              if(res.ok){
-                window.analytics.sendEvent('Goal archived', {});
-              }
-              if (!res || !res.ok) {
-                this.clearLoading('dots', '!Something went wrong');
-              }
-            });
-          }
-        });
-      },
+      onItemAction: (item, i) => this[item.handler](options, item, i),
     };
+    const items = [
+      { handler: 'onEditMilestone', title: 'Add milestone' },
+      { handler: 'onArchive', title: 'Archive Goal' },
+    ];
+    if(goal.get('milestone_id')){
+      items[0].title = 'Edit milestone';
+    }
     contextMenu({
       options,
       component: TabMenu,
       props: {
-        items: [{ title: 'Archive Goal' }],
+        items,
         delegate,
       },
     });
@@ -305,6 +341,9 @@ export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
   renameGoal: ca.goals.rename,
   selectAssignees: a.goals.selectAssignees,
+  selectMilestone: a.menus.selectMilestone,
+  addGoalToMilestone: ca.milestones.addGoal,
+  removeGoalFromMilestone: ca.milestones.removeGoal,
   confirm: a.menus.confirm,
   inputMenu: a.menus.input,
   preview: a.links.preview,

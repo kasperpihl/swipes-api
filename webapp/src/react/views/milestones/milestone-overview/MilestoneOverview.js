@@ -28,7 +28,11 @@ class MilestoneOverview extends PureComponent {
     const title = getLoading('title').loadingLabel;
     return (
       <div className="milestone-overview__header">
-        <HOCHeaderTitle title={title || m.get('title')} delegate={delegate}>
+        <HOCHeaderTitle
+          title={title || m.get('title')}
+          delegate={delegate}
+          subtitle={msgGen.milestones.getSubtitle(m)}
+        >
           <Button
             primary
             onClick={this.onAddGoals}
