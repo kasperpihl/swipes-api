@@ -144,7 +144,7 @@ const milestoneMigrateIncompleteGoals = valLocals('milestoneMigrateIncompleteGoa
   dbMilestonesMigrateIncompleteGoals({ milestone_id, migrate_to_milestone_id })
     .then((goalIdsToRemoveFromMilestone) => {
       setLocals({
-        goalIdsToRemoveFromMilestone,
+        goal_ids: goalIdsToRemoveFromMilestone,
       });
 
       return next();
