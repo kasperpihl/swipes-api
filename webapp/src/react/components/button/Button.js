@@ -1,11 +1,19 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import * as a from 'actions';
+// import * as ca from 'swipes-core-js/actions';
+import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
+// import { map, list } from 'react-immutable-proptypes';
+// import { fromJS } from 'immutable';
 import Icon from 'Icon';
-const MIN_TIME = 1000;
-const SUCCESS_TIMER = 3000;
+import ButtonTooltip from './ButtonTooltip';
 import './styles/button.scss';
 
-class Button extends Component {
+const MIN_TIME = 1000;
+const SUCCESS_TIMER = 3000;
+
+class Button extends PureComponent {
   constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
@@ -14,10 +22,8 @@ class Button extends Component {
       errorState: false,
       successState: false,
     };
-  }
-  componentWillUnmount() {
-    clearTimeout(this._timer);
-    clearTimeout(this._resultTimer);
+
+    bindAll(this, ['onMouseEnter', 'onMouseLeave']);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.loading !== this.props.loading) {
@@ -56,6 +62,10 @@ class Button extends Component {
       }, SUCCESS_TIMER);
     }
   }
+  componentWillUnmount() {
+    clearTimeout(this._timer);
+    clearTimeout(this._resultTimer);
+  }
   onClick(e) {
     const { onClick, disabled } = this.props;
 
@@ -64,6 +74,29 @@ class Button extends Component {
     }
 
     this.refs.button.blur();
+  }
+  onMouseEnter(e) {
+    const { tooltip, tooltipLabel } = this.props;
+    const target = getParentByClass(e.target, 'g-button');
+    const position = 'top';
+
+    const data = {
+      component: ButtonTooltip,
+      props: {
+        tooltipLabel,
+      },
+      options: {
+        boundingRect: target.getBoundingClientRect(),
+        position,
+      },
+    };
+
+    tooltip(data);
+  }
+  onMouseLeave() {
+    const { tooltip } = this.props;
+
+    tooltip(null);
   }
   renderIcon() {
     const { icon } = this.props;
@@ -116,11 +149,7 @@ class Button extends Component {
       frameless,
       selected,
       tabIndex: tabIndexProps,
-      loading: lol,
       className: classNameFromButton,
-      errorLabel,
-      successLabel,
-      loadingLabel,
       ...rest
     } = this.props;
     const { loading, errorState, successState } = this.state;
@@ -186,8 +215,6 @@ class Button extends Component {
   }
 }
 
-export default Button;
-
 const { string, bool, func } = PropTypes;
 
 Button.propTypes = {
@@ -204,3 +231,11 @@ Button.propTypes = {
   loading: bool,
   frameless: bool,
 };
+
+function mapStateToProps() {
+  return {};
+}
+console.log(a.main);
+export default connect(mapStateToProps, {
+  tooltip: a.main.tooltip,
+})(Button);
