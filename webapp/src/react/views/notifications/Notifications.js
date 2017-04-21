@@ -18,10 +18,16 @@ export default class Notifications extends Component {
     this.onScroll = this.callDelegate.bind(null, 'onScroll');
   }
   renderHeader() {
-    const { isLoading, tabIndex } = this.props;
+    const { isLoading, tabIndex, numberOfUnread } = this.props;
 
     const button = tabIndex === 0 ? (
-      <Button loading={isLoading('all')} text="Mark all as read" onClick={this.onMarkAll} />
+      <Button
+        loading={isLoading('all')}
+        text="Mark all as read"
+        disabled={!numberOfUnread}
+        tooltipLabel={!numberOfUnread ? 'All your notifications are already marked as read' : undefined}
+        onClick={this.onMarkAll}
+      />
     ) : null;
 
     return (

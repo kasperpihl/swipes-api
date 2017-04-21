@@ -11,9 +11,10 @@ class ButtonTooltip extends PureComponent {
   componentDidMount() {
   }
   render() {
+    const { label } = this.props;
     return (
       <div className="button-tooltip">
-        Lorem ipsum dolor sit amet.
+        {label}
       </div>
     );
   }

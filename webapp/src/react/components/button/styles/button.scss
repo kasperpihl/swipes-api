@@ -172,7 +172,6 @@ $borderColor: $deepBlue-10;
   &--disabled {
     border-color: transparent;
     background-color: transparent;
-    pointer-events: none;
 
     #{$b}__text {
       color: $deepBlue-20;
@@ -195,7 +194,7 @@ $borderColor: $deepBlue-10;
   }
 }
 
-// selected states 
+// selected states
 
 .g-button {
   $b: &;

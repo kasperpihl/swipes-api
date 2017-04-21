@@ -87,7 +87,7 @@ class Button extends PureComponent {
     const data = {
       component: ButtonTooltip,
       props: {
-        tooltipLabel,
+        label: tooltipLabel,
       },
       options: {
         boundingRect: target.getBoundingClientRect(),
@@ -163,6 +163,7 @@ class Button extends PureComponent {
       loadingLabel,
       errorLabel,
       successLabel,
+      tooltipLabel,
       ...rest
     } = this.props;
     const { loading, errorState, successState } = this.state;
