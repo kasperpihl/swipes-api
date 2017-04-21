@@ -132,7 +132,7 @@ class NotificationItem extends Component {
     return <Button text="Reply" primary small onClick={this.onReply} />;
   }
   render() {
-    const { notification: n, delegate } = this.props;
+    const { notification: n, delegate, noBorder, narrow } = this.props;
     let className = 'notification';
 
     if (n.get('unseen')) {
@@ -143,7 +143,7 @@ class NotificationItem extends Component {
       className += ' notification--clickable';
     }
 
-    if(n.get('noBorder')){
+    if(noBorder){
       className += ' notification--no-border';
     }
 
@@ -178,11 +178,12 @@ const { string, object, number, bool, oneOfType, array } = PropTypes;
 NotificationItem.propTypes = {
   i: number,
   delegate: object,
+  noBorder: bool,
+  narrow: bool,
   notification: mapContains({
     icon: string,
     subtitle: string,
     noClickTitle: bool,
-    noBorder: bool,
     title: oneOfType([array, string]),
     message: string,
     attachments: list,

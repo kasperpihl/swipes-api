@@ -177,7 +177,6 @@ class GoalOverview extends PureComponent {
     let nf = msgGen.history.getNotificationWrapperForHistory(helper.getId(), history, {
       icon: false,
     });
-    nf = nf.set('noBorder', true);
 
     return (
       <div className="goal-overview__column goal-overview__column--right">
@@ -187,6 +186,8 @@ class GoalOverview extends PureComponent {
           actions={this.renderActivitySeeAllButton()}
         >
           <NotificationWrapper
+            narrow={true}
+            noBorder={true}
             delegate={delegate}
             notification={nf}
           />
