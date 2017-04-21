@@ -8,3 +8,30 @@
   box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
   border: 1px solid #E5E6EA;
 }
+
+.goal-row {
+  @include size(100%);
+  @include flexContainer('row');
+
+  &__icon {
+    @include size(auto, 100%);
+    @include flexContainer('row', center, center);
+    padding-right: 12px;
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color(white);
+    background-color: $green-color;
+    border-radius: 50%;
+  }
+
+  &__content {
+    @include size(100%);
+    @include flexContainer('column', left, center);
+  }
+
+  &__subtitle {
+    @include font(12px, $deepBlue-60, 15px, 500);
+  }
+}

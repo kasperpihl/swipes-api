@@ -8,6 +8,7 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import { Creatable } from 'react-select';
+import Icon from 'Icon';
 
 import './styles/goal-selector.scss';
 import './styles/react-select/default.scss';
@@ -22,7 +23,7 @@ class HOCGoalSelector extends PureComponent {
   }
   onChange(val) {
     const { goals, milestoneId, hide } = this.props;
-    if(val.id) {
+    if (val.id) {
       this.callDelegate('onAddGoalToMilestone', val.id);
     } else {
       this.callDelegate('onCreateGoal', val.value);
@@ -32,9 +33,23 @@ class HOCGoalSelector extends PureComponent {
   renderGoalItem(option) {
     return (
       <div className="goal-row">
-        {option.label}
+        {
+          option.completed ? (
+            <div className="goal-row__icon">
+              <Icon icon="ActivityCheckmark" className="goal-row__svg" />
+            </div>
+          ) : (
+            undefined
+          )
+        }
+        <div className="goal-row__content">
+          <div className="goal-row__title">
+            {option.label}
+          </div>
+          <div className="goal-row__subtitle">{option.hasThisMilestone ? 'This goal is already a part of this milestone' : ''}</div>
+        </div>
       </div>
-    )
+    );
   }
   render() {
     const { milestoneId, goals } = this.props;
@@ -49,8 +64,8 @@ class HOCGoalSelector extends PureComponent {
           hasThisMilestone: (g.get('milestone_id') === milestoneId),
         };
       }).toArray(),
-      isOptionUnique: (s) => (s.option.label && s.option.label.length),
-      promptTextCreator: (s) => `Create a new goal "${s}"`,
+      isOptionUnique: s => (s.option.label && s.option.label.length),
+      promptTextCreator: s => `Create a new goal "${s}"`,
       autofocus: true,
       openOnFocus: true,
       onBlurResetsInput: false,
