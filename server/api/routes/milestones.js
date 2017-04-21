@@ -103,8 +103,6 @@ authed.all('/milestones.addGoal',
     goal_id: string.require(),
     milestone_id: string.require(),
     goal_order: array.require(),
-    history_index: number.require(),
-    history_item: object.require(),
   }),
 );
 
@@ -124,8 +122,6 @@ authed.all('/milestones.removeGoal',
     goal_id: string.require(),
     milestone_id: string.require(),
     goal_order: array.require(),
-    history_index: number.require(),
-    history_item: object.require(),
   }),
 );
 
