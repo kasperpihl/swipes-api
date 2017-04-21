@@ -48,6 +48,7 @@ class MilestoneOverview extends PureComponent {
     const { milestone, delegate, tabs, tabIndex, goals } = this.props;
     const tab = tabs[tabIndex];
     const goalList = goals.get(tab);
+    console.log(goals.get('Current'));
     return (
       <section>
         <TabBar
@@ -61,14 +62,53 @@ class MilestoneOverview extends PureComponent {
           activeTab={tabIndex}
           delegate={delegate}
         />
-        {goalList.map(g => (
-          <HOCGoalListItem
-            goalId={g.get('id')}
-            key={g.get('id')}
-            delegate={delegate}
-          />
-        ))}
+
+        {this.renderList()}
       </section>
+    );
+  }
+  renderList() {
+    const { delegate, tabs, tabIndex, goals } = this.props;
+    const tab = tabs[tabIndex];
+    const goalList = goals.get(tab);
+
+    if (!goalList.size) {
+      return this.renderEmptyState();
+    }
+
+    return (
+      goalList.map(g => (
+        <HOCGoalListItem
+          goalId={g.get('id')}
+          key={g.get('id')}
+          delegate={delegate}
+        />
+      ))
+    );
+  }
+  renderEmptyState() {
+    const { tabs, tabIndex, goals } = this.props;
+    const tab = tabs[tabIndex];
+    const goalList = goals.get(tab);
+
+    if (tabIndex === 0 && !goalList.size && goals.get('Completed').size) {
+      return (
+        <div className="milestone-empty">
+          <div className="milestone-empty__content">
+            Great work on this milestone! All goals have been completed. <br />
+            Add a new goal to continue the work or close the milestone as completed.
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="milestone-empty">
+        <div className="milestone-empty__content">
+          Great milestone! What are the goals that will help you and your team achieve it?
+          <div className="milestone-empty__action" onClick={this.onAddGoals}>Add goals to this milestone</div>
+        </div>
+      </div>
     );
   }
   renderRightSection() {

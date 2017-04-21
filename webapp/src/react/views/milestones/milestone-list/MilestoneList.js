@@ -38,7 +38,7 @@ class MilestoneList extends PureComponent {
   }
   renderList() {
     const { milestones, delegate } = this.props;
-    return milestones.map((m) => (
+    return milestones.map(m => (
       <HOCMilestoneItem
         key={m.get('id')}
         milestone={m}
@@ -46,12 +46,33 @@ class MilestoneList extends PureComponent {
       />
     )).toArray();
   }
+  renderEmptyState() {
+    const { tabIndex } = this.props;
+
+    return (
+      <div className="milestone-empty">
+        <div className="milestone-empty__content">
+          {tabIndex === 0 ?
+            'This is the beginning of something great, a project or a big achievement for the team. Add your first milestone and set the goals for it.' :
+            'Shhh, the team is hard at work and things are still in progress. No closed milestones yet.'}
+          <div className="milestone-empty__action" onClick={this.onAddMilestone}>{tabIndex === 0 ? 'Add a milestone' : ''}</div>
+        </div>
+      </div>
+    );
+  }
   render() {
+    const { milestones } = this.props;
     return (
       <SWView noframe header={this.renderHeader()}>
-        <div className="milestone-list">
-          {this.renderList()}
-        </div>
+        {
+          milestones.size ? (
+            <div className="milestone-list">
+              {this.renderList()}
+            </div>
+          ) : (
+            this.renderEmptyState()
+          )
+        }
       </SWView>
     );
   }
