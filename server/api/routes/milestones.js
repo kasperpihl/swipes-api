@@ -68,6 +68,7 @@ authed.all('/milestones.close',
   notificationsPushToQueue,
   valResponseAndSend({
     milestone_id: string.require(),
+    goal_order: array.require(),
   }));
 
 authed.all('/milestones.open',
