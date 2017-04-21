@@ -70,6 +70,7 @@ const milestoneOpenCloseWithHistoryNotificationData = (req, res, next) => {
     group_id,
     milestone,
     milestone_id,
+    goal_ids,
   } = res.locals;
   const historyIndex = getHistoryIndex(milestone.history, group_id);
 
@@ -88,6 +89,7 @@ const milestoneOpenCloseWithHistoryNotificationData = (req, res, next) => {
   res.locals.eventData = {
     milestone_id,
     goal_order: milestone.goal_order,
+    goal_ids,
   };
 
   return next();

@@ -220,16 +220,19 @@ const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessa
   milestone_id: string.require(),
   eventType: string.require(),
   notificationGroupId: string.require(),
+  goal_ids: array,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     milestone_id,
     eventType,
     notificationGroupId,
+    goal_ids = [],
   } = res.locals;
   const queueMessage = {
     user_id,
     milestone_id,
+    goal_ids,
     event_type: eventType,
     group_id: notificationGroupId,
   };
