@@ -68,7 +68,7 @@ class HOCMilestoneOverview extends PureComponent {
         }
         confirm(Object.assign({}, options, {
           title: 'Close milestone',
-          message: 'Do you want to close this milestone and get ready for the next challenge?',
+          message: 'Closing a milestone removes all goals that are not completed from it.',
         }), (i) => {
           if (i === 1) {
             this.setLoading('dots');
@@ -125,7 +125,7 @@ class HOCMilestoneOverview extends PureComponent {
       this.setLoading('add');
       addGoalToMilestone(milestone.get('id'), goalId).then((res) => {
         if(res && res.ok){
-          this.clearLoading('add', 'Added', 2000);
+          this.clearLoading('add');
         } else {
           this.clearLoading('add', '!Something went wrong', 3000);
         }
@@ -139,7 +139,7 @@ class HOCMilestoneOverview extends PureComponent {
     this.tabDidChange(0);
     createGoal(title, noteContent, milestone.get('id')).then((res) => {
       if (res && res.ok) {
-        this.clearLoading('add', 'Added', 2000);
+        this.clearLoading('add');
         window.analytics.sendEvent('Goal added', {});
       } else {
         this.clearLoading('add', '!Something went wrong', 3000);
