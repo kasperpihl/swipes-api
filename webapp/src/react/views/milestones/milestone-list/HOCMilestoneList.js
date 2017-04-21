@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import MilestoneList from './MilestoneList';
+
+const emptyList = List();
 
 class HOCMilestoneList extends PureComponent {
   static minWidth() {
@@ -16,6 +19,12 @@ class HOCMilestoneList extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);
+  }
+  componentWillMount() {
+    this.setState({
+      tabs: ['Open', 'Closed'],
+      tabIndex: 0,
+    })
   }
   componentDidMount() {
   }
@@ -57,14 +66,25 @@ class HOCMilestoneList extends PureComponent {
       alignX: 'right',
     };
   }
-
+  tabDidChange(index) {
+    const { tabIndex } = this.state;
+    if (tabIndex !== index) {
+      this.setState({
+        tabIndex: index,
+      });
+    }
+  }
   render() {
     const { milestones } = this.props;
-
+    const { tabs, tabIndex } = this.state;
+    const group = milestones.groupBy(m => m.get('closed') ? 'Closed' : 'Open');
+    console.log(group.toJS());
     return (
       <MilestoneList
         delegate={this}
-        milestones={milestones}
+        milestones={group.get(tabs[tabIndex]) || emptyList}
+        tabs={tabs}
+        tabIndex={tabIndex}
         {...this.bindLoading()}
       />
     );

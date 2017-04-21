@@ -20,7 +20,7 @@ class MilestoneList extends PureComponent {
   componentDidMount() {
   }
   renderHeader() {
-    const { getLoading } = this.props;
+    const { getLoading, tabs, tabIndex, delegate } = this.props;
     return (
       <div className="milestone-list__header">
         <HOCHeaderTitle title="Milestones">
@@ -32,7 +32,7 @@ class MilestoneList extends PureComponent {
           />
         </HOCHeaderTitle>
 
-        <TabBar tabs={['Open', 'Closed (coming soon)']} activeTab={0} />
+        <TabBar delegate={delegate} tabs={tabs} activeTab={tabIndex} />
       </div>
     );
   }

@@ -38,6 +38,13 @@ export const rename = valAction('milestones.rename', [
 })));
 
 
+export const open = valAction('milestones.open', [
+  string.require(),
+], (milestoneId) => (d, getState) => d(a.api.request('milestones.open', {
+  milestone_id: milestoneId,
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+})));
+
 export const close = valAction('milestones.close', [
   string.require(),
 ], (milestoneId) => (d, getState) => d(a.api.request('milestones.close', {

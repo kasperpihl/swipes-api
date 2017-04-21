@@ -12,7 +12,16 @@ export default function main(state = initialState, action) {
       });
       return milestones;
     }
-    case 'milestones.rename': {
+    case 'milestones.close':
+    case 'milestone_closed': {
+      return state.setIn([payload.milestone_id, 'closed'], true);
+    }
+    case 'milestones.open':
+    case 'milestone_opened': {
+      return state.setIn([payload.milestone_id, 'closed'], false);
+    }
+    case 'milestones.rename':
+    case 'milestone_renamed': {
       return state.setIn([payload.milestone_id, 'title'], payload.title);
     }
     case 'goal_created':

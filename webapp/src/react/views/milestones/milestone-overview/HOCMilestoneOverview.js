@@ -45,13 +45,27 @@ class HOCMilestoneOverview extends PureComponent {
   onContext(e) {
     const {
       closeMilestone,
+      openMilestone,
       contextMenu,
       confirm,
       milestone,
     } = this.props;
     const options = this.getOptionsForE(e);
     const delegate = {
-      onItemAction: () => {
+      onItemAction: (item, i) => {
+        if(item.id === 'open') {
+          contextMenu(null);
+          this.setLoading('dots');
+          openMilestone(milestone.get('id')).then((res) => {
+            if(res.ok){
+              this.clearLoading('dots', 'Milestone opened', 1000);
+              window.analytics.sendEvent('Milestone opened', {});
+            } else {
+              this.clearLoading('dots', '!Something went wrong', 3000);
+            }
+          })
+          return;
+        }
         confirm(Object.assign({}, options, {
           title: 'Close milestone',
           message: 'Do you want to close this milestone and get ready for the next challenge?',
@@ -62,8 +76,7 @@ class HOCMilestoneOverview extends PureComponent {
               if(res.ok){
                 this.clearLoading('dots', 'Milestone closed', 1000);
                 window.analytics.sendEvent('Milestone closed', {});
-              }
-              if (!res || !res.ok) {
+              } else {
                 this.clearLoading('dots', '!Something went wrong', 3000);
               }
             });
@@ -71,11 +84,15 @@ class HOCMilestoneOverview extends PureComponent {
         });
       },
     };
+    const items = [{ id: 'close', title: 'Close milestone' }];
+    if(milestone.get('closed')){
+      items[0] = { id: 'open', title: 'Open milestone'};
+    }
     contextMenu({
       options,
       component: TabMenu,
       props: {
-        items: [{ title: 'Close milestone' }],
+        items,
         delegate,
       },
     });
@@ -227,6 +244,7 @@ export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
   inputMenu: a.menus.input,
   closeMilestone: ca.milestones.close,
+  openMilestone: ca.milestones.open,
   renameMilestone: ca.milestones.rename,
   confirm: a.menus.confirm,
   addGoalToMilestone: ca.milestones.addGoal,
