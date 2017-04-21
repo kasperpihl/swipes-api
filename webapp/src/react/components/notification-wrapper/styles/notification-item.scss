@@ -6,163 +6,112 @@
 // ======================================================
 
 .notification {
-  $b: &;
-  $flexIgnoreList: '#{$b}__column--right';
-
   @include size(100%, auto);
-  @include heightSpecifications(66px, initial);
-  @include flexContainer('row', left, stretch, $flexIgnoreList);
-  padding: 21px 0;
-  border-bottom: 1px solid $deepBlue-5;
-  &--no-border{
-    border-bottom: 0px;
-  }
-  overflow: hidden;
+  border-bottom: 1px solid $deepBlue-10;
+  padding: 15px 9px;
 }
 
 .notif-attachment {
   $b: &;
   $flexIgnoreList: '#{$b}__icon';
-
-  @include size(100%, 24px);
-  @include flexContainer('row', left, center, $flexIgnoreList);
+  @include size(200px, auto);
+  @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
 }
+
 
 // ======================================================
 // Elements
 // ======================================================
 
-// Containers
-
 .notification {
   $b: &;
+  &__section {
+    $flexIgnoreList: '#{$b}__icon-wrapper', '#{$b}__reply', '#{$b}__attachments';
 
-  &__column{
+    @include size(100%, auto);
+    @include flexContainer('row', left, stretch, $selectorsToIgnoreFlex: $flexIgnoreList);
 
-    &--left {
-      @include size(100%, auto);
+    &:nth-child(2) {
+      margin-top: 19px;
     }
   }
 
-  &__top {
-    $flexIgnoreList: '#{$b}__image', '#{$b}__timeago';
-
-    @include size(100%, auto);
-    @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
-  }
-
-  &__bottom {
-    @include size(100%, auto);
-    padding-left: 39px;
-  }
-
-  &__right {
-    @include size(auto, 100%);
-    @include flexContainer('column', right, between);
-  }
-}
-
-// Icon
-.notification {
-
-  &__image {
-    @include size(30px);
-  }
-
-  &__assigning {
-    @include size(30px);
-    @include centerAbsolute();
-    opacity: 0;
-    pointer-events: none;
-    transition: .2s ease;
+  &__icon-wrapper {
+    @include flexContainer('row', center, center);
   }
 
   &__icon {
     @include size(30px);
-    @include centerAbsolute();
     @include flexContainer('row', center, center);
-    background-color: $deepBlue-30;
-    border-radius: 50%;
-    overflow: hidden;
-    transition: .2s ease;
+    background-color: $deepBlue-60;
+    border-radius: 3px;
   }
 
   &__svg {
     @include size(24px);
-    @include svg-color($bg);
-  }
-}
-
-// Content
-
-.notification {
-
-  &__content {
-    @include size(100%, auto);
-    padding-left: 15px;
-    margin-top: -4px;
+    @include svg-color(white);
   }
 
-  &__subtitle {
-    @include size(100%, auto);
-    @include font(12px, $deepBlue-30, 15px, 400);
+  &__title-wrap {
+    @include size($width: 100%);
+    padding: 0 12px;
   }
 
   &__title {
-    @include size(100%, auto);
-    @include font(15px, $deepBlue-90, 24px);
+    @include font(15px, $deepBlue-90, 21px);
+  }
+
+  &__subtitle {
+    @include font(12px, $deepBlue-30, 15px, 500);
+  }
+
+  &__reply {
+    @include font(12px, $blue-100, 18px, 500);
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   &__message {
     @include size(100%, auto);
-    @include font(13px, $deepBlue-50, 18px, 400);
-    font-style: italic;
-    margin-top: 9px;
-  }
-
-  &__attachments {
-    @include size(100%, auto);
-    padding-top: 9px;
-
-    &:empty {
-      display: none;
-    }
+    @include font(12px, $deepBlue-60, 15px);
+    padding-right: 21px;
+    padding-left: 42px;
   }
 }
-
-// Timestamp
-
-.notification {
-
-  &__timeago {
-    @include size(auto);
-    @include font(12px, $deepBlue-30, 15px, 400);
-    white-space: nowrap;
-  }
-}
-
-// Attachment
 
 .notif-attachment {
-
+  $b: &;
   &__icon {
     @include size(24px);
   }
 
   &__svg {
     @include size(24px);
-    @include svg-color($blue-100);
-    transition: .15s ease;
+    @include svg-color($deepBlue-50);
+    transition: .2s ease;
   }
 
   &__title {
     @include size(100%, auto);
-    @include font(12px, $blue-100, 18px, 500);
+    @include font(12px, $deepBlue-80, 24px, 500);
+    @include truncateString();
     padding-left: 6px;
-    transition: .15s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    transition: .2s ease;
+  }
+
+  &:hover {
+    #{$b}__svg {
+      @include svg-color($blue-100);
+      transition: .2s ease;
+    }
+
+    #{$b}__title {
+      @include font($c: $blue-100);
+      text-decoration: underline;
+      transition: .2s ease;
+    }
   }
 }
 
@@ -174,84 +123,46 @@
   $b: &;
 
   &--unseen {
-    #{$b}__icon {
-      background-color: $blue-80;
-    }
-  }
-
-  &--small {
-    #{$b}__content {
-      padding-left: 0;
-    }
-
-    #{$b}__bottom {
-      padding-left: 0;
-    }
-  }
-}
-
-// ======================================================
-// Targeting
-// ======================================================
-
-.notification {
-
-  &__subtitle:only-child {
-    @include size(100%, auto);
-    @include font(15px, $deepBlue-90, 21px, 400);
-    margin-top: 6px;
-  }
-}
-
-// ======================================================
-// Hover
-// ======================================================
-
-.notification {
-  $b: &;
-
-  &:hover {
-    #{$b}__svg {
-      transform: translateY(-30px);
-      transition: .4s ease;
-    }
+    background-color: $blue-5;
 
     #{$b}__icon {
-      pointer-events: none;
-      opacity: 0;
-      transition: .4s .2s ease;
-    }
-
-    #{$b}__assigning {
-      pointer-events: all;
-      opacity: 1;
-      transition: .4s .2s ease;
+      background-color: $blue-100;
     }
   }
-}
 
-.notification {
-  $b: &;
+  &__reply {
 
-  &--clickable {
-
-    #{$b}__top {
+    &--replied {
+      @include font($c: $deepBlue-30);
 
       &:hover {
-        #{$b}__subtitle {
-          @include font($c: $blue-100);
-        }
+        text-decoration: none;
       }
     }
   }
-}
 
-.notif-attachment {
-  $b: &;
+  &--no-border {
+    border: none;
+  }
 
-  &:hover {
-    #{$b}__title {
-      text-decoration: underline;
+  &--small {
+    #{$b}__title-wrap {
+      padding-left: 0;
+    }
+  }
+
+  &--narrow {
+
+    #{$b}__message {
+      padding-left: 0;
+    }
+
+    #{$b}__section:last-child {
+      @include flexContainer('column');
+    }
+
+    #{$b}__attachments {
+      margin-top: 9px;
     }
   }
 }

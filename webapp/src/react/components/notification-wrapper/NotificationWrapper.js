@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { mapContains, list } from 'react-immutable-proptypes';
-import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
-import Button from 'Button';
 import { setupDelegate, setupCachedCallback, attachmentIconForService } from 'swipes-core-js/classes/utils';
 
 import './styles/notification-item';
@@ -33,13 +31,62 @@ class NotificationItem extends Component {
     }
 
     return (
-      <div className="notification__image">
+      <div className="notification__icon-wrapper">
         <div className="notification__icon">
           <Icon icon={n.get('icon')} className="notification__svg" />
         </div>
-        <div className="notification__assigning">
-          <HOCAssigning assignees={[n.get('userId')]} rounded tooltipAlign="left" />
+      </div>
+    );
+  }
+  renderTitleWrapper() {
+    const { notification: n } = this.props;
+
+    return (
+      <div className="notification__title-wrap">
+        {this.renderTitle(n.get('title'))}
+        <div className="notification__subtitle">
+          {n.get('subtitle')}
+          {
+            n.get('subtitle') ? (
+            ' • '
+            ) : (
+              undefined
+            )
+          }
+          {n.get('timeago')}</div>
+      </div>
+    );
+  }
+  renderTitle(title) {
+    if (!title) {
+      return undefined;
+    }
+
+    if (!Array.isArray(title)) {
+      title = [title];
+    }
+
+    return title.map((t, i) => (
+      <div key={i} className="notification__title">{t}</div>
+    ));
+  }
+  renderActions() {
+    const { notification: n } = this.props;
+
+    if (!n.get('reply')) {
+      return undefined;
+    }
+    if (n.get('reply') === 'replied') {
+      return (
+        <div className="notification__reply notification__reply--replied">
+          Replied
         </div>
+      );
+    }
+
+    return (
+      <div className="notification__reply" onClick={this.onReply}>
+        Reply
       </div>
     );
   }
@@ -80,57 +127,6 @@ class NotificationItem extends Component {
       </div>
     );
   }
-  renderTitle(title) {
-    if (!title) {
-      return undefined;
-    }
-
-    if (!Array.isArray(title)) {
-      title = [title];
-    }
-    return title.map((t, i) => (
-      <div key={i} className="notification__title">{t}</div>
-    ));
-  }
-  renderContent() {
-    const { notification: n } = this.props;
-
-    return (
-      <div className="notification__content">
-        {this.renderTitle(n.get('title'))}
-        <div className="notification__subtitle">{n.get('subtitle')}</div>
-        {this.renderMessage()}
-      </div>
-    );
-  }
-  renderRight() {
-    return (
-      <div className="notification__right">
-        {this.renderTimestamp()}
-        {this.renderReplyAction()}
-      </div>
-    );
-  }
-  renderTimestamp() {
-    const { notification: n } = this.props;
-
-    if (!n.get('timeago')) {
-      return undefined;
-    }
-
-    return <div className="notification__timeago">{n.get('timeago')}</div>;
-  }
-  renderReplyAction() {
-    const { notification: n } = this.props;
-
-    if (!n.get('reply')) {
-      return undefined;
-    }
-    if (n.get('reply') === 'replied') {
-      return 'Replied';
-    }
-    return <Button text="Reply" primary small onClick={this.onReply} />;
-  }
   render() {
     const { notification: n, delegate, noBorder, narrow } = this.props;
     let className = 'notification';
@@ -143,8 +139,12 @@ class NotificationItem extends Component {
       className += ' notification--clickable';
     }
 
-    if(noBorder){
+    if (noBorder) {
       className += ' notification--no-border';
+    }
+
+    if (narrow) {
+      className += ' notification--narrow';
     }
 
     if (!n.get('icon')) {
@@ -153,18 +153,14 @@ class NotificationItem extends Component {
 
     return (
       <div className={className}>
-        <div className="notification__column notification__column--left">
-          <div className="notification__top" onClick={this.onClick}>
-            {this.renderIcon()}
-            {this.renderContent()}
-          </div>
-          <div className="notification__bottom">
-            {this.renderAttachments()}
-          </div>
+        <div className="notification__section">
+          {this.renderIcon()}
+          {this.renderTitleWrapper()}
+          {this.renderActions()}
         </div>
-
-        <div className="notification__column notification__column--right">
-          {this.renderRight()}
+        <div className="notification__section">
+          {this.renderMessage()}
+          {this.renderAttachments()}
         </div>
       </div>
     );
