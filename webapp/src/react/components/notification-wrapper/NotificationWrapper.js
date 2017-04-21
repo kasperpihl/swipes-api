@@ -45,7 +45,9 @@ class NotificationItem extends Component {
       <div className="notification__title-wrap">
         {this.renderTitle(n.get('title'))}
         <div className="notification__subtitle">
-          {n.get('subtitle')}
+          <span onClick={this.onClick}>
+            {n.get('subtitle')}
+          </span>
           {
             n.get('subtitle') ? (
             ' • '

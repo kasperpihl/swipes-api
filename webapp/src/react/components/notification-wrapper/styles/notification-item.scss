@@ -8,7 +8,8 @@
 .notification {
   @include size(100%, auto);
   border-bottom: 1px solid $deepBlue-10;
-  padding: 15px 9px;
+  padding: 12px 9px;
+  padding-bottom: 21px;
 }
 
 .notif-attachment {
@@ -78,6 +79,37 @@
     @include font(12px, $deepBlue-60, 15px);
     padding-right: 21px;
     padding-left: 42px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 42px; top: -9px;
+      @include size(calc(100% - 42px - 21px), 1px);
+      background-color: $deepBlue-5;
+    }
+  }
+
+  &__attachments {
+    @include size(200px, auto);
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0; top: -9px;
+      @include size(100%, 1px);
+      background-color: $deepBlue-5;
+    }
+
+    &:empty {
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0; top: -9px;
+        @include size(100%, 0px);
+        background-color: $deepBlue-5;
+        opacity: 0;
+      }
+    }
   }
 }
 
@@ -164,5 +196,16 @@
     #{$b}__attachments {
       margin-top: 9px;
     }
+  }
+}
+
+// ======================================================
+// Hovers
+// ======================================================
+
+.notification {
+
+  &__subtitle span:hover {
+    @include font($c: $blue-100);
   }
 }

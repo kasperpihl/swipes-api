@@ -12,6 +12,12 @@ import Notifications from './Notifications';
 /* global msgGen */
 
 class HOCNotifications extends PureComponent {
+  static minWidth() {
+    return 640;
+  }
+  static maxWidth() {
+    return 640;
+  }
   constructor(props) {
     super(props);
     let tabIndex = 0;
