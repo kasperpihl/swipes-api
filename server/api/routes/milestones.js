@@ -33,6 +33,7 @@ import {
 import {
   valBody,
   valResponseAndSend,
+  mapLocals,
 } from '../utils';
 
 const authed = express.Router();
@@ -62,6 +63,7 @@ authed.all('/milestones.close',
   milestonesClose,
   milestonesUpdateSingle,
   milestoneMigrateIncompleteGoals,
+  milestonesRemoveGoal,
   milestonesOpenCloseQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
@@ -87,6 +89,9 @@ authed.all('/milestones.addGoal',
     milestone_id: string.require(),
     current_milestone_id: string,
   }),
+  mapLocals('goal_id', (setLocals, goal_id) => {
+    setLocals({ goal_ids: [goal_id] });
+  }),
   goalsAddMilestone,
   milestonesRemoveGoal,
   milestonesAddGoal,
@@ -103,6 +108,9 @@ authed.all('/milestones.removeGoal',
   valBody({
     goal_id: string.require(),
     milestone_id: string.require(),
+  }),
+  mapLocals('goal_id', (setLocals, goal_id) => {
+    setLocals({ goal_ids: [goal_id] });
   }),
   goalsRemoveMilestone,
   milestonesRemoveGoal,

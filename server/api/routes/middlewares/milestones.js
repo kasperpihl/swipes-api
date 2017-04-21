@@ -142,7 +142,11 @@ const milestoneMigrateIncompleteGoals = valLocals('milestoneMigrateIncompleteGoa
   } = res.locals;
 
   dbMilestonesMigrateIncompleteGoals({ milestone_id, migrate_to_milestone_id })
-    .then(() => {
+    .then((goalIdsToRemoveFromMilestone) => {
+      setLocals({
+        goalIdsToRemoveFromMilestone,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -324,13 +328,13 @@ const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage',
 });
 const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   user_id: string.require(),
-  goal_id: string.require(),
+  goal_ids: array.require(),
   milestone_id: string,
   current_milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
   user_id,
-  goal_id,
+  goal_ids,
   current_milestone_id,
 } = res.locals;
   let {
@@ -343,7 +347,7 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
 
   milestone_id = current_milestone_id || milestone_id;
 
-  return dbMilestonesRemoveGoal({ user_id, goal_id, milestone_id })
+  return dbMilestonesRemoveGoal({ user_id, goal_ids, milestone_id })
   .then((result) => {
     const changes = result.changes[0].new_val || result.changes[0].old_val;
 

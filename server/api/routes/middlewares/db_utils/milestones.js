@@ -2,6 +2,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -63,10 +64,10 @@ const dbMilestonesAddGoal = funcWrap([
 const dbMilestonesRemoveGoal = funcWrap([
   object.as({
     user_id: string.require(),
-    goal_id: string.require(),
+    goal_ids: array.require(),
     milestone_id: string.require(),
   }).require(),
-], (err, { user_id, goal_id, milestone_id }) => {
+], (err, { user_id, goal_ids, milestone_id }) => {
   if (err) {
     throw new SwipesError(`dbMilestonesRemoveGoal: ${err}`);
   }
@@ -75,7 +76,7 @@ const dbMilestonesRemoveGoal = funcWrap([
     r.table('milestones')
       .get(milestone_id)
       .update({
-        goal_order: r.row('goal_order').default([]).difference([goal_id]),
+        goal_order: r.row('goal_order').default([]).difference(goal_ids),
         updated_at: r.now(),
         updated_by: user_id,
       }, {
@@ -110,6 +111,12 @@ const dbMilestonesMigrateIncompleteGoals = funcWrap([
       })
       .update({
         milestone_id: migrate_to_milestone_id,
+      }, {
+        returnChanges: 'always',
+      }).do((results) => {
+        return results('changes')('new_val').map((goal) => {
+          return goal('id');
+        });
       });
 
   return db.rethinkQuery(q);
