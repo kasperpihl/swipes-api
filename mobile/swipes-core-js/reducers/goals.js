@@ -17,6 +17,15 @@ export default function goalsReducer(state = initialState, action) {
       });
       return goals;
     }
+    case 'milestones.close':
+    case 'milestone_closed': {
+      if(payload.goal_ids) {
+        payload.goal_ids.forEach((id) => {
+          state = state.setIn([id, 'milestone_id'], null);
+        })
+      }
+      return state;
+    }
     case 'goal_renamed':
     case 'goals.rename': {
       if (state.getIn([payload.goal_id, 'title']) === payload.title) {

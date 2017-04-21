@@ -27,7 +27,7 @@ class HOCGoalList extends PureComponent {
         { id: 'goalType' },
         ' assigned to ',
         { id: 'userId' },
-        ' with ',
+        ' in ',
         { id: 'milestoneId' },
       ]),
     };

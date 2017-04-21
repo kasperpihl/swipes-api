@@ -68,7 +68,7 @@ class HOCMilestoneOverview extends PureComponent {
         }
         confirm(Object.assign({}, options, {
           title: 'Close milestone',
-          message: 'Closing a milestone removes all goals that are not completed from it.',
+          message: 'Incompleted goals will be unassigned from this milestone.',
         }), (i) => {
           if (i === 1) {
             this.setLoading('dots');

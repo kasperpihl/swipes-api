@@ -22,6 +22,7 @@ export default class Goals {
     if(!event) {
       event = helper.getLastActivityByType('goal_created');
     }
+    if(!event) return 'Created';
     const ts = timeAgo(event.get('done_at'));
     const name = this.parent.users.getName(event.get('done_by'));
     const start = event.get('type') === 'goal_completed' ? 'Completed' : 'Started';
@@ -31,6 +32,7 @@ export default class Goals {
       milestonePrefix = `${msName} // `;
     }
     return `${milestonePrefix}${start} by ${name} ${ts}`;
+
   }
   getListSubtitle(goal) {
     const helper = new GoalsUtil(goal);
