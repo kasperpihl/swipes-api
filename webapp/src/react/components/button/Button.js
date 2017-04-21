@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as a from 'actions';
+import { tooltip } from 'actions/main';
 // import * as ca from 'swipes-core-js/actions';
 import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
@@ -76,7 +76,7 @@ class Button extends PureComponent {
     this.refs.button.blur();
   }
   onMouseEnter(e) {
-    const { tooltip, tooltipLabel } = this.props;
+    const { loadTooltip, tooltipLabel } = this.props;
     const target = getParentByClass(e.target, 'g-button');
     const position = 'top';
 
@@ -91,12 +91,12 @@ class Button extends PureComponent {
       },
     };
 
-    tooltip(data);
+    loadTooltip(data);
   }
   onMouseLeave() {
-    const { tooltip } = this.props;
+    const { loadTooltip } = this.props;
 
-    tooltip(null);
+    loadTooltip(null);
   }
   renderIcon() {
     const { icon } = this.props;
@@ -235,7 +235,7 @@ Button.propTypes = {
 function mapStateToProps() {
   return {};
 }
-console.log(a.main);
+
 export default connect(mapStateToProps, {
-  tooltip: a.main.tooltip,
+  loadTooltip: tooltip,
 })(Button);
