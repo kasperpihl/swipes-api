@@ -331,6 +331,7 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   goal_ids: array.require(),
   milestone_id: string,
   current_milestone_id: string,
+  eventType: string,
 }, (req, res, next, setLocals) => {
   const {
   user_id,
@@ -339,6 +340,7 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
 } = res.locals;
   let {
   milestone_id,
+  eventType,
 } = res.locals;
 
   if (!milestone_id && !current_milestone_id) {
@@ -350,10 +352,11 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   return dbMilestonesRemoveGoal({ user_id, goal_ids, milestone_id })
   .then((result) => {
     const changes = result.changes[0].new_val || result.changes[0].old_val;
+    eventType = goal_ids.length > 0 ? eventType : 'milestone_goal_removed';
 
     setLocals({
+      eventType,
       goal_order: changes.goal_order,
-      eventType: 'milestone_goal_removed',
     });
 
     return next();
