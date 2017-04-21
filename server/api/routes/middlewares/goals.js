@@ -225,28 +225,19 @@ const goalsArchive = valLocals('goalsArchive', {
     });
 });
 const goalsAddMilestone = valLocals('goalsAddMilestone', {
-  user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
     goal_id,
     milestone_id,
   } = res.locals;
-  const historyItem = {
-    milestone_id,
-    type: 'milestone_added',
-    done_by: user_id,
-    done_at: r.now(),
-  };
   const properties = {
     milestone_id,
-    history: r.row('history').append(historyItem),
   };
 
   dbGoalsUpdateSingle({ goal_id, properties })
-    .then(() => {
+    .then((results) => {
       setLocals({
         eventType: 'milestone_goal_added',
       });
@@ -258,26 +249,18 @@ const goalsAddMilestone = valLocals('goalsAddMilestone', {
     });
 });
 const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
-  user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
     goal_id,
   } = res.locals;
-  const historyItem = {
-    type: 'milestone_removed',
-    done_by: user_id,
-    done_at: r.now(),
-  };
   const properties = {
     milestone_id: null,
-    history: r.row('history').append(historyItem),
   };
 
   dbGoalsUpdateSingle({ goal_id, properties })
-    .then(() => {
+    .then((results) => {
       setLocals({
         eventType: 'milestone_goal_removed',
       });
