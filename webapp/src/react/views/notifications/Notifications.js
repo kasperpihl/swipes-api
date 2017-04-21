@@ -65,22 +65,24 @@ export default class Notifications extends Component {
     const {
       notifications,
       delegate,
+      tabIndex,
     } = this.props;
 
     if (!notifications || !notifications.size) {
       return undefined;
     }
 
-    return notifications.map((n, i) => {
+    return notifications.map((n) => {
       if (!n) {
         return null;
       }
       return (
         <NotificationWrapper
           notification={n}
-          i={i}
+          pinned={tabIndex === 0 && (n.get('reply') === true)}
+          i={n.get('index')}
           delegate={delegate}
-          key={`notif${i}`}
+          key={`notif${n.get('index')}`}
         />
       );
     });

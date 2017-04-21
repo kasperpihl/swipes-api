@@ -186,7 +186,22 @@ class HOCNotifications extends PureComponent {
     const { tabs, tabIndex } = this.state;
     let { notifications } = this.state;
     if (notifications) {
-      notifications = notifications.map(n => msgGen.notifications.getNotificationWrapper(n));
+      notifications = notifications.map(
+        (n, i) => msgGen.notifications.getNotificationWrapper(n).set('index', i)
+      );
+
+      if(tabIndex === 0){
+        notifications = notifications.sort((n1, n2) => {
+          const n1Reply = n1.get('reply') === true;
+          const n2Reply = n2.get('reply') === true;
+          if(n1Reply && !n2Reply){
+            return -1;
+          } else if(n2Reply && !n1Reply){
+            return 1;
+          }
+          return 0;
+        });
+      }
     }
     const { savedState, filters } = this.props;
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
