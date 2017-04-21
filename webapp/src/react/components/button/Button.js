@@ -160,6 +160,9 @@ class Button extends PureComponent {
       loadTooltip,
       className: classNameFromButton,
       loading: ldr,
+      loadingLabel,
+      errorLabel,
+      successLabel,
       ...rest
     } = this.props;
     const { loading, errorState, successState } = this.state;

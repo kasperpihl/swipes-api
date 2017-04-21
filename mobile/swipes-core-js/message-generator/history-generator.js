@@ -83,7 +83,12 @@ export default class HistoryGenerator {
 
         return `${from} notified ${to}`;
       }
-
+      case 'milestone_added': {
+        return `${from} added the milestone "${msgGen.milestones.getName(h.get('milestone_id'))}"`;
+      }
+      case 'milestone_removed': {
+        return `${from} removed the milestone "${msgGen.milestones.getName(h.get('milestone_id'))}"`;
+      }
       default:
         return h.get('type');
     }
