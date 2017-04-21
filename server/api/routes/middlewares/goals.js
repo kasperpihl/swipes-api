@@ -247,6 +247,10 @@ const goalsAddMilestone = valLocals('goalsAddMilestone', {
 
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
+      setLocals({
+        eventType: 'milestone_goal_added',
+      });
+
       return next();
     })
     .catch((err) => {
@@ -274,6 +278,10 @@ const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
 
   dbGoalsUpdateSingle({ goal_id, properties })
     .then(() => {
+      setLocals({
+        eventType: 'milestone_goal_removed',
+      });
+
       return next();
     })
     .catch((err) => {
