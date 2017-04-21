@@ -80,6 +80,10 @@ class Button extends PureComponent {
     const target = getParentByClass(e.target, 'g-button');
     const position = 'top';
 
+    if (!tooltipLabel) {
+      return undefined;
+    }
+
     const data = {
       component: ButtonTooltip,
       props: {
@@ -94,7 +98,11 @@ class Button extends PureComponent {
     loadTooltip(data);
   }
   onMouseLeave() {
-    const { loadTooltip } = this.props;
+    const { loadTooltip, tooltipLabel } = this.props;
+
+    if (!tooltipLabel) {
+      return undefined;
+    }
 
     loadTooltip(null);
   }
@@ -208,7 +216,15 @@ class Button extends PureComponent {
     }
 
     return (
-      <a ref="button" className={className} {...rest} onClick={this.onClick} {...tabIndex}>
+      <a
+        ref="button"
+        className={className}
+        {...rest}
+        onClick={this.onClick}
+        {...tabIndex}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
         {this.renderIcon()}
         {this.renderText()}
         {this.renderResultState()}

@@ -13,7 +13,7 @@ class ButtonTooltip extends PureComponent {
   render() {
     return (
       <div className="button-tooltip">
-        Tooltip
+        Lorem ipsum dolor sit amet.
       </div>
     );
   }

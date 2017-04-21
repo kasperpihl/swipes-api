@@ -1,2 +1,9 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
+
+.button-tooltip {
+  padding: 9px 15px;
+  background-color: $deepBlue-80;
+  border-radius: 3px;
+  @include font(15px, white);
+}
