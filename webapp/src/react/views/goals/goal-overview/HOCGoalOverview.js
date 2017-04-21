@@ -248,7 +248,9 @@ class HOCGoalOverview extends PureComponent {
     this.onChooseNotificationType(e, true);
   }
   onNotify(e) {
-    this.onChooseNotificationType(e, false);
+    this.onOpenNotify(fromJS({
+      notification_type: 'default',
+    }));
   }
   onContext(e) {
     const {

@@ -96,7 +96,7 @@ class GoalOverview extends PureComponent {
             onClick={this.onAskFor}
           />
           <Button
-            text="Give..."
+            text="Notify"
             selected={notifySel}
             onClick={this.onNotify}
           />

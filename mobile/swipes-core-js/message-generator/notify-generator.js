@@ -26,8 +26,9 @@ export default class Notify {
       case 'decision':
         return 'Give a decision';
       case 'update':
-      default:
         return 'Give an update';
+      default:
+        return 'Send notification';
     }
   }
   getNotifyPopupSubtitle(isRequest, type) {
@@ -90,8 +91,9 @@ export default class Notify {
       case 'decision':
         return 'Let your teammates know about a decision.';
       case 'update':
-      default:
         return 'Give your teammates an update. What is the latest on this step and the goal?';
+      default:
+        return 'Notify your teammates.';
     }
   }
 }
