@@ -83,7 +83,13 @@ class HOCMilestoneList extends PureComponent {
       <MilestoneList
         delegate={this}
         milestones={group.get(tabs[tabIndex]) || emptyList}
-        tabs={tabs}
+        tabs={tabs.map((t) => {
+          const size = (group.get(t) && group.get(t).size) || 0;
+          if (size) {
+            t += ` (${size})`;
+          }
+          return t;
+        })}
         tabIndex={tabIndex}
         {...this.bindLoading()}
       />

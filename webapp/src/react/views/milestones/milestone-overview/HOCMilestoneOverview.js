@@ -58,7 +58,7 @@ class HOCMilestoneOverview extends PureComponent {
           this.setLoading('dots');
           openMilestone(milestone.get('id')).then((res) => {
             if(res.ok){
-              this.clearLoading('dots', 'Milestone opened', 1000);
+              this.clearLoading('dots', 'Opened', 2000);
               window.analytics.sendEvent('Milestone opened', {});
             } else {
               this.clearLoading('dots', '!Something went wrong', 3000);
@@ -74,7 +74,7 @@ class HOCMilestoneOverview extends PureComponent {
             this.setLoading('dots');
             closeMilestone(milestone.get('id')).then((res) => {
               if(res.ok){
-                this.clearLoading('dots', 'Milestone closed', 1000);
+                this.clearLoading('dots', 'Closed', 2000);
                 window.analytics.sendEvent('Milestone closed', {});
               } else {
                 this.clearLoading('dots', '!Something went wrong', 3000);
@@ -125,7 +125,7 @@ class HOCMilestoneOverview extends PureComponent {
       this.setLoading('add');
       addGoalToMilestone(milestone.get('id'), goalId).then((res) => {
         if(res && res.ok){
-          this.clearLoading('add', 'Goal added', 1000);
+          this.clearLoading('add', 'Added', 2000);
         } else {
           this.clearLoading('add', '!Something went wrong', 3000);
         }
@@ -139,7 +139,7 @@ class HOCMilestoneOverview extends PureComponent {
     this.tabDidChange(0);
     createGoal(title, noteContent, milestone.get('id')).then((res) => {
       if (res && res.ok) {
-        this.clearLoading('add', 'Goal added', 1000);
+        this.clearLoading('add', 'Added', 2000);
         window.analytics.sendEvent('Goal added', {});
       } else {
         this.clearLoading('add', '!Something went wrong', 3000);
