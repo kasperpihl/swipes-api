@@ -41,6 +41,10 @@ class NotificationItem extends Component {
   renderTitleWrapper() {
     const { notification: n } = this.props;
 
+    if (!n.get('title')) {
+      return undefined;
+    }
+
     return (
       <div className="notification__title-wrap">
         {this.renderTitle(n.get('title'))}
@@ -149,7 +153,7 @@ class NotificationItem extends Component {
       className += ' notification--narrow';
     }
 
-    if(pinned) {
+    if (pinned) {
       className += ' notification--pinned';
     }
 

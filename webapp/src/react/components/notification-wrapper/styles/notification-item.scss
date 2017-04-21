@@ -148,6 +148,35 @@
 }
 
 // ======================================================
+// Targeting
+// ======================================================
+
+.notification {
+  $b: &;
+
+  &__section:first-child:empty {
+    display: none;
+
+    & + #{$b}__section {
+
+      #{$b}__message {
+        &:before {
+          @include size(0px);
+          opacity: 0;
+        }
+      }
+
+      #{$b}__attachments {
+        &:before {
+          @include size(0px);
+          opacity: 0;
+        }
+      }
+    }
+  }
+}
+
+// ======================================================
 // Modifiers
 // ======================================================
 
@@ -155,7 +184,6 @@
   $b: &;
 
   &--unseen {
-    background-color: $blue-5;
 
     #{$b}__icon {
       background-color: $blue-100;
@@ -181,6 +209,10 @@
     #{$b}__title-wrap {
       padding-left: 0;
     }
+
+    #{$b}__message {
+      padding-left: 0;
+    }
   }
 
   &--narrow {
@@ -196,6 +228,10 @@
     #{$b}__attachments {
       margin-top: 9px;
     }
+  }
+
+  &--pinned {
+    background-color: $blue-5;
   }
 }
 
