@@ -149,7 +149,9 @@ class Button extends PureComponent {
       frameless,
       selected,
       tabIndex: tabIndexProps,
+      loadTooltip,
       className: classNameFromButton,
+      loading: ldr,
       ...rest
     } = this.props;
     const { loading, errorState, successState } = this.state;
