@@ -84,8 +84,9 @@ const milestonesClose = valLocals('milestonesClose', {
     user_id,
     notificationGroupId,
   } = res.locals;
+  const type = 'milestone_closed';
   const historyItem = {
-    type: 'milestone_closed',
+    type,
     done_by: user_id,
     done_at: r.now(),
     group_id: notificationGroupId,
@@ -98,7 +99,7 @@ const milestonesClose = valLocals('milestonesClose', {
 
   setLocals({
     properties,
-    eventType: 'milestone_closed',
+    eventType: type,
   });
 
   return next();
@@ -111,8 +112,9 @@ const milestonesOpen = valLocals('milestonesOpen', {
     user_id,
     notificationGroupId,
   } = res.locals;
+  const type = 'milestone_opened';
   const historyItem = {
-    type: 'milestone_opened',
+    type,
     done_by: user_id,
     done_at: r.now(),
     group_id: notificationGroupId,
@@ -125,7 +127,7 @@ const milestonesOpen = valLocals('milestonesOpen', {
 
   setLocals({
     properties,
-    eventType: 'milestone_closed',
+    eventType: type,
   });
 
   return next();
