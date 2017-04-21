@@ -57,10 +57,10 @@ class HOCGoalSelector extends PureComponent {
       options: goals.sort((g1, g2) => {
         const h1 = new GoalsUtil(g1);
         const h2 = new GoalsUtil(g2);
-        if(h1.getIsCompleted() === h2.getIsCompleted()){
-          return g1.get('title').localeCompare(g2.get('title'));
+        if(h1.getIsCompleted() !== h2.getIsCompleted()){
+          return h1.getIsCompleted() ? 1 : -1;
         }
-        return h1.getIsCompleted() ? 1 : -1;
+        return g1.get('title').localeCompare(g2.get('title'));
       }).map((g) => {
         const helper = new GoalsUtil(g);
         return {

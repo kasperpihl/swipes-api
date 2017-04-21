@@ -52,7 +52,6 @@ class MilestoneOverview extends PureComponent {
     const { milestone, delegate, tabs, tabIndex, goals } = this.props;
     const tab = tabs[tabIndex];
     const goalList = goals.get(tab);
-    console.log(goals.get('Current'));
     return (
       <section>
         <TabBar
