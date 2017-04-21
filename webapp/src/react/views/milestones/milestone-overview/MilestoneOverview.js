@@ -90,16 +90,17 @@ class MilestoneOverview extends PureComponent {
     );
   }
   renderEmptyState() {
-    const { tabs, tabIndex, goals } = this.props;
+    const { tabs, tabIndex, goals, milestone } = this.props;
     const tab = tabs[tabIndex];
     const goalList = goals.get(tab);
 
     if (tabIndex === 0 && !goalList.size && goals.get('Completed').size) {
+      const extraText = 'Add a new goal to continue the work or close the milestone as completed.';
       return (
         <div className="milestone-empty">
           <div className="milestone-empty__content">
             Great work on this milestone! All goals have been completed. <br />
-            Add a new goal to continue the work or close the milestone as completed.
+            {milestone.get('closed') ? '' : extraText}
           </div>
         </div>
       );

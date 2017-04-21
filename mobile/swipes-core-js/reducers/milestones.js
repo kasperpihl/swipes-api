@@ -14,6 +14,9 @@ export default function main(state = initialState, action) {
     }
     case 'milestones.close':
     case 'milestone_closed': {
+      if(payload.milestone_id && payload.goal_order){
+        state = state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));
+      }
       return state.setIn([payload.milestone_id, 'closed'], true);
     }
     case 'milestones.open':
@@ -32,7 +35,7 @@ export default function main(state = initialState, action) {
     case 'milestone_goal_removed':
     case 'milestones.addGoal':
     case 'milestone_goal_added': {
-      if(payload.milestone_id){
+      if(payload.milestone_id && payload.goal_order){
         return state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));
       }
       return state;
