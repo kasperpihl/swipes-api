@@ -130,7 +130,7 @@ class NotificationItem extends Component {
     );
   }
   render() {
-    const { notification: n, delegate, noBorder, narrow } = this.props;
+    const { notification: n, delegate, noBorder, narrow, pinned } = this.props;
     let className = 'notification';
 
     if (n.get('unseen')) {
@@ -147,6 +147,10 @@ class NotificationItem extends Component {
 
     if (narrow) {
       className += ' notification--narrow';
+    }
+
+    if(pinned) {
+      className += ' notification--pinned';
     }
 
     if (!n.get('icon')) {
