@@ -147,8 +147,24 @@ const milestoneMigrateIncompleteGoals = valLocals('milestoneMigrateIncompleteGoa
       return next(err);
     });
 });
+const milestoneRename = valLocals('milestoneRename', {
+  title: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    title,
+  } = res.locals;
+
+  setLocals({
+    properties: {
+      title,
+    },
+    eventType: 'milestone_renamed',
+  });
+
+  return next();
+});
 const milestonesUpdateSingle = valLocals('milestonesUpdateSingle', {
-  properties: string.require(),
+  properties: object.require(),
   milestone_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -210,6 +226,32 @@ const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessa
     milestone_id,
     event_type: eventType,
     group_id: notificationGroupId,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: milestone_id,
+  });
+
+  return next();
+});
+const milestonesRenameQueueMessage = valLocals('milestonesRenameQueueMessage', {
+  user_id: string.require(),
+  milestone_id: string.require(),
+  title: string.require(),
+  eventType: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    milestone_id,
+    title,
+    eventType,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    milestone_id,
+    title,
+    event_type: eventType,
   };
 
   setLocals({
@@ -282,16 +324,22 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string,
+  current_milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
   user_id,
   goal_id,
+  current_milestone_id,
+} = res.locals;
+  let {
   milestone_id,
 } = res.locals;
 
-  if (!milestone_id) {
+  if (!milestone_id && !current_milestone_id) {
     return next();
   }
+
+  milestone_id = current_milestone_id || milestone_id;
 
   return dbMilestonesRemoveGoal({ user_id, goal_id, milestone_id })
   .then((result) => {
@@ -351,4 +399,6 @@ export {
   milestonesRemoveGoal,
   milestonesRemoveGoalQueueMessage,
   milestoneMigrateIncompleteGoals,
+  milestoneRename,
+  milestonesRenameQueueMessage,
 };

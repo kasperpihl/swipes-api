@@ -3,9 +3,11 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import { propsOrPop } from 'classes/react-utils';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCGoalSelector from 'context-menus/goal-selector/HOCGoalSelector';
+import TabMenu from 'context-menus/tab-menu/TabMenu';
 // import { map, list } from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import {
@@ -24,19 +26,78 @@ class HOCMilestoneOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      tabIndex: 0,
-      tabs: ['Current', 'Completed'],
-      goals: this.getFilteredGoals(props.milestone, props.starredGoals),
-    };
+    propsOrPop(this, 'milestone');
     setupLoading(this);
   }
-  componentDidMount() {
+  componentWillMount() {
+    this.setState({
+      tabIndex: 0,
+      tabs: ['Current', 'Completed'],
+      goals: this.getFilteredGoals(this.props.milestone, this.props.starredGoals),
+    });
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       goals: this.getFilteredGoals(nextProps.milestone, nextProps.starredGoals),
     })
+  }
+  onContext(e) {
+    const {
+      closeMilestone,
+      contextMenu,
+      confirm,
+      milestone,
+    } = this.props;
+    const options = this.getOptionsForE(e);
+    const delegate = {
+      onItemAction: () => {
+        confirm(Object.assign({}, options, {
+          title: 'Close milestone',
+          message: 'Do you want to close this milestone and get ready for the next challenge?',
+        }), (i) => {
+          if (i === 1) {
+            this.setLoading('dots');
+            closeMilestone(milestone.get('id')).then((res) => {
+              if(res.ok){
+                this.clearLoading('dots', 'Milestone closed', 1000);
+                window.analytics.sendEvent('Milestone closed', {});
+              }
+              if (!res || !res.ok) {
+                this.clearLoading('dots', '!Something went wrong', 3000);
+              }
+            });
+          }
+        });
+      },
+    };
+    contextMenu({
+      options,
+      component: TabMenu,
+      props: {
+        items: [{ title: 'Close milestone' }],
+        delegate,
+      },
+    });
+  }
+  onTitleClick(e) {
+    const options = this.getOptionsForE(e);
+    const { milestone, renameMilestone, inputMenu } = this.props;
+    inputMenu({
+      ...options,
+      text: milestone.get('title'),
+      buttonLabel: 'Rename',
+    }, (title) => {
+      if (title !== milestone.get('title') && title.length) {
+        this.setLoading('title', 'Renaming...');
+        renameMilestone(milestone.get('id'), title).then(() => {
+          this.clearLoading('title');
+        });
+      }
+    });
+  }
+  onClose() {
+
   }
   onAddGoalToMilestone(goalId) {
     const { goals, milestone, addGoalToMilestone } = this.props;
@@ -47,7 +108,7 @@ class HOCMilestoneOverview extends PureComponent {
       this.setLoading('add');
       addGoalToMilestone(milestone.get('id'), goalId).then((res) => {
         if(res && res.ok){
-          this.clearLoading('add', 'Goal added', 3000);
+          this.clearLoading('add', 'Goal added', 1000);
         } else {
           this.clearLoading('add', '!Something went wrong', 3000);
         }
@@ -61,7 +122,7 @@ class HOCMilestoneOverview extends PureComponent {
     this.tabDidChange(0);
     createGoal(title, noteContent, milestone.get('id')).then((res) => {
       if (res && res.ok) {
-        this.clearLoading('add', 'Goal added', 3000);
+        this.clearLoading('add', 'Goal added', 1000);
         window.analytics.sendEvent('Goal added', {});
       } else {
         this.clearLoading('add', '!Something went wrong', 3000);
@@ -164,6 +225,10 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
+  inputMenu: a.menus.input,
+  closeMilestone: ca.milestones.close,
+  renameMilestone: ca.milestones.rename,
+  confirm: a.menus.confirm,
   addGoalToMilestone: ca.milestones.addGoal,
   createGoal: ca.goals.create,
 })(HOCMilestoneOverview);
