@@ -112,7 +112,7 @@
     @include svg-color($deepBlue-100);
     opacity: 0;
     transition: .3s ease;
-    transform: translateX(-15px);
+    transform: translate3d(-15px, 0px, 0px);
   }
 }
 
@@ -205,7 +205,7 @@
 
     .header__svg {
       opacity: 1;
-      transform: translateX(0px);
+      transform: translate3d(0px, 0px, 0px);
       transition: .25s ease;
     }
 
@@ -216,7 +216,7 @@
 
     .progress__number {
       opacity: 1;
-      transform: scale(2);
+      transform: scale3d(2, 2, 1);
       transition: transform .4s ease, opacity .2s ease;
     }
   }
