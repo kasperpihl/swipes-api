@@ -51,6 +51,7 @@ const organizationsCreate = valLocals('organizationsCreate', {
     trial: {
       started_at: r.now(),
       ending_at: r.now().add(1209600), // 14 days or 2 weeks
+      started_by: user_id,
     },
   };
 
