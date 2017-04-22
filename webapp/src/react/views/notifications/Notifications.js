@@ -24,7 +24,7 @@ export default class Notifications extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.setState({ hasLoaded: true });
-    }, 1);
+    }, 200);
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.tabIndex !== nextProps.tabIndex) {
@@ -37,7 +37,7 @@ export default class Notifications extends Component {
     if (!this.state.hasLoaded) {
       setTimeout(() => {
         this.setState({ hasLoaded: true });
-      }, 1);
+      }, 200);
     }
   }
   renderHeader() {
@@ -120,11 +120,7 @@ export default class Notifications extends Component {
     const { hasLoaded } = this.state;
 
     if (!hasLoaded) {
-      return (
-        <div className="notifications__loader">
-          <Loader center />
-        </div>
-      );
+      return undefined;
     }
 
     return (

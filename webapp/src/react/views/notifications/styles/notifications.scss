@@ -10,6 +10,8 @@
   @include size(100%, auto);
   @include flexContainer('column');
   padding-bottom: 60px;
+  animation: fadeNotifIn .35s ease forwards;
+  opacity: 0;
 }
 
 .notifications-empty-state {
@@ -35,6 +37,19 @@
 
   &__loader {
     @include size(100%);
+    @include flexContainer('row', center, center);
+
+    .spinner {
+    	@include size(50px);
+    	@include svg-color($blue-100);
+    	animation: rotateSpinner 2s linear infinite;
+
+    	&__path {
+    		stroke-linecap: round;
+        animation: dashSpinner 1.5s ease infinite;
+        stroke-width: 4;
+    	}
+    }
   }
 }
 
@@ -51,5 +66,19 @@
     @include font(15px, $deepBlue-80, 24px);
     text-align: center;
     margin-top: 12px;
+  }
+}
+
+// ======================================================
+// Animations
+// ======================================================
+
+
+@keyframes fadeNotifIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
