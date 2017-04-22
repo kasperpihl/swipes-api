@@ -10,7 +10,7 @@
   @include size(100%, auto);
   @include flexContainer('column');
   padding-bottom: 60px;
-  animation: fadeNotifIn .35s ease forwards;
+  animation: fadeNotifIn .15s ease forwards;
   opacity: 0;
 }
 

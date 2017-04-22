@@ -138,12 +138,12 @@ class HOCViewController extends PureComponent {
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
-    const PView = views[(pView && pView.get('id'))] || views['NotFound'];
+    const PView = views[(pView && pView.get('id'))] || views.NotFound;
     const pMinMax = this.getMinMaxForView(PView);
 
     // Secondary view
     const sView = navigation.getIn(['secondary', 'stack']).last();
-    const SView = sView ? (views[sView.get('id')] || views['NotFound']) : undefined;
+    const SView = sView ? (views[sView.get('id')] || views.NotFound) : undefined;
     const sMinMax = sView ? this.getMinMaxForView(SView) : 0;
 
     const sizes = this.determineSizesForWidths(pMinMax, sMinMax);
@@ -238,7 +238,7 @@ class HOCViewController extends PureComponent {
   }
   renderContent(currentView, target, style, xClasses) {
     const { navigation } = this.props;
-    const View = views[currentView.get('id')] || views['NotFound'];
+    const View = views[currentView.get('id')] || views.NotFound;
     let props = {};
     if (currentView.get('props')) {
       props = currentView.get('props').toObject();
@@ -256,7 +256,7 @@ class HOCViewController extends PureComponent {
       onClick = this.onUnderlayCached(target);
     }
     return (
-      <ContextWrapper target={target} key={navigation.getIn([target, 'id'])}>
+      <ContextWrapper target={target} key={target}>
         <section
           className={className}
           style={style}

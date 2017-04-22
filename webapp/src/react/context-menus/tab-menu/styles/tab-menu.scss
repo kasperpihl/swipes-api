@@ -134,6 +134,7 @@ $sectionHeight: 52px;
     @include flex();
     min-height: 54px;
     border-radius: 3px;
+    padding: 9px 0;
     transition: .2s ease-in-out;
 
     &:before {
