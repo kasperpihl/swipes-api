@@ -151,10 +151,10 @@ notAuthed.all('/organizations.getInfoFromInvitationToken',
   usersParseInvitationToken,
   organizationsGetInfoFromInvitationToken,
   valResponseAndSend({
-    me: object.require(),
+    me: object,
     download_links: object.require(),
-    organization: object.require(),
-    invited_by: object.require(),
+    organization: object,
+    invited_by: object,
   }),
 );
 

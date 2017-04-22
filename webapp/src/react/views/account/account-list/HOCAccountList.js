@@ -68,7 +68,7 @@ class HOCAccountList extends PureComponent {
   onClick(section) {
     const { navPush, browser, target } = this.props;
     if(section.id === 'FAQ'){
-      return browser(target, 'http://support.swipesapp.com');
+      return browser(target, 'http://support.swipesapp.com/hc/en-us/categories/115000489025-Swipes-Workspace');
     }
     return navPush({
       id: section.id,

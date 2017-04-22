@@ -23,52 +23,61 @@ class HOCSignupPage extends PureComponent {
     setupLoading(this);
   }
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-
     window.analytics.sendEvent('Signup opened', {});
     const { request } = this.props;
-    const { formData, invitationToken } = this.state;
-    this.setLoading('signup');
-    request('organizations.getInfoFromInvitationToken', {
-      invitation_token: invitationToken,
-    }).then((res) => {
-      this.clearLoading('signup');
-      if (res && res.ok) {
-        const me = fromJS(res.me);
-        if (me && me.get('invited_by')) {
-          window.analytics.sendEvent('Invitation opened', {});
-        }
-        const firstName = msgGen.users.getFirstName(me);
-        const email = msgGen.users.getEmail(me);
-        this.setState({
-          forceDownload: !!me.get('activated'),
-          downloadLinks: res.download_links,
-          organization: fromJS(res.organization),
-          invitedBy: fromJS(res.invited_by),
-          me,
-          formData: formData.set('email', email).set('firstName', firstName),
-        });
-      }
+    const { createOrganization, formData, invitationToken } = this.state;
+    if(invitationToken) {
+      this.setLoading('signup');
 
-      console.log('ressy', res);
-    });
+      request('organizations.getInfoFromInvitationToken', {
+        invitation_token: invitationToken,
+      }).then((res) => {
+        this.clearLoading('signup');
+        if (res && res.ok) {
+          if(res.me) {
+            const me = fromJS(res.me);
+            if (me && me.get('invited_by')) {
+              window.analytics.sendEvent('Invitation opened', {});
+            }
+            const firstName = msgGen.users.getFirstName(me);
+            const email = msgGen.users.getEmail(me);
+            this.setState({
+              forceDownload: !!me.get('activated'),
+              downloadLinks: res.download_links,
+              organization: fromJS(res.organization),
+              invitedBy: fromJS(res.invited_by),
+              me,
+              formData: formData.set('email', email).set('firstName', firstName),
+            });
+          } else {
+            this.setState({
+              downloadLinks: res.download_links,
+              createOrganization: true,
+            });
+          }
+
+        }
+
+        console.log('ressy', res);
+      });
+    }
+
   }
   onChange(key, e) {
     const { formData } = this.state;
     this.setState({ formData: formData.set(key, e.target.value) });
   }
   onClick() {
-    const { formData, invitationToken, me } = this.state;
-    const { signup } = this.props;
+    const { formData, invitationToken, me, createOrganization } = this.state;
+    const { signup, createOrgRequest } = this.props;
     this.setLoading('signupButton');
     signup({
       first_name: formData.get('firstName'),
       last_name: formData.get('lastName'),
       email: formData.get('email'),
       password: formData.get('password'),
-      invitation_token: invitationToken,
+      organization_name: createOrganization ? formData.get('organizationName') : undefined,
+      invitation_token: createOrganization ? undefined : invitationToken,
     }).then((res) => {
       this.clearLoading('signupButton');
       if (res.ok && me && me.get('invited_by')) {
@@ -79,15 +88,27 @@ class HOCSignupPage extends PureComponent {
       }
       if (res.ok) {
         window.analytics.sendEvent('Signed up', {});
+        if(createOrganization){
+          window.analytics.sendEvent('Organization created', {});
+        }
       }
       console.log('ressy', res);
     });
   }
   renderContent() {
-    const { formData, organization, invitedBy, hasLoaded, forceDownload, downloadLinks } = this.state;
+    const {
+      formData,
+      organization,
+      invitedBy,
+      hasLoaded,
+      forceDownload,
+      downloadLinks,
+      invitationToken,
+      createOrganization,
+    } = this.state;
     const { token } = this.props;
 
-    if (this.getLoading('signup').loading || !hasLoaded) {
+    if (this.getLoading('signup').loading) {
       return (
         <div className="signup__loader">
           <img src="https://media.giphy.com/media/cZDRRGVuNMLOo/giphy.gif" alt="" />
@@ -107,6 +128,8 @@ class HOCSignupPage extends PureComponent {
         formData={formData}
         delegate={this}
         organization={organization}
+        invitationToken={invitationToken}
+        createOrganization={createOrganization}
         inviter={invitedBy}
         {...this.bindLoading()}
       />

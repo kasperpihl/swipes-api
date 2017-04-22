@@ -14,10 +14,23 @@ class SignupPage extends PureComponent {
   }
   componentDidMount() {
   }
-  generateTitle() {
-    const { organization, inviter } = this.props;
+  getSubtitle() {
+    const { organization, inviter, createOrganization } = this.props;
+    if(createOrganization){
+      return 'You and your team has been invited to try Swipes Workspace';
+    }
     if (!inviter) {
-      return undefined;
+      return 'Hint: Swipes Personal users are getting invites.';
+    }
+    return 'Your team is waiting for you. Sign up to join them';
+  }
+  generateTitle() {
+    const { organization, inviter, createOrganization } = this.props;
+    if(createOrganization){
+      return 'Signup organization';
+    }
+    if (!inviter) {
+      return 'Swipes Workspace is invite only';
     }
     return `Join ${msgGen.users.getFirstName(inviter)} and the ${organization.get('name')} team`;
   }
@@ -38,6 +51,30 @@ class SignupPage extends PureComponent {
       </div>
     );
   }
+  renderHeader() {
+    return [
+      <div key="1" className="title-container">
+        {this.renderPeople()}
+        <h1 className="title">{this.generateTitle()}</h1>
+      </div>,
+      <h3 key="2" className="subtitle">{this.getSubtitle()}</h3>,
+    ];
+  }
+  renderForm() {
+    const { createOrganization: cO, inviter } = this.props;
+    if(!cO && !inviter) {
+      return undefined;
+    }
+    return (
+      <div className="form">
+        {cO ? this.renderInputField('organizationName', 'text', 'Organization name') : undefined}
+        {this.renderInputField('email', 'email', 'Email')}
+        {this.renderInputField('firstName', 'text', 'First name')}
+        {this.renderInputField('lastName', 'text', 'Last name')}
+        {this.renderInputField('password', 'password', 'Password')}
+      </div>
+    )
+  }
   renderInputField(key, type, placeholder) {
     const { delegate } = this.props;
     const value = this.props.formData.get(key) || '';
@@ -53,38 +90,38 @@ class SignupPage extends PureComponent {
       />
     );
   }
-  render() {
+  renderFooter() {
+    const { createOrganization: cO, inviter } = this.props;
+    if(!cO && !inviter) {
+      return undefined;
+    }
     const isLoading = this.props.getLoading('signupButton').loading;
 
     return (
+      <div className="footer">
+        <div className="button" onClick={this.onClick}>
+          {
+            isLoading ? (
+              <Icon icon="loader" width="12" height="12" />
+            ) : (
+              'Sign up'
+            )
+          }
+        </div>
+        <div className="footer-sentence">
+          By signing up you, agree to the <a href="#">Terms & Conditions</a>
+        </div>
+      </div>
+    );
+  }
+  render() {
+    return (
       <div className="singup-wrapper">
-        <div className="title-container">
-          {this.renderPeople()}
-          <h1 className="title">{this.generateTitle()}</h1>
-        </div>
-        <h3 className="subtitle">Your team is waiting for you. Sign up to join them</h3>
+        {this.renderHeader()}
 
-        <div className="form">
-          {this.renderInputField('email', 'email', 'Email')}
-          {this.renderInputField('firstName', 'text', 'First name')}
-          {this.renderInputField('lastName', 'text', 'Last name')}
-          {this.renderInputField('password', 'password', 'Password')}
-        </div>
+        {this.renderForm()}
 
-        <div className="footer">
-          <div className="button" onClick={this.onClick}>
-            {
-              isLoading ? (
-                <Icon icon="loader" width="12" height="12" />
-              ) : (
-                'Sign up'
-              )
-            }
-          </div>
-          <div className="footer-sentence">
-            By signing up you, agree to the <a href="#">Terms & Conditions</a>
-          </div>
-        </div>
+        {this.renderFooter()}
       </div>
     );
   }
