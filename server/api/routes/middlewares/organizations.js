@@ -28,12 +28,17 @@ import {
 
 const organizationsCreate = valLocals('organizationsCreate', {
   user_id: string.require(),
-  organization_name: string.require(),
+  organization_name: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     organization_name,
   } = res.locals;
+
+  if (!organization_name) {
+    return next();
+  }
+
   const organizationId = generateSlackLikeId('O');
   const organization = {
     id: organizationId,
@@ -45,7 +50,7 @@ const organizationsCreate = valLocals('organizationsCreate', {
     updated_at: r.now(),
   };
 
-  dbOrganizationsCreate({ organization })
+  return dbOrganizationsCreate({ organization })
     .then(() => {
       setLocals({
         organizationId,
@@ -59,14 +64,18 @@ const organizationsCreate = valLocals('organizationsCreate', {
 });
 const organizationsAddToUser = valLocals('organizationsAddToUser', {
   user_id: string.require(),
-  organizationId: string.require(),
+  organizationId: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     organizationId,
   } = res.locals;
 
-  dbUsersAddOrganization({ user_id, organizationId })
+  if (!organizationId) {
+    return next();
+  }
+
+  return dbUsersAddOrganization({ user_id, organizationId })
     .then(() => {
       return next();
     })

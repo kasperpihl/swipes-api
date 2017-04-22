@@ -32,6 +32,10 @@ import {
   usersInvitedUserQueueMessage,
 } from './middlewares/users';
 import {
+  organizationsCreate,
+  organizationsAddToUser,
+} from './middlewares/organizations';
+import {
   xendoSignUpQueueMessage,
   xendoRemoveServiceFromUserQueueMessage,
 } from './middlewares/xendo';
@@ -81,6 +85,7 @@ notAuthed.all('/users.signup',
     password: string.min(1).require(),
     first_name: string.max(32).require(),
     last_name: string.max(32).require(),
+    organization_name: string,
     invitation_token: string,
   }),
   userAvailability,
@@ -96,6 +101,8 @@ notAuthed.all('/users.signup',
       setLocals({ user_id: userId });
     },
   ),
+  organizationsCreate,
+  organizationsAddToUser,
   valResponseAndSend({
     user_id: string.require(),
     token: string.require(),
