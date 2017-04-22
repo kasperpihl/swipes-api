@@ -25,7 +25,7 @@ class HOCNotifications extends PureComponent {
       tabIndex = props.savedState.get('tabIndex') || 0;
     }
     this.state = {
-      tabs: ['received', 'sent'], //, 'activity'
+      tabs: ['received', 'sent'], // , 'activity'
       tabIndex,
     };
     this.state.notifications = this.getFilteredNotifications(tabIndex);
@@ -189,20 +189,20 @@ class HOCNotifications extends PureComponent {
     if (notifications) {
       notifications = notifications.map(
         (n, i) => {
-          if(n.get('notification') && !n.get('seen_at')){
+          if (n.get('notification') && !n.get('seen_at')) {
             numberOfUnread += 1;
           }
-          return msgGen.notifications.getNotificationWrapper(n).set('index', i)
-        }
+          return msgGen.notifications.getNotificationWrapper(n).set('index', i);
+        },
       );
 
-      if(tabIndex === 0){
+      if (tabIndex === 0) {
         notifications = notifications.sort((n1, n2) => {
           const n1Reply = n1.get('reply') === true;
           const n2Reply = n2.get('reply') === true;
-          if(n1Reply && !n2Reply){
+          if (n1Reply && !n2Reply) {
             return -1;
-          } else if(n2Reply && !n1Reply){
+          } else if (n2Reply && !n1Reply) {
             return 1;
           }
           return 0;
@@ -211,6 +211,7 @@ class HOCNotifications extends PureComponent {
     }
     const { savedState, filters } = this.props;
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
+
     return (
       <Notifications
         delegate={this}

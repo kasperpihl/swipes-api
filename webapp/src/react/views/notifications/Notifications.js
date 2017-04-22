@@ -6,16 +6,39 @@ import SWView from 'SWView';
 import TabBar from 'components/tab-bar/TabBar';
 import Button from 'Button';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-
+import Loader from 'components/loaders/Loader';
 import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
+
 import './styles/notifications';
 
 export default class Notifications extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      hasLoaded: false,
+    };
     setupDelegate(this);
     this.onMarkAll = this.callDelegate.bind(null, 'onMark', 'all');
     this.onScroll = this.callDelegate.bind(null, 'onScroll');
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.tabIndex !== nextProps.tabIndex) {
+      if (this.state.hasLoaded) {
+        this.setState({ hasLoaded: false });
+      }
+    }
+  }
+  componentDidUpdate() {
+    if (!this.state.hasLoaded) {
+      setTimeout(() => {
+        this.setState({ hasLoaded: true });
+      }, 1);
+    }
   }
   renderHeader() {
     const { isLoading, tabIndex, numberOfUnread } = this.props;
@@ -93,6 +116,23 @@ export default class Notifications extends Component {
       );
     });
   }
+  renderContent() {
+    const { hasLoaded } = this.state;
+
+    if (!hasLoaded) {
+      return (
+        <div className="notifications__loader">
+          <Loader center />
+        </div>
+      );
+    }
+
+    return (
+      <div className="notifications">
+        {this.renderNotifications()}
+      </div>
+    );
+  }
   render() {
     const { initialScroll } = this.props;
     return (
@@ -101,9 +141,7 @@ export default class Notifications extends Component {
         onScroll={this.onScroll}
         initialScroll={initialScroll}
       >
-        <div className="notifications">
-          {this.renderNotifications()}
-        </div>
+        {this.renderContent()}
       </SWView>
     );
   }
