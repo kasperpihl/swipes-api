@@ -3,8 +3,8 @@
     "host": "rethinkdb-staging6110.cloudapp.net",
     "port": 28015,
     "db": "swipes",
-    "user": "admin",
-    "password": ""
+    "user": "swipes",
+    "password": "sw1py@staging"
   },
   "xendo": {
     "clientId": "99965e447026eb281dfc",
