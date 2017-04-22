@@ -102,20 +102,6 @@ const dbUsersGetServiceWithAuth = funcWrap([
 
   return db.rethinkQuery(q);
 });
-const dbUsersUpdateProfilePic = funcWrap([
-  object.as({
-    user_id: string.require(),
-    profilePic: string.require(),
-  }).require(),
-], (err, { user_id, profilePic }) => {
-  if (err) {
-    throw new SwipesError(`dbUsersUpdateProfilePic: ${err}`);
-  }
-
-  const q = r.table('users').get(user_id).update({ profile_pic: profilePic });
-
-  return db.rethinkQuery(q);
-});
 const dbUsersGetSingleWithOrganizations = funcWrap([
   object.as({
     user_id: string.require(),
@@ -216,7 +202,6 @@ export {
   dbUsersRemoveService,
   dbUsersAddSevice,
   dbUsersGetServiceWithAuth,
-  dbUsersUpdateProfilePic,
   dbUsersGetSingleWithOrganizations,
   dbUsersGetByEmailWithFields,
   dbUsersAddOrganization,

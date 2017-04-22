@@ -18,7 +18,6 @@ import {
   usersGetXendoServiceId,
   usersRemoveXendoService,
   usersRemoveService,
-  usersUpdateProfilePic,
   userGetInfoForToken,
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
@@ -151,14 +150,6 @@ authed.post('/users.invite',
     user: object.require(),
     organization: object,
   }),
-);
-
-// T_TODO
-// that's a hack that we will remove Sunday
-// DELETE THIS AS SOON AS POSSIBLE
-authed.post('/users.profilePic',
-  usersUpdateProfilePic,
-  sendResponse,
 );
 
 export {

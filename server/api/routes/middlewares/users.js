@@ -22,7 +22,6 @@ import {
 import {
   dbUsersGetService,
   dbUsersRemoveService,
-  dbUsersUpdateProfilePic,
   dbUsersGetSingleWithOrganizations,
   dbUsersGetByEmailWithFields,
   dbUsersCreate,
@@ -408,22 +407,6 @@ const usersRemoveService = valLocals('usersRemoveService', {
       return next(err);
     });
 });
-const usersUpdateProfilePic = valLocals('usersUpdateProfilePic', {
-  user_id: string.require(),
-}, (req, res, next) => {
-  const {
-    user_id,
-  } = res.locals;
-  const profilePic = req.body.profile_pic;
-
-  return dbUsersUpdateProfilePic({ user_id, profilePic })
-    .then(() => {
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
-    });
-});
 const usersGetSingleWithOrganizations = valLocals('usersGetSingleWithOrganizations', {
   user_id: string.require(),
 }, (req, res, next, setLocals) => {
@@ -631,7 +614,6 @@ export {
   usersGetXendoServiceId,
   usersRemoveXendoService,
   usersRemoveService,
-  usersUpdateProfilePic,
   usersGetSingleWithOrganizations,
   userGetInfoForToken,
   usersRevokeToken,
