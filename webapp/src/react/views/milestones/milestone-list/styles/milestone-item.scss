@@ -163,7 +163,7 @@
     left: calc(50% - (54px / 2)); top: calc(50% - (54px / 2));
     opacity: 0;
     position: absolute;
-    transform: scale(1);
+    transform: scale3d(1, 1, 1);
     transition: .4s ease;
     user-select: none;
   }
