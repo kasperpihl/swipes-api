@@ -156,6 +156,9 @@ authed.all('/goals.archive',
   valBody({
     goal_id: string.require(),
   }),
+  mapLocals('goal_id', (setLocals, goal_id) => {
+    setLocals({ goal_ids: [goal_id] });
+  }),
   notificationCreateGroupId,
   goalsArchive,
   milestonesRemoveGoal,
