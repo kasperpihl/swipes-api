@@ -17,7 +17,7 @@ class SignupPage extends PureComponent {
   getSubtitle() {
     const { organization, inviter, createOrganization } = this.props;
     if(createOrganization){
-      return 'You and your team has been invited to try Swipes Workspace';
+      return "You are invited to try the Swipes Workspace for a 14 days free trial.";
     }
     if (!inviter) {
       return 'Hint: Swipes Personal users are getting invites.';

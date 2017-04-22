@@ -80,16 +80,17 @@ class HOCSignupPage extends PureComponent {
       invitation_token: createOrganization ? undefined : invitationToken,
     }).then((res) => {
       this.clearLoading('signupButton');
-      if (res.ok && me && me.get('invited_by')) {
-        window.analytics.sendEvent('Invitation accepted', {
-          distinct_id: me.get('invited_by'),
-          // 'Minutes since invite':
-        });
-      }
       if (res.ok) {
+        this.setState({forceDownload: true});
         window.analytics.sendEvent('Signed up', {});
         if(createOrganization){
           window.analytics.sendEvent('Organization created', {});
+        }
+        if(me && me.get('invited_by')) {
+          window.analytics.sendEvent('Invitation accepted', {
+            distinct_id: me.get('invited_by'),
+            // 'Minutes since invite':
+          });
         }
       }
       console.log('ressy', res);
@@ -116,7 +117,7 @@ class HOCSignupPage extends PureComponent {
       );
     }
 
-    if (forceDownload || token) {
+    if (forceDownload) {
       return (
         <DownloadPage
           downloadLinks={downloadLinks}
