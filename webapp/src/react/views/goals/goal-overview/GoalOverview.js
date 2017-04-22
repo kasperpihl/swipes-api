@@ -174,7 +174,7 @@ class GoalOverview extends PureComponent {
     const { delegate } = this.props;
     const helper = this.getHelper();
     const history = helper.getLastActivity();
-    let nf = msgGen.history.getNotificationWrapperForHistory(helper.getId(), history, {
+    const nf = msgGen.history.getNotificationWrapperForHistory(helper.getId(), history, {
       icon: false,
     });
 
@@ -186,8 +186,8 @@ class GoalOverview extends PureComponent {
           actions={this.renderActivitySeeAllButton()}
         >
           <NotificationWrapper
-            narrow={true}
-            noBorder={true}
+            narrow
+            noBorder
             delegate={delegate}
             notification={nf}
           />
@@ -201,12 +201,14 @@ class GoalOverview extends PureComponent {
   renderSuccessFooter(handoff) {
     let icon = handoff.toId ? 'ActivityCheckmark' : 'Star';
     let iconClass = 'success-footer__icon';
+
     if (handoff.backward) {
       iconClass += ' success-footer__icon--backward';
       icon = 'Iteration';
     }
+
     return (
-      <div className="success-footer">
+      <div className="success-footer" key={icon}>
         <div className={iconClass}>
           <Icon icon={icon} className="success-footer__svg" />
         </div>

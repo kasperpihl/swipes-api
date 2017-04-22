@@ -45,8 +45,8 @@
     	animation: rotateSpinner 2s linear infinite;
 
     	&__path {
-    		stroke-linecap: round;
         animation: dashSpinner 1.5s ease infinite;
+    		stroke-linecap: round;
         stroke-width: 4;
     	}
     }

@@ -219,6 +219,11 @@
 
     #{$b}__message {
       padding-left: 0;
+
+      &:before {
+        @include size(0px);
+        opacity: 0;
+      }
     }
 
     #{$b}__section:last-child {
@@ -227,6 +232,11 @@
 
     #{$b}__attachments {
       margin-top: 9px;
+
+      &:before {
+        @include size(0px);
+        opacity: 0;
+      }
     }
   }
 

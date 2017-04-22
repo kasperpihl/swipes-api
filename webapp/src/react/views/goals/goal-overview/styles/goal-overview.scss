@@ -133,24 +133,31 @@
 
   @include size(100%, 121px);
   @include flexContainer('row', left, center, $flexIgnoreList);
+  animation: slideInFooter .4s ease forwards;
   background-color: $blue-5;
   border-top: 1px solid $deepBlue-10;
   padding: 0 30px;
+  transform:  translate3d(0px, 100%, 0px);
 
   &__icon {
     @include size(60px);
     @include flexContainer('row', center, center);
+    animation: bounceInIcon .4s .4s linear forwards;
     background-color: $green-color;
     border-radius: 50%;
+    opacity: 0;
+
     &--backward {
       background-color: $blue-100;
     }
+
     #{$b}__svg {
       @include svg-color($bg);
     }
   }
 
   &__content {
+    @include size(100%, auto);
     @include font(15px, $deepBlue-80, 24px);
     padding: 0 30px;
 
@@ -211,5 +218,30 @@
   to {
     opacity: 1;
     transform: translateY(0px)
+  }
+}
+
+@keyframes slideInFooter {
+  to {
+    transform: translate3d(0px, 0px, 0px);
+  }
+}
+
+@keyframes bounceInIcon {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translate3d(0,0,0);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(0.89);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0,0,0);
   }
 }
