@@ -146,6 +146,8 @@ const goalsNotifySendEmails = (req, res, next) => {
     content: getNotificationAttachmentsList({ goal, flags: history.flags }),
   }];
   const to = [];
+  const merge_vars = [];
+  const host = config.get('host');
 
   usersWithFields.forEach((item) => {
     const profile = item.profile;
@@ -157,12 +159,20 @@ const goalsNotifySendEmails = (req, res, next) => {
         name: `${profile.first_name} ${profile.last_name}`,
         type: 'to',
       });
+      merge_vars.push({
+        rcpt: item.email,
+        vars: [{
+          name: 'UNSUBSCRIBE_LINK',
+          content: `${host}ubsubscribe?email=${item.email}&email_type=goal_notify`,
+        }],
+      });
     }
   });
 
   const message = {
     to,
     subject,
+    merge_vars,
     from_email: 'noreply@swipesapp.com',
     from_name: 'Swipes Team',
     headers: {
