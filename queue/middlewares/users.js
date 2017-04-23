@@ -25,6 +25,7 @@ const usersGetMultipleWithFields = (req, res, next) => {
   const fields = [
     'email',
     'profile',
+    'settings',
   ];
 
   return dbUsersGetMultipleWithFields({ user_ids, fields })
