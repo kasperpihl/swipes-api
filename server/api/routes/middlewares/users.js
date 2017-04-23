@@ -54,6 +54,10 @@ const defaultSettings = {
     },
   },
   starred_goals: [],
+  pinned_goals: [],
+  subsctiptions: {
+    goal_notify: true,
+  },
 };
 const userAvailability = valLocals('userAvailability', {
   email: string.format('email').require(),

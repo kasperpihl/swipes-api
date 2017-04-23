@@ -147,14 +147,17 @@ const goalsNotifySendEmails = (req, res, next) => {
   }];
   const to = [];
 
-  usersWithFields.forEach((user) => {
-    const profile = user.profile;
+  usersWithFields.forEach((item) => {
+    const profile = item.profile;
+    const subscriptions = item.settings.subscriptions;
 
-    to.push({
-      email: user.email,
-      name: `${profile.first_name} ${profile.last_name}`,
-      type: 'to',
-    });
+    if (user.id !== item.id && subscriptions.goal_notify) {
+      to.push({
+        email: item.email,
+        name: `${profile.first_name} ${profile.last_name}`,
+        type: 'to',
+      });
+    }
   });
 
   const message = {

@@ -32,8 +32,8 @@ import {
   usersInvitedUserQueueMessage,
 } from './middlewares/users';
 import {
-  meUpdateProfile,
-  meUpdateProfileQueueMessage,
+  meUpdateSettings,
+  meUpdateSettingsQueueMessage,
 } from './middlewares/me';
 import {
   organizationsCreate,
@@ -169,7 +169,7 @@ notAuthed.all('/users.unsubscribe',
    mapLocals(
     ['user', 'email_type'],
     (setLocals, user, email_type) => {
-      const profile = {
+      const settings = {
         subscriptions: {
           goal_notify: false,
         },
@@ -177,12 +177,12 @@ notAuthed.all('/users.unsubscribe',
 
       setLocals({
         user_id: user.id,
-        profile,
+        settings,
       });
     },
   ),
-  meUpdateProfile,
-  meUpdateProfileQueueMessage,
+  meUpdateSettings,
+  meUpdateSettingsQueueMessage,
   notificationsPushToQueue,
   sendResponse,
 );
