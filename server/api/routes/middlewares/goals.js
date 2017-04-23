@@ -318,14 +318,14 @@ const goalsUpdate = valLocals('goalsUpdate', {
 const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
   goal: object.require(),
-  milestone_id: string,
   goal_order: array,
+  milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal,
-    milestone_id,
-    goal_order,
+    goal_order = [],
+    milestone_id = null,
   } = res.locals;
   const goal_id = goal.id;
   const queueMessage = {

@@ -1,6 +1,5 @@
 import url from 'url';
 import ws from 'ws';
-import usersProfilePic from './users';
 import userServices from './services';
 import notes from './notes';
 import commonEvents from './common-events';
@@ -61,7 +60,6 @@ const websocketStart = (server) => {
 
     socket.send(JSON.stringify({ type: 'hello', payload: 'world' }));
 
-    usersProfilePic(socket, user_id);
     userServices(socket, user_id);
     notes(socket, user_id);
     commonEvents(socket, user_id);
