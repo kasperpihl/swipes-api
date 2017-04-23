@@ -27,6 +27,7 @@ const notificationGiveLabels = {
   update: 'sent you an update',
   assets: 'sent you assets',
   decision: 'sent you a decision',
+  default: 'notified you',
 };
 const notificationReplyLabels = {
   feedback: 'sent you back feedback',
