@@ -28,6 +28,9 @@ class Root extends PureComponent {
   checkLoginStatus() {
     const { location, token, isHydrated, history } = this.props;
     const path = location.pathname;
+    if(path === '/unsubscribe'){
+      return;
+    }
     if(path !== '/signup' && !window.ipcListener.isElectron && isHydrated && token) {
       history.push('/signup');
     }
@@ -59,6 +62,10 @@ class Root extends PureComponent {
         <HOCTooltip />
         <DevTools />
         <div className="content-wrapper">
+          <Route path="/unsubscribe" render={() => {
+            const HOCUnsubscribe = require('src/react/pages/unsubscribe/HOCUnsubscribe').default;
+            return <HOCUnsubscribe />;
+          }} />
           <Route path="/" exact={true} render={() => {
             const HOCApp = require('src/react/app/HOCApp').default;
             return <HOCApp />;
