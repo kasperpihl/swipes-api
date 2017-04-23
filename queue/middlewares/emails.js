@@ -146,20 +146,33 @@ const goalsNotifySendEmails = (req, res, next) => {
     content: getNotificationAttachmentsList({ goal, flags: history.flags }),
   }];
   const to = [];
+  const merge_vars = [];
+  const host = config.get('host');
 
-  usersWithFields.forEach((user) => {
-    const profile = user.profile;
+  usersWithFields.forEach((item) => {
+    const profile = item.profile;
+    const subscriptions = item.settings.subscriptions;
 
-    to.push({
-      email: user.email,
-      name: `${profile.first_name} ${profile.last_name}`,
-      type: 'to',
-    });
+    if (user.id !== item.id && subscriptions.goal_notify) {
+      to.push({
+        email: item.email,
+        name: `${profile.first_name} ${profile.last_name}`,
+        type: 'to',
+      });
+      merge_vars.push({
+        rcpt: item.email,
+        vars: [{
+          name: 'UNSUBSCRIBE_LINK',
+          content: `${host}ubsubscribe?email=${item.email}&email_type=goal_notify`,
+        }],
+      });
+    }
   });
 
   const message = {
     to,
     subject,
+    merge_vars,
     from_email: 'noreply@swipesapp.com',
     from_name: 'Swipes Team',
     headers: {
