@@ -2,6 +2,7 @@ import express from 'express';
 import {
   string,
   object,
+  any,
 } from 'valjs';
 import {
   valBody,
@@ -30,6 +31,10 @@ import {
   userActivatedUserSignUpQueueMessage,
   usersInvitedUserQueueMessage,
 } from './middlewares/users';
+import {
+  meUpdateProfile,
+  meUpdateProfileQueueMessage,
+} from './middlewares/me';
 import {
   organizationsCreate,
   organizationsAddToUser,
@@ -126,18 +131,16 @@ authed.post('/users.serviceDisconnect',
   valResponseAndSend(),
 );
 
-authed.post('/users.invite',
+authed.all('/users.invite',
   valBody({
     organization_id: string.require(),
     first_name: string.require(),
     email: string.require(),
   }),
-  mapLocals(
-    [],
-    (setLocals) => {
-      const fields = [];
-      setLocals({ fields });
-    },
+  mapLocals([], (setLocals) => {
+    const fields = [];
+    setLocals({ fields });
+  },
   ),
   usersGetByEmailWithFields,
   usersCreateTempUnactivatedUser,
@@ -150,6 +153,38 @@ authed.post('/users.invite',
     user: object.require(),
     organization: object,
   }),
+);
+
+notAuthed.all('/users.unsubscribe',
+  valBody({
+    email: string.format('email').require(),
+    email_type: any.of('goal_notify'),
+  }),
+  mapLocals([], (setLocals) => {
+    const fields = ['id'];
+    setLocals({ fields });
+  },
+  ),
+  usersGetByEmailWithFields,
+   mapLocals(
+    ['user', 'email_type'],
+    (setLocals, user, email_type) => {
+      const profile = {
+        subscriptions: {
+          goal_notify: false,
+        },
+      };
+
+      setLocals({
+        user_id: user.id,
+        profile,
+      });
+    },
+  ),
+  meUpdateProfile,
+  meUpdateProfileQueueMessage,
+  notificationsPushToQueue,
+  sendResponse,
 );
 
 export {
