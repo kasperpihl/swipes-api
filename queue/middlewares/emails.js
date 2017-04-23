@@ -163,7 +163,7 @@ const goalsNotifySendEmails = (req, res, next) => {
         rcpt: item.email,
         vars: [{
           name: 'UNSUBSCRIBE_LINK',
-          content: `${host}ubsubscribe?email=${item.email}&email_type=goal_notify`,
+          content: `${host}unsubscribe?email=${item.email}&email_type=goal_notify`,
         }],
       });
     }

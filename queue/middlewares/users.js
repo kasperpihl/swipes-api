@@ -23,6 +23,7 @@ const usersGetMultipleWithFields = (req, res, next) => {
     user_ids,
   } = res.locals;
   const fields = [
+    'id',
     'email',
     'profile',
     'settings',
