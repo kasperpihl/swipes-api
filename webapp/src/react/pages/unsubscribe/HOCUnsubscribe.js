@@ -22,19 +22,21 @@ class HOCUnsubscribe extends PureComponent {
       email,
       email_type: emailType,
     }).then((res) => {
-      if(res.ok) {
+      if (res.ok) {
         this.clearLoading('unsubscribe', 'You have been unsubscribed from these types of emails');
       } else {
         this.clearLoading('unsubscribe', '!Something went wrong');
       }
-    })
+    });
   }
   render() {
     return (
       <div className="unsubscribe">
-        {this.getLoading('unsubscribe').loadingLabel}
-        {this.getLoading('unsubscribe').successLabel}
-        {this.getLoading('unsubscribe').errorLabel}
+        <div className="unsubscribe__text">
+          {this.getLoading('unsubscribe').loadingLabel}
+          {this.getLoading('unsubscribe').successLabel}
+          {this.getLoading('unsubscribe').errorLabel}
+        </div>
       </div>
     );
   }
