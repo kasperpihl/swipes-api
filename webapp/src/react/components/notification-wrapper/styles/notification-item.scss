@@ -45,7 +45,7 @@
   &__icon {
     @include size(30px);
     @include flexContainer('row', center, center);
-    background-color: $deepBlue-40;
+    background-color: $deepBlue-60;
     border-radius: 3px;
   }
 
@@ -65,6 +65,9 @@
 
   &__subtitle {
     @include font(12px, $deepBlue-40, 15px, 400);
+
+    span {
+    }
   }
 
   &__reply {
@@ -77,7 +80,7 @@
 
   &__message {
     @include size(100%, auto);
-    @include font(15px, $deepBlue-100, 21px);
+    @include font(15px, $deepBlue-60, 21px);
     padding-right: 21px;
     padding-left: 42px;
 
