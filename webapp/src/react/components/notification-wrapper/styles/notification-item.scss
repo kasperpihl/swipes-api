@@ -10,6 +10,7 @@
   border-bottom: 1px solid $deepBlue-10;
   padding: 12px 9px;
   padding-bottom: 21px;
+  overflow: hidden;
 }
 
 .notif-attachment {
@@ -59,7 +60,7 @@
   }
 
   &__title {
-    @include font(15px, $deepBlue-90, 21px);
+    @include font(12px, $deepBlue-90, 21px);
   }
 
   &__subtitle {
@@ -76,7 +77,7 @@
 
   &__message {
     @include size(100%, auto);
-    @include font(14px, $deepBlue-80, 20px);
+    @include font(15px, $deepBlue-80, 21px);
     padding-right: 21px;
     padding-left: 42px;
 

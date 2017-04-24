@@ -104,7 +104,7 @@ class NotificationItem extends Component {
     }
 
     return (
-      <div className="notification__message">&bdquo;{n.get('message')}&ldquo;</div>
+      <div className="notification__message">{n.get('message')}</div>
     );
   }
   renderAttachments() {
