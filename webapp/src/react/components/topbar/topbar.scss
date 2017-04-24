@@ -38,6 +38,13 @@ $topbarSize: 38px;
     @include size(100%, 60px);
     @include flexContainer('row', center, center);
   }
+
+  &__trial {
+    @include size(100%);
+    @include font(16px, white, 300);
+    padding: 15px;
+    opacity: .6;
+  }
 }
 
 // Misc

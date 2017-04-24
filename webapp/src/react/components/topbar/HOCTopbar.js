@@ -81,13 +81,12 @@ class HOCTopbar extends PureComponent {
       statusMessage = 'New version available';
       btn = this.renderReloadBtn();
     } else if (status === 'offline' && lastConnect) {
-      if(reconnectAttempt > 4) {
+      if (reconnectAttempt > 4) {
         statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
         btn = this.renderRetryBtn();
       }
-
     } else if (status === 'connecting' && lastConnect) {
-      if(reconnectAttempt > 4) {
+      if (reconnectAttempt > 4) {
         statusMessage = 'Connecting...';
       }
     }
@@ -124,12 +123,12 @@ class HOCTopbar extends PureComponent {
   }
   renderTrialIndicator() {
     const daysLeft = msgGen.orgs.getDaysLeft();
-    if(typeof daysLeft !== 'number' || daysLeft <= 0) {
+    if (typeof daysLeft !== 'number' || daysLeft <= 0) {
       return undefined;
     }
     return (
-      <div className="trial">{`${daysLeft} days left in trial`}</div>
-    )
+      <div className="topbar__trial">{`${daysLeft} days left in trial`}</div>
+    );
   }
   renderWindowsActions() {
     const { isMaximized, isFullscreen } = this.props;

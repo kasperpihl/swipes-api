@@ -24,7 +24,7 @@ class HOCMilestoneList extends PureComponent {
     this.setState({
       tabs: ['Open', 'Closed'],
       tabIndex: 0,
-    })
+    });
   }
   componentDidMount() {
   }
@@ -78,7 +78,7 @@ class HOCMilestoneList extends PureComponent {
     const { milestones } = this.props;
     const { tabs, tabIndex } = this.state;
     const group = milestones.groupBy(m => m.get('closed') ? 'Closed' : 'Open');
-    console.log(group.toJS());
+
     return (
       <MilestoneList
         delegate={this}

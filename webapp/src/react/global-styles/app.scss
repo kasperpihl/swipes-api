@@ -112,6 +112,10 @@
   // windows
   &.platform-win32 {
 
+    .topbar__trial {
+      @include flexContainer('row', left, center);
+    }
+
     &.window-is-maximized {
       $paddingSide: 4px;
       padding: $paddingSide;
@@ -132,6 +136,10 @@
 
     .content-wrapper {
       border-radius: 5px;
+    }
+
+    .topbar__trial {
+      @include flexContainer('row', right, center);
     }
 
     &.window-is-fullscreen {
