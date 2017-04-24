@@ -76,7 +76,7 @@
 
   &__message {
     @include size(100%, auto);
-    @include font(12px, $deepBlue-60, 15px);
+    @include font(14px, $deepBlue-80, 20px);
     padding-right: 21px;
     padding-left: 42px;
 
