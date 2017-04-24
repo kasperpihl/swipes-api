@@ -172,7 +172,7 @@ class HOCOrganization extends PureComponent {
         firstNameVal={firstNameVal}
         emailVal={emailVal}
         organization={organization}
-        isAdmin={msgGen.users.isAdmin(me)}
+        isAdmin={msgGen.me.isAdmin()}
         users={users.sort(
           (u1, u2) => msgGen.users.getFirstName(u1).localeCompare(msgGen.users.getFirstName(u2))
         )}

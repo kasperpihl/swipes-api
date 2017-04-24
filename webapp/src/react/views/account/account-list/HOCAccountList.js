@@ -34,7 +34,7 @@ class HOCAccountList extends PureComponent {
           title: 'Onboarding',
           subtitle: 'Learn how to use get started with Swipes',
         },
-        msgGen.users.isAdmin(props.me) ? {
+        msgGen.me.isAdmin() ? {
           id: 'Payment',
           title: 'Billing (coming soon)',
           subtitle: 'Set up and manage the payment card for the account',

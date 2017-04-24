@@ -122,8 +122,10 @@ class HOCTopbar extends PureComponent {
     );
   }
   renderTrialIndicator() {
+    const { me } = this.props;
     const daysLeft = msgGen.orgs.getDaysLeft();
-    if (typeof daysLeft !== 'number' || daysLeft <= 0) {
+    const isAdmin = msgGen.me.isAdmin(me && me.get('id'));
+    if (!isAdmin || typeof daysLeft !== 'number' || daysLeft <= 0) {
       return undefined;
     }
     return (
@@ -181,6 +183,7 @@ class HOCTopbar extends PureComponent {
 
 function mapStateToProps(state) {
   return {
+    me: state.get('me'),
     nextRetry: state.getIn(['connection', 'nextRetry']),
     versionInfo: state.getIn(['connection', 'versionInfo']),
     reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),

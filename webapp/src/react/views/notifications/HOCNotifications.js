@@ -55,6 +55,7 @@ class HOCNotifications extends PureComponent {
   }
   onReply(i) {
     const n = this.state.notifications.get(i);
+    this.onMark(n.get('id'));
     const { navPush } = this.props;
     navPush({
       id: 'Notify',
