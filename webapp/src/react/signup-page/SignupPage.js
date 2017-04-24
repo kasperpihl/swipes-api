@@ -16,8 +16,8 @@ class SignupPage extends PureComponent {
   }
   getSubtitle() {
     const { organization, inviter, createOrganization } = this.props;
-    if(createOrganization){
-      return "You are invited to try the Swipes Workspace for a 14 days free trial.";
+    if (createOrganization) {
+      return 'You are invited to try the Swipes Workspace for a 14 days free trial.';
     }
     if (!inviter) {
       return 'Hint: Swipes Personal users are getting invites.';
@@ -26,7 +26,7 @@ class SignupPage extends PureComponent {
   }
   generateTitle() {
     const { organization, inviter, createOrganization } = this.props;
-    if(createOrganization){
+    if (createOrganization) {
       return 'Signup organization';
     }
     if (!inviter) {
@@ -62,7 +62,7 @@ class SignupPage extends PureComponent {
   }
   renderForm() {
     const { createOrganization: cO, inviter } = this.props;
-    if(!cO && !inviter) {
+    if (!cO && !inviter) {
       return undefined;
     }
     return (
@@ -73,7 +73,7 @@ class SignupPage extends PureComponent {
         {this.renderInputField('lastName', 'text', 'Last name')}
         {this.renderInputField('password', 'password', 'Password')}
       </div>
-    )
+    );
   }
   renderInputField(key, type, placeholder) {
     const { delegate } = this.props;
@@ -92,7 +92,7 @@ class SignupPage extends PureComponent {
   }
   renderFooter() {
     const { createOrganization: cO, inviter } = this.props;
-    if(!cO && !inviter) {
+    if (!cO && !inviter) {
       return undefined;
     }
     const isLoading = this.props.getLoading('signupButton').loading;
@@ -109,7 +109,7 @@ class SignupPage extends PureComponent {
           }
         </div>
         <div className="footer-sentence">
-          By signing up you, agree to the <a href="#">Terms & Conditions</a>
+          By signing up you agree to the <a href="#">Terms & Conditions</a>
         </div>
       </div>
     );

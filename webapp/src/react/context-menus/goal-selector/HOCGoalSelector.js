@@ -57,7 +57,7 @@ class HOCGoalSelector extends PureComponent {
       options: goals.sort((g1, g2) => {
         const h1 = new GoalsUtil(g1);
         const h2 = new GoalsUtil(g2);
-        if(h1.getIsCompleted() !== h2.getIsCompleted()){
+        if (h1.getIsCompleted() !== h2.getIsCompleted()) {
           return h1.getIsCompleted() ? 1 : -1;
         }
         return g1.get('title').localeCompare(g2.get('title'));
@@ -78,6 +78,8 @@ class HOCGoalSelector extends PureComponent {
       onBlurResetsInput: false,
       onChange: this.onChange,
       optionRenderer: this.renderGoalItem,
+      noResultsText: '',
+      placeholder: 'Type the name of the goal',
     };
     return (
       <div className="goal-selector">

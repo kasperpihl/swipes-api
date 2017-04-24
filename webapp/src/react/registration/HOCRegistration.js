@@ -123,11 +123,11 @@ class HOCRegistration extends Component {
   renderFooter() {
     const { showWelcomeMessage } = this.state;
     const isLoading = this.getLoading('signInButton').loading;
-    let resetClass = 'welcome__reset';
+    const resetClass = 'welcome__reset';
     let continueClass = 'welcome__continue';
 
     if (!showWelcomeMessage) {
-      resetClass += ' welcome__reset--show';
+      // resetClass += ' welcome__reset--show'; // Enable when we have reset password
       continueClass += ' welcome__continue--sign-in';
     } else {
       continueClass += ' welcome__continue--continue';
