@@ -42,7 +42,7 @@ class HOCAccountList extends PureComponent {
         {
           id: 'FAQ',
           title: 'Help Center',
-          subtitle: 'See answers to frequently asked questions and learn more about using the Swipes Workspace'
+          subtitle: 'See answers to frequently asked questions and learn all about using the Swipes Workspace. Or reach out to help@swipesapp.com for any help.',
         }
       ],
     };
