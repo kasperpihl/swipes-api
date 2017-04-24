@@ -228,11 +228,13 @@ class StepList extends PureComponent {
       <div
         className={className}
         key={i}
-        onMouseEnter={this.onEnter(i)}
-        onMouseLeave={this.onLeave}
-        onClick={this.onCheck(i)}
       >
-        <div className="step-list-item__indicator">
+        <div
+          className="step-list-item__indicator"
+          onMouseEnter={this.onEnter(i)}
+          onMouseLeave={this.onLeave}
+          onClick={this.onCheck(i)}
+        >
           <div className="indicator">
             <div className="indicator__number">{i + 1}</div>
             <div className="indicator__icon">

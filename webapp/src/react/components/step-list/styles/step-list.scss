@@ -14,11 +14,10 @@
   $flexIgnoreList: '#{$b}__indicator', '#{$b}__assignees';
 
   @include size(100%, auto);
-  @include flexContainer('row', left, center, $flexIgnoreList);
+  @include flexContainer('row', left, stretch, $flexIgnoreList);
   min-height: 66px;
   border-top: 1px solid $deepBlue-5;
   transition: 0s;
-  padding: 18px 0;
 }
 
 .add-step {
@@ -56,7 +55,7 @@
 .step-list-item {
   $b: &;
   &__indicator {
-    @include size(49px, 100%);
+    @include size(49px, initial);
     @include flexContainer('row', left, center);
     transition: .15s ease;
 
@@ -69,12 +68,15 @@
   }
 
   &__title {
-    @include size(100%, auto);
+    @include size(100%, initial);
     @include font(15px, $deepBlue-80, 24px);
+    @include flexContainer('row', left, center);
+    padding: 18px 0;
     transition: .15s ease;
   }
 
   &__assignees {
+    @include flexContainer('row', center, center);
     padding-left: 6px;
     transition: .15s ease;
   }
