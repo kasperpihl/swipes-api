@@ -30,13 +30,13 @@ class HOCAccountList extends PureComponent {
           subtitle: 'Invite new team members and manage user permissions',
         },
         {
-          id: 'Settings',
-          title: 'My settings',
-          subtitle: 'Set up your email preferences and other settings in the app',
+          id: 'Onboarding',
+          title: 'Onboarding',
+          subtitle: 'Learn how to use get started with Swipes',
         },
         {
           id: 'Payment',
-          title: 'Billing',
+          title: 'Billing (coming soon)',
           subtitle: 'Set up and manage the payment card for the account',
         },
         {
@@ -67,6 +67,9 @@ class HOCAccountList extends PureComponent {
   }
   onClick(section) {
     const { navPush, browser, target } = this.props;
+    if(section.id === 'Payment') {
+      return undefined;
+    }
     if(section.id === 'FAQ'){
       return browser(target, 'http://support.swipesapp.com/hc/en-us/categories/115000489025-Swipes-Workspace');
     }
