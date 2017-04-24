@@ -24,8 +24,8 @@ section.view-container {
   left: 0; top: 0;
   overflow: hidden;
   position: absolute;
-  transition: transform .5s ease;
-  will-change: width, left;
+  transition: transform .4s ease;
+  will-change: width, transform;
 }
 
 .sw-view {

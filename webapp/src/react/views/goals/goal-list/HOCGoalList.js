@@ -195,16 +195,19 @@ class HOCGoalList extends PureComponent {
       filterProp,
     } = this.state;
     let goalFilter = filters.get(tabs[tabIndex]);
-    console.log(filters.toJS(), tabs[tabIndex]);
+
     goalFilter = goalFilter.set('goals', goalFilter.get('goals').sort((g1, g2) => {
       const g1StarI = sG.indexOf(g1);
       const g2StarI = sG.indexOf(g2);
+
       if (g1StarI > g2StarI) {
         return -1;
       }
+
       if (g2StarI > g1StarI) {
         return 1;
       }
+
       return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']));
     }));
 

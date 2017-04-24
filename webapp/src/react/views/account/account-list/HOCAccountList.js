@@ -12,7 +12,7 @@ class HOCAccountList extends PureComponent {
     return 600;
   }
   static maxWidth() {
-    return 600;
+    return 700;
   }
   constructor(props) {
     super(props);
@@ -42,8 +42,8 @@ class HOCAccountList extends PureComponent {
         {
           id: 'FAQ',
           title: 'Help Center',
-          subtitle: 'See answers to frequently asked questions and learn more about using the Swipes Workspace'
-        }
+          subtitle: 'See answers to frequently asked questions and learn more about using the Swipes Workspace',
+        },
       ],
     };
   }
@@ -67,7 +67,7 @@ class HOCAccountList extends PureComponent {
   }
   onClick(section) {
     const { navPush, browser, target } = this.props;
-    if(section.id === 'FAQ'){
+    if (section.id === 'FAQ') {
       return browser(target, 'http://support.swipesapp.com/hc/en-us/categories/115000489025-Swipes-Workspace');
     }
     return navPush({

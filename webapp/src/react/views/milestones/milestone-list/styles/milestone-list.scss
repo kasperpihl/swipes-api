@@ -6,6 +6,7 @@
   @include flexContainer('row') {
     flex-wrap: wrap;
   };
+
   padding: 15px;
 
   &__header {

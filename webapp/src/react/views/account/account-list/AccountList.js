@@ -27,7 +27,9 @@ class AccountList extends PureComponent {
   }
   renderHeader() {
     return (
-      <HOCHeaderTitle title="Account" />
+      <div className="account-list__header">
+        <HOCHeaderTitle title="Account" />
+      </div>
     );
   }
   renderSections() {
@@ -47,7 +49,7 @@ class AccountList extends PureComponent {
     const { isLoggingOut } = this.props;
 
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView noframe header={this.renderHeader()}>
         <div className="account-list">
           {this.renderSections()}
         </div>
