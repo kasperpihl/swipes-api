@@ -15,6 +15,7 @@ const notificationIconsMap = {
   update: `${s3BucketUrl}email_icons/swipes-email-icon-status.png`,
   assets: `${s3BucketUrl}email_icons/swipes-email-icon-assets.png`,
   decision: `${s3BucketUrl}email_icons/swipes-email-icon-decision.png`,
+  default: `${s3BucketUrl}email_icons/swipes-email-icon-notify.png`,
 };
 const notificationRequestLabels = {
   feedback: 'asks for your feedback',
