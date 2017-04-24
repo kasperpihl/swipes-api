@@ -19,7 +19,7 @@ section.view-container {
   @include border-radius(6px, 6px, 0px, 0px);
   @include flexContainer('column');
   background-color: $bg;
-  box-shadow: 0 6px 12px 1px rgba(0,12,47,0.3);
+  box-shadow: 0 6px 12px 1px rgba($deepBlue-100, .3);
   margin-top: calc(60px - 38px);
   left: 0; top: 0;
   overflow: hidden;
@@ -110,8 +110,8 @@ section.view-container {
   }
 
   &--overlay {
-    transition: transform .3s ease;
     transform: translateX(50%);
+    transition: transform .3s ease;
   }
   &--underlay {
     transition: transform .3s ease;
