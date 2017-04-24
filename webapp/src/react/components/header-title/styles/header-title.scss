@@ -35,7 +35,7 @@ $noSubH: 60px;
   &__subtitle {
     @include size(100%, auto);
     @include font(12px, $deepBlue-40, 400);
-    margin-top: 12px;
+    margin-top: 6px;
   }
 
   &__input {

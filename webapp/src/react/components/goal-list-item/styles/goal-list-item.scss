@@ -50,24 +50,22 @@ $contHeight: 79px;
 
   &__title {
     @include size(calc(100% - 50px), auto);
-    @include font(17px, $deepBlue-80, 24px);
+    @include font(18px, $deepBlue-80, 24px);
     @include truncateString();
     transition: color .1s ease;
   }
 
   &__subtitle {
-    @include size(calc(100% - 50px), 30px);
+    @include size(calc(100% - 50px), auto);
     @include flex(center, flex-start);
     @include flexContainer('row', left, center);
     overflow: hidden;
   }
 
   &__label {
-    @include size(100%, 20px);
-    @include font(12px, $deepBlue-50, 15px, 500);
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-50, 15px);
     @include truncateString();
-    letter-spacing: .5px;
-    margin-top: 3px;
     transition: .25s ease;
   }
 
