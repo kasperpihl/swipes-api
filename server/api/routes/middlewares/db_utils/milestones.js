@@ -114,7 +114,9 @@ const dbMilestonesMigrateIncompleteGoals = funcWrap([
       }, {
         returnChanges: 'always',
       }).do((results) => {
-        return results('changes')('new_val').map((goal) => {
+        // In the case that all of the goal in a milestone are completed
+        // there will be no changes object
+        return results('changes').default({})('new_val').default([]).map((goal) => {
           return goal('id');
         });
       });

@@ -26,6 +26,7 @@ class HOCOnboarding extends PureComponent {
         title: 'Goals',
       });
     } else if(item.get('id') === 'invite-team') {
+      complete(item.get('id'));
       openSecondary({
         id: 'Organization',
         title: 'Team account',

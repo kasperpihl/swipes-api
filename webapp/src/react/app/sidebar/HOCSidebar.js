@@ -12,26 +12,20 @@ import './styles/sidebar.scss';
 class HOCSidebar extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      navItems: [
-        { id: 'MilestoneList', svg: 'Milestones' },
-        { id: 'GoalList', svg: 'Goals' },
-        { id: 'Notifications', svg: 'Notification' },
-        { id: 'Onboarding', svg: 'Onboarding' },
-        // { id: 'Find', svg: 'Find' },
-        // { id: 'Slack', svg: 'Hashtag' },
-        // { id: 'Store', svg: 'Store' },
-      ].filter(v => !!v),
-    };
-    this.state.activeItem = this.getActiveItem(props.navId);
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onRightClickCached = setupCachedCallback(this.onClick, this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.navId !== this.props.navId) {
-      this.setState({ activeItem: this.getActiveItem(nextProps.navId) });
-    }
+  getNavItems() {
+    return [
+      { id: 'MilestoneList', svg: 'Milestones' },
+      { id: 'GoalList', svg: 'Goals' },
+      { id: 'Notifications', svg: 'Notification' },
+      this.getRemainingOnboarding() ? { id: 'Onboarding', svg: 'Onboarding' } : undefined,
+      // { id: 'Find', svg: 'Find' },
+      // { id: 'Slack', svg: 'Hashtag' },
+      // { id: 'Store', svg: 'Store' },
+    ].filter(v => !!v);
   }
   onClick(id, target) {
     const { navSet } = this.props;
@@ -42,19 +36,6 @@ class HOCSidebar extends PureComponent {
       id,
       title: this.getTitleForId(id),
     });
-  }
-  getActiveItem(navId) {
-    const { navItems } = this.state;
-    const isNavitem = navItems.some(item => item.id === navId);
-    let activeItem = null;
-    if (isNavitem) {
-      navItems.forEach((item, i) => {
-        if (item.id === navId) {
-          activeItem = i;
-        }
-      });
-    }
-    return activeItem;
   }
   getTitleForId(id) {
     switch (id) {
@@ -113,7 +94,7 @@ class HOCSidebar extends PureComponent {
   }
   // render
   renderTopSection() {
-    const { navItems } = this.state;
+    const navItems = this.getNavItems();
 
     if (navItems) {
       return navItems.map((o, i) => this.renderItem(o, i));
