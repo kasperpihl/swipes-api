@@ -122,6 +122,15 @@ class HOCTopbar extends PureComponent {
       <Button primary small text="Reload" onClick={this.onReload} className="topbar__retry-btn" />
     );
   }
+  renderTrialIndicator() {
+    const daysLeft = msgGen.orgs.getDaysLeft();
+    if(typeof daysLeft !== 'number' || daysLeft <= 0) {
+      return undefined;
+    }
+    return (
+      <div className="trial">{`${daysLeft} days left in trial`}</div>
+    )
+  }
   renderWindowsActions() {
     const { isMaximized, isFullscreen } = this.props;
     let toggleMaximizeIcon = 'WindowsMaximize';
@@ -162,6 +171,7 @@ class HOCTopbar extends PureComponent {
   render() {
     return (
       <div className="topbar">
+        {this.renderTrialIndicator()}
         {this.renderStatusIndicator()}
         {this.renderWindowsActions()}
       </div>

@@ -7,8 +7,23 @@ export default class Milestones {
   }
   isValid() {
     const org = this.store.getState().getIn(['me', 'organizations', 0]);
-    const now = moment();
-    const trial = org.get('trial');
-    return false;
+    if(org) {
+      const now = moment();
+      const endingAt = org.getIn(['trial', 'ending_at']);
+      if(endingAt.diff(now, 'days') < 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+  getDaysLeft() {
+    const org = this.store.getState().getIn(['me', 'organizations', 0]);
+    if(org) {
+      const now = moment();
+      const trial = org.get('trial');
+      const endingAt = moment(trial.get('ending_at'));
+      return endingAt.diff(now, 'days');
+    }
+    return undefined;
   }
 }

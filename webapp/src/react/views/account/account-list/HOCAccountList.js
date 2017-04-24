@@ -34,17 +34,17 @@ class HOCAccountList extends PureComponent {
           title: 'Onboarding',
           subtitle: 'Learn how to use get started with Swipes',
         },
-        {
+        msgGen.users.isAdmin(props.me) ? {
           id: 'Payment',
           title: 'Billing (coming soon)',
           subtitle: 'Set up and manage the payment card for the account',
-        },
+        } : undefined,
         {
           id: 'FAQ',
           title: 'Help Center',
           subtitle: 'See answers to frequently asked questions and learn all about using the Swipes Workspace. Or reach out to help@swipesapp.com for any help.',
-        },
-      ],
+        }
+      ].filter(v => !!v),
     };
   }
   componentDidMount() {
@@ -100,8 +100,10 @@ class HOCAccountList extends PureComponent {
 
 HOCAccountList.propTypes = {};
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    me: state.get('me'),
+  };
 }
 
 export default connect(mapStateToProps, {
