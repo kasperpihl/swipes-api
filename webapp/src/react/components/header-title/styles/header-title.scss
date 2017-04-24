@@ -34,7 +34,7 @@ $noSubH: 60px;
 
   &__subtitle {
     @include size(100%, auto);
-    @include font(12px, $deepBlue-30, 500);
+    @include font(12px, $deepBlue-40, 400);
     margin-top: 12px;
   }
 

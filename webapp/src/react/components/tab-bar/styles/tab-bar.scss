@@ -16,7 +16,7 @@
   &__tab {
     @include size(auto, 40px);
     @include flex(center);
-    @include font(12px, $deepBlue-30, 15px, 500);
+    @include font(13px, $deepBlue-40, 17px, 500);
     margin: 0;
     padding-right: 30px;
     transition: .1s;
@@ -31,7 +31,7 @@
     }
 
     &--active {
-      color: $deepBlue-100;
+      @include font(13px, $deepBlue-100, 17px, 500);
       transition: .1s;
 
       &:hover {
