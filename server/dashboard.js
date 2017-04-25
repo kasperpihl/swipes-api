@@ -18,6 +18,7 @@ app.all('/', (req, res, next) => {
   const q =
     r.db('swipes')
       .table('users')
+      .filter({ activated: true })
       .count();
 
   db.rethinkQuery(q).then((result) => {
@@ -26,8 +27,7 @@ app.all('/', (req, res, next) => {
       result,
     });
   });
-
-})
+});
 
 // start api rest server
 server.listen(1337);
