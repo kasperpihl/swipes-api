@@ -23,7 +23,7 @@ class SignupPage extends PureComponent {
   getSubtitle() {
     const { organization, inviter, createOrganization } = this.props;
     if (createOrganization) {
-      return 'You are invited to try the Swipes Workspace for a 14 days free trial. No credit card required. After the trial the price will be $15/user/month';
+      return 'You are invited to try the Swipes Workspace for a 14-day free trial. Start your trial by signing up. No credit card required. After the trial, continue using the Workspace for $15 per user / month.';
     }
     if (!inviter) {
       return 'Hint: Swipes Personal users are getting invites.';

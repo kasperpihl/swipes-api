@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -10,6 +11,11 @@ import SignupHeader from './SignupHeader';
 import DownloadPage from './DownloadPage';
 
 import './styles/signup.scss';
+const defLinks = {
+  darwin: 'https://www.dropbox.com/s/wbdmnfbvxjn19gz/SwipesInstaller.pkg?dl=1',
+  win32: 'https://www.dropbox.com/s/9zjvzmgsevhaipv/Swipes-win32-ia32.zip?dl=1',
+  linux: 'https://www.dropbox.com/s/jngyb7q1zc1lq8c/Swipes-linux-ia32.zip?dl=1',
+};
 
 class HOCSignupPage extends PureComponent {
   constructor(props) {
@@ -23,45 +29,45 @@ class HOCSignupPage extends PureComponent {
     setupLoading(this);
   }
   componentDidMount() {
+    console.log('did mount');
     window.analytics.sendEvent('Signup opened', {});
-    const { request } = this.props;
+    const { request, forceDownload, history } = this.props;
     const { createOrganization, formData, invitationToken } = this.state;
-    if(invitationToken) {
+    if(invitationToken && !forceDownload) {
       this.setLoading('signup');
 
       request('organizations.getInfoFromInvitationToken', {
         invitation_token: invitationToken,
       }).then((res) => {
         this.clearLoading('signup');
-        if (res && res.ok) {
+        if (res && res.ok && !this._unmounted) {
           if(res.me) {
             const me = fromJS(res.me);
-            if (me && me.get('invited_by')) {
-              window.analytics.sendEvent('Invitation opened', {});
-            }
+            window.analytics.sendEvent('Invitation opened', {});
+
             const firstName = msgGen.users.getFirstName(me);
             const email = msgGen.users.getEmail(me);
-            this.setState({
-              forceDownload: !!me.get('activated'),
-              downloadLinks: res.download_links,
-              organization: fromJS(res.organization),
-              invitedBy: fromJS(res.invited_by),
-              me,
-              formData: formData.set('email', email).set('firstName', firstName),
-            });
+            if(me.get('activated')) {
+              history.push('/download');
+            } else {
+              this.setState({
+                organization: fromJS(res.organization),
+                invitedBy: fromJS(res.invited_by),
+                me,
+                formData: formData.set('email', email).set('firstName', firstName),
+              });
+            }
           } else {
             this.setState({
-              downloadLinks: res.download_links,
               createOrganization: true,
             });
           }
-
         }
-
-        console.log('ressy', res);
       });
     }
-
+  }
+  componentWillUnmount(){
+    this._unmounted = true;
   }
   onChange(key, e) {
     const { formData } = this.state;
@@ -69,7 +75,7 @@ class HOCSignupPage extends PureComponent {
   }
   onClick() {
     const { formData, invitationToken, me, createOrganization } = this.state;
-    const { signup, createOrgRequest } = this.props;
+    const { signup, createOrgRequest, history } = this.props;
     this.setLoading('signupButton');
     signup({
       first_name: formData.get('firstName'),
@@ -81,7 +87,6 @@ class HOCSignupPage extends PureComponent {
     }).then((res) => {
       this.clearLoading('signupButton');
       if (res.ok) {
-        this.setState({forceDownload: true});
         window.analytics.sendEvent('Signed up', {});
         if(createOrganization){
           window.analytics.sendEvent('Organization created', {});
@@ -92,6 +97,7 @@ class HOCSignupPage extends PureComponent {
             // 'Minutes since invite':
           });
         }
+        history.push('/download');
       }
       console.log('ressy', res);
     });
@@ -102,11 +108,10 @@ class HOCSignupPage extends PureComponent {
       organization,
       invitedBy,
       hasLoaded,
-      forceDownload,
-      downloadLinks,
       invitationToken,
       createOrganization,
     } = this.state;
+    const { forceDownload } = this.props;
     const { token } = this.props;
 
     if (this.getLoading('signup').loading) {
@@ -120,7 +125,7 @@ class HOCSignupPage extends PureComponent {
     if (forceDownload) {
       return (
         <DownloadPage
-          downloadLinks={downloadLinks}
+          downloadLinks={defLinks}
         />
       );
     }
@@ -137,11 +142,10 @@ class HOCSignupPage extends PureComponent {
     );
   }
   render() {
-    const { forceDownload } = this.state;
-    const { token } = this.props;
+    const { token, forceDownload } = this.props;
     const headerProps = {
       crumbs: ['SIGNUP', 'DOWNLOAD'],
-      activeCrumb: (token || forceDownload) ? 1 : 0,
+      activeCrumb: forceDownload ? 1 : 0,
     };
     return (
       <div className="signup">
@@ -164,7 +168,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   request: ca.api.request,
   signup: ca.users.signup,
-})(HOCSignupPage);
+})(HOCSignupPage));

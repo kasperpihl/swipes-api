@@ -94,7 +94,7 @@ class DownloadPage extends PureComponent {
   render() {
     return (
       <div className="download-page">
-        <h1 className="title">Download the Swipes Workspace</h1>
+        <h1 className="title">Awesome! Download the Swipes Workspace</h1>
         <h3 className="subtitle">Start working with your team from anywhere</h3>
         <div className="section">
           <div className="section-title">Desktop</div>

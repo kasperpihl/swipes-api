@@ -76,7 +76,11 @@ class Root extends PureComponent {
           }} />
           <Route path="/signup" render={() => {
             const HOCSignupPage = require('src/react/signup-page/HOCSignupPage').default;
-            return <HOCSignupPage />
+            return <HOCSignupPage key="signup" />
+          }} />
+          <Route path="/download" render={() => {
+            const HOCSignupPage = require('src/react/signup-page/HOCSignupPage').default;
+            return <HOCSignupPage key="signup" forceDownload />
           }} />
         </div>
       </div>
