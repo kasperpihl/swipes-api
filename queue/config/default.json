@@ -18,6 +18,9 @@
   "mandrill": {
     "apiKey": "HUs9tnqPhIvJgEXDFAXgrw"
   },
+  "mailchimp": {
+    "apiKey": "ecf74584af1de945beeb71c8918ed5a7-us7"
+  },
   "s3BucketUrl": "https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/",
   "port": 6000,
   "cors": "*",
