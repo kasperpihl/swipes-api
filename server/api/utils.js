@@ -10,9 +10,9 @@ const getDownloadLinks = () => {
   if(config.get('env') === 'staging'){
   }
   return {
-    darwin: 'https://www.dropbox.com/s/wbdmnfbvxjn19gz/SwipesInstaller.pkg?dl=1',
-    win32: 'https://www.dropbox.com/s/9zjvzmgsevhaipv/Swipes-win32-ia32.zip?dl=1',
-    linux: 'https://www.dropbox.com/s/jngyb7q1zc1lq8c/Swipes-linux-ia32.zip?dl=1',
+    darwin: 'http://swipesapp.com/download-mac',
+    win32: 'http://swipesapp.com/download-win',
+    linux: 'http://swipesapp.com/download-linux',
   };
 }
 
