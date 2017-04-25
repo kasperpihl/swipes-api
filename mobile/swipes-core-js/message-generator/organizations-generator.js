@@ -18,7 +18,7 @@ export default class Milestones {
   }
   getDaysLeft() {
     const org = this.store.getState().getIn(['me', 'organizations', 0]);
-    if(org) {
+    if(org && org.get('trial')) {
       const now = moment();
       const trial = org.get('trial');
       const endingAt = moment(trial.get('ending_at'));
