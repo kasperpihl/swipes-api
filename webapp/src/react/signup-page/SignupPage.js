@@ -33,7 +33,7 @@ class SignupPage extends PureComponent {
   generateTitle() {
     const { organization, inviter, createOrganization } = this.props;
     if (createOrganization) {
-      return 'Signup organization';
+      return 'Sign up organization';
     }
     if (!inviter) {
       return 'Swipes Workspace is invite only';
