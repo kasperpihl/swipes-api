@@ -195,6 +195,27 @@
 .welcome {
 	$b: &;
 
+	&__actions--continue:focus {
+
+		#{$b}__continue {
+			text-decoration: underline;
+
+			&:after {
+				text-decoration: underline;
+			}
+		}
+
+		#{$b}__icon {
+			transform: translateX(15px);
+			transition: .5s ease;
+
+			&:after {
+				-webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+				transition: .5s ease;
+			}
+		}
+	}
+
 	&__actions:hover {
 
 		#{$b}__svg {

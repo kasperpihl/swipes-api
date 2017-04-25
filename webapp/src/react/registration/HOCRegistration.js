@@ -138,7 +138,7 @@ class HOCRegistration extends Component {
         <div className="welcome__actions welcome__actions--reset">
           <div className={resetClass}>Reset my password</div>
         </div>
-        <div className="welcome__actions welcome__actions--continue" onClick={this.handleContinue}>
+        <button className="welcome__actions welcome__actions--continue" onClick={this.handleContinue}>
           <div
             className={continueClass}
             data-title="Take me to my Workspace"
@@ -157,7 +157,7 @@ class HOCRegistration extends Component {
               </div>
             )
           }
-        </div>
+        </button>
       </div>
     );
   }
