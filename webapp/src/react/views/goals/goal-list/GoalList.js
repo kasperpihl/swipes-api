@@ -129,7 +129,7 @@ class GoalList extends Component {
           </div>
           <Button
             primary
-            text="Create your first goal"
+            text="Create a goal"
             className="goals-empty-state__button"
             onClick={this.onAddGoal}
           />
@@ -137,7 +137,7 @@ class GoalList extends Component {
       );
     }
 
-    let i = 0;
+    const i = 0;
     return goals.map(goalId => (
       <HOCGoalListItem
         goalId={goalId}

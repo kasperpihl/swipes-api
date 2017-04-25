@@ -103,7 +103,7 @@ export default class Notifications extends Component {
 
     return notifications.map((n) => {
       if (!n) {
-        return null;
+        return this.renderEmpty();
       }
       return (
         <NotificationWrapper
