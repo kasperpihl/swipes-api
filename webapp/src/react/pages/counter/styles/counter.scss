@@ -1,0 +1,26 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.counter {
+  @include size(100%);
+  @include flexContainer('row', center, center);
+  background-color: $bg;
+  overflow: hidden;
+
+  &__count {
+    @include font(500px, #333ddd, 900);
+  }
+
+  &__confetti {
+    position: absolute;
+    bottom: 0;
+
+    &--left {
+      left: 0;
+    }
+
+    &--right {
+      right: 0;
+    }
+  }
+}
