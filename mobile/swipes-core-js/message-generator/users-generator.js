@@ -12,12 +12,6 @@ export default class Users {
     }
     return user;
   }
-  isAdmin(userId) {
-    const user = this.getUser(userId);
-    const uId = user.get('id');
-    const org = user.getIn(['organizations', 0]);
-    return org.get('admins').contains(uId) || org.get('owner_id') === uId;
-  }
 
   getEmail(userId) {
     const user = this.getUser(userId);
