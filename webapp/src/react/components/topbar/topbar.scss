@@ -44,6 +44,8 @@ $topbarSize: 38px;
     @include font(15px, white, 300);
     padding: 15px;
     opacity: .6;
+    position: absolute;
+    left: 0; top: 0;
   }
 }
 
