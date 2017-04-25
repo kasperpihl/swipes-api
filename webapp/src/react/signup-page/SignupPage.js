@@ -11,8 +11,14 @@ class SignupPage extends PureComponent {
     this.state = {};
     setupDelegate(this);
     this.onClick = this.callDelegate.bind(null, 'onClick');
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
   componentDidMount() {
+  }
+  handleKeyDown(e) {
+    if (e.keyCode === 13) {
+      this.onClick();
+    }
   }
   getSubtitle() {
     const { organization, inviter, createOrganization } = this.props;
@@ -71,11 +77,11 @@ class SignupPage extends PureComponent {
         {this.renderInputField('email', 'email', 'Email')}
         {this.renderInputField('firstName', 'text', 'First name')}
         {this.renderInputField('lastName', 'text', 'Last name')}
-        {this.renderInputField('password', 'password', 'Password')}
+        {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
       </div>
     );
   }
-  renderInputField(key, type, placeholder) {
+  renderInputField(key, type, placeholder, props) {
     const { delegate } = this.props;
     const value = this.props.formData.get(key) || '';
 
@@ -87,6 +93,7 @@ class SignupPage extends PureComponent {
         placeholder={placeholder}
         delegate={delegate}
         value={value}
+        props={props}
       />
     );
   }
@@ -99,7 +106,7 @@ class SignupPage extends PureComponent {
 
     return (
       <div className="footer">
-        <div className="button" onClick={this.onClick}>
+        <div className="button" ref="button" onClick={this.onClick}>
           {
             isLoading ? (
               <Icon icon="loader" width="12" height="12" />

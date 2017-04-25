@@ -57,7 +57,7 @@ class SignupInput extends PureComponent {
     }
   }
   render() {
-    const { inputKey, type, placeholder, value } = this.props;
+    const { inputKey, type, placeholder, value, props } = this.props;
     const { visiblePassword, float, floatValue } = this.state;
     let floatingClass = 'floating-input';
     let iconClass = 'floating-input__icon';
@@ -88,6 +88,7 @@ class SignupInput extends PureComponent {
           onChange={this.onChangeCached(inputKey)}
           className="floating-input__input"
           autoComplete="off"
+          {...props}
         />
         <label htmlFor={inputKey}>{placeholder}</label>
 
