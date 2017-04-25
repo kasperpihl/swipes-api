@@ -16,11 +16,18 @@ class HOCCounter extends PureComponent {
     };
   }
   componentDidMount() {
+    this.hitWin = new Audio('https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1493094279-UZTYMBVGO/hitwin.mp3');
+    this.marioWin = new Audio('https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1493094286-UZTYMBVGO/mariowin.mp3');
+    this.saxWin = new Audio('https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1493094293-UZTYMBVGO/saxwin.mp3');
+
+
     setTimeout(() => {
       this.setState({ shoot: true });
-      const audio = new Audio('https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1493094279-UZTYMBVGO/hitwin.mp3');
-      audio.play();
+      this.setState({ shoot: false });
+      this.marioWin.play();
     }, 10000);
+
+    console.log('yo');
   }
   render() {
     const leftConfig = {
