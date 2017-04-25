@@ -31,7 +31,7 @@ class Root extends PureComponent {
     if(path === '/unsubscribe'){
       return;
     }
-    if(path !== '/signup' && !window.ipcListener.isElectron && isHydrated && token) {
+    if((path === '/' || path === '/login') && !window.ipcListener.isElectron) {
       history.push('/signup');
     }
     if (path === '/' && isHydrated && !token) {
