@@ -25,20 +25,41 @@ class HOCCounter extends PureComponent {
     this.marioWin = new Audio('https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1493094286-UZTYMBVGO/mariowin.mp3');
     this.saxWin = new Audio('https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1493094293-UZTYMBVGO/saxwin.mp3');
 
-
-    setTimeout(() => {
-      this.setState({ shoot: true });
-      this.setState({ shoot: false });
-      this.marioWin.play();
-    }, 10000);
-
-    console.log('yo');
   }
   componentDidUpdate(prevProps, prevState) {
-
+    const { counter } = this.state;
+    const celebration = this.getCelebrationForNumber(counter);
+    if(celebration) {
+      this[celebration].play();
+      this.runCelebration();
+      this.setState({ prevCelebrate: counter });
+    }
   }
   componentWillUnmount() {
     this._unmounted = true;
+  }
+  getCelebrationForNumber(counter) {
+    const { prevCelebrate } = this.state;
+    if(counter === prevCelebrate){
+      return undefined;
+    }
+    if(counter % 1000 === 0){
+      return 'hitWin';
+    }
+    if(counter % 100 === 0) {
+      return 'saxWin';
+    }
+    if(counter % 10 === 0) {
+      return 'marioWin';
+    }
+    return undefined;
+  }
+  runCelebration(){
+    this.setState({
+      shoot: true,
+    }, () => {
+      this.setState({shoot: false});
+    })
   }
   fetchAndSet() {
     const headers = new Headers({
@@ -54,7 +75,10 @@ class HOCCounter extends PureComponent {
       }
     }).catch((e) => {
       console.log('err', e);
-    })
+    });
+    if(!this._unmounted) {
+      setTimeout(() => this.fetchAndSet(), 5000);
+    }
   }
   render() {
     const leftConfig = {
