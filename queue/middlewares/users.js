@@ -1,8 +1,17 @@
+import config from 'config';
+import Mailchimp from 'mailchimp-api-v3';
+import Promise from 'bluebird';
 import {
   dbUsersGetSingleWithOrganizations,
   dbUsersGetMultipleWithFields,
 } from '../db_utils/users';
 
+const mailChimpListIds = [
+  '83f9136e88',
+  'f5a33f6905',
+];
+const mailChimpConf = config.get('mailchimp');
+const mailchimp = new Mailchimp(mailChimpConf.apiKey);
 const usersGetSingleWithOrganizations = (req, res, next) => {
   const {
     user_id,
@@ -60,10 +69,38 @@ const usersInvitedNotificationData = (req, res, next) => {
 
   return next();
 };
+const usersSubscribeToMailChimp = (req, res, next) => {
+  const {
+    email,
+  } = res.locals;
+  const promises = [];
+
+  mailChimpListIds.forEach((id) => {
+    promises.push(mailchimp.post({
+      path: `/lists/${id}`,
+      body: {
+        members: [{
+          email_address: email,
+          email_type: 'html',
+          status: 'subscribed',
+        }],
+      },
+    }));
+  });
+
+  Promise.all(promises)
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
 
 export {
   usersGetSingleWithOrganizations,
   usersGetMultipleWithFields,
   usersActivatedNotificationData,
   usersInvitedNotificationData,
+  usersSubscribeToMailChimp,
 };

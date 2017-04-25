@@ -606,6 +606,25 @@ const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
 
   return next();
 });
+const userSubscribeToMailChimpQueueMessage = valLocals('userSubscribeToMailChimpQueueMessage', {
+  email: string.format('email').require(),
+}, (req, res, next, setLocals) => {
+  const {
+    email,
+  } = res.locals;
+
+  const queueMessage = {
+    email,
+    event_type: 'user_subscribe_to_mailchimp',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: email,
+  });
+
+  return next();
+});
 
 export {
   usersComparePasswordSignIn,
@@ -628,4 +647,5 @@ export {
   usersParseInvitationToken,
   userActivatedUserSignUpQueueMessage,
   usersInvitedUserQueueMessage,
+  userSubscribeToMailChimpQueueMessage,
 };

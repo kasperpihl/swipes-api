@@ -30,6 +30,7 @@ import {
   usersParseInvitationToken,
   userActivatedUserSignUpQueueMessage,
   usersInvitedUserQueueMessage,
+  userSubscribeToMailChimpQueueMessage,
 } from './middlewares/users';
 import {
   meUpdateSettings,
@@ -107,6 +108,8 @@ notAuthed.all('/users.signup',
   ),
   organizationsCreate,
   organizationsAddToUser,
+  userSubscribeToMailChimpQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     user_id: string.require(),
     token: string.require(),

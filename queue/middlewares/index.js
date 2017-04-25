@@ -102,6 +102,10 @@ const user_invited = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const user_subscribe_to_mailchimp = [
+  users.usersSubscribeToMailChimp,
+];
+
 const goal_renamed = notifyWrapper([
   goals.goalsRenamedNotificationData,
   notify.notifyAllInCompany,
@@ -293,6 +297,7 @@ export {
   user_invitation_email,
   user_activated,
   user_invited,
+  user_subscribe_to_mailchimp,
   profile_updated,
   organization_updated,
 };
