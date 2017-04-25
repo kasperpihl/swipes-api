@@ -606,16 +606,22 @@ const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
 
   return next();
 });
-const userSubscribeToMailChimpQueueMessage = valLocals('userSubscribeToMailChimpQueueMessage', {
+const userSignupQueueMessage = valLocals('userSubscribeToMailChimpQueueMessage', {
   email: string.format('email').require(),
+  organizationId: string.require(),
+  first_name: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     email,
+    organizationId,
+    first_name,
   } = res.locals;
 
   const queueMessage = {
     email,
-    event_type: 'user_subscribe_to_mailchimp',
+    first_name,
+    organization_id: organizationId,
+    event_type: 'user_signup',
   };
 
   setLocals({
@@ -647,5 +653,5 @@ export {
   usersParseInvitationToken,
   userActivatedUserSignUpQueueMessage,
   usersInvitedUserQueueMessage,
-  userSubscribeToMailChimpQueueMessage,
+  userSignupQueueMessage,
 };
