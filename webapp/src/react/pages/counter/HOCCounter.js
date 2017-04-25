@@ -18,6 +18,8 @@ class HOCCounter extends PureComponent {
   componentDidMount() {
     setTimeout(() => {
       this.setState({ shoot: true });
+      const audio = new Audio('src/react/pages/counter/sounds/marioWin.mp3');
+      audio.play();
     }, 10000);
   }
   render() {

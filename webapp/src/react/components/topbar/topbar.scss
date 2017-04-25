@@ -41,7 +41,7 @@ $topbarSize: 38px;
 
   &__trial {
     @include size(100%);
-    @include font(16px, white, 300);
+    @include font(15px, white, 300);
     padding: 15px;
     opacity: .6;
   }
