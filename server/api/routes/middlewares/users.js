@@ -55,7 +55,7 @@ const defaultSettings = {
   },
   starred_goals: [],
   pinned_goals: [],
-  subsctiptions: {
+  subscriptions: {
     goal_notify: true,
   },
 };
