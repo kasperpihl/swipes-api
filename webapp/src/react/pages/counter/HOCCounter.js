@@ -13,7 +13,6 @@ class HOCCounter extends PureComponent {
     super(props);
     this.state = {
       shoot: false,
-      counter: 0,
       prevCelebrate: 0,
     };
   }
@@ -70,9 +69,7 @@ class HOCCounter extends PureComponent {
       if (r && r.ok) return r.json();
       return Promise.reject({ message: r.statusText, code: r.status });
     }).then((res) => {
-      if(res.result !== this.state.counter && !this._unmounted) {
-        this.setState({ counter: res.result});
-      }
+      this.setState({ ...res });
     }).catch((e) => {
       console.log('err', e);
     });
@@ -96,10 +93,10 @@ class HOCCounter extends PureComponent {
       elementCount: 300,
       decay: 0.95,
     };
-    const { counter } = this.state;
+    const { users } = this.state;
     return (
       <div className="counter">
-        <div className="counter__count">{counter}</div>
+        <div className="counter__count">{users}</div>
         <div className="counter__confetti counter__confetti--left">
           <Confetti active={this.state.shoot} config={leftConfig} />
         </div>

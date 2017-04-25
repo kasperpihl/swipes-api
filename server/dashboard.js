@@ -15,16 +15,22 @@ app.use(cors({
 
 const server = http.createServer(app);
 app.all('/', (req, res, next) => {
-  const q =
-    r.db('swipes')
-      .table('users')
-      .filter({ activated: true })
-      .count();
+  const sw = r.db('swipes');
+  const promises = [
+    sw.table('users').filter({ activated: true }).count(),
+    sw.table('users').filter({ activated: false }).count(),
+    sw.table('organizations').count(),
+    sw.table('goals').count(),
+    sw.table('milestones').count(),
+  ].map((q) => db.rethinkQuery(q));
 
-  db.rethinkQuery(q).then((result) => {
+  Promise.all(promises).then((results) => {
     res.json({
-      ok: true,
-      result,
+      users: results[0],
+      pendingUsers: results[1],
+      organizations: results[2],
+      goals: results[3],
+      milestones: results[4],
     });
   });
 });
