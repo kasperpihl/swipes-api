@@ -102,7 +102,9 @@ const user_invited = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const user_subscribe_to_mailchimp = [
+const user_signup = [
+  organizations.organizationsGetSingle,
+  emails.usersWelcomeEmail,
   users.usersSubscribeToMailChimp,
 ];
 
@@ -297,7 +299,7 @@ export {
   user_invitation_email,
   user_activated,
   user_invited,
-  user_subscribe_to_mailchimp,
+  user_signup,
   profile_updated,
   organization_updated,
 };

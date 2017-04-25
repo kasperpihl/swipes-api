@@ -259,8 +259,62 @@ const usersInvitationEmail = (req, res, next) => {
     return next(new SwipesError(`usersInvitationEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
   });
 };
+const usersWelcomeEmail = (req, res, next) => {
+  const {
+    email,
+    first_name,
+    organization,
+  } = res.locals;
+  const template_name = 'welcome-email';
+  const template_content = [{
+    name: '',
+    content: '',
+  }];
+  const merge_vars = [{
+    rcpt: email,
+    vars: [{
+      name: 'NAME',
+      content: first_name,
+    }, {
+      name: 'COMPANY_NAME',
+      content: organization.name,
+    }],
+  }];
+  const to = [
+    {
+      email,
+      name: first_name,
+      type: 'to',
+    },
+  ];
+  const subject = 'Welcome to Swipes';
+  const message = {
+    to,
+    subject,
+    merge_vars,
+    from_email: 'noreply@swipesapp.com',
+    from_name: 'Swipes Team',
+    headers: {
+      'Reply-To': 'noreply@swipesapp.com',
+    },
+    important: false,
+    merge: true,
+    merge_language: 'mailchimp',
+  };
+
+  return mandrill_client.messages.sendTemplate({
+    template_name,
+    template_content,
+    message,
+  }, (result) => {
+    return next();
+  }, (e) => {
+    return next(new SwipesError(`usersWelcomeEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
+  });
+};
 
 export {
   goalsNotifySendEmails,
   usersInvitationEmail,
+  usersWelcomeEmail,
 };
