@@ -27,7 +27,7 @@ class HOCCounter extends PureComponent {
   }
   componentDidUpdate(prevProps, prevState) {
     const { users } = this.state;
-    const celebration = this.getCelebrationForNumber(counter);
+    const celebration = this.getCelebrationForNumber(users);
     if (celebration) {
       this[celebration].play();
       this.runCelebration();
