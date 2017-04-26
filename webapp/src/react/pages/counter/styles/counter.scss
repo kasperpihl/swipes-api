@@ -13,6 +13,7 @@
 }
 
 .counter {
+  $b: &;
 
   &__header {
     @include size(100%, 115px);
@@ -65,11 +66,21 @@
     &--big {
       @include size(100%);
     }
+
+    &:hover {
+
+
+      #{$b}__number {
+        @include font($c: #333ddd);
+        transition: .2s ease;
+      }
+    }
   }
 
   &__number {
     @include font(120px, $deepBlue-100, 120px);
     font-family: 'Teko';
+    transition: .2s ease;
 
     &--big {
       @include font(300px, $deepBlue-100, 300px);

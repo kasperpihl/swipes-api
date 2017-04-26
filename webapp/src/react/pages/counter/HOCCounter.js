@@ -26,12 +26,12 @@ class HOCCounter extends PureComponent {
     this.saxWin = new Audio('https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/uploads/ONY8E94FL/1493094293-UZTYMBVGO/saxwin.mp3');
   }
   componentDidUpdate(prevProps, prevState) {
-    const { counter } = this.state;
+    const { users } = this.state;
     const celebration = this.getCelebrationForNumber(counter);
     if (celebration) {
       this[celebration].play();
       this.runCelebration();
-      this.setState({ prevCelebrate: counter });
+      this.setState({ prevCelebrate: users });
     }
 
     console.log(this.state);
@@ -137,13 +137,6 @@ class HOCCounter extends PureComponent {
     return (
       <div className="counter">
 
-        <div className="counter__confetti counter__confetti--left">
-          <Confetti active={this.state.shoot} config={leftConfig} />
-        </div>
-        <div className="counter__confetti counter__confetti--right">
-          <Confetti active={this.state.shoot} config={rightConfig} />
-        </div>
-
         {this.renderHeader()}
 
         <div className="counter__content">
@@ -161,6 +154,14 @@ class HOCCounter extends PureComponent {
         </div>
 
         {this.renderFooter()}
+
+
+        <div className="counter__confetti counter__confetti--left">
+          <Confetti active={this.state.shoot} config={leftConfig} />
+        </div>
+        <div className="counter__confetti counter__confetti--right">
+          <Confetti active={this.state.shoot} config={rightConfig} />
+        </div>
       </div>
     );
   }
