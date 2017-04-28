@@ -294,8 +294,8 @@ class StepList extends PureComponent {
   }
   render() {
     const { steps } = this.props;
-    const SortableItem = SortableElement(({step, i}) => this.renderStep(step, i));
-    const SortableList = SortableContainer(({items}) => (
+    const SortableItem = SortableElement(({ step, i }) => this.renderStep(step, i));
+    const SortableList = SortableContainer(({ items }) => (
       <div>
         {items.map((step, i) => (
           <SortableItem step={step} index={i} i={i} key={step.get('id')} />
@@ -309,6 +309,8 @@ class StepList extends PureComponent {
         <SortableList
           items={steps}
           lockAxis="y"
+          lockToContainerEdges
+          helperClass="step-list-item__sortable"
         />
         {this.renderAddStep()}
       </div>

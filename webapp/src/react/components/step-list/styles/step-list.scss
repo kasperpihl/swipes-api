@@ -15,7 +15,8 @@
 
   @include size(100%, auto);
   @include flexContainer('row', left, stretch, $flexIgnoreList);
-  min-height: 66px;
+  @include heightSpecifications(66px, initial);
+  background-color: $bg;
   border-top: 1px solid $deepBlue-5;
   transition: 0s;
 }
@@ -54,6 +55,14 @@
 
 .step-list-item {
   $b: &;
+
+  &__sortable {
+    z-index: 99999999999;
+    box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
+    padding: 0 15px;
+    transition: .2s ease;
+  }
+
   &__indicator {
     @include size(49px, initial);
     @include flexContainer('row', left, center);
