@@ -9,6 +9,7 @@ import {
   setupDelegate,
   truncateString,
 } from 'swipes-core-js/classes/utils';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Icon from 'Icon';
 import Button from 'Button';
 import HOCAssigning from 'components/assigning/HOCAssigning';
@@ -227,7 +228,7 @@ class StepList extends PureComponent {
     return (
       <div
         className={className}
-        key={i}
+        key={step.get('id')}
       >
         <div
           className="step-list-item__indicator"
@@ -293,9 +294,22 @@ class StepList extends PureComponent {
   }
   render() {
     const { steps } = this.props;
+    const SortableItem = SortableElement(({step, i}) => this.renderStep(step, i));
+    const SortableList = SortableContainer(({items}) => (
+      <div>
+        {items.map((step, i) => (
+          <SortableItem step={step} index={i} i={i} key={step.get('id')} />
+        )).toArray()}
+      </div>
+
+    ));
+
     return (
       <div className="step-list">
-        {steps.map((s, i) => this.renderStep(s, i))}
+        <SortableList
+          items={steps}
+          lockAxis="y"
+        />
         {this.renderAddStep()}
       </div>
     );
