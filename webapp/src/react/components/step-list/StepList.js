@@ -64,17 +64,17 @@ class StepList extends PureComponent {
     }
 
     this.setState({
-      hoverIndex: i,
+      //hoverIndex: i,
     });
   }
   onChange(i, e) {
-    const { steps } = this.props;
+    const { steps, stepOrder } = this.props;
     const { stepTitles } = this.state;
     const value = e.target.value;
     if (i === 'add') {
       this.setState({ addStepValue: value });
     } else {
-      const step = steps.get(i);
+      const step = steps.get(stepOrder.get(i));
       this.setState({ stepTitles: stepTitles.set(step.get('id'), value) });
     }
   }
@@ -95,7 +95,7 @@ class StepList extends PureComponent {
     tooltip(null);
 
     this.setState({
-      hoverIndex: -1,
+      //hoverIndex: -1,
     });
   }
   onFocus() {
@@ -110,16 +110,16 @@ class StepList extends PureComponent {
   }
   getPlaceholder() {
     let placeholder = 'What is the next step? Add it here...';
-    const { steps } = this.props;
-    if (!steps.size) {
+    const { stepOrder } = this.props;
+    if (!stepOrder.size) {
       placeholder = 'What is the first step? Enter it here...';
     }
     return placeholder;
   }
   saveTitle(i) {
-    const { steps } = this.props;
+    const { stepOrder, steps } = this.props;
     const { stepTitles } = this.state;
-    const step = steps.get(i);
+    const step = steps.get(stepOrder.get(i));
     const title = stepTitles.get(step.get('id'));
     if (title && title.length && title !== step.get('title')) {
       this.callDelegate('onStepRename', i, title);
@@ -170,7 +170,7 @@ class StepList extends PureComponent {
     );
   }
   renderStep(step, i) {
-    const { currentStepIndex, delegate, steps, getLoading, isLoading, editMode } = this.props;
+    const { currentStepIndex, delegate, stepOrder, getLoading, isLoading, editMode } = this.props;
     if (editMode) {
       return this.renderEditStep(step, i);
     }
@@ -196,7 +196,7 @@ class StepList extends PureComponent {
     } else {
       tooltip = `Complete ${i - completedI} steps`;
       className += ' step-list-item--future';
-      if (i === steps.size - 1) {
+      if (i === stepOrder.size - 1) {
         tooltip = 'Complete goal';
       }
     }
@@ -293,12 +293,12 @@ class StepList extends PureComponent {
     );
   }
   render() {
-    const { steps } = this.props;
-    const SortableItem = SortableElement(({ step, i }) => this.renderStep(step, i));
-    const SortableList = SortableContainer(({ items }) => (
-      <div>
-        {items.map((step, i) => (
-          <SortableItem step={step} index={i} i={i} key={step.get('id')} />
+    const { stepOrder, steps } = this.props;
+    const SortableItem = SortableElement(({step, i}) => this.renderStep(step, i));
+    const SortableList = SortableContainer(({items}) => (
+      <div key="work">
+        {items.map((stepId, i) => (
+          <SortableItem step={steps.get(stepId)} index={i} i={i} key={stepId} />
         )).toArray()}
       </div>
 
@@ -307,7 +307,7 @@ class StepList extends PureComponent {
     return (
       <div className="step-list">
         <SortableList
-          items={steps}
+          items={stepOrder}
           lockAxis="y"
           lockToContainerEdges
           helperClass="step-list-item__sortable"

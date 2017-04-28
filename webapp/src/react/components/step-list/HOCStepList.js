@@ -170,6 +170,7 @@ class HOCStepList extends PureComponent {
     const {
       tooltip,
       editMode,
+      goal,
     } = this.props;
     const { steps } = this.state;
 
@@ -177,8 +178,9 @@ class HOCStepList extends PureComponent {
       <StepList
         currentStepIndex={helper.getNumberOfCompletedSteps()}
         {...this.bindLoading()}
+        steps={goal.get('steps')}
+        stepOrder={goal.get('step_order')}
         delegate={this}
-        steps={steps}
         tooltip={tooltip}
         editMode={editMode}
       />
