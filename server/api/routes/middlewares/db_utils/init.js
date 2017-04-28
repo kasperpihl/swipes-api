@@ -27,21 +27,35 @@ const initMe = funcWrap([
       })
       .do((user) => {
         return user.merge({
-          goals:
-            r.table('goals')
+          milestones:
+            r.table('milestones')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
-              .filter({
-                archived: false,
+              .filter((milestone) => {
+                return milestone('restricted').default('false').eq(false)
+                        .or(milestone('permissions').contains(user_id));
               })
               .coerceTo('ARRAY'),
         });
       })
       .do((user) => {
-        return user.merge({
-          milestones:
-            r.table('milestones')
-              .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
-              .coerceTo('ARRAY'),
+        return user.merge(() => {
+          return {
+            goals: r.do(() => {
+              return user('milestones').map((milestone) => {
+                return milestone('id');
+              });
+            })
+            .do((milestones_ids) => {
+              return r.table('goals')
+                .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+                .filter((goal) => {
+                  return goal('restricted').default('false').eq('false')
+                    .and(goal('archived').default('false').eq(false))
+                    .or(milestones_ids.default([]).contains(goal('milestone_id').default('null')));
+                })
+                .coerceTo('ARRAY');
+            }),
+          };
         });
       })
       .do((user) => {
