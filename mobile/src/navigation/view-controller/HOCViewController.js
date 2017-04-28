@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from '../../actions';
 import { NavigationExperimental, View, StyleSheet } from 'react-native';
+import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import * as views from '../../views';
 import HOCBreadCrumbs from '../../components/breadcrumbs/HOCBreadCrumbs';
 import { viewSize } from '../../utils/globalStyles';
@@ -26,8 +27,8 @@ class HOCViewController extends PureComponent {
     super(props, context);
 
     this.renderScene = this.renderScene.bind(this);
-    this.navPush = props.navPush.bind(null, props.sliderIndex);
-    this.navPop = props.navPop.bind(null, props.sliderIndex);
+    this.navPushCached = setupCachedCallback(props.navPush);
+    this.navPopCached = setupCachedCallback(props.navPop);
   }
   reduxToNavigationState(reduxState) {
     return {
@@ -39,20 +40,14 @@ class HOCViewController extends PureComponent {
     const { route } = sceneProps.scene;
     const { activeSliderIndex, sliderIndex, routes, setActionButtons } = this.props;
     const Comp = views[route.id];
-    let isActive = sliderIndex === activeSliderIndex;
-
-    if (isActive && sceneProps.scene.index !== routes.size - 1) {
-      isActive = false;
-    }
 
     return (
       <View style={styles.viewController}>
-        <HOCBreadCrumbs sliderIndex={sliderIndex} />
+        <HOCBreadCrumbs sliderIndex={activeSliderIndex} />
         <View style={styles.content}>
           <Comp
-            navPush={this.navPush}
-            navPop={this.navPop}
-            isActive={isActive}
+            navPush={this.navPushCached(activeSliderIndex)}
+            navPop={this.navPopCached(activeSliderIndex)}
             setActionButtons={setActionButtons}
             {...route.props}
           />
@@ -61,23 +56,27 @@ class HOCViewController extends PureComponent {
     );
   }
   render() {
+    const { activeSliderIndex, routes } = this.props;
+
     return (
       <NavigationCardStack
         style={styles.viewController}
-        enableGestures={false}
-        direction="vertical"
-        onNavigateBack={this.navPop}
-        navigationState={this.reduxToNavigationState(this.props.routes)}
+        onNavigateBack={this.navPopCached(activeSliderIndex)}
+        navigationState={this.reduxToNavigationState(routes)}
         renderScene={this.renderScene}
       />
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  activeSliderIndex: state.getIn(['navigation', 'sliderIndex']),
-  routes: state.getIn(['navigation', 'sliders', ownProps.sliderIndex, 'routes']),
-});
+function mapStateToProps(state) {
+  const activeSliderIndex = state.getIn(['navigation', 'sliderIndex']);
+
+  return {
+    activeSliderIndex,
+    routes: state.getIn(['navigation', 'sliders', activeSliderIndex, 'routes']),
+  };
+}
 
 export default connect(mapStateToProps, {
   navPush: a.navigation.push,

@@ -20,25 +20,27 @@ class HOCGoalList extends Component {
     this.onActionButton = this.onActionButton.bind(this);
   }
   componentDidMount() {
-    setTimeout(() => {
+    this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
     }, 1);
 
     if (this.props.isActive) {
       this.renderActionButtons();
     }
-
-    console.log('didmount');
   }
   componentDidUpdate(prevProps) {
     if (!this.state.hasLoaded) {
-      setTimeout(() => {
+      clearTimeout(this.loadingTimeout);
+      this.loadingTimeout = setTimeout(() => {
         this.setState({ hasLoaded: true });
       }, 1);
     }
     if (!prevProps.isActive && this.props.isActive) {
       this.renderActionButtons();
     }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
   }
   onPushStack(route) {
     const { navPush } = this.props;

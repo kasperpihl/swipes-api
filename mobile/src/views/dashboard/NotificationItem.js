@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, WebView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate, setupCachedCallback, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import Icon from '../../components/icons/Icon';
@@ -10,16 +10,9 @@ class NotificationItem extends Component {
   constructor(props) {
     super(props);
 
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-
     setupDelegate(this);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
     this.onNotificationPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationPress'));
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
   }
   renderIcon() {
     const { notification: n } = this.props;

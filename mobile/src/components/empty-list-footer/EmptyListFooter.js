@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
   footer: {
     width: viewSize.width,
     height: 112,
-    backgroundColor: 'green',
   },
 });
 

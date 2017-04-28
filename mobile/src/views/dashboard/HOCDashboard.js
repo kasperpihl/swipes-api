@@ -22,8 +22,19 @@ class HOCDashboard extends PureComponent {
     this.onActionButton = this.onActionButton.bind(this);
     this.onModal = this.onModal.bind(this);
   }
+  componentWillMount() {
+    const { notifications, filters } = this.props;
+
+    if (filters) {
+      const tabIndex = this.state.tabIndex;
+
+      this.setState({
+        notifications: this.getFilteredNotifications(tabIndex, notifications, filters),
+      });
+    }
+  }
   componentDidMount() {
-    setTimeout(() => {
+    this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
     }, 1);
 
@@ -43,7 +54,8 @@ class HOCDashboard extends PureComponent {
   }
   componentDidUpdate(prevProps, prevState) {
     if (!this.state.hasLoaded) {
-      setTimeout(() => {
+      clearTimeout(this.loadingTimeout);
+      this.loadingTimeout = setTimeout(() => {
         this.setState({ hasLoaded: true });
       }, 1);
     }
@@ -51,6 +63,9 @@ class HOCDashboard extends PureComponent {
     if (!prevProps.isActive && this.props.isActive) {
       this.renderActionButtons();
     }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
   }
   onChangeTab(index) {
     const { tabIndex } = this.state;
@@ -130,19 +145,19 @@ class HOCDashboard extends PureComponent {
       navPush(overview);
     }
   }
-  openLink(att) {
-    const link = att.get('link') || att;
-    const service = link.get('service') || link;
-    if (att && service.get('type') === 'url') {
-      Linking.openURL(service.get('id'));
-    }
-  }
   getFilteredNotifications(fI, notifications, filters) {
     notifications = notifications || this.props.notifications;
     filters = filters || this.props.filters;
     const filterId = this.state.tabs[fI];
 
     return filters.getIn([filterId, 'notifications']).map(i => notifications.get(i));
+  }
+  openLink(att) {
+    const link = att.get('link') || att;
+    const service = link.get('service') || link;
+    if (att && service.get('type') === 'url') {
+      Linking.openURL(service.get('id'));
+    }
   }
   renderActionButtons() {
     this.props.setActionButtons({

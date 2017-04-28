@@ -1,25 +1,55 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from './actions';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar, ScrollView, Text } from 'react-native';
-import Swiper from 'react-native-swiper';
-import AndroidBackButton from 'react-native-android-back-button';
+import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
+// import AndroidBackButton from 'react-native-android-back-button';
 import LinearGradient from 'react-native-linear-gradient';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
-import DevTools from './components/dev-tools/DevTools';
-import HOCContextButton from './components/context-button/HOCContextButton';
+// import DevTools from './components/dev-tools/DevTools';
 import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
 import ActionModal from './modals/ActionModal';
 
+const styles = StyleSheet.create({
+  app: {
+    flex: 1,
+    backgroundColor: colors.bgColor,
+    flexDirection: 'column',
+  },
+  wrapper: {
+    flex: 1,
+    backgroundColor: colors.bgColor,
+  },
+  bottomBar: {
+    width: viewSize.width,
+    height: 60,
+    backgroundColor: 'green',
+  },
+  page: {
+    width: viewSize.width,
+    backgroundColor: 'red',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: viewSize.width,
+    height: viewSize.height + 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+
 class App extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { initialIndex: 1 };
-
-    this.backNavigation = this.backNavigation.bind(this);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -27,17 +57,6 @@ class App extends PureComponent {
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
-  }
-  backNavigation() {
-    if (this.refs.swiper.state.index > 1) {
-      this.refs.swiper.scrollBy(-1);
-      return true;
-    } else if (this.refs.swiper.state.index < 1) {
-      this.refs.swiper.scrollBy(1);
-      return true;
-    }
-
-    return false;
   }
   renderLoader() {
     const { isHydrated, lastConnect } = this.props;
@@ -67,52 +86,19 @@ class App extends PureComponent {
     return <Login />;
   }
   renderApp() {
-    const { token, isHydrated, lastConnect } = this.props;
+    const { token, isHydrated, lastConnect, activeSliderIndex } = this.props;
 
     if (!token || !isHydrated || !lastConnect) {
       return undefined;
     }
 
-    /* return (
-      <View style={styles.app}>
-        <AndroidBackButton onPress={this.backNavigation} />
-        <Swiper
-          loop={false}
-          index={this.state.initialIndex}
-          bounces
-          ref="swiper"
-          showsPagination={false}
-          onMomentumScrollEnd={(e, state) => {
-            const { sliderChange } = this.props;
-            setTimeout(() => sliderChange(state.index), 1);
-          }}
-        >
-          <HOCViewController sliderIndex={0} />
-          <HOCViewController sliderIndex={1} />
-          <HOCViewController sliderIndex={2} />
-        </Swiper>
-
-        <HOCContextButton />
-        <ActionModal />
-      </View>
-    );*/
-
     return (
       <View style={styles.app}>
-        <View style={styles.scroller}>
-          <ScrollView
-            horizontal
-            pagingEnabled
-            ref={(snapScroll) => { this.snapScroll = snapScroll; }}
-            showsHorizontalScrollIndicator={false}
-            style={styles.scroller}
-          >
-            <HOCViewController sliderIndex={0} />
-            <HOCViewController sliderIndex={1} />
-            <HOCViewController sliderIndex={2} />
-          </ScrollView>
+        <View style={styles.wrapper}>
+          <HOCViewController />
         </View>
-        <View style={styles.bottomBar} />
+        <HOCTabNavigation />
+        <ActionModal />
       </View>
     );
   }
@@ -127,7 +113,6 @@ class App extends PureComponent {
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
-        {/* <DevTools />*/}
       </View>
     );
   }
@@ -144,37 +129,3 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   sliderChange: a.navigation.sliderChange,
 })(App);
-
-const styles = StyleSheet.create({
-  app: {
-    flex: 1,
-    backgroundColor: colors.bgColor,
-    flexDirection: 'column',
-  },
-  scroller: {
-    flex: 1,
-    backgroundColor: colors.bgColor,
-    flexDirection: 'row',
-  },
-  bottomBar: {
-    width: viewSize.width,
-    height: 60,
-    backgroundColor: 'green',
-  },
-  page: {
-    width: viewSize.width,
-    backgroundColor: 'red',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  gradient: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: viewSize.width,
-    height: viewSize.height + 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -122,7 +122,13 @@ export default {
 
   },
   Goals: {
-
+    svg: (
+      <G>
+        <Path d="M12,2A10,10,0,1,1,2,12,10.01129,10.01129,0,0,1,12,2m0-2A12,12,0,1,0,24,12,12,12,0,0,0,12,0Z" />
+        <Circle cx="12" cy="12" r="3" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
   },
   Goal: {
 
@@ -183,7 +189,8 @@ export default {
     viewBox: DEF_VIEWBOX,
   },
   Milestones: {
-
+    svg: <Path d="M21,4H16V0H1V24H3V14H9v4H23V4ZM3,12V2H14V12Zm18,4H11V14h5V6h5Z" />,
+    viewBox: DEF_VIEWBOX,
   },
   Minus: {
 
@@ -200,7 +207,13 @@ export default {
     viewBox: DEF_VIEWBOX,
   },
   Notification: {
-
+    svg: (
+      <G>
+        <Path d="M12,21a3,3,0,0,0,3-3H9A3.00007,3.00007,0,0,0,12,21Z" />
+        <Path d="M19,15V10A7,7,0,0,0,5,10v5H2v2H22V15ZM7,15V10a5,5,0,0,1,10,0v5Z" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
   },
   Person: {
     svg: (

@@ -3,21 +3,14 @@ import * as types from '../constants/ActionTypes';
 
 const initialState = fromJS({
   actionButtons: {},
-  sliderIndex: 1,
+  sliderIndex: 0,
   sliders: [
     {
       routes: [
         {
-          id: 'Profile',
-          title: 'Profile',
-        },
-      ],
-    },
-    {
-      routes: [
-        {
-          id: 'Dashboard',
-          title: 'Notifications',
+          id: 'Milestones',
+          title: 'Milestones',
+          icon: 'Milestones',
         },
       ],
     },
@@ -26,6 +19,25 @@ const initialState = fromJS({
         {
           id: 'GoalList',
           title: 'Goals',
+          icon: 'Goals',
+        },
+      ],
+    },
+    {
+      routes: [
+        {
+          id: 'Dashboard',
+          title: 'Notifications',
+          icon: 'Notification',
+        },
+      ],
+    },
+    {
+      routes: [
+        {
+          id: 'Profile',
+          title: 'Profile',
+          icon: 'Person',
         },
       ],
     },
