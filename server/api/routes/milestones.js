@@ -3,6 +3,7 @@ import {
   string,
   object,
   array,
+  bool,
 } from 'valjs';
 import {
   milestonesCreate,
@@ -19,6 +20,7 @@ import {
   milestoneMigrateIncompleteGoals,
   milestoneRename,
   milestonesRenameQueueMessage,
+  milestonesGetSingle,
 } from './middlewares/milestones';
 import {
   goalsAddMilestone,
@@ -43,6 +45,7 @@ authed.all('/milestones.create',
   valBody({
     title: string.require(),
     organization_id: string.require(),
+    restricted: bool.require(),
     due_date: string.format('iso8601'),
   }),
   notificationCreateGroupId,
@@ -94,6 +97,7 @@ authed.all('/milestones.addGoal',
   mapLocals('goal_id', (setLocals, goal_id) => {
     setLocals({ goal_ids: [goal_id] });
   }),
+  milestonesGetSingle,
   goalsAddMilestone,
   milestonesRemoveGoal,
   milestonesAddGoal,
