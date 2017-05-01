@@ -11,6 +11,7 @@ export const create = valAction('milestones.create', [
   d(a.onboarding.complete('create-milestone'));
   return d(a.api.request('milestones.create', {
     title,
+    restricted: false,
     organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
   }));
 });
@@ -20,6 +21,7 @@ export const addGoal = valAction('milestones.addGoal', [
   string.require(),
 ], (milestoneId, goalId) => (d, getState) => {
   const currentMilestoneId = getState().getIn(['goals', goalId, 'milestone_id']);
+  d(a.onboarding.complete('add-goal-milestone'));
   return d(a.api.request('milestones.addGoal', {
     goal_id: goalId,
     current_milestone_id: currentMilestoneId,

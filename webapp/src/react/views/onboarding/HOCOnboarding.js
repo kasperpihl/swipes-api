@@ -20,6 +20,11 @@ class HOCOnboarding extends PureComponent {
         id: 'Profile',
         title: 'Profile',
       });
+    } else if (['add-goal-milestone', 'create-milestone'].indexOf(item.get('id')) > -1) {
+      openSecondary({
+        id: 'MilestoneList',
+        title: 'Milestones',
+      });
     } else if(item.get('id') === 'create-goal') {
       openSecondary({
         id: 'GoalList',
@@ -32,10 +37,9 @@ class HOCOnboarding extends PureComponent {
         title: 'Team account',
       });
     }
-    else if(item.get('id') === 'watch-introduction-video') {
+    else if(item.get('url')) {
       complete(item.get('id'));
-      const videoUrl = 'https://youtu.be/X0VZOCBZhik?autoplay=1';
-      browser(target, videoUrl);
+      browser(target, item.get('url'));
     }
 
   }
