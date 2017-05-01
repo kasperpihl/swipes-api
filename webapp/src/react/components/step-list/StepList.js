@@ -64,7 +64,7 @@ class StepList extends PureComponent {
     }
 
     this.setState({
-      //hoverIndex: i,
+      hoverIndex: i,
     });
   }
   onChange(i, e) {
@@ -95,7 +95,7 @@ class StepList extends PureComponent {
     tooltip(null);
 
     this.setState({
-      //hoverIndex: -1,
+      hoverIndex: -1,
     });
   }
   onFocus() {
@@ -139,7 +139,7 @@ class StepList extends PureComponent {
     return (
       <div
         className={className}
-        key={i}
+        key={step.get('id')}
       >
         <div className="step-list-item__remove" >
           <Button
@@ -303,15 +303,15 @@ class StepList extends PureComponent {
       </div>
 
     ));
-
     return (
       <div className="step-list">
-        <SortableList
+        {stepOrder.map((stepId, i) => this.renderStep(steps.get(stepId), i)).toArray()}
+        {/* <SortableList
           items={stepOrder}
           lockAxis="y"
           lockToContainerEdges
           helperClass="step-list-item__sortable"
-        />
+        /> */}
         {this.renderAddStep()}
       </div>
     );
