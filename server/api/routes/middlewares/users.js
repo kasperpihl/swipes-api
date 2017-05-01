@@ -43,11 +43,14 @@ const invitationTokenSecret = 'very_s3cret_invit@tion_secr3t';
 const defaultSettings = {
   onboarding: {
     order: [
-      'create-account',
-      'personalize-swipes',
-      'create-goal',
-      'watch-introduction-video',
-      'invite-team',
+      'create-account' ,
+      'personalize-swipes' ,
+      'intro-article',
+      'create-milestone',
+      'add-goal-milestone' ,
+      'article-move-fast-goals',
+      'article-collect-feedback',
+      'invite-team'
     ],
     completed: {
       'create-account': true,
