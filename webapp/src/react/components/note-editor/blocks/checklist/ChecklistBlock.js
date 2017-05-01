@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { EditorBlock, EditorState } from 'draft-js';
-import Checkbox from 'components/swipes-ui/Checkbox';
+import Checkbox from './Checkbox';
 import {
   resetBlockToType,
 } from '../../draft-utils';
