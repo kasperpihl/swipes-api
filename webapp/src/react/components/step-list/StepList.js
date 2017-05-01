@@ -323,7 +323,8 @@ export default StepList;
 const { func, number, object, bool } = PropTypes;
 
 StepList.propTypes = {
-  steps: list,
+  steps: map,
+  stepOrder: list,
   editMode: bool,
   tooltip: func,
   delegate: object,
