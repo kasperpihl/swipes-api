@@ -31,14 +31,16 @@ class HOCOnboarding extends PureComponent {
         title: 'Goals',
       });
     } else if(item.get('id') === 'invite-team') {
-      complete(item.get('id'));
       openSecondary({
         id: 'Organization',
         title: 'Team account',
       });
     }
     else if(item.get('url')) {
-      complete(item.get('id'));
+      setTimeout(() => {
+        complete(item.get('id'));
+      }, 5000);
+
       browser(target, item.get('url'));
     }
 

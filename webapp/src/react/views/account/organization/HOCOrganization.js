@@ -32,10 +32,11 @@ class HOCOrganization extends PureComponent {
   }
   onInvite() {
     const { firstNameVal, emailVal } = this.state;
-    const { invite } = this.props;
+    const { invite, completeOnboarding } = this.props;
     this.setLoading('invite');
     invite(firstNameVal, emailVal).then((res) => {
       if(res.ok) {
+        completeOnboarding('invite-team');
         this.setState({ emailVal: '', firstNameVal: ''});
         this.clearLoading('invite', `Invited ${firstNameVal}`, 3000);
         window.analytics.sendEvent('Invitation sent', {
@@ -194,6 +195,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   invite: ca.users.invite,
+  completeOnboarding: ca.onboarding.complete,
   demoteAnAdmin: ca.organizations.demoteAnAdmin,
   promoteToAdmin: ca.organizations.promoteToAdmin,
   contextMenu: a.main.contextMenu,
