@@ -49,7 +49,7 @@ class Onboarding extends PureComponent {
     return (
       <HOCHeaderTitle
         title={title}
-        subtitle="We have added 5 easy steps that will set you up for success."
+        subtitle="We have added a few easy steps that will set you up for success."
       >
         {this.renderProgressBar()}
       </HOCHeaderTitle>
