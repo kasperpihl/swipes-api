@@ -144,7 +144,7 @@ class HOCNotifications extends PureComponent {
     notifications = notifications || this.props.notifications;
     filters = filters || this.props.filters;
     const filterId = this.state.tabs[fI];
-    return filters.getIn([filterId, 'notifications']).map(i => notifications.get(i));
+    return filters.getIn([filterId, 'notifications']).map(i => notifications.get(i)).filter(v => !!v);
   }
   getAttachments(goalId, flags) {
     const helper = this.getHelperForId(goalId);
