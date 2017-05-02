@@ -87,7 +87,7 @@ const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
   const fileId = generateSlackLikeId('F', 10);
   const nameArr = file_name.split('.');
   const ext = nameArr[nameArr.length - 1];
-  const contentType = mime.lookup(ext) || null;
+  const contentType = mime.lookup(ext) || 'application/octet-stream';
 
   dbFilesAdd({ user_id, organization_id, file_name, s3_url, fileId, contentType })
     .then((results) => {
