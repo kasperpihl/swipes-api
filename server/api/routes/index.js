@@ -17,12 +17,14 @@ import * as stream from './stream';
 import * as tokens from './tokens';
 import * as me from './me';
 import * as organizations from './organizations';
+import * as dashboard from './dashboard';
 
 const v1NotAuthed = [
   users.notAuthed,
   services.notAuthed,
   stream.notAuthed,
   organizations.notAuthed,
+  dashboard.notAuthed,
 ];
 const v1Authed = [
   init.authed,

@@ -1,10 +1,9 @@
 import http from 'http';
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
+import request from 'request';
+
 const app = express();
-import r from 'rethinkdb';
-import db from './db';
 
 app.use(cors({
   origin: '*',
@@ -15,23 +14,23 @@ app.use(cors({
 
 const server = http.createServer(app);
 app.all('/', (req, res, next) => {
-  const sw = r.db('swipes');
-  const promises = [
-    sw.table('users').filter({ activated: true }).count(),
-    sw.table('users').filter({ activated: false }).count(),
-    sw.table('organizations').count(),
-    sw.table('goals').count(),
-    sw.table('milestones').count(),
-  ].map((q) => db.rethinkQuery(q));
+  const url = 'https://live.swipesapp.com/v1/dashboardd_awesome_cat_rainbow';
+  const options = {
+    method: 'get',
+    json: true,
+    url,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+  };
 
-  Promise.all(promises).then((results) => {
-    res.json({
-      users: results[0],
-      pendingUsers: results[1],
-      organizations: results[2],
-      goals: results[3],
-      milestones: results[4],
-    });
+  request(options, (err, res, body) => {
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+
+    return res.json(res);
   });
 });
 
