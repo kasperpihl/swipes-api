@@ -20,6 +20,28 @@ $contHeight: 79px;
   will-change: height;
 }
 
+.goal-item-tooltip {
+  @include font(12px, $bg, 500);
+  background-color: $deepBlue-100;
+  padding: 10px 15px;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: fadetooltip .3s ease forwards;
+}
+
+@keyframes fadetooltip {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
 // ======================================================
 // Elements
 // ======================================================

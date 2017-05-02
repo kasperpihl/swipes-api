@@ -2,12 +2,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate, bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import GoalItemTooltip from './GoalItemTooltip';
 
 import './styles/goal-list-item.scss';
 /* global msgGen */
@@ -19,10 +20,34 @@ class HOCGoalListItem extends PureComponent {
     };
     setupDelegate(this, props.goalId);
     this.onClick = this.onClickItem.bind(this);
-    this.onPin = this.onPin.bind(this);
+    bindAll(this, ['onEnter', 'onLeave', 'onPin']);
   }
   componentWillUnmount() {
     this._unmounted = true;
+  }
+  onEnter(e) {
+    const { goal, tooltip } = this.props;
+    const target = getParentByClass(e.target, 'goal-list-item__indicator');
+    const tooltipText = goal.get('starred') ? 'Starred' : 'Star to prioritize';
+
+    const data = {
+      component: GoalItemTooltip,
+      props: {
+        tooltipText,
+        goalId: goal.get('id'),
+      },
+      options: {
+        boundingRect: target.getBoundingClientRect(),
+        position: 'left',
+      },
+    };
+
+    tooltip(data);
+  }
+  onLeave() {
+    const { tooltip } = this.props;
+
+    tooltip(null);
   }
   onAssign(id, e) {
     const { goalId, selectAssignees, assignStep } = this.props;
@@ -58,9 +83,9 @@ class HOCGoalListItem extends PureComponent {
   onPin() {
     const { togglePinGoal, goal } = this.props;
     this.setState({ animateToStarred: true });
-    const event = goal.get('pinned') ? 'Goal unpinned' : 'Goal pinned'
+    const event = goal.get('pinned') ? 'Goal unpinned' : 'Goal pinned';
     togglePinGoal(goal.get('id')).then((res) => {
-      if(res && res.ok){
+      if (res && res.ok) {
         window.analytics.sendEvent(event, {});
       }
       if (!this._unmounted) {
@@ -80,7 +105,7 @@ class HOCGoalListItem extends PureComponent {
   }
   renderIndicator() {
     return (
-      <div className="goal-list-item__indicator" onClick={this.onPin}>
+      <div className="goal-list-item__indicator" onClick={this.onPin} onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
         <div className="goal-list-item__dot" />
       </div>
     );
@@ -94,7 +119,7 @@ class HOCGoalListItem extends PureComponent {
         <div className="goal-list-item__title">{goal.get('title')}</div>
         <div className="goal-list-item__subtitle">
           <div className="goal-list-item__label">{status}</div>
-          {/*this.renderProgressBar()*/}
+          {/* this.renderProgressBar()*/}
         </div>
       </div>
     );
@@ -186,6 +211,7 @@ HOCGoalListItem.propTypes = {
 
 export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
+  tooltip: a.main.tooltip,
   assignStep: ca.steps.assign,
   togglePinGoal: ca.me.togglePinGoal,
 })(HOCGoalListItem);
