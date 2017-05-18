@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
 class App extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { initialIndex: 1 };
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -86,7 +85,7 @@ class App extends PureComponent {
     return <Login />;
   }
   renderApp() {
-    const { token, isHydrated, lastConnect, activeSliderIndex } = this.props;
+    const { token, isHydrated, lastConnect } = this.props;
 
     if (!token || !isHydrated || !lastConnect) {
       return undefined;
@@ -127,5 +126,4 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  sliderChange: a.navigation.sliderChange,
 })(App);

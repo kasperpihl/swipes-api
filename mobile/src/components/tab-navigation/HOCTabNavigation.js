@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation, TouchableNativeFeedback } from 'react-native';
+import { View, StyleSheet, Platform, UIManager, LayoutAnimation, TouchableNativeFeedback, TouchableHighlight } from 'react-native';
 import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import * as a from '../../actions';
 import RippleButton from 'react-native-material-ripple';
@@ -73,11 +73,11 @@ class HOCTabNavigation extends PureComponent {
       const fill = i === activeSliderIndex ? colors.blue100 : colors.deepBlue20;
 
       return (
-        <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('rgba(0, 122, 255, 0.2)')} key={i} onPress={this.handlePressCached(i)}>
+        <TouchableHighlight underlayColor="white" activeOpacity="0.7" key={i} onPress={this.handlePressCached(i)}>
           <View style={styles.navItem} >
             <Icon name={r.icon} width="24" height="24" fill={fill} />
           </View>
-        </TouchableNativeFeedback>
+        </TouchableHighlight>
       );
     });
 

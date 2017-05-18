@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { NavigationExperimental, View, StyleSheet, Text } from 'react-native';
 import * as a from '../../actions';
-import { NavigationExperimental, View, StyleSheet } from 'react-native';
 import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import * as views from '../../views';
 import HOCBreadCrumbs from '../../components/breadcrumbs/HOCBreadCrumbs';
@@ -30,6 +30,9 @@ class HOCViewController extends PureComponent {
     this.navPushCached = setupCachedCallback(props.navPush);
     this.navPopCached = setupCachedCallback(props.navPop);
   }
+  componentWillUpdate(nextProps, nextState) {
+    console.log(nextProps.activeSliderIndex);
+  }
   reduxToNavigationState(reduxState) {
     return {
       index: reduxState.size - 1,
@@ -38,7 +41,7 @@ class HOCViewController extends PureComponent {
   }
   renderScene(sceneProps) {
     const { route } = sceneProps.scene;
-    const { activeSliderIndex, sliderIndex, routes, setActionButtons } = this.props;
+    const { activeSliderIndex, routes, setActionButtons } = this.props;
     const Comp = views[route.id];
 
     return (
@@ -81,5 +84,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   navPush: a.navigation.push,
   navPop: a.navigation.pop,
-  setActionButtons: a.navigation.setActionButtons,
 })(HOCViewController);
