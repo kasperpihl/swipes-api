@@ -3,7 +3,6 @@ import {
   string,
   object,
   array,
-  bool,
 } from 'valjs';
 import {
   dbMilestonesInsertSingle,
@@ -11,7 +10,6 @@ import {
   dbMilestonesAddGoal,
   dbMilestonesRemoveGoal,
   dbMilestonesMigrateIncompleteGoals,
-  dbMilestonesGetSingle,
 } from './db_utils/milestones';
 import {
   generateSlackLikeId,
@@ -23,7 +21,6 @@ const milestonesCreate = valLocals('milestonesCreate', {
   title: string.require(),
   organization_id: string.require(),
   notificationGroupId: string.require(),
-  restricted: bool.require(),
   due_date: string.format('iso8601'),
 }, (req, res, next, setLocals) => {
   const {
@@ -31,16 +28,12 @@ const milestonesCreate = valLocals('milestonesCreate', {
     title,
     organization_id,
     notificationGroupId,
-    restricted,
     due_date,
   } = res.locals;
-  const permissions = restricted ? [user_id] : [];
   const milestone = {
     id: generateSlackLikeId('M'),
     title,
     organization_id,
-    restricted,
-    permissions,
     goal_order: [],
     due_date: due_date || null,
     created_by: user_id,
@@ -60,25 +53,6 @@ const milestonesCreate = valLocals('milestonesCreate', {
   });
 
   return next();
-});
-const milestonesGetSingle = valLocals('milestonesGetSingle', {
-  milestone_id: string.require(),
-}, (req, res, next, setLocals) => {
-  const {
-    milestone_id,
-  } = res.locals;
-
-  dbMilestonesGetSingle({ milestone_id })
-    .then((milestone) => {
-      setLocals({
-        milestone,
-      });
-
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
-    });
 });
 const milestonesInsert = valLocals('milestonesInsert', {
   milestone: object.as({
@@ -439,5 +413,4 @@ export {
   milestoneMigrateIncompleteGoals,
   milestoneRename,
   milestonesRenameQueueMessage,
-  milestonesGetSingle,
 };
