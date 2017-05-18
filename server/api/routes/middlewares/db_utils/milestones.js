@@ -10,19 +10,6 @@ import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
 
-const dbMilestonesGetSingle = funcWrap([
-  object.as({
-    milestone_id: string.require(),
-  }).require(),
-], (err, { milestone_id }) => {
-  if (err) {
-    throw new SwipesError(`dbMilestonesInsertSingle: ${err}`);
-  }
-
-  const q = r.table('milestones').get(milestone_id);
-
-  return db.rethinkQuery(q);
-});
 const dbMilestonesInsertSingle = funcWrap([
   object.as({
     milestone: object.require(),
@@ -143,5 +130,4 @@ export {
   dbMilestonesAddGoal,
   dbMilestonesRemoveGoal,
   dbMilestonesMigrateIncompleteGoals,
-  dbMilestonesGetSingle,
 };

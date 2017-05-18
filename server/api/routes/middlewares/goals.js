@@ -227,16 +227,13 @@ const goalsArchive = valLocals('goalsArchive', {
 const goalsAddMilestone = valLocals('goalsAddMilestone', {
   goal_id: string.require(),
   milestone_id: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     goal_id,
     milestone_id,
-    milestone,
   } = res.locals;
   const properties = {
     milestone_id,
-    restricted: milestone.restricted || false,
   };
 
   dbGoalsUpdateSingle({ goal_id, properties })
