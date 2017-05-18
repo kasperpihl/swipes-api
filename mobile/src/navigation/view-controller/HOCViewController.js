@@ -61,14 +61,16 @@ class HOCViewController extends PureComponent {
   render() {
     const { activeSliderIndex, routes } = this.props;
 
-    return (
+    return <View><Text>Loohohhoho</Text></View>;
+
+    /* return (
       <NavigationCardStack
         style={styles.viewController}
         onNavigateBack={this.navPopCached(activeSliderIndex)}
         navigationState={this.reduxToNavigationState(routes)}
         renderScene={this.renderScene}
       />
-    );
+    );*/
   }
 }
 

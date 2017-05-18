@@ -97,7 +97,7 @@ class App extends PureComponent {
           <HOCViewController />
         </View>
         <HOCTabNavigation />
-        <ActionModal />
+        {/* <ActionModal />*/}
       </View>
     );
   }
