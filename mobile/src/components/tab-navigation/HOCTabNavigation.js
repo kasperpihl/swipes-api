@@ -73,7 +73,7 @@ class HOCTabNavigation extends PureComponent {
       const fill = i === activeSliderIndex ? colors.blue100 : colors.deepBlue20;
 
       return (
-        <TouchableHighlight underlayColor="white" activeOpacity="0.7" key={i} onPress={this.handlePressCached(i)}>
+        <TouchableHighlight underlayColor="white" activeOpacity={0.7} key={i} onPress={this.handlePressCached(i)}>
           <View style={styles.navItem} >
             <Icon name={r.icon} width="24" height="24" fill={fill} />
           </View>
