@@ -7,6 +7,25 @@ import { colors } from '../../utils/globalStyles';
 import HOCGoalItem from './HOCGoalItem';
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.bgColor,
+  },
+  list: {
+    flex: 1,
+  },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loader: {
+    marginTop: -60,
+  },
+});
+
+
 class HOCGoalList extends Component {
   constructor(props) {
     super(props);
@@ -31,10 +50,12 @@ class HOCGoalList extends Component {
   componentDidUpdate(prevProps) {
     if (!this.state.hasLoaded) {
       clearTimeout(this.loadingTimeout);
+
       this.loadingTimeout = setTimeout(() => {
         this.setState({ hasLoaded: true });
       }, 1);
     }
+
     if (!prevProps.isActive && this.props.isActive) {
       this.renderActionButtons();
     }
@@ -52,19 +73,11 @@ class HOCGoalList extends Component {
       this.setState({ tabIndex: index, hasLoaded: false });
     }
   }
-  onActionButton(i) {
-    // console.log('action!', i);
-  }
-  renderActionButtons() {
-    this.props.setActionButtons({
-      onClick: this.onActionButton,
-      buttons: [{ text: 'Add a goal' }],
-    });
-  }
   renderHeader() {
     const { filters } = this.props;
     const { tabIndex, tabs } = this.state;
     const newTabs = [];
+
     return (
       <HOCHeader
         title="Goals"
@@ -139,24 +152,6 @@ class HOCGoalList extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.bgColor,
-  },
-  list: {
-    flex: 1,
-  },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loader: {
-    marginTop: -60,
-  },
-});
 
 function mapStateToProps(state) {
   return {
