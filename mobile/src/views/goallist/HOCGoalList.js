@@ -36,16 +36,11 @@ class HOCGoalList extends Component {
     };
 
     this.renderGoal = this.renderGoal.bind(this);
-    this.onActionButton = this.onActionButton.bind(this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
     }, 1);
-
-    if (this.props.isActive) {
-      this.renderActionButtons();
-    }
   }
   componentDidUpdate(prevProps) {
     if (!this.state.hasLoaded) {
@@ -54,10 +49,6 @@ class HOCGoalList extends Component {
       this.loadingTimeout = setTimeout(() => {
         this.setState({ hasLoaded: true });
       }, 1);
-    }
-
-    if (!prevProps.isActive && this.props.isActive) {
-      this.renderActionButtons();
     }
   }
   componentWillUnmount() {
