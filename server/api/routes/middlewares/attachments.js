@@ -33,6 +33,12 @@ const attachmentsCreate = valLocals('attachmentsCreate', {
     short_url,
   };
 
+  if (link.service.type === 'url') {
+    if (/^(f|ht)tps?:\/\//.test(link.service.type) === false) {
+      link.service.id = `http://${link.service.id}`;
+    }
+  }
+
   const attachment = {
     link,
     title,
