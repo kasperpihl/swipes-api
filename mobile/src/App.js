@@ -11,6 +11,7 @@ import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
 import ActionModal from './modals/ActionModal';
+import OneSignal from 'react-native-onesignal';
 
 const styles = StyleSheet.create({
   app: {
@@ -49,13 +50,46 @@ const styles = StyleSheet.create({
 class App extends PureComponent {
   constructor(props) {
     super(props);
+    this.onIds = this.onIds.bind(this);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
+  componentWillMount() {
+    OneSignal.addEventListener('ids', this.onIds);
+  }
   componentWillUpdate() {
+
     LayoutAnimation.easeInEaseOut();
+  }
+  componentDidUpdate(prevProps) {
+    if(prevProps.myId !== this.props.myId){
+      this.checkTagsAndUpdate();
+    }
+  }
+  componentWillUnmount() {
+    OneSignal.removeEventListener('ids', this.onIds);
+  }
+  onIds(device) {
+    if(device.userId) {
+      this.playerId = device.userId;
+      this.checkTagsAndUpdate();
+    }
+    console.log('Device info: ', device);
+  }
+  checkTagsAndUpdate() {
+    const { myId } = this.props;
+    if(myId) {
+      OneSignal.getTags((receivedTags) => {
+        if(!receivedTags.swipesUserId || myId !== receivedTags.swipesUserId){
+          console.log('sending tag', myId);
+          OneSignal.sendTag('swipesUserId', myId);
+        }
+        console.log(receivedTags);
+      });
+    }
+
   }
   renderLoader() {
     const { isHydrated, lastConnect } = this.props;
@@ -120,6 +154,7 @@ class App extends PureComponent {
 function mapStateToProps(state) {
   return {
     token: state.getIn(['connection', 'token']),
+    myId: state.getIn(['me', 'id']),
     lastConnect: state.getIn(['connection', 'lastConnect']),
     isHydrated: state.getIn(['main', 'isHydrated']),
   };
