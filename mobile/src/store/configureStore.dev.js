@@ -29,7 +29,7 @@ const transformState = (state) => {
 };
 export default {
   middlewares: [
-    createLogger(
+    /*createLogger(
       {
         stateTransformer: transformState, // state => state.toJS(),
         collapsed: true,
@@ -37,6 +37,6 @@ export default {
         // diff: true,
         predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1),
       },
-    ),
+    ),*/
   ],
 };
