@@ -1,6 +1,7 @@
 import aws from 'aws-sdk';
 import config from 'config';
 import mime from 'mime-types';
+import slug from 'slug';
 import {
   string,
 } from 'valjs';
@@ -17,6 +18,7 @@ import {
 
 const awsConfig = config.get('awsS3');
 
+slug.defaults.mode = 'rfc3986';
 aws.config.update({
   accessKeyId: awsConfig.accessKey,
   secretAccessKey: awsConfig.secretKey,
@@ -32,8 +34,9 @@ const filesCreateS3Path = valLocals('filesCreateS3Name', {
     organization_id,
     file_name,
   } = res.locals;
+  const slug_file_name = slug(file_name);
   const seconds = Date.now() / 1000 | 0;
-  const s3Path = `uploads/${organization_id}/${seconds}-${user_id}/${file_name}`;
+  const s3Path = `uploads/${organization_id}/${seconds}-${user_id}/${slug_file_name}`;
 
   setLocals({
     s3Path,
@@ -84,12 +87,13 @@ const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
     file_name,
     s3_url,
   } = res.locals;
+  const slug_file_name = slug(file_name);
   const fileId = generateSlackLikeId('F', 10);
-  const nameArr = file_name.split('.');
+  const nameArr = slug_file_name.split('.');
   const ext = nameArr[nameArr.length - 1];
   const contentType = mime.lookup(ext) || 'application/octet-stream';
 
-  dbFilesAdd({ user_id, organization_id, file_name, s3_url, fileId, contentType })
+  dbFilesAdd({ user_id, organization_id, slug_file_name, s3_url, fileId, contentType })
     .then((results) => {
       const changes = results.changes[0];
 
@@ -105,7 +109,7 @@ const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
             account_id: user_id,
           },
           meta: {
-            title: file_name,
+            title: slug_file_name,
           },
         },
       });
