@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Linking } from 'react-native';
 import { connect } from 'react-redux';
+import {
+  CustomTabs,
+  ANIMATIONS_SLIDE
+} from 'react-native-custom-tabs';
 import * as a from '../../actions';
 import Dashboard from './Dashboard';
 
@@ -156,13 +160,23 @@ class HOCDashboard extends PureComponent {
     const link = att.get('link') || att;
     const service = link.get('service') || link;
     console.log(att.toJS());
-    if(att && service.get('name') === 'swipes'){
+    if (att && service.get('name') === 'swipes') {
       const { token, orgId } = this.props;
-      if(service.get('type') === 'note'){
+      if (service.get('type') === 'note') {
         Linking.openURL(`https://staging.swipesapp.com/note.html?token=${token}&note_id=${service.get('id')}&organization_id=${orgId}`);
       }
       if (service.get('type') === 'url') {
-        Linking.openURL(service.get('id'));
+        CustomTabs.openURL(service.get('id'), {
+          toolbarColor: '#ffffff',
+          enableUrlBarHiding: true,
+          showPageTitle: true,
+          enableDefaultShare: true,
+          animations: ANIMATIONS_SLIDE
+        }).then((launched: boolean) => {
+          console.log(`Launched custom tabs: ${launched}`);
+        }).catch(err => {
+          console.error(err)
+        });
       }
     }
 

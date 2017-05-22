@@ -16,6 +16,7 @@
     "react-native": "0.42.0",
     "react-native-android-back-button": "^0.3.0",
     "react-native-animatable": "^1.1.1",
+    "react-native-custom-tabs": "^0.1.5",
     "react-native-immutable-list-view": "^0.4.2",
     "react-native-linear-gradient": "^2.0.0",
     "react-native-material-ripple": "^0.7.2",
