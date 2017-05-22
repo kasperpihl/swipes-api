@@ -1,11 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Linking, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import Browser from 'react-native-browser';
-import {
-  CustomTabs,
-  ANIMATIONS_SLIDE
-} from 'react-native-custom-tabs';
 import * as a from '../../actions';
 import Dashboard from './Dashboard';
 import HOCPreviewNote from '../preview-note/HOCPreviewNote';
@@ -159,59 +154,8 @@ class HOCDashboard extends PureComponent {
     return filters.getIn([filterId, 'notifications']).map(i => notifications.get(i));
   }
   openLink(att) {
-    const { navPush } = this.props
-    const link = att.get('link') || att;
-    const service = link.get('service') || link;
-    console.log('attachemnt!!!!!!!!!!', att.toJS());
-    if (att && service.get('name') === 'swipes') {
-      const { token, orgId } = this.props;
-      if (service.get('type') === 'note') {
-
-        const noteView = {
-          id: 'PreviewNote',
-          title: att.get('title'),
-          props: {
-            noteId: service.get('id'),
-            noteTitle: att.get('title'),
-          },
-        };
-
-        navPush(noteView);
-      }
-      if (service.get('type') === 'url') {
-        if (Platform.OS === 'android') {
-          CustomTabs.openURL(service.get('id'), {
-            toolbarColor: '#ffffff',
-            enableUrlBarHiding: true,
-            showPageTitle: true,
-            enableDefaultShare: true,
-            animations: ANIMATIONS_SLIDE
-          }).then((launched: boolean) => {
-            console.log(`Launched custom tabs: ${launched}`);
-          }).catch(err => {
-            console.error(err)
-          });
-        } else {
-          Browser.open(service.get('id'), {
-            showUrlWhileLoading: true,
-            // loadingBarTintColor: processColor('#d64bbd'),
-            navigationButtonsHidden: false,
-            showActionButton: true,
-            showDoneButton: true,
-            doneButtonTitle: 'Done',
-            showPageTitles: true,
-            disableContextualPopupMenu: false,
-            hideWebViewBoundaries: false,
-            // buttonTintColor: processColor('#d64bbd')
-          });
-        }
-
-      }
-      if (service.get('type') === 'file') {
-
-      }
-    }
-
+    const { preview } = this.props;
+    preview(att);
   }
   renderActionButtons() {
     this.props.setActionButtons({
@@ -262,4 +206,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   showModal: a.modals.showModal,
+  preview: a.links.preview,
 })(HOCDashboard);
