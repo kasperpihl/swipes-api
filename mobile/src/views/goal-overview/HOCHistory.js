@@ -2,6 +2,10 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, Linking, Dimensions, ActivityIndicator } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
+import {
+  CustomTabs,
+  ANIMATIONS_SLIDE
+} from 'react-native-custom-tabs';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import NotificationItem from '../dashboard/NotificationItem';
@@ -35,7 +39,17 @@ class HOCHistory extends PureComponent {
     const link = att.get('link') || att;
     const service = link.get('service') || link;
     if (att && service.get('type') === 'url') {
-      Linking.openURL(service.get('id'));
+      CustomTabs.openURL(service.get('id'), {
+        toolbarColor: '#ffffff',
+        enableUrlBarHiding: true,
+        showPageTitle: true,
+        enableDefaultShare: true,
+        animations: ANIMATIONS_SLIDE
+      }).then((launched: boolean) => {
+        console.log(`Launched custom tabs: ${launched}`);
+      }).catch(err => {
+        console.error(err)
+      });
     }
   }
   renderListLoader() {

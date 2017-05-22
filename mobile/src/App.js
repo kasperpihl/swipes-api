@@ -122,6 +122,13 @@ class App extends PureComponent {
 
     return <Login />;
   }
+  renderBackButton() {
+    if (Platform.OS === 'android') {
+      return <HOCAndroidBackButton />;
+    }
+
+    return undefined;
+  }
   renderApp() {
     const { token, isHydrated, lastConnect } = this.props;
 
@@ -136,12 +143,7 @@ class App extends PureComponent {
         </View>
         <HOCTabNavigation />
         <ActionModal />
-
-        {Platform === 'android' ? (
-          <HOCAndroidBackButton />
-        ) : (
-            undefined
-          )}
+        {this.renderBackButton()}
       </View>
     );
   }
