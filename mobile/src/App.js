@@ -59,6 +59,9 @@ class App extends PureComponent {
   componentWillMount() {
     OneSignal.addEventListener('ids', this.onIds);
   }
+  componentDidMount() {
+    this.checkTagsAndUpdate();
+  }
   componentWillUpdate() {
 
     LayoutAnimation.easeInEaseOut();
@@ -80,14 +83,15 @@ class App extends PureComponent {
   }
   checkTagsAndUpdate() {
     const { myId } = this.props;
+    OneSignal.getTags((receivedTags) => {
+      if((!receivedTags.swipesUserId && myId) || myId !== receivedTags.swipesUserId){
+        console.log('sending tag', myId);
+        OneSignal.sendTag('swipesUserId', myId || '');
+      }
+      console.log(receivedTags);
+    });
     if(myId) {
-      OneSignal.getTags((receivedTags) => {
-        if(!receivedTags.swipesUserId || myId !== receivedTags.swipesUserId){
-          console.log('sending tag', myId);
-          OneSignal.sendTag('swipesUserId', myId);
-        }
-        console.log(receivedTags);
-      });
+
     }
 
   }
