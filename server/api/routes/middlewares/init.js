@@ -1,6 +1,7 @@
 import Promise from 'bluebird';
 import {
   string,
+  bool,
 } from 'valjs';
 import {
   valLocals,
@@ -18,12 +19,14 @@ import {
 
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
+  without_notes: bool,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    without_notes,
   } = res.locals;
   const promiseArrayQ = [
-    initMe(user_id),
+    initMe(user_id, without_notes),
     servicesGetAll(),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
@@ -75,7 +78,7 @@ const initGetData = valLocals('initGetData', {
         delete me.ways;
       }
 
-      if (me.notes.length > 0) {
+      if (me.notes && me.notes.length > 0) {
         notes = me.notes;
 
         // We don't want duplication of that data served on the client;

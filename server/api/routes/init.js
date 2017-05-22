@@ -1,11 +1,13 @@
 import express from 'express';
 import {
   string,
+  bool,
   object,
   array,
 } from 'valjs';
 import initGetData from './middlewares/init';
 import {
+  valBody,
   valResponseAndSend,
 } from '../utils';
 
@@ -13,6 +15,9 @@ const authed = express.Router();
 const notAuthed = express.Router();
 
 authed.all('/init',
+  valBody({
+    without_notes: bool,
+  }),
   initGetData,
   valResponseAndSend({
     me: object.require(),

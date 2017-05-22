@@ -1,6 +1,7 @@
 import r from 'rethinkdb';
 import {
   string,
+  bool,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -10,7 +11,8 @@ import {
 
 const initMe = funcWrap([
   string.require(),
-], (err, user_id) => {
+  bool,
+], (err, user_id, without_notes = false) => {
   if (err) {
     throw new SwipesError(`initMe: ${err}`);
   }
@@ -54,12 +56,16 @@ const initMe = funcWrap([
         });
       })
       .do((user) => {
-        return user.merge({
-          notes:
-            r.table('notes')
-              .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
-              .coerceTo('ARRAY'),
-        });
+        return r.branch(
+          r.expr(without_notes).ne(true),
+          user.merge({
+            notes:
+              r.table('notes')
+                .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+                .coerceTo('ARRAY'),
+          }),
+          user.merge({ notes: [] }),
+        );
       })
       .do((user) => {
         return user.merge({
