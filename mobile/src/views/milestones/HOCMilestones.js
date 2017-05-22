@@ -1,9 +1,19 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
 import HOCHeader from '../../components/header/HOCHeader';
 import { colors } from '../../utils/globalStyles';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.bgColor,
+  },
+});
+
 class HOCMilestones extends PureComponent {
+  pressThis() {
+    console.log('wtf');
+  }
   renderHeader() {
     return <HOCHeader title="Milestones" />;
   }
@@ -15,12 +25,5 @@ class HOCMilestones extends PureComponent {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.bgColor,
-  },
-});
 
 export default HOCMilestones;
