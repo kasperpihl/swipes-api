@@ -35,8 +35,9 @@ module.exports = {
     extensions: ['.js', '.scss']
   },
   entry: {
-    app: ['./src/index'],
+    app: './src/index',
     jira: './src/jira-index',
+    note: './src/note-index',
     vendor: Object.keys(require("./package.json").dependencies),
   },
   output: {
@@ -56,6 +57,11 @@ module.exports = {
       template: 'statics/jira-auth.html',
       chunks: ['vendor', 'jira'],
       filename: 'jira-auth.html'
+    }),
+    new HtmlWebpackPlugin({
+      template: 'statics/note.html',
+      chunks: ['vendor', 'note'],
+      filename: 'note.html'
     })
   ],
   module: {

@@ -34,7 +34,7 @@ class HOCSideNote extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ['setEditorState', 'bouncedSaveNote', 'onBeforeUnload', 'onResolveConflict']);
+    bindAll(this, ['bouncedSaveNote', 'onBeforeUnload', 'onResolveConflict']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
     setupLoading(this);
   }
@@ -211,10 +211,10 @@ class HOCSideNote extends PureComponent {
       <SWView header={this.renderHeader()} maxWidth={maxWidth}>
         <div className="side-note">
           <NoteEditor
+            mediumEditor
             rawState={rawState}
             ref="editor"
             editorState={editorState}
-            setEditorState={this.setEditorState}
             onBlur={this.onBlur}
             delegate={this}
             disabled={this.getLoading('conflict').loading}
