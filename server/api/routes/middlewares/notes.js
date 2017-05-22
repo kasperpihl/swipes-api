@@ -9,6 +9,7 @@ import {
 } from '../../../middlewares/swipes-error';
 import {
   dbNotesInsert,
+  dbNotesGetSingle,
 } from './db_utils/notes';
 import {
   generateSlackLikeId,
@@ -51,7 +52,7 @@ const notesCreate = valLocals('notesCreate', {
 const notesSave = valLocals('notesSave', {
   user_id: string.require(),
   organization_id: string.require(),
-  id: string.require(),
+  note_id: string.require(),
   text: object.require(),
   save_id: string.require(),
   rev: number.require(),
@@ -59,7 +60,7 @@ const notesSave = valLocals('notesSave', {
   const {
     user_id,
     organization_id,
-    id,
+    note_id,
     text,
     save_id,
     rev,
@@ -68,8 +69,8 @@ const notesSave = valLocals('notesSave', {
   const note = {
     updated_by: user_id,
     organization_id,
-    id,
     text,
+    id: note_id,
     last_save_id: save_id,
     updated_at: r.now(),
     rev,
@@ -93,8 +94,35 @@ const notesSave = valLocals('notesSave', {
     return next(err);
   });
 });
+const notesGetSingle = valLocals('notesGetSingle', {
+  note_id: string.require(),
+  organization_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    note_id,
+    organization_id,
+  } = res.locals;
+
+  dbNotesGetSingle({ note_id, organization_id })
+  .then((notes) => {
+    if (notes.length === 0) {
+      return next(new SwipesError({
+        message: 'Invalid note',
+      }));
+    }
+    setLocals({
+      note: notes[0],
+    });
+
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
+});
 
 export {
   notesCreate,
   notesSave,
+  notesGetSingle,
 };

@@ -7,6 +7,7 @@ import {
 import {
   notesSave,
   notesCreate,
+  notesGetSingle,
 } from './middlewares/notes';
 import {
   valBody,
@@ -28,7 +29,7 @@ authed.all('/notes.create',
 
 authed.all('/notes.save',
   valBody({
-    id: string.require(),
+    note_id: string.require(),
     title: string,
     organization_id: string.require(),
     save_id: string.require(),
@@ -36,6 +37,17 @@ authed.all('/notes.save',
     text: object.require(),
   }),
   notesSave,
+  valResponseAndSend({
+    note: object.require(),
+  }),
+);
+
+authed.all('/notes.get',
+  valBody({
+    note_id: string.require(),
+    organization_id: string.require(),
+  }),
+  notesGetSingle,
   valResponseAndSend({
     note: object.require(),
   }),
