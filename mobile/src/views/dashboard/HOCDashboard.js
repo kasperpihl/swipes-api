@@ -155,9 +155,17 @@ class HOCDashboard extends PureComponent {
   openLink(att) {
     const link = att.get('link') || att;
     const service = link.get('service') || link;
-    if (att && service.get('type') === 'url') {
-      Linking.openURL(service.get('id'));
+    console.log(att.toJS());
+    if(att && service.get('name') === 'swipes'){
+      const { token, orgId } = this.props;
+      if(service.get('type') === 'note'){
+        Linking.openURL(`https://staging.swipesapp.com/note.html?token=${token}&note_id=${service.get('id')}&organization_id=${orgId}`);
+      }
+      if (service.get('type') === 'url') {
+        Linking.openURL(service.get('id'));
+      }
     }
+
   }
   renderActionButtons() {
     this.props.setActionButtons({
@@ -197,6 +205,8 @@ class HOCDashboard extends PureComponent {
 function mapStateToProps(state) {
   return {
     notifications: state.get('notifications'),
+    token: state.getIn(['connection', 'token']),
+    orgId: state.getIn(['me', 'organizations', 0, 'id']),
     filters: state.getIn(['filters', 'notifications']),
     users: state.get('users'),
     goals: state.get('goals'),
