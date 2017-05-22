@@ -1,17 +1,16 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from './actions';
 import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
-// import AndroidBackButton from 'react-native-android-back-button';
+import OneSignal from 'react-native-onesignal';
+import * as a from './actions';
 import LinearGradient from 'react-native-linear-gradient';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
-// import DevTools from './components/dev-tools/DevTools';
 import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
+import HOCAndroidBackButton from './components/android-back-button/HOCAndroidBackButton';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
 import ActionModal from './modals/ActionModal';
-import OneSignal from 'react-native-onesignal';
 
 const styles = StyleSheet.create({
   app: {
@@ -63,11 +62,10 @@ class App extends PureComponent {
     this.checkTagsAndUpdate();
   }
   componentWillUpdate() {
-
     LayoutAnimation.easeInEaseOut();
   }
   componentDidUpdate(prevProps) {
-    if(prevProps.myId !== this.props.myId){
+    if (prevProps.myId !== this.props.myId) {
       this.checkTagsAndUpdate();
     }
   }
@@ -75,7 +73,7 @@ class App extends PureComponent {
     OneSignal.removeEventListener('ids', this.onIds);
   }
   onIds(device) {
-    if(device.userId) {
+    if (device.userId) {
       this.playerId = device.userId;
       this.checkTagsAndUpdate();
     }
@@ -84,16 +82,18 @@ class App extends PureComponent {
   checkTagsAndUpdate() {
     const { myId } = this.props;
     OneSignal.getTags((receivedTags) => {
-      if((!receivedTags.swipesUserId && myId) || myId !== receivedTags.swipesUserId){
+      if (!receivedTags) {
+        receivedTags = {};
+      }
+      if ((!receivedTags.swipesUserId && myId) || myId !== receivedTags.swipesUserId) {
         console.log('sending tag', myId);
         OneSignal.sendTag('swipesUserId', myId || '');
       }
       console.log(receivedTags);
     });
-    if(myId) {
+    if (myId) {
 
     }
-
   }
   renderLoader() {
     const { isHydrated, lastConnect } = this.props;
@@ -136,6 +136,7 @@ class App extends PureComponent {
         </View>
         <HOCTabNavigation />
         <ActionModal />
+        <HOCAndroidBackButton />
       </View>
     );
   }

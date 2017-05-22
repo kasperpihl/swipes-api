@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { NavigationExperimental, View, StyleSheet, Text } from 'react-native';
+import { NavigationExperimental, View, StyleSheet, Platform } from 'react-native';
 import * as a from '../../actions';
 import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import * as views from '../../views';
@@ -64,6 +64,7 @@ class HOCViewController extends PureComponent {
     return (
       <NavigationCardStack
         style={styles.viewController}
+        enableGestures={Platform === 'ios'}
         onNavigateBack={this.navPopCached(activeSliderIndex)}
         navigationState={this.reduxToNavigationState(routes)}
         renderScene={this.renderScene}
