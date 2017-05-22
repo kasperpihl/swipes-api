@@ -21,7 +21,18 @@ class ExternalNoteView extends PureComponent {
   componentDidMount() {
   }
   setEditorState(editorState) {
-    this.setState({ editorState });
+    if(!this.state.editorState) {
+      this.setState({ editorState });
+    }
+
+  }
+  onLinkClick(url) {
+    if(typeof window.postMessage === 'function') {
+      window.postMessage(JSON.stringify({
+        action: 'url',
+        value: url,
+      }));
+    }
   }
   loadNote() {
     const serData = {
