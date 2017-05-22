@@ -14,6 +14,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderTopWidth: 1,
     borderTopColor: colors.deepBlue5,
+    zIndex: 100,
+    backgroundColor: colors.bgColor,
   },
   navItem: {
     flex: 1,

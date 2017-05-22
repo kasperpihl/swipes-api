@@ -178,6 +178,9 @@ class HOCDashboard extends PureComponent {
           console.error(err)
         });
       }
+      if(service.get('type') === 'file') {
+
+      }
     }
 
   }
