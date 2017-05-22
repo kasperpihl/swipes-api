@@ -136,7 +136,12 @@ class App extends PureComponent {
         </View>
         <HOCTabNavigation />
         <ActionModal />
-        <HOCAndroidBackButton />
+
+        {Platform === 'android' ? (
+          <HOCAndroidBackButton />
+        ) : (
+            undefined
+          )}
       </View>
     );
   }
