@@ -64,7 +64,10 @@ export default class Socket {
       this._pingTimer = setInterval(() => {
         this.sendPing();
       }, 20000);
-      this.store.dispatch(a.api.request('init')).then((res) => {
+
+      this.store.dispatch(a.api.request('init', {
+        without_notes: !!window.__WITHOUT_NOTES__,
+      })).then((res) => {
         this.isConnecting = false;
         if (res && res.ok) {
           this.reconnect_attempts = 0;
