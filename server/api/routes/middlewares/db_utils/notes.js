@@ -1,5 +1,6 @@
 import r from 'rethinkdb';
 import {
+  string,
   object,
   funcWrap,
 } from 'valjs';
@@ -31,7 +32,22 @@ const dbNotesInsert = funcWrap([
       });
   return db.rethinkQuery(q);
 });
+const dbNotesGetSingle = funcWrap([
+  object.as({
+    note_id: string.require(),
+    organization_id: string.require(),
+  }).require(),
+], (valErr, { note_id, organization_id }) => {
+  if (valErr) {
+    throw new SwipesError(`dbNotesGetSingle: ${valErr}`);
+  }
+
+  const q = r.db('swipes').table('notes').getAll([note_id, organization_id], { index: 'id_organization' });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbNotesInsert,
+  dbNotesGetSingle,
 };

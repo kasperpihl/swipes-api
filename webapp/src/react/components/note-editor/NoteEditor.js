@@ -52,7 +52,7 @@ class NoteEditor extends Component {
     this.callDelegate('onLinkClick', url);
   }
   setEditorState(editorState, force) {
-    this.props.setEditorState(editorState, force);
+    this.callDelegate('setEditorState', editorState, force);
   }
   getEditorState() {
     return this.props.editorState;
@@ -63,15 +63,11 @@ class NoteEditor extends Component {
   focus() {
     this.refs.editor.focus();
   }
-
-  render() {
+  renderEditor() {
     const {
       editorState,
       readOnly,
     } = this.props;
-    if (!editorState) {
-      return <div />;
-    }
 
     const contentState = editorState.getCurrentContent();
     const hasText = contentState.hasText();
@@ -82,29 +78,41 @@ class NoteEditor extends Component {
     }
     const placeHolder = (
       <div>
-        Write down any tips and information that will help your team get started.
-        <br />
-        <br />
-        Write [] to create a checklist or mark the text to edit and style it.
+        Write anything in me.
       </div>
     );
+
     return (
+      <Editor
+        ref="editor"
+        spellCheck
+        readOnly={readOnly}
+        editorState={editorState}
+        {...this.plugins.bind}
+        onBlur={this.props.onBlur}
+        placeholder={showPlaceholder ? placeHolder : undefined}
+
+      />
+    )
+  }
+  render() {
+    const {
+      editorState,
+      mediumEditor,
+    } = this.props;
+    if (!editorState) {
+      return <div ref="editor"/>;
+    }
+
+
+    return mediumEditor ? (
       <MediumEditor
         editorState={editorState}
         delegate={this}
       >
-        <Editor
-          ref="editor"
-          spellCheck
-          readOnly={readOnly}
-          editorState={editorState}
-          {...this.plugins.bind}
-          onBlur={this.props.onBlur}
-          placeholder={showPlaceholder ? placeHolder : undefined}
-
-        />
+        {this.renderEditor()}
       </MediumEditor>
-    );
+    ) : this.renderEditor();
   }
 }
 
@@ -113,10 +121,10 @@ export default NoteEditor;
 const { bool, func, object } = PropTypes;
 
 NoteEditor.propTypes = {
-  setEditorState: func.isRequired,
   onBlur: func,
   rawState: object,
   delegate: object,
   editorState: object,
+  mediumEditor: bool,
   readOnly: bool,
 };
