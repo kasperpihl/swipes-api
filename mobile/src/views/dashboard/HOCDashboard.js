@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Linking } from 'react-native';
+import { View, StyleSheet, Linking, Platform } from 'react-native';
 import { connect } from 'react-redux';
+import Browser from 'react-native-browser';
 import {
   CustomTabs,
   ANIMATIONS_SLIDE
@@ -166,17 +167,33 @@ class HOCDashboard extends PureComponent {
         Linking.openURL(`https://staging.swipesapp.com/note.html?token=${token}&note_id=${service.get('id')}&organization_id=${orgId}`);
       }
       if (service.get('type') === 'url') {
-        CustomTabs.openURL(service.get('id'), {
-          toolbarColor: '#ffffff',
-          enableUrlBarHiding: true,
-          showPageTitle: true,
-          enableDefaultShare: true,
-          animations: ANIMATIONS_SLIDE
-        }).then((launched: boolean) => {
-          console.log(`Launched custom tabs: ${launched}`);
-        }).catch(err => {
-          console.error(err)
-        });
+        if(Platform.OS === 'Android') {
+          CustomTabs.openURL(service.get('id'), {
+            toolbarColor: '#ffffff',
+            enableUrlBarHiding: true,
+            showPageTitle: true,
+            enableDefaultShare: true,
+            animations: ANIMATIONS_SLIDE
+          }).then((launched: boolean) => {
+            console.log(`Launched custom tabs: ${launched}`);
+          }).catch(err => {
+            console.error(err)
+          });
+        } else {
+          Browser.open(service.get('id'), {
+            showUrlWhileLoading: true,
+            // loadingBarTintColor: processColor('#d64bbd'),
+            navigationButtonsHidden: false,
+            showActionButton: true,
+            showDoneButton: true,
+            doneButtonTitle: 'Done',
+            showPageTitles: true,
+            disableContextualPopupMenu: false,
+            hideWebViewBoundaries: false,
+            // buttonTintColor: processColor('#d64bbd')
+          });
+        }
+
       }
       if(service.get('type') === 'file') {
 
