@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import AndroidBackButton from 'react-native-android-back-button';
@@ -26,7 +27,11 @@ class HOCAndroidBackButton extends PureComponent {
     return false;
   }
   render() {
-    return <AndroidBackButton onPress={this.onBackPress} />;
+    if (Platform === 'android') {
+      return <AndroidBackButton onPress={this.onBackPress} />;
+    }
+
+    return undefined;
   }
 }
 
