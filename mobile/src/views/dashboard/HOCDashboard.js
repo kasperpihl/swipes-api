@@ -8,6 +8,7 @@ import {
 } from 'react-native-custom-tabs';
 import * as a from '../../actions';
 import Dashboard from './Dashboard';
+import HOCPreviewNote from '../preview-note/HOCPreviewNote';
 
 const styles = StyleSheet.create({
   container: {
@@ -158,16 +159,27 @@ class HOCDashboard extends PureComponent {
     return filters.getIn([filterId, 'notifications']).map(i => notifications.get(i));
   }
   openLink(att) {
+    const { navPush } = this.props
     const link = att.get('link') || att;
     const service = link.get('service') || link;
-    console.log(att.toJS());
+    console.log('attachemnt!!!!!!!!!!', att.toJS());
     if (att && service.get('name') === 'swipes') {
       const { token, orgId } = this.props;
       if (service.get('type') === 'note') {
-        Linking.openURL(`https://staging.swipesapp.com/note.html?token=${token}&note_id=${service.get('id')}&organization_id=${orgId}`);
+
+        const noteView = {
+          id: 'PreviewNote',
+          title: att.get('title'),
+          props: {
+            noteId: service.get('id'),
+            noteTitle: att.get('title'),
+          },
+        };
+
+        navPush(noteView);
       }
       if (service.get('type') === 'url') {
-        if(Platform.OS === 'Android') {
+        if (Platform.OS === 'android') {
           CustomTabs.openURL(service.get('id'), {
             toolbarColor: '#ffffff',
             enableUrlBarHiding: true,
@@ -195,7 +207,7 @@ class HOCDashboard extends PureComponent {
         }
 
       }
-      if(service.get('type') === 'file') {
+      if (service.get('type') === 'file') {
 
       }
     }
