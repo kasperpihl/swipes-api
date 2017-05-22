@@ -27,11 +27,15 @@ class HOCPreviewNote extends PureComponent {
   }
   componentDidMount() {
   }
+  onWebviewMessage(data) {
+    console.log(data);
+  }
   generateNoteUrl() {
     const { token, orgId, noteId } = this.props;
 
     return `${window.__API_URL__}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`;
   }
+
   renderHeader() {
     const { noteTitle } = this.props;
 
@@ -43,7 +47,11 @@ class HOCPreviewNote extends PureComponent {
   }
   renderWebview() {
     return (
-      <WebView source={{ uri: this.generateNoteUrl() }} style={styles.webviewStyles} />
+      <WebView
+        source={{ uri: this.generateNoteUrl() }}
+        style={styles.webviewStyles}
+        onMessage={this.onWebviewMessage}
+      />
     );
   }
   render() {
