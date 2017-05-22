@@ -30,7 +30,7 @@ export const save = (id, oId, text, saveId, rev) => (dp, getState) => new Promis
 
   dp(a.api.request('notes.save', {
     organization_id: oId,
-    id,
+    note_id: id,
     save_id: saveId,
     text,
     rev: rev || serverOrg.get('rev') || 1,
