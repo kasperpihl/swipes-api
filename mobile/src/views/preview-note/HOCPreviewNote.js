@@ -55,6 +55,7 @@ class HOCPreviewNote extends PureComponent {
     return (
       <WebView
         source={{ uri: this.generateNoteUrl() }}
+        scalesPageToFit
         style={styles.webviewStyles}
         onMessage={this.onWebviewMessage}
       />
