@@ -21,6 +21,10 @@
   "mailchimp": {
     "apiKey": "ecf74584af1de945beeb71c8918ed5a7-us7"
   },
+  "onesignal": {
+    "appId": "db8f2558-a836-4e95-b22b-089e8e85f6e9",
+    "restKey": "ZmE3NTUwNzQtMzI3Zi00YzI2LTg3Y2QtNWI5NWNlNzU1NGIy"
+  },
   "s3BucketUrl": "https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/",
   "port": 6000,
   "cors": "*",

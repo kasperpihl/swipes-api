@@ -67,6 +67,7 @@ const goal_notify = notifyWrapper([
   goals.goalsNotifyAddSenderAlways,
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
+  notify.notifyGoalNotifySendPushNotifications,
 ]);
 
 const goal_notify_email = [
