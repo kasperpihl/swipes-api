@@ -64,7 +64,7 @@ class HOCViewController extends PureComponent {
     return (
       <NavigationCardStack
         style={styles.viewController}
-        enableGestures={Platform === 'ios'}
+        enableGestures={Platform.OS === 'ios'}
         onNavigateBack={this.navPopCached(activeSliderIndex)}
         navigationState={this.reduxToNavigationState(routes)}
         renderScene={this.renderScene}
