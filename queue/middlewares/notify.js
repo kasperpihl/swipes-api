@@ -1,8 +1,15 @@
 import r from 'rethinkdb';
+import config from 'config';
+import request from 'request';
 import commonMultipleEvents from '../db_utils/events';
+import {
+  getHistoryIndex,
+} from '../utils';
 import {
   dbInsertMultipleNotifications,
 } from '../db_utils/notifications';
+
+const oneSignalConfig = config.get('onesignal');
 
 const notifySingleUser = (req, res, next) => {
   const {
@@ -224,6 +231,58 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       return next(err);
     });
 };
+const notifyGoalNotifySendPushNotifications = (req, res, next) => {
+  const {
+    goal,
+    user,
+    user_ids,
+    group_id,
+  } = res.locals;
+  const historyIndex = getHistoryIndex(goal.history, group_id);
+  const history = goal.history[historyIndex];
+  const filters = [];
+
+  user_ids.forEach((userId) => {
+    if (filters.length > 0) {
+      filters.push({
+        operator: 'OR',
+      });
+    }
+
+    filters.push({
+      field: 'tag',
+      key: 'swipesUserId',
+      relation: '=',
+      value: userId,
+    });
+  });
+
+  const message = {
+    filters,
+    app_id: oneSignalConfig.appId,
+    contents: { en: history.message },
+    headings: { en: `${user.profile.first_name} notifies you` },
+    subtitle: { en: `about ${goal.title}` },
+  };
+  const reqOptions = {
+    url: 'https://onesignal.com/api/v1/notifications',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      Authorization: `Basic ${oneSignalConfig.restKey}`,
+    },
+    json: message,
+  };
+
+  request.post(reqOptions, (error) => {
+    if (error) {
+      console.log(error);
+      return next(error);
+    }
+
+    return next();
+  });
+};
 
 export {
   notifySingleUser,
@@ -235,4 +294,5 @@ export {
   notifyMultipleUsers,
   notifySendEventToAllInCompany,
   notifyManyToMany,
+  notifyGoalNotifySendPushNotifications,
 };

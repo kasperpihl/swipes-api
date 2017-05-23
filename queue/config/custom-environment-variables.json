@@ -13,6 +13,9 @@
   "mailchimp": {
     "apiKey": "SW_MAILCHIMP_API_KEY"
   },
+  "onesignal": {
+    "restKey": "SW_ONESIGNAL_REST_KEY"
+  },
   "s3BucketUrl": "SW_S3_BUCKET_URL",
   "host": "SW_HOST"
 }
