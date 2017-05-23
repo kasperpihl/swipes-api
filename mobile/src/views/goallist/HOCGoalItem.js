@@ -36,8 +36,8 @@ class HOCGoalItem extends PureComponent {
     this.callDelegate('onPushStack', overview);
   }
   renderContent() {
-    const { goal, filter } = this.props;
-    const status = msgGen.goals.getSubtitle(goal, filter);
+    const { goal } = this.props;
+    const status = msgGen.goals.getSubtitle(goal);
 
     return (
       <View style={styles.content}>
@@ -80,7 +80,6 @@ class HOCGoalItem extends PureComponent {
 function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
-    filter: state.getIn(['filters', ownProps.filterId, 'filter']),
   };
 }
 

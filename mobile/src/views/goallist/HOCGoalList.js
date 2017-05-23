@@ -67,7 +67,6 @@ class HOCGoalList extends Component {
   renderHeader() {
     const { filters } = this.props;
     const { tabIndex, tabs } = this.state;
-    const newTabs = [];
 
     return (
       <HOCHeader
@@ -85,8 +84,8 @@ class HOCGoalList extends Component {
       />
     );
   }
-  renderGoal(gId, filterId) {
-    return <HOCGoalItem goalId={gId} filterId={filterId} delegate={this} />;
+  renderGoal(gId) {
+    return <HOCGoalItem goalId={gId} delegate={this} />;
   }
   renderFooter() {
     return <EmptyListFooter />;
