@@ -3,6 +3,7 @@ package com.swipes;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNReactNativeDocViewerPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.burnweb.rnsendintent.RNSendIntentPackage;
 import com.horcrux.svg.SvgPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNReactNativeDocViewerPackage(),
             new ReactNativeOneSignalPackage(),
             new RNSendIntentPackage(),
             new SvgPackage(),

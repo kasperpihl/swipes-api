@@ -59,15 +59,17 @@ export const preview = att => (d, getState) => {
   } else if (service.get('name') === 'swipes' && service.get('type') === 'url') {
     d(browser(service.get('id')));
   } else {
-    // d(a.navigation.openSecondary(from, {
-    //   id: 'Preview',
-    //   title: 'Preview',
-    //   showTitleInCrumb: true,
-    //   props: {
-    //     // K_TODO: Backward compatibility remove || permission.get('shortUrl')
-    //     loadPreview: permission.get('short_url') || permission.get('shortUrl') || link.toJS(),
-    //     targetId,
-    //   },
-    // }));
+    console.log(att.toJS());
+
+    // OpenFile.openDoc([{
+    //   url: "http://www.snee.com/xml/xslt/sample.doc",
+    //   fileName: "sample"
+    // }], (error, url) => {
+    //   if (error) {
+    //     console.error(error);
+    //   } else {
+    //     console.log(url)
+    //   }
+    // })
   }
 };
