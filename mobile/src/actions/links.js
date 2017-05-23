@@ -4,6 +4,7 @@ import {
   CustomTabs,
   ANIMATIONS_SLIDE,
 } from 'react-native-custom-tabs';
+import OpenFile from 'react-native-doc-viewer';
 import * as a from './';
 
 // ======================================================
