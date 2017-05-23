@@ -6,6 +6,7 @@ import {
 } from 'react-native-custom-tabs';
 import OpenFile from 'react-native-doc-viewer';
 import * as a from './';
+import * as ca from '../../swipes-core-js/actions';
 
 // ======================================================
 // Url
@@ -44,33 +45,42 @@ export const preview = att => (d, getState) => {
   const link = att.get('link') || att;
   const service = link.get('service') || link;
   const meta = link.get('meta') || link;
+  const permission = link.get('permission') || link;
   const title = att.get('title') || meta.get('title');
   const activeSliderIndex = getState().getIn(['navigation', 'sliderIndex']);
 
 
-  if (service.get('name') === 'swipes' && service.get('type') === 'note') {
-    d(a.navigation.push(activeSliderIndex, {
-      id: 'PreviewNote',
-      title: service.get('id'),
-      props: {
-        noteId: service.get('id'),
-        noteTitle: title,
-      },
-    }));
-  } else if (service.get('name') === 'swipes' && service.get('type') === 'url') {
-    d(browser(service.get('id')));
-  } else {
-    console.log(att.toJS());
+  if (service.get('name') === 'swipes'){
+    if (service.get('type') === 'note') {
+      d(a.navigation.push(activeSliderIndex, {
+        id: 'PreviewNote',
+        title: service.get('id'),
+        props: {
+          noteId: service.get('id'),
+          noteTitle: title,
+        },
+      }));
+    } else if (service.get('type') === 'url') {
+      d(browser(service.get('id')));
+    } else if (service.get('type') === 'file') {
+      console.log(att.toJS());
+      d(ca.api.request('links.preview', {
+        short_url: permission.get('short_url'),
+      })).then((res) => {
+        console.log('fucking fired', res);
+        OpenFile.openDoc([{
+          url: res.preview.file.url,
+          fileName: res.preview.header.title,
+        }], (error, url) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log(url)
+          }
+        })
+      });
+      //
+    }
 
-    // OpenFile.openDoc([{
-    //   url: "http://www.snee.com/xml/xslt/sample.doc",
-    //   fileName: "sample"
-    // }], (error, url) => {
-    //   if (error) {
-    //     console.error(error);
-    //   } else {
-    //     console.log(url)
-    //   }
-    // })
   }
 };
