@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
-import { attachmentIconForService } from '../../../swipes-core-js/classes/utils';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton';
+import ImmutableListView from 'react-native-immutable-list-view';
+import { attachmentIconForService, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 import Icon from '../../components/icons/Icon';
-import { colors, viewSize } from '../../utils/globalStyles';
+import * as a from '../../actions';
+import RippleButton from '../../components/ripple-button/RippleButton';
+import { colors } from '../../utils/globalStyles';
 
 
 class HOCAttachments extends PureComponent {
@@ -16,38 +18,56 @@ class HOCAttachments extends PureComponent {
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+
+    this.renderAttachment = this.renderAttachment.bind(this);
+    this.attachmentPress = setupCachedCallback(this.attachmentPress, this);
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
-  getHelper() {
-    const { goal } = this.props;
-    return new GoalsUtil(goal);
+  attachmentPress(att) {
+    const { preview } = this.props;
+
+    preview(att);
   }
-  renderAttachments() {
+  renderAttachment(attachment) {
+    const { attachments } = this.props;
+
+    const at = attachments.get(attachment);
+    const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
+
+    return (
+      <RippleButton rippleColor={colors.deepBlue60} style={styles.attachment} rippleOpacity={0.8} key={attachment} onPress={this.attachmentPress(at)}>
+        <View style={styles.attachment}>
+          <View style={styles.icon}>
+            <Icon name={icon} width="24" height="24" fill={colors.blue100} />
+          </View>
+          <Text style={styles.label} ellipsizeMode="tail">{at.get('title')}</Text>
+        </View>
+      </RippleButton>
+    );
+  }
+  renderFooter() {
+    return <EmptyListFooter />;
+  }
+  renderAttachmentList() {
     const {
-      attachments,
       attachmentOrder,
     } = this.props;
 
-    return attachmentOrder.map((aId) => {
-      const at = attachments.get(aId);
-      const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
-
-      return (
-        <View key={aId} style={styles.attachment}>
-          <View style={styles.icon}>
-            <Icon name={icon} width="24" height="24" fill={colors.deepBlue100} />
-          </View>
-          <Text style={styles.label}>{at.get('title')}</Text>
-        </View>
-      );
-    });
+    return (
+      <ImmutableListView
+        removeClippedSubviews={false}
+        immutableData={attachmentOrder}
+        renderRow={this.renderAttachment}
+        renderFooter={this.renderFooter}
+      />
+    );
   }
   render() {
     return (
       <View>
-        {this.renderAttachments()}
+        {this.renderAttachmentList()}
       </View>
     );
   }
@@ -55,13 +75,11 @@ class HOCAttachments extends PureComponent {
 
 const styles = StyleSheet.create({
   attachment: {
-    width: viewSize.width,
-    height: 72,
-    marginHorizontal: 15,
+    flex: 1,
+    minHeight: 50,
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue5,
+    paddingHorizontal: 30,
   },
   icon: {
     paddingRight: 18,
@@ -80,4 +98,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  preview: a.links.preview,
 })(HOCAttachments);

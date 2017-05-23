@@ -7,3 +7,5 @@ export const SET_ACTION_BUTTONS = 'SET_ACTION_BUTTONS';
 
 // MODALS
 export const SHOW_MODAL = 'SHOW_MODAL';
+
+export const SHOW_LOADER = 'SHOW_LOADER';

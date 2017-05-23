@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
 import OneSignal from 'react-native-onesignal';
-import * as a from './actions';
 import LinearGradient from 'react-native-linear-gradient';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
@@ -10,7 +9,7 @@ import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
 import HOCAndroidBackButton from './components/android-back-button/HOCAndroidBackButton';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
-import ActionModal from './modals/ActionModal';
+import LoadingModal from './modals/LoadingModal';
 
 const styles = StyleSheet.create({
   app: {
@@ -141,8 +140,8 @@ class App extends PureComponent {
         <View style={styles.wrapper}>
           <HOCViewController />
         </View>
+        <LoadingModal />
         <HOCTabNavigation />
-        <ActionModal />
         {this.renderBackButton()}
       </View>
     );

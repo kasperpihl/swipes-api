@@ -3,7 +3,6 @@ import { View, StyleSheet, Linking, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from '../../actions';
 import Dashboard from './Dashboard';
-import HOCPreviewNote from '../preview-note/HOCPreviewNote';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,7 +20,6 @@ class HOCDashboard extends PureComponent {
     };
 
     this.onActionButton = this.onActionButton.bind(this);
-    this.onModal = this.onModal.bind(this);
   }
   componentWillMount() {
     const { notifications, filters } = this.props;
@@ -82,69 +80,19 @@ class HOCDashboard extends PureComponent {
   onActionButton(i) {
     // console.log('action!', i);
   }
-  onModal(i, props) {
-    const { showModal, navPush } = this.props;
-
-    if (i === 0) {
-      const overview = {
-        id: 'GoalOverview',
-        title: 'Goal overview',
-        props: {
-          goalId: props.goalId,
-        },
-      };
-      showModal();
-      navPush(overview);
-    } else if (i === 1) {
-      const notify = {
-        id: 'Notify',
-        title: 'Notify',
-        props: {
-          title: 'Reply',
-          goalId: props.goalId,
-        },
-      };
-      showModal();
-      navPush(notify);
-    }
-  }
   onNotificationPress(obj) {
-    const { showModal, navPush } = this.props;
+    const { navPush } = this.props;
     const { notifications } = this.state;
     const notification = notifications.get(obj.get('i'));
+    const overview = {
+      id: 'GoalOverview',
+      title: 'Goal overview',
+      props: {
+        goalId: notification.getIn(['target', 'id']),
+      },
+    };
 
-    if (obj.get('reply')) {
-      const modal = {
-        title: 'Choose an Action',
-        onClick: this.onModal,
-        actions: [
-          {
-            title: `Open ${notification.getIn(['meta', 'title'])}`,
-            props: {
-              goalId: notification.getIn(['target', 'id']),
-            },
-          },
-          {
-            title: `Reply to ${msgGen.users.getName(notification.get('done_by'))}`,
-            props: {
-              goalId: notification.getIn(['target', 'id']),
-            },
-          },
-        ],
-      };
-
-      showModal(modal);
-    } else {
-      const overview = {
-        id: 'GoalOverview',
-        title: 'Goal overview',
-        props: {
-          goalId: notification.getIn(['target', 'id']),
-        },
-      };
-
-      navPush(overview);
-    }
+    navPush(overview);
   }
   getFilteredNotifications(fI, notifications, filters) {
     notifications = notifications || this.props.notifications;
@@ -205,6 +153,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  showModal: a.modals.showModal,
   preview: a.links.preview,
 })(HOCDashboard);

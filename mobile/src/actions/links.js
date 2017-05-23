@@ -50,7 +50,7 @@ export const preview = att => (d, getState) => {
   const activeSliderIndex = getState().getIn(['navigation', 'sliderIndex']);
 
 
-  if (service.get('name') === 'swipes'){
+  if (service.get('name') === 'swipes') {
     if (service.get('type') === 'note') {
       d(a.navigation.push(activeSliderIndex, {
         id: 'PreviewNote',
@@ -63,24 +63,23 @@ export const preview = att => (d, getState) => {
     } else if (service.get('type') === 'url') {
       d(browser(service.get('id')));
     } else if (service.get('type') === 'file') {
-      console.log(att.toJS());
+      d(a.loading.showLoader(true));
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
-        console.log('fucking fired', res);
         OpenFile.openDoc([{
           url: res.preview.file.url,
           fileName: res.preview.header.title,
+
         }], (error, url) => {
           if (error) {
-            console.error(error);
+            d(a.loading.showLoader(false));
+            console.error('error', error);
           } else {
-            console.log(url)
+            console.log(url);
           }
-        })
+        });
       });
-      //
     }
-
   }
 };
