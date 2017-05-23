@@ -52,7 +52,6 @@ class HOCPreviewNote extends PureComponent {
     );
   }
   renderWebview() {
-    console.log(this.generateNoteUrl());
     return (
       <WebView
         source={{ uri: this.generateNoteUrl() }}
