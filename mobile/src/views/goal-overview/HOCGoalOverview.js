@@ -13,7 +13,7 @@ class HOCGoalOverview extends PureComponent {
     super(props);
     this.state = {
       tabIndex: 0,
-      hideButton: false,
+      routeNum: props.lastRoute
     };
 
     this.closeView = this.closeView.bind(this);
@@ -26,8 +26,13 @@ class HOCGoalOverview extends PureComponent {
   componentDidMount() {
     this.renderActionButtons();
   }
-  componentWillUpdate() {
+  componentWillUpdate(nextProps) {
     LayoutAnimation.easeInEaseOut();
+
+    if (this.state.routeNum === nextProps.lastRoute) {
+      console.log(this.state.routeNum, nextProps.lastRoute)
+      this.renderActionButtons();
+    }
   }
   onActionButton(i) {
     if (i === 0) {

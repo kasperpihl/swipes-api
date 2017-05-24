@@ -43,6 +43,7 @@ class HOCViewController extends Component {
     const { route } = sceneProps.scene;
     const { activeSliderIndex, routes, setActionButtons } = this.props;
     const Comp = views[route.id];
+    let isActive = routes.size;
 
     return (
       <View style={styles.viewController}>
@@ -52,6 +53,7 @@ class HOCViewController extends Component {
             navPush={this.navPushCached(activeSliderIndex)}
             navPop={this.navPopCached(activeSliderIndex)}
             setActionButtons={setActionButtons}
+            lastRoute={routes.size}
             {...route.props}
           />
         </View>
