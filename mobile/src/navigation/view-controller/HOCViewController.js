@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationExperimental, View, StyleSheet, Platform } from 'react-native';
 import * as a from '../../actions';
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 
 
-class HOCViewController extends PureComponent {
+class HOCViewController extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -85,4 +85,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   navPush: a.navigation.push,
   navPop: a.navigation.pop,
+  setActionButtons: a.navigation.setActionButtons,
 })(HOCViewController);

@@ -76,7 +76,7 @@ class App extends PureComponent {
       this.playerId = device.userId;
       this.checkTagsAndUpdate();
     }
-    console.log('Device info: ', device);
+    // console.log('Device info: ', device);
   }
   checkTagsAndUpdate() {
     const { myId } = this.props;
@@ -85,10 +85,10 @@ class App extends PureComponent {
         receivedTags = {};
       }
       if ((!receivedTags.swipesUserId && myId) || myId !== receivedTags.swipesUserId) {
-        console.log('sending tag', myId);
+        // console.log('sending tag', myId);
         OneSignal.sendTag('swipesUserId', myId || '');
       }
-      console.log(receivedTags);
+      // console.log(receivedTags);
     });
     if (myId) {
 

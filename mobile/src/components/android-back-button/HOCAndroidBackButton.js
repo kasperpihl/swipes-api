@@ -23,7 +23,7 @@ class HOCAndroidBackButton extends PureComponent {
       return true;
     }
 
-    return true;
+    return false;
   }
   render() {
     return <AndroidBackButton onPress={this.onBackPress} />;

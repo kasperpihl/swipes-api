@@ -74,9 +74,9 @@ export const preview = att => (d, getState) => {
         }], (error, url) => {
           if (error) {
             d(a.loading.showLoader(false));
-            console.error('error', error);
+            // console.error('error', error);
           } else {
-            console.log(url);
+            // console.log(url);
           }
         });
       });

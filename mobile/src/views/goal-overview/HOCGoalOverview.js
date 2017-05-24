@@ -24,17 +24,10 @@ class HOCGoalOverview extends PureComponent {
     }
   }
   componentDidMount() {
-    if (this.props.isActive) {
-      this.renderActionButtons();
-    }
+    this.renderActionButtons();
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
-  }
-  componentDidUpdate(prevProps) {
-    if (!prevProps.isActive && this.props.isActive) {
-      this.renderActionButtons();
-    }
   }
   onActionButton(i) {
     if (i === 0) {
