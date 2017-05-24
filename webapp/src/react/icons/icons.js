@@ -67,8 +67,7 @@ import LargeList from './svgs/large-list.svg';
 import Linux from './svgs/linux.svg';
 import LogoLoader from './svgs/logo-loader.svg';
 import Logout from './svgs/logout.svg';
-import Milestones
-from './svgs/milestones.svg';
+import Milestones from './svgs/milestones.svg';
 import MilestoneProgress from './svgs/milestone-progress.svg';
 import Minus from './svgs/minus.svg';
 import Note from './svgs/note.svg';

@@ -37,8 +37,9 @@ module.exports = {
   entry: {
     app: './src/index',
     jira: './src/jira-index',
-    note: './src/note-index',
-    vendor: Object.keys(require("./package.json").dependencies),
+    note: './src/react/pages/external-note-view/ExternalNoteView',
+    reset: './src/react/pages/reset/Reset',
+    // vendor: Object.keys(require("./package.json").dependencies),
   },
   output: {
       path: path.join(__dirname, 'dist'),
@@ -46,23 +47,28 @@ module.exports = {
       publicPath: '/'
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor'
+    new HtmlWebpackPlugin({
+      template: 'statics/page.html',
+      chunks: ['reset'],
+      filename: 'reset.html'
     }),
     new HtmlWebpackPlugin({
-      template: 'statics/index.html',
-      chunks: ['vendor', 'app']
-    }),
-    new HtmlWebpackPlugin({
-      template: 'statics/jira-auth.html',
-      chunks: ['vendor', 'jira'],
+      template: 'statics/page.html',
+      chunks: ['jira'],
       filename: 'jira-auth.html'
     }),
     new HtmlWebpackPlugin({
-      template: 'statics/note.html',
-      chunks: ['vendor', 'note'],
+      template: 'statics/page.html',
+      chunks: ['note'],
       filename: 'note.html'
-    })
+    }),
+
+    new HtmlWebpackPlugin({
+      template: 'statics/index.html',
+      chunks: ['app']
+    }),
+
+
   ],
   module: {
     rules: [

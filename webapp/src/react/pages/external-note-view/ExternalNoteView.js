@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import loadPage from 'src/react/pages/load';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll } from 'swipes-core-js/classes/utils';
@@ -58,26 +59,43 @@ class ExternalNoteView extends PureComponent {
       console.log('err', e);
     });
   }
-  render() {
+  renderLoading() {
+    const { rawState } = this.state;
+    if(rawState) {
+      return;
+    }
+
+    return (
+      <div className="loading">Loading</div>
+    )
+  }
+  renderEditor() {
     const { editorState } = this.state;
     let { rawState } = this.state;
     if(editorState) {
       rawState = undefined;
     }
+    
+    return (
+      <NoteEditor
+        delegate={this}
+        editorState={editorState}
+        rawState={rawState}
+        readOnly
+      />
+    )
+  }
+  render() {
     return (
       <div className="external-note-view">
-        <NoteEditor
-          delegate={this}
-          editorState={editorState}
-          rawState={rawState}
-          readOnly
-        />
+        {this.renderLoading()}
+        {this.renderEditor()}
       </div>
     )
   }
 }
 
-export default ExternalNoteView
+loadPage(ExternalNoteView);
 
 // const { string } = PropTypes;
 

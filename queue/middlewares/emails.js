@@ -330,7 +330,7 @@ const meResetPasswordEmail = (req, res, next) => {
       content: first_name,
     }, {
       name: 'RESET_PASSWORD_URL',
-      content: `${host}reset-password?token=${token}`,
+      content: `${host}reset.html?token=${token}`,
     }],
   }];
   const to = [
