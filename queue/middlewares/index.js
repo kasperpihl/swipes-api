@@ -93,6 +93,10 @@ const user_invitation_email = [
   emails.usersInvitationEmail,
 ];
 
+const send_reset_password_email = [
+  emails.meResetPasswordEmail,
+];
+
 const user_activated = notifyWrapper([
   users.usersActivatedNotificationData,
   notify.notifyAllInCompany,
@@ -298,6 +302,7 @@ export {
   token_revoked,
   settings_updated,
   user_invitation_email,
+  send_reset_password_email,
   user_activated,
   user_invited,
   user_signup,

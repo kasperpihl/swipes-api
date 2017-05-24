@@ -1,3 +1,4 @@
+import sha1 from 'sha1';
 import {
   string,
   object,
@@ -15,7 +16,13 @@ import {
   dbMeUpdateProfile,
 } from './db_utils/me';
 import {
+  dbUsersGetByEmail,
+  dbUsersResetPassword,
+} from './db_utils/users';
+import {
   valLocals,
+  createTokens,
+  parseToken,
 } from '../../utils';
 import {
   SwipesError,
@@ -224,6 +231,123 @@ const meUploadProfilePhotoToS3 = valLocals('meUploadProfilePhotoToS3', {
       return next(new SwipesError('Something went wrong with the uploading to s3', { err }));
     });
 });
+const meAccountExists = valLocals('meAccountExists', {
+  email: string.format('email').require(),
+}, (req, res, next, setLocals) => {
+  const {
+    email,
+  } = res.locals;
+
+  return dbUsersGetByEmail({ email })
+    .then((result) => {
+      if (result.length > 0) {
+        const user = result[0];
+
+        setLocals({
+          user,
+        });
+      }
+
+      return next();
+    })
+    .catch((err) => {
+      return next(new SwipesError('meAccountExists', { err }));
+    });
+});
+const meCreateResetToken = valLocals('meCreateResetToken', {
+  user: object,
+}, (req, res, next, setLocals) => {
+  const {
+    user,
+  } = res.locals;
+
+  if (!user) {
+    return next();
+  }
+
+  const tokens = createTokens({
+    iss: user.id,
+    exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
+  });
+
+  setLocals({
+    token: tokens.shortToken,
+  });
+
+  return next();
+});
+const meResetEmailQueueMessage = valLocals('meResetEmailQueueMessage', {
+  email: string.format('email').require(),
+  user: object,
+}, (req, res, next, setLocals) => {
+  const {
+    email,
+    user,
+    token,
+  } = res.locals;
+
+  if (!user) {
+    return next();
+  }
+
+  const queueMessage = {
+    email,
+    token,
+    first_name: user.profile.first_name,
+    event_type: 'send_reset_password_email',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: user.id,
+  });
+
+  return next();
+});
+const meVerifyResetToken = valLocals('meVerifyResetToken', {
+  token: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    token,
+  } = res.locals;
+
+  const parsedToken = parseToken(token);
+  const tokenContent = parsedToken.content;
+  const now = Math.floor(Date.now() / 1000);
+
+
+  if (tokenContent.exp < now) {
+    return next(new SwipesError('Invalid reset token'));
+  }
+
+  setLocals({
+    tokenContent,
+  });
+
+  return next();
+});
+const meResetPassword = valLocals('meResetPassword', {
+  tokenContent: object.require(),
+  password: string.min(1).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    tokenContent,
+    password,
+  } = res.locals;
+
+  const passwordSha1 = sha1(password);
+
+  return dbUsersResetPassword({
+    user_id: tokenContent.iss,
+    password: passwordSha1,
+  })
+  .then(() => {
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
+});
 
 export {
   meUpdateSettings,
@@ -233,4 +357,9 @@ export {
   meUploadProfilePhoto,
   meProfilePhotoResize,
   meUploadProfilePhotoToS3,
+  meAccountExists,
+  meCreateResetToken,
+  meResetEmailQueueMessage,
+  meVerifyResetToken,
+  meResetPassword,
 };

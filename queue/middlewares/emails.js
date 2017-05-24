@@ -97,7 +97,6 @@ const getNotificationAttachmentsList = ({ goal, flags = [] }) => {
 
   return list.join('');
 };
-
 const goalsNotifySendEmails = (req, res, next) => {
   const {
     notification_type,
@@ -312,9 +311,64 @@ const usersWelcomeEmail = (req, res, next) => {
     return next(new SwipesError(`usersWelcomeEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
   });
 };
+const meResetPasswordEmail = (req, res, next) => {
+  const {
+    email,
+    first_name,
+    token,
+  } = res.locals;
+  const host = config.get('host');
+  const template_name = 'reset-password';
+  const template_content = [{
+    name: '',
+    content: '',
+  }];
+  const merge_vars = [{
+    rcpt: email,
+    vars: [{
+      name: 'NAME',
+      content: first_name,
+    }, {
+      name: 'RESET_PASSWORD_URL',
+      content: `${host}reset-password?token=${token}`,
+    }],
+  }];
+  const to = [
+    {
+      email,
+      name: first_name,
+      type: 'to',
+    },
+  ];
+  const subject = 'Reset password for Swipes Workspace';
+  const message = {
+    to,
+    subject,
+    merge_vars,
+    from_email: 'noreply@swipesapp.com',
+    from_name: 'Swipes Team',
+    headers: {
+      'Reply-To': 'noreply@swipesapp.com',
+    },
+    important: false,
+    merge: true,
+    merge_language: 'mailchimp',
+  };
+
+  return mandrill_client.messages.sendTemplate({
+    template_name,
+    template_content,
+    message,
+  }, (result) => {
+    return next();
+  }, (e) => {
+    return next(new SwipesError(`meResetPasswordEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
+  });
+};
 
 export {
   goalsNotifySendEmails,
   usersInvitationEmail,
   usersWelcomeEmail,
+  meResetPasswordEmail,
 };

@@ -5,16 +5,17 @@ import jwt from 'jwt-simple';
 import {
   SwipesError,
 } from '../middlewares/swipes-error';
+
 const getNewestElectronVersion = () => '0.0.5';
 const getDownloadLinks = () => {
-  if(config.get('env') === 'staging'){
-  }
+  // if (config.get('env') === 'staging') {
+  // }
   return {
     darwin: 'http://swipesapp.com/download-mac',
     win32: 'http://swipesapp.com/download-win',
     linux: 'http://swipesapp.com/download-linux',
   };
-}
+};
 
 const generateSlackLikeId = (type = '', number = 8) => {
   const id = randomstring.generate(number).toUpperCase();
@@ -49,11 +50,11 @@ const getSwipesLinkObj = ({ type, id, title, account_id }) => {
   };
 };
 
-const createTokens = (user_id) => {
-  const token = jwt.encode({
-    iss: user_id,
+const createTokens = (tokenContent) => {
+  const content = Object.assign({}, tokenContent, {
     r: generateSlackLikeId('', 3),
-  }, config.get('jwtTokenSecret'));
+  });
+  const token = jwt.encode(content, config.get('jwtTokenSecret'));
   const shortToken = token.split('.').splice(1, 2).join('.');
   const prefix = 'sw.';
 

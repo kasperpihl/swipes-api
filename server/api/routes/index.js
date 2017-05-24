@@ -25,6 +25,7 @@ const v1NotAuthed = [
   stream.notAuthed,
   organizations.notAuthed,
   dashboard.notAuthed,
+  me.notAuthed,
 ];
 const v1Authed = [
   init.authed,

@@ -15,7 +15,6 @@ import {
   createTokens,
 } from '../../utils';
 import * as services from '../../services';
-import db from '../../../db';
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
@@ -26,6 +25,7 @@ import {
   dbUsersGetByEmailWithFields,
   dbUsersCreate,
   dbUsersActivateAfterSignUp,
+  dbUsersGetByEmail,
 } from './db_utils/users';
 import {
   dbOrganizationsAddUser,
@@ -43,14 +43,14 @@ const invitationTokenSecret = 'very_s3cret_invit@tion_secr3t';
 const defaultSettings = {
   onboarding: {
     order: [
-      'create-account' ,
-      'personalize-swipes' ,
+      'create-account',
+      'personalize-swipes',
       'intro-article',
       'create-milestone',
-      'add-goal-milestone' ,
+      'add-goal-milestone',
       'article-move-fast-goals',
       'article-collect-feedback',
-      'invite-team'
+      'invite-team',
     ],
     completed: {
       'create-account': true,
@@ -71,9 +71,7 @@ const userAvailability = valLocals('userAvailability', {
     invitation_token,
   } = res.locals;
 
-  const query = r.table('users').getAll(email, { index: 'email' });
-
-  return db.rethinkQuery(query)
+  return dbUsersGetByEmail({ email })
     .then((result) => {
       const user = result[0];
 
@@ -177,7 +175,9 @@ const userSignUp = valLocals('userSignUp', {
     invitation_token,
   } = res.locals;
 
-  const tokens = createTokens(tokenInfo.user_id);
+  const tokens = createTokens({
+    iss: tokenInfo.user_id,
+  });
   const promises = [
     dbTokensInsertSingle({ token: tokens.token, tokenInfo }),
   ];
@@ -289,7 +289,9 @@ const userSignIn = valLocals('userSignIn', {
     tokenInfo,
   } = res.locals;
 
-  const tokens = createTokens(tokenInfo.user_id);
+  const tokens = createTokens({
+    iss: tokenInfo.user_id,
+  });
 
   setLocals({
     token: tokens.shortToken,

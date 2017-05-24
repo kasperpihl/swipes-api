@@ -196,6 +196,36 @@ const dbUsersActivateAfterSignUp = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbUsersGetByEmail = funcWrap([
+  object.as({
+    email: string.format('email').require(),
+  }).require(),
+], (err, { email }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersGetByEmail: ${err}`);
+  }
+
+  const q = r.table('users').getAll(email, { index: 'email' });
+
+  return db.rethinkQuery(q);
+});
+const dbUsersResetPassword = funcWrap([
+  object.as({
+    user_id: string.require(),
+    password: string.require(),
+  }).require(),
+], (err, { user_id, password }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersResetPassword: ${err}`);
+  }
+
+  const q = r.table('users').get(user_id).update({
+    password,
+    updated_at: r.now(),
+  });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbUsersGetService,
@@ -207,4 +237,6 @@ export {
   dbUsersAddOrganization,
   dbUsersCreate,
   dbUsersActivateAfterSignUp,
+  dbUsersGetByEmail,
+  dbUsersResetPassword,
 };

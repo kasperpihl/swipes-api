@@ -15,6 +15,11 @@ import {
   meUploadProfilePhoto,
   meProfilePhotoResize,
   meUploadProfilePhotoToS3,
+  meAccountExists,
+  meCreateResetToken,
+  meResetEmailQueueMessage,
+  meVerifyResetToken,
+  meResetPassword,
 } from './middlewares/me';
 import {
   notificationsPushToQueue,
@@ -64,6 +69,35 @@ multipart.post('/me.uploadProfilePhoto',
     user_id: string.require(),
     profile: object.require(),
   }),
+);
+
+notAuthed.post('/me.sendResetEmail',
+  valBody({
+    email: string.format('email').require(),
+  }),
+  meAccountExists,
+  meCreateResetToken,
+  meResetEmailQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend(),
+);
+
+notAuthed.post('/me.verifyResetToken',
+  valBody({
+    token: string.require(),
+  }),
+  meVerifyResetToken,
+  valResponseAndSend(),
+);
+
+notAuthed.post('/me.resetPassword',
+  valBody({
+    token: string.require(),
+    password: string.min(1).require(),
+  }),
+  meVerifyResetToken,
+  meResetPassword,
+  valResponseAndSend(),
 );
 
 export {
