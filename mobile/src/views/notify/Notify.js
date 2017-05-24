@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import HOCHeader from '../../components/header/HOCHeader';
-import { attachmentIconForService, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
+import { attachmentIconForService, setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
@@ -12,10 +13,8 @@ class Notify extends Component {
     super(props);
     this.state = { text: '' };
 
-    this.flagPress = setupCachedCallback(this.flagPress, this);
-  }
-  attachmentPress(att) {
-    console.log('att', att)
+    setupDelegate(this);
+    this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment');
   }
   renderHeader() {
     return <HOCHeader title="Ask for something" />;
@@ -35,6 +34,7 @@ class Notify extends Component {
             multiline
             autoFocus
             placeholder=""
+            autoCapitalize="sentences"
             onChange={(event) => {
               this.setState({
                 text: event.nativeEvent.text,
@@ -59,17 +59,21 @@ class Notify extends Component {
       const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
 
       return (
-        <RippleButton rippleColor={colors.deepBlue60} style={styles.attachment} rippleOpacity={0.8} key={att} onPress={this.attachmentPress(at)}>
-          <View style={styles.attachment}>
-            <View style={styles.icon}>
-              <Icon name={icon} width="24" height="24" fill={colors.deepBlue100} />
+        <View style={styles.attachment} key={att}>
+          <RippleButton rippleColor={colors.deepBlue60} style={styles.attachment} rippleOpacity={0.8} onPress={this.onOpenAttachmentCached(at)}>
+            <View style={styles.attachmentLeft}>
+              <View style={styles.icon}>
+                <Icon name={icon} width="24" height="24" fill={colors.deepBlue100} />
+              </View>
+              <Text style={styles.label} ellipsizeMode="tail">{at.get('title')}</Text>
             </View>
-            <Text style={styles.label} ellipsizeMode="tail">{at.get('title')}</Text>
+          </RippleButton>
+          <RippleButton rippleColor={colors.red100} style={styles.flagButton} rippleOpacity={0.8} onPress={this.onFlagAttachmentCached(at)}>
             <View style={styles.flagIcon}>
               <Icon name="Flag" width="24" height="24" fill={colors.deepBlue60} />
             </View>
-          </View>
-        </RippleButton>
+          </RippleButton>
+        </View>
       );
     });
 
@@ -80,10 +84,10 @@ class Notify extends Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {this.renderHeader()}
-          <ScrollView>
+          <KeyboardAwareScrollView>
             {this.renderWriteHandoff()}
             {this.renderAttachmentList()}
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -128,6 +132,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
+  },
+  attachmentLeft: {
+    flex: 1,
+    minHeight: 72,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  flagButton: {
+    width: 72,
+    height: 72,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 72 / 2,
   },
   icon: {
     paddingRight: 18,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as a from '../../actions';
 import Notify from './Notify';
 
 class HOCNotify extends Component {
@@ -7,8 +8,12 @@ class HOCNotify extends Component {
     super(props);
     this.state = { text: '' };
   }
-  attachmentPress(att) {
-    console.log('att', att);
+  onOpenAttachment(att) {
+    const { preview } = this.props;
+    preview(att);
+  }
+  onFlagAttachment(att) {
+
   }
   render() {
     const { me, goal } = this.props;
@@ -25,4 +30,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
+  preview: a.links.preview,
 })(HOCNotify);
