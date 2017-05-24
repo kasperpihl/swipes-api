@@ -4,6 +4,7 @@ import request from 'request';
 import commonMultipleEvents from '../db_utils/events';
 import {
   getHistoryIndex,
+  notifyMessageGenerator,
 } from '../utils';
 import {
   dbInsertMultipleNotifications,
@@ -237,6 +238,7 @@ const notifyGoalNotifySendPushNotifications = (req, res, next) => {
     user,
     user_ids,
     group_id,
+    notification_type,
   } = res.locals;
   const historyIndex = getHistoryIndex(goal.history, group_id);
   const history = goal.history[historyIndex];
@@ -257,12 +259,18 @@ const notifyGoalNotifySendPushNotifications = (req, res, next) => {
     });
   });
 
+  const from = user.profile.first_name;
+  const headingsMessage = notifyMessageGenerator(from, notification_type, history.request);
   const message = {
     filters,
     app_id: oneSignalConfig.appId,
     contents: { en: history.message },
-    headings: { en: `${user.profile.first_name} notifies you` },
+    headings: { en: headingsMessage },
     subtitle: { en: `about ${goal.title}` },
+    data: {
+      group_id,
+      organization_id: user.organizations[0],
+    },
   };
   const reqOptions = {
     url: 'https://onesignal.com/api/v1/notifications',

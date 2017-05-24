@@ -54,10 +54,26 @@ const createNotificationTarget = (mainItem, historyIndex) => {
     history_index: historyIndex,
   };
 };
+const notifyMessageGenerator = (from, type, request) => {
+  if (request) {
+    if (type === 'update') return `${from} asked you for an update`;
+    else if (type === 'feedback') return `${from} asked you for feedback`;
+    else if (type === 'assets') return `${from} asked you for assets`;
+    else if (type === 'decision') return `${from} asked you for a decision`;
+  }
+
+  if (type === 'update') return `${from} gave you an update`;
+  else if (type === 'feedback') return `${from} gave you feedback`;
+  else if (type === 'assets') return `${from} gave you assets`;
+  else if (type === 'decision') return `${from} gave you a decision`;
+
+  return `${from} notified you`;
+};
 
 export {
   valLocals,
   setLocals,
   getHistoryIndex,
   createNotificationTarget,
+  notifyMessageGenerator,
 };
