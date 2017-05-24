@@ -8,7 +8,7 @@ import { colors } from '../../utils/globalStyles';
 class HOCNotify extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: '', height: 162 };
+    this.state = { text: '' };
   }
   renderHeader() {
     return <HOCHeader title={this.props.title} />;
@@ -24,6 +24,7 @@ class HOCNotify extends Component {
         </View>
         <View style={styles.handoffInput}>
           <TextInput
+            numberOfLines={6}
             multiline
             onChange={(event) => {
               this.setState({
@@ -32,8 +33,7 @@ class HOCNotify extends Component {
             }}
             value={this.state.text}
             placeholderTextColor={colors.deepBlue50}
-            underlineColorAndroid={colors.bgColor}
-            style={[styles.input, { height: Math.max(27, this.state.height) }]}
+            style={styles.input}
           />
         </View>
       </View>
@@ -70,16 +70,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    height: 162,
     padding: 0,
     margin: 0,
     marginLeft: 15,
     paddingRight: 9,
     paddingLeft: 3,
+    paddingBottom: 15,
     marginTop: 3,
-    color: colors.deepBlue100,
     fontSize: 15,
     lineHeight: 25,
+    textAlignVertical: 'top',
   },
 });
 
