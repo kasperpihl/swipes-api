@@ -14,6 +14,7 @@
     "apiKey": "SW_MAILCHIMP_API_KEY"
   },
   "onesignal": {
+    "appId": "SW_ONESIGNAL_APP_ID",
     "restKey": "SW_ONESIGNAL_REST_KEY"
   },
   "s3BucketUrl": "SW_S3_BUCKET_URL",
