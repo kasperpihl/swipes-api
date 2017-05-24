@@ -26,6 +26,7 @@ class HOCNotify extends Component {
           <TextInput
             numberOfLines={6}
             multiline
+            autoFocus
             onChange={(event) => {
               this.setState({
                 text: event.nativeEvent.text,
