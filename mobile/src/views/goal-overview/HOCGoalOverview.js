@@ -30,7 +30,6 @@ class HOCGoalOverview extends PureComponent {
     LayoutAnimation.easeInEaseOut();
 
     if (this.state.routeNum === nextProps.lastRoute) {
-      console.log(this.state.routeNum, nextProps.lastRoute)
       this.renderActionButtons();
     }
   }
@@ -132,6 +131,8 @@ class HOCGoalOverview extends PureComponent {
     } else if (tabIndex === 2) {
       return this.renderAttachments();
     }
+
+    return undefined;
   }
   render() {
     return (

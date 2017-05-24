@@ -116,7 +116,13 @@ export default {
     viewBox: DEF_VIEWBOX,
   },
   Flag: {
-
+    svg: (
+      <G>
+        <Rect x="6" y="6" width="2" height="12" />
+        <Polygon points="9,6,9,14,18,14,15,10,18,6,9,6" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
   },
   Folder: {
 

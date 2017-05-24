@@ -17,6 +17,14 @@ const styles = StyleSheet.create({
     zIndex: 100,
     backgroundColor: colors.bgColor,
   },
+  navHidden: {
+    width: viewSize.width,
+    height: 0,
+    flexDirection: 'row',
+    borderTopColor: colors.deepBlue5,
+    zIndex: 100,
+    backgroundColor: colors.bgColor,
+  },
   navItem: {
     flex: 1,
     alignItems: 'center',
@@ -33,7 +41,7 @@ class HOCTabNavigation extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      routes: [
+      rootRoutes: [
         {
           icon: 'Milestones',
         },
@@ -66,13 +74,13 @@ class HOCTabNavigation extends PureComponent {
     }
   }
   renderSlider() {
-    const { activeSliderIndex, actionButtons } = this.props;
+    const { activeSliderIndex, routes } = this.props;
     const sliderPosPercentage = activeSliderIndex * 25;
     const sliderPosPixel = sliderPosPercentage * viewSize.width / 100;
-    const sliderPos = actionButtons.size ? 0 : sliderPosPixel;
-    const sliderWidth = actionButtons.size ? viewSize.width : viewSize.width / 4;
-    const sliderHeight = actionButtons.size ? 2 : 4;
-    const sliderColor = actionButtons.size ? colors.blue100 : colors.blue100;
+    const sliderPos = routes.size > 1 ? 0 : sliderPosPixel;
+    const sliderWidth = routes.size > 1 ? viewSize.width : viewSize.width / 4;
+    const sliderHeight = routes.size > 1 ? 2 : 4;
+    const sliderColor = routes.size > 1 ? colors.blue100 : colors.blue100;
 
 
     return (
@@ -80,14 +88,14 @@ class HOCTabNavigation extends PureComponent {
     );
   }
   renderNavItems() {
-    const { activeSliderIndex, actionButtons } = this.props;
+    const { activeSliderIndex, routes } = this.props;
 
-    if (actionButtons.size) {
+    if (routes.size > 1) {
       return <HOCActionBar />;
     }
 
-    const { routes } = this.state;
-    const navItems = routes.map((r, i) => {
+    const { rootRoutes } = this.state;
+    const navItems = rootRoutes.map((r, i) => {
       const fill = i === activeSliderIndex ? colors.blue100 : colors.deepBlue20;
 
       return (
@@ -102,11 +110,16 @@ class HOCTabNavigation extends PureComponent {
     return navItems;
   }
   render() {
-    const { actionButtons } = this.props;
-    const topBorderStyles = actionButtons.size ? 0 : 1;
+    const { routes, actionButtons } = this.props;
+    const topBorderStyles = routes.size > 1 ? 0 : 1;
+    let navStyles = styles.nav;
+
+    if (routes.size > 1 && !actionButtons.size && Platform.OS === 'android') {
+      navStyles = styles.navHidden;
+    }
 
     return (
-      <View style={[styles.nav, { borderTopWidth: topBorderStyles }]}>
+      <View style={[navStyles, { borderTopWidth: topBorderStyles }]}>
         {this.renderNavItems()}
         {this.renderSlider()}
       </View >
@@ -115,9 +128,12 @@ class HOCTabNavigation extends PureComponent {
 }
 
 function mapStateToProps(state) {
+  const activeSliderIndex = state.getIn(['navigation', 'sliderIndex']);
+
   return {
     actionButtons: state.getIn(['navigation', 'actionButtons']),
-    activeSliderIndex: state.getIn(['navigation', 'sliderIndex']),
+    activeSliderIndex,
+    routes: state.getIn(['navigation', 'sliders', activeSliderIndex, 'routes']),
   };
 }
 
