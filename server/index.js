@@ -24,10 +24,9 @@ const env = config.get('env');
 const transports = [];
 
 if (env !== 'dev') {
+  expressWinston.bodyBlacklist.push('token', 'password', 'text', 'title');
   expressWinston.requestWhitelist.push('body');
   expressWinston.responseWhitelist.push('body');
-  expressWinston.requestWhitelist.push('locals');
-  expressWinston.responseWhitelist.push('locals');
 
   transports.push(new winston.transports.Loggly({
     subdomain: logglyConfig.subdomain,
@@ -57,6 +56,18 @@ app.use(cors({
 if (env !== 'dev') {
   app.use(expressWinston.logger({
     transports,
+    responseFilter: (res, propName) => {
+      if (propName === 'body') {
+        delete res[propName].token;
+        delete res[propName].password;
+        delete res[propName].text;
+        delete res[propName].title;
+
+        return res[propName];
+      }
+
+      return res[propName];
+    },
   }));
 }
 
