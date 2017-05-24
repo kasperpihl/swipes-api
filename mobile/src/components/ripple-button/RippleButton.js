@@ -16,7 +16,7 @@ class RippleButton extends Component {
     const { children, rippleColor, rippleOpacity, onPress, ...props } = this.props;
 
     return (
-      <MaterialRippleButton rippleColor={rippleColor} rippleOpacity={rippleOpacity} onPressIn={onPress} {...props}>
+      <MaterialRippleButton rippleColor={rippleColor} rippleOpacity={rippleOpacity} onPress={onPress} {...props}>
         {children}
       </MaterialRippleButton>
     );
