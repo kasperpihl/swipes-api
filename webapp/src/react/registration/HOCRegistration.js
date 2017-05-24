@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupCachedCallback, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
@@ -21,11 +22,40 @@ class HOCRegistration extends Component {
       showWelcomeMessage: true,
     };
     this.cachedOnChange = setupCachedCallback(this.onChange, this);
-    bindAll(this, ['onSignin', 'handleContinue', 'handleButtonClick', 'handleKeyDown']);
+    bindAll(this, ['onSignin', 'handleContinue', 'handleButtonClick', 'handleKeyDown', 'onResetPassword']);
     setupLoading(this);
   }
   componentDidMount() {
     window.analytics.sendEvent('Login opened', {});
+  }
+  onResetPassword(e) {
+    const { request, inputMenu, confirm } = this.props;
+    const { email } = this.state;
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+    };
+    inputMenu({
+      ...options,
+      placeholder: 'Email',
+      text: email,
+      buttonLabel: 'Reset',
+    }, (resetEmail) => {
+      if (resetEmail && resetEmail.length) {
+        request('me.sendResetEmail', {
+          email: resetEmail,
+        }).then((res) => {
+          confirm({
+            ...options,
+            actions: [{ text: 'Okay' }],
+            title: 'Reset password',
+            message: 'We will send you an email to change your password.',
+          });
+        });
+
+      }
+    });
+
+
   }
   handleEmailChange(value) {
     const { loading } = this.state;
@@ -123,11 +153,11 @@ class HOCRegistration extends Component {
   renderFooter() {
     const { showWelcomeMessage } = this.state;
     const isLoading = this.getLoading('signInButton').loading;
-    const resetClass = 'welcome__reset';
+    let resetClass = 'welcome__reset';
     let continueClass = 'welcome__continue';
 
     if (!showWelcomeMessage) {
-      // resetClass += ' welcome__reset--show'; // Enable when we have reset password
+      resetClass += ' welcome__reset--show'; // Enable when we have reset password
       continueClass += ' welcome__continue--sign-in';
     } else {
       continueClass += ' welcome__continue--continue';
@@ -135,7 +165,7 @@ class HOCRegistration extends Component {
 
     return (
       <div className="welcome__footer">
-        <div className="welcome__actions welcome__actions--reset">
+        <div className="welcome__actions welcome__actions--reset" onClick={this.onResetPassword}>
           <div className={resetClass}>Reset my password</div>
         </div>
         <button className="welcome__actions welcome__actions--continue" onClick={this.handleContinue}>
@@ -186,4 +216,6 @@ HOCRegistration.propTypes = {
 
 export default withRouter(connect(mapStateToProps, {
   request: ca.api.request,
+  inputMenu: a.menus.input,
+  confirm: a.menus.confirm,
 })(HOCRegistration));
