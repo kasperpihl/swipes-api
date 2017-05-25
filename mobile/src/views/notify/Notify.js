@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import HOCHeader from '../../components/header/HOCHeader';
-import { attachmentIconForService, setupDelegate } from '../../../swipes-core-js/classes/utils';
+import { attachmentIconForService, setupCachedCallback, setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
@@ -84,10 +83,10 @@ class Notify extends Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {this.renderHeader()}
-          <KeyboardAwareScrollView>
+          <ScrollView>
             {this.renderWriteHandoff()}
             {this.renderAttachmentList()}
-          </KeyboardAwareScrollView>
+          </ScrollView>
         </View>
       </TouchableWithoutFeedback>
     );

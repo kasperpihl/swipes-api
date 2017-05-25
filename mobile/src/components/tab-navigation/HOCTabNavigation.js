@@ -115,7 +115,7 @@ class HOCTabNavigation extends PureComponent {
     let navStyles = styles.nav;
 
     if (routes.size > 1 && !actionButtons.size && Platform.OS === 'android') {
-      // navStyles = styles.navHidden;
+      navStyles = styles.navHidden;
     }
 
     return (

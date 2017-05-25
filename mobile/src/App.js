@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import LinearGradient from 'react-native-linear-gradient';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
 import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
@@ -128,6 +129,14 @@ class App extends PureComponent {
 
     return undefined;
   }
+  renderKeyboardSpacer() {
+
+    if (Platform.OS === 'KeyboardSpacer') {
+      return <KeyboardSpacer />
+    }
+
+    return undefined;
+  }
   renderApp() {
     const { token, isHydrated, lastConnect } = this.props;
 
@@ -143,6 +152,7 @@ class App extends PureComponent {
         <LoadingModal />
         <HOCTabNavigation />
         {this.renderBackButton()}
+        {this.renderKeyboardSpacer()}
       </View>
     );
   }
