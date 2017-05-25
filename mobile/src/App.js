@@ -131,7 +131,7 @@ class App extends PureComponent {
   }
   renderKeyboardSpacer() {
 
-    if (Platform.OS === 'KeyboardSpacer') {
+    if (Platform.OS === 'ios') {
       return <KeyboardSpacer />
     }
 
