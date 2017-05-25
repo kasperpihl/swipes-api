@@ -31,8 +31,8 @@ class Assignees extends Component {
     }
 
     const renderPeople = assignees.map((a, i) => {
-      const pic = a.get('profile_pic');
-      const firstLetter = a.get('first_name').charAt(0);
+      const pic = msgGen.users.getPhoto(a);
+      const firstLetter = msgGen.users.getFirstName(a).charAt(0);
 
       if (i < maxImages || (i === maxImages && assignees.size === (maxImages + 1))) {
         if (pic) {
@@ -43,8 +43,8 @@ class Assignees extends Component {
           );
         }
         return (
-          <View key={i}>
-            <Text>{firstLetter}</Text>
+          <View key={i} style={styles.initialWrapper}>
+            <Text style={styles.initial}>{firstLetter}</Text>
           </View>
         );
       }
@@ -111,7 +111,19 @@ const styles = StyleSheet.create({
   },
   people: {
     flexDirection: 'row',
-
+  },
+  initialWrapper: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.deepBlue100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  initial: {
+    fontSize: 15,
+    color: 'white',
+    fontWeight: 'bold'
   },
   morePeople: {
     width: 32,

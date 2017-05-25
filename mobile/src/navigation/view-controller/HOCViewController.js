@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavigationExperimental, View, StyleSheet, Platform } from 'react-native';
+import { NavigationExperimental, View, StyleSheet, Platform, Keyboard } from 'react-native';
 import * as a from '../../actions';
 import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import * as views from '../../views';
@@ -31,7 +31,7 @@ class HOCViewController extends Component {
     this.navPopCached = setupCachedCallback(props.navPop);
   }
   componentWillUpdate(nextProps, nextState) {
-
+    return Keyboard.dismiss;
   }
   reduxToNavigationState(reduxState) {
     return {

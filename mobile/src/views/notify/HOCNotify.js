@@ -18,7 +18,14 @@ class HOCNotify extends Component {
         request: notify.get('request') || false,
         notification_type: notify.get('notification_type') || 'update',
       }),
+      routeNum: props.lastRoute,
     };
+
+    this.onActionButton = this.onActionButton.bind(this);
+    this.onModalAction = this.onModalAction.bind(this);
+  }
+  componentDidMount() {
+    this.renderActionButtons();
   }
   onOpenAttachment(att) {
     const { preview } = this.props;
@@ -38,14 +45,66 @@ class HOCNotify extends Component {
     const { notify } = this.state;
     this.updateHandoff(notify.set('message', text));
   }
+  onModalAction(data) {
+    console.log(data);
+    // let { notify } = this.state;
+    // const uId = props.user.get('id');
+
+    // if (notify.get('assignees').includes(uId)) {
+    //   notify = notify.updateIn(['assignees'], fl => fl.filter(f => f !== uId));
+    // } else {
+    //   notify = notify.updateIn(['assignees'], fl => fl.push(uId));
+    // }
+
+    // this.updateHandoff(notify);
+  }
+  onActionButton(index) {
+    const { users, showModal } = this.props;
+
+    const sortedUsers = users.sort(
+      (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
+    );
+
+    const userInfoToActions = sortedUsers.map((u) => {
+      const selected = this.state.notify.get('assignees').indexOf(u.get('id'));
+
+      const obj = {
+        title: `${msgGen.users.getFirstName(u.get('id'))} ${msgGen.users.getLastName(u.get('id'))}`,
+        props: {
+          user: u,
+          selected,
+        },
+      };
+
+      return obj;
+    }).toArray();
+
+    if (index === 0) {
+      const modal = {
+        title: 'Assign People',
+        onClick: this.onModalAction,
+        actions: userInfoToActions,
+      };
+
+      showModal(modal);
+    }
+  }
   updateHandoff(notify) {
     this.setState({ notify });
+  }
+  renderActionButtons() {
+    this.props.setActionButtons({
+      onClick: this.onActionButton,
+      buttons: [
+        { text: 'Assign people' },
+      ],
+    });
   }
   render() {
     const { me, goal } = this.props;
     const { notify } = this.state;
 
-    return <Notify me={me} goal={goal} delegate={this} notify={notify} />
+    return <Notify me={me} goal={goal} delegate={this} notify={notify} />;
   }
 }
 
@@ -53,9 +112,11 @@ function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
     me: state.get('me'),
+    users: state.get('users'),
   };
 }
 
 export default connect(mapStateToProps, {
   preview: a.links.preview,
+  showModal: a.modals.show,
 })(HOCNotify);

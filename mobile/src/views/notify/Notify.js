@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 import HOCHeader from '../../components/header/HOCHeader';
-import { attachmentIconForService, setupCachedCallback, setupDelegate } from '../../../swipes-core-js/classes/utils';
+import { attachmentIconForService, setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
@@ -53,6 +53,9 @@ class Notify extends Component {
       const at = attachments.get(att);
       const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
       const isFlagged = notify.get('flags').contains(at.get('id'));
+
+      const flaggedIconColor = isFlagged ? colors.red80 : colors.deepBlue60;
+
       return (
         <View style={styles.attachment} key={att}>
           <RippleButton rippleColor={colors.deepBlue60} style={styles.attachment} rippleOpacity={0.8} onPress={this.onOpenAttachmentCached(at)}>
@@ -65,7 +68,7 @@ class Notify extends Component {
           </RippleButton>
           <RippleButton rippleColor={colors.red100} style={styles.flagButton} rippleOpacity={0.8} onPress={this.onFlagAttachmentCached(at.get('id'))}>
             <View style={styles.flagIcon}>
-              <Icon name="Flag" width="24" height="24" fill={colors.deepBlue60} />
+              <Icon name="Flag" width="24" height="24" fill={flaggedIconColor} />
             </View>
           </RippleButton>
         </View>
@@ -145,6 +148,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 72 / 2,
+    overflow: 'hidden',
   },
   icon: {
     paddingRight: 18,

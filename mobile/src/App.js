@@ -11,6 +11,7 @@ import HOCAndroidBackButton from './components/android-back-button/HOCAndroidBac
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
 import LoadingModal from './modals/LoadingModal';
+import ActionModal from './modals/ActionModal';
 
 const styles = StyleSheet.create({
   app: {
@@ -57,6 +58,7 @@ class App extends PureComponent {
   }
   componentWillMount() {
     OneSignal.addEventListener('ids', this.onIds);
+    OneSignal.inFocusDisplaying(2);
   }
   componentDidMount() {
     this.checkTagsAndUpdate();
@@ -150,6 +152,7 @@ class App extends PureComponent {
           <HOCViewController />
         </View>
         <LoadingModal />
+        <ActionModal />
         <HOCTabNavigation />
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}

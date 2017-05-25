@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes';
 
-export function showModal(payload) {
+export function show(payload) {
   return { type: types.SHOW_MODAL, payload };
 }

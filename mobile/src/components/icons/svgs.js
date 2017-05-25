@@ -55,7 +55,8 @@ export default {
 
   },
   ChecklistCheckmark: {
-
+    svg: <Polygon points="11.768,14.268,7.438,11.768,6.438,13.5,12.5,17,18,7.474,16.268,6.474,11.768,14.268" />,
+    viewBox: DEF_VIEWBOX,
   },
   Checkmark: {
 
