@@ -18,9 +18,10 @@ class Notify extends PureComponent {
   renderHeader() {
     const { notify } = this.props;
     const assignees = notify.get('assignees');
+    const title = msgGen.notify.getNotifyTitle(notify);
 
     return (
-      <HOCHeader title="Ask for something">
+      <HOCHeader title={title}>
         {assignees.length ? (
           <HOCAssigning assignees={assignees} />
         ) : (
@@ -33,6 +34,7 @@ class Notify extends PureComponent {
     const { me, notify } = this.props;
     const assignees = [`${me.get('id')}`];
     const placeholder = msgGen.notify.getWriteMessagePlaceholder(notify);
+
     return (
       <View style={styles.handoff}>
         <View style={styles.profileImage}>

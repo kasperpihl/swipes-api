@@ -1,61 +1,67 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { fromJS } from 'immutable';
-import * as a from '../actions';
-import { setupCachedCallback } from '../../swipes-core-js/classes/utils';
-import { colors, viewSize } from '../utils/globalStyles';
-import RippleButton from '../components/ripple-button/RippleButton';
-import HOCAssigning from '../components/assignees/HOCAssigning';
-import Icon from '../components/icons/Icon';
+import * as a from '../../actions';
+import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
+import { colors, viewSize } from '../../utils/globalStyles';
+import RippleButton from '../../components/ripple-button/RippleButton';
+import HOCAssigning from '../../components/assignees/HOCAssigning';
+import Icon from '../../components/icons/Icon';
+import ActionModalList from './ActionModalList';
 
-class ActionModal extends Component {
+class ActionModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       modalState: false,
-      assignees: fromJS({
-        selectedAssignees: [],
-      }),
+
     };
 
     this.closeModal = this.closeModal.bind(this);
-    this.onCTAClick = this.onCTAClick.bind(this);
-    this.onButtonClick = setupCachedCallback(this.onButtonClick, this);
+    this.onMultipleClick = this.onMultipleClick.bind(this);
+    // this.onButtonClick = setupCachedCallback(this.onButtonClick, this);
   }
   componentWillReceiveProps(nextProps) {
     const { modalState } = this.state;
 
     if (nextProps.modal.size > 1 && !modalState) {
       this.setState({ modalState: true });
+
+      if (nextProps.modal.get('multiple')) {
+        this.setState({ selectedItems: fromJS([]) });
+      }
     } else if (nextProps.modal.size < 1 && modalState) {
       this.setState({ modalState: false });
     }
   }
-  onButtonClick(i, props, e) {
-    let { assignees } = this.state;
-    const uId = props.user.get('id');
-
-    if (assignees.get('selectedAssignees').includes(uId)) {
-      assignees = assignees.updateIn(['selectedAssignees'], fl => fl.filter(f => f !== uId));
-    } else {
-      assignees = assignees.updateIn(['selectedAssignees'], fl => fl.push(uId));
-    }
-
-    this.updateState(assignees);
-  }
-  onCTAClick() {
+  onItemPress(item, e) {
     const { modal } = this.props;
 
-    modal.get('onClick')(this.state.assignees.get('selectedAssignees'));
+    if (modal.get('multiple')) {
+      let { selectedItems } = this.state;
+
+      if (selectedItems.includes(item.index)) {
+        selectedItems = selectedItems.delete(selectedItems.indexOf(item.index));
+      } else {
+        selectedItems = selectedItems.push(item.index);
+      }
+
+      this.setState({ selectedItems });
+    } else {
+      modal.get('onClick')(item, e);
+    }
+  }
+  onMultipleClick() {
+    const { selectedItems } = this.state;
+    const { modal } = this.props;
+
+    modal.get('onClick')(selectedItems);
   }
   closeModal() {
     const { showModal } = this.props;
 
     showModal();
-  }
-  updateState(assignees) {
-    this.setState({ assignees });
   }
   renderTitle() {
     const { modal } = this.props;
@@ -72,65 +78,31 @@ class ActionModal extends Component {
 
     return undefined;
   }
-  renderSelection(selected) {
-    const selectedBorderColor = selected ? 'rgba(255,155,255,0)' : colors.deepBlue20;
-
-    return (
-      <View style={[styles.selectionWrapper, { borderColor: selectedBorderColor }]}>
-        {selected ? (
-          <Icon name="ChecklistCheckmark" width="24" height="24" fill={colors.greenColor} />
-        ) : (
-            undefined
-          )}
-      </View>
-    );
-  }
-  renderCTA() {
-    return (
-      <RippleButton
-        rippleColor={colors.blue100}
-        rippleOpacity={0.8}
-        style={styles.ctaButton}
-        onPress={this.onCTAClick}
-      >
-        <View style={styles.cta}>
-          <Text style={styles.ctaTitle}>Assign</Text>
-        </View>
-      </RippleButton>
-    );
-  }
-  renderButtons() {
+  renderList() {
+    const { selectedItems } = this.state;
     const { modal } = this.props;
 
-    if (modal && modal.get('actions')) {
-      const buttons = modal.get('actions').map((a, i) => {
-        const selected = this.state.assignees.get('selectedAssignees').contains(a.props.user.get('id'));
+    if (modal && modal.get('items')) {
+      return <ActionModalList listItems={modal.get('items')} selectedItems={selectedItems} multiple={modal.get('multiple')} delegate={this} />;
+    }
 
-        return (
-          <RippleButton
-            rippleColor={colors.deepBlue40}
-            rippleOpacity={0.8}
-            style={styles.button}
-            onPress={this.onButtonClick(i, a.props)}
-            key={i}
-          >
-            <View style={styles.button}>
-              <HOCAssigning assignees={[a.props.user.get('id')]} />
-              <Text style={styles.actionTitle}>{a.title}</Text>
-              {this.renderSelection(selected)}
-            </View>
-          </RippleButton>
-        );
-      });
+    return undefined;
+  }
+  renderAction() {
+    const { modal } = this.props;
 
+    if (modal && modal.get('multiple')) {
       return (
-        <View style={styles.modalBox}>
-          {this.renderTitle()}
-          <ScrollView>
-            {buttons}
-          </ScrollView>
-          {this.renderCTA()}
-        </View>
+        <RippleButton
+          rippleColor={colors.blue100}
+          rippleOpacity={0.8}
+          style={styles.ctaButton}
+          onPress={this.onMultipleClick}
+        >
+          <View style={styles.cta}>
+            <Text style={styles.ctaTitle}>{modal.get('multiple')}</Text>
+          </View>
+        </RippleButton>
       );
     }
 
@@ -139,7 +111,7 @@ class ActionModal extends Component {
   render() {
     return (
       <Modal
-        animationType={'fade'}
+        animationType={'slide'}
         transparent
         visible={this.state.modalState}
         onRequestClose={this.closeModal}
@@ -148,7 +120,11 @@ class ActionModal extends Component {
           <TouchableWithoutFeedback onPress={this.closeModal}>
             <View style={styles.tappableOverlay} />
           </TouchableWithoutFeedback>
-          {this.renderButtons()}
+          <View style={styles.modalBox}>
+            {this.renderTitle()}
+            {this.renderList()}
+            {this.renderAction()}
+          </View>
         </View>
       </Modal>
     );

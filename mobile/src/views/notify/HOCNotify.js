@@ -7,7 +7,7 @@ import Notify from './Notify';
 class HOCNotify extends PureComponent {
   constructor(props) {
     super(props);
-    const notify = props.notify || fromJS({});
+    const notify = fromJS(props.notify) || fromJS({});
 
     this.state = {
       notify: fromJS({
@@ -66,25 +66,27 @@ class HOCNotify extends PureComponent {
       (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
     );
 
-    const userInfoToActions = sortedUsers.map((u) => {
-      const selected = this.state.notify.get('assignees').indexOf(u.get('id'));
+    const userInfoToActions = sortedUsers.map((u, i) => {
+      const selected = this.state.notify.get('assignees').indexOf(u.get('id')) === 0;
 
       const obj = {
         title: `${msgGen.users.getFirstName(u.get('id'))} ${msgGen.users.getLastName(u.get('id'))}`,
-        props: {
-          user: u,
-          selected,
+        selected,
+        index: i,
+        leftIcon: {
+          user: u.get('id'),
         },
       };
 
       return obj;
-    }).toArray();
+    });
 
     if (index === 0) {
       const modal = {
         title: 'Assign People',
         onClick: this.onModalAction,
-        actions: userInfoToActions,
+        multiple: 'Assign',
+        items: userInfoToActions,
       };
 
       showModal(modal);
@@ -114,8 +116,6 @@ class HOCNotify extends PureComponent {
   render() {
     const { me, goal } = this.props;
     const { notify } = this.state;
-
-    console.log(notify.toJS());
 
     return <Notify me={me} goal={goal} delegate={this} notify={notify} />;
   }

@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     top: 33,
-    // backgroundColor: 'yellow',
   },
   breadcrumb: {
     flexDirection: 'row',

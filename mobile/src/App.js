@@ -11,7 +11,7 @@ import HOCAndroidBackButton from './components/android-back-button/HOCAndroidBac
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
 import LoadingModal from './modals/LoadingModal';
-import ActionModal from './modals/ActionModal';
+import ActionModal from './modals/action-modal/ActionModal';
 import DevTools from './components/dev-tools/DevTools';
 
 const styles = StyleSheet.create({

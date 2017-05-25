@@ -13,7 +13,7 @@ class HOCGoalOverview extends PureComponent {
     super(props);
     this.state = {
       tabIndex: 0,
-      routeNum: props.lastRoute
+      routeNum: props.lastRoute,
     };
 
     this.closeView = this.closeView.bind(this);
@@ -34,8 +34,35 @@ class HOCGoalOverview extends PureComponent {
     }
   }
   onActionButton(i) {
+    const { goal } = this.props;
+
     if (i === 0) {
-      this.openNotify();
+      const notify = {
+        id: 'Notify',
+        title: 'Notify',
+        props: {
+          goalId: goal.get('id'),
+          notify: {
+            request: true,
+            notification_type: 'feedback',
+          },
+        },
+      };
+
+      this.openNotify(notify);
+    } else if (i === 1) {
+      const notify = {
+        id: 'Notify',
+        title: 'Notify',
+        props: {
+          goalId: goal.get('id'),
+          notify: {
+            notification_type: 'default',
+          },
+        },
+      };
+
+      this.openNotify(notify);
     }
   }
   onChangeTab(index) {
@@ -47,17 +74,8 @@ class HOCGoalOverview extends PureComponent {
     const { goal } = this.props;
     return new GoalsUtil(goal);
   }
-  openNotify() {
-    const { navPush, goal } = this.props;
-
-    const notify = {
-      id: 'Notify',
-      title: 'Notify',
-      props: {
-        title: 'Ask for',
-        goalId: goal.get('id'),
-      },
-    };
+  openNotify(notify) {
+    const { navPush } = this.props;
 
     navPush(notify);
   }
@@ -71,7 +89,7 @@ class HOCGoalOverview extends PureComponent {
       onClick: this.onActionButton,
       buttons: [
         { text: 'Ask for' },
-        { text: 'Give' },
+        { text: 'Notify' },
       ],
     });
   }

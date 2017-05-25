@@ -1,7 +1,7 @@
 import {
   StyleSheet,
   Dimensions,
-  Platform
+  Platform,
 } from 'react-native';
 
 const { width: ww, height: wh } = Dimensions.get('window');
@@ -11,8 +11,8 @@ const VIEW_WIDTH = ww;
 
 export const viewSize = {
   width: VIEW_WIDTH,
-  height: VIEW_HEIGHT
-}
+  height: VIEW_HEIGHT,
+};
 
 export const colors = {
   deepBlue5: '#f2f3f4',
@@ -51,7 +51,8 @@ export const colors = {
   greenColor: '#3ADA8B',
   redColor: '#FC461E',
   yellowColor: '#FFD776',
-  bgColor: '#fff',
+  bgColor: '#ffffff',
   bgGradientFrom: '#72bbee',
   bgGradientTo: '#4e70c5',
 }
+;
