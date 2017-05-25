@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 import HOCHeader from '../../components/header/HOCHeader';
 import { attachmentIconForService, setupCachedCallback, setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
@@ -124,6 +124,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 25,
     textAlignVertical: 'top',
+    ...Platform.select({
+      ios: {
+        height: 25 * 8,
+      },
+    }),
   },
   attachment: {
     flex: 1,
