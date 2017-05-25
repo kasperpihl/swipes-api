@@ -13,15 +13,15 @@ class Notify extends Component {
     this.state = { text: '' };
 
     setupDelegate(this);
-    this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment');
+    this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment', 'onChangeText');
   }
   renderHeader() {
     return <HOCHeader title="Ask for something" />;
   }
   renderWriteHandoff() {
-    const { me } = this.props;
+    const { me, notify } = this.props;
     const assignees = [`${me.get('id')}`];
-
+    const placeholder = msgGen.notify.getWriteMessagePlaceholder(notify);
     return (
       <View style={styles.handoff}>
         <View style={styles.profileImage}>
@@ -32,14 +32,10 @@ class Notify extends Component {
             numberOfLines={3}
             multiline
             autoFocus
-            placeholder=""
+            placeholder={placeholder}
             autoCapitalize="sentences"
-            onChange={(event) => {
-              this.setState({
-                text: event.nativeEvent.text,
-              });
-            }}
-            value={this.state.text}
+            onChange={this.onChangeText}
+            value={this.props.notify.get('message')}
             placeholderTextColor={colors.deepBlue50}
             style={styles.input}
             underlineColorAndroid="rgba(255,255,255,0)"
@@ -49,14 +45,14 @@ class Notify extends Component {
     );
   }
   renderAttachmentList() {
-    const { goal } = this.props;
+    const { goal, notify } = this.props;
     const attachmentOrder = goal.get('attachment_order');
     const attachments = goal.get('attachments');
 
     const attachmentsUi = attachmentOrder.map((att, i) => {
       const at = attachments.get(att);
       const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
-
+      const isFlagged = notify.get('flags').contains(at.get('id'));
       return (
         <View style={styles.attachment} key={att}>
           <RippleButton rippleColor={colors.deepBlue60} style={styles.attachment} rippleOpacity={0.8} onPress={this.onOpenAttachmentCached(at)}>
@@ -67,7 +63,7 @@ class Notify extends Component {
               <Text style={styles.label} ellipsizeMode="tail">{at.get('title')}</Text>
             </View>
           </RippleButton>
-          <RippleButton rippleColor={colors.red100} style={styles.flagButton} rippleOpacity={0.8} onPress={this.onFlagAttachmentCached(at)}>
+          <RippleButton rippleColor={colors.red100} style={styles.flagButton} rippleOpacity={0.8} onPress={this.onFlagAttachmentCached(at.get('id'))}>
             <View style={styles.flagIcon}>
               <Icon name="Flag" width="24" height="24" fill={colors.deepBlue60} />
             </View>
