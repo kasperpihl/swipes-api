@@ -16,10 +16,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderLeftWidth: 1,
-    borderLeftColor: colors.deepBlue5,
-    borderRightWidth: 1,
-    borderRightColor: colors.deepBlue5,
   },
   iconButton: {
     width: 70,

@@ -29,7 +29,7 @@ class Notify extends Component {
         </View>
         <View style={styles.handoffInput}>
           <TextInput
-            numberOfLines={8}
+            numberOfLines={5}
             multiline
             autoFocus
             placeholder=""
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     ...Platform.select({
       ios: {
-        height: 25 * 8,
+        height: 25 * 5,
       },
     }),
   },
