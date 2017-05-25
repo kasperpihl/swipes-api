@@ -239,24 +239,27 @@ const notifyGoalNotifySendPushNotifications = (req, res, next) => {
     user_ids,
     group_id,
     notification_type,
+    notifyMyself,
   } = res.locals;
   const historyIndex = getHistoryIndex(goal.history, group_id);
   const history = goal.history[historyIndex];
   const filters = [];
 
   user_ids.forEach((userId) => {
-    if (filters.length > 0) {
+    if (notifyMyself || userId !== user.id) {
+      if (filters.length > 0) {
+        filters.push({
+          operator: 'OR',
+        });
+      }
+
       filters.push({
-        operator: 'OR',
+        field: 'tag',
+        key: 'swipesUserId',
+        relation: '=',
+        value: userId,
       });
     }
-
-    filters.push({
-      field: 'tag',
-      key: 'swipesUserId',
-      relation: '=',
-      value: userId,
-    });
   });
 
   const from = user.profile.first_name;
