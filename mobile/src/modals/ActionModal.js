@@ -94,7 +94,7 @@ class ActionModal extends Component {
         onPress={this.onCTAClick}
       >
         <View style={styles.cta}>
-          <Text style={styles.ctaTitle}>{this.state.assignees.get('selectedAssignees').size ? 'Reassign' : 'Assign'}</Text>
+          <Text style={styles.ctaTitle}>Assign</Text>
         </View>
       </RippleButton>
     );

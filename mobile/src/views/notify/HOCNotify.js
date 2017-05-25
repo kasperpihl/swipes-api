@@ -46,17 +46,13 @@ class HOCNotify extends Component {
     this.updateHandoff(notify.set('message', text));
   }
   onModalAction(data) {
-    console.log(data);
-    // let { notify } = this.state;
-    // const uId = props.user.get('id');
+    let { notify } = this.state;
+    const { showModal } = this.props;
 
-    // if (notify.get('assignees').includes(uId)) {
-    //   notify = notify.updateIn(['assignees'], fl => fl.filter(f => f !== uId));
-    // } else {
-    //   notify = notify.updateIn(['assignees'], fl => fl.push(uId));
-    // }
+    notify = notify.setIn(['assignees'], data.toJS());
 
-    // this.updateHandoff(notify);
+    this.updateHandoff(notify);
+    showModal();
   }
   onActionButton(index) {
     const { users, showModal } = this.props;
@@ -103,6 +99,8 @@ class HOCNotify extends Component {
   render() {
     const { me, goal } = this.props;
     const { notify } = this.state;
+
+    console.log(notify.toJS());
 
     return <Notify me={me} goal={goal} delegate={this} notify={notify} />;
   }

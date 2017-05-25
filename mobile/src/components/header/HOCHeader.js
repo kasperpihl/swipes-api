@@ -52,13 +52,18 @@ class Header extends Component {
     );
   }
   render() {
-    const { tabs } = this.props;
+    const { tabs, children } = this.props;
 
     const containerStyles = tabs ? styles.containerWithtabs : styles.container;
 
     return (
       <View style={containerStyles}>
-        <Text style={styles.title}>{this.props.title}</Text>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>{this.props.title}</Text>
+          <View style={styles.titleChildren}>
+            {children}
+          </View>
+        </View>
         {this.renderTabs()}
       </View>
     );
@@ -81,7 +86,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgColor,
     paddingTop: 54,
   },
+  titleWrapper: {
+    height: 50,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  titleChildren: {
+  },
   title: {
+    flex: 1,
     color: colors.deepBlue100,
     fontSize: 30,
   },

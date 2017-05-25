@@ -16,7 +16,18 @@ class Notify extends Component {
     this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment', 'onChangeText');
   }
   renderHeader() {
-    return <HOCHeader title="Ask for something" />;
+    const { notify } = this.props;
+    const assignees = notify.get('assignees');
+
+    return (
+      <HOCHeader title="Ask for something">
+        {assignees.length ? (
+          <HOCAssigning assignees={assignees} />
+        ) : (
+            undefined
+          )}
+      </HOCHeader>
+    );
   }
   renderWriteHandoff() {
     const { me, notify } = this.props;
