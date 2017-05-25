@@ -12,6 +12,7 @@ import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
 import LoadingModal from './modals/LoadingModal';
 import ActionModal from './modals/ActionModal';
+import DevTools from './components/dev-tools/DevTools';
 
 const styles = StyleSheet.create({
   app: {
@@ -132,9 +133,8 @@ class App extends PureComponent {
     return undefined;
   }
   renderKeyboardSpacer() {
-
     if (Platform.OS === 'ios') {
-      return <KeyboardSpacer />
+      return <KeyboardSpacer />;
     }
 
     return undefined;
@@ -154,6 +154,7 @@ class App extends PureComponent {
         <LoadingModal />
         <ActionModal />
         <HOCTabNavigation />
+        {/* <DevTools />*/}
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}
       </View>

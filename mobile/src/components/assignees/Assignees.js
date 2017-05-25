@@ -113,17 +113,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   initialWrapper: {
-    width: 32,
-    height: 32,
+    width: 33,
+    height: 33,
     borderRadius: 16,
     backgroundColor: colors.deepBlue100,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: -9,
   },
   initial: {
     fontSize: 15,
     color: 'white',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   morePeople: {
     width: 32,

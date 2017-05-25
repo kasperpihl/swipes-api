@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 import HOCHeader from '../../components/header/HOCHeader';
 import { attachmentIconForService, setupDelegate } from '../../../swipes-core-js/classes/utils';
@@ -7,7 +7,7 @@ import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
 import { colors } from '../../utils/globalStyles';
 
-class Notify extends Component {
+class Notify extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { text: '' };
@@ -46,7 +46,7 @@ class Notify extends Component {
             placeholder={placeholder}
             autoCapitalize="sentences"
             onChange={this.onChangeText}
-            value={this.props.notify.get('message')}
+            initialValue={this.props.notify.get('message')}
             placeholderTextColor={colors.deepBlue50}
             style={styles.input}
             underlineColorAndroid="rgba(255,255,255,0)"

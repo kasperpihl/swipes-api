@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import * as a from '../../actions';
 import Notify from './Notify';
 
-class HOCNotify extends Component {
+class HOCNotify extends PureComponent {
   constructor(props) {
     super(props);
     const notify = props.notify || fromJS({});
@@ -26,6 +26,11 @@ class HOCNotify extends Component {
   }
   componentDidMount() {
     this.renderActionButtons();
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.notify.get('assignees') !== prevState.notify.get('assignees')) {
+      this.renderActionButtons();
+    }
   }
   onOpenAttachment(att) {
     const { preview } = this.props;
@@ -89,11 +94,21 @@ class HOCNotify extends Component {
     this.setState({ notify });
   }
   renderActionButtons() {
+    const { notify } = this.state;
+    let actionButtons = [
+      { text: 'Assign people' },
+    ];
+
+    if (notify && notify.get('assignees').length) {
+      actionButtons = [
+        { text: 'Assign people' },
+        { text: 'Notify' },
+      ];
+    }
+
     this.props.setActionButtons({
       onClick: this.onActionButton,
-      buttons: [
-        { text: 'Assign people' },
-      ],
+      buttons: actionButtons,
     });
   }
   render() {
