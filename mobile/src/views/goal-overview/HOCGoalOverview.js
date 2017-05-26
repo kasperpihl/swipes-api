@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
+import * as a from '../../actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCHistory from './HOCHistory';
@@ -18,6 +20,7 @@ class HOCGoalOverview extends PureComponent {
 
     this.closeView = this.closeView.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
+    this.onModalAskForAction = this.onModalAskForAction.bind(this);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -33,23 +36,60 @@ class HOCGoalOverview extends PureComponent {
       this.renderActionButtons();
     }
   }
-  onActionButton(i) {
+  onModalAskForAction(i) {
     const { goal } = this.props;
+    const type = i.get('title');
+
+    const notify = {
+      id: 'Notify',
+      title: 'Notify',
+      props: {
+        goalId: goal.get('id'),
+        notify: {
+          notification_type: type,
+          required: true,
+        },
+      },
+    };
+
+    this.openNotify(notify);
+  }
+  onActionButton(i) {
+    const { goal, showModal } = this.props;
 
     if (i === 0) {
-      const notify = {
-        id: 'Notify',
-        title: 'Notify',
-        props: {
-          goalId: goal.get('id'),
-          notify: {
-            request: true,
-            notification_type: 'feedback',
+      const modal = {
+        title: 'Ask for',
+        onClick: this.onModalAskForAction,
+        items: fromJS([
+          {
+            title: 'Update',
+            leftIcon: {
+              icon: 'Status',
+            },
           },
-        },
+          {
+            title: 'Feedback',
+            leftIcon: {
+              icon: 'Feedback',
+            },
+          },
+          {
+            title: 'Assets',
+            leftIcon: {
+              icon: 'Assets',
+            },
+          },
+          {
+            title: 'Decision',
+            leftIcon: {
+              icon: 'Decision',
+            },
+          },
+        ]),
       };
 
-      this.openNotify(notify);
+      showModal(modal);
     } else if (i === 1) {
       const notify = {
         id: 'Notify',
@@ -182,5 +222,5 @@ function mapStateToProps(state, ownProps) {
   };
 }
 export default connect(mapStateToProps, {
-
+  showModal: a.modals.show,
 })(HOCGoalOverview);

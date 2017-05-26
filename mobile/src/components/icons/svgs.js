@@ -1,5 +1,5 @@
 import React from 'react';
-import { G, Path, Polygon, Circle, Rect, Polyline } from 'react-native-svg';
+import { G, Path, Polygon, Circle, Rect, Line, Polyline } from 'react-native-svg';
 
 const DEF_VIEWBOX = '0 0 24 24';
 
@@ -79,6 +79,15 @@ export default {
   },
   CreateNote: {
 
+  },
+  Decision: {
+    svg: (
+      <G>
+        <Path d="M17,8a4,4,0,1,0,4,4A4.00422,4.00422,0,0,0,17,8Zm0,6a2,2,0,1,1,2-2A2.00266,2.00266,0,0,1,17,14Z" />
+        <Polygon points="9.293,8.293,7,10.586,4.707,8.293,3.293,9.707,5.586,12,3.293,14.293,4.707,15.707,7,13.414,9.293,15.707,10.707,14.293,8.414,12,10.707,9.707,9.293,8.293" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
   },
   Deliver: {
 

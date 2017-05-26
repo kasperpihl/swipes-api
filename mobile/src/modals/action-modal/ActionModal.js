@@ -151,15 +151,15 @@ const styles = StyleSheet.create({
     top: 0,
   },
   modalBox: {
-    width: 300,
-    height: 400,
+    width: 275,
+    height: viewSize.height * 0.5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.bgColor,
     elevation: 5,
   },
   titleWrapper: {
-    width: 300,
+    width: 275,
     height: 60,
     justifyContent: 'center',
     paddingHorizontal: 15,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     color: colors.deepBlue100,
   },
   button: {
-    width: 300,
+    width: 275,
     height: 60,
     flexDirection: 'row',
     alignItems: 'center',
@@ -192,13 +192,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ctaButton: {
-    width: 300,
+    width: 275,
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
   },
   cta: {
-    width: 300,
+    width: 275,
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
