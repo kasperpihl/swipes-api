@@ -6,6 +6,7 @@ import {
 import {
   valBody,
   valResponseAndSend,
+  mapLocals,
 } from '../utils';
 import {
   meUpdateSettings,
@@ -75,6 +76,14 @@ notAuthed.post('/me.sendResetEmail',
   valBody({
     email: string.format('email').require(),
   }),
+  mapLocals(
+    ['email'],
+    (setLocals, email) => {
+      setLocals({
+        email: email.toLowerCase(),
+      });
+    },
+  ),
   meAccountExists,
   meCreateResetToken,
   meResetEmailQueueMessage,
