@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
+import { goals } from '../../../swipes-core-js/actions';
 import * as a from '../../actions';
 import Notify from './Notify';
 
@@ -60,7 +61,8 @@ class HOCNotify extends PureComponent {
     showModal();
   }
   onActionButton(index) {
-    const { users, showModal } = this.props;
+    const { users, showModal, navPop, goal, goalNotify } = this.props;
+    const { notify } = this.state;
 
     const sortedUsers = users.sort(
       (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
@@ -90,6 +92,13 @@ class HOCNotify extends PureComponent {
       };
 
       showModal(modal);
+    } else if (index === 1) {
+      goalNotify(goal.get('id'), notify).then((res) => {
+        if (res && res.ok) {
+          navPop();
+        } else {
+        }
+      });
     }
   }
   updateHandoff(notify) {
@@ -132,4 +141,5 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   preview: a.links.preview,
   showModal: a.modals.show,
+  goalNotify: goals.notify,
 })(HOCNotify);
