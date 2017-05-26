@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     minHeight: 50,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 15,
   },
   icon: {
     paddingRight: 18,

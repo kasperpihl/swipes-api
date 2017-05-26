@@ -24,11 +24,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bgColor,
   },
-  bottomBar: {
-    width: viewSize.width,
-    height: 60,
-    backgroundColor: 'green',
-  },
   page: {
     width: viewSize.width,
     backgroundColor: 'red',

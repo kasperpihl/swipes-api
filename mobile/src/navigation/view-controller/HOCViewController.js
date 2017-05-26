@@ -15,9 +15,11 @@ const styles = StyleSheet.create({
   viewController: {
     width: viewSize.width,
     flex: 1,
+    backgroundColor: 'white',
   },
   content: {
     flex: 1,
+    backgroundColor: 'white',
   },
 });
 
@@ -46,7 +48,7 @@ class HOCViewController extends PureComponent {
     const isActive = routes.size;
 
     return (
-      <View style={styles.viewController}>
+      <View style={styles.viewController} key={activeSliderIndex}>
         <HOCBreadCrumbs sliderIndex={activeSliderIndex} />
         <View style={styles.content}>
           <Comp
