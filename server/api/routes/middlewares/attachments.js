@@ -34,7 +34,7 @@ const attachmentsCreate = valLocals('attachmentsCreate', {
   };
 
   if (link.service.type === 'url') {
-    if (/^(f|ht)tps?:\/\//.test(link.service.type) === false) {
+    if (/^(f|ht)tps?:\/\//.test(link.service.id) === false) {
       link.service.id = `http://${link.service.id}`;
     }
   }

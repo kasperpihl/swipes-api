@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
-import { apiRequest, bindAll } from 'swipes-core-js/classes/utils';
+import { apiRequest, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
+import SignupInput from 'src/react/signup-page/SignupInput';
+import Icon from 'Icon';
 
 import './styles/reset.scss';
 
@@ -8,94 +10,109 @@ class Reset extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      loading: true,
       newPass: '',
     }
-    bindAll(this, ['onReset', 'onChange']);
+    setupLoading(this);
+    bindAll(this, ['onReset', 'onChange', 'onKeyDown']);
   }
   componentWillMount() {
+    this.setLoading('verify');
     apiRequest('me.verifyResetToken', {
       token: getURLParameter('token')
     }).then((res) => {
       if(res && res.ok) {
-        this.setState({
-          loading: false,
-        });
+        this.clearLoading('verify');
       } else {
-        this.setState({
-          error: 'This token is no longer valid',
-          loading: false,
-        })
+        this.clearLoading('verify',);
+        this.clearLoading('reset', 'This token is no longer valid');
       }
-      console.log(res);
     })
+  }
+  onKeyDown(e){
+    if(e.keyCode === 13) {
+      this.onReset();
+    }
   }
   onReset() {
     const { newPass } = this.state;
+    if(!newPass.length) {
+      return;
+    }
+    this.setLoading('reset');
     apiRequest('me.resetPassword', {
       token: getURLParameter('token'),
       password: newPass,
     }).then((res) => {
       if(res && res.ok) {
-        this.setState({
-          success: 'Your password has been reset. Try login again now.',
-        });
+        this.clearLoading('reset', 'Your password has been reset. Try login again now.');
       } else {
-        this.setState({
-          error: 'Something went wrong',
-          loading: false,
-        })
+        this.clearLoading('reset', 'Something went wrong');
       }
       console.log(res);
     })
   }
-  onChange(e) {
+  onChange(key, e) {
     this.setState({newPass: e.target.value});
   }
   renderLoading() {
-    const { loading } = this.state;
-    if(!loading){
+    if(!this.isLoading('verify')){
       return undefined;
     }
     return (
       <div className="loading">Loading</div>
     )
   }
-  renderFields() {
-    const { loading, error, success, newPass } = this.state;
-    if(loading || error || success) {
+  renderForm() {
+    const successLabel = this.getLoading('reset').successLabel;
+    if(this.isLoading('verify') || successLabel){
       return undefined;
     }
     return (
-      <div className="fields">
-        <input
-          placeholder="New password"
-          type="password"
-          onChange={this.onChange}
-          value={newPass}
-        />
-        <button onClick={this.onReset} disabled={!newPass.length}>
-          Reset
-        </button>
+      <div className="form">
+        <h6>Reset password Swipes Workspace</h6>
+        {this.renderInputField()}
+        {this.renderButton()}
       </div>
     )
   }
-  renderError() {
-    const { error } = this.state;
-    if(!error) {
-      return undefined;
-    }
+  renderInputField() {
+    const { newPass } = this.state;
+
     return (
-      <div className="error">{error}</div>
+      <SignupInput
+        type="password"
+        placeholder="Your new password"
+        delegate={this}
+        value={newPass}
+        inputKey="password"
+        props={{
+          onKeyDown: this.onKeyDown,
+          autoFocus: true,
+        }}
+      />
+    );
+  }
+  renderButton() {
+
+    return (
+      <div className="button" ref="button" onClick={this.onReset}>
+        {
+          this.isLoading('reset') ? (
+            <Icon icon="loader" width="12" height="12" />
+          ) : (
+            'Reset'
+          )
+        }
+      </div>
     )
   }
   renderSuccess() {
-    const { success } = this.state;
-    if(!success) {
+    const successLabel = this.getLoading('reset').successLabel;
+    if(!successLabel) {
       return undefined;
     }
     return (
-      <div className="success">{success}</div>
+      <div className="success">{successLabel}</div>
     )
   }
 
@@ -103,8 +120,7 @@ class Reset extends PureComponent {
     return (
       <div className="reset">
         {this.renderLoading()}
-        {this.renderFields()}
-        {this.renderError()}
+        {this.renderForm()}
         {this.renderSuccess()}
       </div>
     )
