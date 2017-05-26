@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { NavigationExperimental, View, StyleSheet, Platform, Keyboard } from 'react-native';
 import * as a from '../../actions';
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 
 
-class HOCViewController extends Component {
+class HOCViewController extends PureComponent {
   constructor(props, context) {
     super(props, context);
 
@@ -43,7 +43,7 @@ class HOCViewController extends Component {
     const { route } = sceneProps.scene;
     const { activeSliderIndex, routes, setActionButtons } = this.props;
     const Comp = views[route.id];
-    let isActive = routes.size;
+    const isActive = routes.size;
 
     return (
       <View style={styles.viewController}>

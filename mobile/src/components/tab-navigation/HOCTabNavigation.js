@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import { View, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import * as a from '../../actions';
-import Icon from '../icons/Icon';
-import RippleButton from '../ripple-button/RippleButton';
 import HOCActionBar from './HOCActionBar';
+import TabNavigationItem from './TabNavigationItem';
 import { colors, viewSize } from '../../utils/globalStyles';
 
 const styles = StyleSheet.create({
@@ -24,11 +23,6 @@ const styles = StyleSheet.create({
     borderTopColor: colors.deepBlue5,
     zIndex: 100,
     backgroundColor: colors.bgColor,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   slider: {
     position: 'absolute',
@@ -98,13 +92,7 @@ class HOCTabNavigation extends PureComponent {
     const navItems = rootRoutes.map((r, i) => {
       const fill = i === activeSliderIndex ? colors.blue100 : colors.deepBlue20;
 
-      return (
-        <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={styles.navItem} key={`navbutton-${i}`} onPress={this.handlePressCached(i)}>
-          <View style={styles.navItem}>
-            <Icon name={r.icon} width="24" height="24" fill={fill} />
-          </View>
-        </RippleButton>
-      );
+      return <TabNavigationItem icon={r.icon} index={i} fill={fill} key={`navbutton-${i}`} delegate={this} />;
     });
 
     return navItems;
