@@ -26,6 +26,7 @@ class ActionModalList extends Component {
     return (
       <ImmutableListView
         style={styles.list}
+        keyboardShouldPersistTaps="always"
         immutableData={listItems}
         renderRow={this.renderlistItem}
       />

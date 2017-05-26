@@ -20,6 +20,7 @@ class HOCNotify extends PureComponent {
         notification_type: notify.get('notification_type') || 'update',
       }),
       routeNum: props.lastRoute,
+      hasLoaded: false,
     };
 
     this.onActionButton = this.onActionButton.bind(this);
@@ -27,11 +28,17 @@ class HOCNotify extends PureComponent {
   }
   componentDidMount() {
     this.renderActionButtons();
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.notify.get('assignees') !== prevState.notify.get('assignees')) {
       this.renderActionButtons();
     }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
   }
   onOpenAttachment(att) {
     const { preview } = this.props;
@@ -52,7 +59,6 @@ class HOCNotify extends PureComponent {
     this.updateHandoff(notify.set('message', text));
   }
   onModalAction(sortedUsers, data) {
-    console.log(sortedUsers.toJS());
     let { notify } = this.state;
     const { showModal } = this.props;
     notify = notify.setIn(['assignees'], data.map(i => sortedUsers.getIn([i, 'id'])));
@@ -93,10 +99,13 @@ class HOCNotify extends PureComponent {
 
       showModal(modal);
     } else if (index === 1) {
+      this.setState({ hasLoaded: false });
       goalNotify(goal.get('id'), notify).then((res) => {
         if (res && res.ok) {
+          this.setState({ hasLoaded: true });
           navPop();
         } else {
+          this.setState({ hasLoaded: true });
         }
       });
     }
@@ -124,9 +133,9 @@ class HOCNotify extends PureComponent {
   }
   render() {
     const { me, goal } = this.props;
-    const { notify } = this.state;
+    const { notify, hasLoaded } = this.state;
 
-    return <Notify me={me} goal={goal} delegate={this} notify={notify} />;
+    return <Notify me={me} hasLoaded={hasLoaded} goal={goal} delegate={this} notify={notify} />;
   }
 }
 

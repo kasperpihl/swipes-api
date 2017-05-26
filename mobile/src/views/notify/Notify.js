@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, ActivityIndicator, Keyboard, Platform } from 'react-native';
 import HOCHeader from '../../components/header/HOCHeader';
 import { attachmentIconForService, setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
@@ -10,10 +10,18 @@ import { colors } from '../../utils/globalStyles';
 class Notify extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { text: '' };
+    this.state = { text: '', hasLoaded: false };
 
     setupDelegate(this);
     this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment', 'onChangeText');
+  }
+  componentDidMount() {
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
   }
   renderHeader() {
     const { notify } = this.props;
@@ -90,16 +98,34 @@ class Notify extends PureComponent {
 
     return attachmentsUi;
   }
+  renderListLoader() {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
+  }
+  renderContent() {
+    const { hasLoaded } = this.state;
+
+    if (!hasLoaded) {
+      return this.renderListLoader();
+    }
+
+    return (
+      <View style={styles.container}>
+        {this.renderHeader()}
+        <ScrollView>
+          {this.renderWriteHandoff()}
+          {this.renderAttachmentList()}
+        </ScrollView>
+      </View>
+    );
+  }
   render() {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          {this.renderHeader()}
-          <ScrollView>
-            {this.renderWriteHandoff()}
-            {this.renderAttachmentList()}
-          </ScrollView>
-        </View>
+        {this.renderContent()}
       </TouchableWithoutFeedback>
     );
   }
@@ -109,6 +135,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.bgColor,
+  },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   handoff: {
     flex: 1,

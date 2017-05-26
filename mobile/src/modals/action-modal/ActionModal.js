@@ -40,9 +40,9 @@ class ActionModal extends PureComponent {
         return dItem;
       }));
       this.setState({ modal });
+    } else {
+      modal.get('onClick')(item);
     }
-
-    modal.get('onClick')(item);
   }
   onMultipleClick() {
     const { modal } = this.state;
