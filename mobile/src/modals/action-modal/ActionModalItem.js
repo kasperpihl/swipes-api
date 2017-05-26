@@ -50,22 +50,17 @@ class ActionModalItem extends Component {
   }
   renderLeftIcon() {
     const { item } = this.props;
-    let newItem = item;
 
-    if (Iterable.isIterable(item)) {
-      newItem = item.toJS();
-    }
-
-    if (newItem.leftIcon.user) {
+    if (item.getIn(['leftIcon', 'user'])) {
       return (
         <View style={styles.leftIcon}>
-          <HOCAssigning assignees={[newItem.leftIcon.user]} />
+          <HOCAssigning assignees={[item.getIn(['leftIcon', 'user'])]} />
         </View>
       );
-    } else if (newItem.leftIcon.icon) {
+    } else if (item.getIn(['leftIcon', 'icon'])) {
       return (
         <View style={styles.leftIcon}>
-          <Icon name={newItem.leftIcon.icon} width="24" height="24" fill={colors.deepBlue80} />
+          <Icon name={item.getIn(['leftIcon', 'icon'])} width="24" height="24" fill={colors.deepBlue80} />
         </View>
       );
     }
@@ -74,28 +69,18 @@ class ActionModalItem extends Component {
   }
   renderTitle() {
     const { item } = this.props;
-    let newItem = item;
-
-    if (Iterable.isIterable(item)) {
-      newItem = item.toJS();
-    }
 
     return (
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>{newItem.title}</Text>
+        <Text style={styles.title}>{item.get('title')}</Text>
       </View>
     );
   }
   renderSelector() {
-    const { multiple, item, selectedItems } = this.props;
-    let newItem = item;
-
-    if (Iterable.isIterable(item)) {
-      newItem = item.toJS();
-    }
+    const { multiple, item } = this.props;
 
     if (multiple) {
-      const isSelected = newItem.selected;
+      const isSelected = item.get('selected');
       const selectedBorder = isSelected ? 'rgba(255,255,255,0)' : colors.deepBlue20;
 
       return (
@@ -112,7 +97,7 @@ class ActionModalItem extends Component {
     return undefined;
   }
   render() {
-    const { item, selectedItems } = this.props;
+    const { item } = this.props;
 
     return (
       <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} style={styles.container} onPress={this.onItemPressCached(item)}>

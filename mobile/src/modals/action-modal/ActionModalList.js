@@ -22,19 +22,11 @@ class ActionModalList extends Component {
     return <ActionModalItem item={item} multiple={multiple} delegate={delegate} />;
   }
   render() {
-    const { selectedItems, listItems, multiple } = this.props;
+    const { listItems, multiple } = this.props;
     return (
       <ImmutableListView
         style={styles.list}
-        immutableData={listItems.map((item) => {
-          if (selectedItems) {
-            item.selected = selectedItems.includes(item.index);
-
-            return Object.assign({}, item);
-          }
-
-          return item;
-        })}
+        immutableData={listItems}
         renderRow={this.renderlistItem}
       />
     );

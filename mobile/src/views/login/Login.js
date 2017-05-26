@@ -32,7 +32,7 @@ class Login extends PureComponent {
             style={styles.input}
             onChangeText={email => this.setState({ email })}
             value={this.state.email}
-            placeholder="fuck"
+            placeholder="email"
             returnKeyType="next"
           />
           <TextInput
@@ -40,6 +40,7 @@ class Login extends PureComponent {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
             returnKeyType="go"
+            placeholder="password"
             secureTextEntry
             onSubmitEditing={this.signIn}
           />

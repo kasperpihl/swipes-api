@@ -51,11 +51,11 @@ class HOCNotify extends PureComponent {
     const { notify } = this.state;
     this.updateHandoff(notify.set('message', text));
   }
-  onModalAction(data) {
+  onModalAction(sortedUsers, data) {
+    console.log(sortedUsers.toJS());
     let { notify } = this.state;
     const { showModal } = this.props;
-
-    notify = notify.setIn(['assignees'], data.toJS());
+    notify = notify.setIn(['assignees'], data.map(i => sortedUsers.getIn([i, 'id'])));
 
     this.updateHandoff(notify);
     showModal();
@@ -66,10 +66,10 @@ class HOCNotify extends PureComponent {
 
     const sortedUsers = users.sort(
       (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
-    );
+    ).toList();
 
     const userInfoToActions = sortedUsers.map((u, i) => {
-      const selected = this.state.notify.get('assignees').indexOf(u.get('id')) === 0;
+      const selected = this.state.notify.get('assignees').indexOf(u.get('id')) > -1;
 
       const obj = {
         title: `${msgGen.users.getFirstName(u.get('id'))} ${msgGen.users.getLastName(u.get('id'))}`,
@@ -80,13 +80,13 @@ class HOCNotify extends PureComponent {
         },
       };
 
-      return obj;
+      return fromJS(obj);
     });
 
     if (index === 0) {
       const modal = {
         title: 'Assign People',
-        onClick: this.onModalAction,
+        onClick: this.onModalAction.bind(this, sortedUsers),
         multiple: 'Assign',
         items: userInfoToActions,
       };

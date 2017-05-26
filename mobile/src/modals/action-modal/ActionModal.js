@@ -14,8 +14,7 @@ class ActionModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      modalState: false,
-
+      modal: null,
     };
 
     this.closeModal = this.closeModal.bind(this);
@@ -23,40 +22,38 @@ class ActionModal extends PureComponent {
     // this.onButtonClick = setupCachedCallback(this.onButtonClick, this);
   }
   componentWillReceiveProps(nextProps) {
-    const { modalState } = this.state;
+    const { modal } = this.state;
 
-    if (nextProps.modal.size > 1 && !modalState) {
-      this.setState({ modalState: true });
-
-      if (nextProps.modal.get('multiple')) {
-        this.setState({ selectedItems: fromJS([]) });
-      }
-    } else if (nextProps.modal.size < 1 && modalState) {
-      this.setState({ modalState: false });
+    if (nextProps.modal.size > 1 && !modal) {
+      this.setState({ modal: nextProps.modal });
+    } else if (nextProps.modal.size < 1 && modal) {
+      this.setState({ modal: null });
     }
   }
   onItemPress(item, e) {
-    const { modal } = this.props;
-
+    let { modal } = this.state;
     if (modal.get('multiple')) {
-      let { selectedItems } = this.state;
-
-      if (selectedItems.includes(item.index)) {
-        selectedItems = selectedItems.delete(selectedItems.indexOf(item.index));
-      } else {
-        selectedItems = selectedItems.push(item.index);
-      }
-
-      this.setState({ selectedItems });
-    } else {
-      modal.get('onClick')(item, e);
+      modal = modal.updateIn(['items'], items => items.map((dItem, i) => {
+        if (item.get('index') === dItem.get('index')) {
+          return dItem.set('selected', !dItem.get('selected'));
+        }
+        return dItem;
+      }));
+      this.setState({ modal });
     }
+
+    modal.get('onClick')(item);
   }
   onMultipleClick() {
-    const { selectedItems } = this.state;
-    const { modal } = this.props;
+    const { modal } = this.state;
+    const selectedIndexes = [];
+    modal.get('items').forEach((item, i) => {
+      if (item.get('selected')) {
+        selectedIndexes.push(i);
+      }
+    });
 
-    modal.get('onClick')(selectedItems);
+    modal.get('onClick')(selectedIndexes);
   }
   closeModal() {
     const { showModal } = this.props;
@@ -64,7 +61,7 @@ class ActionModal extends PureComponent {
     showModal();
   }
   renderTitle() {
-    const { modal } = this.props;
+    const { modal } = this.state;
 
     if (modal && modal.get('title')) {
       return (
@@ -79,17 +76,16 @@ class ActionModal extends PureComponent {
     return undefined;
   }
   renderList() {
-    const { selectedItems } = this.state;
-    const { modal } = this.props;
+    const { modal } = this.state;
 
     if (modal && modal.get('items')) {
-      return <ActionModalList listItems={modal.get('items')} selectedItems={selectedItems} multiple={modal.get('multiple')} delegate={this} />;
+      return <ActionModalList listItems={modal.get('items')} multiple={modal.get('multiple')} delegate={this} />;
     }
 
     return undefined;
   }
   renderAction() {
-    const { modal } = this.props;
+    const { modal } = this.state;
 
     if (modal && modal.get('multiple')) {
       return (
@@ -113,7 +109,7 @@ class ActionModal extends PureComponent {
       <Modal
         animationType={'slide'}
         transparent
-        visible={this.state.modalState}
+        visible={!!this.state.modal}
         onRequestClose={this.closeModal}
       >
         <View style={styles.modal}>

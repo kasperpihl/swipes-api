@@ -37,8 +37,8 @@ class HOCGoalOverview extends PureComponent {
     }
   }
   onModalAskForAction(i) {
-    const { goal } = this.props;
-    const type = i.get('title');
+    const { goal, showModal } = this.props;
+    const type = i.get('title').toLowerCase();
 
     const notify = {
       id: 'Notify',
@@ -47,11 +47,12 @@ class HOCGoalOverview extends PureComponent {
         goalId: goal.get('id'),
         notify: {
           notification_type: type,
-          required: true,
+          request: true,
         },
       },
     };
 
+    showModal();
     this.openNotify(notify);
   }
   onActionButton(i) {
