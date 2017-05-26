@@ -65,7 +65,6 @@
     "staging": "pm2 reload pm2_config.json --env staging && pm2 save",
     "production": "pm2 reload pm2_config.json --env production && pm2 save",
     "server": "nodemon ./dist/index.js",
-    "dashboard": "webpack --config ./webpack.dashboard.js && nodemon ./dist/dashboard.js",
     "start": "npm-run-all --parallel server watch"
   }
 }

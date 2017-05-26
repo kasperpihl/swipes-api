@@ -1,5 +1,4 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import Confetti from 'react-dom-confetti';
 // import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
@@ -9,7 +8,7 @@ import Confetti from 'react-dom-confetti';
 import Icon from 'Icon';
 import './styles/counter.scss';
 
-class HOCCounter extends PureComponent {
+export default class HOCCounter extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,7 +65,7 @@ class HOCCounter extends PureComponent {
       'Content-Type': 'application/json',
       method: 'GET',
     });
-    fetch('http://localhost:1337', { headers }).then((r) => {
+    fetch('https://live.swipesapp.com/v1/dashboardd_awesome_cat_rainbow', { headers }).then((r) => {
       if (r && r.ok) return r.json();
       return Promise.reject({ message: r.statusText, code: r.status });
     }).then((res) => {
@@ -168,10 +167,3 @@ class HOCCounter extends PureComponent {
 // const { string } = PropTypes;
 
 HOCCounter.propTypes = {};
-
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps, {
-})(HOCCounter);
