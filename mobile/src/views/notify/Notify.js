@@ -10,18 +10,10 @@ import { colors } from '../../utils/globalStyles';
 class Notify extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { text: '', hasLoaded: false };
+    this.state = { text: '' };
 
     setupDelegate(this);
     this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment', 'onChangeText');
-  }
-  componentDidMount() {
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
   }
   renderHeader() {
     const { notify } = this.props;
@@ -106,7 +98,7 @@ class Notify extends PureComponent {
     );
   }
   renderContent() {
-    const { hasLoaded } = this.state;
+    const { hasLoaded } = this.props;
 
     if (!hasLoaded) {
       return this.renderListLoader();
