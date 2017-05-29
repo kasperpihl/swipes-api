@@ -274,7 +274,6 @@ const notifyGoalNotifySendPushNotifications = (req, res, next) => {
       group_id,
       organization_id: user.organizations[0],
     },
-    small_icon: 'ic_stat_onesignal_default',
     priority: 10,
     content_available: true,
     android_visibility: 0,
