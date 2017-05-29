@@ -13,6 +13,7 @@ import { colors, viewSize } from './utils/globalStyles';
 import LoadingModal from './modals/LoadingModal';
 import ActionModal from './modals/action-modal/ActionModal';
 import DevTools from './components/dev-tools/DevTools';
+import * as a from './actions';
 
 const styles = StyleSheet.create({
   app: {
@@ -47,6 +48,7 @@ class App extends PureComponent {
   constructor(props) {
     super(props);
     this.onIds = this.onIds.bind(this);
+    this.onOpened = this.onOpened.bind(this);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -54,6 +56,7 @@ class App extends PureComponent {
   }
   componentWillMount() {
     OneSignal.addEventListener('ids', this.onIds);
+    OneSignal.addEventListener('opened', this.onOpened);
     OneSignal.inFocusDisplaying(2);
   }
   componentDidMount() {
@@ -69,6 +72,7 @@ class App extends PureComponent {
   }
   componentWillUnmount() {
     OneSignal.removeEventListener('ids', this.onIds);
+    OneSignal.removeEventListener('opened', this.onOpened);
   }
   onIds(device) {
     if (device.userId) {
@@ -92,6 +96,11 @@ class App extends PureComponent {
     if (myId) {
 
     }
+  }
+  onOpened(openResult) {
+    const { sliderChange } = this.props;
+
+    sliderChange(2);
   }
   renderLoader() {
     const { isHydrated, lastConnect } = this.props;
@@ -181,4 +190,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  sliderChange: a.navigation.sliderChange,
 })(App);
