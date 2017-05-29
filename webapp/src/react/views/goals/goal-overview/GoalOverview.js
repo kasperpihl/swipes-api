@@ -124,7 +124,7 @@ class GoalOverview extends PureComponent {
   }
   renderStepListEditButton() {
     const helper = this.getHelper();
-    if (!helper.getTotalNumberOfSteps()) {
+    if (!helper.getNumberOfSteps()) {
       return undefined;
     }
     const { editMode } = this.props;
@@ -153,7 +153,7 @@ class GoalOverview extends PureComponent {
     const { delegate, editMode } = this.props;
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
-    const totalSteps = helper.getTotalNumberOfSteps();
+    const totalSteps = helper.getNumberOfSteps();
     let title = `Steps ${numberOfCompleted}/${totalSteps}`;
     if (!totalSteps) {
       title = 'Add steps';
@@ -239,16 +239,8 @@ class GoalOverview extends PureComponent {
     if (helper.getIsCompleted()) {
       return undefined;
     }
-    let buttonLabel = 'Start goal';
+    const buttonLabel = 'Complete goal';
 
-    const currentStep = helper.getCurrentStep();
-    if (currentStep) {
-      buttonLabel = `Complete "${truncateString(currentStep.get('title'), 19)}"`;
-    }
-    const nextStep = helper.getNextStep();
-    if (!nextStep) {
-      buttonLabel = 'Complete goal';
-    }
     return (
       <div className="handoff-bar">
         <div className="handoff-bar__label" />

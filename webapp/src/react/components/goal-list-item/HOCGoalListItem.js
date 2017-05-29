@@ -49,30 +49,7 @@ class HOCGoalListItem extends PureComponent {
 
     tooltip(null);
   }
-  onAssign(id, e) {
-    const { goalId, selectAssignees, assignStep } = this.props;
-    const helper = this.getHelper();
-    const step = helper.getCurrentStep();
 
-    e.stopPropagation();
-
-    const options = this.getOptionsForE(e);
-    options.actionLabel = 'Assign';
-
-    if (step.get('assignees').size) {
-      options.actionLabel = 'Reassign';
-    }
-
-    let overrideAssignees;
-
-    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        assignStep(goalId, step.get('id'), overrideAssignees);
-      }
-    });
-  }
   onClickItem() {
     const selection = window.getSelection();
 
@@ -127,7 +104,7 @@ class HOCGoalListItem extends PureComponent {
   renderProgressBar() {
     const helper = this.getHelper();
     const numberOfCompletedSteps = helper.getNumberOfCompletedSteps();
-    const numberOfAllSteps = helper.getTotalNumberOfSteps();
+    const numberOfAllSteps = helper.getNumberOfSteps();
     const completedProgressFill = (numberOfCompletedSteps * 100) / numberOfAllSteps;
     const styles = {
       width: `${completedProgressFill}%`,
@@ -153,17 +130,16 @@ class HOCGoalListItem extends PureComponent {
   renderAssignees() {
     const { goal } = this.props;
     const helper = this.getHelper();
-    if (helper.getIsCompleted() || !helper.getTotalNumberOfSteps()) {
+    if (helper.getIsCompleted() || !helper.getNumberOfSteps()) {
       return undefined;
     }
 
     return (
       <div className="goal-list-item__assigning">
         <HOCAssigning
-          assignees={helper.getCurrentAssignees()}
+          assignees={helper.getAllAssignees()}
           maxImages={2}
           rounded
-          delegate={this}
         />
       </div>
     );

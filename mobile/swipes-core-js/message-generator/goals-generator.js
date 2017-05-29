@@ -10,7 +10,6 @@ export default class Goals {
   getType(goalType) {
     const goalTypes = {
       current: 'Current goals',
-      upcoming: 'Upcoming goals',
       completed: 'Completed goals',
       starred: 'Starred goals',
     };
@@ -36,7 +35,6 @@ export default class Goals {
   }
   getListSubtitle(goal) {
     const helper = new GoalsUtil(goal);
-    const currentStep = helper.getCurrentStep();
     if (helper.getIsCompleted()) {
       const completedEvent = helper.getLastActivityByType('goal_completed');
       if(completedEvent){
@@ -46,21 +44,16 @@ export default class Goals {
       }
       return 'All done.';
     }
-    if (!helper.getTotalNumberOfSteps()) {
+    if (!helper.getNumberOfSteps()) {
       return 'No steps added.';
     }
-    if (!currentStep) {
-      return 'All done';
-    }
 
-    const currentStepIndex = helper.getCurrentStepIndex();
-    return `${currentStepIndex + 1}. ${currentStep.get('title')}`;
+    return `${helper.getNumberOfCompletedSteps()} / ${helper.getNumberOfSteps()} steps completed.`;
   }
 
   getFilterLabel(number, filter) {
     const goalTypes = {
       current: 'current ',
-      upcoming: 'upcoming ',
       completed: 'completed ',
       starred: 'starred ',
     };

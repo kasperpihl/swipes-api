@@ -38,35 +38,6 @@ class StepList extends PureComponent {
   }
   componentDidMount() {
   }
-  componentWillUnmount() {
-    const { tooltip } = this.props;
-    tooltip(null);
-  }
-  onEnter(i, e) {
-    const target = getParentByClass(e.target, 'step-list-item');
-
-    if (target) {
-      const tooltipText = this.tooltips[i];
-      const { tooltip } = this.props;
-
-      const data = {
-        component: StepTooltip,
-        props: {
-          tooltipText,
-        },
-        options: {
-          boundingRect: target.getBoundingClientRect(),
-          position: 'right',
-        },
-      };
-
-      tooltip(data);
-    }
-
-    this.setState({
-      hoverIndex: i,
-    });
-  }
   onChange(i, e) {
     const { steps, stepOrder } = this.props;
     const { stepTitles } = this.state;
@@ -88,15 +59,6 @@ class StepList extends PureComponent {
         this.saveTitle(i);
       }
     }
-  }
-  onLeave() {
-    const { tooltip } = this.props;
-
-    tooltip(null);
-
-    this.setState({
-      hoverIndex: -1,
-    });
   }
   onFocus() {
     this.setState({ addFocus: true });
@@ -170,12 +132,11 @@ class StepList extends PureComponent {
     );
   }
   renderStep(step, i) {
-    const { currentStepIndex, delegate, stepOrder, getLoading, isLoading, editMode } = this.props;
+    const { delegate, getLoading, isLoading, editMode } = this.props;
     if (editMode) {
       return this.renderEditStep(step, i);
     }
-    const completedI = currentStepIndex - 1;
-    const { hoverIndex } = this.state;
+
     let hoverIcon = 'ActivityCheckmark';
     let className = 'step-list-item';
 
@@ -185,59 +146,17 @@ class StepList extends PureComponent {
       className += ' step-list-item--loading';
     }
 
-    let tooltip;
-    if (i <= completedI) {
-      tooltip = `Go back to "${truncateString(step.get('title'), 19)}"`;
+    if(step.get('completed')) {
       className += ' step-list-item--completed';
-      hoverIcon = 'Iteration';
-    } else if (i === currentStepIndex) {
-      tooltip = `Complete "${truncateString(step.get('title'), 19)}"`;
-      className += ' step-list-item--current';
     } else {
-      tooltip = `Complete ${i - completedI} steps`;
-      className += ' step-list-item--future';
-      if (i === stepOrder.size - 1) {
-        tooltip = 'Complete goal';
-      }
+      className += ' step-list-item--current';
     }
-    this.tooltips[i] = tooltip;
-    if (getLoading('completing').loadingLabel) {
-      const lI = parseInt(getLoading('completing').loadingLabel, 10);
-      if (lI < currentStepIndex) {
-        if (i < currentStepIndex && i >= lI) {
-          title = 'Going back...';
-          className += ' step-list-item--hover';
-        }
-      } else if (i >= currentStepIndex && i <= lI) {
-        title = 'Completing...';
-        className += ' step-list-item--hover';
-      }
-    }
-
-    if (hoverIndex !== -1) {
-      if (hoverIndex >= currentStepIndex) {
-        if (i >= currentStepIndex && i <= hoverIndex) {
-          className += ' step-list-item--hover';
-        }
-      } else if (i < currentStepIndex && i >= hoverIndex) {
-        className += ' step-list-item--hover';
-      }
-    }
-
 
     return (
-      <div
-        className={className}
-        key={step.get('id')}
-      >
-        <div
-          className="step-list-item__indicator"
-          onMouseEnter={this.onEnter(i)}
-          onMouseLeave={this.onLeave}
-          onClick={this.onCheck(i)}
-        >
+      <div className={className} key={step.get('id')}>
+        <div className="step-list-item__indicator" onClick={this.onCheck(i)}>
           <div className="indicator">
-            <div className="indicator__number">{i + 1}</div>
+            <div className="indicator__number"></div>
             <div className="indicator__icon">
               <Icon icon={hoverIcon} className="indicator__svg" />
             </div>

@@ -138,7 +138,7 @@ class HOCGoalOverview extends PureComponent {
     const { goal } = this.props;
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
-    const totalSteps = helper.getTotalNumberOfSteps();
+    const totalSteps = helper.getNumberOfSteps();
     const tabs = [`Steps(${numberOfCompleted}/${totalSteps})`, 'Activity', `Attachments(${goal.get('attachment_order').size})`];
 
     return (

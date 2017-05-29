@@ -6,8 +6,6 @@ import {
 
 import * as a from './';
 import { valAction } from '../classes/utils';
-import GoalsUtil from '../classes/goals-util';
-
 
 export const create = valAction('goals.create', [
   string.min(1).max(155).require(),
@@ -56,16 +54,14 @@ export const notify = (gId, notification) => d => d(a.api.request('goals.notify'
   ...notification.toJS(),
 }));
 
-export const completeStep = (gId, nextStepId) => (d, getState) => {
-  const goal = getState().getIn(['goals', gId]);
-  const helper = new GoalsUtil(goal);
-  const currentStepId = helper.getCurrentStepId();
+export const completeStep = (gId, sId) => d => d(a.api.request('goals.completeStep', {
+  goal_id: gId,
+  step_id: sId,
+}))
 
-  return d(a.api.request('goals.completeStep', {
-    goal_id: gId,
-    next_step_id: nextStepId,
-    current_step_id: currentStepId,
-  }));
-};
+export const uncompleteStep = (gId, sId) => d => d(a.api.request('goals.uncompleteStep', {
+  goal_id: gId,
+  step_id: sId,
+}))
 
 export const archive = goalId => d => d(a.api.request('goals.archive', { goal_id: goalId }));
