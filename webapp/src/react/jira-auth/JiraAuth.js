@@ -144,13 +144,14 @@ class JiraAuth extends Component {
           <div className={errorClass}>{error}</div>
         </div>
         <div className="jira-auth__actions">
-          <Button
+          <button onClick={this.onClick}>Authorize</button>
+          {/* <Button
             primary
             text="Authorize Jira"
             onClick={this.onClick}
             loading={loading}
             className="jira-auth__button"
-          />
+          /> */}
         </div>
       </div>
     );

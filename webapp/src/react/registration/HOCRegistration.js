@@ -110,13 +110,14 @@ class HOCRegistration extends Component {
     this.props.request('users.signin', data).then((res) => {
       if (!res.ok) {
         let label = '!Something went wrong :/';
+        console.log('res', res);
+        if(res.error && res.error.message){
+          label = '!' + res.error.message;
+          if (label === "!body /users.signin: Invalid object['email']: did not match format") {
+            label = '!Not a valid email';
+          }
+        }
 
-        if (res.err === "body /users.signup: Invalid object['invitation_code']: Invalid invitation code") {
-          label = '!Invalid invitation code';
-        }
-        if (res.err === "body /users.signup: Invalid object['email']: did not match format") {
-          label = '!Not a valid email';
-        }
         this.clearLoading('signInButton', label);
       } else {
         window.analytics.sendEvent('Logged in', {});
