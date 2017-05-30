@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate, setupCachedCallback, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
+import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
 
 import { colors, viewSize } from '../../utils/globalStyles';
@@ -13,15 +14,16 @@ class NotificationItem extends Component {
     setupDelegate(this);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
     this.onNotificationPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationPress'));
+    this.onReplyTo = setupCachedCallback(this.callDelegate.bind(null, 'onReply'));
   }
   renderIcon() {
-    const { notification: n } = this.props;
+    const { notification: n, pinned } = this.props;
 
     if (!n.get('icon')) {
       return undefined;
     }
 
-    const iconStyles = n.get('unseen') ? styles.iconUnread : styles.iconRead;
+    const iconStyles = n.get('unseen') || pinned ? styles.iconUnread : styles.iconRead;
 
     return (
       <View style={iconStyles}>
@@ -99,17 +101,38 @@ class NotificationItem extends Component {
     );
   }
   renderTimestamp() {
-    const { notification: n } = this.props;
+    const { notification: n, pinned } = this.props;
 
     if (!n.get('timeago')) {
       return undefined;
     }
 
-    return <Text style={styles.timestamp}>{n.get('timeago')}</Text>;
+    return (
+      <View style={styles.topRight}>
+        <Text style={styles.timestamp}>{n.get('timeago')}</Text>
+        {pinned ? (
+          <RippleButton style={styles.replyButton} rippleColor={colors.blue100} rippleOpacity={0.8} onPress={this.onReplyTo(n)}>
+            <View style={styles.replyButton}>
+              <Text style={styles.replyButtonLabel}>Reply</Text>
+            </View>
+          </RippleButton>
+        ) : (
+            undefined
+          )}
+      </View>
+    );
   }
   render() {
+    const { pinned } = this.props;
+
+    let itemBackground = colors.bgColor;
+
+    if (pinned) {
+      itemBackground = colors.blue5;
+    }
+
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: itemBackground }]}>
         <FeedbackButton onPress={this.onNotificationPress(this.props.notification)}>
           <View style={styles.topSection}>
             {this.renderIcon()}
@@ -129,7 +152,6 @@ class NotificationItem extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    minHeight: 66,
   },
   seperator: {
     width: viewSize.width - 30,
@@ -166,6 +188,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 12,
     color: colors.deepBlue40,
+    marginBottom: 15,
   },
   title: {
     fontSize: 16.5,
@@ -175,7 +198,6 @@ const styles = StyleSheet.create({
   message: {
     flexWrap: 'wrap',
     fontSize: 13.5,
-    marginTop: 15,
     color: colors.deepBlue50,
   },
   timestamp: {
@@ -200,6 +222,20 @@ const styles = StyleSheet.create({
     paddingLeft: 9,
     color: colors.blue100,
     fontSize: 13,
+  },
+  topRight: {
+    width: 50,
+    height: 66,
+    alignItems: 'flex-end',
+  },
+  replyButton: {
+    width: 50,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  replyButtonLabel: {
+    color: colors.blue100,
   },
 });
 

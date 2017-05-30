@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback
 import HOCHeader from '../../components/header/HOCHeader';
 import { attachmentIconForService, setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
+import NotificationItem from '../dashboard/NotificationItem';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
 import { colors } from '../../utils/globalStyles';
@@ -22,12 +23,40 @@ class Notify extends PureComponent {
 
     return (
       <HOCHeader title={title}>
-        {assignees.length ? (
+        {assignees.length || assignees.size ? (
           <HOCAssigning assignees={assignees} />
         ) : (
             undefined
           )}
       </HOCHeader>
+    );
+  }
+  renderRequest() {
+    const { replyObj, goal, delegate } = this.props;
+
+    if (!replyObj) {
+      return undefined;
+    }
+
+    const title = `${msgGen.users.getName(replyObj.get('done_by'))} asked`;
+    const notif = msgGen.history.getNotificationWrapperForHistory(goal.get('id'), replyObj, {
+      title: false,
+      subtitle: false,
+      icon: false,
+      timeago: false,
+      reply: false,
+    });
+
+    return (
+      <View style={styles.requestWrapper}>
+        <Text style={styles.requestTitle}>{title}</Text>
+        <View style={styles.requestNotif}>
+          <NotificationItem
+            delegate={delegate}
+            notification={notif}
+          />
+        </View>
+      </View>
     );
   }
   renderWriteHandoff() {
@@ -108,6 +137,7 @@ class Notify extends PureComponent {
       <View style={styles.container}>
         {this.renderHeader()}
         <ScrollView>
+          {this.renderRequest()}
           {this.renderWriteHandoff()}
           {this.renderAttachmentList()}
         </ScrollView>
@@ -132,6 +162,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  requestWrapper: {
+    paddingTop: 15,
+  },
+  requestTitle: {
+    marginHorizontal: 30,
+    color: colors.deepBlue80,
+    fontSize: 13,
+    fontWeight: 'bold',
+    zIndex: 2,
+  },
+  requestNotif: {
+    marginTop: -20,
+    zIndex: 1,
   },
   handoff: {
     flex: 1,

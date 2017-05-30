@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { goals } from '../../../swipes-core-js/actions';
+import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import * as a from '../../actions';
 import Notify from './Notify';
 
@@ -23,6 +24,11 @@ class HOCNotify extends PureComponent {
       hasLoaded: false,
     };
 
+    const helper = this.getHelper();
+    if (typeof notify.get('reply_to') === 'number') {
+      this.state.replyObj = helper.getActivityByIndex(notify.get('reply_to'));
+    }
+
     this.onActionButton = this.onActionButton.bind(this);
     this.onModalAction = this.onModalAction.bind(this);
   }
@@ -39,6 +45,10 @@ class HOCNotify extends PureComponent {
   }
   componentWillUnmount() {
     clearTimeout(this.loadingTimeout);
+  }
+  getHelper() {
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
   }
   onOpenAttachment(att) {
     const { preview } = this.props;
@@ -119,7 +129,7 @@ class HOCNotify extends PureComponent {
       { text: 'Assign people' },
     ];
 
-    if (notify && notify.get('assignees').length) {
+    if (notify && (notify.get('assignees').length || notify.get('assignees').size)) {
       actionButtons = [
         { text: 'Assign people' },
         { text: 'Notify' },
@@ -133,9 +143,9 @@ class HOCNotify extends PureComponent {
   }
   render() {
     const { me, goal } = this.props;
-    const { notify, hasLoaded } = this.state;
+    const { notify, hasLoaded, replyObj } = this.state;
 
-    return <Notify me={me} hasLoaded={hasLoaded} goal={goal} delegate={this} notify={notify} />;
+    return <Notify me={me} hasLoaded={hasLoaded} goal={goal} delegate={this} notify={notify} replyObj={replyObj} />;
   }
 }
 

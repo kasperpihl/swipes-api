@@ -5,7 +5,6 @@ import { List } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCGoalItem from '../goallist/HOCGoalItem';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { colors } from '../../utils/globalStyles';
 
@@ -75,9 +74,6 @@ class HOCMilestoneOverview extends Component {
   renderGoal(goal) {
     return <HOCGoalItem goalId={goal.get('id')} delegate={this} />;
   }
-  renderFooter() {
-    return <EmptyListFooter />;
-  }
   renderList() {
     const { tabs, tabIndex, goals } = this.state;
     const tab = tabs[tabIndex];
@@ -85,10 +81,10 @@ class HOCMilestoneOverview extends Component {
 
     return (
       <ImmutableListView
+        key={tab}
         style={styles.list}
         immutableData={goalList}
         renderRow={this.renderGoal}
-        renderFooter={this.renderFooter}
       />
     );
   }
