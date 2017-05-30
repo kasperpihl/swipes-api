@@ -52,14 +52,12 @@ const stepsReorderedNotificationData = (req, res, next) => {
   const {
     goal_id,
     step_order,
-    status,
   } = res.locals;
 
   res.locals.notificationData = null;
   res.locals.eventData = {
     goal_id,
     step_order,
-    status,
   };
 
   return next();

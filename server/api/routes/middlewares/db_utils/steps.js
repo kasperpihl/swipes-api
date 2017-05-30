@@ -132,9 +132,8 @@ const dbStepsReorder = funcWrap([
     user_id: string.require(),
     goal_id: string.require(),
     step_order: array.of(string).require(),
-    current_step_id: string.require(),
   }).require(),
-], (err, { user_id, goal_id, step_order, current_step_id }) => {
+], (err, { user_id, goal_id, step_order }) => {
   if (err) {
     throw new SwipesError(`dbStepsReorder: ${err}`);
   }
@@ -169,13 +168,8 @@ const dbStepsReorder = funcWrap([
           .do((items) => {
             return r.expr(step_order).setUnion(items);
           }),
-        status: {
-          current_step_id,
-        },
         updated_at: r.now(),
         updated_by: user_id,
-      }, {
-        returnChanges: true,
       });
 
   return db.rethinkQuery(q);
