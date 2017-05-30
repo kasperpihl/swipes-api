@@ -6,6 +6,7 @@ import {
   any,
   bool,
   number,
+  date,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -137,7 +138,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   }).require(),
   notificationGroupId: string.require(),
   step_id: string.require(),
-  goalCompletedAt: any.require(),
+  goalCompletedAt: date.acceptNull().require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -180,7 +181,7 @@ const goalsIncompleteStep = valLocals('goalsIncompleteStep', {
   }).require(),
   notificationGroupId: string.require(),
   step_id: string.require(),
-  goalCompletedAt: string.require(),
+  goalCompletedAt: date.acceptNull().require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
