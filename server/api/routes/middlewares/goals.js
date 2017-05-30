@@ -56,10 +56,7 @@ const goalsCreate = valLocals('goalsCreate', {
   goal.attachments = {};
   goal.attachment_order = [];
   goal.milestone_id = milestone_id;
-
-  goal.status = {
-    current_step_id: null,
-  };
+  goal.completed_at = null;
 
   setLocals({
     goal,
