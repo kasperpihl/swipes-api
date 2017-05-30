@@ -115,7 +115,9 @@ const goalsFindCompleteStatus = valLocals('goalsFindCompleteStatus', {
   if (path.indexOf('incompleteStep') > 0) {
     goalCompletedAt = null;
   } else {
-    goal.steps.forEach((step) => {
+    goal.step_order.forEach((stepId) => {
+      const step = goal.steps[stepId];
+
       if (step.id !== step_id && step.completed_at === null) {
         goalCompletedAt = null;
       }
@@ -135,7 +137,7 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
   }).require(),
   notificationGroupId: string.require(),
   step_id: string.require(),
-  goalCompletedAt: string.require(),
+  goalCompletedAt: any.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
