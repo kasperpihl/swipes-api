@@ -106,6 +106,7 @@ class StepListItem extends PureComponent {
     }
 
     if(step.get('completed_at')) {
+      hoverIcon = 'Iteration';
       className += ' step-list-item--completed';
     } else {
       className += ' step-list-item--current';
