@@ -37,6 +37,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Upload images to your Swipes goals</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Upload images to your Swipes goals</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Upload videos to your Swipes goals</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
