@@ -19,10 +19,10 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'milestones.close':
     case 'milestone_closed': {
-      if(payload.goal_ids) {
+      if (payload.goal_ids) {
         payload.goal_ids.forEach((id) => {
           state = state.setIn([id, 'milestone_id'], null);
-        })
+        });
       }
       return state;
     }
@@ -42,7 +42,6 @@ export default function goalsReducer(state = initialState, action) {
     case 'goal_completed':
     case 'goal_notify':
     case 'goals.notify':
-    case 'goal_started':
     case 'goals.start': {
       return state.mergeIn([payload.goal.id], payload.goal);
     }
@@ -137,7 +136,7 @@ export default function goalsReducer(state = initialState, action) {
       });
     }
     case 'milestones.removeGoal':
-    case 'milestone_goal_removed':{
+    case 'milestone_goal_removed': {
       return state.setIn([payload.goal_id, 'milestone_id'], null);
     }
     case 'milestones.addGoal':
@@ -147,8 +146,8 @@ export default function goalsReducer(state = initialState, action) {
     case 'me.updateSettings':
     case 'settings_updated': {
       const stars = payload.settings.starred_goals;
-      if(stars){
-        return state.map((g) => g.set('starred', stars.indexOf(g.get('id')) > -1));
+      if (stars) {
+        return state.map(g => g.set('starred', stars.indexOf(g.get('id')) > -1));
       }
       return state;
     }

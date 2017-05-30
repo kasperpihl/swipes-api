@@ -48,12 +48,6 @@ const goal_completed = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const goal_started = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
-  notify.notifyAllInCompany,
-]);
-
 const goal_archived = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsArchiveWithHistoryNotificationData,
@@ -277,7 +271,6 @@ const organization_updated = noUserNotifyWrapper([
 export {
   goal_created,
   goal_completed,
-  goal_started,
   goal_archived,
   goal_notify,
   goal_notify_email,

@@ -47,7 +47,6 @@ export default class HistoryGenerator {
 
     switch (h.get('type')) {
       case 'goal_created':
-      case 'goal_started':
         return `${from} kicked off this goal`;
       case 'goal_completed':
         return `${from} completed this goal`;

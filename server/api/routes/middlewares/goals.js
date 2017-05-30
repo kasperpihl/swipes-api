@@ -1,3 +1,4 @@
+import r from 'rethinkdb';
 import {
   string,
   object,
