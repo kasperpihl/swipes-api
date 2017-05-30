@@ -1,4 +1,3 @@
-import r from 'rethinkdb';
 import {
   string,
   object,
@@ -41,8 +40,8 @@ const goalsCreate = valLocals('goalsCreate', {
 
   goal.id = generateSlackLikeId('G');
   goal.organization_id = organization_id;
-  goal.created_at = r.now();
-  goal.updated_at = r.now();
+  goal.created_at = new Date();
+  goal.updated_at = new Date();
   goal.created_by = user_id;
   goal.archived = false;
   goal.history = [{
@@ -50,7 +49,7 @@ const goalsCreate = valLocals('goalsCreate', {
     from: null,
     to: null,
     done_by: user_id,
-    done_at: r.now(),
+    done_at: new Date(),
   }];
   goal.steps = {};
   goal.step_order = [];
@@ -82,7 +81,7 @@ const goalsCompleteGoal = valLocals('goalsCompleteGoal', {
   const historyItem = {
     type,
     done_by: user_id,
-    done_at: r.now(),
+    done_at: new Date(),
     group_id: notificationGroupId,
   };
 
@@ -111,7 +110,7 @@ const goalsFindCompleteStatus = valLocals('goalsFindCompleteStatus', {
     step_id,
   } = res.locals;
   const path = req.path;
-  let goalCompletedAt = goal.completed_at || r.now();
+  let goalCompletedAt = goal.completed_at || new Date();
 
   if (path.indexOf('incompleteStep') > 0) {
     goalCompletedAt = null;
@@ -158,12 +157,12 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     type,
     step_id,
     done_by: user_id,
-    done_at: r.now(),
+    done_at: new Date(),
     group_id: notificationGroupId,
     assignees: currentStep.assignees || [],
   };
 
-  currentStep.completed_at = currentStep.completed_at || r.now();
+  currentStep.completed_at = currentStep.completed_at || new Date();
   goal.completed_at = goalCompletedAt;
   goal.history.push(history);
 
@@ -201,7 +200,7 @@ const goalsIncompleteStep = valLocals('goalsIncompleteStep', {
     type,
     step_id,
     done_by: user_id,
-    done_at: r.now(),
+    done_at: new Date(),
     group_id: notificationGroupId,
     assignees: currentStep.assignees || [],
   };
@@ -249,7 +248,7 @@ const goalsArchive = valLocals('goalsArchive', {
   const historyItem = {
     type: 'goal_archived',
     done_by: user_id,
-    done_at: r.now(),
+    done_at: new Date(),
     group_id: notificationGroupId,
   };
   const properties = {
@@ -539,7 +538,7 @@ const goalsNotify = valLocals('goalsNotify', {
     from: null,
     to: null,
     done_by: user_id,
-    done_at: r.now(),
+    done_at: new Date(),
     group_id: notificationGroupId,
   };
 
