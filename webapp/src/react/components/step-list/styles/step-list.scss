@@ -55,11 +55,11 @@
 
 .step-list-item {
   $b: &;
+
   &__sortable {
-    z-index: 99999999999;
     box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
     padding: 0 15px;
-    // transition: .2s ease;
+    z-index: 99999999999;
   }
 
   &__indicator {
@@ -68,6 +68,7 @@
     transition: .15s ease;
 
     #{$b}--target {
+
       .indicator__number {
         transform: translateX(30px);
         transition: .3s ease;
@@ -173,6 +174,7 @@
       transform: scale(.4);
       order: 1;
     }
+
     &--focused {
       .add-step__indicator {
         transform: scale(1.0);
@@ -217,13 +219,6 @@
 .step-list-item {
   $b: &;
 
-  &--completed {
-
-    #{$b}__title, #{$b}__assignees {
-      opacity: .5;
-    }
-  }
-
   &--current {
 
     .indicator {
@@ -236,69 +231,8 @@
     }
   }
 
-  &--future {
-
-    & > * {
-      opacity: .5;
-    }
-
-    .indicator {
-      background-color: $bg;
-      border: 2px solid $deepBlue-100;
-
-      &__number {
-        @include font($c: $deepBlue-100);
-      }
-    }
-  }
-
-  &:not(&--completed)#{&}--hover {
-    & > * {
-      opacity: 1;
-    }
-
-    .indicator {
-      border-color: $green-color;
-    }
-
-    .indicator__svg {
-      @include svg-color($green-color)
-    }
-  }
-
-  &:not(&--current):not(&--future)#{&}--hover {
-
-    .indicator {
-      border-color: $deepBlue-100;
-      background-color: white;
-    }
-
-    .indicator__svg {
-      @include svg-color($deepBlue-100);
-    }
-  }
-
   &--loading {
     opacity: 1;
-  }
-
-  &--hover {
-    opacity: 1;
-
-    .indicator__number {
-      transform: translateX(30px);
-      transition: .3s ease;
-    }
-
-    .indicator__icon {
-      transform: translateX(-2px);
-      transition: .3s ease;
-    }
-
-    #{$b}__title, #{$b}__assignees {
-      opacity: 1;
-      transition: .15s ease;
-    }
   }
 }
 
@@ -383,6 +317,50 @@
     #{$b}__title, #{$b}__assignees {
       opacity: 1;
       transition: .15s ease;
+    }
+  }
+
+  &__indicator:hover {
+    .indicator__number {
+      transform: translateX(30px);
+      transition: .3s ease;
+    }
+
+    .indicator__icon {
+      transform: translateX(-2px);
+      transition: .3s ease;
+    }
+  }
+
+  &--completed #{$b}__indicator:hover {
+
+    .indicator {
+      background-color: $bg;
+      border: 2px solid $deepBlue-100;
+
+      &__number {
+        @include font($c: $deepBlue-100);
+      }
+
+      &__svg {
+        @include svg-color($deepBlue-100);
+      }
+    }
+  }
+
+  &--current #{$b}__indicator:hover {
+
+    .indicator {
+      background-color: $green-color;
+      border: 2px solid $green-color;
+
+      &__number {
+        @include font($c: $bg);
+      }
+
+      &__svg {
+        @include svg-color($bg);
+      }
     }
   }
 }
