@@ -122,7 +122,7 @@ class StepListItem extends PureComponent {
             </div>
           </div>
         </div>
-        <div className="step-list-item__title">
+        <div className="step-list-item__title" onClick={this.onStepClickCached(i)}>
           {title}
         </div>
         <div className="step-list-item__assignees">

@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { string } from 'valjs';
 import * as Icons from './icons';
 import * as Images from './images';
 
-class Icon extends Component {
+class Icon extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
