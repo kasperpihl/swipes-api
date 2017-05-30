@@ -117,7 +117,7 @@ const dbStepsDelete = funcWrap([
           completed_at: r.branch(
             // check if there is incompleted steps after the delete
             row('step_order').filter((stepId) => {
-              row('steps')(stepId)('completed_at').eq(null).and(row('steps')(stepId)('deleted').ne(true)).and(row('steps')(stepId)('id').ne(step_id));
+              return row('steps')(stepId)('completed_at').eq(null).and(row('steps')(stepId)('deleted').default(false).ne(true)).and(row('steps')(stepId)('id').ne(step_id));
             }).count().gt(0),
             // if there is - don't do anything
             row('completed_at'),
