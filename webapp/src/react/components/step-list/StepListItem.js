@@ -14,7 +14,7 @@ class StepListItem extends PureComponent {
     super(props)
     this.state = {};
     setupDelegate(this);
-    this.callDelegate.bindAll('onStepCheck', 'onStepRemove');
+    this.callDelegate.bindAll('onStepCheck', 'onStepRemove', 'onStepClick');
     bindAll(this, ['onChange', 'onBlur', 'onKeyDown']);
   }
   componentDidMount() {
