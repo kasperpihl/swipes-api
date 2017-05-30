@@ -127,13 +127,14 @@ class HOCStepList extends PureComponent {
     });
   }
   onStepCheck(i, e) {
-    const { completeStep, uncompleteStep, goal } = this.props;
+    console.log('i', i, e);
+    const { completeStep, incompleteStep, goal } = this.props;
     const helper = this.getHelper();
 
     const step = helper.getStepByIndex(i);
-    const actionEvent = step.get('completed') ? 'Step uncompleted' : 'Step completed';
-    const actionLabel = step.get('completed') ? 'Uncompleting...' : 'Completing...';
-    const actionFunc = step.get('completed') ? uncompleteStep : completeStep;
+    const actionEvent = step.get('completed_at') ? 'Step incompleted' : 'Step completed';
+    const actionLabel = step.get('completed_at') ? 'Uncompleting...' : 'Completing...';
+    const actionFunc = step.get('completed_at') ? incompleteStep : completeStep;
 
     this.setLoading(step.get('id'), actionLabel);
     actionFunc(goal.get('id'), step.get('id')).then((res) => {
@@ -187,7 +188,7 @@ export default connect((state, oP) => ({
   selectAssignees: a.goals.selectAssignees,
   reorder: ca.steps.reorder,
   completeStep: ca.goals.completeStep,
-  uncompleteStep: ca.goals.uncompleteStep,
+  incompleteStep: ca.goals.incompleteStep,
   confirm: a.menus.confirm,
   removeStep: ca.steps.remove,
   renameStep: ca.steps.rename,

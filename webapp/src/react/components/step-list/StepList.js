@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { list, map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
@@ -9,11 +10,12 @@ import {
   setupDelegate,
   truncateString,
 } from 'swipes-core-js/classes/utils';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { SortableElement } from 'react-sortable-hoc';
 import Icon from 'Icon';
 import Button from 'Button';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import StepTooltip from './StepTooltip';
+import SortableList from './SortableList';
 
 import './styles/step-list.scss';
 
@@ -23,53 +25,35 @@ class StepList extends PureComponent {
     this.state = {
       addFocus: false,
       addStepValue: '',
-      hoverIndex: -1,
-      stepTitles: fromJS({}),
     };
-    this.tooltips = [];
     setupDelegate(this);
     this.callDelegate.bindAll('onStepSort');
-    this.onEnter = setupCachedCallback(this.onEnter, this);
-    this.onKeyDownCached = setupCachedCallback(this.onKeyDown, this);
-    this.onChangeCached = setupCachedCallback(this.onChange, this);
-    this.onBlurCached = setupCachedCallback(this.onBlur, this);
-    this.onRemoveCached = setupCachedCallback(this.callDelegate.bind(null, 'onStepRemove'));
-    this.onCheck = setupCachedCallback(this.callDelegate.bind(null, 'onStepCheck'));
-    bindAll(this, ['onLeave', 'onFocus']);
+    bindAll(this, ['onSortEnd', 'onFocus', 'onBlur', 'onChange', 'onKeyDown']);
   }
   componentDidMount() {
   }
-  onChange(i, e) {
-    const { steps, stepOrder } = this.props;
-    const { stepTitles } = this.state;
+  onChange(e) {
     const value = e.target.value;
-    if (i === 'add') {
-      this.setState({ addStepValue: value });
-    } else {
-      const step = steps.get(stepOrder.get(i));
-      this.setState({ stepTitles: stepTitles.set(step.get('id'), value) });
-    }
+    this.setState({ addStepValue: value });
   }
-  onKeyDown(i, e) {
+  onKeyDown(e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {
-      if (i === 'add') {
-        this.callDelegate('onStepAdd', e.target.value);
-        this.setState({ addStepValue: '' });
-      } else {
-        e.target.blur();
-        this.saveTitle(i);
-      }
+      this.callDelegate('onStepAdd', e.target.value);
+      this.setState({ addStepValue: '' });
     }
   }
   onFocus() {
     this.setState({ addFocus: true });
   }
   onBlur(i) {
-    if (i === 'add') {
-      this.setState({ addFocus: false });
-    } else {
-      this.saveTitle(i);
-    }
+    this.setState({ addFocus: false });
+  }
+  onSortStart() {
+    document.body.classList.add("no-select");
+  }
+  onSortEnd(obj, e) {
+    document.body.classList.remove("no-select");
+    this.onStepSort(obj, e);
   }
   getPlaceholder() {
     let placeholder = 'What is the next step? Add it here...';
@@ -78,6 +62,9 @@ class StepList extends PureComponent {
       placeholder = 'What is the first step? Enter it here...';
     }
     return placeholder;
+  }
+  getContainer(el) {
+    return getParentByClass(el.refs.root, 'sw-view__scroll');
   }
   saveTitle(i) {
     const { stepOrder, steps } = this.props;
@@ -89,92 +76,7 @@ class StepList extends PureComponent {
       this.setState({ stepTitles: stepTitles.remove(step.get('id')) });
     }
   }
-  renderEditStep(step, i) {
-    const { delegate, getLoading } = this.props;
-    const { stepTitles } = this.state;
-    let className = 'step-list-item step-list-item--editing';
-    let title = stepTitles.get(step.get('id')) || step.get('title');
-    if (getLoading(step.get('id')).loading) {
-      title = getLoading(step.get('id')).loadingLabel;
-      className += ' step-list-item--loading';
-    }
 
-    return (
-      <div className={className}>
-        <div className="step-list-item__remove" >
-          <Button
-            icon="Trash"
-            className="step-list-item__remove--button"
-            onClick={this.onRemoveCached(i)}
-          />
-        </div>
-        <input
-          type="text"
-          className="step-list-item__input"
-          onKeyDown={this.onKeyDownCached(i)}
-          onBlur={this.onBlurCached(i)}
-          value={title}
-          onChange={this.onChangeCached(i)}
-          placeholder="Enter the step title"
-        />
-        <div className="step-list-item__assignees">
-          <HOCAssigning
-            delegate={delegate}
-            index={i}
-            assignees={step.get('assignees')}
-            rounded
-            size={24}
-          />
-        </div>
-      </div>
-    );
-  }
-  renderStep(step, i) {
-    const { delegate, getLoading, isLoading, editMode } = this.props;
-    if (editMode) {
-      return this.renderEditStep(step, i);
-    }
-
-    let hoverIcon = 'ActivityCheckmark';
-    let className = 'step-list-item';
-
-    let title = step.get('title');
-    if (isLoading(step.get('id'))) {
-      title = getLoading(step.get('id')).loadingLabel;
-      className += ' step-list-item--loading';
-    }
-
-    if(step.get('completed')) {
-      className += ' step-list-item--completed';
-    } else {
-      className += ' step-list-item--current';
-    }
-
-    return (
-      <div className={className} key={step.get('id')}>
-        <div className="step-list-item__indicator" onClick={this.onCheck(i)}>
-          <div className="indicator">
-            <div className="indicator__number">{ i + 1 }</div>
-            <div className="indicator__icon">
-              <Icon icon={hoverIcon} className="indicator__svg" />
-            </div>
-          </div>
-        </div>
-        <div className="step-list-item__title">
-          {title}
-        </div>
-        <div className="step-list-item__assignees">
-          <HOCAssigning
-            delegate={delegate}
-            index={i}
-            assignees={step.get('assignees')}
-            rounded
-            size={24}
-          />
-        </div>
-      </div>
-    );
-  }
   renderAddStep() {
     const { isLoading, getLoading } = this.props;
     const { addFocus, addStepValue } = this.state;
@@ -196,11 +98,11 @@ class StepList extends PureComponent {
           ref="addStepInput"
           type="text"
           onFocus={this.onFocus}
-          onBlur={this.onBlurCached('add')}
+          onBlur={this.onBlur}
           className="add-step__input"
           value={value}
-          onChange={this.onChangeCached('add')}
-          onKeyDown={this.onKeyDownCached('add')}
+          onChange={this.onChange}
+          onKeyDown={this.onKeyDown}
           placeholder={placeholder}
         />
         <div className="add-step__indicator">
@@ -209,33 +111,27 @@ class StepList extends PureComponent {
       </div>
     );
   }
-  render() {
-    const { stepOrder, steps } = this.props;
-    const SortableItem = SortableElement(({step, i}) => this.renderStep(step, i));
-    const SortableList = SortableContainer(({items}) => (
-      <div key="work">
-        {items.map((stepId, i) => (
-          <SortableItem step={steps.get(stepId)} index={i} i={i} key={stepId} />
-        )).toArray()}
-      </div>
 
-    ));
+  render() {
+
     return (
       <div className="step-list">
         <SortableList
-          items={stepOrder}
           lockAxis="y"
           distance={5}
-          onSortStart={() => {
-            document.body.classList.add("no-select");
-          }}
-          onSortEnd={(obj, e) => {
-            document.body.classList.remove("no-select");
-            this.onStepSort(obj, e);
-          }}
-          shouldCancelStart={() => !!this.props.editMode}
+          onSortStart={this.onSortStart}
+          onSortEnd={this.onSortEnd}
+          getContainer={this.getContainer}
           lockToContainerEdges
           helperClass="step-list-item__sortable"
+
+          stepOrder={this.props.stepOrder}
+          steps={this.props.steps}
+          _loadingStates={this.props._loadingStates}
+          getLoading={this.props.getLoading}
+          isLoading={this.props.isLoading}
+          delegate={this.props.delegate}
+          editMode={this.props.editMode}
         />
         {this.renderAddStep()}
       </div>

@@ -36,7 +36,9 @@ export default function goalsReducer(state = initialState, action) {
     case 'goals.loadWay':
     case 'goal_load_way':
     case 'goals.completeStep':
+    case 'goals.incompleteStep':
     case 'step_completed':
+    case 'step_incompleted':
     case 'goal_completed':
     case 'goal_notify':
     case 'goals.notify':

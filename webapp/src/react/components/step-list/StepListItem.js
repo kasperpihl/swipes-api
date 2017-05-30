@@ -1,24 +1,51 @@
 import React, { PureComponent } from 'react'
+import { SortableElement } from 'react-sortable-hoc';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
+import Button from 'Button';
+import Icon from 'Icon';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 // import './styles/step-list-item.scss';
 
 class StepListItem extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {};
+    setupDelegate(this);
+    this.callDelegate.bindAll('onStepCheck', 'onStepRemove');
+    bindAll(this, ['onChange', 'onBlur', 'onKeyDown']);
   }
   componentDidMount() {
   }
+  onKeyDown(e) {
+    if (e.keyCode === 13 && e.target.value.length > 0) {
+      e.target.blur();
+      this.saveTitle();
+    }
+  }
+  onChange(e) {
+    this.setState({title: e.target.value});
+  }
+  onBlur(e) {
+    this.saveTitle();
+  }
+  saveTitle() {
+    const { title } = this.state;
+    const { step, i } = this.props;
+
+    if(title && title.length && title !== step.get('title')){
+      this.callDelegate('onStepRename', i, title);
+      this.setState({title: null});
+    }
+  }
   renderEditStep(step, i) {
     const { delegate, getLoading } = this.props;
-    const { stepTitles } = this.state;
+    let { title } = this.state;
+    title = title || step.get('title');
     let className = 'step-list-item step-list-item--editing';
-    let title = stepTitles.get(step.get('id')) || step.get('title');
+
     if (getLoading(step.get('id')).loading) {
       title = getLoading(step.get('id')).loadingLabel;
       className += ' step-list-item--loading';
@@ -30,16 +57,16 @@ class StepListItem extends PureComponent {
           <Button
             icon="Trash"
             className="step-list-item__remove--button"
-            onClick={this.onRemoveCached(i)}
+            onClick={this.onStepRemoveCached(i)}
           />
         </div>
         <input
           type="text"
           className="step-list-item__input"
-          onKeyDown={this.onKeyDownCached(i)}
-          onBlur={this.onBlurCached(i)}
+          onKeyDown={this.onKeyDown}
+          onBlur={this.onBlur}
           value={title}
-          onChange={this.onChangeCached(i)}
+          onChange={this.onChange}
           placeholder="Enter the step title"
         />
         <div className="step-list-item__assignees">
@@ -54,8 +81,17 @@ class StepListItem extends PureComponent {
       </div>
     );
   }
-  renderStep(step, i) {
-    const { delegate, getLoading, isLoading, editMode } = this.props;
+
+  render() {
+    const {
+      delegate,
+      getLoading,
+      isLoading,
+      editMode,
+      step,
+      i,
+    } = this.props;
+
     if (editMode) {
       return this.renderEditStep(step, i);
     }
@@ -69,7 +105,7 @@ class StepListItem extends PureComponent {
       className += ' step-list-item--loading';
     }
 
-    if(step.get('completed')) {
+    if(step.get('completed_at')) {
       className += ' step-list-item--completed';
     } else {
       className += ' step-list-item--current';
@@ -77,9 +113,9 @@ class StepListItem extends PureComponent {
 
     return (
       <div className={className}>
-        <div className="step-list-item__indicator" onClick={this.onCheck(i)}>
+        <div className="step-list-item__indicator" onClick={this.onStepCheckCached(i)}>
           <div className="indicator">
-            <div className="indicator__number"></div>
+            <div className="indicator__number">{ i + 1 }</div>
             <div className="indicator__icon">
               <Icon icon={hoverIcon} className="indicator__svg" />
             </div>
@@ -100,14 +136,9 @@ class StepListItem extends PureComponent {
       </div>
     );
   }
-  render() {
-    return (
-      <div className="className" />
-    )
-  }
 }
 
-export default StepListItem
+export default SortableElement(StepListItem)
 
 // const { string } = PropTypes;
 

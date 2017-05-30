@@ -59,7 +59,7 @@ export const completeStep = (gId, sId) => a.api.request('goals.completeStep', {
   step_id: sId,
 })
 
-export const uncompleteStep = (gId, sId) => a.api.request('goals.uncompleteStep', {
+export const incompleteStep = (gId, sId) => a.api.request('goals.incompleteStep', {
   goal_id: gId,
   step_id: sId,
 })
