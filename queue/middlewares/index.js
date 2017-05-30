@@ -131,6 +131,13 @@ const step_completed = notifyWrapper([
   notify.notifySendEventToAllInCompany,
 ]);
 
+const step_incompleted = notifyWrapper([
+  goals.goalsGetSingle,
+  goals.goalsGeneralWithHistoryNotificationData,
+  notify.notifyAllInGoal,
+  notify.notifySendEventToAllInCompany,
+]);
+
 const milestone_created = notifyWrapper([
   milestones.milestonesGetSingle,
   milestones.milestonesGeneralWithHistoryNotificationData,
@@ -277,6 +284,7 @@ export {
   goal_renamed,
   goal_loaded_way,
   step_completed,
+  step_incompleted,
   milestone_created,
   milestone_closed,
   milestones_opened,

@@ -26,6 +26,38 @@ const dbGoalsInsertSingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbGoalsCompleteGoal = funcWrap([
+  object.as({
+    goal_id: string.require(),
+    user_id: string.require(),
+    historyItem: object.require(),
+  }),
+], (err, { goal_id, user_id, historyItem }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsCompleteGoal: ${err}`);
+  }
+
+  const q =
+    r.table('goals')
+      .get(goal_id)
+      .update({
+        steps: r.row('steps').map(step => step.merge({
+          completed_at: r.branch(
+            step('completed_at').ne(null),
+            step('completed_at'),
+            r.now(),
+          ) }),
+        ),
+        history: r.row('history').append(historyItem),
+        completed_at: r.now(),
+        updated_at: r.now(),
+        updated_by: user_id,
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 const dbGoalsUpdateSingle = funcWrap([
   object.as({
     goal_id: string.require(),
@@ -123,4 +155,5 @@ export {
   dbGoalsGetSingle,
   dbGoalsPushToHistorySingle,
   dbGoalsRepliesHistoryUpdate,
+  dbGoalsCompleteGoal,
 };
