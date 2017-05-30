@@ -28,6 +28,7 @@ class StepList extends PureComponent {
     };
     this.tooltips = [];
     setupDelegate(this);
+    this.callDelegate.bindAll('onStepSort');
     this.onEnter = setupCachedCallback(this.onEnter, this);
     this.onKeyDownCached = setupCachedCallback(this.onKeyDown, this);
     this.onChangeCached = setupCachedCallback(this.onChange, this);
@@ -99,10 +100,7 @@ class StepList extends PureComponent {
     }
 
     return (
-      <div
-        className={className}
-        key={step.get('id')}
-      >
+      <div className={className}>
         <div className="step-list-item__remove" >
           <Button
             icon="Trash"
@@ -156,7 +154,7 @@ class StepList extends PureComponent {
       <div className={className} key={step.get('id')}>
         <div className="step-list-item__indicator" onClick={this.onCheck(i)}>
           <div className="indicator">
-            <div className="indicator__number"></div>
+            <div className="indicator__number">{ i + 1 }</div>
             <div className="indicator__icon">
               <Icon icon={hoverIcon} className="indicator__svg" />
             </div>
@@ -224,13 +222,21 @@ class StepList extends PureComponent {
     ));
     return (
       <div className="step-list">
-        {stepOrder.map((stepId, i) => this.renderStep(steps.get(stepId), i)).toArray()}
-        {/* <SortableList
+        <SortableList
           items={stepOrder}
           lockAxis="y"
+          distance={5}
+          onSortStart={() => {
+            document.body.classList.add("no-select");
+          }}
+          onSortEnd={(obj, e) => {
+            document.body.classList.remove("no-select");
+            this.onStepSort(obj, e);
+          }}
+          shouldCancelStart={() => !!this.props.editMode}
           lockToContainerEdges
           helperClass="step-list-item__sortable"
-        /> */}
+        />
         {this.renderAddStep()}
       </div>
     );

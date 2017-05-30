@@ -102,6 +102,30 @@ class HOCStepList extends PureComponent {
     });
     e.stopPropagation();
   }
+  onStepSort({oldIndex, newIndex}, e) {
+    if(oldIndex === newIndex){
+      return;
+    }
+    const { reorder } = this.props;
+    const helper = this.getHelper();
+    const stepOrder = helper.getStepOrder();
+    const newStepOrder = helper.getNewStepOrder(oldIndex, newIndex);
+    const max = (oldIndex > newIndex) ? oldIndex : newIndex;
+    const min = (oldIndex < newIndex) ? oldIndex : newIndex;
+
+    this.setLoading(stepOrder.get(oldIndex), 'Reordering');
+    for(let i = min ; i <= max ; i++) {
+      //this.setLoading(stepOrder.get(i), 'Reordering...');
+      this.setState({ tempOrder: newStepOrder });
+    }
+    reorder(helper.getId(), newStepOrder).then((res) => {
+      console.log('ressy', res);
+      this.setState({tempOrder: null});
+      for(let i = min ; i <= max ; i++) {
+        this.clearLoading(stepOrder.get(i));
+      }
+    });
+  }
   onStepCheck(i, e) {
     const { completeStep, uncompleteStep, goal } = this.props;
     const helper = this.getHelper();
@@ -139,13 +163,13 @@ class HOCStepList extends PureComponent {
       editMode,
       goal,
     } = this.props;
-    const { steps } = this.state;
+    const { steps, tempOrder } = this.state;
 
     return (
       <StepList
         {...this.bindLoading()}
         steps={goal.get('steps')}
-        stepOrder={goal.get('step_order')}
+        stepOrder={tempOrder || goal.get('step_order')}
         delegate={this}
         tooltip={tooltip}
         editMode={editMode}
@@ -161,6 +185,7 @@ export default connect((state, oP) => ({
   tooltip: a.main.tooltip,
   addStep: ca.steps.add,
   selectAssignees: a.goals.selectAssignees,
+  reorder: ca.steps.reorder,
   completeStep: ca.goals.completeStep,
   uncompleteStep: ca.goals.uncompleteStep,
   confirm: a.menus.confirm,

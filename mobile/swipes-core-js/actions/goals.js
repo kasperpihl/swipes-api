@@ -49,19 +49,19 @@ export const rename = (goalId, title) => a.api.request('goals.rename', {
   title,
 });
 
-export const notify = (gId, notification) => d => d(a.api.request('goals.notify', {
+export const notify = (gId, notification) => a.api.request('goals.notify', {
   goal_id: gId,
   ...notification.toJS(),
-}));
+});
 
-export const completeStep = (gId, sId) => d => d(a.api.request('goals.completeStep', {
+export const completeStep = (gId, sId) => a.api.request('goals.completeStep', {
   goal_id: gId,
   step_id: sId,
-}))
+})
 
-export const uncompleteStep = (gId, sId) => d => d(a.api.request('goals.uncompleteStep', {
+export const uncompleteStep = (gId, sId) => a.api.request('goals.uncompleteStep', {
   goal_id: gId,
   step_id: sId,
-}))
+})
 
-export const archive = goalId => d => d(a.api.request('goals.archive', { goal_id: goalId }));
+export const archive = goalId => a.api.request('goals.archive', { goal_id: goalId });

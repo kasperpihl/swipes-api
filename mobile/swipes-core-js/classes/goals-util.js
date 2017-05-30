@@ -21,6 +21,10 @@ export default class GoalsUtil {
     return this.goal.get('step_order').findKey(v => (v === id));
   }
 
+  getStepOrder() {
+    return this.goal.get('step_order');
+  }
+
   // ======================================================
   // Get step
   // ======================================================
@@ -51,6 +55,10 @@ export default class GoalsUtil {
     return !!step.get('assignees').find(a => (a === this.id));
   }
 
+  getNewStepOrder(oldIndex, newIndex) {
+    const movedId = this.goal.getIn(['step_order', oldIndex]);
+    return this.goal.get('step_order').delete(oldIndex).insert(newIndex, movedId);
+  }
   getOrderedSteps() {
     return this.goal.get('step_order').map(id => this.goal.getIn(['steps', id]));
   }
