@@ -9,6 +9,8 @@ import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter'
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+
+    this.renderRow = this.renderRow.bind(this);
   }
   renderHeader() {
     return (
@@ -50,14 +52,16 @@ class Dashboard extends Component {
     return (
       <ImmutableListView
         immutableData={notifications}
-        renderRow={rowData => this.renderRow(rowData, delegate)}
+        renderRow={this.renderRow}
         renderFooter={this.renderFooter}
         removeClippedSubviews={false}
       />
     );
   }
-  renderRow(rowData, delegate) {
-    return <NotificationItem notification={rowData} delegate={delegate} />;
+  renderRow(n) {
+    const { delegate, tabIndex } = this.props;
+
+    return <NotificationItem notification={n} delegate={delegate} pinned={tabIndex === 0 && (n.get('reply') === true)} />;
   }
   renderFooter() {
     return <EmptyListFooter />;

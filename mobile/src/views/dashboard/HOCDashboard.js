@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Linking, Platform } from 'react-native';
 import { connect } from 'react-redux';
+import { List, Map } from 'immutable';
 import * as a from '../../actions';
+import * as ca from '../../../swipes-core-js/actions';
 import Dashboard from './Dashboard';
 
 const styles = StyleSheet.create({
@@ -18,8 +20,6 @@ class HOCDashboard extends PureComponent {
       tabIndex: 0,
       hasLoaded: false,
     };
-
-    this.onActionButton = this.onActionButton.bind(this);
   }
   componentWillMount() {
     const { notifications, filters } = this.props;
@@ -58,13 +58,25 @@ class HOCDashboard extends PureComponent {
         this.setState({ hasLoaded: true });
       }, 1);
     }
-
-    if (!prevProps.isActive && this.props.isActive) {
-      this.renderActionButtons();
-    }
   }
   componentWillUnmount() {
     clearTimeout(this.loadingTimeout);
+  }
+  onMark(id) {
+    const { markNotifications } = this.props;
+    const { notifications } = this.state;
+
+    if (notifications.size) {
+      let arg = [id];
+
+      if (id === 'all') {
+        arg = notifications.toArray().filter(n => !n.get('seen_at')).map(n => n.get('id'));
+      }
+
+      if (arg.length) {
+        markNotifications(arg);
+      }
+    }
   }
   onChangeTab(index) {
     const { tabIndex } = this.state;
@@ -77,13 +89,33 @@ class HOCDashboard extends PureComponent {
       });
     }
   }
-  onActionButton(i) {
-    // console.log('action!', i);
+  onReply(n) {
+    const { notifications } = this.state;
+    const { navPush } = this.props;
+    const notification = notifications.get(n.get('i'));
+
+    this.onMark(notification.get('id'));
+
+    navPush({
+      id: 'Notify',
+      title: 'Notify',
+      props: {
+        notify: Map({
+          reply_to: notification.getIn(['target', 'history_index']),
+          notification_type: notification.getIn(['meta', 'notification_type']),
+          assignees: List([notification.get('done_by')]),
+        }),
+        goalId: notification.getIn(['target', 'id']),
+      },
+    });
   }
   onNotificationPress(obj) {
     const { navPush } = this.props;
     const { notifications } = this.state;
     const notification = notifications.get(obj.get('i'));
+
+    this.onMark(notification.get('id'));
+
     const overview = {
       id: 'GoalOverview',
       title: 'Goal overview',
@@ -103,13 +135,8 @@ class HOCDashboard extends PureComponent {
   }
   openLink(att) {
     const { preview } = this.props;
+
     preview(att);
-  }
-  renderActionButtons() {
-    this.props.setActionButtons({
-      onClick: this.onActionButton,
-      buttons: [{ text: 'Mark All as Read' }],
-    });
   }
   render() {
     const { filters } = this.props;
@@ -153,5 +180,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  markNotifications: ca.notifications.mark,
   preview: a.links.preview,
 })(HOCDashboard);
