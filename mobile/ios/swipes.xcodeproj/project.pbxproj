@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -234,6 +235,13 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		A710798C1EDE4867009BE53E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9CD5118A2464A3A93849A2D /* RNImagePicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
+			remoteInfo = RNImagePicker;
+		};
 		A71BD5251E83031800350326 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 14344677E3334144BAAF85FE /* BVLinearGradient.xcodeproj */;
@@ -319,11 +327,11 @@
 		A73D8A071ED39E5C001E3840 /* RCTBrowser.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBrowser.xcodeproj; path = "../node_modules/react-native-browser/RCTBrowser.xcodeproj"; sourceTree = "<group>"; };
 		A7C255251ECF621300BD007D /* swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = swipes.entitlements; path = swipes/swipes.entitlements; sourceTree = "<group>"; };
 		AA7D0DDF44284A78B90C17B6 /* ReactNativeCustomTabs.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeCustomTabs.xcodeproj; path = "../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs.xcodeproj"; sourceTree = "<group>"; };
+		AB1619CF453941C4A304F00C /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		B7C39509E9794B9495047D7D /* libDBCustomTabs.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libDBCustomTabs.a; sourceTree = "<group>"; };
 		C4045E371D8A4EC7B4303277 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
+		C9CD5118A2464A3A93849A2D /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		F6F5734475CA4E179687A774 /* RCTOneSignal.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOneSignal.xcodeproj; path = "../node_modules/react-native-onesignal/ios/RCTOneSignal.xcodeproj"; sourceTree = "<group>"; };
-		C9CD5118A2464A3A93849A2D /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; name = "RNImagePicker.xcodeproj"; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		AB1619CF453941C4A304F00C /* libRNImagePicker.a */ = {isa = PBXFileReference; name = "libRNImagePicker.a"; path = "libRNImagePicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -567,6 +575,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A710796B1EDE4867009BE53E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A710798D1EDE4867009BE53E /* libRNImagePicker.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A71BD5221E83031800350326 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -799,6 +815,10 @@
 					ProjectRef = AA7D0DDF44284A78B90C17B6 /* ReactNativeCustomTabs.xcodeproj */;
 				},
 				{
+					ProductGroup = A710796B1EDE4867009BE53E /* Products */;
+					ProjectRef = C9CD5118A2464A3A93849A2D /* RNImagePicker.xcodeproj */;
+				},
+				{
 					ProductGroup = A73D8A311ED48042001E3840 /* Products */;
 					ProjectRef = 1E0D07E439494AE4A09967D4 /* RNReactNativeDocViewer.xcodeproj */;
 				},
@@ -991,6 +1011,13 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A710798D1EDE4867009BE53E /* libRNImagePicker.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNImagePicker.a;
+			remoteRef = A710798C1EDE4867009BE53E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A71BD5261E83031800350326 /* libBVLinearGradient.a */ = {
@@ -1193,7 +1220,7 @@
 					"$(SRCROOT)/../node_modules/react-native-onesignal/ios/RCTOneSignal/**",
 					"$(SRCROOT)..\node_modules\neact-native-custom-tabsiosReactNativeCustomTabs",
 					"$(SRCROOT)..\node_modules\neact-native-doc-viewerios/**",
-					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
 				);
 				INFOPLIST_FILE = swipesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1233,7 +1260,7 @@
 					"$(SRCROOT)/../node_modules/react-native-onesignal/ios/RCTOneSignal/**",
 					"$(SRCROOT)..\node_modules\neact-native-custom-tabsiosReactNativeCustomTabs",
 					"$(SRCROOT)..\node_modules\neact-native-doc-viewerios/**",
-					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
 				);
 				INFOPLIST_FILE = swipesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1271,7 +1298,7 @@
 					"$(SRCROOT)/../node_modules/react-native-svgios/**/**",
 					"$(SRCROOT)/../node_modules/react-native-custom-tabsiosReactNativeCustomTabs",
 					"$(SRCROOT)/../node_modules/react-native-doc-viewerios/**",
-					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1301,7 +1328,7 @@
 					"$(SRCROOT)/../node_modules/react-native-svgios/**/**",
 					"$(SRCROOT)/../node_modules/react-native-custom-tabsiosReactNativeCustomTabs",
 					"$(SRCROOT)/../node_modules/react-native-doc-viewerios/**",
-					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1341,7 +1368,7 @@
 					"$(SRCROOT)/../node_modules/react-native-onesignal/ios/RCTOneSignal/**",
 					"$(SRCROOT)..\node_modules\neact-native-custom-tabsiosReactNativeCustomTabs",
 					"$(SRCROOT)..\node_modules\neact-native-doc-viewerios/**",
-					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
 				);
 				INFOPLIST_FILE = "swipes-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1389,7 +1416,7 @@
 					"$(SRCROOT)/../node_modules/react-native-onesignal/ios/RCTOneSignal/**",
 					"$(SRCROOT)..\node_modules\neact-native-custom-tabsiosReactNativeCustomTabs",
 					"$(SRCROOT)..\node_modules\neact-native-doc-viewerios/**",
-					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
 				);
 				INFOPLIST_FILE = "swipes-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
