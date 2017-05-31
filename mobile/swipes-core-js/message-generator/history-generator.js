@@ -53,12 +53,19 @@ export default class HistoryGenerator {
 
       case 'goal_archived':
         return `${from} archived this goal`;
-
-      case 'step_completed': {
-        if (h.get('progress') === 'iteration') {
-          return `${from} made an iteration`;
+      case 'step_incompleted': {
+        const step = helper.getStepById(h.get('step_id'));
+        if(step) {
+          return `${from} incompleted '${step.get('title')}'`;
         }
-        return `${from} completed step`;
+        return `${from} incompleted a step`;
+      }
+      case 'step_completed': {
+        const step = helper.getStepById(h.get('step_id'));
+        if(step) {
+          return `${from} completed '${step.get('title')}'`;
+        }
+        return `${from} completed a step`;
       }
 
       case 'goal_notify': {
@@ -131,6 +138,8 @@ export default class HistoryGenerator {
 
       case 'step_completed':
         return 'ActivityCheckmark';
+      case 'step_incompleted':
+        return 'Iteration';
 
       case 'goal_notify':
         switch (h.get('notification_type') || h.getIn(['meta', 'notification_type'])) {

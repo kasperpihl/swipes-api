@@ -133,13 +133,17 @@ class HOCStepList extends PureComponent {
 
     const step = helper.getStepByIndex(i);
     const actionEvent = step.get('completed_at') ? 'Step incompleted' : 'Step completed';
-    const actionLabel = step.get('completed_at') ? 'Uncompleting...' : 'Completing...';
+    const actionLabel = step.get('completed_at') ? 'Incompleting...' : 'Completing...';
     const actionFunc = step.get('completed_at') ? incompleteStep : completeStep;
 
     this.setLoading(step.get('id'), actionLabel);
     actionFunc(goal.get('id'), step.get('id')).then((res) => {
       if (res && res.ok) {
         this.clearLoading(step.get('id'));
+        this.callDelegate('onStepDidComplete', {
+          completed: !step.get('completed_at'),
+          stepId: step.get('id'),
+        })
         window.analytics.sendEvent(actionEvent, {});
       } else {
         this.clearLoading(step.get('id'), '!Something went wrong', 3000);

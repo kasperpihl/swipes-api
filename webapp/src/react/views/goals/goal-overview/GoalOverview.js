@@ -39,7 +39,7 @@ class GoalOverview extends PureComponent {
     const helper = this.getHelper();
 
     const myName = msgGen.users.getName(myId, { disableYou: true });
-    if (!handoff.toId) {
+    /*if (!handoff.toId) {
       return (
         <span>
           Great work {myName}! {"You've"} just completed the goal{' '}
@@ -47,10 +47,13 @@ class GoalOverview extends PureComponent {
           Send a message to the team to congratulate them for the achievement.
         </span>
       );
-    }
-    const toStep = helper.getStepById(handoff.toId);
+    }*/
+    const step = helper.getStepById(handoff.stepId);
+    const title = truncateString(step.get('title'), 19);
+
     let personString = 'the next person';
-    const assignees = helper.getAssigneesForStepId(handoff.toId);
+    let assignees = helper.getAssigneesForStepId(handoff.stepId);
+    assignees = handoff.completed ? helper.getAllAssignees() : assignees;
     if (assignees.size) {
       personString = (
         <b>“{msgGen.users.getNames(assignees, {
@@ -59,8 +62,8 @@ class GoalOverview extends PureComponent {
         })}”</b>
     );
     }
-    if (handoff.backward) {
-      const title = truncateString(toStep.get('title'), 19);
+
+    if (!handoff.completed) {
       return (
         <span>
           Alright, {myName}. <b>“{title}”</b> needs some changes.<br />
@@ -68,8 +71,6 @@ class GoalOverview extends PureComponent {
         </span>
       );
     }
-    const titles = helper.getStepTitlesBetweenIds(handoff.fromId, handoff.toId);
-    const title = titles.size > 1 ? `${titles.size} steps` : truncateString(titles.get(0), 19);
     return (
       <span>
         Great progress, {myName}! You completed <b>“{title}”</b><br />
@@ -199,10 +200,10 @@ class GoalOverview extends PureComponent {
     );
   }
   renderSuccessFooter(handoff) {
-    let icon = handoff.toId ? 'ActivityCheckmark' : 'Star';
+    let icon = 'ActivityCheckmark';
     let iconClass = 'success-footer__icon';
 
-    if (handoff.backward) {
+    if (!handoff.completed) {
       iconClass += ' success-footer__icon--backward';
       icon = 'Iteration';
     }
@@ -240,7 +241,7 @@ class GoalOverview extends PureComponent {
       return undefined;
     }
     const buttonLabel = 'Complete goal';
-
+    return undefined;
     return (
       <div className="handoff-bar">
         <div className="handoff-bar__label" />
