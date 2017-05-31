@@ -113,6 +113,8 @@ export default class HistoryGenerator {
   getReplyButtonForHistory(id, h) {
     const myId = this.store.getState().getIn(['me', 'id']);
     const helper = this._getHelper(id);
+    return true;
+
     if (!h || !h.get('request') || !h.get('assignees').contains(myId)) {
       return false;
     }
