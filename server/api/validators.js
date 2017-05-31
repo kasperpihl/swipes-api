@@ -3,6 +3,7 @@ import {
   object,
   array,
   bool,
+  date,
 } from 'valjs';
 
 const goalMoreStrict =
@@ -32,13 +33,11 @@ const goalFullMoreStrict =
       attachments: object.require(),
       attachment_order: array.of(string).require(),
       archived: bool.require(),
-      // T_TODO history and status can be described even deeper
       history: array.of(object).require(),
-      status: object.require(),
       created_by: string.require(),
-      // T_TODO cover the dates someday
-      // created_at;
-      // updated_at;
+      created_at: date.require(),
+      updated_at: date.require(),
+      completed_at: date.acceptNull().require(),
     }).require();
 
 const goalLessStrict =
