@@ -48,13 +48,6 @@ import {
   notificationCreateGroupId,
 } from './middlewares/util_middlewares';
 import {
-  usersGetSingleWithOrganizations,
-} from './middlewares/users';
-import {
-  notifyAllInCompany,
-  notifyCommonRethinkdb,
-} from './middlewares/notify';
-import {
   notesCreate,
 } from './middlewares/notes';
 import {
@@ -234,16 +227,6 @@ authed.all('/goals.loadWay',
   valResponseAndSend({
     goal: object.require(),
   }));
-
-// T_TODO warning: this endpoint is to be removed
-authed.all('/goals.update',
-    usersGetSingleWithOrganizations,
-    goalsUpdate,
-    notifyAllInCompany,
-    notifyCommonRethinkdb,
-    valResponseAndSend({
-      goal: object.require(),
-    }));
 
 export {
   authed,
