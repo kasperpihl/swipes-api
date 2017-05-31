@@ -101,10 +101,8 @@ class HOCGoalOverview extends PureComponent {
 
   onHandoffMessage(handoff) {
     const helper = this.getHelper();
-    let assignees = helper.getAllInvolvedAssignees();
-    if (handoff.toId) {
-      assignees = helper.getAssigneesForStepId(handoff.toId);
-    }
+    const assignees = helper.getAllAssignees();
+
     // console.log(i, handoff);
     this.onOpenNotify(undefined, assignees);
   }
@@ -171,10 +169,7 @@ class HOCGoalOverview extends PureComponent {
     this.setState({ handoff });
   }
   onBarClick(e) {
-    const helper = this.getHelper();
-    if (this.stepList) {
-      this.stepList.onStepCheck(helper.getCurrentStepIndex(), e);
-    }
+    console.log('bar!');
   }
   onCloseHandoff() {
     this.setState({ handoff: null });
@@ -185,10 +180,8 @@ class HOCGoalOverview extends PureComponent {
 
     if (handoff) {
       const helper = this.getHelper();
-      let assignees = helper.getAllInvolvedAssignees();
-      if (handoff.toId) {
-        assignees = helper.getAssigneesForStepId(handoff.toId);
-      }
+      const assignees = helper.getAllAssignees();
+
       this.onOpenNotify(fromJS({
         notification_type: 'update',
         assignees: assignees || [me.get('id')],

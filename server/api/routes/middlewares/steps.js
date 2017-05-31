@@ -3,6 +3,7 @@ import {
   string,
   array,
   object,
+  any,
 } from 'valjs';
 import {
   dbStepsAdd,
@@ -37,6 +38,7 @@ const stepsAdd = valLocals('stepsAdd', {
     created_at: r.now(),
     updated_at: r.now(),
     updated_by: user_id,
+    completed_at: null,
   });
 
   dbStepsAdd({ user_id, goal_id, step: mutatedStep })
@@ -46,7 +48,7 @@ const stepsAdd = valLocals('stepsAdd', {
       setLocals({
         step: changes.new_val.steps[step_id],
         step_order: changes.new_val.step_order,
-        status: changes.new_val.status,
+        completed_at: changes.new_val.completed_at,
       });
 
       return next();
@@ -60,21 +62,21 @@ const stepsAddQueueMessage = valLocals('stepsAddQueueMessage', {
   goal_id: string.require(),
   step: object.require(),
   step_order: array.require(),
-  status: object.require(),
+  completed_at: any,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     step,
     step_order,
-    status,
+    completed_at,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
     step,
     step_order,
-    status,
+    completed_at,
     event_type: 'step_added',
   };
 
@@ -149,7 +151,7 @@ const stepsDelete = valLocals('stepsDelete', {
       const changes = results.changes[0];
 
       setLocals({
-        status: changes.new_val.status,
+        completed_at: changes.new_val.completed_at,
       });
 
       return next();
@@ -162,19 +164,19 @@ const stepsDeleteQueueMessage = valLocals('stepsDeleteQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   step_id: string.require(),
-  status: object.require(),
+  completed_at: any,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     step_id,
-    status,
+    completed_at,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
     step_id,
-    status,
+    completed_at,
     event_type: 'step_deleted',
   };
 
@@ -189,28 +191,15 @@ const stepsReorder = valLocals('stepsReorder', {
   user_id: string.require(),
   goal_id: string.require(),
   step_order: array.of(string).require(),
-  current_step_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     step_order,
-    current_step_id,
   } = res.locals;
 
-  dbStepsReorder({ user_id, goal_id, step_order, current_step_id })
-    .then((results) => {
-      const changes = results.changes[0];
-      let status = {};
-
-      if (changes) {
-        status = changes.new_val.status;
-      }
-
-      setLocals({
-        status,
-      });
-
+  dbStepsReorder({ user_id, goal_id, step_order })
+    .then(() => {
       return next();
     })
     .catch((err) => {
@@ -221,19 +210,16 @@ const stepsReorderQueueMessage = valLocals('stepsReorderQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   step_order: array.of(string).require(),
-  status: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     step_order,
-    status,
   } = res.locals;
   const queueMessage = {
     user_id,
     goal_id,
     step_order,
-    status,
     event_type: 'step_reordered',
   };
 

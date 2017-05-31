@@ -48,12 +48,6 @@ const goal_completed = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const goal_started = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
-  notify.notifyAllInCompany,
-]);
-
 const goal_archived = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsArchiveWithHistoryNotificationData,
@@ -125,6 +119,13 @@ const goal_loaded_way = notifyWrapper([
 ]);
 
 const step_completed = notifyWrapper([
+  goals.goalsGetSingle,
+  goals.goalsGeneralWithHistoryNotificationData,
+  notify.notifyAllInGoal,
+  notify.notifySendEventToAllInCompany,
+]);
+
+const step_incompleted = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsGeneralWithHistoryNotificationData,
   notify.notifyAllInGoal,
@@ -270,13 +271,13 @@ const organization_updated = noUserNotifyWrapper([
 export {
   goal_created,
   goal_completed,
-  goal_started,
   goal_archived,
   goal_notify,
   goal_notify_email,
   goal_renamed,
   goal_loaded_way,
   step_completed,
+  step_incompleted,
   milestone_created,
   milestone_closed,
   milestones_opened,

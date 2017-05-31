@@ -4,6 +4,7 @@ import {
   object,
   array,
   date,
+  any,
 } from 'valjs';
 import {
   stepsAdd,
@@ -51,7 +52,7 @@ authed.all('/steps.add',
       assignees: array.require(),
     }).require(),
     step_order: array.require(),
-    status: object.require(),
+    completed_at: any,
   }));
 
 authed.all('/steps.rename',
@@ -80,14 +81,13 @@ authed.all('/steps.delete',
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
-    status: object.require(),
+    completed_at: any,
   }));
 
 authed.all('/steps.reorder',
   valBody({
     goal_id: string.require(),
     step_order: array.of(string).require(),
-    current_step_id: string.require(),
   }),
   stepsReorder,
   stepsReorderQueueMessage,
@@ -95,7 +95,6 @@ authed.all('/steps.reorder',
   valResponseAndSend({
     goal_id: string.require(),
     step_order: array.require(),
-    status: object.require(),
   }));
 
 authed.all('/steps.assign',

@@ -30,6 +30,10 @@
   z-index: -1;
 }
 
+.no-select {
+  user-select: none !important;
+}
+
 // overlay (Browser etc.)
 
 .overlay {

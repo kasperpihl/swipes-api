@@ -6,8 +6,6 @@ import {
 
 import * as a from './';
 import { valAction } from '../classes/utils';
-import GoalsUtil from '../classes/goals-util';
-
 
 export const create = valAction('goals.create', [
   string.min(1).max(155).require(),
@@ -51,21 +49,19 @@ export const rename = (goalId, title) => a.api.request('goals.rename', {
   title,
 });
 
-export const notify = (gId, notification) => d => d(a.api.request('goals.notify', {
+export const notify = (gId, notification) => a.api.request('goals.notify', {
   goal_id: gId,
   ...notification.toJS(),
-}));
+});
 
-export const completeStep = (gId, nextStepId) => (d, getState) => {
-  const goal = getState().getIn(['goals', gId]);
-  const helper = new GoalsUtil(goal);
-  const currentStepId = helper.getCurrentStepId();
+export const completeStep = (gId, sId) => a.api.request('goals.completeStep', {
+  goal_id: gId,
+  step_id: sId,
+})
 
-  return d(a.api.request('goals.completeStep', {
-    goal_id: gId,
-    next_step_id: nextStepId,
-    current_step_id: currentStepId,
-  }));
-};
+export const incompleteStep = (gId, sId) => a.api.request('goals.incompleteStep', {
+  goal_id: gId,
+  step_id: sId,
+})
 
-export const archive = goalId => d => d(a.api.request('goals.archive', { goal_id: goalId }));
+export const archive = goalId => a.api.request('goals.archive', { goal_id: goalId });

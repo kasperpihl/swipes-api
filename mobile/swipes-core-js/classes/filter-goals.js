@@ -18,7 +18,7 @@ export default function filterGoal(goal, filter) {
 
   // Check goal types
   const goalType = filter.get('goalType');
-  // Supported: current, upcoming, completed, starred
+  // Supported: current, completed, starred
   if(goalType === 'completed' && !isCompleted){
     return false;
   }
@@ -34,7 +34,7 @@ export default function filterGoal(goal, filter) {
   if (userId) {
     // Check all/completed goals for assignees filter
     if (!goalType || goalType === 'completed') {
-      const allInvolved = helper.getAllInvolvedAssignees();
+      const allInvolved = helper.getAllAssignees();
       const hasUser = (allInvolved.indexOf(userId) > -1);
       if (userId !== 'none' && userId && !hasUser) {
         return false;
@@ -43,25 +43,7 @@ export default function filterGoal(goal, filter) {
         return false;
       }
     }
-    // Check upcoming goals for assignees filter
-    if(goalType === 'upcoming'){
-      const currentAssignees = helper.getCurrentAssignees();
-      const isCurrentlyAssigned = currentAssignees.find(uId => uId === userId);
-      if (userId === 'none') {
-        if (!helper.hasEmptyStepsLater()) {
-          return false;
-        }
-      } else if(userId !== 'none') {
-        if (isCurrentlyAssigned) {
-          return false;
-        }
-        const remainingAssignees = helper.getRemainingAssignees();
-        const isAssignedLater = remainingAssignees.find(uId => uId === userId);
-        if (!isAssignedLater) {
-          return false;
-        }
-      }
-    }
+
     // Check current goals for assignees filter
     if (goalType === 'current') {
       const currentAssignees = helper.getCurrentAssignees();
@@ -71,7 +53,7 @@ export default function filterGoal(goal, filter) {
           return false;
         }
       } else if (userId === 'none') {
-        if (currentAssignees.size && helper.getTotalNumberOfSteps()) {
+        if (currentAssignees.size && helper.getNumberOfSteps()) {
           return false;
         }
       } else if (!isCurrentlyAssigned) {

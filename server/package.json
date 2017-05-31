@@ -34,7 +34,7 @@
     "shortid": "^2.2.6",
     "slug": "^0.9.1",
     "underscore": "1.8.x",
-    "valjs": "0.0.24",
+    "valjs": "0.0.28",
     "winston": "^2.3.1",
     "winston-loggly-bulk": "^1.3.4",
     "ws": "^1.1.1"

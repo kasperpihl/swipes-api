@@ -22,8 +22,8 @@ import {
   goalsCreateQueueMessage,
   goalsArchiveQueueMessage,
   goalsCompleteStep,
-  goalsNextStepQueueMessage,
-  goalsProgressStatus,
+  goalsCompleteStepQueueMessage,
+  goalsIncompleteStepQueueMessage,
   goalsNotify,
   goalsNotifyQueueMessage,
   goalsHistoryUpdateIfReply,
@@ -32,6 +32,10 @@ import {
   goalsLoadWay,
   goalsLoadWayQueueMessage,
   goalsNotifyEmailQueueMessage,
+  goalsFindCompleteStatus,
+  goalsIncompleteStep,
+  goalsCompleteGoal,
+  goalsCompleteQueueMessage,
 } from './middlewares/goals';
 import {
   milestonesRemoveGoal,
@@ -121,19 +125,45 @@ authed.all('/goals.create',
     goal_order: array,
   }));
 
+authed.all('/goals.completeGoal',
+  valBody({
+    goal_id: string.require(),
+  }),
+  notificationCreateGroupId,
+  goalsCompleteGoal,
+  goalsCompleteQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal: object.require(),
+  }));
+
 authed.all('/goals.completeStep',
   valBody({
     goal_id: string.require(),
-    current_step_id: string,
-    next_step_id: string,
-    assignees: array.of(string),
+    step_id: string.require(),
   }),
   notificationCreateGroupId,
   goalsGet,
-  goalsProgressStatus,
+  goalsFindCompleteStatus,
   goalsCompleteStep,
   goalsUpdate,
-  goalsNextStepQueueMessage,
+  goalsCompleteStepQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal: object.require(),
+  }));
+
+authed.all('/goals.incompleteStep',
+  valBody({
+    goal_id: string.require(),
+    step_id: string.require(),
+  }),
+  notificationCreateGroupId,
+  goalsGet,
+  goalsFindCompleteStatus,
+  goalsIncompleteStep,
+  goalsUpdate,
+  goalsIncompleteStepQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),

@@ -235,7 +235,7 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		A710798C1EDE4867009BE53E /* PBXContainerItemProxy */ = {
+		A71079441EDE2BE1009BE53E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C9CD5118A2464A3A93849A2D /* RNImagePicker.xcodeproj */;
 			proxyType = 2;
@@ -575,10 +575,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A710796B1EDE4867009BE53E /* Products */ = {
+		A71079231EDE2BE1009BE53E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A710798D1EDE4867009BE53E /* libRNImagePicker.a */,
+				A71079451EDE2BE1009BE53E /* libRNImagePicker.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -815,7 +815,11 @@
 					ProjectRef = AA7D0DDF44284A78B90C17B6 /* ReactNativeCustomTabs.xcodeproj */;
 				},
 				{
+<<<<<<< HEAD
 					ProductGroup = A710796B1EDE4867009BE53E /* Products */;
+=======
+					ProductGroup = A71079231EDE2BE1009BE53E /* Products */;
+>>>>>>> checklist
 					ProjectRef = C9CD5118A2464A3A93849A2D /* RNImagePicker.xcodeproj */;
 				},
 				{
@@ -1013,11 +1017,19 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+<<<<<<< HEAD
 		A710798D1EDE4867009BE53E /* libRNImagePicker.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNImagePicker.a;
 			remoteRef = A710798C1EDE4867009BE53E /* PBXContainerItemProxy */;
+=======
+		A71079451EDE2BE1009BE53E /* libRNImagePicker.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNImagePicker.a;
+			remoteRef = A71079441EDE2BE1009BE53E /* PBXContainerItemProxy */;
+>>>>>>> checklist
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A71BD5261E83031800350326 /* libBVLinearGradient.a */ = {
@@ -1298,7 +1310,11 @@
 					"$(SRCROOT)/../node_modules/react-native-svgios/**/**",
 					"$(SRCROOT)/../node_modules/react-native-custom-tabsiosReactNativeCustomTabs",
 					"$(SRCROOT)/../node_modules/react-native-doc-viewerios/**",
+<<<<<<< HEAD
 					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
+=======
+					"$(SRCROOT)/../node_modules/react-native-image-pickerios/**",
+>>>>>>> checklist
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1328,7 +1344,11 @@
 					"$(SRCROOT)/../node_modules/react-native-svgios/**/**",
 					"$(SRCROOT)/../node_modules/react-native-custom-tabsiosReactNativeCustomTabs",
 					"$(SRCROOT)/../node_modules/react-native-doc-viewerios/**",
+<<<<<<< HEAD
 					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
+=======
+					"$(SRCROOT)/../node_modules/react-native-image-pickerios/**",
+>>>>>>> checklist
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

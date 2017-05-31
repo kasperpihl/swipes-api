@@ -102,57 +102,50 @@ class HOCStepList extends PureComponent {
     });
     e.stopPropagation();
   }
-  onStepCheck(i, e) {
-    const { completeStep, goal, confirm } = this.props;
-    const options = this.getOptionsForE(e);
-    const helper = this.getHelper();
-    const currentI = helper.getCurrentStepIndex();
-    const handoff = {
-      goalId: helper.getId(),
-      backward: (i < currentI),
-      fromId: helper.getCurrentStepId(),
-    };
-    const loadingI = i;
-    if (i >= currentI) {
-      i += 1;
+  onStepSort({oldIndex, newIndex}, e) {
+    if(oldIndex === newIndex){
+      return;
     }
+    const { reorder } = this.props;
+    const helper = this.getHelper();
+    const stepOrder = helper.getStepOrder();
+    const newStepOrder = helper.getNewStepOrder(oldIndex, newIndex);
+    const max = (oldIndex > newIndex) ? oldIndex : newIndex;
+    const min = (oldIndex < newIndex) ? oldIndex : newIndex;
+
+    this.setLoading(stepOrder.get(oldIndex), 'Reordering');
+    for(let i = min ; i <= max ; i++) {
+      //this.setLoading(stepOrder.get(i), 'Reordering...');
+      this.setState({ tempOrder: newStepOrder });
+    }
+    reorder(helper.getId(), newStepOrder).then((res) => {
+      console.log('ressy', res);
+      this.setState({tempOrder: null});
+      for(let i = min ; i <= max ; i++) {
+        this.clearLoading(stepOrder.get(i));
+      }
+    });
+  }
+  onStepCheck(i, e) {
+    console.log('i', i, e);
+    const { completeStep, incompleteStep, goal } = this.props;
+    const helper = this.getHelper();
 
     const step = helper.getStepByIndex(i);
-    const nextStepId = (step && step.get('id')) || null;
-    handoff.toId = nextStepId;
-    if (handoff.toId && !handoff.fromId) {
-      // If the goal was completed, and undo some steps.
-      handoff.backward = true;
-    }
-    const completeHandler = () => {
-      this.setLoading('completing', `${loadingI}`);
-      this.callDelegate('onStepWillComplete', handoff);
-      completeStep(goal.get('id'), nextStepId).then((res) => {
-        if (res && res.ok) {
-          this.clearLoading('completing');
-          this.callDelegate('onStepDidComplete', handoff);
-          window.analytics.sendEvent('Step completed', {
-            'Iteration': handoff.backward,
-          });
-        } else {
-          this.callDelegate('onStepDidFailComplete', handoff);
-          this.clearLoading('completing', '!Something went wrong');
-        }
-      });
-    };
+    const actionEvent = step.get('completed_at') ? 'Step incompleted' : 'Step completed';
+    const actionLabel = step.get('completed_at') ? 'Uncompleting...' : 'Completing...';
+    const actionFunc = step.get('completed_at') ? incompleteStep : completeStep;
 
-    if (handoff.backward) {
-      confirm(Object.assign({}, options, {
-        title: 'Make an iteration',
-        message: 'Do you want uncheck these steps and redo them',
-      }), (res) => {
-        if (res === 1) {
-          completeHandler();
-        }
-      });
-    } else {
-      completeHandler();
-    }
+    this.setLoading(step.get('id'), actionLabel);
+    actionFunc(goal.get('id'), step.get('id')).then((res) => {
+      if (res && res.ok) {
+        this.clearLoading(step.get('id'));
+        window.analytics.sendEvent(actionEvent, {});
+      } else {
+        this.clearLoading(step.get('id'), '!Something went wrong', 3000);
+      }
+    });
+
   }
   getHelper(overrideGoal) {
     const { goal, myId } = this.props;
@@ -166,20 +159,18 @@ class HOCStepList extends PureComponent {
     };
   }
   render() {
-    const helper = this.getHelper();
     const {
       tooltip,
       editMode,
       goal,
     } = this.props;
-    const { steps } = this.state;
+    const { steps, tempOrder } = this.state;
 
     return (
       <StepList
-        currentStepIndex={helper.getNumberOfCompletedSteps()}
         {...this.bindLoading()}
         steps={goal.get('steps')}
-        stepOrder={goal.get('step_order')}
+        stepOrder={tempOrder || goal.get('step_order')}
         delegate={this}
         tooltip={tooltip}
         editMode={editMode}
@@ -195,7 +186,9 @@ export default connect((state, oP) => ({
   tooltip: a.main.tooltip,
   addStep: ca.steps.add,
   selectAssignees: a.goals.selectAssignees,
+  reorder: ca.steps.reorder,
   completeStep: ca.goals.completeStep,
+  incompleteStep: ca.goals.incompleteStep,
   confirm: a.menus.confirm,
   removeStep: ca.steps.remove,
   renameStep: ca.steps.rename,

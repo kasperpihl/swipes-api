@@ -24,16 +24,6 @@ const initialState = fromJS({
       },
       goals: OrderedSet(),
     },
-    upcoming: {
-      id: 'upcoming',
-      title: 'Upcoming',
-      description: 'Goals that is assigned to you in an upcoming step',
-      filter: {
-        userId: 'me',
-        goalType: 'upcoming',
-      },
-      goals: OrderedSet(),
-    },
     unassigned: {
       id: 'unassigned',
       title: 'Unassigned',

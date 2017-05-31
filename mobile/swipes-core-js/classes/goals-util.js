@@ -17,36 +17,18 @@ export default class GoalsUtil {
   // ======================================================
   // Get stepIndex
   // ======================================================
-  getCurrentStepIndex() {
-    const id = this.getCurrentStepId();
-    return this.getStepIndexForId(id);
-  }
   getStepIndexForId(id) {
     return this.goal.get('step_order').findKey(v => (v === id));
   }
 
-  // ======================================================
-  // Get stepId
-  // ======================================================
-  getCurrentStepId() {
-    return this.goal.getIn(['status', 'current_step_id']);
-  }
-  getNextStepId() {
-    const nextIndex = this.getCurrentStepIndex() + 1;
-    const nextStep = this.getStepByIndex(nextIndex);
-    return (nextStep && nextStep.get('id')) || null;
+  getStepOrder() {
+    return this.goal.get('step_order');
   }
 
   // ======================================================
   // Get step
   // ======================================================
-  getCurrentStep() {
-    return this.goal.getIn(['steps', this.getCurrentStepId()]);
-  }
-  getNextStep() {
-    const nextIndex = this.getCurrentStepIndex() + 1;
-    return this.getStepByIndex(nextIndex);
-  }
+
   getStepByIndex(index) {
     const id = this.goal.getIn(['step_order', index]);
     return this.getStepById(id);
@@ -55,8 +37,15 @@ export default class GoalsUtil {
     return this.goal.getIn(['steps', id]);
   }
 
+  getIsStepCompleted(s) {
+    if(typeof s === 'string'){
+      s = this.goal.getIn(['steps', s]);
+    }
+    return s.get('completed_at');
+  }
+
   getIsCompleted() {
-    return !!this.goal.getIn(['status', 'completed']);
+    return !!this.goal.get('completed_at');
   }
   amIAssigned() {
     const step = this.getCurrentStep();
@@ -66,14 +55,10 @@ export default class GoalsUtil {
     return !!step.get('assignees').find(a => (a === this.id));
   }
 
-  isUserCurrentlyAssigned(userId) {
-    const step = this.getCurrentStep();
-    if (!step) {
-      return false;
-    }
-    return !!step.get('assignees').find(a => (a === userId));
+  getNewStepOrder(oldIndex, newIndex) {
+    const movedId = this.goal.getIn(['step_order', oldIndex]);
+    return this.goal.get('step_order').delete(oldIndex).insert(newIndex, movedId);
   }
-
   getOrderedSteps() {
     return this.goal.get('step_order').map(id => this.goal.getIn(['steps', id]));
   }
@@ -84,33 +69,20 @@ export default class GoalsUtil {
     flags = fromJS(flags || []);
     return flags.map(fId => (this.goal.getIn(['attachments', fId]))).filter(v => !!v);
   }
-  getLastHandoff() {
-    return this.goal.get('history').findLast((h) => {
-      switch (h.get('type')) {
-        case 'goal_created':
-        case 'goal_started':
-        case 'step_completed':
-        case 'goal_completed':
-          return true;
-        default:
-          return false;
-      }
-    });
-  }
-  getLastUpdate() {
-    return this.goal.get('updated_at');
-  }
 
-  getRemainingSteps() {
-    return this.getOrderedSteps().slice(this.getCurrentStepIndex());
-  }
   getNumberOfCompletedSteps() {
     if (this.getIsCompleted()) {
       return this.goal.get('step_order').size;
     }
-    return this.getCurrentStepIndex() || 0;
+    let numberOfCompleted = 0;
+    this.getOrderedSteps().forEach((s) => {
+      if(this.getIsStepCompleted(s)) {
+        numberOfCompleted += 1;
+      }
+    })
+    return numberOfCompleted;
   }
-  getTotalNumberOfSteps() {
+  getNumberOfSteps() {
     return this.goal.get('step_order').size;
   }
   getStepTitleFromId(id) {
@@ -128,9 +100,21 @@ export default class GoalsUtil {
     return titles;
   }
 
+  getAllAssignees() {
+    const assignees = new Set();
+    this.goal.get('steps').forEach((s) => {
+      s.get('assignees').forEach(aId => assignees.add(aId));
+    });
+    return fromJS([...assignees]);
+  }
   getCurrentAssignees() {
-    const i = this.getCurrentStepIndex();
-    return this.getAssigneesForStepIndex(i);
+    const assignees = new Set();
+    this.goal.get('steps').forEach((s) => {
+      if(!this.getIsStepCompleted(s)){
+        s.get('assignees').forEach(aId => assignees.add(aId));
+      }
+    });
+    return fromJS([...assignees]);
   }
   getAssigneesForStepId(id) {
     const stepIndex = this.getStepIndexForId(id);
@@ -143,6 +127,7 @@ export default class GoalsUtil {
     }
     return step.get('assignees');
   }
+
   getActivityByIndex(index) {
     return this.goal.getIn(['history', index]);
   }
@@ -155,32 +140,11 @@ export default class GoalsUtil {
   getLastActivityIndex() {
     return this.goal.get('history').size - 1;
   }
-  getAllInvolvedAssignees() {
-    const assignees = new Set();
-    this.goal.get('steps').forEach((s) => {
-      s.get('assignees').forEach(aId => assignees.add(aId));
-    });
-    this.goal.get('history').forEach((h) => {
-      assignees.add(h.get('done_by'));
-    });
-    return fromJS([...assignees]);
-  }
+
   hasIRepliedToHistory(hE) {
     const history = this.goal.get('history');
     const index = history.findIndex(h => h.get('group_id') === hE.get('group_id'));
     return history.find(h => h.get('reply_to') === index);
-  }
-  hasEmptyStepsLater() {
-    const steps = this.getRemainingSteps();
-    return (steps.filter(s => !s.get('assignees').size).size > 0);
-  }
-  getRemainingAssignees() {
-    const steps = this.getRemainingSteps();
-    const assignees = new Set();
-    steps.forEach((s) => {
-      s.get('assignees').forEach(aId => assignees.add(aId));
-    });
-    return fromJS([...assignees]);
   }
 
   getObjectForWay() {

@@ -24,3 +24,8 @@ export const remove = (goalId, stepId) => a.api.request('steps.delete', {
   goal_id: goalId,
   step_id: stepId,
 });
+
+export const reorder = (goalId, stepOrder) => a.api.request('steps.reorder', {
+  goal_id: goalId,
+  step_order: stepOrder,
+});

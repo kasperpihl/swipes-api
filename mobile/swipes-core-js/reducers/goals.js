@@ -19,10 +19,10 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'milestones.close':
     case 'milestone_closed': {
-      if(payload.goal_ids) {
+      if (payload.goal_ids) {
         payload.goal_ids.forEach((id) => {
           state = state.setIn([id, 'milestone_id'], null);
-        })
+        });
       }
       return state;
     }
@@ -36,11 +36,12 @@ export default function goalsReducer(state = initialState, action) {
     case 'goals.loadWay':
     case 'goal_load_way':
     case 'goals.completeStep':
+    case 'goals.incompleteStep':
     case 'step_completed':
+    case 'step_incompleted':
     case 'goal_completed':
     case 'goal_notify':
     case 'goals.notify':
-    case 'goal_started':
     case 'goals.start': {
       return state.mergeIn([payload.goal.id], payload.goal);
     }
@@ -81,6 +82,11 @@ export default function goalsReducer(state = initialState, action) {
         payload.goal_id, 'steps', payload.step_id, 'assignees',
       ], fromJS(payload.assignees));
     }
+    case 'steps.reorder':
+    case 'step_reordered': {
+      return state.setIn([payload.goal_id, 'step_order'], fromJS(payload.step_order));
+    }
+
     case 'goal_archived':
     case 'goals.archive': {
       if (!state.get(payload.goal_id)) {
@@ -130,7 +136,7 @@ export default function goalsReducer(state = initialState, action) {
       });
     }
     case 'milestones.removeGoal':
-    case 'milestone_goal_removed':{
+    case 'milestone_goal_removed': {
       return state.setIn([payload.goal_id, 'milestone_id'], null);
     }
     case 'milestones.addGoal':
@@ -140,8 +146,8 @@ export default function goalsReducer(state = initialState, action) {
     case 'me.updateSettings':
     case 'settings_updated': {
       const stars = payload.settings.starred_goals;
-      if(stars){
-        return state.map((g) => g.set('starred', stars.indexOf(g.get('id')) > -1));
+      if (stars) {
+        return state.map(g => g.set('starred', stars.indexOf(g.get('id')) > -1));
       }
       return state;
     }

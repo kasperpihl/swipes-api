@@ -50,24 +50,7 @@ class HOCGoalList extends PureComponent {
       this.updateFilter({});
     }
   }
-  onAssignClick(goalId, e) {
-    const { goals, selectAssignees } = this.props;
-    const helper = this.getHelper();
-    const stepId = helper.getCurrentStepId();
-    const step = goals.getIn([goalId, 'steps', stepId]);
-    e.stopPropagation();
-    const options = this.getOptionsForE(e);
-    options.actionLabel = 'Reassign and write message';
-    let overrideAssignees;
-    const title = 'Handoff';
-    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        console.log('lets do this!');
-      }
-    });
-  }
+
   onScroll(e) {
     this._scrollTop = e.target.scrollTop;
   }
