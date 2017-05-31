@@ -36,6 +36,8 @@ import {
   goalsIncompleteStep,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
+  goalsIncompleteGoal,
+  goalsIncompleteQueueMessage,
 } from './middlewares/goals';
 import {
   milestonesRemoveGoal,
@@ -125,6 +127,18 @@ authed.all('/goals.completeGoal',
   notificationCreateGroupId,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal: object.require(),
+  }));
+
+authed.all('/goals.incompleteGoal',
+  valBody({
+    goal_id: string.require(),
+  }),
+  notificationCreateGroupId,
+  goalsIncompleteGoal,
+  goalsIncompleteQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
