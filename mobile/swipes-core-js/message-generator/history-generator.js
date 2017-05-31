@@ -87,7 +87,7 @@ export default class HistoryGenerator {
         else if (type === 'assets') return `${from} gave ${to} assets`;
         else if (type === 'decision') return `${from} gave ${to} a decision`;
 
-        return `${from} notified ${to}`;
+        return `${from} wrote ${to}`;
       }
       case 'milestone_added': {
         return `${from} added the milestone "${msgGen.milestones.getName(h.get('milestone_id'))}"`;
