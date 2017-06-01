@@ -35,6 +35,10 @@ class HOCActivityFeed extends PureComponent {
       preview(this.context.target, att);
     }
   }
+  onClickURL(nI, url) {
+    const { target, browser } = this.props;
+    browser(target, url);
+  }
   getHelper() {
     const { goal, myId } = this.props;
     return new GoalsUtil(goal, myId);
@@ -72,4 +76,5 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   preview: a.links.preview,
+  browser: a.main.browser,
 })(HOCActivityFeed);

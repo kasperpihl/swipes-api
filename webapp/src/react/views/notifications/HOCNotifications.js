@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { list, map } from 'react-immutable-proptypes';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import * as actions from 'actions';
+import * as a from 'actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as ca from 'swipes-core-js/actions';
 import { setupDelegate, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
@@ -113,6 +113,11 @@ class HOCNotifications extends PureComponent {
         Service: att.getIn([id, 'link', 'service', 'name']),
       });
     }
+  }
+  onClickURL(nI, url) {
+    console.log(url);
+    const { target, browser } = this.props;
+    browser(target, url);
   }
   onClickTitle(i) {
     const n = this.state.notifications.get(i);
@@ -261,5 +266,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   markNotifications: ca.notifications.mark,
-  preview: actions.links.preview,
+  preview: a.links.preview,
+  browser: a.main.browser,
 })(HOCNotifications);

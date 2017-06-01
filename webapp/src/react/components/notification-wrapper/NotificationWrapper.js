@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { mapContains, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
-import { setupDelegate, setupCachedCallback, attachmentIconForService } from 'swipes-core-js/classes/utils';
+import { setupDelegate, setupCachedCallback, attachmentIconForService, URL_REGEX } from 'swipes-core-js/classes/utils';
 
 import './styles/notification-item';
 
@@ -11,7 +11,7 @@ class NotificationItem extends Component {
     super(props);
     this.state = {};
     setupDelegate(this, props.i);
-    this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'onClickAttachment'));
+    this.callDelegate.bindAll('onClickAttachment', 'onClickURL');
     this.onReply = this.callDelegate.bind(null, 'onReply');
     this.onClick = this.onClick.bind(this);
   }
@@ -95,9 +95,31 @@ class NotificationItem extends Component {
     if (!n.get('message')) {
       return undefined;
     }
+    let message = n.get('message');
+
+    message = message.split('\n').map((item, key) => {
+      const urls = item.match(URL_REGEX);
+      if(urls){
+        item = item.split(URL_REGEX);
+        urls.forEach((url, i) => {
+          console.log(url, i);
+          item.splice(1 + i + i, 0, (
+            <a
+              onClick={this.onClickURLCached(url)}
+              className="notification__link"
+              key={'link' + i}
+            >
+              {url}
+            </a>
+          ));
+        })
+      }
+
+      return <span key={key}>{item}<br/></span>;
+    });
 
     return (
-      <div className="notification__message">{n.get('message')}</div>
+      <div className="notification__message">{message}</div>
     );
   }
   renderAttachments() {
@@ -109,7 +131,7 @@ class NotificationItem extends Component {
     }
 
     const HTMLAttachments = attachments.map((att, i) => (
-      <div onClick={this.onAttachmentClick(i)} className="notif-attachment" key={i}>
+      <div onClick={this.onClickAttachmentCached(i)} className="notif-attachment" key={i}>
         <div className="notif-attachment__icon">
           <Icon
             icon={attachmentIconForService(att.getIn(['link', 'service']) || att)}

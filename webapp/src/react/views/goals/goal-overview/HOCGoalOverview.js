@@ -82,6 +82,10 @@ class HOCGoalOverview extends PureComponent {
       preview(target, att);
     }
   }
+  onClickURL(nI, url) {
+    const { browser, target } = this.props;
+    browser(target, url);
+  }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
     const { goal, renameGoal, inputMenu } = this.props;
@@ -342,4 +346,5 @@ export default connect(mapStateToProps, {
   confirm: a.menus.confirm,
   inputMenu: a.menus.input,
   preview: a.links.preview,
+  browser: a.main.browser,
 })(HOCGoalOverview);

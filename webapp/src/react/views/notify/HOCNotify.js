@@ -70,6 +70,7 @@ class HOCNotify extends PureComponent {
       }
     });
   }
+
   onFlag(id) {
     let { notify } = this.state;
     if (notify.get('flags').includes(id)) {
@@ -159,4 +160,5 @@ export default connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
   saveCache: cache.save,
   goalNotify: goals.notify,
+  browser: a.main.browser,
 })(HOCNotify);
