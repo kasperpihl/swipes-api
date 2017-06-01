@@ -85,7 +85,7 @@ class HOCGoalList extends Component {
     );
   }
   renderGoal(gId, filterId) {
-    return <HOCGoalItem goalId={gId} delegate={this} />;
+    return <HOCGoalItem goalId={gId} key={gId} delegate={this} />;
   }
   renderFooter() {
     return <EmptyListFooter />;

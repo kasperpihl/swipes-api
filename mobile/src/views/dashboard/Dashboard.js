@@ -51,6 +51,7 @@ class Dashboard extends Component {
 
     return (
       <ImmutableListView
+        scrollEnabled={false}
         immutableData={notifications}
         renderRow={this.renderRow}
         renderFooter={this.renderFooter}

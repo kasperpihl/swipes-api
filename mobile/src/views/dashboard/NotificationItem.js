@@ -123,7 +123,7 @@ class NotificationItem extends Component {
     );
   }
   render() {
-    const { pinned } = this.props;
+    const { notification: n, pinned } = this.props;
 
     let itemBackground = colors.bgColor;
 
@@ -140,6 +140,7 @@ class NotificationItem extends Component {
             {this.renderTimestamp()}
           </View>
         </FeedbackButton>
+
         <View style={styles.bottomSection}>
           {this.renderAttachments()}
         </View>
@@ -148,6 +149,7 @@ class NotificationItem extends Component {
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {
