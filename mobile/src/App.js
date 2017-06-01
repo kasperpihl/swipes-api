@@ -215,7 +215,8 @@ function mapStateToProps(state) {
 
 let codePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
-  installMode: codePush.InstallMode.IMMEDIATE
+  installMode: codePush.InstallMode.IMMEDIATE,
+  updateDialog: true,
 };
 
 export default codePush(codePushOptions)(connect(mapStateToProps, {

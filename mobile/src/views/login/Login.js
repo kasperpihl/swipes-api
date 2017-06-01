@@ -62,7 +62,8 @@ export default connect(null, {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bgColor,
+    // backgroundColor: colors.bgColor,
+    backgroundColor: 'red',
     alignItems: 'center',
     justifyContent: 'center',
   },
