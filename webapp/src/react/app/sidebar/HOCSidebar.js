@@ -45,6 +45,8 @@ class HOCSidebar extends PureComponent {
         return 'Goals';
       case 'AccountList':
         return 'Account';
+      case 'Notifications':
+        return 'Messages';
       default:
         return id;
     }

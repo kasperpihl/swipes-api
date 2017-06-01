@@ -28,7 +28,7 @@ export default class Notify {
       case 'update':
         return 'Give an update';
       default:
-        return 'Send notification';
+        return 'Send message';
     }
   }
   getNotifyPopupSubtitle(isRequest, type) {
@@ -43,7 +43,7 @@ export default class Notify {
     return {
       update: 'Give your teammates an update',
       feedback: 'Share your feedback on this goal',
-      assets: 'Notify your teammates about new information',
+      assets: 'Message your teammates about new information',
       decision: 'Let your teammates know about a decisions',
     }[type];
   }
@@ -93,7 +93,7 @@ export default class Notify {
       case 'update':
         return 'Give your teammates an update. What is the latest on this step and the goal?';
       default:
-        return 'Notify your teammates.';
+        return 'Message your teammates.';
     }
   }
 }

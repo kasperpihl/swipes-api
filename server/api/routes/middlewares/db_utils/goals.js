@@ -40,18 +40,64 @@ const dbGoalsCompleteGoal = funcWrap([
   const q =
     r.table('goals')
       .get(goal_id)
-      .update({
-        steps: r.row('steps').map(step => step.merge({
-          completed_at: r.branch(
-            step('completed_at').ne(null),
-            step('completed_at'),
-            r.now(),
-          ) }),
-        ),
-        history: r.row('history').append(historyItem),
-        completed_at: r.now(),
-        updated_at: r.now(),
-        updated_by: user_id,
+      .update((goal) => {
+        return {
+          steps: goal('step_order').map((stepId) => {
+            return r.expr([
+              stepId,
+              goal('steps')(stepId).merge({
+                updated_at: r.now(),
+                updated_by: user_id,
+                completed_at: r.branch(
+                  goal('steps')(stepId)('completed_at').ne(null),
+                  goal('steps')(stepId)('completed_at'),
+                  r.now(),
+                ),
+              }),
+            ]);
+          }).coerceTo('object'),
+          history: goal('history').append(historyItem),
+          completed_at: r.now(),
+          updated_at: r.now(),
+          updated_by: user_id,
+        };
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
+const dbGoalsIncompleteGoal = funcWrap([
+  object.as({
+    goal_id: string.require(),
+    user_id: string.require(),
+    historyItem: object.require(),
+  }),
+], (err, { goal_id, user_id, historyItem }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsCompleteGoal: ${err}`);
+  }
+
+  const q =
+    r.table('goals')
+      .get(goal_id)
+      .update((goal) => {
+        return {
+          steps: goal('step_order').map((stepId) => {
+            return r.expr([
+              stepId,
+              goal('steps')(stepId).merge({
+                updated_at: r.now(),
+                updated_by: user_id,
+                completed_at: null,
+              }),
+            ]);
+          }).coerceTo('object'),
+          history: goal('history').append(historyItem),
+          completed_at: null,
+          updated_at: r.now(),
+          updated_by: user_id,
+        };
       }, {
         returnChanges: true,
       });
@@ -156,4 +202,5 @@ export {
   dbGoalsPushToHistorySingle,
   dbGoalsRepliesHistoryUpdate,
   dbGoalsCompleteGoal,
+  dbGoalsIncompleteGoal,
 };

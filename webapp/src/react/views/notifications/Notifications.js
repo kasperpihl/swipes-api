@@ -55,7 +55,7 @@ export default class Notifications extends Component {
 
     return (
       <div className="notifications-header">
-        <HOCHeaderTitle title="Notifications">
+        <HOCHeaderTitle title="Messages">
           {button}
         </HOCHeaderTitle>
         {this.renderTabbar()}
@@ -108,7 +108,7 @@ export default class Notifications extends Component {
       return (
         <NotificationWrapper
           notification={n}
-          pinned={tabIndex === 0 && (n.get('reply') === true)}
+          // pinned={tabIndex === 0 && (n.get('reply') === true)}
           i={n.get('index')}
           delegate={delegate}
           key={`notif${n.get('index')}`}

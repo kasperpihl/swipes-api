@@ -87,7 +87,7 @@ export default class HistoryGenerator {
         else if (type === 'assets') return `${from} gave ${to} assets`;
         else if (type === 'decision') return `${from} gave ${to} a decision`;
 
-        return `${from} notified ${to}`;
+        return `${from} wrote ${to}`;
       }
       case 'milestone_added': {
         return `${from} added the milestone "${msgGen.milestones.getName(h.get('milestone_id'))}"`;
@@ -113,6 +113,8 @@ export default class HistoryGenerator {
   getReplyButtonForHistory(id, h) {
     const myId = this.store.getState().getIn(['me', 'id']);
     const helper = this._getHelper(id);
+    return true;
+
     if (!h || !h.get('request') || !h.get('assignees').contains(myId)) {
       return false;
     }

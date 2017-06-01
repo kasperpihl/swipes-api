@@ -36,6 +36,8 @@ import {
   goalsIncompleteStep,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
+  goalsIncompleteGoal,
+  goalsIncompleteQueueMessage,
 } from './middlewares/goals';
 import {
   milestonesRemoveGoal,
@@ -47,13 +49,6 @@ import {
 import {
   notificationCreateGroupId,
 } from './middlewares/util_middlewares';
-import {
-  usersGetSingleWithOrganizations,
-} from './middlewares/users';
-import {
-  notifyAllInCompany,
-  notifyCommonRethinkdb,
-} from './middlewares/notify';
 import {
   notesCreate,
 } from './middlewares/notes';
@@ -132,6 +127,18 @@ authed.all('/goals.completeGoal',
   notificationCreateGroupId,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal: object.require(),
+  }));
+
+authed.all('/goals.incompleteGoal',
+  valBody({
+    goal_id: string.require(),
+  }),
+  notificationCreateGroupId,
+  goalsIncompleteGoal,
+  goalsIncompleteQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
@@ -234,16 +241,6 @@ authed.all('/goals.loadWay',
   valResponseAndSend({
     goal: object.require(),
   }));
-
-// T_TODO warning: this endpoint is to be removed
-authed.all('/goals.update',
-    usersGetSingleWithOrganizations,
-    goalsUpdate,
-    notifyAllInCompany,
-    notifyCommonRethinkdb,
-    valResponseAndSend({
-      goal: object.require(),
-    }));
 
 export {
   authed,

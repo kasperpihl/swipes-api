@@ -72,7 +72,7 @@
 
   &__reply {
     @include font(12px, $blue-100, 18px, 500);
-
+    visibility: hidden;
     &:hover {
       text-decoration: underline;
     }
@@ -142,7 +142,6 @@
       @include svg-color($blue-100);
       transition: .2s ease;
     }
-
     #{$b}__title {
       @include font($c: $blue-100);
       text-decoration: underline;
@@ -254,7 +253,12 @@
 // ======================================================
 
 .notification {
-
+  $b: &;
+  &:hover {
+    #{$b}__reply {
+      visibility: visible;
+    }
+  }
   &__subtitle span:hover {
     @include font($c: $blue-100);
   }

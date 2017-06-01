@@ -15,6 +15,7 @@ import {
   dbGoalsPushToHistorySingle,
   dbGoalsRepliesHistoryUpdate,
   dbGoalsCompleteGoal,
+  dbGoalsIncompleteGoal,
 } from './db_utils/goals';
 import {
   generateSlackLikeId,
@@ -88,6 +89,40 @@ const goalsCompleteGoal = valLocals('goalsCompleteGoal', {
       const changes = results.changes[0];
 
       setLocals({
+        type,
+        goal: changes.new_val,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const goalsIncompleteGoal = valLocals('goalsIncompleteGoal', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  notificationGroupId: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    notificationGroupId,
+  } = res.locals;
+  const type = 'goal_incompleted';
+  const historyItem = {
+    type,
+    done_by: user_id,
+    done_at: new Date(),
+    group_id: notificationGroupId,
+  };
+
+  dbGoalsIncompleteGoal({ goal_id, user_id, historyItem })
+    .then((results) => {
+      const changes = results.changes[0];
+
+      setLocals({
+        type,
         goal: changes.new_val,
       });
 
@@ -452,11 +487,13 @@ const goalsCompleteStepQueueMessage = valLocals('goalsCompleteStepQueueMessage',
 const goalsCompleteQueueMessage = valLocals('goalsCompleteQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
+  type: string.require(),
   notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
+    type,
     notificationGroupId,
   } = res.locals;
 
@@ -464,7 +501,34 @@ const goalsCompleteQueueMessage = valLocals('goalsCompleteQueueMessage', {
     user_id,
     goal_id,
     group_id: notificationGroupId,
-    event_type: 'goal_completed',
+    event_type: type,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
+const goalsIncompleteQueueMessage = valLocals('goalsIncompleteQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  type: string.require(),
+  notificationGroupId: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    type,
+    notificationGroupId,
+  } = res.locals;
+
+  const queueMessage = {
+    user_id,
+    goal_id,
+    group_id: notificationGroupId,
+    event_type: type,
   };
 
   setLocals({
@@ -785,4 +849,6 @@ export {
   goalsFindCompleteStatus,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
+  goalsIncompleteGoal,
+  goalsIncompleteQueueMessage,
 };

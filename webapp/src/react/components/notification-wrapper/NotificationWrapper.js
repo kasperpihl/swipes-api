@@ -82,13 +82,6 @@ class NotificationItem extends Component {
     if (!n.get('reply')) {
       return undefined;
     }
-    if (n.get('reply') === 'replied') {
-      return (
-        <div className="notification__reply notification__reply--replied">
-          Replied
-        </div>
-      );
-    }
 
     return (
       <div className="notification__reply" onClick={this.onReply}>
