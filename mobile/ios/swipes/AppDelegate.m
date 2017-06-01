@@ -9,9 +9,16 @@
  */
 
 #import "AppDelegate.h"
+#import <CodePush/CodePush.h>
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+
+#ifdef STAGING
+#define CODE_PUSH_KEY @"8fw5E4sQ2P9DD9WRmRZsTW0bBF00NyuqwmYWX"
+#else
+#define CODE_PUSH_KEY @"FEd9yo3wX0XyBsrndnbK4T15FxaSNyuqwmYWX"
+#endif
 
 @implementation AppDelegate
 @synthesize oneSignal = _oneSignal;
@@ -20,8 +27,14 @@
   self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
                                                          appId:@"db8f2558-a836-4e95-b22b-089e8e85f6e9"];
   NSURL *jsCodeLocation;
+  
 
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  
+#ifdef DEBUG
+    jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+#else
+    jsCodeLocation = [CodePush bundleURL];
+#endif
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"swipes"
