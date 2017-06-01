@@ -49,7 +49,7 @@ class HOCMilestoneItem extends PureComponent {
     const { milestone } = this.props;
     const { goals } = this.state;
     const numberOfGoals = goals.size;
-    const numberOfCompletedGoals = goals.filter(g => g.getIn(['status', 'completed'])).size;
+    const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
 
     const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
 
