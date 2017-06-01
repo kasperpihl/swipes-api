@@ -365,10 +365,70 @@ const meResetPasswordEmail = (req, res, next) => {
     return next(new SwipesError(`meResetPasswordEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
   });
 };
+const usersAcceptedInvitationEmail = (req, res, next) => {
+  const {
+    user,
+    usersWithFields,
+  } = res.locals;
+  const template_name = 'invitation-accepted';
+  const template_content = [{
+    name: '',
+    content: '',
+  }];
+  const merge_vars = [];
+  const to = [];
+
+  usersWithFields.forEach((userWithFields) => {
+    merge_vars.push({
+      rcpt: userWithFields.email,
+      vars: [{
+        name: 'NAME',
+        content: user.profile.first_name,
+      }, {
+        name: 'NAME_NEW_MEMBER',
+        content: userWithFields.profile.first_name,
+      }, {
+        name: 'COMPANY_NAME',
+        content: user.organizations[0].name,
+      }],
+    });
+
+    to.push({
+      email: userWithFields.email,
+      name: userWithFields.profile.first_name,
+      type: 'to',
+    });
+  });
+  const subject = 'New memeber joined your team';
+  const message = {
+    to,
+    subject,
+    merge_vars,
+    from_email: 'noreply@swipesapp.com',
+    from_name: 'Swipes Team',
+    headers: {
+      'Reply-To': 'noreply@swipesapp.com',
+    },
+    important: false,
+    merge: true,
+    merge_language: 'mailchimp',
+  };
+
+  return mandrill_client.messages.sendTemplate({
+    template_name,
+    template_content,
+    message,
+  }, (result) => {
+    return next();
+  }, (e) => {
+    return next(new SwipesError(`usersAcceptedInvitationEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
+  });
+};
 
 export {
   goalsNotifySendEmails,
   usersInvitationEmail,
   usersWelcomeEmail,
   meResetPasswordEmail,
+  usersAcceptedInvitationEmail,
 };

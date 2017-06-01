@@ -100,6 +100,18 @@ const send_reset_password_email = [
 const user_activated = notifyWrapper([
   users.usersActivatedNotificationData,
   notify.notifyAllInCompany,
+  (req, res, next) => {
+    const {
+      user,
+    } = res.locals;
+    const organization = user.organizations[0];
+
+    res.locals.user_ids = organization.users.filter(userId => userId !== user.id);
+
+    return next();
+  },
+  users.usersGetMultipleWithFields,
+  emails.usersAcceptedInvitationEmail,
 ]);
 
 const user_invited = notifyWrapper([
