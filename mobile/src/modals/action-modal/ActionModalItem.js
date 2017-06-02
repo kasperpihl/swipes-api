@@ -8,9 +8,11 @@ import RippleButton from '../../components/ripple-button/RippleButton';
 import { colors } from '../../utils/globalStyles';
 
 const styles = StyleSheet.create({
+  containerButton: {
+    height: 65,
+  },
   container: {
-    width: 275,
-    minHeight: 65,
+    height: 65,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
@@ -19,7 +21,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   titleWrapper: {
-    flex: 1,
+
   },
   title: {
     fontSize: 14,
@@ -68,10 +70,21 @@ class ActionModalItem extends Component {
     return undefined;
   }
   renderTitle() {
-    const { item } = this.props;
+    const { item, singleRender } = this.props;
+
+    let extraTitleStyles = {
+
+    };
+
+    if (!singleRender) {
+      extraTitleStyles = {
+        flex: 1,
+      };
+    }
+
 
     return (
-      <View style={styles.titleWrapper}>
+      <View style={[styles.titleWrapper, extraTitleStyles]}>
         <Text style={styles.title}>{item.get('title')}</Text>
       </View>
     );
@@ -97,11 +110,21 @@ class ActionModalItem extends Component {
     return undefined;
   }
   render() {
-    const { item } = this.props;
+    const { item, singleRender } = this.props;
+
+    let extraStyle = {
+
+    };
+
+    if (!singleRender) {
+      extraStyle = {
+        flex: 1,
+      };
+    }
 
     return (
-      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} style={styles.container} onPress={this.onItemPressCached(item)}>
-        <View style={styles.container}>
+      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item)}>
+        <View style={[styles.container, extraStyle]}>
           {this.renderLeftIcon()}
           {this.renderTitle()}
           {this.renderSelector()}
@@ -112,3 +135,34 @@ class ActionModalItem extends Component {
 }
 
 export default ActionModalItem;
+
+
+// const styles = StyleSheet.create({
+//   containerButton: {
+//     flex: 1,
+//     minHeight: 65,
+//   },
+//   container: {
+//     flex: 1,
+//     minHeight: 65,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     paddingHorizontal: 15,
+//   },
+//   leftIcon: {
+//     marginRight: 15,
+//   },
+//   titleWrapper: {
+//     flex: 1,
+//   },
+//   title: {
+//     fontSize: 14,
+//     color: colors.deepBlue80,
+//   },
+//   selector: {
+//     width: 26,
+//     height: 26,
+//     borderRadius: 13,
+//     borderWidth: 2,
+//   },
+// });

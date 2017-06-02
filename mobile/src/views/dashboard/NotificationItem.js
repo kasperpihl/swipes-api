@@ -14,16 +14,17 @@ class NotificationItem extends Component {
     setupDelegate(this);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
     this.onNotificationPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationPress'));
+    this.onNotificationLongPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationLongPress'));
     this.onReplyTo = setupCachedCallback(this.callDelegate.bind(null, 'onReply'));
   }
   renderIcon() {
-    const { notification: n, pinned } = this.props;
+    const { notification: n } = this.props;
 
     if (!n.get('icon')) {
       return undefined;
     }
 
-    const iconStyles = n.get('unseen') || pinned ? styles.iconUnread : styles.iconRead;
+    const iconStyles = n.get('unseen') ? styles.iconUnread : styles.iconRead;
 
     return (
       <View style={iconStyles}>
@@ -101,7 +102,7 @@ class NotificationItem extends Component {
     );
   }
   renderTimestamp() {
-    const { notification: n, pinned } = this.props;
+    const { notification: n } = this.props;
 
     if (!n.get('timeago')) {
       return undefined;
@@ -110,30 +111,20 @@ class NotificationItem extends Component {
     return (
       <View style={styles.topRight}>
         <Text style={styles.timestamp}>{n.get('timeago')}</Text>
-        {pinned ? (
-          <RippleButton style={styles.replyButton} rippleColor={colors.blue100} rippleOpacity={0.8} onPress={this.onReplyTo(n)}>
-            <View style={styles.replyButton}>
-              <Text style={styles.replyButtonLabel}>Reply</Text>
-            </View>
-          </RippleButton>
-        ) : (
-            undefined
-          )}
+        <RippleButton style={styles.replyButton} rippleColor={colors.blue100} rippleOpacity={0.8} onPress={this.onReplyTo(n)}>
+          <View style={styles.replyButton}>
+            <Text style={styles.replyButtonLabel}>Reply</Text>
+          </View>
+        </RippleButton>
       </View>
     );
   }
   render() {
-    const { notification: n, pinned } = this.props;
-
-    let itemBackground = colors.bgColor;
-
-    if (pinned) {
-      itemBackground = colors.blue5;
-    }
+    const { notification: n } = this.props;
 
     return (
-      <View style={[styles.container, { backgroundColor: itemBackground }]}>
-        <FeedbackButton onPress={this.onNotificationPress(this.props.notification)}>
+      <View style={styles.container}>
+        <FeedbackButton onPress={this.onNotificationPress(n)} onLongPress={this.onNotificationLongPress(n)}>
           <View style={styles.topSection}>
             {this.renderIcon()}
             {this.renderContent()}
@@ -154,6 +145,7 @@ class NotificationItem extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.bgColor,
   },
   seperator: {
     width: viewSize.width - 30,

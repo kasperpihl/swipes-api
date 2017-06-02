@@ -105,6 +105,7 @@ class HOCNotify extends PureComponent {
         onClick: this.onModalAction.bind(this, sortedUsers),
         multiple: 'Assign',
         items: userInfoToActions,
+        fullscreen: true,
       };
 
       showModal(modal);

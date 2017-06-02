@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Linking, Platform } from 'react-native';
+import { View, StyleSheet, Vibration } from 'react-native';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
+import ActionSheet from '@remobile/react-native-action-sheet';
 import * as a from '../../actions';
 import * as ca from '../../../swipes-core-js/actions';
 import Dashboard from './Dashboard';
@@ -125,6 +126,9 @@ class HOCDashboard extends PureComponent {
     };
 
     navPush(overview);
+  }
+  onNotificationLongPress(n) {
+    Vibration.vibrate(100);
   }
   getFilteredNotifications(fI, notifications, filters) {
     notifications = notifications || this.props.notifications;

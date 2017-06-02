@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback, ScrollView } from 'react-native';
-import { fromJS } from 'immutable';
+import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import * as a from '../../actions';
-import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import { colors, viewSize } from '../../utils/globalStyles';
 import RippleButton from '../../components/ripple-button/RippleButton';
-import HOCAssigning from '../../components/assignees/HOCAssigning';
 import Icon from '../../components/icons/Icon';
 import ActionModalList from './ActionModalList';
 
@@ -60,15 +57,47 @@ class ActionModal extends PureComponent {
 
     showModal();
   }
+  renderCloseButton() {
+    const { modal } = this.props;
+
+    if (!modal.get('fullscreen')) {
+      return undefined;
+    }
+
+    const closeButtonStyles = {
+      width: 60,
+      height: 60,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: -15,
+    };
+
+    return (
+      <RippleButton style={closeButtonStyles} rippleColor={colors.deepBlue60} rippleOpacity={0.8} onPress={this.closeModal}>
+        <View style={closeButtonStyles}>
+          <Icon name="Close" width="24" height="24" fill={colors.deepBlue80} />
+        </View>
+      </RippleButton>
+    );
+  }
   renderTitle() {
     const { modal } = this.state;
 
     if (modal && modal.get('title')) {
+      let titleHeight = 60;
+
+      if (modal.get('fullscreen')) {
+        titleHeight = 90;
+      }
+
+      console.log(titleHeight);
+
       return (
-        <View style={styles.titleWrapper}>
+        <View style={[styles.titleWrapper, { height: titleHeight }]}>
           <Text style={styles.title}>
             {modal.get('title')}
           </Text>
+          {this.renderCloseButton()}
         </View>
       );
     }
@@ -79,7 +108,7 @@ class ActionModal extends PureComponent {
     const { modal } = this.state;
 
     if (modal && modal.get('items')) {
-      return <ActionModalList listItems={modal.get('items')} multiple={modal.get('multiple')} delegate={this} />;
+      return <ActionModalList listItems={modal.get('items')} fullscreen={modal.get('fullscreen')} scrollable={modal.get('scrollable')} multiple={modal.get('multiple')} delegate={this} />;
     }
 
     return undefined;
@@ -105,9 +134,26 @@ class ActionModal extends PureComponent {
     return undefined;
   }
   render() {
+    const { modal } = this.props;
+    let modalStyles = {
+      width: viewSize.width * 0.8,
+      maxWidth: 275,
+      elevation: 5,
+    };
+
+    let animationStyle = 'fade';
+
+    if (modal.get('fullscreen')) {
+      modalStyles = {
+        width: viewSize.width,
+        height: viewSize.height,
+      };
+      animationStyle = 'slide';
+    }
+
     return (
       <Modal
-        animationType={'slide'}
+        animationType={animationStyle}
         transparent
         visible={!!this.state.modal}
         onRequestClose={this.closeModal}
@@ -116,7 +162,7 @@ class ActionModal extends PureComponent {
           <TouchableWithoutFeedback onPress={this.closeModal}>
             <View style={styles.tappableOverlay} />
           </TouchableWithoutFeedback>
-          <View style={styles.modalBox}>
+          <View style={[styles.modalBox, modalStyles]}>
             {this.renderTitle()}
             {this.renderList()}
             {this.renderAction()}
@@ -147,29 +193,21 @@ const styles = StyleSheet.create({
     top: 0,
   },
   modalBox: {
-    width: 275,
-    height: viewSize.height * 0.5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.bgColor,
-    elevation: 5,
   },
   titleWrapper: {
-    width: 275,
-    height: 60,
-    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
     paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.deepBlue10,
   },
   title: {
+    flex: 1,
     fontSize: 18,
     color: colors.deepBlue100,
-  },
-  button: {
-    width: 275,
-    height: 60,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 9,
   },
   actionTitle: {
     flex: 1,
@@ -188,14 +226,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ctaButton: {
-    width: 275,
-    height: 60,
+    flex: 1,
+    alignSelf: 'stretch',
+    maxHeight: 70,
     justifyContent: 'center',
     alignItems: 'center',
   },
   cta: {
-    width: 275,
-    height: 60,
+    flex: 1,
+    maxHeight: 70,
+    alignSelf: 'stretch',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.bgColor,

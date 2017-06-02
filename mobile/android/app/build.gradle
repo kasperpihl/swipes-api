@@ -96,9 +96,6 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
-        manifestPlaceholders = [manifestApplicationId: "${applicationId}",
-                                onesignal_app_id: "db8f2558-a836-4e95-b22b-089e8e85f6e9",
-                                onesignal_google_project_number: "814416993959"]
     }
     signingConfigs {
         release {
@@ -119,10 +116,41 @@ android {
         }
     }
     buildTypes {
+        debug {
+            versionNameSuffix '-DEBUG'
+            resValue "string", "app_name", "SwipesDev"
+            buildConfigField "String", "CODEPUSH_KEY", '""'
+            defaultConfig {
+                manifestPlaceholders = [
+                    onesignal_app_id: "db8f2558-a836-4e95-b22b-089e8e85f6e9",
+                    onesignal_google_project_number: "814416993959"
+                ]
+            }
+        }
+        releaseStaging {
+            versionNameSuffix '-STAGING'
+            resValue "string", "app_name", "Swipes Staging"
+            signingConfig signingConfigs.release
+            buildConfigField "String", "CODEPUSH_KEY", '"wJtyg-kSw5R0NoHoTFvj6MqP06QxNyuqwmYWX"'
+            defaultConfig {
+                manifestPlaceholders = [
+                    onesignal_app_id: "db8f2558-a836-4e95-b22b-089e8e85f6e9",
+                    onesignal_google_project_number: "814416993959"
+                ]
+            }
+        }
         release {
+            resValue "string", "app_name", "Swipes"
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "CODEPUSH_KEY", '"ZcwuUupyV_lvtHEsxo4rLdLZwX6xNyuqwmYWX"'
+            defaultConfig {
+                manifestPlaceholders = [
+                    onesignal_app_id: "420ca44f-378a-4ce5-adb7-18cef4b689c0s",
+                    onesignal_google_project_number: "410470964842"
+                ]
+            }
         }
     }
     // applicationVariants are e.g. debug, release

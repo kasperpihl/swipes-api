@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
 import OneSignal from 'react-native-onesignal';
-import codePush from "react-native-code-push";
+import codePush from 'react-native-code-push';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Login from './views/login/Login';
@@ -99,27 +99,27 @@ class App extends PureComponent {
     }
   }
   codePushStatusDidChange(status) {
-    switch(status) {
+    switch (status) {
       case codePush.SyncStatus.CHECKING_FOR_UPDATE:
-        console.log("Checking for updates.");
+        console.log('Checking for updates.');
         break;
       case codePush.SyncStatus.DOWNLOADING_PACKAGE:
-        console.log("Downloading package.");
+        console.log('Downloading package.');
         break;
       case codePush.SyncStatus.INSTALLING_UPDATE:
-        console.log("Installing update.");
+        console.log('Installing update.');
         break;
       case codePush.SyncStatus.UP_TO_DATE:
-        console.log("Up-to-date.");
+        console.log('Up-to-date.');
         break;
       case codePush.SyncStatus.UPDATE_INSTALLED:
-        console.log("Update installed.");
+        console.log('Update installed.');
         break;
     }
   }
 
   codePushDownloadDidProgress(progress) {
-      console.log(progress.receivedBytes + " of " + progress.totalBytes + " received.");
+    console.log(`${progress.receivedBytes} of ${progress.totalBytes} received.`);
   }
   onOpened(openResult) {
     const { sliderChange } = this.props;
@@ -213,7 +213,7 @@ function mapStateToProps(state) {
   };
 }
 
-let codePushOptions = {
+const codePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
   installMode: codePush.InstallMode.IMMEDIATE,
   updateDialog: true,

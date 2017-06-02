@@ -51,7 +51,6 @@ class Dashboard extends Component {
 
     return (
       <ImmutableListView
-        scrollEnabled={false}
         immutableData={notifications}
         renderRow={this.renderRow}
         renderFooter={this.renderFooter}
@@ -62,7 +61,7 @@ class Dashboard extends Component {
   renderRow(n) {
     const { delegate, tabIndex } = this.props;
 
-    return <NotificationItem notification={n} delegate={delegate} pinned={tabIndex === 0 && (n.get('reply') === true)} />;
+    return <NotificationItem notification={n} delegate={delegate} />;
   }
   renderFooter() {
     return <EmptyListFooter />;

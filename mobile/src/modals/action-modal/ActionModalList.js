@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import ActionModalItem from './ActionModalItem';
 
 const styles = StyleSheet.create({
   list: {
     flex: 1,
+    alignSelf: 'stretch',
+  },
+  nonScrollableList: {
+    alignSelf: 'stretch',
   },
 });
 
@@ -17,20 +21,36 @@ class ActionModalList extends Component {
 
     this.renderlistItem = this.renderlistItem.bind(this);
   }
+  renderList() {
+    const { listItems, multiple, delegate } = this.props;
+
+    const listItemsRender = listItems.map((lI, i) => <ActionModalItem key={i} singleRender item={lI} multiple={multiple} delegate={delegate} />);
+
+    return (
+      <View style={styles.nonScrollableList}>
+        {listItemsRender}
+      </View>
+    );
+  }
   renderlistItem(item) {
     const { multiple, delegate } = this.props;
     return <ActionModalItem item={item} multiple={multiple} delegate={delegate} />;
   }
   render() {
-    const { listItems, multiple } = this.props;
-    return (
-      <ImmutableListView
-        style={styles.list}
-        keyboardShouldPersistTaps="always"
-        immutableData={listItems}
-        renderRow={this.renderlistItem}
-      />
-    );
+    const { listItems, multiple, scrollable, fullscreen } = this.props;
+
+    if (scrollable || fullscreen) {
+      return (
+        <ImmutableListView
+          style={styles.list}
+          keyboardShouldPersistTaps="always"
+          immutableData={listItems}
+          renderRow={this.renderlistItem}
+        />
+      );
+    }
+
+    return this.renderList();
   }
 }
 
