@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import * as a from '../../actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
+import * as ca from '../../../swipes-core-js/actions';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCHistory from './HOCHistory';
 import HOCStepList from './HOCStepList';
@@ -35,6 +36,13 @@ class HOCGoalOverview extends PureComponent {
     if (this.state.routeNum === nextProps.lastRoute) {
       this.renderActionButtons();
     }
+  }
+  onComplete(step) {
+    const { completeStep, incompleteStep } = this.props;
+    const helper = this.getHelper();
+    const actionFunc = step.get('completed_at') ? incompleteStep : completeStep;
+
+    actionFunc(helper.getId(), step.get('id'));
   }
   onModalAskForAction(i) {
     const { goal, showModal } = this.props;
@@ -165,7 +173,6 @@ class HOCGoalOverview extends PureComponent {
       <HOCStepList
         goal={goal}
         steps={helper.getOrderedSteps()}
-        completed={helper.getNumberOfCompletedSteps()}
         delegate={this}
       />
     );
@@ -194,10 +201,12 @@ class HOCGoalOverview extends PureComponent {
     return undefined;
   }
   render() {
+    const { tabIndex } = this.state;
+
     return (
       <View style={styles.container}>
         {this.renderHeader()}
-        <View style={styles.content}>
+        <View style={styles.content} key={tabIndex} >
           {this.renderContent()}
         </View>
       </View>
@@ -224,4 +233,6 @@ function mapStateToProps(state, ownProps) {
 }
 export default connect(mapStateToProps, {
   showModal: a.modals.show,
+  completeStep: ca.goals.completeStep,
+  incompleteStep: ca.goals.incompleteStep,
 })(HOCGoalOverview);

@@ -1,73 +1,11 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
+import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
+import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import { colors } from '../../utils/globalStyles';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton';
-
-class HOCStepList extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  completeStep() {
-    // console.log('complete step');
-  }
-  renderSteps(step, secI, i, completed) {
-    const completedI = completed - 1;
-    const currentStepIndex = completed;
-    let indicatorStyles;
-    let indicatorLabelStyles;
-    let titleStyles;
-
-    if (i <= completedI) {
-      indicatorStyles = styles.indicatorCompleted;
-      indicatorLabelStyles = styles.indicatorLabelCompleted;
-      titleStyles = styles.titleCompleted;
-    } else if (i === currentStepIndex) {
-      indicatorStyles = styles.indicatorCurrent;
-      indicatorLabelStyles = styles.indicatorLabelCurrent;
-      titleStyles = styles.titleCurrent;
-    } else {
-      indicatorStyles = styles.indicatorFuture;
-      indicatorLabelStyles = styles.indicatorLabelFuture;
-      titleStyles = styles.titleFuture;
-    }
-
-    return (
-      <FeedbackButton onPress={this.completeStep}>
-        <View style={styles.step}>
-          <View style={[styles.indicator, indicatorStyles]}>
-            <Text style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
-          </View>
-          <View style={styles.title}>
-            <Text style={[styles.titleLabel, titleStyles]}>{step.get('title')}</Text>
-          </View>
-          <View style={styles.assignees}>
-            <HOCAssigning assignees={step.get('assignees')} />
-          </View>
-        </View>
-      </FeedbackButton>
-    );
-  }
-  renderFooter() {
-    return <EmptyListFooter />;
-  }
-  render() {
-    const { steps, completed, delegate } = this.props;
-
-    return (
-      <View style={styles.container}>
-        <ImmutableListView
-          immutableData={steps}
-          renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex, completed, delegate)}
-          renderFooter={this.renderFooter}
-        />
-      </View>
-    );
-  }
-}
+import RippleButton from '../../components/ripple-button/RippleButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -88,32 +26,22 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  indicatorCompleted: {
-    backgroundColor: colors.greenColor,
-  },
-  indicatorCurrent: {
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: colors.deepBlue90,
   },
-  indicatorFuture: {
-    backgroundColor: 'white',
+  indicatorCompleted: {
+    backgroundColor: colors.greenColor,
+    borderColor: colors.greenColor,
     borderWidth: 2,
-    borderColor: colors.deepBlue30,
   },
   indicatorLabel: {
     fontSize: 15,
     fontWeight: '500',
+    color: colors.deepBlue90,
   },
   indicatorLabelCompleted: {
     color: 'white',
-  },
-  indicatorLabelCurrent: {
-    color: colors.deepBlue90,
-  },
-  indicatorLabelFuture: {
-    color: colors.deepBlue30,
   },
   title: {
     flex: 1,
@@ -121,16 +49,66 @@ const styles = StyleSheet.create({
   },
   titleLabel: {
     fontSize: 16.5,
+    color: colors.deepBlue90,
   },
   titleCompleted: {
     color: colors.deepBlue30,
   },
-  titleCurrent: {
-    color: colors.deepBlue90,
-  },
-  titleFuture: {
-    color: colors.deepBlue30,
-  },
 });
+
+class HOCStepList extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+
+    setupDelegate(this);
+    this.callDelegate.bindAll('onComplete');
+  }
+  getHelper() {
+    const { goal } = this.props;
+
+    return new GoalsUtil(goal);
+  }
+  renderSteps(step, secI, i, completed) {
+    const helper = this.getHelper();
+    let indicatorStyles;
+    let indicatorLabelStyles;
+    let titleStyles;
+
+    if (helper.getIsStepCompleted(step)) {
+      indicatorStyles = styles.indicatorCompleted;
+      indicatorLabelStyles = styles.indicatorLabelCompleted;
+      titleStyles = styles.titleCompleted;
+    }
+
+    return (
+      <RippleButton rippleColor={colors.greenColor} rippleOpacity={0.8} onPress={this.onCompleteCached(step)}>
+        <View style={styles.step}>
+          <View style={[styles.indicator, indicatorStyles]}>
+            <Text style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
+          </View>
+          <View style={styles.title}>
+            <Text style={[styles.titleLabel, titleStyles]}>{step.get('title')}</Text>
+          </View>
+          <View style={styles.assignees}>
+            <HOCAssigning assignees={step.get('assignees')} />
+          </View>
+        </View>
+      </RippleButton>
+    );
+  }
+  render() {
+    const { steps, completed, delegate } = this.props;
+
+    return (
+      <View style={styles.container}>
+        <ImmutableListView
+          immutableData={steps}
+          renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex, completed, delegate)}
+        />
+      </View>
+    );
+  }
+}
 
 export default HOCStepList;

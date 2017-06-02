@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
-import { Iterable } from 'immutable';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import Icon from '../../components/icons/Icon';
