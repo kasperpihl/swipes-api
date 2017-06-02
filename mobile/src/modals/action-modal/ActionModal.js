@@ -90,8 +90,6 @@ class ActionModal extends PureComponent {
         titleHeight = 90;
       }
 
-      console.log(titleHeight);
-
       return (
         <View style={[styles.titleWrapper, { height: titleHeight }]}>
           <Text style={styles.title}>
