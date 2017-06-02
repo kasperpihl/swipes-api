@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, TouchableNativeFeedback } from 'react-native';
 import MaterialRippleButton from 'react-native-material-ripple';
+import { colors } from '../../utils/globalStyles';
 
 class RippleButton extends Component {
   hexToRgb(hex) {
@@ -14,9 +15,11 @@ class RippleButton extends Component {
   }
   renderIosButton() {
     const { children, rippleColor, rippleOpacity, onPress, ...props } = this.props;
+    const defaultRippleColor = rippleColor || colors.deepBlue40;
+    const opacity = rippleOpacity ? 1 - rippleOpacity : 0.8;
 
     return (
-      <MaterialRippleButton rippleColor={rippleColor} rippleOpacity={rippleOpacity} onPress={onPress} {...props}>
+      <MaterialRippleButton rippleColor={defaultRippleColor} rippleOpacity={rippleOpacity} onPress={onPress} {...props}>
         {children}
       </MaterialRippleButton>
     );
@@ -24,8 +27,9 @@ class RippleButton extends Component {
   renderAndroidButton() {
     const { children, rippleColor, rippleOpacity, onPress, ...props } = this.props;
     const opacity = rippleOpacity ? 1 - rippleOpacity : 0.2;
+    const defaultRippleColor = rippleColor || colors.deepBlue40;
 
-    const rgb = this.hexToRgb(rippleColor);
+    const rgb = this.hexToRgb(defaultRippleColor);
     const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
 
     return (

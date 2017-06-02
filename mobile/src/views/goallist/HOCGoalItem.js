@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, Alert } from 'react-native';
+import { fromJS } from 'immutable';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton';
+import RippleButton from '../../components/ripple-button/RippleButton';
+import * as a from '../../actions';
+import * as ca from '../../../swipes-core-js/actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import { colors, viewSize } from '../../utils/globalStyles';
@@ -15,12 +18,60 @@ class HOCGoalItem extends PureComponent {
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
-
+    this.onPin = this.onPin.bind(this);
+    this.onModalGoalAction = this.onModalGoalAction.bind(this);
     this.openOverview = this.openOverview.bind(this);
+    this.onArchiveGoal = this.onArchiveGoal.bind(this);
     setupDelegate(this);
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
+  }
+  onArchiveGoal() {
+    const { goal, archive, showModal } = this.props;
+    console.log('do you get here?');
+    archive(goal.get('id'));
+    showModal();
+  }
+  onModalGoalAction(i) {
+    const { togglePinGoal, goal, showModal } = this.props;
+
+    if (i.get('index') === 'pin') {
+      togglePinGoal(goal.get('id'));
+    } else if (i.get('index') === 'archive') {
+      Alert.alert(
+        'Archive goal',
+        'This will make this goal inactive for all participants.',
+        [
+          { text: 'Cancel', onPress: () => showModal(), style: 'cancel' },
+          { text: 'OK', onPress: () => this.onArchiveGoal() },
+        ],
+        { cancelable: true },
+      );
+    }
+  }
+  onPin() {
+    const { showModal } = this.props;
+
+    const modal = {
+      title: 'Goal',
+      onClick: this.onModalGoalAction,
+      items: fromJS([
+        {
+          title: 'Pin goal',
+          index: 'pin',
+        },
+        {
+          title: 'Archive',
+          index: 'archive',
+        },
+        {
+          title: 'Add to a milestone (Coming Soon)',
+        },
+      ]),
+    };
+
+    showModal(modal);
   }
   openOverview() {
     const { goal } = this.props;
@@ -66,13 +117,13 @@ class HOCGoalItem extends PureComponent {
     }
 
     return (
-      <FeedbackButton onPress={this.openOverview}>
+      <RippleButton onPress={this.openOverview} onLongPress={this.onPin}>
         <View style={rowStyles}>
           {this.renderContent()}
           {this.renderAssignees()}
           <View style={styles.seperator} />
         </View>
-      </FeedbackButton>
+      </RippleButton>
     );
   }
 }
@@ -84,6 +135,9 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
+  togglePinGoal: ca.me.togglePinGoal,
+  archive: ca.goals.archive,
+  showModal: a.modals.show,
 })(HOCGoalItem);
 
 const styles = StyleSheet.create({

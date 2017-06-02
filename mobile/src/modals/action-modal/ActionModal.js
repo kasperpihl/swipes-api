@@ -84,14 +84,20 @@ class ActionModal extends PureComponent {
     const { modal } = this.state;
 
     if (modal && modal.get('title')) {
-      let titleHeight = 60;
+      let titleStyles = {
+        height: 60,
+      };
 
       if (modal.get('fullscreen')) {
-        titleHeight = 90;
+        titleStyles = {
+          height: 90,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.deepBlue10,
+        };
       }
 
       return (
-        <View style={[styles.titleWrapper, { height: titleHeight }]}>
+        <View style={[styles.titleWrapper, titleStyles]}>
           <Text style={styles.title}>
             {modal.get('title')}
           </Text>
@@ -199,8 +205,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue10,
   },
   title: {
     flex: 1,

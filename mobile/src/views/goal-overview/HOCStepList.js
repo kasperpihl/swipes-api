@@ -82,7 +82,7 @@ class HOCStepList extends PureComponent {
     }
 
     return (
-      <RippleButton rippleColor={colors.greenColor} rippleOpacity={0.8} onPress={this.onCompleteCached(step)}>
+      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onCompleteCached(step)}>
         <View style={styles.step}>
           <View style={[styles.indicator, indicatorStyles]}>
             <Text style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
