@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, Vibration } from 'react-native';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
-import ActionSheet from '@remobile/react-native-action-sheet';
 import * as a from '../../actions';
 import * as ca from '../../../swipes-core-js/actions';
 import Dashboard from './Dashboard';
@@ -17,7 +16,7 @@ class HOCDashboard extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['received', 'sent', 'activity'],
+      tabs: ['received', 'sent'],
       tabIndex: 0,
       hasLoaded: false,
     };

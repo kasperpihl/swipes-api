@@ -15,7 +15,7 @@ class Dashboard extends Component {
   renderHeader() {
     return (
       <HOCHeader
-        title="Notifications"
+        title="Messages"
         tabs={this.props.tabs}
         currentTab={this.props.tabIndex}
         delegate={this.props.delegate}

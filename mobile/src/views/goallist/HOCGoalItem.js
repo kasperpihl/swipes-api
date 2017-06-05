@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, Alert } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, Alert, Vibration } from 'react-native';
 import { fromJS } from 'immutable';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import RippleButton from '../../components/ripple-button/RippleButton';
@@ -29,7 +29,7 @@ class HOCGoalItem extends PureComponent {
   }
   onArchiveGoal() {
     const { goal, archive, showModal } = this.props;
-    console.log('do you get here?');
+
     archive(goal.get('id'));
     showModal();
   }
@@ -38,6 +38,7 @@ class HOCGoalItem extends PureComponent {
 
     if (i.get('index') === 'pin') {
       togglePinGoal(goal.get('id'));
+      showModal();
     } else if (i.get('index') === 'archive') {
       Alert.alert(
         'Archive goal',
@@ -52,7 +53,6 @@ class HOCGoalItem extends PureComponent {
   }
   onPin() {
     const { showModal } = this.props;
-
     const modal = {
       title: 'Goal',
       onClick: this.onModalGoalAction,
@@ -71,6 +71,7 @@ class HOCGoalItem extends PureComponent {
       ]),
     };
 
+    Vibration.vibrate(100);
     showModal(modal);
   }
   openOverview() {

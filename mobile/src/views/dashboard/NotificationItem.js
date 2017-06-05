@@ -101,6 +101,21 @@ class NotificationItem extends Component {
       </View>
     );
   }
+  renderReplyButton() {
+    const { notification: n } = this.props;
+
+    if (n.get('reply')) {
+      return (
+        <RippleButton style={styles.replyButton} rippleColor={colors.blue100} rippleOpacity={0.8} onPress={this.onReplyTo(n)}>
+          <View style={styles.replyButton}>
+            <Text style={styles.replyButtonLabel}>Reply</Text>
+          </View>
+        </RippleButton>
+      );
+    }
+
+    return undefined;
+  }
   renderTimestamp() {
     const { notification: n } = this.props;
 
@@ -111,11 +126,7 @@ class NotificationItem extends Component {
     return (
       <View style={styles.topRight}>
         <Text style={styles.timestamp}>{n.get('timeago')}</Text>
-        <RippleButton style={styles.replyButton} rippleColor={colors.blue100} rippleOpacity={0.8} onPress={this.onReplyTo(n)}>
-          <View style={styles.replyButton}>
-            <Text style={styles.replyButtonLabel}>Reply</Text>
-          </View>
-        </RippleButton>
+        {this.renderReplyButton()}
       </View>
     );
   }

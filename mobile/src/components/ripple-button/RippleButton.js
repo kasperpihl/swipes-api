@@ -14,18 +14,18 @@ class RippleButton extends Component {
     } : null;
   }
   renderIosButton() {
-    const { children, rippleColor, rippleOpacity, onPress, ...props } = this.props;
+    const { children, rippleColor, rippleOpacity, onPress, onLongPress, ...props } = this.props;
     const defaultRippleColor = rippleColor || colors.deepBlue40;
     const opacity = rippleOpacity ? 1 - rippleOpacity : 0.8;
 
     return (
-      <MaterialRippleButton rippleColor={defaultRippleColor} rippleOpacity={rippleOpacity} onPress={onPress} {...props}>
+      <MaterialRippleButton rippleColor={defaultRippleColor} rippleOpacity={rippleOpacity} onPress={onPress} onLongPress={onLongPress} {...props}>
         {children}
       </MaterialRippleButton>
     );
   }
   renderAndroidButton() {
-    const { children, rippleColor, rippleOpacity, onPress, ...props } = this.props;
+    const { children, rippleColor, rippleOpacity, onPress, onLongPress, ...props } = this.props;
     const opacity = rippleOpacity ? 1 - rippleOpacity : 0.2;
     const defaultRippleColor = rippleColor || colors.deepBlue40;
 
@@ -33,7 +33,7 @@ class RippleButton extends Component {
     const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
 
     return (
-      <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(rgba)} onPress={onPress} {...props}>
+      <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(rgba)} onLongPress={onLongPress} onPress={onPress} {...props}>
         {children}
       </TouchableNativeFeedback>
     );
