@@ -28,7 +28,7 @@ const initGetData = valLocals('initGetData', {
     timestamp,
   } = res.locals;
   const promiseArrayQ = [
-    initMe(user_id, without_notes),
+    initMe(user_id, without_notes, timestamp),
     servicesGetAll(),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,

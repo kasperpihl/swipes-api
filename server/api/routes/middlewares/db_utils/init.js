@@ -14,6 +14,7 @@ const initMe = funcWrap([
   bool,
   string.format('iso8601'),
 ], (err, user_id, without_notes = false, timestamp = new Date(1970, 1, 1).toISOString()) => {
+  console.log(timestamp);
   if (err) {
     throw new SwipesError(`initMe: ${err}`);
   }
