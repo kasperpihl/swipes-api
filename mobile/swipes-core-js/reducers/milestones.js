@@ -7,6 +7,9 @@ export default function main(state = initialState, action) {
   switch (type) {
     case 'init': {
       let milestones = Map();
+      if(!payload.full_fetch) {
+        milestones = state;
+      }
       payload.milestones.forEach((m) => {
         milestones = milestones.set(m.id, fromJS(m));
       });

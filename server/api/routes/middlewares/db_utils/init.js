@@ -12,7 +12,9 @@ import {
 const initMe = funcWrap([
   string.require(),
   bool,
-], (err, user_id, without_notes = false) => {
+  string.format('iso8601'),
+], (err, user_id, without_notes = false, timestamp) => {
+  console.log(timestamp);
   if (err) {
     throw new SwipesError(`initMe: ${err}`);
   }
@@ -32,6 +34,9 @@ const initMe = funcWrap([
           goals:
             r.table('goals')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+              .filter((goal) => {
+                return goal('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+              })
               .filter({ archived: false })
               .coerceTo('ARRAY'),
         });
@@ -41,6 +46,9 @@ const initMe = funcWrap([
           milestones:
              r.table('milestones')
                .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+              .filter((milestone) => {
+                return milestone('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+              })
                .coerceTo('ARRAY'),
         });
       })

@@ -20,27 +20,33 @@ import {
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
   without_notes: bool,
+  timestamp: string.format('iso8601'),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     without_notes,
+    timestamp,
   } = res.locals;
   const promiseArrayQ = [
-    initMe(user_id, without_notes),
+    initMe(user_id, without_notes, timestamp),
     servicesGetAll(),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
       filter: { sender: false },
       filterDefaultOption: true,
+      timestamp,
     }),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
       filter: { sender: true },
       filterDefaultOption: false,
+      timestamp,
     }),
     dbOnboardingGetAll(),
   ];
-  const ts = new Date().toISOString();
+
+  const now = new Date().toISOString();
+
   Promise.all(promiseArrayQ)
     .then((data) => {
       const me = data[0];
@@ -92,7 +98,7 @@ const initGetData = valLocals('initGetData', {
         milestones,
         ways,
         notes,
-        ts,
+        timestamp: now,
         services: data[1],
         notifications: data[2].concat(data[3]),
         onboarding: data[4],

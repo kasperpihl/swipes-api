@@ -6,7 +6,7 @@ const initialState = fromJS({
   lastConnect: null,
   token: null,
   status: 'offline',
-  versionInfo: {}
+  versionInfo: {},
 });
 
 export default function me(state = initialState, action) {
@@ -17,13 +17,15 @@ export default function me(state = initialState, action) {
 
   switch (type) {
     case ('init'): {
-      return state.set('lastConnect', payload.ts);
+      return state.set('lastConnect', payload.timestamp);
     }
     case REHYDRATE:
 
       if (action && action.payload && action.payload.connection) {
-        let { connection } = action.payload;
-        return initialState.set('token', connection.get('token'));
+        const { connection } = action.payload;
+
+        return initialState.set('token', connection.get('token'))
+                           .set('lastConnect', connection.get('lastConnect'));
       }
       return state;
     case types.SET_UPDATE_STATUS: {

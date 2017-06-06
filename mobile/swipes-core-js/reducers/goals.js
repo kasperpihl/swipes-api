@@ -11,10 +11,16 @@ export default function goalsReducer(state = initialState, action) {
   switch (type) {
     case 'init': {
       let goals = Map();
-      const stars = payload.me.settings.starred_goals;
+      if(!payload.full_fetch) {
+        goals = state;
+      }
+
       payload.goals.forEach((g) => {
-        goals = goals.set(g.id, fromJS(g).set('starred', stars.indexOf(g.id) > -1));
+        goals = goals.set(g.id, fromJS(g));
       });
+
+      const stars = payload.me.settings.starred_goals;
+      goals = goals.map(g => g.set('starred', stars.indexOf(g.get('id')) > -1))
       return goals;
     }
     case 'milestones.close':
