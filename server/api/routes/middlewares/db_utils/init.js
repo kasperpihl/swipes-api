@@ -13,7 +13,7 @@ const initMe = funcWrap([
   string.require(),
   bool,
   string.format('iso8601'),
-], (err, user_id, without_notes = false, timestamp = new Date(1970, 1, 1)) => {
+], (err, user_id, without_notes = false, timestamp = new Date(1970, 1, 1).toISOString()) => {
   if (err) {
     throw new SwipesError(`initMe: ${err}`);
   }
@@ -34,7 +34,7 @@ const initMe = funcWrap([
             r.table('goals')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
               .filter((goal) => {
-                return goal('updated_at').during(timestamp, r.now().add(3600));
+                return goal('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
               })
               .filter({ archived: false })
               .coerceTo('ARRAY'),
@@ -46,7 +46,7 @@ const initMe = funcWrap([
              r.table('milestones')
                .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
               .filter((milestone) => {
-                return milestone('updated_at').during(timestamp, r.now());
+                return milestone('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
               })
                .coerceTo('ARRAY'),
         });
