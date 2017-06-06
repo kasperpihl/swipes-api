@@ -14,9 +14,7 @@ import {
   getSwipesLinkObj,
 } from '../utils';
 import {
-  goalsUpdate,
   goalsCreate,
-  goalsGet,
   goalsArchive,
   goalsInsert,
   goalsCreateQueueMessage,
@@ -32,7 +30,6 @@ import {
   goalsLoadWay,
   goalsLoadWayQueueMessage,
   goalsNotifyEmailQueueMessage,
-  goalsFindCompleteStatus,
   goalsIncompleteStep,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
@@ -120,7 +117,7 @@ authed.all('/goals.create',
     goal_order: array,
   }));
 
-authed.all('/goals.completeGoal',
+authed.all('/goals.complete',
   valBody({
     goal_id: string.require(),
   }),
@@ -132,7 +129,7 @@ authed.all('/goals.completeGoal',
     goal: object.require(),
   }));
 
-authed.all('/goals.incompleteGoal',
+authed.all('/goals.incomplete',
   valBody({
     goal_id: string.require(),
   }),
@@ -150,10 +147,7 @@ authed.all('/goals.completeStep',
     step_id: string.require(),
   }),
   notificationCreateGroupId,
-  goalsGet,
-  goalsFindCompleteStatus,
   goalsCompleteStep,
-  goalsUpdate,
   goalsCompleteStepQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
@@ -166,10 +160,7 @@ authed.all('/goals.incompleteStep',
     step_id: string.require(),
   }),
   notificationCreateGroupId,
-  goalsGet,
-  goalsFindCompleteStatus,
   goalsIncompleteStep,
-  goalsUpdate,
   goalsIncompleteStepQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({

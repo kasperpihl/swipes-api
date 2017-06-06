@@ -237,14 +237,18 @@ class GoalOverview extends PureComponent {
     }
     const helper = this.getHelper();
 
+    let buttonLabel = 'Complete goal';
+    let label;
     if (helper.getIsCompleted()) {
-      return undefined;
+      buttonLabel = 'Incomplete goal';
+      label = 'This goal is completed';
     }
-    const buttonLabel = 'Complete goal';
-    return undefined;
+
     return (
       <div className="handoff-bar">
-        <div className="handoff-bar__label" />
+        <div className="handoff-bar__label">
+          {label}
+        </div>
         <div className="handoff-bar__actions">
           <Button
             text={buttonLabel}

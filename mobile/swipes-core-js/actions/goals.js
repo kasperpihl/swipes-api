@@ -64,4 +64,12 @@ export const incompleteStep = (gId, sId) => a.api.request('goals.incompleteStep'
   step_id: sId,
 })
 
+export const complete = (gId) => a.api.request('goals.complete', {
+  goal_id: gId,
+})
+
+export const incomplete = (gId) => a.api.request('goals.incomplete', {
+  goal_id: gId,
+})
+
 export const archive = goalId => a.api.request('goals.archive', { goal_id: goalId });

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import codePush from "react-native-code-push";
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Text } from 'react-native';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import { colors, viewSize } from '../../utils/globalStyles';
@@ -11,8 +12,14 @@ class Login extends PureComponent {
     this.state = {
       email: '',
       password: '',
+      version: 'unfound',
     };
-
+    codePush.getUpdateMetadata().then((pack) => {
+      console.log('pack', pack);
+      if(pack) {
+        this.setState({ version: pack.label });
+      }
+    })
     this.signIn = this.signIn.bind(this);
   }
   signIn() {
@@ -25,9 +32,11 @@ class Login extends PureComponent {
     });
   }
   render() {
+    const { version } = this.state;
     return (
       <View style={styles.container}>
         <KeyboardAvoidingView behavior="height" style={styles.container}>
+          <Text>{version}</Text>
           <TextInput
             style={styles.input}
             onChangeText={email => this.setState({ email })}
@@ -62,8 +71,8 @@ export default connect(null, {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: colors.bgColor,
-    backgroundColor: 'red',
+    backgroundColor: colors.bgColor,
+    // backgroundColor: 'red',
     alignItems: 'center',
     justifyContent: 'center',
   },

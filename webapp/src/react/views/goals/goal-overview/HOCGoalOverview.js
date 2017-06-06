@@ -172,8 +172,18 @@ class HOCGoalOverview extends PureComponent {
     this.clearLoading('completing');
     this.setState({ handoff });
   }
-  onBarClick(e) {
-    console.log('bar!');
+  onBarClick() {
+    const { incompleteGoal, completeGoal } = this.props;
+    const helper = this.getHelper();
+    const actionFunc = helper.getIsCompleted() ? incompleteGoal : completeGoal;
+    this.setLoading('completing')
+    actionFunc(helper.getId()).then((res) => {
+      if(res && res.ok) {
+        this.clearLoading('completing')
+      } else {
+        this.clearLoading('completing', '!Something went wrong');
+      }
+    })
   }
   onCloseHandoff() {
     this.setState({ handoff: null });
@@ -339,6 +349,8 @@ export default connect(mapStateToProps, {
   archive: ca.goals.archive,
   contextMenu: a.main.contextMenu,
   renameGoal: ca.goals.rename,
+  completeGoal: ca.goals.complete,
+  incompleteGoal: ca.goals.incomplete,
   selectAssignees: a.goals.selectAssignees,
   selectMilestone: a.menus.selectMilestone,
   addGoalToMilestone: ca.milestones.addGoal,
