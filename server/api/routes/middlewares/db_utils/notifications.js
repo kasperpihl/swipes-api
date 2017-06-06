@@ -34,7 +34,7 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
 ], (err, {
   user_id, filter = {},
   filterDefaultOption,
-  timestamp = new Date(1970, 1, 1).toISOString(),
+  timestamp,
 }) => {
   if (err) {
     throw new SwipesError(`dbNotificationsGetAllByIdOrderByTs: ${err}`);

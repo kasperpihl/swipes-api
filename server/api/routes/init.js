@@ -23,7 +23,10 @@ authed.all('/init',
   mapLocals('timestamp', (setLocals, timestamp) => {
     const full_fetch = !!timestamp;
 
-    setLocals({ full_fetch });
+    setLocals({
+      full_fetch,
+      timestamp: timestamp === null ? new Date(1970, 1, 1).toISOString() : timestamp,
+    });
   }),
   initGetData,
   valResponseAndSend({
