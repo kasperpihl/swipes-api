@@ -127,7 +127,7 @@ class HOCDashboard extends PureComponent {
     navPush(overview);
   }
   onNotificationLongPress(n) {
-    Vibration.vibrate(100);
+
   }
   getFilteredNotifications(fI, notifications, filters) {
     notifications = notifications || this.props.notifications;

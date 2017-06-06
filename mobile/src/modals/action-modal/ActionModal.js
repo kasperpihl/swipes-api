@@ -143,6 +143,12 @@ class ActionModal extends PureComponent {
       width: viewSize.width * 0.8,
       maxWidth: 275,
       elevation: 5,
+      shadowColor: colors.deepBlue100,
+      shadowOffset: {
+        width: 0, height: 1,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
     };
 
     let animationStyle = 'fade';
