@@ -101,24 +101,24 @@ class App extends PureComponent {
   codePushStatusDidChange(status) {
     switch (status) {
       case codePush.SyncStatus.CHECKING_FOR_UPDATE:
-        console.log('Checking for updates.');
+        // console.log('Checking for updates.');
         break;
       case codePush.SyncStatus.DOWNLOADING_PACKAGE:
-        console.log('Downloading package.');
+        // console.log('Downloading package.');
         break;
       case codePush.SyncStatus.INSTALLING_UPDATE:
-        console.log('Installing update.');
+        // console.log('Installing update.');
         break;
       case codePush.SyncStatus.UP_TO_DATE:
-        console.log('Up-to-date.');
+        // console.log('Up-to-date.');
         break;
       case codePush.SyncStatus.UPDATE_INSTALLED:
-        console.log('Update installed.');
+        // console.log('Update installed.');
         break;
     }
   }
   codePushDownloadDidProgress(progress) {
-    console.log(`${progress.receivedBytes} of ${progress.totalBytes} received.`);
+    // console.log(`${progress.receivedBytes} of ${progress.totalBytes} received.`);
   }
   onOpened(openResult) {
     const { sliderChange } = this.props;
@@ -181,14 +181,13 @@ class App extends PureComponent {
         <LoadingModal />
         <ActionModal />
         <HOCTabNavigation />
-        <DevTools />
+        {/* <DevTools />*/}
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}
       </View>
     );
   }
   render() {
-    console.log('render');
     return (
       <View style={styles.app}>
         <StatusBar

@@ -24,17 +24,9 @@ class SceneRenderer extends PureComponent {
     this.navPushCached = setupCachedCallback(props.navPush);
     this.navPopCached = setupCachedCallback(props.navPop);
   }
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.isActive && nextProps.routes !== this.props.routes) {
-      return true;
-    }
-
-    return false;
-  }
   render() {
     const { activeSliderIndex, routes, setActionButtons, route, navPush } = this.props;
     const Comp = views[route.id];
-    const isActive = routes.size;
 
     return (
       <View style={styles.viewController} key={activeSliderIndex}>

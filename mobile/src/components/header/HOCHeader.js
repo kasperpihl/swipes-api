@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { setupDelegate, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import Tabs from '../tabs/Tabs';
 import { colors } from '../../utils/globalStyles';
 
@@ -54,17 +54,17 @@ class Header extends PureComponent {
   render() {
     const { tabs, children } = this.props;
 
-    const containerStyles = tabs ? styles.containerWithtabs : styles.container;
-
     return (
-      <View style={containerStyles}>
-        <View style={styles.titleWrapper}>
+      <View style={styles.container}>
+        <View style={styles.topContainer}>
           <Text style={styles.title}>{this.props.title}</Text>
-          <View style={styles.titleChildren}>
+          <View style={styles.children}>
             {children}
           </View>
         </View>
-        {this.renderTabs()}
+        <ScrollView style={styles.bottomContainer} horizontal showsHorizontalScrollIndicator={false} alwaysBounceHorizontal={false} >
+          {this.renderTabs()}
+        </ScrollView>
       </View>
     );
   }
@@ -72,51 +72,31 @@ class Header extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 30,
     marginHorizontal: 15,
-    paddingTop: 54,
+    marginTop: 39,
+    flexDirection: 'column',
     borderBottomWidth: 1,
     borderBottomColor: colors.deepBlue20,
     backgroundColor: colors.bgColor,
   },
-  containerWithtabs: {
-    marginHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue20,
-    backgroundColor: colors.bgColor,
-    paddingTop: 54,
-  },
-  titleWrapper: {
-    height: 50,
-    alignItems: 'center',
+  topContainer: {
     flexDirection: 'row',
+    marginBottom: 9,
   },
-  titleChildren: {
+  bottomContainer: {
+    flexDirection: 'row',
   },
   title: {
     flex: 1,
     color: colors.deepBlue100,
-    fontSize: 30,
+    fontSize: 27,
+  },
+  children: {
+    flexDirection: 'row',
   },
   tabTitle: {
     color: colors.deepBlue30,
     fontWeight: '500',
-  },
-  breadcrumbs: {
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 33,
-  },
-  breadcrumb: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  breadcrumbLabel: {
-    flexDirection: 'row',
-    marginTop: -2,
-    color: colors.deepBlue30,
-    fontSize: 12,
   },
 });
 
