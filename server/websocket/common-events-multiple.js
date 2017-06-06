@@ -46,6 +46,7 @@ const commonEventsMultiple = (socket, userId) => {
         socket.send(JSON.stringify({
           type,
           payload,
+          updated_at: new Date().toISOString(),
         }));
       });
     });

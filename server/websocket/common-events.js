@@ -39,7 +39,11 @@ const commonEvents = (socket, userId) => {
           payload = _.omit(n, ['id', 'type', 'user_id']);
         }
 
-        socket.send(JSON.stringify({ type, payload }));
+        socket.send(JSON.stringify({
+          type,
+          payload,
+          updated_at: new Date().toISOString(),
+        }));
       });
     });
 };
