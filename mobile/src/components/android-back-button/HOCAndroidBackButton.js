@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import AndroidBackButton from 'react-native-android-back-button';
@@ -10,6 +11,9 @@ class HOCAndroidBackButton extends PureComponent {
     this.state = {};
 
     this.onBackPress = this.onBackPress.bind(this);
+  }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
   onBackPress() {
     const { activeSliderIndex, sliders, navPop, sliderChange } = this.props;
@@ -26,7 +30,7 @@ class HOCAndroidBackButton extends PureComponent {
     return false;
   }
   render() {
-    return <AndroidBackButton onPress={this.onBackPress} />;
+    return null;
   }
 }
 

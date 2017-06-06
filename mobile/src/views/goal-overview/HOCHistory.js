@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import ImmutableListView from 'react-native-immutable-list-view';
+import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import * as a from '../../actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
@@ -85,7 +85,7 @@ class HOCHistory extends PureComponent {
     }
 
     return (
-      <ImmutableListView
+      <ImmutableVirtualizedList
         ref="listView"
         removeClippedSubviews={false}
         immutableData={events}

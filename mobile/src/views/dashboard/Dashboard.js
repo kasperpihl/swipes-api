@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import NotificationItem from './NotificationItem';
 import { colors, viewSize } from '../../utils/globalStyles';
-import ImmutableListView from 'react-native-immutable-list-view';
+import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
@@ -32,7 +32,6 @@ class Dashboard extends Component {
   renderNotifications() {
     const {
       notifications,
-      delegate,
       hasLoaded,
     } = this.props;
 
@@ -50,10 +49,10 @@ class Dashboard extends Component {
     }
 
     return (
-      <ImmutableListView
+      <ImmutableVirtualizedList
         immutableData={notifications}
         renderRow={this.renderRow}
-        rowsDuringInteraction={0}
+        rowsDuringInteraction={10}
         removeClippedSubviews={false}
       />
     );

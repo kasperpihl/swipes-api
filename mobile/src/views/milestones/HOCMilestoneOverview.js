@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import ImmutableListView from 'react-native-immutable-list-view';
+import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCGoalItem from '../goallist/HOCGoalItem';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
@@ -80,7 +80,7 @@ class HOCMilestoneOverview extends PureComponent {
     const goalList = goals.get(tab);
 
     return (
-      <ImmutableListView
+      <ImmutableVirtualizedList
         key={tab}
         style={styles.list}
         immutableData={goalList}

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
-import ImmutableListView from 'react-native-immutable-list-view';
+import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
@@ -110,7 +110,7 @@ class HOCStepList extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <ImmutableListView
+        <ImmutableVirtualizedList
           immutableData={steps}
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
         />

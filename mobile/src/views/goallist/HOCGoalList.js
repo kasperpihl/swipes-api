@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import ImmutableListView from 'react-native-immutable-list-view';
+import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import { colors } from '../../utils/globalStyles';
 import HOCGoalItem from './HOCGoalItem';
@@ -123,7 +123,7 @@ class HOCGoalList extends PureComponent {
     }));
 
     return (
-      <ImmutableListView
+      <ImmutableVirtualizedList
         style={styles.list}
         immutableData={goalFilter.get('goals')}
         renderRow={gId => this.renderGoal(gId, tabs[tabIndex])}

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import ImmutableListView from 'react-native-immutable-list-view';
+import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import * as a from '../../actions';
 import HOCHeader from '../../components/header/HOCHeader';
 import { colors } from '../../utils/globalStyles';
@@ -86,7 +86,7 @@ class HOCMilestones extends PureComponent {
     const milestonesToRender = group.get(tabs[tabIndex]) || emptyList;
 
     return (
-      <ImmutableListView
+      <ImmutableVirtualizedList
         style={styles.list}
         immutableData={milestonesToRender}
         renderRow={mS => this.renderMilestoneItem(mS)}

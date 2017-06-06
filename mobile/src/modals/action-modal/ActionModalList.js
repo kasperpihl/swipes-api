@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import ImmutableListView from 'react-native-immutable-list-view';
+import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import ActionModalItem from './ActionModalItem';
 
 const styles = StyleSheet.create({
@@ -41,7 +41,7 @@ class ActionModalList extends Component {
 
     if (scrollable || fullscreen) {
       return (
-        <ImmutableListView
+        <ImmutableVirtualizedList
           style={styles.list}
           keyboardShouldPersistTaps="always"
           immutableData={listItems}

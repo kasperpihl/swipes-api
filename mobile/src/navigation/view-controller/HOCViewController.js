@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { NavigationExperimental, StyleSheet, Platform, Keyboard } from 'react-native';
+import { StyleSheet, Platform, Keyboard } from 'react-native';
+import NavigationExperimental from 'react-native-navigation-experimental-compat';
 import * as a from '../../actions';
 import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import SceneRenderer from './SceneRenderer';

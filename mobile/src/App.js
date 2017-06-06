@@ -182,7 +182,7 @@ class App extends PureComponent {
         <LoadingModal />
         <ActionModal />
         <HOCTabNavigation />
-        <DevTools />
+        {/* <DevTools />*/}
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}
       </View>

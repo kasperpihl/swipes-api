@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
-import ImmutableListView from 'react-native-immutable-list-view';
+import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import ImagePicker from 'react-native-image-picker';
 import { attachmentIconForService, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
@@ -89,7 +89,7 @@ class HOCAttachments extends PureComponent {
     } = this.props;
 
     return (
-      <ImmutableListView
+      <ImmutableVirtualizedList
         removeClippedSubviews={false}
         immutableData={attachmentOrder}
         renderRow={this.renderAttachment}
