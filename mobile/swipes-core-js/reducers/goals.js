@@ -35,14 +35,16 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'goals.loadWay':
     case 'goal_load_way':
+    case 'goals.complete':
+    case 'goal_completed':
+    case 'goals.incomplete':
+    case 'goal_incompleted':
     case 'goals.completeStep':
     case 'goals.incompleteStep':
     case 'step_completed':
     case 'step_incompleted':
-    case 'goal_completed':
     case 'goal_notify':
-    case 'goals.notify':
-    case 'goals.start': {
+    case 'goals.notify': {
       return state.mergeIn([payload.goal.id], payload.goal);
     }
     case 'step_added':
@@ -50,8 +52,8 @@ export default function goalsReducer(state = initialState, action) {
       if (state.getIn([payload.goal_id, 'steps', payload.step.id])) {
         return state;
       }
-      if (payload.status) {
-        state = state.setIn([payload.goal_id, 'status'], fromJS(payload.status));
+      if (typeof payload.completed_at !== 'undefined') {
+        state = state.setIn([payload.goal_id, 'completed_at'], payload.completed_at);
       }
       state = state.setIn([payload.goal_id, 'step_order'], fromJS(payload.step_order));
       return state.setIn([payload.goal_id, 'steps', payload.step.id], fromJS(payload.step));
@@ -61,8 +63,8 @@ export default function goalsReducer(state = initialState, action) {
       if (!state.getIn([payload.goal_id, 'steps', payload.step_id])) {
         return state;
       }
-      if (payload.status) {
-        state = state.setIn([payload.goal_id, 'status'], fromJS(payload.status));
+      if (typeof payload.completed_at !== 'undefined') {
+        state = state.setIn([payload.goal_id, 'completed_at'], payload.completed_at);
       }
       return state.updateIn([payload.goal_id], (g) => {
         g = g.updateIn(['step_order'], s => s.filter(id => id !== payload.step_id));

@@ -117,7 +117,7 @@ authed.all('/goals.create',
     goal_order: array,
   }));
 
-authed.all('/goals.completeGoal',
+authed.all('/goals.complete',
   valBody({
     goal_id: string.require(),
   }),
@@ -129,7 +129,7 @@ authed.all('/goals.completeGoal',
     goal: object.require(),
   }));
 
-authed.all('/goals.incompleteGoal',
+authed.all('/goals.incomplete',
   valBody({
     goal_id: string.require(),
   }),
