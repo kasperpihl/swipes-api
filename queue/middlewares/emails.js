@@ -35,6 +35,7 @@ const notificationReplyLabels = {
   update: 'sent you back an update',
   assets: 'sent you back assets',
   decision: 'sent you back a decision',
+  default: 'replied to you',
 };
 const attachmentIcons = {
   note: `${s3BucketUrl}email_icons/swipes-email-icon-attachment-note.png`,
