@@ -66,7 +66,7 @@ export default class Socket {
       }, 20000);
       const timestamp = this.store.getState().getIn(['connection', 'lastConnect']);
       this.store.dispatch(a.api.request('init', {
-        timestamp: timestamp,
+        timestamp: timestamp || null,
         without_notes: !!window.__WITHOUT_NOTES__,
       })).then((res) => {
         this.isConnecting = false;

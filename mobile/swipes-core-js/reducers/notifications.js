@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 import * as types from '../constants';
 import { REHYDRATE } from 'redux-persist/constants';
 
@@ -10,12 +10,25 @@ export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case REHYDRATE:
-      if (action && action.payload && action.payload.notifications) {
-        return action.payload.notifications.toList();
+      if (payload && payload.notifications) {
+        return payload.notifications.toList();
       }
       return state;
     case 'init': {
-      return fromJS(payload.notifications).sort(sortFn);
+      if(payload.full_fetch){
+        return fromJS(payload.notifications).sort(sortFn);
+      }
+      let notifications = state;
+
+      fromJS(payload.notifications).forEach((n) => {
+        const index = notifications.findIndex(sn => sn.get('id') === n.get('id'));
+        if(index > -1) {
+          notifications = notifications.set(index, n);
+        } else {
+          notifications = notifications.push(n);
+        }
+      })
+      return notifications.sort(sortFn);
     }
 
     // ======================================================
