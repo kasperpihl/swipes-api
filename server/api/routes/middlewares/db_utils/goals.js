@@ -194,6 +194,115 @@ const dbGoalsRepliesHistoryUpdate = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbGoalsCompleteStep = funcWrap([
+  object.as({
+    goal_id: string.require(),
+    step_id: string.require(),
+    user_id: string.require(),
+    type: string.require(),
+    notificationGroupId: string.require(),
+  }),
+], (err, { goal_id, step_id, user_id, type, notificationGroupId }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsCompleteStep: ${err}`);
+  }
+
+  const q =
+    r.table('goals')
+      .get(goal_id)
+      .update((goal) => {
+        return {
+          steps: r.branch(
+            goal('steps').hasFields(step_id),
+            goal('steps').merge({
+              [step_id]: goal('steps')(step_id).merge({
+                updated_at: r.now(),
+                updated_by: user_id,
+                completed_at: r.branch(
+                  goal('steps')(step_id)('completed_at').ne(null),
+                  goal('steps')(step_id)('completed_at'),
+                  r.now(),
+                ),
+              }),
+            }),
+            r.error('Invalid step_id'),
+          ),
+          history: goal('history').append({
+            type,
+            step_id,
+            done_by: user_id,
+            done_at: r.now(),
+            group_id: notificationGroupId,
+            assignees: goal('steps')(step_id)('assignees') || [],
+          }),
+          completed_at: r.branch(
+            goal('step_order').map((stepId) => {
+              return goal('steps')(stepId);
+            }).filter((step) => {
+              return step('id').ne(step_id).and(step('completed_at').ne(null));
+            })
+            .count()
+            .eq(goal('step_order').filter(stepId => stepId.ne(step_id)).count()),
+            r.now(),
+            null,
+          ),
+          updated_at: r.now(),
+          updated_by: user_id,
+        };
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
+
+const dbGoalsIncompleteStep = funcWrap([
+  object.as({
+    goal_id: string.require(),
+    step_id: string.require(),
+    user_id: string.require(),
+    type: string.require(),
+    notificationGroupId: string.require(),
+  }),
+], (err, { goal_id, step_id, user_id, type, notificationGroupId }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsIncompleteStep: ${err}`);
+  }
+
+  const q =
+    r.table('goals')
+      .get(goal_id)
+      .update((goal) => {
+        return {
+          steps: r.branch(
+            goal('steps').hasFields(step_id),
+            goal('steps').merge({
+              [step_id]: goal('steps')(step_id).merge({
+                updated_at: r.now(),
+                updated_by: user_id,
+                completed_at: null,
+              }),
+            }),
+            r.error('Invalid step_id'),
+          ),
+          history: goal('history').append({
+            type,
+            step_id,
+            done_by: user_id,
+            done_at: r.now(),
+            group_id: notificationGroupId,
+            assignees: goal('steps')(step_id)('assignees') || [],
+          }),
+          completed_at: null,
+          updated_at: r.now(),
+          updated_by: user_id,
+        };
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbGoalsInsertSingle,
@@ -203,4 +312,6 @@ export {
   dbGoalsRepliesHistoryUpdate,
   dbGoalsCompleteGoal,
   dbGoalsIncompleteGoal,
+  dbGoalsCompleteStep,
+  dbGoalsIncompleteStep,
 };
