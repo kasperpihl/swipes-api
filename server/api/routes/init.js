@@ -9,6 +9,7 @@ import initGetData from './middlewares/init';
 import {
   valBody,
   valResponseAndSend,
+  mapLocals,
 } from '../utils';
 
 const authed = express.Router();
@@ -18,6 +19,11 @@ authed.all('/init',
   valBody({
     timestamp: string.format('iso8601'),
     without_notes: bool,
+  }),
+  mapLocals('timestamp', (setLocals, timestamp) => {
+    const full_fetch = !!timestamp;
+
+    setLocals({ full_fetch });
   }),
   initGetData,
   valResponseAndSend({
@@ -31,6 +37,7 @@ authed.all('/init',
     services: array.of(object).require(),
     notifications: array.of(object).require(),
     onboarding: array.of(object).require(),
+    full_fetch: bool.require(),
   }));
 
 export {
