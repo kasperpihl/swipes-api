@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 });
 
 
-class HOCGoalList extends Component {
+class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -128,6 +128,7 @@ class HOCGoalList extends Component {
         immutableData={goalFilter.get('goals')}
         renderRow={gId => this.renderGoal(gId, tabs[tabIndex])}
         renderFooter={this.renderFooter}
+        rowsDuringInteraction={0}
       />
     );
   }

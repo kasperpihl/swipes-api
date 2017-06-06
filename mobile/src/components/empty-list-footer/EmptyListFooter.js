@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { viewSize } from '../../utils/globalStyles';
 
-class EmptyListFooter extends Component {
+class EmptyListFooter extends PureComponent {
   render() {
     return <View style={styles.footer} />;
   }

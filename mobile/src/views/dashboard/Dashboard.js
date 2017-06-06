@@ -53,7 +53,7 @@ class Dashboard extends Component {
       <ImmutableListView
         immutableData={notifications}
         renderRow={this.renderRow}
-        renderFooter={this.renderFooter}
+        rowsDuringInteraction={0}
         removeClippedSubviews={false}
       />
     );

@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import Tabs from '../tabs/Tabs';
 import { colors } from '../../utils/globalStyles';
 
-class Header extends Component {
+class Header extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};

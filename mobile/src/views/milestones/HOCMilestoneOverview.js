@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class HOCMilestoneOverview extends Component {
+class HOCMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

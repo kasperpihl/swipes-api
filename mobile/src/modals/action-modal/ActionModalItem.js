@@ -134,34 +134,3 @@ class ActionModalItem extends Component {
 }
 
 export default ActionModalItem;
-
-
-// const styles = StyleSheet.create({
-//   containerButton: {
-//     flex: 1,
-//     minHeight: 65,
-//   },
-//   container: {
-//     flex: 1,
-//     minHeight: 65,
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     paddingHorizontal: 15,
-//   },
-//   leftIcon: {
-//     marginRight: 15,
-//   },
-//   titleWrapper: {
-//     flex: 1,
-//   },
-//   title: {
-//     fontSize: 14,
-//     color: colors.deepBlue80,
-//   },
-//   selector: {
-//     width: 26,
-//     height: 26,
-//     borderRadius: 13,
-//     borderWidth: 2,
-//   },
-// });

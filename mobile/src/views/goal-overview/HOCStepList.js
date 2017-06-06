@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
@@ -63,13 +63,21 @@ class HOCStepList extends PureComponent {
 
     setupDelegate(this);
     this.callDelegate.bindAll('onComplete');
+    this.renderSteps = this.renderSteps.bind(this);
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
   }
   getHelper() {
     const { goal } = this.props;
 
     return new GoalsUtil(goal);
   }
-  renderSteps(step, secI, i, completed) {
+  renderSteps(step, secI, i) {
     const helper = this.getHelper();
     let indicatorStyles;
     let indicatorLabelStyles;
@@ -98,13 +106,13 @@ class HOCStepList extends PureComponent {
     );
   }
   render() {
-    const { steps, completed, delegate } = this.props;
+    const { steps } = this.props;
 
     return (
       <View style={styles.container}>
         <ImmutableListView
           immutableData={steps}
-          renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex, completed, delegate)}
+          renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
         />
       </View>
     );

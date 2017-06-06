@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { NavigationExperimental, View, StyleSheet, Platform, Keyboard } from 'react-native';
+import { NavigationExperimental, StyleSheet, Platform, Keyboard } from 'react-native';
 import * as a from '../../actions';
 import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
-import * as views from '../../views';
-import HOCBreadCrumbs from '../../components/breadcrumbs/HOCBreadCrumbs';
+import SceneRenderer from './SceneRenderer';
 import { viewSize } from '../../utils/globalStyles';
 
 const {
@@ -29,7 +28,6 @@ class HOCViewController extends PureComponent {
     super(props, context);
 
     this.renderScene = this.renderScene.bind(this);
-    this.navPushCached = setupCachedCallback(props.navPush);
     this.navPopCached = setupCachedCallback(props.navPop);
   }
   componentWillUpdate(nextProps, nextState) {
@@ -43,23 +41,18 @@ class HOCViewController extends PureComponent {
   }
   renderScene(sceneProps) {
     const { route } = sceneProps.scene;
-    const { activeSliderIndex, routes, setActionButtons } = this.props;
-    const Comp = views[route.id];
-    const isActive = routes.size;
+    const { activeSliderIndex, routes, setActionButtons, navPop, navPush } = this.props;
 
     return (
-      <View style={styles.viewController} key={activeSliderIndex}>
-        <HOCBreadCrumbs sliderIndex={activeSliderIndex} />
-        <View style={styles.content}>
-          <Comp
-            navPush={this.navPushCached(activeSliderIndex)}
-            navPop={this.navPopCached(activeSliderIndex)}
-            setActionButtons={setActionButtons}
-            lastRoute={routes.size}
-            {...route.props}
-          />
-        </View>
-      </View>
+      <SceneRenderer
+        route={route}
+        activeSliderIndex={activeSliderIndex}
+        routes={routes}
+        setActionButtons={setActionButtons}
+        navPush={navPush}
+        navPop={navPop}
+        isActive={sceneProps.scene.isActive}
+      />
     );
   }
   render() {
