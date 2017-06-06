@@ -50,6 +50,8 @@ export default class HistoryGenerator {
         return `${from} kicked off this goal`;
       case 'goal_completed':
         return `${from} completed this goal`;
+      case 'goal_incompleted':
+        return `${from} incompleted this goal`;
 
       case 'goal_archived':
         return `${from} archived this goal`;
