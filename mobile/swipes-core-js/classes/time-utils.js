@@ -51,8 +51,8 @@ export function timeAgo(date, simple) {
       .replace(' hours', 'h')
       .replace('a day', '1d')
       .replace(' days', 'd')
-      .replace('a month', '1m')
-      .replace(' months', 'm')
+      .replace('a month', '1month')
+      .replace(' months', 'months')
       .replace('a year', '1y')
       .replace(' years', 'y');
   }
