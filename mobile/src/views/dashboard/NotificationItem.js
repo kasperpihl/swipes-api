@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate, setupCachedCallback, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
 import FeedbackButton from '../../components/feedback-button/FeedbackButton';
@@ -7,7 +7,7 @@ import Icon from '../../components/icons/Icon';
 
 import { colors, viewSize } from '../../utils/globalStyles';
 
-class NotificationItem extends Component {
+class NotificationItem extends PureComponent {
   constructor(props) {
     super(props);
 

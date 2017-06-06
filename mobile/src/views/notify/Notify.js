@@ -7,6 +7,7 @@ import NotificationItem from '../dashboard/NotificationItem';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
 import { colors } from '../../utils/globalStyles';
+import HandoffMessage from './HandoffMessage';
 
 class Notify extends PureComponent {
   constructor(props) {
@@ -23,7 +24,7 @@ class Notify extends PureComponent {
 
     return (
       <HOCHeader title={title}>
-        {assignees.length || assignees.size ? (
+        {assignees.size ? (
           <HOCAssigning assignees={assignees} />
         ) : (
             undefined
@@ -60,7 +61,7 @@ class Notify extends PureComponent {
     );
   }
   renderWriteHandoff() {
-    const { me, notify } = this.props;
+    const { me, notify, delegate } = this.props;
     const assignees = [`${me.get('id')}`];
     const placeholder = msgGen.notify.getWriteMessagePlaceholder(notify);
 
@@ -70,17 +71,10 @@ class Notify extends PureComponent {
           <HOCAssigning assignees={[`${me.get('id')}`]} />
         </View>
         <View style={styles.handoffInput}>
-          <TextInput
-            numberOfLines={3}
-            multiline
-            autoFocus
+          <HandoffMessage
+            delegate={delegate}
             placeholder={placeholder}
-            autoCapitalize="sentences"
-            onChange={this.onChangeText}
-            initialValue={this.props.notify.get('message')}
-            placeholderTextColor={colors.deepBlue50}
-            style={styles.input}
-            underlineColorAndroid="rgba(255,255,255,0)"
+            initialText={notify.get('message')}
           />
         </View>
       </View>

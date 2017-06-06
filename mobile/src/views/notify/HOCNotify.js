@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 import { goals } from '../../../swipes-core-js/actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import * as a from '../../actions';
@@ -63,22 +63,21 @@ class HOCNotify extends PureComponent {
     }
     this.updateHandoff(notify);
   }
-  onChangeText(event) {
-    const text = event.nativeEvent.text;
-    const { notify } = this.state;
-    this.updateHandoff(notify.set('message', text));
+  onChangeText(text) {
+    this.message = text;
+    // this.updateHandoff(notify.set('message', text));
   }
   onModalAction(sortedUsers, data) {
     let { notify } = this.state;
     const { showModal } = this.props;
-    notify = notify.setIn(['assignees'], data.map(i => sortedUsers.getIn([i, 'id'])));
+    notify = notify.setIn(['assignees'], List(data.map(i => sortedUsers.getIn([i, 'id']))));
 
     this.updateHandoff(notify);
     showModal();
   }
   onActionButton(index) {
     const { users, showModal, navPop, goal, goalNotify } = this.props;
-    const { notify } = this.state;
+    let { notify } = this.state;
 
     const sortedUsers = users.sort(
       (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
@@ -111,6 +110,7 @@ class HOCNotify extends PureComponent {
       showModal(modal);
     } else if (index === 1) {
       this.setState({ hasLoaded: false });
+      notify = notify.set('message', this.message || notify.get('message'));
       goalNotify(goal.get('id'), notify).then((res) => {
         if (res && res.ok) {
           this.setState({ hasLoaded: true });
@@ -130,7 +130,7 @@ class HOCNotify extends PureComponent {
       { text: 'Assign people' },
     ];
 
-    if (notify && (notify.get('assignees').length || notify.get('assignees').size)) {
+    if (notify && notify.get('assignees').size) {
       actionButtons = [
         { text: 'Assign people' },
         { text: 'Notify' },

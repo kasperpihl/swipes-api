@@ -3,11 +3,10 @@ export default class Users {
     this.store = store;
   }
   getUser(user) {
-    if(typeof user === 'string'){
+    if (typeof user === 'string') {
       const state = this.store.getState();
       const users = state.get('users');
-      if(user === 'me')
-        return state.get('me');
+      if (user === 'me')      { return state.get('me'); }
       return users.get(user);
     }
     return user;
@@ -19,7 +18,7 @@ export default class Users {
   }
   getPhoto(userId, size) {
     const sizes = [192, 96, 64];
-    if(sizes.indexOf(size) === -1){
+    if (sizes.indexOf(size) === -1) {
       size = 192;
     }
     const sizeString = `${size}x${size}`;
@@ -30,18 +29,18 @@ export default class Users {
   getFirstName(userId) {
     const user = this.getUser(userId);
     const firstName = user.getIn(['profile', 'first_name']) || '';
-    return firstName.split(' ').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+    return firstName.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
   }
   getLastName(userId) {
     const user = this.getUser(userId);
     const lastName = user.getIn(['profile', 'last_name']) || '';
-    return lastName.split(' ').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+    return lastName.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
   }
   getRole(userId) {
     const user = this.getUser(userId);
     return user.getIn(['profile', 'role']) || '';
   }
-  getBio(userId){
+  getBio(userId) {
     const user = this.getUser(userId);
     return user.getIn(['profile', 'bio']) || '';
   }
@@ -49,11 +48,11 @@ export default class Users {
     const user = this.getUser(userId);
     return user.getIn(['organizations', 0, 'name']);
   }
-  getInitials(userId){
+  getInitials(userId) {
     const user = this.getUser(userId);
     let initials = this.getFirstName(user).substring(0, 1);
     const lastName = this.getLastName(user);
-    if(lastName.length) {
+    if (lastName.length) {
       initials += lastName.substring(0, 1);
     }
     return initials;
@@ -63,10 +62,10 @@ export default class Users {
     const firstName = this.getFirstName(user);
     const lastName = this.getLastName(user);
     let fullName = firstName;
-    if(lastName.length){
+    if (lastName.length) {
       fullName += ` ${lastName}`;
     }
-    return fullName
+    return fullName;
   }
   getName(userId, options) {
     options = options || {};

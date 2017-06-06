@@ -64,7 +64,7 @@ class App extends PureComponent {
     this.checkTagsAndUpdate();
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   componentDidUpdate(prevProps) {
     if (prevProps.myId !== this.props.myId) {
@@ -117,7 +117,6 @@ class App extends PureComponent {
         break;
     }
   }
-
   codePushDownloadDidProgress(progress) {
     console.log(`${progress.receivedBytes} of ${progress.totalBytes} received.`);
   }
@@ -182,13 +181,14 @@ class App extends PureComponent {
         <LoadingModal />
         <ActionModal />
         <HOCTabNavigation />
-        {/* <DevTools />*/}
+        <DevTools />
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}
       </View>
     );
   }
   render() {
+    console.log('render');
     return (
       <View style={styles.app}>
         <StatusBar

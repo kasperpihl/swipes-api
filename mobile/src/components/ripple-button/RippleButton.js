@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Platform, TouchableNativeFeedback } from 'react-native';
 import MaterialRippleButton from 'react-native-material-ripple';
 import { colors } from '../../utils/globalStyles';
 
-class RippleButton extends Component {
+class RippleButton extends PureComponent {
   hexToRgb(hex) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
