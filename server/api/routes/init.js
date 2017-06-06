@@ -21,7 +21,7 @@ authed.all('/init',
     without_notes: bool,
   }),
   mapLocals('timestamp', (setLocals, timestamp) => {
-    const full_fetch = !!timestamp;
+    const full_fetch = !timestamp;
 
     setLocals({
       full_fetch,
