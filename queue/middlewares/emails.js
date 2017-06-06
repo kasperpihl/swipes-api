@@ -383,10 +383,10 @@ const usersAcceptedInvitationEmail = (req, res, next) => {
       rcpt: userWithFields.email,
       vars: [{
         name: 'NAME',
-        content: user.profile.first_name,
+        content: userWithFields.profile.first_name,
       }, {
         name: 'NAME_NEW_MEMBER',
-        content: userWithFields.profile.first_name,
+        content: user.profile.first_name,
       }, {
         name: 'COMPANY_NAME',
         content: user.organizations[0].name,
@@ -399,7 +399,7 @@ const usersAcceptedInvitationEmail = (req, res, next) => {
       type: 'to',
     });
   });
-  const subject = 'New memeber joined your team';
+  const subject = 'New member joined your team';
   const message = {
     to,
     subject,
