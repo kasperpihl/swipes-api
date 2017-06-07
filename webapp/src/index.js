@@ -25,7 +25,6 @@ window.getURLParameter = name => decodeURIComponent((new RegExp(`[?|&]${name}=` 
 
 const store = configureStore();
 
-
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
 const delegate = {

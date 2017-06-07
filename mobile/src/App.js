@@ -126,9 +126,9 @@ class App extends PureComponent {
     sliderChange(2);
   }
   renderLoader() {
-    const { isHydrated, lastConnect } = this.props;
+    const { ready } = this.props;
 
-    if (isHydrated && lastConnect) {
+    if (ready) {
       return undefined;
     }
 
@@ -167,9 +167,9 @@ class App extends PureComponent {
     return undefined;
   }
   renderApp() {
-    const { token, isHydrated, lastConnect } = this.props;
+    const { token, ready } = this.props;
 
-    if (!token || !isHydrated || !lastConnect) {
+    if (!token || !ready) {
       return undefined;
     }
 
@@ -207,7 +207,7 @@ function mapStateToProps(state) {
   return {
     token: state.getIn(['connection', 'token']),
     myId: state.getIn(['me', 'id']),
-    lastConnect: state.getIn(['connection', 'lastConnect']),
+    ready: state.getIn(['connection', 'ready']),
     isHydrated: state.getIn(['main', 'isHydrated']),
   };
 }

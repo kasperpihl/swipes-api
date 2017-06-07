@@ -15,8 +15,8 @@ class HOCApp extends PureComponent {
     return <SwipesLoader center text="Loading" size={90} />;
   }
   render() {
-    const { lastConnect } = this.props;
-    if (!lastConnect) {
+    const { ready } = this.props;
+    if (!ready) {
       return this.renderLoader();
     }
     return (
@@ -28,15 +28,15 @@ class HOCApp extends PureComponent {
   }
 }
 
-const { string } = PropTypes;
+const { bool } = PropTypes;
 
 HOCApp.propTypes = {
-  lastConnect: string,
+  ready: bool,
 };
 
 function mapStateToProps(state) {
   return {
-    lastConnect: state.getIn(['connection', 'lastConnect']),
+    ready: state.getIn(['connection', 'ready']),
   };
 }
 
