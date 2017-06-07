@@ -6,7 +6,7 @@ export default class Users {
     if (typeof user === 'string') {
       const state = this.store.getState();
       const users = state.get('users');
-      if (user === 'me')      { return state.get('me'); }
+      if (user === 'me') { return state.get('me'); }
       return users.get(user);
     }
     return user;
@@ -102,7 +102,8 @@ export default class Users {
     const preferId = options.preferId || me.get('id');
     const numberOfNames = options.number || 1;
     if (userIds.includes(preferId)) {
-      userIds = userIds.filter(uId => uId !== preferId).insert(0, preferId);
+      // userIds = userIds.filter(uId => uId !== preferId).insert(0, preferId);
+      // console.log(userIds.toJS());
     }
     const names = userIds.map(uId => this.getName(uId, options));
     let nameString = '';

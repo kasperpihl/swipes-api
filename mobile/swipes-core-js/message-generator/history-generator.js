@@ -57,14 +57,14 @@ export default class HistoryGenerator {
         return `${from} archived this goal`;
       case 'step_incompleted': {
         const step = helper.getStepById(h.get('step_id'));
-        if(step) {
+        if (step) {
           return `${from} incompleted '${step.get('title')}'`;
         }
         return `${from} incompleted a step`;
       }
       case 'step_completed': {
         const step = helper.getStepById(h.get('step_id'));
-        if(step) {
+        if (step) {
           return `${from} completed '${step.get('title')}'`;
         }
         return `${from} completed a step`;
@@ -72,7 +72,7 @@ export default class HistoryGenerator {
 
       case 'goal_notify': {
         const yourself = h.get('done_by') === me.get('id');
-
+        console.log(h.get('assignees') && h.get('assignees').toJS());
         const to = this.parent.users.getNames(h.get('assignees') || List([me.get('id')]), {
           yourself,
           number: 1,
