@@ -11,9 +11,9 @@ import {
 
 const initMe = funcWrap([
   string.require(),
+  string.format('iso8601').require(),
   bool,
-  string.format('iso8601'),
-], (err, user_id, without_notes = false, timestamp) => {
+], (err, user_id, timestamp, without_notes = false) => {
   console.log(timestamp);
   if (err) {
     throw new SwipesError(`initMe: ${err}`);
@@ -57,6 +57,9 @@ const initMe = funcWrap([
           ways:
             r.table('ways')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+              .filter((ways) => {
+                return ways('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+              })
               .filter({
                 archived: false,
               })
@@ -82,6 +85,9 @@ const initMe = funcWrap([
               users:
                 r.table('users')
                   .getAll(r.args(organization('users')))
+                  .filter((user) => {
+                    return user('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+                  })
                   .without('password', 'organizations', 'services', 'xendoCredentials', 'settings')
                   .coerceTo('ARRAY'),
             });

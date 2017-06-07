@@ -29,7 +29,7 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
   object.as({
     user_id: string.require(),
     filter: object.require(),
-    timestamp: string.format('iso8601'),
+    timestamp: string.format('iso8601').require(),
   }).require(),
 ], (err, {
   user_id, filter = {},

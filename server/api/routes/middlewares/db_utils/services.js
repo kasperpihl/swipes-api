@@ -8,11 +8,22 @@ import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
 
-const servicesGetAll = () => {
-  const q = r.table('services').filter({ hidden: false });
+const servicesGetAll = funcWrap([
+  string.format('iso8601').require(),
+], (err, timestamp) => {
+  if (err) {
+    throw new SwipesError(`servicesGetAll: ${err}`);
+  }
+
+  const q =
+    r.table('services')
+      .filter((service) => {
+        return service('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+      })
+      .filter({ hidden: false });
 
   return db.rethinkQuery(q);
-};
+});
 const getServiceByName = funcWrap([
   string.require(),
 ], (err, serviceName) => {
