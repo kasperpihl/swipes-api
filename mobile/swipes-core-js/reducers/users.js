@@ -1,4 +1,5 @@
 import { fromJS, Map } from 'immutable';
+import { reducerInitToMap } from '../classes/utils';
 
 const initialState = fromJS({});
 
@@ -6,11 +7,7 @@ export default function usersReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case 'init': {
-      let users = Map();
-      payload.users.forEach((u) => {
-        users = users.set(u.id, fromJS(u));
-      });
-      return users;
+      return reducerInitToMap(payload, 'users', state);
     }
     case 'me.uploadProfilePhoto':
     case 'me.updateProfile':

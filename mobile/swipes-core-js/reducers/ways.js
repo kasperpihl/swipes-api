@@ -1,16 +1,13 @@
 import { fromJS, Map } from 'immutable';
+import { reducerInitToMap } from '../classes/utils';
 
 const initialState = fromJS({});
 
-export default function main(state = initialState, action) {
+export default function waysReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case 'init': {
-      let ways = Map();
-      payload.ways.forEach((w) => {
-        ways = ways.set(w.id, fromJS(w));
-      });
-      return ways;
+      return reducerInitToMap(payload, 'ways', state);
     }
 
 
