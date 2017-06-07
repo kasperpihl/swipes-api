@@ -45,6 +45,8 @@ const dbWaysUpdateSingle = funcWrap([
     throw new SwipesError(`dbWaysUpdateSingle: ${err}`);
   }
 
+  properties.updated_at = r.now();
+
   const q = r.table('ways').get(id).update(properties);
 
   return db.rethinkQuery(q);

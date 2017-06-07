@@ -39,10 +39,12 @@ const dbUsersRemoveService = funcWrap([
   const q =
     r.table('users')
       .get(user_id)
-      .update({ services: r.row('services')
-        .filter((service) => {
-          return service('id').ne(account_id);
-        }),
+      .update({
+        services: r.row('services')
+          .filter((service) => {
+            return service('id').ne(account_id);
+          }),
+        updated_at: r.now(),
       });
 
   return db.rethinkQuery(q);
@@ -69,6 +71,7 @@ const dbUsersAddSevice = funcWrap([
                     .not();
           })
           .append(service),
+      updated_at: r.now(),
     };
   });
 
@@ -159,6 +162,7 @@ const dbUsersAddOrganization = funcWrap([
       .get(user_id)
       .update({
         organizations: r.row('organizations').default([]).setUnion([organizationId]),
+        updated_at: r.now(),
       });
 
   return db.rethinkQuery(q);
