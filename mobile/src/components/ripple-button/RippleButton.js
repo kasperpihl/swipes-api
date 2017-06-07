@@ -33,7 +33,7 @@ class RippleButton extends PureComponent {
     const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
 
     return (
-      <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(rgba)} onLongPress={onLongPress} onPress={onPress} {...props}>
+      <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(rgba)} onPress={onPress} {...props}>
         {children}
       </TouchableNativeFeedback>
     );

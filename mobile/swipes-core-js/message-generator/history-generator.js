@@ -72,7 +72,7 @@ export default class HistoryGenerator {
 
       case 'goal_notify': {
         const yourself = h.get('done_by') === me.get('id');
-        console.log(h.get('assignees') && h.get('assignees').toJS());
+        // console.log(h.get('assignees') && h.get('assignees').toJS());
         const to = this.parent.users.getNames(h.get('assignees') || List([me.get('id')]), {
           yourself,
           number: 1,
