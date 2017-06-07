@@ -36,7 +36,6 @@ const dbStepsAdd = funcWrap([
         step_order: r.row('step_order').append(step.id),
         completed_at: null,
         updated_at: r.now(),
-        updated_by: user_id,
       }, {
         returnChanges: true,
       });
@@ -68,7 +67,6 @@ const dbStepsRename = funcWrap([
           },
         },
         updated_at: r.now(),
-        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);
@@ -131,7 +129,6 @@ const dbStepsDelete = funcWrap([
             ),
           ),
           updated_at: r.now(),
-          updated_by: user_id,
         };
       }), {
         returnChanges: true,
@@ -183,7 +180,6 @@ const dbStepsReorder = funcWrap([
             return r.expr(step_order).setUnion(items);
           }),
         updated_at: r.now(),
-        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);
@@ -213,7 +209,6 @@ const dbStepsAssign = funcWrap([
           },
         },
         updated_at: r.now(),
-        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);

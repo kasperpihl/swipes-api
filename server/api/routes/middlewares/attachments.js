@@ -46,7 +46,6 @@ const attachmentsCreate = valLocals('attachmentsCreate', {
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
-    updated_by: user_id,
   };
 
   setLocals({

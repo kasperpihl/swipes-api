@@ -56,7 +56,6 @@ const dbMilestonesAddGoal = funcWrap([
       .update({
         goal_order: r.row('goal_order').default([]).setUnion([goal_id]),
         updated_at: r.now(),
-        updated_by: user_id,
       }, {
         returnChanges: true,
       });
@@ -80,7 +79,6 @@ const dbMilestonesRemoveGoal = funcWrap([
       .update({
         goal_order: r.row('goal_order').default([]).difference(goal_ids),
         updated_at: r.now(),
-        updated_by: user_id,
       }, {
         returnChanges: true,
       });

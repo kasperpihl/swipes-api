@@ -37,7 +37,6 @@ const dbAttachmentsAdd = funcWrap([
         },
         attachment_order: r.row('attachment_order').default([]).setUnion([attachment.id]),
         updated_at: r.now(),
-        updated_by: user_id,
       }, {
         returnChanges: true,
       });
@@ -75,7 +74,6 @@ const dbAttachmentsRename = funcWrap([
           },
         },
         updated_at: r.now(),
-        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);
@@ -111,7 +109,6 @@ const dbAttachmentsDelete = funcWrap([
         },
         attachment_order: r.row('attachment_order').difference([attachment_id]),
         updated_at: r.now(),
-        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);
@@ -164,7 +161,6 @@ const dbAttachmentsReorder = funcWrap([
             return r.expr(attachment_order).setUnion(items);
           }),
         updated_at: r.now(),
-        updated_by: user_id,
       });
 
   return db.rethinkQuery(q);
