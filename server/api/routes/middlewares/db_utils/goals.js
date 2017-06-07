@@ -114,6 +114,8 @@ const dbGoalsUpdateSingle = funcWrap([
     throw new SwipesError(`dbGoalsUpdateSingle: ${err}`);
   }
 
+  properties.updated_at = r.now();
+
   const q =
     r.table('goals')
       .get(goal_id)
@@ -151,6 +153,7 @@ const dbGoalsPushToHistorySingle = funcWrap([
       .get(goal_id)
       .update({
         history: r.row('history').append(historyItem),
+        updated_at: r.now(),
       }, { returnChanges: true });
 
   return db.rethinkQuery(q);
@@ -188,6 +191,7 @@ const dbGoalsRepliesHistoryUpdate = funcWrap([
                 };
               }),
           ),
+        updated_at: r.now(),
       }, {
         returnChanges: true,
       });

@@ -33,6 +33,8 @@ const dbMilestonesUpdateSingle = funcWrap([
     throw new SwipesError(`dbMilestonesUpdateSingle: ${err}`);
   }
 
+  properties.updated_at = r.now();
+
   const q = r.table('milestones').get(milestone_id).update(properties);
 
   return db.rethinkQuery(q);
@@ -111,6 +113,7 @@ const dbMilestonesMigrateIncompleteGoals = funcWrap([
       })
       .update({
         milestone_id: migrate_to_milestone_id,
+        updated_at: r.now(),
       }, {
         returnChanges: 'always',
       }).do((results) => {

@@ -21,6 +21,7 @@ const dbNotificationsMarkAsSeen = funcWrap([
 
   const q = r.table('notifications').getAll(r.args(notification_ids)).update({
     seen_at: timestamp_now,
+    updated_at: r.now(),
   });
 
   return db.rethinkQuery(q);

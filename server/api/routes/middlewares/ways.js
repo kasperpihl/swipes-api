@@ -73,7 +73,6 @@ const waysArchive = valLocals('waysArchive', {
   } = res.locals;
   const properties = {
     archived: true,
-    updated_at: r.now(),
   };
 
   dbWaysUpdateSingle({ id, properties })

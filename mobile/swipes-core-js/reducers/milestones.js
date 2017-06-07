@@ -1,4 +1,5 @@
 import { fromJS, Map } from 'immutable';
+import { reducerInitToMap } from '../classes/utils';
 
 const initialState = fromJS({});
 
@@ -6,14 +7,7 @@ export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case 'init': {
-      let milestones = Map();
-      if(!payload.full_fetch) {
-        milestones = state;
-      }
-      payload.milestones.forEach((m) => {
-        milestones = milestones.set(m.id, fromJS(m));
-      });
-      return milestones;
+      return reducerInitToMap(payload, 'milestones', state);
     }
     case 'milestones.close':
     case 'milestone_closed': {

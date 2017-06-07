@@ -1,4 +1,5 @@
 import { fromJS, Map } from 'immutable';
+import { reducerInitToMap } from '../classes/utils';
 
 const initialState = fromJS({});
 
@@ -10,14 +11,7 @@ export default function goalsReducer(state = initialState, action) {
 
   switch (type) {
     case 'init': {
-      let goals = Map();
-      if(!payload.full_fetch) {
-        goals = state;
-      }
-
-      payload.goals.forEach((g) => {
-        goals = goals.set(g.id, fromJS(g));
-      });
+      let goals = reducerInitToMap(payload, 'goals', state);
 
       const stars = payload.me.settings.starred_goals;
       goals = goals.map(g => g.set('starred', stars.indexOf(g.get('id')) > -1));

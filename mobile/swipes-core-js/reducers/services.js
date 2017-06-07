@@ -1,4 +1,5 @@
 import { fromJS, Map } from 'immutable';
+import { reducerInitToMap } from '../classes/utils';
 
 const initialState = fromJS({});
 
@@ -6,11 +7,7 @@ export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case 'init': {
-      let services = Map();
-      payload.services.forEach((s) => {
-        services = services.set(s.id, fromJS(s));
-      });
-      return services;
+      return reducerInitToMap(payload, 'services', state);
     }
 
     default:

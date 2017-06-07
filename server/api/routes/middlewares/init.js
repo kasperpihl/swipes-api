@@ -44,7 +44,7 @@ const initGetData = valLocals('initGetData', {
       filterDefaultOption: false,
       timestamp,
     }),
-    dbOnboardingGetAll(),
+    dbOnboardingGetAll(timestamp),
   ];
 
   const now = new Date().toISOString();
