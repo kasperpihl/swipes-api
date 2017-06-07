@@ -4,7 +4,9 @@ import { REHYDRATE } from 'redux-persist/constants';
 
 const initialState = fromJS({
   lastConnect: null,
+  lastVersion: null,
   token: null,
+  ready: false,
   status: 'offline',
   versionInfo: {},
 });
@@ -20,12 +22,12 @@ export default function connectionReducer(state = initialState, action) {
       return state.set('lastConnect', payload.timestamp);
     }
     case REHYDRATE:
-
       if (action && action.payload && action.payload.connection) {
         const { connection } = action.payload;
 
         return initialState.set('token', connection.get('token'))
-                           .set('lastConnect', connection.get('lastConnect'));
+                           .set('lastConnect', connection.get('lastConnect'))
+                           .set('lastVersion', connection.get('lastVersion'));
       }
       return state;
     case types.SET_UPDATE_STATUS: {
