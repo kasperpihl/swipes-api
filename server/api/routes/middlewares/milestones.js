@@ -271,12 +271,10 @@ const milestonesRenameQueueMessage = valLocals('milestonesRenameQueueMessage', {
   return next();
 });
 const milestonesAddGoal = valLocals('milestonesAddGoal', {
-  user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
     goal_id,
     milestone_id,
   } = res.locals;
@@ -285,7 +283,7 @@ const milestonesAddGoal = valLocals('milestonesAddGoal', {
     return next();
   }
 
-  return dbMilestonesAddGoal({ user_id, goal_id, milestone_id })
+  return dbMilestonesAddGoal({ goal_id, milestone_id })
     .then((result) => {
       const changes = result.changes[0].new_val || result.changes[0].old_val;
 
@@ -330,14 +328,12 @@ const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage',
   return next();
 });
 const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
-  user_id: string.require(),
   goal_ids: array.require(),
   milestone_id: string,
   current_milestone_id: string,
   eventType: string,
 }, (req, res, next, setLocals) => {
   const {
-  user_id,
   goal_ids,
   current_milestone_id,
 } = res.locals;
@@ -352,7 +348,7 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
 
   milestone_id = current_milestone_id || milestone_id;
 
-  return dbMilestonesRemoveGoal({ user_id, goal_ids, milestone_id })
+  return dbMilestonesRemoveGoal({ goal_ids, milestone_id })
   .then((result) => {
     const changes = result.changes[0].new_val || result.changes[0].old_val;
     eventType = goal_ids.length > 0 ? eventType : 'milestone_goal_removed';

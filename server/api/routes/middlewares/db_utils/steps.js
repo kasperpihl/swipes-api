@@ -12,7 +12,6 @@ import {
 
 const dbStepsAdd = funcWrap([
   object.as({
-    user_id: string.require(),
     goal_id: string.require(),
     step: object.as({
       id: string.format(/^[A-Za-z0-9]+$/g).min(6).max(6).require(),
@@ -20,7 +19,7 @@ const dbStepsAdd = funcWrap([
       assignees: array.of(string).require(),
     }).require(),
   }).require(),
-], (err, { user_id, goal_id, step }) => {
+], (err, { goal_id, step }) => {
   if (err) {
     throw new SwipesError(`dbStepAdd: ${err}`);
   }
@@ -140,11 +139,10 @@ const dbStepsDelete = funcWrap([
 });
 const dbStepsReorder = funcWrap([
   object.as({
-    user_id: string.require(),
     goal_id: string.require(),
     step_order: array.of(string).require(),
   }).require(),
-], (err, { user_id, goal_id, step_order }) => {
+], (err, { goal_id, step_order }) => {
   if (err) {
     throw new SwipesError(`dbStepsReorder: ${err}`);
   }

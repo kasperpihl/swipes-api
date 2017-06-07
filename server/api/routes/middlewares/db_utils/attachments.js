@@ -12,11 +12,10 @@ import {
 
 const dbAttachmentsAdd = funcWrap([
   object.as({
-    user_id: string.require(),
     target_id: string.require(),
     attachment: object.require(),
   }).require(),
-], (err, { user_id, target_id, attachment }) => {
+], (err, { target_id, attachment }) => {
   if (err) {
     throw new SwipesError(`attachmentsAdd: ${err}`);
   }
