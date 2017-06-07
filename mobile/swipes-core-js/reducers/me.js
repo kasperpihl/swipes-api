@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 
 const initialState = fromJS({});
 
-export default function me(state = initialState, action) {
+export default function meReducer(state = initialState, action) {
   const {
     type,
     payload,

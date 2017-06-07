@@ -9,7 +9,7 @@ const initialState = fromJS({
   versionInfo: {},
 });
 
-export default function me(state = initialState, action) {
+export default function connectionReducer(state = initialState, action) {
   const {
     type,
     payload,

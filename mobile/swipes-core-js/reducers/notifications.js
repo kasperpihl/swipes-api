@@ -6,7 +6,7 @@ const initialState = fromJS([]);
 
 const sortFn = (b, c) => c.get('updated_at').localeCompare(b.get('updated_at'));
 
-export default function main(state = initialState, action) {
+export default function notificationsReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case REHYDRATE:
