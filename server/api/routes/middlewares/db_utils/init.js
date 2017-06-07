@@ -12,9 +12,9 @@ import {
 const initMe = funcWrap([
   string.require(),
   string.format('iso8601').require(),
+  bool.require(),
   bool,
-], (err, user_id, timestamp, without_notes = false) => {
-  console.log(timestamp);
+], (err, user_id, timestamp, full_fetch, without_notes = false) => {
   if (err) {
     throw new SwipesError(`initMe: ${err}`);
   }
@@ -37,7 +37,9 @@ const initMe = funcWrap([
               .filter((goal) => {
                 return goal('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
               })
-              .filter({ archived: false })
+              .filter((goal) => {
+                return goal('archived').eq(false).or(goal('archived').eq(!full_fetch));
+              })
               .coerceTo('ARRAY'),
         });
       })
@@ -49,7 +51,7 @@ const initMe = funcWrap([
               .filter((milestone) => {
                 return milestone('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
               })
-               .coerceTo('ARRAY'),
+              .coerceTo('ARRAY'),
         });
       })
       .do((user) => {
@@ -57,11 +59,11 @@ const initMe = funcWrap([
           ways:
             r.table('ways')
               .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
-              .filter((ways) => {
-                return ways('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+              .filter((way) => {
+                return way('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
               })
-              .filter({
-                archived: false,
+              .filter((way) => {
+                return way('archived').eq(false).or(way('archived').eq(!full_fetch));
               })
               .coerceTo('ARRAY'),
         });

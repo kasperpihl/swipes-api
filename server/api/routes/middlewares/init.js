@@ -19,17 +19,19 @@ import {
 
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
+  timestamp: string.format('iso8601').require(),
+  full_fetch: bool.require(),
   without_notes: bool,
-  timestamp: string.format('iso8601'),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    without_notes,
     timestamp,
+    full_fetch,
+    without_notes,
   } = res.locals;
   const promiseArrayQ = [
-    initMe(user_id, timestamp, without_notes),
-    servicesGetAll(timestamp),
+    initMe(user_id, timestamp, full_fetch, without_notes),
+    servicesGetAll(timestamp, full_fetch),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
       filter: { sender: false },

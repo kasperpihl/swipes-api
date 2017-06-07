@@ -1,6 +1,7 @@
 import r from 'rethinkdb';
 import {
   string,
+  bool,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -10,7 +11,8 @@ import {
 
 const servicesGetAll = funcWrap([
   string.format('iso8601').require(),
-], (err, timestamp) => {
+  bool.require(),
+], (err, timestamp, full_fetch) => {
   if (err) {
     throw new SwipesError(`servicesGetAll: ${err}`);
   }
@@ -20,7 +22,9 @@ const servicesGetAll = funcWrap([
       .filter((service) => {
         return service('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
       })
-      .filter({ hidden: false });
+      .filter((service) => {
+        return service('hidden').eq(false).or(service('hidden').eq(!full_fetch));
+      });
 
   return db.rethinkQuery(q);
 });
