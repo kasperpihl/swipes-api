@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import moment from 'moment';
+import mime from 'react-native-mime-types';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
@@ -7,6 +9,7 @@ import { attachmentIconForService, setupCachedCallback } from '../../../swipes-c
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 import Icon from '../../components/icons/Icon';
 import * as a from '../../actions';
+import * as ca from '../../../swipes-core-js/actions';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import { colors } from '../../utils/globalStyles';
 
@@ -28,6 +31,7 @@ class HOCAttachments extends PureComponent {
     LayoutAnimation.easeInEaseOut();
   }
   onAddAttachment() {
+    const { upload, goal } = this.props;
     const options = {
       title: 'Select Avatar',
       customButtons: [
@@ -49,9 +53,19 @@ class HOCAttachments extends PureComponent {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = { uri: response.uri };
+        const type = mime.lookup(response.uri)  || 'application/octet-stream';
+        const ext = mime.extension(type);
+        const name = response.fileName
+                    || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
+        const file = {
+          name,
+          uri: response.uri,
+          type,
+        };
+        console.log('res', response);
+        upload(goal.get('id'), [file]);
+        // console.log('uploading!', goal.get('id'), file, response);
 
-        console.log(response);
 
         // You can also display the image using data:
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
@@ -164,4 +178,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   preview: a.links.preview,
+  upload: ca.files.upload,
 })(HOCAttachments);

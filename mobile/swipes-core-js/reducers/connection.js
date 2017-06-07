@@ -25,7 +25,7 @@ export default function me(state = initialState, action) {
         const { connection } = action.payload;
 
         return initialState.set('token', connection.get('token'))
-                           .set('lastConnect', connection.get('lastConnect'));
+                          //  .set('lastConnect', connection.get('lastConnect'));
       }
       return state;
     case types.SET_UPDATE_STATUS: {

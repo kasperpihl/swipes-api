@@ -10,7 +10,6 @@ import HOCHistory from './HOCHistory';
 import HOCStepList from './HOCStepList';
 import HOCAttachments from './HOCAttachments';
 
-
 class HOCGoalOverview extends PureComponent {
   constructor(props) {
     super(props);
@@ -186,6 +185,7 @@ class HOCGoalOverview extends PureComponent {
       <HOCAttachments
         attachments={goal.get('attachments')}
         attachmentOrder={goal.get('attachment_order')}
+        goal={goal}
       />
     );
   }
