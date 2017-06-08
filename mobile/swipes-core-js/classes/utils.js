@@ -20,6 +20,28 @@ export function apiRequest(endpoint, params) {
 
 }
 
+export const parseVersionString = (version) => {
+  const x = version.split('.');
+  const major = parseInt(x[0], 10) || 0;
+  const minor = parseInt(x[1], 10) || 0;
+  const patch = parseInt(x[2], 10) || 0;
+
+  return {
+    major,
+    minor,
+    patch,
+  };
+};
+
+export function hasMinorChange(current, last) {
+  if(!last){
+    return true;
+  }
+  current = parseVersionString(current);
+  last = parseVersionString(last);
+  return (current.major > last.major || current.minor > last.minor);
+}
+
 export function reducerInitToMap(payload, key, state) {
   let collection = Map();
   if(!payload.full_fetch) {

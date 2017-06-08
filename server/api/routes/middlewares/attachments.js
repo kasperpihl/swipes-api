@@ -46,7 +46,6 @@ const attachmentsCreate = valLocals('attachmentsCreate', {
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
-    updated_by: user_id,
   };
 
   setLocals({
@@ -56,17 +55,15 @@ const attachmentsCreate = valLocals('attachmentsCreate', {
   return next();
 });
 const attachmentsInsert = valLocals('attachmentsInsert', {
-  user_id: string.require(),
   target_id: string.require(),
   attachment: object.require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
     target_id,
     attachment,
   } = res.locals;
 
-  dbAttachmentsAdd({ user_id, target_id, attachment })
+  dbAttachmentsAdd({ target_id, attachment })
     .then((results) => {
       const changes = results.changes[0];
 

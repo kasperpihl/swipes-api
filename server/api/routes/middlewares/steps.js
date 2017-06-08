@@ -41,7 +41,7 @@ const stepsAdd = valLocals('stepsAdd', {
     completed_at: null,
   });
 
-  dbStepsAdd({ user_id, goal_id, step: mutatedStep })
+  dbStepsAdd({ goal_id, step: mutatedStep })
     .then((results) => {
       const changes = results.changes[0];
 
@@ -188,17 +188,15 @@ const stepsDeleteQueueMessage = valLocals('stepsDeleteQueueMessage', {
   return next();
 });
 const stepsReorder = valLocals('stepsReorder', {
-  user_id: string.require(),
   goal_id: string.require(),
   step_order: array.of(string).require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
     goal_id,
     step_order,
   } = res.locals;
 
-  dbStepsReorder({ user_id, goal_id, step_order })
+  dbStepsReorder({ goal_id, step_order })
     .then(() => {
       return next();
     })

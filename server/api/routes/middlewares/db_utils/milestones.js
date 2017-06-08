@@ -41,11 +41,10 @@ const dbMilestonesUpdateSingle = funcWrap([
 });
 const dbMilestonesAddGoal = funcWrap([
   object.as({
-    user_id: string.require(),
     goal_id: string.require(),
     milestone_id: string.require(),
   }).require(),
-], (err, { user_id, goal_id, milestone_id }) => {
+], (err, { goal_id, milestone_id }) => {
   if (err) {
     throw new SwipesError(`dbMilestonesAddGoal: ${err}`);
   }
@@ -56,7 +55,6 @@ const dbMilestonesAddGoal = funcWrap([
       .update({
         goal_order: r.row('goal_order').default([]).setUnion([goal_id]),
         updated_at: r.now(),
-        updated_by: user_id,
       }, {
         returnChanges: true,
       });
@@ -65,11 +63,10 @@ const dbMilestonesAddGoal = funcWrap([
 });
 const dbMilestonesRemoveGoal = funcWrap([
   object.as({
-    user_id: string.require(),
     goal_ids: array.require(),
     milestone_id: string.require(),
   }).require(),
-], (err, { user_id, goal_ids, milestone_id }) => {
+], (err, { goal_ids, milestone_id }) => {
   if (err) {
     throw new SwipesError(`dbMilestonesRemoveGoal: ${err}`);
   }
@@ -80,7 +77,6 @@ const dbMilestonesRemoveGoal = funcWrap([
       .update({
         goal_order: r.row('goal_order').default([]).difference(goal_ids),
         updated_at: r.now(),
-        updated_by: user_id,
       }, {
         returnChanges: true,
       });

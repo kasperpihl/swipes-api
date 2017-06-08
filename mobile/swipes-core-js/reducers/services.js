@@ -3,7 +3,7 @@ import { reducerInitToMap } from '../classes/utils';
 
 const initialState = fromJS({});
 
-export default function main(state = initialState, action) {
+export default function servicesReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case 'init': {

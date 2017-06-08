@@ -45,10 +45,8 @@ const defaultSettings = {
     order: [
       'create-account',
       'personalize-swipes',
-      'intro-article',
+      'watch-introduction-video',
       'create-milestone',
-      'add-goal-milestone',
-      'article-move-fast-goals',
       'article-collect-feedback',
       'invite-team',
     ],

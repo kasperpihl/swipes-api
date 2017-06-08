@@ -59,7 +59,6 @@ const dbGoalsCompleteGoal = funcWrap([
           history: goal('history').append(historyItem),
           completed_at: r.now(),
           updated_at: r.now(),
-          updated_by: user_id,
         };
       }, {
         returnChanges: true,
@@ -96,7 +95,6 @@ const dbGoalsIncompleteGoal = funcWrap([
           history: goal('history').append(historyItem),
           completed_at: null,
           updated_at: r.now(),
-          updated_by: user_id,
         };
       }, {
         returnChanges: true,
@@ -251,7 +249,6 @@ const dbGoalsCompleteStep = funcWrap([
             null,
           ),
           updated_at: r.now(),
-          updated_by: user_id,
         };
       }, {
         returnChanges: true,
@@ -299,7 +296,6 @@ const dbGoalsIncompleteStep = funcWrap([
           }),
           completed_at: null,
           updated_at: r.now(),
-          updated_by: user_id,
         };
       }, {
         returnChanges: true,

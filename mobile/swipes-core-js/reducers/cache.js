@@ -3,7 +3,7 @@ import * as types from '../constants';
 
 const initialState = fromJS({});
 
-export default function main(state = initialState, action) {
+export default function cacheReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
 
