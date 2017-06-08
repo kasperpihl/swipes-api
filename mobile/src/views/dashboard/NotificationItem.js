@@ -135,13 +135,13 @@ class NotificationItem extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <FeedbackButton onPress={this.onNotificationPress(n)} onLongPress={this.onNotificationLongPress(n)}>
+        <RippleButton onPress={this.onNotificationPress(n)} onLongPress={this.onNotificationLongPress(n)}>
           <View style={styles.topSection}>
             {this.renderIcon()}
             {this.renderContent()}
             {this.renderTimestamp()}
           </View>
-        </FeedbackButton>
+        </RippleButton>
 
         <View style={styles.bottomSection}>
           {this.renderAttachments()}

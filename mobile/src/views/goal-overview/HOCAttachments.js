@@ -31,7 +31,7 @@ class HOCAttachments extends PureComponent {
     LayoutAnimation.easeInEaseOut();
   }
   onAddAttachment() {
-    const { upload, goal } = this.props;
+    const { upload, goal, loading } = this.props;
     const options = {
       title: 'Select Avatar',
       customButtons: [
@@ -53,22 +53,21 @@ class HOCAttachments extends PureComponent {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const type = mime.lookup(response.uri)  || 'application/octet-stream';
+        const type = mime.lookup(response.uri) || 'application/octet-stream';
         const ext = mime.extension(type);
         const name = response.fileName
-                    || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
+          || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
         const file = {
           name,
           uri: response.uri,
           type,
         };
         console.log('res', response);
-        upload(goal.get('id'), [file]);
-        // console.log('uploading!', goal.get('id'), file, response);
-
-
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        loading(true);
+        upload(goal.get('id'), [file]).then((res) => {
+          console.log(res);
+          loading();
+        });
       }
     });
   }
@@ -178,5 +177,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   preview: a.links.preview,
+  loading: a.loading.showLoader,
   upload: ca.files.upload,
 })(HOCAttachments);

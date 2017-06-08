@@ -71,7 +71,7 @@ class HOCGoalItem extends PureComponent {
       ]),
     };
 
-    Vibration.vibrate(100);
+    Vibration.vibrate(50);
     showModal(modal);
   }
   openOverview() {

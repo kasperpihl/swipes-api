@@ -116,6 +116,8 @@ class HOCDashboard extends PureComponent {
 
     this.onMark(notification.get('id'));
 
+    console.log('wtf');
+
     const overview = {
       id: 'GoalOverview',
       title: 'Goal overview',
