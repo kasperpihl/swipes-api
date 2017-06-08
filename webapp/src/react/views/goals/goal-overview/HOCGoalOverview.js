@@ -314,7 +314,7 @@ class HOCGoalOverview extends PureComponent {
       { handler: 'onArchive', title: 'Archive Goal' },
     ];
     if(goal.get('milestone_id')){
-      items[0].title = 'Edit milestone';
+      items[2].title = 'Edit milestone';
     }
     contextMenu({
       options,
