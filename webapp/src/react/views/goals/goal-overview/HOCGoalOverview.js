@@ -282,8 +282,20 @@ class HOCGoalOverview extends PureComponent {
   }
   onLoadWay(options) {
     const { loadWay, goalLoadWay } = this.props;
-    loadWay(options, (res) => {
-      console.log(res.toJS());
+    const helper = this.getHelper();
+    loadWay(options, (way) => {
+      if(way) {
+        this.setLoading('dots');
+        goalLoadWay(helper.getId(), way.get('id')).then((res) => {
+          if(res.ok){
+            this.clearLoading('dots', 'Loaded way');
+          }
+          else {
+            this.clearLoading('dots', '!Something went wrong');
+          }
+        });
+      }
+
     });
   }
   onContext(e) {
