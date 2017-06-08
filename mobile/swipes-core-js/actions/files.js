@@ -3,11 +3,12 @@ import * as a from './';
 const sendFile = (presignedURL, file, callback) => {
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
+    console.log(xhr);
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        callback(file.uri);
+        callback({ ok: true });
       } else {
-        callback(null, file.uri);
+        callback({ ok: false });
       }
     }
   };
@@ -30,18 +31,20 @@ export const upload = (targetId, files, body) => (dispatch, getState) => new Pro
     const signedUrl = res.signed_url;
     s3Url = res.s3_url;
 
-    sendFile(signedUrl, file, (successURI) => {
-      if(successURI) {
-        console.log('dispatch!', successURI);
+    sendFile(signedUrl, file, (fileRes) => {
+      if(fileRes && fileRes.ok) {
+        console.log('dispatch!', fileRes);
         dispatch(a.api.request('files.upload', {
           target_id: targetId,
           organization_id: orgId,
           file_name: fileName,
           s3_url: s3Url,
         }))
-        .then((res) => {
-          resolve(res);
+        .then((localRes) => {
+          resolve(localRes);
         })
+      } else {
+        resolve({ ok: false });
       }
 
     });
