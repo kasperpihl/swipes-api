@@ -18,9 +18,12 @@
 @synthesize oneSignal = _oneSignal;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#ifdef ONE_SIGNAL_KEY
-  self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions appId:ONE_SIGNAL_KEY];
+  NSString *onesignalKey = @"db8f2558-a836-4e95-b22b-089e8e85f6e9";
+#ifdef RELEASE
+  onesignalKey = @"420ca44f-378a-4ce5-adb7-18cef4b689c0";
 #endif
+
+  self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions appId:onesignalKey];
   
   NSURL *jsCodeLocation;
 #ifdef DEBUG
