@@ -150,7 +150,7 @@ export default class GoalsUtil {
   getObjectForWay() {
     return {
       title: this.goal.get('title'),
-      steps: this.goal.get('steps'),
+      steps: this.goal.get('steps').map(g => g.delete('completed_at')),
       step_order: this.goal.get('step_order'),
       attachments: this.goal.get('attachments'),
       attachment_order: this.goal.get('attachment_order'),
