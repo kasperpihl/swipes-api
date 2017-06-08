@@ -38,7 +38,7 @@ class HOCPreviewNote extends PureComponent {
   }
   generateNoteUrl() {
     const { token, orgId, noteId } = this.props;
-
+    console.log(`${window.__API_URL__}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`);
     return `${window.__API_URL__}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`;
   }
 

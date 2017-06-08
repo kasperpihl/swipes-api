@@ -50,7 +50,6 @@ class ExternalNoteView extends PureComponent {
       return Promise.reject({ message: r.statusText, code: r.status });
     }).then((res) => {
       if (res && res.ok) {
-        console.log('res', res);
         this.setState({ rawState: res.note.text } );
       } else {
         return Promise.reject({ message: res.error });
@@ -75,7 +74,7 @@ class ExternalNoteView extends PureComponent {
     if(editorState) {
       rawState = undefined;
     }
-    
+
     return (
       <NoteEditor
         delegate={this}

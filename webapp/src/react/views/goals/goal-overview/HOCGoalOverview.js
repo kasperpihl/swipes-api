@@ -259,6 +259,33 @@ class HOCGoalOverview extends PureComponent {
       notification_type: 'default',
     }));
   }
+  onSaveWay(options) {
+    const { createWay, inputMenu } = this.props;
+    const helper = this.getHelper();
+    inputMenu({
+      ...options,
+      placeholder: 'What should we call the way?',
+      buttonLabel: 'Save',
+    }, (title) => {
+      if(title && title.length) {
+        this.setLoading('dots');
+        createWay(title, helper.getObjectForWay()).then((res) => {
+          if(res.ok){
+            this.clearLoading('dots', 'Saved way');
+          }
+          else {
+            this.clearLoading('dots', '!Something went wrong');
+          }
+        });
+      }
+    })
+  }
+  onLoadWay(options) {
+    const { loadWay, goalLoadWay } = this.props;
+    loadWay(options, (res) => {
+      console.log(res.toJS());
+    });
+  }
   onContext(e) {
     const {
       goal,
@@ -269,6 +296,8 @@ class HOCGoalOverview extends PureComponent {
       onItemAction: (item, i) => this[item.handler](options, item, i),
     };
     const items = [
+      { handler: 'onLoadWay', title: 'Load a way'},
+      { handler: 'onSaveWay', title: 'Save as a way'},
       { handler: 'onEditMilestone', title: 'Add milestone' },
       { handler: 'onArchive', title: 'Archive Goal' },
     ];
@@ -351,6 +380,9 @@ export default connect(mapStateToProps, {
   renameGoal: ca.goals.rename,
   completeGoal: ca.goals.complete,
   incompleteGoal: ca.goals.incomplete,
+  loadWay: a.ways.load,
+  goalLoadWay: ca.goals.loadWay,
+  createWay: ca.ways.create,
   selectAssignees: a.goals.selectAssignees,
   selectMilestone: a.menus.selectMilestone,
   addGoalToMilestone: ca.milestones.addGoal,

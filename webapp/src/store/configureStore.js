@@ -28,8 +28,8 @@ export default function configureStore(preloadedState) {
   persistStore(store, {
     blacklist: ['main', 'search', 'toasty', 'filters'],
   });
+  window.getState = store.getState;
   if (!isProd) {
-    window.getState = store.getState;
     window.dispatch = store.dispatch;
     window.Immutable = Immutable;
   }

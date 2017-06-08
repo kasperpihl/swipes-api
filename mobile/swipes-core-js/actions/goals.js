@@ -29,18 +29,11 @@ export const create = valAction('goals.create', [
 
 export const loadWay = valAction('goals.loadWay', [
   string.require(),
-  any.of(string, object).require(),
-], (goalId, wayOrId) => (d) => {
-  let way = wayOrId;
-  let wayId;
-  if (typeof wayOrId === 'string') {
-    way = undefined;
-    wayId = wayOrId;
-  }
+  string.require(),
+], (goalId, wayId) => (d) => {
   return d(a.api.request('goals.loadWay', {
     goal_id: goalId,
     way_id: wayId,
-    way,
   }));
 });
 
