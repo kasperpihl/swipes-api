@@ -85,6 +85,7 @@ class HOCMilestoneOverview extends PureComponent {
         style={styles.list}
         immutableData={goalList}
         renderRow={this.renderGoal}
+        onScroll={window.onScroll}
       />
     );
   }

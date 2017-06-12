@@ -113,6 +113,7 @@ class HOCStepList extends PureComponent {
         <ImmutableVirtualizedList
           immutableData={steps}
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
+          onScroll={window.onScroll}
         />
       </View>
     );
