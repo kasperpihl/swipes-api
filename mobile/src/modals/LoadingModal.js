@@ -4,7 +4,6 @@ import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback, ActivityIndica
 import * as a from '../actions';
 import { setupCachedCallback } from '../../swipes-core-js/classes/utils';
 import { colors, viewSize } from '../utils/globalStyles';
-import FeedbackButton from '../components/feedback-button/FeedbackButton';
 
 class LoadingModal extends PureComponent {
   constructor(props) {

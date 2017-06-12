@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, WebView, StyleSheet } from 'react-native';
 import Icon from '../../components/icons/Icon';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton'
+import RippleButton from '../../components/ripple-button/RippleButton';
 import { colors, viewSize } from '../../utils/globalStyles';
 
 class InternalWebview extends Component {
@@ -13,21 +13,21 @@ class InternalWebview extends Component {
   closeWebview() {
     const { onPopRoute } = this.props;
 
-    onPopRoute()
+    onPopRoute();
   }
   renderNavBar() {
     return (
       <View style={styles.navbar}>
-        <FeedbackButton onPress={this.closeWebview}>
+        <RippleButton onPress={this.closeWebview}>
           <View style={styles.icon}>
             <Icon name="Close" width="24" height="24" fill={colors.deepBlue80} />
           </View>
-        </FeedbackButton>
+        </RippleButton>
         <View style={styles.titleWrap}>
           <Text>{this.props.title}</Text>
         </View>
       </View>
-    )
+    );
   }
   render() {
     return (
@@ -35,7 +35,7 @@ class InternalWebview extends Component {
         {this.renderNavBar()}
         <WebView
           source={{ uri: this.props.url }}
-          style={{ flex: 1}}
+          style={{ flex: 1 }}
         />
       </View>
     );
@@ -45,14 +45,14 @@ class InternalWebview extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red'
+    backgroundColor: 'red',
   },
   navbar: {
     width: viewSize.width,
     height: 80,
     backgroundColor: colors.deepBlue10,
     flexDirection: 'row',
-    elevation: 2
+    elevation: 2,
   },
   icon: {
     width: 80,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   titleWrap: {
     flex: 1,
     justifyContent: 'center',
-  }
+  },
 });
 
 export default InternalWebview;

@@ -38,7 +38,9 @@ const styles = StyleSheet.create({
 class HOCHeader extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      headerHeight: 0,
+    };
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -68,6 +70,16 @@ class HOCHeader extends PureComponent {
   onSelect(el) {
     this.callDelegate('onChangeTab', el.props.name);
   }
+  measureView(event) {
+    this.getHeaderHeight(event.nativeEvent.layout.height);
+  }
+  getHeaderHeight(height) {
+    const { headerHeight } = this.state;
+
+    if (headerHeight !== height) {
+      this.setState({ headerHeight: height });
+    }
+  }
   renderTabs() {
     const { tabs } = this.props;
 
@@ -90,16 +102,17 @@ class HOCHeader extends PureComponent {
     );
   }
   render() {
+    const { headerHeight } = this.state;
     const { tabs, children, collapsed } = this.props;
 
     let marginTop = 0;
 
     if (collapsed) {
-      marginTop = -100;
+      marginTop = -headerHeight;
     }
 
     return (
-      <View style={[styles.container, { marginTop }]}>
+      <View onLayout={event => this.measureView(event)} style={[styles.container, { marginTop }]}>
         <View style={styles.topContainer}>
           <Text style={styles.title}>{this.props.title}</Text>
           <View style={styles.children}>

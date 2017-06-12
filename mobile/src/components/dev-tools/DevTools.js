@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
-import FeedbackButton from '../feedback-button/FeedbackButton';
+import RippleButton from '../ripple-button/RippleButton';
 import PrefMonitor from 'react-native/Libraries/Performance/RCTRenderingPerf';
 
 class DevTools extends PureComponent {
@@ -24,9 +24,9 @@ class DevTools extends PureComponent {
     const buttonStateStyles = recording ? styles.buttonActive : styles.buttonIdle;
 
     return (
-      <FeedbackButton onPress={this.toggleRecording}>
+      <RippleButton onPress={this.toggleRecording}>
         <View style={[styles.button, buttonStateStyles]} />
-      </FeedbackButton>
+      </RippleButton>
     );
   }
 }

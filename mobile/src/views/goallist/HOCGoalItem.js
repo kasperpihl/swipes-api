@@ -89,8 +89,8 @@ class HOCGoalItem extends PureComponent {
     this.callDelegate('onPushStack', overview);
   }
   renderContent() {
-    const { goal } = this.props;
-    const status = msgGen.goals.getSubtitle(goal);
+    const { goal, filter } = this.props;
+    const status = msgGen.goals.getListSubtitle(goal);
 
     return (
       <View style={styles.content}>
@@ -102,7 +102,7 @@ class HOCGoalItem extends PureComponent {
   renderAssignees() {
     const { goal } = this.props;
     const helper = new GoalsUtil(goal);
-    const currentAssignees = helper.getCurrentAssignees();
+    const currentAssignees = helper.getAllAssignees();
 
     return (
       <View style={styles.assignees}>

@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate, setupCachedCallback, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
 
@@ -55,7 +54,7 @@ class NotificationItem extends PureComponent {
       const iconName = attachmentIconForService(att.getIn(['link', 'service']) || att);
 
       return (
-        <FeedbackButton key={`attachment-${i}`} onPress={this.onAttachmentClick(att)}>
+        <RippleButton key={`attachment-${i}`} onPress={this.onAttachmentClick(att)}>
           <View style={styles.attachment}>
             <Icon
               name={iconName}
@@ -65,7 +64,7 @@ class NotificationItem extends PureComponent {
             />
             <Text style={styles.attachmentTitle} numberOfLines={1}>{att.get('title')}</Text>
           </View>
-        </FeedbackButton>
+        </RippleButton>
       );
     });
 

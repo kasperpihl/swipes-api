@@ -98,11 +98,15 @@ class HOCTabNavigation extends PureComponent {
     return navItems;
   }
   render() {
-    const { routes, actionButtons } = this.props;
+    const { routes, actionButtons, collapsed } = this.props;
     const topBorderStyles = routes.size > 1 ? 0 : 1;
     let navStyles = styles.nav;
 
     if (routes.size > 1 && !actionButtons.size && Platform.OS === 'android') {
+      navStyles = styles.navHidden;
+    }
+
+    if (collapsed) {
       navStyles = styles.navHidden;
     }
 
@@ -119,6 +123,7 @@ function mapStateToProps(state) {
   const activeSliderIndex = state.getIn(['navigation', 'sliderIndex']);
 
   return {
+    collapsed: state.getIn(['navigation', 'collapsed']),
     actionButtons: state.getIn(['navigation', 'actionButtons']),
     activeSliderIndex,
     routes: state.getIn(['navigation', 'sliders', activeSliderIndex, 'routes']),

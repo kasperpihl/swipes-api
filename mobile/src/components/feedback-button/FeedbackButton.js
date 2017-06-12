@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Platform, TouchableNativeFeedback, TouchableHighlight } from 'react-native';
 
 
-class FeedbackButton extends Component {
+class RippleButton extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
-  renderFeedbackButton() {
+  renderRippleButton() {
     return (
       <TouchableNativeFeedback {...this.props}>
         {this.props.children}
@@ -23,7 +23,7 @@ class FeedbackButton extends Component {
   }
   renderButton() {
     if (Platform.OS === 'android') {
-      return this.renderFeedbackButton();
+      return this.renderRippleButton();
     }
     return this.renderHighlightButton();
   }
@@ -32,4 +32,4 @@ class FeedbackButton extends Component {
   }
 }
 
-export default FeedbackButton;
+export default RippleButton;

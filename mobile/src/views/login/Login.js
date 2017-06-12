@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import codePush from "react-native-code-push";
+import codePush from 'react-native-code-push';
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Text } from 'react-native';
-import FeedbackButton from '../../components/feedback-button/FeedbackButton';
+import RippleButton from '../../components/ripple-button/RippleButton';
 import { colors, viewSize } from '../../utils/globalStyles';
 import { api } from '../../../swipes-core-js/actions';
 
@@ -16,10 +16,10 @@ class Login extends PureComponent {
     };
     codePush.getUpdateMetadata().then((pack) => {
       console.log('pack', pack);
-      if(pack) {
+      if (pack) {
         this.setState({ version: pack.label });
       }
-    })
+    });
     this.signIn = this.signIn.bind(this);
   }
   signIn() {
@@ -53,11 +53,11 @@ class Login extends PureComponent {
             secureTextEntry
             onSubmitEditing={this.signIn}
           />
-          <FeedbackButton onPress={this.signIn}>
+          <RippleButton onPress={this.signIn}>
             <View style={styles.button}>
               <Text style={styles.buttonLabel}>Sign in</Text>
             </View>
-          </FeedbackButton>
+          </RippleButton>
         </KeyboardAvoidingView>
       </View>
     );

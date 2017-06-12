@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import { colors, viewSize } from '../../utils/globalStyles';
@@ -58,7 +59,7 @@ class MilestoneItem extends Component {
   renderProgress() {
     const { goals } = this.state;
     const numberOfGoals = goals.size;
-    const numberOfCompletedGoals = goals.filter(g => g.getIn(['status', 'completed'])).size;
+    const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
 
     return (
       <Text style={styles.subtitle}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
