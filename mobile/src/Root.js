@@ -17,7 +17,10 @@ window.getHeaders = () => ({
 
 init(store);
 window.onScroll = function(store){
+  const animationTime = 300;
+  const movement = 20;
   let posY = undefined;
+  let lockTime = undefined;
   let compareY = undefined;
   let collapsed = false;
   store.subscribe(() => {
@@ -32,15 +35,27 @@ window.onScroll = function(store){
     }
   });
   function onScroll(sE) {
-    //console.log(sE.nativeEvent.contentOffset.y, posY);
+    if(lockTime) {
+      const now = new Date().getTime();
+      if((now - lockTime) < animationTime){
+        return;
+      } else {
+        lockTime = undefined;
+      }
+
+    }
     posY = sE.nativeEvent.contentOffset.y;
+    const isOverscroll = (posY + sE.nativeEvent.layoutMeasurement.height) >= sE.nativeEvent.contentSize.height;
+
+    // console.log(sE.nativeEvent);
     if(typeof compareY !== 'undefined') {
       if(collapsed) {
-        if(posY >= compareY) {
+        if(isOverscroll || posY >= compareY) {
           compareY = posY;
         } else {
-          if((compareY - posY) > 20) {
+          if((compareY - posY) > movement || posY < 0) {
             store.dispatch(a.navigation.setCollapsed(false));
+            lockTime = new Date().getTime();
             compareY = posY;
           }
         }
@@ -48,8 +63,9 @@ window.onScroll = function(store){
         if(posY <= compareY) {
           compareY = posY;
         } else {
-          if((posY - compareY) > 20) {
+          if(isOverscroll || ((posY - compareY) > movement && posY > 0)) {
             store.dispatch(a.navigation.setCollapsed(true));
+            lockTime = new Date().getTime();
             compareY = posY;
           }
         }

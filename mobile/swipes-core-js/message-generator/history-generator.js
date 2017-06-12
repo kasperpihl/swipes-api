@@ -115,14 +115,11 @@ export default class HistoryGenerator {
   getReplyButtonForHistory(id, h) {
     const myId = this.store.getState().getIn(['me', 'id']);
     const helper = this._getHelper(id);
-    return true;
 
-    if (!h || !h.get('request') || !h.get('assignees').contains(myId)) {
+    if(!h || h.get('type') !== 'goal_notified' || h.get('done_by') === myId) {
       return false;
     }
-    if (helper.hasIRepliedToHistory(h)) {
-      return 'replied';
-    }
+
     return true;
   }
   getAttachments(id, h) {
