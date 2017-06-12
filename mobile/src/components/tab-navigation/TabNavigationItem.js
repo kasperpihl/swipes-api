@@ -26,7 +26,7 @@ class TabNavigationItem extends Component {
     return (
       <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached(index)}>
         <View style={styles.navItem}>
-          <Icon name={icon} width="24" height="24" fill={fill} />
+          <Icon name={icon} width="20" height="20" fill={fill} />
         </View>
       </RippleButton>
     );

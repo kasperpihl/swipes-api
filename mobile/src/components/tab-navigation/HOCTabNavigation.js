@@ -10,7 +10,7 @@ import { colors, viewSize } from '../../utils/globalStyles';
 const styles = StyleSheet.create({
   nav: {
     width: viewSize.width,
-    height: 70,
+    height: 54,
     flexDirection: 'row',
     borderTopColor: colors.deepBlue5,
     zIndex: 100,

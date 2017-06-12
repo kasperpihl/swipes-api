@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconButton: {
-    width: 70,
-    height: 70,
+    width: 54,
+    height: 54,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   verticalSeperator: {
     width: 1,
-    height: 70,
+    height: 54,
     position: 'absolute',
     left: 0,
     top: 0,

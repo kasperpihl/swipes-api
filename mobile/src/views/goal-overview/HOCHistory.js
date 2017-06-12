@@ -6,7 +6,7 @@ import * as a from '../../actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import NotificationItem from '../dashboard/NotificationItem';
-import { colors } from '../../utils/globalStyles';
+import { colors, viewSize } from '../../utils/globalStyles';
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
 const styles = StyleSheet.create({
@@ -41,6 +41,8 @@ class HOCHistory extends PureComponent {
     setTimeout(() => {
       this.setState({ hasRendered: true });
     }, 1);
+
+    console.log(viewSize);
   }
   getHelper() {
     const { goal } = this.props;

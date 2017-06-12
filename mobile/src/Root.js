@@ -17,7 +17,7 @@ window.getHeaders = () => ({
 
 init(store);
 window.onScroll = (function (store) {
-  const animationTime = 1000;
+  const animationTime = 300;
   const movement = 50;
   let posY;
   let lockTime;
@@ -39,10 +39,8 @@ window.onScroll = (function (store) {
       const now = new Date().getTime();
       if ((now - lockTime) < animationTime) {
         return;
-      } 
-        lockTime = undefined;
-      
-
+      }
+      lockTime = undefined;
     }
     posY = sE.nativeEvent.contentOffset.y;
     const isOverscroll = (posY + sE.nativeEvent.layoutMeasurement.height) >= sE.nativeEvent.contentSize.height;
@@ -52,24 +50,18 @@ window.onScroll = (function (store) {
       if (collapsed) {
         if (isOverscroll || posY >= compareY) {
           compareY = posY;
-        } else {
-          if ((compareY - posY) > movement || posY < 0) {
-            store.dispatch(a.navigation.setCollapsed(false));
-            lockTime = new Date().getTime();
-            compareY = posY;
-          }
-        }
-      } else {
-        if (posY <= compareY) {
+        } else if ((compareY - posY) > movement || posY < 0) {
+          store.dispatch(a.navigation.setCollapsed(false));
+          lockTime = new Date().getTime();
           compareY = posY;
-        } else {
-          if (isOverscroll || ((posY - compareY) > movement && posY > 0)) {
-            store.dispatch(a.navigation.setCollapsed(true));
-            lockTime = new Date().getTime();
-            compareY = posY;
-          }
         }
-      }
+      } else if (posY <= compareY) {
+        compareY = posY;
+      } else if (isOverscroll || ((posY - compareY) > movement && posY > 0)) {
+          store.dispatch(a.navigation.setCollapsed(true));
+          lockTime = new Date().getTime();
+          compareY = posY;
+        }
     } else {
       compareY = posY;
     }
