@@ -18,8 +18,8 @@ class HOCSidebar extends PureComponent {
 
   getNavItems() {
     return [
-      { id: 'MilestoneList', svg: 'Milestones' },
       { id: 'GoalList', svg: 'Goals' },
+      { id: 'MilestoneList', svg: 'Milestones' },
       { id: 'Notifications', svg: 'Notification' },
       this.getRemainingOnboarding() ? { id: 'Onboarding', svg: 'Onboarding' } : undefined,
       // { id: 'Find', svg: 'Find' },
