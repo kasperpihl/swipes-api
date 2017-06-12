@@ -4,7 +4,7 @@ import { REHYDRATE } from 'redux-persist/constants';
 
 const initialState = fromJS([]);
 
-const sortFn = (b, c) => c.get('updated_at').localeCompare(b.get('updated_at'));
+const sortFn = (b, c) => c.get('created_at').localeCompare(b.get('created_at'));
 
 export default function notificationsReducer(state = initialState, action) {
   const { payload, type } = action;
@@ -15,19 +15,19 @@ export default function notificationsReducer(state = initialState, action) {
       }
       return state;
     case 'init': {
-      if(payload.full_fetch){
+      if (payload.full_fetch) {
         return fromJS(payload.notifications).sort(sortFn);
       }
       let notifications = state;
 
       fromJS(payload.notifications).forEach((n) => {
         const index = notifications.findIndex(sn => sn.get('id') === n.get('id'));
-        if(index > -1) {
+        if (index > -1) {
           notifications = notifications.set(index, n);
         } else {
           notifications = notifications.push(n);
         }
-      })
+      });
       return notifications.sort(sortFn);
     }
 

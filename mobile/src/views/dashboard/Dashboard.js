@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import NotificationItem from './NotificationItem';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
@@ -6,7 +6,7 @@ import { colors } from '../../utils/globalStyles';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 
-class Dashboard extends Component {
+class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
     setupDelegate(this);

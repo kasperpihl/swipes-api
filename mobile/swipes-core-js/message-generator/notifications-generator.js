@@ -13,7 +13,7 @@ export default class NotificationsGenerator {
     const index = notification.getIn(['target', 'history_index']);
     const history = goals.getIn([id, 'history', index]);
     let m = Map({
-      timeago: timeAgo(notification.get('updated_at'), true),
+      timeago: timeAgo(notification.get('created_at'), true),
       title: this.getTitle(notification, history),
       subtitle: this.getSubtitle(notification, history),
       request: !!notification.get('request'),

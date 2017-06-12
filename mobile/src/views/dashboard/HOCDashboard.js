@@ -153,6 +153,7 @@ class HOCDashboard extends PureComponent {
     let { notifications: n, tabs } = this.state;
 
     if (n) {
+      console.log(n.get(0).toJS());
       n = n.map((n, i) => msgGen.notifications.getNotificationWrapper(n).set('i', i));
     }
 
