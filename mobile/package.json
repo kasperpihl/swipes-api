@@ -12,7 +12,7 @@
     "moment": "^2.18.1",
     "react": "16.0.0-alpha.12",
     "react-immutable-proptypes": "^2.1.0",
-    "react-native": "0.45.0",
+    "react-native": "0.45.1",
     "react-native-android-back-button": "^0.3.0",
     "react-native-browser": "^0.6.2",
     "react-native-code-push": "^2.0.3-beta",
