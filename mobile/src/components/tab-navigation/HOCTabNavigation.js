@@ -37,10 +37,10 @@ class HOCTabNavigation extends PureComponent {
     this.state = {
       rootRoutes: [
         {
-          icon: 'Milestones',
+          icon: 'Goals',
         },
         {
-          icon: 'Goals',
+          icon: 'Milestones',
         },
         {
           icon: 'Notification',
@@ -82,7 +82,11 @@ class HOCTabNavigation extends PureComponent {
     );
   }
   renderNavItems() {
-    const { activeSliderIndex, routes } = this.props;
+    const { activeSliderIndex, routes, collapsed } = this.props;
+
+    if (collapsed) {
+      return undefined;
+    }
 
     if (routes.size > 1) {
       return <HOCActionBar />;

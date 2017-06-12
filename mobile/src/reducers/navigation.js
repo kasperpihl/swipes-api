@@ -9,18 +9,18 @@ const initialState = fromJS({
     {
       routes: [
         {
-          id: 'Milestones',
-          title: 'Milestones',
-          icon: 'Milestones',
+          id: 'GoalList',
+          title: 'Goals',
+          icon: 'Goals',
         },
       ],
     },
     {
       routes: [
         {
-          id: 'GoalList',
-          title: 'Goals',
-          icon: 'Goals',
+          id: 'Milestones',
+          title: 'Milestones',
+          icon: 'Milestones',
         },
       ],
     },
