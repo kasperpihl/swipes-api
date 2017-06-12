@@ -62,7 +62,7 @@ class Dashboard extends Component {
         renderRow={this.renderRow}
         rowsDuringInteraction={10}
         removeClippedSubviews={false}
-        onScroll={this.handleScroll}
+        onScroll={window.onScroll}
       />
     );
   }

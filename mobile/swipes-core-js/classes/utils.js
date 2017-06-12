@@ -17,7 +17,6 @@ export function apiRequest(endpoint, params) {
       resolve(null, e);
     });
   })
-
 }
 
 export const parseVersionString = (version) => {
