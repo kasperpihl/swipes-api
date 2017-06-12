@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import loadImage from 'blueimp-load-image';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import './styles/image';
 
@@ -18,6 +19,20 @@ class Image extends Component {
       rawSize: false,
     };
     bindAll(this, ['toggleRawSize']);
+    loadImage(props.file.url, (img) => {
+      if(img.type === "error") {
+        this.props.onError("Error loading image " + imageUrl);
+      } else {
+        console.log(this.cont);
+        console.log('loaded image', img, this.cont);
+        this.cont.appendChild(img);
+        this.props.onLoad();
+        //document.body.appendChild(img);
+      }
+    }, {
+      orientation: true,
+      crossOrigin: true,
+    });
   }
   toggleRawSize() {
     const { rawSize } = this.state;
@@ -33,14 +48,14 @@ class Image extends Component {
     }
 
     return (
-      <div className={className} onClick={this.toggleRawSize}>
-        <img
+      <div ref={(cont) => { this.cont = cont; }} className={className} onClick={this.toggleRawSize}>
+        {/*<img
           onLoad={this.props.onLoad}
           onError={this.props.onError}
           src={file.url}
           className="preview-image__image"
           role="presentation"
-        />
+        />*/}
       </div>
     );
   }
