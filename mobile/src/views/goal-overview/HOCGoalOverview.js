@@ -28,12 +28,9 @@ class HOCGoalOverview extends PureComponent {
   }
   componentDidMount() {
     this.renderActionButtons();
-    console.log('initState', this.state.routeNum);
   }
   componentWillUpdate(nextProps) {
     LayoutAnimation.easeInEaseOut();
-    console.log('state', this.state.routeNum);
-    console.log('nextProps', nextProps.lastRoute);
     if (this.state.routeNum === nextProps.lastRoute) {
       this.renderActionButtons();
     }

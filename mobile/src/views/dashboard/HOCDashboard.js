@@ -141,6 +141,11 @@ class HOCDashboard extends PureComponent {
 
     preview(att);
   }
+  onCollapse(collapsed) {
+    const { setCollapsed } = this.props;
+
+    setCollapsed(collapsed);
+  }
   render() {
     const { filters } = this.props;
     let { notifications: n, tabs } = this.state;
@@ -184,4 +189,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   markNotifications: ca.notifications.mark,
   preview: a.links.preview,
+  setCollapsed: a.navigation.setCollapsed,
 })(HOCDashboard);

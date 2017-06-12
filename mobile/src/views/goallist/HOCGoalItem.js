@@ -51,22 +51,23 @@ class HOCGoalItem extends PureComponent {
       );
     }
   }
+
   onPin() {
-    const { showModal } = this.props;
+    const { showModal, goal } = this.props;
+    const isStarred = !!goal.get('starred');
+
+
     const modal = {
       title: 'Goal',
       onClick: this.onModalGoalAction,
       items: fromJS([
         {
-          title: 'Pin goal',
+          title: `${isStarred ? 'Unstar' : 'Star'} goal`,
           index: 'pin',
         },
         {
           title: 'Archive',
           index: 'archive',
-        },
-        {
-          title: 'Add to a milestone (Coming Soon)',
         },
       ]),
     };

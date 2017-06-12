@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import NotificationItem from './NotificationItem';
+import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import { colors } from '../../utils/globalStyles';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
@@ -8,8 +9,16 @@ import HOCHeader from '../../components/header/HOCHeader';
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-
+    setupDelegate(this);
+    this.callDelegate.bindAll('onCollapse');
     this.renderRow = this.renderRow.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+  }
+  handleScroll(sE) {
+    const posY = sE.nativeEvent.contentOffset.y;
+    if (posY > 200) {
+      this.onCollapse(true);
+    }
   }
   renderHeader() {
     return (
@@ -53,6 +62,7 @@ class Dashboard extends Component {
         renderRow={this.renderRow}
         rowsDuringInteraction={10}
         removeClippedSubviews={false}
+        onScroll={this.handleScroll}
       />
     );
   }

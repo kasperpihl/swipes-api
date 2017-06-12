@@ -36,6 +36,7 @@ class HOCGoalList extends PureComponent {
     };
 
     this.renderGoal = this.renderGoal.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -63,6 +64,9 @@ class HOCGoalList extends PureComponent {
     if (index !== this.state.tabIndex) {
       this.setState({ tabIndex: index, hasLoaded: false });
     }
+  }
+  handleScroll(sE) {
+    console.log(sE);
   }
   renderHeader() {
     const { filters } = this.props;
@@ -127,8 +131,7 @@ class HOCGoalList extends PureComponent {
         style={styles.list}
         immutableData={goalFilter.get('goals')}
         renderRow={gId => this.renderGoal(gId, tabs[tabIndex])}
-        renderFooter={this.renderFooter}
-        rowsDuringInteraction={0}
+        onScroll={this.handleScroll}
       />
     );
   }
