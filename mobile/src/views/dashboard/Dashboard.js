@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import NotificationItem from './NotificationItem';
-import { colors, viewSize } from '../../utils/globalStyles';
+import { colors } from '../../utils/globalStyles';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -61,9 +60,6 @@ class Dashboard extends Component {
     const { delegate, tabIndex } = this.props;
 
     return <NotificationItem notification={n} delegate={delegate} />;
-  }
-  renderFooter() {
-    return <EmptyListFooter />;
   }
   render() {
     return (

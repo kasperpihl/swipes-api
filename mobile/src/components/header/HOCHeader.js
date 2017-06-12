@@ -73,7 +73,7 @@ class Header extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 15,
-    marginTop: 39,
+    paddingTop: 39,
     flexDirection: 'column',
     borderBottomWidth: 1,
     borderBottomColor: colors.deepBlue20,

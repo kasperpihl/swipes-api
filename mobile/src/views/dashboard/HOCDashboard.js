@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Vibration } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import * as a from '../../actions';
@@ -116,8 +116,6 @@ class HOCDashboard extends PureComponent {
 
     this.onMark(notification.get('id'));
 
-    console.log('wtf');
-
     const overview = {
       id: 'GoalOverview',
       title: 'Goal overview',
@@ -150,7 +148,6 @@ class HOCDashboard extends PureComponent {
     if (n) {
       n = n.map((n, i) => msgGen.notifications.getNotificationWrapper(n).set('i', i));
     }
-
 
     return (
       <View style={styles.container}>
