@@ -131,7 +131,7 @@ class HOCGoalList extends PureComponent {
         style={styles.list}
         immutableData={goalFilter.get('goals')}
         renderRow={gId => this.renderGoal(gId, tabs[tabIndex])}
-        onScroll={this.handleScroll}
+        onScroll={window.onScroll}
       />
     );
   }

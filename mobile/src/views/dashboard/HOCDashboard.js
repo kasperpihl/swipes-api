@@ -33,7 +33,6 @@ class HOCDashboard extends PureComponent {
     }
   }
   componentDidMount() {
-    console.log('mounted');
     this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
     }, 1);

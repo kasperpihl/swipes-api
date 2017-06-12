@@ -107,6 +107,7 @@ class HOCAttachments extends PureComponent {
         immutableData={attachmentOrder}
         renderRow={this.renderAttachment}
         renderFooter={this.renderFooter}
+        onScroll={window.onScroll}
       />
     );
   }
