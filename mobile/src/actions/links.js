@@ -63,19 +63,19 @@ export const preview = att => (d, getState) => {
     } else if (service.get('type') === 'url') {
       d(browser(service.get('id')));
     } else if (service.get('type') === 'file') {
-      d(a.loading.showLoader(true));
+      // d(a.loading.showLoader(true));
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
-        OpenFile.openDoc([{
-          url: res.preview.file.url,
-          fileName: res.preview.header.title,
+        // OpenFile.openDoc([{
+        //   url: res.preview.file.url,
+        //   fileName: res.preview.header.title,
 
-        }], (error, url) => {
-          if (error) {
-            d(a.loading.showLoader(false));
-          }
-        });
+        // }], (error, url) => {
+        //   if (error) {
+        //     d(a.loading.showLoader(false));
+        //   }
+        // });
       });
     }
   }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import * as a from '../../actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
+import { setupLoading } from '../../../swipes-core-js/classes/utils';
 import * as ca from '../../../swipes-core-js/actions';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCHistory from './HOCHistory';
@@ -21,7 +22,7 @@ class HOCGoalOverview extends PureComponent {
     this.closeView = this.closeView.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
     this.onModalAskForAction = this.onModalAskForAction.bind(this);
-
+    setupLoading(this);
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
@@ -36,11 +37,22 @@ class HOCGoalOverview extends PureComponent {
     }
   }
   onComplete(step) {
+    if (this.isLoading(step.get('id'))) {
+      return;
+    }
     const { completeStep, incompleteStep } = this.props;
     const helper = this.getHelper();
     const actionFunc = step.get('completed_at') ? incompleteStep : completeStep;
+    const loadingLabel = step.get('completed_at') ? 'Incompleting...' : 'Completing...';
+    this.setLoading(step.get('id'), loadingLabel);
 
-    actionFunc(helper.getId(), step.get('id'));
+    actionFunc(helper.getId(), step.get('id')).then((res) => {
+      if (res && res.ok) {
+        this.clearLoading(step.get('id'));
+      } else {
+        this.clearLoading(step.get('id'), '!Something went wrong', 3000);
+      }
+    });
   }
   onModalAskForAction(i) {
     const { goal, showModal } = this.props;
@@ -172,6 +184,7 @@ class HOCGoalOverview extends PureComponent {
         goal={goal}
         steps={helper.getOrderedSteps()}
         delegate={this}
+        {...this.bindLoading()}
       />
     );
   }

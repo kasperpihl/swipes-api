@@ -78,10 +78,17 @@ class HOCStepList extends PureComponent {
     return new GoalsUtil(goal);
   }
   renderSteps(step, secI, i) {
+    const { isLoading, getLoading } = this.props;
     const helper = this.getHelper();
     let indicatorStyles;
     let indicatorLabelStyles;
     let titleStyles;
+    let title = step.get('title');
+
+    if (isLoading(step.get('id'))) {
+      title = getLoading(step.get('id')).loadingLabel;
+    }
+    console.log(step.toJS());
 
     if (helper.getIsStepCompleted(step)) {
       indicatorStyles = styles.indicatorCompleted;
@@ -96,7 +103,7 @@ class HOCStepList extends PureComponent {
             <Text style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
           </View>
           <View style={styles.title}>
-            <Text style={[styles.titleLabel, titleStyles]}>{step.get('title')}</Text>
+            <Text style={[styles.titleLabel, titleStyles]}>{title}</Text>
           </View>
           <View style={styles.assignees}>
             <HOCAssigning assignees={step.get('assignees')} />
@@ -106,12 +113,12 @@ class HOCStepList extends PureComponent {
     );
   }
   render() {
-    const { steps } = this.props;
+    const { steps, isLoading, getLoading } = this.props;
 
     return (
       <View style={styles.container}>
         <ImmutableVirtualizedList
-          immutableData={steps}
+          immutableData={steps.map(s => s.set('title', isLoading(s.get('id')) ? getLoading(s.get('id')).loadingLabel : s.get('title')))}
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
           onScroll={window.onScroll}
         />
