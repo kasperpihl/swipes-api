@@ -21,17 +21,14 @@ class Image extends Component {
     bindAll(this, ['toggleRawSize']);
     loadImage(props.file.url, (img) => {
       if(img.type === "error") {
-        this.props.onError("Error loading image " + imageUrl);
+        this.props.onError("Error loading image ");
       } else {
-        console.log(this.cont);
-        console.log('loaded image', img, this.cont);
         this.cont.appendChild(img);
         this.props.onLoad();
-        //document.body.appendChild(img);
       }
     }, {
       orientation: true,
-      crossOrigin: true,
+      // crossOrigin: 'anonymous',
     });
   }
   toggleRawSize() {
