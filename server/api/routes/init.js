@@ -20,14 +20,10 @@ authed.all('/init',
     timestamp: string.format('iso8601'),
     without_notes: bool,
   }),
-  mapLocals('timestamp', (setLocals, timestamp) => {
-    const full_fetch = !timestamp;
-
-    setLocals({
-      full_fetch,
-      timestamp: timestamp === null ? new Date(1970, 1, 1).toISOString() : timestamp,
-    });
-  }),
+  mapLocals(l => ({
+    full_fetch: !l.timestamp,
+    timestamp: l.timestamp === null ? new Date(1970, 1, 1).toISOString() : l.timestamp,
+  })),
   initGetData,
   valResponseAndSend({
     me: object.require(),

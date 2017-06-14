@@ -91,9 +91,9 @@ authed.all('/milestones.addGoal',
     milestone_id: string.require(),
     current_milestone_id: string,
   }),
-  mapLocals('goal_id', (setLocals, goal_id) => {
-    setLocals({ goal_ids: [goal_id] });
-  }),
+  mapLocals(locals => ({
+    goal_ids: [locals.goal_id],
+  })),
   goalsAddMilestone,
   milestonesRemoveGoal,
   milestonesAddGoal,
@@ -111,9 +111,9 @@ authed.all('/milestones.removeGoal',
     goal_id: string.require(),
     milestone_id: string.require(),
   }),
-  mapLocals('goal_id', (setLocals, goal_id) => {
-    setLocals({ goal_ids: [goal_id] });
-  }),
+  mapLocals(locals => ({
+    goal_ids: [locals.goal_id],
+  })),
   goalsRemoveMilestone,
   milestonesRemoveGoal,
   milestonesRemoveGoalQueueMessage,
