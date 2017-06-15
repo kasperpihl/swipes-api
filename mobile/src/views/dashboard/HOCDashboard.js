@@ -151,8 +151,10 @@ class HOCDashboard extends PureComponent {
     const { filters } = this.props;
     let { notifications: n, tabs } = this.state;
 
+    StatusBar.setTranslucent(true);
+    StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.20)');
+
     if (n) {
-      console.log(n.get(0).toJS());
       n = n.map((n, i) => msgGen.notifications.getNotificationWrapper(n).set('i', i));
     }
 

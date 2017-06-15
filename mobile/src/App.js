@@ -188,6 +188,8 @@ class App extends PureComponent {
     );
   }
   render() {
+    StatusBar.setTranslucent(true);
+    StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.20)');
     return (
       <View style={styles.app}>
         <StatusBar

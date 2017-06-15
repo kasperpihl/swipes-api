@@ -39,7 +39,7 @@ class NotificationItem extends PureComponent {
     }
 
     return (
-      <Text style={styles.message}>&bdquo;{n.get('message')}&ldquo;</Text>
+      <Text style={styles.message}>{n.get('message')}</Text>
     );
   }
   renderAttachments() {
@@ -100,21 +100,6 @@ class NotificationItem extends PureComponent {
       </View>
     );
   }
-  renderReplyButton() {
-    const { notification: n } = this.props;
-
-    if (n.get('reply')) {
-      return (
-        <RippleButton style={styles.replyButton} rippleColor={colors.blue100} rippleOpacity={0.8} onPress={this.onReplyTo(n)}>
-          <View style={styles.replyButton}>
-            <Text style={styles.replyButtonLabel}>Reply</Text>
-          </View>
-        </RippleButton>
-      );
-    }
-
-    return undefined;
-  }
   renderTimestamp() {
     const { notification: n } = this.props;
 
@@ -125,9 +110,24 @@ class NotificationItem extends PureComponent {
     return (
       <View style={styles.topRight}>
         <Text style={styles.timestamp}>{n.get('timeago')}</Text>
-        {this.renderReplyButton()}
       </View>
     );
+  }
+  renderReplyButton() {
+    const { notification: n } = this.props;
+
+    if (n.get('reply')) {
+      return (
+        <RippleButton style={styles.replyButton} onPress={this.onReplyTo(n)}>
+          <View style={styles.replyButton}>
+            <Icon name="Reply" width="24" height="24" fill={colors.deepBlue50} />
+            <Text style={styles.replyButtonLabel}>Reply</Text>
+          </View>
+        </RippleButton>
+      );
+    }
+
+    return undefined;
   }
   render() {
     const { notification: n } = this.props;
@@ -145,6 +145,7 @@ class NotificationItem extends PureComponent {
         <View style={styles.bottomSection}>
           {this.renderAttachments()}
         </View>
+        {this.renderReplyButton()}
         <View style={styles.seperator} />
       </View>
     );
@@ -166,23 +167,27 @@ const styles = StyleSheet.create({
   topSection: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    paddingVertical: 18,
+    paddingTop: 18,
+    paddingBottom: 12,
+  },
+  bottomSection: {
+
   },
   iconRead: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.deepBlue30,
-    borderRadius: 50,
+    borderRadius: 18,
   },
   iconUnread: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.blue100,
-    borderRadius: 50,
+    borderRadius: 16,
   },
   content: {
     flex: 1,
@@ -191,36 +196,40 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 12,
-    color: colors.deepBlue40,
-    marginBottom: 15,
+    color: colors.deepBlue60,
+    marginBottom: 12,
+    lineHeight: 15,
   },
   title: {
-    fontSize: 16.5,
-    color: colors.deepBlue90,
-    marginTop: 3,
+    fontSize: 15,
+    color: colors.deepBlue100,
+    fontWeight: '500',
+    lineHeight: 21,
   },
   message: {
     flexWrap: 'wrap',
-    fontSize: 13.5,
-    color: colors.deepBlue50,
+    fontSize: 15,
+    color: colors.deepBlue70,
+    lineHeight: 21,
   },
   timestamp: {
     fontSize: 12,
-    color: colors.deepBlue40,
+    color: colors.deepBlue60,
+    lineHeight: 15,
   },
   attachments: {
-    paddingBottom: 18,
-  },
-  smallAttachments: {
-    paddingTop: 15,
-    paddingLeft: 15,
+    borderTopWidth: 1,
+    borderTopColor: colors.deepBlue5,
+    marginLeft: 55,
+    marginRight: 15,
+    paddingTop: 7.5,
+    paddingBottom: 10.5,
   },
   attachment: {
     flex: 1,
     flexDirection: 'row',
-    height: 40,
     alignItems: 'center',
-    paddingLeft: 55,
+    paddingVertical: 7.5,
   },
   attachmentTitle: {
     paddingLeft: 9,
@@ -233,13 +242,17 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   replyButton: {
-    width: 50,
-    flex: 1,
+    width: viewSize.width - 30,
+    marginLeft: 15,
+    height: 42,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderTopColor: colors.deepBlue5,
   },
   replyButtonLabel: {
-    color: colors.blue100,
+    color: colors.deepBlue50,
+    paddingLeft: 9,
   },
 });
 

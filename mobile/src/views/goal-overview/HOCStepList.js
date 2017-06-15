@@ -88,7 +88,6 @@ class HOCStepList extends PureComponent {
     if (isLoading(step.get('id'))) {
       title = getLoading(step.get('id')).loadingLabel;
     }
-    console.log(step.toJS());
 
     if (helper.getIsStepCompleted(step)) {
       indicatorStyles = styles.indicatorCompleted;

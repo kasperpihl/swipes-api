@@ -8,15 +8,14 @@ import { colors } from '../../utils/globalStyles';
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 15,
-    paddingTop: 39,
+    paddingTop: 33,
     flexDirection: 'column',
     borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue20,
+    borderBottomColor: colors.deepBlue100,
     backgroundColor: colors.bgColor,
   },
   topContainer: {
     flexDirection: 'row',
-    marginBottom: 9,
   },
   bottomContainer: {
     flexDirection: 'row',
@@ -24,7 +23,9 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     color: colors.deepBlue100,
-    fontSize: 27,
+    fontSize: 24,
+    fontWeight: 'bold',
+    lineHeight: 36,
   },
   children: {
     flexDirection: 'row',
@@ -106,13 +107,18 @@ class HOCHeader extends PureComponent {
     const { tabs, children, collapsed } = this.props;
 
     let marginTop = 0;
+    let paddingBottom = 0;
 
     if (collapsed) {
       marginTop = -headerHeight;
     }
 
+    if (!tabs) {
+      paddingBottom = 12;
+    }
+
     return (
-      <View onLayout={event => this.measureView(event)} style={[styles.container, { marginTop }]}>
+      <View onLayout={event => this.measureView(event)} style={[styles.container, { marginTop, paddingBottom }]}>
         <View style={styles.topContainer}>
           <Text style={styles.title}>{this.props.title}</Text>
           <View style={styles.children}>

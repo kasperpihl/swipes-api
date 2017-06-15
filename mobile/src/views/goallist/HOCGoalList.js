@@ -36,7 +36,6 @@ class HOCGoalList extends PureComponent {
     };
 
     this.renderGoal = this.renderGoal.bind(this);
-    this.handleScroll = this.handleScroll.bind(this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -64,9 +63,6 @@ class HOCGoalList extends PureComponent {
     if (index !== this.state.tabIndex) {
       this.setState({ tabIndex: index, hasLoaded: false });
     }
-  }
-  handleScroll(sE) {
-    console.log(sE);
   }
   renderHeader() {
     const { filters } = this.props;
