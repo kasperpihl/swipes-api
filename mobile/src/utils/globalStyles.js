@@ -49,10 +49,11 @@ export const colors = {
   red140: '#97313E',
   red160: '#652438',
   greenColor: '#3ADA8B',
+  tishoGreen: '#78F4B0',
   redColor: '#FC461E',
   yellowColor: '#FFD776',
   bgColor: '#ffffff',
   bgGradientFrom: '#72bbee',
   bgGradientTo: '#4e70c5',
 }
-;
+  ;

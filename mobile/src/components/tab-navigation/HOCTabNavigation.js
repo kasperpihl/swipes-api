@@ -43,7 +43,7 @@ class HOCTabNavigation extends PureComponent {
           icon: 'Milestones',
         },
         {
-          icon: 'Notification',
+          icon: 'Messages',
         },
         {
           icon: 'Person',
@@ -73,12 +73,11 @@ class HOCTabNavigation extends PureComponent {
     const sliderPosPixel = sliderPosPercentage * viewSize.width / 100;
     const sliderPos = routes.size > 1 ? 0 : sliderPosPixel;
     const sliderWidth = routes.size > 1 ? viewSize.width : viewSize.width / 4;
-    const sliderHeight = routes.size > 1 ? 2 : 4;
+    const sliderHeight = routes.size > 1 ? 1 : 2;
     const sliderColor = routes.size > 1 ? colors.blue100 : colors.blue100;
 
-
     return (
-      <View style={[styles.slider, { left: sliderPos, width: sliderWidth, height: sliderHeight, backgroundColor: sliderColor }]} />
+      <View style={[styles.slider, { left: sliderPos, width: sliderWidth, height: sliderHeight, backgroundColor: colors.deepBlue100 }]} />
     );
   }
   renderNavItems() {
@@ -94,9 +93,9 @@ class HOCTabNavigation extends PureComponent {
 
     const { rootRoutes } = this.state;
     const navItems = rootRoutes.map((r, i) => {
-      const fill = i === activeSliderIndex ? colors.blue100 : colors.deepBlue20;
+      const icon = i === activeSliderIndex ? r.icon + 'Active' : r.icon;
 
-      return <TabNavigationItem icon={r.icon} index={i} fill={fill} key={`navbutton-${i}`} delegate={this} />;
+      return <TabNavigationItem icon={icon} index={i} fill={colors.deepBlue100} key={`navbutton-${i}`} delegate={this} />;
     });
 
     return navItems;

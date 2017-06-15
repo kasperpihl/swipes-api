@@ -94,7 +94,7 @@ class NotificationItem extends PureComponent {
     return (
       <View style={styles.content}>
         {this.renderTitle(n.get('title'))}
-        <Text style={styles.subtitle}>{n.get('subtitle')}</Text>
+        <Text style={styles.subtitle}>{n.get('subtitle')} - {n.get('timeago')}</Text>
         {this.renderMessage()}
       </View>
     );
@@ -130,18 +130,18 @@ class NotificationItem extends PureComponent {
   }
   render() {
     const { notification: n } = this.props;
+    const backgroundColor = n.get('unseen') ? colors.blue5 : colors.bgColor;
 
     return (
       <View style={styles.container}>
         <RippleButton onPress={this.onNotificationPress(n)}>
-          <View style={styles.topSection}>
+          <View style={[styles.topSection, { backgroundColor }]}>
             {this.renderIcon()}
             {this.renderContent()}
-            {this.renderTimestamp()}
           </View>
         </RippleButton>
 
-        <View style={styles.bottomSection}>
+        <View style={[styles.bottomSection, { backgroundColor }]}>
           {this.renderAttachments()}
         </View>
         {this.renderReplyButton()}
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 12,
-    color: colors.deepBlue60,
+    color: colors.deepBlue50,
     marginBottom: 12,
     lineHeight: 15,
   },
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 12,
-    color: colors.deepBlue60,
+    color: colors.deepBlue50,
     lineHeight: 15,
   },
   attachments: {
@@ -233,7 +233,8 @@ const styles = StyleSheet.create({
   attachmentTitle: {
     paddingLeft: 9,
     color: colors.blue100,
-    fontSize: 13,
+    fontSize: 15,
+    lineHeight: 18,
   },
   topRight: {
     width: 50,
