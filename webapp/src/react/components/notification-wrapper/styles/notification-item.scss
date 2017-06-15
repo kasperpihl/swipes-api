@@ -83,7 +83,7 @@
     @include font(15px, $deepBlue-60, 21px);
     padding-right: 21px;
     padding-left: 42px;
-    word-break: break-all;
+
     &:before {
       content: '';
       position: absolute;
@@ -95,6 +95,7 @@
 
   &__link {
     color: $blue-100;
+    word-break: break-all;
     cursor: pointer;
 
     &:hover {

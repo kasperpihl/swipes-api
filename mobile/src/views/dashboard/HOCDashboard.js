@@ -51,8 +51,10 @@ class HOCDashboard extends PureComponent {
       });
     }
   }
+  componentWillUpdate(nextProps, nextState) {
+
+  }
   componentDidUpdate(prevProps, prevState) {
-    console.log('updated');
     if (!this.state.hasLoaded) {
       clearTimeout(this.loadingTimeout);
       this.loadingTimeout = setTimeout(() => {
@@ -115,7 +117,9 @@ class HOCDashboard extends PureComponent {
     const { notifications } = this.state;
     const notification = notifications.get(obj.get('i'));
 
-    this.onMark(notification.get('id'));
+    if (!notification.get('seen_at')) {
+      this.onMark(notification.get('id'));
+    }
 
     const overview = {
       id: 'GoalOverview',

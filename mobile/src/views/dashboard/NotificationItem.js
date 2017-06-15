@@ -13,7 +13,6 @@ class NotificationItem extends PureComponent {
     setupDelegate(this);
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
     this.onNotificationPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationPress'));
-    this.onNotificationLongPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationLongPress'));
     this.onReplyTo = setupCachedCallback(this.callDelegate.bind(null, 'onReply'));
   }
   renderIcon() {
@@ -134,7 +133,7 @@ class NotificationItem extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <RippleButton onPress={this.onNotificationPress(n)} onLongPress={this.onNotificationLongPress(n)}>
+        <RippleButton onPress={this.onNotificationPress(n)}>
           <View style={styles.topSection}>
             {this.renderIcon()}
             {this.renderContent()}

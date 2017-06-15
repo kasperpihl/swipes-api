@@ -32,7 +32,6 @@ class HOCViewController extends PureComponent {
     this.navPopCached = setupCachedCallback(props.navPop);
   }
   componentWillUpdate(nextProps, nextState) {
-    console.log(nextProps);
     return Keyboard.dismiss;
   }
   reduxToNavigationState(reduxState) {

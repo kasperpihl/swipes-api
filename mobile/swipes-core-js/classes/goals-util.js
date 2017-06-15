@@ -38,7 +38,7 @@ export default class GoalsUtil {
   }
 
   getIsStepCompleted(s) {
-    if(typeof s === 'string'){
+    if (typeof s === 'string') {
       s = this.goal.getIn(['steps', s]);
     }
     return s.get('completed_at');
@@ -76,7 +76,7 @@ export default class GoalsUtil {
     }
     let numberOfCompleted = 0;
     this.getOrderedSteps().forEach((s) => {
-      if(this.getIsStepCompleted(s)) {
+      if (this.getIsStepCompleted(s)) {
         numberOfCompleted += 1;
       }
     })
@@ -110,7 +110,7 @@ export default class GoalsUtil {
   getCurrentAssignees() {
     const assignees = new Set();
     this.goal.get('steps').forEach((s) => {
-      if(!this.getIsStepCompleted(s)){
+      if (!this.getIsStepCompleted(s)) {
         s.get('assignees').forEach(aId => assignees.add(aId));
       }
     });

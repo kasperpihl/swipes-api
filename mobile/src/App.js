@@ -67,6 +67,13 @@ class App extends PureComponent {
     LayoutAnimation.easeInEaseOut();
   }
   componentDidUpdate(prevProps) {
+    if (this.props.ready && this.forwardToIndex) {
+      setTimeout(() => {
+        this.props.sliderChange(this.forwardToIndex);
+        this.forwardToIndex = undefined;
+      }, 1);
+
+    }
     if (prevProps.myId !== this.props.myId) {
       this.checkTagsAndUpdate();
     }
@@ -121,9 +128,12 @@ class App extends PureComponent {
     // console.log(`${progress.receivedBytes} of ${progress.totalBytes} received.`);
   }
   onOpened(openResult) {
-    const { sliderChange } = this.props;
-
-    sliderChange(2);
+    const { isHydrated, token, ready, sliderChange } = this.props;
+    if (ready) {
+      sliderChange(2);
+    } else {
+      this.forwardToIndex = 2;
+    }
   }
   renderLoader() {
     const { ready } = this.props;
@@ -181,7 +191,7 @@ class App extends PureComponent {
         <LoadingModal />
         <ActionModal />
         <HOCTabNavigation />
-        {/* <DevTools />*/}
+        {/*<DevTools />*/}
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}
       </View>
