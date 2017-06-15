@@ -85,17 +85,10 @@ authed.all('/organizations.transferOwnership',
     organization_id: string.require(),
     password: string.min(1).require(),
   }),
-  mapLocals(
-    [],
-    (setLocals) => {
-      const fields = ['id', 'password'];
-      const passwordError = 'Invalid password';
-      setLocals({
-        fields,
-        passwordError,
-      });
-    },
-  ),
+  mapLocals(() => ({
+    fields: ['id', 'password'],
+    passwordError: 'Invalid password',
+  })),
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   organizationsGetSingle,

@@ -277,10 +277,6 @@ const notifyGoalNotifySendPushNotifications = (req, res, next) => {
     priority: 10,
     content_available: true,
     android_visibility: 0,
-    buttons: [{
-      id: group_id,
-      text: 'Reply',
-    }],
   };
   const reqOptions = {
     url: 'https://onesignal.com/api/v1/notifications',

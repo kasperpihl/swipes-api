@@ -56,25 +56,13 @@ notAuthed.all('/users.signin',
     email: string.format('email').require(),
     password: string.min(1).require(),
   }),
-  mapLocals(
-    ['email'],
-    (setLocals, email) => {
-      setLocals({
-        email: email.toLowerCase(),
-      });
-    },
-  ),
-  mapLocals(
-    [],
-    (setLocals) => {
-      const fields = ['id', 'password'];
-      const passwordError = 'Wrong email or password';
-      setLocals({
-        fields,
-        passwordError,
-      });
-    },
-  ),
+  mapLocals(locals => ({
+    email: locals.email.toLowerCase(),
+  })),
+  mapLocals(() => ({
+    fields: ['id', 'password'],
+    passwordError: 'Wrong email or password',
+  })),
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   (req, res, next) => {
@@ -101,14 +89,9 @@ notAuthed.all('/users.signup',
     organization_name: string,
     invitation_token: string,
   }),
-  mapLocals(
-    ['email'],
-    (setLocals, email) => {
-      setLocals({
-        email: email.toLowerCase(),
-      });
-    },
-  ),
+  mapLocals(locals => ({
+    email: locals.email.toLowerCase(),
+  })),
   userAvailability,
   usersParseInvitationToken,
   usersActivateUserSignUp,
@@ -116,12 +99,9 @@ notAuthed.all('/users.signup',
   notificationsPushToQueue,
   userGetInfoForToken,
   userSignUp,
-  mapLocals(
-    ['userId'],
-    (setLocals, userId) => {
-      setLocals({ user_id: userId });
-    },
-  ),
+  mapLocals(locals => ({
+    user_id: locals.userId,
+  })),
   organizationsCreate,
   organizationsAddToUser,
   userSignupQueueMessage,
@@ -156,19 +136,12 @@ authed.all('/users.invite',
     first_name: string.require(),
     email: string.require(),
   }),
-  mapLocals(
-    ['email'],
-    (setLocals, email) => {
-      setLocals({
-        email: email.toLowerCase(),
-      });
-    },
-  ),
-  mapLocals([], (setLocals) => {
-    const fields = [];
-    setLocals({ fields });
-  },
-  ),
+  mapLocals(locals => ({
+    email: locals.email.toLowerCase(),
+  })),
+  mapLocals(() => ({
+    fields: [],
+  })),
   usersGetByEmailWithFields,
   usersCreateTempUnactivatedUser,
   usersCreateInvitationToken,
@@ -187,35 +160,21 @@ notAuthed.all('/users.unsubscribe',
     email: string.format('email').require(),
     email_type: any.of('goal_notify'),
   }),
-  mapLocals(
-    ['email'],
-    (setLocals, email) => {
-      setLocals({
-        email: email.toLowerCase(),
-      });
-    },
-  ),
-  mapLocals([], (setLocals) => {
-    const fields = ['id'];
-    setLocals({ fields });
-  },
-  ),
+  mapLocals(locals => ({
+    email: locals.email.toLowerCase(),
+  })),
+  mapLocals(() => ({
+    fields: ['id'],
+  })),
   usersGetByEmailWithFields,
-   mapLocals(
-    ['user', 'email_type'],
-    (setLocals, user, email_type) => {
-      const settings = {
-        subscriptions: {
-          goal_notify: false,
-        },
-      };
-
-      setLocals({
-        user_id: user.id,
-        settings,
-      });
+  mapLocals(locals => ({
+    user_id: locals.user.id,
+    settings: {
+      subscriptions: {
+        goal_notify: false,
+      },
     },
-  ),
+  })),
   meUpdateSettings,
   meUpdateSettingsQueueMessage,
   notificationsPushToQueue,

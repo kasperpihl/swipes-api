@@ -76,14 +76,9 @@ notAuthed.post('/me.sendResetEmail',
   valBody({
     email: string.format('email').require(),
   }),
-  mapLocals(
-    ['email'],
-    (setLocals, email) => {
-      setLocals({
-        email: email.toLowerCase(),
-      });
-    },
-  ),
+  mapLocals(locals => ({
+    email: locals.email.toLowerCase(),
+  })),
   meAccountExists,
   meCreateResetToken,
   meResetEmailQueueMessage,

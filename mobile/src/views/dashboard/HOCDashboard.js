@@ -90,11 +90,11 @@ class HOCDashboard extends PureComponent {
       });
     }
   }
-  onReply(n) {
+  onReply(n, e) {
     const { notifications } = this.state;
     const { navPush } = this.props;
     const notification = notifications.get(n.get('i'));
-
+    e.stopPropagation();
     this.onMark(notification.get('id'));
 
     navPush({

@@ -73,39 +73,45 @@ authed.all('/goals.create',
     note_content: object.require(),
     milestone_id: string,
   }),
-  mapLocals('note_content', (setLocals, note_content) => {
-    setLocals({ text: note_content });
-  }),
+  mapLocals(locals => ({
+    text: locals.note_content,
+  })),
   notesCreate,
   // Some mapping so we can add the note as an attachment to the goal
-  mapLocals(['note', 'user_id'], (setLocals, note, user_id) => {
+  mapLocals((locals) => {
     const options = {
       type: 'note',
-      id: note.id,
+      id: locals.note.id,
       title: 'Goal description',
-      account_id: user_id,
+      account_id: locals.user_id,
     };
 
-    setLocals({ link: getSwipesLinkObj({ ...options }) });
+    return { link: getSwipesLinkObj({ ...options }) };
   }),
   linksCreate,
   linksAddPermission,
   attachmentsCreate,
   goalsCreate,
   goalsInsert,
-  mapLocals('goal', (setLocals, goal) => {
-    setLocals({ target_id: goal.id });
-  }),
+  mapLocals(locals => ({
+    target_id: locals.goal.id,
+  })),
   attachmentsInsert,
   mapLocals(
-    ['attachment', 'attachment_order', 'goal'],
-    (setLocals, attachment, attachment_order, goal) => {
+    (locals) => {
+      const {
+        goal,
+        attachment,
+        attachment_order,
+      } = locals;
+
       goal.attachments[attachment.id] = attachment;
       goal.attachment_order = attachment_order;
-      setLocals({
+
+      return {
         goal_id: goal.id,
         goal,
-      });
+      };
     },
   ),
   milestonesAddGoal,
@@ -184,9 +190,9 @@ authed.all('/goals.archive',
   valBody({
     goal_id: string.require(),
   }),
-  mapLocals('goal_id', (setLocals, goal_id) => {
-    setLocals({ goal_ids: [goal_id] });
-  }),
+  mapLocals(locals => ({
+    goal_ids: [locals.goal_id],
+  })),
   notificationCreateGroupId,
   goalsArchive,
   milestonesRemoveGoal,

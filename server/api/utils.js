@@ -140,10 +140,9 @@ const setLocals = (name, res, next, state) => {
   return null;
 };
 
-const mapLocals = (getLocals, handler) => (req, res, next) => {
+const mapLocals = (handler) => (req, res, next) => {
   // let's validate the params #inception! :D
-  const error = valjs({ getLocals, handler }, object.as({
-    getLocals: any.of(string.require(), array.of(string).require()).require(),
+  const error = valjs({ handler }, object.as({
     handler: func.require(),
   }));
 
@@ -151,15 +150,9 @@ const mapLocals = (getLocals, handler) => (req, res, next) => {
     return next(new SwipesError(`middleware input mapLocals: ${error}`));
   }
 
-  let locals = getLocals;
+  const newLocals = handler(res.locals);
 
-  if (!Array.isArray(getLocals)) {
-    locals = [getLocals];
-  }
-  locals = locals.map((l) => {
-    return res.locals[l];
-  });
-  handler(setLocals.bind(null, 'mapLocals', res, next), ...locals);
+  setLocals('mapLocals', res, next, newLocals);
   return next();
 };
 
