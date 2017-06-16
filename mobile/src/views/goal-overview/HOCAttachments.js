@@ -86,7 +86,7 @@ class HOCAttachments extends PureComponent {
       <RippleButton rippleColor={colors.deepBlue60} style={styles.attachment} rippleOpacity={0.8} key={attachment} onPress={this.attachmentPress(at)}>
         <View style={styles.attachment}>
           <View style={styles.icon}>
-            <Icon name={icon} width="24" height="24" fill={colors.blue100} />
+            <Icon name={icon} width="24" height="24" fill={colors.deepBlue100} />
           </View>
           <Text style={styles.label} ellipsizeMode="tail">{at.get('title')}</Text>
         </View>
@@ -145,11 +145,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   icon: {
-    paddingRight: 18,
+    paddingRight: 9,
   },
   label: {
     color: colors.deepBlue100,
-    fontSize: 18,
+    fontSize: 15,
+    lineHeight: 18,
   },
   fabWrapper: {
     width: 60,

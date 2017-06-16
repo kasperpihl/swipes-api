@@ -21,23 +21,23 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.deepBlue5,
   },
   indicator: {
-    width: 33,
-    height: 33,
+    width: 30,
+    height: 30,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colors.deepBlue90,
   },
   indicatorCompleted: {
     backgroundColor: colors.greenColor,
     borderColor: colors.greenColor,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   indicatorLabel: {
-    fontSize: 15,
-    fontWeight: '500',
+    fontSize: 12,
+    fontWeight: 'bold',
     color: colors.deepBlue90,
   },
   indicatorLabelCompleted: {
@@ -48,11 +48,11 @@ const styles = StyleSheet.create({
     paddingLeft: 21,
   },
   titleLabel: {
-    fontSize: 16.5,
-    color: colors.deepBlue90,
+    fontSize: 15,
+    color: colors.deepBlue100,
   },
   titleCompleted: {
-    color: colors.deepBlue30,
+    color: colors.deepBlue50,
   },
 });
 
@@ -84,6 +84,7 @@ class HOCStepList extends PureComponent {
     let indicatorLabelStyles;
     let titleStyles;
     let title = step.get('title');
+    let opacity = 1;
 
     if (isLoading(step.get('id'))) {
       title = getLoading(step.get('id')).loadingLabel;
@@ -93,6 +94,7 @@ class HOCStepList extends PureComponent {
       indicatorStyles = styles.indicatorCompleted;
       indicatorLabelStyles = styles.indicatorLabelCompleted;
       titleStyles = styles.titleCompleted;
+      opacity = 0.3;
     }
 
     return (
@@ -104,7 +106,7 @@ class HOCStepList extends PureComponent {
           <View style={styles.title}>
             <Text style={[styles.titleLabel, titleStyles]}>{title}</Text>
           </View>
-          <View style={styles.assignees}>
+          <View style={[styles.assignees, { opacity }]}>
             <HOCAssigning assignees={step.get('assignees')} />
           </View>
         </View>
