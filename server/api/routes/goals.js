@@ -84,9 +84,10 @@ authed.all('/goals.create',
   notesCreate,
   // Some mapping so we can add the note as an attachment to the goal
   mapLocals((locals) => {
+    const note = locals.notes[0];
     const options = {
       type: 'note',
-      id: locals.note.id,
+      id: note.id,
       title: 'Goal description',
       account_id: locals.user_id,
     };
