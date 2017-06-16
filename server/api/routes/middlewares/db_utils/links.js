@@ -3,6 +3,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -68,6 +69,33 @@ const addPermissionsToALink = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const addPermissionsToALinks = funcWrap([
+  object.as({
+    user_id: string.require(),
+    mappedPermissions: array.require(),
+  }).require(),
+], (err, { user_id, mappedPermissions }) => {
+  if (err) {
+    throw new SwipesError(`addPermissionsToALinks: ${err}`);
+  }
+
+  const insert_docs = [];
+
+  mappedPermissions.forEach((item) => {
+    const permissionPart = shortid.generate();
+    insert_docs.push(Object.assign({}, item, {
+      id: permissionPart,
+      created_at: r.now(),
+      done_by: user_id,
+    }));
+  });
+
+  const q = r.table('links_permissions').insert(insert_docs, {
+    returnChanges: true,
+  });
+
+  return db.rethinkQuery(q);
+});
 const createLink = funcWrap([
   object.as({
     meta: object.require(),
@@ -102,10 +130,36 @@ const createLink = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const createLinkBatch = funcWrap([
+  object.as({
+    insert_docs: array.require(),
+  }).require(),
+], (err, { insert_docs }) => {
+  if (err) {
+    throw new SwipesError(`createLinkBatch: ${err}`);
+  }
+
+  insert_docs.map((doc) => {
+    return Object.assign(doc, {
+      created_at: r.now(),
+      updated_at: r.now(),
+    });
+  });
+
+  const q =
+    r.table('links')
+      .insert(insert_docs, {
+        returnChanges: 'always',
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   findLinkPermissionsById,
   findLinksFromIds,
   addPermissionsToALink,
   createLink,
+  createLinkBatch,
+  addPermissionsToALinks,
 };

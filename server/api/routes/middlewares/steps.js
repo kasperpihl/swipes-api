@@ -1,4 +1,3 @@
-import r from 'rethinkdb';
 import {
   string,
   array,
@@ -13,8 +12,10 @@ import {
   dbStepsAssign,
 } from './db_utils/steps';
 import {
+  stepsCreateStep,
+} from './utils';
+import {
   valLocals,
-  generateSlackLikeId,
 } from '../../utils';
 
 const stepsAdd = valLocals('stepsAdd', {
@@ -31,22 +32,14 @@ const stepsAdd = valLocals('stepsAdd', {
     step,
   } = res.locals;
 
-  const step_id = generateSlackLikeId('', 6);
-  const mutatedStep = Object.assign({}, step, {
-    id: step_id,
-    created_by: user_id,
-    created_at: r.now(),
-    updated_at: r.now(),
-    updated_by: user_id,
-    completed_at: null,
-  });
+  const mutatedStep = stepsCreateStep({ user_id, ...step });
 
   dbStepsAdd({ goal_id, step: mutatedStep })
     .then((results) => {
       const changes = results.changes[0];
 
       setLocals({
-        step: changes.new_val.steps[step_id],
+        step: changes.new_val.steps[mutatedStep.id],
         step_order: changes.new_val.step_order,
         completed_at: changes.new_val.completed_at,
       });

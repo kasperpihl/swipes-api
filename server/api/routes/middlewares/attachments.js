@@ -1,4 +1,3 @@
-import r from 'rethinkdb';
 import {
   string,
   object,
@@ -11,8 +10,10 @@ import {
   dbAttachmentsReorder,
 } from './db_utils/attachments';
 import {
+  attachmentsCreateAttachment,
+} from './utils';
+import {
   valLocals,
-  generateSlackLikeId,
 } from '../../utils';
 
 const attachmentsCreate = valLocals('attachmentsCreate', {
@@ -39,14 +40,11 @@ const attachmentsCreate = valLocals('attachmentsCreate', {
     }
   }
 
-  const attachment = {
+  const attachment = attachmentsCreateAttachment({
+    user_id,
     link,
     title,
-    id: generateSlackLikeId('', 6),
-    created_by: user_id,
-    created_at: r.now(),
-    updated_at: r.now(),
-  };
+  });
 
   setLocals({
     attachment,
