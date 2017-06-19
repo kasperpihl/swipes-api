@@ -27,8 +27,8 @@ import {
   goalsHistoryUpdateIfReply,
   goalsRename,
   goalsRenameQueueMessage,
-  goalsLoadWay,
-  goalsLoadWayQueueMessage,
+  goalsAppendWayToGoal,
+  goalsAppendWayToGoalQueueMessage,
   goalsNotifyEmailQueueMessage,
   goalsIncompleteStep,
   goalsCompleteGoal,
@@ -51,10 +51,15 @@ import {
 } from './middlewares/notes';
 import {
   waysGetSingle,
+  waysModifyStepsAndAttachmentsInWay,
+  waysGetNoteContentFromWayAttachmets,
+  waysModifyNotesContentInWayAttachments,
 } from './middlewares/ways';
 import {
   linksAddPermission,
   linksCreate,
+  linksCreateBatch,
+  linksAddPermissionBatch,
 } from './middlewares/links';
 import {
   attachmentsCreate,
@@ -79,9 +84,10 @@ authed.all('/goals.create',
   notesCreate,
   // Some mapping so we can add the note as an attachment to the goal
   mapLocals((locals) => {
+    const note = locals.notes[0];
     const options = {
       type: 'note',
-      id: locals.note.id,
+      id: note.id,
       title: 'Goal description',
       account_id: locals.user_id,
     };
@@ -231,8 +237,46 @@ authed.all('/goals.loadWay',
     way_id: string.require(),
   }),
   waysGetSingle,
-  goalsLoadWay,
-  goalsLoadWayQueueMessage,
+  waysModifyStepsAndAttachmentsInWay,
+  waysGetNoteContentFromWayAttachmets,
+  mapLocals(locals => ({
+    organization_id: locals.way.organization_id,
+    text: locals.texts,
+  })),
+  notesCreate,
+  mapLocals((locals) => {
+    const notes = locals.notes;
+    const notesAttachment = locals.notesAttachment;
+    const links = [];
+
+    notes.forEach((note, i) => {
+      const options = {
+        type: 'note',
+        id: note.id,
+        title: notesAttachment[i].title,
+        account_id: locals.user_id,
+      };
+
+      links.push(getSwipesLinkObj({ ...options }));
+    });
+
+    return { links };
+  }),
+  linksCreateBatch,
+  linksAddPermissionBatch,
+  mapLocals((locals) => {
+    const short_urls = locals.short_urls;
+    const links = locals.links.map((link, i) => {
+      return Object.assign({}, link, {
+        short_url: short_urls[i],
+      });
+    });
+
+    return { links };
+  }),
+  waysModifyNotesContentInWayAttachments,
+  goalsAppendWayToGoal,
+  goalsAppendWayToGoalQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),

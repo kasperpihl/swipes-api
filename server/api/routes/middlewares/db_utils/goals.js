@@ -1,9 +1,10 @@
 import r from 'rethinkdb';
 import {
   string,
-  object,
-  funcWrap,
   number,
+  object,
+  array,
+  funcWrap,
 } from 'valjs';
 import db from '../../../../db';
 import {
@@ -303,6 +304,34 @@ const dbGoalsIncompleteStep = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbGoalsAppendWayToGoal = funcWrap([
+  object.as({
+    goal_id: string.require(),
+    steps: object.require(),
+    step_order: array.require(),
+    attachments: object.require(),
+    attachment_order: array.require(),
+  }),
+], (err, { goal_id, steps, step_order, attachments, attachment_order }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsAppendWayToGoal: ${err}`);
+  }
+
+  const q =
+    r.table('goals')
+      .get(goal_id)
+      .update({
+        steps: r.row('steps').merge(steps),
+        step_order: r.row('step_order').setUnion(step_order),
+        attachments: r.row('attachments').merge(attachments),
+        attachment_order: r.row('attachment_order').setUnion(attachment_order),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbGoalsInsertSingle,
@@ -314,4 +343,5 @@ export {
   dbGoalsIncompleteGoal,
   dbGoalsCompleteStep,
   dbGoalsIncompleteStep,
+  dbGoalsAppendWayToGoal,
 };

@@ -3,13 +3,17 @@ import {
   string,
   number,
   object,
+  array,
+  any,
 } from 'valjs';
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
 import {
-  dbNotesInsert,
+  dbNotesInsertWithConflictHandling,
   dbNotesGetSingle,
+  dbNotesGetMultiple,
+  dbNotesInsertBatch,
 } from './db_utils/notes';
 import {
   generateSlackLikeId,
@@ -19,29 +23,41 @@ import {
 const notesCreate = valLocals('notesCreate', {
   user_id: string.require(),
   organization_id: string.require(),
-  text: object.require(),
+  text: any.of(object, array).require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     organization_id,
     text,
   } = res.locals;
-  const note_id = generateSlackLikeId('N');
-  const note = {
-    organization_id,
-    rev: 1,
-    id: note_id,
-    text,
-    created_at: r.now(),
-    updated_at: r.now(),
-    updated_by: user_id,
-    created_by: user_id,
-  };
+  let texts = text;
 
-  dbNotesInsert({ note })
+  if (!Array.isArray(text)) {
+    texts = [text];
+  }
+
+  const notes = [];
+
+  texts.forEach((text) => {
+    const note_id = generateSlackLikeId('N');
+    const note = {
+      organization_id,
+      rev: 1,
+      id: note_id,
+      text,
+      created_at: new Date(),
+      updated_at: new Date(),
+      updated_by: user_id,
+      created_by: user_id,
+    };
+
+    notes.push(note);
+  });
+
+  dbNotesInsertBatch({ notes })
   .then(() => {
     setLocals({
-      note,
+      notes,
     });
     return next();
   })
@@ -76,7 +92,7 @@ const notesSave = valLocals('notesSave', {
     rev,
   };
 
-  dbNotesInsert({ note })
+  dbNotesInsertWithConflictHandling({ note })
   .then((res) => {
     if (res.unchanged === 1) {
       return next(new SwipesError({
@@ -120,9 +136,57 @@ const notesGetSingle = valLocals('notesGetSingle', {
     return next(err);
   });
 });
+const notesGetMultipleFromGoal = valLocals('notesGetMultipleFromGoal', {
+  goal: object.require(),
+  organization_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    goal,
+    organization_id,
+  } = res.locals;
+  const {
+    attachment_order,
+    attachments,
+  } = goal;
+  const note_ids = [];
+
+  attachment_order.forEach((attachmentId) => {
+    const attachment = attachments[attachmentId];
+    if (attachment.link.service.type === 'note') {
+      note_ids.push(attachment.link.service.id);
+    }
+  });
+
+  if (note_ids.length === 0) {
+    setLocals({
+      notes: [],
+    });
+
+    return next();
+  }
+
+  return dbNotesGetMultiple({ note_ids, organization_id })
+  .then((notes) => {
+    if (notes.length === 0) {
+      return next(new SwipesError({
+        message: 'Invalid notes',
+      }));
+    }
+
+    setLocals({
+      notes,
+    });
+
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
+});
 
 export {
   notesCreate,
   notesSave,
   notesGetSingle,
+  notesGetMultipleFromGoal,
 };

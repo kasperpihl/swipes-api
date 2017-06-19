@@ -9,7 +9,12 @@ import {
   waysArchive,
   waysCreateQueueMessage,
   waysArchiveQueueMessage,
+  waysCopyAttachments,
+  waysCopySteps,
 } from './middlewares/ways';
+import {
+  notesGetMultipleFromGoal,
+} from './middlewares/notes';
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
@@ -31,6 +36,9 @@ authed.all('/ways.create',
     description: string,
     goal: goalMoreStrict,
   }),
+  notesGetMultipleFromGoal,
+  waysCopyAttachments,
+  waysCopySteps,
   waysCreate,
   waysInsert,
   waysCreateQueueMessage,

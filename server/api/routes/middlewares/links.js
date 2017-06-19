@@ -9,6 +9,8 @@ import {
   findLinksFromIds,
   addPermissionsToALink,
   createLink,
+  createLinkBatch,
+  addPermissionsToALinks,
 } from './db_utils/links';
 import {
   SwipesError,
@@ -68,7 +70,38 @@ const linksFindPermissions = valLocals('linksFindPermissions', {
       });
   }
 });
+const linksAddPermissionBatch = valLocals('linksAddPermissionBatch', {
+  user_id: string.require(),
+  links: array.require(),
+  permissions: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    links,
+    permissions,
+  } = res.locals;
 
+  const mappedPermissions = links.map((link, i) => {
+    return {
+      link_id: link.checksum,
+      permission: permissions[i],
+    };
+  });
+
+  addPermissionsToALinks({ user_id, mappedPermissions })
+    .then((result) => {
+      const short_urls = result.changes.map(change => change.new_val.id);
+
+      setLocals({
+        short_urls,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 const linksAddPermission = valLocals('linksAddPermission', {
   user_id: string.require(),
   link: object.require(),
@@ -92,7 +125,6 @@ const linksAddPermission = valLocals('linksAddPermission', {
       return next(err);
     });
 });
-
 const linksCreate = valLocals('linksCreate', {
   link: object.as({
     service,
@@ -127,10 +159,54 @@ const linksCreate = valLocals('linksCreate', {
       return next(error);
     });
 });
+const linksCreateBatch = valLocals('linksCreateBatch', {
+  links: array.of(object.as({
+    service,
+    permission: linkPermission,
+    meta: linkMeta,
+  })).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    links,
+  } = res.locals;
+  const permissions = [];
+  const insert_docs = [];
+
+  links.forEach((link) => {
+    const {
+      service,
+      meta,
+      permission,
+    } = link;
+
+    const checksum = hash({ service });
+    const insert_doc = Object.assign({ checksum }, { service, meta });
+
+    permissions.push(permission);
+    insert_docs.push(insert_doc);
+  });
+
+  createLinkBatch({ insert_docs })
+    .then((result) => {
+      const inserted = result.changes.map(change => change.new_val);
+
+      setLocals({
+        links: inserted,
+        permissions,
+      });
+
+      return next();
+    })
+    .catch((error) => {
+      return next(error);
+    });
+});
 
 export {
   linksFindPermissions,
   linksGetByIds,
   linksAddPermission,
   linksCreate,
+  linksCreateBatch,
+  linksAddPermissionBatch,
 };

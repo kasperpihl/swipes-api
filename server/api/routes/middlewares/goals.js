@@ -17,6 +17,7 @@ import {
   dbGoalsIncompleteGoal,
   dbGoalsCompleteStep,
   dbGoalsIncompleteStep,
+  dbGoalsAppendWayToGoal,
 } from './db_utils/goals';
 import {
   generateSlackLikeId,
@@ -700,7 +701,7 @@ const goalsRenameQueueMessage = valLocals('goalsRenameQueueMessage', {
 
   return next();
 });
-const goalsLoadWay = valLocals('goalsLoadWay', {
+const goalsAppendWayToGoal = valLocals('goalsAppendWayToGoal', {
   goal_id: string.require(),
   way: object.require(),
 }, (req, res, next, setLocals) => {
@@ -715,14 +716,8 @@ const goalsLoadWay = valLocals('goalsLoadWay', {
     attachments,
     attachment_order,
   } = goal;
-  const properties = {
-    steps,
-    step_order,
-    attachments,
-    attachment_order,
-  };
 
-  dbGoalsUpdateSingle({ goal_id, properties })
+  dbGoalsAppendWayToGoal({ goal_id, steps, step_order, attachments, attachment_order })
     .then((results) => {
       const changes = results.changes[0];
       const goal = changes.new_val || changes.old_val;
@@ -737,7 +732,7 @@ const goalsLoadWay = valLocals('goalsLoadWay', {
       return next(err);
     });
 });
-const goalsLoadWayQueueMessage = valLocals('goalsLoadWayQueueMessage', {
+const goalsAppendWayToGoalQueueMessage = valLocals('goalsAppendWayToGoalQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
 }, (req, res, next, setLocals) => {
@@ -778,8 +773,8 @@ export {
   goalsHistoryUpdateIfReply,
   goalsRename,
   goalsRenameQueueMessage,
-  goalsLoadWay,
-  goalsLoadWayQueueMessage,
+  goalsAppendWayToGoal,
+  goalsAppendWayToGoalQueueMessage,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
   goalsIncompleteGoal,

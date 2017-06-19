@@ -12,6 +12,7 @@ import {
 import {
   valBody,
   valResponseAndSend,
+  mapLocals,
 } from '../utils';
 
 const authed = express.Router();
@@ -23,6 +24,9 @@ authed.all('/notes.create',
     text: object.require(),
   }),
   notesCreate,
+  mapLocals(locals => ({
+    note: locals.notes[0],
+  })),
   valResponseAndSend({
     note: object.require(),
   }));

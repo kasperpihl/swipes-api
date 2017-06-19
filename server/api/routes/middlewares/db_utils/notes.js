@@ -2,6 +2,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -9,13 +10,13 @@ import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
 
-const dbNotesInsert = funcWrap([
+const dbNotesInsertWithConflictHandling = funcWrap([
   object.as({
     note: object.require(),
   }).require(),
 ], (valErr, { note }) => {
   if (valErr) {
-    throw new SwipesError(`dbNotesInsert: ${valErr}`);
+    throw new SwipesError(`dbNotesInsertWithConflictHandling: ${valErr}`);
   }
 
   const q =
@@ -30,6 +31,20 @@ const dbNotesInsert = funcWrap([
           );
         },
       });
+
+  return db.rethinkQuery(q);
+});
+const dbNotesInsertBatch = funcWrap([
+  object.as({
+    notes: array.require(),
+  }).require(),
+], (valErr, { notes }) => {
+  if (valErr) {
+    throw new SwipesError(`dbNotesInsertBatch: ${valErr}`);
+  }
+
+  const q = r.table('notes').insert(notes);
+
   return db.rethinkQuery(q);
 });
 const dbNotesGetSingle = funcWrap([
@@ -46,8 +61,33 @@ const dbNotesGetSingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbNotesGetMultiple = funcWrap([
+  object.as({
+    note_ids: array.require(),
+    organization_id: string.require(),
+  }).require(),
+], (valErr, { note_ids, organization_id }) => {
+  if (valErr) {
+    throw new SwipesError(`dbNotesGetMultiple: ${valErr}`);
+  }
+
+  const compoundIndexArgs = [];
+
+  note_ids.forEach((note_id) => {
+    compoundIndexArgs.push([
+      note_id,
+      organization_id,
+    ]);
+  });
+
+  const q = r.db('swipes').table('notes').getAll(...compoundIndexArgs, { index: 'id_organization' });
+
+  return db.rethinkQuery(q);
+});
 
 export {
-  dbNotesInsert,
+  dbNotesInsertWithConflictHandling,
   dbNotesGetSingle,
+  dbNotesGetMultiple,
+  dbNotesInsertBatch,
 };
