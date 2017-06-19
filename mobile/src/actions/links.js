@@ -67,15 +67,25 @@ export const preview = att => (d, getState) => {
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
-        // OpenFile.openDoc([{
-        //   url: res.preview.file.url,
-        //   fileName: res.preview.header.title,
+        OpenFile.openDoc([{
+          url: res.preview.file.url,
+          fileName: res.preview.header.title,
 
-        // }], (error, url) => {
-        //   if (error) {
-        //     d(a.loading.showLoader(false));
-        //   }
-        // });
+        }], (error, url) => {
+          if (error) {
+            // d(a.loading.showLoader(false));
+            console.log('====================================');
+            console.log('error', error);
+            console.log('====================================');
+          }
+
+          if (url) {
+            // d(a.loading.showLoader(false));
+            console.log('====================================');
+            console.log('url', url);
+            console.log('====================================');
+          }
+        });
       });
     }
   }

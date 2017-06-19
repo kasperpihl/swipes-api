@@ -22,19 +22,18 @@ class HOCDashboard extends PureComponent {
     };
   }
   componentWillMount() {
-    const { notifications, filters } = this.props;
-
-    if (filters) {
-      const tabIndex = this.state.tabIndex;
-
-      this.setState({
-        notifications: this.getFilteredNotifications(tabIndex, notifications, filters),
-      });
-    }
   }
   componentDidMount() {
+    const { notifications, filters } = this.props;
     this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
+      if (filters) {
+        const tabIndex = this.state.tabIndex;
+
+        this.setState({
+          notifications: this.getFilteredNotifications(tabIndex, notifications, filters),
+        });
+      }
     }, 1);
 
     if (this.props.isActive) {

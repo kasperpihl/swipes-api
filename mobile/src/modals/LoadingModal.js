@@ -65,5 +65,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  showLoader: a.modals.showLoader,
+  showLoader: a.loading.showLoader,
 })(LoadingModal);

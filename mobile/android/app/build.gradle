@@ -97,7 +97,7 @@ android {
     defaultConfig {
         applicationId "com.swipes"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         ndk {
@@ -172,13 +172,11 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-interactable')
     compile project(':react-native-code-push')
     compile project(':react-native-image-picker')
     compile project(':react-native-doc-viewer')
     compile project(':react-native-custom-tabs')
     compile project(':react-native-onesignal')
-    compile project(':react-native-send-intent')
     compile project(':react-native-svg')
     compile project(':react-native-linear-gradient')
     compile fileTree(dir: "libs", include: ["*.jar"])

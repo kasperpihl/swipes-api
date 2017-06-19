@@ -43,7 +43,7 @@ class Dashboard extends PureComponent {
       hasLoaded,
     } = this.props;
 
-    if (!hasLoaded) {
+    if (!hasLoaded || !notifications) {
       return this.renderListLoader();
     }
 
