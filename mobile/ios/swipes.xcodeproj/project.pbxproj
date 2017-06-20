@@ -31,6 +31,7 @@
 		9577F01F6FD446F898AAA1F9 /* libDBCustomTabs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C39509E9794B9495047D7D /* libDBCustomTabs.a */; };
 		A73D8A101ED39E86001E3840 /* libRCTBrowser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A73D8A0D1ED39E5C001E3840 /* libRCTBrowser.a */; };
 		086D3A0E9088472ABD07DEF1 /* libRNReactNativeDocViewer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8800CDCEB56E462480DEDD13 /* libRNReactNativeDocViewer.a */; };
+		DE9E8406BE5F4B46BD71CEEF /* libRNIntercom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B8C36BC4529247F092B9F8F4 /* libRNIntercom.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -319,6 +320,8 @@
 		FE5D7F13F5F044E4BB64A325 /* CodePush.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
 		3279D7B4ECBE4FD3AEEB57F1 /* RNReactNativeDocViewer.xcodeproj */ = {isa = PBXFileReference; name = "RNReactNativeDocViewer.xcodeproj"; path = "../node_modules/react-native-doc-viewer/ios/RNReactNativeDocViewer.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		8800CDCEB56E462480DEDD13 /* libRNReactNativeDocViewer.a */ = {isa = PBXFileReference; name = "libRNReactNativeDocViewer.a"; path = "libRNReactNativeDocViewer.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		3ED48FC0DC234A6B8633610A /* RNIntercom.xcodeproj */ = {isa = PBXFileReference; name = "RNIntercom.xcodeproj"; path = "../node_modules/react-native-intercom/iOS/RNIntercom.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		B8C36BC4529247F092B9F8F4 /* libRNIntercom.a */ = {isa = PBXFileReference; name = "libRNIntercom.a"; path = "libRNIntercom.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -353,6 +356,7 @@
 				3B5E0938CD874C3DAB64E1A6 /* libCodePush.a in Frameworks */,
 				19A767D93C644AEE9F2CB203 /* libz.tbd in Frameworks */,
 				086D3A0E9088472ABD07DEF1 /* libRNReactNativeDocViewer.a in Frameworks */,
+				DE9E8406BE5F4B46BD71CEEF /* libRNIntercom.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,6 +511,7 @@
 				AA7D0DDF44284A78B90C17B6 /* ReactNativeCustomTabs.xcodeproj */,
 				FE5D7F13F5F044E4BB64A325 /* CodePush.xcodeproj */,
 				3279D7B4ECBE4FD3AEEB57F1 /* RNReactNativeDocViewer.xcodeproj */,
+				3ED48FC0DC234A6B8633610A /* RNIntercom.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1093,12 +1098,14 @@
 					"$(SRCROOT)/../node_modules/react-native-image-pickerios",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)\..\node_modules\react-native-doc-viewer\ios/**",
+					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 				);
 				INFOPLIST_FILE = swipesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1129,6 +1136,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-pickerios/**",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)\..\node_modules\react-native-doc-viewer\ios/**",
+					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1250,6 +1258,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-pickerios/**",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)\..\node_modules\react-native-doc-viewer\ios/**",
+					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1285,12 +1294,14 @@
 					"$(SRCROOT)/../node_modules/react-native-image-pickerios",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)\..\node_modules\react-native-doc-viewer\ios/**",
+					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 				);
 				INFOPLIST_FILE = swipesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1362,6 +1373,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-pickerios/**",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)\..\node_modules\react-native-doc-viewer\ios/**",
+					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1397,12 +1409,14 @@
 					"$(SRCROOT)/../node_modules/react-native-image-pickerios",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)\..\node_modules\react-native-doc-viewer\ios/**",
+					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 				);
 				INFOPLIST_FILE = swipesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
