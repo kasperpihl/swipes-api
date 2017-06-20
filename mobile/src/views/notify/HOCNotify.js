@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
 import { goals } from '../../../swipes-core-js/actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
+import { attachmentIconForService } from '../../../swipes-core-js/classes/utils';
 import * as a from '../../actions';
 import Notify from './Notify';
 
@@ -54,18 +55,23 @@ class HOCNotify extends PureComponent {
     const { preview } = this.props;
     preview(att);
   }
-  onFlagAttachment(id) {
+  onFlagAttachments(attachments, ids) {
     let { notify } = this.state;
-    if (notify.get('flags').includes(id)) {
-      notify = notify.updateIn(['flags'], fl => fl.filter(f => f !== id));
-    } else {
-      notify = notify.updateIn(['flags'], fl => fl.push(id));
-    }
+    const { showModal } = this.props;
+
+    ids.map(i => {
+      const attId = attachments.getIn([i, 'index']);
+
+      if (!notify.get('flags').includes(attId)) {
+        notify = notify.updateIn(['flags'], fl => fl.push(attId));
+      }
+    })
+
     this.updateHandoff(notify);
+    showModal();
   }
   onChangeText(text) {
     this.message = text;
-    // this.updateHandoff(notify.set('message', text));
   }
   onModalAction(sortedUsers, data) {
     let { notify } = this.state;
@@ -110,10 +116,40 @@ class HOCNotify extends PureComponent {
 
   }
   onActionButton(index) {
-    const { navPop, goal, goalNotify } = this.props;
+    const { navPop, goal, goalNotify, showModal } = this.props;
     let { notify } = this.state;
+    const attachmentOrder = goal.get('attachment_order');
+    const attachments = goal.get('attachments');
 
-    if (index === 1) {
+    if (index === 0) {
+      const attachmentsUi = attachmentOrder.map((att, i) => {
+        const at = attachments.get(att);
+        const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
+        const isFlagged = notify.get('flags').contains(at.get('id'));
+
+        const obj = {
+          title: at.get('title'),
+          selected: isFlagged,
+          index: at.get('id'),
+          leftIcon: {
+            icon: icon,
+          },
+        };
+
+        return fromJS(obj);
+      })
+
+      const modal = {
+        title: 'Attach Files',
+        onClick: this.onFlagAttachments.bind(this, attachmentsUi),
+        multiple: 'Attach',
+        items: attachmentsUi,
+        fullscreen: true,
+      };
+
+      showModal(modal);
+
+    } else if (index === 1) {
       this.setState({ hasLoaded: false });
       notify = notify.set('message', this.message || notify.get('message'));
       goalNotify(goal.get('id'), notify).then((res) => {
@@ -137,8 +173,8 @@ class HOCNotify extends PureComponent {
 
     if (notify && notify.get('assignees').size) {
       actionButtons = [
-        { text: 'Assign people' },
-        { text: 'Notify' },
+        { text: 'Attach' },
+        { icon: 'Send' },
       ];
     }
 

@@ -24,8 +24,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textButtonLabel: {
-    fontSize: 15,
-    color: colors.deepBlue80,
+    fontSize: 12,
+    color: colors.blue100,
+    fontWeight: 'bold',
   },
   verticalSeperator: {
     width: 1,
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
-    backgroundColor: colors.deepBlue5,
+    backgroundColor: colors.deepBlue10,
   },
 });
 
@@ -64,19 +65,29 @@ class HOCActionBar extends PureComponent {
       actionButtons.get('onClick')(i, e);
     }
   }
-  renderTextButton(key, button, onPress) {
+  renderTextButton(key, button, onPress, seperator) {
     return (
       <RippleButton rippleColor={colors.blue100} style={styles.textButton} rippleOpacity={0.8} onPress={onPress} key={key} >
         <View style={styles.textButton}>
+          {seperator ? (
+            <View style={styles.verticalSeperator} />
+          ) : (
+              undefined
+            )}
           <Text style={styles.textButtonLabel}>{button.text}</Text>
         </View>
       </RippleButton>
     );
   }
-  renderIconButton(key, button, onPress) {
+  renderIconButton(key, button, onPress, seperator) {
     return (
-      <RippleButton rippleColor={colors.blue100} style={styles.iconButton} rippleOpacity={0.8} onPress={onPress} key={key} >
+      <RippleButton rippleColor={colors.blue100} style={styles.iconButton} rippleOpacity={0.8} onPress={onPress} key={key}>
         <View style={styles.iconButton}>
+          {seperator ? (
+            <View style={styles.verticalSeperator} />
+          ) : (
+              undefined
+            )}
           <Icon name={button.icon} width="24" height="24" fill={colors.blue100} />
         </View>
       </RippleButton>
@@ -95,13 +106,18 @@ class HOCActionBar extends PureComponent {
     const { actionButtons } = this.props;
 
     if (actionButtons && actionButtons.get('buttons')) {
+      console.log('====================================');
+      console.log('====================================');
+
       return actionButtons.get('buttons').map((b, i) => {
+        const seperator = i === 0 ? false : true;
+
         if (b.text) {
-          return this.renderTextButton(i, b, this.onActionClick(i));
+          return this.renderTextButton(i, b, this.onActionClick(i), seperator);
         }
 
         if (b.icon) {
-          return this.renderIconButton(i, b, this.onActionClick(i));
+          return this.renderIconButton(i, b, this.onActionClick(i), seperator);
         }
       });
     }

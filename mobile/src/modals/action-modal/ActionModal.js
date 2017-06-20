@@ -49,7 +49,6 @@ class ActionModal extends PureComponent {
         selectedIndexes.push(i);
       }
     });
-
     modal.get('onClick')(selectedIndexes);
   }
   closeModal() {

@@ -60,7 +60,7 @@ export const request = (options, data) => (d, getState) => {
     ...extraHeaders,
   });
 
-  if(!options.formData) {
+  if (!options.formData) {
     body = JSON.stringify(body);
     headers.append('Content-Type', 'application/json');
   } else {
@@ -78,34 +78,35 @@ export const request = (options, data) => (d, getState) => {
   };
   return new Promise((resolve, reject) => {
     fetch(apiUrl + command, serData)
-    .then((r) => {
-      if (r && r.ok) return r.json();
-      return Promise.reject({ message: r.statusText, code: r.status });
-    }).then((res) => {
-      state = getState();
-      handleUpdatesNeeded(res, state, d);
+      .then((r) => {
+        if (r && r.ok) return r.json();
+        return Promise.reject({ message: r.statusText, code: r.status });
+      }).then((res) => {
+        state = getState();
+        handleUpdatesNeeded(res, state, d);
 
-      if (res && res.ok) {
-        d({
-          type: command,
-          payload: res,
-        });
-      } else {
-        if(res.message === 'not_authed') {
-          d({ type: types.RESET_STATE });
+        if (res && res.ok) {
+          d({
+            type: command,
+            payload: res,
+          });
+        } else {
+
+          if (res.error === 'not_authed') {
+            d({ type: types.RESET_STATE });
+          }
+          return Promise.reject({ message: res.error });
         }
-        return Promise.reject({ message: res.error });
-      }
 
         // Let's return a promise for convenience.
-      resolve(res);
-    }).catch((e) => {
-      console.log('err', e);
-      if (__DEV__) {
-        console.warn(command, e);
-      }
-      resolve({ ok: false, error: e });
-    });
+        resolve(res);
+      }).catch((e) => {
+        console.log('err', e);
+        if (__DEV__) {
+          console.warn(command, e);
+        }
+        resolve({ ok: false, error: e });
+      });
   });
 };
 

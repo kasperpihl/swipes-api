@@ -25,21 +25,6 @@ class Notify extends PureComponent {
   renderHeader() {
     const { notify } = this.props;
     const assignees = notify.get('assignees');
-    const title = msgGen.notify.getNotifyTitle(notify);
-
-    return (
-      <HOCHeader title={title}>
-        {assignees.size ? (
-          <HOCAssigning assignees={assignees} />
-        ) : (
-            undefined
-          )}
-      </HOCHeader>
-    );
-  }
-  renderHeader2() {
-    const { notify } = this.props;
-    const assignees = notify.get('assignees');
     const helper = this.getHelper();
     const amountOfAssignees = assignees.size;
 
@@ -134,8 +119,7 @@ class Notify extends PureComponent {
 
     return (
       <View style={styles.container}>
-        {/*{this.renderHeader()}*/}
-        {this.renderHeader2()}
+        {this.renderHeader()}
         <ScrollView>
           {this.renderWriteHandoff()}
           {/*{this.renderAttachmentList()}*/}
@@ -191,7 +175,8 @@ const styles = StyleSheet.create({
     color: colors.blue100,
   },
   headerButtonWrapper: {
-    width: 30,
+    width: 40,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
   },

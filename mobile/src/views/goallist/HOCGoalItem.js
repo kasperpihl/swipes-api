@@ -88,6 +88,23 @@ class HOCGoalItem extends PureComponent {
 
     this.callDelegate('onPushStack', overview);
   }
+  completedDot() {
+    const { goal } = this.props;
+    const helper = new GoalsUtil(goal);
+    const isCompleted = helper.getIsCompleted();
+
+    if (isCompleted) {
+
+      return (
+        <View style={styles.completedWrapper}>
+          <View style={styles.completedDot} />
+        </View>
+      )
+    }
+
+
+    return undefined;
+  }
   renderContent() {
     const { goal, filter } = this.props;
     const status = msgGen.goals.getListSubtitle(goal);
@@ -121,6 +138,7 @@ class HOCGoalItem extends PureComponent {
     return (
       <RippleButton onPress={this.openOverview} onLongPress={this.onPin}>
         <View style={rowStyles}>
+          {this.completedDot()}
           {this.renderContent()}
           {this.renderAssignees()}
           <View style={styles.seperator} />
@@ -151,6 +169,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'stretch',
+  },
+  completedWrapper: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  completedDot: {
+    width: 9,
+    height: 9,
+    backgroundColor: colors.greenColor,
+    borderRadius: 4.5,
   },
   starredRow: {
     backgroundColor: colors.blue5,

@@ -8,10 +8,10 @@ import { colors } from '../../utils/globalStyles';
 
 const styles = StyleSheet.create({
   containerButton: {
-    height: 65,
+    height: 54,
   },
   container: {
-    height: 65,
+    height: 54,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
@@ -23,14 +23,15 @@ const styles = StyleSheet.create({
 
   },
   title: {
-    fontSize: 14,
-    color: colors.deepBlue80,
+    fontSize: 15,
+    lineHeight: 24,
+    color: colors.deepBlue100,
   },
   selector: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    borderWidth: 2,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    borderWidth: 1,
   },
 });
 
@@ -93,16 +94,11 @@ class ActionModalItem extends Component {
 
     if (multiple) {
       const isSelected = item.get('selected');
-      const selectedBorder = isSelected ? 'rgba(255,255,255,0)' : colors.deepBlue20;
+      const selectedBorder = isSelected ? colors.blue100 : colors.deepBlue30;
+      const backgroundColor = isSelected ? colors.blue100 : colors.bgColor;
 
       return (
-        <View style={[styles.selector, { borderColor: selectedBorder }]}>
-          {isSelected ? (
-            <Icon name="ChecklistCheckmark" width="24" height="24" fill={colors.greenColor} />
-          ) : (
-              undefined
-            )}
-        </View>
+        <View style={[styles.selector, { borderColor: selectedBorder, backgroundColor: backgroundColor }]} />
       );
     }
 
@@ -110,6 +106,8 @@ class ActionModalItem extends Component {
   }
   render() {
     const { item, singleRender } = this.props;
+    const isSelected = item.get('selected');
+    const backgroundColor = isSelected ? colors.blue5 : colors.bgColor;
 
     let extraStyle = {
 
@@ -122,8 +120,8 @@ class ActionModalItem extends Component {
     }
 
     return (
-      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item)}>
-        <View style={[styles.container, extraStyle]}>
+      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item)}>
+        <View style={[styles.container, extraStyle, { backgroundColor }]}>
           {this.renderLeftIcon()}
           {this.renderTitle()}
           {this.renderSelector()}
