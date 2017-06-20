@@ -172,6 +172,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-mixpanel')
     compile project(':react-native-intercom')
     compile project(':react-native-doc-viewer')
     compile project(':react-native-code-push')

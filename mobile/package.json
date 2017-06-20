@@ -26,6 +26,7 @@
     "react-native-linear-gradient": "^2.0.0",
     "react-native-material-ripple": "^0.7.2",
     "react-native-mime-types": "^2.2.0",
+    "react-native-mixpanel": "0.0.15",
     "react-native-navigation-experimental-compat": "^1.0.0",
     "react-native-onesignal": "^3.0.4",
     "react-native-svg": "^5.2.0",
