@@ -1,7 +1,6 @@
 package com.swipes;
 
 import com.facebook.react.ReactActivity;
-import com.reactlibrary.RNReactNativeDocViewerPackage;
 import com.github.droibit.android.reactnative.customtabs.CustomTabsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.horcrux.svg.SvgPackage;

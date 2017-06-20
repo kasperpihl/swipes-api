@@ -32,6 +32,7 @@ class HOCAttachments extends PureComponent {
   }
   onAddAttachment() {
     const { upload, goal, loading } = this.props;
+
     const options = {
       title: 'Select Avatar',
       customButtons: [
@@ -106,7 +107,6 @@ class HOCAttachments extends PureComponent {
         removeClippedSubviews={false}
         immutableData={attachmentOrder}
         renderRow={this.renderAttachment}
-        renderFooter={this.renderFooter}
         onScroll={window.onScroll}
       />
     );
@@ -127,7 +127,7 @@ class HOCAttachments extends PureComponent {
       <View style={styles.container}>
         {this.renderAttachmentList()}
 
-        {this.renderFAB()}
+        {/*{this.renderFAB()}*/}
       </View>
     );
   }

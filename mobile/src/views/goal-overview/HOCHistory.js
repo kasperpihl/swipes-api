@@ -92,7 +92,6 @@ class HOCHistory extends PureComponent {
         removeClippedSubviews={false}
         immutableData={events}
         renderRow={event => this.renderEvent(event, me, this)}
-        renderFooter={this.renderFooter}
         onScroll={window.onScroll}
       />
     );

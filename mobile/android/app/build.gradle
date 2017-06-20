@@ -172,9 +172,8 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-code-push')
-    compile project(':react-native-image-picker')
     compile project(':react-native-doc-viewer')
+    compile project(':react-native-code-push')
     compile project(':react-native-custom-tabs')
     compile project(':react-native-onesignal')
     compile project(':react-native-svg')

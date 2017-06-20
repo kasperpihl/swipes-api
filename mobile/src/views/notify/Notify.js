@@ -32,34 +32,6 @@ class Notify extends PureComponent {
       </HOCHeader>
     );
   }
-  renderRequest() {
-    const { replyObj, goal, delegate } = this.props;
-
-    if (!replyObj) {
-      return undefined;
-    }
-
-    const title = `${msgGen.users.getName(replyObj.get('done_by'))} asked`;
-    const notif = msgGen.history.getNotificationWrapperForHistory(goal.get('id'), replyObj, {
-      title: false,
-      subtitle: false,
-      icon: false,
-      timeago: false,
-      reply: false,
-    });
-
-    return (
-      <View style={styles.requestWrapper}>
-        <Text style={styles.requestTitle}>{title}</Text>
-        <View style={styles.requestNotif}>
-          <NotificationItem
-            delegate={delegate}
-            notification={notif}
-          />
-        </View>
-      </View>
-    );
-  }
   renderWriteHandoff() {
     const { me, notify, delegate } = this.props;
     const assignees = [`${me.get('id')}`];
@@ -131,7 +103,6 @@ class Notify extends PureComponent {
       <View style={styles.container}>
         {this.renderHeader()}
         <ScrollView>
-          {this.renderRequest()}
           {this.renderWriteHandoff()}
           {this.renderAttachmentList()}
         </ScrollView>

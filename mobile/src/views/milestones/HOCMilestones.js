@@ -90,7 +90,6 @@ class HOCMilestones extends PureComponent {
         style={styles.list}
         immutableData={milestonesToRender}
         renderRow={mS => this.renderMilestoneItem(mS)}
-        renderFooter={this.renderFooter}
         onScroll={window.onScroll}
       />
     );

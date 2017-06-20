@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { View, StyleSheet, StatusBar, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import * as a from '../../actions';
@@ -154,8 +154,10 @@ class HOCDashboard extends PureComponent {
     const { filters } = this.props;
     let { notifications: n, tabs } = this.state;
 
-    StatusBar.setTranslucent(true);
-    StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.20)');
+    if (Platform.OS === 'android') {
+      StatusBar.setTranslucent(true);
+      StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.20)');
+    }
 
     if (n) {
       n = n.map((n, i) => msgGen.notifications.getNotificationWrapper(n).set('i', i));

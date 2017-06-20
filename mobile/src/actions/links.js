@@ -63,7 +63,7 @@ export const preview = att => (d, getState) => {
     } else if (service.get('type') === 'url') {
       d(browser(service.get('id')));
     } else if (service.get('type') === 'file') {
-      // d(a.loading.showLoader(true));
+      d(a.loading.showLoader(true));
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
@@ -72,19 +72,7 @@ export const preview = att => (d, getState) => {
           fileName: res.preview.header.title,
 
         }], (error, url) => {
-          if (error) {
-            // d(a.loading.showLoader(false));
-            console.log('====================================');
-            console.log('error', error);
-            console.log('====================================');
-          }
-
-          if (url) {
-            // d(a.loading.showLoader(false));
-            console.log('====================================');
-            console.log('url', url);
-            console.log('====================================');
-          }
+          d(a.loading.showLoader(false));
         });
       });
     }

@@ -3,9 +3,8 @@ package com.swipes;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.microsoft.codepush.react.CodePush;
-import com.imagepicker.ImagePickerPackage;
 import com.reactlibrary.RNReactNativeDocViewerPackage;
+import com.microsoft.codepush.react.CodePush;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.horcrux.svg.SvgPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -37,7 +36,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new CodePush(BuildConfig.CODEPUSH_KEY, MainApplication.this, BuildConfig.DEBUG),
-            new ImagePickerPackage(),
             new RNReactNativeDocViewerPackage(),
             new ReactNativeOneSignalPackage(),
             new SvgPackage(),
