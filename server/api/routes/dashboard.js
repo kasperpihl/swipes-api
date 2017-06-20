@@ -28,6 +28,128 @@ notAuthed.all('/dashboardd_awesome_cat_rainbow',
   },
  );
 
+notAuthed.all('/update_attachments',
+  (req, res, next) => {
+    const q = r.table('goals').count();
+
+    db.rethinkQuery(q)
+    .then((count) => {
+      res.locals.count = count;
+
+      return next();
+    });
+  },
+  (req, res, next) => {
+    const count = res.locals.count;
+    const itemsPerPage = 50;
+    const promises = [];
+    let pages = Math.ceil(count / itemsPerPage);
+    let pageNum = 1;
+
+    while (pages >= 0) {
+      const q =
+          r.table('goals')
+          .orderBy(r.desc('created_at'))
+          .slice((pageNum - 1) * itemsPerPage, pageNum * itemsPerPage)
+          .pluck('attachments', 'attachment_order', 'id');
+
+      promises.push(db.rethinkQuery(q));
+
+      pageNum += 1;
+      pages -= 1;
+    }
+
+    Promise.all(promises)
+      .then((goals) => {
+        const flattened = goals.reduce((a, b) => {
+          return a.concat(b);
+        });
+        res.locals.goals = flattened;
+
+        return next();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+  (req, res, next) => {
+    const goals = res.locals.goals;
+    const filteredGoalsWithOldAttachmentStructure = goals.filter((goal) => {
+      let isIt = false;
+
+      goal.attachment_order.forEach((aId) => {
+        isIt = !goal.attachments[aId].link;
+      });
+
+      return isIt;
+    });
+
+    res.locals.goals = filteredGoalsWithOldAttachmentStructure;
+
+    return next();
+  },
+  (req, res, next) => {
+    const goals = res.locals.goals;
+
+    goals.map((goal) => {
+      goal.attachment_order.forEach((aId) => {
+        if (!goal.attachments[aId].link) {
+          goal.attachments[aId] = {
+            created_at: r.now(),
+            created_by: null,
+            id: aId,
+            link: {
+              created_at: r.now(),
+              checksum: r.table('links_permissions').get(goal.attachments[aId].shortUrl)('link_id'),
+              permission: {
+                short_url: goal.attachments[aId].shortUrl,
+              },
+              service: {
+                id: goal.attachments[aId].id,
+                name: goal.attachments[aId].name,
+                type: goal.attachments[aId].type,
+              },
+              title: goal.attachments[aId].title,
+              updated_at: r.now(),
+            },
+          };
+        }
+      });
+
+      return goal;
+    });
+
+    res.locals.goals = goals;
+
+    return next();
+  },
+  (req, res, next) => {
+    const goals = res.locals.goals;
+    const promises = [];
+
+    goals.forEach((goal) => {
+      const q = r.table('goals').get(goal.id).update({
+        attachments: goal.attachments,
+      }, {
+        nonAtomic: true,
+      });
+
+      promises.push(db.rethinkQuery(q));
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        return next();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+  (req, res, next) => {
+    return res.json({});
+  },
+ );
+
 export {
   authed,
   notAuthed,
