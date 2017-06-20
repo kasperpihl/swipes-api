@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import * as types from '../constants';
 
 const initialState = fromJS({});
 
@@ -45,6 +46,9 @@ export default function meReducer(state = initialState, action) {
     case 'service_removed': {
       return state.updateIn(['services'], services => services.filter(service => (service.get('id') !== payload.id)));
     }
+    case types.RESET_STATE: {
+      return initialState;
+    }  
     default:
       return state;
   }

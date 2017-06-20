@@ -1,5 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { reducerInitToMap } from '../classes/utils';
+import * as types from '../constants';
 
 const initialState = fromJS({});
 
@@ -152,6 +153,9 @@ export default function goalsReducer(state = initialState, action) {
         return state.map(g => g.set('starred', stars.indexOf(g.get('id')) > -1));
       }
       return state;
+    }
+    case types.RESET_STATE: {
+      return initialState;
     }
     default:
       return state;

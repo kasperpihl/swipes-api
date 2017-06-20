@@ -26,7 +26,7 @@ export default function configureStore(preloadedState) {
     enhancer,
   );
 
-  persistStore(store, {
+  window.persistor = persistStore(store, {
     storage: AsyncStorage,
     blacklist: ['notes', 'navigation', 'filters', 'modals', 'loading'],
   });

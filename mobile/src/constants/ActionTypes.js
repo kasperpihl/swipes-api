@@ -1,3 +1,5 @@
+// MAIN
+export const RESET_STATE = 'RESET_STATE';
 
 // NAVIGATION
 export const SLIDER_CHANGE = 'SLIDER_CHANGE';

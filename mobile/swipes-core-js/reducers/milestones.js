@@ -1,5 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { reducerInitToMap } from '../classes/utils';
+import * as types from '../constants';
 
 const initialState = fromJS({});
 
@@ -11,7 +12,7 @@ export default function milestonesReducer(state = initialState, action) {
     }
     case 'milestones.close':
     case 'milestone_closed': {
-      if(payload.milestone_id && payload.goal_order){
+      if (payload.milestone_id && payload.goal_order) {
         state = state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));
       }
       return state.setIn([payload.milestone_id, 'closed'], true);
@@ -32,7 +33,7 @@ export default function milestonesReducer(state = initialState, action) {
     case 'milestone_goal_removed':
     case 'milestones.addGoal':
     case 'milestone_goal_added': {
-      if(payload.milestone_id && payload.goal_order){
+      if (payload.milestone_id && payload.goal_order) {
         return state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));
       }
       return state;
@@ -41,7 +42,9 @@ export default function milestonesReducer(state = initialState, action) {
     case 'milestone_created': {
       return state.set(payload.milestone.id, fromJS(payload.milestone));
     }
-
+    case types.RESET_STATE: {
+      return initialState;
+    }
     default:
       return state;
   }

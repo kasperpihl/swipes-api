@@ -15,8 +15,12 @@ export default class Socket {
   }
   storeChange() {
     const state = this.store.getState();
-
     this.token = state.getIn(['connection', 'token']);
+    if (this.socket && !this.token) {
+      if (this.ws && this.ws.readyState == this.ws.OPEN) {
+        this.ws.close();
+      }
+    }
     if (this.token && !this.socket && !this.isConnecting) {
       if (!this.timer) {
         this.timedConnect(this.timerForAttempt());
@@ -74,7 +78,7 @@ export default class Socket {
           this.reconnect_attempts = 0;
           this.changeStatus('online');
         } else if (res && res.error) {
-          if(res.error.message === 'not_authed'){
+          if (res.error.message === 'not_authed') {
             this.callDelegate('forceLogout');
           } else {
             this.ws.close();
@@ -89,11 +93,20 @@ export default class Socket {
       this.isConnecting = false;
       clearInterval(this._pingTimer);
       this.reconnect_attempts += 1;
+
       const time = this.timerForAttempt();
-      const nextRetry = new Date();
-      nextRetry.setSeconds(nextRetry.getSeconds() + (time / 1000));
+      let nextRetry;
+
+      if (this.token) {
+        this.timedConnect(time);
+        nextRetry = new Date();
+        nextRetry.setSeconds(nextRetry.getSeconds() + (time / 1000));
+      } else {
+        this.reconnect_attempts = 0;
+        this.socket = false;
+        this.timer = undefined;
+      }
       this.changeStatus('offline', nextRetry);
-      this.timedConnect(time);
     };
   }
   sendPing() {

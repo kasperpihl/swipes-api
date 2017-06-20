@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import codePush from 'react-native-code-push';
-import { View, KeyboardAvoidingView, TextInput, StyleSheet, Text } from 'react-native';
+import { View, KeyboardAvoidingView, TextInput, StyleSheet, Text, ScrollView, Platform } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import { colors, viewSize } from '../../utils/globalStyles';
 import { api } from '../../../swipes-core-js/actions';
@@ -31,12 +33,31 @@ class Login extends PureComponent {
     }).then((res) => {
     });
   }
+  renderGradient() {
+
+    return (
+      <LinearGradient
+        start={{ x: 0.0, y: 0.0 }}
+        end={{ x: 1.0, y: 0.5 }}
+        colors={[colors.bgGradientFrom, colors.bgGradientTo]}
+        style={styles.gradient}
+      >
+      </LinearGradient>
+    )
+  }
+  renderKeyboardSpacer() {
+    if (Platform.OS === 'ios') {
+      return <KeyboardSpacer />;
+    }
+
+    return undefined;
+  }
   render() {
     const { version } = this.state;
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView behavior="height" style={styles.container}>
-          <Text>{version}</Text>
+        {this.renderGradient()}
+        <ScrollView contentContainerStyle={styles.container}>
           <TextInput
             style={styles.input}
             onChangeText={email => this.setState({ email })}
@@ -58,7 +79,8 @@ class Login extends PureComponent {
               <Text style={styles.buttonLabel}>Sign in</Text>
             </View>
           </RippleButton>
-        </KeyboardAvoidingView>
+        </ScrollView>
+        {this.renderKeyboardSpacer()}
       </View>
     );
   }
@@ -71,8 +93,15 @@ export default connect(null, {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bgColor,
-    // backgroundColor: 'red',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: viewSize.width,
+    height: viewSize.height + 24,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -10,6 +10,9 @@ export default function onboardingReducer(state = initialState, action) {
     case 'init': {
       return reducerInitToMap(payload, 'onboarding', state);;
     }
+    case types.RESET_STATE: {
+      return initialState;
+    }
     default:
       return state;
   }

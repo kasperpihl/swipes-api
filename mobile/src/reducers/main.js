@@ -1,5 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
+import * as types from '../constants/ActionTypes';
 
 const initialState = fromJS({
   overlay: null,
@@ -10,9 +11,11 @@ const initialState = fromJS({
 export default function main(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
-    case REHYDRATE:
+    case REHYDRATE: {
       return state.set('isHydrated', true);
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }

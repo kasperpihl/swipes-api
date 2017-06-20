@@ -11,7 +11,8 @@ export default function modals(state = initialState, action) {
     case types.SHOW_MODAL: {
       return state.set('modal', Map(payload));
     }
-    default:
+    default: {
       return state;
+    }
   }
 }

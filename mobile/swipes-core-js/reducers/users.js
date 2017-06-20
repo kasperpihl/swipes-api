@@ -1,5 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { reducerInitToMap } from '../classes/utils';
+import * as types from '../constants';
 
 const initialState = fromJS({});
 
@@ -18,6 +19,9 @@ export default function usersReducer(state = initialState, action) {
     case 'users.invite':{
       return state.set(payload.user.id, fromJS(payload.user));
     }
+    case types.RESET_STATE: {
+      return initialState;
+    }  
     default:
       return state;
   }

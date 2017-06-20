@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
+import * as a from '../../actions';
 import HOCHeader from '../../components/header/HOCHeader';
+import RippleButton from '../../components/ripple-button/RippleButton';
 import { viewSize, colors } from '../../utils/globalStyles';
 
 class HOCProfile extends PureComponent {
@@ -10,6 +12,7 @@ class HOCProfile extends PureComponent {
     this.state = {};
 
     this.onActionButton = this.onActionButton.bind(this);
+    this.onLogOut = this.onLogOut.bind(this);
   }
   componentDidMount() {
     if (this.props.isActive) {
@@ -20,6 +23,11 @@ class HOCProfile extends PureComponent {
     if (!prevProps.isActive && this.props.isActive) {
       this.renderActionButtons();
     }
+  }
+  onLogOut() {
+    const { signout } = this.props;
+
+    signout();
   }
   onActionButton(i) {
     // console.log('action!', i);
@@ -64,6 +72,12 @@ class HOCProfile extends PureComponent {
           <Text style={styles.name}>{me.get('first_name')} {me.get('last_name')}</Text>
           <View style={styles.seperator} />
           <Text style={styles.orgName}>{me.getIn(['organizations', 0, 'name'])}</Text>
+
+          <RippleButton style={styles.logOutButton} onPress={this.onLogOut}>
+            <View style={styles.logOut}>
+              <Text style={styles.logOutLabel}>Log out</Text>
+            </View>
+          </RippleButton>
         </View>
       </View>
     );
@@ -115,6 +129,18 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     backgroundColor: colors.deepBlue20,
   },
+  logOutButton: {
+  },
+  logOut: {
+    borderColor: colors.deepBlue100,
+    borderWidth: 1,
+    marginTop: 30,
+    borderRadius: 3,
+  },
+  logOutLabel: {
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+  }
 });
 
 function mapStateToProps(state) {
@@ -123,4 +149,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {})(HOCProfile);
+export default connect(mapStateToProps, {
+  signout: a.main.signout
+})(HOCProfile);

@@ -21,17 +21,17 @@ export default function connectionReducer(state = initialState, action) {
   switch (type) {
     case ('init'): {
       return state.set('lastConnect', payload.timestamp)
-                  .set('lastVersion', window.__VERSION__)
-                  .set('ready', true);
+        .set('lastVersion', window.__VERSION__)
+        .set('ready', true);
     }
     case REHYDRATE:
       if (action && action.payload && action.payload.connection) {
         const { connection } = action.payload;
 
         return initialState.set('token', connection.get('token'))
-                 .set('lastConnect', connection.get('lastConnect'))
-                 .set('lastVersion', connection.get('lastVersion'))
-                 .set('ready', window.__VERSION__ === connection.get('lastVersion'));
+          .set('lastConnect', connection.get('lastConnect'))
+          .set('lastVersion', connection.get('lastVersion'))
+          .set('ready', window.__VERSION__ === connection.get('lastVersion'));
       }
       return state;
     case types.SET_UPDATE_STATUS: {
@@ -39,8 +39,8 @@ export default function connectionReducer(state = initialState, action) {
     }
     case types.SET_STATUS: {
       return state.set('status', payload.status)
-                  .set('nextRetry', payload.nextRetry)
-                  .set('reconnectAttempt', payload.reconnectAttempt);
+        .set('nextRetry', payload.nextRetry)
+        .set('reconnectAttempt', payload.reconnectAttempt);
     }
     // ======================================================
     // Authorization methods
@@ -54,6 +54,9 @@ export default function connectionReducer(state = initialState, action) {
       if (payload.token_to_revoke !== currToken) {
         return state;
       }
+      return initialState;
+    }
+    case types.RESET_STATE: {
       return initialState;
     }
     default:

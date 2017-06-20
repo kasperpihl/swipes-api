@@ -71,7 +71,11 @@ export default function navigation(state = initialState, action) {
         return routes.butLast();
       });
     }
-    default:
+    case types.RESET_STATE: {
+      return initialState;
+    }
+    default: {
       return state;
+    }
   }
 }

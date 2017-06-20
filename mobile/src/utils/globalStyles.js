@@ -53,7 +53,6 @@ export const colors = {
   redColor: '#FC461E',
   yellowColor: '#FFD776',
   bgColor: '#ffffff',
-  bgGradientFrom: '#72bbee',
-  bgGradientTo: '#4e70c5',
-}
-  ;
+  bgGradientFrom: '#74C7F5',
+  bgGradientTo: '#4973C9',
+};

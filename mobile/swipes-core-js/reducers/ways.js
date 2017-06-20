@@ -1,5 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { reducerInitToMap } from '../classes/utils';
+import * as types from '../constants';
 
 const initialState = fromJS({});
 
@@ -21,6 +22,9 @@ export default function waysReducer(state = initialState, action) {
     case 'way_archived':
     case 'ways.archive': {
       return state.delete(payload.id);
+    }
+    case types.RESET_STATE: {
+      return initialState;
     }
     default:
       return state;

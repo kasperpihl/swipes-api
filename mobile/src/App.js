@@ -145,7 +145,7 @@ class App extends PureComponent {
     return (
       <LinearGradient
         start={{ x: 0.0, y: 0.0 }}
-        end={{ x: 1.0, y: 0.0 }}
+        end={{ x: 1.0, y: 0.5 }}
         colors={[colors.bgGradientFrom, colors.bgGradientTo]}
         style={styles.gradient}
       >

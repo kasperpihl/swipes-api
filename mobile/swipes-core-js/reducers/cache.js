@@ -19,7 +19,9 @@ export default function cacheReducer(state = initialState, action) {
     case types.CACHE_CLEAR: {
       return state.set(initialState);
     }
-
+    case types.RESET_STATE: {
+      return initialState;
+    }
     default:
       return state;
   }

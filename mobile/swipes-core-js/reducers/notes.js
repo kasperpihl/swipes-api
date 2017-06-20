@@ -74,6 +74,9 @@ export default function notesReducer(state = initialState, action) {
       const note = fromJS(payload);
       return handleNoteUpdate(state, note);
     }
+    case types.RESET_STATE: {
+      return initialState;
+    }
     default:
       return state;
   }

@@ -47,7 +47,9 @@ export default function notificationsReducer(state = initialState, action) {
         return n;
       });
     }
-
+    case types.RESET_STATE: {
+      return initialState;
+    }
     default:
       return state;
   }
