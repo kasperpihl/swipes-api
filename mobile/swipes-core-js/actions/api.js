@@ -91,6 +91,9 @@ export const request = (options, data) => (d, getState) => {
           payload: res,
         });
       } else {
+        if(res.message === 'not_authed') {
+          d({ type: types.RESET_STATE });
+        }
         return Promise.reject({ message: res.error });
       }
 
