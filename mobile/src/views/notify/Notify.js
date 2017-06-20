@@ -2,11 +2,12 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableWithoutFeedback, ActivityIndicator, Keyboard, Platform } from 'react-native';
 import HOCHeader from '../../components/header/HOCHeader';
 import { attachmentIconForService, setupDelegate } from '../../../swipes-core-js/classes/utils';
+import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import NotificationItem from '../dashboard/NotificationItem';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
-import { colors } from '../../utils/globalStyles';
+import { colors, viewSize } from '../../utils/globalStyles';
 import HandoffMessage from './HandoffMessage';
 
 class Notify extends PureComponent {
@@ -15,7 +16,11 @@ class Notify extends PureComponent {
     this.state = { text: '' };
 
     setupDelegate(this);
-    this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment', 'onChangeText');
+    this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment', 'onChangeText', 'onAssignUsers');
+  }
+  getHelper() {
+    const { goal, me } = this.props;
+    return new GoalsUtil(goal, me.get('id'));
   }
   renderHeader() {
     const { notify } = this.props;
@@ -31,6 +36,34 @@ class Notify extends PureComponent {
           )}
       </HOCHeader>
     );
+  }
+  renderHeader2() {
+    const { notify } = this.props;
+    const assignees = notify.get('assignees');
+    const helper = this.getHelper();
+    const amountOfAssignees = assignees.size;
+
+    const renderAssigneesText = assignees.map((a, i) => {
+      if (amountOfAssignees - 1 === i) {
+        return <Text style={styles.assignee} key={a}>{msgGen.users.getFullName(a)}</Text>
+      } else {
+        return <Text style={styles.assignee} key={a}>{msgGen.users.getFullName(a)}, </Text>
+      }
+    })
+
+    return (
+      <View style={styles.headerWrapper} >
+        <Text style={styles.headerLabel}>To:</Text>
+        <View style={styles.assigneesWrapper}>
+          {renderAssigneesText}
+        </View>
+        <RippleButton style={styles.headerButtonWrapper} onPress={this.onAssignUsersCached()}>
+          <View style={styles.headerButton}>
+            <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
+          </View>
+        </RippleButton>
+      </View>
+    )
   }
   renderWriteHandoff() {
     const { me, notify, delegate } = this.props;
@@ -101,10 +134,11 @@ class Notify extends PureComponent {
 
     return (
       <View style={styles.container}>
-        {this.renderHeader()}
+        {/*{this.renderHeader()}*/}
+        {this.renderHeader2()}
         <ScrollView>
           {this.renderWriteHandoff()}
-          {this.renderAttachmentList()}
+          {/*{this.renderAttachmentList()}*/}
         </ScrollView>
       </View>
     );
@@ -128,89 +162,59 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  requestWrapper: {
-    paddingTop: 15,
+  headerWrapper: {
+    width: viewSize.width - 30,
+    marginTop: 33,
+    marginLeft: 15,
+    flexDirection: 'row',
+    paddingBottom: 6,
+    borderBottomColor: colors.deepBlue30,
+    borderBottomWidth: 1,
   },
-  requestTitle: {
-    marginHorizontal: 30,
-    color: colors.deepBlue80,
-    fontSize: 13,
-    fontWeight: 'bold',
-    zIndex: 2,
+  headerLabel: {
+    fontSize: 12,
+    lineHeight: 24,
+    fontWeight: '500',
+    color: colors.deepBlue50,
   },
-  requestNotif: {
-    marginTop: -20,
-    zIndex: 1,
+  assigneesWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingLeft: 6,
+    paddingTop: 2,
+  },
+  assignee: {
+    fontSize: 15,
+    lineHeight: 24,
+    fontWeight: '500',
+    color: colors.blue100,
+  },
+  headerButtonWrapper: {
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerButton: {
+    width: 24,
+    height: 24,
+    backgroundColor: colors.blue100,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4,
   },
   handoff: {
     flex: 1,
     flexDirection: 'row',
     marginHorizontal: 15,
-    paddingTop: 30,
-    paddingBottom: 60,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue20,
+    paddingTop: 15,
   },
   profileImage: {
-    width: 32,
+    width: 30,
   },
   handoffInput: {
     flex: 1,
-  },
-  input: {
-    padding: 0,
-    margin: 0,
-    marginLeft: 30,
-    paddingRight: 9,
-    paddingLeft: 3,
-    paddingBottom: 15,
-    marginTop: 3,
-    fontSize: 15,
-    lineHeight: 25,
-    textAlignVertical: 'top',
-    ...Platform.select({
-      ios: {
-        height: 25 * 3,
-      },
-    }),
-  },
-  attachment: {
-    flex: 1,
-    minHeight: 72,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-  },
-  attachmentLeft: {
-    flex: 1,
-    minHeight: 72,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  flagButton: {
-    width: 72,
-    height: 72,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 72 / 2,
-    overflow: 'hidden',
-  },
-  icon: {
-    paddingRight: 18,
-  },
-  label: {
-    flex: 1,
-    color: colors.deepBlue100,
-    fontSize: 18,
-  },
-  flagIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: colors.deepBlue5,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 

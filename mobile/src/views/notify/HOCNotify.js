@@ -75,8 +75,8 @@ class HOCNotify extends PureComponent {
     this.updateHandoff(notify);
     showModal();
   }
-  onActionButton(index) {
-    const { users, showModal, navPop, goal, goalNotify } = this.props;
+  onAssignUsers() {
+    const { users, showModal, } = this.props;
     let { notify } = this.state;
 
     const sortedUsers = users.sort(
@@ -98,17 +98,22 @@ class HOCNotify extends PureComponent {
       return fromJS(obj);
     });
 
-    if (index === 0) {
-      const modal = {
-        title: 'Assign People',
-        onClick: this.onModalAction.bind(this, sortedUsers),
-        multiple: 'Assign',
-        items: userInfoToActions,
-        fullscreen: true,
-      };
+    const modal = {
+      title: 'Assign People',
+      onClick: this.onModalAction.bind(this, sortedUsers),
+      multiple: 'Assign',
+      items: userInfoToActions,
+      fullscreen: true,
+    };
 
-      showModal(modal);
-    } else if (index === 1) {
+    showModal(modal);
+
+  }
+  onActionButton(index) {
+    const { navPop, goal, goalNotify } = this.props;
+    let { notify } = this.state;
+
+    if (index === 1) {
       this.setState({ hasLoaded: false });
       notify = notify.set('message', this.message || notify.get('message'));
       goalNotify(goal.get('id'), notify).then((res) => {

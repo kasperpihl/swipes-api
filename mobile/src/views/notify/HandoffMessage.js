@@ -12,13 +12,12 @@ const styles = StyleSheet.create({
   input: {
     padding: 0,
     margin: 0,
-    marginLeft: 30,
     paddingRight: 9,
-    paddingLeft: 3,
+    paddingLeft: 15,
     paddingBottom: 15,
-    marginTop: 3,
+    marginTop: 6,
     fontSize: 15,
-    lineHeight: 25,
+    lineHeight: 21,
     textAlignVertical: 'top',
     ...Platform.select({
       ios: {
