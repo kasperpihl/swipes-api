@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import mime from 'react-native-mime-types';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import ImagePicker from 'react-native-image-picker';
@@ -17,18 +17,10 @@ import { colors } from '../../utils/globalStyles';
 class HOCAttachments extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
 
     this.renderAttachment = this.renderAttachment.bind(this);
     this.onAddAttachment = this.onAddAttachment.bind(this);
     this.attachmentPress = setupCachedCallback(this.attachmentPress, this);
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
   }
   onAddAttachment() {
     const { upload, goal, loading } = this.props;

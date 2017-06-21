@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Hyperlink from 'react-native-hyperlink';
 import { setupDelegate, setupCachedCallback, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
@@ -14,6 +15,11 @@ class NotificationItem extends PureComponent {
     this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
     this.onNotificationPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationPress'));
     this.onReplyTo = setupCachedCallback(this.callDelegate.bind(null, 'onReply'));
+
+    this.handleURL = this.handleURL.bind(this);
+  }
+  handleURL(url) {
+    console.log(url)
   }
   renderIcon() {
     const { notification: n } = this.props;
@@ -38,7 +44,12 @@ class NotificationItem extends PureComponent {
     }
 
     return (
-      <Text style={styles.message}>{n.get('message')}</Text>
+      <Hyperlink
+        onPress={this.handleURL}
+        linkStyle={[styles.message, { color: colors.blue100 }]}
+      >
+        <Text style={styles.message}>{n.get('message')}</Text>
+      </Hyperlink>
     );
   }
   renderAttachments() {

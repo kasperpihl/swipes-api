@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
@@ -16,6 +16,14 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loader: {
+    marginTop: -60,
+  },
 });
 
 class HOCMilestoneOverview extends PureComponent {
@@ -25,9 +33,27 @@ class HOCMilestoneOverview extends PureComponent {
       tabs: ['Current', 'Completed'],
       tabIndex: 0,
       goals: this.getFilteredGoals(this.props.milestone, this.props.starredGoals),
+      hasLoaded: false,
     };
 
     this.renderGoal = this.renderGoal.bind(this);
+  }
+  componentDidMount() {
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+  }
+  componentDidUpdate(prevProps) {
+    if (!this.state.hasLoaded) {
+      clearTimeout(this.loadingTimeout);
+
+      this.loadingTimeout = setTimeout(() => {
+        this.setState({ hasLoaded: true });
+      }, 1);
+    }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
   }
   getFilteredGoals(milestone, starredGoals) {
     const goals = msgGen.milestones.getGoals(milestone);
@@ -50,7 +76,7 @@ class HOCMilestoneOverview extends PureComponent {
   }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index });
+      this.setState({ tabIndex: index, hasLoaded: false });
     }
   }
   onPushStack(goalOverview) {
@@ -74,8 +100,20 @@ class HOCMilestoneOverview extends PureComponent {
   renderGoal(goal) {
     return <HOCGoalItem goalId={goal.get('id')} delegate={this} />;
   }
+  renderListLoader() {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
+  }
   renderList() {
-    const { tabs, tabIndex, goals } = this.state;
+    const { tabs, tabIndex, goals, hasLoaded } = this.state;
+
+    if (!hasLoaded) {
+      return this.renderListLoader();
+    }
+
     const tab = tabs[tabIndex];
     const goalList = goals.get(tab);
 

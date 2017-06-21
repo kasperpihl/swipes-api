@@ -152,7 +152,7 @@ class HOCDashboard extends PureComponent {
   }
   render() {
     const { filters } = this.props;
-    let { notifications: n, tabs } = this.state;
+    let { notifications: n, tabs, hasLoaded } = this.state;
 
     if (Platform.OS === 'android') {
       StatusBar.setTranslucent(true);
@@ -160,7 +160,7 @@ class HOCDashboard extends PureComponent {
     }
 
     if (n) {
-      n = n.map((n, i) => msgGen.notifications.getNotificationWrapper(n).set('i', i));
+      n = n.map((n, i) => msgGen.notifications.getNotificationWrapper(n).set('i', i))
     }
 
     return (

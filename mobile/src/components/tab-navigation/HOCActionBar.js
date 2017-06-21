@@ -106,8 +106,6 @@ class HOCActionBar extends PureComponent {
     const { actionButtons } = this.props;
 
     if (actionButtons && actionButtons.get('buttons')) {
-      console.log('====================================');
-      console.log('====================================');
 
       return actionButtons.get('buttons').map((b, i) => {
         const seperator = i === 0 ? false : true;

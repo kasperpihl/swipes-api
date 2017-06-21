@@ -28,7 +28,6 @@ class HOCHistory extends PureComponent {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      hasRendered: false,
       contentHeight: 0,
       containerheight: 0,
     };
@@ -36,13 +35,6 @@ class HOCHistory extends PureComponent {
     this.lastY = 0;
     this.direction = 'up';
     setupDelegate(this);
-  }
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ hasRendered: true });
-    }, 1);
-
-    console.log(viewSize);
   }
   getHelper() {
     const { goal } = this.props;
@@ -53,13 +45,6 @@ class HOCHistory extends PureComponent {
     const { preview } = this.props;
 
     preview(att);
-  }
-  renderListLoader() {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
-      </View>
-    );
   }
   renderEvent(event, me, ctx) {
     if (event.get('type') === 'notified') {
@@ -74,10 +59,6 @@ class HOCHistory extends PureComponent {
     return <EmptyListFooter />;
   }
   renderList() {
-    const { hasRendered } = this.state;
-    if (!hasRendered) {
-      return this.renderListLoader();
-    }
     const { goal, me } = this.props;
     const history = goal.get('history');
     const events = history.map((e, i) => msgGen.history.getNotificationWrapperForHistory(goal.get('id'), e)).reverse();

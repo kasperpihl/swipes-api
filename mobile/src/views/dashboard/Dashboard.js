@@ -60,9 +60,9 @@ class Dashboard extends PureComponent {
       <ImmutableVirtualizedList
         immutableData={notifications}
         renderRow={this.renderRow}
-        rowsDuringInteraction={10}
-        removeClippedSubviews={false}
         onScroll={window.onScroll}
+        initialNumToRender={5}
+        debug={true}
       />
     );
   }

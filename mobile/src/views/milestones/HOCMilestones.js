@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
@@ -17,6 +17,14 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loader: {
+    marginTop: -60,
+  },
 });
 
 const emptyList = List();
@@ -27,13 +35,31 @@ class HOCMilestones extends PureComponent {
     this.state = {
       tabs: ['Open', 'Closed'],
       tabIndex: 0,
+      hasLoaded: false,
     };
 
     this.renderMilestoneItem = this.renderMilestoneItem.bind(this);
   }
+  componentDidMount() {
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+  }
+  componentDidUpdate(prevProps) {
+    if (!this.state.hasLoaded) {
+      clearTimeout(this.loadingTimeout);
+
+      this.loadingTimeout = setTimeout(() => {
+        this.setState({ hasLoaded: true });
+      }, 1);
+    }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
+  }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index });
+      this.setState({ tabIndex: index, hasLoaded: false });
     }
   }
   onOpenMilestone(milestone) {
@@ -48,6 +74,13 @@ class HOCMilestones extends PureComponent {
     };
 
     navPush(overview);
+  }
+  renderListLoader() {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
   }
   renderHeader() {
     const { tabIndex, tabs } = this.state;
@@ -76,14 +109,15 @@ class HOCMilestones extends PureComponent {
       <MilestoneItem milestone={milestone} delegate={this} />
     );
   }
-  renderFooter() {
-    return <EmptyListFooter />;
-  }
   renderList() {
-    const { tabIndex, tabs } = this.state;
+    const { tabIndex, tabs, hasLoaded } = this.state;
     const { milestones } = this.props;
     const group = milestones.groupBy(m => m.get('closed') ? 'Closed' : 'Open');
     const milestonesToRender = group.get(tabs[tabIndex]) || emptyList;
+
+    if (!hasLoaded) {
+      return this.renderListLoader();
+    }
 
     return (
       <ImmutableVirtualizedList
@@ -91,6 +125,7 @@ class HOCMilestones extends PureComponent {
         immutableData={milestonesToRender}
         renderRow={mS => this.renderMilestoneItem(mS)}
         onScroll={window.onScroll}
+        windowSize={2}
       />
     );
   }

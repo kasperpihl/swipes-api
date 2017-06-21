@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, StyleSheet, Platform, UIManager, LayoutAnimation, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import * as a from '../../actions';
@@ -10,6 +10,7 @@ import HOCHeader from '../../components/header/HOCHeader';
 import HOCHistory from './HOCHistory';
 import HOCStepList from './HOCStepList';
 import HOCAttachments from './HOCAttachments';
+import { colors, viewSize } from '../../utils/globalStyles';
 
 class HOCGoalOverview extends PureComponent {
   constructor(props) {
@@ -17,6 +18,7 @@ class HOCGoalOverview extends PureComponent {
     this.state = {
       tabIndex: 0,
       routeNum: props.lastRoute,
+      hasLoaded: false,
     };
 
     this.closeView = this.closeView.bind(this);
@@ -29,12 +31,28 @@ class HOCGoalOverview extends PureComponent {
   }
   componentDidMount() {
     this.renderActionButtons();
+
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
   }
   componentWillUpdate(nextProps) {
     LayoutAnimation.easeInEaseOut();
     if (this.state.routeNum === nextProps.lastRoute) {
       this.renderActionButtons();
     }
+  }
+  componentDidUpdate(prevProps) {
+    if (!this.state.hasLoaded) {
+      clearTimeout(this.loadingTimeout);
+
+      this.loadingTimeout = setTimeout(() => {
+        this.setState({ hasLoaded: true });
+      }, 1);
+    }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
   }
   onComplete(step) {
     if (this.isLoading(step.get('id'))) {
@@ -125,8 +143,10 @@ class HOCGoalOverview extends PureComponent {
     }
   }
   onChangeTab(index) {
+    const { hasLoaded } = this.state;
+
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index });
+      this.setState({ tabIndex: index, hasLoaded: false });
     }
   }
   getHelper() {
@@ -153,7 +173,7 @@ class HOCGoalOverview extends PureComponent {
     });
   }
   renderHeader() {
-    const { goal } = this.props;
+    const { goal, goalId } = this.props;
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getNumberOfSteps();
@@ -184,7 +204,7 @@ class HOCGoalOverview extends PureComponent {
         goal={goal}
         steps={helper.getOrderedSteps()}
         delegate={this}
-        {...this.bindLoading()}
+        {...this.bindLoading() }
       />
     );
   }
@@ -199,8 +219,19 @@ class HOCGoalOverview extends PureComponent {
       />
     );
   }
+  renderListLoader() {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
+  }
   renderContent() {
-    const { tabIndex } = this.state;
+    const { tabIndex, hasLoaded } = this.state;
+
+    if (!hasLoaded) {
+      return this.renderListLoader();
+    }
 
     if (tabIndex === 0) {
       return this.renderStepList();
@@ -233,6 +264,14 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loader: {
+    marginTop: -60,
   },
 });
 

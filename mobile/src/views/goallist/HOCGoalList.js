@@ -5,7 +5,6 @@ import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import { colors } from '../../utils/globalStyles';
 import HOCGoalItem from './HOCGoalItem';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 
 const styles = StyleSheet.create({
   container: {
@@ -86,9 +85,6 @@ class HOCGoalList extends PureComponent {
   }
   renderGoal(gId, filterId) {
     return <HOCGoalItem goalId={gId} key={gId} delegate={this} />;
-  }
-  renderFooter() {
-    return <EmptyListFooter />;
   }
   renderListLoader() {
     return (

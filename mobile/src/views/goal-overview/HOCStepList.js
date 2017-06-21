@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
@@ -64,13 +64,6 @@ class HOCStepList extends PureComponent {
     setupDelegate(this);
     this.callDelegate.bindAll('onComplete');
     this.renderSteps = this.renderSteps.bind(this);
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
   }
   getHelper() {
     const { goal } = this.props;
