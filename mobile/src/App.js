@@ -61,7 +61,8 @@ class App extends PureComponent {
     OneSignal.inFocusDisplaying(2);
   }
   componentDidMount() {
-    this.checkTagsAndUpdate();
+    //this.checkTagsAndUpdate();
+    window.analytics.sendEvent('App loaded', {});
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -85,25 +86,28 @@ class App extends PureComponent {
   onIds(device) {
     if (device.userId) {
       this.playerId = device.userId;
+      console.log('id', device.userId);
       this.checkTagsAndUpdate();
     }
     // console.log('Device info: ', device);
   }
   checkTagsAndUpdate() {
-    const { myId } = this.props;
+    console.log('checking tags');
     OneSignal.getTags((receivedTags) => {
+      const { myId, isHydrated } = this.props;
       if (!receivedTags) {
         receivedTags = {};
       }
-      if ((!receivedTags.swipesUserId && myId) || myId !== receivedTags.swipesUserId) {
-        // console.log('sending tag', myId);
-        OneSignal.sendTag('swipesUserId', myId || '');
+      console.log('checked', receivedTags.swipesUserId, myId);
+      if(isHydrated && !myId && receivedTags.swipesUserId) {
+        console.log('deleting swipesUserId');
+        OneSignal.deleteTag("swipesUserId");
+      } else if(isHydrated && myId && !receivedTags.swipesUserId) {
+        console.log('setting userId', myId);
+        OneSignal.sendTag('swipesUserId', myId);
       }
       // console.log(receivedTags);
     });
-    if (myId) {
-
-    }
   }
   codePushStatusDidChange(status) {
     switch (status) {

@@ -10,6 +10,7 @@
 
 #import "AppDelegate.h"
 #import <CodePush/CodePush.h>
+#import "Intercom/intercom.h"
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -31,7 +32,8 @@
 #else
     jsCodeLocation = [CodePush bundleURL];
 #endif
-
+  [Intercom setApiKey:@"d9c5cd60ed95e2617f41c2b4d01f7f0fda394e63" forAppId:@"q8xibmac"];
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"swipes"
                                                initialProperties:nil

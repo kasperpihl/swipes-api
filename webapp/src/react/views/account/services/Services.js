@@ -12,6 +12,7 @@ import './services.scss';
 const authSuccess = [
   `${document.location.origin}`,
   'https://staging.swipesapp.com',
+  'https://live.swipesapp.com',
 ].map(o => `${o}/oauth-success.html`);
 
 class Services extends Component {

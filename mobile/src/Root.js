@@ -1,18 +1,26 @@
 import React, { PureComponent } from 'react';
+import { Platform } from 'react-native';
 import { Provider } from 'react-redux';
-import { Platform, View, Text } from 'react-native';
+import { version } from '../package.json';
+import DeviceInfo from 'react-native-device-info';
 
 import App from './App';
 import configureStore from './store/configureStore';
 import { init } from '../swipes-core-js';
+import Analytics from './utils/analytics';
 import * as a from './actions';
 
 const store = configureStore();
 
 window.__API_URL__ = 'https://staging.swipesapp.com';
+window.__PLATFORM__ = Platform.OS;
+window.__VERSION__ = version;
 window.__WITHOUT_NOTES__ = true;
+window.analytics = new Analytics(store);
 window.getHeaders = () => ({
   'sw-platform': Platform.OS,
+  'sw-version': window.__VERSION__,
+  'sw-app-version': DeviceInfo.getVersion(),
 });
 
 init(store);

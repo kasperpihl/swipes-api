@@ -85,6 +85,7 @@ export default class IpcListener {
   getHeaders() {
     const headers = {
       'sw-web-version': window.__VERSION__,
+      'sw-version': window.__VERSION__,
       'sw-platform': this.platform,
     };
     if(this.version) {
