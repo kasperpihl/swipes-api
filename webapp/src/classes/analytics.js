@@ -38,6 +38,7 @@ export default class Analytics {
       Intercom('shutdown');
       amplitude.getInstance().setUserId(null);
       amplitude.getInstance().regenerateDeviceId();
+      mixpanel.reset()
     }
   }
   sendEvent(name, data) {
@@ -67,6 +68,7 @@ export default class Analytics {
       this.userId = me.get('id');
       if(this.enable){
         Intercom('update', {
+          user_id: this.userId,
           name: msgGen.users.getFullName(me),
           email: msgGen.users.getEmail(me),
           created_at: me.get('created_at'),
@@ -76,8 +78,8 @@ export default class Analytics {
             created_at: org.get('created_at'),
           }
         });
-        mixpanel.identify(me.get('id'));
-        amplitude.getInstance().setUserId(me.get('id'));
+        mixpanel.identify(this.userId);
+        amplitude.getInstance().setUserId(this.userId);
         amplitude.getInstance().setUserProperties({
           'First name': msgGen.users.getFirstName(me),
           'Last name': msgGen.users.getLastName(me),

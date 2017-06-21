@@ -3,6 +3,9 @@ package com.swipes;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.kevinejohn.RNMixpanel.RNMixpanel;
+import com.robinpowered.react.Intercom.IntercomPackage;
 import com.reactlibrary.RNReactNativeDocViewerPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
@@ -35,6 +38,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
+            new RNMixpanel(),
+            new IntercomPackage(),
             new CodePush(BuildConfig.CODEPUSH_KEY, MainApplication.this, BuildConfig.DEBUG),
             new RNReactNativeDocViewerPackage(),
             new ReactNativeOneSignalPackage(),
