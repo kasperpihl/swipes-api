@@ -49,6 +49,10 @@ export const preview = att => (d, getState) => {
   const title = att.get('title') || meta.get('title');
   const activeSliderIndex = getState().getIn(['navigation', 'sliderIndex']);
 
+  window.analytics.sendEvent('Attachment opened', {
+    Type: service.get('type'),
+    Service: service.get('name'),
+  });
 
   if (service.get('name') === 'swipes') {
     if (service.get('type') === 'note') {

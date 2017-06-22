@@ -62,7 +62,6 @@ class App extends PureComponent {
   }
   componentDidMount() {
     //this.checkTagsAndUpdate();
-    window.analytics.sendEvent('App loaded', {});
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();

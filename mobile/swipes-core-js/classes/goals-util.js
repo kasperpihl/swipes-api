@@ -102,14 +102,14 @@ export default class GoalsUtil {
 
   getAllAssignees() {
     const assignees = new Set();
-    this.goal.get('steps').forEach((s) => {
+    this.getOrderedSteps().forEach((s) => {
       s.get('assignees').forEach(aId => assignees.add(aId));
-    });
+    })
     return fromJS([...assignees]);
   }
   getCurrentAssignees() {
     const assignees = new Set();
-    this.goal.get('steps').forEach((s) => {
+    this.getOrderedSteps().forEach((s) => {
       if (!this.getIsStepCompleted(s)) {
         s.get('assignees').forEach(aId => assignees.add(aId));
       }

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Platform, Keyboard } from 'react-native';
+import { StyleSheet, Platform, Keyboard, AppState } from 'react-native';
 import NavigationExperimental from 'react-native-navigation-experimental-compat';
 import * as a from '../../actions';
 import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
@@ -27,12 +27,28 @@ const styles = StyleSheet.create({
 class HOCViewController extends PureComponent {
   constructor(props, context) {
     super(props, context);
+    this.state = {};
 
     this.renderScene = this.renderScene.bind(this);
+    this.onAppStateChange = this.onAppStateChange.bind(this);
     this.navPopCached = setupCachedCallback(props.navPop);
+  }
+  componentDidMount() {
+    window.analytics.sendEvent('App loaded', {});
+    AppState.addEventListener('change', this.onAppStateChange);
   }
   componentWillUpdate(nextProps, nextState) {
     return Keyboard.dismiss;
+  }
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.onAppStateChange);
+  }
+  onAppStateChange(nextAppState) {
+    const currAppState = this.state.appState || '';
+    if (currAppState.match(/inactive|background/) && nextAppState === 'active') {
+      window.analytics.sendEvent('App loaded', { reopen: true });
+    }
+    this.setState({appState: nextAppState});
   }
   reduxToNavigationState(reduxState) {
     return {
