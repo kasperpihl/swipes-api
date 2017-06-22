@@ -66,10 +66,10 @@ window.onScroll = (function (store) {
       } else if (posY <= compareY) {
         compareY = posY;
       } else if (isOverscroll || ((posY - compareY) > movement && posY > 0)) {
-          store.dispatch(a.navigation.setCollapsed(true));
-          lockTime = new Date().getTime();
-          compareY = posY;
-        }
+        store.dispatch(a.navigation.setCollapsed(true));
+        lockTime = new Date().getTime();
+        compareY = posY;
+      }
     } else {
       compareY = posY;
     }

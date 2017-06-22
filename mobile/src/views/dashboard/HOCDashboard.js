@@ -96,7 +96,10 @@ class HOCDashboard extends PureComponent {
     const { navPush } = this.props;
     const notification = notifications.get(n.get('i'));
     e.stopPropagation();
-    this.onMark(notification.get('id'));
+
+    if (!notification.get('seen_at')) {
+      this.onMark(notification.get('id'));
+    }
 
     navPush({
       id: 'Notify',
@@ -142,6 +145,10 @@ class HOCDashboard extends PureComponent {
   }
   openLink(att) {
     const { preview } = this.props;
+
+    if (!notification.get('seen_at')) {
+      this.onMark(notification.get('id'));
+    }
 
     preview(att);
   }
