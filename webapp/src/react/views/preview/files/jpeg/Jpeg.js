@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import loadImage from 'blueimp-load-image';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import './styles/image';
+import './styles/jpeg';
 
-class Image extends Component {
+class Jpeg extends Component {
   static supportContentType(contentType) {
     return ([
-      'image/png',
-      'image/gif',
+      'image/jpg',
+      'image/jpeg',
     ].indexOf(contentType) !== -1);
   }
   constructor(props) {
@@ -16,6 +17,17 @@ class Image extends Component {
       rawSize: false,
     };
     bindAll(this, ['toggleRawSize']);
+    loadImage(props.file.url, (img) => {
+      if(img.type === "error") {
+        this.props.onError("Error loading image ");
+      } else {
+        this.cont.appendChild(img);
+        this.props.onLoad();
+      }
+    }, {
+      orientation: true,
+      // crossOrigin: 'anonymous',
+    });
   }
   toggleRawSize() {
     const { rawSize } = this.state;
@@ -24,31 +36,31 @@ class Image extends Component {
   render() {
     const { file } = this.props;
     const { rawSize } = this.state;
-    let className = 'preview-image';
+    let className = 'preview-jpeg';
 
     if (rawSize) {
-      className += ' preview-image--full-size';
+      className += ' preview-jpeg--full-size';
     }
 
     return (
-      <div className={className} onClick={this.toggleRawSize}>
-        <img
+      <div ref={(cont) => { this.cont = cont; }} className={className} onClick={this.toggleRawSize}>
+        {/*<img
           onLoad={this.props.onLoad}
           onError={this.props.onError}
           src={file.url}
-          className="preview-image__image"
+          className="preview-jpeg__image"
           role="presentation"
-        />
+        />*/}
       </div>
     );
   }
 }
 
-export default Image;
+export default Jpeg;
 
 const { object, func } = PropTypes;
 
-Image.propTypes = {
+Jpeg.propTypes = {
   file: object,
   onError: func,
   onLoad: func,
