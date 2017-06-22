@@ -1,11 +1,13 @@
 package com.swipes;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.facebook.react.ReactApplication;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.kevinejohn.RNMixpanel.RNMixpanel;
 import com.robinpowered.react.Intercom.IntercomPackage;
+import io.intercom.android.sdk.Intercom;
 import com.reactlibrary.RNReactNativeDocViewerPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
@@ -59,6 +61,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    Intercom.initialize(this, "android_sdk-a53db85501edc71346df31810c45626fd00506a2", "q8xibmac");
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

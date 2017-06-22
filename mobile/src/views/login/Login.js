@@ -59,9 +59,9 @@ class Login extends PureComponent {
   renderButton() {
     const { keyboardOpen } = this.state;
 
-    if (keyboardOpen) {
-      return undefined;
-    }
+    // if (keyboardOpen) {
+    //   return undefined;
+    // }
 
     return (
       <RippleButton onPress={this.signIn}>
@@ -101,36 +101,40 @@ class Login extends PureComponent {
               <Text style={styles.titleLabel}>Sign in to your Workspace</Text>
             </View>
             <View style={styles.form}>
-              <TextInput
-                style={styles.input}
-                onChangeText={email => this.setState({ email })}
-                value={this.state.email}
-                placeholder="Email"
-                onSubmitEditing={this.focusNext}
-                placeholderTextColor="white"
-                returnKeyType="next"
-                underlineColorAndroid="transparent"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-              <TextInput
-                ref="passwordInput"
-                style={styles.input2}
-                onChangeText={password => this.setState({ password })}
-                value={this.state.password}
-                returnKeyType="go"
-                placeholder="Password"
-                placeholderTextColor="white"
-                secureTextEntry
-                onSubmitEditing={this.signIn}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={email => this.setState({ email })}
+                  value={this.state.email}
+                  placeholder="Email"
+                  onSubmitEditing={this.focusNext}
+                  placeholderTextColor="white"
+                  returnKeyType="next"
+                  underlineColorAndroid="transparent"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  ref="passwordInput"
+                  style={styles.input2}
+                  onChangeText={password => this.setState({ password })}
+                  value={this.state.password}
+                  returnKeyType="go"
+                  placeholder="Password"
+                  placeholderTextColor="white"
+                  secureTextEntry
+                  onSubmitEditing={this.signIn}
+                  underlineColorAndroid="transparent"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
             </View>
+            {this.renderButton()}
           </ScrollView>
-          {this.renderButton()}
           {this.renderKeyboardSpacer()}
         </View>
       </TouchableWithoutFeedback>
@@ -151,6 +155,7 @@ const styles = StyleSheet.create({
     width: viewSize.width,
     marginTop: 60,
     paddingHorizontal: 15,
+    backgroundColor: 'transparent',
   },
   titleLabel: {
     fontSize: 39,
@@ -169,29 +174,28 @@ const styles = StyleSheet.create({
   },
   form: {
     width: viewSize.width,
-    marginTop: 90,
-    paddingBottom: 136,
+    marginTop: 45,
   },
-  input: {
+  inputWrapper: {
     width: viewSize.width - 30,
     marginLeft: 15,
-    height: 50,
-    color: 'white',
-    fontSize: 15,
-    lineHeight: 21,
     borderBottomColor: 'white',
     borderBottomWidth: 1
   },
-  input2: {
+  input: {
     width: viewSize.width - 30,
-    marginLeft: 15,
     height: 50,
     color: 'white',
     fontSize: 15,
     lineHeight: 21,
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    marginTop: 45,
+  },
+  input2: {
+    width: viewSize.width - 30,
+    height: 50,
+    color: 'white',
+    fontSize: 15,
+    lineHeight: 21,
+    marginTop: 30,
   },
   button: {
     width: viewSize.width - 30,
@@ -201,9 +205,9 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderWidth: 1,
     borderRadius: 3,
-    position: 'absolute',
-    left: 15,
-    bottom: 30,
+    marginLeft: 15,
+    marginTop: 60,
+    marginBottom: 30,
   },
   buttonLabel: {
     color: 'white',
