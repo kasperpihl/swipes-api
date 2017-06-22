@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
   button: {
     width: viewSize.width - 30,
     height: 61,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
     borderColor: 'white',
@@ -211,6 +212,7 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     color: 'white',
+    backgroundColor: 'transparent',
     fontSize: 12,
     fontWeight: 'bold',
   },
