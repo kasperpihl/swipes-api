@@ -62,7 +62,7 @@ export default class Analytics {
       const orgName = me.getIn(['organizations', 0, 'name']);
       this.userId = me.get('id');
       if(this.enable){
-        Intercom.registerIdentifiedUser({ userId: this.userId });
+        Intercom.registerIdentifiedUser({ email: msgGen.users.getEmail(me) });
         Intercom.updateUser({
           name: msgGen.users.getFullName(me),
           email: msgGen.users.getEmail(me),

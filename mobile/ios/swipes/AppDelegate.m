@@ -32,7 +32,7 @@
 #else
     jsCodeLocation = [CodePush bundleURL];
 #endif
-  [Intercom setApiKey:@"d9c5cd60ed95e2617f41c2b4d01f7f0fda394e63" forAppId:@"q8xibmac"];
+  [Intercom setApiKey:@"ios_sdk-8b688b5b05d462fa08a8888ff407c3db90a3bd28" forAppId:@"q8xibmac"];
   
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"swipes"

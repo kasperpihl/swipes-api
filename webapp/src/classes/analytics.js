@@ -68,7 +68,6 @@ export default class Analytics {
       this.userId = me.get('id');
       if(this.enable){
         Intercom('update', {
-          user_id: this.userId,
           name: msgGen.users.getFullName(me),
           email: msgGen.users.getEmail(me),
           created_at: me.get('created_at'),
