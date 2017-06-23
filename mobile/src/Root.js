@@ -12,7 +12,7 @@ import * as a from './actions';
 
 const store = configureStore();
 
-window.__API_URL__ = 'https://live.swipesapp.com';
+window.__API_URL__ = 'https://staging.swipesapp.com';
 window.__PLATFORM__ = Platform.OS;
 window.__VERSION__ = version;
 window.__WITHOUT_NOTES__ = true;

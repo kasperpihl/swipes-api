@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loader: {
-    marginTop: -60,
+
   },
 });
 

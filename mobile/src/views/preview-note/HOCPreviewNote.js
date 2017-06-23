@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, WebView, StyleSheet, Platform } from 'react-native';
+import { View, WebView, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from '../../actions';
 // import * as ca from 'swipes-core-js/actions';
@@ -18,6 +18,13 @@ const styles = StyleSheet.create({
   webviewStyles: {
     flex: 1,
   },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loader: {
+  },
 });
 
 class HOCPreviewNote extends PureComponent {
@@ -25,6 +32,7 @@ class HOCPreviewNote extends PureComponent {
     super(props);
     this.state = {};
     this.onWebviewMessage = this.onWebviewMessage.bind(this);
+    this.renderLoading = this.renderLoading.bind(this);
   }
   componentDidMount() {
   }
@@ -41,7 +49,14 @@ class HOCPreviewNote extends PureComponent {
     console.log(`${window.__API_URL__}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`);
     return `${window.__API_URL__}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`;
   }
-
+  renderLoading() {
+    console.log('faggot')
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
+  }
   renderHeader() {
     const { noteTitle } = this.props;
 
@@ -55,9 +70,11 @@ class HOCPreviewNote extends PureComponent {
     return (
       <WebView
         source={{ uri: this.generateNoteUrl() }}
+        renderLoading={this.renderLoading}
         scalesPageToFit
         style={styles.webviewStyles}
         onMessage={this.onWebviewMessage}
+        startInLoadingState={true}
       />
     );
   }
