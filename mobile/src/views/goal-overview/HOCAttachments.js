@@ -26,10 +26,7 @@ class HOCAttachments extends PureComponent {
     const { upload, goal, loading } = this.props;
 
     const options = {
-      title: 'Select Avatar',
-      customButtons: [
-        { name: 'fb', title: 'Choose Photo from Facebook' },
-      ],
+      title: 'Attach image',
       storageOptions: {
         skipBackup: true,
         path: 'images',
