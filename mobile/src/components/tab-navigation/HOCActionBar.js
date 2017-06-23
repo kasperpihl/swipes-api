@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
   },
   verticalSeperator: {
     width: 1,
-    height: 54,
+    height: 20,
     position: 'absolute',
     left: 0,
-    top: 0,
+    top: 17,
     backgroundColor: colors.deepBlue10,
   },
 });

@@ -105,7 +105,7 @@ class HOCNotify extends PureComponent {
     });
 
     const modal = {
-      title: 'Assign People',
+      title: 'Attach files',
       onClick: this.onModalAction.bind(this, sortedUsers),
       multiple: 'Assign',
       items: userInfoToActions,
