@@ -15,7 +15,8 @@ class Login extends PureComponent {
       email: '',
       password: '',
       version: 'unfound',
-      keyboardOpen: false
+      keyboardOpen: false,
+      errorMessage: '',
     };
 
     codePush.getUpdateMetadata().then((pack) => {
@@ -47,10 +48,22 @@ class Login extends PureComponent {
   signIn() {
     const { request } = this.props;
     const { email, password } = this.state;
+
+    this.setState({ errorMessage: '' })
+
     request('users.signin', {
       email: email.toLowerCase(),
       password,
     }).then((res) => {
+      if (res.error && res.error.message) {
+        let label = res.error.message;
+
+        if (label === "!body /users.signin: Invalid object['email']: did not match format") {
+          label = 'Not a valid email';
+        }
+
+        this.setState({ errorMessage: label })
+      }
     });
   }
   focusNext() {
@@ -89,6 +102,19 @@ class Login extends PureComponent {
     }
 
     return undefined;
+  }
+  renderErrorLabel() {
+    const { errorMessage } = this.state;
+
+    if (!errorMessage) {
+      return undefined;
+    }
+
+    return (
+      <View style={styles.errorWrapper}>
+        <Text style={styles.errorLabel}>Not a valid email</Text>
+      </View>
+    )
   }
   render() {
     const { version } = this.state;
@@ -135,6 +161,7 @@ class Login extends PureComponent {
             </View>
             {this.renderButton()}
           </ScrollView>
+          {this.renderErrorLabel()}
           {this.renderKeyboardSpacer()}
         </View>
       </TouchableWithoutFeedback>
@@ -150,6 +177,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+  },
+  errorWrapper: {
+    position: 'absolute',
+    left: 0, bottom: 0,
+    backgroundColor: colors.deepBlue100,
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    width: viewSize.width,
+  },
+  errorLabel: {
+    textAlign: 'center',
+    color: colors.bgColor,
+    fontSize: 12,
+    lineHeight: 15,
   },
   titleWrapper: {
     width: viewSize.width,

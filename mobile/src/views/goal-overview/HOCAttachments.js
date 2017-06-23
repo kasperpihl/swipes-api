@@ -119,7 +119,7 @@ class HOCAttachments extends PureComponent {
       <View style={styles.container}>
         {this.renderAttachmentList()}
 
-        {/*{this.renderFAB()}*/}
+        {this.renderFAB()}
       </View>
     );
   }
