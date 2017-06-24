@@ -116,7 +116,7 @@ export default class HistoryGenerator {
     const myId = this.store.getState().getIn(['me', 'id']);
     const helper = this._getHelper(id);
 
-    if(!h || h.get('type') !== 'goal_notify' || !h.get('assignees').contains(myId)) {
+    if (!h || h.get('type') !== 'goal_notify' || !h.get('assignees').contains(myId)) {
       return false;
     }
     return true;

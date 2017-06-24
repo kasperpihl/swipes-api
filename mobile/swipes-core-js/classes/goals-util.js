@@ -30,10 +30,16 @@ export default class GoalsUtil {
   // ======================================================
 
   getStepByIndex(index) {
+    if (!this.goal) {
+      return undefined;
+    }
     const id = this.goal.getIn(['step_order', index]);
     return this.getStepById(id);
   }
   getStepById(id) {
+    if (!this.goal) {
+      return undefined;
+    }
     return this.goal.getIn(['steps', id]);
   }
 
@@ -79,7 +85,7 @@ export default class GoalsUtil {
       if (this.getIsStepCompleted(s)) {
         numberOfCompleted += 1;
       }
-    })
+    });
     return numberOfCompleted;
   }
   getNumberOfSteps() {
@@ -104,7 +110,7 @@ export default class GoalsUtil {
     const assignees = new Set();
     this.getOrderedSteps().forEach((s) => {
       s.get('assignees').forEach(aId => assignees.add(aId));
-    })
+    });
     return fromJS([...assignees]);
   }
   getCurrentAssignees() {
@@ -135,7 +141,7 @@ export default class GoalsUtil {
     return this.goal.get('history').last();
   }
   getLastActivityByType(type) {
-    return this.goal.get('history').findLast((a) => a.get('type') === type);
+    return this.goal.get('history').findLast(a => a.get('type') === type);
   }
   getLastActivityIndex() {
     return this.goal.get('history').size - 1;
