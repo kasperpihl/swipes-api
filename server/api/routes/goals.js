@@ -56,15 +56,9 @@ import {
   waysModifyNotesContentInWayAttachments,
 } from './middlewares/ways';
 import {
-  linksAddPermission,
-  linksCreate,
   linksCreateBatch,
   linksAddPermissionBatch,
 } from './middlewares/links';
-import {
-  attachmentsCreate,
-  attachmentsInsert,
-} from './middlewares/attachments';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -75,48 +69,18 @@ authed.all('/goals.create',
       title: string.min(1).require(),
     }).require(),
     organization_id: string.require(),
-    note_content: object.require(),
     milestone_id: string,
   }),
-  mapLocals(locals => ({
-    text: locals.note_content,
-  })),
-  notesCreate,
-  // Some mapping so we can add the note as an attachment to the goal
-  mapLocals((locals) => {
-    const note = locals.notes[0];
-    const options = {
-      type: 'note',
-      id: note.id,
-      title: 'Goal description',
-      account_id: locals.user_id,
-    };
-
-    return { link: getSwipesLinkObj({ ...options }) };
-  }),
-  linksCreate,
-  linksAddPermission,
-  attachmentsCreate,
   goalsCreate,
   goalsInsert,
-  mapLocals(locals => ({
-    target_id: locals.goal.id,
-  })),
-  attachmentsInsert,
   mapLocals(
     (locals) => {
       const {
         goal,
-        attachment,
-        attachment_order,
       } = locals;
-
-      goal.attachments[attachment.id] = attachment;
-      goal.attachment_order = attachment_order;
 
       return {
         goal_id: goal.id,
-        goal,
       };
     },
   ),

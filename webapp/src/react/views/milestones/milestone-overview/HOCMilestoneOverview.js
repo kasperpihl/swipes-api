@@ -40,7 +40,7 @@ class HOCMilestoneOverview extends PureComponent {
   componentWillReceiveProps(nextProps) {
     this.setState({
       goals: this.getFilteredGoals(nextProps.milestone, nextProps.starredGoals),
-    })
+    });
   }
   onContext(e) {
     const {
@@ -53,17 +53,17 @@ class HOCMilestoneOverview extends PureComponent {
     const options = this.getOptionsForE(e);
     const delegate = {
       onItemAction: (item, i) => {
-        if(item.id === 'open') {
+        if (item.id === 'open') {
           contextMenu(null);
           this.setLoading('dots');
           openMilestone(milestone.get('id')).then((res) => {
-            if(res.ok){
+            if (res.ok) {
               this.clearLoading('dots', 'Opened', 2000);
               window.analytics.sendEvent('Milestone opened', {});
             } else {
               this.clearLoading('dots', '!Something went wrong', 3000);
             }
-          })
+          });
           return;
         }
         confirm(Object.assign({}, options, {
@@ -73,7 +73,7 @@ class HOCMilestoneOverview extends PureComponent {
           if (i === 1) {
             this.setLoading('dots');
             closeMilestone(milestone.get('id')).then((res) => {
-              if(res.ok){
+              if (res.ok) {
                 this.clearLoading('dots', 'Closed', 2000);
                 window.analytics.sendEvent('Milestone closed', {});
               } else {
@@ -85,8 +85,8 @@ class HOCMilestoneOverview extends PureComponent {
       },
     };
     const items = [{ id: 'close', title: 'Close milestone' }];
-    if(milestone.get('closed')){
-      items[0] = { id: 'open', title: 'Open milestone'};
+    if (milestone.get('closed')) {
+      items[0] = { id: 'open', title: 'Open milestone' };
     }
     contextMenu({
       options,
@@ -119,12 +119,12 @@ class HOCMilestoneOverview extends PureComponent {
   onAddGoalToMilestone(goalId) {
     const { goals, milestone, addGoalToMilestone } = this.props;
     const goal = goals.get(goalId);
-    if(goal.get('milestone_id') !== milestone.get('id')) {
+    if (goal.get('milestone_id') !== milestone.get('id')) {
       const isCompleted = new GoalsUtil(goal).getIsCompleted();
       this.tabDidChange(isCompleted ? 1 : 0);
       this.setLoading('add');
       addGoalToMilestone(milestone.get('id'), goalId).then((res) => {
-        if(res && res.ok){
+        if (res && res.ok) {
           this.clearLoading('add');
         } else {
           this.clearLoading('add', '!Something went wrong', 3000);
@@ -134,10 +134,9 @@ class HOCMilestoneOverview extends PureComponent {
   }
   onCreateGoal(title) {
     const { milestone, createGoal } = this.props;
-    const noteContent = convertToRaw(EditorState.createEmpty().getCurrentContent());
     this.setLoading('add');
     this.tabDidChange(0);
-    createGoal(title, noteContent, milestone.get('id')).then((res) => {
+    createGoal(title, milestone.get('id')).then((res) => {
       if (res && res.ok) {
         this.clearLoading('add');
         window.analytics.sendEvent('Goal added', {});
@@ -156,7 +155,7 @@ class HOCMilestoneOverview extends PureComponent {
         milestoneId: milestone.get('id'),
         delegate: this,
       },
-    })
+    });
   }
   onGoalClick(goalId) {
     const { navPush } = this.props;
@@ -192,7 +191,7 @@ class HOCMilestoneOverview extends PureComponent {
     }).groupBy(g => new GoalsUtil(g).getIsCompleted() ? 'Completed' : 'Current');
 
     // Make sure there if no current or completed to add an empty list
-    gg = gg.set('Current', gg.get('Current') || List())
+    gg = gg.set('Current', gg.get('Current') || List());
     gg = gg.set('Completed', gg.get('Completed') || List());
     return gg;
   }
@@ -202,7 +201,7 @@ class HOCMilestoneOverview extends PureComponent {
       delegate: this,
       tabIndex,
       tabs,
-    }
+    };
   }
   getOptionsForE(e) {
     return {
