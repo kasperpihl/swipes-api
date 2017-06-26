@@ -23,7 +23,7 @@ class MilestoneList extends PureComponent {
     const { getLoading, tabs, tabIndex, delegate } = this.props;
     return (
       <div className="milestone-list__header">
-        <HOCHeaderTitle title="Milestones">
+        <HOCHeaderTitle title="Plan">
           <Button
             text="Add a milestone"
             primary

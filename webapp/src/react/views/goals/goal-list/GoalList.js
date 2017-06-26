@@ -51,7 +51,7 @@ class GoalList extends Component {
     const { getLoading } = this.props;
     return (
       <div className="goals-list__header">
-        <HOCHeaderTitle title="Goals">
+        <HOCHeaderTitle title="Take Action">
           <Button
             text="Add a goal"
             primary

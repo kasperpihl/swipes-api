@@ -55,7 +55,7 @@ export default class Notifications extends Component {
 
     return (
       <div className="notifications-header">
-        <HOCHeaderTitle title="Messages">
+        <HOCHeaderTitle title="Discuss">
           {button}
         </HOCHeaderTitle>
         {this.renderTabbar()}
