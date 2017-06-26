@@ -10,12 +10,10 @@ import {
   stepsAdd,
   stepsRename,
   stepsDelete,
-  stepsReorder,
   stepsAssign,
   stepsAddQueueMessage,
   stepsRenameQueueMessage,
   stepsDeleteQueueMessage,
-  stepsReorderQueueMessage,
   stepsAssignQueueMessage,
 } from './middlewares/steps';
 import {
@@ -82,19 +80,6 @@ authed.all('/steps.delete',
     goal_id: string.require(),
     step_id: string.require(),
     completed_at: any,
-  }));
-
-authed.all('/steps.reorder',
-  valBody({
-    goal_id: string.require(),
-    step_order: array.of(string).require(),
-  }),
-  stepsReorder,
-  stepsReorderQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    goal_id: string.require(),
-    step_order: array.require(),
   }));
 
 authed.all('/steps.assign',

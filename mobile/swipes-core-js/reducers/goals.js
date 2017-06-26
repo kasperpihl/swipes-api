@@ -85,7 +85,7 @@ export default function goalsReducer(state = initialState, action) {
         payload.goal_id, 'steps', payload.step_id, 'assignees',
       ], fromJS(payload.assignees));
     }
-    case 'steps.reorder':
+    case 'goals.stepsReorder':
     case 'step_reordered': {
       return state.setIn([payload.goal_id, 'step_order'], fromJS(payload.step_order));
     }
