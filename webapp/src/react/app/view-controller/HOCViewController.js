@@ -282,7 +282,6 @@ class HOCViewController extends PureComponent {
   }
 
   render() {
-    console.log('navigation', this.props.navigation.toJS());
     return (
       <div ref="controller" className="view-controller">
         {this.renderViewControllers()}
