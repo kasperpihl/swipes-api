@@ -8,11 +8,9 @@ import {
   bool,
 } from 'valjs';
 import {
-  valBody,
-  mapLocals,
-  valResponseAndSend,
-  getSwipesLinkObj,
-} from '../utils';
+  milestonesRemoveGoal,
+  milestonesAddGoal,
+} from './middlewares/milestones';
 import {
   goalsCreate,
   goalsArchive,
@@ -37,9 +35,9 @@ import {
   goalsIncompleteQueueMessage,
 } from './middlewares/goals';
 import {
-  milestonesRemoveGoal,
-  milestonesAddGoal,
-} from './middlewares/milestones';
+  stepsReorder,
+  stepsReorderQueueMessage,
+} from './middlewares/steps';
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
@@ -59,6 +57,12 @@ import {
   linksCreateBatch,
   linksAddPermissionBatch,
 } from './middlewares/links';
+import {
+  valBody,
+  mapLocals,
+  valResponseAndSend,
+  getSwipesLinkObj,
+} from '../utils';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -244,6 +248,19 @@ authed.all('/goals.loadWay',
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
+  }));
+
+authed.all('/goals.stepsReorder',
+  valBody({
+    goal_id: string.require(),
+    step_order: array.of(string).require(),
+  }),
+  stepsReorder,
+  stepsReorderQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal_id: string.require(),
+    step_order: array.require(),
   }));
 
 export {

@@ -138,11 +138,13 @@ class HOCViewController extends PureComponent {
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
+    const pSize = navigation.getIn(['primary', 'stack']).size;
     const PView = views[(pView && pView.get('id'))] || views.NotFound;
     const pMinMax = this.getMinMaxForView(PView);
 
     // Secondary view
     const sView = navigation.getIn(['secondary', 'stack']).last();
+    const sSize = navigation.getIn(['secondary', 'stack']).size;
     const SView = sView ? (views[sView.get('id')] || views.NotFound) : undefined;
     const sMinMax = sView ? this.getMinMaxForView(SView) : 0;
 
@@ -271,7 +273,7 @@ class HOCViewController extends PureComponent {
             popSecondary={this.onPopCached('secondary')}
             delegate={this}
             target={target}
-            key={navigation.getIn([target, 'id'])}
+            key={navigation.getIn([target, 'id']) + navigation.getIn([target, 'stack']).size}
             {...props}
           />
         </section>
@@ -280,6 +282,7 @@ class HOCViewController extends PureComponent {
   }
 
   render() {
+    console.log('navigation', this.props.navigation.toJS());
     return (
       <div ref="controller" className="view-controller">
         {this.renderViewControllers()}

@@ -40,13 +40,13 @@ class HOCSidebar extends PureComponent {
   getTitleForId(id) {
     switch (id) {
       case 'MilestoneList':
-        return 'Milestones';
+        return 'Plan';
       case 'GoalList':
-        return 'Goals';
+        return 'Take Action';
       case 'AccountList':
         return 'Account';
       case 'Notifications':
-        return 'Messages';
+        return 'Discuss';
       default:
         return id;
     }

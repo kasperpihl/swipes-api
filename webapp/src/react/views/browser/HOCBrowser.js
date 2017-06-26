@@ -21,6 +21,7 @@ class HOCBrowser extends PureComponent {
   }
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       backEnabled: false,
       forwardEnabled: false,
@@ -55,6 +56,7 @@ class HOCBrowser extends PureComponent {
       }
     });
     webview.addEventListener('did-navigate-in-page', (e) => {
+      console.log(e.url, e.isMainFrame);
       if (!this._unmounted && e.isMainFrame) {
         this.updateUrl(e.url);
       }
@@ -78,7 +80,9 @@ class HOCBrowser extends PureComponent {
   navbarAction(action) {
     switch (action) {
       case 'browser':
-        return window.open(this.state.currentUrl);
+        window.open(this.state.currentUrl);
+        this.props.navPop();
+        return null;
       case 'back':
         return this.webview.goBack();
       case 'forward':
