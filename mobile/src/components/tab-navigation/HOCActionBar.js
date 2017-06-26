@@ -109,7 +109,7 @@ class HOCActionBar extends PureComponent {
     if (actionButtons && actionButtons.get('buttons')) {
 
       return actionButtons.get('buttons').map((b, i) => {
-        const seperator = i === 0 ? false : true;
+        const seperator = i === 0 && Platform.OS !== 'android' ? false : true;
 
         if (b.text) {
           return this.renderTextButton(i, b, this.onActionClick(i), seperator);
