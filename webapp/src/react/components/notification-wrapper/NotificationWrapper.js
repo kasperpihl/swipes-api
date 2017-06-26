@@ -54,10 +54,10 @@ class NotificationItem extends Component {
           </span>
           {
             n.get('subtitle') ? (
-            ' • '
+              ' • '
             ) : (
-              undefined
-            )
+                undefined
+              )
           }
           {n.get('timeago')}</div>
       </div>
@@ -99,7 +99,7 @@ class NotificationItem extends Component {
 
     message = message.split('\n').map((item, key) => {
       const urls = item.match(URL_REGEX);
-      if(urls){
+      if (urls) {
         item = item.split(URL_REGEX);
         urls.forEach((url, i) => {
           console.log(url, i);
@@ -115,7 +115,7 @@ class NotificationItem extends Component {
         })
       }
 
-      return <span key={key}>{item}<br/></span>;
+      return <span key={key}>{item}<br /></span>;
     });
 
     return (
