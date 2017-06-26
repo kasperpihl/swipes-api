@@ -146,10 +146,6 @@ class HOCDashboard extends PureComponent {
   openLink(att) {
     const { preview } = this.props;
 
-    if (!notification.get('seen_at')) {
-      this.onMark(notification.get('id'));
-    }
-
     preview(att);
   }
   onCollapse(collapsed) {

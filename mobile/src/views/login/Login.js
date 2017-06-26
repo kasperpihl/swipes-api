@@ -122,7 +122,7 @@ class Login extends PureComponent {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {this.renderGradient()}
-          <ScrollView>
+          <ScrollView keyboardShouldPersistTaps="always">
             <View style={styles.titleWrapper}>
               <Text style={styles.titleLabel}>Sign in to your Workspace</Text>
             </View>

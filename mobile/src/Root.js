@@ -9,10 +9,14 @@ import configureStore from './store/configureStore';
 import { init } from '../swipes-core-js';
 import Analytics from './utils/analytics';
 import * as a from './actions';
-
 const store = configureStore();
 
-window.__API_URL__ = 'https://staging.swipesapp.com';
+if (window.__DEV__) {
+  window.__API_URL__ = 'https://staging.swipesapp.com';
+} else {
+  window.__API_URL__ = 'https://live.swipesapp.com';
+}
+
 window.__PLATFORM__ = Platform.OS;
 window.__VERSION__ = version;
 window.__WITHOUT_NOTES__ = true;
