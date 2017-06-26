@@ -50,6 +50,9 @@ window.onScroll = (function (store) {
       }
       lockTime = undefined;
     }
+    if (sE.nativeEvent.contentSize.height < sE.nativeEvent.layoutMeasurement.height) {
+      return;
+    }
     posY = sE.nativeEvent.contentOffset.y;
     const isOverscroll = (posY + sE.nativeEvent.layoutMeasurement.height) >= sE.nativeEvent.contentSize.height;
 

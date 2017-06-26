@@ -235,22 +235,24 @@ const styles = StyleSheet.create({
   ctaButton: {
     flex: 1,
     alignSelf: 'stretch',
-    maxHeight: 70,
+    maxHeight: 54,
     justifyContent: 'center',
     alignItems: 'center',
   },
   cta: {
     flex: 1,
-    maxHeight: 70,
+    maxHeight: 54,
     alignSelf: 'stretch',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.bgColor,
     borderTopWidth: 2,
-    borderTopColor: colors.blue100,
+    borderTopColor: colors.deepBlue10
   },
   ctaTitle: {
-    fontSize: 18,
+    fontSize: 12,
+    fontWeight: 'bold',
+    lineHeight: 24,
     color: colors.blue100,
   },
 });

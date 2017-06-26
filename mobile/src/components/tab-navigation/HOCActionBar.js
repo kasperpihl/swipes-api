@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
   },
   textButton: {
     flex: 1,
+    alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
   },

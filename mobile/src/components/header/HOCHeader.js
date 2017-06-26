@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import Tabs from '../tabs/Tabs';
@@ -43,6 +43,10 @@ class HOCHeader extends PureComponent {
       headerHeight: 0,
     };
 
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+
     setupDelegate(this);
     this.onSelect = this.onSelect.bind(this);
   }
@@ -60,6 +64,9 @@ class HOCHeader extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const { currentTab } = this.props;
     this.setState({ page: nextProps.currentTab });
+  }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
   }
   onSelect(el) {
     this.callDelegate('onChangeTab', el.props.name);

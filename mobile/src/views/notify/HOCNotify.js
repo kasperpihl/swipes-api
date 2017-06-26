@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
 import { goals } from '../../../swipes-core-js/actions';
@@ -40,7 +41,7 @@ class HOCNotify extends PureComponent {
     }, 1);
   }
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.notify.get('assignees') !== prevState.notify.get('assignees')) {
+    if (this.state.notify.get('assignees') !== prevState.notify.get('assignees') || this.state.notify.get('flags') !== prevState.notify.get('flags')) {
       this.renderActionButtons();
     }
   }
@@ -59,13 +60,26 @@ class HOCNotify extends PureComponent {
     let { notify } = this.state;
     const { showModal } = this.props;
 
+    const flags = [];
+
+    ids.map(i => {
+      const attId = attachments.getIn([i, 'index']);
+      flags.push(attId);
+    });
+
+    notify.get('flags').map((fl, i) => {
+      if (flags.indexOf(fl) < 0) {
+        notify = notify.deleteIn(['flags', i]);
+      }
+    });
+
     ids.map(i => {
       const attId = attachments.getIn([i, 'index']);
 
       if (!notify.get('flags').includes(attId)) {
         notify = notify.updateIn(['flags'], fl => fl.push(attId));
       }
-    })
+    });
 
     this.updateHandoff(notify);
     showModal();
@@ -105,7 +119,7 @@ class HOCNotify extends PureComponent {
     });
 
     const modal = {
-      title: 'Attach files',
+      title: 'Assign teammates',
       onClick: this.onModalAction.bind(this, sortedUsers),
       multiple: 'Assign',
       items: userInfoToActions,
@@ -150,21 +164,34 @@ class HOCNotify extends PureComponent {
       showModal(modal);
 
     } else if (index === 1) {
-      this.setState({ hasLoaded: false });
       notify = notify.set('message', this.message || notify.get('message'));
-      goalNotify(goal.get('id'), notify).then((res) => {
-        if (res && res.ok) {
-          this.setState({ hasLoaded: true });
-          window.analytics.sendEvent('Notification sent', {
-            Request: !!notify.get('request'),
-            Type: notify.get('notification_type'),
-            Reply: !!(typeof notify.get('reply_to') === 'number'),
-          });
-          navPop();
-        } else {
-          this.setState({ hasLoaded: true });
-        }
-      });
+
+      if (notify.get('message').length) {
+        this.setState({ hasLoaded: false });
+        goalNotify(goal.get('id'), notify).then((res) => {
+          if (res && res.ok) {
+            this.setState({ hasLoaded: true });
+            window.analytics.sendEvent('Notification sent', {
+              Request: !!notify.get('request'),
+              Type: notify.get('notification_type'),
+              Reply: !!(typeof notify.get('reply_to') === 'number'),
+            });
+            navPop();
+          } else {
+            this.setState({ hasLoaded: true });
+          }
+        });
+      } else {
+        Alert.alert(
+          'Can\'t send message',
+          'You must enter text to send this message',
+          [
+            { text: 'OK', onPress: () => console.log('Ask me later pressed') },
+          ],
+          { cancelable: false }
+        )
+      }
+
     }
   }
   updateHandoff(notify) {
@@ -172,13 +199,15 @@ class HOCNotify extends PureComponent {
   }
   renderActionButtons() {
     const { notify } = this.state;
+    const attachLable = notify.get('flags').size > 0 ? `Attach files (${notify.get('flags').size})` : 'Attach files';
+
     let actionButtons = [
-      { text: 'Assign people' },
+      { text: attachLable },
     ];
 
     if (notify && notify.get('assignees').size) {
       actionButtons = [
-        { text: 'Attach' },
+        { text: attachLable },
         { icon: 'Send' },
       ];
     }
