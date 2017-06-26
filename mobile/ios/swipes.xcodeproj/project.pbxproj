@@ -28,6 +28,7 @@
 		2BC15F6906FB42A59B680349 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833C994490934B419CBC7F9D /* libRNSVG.a */; };
 		32E17CC72D7F451581EC8BF4 /* libRNMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CFC60260C7E4C84AAEF0DC5 /* libRNMixpanel.a */; };
 		3B5E0938CD874C3DAB64E1A6 /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C46A2F49E9428F8580247F /* libCodePush.a */; };
+		497A0157499045C9B7F01F22 /* libRNFileOpener.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D137A530F284A749617EA1B /* libRNFileOpener.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		894CF16254AB4B14A54ABA8F /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A827217E56F4363B9121DB5 /* libRCTOneSignal.a */; };
@@ -308,6 +309,13 @@
 			remoteGlobalIDString = 2791E7F51BB3C10A00FD32EA;
 			remoteInfo = RCTBrowserTests;
 		};
+		A76AA1BB1F00E7C400451306 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A2D980F5AB2A42ED831D5948 /* RNFileOpener.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DB8F70EF1CD3047700E71D6D;
+			remoteInfo = RNFileOpener;
+		};
 		A771E67D1EE077FB00A94F50 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE5D7F13F5F044E4BB64A325 /* CodePush.xcodeproj */;
@@ -377,6 +385,8 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		833C994490934B419CBC7F9D /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
 		8800CDCEB56E462480DEDD13 /* libRNReactNativeDocViewer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNReactNativeDocViewer.a; sourceTree = "<group>"; };
+		8D137A530F284A749617EA1B /* libRNFileOpener.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFileOpener.a; sourceTree = "<group>"; };
+		A2D980F5AB2A42ED831D5948 /* RNFileOpener.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFileOpener.xcodeproj; path = "../node_modules/react-native-file-opener/ios/RNFileOpener.xcodeproj"; sourceTree = "<group>"; };
 		A453A189D8064ED0AB80D9B0 /* RNMixpanel.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNMixpanel.xcodeproj; path = "../node_modules/react-native-mixpanel/RNMixpanel.xcodeproj"; sourceTree = "<group>"; };
 		A53E6A361A2D439EA92DE4F6 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		A73117731EF9F2D200660C92 /* Intercom.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Intercom.framework; sourceTree = "<group>"; };
@@ -433,6 +443,7 @@
 				32E17CC72D7F451581EC8BF4 /* libRNMixpanel.a in Frameworks */,
 				F2DA9DB46AA74292822EAF98 /* libRNDeviceInfo.a in Frameworks */,
 				1719DA7705FE4027B9415DEF /* libRNImagePicker.a in Frameworks */,
+				497A0157499045C9B7F01F22 /* libRNFileOpener.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +601,7 @@
 				A453A189D8064ED0AB80D9B0 /* RNMixpanel.xcodeproj */,
 				EDA2955DD0594B72BD1EB82E /* RNDeviceInfo.xcodeproj */,
 				425165852169407AA074E011 /* RNImagePicker.xcodeproj */,
+				A2D980F5AB2A42ED831D5948 /* RNFileOpener.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -700,6 +712,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A76AA1961F00E7C400451306 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A76AA1BC1F00E7C400451306 /* libRNFileOpener.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A771E6791EE077FB00A94F50 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -750,6 +770,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "swipes" */;
 			buildPhases = (
+				A76AA1C31F00E95B00451306 /* ShellScript */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
@@ -869,6 +890,10 @@
 				{
 					ProductGroup = A731173E1EF9EB2100660C92 /* Products */;
 					ProjectRef = EDA2955DD0594B72BD1EB82E /* RNDeviceInfo.xcodeproj */;
+				},
+				{
+					ProductGroup = A76AA1961F00E7C400451306 /* Products */;
+					ProjectRef = A2D980F5AB2A42ED831D5948 /* RNFileOpener.xcodeproj */;
 				},
 				{
 					ProductGroup = A72936AA1F00B70F00D72059 /* Products */;
@@ -1159,6 +1184,13 @@
 			remoteRef = A73D8A0E1ED39E5C001E3840 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		A76AA1BC1F00E7C400451306 /* libRNFileOpener.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFileOpener.a;
+			remoteRef = A76AA1BB1F00E7C400451306 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		A771E67E1EE077FB00A94F50 /* libCodePush.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1229,6 +1261,19 @@
 			shellPath = /bin/sh;
 			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Intercom.framework/strip-frameworks.sh\"";
 		};
+		A76AA1C31F00E95B00451306 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1288,12 +1333,14 @@
 					"$(SRCROOT)/../node_modules/react-native-mixpanel/RNMixpanel",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
+					"$(SRCROOT)/../node_modules/react-native-file-opener/ios/RNFileOpener",
 				);
 				INFOPLIST_FILE = swipesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1335,6 +1382,7 @@
 					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 					"$(SRCROOT)/../node_modules/react-native-mixpanel/RNMixpanel",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-file-opener/ios/RNFileOpener",
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1463,6 +1511,7 @@
 					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 					"$(SRCROOT)/../node_modules/react-native-mixpanel/RNMixpanel",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-file-opener/ios/RNFileOpener",
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1502,12 +1551,14 @@
 					"$(SRCROOT)/../node_modules/react-native-mixpanel/RNMixpanel",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
+					"$(SRCROOT)/../node_modules/react-native-file-opener/ios/RNFileOpener",
 				);
 				INFOPLIST_FILE = swipesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1590,6 +1641,7 @@
 					"$(SRCROOT)/../node_modules/react-native-intercom/iOS",
 					"$(SRCROOT)/../node_modules/react-native-mixpanel/RNMixpanel",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-file-opener/ios/RNFileOpener",
 				);
 				INFOPLIST_FILE = swipes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1629,12 +1681,14 @@
 					"$(SRCROOT)/../node_modules/react-native-mixpanel/RNMixpanel",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
+					"$(SRCROOT)/../node_modules/react-native-file-opener/ios/RNFileOpener",
 				);
 				INFOPLIST_FILE = swipesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

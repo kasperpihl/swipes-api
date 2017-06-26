@@ -71,12 +71,13 @@ export const preview = att => (d, getState) => {
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
+        d(a.loading.showLoader(false));
         OpenFile.openDoc([{
           url: res.preview.file.url,
           fileName: res.preview.header.title,
 
         }], (error, url) => {
-          d(a.loading.showLoader(false));
+
         });
       });
     }
