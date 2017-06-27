@@ -5,6 +5,7 @@ import { Route, withRouter } from 'react-router-dom';
 
 import * as a from 'actions';
 import Gradient from 'components/gradient/Gradient';
+import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
 //import HOCApp from 'src/react/app/HOCApp';
 import HOCContextMenu from 'components/context-menu/HOCContextMenu';
 import HOCTooltip from 'components/tooltip/HOCTooltip';
@@ -28,10 +29,10 @@ class Root extends PureComponent {
   checkLoginStatus() {
     const { location, token, isHydrated, history } = this.props;
     const path = location.pathname;
-    if(path === '/unsubscribe'){
+    if (path === '/unsubscribe') {
       return;
     }
-    if((path === '/' || path === '/login') && !window.ipcListener.isElectron) {
+    if ((path === '/' || path === '/login') && !window.ipcListener.isElectron) {
       history.push('/signup');
     }
     if (path === '/' && isHydrated && !token) {
@@ -42,7 +43,7 @@ class Root extends PureComponent {
     }
   }
   renderTopbar() {
-    if(window.ipcListener.isElectron){
+    if (window.ipcListener.isElectron) {
       const HOCTopbar = require('components/topbar/HOCTopbar').default;
       return <HOCTopbar />;
     }
@@ -51,12 +52,13 @@ class Root extends PureComponent {
   render() {
     const { isMaximized, isFullscreen, lastConnect } = this.props;
     let className = `platform-${window.ipcListener.platform}`;
-    if(isMaximized) className += ' window-is-maximized';
-    if(isFullscreen) className += ' window-is-fullscreen';
+    if (isMaximized) className += ' window-is-maximized';
+    if (isFullscreen) className += ' window-is-fullscreen';
 
     return (
       <div id="app" className={className}>
         <Gradient />
+        <SuccessStateGradient />
         {this.renderTopbar()}
         <HOCContextMenu />
         <HOCTooltip />

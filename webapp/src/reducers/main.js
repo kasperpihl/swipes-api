@@ -7,6 +7,7 @@ const initialState = fromJS({
   overlay: null,
   isHydrated: false,
   versionInfo: {},
+  successState: false,
 });
 
 export default function main(state = initialState, action) {
@@ -48,6 +49,14 @@ export default function main(state = initialState, action) {
     }
     case types.PREVIEW: {
       return state.set('preview', Map(payload));
+    }
+
+    // ======================================================
+    // Success animation
+    // ======================================================
+
+    case 'goals.completeStep': {
+      return state.set('successState', true);
     }
 
     default:

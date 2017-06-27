@@ -1,0 +1,40 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.success-gradient {
+  $b: &;
+  @include size(100%);
+  left: 0; top: 0;
+  pointer-events: none;
+  position: fixed;
+
+  &__gradient {
+    @include size(100%);
+    background: linear-gradient(135deg, rgba(147,247,190,1) 0%, rgba(34,208,112,1) 100%);
+    opacity: 0;
+    transition: .6s ease;
+  }
+
+  &--active {
+
+    #{$b}__gradient {
+      opacity: 1;
+      transition: .2s ease;
+    }
+  }
+}
+
+@keyframes fadeGradient {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
