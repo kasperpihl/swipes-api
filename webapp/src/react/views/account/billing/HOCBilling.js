@@ -28,7 +28,7 @@ class HOCBilling extends PureComponent {
       if (res.ok) {
         this.clearLoading('submit');
       } else {
-        const message = res.error && res.error.message;
+        const message = res.error && res.error.message && res.error.message.message;
         this.clearLoading('submit', '!' + message);
       }
     })
