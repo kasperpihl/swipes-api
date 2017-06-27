@@ -423,6 +423,8 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
       .catch((err) => {
         return next(err);
       });
+  }).catch((err) => {
+    return next(new SwipesError(err));
   });
 });
 
