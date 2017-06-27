@@ -156,6 +156,7 @@ notAuthed.all('/organizations.getInfoFromInvitationToken',
 notAuthed.all('/organizations.createStripeCustomer',
   valBody({
     organization_id: string.require(),
+    token: string.require(),
   }),
   organizationsGetSingle,
   organizationsCheckAdminRights,
@@ -170,6 +171,7 @@ notAuthed.all('/organizations.createStripeCustomer',
     stripe_customer_id: locals.stripeCustomerId,
   })),
   valResponseAndSend({
+    organization_id: string.require(),
     stripe_customer_id: string.require(),
   }),
 );
