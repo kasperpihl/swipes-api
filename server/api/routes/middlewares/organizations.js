@@ -376,12 +376,14 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
     email: string.format('email').require(),
   }).require(),
   stripe_token: string.require(),
+  plan: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     organization_id,
     organization,
     user,
     stripe_token,
+    plan,
   } = res.locals;
   const email = user.email;
 
@@ -396,6 +398,9 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
     email,
     source: stripe_token,
     description: organization.name,
+    metadata: {
+      plan,
+    },
   });
 
   return stripe.customers[funcName](...args).then((customer) => {
