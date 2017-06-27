@@ -30,13 +30,24 @@ class Billing extends PureComponent {
     super(props)
     this.state = {
       errorMessage: '',
-      billingStatus: 'monthly',
       successState: true,
     };
     setupDelegate(this);
+    this.callDelegate.bindAll('onSwitchPlan');
     bindAll(this, ['onChange', 'onSubmit']);
   }
   componentDidMount() {
+  }
+  getPrice() {
+    const { billingStatus, users } = this.props;
+    const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
+    let price = 9;
+    let months = 1;
+    if(billingStatus === 'yearly') {
+      price = 6;
+      months = 12;
+    }
+    return price * months * numberOfUsers;
   }
   onSubmit(e) {
     e.preventDefault();
@@ -70,7 +81,7 @@ class Billing extends PureComponent {
     );
   }
   renderToggle() {
-    const { billingStatus } = this.state;
+    const { billingStatus } = this.props;
     let className = 'toggle';
 
     if (billingStatus === 'monthly') {
@@ -81,12 +92,12 @@ class Billing extends PureComponent {
 
     return (
       <div className={className}>
-        <div className="toggle__section">
+        <div className="toggle__section" onClick={this.onSwitchPlanCached('monthly')}>
           <div className="toggle__price">$9</div>
           <div className="toggle__label">per user a month</div>
           <div className="toggle__sublabel">billed monthly</div>
         </div>
-        <div className="toggle__section">
+        <div className="toggle__section" onClick={this.onSwitchPlanCached('yearly')}>
           <div className="toggle__price">$6</div>
           <div className="toggle__label">per user a month</div>
           <div className="toggle__sublabel">billed anually <span>You save 33%</span></div>
@@ -116,6 +127,7 @@ class Billing extends PureComponent {
   }
   renderBottomSection() {
     const { cardState } = this.state;
+    const { organization, users } = this.props;
     const isReady = cardState && cardState.complete;
     const { billingStatus } = this.props;
     const className = billingStatus ? 'payment__bottom-section' : 'payment__bottom-section payment__bottom-section--success';
@@ -125,7 +137,7 @@ class Billing extends PureComponent {
         <div className="top-section">
           {this.renderBilling()}
           <button disabled={!isReady} onClick={this.onSubmit} className="payment__cta">Submit Payment</button>
-          <div className="payment__cta-subtitle">You will be billed $45</div>
+          <div className="payment__cta-subtitle">You will be billed ${this.getPrice()}.</div>
         </div>
         <div className="bottom-section">
           <div className="bottom-section__title">Thank you for your purchase, Nigel</div>
@@ -138,7 +150,7 @@ class Billing extends PureComponent {
     )
   }
   render() {
-
+    const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
     return (
       <SWView
         header={this.renderHeader()}
@@ -146,7 +158,10 @@ class Billing extends PureComponent {
         <div className="payment">
           <div className="payment__toggle">
             {this.renderToggle()}
-            <div className="payment__toggle-subtitle">You currently have 5 active users in Swipes Inc.</div>
+            <div className="payment__toggle-subtitle">
+              You have {numberOfUsers} users in {organization.get('name')}.
+            </div>
+
           </div>
           {this.renderBottomSection()}
         </div>

@@ -12,6 +12,10 @@ import Billing from './Billing';
 class HOCBilling extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      billingStatus: 'monthly',
+    };
+
     setupLoading(this);
   }
   componentDidMount() {
@@ -27,7 +31,13 @@ class HOCBilling extends PureComponent {
       }
     })
   }
+  onSwitchPlan(plan) {
+    this.setState({ billingStatus: plan });
+  }
   render() {
+    const { billingStatus } = this.state;
+    const { organization, users } = this.props;
+
     let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
     if (process.env.NODE_ENV !== 'production') {
       token = 'pk_test_0pUn7s5EyQy7GeAg93QrsJl9';
@@ -37,6 +47,9 @@ class HOCBilling extends PureComponent {
         <Elements>
           <Billing
             delegate={this}
+            billingStatus={billingStatus}
+            organization={organization}
+            users={users}
             {...this.bindLoading() }
           />
         </Elements>
@@ -48,8 +61,11 @@ class HOCBilling extends PureComponent {
 
 HOCBilling.propTypes = {};
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    organization: state.getIn(['me', 'organizations', 0]),
+    users: state.get('users'),
+  };
 }
 
 export default connect(mapStateToProps, {
