@@ -140,10 +140,10 @@ class Billing extends PureComponent {
   }
   renderBottomSection() {
     const { cardState } = this.state;
-    const { organization, users } = this.props;
+    const { organization, users, billingStatus } = this.props;
     const isReady = cardState && cardState.complete;
-    const { billingStatus } = this.props;
-    const className = billingStatus ? 'payment__bottom-section' : 'payment__bottom-section payment__bottom-section--success';
+    const hasStripe = organization.get('stripe_customer_id');
+    const className = `payment__bottom-section ${hasStripe ? 'payment__bottom-section--success' : ''}`;
 
     return (
       <div className={className}>
