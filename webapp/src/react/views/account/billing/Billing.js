@@ -70,7 +70,7 @@ class Billing extends PureComponent {
     setLoading('submit');
     stripe.createToken().then(({ token, error }) => {
       if (error) {
-        clearLoading('submit', '!Something went wrong', 3000);
+        clearLoading('submit');
         this.setState({ errorMessage: error.message });
       } else {
         console.log('Received Stripe token:', token);
