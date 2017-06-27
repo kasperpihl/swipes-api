@@ -194,12 +194,13 @@ const dbOrganizationsEnableUser = funcWrap([
 
   return db.rethinkQuery(q);
 });
-const dbOrganizationsUpdateStripeCustomerId = funcWrap([
+const dbOrganizationsUpdateStripeCustomerIdAndPlan = funcWrap([
   object.as({
     organization_id: string.require(),
     stripe_customer_id: string.require(),
+    plan: string.require(),
   }).require(),
-], (err, { organization_id, stripe_customer_id }) => {
+], (err, { organization_id, stripe_customer_id, plan }) => {
   if (err) {
     throw new SwipesError(`dbOrganizationsUpdateStripeCustomerId: ${err}`);
   }
@@ -209,6 +210,7 @@ const dbOrganizationsUpdateStripeCustomerId = funcWrap([
       .get(organization_id)
       .update({
         stripe_customer_id,
+        plan,
         updated_at: r.now(),
       });
 
@@ -225,5 +227,5 @@ export {
   dbOrganizationsTransferOwnership,
   dbOrganizationsDisableUser,
   dbOrganizationsEnableUser,
-  dbOrganizationsUpdateStripeCustomerId,
+  dbOrganizationsUpdateStripeCustomerIdAndPlan,
 };

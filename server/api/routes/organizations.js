@@ -143,6 +143,7 @@ authed.all('/organizations.createStripeCustomer',
   valBody({
     organization_id: string.require(),
     stripe_token: string.require(),
+    plan: string.require(),
   }),
   organizationsGetSingle,
   organizationsCheckAdminRights,
@@ -159,6 +160,7 @@ authed.all('/organizations.createStripeCustomer',
   valResponseAndSend({
     organization_id: string.require(),
     stripe_customer_id: string.require(),
+    plan: string.require(),
   }),
 );
 

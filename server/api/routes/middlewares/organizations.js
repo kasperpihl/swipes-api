@@ -15,7 +15,7 @@ import {
   dbOrganizationsTransferOwnership,
   dbOrganizationsDisableUser,
   dbOrganizationsEnableUser,
-  dbOrganizationsUpdateStripeCustomerId,
+  dbOrganizationsUpdateStripeCustomerIdAndPlan,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -410,9 +410,9 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
       stripeCustomerId,
     });
 
-    dbOrganizationsUpdateStripeCustomerId({ organization_id, stripe_customer_id: stripeCustomerId })
+    dbOrganizationsUpdateStripeCustomerIdAndPlan({ organization_id, stripe_customer_id: stripeCustomerId, plan })
       .then(() => {
-        const updatedFields = ['stripe_customer_id'];
+        const updatedFields = ['stripe_customer_id', 'plan'];
 
         setLocals({
           updatedFields,
