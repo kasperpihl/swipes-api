@@ -12,14 +12,14 @@
     @include size(100%);
     background: linear-gradient(135deg, rgba(147,247,190,1) 0%, rgba(34,208,112,1) 100%);
     opacity: 0;
-    transition: .6s ease;
+    transition: 2s cubic-bezier(.92,0,.52,.99);
   }
 
   &--active {
 
     #{$b}__gradient {
       opacity: 1;
-      transition: .2s ease;
+      transition: .35s ease-in;
     }
   }
 }

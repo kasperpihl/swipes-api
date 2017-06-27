@@ -10,7 +10,7 @@ class SuccessStateGradient extends PureComponent {
     };
   }
   componentWillReceiveProps(nextProps) {
-    if(nextProps.successState !== this.props.successState) {
+    if (nextProps.successState !== this.props.successState) {
       this.runPulse(nextProps.successState);
     }
   }
@@ -22,14 +22,14 @@ class SuccessStateGradient extends PureComponent {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.setState({ activePulse: false });
-    }, 500);
+    }, 700);
   }
   render() {
     const { successState } = this.props;
     const { activePulse } = this.state;
 
     let gradientClass = 'success-gradient';
-    if(activePulse) {
+    if (activePulse) {
       gradientClass += ' success-gradient--active';
     }
 
