@@ -38,6 +38,19 @@ class Billing extends PureComponent {
   }
   componentDidMount() {
   }
+  getShowPrice() {
+    const { billingStatus, users } = this.props;
+    const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
+    let price = 9;
+    let months = 1;
+    let postfix = ' monthly';
+    if(billingStatus === 'yearly') {
+      price = 6;
+      months = 12;
+      postfix =` annually ($${price*months}/month)`;
+    }
+    return `$${price*months*numberOfUsers}${postfix}`;
+  }
   getPrice() {
     const { billingStatus, users } = this.props;
     const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
@@ -140,7 +153,7 @@ class Billing extends PureComponent {
           <div className="payment__cta-subtitle">You will be billed ${this.getPrice()}.</div>
         </div>
         <div className="bottom-section">
-          <div className="bottom-section__title">Thank you for your purchase, Nigel</div>
+          <div className="bottom-section__title">Thank you for your purchase.</div>
           <div className="payment-status">
             <div className="payment-status__label">Your subscription status is:</div>
             <div className="payment-status__status payment-status__status--active">Active</div>
@@ -150,6 +163,7 @@ class Billing extends PureComponent {
     )
   }
   render() {
+    const { organization, users } = this.props;
     const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
     return (
       <SWView
@@ -159,7 +173,7 @@ class Billing extends PureComponent {
           <div className="payment__toggle">
             {this.renderToggle()}
             <div className="payment__toggle-subtitle">
-              You have {numberOfUsers} users in {organization.get('name')}.
+              You have {numberOfUsers} users in {organization.get('name')}. {`That's ${this.getShowPrice()}`}
             </div>
 
           </div>
