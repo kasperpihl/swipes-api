@@ -5,11 +5,33 @@ import './style/success-gradient.scss';
 class SuccessStateGradient extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      activePulse: false,
+    };
+  }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.successState !== this.props.successState) {
+      this.runPulse(nextProps.successState);
+    }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+  runPulse() {
+    this.setState({ activePulse: true });
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.setState({ activePulse: false });
+    }, 500);
   }
   render() {
     const { successState } = this.props;
-    const gradientClass = successState ? 'success-gradient success-gradient--active' : 'success-gradient';
+    const { activePulse } = this.state;
+
+    let gradientClass = 'success-gradient';
+    if(activePulse) {
+      gradientClass += ' success-gradient--active';
+    }
 
     return (
       <div className={gradientClass}>

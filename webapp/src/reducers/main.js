@@ -56,7 +56,7 @@ export default function main(state = initialState, action) {
     // ======================================================
 
     case 'goals.completeStep': {
-      return state.set('successState', true);
+      return state.set('successState', new Date());
     }
 
     default:
