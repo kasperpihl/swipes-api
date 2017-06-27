@@ -230,6 +230,24 @@ const dbUsersResetPassword = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbUsersGetByIdWithFields = funcWrap([
+  object.as({
+    user_id: string.require(),
+    fields: array.of(string).require(),
+  }).require(),
+], (err, { user_id, fields }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersGetByIdWithFields: ${err}`);
+  }
+
+  let q = r.table('users').get(user_id);
+
+  if (fields.length > 0) {
+    q = q.pluck(...fields);
+  }
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbUsersGetService,
@@ -243,4 +261,5 @@ export {
   dbUsersActivateAfterSignUp,
   dbUsersGetByEmail,
   dbUsersResetPassword,
+  dbUsersGetByIdWithFields,
 };

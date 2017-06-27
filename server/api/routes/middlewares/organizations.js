@@ -1,9 +1,11 @@
+import config from 'config';
 import r from 'rethinkdb';
 import {
   string,
   object,
   array,
 } from 'valjs';
+import stripePackage from 'stripe';
 import {
   dbOrganizationsCreate,
   dbOrganizationsGetInfoFromInvitationToken,
@@ -13,6 +15,7 @@ import {
   dbOrganizationsTransferOwnership,
   dbOrganizationsDisableUser,
   dbOrganizationsEnableUser,
+  dbOrganizationsUpdateStripeCustomerId,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -25,6 +28,9 @@ import {
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
+
+const stripeConfig = config.get('stripe');
+const stripe = stripePackage(stripeConfig.secretKey);
 
 const organizationsCreate = valLocals('organizationsCreate', {
   user_id: string.require(),
@@ -342,7 +348,7 @@ const organizationsEnableUser = valLocals('organizationsEnableUser', {
       return next(err);
     });
 });
-const organizationsUpdatedQueueMessage = valLocals('organizationsPromoteToAdminQueueMessage', {
+const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMessage', {
   organization_id: string.require(),
   updatedFields: array.require(),
 }, (req, res, next, setLocals) => {
@@ -363,6 +369,45 @@ const organizationsUpdatedQueueMessage = valLocals('organizationsPromoteToAdminQ
 
   return next();
 });
+const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCustomer', {
+  organization_id: string.require(),
+  organization: object.require(),
+  email: string.format('email').require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    organization,
+    email,
+  } = res.locals;
+
+  if (organization.stripe_customer_id) {
+    return next();
+  }
+
+  return stripe.customers.create({
+    email,
+  }).then((customer) => {
+    const stripeCustomerId = customer.id;
+
+    setLocals({
+      stripeCustomerId,
+    });
+
+    dbOrganizationsUpdateStripeCustomerId({ organization_id, stripe_customer_id: stripeCustomerId })
+      .then(() => {
+        const updatedFields = ['stripe_customer_id'];
+
+        setLocals({
+          updatedFields,
+        });
+
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
+      });
+  });
+});
 
 export {
   organizationsCreate,
@@ -377,4 +422,5 @@ export {
   organizationsTransferOwnership,
   organizationsDisableUser,
   organizationsEnableUser,
+  organizationsCreateStripeCustomer,
 };

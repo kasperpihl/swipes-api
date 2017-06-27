@@ -26,6 +26,7 @@ import {
   dbUsersCreate,
   dbUsersActivateAfterSignUp,
   dbUsersGetByEmail,
+  dbUsersGetByIdWithFields,
 } from './db_utils/users';
 import {
   dbOrganizationsAddUser,
@@ -252,6 +253,27 @@ const usersGetByEmailWithFields = valLocals('usersGetByEmailWithFields', {
     .then((users) => {
       const user = users[0];
 
+      setLocals({
+        user,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const usersGetByIdWithFields = valLocals('usersGetByIdWithFields', {
+  user_id: string.require(),
+  fields: array.of(string).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    fields,
+  } = res.locals;
+
+  dbUsersGetByIdWithFields({ user_id, fields })
+    .then((user) => {
       setLocals({
         user,
       });
@@ -657,4 +679,5 @@ export {
   userActivatedUserSignUpQueueMessage,
   usersInvitedUserQueueMessage,
   userSignupQueueMessage,
+  usersGetByIdWithFields,
 };

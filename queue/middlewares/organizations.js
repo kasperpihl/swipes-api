@@ -16,6 +16,7 @@ const organizationsGetSingle = (req, res, next) => {
     });
 };
 const organizationsUpdatedNotificationData = (req, res, next) => {
+  console.log('dOWAIJDWJIDWIJDIJWADIJWAJI');
   const {
     updated_fields,
     organization,

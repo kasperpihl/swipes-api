@@ -18,11 +18,13 @@ import {
   organizationsTransferOwnership,
   organizationsDisableUser,
   organizationsEnableUser,
+  organizationsCreateStripeCustomer,
 } from './middlewares/organizations';
 import {
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   usersParseInvitationToken,
+  usersGetByIdWithFields,
 } from './middlewares/users';
 import {
   notificationsPushToQueue,
@@ -148,6 +150,27 @@ notAuthed.all('/organizations.getInfoFromInvitationToken',
     download_links: object.require(),
     organization: object,
     invited_by: object,
+  }),
+);
+
+notAuthed.all('/organizations.createStripeCustomer',
+  valBody({
+    organization_id: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  mapLocals(() => ({
+    fields: ['email'],
+  })),
+  usersGetByIdWithFields,
+  organizationsCreateStripeCustomer,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  mapLocals(locals => ({
+    stripe_customer_id: locals.stripeCustomerId,
+  })),
+  valResponseAndSend({
+    stripe_customer_id: string.require(),
   }),
 );
 

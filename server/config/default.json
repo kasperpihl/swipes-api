@@ -55,6 +55,10 @@
     "tags": "swipesapp-staging-nodejs-errors",
     "subdomain": "swipesapp"
   },
+  "stripe": {
+    "publishableKey": "pk_test_0pUn7s5EyQy7GeAg93QrsJl9",
+    "secretKey": "sk_test_4W0QBXIDYrveAkgPHevilCbe"
+  },
   "valjs_debug": true,
   "origin": "http://localhost",
   "webhooksHost": "https://swipesdev.ngrok.io/",

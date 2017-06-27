@@ -33,6 +33,7 @@
     "sharp": "^0.17.3",
     "shortid": "^2.2.6",
     "slug": "^0.9.1",
+    "stripe": "^4.23.1",
     "underscore": "1.8.x",
     "valjs": "0.0.28",
     "winston": "^2.3.1",

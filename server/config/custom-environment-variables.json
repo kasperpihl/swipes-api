@@ -50,6 +50,10 @@
     "tags": "SW_LOGGLY_TAGS",
     "subdomain": "SW_LOGGLY_SUBDOMAIN"
   },
+  "stripe": {
+    "publishableKey": "SW_STRIPE_PUBLISHABLE_KEY",
+    "secretKey": "SW_STRIPE_SECRET_KEY"
+  },
   "valjs_debug": "SW_VALJS_DEBUG",
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
