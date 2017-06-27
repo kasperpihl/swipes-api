@@ -31,6 +31,11 @@ export default function meReducer(state = initialState, action) {
         return org.set('admins', fromJS(payload.admins)).set('updated_at', payload.updated_at);
       })
     }
+    case 'organizations.createStripeCustomer': {
+      return state.updateIn(['organizations', 0], (org) => {
+        return org.set('plan', payload.plan).set('stripe_customer_id', payload.stripe_customer_id);
+      })
+    }
     case 'service_added': {
       const service = fromJS(payload);
       return state.updateIn(['services'], services => services.push(service));
@@ -48,7 +53,7 @@ export default function meReducer(state = initialState, action) {
     }
     case types.RESET_STATE: {
       return initialState;
-    }  
+    }
     default:
       return state;
   }

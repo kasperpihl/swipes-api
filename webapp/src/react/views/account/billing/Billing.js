@@ -65,10 +65,12 @@ class Billing extends PureComponent {
   onSubmit(e) {
     e.preventDefault();
     const { cardState } = this.state;
-    const { stripe } = this.props;
+    const { stripe, setLoading, clearLoading } = this.props;
 
+    setLoading('submit');
     stripe.createToken().then(({ token, error }) => {
       if (error) {
+        clearLoading('submit', '!Something went wrong');
         this.setState({ errorMessage: error.message });
       } else {
         console.log('Received Stripe token:', token);

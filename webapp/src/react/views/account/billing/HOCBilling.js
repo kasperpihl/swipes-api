@@ -13,7 +13,7 @@ class HOCBilling extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      billingStatus: 'monthly',
+      billingStatus: props.organization.get('plan') || 'monthly',
     };
 
     setupLoading(this);
@@ -22,8 +22,9 @@ class HOCBilling extends PureComponent {
   }
   onSubmit(token) {
     const { createStripeCustomer } = this.props;
-    this.setLoading('submit');
-    createStripeCustomer(token.id).then((res) => {
+    const { billingStatus } = this.state;
+
+    createStripeCustomer(token.id, billingStatus).then((res) => {
       if (res.ok) {
         this.clearLoading('submit');
       } else {
