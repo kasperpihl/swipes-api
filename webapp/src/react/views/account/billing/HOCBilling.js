@@ -28,12 +28,16 @@ class HOCBilling extends PureComponent {
       if (res.ok) {
         this.clearLoading('submit');
       } else {
-        this.clearLoading('submit', '!Something went wrong');
+        this.clearLoading('submit', '!Something went wrong', 3000);
       }
     })
   }
   onSwitchPlan(plan) {
-    this.setState({ billingStatus: plan });
+    const { organization } = this.props;
+    if(!organization.get('stripe_customer_id')) {
+      this.setState({ billingStatus: plan });
+    }
+
   }
   render() {
     const { billingStatus } = this.state;

@@ -70,7 +70,7 @@ class Billing extends PureComponent {
     setLoading('submit');
     stripe.createToken().then(({ token, error }) => {
       if (error) {
-        clearLoading('submit', '!Something went wrong');
+        clearLoading('submit', '!Something went wrong', 3000);
         this.setState({ errorMessage: error.message });
       } else {
         console.log('Received Stripe token:', token);
@@ -83,8 +83,10 @@ class Billing extends PureComponent {
     this.setState({ cardState });
   }
   renderHeader() {
-    const status = true ? 'Inactive' : 'Active';
-    const className = true ? 'payment-status__status payment-status__status--inactive' : 'payment-status__status payment-status__status--active';
+    const { organization } = this.props;
+    const hasStripe = organization.get('stripe_customer_id');
+    const status = !hasStripe ? 'Inactive' : 'Active';
+    const className = !hasStripe ? 'payment-status__status payment-status__status--inactive' : 'payment-status__status payment-status__status--active';
 
     return (
       <HOCHeaderTitle title="Payment">
