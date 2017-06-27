@@ -293,7 +293,7 @@ const usersGetOwnerByIdWithFields = valLocals('usersGetOwnerByIdWithFields', {
     fields,
   } = res.locals;
 
-  dbUsersGetByIdWithFields({ owner_id, fields })
+  dbUsersGetByIdWithFields({ user_id: owner_id, fields })
     .then((user) => {
       setLocals({
         ownerUser: user,
