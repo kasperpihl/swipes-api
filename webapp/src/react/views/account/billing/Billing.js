@@ -31,6 +31,7 @@ class Billing extends PureComponent {
     this.state = {
       errorMessage: '',
       billingStatus: 'monthly',
+      successState: true,
     };
     setupDelegate(this);
     bindAll(this, ['onChange', 'onSubmit']);
@@ -113,40 +114,42 @@ class Billing extends PureComponent {
       </div>
     )
   }
-  renderSuccessState() {
-
-    return (
-      <div className="payment__success">
-        hi
-      </div>
-    )
-  }
-  renderContent() {
-    const { successState } = this.props;
+  renderBottomSection() {
     const { cardState } = this.state;
     const isReady = cardState && cardState.complete;
-
-    if (successState) {
-      return (this.renderSuccessState());
-    }
+    const { billingStatus } = this.props;
+    const className = billingStatus ? 'payment__bottom-section' : 'payment__bottom-section payment__bottom-section--success';
 
     return (
-      <div className="payment">
-        <div className="payment__toggle">
-          {this.renderToggle()}
-          <div className="payment__toggle-subtitle">You currently have 5 active users in Swipes Inc.</div>
+      <div className={className}>
+        <div className="top-section">
+          {this.renderBilling()}
+          <button disabled={!isReady} onClick={this.onSubmit} className="payment__cta">Submit Payment</button>
+          <div className="payment__cta-subtitle">You will be billed $45</div>
         </div>
-        {this.renderBilling()}
-        <button disabled={!isReady} onClick={this.onSubmit} className="payment__cta">Submit Payment</button>
-        <div className="payment__cta-subtitle">You will be billed $45</div>
+        <div className="bottom-section">
+          <div className="bottom-section__title">Thank you for your purchase, Nigel</div>
+          <div className="payment-status">
+            <div className="payment-status__label">Your subscription status is:</div>
+            <div className="payment-status__status payment-status__status--active">Active</div>
+          </div>
+        </div>
       </div>
     )
   }
   render() {
 
     return (
-      <SWView header={this.renderHeader()}>
-        {this.renderContent()}
+      <SWView
+        header={this.renderHeader()}
+      >
+        <div className="payment">
+          <div className="payment__toggle">
+            {this.renderToggle()}
+            <div className="payment__toggle-subtitle">You currently have 5 active users in Swipes Inc.</div>
+          </div>
+          {this.renderBottomSection()}
+        </div>
       </SWView>
     )
   }

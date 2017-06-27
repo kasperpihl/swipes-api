@@ -35,7 +35,54 @@
     @include font(12px, $deepBlue-30, 15px, 500);
     margin-top: 9px;
   }
+
+  &__bottom-section {
+    @include size(420px, auto);
+    @include flexContainer('column', center);
+
+    .top-section {
+      @include size(420px, auto);
+      @include flexContainer('column', center);
+      transition: .4s ease;
+    }
+
+    .bottom-section {
+      @include size(420px, auto);
+      @include flexContainer('column', center);
+      position: absolute;
+      left: 0; top: 0;
+      transform: translateY(300%);
+      opacity: 0;
+      pointer-events: none;
+      transition: .4s .2s ease;
+
+      &__title {
+        @include font(27px, $deepBlue-100, 36px);
+        text-align: center;
+        padding-bottom: 12px;
+      }
+    }
+
+    &--success {
+
+      .top-section {
+        transform: translateY(-100%);
+        pointer-events: none;
+        opacity: 0;
+        transition: .4s ease;
+      }
+
+      .bottom-section {
+        transform: translateY(0%);
+        opacity: 1;
+        pointer-events: all;
+        transition: .4s .2s ease;
+      }
+    }
+  }
 }
+
+
 
 .payment-status {
   @include flexContainer('row', left, center);
@@ -56,7 +103,7 @@
     }
 
     &--active {
-      @include font($c: $deepBlue-30);
+      @include font($c:white);
       background-color: $blue-100;
     }
   }
