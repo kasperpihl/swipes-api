@@ -187,6 +187,7 @@
 
 .billing {
   @include size(420px, auto);
+  padding-bottom: 30px;
 }
 
 .form-row {
