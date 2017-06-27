@@ -113,23 +113,40 @@ class Billing extends PureComponent {
       </div>
     )
   }
-  render() {
+  renderSuccessState() {
+
+    return (
+      <div className="payment__success">
+        hi
+      </div>
+    )
+  }
+  renderContent() {
+    const { successState } = this.props;
     const { cardState } = this.state;
     const isReady = cardState && cardState.complete;
 
+    if (successState) {
+      return (this.renderSuccessState());
+    }
+
     return (
-      <SWView
-        header={this.renderHeader()}
-      >
-        <div className="payment">
-          <div className="payment__toggle">
-            {this.renderToggle()}
-            <div className="payment__toggle-subtitle">You currently have 5 active users in Swipes Inc.</div>
-          </div>
-          {this.renderBilling()}
-          <button disabled={!isReady} onClick={this.onSubmit} className="payment__cta">Submit Payment</button>
-          <div className="payment__cta-subtitle">You will be billed $45</div>
+      <div className="payment">
+        <div className="payment__toggle">
+          {this.renderToggle()}
+          <div className="payment__toggle-subtitle">You currently have 5 active users in Swipes Inc.</div>
         </div>
+        {this.renderBilling()}
+        <button disabled={!isReady} onClick={this.onSubmit} className="payment__cta">Submit Payment</button>
+        <div className="payment__cta-subtitle">You will be billed $45</div>
+      </div>
+    )
+  }
+  render() {
+
+    return (
+      <SWView header={this.renderHeader()}>
+        {this.renderContent()}
       </SWView>
     )
   }

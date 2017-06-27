@@ -19,20 +19,26 @@
   }
 
   &__cta {
-    @include font(15px, white, 24px, 500);
+    @include font(15px, white, 24px);
     background-color: $blue-100;
     border-radius: 50px;
     padding: 12px 39px;
     margin-top: 39px;
+    cursor: pointer;
 
-    &__hover {
+    &:hover {
       background-color: $blue-80;
     }
+  }
+
+  &__cta-subtitle {
+    @include font(12px, $deepBlue-30, 15px, 500);
+    margin-top: 9px;
   }
 }
 
 .payment-status {
-  @include flexContainer('row');
+  @include flexContainer('row', left, center);
 
   &__label {
     @include font(12px, $deepBlue-50, 21px, 500);
@@ -72,7 +78,7 @@
       transition: .2s ease;
 
       &:hover {
-        background-color: $blue-10;
+        background-color: $deepBlue-5;
         transition: .2s ease;
       }
 
@@ -97,6 +103,11 @@
       font-size: 12px;	font-weight: 500;	line-height: 15px;
       padding-top: 57px;
       padding-left: 21px;
+
+      span {
+        background-color: rgba(254,215,124,1);
+        padding: 0 3px;
+      }
     }
 
     &--first {
