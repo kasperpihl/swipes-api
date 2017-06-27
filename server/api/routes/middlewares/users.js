@@ -284,6 +284,27 @@ const usersGetByIdWithFields = valLocals('usersGetByIdWithFields', {
       return next(err);
     });
 });
+const usersGetOwnerByIdWithFields = valLocals('usersGetOwnerByIdWithFields', {
+  owner_id: string.require(),
+  fields: array.of(string).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    owner_id,
+    fields,
+  } = res.locals;
+
+  dbUsersGetByIdWithFields({ owner_id, fields })
+    .then((user) => {
+      setLocals({
+        ownerUser: user,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 const usersComparePasswordSignIn = valLocals('usersComparePasswordSignIn', {
   user: object,
   password: string.min(1).require(),
@@ -680,4 +701,5 @@ export {
   usersInvitedUserQueueMessage,
   userSignupQueueMessage,
   usersGetByIdWithFields,
+  usersGetOwnerByIdWithFields,
 };

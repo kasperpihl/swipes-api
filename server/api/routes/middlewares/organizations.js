@@ -372,7 +372,7 @@ const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMes
 const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCustomer', {
   organization_id: string.require(),
   organization: object.require(),
-  user: object.as({
+  ownerUser: object.as({
     email: string.format('email').require(),
   }).require(),
   stripe_token: string.require(),
@@ -381,11 +381,11 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
   const {
     organization_id,
     organization,
-    user,
+    ownerUser,
     stripe_token,
     plan,
   } = res.locals;
-  const email = user.email;
+  const email = ownerUser.email;
 
   const args = [];
   let funcName = 'create';

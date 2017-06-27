@@ -24,7 +24,7 @@ import {
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   usersParseInvitationToken,
-  usersGetByIdWithFields,
+  usersGetOwnerByIdWithFields,
 } from './middlewares/users';
 import {
   notificationsPushToQueue,
@@ -150,7 +150,7 @@ authed.all('/organizations.createStripeCustomer',
   mapLocals(() => ({
     fields: ['email'],
   })),
-  usersGetByIdWithFields,
+  usersGetOwnerByIdWithFields,
   organizationsCreateStripeCustomer,
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
