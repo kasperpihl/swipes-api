@@ -260,7 +260,7 @@ authed.all('/goals.stepsReorder',
   notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
-    step_order: array.require(),
+    step_order: array.of(string).require(),
   }));
 
 export {

@@ -122,6 +122,26 @@ const dbMilestonesMigrateIncompleteGoals = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbMilestonesGoalsReorder = funcWrap([
+  object.as({
+    milestone_id: string.require(),
+    goal_order: array.of(string).require(),
+  }).require(),
+], (err, { milestone_id, goal_order }) => {
+  if (err) {
+    throw new SwipesError(`dbMilestonesGoalsReorder: ${err}`);
+  }
+
+  const q =
+    r.table('milestones')
+      .get(milestone_id)
+      .update({
+        goal_order,
+        updated_at: r.now(),
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbMilestonesInsertSingle,
@@ -129,4 +149,5 @@ export {
   dbMilestonesAddGoal,
   dbMilestonesRemoveGoal,
   dbMilestonesMigrateIncompleteGoals,
+  dbMilestonesGoalsReorder,
 };

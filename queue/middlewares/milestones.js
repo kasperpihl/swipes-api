@@ -108,6 +108,20 @@ const milestonesRenamedNotificationData = (req, res, next) => {
 
   return next();
 };
+const milestonesGoalsReorderedNotificationData = (req, res, next) => {
+  const {
+    milestone_id,
+    goal_order,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = {
+    milestone_id,
+    goal_order,
+  };
+
+  return next();
+};
 
 export {
   milestonesGetSingle,
@@ -115,4 +129,5 @@ export {
   milestonesGoalAddedRemovedNotificationData,
   milestoneOpenCloseWithHistoryNotificationData,
   milestonesRenamedNotificationData,
+  milestonesGoalsReorderedNotificationData,
 };

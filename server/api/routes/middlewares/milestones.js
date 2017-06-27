@@ -10,6 +10,7 @@ import {
   dbMilestonesAddGoal,
   dbMilestonesRemoveGoal,
   dbMilestonesMigrateIncompleteGoals,
+  dbMilestonesGoalsReorder,
 } from './db_utils/milestones';
 import {
   generateSlackLikeId,
@@ -393,6 +394,47 @@ const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMes
 
   return next();
 });
+const milestonesGoalsReorder = valLocals('milestonesGoalsReorder', {
+  milestone_id: string.require(),
+  goal_order: array.of(string).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    milestone_id,
+    goal_order,
+  } = res.locals;
+
+  dbMilestonesGoalsReorder({ milestone_id, goal_order })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const milestonesGoalsReorderQueueMessage = valLocals('milestonesGoalsReorderQueueMessage', {
+  user_id: string.require(),
+  milestone_id: string.require(),
+  goal_order: array.of(string).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    milestone_id,
+    goal_order,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    milestone_id,
+    goal_order,
+    event_type: 'milestone_goals_reordered',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: milestone_id,
+  });
+
+  return next();
+});
 
 export {
   milestonesCreate,
@@ -409,4 +451,6 @@ export {
   milestoneMigrateIncompleteGoals,
   milestoneRename,
   milestonesRenameQueueMessage,
+  milestonesGoalsReorder,
+  milestonesGoalsReorderQueueMessage,
 };

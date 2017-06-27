@@ -178,6 +178,11 @@ const milestone_goal_removed = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const milestone_goals_reordered = notifyWrapper([
+  milestones.milestonesGoalsReorderedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const milestone_renamed = notifyWrapper([
   milestones.milestonesRenamedNotificationData,
   notify.notifyAllInCompany,
@@ -303,6 +308,7 @@ export {
   milestone_goal_added,
   milestone_goal_removed,
   milestone_renamed,
+  milestone_goals_reordered,
   way_created,
   way_archived,
   notifications_seen_history_updated,

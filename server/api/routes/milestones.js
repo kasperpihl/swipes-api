@@ -19,6 +19,8 @@ import {
   milestoneMigrateIncompleteGoals,
   milestoneRename,
   milestonesRenameQueueMessage,
+  milestonesGoalsReorder,
+  milestonesGoalsReorderQueueMessage,
 } from './middlewares/milestones';
 import {
   goalsAddMilestone,
@@ -137,6 +139,20 @@ authed.all('/milestones.rename',
   valResponseAndSend({
     milestone_id: string.require(),
     title: string.require(),
+  }),
+);
+
+authed.all('/milestones.goalsReorder',
+  valBody({
+    milestone_id: string.require(),
+    goal_order: array.of(string).require(),
+  }),
+  milestonesGoalsReorder,
+  milestonesGoalsReorderQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    milestone_id: string.require(),
+    goal_order: array.of(string).require(),
   }),
 );
 
