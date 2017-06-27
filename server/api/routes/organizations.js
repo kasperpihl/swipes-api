@@ -150,6 +150,9 @@ authed.all('/organizations.createStripeCustomer',
   mapLocals(() => ({
     fields: ['email'],
   })),
+  mapLocals(locals => ({
+    owner_id: locals.organization.owner_id,
+  })),
   usersGetOwnerByIdWithFields,
   organizationsCreateStripeCustomer,
   organizationsUpdatedQueueMessage,
