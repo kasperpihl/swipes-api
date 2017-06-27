@@ -20,7 +20,7 @@ class HOCBilling extends PureComponent {
     const { createStripeCustomer } = this.props;
     this.setLoading('submit');
     createStripeCustomer(token.id).then((res) => {
-      if(res.ok) {
+      if (res.ok) {
         this.clearLoading('submit');
       } else {
         this.clearLoading('submit', '!Something went wrong');
@@ -37,7 +37,7 @@ class HOCBilling extends PureComponent {
         <Elements>
           <Billing
             delegate={this}
-            {...this.bindLoading()}
+            {...this.bindLoading() }
           />
         </Elements>
       </StripeProvider>
