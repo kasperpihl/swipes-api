@@ -395,6 +395,8 @@ export function setupLoading(ctx) {
     return {
       isLoading: this.isLoading,
       getLoading: this.getLoading,
+      clearLoading: this.clearLoading,
+      setLoading: this.setLoading,
       _loadingStates,
     }
   }

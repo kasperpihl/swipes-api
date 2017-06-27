@@ -139,24 +139,10 @@ authed.all('/organizations.enableUser',
   }),
 );
 
-notAuthed.all('/organizations.getInfoFromInvitationToken',
-  valBody({
-    invitation_token: string.require(),
-  }),
-  usersParseInvitationToken,
-  organizationsGetInfoFromInvitationToken,
-  valResponseAndSend({
-    me: object,
-    download_links: object.require(),
-    organization: object,
-    invited_by: object,
-  }),
-);
-
-notAuthed.all('/organizations.createStripeCustomer',
+authed.all('/organizations.createStripeCustomer',
   valBody({
     organization_id: string.require(),
-    token: string.require(),
+    stripe_token: string.require(),
   }),
   organizationsGetSingle,
   organizationsCheckAdminRights,
@@ -173,6 +159,20 @@ notAuthed.all('/organizations.createStripeCustomer',
   valResponseAndSend({
     organization_id: string.require(),
     stripe_customer_id: string.require(),
+  }),
+);
+
+notAuthed.all('/organizations.getInfoFromInvitationToken',
+  valBody({
+    invitation_token: string.require(),
+  }),
+  usersParseInvitationToken,
+  organizationsGetInfoFromInvitationToken,
+  valResponseAndSend({
+    me: object,
+    download_links: object.require(),
+    organization: object,
+    invited_by: object,
   }),
 );
 

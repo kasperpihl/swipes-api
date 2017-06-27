@@ -372,25 +372,33 @@ const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMes
 const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCustomer', {
   organization_id: string.require(),
   organization: object.require(),
-  email: string.format('email').require(),
-  token: string.require(),
+  user: object.as({
+    email: string.format('email').require(),
+  }).require(),
+  stripe_token: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     organization_id,
     organization,
-    email,
-    token,
+    user,
+    stripe_token,
   } = res.locals;
+  const email = user.email;
 
+  const args = [];
+  let funcName = 'create';
   if (organization.stripe_customer_id) {
-    return next();
+    funcName = 'update';
+    args.push(organization.stripe_customer_id);
   }
 
-  return stripe.customers.create({
+  args.push({
     email,
-    source: token,
+    source: stripe_token,
     description: organization.name,
-  }).then((customer) => {
+  });
+
+  return stripe.customers[funcName](...args).then((customer) => {
     const stripeCustomerId = customer.id;
 
     setLocals({

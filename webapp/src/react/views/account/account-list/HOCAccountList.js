@@ -35,8 +35,8 @@ class HOCAccountList extends PureComponent {
           subtitle: 'Learn how to use get started with Swipes',
         },
         msgGen.me.isAdmin() ? {
-          id: 'Payment',
-          title: 'Billing (coming soon)',
+          id: 'Billing',
+          title: 'Billing',
           subtitle: 'Set up and manage the payment card for the account',
         } : undefined,
         {
@@ -67,9 +67,6 @@ class HOCAccountList extends PureComponent {
   }
   onClick(section) {
     const { navPush, browser, target } = this.props;
-    if (section.id === 'Payment') {
-      return undefined;
-    }
     if (section.id === 'FAQ') {
       return browser(target, 'http://support.swipesapp.com/hc/en-us/categories/115000489025-Swipes-Workspace');
     }
