@@ -26,7 +26,7 @@ class StepListItem extends PureComponent {
     }
   }
   onChange(e) {
-    this.setState({title: e.target.value});
+    this.setState({ title: e.target.value });
   }
   onBlur(e) {
     this.saveTitle();
@@ -35,9 +35,9 @@ class StepListItem extends PureComponent {
     const { title } = this.state;
     const { step, i } = this.props;
 
-    if(title && title.length && title !== step.get('title')){
+    if (title && title.length && title !== step.get('title')) {
       this.callDelegate('onStepRename', i, title);
-      this.setState({title: null});
+      this.setState({ title: null });
     }
   }
   renderEditStep(step, i) {
@@ -105,7 +105,7 @@ class StepListItem extends PureComponent {
       className += ' step-list-item--loading';
     }
 
-    if(step.get('completed_at')) {
+    if (step.get('completed_at')) {
       hoverIcon = 'Iteration';
       className += ' step-list-item--completed';
     } else {
@@ -116,7 +116,7 @@ class StepListItem extends PureComponent {
       <div className={className}>
         <div className="step-list-item__indicator" onClick={this.onStepCheckCached(i)}>
           <div className="indicator">
-            <div className="indicator__number">{ i + 1 }</div>
+            <div className="indicator__number">{i + 1}</div>
             <div className="indicator__icon">
               <Icon icon={hoverIcon} className="indicator__svg" />
             </div>

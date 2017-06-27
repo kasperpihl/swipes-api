@@ -5,7 +5,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-// import Button from 'Button';
+import Button from 'Button';
 // import Icon from 'Icon';
 import './styles/billing.scss';
 
@@ -44,19 +44,19 @@ class Billing extends PureComponent {
     let price = 9;
     let months = 1;
     let postfix = ' monthly';
-    if(billingStatus === 'yearly') {
+    if (billingStatus === 'yearly') {
       price = 6;
       months = 12;
-      postfix =` annually ($${price*months}/month)`;
+      postfix = ` annually ($${price * months}/month)`;
     }
-    return `$${price*months*numberOfUsers}${postfix}`;
+    return `$${price * months * numberOfUsers}${postfix}`;
   }
   getPrice() {
     const { billingStatus, users } = this.props;
     const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
     let price = 9;
     let months = 1;
-    if(billingStatus === 'yearly') {
+    if (billingStatus === 'yearly') {
       price = 6;
       months = 12;
     }
@@ -142,7 +142,7 @@ class Billing extends PureComponent {
   }
   renderBottomSection() {
     const { cardState } = this.state;
-    const { organization, users, billingStatus } = this.props;
+    const { organization, users, billingStatus, getLoading } = this.props;
     const isReady = cardState && cardState.complete;
     const hasStripe = organization.get('stripe_customer_id');
     const className = `payment__bottom-section ${hasStripe ? 'payment__bottom-section--success' : ''}`;
@@ -151,7 +151,13 @@ class Billing extends PureComponent {
       <div className={className}>
         <div className="top-section">
           {this.renderBilling()}
-          <button disabled={!isReady} onClick={this.onSubmit} className="payment__cta">Submit Payment</button>
+          <Button
+            {...getLoading('submit') }
+            primary
+            disabled={!isReady}
+            text="Submit Payment"
+            onClick={this.onSubmit}
+          />
           <div className="payment__cta-subtitle">You will be billed ${this.getPrice()}.</div>
         </div>
         <div className="bottom-section">
