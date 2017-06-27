@@ -349,14 +349,17 @@ const organizationsEnableUser = valLocals('organizationsEnableUser', {
     });
 });
 const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMessage', {
+  user_id: string.require(),
   organization_id: string.require(),
   updatedFields: array.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user_id,
     organization_id,
     updatedFields,
   } = res.locals;
   const queueMessage = {
+    user_id,
     organization_id,
     updated_fields: updatedFields,
     event_type: 'organization_updated',

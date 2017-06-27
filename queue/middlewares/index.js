@@ -29,13 +29,6 @@ const xendoWrapper = (middlewares) => {
   ]
   .concat(middlewares);
 };
-const noUserNotifyWrapper = (middlewares) => {
-  middlewares
-  .concat([
-    notify.notifyInsertMultipleNotifications,
-    notify.notifyCommonRethinkdb,
-  ]);
-};
 const goal_created = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsCreatedNotificationData,
@@ -286,9 +279,10 @@ const profile_updated = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const organization_updated = noUserNotifyWrapper([
+const organization_updated = notifyWrapper([
   organizations.organizationsGetSingle,
   organizations.organizationsUpdatedNotificationData,
+  notify.notifyAllInCompany,
 ]);
 
 export {

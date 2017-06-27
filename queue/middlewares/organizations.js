@@ -16,8 +16,8 @@ const organizationsGetSingle = (req, res, next) => {
     });
 };
 const organizationsUpdatedNotificationData = (req, res, next) => {
-  console.log('dOWAIJDWJIDWIJDIJWADIJWAJI');
   const {
+    organization_id,
     updated_fields,
     organization,
   } = res.locals;
@@ -31,6 +31,7 @@ const organizationsUpdatedNotificationData = (req, res, next) => {
   res.locals.notificationData = null;
   res.locals.eventData = {
     ...updatedData,
+    organization_id,
     updated_at: organization.updated_at,
   };
 
