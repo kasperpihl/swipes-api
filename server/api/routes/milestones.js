@@ -109,7 +109,7 @@ authed.all('/milestones.addGoal',
   valResponseAndSend({
     goal_id: string.require(),
     milestone_id: string.require(),
-    old_milestone_id: string.require(),
+    old_milestone_id: string,
     goal_order: array.require(),
   }),
 );

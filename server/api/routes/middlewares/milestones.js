@@ -303,7 +303,7 @@ const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage',
   user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string.require(),
-  old_milestone_id: string.require(),
+  old_milestone_id: string,
   goal_order: array.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
