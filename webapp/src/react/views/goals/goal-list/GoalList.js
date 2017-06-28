@@ -93,7 +93,7 @@ class GoalList extends Component {
 
       return p;
     }).toJS();
-
+    const hasFilter = !!filter.size;
     return (
       <Measure onMeasure={this.onFilterHeight}>
         <div className="goals-list__filter">
@@ -119,15 +119,11 @@ class GoalList extends Component {
               filter={filterArray}
             />
 
-            <div className="goals-list__filter-actions">
-              <div className="goals-list__filter-action" onClick={this.clearFilter}>Clear filter</div>
-              <div
-                className="goals-list__filter-action goals-list__filter-action--main"
-                onClick={this.hideFilter}
-              >
-                Hide
+            {hasFilter ? (
+              <div className="goals-list__filter-actions">
+                <div className="goals-list__filter-action" onClick={this.clearFilter}>Clear filter</div>
               </div>
-            </div>
+            ) : undefined}
           </div>
         </div>
       </Measure>
