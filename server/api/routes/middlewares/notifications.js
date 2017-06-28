@@ -61,6 +61,7 @@ const notificationsMarkAsSeenHistoryUpdatedQueueMessage = valLocals('notificatio
 
   setLocals({
     queueMessage,
+    messageGroupId: user_id,
   });
 
   return next();
