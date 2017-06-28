@@ -34,13 +34,6 @@ const initialState = fromJS({
       },
       goals: OrderedSet(),
     },
-    default: {
-      id: 'default',
-      title: 'Filter',
-      description: 'Filter goals to your needs',
-      filter: defaultFilter,
-      goals: OrderedSet(),
-    },
     search: {
       id: 'search',
       title: 'Search',

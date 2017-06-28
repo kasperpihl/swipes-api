@@ -20,7 +20,7 @@ class HOCGoalList extends PureComponent {
     super(props);
     setupDelegate(this);
     this.state = {
-      tabs: ['current', 'starred', 'unassigned', 'default'],
+      tabs: ['current', 'starred', 'unassigned', 'search'],
       tabIndex: 0,
       showFilter: false,
       filterProp: fromJS([
@@ -75,7 +75,7 @@ class HOCGoalList extends PureComponent {
   }
   onClearFilter() {
     const { clearFilter } = this.props;
-    clearFilter('goals', 'default');
+    clearFilter('goals', 'search');
   }
 
   onChangeFilter(obj, e) {
@@ -143,7 +143,7 @@ class HOCGoalList extends PureComponent {
     if (tabIndex === (tabs.size - 1)) {
       saveCache('list-filter', newFilter);
     }
-    updateFilter('goals', 'default', filter.merge(mergeObj));
+    updateFilter('goals', 'search', filter.merge(mergeObj));
   }
 
   tabDidChange(index) {
