@@ -99,6 +99,7 @@ class GoalList extends Component {
         <div className="goals-list__filter">
           <div className="goals-list__search">
             <input type="text"
+              autoFocus
               placeholder="Search for goals"
               value={filter.get('matching') || ''}
               onChange={(e) => {
