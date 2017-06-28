@@ -307,7 +307,7 @@ const goalsRemoveMilestone = valLocals('goalsRemoveMilestone', {
       return next(err);
     });
 });
-const goalsGet = valLocals('goalsGet', {
+const goalsGetSingle = valLocals('goalsGetSingle', {
   goal_id: string.require(),
 }, (req, res, next) => {
   const {
@@ -760,7 +760,7 @@ export {
   goalsArchive,
   goalsAddMilestone,
   goalsRemoveMilestone,
-  goalsGet,
+  goalsGetSingle,
   goalsCreateQueueMessage,
   goalsArchiveQueueMessage,
   goalsCompleteStepQueueMessage,

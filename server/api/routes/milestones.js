@@ -25,6 +25,7 @@ import {
 import {
   goalsAddMilestone,
   goalsRemoveMilestone,
+  goalsGetSingle,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -96,6 +97,10 @@ authed.all('/milestones.addGoal',
   mapLocals(locals => ({
     goal_ids: [locals.goal_id],
   })),
+  goalsGetSingle,
+  mapLocals(locals => ({
+    old_milestone_id: locals.goal.milestone_id,
+  })),
   goalsAddMilestone,
   milestonesRemoveGoal,
   milestonesAddGoal,
@@ -104,6 +109,7 @@ authed.all('/milestones.addGoal',
   valResponseAndSend({
     goal_id: string.require(),
     milestone_id: string.require(),
+    old_milestone_id: string.require(),
     goal_order: array.require(),
   }),
 );
