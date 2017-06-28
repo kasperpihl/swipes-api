@@ -122,6 +122,7 @@ class Notify extends PureComponent {
       title: false,
       subtitle: false,
       icon: false,
+      seenBy: false,
       timeago: false,
       reply: false,
     });

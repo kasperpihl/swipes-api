@@ -34,7 +34,7 @@ export default class HistoryGenerator {
       title: def.title ? this.getTitle(helper.getId(), h) : null,
       subtitle: def.subtitle ? this.getSubtitle(helper.getId(), h) : null,
       userId: h.get('done_by'),
-      seenBy: def.seenBy ? this.getSeenByForHistory(helper.getId(), h) : null,
+      seenBy: def.seenBy ? this.getSeenByForHistory(h) : null,
       reply: def.reply ? this.getReplyButtonForHistory(h) : null,
       message: def.message ? h.get('message') : null,
       icon: def.icon ? this.getIcon(h) : null,
