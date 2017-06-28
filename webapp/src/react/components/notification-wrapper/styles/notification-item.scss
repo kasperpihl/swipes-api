@@ -28,7 +28,7 @@
 .notification {
   $b: &;
   &__section {
-    $flexIgnoreList: '#{$b}__icon-wrapper', '#{$b}__reply', '#{$b}__attachments';
+    $flexIgnoreList: '#{$b}__icon-wrapper', '#{$b}__reply', '#{$b}__attachments', '#{$b}__seen-by';
 
     @include size(100%, auto);
     @include flexContainer('row', left, stretch, $selectorsToIgnoreFlex: $flexIgnoreList);
@@ -73,9 +73,19 @@
   &__reply {
     @include font(12px, $blue-100, 18px, 500);
     visibility: hidden;
+
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  &__seen-by {
+    @include flexContainer('row');
+  }
+
+  &__seen-by-text {
+    @include font(12px, $deepBlue-30, 18px, 500);
+    margin-right: 3px;
   }
 
   &__message {
@@ -265,11 +275,13 @@
 
 .notification {
   $b: &;
+
   &:hover {
     #{$b}__reply {
       visibility: visible;
     }
   }
+
   &__subtitle span:hover {
     @include font($c: $blue-100);
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { mapContains, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import { setupDelegate, setupCachedCallback, attachmentIconForService, URL_REGEX } from 'swipes-core-js/classes/utils';
 
 import './styles/notification-item';
@@ -79,15 +80,26 @@ class NotificationItem extends Component {
   renderActions() {
     const { notification: n } = this.props;
 
-    if (!n.get('reply')) {
-      return undefined;
+    if (n.get('seenBy')) {
+      <div className="notification__seen-by">
+        <div className="notification__seen-by-text">
+          Seen by:
+        </div>
+
+        <HOCAssigning assignees={n.get('seenBy')} rounded size={20} />
+      </div>
     }
 
-    return (
-      <div className="notification__reply" onClick={this.onReply}>
-        Reply
-      </div>
-    );
+    if (n.get('reply')) {
+      return (
+        <div className="notification__reply" onClick={this.onReply}>
+          Reply
+        </div>
+      );
+    }
+
+    return undefined;
+
   }
   renderMessage() {
     const { notification: n } = this.props;
@@ -102,7 +114,6 @@ class NotificationItem extends Component {
       if (urls) {
         item = item.split(URL_REGEX);
         urls.forEach((url, i) => {
-          console.log(url, i);
           item.splice(1 + i + i, 0, (
             <a
               onClick={this.onClickURLCached(url)}
