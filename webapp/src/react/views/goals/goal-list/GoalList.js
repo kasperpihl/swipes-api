@@ -161,9 +161,13 @@ class GoalList extends Component {
   }
   renderFilterFooter() {
     const { filter, goals, showFilter, delegate, tabs, tabIndex } = this.props;
+    let status = `${goals.size} results`;
+    if ((tabIndex !== (tabs.length - 1))) {
+      status = msgGen.goals.getFilterLabel(goals.size, filter);
+    }
     return (
       <FilterFooter
-        status={msgGen.goals.getFilterLabel(goals.size, filter)}
+        status={status}
         delegate={delegate}
         disableEdit={showFilter || (tabIndex !== (tabs.length - 1))}
       />
