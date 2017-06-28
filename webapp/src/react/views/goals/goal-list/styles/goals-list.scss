@@ -45,13 +45,13 @@
 
   &__filter-wrap {
     @include flexContainer('row');
+    padding-bottom: 24px;
   }
 
   &__filter-actions {
     flex: none;
     @include size(auto, 30px);
     @include flexContainer('row', right, center);
-    margin-bottom: 24px;
   }
 
   &__filter-action {
