@@ -6,7 +6,14 @@ export default class NotificationsGenerator {
     this.store = store;
     this.parent = parent;
   }
-  getNotificationWrapper(notification) {
+  getNotificationWrapper(notification, options) {
+
+    let def = {
+      seenBy: true,
+      reply: true,
+    };
+    def = Object.assign(def, options);
+
     const goals = this.store.getState().get('goals');
 
     const id = notification.getIn(['target', 'id']);
@@ -23,9 +30,13 @@ export default class NotificationsGenerator {
     });
 
     if (history) {
-      m = m.set('reply', this.parent.history.getReplyButtonForHistory(id, history));
+      if(def.reply) {
+        m = m.set('reply', this.parent.history.getReplyButtonForHistory(id, history));
+      }
+      if(def.seenBy) {
+        m = m.set('seenBy', this.parent.history.getSeenByForHistory(history));
+      }
       m = m.set('message', history.get('message'));
-      m = m.set('seenBy', this.parent.history.getSeenByForHistory(history));
       m = m.set('attachments', this.parent.history.getAttachments(id, history));
     } else {
       m = m.set('noClickTitle', !!notification.get('seen_at'));

@@ -198,7 +198,10 @@ class HOCNotifications extends PureComponent {
           if (n.get('notification') && !n.get('seen_at')) {
             numberOfUnread += 1;
           }
-          return msgGen.notifications.getNotificationWrapper(n).set('index', i);
+          return msgGen.notifications.getNotificationWrapper(n, {
+            seenBy: tabIndex === 1,
+            reply: tabIndex === 0,
+          }).set('index', i);
         },
       );
 
