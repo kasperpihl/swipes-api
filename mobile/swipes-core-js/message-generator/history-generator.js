@@ -105,10 +105,12 @@ export default class HistoryGenerator {
   }
   getSeenByForHistory(h) {
     const me = this.store.getState().get('me');
-    if(h.get('done_by') === me.get('id')){
-      return h.get('seen_by') || [];
+
+    if(!h || h.get('done_by') !== me.get('id')){
+      return undefined;
     }
-    return undefined;
+    return h.get('seen_by') || [];
+
   }
   getSubtitle(id, h) {
     const helper = this._getHelper(id);
