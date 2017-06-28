@@ -3,6 +3,7 @@
 .DS_Store
 drafts.txt
 rethinkdb_data
+package-lock.json
 # Logs
 logs
 *.log

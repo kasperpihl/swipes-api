@@ -80,12 +80,17 @@
   }
 
   &__seen-by {
-    @include flexContainer('row');
+    @include flexContainer('row', left, center);
   }
 
   &__seen-by-text {
-    @include font(12px, $deepBlue-30, 18px, 500);
+    @include font(12px, $deepBlue-30, 24px, 500);
     margin-right: 3px;
+  }
+
+  &__seen-by-icon {
+    @include size(24px);
+    @include svg-color($deepBlue-30);
   }
 
   &__message {

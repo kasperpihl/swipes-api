@@ -78,23 +78,34 @@ class NotificationItem extends Component {
     ));
   }
   renderSeenBy(seenBy) {
-    if(!seenBy || !seenBy.size) {
 
+    if (!seenBy || !seenBy.size) {
+      return (
+        <div className="notification__seen-by">
+          <div className="notification__seen-by-text">
+            Deliverd
+          </div>
+
+          <Icon icon="ActivityCheckmark" className="notification__seen-by-icon" />
+        </div>
+      );
     }
+
+    return (
+      <div className="notification__seen-by">
+        <div className="notification__seen-by-text">
+          Seen by:
+          </div>
+
+        <HOCAssigning assignees={seenBy} rounded size={24} />
+      </div>
+    );
   }
   renderActions() {
     const { notification: n } = this.props;
 
     if (n.get('seenBy')) {
-      return (
-        <div className="notification__seen-by">
-          <div className="notification__seen-by-text">
-            Seen by:
-          </div>
-
-          <HOCAssigning assignees={n.get('seenBy')} rounded size={20} />
-        </div>
-      );
+      return this.renderSeenBy(n.get('seenBy'));
     }
 
     if (n.get('reply')) {
