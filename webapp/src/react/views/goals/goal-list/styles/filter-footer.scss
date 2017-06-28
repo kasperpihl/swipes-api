@@ -3,10 +3,11 @@
 
 .filter-footer {
   $b: &;
-  @include size(100%, 60px);
+  @include size(100%, 24px);
   @include flex(flex);
   max-width: 780px;
   background-color: $bg;
+  border-bottom: 1px solid $deepBlue-10;
 
   &__section {
     @include size(100%, auto);

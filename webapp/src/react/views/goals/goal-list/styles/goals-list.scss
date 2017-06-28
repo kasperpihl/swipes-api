@@ -51,6 +51,7 @@
     flex: none;
     @include size(auto, 30px);
     @include flexContainer('row', right, center);
+    margin-bottom: 24px;
   }
 
   &__filter-action {
