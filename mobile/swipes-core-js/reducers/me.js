@@ -25,16 +25,11 @@ export default function meReducer(state = initialState, action) {
       }
       return state;
     }
+    case 'organizations.createStripeCustomer':
     case 'organizations.promoteToAdmin':
-    case 'organizations.demoteAnAdmin': {
-      return state.updateIn(['organizations', 0], (org) => {
-        return org.set('admins', fromJS(payload.admins)).set('updated_at', payload.updated_at);
-      })
-    }
-    case 'organizations.createStripeCustomer': {
-      return state.updateIn(['organizations', 0], (org) => {
-        return org.set('plan', payload.plan).set('stripe_customer_id', payload.stripe_customer_id);
-      })
+    case 'organizations.demoteAnAdmin':
+    case 'organization_updated': {
+      return state.mergeIn(['organizations', 0], fromJS(payload.organization));
     }
     case 'service_added': {
       const service = fromJS(payload);

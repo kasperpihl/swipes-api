@@ -83,7 +83,7 @@ class NotificationItem extends Component {
       return (
         <div className="notification__seen-by">
           <div className="notification__seen-by-text">
-            Deliverd
+            Delivered
           </div>
 
           <Icon icon="ActivityCheckmark" className="notification__seen-by-icon" />
