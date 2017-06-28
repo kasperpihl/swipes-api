@@ -77,17 +77,24 @@ class NotificationItem extends Component {
       <div key={i} className="notification__title">{t}</div>
     ));
   }
+  renderSeenBy(seenBy) {
+    if(!seenBy || !seenBy.size) {
+
+    }
+  }
   renderActions() {
     const { notification: n } = this.props;
 
     if (n.get('seenBy')) {
-      <div className="notification__seen-by">
-        <div className="notification__seen-by-text">
-          Seen by:
-        </div>
+      return (
+        <div className="notification__seen-by">
+          <div className="notification__seen-by-text">
+            Seen by:
+          </div>
 
-        <HOCAssigning assignees={n.get('seenBy')} rounded size={20} />
-      </div>
+          <HOCAssigning assignees={n.get('seenBy')} rounded size={20} />
+        </div>
+      );
     }
 
     if (n.get('reply')) {
@@ -162,7 +169,7 @@ class NotificationItem extends Component {
   render() {
     const { notification: n, delegate, noBorder, narrow, pinned } = this.props;
     let className = 'notification';
-    console.log('n', n.toJS());
+
     if (n.get('unseen')) {
       className += ' notification--unseen';
     }

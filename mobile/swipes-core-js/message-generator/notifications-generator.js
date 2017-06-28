@@ -25,6 +25,7 @@ export default class NotificationsGenerator {
     if (history) {
       m = m.set('reply', this.parent.history.getReplyButtonForHistory(id, history));
       m = m.set('message', history.get('message'));
+      m = m.set('seenBy', this.parent.history.getSeenByForHistory(history));
       m = m.set('attachments', this.parent.history.getAttachments(id, history));
     } else {
       m = m.set('noClickTitle', !!notification.get('seen_at'));
