@@ -96,16 +96,7 @@ class HOCGoalList extends PureComponent {
       selectMilestone(options, res => this.updateFilter({ milestoneId: res.id }));
     }
     if (obj.id === 'matching') {
-      const { inputMenu } = this.props;
-      const { tabs, tabIndex } = this.state;
-      const text = this.props.filters.getIn([tabs[tabIndex], 'filter', 'matching']);
-      inputMenu({
-        ...options,
-        buttonLabel: 'Search',
-        placeholder: 'Search goal and step titles',
-        allowEmpty: true,
-        text,
-      }, res => this.updateFilter({ matching: res }));
+      this.updateFilter({ matching: obj.value });
     }
   }
   onAddGoal(e) {

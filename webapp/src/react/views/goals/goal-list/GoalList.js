@@ -96,6 +96,16 @@ class GoalList extends Component {
     return (
       <Measure onMeasure={this.onFilterHeight}>
         <div className="goals-list__filter">
+          <input type="text"
+            placeholder="Search for goals"
+            value={filter.get('matching') || ''}
+            onChange={(e) => {
+              this.callDelegate('onChangeFilter', {
+                id: 'matching',
+                value: e.target.value,
+              }, e);
+            }}
+          />
           <Filter
             onClick={(id, obj, e) => {
               this.callDelegate('onChangeFilter', obj, e);

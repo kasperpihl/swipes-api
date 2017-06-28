@@ -71,12 +71,18 @@ export default function filterGoal(goal, filter) {
     if (goal.get('title').toLowerCase().includes(matching)) {
       foundMatch = true;
     }
-    goal.get('steps').forEach((s) => {
+    helper.getOrderedSteps().forEach((s) => {
       if (s.get('title').toLowerCase().includes(matching)) {
         foundMatch = true;
       }
       return !foundMatch;
     });
+    helper.getOrderedAttachments().forEach((a) => {
+      if (a.get('title').toLowerCase().includes(matching)) {
+        foundMatch = true;
+      }
+      return !foundMatch;
+    })
     if (!foundMatch) {
       return false;
     }
