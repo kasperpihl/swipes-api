@@ -107,7 +107,7 @@ export default function goalsReducer(state = initialState, action) {
     case 'history_updated': {
       return state.updateIn([payload.target.id], (g) => {
         const hIndex = payload.target.history_index;
-        if (!g || g.getIn(['history', hIndex])) return g;
+        if (!g || !g.getIn(['history', hIndex])) return g;
         return g.setIn(['history', hIndex], fromJS(payload.changes));
       });
     }
