@@ -82,7 +82,7 @@ export default function filterGoal(goal, filter) {
         foundMatch = true;
       }
       return !foundMatch;
-    })
+    });
     if (!foundMatch) {
       return false;
     }

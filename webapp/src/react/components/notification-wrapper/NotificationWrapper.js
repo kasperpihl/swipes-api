@@ -162,7 +162,7 @@ class NotificationItem extends Component {
   render() {
     const { notification: n, delegate, noBorder, narrow, pinned } = this.props;
     let className = 'notification';
-
+    console.log('n', n.toJS());
     if (n.get('unseen')) {
       className += ' notification--unseen';
     }

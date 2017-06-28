@@ -23,6 +23,7 @@ export default class HistoryGenerator {
       subtitle: true,
       attachments: true,
       message: true,
+      seenBy: true,
       reply: true,
     };
     def = Object.assign(def, options);
@@ -33,6 +34,7 @@ export default class HistoryGenerator {
       title: def.title ? this.getTitle(helper.getId(), h) : null,
       subtitle: def.subtitle ? this.getSubtitle(helper.getId(), h) : null,
       userId: h.get('done_by'),
+      seenBy: def.seenBy ? this.getSeenByForHistory(helper.getId(), h) : null,
       reply: def.reply ? this.getReplyButtonForHistory(helper.getId(), h) : null,
       message: def.message ? h.get('message') : null,
       icon: def.icon ? this.getIcon(h) : null,
@@ -100,6 +102,13 @@ export default class HistoryGenerator {
       default:
         return h.get('type');
     }
+  }
+  getSeenByForHistory(id, h) {
+    const me = this.store.getState().get('me');
+    if(h.get('done_by') === me.get('id')){
+      return h.get('seenBy') || [];
+    }
+    return undefined;
   }
   getSubtitle(id, h) {
     const helper = this._getHelper(id);
