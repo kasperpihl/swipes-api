@@ -109,7 +109,10 @@ export default class HistoryGenerator {
     if(!h || h.get('done_by') !== me.get('id')){
       return undefined;
     }
-    return h.get('seen_by') || [];
+    if (h.get('seen_by')) {
+      return h.get('seen_by').filter(id => id !== me.get('id'));
+    }
+    return [];
 
   }
   getSubtitle(id, h) {
