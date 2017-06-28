@@ -212,6 +212,8 @@ const dbOrganizationsUpdateStripeCustomerIdAndPlan = funcWrap([
         stripe_customer_id,
         plan,
         updated_at: r.now(),
+      }, {
+        returnChanges: true,
       });
 
   return db.rethinkQuery(q);

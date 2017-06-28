@@ -17,22 +17,13 @@ const organizationsGetSingle = (req, res, next) => {
 };
 const organizationsUpdatedNotificationData = (req, res, next) => {
   const {
-    organization_id,
-    updated_fields,
     organization,
   } = res.locals;
-  const updatedData = {};
-
-  updated_fields.forEach((field) => {
-    updatedData[field] = organization[field];
-  });
 
 
   res.locals.notificationData = null;
   res.locals.eventData = {
-    ...updatedData,
-    organization_id,
-    updated_at: organization.updated_at,
+    organization,
   };
 
   return next();

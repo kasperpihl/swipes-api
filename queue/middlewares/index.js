@@ -280,7 +280,6 @@ const profile_updated = notifyWrapper([
 ]);
 
 const organization_updated = notifyWrapper([
-  organizations.organizationsGetSingle,
   organizations.organizationsUpdatedNotificationData,
   notify.notifyAllInCompany,
 ]);

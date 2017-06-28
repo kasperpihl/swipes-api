@@ -1,9 +1,7 @@
 import express from 'express';
 import {
   string,
-  array,
   object,
-  date,
 } from 'valjs';
 import {
   organizationsCreate,
@@ -37,6 +35,20 @@ import {
 
 const authed = express.Router();
 const notAuthed = express.Router();
+const createOrganizationWithOnlyChangedFields = (locals) => {
+  const updatedFields = locals.updatedFields;
+  const organization = locals.organization;
+  const pluckedOrganization = {
+    id: organization.id,
+    updated_at: organization.updated_at,
+  };
+
+  updatedFields.forEach((field) => {
+    pluckedOrganization[field] = organization[field];
+  });
+
+  return pluckedOrganization;
+};
 
 authed.all('/organizations.create',
   valBody({
@@ -55,12 +67,13 @@ authed.all('/organizations.promoteToAdmin',
   organizationsGetSingle,
   organizationsCheckAdminRights,
   organizationsPromoteToAdmin,
+  mapLocals(locals => ({
+    organization: createOrganizationWithOnlyChangedFields(locals),
+  })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    organization_id: string.require(),
-    admins: array.require(),
-    updated_at: date.require(),
+    organization: object.require(),
   }),
 );
 
@@ -72,12 +85,13 @@ authed.all('/organizations.demoteAnAdmin',
   organizationsGetSingle,
   organizationsCheckAdminRights,
   organizationsDemoteAnAdmin,
+  mapLocals(locals => ({
+    organization: createOrganizationWithOnlyChangedFields(locals),
+  })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    organization_id: string.require(),
-    admins: array.require(),
-    updated_at: date.require(),
+    organization: object.require(),
   }),
 );
 
@@ -96,13 +110,13 @@ authed.all('/organizations.transferOwnership',
   organizationsGetSingle,
   organizationsCheckOwnerRights,
   organizationsTransferOwnership,
+  mapLocals(locals => ({
+    organization: createOrganizationWithOnlyChangedFields(locals),
+  })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    organization_id: string.require(),
-    owner_id: string.require(),
-    admins: array.require(),
-    updated_at: date.require(),
+    organization: object.require(),
   }),
 );
 
@@ -114,12 +128,13 @@ authed.all('/organizations.disableUser',
   organizationsGetSingle,
   organizationsCheckAdminRights,
   organizationsDisableUser,
+  mapLocals(locals => ({
+    organization: createOrganizationWithOnlyChangedFields(locals),
+  })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    organization_id: string.require(),
-    disabled_users: array.require(),
-    updated_at: date.require(),
+    organization: object.require(),
   }),
 );
 authed.all('/organizations.enableUser',
@@ -130,12 +145,13 @@ authed.all('/organizations.enableUser',
   organizationsGetSingle,
   organizationsCheckAdminRights,
   organizationsEnableUser,
+  mapLocals(locals => ({
+    organization: createOrganizationWithOnlyChangedFields(locals),
+  })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    organization_id: string.require(),
-    disabled_users: array.require(),
-    updated_at: date.require(),
+    organization: object.require(),
   }),
 );
 
@@ -155,15 +171,16 @@ authed.all('/organizations.createStripeCustomer',
   })),
   usersGetOwnerByIdWithFields,
   organizationsCreateStripeCustomer,
+  mapLocals(locals => ({
+    organization: createOrganizationWithOnlyChangedFields(locals),
+  })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
   mapLocals(locals => ({
     stripe_customer_id: locals.stripeCustomerId,
   })),
   valResponseAndSend({
-    organization_id: string.require(),
-    stripe_customer_id: string.require(),
-    plan: string.require(),
+    organization: object.require(),
   }),
 );
 
