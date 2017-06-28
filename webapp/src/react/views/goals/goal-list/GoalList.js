@@ -8,6 +8,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Filter from 'components/filter/Filter';
 import SWView from 'SWView';
 import Button from 'Button';
+import Icon from 'Icon';
 import Measure from 'react-measure';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import FilterFooter from './FilterFooter';
@@ -55,7 +56,7 @@ class GoalList extends Component {
           <Button
             text="Add a goal"
             primary
-            {...getLoading('add')}
+            {...getLoading('add') }
             onClick={this.onAddGoal}
           />
         </HOCHeaderTitle>
@@ -96,30 +97,35 @@ class GoalList extends Component {
     return (
       <Measure onMeasure={this.onFilterHeight}>
         <div className="goals-list__filter">
-          <input type="text"
-            placeholder="Search for goals"
-            value={filter.get('matching') || ''}
-            onChange={(e) => {
-              this.callDelegate('onChangeFilter', {
-                id: 'matching',
-                value: e.target.value,
-              }, e);
-            }}
-          />
-          <Filter
-            onClick={(id, obj, e) => {
-              this.callDelegate('onChangeFilter', obj, e);
-            }}
-            filter={filterArray}
-          />
+          <div className="goals-list__search">
+            <input type="text"
+              placeholder="Search for goals"
+              value={filter.get('matching') || ''}
+              onChange={(e) => {
+                this.callDelegate('onChangeFilter', {
+                  id: 'matching',
+                  value: e.target.value,
+                }, e);
+              }}
+            />
+            <Icon icon="Find" className="goals-list__search-svg" />
+          </div>
+          <div className="goals-list__filter-wrap">
+            <Filter
+              onClick={(id, obj, e) => {
+                this.callDelegate('onChangeFilter', obj, e);
+              }}
+              filter={filterArray}
+            />
 
-          <div className="goals-list__filter-actions">
-            <div className="goals-list__filter-action" onClick={this.clearFilter}>Clear filter</div>
-            <div
-              className="goals-list__filter-action goals-list__filter-action--main"
-              onClick={this.hideFilter}
-            >
-              Hide
+            <div className="goals-list__filter-actions">
+              <div className="goals-list__filter-action" onClick={this.clearFilter}>Clear filter</div>
+              <div
+                className="goals-list__filter-action goals-list__filter-action--main"
+                onClick={this.hideFilter}
+              >
+                Hide
+              </div>
             </div>
           </div>
         </div>
