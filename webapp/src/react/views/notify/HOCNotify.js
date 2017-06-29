@@ -90,10 +90,16 @@ class HOCNotify extends PureComponent {
       }
     });
   }
+  onAutoCompleteSelect(i) {
+
+  }
+  onAutoCompleteRow(i) {
+
+  }
   onHandoffChange(text, e) {
     const { notify } = this.state;
-    const { autoComplete } = this.props;
-    autoComplete(e.target.getBoundingClientRect());
+    //const { autoComplete } = this.props;
+    //autoComplete(e.target.getBoundingClientRect(), this);
     this.updateHandoff(notify.set('message', text));
   }
   onChangeClick(e) {
