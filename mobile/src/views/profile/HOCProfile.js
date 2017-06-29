@@ -44,16 +44,16 @@ class HOCProfile extends PureComponent {
   renderProfile() {
     const { me } = this.props;
 
-    if (me.get('profile_pic')) {
+    if (msgGen.users.getPhoto(me)) {
       return (
         <Image
-          source={{ uri: me.get('profile_pic') }}
+          source={{ uri: msgGen.users.getPhoto(me) }}
           style={styles.profileImage}
         />
       );
     }
 
-    const initials = me.get('first_name').substring(0, 1) + me.get('last_name').substring(0, 1);
+    const initials = msgGen.users.getInitials(me);
 
     return (
       <View style={styles.initialsView}>
@@ -69,7 +69,7 @@ class HOCProfile extends PureComponent {
         {this.renderHeader()}
         <View style={styles.profile}>
           {this.renderProfile()}
-          <Text style={styles.name}>{me.get('first_name')} {me.get('last_name')}</Text>
+          <Text style={styles.name}>{msgGen.users.getFullName(me)}</Text>
           <View style={styles.seperator} />
           <Text style={styles.orgName}>{me.getIn(['organizations', 0, 'name'])}</Text>
 
