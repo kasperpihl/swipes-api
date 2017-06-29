@@ -39,26 +39,19 @@ class HOCMilestoneList extends PureComponent {
     });
     console.log('open', milestoneId);
   }
-  onAddMilestone(e) {
+  onAddMilestone(title) {
     const { inputMenu, createMilestone } = this.props;
-    const options = this.getOptionsForE(e);
-    inputMenu({
-      ...options,
-      placeholder: 'Name of the milestone',
-      buttonLabel: 'Create',
-    }, (title) => {
-      if (title && title.length) {
-        this.setLoading('add');
-        createMilestone(title).then((res) => {
-          if (res && res.ok) {
-            this.clearLoading('add', 'Added milestone', 3000);
-            window.analytics.sendEvent('Milestone created', {});
-          } else {
-            this.clearLoading('add', '!Something went wrong');
-          }
-        });
-      }
-    });
+    if (title && title.length) {
+      this.setLoading('add');
+      createMilestone(title).then((res) => {
+        if (res && res.ok) {
+          this.clearLoading('add');
+          window.analytics.sendEvent('Milestone created', {});
+        } else {
+          this.clearLoading('add', '!Something went wrong');
+        }
+      });
+    }
   }
   getOptionsForE(e) {
     return {
