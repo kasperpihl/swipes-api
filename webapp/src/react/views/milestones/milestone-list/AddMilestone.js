@@ -30,6 +30,7 @@ class AddMilestone extends PureComponent {
     const { isLoading, getLoading } = this.props;
     return (
       <div className="add-milestone">
+        hello
       </div>
     )
   }

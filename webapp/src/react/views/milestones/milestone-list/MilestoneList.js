@@ -8,6 +8,8 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 // import Icon from 'Icon';
 import HOCMilestoneItem from './HOCMilestoneItem';
+import AddMilestone from './AddMilestone';
+
 import './styles/milestone-list.scss';
 
 class MilestoneList extends PureComponent {
@@ -46,6 +48,13 @@ class MilestoneList extends PureComponent {
       />
     )).toArray();
   }
+  renderAddMilestone() {
+    return (
+      <AddMilestone
+        delegate={this}
+      />
+    )
+  }
   renderEmptyState() {
     const { tabIndex } = this.props;
 
@@ -68,6 +77,7 @@ class MilestoneList extends PureComponent {
           milestones.size ? (
             <div className="milestone-list">
               {this.renderList()}
+              {this.renderAddMilestone()}
             </div>
           ) : (
             this.renderEmptyState()
