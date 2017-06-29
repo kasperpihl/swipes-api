@@ -18,7 +18,7 @@ class AutoCompleting extends PureComponent {
     const { boundingRect } = this.props;
     let className = 'auto-completing';
     const style = {};
-    if(!boundingRect) {
+    if(boundingRect) {
       className += ' auto-completing__shown';
       style.width = 400 + 'px';
       style.height = 400 + 'px';
