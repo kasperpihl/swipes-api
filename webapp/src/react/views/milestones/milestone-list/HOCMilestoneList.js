@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import * as a from 'actions';
+// import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import MilestoneList from './MilestoneList';
@@ -39,32 +39,19 @@ class HOCMilestoneList extends PureComponent {
     });
     console.log('open', milestoneId);
   }
-  onAddMilestone(e) {
-    const { inputMenu, createMilestone } = this.props;
-    const options = this.getOptionsForE(e);
-    inputMenu({
-      ...options,
-      placeholder: 'Name of the milestone',
-      buttonLabel: 'Create',
-    }, (title) => {
-      if (title && title.length) {
-        this.setLoading('add');
-        createMilestone(title).then((res) => {
-          if (res && res.ok) {
-            this.clearLoading('add', 'Added milestone', 3000);
-            window.analytics.sendEvent('Milestone created', {});
-          } else {
-            this.clearLoading('add', '!Something went wrong');
-          }
-        });
-      }
-    });
-  }
-  getOptionsForE(e) {
-    return {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
+  onAddMilestone(title) {
+    const { createMilestone } = this.props;
+    if (title && title.length) {
+      this.setLoading('add');
+      createMilestone(title).then((res) => {
+        if (res && res.ok) {
+          this.clearLoading('add');
+          window.analytics.sendEvent('Milestone created', {});
+        } else {
+          this.clearLoading('add', '!Something went wrong');
+        }
+      });
+    }
   }
   tabDidChange(index) {
     const { tabIndex } = this.state;
@@ -104,6 +91,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  inputMenu: a.menus.input,
   createMilestone: ca.milestones.create,
 })(HOCMilestoneList);

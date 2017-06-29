@@ -52,6 +52,7 @@ class MilestoneList extends PureComponent {
     return (
       <AddMilestone
         delegate={this}
+        {...this.props.bindLoading()}
       />
     )
   }
