@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import * as a from 'actions';
+// import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import MilestoneList from './MilestoneList';
@@ -40,7 +40,7 @@ class HOCMilestoneList extends PureComponent {
     console.log('open', milestoneId);
   }
   onAddMilestone(title) {
-    const { inputMenu, createMilestone } = this.props;
+    const { createMilestone } = this.props;
     if (title && title.length) {
       this.setLoading('add');
       createMilestone(title).then((res) => {
@@ -52,12 +52,6 @@ class HOCMilestoneList extends PureComponent {
         }
       });
     }
-  }
-  getOptionsForE(e) {
-    return {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
   }
   tabDidChange(index) {
     const { tabIndex } = this.state;
@@ -97,6 +91,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  inputMenu: a.menus.input,
   createMilestone: ca.milestones.create,
 })(HOCMilestoneList);
