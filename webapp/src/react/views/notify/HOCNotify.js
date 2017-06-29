@@ -90,8 +90,10 @@ class HOCNotify extends PureComponent {
       }
     });
   }
-  onHandoffChange(text) {
+  onHandoffChange(text, e) {
     const { notify } = this.state;
+    const { autoComplete } = this.props;
+    autoComplete(e.target.getBoundingClientRect());
     this.updateHandoff(notify.set('message', text));
   }
   onChangeClick(e) {
@@ -157,6 +159,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
+  autoComplete: a.main.autoComplete,
   contextMenu: a.main.contextMenu,
   saveCache: cache.save,
   goalNotify: goals.notify,

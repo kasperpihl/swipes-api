@@ -14,7 +14,7 @@ class HandoffWriteMessage extends Component {
   }
   onHandoffChange(e) {
     const { onChange } = this.props;
-    onChange(e.target.value);
+    onChange(e.target.value, e);
   }
   focus() {
     this.refs.textarea.focus();

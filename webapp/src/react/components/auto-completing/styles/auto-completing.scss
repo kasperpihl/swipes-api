@@ -4,8 +4,11 @@
 .auto-completing {
   position: fixed;
   z-index: 9999;
-
+  background-color: red;
+  visibility: hidden;
+  pointer-events: none;
   &--shown {
-    background-color: red;
-  }  
+    visibility: visible;
+    pointer-events: all;
+  }
 }

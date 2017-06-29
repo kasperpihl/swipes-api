@@ -19,15 +19,15 @@ class AutoCompleting extends PureComponent {
     let className = 'auto-completing';
     const style = {};
     if(boundingRect) {
-      className += ' auto-completing__shown';
+      className += ' auto-completing--shown';
       style.width = 400 + 'px';
       style.height = 400 + 'px';
-      style.bottom = boundingRect.top + 'px';
-      style.left = 0 + 'px';
+      style.top = (boundingRect.top - 400) + 'px';
+      style.left = boundingRect.left + 'px';
     }
 
     return (
-      <div className="auto-completing" style={style}>
+      <div className={className} style={style}>
       </div>
     )
   }
