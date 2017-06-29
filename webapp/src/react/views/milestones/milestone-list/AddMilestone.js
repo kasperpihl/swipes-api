@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react'
 import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
 // import Button from 'Button';
-// import Icon from 'Icon';
+import Icon from 'Icon';
 // import './styles/add-milestone.scss';
 
 class AddMilestone extends PureComponent {
@@ -15,6 +15,8 @@ class AddMilestone extends PureComponent {
     };
     setupDelegate(this);
     this.callDelegate.bindAll('onAddMilestone');
+    this.onChange = this.onChange.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
   componentDidMount() {
   }
@@ -22,14 +24,31 @@ class AddMilestone extends PureComponent {
     this.setState({ title: e.target.value });
   }
   onKeyDown(e) {
-    if(e.keyCode === 13) {
+    if (e.keyCode === 13) {
       this.onAddMilestone(this.state.title);
     }
+  }
+  renderInput() {
+    const { title } = this.state;
+
+    return (
+      <input value={title} onChange={this.onChange} onKeyDown={this.onKeyDown} placeholder="Add new milestone" />
+    )
+  }
+  renderAdd() {
+
+    return (
+      <div className="add-milestone__body">
+        <Icon icon="Plus" className="add-milestone__svg" />
+      </div>
+    )
   }
   render() {
     const { isLoading, getLoading } = this.props;
     return (
       <div className="add-milestone">
+        {this.renderInput()}
+        {this.renderAdd()}
       </div>
     )
   }
