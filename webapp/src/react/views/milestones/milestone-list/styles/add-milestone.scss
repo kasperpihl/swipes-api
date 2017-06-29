@@ -58,6 +58,15 @@
     @include svg-color($deepBlue-50);
     transition: .25s ease;
   }
+
+  &__loader {
+    @include size(100%);
+    position: absolute;
+    left: 0; top: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: .25s ease;
+  }
 }
 
 // ======================================================
@@ -68,9 +77,14 @@
   $b: &;
 
   &__svg#{&}__svg--active {
-      @include svg-color($blue-100 !important);
-      transition: .25s ease;
-    }
+    @include svg-color($blue-100 !important);
+    transition: .25s ease;
+  }
+
+  &__svg#{&}__svg--hidden {
+    opacity: 0;
+    transition: .25s ease;
+  }
 }
 
 // ======================================================

@@ -5,6 +5,7 @@ import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/clas
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
+import Loader from 'components/loaders/Loader';
 import './styles/add-milestone.scss';
 
 class AddMilestone extends PureComponent {
@@ -38,17 +39,27 @@ class AddMilestone extends PureComponent {
     )
   }
   renderAdd() {
+    const { isLoading } = this.props;
     const { title } = this.state;
-    let className = 'add-milestone__svg';
+    let iconClassName = 'add-milestone__svg';
+    let loaderClassName = 'add-milestone__loader';
 
     if (title.length > 0) {
-      className += ' add-milestone__svg--active'
+      iconClassName += ' add-milestone__svg--active'
+    }
+
+    if (isLoading) {
+      iconClassName += ' add-milestone__svg--hidden';
+      loaderClassName += ' add-milestone__loader--show';
     }
 
     return (
-      <div className="add-milestone__body">
-        <Icon icon="Plus" className={className} />
-      </div>
+      <div className="add-milestone__body" onClick={this.onAddMilestone(this.state.title)}>
+        <Icon icon="Plus" className={iconClassName} />
+        <div className={loaderClassName}>
+          <Loader center size={60} />
+        </div>
+      </div >
     )
   }
   render() {
