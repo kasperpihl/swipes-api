@@ -2,7 +2,8 @@
 @import '~styles/_mixins.scss';
 
 .auto-completing {
-
+  position: fixed;
+  z-index: 9999;
 
   &--shown {
     background-color: red;
