@@ -17,7 +17,7 @@ class MilestoneList extends PureComponent {
     super(props);
     this.state = {};
     setupDelegate(this);
-    this.callDelegate.bindAll('onAddGoal', 'onAddMilestone');
+    this.callDelegate.bindAll('onAddGoal');
   }
   componentDidMount() {
   }
@@ -26,12 +26,7 @@ class MilestoneList extends PureComponent {
     return (
       <div className="milestone-list__header">
         <HOCHeaderTitle title="Plan">
-          <Button
-            text="Add a milestone"
-            primary
-            {...getLoading('add')}
-            onClick={this.onAddMilestone}
-          />
+
         </HOCHeaderTitle>
 
         <TabBar delegate={delegate} tabs={tabs} activeTab={tabIndex} />
@@ -49,9 +44,10 @@ class MilestoneList extends PureComponent {
     )).toArray();
   }
   renderAddMilestone() {
+    const { delegate } = this.props;
     return (
       <AddMilestone
-        delegate={this}
+        delegate={delegate}
         {...this.props.bindLoading()}
       />
     )
@@ -65,7 +61,7 @@ class MilestoneList extends PureComponent {
           {tabIndex === 0 ?
             'This is the beginning of something great, a project or a big achievement for the team. Add your first milestone and set the goals for it.' :
             'Shhh, the team is hard at work and things are still in progress. No closed milestones yet.'}
-          <div className="milestone-empty__action" onClick={this.onAddMilestone}>{tabIndex === 0 ? 'Add a milestone' : ''}</div>
+          <div className="milestone-empty__action">{tabIndex === 0 ? 'Add a milestone' : ''}</div>
         </div>
       </div>
     );

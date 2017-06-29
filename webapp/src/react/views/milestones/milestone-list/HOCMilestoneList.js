@@ -41,7 +41,7 @@ class HOCMilestoneList extends PureComponent {
   }
   onAddMilestone(title) {
     const { createMilestone } = this.props;
-    if (title && title.length) {
+    if (title && title.length && !this.isLoading('add')) {
       this.setLoading('add');
       createMilestone(title).then((res) => {
         if (res && res.ok) {

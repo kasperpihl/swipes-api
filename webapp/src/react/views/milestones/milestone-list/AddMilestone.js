@@ -54,12 +54,12 @@ class AddMilestone extends PureComponent {
     }
 
     return (
-      <div className="add-milestone__body" onClick={this.onAddMilestone(this.state.title)}>
+      <div className="add-milestone__body">
         <Icon icon="Plus" className={iconClassName} />
         <div className={loaderClassName}>
           <Loader center size={60} />
         </div>
-      </div >
+      </div>
     )
   }
   render() {
