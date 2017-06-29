@@ -7,6 +7,7 @@ import * as a from 'actions';
 import Gradient from 'components/gradient/Gradient';
 import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
 //import HOCApp from 'src/react/app/HOCApp';
+import HOCAutoCompleting from 'components/auto-completing/HOCAutoCompleting';
 import HOCContextMenu from 'components/context-menu/HOCContextMenu';
 import HOCTooltip from 'components/tooltip/HOCTooltip';
 
@@ -62,6 +63,7 @@ class Root extends PureComponent {
         {this.renderTopbar()}
         <HOCContextMenu />
         <HOCTooltip />
+        <HOCAutoCompleting />
         <DevTools />
         <div className="content-wrapper">
           <Route path="/unsubscribe" render={() => {

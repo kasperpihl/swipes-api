@@ -34,6 +34,13 @@ export default function main(state = initialState, action) {
     }
 
     // ======================================================
+    // Auto Completing
+    // ======================================================
+    case types.AUTO_COMPLETE: {
+      return state.set('autoComplete', (payload && fromJS(payload)) || null);
+    }
+
+    // ======================================================
     // Context Menu
     // ======================================================
     case types.CONTEXT_MENU: {

@@ -27,6 +27,13 @@ export const contextMenu = payload => (dp, getState) => {
 };
 
 // ======================================================
+// Auto Completing
+// ======================================================
+export const autoComplete = (boundingRect, delegate) => {
+  return { type: types.AUTO_COMPLETE, payload: { boundingRect, delegate }};
+}
+
+// ======================================================
 // Open slack in a users page
 // ======================================================
 export const openSlackIn = id => ({ type: types.SLACK_OPEN_IN, payload: { id } });
