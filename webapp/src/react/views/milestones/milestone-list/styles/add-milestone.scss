@@ -66,6 +66,11 @@
     pointer-events: none;
     opacity: 0;
     transition: .25s ease;
+
+    &--show {
+      opacity: 1;
+      transition: .25s ease;
+    }
   }
 }
 

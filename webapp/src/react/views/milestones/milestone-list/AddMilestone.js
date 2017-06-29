@@ -18,6 +18,7 @@ class AddMilestone extends PureComponent {
     this.callDelegate.bindAll('onAddMilestone');
     this.onChange = this.onChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
   }
   componentDidMount() {
   }
@@ -27,14 +28,26 @@ class AddMilestone extends PureComponent {
   onKeyDown(e) {
     if (e.keyCode === 13) {
       this.onAddMilestone(this.state.title);
+      this.setState({ title: '' });
     }
+  }
+  handleFocus() {
+    const { addMilestoneInput } = this.refs;
+
+    addMilestoneInput.focus();
   }
   renderInput() {
     const { title } = this.state;
 
     return (
       <div className="add-milestone__header">
-        <input value={title} onChange={this.onChange} onKeyDown={this.onKeyDown} placeholder="Add new milestone" />
+        <input
+          ref="addMilestoneInput"
+          value={title}
+          onChange={this.onChange}
+          onKeyDown={this.onKeyDown}
+          placeholder="Add new milestone"
+        />
       </div>
     )
   }
@@ -48,7 +61,7 @@ class AddMilestone extends PureComponent {
       iconClassName += ' add-milestone__svg--active'
     }
 
-    if (isLoading) {
+    if (isLoading('add')) {
       iconClassName += ' add-milestone__svg--hidden';
       loaderClassName += ' add-milestone__loader--show';
     }
@@ -65,7 +78,7 @@ class AddMilestone extends PureComponent {
   render() {
     const { isLoading, getLoading } = this.props;
     return (
-      <div className="add-milestone">
+      <div className="add-milestone" onClick={this.handleFocus}>
         {this.renderInput()}
         {this.renderAdd()}
       </div>
