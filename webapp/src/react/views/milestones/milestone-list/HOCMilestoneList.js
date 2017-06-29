@@ -64,7 +64,9 @@ class HOCMilestoneList extends PureComponent {
   render() {
     const { milestones } = this.props;
     const { tabs, tabIndex } = this.state;
-    const group = milestones.groupBy(m => m.get('closed') ? 'Closed' : 'Open');
+    const group = milestones.sort(
+      (a, b) => a.get('created_at').localeCompare(b.get('created_at'))
+    ).groupBy(m => m.get('closed') ? 'Closed' : 'Open');
 
     return (
       <MilestoneList
