@@ -2,5 +2,9 @@
 @import '~styles/_mixins.scss';
 
 .auto-completing {
-  
+
+
+  &--shown {
+    background-color: red;
+  }  
 }
