@@ -5,7 +5,7 @@ import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/clas
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
-// import './styles/add-milestone.scss';
+import './styles/add-milestone.scss';
 
 class AddMilestone extends PureComponent {
   constructor(props) {
@@ -32,14 +32,22 @@ class AddMilestone extends PureComponent {
     const { title } = this.state;
 
     return (
-      <input value={title} onChange={this.onChange} onKeyDown={this.onKeyDown} placeholder="Add new milestone" />
+      <div className="add-milestone__header">
+        <input value={title} onChange={this.onChange} onKeyDown={this.onKeyDown} placeholder="Add new milestone" />
+      </div>
     )
   }
   renderAdd() {
+    const { title } = this.state;
+    let className = 'add-milestone__svg';
+
+    if (title.length > 0) {
+      className += ' add-milestone__svg--active'
+    }
 
     return (
       <div className="add-milestone__body">
-        <Icon icon="Plus" className="add-milestone__svg" />
+        <Icon icon="Plus" className={className} />
       </div>
     )
   }
