@@ -326,6 +326,7 @@ const dbGoalsAppendWayToGoal = funcWrap([
         attachments: r.row('attachments').merge(attachments),
         attachment_order: r.row('attachment_order').setUnion(attachment_order),
         updated_at: r.now(),
+        completed_at: null,
       }, {
         returnChanges: true,
       });
