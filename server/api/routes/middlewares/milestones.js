@@ -94,6 +94,7 @@ const milestonesClose = valLocals('milestonesClose', {
   };
   const properties = {
     closed: true,
+    closed_at: r.now(),
     history: r.row('history').append(historyItem),
     updated_at: r.now(),
   };
@@ -122,6 +123,7 @@ const milestonesOpen = valLocals('milestonesOpen', {
   };
   const properties = {
     closed: false,
+    closed_at: null,
     history: r.row('history').append(historyItem),
     updated_at: r.now(),
   };
