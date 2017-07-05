@@ -89,6 +89,7 @@ const milestoneOpenCloseWithHistoryNotificationData = (req, res, next) => {
   res.locals.notificationData = notificationData;
   res.locals.eventData = {
     milestone_id,
+    closed_at: milestone.closed_at,
     goal_order: milestone.goal_order,
     goal_ids,
   };

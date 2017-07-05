@@ -15,11 +15,11 @@ export default function milestonesReducer(state = initialState, action) {
       if (payload.milestone_id && payload.goal_order) {
         state = state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));
       }
-      return state.setIn([payload.milestone_id, 'closed'], true);
+      return state.setIn([payload.milestone_id, 'closed_at'], payload.closed_at);
     }
     case 'milestones.open':
     case 'milestone_opened': {
-      return state.setIn([payload.milestone_id, 'closed'], false);
+      return state.setIn([payload.milestone_id, 'closed_at'], payload.closed_at);
     }
     case 'milestones.rename':
     case 'milestone_renamed': {
@@ -34,9 +34,7 @@ export default function milestonesReducer(state = initialState, action) {
     case 'milestones.addGoal':
     case 'milestone_goal_added': {
       if (payload.old_milestone_id) {
-        state = state.updateIn([payload.old_milestone_id, 'goal_order'], (order) => {
-          return order.filter(id => id !== payload.goal_id);
-        });
+        state = state.updateIn([payload.old_milestone_id, 'goal_order'], order => order.filter(id => id !== payload.goal_id));
       }
       if (payload.milestone_id && payload.goal_order) {
         return state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));

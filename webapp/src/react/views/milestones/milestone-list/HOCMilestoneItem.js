@@ -57,7 +57,7 @@ class HOCMilestoneItem extends PureComponent {
 
     let progressClassName = 'milestone__svg milestone__svg--fg';
 
-    if (milestone.get('closed')) {
+    if (milestone.get('closed_at')) {
       progressClassName += ' milestone__svg--closed';
     }
 

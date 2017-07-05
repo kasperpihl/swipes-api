@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loader: {
-     
+
   },
 });
 
@@ -85,7 +85,7 @@ class HOCMilestones extends PureComponent {
   renderHeader() {
     const { tabIndex, tabs } = this.state;
     const { milestones } = this.props;
-    const group = milestones.groupBy(m => m.get('closed') ? 'Closed' : 'Open');
+    const group = milestones.groupBy(m => m.get('closed_at') ? 'Closed' : 'Open');
 
     return (
       <HOCHeader
@@ -112,7 +112,7 @@ class HOCMilestones extends PureComponent {
   renderList() {
     const { tabIndex, tabs, hasLoaded } = this.state;
     const { milestones } = this.props;
-    const group = milestones.groupBy(m => m.get('closed') ? 'Closed' : 'Open');
+    const group = milestones.groupBy(m => m.get('closed_at') ? 'Closed' : 'Open');
     const milestonesToRender = group.get(tabs[tabIndex]) || emptyList;
 
     if (!hasLoaded) {

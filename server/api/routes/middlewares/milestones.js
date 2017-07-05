@@ -40,7 +40,7 @@ const milestonesCreate = valLocals('milestonesCreate', {
     created_by: user_id,
     created_at: r.now(),
     updated_at: r.now(),
-    closed: false,
+    closed_at: null,
     history: [{
       type: 'milestone_created',
       done_by: user_id,
@@ -93,7 +93,6 @@ const milestonesClose = valLocals('milestonesClose', {
     group_id: notificationGroupId,
   };
   const properties = {
-    closed: true,
     closed_at: r.now(),
     history: r.row('history').append(historyItem),
     updated_at: r.now(),
@@ -122,7 +121,6 @@ const milestonesOpen = valLocals('milestonesOpen', {
     group_id: notificationGroupId,
   };
   const properties = {
-    closed: false,
     closed_at: null,
     history: r.row('history').append(historyItem),
     updated_at: r.now(),
