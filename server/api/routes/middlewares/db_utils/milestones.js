@@ -102,7 +102,7 @@ const dbMilestonesMigrateIncompleteGoals = funcWrap([
           .getAll(r.args(goal_ids))
           .filter({
             archived: false,
-            status: { completed: false },
+            completed_at: null,
           }, {
             default: true,
           });
