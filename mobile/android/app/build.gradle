@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
+import groovy.json.JsonSlurper
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -90,6 +91,16 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+def getVersion() {
+    def slurper = new JsonSlurper()
+    def version = slurper.parse(file('../../package.json'))
+
+    return version;
+}
+
+def updatedVerionName = getVersion().androidVersionName
+def updatedVersionCode = getVersion().androidVersionCode
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -98,8 +109,8 @@ android {
         applicationId "com.swipes"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 5
-        versionName "0.4"
+        versionCode updatedVersionCode
+        versionName updatedVerionName
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
