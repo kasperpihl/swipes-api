@@ -85,20 +85,22 @@ const milestonesClose = valLocals('milestonesClose', {
     user_id,
     notificationGroupId,
   } = res.locals;
+  const closedAt = new Date();
   const type = 'milestone_closed';
   const historyItem = {
     type,
     done_by: user_id,
-    done_at: r.now(),
+    done_at: new Date(),
     group_id: notificationGroupId,
   };
   const properties = {
-    closed_at: r.now(),
+    closed_at: closedAt,
     history: r.row('history').append(historyItem),
-    updated_at: r.now(),
+    updated_at: new Date(),
   };
 
   setLocals({
+    closed_at: closedAt,
     properties,
     eventType: type,
   });
