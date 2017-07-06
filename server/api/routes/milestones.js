@@ -3,6 +3,7 @@ import {
   string,
   object,
   array,
+  date,
 } from 'valjs';
 import {
   milestonesCreate,
@@ -71,6 +72,7 @@ authed.all('/milestones.close',
   notificationsPushToQueue,
   valResponseAndSend({
     milestone_id: string.require(),
+    closed_at: date.require(),
     goal_order: array.require(),
     goal_ids: array,
   }));
