@@ -22,7 +22,7 @@
 // ======================================================
 
 .add-milestone {
-  b: &;
+  $b: &;
 
   &__header {
     @include size(100%, auto);
@@ -37,11 +37,6 @@
       &::-webkit-input-placeholder {
         @include font(21px, $deepBlue-30, 27px, 400);
       }
-
-      &:focus {
-        border-bottom: 1px solid $blue-100;
-        transition: .25s ease;
-      }
     }
   }
 
@@ -53,10 +48,36 @@
     transition: .25s ease;
   }
 
-  &__svg {
+  &__icon-wrapper {
     @include size(150px);
+    @include flexContainer('row', center, center);
+    border-radius: 50%;
+    transition: .25s ease;
+
+    &:after, &:before {
+      content: '';
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid $deepBlue-10;
+    }
+
+    &:before {
+      @include size(100%);
+    }
+
+    &:after {
+      @include size(54px);
+      background-color: white;
+    }
+  }
+
+  &__svg {
+    @include size(24px);
     @include svg-color($deepBlue-50);
     transition: .25s ease;
+    z-index: 2;
   }
 
   &__loader {
@@ -66,11 +87,6 @@
     pointer-events: none;
     opacity: 0;
     transition: .25s ease;
-
-    &--show {
-      opacity: 1;
-      transition: .25s ease;
-    }
   }
 }
 
@@ -81,14 +97,33 @@
 .add-milestone {
   $b: &;
 
-  &__svg#{&}__svg--active {
-    @include svg-color($blue-100 !important);
-    transition: .25s ease;
+  &#{$b}--active {
+    #{$b}__icon-wrapper {
+      background-color: $deepBlue-10;
+      transition: .25s ease;
+    }
+    
+    #{$b}__icon {
+      @include svg-color($blue-100 !important);
+      transition: .25s ease;
+    }
   }
-
-  &__svg#{&}__svg--hidden {
-    opacity: 0;
-    transition: .25s ease;
+  
+  &#{$b}--loading {
+    #{$b}__icon-wrapper {
+      opacity: 0;
+      transition: .25s ease;
+    }
+    
+    #{$b}__icon {
+      opacity: 0;
+      transition: .25s ease;
+    }
+    
+    #{$b}__loader {
+      opacity: 1;
+      transition: .25s ease;
+    }
   }
 }
 
@@ -103,17 +138,18 @@
     box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
     transition: .25s ease;
 
-    #{$b}__header input:placeholder-shown {
-      border-bottom: 1px solid $deepBlue-10;
-    }
-
     #{$b}__body {
       border-bottom: 1px solid $deepBlue-10;
       transition: .25s ease;
     }
 
+    #{$b}__icon-wrapper {
+      background-color: $deepBlue-10;
+      transition: .25s ease;
+    }
+
     #{$b}__svg {
-      @include svg-color($deepBlue-100);
+      @include svg-color($deepBlue-80);
       transition: .25s ease;
     }
   }

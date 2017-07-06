@@ -68,7 +68,9 @@ class AddMilestone extends PureComponent {
 
     return (
       <div className="add-milestone__body">
-        <Icon icon="Plus" className={iconClassName} />
+        <div className="add-milestone__icon-wrapper">
+          <Icon icon="Plus" className={iconClassName} />
+        </div>
         <div className={loaderClassName}>
           <Loader center size={60} />
         </div>
@@ -76,9 +78,21 @@ class AddMilestone extends PureComponent {
     )
   }
   render() {
-    const { isLoading, getLoading } = this.props;
+    const { isLoading } = this.props;
+    const { title } = this.state;
+    let className = 'add-milestone';
+
+    if (title.length > 0) {
+      className += ' add-milestone--active'
+    }
+
+    if (isLoading('add')) {
+      className += ' add-milestone--loading'
+    }
+
+
     return (
-      <div className="add-milestone" onClick={this.handleFocus}>
+      <div className={className} onClick={this.handleFocus}>
         {this.renderInput()}
         {this.renderAdd()}
       </div>
