@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "prebuild:android": "node increment.js",
+    "prebuild:android": "node increment_version_code.js",
     "build:android": "cd android; gradlew assembleRelease"
   },
   "dependencies": {
