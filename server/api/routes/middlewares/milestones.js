@@ -38,13 +38,13 @@ const milestonesCreate = valLocals('milestonesCreate', {
     goal_order: [],
     due_date: due_date || null,
     created_by: user_id,
-    created_at: r.now(),
-    updated_at: r.now(),
+    created_at: new Date(),
+    updated_at: new Date(),
     closed_at: null,
     history: [{
       type: 'milestone_created',
       done_by: user_id,
-      done_at: r.now(),
+      done_at: new Date(),
       group_id: notificationGroupId,
     }],
   };
