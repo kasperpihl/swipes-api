@@ -100,7 +100,7 @@ class MilestoneOverview extends PureComponent {
         <div className="milestone-empty">
           <div className="milestone-empty__content">
             Great work on this milestone! All goals have been completed. <br />
-            {milestone.get('closed') ? '' : extraText}
+            {milestone.get('closed_at') ? '' : extraText}
           </div>
         </div>
       );
@@ -126,7 +126,7 @@ class MilestoneOverview extends PureComponent {
 
     let progressClassName = 'milestone-progress__svg milestone-progress__svg--fg';
 
-    if (milestone.get('closed')) {
+    if (milestone.get('closed_at')) {
       progressClassName += ' milestone-progress__svg--closed';
     }
 

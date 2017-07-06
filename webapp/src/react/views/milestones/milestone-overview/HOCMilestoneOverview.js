@@ -85,7 +85,7 @@ class HOCMilestoneOverview extends PureComponent {
       },
     };
     const items = [{ id: 'close', title: 'Close milestone' }];
-    if (milestone.get('closed')) {
+    if (milestone.get('closed_at')) {
       items[0] = { id: 'open', title: 'Open milestone' };
     }
     contextMenu({
