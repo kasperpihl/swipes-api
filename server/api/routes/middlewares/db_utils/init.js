@@ -45,6 +45,20 @@ const initMe = funcWrap([
       })
       .do((user) => {
         return user.merge({
+          posts:
+            r.table('posts')
+              .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+              .filter((post) => {
+                return post('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+              })
+              .filter((post) => {
+                return post('archived').eq(false).or(post('archived').eq(!full_fetch));
+              })
+              .coerceTo('ARRAY'),
+        });
+      })
+      .do((user) => {
+        return user.merge({
           milestones:
              r.table('milestones')
                .getAll(user('organizations')(0)('id'), { index: 'organization_id' })

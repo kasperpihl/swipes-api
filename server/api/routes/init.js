@@ -17,7 +17,6 @@ const notAuthed = express.Router();
 
 authed.all('/init',
   valBody({
-    organization_id: string.require(),
     timestamp: string.format('iso8601'),
     without_notes: bool,
   }),

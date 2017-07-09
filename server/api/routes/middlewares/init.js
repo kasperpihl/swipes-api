@@ -8,9 +8,6 @@ import {
 } from '../../utils';
 import initMe from './db_utils/init';
 import {
-  dbPostsGetAllByOrganization,
-} from './db_utils/posts';
-import {
   servicesGetAll,
 } from './db_utils/services';
 import {
@@ -50,10 +47,6 @@ const initGetData = valLocals('initGetData', {
       timestamp,
     }),
     dbOnboardingGetAll(timestamp),
-    dbPostsGetAllByOrganization({
-      organization_id,
-      timestamp,
-    }),
   ];
 
   const now = new Date().toISOString();
@@ -66,6 +59,7 @@ const initGetData = valLocals('initGetData', {
       let milestones = [];
       let ways = [];
       let notes = [];
+      let posts = [];
 
       if (me.organizations.length > 0) {
         users = me.organizations[0].users;
@@ -79,6 +73,13 @@ const initGetData = valLocals('initGetData', {
 
         // We don't want duplication of that data served on the client;
         delete me.goals;
+      }
+
+      if (me.posts.length > 0) {
+        posts = me.posts;
+
+        // We don't want duplication of that data served on the client;
+        delete me.posts;
       }
 
       if (me.milestones.length > 0) {
@@ -109,11 +110,11 @@ const initGetData = valLocals('initGetData', {
         milestones,
         ways,
         notes,
+        posts,
         timestamp: now,
         services: data[1],
         notifications: data[2].concat(data[3]),
         onboarding: data[4],
-        posts: data[5],
       });
 
       return next();
