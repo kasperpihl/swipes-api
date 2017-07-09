@@ -18,6 +18,7 @@ import * as tokens from './tokens';
 import * as me from './me';
 import * as organizations from './organizations';
 import * as dashboard from './dashboard';
+import * as posts from './posts';
 
 const v1NotAuthed = [
   users.notAuthed,
@@ -45,6 +46,7 @@ const v1Authed = [
   tokens.authed,
   me.authed,
   organizations.authed,
+  posts.authed,
 ];
 const v1Multipart = [
   me.multipart,

@@ -11,6 +11,7 @@ import * as notify from './notify';
 import * as emails from './emails';
 import * as me from './me';
 import * as organizations from './organizations';
+import * as posts from './posts';
 
 const notifyWrapper = (middlewares) => {
   return [
@@ -284,6 +285,22 @@ const organization_updated = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const post_created = notifyWrapper([
+  posts.postsGetSingle,
+  posts.postCreatedNotificationData,
+  (req, res, next) => {
+    const {
+      post,
+    } = res.locals;
+
+    res.locals.user_ids = post.tagged_users;
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+
 export {
   goal_created,
   goal_completed,
@@ -327,4 +344,5 @@ export {
   user_signup,
   profile_updated,
   organization_updated,
+  post_created,
 };
