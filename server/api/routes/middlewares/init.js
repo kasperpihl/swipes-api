@@ -8,6 +8,9 @@ import {
 } from '../../utils';
 import initMe from './db_utils/init';
 import {
+  dbPostsGetAllByOrganization,
+} from './db_utils/posts';
+import {
   servicesGetAll,
 } from './db_utils/services';
 import {
@@ -19,12 +22,14 @@ import {
 
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
+  organization_id: string.require(),
   timestamp: string.format('iso8601').require(),
   full_fetch: bool.require(),
   without_notes: bool,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    organization_id,
     timestamp,
     full_fetch,
     without_notes,
@@ -45,6 +50,10 @@ const initGetData = valLocals('initGetData', {
       timestamp,
     }),
     dbOnboardingGetAll(timestamp),
+    dbPostsGetAllByOrganization({
+      organization_id,
+      timestamp,
+    }),
   ];
 
   const now = new Date().toISOString();
@@ -104,6 +113,7 @@ const initGetData = valLocals('initGetData', {
         services: data[1],
         notifications: data[2].concat(data[3]),
         onboarding: data[4],
+        posts: data[5],
       });
 
       return next();
