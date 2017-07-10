@@ -11,24 +11,35 @@ import CreatePost from './CreatePost';
 class HOCCreatePost extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.post = fromJS({
-      message: props.message || '',
-      type: 'knowledge',
-      attachments: [],
-      taggedPeople: [],
-    })
+    this.state = {
+      post: fromJS({
+        message: '',
+        type: 'knowledge',
+        attachments: [],
+        taggedPeople: [],
+      })
+    };
   }
   componentDidMount() {
   }
+  onMessageChange(e) {
+    let { post } = this.state;
+    post = post.set('message', e.target.value);
+
+    this.setState({ post });
+  }
   onButtonClick(type) {
-    console.log('type', type)
+    console.log('type', type);
   }
   render() {
     const { myId } = this.props;
-
+    const { post } = this.state;
     return (
-      <CreatePost post={this.post} myId={myId} delegate={this} />
+      <CreatePost
+        post={post}
+        myId={myId}
+        delegate={this}
+      />
     );
   }
 }

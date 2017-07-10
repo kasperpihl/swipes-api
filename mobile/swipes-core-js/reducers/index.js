@@ -7,6 +7,7 @@ import milestones from './milestones';
 import notes from './notes';
 import notifications from './notifications';
 import onboarding from './onboarding';
+import posts from './posts';
 import services from './services';
 import users from './users';
 import ways from './ways';
@@ -21,6 +22,7 @@ export {
   notes,
   notifications,
   onboarding,
+  posts,
   services,
   users,
   ways,
