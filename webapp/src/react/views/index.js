@@ -1,6 +1,7 @@
 import AccountList from './account/account-list/HOCAccountList';
 import Billing from './account/billing/HOCBilling';
 import Browser from './browser/HOCBrowser';
+import CreatePost from './posts/compose-post/HOCCreatePost';
 import Find from './find/HOCFind';
 import GoalList from './goals/goal-list/HOCGoalList';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
@@ -24,6 +25,7 @@ export {
   ActivityFeed,
   Billing,
   Browser,
+  CreatePost,
   Find,
   GoalList,
   GoalOverview,

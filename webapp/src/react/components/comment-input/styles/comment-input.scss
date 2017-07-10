@@ -1,0 +1,61 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.comment-input {
+  $b: &;
+  $flexIgnoreList: '#{$b}__image', '#{$b}__initials', '#{$b}__icon-button';
+  
+  @include size(calc(100% - 60px), auto);
+  @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+  @include heightSpecifications(61px, initial);
+  border-top: 1px solid $deepBlue-10;
+  margin-left: 30px;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.comment-input {
+
+  &__image {
+    @include size(45px);
+    border-radius: 3px;
+    padding: calc((45px - 30px) / 2);
+  }
+
+  &__textarea-wrapper {
+    position: absolute;
+    @include size(calc(100% - 45px * 2), 100%);
+    left: 45px; top: 0;
+  }
+
+  &__textarea {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-70, 18px);
+    padding-left: 6px;
+    resize: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__icon-button {
+    @include size(45px);
+    @include flexContainer('row', center, center);
+
+    &:hover {
+      background-color: $deepBlue-10;
+    }
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-70);
+  }
+}
