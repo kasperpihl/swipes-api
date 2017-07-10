@@ -28,7 +28,6 @@ class PostComposer extends PureComponent {
       string: msgGen.posts.getPostTypeTitle(type),
     }];
 
-
     const taggedUsers = post.get('taggedUsers');
     if(taggedUsers.size) {
       string.push(' to ');

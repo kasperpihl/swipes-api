@@ -32,6 +32,21 @@ export const parseVersionString = (version) => {
   };
 };
 
+export function convertObjToUnderscore(obj) {
+  Object.keys(obj).forEach((key) => {
+    const newKey = toUnderscore(key);
+    if(newKey !== key){
+      obj[newKey] = obj[key];
+      delete obj[key];
+    }
+  });
+  return obj;
+}
+
+export function toUnderscore(string) {
+  return string.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();});
+}
+
 export function hasMinorChange(current, last) {
   if(!last){
     return true;

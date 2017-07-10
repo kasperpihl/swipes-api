@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import * as ca from 'swipes-core-js/actions';
+import { setupLoading, convertObjToUnderscore } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
@@ -21,8 +21,10 @@ class HOCCreatePost extends PureComponent {
         type: 'message',
         attachments: [],
         taggedUsers: [],
+        context: null,
       })
     };
+    setupLoading(this);
   }
   componentDidMount() {
   }
@@ -83,6 +85,15 @@ class HOCCreatePost extends PureComponent {
     }
     this.setState({ post });
   }
+  onPostClick(e) {
+    const { createPost } = this.props;
+    const { post } = this.state;
+    console.log('hi');
+    this.setLoading('post');
+    createPost(convertObjToUnderscore(post.toJS())).then((res) => {
+      this.clearLoading('post');
+    })
+  }
   onMessageChange(e) {
     let { post } = this.state;
     post = post.set('message', e.target.value);
@@ -112,6 +123,7 @@ class HOCCreatePost extends PureComponent {
         post={post}
         myId={myId}
         delegate={this}
+        {...this.bindLoading()}
       />
     );
   }
@@ -130,4 +142,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
   contextMenu: a.main.contextMenu,
+  createPost: ca.posts.create,
 })(HOCCreatePost);

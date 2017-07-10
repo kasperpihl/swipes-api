@@ -9,6 +9,13 @@ export default function posts (state = initialState, action) {
     case 'init': {
       return reducerInitToMap(payload, 'posts', state);
     }
+    case 'posts.create':
+    case 'post_created': {
+      if (state.get(payload.post.id)) {
+        return state;
+      }
+      return state.mergeIn([payload.post.id], fromJS(payload.post));
+    }
     default:
       return state
   }

@@ -13,12 +13,7 @@ class CreatePost extends PureComponent {
   constructor(props) {
     super(props)
     setupDelegate(this);
-    this.callDelegate.bindAll('onButtonClick');
-  }
-  componentDidMount() {
-  }
-  onSendPost() {
-
+    this.callDelegate.bindAll('onButtonClick', 'onPostClick');
   }
   renderSubtitle() {
 
@@ -35,23 +30,14 @@ class CreatePost extends PureComponent {
       <HOCHeaderTitle title="Create Post" subtitle={this.renderSubtitle()} border />
     )
   }
-  renderFooter() {
-
-    return (
-      <div className="create-post-footer">
-        <div className="create-post-footer__action">
-          <Button primary text="Post" onClick={this.onSendPost} />
-        </div>
-
-      </div>
-    )
-  }
   renderComposer() {
     const { delegate, post, myId } = this.props;
 
     return <PostComposer myId={myId} post={post} delegate={delegate} />
   }
   renderActions() {
+    const { getLoading } = this.props;
+    
     const buttons = [
       {
         'data-id': 'type',
@@ -80,7 +66,13 @@ class CreatePost extends PureComponent {
     return (
       <div className="create-post__actions">
         {buttons}
-        <Button primary text="Post" onClick={this.onSendPost} className="create-post__button" />
+        <Button
+          primary
+          text="Post"
+          onClick={this.onPostClick}
+          {...getLoading('post')}
+          className="create-post__button"
+        />
       </div>
     )
   }
