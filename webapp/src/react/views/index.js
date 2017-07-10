@@ -12,6 +12,8 @@ import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
 import MilestoneOverview from './milestones/milestone-overview/HOCMilestoneOverview';
 import NotFound from './not-found/NotFound';
 import Notifications from './notifications/HOCNotifications';
+import PostFeed from './posts/post-feed/HOCPostFeed';
+import PostView from './posts/post-view/HOCPostView';
 import Preview from './preview/HOCPreview';
 import Profile from './account/profile/HOCProfile';
 import Organization from './account/organization/HOCOrganization';
@@ -35,6 +37,8 @@ export {
   MilestoneOverview,
   NotFound,
   Notifications,
+  PostFeed,
+  PostView,
   Preview,
   Profile,
   Organization,

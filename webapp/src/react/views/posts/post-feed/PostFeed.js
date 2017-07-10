@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
@@ -11,6 +11,8 @@ import Button from 'Button';
 class PostFeed extends PureComponent {
   constructor(props) {
     super(props)
+    setupDelegate(this);
+    this.callDelegate.bindAll('onPostClick');
     this.state = {}
   }
   componentDidMount() {
@@ -23,12 +25,24 @@ class PostFeed extends PureComponent {
       </HOCHeaderTitle>
     )
   }
+  renderPosts() {
+    const { posts } = this.props;
+
+    return posts.map((p) => (
+      <div
+        key={p.get('id')}
+        onClick={this.onPostClickCached(p.get('id'))}
+      >
+          {p.get('message')}
+      </div>
+    )).toArray();
+  }
   render() {
     return (
       <SWView
         header={this.renderHeader()}
       >
-
+        {this.renderPosts()}
       </SWView>
     )
   }

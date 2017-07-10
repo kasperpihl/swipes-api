@@ -15,17 +15,39 @@ class HOCPostFeed extends PureComponent {
   }
   componentDidMount() {
   }
+  onPostClick(postId) {
+    const { navPush } = this.props;
+
+    navPush({
+      id: 'PostView',
+      title: 'Post',
+      props: {
+        postId,
+      }
+    })
+  }
   render() {
+    const { posts } = this.props;
+
+    const sortedPosts = posts.sort((a, b) => {
+      return a.get('updated_at').localeCompare(b.get('updated_at'));
+    });
+
     return (
-      <PostFeed />
+      <PostFeed
+        posts={sortedPosts}
+        delegate={this}
+      />
     );
   }
 }
 
 // const { string } = PropTypes;
 HOCPostFeed.propTypes = {};
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    posts: state.get('posts'),
+  };
 }
 export default connect(mapStateToProps, {
 })(HOCPostFeed);
