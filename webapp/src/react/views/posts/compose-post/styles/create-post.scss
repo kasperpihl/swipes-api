@@ -33,6 +33,44 @@
     @include svg-color($deepBlue-40);
     margin-right: 6px;
   }
+
+  &__actions {
+    @include size(100%, auto);
+    @include flexContainer('row', center, center);
+    border-top: 1px solid $deepBlue-5;
+    padding-top: 6px;
+    margin-top: 21px;
+  }
+
+  &__action {
+    padding: 0 15px;
+    border: none;
+
+    svg {
+      @include svg-color($deepBlue-60);
+      margin-right: 6px;
+    }
+
+    .g-button__text {
+      color: $deepBlue-50 !important;
+    }
+
+    &:hover {
+      background-color: $blue-5 !important;
+
+      svg {
+        @include svg-color($deepBlue-80 !important);        
+      }
+
+      .g-button__text {
+        color: $deepBlue-80 !important;
+      }
+    }
+
+    &:not(:last-child) {
+      margin-right: 6px;
+    }
+  }
 }
 
 .create-post-footer {

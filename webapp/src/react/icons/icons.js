@@ -23,7 +23,7 @@ import ArrowRightLine from './svgs/arrow-right-line.svg';
 import ArrowRightLong from './svgs/arrow-right-long.svg';
 import Assign from './svgs/assign.svg';
 import Assets from './svgs/assets.svg';
-import Attach from './svgs/Attach.svg';
+import Attach from './svgs/attach.svg';
 import Bold from './svgs/bold.svg';
 import Breadcrumb from './svgs/breadcrumb.svg';
 import Calendar from './svgs/calendar.svg';
@@ -149,6 +149,7 @@ export {
   ArrowRightLine,
   ArrowRightLong,
   Assets,
+  Attach,
   Assign,
   Bold,
   Breadcrumb,

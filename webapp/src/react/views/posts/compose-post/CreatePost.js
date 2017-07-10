@@ -59,17 +59,17 @@ class CreatePost extends PureComponent {
       {
         'data-id': 'type',
         text: 'Change Type',
-        icon: '',
+        icon: 'Decision',
       },
       {
         'data-id': 'people',
         text: 'Tag Colleagues',
-        icon: '',
+        icon: 'TagColleague',
       },
       {
         'data-id': 'attach',
         text: 'Attach',
-        icon: '',
+        icon: 'Attach',
       }
     ].map(b => (
       <Button

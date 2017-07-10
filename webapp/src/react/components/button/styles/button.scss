@@ -265,26 +265,26 @@ $borderColor: $deepBlue-10;
 .g-button {
   $b: &;
 
-  &--icon-and-text:hover {
+  // &--icon-and-text:hover {
 
-    #{$b}__svg {
-      transform: translateX(-6px);
-    }
+  //   #{$b}__svg {
+  //     transform: translateX(-6px);
+  //   }
 
-    #{$b}__text {
-      transform: translateX(6px);
-    }
-  }
+  //   #{$b}__text {
+  //     transform: translateX(6px);
+  //   }
+  // }
 
-  &--reverse#{&}--icon-and-text:hover {
-    #{$b}__svg {
-      transform: translateX(6px);
-    }
+  // &--reverse#{&}--icon-and-text:hover {
+  //   #{$b}__svg {
+  //     transform: translateX(6px);
+  //   }
 
-    #{$b}__text {
-      transform: translateX(-6px);
-    }
-  }
+  //   #{$b}__text {
+  //     transform: translateX(-6px);
+  //   }
+  // }
 }
 
 // disabled hover
