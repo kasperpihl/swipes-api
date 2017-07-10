@@ -61,7 +61,7 @@ class CreatePost extends PureComponent {
         icon: 'Decision',
       },
       {
-        'data-id': 'people',
+        'data-id': 'users',
         text: 'Tag Colleagues',
         icon: 'TagColleague',
       },
@@ -89,7 +89,6 @@ class CreatePost extends PureComponent {
     return (
       <SWView
         header={this.renderHeader()}
-        footer={this.renderFooter()}
       >
         {this.renderComposer()}
         {this.renderActions()}

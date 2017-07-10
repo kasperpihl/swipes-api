@@ -5,6 +5,7 @@ import MilestonesGenerator from './milestones-generator';
 import OrganizationsGenerator from './organizations-generator';
 import NotificationsGenerator from './notifications-generator';
 import NotifyGenerator from './notify-generator';
+import PostsGenerator from './posts-generator';
 import UsersGenerator from './users-generator';
 
 export default class MessageGenerator {
@@ -17,6 +18,7 @@ export default class MessageGenerator {
     this.notifications = new NotificationsGenerator(store, this);
     this.notify = new NotifyGenerator(store, this);
     this.orgs = new OrganizationsGenerator(store, this);
+    this.posts = new PostsGenerator(store, this);
     this.users = new UsersGenerator(store, this);
   }
 }

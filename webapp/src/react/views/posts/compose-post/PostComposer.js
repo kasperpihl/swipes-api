@@ -6,15 +6,54 @@ import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
+import Filter from 'components/filter/Filter';
+
 import './styles/post-composer.scss';
 
 class PostComposer extends PureComponent {
   constructor(props) {
     super(props)
     setupDelegate(this)
-    this.callDelegate.bindAll('onMessageChange')
+    this.callDelegate.bindAll('onMessageChange', 'onFilterClick');
   }
   componentDidMount() {
+  }
+  renderGeneratedSubtitle() {
+    const { post, delegate } = this.props;
+
+    const type = post.get('type');
+  
+    let string = ['— ', {
+      id: 'type',
+      string: msgGen.posts.getPostTypeTitle(type),
+    }];
+
+    let preUsers = ' to ';
+    if(post.get('type') === 'question') {
+      preUsers = ' from ';
+    }
+
+    const taggedUsers = post.get('taggedUsers');
+
+    if(taggedUsers.size) {
+      string.push(preUsers);
+      taggedUsers.forEach((id, i) => {
+        if(i > 0) {
+          string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');
+        }
+        string.push({
+          id,
+          string: msgGen.users.getFirstName(id),
+        });
+      });
+    }
+
+    return (
+      <Filter
+        filter={string}
+        onClick={this.onFilterClick}
+      />
+    )
   }
   renderProfilePic() {
     const { myId } = this.props;
@@ -58,6 +97,7 @@ class PostComposer extends PureComponent {
     return (
       <div className="post-composer">
         {this.renderTextarea()}
+        {this.renderGeneratedSubtitle()}
       </div>
     )
   }
