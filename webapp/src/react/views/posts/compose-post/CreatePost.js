@@ -4,8 +4,10 @@ import React, { PureComponent } from 'react'
 import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import Button from 'Button';
-// import Icon from 'Icon';
-// import './styles/create-post.scss';
+import Icon from 'Icon';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import PostComposer from './PostComposer';
+import './styles/create-post.scss';
 
 class CreatePost extends PureComponent {
   constructor(props) {
@@ -16,16 +18,41 @@ class CreatePost extends PureComponent {
   }
   componentDidMount() {
   }
+  onSendPost() {
+
+  }
+  renderSubtitle() {
+
+    return (
+      <div className="create-post__context">
+        <Icon icon="MiniGoal" className="create-post__svg" />
+        Lorem ipsum.
+      </div>
+    )
+  }
   renderHeader() {
 
+    return (
+      <HOCHeaderTitle title="Create Post" subtitle={this.renderSubtitle()}>
+        <Button primary text="Post" onClick={this.onSendPost} />
+      </HOCHeaderTitle>
+    )
   }
   renderFooter() {
 
+    return (
+      <div className="create-post-footer">
+        <div className="create-post-footer__action">
+          <Button primary text="Post" onClick={this.onSendPost} />
+        </div>
+
+      </div>
+    )
   }
   renderComposer() {
     const { delegate, post, myId } = this.props;
 
-    // return <PostComposer myId={myId} post={post} delegate={delegate} />
+    return <PostComposer myId={myId} post={post} delegate={delegate} />
   }
   renderActions() {
     const buttons = [
@@ -61,15 +88,13 @@ class CreatePost extends PureComponent {
   }
   render() {
     return (
-      <div className="create-post">
-        <SWView
-          header={this.renderHeader()}
-          footer={this.renderFooter()}
-        >
-          {this.renderComposer()}
-          {this.renderActions()}
-        </SWView>
-      </div>
+      <SWView
+        header={this.renderHeader()}
+        footer={this.renderFooter()}
+      >
+        {this.renderComposer()}
+        {this.renderActions()}
+      </SWView>
     )
   }
 }

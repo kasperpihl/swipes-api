@@ -1,0 +1,44 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.create-post {
+  @include size(100%, auto);
+  @include heightSpecifications(100%, initial);
+}
+
+.create-post-footer {
+  @include size(100%, 73px);
+  border-top: 1px solid $deepBlue-5;
+  padding: 0 30px;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.create-post {
+
+  &__context {
+    @include size(100%, auto);
+    @include flexContainer('row', left, center);
+    @include font(12px, $deepBlue-40, 18px, 500);
+  }
+
+  &__svg {
+    @include size(12px);
+    @include svg-color($deepBlue-40);
+    margin-right: 6px;
+  }
+}
+
+.create-post-footer {
+
+  &__action {
+    @include size(100%, 72px);
+    @include flexContainer('row', right, center);
+  }
+}

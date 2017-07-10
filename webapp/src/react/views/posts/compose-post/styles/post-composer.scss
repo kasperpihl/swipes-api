@@ -1,0 +1,47 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.post-composer {
+  @include size(100%, auto);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.post-composer {
+
+  &__text-wrapper {
+    @include size(100%, auto);
+    @include flexContainer('row', left, top);
+  }
+
+  &__profile-pic {
+    @include size(48px);
+    border-radius: 3px;
+
+    img {
+      @include size(48px);
+      border-radius: 3px;
+    }
+  }
+
+  &__textarea {
+    @include font(15px, $deepBlue-100, 21px);
+    padding-left: 21px;
+    resize: none;
+    width: 100%;
+
+    &::-webkit-input-placeholder {
+      @include font(15px, $deepBlue-50, 21px);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
