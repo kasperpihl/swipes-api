@@ -11,9 +11,6 @@ import './styles/post-composer.scss';
 class PostComposer extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      text: ''
-    }
     setupDelegate(this)
     this.callDelegate.bindAll('onMessageChange')
   }
@@ -39,8 +36,7 @@ class PostComposer extends PureComponent {
     )
   }
   renderTextarea() {
-    const { text } = this.state;
-    const { myId } = this.props;
+    const { myId, post } = this.props;
     const placeholder = `What do you want to discuss, ${msgGen.users.getFirstName(myId)}?`;
 
     return (
@@ -48,7 +44,7 @@ class PostComposer extends PureComponent {
         {this.renderProfilePic()}
         <ReactTextarea
           className="post-composer__textarea"
-          value={text}
+          value={post.get('message')}
           minRows={4}
           maxRows={9}
           ref="textarea"
