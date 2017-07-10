@@ -62,7 +62,7 @@ class PostComposer extends PureComponent {
     const image = msgGen.users.getPhoto(myId);
     const initials = msgGen.users.getInitials(myId);
 
-    if (image) {
+    if (!image) {
       return (
         <div className="post-composer__profile-initials">
           {initials}
