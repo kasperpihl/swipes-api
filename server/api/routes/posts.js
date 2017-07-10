@@ -8,6 +8,9 @@ import {
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,
+  postsCreateComment,
+  postsAddComment,
+  postsAddCommentQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -44,6 +47,23 @@ authed.all('/posts.create',
   notificationsPushToQueue,
   valResponseAndSend({
     post: object.require(),
+  }),
+);
+
+authed.all('/posts.addComment',
+  valBody({
+    post_id: string.require(),
+    message: string.require(),
+    attachments: array.of(object),
+    reactions: array.of(object),
+  }),
+  postsCreateComment,
+  postsAddComment,
+  // postsAddCommentQueueMessage,
+  // notificationsPushToQueue,
+  valResponseAndSend({
+    post_id: string.require(),
+    comment: object.require(),
   }),
 );
 

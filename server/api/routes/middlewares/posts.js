@@ -1,3 +1,4 @@
+import r from 'rethinkdb';
 import {
   string,
   object,
@@ -5,6 +6,7 @@ import {
 } from 'valjs';
 import {
   dbPostsInsertSingle,
+  dbPostsAddComment,
 } from './db_utils/posts';
 import {
   generateSlackLikeId,
@@ -98,8 +100,88 @@ const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
   return next();
 });
 
+const postsCreateComment = valLocals('postsCreateComment', {
+  user_id: string.require(),
+  message: string.require(),
+  attachments: array.of(object),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    message,
+    attachments = [],
+  } = res.locals;
+
+  const comment = {
+    message,
+    attachments,
+    id: generateSlackLikeId('C'),
+    created_at: r.now(),
+    updated_at: r.now(),
+    created_by: user_id,
+    archived: false,
+    reactions: [],
+  };
+
+  setLocals({
+    comment,
+  });
+
+  return next();
+});
+
+const postsAddComment = valLocals('postsAddComment', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment,
+  } = res.locals;
+
+  dbPostsAddComment({ user_id, post_id, comment })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+
+const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment: object.require(),
+  notificationGroupId: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment,
+    notificationGroupId,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    post_id,
+    comment_id: comment.id,
+    event_type: 'post_comment_added',
+    group_id: notificationGroupId,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
+
 export {
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,
+  postsCreateComment,
+  postsAddComment,
+  postsAddCommentQueueMessage,
 };
