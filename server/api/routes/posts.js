@@ -31,7 +31,6 @@ authed.all('/posts.create',
     message: string.require(),
     type: string.require(),
     attachments: array.of(object),
-    attachment_order: array.of(string),
     tagged_users: array.of(string),
     context: object.as({
       id: string.require(),

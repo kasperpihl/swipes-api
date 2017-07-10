@@ -20,7 +20,6 @@ const postsCreate = valLocals('postsCreate', {
   message: string.require(),
   type: string.require(),
   attachments: array.of(object),
-  attachment_order: array.of(string),
   tagged_users: array.of(string),
   context: object,
 }, (req, res, next, setLocals) => {
@@ -29,8 +28,7 @@ const postsCreate = valLocals('postsCreate', {
     organization_id,
     message,
     type,
-    attachments = {},
-    attachment_order = [],
+    attachments = [],
     tagged_users = [],
     context = {},
   } = res.locals;
@@ -40,7 +38,6 @@ const postsCreate = valLocals('postsCreate', {
     message,
     type,
     attachments,
-    attachment_order,
     tagged_users,
     context,
     id: generateSlackLikeId('P'),
@@ -49,7 +46,7 @@ const postsCreate = valLocals('postsCreate', {
     created_by: user_id,
     archived: false,
     followers: [...new Set([...[user_id], ...tagged_users])],
-    comments: [],
+    comments: {},
     reactions: [],
   };
 
