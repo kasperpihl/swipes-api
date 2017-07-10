@@ -12,7 +12,7 @@ class PostFeed extends PureComponent {
   constructor(props) {
     super(props)
     setupDelegate(this);
-    this.callDelegate.bindAll('onPostClick');
+    this.callDelegate.bindAll('onPostClick', 'onNewPost');
     this.state = {}
   }
   componentDidMount() {
@@ -21,7 +21,7 @@ class PostFeed extends PureComponent {
 
     return (
       <HOCHeaderTitle>
-        <Button text="Create Post" />
+        <Button text="Create Post" onClick={this.onNewPost} />
       </HOCHeaderTitle>
     )
   }
