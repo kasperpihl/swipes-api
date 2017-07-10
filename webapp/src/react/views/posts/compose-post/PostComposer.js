@@ -28,15 +28,10 @@ class PostComposer extends PureComponent {
       string: msgGen.posts.getPostTypeTitle(type),
     }];
 
-    let preUsers = ' to ';
-    if (post.get('type') === 'question') {
-      preUsers = ' from ';
-    }
 
     const taggedUsers = post.get('taggedUsers');
-
-    if (taggedUsers.size) {
-      string.push(preUsers);
+    if(taggedUsers.size) {
+      string.push(' to ');
       taggedUsers.forEach((id, i) => {
         if (i > 0) {
           string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');

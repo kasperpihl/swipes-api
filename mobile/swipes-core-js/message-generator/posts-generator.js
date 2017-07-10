@@ -19,9 +19,9 @@ export default class Posts {
   getPostTypeSubtitle(type){
     switch (type) {
       case 'information':
-        return 'Articles, knowledge and funny videos';
+        return 'Articles, ideas, knowledge and funny videos';
       case 'question':
-        return 'Ask for feedback, assets or other stuff';
+        return 'For feedback, assets or updates etc.';
       case 'announcement':
         return 'Announce important events!';
       case 'message':
