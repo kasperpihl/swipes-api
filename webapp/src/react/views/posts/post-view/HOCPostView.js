@@ -17,10 +17,10 @@ class HOCPostView extends PureComponent {
 
   }
   render() {
-    const { meId, post } = this.props;
+    const { myId, post } = this.props;
 
     return (
-      <PostView meId={meId} post={post} delegate={this} />
+      <PostView myId={myId} post={post} delegate={this} />
     );
   }
 }
@@ -31,7 +31,7 @@ HOCPostView.propTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
-    meId: state.getIn(['me', 'id']),
+    myId: state.getIn(['me', 'id']),
     post: state.getIn(['posts', ownProps.postId])
   };
 }

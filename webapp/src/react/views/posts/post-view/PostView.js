@@ -126,15 +126,13 @@ class PostView extends PureComponent {
   }
   render() {
     return (
-      <div className="post">
-        <SWView
-          header={this.renderHeader()}
-        >
-          {this.renderMessage()}
-          {/*{this.renderAttachments()}*/}
-          {this.renderPostActions()}
-        </SWView>
-      </div>
+      <SWView
+        header={this.renderHeader()}
+      >
+        {this.renderMessage()}
+        {/*{this.renderAttachments()}*/}
+        {this.renderPostActions()}
+      </SWView>
     )
   }
 }

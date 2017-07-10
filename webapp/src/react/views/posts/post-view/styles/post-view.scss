@@ -5,17 +5,6 @@
 // Block
 // ======================================================
 
-.post  {
-  @include size(600px, calc(100% - 60px));
-  @include border-radius(6px, 6px, 0px, 0px);
-  @include flexContainer('column');
-  background-color: $bg;
-  box-shadow: 0 6px 12px 1px rgba($deepBlue-100, .3);
-  margin-top: calc(60px);
-  margin-left: calc(50% - 300px);
-  position: absolute;
-}
-
 .post-header {
   $b: &;
   $flexIgnoreList: '#{$b}__image';
@@ -97,7 +86,7 @@
 
 .post-header {
 
-  &__image {
+  &__profile-pic {
     @include size(48px);
     border-radius: 3px;
 
@@ -105,6 +94,13 @@
       @include size(48px);
       border-radius: 3px;
     }
+  }
+
+  &__profile-initials {
+    @include size(48px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-10;
+    border-radius: 3px;
   }
 
   &__content {
