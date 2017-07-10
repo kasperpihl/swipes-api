@@ -19,14 +19,12 @@ import {
 
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
-  organization_id: string.require(),
   timestamp: string.format('iso8601').require(),
   full_fetch: bool.require(),
   without_notes: bool,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    organization_id,
     timestamp,
     full_fetch,
     without_notes,
