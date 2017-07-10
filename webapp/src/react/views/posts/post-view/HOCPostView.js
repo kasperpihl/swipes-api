@@ -17,10 +17,10 @@ class HOCPostView extends PureComponent {
 
   }
   render() {
-    const { meId } = this.props;
+    const { meId, post } = this.props;
 
     return (
-      <PostView meId={meId} delegate={this} />
+      <PostView meId={meId} post={post} delegate={this} />
     );
   }
 }

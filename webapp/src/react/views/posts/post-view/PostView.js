@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll, setupDelegate, setupCachedCallback, URL_REGEX } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
@@ -16,43 +16,82 @@ class PostView extends PureComponent {
   }
   componentDidMount() {
   }
-  renderHeader() {
-    const { me } = this.props;
+  renderProfilePic() {
+    const { myId } = this.props;
+    const image = msgGen.users.getPhoto(myId);
+    const initials = msgGen.users.getInitials(myId);
 
-    if (me.get('id')) {
-      const profileImage = msgGen.users.getPhoto(me.get('id'));
-
+    if (!image) {
       return (
-        <div className="post__header">
-          <div className="post-header">
-            <div className="post-header__image">
-              <img src={profileImage} alt="" className="post-header__img" />
-            </div>
-            <div className="post-header__content">
-              <div className="post-header__title">Yana notified <span>Kasper</span>, <span>Stefan</span>, <span>Kristjan</span> and <span>Tihomir</span></div>
-              <div className="post-header__subtitle">
-                <Icon className="post-header__svg" icon="Goals" />
-                Learn Swipes Feedback • 2 min
-              </div>
-            </div>
-          </div>
+        <div className="post-header__profile-initials">
+          {initials}
         </div>
       )
     }
-    return undefined;
-  }
-  renderFooter() {
-    const { delegate, me } = this.props;
-
-    return <CommentInput me={me} delegate={delegate} />
-  }
-  renderMessage() {
 
     return (
-      <div className="post__message">
-        I just finished with the research and I have made a summary of the most important findings. Let me know what you think.
+      <div className="post-header__profile-pic">
+        <img src={image} />
       </div>
     )
+  }
+  renderHeader() {
+
+    return (
+      <div className="post__header">
+        <div className="post-header">
+          {this.renderProfilePic()}
+          <div className="post-header__content">
+            <div className="post-header__title">Yana notified <span>Kasper</span>, <span>Stefan</span>, <span>Kristjan</span> and <span>Tihomir</span></div>
+            <div className="post-header__subtitle">
+              <Icon className="post-header__svg" icon="Goals" />
+              Learn Swipes Feedback • 2 min
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  renderFooter() {
+    const { delegate, meId } = this.props;
+
+    return <CommentInput meId={meId} delegate={delegate} />
+  }
+  renderMessage() {
+    const { post } = this.props;
+
+    if (post && post.get('message')) {
+
+      let message = post.get('message');
+
+      message = message.split('\n').map((item, key) => {
+        const urls = item.match(URL_REGEX);
+        if (urls) {
+          item = item.split(URL_REGEX);
+          urls.forEach((url, i) => {
+            item.splice(1 + i + i, 0, (
+              <a
+                onClick={this.onClickURLCached(url)}
+                className="notification__link"
+                key={'link' + i}
+              >
+                {url}
+              </a>
+            ));
+          })
+        }
+
+        return <span key={key}>{item}<br /></span>;
+      });
+
+
+      return (
+        <div className="post__message">
+          {message}
+        </div>
+      )
+    }
+
   }
   renderAttachments() {
 
@@ -79,7 +118,7 @@ class PostView extends PureComponent {
     return (
       <div className="post__actions">
         <div className="post__action">
-          <Icon icon="Folder" className="post__svg" />
+          <Icon icon="Reaction" className="post__svg" />
           <div className="post__action-label">React</div>
         </div>
       </div>
@@ -90,10 +129,9 @@ class PostView extends PureComponent {
       <div className="post">
         <SWView
           header={this.renderHeader()}
-          footer={this.renderFooter()}
         >
           {this.renderMessage()}
-          {this.renderAttachments()}
+          {/*{this.renderAttachments()}*/}
           {this.renderPostActions()}
         </SWView>
       </div>

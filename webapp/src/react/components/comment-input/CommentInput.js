@@ -43,16 +43,10 @@ class CommentInput extends PureComponent {
     }
   }
   renderImage() {
-    const { me } = this.props;
+    const { meId } = this.props;
 
-    if (!me.get('id')) {
-      console.error('Me not provided');
-
-      return undefined;
-    }
-
-    const image = msgGen.users.getPhoto(me.get('id'));
-    const initials = msgGen.users.getInitials(me.get('id'))
+    const image = msgGen.users.getPhoto(meId);
+    const initials = msgGen.users.getInitials(meId)
 
     if (image) {
       return <img src={image} className="comment-input__image" />
