@@ -36,40 +36,35 @@
 
   &__actions {
     @include size(100%, auto);
-    @include flexContainer('row', center, center);
+    @include flexContainer('row', right, center);
     border-top: 1px solid $deepBlue-5;
     padding-top: 6px;
     margin-top: 21px;
   }
 
   &__action {
+    @include size(auto, 36px);
+    @include flexContainer('row', center, center);
     padding: 0 15px;
     border: none;
+    border-radius: 18px;
+    transition: .2s ease;
+  }
 
-    svg {
-      @include svg-color($deepBlue-60);
-      margin-right: 6px;
-    }
+  &__action-icon {
+    @include size(24px);
+    @include svg-color($deepBlue-50);
+    margin-right: 6px;
+    transition: .2s ease;
+  }
 
-    .g-button__text {
-      color: $deepBlue-50 !important;
-    }
+  &__action-label {
+    @include font(12px, $deepBlue-50, 18px, 500);
+    transition: .2s ease;
+  }
 
-    &:hover {
-      background-color: $blue-5 !important;
-
-      svg {
-        @include svg-color($deepBlue-80 !important);        
-      }
-
-      .g-button__text {
-        color: $deepBlue-80 !important;
-      }
-    }
-
-    &:not(:last-child) {
-      margin-right: 6px;
-    }
+  &__button {
+    margin-left: 12px;
   }
 }
 
@@ -78,5 +73,52 @@
   &__action {
     @include size(100%, 72px);
     @include flexContainer('row', right, center);
+  }
+}
+
+// ======================================================
+// event target
+// ======================================================
+
+.create-post {
+  $b: &;
+
+  &__action:hover {
+    background-color: $blue-5;
+    transition: .2s ease;
+
+    #{$b}__action-icon {
+      @include svg-color($deepBlue-80);
+      transition: .2s ease;
+    }
+
+    #{$b}__action-label {
+      @include font($c: $deepBlue-80);
+      transition: .2s ease;
+    }
+  }
+
+  &__action:focus {
+    outline: none;
+  }
+
+  &__action:active {
+    transform: scale(.93);
+    transition: .2s ease;
+  }
+}
+
+// ======================================================
+// selectors
+// ======================================================
+
+.create-post {
+  $b: &;
+
+  &__action {
+
+    &:not(:last-child) {
+      margin-right: 6px;
+    }
   }
 }

@@ -7,6 +7,7 @@
 
 .post-composer {
   @include size(100%, auto);
+  padding-top: 24px;
 }
 
 // ======================================================
@@ -14,10 +15,13 @@
 // ======================================================
 
 .post-composer {
+  $b: &;
 
   &__text-wrapper {
+    $flexIgnoreList: '#{$b}__profile-pic' '#{$b}__profile-initials';
+
     @include size(100%, auto);
-    @include flexContainer('row', left, top);
+    @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
   }
 
   &__profile-pic {
@@ -28,6 +32,13 @@
       @include size(48px);
       border-radius: 3px;
     }
+  }
+
+  &__profile-initials {
+    @include size(48px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-10;
+    border-radius: 3px;
   }
 
   &__textarea {
@@ -43,5 +54,11 @@
     &:focus {
       outline: none;
     }
+  }
+
+  &__subtitle {
+    @include size(100%, auto);
+    padding-left: 69px;
+    margin-top: 9px;
   }
 }

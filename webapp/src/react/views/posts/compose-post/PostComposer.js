@@ -22,23 +22,23 @@ class PostComposer extends PureComponent {
     const { post, delegate } = this.props;
 
     const type = post.get('type');
-  
+
     let string = ['— ', {
       id: 'type',
       string: msgGen.posts.getPostTypeTitle(type),
     }];
 
     let preUsers = ' to ';
-    if(post.get('type') === 'question') {
+    if (post.get('type') === 'question') {
       preUsers = ' from ';
     }
 
     const taggedUsers = post.get('taggedUsers');
 
-    if(taggedUsers.size) {
+    if (taggedUsers.size) {
       string.push(preUsers);
       taggedUsers.forEach((id, i) => {
-        if(i > 0) {
+        if (i > 0) {
           string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');
         }
         string.push({
@@ -49,10 +49,12 @@ class PostComposer extends PureComponent {
     }
 
     return (
-      <Filter
-        filter={string}
-        onClick={this.onFilterClick}
-      />
+      <div className="post-composer__subtitle">
+        <Filter
+          filter={string}
+          onClick={this.onFilterClick}
+        />
+      </div>
     )
   }
   renderProfilePic() {
@@ -60,7 +62,7 @@ class PostComposer extends PureComponent {
     const image = msgGen.users.getPhoto(myId);
     const initials = msgGen.users.getInitials(myId);
 
-    if (!image) {
+    if (image) {
       return (
         <div className="post-composer__profile-initials">
           {initials}
@@ -84,7 +86,7 @@ class PostComposer extends PureComponent {
         <ReactTextarea
           className="post-composer__textarea"
           value={post.get('message')}
-          minRows={4}
+          minRows={3}
           maxRows={9}
           ref="textarea"
           onChange={this.onMessageChange}

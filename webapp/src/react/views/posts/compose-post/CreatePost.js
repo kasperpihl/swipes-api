@@ -32,9 +32,7 @@ class CreatePost extends PureComponent {
   renderHeader() {
 
     return (
-      <HOCHeaderTitle title="Create Post" subtitle={this.renderSubtitle()}>
-        <Button primary text="Post" onClick={this.onSendPost} />
-      </HOCHeaderTitle>
+      <HOCHeaderTitle title="Create Post" subtitle={this.renderSubtitle()} border />
     )
   }
   renderFooter() {
@@ -71,17 +69,18 @@ class CreatePost extends PureComponent {
         icon: 'Attach',
       }
     ].map(b => (
-      <Button
-        key={b.text}
-        {...b}
-        className="create-post__action"
-        onClick={this.onButtonClickCached(b['data-id'])}
-      />
+      <button key={b.text} className="create-post__action" onClick={this.onButtonClickCached(b['data-id'])}>
+        <Icon icon={b.icon} className="create-post__action-icon" />
+        <div className="create-post__action-label">
+          {b.text}
+        </div>
+      </button>
     ));
 
     return (
       <div className="create-post__actions">
         {buttons}
+        <Button primary text="Post" onClick={this.onSendPost} className="create-post__button" />
       </div>
     )
   }
