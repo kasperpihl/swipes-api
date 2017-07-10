@@ -19,7 +19,7 @@ class PostFeed extends PureComponent {
 
     return (
       <HOCHeaderTitle>
-
+        <Button text="Create Post" />
       </HOCHeaderTitle>
     )
   }
