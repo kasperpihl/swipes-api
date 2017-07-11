@@ -16,6 +16,14 @@ class SWView extends Component {
       this.refs.scroller.scrollTop = initialScroll;
     }
   }
+  componentDidUpdate() {
+    if (this.props.scrollToBottom) {
+      const scroller = this.refs.scroller;
+      // console.log(scroller);
+      scroller.scrollTop = scroller.scrollHeight - scroller.clientHeight;
+    }
+
+  }
   renderHeader() {
     const { header } = this.props;
 

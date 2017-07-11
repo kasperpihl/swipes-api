@@ -124,10 +124,13 @@ class PostView extends PureComponent {
     return undefined;
   }
   render() {
+    const { scrollToBottom } = this.props;
+
     return (
       <SWView
         header={this.renderHeader()}
         footer={this.renderFooter()}
+        scrollToBottom={scrollToBottom}
       >
         {this.renderComments()}
       </SWView>
