@@ -33,7 +33,6 @@ const postCreatedNotificationData = (req, res, next) => {
     post,
   } = res.locals;
 
-
   res.locals.notificationData = {
     target: {
       id: post.id,

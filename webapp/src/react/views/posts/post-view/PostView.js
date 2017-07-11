@@ -108,26 +108,28 @@ class PostView extends PureComponent {
   renderComments() {
     const { post, delegate, myId } = this.props;
     const comments = post.get('comments');
+    let renderComments = undefined;
 
     if (comments && comments.size) {
-      const renderComments = comments.map((c, i) => {
+      renderComments = comments.sort((a, b) => a.get('created_at').localeCompare(b.get('created_at'))).map((c, i) => {
         return <CommentView comment={c} key={c.get('id')} delegate={delegate} />
       }).toArray();
-
-      return (
-        <div className="post__comments">
-          <CommentInput myId={myId} delegate={delegate} />
-          {renderComments}
-        </div>
-      );
     }
 
-    return undefined;
+    return (
+      <div className="post__comments">
+        {renderComments}
+        <CommentInput myId={myId} delegate={delegate} />
+      </div>
+    );
   }
   render() {
+    const { scrollToBottom } = this.props;
+
     return (
       <SWView
         header={this.renderHeader()}
+        scrollToBottom={scrollToBottom}
         noframe
       >
         {this.renderComments()}
