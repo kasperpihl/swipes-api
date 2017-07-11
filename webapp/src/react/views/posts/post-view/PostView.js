@@ -110,7 +110,7 @@ class PostView extends PureComponent {
     const comments = post.get('comments');
 
     if (comments && comments.size) {
-      const renderComments = comments.map((c, i) => {
+      const renderComments = comments.sort((a, b) => a.get('created_at').localeCompare(b.get('created_at'))).map((c, i) => {
         return <CommentView comment={c} key={c.get('id')} delegate={delegate} />
       }).toArray();
 
