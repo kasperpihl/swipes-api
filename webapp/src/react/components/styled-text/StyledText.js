@@ -21,7 +21,7 @@ class StyledText extends PureComponent {
 
     return (
       <div className={`styled-text ${className || ''}`} style={textStyle}>
-        {text.map((t) => {
+        {text.map((t, i) => {
           if (typeof t === 'string') {
             return t;
           }
@@ -38,7 +38,7 @@ class StyledText extends PureComponent {
               onMouseLeave={this.onTextMouseLeaveCached(t.id, t)}
               onClick={this.onTextClickCached(t.id, t)}
               className={`styled-text__selector ${className || ''}`}
-              key={t.id}
+              key={t.id + '' + i}
               {...rest}
             >
               {t.string}

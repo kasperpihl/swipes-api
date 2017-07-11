@@ -9,6 +9,9 @@
   @include size(100%, auto);
   @include flexContainer('row', left, top);
   padding-bottom: 12px;
+  animation: fadeCommentin .25s ease-in-out forwards;
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 // ======================================================
@@ -57,5 +60,12 @@
         color: $blue-100;
       }
     }
+  }
+}
+
+@keyframes fadeCommentin {
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
   }
 }
