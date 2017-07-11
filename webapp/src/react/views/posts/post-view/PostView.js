@@ -27,6 +27,9 @@ class PostView extends PureComponent {
     return (
       <div className="post__header">
         <PostHeader post={post} delegate={delegate} />
+        {this.renderMessage()}
+        {/*{this.renderAttachments()}*/}
+        {this.renderPostActions()}
       </div>
     )
   }
@@ -126,9 +129,6 @@ class PostView extends PureComponent {
         header={this.renderHeader()}
         footer={this.renderFooter()}
       >
-        {this.renderMessage()}
-        {/*{this.renderAttachments()}*/}
-        {this.renderPostActions()}
         {this.renderComments()}
       </SWView>
     )
