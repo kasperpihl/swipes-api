@@ -17,6 +17,7 @@ const postsGetSingle = (req, res, next) => {
 };
 const postCreatedNotificationData = (req, res, next) => {
   const {
+    user_id,
     post,
   } = res.locals;
 
@@ -24,6 +25,12 @@ const postCreatedNotificationData = (req, res, next) => {
   res.locals.notificationData = {
     target: {
       id: post.id,
+    },
+    meta: {
+      created_by: user_id,
+      type: post.type,
+      message: post.message,
+      context: post.context,
     },
   };
   res.locals.eventData = {

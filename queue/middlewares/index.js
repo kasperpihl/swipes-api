@@ -38,38 +38,20 @@ const goal_created = notifyWrapper([
 
 const goal_completed = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsGeneralNotificationData,
   notify.notifyAllInCompany,
 ]);
 
 const goal_incompleted = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsGeneralNotificationData,
   notify.notifyAllInCompany,
 ]);
 
 const goal_archived = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsArchiveWithHistoryNotificationData,
+  goals.goalsArchiveNotificationData,
   notify.notifyAllInCompany,
 ]);
-
-const goal_notify = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
-  goals.goalsNotifyAdditionalData,
-  goals.goalsNotifyAddSenderAlways,
-  notify.notifyMultipleUsers,
-  notify.notifySendEventToAllInCompany,
-  notify.notifyGoalNotifySendPushNotifications,
-]);
-
-const goal_notify_email = [
-  users.usersGetSingleWithOrganizations,
-  goals.goalsGetSingle,
-  users.usersGetMultipleWithFields,
-  emails.goalsNotifySendEmails,
-];
 
 const user_invitation_email = [
   (req, res, next) => {
@@ -132,14 +114,14 @@ const goal_loaded_way = notifyWrapper([
 
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsGeneralNotificationData,
   notify.notifyAllInGoal,
   notify.notifySendEventToAllInCompany,
 ]);
 
 const step_incompleted = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsGeneralNotificationData,
   notify.notifyAllInGoal,
   notify.notifySendEventToAllInCompany,
 ]);
@@ -323,8 +305,6 @@ export {
   goal_completed,
   goal_incompleted,
   goal_archived,
-  goal_notify,
-  goal_notify_email,
   goal_renamed,
   goal_loaded_way,
   step_completed,

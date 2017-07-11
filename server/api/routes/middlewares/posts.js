@@ -19,7 +19,7 @@ import {
 const postsCreate = valLocals('postsCreate', {
   user_id: string.require(),
   organization_id: string.require(),
-  message: string.require(),
+  message: string.min(1).require(),
   type: string.require(),
   attachments: array.of(object),
   tagged_users: array.of(string),
@@ -78,18 +78,17 @@ const postsInsertSingle = valLocals('postsInsertSingle', {
 const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
   user_id: string.require(),
   post: object.require(),
-  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post,
-    notificationGroupId,
   } = res.locals;
+  const event_type = 'post_created';
   const queueMessage = {
     user_id,
+    event_type,
+    notification_id_sufix: `${post.id}-${event_type}`,
     post_id: post.id,
-    event_type: 'post_created',
-    group_id: notificationGroupId,
   };
 
   setLocals({
@@ -153,20 +152,17 @@ const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
   comment: object.require(),
-  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post_id,
     comment,
-    notificationGroupId,
   } = res.locals;
   const queueMessage = {
     user_id,
     post_id,
     comment_id: comment.id,
     event_type: 'post_comment_added',
-    group_id: notificationGroupId,
   };
 
   setLocals({

@@ -86,17 +86,16 @@ class HOCCreatePost extends PureComponent {
     this.setState({ post });
   }
   onPostClick(e) {
-    const { createPost } = this.props;
+    const { createPost, navPop } = this.props;
     const { post } = this.state;
-
     this.setLoading('post');
 
     createPost(convertObjToUnderscore(post.toJS())).then((res) => {
-
-      console.log('====================================');
-      console.log(res);
-      console.log('====================================');
-      this.clearLoading('post');
+      if (res.ok) {
+        navPop();
+      } else {
+        this.clearLoading('post', '!Something went wrong');
+      }
     })
   }
   onMessageChange(e) {

@@ -1,16 +1,12 @@
 import r from 'rethinkdb';
-import config from 'config';
-import request from 'request';
+// import config from 'config';
+// import request from 'request';
 import commonMultipleEvents from '../db_utils/events';
-import {
-  getHistoryIndex,
-  notifyMessageGenerator,
-} from '../utils';
 import {
   dbInsertMultipleNotifications,
 } from '../db_utils/notifications';
 
-const oneSignalConfig = config.get('onesignal');
+// const oneSignalConfig = config.get('onesignal');
 
 const notifySingleUser = (req, res, next) => {
   const {
@@ -152,12 +148,10 @@ const notifyManyToMany = (req, res, next) => {
 };
 const notifyInsertMultipleNotifications = (req, res, next) => {
   const {
-    user_id,
-    group_id,
+    notification_id_sufix,
     event_type,
     uniqueUsersToNotify,
     notificationData,
-    notifyMyself,
   } = res.locals;
 
   if (notificationData === null) {
@@ -171,16 +165,12 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     const notification = {
       // because mutation is the root of all evil
       // we are mutating the data object few lines down
-      group_id,
-      id: `${group_id}-${userId}`,
-      type: event_type,
+      event_type,
+      id: `${userId}-${notification_id_sufix}`,
       user_id: userId,
-      done_by: user_id,
       seen_at: null,
       created_at: r.now(),
       updated_at: r.now(),
-      sender: false,
-      activity: false,
       ...notificationData,
     };
 
@@ -192,22 +182,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     return next();
   }
 
-  const mappedNotifications = notifications.map((notification) => {
-    if (notification.user_id === notification.done_by && !notifyMyself) {
-      notification.notification = false;
-    }
-    if (notification.user_id === notification.done_by && event_type === 'goal_notify') {
-      notification.sender = true;
-    }
-    if (event_type !== 'goal_notify') {
-      notification.activity = true;
-      notification.seen_at = r.now();
-    }
-
-    return notification;
-  });
-
-  return dbInsertMultipleNotifications({ notifications: mappedNotifications })
+  return dbInsertMultipleNotifications({ notifications })
     .then((dbResults) => {
       if (!dbResults.changes) {
         return next();
@@ -232,71 +207,71 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       return next(err);
     });
 };
-const notifyGoalNotifySendPushNotifications = (req, res, next) => {
-  const {
-    goal,
-    user,
-    user_ids,
-    group_id,
-    notification_type,
-    notifyMyself,
-  } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
-  const history = goal.history[historyIndex];
-  const filters = [];
+// const notifyGoalNotifySendPushNotifications = (req, res, next) => {
+//   const {
+//     goal,
+//     user,
+//     user_ids,
+//     group_id,
+//     notification_type,
+//     notifyMyself,
+//   } = res.locals;
+//   const historyIndex = getHistoryIndex(goal.history, group_id);
+//   const history = goal.history[historyIndex];
+//   const filters = [];
 
-  user_ids.forEach((userId) => {
-    if (notifyMyself || userId !== user.id) {
-      if (filters.length > 0) {
-        filters.push({
-          operator: 'OR',
-        });
-      }
+//   user_ids.forEach((userId) => {
+//     if (notifyMyself || userId !== user.id) {
+//       if (filters.length > 0) {
+//         filters.push({
+//           operator: 'OR',
+//         });
+//       }
 
-      filters.push({
-        field: 'tag',
-        key: 'swipesUserId',
-        relation: '=',
-        value: userId,
-      });
-    }
-  });
+//       filters.push({
+//         field: 'tag',
+//         key: 'swipesUserId',
+//         relation: '=',
+//         value: userId,
+//       });
+//     }
+//   });
 
-  const from = user.profile.first_name;
-  const headingsMessage = notifyMessageGenerator(from, notification_type, history.request);
-  const message = {
-    filters,
-    app_id: oneSignalConfig.appId,
-    contents: { en: history.message },
-    headings: { en: headingsMessage },
-    subtitle: { en: `about ${goal.title}` },
-    data: {
-      group_id,
-      organization_id: user.organizations[0],
-    },
-    priority: 10,
-    content_available: true,
-    android_visibility: 0,
-  };
-  const reqOptions = {
-    url: 'https://onesignal.com/api/v1/notifications',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      Authorization: `Basic ${oneSignalConfig.restKey}`,
-    },
-    json: message,
-  };
+//   const from = user.profile.first_name;
+//   const headingsMessage = notifyMessageGenerator(from, notification_type, history.request);
+//   const message = {
+//     filters,
+//     app_id: oneSignalConfig.appId,
+//     contents: { en: history.message },
+//     headings: { en: headingsMessage },
+//     subtitle: { en: `about ${goal.title}` },
+//     data: {
+//       group_id,
+//       organization_id: user.organizations[0],
+//     },
+//     priority: 10,
+//     content_available: true,
+//     android_visibility: 0,
+//   };
+//   const reqOptions = {
+//     url: 'https://onesignal.com/api/v1/notifications',
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json; charset=utf-8',
+//       Authorization: `Basic ${oneSignalConfig.restKey}`,
+//     },
+//     json: message,
+//   };
 
-  request.post(reqOptions, (error) => {
-    if (error) {
-      console.log(error);
-      return next(error);
-    }
+//   request.post(reqOptions, (error) => {
+//     if (error) {
+//       console.log(error);
+//       return next(error);
+//     }
 
-    return next();
-  });
-};
+//     return next();
+//   });
+// };
 
 export {
   notifySingleUser,
@@ -308,5 +283,4 @@ export {
   notifyMultipleUsers,
   notifySendEventToAllInCompany,
   notifyManyToMany,
-  notifyGoalNotifySendPushNotifications,
 };

@@ -1,18 +1,5 @@
 import dbGetSingleGoal from '../db_utils/goals';
-import {
-  getHistoryIndex,
-  createNotificationTarget,
-} from '../utils';
-import {
-  SwipesError,
-} from '../swipes-error';
 
-const notificationMeta = (goal) => {
-  return {
-    type: 'goal',
-    title: goal.title,
-  };
-};
 const goalsGetSingle = (req, res, next) => {
   const {
     goal_id,
@@ -44,36 +31,6 @@ const goalsCreatedNotificationData = (req, res, next) => {
 
   return next();
 };
-const goalsNotifyAddSenderAlways = (req, res, next) => {
-  const {
-    user_id,
-    user_ids,
-  } = res.locals;
-
-  if (user_ids.indexOf(user_id) > -1) {
-    res.locals.notifyMyself = true;
-  }
-
-  res.locals.user_ids = [...new Set([...[user_id], ...user_ids])];
-
-  return next();
-};
-const goalsNotifyAdditionalData = (req, res, next) => {
-  const {
-    // T_TODO delete the default value.. it's only for backward compatibility for now
-    notification_type = null,
-    reply_to = null,
-    notificationData,
-  } = res.locals;
-
-  notificationData.notification = true;
-  notificationData.meta.notification_type = notification_type;
-  notificationData.meta.reply_to = reply_to;
-
-  res.locals.notificationData = notificationData;
-
-  return next();
-};
 const goalsRenamedNotificationData = (req, res, next) => {
   const {
     goal_id,
@@ -98,52 +55,25 @@ const goalsLoadedWayNotificationData = (req, res, next) => {
 
   return next();
 };
-const goalsGeneralWithHistoryNotificationData = (req, res, next) => {
+const goalsGeneralNotificationData = (req, res, next) => {
   const {
-    group_id,
     goal,
   } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
 
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsGeneralNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
+  res.locals.notificationData = null;
   res.locals.eventData = { goal };
-  res.locals.historyIndex = historyIndex;
 
   return next();
 };
-const goalsArchiveWithHistoryNotificationData = (req, res, next) => {
+const goalsArchiveNotificationData = (req, res, next) => {
   const {
-    group_id,
-    goal,
+    goal_id,
     milestone_id,
     goal_order,
   } = res.locals;
-  const historyIndex = getHistoryIndex(goal.history, group_id);
 
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsArchiveWithHistoryNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(goal, historyIndex);
-  const meta = notificationMeta(goal);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
-  res.locals.eventData = { goal_id: goal.id, milestone_id, goal_order };
+  res.locals.notificationData = null;
+  res.locals.eventData = { goal_id, milestone_id, goal_order };
 
   return next();
 };
@@ -151,10 +81,8 @@ const goalsArchiveWithHistoryNotificationData = (req, res, next) => {
 export {
   goalsGetSingle,
   goalsCreatedNotificationData,
-  goalsNotifyAddSenderAlways,
-  goalsNotifyAdditionalData,
   goalsRenamedNotificationData,
-  goalsGeneralWithHistoryNotificationData,
+  goalsGeneralNotificationData,
   goalsLoadedWayNotificationData,
-  goalsArchiveWithHistoryNotificationData,
+  goalsArchiveNotificationData,
 };
