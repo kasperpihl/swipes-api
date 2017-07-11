@@ -15,7 +15,7 @@ import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import diff from 'classes/draft-util';
 
 import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
-import * as actions from 'actions';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 
 import './styles/side-note';
@@ -172,7 +172,7 @@ class HOCSideNote extends PureComponent {
       buttonHtml = (
         <Button
           primary
-          {...this.getLoading('conflict')}
+          {...this.getLoading('conflict') }
           text="Resolve now"
           onClick={this.onResolveConflict}
         />
@@ -202,8 +202,8 @@ class HOCSideNote extends PureComponent {
     let rawState = overrideRaw;
     if (!editorState) {
       rawState = cachedText ||
-                  note.get('text') ||
-                  fromJS(emptyState);
+        note.get('text') ||
+        fromJS(emptyState);
       rawState = rawState.toJS();
     }
 
@@ -263,5 +263,5 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   saveNote: ca.notes.save,
   cacheNote: ca.notes.cache,
-  browser: actions.main.browser,
+  browser: a.main.browser,
 })(HOCSideNote);

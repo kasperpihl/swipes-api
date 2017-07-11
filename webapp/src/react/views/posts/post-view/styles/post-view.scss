@@ -82,6 +82,10 @@
     @include font(12px, $deepBlue-40, 18px, 500);
     padding-left: 9px;
   }
+
+  &__comments {
+    padding-top: 18px;
+  }
 }
 
 .post-header {

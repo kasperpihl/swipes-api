@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
@@ -16,6 +16,13 @@ class HOCPostView extends PureComponent {
     setupLoading(this)
   }
   componentDidMount() {
+  }
+  onLinkClick(url) {
+    const { browser, target } = this.props;
+    console.log('====================================');
+    console.log('are we here?');
+    console.log('====================================');
+    browser(target, url);
   }
   onAddComment(message, e) {
     const { addComment, postId } = this.props;
@@ -51,4 +58,5 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   addComment: ca.posts.addComment,
+  browser: a.main.browser,
 })(HOCPostView);

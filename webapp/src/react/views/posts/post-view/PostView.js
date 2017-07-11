@@ -2,10 +2,12 @@ import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback, URL_REGEX } from 'swipes-core-js/classes/utils';
+import { List } from 'immutable';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import SWView from 'SWView';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
+import CommentView from './CommentView';
 // import Button from 'Button';
 import Icon from 'Icon';
 import './styles/post-view.scss';
@@ -14,6 +16,9 @@ class PostView extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
+
+    setupDelegate(this);
+    this.callDelegate.bindAll('onLinkClick')
   }
   componentDidMount() {
   }
@@ -74,7 +79,7 @@ class PostView extends PureComponent {
           urls.forEach((url, i) => {
             item.splice(1 + i + i, 0, (
               <a
-                onClick={this.onClickURLCached(url)}
+                onClick={this.onLinkClickCached(url)}
                 className="notification__link"
                 key={'link' + i}
               >
@@ -127,6 +132,24 @@ class PostView extends PureComponent {
       </div>
     )
   }
+  renderComments() {
+    const { post, delegate } = this.props;
+    const comments = post.get('comments');
+
+    if (comments && comments.size) {
+      const renderComments = comments.map((c, i) => {
+        return <CommentView comment={c} key={c.get('id')} delegate={delegate} />
+      }).toArray();
+
+      return (
+        <div className="post__comments">
+          {renderComments}
+        </div>
+      );
+    }
+
+    return undefined;
+  }
   render() {
     return (
       <SWView
@@ -136,6 +159,7 @@ class PostView extends PureComponent {
         {this.renderMessage()}
         {/*{this.renderAttachments()}*/}
         {this.renderPostActions()}
+        {this.renderComments()}
       </SWView>
     )
   }
