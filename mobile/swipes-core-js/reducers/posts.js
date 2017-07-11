@@ -16,6 +16,16 @@ export default function posts (state = initialState, action) {
       }
       return state.mergeIn([payload.post.id], fromJS(payload.post));
     }
+    case 'post_comment_added':
+    case 'posts.addComment': {
+      const { post_id, comment } = payload;
+
+      if (!state.get(post_id)) {
+        return state;
+      }
+
+      return state.setIn([post_id, 'comments', comment.id], fromJS(comment));
+    }
     default:
       return state
   }
