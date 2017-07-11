@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import * as ca from 'swipes-core-js/actions';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import PostView from './PostView';
@@ -12,9 +12,22 @@ class HOCPostView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+
+    setupLoading(this)
   }
   componentDidMount() {
+  }
+  onAddComment(message, e) {
+    const { addComment, postId } = this.props;
 
+    addComment({
+      post_id: postId,
+      message,
+    }).then((res) => {
+      if (res.ok) {
+
+      }
+    })
   }
   render() {
     const { myId, post } = this.props;
@@ -37,4 +50,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
+  addComment: ca.posts.addComment,
 })(HOCPostView);

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback, URL_REGEX } from 'swipes-core-js/classes/utils';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import SWView from 'SWView';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
@@ -17,9 +18,9 @@ class PostView extends PureComponent {
   componentDidMount() {
   }
   renderProfilePic() {
-    const { myId } = this.props;
-    const image = msgGen.users.getPhoto(myId);
-    const initials = msgGen.users.getInitials(myId);
+    const { post } = this.props;
+    const image = msgGen.users.getPhoto(post.get('created_by'));
+    const initials = msgGen.users.getInitials(post.get('created_by'));
 
     if (!image) {
       return (
@@ -36,6 +37,8 @@ class PostView extends PureComponent {
     )
   }
   renderHeader() {
+    const { post } = this.props;
+    const subtitle = timeAgo(post.get('created_at'), true);
 
     return (
       <div className="post__header">
@@ -44,8 +47,8 @@ class PostView extends PureComponent {
           <div className="post-header__content">
             <div className="post-header__title">Yana notified <span>Kasper</span>, <span>Stefan</span>, <span>Kristjan</span> and <span>Tihomir</span></div>
             <div className="post-header__subtitle">
-              <Icon className="post-header__svg" icon="Goals" />
-              Learn Swipes Feedback • 2 min
+              {/*<Icon className="post-header__svg" icon="Goals" />*/}
+              {subtitle}
             </div>
           </div>
         </div>
@@ -53,9 +56,9 @@ class PostView extends PureComponent {
     )
   }
   renderFooter() {
-    const { delegate, meId } = this.props;
+    const { delegate, myId } = this.props;
 
-    return <CommentInput meId={meId} delegate={delegate} />
+    return <CommentInput myId={myId} delegate={delegate} />
   }
   renderMessage() {
     const { post } = this.props;
@@ -128,6 +131,7 @@ class PostView extends PureComponent {
     return (
       <SWView
         header={this.renderHeader()}
+        footer={this.renderFooter()}
       >
         {this.renderMessage()}
         {/*{this.renderAttachments()}*/}

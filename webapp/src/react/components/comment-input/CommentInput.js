@@ -15,6 +15,9 @@ class CommentInput extends PureComponent {
       commentText: '',
     };
 
+    setupDelegate(this);
+    this.callDelegate.bindAll('onAddComment');
+
     bindAll(this, ['onCommentChange', 'handleAttach', 'handleSend', 'handleKeyDown', 'handleTextareaFocus']);
   }
   componentDidMount() {
@@ -33,8 +36,11 @@ class CommentInput extends PureComponent {
   handleAttach() {
 
   }
-  handleSend() {
+  handleSend(e) {
+    const { commentText } = this.state;
 
+    this.onAddComment(commentText, e);
+    this.setState({ commentText: '' });
   }
   handleKeyDown(e) {
     if (e.keyCode === 13 && !e.shiftKey) {
@@ -43,10 +49,10 @@ class CommentInput extends PureComponent {
     }
   }
   renderImage() {
-    const { meId } = this.props;
+    const { myId } = this.props;
 
-    const image = msgGen.users.getPhoto(meId);
-    const initials = msgGen.users.getInitials(meId)
+    const image = msgGen.users.getPhoto(myId);
+    const initials = msgGen.users.getInitials(myId)
 
     if (image) {
       return <img src={image} className="comment-input__image" />
@@ -57,8 +63,8 @@ class CommentInput extends PureComponent {
   renderIcons() {
 
     return (
-      <div className="comment-input__icon-button" onClick={this.handleSend()}>
-        <Icon icon="ArrowRightLine" className="comment-input__svg" />
+      <div className="comment-input__icon-button">
+        <Icon icon="Attach" className="comment-input__svg" />
       </div>
     )
   }

@@ -48,9 +48,16 @@
   &__icon-button {
     @include size(45px);
     @include flexContainer('row', center, center);
+    transition: .2s ease;
 
     &:hover {
       background-color: $deepBlue-10;
+      transition: .2s ease;
+    }
+
+    &:active {
+      transform: scale(.93);
+      transition: .2s ease;
     }
   }
 
