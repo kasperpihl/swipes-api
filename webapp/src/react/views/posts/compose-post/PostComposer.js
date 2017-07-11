@@ -29,7 +29,7 @@ class PostComposer extends PureComponent {
     }];
 
     const taggedUsers = post.get('taggedUsers');
-    if(taggedUsers.size) {
+    if (taggedUsers.size) {
       string.push(' to ');
       taggedUsers.forEach((id, i) => {
         if (i > 0) {
@@ -85,6 +85,7 @@ class PostComposer extends PureComponent {
           ref="textarea"
           onChange={this.onMessageChange}
           placeholder={placeholder}
+          autoFocus
         />
       </div>
     )

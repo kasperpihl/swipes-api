@@ -19,9 +19,7 @@ class HOCPostView extends PureComponent {
   }
   onLinkClick(url) {
     const { browser, target } = this.props;
-    console.log('====================================');
-    console.log('are we here?');
-    console.log('====================================');
+
     browser(target, url);
   }
   onAddComment(message, e) {

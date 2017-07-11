@@ -127,7 +127,7 @@ class PostView extends PureComponent {
       <div className="post__actions">
         <div className="post__action">
           <Icon icon="Reaction" className="post__svg" />
-          <div className="post__action-label">React</div>
+          <div className="post__action-label">Like</div>
         </div>
       </div>
     )

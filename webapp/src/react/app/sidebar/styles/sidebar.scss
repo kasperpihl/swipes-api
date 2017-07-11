@@ -79,8 +79,8 @@ $sidebarWidth: 84px;
     &:before {
       pointer-events: none;
       @include font(15px, $deepBlue-60);
-      @include size(auto, auto);
-      min-width: 100px;
+      display: inline-block;
+      white-space: nowrap;
       background-color: white;
       border-radius: 2px;
       box-shadow: 0 6px 6px 1px rgba(0,12,47,0.1);

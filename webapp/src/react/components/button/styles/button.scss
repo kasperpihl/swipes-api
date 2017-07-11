@@ -104,6 +104,11 @@ $borderColor: $deepBlue-10;
       padding-left: 6px;
     }
   }
+
+  &:active {
+    transform: scale(.93);
+    transition: .2s ease; 
+  }
 }
 
 // Reverse for Icon and text

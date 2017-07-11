@@ -61,7 +61,7 @@ class HOCCreatePost extends PureComponent {
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
-        this.setState({ post: this.state.post.set('type', item.type)});
+        this.setState({ post: this.state.post.set('type', item.type) });
       },
     };
     contextMenu({
@@ -78,7 +78,7 @@ class HOCCreatePost extends PureComponent {
   }
   onFilterClick(id, obj, e) {
     let { post } = this.state;
-    if(id === 'type') {
+    if (id === 'type') {
       this.onChooseNotificationType(e);
     } else {
       post = post.set('taggedUsers', post.get('taggedUsers').filter(uid => uid !== id));
@@ -88,9 +88,14 @@ class HOCCreatePost extends PureComponent {
   onPostClick(e) {
     const { createPost } = this.props;
     const { post } = this.state;
-    console.log('hi');
+
     this.setLoading('post');
+
     createPost(convertObjToUnderscore(post.toJS())).then((res) => {
+
+      console.log('====================================');
+      console.log(res);
+      console.log('====================================');
       this.clearLoading('post');
     })
   }
@@ -102,10 +107,9 @@ class HOCCreatePost extends PureComponent {
   }
 
   onButtonClick(type, e) {
-    console.log('type', type);
-    if(type === 'type') {
+    if (type === 'type') {
       this.onChooseNotificationType(e);
-    } else if(type === 'users') {
+    } else if (type === 'users') {
       this.onSelectAssignees(e);
     }
   }
@@ -123,7 +127,7 @@ class HOCCreatePost extends PureComponent {
         post={post}
         myId={myId}
         delegate={this}
-        {...this.bindLoading()}
+        {...this.bindLoading() }
       />
     );
   }

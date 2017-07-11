@@ -79,7 +79,7 @@ class CommentView extends PureComponent {
 
     return (
       <div className="comment__underbar">
-        <span className="comment__react" onClick={this.openReactions}>React</span> • {timestamp}
+        <span className="comment__react" onClick={this.openReactions}>Like</span> • {timestamp}
       </div>
     )
   }

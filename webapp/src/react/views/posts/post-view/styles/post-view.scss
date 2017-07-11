@@ -110,7 +110,7 @@
   &__content {
     @include size(100%, auto);
     @include flexContainer('column', left, center);
-    padding-left: 18px;
+    padding-left: 15px;
   }
 
   &__title {
