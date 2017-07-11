@@ -148,7 +148,7 @@ const notifyManyToMany = (req, res, next) => {
 };
 const notifyInsertMultipleNotifications = (req, res, next) => {
   const {
-    // user_id,
+    notification_id_sufix,
     event_type,
     uniqueUsersToNotify,
     notificationData,
@@ -166,7 +166,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       // because mutation is the root of all evil
       // we are mutating the data object few lines down
       event_type,
-      id: `${userId}`,
+      id: `${userId}-${notification_id_sufix}`,
       user_id: userId,
       seen_at: null,
       created_at: r.now(),

@@ -18,9 +18,6 @@ import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
-  notificationCreateGroupId,
-} from './middlewares/util_middlewares';
-import {
   valBody,
   valResponseAndSend,
 } from '../utils';
@@ -31,7 +28,7 @@ const notAuthed = express.Router();
 authed.all('/posts.create',
   valBody({
     organization_id: string.require(),
-    message: string.require(),
+    message: string.min(1).require(),
     type: string.require(),
     attachments: array.of(object),
     tagged_users: array.of(string),
@@ -40,7 +37,6 @@ authed.all('/posts.create',
       title: string.require(),
     }),
   }),
-  notificationCreateGroupId,
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,

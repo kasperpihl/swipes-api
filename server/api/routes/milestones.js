@@ -32,9 +32,6 @@ import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
-  notificationCreateGroupId,
-} from './middlewares/util_middlewares';
-import {
   valBody,
   valResponseAndSend,
   mapLocals,
@@ -49,7 +46,6 @@ authed.all('/milestones.create',
     organization_id: string.require(),
     due_date: string.format('iso8601'),
   }),
-  notificationCreateGroupId,
   milestonesCreate,
   milestonesInsert,
   milestonesCreateQueueMessage,
@@ -63,7 +59,6 @@ authed.all('/milestones.close',
     milestone_id: string.require(),
     migrate_to_milestone_id: string,
   }),
-  notificationCreateGroupId,
   milestoneMigrateIncompleteGoals,
   milestonesRemoveGoal,
   milestonesClose,
@@ -81,7 +76,6 @@ authed.all('/milestones.open',
   valBody({
     milestone_id: string.require(),
   }),
-  notificationCreateGroupId,
   milestonesOpen,
   milestonesUpdateSingle,
   milestonesOpenCloseQueueMessage,

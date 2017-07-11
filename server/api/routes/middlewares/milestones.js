@@ -21,14 +21,12 @@ const milestonesCreate = valLocals('milestonesCreate', {
   user_id: string.require(),
   title: string.require(),
   organization_id: string.require(),
-  notificationGroupId: string.require(),
   due_date: string.format('iso8601'),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     title,
     organization_id,
-    notificationGroupId,
     due_date,
   } = res.locals;
   const milestone = {
@@ -45,7 +43,6 @@ const milestonesCreate = valLocals('milestonesCreate', {
       type: 'milestone_created',
       done_by: user_id,
       done_at: new Date(),
-      group_id: notificationGroupId,
     }],
   };
 
@@ -79,11 +76,9 @@ const milestonesInsert = valLocals('milestonesInsert', {
 });
 const milestonesClose = valLocals('milestonesClose', {
   user_id: string.require(),
-  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    notificationGroupId,
   } = res.locals;
   const closedAt = new Date();
   const type = 'milestone_closed';
@@ -91,7 +86,6 @@ const milestonesClose = valLocals('milestonesClose', {
     type,
     done_by: user_id,
     done_at: new Date(),
-    group_id: notificationGroupId,
   };
   const properties = {
     closed_at: closedAt,
@@ -109,18 +103,15 @@ const milestonesClose = valLocals('milestonesClose', {
 });
 const milestonesOpen = valLocals('milestonesOpen', {
   user_id: string.require(),
-  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    notificationGroupId,
   } = res.locals;
   const type = 'milestone_opened';
   const historyItem = {
     type,
     done_by: user_id,
     done_at: r.now(),
-    group_id: notificationGroupId,
   };
   const properties = {
     closed_at: null,
@@ -195,20 +186,17 @@ const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
     id: string.require(),
   }).require(),
   eventType: string.require(),
-  notificationGroupId: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     milestone,
     eventType,
-    notificationGroupId,
   } = res.locals;
   const milestone_id = milestone.id;
   const queueMessage = {
     user_id,
     milestone_id,
     event_type: eventType,
-    group_id: notificationGroupId,
   };
 
   setLocals({
@@ -222,14 +210,12 @@ const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessa
   user_id: string.require(),
   milestone_id: string.require(),
   eventType: string.require(),
-  notificationGroupId: string.require(),
   goal_ids: array,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     milestone_id,
     eventType,
-    notificationGroupId,
     goal_ids = [],
   } = res.locals;
   const queueMessage = {
@@ -237,7 +223,6 @@ const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessa
     milestone_id,
     goal_ids,
     event_type: eventType,
-    group_id: notificationGroupId,
   };
 
   setLocals({
