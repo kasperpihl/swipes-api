@@ -6,7 +6,7 @@ import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
-import Filter from 'components/filter/Filter';
+import StyledText from 'components/styled-text/StyledText';
 
 import './styles/post-composer.scss';
 
@@ -44,9 +44,9 @@ class PostComposer extends PureComponent {
 
     return (
       <div className="post-composer__subtitle">
-        <Filter
-          filter={string}
-          onClick={this.onFilterClick}
+        <StyledText
+          text={string}
+          delegate={delegate}
         />
       </div>
     )
