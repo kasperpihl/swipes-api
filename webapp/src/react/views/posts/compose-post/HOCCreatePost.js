@@ -76,12 +76,12 @@ class HOCCreatePost extends PureComponent {
       },
     });
   }
-  onFilterClick(id, obj, e) {
+  onTextClick(id, obj, e) {
     let { post } = this.state;
-    if (id === 'type') {
+    if (obj.id === 'type') {
       this.onChooseNotificationType(e);
     } else {
-      post = post.set('taggedUsers', post.get('taggedUsers').filter(uid => uid !== id));
+      post = post.set('taggedUsers', post.get('taggedUsers').filter(uid => uid !== obj.id));
     }
     this.setState({ post });
   }

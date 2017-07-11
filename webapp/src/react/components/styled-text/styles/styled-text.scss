@@ -1,0 +1,33 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.styled-text {
+  $b: &;
+  width: 100%;
+  @include font(15px, $deepBlue-60, 21px);
+
+  button#{$b}__selector {
+    @include font(15px, $blue-100, 21px, 500);
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -3px;
+      @include size(100%, 3px);
+      background-color: $blue-10;
+      transition: .15s ease;
+      z-index: -1;
+    }
+
+    &:hover, &:focus {
+
+      &:before {
+        @include size(100%, 1px);
+        background-color: $blue-100;
+        transform: translateY(3px);
+        transition: .15s ease;
+      }
+    }
+  }
+}
