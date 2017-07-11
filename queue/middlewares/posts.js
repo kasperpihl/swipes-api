@@ -55,6 +55,7 @@ const postCommentAddedNotificationData = (req, res, next) => {
   const {
     user_id,
     post,
+    comment_id,
   } = res.locals;
 
   res.locals.notificationData = {
@@ -70,7 +71,8 @@ const postCommentAddedNotificationData = (req, res, next) => {
     },
   };
   res.locals.eventData = {
-    post,
+    post_id: post.id,
+    comment: post.comments[comment_id],
   };
 
   return next();
