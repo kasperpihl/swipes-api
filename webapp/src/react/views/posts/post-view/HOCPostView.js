@@ -9,6 +9,9 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import PostView from './PostView';
 
 class HOCPostView extends PureComponent {
+  static maxWidth() {
+    return 600;
+  }
   constructor(props) {
     super(props);
     this.state = {};

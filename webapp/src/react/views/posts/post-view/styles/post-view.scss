@@ -98,6 +98,13 @@
       @include size(48px);
       border-radius: 3px;
     }
+
+    .post-header__emoji {
+      position: absolute;
+      top: 0; right: 0;
+      transform: translate(40%, -40%);
+      font-size: 21px;
+    }
   }
 
   &__profile-initials {
@@ -117,7 +124,8 @@
     @include font(15px, $deepBlue-100, 21px);
 
     span {
-      color: $blue-100;
+      color: $deepBlue-80;
+      font-weight: 500;
     }
   }
 

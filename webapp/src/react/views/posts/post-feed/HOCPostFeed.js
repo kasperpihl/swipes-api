@@ -9,6 +9,9 @@ import { connect } from 'react-redux';
 import PostFeed from './PostFeed';
 
 class HOCPostFeed extends PureComponent {
+  static maxWidth() {
+    return 600;
+  }
   constructor(props) {
     super(props);
     this.state = {};

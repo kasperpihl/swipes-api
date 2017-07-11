@@ -38,6 +38,7 @@ class PostView extends PureComponent {
     return (
       <div className="post-header__profile-pic">
         <img src={image} />
+        {/*<div className="post-header__emoji">☝</div>*/}
       </div>
     )
   }
@@ -50,7 +51,7 @@ class PostView extends PureComponent {
         <div className="post-header">
           {this.renderProfilePic()}
           <div className="post-header__content">
-            <div className="post-header__title">Yana notified <span>Kasper</span>, <span>Stefan</span>, <span>Kristjan</span> and <span>Tihomir</span></div>
+            <div className="post-header__title">☝ Yana notified <span>Kasper</span>, <span>Stefan</span>, <span>Kristjan</span> and <span>Tihomir</span></div>
             <div className="post-header__subtitle">
               {/*<Icon className="post-header__svg" icon="Goals" />*/}
               {subtitle}
