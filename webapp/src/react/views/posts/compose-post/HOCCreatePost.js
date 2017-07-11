@@ -86,12 +86,15 @@ class HOCCreatePost extends PureComponent {
     this.setState({ post });
   }
   onPostClick(e) {
-    const { createPost } = this.props;
+    const { createPost, navPop } = this.props;
     const { post } = this.state;
-    console.log('hi');
     this.setLoading('post');
     createPost(convertObjToUnderscore(post.toJS())).then((res) => {
-      this.clearLoading('post');
+      if(res.ok) {
+        navPop();
+      } else {
+        this.clearLoading('post', '!Something went wrong');
+      }
     })
   }
   onMessageChange(e) {
@@ -102,7 +105,6 @@ class HOCCreatePost extends PureComponent {
   }
 
   onButtonClick(type, e) {
-    console.log('type', type);
     if(type === 'type') {
       this.onChooseNotificationType(e);
     } else if(type === 'users') {
