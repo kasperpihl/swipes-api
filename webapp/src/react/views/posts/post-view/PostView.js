@@ -106,7 +106,7 @@ class PostView extends PureComponent {
     )
   }
   renderComments() {
-    const { post, delegate } = this.props;
+    const { post, delegate, myId } = this.props;
     const comments = post.get('comments');
 
     if (comments && comments.size) {
@@ -116,6 +116,7 @@ class PostView extends PureComponent {
 
       return (
         <div className="post__comments">
+          <CommentInput myId={myId} delegate={delegate} />
           {renderComments}
         </div>
       );
@@ -127,7 +128,7 @@ class PostView extends PureComponent {
     return (
       <SWView
         header={this.renderHeader()}
-        footer={this.renderFooter()}
+        noframe
       >
         {this.renderComments()}
       </SWView>

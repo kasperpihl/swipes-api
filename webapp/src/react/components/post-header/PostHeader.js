@@ -41,6 +41,7 @@ class PostHeader extends PureComponent {
         string.push({
           id,
           string: msgGen.users.getFirstName(id),
+          className: 'post-header__styled-button'
         });
       });
     }
@@ -49,6 +50,7 @@ class PostHeader extends PureComponent {
         <StyledText
           text={string}
           delegate={delegate}
+          className="post-header__styled-text"
         />
       </div>
     )

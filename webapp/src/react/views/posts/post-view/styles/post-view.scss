@@ -43,6 +43,7 @@
 
   &__header {
     @include size(100%, auto);
+    padding: 0 30px;
   }
 
   &__message {
@@ -84,6 +85,8 @@
   }
 
   &__comments {
+    background-color: $comment-bg;
+    padding: 0 30px;
     padding-top: 18px;
   }
 }

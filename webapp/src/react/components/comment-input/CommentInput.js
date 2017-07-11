@@ -68,14 +68,52 @@ class CommentInput extends PureComponent {
       </div>
     )
   }
-  render() {
+  // render() {
+  //   const { commentText } = this.state;
+  //   const placeholder = 'Write a comment';
+
+  //   return (
+  //     <div className="comment-input">
+  //       {this.renderImage()}
+  //       <ReactTextarea
+  //         className="comment-input__textarea"
+  //         value={commentText}
+  //         minRows={1}
+  //         maxRows={6}
+  //         ref="textarea"
+  //         onChange={this.onCommentChange}
+  //         onKeyDown={this.handleKeyDown}
+  //         placeholder={placeholder}
+  //       />
+  //       {this.renderIcons()}
+  //     </div>
+  //   )
+  // }
+  renderProfilePic() {
+    const { myId } = this.props;
+    const image = msgGen.users.getPhoto(myId);
+    const initials = msgGen.users.getInitials(myId);
+
+    if (!image) {
+      return (
+        <div className="comment-input__profile-initials">
+          {initials}
+        </div>
+      )
+    }
+
+    return (
+      <div className="comment-input__profile-pic">
+        <img src={image} />
+      </div>
+    )
+  }
+  renderTextarea() {
     const { commentText } = this.state;
     const placeholder = 'Write a comment';
 
     return (
-      <div className="comment-input">
-        {this.renderImage()}
-        <div className="comment-input__textarea-wrapper" onClick={this.handleTextareaFocus}></div>
+      <div className="comment-input__textarea-wrapper">
         <ReactTextarea
           className="comment-input__textarea"
           value={commentText}
@@ -86,7 +124,21 @@ class CommentInput extends PureComponent {
           onKeyDown={this.handleKeyDown}
           placeholder={placeholder}
         />
-        {this.renderIcons()}
+
+        <div className="comment-input__icon-wrapper">
+          <Icon icon="Attach" className="comment-input__svg" />
+        </div>
+      </div>
+    )
+  }
+  render() {
+    const { commentText } = this.state;
+    const placeholder = 'Write a comment';
+
+    return (
+      <div className="comment-input">
+        {this.renderProfilePic()}
+        {this.renderTextarea()}
       </div>
     )
   }
