@@ -111,8 +111,8 @@ class PostView extends PureComponent {
     let renderComments = undefined;
 
     if (comments && comments.size) {
-      renderComments = comments.sort((a, b) => a.get('created_at').localeCompare(b.get('created_at'))).map((c, i) => {
-        return <CommentView comment={c} key={c.get('id')} delegate={delegate} />
+      const renderComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at'))).map((c, i) => {
+        return <CommentView isLast={i === comments.size - 1} comment={c} key={c.get('id')} delegate={delegate} />
       }).toArray();
     }
 
@@ -124,12 +124,9 @@ class PostView extends PureComponent {
     );
   }
   render() {
-    const { scrollToBottom } = this.props;
-
     return (
       <SWView
         header={this.renderHeader()}
-        scrollToBottom={scrollToBottom}
         noframe
       >
         {this.renderComments()}

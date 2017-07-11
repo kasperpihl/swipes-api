@@ -18,6 +18,9 @@ class CommentView extends PureComponent {
     this.callDelegate.bindAll('onLinkClick')
   }
   componentDidMount() {
+    if(this.props.isLast) {
+      this.refs.comment.scrollIntoView();
+    }
   }
   openReactions() {
     console.log('hihihihih')
@@ -87,7 +90,7 @@ class CommentView extends PureComponent {
     const { comment } = this.props;
 
     return (
-      <div className="comment">
+      <div className="comment" ref="comment">
         {this.renderProfilePic()}
         <div className="comment__side">
           {this.renderMessage()}

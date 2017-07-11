@@ -20,16 +20,6 @@ class HOCPostView extends PureComponent {
   }
   componentDidMount() {
   }
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.post.get('comments').size !== this.props.post.get('comments')) {
-      this.setState({ scrollToBottom: true });
-    }
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if(prevState.scrollToBottom){
-      this.setState({ scrollToBottom: false });
-    }
-  }
   onLinkClick(url) {
     const { browser, target } = this.props;
 
@@ -49,14 +39,12 @@ class HOCPostView extends PureComponent {
   }
   render() {
     const { myId, post } = this.props;
-    const { scrollToBottom } = this.state;
 
     return (
       <PostView
         myId={myId}
         post={post}
         delegate={this}
-        scrollToBottom={scrollToBottom}
       />
     );
   }
