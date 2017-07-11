@@ -41,19 +41,6 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
 
   return next();
 };
-const getHistoryIndex = (historyArray, group_id) => {
-  const index = historyArray.findIndex((item) => {
-    return item.group_id === group_id;
-  });
-
-  return index;
-};
-const createNotificationTarget = (mainItem, historyIndex) => {
-  return {
-    id: mainItem.id,
-    history_index: historyIndex,
-  };
-};
 const notifyMessageGenerator = (from, type, request) => {
   if (request) {
     if (type === 'update') return `${from} asked you for an update`;
@@ -73,7 +60,5 @@ const notifyMessageGenerator = (from, type, request) => {
 export {
   valLocals,
   setLocals,
-  getHistoryIndex,
-  createNotificationTarget,
   notifyMessageGenerator,
 };

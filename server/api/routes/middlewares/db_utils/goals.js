@@ -1,7 +1,6 @@
 import r from 'rethinkdb';
 import {
   string,
-  number,
   object,
   array,
   funcWrap,
@@ -137,75 +136,14 @@ const dbGoalsGetSingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
-const dbGoalsPushToHistorySingle = funcWrap([
-  object.as({
-    goal_id: string.require(),
-    historyItem: object.require(),
-  }),
-], (err, { goal_id, historyItem }) => {
-  if (err) {
-    throw new SwipesError(`dbGoalsPushToHistorySingle: ${err}`);
-  }
-
-  const q =
-    r.table('goals')
-      .get(goal_id)
-      .update({
-        history: r.row('history').append(historyItem),
-        updated_at: r.now(),
-      }, { returnChanges: true });
-
-  return db.rethinkQuery(q);
-});
-const dbGoalsRepliesHistoryUpdate = funcWrap([
-  object.as({
-    reply_index: number.require(),
-    target: object.as({
-      id: string.require(),
-      history_index: number.int().gte(0).require(),
-    }).require(),
-  }).require(),
-], (err, { reply_index, target }) => {
-  if (err) {
-    throw new SwipesError(`dbGoalsRepliesHistoryUpdate: ${err}`);
-  }
-
-  let table = '';
-
-  if (target.id.startsWith('G')) {
-    table = 'goals';
-  }
-
-  const q =
-    r.table(table)
-      .get(target.id)
-      .update({
-        history: r.row('history')
-          .changeAt(target.history_index,
-            r.row('history')
-              .nth(target.history_index)
-              .merge((item) => {
-                return {
-                  replies: item('replies').default([]).setUnion([reply_index]),
-                };
-              }),
-          ),
-        updated_at: r.now(),
-      }, {
-        returnChanges: true,
-      });
-
-  return db.rethinkQuery(q);
-});
 const dbGoalsCompleteStep = funcWrap([
   object.as({
     goal_id: string.require(),
     step_id: string.require(),
     user_id: string.require(),
     type: string.require(),
-    notificationGroupId: string.require(),
   }),
-], (err, { goal_id, step_id, user_id, type, notificationGroupId }) => {
+], (err, { goal_id, step_id, user_id, type }) => {
   if (err) {
     throw new SwipesError(`dbGoalsCompleteStep: ${err}`);
   }
@@ -235,7 +173,6 @@ const dbGoalsCompleteStep = funcWrap([
             step_id,
             done_by: user_id,
             done_at: r.now(),
-            group_id: notificationGroupId,
             assignees: goal('steps')(step_id)('assignees') || [],
           }),
           completed_at: r.branch(
@@ -264,9 +201,8 @@ const dbGoalsIncompleteStep = funcWrap([
     step_id: string.require(),
     user_id: string.require(),
     type: string.require(),
-    notificationGroupId: string.require(),
   }),
-], (err, { goal_id, step_id, user_id, type, notificationGroupId }) => {
+], (err, { goal_id, step_id, user_id, type }) => {
   if (err) {
     throw new SwipesError(`dbGoalsIncompleteStep: ${err}`);
   }
@@ -292,7 +228,6 @@ const dbGoalsIncompleteStep = funcWrap([
             step_id,
             done_by: user_id,
             done_at: r.now(),
-            group_id: notificationGroupId,
             assignees: goal('steps')(step_id)('assignees') || [],
           }),
           completed_at: null,
@@ -338,8 +273,6 @@ export {
   dbGoalsInsertSingle,
   dbGoalsUpdateSingle,
   dbGoalsGetSingle,
-  dbGoalsPushToHistorySingle,
-  dbGoalsRepliesHistoryUpdate,
   dbGoalsCompleteGoal,
   dbGoalsIncompleteGoal,
   dbGoalsCompleteStep,

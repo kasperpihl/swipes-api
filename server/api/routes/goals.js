@@ -3,9 +3,6 @@ import {
   string,
   object,
   array,
-  number,
-  any,
-  bool,
 } from 'valjs';
 import {
   milestonesRemoveGoal,
@@ -20,14 +17,10 @@ import {
   goalsCompleteStep,
   goalsCompleteStepQueueMessage,
   goalsIncompleteStepQueueMessage,
-  goalsNotify,
-  goalsNotifyQueueMessage,
-  goalsHistoryUpdateIfReply,
   goalsRename,
   goalsRenameQueueMessage,
   goalsAppendWayToGoal,
   goalsAppendWayToGoalQueueMessage,
-  goalsNotifyEmailQueueMessage,
   goalsIncompleteStep,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
@@ -41,9 +34,6 @@ import {
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
-import {
-  notificationCreateGroupId,
-} from './middlewares/util_middlewares';
 import {
   notesCreate,
 } from './middlewares/notes';
@@ -101,7 +91,6 @@ authed.all('/goals.complete',
   valBody({
     goal_id: string.require(),
   }),
-  notificationCreateGroupId,
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
   notificationsPushToQueue,
@@ -113,7 +102,6 @@ authed.all('/goals.incomplete',
   valBody({
     goal_id: string.require(),
   }),
-  notificationCreateGroupId,
   goalsIncompleteGoal,
   goalsIncompleteQueueMessage,
   notificationsPushToQueue,
@@ -126,7 +114,6 @@ authed.all('/goals.completeStep',
     goal_id: string.require(),
     step_id: string.require(),
   }),
-  notificationCreateGroupId,
   goalsCompleteStep,
   goalsCompleteStepQueueMessage,
   notificationsPushToQueue,
@@ -139,7 +126,6 @@ authed.all('/goals.incompleteStep',
     goal_id: string.require(),
     step_id: string.require(),
   }),
-  notificationCreateGroupId,
   goalsIncompleteStep,
   goalsIncompleteStepQueueMessage,
   notificationsPushToQueue,
@@ -167,7 +153,6 @@ authed.all('/goals.archive',
   mapLocals(locals => ({
     goal_ids: [locals.goal_id],
   })),
-  notificationCreateGroupId,
   goalsArchive,
   milestonesRemoveGoal,
   goalsArchiveQueueMessage,
@@ -176,27 +161,6 @@ authed.all('/goals.archive',
     goal_id: string.require(),
     milestone_id: string,
     goal_order: array,
-  }));
-
-authed.all('/goals.notify',
-  valBody({
-    goal_id: string.require(),
-    assignees: array.of(string).min(1).require(),
-    message: string.min(1).require(),
-    flags: array.of(string),
-    notification_type: any.of('feedback', 'update', 'assets', 'decision', 'default'),
-    request: bool,
-    reply_to: number,
-  }),
-  notificationCreateGroupId,
-  goalsNotify,
-  goalsHistoryUpdateIfReply,
-  goalsNotifyQueueMessage,
-  notificationsPushToQueue,
-  goalsNotifyEmailQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    goal: object.require(),
   }));
 
 authed.all('/goals.loadWay',
