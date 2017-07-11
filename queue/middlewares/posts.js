@@ -1,5 +1,17 @@
 import dbPostsGetSingle from '../db_utils/posts';
 
+const uniqueCommentUserIds = (comments) => {
+  const userIds = [];
+  const keys = Object.keys(comments);
+
+  keys.forEach((key) => {
+    const comment = comments[key];
+
+    userIds.push(comment.created_by);
+  });
+
+  return new Set(userIds);
+};
 const postsGetSingle = (req, res, next) => {
   const {
     post_id,
@@ -39,8 +51,33 @@ const postCreatedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postCommentAddedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    post,
+  } = res.locals;
+
+  res.locals.notificationData = {
+    target: {
+      id: post.id,
+    },
+    meta: {
+      user_id,
+      user_ids: uniqueCommentUserIds(post.comments),
+      message: post.message,
+      context: post.context,
+      type: post.type,
+    },
+  };
+  res.locals.eventData = {
+    post,
+  };
+
+  return next();
+};
 
 export {
   postsGetSingle,
   postCreatedNotificationData,
+  postCommentAddedNotificationData,
 };

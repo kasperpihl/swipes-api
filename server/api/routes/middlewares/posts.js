@@ -12,9 +12,6 @@ import {
   generateSlackLikeId,
   valLocals,
 } from '../../utils';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
 
 const postsCreate = valLocals('postsCreate', {
   user_id: string.require(),
@@ -158,11 +155,13 @@ const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
     post_id,
     comment,
   } = res.locals;
+  const event_type = 'post_comment_added';
   const queueMessage = {
     user_id,
     post_id,
+    event_type,
+    notification_id_sufix: `${post_id}-${comment.id}-${event_type}`,
     comment_id: comment.id,
-    event_type: 'post_comment_added',
   };
 
   setLocals({
