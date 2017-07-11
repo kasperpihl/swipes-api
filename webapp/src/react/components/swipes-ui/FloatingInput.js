@@ -54,7 +54,7 @@ class FloatingInput extends Component {
     }
   }
   render() {
-    const { label, type, id, error, value } = this.props;
+    const { label, type, id, error, value, autoFocus } = this.props;
     const { visiblePassword } = this.state;
     let floatingClass = 'floating-label--inactive';
     let iconClass = 'floating-label__icon';
@@ -89,6 +89,7 @@ class FloatingInput extends Component {
           onBlur={this.floatBlur}
           onKeyDown={this.props.onKeyDown}
           onChange={this.onChange}
+          autoFocus={autoFocus}
         />
         <label htmlFor={id} className="floating-label__label">{label}</label>
 
