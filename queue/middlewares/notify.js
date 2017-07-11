@@ -148,12 +148,10 @@ const notifyManyToMany = (req, res, next) => {
 };
 const notifyInsertMultipleNotifications = (req, res, next) => {
   const {
-    user_id,
-    group_id,
+    // user_id,
     event_type,
     uniqueUsersToNotify,
     notificationData,
-    notifyMyself,
   } = res.locals;
 
   if (notificationData === null) {
@@ -167,16 +165,12 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     const notification = {
       // because mutation is the root of all evil
       // we are mutating the data object few lines down
-      group_id,
-      id: `${group_id}-${userId}`,
-      type: event_type,
+      event_type,
+      id: `${userId}`,
       user_id: userId,
-      done_by: user_id,
       seen_at: null,
       created_at: r.now(),
       updated_at: r.now(),
-      sender: false,
-      activity: false,
       ...notificationData,
     };
 
@@ -188,22 +182,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     return next();
   }
 
-  const mappedNotifications = notifications.map((notification) => {
-    if (notification.user_id === notification.done_by && !notifyMyself) {
-      notification.notification = false;
-    }
-    if (notification.user_id === notification.done_by && event_type === 'goal_notify') {
-      notification.sender = true;
-    }
-    if (event_type !== 'goal_notify') {
-      notification.activity = true;
-      notification.seen_at = r.now();
-    }
-
-    return notification;
-  });
-
-  return dbInsertMultipleNotifications({ notifications: mappedNotifications })
+  return dbInsertMultipleNotifications({ notifications })
     .then((dbResults) => {
       if (!dbResults.changes) {
         return next();
