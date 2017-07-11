@@ -15,6 +15,14 @@ class HOCPostFeed extends PureComponent {
   }
   componentDidMount() {
   }
+  onNewPost() {
+    const { navPush } = this.props;
+
+    navPush({
+      id: 'CreatePost',
+      title: 'New post',
+    })
+  }
   onPostClick(postId) {
     const { navPush } = this.props;
 
