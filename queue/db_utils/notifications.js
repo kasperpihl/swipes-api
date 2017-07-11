@@ -14,6 +14,7 @@ import {
 const dbInsertMultipleNotifications = ({ notifications }) => {
   const q = r.table('notifications').insert(notifications, {
     returnChanges: true,
+    conflict: 'replace',
   });
 
   return db.rethinkQuery(q);
