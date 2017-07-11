@@ -3,7 +3,7 @@ export default class Posts {
     this.store = store;
     this.parent = parent;
   }
-  getPostTypeTitle(type) {
+  getPostComposeTypeTitle(type) {
     switch (type) {
       case 'information':
         return 'Share information';
@@ -14,6 +14,19 @@ export default class Posts {
       case 'message':
       default:
         return 'Send a message';
+    }
+  }
+  getPostTypeTitle(type) {
+    switch (type) {
+      case 'information':
+        return 'shared information';
+      case 'question':
+        return 'asked a question';
+      case 'announcement':
+        return 'made an announcement';
+      case 'message':
+      default:
+        return 'sent a message';
     }
   }
   getPostTypeSubtitle(type){

@@ -30,7 +30,7 @@
     @include font(12px, $deepBlue-80, 24px, 500);
     @include truncateString();
     padding-left: 6px;
-  } 
+  }
 }
 
 // ======================================================
@@ -40,7 +40,7 @@
 .post {
   $b: &;
   padding-top: 30px;
-  
+
   &__header {
     @include size(100%, auto);
   }
@@ -85,58 +85,5 @@
 
   &__comments {
     padding-top: 18px;
-  }
-}
-
-.post-header {
-
-  &__profile-pic {
-    @include size(48px);
-    border-radius: 3px;
-
-    img {
-      @include size(48px);
-      border-radius: 3px;
-    }
-
-    .post-header__emoji {
-      position: absolute;
-      top: 0; right: 0;
-      transform: translate(40%, -40%);
-      font-size: 21px;
-    }
-  }
-
-  &__profile-initials {
-    @include size(48px);
-    @include flexContainer('row', center, center);
-    background-color: $deepBlue-10;
-    border-radius: 3px;
-  }
-
-  &__content {
-    @include size(100%, auto);
-    @include flexContainer('column', left, center);
-    padding-left: 15px;
-  }
-
-  &__title {
-    @include font(15px, $deepBlue-100, 21px);
-
-    span {
-      color: $deepBlue-80;
-      font-weight: 500;
-    }
-  }
-
-  &__subtitle {
-    @include flexContainer('row', left, center);
-    @include font(12px, $deepBlue-40, 18px, 500);
-  }
-
-  &__svg {
-    @include size(12px);
-    @include svg-color($deepBlue-40);
-    margin-right: 6px;
   }
 }

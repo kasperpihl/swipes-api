@@ -7,6 +7,7 @@ import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import SWView from 'SWView';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
+import PostHeader from 'components/post-header/PostHeader';
 import CommentView from './CommentView';
 // import Button from 'Button';
 import Icon from 'Icon';
@@ -20,44 +21,12 @@ class PostView extends PureComponent {
     setupDelegate(this);
     this.callDelegate.bindAll('onLinkClick')
   }
-  componentDidMount() {
-  }
-  renderProfilePic() {
-    const { post } = this.props;
-    const image = msgGen.users.getPhoto(post.get('created_by'));
-    const initials = msgGen.users.getInitials(post.get('created_by'));
-
-    if (!image) {
-      return (
-        <div className="post-header__profile-initials">
-          {initials}
-        </div>
-      )
-    }
-
-    return (
-      <div className="post-header__profile-pic">
-        <img src={image} />
-        {/*<div className="post-header__emoji">☝</div>*/}
-      </div>
-    )
-  }
   renderHeader() {
-    const { post } = this.props;
-    const subtitle = timeAgo(post.get('created_at'), true);
+    const { post, delegate } = this.props;
 
     return (
       <div className="post__header">
-        <div className="post-header">
-          {this.renderProfilePic()}
-          <div className="post-header__content">
-            <div className="post-header__title">☝ Yana notified <span>Kasper</span>, <span>Stefan</span>, <span>Kristjan</span> and <span>Tihomir</span></div>
-            <div className="post-header__subtitle">
-              {/*<Icon className="post-header__svg" icon="Goals" />*/}
-              {subtitle}
-            </div>
-          </div>
-        </div>
+        <PostHeader post={post} delegate={delegate} />
       </div>
     )
   }

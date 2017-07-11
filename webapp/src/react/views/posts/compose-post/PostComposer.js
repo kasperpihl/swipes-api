@@ -25,7 +25,7 @@ class PostComposer extends PureComponent {
 
     let string = ['— ', {
       id: 'type',
-      string: msgGen.posts.getPostTypeTitle(type),
+      string: msgGen.posts.getPostComposeTypeTitle(type),
     }];
 
     const taggedUsers = post.get('taggedUsers');

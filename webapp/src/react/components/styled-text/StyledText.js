@@ -17,23 +17,29 @@ class StyledText extends PureComponent {
   componentDidMount() {
   }
   render() {
-    const { text, textStyle } = this.props;
+    const { text, textStyle, className } = this.props;
 
     return (
-      <div className="styled-text" style={textStyle}>
+      <div className={`styled-text ${className || ''}`} style={textStyle}>
         {text.map((t) => {
           if (typeof t === 'string') {
             return t;
           }
 
+          const {
+            id,
+            string,
+            className,
+            ...rest,
+          } = t;
           return (
             <button
               onMouseEnter={this.onTextMouseEnterCached(t.id, t)}
               onMouseLeave={this.onTextMouseLeaveCached(t.id, t)}
               onClick={this.onTextClickCached(t.id, t)}
-              className="styled-text__selector"
+              className={`styled-text__selector ${className || ''}`}
               key={t.id}
-              style={t.style}
+              {...rest}
             >
               {t.string}
             </button>
