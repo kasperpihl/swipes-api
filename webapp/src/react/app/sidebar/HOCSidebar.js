@@ -6,16 +6,35 @@ import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import * as a from 'actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import HOCNotifications from 'views/notifications/HOCNotifications';
 
 import './styles/sidebar.scss';
 
 class HOCSidebar extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      isOpenNotifications: false,
+    };
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onRightClickCached = setupCachedCallback(this.onClick, this);
   }
+  onClick(id, target, e) {
+    const { navSet } = this.props;
+    if (target === 'secondary' && id === 'Slack') {
+      return;
+    }
 
+    if (id === 'Notifications') {
+      this.openNotifications(e);
+      return;
+    }
+
+    navSet(target, {
+      id,
+      title: this.getTitleForId(id),
+    });
+  }
   getNavItems() {
     return [
       { id: 'GoalList', svg: 'Goals' },
@@ -26,16 +45,6 @@ class HOCSidebar extends PureComponent {
       // { id: 'Slack', svg: 'Hashtag' },
       // { id: 'Store', svg: 'Store' },
     ].filter(v => !!v);
-  }
-  onClick(id, target) {
-    const { navSet } = this.props;
-    if (target === 'secondary' && id === 'Slack') {
-      return;
-    }
-    navSet(target, {
-      id,
-      title: this.getTitleForId(id),
-    });
   }
   getTitleForId(id) {
     switch (id) {
@@ -57,15 +66,29 @@ class HOCSidebar extends PureComponent {
     const completed = me.getIn(['settings', 'onboarding', 'completed']);
     return order.filter(id => !completed.get(id)).size;
   }
+  openNotifications(e) {
+    const { contextMenu } = this.props;
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignY: 'top',
+      alignX: 'right',
+    };
+    this.setState({ isOpenNotifications: true });
+    contextMenu({
+      component: HOCNotifications,
+      onClose: () => { this.setState({ isOpenNotifications: false }); },
+      options,
+    })
+  }
   renderItem(item) {
     const { navId, counters } = this.props;
+    const { isOpenNotifications: isOpen } = this.state
     let counter = counters.get(item.id);
     if (item.id === 'Onboarding') {
       counter = this.getRemainingOnboarding();
     }
     let className = 'sidebar__item';
-
-    if (item.id === navId) {
+    if (isOpen && item.id === 'Notifications' || !isOpen && item.id === navId) {
       className += ' sidebar__item--active';
     }
 
@@ -94,8 +117,9 @@ class HOCSidebar extends PureComponent {
       </div>
     );
   }
+
   // render
-  renderTopSection() {
+  renderMiddleSection() {
     const navItems = this.getNavItems();
 
     if (navItems) {
@@ -120,8 +144,11 @@ class HOCSidebar extends PureComponent {
     return (
       <div className="sidebar">
         <div className="sidebar__top-section">
+          {this.renderItem({ id: 'Notifications' })}
+        </div>
+        <div className="sidebar__middle-section">
           <div className="sidebar__section">
-            {this.renderTopSection()}
+            {this.renderMiddleSection()}
           </div>
         </div>
         <div className="sidebar__bottom-section">
@@ -151,5 +178,6 @@ HOCSidebar.propTypes = {
 
 const ConnectedHOCSidebar = connect(mapStateToProps, {
   navSet: a.navigation.set,
+  contextMenu: a.main.contextMenu,
 })(HOCSidebar);
 export default ConnectedHOCSidebar;
