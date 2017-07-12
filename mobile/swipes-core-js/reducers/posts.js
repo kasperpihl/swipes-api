@@ -26,6 +26,27 @@ export default function posts (state = initialState, action) {
 
       return state.setIn([post_id, 'comments', comment.id], fromJS(comment));
     }
+    case 'posts.addReaction':
+    case 'post_reaction_added': {
+      const { post_id, reaction } = payload;
+      if (!state.get(post_id)) {
+        return state;
+      }
+      return state.updateIn([post_id, 'reactions'], (reactions) => {
+        console.log(reactions.filter(r => r.get('created_by') !== reaction.created_by).insert(0, fromJS(reaction)));
+        return reactions.filter(r => r.get('created_by') !== reaction.created_by).insert(0, fromJS(reaction))
+      });
+    }
+    case 'posts.removeReaction':
+    case 'post_reaction_removed': {
+      const { post_id, user_id } = payload;
+      if (!state.get(post_id)) {
+        return state;
+      }
+      return state.updateIn([post_id, 'reactions'], (reactions) => {
+        return reactions.filter(r => r.get('created_by') !== payload.user_id);
+      });
+    }
     default:
       return state
   }

@@ -102,8 +102,7 @@ export default class Users {
     const preferId = options.preferId || me.get('id');
     const numberOfNames = options.number || 1;
     if (userIds.includes(preferId)) {
-      // userIds = userIds.filter(uId => uId !== preferId).insert(0, preferId);
-      // console.log(userIds.toJS());
+      userIds = userIds.filter(uId => uId !== preferId).insert(0, preferId);
     }
     const names = userIds.map(uId => this.getName(uId, options));
     let nameString = '';

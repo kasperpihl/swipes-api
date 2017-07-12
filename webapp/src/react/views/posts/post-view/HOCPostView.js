@@ -25,6 +25,19 @@ class HOCPostView extends PureComponent {
 
     return !fromFeed;
   }
+  onAddReaction() {
+    const { post, addReaction } = this.props;
+    addReaction({
+      post_id: post.get('id'),
+      reaction: 'like'
+    });
+  }
+  onRemoveReaction() {
+    const { post, removeReaction } = this.props;
+    removeReaction({
+      post_id: post.get('id'),
+    });
+  }
   onHeaderContextClick() {
     const { openSecondary, post } = this.props;
     openSecondary(navForContext(post.get('context')));
@@ -73,5 +86,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   addComment: ca.posts.addComment,
+  addReaction: ca.posts.addReaction,
+  removeReaction: ca.posts.removeReaction,
   browser: a.main.browser,
 })(HOCPostView);

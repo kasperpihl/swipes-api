@@ -98,7 +98,7 @@ const postReactionAddedNotificationData = (req, res, next) => {
   };
   res.locals.eventData = {
     post_id: post.id,
-    reaction: post.reactions.filter(r => r.created_by === user_id),
+    reaction: post.reactions.find(r => r.created_by === user_id),
   };
 
   return next();
