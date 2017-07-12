@@ -89,8 +89,8 @@ const postReactionAddedNotificationData = (req, res, next) => {
       id: post.id,
     },
     meta: {
-      reaction,
-      user_ids: post.reactions.filter(r => r.created_by !== user_id).map(r => r.created_by),
+      last_reaction: reaction,
+      user_ids: post.reactions.map(r => r.created_by),
       message: post.message,
       context: post.context,
       type: post.type,
