@@ -25,6 +25,7 @@ class PostHeader extends PureComponent {
       {
         id: post.get('created_by'),
         string: msgGen.users.getFirstName(post.get('created_by')),
+        className: 'post-header__styled-button',
       },
       ' ',
       msgGen.posts.getPostTypeTitle(type)
@@ -41,7 +42,7 @@ class PostHeader extends PureComponent {
         string.push({
           id,
           string: msgGen.users.getFirstName(id),
-          className: 'post-header__styled-button'
+          className: 'post-header__styled-button',
         });
       });
     }
@@ -79,7 +80,7 @@ class PostHeader extends PureComponent {
     const { post } = this.props;
     let subtitle = timeAgo(post.get('created_at'), true);
     let icon;
-    if(post.get('context')) {
+    if (post.get('context')) {
       subtitle = (
         <span onClick={this.onHeaderContextClick}>
           {post.getIn(['context', 'title'])}
