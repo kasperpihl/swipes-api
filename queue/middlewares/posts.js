@@ -1,4 +1,7 @@
-import dbPostsGetSingle from '../db_utils/posts';
+import {
+  dbPostsGetSingle,
+  dbPostsGetSingleCommentAndFollowers,
+} from '../db_utils/posts';
 import {
   objectToArray,
 } from '../utils';
@@ -23,6 +26,22 @@ const postsGetSingle = (req, res, next) => {
   return dbPostsGetSingle({ post_id })
     .then((post) => {
       res.locals.post = post;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
+const postsGetSingleCommentAndFollowers = (req, res, next) => {
+  const {
+    post_id,
+    comment_id,
+  } = res.locals;
+
+  return dbPostsGetSingleCommentAndFollowers({ post_id, comment_id })
+    .then((postSingleCommentAndFollowers) => {
+      res.locals.postSingleCommentAndFollowers = postSingleCommentAndFollowers;
 
       return next();
     })
@@ -117,11 +136,42 @@ const postReactionRemovedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postCommentReactionAddedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+    postSingleCommentAndFollowers,
+    reaction,
+  } = res.locals;
+  const comment = postSingleCommentAndFollowers.comment;
+
+  res.locals.notificationData = {
+    target: {
+      comment_id,
+      id: post_id,
+    },
+    meta: {
+      last_reaction: reaction,
+      user_ids: comment.reactions.map(r => r.created_by),
+      message: comment.message,
+    },
+  };
+  res.locals.eventData = {
+    post_id,
+    comment_id,
+    reaction: comment.reactions.find(r => r.created_by === user_id),
+  };
+
+  return next();
+};
 
 export {
   postsGetSingle,
+  postsGetSingleCommentAndFollowers,
   postCreatedNotificationData,
   postCommentAddedNotificationData,
   postReactionAddedNotificationData,
   postReactionRemovedNotificationData,
+  postCommentReactionAddedNotificationData,
 };
