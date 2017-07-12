@@ -17,9 +17,11 @@ class Notifications extends PureComponent {
   componentDidMount() {
   }
   renderHeader() {
-
     return (
-      <div></div>
+      <div className="notifications__header">
+        <div className="notifications__title">Notifications</div>
+        <div className="notifications__mark-all">Mark all as read</div>
+      </div>
     )
   }
   renderNotifications() {
@@ -31,6 +33,7 @@ class Notifications extends PureComponent {
     return (
       <div className={className}>
         <SWView
+          noframe
           header={this.renderHeader()}
         >
           {this.renderNotifications()}

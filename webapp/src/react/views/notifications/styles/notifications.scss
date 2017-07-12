@@ -1,0 +1,42 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.notifications {
+  @include size(360px, 540px);
+  background-color: $bg;
+  border: 1px solid $deepBlue-10;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.notifications {
+
+  &__header {
+    @include size(100%, 49px);
+    @include flexContainer('row', between, center);
+    border-bottom: 1px solid $deepBlue-10;
+    padding: 0 15px;
+  }
+
+  &__title {
+    @include font(15px, $deepBlue-100, 24px);
+  }
+
+  &__mark-all {
+    @include font(12px, $deepBlue-40, 24px, 500);
+    transition: .2s ease;
+
+    &:hover {
+      @include font($c: $blue-100);
+      transition: .2s ease;
+    }
+  }
+}
