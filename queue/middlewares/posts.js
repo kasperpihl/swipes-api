@@ -55,7 +55,6 @@ const postCreatedNotificationData = (req, res, next) => {
 };
 const postCommentAddedNotificationData = (req, res, next) => {
   const {
-    user_id,
     post,
     comment_id,
   } = res.locals;
@@ -65,7 +64,6 @@ const postCommentAddedNotificationData = (req, res, next) => {
       id: post.id,
     },
     meta: {
-      user_id,
       user_ids: uniqueCommentUserIds(post.comments),
       message: post.message,
       context: post.context,
