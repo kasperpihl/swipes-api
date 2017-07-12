@@ -71,7 +71,10 @@ class HOCSidebar extends PureComponent {
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignY: 'top',
-      alignX: 'right',
+      alignX: 'left',
+      excludeX: true,
+      positionX: 12,
+
     };
     this.setState({ isOpenNotifications: true });
     contextMenu({
