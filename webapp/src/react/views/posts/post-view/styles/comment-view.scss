@@ -24,6 +24,7 @@
   &__profile-pic {
     @include size(24px);
     border-radius: 3px;
+    margin-left: 3px;
 
     img {
       @include size(24px);
@@ -36,11 +37,12 @@
     @include flexContainer('row', center, center);
     background-color: $deepBlue-10;
     border-radius: 3px;
+    margin-left: 3px;
   }
 
   &__side {
     @include size(100%, auto);
-    padding-left: 12px;
+    padding-left: 15px;
   }
 
   &__name {
