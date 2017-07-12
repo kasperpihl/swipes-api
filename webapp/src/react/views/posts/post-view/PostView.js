@@ -21,7 +21,7 @@ class PostView extends PureComponent {
     this.state = {}
 
     setupDelegate(this);
-    this.callDelegate.bindAll('onLinkClick')
+    this.callDelegate.bindAll('onLinkClick', 'onOpenPost')
   }
   renderHeader() {
     const { post, delegate } = this.props;
@@ -96,8 +96,6 @@ class PostView extends PureComponent {
     )
   }
   renderPostActions() {
-
-
     return (
       <div className="post__actions">
         <div className="post__action">
@@ -112,9 +110,11 @@ class PostView extends PureComponent {
     const comments = post.get('comments');
 
     if (!fromFeed || comments.size <= MAX_COMMENTS_FEED) return undefined;
+
     const number = comments.size - MAX_COMMENTS_FEED + 1;
+
     return (
-      <div className="post__more-comments">
+      <div className="post__more-comments" onClick={this.onOpenPostCached(post.get('id'))}>
         View {number} more comments
       </div>
     )
@@ -126,9 +126,11 @@ class PostView extends PureComponent {
 
     if (comments && comments.size) {
       let sortedComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at')));
+
       if (fromFeed && comments.size > MAX_COMMENTS_FEED) {
         sortedComments = sortedComments.slice(-MAX_COMMENTS_FEED + 1)
       }
+
       renderComments = sortedComments.map((c, i) => {
         return <CommentView isLast={i === comments.size - 1} comment={c} key={c.get('id')} delegate={delegate} />
       }).toArray();
