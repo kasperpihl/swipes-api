@@ -28,9 +28,9 @@ class Notifications extends PureComponent {
   renderNotifications() {
     const { notifications } = this.props;
 
-    return notification.map((n) => (
-      <NotificationItem notification={n} />
-    ))
+    return notifications.map((n, i) => (
+      <NotificationItem notification={n} key={i} />
+    )).toArray();
   }
   render() {
     let className = 'notifications';
