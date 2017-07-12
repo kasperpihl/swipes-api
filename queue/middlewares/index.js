@@ -316,6 +316,10 @@ const post_reaction_added = notifyWrapper([
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
 ]);
+const post_reaction_removed = notifyWrapper([
+  posts.postReactionRemovedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
 
 export {
   goal_created,
@@ -361,4 +365,5 @@ export {
   post_created,
   post_comment_added,
   post_reaction_added,
+  post_reaction_removed,
 };

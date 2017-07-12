@@ -68,9 +68,30 @@ const dbPostsAddReaction = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbPostsRemoveReaction = funcWrap([
+  object.as({
+    user_id: string.require(),
+    post_id: string.require(),
+  }).require(),
+], (err, { user_id, post_id }) => {
+  if (err) {
+    throw new SwipesError(`dbPostsRemoveReaction: ${err}`);
+  }
+
+  const q =
+    r.table('posts')
+      .get(post_id)
+      .update({
+        reactions: r.row('reactions').filter(r => r('created_by').ne(user_id)),
+        updated_at: r.now(),
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbPostsInsertSingle,
   dbPostsAddComment,
   dbPostsAddReaction,
+  dbPostsRemoveReaction,
 };

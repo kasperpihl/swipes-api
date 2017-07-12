@@ -14,6 +14,8 @@ import {
   postsCreateReaction,
   postsAddReaction,
   postsAddReactionQueueMessage,
+  postsRemoveReaction,
+  postsRemoveReactionQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -77,6 +79,19 @@ authed.all('/posts.addReaction',
   valResponseAndSend({
     post_id: string.require(),
     reaction: object.require(),
+  }),
+);
+
+authed.all('/posts.removeReaction',
+  valBody({
+    post_id: string.require(),
+  }),
+  postsRemoveReaction,
+  postsRemoveReactionQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    user_id: string.require(),
+    post_id: string.require(),
   }),
 );
 

@@ -103,10 +103,25 @@ const postReactionAddedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postReactionRemovedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    post_id,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = {
+    user_id,
+    post_id,
+  };
+
+  return next();
+};
 
 export {
   postsGetSingle,
   postCreatedNotificationData,
   postCommentAddedNotificationData,
   postReactionAddedNotificationData,
+  postReactionRemovedNotificationData,
 };
