@@ -55,7 +55,7 @@ class HOCSidebar extends PureComponent {
       case 'AccountList':
         return 'Account';
       case 'Notifications':
-        return 'Discuss';
+        return 'Notifications';
       default:
         return id;
     }
@@ -147,7 +147,7 @@ class HOCSidebar extends PureComponent {
     return (
       <div className="sidebar">
         <div className="sidebar__top-section">
-          {this.renderItem({ id: 'Notifications' })}
+          {this.renderItem({ id: 'Notifications', svg: 'Notification' })}
         </div>
         <div className="sidebar__middle-section">
           <div className="sidebar__section">
