@@ -53,7 +53,7 @@ class HOCCreatePost extends PureComponent {
       { icon: 'Earth', type: 'information' }
     ].map((i) => {
       i.leftIcon = { icon: i.icon };
-      i.title = msgGen.posts.getPostTypeTitle(i.type);
+      i.title = msgGen.posts.getPostComposeTypeTitle(i.type);
       i.subtitle = msgGen.posts.getPostTypeSubtitle(i.type);
       return i;
     });
