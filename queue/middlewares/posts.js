@@ -16,7 +16,7 @@ const uniqueCommentUserIds = (comments) => {
     userIds.push(comment.created_by);
   });
 
-  return new Set(userIds);
+  return Array.from(new Set(userIds));
 };
 const postsGetSingle = (req, res, next) => {
   const {
