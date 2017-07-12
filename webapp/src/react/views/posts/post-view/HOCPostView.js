@@ -20,6 +20,11 @@ class HOCPostView extends PureComponent {
   }
   componentDidMount() {
   }
+  shouldScroll() {
+    const { fromFeed } = this.props;
+
+    return !fromFeed;
+  }
   onHeaderContextClick() {
     const { openSecondary, post } = this.props;
     openSecondary(navForContext(post.get('context')));

@@ -20,7 +20,7 @@ class PostFeed extends PureComponent {
   }
   renderHeader() {
     return (
-      <HOCHeaderTitle>
+      <HOCHeaderTitle title="Discuss" border>
         <Button text="Create Post" onClick={this.onNewPost} />
       </HOCHeaderTitle>
     )
@@ -41,7 +41,9 @@ class PostFeed extends PureComponent {
       <SWView
         header={this.renderHeader()}
       >
-        {this.renderPosts()}
+        <div className="post-feed">
+          {this.renderPosts()}
+        </div>
       </SWView>
     )
   }

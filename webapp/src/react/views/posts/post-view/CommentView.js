@@ -15,10 +15,10 @@ class CommentView extends PureComponent {
 
     this.openReactions = this.openReactions.bind(this);
     setupDelegate(this);
-    this.callDelegate.bindAll('onLinkClick')
+    this.callDelegate.bindAll('onLinkClick', 'shouldScroll')
   }
   componentDidMount() {
-    if (this.props.isLast) {
+    if (this.props.isLast && this.shouldScroll()) {
       this.refs.comment.scrollIntoView();
     }
   }

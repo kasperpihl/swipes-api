@@ -4,6 +4,8 @@
 
 
 .post-feed {
+  @include size(100%, auto);
+  padding-bottom: 30px;
 
   &__item {
     @include size(100%, auto);
@@ -11,7 +13,7 @@
     border-radius: 3px;
     overflow: hidden;
     padding-top: 24px;
-    margin-bottom: 12px;
+    margin-top: 12px;
 
     .post__comments {
       padding: 0 15px;
