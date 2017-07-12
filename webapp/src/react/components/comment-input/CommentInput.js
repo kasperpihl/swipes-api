@@ -58,7 +58,7 @@ class CommentInput extends PureComponent {
       return <img src={image} className="comment-input__image" />
     }
 
-    return <div className="comment-input__initials">KV</div>
+    return <div className="comment-input__initials">{initials}</div>
   }
   renderIcons() {
 

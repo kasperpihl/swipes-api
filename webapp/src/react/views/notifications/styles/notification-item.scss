@@ -1,0 +1,71 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.notification-item {
+  $b: &;
+  $flexIgnoreList: '#{$b}__image', '#{$b}__initials';
+ 
+  @include size(100%, auto);
+  @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+  padding: 9px 14px;
+  border-bottom: 1px solid $deepBlue-5;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.notification-item {
+
+  &__image {
+    @include size(54px);
+    border-radius: 3px;
+
+    img {
+      @include size(54px);
+      border-radius: 3px;
+    }
+  }
+
+  &__initials {
+    @include size(54px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-10;
+    border-radius: 3px;
+  }
+
+  &__content {
+    @include size(100%, auto);
+    padding-left: 9px;
+    padding-right: 15px;
+  }
+
+  &__timestamp {
+    @include font(12px, $deepBlue-40, 18px, 500);
+    padding-top: 3px;
+  }
+
+  &__styled-text {
+    @include font(12px, $deepBlue-100, 15px);
+  }
+
+  &__styled-button {
+    @include font(12px, $deepBlue-100, 15px, 500);
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.notification-item {
+  $b: &;
+
+  &#{$b}--completed {
+    background-color: $blue-5;
+  }
+}
