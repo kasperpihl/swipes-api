@@ -97,6 +97,19 @@ class HOCMilestoneOverview extends PureComponent {
       },
     });
   }
+  onDiscuss(e) {
+    const { navPush, milestone } = this.props;
+    navPush({
+      id: 'CreatePost',
+      title: 'Create Post',
+      props: {
+        context: {
+          title: milestone.get('title'),
+          id: milestone.get('id'),
+        },
+      },
+    });
+  }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
     const { milestone, renameMilestone, inputMenu } = this.props;
