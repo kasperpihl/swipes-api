@@ -34,6 +34,14 @@
     }
   }
 
+  &__styled-text {
+    @include font(15px, $deepBlue-50, 24px);
+  }
+
+  &__styled-button {
+    @include font(15px, $deepBlue-100, 24px);
+  }
+
   &__subtitle {
     @include flexContainer('row', left, center);
     @include font(12px, $deepBlue-40, 18px, 500);

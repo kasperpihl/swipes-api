@@ -3,11 +3,9 @@
 
 .styled-text {
   $b: &;
-
-  @include font(15px, $deepBlue-60, 21px);
   width: 100%;
 
   button#{$b}__selector {
-    @include font(15px, $deepBlue-100, 21px);
+
   }
 }

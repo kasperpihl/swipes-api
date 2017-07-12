@@ -26,6 +26,7 @@ class PostComposer extends PureComponent {
     let string = ['— ', {
       id: 'type',
       string: msgGen.posts.getPostComposeTypeTitle(type),
+      className: 'post-composer__styled-button post-composer__styled-button--type'
     }];
 
     const taggedUsers = post.get('taggedUsers');
@@ -38,6 +39,7 @@ class PostComposer extends PureComponent {
         string.push({
           id,
           string: msgGen.users.getFirstName(id),
+          className: 'post-composer__styled-button post-composer__styled-button--people'
         });
       });
     }
@@ -47,6 +49,7 @@ class PostComposer extends PureComponent {
         <StyledText
           text={string}
           delegate={delegate}
+          className="post-composer__styled-text"
         />
       </div>
     )

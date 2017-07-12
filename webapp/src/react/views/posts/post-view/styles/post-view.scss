@@ -8,9 +8,15 @@
 .post-header {
   $b: &;
   $flexIgnoreList: '#{$b}__image';
+  background-color: white;
 
   @include size(100%, auto);
   @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
+}
+
+.post-test-header {
+  @include size(100%, 500px);
+  background-color: white;
 }
 
 .post-attachment {
@@ -40,10 +46,12 @@
 .post {
   $b: &;
   padding-top: 30px;
+  background-color: white;
 
   &__header {
     @include size(100%, auto);
     padding: 0 30px;
+    background-color: white;
   }
 
   &__message {
@@ -66,7 +74,6 @@
     @include flexContainer('row', left, center);
     border-top: 1px solid $deepBlue-5;
     border-bottom: 1px solid $deepBlue-5;
-    padding-left: 63px;
     margin-top: 24px;
   }
 

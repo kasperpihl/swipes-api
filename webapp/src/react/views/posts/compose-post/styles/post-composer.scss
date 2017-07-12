@@ -61,4 +61,53 @@
     padding-left: 69px;
     margin-top: 9px;
   }
+
+  &__styled-text {
+    @include font(12px, $deepBlue-50, 18px, 500);
+  }
+
+  &__styled-button {
+    @include font(12px, $blue-100, 18px, 500);
+
+    &--people {
+
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0; top: 9px;
+        @include size(0%, 1px);
+        background-color: $blue-100;
+        transition: .2s ease;
+      }
+
+      &:hover {
+        &:after {
+          @include size(100%, 1px);
+          transition: .2s ease;
+        }
+      }
+    }
+
+    &--type {
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0; bottom: -3px;
+        @include size(100%, 3px);
+        background-color: $blue-10;
+        transition: .15s ease;
+        z-index: -1;
+      }
+
+      &:hover {
+        &:after {
+          @include size(100%, 1px);
+          background-color: $blue-100;
+          transform: translateY(3px);
+          transition: .15s ease;
+        }
+      }
+    }
+  }
 }

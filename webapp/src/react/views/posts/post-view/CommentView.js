@@ -18,7 +18,7 @@ class CommentView extends PureComponent {
     this.callDelegate.bindAll('onLinkClick')
   }
   componentDidMount() {
-    if(this.props.isLast) {
+    if (this.props.isLast) {
       this.refs.comment.scrollIntoView();
     }
   }
@@ -44,9 +44,18 @@ class CommentView extends PureComponent {
       </div>
     )
   }
+  renderName() {
+    const { comment } = this.props;
+    const name = msgGen.users.getFullName(comment.get('created_by'));
+
+    return (
+      <div className="comment__name">
+        {name}
+      </div>
+    )
+  }
   renderMessage() {
     const { comment } = this.props;
-    const name = msgGen.users.getFirstName(comment.get('created_by'));
     let message = comment.get('message');
 
     message = message.split('\n').map((item, key) => {
@@ -71,18 +80,17 @@ class CommentView extends PureComponent {
 
     return (
       <div className="comment__content">
-        <span className="comment__name">{name + ' '}</span>
         {message}
       </div>
     )
   }
-  renderUnderBar() {
+  renderSubLine() {
     const { comment } = this.props;
-    const timestamp = timeAgo(comment.get('created_at'), true)
+    const timestamp = timeAgo(comment.get('created_at'), true);
 
     return (
-      <div className="comment__underbar">
-        <span className="comment__react" onClick={this.openReactions}>Like</span> • {timestamp}
+      <div className="comment__subline">
+        <span className="comment__react-btn" onClick={this.openReactions}>Like</span> • {timestamp}
       </div>
     )
   }
@@ -93,8 +101,9 @@ class CommentView extends PureComponent {
       <div className="comment" ref="comment">
         {this.renderProfilePic()}
         <div className="comment__side">
+          {this.renderName()}
           {this.renderMessage()}
-          {this.renderUnderBar()}
+          {this.renderSubLine()}
         </div>
       </div>
     )
