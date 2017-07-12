@@ -11,6 +11,11 @@ import {
   postsCreateComment,
   postsAddComment,
   postsAddCommentQueueMessage,
+  postsCreateReaction,
+  postsAddReaction,
+  postsAddReactionQueueMessage,
+  postsRemoveReaction,
+  postsRemoveReactionQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -51,7 +56,6 @@ authed.all('/posts.addComment',
     post_id: string.require(),
     message: string.require(),
     attachments: array.of(object),
-    reactions: array.of(object),
   }),
   postsCreateComment,
   postsAddComment,
@@ -60,6 +64,34 @@ authed.all('/posts.addComment',
   valResponseAndSend({
     post_id: string.require(),
     comment: object.require(),
+  }),
+);
+
+authed.all('/posts.addReaction',
+  valBody({
+    post_id: string.require(),
+    reaction: string.require(),
+  }),
+  postsCreateReaction,
+  postsAddReaction,
+  postsAddReactionQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    post_id: string.require(),
+    reaction: object.require(),
+  }),
+);
+
+authed.all('/posts.removeReaction',
+  valBody({
+    post_id: string.require(),
+  }),
+  postsRemoveReaction,
+  postsRemoveReactionQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    user_id: string.require(),
+    post_id: string.require(),
   }),
 );
 

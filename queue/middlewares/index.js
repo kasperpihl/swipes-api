@@ -300,6 +300,27 @@ const post_comment_added = notifyWrapper([
   notify.notifySendEventToAllInCompany,
 ]);
 
+const post_reaction_added = notifyWrapper([
+  posts.postsGetSingle,
+  posts.postReactionAddedNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      post,
+    } = res.locals;
+
+    res.locals.user_ids = post.followers.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_reaction_removed = notifyWrapper([
+  posts.postReactionRemovedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
+
 export {
   goal_created,
   goal_completed,
@@ -343,4 +364,6 @@ export {
   organization_updated,
   post_created,
   post_comment_added,
+  post_reaction_added,
+  post_reaction_removed,
 };
