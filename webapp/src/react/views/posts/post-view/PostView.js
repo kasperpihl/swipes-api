@@ -8,6 +8,7 @@ import SWView from 'SWView';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
 import PostHeader from 'components/post-header/PostHeader';
+import Reactions from 'components/reactions/Reactions';
 import CommentView from './CommentView';
 // import Button from 'Button';
 import Icon from 'Icon';
@@ -96,14 +97,15 @@ class PostView extends PureComponent {
     )
   }
   renderPostActions() {
-
+    const { post, delegate, myId } = this.props;
 
     return (
       <div className="post__actions">
-        <div className="post__action">
-          <Icon icon="Reaction" className="post__svg" />
-          <div className="post__action-label">Like</div>
-        </div>
+        <Reactions
+          reactions={post.get('reactions')}
+          delegate={delegate}
+          myId={myId}
+        />
       </div>
     )
   }

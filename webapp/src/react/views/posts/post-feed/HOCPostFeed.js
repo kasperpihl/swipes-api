@@ -41,7 +41,7 @@ class HOCPostFeed extends PureComponent {
     const { posts } = this.props;
 
     const sortedPosts = posts.sort((a, b) => {
-      return b.get('updated_at').localeCompare(a.get('updated_at'));
+      return b.get('created_at').localeCompare(a.get('created_at'));
     });
 
     return (

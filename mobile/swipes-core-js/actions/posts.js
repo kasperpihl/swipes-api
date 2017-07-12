@@ -12,3 +12,11 @@ export const create = payload => (dp, getState) => dp(ca.api.request('posts.crea
 export const addComment = payload => (dp, getState) => dp(ca.api.request('posts.addComment', {
   ...payload,
 }));
+
+export const addReaction = payload => (dp, getState) => dp(ca.api.request('posts.addReaction', {
+  ...payload,
+}));
+
+export const removeReaction = payload => (dp, getState) => dp(ca.api.request('posts.removeReaction', {
+  ...payload,
+}));
