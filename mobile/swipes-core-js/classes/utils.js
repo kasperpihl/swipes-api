@@ -105,6 +105,44 @@ export function valAction(actionName, arrayArgs, actionHandler) {
   return funcWrap(arrayArgs, handler);
 }
 
+export function iconForId(id) {
+  if(id.startsWith('G')) {
+    return 'MiniGoal';
+  } else if (id.startsWith('M')) {
+    return 'MiniMilestone';
+  } else if (id.startsWith('N')) {
+    return 'MiniNote';
+  } else if (id.startsWith('F')) {
+    return 'MiniFile';
+  }
+}
+
+export function navForContext(context) {
+  const id = context.get('id');
+  const title = context.get('title');
+  if(id.startsWith('G')) {
+    return {
+      id: 'GoalOverview',
+      title: 'Goal overview',
+      props: {
+        goalId: id,
+      },
+    };
+  } else if (id.startsWith('M')) {
+    return {
+      id: 'MilestoneOverview',
+      title: 'Milestone overview',
+      props: {
+        milestoneId: id,
+      },
+    };
+  } else if (id.startsWith('N')) {
+    return 'MiniNote';
+  } else if (id.startsWith('F')) {
+    return 'MiniFile';
+  }
+}
+
 export function iconForService(service) {
   switch (service) {
     case 'slack':

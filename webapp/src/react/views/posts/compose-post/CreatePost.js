@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll, setupDelegate, setupCachedCallback, iconForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
@@ -13,14 +13,18 @@ class CreatePost extends PureComponent {
   constructor(props) {
     super(props)
     setupDelegate(this);
-    this.callDelegate.bindAll('onButtonClick', 'onPostClick');
+    this.callDelegate.bindAll('onButtonClick', 'onPostClick', 'onContextClick');
   }
   renderSubtitle() {
+    const { post } = this.props;
+    if(!post.get('context')) {
+      return undefined;
+    }
 
     return (
-      <div className="create-post__context">
-        <Icon icon="MiniGoal" className="create-post__svg" />
-        Lorem ipsum.
+      <div className="create-post__context" onClick={this.onContextClick}>
+        <Icon icon={iconForId(post.getIn(['context', 'id']))} className="create-post__svg" />
+        {post.getIn(['context', 'title'])}
       </div>
     )
   }
@@ -37,7 +41,7 @@ class CreatePost extends PureComponent {
   }
   renderActions() {
     const { getLoading } = this.props;
-    
+
     const buttons = [
       {
         'data-id': 'type',

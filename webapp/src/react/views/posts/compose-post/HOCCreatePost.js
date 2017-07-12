@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupLoading, convertObjToUnderscore } from 'swipes-core-js/classes/utils';
+import { setupLoading, convertObjToUnderscore, navForContext } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
@@ -21,7 +21,7 @@ class HOCCreatePost extends PureComponent {
         type: 'message',
         attachments: [],
         taggedUsers: [],
-        context: null,
+        context: props.context || null,
       })
     };
     setupLoading(this);

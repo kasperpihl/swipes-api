@@ -20,14 +20,7 @@ class GoalOverview extends PureComponent {
     super(props);
     this.state = {};
     setupDelegate(this);
-
-    this.onAskFor = this.callDelegate.bind(null, 'onAskFor');
-    this.onNotify = this.callDelegate.bind(null, 'onNotify');
-    this.onContext = this.callDelegate.bind(null, 'onContext');
-    this.onHandoff = this.callDelegate.bind(null, 'onHandoff');
-    this.onCloseHandoff = this.callDelegate.bind(null, 'onCloseHandoff');
-    this.onBarClick = this.callDelegate.bind(null, 'onBarClick');
-    this.onEditSteps = this.callDelegate.bind(null, 'onEditSteps');
+    this.callDelegate.bindAll('onDiscuss', 'onContext', 'onHandoff', 'onCloseHandoff', 'onBarClick', 'onEditSteps');
   }
   getHelper() {
     const { goal, myId } = this.props;
@@ -78,11 +71,9 @@ class GoalOverview extends PureComponent {
     );
   }
   renderHeader() {
-    const { goal, getLoading, isLoading, delegate } = this.props;
+    const { goal, getLoading, delegate } = this.props;
 
     const title = getLoading('title').loadingLabel;
-    const askSel = isLoading('ask-for-menu');
-    const notifySel = isLoading('notify-menu');
     return (
       <div className="add-goal__header">
         <HOCHeaderTitle
@@ -91,14 +82,8 @@ class GoalOverview extends PureComponent {
           delegate={delegate}
         >
           <Button
-            text="Ask for..."
-            selected={askSel}
-            onClick={this.onAskFor}
-          />
-          <Button
-            text="Message"
-            selected={notifySel}
-            onClick={this.onNotify}
+            text="Discuss"
+            onClick={this.onDiscuss}
           />
           <Button
             icon="ThreeDots"

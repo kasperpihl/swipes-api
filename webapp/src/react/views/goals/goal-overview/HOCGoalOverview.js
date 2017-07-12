@@ -48,41 +48,6 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
-  onReply(i) {
-    const helper = this.getHelper();
-    const lastActivity = helper.getLastActivity();
-    const lastActivityIndex = helper.getLastActivityIndex();
-    const { navPush } = this.props;
-    navPush({
-      id: 'Notify',
-      title: 'Notify',
-      props: {
-        notify: Map({
-          reply_to: lastActivityIndex,
-          notification_type: lastActivity.get('notification_type'),
-          assignees: List([lastActivity.get('done_by')]),
-        }),
-        goalId: helper.getId(),
-      },
-    });
-  }
-  onClickAttachment(hI, i) {
-    const { goal, preview, target } = this.props;
-    const helper = this.getHelper();
-    const lastActivity = helper.getLastActivity();
-    const flag = lastActivity.getIn(['flags', i]);
-    const att = goal.getIn(['attachments', flag]);
-    const selection = window.getSelection();
-
-    if (att && selection.toString().length === 0) {
-      window.analytics.sendEvent('Flag opened', {
-        From: 'Latest Update',
-        Type: att.getIn(['link', 'service', 'type']),
-        Service: att.getIn(['link', 'service', 'name']),
-      });
-      preview(target, att);
-    }
-  }
   onClickURL(nI, url) {
     const { browser, target } = this.props;
     browser(target, url);
@@ -112,57 +77,6 @@ class HOCGoalOverview extends PureComponent {
     this.onOpenNotify(undefined, assignees);
   }
 
-  onOpenNotify(notify) {
-    const { openSecondary, goal } = this.props;
-    openSecondary({
-      id: 'Notify',
-      title: 'Notify',
-      props: {
-        notify,
-        goalId: goal.get('id'),
-      },
-    });
-  }
-  onChooseNotificationType(e, request) {
-    const { contextMenu } = this.props;
-    const options = this.getOptionsForE(e);
-    options.alignY = 'top';
-    options.alignX = 'center';
-    options.positionY = 6;
-    options.excludeY = true;
-    const getSub = msgGen.notify.getNotifyPopupSubtitle.bind(null, request);
-
-    const items = [
-      { title: 'Update', icon: 'Status', subtitle: getSub('update') },
-      { title: 'Feedback', icon: 'Feedback', subtitle: getSub('feedback') },
-      { title: 'Assets', icon: 'Assets', subtitle: getSub('assets') },
-      { title: 'Decision', icon: 'Decision', subtitle: getSub('decision') },
-    ].map((i) => { i.leftIcon = { icon: i.icon }; return i; });
-
-    const delegate = {
-      onItemAction: (item) => {
-        contextMenu(null);
-        this.onOpenNotify(fromJS({
-          request,
-          notification_type: item.title.toLowerCase(),
-        }));
-      },
-    };
-    const loadingId = request ? 'ask-for-menu' : 'notify-menu';
-    this.setLoading(loadingId);
-    contextMenu({
-      options,
-      component: TabMenu,
-      onClose: () => this.clearLoading(loadingId),
-      props: {
-        delegate,
-        items,
-        style: {
-          width: '360px',
-        },
-      },
-    });
-  }
   onStepWillComplete() {
     this.setLoading('completing');
   }
@@ -252,13 +166,18 @@ class HOCGoalOverview extends PureComponent {
       }
     })
   }
-  onAskFor(e) {
-    this.onChooseNotificationType(e, true);
-  }
-  onNotify(e) {
-    this.onOpenNotify(fromJS({
-      notification_type: 'default',
-    }));
+  onDiscuss(e) {
+    const { navPush, goal } = this.props;
+    navPush({
+      id: 'CreatePost',
+      title: 'Create Post',
+      props: {
+        context: {
+          title: goal.get('title'),
+          id: goal.get('id'),
+        },
+      },
+    });
   }
   onSaveWay(options) {
     const { createWay, inputMenu } = this.props;

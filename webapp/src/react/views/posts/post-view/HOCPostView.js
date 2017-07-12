@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import PostView from './PostView';
@@ -19,6 +19,10 @@ class HOCPostView extends PureComponent {
     setupLoading(this)
   }
   componentDidMount() {
+  }
+  onHeaderContextClick() {
+    const { openSecondary, post } = this.props;
+    openSecondary(navForContext(post.get('context')));
   }
   onLinkClick(url) {
     const { browser, target } = this.props;

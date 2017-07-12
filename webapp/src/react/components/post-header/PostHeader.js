@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate, iconForId } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
 // import SWView from 'SWView';
 // import Button from 'Button';
-// import Icon from 'Icon';
+import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
 import './styles/post-header.scss';
 
@@ -73,20 +73,37 @@ class PostHeader extends PureComponent {
         <img src={image} />
       </div>
     )
+    const test = '';
+  }
+  renderSubtitle() {
+    const { post } = this.props;
+    let subtitle = timeAgo(post.get('created_at'), true);
+    let icon;
+    if(post.get('context')) {
+      subtitle = (
+        <span onClick={this.onHeaderContextClick}>
+          {post.getIn(['context', 'title'])}
+          {' - '}
+          {subtitle}
+        </span>
+      )
+      icon = <Icon className="post-header__svg" icon={iconForId(post.getIn(['context', 'id']))} />;
+    }
+    return (
+      <div className="post-header__subtitle">
+        {icon}
+        {subtitle}
+      </div>
+    );
   }
   render() {
-    const { post } = this.props;
-    const subtitle = timeAgo(post.get('created_at'), true);
 
     return (
       <div className="post-header">
         {this.renderProfilePic()}
         <div className="post-header__content">
           {this.renderGeneratedTitle()}
-          <div className="post-header__subtitle">
-            {/*<Icon className="post-header__svg" icon="Goals" />*/}
-            {subtitle}
-          </div>
+          {this.renderSubtitle()}
         </div>
       </div>
     );
