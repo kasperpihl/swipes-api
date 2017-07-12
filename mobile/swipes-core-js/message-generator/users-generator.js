@@ -83,6 +83,9 @@ export default class Users {
       const user = users.get(userId);
       if (user) {
         if (user.get('id') === me.get('id') && !options.disableYou) {
+          if(options.capitalize) {
+            return options.yourself ? 'Yourself' : 'You';
+          }
           return options.yourself ? 'yourself' : 'you';
         }
 

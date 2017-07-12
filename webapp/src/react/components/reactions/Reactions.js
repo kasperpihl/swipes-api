@@ -94,6 +94,7 @@ class HOCReactions extends PureComponent {
     const userIds = reactions.map(r => r.get('created_by'));
     const nameString = msgGen.users.getNames(userIds, {
       number: 2,
+      capitalize: true,
     });
 
     return (
