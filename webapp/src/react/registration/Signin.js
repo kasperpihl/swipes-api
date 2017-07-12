@@ -48,6 +48,7 @@ class Signin extends Component {
           key="email"
           value={email}
           onChange={this.onEmailChange}
+          onKeyDown={this.handleKeyDown}
           error={!!errorLabel}
           focus={emailFocus}
           autoFocus
