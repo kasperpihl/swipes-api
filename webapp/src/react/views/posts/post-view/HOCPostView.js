@@ -47,10 +47,11 @@ class HOCPostView extends PureComponent {
     })
   }
   render() {
-    const { myId, post } = this.props;
+    const { myId, post, fromFeed } = this.props;
 
     return (
       <PostView
+        fromFeed
         myId={myId}
         post={post}
         delegate={this}

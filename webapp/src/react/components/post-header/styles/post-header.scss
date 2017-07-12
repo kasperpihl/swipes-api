@@ -2,6 +2,7 @@
 @import '~styles/_mixins.scss';
 
 .post-header {
+  $b: &;
 
   &__profile-pic {
     @include size(48px);
@@ -45,6 +46,13 @@
   &__subtitle {
     @include flexContainer('row', left, center);
     @include font(12px, $deepBlue-40, 18px, 500);
+
+    #{$b}__span-link {
+      
+      &:hover {
+        color: $blue-100;
+      }
+    }
   }
 
   &__svg {

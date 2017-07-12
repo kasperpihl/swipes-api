@@ -13,6 +13,8 @@ import CommentView from './CommentView';
 import Icon from 'Icon';
 import './styles/post-view.scss';
 
+const MAX_COMMENTS_FEED = 3;
+
 class PostView extends PureComponent {
   constructor(props) {
     super(props)
@@ -105,19 +107,36 @@ class PostView extends PureComponent {
       </div>
     )
   }
+  renderViewMoreComments() {
+    const { fromFeed, post } = this.props;
+    const comments = post.get('comments');
+
+    if (!fromFeed || comments.size <= MAX_COMMENTS_FEED) return undefined;
+    const number = comments.size - MAX_COMMENTS_FEED + 1;
+    return (
+      <div className="post__more-comments">
+        View {number} more comments
+      </div>
+    )
+  }
   renderComments() {
-    const { post, delegate, myId } = this.props;
+    const { post, delegate, myId, fromFeed } = this.props;
     const comments = post.get('comments');
     let renderComments = undefined;
 
     if (comments && comments.size) {
-      renderComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at'))).map((c, i) => {
+      let sortedComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at')));
+      if (fromFeed && comments.size > MAX_COMMENTS_FEED) {
+        sortedComments = sortedComments.slice(-MAX_COMMENTS_FEED + 1)
+      }
+      renderComments = sortedComments.map((c, i) => {
         return <CommentView isLast={i === comments.size - 1} comment={c} key={c.get('id')} delegate={delegate} />
       }).toArray();
     }
 
     return (
       <div className="post__comments">
+        {this.renderViewMoreComments()}
         {renderComments}
         <CommentInput myId={myId} delegate={delegate} />
       </div>

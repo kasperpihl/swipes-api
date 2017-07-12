@@ -55,7 +55,7 @@
   }
 
   &__message {
-    @include font(18px, $deepBlue-90, 24px);
+    @include font(15px, $deepBlue-90, 18px);
     padding-top: 21px;
     padding-bottom: 18px;
     padding-left: 63px;
@@ -74,7 +74,6 @@
     @include flexContainer('row', left, center);
     border-top: 1px solid $deepBlue-5;
     border-bottom: 1px solid $deepBlue-5;
-    margin-top: 24px;
   }
 
   &__action {
@@ -95,5 +94,14 @@
     background-color: $comment-bg;
     padding: 0 30px;
     padding-top: 0px;
+  }
+
+  &__more-comments {
+    @include font(12px, $blue-100, 15px);
+    padding-top: 12px;
+
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
   }
 }

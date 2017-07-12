@@ -14,7 +14,7 @@ class PostHeader extends PureComponent {
     super(props);
     this.state = {};
     setupDelegate(this);
-    this.callDelegate.bindAll('onHeaderContextClick', 'onHeaderMenuClick');
+    this.callDelegate.bindAll('onHeaderContextClick', 'onHeaderMenuClick', 'onOpenPost');
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
@@ -78,22 +78,25 @@ class PostHeader extends PureComponent {
   }
   renderSubtitle() {
     const { post } = this.props;
-    let subtitle = timeAgo(post.get('created_at'), true);
+    const timeStamp = timeAgo(post.get('created_at'), true);
+    const seperator = post.get('context') ? <span>&nbsp;•&nbsp;</span > : undefined;
+    const contextTitle = post.get('context') ? post.getIn(['context', 'title']) : null;
     let icon;
+
     if (post.get('context')) {
-      subtitle = (
-        <span onClick={this.onHeaderContextClick}>
-          {post.getIn(['context', 'title'])}
-          {' - '}
-          {subtitle}
-        </span>
-      )
       icon = <Icon className="post-header__svg" icon={iconForId(post.getIn(['context', 'id']))} />;
     }
+
     return (
       <div className="post-header__subtitle">
         {icon}
-        {subtitle}
+        <span className="post-header__span-link" onClick={this.onHeaderContextClick}>
+          {contextTitle}
+        </span>
+        {seperator}
+        <span className="post-header__span-link" onClick={this.onOpenPostCached(post.get('id'))}>
+          {timeStamp}
+        </span>
       </div>
     );
   }
