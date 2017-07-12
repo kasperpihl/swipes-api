@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import * as actions from 'actions';
+import * as a from 'actions';
 import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Assigning from './Assigning';
@@ -21,7 +21,7 @@ class HOCAssigning extends PureComponent {
   getUsersFromAssignees(users, assignees) {
     const { myId } = this.props;
     let filteredUsers = List(assignees);
-    if(filteredUsers.contains(myId)){
+    if (filteredUsers.contains(myId)) {
       filteredUsers = filteredUsers.filter(uId => uId !== myId).insert(0, myId);
     }
     filteredUsers = filteredUsers.map(aId => users.get(aId));
@@ -75,5 +75,5 @@ HOCAssigning.propTypes = {
 };
 
 export default connect(mapStateToProps, {
-  tooltip: actions.main.tooltip,
+  tooltip: a.main.tooltip,
 })(HOCAssigning);
