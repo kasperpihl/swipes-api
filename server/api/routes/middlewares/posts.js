@@ -9,6 +9,7 @@ import {
   dbPostsAddReaction,
   dbPostsRemoveReaction,
   dbPostsCommentAddReaction,
+  dbPostsCommentRemoveReaction,
 } from './db_utils/posts';
 import {
   generateSlackLikeId,
@@ -326,6 +327,50 @@ const postsCommentAddReactionQueueMessage = valLocals('postsCommentAddReactionQu
 
   return next();
 });
+const postsCommentRemoveReaction = valLocals('postsCommentRemoveReaction', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+  } = res.locals;
+
+  dbPostsCommentRemoveReaction({ user_id, post_id, comment_id })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const postsCommentRemoveReactionQueueMessage = valLocals('postsCommentRemoveReactionQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+  } = res.locals;
+  const event_type = 'post_comment_reaction_removed';
+  const queueMessage = {
+    user_id,
+    post_id,
+    comment_id,
+    event_type,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
 
 export {
   postsCreate,
@@ -341,4 +386,6 @@ export {
   postsRemoveReactionQueueMessage,
   postsCommentAddReaction,
   postsCommentAddReactionQueueMessage,
+  postsCommentRemoveReaction,
+  postsCommentRemoveReactionQueueMessage,
 };

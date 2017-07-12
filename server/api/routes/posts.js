@@ -18,6 +18,8 @@ import {
   postsRemoveReactionQueueMessage,
   postsCommentAddReaction,
   postsCommentAddReactionQueueMessage,
+  postsCommentRemoveReaction,
+  postsCommentRemoveReactionQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -69,23 +71,6 @@ authed.all('/posts.addComment',
   }),
 );
 
-authed.all('/posts.commentAddReaction',
-  valBody({
-    post_id: string.require(),
-    comment_id: string.require(),
-    reaction: string.require(),
-  }),
-  postsCreateReaction,
-  postsCommentAddReaction,
-  postsCommentAddReactionQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    post_id: string.require(),
-    comment_id: string.require(),
-    reaction: object.require(),
-  }),
-);
-
 authed.all('/posts.addReaction',
   valBody({
     post_id: string.require(),
@@ -111,6 +96,38 @@ authed.all('/posts.removeReaction',
   valResponseAndSend({
     user_id: string.require(),
     post_id: string.require(),
+  }),
+);
+
+authed.all('/posts.commentAddReaction',
+valBody({
+  post_id: string.require(),
+  comment_id: string.require(),
+  reaction: string.require(),
+}),
+postsCreateReaction,
+postsCommentAddReaction,
+postsCommentAddReactionQueueMessage,
+notificationsPushToQueue,
+valResponseAndSend({
+  post_id: string.require(),
+  comment_id: string.require(),
+  reaction: object.require(),
+}),
+);
+
+authed.all('/posts.commentRemoveReaction',
+  valBody({
+    post_id: string.require(),
+    comment_id: string.require(),
+  }),
+  postsCommentRemoveReaction,
+  postsCommentRemoveReactionQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    user_id: string.require(),
+    post_id: string.require(),
+    comment_id: string.require(),
   }),
 );
 

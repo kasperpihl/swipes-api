@@ -118,6 +118,35 @@ const dbPostsCommentAddReaction = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbPostsCommentRemoveReaction = funcWrap([
+  object.as({
+    user_id: string.require(),
+    post_id: string.require(),
+    comment_id: string.require(),
+  }).require(),
+], (err, { user_id, post_id, comment_id }) => {
+  if (err) {
+    throw new SwipesError(`dbPostsCommentRemoveReaction: ${err}`);
+  }
+
+  const q =
+    r.table('posts')
+      .get(post_id)
+      .update((post) => {
+        return post.merge({
+          comments: {
+            [comment_id]: post('comments')(comment_id).merge(
+              {
+                reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)),
+              },
+            ),
+          },
+          updated_at: r.now(),
+        });
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbPostsInsertSingle,
@@ -125,4 +154,5 @@ export {
   dbPostsAddReaction,
   dbPostsRemoveReaction,
   dbPostsCommentAddReaction,
+  dbPostsCommentRemoveReaction,
 };
