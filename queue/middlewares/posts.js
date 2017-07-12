@@ -1,12 +1,15 @@
 import dbPostsGetSingle from '../db_utils/posts';
+import {
+  objectToArray,
+} from '../utils';
 
 const uniqueCommentUserIds = (comments) => {
   const userIds = [];
-  const keys = Object.keys(comments);
+  const commentsArray = objectToArray(comments);
 
-  keys.forEach((key) => {
-    const comment = comments[key];
-
+  commentsArray.sort((a, b) => {
+    return b.created_at - a.created_at;
+  }).forEach((comment) => {
     userIds.push(comment.created_by);
   });
 

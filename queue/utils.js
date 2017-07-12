@@ -56,9 +56,13 @@ const notifyMessageGenerator = (from, type, request) => {
 
   return `${from} notified you`;
 };
+const objectToArray = (obj) => {
+  return Object.keys(obj).map(key => obj[key]);
+};
 
 export {
   valLocals,
   setLocals,
   notifyMessageGenerator,
+  objectToArray,
 };
