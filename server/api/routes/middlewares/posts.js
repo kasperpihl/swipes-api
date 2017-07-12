@@ -1,4 +1,3 @@
-import r from 'rethinkdb';
 import {
   string,
   object,
@@ -7,6 +6,7 @@ import {
 import {
   dbPostsInsertSingle,
   dbPostsAddComment,
+  dbPostsAddReaction,
 } from './db_utils/posts';
 import {
   generateSlackLikeId,
@@ -144,7 +144,6 @@ const postsAddComment = valLocals('postsAddComment', {
       return next(err);
     });
 });
-
 const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -171,6 +170,71 @@ const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
 
   return next();
 });
+const postsCreateReaction = valLocals('postsCreateReaction', {
+  user_id: string.require(),
+  reaction: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    reaction,
+  } = res.locals;
+
+  const reactionObj = {
+    reaction,
+    created_by: user_id,
+  };
+
+  setLocals({
+    reaction: reactionObj,
+  });
+
+  return next();
+});
+const postsAddReaction = valLocals('postsAddReaction', {
+  user_id: string.require(),
+  post_id: string.require(),
+  reaction: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    reaction,
+  } = res.locals;
+
+  dbPostsAddReaction({ user_id, post_id, reaction })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const postsAddReactionQueueMessage = valLocals('postsAddReactionQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  reaction: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    reaction,
+  } = res.locals;
+  const event_type = 'post_reaction_added';
+  const queueMessage = {
+    user_id,
+    post_id,
+    reaction,
+    event_type,
+    notification_id_sufix: `${post_id}-${event_type}`,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
 
 export {
   postsCreate,
@@ -179,4 +243,7 @@ export {
   postsCreateComment,
   postsAddComment,
   postsAddCommentQueueMessage,
+  postsCreateReaction,
+  postsAddReaction,
+  postsAddReactionQueueMessage,
 };

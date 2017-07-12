@@ -77,9 +77,36 @@ const postCommentAddedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postReactionAddedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    post,
+    reaction,
+  } = res.locals;
+
+  res.locals.notificationData = {
+    target: {
+      id: post.id,
+    },
+    meta: {
+      reaction,
+      user_ids: post.reactions.filter(r => r.created_by !== user_id).map(r => r.created_by),
+      message: post.message,
+      context: post.context,
+      type: post.type,
+    },
+  };
+  res.locals.eventData = {
+    post_id: post.id,
+    reaction: post.reactions.filter(r => r.created_by === user_id),
+  };
+
+  return next();
+};
 
 export {
   postsGetSingle,
   postCreatedNotificationData,
   postCommentAddedNotificationData,
+  postReactionAddedNotificationData,
 };
