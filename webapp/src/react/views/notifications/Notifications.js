@@ -5,6 +5,7 @@ import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/clas
 import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
+import NotificationItem from './NotificationItem';
 import './styles/notifications.scss';
 
 class Notifications extends PureComponent {
@@ -26,6 +27,10 @@ class Notifications extends PureComponent {
   }
   renderNotifications() {
     const { notifications } = this.props;
+
+    return notification.map((n) => (
+      <NotificationItem notification={n} />
+    ))
   }
   render() {
     let className = 'notifications';

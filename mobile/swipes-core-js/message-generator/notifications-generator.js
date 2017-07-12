@@ -6,6 +6,17 @@ export default class NotificationsGenerator {
     this.store = store;
     this.parent = parent;
   }
+  getStyledTextForNotification(n) {
+    const meta = n.get('meta');
+    let text = [];
+    console.log(n.toJS());
+    switch(n.get('event_type')) {
+      case 'post_created': {
+        break;
+      }
+    }
+    return text;
+  }
   getNotificationWrapper(notification, options) {
 
     let def = {

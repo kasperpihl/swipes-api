@@ -5,21 +5,25 @@ import React, { PureComponent } from 'react'
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
+import StyledText from 'components/styled-text/StyledText';
 import './styles/notification-item.scss';
 
 class NotificationItem extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLinkClick')
+    setupDelegate(this);
+    this.callDelegate.bindAll('onNotificationOpen')
   }
   componentDidMount() {
   }
   render() {
-    return (
-      <div className="notification-item">
+    const { notification } = this.props;
+    const text = msgGen.notifications.getStyledTextForNotification(notification);
 
+    return (
+      <div className="notification-item" onClick={this.onNotificationOpen}>
+        <StyledText text={text} />
       </div>
     )
   }
