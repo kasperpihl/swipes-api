@@ -27,7 +27,6 @@ class GoalOverview extends PureComponent {
     this.onHandoff = this.callDelegate.bind(null, 'onHandoff');
     this.onCloseHandoff = this.callDelegate.bind(null, 'onCloseHandoff');
     this.onBarClick = this.callDelegate.bind(null, 'onBarClick');
-    this.onSeeAll = this.callDelegate.bind(null, 'onSeeAll');
     this.onEditSteps = this.callDelegate.bind(null, 'onEditSteps');
   }
   getHelper() {
@@ -143,13 +142,6 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
-  renderActivitySeeAllButton() {
-    return (
-      <div className="step-list__edit-button" onClick={this.onSeeAll}>
-        See all
-      </div>
-    );
-  }
   renderLeft() {
     const { delegate, editMode } = this.props;
     const helper = this.getHelper();
@@ -181,18 +173,6 @@ class GoalOverview extends PureComponent {
 
     return (
       <div className="goal-overview__column goal-overview__column--right">
-        <Section
-          title="Latest Activity"
-          className="goal-overview__last-activity"
-          actions={this.renderActivitySeeAllButton()}
-        >
-          <NotificationWrapper
-            narrow
-            noBorder
-            delegate={delegate}
-            notification={nf}
-          />
-        </Section>
         <Section title="Attachments">
           {this.renderAttachments()}
         </Section>

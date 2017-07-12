@@ -38,7 +38,8 @@ class HOCGoalOverview extends PureComponent {
     this.setState({ editMode: !this.state.editMode });
   }
   onSeeAll() {
-    const { openSecondary, goal } = this.props;
+    const { openSecondary, goal, contextMenu } = this.props;
+    contextMenu();
     openSecondary({
       id: 'ActivityFeed',
       title: 'ActivityFeed',
@@ -311,6 +312,7 @@ class HOCGoalOverview extends PureComponent {
       { handler: 'onLoadWay', title: 'Load a way'},
       { handler: 'onSaveWay', title: 'Save as a way'},
       { handler: 'onEditMilestone', title: 'Add milestone' },
+      { handler: 'onSeeAll', title: 'View activity' },
       { handler: 'onArchive', title: 'Archive Goal' },
     ];
     if(goal.get('milestone_id')){
