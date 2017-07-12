@@ -1,6 +1,62 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
 .reactions {
-  
+  @include size(100%, auto);
+  @include flexContainer('row', left, center);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.reactions {
+
+  &__button {
+    @include font(12px, $blue-100, 15px, 500);
+  }
+
+  &__label {
+    @include font(12px, $deepBlue-80, 15px, 500);
+  }
+}
+
+// ======================================================
+// targeting
+// ======================================================
+
+.reactions {
+
+  &__button {
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__label {
+
+    &:before {
+      content: '\00a0— '
+    }
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.reactions {
+  $b: &;
+
+  &__button {
+    &--loading {
+      @include font($c: $deepBlue-100);
+      pointer-events: none;
+    }
+ }
 }

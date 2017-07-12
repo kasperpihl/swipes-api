@@ -97,7 +97,7 @@ class PostView extends PureComponent {
     )
   }
   renderPostActions() {
-    const { post, delegate, myId } = this.props;
+    const { post, delegate, myId, isLoading } = this.props;
 
     return (
       <div className="post__actions">
@@ -105,6 +105,7 @@ class PostView extends PureComponent {
           reactions={post.get('reactions')}
           delegate={delegate}
           myId={myId}
+          isLoading={isLoading('reactionState')}
         />
       </div>
     )

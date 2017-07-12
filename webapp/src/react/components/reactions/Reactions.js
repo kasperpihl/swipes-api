@@ -24,27 +24,38 @@ class Reactions extends PureComponent {
     const { myId, reactions } = this.props;
     const { iLike } = this.state;
 
-    if ( typeof iLike === 'undefined' || reactions !== nextReactions ) {
+    if (typeof iLike === 'undefined' || reactions !== nextReactions) {
       const newILike = !!nextReactions.find(r => r.get('created_by') === myId);
-      if(iLike !== newILike) {
+      if (iLike !== newILike) {
         this.setState({ iLike: newILike });
       }
     }
   }
+  renderLoader() {
+
+
+  }
   renderButton() {
+    const { isLoading } = this.props;
     const { iLike } = this.state;
+    let className = 'reactions__button';
+
+    if (isLoading) {
+      className += ' reactions__button--loading'
+    }
+
     const labelAction = iLike ? 'Unlike' : 'Like';
     const onClick = iLike ? this.onRemoveReaction : this.onAddReaction;
 
     return (
-      <div onClick={onClick} className="reactions__button">
+      <div onClick={onClick} className={className}>
         {labelAction}
       </div>
     )
   }
   renderLikers() {
     const { reactions } = this.props;
-    if(!reactions || !reactions.size) {
+    if (!reactions || !reactions.size) {
       return undefined;
     }
     const userIds = reactions.map(r => r.get('created_by'));

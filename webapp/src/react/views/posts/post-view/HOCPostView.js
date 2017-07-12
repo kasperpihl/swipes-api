@@ -27,15 +27,23 @@ class HOCPostView extends PureComponent {
   }
   onAddReaction() {
     const { post, addReaction } = this.props;
+    this.setLoading('reactionState');
+
     addReaction({
       post_id: post.get('id'),
       reaction: 'like'
+    }).then((res) => {
+      this.clearLoading('reactionState')
     });
   }
   onRemoveReaction() {
     const { post, removeReaction } = this.props;
+    this.setLoading('reactionState');
+
     removeReaction({
       post_id: post.get('id'),
+    }).then((res) => {
+      this.clearLoading('reactionState')
     });
   }
   onHeaderContextClick() {
@@ -68,6 +76,7 @@ class HOCPostView extends PureComponent {
         myId={myId}
         post={post}
         delegate={this}
+        {...this.bindLoading() }
       />
     );
   }
