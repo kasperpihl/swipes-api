@@ -9,10 +9,27 @@ export default class NotificationsGenerator {
   getStyledTextForNotification(n) {
     const meta = n.get('meta');
     let text = [];
-    console.log(n.toJS());
+    if(n.get('event_type')) {
+      console.log(n.get('event_type'), n.toJS());
+    }
+
     switch(n.get('event_type')) {
       case 'post_created': {
+        text.push(this.parent.users.getName(meta.get('created_by')));
+        text.push(' ' + msgGen.posts.getPostTypeTitle(meta.get('type')))
+        text.push(` ${meta.get('type') === 'question' ? ' of ' : ' to '} `);
+        text.push({
+          id: 'users',
+          string: 'you'
+        })
+        text.push(`: "${meta.get('message')}"'`);
         break;
+      }
+      case 'post_reaction_added': {
+        text.push(this.parent.users.getName(meta.getIn(['last_reaction', 'created_by'])));
+      }
+      case 'post_comment_added': {
+        //text.push(this.parent.users.getName(meta.getIn(['last_reaction', 'created_by'])));
       }
     }
     return text;

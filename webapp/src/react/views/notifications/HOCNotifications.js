@@ -31,15 +31,16 @@ class HOCNotifications extends PureComponent {
     });
   }
   onNotificationOpen(id) {
-    
+
   }
   render() {
-    const { notifications: n } = this.props;
-
+    console.log('this', this)
+    const { notifications } = this.props;
+    const sortedNotifications = notifications.filter(n => !!n.get('event_type'));
     return (
       <Notifications
         delegate={this}
-        notifications={n}
+        notifications={sortedNotifications}
         {...this.bindLoading()}
       />
     );

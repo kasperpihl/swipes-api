@@ -32,19 +32,10 @@ class NotificationItem extends PureComponent {
   }
   render() {
     const { notification: n } = this.props;
-    // const text = msgGen.notifications.getStyledTextForNotification(notification);
+    //
     let className = 'notification-item';
     const timestamp = timeAgo(n.get('created_at'), true)
-    const text = [
-      'Yana mentioned ',
-      {
-        id: 'lakusgh',
-        string: 'you and 3 others',
-        className: 'notification-item__styled-button',
-      },
-      ' in a message: “I just finished with the…'
-    ];
-
+    const text = msgGen.notifications.getStyledTextForNotification(n);
 
     if (!n.get('seen_at')) {
       className += ' notification-item--unread';
