@@ -59,7 +59,6 @@ authed.all('/posts.create',
 
 authed.all('/posts.archive',
   valBody({
-    organization_id: string.require(),
     post_id: string.require(),
   }),
   postsArchiveSingle,
