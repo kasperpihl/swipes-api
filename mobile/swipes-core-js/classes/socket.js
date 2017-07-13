@@ -68,7 +68,11 @@ export default class Socket {
       this._pingTimer = setInterval(() => {
         this.sendPing();
       }, 20000);
-      const timestamp = this.store.getState().getIn(['connection', 'lastConnect']);
+      let timestamp;
+      const ready = this.store.getState().getIn(['connection', 'ready']);
+      if(ready) {
+        timestamp = this.store.getState().getIn(['connection', 'lastConnect']);
+      }
       this.store.dispatch(a.api.request('init', {
         timestamp: timestamp || null,
         without_notes: !!window.__WITHOUT_NOTES__,
