@@ -9,6 +9,7 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import getTarget from 'src/react/app/view-controller/GetTarget';
+import './styles/discuss-button.scss';
 
 class HOCDiscussButton extends PureComponent {
   constructor(props) {
@@ -45,14 +46,14 @@ class HOCDiscussButton extends PureComponent {
   }
   renderLeftSide() {
     return (
-      <div className="discuss-button__left" onClick={this.onDiscuss}>Discuss</div>
+      <div className="discuss-button__button" onClick={this.onDiscuss}>Discuss</div>
     )
   }
   renderRightSide() {
     const { posts } = this.props;
 
     return (
-      <div className="discuss-button__right" onClick={this.onFeed}>{posts.size}</div>
+      <div className="discuss-button__button" onClick={this.onFeed}>{posts.size}</div>
     )
   }
   render() {

@@ -74,7 +74,6 @@ class PostHeader extends PureComponent {
         <img src={image} />
       </div>
     )
-    const test = '';
   }
   renderSubtitle() {
     const { post } = this.props;

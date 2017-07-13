@@ -1,0 +1,26 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.discuss-button {
+  @include size(auto, 36px);
+  @include flexContainer('row');
+  border: 1px solid $deepBlue-10;
+  border-radius: 100px;
+  overflow: hidden;
+
+  &__button {
+    @include size(auto, 100%);
+    @include flexContainer('row', center, center);
+    @include font(12px, $deepBlue-60, 18px, 500);
+    padding: 0 24px;
+
+    &:last-child {
+      border-left: 1px solid $deepBlue-10;
+    }
+
+    &:hover {
+      @include font(12px, $deepBlue-100, 18px, 500);
+      background-color: $deepBlue-10
+    }
+  }
+}
