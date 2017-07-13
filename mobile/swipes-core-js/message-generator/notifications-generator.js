@@ -35,13 +35,6 @@ export default class NotificationsGenerator {
   getStyledTextForNotification(n) {
     const meta = n.get('meta');
     const { users, posts } = this.parent;
-    let message = meta.get('message');
-
-    if (message.length > 30) {
-      message = message.slice(0, 30);
-      message += '...'
-    }
-
     let text = [];
     if (meta.get('event_type')) {
       console.log(meta.get('event_type'), n.toJS());
@@ -49,20 +42,23 @@ export default class NotificationsGenerator {
     switch (meta.get('event_type')) {
       case 'post_created': {
         text.push(boldText('send', users.getName(meta.get('created_by'))));
-        text.push(' ' + posts.getPostTypeTitle(meta.get('type')))
+        text.push(' ' + posts.getPostTypeTitle(meta.get('type')));
         text.push(` ${meta.get('type') === 'question' ? ' of ' : ' to '} `);
         text.push(boldText('users', 'you'));
-        text.push(`: "${message}"'`);
+        text.push(`: "${meta.get('message')}"'`);
         break;
       }
       case 'post_reaction_added': {
         text.push(this.getUserStringMeta(meta));
-        text.push(` liked your ${meta.get('type')}: "${message}"`);
+        text.push(` liked your ${meta.get('type')}: "${meta.get('message')}"`);
         break;
       }
       case 'post_comment_added': {
         text.push(this.getUserStringMeta(meta));
-        text.push(` commented on your ${meta.get('type')}: "${message}"`)
+        const byMe = meta.get('created_by') === users.getUser('me');
+        const followString = byMe ? '' : ' you follow';
+        const preFix = byMe ? 'your ' : posts.getPrefixForType(meta.get('type'));
+        text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${meta.get('message')}"`)
         break;
       }
     }

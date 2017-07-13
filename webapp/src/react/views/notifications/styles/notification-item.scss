@@ -51,6 +51,7 @@
 
   &__styled-text {
     @include font(12px, $deepBlue-100, 15px);
+    @include truncateString(true);
   }
 
   &__styled-button {
