@@ -158,6 +158,10 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     return next();
   }
 
+  if (notificationData.meta) {
+    notificationData.meta.event_type = event_type;
+  }
+
   const notifications = [];
   const userNotificationMap = {};
 
@@ -165,7 +169,6 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     const notification = {
       // because mutation is the root of all evil
       // we are mutating the data object few lines down
-      event_type,
       id: `${userId}-${notification_id_sufix}`,
       user_id: userId,
       seen_at: null,
