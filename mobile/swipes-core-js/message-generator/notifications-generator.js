@@ -25,9 +25,9 @@ export default class NotificationsGenerator {
   getImportantUserIdFromMeta(meta) {
     let userId;
     const type = meta.get('event_type');
-    if(['post_reaction_added', 'post_comment_added'].indexOf(type) !== -1) {
+    if (['post_reaction_added', 'post_comment_added'].indexOf(type) !== -1) {
       userId = meta.getIn(['user_ids', 0]);
-    } else if(['post_created'].indexOf(type) !== -1) {
+    } else if (['post_created'].indexOf(type) !== -1) {
       userId = meta.get('created_by');
     }
     return userId;
@@ -35,27 +35,34 @@ export default class NotificationsGenerator {
   getStyledTextForNotification(n) {
     const meta = n.get('meta');
     const { users, posts } = this.parent;
+    let message = meta.get('message');
+
+    if (message.length > 30) {
+      message = message.slice(0, 30);
+      message += '...'
+    }
+
     let text = [];
-    if(meta.get('event_type')) {
+    if (meta.get('event_type')) {
       console.log(meta.get('event_type'), n.toJS());
     }
-    switch(meta.get('event_type')) {
+    switch (meta.get('event_type')) {
       case 'post_created': {
         text.push(boldText('send', users.getName(meta.get('created_by'))));
         text.push(' ' + posts.getPostTypeTitle(meta.get('type')))
         text.push(` ${meta.get('type') === 'question' ? ' of ' : ' to '} `);
         text.push(boldText('users', 'you'));
-        text.push(`: "${meta.get('message')}"'`);
+        text.push(`: "${message}"'`);
         break;
       }
       case 'post_reaction_added': {
         text.push(this.getUserStringMeta(meta));
-        text.push(` liked your ${meta.get('type')}: "${meta.get('message')}"`);
+        text.push(` liked your ${meta.get('type')}: "${message}"`);
         break;
       }
       case 'post_comment_added': {
         text.push(this.getUserStringMeta(meta));
-        text.push(` commented on your ${meta.get('type')}: "${meta.get('message')}"`)
+        text.push(` commented on your ${meta.get('type')}: "${message}"`)
         break;
       }
     }
@@ -85,10 +92,10 @@ export default class NotificationsGenerator {
     });
 
     if (history) {
-      if(def.reply) {
+      if (def.reply) {
         m = m.set('reply', this.parent.history.getReplyButtonForHistory(id, history));
       }
-      if(def.seenBy) {
+      if (def.seenBy) {
         m = m.set('seenBy', this.parent.history.getSeenByForHistory(history));
       }
       m = m.set('message', history.get('message'));
