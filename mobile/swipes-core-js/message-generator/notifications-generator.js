@@ -25,7 +25,11 @@ export default class NotificationsGenerator {
   getImportantUserIdFromMeta(meta) {
     let userId;
     const type = meta.get('event_type');
-    if (['post_reaction_added', 'post_comment_added'].indexOf(type) !== -1) {
+    if ([
+      'post_reaction_added',
+      'post_comment_added',
+      'post_comment_reaction_added',
+    ].indexOf(type) !== -1) {
       userId = meta.getIn(['user_ids', 0]);
     } else if (['post_created'].indexOf(type) !== -1) {
       userId = meta.get('created_by');
@@ -59,6 +63,11 @@ export default class NotificationsGenerator {
         const followString = byMe ? '' : ' you follow';
         const preFix = byMe ? 'your ' : posts.getPrefixForType(meta.get('type'));
         text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${meta.get('message')}"`)
+        break;
+      }
+      case 'post_comment_reaction_added': {
+        text.push(this.getUserStringMeta(meta));
+        text.push(` liked your comment: "${meta.get('message')}"`);
         break;
       }
     }
