@@ -12,6 +12,7 @@ import {
   dbPostsCommentRemoveReaction,
   dbPostsArchiveSingle,
   dbPostsUnfollow,
+  dbPostsFollow,
 } from './db_utils/posts';
 import {
   generateSlackLikeId,
@@ -69,6 +70,24 @@ const postsInsertSingle = valLocals('postsInsertSingle', {
   } = res.locals;
 
   dbPostsInsertSingle({ post })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+
+const postsFollow = valLocals('postsFollow', {
+  user_id: string.require(),
+  post_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+  } = res.locals;
+
+  dbPostsFollow({ user_id, post_id })
     .then(() => {
       return next();
     })
@@ -144,6 +163,29 @@ const postsUnfollowQueueMessage = valLocals('postsUnfollowQueueMessage', {
     post_id,
   } = res.locals;
   const event_type = 'post_unfollowed';
+  const queueMessage = {
+    user_id,
+    post_id,
+    event_type,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
+
+const postsFollowQueueMessage = valLocals('postsFollowQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+  } = res.locals;
+  const event_type = 'post_followed';
   const queueMessage = {
     user_id,
     post_id,
@@ -474,4 +516,6 @@ export {
   postsArchiveQueueMessage,
   postsUnfollow,
   postsUnfollowQueueMessage,
+  postsFollow,
+  postsFollowQueueMessage,
 };

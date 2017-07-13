@@ -355,7 +355,11 @@ const post_comment_reaction_removed = notifyWrapper([
   notify.notifySendEventToAllInCompany,
 ]);
 const post_unfollowed = notifyWrapper([
-  posts.postUnfollowedNotificationData,
+  posts.postFollowedUnfollowedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_followed = notifyWrapper([
+  posts.postFollowedUnfollowedNotificationData,
   notify.notifySendEventToAllInCompany,
 ]);
 
@@ -408,4 +412,5 @@ export {
   post_comment_reaction_removed,
   post_archived,
   post_unfollowed,
+  post_followed,
 };
