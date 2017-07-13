@@ -1,4 +1,4 @@
-import * as types from 'constants'
+import * as types from '../constants'
 import { fromJS } from 'immutable'
 import { reducerInitToMap } from '../classes/utils';
 const initialState = fromJS({});
