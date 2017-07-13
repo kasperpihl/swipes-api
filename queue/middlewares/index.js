@@ -308,8 +308,9 @@ const post_reaction_added = notifyWrapper([
       user_id,
       post,
     } = res.locals;
+    const created_by = post.created_by;
 
-    res.locals.user_ids = post.followers.filter((userId) => { return userId !== user_id; });
+    res.locals.user_ids = post.followers.filter((userId) => { return created_by === userId && userId !== user_id; });
 
     return next();
   },
