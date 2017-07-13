@@ -1,4 +1,4 @@
-package com.swipes;
+package com.swipesapp;
 
 import com.facebook.react.ReactActivity;
 import com.github.droibit.android.reactnative.customtabs.CustomTabsPackage;

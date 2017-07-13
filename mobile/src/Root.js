@@ -86,13 +86,6 @@ window.onScroll = (function (store) {
 
 class Root extends PureComponent {
   render() {
-    console.log('getVersion====================================');
-    console.log(DeviceInfo.getVersion());
-    console.log('getVersion====================================');
-
-    console.log('getBuildNumber====================================');
-    console.log(DeviceInfo.getBuildNumber());
-    console.log('getBuildNumber====================================');
     return (
       <Provider store={store}>
         <App />

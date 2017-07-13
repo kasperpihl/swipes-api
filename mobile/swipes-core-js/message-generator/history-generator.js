@@ -106,9 +106,10 @@ export default class HistoryGenerator {
   getSeenByForHistory(h) {
     const me = this.store.getState().get('me');
 
-    if(!h || h.get('done_by') !== me.get('id')){
+    if(!h || h.get('done_by') !== me.get('id') || h.get('type') !== 'goal_notify'){
       return undefined;
     }
+
     if (h.get('seen_by')) {
       return h.get('seen_by').filter(id => id !== me.get('id'));
     }

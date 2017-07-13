@@ -1,14 +1,14 @@
 {
   "name": "swipes",
   "version": "0.0.1",
-  "androidVersionName": "0.4.0",
-  "androidVersionCode": 5,
+  "androidVersionName": "0.5.0",
+  "androidVersionCode": 6,
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "prebuild:android": "node increment_version_code.js",
-    "build:android": "cd android; gradlew assembleRelease"
+    "build:android": "cd android && gradlew clean && gradlew assembleRelease"
   },
   "dependencies": {
     "babel-register": "^6.24.1",
