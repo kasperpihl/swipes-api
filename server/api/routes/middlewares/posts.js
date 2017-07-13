@@ -11,6 +11,7 @@ import {
   dbPostsCommentAddReaction,
   dbPostsCommentRemoveReaction,
   dbPostsArchiveSingle,
+  dbPostsUnfollow,
 } from './db_utils/posts';
 import {
   generateSlackLikeId,
@@ -76,6 +77,24 @@ const postsInsertSingle = valLocals('postsInsertSingle', {
     });
 });
 
+const postsUnfollow = valLocals('postsUnfollow', {
+  user_id: string.require(),
+  post_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+  } = res.locals;
+
+  dbPostsUnfollow({ user_id, post_id })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+
 const postsArchiveSingle = valLocals('postsArchiveSingle', {
   post_id: string.require(),
 }, (req, res, next, setLocals) => {
@@ -111,6 +130,29 @@ const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
   setLocals({
     queueMessage,
     messageGroupId: post.id,
+  });
+
+  return next();
+});
+
+const postsUnfollowQueueMessage = valLocals('postsUnfollowQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+  } = res.locals;
+  const event_type = 'post_unfollowed';
+  const queueMessage = {
+    user_id,
+    post_id,
+    event_type,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
   });
 
   return next();
@@ -430,4 +472,6 @@ export {
   postsCommentRemoveReactionQueueMessage,
   postsArchiveSingle,
   postsArchiveQueueMessage,
+  postsUnfollow,
+  postsUnfollowQueueMessage,
 };
