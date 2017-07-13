@@ -65,7 +65,7 @@
 .notification-item {
   $b: &;
 
-  &#{$b}--completed {
+  &#{$b}--unread {
     background-color: $blue-5;
   }
 }

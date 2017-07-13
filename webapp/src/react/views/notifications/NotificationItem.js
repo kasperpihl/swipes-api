@@ -46,9 +46,13 @@ class NotificationItem extends PureComponent {
     ];
 
 
-    if (n.get('seen_at')) {
-      className += ' notification-item--completed';
+    if (!n.get('seen_at')) {
+      className += ' notification-item--unread';
     }
+
+    console.log('====================================');
+    console.log(n.toJS());
+    console.log('====================================');
 
     return (
       <div className={className} onClick={this.onNotificationOpen}>
