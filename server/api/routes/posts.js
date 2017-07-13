@@ -20,6 +20,8 @@ import {
   postsCommentAddReactionQueueMessage,
   postsCommentRemoveReaction,
   postsCommentRemoveReactionQueueMessage,
+  postsArchiveSingle,
+  postsArchiveQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -52,6 +54,19 @@ authed.all('/posts.create',
   notificationsPushToQueue,
   valResponseAndSend({
     post: object.require(),
+  }),
+);
+
+authed.all('/posts.archive',
+  valBody({
+    organization_id: string.require(),
+    post_id: string.require(),
+  }),
+  postsArchiveSingle,
+  postsArchiveQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    post_id: string.require(),
   }),
 );
 

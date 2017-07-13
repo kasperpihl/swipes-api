@@ -282,6 +282,10 @@ const post_created = notifyWrapper([
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
 ]);
+const post_archived = notifyWrapper([
+  posts.postArchivedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
 
 const post_comment_added = notifyWrapper([
   posts.postsGetSingle,
@@ -398,4 +402,5 @@ export {
   post_reaction_removed,
   post_comment_reaction_added,
   post_comment_reaction_removed,
+  post_archived,
 };

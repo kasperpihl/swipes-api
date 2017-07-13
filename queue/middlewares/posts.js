@@ -73,6 +73,18 @@ const postCreatedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postArchivedNotificationData = (req, res, next) => {
+  const {
+    post_id,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = {
+    post_id,
+  };
+
+  return next();
+};
 const postCommentAddedNotificationData = (req, res, next) => {
   const {
     post,
@@ -194,4 +206,5 @@ export {
   postReactionRemovedNotificationData,
   postCommentReactionAddedNotificationData,
   postCommentReactionRemovedNotificationData,
+  postArchivedNotificationData,
 };

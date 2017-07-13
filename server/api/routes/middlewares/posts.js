@@ -10,6 +10,7 @@ import {
   dbPostsRemoveReaction,
   dbPostsCommentAddReaction,
   dbPostsCommentRemoveReaction,
+  dbPostsArchiveSingle,
 } from './db_utils/posts';
 import {
   generateSlackLikeId,
@@ -75,6 +76,22 @@ const postsInsertSingle = valLocals('postsInsertSingle', {
     });
 });
 
+const postsArchiveSingle = valLocals('postsArchiveSingle', {
+  post_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    post_id,
+  } = res.locals;
+
+  dbPostsArchiveSingle({ post_id })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+
 const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
   user_id: string.require(),
   post: object.require(),
@@ -94,6 +111,29 @@ const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
   setLocals({
     queueMessage,
     messageGroupId: post.id,
+  });
+
+  return next();
+});
+
+const postsArchiveQueueMessage = valLocals('postsArchiveQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+  } = res.locals;
+  const event_type = 'post_archived';
+  const queueMessage = {
+    user_id,
+    post_id,
+    event_type,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
   });
 
   return next();
@@ -388,4 +428,6 @@ export {
   postsCommentAddReactionQueueMessage,
   postsCommentRemoveReaction,
   postsCommentRemoveReactionQueueMessage,
+  postsArchiveSingle,
+  postsArchiveQueueMessage,
 };

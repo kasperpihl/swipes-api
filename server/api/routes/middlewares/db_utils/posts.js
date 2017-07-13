@@ -23,6 +23,23 @@ const dbPostsInsertSingle = funcWrap([
   return db.rethinkQuery(q);
 });
 
+const dbPostsArchiveSingle = funcWrap([
+  object.as({
+    post_id: string.require(),
+  }).require(),
+], (err, { post_id }) => {
+  if (err) {
+    throw new SwipesError(`dbPostsArchiveSingle: ${err}`);
+  }
+
+  const q = r.table('posts').get(post_id).update({
+    archived: true,
+    updated_at: r.now(),
+  });
+
+  return db.rethinkQuery(q);
+});
+
 const dbPostsAddComment = funcWrap([
   object.as({
     user_id: string.require(),
@@ -155,4 +172,5 @@ export {
   dbPostsRemoveReaction,
   dbPostsCommentAddReaction,
   dbPostsCommentRemoveReaction,
+  dbPostsArchiveSingle,
 };
