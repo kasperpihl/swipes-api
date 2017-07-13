@@ -21,8 +21,9 @@ class NotificationItem extends PureComponent {
   renderProfilePic() {
     const { notification: n } = this.props;
 
-    const image = msgGen.users.getPhoto(n.get('user_id'));
-    const initials = msgGen.users.getInitials(n.get('user_id'))
+    const userId = msgGen.notifications.getImportantUserIdFromMeta(n.get('meta'));
+    const image = msgGen.users.getPhoto(userId);
+    const initials = msgGen.users.getInitials(userId);
 
     if (image) {
       return <img src={image} className="notification-item__image" />
@@ -41,12 +42,8 @@ class NotificationItem extends PureComponent {
       className += ' notification-item--unread';
     }
 
-    console.log('====================================');
-    console.log(n.toJS());
-    console.log('====================================');
-
     return (
-      <div className={className} onClick={this.onNotificationOpen}>
+      <div className={className} onClick={this.onNotificationOpenCached(n)}>
         {this.renderProfilePic()}
         <div className="notification-item__content">
           <StyledText text={text} className="notification-item__styled-text" />

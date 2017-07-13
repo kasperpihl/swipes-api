@@ -21,15 +21,17 @@ class Notifications extends PureComponent {
     return (
       <div className="notifications__header">
         <div className="notifications__title">Notifications</div>
-        <div className="notifications__mark-all">Mark all as read</div>
+        <div onClick={this.onMarkAll} className="notifications__mark-all">
+          Mark all as read
+        </div>
       </div>
     )
   }
   renderNotifications() {
-    const { notifications } = this.props;
+    const { notifications, delegate } = this.props;
 
     return notifications.map((n, i) => (
-      <NotificationItem notification={n} key={i} />
+      <NotificationItem notification={n} key={i} delegate={delegate}/>
     )).toArray();
   }
   render() {

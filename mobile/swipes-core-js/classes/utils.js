@@ -136,6 +136,14 @@ export function navForContext(context) {
         milestoneId: id,
       },
     };
+  } else if(id.startsWith('P')) {
+    return {
+      id: 'PostView',
+      title: 'Post',
+      props: {
+        postId: id,
+      }
+    }
   } else if (id.startsWith('N')) {
     return 'MiniNote';
   } else if (id.startsWith('F')) {

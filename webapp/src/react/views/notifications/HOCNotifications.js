@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
+import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import Notifications from './Notifications';
@@ -19,24 +19,30 @@ class HOCNotifications extends PureComponent {
   componentWillUnmount() {
     this._unmounted = true;
   }
-  onMarkAll() {
-    const { markNotifications, notifications } = this.props;
-    const nToMark = notifications.toArray().filter(n => !n.get('seen_at')).map(n => n.get('id'));
-
+  onMark(ids) {
+    const { markNotifications } = this.props;
     this.setLoading('marking');
-    markNotifications(nToMark).then(() => {
+    markNotifications(ids).then(() => {
       if (!this._unmounted) {
         this.clearLoading('marking');
       }
     });
   }
-  onNotificationOpen(id) {
-
+  onMarkAll() {
+    const { notifications } = this.props;
+    const nToMark = notifications.toArray().filter(n => !n.get('seen_at')).map(n => n.get('id'));
+    this.onMark(nToMark)
+  }
+  onNotificationOpen(n) {
+    const nav = navForContext(n.get('target'));
+    const { openSecondary, hide } = this.props;
+    this.onMark([n.get('id')]);
+    openSecondary('primary', nav);
+    hide();
   }
   render() {
-    console.log('this', this)
     const { notifications } = this.props;
-    const sortedNotifications = notifications.filter(n => !!n.get('event_type'));
+    const sortedNotifications = notifications; //.filter(n => !!n.get('event_type'));
     return (
       <Notifications
         delegate={this}
@@ -55,4 +61,6 @@ function mapStateToProps(state) {
   };
 }
 export default connect(mapStateToProps, {
+  openSecondary: a.navigation.openSecondary,
+  markNotifications: ca.notifications.mark,
 })(HOCNotifications);

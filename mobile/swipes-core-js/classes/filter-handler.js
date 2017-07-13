@@ -75,22 +75,12 @@ export default class FilterHandler {
     const notifications = state.get('notifications');
     if (notifications !== this.prevNotifications) {
       this.prevNotifications = this.prevNotifications || List();
-      let notifFilters = filters.get('notifications')
-        .map(f => f.set('unread', 0).set('notifications', List()));
       let counter = 0;
       notifications.forEach((n, i) => {
-        notifFilters.forEach((f, k) => {
-          if (f.get('filter')(n)) {
-            notifFilters = notifFilters.updateIn([k, 'notifications'], notifs => notifs.push(i));
-            if (!n.get('seen_at') && (k === 'received')) {
-              const curr = notifFilters.getIn([k, 'unread']);
-              notifFilters = notifFilters.setIn([k, 'unread'], curr + 1);
-              counter += 1;
-            }
-          }
-        });
+        if (!n.get('seen_at')) {
+          counter += 1;
+        }
       });
-      filters = filters.set('notifications', notifFilters);
       const currUnread = state.getIn(['navigation', 'counters', 'Notifications']);
 
       this.prevNotifications = notifications;
