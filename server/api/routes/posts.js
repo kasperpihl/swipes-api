@@ -58,7 +58,7 @@ authed.all('/posts.create',
 authed.all('/posts.addComment',
   valBody({
     post_id: string.require(),
-    message: string.require(),
+    message: string.min(1).require(),
     attachments: array.of(object),
   }),
   postsCreateComment,
