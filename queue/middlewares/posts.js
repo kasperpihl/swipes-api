@@ -6,6 +6,7 @@ import {
   objectToArray,
 } from '../utils';
 
+const MAX_LENGHT = 50;
 const uniqueCommentUserIds = (comments) => {
   const userIds = [];
   const commentsArray = objectToArray(comments);
@@ -62,7 +63,7 @@ const postCreatedNotificationData = (req, res, next) => {
     meta: {
       created_by: user_id,
       type: post.type,
-      message: post.message,
+      message: post.message.substr(0, MAX_LENGHT),
       context: post.context,
     },
   };
@@ -85,7 +86,7 @@ const postCommentAddedNotificationData = (req, res, next) => {
     },
     meta: {
       user_ids: uniqueCommentUserIds(post.comments),
-      message: post.message,
+      message: post.message.substr(0, MAX_LENGHT),
       context: post.context,
       type: post.type,
       created_by: comment.created_by,
@@ -112,7 +113,7 @@ const postReactionAddedNotificationData = (req, res, next) => {
     meta: {
       last_reaction: reaction,
       user_ids: post.reactions.map(r => r.created_by),
-      message: post.message,
+      message: post.message.substr(0, MAX_LENGHT),
       context: post.context,
       type: post.type,
     },
@@ -156,7 +157,7 @@ const postCommentReactionAddedNotificationData = (req, res, next) => {
     meta: {
       last_reaction: reaction,
       user_ids: comment.reactions.map(r => r.created_by),
-      message: comment.message,
+      message: comment.message.substr(0, MAX_LENGHT),
     },
   };
   res.locals.eventData = {
