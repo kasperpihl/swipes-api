@@ -97,15 +97,14 @@ class PostView extends PureComponent {
     )
   }
   renderPostActions() {
-    const { post, delegate, myId, isLoading } = this.props;
+    const { post, delegate, isLoading } = this.props;
 
     return (
       <div className="post__actions">
         <Reactions
           reactions={post.get('reactions')}
           delegate={delegate}
-          myId={myId}
-          isLoading={isLoading('reactionState')}
+          isLoading={isLoading('reaction')}
         />
       </div>
     )
@@ -125,7 +124,7 @@ class PostView extends PureComponent {
     )
   }
   renderComments() {
-    const { post, delegate, myId, fromFeed } = this.props;
+    const { post, delegate, myId, fromFeed, isLoading } = this.props;
     const comments = post.get('comments');
     let renderComments = undefined;
 
@@ -136,9 +135,15 @@ class PostView extends PureComponent {
         sortedComments = sortedComments.slice(-MAX_COMMENTS_FEED + 1)
       }
 
-      renderComments = sortedComments.map((c, i) => {
-        return <CommentView isLast={i === comments.size - 1} comment={c} key={c.get('id')} delegate={delegate} />
-      }).toArray();
+      renderComments = sortedComments.map((c, i) => (
+        <CommentView
+          isLast={i === comments.size - 1}
+          comment={c}
+          loadingReaction={isLoading(`${c.get('id')}reaction`)}
+          key={c.get('id')}
+          delegate={delegate}
+        />
+      )).toArray();
     }
 
     return (

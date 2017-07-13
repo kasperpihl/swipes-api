@@ -6,6 +6,7 @@ import { timeAgo } from 'swipes-core-js/classes/time-utils';
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
+import Reactions from 'components/reactions/Reactions';
 import './styles/comment-view.scss';
 
 class CommentView extends PureComponent {
@@ -85,12 +86,17 @@ class CommentView extends PureComponent {
     )
   }
   renderSubLine() {
-    const { comment } = this.props;
+    const { comment, delegate, loadingReaction } = this.props;
     const timestamp = timeAgo(comment.get('created_at'), true);
 
     return (
       <div className="comment__subline">
-        <span className="comment__react-btn" onClick={this.openReactions}>Like</span> • {timestamp}
+        <Reactions
+          reactions={comment.get('reactions')}
+          isLoading={loadingReaction}
+          delegate={delegate}
+          commentId={comment.get('id')}
+        /> • {timestamp}
       </div>
     )
   }

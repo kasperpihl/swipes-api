@@ -8,7 +8,7 @@
 .notification-item {
   $b: &;
   $flexIgnoreList: '#{$b}__image', '#{$b}__initials';
- 
+
   @include size(100%, auto);
   @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
   padding: 9px 14px;

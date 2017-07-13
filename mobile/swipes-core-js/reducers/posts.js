@@ -33,7 +33,6 @@ export default function posts (state = initialState, action) {
         return state;
       }
       return state.updateIn([post_id, 'reactions'], (reactions) => {
-        console.log(reactions.filter(r => r.get('created_by') !== reaction.created_by).insert(0, fromJS(reaction)));
         return reactions.filter(r => r.get('created_by') !== reaction.created_by).insert(0, fromJS(reaction))
       });
     }
@@ -44,6 +43,26 @@ export default function posts (state = initialState, action) {
         return state;
       }
       return state.updateIn([post_id, 'reactions'], (reactions) => {
+        return reactions.filter(r => r.get('created_by') !== payload.user_id);
+      });
+    }
+    case 'posts.commentAddReaction':
+    case 'post_comment_reaction_added': {
+      const { post_id, reaction, comment_id } = payload;
+      if (!state.get(post_id)) {
+        return state;
+      }
+      return state.updateIn([post_id, 'comments', comment_id, 'reactions'], (reactions) => {
+        return reactions.filter(r => r.get('created_by') !== reaction.created_by).insert(0, fromJS(reaction))
+      });
+    }
+    case 'posts.commentRemoveReaction':
+    case 'post_comment_reaction_removed': {
+      const { post_id, user_id, comment_id } = payload;
+      if (!state.get(post_id)) {
+        return state;
+      }
+      return state.updateIn([post_id, 'comments', comment_id, 'reactions'], (reactions) => {
         return reactions.filter(r => r.get('created_by') !== payload.user_id);
       });
     }

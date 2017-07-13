@@ -25,25 +25,29 @@ class HOCPostView extends PureComponent {
 
     return !fromFeed;
   }
-  onAddReaction() {
-    const { post, addReaction } = this.props;
-    this.setLoading('reactionState');
+  onAddReaction(commentId) {
+    const { post, addReaction, commentAddReaction } = this.props;
+    const runFunc = commentId ? commentAddReaction : addReaction;
 
-    addReaction({
+    this.setLoading(`${commentId || ''}reaction`);
+    runFunc({
       post_id: post.get('id'),
-      reaction: 'like'
+      reaction: 'like',
+      comment_id: commentId || null,
     }).then((res) => {
-      this.clearLoading('reactionState')
+      this.clearLoading(`${commentId || ''}reaction`)
     });
   }
-  onRemoveReaction() {
-    const { post, removeReaction } = this.props;
-    this.setLoading('reactionState');
+  onRemoveReaction(commentId) {
+    const { post, removeReaction, commentRemoveReaction } = this.props;
+    const runFunc = commentId ? commentRemoveReaction : removeReaction;
 
-    removeReaction({
+    this.setLoading(`${commentId || ''}reaction`);
+    runFunc({
       post_id: post.get('id'),
+      comment_id: commentId,
     }).then((res) => {
-      this.clearLoading('reactionState')
+      this.clearLoading(`${commentId || ''}reaction`)
     });
   }
   onHeaderContextClick() {
@@ -96,6 +100,8 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   addComment: ca.posts.addComment,
   addReaction: ca.posts.addReaction,
+  commentAddReaction: ca.posts.commentAddReaction,
+  commentRemoveReaction: ca.posts.commentRemoveReaction,
   removeReaction: ca.posts.removeReaction,
   browser: a.main.browser,
 })(HOCPostView);

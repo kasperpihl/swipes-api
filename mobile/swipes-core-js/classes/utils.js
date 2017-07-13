@@ -258,6 +258,10 @@ export function queryStringToObject(query) {
 export function setupCachedCallback(method, ctx) {
   const cachedMethod = {};
   return function cachedCallback(id) {
+    id = id || '';
+    if(typeof(id) === 'object') {
+      id = JSON.stringify(id);
+    }
     if (!cachedMethod[id]) {
       const args = Array.from(arguments);
       cachedMethod[id] = method.bind(ctx, ...args);

@@ -55,7 +55,8 @@ class HOCReactions extends PureComponent {
     tooltip(null);
   }
   updateILike(nextReactions) {
-    const { myId, reactions } = this.props;
+    const { reactions } = this.props;
+    const myId = msgGen.users.getUser('me').get('id');
     const { iLike } = this.state;
 
     if (typeof iLike === 'undefined' || reactions !== nextReactions) {
@@ -67,7 +68,7 @@ class HOCReactions extends PureComponent {
     }
   }
   renderButton() {
-    const { isLoading } = this.props;
+    const { isLoading, commentId:cId } = this.props;
     const { iLike } = this.state;
     let className = 'reactions__button';
 
@@ -76,7 +77,7 @@ class HOCReactions extends PureComponent {
     }
 
     const labelAction = iLike ? 'Unlike' : 'Like';
-    const onClick = iLike ? this.onRemoveReaction : this.onAddReaction;
+    const onClick = iLike ? this.onRemoveReactionCached(cId) : this.onAddReactionCached(cId);
 
     return (
       <div onClick={onClick} className={className}>
@@ -85,21 +86,27 @@ class HOCReactions extends PureComponent {
     )
   }
   renderLikers() {
-    const { reactions } = this.props;
+    const { reactions, commentId } = this.props;
 
     if (!reactions || !reactions.size) {
       return undefined;
     }
+    let likeString = reactions.size;
 
-    const userIds = reactions.map(r => r.get('created_by'));
-    const nameString = msgGen.users.getNames(userIds, {
-      number: 2,
-      capitalize: true,
-    });
+    if(!commentId) {
+      const userIds = reactions.map(r => r.get('created_by'));
+      const nameString = msgGen.users.getNames(userIds, {
+        number: 2,
+        capitalize: true,
+      });
+      likeString = `${nameString} like this.`;
+    }
+
+
 
     return (
       <div className="reactions__label" onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
-        {nameString} like this.
+        {likeString}
       </div>
     )
   }
