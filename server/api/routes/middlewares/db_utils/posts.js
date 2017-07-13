@@ -23,6 +23,24 @@ const dbPostsInsertSingle = funcWrap([
   return db.rethinkQuery(q);
 });
 
+const dbPostsUnfollow = funcWrap([
+  object.as({
+    user_id: string.require(),
+    post_id: string.require(),
+  }).require(),
+], (err, { user_id, post_id }) => {
+  if (err) {
+    throw new SwipesError(`dbPostsUnfollow: ${err}`);
+  }
+
+  const q = r.table('posts').get(post_id).update({
+    followers: r.row('followers').difference([user_id]),
+    updated_at: r.now(),
+  });
+
+  return db.rethinkQuery(q);
+});
+
 const dbPostsArchiveSingle = funcWrap([
   object.as({
     post_id: string.require(),
@@ -173,4 +191,5 @@ export {
   dbPostsCommentAddReaction,
   dbPostsCommentRemoveReaction,
   dbPostsArchiveSingle,
+  dbPostsUnfollow,
 };

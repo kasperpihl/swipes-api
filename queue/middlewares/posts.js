@@ -196,6 +196,20 @@ const postCommentReactionRemovedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postUnfollowedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    post_id,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = {
+    user_id,
+    post_id,
+  };
+
+  return next();
+};
 
 export {
   postsGetSingle,
@@ -207,4 +221,5 @@ export {
   postCommentReactionAddedNotificationData,
   postCommentReactionRemovedNotificationData,
   postArchivedNotificationData,
+  postUnfollowedNotificationData,
 };

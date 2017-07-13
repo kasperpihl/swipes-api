@@ -22,6 +22,8 @@ import {
   postsCommentRemoveReactionQueueMessage,
   postsArchiveSingle,
   postsArchiveQueueMessage,
+  postsUnfollow,
+  postsUnfollowQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -54,6 +56,19 @@ authed.all('/posts.create',
   notificationsPushToQueue,
   valResponseAndSend({
     post: object.require(),
+  }),
+);
+
+authed.all('/posts.unfollow',
+  valBody({
+    post_id: string.require(),
+  }),
+  postsUnfollow,
+  postsUnfollowQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    user_id: string.require(),
+    post_id: string.require(),
   }),
 );
 

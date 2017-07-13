@@ -354,6 +354,10 @@ const post_comment_reaction_removed = notifyWrapper([
   posts.postCommentReactionRemovedNotificationData,
   notify.notifySendEventToAllInCompany,
 ]);
+const post_unfollowed = notifyWrapper([
+  posts.postUnfollowedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
 
 export {
   goal_created,
@@ -403,4 +407,5 @@ export {
   post_comment_reaction_added,
   post_comment_reaction_removed,
   post_archived,
+  post_unfollowed,
 };
