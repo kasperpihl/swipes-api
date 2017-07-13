@@ -117,9 +117,10 @@ export function iconForId(id) {
   }
 }
 
-export function navForContext(context) {
-  const id = context.get('id');
-  const title = context.get('title');
+export function navForContext(id) {
+  if (typeof id === 'object') {
+    id = id.get('id')
+  }
   if(id.startsWith('G')) {
     return {
       id: 'GoalOverview',

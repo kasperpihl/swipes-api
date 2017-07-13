@@ -79,7 +79,7 @@ class PostHeader extends PureComponent {
   renderSubtitle() {
     const { post } = this.props;
     const timeStamp = timeAgo(post.get('created_at'), true);
-    const seperator = post.get('context') ? <span>&nbsp;•&nbsp;</span > : undefined;
+    const seperator = post.get('context') ? <span>&nbsp;•&nbsp;</span> : undefined;
     const contextTitle = post.get('context') ? post.getIn(['context', 'title']) : null;
     let icon;
 

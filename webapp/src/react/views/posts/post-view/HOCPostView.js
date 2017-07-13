@@ -5,6 +5,7 @@ import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
+import getTarget from 'src/react/app/view-controller/GetTarget';
 // import { fromJS } from 'immutable';
 import PostView from './PostView';
 
@@ -51,13 +52,16 @@ class HOCPostView extends PureComponent {
     });
   }
   onHeaderContextClick() {
-    const { openSecondary, post } = this.props;
-    openSecondary(navForContext(post.get('context')));
+    const { openSecondary, post, target } = this.props;
+    openSecondary(target, navForContext(post.get('context')));
   }
   onLinkClick(url) {
     const { browser, target } = this.props;
-
     browser(target, url);
+  }
+  onOpenPost(postId) {
+    const { openSecondary, post, target } = this.props;
+    openSecondary(target, navForContext(postId));
   }
   onAddComment(message, e) {
     const { addComment, postId } = this.props;
@@ -76,7 +80,7 @@ class HOCPostView extends PureComponent {
 
     return (
       <PostView
-        fromFeed
+        fromFeed={fromFeed}
         myId={myId}
         post={post}
         delegate={this}
@@ -97,11 +101,12 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default getTarget(connect(mapStateToProps, {
+  openSecondary: a.navigation.openSecondary,
   addComment: ca.posts.addComment,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,
   commentRemoveReaction: ca.posts.commentRemoveReaction,
   removeReaction: ca.posts.removeReaction,
   browser: a.main.browser,
-})(HOCPostView);
+})(HOCPostView));
