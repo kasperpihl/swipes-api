@@ -1,16 +1,17 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
+$imgSize: 54px;
+
 // ======================================================
 // Block
 // ======================================================
-
 .notification-item {
   $b: &;
   $flexIgnoreList: '#{$b}__image', '#{$b}__initials';
 
   @include size(100%, auto);
-  @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+  @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
   padding: 9px 14px;
   border-bottom: 1px solid $deepBlue-5;
 }
@@ -22,17 +23,17 @@
 .notification-item {
 
   &__image {
-    @include size(54px);
+    @include size($imgSize);
     border-radius: 3px;
 
     img {
-      @include size(54px);
+      @include size($imgSize);
       border-radius: 3px;
     }
   }
 
   &__initials {
-    @include size(54px);
+    @include size($imgSize);
     @include flexContainer('row', center, center);
     background-color: $deepBlue-10;
     border-radius: 3px;
