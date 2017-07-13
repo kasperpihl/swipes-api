@@ -42,7 +42,7 @@ export default class NotificationsGenerator {
     switch(meta.get('event_type')) {
       case 'post_created': {
         text.push(boldText('send', users.getName(meta.get('created_by'))));
-        text.push(' ' + posts.getPostTypeTitle(meta.get('type')))
+        text.push(' ' + posts.getPostTypeTitle(meta.get('type')));
         text.push(` ${meta.get('type') === 'question' ? ' of ' : ' to '} `);
         text.push(boldText('users', 'you'));
         text.push(`: "${meta.get('message')}"'`);
@@ -55,7 +55,10 @@ export default class NotificationsGenerator {
       }
       case 'post_comment_added': {
         text.push(this.getUserStringMeta(meta));
-        text.push(` commented on your ${meta.get('type')}: "${meta.get('message')}"`)
+        const byMe = meta.get('created_by') === users.getUser('me');
+        const followString = byMe ? '' : ' you follow';
+        const preFix = byMe ? 'your ' : posts.getPrefixForType(meta.get('type'));
+        text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${meta.get('message')}"`)
         break;
       }
     }

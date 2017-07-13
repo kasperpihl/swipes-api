@@ -16,6 +16,18 @@ export default class Posts {
         return 'Send a message';
     }
   }
+  getPrefixForType(type) {
+    switch (type) {
+      case 'information':
+        return '';
+      case 'announcement':
+        return 'an ';
+      case 'question':
+      case 'message':
+      default:
+        return 'a ';
+    }
+  }
   getPostTypeTitle(type) {
     switch (type) {
       case 'information':
