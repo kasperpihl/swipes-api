@@ -13,6 +13,9 @@ class HOCPostView extends PureComponent {
   static maxWidth() {
     return 600;
   }
+  static minWidth() {
+    return 600;
+  }
   constructor(props) {
     super(props);
     this.state = {};
