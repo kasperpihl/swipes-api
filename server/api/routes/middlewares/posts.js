@@ -162,7 +162,7 @@ const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
     user_id,
     post_id,
     event_type,
-    notification_id_sufix: `${post_id}-${comment.id}-${event_type}`,
+    notification_id_sufix: `${post_id}-${event_type}`,
     comment_id: comment.id,
   };
 
