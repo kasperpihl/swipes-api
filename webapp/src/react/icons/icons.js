@@ -10,6 +10,7 @@ import SwipesLogoText from './svgs/swipes-logo-text.svg';
 import SwipesLogoEmpty from './svgs/swipes-logo-empty.svg';
 import SwipesLogoFull from './svgs/swipes-full-icon.svg';
 import SwipesSignature from './svgs/signature.svg';
+// TagColleague
 
 import ActivityCheckmark from './svgs/activity-checkmark.svg';
 import AddPerson from './svgs/add-person.svg';
@@ -22,6 +23,7 @@ import ArrowRightLine from './svgs/arrow-right-line.svg';
 import ArrowRightLong from './svgs/arrow-right-long.svg';
 import Assign from './svgs/assign.svg';
 import Assets from './svgs/assets.svg';
+import Attach from './svgs/attach.svg';
 import Bold from './svgs/bold.svg';
 import Breadcrumb from './svgs/breadcrumb.svg';
 import Calendar from './svgs/calendar.svg';
@@ -70,6 +72,9 @@ import Logout from './svgs/logout.svg';
 import Messages from './svgs/messages.svg';
 import Milestones from './svgs/milestones.svg';
 import MilestoneProgress from './svgs/milestone-progress.svg';
+import MiniGoal from './svgs/mini-goal.svg';
+import MiniMilestone from './svgs/mini-milestone.svg';
+import MiniNote from './svgs/mini-note.svg';
 import Minus from './svgs/minus.svg';
 import Note from './svgs/note.svg';
 import Notification from './svgs/notification.svg';
@@ -77,11 +82,13 @@ import Onboarding from './svgs/onboarding.svg';
 import OrderedList from './svgs/ordered-list.svg';
 import Person from './svgs/person.svg';
 import Plus from './svgs/plus.svg';
+import Reaction from './svgs/reaction.svg';
 import Reload from './svgs/reload.svg';
 import SmallList from './svgs/small-list.svg';
 import Star from './svgs/star.svg';
 import Status from './svgs/status.svg';
 import Store from './svgs/store.svg';
+import TagColleague from './svgs/tag-colleague.svg';
 import ThreeDots from './svgs/three-dots.svg';
 import ToFullscreen from './svgs/to-fullscreen.svg';
 import Trash from './svgs/trash.svg';
@@ -141,8 +148,9 @@ export {
   ArrowRightFull,
   ArrowRightLine,
   ArrowRightLong,
-  Assign,
   Assets,
+  Attach,
+  Assign,
   Bold,
   Breadcrumb,
   Calendar,
@@ -189,8 +197,11 @@ export {
   LogoLoader,
   Logout,
   Messages,
-  Milestones,
   MilestoneProgress,
+  Milestones,
+  MiniGoal,
+  MiniMilestone,
+  MiniNote,
   Minus,
   Note,
   Notification,
@@ -198,11 +209,13 @@ export {
   OrderedList,
   Person,
   Plus,
+  Reaction,
   Reload,
   SmallList,
   Star,
   Status,
   Store,
+  TagColleague,
   ThreeDots,
   ToFullscreen,
   Trash,

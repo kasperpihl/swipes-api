@@ -11,6 +11,7 @@ import * as notify from './notify';
 import * as emails from './emails';
 import * as me from './me';
 import * as organizations from './organizations';
+import * as posts from './posts';
 
 const notifyWrapper = (middlewares) => {
   return [
@@ -37,38 +38,20 @@ const goal_created = notifyWrapper([
 
 const goal_completed = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsGeneralNotificationData,
   notify.notifyAllInCompany,
 ]);
 
 const goal_incompleted = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsGeneralNotificationData,
   notify.notifyAllInCompany,
 ]);
 
 const goal_archived = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsArchiveWithHistoryNotificationData,
+  goals.goalsArchiveNotificationData,
   notify.notifyAllInCompany,
 ]);
-
-const goal_notify = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
-  goals.goalsNotifyAdditionalData,
-  goals.goalsNotifyAddSenderAlways,
-  notify.notifyMultipleUsers,
-  notify.notifySendEventToAllInCompany,
-  notify.notifyGoalNotifySendPushNotifications,
-]);
-
-const goal_notify_email = [
-  users.usersGetSingleWithOrganizations,
-  goals.goalsGetSingle,
-  users.usersGetMultipleWithFields,
-  emails.goalsNotifySendEmails,
-];
 
 const user_invitation_email = [
   (req, res, next) => {
@@ -131,14 +114,14 @@ const goal_loaded_way = notifyWrapper([
 
 const step_completed = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsGeneralNotificationData,
   notify.notifyAllInGoal,
   notify.notifySendEventToAllInCompany,
 ]);
 
 const step_incompleted = notifyWrapper([
   goals.goalsGetSingle,
-  goals.goalsGeneralWithHistoryNotificationData,
+  goals.goalsGeneralNotificationData,
   notify.notifyAllInGoal,
   notify.notifySendEventToAllInCompany,
 ]);
@@ -284,13 +267,87 @@ const organization_updated = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const post_created = notifyWrapper([
+  posts.postsGetSingle,
+  posts.postCreatedNotificationData,
+  (req, res, next) => {
+    const {
+      post,
+    } = res.locals;
+
+    res.locals.user_ids = post.tagged_users;
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+
+const post_comment_added = notifyWrapper([
+  posts.postsGetSingle,
+  posts.postCommentAddedNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      post,
+    } = res.locals;
+
+    res.locals.user_ids = post.followers.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+
+const post_reaction_added = notifyWrapper([
+  posts.postsGetSingle,
+  posts.postReactionAddedNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      post,
+    } = res.locals;
+
+    res.locals.user_ids = post.followers.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_reaction_removed = notifyWrapper([
+  posts.postReactionRemovedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
+
+const post_comment_reaction_added = notifyWrapper([
+  posts.postsGetSingleCommentAndFollowers,
+  posts.postCommentReactionAddedNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      postSingleCommentAndFollowers,
+    } = res.locals;
+    const followers = postSingleCommentAndFollowers.followers;
+
+    res.locals.user_ids = followers.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_comment_reaction_removed = notifyWrapper([
+  posts.postCommentReactionRemovedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
+
 export {
   goal_created,
   goal_completed,
   goal_incompleted,
   goal_archived,
-  goal_notify,
-  goal_notify_email,
   goal_renamed,
   goal_loaded_way,
   step_completed,
@@ -327,4 +384,10 @@ export {
   user_signup,
   profile_updated,
   organization_updated,
+  post_created,
+  post_comment_added,
+  post_reaction_added,
+  post_reaction_removed,
+  post_comment_reaction_added,
+  post_comment_reaction_removed,
 };

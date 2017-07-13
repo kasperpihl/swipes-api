@@ -57,6 +57,7 @@ const initGetData = valLocals('initGetData', {
       let milestones = [];
       let ways = [];
       let notes = [];
+      let posts = [];
 
       if (me.organizations.length > 0) {
         users = me.organizations[0].users;
@@ -70,6 +71,13 @@ const initGetData = valLocals('initGetData', {
 
         // We don't want duplication of that data served on the client;
         delete me.goals;
+      }
+
+      if (me.posts.length > 0) {
+        posts = me.posts;
+
+        // We don't want duplication of that data served on the client;
+        delete me.posts;
       }
 
       if (me.milestones.length > 0) {
@@ -100,6 +108,7 @@ const initGetData = valLocals('initGetData', {
         milestones,
         ways,
         notes,
+        posts,
         timestamp: now,
         services: data[1],
         notifications: data[2].concat(data[3]),

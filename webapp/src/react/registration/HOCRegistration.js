@@ -111,7 +111,7 @@ class HOCRegistration extends Component {
       if (!res.ok) {
         let label = '!Something went wrong :/';
         console.log('res', res);
-        if(res.error && res.error.message){
+        if (res.error && res.error.message) {
           label = '!' + res.error.message;
           if (label === "!body /users.signin: Invalid object['email']: did not match format") {
             label = '!Not a valid email';
@@ -146,7 +146,7 @@ class HOCRegistration extends Component {
         {showWelcomeMessage ? (
           <WelcomeMessage delegate={this} />
         ) : (
-          <Signin email={email} password={password} delegate={this} errorLabel={errorLabel} />
+            <Signin email={email} password={password} delegate={this} errorLabel={errorLabel} />
           )}
       </div>
     );
@@ -183,10 +183,10 @@ class HOCRegistration extends Component {
                 <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
               </svg>
             ) : (
-              <div className="welcome__icon">
-                <Icon icon="ArrowRightLong" className="welcome__svg" />
-              </div>
-            )
+                <div className="welcome__icon">
+                  <Icon icon="ArrowRightLong" className="welcome__svg" />
+                </div>
+              )
           }
         </button>
       </div>

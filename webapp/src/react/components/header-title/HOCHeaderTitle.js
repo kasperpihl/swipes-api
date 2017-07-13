@@ -39,7 +39,7 @@ export default class HOCHeaderTitle extends Component {
     );
   }
   renderTitle() {
-    const { title, subtitle } = this.props;
+    const { title, subtitle, subtitleElement } = this.props;
 
     return (
       <div className="header-title__title" key="header-title" onClick={this.onClick}>
@@ -50,16 +50,23 @@ export default class HOCHeaderTitle extends Component {
   }
   renderContent() {
     const { title, placeholder } = this.props;
+
     if (placeholder) {
       return this.renderInputTitle(placeholder);
     }
+
     return this.renderTitle();
   }
   render() {
-    const { children, subtitle } = this.props;
+    const { children, subtitle, border } = this.props;
     let className = 'header-title';
-    if(!subtitle || !subtitle.length) {
+
+    if (!subtitle) {
       className += ' header-title--no-subtitle';
+    }
+
+    if (border) {
+      className += ' header-title--border';
     }
 
     return (
@@ -73,12 +80,12 @@ export default class HOCHeaderTitle extends Component {
   }
 }
 
-const { object, string, array, oneOfType } = PropTypes;
+const { object, string, array, oneOfType, element } = PropTypes;
 
 HOCHeaderTitle.propTypes = {
   title: string,
   placeholder: string,
-  subtitle: string,
+  subtitle: oneOfType([string, element]),
   delegate: object,
   children: oneOfType([object, array]),
 };

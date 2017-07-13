@@ -1,0 +1,107 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.post-header {
+  $b: &;
+  $flexIgnoreList: '#{$b}__image';
+  background-color: white;
+
+  @include size(100%, auto);
+  @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
+}
+
+.post-test-header {
+  @include size(100%, 500px);
+  background-color: white;
+}
+
+.post-attachment {
+  @include size(180px, 36px);
+  @include flexContainer('row', left, center);
+  padding: 0 9px;
+  border: 1px solid $deepBlue-5;
+  border-radius: 3px;
+  margin-right: 6px;
+
+  &__svg {
+    @include size(24px);
+  }
+
+  &__label {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-80, 24px, 500);
+    @include truncateString();
+    padding-left: 6px;
+  }
+}
+
+// ======================================================
+// Element
+// ======================================================
+
+.post {
+  $b: &;
+  padding-top: 30px;
+  background-color: white;
+
+  &__header {
+    @include size(100%, auto);
+    padding: 0 30px;
+    background-color: white;
+  }
+
+  &__message {
+    @include font(15px, $deepBlue-90, 18px);
+    padding-top: 9px;
+    padding-bottom: 12px;
+    padding-left: 63px;
+  }
+
+  &__attachments {
+    @include size(100%, auto);
+    @include flexContainer('row') {
+      flex-wrap: wrap;
+    };
+    padding-left: 63px;
+  }
+
+  &__actions {
+    @include size(100%, 38px);
+    @include flexContainer('row', left, center);
+    border-top: 1px solid $deepBlue-5;
+  }
+
+  &__action {
+    @include flexContainer('row', left, center);
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-50);
+  }
+
+  &__action-label {
+    @include font(12px, $deepBlue-40, 18px, 500);
+    padding-left: 9px;
+  }
+
+  &__comments {
+    background-color: $comment-bg;
+    padding: 0 30px;
+    padding-top: 0px;
+    border-top: 1px solid $deepBlue-5;
+  }
+
+  &__more-comments {
+    @include font(12px, $blue-100, 15px);
+    padding-top: 12px;
+
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
+  }
+}

@@ -9,7 +9,7 @@ $sidebarWidth: 84px;
 
 .sidebar {
   $b: &;
-  $flexIgnoreList: '#{$b}__bottom-section';
+  $flexIgnoreList: '#{$b}__bottom-section', '#{$b}__top-section';
 
   @include size($sidebarWidth, 100%);
   @include flexContainer('column', $selectorsToIgnoreFlex: $flexIgnoreList) {
@@ -28,6 +28,16 @@ $sidebarWidth: 84px;
 .sidebar {
 
   &__top-section {
+    @include size(100%, auto);
+    @include flexContainer('column', center, center);
+
+    & > .sidebar__item {
+      border-radius: 4px !important;
+    }
+  }
+
+
+  &__middle-section {
     @include size(100%);
     @include flexContainer('column', center, center);
     padding-top: 38px;
@@ -36,7 +46,6 @@ $sidebarWidth: 84px;
   &__bottom-section {
     @include size(100%, auto);
     @include flexContainer('column', center, center);
-    @include flex(none);
 
     & > .sidebar__item {
       background-color: transparent;
@@ -79,8 +88,8 @@ $sidebarWidth: 84px;
     &:before {
       pointer-events: none;
       @include font(15px, $deepBlue-60);
-      @include size(auto, auto);
-      min-width: 100px;
+      display: inline-block;
+      white-space: nowrap;
       background-color: white;
       border-radius: 2px;
       box-shadow: 0 6px 6px 1px rgba(0,12,47,0.1);
@@ -127,6 +136,7 @@ $sidebarWidth: 84px;
     padding-bottom: 1px;
     pointer-events: none;
     position: absolute;
+    border-top-right-radius: 4px;
   }
 }
 

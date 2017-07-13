@@ -14,6 +14,9 @@ export default class Users {
 
   getEmail(userId) {
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     return user.get('email');
   }
   getPhoto(userId, size) {
@@ -24,32 +27,53 @@ export default class Users {
     const sizeString = `${size}x${size}`;
 
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     return user.getIn(['profile', 'photos', sizeString]);
   }
   getFirstName(userId) {
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     const firstName = user.getIn(['profile', 'first_name']) || '';
     return firstName.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
   }
   getLastName(userId) {
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     const lastName = user.getIn(['profile', 'last_name']) || '';
     return lastName.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
   }
   getRole(userId) {
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     return user.getIn(['profile', 'role']) || '';
   }
   getBio(userId) {
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     return user.getIn(['profile', 'bio']) || '';
   }
   getOrganizationName(userId) {
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     return user.getIn(['organizations', 0, 'name']);
   }
   getInitials(userId) {
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     let initials = this.getFirstName(user).substring(0, 1);
     const lastName = this.getLastName(user);
     if (lastName.length) {
@@ -59,6 +83,9 @@ export default class Users {
   }
   getFullName(userId) {
     const user = this.getUser(userId);
+    if(!user) {
+      return undefined;
+    }
     const firstName = this.getFirstName(user);
     const lastName = this.getLastName(user);
     let fullName = firstName;
@@ -83,6 +110,9 @@ export default class Users {
       const user = users.get(userId);
       if (user) {
         if (user.get('id') === me.get('id') && !options.disableYou) {
+          if(options.capitalize) {
+            return options.yourself ? 'Yourself' : 'You';
+          }
           return options.yourself ? 'yourself' : 'you';
         }
 
@@ -100,10 +130,16 @@ export default class Users {
     }
     const me = state.get('me');
     const preferId = options.preferId || me.get('id');
+    let excludeId = options.excludeId;
     const numberOfNames = options.number || 1;
+    if (excludeId === 'me') {
+      excludeId = me.get('id');
+    }
+    if (userIds.includes(excludeId)) {
+      userIds = userIds.filter(uId => uId !== excludeId)
+    }
     if (userIds.includes(preferId)) {
-      // userIds = userIds.filter(uId => uId !== preferId).insert(0, preferId);
-      // console.log(userIds.toJS());
+      userIds = userIds.filter(uId => uId !== preferId).insert(0, preferId);
     }
     const names = userIds.map(uId => this.getName(uId, options));
     let nameString = '';

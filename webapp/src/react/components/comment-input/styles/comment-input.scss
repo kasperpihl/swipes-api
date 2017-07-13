@@ -1,0 +1,93 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.comment-input {
+  $b: &;
+  $flexIgnoreList: '#{$b}__image', '#{$b}__initials', '#{$b}__icon-button';
+  
+  @include size(100%, auto);
+  @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+  @include heightSpecifications(61px, initial);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.comment-input {
+  $b: &;
+
+  &__profile-pic {
+    @include size(36px);
+    border-radius: 3px;
+
+    img {
+      @include size(36px);
+      border-radius: 3px;
+    }
+  }
+
+  &__profile-initials {
+    @include size(36px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-10;
+    border-radius: 3px;
+  }
+
+  &__textarea-wrapper {
+    $flexIgnoreList: '#{$b}__icon-wrapper';
+
+    @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+    width: 100%;
+    margin-left: 6px;
+    border: 1px solid #E5E6EA;
+    background-color: #FFFFFF;
+    padding-right: 6px;
+  }
+
+  &__textarea {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-100, 18px);
+    background-color: white;
+    resize: none;
+    display: block;
+    padding: 9px 0;
+    padding-left: 6px;
+
+    &::-webkit-input-placeholder {
+      @include font(12px, $deepBlue-60, 18px);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__icon-wrapper {
+    @include size(30px);
+    @include flexContainer('row', center, center);
+    transition: .2s ease;
+
+    &:hover {
+      #{$b}__svg {
+        @include svg-color($deepBlue-60);
+        transition: .2s ease;
+      }
+    }
+
+    &:active {
+      transform: scale(.93);
+      transition: .2s ease;
+    }
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($deepBlue-30);
+    transition: .2s ease;
+  }
+}

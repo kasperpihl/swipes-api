@@ -1,23 +1,17 @@
-@import '~styles/_vars.scss';
-@import '~styles/_mixins.scss';
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
 
 // ======================================================
 // Block
 // ======================================================
 
-
 .notifications {
-  @include size(100%, auto);
-  @include flexContainer('column');
-  padding-bottom: 60px;
-  animation: fadeNotifIn .15s ease forwards;
-  opacity: 0;
-}
-
-.notifications-empty-state {
-  @include size(100%, auto);
-  @include heightSpecifications(236px, initial);
-  @include flexContainer('column', center, center);
+  @include size(360px, 540px);
+  background-color: $bg;
+  border: 1px solid $deepBlue-10;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 3px 6px 0 rgba(0,12,47,0.3);
 }
 
 // ======================================================
@@ -27,58 +21,23 @@
 .notifications {
 
   &__header {
-    @include size(100%, 50px);
-    @include flex(center, flex-start);
-    @include flex(none);
-    @include font(12px, $deepBlue-80, 15px, bold);
-    border-top: 1px solid $deepBlue-20;
-    color: $deepBlue-60;
+    @include size(100%, 49px);
+    @include flexContainer('row', between, center);
+    border-bottom: 1px solid $deepBlue-10;
+    padding: 0 15px;
   }
-
-  &__loader {
-    @include size(100%);
-    @include flexContainer('row', center, center);
-
-    .spinner {
-    	@include size(50px);
-    	@include svg-color($blue-100);
-    	animation: rotateSpinner 2s linear infinite;
-
-    	&__path {
-        animation: dashSpinner 1.5s ease infinite;
-    		stroke-linecap: round;
-        stroke-width: 4;
-    	}
-    }
-  }
-}
-
-
-.notifications-empty-state {
 
   &__title {
-    @include font(27px, $deepBlue-80, 35px);
+    @include font(15px, $deepBlue-100, 24px);
   }
 
-  &__message {
-    @include size(100%, auto);
-    @include widthSpecifications(initial, 450px);
-    @include font(15px, $deepBlue-80, 24px);
-    text-align: center;
-    margin-top: 12px;
-  }
-}
+  &__mark-all {
+    @include font(12px, $deepBlue-40, 24px, 500);
+    transition: .2s ease;
 
-// ======================================================
-// Animations
-// ======================================================
-
-
-@keyframes fadeNotifIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
+    &:hover {
+      @include font($c: $blue-100);
+      transition: .2s ease;
+    }
   }
 }

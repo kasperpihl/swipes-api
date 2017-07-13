@@ -1,0 +1,63 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.post-header {
+  $b: &;
+
+  &__profile-pic {
+    @include size(48px);
+    border-radius: 3px;
+
+    img {
+      @include size(48px);
+      border-radius: 3px;
+    }
+  }
+
+  &__profile-initials {
+    @include size(48px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-10;
+    border-radius: 3px;
+  }
+
+  &__content {
+    @include size(100%, auto);
+    @include flexContainer('column', left, center);
+    padding-left: 15px;
+  }
+
+  &__title {
+    @include font(15px, $deepBlue-100, 21px);
+
+    span {
+      color: $blue-100;
+    }
+  }
+
+  &__styled-text {
+    @include font(15px, $deepBlue-50, 24px);
+  }
+
+  &__styled-button {
+    @include font(15px, $deepBlue-100, 24px);
+  }
+
+  &__subtitle {
+    @include flexContainer('row', left, center);
+    @include font(12px, $deepBlue-40, 18px, 500);
+
+    #{$b}__span-link {
+      
+      &:hover {
+        color: $blue-100;
+      }
+    }
+  }
+
+  &__svg {
+    @include size(12px);
+    @include svg-color($deepBlue-40);
+    margin-right: 6px;
+  }
+}

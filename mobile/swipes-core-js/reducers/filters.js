@@ -42,23 +42,6 @@ const initialState = fromJS({
       goals: OrderedSet(),
     }
   },
-  notifications: {
-    received: {
-      title: 'Received',
-      filter: n => n.get('notification'),
-      notifications: List(),
-    },
-    sent: {
-      title: 'Sent',
-      filter: n => n.get('sender'),
-      notifications: List(),
-    },
-    activity: {
-      title: 'Team activity',
-      filter: n => n.get('activity'),
-      notifications: List(),
-    },
-  },
 });
 
 export default function filtersReducer(state = initialState, action) {

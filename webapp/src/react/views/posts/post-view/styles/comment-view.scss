@@ -1,0 +1,75 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.comment {
+  @include size(100%, auto);
+  @include flexContainer('row', left, top);
+  padding-top: 12px;
+  animation: fadeCommentin .25s ease-in-out forwards;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.comment {
+  $b: &;
+
+  &__profile-pic {
+    @include size(24px);
+    border-radius: 3px;
+    margin-left: 3px;
+
+    img {
+      @include size(24px);
+      border-radius: 3px;
+    }
+  }
+
+  &__profile-initials {
+    @include size(24px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-10;
+    border-radius: 3px;
+    margin-left: 3px;
+  }
+
+  &__side {
+    @include size(100%, auto);
+    padding-left: 15px;
+  }
+
+  &__name {
+    @include font(12px, $deepBlue-100, 15px, 500);
+  }
+
+  &__content {
+    @include font(12px, $deepBlue-100, 15px);
+    padding-top: 3px;
+  }
+
+  &__subline {
+    @include font(12px, $deepBlue-50, 15px, 500);
+    padding-top: 6px;
+
+    span {
+
+      &:hover {
+        @include font($c: $blue-100);
+      }
+    }
+  }
+}
+
+@keyframes fadeCommentin {
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

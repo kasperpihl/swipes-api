@@ -19,7 +19,7 @@ class MilestoneOverview extends PureComponent {
     super(props);
     this.state = {};
     setupDelegate(this);
-    this.callDelegate.bindAll('onAddGoals', 'onContext');
+    this.callDelegate.bindAll('onAddGoals', 'onContext', 'onDiscuss');
   }
   componentDidMount() {
   }
@@ -37,7 +37,11 @@ class MilestoneOverview extends PureComponent {
             primary
             onClick={this.onAddGoals}
             {...getLoading('add')}
-            text="Add goal to this milestone"
+            text="Add goal"
+          />
+          <Button
+            onClick={this.onDiscuss}
+            text="Discuss"
           />
           <Button
             icon="ThreeDots"

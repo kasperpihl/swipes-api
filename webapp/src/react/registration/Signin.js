@@ -18,9 +18,9 @@ class Signin extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
   componentDidMount() {
-    this.focusInput = setTimeout(() => {
-      this.setState({ emailFocus: true });
-    }, 1000);
+    // this.focusInput = setTimeout(() => {
+    //   this.setState({ emailFocus: true });
+    // }, 1000);
   }
   componentWillUnmount() {
     clearTimeout(this.focusInput);
@@ -48,8 +48,10 @@ class Signin extends Component {
           key="email"
           value={email}
           onChange={this.onEmailChange}
+          onKeyDown={this.handleKeyDown}
           error={!!errorLabel}
           focus={emailFocus}
+          autoFocus
         />
         <FloatingInput
           label="Password"

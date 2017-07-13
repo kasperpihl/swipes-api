@@ -32,6 +32,21 @@ export const parseVersionString = (version) => {
   };
 };
 
+export function convertObjToUnderscore(obj) {
+  Object.keys(obj).forEach((key) => {
+    const newKey = toUnderscore(key);
+    if(newKey !== key){
+      obj[newKey] = obj[key];
+      delete obj[key];
+    }
+  });
+  return obj;
+}
+
+export function toUnderscore(string) {
+  return string.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();});
+}
+
 export function hasMinorChange(current, last) {
   if(!last){
     return true;
@@ -88,6 +103,52 @@ export function valAction(actionName, arrayArgs, actionHandler) {
     return () => Promise.resolve();
   }
   return funcWrap(arrayArgs, handler);
+}
+
+export function iconForId(id) {
+  if(id.startsWith('G')) {
+    return 'MiniGoal';
+  } else if (id.startsWith('M')) {
+    return 'MiniMilestone';
+  } else if (id.startsWith('N')) {
+    return 'MiniNote';
+  } else if (id.startsWith('F')) {
+    return 'MiniFile';
+  }
+}
+
+export function navForContext(context) {
+  const id = context.get('id');
+  const title = context.get('title');
+  if(id.startsWith('G')) {
+    return {
+      id: 'GoalOverview',
+      title: 'Goal overview',
+      props: {
+        goalId: id,
+      },
+    };
+  } else if (id.startsWith('M')) {
+    return {
+      id: 'MilestoneOverview',
+      title: 'Milestone overview',
+      props: {
+        milestoneId: id,
+      },
+    };
+  } else if(id.startsWith('P')) {
+    return {
+      id: 'PostView',
+      title: 'Post',
+      props: {
+        postId: id,
+      }
+    }
+  } else if (id.startsWith('N')) {
+    return 'MiniNote';
+  } else if (id.startsWith('F')) {
+    return 'MiniFile';
+  }
 }
 
 export function iconForService(service) {
