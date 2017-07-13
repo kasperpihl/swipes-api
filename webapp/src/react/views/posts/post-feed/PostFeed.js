@@ -19,8 +19,9 @@ class PostFeed extends PureComponent {
   componentDidMount() {
   }
   renderHeader() {
+    const { filterTitle } = this.props;
     return (
-      <HOCHeaderTitle title="Discuss" border>
+      <HOCHeaderTitle title="Discussions" subtitle={filterTitle && `re. ${filterTitle}`} border>
         <Button text="Create Post" onClick={this.onNewPost} />
       </HOCHeaderTitle>
     )
@@ -28,10 +29,10 @@ class PostFeed extends PureComponent {
   renderPosts() {
     const { posts, delegate } = this.props;
 
-    return posts.map((p) => {
+    return posts.map((pId) => {
       return (
-        <div className="post-feed__item" key={p.get('id')}>
-          <HOCPostView postId={p.get('id')} fromFeed />
+        <div className="post-feed__item" key={pId}>
+          <HOCPostView postId={pId} fromFeed />
         </div>
       )
     }).toArray();

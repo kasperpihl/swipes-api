@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import * as reducers from './reducers';
+import * as selectors from './selectors';
 import * as constants from './constants';
 
 import Socket from './classes/socket';
@@ -19,5 +20,6 @@ export {
   actions,
   init,
   reducers,
+  selectors,
   constants,
 };

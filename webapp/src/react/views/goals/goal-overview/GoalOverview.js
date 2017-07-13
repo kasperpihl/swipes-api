@@ -11,6 +11,7 @@ import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
 import Section from 'components/section/Section';
+import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import Button from 'Button';
 import Icon from 'Icon';
 import './styles/goal-overview.scss';
@@ -81,9 +82,9 @@ class GoalOverview extends PureComponent {
           subtitle={msgGen.goals.getSubtitle(goal)}
           delegate={delegate}
         >
-          <Button
-            text="Discuss"
-            onClick={this.onDiscuss}
+          <HOCDiscussButton
+            filterId={goal.get('id')}
+            filterTitle={goal.get('title')}
           />
           <Button
             icon="ThreeDots"

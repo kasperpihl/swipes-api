@@ -166,19 +166,6 @@ class HOCGoalOverview extends PureComponent {
       }
     })
   }
-  onDiscuss(e) {
-    const { navPush, goal } = this.props;
-    navPush({
-      id: 'CreatePost',
-      title: 'Create Post',
-      props: {
-        context: {
-          title: goal.get('title'),
-          id: goal.get('id'),
-        },
-      },
-    });
-  }
   onSaveWay(options) {
     const { createWay, inputMenu } = this.props;
     const helper = this.getHelper();

@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
@@ -38,15 +39,11 @@ class HOCPostFeed extends PureComponent {
     })
   }
   render() {
-    const { posts } = this.props;
-
-    const sortedPosts = posts.sort((a, b) => {
-      return b.get('created_at').localeCompare(a.get('created_at'));
-    });
-
+    const { posts, filterTitle } = this.props;
     return (
       <PostFeed
-        posts={sortedPosts}
+        posts={posts}
+        filterTitle={filterTitle}
         delegate={this}
       />
     );
@@ -55,9 +52,9 @@ class HOCPostFeed extends PureComponent {
 
 // const { string } = PropTypes;
 HOCPostFeed.propTypes = {};
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    posts: state.get('posts'),
+    posts: cs.posts.getSortedIds(state, ownProps),
   };
 }
 export default connect(mapStateToProps, {
