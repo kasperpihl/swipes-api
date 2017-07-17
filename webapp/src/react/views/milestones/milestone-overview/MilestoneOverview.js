@@ -9,7 +9,7 @@ import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import Section from 'components/section/Section';
 import Button from 'Button';
 import Icon from 'Icon';
-
+import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import './styles/milestone-overview.scss';
 
 const PROGRESS_DASH = 320.4876403808594;
@@ -39,9 +39,9 @@ class MilestoneOverview extends PureComponent {
             {...getLoading('add')}
             text="Add goal"
           />
-          <Button
-            onClick={this.onDiscuss}
-            text="Discuss"
+          <HOCDiscussButton
+            filterId={m.get('id')}
+            filterTitle={m.get('title')}
           />
           <Button
             icon="ThreeDots"

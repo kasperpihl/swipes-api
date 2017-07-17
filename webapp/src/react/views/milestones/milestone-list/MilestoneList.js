@@ -70,16 +70,10 @@ class MilestoneList extends PureComponent {
     const { milestones } = this.props;
     return (
       <SWView noframe header={this.renderHeader()}>
-        {
-          milestones.size ? (
-            <div className="milestone-list">
-              {this.renderList()}
-              {this.renderAddMilestone()}
-            </div>
-          ) : (
-            this.renderEmptyState()
-          )
-        }
+        <div className="milestone-list">
+          {this.renderList()}
+          {this.renderAddMilestone()}
+        </div>
       </SWView>
     );
   }

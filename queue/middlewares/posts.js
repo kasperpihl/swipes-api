@@ -196,7 +196,7 @@ const postCommentReactionRemovedNotificationData = (req, res, next) => {
 
   return next();
 };
-const postUnfollowedNotificationData = (req, res, next) => {
+const postFollowedUnfollowedNotificationData = (req, res, next) => {
   const {
     user_id,
     post_id,
@@ -221,5 +221,5 @@ export {
   postCommentReactionAddedNotificationData,
   postCommentReactionRemovedNotificationData,
   postArchivedNotificationData,
-  postUnfollowedNotificationData,
+  postFollowedUnfollowedNotificationData,
 };

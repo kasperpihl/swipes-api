@@ -5,6 +5,7 @@ import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
+import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import {
   convertToRaw,
@@ -187,6 +188,10 @@ class HOCSideNote extends PureComponent {
           subtitle={subtitle}
         >
           {buttonHtml}
+          <HOCDiscussButton
+            filterId={note.get('id')}
+            filterTitle={title}
+          />
         </HOCHeaderTitle>
       </div>
     );
