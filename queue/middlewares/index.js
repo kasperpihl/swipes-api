@@ -223,8 +223,21 @@ const step_reordered = notifyWrapper([
 ]);
 
 const step_assigned = notifyWrapper([
+  goals.goalsGetSingle,
   steps.stepsAssignedNotificationData,
-  notify.notifyAllInCompany,
+  steps.stepsAssignedUsersNotificationDataMap,
+  (req, res, next) => {
+    const {
+      user_id,
+      assignees_diff,
+    } = res.locals;
+
+    res.locals.user_ids = assignees_diff.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
 ]);
 
 const xendo_user_signup = xendoWrapper([

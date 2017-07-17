@@ -235,7 +235,17 @@ const stepsAssign = valLocals('stepsAssign', {
   } = res.locals;
 
   dbStepsAssign({ user_id, goal_id, step_id, assignees })
-    .then(() => {
+    .then((result) => {
+      const newVal = result.changes[0].new_val;
+      const oldVal = result.changes[0].old_val;
+      const newStepAssignees = newVal.steps[step_id].assignees;
+      const oldStepAssignees = oldVal.steps[step_id].assignees;
+      const diffAssignees = newStepAssignees.filter(a => !oldStepAssignees.find(b => b === a));
+
+      setLocals({
+        assignees_diff: diffAssignees,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -246,19 +256,24 @@ const stepsAssignQueueMessage = valLocals('stepsAssignQueueMessage', {
   user_id: string.require(),
   step_id: string.require(),
   assignees: array.of(string).require(),
+  assignees_diff: array.of(string).require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
     step_id,
     assignees,
+    assignees_diff,
   } = res.locals;
+  const event_type = 'step_assigned';
   const queueMessage = {
     user_id,
     goal_id,
     step_id,
     assignees,
-    event_type: 'step_assigned',
+    assignees_diff,
+    event_type,
+    notification_id_sufix: `${goal_id}-${event_type}`,
   };
 
   setLocals({
