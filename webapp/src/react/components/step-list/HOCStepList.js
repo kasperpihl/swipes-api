@@ -11,10 +11,10 @@ import StepList from './StepList';
 class HOCStepList extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {};
     const helper = this.getHelper();
-    this.state = {
-      steps: helper.getOrderedSteps(),
-    };
+    this.state.steps = helper.getOrderedSteps();
+
     setupLoading(this);
     setupDelegate(this);
   }
@@ -153,7 +153,12 @@ class HOCStepList extends PureComponent {
   }
   getHelper(overrideGoal) {
     const { goal, myId } = this.props;
+    const { tempOrder } = this.state;
+
     overrideGoal = overrideGoal || goal;
+    if(tempOrder) {
+      overrideGoal = overrideGoal.set('step_order', tempOrder);
+    }
     return new GoalsUtil(overrideGoal, myId);
   }
   getOptionsForE(e) {

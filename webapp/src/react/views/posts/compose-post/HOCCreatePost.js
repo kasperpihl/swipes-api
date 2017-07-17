@@ -17,10 +17,10 @@ class HOCCreatePost extends PureComponent {
     super(props);
     this.state = {
       post: fromJS({
-        message: '',
-        type: 'message',
-        attachments: [],
-        taggedUsers: [],
+        message: props.message || '',
+        type: props.type || 'message',
+        attachments: props.attachments || [],
+        taggedUsers: props.taggedUsers || [],
         context: props.context || null,
       })
     };

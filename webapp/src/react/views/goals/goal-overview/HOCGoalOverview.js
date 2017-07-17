@@ -37,6 +37,20 @@ class HOCGoalOverview extends PureComponent {
   onEditSteps() {
     this.setState({ editMode: !this.state.editMode });
   }
+  onCreatePost(props) {
+    const { goal, navPush } = this.props;
+    props = props || {};
+    props.context = {
+      id: goal.get('id'),
+      title: goal.get('title'),
+    };
+
+    navPush({
+      id: 'CreatePost',
+      title: 'Create Post',
+      props,
+    })
+  }
   onSeeAll() {
     const { openSecondary, goal, contextMenu } = this.props;
     contextMenu();
@@ -71,10 +85,12 @@ class HOCGoalOverview extends PureComponent {
 
   onHandoffMessage(handoff) {
     const helper = this.getHelper();
-    const assignees = helper.getAllAssignees();
+    const assignees = helper.getAllAssigneesButMe();
 
-    // console.log(i, handoff);
-    this.onOpenNotify(undefined, assignees);
+    console.log(i, handoff);
+    this.onCreatePost({
+      taggedUsers: assignees.toArray()
+    });
   }
 
   onStepWillComplete() {
@@ -109,12 +125,11 @@ class HOCGoalOverview extends PureComponent {
 
     if (handoff) {
       const helper = this.getHelper();
-      const assignees = helper.getAllAssignees();
+      const taggedUsers = helper.getAllAssigneesButMe();
 
-      this.onOpenNotify(fromJS({
-        notification_type: 'update',
-        assignees: assignees || [me.get('id')],
-      }));
+      this.onCreatePost({
+        taggedUsers: taggedUsers.toArray(),
+      });
       this.setState({ handoff: null });
     }
   }

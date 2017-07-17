@@ -6,7 +6,6 @@ import Find from './find/HOCFind';
 import GoalList from './goals/goal-list/HOCGoalList';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import ActivityFeed from './goals/activity-feed/HOCActivityFeed';
-import Notify from './notify/HOCNotify';
 import Onboarding from './onboarding/HOCOnboarding';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
 import MilestoneOverview from './milestones/milestone-overview/HOCMilestoneOverview';
@@ -31,7 +30,6 @@ export {
   Find,
   GoalList,
   GoalOverview,
-  Notify,
   Onboarding,
   MilestoneList,
   MilestoneOverview,

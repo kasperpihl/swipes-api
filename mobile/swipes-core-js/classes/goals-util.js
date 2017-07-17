@@ -113,6 +113,15 @@ export default class GoalsUtil {
     });
     return fromJS([...assignees]);
   }
+  getAllAssigneesButMe() {
+    const assignees = new Set();
+    this.getOrderedSteps().forEach((s) => {
+      s.get('assignees').forEach(aId => {
+        if(aId !== this.id) assignees.add(aId);
+      });
+    });
+    return fromJS([...assignees]);
+  }
   getCurrentAssignees() {
     const assignees = new Set();
     this.getOrderedSteps().forEach((s) => {

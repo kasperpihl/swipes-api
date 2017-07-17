@@ -40,9 +40,6 @@ export default class NotificationsGenerator {
     const meta = n.get('meta');
     const { users, posts } = this.parent;
     let text = [];
-    if (meta.get('event_type')) {
-      console.log(meta.get('event_type'), n.toJS());
-    }
     switch (meta.get('event_type')) {
       case 'post_created': {
         text.push(boldText('send', users.getName(meta.get('created_by'))));
