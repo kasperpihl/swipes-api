@@ -42,30 +42,6 @@ const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
       return next(err);
     });
 });
-const notificationsMarkAsSeenHistoryUpdatedQueueMessage = valLocals('notificationsMarkAsSeenHistoryUpdatedQueueMessage', {
-  user_id: string.require(),
-  notification_ids: array.of(string).require(),
-  last_marked: string.require(),
-}, (req, res, next, setLocals) => {
-  const {
-    user_id,
-    notification_ids,
-    last_marked,
-  } = res.locals;
-  const queueMessage = {
-    user_id,
-    notification_ids,
-    last_marked,
-    event_type: 'notifications_seen_history_updated',
-  };
-
-  setLocals({
-    queueMessage,
-    messageGroupId: user_id,
-  });
-
-  return next();
-});
 const notificationsMarkAsSeenQueueMessage = valLocals('notificationsMarkAsSeenQueueMessage', {
   user_id: string.require(),
   notification_ids: array.of(string).require(),
@@ -150,5 +126,4 @@ export {
   notificationsPushToQueue,
   notificationsMarkAsSeen,
   notificationsMarkAsSeenQueueMessage,
-  notificationsMarkAsSeenHistoryUpdatedQueueMessage,
 };

@@ -176,12 +176,6 @@ const way_archived = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const notifications_seen_history_updated = [
-  notifications.notificationsGetIds,
-  notifications.noticationsUpdateTargetHistory,
-  notify.notifyManyToMany,
-];
-
 const notifications_seen = [
   notifications.notificationsSeenNotificationData,
   notify.notifySingleUser,
@@ -381,7 +375,6 @@ export {
   milestone_goals_reordered,
   way_created,
   way_archived,
-  notifications_seen_history_updated,
   notifications_seen,
   attachment_added,
   attachment_renamed,
