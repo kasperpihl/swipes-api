@@ -15,6 +15,7 @@ export const viewSize = {
 };
 
 export const colors = {
+  deepBlue4: '#F7F7F8',
   deepBlue5: '#f2f3f4',
   deepBlue10: '#e5e6ea',
   deepBlue20: '#CCCED5',

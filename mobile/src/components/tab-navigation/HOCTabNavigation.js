@@ -43,6 +43,9 @@ class HOCTabNavigation extends PureComponent {
           icon: 'Milestones',
         },
         {
+          icon: 'Notification',
+        },
+        {
           icon: 'Messages',
         },
         {
@@ -64,15 +67,20 @@ class HOCTabNavigation extends PureComponent {
     const { sliderChange, activeSliderIndex } = this.props;
 
     if (i !== activeSliderIndex) {
+      if (!i) {
+        sliderChange(0);
+        return;
+      }
+
       sliderChange(i);
     }
   }
   renderSlider() {
     const { activeSliderIndex, routes } = this.props;
-    const sliderPosPercentage = activeSliderIndex * 25;
+    const sliderPosPercentage = activeSliderIndex * 20;
     const sliderPosPixel = sliderPosPercentage * viewSize.width / 100;
     const sliderPos = routes.size > 1 ? 0 : sliderPosPixel;
-    const sliderWidth = routes.size > 1 ? viewSize.width : viewSize.width / 4;
+    const sliderWidth = routes.size > 1 ? viewSize.width : viewSize.width / 5;
     const sliderHeight = routes.size > 1 ? 1 : 2;
     const sliderColor = routes.size > 1 ? colors.deepBlue10 : colors.deepBlue100;
 
@@ -89,7 +97,6 @@ class HOCTabNavigation extends PureComponent {
 
     const { rootRoutes } = this.state;
     const navItems = rootRoutes.map((r, i) => {
-
       return <TabNavigationItem icon={r.icon} index={i} fill={colors.deepBlue100} key={`navbutton-${i}`} delegate={this} />;
     });
 

@@ -48,7 +48,7 @@ class HOCViewController extends PureComponent {
     if (currAppState.match(/inactive|background/) && nextAppState === 'active') {
       window.analytics.sendEvent('App loaded', { reopen: true });
     }
-    this.setState({appState: nextAppState});
+    this.setState({ appState: nextAppState });
   }
   reduxToNavigationState(reduxState) {
     return {

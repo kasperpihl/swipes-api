@@ -28,8 +28,17 @@ const initialState = fromJS({
       routes: [
         {
           id: 'Dashboard',
-          title: 'Discuss',
+          title: 'Notifications',
           icon: 'Notification',
+        },
+      ],
+    },
+    {
+      routes: [
+        {
+          id: 'PostFeed',
+          title: 'Discuss',
+          icon: 'Messages',
         },
       ],
     },

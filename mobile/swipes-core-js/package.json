@@ -13,6 +13,7 @@
     "babel-preset-es2015": "^6.24.0"
   },
   "dependencies": {
+    "reselect": "^3.0.1",
     "valjs": "0.0.27"
   }
 }

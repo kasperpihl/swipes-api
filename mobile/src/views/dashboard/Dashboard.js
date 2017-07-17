@@ -74,8 +74,8 @@ class Dashboard extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
-        {this.renderHeader()}
-        {this.renderNotifications()}
+        {/* {this.renderHeader()}
+        {this.renderNotifications()} */}
       </View>
     );
   }
