@@ -55,9 +55,7 @@ class PostFooter extends PureComponent {
     this.state = {
       text: ''
     }
-<<<<<<< HEAD
-    setupDelegate(this);
-    this.callDelegate.bindAll('onAddComment', 'onNavigateBack')
+    setupDelegate(this, 'onAddComment', 'onNavigateBack');
 
     this.handleAddComment = this.handleAddComment.bind(this);
     this.handleBackButton = this.handleBackButton.bind(this);
@@ -68,9 +66,6 @@ class PostFooter extends PureComponent {
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
-=======
-    // setupDelegate(this);
->>>>>>> e6acaf77d213cd4f1bb6f872a76be029866458bf
   }
   handleAddComment() {
     const { text } = this.state;
