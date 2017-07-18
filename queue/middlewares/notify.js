@@ -152,7 +152,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     event_type,
     uniqueUsersToNotify,
     notificationData,
-    usersNotificationDataMetaMap,
+    usersNotificationDataMetaMap = {},
   } = res.locals;
 
   if (notificationData === null) {
@@ -173,8 +173,6 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
         ...usersNotificationDataMetaMap[userId],
       };
     }
-
-    console.log(notificationData);
 
     const notification = {
       // because mutation is the root of all evil
