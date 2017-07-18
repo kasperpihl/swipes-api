@@ -17,19 +17,21 @@ import { colors, viewSize } from "../../utils/globalStyles";
 const styles = StyleSheet.create({
   actionBar: {
     flex: 1,
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   textButton: {
     flex: 1,
     alignSelf: "stretch",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   iconButton: {
     width: 54,
     height: 54,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    flexDirection: "row",
   },
   textButtonLabel: {
     fontSize: 12,
@@ -92,11 +94,17 @@ class HOCActionBar extends PureComponent {
       </RippleButton>
     );
   }
-  renderIconButton(key, button, onPress, seperator) {
+  renderIconButton(key, button, onPress, seperator, align) {
+    let extraStyles = {};
+
+    if (align === 'right') {
+      extraStyles = { alignSelf: 'flex-end'}
+    }
+
     return (
       <RippleButton
         rippleColor={colors.blue100}
-        style={styles.iconButton}
+        style={[styles.iconButton, {extraStyles}]}
         rippleOpacity={0.8}
         onPress={onPress}
         key={key}
@@ -138,7 +146,7 @@ class HOCActionBar extends PureComponent {
         }
 
         if (b.icon) {
-          return this.renderIconButton(i, b, this.onActionClick(i), seperator);
+          return this.renderIconButton(i, b, this.onActionClick(i), seperator, b.align);
         }
       });
     }

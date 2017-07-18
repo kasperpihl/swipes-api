@@ -20,14 +20,23 @@ const styles = StyleSheet.create({
     width: 54,
     height: 54,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    ...Platform.select({
+      android: {
+        borderLeftWidth: 1,
+        borderLeftColor: colors.deepBlue5,
+      },
+    }),
+    
   },
   textareaWrapper: {
     flex: 1,
-    paddingVertical: 4,
+    paddingTop: 4,
+    paddingBottom: 5,
     ...Platform.select({
       android: {
-        paddingLeft: 9,
+        paddingTop: 0,
+        paddingBottom: 0,
       },
     }),
   },
@@ -39,6 +48,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    ...Platform.select({
+      android: {
+        borderWidth: 0,
+        borderColor: colors.deepBlue5,
+        borderRadius: 0,
+      },
+    }),
   },
   input: {
     flex: 1,
@@ -93,6 +109,8 @@ class PostFooter extends PureComponent {
     )
   }
   renderTextarea() {
+    const { placeholder } = this.props;
+ 
     return (
       <View style={styles.textareaWrapper}>
         <View style={styles.textareaBorder}>
@@ -102,6 +120,9 @@ class PostFooter extends PureComponent {
             value={this.state.text}
             multiline={true}
             underlineColorAndroid="transparent"
+            autoCapitalize="sentences"
+            autoCorrect={true}
+            placeholder={placeholder}
           />
         </View>
       </View>

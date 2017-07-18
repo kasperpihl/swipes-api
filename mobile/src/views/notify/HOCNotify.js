@@ -96,7 +96,7 @@ class HOCNotify extends PureComponent {
     showModal();
   }
   onAssignUsers() {
-    const { users, showModal, } = this.props;
+    const { users, showModal } = this.props;
     let { notify } = this.state;
 
     const sortedUsers = users.sort(

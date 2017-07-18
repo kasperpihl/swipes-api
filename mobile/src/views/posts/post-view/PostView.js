@@ -278,7 +278,7 @@ class PostView extends PureComponent {
           {this.renderActions()}
           {this.renderComments()}
         </ScrollView>
-        <PostFooter delegate={delegate} />
+        <PostFooter delegate={delegate} placeholder="Write a comment…"/>
       </View>
     );
   }

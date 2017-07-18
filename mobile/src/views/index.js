@@ -8,6 +8,7 @@ import Notify from './notify/HOCNotify';
 import PreviewNote from './preview-note/HOCPreviewNote';
 import PostFeed from './posts/post-feed/HOCPostFeed';
 import PostView from './posts/post-view/HOCPostView';
+import PostCreate from './posts/post-create/HOCPostCreate';
 
 export {
   Dashboard,
@@ -19,5 +20,6 @@ export {
   Notify,
   PreviewNote,
   PostFeed,
-  PostView
+  PostView,
+  PostCreate
 };

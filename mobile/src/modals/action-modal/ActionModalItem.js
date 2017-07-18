@@ -119,7 +119,7 @@ class ActionModalItem extends Component {
     }
 
     return (
-      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item)}>
+      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item.get('index'), item)}>
         <View style={[styles.container, extraStyle, { backgroundColor }]}>
           {this.renderLeftIcon()}
           {this.renderTitle()}

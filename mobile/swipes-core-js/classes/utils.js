@@ -261,15 +261,19 @@ export function queryStringToObject(query) {
 export function setupCachedCallback(method, ctx) {
   const cachedMethod = {};
   return function cachedCallback(id) {
-    id = id || '';
-    if(typeof(id) === 'object') {
-      id = JSON.stringify(id);
+    let index = id;
+    if(typeof index === 'object') {
+      index = JSON.stringify(id);
     }
-    if (!cachedMethod[id]) {
+    if (typeof index !== 'string') {
+      index = '' + index;
+    }
+    
+    if (!cachedMethod[index]) {
       const args = Array.from(arguments);
-      cachedMethod[id] = method.bind(ctx, ...args);
+      cachedMethod[index] = method.bind(ctx, ...args);
     }
-    return cachedMethod[id];
+    return cachedMethod[index];
   };
 }
 

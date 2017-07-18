@@ -27,11 +27,11 @@ class ActionModal extends PureComponent {
       this.setState({ modal: null });
     }
   }
-  onItemPress(item, e) {
+  onItemPress(itemIndex, item, e) {
     let { modal } = this.state;
     if (modal.get('multiple')) {
       modal = modal.updateIn(['items'], items => items.map((dItem, i) => {
-        if (item.get('index') === dItem.get('index')) {
+        if (itemIndex === dItem.get('index')) {
           return dItem.set('selected', !dItem.get('selected'));
         }
         return dItem;
@@ -254,6 +254,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     lineHeight: 24,
     color: colors.blue100,
+    includeFontPadding: false,
+    paddingBottom: 2,
   },
 });
 
