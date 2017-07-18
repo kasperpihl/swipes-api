@@ -339,18 +339,15 @@ const postsAddReaction = valLocals('postsAddReaction', {
 const postsAddReactionQueueMessage = valLocals('postsAddReactionQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
-  reaction: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post_id,
-    reaction,
   } = res.locals;
   const event_type = 'post_reaction_added';
   const queueMessage = {
     user_id,
     post_id,
-    reaction,
     event_type,
     notification_id_sufix: `${post_id}-${event_type}`,
   };
@@ -426,20 +423,17 @@ const postsCommentAddReactionQueueMessage = valLocals('postsCommentAddReactionQu
   user_id: string.require(),
   post_id: string.require(),
   comment_id: string.require(),
-  reaction: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post_id,
     comment_id,
-    reaction,
   } = res.locals;
   const event_type = 'post_comment_reaction_added';
   const queueMessage = {
     user_id,
     post_id,
     comment_id,
-    reaction,
     event_type,
     notification_id_sufix: `${post_id}-${comment_id}-${event_type}`,
   };
