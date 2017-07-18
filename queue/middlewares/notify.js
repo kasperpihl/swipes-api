@@ -113,6 +113,10 @@ const notifyCommonRethinkdb = (req, res, next) => {
     eventData,
   } = res.locals;
 
+  if (eventData === null) {
+    return next();
+  }
+
   const objToInsert = {
     user_ids: uniqueUsersToNotifyWithEvent || uniqueUsersToNotify,
     type: event_type,
@@ -121,7 +125,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
     user_notification_map: userNotificationMap,
   };
 
-  commonMultipleEvents({ objToInsert })
+  return commonMultipleEvents({ objToInsert })
     .then(() => {
       return next();
     })

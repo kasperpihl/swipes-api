@@ -336,17 +336,17 @@ const post_reaction_removed = notifyWrapper([
 ]);
 
 const post_comment_reaction_added = notifyWrapper([
-  posts.postsGetSingleCommentAndFollowers,
+  posts.postsGetSingleCommentFollowersReactions,
   posts.postCommentReactionAddedNotificationData,
   (req, res, next) => {
     const {
       user_id,
-      postSingleCommentAndFollowers,
+      postSingleCommentFollowersReactions,
     } = res.locals;
     const {
       comment,
       followers,
-    } = postSingleCommentAndFollowers;
+    } = postSingleCommentFollowersReactions;
 
     res.locals.user_ids = followers.filter((userId) => {
       return comment.created_by === userId && userId !== user_id;
