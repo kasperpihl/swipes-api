@@ -64,7 +64,7 @@ class MilestoneItem extends Component {
     };
 
     this.openMilestone = this.openMilestone.bind(this);
-    setupDelegate(this);
+    setupDelegate(this, 'onOpenMilestone');
   }
   getFilteredGoals(milestone) {
     return msgGen.milestones.getGoals(milestone);
@@ -72,7 +72,7 @@ class MilestoneItem extends Component {
   openMilestone() {
     const { milestone } = this.props;
 
-    this.callDelegate('onOpenMilestone', milestone);
+    this.onOpenMilestone(milestone);
   }
   renderProgress() {
     const { goals } = this.state;

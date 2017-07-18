@@ -61,8 +61,8 @@ class HOCStepList extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onComplete');
+    setupDelegate(this, 'onComplete');
+
     this.renderSteps = this.renderSteps.bind(this);
   }
   getHelper() {

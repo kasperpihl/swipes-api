@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Hyperlink from 'react-native-hyperlink';
-import { setupDelegate, setupCachedCallback, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
+import { setupDelegate, attachmentIconForService } from '../../../swipes-core-js/classes/utils';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
 
@@ -11,10 +11,7 @@ class NotificationItem extends PureComponent {
   constructor(props) {
     super(props);
 
-    setupDelegate(this);
-    this.onAttachmentClick = setupCachedCallback(this.callDelegate.bind(null, 'openLink'));
-    this.onNotificationPress = setupCachedCallback(this.callDelegate.bind(null, 'onNotificationPress'));
-    this.onReplyTo = setupCachedCallback(this.callDelegate.bind(null, 'onReply'));
+    setupDelegate(this, 'openLink', 'onNotificationPress', 'onReply');
 
     this.handleURL = this.handleURL.bind(this);
   }
@@ -64,7 +61,7 @@ class NotificationItem extends PureComponent {
       const iconName = attachmentIconForService(att.getIn(['link', 'service']) || att);
 
       return (
-        <RippleButton key={`attachment-${i}`} onPress={this.onAttachmentClick(att)}>
+        <RippleButton key={`attachment-${i}`} onPress={this.openLinkCached(att)}>
           <View style={styles.attachment}>
             <Icon
               name={iconName}
@@ -128,7 +125,7 @@ class NotificationItem extends PureComponent {
 
     if (n.get('reply')) {
       return (
-        <RippleButton style={styles.replyButton} onPress={this.onReplyTo(n)}>
+        <RippleButton style={styles.replyButton} onPress={this.onReplyCached(n)}>
           <View style={styles.replyButton}>
             <Icon name="Reply" width="24" height="24" fill={colors.deepBlue50} />
             <Text style={styles.replyButtonLabel}>Reply</Text>
@@ -145,7 +142,7 @@ class NotificationItem extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <RippleButton onPress={this.onNotificationPress(n)}>
+        <RippleButton onPress={this.onNotificationPressCached(n)}>
           <View style={[styles.topSection, { backgroundColor }]}>
             {this.renderIcon()}
             {this.renderContent()}

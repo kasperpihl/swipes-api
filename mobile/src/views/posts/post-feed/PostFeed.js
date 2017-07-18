@@ -45,8 +45,7 @@ class PostFeed extends PureComponent {
     super(props);
     this.state = { hasLoaded: false, };
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onNewPost');
+    setupDelegate(this, 'onNewPost');
 
     this.renderFeedItem = this.renderFeedItem.bind(this);
   }

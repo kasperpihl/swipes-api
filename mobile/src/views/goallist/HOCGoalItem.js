@@ -22,7 +22,7 @@ class HOCGoalItem extends PureComponent {
     this.onModalGoalAction = this.onModalGoalAction.bind(this);
     this.openOverview = this.openOverview.bind(this);
     this.onArchiveGoal = this.onArchiveGoal.bind(this);
-    setupDelegate(this);
+    setupDelegate(this, 'onPushStack');
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -86,7 +86,7 @@ class HOCGoalItem extends PureComponent {
       },
     };
 
-    this.callDelegate('onPushStack', overview);
+    this.onPushStack(overview);
   }
   completedDot() {
     const { goal } = this.props;

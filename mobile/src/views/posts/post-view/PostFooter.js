@@ -50,8 +50,7 @@ class PostFooter extends PureComponent {
     this.state = {
       text: ''
     }
-    setupDelegate(this);
-    // this.callDelegate.bindAll('onLinkClick')
+    // setupDelegate(this);
   }
   componentDidMount() {
 

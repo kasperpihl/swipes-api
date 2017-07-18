@@ -119,8 +119,7 @@ class PostFeed extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onOpenUrl', 'onAddReaction', 'onOpenPost');
+    setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onOpenPost');
     this.handleOpenPost = this.handleOpenPost.bind(this);
   }
   handleOpenPost() {

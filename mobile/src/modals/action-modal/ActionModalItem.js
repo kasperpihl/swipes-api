@@ -44,8 +44,7 @@ class ActionModalItem extends Component {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onItemPress');
+    setupDelegate(this, 'onItemPress');
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();

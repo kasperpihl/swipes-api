@@ -15,8 +15,7 @@ class Notify extends PureComponent {
     super(props);
     this.state = { text: '' };
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onOpenAttachment', 'onFlagAttachment', 'onChangeText', 'onAssignUsers');
+    setupDelegate(this, 'onOpenAttachment', 'onFlagAttachment', 'onChangeText', 'onAssignUsers');
   }
   getHelper() {
     const { goal, me } = this.props;

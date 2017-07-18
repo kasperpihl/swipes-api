@@ -32,8 +32,7 @@ class Notify extends PureComponent {
     super(props);
     this.state = { text: props.initialText };
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onChangeText');
+    setupDelegate(this, 'onChangeText');
     this.onChange = this.onChange.bind(this);
   }
   onChange(event) {

@@ -47,7 +47,7 @@ class HOCHeader extends PureComponent {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    setupDelegate(this);
+    setupDelegate(this, 'onChangeTab');
     this.onSelect = this.onSelect.bind(this);
   }
   componentWillMount() {
@@ -69,7 +69,7 @@ class HOCHeader extends PureComponent {
     LayoutAnimation.easeInEaseOut();
   }
   onSelect(el) {
-    this.callDelegate('onChangeTab', el.props.name);
+    this.onChangeTab(el.props.name);
   }
   measureView(event) {
     this.getHeaderHeight(event.nativeEvent.layout.height);

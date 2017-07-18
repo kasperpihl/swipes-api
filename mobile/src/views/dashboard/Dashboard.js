@@ -9,8 +9,7 @@ import HOCHeader from '../../components/header/HOCHeader';
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
-    setupDelegate(this);
-    this.callDelegate.bindAll('onCollapse');
+    setupDelegate(this, 'onCollapse');
     this.renderRow = this.renderRow.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
