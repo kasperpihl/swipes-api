@@ -73,6 +73,7 @@ class GoalOverview extends PureComponent {
   }
   renderHeader() {
     const { goal, getLoading, delegate } = this.props;
+    const helper = this.getHelper();
 
     const title = getLoading('title').loadingLabel;
     return (
@@ -85,6 +86,7 @@ class GoalOverview extends PureComponent {
           <HOCDiscussButton
             filterId={goal.get('id')}
             filterTitle={goal.get('title')}
+            taggedUsers={helper.getAllAssigneesButMe().toArray()}
           />
           <Button
             icon="ThreeDots"

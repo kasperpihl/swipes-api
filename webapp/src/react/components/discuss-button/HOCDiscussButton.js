@@ -32,7 +32,7 @@ class HOCDiscussButton extends PureComponent {
     });
   }
   onDiscuss() {
-    const { navPush, target, filterId, filterTitle } = this.props;
+    const { navPush, target, filterId, filterTitle, taggedUsers } = this.props;
     navPush(target, {
       id: 'CreatePost',
       title: 'Create Post',
@@ -41,6 +41,7 @@ class HOCDiscussButton extends PureComponent {
           title: filterTitle,
           id: filterId,
         },
+        taggedUsers
       },
     });
   }

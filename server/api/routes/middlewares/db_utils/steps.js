@@ -207,6 +207,8 @@ const dbStepsAssign = funcWrap([
           },
         },
         updated_at: r.now(),
+      }, {
+        returnChanges: true,
       });
 
   return db.rethinkQuery(q);

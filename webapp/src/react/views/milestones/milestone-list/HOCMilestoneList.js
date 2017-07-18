@@ -37,7 +37,6 @@ class HOCMilestoneList extends PureComponent {
         milestoneId,
       },
     });
-    console.log('open', milestoneId);
   }
   onAddMilestone(title) {
     const { createMilestone } = this.props;
