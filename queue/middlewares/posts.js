@@ -113,7 +113,6 @@ const postCommentAddedNotificationData = (req, res, next) => {
 };
 const postReactionAddedNotificationData = (req, res, next) => {
   const {
-    user_id,
     post,
     reaction,
   } = res.locals;
@@ -131,8 +130,8 @@ const postReactionAddedNotificationData = (req, res, next) => {
     },
   };
   res.locals.eventData = {
+    reaction,
     post_id: post.id,
-    reaction: post.reactions.find(r => r.created_by === user_id),
   };
 
   return next();
@@ -153,7 +152,6 @@ const postReactionRemovedNotificationData = (req, res, next) => {
 };
 const postCommentReactionAddedNotificationData = (req, res, next) => {
   const {
-    user_id,
     post_id,
     comment_id,
     postSingleCommentAndFollowers,
@@ -173,9 +171,9 @@ const postCommentReactionAddedNotificationData = (req, res, next) => {
     },
   };
   res.locals.eventData = {
+    reaction,
     post_id,
     comment_id,
-    reaction: comment.reactions.find(r => r.created_by === user_id),
   };
 
   return next();
