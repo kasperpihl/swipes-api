@@ -113,16 +113,24 @@ const postCommentAddedNotificationData = (req, res, next) => {
 };
 const postReactionAddedNotificationData = (req, res, next) => {
   const {
+    user_id,
     post,
-    reaction,
   } = res.locals;
+  const lastReaction = post.reactions.find(r => r.created_by === user_id);
+
+  if (!lastReaction) {
+    res.locals.notificationData = null;
+    res.locals.eventData = null;
+
+    return next();
+  }
 
   res.locals.notificationData = {
     target: {
       id: post.id,
     },
     meta: {
-      last_reaction: reaction,
+      last_reaction: lastReaction,
       user_ids: post.reactions.map(r => r.created_by),
       message: post.message.substr(0, MAX_LENGHT),
       context: post.context,
@@ -130,8 +138,8 @@ const postReactionAddedNotificationData = (req, res, next) => {
     },
   };
   res.locals.eventData = {
-    reaction,
     post_id: post.id,
+    reaction: lastReaction,
   };
 
   return next();
