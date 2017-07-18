@@ -28,6 +28,9 @@ export default class NotificationsGenerator {
       'post_comment_added',
       'post_comment_reaction_added',
     ].indexOf(type) !== -1) {
+      if(meta.getIn(['last_reaction', 'created_by'])){
+        return meta.getIn(['last_reaction', 'created_by']);
+      }
       userId = meta.getIn(['user_ids', 0]);
     } else if (['post_created'].indexOf(type) !== -1) {
       userId = meta.get('created_by');
@@ -77,69 +80,33 @@ export default class NotificationsGenerator {
     }
     return text;
   }
-  getNotificationWrapper(notification, options) {
-    let def = {
-      seenBy: true,
-      reply: true,
+  getDesktopNotification(n) {
+    const meta = n.get('meta');
+    const notif = {
+      id: n.get('id'),
+      context: n.get('context').toJS(),
     };
-    def = Object.assign(def, options);
-
-    const goals = this.store.getState().get('goals');
-
-    const id = notification.getIn(['target', 'id']);
-    const index = notification.getIn(['target', 'history_index']);
-    const history = goals.getIn([id, 'history', index]);
-    let m = Map({
-      timeago: timeAgo(notification.get('created_at'), true),
-      title: this.getTitle(notification, history),
-      subtitle: this.getSubtitle(notification, history),
-      request: !!notification.get('request'),
-      icon: this.getIcon(notification),
-      unseen: notification.get('notification') && !notification.get('seen_at'),
-      userId: notification.get('done_by'),
-    });
-
-    if (history) {
-      if (def.reply) {
-        m = m.set('reply', this.parent.history.getReplyButtonForHistory(id, history));
+    switch (meta.get('event_type')) {
+      case 'step_assigned': {
+        notif.title = 'You got assigned to a step';
+        break;
       }
-      if (def.seenBy) {
-        m = m.set('seenBy', this.parent.history.getSeenByForHistory(history));
+      case 'post_created': {
+        break;
       }
-      m = m.set('message', history.get('message'));
-      m = m.set('attachments', this.parent.history.getAttachments(id, history));
-    } else {
-      m = m.set('noClickTitle', !!notification.get('seen_at'));
+      case 'post_reaction_added': {
+        break;
+      }
+      case 'post_comment_added': {
+        break;
+      }
+      case 'post_comment_reaction_added': {
+        break;
+      }
     }
-    return m;
-  }
-  getTitle(n, h) {
-    if (!h) {
-      const goals = this.store.getState().get('goals');
-      const id = n.getIn(['target', 'id']);
-      const index = n.getIn(['target', 'history_index']);
-      h = goals.getIn([id, 'history', index]);
+    if(!notif.title) {
+      return undefined;
     }
-    return this.parent.history.getTitle(n.getIn(['target', 'id']), h || n);
-  }
-  getSubtitle(n, h) {
-    let extra = '';
-    if (!h) {
-      extra = ' (archived)';
-    }
-    return `on ${n.getIn(['meta', 'title'])}${extra}`;
-  }
-  getMessage(n) {
-    const goals = this.store.getState().get('goals');
-    const id = n.getIn(['target', 'id']);
-    const index = n.getIn(['target', 'history_index']);
-    const h = goals.getIn([id, 'history', index]);
-    if (h) {
-      return h.get('message');
-    }
-    return undefined;
-  }
-  getIcon(n) {
-    return this.parent.history.getIcon(n);
+    return notif;
   }
 }

@@ -113,6 +113,10 @@ const notifyCommonRethinkdb = (req, res, next) => {
     eventData,
   } = res.locals;
 
+  if (eventData === null) {
+    return next();
+  }
+
   const objToInsert = {
     user_ids: uniqueUsersToNotifyWithEvent || uniqueUsersToNotify,
     type: event_type,
@@ -121,7 +125,7 @@ const notifyCommonRethinkdb = (req, res, next) => {
     user_notification_map: userNotificationMap,
   };
 
-  commonMultipleEvents({ objToInsert })
+  return commonMultipleEvents({ objToInsert })
     .then(() => {
       return next();
     })
@@ -152,7 +156,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     event_type,
     uniqueUsersToNotify,
     notificationData,
-    usersNotificationDataMetaMap,
+    usersNotificationDataMetaMap = {},
   } = res.locals;
 
   if (notificationData === null) {
@@ -173,8 +177,6 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
         ...usersNotificationDataMetaMap[userId],
       };
     }
-
-    console.log(notificationData);
 
     const notification = {
       // because mutation is the root of all evil

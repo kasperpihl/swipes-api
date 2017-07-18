@@ -84,8 +84,8 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     onActionClick: () => {
       callback();
     },
-    numberOfTabs: () => 3,
-    nameForTab: i => [`Assigned (${assignees.length})`, 'Recent', 'All'][i],
+    getNumberOfTabs: () => 3,
+    getNameForTab: i => [`Assigned (${assignees.length})`, 'Recent', 'All'][i],
     onItemAction: (item, side) => {
       const index = assignees.indexOf(item.id);
       if (index === -1) {

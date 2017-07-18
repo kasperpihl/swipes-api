@@ -1,8 +1,8 @@
+import { fromJS } from 'immutable';
 import * as types from '../constants';
 
 import { bindAll, setupDelegate } from './utils';
 import * as a from '../actions';
-import sendNotification from './notification-handler';
 
 export default class Socket {
   constructor(store, delegate) {
@@ -147,7 +147,13 @@ export default class Socket {
         payload: payload.notification_data,
       });
 
-      sendNotification(payload.notification_data);
+      if (window && window.ipcListener && window.msgGen) {
+        const n = fromJS(notification);
+        const nToSend = window.msgGen.notifications.getDesktopNotification(n);
+        if(nToSend) {
+          window.ipcListener.sendNotification(nToSend);
+        }
+      }
     }
   }
 }
