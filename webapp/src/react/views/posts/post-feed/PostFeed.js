@@ -12,8 +12,7 @@ import './styles/post-feed.scss';
 class PostFeed extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this);
-    this.callDelegate.bindAll('onPostClick', 'onNewPost');
+    setupDelegate(this, 'onPostClick', 'onNewPost');
     this.state = {}
   }
   componentDidMount() {

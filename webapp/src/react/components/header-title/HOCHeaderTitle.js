@@ -12,12 +12,11 @@ export default class HOCHeaderTitle extends Component {
     super(props);
     this.state = {};
 
-    setupDelegate(this);
-    this.onClick = this.callDelegate.bind(null, 'onTitleClick');
+    setupDelegate(this, 'onTitleClick', 'navbarLoadedInput');
   }
   componentDidMount() {
     const { input } = this.refs;
-    this.callDelegate('navbarLoadedInput', input);
+    this.navbarLoadedInput(input);
   }
   renderInputTitle(placeholder) {
     const {
@@ -42,7 +41,7 @@ export default class HOCHeaderTitle extends Component {
     const { title, subtitle, subtitleElement } = this.props;
 
     return (
-      <div className="header-title__title" key="header-title" onClick={this.onClick}>
+      <div className="header-title__title" key="header-title" onClick={this.onTitleClick}>
         {title}
         <div className="header-title__subtitle">{subtitle}</div>
       </div>

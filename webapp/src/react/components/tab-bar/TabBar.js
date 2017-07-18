@@ -15,13 +15,9 @@ class TabBar extends Component {
     };
     this.calculateSliderClips = this.calculateSliderClips.bind(this);
     this.bouncedCalc = debounce(this.calculateSliderClips, 1);
-    setupDelegate(this);
-    bindAll(this, ['onChange']);
+    setupDelegate(this, 'tabDidChange');
   }
-  onChange(e) {
-    const newIndex = Number(e.target.getAttribute('data-index'));
-    this.callDelegate('tabDidChange', newIndex);
-  }
+
   calculateSliderClips() {
     const { tabBar } = this.refs;
     if (tabBar) {
@@ -80,7 +76,11 @@ class TabBar extends Component {
 
       return (
         <Measure key={`tab-${i}`} onMeasure={this.bouncedCalc}>
-          <div ref={`tab-${i}`} className={tabClass} data-index={i} onClick={this.onChange}>{tab}</div>
+          <div
+            ref={`tab-${i}`}
+            className={tabClass}
+            onClick={this.tabDidChangeCached(i)}
+          >{tab}</div>
         </Measure>
       );
     });

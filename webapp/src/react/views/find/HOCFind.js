@@ -9,6 +9,7 @@ import SWView from 'SWView';
 import Button from 'Button';
 import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import HOCBrowse from './browse/HOCBrowse';
 import SearchResults from './SearchResults';
 import BrowseSectionList from './browse/BrowseSectionList';
@@ -32,7 +33,6 @@ class HOCFind extends Component {
       searchQ: '',
     };
     this.unhandledDocs = [];
-    setupDelegate(this);
     bindAll(this, ['onInputChange', 'onInputKeyUp', 'onConnectService']);
   }
   onInputChange(e) {
@@ -257,10 +257,10 @@ function mapStateToProps(state) {
   };
 }
 
-const ConnectedHOCFind = connect(mapStateToProps, {
+const ConnectedHOCFind = navWrapper(connect(mapStateToProps, {
   openPreview: actions.links.preview,
   addAttachment: ca.attachments.add,
   request: ca.api.request,
   search: actions.main.search,
-})(HOCFind);
+})(HOCFind));
 export default ConnectedHOCFind;

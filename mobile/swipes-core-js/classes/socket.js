@@ -8,7 +8,7 @@ export default class Socket {
   constructor(store, delegate) {
     this.store = store;
     this.delegate = delegate;
-    setupDelegate(this);
+    setupDelegate(this, 'forceLogout');
     this.reconnect_attempts = 0;
     bindAll(this, ['message', 'changeStatus', 'storeChange']);
     store.subscribe(this.storeChange);
@@ -83,7 +83,7 @@ export default class Socket {
           this.changeStatus('online');
         } else if (res && res.error) {
           if (res.error.message === 'not_authed') {
-            this.callDelegate('forceLogout');
+            this.forceLogout();
           } else {
             this.ws.close();
           }

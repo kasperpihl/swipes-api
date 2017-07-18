@@ -18,12 +18,10 @@ class Profile extends PureComponent {
       bioCounter: 300,
     };
 
-    setupDelegate(this);
+    setupDelegate(this, 'onBlur', 'onImageChange');
     this.onChangeCached = setupCachedCallback(this.onChange, this);
     this.onEditCached = setupCachedCallback(this.enableEditMode, this);
-    this.onBlurCached = setupCachedCallback(this.callDelegate.bind(null, 'onBlur'));
     this.handleEditState = this.handleEditState.bind(this);
-    this.onImageChange = this.callDelegate.bind(null, 'onImageChange');
 
 
     bindAll(this, ['enableEditMode', 'onUploadClick']);

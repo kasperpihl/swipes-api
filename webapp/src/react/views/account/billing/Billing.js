@@ -32,8 +32,7 @@ class Billing extends PureComponent {
       errorMessage: '',
       successState: true,
     };
-    setupDelegate(this);
-    this.callDelegate.bindAll('onSwitchPlan');
+    setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess');
     bindAll(this, ['onChange', 'onSubmit']);
   }
   componentDidMount() {
@@ -74,7 +73,7 @@ class Billing extends PureComponent {
         this.setState({ errorMessage: error.message });
       } else {
         console.log('Received Stripe token:', token);
-        this.callDelegate('onSubmit', token);
+        this.onSubmitSuccess(token);
       }
 
     });

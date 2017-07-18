@@ -6,6 +6,7 @@ import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { fromJS } from 'immutable';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Organization from './Organization';
 
 class HOCOrganization extends PureComponent {
@@ -193,10 +194,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   invite: ca.users.invite,
   completeOnboarding: ca.onboarding.complete,
   demoteAnAdmin: ca.organizations.demoteAnAdmin,
   promoteToAdmin: ca.organizations.promoteToAdmin,
   contextMenu: a.main.contextMenu,
-})(HOCOrganization);
+})(HOCOrganization));

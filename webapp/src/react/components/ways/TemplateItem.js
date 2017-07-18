@@ -8,14 +8,13 @@ class TemplateItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, props.template);
-    this.onClick = this.callDelegate.bind(null, 'onTemplateClick');
+    setupDelegate(this, 'onTemplateClick').setGlobals(props.template);
   }
   render() {
     const { template } = this.props;
 
     return (
-      <div className="template-item" onClick={this.onClick}>
+      <div className="template-item" onClick={this.onTemplateClick}>
         <div className="template-item__title">{template.title}</div>
         <div className="template-item__message">{template.description}</div>
       </div>

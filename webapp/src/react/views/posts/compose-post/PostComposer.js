@@ -13,8 +13,7 @@ import './styles/post-composer.scss';
 class PostComposer extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this)
-    this.callDelegate.bindAll('onMessageChange', 'onFilterClick');
+    setupDelegate(this, 'onMessageChange', 'onFilterClick')
   }
   componentDidMount() {
   }

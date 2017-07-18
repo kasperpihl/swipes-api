@@ -21,19 +21,11 @@ class GoalList extends Component {
     super(props);
     this.state = { filterHeight: 0 };
 
-    setupDelegate(this);
-    this.clearFilter = this.callDelegate.bind(null, 'onClearFilter');
-    this.hideFilter = this.callDelegate.bind(null, 'onHideFilter');
-    this.editFilter = this.callDelegate.bind(null, 'onEditFilter');
-    this.onScroll = this.callDelegate.bind(null, 'onScroll');
-    this.onAddGoal = this.callDelegate.bind(null, 'onAddGoal');
-    bindAll(this, ['clickedListItem', 'onFilterHeight']);
+    setupDelegate(this, 'onClearFilter', 'onScroll', 'onAddGoal', 'onChangeFilter');
+    bindAll(this, ['onFilterHeight']);
   }
   onFilterHeight(dim) {
     this.setState({ filterHeight: dim.height });
-  }
-  clickedListItem(id) {
-    this.callDelegate('onClickGoal', id);
   }
 
   renderTabbar() {
@@ -103,7 +95,7 @@ class GoalList extends Component {
               placeholder="Search for goals"
               value={filter.get('matching') || ''}
               onChange={(e) => {
-                this.callDelegate('onChangeFilter', {
+                this.onChangeFilter({
                   id: 'matching',
                   value: e.target.value,
                 }, e);
@@ -114,14 +106,14 @@ class GoalList extends Component {
           <div className="goals-list__filter-wrap">
             <Filter
               onClick={(id, obj, e) => {
-                this.callDelegate('onChangeFilter', obj, e);
+                this.onChangeFilter(obj, e);
               }}
               filter={filterArray}
             />
 
             {hasFilter ? (
               <div className="goals-list__filter-actions">
-                <div className="goals-list__filter-action" onClick={this.clearFilter}>Clear filter</div>
+                <div className="goals-list__filter-action" onClick={this.onClearFilter}>Clear filter</div>
               </div>
             ) : undefined}
           </div>

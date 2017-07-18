@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { mapContains, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { setupDelegate, setupCachedCallback, attachmentIconForService, URL_REGEX } from 'swipes-core-js/classes/utils';
+import { setupDelegate, attachmentIconForService, URL_REGEX } from 'swipes-core-js/classes/utils';
 
 import './styles/notification-item';
 
@@ -11,9 +11,7 @@ class NotificationItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, props.i);
-    this.callDelegate.bindAll('onClickAttachment', 'onClickURL');
-    this.onReply = this.callDelegate.bind(null, 'onReply');
+    setupDelegate(this, 'onClickAttachment', 'onClickURL', 'onReply', 'onClickTitle').setGlobals(props.i);
     this.onClick = this.onClick.bind(this);
   }
   onClick(e) {
@@ -21,7 +19,7 @@ class NotificationItem extends Component {
     const selection = window.getSelection();
 
     if (selection.toString().length === 0 && !n.get('noClickTitle')) {
-      this.callDelegate('onClickTitle', e);
+      this.onClickTitle(e);
     }
   }
   renderIcon() {

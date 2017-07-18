@@ -11,13 +11,13 @@ class ResultList extends Component {
     super(props);
     this.state = {};
     this.onActionCached = setupCachedCallback(this.onAction, this);
-    setupDelegate(this);
+    setupDelegate(this, 'onItemAction');
   }
   componentDidMount() {
   }
   onAction(i, side, e) {
     const { results } = this.props;
-    this.callDelegate('onItemAction', results[i], side, e);
+    this.onItemAction(results[i], side, e);
   }
   renderResults() {
     const { results } = this.props;

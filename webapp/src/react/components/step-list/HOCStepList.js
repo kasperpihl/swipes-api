@@ -16,7 +16,7 @@ class HOCStepList extends PureComponent {
     this.state.steps = helper.getOrderedSteps();
 
     setupLoading(this);
-    setupDelegate(this);
+    setupDelegate(this, 'viewDidLoad', 'onStepDidComplete');
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.goal !== this.props.goal) {
@@ -25,7 +25,7 @@ class HOCStepList extends PureComponent {
     }
   }
   componentDidMount() {
-    this.callDelegate('viewDidLoad', this);
+    this.viewDidLoad(this);
   }
   onStepAdd(title) {
     const { addStep, goal } = this.props;
@@ -140,7 +140,7 @@ class HOCStepList extends PureComponent {
     actionFunc(goal.get('id'), step.get('id')).then((res) => {
       if (res && res.ok) {
         this.clearLoading(step.get('id'));
-        this.callDelegate('onStepDidComplete', {
+        this.onStepDidComplete({
           completed: !step.get('completed_at'),
           stepId: step.get('id'),
         })

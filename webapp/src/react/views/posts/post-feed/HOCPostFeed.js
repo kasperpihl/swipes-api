@@ -7,11 +7,15 @@ import * as cs from 'swipes-core-js/selectors';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostFeed from './PostFeed';
 
 class HOCPostFeed extends PureComponent {
   static maxWidth() {
     return 600;
+  }
+  static minWidth() {
+    return 540;
   }
   constructor(props) {
     super(props);
@@ -66,5 +70,5 @@ function mapStateToProps(state, ownProps) {
     posts: cs.posts.getSortedIds(state, ownProps),
   };
 }
-export default connect(mapStateToProps, {
-})(HOCPostFeed);
+export default navWrapper(connect(mapStateToProps, {
+})(HOCPostFeed));

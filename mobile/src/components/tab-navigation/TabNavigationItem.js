@@ -18,8 +18,7 @@ class TabNavigationItem extends Component {
     super(props);
     this.state = {};
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('handlePress');
+    setupDelegate(this, 'handlePress');
   }
   render() {
     const { icon, index, fill } = this.props;

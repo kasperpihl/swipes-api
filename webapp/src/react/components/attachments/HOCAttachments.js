@@ -26,10 +26,9 @@ class HOCAttachments extends PureComponent {
     super(props, context);
     this.state = { fileVal: '' };
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
-    this.onFlagClickCached = setupCachedCallback(this.onFlagClick, this);
     this.onContextMenuCached = setupCachedCallback(this.onContextMenu, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
-    setupDelegate(this);
+    setupDelegate(this, 'onFlag', 'willOpenPreview');
     bindAll(this, ['onChangeFiles', 'onPaste']);
     setupLoading(this);
   }
@@ -50,7 +49,7 @@ class HOCAttachments extends PureComponent {
     const selection = window.getSelection();
 
     if (selection.toString().length === 0) {
-      this.callDelegate('willOpenPreview', attachments.get(id), e);
+      this.willOpenPreview(attachments.get(id), e);
       previewLink(this.context.target, attachments.get(id));
       window.analytics.sendEvent('Attachment opened', {
         Type: attachments.getIn([id, 'link', 'service', 'type']),
@@ -59,9 +58,6 @@ class HOCAttachments extends PureComponent {
     }
   }
 
-  onFlagClick(id) {
-    this.callDelegate('onFlag', id);
-  }
   onContextMenu(id, e) {
     const { contextMenu, attachments } = this.props;
     const at = attachments.get(id);
@@ -257,7 +253,7 @@ class HOCAttachments extends PureComponent {
         <Attachment
           key={aId}
           flagged={(enableFlagging && flags.indexOf(aId) !== -1)}
-          onFlag={this.onFlagClickCached(aId)}
+          onFlag={this.onFlagCached(aId)}
           onContextMenu={this.onContextMenuCached(aId)}
           onClick={this.onPreviewCached(aId)}
           {...this.getLoading(aId)}

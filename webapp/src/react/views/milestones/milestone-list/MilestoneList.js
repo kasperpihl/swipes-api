@@ -16,8 +16,7 @@ class MilestoneList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this);
-    this.callDelegate.bindAll('onAddGoal');
+    setupDelegate(this, 'onAddGoal');
   }
   componentDidMount() {
   }

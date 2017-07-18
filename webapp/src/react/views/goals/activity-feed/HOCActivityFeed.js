@@ -5,6 +5,7 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import ActivityFeed from './ActivityFeed';
 
 class HOCActivityFeed extends PureComponent {
@@ -74,7 +75,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   preview: a.links.preview,
   browser: a.main.browser,
-})(HOCActivityFeed);
+})(HOCActivityFeed));

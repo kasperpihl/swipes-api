@@ -14,8 +14,7 @@ class AddMilestone extends PureComponent {
     this.state = {
       title: '',
     };
-    setupDelegate(this);
-    this.callDelegate.bindAll('onAddMilestone');
+    setupDelegate(this, 'onAddMilestone');
     this.onChange = this.onChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.handleFocus = this.handleFocus.bind(this);

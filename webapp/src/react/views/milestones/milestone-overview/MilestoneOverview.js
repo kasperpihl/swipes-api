@@ -18,8 +18,7 @@ class MilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this);
-    this.callDelegate.bindAll('onAddGoals', 'onContext', 'onDiscuss');
+    setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss');
   }
   componentDidMount() {
   }

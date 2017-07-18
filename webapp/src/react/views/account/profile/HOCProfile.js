@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Profile from './Profile';
 
 class HOCProfile extends PureComponent {
@@ -103,10 +104,10 @@ HOCProfile.propTypes = {
   me: map,
 };
 
-const ConnectedHOCProfile = connect(mapStateToProps, {
+const ConnectedHOCProfile = navWrapper(connect(mapStateToProps, {
   updateProfile: ca.me.updateProfile,
   uploadProfilePhoto: ca.me.uploadProfilePhoto,
   completeOnboarding: ca.onboarding.complete,
-})(HOCProfile);
+})(HOCProfile));
 
 export default ConnectedHOCProfile;

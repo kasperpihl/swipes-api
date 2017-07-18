@@ -7,6 +7,7 @@ import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Billing from './Billing';
 
 class HOCBilling extends PureComponent {
@@ -20,7 +21,7 @@ class HOCBilling extends PureComponent {
   }
   componentDidMount() {
   }
-  onSubmit(token) {
+  onSubmitSuccess(token) {
     const { createStripeCustomer } = this.props;
     const { billingStatus } = this.state;
 
@@ -74,6 +75,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   createStripeCustomer: ca.organizations.createStripeCustomer,
-})(HOCBilling);
+})(HOCBilling));

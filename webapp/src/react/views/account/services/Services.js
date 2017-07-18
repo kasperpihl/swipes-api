@@ -6,6 +6,7 @@ import { bindAll, queryStringToObject } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import SWView from 'SWView';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import ConnectRow from './ConnectRow';
 import './services.scss';
 
@@ -168,10 +169,10 @@ function mapStateToProps(state) {
   };
 }
 
-const ConnectedServices = connect(mapStateToProps, {
+const ConnectedServices = navWrapper(connect(mapStateToProps, {
   browser: a.main.browser,
   handleOAuthSuccess: ca.me.handleOAuthSuccess,
   disconnectService: ca.me.disconnectService,
   confirm: a.menus.confirm,
-})(Services);
+})(Services));
 export default ConnectedServices;

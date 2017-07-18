@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import SWView from 'SWView';
 import Webview from 'components/webview/Webview';
 import Loader from 'components/loaders/Loader';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import BrowserNavBar from './BrowserNavBar';
 
 import './styles/browser';
@@ -147,5 +148,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
-})(HOCBrowser);
+export default navWrapper(connect(mapStateToProps, {
+})(HOCBrowser));

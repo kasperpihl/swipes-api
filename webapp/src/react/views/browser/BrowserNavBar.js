@@ -7,17 +7,10 @@ class BrowserNavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this);
+    setupDelegate(this, 'navbarAction');
 
-    this.actions = {};
-    ['back', 'forward', 'reload', 'browser', 'close'].forEach((act) => {
-      this.actions[act] = this.onAction.bind(this, act);
-    });
   }
   componentDidMount() {
-  }
-  onAction(action) {
-    this.callDelegate('navbarAction', action);
   }
   renderNavigation() {
     const {
@@ -31,7 +24,7 @@ class BrowserNavBar extends Component {
         className="browser-nav__btn"
         frameless
         disabled={!backEnabled}
-        onClick={this.actions.back}
+        onClick={this.navbarActionCached('back')}
       />,
       <Button
         key="forward"
@@ -39,14 +32,14 @@ class BrowserNavBar extends Component {
         className="browser-nav__btn"
         frameless
         disabled={!forwardEnabled}
-        onClick={this.actions.forward}
+        onClick={this.navbarActionCached('forward')}
       />,
       <Button
         key="reload"
         icon="Reload"
         className="browser-nav__btn"
         frameless
-        onClick={this.actions.reload}
+        onClick={this.navbarActionCached('reload')}
       />,
     ];
   }
@@ -68,7 +61,7 @@ class BrowserNavBar extends Component {
         icon="Earth"
         className="browser-nav__btn"
         frameless
-        onClick={this.actions.browser}
+        onClick={this.navbarActionCached('browser')}
       />,
     ];
   }

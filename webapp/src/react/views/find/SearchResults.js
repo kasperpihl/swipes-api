@@ -9,7 +9,6 @@ import './styles/search-results.scss';
 class SearchResults extends Component {
   constructor(props) {
     super(props);
-    setupDelegate(this);
   }
   renderLoader() {
     const {

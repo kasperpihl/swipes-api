@@ -18,7 +18,7 @@ class HOCGoalListItem extends PureComponent {
     this.state = {
       animateToStarred: false,
     };
-    setupDelegate(this, props.goalId);
+    setupDelegate(this, 'onGoalClick').setGlobals(props.goalId);
     this.onClick = this.onClickItem.bind(this);
     bindAll(this, ['onEnter', 'onLeave', 'onPin']);
   }
@@ -54,7 +54,7 @@ class HOCGoalListItem extends PureComponent {
     const selection = window.getSelection();
 
     if (selection.toString().length === 0) {
-      this.callDelegate('onGoalClick');
+      this.onGoalClick();
     }
   }
   onPin() {

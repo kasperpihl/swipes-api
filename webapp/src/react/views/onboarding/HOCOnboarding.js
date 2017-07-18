@@ -5,6 +5,7 @@ import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { map } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Onboarding from './Onboarding';
 
 class HOCOnboarding extends PureComponent {
@@ -73,7 +74,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   complete: ca.onboarding.complete,
   browser: a.main.browser,
-})(HOCOnboarding);
+})(HOCOnboarding));

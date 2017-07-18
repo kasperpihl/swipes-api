@@ -21,8 +21,7 @@ class PostView extends PureComponent {
     super(props)
     this.state = {}
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onLinkClick', 'onOpenPost')
+    setupDelegate(this, 'onLinkClick', 'onOpenPost');
   }
   renderHeader() {
     const { post, delegate } = this.props;

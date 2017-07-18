@@ -13,8 +13,7 @@ class PostHeader extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this);
-    this.callDelegate.bindAll('onHeaderContextClick', 'onHeaderMenuClick', 'onOpenPost');
+    setupDelegate(this, 'onHeaderContextClick', 'onHeaderMenuClick', 'onOpenPost');
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;

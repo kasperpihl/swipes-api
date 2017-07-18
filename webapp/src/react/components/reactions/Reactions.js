@@ -14,8 +14,7 @@ class HOCReactions extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onAddReaction', 'onRemoveReaction');
+    setupDelegate(this, 'onAddReaction', 'onRemoveReaction');
     bindAll(this, ['onEnter', 'onLeave']);
   }
   componentWillMount() {

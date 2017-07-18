@@ -13,8 +13,7 @@ class StepListItem extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {};
-    setupDelegate(this);
-    this.callDelegate.bindAll('onStepCheck', 'onStepRemove', 'onStepClick');
+    setupDelegate(this, 'onStepCheck', 'onStepRemove', 'onStepClick', 'onStepRename');
     bindAll(this, ['onChange', 'onBlur', 'onKeyDown']);
   }
   componentDidMount() {
@@ -36,7 +35,7 @@ class StepListItem extends PureComponent {
     const { step, i } = this.props;
 
     if (title && title.length && title !== step.get('title')) {
-      this.callDelegate('onStepRename', i, title);
+      this.onStepRename(i, title);
       this.setState({ title: null });
     }
   }

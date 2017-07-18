@@ -9,8 +9,7 @@ class SignupPage extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this);
-    this.onClick = this.callDelegate.bind(null, 'onClick');
+    setupDelegate(this, 'onClick');
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
   componentDidMount() {

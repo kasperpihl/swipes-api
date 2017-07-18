@@ -10,7 +10,7 @@ import {
   EditorState,
   convertToRaw,
 } from 'draft-js';
-
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import GoalList from './GoalList';
 
 /* global msgGen*/
@@ -18,7 +18,6 @@ import GoalList from './GoalList';
 class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
-    setupDelegate(this);
     this.state = {
       tabs: ['current', 'starred', 'unassigned', 'search'],
       tabIndex: 0,
@@ -42,9 +41,6 @@ class HOCGoalList extends PureComponent {
     }
   }
 
-  componentDidMount() {
-    this.callDelegate('viewDidLoad', this);
-  }
   componentDidUpdate(prevProps) {
     if (prevProps.goals !== this.props.goals) {
       this.updateFilter({});
@@ -237,7 +233,7 @@ HOCGoalList.propTypes = {
   // removeThis: PropTypes.string.isRequired
 };
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   saveCache: ca.cache.save,
   createGoal: ca.goals.create,
   selectUser: a.menus.selectUser,
@@ -247,4 +243,4 @@ export default connect(mapStateToProps, {
   inputMenu: a.menus.input,
   selectGoalType: a.menus.selectGoalType,
   selectAssignees: a.goals.selectAssignees,
-})(HOCGoalList);
+})(HOCGoalList));

@@ -17,7 +17,7 @@ class HOCBrowse extends PureComponent {
       results: fromJS([]),
       selectedIndexes: fromJS([]),
     };
-    setupDelegate(this);
+    setupDelegate(this, 'onPreviewLink');
   }
 
   componentDidMount() {
@@ -97,7 +97,7 @@ class HOCBrowse extends PureComponent {
           selectedIndexes: selectedIndexes.setSize(depth).push(i),
         });
       } else if (r && r.on_click.type === 'preview') {
-        this.callDelegate('onPreviewLink', Object.assign({}, r.on_click.preview, {
+        this.onPreviewLink(Object.assign({}, r.on_click.preview, {
           meta: {
             title: r.title,
           },

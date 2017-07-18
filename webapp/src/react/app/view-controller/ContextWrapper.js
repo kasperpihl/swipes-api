@@ -4,8 +4,22 @@ import PropTypes from 'prop-types';
 
 class ContextWrapper extends Component {
   getChildContext() {
-    const { target } = this.props;
-    return { target };
+    const {
+      target,
+      navPop,
+      navPush,
+      saveState,
+      openSecondary,
+      popSecondary,
+    } = this.props;
+    return {
+      target,
+      navPop,
+      navPush,
+      saveState,
+      openSecondary,
+      popSecondary,
+    };
   }
   render() {
     const { children } = this.props;
@@ -15,10 +29,15 @@ class ContextWrapper extends Component {
 
 export default ContextWrapper;
 
-const { string, element } = PropTypes;
+const { string, element, func } = PropTypes;
 
 ContextWrapper.childContextTypes = {
   target: string,
+  navPop: func,
+  navPush: func,
+  saveState: func,
+  openSecondary: func,
+  popSecondary: func,
 };
 ContextWrapper.propTypes = {
   target: string,

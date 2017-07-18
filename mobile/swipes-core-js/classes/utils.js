@@ -209,27 +209,29 @@ export function nearestAttribute(target, attribute) {
   return value;
 }
 
-export function setupDelegate(obj, ...globalArgs) {
-  const defOptions = {
-    globals: [],
-    prefix: '',
-  };
-  let options = defOptions;
+export function setupDelegate(obj, ...delegateMethods) {
+  let globals = [];
+
   const delegate = obj && (obj.delegate || (obj.props && obj.props.delegate));
   obj.callDelegate = function callDelegate(name, ...rest) {
     if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...globalArgs.concat(rest));
+      return delegate[name](...globals.concat(rest));
     }
 
     return undefined;
   };
-  obj.callDelegate.bindAll = function bindAllDelegates(...bindArgs) {
-    bindArgs.forEach((funcName) => {
-      if(typeof funcName === 'string'){
-        obj[funcName] = obj.callDelegate.bind(null, funcName);
-        obj[`${funcName}Cached`] = setupCachedCallback(obj[funcName]);
-      }
-    })
+
+  delegateMethods.forEach((funcName) => {
+    if(typeof funcName === 'string'){
+      obj[funcName] = obj.callDelegate.bind(null, funcName);
+      obj[`${funcName}Cached`] = setupCachedCallback(obj[funcName]);
+    }
+  })
+
+  return {
+    setGlobals: (...globalArgs) => {
+      globals = globals.concat(globalArgs);
+    }
   }
 }
 

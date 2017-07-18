@@ -116,8 +116,7 @@ class PostView extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this);
-    this.callDelegate.bindAll("onOpenUrl", "onAddReaction");
+    setupDelegate(this, "onOpenUrl", "onAddReaction");
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;

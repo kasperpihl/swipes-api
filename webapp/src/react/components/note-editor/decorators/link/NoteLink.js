@@ -31,7 +31,7 @@ class NoteLink extends Component {
   }
   constructor(props) {
     super(props);
-    setupDelegate(this);
+    setupDelegate(this, 'onLinkClick');
     this.onClick = this.onClick.bind(this);
   }
   onClick() {
@@ -40,7 +40,7 @@ class NoteLink extends Component {
     if (entityKey !== null) {
       data = contentState.getEntity(entityKey).get('data').url;
     }
-    this.callDelegate('onLinkClick', data);
+    this.onLinkClick(data);
   }
   render() {
     const { children } = this.props;

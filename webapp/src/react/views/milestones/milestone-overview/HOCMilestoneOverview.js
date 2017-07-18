@@ -9,6 +9,7 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCGoalSelector from 'context-menus/goal-selector/HOCGoalSelector';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 // import { map, list } from 'react-immutable-proptypes';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import { List } from 'immutable';
 import {
   EditorState,
@@ -252,7 +253,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
   inputMenu: a.menus.input,
   closeMilestone: ca.milestones.close,
@@ -261,4 +262,4 @@ export default connect(mapStateToProps, {
   confirm: a.menus.confirm,
   addGoalToMilestone: ca.milestones.addGoal,
   createGoal: ca.goals.create,
-})(HOCMilestoneOverview);
+})(HOCMilestoneOverview));

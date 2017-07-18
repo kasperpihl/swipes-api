@@ -8,7 +8,7 @@ import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/class
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import GoalOverview from './GoalOverview';
 
@@ -309,7 +309,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   archive: ca.goals.archive,
   contextMenu: a.main.contextMenu,
   renameGoal: ca.goals.rename,
@@ -326,4 +326,4 @@ export default connect(mapStateToProps, {
   inputMenu: a.menus.input,
   preview: a.links.preview,
   browser: a.main.browser,
-})(HOCGoalOverview);
+})(HOCGoalOverview));
