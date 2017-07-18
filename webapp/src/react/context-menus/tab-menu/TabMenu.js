@@ -20,7 +20,7 @@ class TabMenu extends Component {
       this.state.tabIndex = props.initialTabIndex;
     }
     bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyDown', 'handleClick']);
-    setupDelegate(this, 'onTabMenuLoad', 'onActionClick', 'onItemAction', 'numberOfTabs', 'nameForTab');
+    setupDelegate(this, 'onTabMenuLoad', 'onActionClick', 'onItemAction', 'getNumberOfTabs', 'getNameForTab');
   }
   componentDidMount() {
     this.onTabMenuLoad(this);
@@ -140,7 +140,7 @@ class TabMenu extends Component {
   renderTabBar() {
     const { tabIndex } = this.state;
 
-    this.numberOfTabs = this.numberOfTabs();
+    this.numberOfTabs = this.getNumberOfTabs();
 
     if (typeof this.numberOfTabs !== 'number') {
       return undefined;
@@ -148,7 +148,7 @@ class TabMenu extends Component {
 
     const tabs = [];
     for (let i = 0; i < this.numberOfTabs; i += 1) {
-      let title = this.nameForTab(i);
+      let title = this.getNameForTab(i);
       if (typeof title !== 'string' || !title.length) {
         title = `Tab #${i}`;
       }

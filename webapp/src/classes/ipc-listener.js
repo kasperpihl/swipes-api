@@ -69,14 +69,7 @@ export default class IpcListener {
     });
 
     desktopNotification.onclick = () => {
-      const title = this.store.getState().getIn(['goals', notification.target.id, 'title']);
-      this.store.dispatch(navigation.openSecondary('primary', {
-        id: 'GoalOverview',
-        title,
-        props: {
-          goalId: notification.target.id,
-        },
-      }));
+      this.store.dispatch(navigation.openSecondary('primary', navForContext(notification.target)));
       this.store.dispatch(ca.notifications.mark([notification.id]));
       const remWin = remote.getCurrentWindow();
       remWin.focus();
