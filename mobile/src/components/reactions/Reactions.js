@@ -82,7 +82,7 @@ class HOCReactions extends PureComponent {
     return (
       <TouchableOpacity onPress={this.handleLike}>
         <View style={styles.likeButton}>
-          <Icon name="Heart" width="12" height="12" fill={heartColor} />
+          <Icon name="Heart" width="24" height="24" fill={heartColor} />
           <Text style={[styles.likeButtonLabel, { color: labelColor }]}>Like</Text>
         </View>
       </TouchableOpacity>

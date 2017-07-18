@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: "row",
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
+    paddingTop: 50,
   },
   headerSide: {
     flex: 1,
@@ -272,7 +273,7 @@ class PostView extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <ScrollView style={{ marginTop: 50, flex: 1 }}>
+        <ScrollView style={{ flex: 1 }}>
           {this.renderPostHeader()}
           {this.renderMessage()}
           {this.renderActions()}

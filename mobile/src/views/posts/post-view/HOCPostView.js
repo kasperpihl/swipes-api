@@ -26,18 +26,11 @@ class HOCPostView extends PureComponent {
     const { post, addReaction, commentAddReaction } = this.props;
     const runFunc = commentId ? commentAddReaction : addReaction;
 
-    console.log('====================================');
-    console.log('adding a reaction', commentId, runFunc);
-    console.log('====================================');
-
     runFunc({
       post_id: post.get("id"),
       reaction: "like",
       comment_id: commentId || null
     }).then(res => {
-      console.log('====================================');
-      console.log('res', res);
-      console.log('====================================');
     });
   }
   onRemoveReaction(bull, commentId) {
@@ -50,7 +43,7 @@ class HOCPostView extends PureComponent {
     }).then(res => {
     });
   }
-  onAddComment(message, e) {
+  onAddComment(message) {
     const { addComment, postId } = this.props;
 
     addComment({
@@ -60,6 +53,11 @@ class HOCPostView extends PureComponent {
       if (res.ok) {
       }
     });
+  }
+  onNavigateBack() {
+    const { navPop } = this.props;
+
+    navPop();
   }
   render() {
     const { myId, post } = this.props;

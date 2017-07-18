@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from '../../../../swipes-core-js/classes/utils';
@@ -24,7 +24,12 @@ const styles = StyleSheet.create({
   },
   textareaWrapper: {
     flex: 1,
-    paddingVertical: 3,
+    paddingVertical: 4,
+    ...Platform.select({
+      android: {
+        paddingLeft: 9,
+      },
+    }),
   },
   textareaBorder: {
     borderWidth: 1,
@@ -51,15 +56,37 @@ class PostFooter extends PureComponent {
       text: ''
     }
     setupDelegate(this);
-    // this.callDelegate.bindAll('onLinkClick')
-  }
-  componentDidMount() {
+    this.callDelegate.bindAll('onAddComment', 'onNavigateBack')
 
+    this.handleAddComment = this.handleAddComment.bind(this);
+    this.handleBackButton = this.handleBackButton.bind(this);
+
+    if (Platform.OS === "android") {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
+  }
+  handleAddComment() {
+    const { text } = this.state;
+
+    this.onAddComment(text);
+    this.setState({ text: '' });
+    Keyboard.dismiss();
+  }
+  handleBackButton() {
+    this.onNavigateBack()
   }
   renderBackButton() {
+    const { text } = this.state;
+
+    if (Platform.OS === "android") {
+      return undefined;
+    }
 
     return (
-      <RippleButton>
+      <RippleButton onPress={this.handleBackButton}>
         <View style={styles.iconButton}>
           <Icon name="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue80} />
         </View>
@@ -67,7 +94,6 @@ class PostFooter extends PureComponent {
     )
   }
   renderTextarea() {
-
     return (
       <View style={styles.textareaWrapper}>
         <View style={styles.textareaBorder}>
@@ -84,7 +110,7 @@ class PostFooter extends PureComponent {
   }
   renderSendButton() {
     return (
-      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.2} >
+      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.2} onPress={this.handleAddComment}>
         <View style={styles.iconButton}>
           <Icon name="Send" width="24" height="24" fill={colors.blue100} />
         </View>
