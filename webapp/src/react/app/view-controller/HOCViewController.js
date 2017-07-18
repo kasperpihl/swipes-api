@@ -258,7 +258,15 @@ class HOCViewController extends PureComponent {
       onClick = this.onUnderlayCached(target);
     }
     return (
-      <ContextWrapper target={target} key={target}>
+      <ContextWrapper
+        target={target}
+        key={target}
+        navPop={this.onPopCached(target)}
+        navPush={this.onPushCached(target)}
+        saveState={this.onSaveState(target)}
+        openSecondary={this.onOpenSecondary(target)}
+        popSecondary={this.onPopCached('secondary')}
+      >
         <section
           className={className}
           style={style}
@@ -266,13 +274,7 @@ class HOCViewController extends PureComponent {
         >
           {this.renderCardHeader(target, canFullscreen)}
           <View
-            navPop={this.onPopCached(target)}
-            navPush={this.onPushCached(target)}
-            saveState={this.onSaveState(target)}
-            openSecondary={this.onOpenSecondary(target)}
-            popSecondary={this.onPopCached('secondary')}
             delegate={this}
-            target={target}
             key={navigation.getIn([target, 'id']) + navigation.getIn([target, 'stack']).size}
             {...props}
           />

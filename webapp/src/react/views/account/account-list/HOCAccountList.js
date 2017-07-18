@@ -5,6 +5,7 @@ import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import AccountList from './AccountList';
 
 class HOCAccountList extends PureComponent {
@@ -103,8 +104,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   signout: a.main.signout,
   browser: a.main.browser,
   confirm: a.menus.confirm,
-})(HOCAccountList);
+})(HOCAccountList));

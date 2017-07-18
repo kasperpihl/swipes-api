@@ -9,6 +9,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import * as Files from './files';
 import * as Rows from './rows';
 import './preview.scss';
@@ -321,8 +322,8 @@ function mapStateToProps() {
   return {};
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   request: ca.api.request,
   addAttachment: ca.attachments.add,
   browser: a.main.browser,
-})(HOCPreviewModal);
+})(HOCPreviewModal));

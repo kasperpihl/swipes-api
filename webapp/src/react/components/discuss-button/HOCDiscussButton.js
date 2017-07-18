@@ -8,7 +8,7 @@ import * as cs from 'swipes-core-js/selectors';
 import { bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-import getTarget from 'src/react/app/view-controller/GetTarget';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import './styles/discuss-button.scss';
 
 class HOCDiscussButton extends PureComponent {
@@ -76,7 +76,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default getTarget(connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   openSecondary: a.navigation.openSecondary,
   navPush: a.navigation.push,
 })(HOCDiscussButton));

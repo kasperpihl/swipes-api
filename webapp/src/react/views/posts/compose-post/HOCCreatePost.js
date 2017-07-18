@@ -7,6 +7,7 @@ import { setupLoading, convertObjToUnderscore, navForContext } from 'swipes-core
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import CreatePost from './CreatePost';
 
 class HOCCreatePost extends PureComponent {
@@ -142,8 +143,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
   contextMenu: a.main.contextMenu,
   createPost: ca.posts.create,
-})(HOCCreatePost);
+})(HOCCreatePost));

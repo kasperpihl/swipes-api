@@ -13,6 +13,7 @@ import {
 } from 'draft-js';
 import Button from 'Button';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import diff from 'classes/draft-util';
 
 import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
@@ -265,8 +266,8 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   saveNote: ca.notes.save,
   cacheNote: ca.notes.cache,
   browser: a.main.browser,
-})(HOCSideNote);
+})(HOCSideNote));

@@ -5,7 +5,7 @@ import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
-import getTarget from 'src/react/app/view-controller/GetTarget';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 // import { fromJS } from 'immutable';
 import PostView from './PostView';
 
@@ -104,7 +104,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default getTarget(connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   openSecondary: a.navigation.openSecondary,
   addComment: ca.posts.addComment,
   addReaction: ca.posts.addReaction,

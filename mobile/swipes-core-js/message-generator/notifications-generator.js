@@ -31,6 +31,8 @@ export default class NotificationsGenerator {
       userId = meta.getIn(['user_ids', 0]);
     } else if (['post_created'].indexOf(type) !== -1) {
       userId = meta.get('created_by');
+    } else {
+      return 'me';
     }
     return userId;
   }

@@ -5,6 +5,7 @@ import { List } from 'immutable';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import MilestoneList from './MilestoneList';
 
 const emptyList = List();
@@ -101,6 +102,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   createMilestone: ca.milestones.create,
-})(HOCMilestoneList);
+})(HOCMilestoneList));

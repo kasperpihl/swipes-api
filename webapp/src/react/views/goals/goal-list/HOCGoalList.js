@@ -10,7 +10,7 @@ import {
   EditorState,
   convertToRaw,
 } from 'draft-js';
-
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import GoalList from './GoalList';
 
 /* global msgGen*/
@@ -237,7 +237,7 @@ HOCGoalList.propTypes = {
   // removeThis: PropTypes.string.isRequired
 };
 
-export default connect(mapStateToProps, {
+export default navWrapper(connect(mapStateToProps, {
   saveCache: ca.cache.save,
   createGoal: ca.goals.create,
   selectUser: a.menus.selectUser,
@@ -247,4 +247,4 @@ export default connect(mapStateToProps, {
   inputMenu: a.menus.input,
   selectGoalType: a.menus.selectGoalType,
   selectAssignees: a.goals.selectAssignees,
-})(HOCGoalList);
+})(HOCGoalList));
