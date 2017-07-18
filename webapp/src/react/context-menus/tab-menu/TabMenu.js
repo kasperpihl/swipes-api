@@ -20,10 +20,10 @@ class TabMenu extends Component {
       this.state.tabIndex = props.initialTabIndex;
     }
     bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyDown', 'handleClick']);
-    setupDelegate(this);
+    setupDelegate(this, 'onTabMenuLoad', 'onActionClick', 'onItemAction', 'numberOfTabs', 'nameForTab');
   }
   componentDidMount() {
-    this.callDelegate('onTabMenuLoad', this);
+    this.onTabMenuLoad(this);
     const { search } = this.props;
     if (search) {
       this.refs.search.focus();
@@ -43,14 +43,14 @@ class TabMenu extends Component {
   }
   handleClick() {
     const { hide } = this.props;
-    this.callDelegate('onActionClick');
+    this.onActionClick();
     hide();
   }
   onKeyDown(e) {
     if (e.keyCode === 13) {
       const { results } = this.state;
       if (results.length) {
-        this.callDelegate('onItemAction', results[0], 'enter', e);
+        this.onItemAction(results[0], 'enter', e);
       }
     }
   }
@@ -140,7 +140,7 @@ class TabMenu extends Component {
   renderTabBar() {
     const { tabIndex } = this.state;
 
-    this.numberOfTabs = this.callDelegate('numberOfTabs');
+    this.numberOfTabs = this.numberOfTabs();
 
     if (typeof this.numberOfTabs !== 'number') {
       return undefined;
@@ -148,7 +148,7 @@ class TabMenu extends Component {
 
     const tabs = [];
     for (let i = 0; i < this.numberOfTabs; i += 1) {
-      let title = this.callDelegate('nameForTab', i);
+      let title = this.nameForTab(i);
       if (typeof title !== 'string' || !title.length) {
         title = `Tab #${i}`;
       }
@@ -226,7 +226,7 @@ class TabMenu extends Component {
       className += ' tab-menu--is-searching';
     }
 
-    this.numberOfTabs = this.callDelegate('numberOfTabs');
+    this.numberOfTabs = this.numberOfTabs();
 
     if (typeof this.numberOfTabs !== 'number' && !search) {
       className += ' tab-menu--dynamic-height';

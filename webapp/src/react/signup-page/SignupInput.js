@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import './styles/signup-input.scss';
 
@@ -13,9 +13,7 @@ class SignupInput extends PureComponent {
       visiblePassword: false,
     };
     bindAll(this, ['floatFocus', 'floatBlur', 'showPassword', 'hidePassword']);
-    setupDelegate(this);
-    this.onClick = this.callDelegate.bind(null, 'onClick');
-    this.onChangeCached = setupCachedCallback(this.callDelegate.bind(null, 'onChange'));
+    setupDelegate(this, 'onClick', 'onChange');
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.focus !== this.props.focus && !this.props.focus) {

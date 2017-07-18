@@ -18,7 +18,6 @@ import GoalList from './GoalList';
 class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
-    setupDelegate(this);
     this.state = {
       tabs: ['current', 'starred', 'unassigned', 'search'],
       tabIndex: 0,
@@ -42,9 +41,6 @@ class HOCGoalList extends PureComponent {
     }
   }
 
-  componentDidMount() {
-    this.callDelegate('viewDidLoad', this);
-  }
   componentDidUpdate(prevProps) {
     if (prevProps.goals !== this.props.goals) {
       this.updateFilter({});

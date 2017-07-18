@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';
@@ -13,16 +13,7 @@ import './styles/organization.scss';
 class Organization extends PureComponent {
   constructor(props) {
     super(props);
-    setupDelegate(this);
-    this.onInvite = this.callDelegate.bind(null, 'onInvite');
-    this.onKeyDown = this.callDelegate.bind(null, 'onKeyDown');
-    this.onChangeCached = setupCachedCallback(this.onChange, this);
-    this.onContextCached = setupCachedCallback(this.callDelegate.bind(null, 'onContext'));
-  }
-  componentDidMount() {
-  }
-  onChange(key, val) {
-    this.callDelegate('onChange', key, val);
+    setupDelegate(this, 'onInvite', 'onKeyDown', 'onContext', 'onChange');
   }
   renderActionButton(u) {
     const { isAdmin, getLoading } = this.props;

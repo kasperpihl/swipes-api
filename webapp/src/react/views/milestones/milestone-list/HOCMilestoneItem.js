@@ -18,8 +18,7 @@ class HOCMilestoneItem extends PureComponent {
     this.state = {
       goals: this.getFilteredGoals(props.milestone),
     };
-    setupDelegate(this, props.milestone.get('id'));
-    this.callDelegate.bindAll('onOpenMilestone');
+    setupDelegate(this, 'onOpenMilestone').setGlobals(props.milestone.get('id'));
   }
   componentDidMount() {
   }

@@ -20,8 +20,7 @@ class GoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this);
-    this.callDelegate.bindAll('onDiscuss', 'onContext', 'onHandoff', 'onCloseHandoff', 'onBarClick', 'onEditSteps');
+    setupDelegate(this, 'onDiscuss', 'onContext', 'onHandoff', 'onCloseHandoff', 'onBarClick', 'onEditSteps');
   }
   getHelper() {
     const { goal, myId } = this.props;

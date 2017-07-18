@@ -16,7 +16,7 @@ import './styles/react-select/default.scss';
 class HOCGoalSelector extends PureComponent {
   constructor(props) {
     super(props);
-    setupDelegate(this);
+    setupDelegate(this, 'onAddGoalToMilestone', 'onCreateGoal');
     this.onChange = this.onChange.bind(this);
   }
   componentDidMount() {
@@ -24,9 +24,9 @@ class HOCGoalSelector extends PureComponent {
   onChange(val) {
     const { goals, milestoneId, hide } = this.props;
     if (val.id) {
-      this.callDelegate('onAddGoalToMilestone', val.id);
+      this.onAddGoalToMilestone(val.id);
     } else {
-      this.callDelegate('onCreateGoal', val.value);
+      this.onCreateGoal(val.value);
     }
     hide();
   }

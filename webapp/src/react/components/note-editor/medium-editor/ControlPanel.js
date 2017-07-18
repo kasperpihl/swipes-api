@@ -19,7 +19,7 @@ class ControlPanel extends Component {
     this.state = {
       showInput: false,
     };
-    setupDelegate(this);
+    setupDelegate(this, 'onFocus');
     bindAll(this, ['addLink', 'handleKeyUp', 'onToggle']);
   }
   componentWillReceiveProps(nextProps) {
@@ -42,7 +42,7 @@ class ControlPanel extends Component {
           style,
         ),
       );
-      setTimeout(this.callDelegate.bind(null, 'focus'), 5);
+      setTimeout(this.onFocus, 5);
     }
 
     if (type === 'inline') {
@@ -52,7 +52,7 @@ class ControlPanel extends Component {
           style,
         ),
       );
-      setTimeout(this.callDelegate.bind(null, 'focus'), 5);
+      setTimeout(this.onFocus, 5);
     }
 
     if (type === 'entity') {
@@ -69,7 +69,7 @@ class ControlPanel extends Component {
     if (e.keyCode === 27) {
       console.log('up', e.keyCode);
       this.setState({ showInput: false });
-      this.callDelegate('focus');
+      this.onFocus();
     }
   }
 

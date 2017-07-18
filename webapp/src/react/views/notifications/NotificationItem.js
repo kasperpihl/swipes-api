@@ -13,8 +13,7 @@ class NotificationItem extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
-    setupDelegate(this);
-    this.callDelegate.bindAll('onNotificationOpen')
+    setupDelegate(this, 'onNotificationOpen');
   }
   componentDidMount() {
   }

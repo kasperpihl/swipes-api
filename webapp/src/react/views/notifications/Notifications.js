@@ -12,8 +12,7 @@ class Notifications extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
-    setupDelegate(this);
-    this.callDelegate.bindAll('onMarkAll')
+    setupDelegate(this, 'onMarkAll');
   }
   componentDidMount() {
   }

@@ -12,10 +12,8 @@ class Signin extends Component {
       emailFocus: false,
     };
 
-    setupDelegate(this);
-    this.onEmailChange = this.onEmailChange.bind(this);
-    this.onPasswordChange = this.onPasswordChange.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    setupDelegate(this, 'handleEmailChange', 'handlePasswordChange', 'handleKeyDown');
+
   }
   componentDidMount() {
     // this.focusInput = setTimeout(() => {
@@ -24,15 +22,6 @@ class Signin extends Component {
   }
   componentWillUnmount() {
     clearTimeout(this.focusInput);
-  }
-  onEmailChange(val) {
-    this.callDelegate('handleEmailChange', val);
-  }
-  onPasswordChange(val) {
-    this.callDelegate('handlePasswordChange', val);
-  }
-  handleKeyDown(e) {
-    this.callDelegate('handleKeyDown', e);
   }
   render() {
     const { email, password, errorLabel } = this.props;
@@ -47,7 +36,7 @@ class Signin extends Component {
           id="email"
           key="email"
           value={email}
-          onChange={this.onEmailChange}
+          onChange={this.handleEmailChange}
           onKeyDown={this.handleKeyDown}
           error={!!errorLabel}
           focus={emailFocus}
@@ -59,7 +48,7 @@ class Signin extends Component {
           id="password"
           key="password"
           value={password}
-          onChange={this.onPasswordChange}
+          onChange={this.handlePasswordChange}
           onKeyDown={this.handleKeyDown}
           error={!!errorLabel}
         />

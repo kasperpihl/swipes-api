@@ -15,8 +15,7 @@ class CommentView extends PureComponent {
     this.state = {}
 
     this.openReactions = this.openReactions.bind(this);
-    setupDelegate(this);
-    this.callDelegate.bindAll('onLinkClick', 'shouldScroll')
+    setupDelegate(this, 'onLinkClick', 'shouldScroll');
   }
   componentDidMount() {
     if (this.props.isLast && this.shouldScroll()) {

@@ -20,6 +20,7 @@ class NoteEditor extends Component {
   constructor(props) {
     super(props);
 
+    setupDelegate(this, 'onLinkClick', 'setEditorState');
     this.plugins = DraftExt(this, {
       decorators: [
         NoteLink,
@@ -30,8 +31,7 @@ class NoteEditor extends Component {
         DefaultBlocks,
       ],
     });
-    this.setEditorState = this.setEditorState.bind(this);
-    setupDelegate(this);
+
     this.onChange = this.setEditorState;
   }
   componentDidMount() {
@@ -48,19 +48,13 @@ class NoteEditor extends Component {
       this.setEditorState(this.plugins.getEditorStateWithDecorators(raw), true);
     }
   }
-  onLinkClick(url) {
-    this.callDelegate('onLinkClick', url);
-  }
-  setEditorState(editorState, force) {
-    this.callDelegate('setEditorState', editorState, force);
-  }
   getEditorState() {
     return this.props.editorState;
   }
   keyBindingFn(e) {
     return getDefaultKeyBinding(e);
   }
-  focus() {
+  onFocus() {
     this.refs.editor.focus();
   }
   renderEditor() {

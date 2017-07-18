@@ -8,8 +8,7 @@ class FilterFooter extends Component {
     super(props);
     this.state = {};
     bindAll(this, ['toggleCompleted']);
-    setupDelegate(this);
-    this.editFilter = this.callDelegate.bind(null, 'onEditFilter');
+    setupDelegate(this, 'onEditFilter');
   }
   toggleCompleted() {
   }
@@ -30,7 +29,7 @@ class FilterFooter extends Component {
       <div className="filter-footer">
         <div className="filter-footer__section">
           <div className="filter-footer__status">{status}</div>
-          <button className={editClass} onClick={this.editFilter}>Edit filter</button>
+          <button className={editClass} onClick={this.onEditFilter}>Edit filter</button>
         </div>
         {/* <div className="filter-footer__section">
           <button className={toggleClass} onClick={this.toggleCompleted} />

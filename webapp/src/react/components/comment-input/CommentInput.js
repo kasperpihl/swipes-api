@@ -15,8 +15,7 @@ class CommentInput extends PureComponent {
       commentText: '',
     };
 
-    setupDelegate(this);
-    this.callDelegate.bindAll('onAddComment');
+    setupDelegate(this, 'onAddComment');
 
     bindAll(this, ['onCommentChange', 'handleAttach', 'handleSend', 'handleKeyDown', 'handleTextareaFocus']);
   }

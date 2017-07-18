@@ -11,8 +11,7 @@ class StyledText extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this);
-    this.callDelegate.bindAll('onTextClick', 'onTextMouseEnter', 'onTextMouseLeave');
+    setupDelegate(this, 'onTextClick', 'onTextMouseEnter', 'onTextMouseLeave');
   }
   componentDidMount() {
   }

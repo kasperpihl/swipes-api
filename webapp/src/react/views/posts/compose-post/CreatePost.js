@@ -12,8 +12,7 @@ import './styles/create-post.scss';
 class CreatePost extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this);
-    this.callDelegate.bindAll('onButtonClick', 'onPostClick', 'onContextClick');
+    setupDelegate(this, 'onButtonClick', 'onPostClick', 'onContextClick');
   }
   renderSubtitle() {
     const { post } = this.props;

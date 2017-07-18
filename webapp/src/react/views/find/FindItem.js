@@ -10,15 +10,12 @@ import './styles/find-item.scss';
 class FindItem extends Component {
   constructor(props) {
     super(props);
-    setupDelegate(this, props.index);
-    bindAll(this, ['onClick', 'onAttach']);
-  }
-  onClick() {
-    this.callDelegate('findItemClick');
+    setupDelegate(this, 'findItemClick', 'findItemAttach').setGlobals(props.index);
+    bindAll(this, ['onAttach']);
   }
   onAttach(e) {
     e.stopPropagation();
-    this.callDelegate('findItemAttach');
+    this.findItemAttach();
   }
   renderContent() {
     const {
@@ -65,7 +62,7 @@ class FindItem extends Component {
     }
 
     return (
-      <div className={className} onClick={this.onClick}>
+      <div className={className} onClick={this.findItemClick}>
         {this.renderContent()}
         {this.renderService()}
         {this.renderActions()}

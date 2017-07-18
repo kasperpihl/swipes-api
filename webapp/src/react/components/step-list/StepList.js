@@ -26,8 +26,7 @@ class StepList extends PureComponent {
       addFocus: false,
       addStepValue: '',
     };
-    setupDelegate(this);
-    this.callDelegate.bindAll('onStepSort');
+    setupDelegate(this, 'onStepSort', 'onStepAdd', 'onStepRename');
     bindAll(this, ['onSortEnd', 'onFocus', 'onBlur', 'onChange', 'onKeyDown']);
   }
   componentDidMount() {
@@ -38,7 +37,7 @@ class StepList extends PureComponent {
   }
   onKeyDown(e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {
-      this.callDelegate('onStepAdd', e.target.value);
+      this.onStepAdd(e.target.value);
       this.setState({ addStepValue: '' });
     }
   }
@@ -72,7 +71,7 @@ class StepList extends PureComponent {
     const step = steps.get(stepOrder.get(i));
     const title = stepTitles.get(step.get('id'));
     if (title && title.length && title !== step.get('title')) {
-      this.callDelegate('onStepRename', i, title);
+      this.onStepRename(i, title);
       this.setState({ stepTitles: stepTitles.remove(step.get('id')) });
     }
   }

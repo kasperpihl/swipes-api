@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import Loader from 'components/loaders/Loader';
 import Button from 'Button';
 import BrowseSectionItem from './BrowseSectionItem';
@@ -11,9 +11,7 @@ class BrowseSectionList extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, props.depth);
-    this.onContextClick = this.callDelegate.bind(null, 'onContextClick');
-    this.clickedItemCached = setupCachedCallback(this.callDelegate.bind(null, 'clickedItem'));
+    setupDelegate(this, 'clickedItem', 'onContextClick').setGlobals(props.depth);
     // now use events as onClick: this.clickedItemCached(i)
   }
   componentDidMount() {

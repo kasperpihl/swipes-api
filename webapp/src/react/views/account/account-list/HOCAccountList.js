@@ -66,7 +66,10 @@ class HOCAccountList extends PureComponent {
       }
     });
   }
-  onClick(section) {
+  onClick(i, e) {
+    const { sections } = this.state;
+    const section = section[i];
+
     const { navPush, browser, target } = this.props;
     if (section.id === 'FAQ') {
       return browser(target, 'http://support.swipesapp.com/hc/en-us/categories/115000489025-Swipes-Workspace');
