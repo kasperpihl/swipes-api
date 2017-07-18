@@ -1,10 +1,11 @@
 import { Map } from 'immutable';
 import { timeAgo } from '../classes/time-utils';
 
-const boldText = (id, string) => ({
+const boldText = (id, string, boldStyle) => ({
   id,
   string,
   className: 'notification-item__styled-button',
+  boldStyle: boldStyle
 });
 
 export default class NotificationsGenerator {
@@ -39,7 +40,7 @@ export default class NotificationsGenerator {
     }
     return userId;
   }
-  getStyledTextForNotification(n) {
+  getStyledTextForNotification(n, boldStyle) {
     const meta = n.get('meta');
     const { users, posts } = this.parent;
     const text = [];
@@ -47,15 +48,15 @@ export default class NotificationsGenerator {
       case 'step_assigned': {
         const count = meta.get('step_assign_count');
         text.push('You have been assigned to ');
-        text.push(boldText('count', `${count} step${count > 1 ? 's' : ''}`));
+        text.push(boldText('count', `${count} step${count > 1 ? 's' : ''}`, boldStyle));
         text.push(` in: "${meta.get('goal_title')}"`);
         break;
       }
       case 'post_created': {
-        text.push(boldText('send', users.getName(meta.get('created_by'))));
+        text.push(boldText('send', users.getName(meta.get('created_by')), boldStyle));
         text.push(` ${posts.getPostTypeTitle(meta.get('type'))}`);
         text.push(` ${meta.get('type') === 'question' ? ' of ' : ' to '} `);
-        text.push(boldText('users', 'you'));
+        text.push(boldText('users', 'you', boldStyle));
         text.push(`: "${meta.get('message')}"'`);
         break;
       }

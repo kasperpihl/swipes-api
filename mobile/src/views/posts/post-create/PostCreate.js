@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
   boldStyle: {
-    color: colors.blue100
+    color: colors.deepBlue100
   }
 })
 
@@ -181,6 +181,7 @@ class PostCreate extends PureComponent {
     let string = ['— ', {
       id: 'type',
       string: msgGen.posts.getPostComposeTypeTitle(type),
+      boldStyle: styles.boldStyle
     }];
     let preUsers = ' to ';
     if (type === 'question') {

@@ -27,7 +27,7 @@ const initialState = fromJS({
     {
       routes: [
         {
-          id: 'Dashboard',
+          id: 'Notifications',
           title: 'Notifications',
           icon: 'Notification',
         },
