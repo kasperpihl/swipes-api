@@ -12,27 +12,28 @@ class HOCPostFeed extends PureComponent {
   }
   componentDidMount() {
   }
-  onAddReaction(postId, iLike) {
-    const { addReaction, removeReaction } = this.props;
-    console.log('====================================');
-    console.log('iLike', iLike);
-    console.log('====================================');
+  onAddReaction(post, commentId) {
+    const { addReaction, commentAddReaction } = this.props;
+    const runFunc = commentId ? commentAddReaction : addReaction;
 
-    if (iLike) {
-      removeReaction({
-        post_id: postId,
-        comment_id: null,
-      })
-    } else {
-      console.log('====================================');
-      console.log('what, not here');
-      console.log('====================================');
-      addReaction({
-        post_id: postId,
-        reaction: 'like',
-        comment_id: null,
-      });
-    }
+    runFunc({
+      post_id: post.get('id'),
+      reaction: 'like',
+      comment_id: commentId || null,
+    }).then((res) => {
+
+    });
+  }
+  onRemoveReaction(post, commentId) {
+    const { removeReaction, commentRemoveReaction } = this.props;
+    const runFunc = commentId ? commentRemoveReaction : removeReaction;
+
+    runFunc({
+      post_id: post.get('id'),
+      comment_id: commentId,
+    }).then((res) => {
+
+    });
   }
   onOpenUrl(url) {
     const { browser } = this.props;
@@ -47,7 +48,7 @@ class HOCPostFeed extends PureComponent {
     //   title: 'New post',
     // })
   }
-  onPostClick(postId) {
+  onOpenPost(postId) {
     const { navPush } = this.props;
 
     navPush({
@@ -83,5 +84,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   browser: a.links.browser,
   addReaction: ca.posts.addReaction,
+  commentAddReaction: ca.posts.commentAddReaction,
+  commentRemoveReaction: ca.posts.commentRemoveReaction,
   removeReaction: ca.posts.removeReaction,
 })(HOCPostFeed);

@@ -8,6 +8,7 @@ import HOCHeader from '../../../components/header/HOCHeader';
 import StyledText from '../../../components/styled-text/StyledText';
 import Icon from '../../../components/icons/Icon';
 import RippleButton from '../../../components/ripple-button/RippleButton';
+import Reactions from '../../../components/reactions/Reactions';
 
 const styles = StyleSheet.create({
   container: {
@@ -88,6 +89,28 @@ const styles = StyleSheet.create({
     color: colors.blue100,
     lineHeight: 27,
     fontWeight: '300',
+  },
+  actions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: 54,
+    alignSelf: 'stretch',
+  },
+  actionsSeperator: {
+    width: viewSize.width - 30,
+    height: 1,
+    backgroundColor: colors.deepBlue10,
+    position: 'absolute',
+    left: 15, top: 0,
+  },
+  commentsButton: {
+    paddingHorizontal: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  reactionWrapper: {
+    paddingHorizontal: 15,
+    alignSelf: 'stretch',
   }
 });
 
@@ -97,7 +120,14 @@ class PostFeed extends PureComponent {
     this.state = {};
 
     setupDelegate(this);
-    this.callDelegate.bindAll('onOpenUrl', 'onAddReaction');
+    this.callDelegate.bindAll('onOpenUrl', 'onAddReaction', 'onOpenPost');
+    this.handleOpenPost = this.handleOpenPost.bind(this);
+  }
+  handleOpenPost() {
+    const { post } = this.props;
+
+
+    this.onOpenPost(post.get('id'))
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
@@ -180,13 +210,15 @@ class PostFeed extends PureComponent {
   renderHeader() {
 
     return (
-      <View style={styles.header}>
-        {this.renderProfilePic()}
-        <View style={styles.headerSide}>
-          {this.renderGeneratedTitle()}
-          {this.renderHeaderSubtitle()}
+      <RippleButton onPress={this.handleOpenPost}>
+        <View style={styles.header}>
+          {this.renderProfilePic()}
+          <View style={styles.headerSide}>
+            {this.renderGeneratedTitle()}
+            {this.renderHeaderSubtitle()}
+          </View>
         </View>
-      </View>
+      </RippleButton>
     )
   }
   renderMessage() {
@@ -209,36 +241,38 @@ class PostFeed extends PureComponent {
       </View>
     )
   }
-  renderActions() {
+  renderComments() {
     const { post } = this.props;
-    const myId = msgGen.users.getUser('me').get('id');
     const commentSize = post.get('comments').size;
-    const reactionsSize = post.get('reactions').size;
-    const iLike = !!post.get('reactions').find(r => r.get('created_by') === myId);
-    const heartColor = iLike ? colors.red80 : colors.deepBlue100;
+
+    if (commentSize === 0) {
+      return undefined;
+    }
+
+    const commentsString = commentSize > 1 ? `${commentSize} Comments` : `${commentSize} Comment`;
 
     return (
-      <View>
-        <View>
-          <RippleButton onPress={this.onAddReactionCached(post.get('id'), iLike)}>
-            <View>
-              <Icon name="Heart" width="24" height="24" fill={heartColor} />
-
-              <Text>Like</Text>
-            </View>
-          </RippleButton>
-          <Text>
-            {reactionsSize}
-          </Text>
+      <RippleButton style={styles.commentsButton} onPress={this.handleOpenPost}>
+        <View style={styles.commentsButton}>
+          <Text style={styles.commentsButtonLabel}>{commentsString}</Text>
         </View>
+      </RippleButton>
+    )
+  }
+  renderActions() {
+    const { post, delegate } = this.props;
 
-        <RippleButton>
-          <View>
-            <Text>
-              {commentSize} Comments
-            </Text>
-          </View>
-        </RippleButton>
+    return (
+      <View style={styles.actions}>
+        <View style={styles.actionsSeperator} />
+        <View style={styles.reactionWrapper}>
+          <Reactions
+            reactions={post.get('reactions')}
+            post={post}
+            delegate={delegate}
+          />
+        </View>
+        {this.renderComments()}
       </View>
     )
   }
@@ -249,8 +283,6 @@ class PostFeed extends PureComponent {
     )
   }
   render() {
-    const { post } = this.props;
-
     return (
       <View style={styles.container}>
         {this.renderHeader()}

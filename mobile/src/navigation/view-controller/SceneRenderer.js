@@ -27,12 +27,13 @@ class SceneRenderer extends PureComponent {
   render() {
     const { activeSliderIndex, routes, setActionButtons, route, navPush } = this.props;
     const Comp = views[route.id];
+    const sliderIndex = `${activeSliderIndex}`;
 
     return (
       <View style={styles.viewController} key={activeSliderIndex}>
         <View style={styles.content}>
           <Comp
-            navPush={this.navPushCached(activeSliderIndex)}
+            navPush={this.navPushCached(sliderIndex)}
             navPop={this.navPopCached(activeSliderIndex)}
             setActionButtons={setActionButtons}
             lastRoute={routes.size}

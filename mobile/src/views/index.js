@@ -7,6 +7,7 @@ import MilestoneOverview from './milestones/HOCMilestoneOverview';
 import Notify from './notify/HOCNotify';
 import PreviewNote from './preview-note/HOCPreviewNote';
 import PostFeed from './posts/post-feed/HOCPostFeed';
+import PostView from './posts/post-view/HOCPostView';
 
 export {
   Dashboard,
@@ -18,4 +19,5 @@ export {
   Notify,
   PreviewNote,
   PostFeed,
+  PostView
 };

@@ -34,11 +34,10 @@ class HOCAndroidBackButton extends PureComponent {
   }
 }
 
-const { number, func } = PropTypes;
+const { string, func } = PropTypes;
 
 HOCAndroidBackButton.propTypes = {
   sliders: list,
-  activeSliderIndex: number,
   navPop: func,
   sliderChange: func,
 };

@@ -25,7 +25,7 @@ class TabNavigationItem extends Component {
     const { icon, index, fill } = this.props;
 
     return (
-      <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached(index)}>
+      <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached('' + index)}>
         <View style={styles.navItem}>
           <Icon name={icon} width="24" height="24" fill={fill} />
         </View>
