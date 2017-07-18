@@ -21,6 +21,9 @@ class HOCGoalOverview extends PureComponent {
   static maxWidth() {
     return 900;
   }
+  static fullscreen() {
+    return false;
+  }
   constructor(props) {
     super(props);
     bindAll(this, ['onContext']);
@@ -309,7 +312,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default navWrapper(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   archive: ca.goals.archive,
   contextMenu: a.main.contextMenu,
   renameGoal: ca.goals.rename,
@@ -326,4 +329,4 @@ export default navWrapper(connect(mapStateToProps, {
   inputMenu: a.menus.input,
   preview: a.links.preview,
   browser: a.main.browser,
-})(HOCGoalOverview));
+})(navWrapper(HOCGoalOverview));
