@@ -146,7 +146,13 @@ export function navForContext(id) {
       }
     }
   } else if (id.startsWith('N')) {
-    return 'MiniNote';
+    return {
+      id: 'SideNote',
+      title: 'Note',
+      props: {
+        id,
+      },
+    };
   } else if (id.startsWith('F')) {
     return 'MiniFile';
   }
