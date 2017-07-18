@@ -28,6 +28,9 @@ export default class NotificationsGenerator {
       'post_comment_added',
       'post_comment_reaction_added',
     ].indexOf(type) !== -1) {
+      if(meta.getIn(['last_reaction', 'created_by'])){
+        return meta.getIn(['last_reaction', 'created_by']);
+      }
       userId = meta.getIn(['user_ids', 0]);
     } else if (['post_created'].indexOf(type) !== -1) {
       userId = meta.get('created_by');

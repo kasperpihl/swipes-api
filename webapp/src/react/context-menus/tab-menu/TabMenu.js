@@ -226,7 +226,7 @@ class TabMenu extends Component {
       className += ' tab-menu--is-searching';
     }
 
-    this.numberOfTabs = this.numberOfTabs();
+    this.numberOfTabs = this.getNumberOfTabs();
 
     if (typeof this.numberOfTabs !== 'number' && !search) {
       className += ' tab-menu--dynamic-height';
