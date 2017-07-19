@@ -341,12 +341,12 @@ const post_comment_reaction_added = notifyWrapper([
   (req, res, next) => {
     const {
       user_id,
-      postSingleCommentFollowersReactions,
+      postSingleCommentFollowers,
     } = res.locals;
     const {
       comment,
       followers,
-    } = postSingleCommentFollowersReactions;
+    } = postSingleCommentFollowers;
 
     res.locals.user_ids = followers.filter((userId) => {
       return comment.created_by === userId && userId !== user_id;

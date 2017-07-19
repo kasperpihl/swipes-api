@@ -1,6 +1,6 @@
 import {
   dbPostsGetSingle,
-  dbPostsGetSingleCommentFollowersReactions,
+  dbPostsGetSingleCommentFollowers,
 } from '../db_utils/posts';
 import {
   objectToArray,
@@ -34,15 +34,15 @@ const postsGetSingle = (req, res, next) => {
       return next(err);
     });
 };
-const postsGetSingleCommentFollowersReactions = (req, res, next) => {
+const postsGetSingleCommentFollowers = (req, res, next) => {
   const {
     post_id,
     comment_id,
   } = res.locals;
 
-  return dbPostsGetSingleCommentFollowersReactions({ post_id, comment_id })
-    .then((postSingleCommentFollowersReactions) => {
-      res.locals.postSingleCommentFollowersReactions = postSingleCommentFollowersReactions;
+  return dbPostsGetSingleCommentFollowers({ post_id, comment_id })
+    .then((postSingleCommentFollowers) => {
+      res.locals.postSingleCommentFollowers = postSingleCommentFollowers;
 
       return next();
     })
@@ -163,13 +163,12 @@ const postCommentReactionAddedNotificationData = (req, res, next) => {
     user_id,
     post_id,
     comment_id,
-    postSingleCommentFollowersReactions,
+    postSingleCommentFollowers,
   } = res.locals;
   const {
     comment,
-    reactions,
-  } = postSingleCommentFollowersReactions;
-  const lastReaction = reactions.find(r => r.created_by === user_id);
+  } = postSingleCommentFollowers;
+  const lastReaction = comment.reactions.find(r => r.created_by === user_id);
 
   if (!lastReaction) {
     res.locals.notificationData = null;
@@ -230,7 +229,7 @@ const postFollowedUnfollowedNotificationData = (req, res, next) => {
 
 export {
   postsGetSingle,
-  postsGetSingleCommentFollowersReactions,
+  postsGetSingleCommentFollowers,
   postCreatedNotificationData,
   postCommentAddedNotificationData,
   postReactionAddedNotificationData,
