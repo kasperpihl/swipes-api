@@ -45,29 +45,3 @@ export function pop(target, i) {
   }
   return { type: types.NAVIGATION_POP, payload };
 }
-
-export const setCounter = (id, counter) => (d, getState) => {
-  // window.ipcListener.setBadgeCount(counter);
-  d({ type: types.NAVIGATION_SET_COUNTER, payload: { id, counter } });
-
-  setTimeout(() => {
-    if (window.ipcListener) {
-      const counters = getState().getIn(['navigation', 'counters']);
-      const slackCount = counters.get('Slack');
-      const swipesCount = counters.get('Notifications');
-      let totalCount = 0;
-      if (swipesCount || slackCount) {
-        if (swipesCount && swipesCount.length) {
-          totalCount += parseInt(swipesCount, 10);
-        }
-        if (slackCount && slackCount.length && slackCount !== '•') {
-          totalCount += parseInt(slackCount, 10);
-        }
-        if (!totalCount && slackCount === '•') {
-          totalCount = slackCount;
-        }
-      }
-      window.ipcListener.setBadgeCount(`${totalCount || ''}`);
-    }
-  }, 10);
-};

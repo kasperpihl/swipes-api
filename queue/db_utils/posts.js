@@ -6,12 +6,11 @@ const dbPostsGetSingle = ({ post_id }) => {
 
   return db.rethinkQuery(q);
 };
-const dbPostsGetSingleCommentFollowersReactions = ({ post_id, comment_id }) => {
+const dbPostsGetSingleCommentFollowers = ({ post_id, comment_id }) => {
   const q = r.db('swipes').table('posts').get(post_id).do((post) => {
     return {
       comment: post('comments')(comment_id).default(null),
       followers: post('followers'),
-      reactions: post('reactions'),
     };
   });
 
@@ -20,5 +19,5 @@ const dbPostsGetSingleCommentFollowersReactions = ({ post_id, comment_id }) => {
 
 export {
   dbPostsGetSingle,
-  dbPostsGetSingleCommentFollowersReactions,
+  dbPostsGetSingleCommentFollowers,
 };

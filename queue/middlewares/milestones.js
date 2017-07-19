@@ -36,57 +36,29 @@ const milestonesGoalAddedRemovedNotificationData = (req, res, next) => {
     goal_order,
   } = res.locals;
 
-  const notificationData = null;
-
-  res.locals.notificationData = notificationData;
+  res.locals.notificationData = null;
   res.locals.eventData = { goal_id, milestone_id, old_milestone_id, goal_order };
 
   return next();
 };
 const milestonesGeneralWithHistoryNotificationData = (req, res, next) => {
   const {
-    group_id,
     milestone,
   } = res.locals;
-  const historyIndex = getHistoryIndex(milestone.history, group_id);
 
-  if (historyIndex === -1) {
-    return next(new SwipesError(`milestonesGeneralWithHistoryNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(milestone, historyIndex);
-  const meta = notificationMeta(milestone);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
+  res.locals.notificationData = null;
   res.locals.eventData = { milestone };
 
   return next();
 };
 const milestoneOpenCloseWithHistoryNotificationData = (req, res, next) => {
   const {
-    group_id,
     milestone,
     milestone_id,
     goal_ids,
   } = res.locals;
-  const historyIndex = getHistoryIndex(milestone.history, group_id);
 
-  if (historyIndex === -1) {
-    return next(new SwipesError(`goalsArchiveWithHistoryNotificationData - history item with ${group_id} is not found`));
-  }
-
-  const target = createNotificationTarget(milestone, historyIndex);
-  const meta = notificationMeta(milestone);
-  const notificationData = {
-    target,
-    meta,
-  };
-
-  res.locals.notificationData = notificationData;
+  res.locals.notificationData = null;
   res.locals.eventData = {
     milestone_id,
     closed_at: milestone.closed_at,
