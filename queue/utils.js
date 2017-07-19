@@ -59,25 +59,10 @@ const notifyMessageGenerator = (from, type, request) => {
 const objectToArray = (obj) => {
   return Object.keys(obj).map(key => obj[key]);
 };
-const getHistoryIndex = (historyArray, group_id) => {
-  const index = historyArray.findIndex((item) => {
-    return item.group_id === group_id;
-  });
-
-  return index;
-};
-const createNotificationTarget = (mainItem, historyIndex) => {
-  return {
-    id: mainItem.id,
-    history_index: historyIndex,
-  };
-};
 
 export {
   valLocals,
   setLocals,
   notifyMessageGenerator,
   objectToArray,
-  getHistoryIndex,
-  createNotificationTarget,
 };
