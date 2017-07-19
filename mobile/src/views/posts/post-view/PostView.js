@@ -1,8 +1,8 @@
 import React, { PureComponent } from "react";
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
 import ParsedText from "react-native-parsed-text";
 import { List } from "immutable";
-import { setupDelegate } from "../../../../swipes-core-js/classes/utils";
+import { setupDelegate, iconForId } from "../../../../swipes-core-js/classes/utils";
 import { timeAgo } from "../../../../swipes-core-js/classes/time-utils";
 import { colors, viewSize } from "../../../utils/globalStyles";
 import HOCHeader from "../../../components/header/HOCHeader";
@@ -17,6 +17,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignSelf: "stretch",
+  },
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header: {
     flex: 1,
@@ -108,15 +113,44 @@ const styles = StyleSheet.create({
     backgroundColor: colors.deepBlue4,
     paddingHorizontal: 15,
     paddingBottom: 21,
+  },
+  navButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: 6,
+  },
+  navButtonLabel: {
+    color: colors.deepBlue50,
+    fontSize: 12,
+    lineHeight: 15,
+    paddingRight: 6,
   }
 });
 
 class PostView extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      hasLoaded: false,
+    };
 
-    setupDelegate(this, "onOpenUrl", "onAddReaction");
+    setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext');
+  }
+  componentDidMount() {
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
+  }
+  renderLoader() {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
+      </View>
+    );
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
@@ -183,7 +217,7 @@ class PostView extends PureComponent {
       </Text>
       : undefined;
     const icon = post.get("context")
-      ? <Icon name="Goals" width="12" height="12" fill={colors.deepBlue40} />
+      ? <Icon name={iconForId(post.getIn(["context", "id"]))} width="12" height="12" fill={colors.deepBlue40} />
       : undefined;
     const padding = post.get("context") ? 5 : 0;
 
@@ -228,6 +262,23 @@ class PostView extends PureComponent {
       </View>
     );
   }
+  renderOpenContextButton() {
+    const { post } = this.props;
+    const context = post.get("context");
+
+    if (!context) {
+      return undefined;
+    }
+
+    return (
+      <RippleButton style={styles.navButton} onPress={this.onNavigateToContext}>
+        <View style={styles.navButton}>
+          <Text style={styles.navButtonLabel}>Open {context.get('title')}</Text>
+          <Icon name="ArrowRightLine" width="24" height="24" fill={colors.deepBlue50} />
+        </View>
+      </RippleButton>
+    )
+  }
   renderActions() {
     const { post, delegate } = this.props;
 
@@ -239,6 +290,7 @@ class PostView extends PureComponent {
           post={post}
           delegate={delegate}
         />
+        {this.renderOpenContextButton()}
       </View>
     );
   }
@@ -267,18 +319,29 @@ class PostView extends PureComponent {
       </View>
     );
   }
+  renderContent() {
+    const { hasLoaded } = this.state;
+
+    if (!hasLoaded) {
+      return this.renderLoader();
+    }
+
+    return (
+      <ScrollView style={{ flex: 1 }}>
+        {this.renderPostHeader()}
+        {this.renderMessage()}
+        {this.renderActions()}
+        {this.renderComments()}
+      </ScrollView>
+    )
+  }
   render() {
     const { delegate } = this.props;
 
     return (
       <View style={styles.container}>
-        <ScrollView style={{ flex: 1 }}>
-          {this.renderPostHeader()}
-          {this.renderMessage()}
-          {this.renderActions()}
-          {this.renderComments()}
-        </ScrollView>
-        <PostFooter delegate={delegate} placeholder="Write a comment…"/>
+        {this.renderContent()}
+        <PostFooter delegate={delegate} placeholder="Write a comment…" commmentLoading={this.state.commmentLoading} />
       </View>
     );
   }

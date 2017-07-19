@@ -27,13 +27,10 @@ class HOCNotifications extends PureComponent {
     this.onMark(nToMark)
   }
   onNotificationOpen(n) {
+    const { navPush } = this.props;
     const nav = navForContext(n.get('target'));
 
-    console.log('====================================');
-    console.log(nav);
-    console.log('====================================');
-
-    // this.onMark([n.get('id')]);
+    navPush(nav)
   }
   render() {
     const { notifications } = this.props;

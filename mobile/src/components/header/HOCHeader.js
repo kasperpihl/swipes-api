@@ -20,12 +20,22 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flexDirection: 'row',
   },
+  titles: {
+    flexDirection: 'column',
+  },
   title: {
     flex: 1,
     color: colors.deepBlue100,
     fontSize: 24,
     fontWeight: 'bold',
     lineHeight: 36,
+  },
+  subtitle: {
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 15,
+    color: colors.deepBlue40,
+    paddingTop: 6,
   },
   children: {
     flexDirection: 'row',
@@ -81,6 +91,21 @@ class HOCHeader extends PureComponent {
       this.setState({ headerHeight: height });
     }
   }
+  renderSubtitle() {
+    const { subtitle } = this.props;
+
+    if (!subtitle) {
+      return undefined;
+    }
+
+    if (typeof subtitle === 'string') {
+      return (
+        <Text style={styles.subtitle}>{subtitle}</Text>
+      )
+    } else {
+      return subtitle;
+    }
+  }
   renderTabs() {
     const { tabs } = this.props;
 
@@ -125,6 +150,7 @@ class HOCHeader extends PureComponent {
             {children}
           </View>
         </View>
+        {this.renderSubtitle()}
         <ScrollView style={styles.bottomContainer} horizontal showsHorizontalScrollIndicator={false} alwaysBounceHorizontal={false} >
           {this.renderTabs()}
         </ScrollView>

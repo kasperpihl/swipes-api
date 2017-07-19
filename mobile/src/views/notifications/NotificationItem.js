@@ -5,6 +5,7 @@ import { timeAgo } from '../../../swipes-core-js/classes/time-utils';
 import { colors, viewSize } from '../../utils/globalStyles';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import StyledText from '../../components/styled-text/StyledText';
+import Icon from '../../components/icons/Icon';
 
 const styles = StyleSheet.create({
   container: {
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   textStyle: {
-    color: colors.deepBlue80,
+    color: colors.deepBlue100,
     fontSize: 12,
     lineHeight: 15,
   },
@@ -54,6 +55,16 @@ const styles = StyleSheet.create({
     color: colors.deepBlue100,
     fontSize: 12,
     lineHeight: 15,
+  },
+  timestampWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  timestampLabel: {
+    fontSize: 12,
+    lineHeight: 18,
+    paddingLeft: 3,
+    color: colors.deepBlue40,
   }
 });
 
@@ -62,6 +73,17 @@ class NotificationItem extends PureComponent {
     super(props);
 
     setupDelegate(this, 'onNotificationOpen');
+  }
+  getIconForType(n) {
+    const type = n.getIn(['meta', 'type']);
+
+    switch (type) {
+      case 'message': return 'MessageColored';
+      case 'question': return 'QuestionColored';
+      case 'announcement': return 'AnnouncementColored';
+      case 'information': return 'InformationColored';
+      default: return 'MessageColored';
+    }
   }
   renderProfilePic() {
     const { notification: n } = this.props;
@@ -91,16 +113,18 @@ class NotificationItem extends PureComponent {
 
     return (
       <View>
-        <StyledText text={text} textStyle={styles.textStyle}/>
+        <StyledText text={text} textStyle={styles.textStyle} />
       </View>
     )
   }
   renderTimestamp() {
     const { notification: n } = this.props;
     const timestamp = timeAgo(n.get('created_at'), true)
-    
+    const icon = this.getIconForType(n);
+
     return (
       <View style={styles.timestampWrapper}>
+        <Icon name={icon} width="24" height="24" />
         <Text style={styles.timestampLabel}>{timestamp}</Text>
       </View>
     )

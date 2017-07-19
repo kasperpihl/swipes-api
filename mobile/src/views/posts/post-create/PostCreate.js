@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     zIndex: 999,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center' 
+    justifyContent: 'center'
   },
   actionButton: {
     height: 36,
@@ -103,14 +103,25 @@ const styles = StyleSheet.create({
   },
   boldStyle: {
     color: colors.deepBlue100
-  }
+  },
+  subtitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 6,
+  },
+  subtitleLabel: {
+    fontSize: 12,
+    lineHeight: 15,
+    color: colors.deepBlue40,
+    paddingLeft: 6,
+  },
 })
 
 class PostCreate extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      
+
     }
 
     setupDelegate(this, 'onMessageChange', 'onTag', 'onChangeType');
@@ -130,9 +141,24 @@ class PostCreate extends PureComponent {
   handleChangingType() {
     this.onChangeType()
   }
+  renderSubtitle() {
+    const { post } = this.props;
+    const context = post.get('context');
+
+    if (!context) {
+      return undefined;
+    }
+
+    return (
+      <View style={styles.subtitle}>
+        <Icon name="Goals" width="12" height="12" fill={colors.deepBlue40} />
+        <Text style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text>
+      </View>
+    )
+  }
   renderHeader() {
 
-    return <HOCHeader title="Create a Post" />
+    return <HOCHeader title="Create a Post" subtitle={this.renderSubtitle()} />
   }
   renderProfilePic() {
     const { myId } = this.props;
@@ -235,15 +261,15 @@ class PostCreate extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
-          {this.renderHeader()}
-          <ScrollView style={{flex: 1}}>
-            <View style={styles.createHeader}>
-              {this.renderProfilePic()}
-              {this.renderTextArea()}
-            </View>
-            {this.renderStyledText()}
-          </ScrollView>
-         {this.renderActionButtons()} 
+        {this.renderHeader()}
+        <ScrollView style={{ flex: 1 }}>
+          <View style={styles.createHeader}>
+            {this.renderProfilePic()}
+            {this.renderTextArea()}
+          </View>
+          {this.renderStyledText()}
+        </ScrollView>
+        {this.renderActionButtons()}
       </View>
     )
   }

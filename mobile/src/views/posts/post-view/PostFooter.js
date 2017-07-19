@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation, ActivityIndicator } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from '../../../../swipes-core-js/classes/utils';
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         borderLeftColor: colors.deepBlue5,
       },
     }),
-    
+
   },
   textareaWrapper: {
     flex: 1,
@@ -110,7 +110,7 @@ class PostFooter extends PureComponent {
   }
   renderTextarea() {
     const { placeholder } = this.props;
- 
+
     return (
       <View style={styles.textareaWrapper}>
         <View style={styles.textareaBorder}>
@@ -129,6 +129,14 @@ class PostFooter extends PureComponent {
     )
   }
   renderSendButton() {
+    const { commentLoading } = this.props;
+
+    if (commentLoading) {
+      <View style={styles.iconButton}>
+        <ActivityIndicator color={colors.blue100} />
+      </View>
+    }
+
     return (
       <RippleButton rippleColor={colors.blue100} rippleOpacity={0.2} onPress={this.handleAddComment}>
         <View style={styles.iconButton}>

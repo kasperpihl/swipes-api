@@ -24,7 +24,9 @@ class HOCGoalOverview extends PureComponent {
     this.closeView = this.closeView.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
     this.onModalAskForAction = this.onModalAskForAction.bind(this);
+
     setupLoading(this);
+
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
@@ -92,55 +94,21 @@ class HOCGoalOverview extends PureComponent {
     this.openNotify(notify);
   }
   onActionButton(i) {
-    const { goal, showModal } = this.props;
+    const { goal, navPush } = this.props;
+    const helper = this.getHelper();
 
-    if (i === 0) {
-      const modal = {
-        title: 'Ask for',
-        onClick: this.onModalAskForAction,
-        items: fromJS([
-          {
-            title: 'Update',
-            leftIcon: {
-              icon: 'Status',
-            },
-          },
-          {
-            title: 'Feedback',
-            leftIcon: {
-              icon: 'Feedback',
-            },
-          },
-          {
-            title: 'Assets',
-            leftIcon: {
-              icon: 'Assets',
-            },
-          },
-          {
-            title: 'Decision',
-            leftIcon: {
-              icon: 'Decision',
-            },
-          },
-        ]),
-      };
-
-      showModal(modal);
-    } else if (i === 1) {
-      const notify = {
-        id: 'Notify',
-        title: 'Notify',
-        props: {
-          goalId: goal.get('id'),
-          notify: {
-            notification_type: 'default',
-          },
+    navPush({
+      id: 'PostCreate',
+      title: 'Create Post',
+      props: {
+        context: {
+          title: goal.get('title'),
+          id: goal.get('id'),
         },
-      };
+        taggedUsers: helper.getAllAssigneesButMe().toArray()
+      },
+    });
 
-      this.openNotify(notify);
-    }
   }
   onChangeTab(index) {
     const { hasLoaded } = this.state;
@@ -153,11 +121,6 @@ class HOCGoalOverview extends PureComponent {
     const { goal } = this.props;
     return new GoalsUtil(goal);
   }
-  openNotify(notify) {
-    const { navPush } = this.props;
-
-    navPush(notify);
-  }
   closeView() {
     const { navPop } = this.props;
 
@@ -167,8 +130,7 @@ class HOCGoalOverview extends PureComponent {
     this.props.setActionButtons({
       onClick: this.onActionButton,
       buttons: [
-        { text: 'Ask for' },
-        { text: 'Notify' },
+        { text: 'Discuss' },
       ],
     });
   }
@@ -271,7 +233,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loader: {
-     
+
   },
 });
 

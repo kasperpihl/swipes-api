@@ -30,11 +30,26 @@ const styles = StyleSheet.create({
 class HOCPreviewNote extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      routeNum: props.lastRoute,
+    };
     this.onWebviewMessage = this.onWebviewMessage.bind(this);
     this.renderLoading = this.renderLoading.bind(this);
+    this.onActionButton = this.onActionButton.bind(this);
   }
   componentDidMount() {
+    this.renderActionButtons();
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+  }
+  componentWillUpdate(nextProps) {
+    if (this.state.routeNum === nextProps.lastRoute) {
+      this.renderActionButtons();
+    }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
   }
   onWebviewMessage(e) {
     const data = JSON.parse(e.nativeEvent.data);
@@ -46,11 +61,34 @@ class HOCPreviewNote extends PureComponent {
   }
   generateNoteUrl() {
     const { token, orgId, noteId } = this.props;
-    console.log(`${window.__API_URL__}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`);
+
     return `${window.__API_URL__}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`;
   }
+  onActionButton(i) {
+    const { noteId, noteTitle, navPush } = this.props;
+
+    navPush({
+      id: 'PostCreate',
+      title: 'Create Post',
+      props: {
+        context: {
+          title: noteTitle,
+          id: noteId,
+        },
+      },
+    });
+
+  }
+  renderActionButtons() {
+
+    this.props.setActionButtons({
+      onClick: this.onActionButton,
+      buttons: [
+        { text: 'Discuss' },
+      ],
+    });
+  }
   renderLoading() {
-    console.log('faggot')
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />

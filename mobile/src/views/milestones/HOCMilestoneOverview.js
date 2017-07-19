@@ -32,16 +32,24 @@ class HOCMilestoneOverview extends PureComponent {
     this.state = {
       tabs: ['Current', 'Completed'],
       tabIndex: 0,
+      routeNum: props.lastRoute,
       goals: this.getFilteredGoals(this.props.milestone, this.props.starredGoals),
       hasLoaded: false,
     };
 
+    this.onActionButton = this.onActionButton.bind(this);
     this.renderGoal = this.renderGoal.bind(this);
   }
   componentDidMount() {
+    this.renderActionButtons();
     this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
     }, 1);
+  }
+  componentWillUpdate(nextProps) {
+    if (this.state.routeNum === nextProps.lastRoute) {
+      this.renderActionButtons();
+    }
   }
   componentDidUpdate(prevProps) {
     if (!this.state.hasLoaded) {
@@ -83,6 +91,29 @@ class HOCMilestoneOverview extends PureComponent {
     const { navPush } = this.props;
 
     navPush(goalOverview);
+  }
+  onActionButton(i) {
+    const { navPush, milestone } = this.props;
+
+    navPush({
+      id: 'PostCreate',
+      title: 'Create Post',
+      props: {
+        context: {
+          title: milestone.get('title'),
+          id: milestone.get('id'),
+        },
+      },
+    });
+
+  }
+  renderActionButtons() {
+    this.props.setActionButtons({
+      onClick: this.onActionButton,
+      buttons: [
+        { text: 'Discuss' },
+      ],
+    });
   }
   renderHeader() {
     const { tabIndex, tabs } = this.state;
@@ -137,9 +168,10 @@ class HOCMilestoneOverview extends PureComponent {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     starredGoals: state.getIn(['me', 'settings', 'starred_goals']),
+    milestone: state.getIn(['milestones', ownProps.milestoneId]),
   };
 }
 

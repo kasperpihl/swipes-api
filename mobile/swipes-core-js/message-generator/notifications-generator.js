@@ -13,13 +13,13 @@ export default class NotificationsGenerator {
     this.store = store;
     this.parent = parent;
   }
-  getUserStringMeta(meta) {
+  getUserStringMeta(meta, boldStyle) {
     const { users } = this.parent;
     return boldText('users', users.getNames(meta.get('user_ids'), {
       preferId: meta.getIn(['last_reaction', 'created_by']),
       excludeId: 'me',
       number: 2,
-    }));
+    }), boldStyle);
   }
   getImportantUserIdFromMeta(meta) {
     let userId;
@@ -29,7 +29,7 @@ export default class NotificationsGenerator {
       'post_comment_added',
       'post_comment_reaction_added',
     ].indexOf(type) !== -1) {
-      if(meta.getIn(['last_reaction', 'created_by'])){
+      if (meta.getIn(['last_reaction', 'created_by'])) {
         return meta.getIn(['last_reaction', 'created_by']);
       }
       userId = meta.getIn(['user_ids', 0]);
@@ -61,12 +61,12 @@ export default class NotificationsGenerator {
         break;
       }
       case 'post_reaction_added': {
-        text.push(this.getUserStringMeta(meta));
+        text.push(this.getUserStringMeta(meta, boldStyle));
         text.push(` liked your ${meta.get('type')}: "${meta.get('message')}"`);
         break;
       }
       case 'post_comment_added': {
-        text.push(this.getUserStringMeta(meta));
+        text.push(this.getUserStringMeta(meta, boldStyle));
         const byMe = meta.get('created_by') === users.getUser('me');
         const followString = byMe ? '' : ' you follow';
         const preFix = byMe ? 'your ' : posts.getPrefixForType(meta.get('type'));
@@ -74,7 +74,7 @@ export default class NotificationsGenerator {
         break;
       }
       case 'post_comment_reaction_added': {
-        text.push(this.getUserStringMeta(meta));
+        text.push(this.getUserStringMeta(meta, boldStyle));
         text.push(` liked your comment: "${meta.get('message')}"`);
         break;
       }
@@ -105,7 +105,7 @@ export default class NotificationsGenerator {
         break;
       }
     }
-    if(!notif.title) {
+    if (!notif.title) {
       return undefined;
     }
     return notif;

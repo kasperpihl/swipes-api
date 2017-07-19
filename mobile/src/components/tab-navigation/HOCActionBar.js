@@ -98,13 +98,13 @@ class HOCActionBar extends PureComponent {
     let extraStyles = {};
 
     if (align === 'right') {
-      extraStyles = { alignSelf: 'flex-end'}
+      extraStyles = { alignSelf: 'flex-end' }
     }
 
     return (
       <RippleButton
         rippleColor={colors.blue100}
-        style={[styles.iconButton, {extraStyles}]}
+        style={[styles.iconButton, { extraStyles }]}
         rippleOpacity={0.8}
         onPress={onPress}
         key={key}
@@ -130,6 +130,11 @@ class HOCActionBar extends PureComponent {
         { icon: "ArrowLeftLine" },
         this.onPop
       );
+    }
+
+    if (Platform.OS === "android") {
+      // Please no one ever judge me here. I needed to get flex's space-between to work :(
+      return <View />
     }
 
     return undefined;

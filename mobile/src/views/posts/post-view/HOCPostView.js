@@ -3,6 +3,7 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import * as a from "../../../actions";
 import * as ca from "../../../../swipes-core-js/actions";
+import { mobileNavForContext } from '../../../utils/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import PostView from "./PostView";
@@ -10,7 +11,9 @@ import PostView from "./PostView";
 class HOCPostView extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      commentLoading: false
+    };
   }
   componentDidMount() {
     this.hideActionBar();
@@ -46,10 +49,13 @@ class HOCPostView extends PureComponent {
   onAddComment(message) {
     const { addComment, postId } = this.props;
 
+    this.setState({ commentLoading: true });
+
     addComment({
       post_id: postId,
       message
     }).then(res => {
+      this.setState({ commentLoading: false });
       if (res.ok) {
       }
     });
@@ -59,10 +65,18 @@ class HOCPostView extends PureComponent {
 
     navPop();
   }
+  onNavigateToContext() {
+    const { post, navPush } = this.props;
+    const context = post.get('context');
+
+    if (context) {
+      navPush(mobileNavForContext(context))
+    }
+  }
   render() {
     const { myId, post } = this.props;
 
-    return <PostView myId={myId} post={post} delegate={this} />;
+    return <PostView myId={myId} post={post} delegate={this} commentLoading={this.state.commentLoading} />;
   }
 }
 

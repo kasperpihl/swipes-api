@@ -69,7 +69,7 @@ class HOCMilestones extends PureComponent {
       id: 'MilestoneOverview',
       title: 'Milestone overview',
       props: {
-        milestone,
+        milestoneId: milestone.get('id'),
       },
     };
 
@@ -87,18 +87,18 @@ class HOCMilestones extends PureComponent {
     const { milestones } = this.props;
     const group = milestones.sort(
       (a, b) => {
-        if(a.get('closed_at') && b.get('closed_at')){
+        if (a.get('closed_at') && b.get('closed_at')) {
           return b.get('closed_at').localeCompare(a.get('closed_at'));
-        } else if(a.get('closed_at')){
+        } else if (a.get('closed_at')) {
           return 1;
-        } else if(b.get('closed_at')) {
+        } else if (b.get('closed_at')) {
           return -1;
         } else {
           return a.get('created_at').localeCompare(b.get('created_at'));
         }
       }
     ).groupBy(m => m.get('closed_at') ? 'Closed' : 'Open');
-    
+
     return (
       <HOCHeader
         title="Milestones"
