@@ -8,6 +8,7 @@ import {
   convertObjToUnderscore,
   navForContext,
   attachmentIconForService,
+  throttle,
 } from 'swipes-core-js/classes/utils';
 import {
   EditorState,
@@ -38,10 +39,15 @@ class HOCCreatePost extends PureComponent {
       }),
       fileVal: '',
     };
+    this.throttledSaveState = throttle(this.saveState.bind(this), 100);
+
     setupLoading(this);
   }
   componentDidMount() {
 
+  }
+  componentWillUnmount() {
+    this.throttledSaveState.clear();
   }
   onAttachmentClick(i) {
     const { post } = this.state;
@@ -58,8 +64,7 @@ class HOCCreatePost extends PureComponent {
     selectAssignees(Object.assign({ actionLabel: 'Done' }, options), existingAssignees, (assignees) => {
       let { post } = this.state;
       if (assignees) {
-        post = post.set('taggedUsers', fromJS(assignees));
-        this.setState({ post });
+        this.updatePost(post.set('taggedUsers', fromJS(assignees)));
       }
     });
   }
@@ -82,7 +87,7 @@ class HOCCreatePost extends PureComponent {
     const delegate = {
       onItemAction: (item) => {
         contextMenu(null);
-        this.setState({ post: this.state.post.set('type', item.type) });
+        this.updatePost(this.state.post.set('type', item.type));
       },
     };
     contextMenu({
@@ -154,9 +159,9 @@ class HOCCreatePost extends PureComponent {
     if (obj.id === 'type') {
       this.onChooseNotificationType(e);
     } else {
-      post = post.set('taggedUsers', post.get('taggedUsers').filter(uid => uid !== obj.id));
+      this.updatePost(post.set('taggedUsers', post.get('taggedUsers').filter(uid => uid !== obj.id)));
     }
-    this.setState({ post });
+
   }
   onPostClick(e) {
     const { createPost, navPop } = this.props;
@@ -175,7 +180,7 @@ class HOCCreatePost extends PureComponent {
     let { post } = this.state;
     post = post.set('message', e.target.value);
 
-    this.setState({ post });
+    this.updatePost(post);
   }
   onButtonClick(type, e) {
     if (type === 'type') {
@@ -185,6 +190,16 @@ class HOCCreatePost extends PureComponent {
     } else if (type === 'attach') {
       this.onChooseAttachment(e);
     }
+  }
+  updatePost(post) {
+    this.setState({ post }, () => {
+      this.throttledSaveState();
+    });
+  }
+  saveState() {
+    const { post } = this.state;
+    const { saveState } = this.props;
+    saveState({ post });
   }
   getOptionsForE(e) {
     return {
@@ -216,7 +231,7 @@ class HOCCreatePost extends PureComponent {
       if (res.ok) {
         const att = fromJS({ link: res.link, title });
         const { post } = this.state;
-        this.setState({ post: post.updateIn(['attachments'], (atts) => atts.push(att) ) });
+        this.updatePost(post.updateIn(['attachments'], (atts) => atts.push(att) ));
         console.log('link created');
       }
     });
