@@ -40,6 +40,10 @@ class CreatePost extends PureComponent {
   }
   renderAttachments() {
     const { post } = this.props;
+    if(!post.get('attachments').size) {
+      return undefined;
+    }
+
     const attachments = post.get('attachments').map((att, i) => (
       <div key={i} className="post-attachment" onClick={this.onAttachmentClickCached(i)}>
         <Icon

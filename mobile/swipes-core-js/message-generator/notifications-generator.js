@@ -85,7 +85,7 @@ export default class NotificationsGenerator {
     const meta = n.get('meta');
     const notif = {
       id: n.get('id'),
-      context: n.get('context').toJS(),
+      target: n.get('target').toJS(),
     };
     switch (meta.get('event_type')) {
       case 'step_assigned': {

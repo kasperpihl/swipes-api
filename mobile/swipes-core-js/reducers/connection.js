@@ -8,6 +8,7 @@ const initialState = fromJS({
   lastVersion: null,
   token: null,
   ready: false,
+  notificationCounter: 0,
   status: 'offline',
   versionInfo: {},
 });
@@ -41,6 +42,9 @@ export default function connectionReducer(state = initialState, action) {
       return state.set('status', payload.status)
         .set('nextRetry', payload.nextRetry)
         .set('reconnectAttempt', payload.reconnectAttempt);
+    }
+    case types.UPDATE_NOTIFICATION_COUNTER: {
+      return state.set('notificationCounter', payload.counter);
     }
     // ======================================================
     // Authorization methods

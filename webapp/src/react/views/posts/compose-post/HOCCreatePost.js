@@ -25,8 +25,11 @@ class HOCCreatePost extends PureComponent {
   }
   constructor(props) {
     super(props);
+
+    const savedState = props.savedState && props.savedState.get('post');
+
     this.state = {
-      post: fromJS({
+      post: savedState || fromJS({
         message: props.message || '',
         type: props.type || 'message',
         attachments: props.attachments || [],
@@ -174,7 +177,6 @@ class HOCCreatePost extends PureComponent {
 
     this.setState({ post });
   }
-
   onButtonClick(type, e) {
     if (type === 'type') {
       this.onChooseNotificationType(e);

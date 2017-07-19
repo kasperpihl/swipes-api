@@ -86,11 +86,13 @@ class HOCSidebar extends PureComponent {
     })
   }
   renderItem(item) {
-    const { navId, counters } = this.props;
+    const { navId, notificationCounter } = this.props;
     const { isOpenNotifications: isOpen } = this.state
-    let counter = counters.get(item.id);
+    let counter = 0;
     if (item.id === 'Onboarding') {
       counter = this.getRemainingOnboarding();
+    } else if(item.id === 'Notifications') {
+      counter = notificationCounter;
     }
     let className = 'sidebar__item';
     if (isOpen && item.id === 'Notifications' || !isOpen && item.id === navId) {
@@ -168,7 +170,7 @@ function mapStateToProps(state) {
   return {
     me: state.get('me'),
     navId: state.getIn(['navigation', 'primary', 'id']),
-    counters: state.getIn(['navigation', 'counters']),
+    notificationCounter: state.getIn(['connection', 'notificationCounter']),
   };
 }
 

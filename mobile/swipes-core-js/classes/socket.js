@@ -148,7 +148,7 @@ export default class Socket {
       });
 
       if (window && window.ipcListener && window.msgGen) {
-        const n = fromJS(notification);
+        const n = fromJS(payload.notification_data);
         const nToSend = window.msgGen.notifications.getDesktopNotification(n);
         if(nToSend) {
           window.ipcListener.sendNotification(nToSend);

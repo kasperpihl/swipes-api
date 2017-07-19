@@ -1,6 +1,5 @@
 import { fromJS } from 'immutable';
 import * as types from 'constants';
-import { UPDATE_NOTIFICATION_COUNTER } from 'swipes-core-js/constants';
 
 const initialState = fromJS({
   primary: {
@@ -51,12 +50,6 @@ export default function history(state = initialState, action) {
         }
         return s.butLast();
       });
-    }
-    case UPDATE_NOTIFICATION_COUNTER: {
-      return state.setIn(['counters', 'Notifications'], payload.counter);
-    }
-    case types.NAVIGATION_SET_COUNTER: {
-      return state.setIn(['counters', payload.id], payload.counter);
     }
     default:
       return state;

@@ -81,7 +81,7 @@ export default class FilterHandler {
           counter += 1;
         }
       });
-      const currUnread = state.getIn(['navigation', 'counters', 'Notifications']);
+      const currUnread = state.getIn(['connection', 'notificationCounter']);
 
       this.prevNotifications = notifications;
       if (currUnread !== counter) {
