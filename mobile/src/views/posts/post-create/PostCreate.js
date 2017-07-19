@@ -124,7 +124,7 @@ class PostCreate extends PureComponent {
 
     }
 
-    setupDelegate(this, 'onMessageChange', 'onTag', 'onChangeType');
+    setupDelegate(this, 'onMessageChange', 'onTag', 'onChangeType', 'onAddAttachment');
     this.handleTagging = this.handleTagging.bind(this);
     this.handleChangingType = this.handleChangingType.bind(this);
 
@@ -134,12 +134,6 @@ class PostCreate extends PureComponent {
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
-  }
-  handleTagging() {
-    this.onTag()
-  }
-  handleChangingType() {
-    this.onChangeType()
   }
   renderSubtitle() {
     const { post } = this.props;
@@ -253,8 +247,9 @@ class PostCreate extends PureComponent {
 
     return (
       <View style={styles.actionButtons}>
-        {this.renderButton('Assign', 'Tag', this.handleTagging)}
-        {this.renderButton('Type', 'Type', this.handleChangingType)}
+        {this.renderButton('Assign', 'Tag', this.onTag)}
+        {this.renderButton('Type', 'Type', this.onChangeType)}
+        {this.renderButton('Attachment', 'Attach', this.onAddAttachment)}
       </View>
     )
   }

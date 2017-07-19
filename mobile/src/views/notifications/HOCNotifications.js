@@ -18,8 +18,7 @@ class HOCNotifications extends PureComponent {
   onMark(ids) {
     const { markNotifications } = this.props;
 
-    markNotifications(ids).then(() => {
-    });
+    markNotifications(ids);
   }
   onMarkAll() {
     const { notifications } = this.props;
@@ -29,8 +28,8 @@ class HOCNotifications extends PureComponent {
   onNotificationOpen(n) {
     const { navPush } = this.props;
     const nav = navForContext(n.get('target'));
-
-    navPush(nav)
+    this.onMark([n.get('id')])
+    navPush(nav);
   }
   render() {
     const { notifications } = this.props;

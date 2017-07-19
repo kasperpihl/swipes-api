@@ -29,7 +29,7 @@ class HOCPostCreate extends PureComponent {
     this.renderActionButtons();
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.routeNum !== this.props.routeNum && this.props.routeNum === this.state.routeNum ) {
+    if (prevProps.routeNum !== this.props.routeNum && this.props.routeNum === this.state.routeNum) {
       this.renderActionButtons();
     }
   }
@@ -130,6 +130,9 @@ class HOCPostCreate extends PureComponent {
     };
 
     showModal(modal);
+  }
+  onAddAttachment() {
+
   }
   updatePost(post) {
     this.setState({ post });

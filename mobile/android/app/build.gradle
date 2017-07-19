@@ -162,7 +162,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField "String", "CODEPUSH_KEY", '"ZcwuUupyV_lvtHEsxo4rLdLZwX6xNyuqwmYWX"'
             manifestPlaceholders = [
-                onesignal_app_id: "420ca44f-378a-4ce5-adb7-18cef4b689c0s",
+                onesignal_app_id: "420ca44f-378a-4ce5-adb7-18cef4b689c0",
                 onesignal_google_project_number: "410470964842"
             ]
         }

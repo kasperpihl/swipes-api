@@ -48,7 +48,8 @@ class HOCTabNavigation extends PureComponent {
           icon: "Milestones"
         },
         {
-          icon: "Notification"
+          icon: "Notification",
+          counter: props.counter,
         },
         {
           icon: "Messages"
@@ -68,6 +69,14 @@ class HOCTabNavigation extends PureComponent {
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.counter !== this.props.counter) {
+      const { rootRoutes } = this.state;
+
+      rootRoutes[2].counter = nextProps.counter;
+      this.setState({ rootRoutes });
+    }
   }
   handlePress(i) {
     const { sliderChange, activeSliderIndex } = this.props;
@@ -112,6 +121,7 @@ class HOCTabNavigation extends PureComponent {
       return (
         <TabNavigationItem
           icon={r.icon}
+          counter={r.counter}
           index={i}
           fill={colors.deepBlue100}
           key={`navbutton-${i}`}
@@ -150,7 +160,8 @@ function mapStateToProps(state) {
   return {
     actionButtons: state.getIn(["navigation", "actionButtons"]),
     activeSliderIndex,
-    routes: state.getIn(["navigation", "sliders", activeSliderIndex, "routes"])
+    routes: state.getIn(["navigation", "sliders", activeSliderIndex, "routes"]),
+    counter: state.getIn(['connection', 'notificationCounter'])
   };
 }
 
