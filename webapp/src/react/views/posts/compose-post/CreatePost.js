@@ -16,7 +16,7 @@ class CreatePost extends PureComponent {
   }
   renderSubtitle() {
     const { post } = this.props;
-    if(!post.get('context')) {
+    if (!post.get('context')) {
       return undefined;
     }
 
@@ -41,13 +41,18 @@ class CreatePost extends PureComponent {
   renderAttachments() {
     const { post } = this.props;
     const attachments = post.get('attachments').map((att, i) => (
-      <div onClick={this.onAttachmentClickCached(i)} key={i}>
-        <Icon icon={attachmentIconForService(att.getIn(['link', 'service']))} />
-        {att.get('title')}
+      <div key={i} className="post-attachment" onClick={this.onAttachmentClickCached(i)}>
+        <Icon
+          icon={attachmentIconForService(att.getIn(['link', 'service']))}
+          className="post-attachment__svg"
+        />
+        <div className="post-attachment__label">
+          {att.get('title')}
+        </div>
       </div>
-    ));
+    ))
     return (
-      <div>
+      <div className="create-post__attachments">
         {attachments}
       </div>
     )
@@ -77,7 +82,7 @@ class CreatePost extends PureComponent {
         key={b.text}
         className="create-post__button"
         onClick={this.onButtonClickCached(b['data-id'])}
-        {...getLoading(b['data-id'])}
+        {...getLoading(b['data-id']) }
         frameless
         icon={b.icon}
       />
@@ -96,7 +101,7 @@ class CreatePost extends PureComponent {
           primary
           text="Post"
           onClick={this.onPostClick}
-          {...getLoading('post')}
+          {...getLoading('post') }
           className="create-post__button"
         />
         <input value={fileVal} ref="upload" type="file" onChange={this.onChangeFiles} />

@@ -16,6 +16,14 @@
   padding: 0 30px;
 }
 
+.create-post__attachments {
+  @include size(100%, auto);
+  @include flexContainer('row') {
+    flex-wrap: wrap;
+  };
+  padding-left: 63px;
+}
+
 // ======================================================
 // Elements
 // ======================================================
@@ -58,7 +66,6 @@
     border: none;
     border-radius: 18px;
     transition: .2s ease;
-
   }
 
   &__action-icon {
