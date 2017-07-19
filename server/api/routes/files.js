@@ -79,6 +79,21 @@ authed.all('/files.upload',
   }),
  );
 
+authed.all('/files.create',
+ valBody({
+   organization_id: string.require(),
+   file_name: string.require(),
+   s3_url: string.require(),
+ }),
+ filesAddToFilesTable,
+ valResponseAndSend({
+   file: object.as({
+     id: string.require(),
+     title: string.require(),
+   }).require(),
+ }),
+);
+
 export {
   authed,
   notAuthed,

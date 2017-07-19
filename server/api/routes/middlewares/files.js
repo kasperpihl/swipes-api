@@ -112,6 +112,10 @@ const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
             title: slug_file_name,
           },
         },
+        file: {
+          id: fileId,
+          title: slug_file_name,
+        },
       });
 
       return next();
