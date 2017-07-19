@@ -7,6 +7,7 @@ import {
 import {
   valBody,
   valResponseAndSend,
+  mapLocals,
 } from '../utils';
 import {
   linksCreate,
@@ -59,6 +60,18 @@ authed.all('/links.create',
   }),
   linksCreate,
   linksAddPermission,
+  mapLocals((locals) => {
+    const {
+      link,
+      short_url,
+    } = locals;
+
+    link.permission = {
+      short_url,
+    };
+
+    return { link };
+  }),
   valResponseAndSend({
     link: object.require(),
   }));
