@@ -148,6 +148,8 @@ android {
             applicationIdSuffix '.staging'
             resValue "string", "app_name", "Swipes Staging"
             signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField "String", "CODEPUSH_KEY", '"wJtyg-kSw5R0NoHoTFvj6MqP06QxNyuqwmYWX"'
             manifestPlaceholders = [
                 onesignal_app_id: "db8f2558-a836-4e95-b22b-089e8e85f6e9",

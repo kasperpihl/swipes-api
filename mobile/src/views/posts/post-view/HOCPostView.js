@@ -25,6 +25,17 @@ class HOCPostView extends PureComponent {
       hide: true
     });
   }
+  onOpenUrl(url) {
+    const { browser } = this.props;
+
+    browser(url);
+  }
+  onAttachmentClick(i) {
+    const { preview } = this.props;
+    const { post } = this.state;
+
+    preview(post.getIn(['attachments', i]));
+  }
   onAddReaction(bull, commentId) {
     const { post, addReaction, commentAddReaction } = this.props;
     const runFunc = commentId ? commentAddReaction : addReaction;
@@ -92,6 +103,8 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
+  browser: a.links.browser,
+  preview: a.links.preview,
   addComment: ca.posts.addComment,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,

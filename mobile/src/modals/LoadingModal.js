@@ -16,7 +16,6 @@ class LoadingModal extends PureComponent {
   }
   componentWillReceiveProps(nextProps) {
     const { loadingState } = this.state;
-
     if (nextProps.loading && !loadingState) {
       this.setState({ loadingState: true });
     } else if (!nextProps.loading && loadingState) {
@@ -26,9 +25,12 @@ class LoadingModal extends PureComponent {
   closeModal() {
     const { showLoader } = this.props;
 
-    showLoader();
+    showLoader(false);
   }
   render() {
+    console.log('====================================');
+    console.log('hi', this.state.loadingState);
+    console.log('====================================');
     return (
       <Modal
         animationType={'fade'}

@@ -78,6 +78,8 @@ class CommentView extends PureComponent {
     if (Platform.OS === "android") {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+
+    setupDelegate(this, 'onOpenUrl')
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();

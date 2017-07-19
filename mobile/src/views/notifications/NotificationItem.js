@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   timestampWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingTop: 3,
   },
   timestampLabel: {
     fontSize: 12,

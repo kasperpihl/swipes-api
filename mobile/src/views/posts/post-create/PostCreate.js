@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate } from '../../../../swipes-core-js/classes/utils';
+import { setupDelegate, attachmentIconForService } from '../../../../swipes-core-js/classes/utils';
 import { colors, viewSize } from '../../../utils/globalStyles';
 import HOCHeader from '../../../components/header/HOCHeader'
 import RippleButton from '../../../components/ripple-button/RippleButton';
@@ -115,6 +115,27 @@ const styles = StyleSheet.create({
     color: colors.deepBlue40,
     paddingLeft: 6,
   },
+  attachments: {
+    paddingHorizontal: 15,
+    marginTop: 30,
+  },
+  attachment: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+    height: 48,
+    paddingHorizontal: 12,
+    borderRadius: 1,
+    borderWidth: 1,
+    borderColor: colors.deepBlue10,
+  },
+  attachmentLabel: {
+    fontSize: 12,
+    color: colors.deepBlue80,
+    fontWeight: '500',
+    paddingLeft: 12,
+  }
 })
 
 class PostCreate extends PureComponent {
@@ -124,9 +145,7 @@ class PostCreate extends PureComponent {
 
     }
 
-    setupDelegate(this, 'onMessageChange', 'onTag', 'onChangeType', 'onAddAttachment');
-    this.handleTagging = this.handleTagging.bind(this);
-    this.handleChangingType = this.handleChangingType.bind(this);
+    setupDelegate(this, 'onMessageChange', 'onTag', 'onChangeType', 'onAddAttachment', 'onAttachmentClick');
 
     if (Platform.OS === "android") {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -243,6 +262,33 @@ class PostCreate extends PureComponent {
       </RippleButton>
     )
   }
+  renderAttachments() {
+    const { post } = this.props;
+
+    if (!post.get('attachments').size) {
+      return undefined;
+    }
+
+    const attachments = post.get('attachments').map((att, i) => (
+      <RippleButton onPress={this.onAttachmentClickCached(i, post)} key={i}>
+        <View style={styles.attachment}>
+          <Icon
+            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            width="24"
+            height="24"
+            fill={colors.deepBlue80}
+          />
+          <Text style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+        </View>
+      </RippleButton>
+    ))
+
+    return (
+      <View style={styles.attachments}>
+        {attachments}
+      </View>
+    )
+  }
   renderActionButtons() {
 
     return (
@@ -263,6 +309,7 @@ class PostCreate extends PureComponent {
             {this.renderTextArea()}
           </View>
           {this.renderStyledText()}
+          {this.renderAttachments()}
         </ScrollView>
         {this.renderActionButtons()}
       </View>

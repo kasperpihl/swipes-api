@@ -59,6 +59,13 @@ class HOCPostFeed extends PureComponent {
       }
     })
   }
+  onAttachmentClick(i, post) {
+    const { preview } = this.props;
+
+    console.log('are you here????')
+
+    preview(post.getIn(['attachments', i]));
+  }
   render() {
     const { posts } = this.props;
 
@@ -82,6 +89,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  preview: a.links.preview,
   browser: a.links.browser,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,

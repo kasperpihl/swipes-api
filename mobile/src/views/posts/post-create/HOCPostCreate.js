@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import * as a from '../../../actions';
 import * as ca from '../../../../swipes-core-js/actions';
 import { setupLoading, convertObjToUnderscore, navForContext } from '../../../../swipes-core-js/classes/utils';
+import moment from 'moment';
+import mime from 'react-native-mime-types';
+import ImagePicker from 'react-native-image-picker';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS, List } from 'immutable';
 import PostCreate from './PostCreate';
@@ -131,8 +134,76 @@ class HOCPostCreate extends PureComponent {
 
     showModal(modal);
   }
-  onAddAttachment() {
+  onAttachmentClick(i) {
+    const { preview } = this.props;
+    const { post } = this.state;
 
+    preview(post.getIn(['attachments', i]));
+  }
+  onAddAttachment() {
+    const { createFile, createLink, loading } = this.props;
+
+    const options = {
+      title: 'Attach image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else if (response.customButton) {
+      } else {
+        const type = mime.lookup(response.uri) || 'application/octet-stream';
+        const ext = mime.extension(type);
+        const name = response.fileName
+          || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
+        const file = {
+          name,
+          uri: response.uri,
+          type,
+        };
+
+        loading(true);
+
+        createFile([file]).then((fileRes) => {
+          if (fileRes.ok) {
+            const link = this.getSwipesLinkObj(type, fileRes.file.id, fileRes.file.title);
+
+            createLink(link).then((res) => {
+              loading();
+              if (res.ok) {
+                const att = fromJS({ link: res.link, title: fileRes.file.title });
+                const { post } = this.state;
+                this.setState({ post: post.updateIn(['attachments'], (atts) => atts.push(att)) });
+              }
+
+            })
+          } else {
+            loading();
+          }
+        });
+      }
+    });
+  }
+  getSwipesLinkObj(type, id, title) {
+    const { myId } = this.props;
+    return {
+      service: {
+        name: 'swipes',
+        type,
+        id,
+      },
+      permission: {
+        account_id: myId,
+      },
+      meta: {
+        title,
+      },
+    };
   }
   updatePost(post) {
     this.setState({ post });
@@ -175,4 +246,8 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   createPost: ca.posts.create,
   showModal: a.modals.show,
+  loading: a.loading.showLoader,
+  createFile: ca.files.create,
+  createLink: ca.links.create,
+  preview: a.links.preview,
 })(HOCPostCreate);

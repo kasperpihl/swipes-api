@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
 import ParsedText from "react-native-parsed-text";
 import { List } from "immutable";
-import { setupDelegate, iconForId } from "../../../../swipes-core-js/classes/utils";
+import { setupDelegate, iconForId, attachmentIconForService } from "../../../../swipes-core-js/classes/utils";
 import { timeAgo } from "../../../../swipes-core-js/classes/time-utils";
 import { colors, viewSize } from "../../../utils/globalStyles";
 import HOCHeader from "../../../components/header/HOCHeader";
@@ -125,6 +125,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
     paddingRight: 6,
+  },
+  attachments: {
+    paddingHorizontal: 15,
+    marginTop: 30,
+  },
+  attachment: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+    height: 48,
+    paddingHorizontal: 12,
+    borderRadius: 1,
+    borderWidth: 1,
+    borderColor: colors.deepBlue10,
+  },
+  attachmentLabel: {
+    fontSize: 12,
+    color: colors.deepBlue80,
+    fontWeight: '500',
+    paddingLeft: 12,
   }
 });
 
@@ -135,7 +156,7 @@ class PostView extends PureComponent {
       hasLoaded: false,
     };
 
-    setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext');
+    setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext', 'onAttachmentClick');
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -262,6 +283,33 @@ class PostView extends PureComponent {
       </View>
     );
   }
+  renderAttachments() {
+    const { post } = this.props;
+
+    if (!post.get('attachments').size) {
+      return undefined;
+    }
+
+    const attachments = post.get('attachments').map((att, i) => (
+      <RippleButton onPress={this.onAttachmentClickCached(i, post)} key={i}>
+        <View style={styles.attachment}>
+          <Icon
+            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            width="24"
+            height="24"
+            fill={colors.deepBlue80}
+          />
+          <Text style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+        </View>
+      </RippleButton>
+    ))
+
+    return (
+      <View style={styles.attachments}>
+        {attachments}
+      </View>
+    )
+  }
   renderOpenContextButton() {
     const { post } = this.props;
     const context = post.get("context");
@@ -330,6 +378,7 @@ class PostView extends PureComponent {
       <ScrollView style={{ flex: 1 }}>
         {this.renderPostHeader()}
         {this.renderMessage()}
+        {this.renderAttachments()}
         {this.renderActions()}
         {this.renderComments()}
       </ScrollView>

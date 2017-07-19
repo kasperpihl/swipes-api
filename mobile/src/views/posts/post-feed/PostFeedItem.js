@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
-import { setupDelegate, iconForId } from '../../../../swipes-core-js/classes/utils';
+import { setupDelegate, iconForId, attachmentIconForService } from '../../../../swipes-core-js/classes/utils';
 import { timeAgo } from '../../../../swipes-core-js/classes/time-utils';
 import { colors, viewSize } from '../../../utils/globalStyles';
 import HOCHeader from '../../../components/header/HOCHeader';
@@ -111,6 +111,26 @@ const styles = StyleSheet.create({
   reactionWrapper: {
     paddingHorizontal: 15,
     alignSelf: 'stretch',
+  },
+  attachments: {
+    paddingHorizontal: 15,
+  },
+  attachment: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+    height: 48,
+    paddingHorizontal: 12,
+    borderRadius: 1,
+    borderWidth: 1,
+    borderColor: colors.deepBlue10,
+  },
+  attachmentLabel: {
+    fontSize: 12,
+    color: colors.deepBlue80,
+    fontWeight: '500',
+    paddingLeft: 12,
   }
 });
 
@@ -119,7 +139,7 @@ class PostFeed extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onOpenPost');
+    setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onOpenPost', 'onAttachmentClick');
     this.handleOpenPost = this.handleOpenPost.bind(this);
   }
   handleOpenPost() {
@@ -281,11 +301,35 @@ class PostFeed extends PureComponent {
       <View style={styles.seperator} />
     )
   }
+  renderAttachments() {
+    const { post } = this.props;
+
+    const attachments = post.get('attachments').map((att, i) => (
+      <RippleButton onPress={this.onAttachmentClickCached(i, post)} key={i}>
+        <View style={styles.attachment}>
+          <Icon
+            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            width="24"
+            height="24"
+            fill={colors.deepBlue80}
+          />
+          <Text style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+        </View>
+      </RippleButton>
+    ))
+
+    return (
+      <View style={styles.attachments}>
+        {attachments}
+      </View>
+    )
+  }
   render() {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
         {this.renderMessage()}
+        {this.renderAttachments()}
         {this.renderActions()}
         {this.renderSeperator()}
       </View>
