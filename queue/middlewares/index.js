@@ -336,7 +336,7 @@ const post_reaction_removed = notifyWrapper([
 ]);
 
 const post_comment_reaction_added = notifyWrapper([
-  posts.postsGetSingleCommentFollowersReactions,
+  posts.postsGetSingleCommentFollowers,
   posts.postCommentReactionAddedNotificationData,
   (req, res, next) => {
     const {
