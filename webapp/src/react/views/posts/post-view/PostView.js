@@ -1,7 +1,13 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback, URL_REGEX } from 'swipes-core-js/classes/utils';
+import {
+  bindAll,
+  setupDelegate,
+  setupCachedCallback,
+  URL_REGEX,
+  attachmentIconForService,
+} from 'swipes-core-js/classes/utils';
 import { List } from 'immutable';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import SWView from 'SWView';
@@ -21,7 +27,7 @@ class PostView extends PureComponent {
     super(props)
     this.state = {}
 
-    setupDelegate(this, 'onLinkClick', 'onOpenPost');
+    setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick');
   }
   renderHeader() {
     const { post, delegate } = this.props;
@@ -30,7 +36,7 @@ class PostView extends PureComponent {
       <div className="post__header">
         <PostHeader post={post} delegate={delegate} />
         {this.renderMessage()}
-        {/*{this.renderAttachments()}*/}
+        {this.renderAttachments()}
         {this.renderPostActions()}
       </div>
     )
@@ -77,21 +83,22 @@ class PostView extends PureComponent {
 
   }
   renderAttachments() {
+    const { post } = this.props;
 
+    const attachments = post.get('attachments').map((att, i) => (
+      <div key={i} className="post-attachment" onClick={this.onAttachmentClickCached(i)}>
+        <Icon
+          icon={attachmentIconForService(att.getIn(['link', 'service']))}
+          className="post-attachment__svg"
+        />
+        <div className="post-attachment__label">
+          {att.get('title')}
+        </div>
+      </div>
+    ))
     return (
       <div className="post__attachments">
-        <div className="post-attachment">
-          <Icon icon="Note" className="post-attachment__svg" />
-          <div className="post-attachment__label">
-            Design Notes
-          </div>
-        </div>
-        <div className="post-attachment">
-          <Icon icon="Hyperlink" className="post-attachment__svg" />
-          <div className="post-attachment__label">
-            https://projects.invisionapp.com/d/main#/console/11492934/242808848/inspect
-          </div>
-        </div>
+        {attachments}
       </div>
     )
   }

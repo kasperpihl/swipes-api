@@ -29,6 +29,11 @@ class HOCPostView extends PureComponent {
 
     return !fromFeed;
   }
+  onAttachmentClick(i) {
+    const { preview, target, post } = this.props;
+
+    preview(target, post.getIn(['attachments', i]));
+  }
   onAddReaction(commentId) {
     const { post, addReaction, commentAddReaction } = this.props;
     const runFunc = commentId ? commentAddReaction : addReaction;
@@ -111,5 +116,6 @@ export default navWrapper(connect(mapStateToProps, {
   commentAddReaction: ca.posts.commentAddReaction,
   commentRemoveReaction: ca.posts.commentRemoveReaction,
   removeReaction: ca.posts.removeReaction,
+  preview: a.links.preview,
   browser: a.main.browser,
 })(HOCPostView));

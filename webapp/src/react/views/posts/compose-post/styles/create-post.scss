@@ -21,7 +21,6 @@
 // ======================================================
 
 .create-post {
-
   &__context {
     @include size(100%, auto);
     @include flexContainer('row', left, center);
@@ -40,6 +39,16 @@
     border-top: 1px solid $deepBlue-5;
     padding-top: 6px;
     margin-top: 21px;
+
+    & [type=file] {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
   }
 
   &__action {
@@ -49,6 +58,7 @@
     border: none;
     border-radius: 18px;
     transition: .2s ease;
+
   }
 
   &__action-icon {

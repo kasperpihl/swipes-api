@@ -3,7 +3,16 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupLoading, convertObjToUnderscore, navForContext } from 'swipes-core-js/classes/utils';
+import {
+  setupLoading,
+  convertObjToUnderscore,
+  navForContext,
+  attachmentIconForService,
+} from 'swipes-core-js/classes/utils';
+import {
+  EditorState,
+  convertToRaw,
+} from 'draft-js';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
@@ -23,11 +32,19 @@ class HOCCreatePost extends PureComponent {
         attachments: props.attachments || [],
         taggedUsers: props.taggedUsers || [],
         context: props.context || null,
-      })
+      }),
+      fileVal: '',
     };
     setupLoading(this);
   }
   componentDidMount() {
+
+  }
+  onAttachmentClick(i) {
+    const { post } = this.state;
+    const { preview, target } = this.props;
+
+    preview(target, post.getIn(['attachments', i]));
   }
   onSelectAssignees(e) {
     const options = this.getOptionsForE(e);
@@ -77,6 +94,58 @@ class HOCCreatePost extends PureComponent {
       },
     });
   }
+  onAddAttachment() {
+
+  }
+  onChangeFiles(e) {
+    this.setState({ fileVal: e.target.value });
+    this.onUploadFiles(e.target.files);
+  }
+  onUploadFiles(files) {
+    const { createFile } = this.props;
+    this.setLoading('attach');
+    createFile(files).then((res) => {
+      if (res.ok) {
+        this.createLinkFromTypeIdTitle('file', res.file.id, res.file.title);
+        this.setState({ fileVal: '' });
+      } else {
+        this.clearLoading('attach', '!Something went wrong');
+      }
+    });
+  }
+  onChooseAttachment(e) {
+    const { chooseAttachmentType, inputMenu, createNote } = this.props;
+    const options = this.getOptionsForE(e);
+
+    chooseAttachmentType(options).then((item) => {
+      if (item.id === 'upload') {
+        this.refs.create.refs.upload.click();
+        return;
+      }
+      options.buttonLabel = 'Add';
+      if (item.id === 'note') {
+        options.placeholder = 'Title of the note';
+      } else if (item.id === 'url') {
+        options.placeholder = 'Enter a URL';
+      }
+      inputMenu(options, (title) => {
+        if (title && title.length) {
+          this.setLoading('attach');
+          if (item.id === 'url') {
+            this.createLinkFromTypeIdTitle(item.id, title, title);
+          } else {
+            createNote(convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
+              if (res && res.ok) {
+                this.createLinkFromTypeIdTitle(item.id, res.note.id, title);
+              } else {
+                this.clearLoading('attach');
+              }
+            });
+          }
+        }
+      });
+    })
+  }
   onTextClick(id, obj, e) {
     let { post } = this.state;
     if (obj.id === 'type') {
@@ -111,6 +180,8 @@ class HOCCreatePost extends PureComponent {
       this.onChooseNotificationType(e);
     } else if (type === 'users') {
       this.onSelectAssignees(e);
+    } else if (type === 'attach') {
+      this.onChooseAttachment(e);
     }
   }
   getOptionsForE(e) {
@@ -119,11 +190,42 @@ class HOCCreatePost extends PureComponent {
       alignX: 'center',
     }
   }
+  getSwipesLinkObj(type, id, title) {
+    const { myId } = this.props;
+    return {
+      service: {
+        name: 'swipes',
+        type,
+        id,
+      },
+      permission: {
+        account_id: myId,
+      },
+      meta: {
+        title,
+      },
+    };
+  }
+  createLinkFromTypeIdTitle(type, id, title) {
+    const link = this.getSwipesLinkObj(type, id, title);
+    const { createLink } = this.props;
+    createLink(link).then((res) => {
+      this.clearLoading('attach');
+      if (res.ok) {
+        const att = fromJS({ link: res.link, title });
+        const { post } = this.state;
+        this.setState({ post: post.updateIn(['attachments'], (atts) => atts.push(att) ) });
+        console.log('link created');
+      }
+    });
+  }
   render() {
     const { myId } = this.props;
-    const { post } = this.state;
+    const { post, fileVal } = this.state;
     return (
       <CreatePost
+        ref="create"
+        fileVal={fileVal}
         post={post}
         myId={myId}
         delegate={this}
@@ -146,5 +248,11 @@ function mapStateToProps(state) {
 export default navWrapper(connect(mapStateToProps, {
   selectAssignees: a.goals.selectAssignees,
   contextMenu: a.main.contextMenu,
+  inputMenu: a.menus.input,
+  preview: a.links.preview,
+  chooseAttachmentType: a.menus.chooseAttachmentType,
   createPost: ca.posts.create,
+  createLink: ca.links.create,
+  createNote: ca.notes.create,
+  createFile: ca.files.create,
 })(HOCCreatePost));

@@ -28,10 +28,10 @@ export const input = (options, callback) => (d) => {
     props: {
       ...options,
       onResult: (title) => {
+        d(a.main.contextMenu(null));
         if (callback) {
           callback(title);
         }
-        d(a.main.contextMenu(null));
       },
     },
   }));
@@ -40,8 +40,8 @@ export const input = (options, callback) => (d) => {
 export const selectGoalType = (options, callback) => (d) => {
   const delegate = {
     onItemAction: (item) => {
-      callback(item);
       d(a.main.contextMenu(null));
+      callback(item);
     },
     resultsForAll: () => [
       { id: null, title: 'All goals' },
@@ -185,3 +185,26 @@ export const selectMilestone = (options, callback) => (d, getState) => {
     },
   }));
 };
+
+export const chooseAttachmentType = (options) => (d, getState) => new Promise((resolve) => {
+  const items = [
+    { id: 'note', title: 'New Note', leftIcon: { icon: 'Note' }},
+    { id: 'url', title: 'Add URL', leftIcon: { icon: 'Hyperlink' }},
+    { id: 'upload', title: 'Upload file', leftIcon: { icon: 'File' }},
+  ];
+
+  const delegate = {
+    onItemAction: (item) => {
+      d(a.main.contextMenu(null));
+      resolve(item);
+    },
+  };
+  d(a.main.contextMenu({
+    options,
+    component: TabMenu,
+    props: {
+      delegate,
+      items,
+    },
+  }));
+})

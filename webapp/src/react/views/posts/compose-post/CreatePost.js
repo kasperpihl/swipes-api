@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback, iconForId } from 'swipes-core-js/classes/utils';
+import { setupDelegate, iconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
@@ -12,7 +12,7 @@ import './styles/create-post.scss';
 class CreatePost extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this, 'onButtonClick', 'onPostClick', 'onContextClick');
+    setupDelegate(this, 'onButtonClick', 'onPostClick', 'onContextClick', 'onChangeFiles', 'onAttachmentClick');
   }
   renderSubtitle() {
     const { post } = this.props;
@@ -38,15 +38,29 @@ class CreatePost extends PureComponent {
 
     return <PostComposer myId={myId} post={post} delegate={delegate} />
   }
+  renderAttachments() {
+    const { post } = this.props;
+    const attachments = post.get('attachments').map((att, i) => (
+      <div onClick={this.onAttachmentClickCached(i)} key={i}>
+        <Icon icon={attachmentIconForService(att.getIn(['link', 'service']))} />
+        {att.get('title')}
+      </div>
+    ));
+    return (
+      <div>
+        {attachments}
+      </div>
+    )
+  }
   renderActions() {
-    const { getLoading } = this.props;
+    const { getLoading, fileVal } = this.props;
 
     const buttons = [
-      {
-        'data-id': 'type',
-        text: 'Change Type',
-        icon: 'Decision',
-      },
+      // {
+      //   'data-id': 'type',
+      //   text: 'Change Type',
+      //   icon: 'Decision',
+      // },
       {
         'data-id': 'users',
         text: 'Tag Colleagues',
@@ -58,13 +72,22 @@ class CreatePost extends PureComponent {
         icon: 'Attach',
       }
     ].map(b => (
-      <button key={b.text} className="create-post__action" onClick={this.onButtonClickCached(b['data-id'])}>
-        <Icon icon={b.icon} className="create-post__action-icon" />
-        <div className="create-post__action-label">
-          {b.text}
-        </div>
-      </button>
+      <Button
+        text={b.text}
+        key={b.text}
+        className="create-post__button"
+        onClick={this.onButtonClickCached(b['data-id'])}
+        {...getLoading(b['data-id'])}
+        frameless
+        icon={b.icon}
+      />
     ));
+    /* <button key={b.text} className="create-post__action" onClick={this.onButtonClickCached(b['data-id'])}>
+      <Icon icon={b.icon} className="create-post__action-icon" />
+      <div className="create-post__action-label">
+        {b.text}
+      </div>
+    </button>*/
 
     return (
       <div className="create-post__actions">
@@ -76,6 +99,7 @@ class CreatePost extends PureComponent {
           {...getLoading('post')}
           className="create-post__button"
         />
+        <input value={fileVal} ref="upload" type="file" onChange={this.onChangeFiles} />
       </div>
     )
   }
@@ -85,6 +109,7 @@ class CreatePost extends PureComponent {
         header={this.renderHeader()}
       >
         {this.renderComposer()}
+        {this.renderAttachments()}
         {this.renderActions()}
       </SWView>
     )
