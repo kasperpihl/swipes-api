@@ -124,9 +124,9 @@ class CommentInput extends PureComponent {
           placeholder={placeholder}
         />
 
-        <div className="comment-input__icon-wrapper">
+        {/*<div className="comment-input__icon-wrapper">
           <Icon icon="Attach" className="comment-input__svg" />
-        </div>
+        </div>*/}
       </div>
     )
   }

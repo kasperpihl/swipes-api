@@ -1,5 +1,6 @@
 import * as api from './api';
 import * as attachments from './attachments';
+import * as autoComplete from './auto-complete';
 import * as cache from './cache';
 import * as files from './files';
 import * as filters from './filters';
@@ -19,6 +20,7 @@ import * as ways from './ways';
 export {
   api,
   attachments,
+  autoComplete,
   cache,
   files,
   filters,

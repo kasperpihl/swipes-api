@@ -68,7 +68,7 @@ class HOCAccountList extends PureComponent {
   }
   onClick(i, e) {
     const { sections } = this.state;
-    const section = section[i];
+    const section = sections[i];
 
     const { navPush, browser, target } = this.props;
     if (section.id === 'FAQ') {

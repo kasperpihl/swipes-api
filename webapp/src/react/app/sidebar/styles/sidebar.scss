@@ -30,6 +30,7 @@ $sidebarWidth: 84px;
   &__top-section {
     @include size(100%, auto);
     @include flexContainer('column', center, center);
+    margin-top: 22px;
 
     & > .sidebar__item {
       border-radius: 4px !important;

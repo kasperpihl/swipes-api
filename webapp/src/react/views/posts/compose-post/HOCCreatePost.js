@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 import {
   setupLoading,
   convertObjToUnderscore,
@@ -237,8 +238,9 @@ class HOCCreatePost extends PureComponent {
     });
   }
   render() {
-    const { myId } = this.props;
+    const { myId, users } = this.props;
     const { post, fileVal } = this.state;
+    console.log(users);
     return (
       <CreatePost
         ref="create"
