@@ -9,8 +9,8 @@ const findResults = (string, options, getState) => {
   defs = Object.assign(defs, options);
   const results = [];
   const state = this.store.getState();
-  if(def.types.indexOf('users') > -1) {
+  if (def.types.indexOf('users') > -1) {
     get('users').forEach((g) => {
-    })
+    });
   }
-}
+};

@@ -23,6 +23,7 @@
     "draft-js-multidecorators": "^1.0.0",
     "draft-js-prism": "^1.0.3",
     "exif-js": "^2.2.1",
+    "fuse.js": "^3.0.5",
     "immutable": "^3.8.1",
     "mixpanel-browser": "^2.11.0",
     "moment": "^2.12.0",
