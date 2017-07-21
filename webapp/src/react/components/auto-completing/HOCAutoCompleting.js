@@ -13,11 +13,6 @@ class HOCAutoCompleting extends PureComponent {
     super(props);
     this.state = {};
   }
-  componentDidMount() {
-  }
-  componentWillReceiveProps(next) {
-
-  }
   render() {
     const { autoComplete } = this.props;
     let boundingRect;
@@ -38,9 +33,10 @@ class HOCAutoCompleting extends PureComponent {
 HOCAutoCompleting.propTypes = {};
 
 function mapStateToProps(state) {
-  return {
+  const mapping = {
     autoComplete: state.getIn(['main', 'autoComplete']),
   };
+  return mapping;
 }
 
 export default connect(mapStateToProps, {
