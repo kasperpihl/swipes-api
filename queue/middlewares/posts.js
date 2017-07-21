@@ -111,6 +111,29 @@ const postCommentAddedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postCommentMentionNotificationData = (req, res, next) => {
+  const {
+    post,
+    comment_id,
+  } = res.locals;
+  const comment = post.comments[comment_id];
+
+  res.locals.notificationData = {
+    target: {
+      id: post.id,
+    },
+    meta: {
+      message: post.message.substr(0, MAX_LENGHT),
+      mentioned_by: comment.created_by,
+    },
+  };
+  res.locals.eventData = {
+    post_id: post.id,
+    comment: post.comments[comment_id],
+  };
+
+  return next();
+};
 const postReactionAddedNotificationData = (req, res, next) => {
   const {
     user_id,
@@ -238,4 +261,5 @@ export {
   postCommentReactionRemovedNotificationData,
   postArchivedNotificationData,
   postFollowedUnfollowedNotificationData,
+  postCommentMentionNotificationData,
 };

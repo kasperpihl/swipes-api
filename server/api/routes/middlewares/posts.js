@@ -61,7 +61,6 @@ const postsCreate = valLocals('postsCreate', {
 
   return next();
 });
-
 const postsInsertSingle = valLocals('postsInsertSingle', {
   post: object.require(),
 }, (req, res, next, setLocals) => {
@@ -77,7 +76,6 @@ const postsInsertSingle = valLocals('postsInsertSingle', {
       return next(err);
     });
 });
-
 const postsFollow = valLocals('postsFollow', {
   user_id: string.require(),
   post_id: string.require(),
@@ -95,7 +93,6 @@ const postsFollow = valLocals('postsFollow', {
       return next(err);
     });
 });
-
 const postsUnfollow = valLocals('postsUnfollow', {
   user_id: string.require(),
   post_id: string.require(),
@@ -113,7 +110,6 @@ const postsUnfollow = valLocals('postsUnfollow', {
       return next(err);
     });
 });
-
 const postsArchiveSingle = valLocals('postsArchiveSingle', {
   post_id: string.require(),
 }, (req, res, next, setLocals) => {
@@ -129,7 +125,6 @@ const postsArchiveSingle = valLocals('postsArchiveSingle', {
       return next(err);
     });
 });
-
 const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
   user_id: string.require(),
   post: object.require(),
@@ -153,7 +148,6 @@ const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
 
   return next();
 });
-
 const postsUnfollowQueueMessage = valLocals('postsUnfollowQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -176,7 +170,6 @@ const postsUnfollowQueueMessage = valLocals('postsUnfollowQueueMessage', {
 
   return next();
 });
-
 const postsFollowQueueMessage = valLocals('postsFollowQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -199,7 +192,6 @@ const postsFollowQueueMessage = valLocals('postsFollowQueueMessage', {
 
   return next();
 });
-
 const postsArchiveQueueMessage = valLocals('postsArchiveQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -222,7 +214,6 @@ const postsArchiveQueueMessage = valLocals('postsArchiveQueueMessage', {
 
   return next();
 });
-
 const postsCreateComment = valLocals('postsCreateComment', {
   user_id: string.require(),
   message: string.require(),
@@ -251,7 +242,6 @@ const postsCreateComment = valLocals('postsCreateComment', {
 
   return next();
 });
-
 const postsAddComment = valLocals('postsAddComment', {
   user_id: string.require(),
   post_id: string.require(),
@@ -271,21 +261,73 @@ const postsAddComment = valLocals('postsAddComment', {
       return next(err);
     });
 });
-const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
+const postsMentionsParseComment = valLocals('postsMentionsParseComment', {
+  comment: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    comment,
+  } = res.locals;
+  const regex = /<!(U[A-Z0-9]*)\|/gi;
+  const mention_ids = [];
+  let tempMatches = [];
+
+  while ((tempMatches = regex.exec(comment.message)) !== null) {
+    mention_ids.push(tempMatches[1]);
+  }
+
+  setLocals({
+    mention_ids,
+  });
+
+  return next();
+});
+const postsMestionsQueueMessage = valLocals('postsMestionsQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
   comment: object.require(),
+  mention_ids: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post_id,
     comment,
+    mention_ids,
+  } = res.locals;
+  const event_type = 'post_comment_mention';
+  const queueMessage = {
+    user_id,
+    post_id,
+    event_type,
+    mention_ids,
+    notification_id_sufix: `${post_id}-${comment.id}-${event_type}`,
+    comment_id: comment.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
+const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment: object.require(),
+  mention_ids: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment,
+    mention_ids,
   } = res.locals;
   const event_type = 'post_comment_added';
   const queueMessage = {
     user_id,
     post_id,
     event_type,
+    mention_ids,
     notification_id_sufix: `${post_id}-${event_type}`,
     comment_id: comment.id,
   };
@@ -512,4 +554,6 @@ export {
   postsUnfollowQueueMessage,
   postsFollow,
   postsFollowQueueMessage,
+  postsMentionsParseComment,
+  postsMestionsQueueMessage,
 };
