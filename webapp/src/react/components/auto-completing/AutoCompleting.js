@@ -5,6 +5,7 @@ import React, { PureComponent } from 'react'
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
+import AutoCompleteItem from './AutoCompleteItem';
 import './styles/auto-completing.scss';
 
 class AutoCompleting extends PureComponent {
@@ -15,14 +16,20 @@ class AutoCompleting extends PureComponent {
   componentDidMount() {
   }
   renderResults() {
-    const { results } = this.props;
+    const { results, selectedIndex, alignToTop, autoComplete } = this.props;
     if(!results) {
       return undefined;
     }
-    return results.map((r) => {
-      console.log(r);
-      return <div key={r.item}>{r.item}</div>
-    });
+    return results.map((r, i) => {
+      return (
+        <AutoCompleteItem
+          key={autoComplete.get('string') + i}
+          item={r.item}
+          selected={(i === selectedIndex)}
+          alignToTop={alignToTop}
+        />
+      )
+    }).reverse();
   }
   render() {
     const { autoComplete } = this.props;
@@ -32,8 +39,8 @@ class AutoCompleting extends PureComponent {
     if(boundingRect) {
       className += ' auto-completing--shown';
       style.width = 400 + 'px';
-      style.height = 400 + 'px';
-      style.top = (boundingRect.top - 400) + 'px';
+      style.height = 250 + 'px';
+      style.top = (boundingRect.top - 250) + 'px';
       style.left = boundingRect.left + 'px';
     }
 

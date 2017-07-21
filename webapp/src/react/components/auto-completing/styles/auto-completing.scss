@@ -7,8 +7,15 @@
   background-color: red;
   visibility: hidden;
   pointer-events: none;
+  overflow-y: scroll;
   &--shown {
     visibility: visible;
     pointer-events: all;
+  }
+  &__item {
+    height: 70px;
+    &--selected {
+      background-color: white;
+    }
   }
 }

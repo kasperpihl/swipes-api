@@ -3,15 +3,13 @@ import Fuse from 'fuse.js';
 
 const defOptions = {
   shouldSort: true,
-  findAllMatches: true,
-  id: 'id',
   includeScore: true,
   includeMatches: true,
   tokenize: true,
-  threshold: 0.4,
+  threshold: 0.6,
   matchAllTokens: true,
   maxPatternLength: 32,
-  minMatchCharLength: 3,
+  minMatchCharLength: 2,
   keys: [
     'email',
     'profile.first_name',

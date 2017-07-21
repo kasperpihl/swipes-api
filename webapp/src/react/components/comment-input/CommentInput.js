@@ -20,15 +20,15 @@ class CommentInput extends PureComponent {
 
     bindAll(this, ['onCommentChange', 'handleAttach', 'handleSend', 'handleKeyDown', 'handleTextareaFocus']);
   }
-  componentDidMount() {
-
-  }
   onCommentChange(e) {
     const value = e.target.value;
 
     this.setState({ commentText: value });
 
     this.bouncedSearch(value, ['users'], e.target.getBoundingClientRect(), this);
+  }
+  onAutoCompleteSelect(item) {
+    console.log('item', item);
   }
   handleTextareaFocus() {
     const { textarea } = this.refs;

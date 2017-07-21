@@ -190,10 +190,12 @@ class PostView extends PureComponent {
     );
   }
   render() {
+    const { fromFeed } = this.props;
     return (
       <SWView
         header={this.renderHeader()}
         noframe
+        disableScroll={fromFeed}
       >
         {this.renderComments()}
       </SWView>
