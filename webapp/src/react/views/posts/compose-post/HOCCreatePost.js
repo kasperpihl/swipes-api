@@ -233,14 +233,13 @@ class HOCCreatePost extends PureComponent {
         const att = fromJS({ link: res.link, title });
         const { post } = this.state;
         this.updatePost(post.updateIn(['attachments'], (atts) => atts.push(att) ));
-        console.log('link created');
       }
     });
   }
   render() {
-    const { myId, users } = this.props;
+    const { myId } = this.props;
     const { post, fileVal } = this.state;
-    console.log(users);
+
     return (
       <CreatePost
         ref="create"
