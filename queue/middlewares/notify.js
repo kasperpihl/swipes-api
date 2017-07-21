@@ -222,54 +222,6 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
       return next(err);
     });
 };
-// const notifyPostTaggedUsersSendPushNotifications = (req, res, next) => {
-//   const {
-//     goal,
-//     user,
-//     user_ids,
-//     group_id,
-//     notification_type,
-//     notifyMyself,
-//   } = res.locals;
-//   const historyIndex = getHistoryIndex(goal.history, group_id);
-//   const history = goal.history[historyIndex];
-//   const filters = [];
-
-//   user_ids.forEach((userId) => {
-//     if (notifyMyself || userId !== user.id) {
-//       if (filters.length > 0) {
-//         filters.push({
-//           operator: 'OR',
-//         });
-//       }
-
-//       filters.push({
-//         field: 'tag',
-//         key: 'swipesUserId',
-//         relation: '=',
-//         value: userId,
-//       });
-//     }
-//   });
-
-//   const from = user.profile.first_name;
-//   const headingsMessage = notifyMessageGenerator(from, notification_type, history.request);
-//   const message = {
-//     filters,
-//     app_id: oneSignalConfig.appId,
-//     contents: { en: history.message },
-//     headings: { en: headingsMessage },
-//     // subtitle: { en: `about ${goal.title}` },
-//     data: {
-//       // group_id,
-//       // post_id
-//       organization_id: user.organizations[0],
-//     },
-//     priority: 10,
-//     content_available: true,
-//     android_visibility: 0,
-//   };
-// };
 const notifySendPushNotification = (req, res, next) => {
   const {
     pushMessage,
