@@ -61,7 +61,6 @@ const postsCreate = valLocals('postsCreate', {
 
   return next();
 });
-
 const postsInsertSingle = valLocals('postsInsertSingle', {
   post: object.require(),
 }, (req, res, next, setLocals) => {
@@ -77,7 +76,6 @@ const postsInsertSingle = valLocals('postsInsertSingle', {
       return next(err);
     });
 });
-
 const postsFollow = valLocals('postsFollow', {
   user_id: string.require(),
   post_id: string.require(),
@@ -95,7 +93,6 @@ const postsFollow = valLocals('postsFollow', {
       return next(err);
     });
 });
-
 const postsUnfollow = valLocals('postsUnfollow', {
   user_id: string.require(),
   post_id: string.require(),
@@ -113,7 +110,6 @@ const postsUnfollow = valLocals('postsUnfollow', {
       return next(err);
     });
 });
-
 const postsArchiveSingle = valLocals('postsArchiveSingle', {
   post_id: string.require(),
 }, (req, res, next, setLocals) => {
@@ -129,7 +125,6 @@ const postsArchiveSingle = valLocals('postsArchiveSingle', {
       return next(err);
     });
 });
-
 const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
   user_id: string.require(),
   post: object.require(),
@@ -153,7 +148,6 @@ const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
 
   return next();
 });
-
 const postsUnfollowQueueMessage = valLocals('postsUnfollowQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -176,7 +170,6 @@ const postsUnfollowQueueMessage = valLocals('postsUnfollowQueueMessage', {
 
   return next();
 });
-
 const postsFollowQueueMessage = valLocals('postsFollowQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -199,7 +192,6 @@ const postsFollowQueueMessage = valLocals('postsFollowQueueMessage', {
 
   return next();
 });
-
 const postsArchiveQueueMessage = valLocals('postsArchiveQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -222,7 +214,6 @@ const postsArchiveQueueMessage = valLocals('postsArchiveQueueMessage', {
 
   return next();
 });
-
 const postsCreateComment = valLocals('postsCreateComment', {
   user_id: string.require(),
   message: string.require(),
@@ -251,7 +242,6 @@ const postsCreateComment = valLocals('postsCreateComment', {
 
   return next();
 });
-
 const postsAddComment = valLocals('postsAddComment', {
   user_id: string.require(),
   post_id: string.require(),
