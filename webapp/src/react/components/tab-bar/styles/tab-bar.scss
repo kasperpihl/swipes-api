@@ -8,7 +8,7 @@
 	@include flex(center, flex-start);
   @include flex(none);
   background-color: $bg;
-  border-bottom: 1px solid $deepBlue-100;
+  border-bottom: 1px solid $deepBlue-10;
   padding: 12px 0;
   position: relative;
   z-index: 2;

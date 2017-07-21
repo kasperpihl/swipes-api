@@ -62,6 +62,7 @@ import Handoff from './svgs/handoff.svg';
 import Hashtag from './svgs/hashtag.svg';
 import HeaderOne from './svgs/header-one.svg';
 import HeaderTwo from './svgs/header-two.svg';
+import Heart from './svgs/heart.svg';
 import Hyperlink from './svgs/hyperlink.svg';
 import Itallic from './svgs/itallic.svg';
 import Iteration from './svgs/iteration.svg';
@@ -189,6 +190,7 @@ export {
   Hashtag,
   HeaderOne,
   HeaderTwo,
+  Heart,
   Hyperlink,
   Itallic,
   Iteration,

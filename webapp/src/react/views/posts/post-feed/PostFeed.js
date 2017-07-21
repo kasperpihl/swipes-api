@@ -21,7 +21,7 @@ class PostFeed extends PureComponent {
     const { filterTitle } = this.props;
     return (
       <HOCHeaderTitle title="Discussions" subtitle={filterTitle && `re. ${filterTitle}`} border>
-        <Button text="Create Post" onClick={this.onNewPost} />
+        <Button primary text="Create Post" onClick={this.onNewPost} />
       </HOCHeaderTitle>
     )
   }

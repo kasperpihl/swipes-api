@@ -7,6 +7,7 @@ import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import AssigneeTooltip from 'components/assigning/AssigneeTooltip';
+import Icon from 'Icon';
 import './styles/reactions.scss';
 
 class HOCReactions extends PureComponent {
@@ -67,12 +68,17 @@ class HOCReactions extends PureComponent {
     }
   }
   renderButton() {
-    const { isLoading, commentId:cId } = this.props;
+    const { isLoading, commentId: cId } = this.props;
     const { iLike } = this.state;
     let className = 'reactions__button';
+    let iconClass = 'reactions__heart';
 
     if (isLoading) {
-      className += ' reactions__button--loading'
+      className += ' reactions__button--loading';
+    }
+
+    if (iLike) {
+      iconClass += ' reactions__heart--liked';
     }
 
     const labelAction = iLike ? 'Unlike' : 'Like';
@@ -80,19 +86,19 @@ class HOCReactions extends PureComponent {
 
     return (
       <div onClick={onClick} className={className}>
-        {labelAction}
+        <Icon icon="Heart" className={iconClass} />
       </div>
     )
   }
   renderLikers() {
-    const { reactions, commentId } = this.props;
+    const { reactions, commentId, commentView } = this.props;
 
     if (!reactions || !reactions.size) {
       return undefined;
     }
     let likeString = reactions.size;
 
-    if(!commentId) {
+    if (!commentId) {
       const userIds = reactions.map(r => r.get('created_by'));
       const nameString = msgGen.users.getNames(userIds, {
         number: 2,
@@ -101,8 +107,6 @@ class HOCReactions extends PureComponent {
       likeString = `${nameString} like this.`;
     }
 
-
-
     return (
       <div className="reactions__label" onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
         {likeString}
@@ -110,8 +114,15 @@ class HOCReactions extends PureComponent {
     )
   }
   render() {
+    const { commentId } = this.props;
+    let className = 'reactions';
+
+    if (commentId) {
+      className += ' reactions--comment'
+    }
+
     return (
-      <div className="reactions">
+      <div className={className}>
         {this.renderButton()}
         {this.renderLikers()}
       </div>
@@ -119,7 +130,7 @@ class HOCReactions extends PureComponent {
   }
 }
 
-// const { string } = PropTypes;
+// const {string} = PropTypes;
 
 HOCReactions.propTypes = {};
 

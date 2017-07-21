@@ -49,9 +49,9 @@ class CommentView extends PureComponent {
     const name = msgGen.users.getFullName(comment.get('created_by'));
 
     return (
-      <div className="comment__name">
+      <span className="comment__name">
         {name}
-      </div>
+      </span>
     )
   }
   renderMessage() {
@@ -75,32 +75,30 @@ class CommentView extends PureComponent {
         })
       }
 
-      return <span key={key}>{item}<br /></span>;
+      return <span key={key}>{item}</span>;
     });
 
     return (
-      <div className="comment__content">
+      <span className="comment__content">
         {message}
-      </div>
+      </span>
     )
   }
-  renderSubLine() {
+  renderReaction() {
     const { comment, delegate, loadingReaction } = this.props;
-    const timestamp = timeAgo(comment.get('created_at'), true);
 
     return (
-      <div className="comment__subline">
-        <Reactions
-          reactions={comment.get('reactions')}
-          isLoading={loadingReaction}
-          delegate={delegate}
-          commentId={comment.get('id')}
-        /> • {timestamp}
-      </div>
+      <Reactions
+        reactions={comment.get('reactions')}
+        isLoading={loadingReaction}
+        delegate={delegate}
+        commentId={comment.get('id')}
+      />
     )
   }
   render() {
     const { comment } = this.props;
+    const timestamp = timeAgo(comment.get('created_at'), true);
 
     return (
       <div className="comment" ref="comment">
@@ -108,8 +106,9 @@ class CommentView extends PureComponent {
         <div className="comment__side">
           {this.renderName()}
           {this.renderMessage()}
-          {this.renderSubLine()}
+          <span className="comment__timestamp"> — {timestamp}</span>
         </div>
+        {this.renderReaction()}
       </div>
     )
   }

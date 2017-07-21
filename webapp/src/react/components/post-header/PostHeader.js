@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { setupDelegate, iconForId } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
 // import SWView from 'SWView';
-// import Button from 'Button';
+import Button from 'Button';
 import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
 import './styles/post-header.scss';
@@ -14,6 +14,28 @@ class PostHeader extends PureComponent {
     super(props);
     this.state = {};
     setupDelegate(this, 'onHeaderContextClick', 'onHeaderMenuClick', 'onOpenPost');
+  }
+  getType() {
+    const { post } = this.props;
+    const type = post.get('type');
+
+    switch (type) {
+      case 'message':
+        return { label: 'Message', color: 'green' }
+        break;
+      case 'message':
+        return { label: 'announcement', color: 'yellow' }
+        break;
+      case 'message':
+        return { label: 'question', color: 'purple' }
+        break;
+      case 'message':
+        return { label: 'information', color: 'blue' }
+        break;
+      default:
+        return { label: 'Message', color: 'green' }
+        break;
+    }
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
@@ -55,28 +77,8 @@ class PostHeader extends PureComponent {
       </div>
     )
   }
-  renderProfilePic() {
-    const { post } = this.props;
-    const image = msgGen.users.getPhoto(post.get('created_by'));
-    const initials = msgGen.users.getInitials(post.get('created_by'));
-
-    if (!image) {
-      return (
-        <div className="post-header__profile-initials">
-          {initials}
-        </div>
-      )
-    }
-
-    return (
-      <div className="post-header__profile-pic">
-        <img src={image} />
-      </div>
-    )
-  }
   renderSubtitle() {
     const { post } = this.props;
-    const timeStamp = timeAgo(post.get('created_at'), true);
     const seperator = post.get('context') ? <span>&nbsp;•&nbsp;</span> : undefined;
     const contextTitle = post.get('context') ? post.getIn(['context', 'title']) : null;
     let icon;
@@ -91,22 +93,40 @@ class PostHeader extends PureComponent {
         <span className="post-header__span-link" onClick={this.onHeaderContextClick}>
           {contextTitle}
         </span>
-        {seperator}
-        <span className="post-header__span-link" onClick={this.onOpenPostCached(post.get('id'))}>
-          {timeStamp}
-        </span>
       </div>
     );
+  }
+  renderType() {
+    const type = this.getType();
+    const className = `post-header__type post-header__type--${type.color}`
+
+    return (
+      <div className={className}>
+        {type.label}
+      </div>
+    )
+  }
+  renderActions() {
+    const { post } = this.props;
+    const timeStamp = timeAgo(post.get('created_at'), true);
+
+    return (
+      <div className="post-header__actions">
+        <Button small icon="ThreeDots" frameless />
+        <div className="post-header__timestamp">{timeStamp}</div>
+        {this.renderType()}
+      </div>
+    )
   }
   render() {
 
     return (
       <div className="post-header">
-        {this.renderProfilePic()}
         <div className="post-header__content">
           {this.renderGeneratedTitle()}
           {this.renderSubtitle()}
         </div>
+        {this.renderActions()}
       </div>
     );
   }

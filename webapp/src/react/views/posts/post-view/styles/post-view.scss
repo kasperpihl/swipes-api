@@ -7,7 +7,7 @@
 
 .post-header {
   $b: &;
-  $flexIgnoreList: '#{$b}__image';
+  $flexIgnoreList: '#{$b}__image', '#{$b}__left';
   background-color: white;
 
   @include size(100%, auto);
@@ -49,16 +49,42 @@
   background-color: white;
 
   &__header {
+    $flexIgnoreList: '#{$b}__left';
     @include size(100%, auto);
+    @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
     padding: 0 30px;
     background-color: white;
   }
 
+  &__left {
+    padding-right: 24px;
+  }
+
+  &__right {
+   width: 100%;
+  }
+
+  &__profile-pic {
+    @include size(60px);
+    border-radius: 3px;
+
+    img {
+      @include size(60px);
+      border-radius: 3px;
+    }
+  }
+
+  &__profile-initials {
+    @include size(60px);
+    @include flexContainer('row', center, center);
+    background-color: $deepBlue-10;
+    border-radius: 3px;
+  }
+
   &__message {
-    @include font(15px, $deepBlue-90, 18px);
+    @include font(18px, $deepBlue-90, 24px);
     padding-top: 9px;
     padding-bottom: 12px;
-    padding-left: 63px;
   }
 
   &__attachments {
@@ -66,13 +92,13 @@
     @include flexContainer('row') {
       flex-wrap: wrap;
     };
-    padding-left: 63px;
   }
 
   &__actions {
     @include size(100%, 38px);
     @include flexContainer('row', left, center);
-    border-top: 1px solid $deepBlue-5;
+    padding-top: 18px;
+    padding-bottom: 28px;
   }
 
   &__action {
@@ -90,10 +116,7 @@
   }
 
   &__comments {
-    background-color: $comment-bg;
-    padding: 0 30px;
-    padding-top: 0px;
-    border-top: 1px solid $deepBlue-5;
+    padding-left: 102px !important;
   }
 
   &__more-comments {

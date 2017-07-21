@@ -21,7 +21,7 @@ $noSubH: 60px;
   @include flexContainer('row', left, top, $flexIgnoreList);
 
   &--border {
-    border-bottom: 1px solid $deepBlue-100;
+    border-bottom: 1px solid $deepBlue-10;
   }
 }
 

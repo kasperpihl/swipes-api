@@ -138,6 +138,9 @@ class HOCPostCreate extends PureComponent {
     const { preview } = this.props;
     const { post } = this.state;
 
+    console.log('i get here');
+
+
     preview(post.getIn(['attachments', i]));
   }
   onAddAttachment() {

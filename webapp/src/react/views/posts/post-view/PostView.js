@@ -29,15 +29,39 @@ class PostView extends PureComponent {
 
     setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick');
   }
+  renderProfilePic() {
+    const { post } = this.props;
+    const image = msgGen.users.getPhoto(post.get('created_by'));
+    const initials = msgGen.users.getInitials(post.get('created_by'));
+
+    if (!image) {
+      return (
+        <div className="post__profile-initials">
+          {initials}
+        </div>
+      )
+    }
+
+    return (
+      <div className="post__profile-pic">
+        <img src={image} />
+      </div>
+    )
+  }
   renderHeader() {
     const { post, delegate } = this.props;
 
     return (
       <div className="post__header">
-        <PostHeader post={post} delegate={delegate} />
-        {this.renderMessage()}
-        {this.renderAttachments()}
-        {this.renderPostActions()}
+        <div className="post__left">
+          {this.renderProfilePic()}
+        </div>
+        <div className="post__right">
+          <PostHeader post={post} delegate={delegate} />
+          {this.renderMessage()}
+          {this.renderAttachments()}
+          {this.renderPostActions()}
+        </div>
       </div>
     )
   }

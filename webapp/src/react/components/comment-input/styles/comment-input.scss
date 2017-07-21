@@ -10,8 +10,10 @@
   $flexIgnoreList: '#{$b}__image', '#{$b}__initials', '#{$b}__icon-button';
   
   @include size(100%, auto);
-  @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
-  @include heightSpecifications(61px, initial);
+  @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
+  @include heightSpecifications(38px, initial);
+  border: 1px solid #E5E6EA;
+  background-color: #FFFFFF;
 }
 
 // ======================================================
@@ -23,11 +25,9 @@
 
   &__profile-pic {
     @include size(36px);
-    border-radius: 3px;
 
     img {
       @include size(36px);
-      border-radius: 3px;
     }
   }
 
@@ -44,8 +44,6 @@
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
     width: 100%;
     margin-left: 6px;
-    border: 1px solid #E5E6EA;
-    background-color: #FFFFFF;
     padding-right: 6px;
   }
 
