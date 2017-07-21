@@ -262,8 +262,6 @@ const notifySendPushNotification = (req, res, next) => {
     android_visibility: 0,
   });
 
-  console.log(message);
-
   const reqOptions = {
     url: 'https://onesignal.com/api/v1/notifications',
     method: 'POST',
