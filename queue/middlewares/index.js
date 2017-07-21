@@ -301,9 +301,27 @@ const post_comment_added = notifyWrapper([
     const {
       user_id,
       post,
+      mention_ids,
     } = res.locals;
 
-    res.locals.user_ids = post.followers.filter((userId) => { return userId !== user_id; });
+    res.locals.user_ids = post.followers.filter((userId) => {
+      return userId !== user_id && !mention_ids.includes(userId);
+    });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_comment_mention = notifyWrapper([
+  posts.postsGetSingle,
+  posts.postCommentMentionNotificationData,
+  (req, res, next) => {
+    const {
+      mention_ids,
+    } = res.locals;
+
+    res.locals.user_ids = mention_ids;
 
     return next();
   },
@@ -419,4 +437,5 @@ export {
   post_archived,
   post_unfollowed,
   post_followed,
+  post_comment_mention,
 };

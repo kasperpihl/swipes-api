@@ -10,6 +10,7 @@ import {
   postsCreatedQueueMessage,
   postsCreateComment,
   postsAddComment,
+  postsMentionsParseComment,
   postsAddCommentQueueMessage,
   postsCreateReaction,
   postsAddReaction,
@@ -26,6 +27,7 @@ import {
   postsUnfollowQueueMessage,
   postsFollow,
   postsFollowQueueMessage,
+  postsMestionsQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -107,7 +109,10 @@ authed.all('/posts.addComment',
   }),
   postsCreateComment,
   postsAddComment,
+  postsMentionsParseComment,
   postsAddCommentQueueMessage,
+  notificationsPushToQueue,
+  postsMestionsQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     post_id: string.require(),

@@ -261,21 +261,73 @@ const postsAddComment = valLocals('postsAddComment', {
       return next(err);
     });
 });
-const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
+const postsMentionsParseComment = valLocals('postsMentionsParseComment', {
+  comment: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    comment,
+  } = res.locals;
+  const regex = /<!(U[A-Z0-9]*)\|/gi;
+  const mention_ids = [];
+  let tempMatches = [];
+
+  while ((tempMatches = regex.exec(comment.message)) !== null) {
+    mention_ids.push(tempMatches[1]);
+  }
+
+  setLocals({
+    mention_ids,
+  });
+
+  return next();
+});
+const postsMestionsQueueMessage = valLocals('postsMestionsQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
   comment: object.require(),
+  mention_ids: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post_id,
     comment,
+    mention_ids,
+  } = res.locals;
+  const event_type = 'post_comment_mention';
+  const queueMessage = {
+    user_id,
+    post_id,
+    event_type,
+    mention_ids,
+    notification_id_sufix: `${post_id}-${comment.id}-${event_type}`,
+    comment_id: comment.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
+const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment: object.require(),
+  mention_ids: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment,
+    mention_ids,
   } = res.locals;
   const event_type = 'post_comment_added';
   const queueMessage = {
     user_id,
     post_id,
     event_type,
+    mention_ids,
     notification_id_sufix: `${post_id}-${event_type}`,
     comment_id: comment.id,
   };
@@ -502,4 +554,6 @@ export {
   postsUnfollowQueueMessage,
   postsFollow,
   postsFollowQueueMessage,
+  postsMentionsParseComment,
+  postsMestionsQueueMessage,
 };
