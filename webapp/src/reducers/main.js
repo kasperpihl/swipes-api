@@ -22,22 +22,11 @@ export default function main(state = initialState, action) {
       return state.set('isFullscreen', payload.toggle);
     }
 
-    case types.SLACK_OPEN_IN: {
-      return state.set('slackOpenIn', payload.id);
-    }
-
     // ======================================================
     // Tooltips
     // ======================================================
     case types.TOOLTIP: {
       return state.set('tooltip', payload);
-    }
-
-    // ======================================================
-    // Auto Completing
-    // ======================================================
-    case types.AUTO_COMPLETE: {
-      return state.set('autoComplete', (payload && fromJS(payload)) || null);
     }
 
     // ======================================================

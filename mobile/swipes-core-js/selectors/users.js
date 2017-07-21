@@ -4,11 +4,12 @@ import Fuse from 'fuse.js';
 const defOptions = {
   shouldSort: true,
   findAllMatches: true,
+  id: 'id',
   includeScore: true,
   includeMatches: true,
-  threshold: 0.6,
-  location: 0,
-  distance: 10,
+  tokenize: true,
+  threshold: 0.4,
+  matchAllTokens: true,
   maxPatternLength: 32,
   minMatchCharLength: 3,
   keys: [
@@ -18,7 +19,7 @@ const defOptions = {
   ],
 };
 
-const getSearchString = (state, props) => props.searchString;
+const getAutoComplete = state => state.get('autoComplete');
 const getUsers = state => state.get('users');
 
 const nameSort = (a, b) => {
@@ -32,21 +33,20 @@ const nameSort = (a, b) => {
   return l1.localeCompare(l2);
 };
 
-export const getSortedUsers = createSelector(
+export const getSorted = createSelector(
   [getUsers],
   (users) => users.sort(nameSort),
 );
 
-export const getSortedUsersArray = createSelector(
+export const getSortedArray = createSelector(
   [getUsers],
   (users) => users.toList().sort(nameSort).toJS(),
 );
 
-export const searchUsers = createSelector(
-  [getSortedUsersArray, getSearchString],
-  (list, searchString) => {
-    console.log('recalc', list.map(u => u.profile.last_name), searchString);
+export const autoComplete = createSelector(
+  [getSortedArray, getAutoComplete],
+  (list, autoComplete) => {
     let fuse = new Fuse(list, defOptions); // "list" is the item array
-    return fuse.search(searchString);
+    return fuse.search(autoComplete.get('string') || '');
   },
 );

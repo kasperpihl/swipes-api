@@ -154,7 +154,7 @@ class PostView extends PureComponent {
     )
   }
   renderComments() {
-    const { post, delegate, myId, fromFeed, isLoading } = this.props;
+    const { post, delegate, myId, fromFeed, isLoading, aCSearch, aCClear } = this.props;
     const comments = post.get('comments');
     let renderComments = undefined;
 
@@ -180,7 +180,12 @@ class PostView extends PureComponent {
       <div className="post__comments">
         {this.renderViewMoreComments()}
         {renderComments}
-        <CommentInput myId={myId} delegate={delegate} />
+        <CommentInput
+          myId={myId}
+          delegate={delegate}
+          aCSearch={aCSearch}
+          aCClear={aCClear}
+        />
       </div>
     );
   }

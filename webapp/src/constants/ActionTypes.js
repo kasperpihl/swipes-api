@@ -5,8 +5,6 @@ export const LOGOUT = 'LOGOUT';
 export const TOOLTIP = 'TOOLTIP';
 export const UPDATE_RECENT_ASSIGNEES = 'UPDATE_RECENT_ASSIGNEES';
 export const CONTEXT_MENU = 'CONTEXT_MENU';
-export const SLACK_OPEN_IN = 'SLACK_OPEN_IN';
-export const AUTO_COMPLETE = 'AUTO_COMPLETE';
 
 // Navigation
 export const NAVIGATION_SET = 'NAVIGATION_SET';

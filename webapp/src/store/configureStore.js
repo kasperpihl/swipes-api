@@ -26,7 +26,7 @@ export default function configureStore(preloadedState) {
   );
 
   persistStore(store, {
-    blacklist: ['main', 'search', 'toasty', 'filters'],
+    blacklist: ['main', 'search', 'toasty', 'filters', 'autoComplete'],
   });
   window.getState = store.getState;
   if (!isProd) {

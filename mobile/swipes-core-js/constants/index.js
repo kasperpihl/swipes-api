@@ -1,4 +1,6 @@
 // Main
+export const AUTO_COMPLETE = 'AUTO_COMPLETE';
+export const AUTO_COMPLETE_CLEAR = 'AUTO_COMPLETE_CLEAR';
 export const SET_STATUS = 'SET_STATUS';
 export const SET_UPDATE_STATUS = 'SET_UPDATE_STATUS';
 export const CACHE_SAVE = 'CACHE_SAVE';

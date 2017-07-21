@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
@@ -14,15 +14,12 @@ class HOCAutoCompleting extends PureComponent {
     this.state = {};
   }
   render() {
-    const { autoComplete } = this.props;
-    let boundingRect;
-    if(autoComplete && autoComplete.get('boundingRect')){
-      boundingRect = autoComplete.get('boundingRect');
-    }
+    const { autoComplete, results } = this.props;
 
     return (
       <AutoCompleting
-        boundingRect={boundingRect}
+        results={results}
+        autoComplete={autoComplete}
         delegate={this}
       />
     );
@@ -33,11 +30,12 @@ class HOCAutoCompleting extends PureComponent {
 HOCAutoCompleting.propTypes = {};
 
 function mapStateToProps(state) {
-  const mapping = {
-    autoComplete: state.getIn(['main', 'autoComplete']),
+  return {
+    autoComplete: state.get('autoComplete'),
+    results: state.getIn(['autoComplete', 'string']) && cs.autoComplete.getResults(state),
   };
-  return mapping;
 }
 
 export default connect(mapStateToProps, {
+
 })(HOCAutoCompleting);

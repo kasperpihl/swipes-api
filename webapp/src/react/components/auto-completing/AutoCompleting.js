@@ -14,8 +14,19 @@ class AutoCompleting extends PureComponent {
   }
   componentDidMount() {
   }
+  renderResults() {
+    const { results } = this.props;
+    if(!results) {
+      return undefined;
+    }
+    return results.map((r) => {
+      console.log(r);
+      return <div key={r.item}>{r.item}</div>
+    });
+  }
   render() {
-    const { boundingRect } = this.props;
+    const { autoComplete } = this.props;
+    const boundingRect = autoComplete.get('boundingRect');
     let className = 'auto-completing';
     const style = {};
     if(boundingRect) {
@@ -28,6 +39,7 @@ class AutoCompleting extends PureComponent {
 
     return (
       <div className={className} style={style}>
+        {this.renderResults()}
       </div>
     )
   }

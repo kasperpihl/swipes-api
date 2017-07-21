@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll, setupDelegate, setupCachedCallback, debounce } from 'swipes-core-js/classes/utils';
 import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
 // import Button from 'Button';
@@ -14,7 +14,8 @@ class CommentInput extends PureComponent {
     this.state = {
       commentText: '',
     };
-
+    const { aCSearch } = props;
+    this.bouncedSearch = debounce(aCSearch, 50);
     setupDelegate(this, 'onAddComment');
 
     bindAll(this, ['onCommentChange', 'handleAttach', 'handleSend', 'handleKeyDown', 'handleTextareaFocus']);
@@ -25,7 +26,9 @@ class CommentInput extends PureComponent {
   onCommentChange(e) {
     const value = e.target.value;
 
-    this.setState({ commentText: value })
+    this.setState({ commentText: value });
+
+    this.bouncedSearch(value, ['users'], e.target.getBoundingClientRect(), this);
   }
   handleTextareaFocus() {
     const { textarea } = this.refs;
@@ -109,6 +112,8 @@ class CommentInput extends PureComponent {
   }
   renderTextarea() {
     const { commentText } = this.state;
+    const { aCClear} = this.props;
+
     const placeholder = 'Write a comment';
 
     return (
@@ -122,6 +127,7 @@ class CommentInput extends PureComponent {
           onChange={this.onCommentChange}
           onKeyDown={this.handleKeyDown}
           placeholder={placeholder}
+          onBlur={aCClear}
         />
 
         {/*<div className="comment-input__icon-wrapper">
