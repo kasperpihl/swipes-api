@@ -289,6 +289,22 @@ const post_created = notifyWrapper([
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
 ]);
+const post_created_push_notification = [
+  users.usersGetSingleWithOrganizations,
+  posts.postsGetSingle,
+  posts.postCreatedPushNotificationData,
+  (req, res, next) => {
+    const {
+      post,
+    } = res.locals;
+
+    res.locals.user_ids = post.tagged_users;
+
+    return next();
+  },
+  posts.postCreatedPushNotificationData,
+  notify.notifySendPushNotification,
+];
 const post_archived = notifyWrapper([
   posts.postArchivedNotificationData,
   notify.notifySendEventToAllInCompany,
@@ -438,4 +454,5 @@ export {
   post_unfollowed,
   post_followed,
   post_comment_mention,
+  post_created_push_notification,
 };

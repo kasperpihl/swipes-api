@@ -28,6 +28,7 @@ import {
   postsFollow,
   postsFollowQueueMessage,
   postsMestionsQueueMessage,
+  postsCreatedPushNotificationQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -57,6 +58,8 @@ authed.all('/posts.create',
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,
+  notificationsPushToQueue,
+  postsCreatedPushNotificationQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     post: object.require(),

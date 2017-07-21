@@ -148,6 +148,31 @@ const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
 
   return next();
 });
+const postsCreatedPushNotificationQueueMessage = valLocals('postsCreatedPushNotificationQueueMessage', {
+  organization_id: string.require(),
+  user_id: string.require(),
+  post: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_id,
+    post,
+  } = res.locals;
+  const event_type = 'post_created_push_notification';
+  const queueMessage = {
+    organization_id,
+    user_id,
+    event_type,
+    post_id: post.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post.id,
+  });
+
+  return next();
+});
 const postsUnfollowQueueMessage = valLocals('postsUnfollowQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -556,4 +581,5 @@ export {
   postsFollowQueueMessage,
   postsMentionsParseComment,
   postsMestionsQueueMessage,
+  postsCreatedPushNotificationQueueMessage,
 };

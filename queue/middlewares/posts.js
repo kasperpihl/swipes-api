@@ -249,6 +249,20 @@ const postFollowedUnfollowedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postCreatedPushNotificationData = (req, res, next) => {
+  const {
+    user,
+    post,
+  } = res.locals;
+
+  res.locals.pushMessage = {
+    contents: { en: post.message },
+    headings: { en: `${user.profile.first_name} tagged you on a post` },
+  };
+  res.locals.pushTargetId = post.id;
+
+  return next();
+};
 
 export {
   postsGetSingle,
@@ -262,4 +276,5 @@ export {
   postArchivedNotificationData,
   postFollowedUnfollowedNotificationData,
   postCommentMentionNotificationData,
+  postCreatedPushNotificationData,
 };
