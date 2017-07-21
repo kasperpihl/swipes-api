@@ -335,6 +335,34 @@ const postsMestionsQueueMessage = valLocals('postsMestionsQueueMessage', {
 
   return next();
 });
+const postsAddCommentPushNotificationQueueMessage = valLocals('postsAddCommentPushNotificationQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment: object.require(),
+  mention_ids: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment,
+    mention_ids,
+  } = res.locals;
+  const event_type = 'post_comment_mention_push_notification';
+  const queueMessage = {
+    user_id,
+    post_id,
+    event_type,
+    mention_ids,
+    comment_id: comment.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
 const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -582,4 +610,5 @@ export {
   postsMentionsParseComment,
   postsMestionsQueueMessage,
   postsCreatedPushNotificationQueueMessage,
+  postsAddCommentPushNotificationQueueMessage,
 };

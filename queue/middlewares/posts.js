@@ -263,6 +263,22 @@ const postCreatedPushNotificationData = (req, res, next) => {
 
   return next();
 };
+const postAddCommentMentionPushNotificationData = (req, res, next) => {
+  const {
+    user,
+    post,
+    comment_id,
+  } = res.locals;
+  const comment = post.comments[comment_id];
+
+  res.locals.pushMessage = {
+    contents: { en: comment.message.replace(/<![A-Z0-9]*\|(.*?)>/gi, '$1') },
+    headings: { en: `${user.profile.first_name} mentioned you on a comment` },
+  };
+  res.locals.pushTargetId = post.id;
+
+  return next();
+};
 
 export {
   postsGetSingle,
@@ -277,4 +293,5 @@ export {
   postFollowedUnfollowedNotificationData,
   postCommentMentionNotificationData,
   postCreatedPushNotificationData,
+  postAddCommentMentionPushNotificationData,
 };
