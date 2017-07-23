@@ -318,10 +318,13 @@ class PostView extends PureComponent {
       return undefined;
     }
 
+    const title = context.get('title');
+    const newTitle = title.length > 10 ? title.slice(0, 9) + '...' : title;
+
     return (
       <RippleButton style={styles.navButton} onPress={this.onNavigateToContext}>
         <View style={styles.navButton}>
-          <Text style={styles.navButtonLabel}>Open {context.get('title')}</Text>
+          <Text style={styles.navButtonLabel}>Open "{newTitle}"</Text>
           <Icon name="ArrowRightLine" width="24" height="24" fill={colors.deepBlue50} />
         </View>
       </RippleButton>

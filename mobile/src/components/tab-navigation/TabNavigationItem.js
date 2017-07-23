@@ -13,13 +13,15 @@ const styles = StyleSheet.create({
   },
   counter: {
     position: 'absolute',
-    right: 5, top: 5,
-    paddingHorizontal: 7.5,
+    right: 3, top: 3,
+    paddingHorizontal: 6,
+    minWidth: 21,
     height: 21,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10,
+    borderRadius: 14,
     backgroundColor: colors.red80,
+    zIndex: 999,
   },
   counterLabel: {
     fontSize: 10,
@@ -55,8 +57,8 @@ class TabNavigationItem extends Component {
     return (
       <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached('' + index)}>
         <View style={styles.navItem}>
-          {this.renderCounter()}
           <Icon name={icon} width="24" height="24" fill={fill} />
+          {this.renderCounter()}
         </View>
       </RippleButton>
     );
