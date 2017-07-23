@@ -176,6 +176,8 @@ class PostView extends PureComponent {
       )).toArray();
     }
 
+    let className = 'post__comments';
+
     return (
       <div className="post__comments">
         {this.renderViewMoreComments()}

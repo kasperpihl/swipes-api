@@ -7,6 +7,7 @@ import ReactTextarea from 'react-textarea-autosize';
 import Button from 'Button';
 import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
+import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 
 import './styles/post-composer.scss';
 
@@ -14,6 +15,11 @@ class PostComposer extends PureComponent {
   constructor(props) {
     super(props)
     setupDelegate(this, 'onMessageChange', 'onFilterClick')
+    this.acOptions = {
+      types: ['users'],
+      delegate: props.delegate,
+      trigger: "@",
+    }
   }
   componentDidMount() {
   }
@@ -83,7 +89,7 @@ class PostComposer extends PureComponent {
     return (
       <div className="post-composer__text-wrapper">
         {this.renderProfilePic()}
-        <ReactTextarea
+        <AutoCompleteInput
           className="post-composer__textarea"
           value={post.get('message')}
           minRows={3}
@@ -92,6 +98,7 @@ class PostComposer extends PureComponent {
           onChange={this.onMessageChange}
           placeholder={placeholder}
           autoFocus
+          options={this.acOptions}
         />
       </div>
     )

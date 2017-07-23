@@ -16,29 +16,47 @@ class HOCAutoCompleting extends PureComponent {
       selectedIndex: 0,
       alignToTop: true,
     };
-    bindAll(this, ['onKeyDown', 'onKeyUp']);
+    // bindAll(this, ['onKeyDown', 'onKeyUp', 'onChan']);
+  }
+  componentDidMount() {
+    window.AC = this;
   }
   componentWillReceiveProps(nextProps) {
     const { results } = this.props;
-    const nextResults = nextProps.results;
-    if(results !== nextResults) {
+    if(results !== nextProps.results) {
       this.setState({ selectedIndex: 0 });
     }
-    if(!results && nextResults){
-      window.addEventListener('keyup', this.onKeyUp);
-      window.addEventListener('keydown', this.onKeyDown);
-    }
-    if(results && !nextResults) {
-      window.removeEventListener('keyup', this.onKeyUp);
-      window.removeEventListener('keydown', this.onKeyDown);
-    }
   }
-  onKeyDown(e) {
-    const { selectedIndex } = this.state;
+  onChange(e, options) {
+    const { results, clear, search, autoComplete } = this.props;
+    const value = e.target.value;
+    const position = this.getCaretPosition(e.target);
+
+    let string = value.substr(0, position);
+    string = string.split('\n').reverse()[0];
+    let array = string.split(` ${options.trigger}`);
+    if(array.length > 1) {
+      string = array[array.length - 1];
+    } else if(array[0].startsWith(`${options.trigger}`)) {
+      string = array[0].substr(1);
+    } else {
+      string = undefined;
+    }
+    if(string) {
+      search(string, options.types, e.target.getBoundingClientRect(), options.delegate);
+    } else if(autoComplete.get('string')) {
+      clear();
+    }
+    //return false;
+  }
+  onKeyDown(e, options) {
     const { results, clear, autoComplete } = this.props;
+    if(!results) {
+      return false;
+    }
+    const { selectedIndex } = this.state;
+
     if([38, 40].indexOf(e.keyCode) !== -1){
-      e.preventDefault();
-      e.stopPropagation();
       let alignToTop = (e.keyCode === 38);
       const modifier = (e.keyCode === 38) ? 1 : -1;
       let newSelected = selectedIndex + modifier;
@@ -50,26 +68,34 @@ class HOCAutoCompleting extends PureComponent {
         alignToTop = false;
       }
       this.setState({ selectedIndex : newSelected, alignToTop });
+      return true;
     }
     if(e.keyCode === 27) {
       clear();
-      e.preventDefault();
-      e.stopPropagation();
+      return true;
     }
     if(e.keyCode === 13) {
-      e.preventDefault();
-      e.stopPropagation();
+      return true;
     }
+    return false;
   }
-  onKeyUp(e) {
-    const { selectedIndex } = this.state;
-    const { clear } = this.props;
-    if(e.keyCode === 13) {
-      e.preventDefault();
-      e.stopPropagation();
-      this.onSelectRow(selectedIndex);
-      clear();
+  onKeyUp(e, options) {
+    const { results, clear } = this.props;
+    if(!results) {
+      return false;
     }
+
+    const { selectedIndex } = this.state;
+    if(e.keyCode === 13) {
+      this.onSelectRow(selectedIndex);
+      return true;
+    }
+    return false;
+  }
+  onBlur() {
+    const { clear } = this.props;
+    clear();
+    return false;
   }
   onSelectRow(i) {
     const { clear, results, autoComplete } = this.props;
@@ -78,6 +104,33 @@ class HOCAutoCompleting extends PureComponent {
       delegate.onAutoCompleteSelect(results[i].item);
     }
     clear();
+  }
+  getCaretPosition(editableDiv) {
+    if(typeof editableDiv.selectionStart !== 'undefined'){
+      return editableDiv.selectionStart;
+    }
+    var caretPos = 0,
+      sel, range;
+    if (window.getSelection) {
+      sel = window.getSelection();
+      if (sel.rangeCount) {
+        range = sel.getRangeAt(0);
+        if (range.commonAncestorContainer.parentNode == editableDiv) {
+          caretPos = range.endOffset;
+        }
+      }
+    } else if (document.selection && document.selection.createRange) {
+      range = document.selection.createRange();
+      if (range.parentElement() == editableDiv) {
+        var tempEl = document.createElement("span");
+        editableDiv.insertBefore(tempEl, editableDiv.firstChild);
+        var tempRange = range.duplicate();
+        tempRange.moveToElementText(tempEl);
+        tempRange.setEndPoint("EndToEnd", range);
+        caretPos = tempRange.text.length;
+      }
+    }
+    return caretPos;
   }
   render() {
     const { autoComplete, results } = this.props;
@@ -107,4 +160,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   clear: ca.autoComplete.clear,
+  search: ca.autoComplete.search,
 })(HOCAutoCompleting);

@@ -5,6 +5,7 @@ const initialState = fromJS({
   types: [],
   delegate: null,
   boundingRect: null,
+  selectedIndex: -1,
 });
 
 export default function autoComplete (state = initialState, action) {

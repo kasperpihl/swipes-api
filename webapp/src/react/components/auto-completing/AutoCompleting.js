@@ -32,11 +32,11 @@ class AutoCompleting extends PureComponent {
     }).reverse();
   }
   render() {
-    const { autoComplete } = this.props;
+    const { autoComplete, results } = this.props;
     const boundingRect = autoComplete.get('boundingRect');
     let className = 'auto-completing';
     const style = {};
-    if(boundingRect) {
+    if(results && boundingRect) {
       className += ' auto-completing--shown';
       style.width = 400 + 'px';
       style.height = 250 + 'px';

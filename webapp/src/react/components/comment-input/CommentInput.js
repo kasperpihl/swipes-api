@@ -2,12 +2,11 @@ import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback, debounce } from 'swipes-core-js/classes/utils';
-import ReactTextarea from 'react-textarea-autosize';
+import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
 import './styles/comment-input.scss';
-
 class CommentInput extends PureComponent {
   constructor(props) {
     super(props)
@@ -17,7 +16,11 @@ class CommentInput extends PureComponent {
     const { aCSearch } = props;
     this.bouncedSearch = debounce(aCSearch, 50);
     setupDelegate(this, 'onAddComment');
-
+    this.acOptions = {
+      types: ['users'],
+      delegate: props.delegate,
+      trigger: "@",
+    }
     bindAll(this, ['onCommentChange', 'handleAttach', 'handleSend', 'handleKeyDown', 'handleTextareaFocus']);
   }
   onCommentChange(e) {
@@ -25,7 +28,7 @@ class CommentInput extends PureComponent {
 
     this.setState({ commentText: value });
 
-    this.bouncedSearch(value, ['users'], e.target.getBoundingClientRect(), this);
+    //this.bouncedSearch(value, ['users'], e.target.getBoundingClientRect(), this);
   }
   onAutoCompleteSelect(item) {
     console.log('item', item);
@@ -70,27 +73,6 @@ class CommentInput extends PureComponent {
       </div>
     )
   }
-  // render() {
-  //   const { commentText } = this.state;
-  //   const placeholder = 'Write a comment';
-
-  //   return (
-  //     <div className="comment-input">
-  //       {this.renderImage()}
-  //       <ReactTextarea
-  //         className="comment-input__textarea"
-  //         value={commentText}
-  //         minRows={1}
-  //         maxRows={6}
-  //         ref="textarea"
-  //         onChange={this.onCommentChange}
-  //         onKeyDown={this.handleKeyDown}
-  //         placeholder={placeholder}
-  //       />
-  //       {this.renderIcons()}
-  //     </div>
-  //   )
-  // }
   renderProfilePic() {
     const { myId } = this.props;
     const image = msgGen.users.getPhoto(myId);
@@ -112,22 +94,21 @@ class CommentInput extends PureComponent {
   }
   renderTextarea() {
     const { commentText } = this.state;
-    const { aCClear} = this.props;
 
     const placeholder = 'Write a comment';
 
     return (
       <div className="comment-input__textarea-wrapper">
-        <ReactTextarea
+        <AutoCompleteInput
           className="comment-input__textarea"
           value={commentText}
           minRows={1}
           maxRows={6}
           ref="textarea"
+          options={this.acOptions}
           onChange={this.onCommentChange}
           onKeyDown={this.handleKeyDown}
           placeholder={placeholder}
-          onBlur={aCClear}
         />
 
         {/*<div className="comment-input__icon-wrapper">
