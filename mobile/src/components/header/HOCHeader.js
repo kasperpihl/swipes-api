@@ -133,9 +133,17 @@ class HOCHeader extends PureComponent {
 
     let marginTop = 0;
     let paddingBottom = 0;
+    let opacity = 1;
+    let borderBottomWidth = 1;
 
     if (collapsed) {
       marginTop = -headerHeight;
+
+      if (Platform.OS === 'ios') {
+        marginTop = -headerHeight + 20;
+        opacity = 0;
+        borderBottomWidth = 0;
+      }
     }
 
     if (!tabs) {
@@ -143,15 +151,15 @@ class HOCHeader extends PureComponent {
     }
 
     return (
-      <View onLayout={event => this.measureView(event)} style={[styles.container, { marginTop, paddingBottom }]}>
-        <View style={styles.topContainer}>
+      <View onLayout={event => this.measureView(event)} style={[styles.container, { marginTop, paddingBottom, borderBottomWidth }]}>
+        <View style={[styles.topContainer, { opacity }]}>
           <Text style={styles.title}>{this.props.title}</Text>
           <View style={styles.children}>
             {children}
           </View>
         </View>
         {this.renderSubtitle()}
-        <ScrollView style={styles.bottomContainer} horizontal showsHorizontalScrollIndicator={false} alwaysBounceHorizontal={false} >
+        <ScrollView style={[styles.bottomContainer, { opacity }]} horizontal showsHorizontalScrollIndicator={false} alwaysBounceHorizontal={false} >
           {this.renderTabs()}
         </ScrollView>
       </View>

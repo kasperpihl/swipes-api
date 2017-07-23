@@ -31,8 +31,7 @@ class HOCPostView extends PureComponent {
     browser(url);
   }
   onAttachmentClick(i) {
-    const { preview } = this.props;
-    const { post } = this.state;
+    const { preview, post } = this.props;
 
     preview(post.getIn(['attachments', i]));
   }
