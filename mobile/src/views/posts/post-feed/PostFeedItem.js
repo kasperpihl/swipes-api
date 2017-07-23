@@ -265,7 +265,13 @@ class PostFeed extends PureComponent {
     const commentSize = post.get('comments').size;
 
     if (commentSize === 0) {
-      return undefined;
+      return (
+        <RippleButton style={styles.commentsButton} onPress={this.handleOpenPost}>
+          <View style={styles.commentsButton}>
+            <Text style={styles.commentsButtonLabel}>Write a comment</Text>
+          </View>
+        </RippleButton>
+      )
     }
 
     const commentsString = commentSize > 1 ? `${commentSize} Comments` : `${commentSize} Comment`;
