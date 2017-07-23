@@ -57,7 +57,7 @@
   }
 
   &__left {
-    padding-right: 24px;
+    padding-right: 18px;
   }
 
   &__right {
@@ -65,11 +65,11 @@
   }
 
   &__profile-pic {
-    @include size(60px);
+    @include size(42px);
     border-radius: 3px;
 
     img {
-      @include size(60px);
+      @include size(42px);
       border-radius: 3px;
     }
   }
@@ -82,7 +82,7 @@
   }
 
   &__message {
-    @include font(18px, $deepBlue-90, 24px);
+    @include font(15px, $deepBlue-90, 21px);
     padding-top: 9px;
     padding-bottom: 12px;
   }
@@ -116,7 +116,8 @@
   }
 
   &__comments {
-    padding-left: 102px !important;
+    padding-left: 63px !important;
+    padding-right: 30px;
   }
 
   &__more-comments {
