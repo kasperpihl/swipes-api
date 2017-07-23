@@ -84,11 +84,13 @@ class HOCPostView extends PureComponent {
     })
   }
   render() {
-    const { myId, post, fromFeed } = this.props;
+    const { myId, post, fromFeed, aCSearch, aCClear } = this.props;
 
     return (
       <PostView
         fromFeed={fromFeed}
+        aCSearch={aCSearch}
+        aCClear={aCClear}
         myId={myId}
         post={post}
         delegate={this}
@@ -111,6 +113,8 @@ function mapStateToProps(state, ownProps) {
 
 export default navWrapper(connect(mapStateToProps, {
   openSecondary: a.navigation.openSecondary,
+  aCSearch: ca.autoComplete.search,
+  aCClear: ca.autoComplete.clear,
   addComment: ca.posts.addComment,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,

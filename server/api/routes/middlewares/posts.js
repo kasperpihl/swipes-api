@@ -148,6 +148,31 @@ const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
 
   return next();
 });
+const postsCreatedPushNotificationQueueMessage = valLocals('postsCreatedPushNotificationQueueMessage', {
+  organization_id: string.require(),
+  user_id: string.require(),
+  post: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_id,
+    post,
+  } = res.locals;
+  const event_type = 'post_created_push_notification';
+  const queueMessage = {
+    organization_id,
+    user_id,
+    event_type,
+    post_id: post.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post.id,
+  });
+
+  return next();
+});
 const postsUnfollowQueueMessage = valLocals('postsUnfollowQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -300,6 +325,34 @@ const postsMestionsQueueMessage = valLocals('postsMestionsQueueMessage', {
     event_type,
     mention_ids,
     notification_id_sufix: `${post_id}-${comment.id}-${event_type}`,
+    comment_id: comment.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
+const postsAddCommentPushNotificationQueueMessage = valLocals('postsAddCommentPushNotificationQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment: object.require(),
+  mention_ids: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment,
+    mention_ids,
+  } = res.locals;
+  const event_type = 'post_comment_mention_push_notification';
+  const queueMessage = {
+    user_id,
+    post_id,
+    event_type,
+    mention_ids,
     comment_id: comment.id,
   };
 
@@ -556,4 +609,6 @@ export {
   postsFollowQueueMessage,
   postsMentionsParseComment,
   postsMestionsQueueMessage,
+  postsCreatedPushNotificationQueueMessage,
+  postsAddCommentPushNotificationQueueMessage,
 };

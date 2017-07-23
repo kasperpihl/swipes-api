@@ -10,7 +10,7 @@
   &__item {
     @include size(100%, auto);
     overflow: hidden;
-    padding-top: 24px;
+    padding-top: 9px;
     margin-top: 9px;
 
     &:not(:first-child) {
@@ -24,8 +24,7 @@
     }
 
     .post__header {
-      padding: 0 15px;
+      padding: 0 3px;
     }
   }
 }
-

@@ -1,3 +1,4 @@
+import autoComplete from './auto-complete';
 import cache from './cache';
 import connection from './connection';
 import filters from './filters';
@@ -13,6 +14,7 @@ import users from './users';
 import ways from './ways';
 
 export {
+  autoComplete,
   cache,
   connection,
   filters,

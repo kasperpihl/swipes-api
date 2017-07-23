@@ -174,7 +174,7 @@ class HOCPostCreate extends PureComponent {
 
         createFile([file]).then((fileRes) => {
           if (fileRes.ok) {
-            const link = this.getSwipesLinkObj(type, fileRes.file.id, fileRes.file.title);
+            const link = this.getSwipesLinkObj('file', fileRes.file.id, fileRes.file.title);
 
             createLink(link).then((res) => {
               loading();

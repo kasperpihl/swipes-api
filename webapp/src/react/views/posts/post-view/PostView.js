@@ -154,7 +154,7 @@ class PostView extends PureComponent {
     )
   }
   renderComments() {
-    const { post, delegate, myId, fromFeed, isLoading } = this.props;
+    const { post, delegate, myId, fromFeed, isLoading, aCSearch, aCClear } = this.props;
     const comments = post.get('comments');
     let renderComments = undefined;
 
@@ -176,19 +176,28 @@ class PostView extends PureComponent {
       )).toArray();
     }
 
+    let className = 'post__comments';
+
     return (
       <div className="post__comments">
         {this.renderViewMoreComments()}
         {renderComments}
-        <CommentInput myId={myId} delegate={delegate} />
+        <CommentInput
+          myId={myId}
+          delegate={delegate}
+          aCSearch={aCSearch}
+          aCClear={aCClear}
+        />
       </div>
     );
   }
   render() {
+    const { fromFeed } = this.props;
     return (
       <SWView
         header={this.renderHeader()}
         noframe
+        disableScroll={fromFeed}
       >
         {this.renderComments()}
       </SWView>

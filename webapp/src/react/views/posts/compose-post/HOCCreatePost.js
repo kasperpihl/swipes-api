@@ -40,12 +40,21 @@ class HOCCreatePost extends PureComponent {
       }),
       fileVal: '',
     };
-    this.throttledSaveState = throttle(this.saveState.bind(this), 100);
+    this.throttledSaveState = throttle(this.saveState.bind(this), 500);
 
     setupLoading(this);
   }
   componentDidMount() {
 
+  }
+  onAutoCompleteSelect(item) {
+    let { post } = this.state;
+    if(!post.get('taggedUsers').contains(item.id)) {
+      post = post.updateIn(['taggedUsers'], (taggedUsers) => taggedUsers.push(item.id));
+      const msgArr = post.get('message').split('@');
+      post = post.set('message', msgArr.slice(0, -1).join('@'));
+      this.updatePost(post);
+    }
   }
   componentWillUnmount() {
     this.throttledSaveState.clear();
@@ -233,14 +242,13 @@ class HOCCreatePost extends PureComponent {
         const att = fromJS({ link: res.link, title });
         const { post } = this.state;
         this.updatePost(post.updateIn(['attachments'], (atts) => atts.push(att) ));
-        console.log('link created');
       }
     });
   }
   render() {
-    const { myId, users } = this.props;
+    const { myId } = this.props;
     const { post, fileVal } = this.state;
-    console.log(users);
+
     return (
       <CreatePost
         ref="create"
