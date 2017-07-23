@@ -303,7 +303,7 @@ class PostCreate extends PureComponent {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1, paddingBottom: 54 }}>
           <View style={styles.createHeader}>
             {this.renderProfilePic()}
             {this.renderTextArea()}
