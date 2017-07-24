@@ -94,8 +94,8 @@ class PostHeader extends PureComponent {
         <span className="post-header__span-link" onClick={this.onHeaderContextClick}>
           {contextTitle}
         </span>
+        {seperator}
         <span className="post-header__timestamp" onClick={this.onOpenPostCached(post.get('id'))}>
-          {seperator}
           {timeStamp}
         </span>
       </div>
