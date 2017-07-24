@@ -118,8 +118,11 @@ export function iconForId(id) {
 }
 
 export function navForContext(id) {
+  let title;
   if (typeof id === 'object') {
-    id = id.get('id')
+    title = id.get('title');
+    id = id.get('id');
+
   }
   if(id.startsWith('G')) {
     return {
@@ -151,6 +154,7 @@ export function navForContext(id) {
       title: 'Note',
       props: {
         id,
+        title,
       },
     };
   } else if (id.startsWith('F')) {
@@ -274,7 +278,7 @@ export function setupCachedCallback(method, ctx) {
     if (typeof index !== 'string') {
       index = '' + index;
     }
-    
+
     if (!cachedMethod[index]) {
       const args = Array.from(arguments);
       cachedMethod[index] = method.bind(ctx, ...args);
