@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate, attachmentIconForService } from '../../../../swipes-core-js/classes/utils';
+import { setupDelegate, attachmentIconForService, iconForId } from '../../../../swipes-core-js/classes/utils';
 import { colors, viewSize } from '../../../utils/globalStyles';
 import HOCHeader from '../../../components/header/HOCHeader'
 import RippleButton from '../../../components/ripple-button/RippleButton';
@@ -164,7 +164,7 @@ class PostCreate extends PureComponent {
 
     return (
       <View style={styles.subtitle}>
-        <Icon name="Goals" width="12" height="12" fill={colors.deepBlue40} />
+        <Icon name={iconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} />
         <Text style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text>
       </View>
     )
