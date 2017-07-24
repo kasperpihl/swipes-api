@@ -71,7 +71,12 @@
       &:not(:empty) {
         padding-right: 3px;
       }
-      
+
+      &:hover {
+        color: $blue-100;
+      }
+    }
+    #{$b}__timestamp {
       &:hover {
         color: $blue-100;
       }
