@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     ...Platform.select({
       ios: {
-        height: 25 * 5,
+        height: 25 * 3,
       },
     }),
   },
@@ -200,7 +200,7 @@ class PostCreate extends PureComponent {
 
     return (
       <TextInput
-        numberOfLines={5}
+        numberOfLines={3}
         multiline
         autoFocus
         onChangeText={this.onMessageChange}

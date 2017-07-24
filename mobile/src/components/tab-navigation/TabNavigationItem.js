@@ -13,7 +13,14 @@ const styles = StyleSheet.create({
   },
   counter: {
     position: 'absolute',
-    right: 3, top: 3,
+    ...Platform.select({
+      ios: {
+        right: -10, top: 3,
+      },
+      android: {
+        right: 3, top: 3,
+      }
+    }),
     paddingHorizontal: 6,
     minWidth: 21,
     height: 21,

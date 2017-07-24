@@ -62,6 +62,11 @@ const styles = StyleSheet.create({
     color: colors.deepBlue80,
     lineHeight: 15,
     paddingLeft: 15,
+    ...Platform.select({
+      ios: {
+        paddingTop: 16.5,
+      },
+    }),
   }
 })
 
