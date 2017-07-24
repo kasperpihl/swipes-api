@@ -229,10 +229,10 @@ $sectionHeight: 52px;
 
       svg {
         @include size(24px);
-        @include svg-color($deepBlue-80);
-        stroke-dasharray: 31.842243194580078px;
-        stroke-dashoffset: 0;
-        stroke-miterlimit: 31.842243194580078px;
+        // @include svg-color($deepBlue-80);
+        // stroke-dasharray: 31.842243194580078px;
+        // stroke-dashoffset: 0;
+        // stroke-miterlimit: 31.842243194580078px;
       }
     }
 
@@ -320,19 +320,7 @@ $sectionHeight: 52px;
           background-color: $blue-5;
         }
 
-        svg {
-          animation: heartBeat 1.5s ease 3;
-        }
       }
     }
   }
-}
-
-@keyframes heartBeat {
-	50% {
-		stroke-dashoffset: 31.842243194580078px;
-	}
-	50.01% {
-		stroke-dashoffset: -31.842243194580078px;
-	}
 }
