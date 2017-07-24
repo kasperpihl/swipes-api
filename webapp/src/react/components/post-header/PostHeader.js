@@ -20,21 +20,15 @@ class PostHeader extends PureComponent {
     const type = post.get('type');
 
     switch (type) {
-      case 'message':
-        return { label: 'Message', color: 'green' }
-        break;
-      case 'message':
-        return { label: 'announcement', color: 'yellow' }
-        break;
-      case 'message':
-        return { label: 'question', color: 'purple' }
-        break;
-      case 'message':
-        return { label: 'information', color: 'blue' }
-        break;
+      case 'announcement':
+        return { label: 'Announcement', color: 'yellow' }
+      case 'question':
+        return { label: 'Question', color: 'purple' }
+      case 'information':
+        return { label: 'Information', color: 'blue' }
+      case 'post':
       default:
         return { label: 'Message', color: 'green' }
-        break;
     }
   }
   renderGeneratedTitle() {
