@@ -11,6 +11,7 @@ const init = (store, delegate) => {
   window.delegate = delegate;
   window.socket = new Socket(store, delegate);
   window.msgGen = new MessageGenerator(store);
+  window.beta = (flag) => window.msgGen.me.beta(flag);
   window.filterHandler = new FilterHandler(store);
 };
 
