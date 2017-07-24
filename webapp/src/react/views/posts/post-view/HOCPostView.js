@@ -44,6 +44,11 @@ class HOCPostView extends PureComponent {
       reaction: 'like',
       comment_id: commentId || null,
     }).then((res) => {
+      if(res.ok) {
+        window.analytics.sendEvent('Reaction added', {
+          'Where': commentId ? 'Comment' : 'Post',
+        });
+      }
       this.clearLoading(`${commentId || ''}reaction`)
     });
   }
@@ -56,6 +61,11 @@ class HOCPostView extends PureComponent {
       post_id: post.get('id'),
       comment_id: commentId,
     }).then((res) => {
+      if(res.ok) {
+        window.analytics.sendEvent('Reaction removed', {
+          'Where': commentId ? 'Comment' : 'Post',
+        });
+      }
       this.clearLoading(`${commentId || ''}reaction`)
     });
   }
@@ -79,7 +89,7 @@ class HOCPostView extends PureComponent {
       message,
     }).then((res) => {
       if (res.ok) {
-
+        window.analytics.sendEvent('Comment added', {});
       }
     })
   }

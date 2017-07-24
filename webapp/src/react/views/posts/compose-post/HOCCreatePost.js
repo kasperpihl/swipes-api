@@ -10,6 +10,7 @@ import {
   navForContext,
   attachmentIconForService,
   throttle,
+  typeForId,
 } from 'swipes-core-js/classes/utils';
 import {
   EditorState,
@@ -180,6 +181,12 @@ class HOCCreatePost extends PureComponent {
 
     createPost(convertObjToUnderscore(post.toJS())).then((res) => {
       if (res.ok) {
+        window.analytics.sendEvent('Post created', {
+          'Type': post.get('type'),
+          'Tagged people': post.get('taggedUsers').size,
+          'Attachments': post.get('attachments').size,
+          'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
+        });
         navPop();
       } else {
         this.clearLoading('post', '!Something went wrong');

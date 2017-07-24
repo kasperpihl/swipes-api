@@ -117,6 +117,18 @@ export function iconForId(id) {
   }
 }
 
+export function typeForId(id) {
+  if(id.startsWith('G')) {
+    return 'Goal';
+  } else if (id.startsWith('M')) {
+    return 'Milestone';
+  } else if (id.startsWith('N')) {
+    return 'Note';
+  } else if (id.startsWith('F')) {
+    return 'File';
+  }
+}
+
 export function navForContext(id) {
   let title;
   if (typeof id === 'object') {
