@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   reactionWrapper: {
     paddingHorizontal: 15,
     alignItems: 'center',
+    justifyContent: 'center',
     alignSelf: 'stretch',
   },
   attachments: {
