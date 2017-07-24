@@ -54,7 +54,7 @@ class PostHeader extends PureComponent {
 
     const taggedUsers = post.get('tagged_users');
     if (taggedUsers.size) {
-      string.push(' to ');
+      string.push(' and tagged ');
       taggedUsers.forEach((id, i) => {
 
         if (i > 0) {

@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react'
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback, debounce } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
+import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
@@ -99,13 +100,13 @@ class CommentInput extends PureComponent {
 
     return (
       <div className="comment-input__textarea-wrapper">
-        <AutoCompleteInput
+        <ReactTextarea //AutoCompleteInput
           className="comment-input__textarea"
           value={commentText}
           minRows={1}
           maxRows={6}
           ref="textarea"
-          options={this.acOptions}
+          // options={this.acOptions}
           onChange={this.onCommentChange}
           onKeyDown={this.handleKeyDown}
           placeholder={placeholder}

@@ -222,14 +222,10 @@ class PostCreate extends PureComponent {
       string: msgGen.posts.getPostComposeTypeTitle(type),
       boldStyle: styles.boldStyle
     }];
-    let preUsers = ' to ';
-    if (type === 'question') {
-      preUsers = ' of ';
-    }
 
     const taggedUsers = post.get('taggedUsers');
     if (taggedUsers.size) {
-      string.push(preUsers);
+      string.push(' and tag ');
       taggedUsers.forEach((id, i) => {
         if (i > 0) {
           string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');

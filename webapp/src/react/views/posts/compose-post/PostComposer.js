@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
-import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
+import ReactTextarea from 'react-textarea-autosize';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 
 import './styles/post-composer.scss';
@@ -33,14 +33,10 @@ class PostComposer extends PureComponent {
       string: msgGen.posts.getPostComposeTypeTitle(type),
       className: 'post-composer__styled-button post-composer__styled-button--type'
     }];
-    let preUsers = ' to ';
-    if(type === 'question') {
-      preUsers = ' of ';
-    }
 
     const taggedUsers = post.get('taggedUsers');
     if (taggedUsers.size) {
-      string.push(preUsers);
+      string.push(' and tag ');
       taggedUsers.forEach((id, i) => {
         if (i > 0) {
           string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');
@@ -89,7 +85,7 @@ class PostComposer extends PureComponent {
     return (
       <div className="post-composer__text-wrapper">
         {this.renderProfilePic()}
-        <AutoCompleteInput
+        <ReactTextarea //AutoCompleteInput
           className="post-composer__textarea"
           value={post.get('message')}
           minRows={3}
@@ -98,7 +94,7 @@ class PostComposer extends PureComponent {
           onChange={this.onMessageChange}
           placeholder={placeholder}
           autoFocus
-          options={this.acOptions}
+          // options={this.acOptions}
         />
       </div>
     )
