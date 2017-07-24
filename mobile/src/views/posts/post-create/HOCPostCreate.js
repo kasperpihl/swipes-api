@@ -114,7 +114,7 @@ class HOCPostCreate extends PureComponent {
       onClick: this.onModalChangeType,
       items: fromJS([
         {
-          title: 'Send a message',
+          title: 'Make a post',
           index: 'message',
         },
         {
