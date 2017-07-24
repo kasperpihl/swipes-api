@@ -44,6 +44,11 @@ class HOCPostView extends PureComponent {
       reaction: "like",
       comment_id: commentId || null
     }).then(res => {
+      if(res.ok) {
+        window.analytics.sendEvent('Reaction added', {
+          'Where': commentId ? 'Comment' : 'Post',
+        });
+      }
     });
   }
   onRemoveReaction(bull, commentId) {
@@ -54,6 +59,11 @@ class HOCPostView extends PureComponent {
       post_id: post.get("id"),
       comment_id: commentId
     }).then(res => {
+      if(res.ok) {
+        window.analytics.sendEvent('Reaction removed', {
+          'Where': commentId ? 'Comment' : 'Post',
+        });
+      }
     });
   }
   onAddComment(message) {
@@ -67,6 +77,7 @@ class HOCPostView extends PureComponent {
     }).then(res => {
       this.setState({ commentLoading: false });
       if (res.ok) {
+        window.analytics.sendEvent('Comment added', {});
       }
     });
   }

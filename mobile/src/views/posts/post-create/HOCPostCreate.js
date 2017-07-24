@@ -43,6 +43,12 @@ class HOCPostCreate extends PureComponent {
     if (i === 0) {
       createPost(convertObjToUnderscore(post.toJS())).then((res) => {
         if (res.ok) {
+          window.analytics.sendEvent('Post created', {
+            'Type': post.get('type'),
+            'Tagged people': post.get('taggedUsers').size,
+            'Attachments': post.get('attachments').size,
+            'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
+          });
           navPop();
         } else {
 
