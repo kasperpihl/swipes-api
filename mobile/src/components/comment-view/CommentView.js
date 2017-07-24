@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
+    alignItems: 'center',
     paddingTop: 6,
   },
   timestamp: {
     fontSize: 12,
-    marginLeft: -4,
   }
 });
 
@@ -143,10 +143,12 @@ class CommentView extends PureComponent {
           delegate={delegate}
           commentId={comment.get("id")}
         >
-          <Text style={styles.timestamp}>
-            {" "} • {timestamp}
-          </Text>
         </Reactions>
+        <View>
+          <Text style={styles.timestamp}>
+            {"  "} • {"  "}{timestamp}
+          </Text>
+        </View>
       </View>
     );
   }

@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
     height: 54,
     alignSelf: 'stretch',
@@ -110,6 +111,7 @@ const styles = StyleSheet.create({
   },
   reactionWrapper: {
     paddingHorizontal: 15,
+    alignItems: 'center',
     alignSelf: 'stretch',
   },
   attachments: {

@@ -9,21 +9,18 @@ import { colors } from '../../utils/globalStyles';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
+    backgroundColor: 'red';
   },
   likeButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   likeButtonLabel: {
-    paddingLeft: 3,
+    paddingRight: 5,
     fontSize: 12,
   },
-  likers: {
-    paddingLeft: 3,
-  }
 })
 
 class HOCReactions extends PureComponent {
@@ -75,31 +72,31 @@ class HOCReactions extends PureComponent {
   }
   renderButton() {
     const { iLike } = this.state;
-    const heartColor = iLike ? colors.red80 : colors.deepBlue100;
-    const labelColor = iLike ? colors.red80 : colors.deepBlue100;
+    const heartFill = iLike ? colors.red80 : 'transparent';
+    const heartStroke = iLike ? colors.red80 : colors.deepBlue40;
 
     return (
       <TouchableOpacity onPress={this.handleLike}>
         <View style={styles.likeButton}>
-          <Icon name="Heart" width="24" height="24" fill={heartColor} />
-          <Text style={[styles.likeButtonLabel, { color: labelColor }]}>Like</Text>
+          <Icon name="Heart" width="24" height="24" fill={heartFill} stroke={heartStroke} />
         </View>
       </TouchableOpacity>
     )
   }
   renderLikers() {
-    const { reactions, commentId } = this.props;
+    const { reactions, commentId, iLike } = this.props;
 
     if (!reactions || !reactions.size) {
       return undefined;
     }
 
-    const likeString = `— ${reactions.size}`;
+    const likeString = `${reactions.size}`;
+    const labelColor = iLike ? colors.red80 : colors.deepBlue40;
 
     return (
 
       <View style={styles.likers}>
-        <Text style={styles.likeButtonLabel}>
+        <Text style={[styles.likeButtonLabel, { color: labelColor }]}>
           {likeString}
         </Text>
       </View>
@@ -110,8 +107,8 @@ class HOCReactions extends PureComponent {
 
     return (
       <View style={styles.container}>
-        {this.renderButton()}
         {this.renderLikers()}
+        {this.renderButton()}
         {children}
       </View>
     );
