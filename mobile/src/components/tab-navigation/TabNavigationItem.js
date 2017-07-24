@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import { colors } from '../../utils/globalStyles';
 import Icon from '../icons/Icon';
