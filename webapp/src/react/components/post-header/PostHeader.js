@@ -28,7 +28,7 @@ class PostHeader extends PureComponent {
         return { label: 'Information', color: 'blue' }
       case 'post':
       default:
-        return { label: 'Message', color: 'green' }
+        return { label: 'Post', color: 'green' }
     }
   }
   renderGeneratedTitle() {

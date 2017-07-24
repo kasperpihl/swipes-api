@@ -33,7 +33,7 @@ class HOCCreatePost extends PureComponent {
     this.state = {
       post: savedState || fromJS({
         message: props.message || '',
-        type: props.type || 'message',
+        type: props.type || 'post',
         attachments: props.attachments || [],
         taggedUsers: props.taggedUsers || [],
         context: props.context || null,
@@ -83,10 +83,10 @@ class HOCCreatePost extends PureComponent {
     const options = this.getOptionsForE(e);
 
     const items = [
-      { icon: 'Status', type: 'message' },
-      { icon: 'Feedback', type: 'question' },
-      { icon: 'Assets', type: 'announcement' },
-      { icon: 'Earth', type: 'information' }
+      { icon: 'MessageColored', type: 'post' },
+      { icon: 'QuestionColored', type: 'question' },
+      { icon: 'AnnouncementColored', type: 'announcement' },
+      { icon: 'InformationColored', type: 'information' }
     ].map((i) => {
       i.leftIcon = { icon: i.icon };
       i.title = msgGen.posts.getPostComposeTypeTitle(i.type);
