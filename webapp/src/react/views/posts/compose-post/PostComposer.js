@@ -7,6 +7,7 @@ import ReactTextarea from 'react-textarea-autosize';
 import Button from 'Button';
 import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
+import ReactTextarea from 'react-textarea-autosize';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 
 import './styles/post-composer.scss';
@@ -89,7 +90,7 @@ class PostComposer extends PureComponent {
     return (
       <div className="post-composer__text-wrapper">
         {this.renderProfilePic()}
-        <AutoCompleteInput
+        <ReactTextarea //AutoCompleteInput
           className="post-composer__textarea"
           value={post.get('message')}
           minRows={3}
@@ -98,7 +99,7 @@ class PostComposer extends PureComponent {
           onChange={this.onMessageChange}
           placeholder={placeholder}
           autoFocus
-          options={this.acOptions}
+          // options={this.acOptions}
         />
       </div>
     )
