@@ -28,6 +28,12 @@ class HOCReactions extends PureComponent {
     clearTimeout(this.tooltipDelay);
   }
   onEnter(e) {
+    const { reactions } = this.props;
+
+    if (!reactions || !reactions.size) {
+      return;
+    }
+
     const target = e.target.getBoundingClientRect();
     this.tooltipDelay = setTimeout(() => {
       const { tooltip, reactions } = this.props;
@@ -96,7 +102,14 @@ class HOCReactions extends PureComponent {
     if (!reactions || !reactions.size) {
       return undefined;
     }
+
+    const { iLike } = this.state;
     let likeString = reactions.size;
+    let className = 'reactions__label';
+
+    if (iLike) {
+      className += ' reactions__label--liked';
+    }
 
     /*if (!commentId) {
       const userIds = reactions.map(r => r.get('created_by'));
@@ -108,7 +121,7 @@ class HOCReactions extends PureComponent {
     }*/
 
     return (
-      <div className="reactions__label" onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
+      <div className={className}>
         {likeString}
       </div>
     )
@@ -122,7 +135,7 @@ class HOCReactions extends PureComponent {
     }
 
     return (
-      <div className={className}>
+      <div className={className} onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
         {this.renderButton()}
         {this.renderLikers()}
       </div>

@@ -79,6 +79,7 @@ class PostHeader extends PureComponent {
   }
   renderSubtitle() {
     const { post } = this.props;
+    const timeStamp = timeAgo(post.get('created_at'), true);
     const seperator = post.get('context') ? <span>&nbsp;•&nbsp;</span> : undefined;
     const contextTitle = post.get('context') ? post.getIn(['context', 'title']) : null;
     let icon;
@@ -92,6 +93,10 @@ class PostHeader extends PureComponent {
         {icon}
         <span className="post-header__span-link" onClick={this.onHeaderContextClick}>
           {contextTitle}
+        </span>
+        <span className="post-header__timestamp">
+          {seperator}
+          {timeStamp}
         </span>
       </div>
     );
@@ -108,12 +113,9 @@ class PostHeader extends PureComponent {
   }
   renderActions() {
     const { post } = this.props;
-    const timeStamp = timeAgo(post.get('created_at'), true);
 
     return (
       <div className="post-header__actions">
-        <Button small icon="ThreeDots" frameless />
-        <div className="post-header__timestamp">{timeStamp}</div>
         {this.renderType()}
       </div>
     )

@@ -93,6 +93,7 @@ class CommentView extends PureComponent {
         isLoading={loadingReaction}
         delegate={delegate}
         commentId={comment.get('id')}
+        fromFeed={true}
       />
     )
   }
@@ -108,7 +109,9 @@ class CommentView extends PureComponent {
           {this.renderMessage()}
           <span className="comment__timestamp"> — {timestamp}</span>
         </div>
-        {this.renderReaction()}
+        <div className="comment__reactions">
+          {this.renderReaction()}
+        </div>
       </div>
     )
   }

@@ -58,9 +58,11 @@ class PostView extends PureComponent {
         </div>
         <div className="post__right">
           <PostHeader post={post} delegate={delegate} />
-          {this.renderMessage()}
+          <div className="post__message-wrapper">
+            {this.renderMessage()}
+            {this.renderPostActions()}
+          </div>
           {this.renderAttachments()}
-          {this.renderPostActions()}
         </div>
       </div>
     )
@@ -178,8 +180,12 @@ class PostView extends PureComponent {
 
     let className = 'post__comments';
 
+    if (!fromFeed) {
+      className += ' post__comments--single'
+    }
+
     return (
-      <div className="post__comments">
+      <div className={className}>
         {this.renderViewMoreComments()}
         {renderComments}
         <CommentInput
@@ -195,10 +201,11 @@ class PostView extends PureComponent {
     const { fromFeed } = this.props;
     return (
       <SWView
-        header={this.renderHeader()}
         noframe
         disableScroll={fromFeed}
       >
+
+        {this.renderHeader()}
         {this.renderComments()}
       </SWView>
     )

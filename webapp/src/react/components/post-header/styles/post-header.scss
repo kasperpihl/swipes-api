@@ -16,15 +16,13 @@
   }
 
   &__timestamp {
-    padding: 3px 6px;
-    border: 1px solid #CCCED5;
-    @include font(12px, $deepBlue-50, 18px);
-    margin-left: 6px;
+    @include font(12px, $deepBlue-40, 18px);
   }
 
   &__type {
     @include font(12px, white, 18px, 500);
-    padding: 3px 12px;
+    border-radius: 3px;
+    padding: 3px 9px;
     margin-left: 1px;
 
     &--green {
@@ -69,6 +67,10 @@
     @include font(12px, $deepBlue-50, 18px, 500);
 
     #{$b}__span-link {
+
+      &:not(:empty) {
+        padding-right: 3px;
+      }
       
       &:hover {
         color: $blue-100;

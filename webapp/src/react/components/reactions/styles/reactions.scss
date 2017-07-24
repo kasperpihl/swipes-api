@@ -18,6 +18,48 @@
   &__button {
     height: 24px;
   }
+
+  &__label {
+    @include font(12px, $deepBlue-30 !important, 15px);
+    order: 1;
+    padding-right: 3px;
+
+    &--liked {
+      @include font(12px, $red-80 !important, 15px);
+    }
+  }
+
+  &__button {
+    height: 20px;
+    order: 2;
+  }
+
+  &__heart {
+    @include size(20px);
+    stroke: $deepBlue-30 !important;
+    fill: transparent;
+    transition: .2s ease;
+
+    path {
+      stroke-width: 1px !important;
+    }
+
+    &:hover {
+      stroke: $red-80 !important;
+      transition: .2s ease;
+    }
+
+    &--liked {
+      stroke: $red-80 !important;
+      fill: $red-80 !important;
+      transition: .2s ease;
+
+      &:hover {
+        opacity: .6;
+        transition: .2s ease;
+      }
+    }
+  }
 }
 
 // ======================================================
@@ -47,60 +89,4 @@
       pointer-events: none;
     }
  }
-
- &:not(#{$b}--comment) {
-    
-    #{$b}__label {
-      @include font(12px, $deepBlue-80, 15px, 500);
-
-      &:before {
-        content: '\00a0— '
-      }
-    }
-
-    #{$b}__heart {
-      @include size(24px);
-      stroke: $red-80;
-      fill: transparent;
-      transition: .2s ease;
-
-      path {
-        stroke-width: 1px !important;
-      }
-
-      &--liked {
-        fill: $red-80;
-        transition: .2s ease;
-      }
-    }
-  }
-
-  &--comment {
-    #{$b}__label {
-      @include font(12px, $deepBlue-30 !important, 15px);
-      order: 1;
-      padding-right: 3px;
-    }
-
-    #{$b}__button {
-      height: 20px;
-      order: 2;
-    }
-
-    #{$b}__heart {
-      @include size(20px);
-      stroke: $deepBlue-30 !important;
-      fill: transparent;
-      transition: .2s ease;
-
-      path {
-        stroke-width: 1px !important;
-      }
-
-      &--liked {
-        fill: $deepBlue-30 !important;
-        transition: .2s ease;
-      }
-    }
-  }
 }

@@ -53,6 +53,7 @@ $imgSize: 54px;
   &__styled-text {
     @include font(12px, $deepBlue-100, 15px);
     @include truncateString(true);
+    word-break: break-all;
   }
 
   &__styled-button {
