@@ -19,6 +19,18 @@ const uniqueCommentUserIds = (comments) => {
 
   return Array.from(new Set(userIds));
 };
+const getPrefixForType = (type) => {
+  switch (type) {
+    case 'information':
+      return '';
+    case 'announcement':
+      return 'an ';
+    case 'question':
+    case 'post':
+    default:
+      return 'a ';
+  }
+}
 const postsGetSingle = (req, res, next) => {
   const {
     post_id,
@@ -257,7 +269,7 @@ const postCreatedPushNotificationData = (req, res, next) => {
 
   res.locals.pushMessage = {
     contents: { en: post.message },
-    headings: { en: `${user.profile.first_name} tagged you on a post` },
+    headings: { en: `${user.profile.first_name} tagged you on ${getPrefixForType(post.type)}${post.type}` },
   };
   res.locals.pushTargetId = post.id;
 
@@ -273,7 +285,7 @@ const postAddCommentMentionPushNotificationData = (req, res, next) => {
 
   res.locals.pushMessage = {
     contents: { en: comment.message.replace(/<![A-Z0-9]*\|(.*?)>/gi, '$1') },
-    headings: { en: `${user.profile.first_name} mentioned you on a comment` },
+    headings: { en: `${user.profile.first_name} mentioned you in a comment` },
   };
   res.locals.pushTargetId = post.id;
 
