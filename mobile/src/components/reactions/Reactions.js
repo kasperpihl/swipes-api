@@ -83,7 +83,8 @@ class HOCReactions extends PureComponent {
     )
   }
   renderLikers() {
-    const { reactions, commentId, iLike } = this.props;
+    const { reactions, commentId } = this.props;
+    const { iLike } = this.state;
 
     if (!reactions || !reactions.size) {
       return undefined;
@@ -106,8 +107,8 @@ class HOCReactions extends PureComponent {
 
     return (
       <View style={styles.container}>
-        {this.renderLikers()}
         {this.renderButton()}
+        {this.renderLikers()}
         {children}
       </View>
     );

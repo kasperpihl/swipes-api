@@ -105,6 +105,10 @@ import WindowsClose from './svgs/windows-close.svg';
 import WindowsMaximize from './svgs/windows-maximize.svg';
 import WindowsMinimize from './svgs/windows-minimize.svg';
 import WindowsUnmaximize from './svgs/windows-unmaximize.svg';
+import MessageColored from './svgs/message-colored.svg';
+import AnnouncementColored from './svgs/announcement-colored.svg';
+import QuestionColored from './svgs/question-colored.svg';
+import InformationColored from './svgs/information-colored.svg';
 
 import WindowsDevice from './svgs/windows-device.svg';
 import MacDevice from './svgs/mac-device.svg';
@@ -233,6 +237,10 @@ export {
   WindowsMaximize,
   WindowsMinimize,
   WindowsUnmaximize,
+  MessageColored,
+  AnnouncementColored,
+  QuestionColored,
+  InformationColored,
 
   WindowsDevice,
   MacDevice,
