@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
-import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';

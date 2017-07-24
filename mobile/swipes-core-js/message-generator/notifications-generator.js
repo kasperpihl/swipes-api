@@ -55,7 +55,7 @@ export default class NotificationsGenerator {
       case 'post_created': {
         text.push(boldText('send', users.getName(meta.get('created_by'), { capitalize: true }), boldStyle));
         text.push(` ${posts.getPostTypeTitle(meta.get('type'))}`);
-        text.push(` ${meta.get('type') === 'question' ? ' of ' : ' to '} `);
+        text.push(` and tagged `);
         text.push(boldText('users', 'you', boldStyle));
         text.push(`: "${meta.get('message')}"'`);
         break;

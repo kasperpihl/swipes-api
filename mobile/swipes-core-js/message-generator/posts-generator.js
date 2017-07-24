@@ -11,9 +11,9 @@ export default class Posts {
         return 'Ask a question';
       case 'announcement':
         return 'Make an announcement';
-      case 'message':
+      case 'post':
       default:
-        return 'Send a message';
+        return 'Make a post';
     }
   }
   getPrefixForType(type) {
@@ -23,7 +23,7 @@ export default class Posts {
       case 'announcement':
         return 'an ';
       case 'question':
-      case 'message':
+      case 'post':
       default:
         return 'a ';
     }
@@ -36,9 +36,9 @@ export default class Posts {
         return 'asked a question';
       case 'announcement':
         return 'made an announcement';
-      case 'message':
+      case 'post':
       default:
-        return 'sent a message';
+        return 'made a post';
     }
   }
   getPostTypeSubtitle(type){
@@ -49,9 +49,9 @@ export default class Posts {
         return 'For feedback, assets or updates etc.';
       case 'announcement':
         return 'Announce important events!';
-      case 'message':
+      case 'post':
       default:
-        return 'Share an update with the team';
+        return 'Share the latest with the team';
     }
   }
 }
