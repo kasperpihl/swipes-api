@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback, URL_REGEX } from 'swipes-core-js/classes/utils';
@@ -11,8 +11,8 @@ import './styles/comment-view.scss';
 
 class CommentView extends PureComponent {
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
 
     this.openReactions = this.openReactions.bind(this);
     setupDelegate(this, 'onLinkClick', 'shouldScroll');
@@ -23,7 +23,7 @@ class CommentView extends PureComponent {
     }
   }
   openReactions() {
-    console.log('hihihihih')
+    console.log('hihihihih');
   }
   renderProfilePic() {
     const { comment } = this.props;
@@ -35,14 +35,14 @@ class CommentView extends PureComponent {
         <div className="comment__profile-initials">
           {initials}
         </div>
-      )
+      );
     }
 
     return (
       <div className="comment__profile-pic">
         <img src={image} />
       </div>
-    )
+    );
   }
   renderName() {
     const { comment } = this.props;
@@ -52,13 +52,15 @@ class CommentView extends PureComponent {
       <span className="comment__name">
         {name}
       </span>
-    )
+    );
   }
   renderMessage() {
     const { comment } = this.props;
-    let message = comment.get('message');
-
-    message = message.split('\n').map((item, key) => {
+    const newLinesArray = comment.get('message').split('\n');
+    const newLinesCount = newLinesArray.length - 1;
+    const message = newLinesArray.map((item, key) => {
+      // const br = newLinesCount === key ? '' : '<br />';
+      const newLine = newLinesCount === key ? null : (<br />);
       const urls = item.match(URL_REGEX);
       if (urls) {
         item = item.split(URL_REGEX);
@@ -67,22 +69,22 @@ class CommentView extends PureComponent {
             <a
               onClick={this.onLinkClickCached(url)}
               className="notification__link"
-              key={'link' + i}
+              key={`link${i}`}
             >
               {url}
             </a>
           ));
-        })
+        });
       }
 
-      return <span key={key}>{item}</span>;
+      return <span key={key}>{item}{newLine}</span>;
     });
 
     return (
       <span className="comment__content">
         {message}
       </span>
-    )
+    );
   }
   renderReaction() {
     const { comment, delegate, loadingReaction } = this.props;
@@ -93,9 +95,9 @@ class CommentView extends PureComponent {
         isLoading={loadingReaction}
         delegate={delegate}
         commentId={comment.get('id')}
-        fromFeed={true}
+        fromFeed
       />
-    )
+    );
   }
   render() {
     const { comment } = this.props;
@@ -113,10 +115,10 @@ class CommentView extends PureComponent {
           {this.renderReaction()}
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default CommentView
+export default CommentView;
 // const { string } = PropTypes;
 CommentView.propTypes = {};
