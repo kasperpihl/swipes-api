@@ -59,7 +59,6 @@ class CommentView extends PureComponent {
     const newLinesArray = comment.get('message').split('\n');
     const newLinesCount = newLinesArray.length - 1;
     const message = newLinesArray.map((item, key) => {
-      // const br = newLinesCount === key ? '' : '<br />';
       const newLine = newLinesCount === key ? null : (<br />);
       const urls = item.match(URL_REGEX);
       if (urls) {
