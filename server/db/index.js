@@ -2,7 +2,7 @@ import config from 'config';
 import r from 'rethinkdb';
 import Promise from 'bluebird';
 
-const dbConfig = config.get('database');
+let dbConfig = config.get('database');
 const isCursor = (obj) => {
   // TODO: Suggest an r.isCursor() API or something similar.
   return obj != null && obj._conn != null;
@@ -32,9 +32,14 @@ const rethinkdb = {
   // need just the results as array from the cursor
   // feed: true/false (to handle change feeds - don't close the connection)
   // returnConnection: return the cursor and the connection in an array
+  // dbConfig: pass a config object for connection to the db
   rethinkQuery: (query, options = {}) => {
     return new Promise((resolve, reject) => {
       let conn;
+
+      if (options.dbConfig) {
+        dbConfig = options.dbConfig;
+      }
 
       r.connect(dbConfig).then((localConn) => {
         conn = localConn;
