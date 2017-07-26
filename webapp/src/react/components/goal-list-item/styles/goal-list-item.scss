@@ -93,6 +93,7 @@ $contHeight: 79px;
 
   &__assigning {
     @include size(auto, 30px);
+    padding-left: 12px;
   }
 }
 
