@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Icon from 'Icon';
 import Button from 'Button';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import './styles/result-item.scss';
 
 // now use events as onClick:
 

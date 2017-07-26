@@ -16,6 +16,10 @@ class AutoCompleteInput extends PureComponent {
   }
   handler(type, e) {
     const { options } = this.props;
+    options.boundingRect = e.target.getBoundingClientRect();
+    const wh = window.outerHeight;
+    const { top, bottom } = options.boundingRect;
+    options.showOnTop = (wh - bottom) < top;
     if(window.AC[type](e, options)){
       e.stopPropagation();
       e.preventDefault();
@@ -27,6 +31,7 @@ class AutoCompleteInput extends PureComponent {
   }
   render() {
     const {
+      nodeType,
       options,
       onKeyUp,
       onKeyDown,
@@ -39,6 +44,9 @@ class AutoCompleteInput extends PureComponent {
     let Comp = ReactTextarea;
     if(this.props.html) {
       Comp = ContentEditable;
+    }
+    if(nodeType) {
+      Comp = nodeType;
     }
     return (
       <Comp

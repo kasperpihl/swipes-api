@@ -7,8 +7,8 @@ const getState = state => state;
 export const getResults = createSelector(
   [getAutoComplete, getState],
   (autoComplete, state) => {
-    const types = autoComplete.get('types');
-    if(types.contains('users')) {
+    const types = autoComplete.getIn(['options', 'types']);
+    if(types && types.indexOf('users') > -1) {
       return cs.users.autoComplete(state);
     }
     return [];

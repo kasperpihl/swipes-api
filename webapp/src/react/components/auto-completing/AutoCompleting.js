@@ -1,10 +1,11 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
+import ResultItem from 'components/result-item/ResultItem';
 import AutoCompleteItem from './AutoCompleteItem';
 import './styles/auto-completing.scss';
 
@@ -20,27 +21,38 @@ class AutoCompleting extends PureComponent {
     if(!results) {
       return undefined;
     }
-    return results.map((r, i) => {
+    let resultHtml = results.map((r, i) => {
       return (
         <AutoCompleteItem
           key={autoComplete.get('string') + i}
           item={r.item}
           selected={(i === selectedIndex)}
           alignToTop={alignToTop}
-        />
+        >
+          <ResultItem
+            {...r.resultItem}
+          />
+        </AutoCompleteItem>
       )
-    }).reverse();
+    });
+    if(autoComplete.getIn(['options', 'showOnTop'])){
+      resultHtml = resultHtml.reverse();
+    }
+    return resultHtml;
   }
   render() {
     const { autoComplete, results } = this.props;
-    const boundingRect = autoComplete.get('boundingRect');
+    const boundingRect = autoComplete.getIn(['options', 'boundingRect']);
     let className = 'auto-completing';
     const style = {};
     if(results && boundingRect) {
       className += ' auto-completing--shown';
-      style.width = 400 + 'px';
+      style.width = 360 + 'px';
       style.height = 250 + 'px';
-      style.top = (boundingRect.top - 250) + 'px';
+      style.top = (boundingRect.bottom) + 'px';
+      if(autoComplete.getIn(['options', 'showOnTop'])) {
+        style.top = (boundingRect.top - 250) + 'px';
+      }
       style.left = boundingRect.left + 'px';
     }
 

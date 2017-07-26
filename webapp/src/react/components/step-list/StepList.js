@@ -16,6 +16,7 @@ import Button from 'Button';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import StepTooltip from './StepTooltip';
 import SortableList from './SortableList';
+import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 
 import './styles/step-list.scss';
 
@@ -25,11 +26,26 @@ class StepList extends PureComponent {
     this.state = {
       addFocus: false,
       addStepValue: '',
+      addStepAssignees: fromJS([]),
     };
     setupDelegate(this, 'onStepSort', 'onStepAdd', 'onStepRename');
     bindAll(this, ['onSortEnd', 'onFocus', 'onBlur', 'onChange', 'onKeyDown']);
+    this.acOptions = {
+      types: ['users'],
+      delegate: this,
+      trigger: "@",
+    }
   }
   componentDidMount() {
+  }
+  onAutoCompleteSelect(id) {
+    let { addStepAssignees, addStepValue } = this.state;
+    if(!addStepAssignees.contains(id)) {
+      addStepAssignees = addStepAssignees.push(id);
+    }
+    const msgArr = addStepValue.split('@');
+    addStepValue = msgArr.slice(0, -1).join('@');
+    this.setState({ addStepValue, addStepAssignees });
   }
   onChange(e) {
     const value = e.target.value;
@@ -78,7 +94,7 @@ class StepList extends PureComponent {
 
   renderAddStep() {
     const { isLoading, getLoading } = this.props;
-    const { addFocus, addStepValue } = this.state;
+    const { addFocus, addStepValue, addStepAssignees } = this.state;
 
     let addClass = 'add-step';
     let value = addStepValue;
@@ -93,7 +109,8 @@ class StepList extends PureComponent {
 
     return (
       <div className={addClass}>
-        <input
+        <AutoCompleteInput
+          nodeType="input"
           ref="addStepInput"
           type="text"
           onFocus={this.onFocus}
@@ -103,9 +120,18 @@ class StepList extends PureComponent {
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           placeholder={placeholder}
+          options={this.acOptions}
         />
         <div className="add-step__indicator">
           <div className="add-step__loader" />
+        </div>
+        <div className="add-step__assignees">
+          <HOCAssigning
+            index="add"
+            assignees={addStepAssignees}
+            rounded
+            size={24}
+          />
         </div>
       </div>
     );

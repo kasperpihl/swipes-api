@@ -43,7 +43,7 @@ class HOCAutoCompleting extends PureComponent {
       string = undefined;
     }
     if(string) {
-      search(string, options.types, e.target.getBoundingClientRect(), options.delegate);
+      search(string, options);
     } else if(autoComplete.get('string')) {
       clear();
     }
@@ -58,7 +58,9 @@ class HOCAutoCompleting extends PureComponent {
 
     if([38, 40].indexOf(e.keyCode) !== -1){
       let alignToTop = (e.keyCode === 38);
-      const modifier = (e.keyCode === 38) ? 1 : -1;
+      let modifier = (e.keyCode === 38) ? -1 : 1;
+      const showOnTop = autoComplete.getIn(['options', 'showOnTop']);
+      modifier = showOnTop ? -modifier : modifier;
       let newSelected = selectedIndex + modifier;
       if(newSelected < 0) {
         newSelected = results.length - 1;
@@ -99,7 +101,7 @@ class HOCAutoCompleting extends PureComponent {
   }
   onSelectRow(i) {
     const { clear, results, autoComplete } = this.props;
-    const delegate = autoComplete.get('delegate');
+    const delegate = autoComplete.getIn(['options', 'delegate']);
     if(delegate && typeof delegate.onAutoCompleteSelect === 'function' && results.length) {
       delegate.onAutoCompleteSelect(results[i].item);
     }

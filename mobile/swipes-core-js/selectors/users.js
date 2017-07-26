@@ -6,6 +6,7 @@ const defOptions = {
   includeScore: true,
   includeMatches: true,
   tokenize: true,
+  id: 'id',
   threshold: 0.6,
   matchAllTokens: true,
   maxPatternLength: 32,
@@ -44,7 +45,29 @@ export const getSortedArray = createSelector(
 export const autoComplete = createSelector(
   [getSortedArray, getAutoComplete],
   (list, autoComplete) => {
+    console.log('calc users');
     let fuse = new Fuse(list, defOptions); // "list" is the item array
-    return fuse.search(autoComplete.get('string') || '');
+    return fuse.search(autoComplete.get('string') || '').map((res) => {
+      const { item } = res;
+      const user = msgGen.users.getUser(item);
+      const profilePic = msgGen.users.getPhoto(user);
+      res.resultItem = {
+        title: msgGen.users.getFullName(user),
+      }
+      if (profilePic) {
+        res.resultItem.leftIcon = {
+          src: profilePic,
+        };
+      } else {
+        res.resultItem.leftIcon = {
+          initials: {
+            color: 'white',
+            backgroundColor: '#000C2F',
+            letters: msgGen.users.getInitials(user),
+          },
+        };
+      }
+      return res;
+    });
   },
 );

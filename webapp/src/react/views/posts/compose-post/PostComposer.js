@@ -85,7 +85,7 @@ class PostComposer extends PureComponent {
     return (
       <div className="post-composer__text-wrapper">
         {this.renderProfilePic()}
-        <ReactTextarea //AutoCompleteInput
+        <AutoCompleteInput //ReactTextarea //
           className="post-composer__textarea"
           value={post.get('message')}
           minRows={3}
@@ -94,7 +94,7 @@ class PostComposer extends PureComponent {
           onChange={this.onMessageChange}
           placeholder={placeholder}
           autoFocus
-          // options={this.acOptions}
+          options={this.acOptions}
         />
       </div>
     )

@@ -145,11 +145,17 @@
 
   .add-step {
     $b: &;
-
+    &__assignees {
+      @include flexContainer('row', center, center);
+      padding-left: 6px;
+      transition: .15s ease;
+      order: 3;
+    }
     &__input {
       @include size(100%, auto);
       @include font(15px, $deepBlue-100, 24px);
       order: 2;
+      @include flexContainer('row', left, center);
 
       &::-webkit-input-placeholder {
         @include font(15px, $deepBlue-30, 24px);

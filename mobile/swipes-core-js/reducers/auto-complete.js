@@ -2,10 +2,7 @@ import * as types from '../constants'
 import { fromJS } from 'immutable'
 const initialState = fromJS({
   string: null,
-  types: [],
-  delegate: null,
-  boundingRect: null,
-  selectedIndex: -1,
+  options: {},
 });
 
 export default function autoComplete (state = initialState, action) {
@@ -15,7 +12,7 @@ export default function autoComplete (state = initialState, action) {
   } = action;
   switch (type) {
     case types.AUTO_COMPLETE: {
-      return state.merge(fromJS(payload));
+      return state.merge(payload);
     }
     case types.AUTO_COMPLETE_CLEAR: {
       return initialState;

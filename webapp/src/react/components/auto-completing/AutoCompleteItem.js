@@ -32,7 +32,7 @@ class AutoCompleteItem extends PureComponent {
     }
   }
   render() {
-    const { item, selected } = this.props;
+    const { item, selected, children } = this.props;
 
     let className = 'auto-completing__item';
     if(selected) {
@@ -41,7 +41,7 @@ class AutoCompleteItem extends PureComponent {
 
     return (
       <div ref="container" className={className} key={item.id}>
-        {item.profile.first_name} {item.profile.last_name}
+        {children}
       </div>
     );
   }

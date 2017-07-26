@@ -76,18 +76,27 @@ class HOCStepList extends PureComponent {
   onAssign(i, e) {
     const options = this.getOptionsForE(e);
     const { selectAssignees, assignStep, goal } = this.props;
-    const helper = this.getHelper();
-    const step = helper.getStepByIndex(i);
+    let assignees = this.state.addStepAssignees;
+    if(i !== 'add') {
+      const helper = this.getHelper();
+      const step = helper.getStepByIndex(i);
+      assignees = step.get('assignees');
+    }
+
 
     options.actionLabel = 'Assign';
-    if(step.get('assignees').size){
+    if(assignees.size){
       options.actionLabel = 'Reassign';
     }
     let overrideAssignees;
-    selectAssignees(options, step.get('assignees').toJS(), (newAssignees) => {
+    selectAssignees(options, assignees.toJS(), (newAssignees) => {
       if (newAssignees) {
         overrideAssignees = newAssignees;
       } else if (overrideAssignees) {
+        if(i === 'add') {
+          this.setState({ addStepAssignees: fromJS(overrideAssignees) });
+          return;
+        }
         const clearCB = this.clearLoading.bind(null, step.get('id'));
         this.setLoading(step.get('id'), 'Assigning...');
         assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res) => {

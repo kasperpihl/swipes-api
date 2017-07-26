@@ -1,0 +1,146 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.result {
+  $e: &;
+
+  @include size(100%, auto);
+  @include flex();
+  min-height: 54px;
+  border-radius: 3px;
+  padding: 9px 0;
+  transition: .2s ease-in-out;
+
+  &:before {
+    @include size(110%, 100%);
+    background-color: transparent;
+    border-radius: 3px;
+    content: '';
+    left: -5%; top: 0;
+    position: absolute;
+    transition: .15s ease-in-out;
+  }
+
+  &__data {
+    @include size(100%, auto);
+    position: relative;
+    z-index: 9;
+  }
+
+  &__title {
+    @include font(15px, $deepBlue-50, 21px);
+  }
+
+  &__subtitle {
+    @include font(12px, $deepBlue-40, 15px);
+  }
+
+  &--selected {
+    & .result__title {
+      @include font(15px, $deepBlue-100, 21px);
+    }
+
+    & .result__subtitle {
+      @include font(12px, $deepBlue-80, 15px);
+    }
+
+    &:before {
+      background-color: $blue-5;
+    }
+  }
+
+  &--disabled {
+    pointer-events: none;
+
+    & .result__title {
+      @include font(15px, $deepBlue-30, 21px, 400);
+    }
+
+    & .result__subtitle {
+      @include font(12px, $deepBlue-30, 15px);
+    }
+
+    &:hover {
+      &:before {
+        background-color: transparent;
+      }
+    }
+  }
+
+
+  &:hover {
+
+    .result__title {
+      @include font($c: $blue-100);
+    }
+  }
+  &__icon {
+    @include flex(none);
+    position: relative;
+    transition: .15s;
+    z-index: 9;
+
+    &--img {
+      @include size(30px);
+
+      img {
+        @include size();
+        border-radius: 50%;
+      }
+    }
+
+    &--svg {
+      @include size(30px);
+      @include flex();
+
+      svg {
+        @include size(24px);
+        // @include svg-color($deepBlue-80);
+        // stroke-dasharray: 31.842243194580078px;
+        // stroke-dashoffset: 0;
+        // stroke-miterlimit: 31.842243194580078px;
+      }
+    }
+
+    &--btn {
+      @include size(30px);
+      @include flex();
+      border: 1px solid $deepBlue-10;
+      border-radius: 50%;
+
+      svg {
+        @include size(24px);
+        @include svg-color($deepBlue-50);
+      }
+
+      &:hover {
+        background-color: $deepBlue-10;
+        transition: .15s;
+      }
+    }
+
+    &--label {
+
+    }
+
+    &--initials {
+      @include size(30px);
+
+      .result__initials {
+        @include size();
+        @include flex();
+        @include font(15px, $bg, 500);
+        background-color: $deepBlue-100;
+        border-radius: 6px;
+      }
+    }
+
+    &--left {
+      margin-right: 15px;
+    }
+
+    &--right {
+      margin-left: 15px;
+    }
+  }
+}

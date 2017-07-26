@@ -3,9 +3,11 @@
 
 .auto-completing {
   position: fixed;
+  box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
   z-index: 9999;
-  background-color: red;
-  border: 2px solid black;
+  overflow: hidden;
+  border-radius: 3px;
+  background-color: white;
   visibility: hidden;
   pointer-events: none;
   overflow-y: scroll;
@@ -14,9 +16,9 @@
     pointer-events: all;
   }
   &__item {
-    height: 70px;
     &--selected {
-      background-color: white;
+      background-color: $blue-20;
     }
+    padding: 0 18px;
   }
 }

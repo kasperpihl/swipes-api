@@ -48,14 +48,14 @@ class HOCCreatePost extends PureComponent {
   componentDidMount() {
 
   }
-  onAutoCompleteSelect(item) {
+  onAutoCompleteSelect(id) {
     let { post } = this.state;
-    if(!post.get('taggedUsers').contains(item.id)) {
-      post = post.updateIn(['taggedUsers'], (taggedUsers) => taggedUsers.push(item.id));
-      const msgArr = post.get('message').split('@');
-      post = post.set('message', msgArr.slice(0, -1).join('@'));
-      this.updatePost(post);
+    if(!post.get('taggedUsers').contains(id)) {
+      post = post.updateIn(['taggedUsers'], (taggedUsers) => taggedUsers.push(id));
     }
+    const msgArr = post.get('message').split('@');
+    post = post.set('message', msgArr.slice(0, -1).join('@'));
+    this.updatePost(post);
   }
   componentWillUnmount() {
     this.throttledSaveState.clear();

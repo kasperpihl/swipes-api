@@ -100,7 +100,7 @@ class CommentInput extends PureComponent {
 
     return (
       <div className="comment-input__textarea-wrapper">
-        <ReactTextarea //AutoCompleteInput
+        <ReactTextarea //AutoCompleteInput //
           className="comment-input__textarea"
           value={commentText}
           minRows={1}

@@ -19,9 +19,12 @@ class HOCPostFeed extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { limit: 10 };
   }
   componentDidMount() {
+  }
+  onReachedEnd() {
+    this.setState({ limit: this.state.limit + 10 });
   }
   onNewPost() {
     const { navPush, filterId, filterTitle } = this.props;
@@ -53,9 +56,12 @@ class HOCPostFeed extends PureComponent {
   }
   render() {
     const { posts, filterTitle } = this.props;
+    const { limit } = this.state;
+
     return (
       <PostFeed
         posts={posts}
+        limit={limit}
         filterTitle={filterTitle}
         delegate={this}
       />
