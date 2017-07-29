@@ -32,8 +32,9 @@ const milestonesGoalAddedRemovedNotificationData = (req, res, next) => {
   const {
     goal_id,
     milestone_id,
-    old_milestone_id,
     goal_order,
+    // when we are removing a goal from a milestone there is no old_milestone_id
+    old_milestone_id = null,
   } = res.locals;
 
   res.locals.notificationData = null;
