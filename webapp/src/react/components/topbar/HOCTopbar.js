@@ -123,6 +123,11 @@ class HOCTopbar extends PureComponent {
   }
   renderTrialIndicator() {
     const { me } = this.props;
+    if (process.env.NODE_ENV !== 'production') {
+      return (
+        <div className="topbar__trial">Development</div>
+      );
+    }
     const daysLeft = msgGen.orgs.getDaysLeft();
     const isAdmin = msgGen.me.isAdmin(me && me.get('id'));
     if (!isAdmin || typeof daysLeft !== 'number' || daysLeft <= 0) {
