@@ -27,10 +27,10 @@ class HOCStepList extends PureComponent {
   componentDidMount() {
     this.viewDidLoad(this);
   }
-  onStepAdd(title) {
+  onStepAdd(title, assignees) {
     const { addStep, goal } = this.props;
     this.setLoading('add', 'Adding...');
-    addStep(goal.get('id'), title).then((res) => {
+    addStep(goal.get('id'), title, assignees).then((res) => {
       this.clearLoading('add');
       if(res.ok){
         window.analytics.sendEvent('Step added', {});
@@ -181,6 +181,7 @@ class HOCStepList extends PureComponent {
       tooltip,
       editMode,
       goal,
+      selectAssignees,
     } = this.props;
     const { steps, tempOrder } = this.state;
 
@@ -188,6 +189,7 @@ class HOCStepList extends PureComponent {
       <StepList
         {...this.bindLoading()}
         steps={goal.get('steps')}
+        selectAssignees={selectAssignees}
         stepOrder={tempOrder || goal.get('step_order')}
         delegate={this}
         tooltip={tooltip}

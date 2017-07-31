@@ -38,6 +38,23 @@ class StepList extends PureComponent {
   }
   componentDidMount() {
   }
+  onAssign(i, e) {
+    console.log('lalala')
+    const options = this.getOptionsForE(e);
+    const { selectAssignees } = this.props;
+    const assignees = this.state.addStepAssignees;
+    options.actionLabel = 'Assign';
+    let overrideAssignees;
+
+    selectAssignees(options, assignees.toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
+      } else if (overrideAssignees) {
+        this.setState({ addStepAssignees: fromJS(overrideAssignees) });
+      }
+    });
+    e.stopPropagation();
+  }
   onAutoCompleteSelect(id) {
     let { addStepAssignees, addStepValue } = this.state;
     if(!addStepAssignees.contains(id)) {
@@ -53,8 +70,12 @@ class StepList extends PureComponent {
   }
   onKeyDown(e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {
-      this.onStepAdd(e.target.value);
-      this.setState({ addStepValue: '' });
+
+      this.onStepAdd(e.target.value, this.state.addStepAssignees.toJS());
+      this.setState({
+        addStepValue: '',
+        addStepAssignees: fromJS([]),
+      });
     }
   }
   onFocus() {
@@ -69,6 +90,12 @@ class StepList extends PureComponent {
   onSortEnd(obj, e) {
     document.body.classList.remove("no-select");
     this.onStepSort(obj, e);
+  }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
   }
   getPlaceholder() {
     let placeholder = 'What is the next step? Add it here...';
@@ -129,6 +156,7 @@ class StepList extends PureComponent {
           <HOCAssigning
             index="add"
             assignees={addStepAssignees}
+            delegate={this}
             rounded
             size={24}
           />
