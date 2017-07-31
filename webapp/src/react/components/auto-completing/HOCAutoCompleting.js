@@ -34,11 +34,9 @@ class HOCAutoCompleting extends PureComponent {
 
     let string = value.substr(0, position);
     string = string.split('\n').reverse()[0];
-    let array = string.split(` ${options.trigger}`);
+    let array = string.split(`${options.trigger}`);
     if(array.length > 1) {
       string = array[array.length - 1];
-    } else if(array[0].startsWith(`${options.trigger}`)) {
-      string = array[0].substr(1);
     } else {
       string = undefined;
     }
