@@ -18,7 +18,7 @@ const defOptions = {
   ],
 };
 
-const getAutoComplete = state => state.get('autoComplete');
+const getAutoCompleteString = state => state.getIn(['autoComplete', 'string']);
 const getUsers = state => state.get('users');
 
 const nameSort = (a, b) => {
@@ -43,11 +43,11 @@ export const getSortedArray = createSelector(
 );
 
 export const autoComplete = createSelector(
-  [getSortedArray, getAutoComplete],
-  (list, autoComplete) => {
+  [getSortedArray, getAutoCompleteString],
+  (list, autoCompleteString) => {
     console.log('calc users');
     let fuse = new Fuse(list, defOptions); // "list" is the item array
-    return fuse.search(autoComplete.get('string') || '').map((res) => {
+    return fuse.search(autoCompleteString || '').map((res) => {
       const { item } = res;
       const user = msgGen.users.getUser(item);
       const profilePic = msgGen.users.getPhoto(user);

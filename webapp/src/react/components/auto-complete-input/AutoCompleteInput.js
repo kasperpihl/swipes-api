@@ -4,7 +4,7 @@ import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import ReactTextarea from 'react-textarea-autosize';
-import ContentEditable from 'react-contenteditable';
+import ContentEditable from 'components/content-editable/ContentEditable';
 
 class AutoCompleteInput extends PureComponent {
   constructor(props) {
@@ -42,7 +42,7 @@ class AutoCompleteInput extends PureComponent {
     } = this.props;
 
     let Comp = ReactTextarea;
-    if(this.props.html) {
+    if(typeof this.props.html === 'string') {
       Comp = ContentEditable;
     }
     if(nodeType) {
@@ -54,6 +54,7 @@ class AutoCompleteInput extends PureComponent {
         onKeyUp={this.handlerCached('onKeyUp')}
         onChange={this.handlerCached('onChange')}
         onBlur={this.handlerCached('onBlur')}
+        ref="input"
         {...rest}
       />
     );

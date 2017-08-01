@@ -19,7 +19,7 @@ class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['current', 'starred', 'unassigned', 'search'],
+      tabs: ['current', 'unassigned', 'search'],
       tabIndex: 0,
       showFilter: false,
       filterProp: fromJS([

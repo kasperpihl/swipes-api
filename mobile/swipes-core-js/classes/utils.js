@@ -43,6 +43,21 @@ export function convertObjToUnderscore(obj) {
   return obj;
 }
 
+export function getDeep(obj, path) {
+  if(typeof obj === 'undefined' || typeof path !== 'string') {
+    return undefined;
+  }
+  const parts = path.split('.');
+  for(let i = 0 ; i < parts.length ; i++) {
+    const part = parts[i];
+    obj = obj[part];
+    if(typeof obj === 'undefined') {
+      return undefined;
+    }
+  }
+  return obj;
+}
+
 export function toUnderscore(string) {
   return string.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();});
 }

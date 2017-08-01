@@ -29,9 +29,8 @@ class HOCAutoCompleting extends PureComponent {
   }
   onChange(e, options) {
     const { results, clear, search, autoComplete } = this.props;
-    const value = e.target.value;
+    const value = this.getValue(e.target);
     const position = this.getCaretPosition(e.target);
-
     let string = value.substr(0, position);
     string = string.split('\n').reverse()[0];
     let array = string.split(`${options.trigger}`);
@@ -105,6 +104,10 @@ class HOCAutoCompleting extends PureComponent {
     }
     clear();
   }
+  getValue(target) {
+    const sel = window.getSelection();
+    return sel.anchorNode.textContent;
+  }
   getCaretPosition(editableDiv) {
     if(typeof editableDiv.selectionStart !== 'undefined'){
       return editableDiv.selectionStart;
@@ -118,16 +121,6 @@ class HOCAutoCompleting extends PureComponent {
         if (range.commonAncestorContainer.parentNode == editableDiv) {
           caretPos = range.endOffset;
         }
-      }
-    } else if (document.selection && document.selection.createRange) {
-      range = document.selection.createRange();
-      if (range.parentElement() == editableDiv) {
-        var tempEl = document.createElement("span");
-        editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-        var tempRange = range.duplicate();
-        tempRange.moveToElementText(tempEl);
-        tempRange.setEndPoint("EndToEnd", range);
-        caretPos = tempRange.text.length;
       }
     }
     return caretPos;

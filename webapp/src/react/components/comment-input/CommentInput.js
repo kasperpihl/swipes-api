@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback, debounce } from 'swipes-core-js/classes/utils';
+import { bindAll, setupDelegate, setupCachedCallback, debounce, getDeep } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
@@ -19,20 +19,50 @@ class CommentInput extends PureComponent {
     setupDelegate(this, 'onAddComment');
     this.acOptions = {
       types: ['users'],
-      delegate: props.delegate,
+      delegate: this,
       trigger: "@",
     }
     bindAll(this, ['onCommentChange', 'handleAttach', 'handleSend', 'handleKeyDown', 'handleTextareaFocus']);
   }
+  componentDidUpdate() {
+    const htmlEl = getDeep(this, 'refs.textarea.refs.input.htmlEl');
+    if(this.forceToEnd && htmlEl){
+      this.placeCaretAtEnd(htmlEl);
+      this.forceToEnd = false;
+    }
+  }
   onCommentChange(e) {
-    const value = e.target.value;
-
+    let value = e.target.value;
+    if(value.substr(-4) === '</a>'){
+      value = value + '<br />';
+      this.forceToEnd = true;
+    }
+    console.log(value);
     this.setState({ commentText: value });
 
     //this.bouncedSearch(value, ['users'], e.target.getBoundingClientRect(), this);
   }
-  onAutoCompleteSelect(item) {
-    console.log('item', item);
+  onAutoCompleteSelect(id) {
+    let { commentText } = this.state;
+    const sel = window.getSelection();
+    const firstName = msgGen.users.getFirstName(id);
+    commentText = commentText.replace('&nbsp;', ' ');
+    // commentText = commentText.replace(/\s/g, ' ');
+    let index = commentText.lastIndexOf(sel.anchorNode.textContent.replace(/\s/g, ' '));
+
+    if(index === -1) {
+      return;
+    }
+    let testStr = commentText.substr(index, sel.anchorOffset);
+    const atIndex = testStr.lastIndexOf('@');
+    testStr = testStr.substr(atIndex);
+    const aNode = `<a contenteditable="false" href="#" data-server="<!${id}|${firstName}>" style="display:inline-block;">${firstName}</a>&nbsp;`;
+    commentText = commentText.substr(0, index + atIndex) + aNode + commentText.substr(index + atIndex + testStr.length);
+    if(commentText.substr(-5) === '</a> '){
+      commentText = commentText.substr(0, commentText.length - 1) + '&nbsp;';
+    }
+    this.forceToEnd = true;
+    this.setState({ commentText });
   }
   handleTextareaFocus() {
     const { textarea } = this.refs;
@@ -54,10 +84,19 @@ class CommentInput extends PureComponent {
       this.handleSend();
     }
   }
+  placeCaretAtEnd(el) {
+    el.focus();
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
   renderImage() {
     const { myId } = this.props;
 
-    const image = msgGen.users.getPhoto(myId);
+    const image = msgGen.users.getPhoto(myId, 64);
     const initials = msgGen.users.getInitials(myId)
 
     if (image) {
@@ -100,13 +139,13 @@ class CommentInput extends PureComponent {
 
     return (
       <div className="comment-input__textarea-wrapper">
-        <ReactTextarea //AutoCompleteInput //
+        <AutoCompleteInput //ReactTextarea //
           className="comment-input__textarea"
-          value={commentText}
-          minRows={1}
-          maxRows={6}
+          html={commentText}
+          // minRows={1}
+          // maxRows={6}
           ref="textarea"
-          // options={this.acOptions}
+          options={this.acOptions}
           onChange={this.onCommentChange}
           onKeyDown={this.handleKeyDown}
           placeholder={placeholder}
