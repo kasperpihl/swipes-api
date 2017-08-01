@@ -70,16 +70,6 @@ class DownloadPage extends PureComponent {
     );
   }
   renderDesktopDownloads() {
-    if (this.mobileCheck()) {
-      return (
-        <div className="device-wrapper">
-          <a className="device">
-            <Icon icon="MacDevice" className="device-svg" />
-            <p>We just sent you an email with a direct link to download Swipes on your desktop.</p>
-          </a>
-        </div>
-      );
-    }
     const type = this.desktopCheck();
 
     return (
@@ -92,6 +82,7 @@ class DownloadPage extends PureComponent {
     );
   }
   render() {
+    const { downloadLinks } = this.props;
     return (
       <div className="download-page">
         <h1 className="title">Awesome! Download the Swipes Workspace</h1>
@@ -102,17 +93,17 @@ class DownloadPage extends PureComponent {
         </div>
 
         <div className="section section--coming-soon">
-          <div className="section-title">Mobile (Coming Soon)</div>
+          <div className="section-title">Mobile (In beta)</div>
 
           <div className="device-wrapper">
-            <div className="device">
+            <a href={downloadLinks.ios} target="_blank" className="device">
               <Icon icon="IphoneDevice" className="device-svg" />
               <p>iOS</p>
-            </div>
-            <div className="device">
+            </a>
+            <a href={downloadLinks.android} target="_blank" className="device">
               <Icon icon="AndroidDevice" className="device-svg" />
               <p>Android</p>
-            </div>
+            </a>
           </div>
         </div>
       </div>

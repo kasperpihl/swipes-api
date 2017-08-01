@@ -11,45 +11,24 @@
 .section {
   margin-top: 51px;
 
-  &--coming-soon {
-    .section-title {
-      @include font(12px, $deepBlue-30, 15px, 400);
-  		border-bottom: 1px solid $deepBlue-30;
-    }
 
-    .device {
-      background-color: $deepBlue-5;
+  .device {
 
-      p {
-        @include font($c: $deepBlue-30);
-      }
-    }
+    &:hover {
+      padding-top: 9px;
+      background-color: $blue-20;
+      transition: .35s ease;
+      -ms-transition: .35s ease;
 
-    .device-svg {
-      @include svg-color($deepBlue-30);
-    }
-  }
-
-  &:not(#{&}--coming-soon) {
-
-    .device {
-
-      &:hover {
-        padding-top: 9px;
-        background-color: $blue-20;
+      .device-svg {
+        @include svg-color($blue-100);
         transition: .35s ease;
         -ms-transition: .35s ease;
+      }
 
-        .device-svg {
-          @include svg-color($blue-100);
-          transition: .35s ease;
-          -ms-transition: .35s ease;
-        }
-
-        p {
-          transition: .35s ease;
-          -ms-transition: .35s ease;
-        }
+      p {
+        transition: .35s ease;
+        -ms-transition: .35s ease;
       }
     }
   }
