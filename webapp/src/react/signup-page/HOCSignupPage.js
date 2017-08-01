@@ -15,6 +15,8 @@ const defLinks = {
   darwin: 'http://swipesapp.com/download-mac',
   win32: 'http://swipesapp.com/download-win',
   linux: 'http://swipesapp.com/download-linux',
+  android: 'http://swipesapp.com/download-android',
+  ios: 'http://swipesapp.com/download-ios',
 };
 
 class HOCSignupPage extends PureComponent {
