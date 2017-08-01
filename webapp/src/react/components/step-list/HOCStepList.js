@@ -77,11 +77,13 @@ class HOCStepList extends PureComponent {
     const options = this.getOptionsForE(e);
     const { selectAssignees, assignStep, goal } = this.props;
     let assignees = this.state.addStepAssignees;
-    if(i !== 'add') {
-      const helper = this.getHelper();
-      const step = helper.getStepByIndex(i);
+
+    const helper = this.getHelper();
+    const step = helper.getStepByIndex(i);
+    if(step) {
       assignees = step.get('assignees');
     }
+
 
 
     options.actionLabel = 'Assign';
