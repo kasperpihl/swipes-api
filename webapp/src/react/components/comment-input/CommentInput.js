@@ -73,8 +73,10 @@ class CommentInput extends PureComponent {
 
   }
   handleSend(e) {
-    const { commentText } = this.state;
-
+    let { commentText } = this.state;
+    commentText = commentText.replace(/<a.*?(<![A-Z0-9]*\|.*?>).*?>.*?<\/a>/gi, "$1");
+    commentText = commentText.replace(/<br\s*\/?>/ig, "\r\n");
+    commentText = commentText.replace('&nbsp;', ' ');
     this.onAddComment(commentText, e);
     this.setState({ commentText: '' });
   }

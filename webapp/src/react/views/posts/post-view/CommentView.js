@@ -54,29 +54,62 @@ class CommentView extends PureComponent {
       </span>
     );
   }
+  renderStuff(regex, inputArray, renderMethod) {
+    let resArray = [];
+    if(typeof inputArray === 'string') {
+      inputArray = [inputArray];
+    }
+    inputArray.forEach((string) => {
+      if(typeof string !== 'string'){
+        return resArray.push(string);
+      }
+      const matches = string.match(regex);
+      if(matches) {
+        let innerSplits = string.split(regex);
+        matches.forEach((match, i) => {
+          innerSplits.splice(1 + i + i, 0, renderMethod.call(null, match, i));
+        });
+        resArray = resArray.concat(innerSplits);
+      } else {
+        resArray.push(string);
+      }
+    });
+    return resArray;
+  }
   renderMessage() {
+    /*
+    <!USTFL9YVE|Tihomir> hi beauty
+
+    [
+      <a href>T</a>,
+       hi beauty
+    ]
+
+    */
     const { comment } = this.props;
+
     const newLinesArray = comment.get('message').split('\n');
     const newLinesCount = newLinesArray.length - 1;
     const message = newLinesArray.map((item, key) => {
       const newLine = newLinesCount === key ? null : (<br />);
-      const urls = item.match(URL_REGEX);
-      if (urls) {
-        item = item.split(URL_REGEX);
-        urls.forEach((url, i) => {
-          item.splice(1 + i + i, 0, (
-            <a
-              onClick={this.onLinkClickCached(url)}
-              className="notification__link"
-              key={`link${i}`}
-            >
-              {url}
-            </a>
-          ));
-        });
-      }
-
-      return <span key={key}>{item}{newLine}</span>;
+      item = this.renderStuff(/<![A-Z0-9]*\|.*?>/gi, item, (mention, i) => {
+        const index = mention.indexOf('|');
+        const id = mention.substring(2, index - 1);
+        const name = mention.substr(index + 1, mention.length - index - 2);
+        return <b key={`mention${i}`}>{name}</b>;
+      });
+      item = this.renderStuff(URL_REGEX, item, (url, i) => (
+        <a
+          onClick={this.onLinkClickCached(url)}
+          className="notification__link"
+          key={`link${i}`}
+        >
+          {url}
+        </a>
+      ));
+      return (
+        <span key={key}>{item}{newLine}</span>
+      );
     });
 
     return (

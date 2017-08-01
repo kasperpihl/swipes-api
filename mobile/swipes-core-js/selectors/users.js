@@ -45,7 +45,6 @@ export const getSortedArray = createSelector(
 export const autoComplete = createSelector(
   [getSortedArray, getAutoCompleteString],
   (list, autoCompleteString) => {
-    console.log('calc users');
     let fuse = new Fuse(list, defOptions); // "list" is the item array
     return fuse.search(autoCompleteString || '').map((res) => {
       const { item } = res;
