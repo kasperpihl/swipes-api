@@ -302,7 +302,6 @@ const post_created_push_notification = [
 
     return next();
   },
-  posts.postCreatedPushNotificationData,
   notify.notifySendPushNotification,
 ];
 const post_comment_mention_push_notification = [
@@ -318,7 +317,28 @@ const post_comment_mention_push_notification = [
 
     return next();
   },
-  posts.postCreatedPushNotificationData,
+  notify.notifySendPushNotification,
+];
+const post_comment_created_by_push_notification = [
+  users.usersGetSingleWithOrganizations,
+  posts.postsGetSingle,
+  posts.postAddCommentCreatedByPushNotificationData,
+  (req, res, next) => {
+    const {
+      mention_ids,
+      user_id,
+      post,
+    } = res.locals;
+    const user_ids = [];
+
+    if (user_id !== post.created_by && !mention_ids.includes(user_id)) {
+      user_ids.push(post.created_by);
+    }
+
+    res.locals.user_ids = user_ids;
+
+    return next();
+  },
   notify.notifySendPushNotification,
 ];
 const post_archived = notifyWrapper([
@@ -472,4 +492,5 @@ export {
   post_comment_mention,
   post_created_push_notification,
   post_comment_mention_push_notification,
+  post_comment_created_by_push_notification,
 };

@@ -30,7 +30,7 @@ const getPrefixForType = (type) => {
     default:
       return 'a ';
   }
-}
+};
 const postsGetSingle = (req, res, next) => {
   const {
     post_id,
@@ -291,6 +291,22 @@ const postAddCommentMentionPushNotificationData = (req, res, next) => {
 
   return next();
 };
+const postAddCommentCreatedByPushNotificationData = (req, res, next) => {
+  const {
+    user,
+    post,
+    comment_id,
+  } = res.locals;
+  const comment = post.comments[comment_id];
+
+  res.locals.pushMessage = {
+    contents: { en: comment.message.replace(/<![A-Z0-9]*\|(.*?)>/gi, '$1') },
+    headings: { en: `${user.profile.first_name} commented on your ${post.type}` },
+  };
+  res.locals.pushTargetId = post.id;
+
+  return next();
+};
 
 export {
   postsGetSingle,
@@ -306,4 +322,5 @@ export {
   postCommentMentionNotificationData,
   postCreatedPushNotificationData,
   postAddCommentMentionPushNotificationData,
+  postAddCommentCreatedByPushNotificationData,
 };

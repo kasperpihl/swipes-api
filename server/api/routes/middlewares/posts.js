@@ -363,6 +363,34 @@ const postsAddCommentPushNotificationQueueMessage = valLocals('postsAddCommentPu
 
   return next();
 });
+const postsAddCommentPushNotificationToCreatedByQueueMessage = valLocals('postsAddCommentPushNotificationToCreatedByQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment: object.require(),
+  mention_ids: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment,
+    mention_ids,
+  } = res.locals;
+  const event_type = 'post_comment_created_by_push_notification';
+  const queueMessage = {
+    user_id,
+    post_id,
+    event_type,
+    mention_ids,
+    comment_id: comment.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
 const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
@@ -611,4 +639,5 @@ export {
   postsMestionsQueueMessage,
   postsCreatedPushNotificationQueueMessage,
   postsAddCommentPushNotificationQueueMessage,
+  postsAddCommentPushNotificationToCreatedByQueueMessage,
 };
