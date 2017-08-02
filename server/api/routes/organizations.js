@@ -184,6 +184,9 @@ authed.all('/organizations.createStripeCustomer',
     userToGetId: locals.organization.owner_id,
   })),
   usersGetByIdWithFields,
+  mapLocals(locals => ({
+    ownerUser: locals.user,
+  })),
   organizationsCreateStripeCustomer,
   mapLocals(locals => ({
     organization: createOrganizationWithOnlyChangedFields(locals),
