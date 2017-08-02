@@ -264,39 +264,18 @@ const usersGetByEmailWithFields = valLocals('usersGetByEmailWithFields', {
     });
 });
 const usersGetByIdWithFields = valLocals('usersGetByIdWithFields', {
-  user_id: string.require(),
+  userToGetId: string.require(),
   fields: array.of(string).require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
+    userToGetId,
     fields,
   } = res.locals;
 
-  dbUsersGetByIdWithFields({ user_id, fields })
+  dbUsersGetByIdWithFields({ user_id: userToGetId, fields })
     .then((user) => {
       setLocals({
         user,
-      });
-
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
-    });
-});
-const usersGetOwnerByIdWithFields = valLocals('usersGetOwnerByIdWithFields', {
-  owner_id: string.require(),
-  fields: array.of(string).require(),
-}, (req, res, next, setLocals) => {
-  const {
-    owner_id,
-    fields,
-  } = res.locals;
-
-  dbUsersGetByIdWithFields({ user_id: owner_id, fields })
-    .then((user) => {
-      setLocals({
-        ownerUser: user,
       });
 
       return next();
@@ -701,5 +680,4 @@ export {
   usersInvitedUserQueueMessage,
   userSignupQueueMessage,
   usersGetByIdWithFields,
-  usersGetOwnerByIdWithFields,
 };

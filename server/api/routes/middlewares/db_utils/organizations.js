@@ -153,9 +153,9 @@ const dbOrganizationsTransferOwnership = funcWrap([
 const dbOrganizationsDisableUser = funcWrap([
   object.as({
     organization_id: string.require(),
-    user_id: string.require(),
+    user_to_disable_id: string.require(),
   }).require(),
-], (err, { organization_id, user_id }) => {
+], (err, { organization_id, user_to_disable_id }) => {
   if (err) {
     throw new SwipesError(`dbOrganizationsDisableUser: ${err}`);
   }
@@ -164,10 +164,19 @@ const dbOrganizationsDisableUser = funcWrap([
     r.table('organizations')
       .get(organization_id)
       .update({
-        disabled_users: r.row('disabled_users').default([]).setUnion([user_id]),
+        users: r.row('users').default([]).difference([user_to_disable_id]),
+        disabled_users: r.row('disabled_users').default([]).setUnion([user_to_disable_id]),
         updated_at: r.now(),
       }, {
         returnChanges: true,
+      }).do((result) => {
+        return r.table('users').get(user_to_disable_id).update((user) => {
+          return {
+            organizations: user('organizations').default([]).difference([organization_id]),
+          };
+        }).do(() => {
+          return result;
+        });
       });
 
   return db.rethinkQuery(q);
@@ -175,9 +184,9 @@ const dbOrganizationsDisableUser = funcWrap([
 const dbOrganizationsEnableUser = funcWrap([
   object.as({
     organization_id: string.require(),
-    user_id: string.require(),
+    user_to_enable_id: string.require(),
   }).require(),
-], (err, { organization_id, user_id }) => {
+], (err, { organization_id, user_to_enable_id }) => {
   if (err) {
     throw new SwipesError(`dbOrganizationsEnableUser: ${err}`);
   }
@@ -186,10 +195,19 @@ const dbOrganizationsEnableUser = funcWrap([
     r.table('organizations')
       .get(organization_id)
       .update({
-        disabled_users: r.row('disabled_users').default([]).difference([user_id]),
+        users: r.row('users').default([]).setUnion([user_to_enable_id]),
+        disabled_users: r.row('disabled_users').default([]).difference([user_to_enable_id]),
         updated_at: r.now(),
       }, {
         returnChanges: true,
+      }).do((result) => {
+        return r.table('users').get(user_to_enable_id).update((user) => {
+          return {
+            organizations: user('organizations').default([]).setUnion([organization_id]),
+          };
+        }).do(() => {
+          return result;
+        });
       });
 
   return db.rethinkQuery(q);

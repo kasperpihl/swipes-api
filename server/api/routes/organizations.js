@@ -17,12 +17,15 @@ import {
   organizationsDisableUser,
   organizationsEnableUser,
   organizationsCreateStripeCustomer,
+  organizationsCheckOwnerDisabledUser,
+  organizationsCheckIsDisableValid,
+  organizationsCheckIsEnableValid,
 } from './middlewares/organizations';
 import {
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   usersParseInvitationToken,
-  usersGetOwnerByIdWithFields,
+  usersGetByIdWithFields,
 } from './middlewares/users';
 import {
   notificationsPushToQueue,
@@ -126,6 +129,13 @@ authed.all('/organizations.disableUser',
     organization_id: string.require(),
   }),
   organizationsGetSingle,
+  mapLocals(locals => ({
+    fields: ['organizations'],
+    userToGetId: locals.user_to_disable_id,
+  })),
+  usersGetByIdWithFields,
+  organizationsCheckIsDisableValid,
+  organizationsCheckOwnerDisabledUser,
   organizationsCheckAdminRights,
   organizationsDisableUser,
   mapLocals(locals => ({
@@ -143,6 +153,12 @@ authed.all('/organizations.enableUser',
     organization_id: string.require(),
   }),
   organizationsGetSingle,
+  mapLocals(locals => ({
+    fields: ['organizations'],
+    userToGetId: locals.user_to_enable_id,
+  })),
+  usersGetByIdWithFields,
+  organizationsCheckIsEnableValid,
   organizationsCheckAdminRights,
   organizationsEnableUser,
   mapLocals(locals => ({
@@ -163,13 +179,11 @@ authed.all('/organizations.createStripeCustomer',
   }),
   organizationsGetSingle,
   organizationsCheckAdminRights,
-  mapLocals(() => ({
-    fields: ['email'],
-  })),
   mapLocals(locals => ({
-    owner_id: locals.organization.owner_id,
+    fields: ['email'],
+    userToGetId: locals.organization.owner_id,
   })),
-  usersGetOwnerByIdWithFields,
+  usersGetByIdWithFields,
   organizationsCreateStripeCustomer,
   mapLocals(locals => ({
     organization: createOrganizationWithOnlyChangedFields(locals),

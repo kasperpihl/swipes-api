@@ -108,30 +108,35 @@ const organizationsGetInfoFromInvitationToken = valLocals('organizationsGetInfoF
     setLocals({
       download_links: getDownloadLinks(),
     });
+
     return next();
   }
   const fields = ['id', 'profile', 'activated'];
 
-  dbOrganizationsGetInfoFromInvitationToken({ user_id: userId, organization_id: organizationId, fields })
-    .then((results) => {
-      const {
-        me,
-        organization,
-        invited_by,
-      } = results;
+  return dbOrganizationsGetInfoFromInvitationToken({
+    user_id: userId,
+    organization_id: organizationId,
+    fields,
+  })
+  .then((results) => {
+    const {
+      me,
+      organization,
+      invited_by,
+    } = results;
 
-      setLocals({
-        me,
-        organization,
-        invited_by,
-        download_links: getDownloadLinks(),
-      });
-
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
+    setLocals({
+      me,
+      organization,
+      invited_by,
+      download_links: getDownloadLinks(),
     });
+
+    return next();
+  })
+  .catch((err) => {
+    return next(err);
+  });
 });
 const organizationsGetSingle = valLocals('organizationsGetSingle', {
   organization_id: string.require(),
@@ -151,6 +156,58 @@ const organizationsGetSingle = valLocals('organizationsGetSingle', {
     .catch((err) => {
       return next(err);
     });
+});
+const organizationsCheckOwnerDisabledUser = valLocals('organizationsCheckOwnerDisabledUser', {
+  user_to_disable_id: string.require(),
+  organization: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_to_disable_id,
+    organization,
+  } = res.locals;
+  const {
+    owner_id,
+  } = organization;
+
+  if (owner_id === user_to_disable_id) {
+    return next(new SwipesError('The owner can\'t be disabled. Should transfer owner rights first.'));
+  }
+
+  return next();
+});
+const organizationsCheckIsDisableValid = valLocals('organizationsCheckIsDisableValid', {
+  organization_id: string.require(),
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user,
+  } = res.locals;
+  const {
+    organizations,
+  } = user;
+
+  if (!organizations.includes(organization_id)) {
+    return next(new SwipesError('This user is not part of that organization or it\'s disabled from it.'));
+  }
+
+  return next();
+});
+const organizationsCheckIsEnableValid = valLocals('organizationsCheckIsEnableValid', {
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user,
+  } = res.locals;
+  const {
+    organizations,
+  } = user;
+
+  if (organizations.length > 0) {
+    return next(new SwipesError('This user is part of another organization. Swipes does not support multiple organizations for now.'));
+  }
+
+  return next();
 });
 const organizationsCheckAdminRights = valLocals('organizationsCheckAdminRights', {
   user_id: string.require(),
@@ -278,16 +335,20 @@ const organizationsDisableUser = valLocals('organizationsDisableUser', {
     user_to_disable_id,
   } = res.locals;
 
-  dbOrganizationsDisableUser({ organization_id, user_id: user_to_disable_id })
+  dbOrganizationsDisableUser({ organization_id, user_to_disable_id })
     .then((result) => {
-      const changes = result.changes[0];
-      const organization = changes.new_val || changes.old_val;
-      const updatedFields = ['disabled_users'];
+      if (result.changes) {
+        const changes = result.changes[0];
+        const organization = changes.new_val || changes.old_val;
+        const updatedFields = ['disabled_users', 'users'];
 
-      setLocals({
-        organization,
-        updatedFields,
-      });
+        setLocals({
+          organization,
+          updatedFields,
+        });
+
+        return next();
+      }
 
       return next();
     })
@@ -304,11 +365,11 @@ const organizationsEnableUser = valLocals('organizationsEnableUser', {
     user_to_enable_id,
   } = res.locals;
 
-  dbOrganizationsEnableUser({ organization_id, user_id: user_to_enable_id })
+  dbOrganizationsEnableUser({ organization_id, user_to_enable_id })
     .then((result) => {
       const changes = result.changes[0];
       const organization = changes.new_val || changes.old_val;
-      const updatedFields = ['disabled_users'];
+      const updatedFields = ['disabled_users', 'users'];
 
       setLocals({
         organization,
@@ -384,22 +445,26 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
       stripeCustomerId,
     });
 
-    dbOrganizationsUpdateStripeCustomerIdAndPlan({ organization_id, stripe_customer_id: stripeCustomerId, plan })
-      .then((result) => {
-        const changes = result.changes[0];
-        const organization = changes.new_val || changes.old_val;
-        const updatedFields = ['stripe_customer_id', 'plan'];
+    dbOrganizationsUpdateStripeCustomerIdAndPlan({
+      organization_id,
+      stripe_customer_id: stripeCustomerId,
+      plan,
+    })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+      const updatedFields = ['stripe_customer_id', 'plan'];
 
-        setLocals({
-          organization,
-          updatedFields,
-        });
-
-        return next();
-      })
-      .catch((err) => {
-        return next(err);
+      setLocals({
+        organization,
+        updatedFields,
       });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
   }).catch((err) => {
     return next(new SwipesError(err));
   });
@@ -419,4 +484,7 @@ export {
   organizationsDisableUser,
   organizationsEnableUser,
   organizationsCreateStripeCustomer,
+  organizationsCheckOwnerDisabledUser,
+  organizationsCheckIsDisableValid,
+  organizationsCheckIsEnableValid,
 };
