@@ -27,7 +27,9 @@ class Gradient extends PureComponent {
   }
   render() {
     const styles = gradient.getGradientStyles();
-
+    if (process.env.NODE_ENV !== 'production') {
+      styles.opacity = 0.3;
+    }
     if (this.state.gradientPos) {
       styles.backgroundPosition = `${this.state.gradientPos}% 50%`;
     }

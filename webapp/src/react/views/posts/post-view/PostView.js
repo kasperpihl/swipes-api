@@ -11,6 +11,7 @@ import {
 import { List } from 'immutable';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import SWView from 'SWView';
+import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
 import PostHeader from 'components/post-header/PostHeader';
@@ -111,20 +112,11 @@ class PostView extends PureComponent {
   renderAttachments() {
     const { post } = this.props;
 
-    const attachments = post.get('attachments').map((att, i) => (
-      <div key={i} className="post-attachment" onClick={this.onAttachmentClickCached(i)}>
-        <Icon
-          icon={attachmentIconForService(att.getIn(['link', 'service']))}
-          className="post-attachment__svg"
-        />
-        <div className="post-attachment__label">
-          {att.get('title')}
-        </div>
-      </div>
-    ))
     return (
       <div className="post__attachments">
-        {attachments}
+        {post.get('attachments').map((att, i) => (
+          <HOCAttachmentItem attachment={att} key={i} />
+        ))}
       </div>
     )
   }

@@ -9,7 +9,6 @@ import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import NotificationWrapper from 'components/notification-wrapper/NotificationWrapper';
 import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import Button from 'Button';
@@ -96,19 +95,7 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
-  renderAttachments() {
-    const { goal, delegate } = this.props;
 
-    return (
-      <HOCAttachments
-        key="attachments"
-        attachments={goal.get('attachments')}
-        attachmentOrder={goal.get('attachment_order')}
-        targetId={goal.get('id')}
-        delegate={delegate}
-      />
-    );
-  }
   renderStepListEditButton() {
     const helper = this.getHelper();
     if (!helper.getNumberOfSteps()) {
@@ -151,17 +138,18 @@ class GoalOverview extends PureComponent {
     );
   }
   renderRight() {
-    const { delegate } = this.props;
-    const helper = this.getHelper();
-    const history = helper.getLastActivity();
-    const nf = msgGen.history.getNotificationWrapperForHistory(helper.getId(), history, {
-      icon: false,
-    });
+    const { delegate, goal } = this.props;
 
     return (
       <div className="goal-overview__column goal-overview__column--right">
         <Section title="Attachments">
-          {this.renderAttachments()}
+          <HOCAttachments
+            key="attachments"
+            attachments={goal.get('attachments')}
+            attachmentOrder={goal.get('attachment_order')}
+            targetId={goal.get('id')}
+            delegate={delegate}
+          />
         </Section>
       </div>
     );

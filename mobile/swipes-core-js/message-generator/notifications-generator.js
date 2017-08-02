@@ -68,8 +68,8 @@ export default class NotificationsGenerator {
       case 'post_comment_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
         const byMe = meta.get('created_by') === users.getUser('me');
-        const followString = byMe ? '' : ' you follow';
         const preFix = byMe ? 'your ' : posts.getPrefixForType(meta.get('type'));
+        const followString = byMe ? '' : ' you follow';
         text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${meta.get('message')}"`);
         break;
       }
@@ -77,6 +77,14 @@ export default class NotificationsGenerator {
         text.push(this.getUserStringMeta(meta, boldStyle));
         text.push(` liked your comment: "${meta.get('message')}"`);
         break;
+      }
+      case 'post_comment_mention': {
+        text.push(boldText('send', users.getName(meta.get('mentioned_by'), { capitalize: true }), boldStyle));
+        text.push(` mentioned you in a comment`);
+        break;
+      }
+      default: {
+        console.log('unknown notification', n.toJS());
       }
     }
     return text;

@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
 import { bindAll, setupDelegate, setupCachedCallback, debounce, getDeep } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
+import HOCAttachButton from 'components/attachments/HOCAttachButton';
+import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
 // import Button from 'Button';
@@ -13,6 +16,7 @@ class CommentInput extends PureComponent {
     super(props)
     this.state = {
       commentText: '',
+      commentAttachments: fromJS([]),
     };
     const { aCSearch } = props;
     this.bouncedSearch = debounce(aCSearch, 50);
@@ -30,6 +34,11 @@ class CommentInput extends PureComponent {
       this.placeCaretAtEnd(htmlEl);
       this.forceToEnd = false;
     }
+  }
+  onAddedAttachment(att) {
+    let { commentAttachments } = this.state;
+    commentAttachments = commentAttachments.push(att);
+    this.setState({ commentAttachments });
   }
   onCommentChange(e) {
     let value = e.target.value;
@@ -115,6 +124,19 @@ class CommentInput extends PureComponent {
       </div>
     )
   }
+  renderAttachments() {
+    const { commentAttachments } = this.state;
+    if(!commentAttachments.size) {
+      return undefined;
+    }
+    return (
+      <div className="comment-input__attachments">
+        {commentAttachments.map((att, i) => (
+          <HOCAttachmentItem attachment={att} key={i} />
+        ))}
+      </div>
+    )
+  }
   renderProfilePic() {
     const { myId } = this.props;
     const image = msgGen.users.getPhoto(myId);
@@ -136,26 +158,30 @@ class CommentInput extends PureComponent {
   }
   renderTextarea() {
     const { commentText } = this.state;
+    const { delegate } = this.props;
 
     const placeholder = 'Write a comment';
 
     return (
       <div className="comment-input__textarea-wrapper">
-        <AutoCompleteInput //ReactTextarea //
+        <AutoCompleteInput
           className="comment-input__textarea"
           html={commentText}
-          // minRows={1}
-          // maxRows={6}
           ref="textarea"
           options={this.acOptions}
           onChange={this.onCommentChange}
           onKeyDown={this.handleKeyDown}
-          placeholder={placeholder}
         />
-
-        {/*<div className="comment-input__icon-wrapper">
+        <div className={`comment-input__placeholder ${commentText.length ? '' : 'comment-input__placeholder--shown'}`}>
+          {placeholder}
+        </div>
+        <HOCAttachButton
+          delegate={this}
+          frameless
+        />
+        {/* <div className="comment-input__icon-wrapper">
           <Icon icon="Attach" className="comment-input__svg" />
-        </div>*/}
+        </div> */}
       </div>
     )
   }
@@ -167,6 +193,7 @@ class CommentInput extends PureComponent {
       <div className="comment-input">
         {this.renderProfilePic()}
         {this.renderTextarea()}
+        {this.renderAttachments()}
       </div>
     )
   }

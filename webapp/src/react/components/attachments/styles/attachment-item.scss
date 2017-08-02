@@ -1,0 +1,26 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.attachment-item {
+  @include size(180px, 36px);
+  @include flexContainer('row', left, center);
+  padding: 0 9px;
+  border-radius: 3px;
+  transition: .2s ease;
+
+  &:hover {
+    background-color: $deepBlue-10;
+    transition: .2s ease;
+  }
+
+  &__svg {
+    @include size(24px);
+  }
+
+  &__label {
+    @include size(100%, auto);
+    @include font(12px, $deepBlue-80, 24px, 500);
+    @include truncateString();
+    padding-left: 6px;
+  }
+}

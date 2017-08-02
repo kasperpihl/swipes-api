@@ -46,6 +46,16 @@
     margin-left: 6px;
     padding-right: 6px;
   }
+  &__placeholder {
+    @include font(12px, $deepBlue-50, 15px);
+    position: absolute;
+    display: none;
+    left: 6px;
+    pointer-events: none;
+    &--shown {
+      display: block;
+    }
+  }
 
   &__textarea {
     @include size(100%, auto);
@@ -53,7 +63,7 @@
     background-color: white;
     resize: none;
     display: inline-block;
-    
+
     padding: 9px 0;
     padding-left: 6px;
 
@@ -88,5 +98,15 @@
     @include size(24px);
     @include svg-color($deepBlue-30);
     transition: .2s ease;
+  }
+  &__attachments{
+    @include size(100%, auto);
+    @include flexContainer('row') {
+      flex-wrap: wrap;
+    };
+    .attachment-item {
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
   }
 }
