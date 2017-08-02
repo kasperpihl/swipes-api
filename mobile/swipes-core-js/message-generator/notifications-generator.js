@@ -1,12 +1,18 @@
 import { Map } from 'immutable';
 import { timeAgo } from '../classes/time-utils';
 
-const boldText = (id, string, boldStyle) => ({
-  id,
-  string,
-  className: 'notification-item__styled-button',
-  boldStyle: boldStyle
-});
+const boldText = (id, string, boldStyle) => {
+  const obj = {
+    id,
+    string,
+    className: 'notification-item__styled-button',
+  };
+  if(boldStyle) {
+    obj.boldStyle = boldStyle;
+  }
+
+  return obj;
+};
 
 export default class NotificationsGenerator {
   constructor(store, parent) {

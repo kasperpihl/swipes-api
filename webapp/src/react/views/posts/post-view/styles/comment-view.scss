@@ -72,6 +72,17 @@
   &__reactions {
     padding-left: 12px;
   }
+  &__attachments {
+    @include size(100%, auto);
+    @include flexContainer('row') {
+      flex-wrap: wrap;
+    };
+    .attachment-item {
+      border: 1px solid $deepBlue-5;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+  }
 }
 
 @keyframes fadeCommentin {
