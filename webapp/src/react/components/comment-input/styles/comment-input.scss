@@ -10,7 +10,9 @@
   $flexIgnoreList: '#{$b}__image', '#{$b}__initials', '#{$b}__icon-button';
 
   @include size(100%, auto);
-  @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
+  &__section {
+    @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
+  }
   @include heightSpecifications(38px, initial);
   border: 1px solid #E5E6EA;
   background-color: #FFFFFF;
@@ -104,9 +106,9 @@
     @include flexContainer('row') {
       flex-wrap: wrap;
     };
+    padding-left: 36px;
     .attachment-item {
       margin-right: 6px;
-      margin-bottom: 6px;
     }
   }
 }

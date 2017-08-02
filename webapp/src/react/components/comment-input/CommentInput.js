@@ -15,8 +15,8 @@ class CommentInput extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      commentText: '',
-      commentAttachments: fromJS([]),
+      message: '',
+      attachments: fromJS([]),
     };
     const { aCSearch } = props;
     this.bouncedSearch = debounce(aCSearch, 50);
@@ -36,9 +36,9 @@ class CommentInput extends PureComponent {
     }
   }
   onAddedAttachment(att) {
-    let { commentAttachments } = this.state;
-    commentAttachments = commentAttachments.push(att);
-    this.setState({ commentAttachments });
+    let { attachments } = this.state;
+    attachments = attachments.push(att);
+    this.setState({ attachments });
   }
   onCommentChange(e) {
     let value = e.target.value;
@@ -46,32 +46,32 @@ class CommentInput extends PureComponent {
       value = value + '<br />';
       this.forceToEnd = true;
     }
-    console.log(value);
-    this.setState({ commentText: value });
+
+    this.setState({ message: value });
 
     //this.bouncedSearch(value, ['users'], e.target.getBoundingClientRect(), this);
   }
   onAutoCompleteSelect(id) {
-    let { commentText } = this.state;
+    let { message } = this.state;
     const sel = window.getSelection();
     const firstName = msgGen.users.getFirstName(id);
-    commentText = commentText.replace('&nbsp;', ' ');
-    // commentText = commentText.replace(/\s/g, ' ');
-    let index = commentText.lastIndexOf(sel.anchorNode.textContent.replace(/\s/g, ' '));
+    message = message.replace('&nbsp;', ' ');
+    // message = message.replace(/\s/g, ' ');
+    let index = message.lastIndexOf(sel.anchorNode.textContent.replace(/\s/g, ' '));
 
     if(index === -1) {
       return;
     }
-    let testStr = commentText.substr(index, sel.anchorOffset);
+    let testStr = message.substr(index, sel.anchorOffset);
     const atIndex = testStr.lastIndexOf('@');
     testStr = testStr.substr(atIndex);
     const aNode = `<a contenteditable="false" href="#" data-server="<!${id}|${firstName}>" style="display:inline-block;">${firstName}</a>&nbsp;`;
-    commentText = commentText.substr(0, index + atIndex) + aNode + commentText.substr(index + atIndex + testStr.length);
-    if(commentText.substr(-5) === '</a> '){
-      commentText = commentText.substr(0, commentText.length - 1) + '&nbsp;';
+    message = message.substr(0, index + atIndex) + aNode + message.substr(index + atIndex + testStr.length);
+    if(message.substr(-5) === '</a> '){
+      message = message.substr(0, message.length - 1) + '&nbsp;';
     }
     this.forceToEnd = true;
-    this.setState({ commentText });
+    this.setState({ message });
   }
   handleTextareaFocus() {
     const { textarea } = this.refs;
@@ -82,12 +82,12 @@ class CommentInput extends PureComponent {
 
   }
   handleSend(e) {
-    let { commentText } = this.state;
-    commentText = commentText.replace(/<a.*?(<![A-Z0-9]*\|.*?>).*?>.*?<\/a>/gi, "$1");
-    commentText = commentText.replace(/<br\s*\/?>/ig, "\r\n");
-    commentText = commentText.replace('&nbsp;', ' ');
-    this.onAddComment(commentText, e);
-    this.setState({ commentText: '' });
+    let { message, attachments } = this.state;
+    message = message.replace(/<a.*?(<![A-Z0-9]*\|.*?>).*?>.*?<\/a>/gi, "$1");
+    message = message.replace(/<br\s*\/?>/ig, "\r\n");
+    message = message.replace('&nbsp;', ' ');
+    this.onAddComment(message, attachments.toJS(), e);
+    this.setState({ message: '', attachments: fromJS([]) });
   }
   handleKeyDown(e) {
     if (e.keyCode === 13 && !e.shiftKey) {
@@ -125,13 +125,13 @@ class CommentInput extends PureComponent {
     )
   }
   renderAttachments() {
-    const { commentAttachments } = this.state;
-    if(!commentAttachments.size) {
+    const { attachments } = this.state;
+    if(!attachments.size) {
       return undefined;
     }
     return (
       <div className="comment-input__attachments">
-        {commentAttachments.map((att, i) => (
+        {attachments.map((att, i) => (
           <HOCAttachmentItem attachment={att} key={i} />
         ))}
       </div>
@@ -157,7 +157,7 @@ class CommentInput extends PureComponent {
     )
   }
   renderTextarea() {
-    const { commentText } = this.state;
+    const { message } = this.state;
     const { delegate } = this.props;
 
     const placeholder = 'Write a comment';
@@ -166,13 +166,13 @@ class CommentInput extends PureComponent {
       <div className="comment-input__textarea-wrapper">
         <AutoCompleteInput
           className="comment-input__textarea"
-          html={commentText}
+          html={message}
           ref="textarea"
           options={this.acOptions}
           onChange={this.onCommentChange}
           onKeyDown={this.handleKeyDown}
         />
-        <div className={`comment-input__placeholder ${commentText.length ? '' : 'comment-input__placeholder--shown'}`}>
+        <div className={`comment-input__placeholder ${message.length ? '' : 'comment-input__placeholder--shown'}`}>
           {placeholder}
         </div>
         <HOCAttachButton
@@ -186,14 +186,18 @@ class CommentInput extends PureComponent {
     )
   }
   render() {
-    const { commentText } = this.state;
+    const { message } = this.state;
     const placeholder = 'Write a comment';
 
     return (
       <div className="comment-input">
-        {this.renderProfilePic()}
-        {this.renderTextarea()}
-        {this.renderAttachments()}
+        <div className="comment-input__section">
+          {this.renderProfilePic()}
+          {this.renderTextarea()}
+        </div>
+        <div className="comment-input__section">
+          {this.renderAttachments()}
+        </div>
       </div>
     )
   }

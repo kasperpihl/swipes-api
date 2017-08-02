@@ -91,7 +91,7 @@ class PostFooter extends PureComponent {
   handleAddComment() {
     const { text } = this.state;
 
-    this.onAddComment(text);
+    this.onAddComment(text, []);
     this.setState({ text: '' });
     Keyboard.dismiss();
   }

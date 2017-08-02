@@ -16,7 +16,7 @@ class HOCAttachmentItem extends PureComponent {
   componentDidMount() {
   }
   onAttachmentClick() {
-    const { attachment, target } = this.props;
+    const { attachment, target, preview } = this.props;
     preview(target, attachment);
   }
   render() {

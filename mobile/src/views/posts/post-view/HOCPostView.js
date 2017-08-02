@@ -66,14 +66,14 @@ class HOCPostView extends PureComponent {
       }
     });
   }
-  onAddComment(message) {
+  onAddComment(message, attachments) {
     const { addComment, postId } = this.props;
 
     this.setState({ commentLoading: true });
-
     addComment({
       post_id: postId,
-      message
+      message,
+      attachments,
     }).then(res => {
       this.setState({ commentLoading: false });
       if (res.ok) {

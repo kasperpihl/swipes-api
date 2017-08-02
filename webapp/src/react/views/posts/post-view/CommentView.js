@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback, URL_REGEX } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
@@ -118,6 +119,20 @@ class CommentView extends PureComponent {
       </span>
     );
   }
+  renderAttachments() {
+    const { comment } = this.props;
+    const attachments = comment.get('attachments');
+    if(!attachments || !attachments.size) {
+      return undefined;
+    }
+    return (
+      <div className="comment__attachments">
+        {attachments.map((att, i) => (
+          <HOCAttachmentItem attachment={att} key={i} />
+        ))}
+      </div>
+    )
+  }
   renderReaction() {
     const { comment, delegate, loadingReaction } = this.props;
 
@@ -139,9 +154,12 @@ class CommentView extends PureComponent {
       <div className="comment" ref="comment">
         {this.renderProfilePic()}
         <div className="comment__side">
-          {this.renderName()}
-          {this.renderMessage()}
-          <span className="comment__timestamp"> — {timestamp}</span>
+          <div className="comment__section">
+            {this.renderName()}
+            {this.renderMessage()}
+            <span className="comment__timestamp"> — {timestamp}</span>
+          </div>
+          {this.renderAttachments()}
         </div>
         <div className="comment__reactions">
           {this.renderReaction()}

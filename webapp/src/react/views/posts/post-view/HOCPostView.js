@@ -81,11 +81,12 @@ class HOCPostView extends PureComponent {
     const { openSecondary, post, target } = this.props;
     openSecondary(target, navForContext(postId));
   }
-  onAddComment(message, e) {
+  onAddComment(message, attachments, e) {
     const { addComment, postId } = this.props;
 
     addComment({
       post_id: postId,
+      attachments,
       message,
     }).then((res) => {
       if (res.ok) {
