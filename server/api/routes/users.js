@@ -39,9 +39,10 @@ import {
 import {
   organizationsCreate,
   organizationsAddToUser,
+  organizationsGetSingle,
+  organizationsCreateUpdateSubscriptionCustomer,
 } from './middlewares/organizations';
 import {
-  xendoSignUpQueueMessage,
   xendoRemoveServiceFromUserQueueMessage,
 } from './middlewares/xendo';
 import {
@@ -95,6 +96,11 @@ notAuthed.all('/users.signup',
   userAvailability,
   usersParseInvitationToken,
   usersActivateUserSignUp,
+  mapLocals(locals => ({
+    organization_id: locals.organizationId,
+  })),
+  organizationsGetSingle,
+  organizationsCreateUpdateSubscriptionCustomer,
   userActivatedUserSignUpQueueMessage,
   notificationsPushToQueue,
   userGetInfoForToken,

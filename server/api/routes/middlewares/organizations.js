@@ -489,6 +489,10 @@ const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCr
   const args = [];
   let funcName = '';
 
+  if (!organization.stripe_customer_id) {
+    return next();
+  }
+
   if (organization.stripe_subscription_id) {
     funcName = 'update';
     args.push(organization.stripe_subscription_id);
