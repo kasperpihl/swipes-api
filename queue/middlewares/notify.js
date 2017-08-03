@@ -38,7 +38,7 @@ const notifyAllInCompany = (req, res, next) => {
   const usersIds = [];
   const organization = user.organizations[0];
 
-  organization.users.forEach((userId) => {
+  organization.active_users.forEach((userId) => {
     usersIds.push(userId);
   });
 
@@ -94,7 +94,7 @@ const notifySendEventToAllInCompany = (req, res, next) => {
   const usersIds = [];
   const organization = user.organizations[0];
 
-  organization.users.forEach((userId) => {
+  organization.active_users.forEach((userId) => {
     usersIds.push(userId);
   });
 

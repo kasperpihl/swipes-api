@@ -472,31 +472,32 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
 });
 const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCreateUpdateSubscriptionCustomer', {
   organization: object.require(),
-  plan: string.require(),
   updatedFields: array,
 }, (req, res, next, setLocals) => {
   const {
     organization,
-    plan,
     updatedFields = [],
   } = res.locals;
-  const stripeCustomerId = organization.stripe_customer_id;
-  const subscriptionItems = [{
+  const {
+    plan,
+    stripe_customer_id,
+  } = organization;
+  const subscription = {
     plan: plan === 'yearly' ? stripeConfig.yearlyPlanId : stripeConfig.monthlyPlanId,
-    quantity: organization.users.length,
-  }];
-
+    quantity: organization.active_users.length,
+  };
   const args = [];
-  let funcName = 'create';
+  let funcName = '';
+
   if (organization.stripe_subscription_id) {
     funcName = 'update';
     args.push(organization.stripe_subscription_id);
+  } else {
+    funcName = 'create';
+    subscription.customer = stripe_customer_id;
   }
 
-  args.push({
-    customer: stripeCustomerId,
-    items: subscriptionItems,
-  });
+  args.push(subscription);
 
   return stripe.subscriptions[funcName](...args)
     .then((subscription) => {

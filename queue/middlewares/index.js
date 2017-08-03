@@ -82,7 +82,7 @@ const user_activated = notifyWrapper([
     } = res.locals;
     const organization = user.organizations[0];
 
-    res.locals.user_ids = organization.users.filter(userId => userId !== user.id);
+    res.locals.user_ids = organization.active_users.filter(userId => userId !== user.id);
 
     return next();
   },
