@@ -1,10 +1,12 @@
 import React, { PureComponent } from "react";
 import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation } from "react-native";
 import ParsedText from "react-native-parsed-text";
-import { setupDelegate } from "../../../swipes-core-js/classes/utils";
+import { setupDelegate, attachmentIconForService } from "../../../swipes-core-js/classes/utils";
 import { timeAgo } from "../../../swipes-core-js/classes/time-utils";
 import Reactions from "../reactions/Reactions";
 import { colors, viewSize } from "../../utils/globalStyles";
+import Icon from "../icons/Icon";
+import RippleButton from "../ripple-button/RippleButton";
 
 const styles = StyleSheet.create({
   container: {
@@ -67,6 +69,27 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 12,
+  },
+  attachments: {
+    paddingHorizontal: 0,
+    marginTop: 3,
+  },
+  attachment: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 3,
+    height: 48,
+    paddingHorizontal: 12,
+    borderRadius: 1,
+    borderWidth: 1,
+    borderColor: colors.deepBlue10,
+  },
+  attachmentLabel: {
+    fontSize: 12,
+    color: colors.deepBlue80,
+    fontWeight: '500',
+    paddingLeft: 12,
   }
 });
 
@@ -79,7 +102,7 @@ class CommentView extends PureComponent {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    setupDelegate(this, 'onOpenUrl')
+    setupDelegate(this, 'onOpenUrl', 'onAttachmentClick')
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -117,6 +140,9 @@ class CommentView extends PureComponent {
       </View>
     );
   }
+  renderText(matchingString, matches) {
+    return matches[2];
+  }
   renderMessage() {
     const { comment } = this.props;
     const message = comment.get("message");
@@ -125,12 +151,42 @@ class CommentView extends PureComponent {
       <View style={styles.messageWrapper}>
         <ParsedText
           style={styles.message}
-          parse={[{ type: "url", style: styles.url, onPress: this.onOpenUrl }]}
+          parse={[
+            { type: "url", style: styles.url, onPress: this.onOpenUrl },
+            { pattern: /<!([A-Z0-9]*)\|(.*?)>/gi, style: styles.nameLabel, renderText: this.renderText},
+          ]}
         >
           {message}
         </ParsedText>
       </View>
     );
+  }
+  renderAttachments() {
+    const { comment } = this.props;
+
+    if (!comment.get('attachments') || !comment.get('attachments').size) {
+      return undefined;
+    }
+
+    const attachments = comment.get('attachments').map((att, i) => (
+      <RippleButton onPress={this.onAttachmentClickCached(i, comment)} key={i}>
+        <View style={styles.attachment}>
+          <Icon
+            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            width="24"
+            height="24"
+            fill={colors.deepBlue80}
+          />
+          <Text style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+        </View>
+      </RippleButton>
+    ))
+
+    return (
+      <View style={styles.attachments}>
+        {attachments}
+      </View>
+    )
   }
   renderSubLine() {
     const { comment, delegate, loadingReaction } = this.props;
@@ -161,8 +217,10 @@ class CommentView extends PureComponent {
         <View style={styles.content}>
           {this.renderName()}
           {this.renderMessage()}
+          {this.renderAttachments()}
           {this.renderSubLine()}
         </View>
+
       </View>
     )
   }

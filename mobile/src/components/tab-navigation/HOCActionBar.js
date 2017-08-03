@@ -104,7 +104,7 @@ class HOCActionBar extends PureComponent {
     return (
       <RippleButton
         rippleColor={colors.blue100}
-        style={[styles.iconButton, { extraStyles }]}
+        style={[styles.iconButton, extraStyles ]}
         rippleOpacity={0.8}
         onPress={onPress}
         key={key}
