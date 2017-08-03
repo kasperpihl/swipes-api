@@ -484,7 +484,7 @@ export function throttle(func, wait) {
 
 
 export function setupLoading(ctx) {
-  let _loadingStates = fromJS({});
+  let _loadingStates = {};
   let unmounted = false;
   const defaultObj = {};
   const timers = {};
@@ -511,11 +511,14 @@ export function setupLoading(ctx) {
     }
   }
   function setLoading(name, label, duration) {
+    if (unmounted) {
+      return;
+    }
     const newState = { loading: true };
     if (label) {
       newState.loadingLabel = label;
     }
-    _loadingStates = _loadingStates.set(name, newState);
+    _loadingStates = Object.assign({}, _loadingStates, { [name]: newState });
     ctx.setState({ _loadingStates });
     setClearTimer(name, duration);
   }
@@ -524,12 +527,12 @@ export function setupLoading(ctx) {
       return;
     }
     const newState = { loading: false };
-    if (label && label.startsWith('!')) {
+    if (label && label.substr(0, 1) === '!') {
       newState.errorLabel = label.substr(1);
     } else if (label) {
       newState.successLabel = label;
     }
-    _loadingStates = _loadingStates.set(name, newState);
+    _loadingStates = Object.assign({}, _loadingStates, { [name]: newState });
     ctx.setState({ _loadingStates });
     setClearTimer(name, duration);
   }
@@ -544,10 +547,10 @@ export function setupLoading(ctx) {
     }
   };
   function getLoading(name) {
-    return _loadingStates.get(name) || defaultObj;
+    return _loadingStates[name] || defaultObj;
   }
   function isLoading(name) {
-    return (_loadingStates.get(name) || defaultObj).loading;
+    return (_loadingStates[name] || defaultObj).loading;
   }
 
   ctx.setLoading = setLoading.bind(ctx);
