@@ -58,7 +58,7 @@ class Login extends PureComponent {
       if (res.error && res.error.message) {
         let label = res.error.message;
 
-        if (label === "!body /users.signin: Invalid object['email']: did not match format") {
+        if (label === "body /users.signin: Invalid object['email']: did not match format") {
           label = 'Not a valid email';
         }
 
@@ -112,7 +112,7 @@ class Login extends PureComponent {
 
     return (
       <View style={styles.errorWrapper}>
-        <Text style={styles.errorLabel}>Not a valid email</Text>
+        <Text style={styles.errorLabel}>{errorMessage}</Text>
       </View>
     )
   }
