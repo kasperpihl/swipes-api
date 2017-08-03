@@ -21,6 +21,9 @@ class HOCNotifications extends PureComponent {
   }
   onMark(ids) {
     const { markNotifications } = this.props;
+    if(!ids.length) {
+      return;
+    }
     this.setLoading('marking');
     markNotifications(ids).then(() => {
       if (!this._unmounted) {
@@ -36,7 +39,9 @@ class HOCNotifications extends PureComponent {
   onNotificationOpen(n) {
     const nav = navForContext(n.get('target'));
     const { openSecondary, hide } = this.props;
-    this.onMark([n.get('id')]);
+    if(!n.get('seen_at')){
+      this.onMark([n.get('id')]);
+    }
     openSecondary('primary', nav);
     hide();
   }

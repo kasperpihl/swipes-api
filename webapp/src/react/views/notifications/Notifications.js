@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
-// import Button from 'Button';
+import Button from 'Button';
 // import Icon from 'Icon';
 import NotificationItem from './NotificationItem';
 import './styles/notifications.scss';
@@ -17,12 +17,18 @@ class Notifications extends PureComponent {
   componentDidMount() {
   }
   renderHeader() {
+    const { getLoading } = this.props;
     return (
       <div className="notifications__header">
         <div className="notifications__title">Notifications</div>
-        <div onClick={this.onMarkAll} className="notifications__mark-all">
-          Mark all as read
-        </div>
+        <Button
+          text="Mark all as read"
+          frameless
+          small
+          onClick={this.onMarkAll}
+          className="notifications__mark-all"
+          {...getLoading('marking')}
+        />
       </div>
     )
   }

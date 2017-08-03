@@ -107,7 +107,7 @@ $borderColor: $deepBlue-10;
 
   &:active {
     transform: scale(.93);
-    transition: .2s ease; 
+    transition: .2s ease;
   }
 }
 
@@ -160,12 +160,13 @@ $borderColor: $deepBlue-10;
     min-width: $btnSize;
 
     #{$b}__text {
-      padding: 0 calc(#{$btnSize} / 2);
+      padding: 0 12px;
     }
 
     &#{$b}--icon-and-text {
-      padding: 0 $btnSize;
+      padding: 0 12px;
     }
+
   }
 }
 
@@ -334,7 +335,8 @@ $borderColor: $deepBlue-10;
     content: '';
     position: absolute;
     left: 0; top: 0;
-    @include size($btnSize);
+
+    @include size($smallBtn);
     border: 0px solid $primaryColor;
     border-radius: 50%;
     transform: rotate(-45deg);
@@ -342,7 +344,9 @@ $borderColor: $deepBlue-10;
     opacity: 0;
     transition: .3s -.3s ease;
   }
-
+  &:not(&--small):after {
+    @include size($btnSize);
+  }
   &--loading {
     border-width: 0px;
     border-color: $deepBlue-10;
@@ -357,7 +361,6 @@ $borderColor: $deepBlue-10;
       opacity: 1;
       transition: .3s .5s ease;
     }
-
     &:after {
       content: '';
       position: absolute;
