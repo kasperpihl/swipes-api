@@ -52,7 +52,9 @@
   },
   "stripe": {
     "publishableKey": "SW_STRIPE_PUBLISHABLE_KEY",
-    "secretKey": "SW_STRIPE_SECRET_KEY"
+    "secretKey": "SW_STRIPE_SECRET_KEY",
+    "yearlyPlanId": "SW_STRIPE_YEARLY_PLAN_ID",
+    "montlyPlanId": "SW_STRIPE_MONTLY_PLAN_ID"
   },
   "valjs_debug": "SW_VALJS_DEBUG",
   "origin": "SW_ORIGIN",

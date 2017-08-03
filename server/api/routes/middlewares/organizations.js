@@ -16,6 +16,7 @@ import {
   dbOrganizationsDisableUser,
   dbOrganizationsEnableUser,
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
+  dbOrganizationsUpdateStripeSubscriptionId,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -469,6 +470,62 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
     return next(new SwipesError(err));
   });
 });
+const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCreateUpdateSubscriptionCustomer', {
+  organization: object.require(),
+  plan: string.require(),
+  updatedFields: array,
+}, (req, res, next, setLocals) => {
+  const {
+    organization,
+    plan,
+    updatedFields = [],
+  } = res.locals;
+  const stripeCustomerId = organization.stripe_customer_id;
+  const subscriptionItems = [{
+    plan: plan === 'yearly' ? stripeConfig.yearlyPlanId : stripeConfig.monthlyPlanId,
+    quantity: organization.users.length,
+  }];
+
+  const args = [];
+  let funcName = 'create';
+  if (organization.stripe_subscription_id) {
+    funcName = 'update';
+    args.push(organization.stripe_subscription_id);
+  }
+
+  args.push({
+    customer: stripeCustomerId,
+    items: subscriptionItems,
+  });
+
+  return stripe.subscriptions[funcName](...args)
+    .then((subscription) => {
+      const stripeSubscriptionId = subscription.id;
+
+      dbOrganizationsUpdateStripeSubscriptionId({
+        organization_id: organization.id,
+        stripe_subscription_id: stripeSubscriptionId,
+      })
+      .then((result) => {
+        const changes = result.changes[0];
+        const organization = changes.new_val || changes.old_val;
+
+        updatedFields.push('stripe_subscription_id');
+
+        setLocals({
+          organization,
+          updatedFields,
+        });
+
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
+      });
+    }).catch((err) => {
+      return next(new SwipesError(err));
+    });
+});
 
 export {
   organizationsCreate,
@@ -487,4 +544,5 @@ export {
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
   organizationsCheckIsEnableValid,
+  organizationsCreateUpdateSubscriptionCustomer,
 };

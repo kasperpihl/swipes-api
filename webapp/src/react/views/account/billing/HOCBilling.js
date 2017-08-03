@@ -30,16 +30,15 @@ class HOCBilling extends PureComponent {
         this.clearLoading('submit');
       } else {
         const message = res.error && res.error.message && res.error.message.message;
-        this.clearLoading('submit', '!' + message);
+        this.clearLoading('submit', `!${  message}`);
       }
-    })
+    });
   }
   onSwitchPlan(plan) {
     const { organization } = this.props;
-    if(!organization.get('stripe_customer_id')) {
+    if (!organization.get('stripe_subscription_id')) {
       this.setState({ billingStatus: plan });
     }
-
   }
   render() {
     const { billingStatus } = this.state;
@@ -57,7 +56,7 @@ class HOCBilling extends PureComponent {
             billingStatus={billingStatus}
             organization={organization}
             users={users}
-            {...this.bindLoading() }
+            {...this.bindLoading()}
           />
         </Elements>
       </StripeProvider>

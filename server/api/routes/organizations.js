@@ -20,6 +20,7 @@ import {
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
   organizationsCheckIsEnableValid,
+  organizationsCreateUpdateSubscriptionCustomer,
 } from './middlewares/organizations';
 import {
   usersGetByEmailWithFields,
@@ -188,14 +189,12 @@ authed.all('/organizations.createStripeCustomer',
     ownerUser: locals.user,
   })),
   organizationsCreateStripeCustomer,
+  organizationsCreateUpdateSubscriptionCustomer,
   mapLocals(locals => ({
     organization: createOrganizationWithOnlyChangedFields(locals),
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
-  mapLocals(locals => ({
-    stripe_customer_id: locals.stripeCustomerId,
-  })),
   valResponseAndSend({
     organization: object.require(),
   }),

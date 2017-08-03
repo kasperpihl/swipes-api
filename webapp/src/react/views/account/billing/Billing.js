@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
@@ -17,17 +17,17 @@ const style = {
     fontSmoothing: 'antialiased',
     fontSize: '16px',
     '::placeholder': {
-      color: '#aab7c4'
-    }
+      color: '#aab7c4',
+    },
   },
   invalid: {
     color: '#fa755a',
-    iconColor: '#fa755a'
-  }
+    iconColor: '#fa755a',
+  },
 };
 class Billing extends PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       errorMessage: '',
       successState: true,
@@ -39,7 +39,7 @@ class Billing extends PureComponent {
   }
   getShowPrice() {
     const { billingStatus, users } = this.props;
-    const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
+    const numberOfUsers = users.filter(u => !u.get('disabled')).size;
     let price = 9;
     let months = 1;
     let postfix = ' monthly';
@@ -52,7 +52,7 @@ class Billing extends PureComponent {
   }
   getPrice() {
     const { billingStatus, users } = this.props;
-    const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
+    const numberOfUsers = users.filter(u => !u.get('disabled')).size;
     let price = 9;
     let months = 1;
     if (billingStatus === 'yearly') {
@@ -75,7 +75,6 @@ class Billing extends PureComponent {
         console.log('Received Stripe token:', token);
         this.onSubmitSuccess(token);
       }
-
     });
   }
   onChange(cardState) {
@@ -83,7 +82,7 @@ class Billing extends PureComponent {
   }
   renderHeader() {
     const { organization } = this.props;
-    const hasStripe = organization.get('stripe_customer_id');
+    const hasStripe = organization.get('stripe_subscription_id');
     const status = !hasStripe ? 'Inactive' : 'Active';
     const className = !hasStripe ? 'payment-status__status payment-status__status--inactive' : 'payment-status__status payment-status__status--active';
 
@@ -101,9 +100,9 @@ class Billing extends PureComponent {
     let className = 'toggle';
 
     if (billingStatus === 'monthly') {
-      className += ' toggle--first'
+      className += ' toggle--first';
     } else {
-      className += ' toggle--second'
+      className += ' toggle--second';
     }
 
     return (
@@ -119,7 +118,7 @@ class Billing extends PureComponent {
           <div className="toggle__sublabel">billed anually <span>You save 33%</span></div>
         </div>
       </div>
-    )
+    );
   }
   renderBilling() {
     const { cardState } = this.state;
@@ -139,13 +138,13 @@ class Billing extends PureComponent {
           <div id="card-errors" role="alert">{errorMessage}</div>
         </div>
       </div>
-    )
+    );
   }
   renderBottomSection() {
     const { cardState } = this.state;
     const { organization, users, billingStatus, getLoading } = this.props;
     const isReady = cardState && cardState.complete;
-    const hasStripe = organization.get('stripe_customer_id');
+    const hasStripe = organization.get('stripe_subscription_id');
     const className = `payment__bottom-section ${hasStripe ? 'payment__bottom-section--success' : ''}`;
 
     return (
@@ -153,7 +152,7 @@ class Billing extends PureComponent {
         <div className="top-section">
           {this.renderBilling()}
           <Button
-            {...getLoading('submit') }
+            {...getLoading('submit')}
             primary
             disabled={!isReady}
             text="Submit Payment"
@@ -169,11 +168,11 @@ class Billing extends PureComponent {
           </div>
         </div>
       </div>
-    )
+    );
   }
   render() {
     const { organization, users } = this.props;
-    const numberOfUsers = users.filter((u) => !u.get('disabled')).size;
+    const numberOfUsers = users.filter(u => !u.get('disabled')).size;
     return (
       <SWView
         header={this.renderHeader()}
@@ -189,7 +188,7 @@ class Billing extends PureComponent {
           {this.renderBottomSection()}
         </div>
       </SWView>
-    )
+    );
   }
 }
 
