@@ -60,10 +60,16 @@ const initGetData = valLocals('initGetData', {
       let posts = [];
 
       if (me.organizations.length > 0) {
-        users = me.organizations[0].users;
+        users = me.organizations[0].active_users;
+
+        if (me.organizations[0].disabled_users) {
+          users = users.concat(me.organizations[0].disabled_users || []);
+
+          delete me.organizations[0].disabled_users;
+        }
 
         // We don't want duplication of that data served on the client;
-        delete me.organizations[0].users;
+        delete me.organizations[0].active_users;
       }
 
       if (me.goals.length > 0) {

@@ -98,9 +98,9 @@ const initMe = funcWrap([
         return user.merge({
           organizations: user('organizations').map((organization) => {
             return organization.merge({
-              users:
+              active_users:
                 r.table('users')
-                  .getAll(r.args(organization('users').default([])))
+                  .getAll(r.args(organization('active_users').default([])))
                   .filter((user) => {
                     return user('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
                   })
@@ -119,6 +119,9 @@ const initMe = funcWrap([
                   .getAll(r.args(organization('disabled_users').default([])))
                   .filter((user) => {
                     return user('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+                  })
+                  .map((user) => {
+                    return user.merge({ disabled: true });
                   })
                   .pluck('id', 'profile')
                   .coerceTo('ARRAY'),
