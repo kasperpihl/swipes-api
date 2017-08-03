@@ -341,7 +341,7 @@ const organizationsDisableUser = valLocals('organizationsDisableUser', {
       if (result.changes) {
         const changes = result.changes[0];
         const organization = changes.new_val || changes.old_val;
-        const updatedFields = ['disabled_users', 'users'];
+        const updatedFields = ['disabled_users', 'active_users'];
 
         setLocals({
           organization,
@@ -370,7 +370,7 @@ const organizationsEnableUser = valLocals('organizationsEnableUser', {
     .then((result) => {
       const changes = result.changes[0];
       const organization = changes.new_val || changes.old_val;
-      const updatedFields = ['disabled_users', 'users'];
+      const updatedFields = ['disabled_users', 'active_users'];
 
       setLocals({
         organization,

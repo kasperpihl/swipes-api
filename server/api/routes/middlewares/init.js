@@ -62,6 +62,12 @@ const initGetData = valLocals('initGetData', {
       if (me.organizations.length > 0) {
         users = me.organizations[0].active_users;
 
+        if (me.organizations[0].pending_users) {
+          users = users.concat(me.organizations[0].pending_users || []);
+
+          delete me.organizations[0].pending_users;
+        }
+
         if (me.organizations[0].disabled_users) {
           users = users.concat(me.organizations[0].disabled_users || []);
 

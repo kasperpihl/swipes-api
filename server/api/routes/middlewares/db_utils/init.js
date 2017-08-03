@@ -114,6 +114,22 @@ const initMe = funcWrap([
         return user.merge({
           organizations: user('organizations').map((organization) => {
             return organization.merge({
+              pending_users:
+                r.table('users')
+                  .getAll(r.args(organization('pending_users').default([])))
+                  .filter((user) => {
+                    return user('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+                  })
+                  .without('password', 'organizations', 'services', 'xendoCredentials', 'settings')
+                  .coerceTo('ARRAY'),
+            });
+          }),
+        });
+      })
+      .do((user) => {
+        return user.merge({
+          organizations: user('organizations').map((organization) => {
+            return organization.merge({
               disabled_users:
                 r.table('users')
                   .getAll(r.args(organization('disabled_users').default([])))
