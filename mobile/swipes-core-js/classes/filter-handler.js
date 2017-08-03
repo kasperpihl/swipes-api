@@ -73,17 +73,20 @@ export default class FilterHandler {
     }
 
     const notifications = state.get('notifications');
-    if (notifications !== this.prevNotifications) {
+    const lastReadTs = state.getIn(['me', 'settings', 'last_read_ts']);
+    if (notifications !== this.prevNotifications || lastReadTs !== this.prevLastReadTs) {
       this.prevNotifications = this.prevNotifications || List();
       let counter = 0;
+
       notifications.forEach((n, i) => {
-        if (!n.get('seen_at')) {
+        if (!n.get('seen_at') && (!lastReadTs || lastReadTs < n.get('created_at'))) {
           counter += 1;
         }
       });
       const currUnread = state.getIn(['connection', 'notificationCounter']);
 
       this.prevNotifications = notifications;
+      this.prevLastReadTs = lastReadTs;
       if (currUnread !== counter) {
         this.store.dispatch({ type: types.UPDATE_NOTIFICATION_COUNTER, payload: { counter } });
         if (window.ipcListener) {

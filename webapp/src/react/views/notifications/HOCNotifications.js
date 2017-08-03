@@ -15,6 +15,11 @@ class HOCNotifications extends PureComponent {
     setupLoading(this);
   }
   componentDidMount() {
+    const { setLastReadTs, notifications } = this.props;
+    if(notifications && notifications.size) {
+      setLastReadTs(notifications.getIn([0, 'created_at']));
+    }
+
   }
   componentWillUnmount() {
     this._unmounted = true;
@@ -68,4 +73,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   openSecondary: a.navigation.openSecondary,
   markNotifications: ca.notifications.mark,
+  setLastReadTs: ca.notifications.setLastReadTs,
 })(HOCNotifications);

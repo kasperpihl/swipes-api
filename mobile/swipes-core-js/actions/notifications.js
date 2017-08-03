@@ -6,3 +6,11 @@ import * as ca from './';
 export const mark = payload => dp => dp(ca.api.request('notifications.markAsSeen', {
   notification_ids: payload,
 }));
+
+export const setLastReadTs = (ts) => (d, getState) => {
+  const lastReadTs = getState().getIn(['me', 'settings', 'last_read_ts']);
+
+  if(!lastReadTs || lastReadTs < ts) {
+    d(ca.me.updateSettings({ last_read_ts: ts }));
+  }
+}
