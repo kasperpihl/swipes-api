@@ -14,6 +14,11 @@ class HOCNotifications extends PureComponent {
     this.state = {};
   }
   componentDidMount() {
+    const { setLastReadTs, notifications } = this.props;
+    if(notifications && notifications.size) {
+      setLastReadTs(notifications.getIn([0, 'created_at']));
+    }
+
   }
   onMark(ids) {
     const { markNotifications } = this.props;
@@ -53,4 +58,5 @@ function mapStateToProps(state) {
 }
 export default connect(mapStateToProps, {
   markNotifications: ca.notifications.mark,
+  setLastReadTs: ca.notifications.setLastReadTs,
 })(HOCNotifications);
