@@ -87,6 +87,28 @@ class HOCOrganization extends PureComponent {
       }
     });
   }
+  onDisableUser(uId) {
+    const { disableUser, organization } = this.props;
+    this.setLoading(uId);
+    disableUser(organization.get('id'), uId).then((res) => {
+      if(res.ok){
+        this.clearLoading(uId, `Deactivated`, 3000);
+      } else {
+        this.clearLoading(uId, '!Something went wrong', 3000);
+      }
+    });
+  }
+  onEnableUser(uId) {
+    const { enableUser, organization } = this.props;
+    this.setLoading(uId);
+    enableUser(organization.get('id'), uId).then((res) => {
+      if(res.ok){
+        this.clearLoading(uId, `Deactivated`, 3000);
+      } else {
+        this.clearLoading(uId, '!Something went wrong', 3000);
+      }
+    });
+  }
   onContext(uId, e) {
     const { contextMenu, organization, users } = this.props;
     const user = users.get(uId);
@@ -96,7 +118,7 @@ class HOCOrganization extends PureComponent {
       {
         id: 'promote',
         title: 'Make an admin',
-        subtitle: 'Admins have full access to the account including deactivate accounts and handle billing'
+        subtitle: 'Admins have full access to the account including disable accounts and handle billing'
       },
     ];
     if(organization.get('admins').contains(uId)){
@@ -109,13 +131,22 @@ class HOCOrganization extends PureComponent {
     if(organization.get('owner_id') === uId){
       items[0].subtitle = "You can't demote the owner.";
       items[0].disabled = true;
+    } else {
+      if(user.get('disabled')) {
+        items.push({
+          id: 'enable',
+          title: 'Enable account',
+          subtitle: 'If a user needs his account again, reopen it from here.',
+        })
+      } else {
+        items.push({
+          id: 'disable',
+          title: 'Disable account',
+          subtitle: 'If a user no longer needs an account, you can close it from here.',
+        })
+      }
     }
-    items.push({
-      id: 'deactive',
-      title: 'Deactivate account',
-      disabled: true,
-      subtitle: 'Coming soon.', //'If a user no longer needs an account, you can close it from here',
-    })
+
     if(!user.get('activated')){
 
       items.push({
@@ -135,8 +166,11 @@ class HOCOrganization extends PureComponent {
         if (item.id === 'demote') {
           this.onDemoteUser(uId);
         }
-        if (item.id === 'deactivate') {
-          this.onDeactiveUser(uId);
+        if (item.id === 'disable') {
+          this.onDisableUser(uId);
+        }
+        if (item.id === 'enable') {
+          this.onEnableUser(uId);
         }
         if (item.id === 'resend') {
           this.onResend(uId);
@@ -198,6 +232,8 @@ export default navWrapper(connect(mapStateToProps, {
   invite: ca.users.invite,
   completeOnboarding: ca.onboarding.complete,
   demoteAnAdmin: ca.organizations.demoteAnAdmin,
+  disableUser: ca.organizations.disableUser,
+  enableUser: ca.organizations.enableUser,
   promoteToAdmin: ca.organizations.promoteToAdmin,
   contextMenu: a.main.contextMenu,
 })(HOCOrganization));
