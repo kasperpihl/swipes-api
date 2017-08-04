@@ -92,6 +92,7 @@ export default class NotificationsGenerator {
       }
       default: {
         console.log('unknown notification', n.toJS());
+        text.push('I don\t know what to say (unknown notification)');
       }
     }
     return text;
