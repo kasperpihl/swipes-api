@@ -9,7 +9,6 @@ import {
   attachmentIconForService,
 } from 'swipes-core-js/classes/utils';
 import { List } from 'immutable';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import SWView from 'SWView';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import HOCAssigning from 'components/assigning/HOCAssigning';

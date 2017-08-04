@@ -1,5 +1,4 @@
 import { Map } from 'immutable';
-import { timeAgo } from '../classes/time-utils';
 
 const boldText = (id, string, boldStyle) => {
   const obj = {

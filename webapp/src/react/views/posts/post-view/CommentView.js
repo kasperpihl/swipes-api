@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate, setupCachedCallback, URL_REGEX } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import TimeAgo from 'components/time-ago/TimeAgo';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 // import SWView from 'SWView';
 // import Button from 'Button';
@@ -148,7 +148,6 @@ class CommentView extends PureComponent {
   }
   render() {
     const { comment } = this.props;
-    const timestamp = timeAgo(comment.get('created_at'), true);
 
     return (
       <div className="comment" ref="comment">
@@ -157,7 +156,12 @@ class CommentView extends PureComponent {
           <div className="comment__section">
             {this.renderName()}
             {this.renderMessage()}
-            <span className="comment__timestamp"> — {timestamp}</span>
+            <TimeAgo
+              className="comment__timestamp"
+              prefix=" — "
+              simple
+              date={comment.get('created_at')}
+            />
           </div>
           {this.renderAttachments()}
         </div>

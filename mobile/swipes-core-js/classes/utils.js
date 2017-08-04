@@ -482,7 +482,6 @@ export function throttle(func, wait) {
   return throttled;
 }
 
-
 export function setupLoading(ctx) {
   let _loadingStates = {};
   let unmounted = false;

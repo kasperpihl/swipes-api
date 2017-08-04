@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate, iconForId } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import TimeAgo from 'components/time-ago/TimeAgo';
 // import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
@@ -73,7 +73,6 @@ class PostHeader extends PureComponent {
   }
   renderSubtitle() {
     const { post } = this.props;
-    const timeStamp = timeAgo(post.get('created_at'), true);
     const seperator = post.get('context') ? <span>&nbsp;•&nbsp;</span> : undefined;
     const contextTitle = post.get('context') ? post.getIn(['context', 'title']) : null;
     let icon;
@@ -89,9 +88,12 @@ class PostHeader extends PureComponent {
           {contextTitle}
         </span>
         {seperator}
-        <span className="post-header__timestamp" onClick={this.onOpenPostCached(post.get('id'))}>
-          {timeStamp}
-        </span>
+        <TimeAgo
+          className="post-header__timestamp"
+          onClick={this.onOpenPostCached(post.get('id'))}
+          simple
+          date={post.get('created_at')}
+        />
       </div>
     );
   }

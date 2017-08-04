@@ -7,12 +7,13 @@ import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import TimeAgo from 'components/time-ago/TimeAgo';
 import {
   convertToRaw,
   EditorState,
 } from 'draft-js';
 import Button from 'Button';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import diff from 'classes/draft-util';
 
@@ -166,11 +167,16 @@ class HOCSideNote extends PureComponent {
   renderHeader() {
     const { target, note, latestRev, title } = this.props;
     const name = msgGen.users.getName(note.get('updated_by'), { yourself: true });
-    const timeString = timeAgo(note.get('updated_at'));
-    let subtitle = `Updated by ${name} ${timeString}`;
+    let subtitle = [
+      `Updated by ${name} `,
+      <TimeAgo
+        key="ts"
+        date={note.get('updated_at')}
+      />,
+    ]
     let buttonHtml;
     if (latestRev < (note.get('rev') || 1)) {
-      subtitle = `CONFLICT. Updated by ${name} ${timeString}`;
+      subtitle[0] = `CONFLICT. Updated by ${name} `;
       buttonHtml = (
         <Button
           primary

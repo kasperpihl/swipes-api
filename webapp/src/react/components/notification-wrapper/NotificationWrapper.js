@@ -4,6 +4,7 @@ import { mapContains, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import { setupDelegate, attachmentIconForService, URL_REGEX } from 'swipes-core-js/classes/utils';
+import TimeAgo from 'components/time-ago/TimeAgo';
 
 import './styles/notification-item';
 
@@ -58,7 +59,11 @@ class NotificationItem extends Component {
                 undefined
               )
           }
-          {n.get('timeago')}</div>
+          <TimeAgo
+            date={n.get('done_at')}
+            simple
+          />
+        </div>
       </div>
     );
   }
@@ -235,6 +240,6 @@ NotificationItem.propTypes = {
     title: oneOfType([array, string]),
     message: string,
     attachments: list,
-    timeago: string,
+    doneAt: string,
   }),
 };

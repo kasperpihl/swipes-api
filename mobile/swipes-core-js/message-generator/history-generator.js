@@ -1,6 +1,5 @@
 import { Map, List } from 'immutable';
 import GoalsUtil from '../classes/goals-util';
-import { timeAgo } from '../classes/time-utils';
 
 export default class HistoryGenerator {
   constructor(store, parent) {
@@ -18,7 +17,7 @@ export default class HistoryGenerator {
   getNotificationWrapperForHistory(id, h, options) {
     let def = {
       icon: true,
-      timeago: true,
+      doneAt: true,
       title: true,
       subtitle: true,
       attachments: true,
@@ -30,7 +29,7 @@ export default class HistoryGenerator {
 
     const helper = this._getHelper(id);
     return Map({
-      timeago: def.timeago ? timeAgo(h.get('done_at'), true) : null,
+      doneAt: def.doneAt ? h.get('done_at') : null,
       title: def.title ? this.getTitle(helper.getId(), h) : null,
       subtitle: def.subtitle ? this.getSubtitle(helper.getId(), h) : null,
       userId: h.get('done_by'),
