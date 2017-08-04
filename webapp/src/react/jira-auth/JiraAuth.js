@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import FloatingInput from 'components/swipes-ui/FloatingInput';
+import FloatingInput from 'components/floating-input/FloatingInput';
 import Button from 'Button';
 import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
 

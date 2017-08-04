@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
-import FloatingInput from 'components/swipes-ui/FloatingInput';
+import FloatingInput from 'components/floating-input/FloatingInput';
 
 import './styles/signin.scss';
 

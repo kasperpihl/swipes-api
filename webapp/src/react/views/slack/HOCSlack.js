@@ -6,7 +6,7 @@ import * as actions from 'actions';
 import { cache } from 'swipes-core-js/actions';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import Webview from 'components/webview/Webview';
-import FloatingInput from 'components/swipes-ui/FloatingInput';
+import FloatingInput from 'components/floating-input/FloatingInput';
 import Button from 'Button';
 import './styles/slack-view';
 
