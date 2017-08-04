@@ -1,4 +1,4 @@
-/* global amplitude, Intercom */
+/* global Intercom */
 import mixpanel from 'mixpanel-browser';
 import { bindAll } from 'swipes-core-js/classes/utils';
 const blockedMixpanelEvents = [
@@ -11,7 +11,6 @@ export default class Analytics {
     // this.enable = true; // for testing on dev. turn off when done.
     if(this.enable){
       mixpanel.init("a1b6f31fc988c7e4a7f40c267e315f5d");
-      amplitude.getInstance().init('862d696479638f16c727cf7dcbcd67d5');
       Intercom("boot", {
         app_id: "q8xibmac",
       });
@@ -36,8 +35,6 @@ export default class Analytics {
   logout() {
     if(this.enable){
       Intercom('shutdown');
-      amplitude.getInstance().setUserId(null);
-      amplitude.getInstance().regenerateDeviceId();
       mixpanel.reset()
     }
   }
@@ -46,7 +43,6 @@ export default class Analytics {
     if(this.enable){
       const props = Object.assign(defs, data);
       Intercom("trackEvent", name, props);
-      amplitude.getInstance().logEvent(name, props);
       if(blockedMixpanelEvents.indexOf(name) === -1){
         mixpanel.track(name, props);
       } else {
@@ -78,17 +74,6 @@ export default class Analytics {
           }
         });
         mixpanel.identify(this.userId);
-        amplitude.getInstance().setUserId(this.userId);
-        amplitude.getInstance().setUserProperties({
-          'First name': msgGen.users.getFirstName(me),
-          'Last name': msgGen.users.getLastName(me),
-          Email: msgGen.users.getEmail(me),
-          'Number of services': me.get('services').size,
-          'Company id': orgId,
-          'Company name': orgName,
-          'Company size': state.get('users').size,
-          'Services connected': me.get('services').map(s => s.get('service_name')).toArray(),
-        });
       }
     }
   }
