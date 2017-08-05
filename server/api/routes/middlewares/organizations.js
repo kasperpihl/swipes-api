@@ -140,13 +140,17 @@ const organizationsGetInfoFromInvitationToken = valLocals('organizationsGetInfoF
   });
 });
 const organizationsGetSingle = valLocals('organizationsGetSingle', {
-  organization_id: string.require(),
+  organization_id: string,
 }, (req, res, next, setLocals) => {
   const {
     organization_id,
   } = res.locals;
 
-  dbOrganizationsGetSingle({ organization_id })
+  if (!organization_id) {
+    return next();
+  }
+
+  return dbOrganizationsGetSingle({ organization_id })
     .then((organization) => {
       setLocals({
         organization,
@@ -471,13 +475,18 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
   });
 });
 const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCreateUpdateSubscriptionCustomer', {
-  organization: object.require(),
+  organization: object,
   updatedFields: array,
 }, (req, res, next, setLocals) => {
   const {
     organization,
     updatedFields = [],
   } = res.locals;
+
+  if (!organization) {
+    return next();
+  }
+
   const {
     plan,
     stripe_customer_id,
