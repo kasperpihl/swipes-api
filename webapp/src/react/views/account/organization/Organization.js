@@ -7,6 +7,7 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import Button from 'Button';
 import Section from 'components/section/Section';
 import FloatingFormInput from './FloatingFormInput';
+import TabBar from 'components/tab-bar/TabBar';
 
 import './styles/organization.scss';
 
@@ -41,6 +42,9 @@ class Organization extends PureComponent {
       if (u.get('id') === organization.get('owner_id')) {
         userLevel = 'OWNER';
       }
+      if(u.get('disabled')) {
+        userLevel = 'DISABLED';
+      }
 
       return (
         <div className="organization__user" key={u.get('id')}>
@@ -68,8 +72,10 @@ class Organization extends PureComponent {
     );
   }
   renderInvite() {
-    const { getLoading, isLoading, firstNameVal, emailVal } = this.props;
-
+    const { getLoading, isLoading, firstNameVal, emailVal, tabIndex } = this.props;
+    if(tabIndex === 1) {
+      return undefined;
+    }
     return (
       <div className="organization__form">
 
@@ -107,13 +113,13 @@ class Organization extends PureComponent {
     );
   }
   renderHeader() {
-    const { organization } = this.props;
+    const { organization, tabIndex, delegate, tabs } = this.props;
     const title = `Team account`;
 
     return (
       <div className="orgnization__header">
         <HOCHeaderTitle title={title} subtitle="Invite your team and manage access" />
-        <Section title="Manage account" />
+        <TabBar tabs={tabs} delegate={delegate} activeTab={tabIndex} />
       </div>
     );
   }

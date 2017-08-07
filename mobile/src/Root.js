@@ -14,7 +14,7 @@ const store = configureStore();
 if (window.__DEV__) {
   window.__API_URL__ = 'https://staging.swipesapp.com';
 } else {
-  window.__API_URL__ = 'https://live.swipesapp.com';
+  window.__API_URL__ = 'https://staging.swipesapp.com';
 }
 
 window.__PLATFORM__ = Platform.OS;

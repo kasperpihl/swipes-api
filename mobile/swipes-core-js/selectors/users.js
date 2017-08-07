@@ -7,7 +7,7 @@ const defOptions = {
   includeMatches: true,
   tokenize: true,
   id: 'id',
-  threshold: 0.6,
+  threshold: 0.5,
   matchAllTokens: true,
   maxPatternLength: 32,
   minMatchCharLength: 2,
@@ -20,6 +20,7 @@ const defOptions = {
 
 const getAutoCompleteString = state => state.getIn(['autoComplete', 'string']);
 const getUsers = state => state.get('users');
+const getString = (state, string) => string;
 
 const nameSort = (a, b) => {
   const f1 = msgGen.users.getFirstName(a);
@@ -41,6 +42,14 @@ export const getSortedArray = createSelector(
   [getUsers],
   (users) => users.toList().sort(nameSort).toJS(),
 );
+
+export const search = createSelector(
+  [getSortedArray, getString],
+  (list, string) => {
+    let fuse = new Fuse(list, defOptions); // "list" is the item array
+    return fuse.search(string || '');
+  }
+)
 
 export const autoComplete = createSelector(
   [getSortedArray, getAutoCompleteString],

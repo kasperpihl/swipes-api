@@ -4,11 +4,30 @@ import * as types from '../constants';
 
 const initialState = fromJS({});
 
+const updateStateFromOrg = (state, org) => {
+  let tempState = state;
+  const disabledUsers = org.disabled_users;
+  if(disabledUsers) {
+    state.forEach((u) => {
+      const isDisabled = !!(disabledUsers.indexOf(u.get('id')) > -1)
+      if(!!u.get('disabled') !== isDisabled) {
+        tempState = state.setIn([u.get('id'), 'disabled'], isDisabled);
+      }
+    });
+  }
+  return tempState;
+}
+
 export default function usersReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case 'init': {
-      return reducerInitToMap(payload, 'users', state);
+      let tempState = reducerInitToMap(payload, 'users', state);
+      if(payload.me.organizations[0]){
+        tempState = updateStateFromOrg(tempState, payload.me.organizations[0]);
+      }
+
+      return tempState;
     }
     case 'me.uploadProfilePhoto':
     case 'me.updateProfile':
@@ -19,9 +38,15 @@ export default function usersReducer(state = initialState, action) {
     case 'users.invite':{
       return state.set(payload.user.id, fromJS(payload.user));
     }
+    case 'organizations.enableUser':
+    case 'organizations.disableUser':
+    case 'organization_updated': {
+      let tempState = updateStateFromOrg(state, payload.organization);
+      return tempState;
+    }
     case types.RESET_STATE: {
       return initialState;
-    }  
+    }
     default:
       return state;
   }

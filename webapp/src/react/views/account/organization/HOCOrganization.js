@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { fromJS } from 'immutable';
@@ -18,6 +19,8 @@ class HOCOrganization extends PureComponent {
     this.state = {
       firstNameVal: '',
       emailVal: '',
+      tabs: ['Active accounts', 'Disabled accounts'],
+      tabIndex: 0,
     };
     setupLoading(this);
   }
@@ -121,23 +124,23 @@ class HOCOrganization extends PureComponent {
         subtitle: 'Admins have full access to the account including disable accounts and handle billing'
       },
     ];
-    if(organization.get('admins').contains(uId)){
+    if(user.get('disabled')) {
       items[0] = {
-        id: 'demote',
-        title: 'Demote to user',
-        subtitle: 'Users cannot deactive accounts or handle billing',
-      };
-    }
-    if(organization.get('owner_id') === uId){
-      items[0].subtitle = "You can't demote the owner.";
-      items[0].disabled = true;
+        id: 'enable',
+        title: 'Enable account',
+        subtitle: 'If a user needs his account again, reopen it from here.',
+      }
     } else {
-      if(user.get('disabled')) {
-        items.push({
-          id: 'enable',
-          title: 'Enable account',
-          subtitle: 'If a user needs his account again, reopen it from here.',
-        })
+      if(organization.get('admins').contains(uId)){
+        items[0] = {
+          id: 'demote',
+          title: 'Demote to user',
+          subtitle: 'Users cannot deactive accounts or handle billing',
+        };
+      }
+      if(organization.get('owner_id') === uId){
+        items[0].subtitle = "You can't demote the owner.";
+        items[0].disabled = true;
       } else {
         items.push({
           id: 'disable',
@@ -145,16 +148,17 @@ class HOCOrganization extends PureComponent {
           subtitle: 'If a user no longer needs an account, you can close it from here.',
         })
       }
+
+      if(!user.get('activated')){
+
+        items.push({
+          id: 'resend',
+          title: 'Resend invitation',
+          subtitle: `Remind ${msgGen.users.getName(uId)} about the invitation to join in`,
+        });
+      }
     }
 
-    if(!user.get('activated')){
-
-      items.push({
-        id: 'resend',
-        title: 'Resend invitation',
-        subtitle: `Remind ${msgGen.users.getName(uId)} about the invitation to join in`,
-      });
-    }
 
     const delegate = {
       onItemAction: (item) => {
@@ -191,6 +195,14 @@ class HOCOrganization extends PureComponent {
       },
     });
   }
+  tabDidChange(index) {
+    const { tabIndex } = this.state;
+    if (tabIndex !== index) {
+      this.setState({
+        tabIndex: index,
+      });
+    }
+  }
   getOptionsForE(e) {
     return {
       boundingRect: e.target.getBoundingClientRect(),
@@ -199,7 +211,7 @@ class HOCOrganization extends PureComponent {
   }
   render() {
     const { users, organization, me } = this.props;
-    const { firstNameVal, emailVal } = this.state;
+    const { firstNameVal, emailVal, tabs, tabIndex } = this.state;
 
     return (
       <Organization
@@ -207,11 +219,15 @@ class HOCOrganization extends PureComponent {
         {...this.bindLoading()}
         firstNameVal={firstNameVal}
         emailVal={emailVal}
+        tabs={tabs}
+        tabIndex={tabIndex}
         organization={organization}
         isAdmin={msgGen.me.isAdmin()}
-        users={users.sort(
-          (u1, u2) => msgGen.users.getFirstName(u1).localeCompare(msgGen.users.getFirstName(u2))
-        )}
+        users={users.filter((u) => {
+          if(u.get('disabled')) {
+            return (tabIndex === 1);
+          } else return (tabIndex === 0);
+        })}
       />
     );
   }
@@ -222,7 +238,7 @@ HOCOrganization.propTypes = {};
 
 function mapStateToProps(state) {
   return {
-    users: state.get('users'),
+    users: cs.users.getSorted(state),
     me: state.get('me'),
     organization: state.getIn(['me', 'organizations', 0]),
   };

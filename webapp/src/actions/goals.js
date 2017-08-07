@@ -1,14 +1,15 @@
 import TabMenu from 'context-menus/tab-menu/TabMenu';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 import { cache } from 'swipes-core-js/actions';
 import * as a from './';
+import * as cs from 'swipes-core-js/selectors';
 
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {
   assignees = assignees || [];
 
   const state = getState();
   let currentRecent = state.getIn(['cache', 'recentAssignees']) || [];
-  if (currentRecent.size) {
+  if (typeof currentRecent.size !== 'undefined') {
     currentRecent = currentRecent.toJS();
   }
 
@@ -56,21 +57,11 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     return resultForUser(user);
   };
 
-  const sortedUsers = users => users.sort(
-    (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
-  ).toArray();
+  const allUsers = () => cs.users.getSorted(state).map(u => resultForUser(u)).toArray();
 
-  const allUsers = () => sortedUsers(state.get('users')).map(u => resultForUser(u));
-
-  const searchForUser = q => sortedUsers(state.get('users')).map((u) => {
-    if (
-      msgGen.users.getFirstName(u).toLowerCase().startsWith(q.toLowerCase()) ||
-      msgGen.users.getLastName(u).toLowerCase().startsWith(q.toLowerCase())
-    ) {
-      return resultForUser(u);
-    }
-    return null;
-  }).filter(v => !!v);
+  const searchForUser = q => cs.users.search(state, q).map((res) => {
+    return resultForUserId(res.item);
+  });
 
   const getRecent = () => currentRecent.map(uId => resultForUserId(uId));
   const getAssignees = () => assignees.map(uId => resultForUserId(uId));
