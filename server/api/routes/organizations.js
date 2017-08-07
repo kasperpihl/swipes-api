@@ -48,7 +48,14 @@ const createOrganizationWithOnlyChangedFields = (locals) => {
   };
 
   updatedFields.forEach((field) => {
+    // if (field === 'active_users' || field === 'pending_users' || field === 'disabled_users') {
+    //   pluckedOrganization.users =
+    //     organization.active_users
+    //       .concat(organization.pending_users)
+    //       .concat(organization.disabled_users);
+    // } else {
     pluckedOrganization[field] = organization[field];
+    // }
   });
 
   return pluckedOrganization;
