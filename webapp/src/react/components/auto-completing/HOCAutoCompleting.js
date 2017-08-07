@@ -31,7 +31,6 @@ class HOCAutoCompleting extends PureComponent {
     const { results, clear, search, autoComplete } = this.props;
     const value = this.getValue(e.target);
     const position = this.getCaretPosition(e.target);
-    console.log('value', value, position);
     let string = value.substr(0, position);
     string = string.split('\n').reverse()[0];
     let array = string.split(`${options.trigger}`);
@@ -40,7 +39,6 @@ class HOCAutoCompleting extends PureComponent {
     } else {
       string = undefined;
     }
-    console.log('search', string);
     if(string) {
       search(string, options);
     } else if(autoComplete.get('string')) {

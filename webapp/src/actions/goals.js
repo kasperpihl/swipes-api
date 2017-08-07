@@ -1,8 +1,8 @@
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import { fromJS, List } from 'immutable';
 import { cache } from 'swipes-core-js/actions';
-import * as a from './';
 import * as cs from 'swipes-core-js/selectors';
+import * as a from './';
 
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {
   assignees = assignees || [];
@@ -11,6 +11,8 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   let currentRecent = state.getIn(['cache', 'recentAssignees']) || [];
   if (typeof currentRecent.size !== 'undefined') {
     currentRecent = currentRecent.toJS();
+    const disabledUsers = state.getIn(['me', 'organizations', 0, 'disabled_users']);
+    currentRecent = currentRecent.filter(r => !disabledUsers.contains(r));
   }
 
   const resultForUser = (user) => {
@@ -57,7 +59,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     return resultForUser(user);
   };
 
-  const allUsers = () => cs.users.getSorted(state).map(u => resultForUser(u)).toArray();
+  const allUsers = () => cs.users.getActive(state).map(u => resultForUser(u)).toArray();
 
   const searchForUser = q => cs.users.search(state, q).map((res) => {
     return resultForUserId(res.item);

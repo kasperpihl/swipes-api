@@ -1,6 +1,7 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import Confirmation from 'src/react/context-menus/confirmation/Confirmation';
 import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
+import * as cs from 'swipes-core-js/selectors';
 import * as a from './';
 
 export const confirm = (options, callback) => (d) => {
@@ -93,32 +94,14 @@ export const selectUser = (options, callback) => (d, getState) => {
     return obj;
   };
 
-  const sortedUsers = users => users.sort(
-    (b, c) => {
-      if (b.get('id') === me.get('id')) {
-        return -1;
-      }
-      if (c.get('id') === me.get('id')) {
-        return 1;
-      }
-      return msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c));
-    },
-  ).toArray();
-
   const allUsers = () => [
     { id: null, title: 'Any one assigned' },
     { id: 'none', title: 'No one assigned' },
-  ].concat(sortedUsers(state.get('users')).map(u => resultForUser(u)));
+  ].concat(cs.users.getActive(state).toArray().map(u => resultForUser(u)));
 
-  const searchForUser = q => sortedUsers(state.get('users')).map((u) => {
-    if (
-      msgGen.users.getFirstName(u).toLowerCase().startsWith(q.toLowerCase()) ||
-      msgGen.users.getLastName(u).toLowerCase().startsWith(q.toLowerCase())
-    ) {
-      return resultForUser(u);
-    }
-    return null;
-  }).filter(v => !!v);
+  const searchForUser = q => cs.users.search(state, q).map((res) => {
+    return resultForUser(state.getIn(['users', res.item]));
+  });
 
   const delegate = {
     onItemAction: (item) => {

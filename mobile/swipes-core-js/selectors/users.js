@@ -38,13 +38,22 @@ export const getSorted = createSelector(
   (users) => users.sort(nameSort),
 );
 
-export const getSortedArray = createSelector(
-  [getUsers],
-  (users) => users.toList().sort(nameSort).toJS(),
+export const getActive = createSelector(
+  [getSorted],
+  (users) => users.filter(u => !u.get('disabled')),
+);
+export const getActiveArray = createSelector(
+  [getActive],
+  (users) => users.toList().toJS(),
+);
+
+export const getDisabled = createSelector(
+  [getSorted],
+  (users) => users.filter(u => !!u.get('disabled')),
 );
 
 export const search = createSelector(
-  [getSortedArray, getString],
+  [getActiveArray, getString],
   (list, string) => {
     let fuse = new Fuse(list, defOptions); // "list" is the item array
     return fuse.search(string || '');
@@ -52,7 +61,7 @@ export const search = createSelector(
 )
 
 export const autoComplete = createSelector(
-  [getSortedArray, getAutoCompleteString],
+  [getActiveArray, getAutoCompleteString],
   (list, autoCompleteString) => {
     let fuse = new Fuse(list, defOptions); // "list" is the item array
     return fuse.search(autoCompleteString || '').map((res) => {
