@@ -136,10 +136,7 @@ const initMe = funcWrap([
                   .filter((user) => {
                     return user('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
                   })
-                  .map((user) => {
-                    return user.merge({ disabled: true });
-                  })
-                  .pluck('id', 'profile', 'disabled')
+                  .without('password', 'organizations', 'services', 'xendoCredentials', 'settings')
                   .coerceTo('ARRAY'),
             });
           }),
