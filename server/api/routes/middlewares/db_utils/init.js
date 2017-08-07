@@ -98,7 +98,7 @@ const initMe = funcWrap([
         return user.merge({
           organizations: user('organizations').map((organization) => {
             return organization.merge({
-              active_users:
+              active_users_real:
                 r.table('users')
                   .getAll(r.args(organization('active_users').default([])))
                   .filter((user) => {
@@ -114,7 +114,7 @@ const initMe = funcWrap([
         return user.merge({
           organizations: user('organizations').map((organization) => {
             return organization.merge({
-              pending_users:
+              pending_users_real:
                 r.table('users')
                   .getAll(r.args(organization('pending_users').default([])))
                   .filter((user) => {
@@ -130,7 +130,7 @@ const initMe = funcWrap([
         return user.merge({
           organizations: user('organizations').map((organization) => {
             return organization.merge({
-              disabled_users:
+              disabled_users_real:
                 r.table('users')
                   .getAll(r.args(organization('disabled_users').default([])))
                   .filter((user) => {

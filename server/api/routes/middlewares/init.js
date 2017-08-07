@@ -60,46 +60,49 @@ const initGetData = valLocals('initGetData', {
       let posts = [];
 
       if (me.organizations.length > 0) {
-        users = me.organizations[0].active_users;
+        users = me.organizations[0].active_users_real;
+        delete me.organizations[0].active_users_real;
 
-        if (me.organizations[0].pending_users) {
-          users = users.concat(me.organizations[0].pending_users || []);
+        if (me.organizations[0].pending_users_real) {
+          users = users.concat(me.organizations[0].pending_users_real || []);
+          delete me.organizations[0].pending_users_real;
         }
 
-        if (me.organizations[0].disabled_users) {
-          users = users.concat(me.organizations[0].disabled_users || []);
+        if (me.organizations[0].disabled_users_real) {
+          users = users.concat(me.organizations[0].disabled_users_real || []);
+          delete me.organizations[0].disabled_users_real;
         }
       }
 
-      if (me.goals.length > 0) {
+      if (me.goals) {
         goals = me.goals;
 
         // We don't want duplication of that data served on the client;
         delete me.goals;
       }
 
-      if (me.posts.length > 0) {
+      if (me.posts) {
         posts = me.posts;
 
         // We don't want duplication of that data served on the client;
         delete me.posts;
       }
 
-      if (me.milestones.length > 0) {
+      if (me.milestones) {
         milestones = me.milestones;
 
         // We don't want duplication of that data served on the client;
         delete me.milestones;
       }
 
-      if (me.ways.length > 0) {
+      if (me.ways) {
         ways = me.ways;
 
         // We don't want duplication of that data served on the client;
         delete me.ways;
       }
 
-      if (me.notes && me.notes.length > 0) {
+      if (me.notes) {
         notes = me.notes;
 
         // We don't want duplication of that data served on the client;
