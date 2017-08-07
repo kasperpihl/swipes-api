@@ -197,7 +197,7 @@ const dbUsersActivateAfterSignUp = funcWrap([
     activated: true,
     updated_at: r.now(),
   }).do((user) => {
-    r.table('organizations').get(user('organizations').nth(0)).update((organization) => {
+    return r.table('organizations').get(user('organizations').nth(0)).update((organization) => {
       return {
         active_users: organization('active_users').default([]).setUnion([user('id')]),
         pending_users: organization('pending_users').default([]).difference([user('id')]),
