@@ -52,7 +52,7 @@ const organizationsCreate = valLocals('organizationsCreate', {
     name: organization_name,
     owner_id: user_id,
     admins: [],
-    users: [user_id],
+    active_users: [user_id],
     created_at: r.now(),
     updated_at: r.now(),
     trial: {
