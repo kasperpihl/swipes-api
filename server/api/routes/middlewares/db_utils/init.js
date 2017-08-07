@@ -139,7 +139,7 @@ const initMe = funcWrap([
                   .map((user) => {
                     return user.merge({ disabled: true });
                   })
-                  .pluck('id', 'profile')
+                  .pluck('id', 'profile', 'disabled')
                   .coerceTo('ARRAY'),
             });
           }),
