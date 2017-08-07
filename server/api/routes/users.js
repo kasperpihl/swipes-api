@@ -5,11 +5,8 @@ import {
   any,
 } from 'valjs';
 import {
-  valBody,
-  sendResponse,
-  valResponseAndSend,
-  mapLocals,
-} from '../utils';
+  organizationConcatUsers,
+} from './middlewares/utils';
 import {
   userAvailability,
   userSignUp,
@@ -48,6 +45,12 @@ import {
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
+import {
+  valBody,
+  sendResponse,
+  valResponseAndSend,
+  mapLocals,
+} from '../utils';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -150,6 +153,9 @@ authed.all('/users.invite',
   })),
   usersGetByEmailWithFields,
   usersCreateTempUnactivatedUser,
+  mapLocals(locals => ({
+    organization: organizationConcatUsers(locals),
+  })),
   usersCreateInvitationToken,
   usersInvitedUserQueueMessage,
   notificationsPushToQueue,

@@ -32,6 +32,9 @@ import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
+  organizationConcatUsers,
+} from './middlewares/utils';
+import {
   valBody,
   valResponseAndSend,
   mapLocals,
@@ -39,27 +42,6 @@ import {
 
 const authed = express.Router();
 const notAuthed = express.Router();
-const createOrganizationWithOnlyChangedFields = (locals) => {
-  const updatedFields = locals.updatedFields;
-  const organization = locals.organization;
-  const pluckedOrganization = {
-    id: organization.id,
-    updated_at: organization.updated_at,
-  };
-
-  updatedFields.forEach((field) => {
-    // if (field === 'active_users' || field === 'pending_users' || field === 'disabled_users') {
-    //   pluckedOrganization.users =
-    //     organization.active_users
-    //       .concat(organization.pending_users)
-    //       .concat(organization.disabled_users);
-    // } else {
-    pluckedOrganization[field] = organization[field];
-    // }
-  });
-
-  return pluckedOrganization;
-};
 
 authed.all('/organizations.create',
   valBody({
@@ -79,7 +61,7 @@ authed.all('/organizations.promoteToAdmin',
   organizationsCheckAdminRights,
   organizationsPromoteToAdmin,
   mapLocals(locals => ({
-    organization: createOrganizationWithOnlyChangedFields(locals),
+    organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
@@ -97,7 +79,7 @@ authed.all('/organizations.demoteAnAdmin',
   organizationsCheckAdminRights,
   organizationsDemoteAnAdmin,
   mapLocals(locals => ({
-    organization: createOrganizationWithOnlyChangedFields(locals),
+    organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
@@ -122,7 +104,7 @@ authed.all('/organizations.transferOwnership',
   organizationsCheckOwnerRights,
   organizationsTransferOwnership,
   mapLocals(locals => ({
-    organization: createOrganizationWithOnlyChangedFields(locals),
+    organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
@@ -148,7 +130,7 @@ authed.all('/organizations.disableUser',
   organizationsDisableUser,
   organizationsCreateUpdateSubscriptionCustomer,
   mapLocals(locals => ({
-    organization: createOrganizationWithOnlyChangedFields(locals),
+    organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
@@ -172,7 +154,7 @@ authed.all('/organizations.enableUser',
   organizationsEnableUser,
   organizationsCreateUpdateSubscriptionCustomer,
   mapLocals(locals => ({
-    organization: createOrganizationWithOnlyChangedFields(locals),
+    organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
@@ -200,7 +182,7 @@ authed.all('/organizations.createStripeCustomer',
   organizationsCreateStripeCustomer,
   organizationsCreateUpdateSubscriptionCustomer,
   mapLocals(locals => ({
-    organization: createOrganizationWithOnlyChangedFields(locals),
+    organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,

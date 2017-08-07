@@ -264,11 +264,9 @@ const organizationsPromoteToAdmin = valLocals('organizationsPromoteToAdmin', {
     .then((result) => {
       const changes = result.changes[0];
       const organization = changes.new_val || changes.old_val;
-      const updatedFields = ['admins'];
 
       setLocals({
         organization,
-        updatedFields,
       });
 
       return next();
@@ -290,11 +288,9 @@ const organizationsDemoteAnAdmin = valLocals('organizationsDemoteAnAdmin', {
     .then((result) => {
       const changes = result.changes[0];
       const organization = changes.new_val || changes.old_val;
-      const updatedFields = ['admins'];
 
       setLocals({
         organization,
-        updatedFields,
       });
 
       return next();
@@ -318,11 +314,9 @@ const organizationsTransferOwnership = valLocals('organizationsTransferOwnership
     .then((result) => {
       const changes = result.changes[0];
       const organization = changes.new_val || changes.old_val;
-      const updatedFields = ['owner_id', 'admins'];
 
       setLocals({
         organization,
-        updatedFields,
       });
 
       return next();
@@ -345,11 +339,9 @@ const organizationsDisableUser = valLocals('organizationsDisableUser', {
       if (result.changes) {
         const changes = result.changes[0];
         const organization = changes.new_val || changes.old_val;
-        const updatedFields = ['disabled_users', 'active_users'];
 
         setLocals({
           organization,
-          updatedFields,
         });
 
         return next();
@@ -374,11 +366,9 @@ const organizationsEnableUser = valLocals('organizationsEnableUser', {
     .then((result) => {
       const changes = result.changes[0];
       const organization = changes.new_val || changes.old_val;
-      const updatedFields = ['disabled_users', 'active_users'];
 
       setLocals({
         organization,
-        updatedFields,
       });
 
       return next();
@@ -390,7 +380,6 @@ const organizationsEnableUser = valLocals('organizationsEnableUser', {
 const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMessage', {
   user_id: string.require(),
   organization: object.require(),
-  updatedFields: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -458,11 +447,9 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
     .then((result) => {
       const changes = result.changes[0];
       const organization = changes.new_val || changes.old_val;
-      const updatedFields = ['stripe_customer_id', 'plan'];
 
       setLocals({
         organization,
-        updatedFields,
       });
 
       return next();
@@ -476,11 +463,9 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
 });
 const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCreateUpdateSubscriptionCustomer', {
   organization: object,
-  updatedFields: array,
 }, (req, res, next, setLocals) => {
   const {
     organization,
-    updatedFields = [],
   } = res.locals;
 
   if (!organization) {
@@ -524,11 +509,8 @@ const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCr
         const changes = result.changes[0];
         const organization = changes.new_val || changes.old_val;
 
-        updatedFields.push('stripe_subscription_id');
-
         setLocals({
           organization,
-          updatedFields,
         });
 
         return next();

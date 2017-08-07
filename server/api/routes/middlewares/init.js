@@ -64,18 +64,11 @@ const initGetData = valLocals('initGetData', {
 
         if (me.organizations[0].pending_users) {
           users = users.concat(me.organizations[0].pending_users || []);
-
-          delete me.organizations[0].pending_users;
         }
 
         if (me.organizations[0].disabled_users) {
           users = users.concat(me.organizations[0].disabled_users || []);
-
-          delete me.organizations[0].disabled_users;
         }
-
-        // We don't want duplication of that data served on the client;
-        delete me.organizations[0].active_users;
       }
 
       if (me.goals.length > 0) {

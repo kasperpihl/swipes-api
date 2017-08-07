@@ -72,8 +72,19 @@ const stepsCreateStep = funcWrap([
 
   return step;
 });
+const organizationConcatUsers = (locals) => {
+  const organization = locals.organization;
+  const active_users = organization.active_users;
+  const disabled_users = organization.disabled_users || [];
+  const pending_users = organization.pending_users || [];
+
+  organization.users = active_users.concat(disabled_users).concat(pending_users);
+
+  return organization;
+};
 
 export {
   attachmentsCreateAttachment,
   stepsCreateStep,
+  organizationConcatUsers,
 };
