@@ -21,9 +21,6 @@ class HOCSidebar extends PureComponent {
   }
   onClick(id, target, e) {
     const { navSet } = this.props;
-    if (target === 'secondary' && id === 'Slack') {
-      return;
-    }
 
     if (id === 'Notifications') {
       this.openNotifications(e);
@@ -37,8 +34,8 @@ class HOCSidebar extends PureComponent {
   }
   getNavItems() {
     return [
-      { id: 'GoalList', svg: 'Goals' },
       { id: 'MilestoneList', svg: 'Milestones' },
+      { id: 'GoalList', svg: 'Goals' },
       { id: 'PostFeed', svg: 'Messages' },
       this.getRemainingOnboarding() ? { id: 'Onboarding', svg: 'Onboarding' } : undefined,
       // { id: 'Find', svg: 'Find' },
