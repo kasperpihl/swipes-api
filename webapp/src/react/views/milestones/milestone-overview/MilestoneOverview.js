@@ -52,38 +52,19 @@ class MilestoneOverview extends PureComponent {
     );
   }
   renderLeftSection() {
-    const { milestone, delegate, tabs, tabIndex, goals } = this.props;
-    const tab = tabs[tabIndex];
-    const goalList = goals.get(tab);
     return (
       <section>
-        <TabBar
-          tabs={tabs.map((t) => {
-            const size = goals.get(t).size;
-            if (size) {
-              t += ` (${size})`;
-            }
-            return t;
-          })}
-          activeTab={tabIndex}
-          delegate={delegate}
-        />
-
-        {this.renderList()}
+        <Section title="This week">
+          {this.renderList('Current')}
+        </Section>
       </section>
     );
   }
-  renderList() {
-    const { delegate, tabs, tabIndex, goals } = this.props;
-    const tab = tabs[tabIndex];
-    const goalList = goals.get(tab);
-
-    if (!goalList.size) {
-      return this.renderEmptyState();
-    }
+  renderList(group) {
+    const { delegate, groupedGoals } = this.props;
 
     return (
-      goalList.map(g => (
+      groupedGoals.get(group).map(g => (
         <HOCGoalListItem
           goalId={g.get('id')}
           key={g.get('id')}
@@ -92,65 +73,15 @@ class MilestoneOverview extends PureComponent {
       ))
     );
   }
-  renderEmptyState() {
-    const { tabs, tabIndex, goals, milestone } = this.props;
-    const tab = tabs[tabIndex];
-    const goalList = goals.get(tab);
 
-    if (tabIndex === 0 && !goalList.size && goals.get('Completed').size) {
-      const extraText = 'Add a new goal to continue the work or close the milestone as completed.';
-      return (
-        <div className="milestone-empty">
-          <div className="milestone-empty__content">
-            Great work on this milestone! All goals have been completed. <br />
-            {milestone.get('closed_at') ? '' : extraText}
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="milestone-empty">
-        <div className="milestone-empty__content">
-          Great milestone! What are the goals that will help you and your team achieve it?
-          <div className="milestone-empty__action" onClick={this.onAddGoals}>Add goals to this milestone</div>
-        </div>
-      </div>
-    );
-  }
   renderRightSection() {
-    const { milestone, goals } = this.props;
-
-    const noCompleted = goals.get('Completed').size;
-    const noGoals = noCompleted + goals.get('Current').size;
-    const percentage = noGoals ? parseInt((noCompleted / noGoals) * 100, 10) : 0;
-
-    const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
-
-    let progressClassName = 'milestone-progress__svg milestone-progress__svg--fg';
-
-    if (milestone.get('closed_at')) {
-      progressClassName += ' milestone-progress__svg--closed';
-    }
-
     return (
       <section>
-        <Section title="Progress">
-          <div className="milestone-progress">
-            <div className="milestone-progress__subtitle">{`${noCompleted} / ${noGoals}`}</div>
-            <Icon icon="MilestoneProgress" className="milestone-progress__svg milestone-progress__svg--bg" />
-            <Icon
-              icon="MilestoneProgress"
-              className={progressClassName}
-              strokeDasharray={PROGRESS_DASH}
-              strokeDashoffset={svgDashOffset}
-            />
-
-            <div className="milestone-progress__inner">
-              <div className="milestone-progress__dot" />
-              <div className="milestone-progress__number">{`${percentage}%`}</div>
-            </div>
-          </div>
+        <Section title="Later">
+          {this.renderList('Later')}
+        </Section>
+        <Section title="Completed">
+          {this.renderList('Completed')}
         </Section>
       </section>
     );

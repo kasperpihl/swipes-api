@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'classes/react-utils';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
@@ -30,19 +31,7 @@ class HOCMilestoneOverview extends PureComponent {
     propsOrPop(this, 'milestone');
     setupLoading(this);
   }
-  componentWillMount() {
-    this.setState({
-      tabIndex: 0,
-      tabs: ['Current', 'Completed'],
-      goals: this.getFilteredGoals(this.props.milestone, this.props.starredGoals),
-    });
-  }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      goals: this.getFilteredGoals(nextProps.milestone, nextProps.starredGoals),
-    });
-  }
   onContext(e) {
     const {
       closeMilestone,
@@ -134,8 +123,6 @@ class HOCMilestoneOverview extends PureComponent {
     const { goals, milestone, addGoalToMilestone } = this.props;
     const goal = goals.get(goalId);
     if (goal.get('milestone_id') !== milestone.get('id')) {
-      const isCompleted = new GoalsUtil(goal).getIsCompleted();
-      this.tabDidChange(isCompleted ? 1 : 0);
       this.setLoading('add');
       addGoalToMilestone(milestone.get('id'), goalId).then((res) => {
         if (res && res.ok) {
@@ -149,7 +136,6 @@ class HOCMilestoneOverview extends PureComponent {
   onCreateGoal(title) {
     const { milestone, createGoal } = this.props;
     this.setLoading('add');
-    this.tabDidChange(0);
     createGoal(title, milestone.get('id')).then((res) => {
       if (res && res.ok) {
         this.clearLoading('add');
@@ -182,41 +168,7 @@ class HOCMilestoneOverview extends PureComponent {
       },
     });
   }
-  tabDidChange(index) {
-    const { tabIndex } = this.state;
-    if (tabIndex !== index) {
-      this.setState({
-        tabIndex: index,
-      });
-    }
-  }
-  getFilteredGoals(milestone, starredGoals) {
-    const goals = msgGen.milestones.getGoals(milestone);
-    let gg = goals.sort((g1, g2) => {
-      const g1StarI = starredGoals.indexOf(g1.get('id'));
-      const g2StarI = starredGoals.indexOf(g2.get('id'));
-      if (g1StarI > g2StarI) {
-        return -1;
-      }
-      if (g2StarI > g1StarI) {
-        return 1;
-      }
-      return 0;
-    }).groupBy(g => new GoalsUtil(g).getIsCompleted() ? 'Completed' : 'Current');
 
-    // Make sure there if no current or completed to add an empty list
-    gg = gg.set('Current', gg.get('Current') || List());
-    gg = gg.set('Completed', gg.get('Completed') || List());
-    return gg;
-  }
-  getGoalListProps() {
-    const { tabIndex, tabs } = this.state;
-    return {
-      delegate: this,
-      tabIndex,
-      tabs,
-    };
-  }
   getOptionsForE(e) {
     return {
       boundingRect: e.target.getBoundingClientRect(),
@@ -226,16 +178,13 @@ class HOCMilestoneOverview extends PureComponent {
     };
   }
   render() {
-    const { milestone } = this.props;
-    const { goals, tabs, tabIndex } = this.state;
+    const { milestone, groupedGoals } = this.props;
 
     return (
       <MilestoneOverview
         {...this.bindLoading()}
         milestone={milestone}
-        tabs={tabs}
-        goals={goals}
-        tabIndex={tabIndex}
+        groupedGoals={groupedGoals}
         delegate={this}
       />
     );
@@ -248,8 +197,8 @@ HOCMilestoneOverview.propTypes = {};
 function mapStateToProps(state, ownProps) {
   return {
     goals: state.get('goals'),
+    groupedGoals: cs.milestones.getGroupedGoals(state, ownProps),
     milestone: state.getIn(['milestones', ownProps.milestoneId]),
-    starredGoals: state.getIn(['me', 'settings', 'starred_goals']),
   };
 }
 
