@@ -20,7 +20,7 @@ const defOptions = {
 
 const getAutoCompleteString = state => state.getIn(['autoComplete', 'string']);
 const getUsers = state => state.get('users');
-const getString = (state, string) => string;
+const getSearchString = (state, props) => props.searchString;
 
 const nameSort = (a, b) => {
   const f1 = msgGen.users.getFirstName(a);
@@ -53,7 +53,7 @@ export const getDisabled = createSelector(
 );
 
 export const search = createSelector(
-  [getActiveArray, getString],
+  [getActiveArray, getSearchString],
   (list, string) => {
     let fuse = new Fuse(list, defOptions); // "list" is the item array
     return fuse.search(string || '');

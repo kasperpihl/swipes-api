@@ -61,7 +61,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
 
   const allUsers = () => cs.users.getActive(state).map(u => resultForUser(u)).toArray();
 
-  const searchForUser = q => cs.users.search(state, q).map((res) => {
+  const searchForUser = q => cs.users.search(state, {searchString:  q}).map((res) => {
     return resultForUserId(res.item);
   });
 

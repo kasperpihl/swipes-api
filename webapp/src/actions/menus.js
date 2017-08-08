@@ -99,7 +99,7 @@ export const selectUser = (options, callback) => (d, getState) => {
     { id: 'none', title: 'No one assigned' },
   ].concat(cs.users.getActive(state).toArray().map(u => resultForUser(u)));
 
-  const searchForUser = q => cs.users.search(state, q).map((res) => {
+  const searchForUser = q => cs.users.search(state, {searchString: q}).map((res) => {
     return resultForUser(state.getIn(['users', res.item]));
   });
 
