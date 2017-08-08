@@ -1,26 +1,15 @@
 import { createSelector } from 'reselect';
 import Fuse from 'fuse.js';
+import { searchSelectorFromKeys, getFuzzyOptionsWithKeys } from '../classes/utils';
 
-const defOptions = {
-  shouldSort: true,
-  includeScore: true,
-  includeMatches: true,
-  tokenize: true,
-  id: 'id',
-  threshold: 0.5,
-  matchAllTokens: true,
-  maxPatternLength: 32,
-  minMatchCharLength: 2,
-  keys: [
-    'email',
-    'profile.first_name',
-    'profile.last_name',
-  ],
-};
+const options = getFuzzyOptionsWithKeys([
+  'email',
+  'profile.first_name',
+  'profile.last_name',
+]);
 
 const getAutoCompleteString = state => state.getIn(['autoComplete', 'string']);
 const getUsers = state => state.get('users');
-const getSearchString = (state, props) => props.searchString;
 
 const nameSort = (a, b) => {
   const f1 = msgGen.users.getFirstName(a);
@@ -52,18 +41,16 @@ export const getDisabled = createSelector(
   (users) => users.filter(u => !!u.get('disabled')),
 );
 
-export const search = createSelector(
-  [getActiveArray, getSearchString],
-  (list, string) => {
-    let fuse = new Fuse(list, defOptions); // "list" is the item array
-    return fuse.search(string || '');
-  }
-)
+export const search = searchSelectorFromKeys([
+  'email',
+  'profile.first_name',
+  'profile.last_name',
+], getActive);
 
 export const autoComplete = createSelector(
   [getActiveArray, getAutoCompleteString],
   (list, autoCompleteString) => {
-    let fuse = new Fuse(list, defOptions); // "list" is the item array
+    let fuse = new Fuse(list, options); // "list" is the item array
     return fuse.search(autoCompleteString || '').map((res) => {
       const { item } = res;
       const user = msgGen.users.getUser(item);

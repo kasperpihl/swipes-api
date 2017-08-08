@@ -1,25 +1,11 @@
 import { createSelector } from 'reselect';
-import Fuse from 'fuse.js';
 import { List } from 'immutable';
 import GoalsUtil from '../classes/goals-util';
-
-const defOptions = {
-  shouldSort: true,
-  includeScore: true,
-  includeMatches: true,
-  tokenize: true,
-  id: 'id',
-  threshold: 0.5,
-  matchAllTokens: true,
-  maxPatternLength: 32,
-  minMatchCharLength: 2,
-  keys: [
-    'title',
-  ],
-};
+import { searchSelectorFromKeys } from '../classes/utils';
 
 const getMilestone = (state, props) => state.getIn(['milestones', props.milestoneId]);
 const getAllGoals = (state) => state.get('goals');
+const getMilestones = (state) => state.get('milestones');
 
 export const getGoals = createSelector(
   [ getMilestone, getAllGoals ],
@@ -41,3 +27,7 @@ export const getGroupedGoals = createSelector(
     return gg;
   }
 )
+
+export const search = searchSelectorFromKeys([
+  'title',
+], getMilestones);

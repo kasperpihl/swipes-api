@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { searchSelectorFromKeys } from '../classes/utils';
 
 const getFilterId = (state, props) => props.filterId;
 const getPosts = (state) => state.get('posts');
@@ -14,3 +15,10 @@ export const getSortedIds = createSelector(
     }).map(p => p.get('id'));
   }
 )
+
+export const search = searchSelectorFromKeys([
+  'message',
+  'comments.message',
+  'attachments.title',
+  'comments.attachments.title',
+], getPosts);

@@ -1,5 +1,37 @@
 import { fromJS, Map } from 'immutable';
+import { createSelector } from 'reselect'
+import Fuse from 'fuse.js';
 import { funcWrap } from 'valjs';
+
+export function searchSelectorFromKeys(keys, getAll) {
+  const getSearchString = (state, props) => props.searchString;
+  const arraySelector = createSelector(
+    [ getAll ],
+    list => list.toList().toJS(),
+  );
+  const options = getFuzzyOptionsWithKeys(keys);
+  return createSelector(
+    [arraySelector, getSearchString],
+    (list, string) => {
+      let fuse = new Fuse(list, options); // "list" is the item array
+      return fuse.search(string || '');
+    }
+  )
+}
+
+export function getFuzzyOptionsWithKeys(keys) {
+  return Object.assign({
+    shouldSort: true,
+    includeScore: true,
+    includeMatches: true,
+    location: 0,
+    id: 'id',
+    threshold: 0.5,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 2,
+  }, { keys });
+}
 
 export function apiRequest(endpoint, params) {
   const serData = {
