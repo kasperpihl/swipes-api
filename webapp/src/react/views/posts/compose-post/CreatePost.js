@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate, iconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
+import { setupDelegate, miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
@@ -23,7 +23,7 @@ class CreatePost extends PureComponent {
 
     return (
       <div className="create-post__context" onClick={this.onContextClick}>
-        <Icon icon={iconForId(post.getIn(['context', 'id']))} className="create-post__svg" />
+        <Icon icon={miniIconForId(post.getIn(['context', 'id']))} className="create-post__svg" />
         {post.getIn(['context', 'title'])}
       </div>
     )

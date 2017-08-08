@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
+import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
 import './styles/search.scss';
@@ -33,19 +33,20 @@ class Search extends PureComponent {
 
   }
   renderResults() {
-    const { searchString } = this.props;
+    const { searchString, limit } = this.props;
     return (
       <HOCSearchResults
         searchString={searchString}
+        limit={limit}
       />
     )
   }
   render() {
     return (
-      <div className="search">
-        {this.renderSearchField()}
+      <SWView header={this.renderSearchField()}>
         {this.renderResults()}
-      </div>
+      </SWView>
+
     );
   }
 }

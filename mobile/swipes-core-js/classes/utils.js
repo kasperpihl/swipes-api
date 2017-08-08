@@ -24,10 +24,10 @@ export function getFuzzyOptionsWithKeys(keys) {
     shouldSort: true,
     includeScore: true,
     includeMatches: true,
-    location: 0,
-    id: 'id',
+    // location: 0,
+    // id: 'id',
     threshold: 0.5,
-    distance: 100,
+    // distance: 1000,
     maxPatternLength: 32,
     minMatchCharLength: 2,
   }, { keys });
@@ -152,7 +152,7 @@ export function valAction(actionName, arrayArgs, actionHandler) {
   return funcWrap(arrayArgs, handler);
 }
 
-export function iconForId(id) {
+export function miniIconForId(id) {
   if(id.startsWith('G')) {
     return 'MiniGoal';
   } else if (id.startsWith('M')) {
@@ -161,6 +161,22 @@ export function iconForId(id) {
     return 'MiniNote';
   } else if (id.startsWith('F')) {
     return 'MiniFile';
+  } else if (id.startsWith('P')) {
+    return 'Messages';
+  }
+}
+
+export function iconForId(id) {
+  if(id.startsWith('G')) {
+    return 'Goals';
+  } else if (id.startsWith('M')) {
+    return 'Milestones';
+  } else if (id.startsWith('N')) {
+    return 'Note';
+  } else if (id.startsWith('F')) {
+    return 'File';
+  } else if (id.startsWith('P')) {
+    return 'Messages';
   }
 }
 

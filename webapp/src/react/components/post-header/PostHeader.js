@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate, iconForId } from 'swipes-core-js/classes/utils';
+import { setupDelegate, miniIconForId } from 'swipes-core-js/classes/utils';
 import TimeAgo from 'components/time-ago/TimeAgo';
 // import SWView from 'SWView';
 import Button from 'Button';
@@ -78,7 +78,7 @@ class PostHeader extends PureComponent {
     let icon;
 
     if (post.get('context')) {
-      icon = <Icon className="post-header__svg" icon={iconForId(post.getIn(['context', 'id']))} />;
+      icon = <Icon className="post-header__svg" icon={miniIconForId(post.getIn(['context', 'id']))} />;
     }
 
     return (

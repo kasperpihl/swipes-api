@@ -16,9 +16,14 @@ export const getSortedIds = createSelector(
   }
 )
 
+export const searchablePosts = createSelector(
+  [ getPosts ],
+  posts => posts.map(p => p.set('comments', p.get('comments').toList())).toList()
+)
+
 export const search = searchSelectorFromKeys([
   'message',
   'comments.message',
   'attachments.title',
   'comments.attachments.title',
-], getPosts);
+], searchablePosts);

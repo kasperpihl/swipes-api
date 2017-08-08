@@ -1,0 +1,9 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.search-result {
+  &__icon {
+    @include size(24px);
+    @include svg-color($deepBlue-30);
+  }
+}

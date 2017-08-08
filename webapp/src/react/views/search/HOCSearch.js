@@ -15,6 +15,7 @@ class HOCSearch extends PureComponent {
     super(props);
     this.state = {
       searchString: '',
+      limit: 10,
     };
     // setupLoading(this);
   }
@@ -24,12 +25,13 @@ class HOCSearch extends PureComponent {
     this.setState({ searchString: e.target.value });
   }
   render() {
-    const { searchString } = this.state;
+    const { searchString, limit } = this.state;
 
     return (
       <Search
         searchString={searchString}
         delegate={this}
+        limit={limit}
       />
     );
   }
