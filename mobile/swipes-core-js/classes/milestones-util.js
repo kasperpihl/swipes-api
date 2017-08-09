@@ -17,5 +17,4 @@ export default class MilestonesUtil {
   getLastActivityByType(type) {
     return this.milestone.get('history').findLast((a) => a.get('type') === type);
   }
-
 }
