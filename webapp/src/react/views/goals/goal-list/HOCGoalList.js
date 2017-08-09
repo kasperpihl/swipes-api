@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 import { connect } from 'react-redux';
 import { fromJS, Set } from 'immutable';
 import { map } from 'react-immutable-proptypes';
@@ -18,35 +19,9 @@ import GoalList from './GoalList';
 class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      tabs: ['current', 'unassigned', 'search'],
-      tabIndex: 0,
-      showFilter: false,
-      filterProp: fromJS([
-        { id: 'goalType' },
-        ' assigned to ',
-        { id: 'userId' },
-        ' in ',
-        { id: 'milestoneId' },
-      ]),
-    };
+    this.state = {};
     setupLoading(this);
-    if (props.savedState) {
-      this.state.tabIndex = Math.min(this.state.tabs.length - 1, props.savedState.get('tabIndex'));
-    }
-    const { tabIndex, tabs } = this.state;
-
-    if (tabIndex === (tabs.length - 1)) {
-      this.state.showFilter = true;
-    }
   }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.goals !== this.props.goals) {
-      this.updateFilter({});
-    }
-  }
-
   onScroll(e) {
     this._scrollTop = e.target.scrollTop;
   }
@@ -63,38 +38,7 @@ class HOCGoalList extends PureComponent {
       },
     });
   }
-  onEditFilter() {
-    this.setState({ showFilter: true });
-  }
-  onHideFilter() {
-    this.setState({ showFilter: false });
-  }
-  onClearFilter() {
-    const { clearFilter } = this.props;
-    clearFilter('goals', 'search');
-  }
 
-  onChangeFilter(obj, e) {
-    const options = {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'center',
-    };
-    if (obj.id === 'goalType') {
-      const { selectGoalType } = this.props;
-      selectGoalType(options, res => this.updateFilter({ goalType: res.id }));
-    }
-    if (obj.id === 'userId') {
-      const { selectUser } = this.props;
-      selectUser(options, res => this.updateFilter({ userId: res.id }));
-    }
-    if (obj.id === 'milestoneId') {
-      const { selectMilestone } = this.props;
-      selectMilestone(options, res => this.updateFilter({ milestoneId: res.id }));
-    }
-    if (obj.id === 'matching') {
-      this.updateFilter({ matching: obj.value });
-    }
-  }
   onAddGoal(e) {
     const { inputMenu, createGoal } = this.props;
     const options = this.getOptionsForE(e);
@@ -105,7 +49,6 @@ class HOCGoalList extends PureComponent {
     }, (title) => {
       if (title && title.length) {
         this.setLoading('add');
-        this.tabDidChange(this.state.tabs.indexOf('unassigned'));
         createGoal(title).then((res) => {
           if (res && res.ok) {
             this.clearLoading('add');
@@ -125,80 +68,21 @@ class HOCGoalList extends PureComponent {
   }
   saveState() {
     const { saveState } = this.props;
-    const { tabIndex } = this.state;
     const savedState = {
-      tabIndex,
       scrollTop: this._scrollTop,
     }; // state if this gets reopened
     saveState(savedState);
   }
-  updateFilter(mergeObj) {
-    const { saveCache, filters, updateFilter } = this.props;
-    const { tabs, tabIndex } = this.state;
-    const filter = filters.getIn([tabs[tabIndex], 'filter']);
-    if (tabIndex === (tabs.size - 1)) {
-      saveCache('list-filter', newFilter);
-    }
-    updateFilter('goals', 'search', filter.merge(mergeObj));
-  }
 
-  tabDidChange(index) {
-    const { tabIndex, tabs } = this.state;
-    if (tabIndex !== index) {
-      const showFilter = (index === (tabs.length - 1));
-      this.setState({
-        tabIndex: index,
-        showFilter,
-      });
-    } else if (index === (tabs.length - 1)) {
-      if (!this.state.showFilter) {
-        this.setState({ showFilter: true });
-      }
-    }
-  }
   render() {
-    const { me, savedState, filters, goals, starredGoals: sG } = this.props;
-    const {
-      tabIndex,
-      tabs,
-      showFilter,
-      filterProp,
-    } = this.state;
-    let goalFilter = filters.get(tabs[tabIndex]);
-
-    goalFilter = goalFilter.set('goals', goalFilter.get('goals').sort((g1, g2) => {
-      const g1StarI = sG.indexOf(g1);
-      const g2StarI = sG.indexOf(g2);
-
-      if (g1StarI > g2StarI) {
-        return -1;
-      }
-
-      if (g2StarI > g1StarI) {
-        return 1;
-      }
-
-      return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']));
-    }));
+    const { savedState, goals } = this.props;
 
     return (
       <GoalList
-        goals={goalFilter.get('goals')}
-        filter={goalFilter.get('filter')}
-        tabIndex={tabIndex}
+        goals={goals}
         savedState={savedState}
         {...this.bindLoading()}
         delegate={this}
-        tabs={tabs.map((tId, i) => {
-          let title = filters.getIn([tId, 'title']);
-          const size = filters.getIn([tId, 'goals']).size;
-          if (i < (tabs.length - 1) && size) {
-            title += ` (${size})`;
-          }
-          return title;
-        })}
-        filterProp={filterProp}
-        showFilter={showFilter}
       />
     );
   }
@@ -206,10 +90,7 @@ class HOCGoalList extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    goals: state.get('goals'),
-    filters: state.getIn(['filters', 'goals']),
-    cache: state.getIn(['cache', 'list-filter']),
-    starredGoals: state.getIn(['me', 'settings', 'starred_goals']),
+    goals: cs.goals.assignedToMe(state),
   };
 }
 
@@ -217,19 +98,13 @@ function mapStateToProps(state) {
 const { func, object } = PropTypes;
 HOCGoalList.propTypes = {
   goals: map,
-  cache: map,
   savedState: object,
-  saveCache: func,
   saveState: func,
   createGoal: func,
   openSecondary: func,
   navPush: func,
   delegate: object,
   inputMenu: func,
-  selectUser: func,
-  selectAssignees: func,
-  selectGoalType: func,
-  selectMilestone: func,
   // removeThis: PropTypes.string.isRequired
 };
 

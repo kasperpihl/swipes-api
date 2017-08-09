@@ -3,43 +3,20 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { map, list } from 'react-immutable-proptypes';
 import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
-import TabBar from 'components/tab-bar/TabBar';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import Filter from 'components/filter/Filter';
 import SWView from 'SWView';
 import Button from 'Button';
-import Icon from 'Icon';
-import Measure from 'react-measure';
+// import Icon from 'Icon';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import FilterFooter from './FilterFooter';
-
 
 import './styles/goals-list.scss';
 
 class GoalList extends Component {
   constructor(props) {
     super(props);
-    this.state = { filterHeight: 0 };
-
-    setupDelegate(this, 'onClearFilter', 'onScroll', 'onAddGoal', 'onChangeFilter');
-    bindAll(this, ['onFilterHeight']);
-  }
-  onFilterHeight(dim) {
-    this.setState({ filterHeight: dim.height });
+    setupDelegate(this, 'onScroll', 'onAddGoal');
   }
 
-  renderTabbar() {
-    const {
-      tabIndex,
-      delegate,
-      tabs,
-    } = this.props;
-    return (
-      <div className="goals-list__tab-bar">
-        <TabBar tabs={tabs} delegate={delegate} activeTab={tabIndex} />
-      </div>
-    );
-  }
   renderHeader() {
     const { getLoading } = this.props;
     return (
@@ -52,79 +29,13 @@ class GoalList extends Component {
             onClick={this.onAddGoal}
           />
         </HOCHeaderTitle>
-        {this.renderTabbar()}
       </div>
     );
   }
-  renderSearch() {
-    return <input type="text" />;
-  }
-  renderFilter() {
-    const { filterProp, filter } = this.props;
-    const filterArray = filterProp.map((p) => {
-      if (typeof p === 'string') {
-        return p;
-      }
-      let newString;
-
-      if (p.get('id') === 'goalType') {
-        newString = msgGen.goals.getType(filter.get('goalType'));
-      } else if (p.get('id') === 'userId') {
-        newString = msgGen.users.getName(filter.get('userId'));
-      } else if (p.get('id') === 'milestoneId') {
-        return p.set('string', msgGen.milestones.getName(filter.get('milestoneId')));
-      } else if (p.get('id') === 'matching') {
-        if (!filter.get('matching') || !filter.get('matching').length) {
-          return p.set('string', 'anything');
-        }
-        return p.set('string', `"${filter.get('matching')}"`);
-      }
-      if (newString !== p.get('string')) {
-        return p.set('string', newString);
-      }
-
-      return p;
-    }).toJS();
-    const hasFilter = !!filter.size;
-    return (
-      <Measure onMeasure={this.onFilterHeight}>
-        <div className="goals-list__filter">
-          <div className="goals-list__search">
-            <input type="text"
-              autoFocus
-              placeholder="Search for goals"
-              value={filter.get('matching') || ''}
-              onChange={(e) => {
-                this.onChangeFilter({
-                  id: 'matching',
-                  value: e.target.value,
-                }, e);
-              }}
-            />
-            <Icon icon="Find" className="goals-list__search-svg" />
-          </div>
-          <div className="goals-list__filter-wrap">
-            <Filter
-              onClick={(id, obj, e) => {
-                this.onChangeFilter(obj, e);
-              }}
-              filter={filterArray}
-            />
-
-            {hasFilter ? (
-              <div className="goals-list__filter-actions">
-                <div className="goals-list__filter-action" onClick={this.onClearFilter}>Clear filter</div>
-              </div>
-            ) : undefined}
-          </div>
-        </div>
-      </Measure>
-    );
-  }
   renderList() {
-    const { filter, goals, delegate, numberOfStars } = this.props;
+    const { goals, delegate } = this.props;
 
-    if (filter.get('goalType') === 'current' && !goals.size) {
+    if (!goals.size) {
       return (
         <div className="goals-empty-state">
           <div className="goals-empty-state__title">Goals</div>
@@ -143,37 +54,17 @@ class GoalList extends Component {
     }
 
     const i = 0;
-    return goals.map(goalId => (
+    return goals.toArray().map(goal => (
       <HOCGoalListItem
-        goalId={goalId}
+        goalId={goal.get('id')}
         delegate={delegate}
-        key={goalId}
+        key={goal.get('id')}
       />
     ));
   }
-  renderFilterFooter() {
-    const { filter, goals, showFilter, delegate, tabs, tabIndex } = this.props;
-    let status = `${goals.size} results`;
-    if ((tabIndex !== (tabs.length - 1))) {
-      status = msgGen.goals.getFilterLabel(goals.size, filter);
-    }
-    return (
-      <FilterFooter
-        status={status}
-        delegate={delegate}
-        disableEdit={showFilter || (tabIndex !== (tabs.length - 1))}
-      />
-    );
-  }
   render() {
-    const { showFilter, tabIndex, savedState } = this.props;
-    const { filterHeight } = this.state;
-    let className = 'goals-list';
-    const style = {};
-    if (showFilter) {
-      style.paddingTop = `${filterHeight}px`;
-      className += ' goals-list--show-filters';
-    }
+    const { savedState } = this.props;
+
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
     return (
       <SWView
@@ -181,9 +72,7 @@ class GoalList extends Component {
         onScroll={this.onScroll}
         initialScroll={initialScroll}
       >
-        <div className={className} style={style} key={tabIndex}>
-          {this.renderFilter()}
-          {this.renderFilterFooter()}
+        <div className="goals-list">
           {this.renderList()}
         </div>
       </SWView>
