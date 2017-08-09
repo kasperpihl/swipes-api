@@ -14,7 +14,7 @@ import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
 import PostHeader from 'components/post-header/PostHeader';
-import Reactions from 'components/reactions/Reactions';
+import HOCReactions from 'components/reactions/HOCReactions';
 import CommentView from './CommentView';
 // import Button from 'Button';
 import Icon from 'Icon';
@@ -120,14 +120,13 @@ class PostView extends PureComponent {
     )
   }
   renderPostActions() {
-    const { post, delegate } = this.props;
+    const { post } = this.props;
 
     return (
       <div className="post__actions">
-        <Reactions
+        <HOCReactions
           reactions={post.get('reactions')}
           postId={post.get('id')}
-          delegate={delegate}
         />
       </div>
     )

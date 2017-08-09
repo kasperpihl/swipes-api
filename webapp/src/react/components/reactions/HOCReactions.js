@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupDelegate, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
+import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import AssigneeTooltip from 'components/assigning/AssigneeTooltip';
@@ -14,7 +14,6 @@ class HOCReactions extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupLoading(this);
     bindAll(this, ['onEnter', 'onLeave', 'onAddReaction', 'onRemoveReaction']);
   }
   componentWillMount() {
@@ -30,7 +29,7 @@ class HOCReactions extends PureComponent {
     const { postId, commentId, addReaction, commentAddReaction } = this.props;
     const runFunc = commentId ? commentAddReaction : addReaction;
 
-    this.setLoading('reaction');
+    this.setState({ iLike: true });
     runFunc({
       post_id: postId,
       reaction: 'like',
@@ -41,14 +40,13 @@ class HOCReactions extends PureComponent {
           'Where': commentId ? 'Comment' : 'Post',
         });
       }
-      this.clearLoading('reaction')
     });
   }
   onRemoveReaction() {
     const { postId, commentId, removeReaction, commentRemoveReaction } = this.props;
     const runFunc = commentId ? commentRemoveReaction : removeReaction;
 
-    this.setLoading('reaction');
+    this.setState({ iLike: false });
     runFunc({
       post_id: postId,
       comment_id: commentId,
@@ -58,7 +56,6 @@ class HOCReactions extends PureComponent {
           'Where': commentId ? 'Comment' : 'Post',
         });
       }
-      this.clearLoading('reaction')
     });
   }
   onEnter(e) {
@@ -91,12 +88,11 @@ class HOCReactions extends PureComponent {
   onLeave() {
     const { tooltip } = this.props;
 
-    clearTimeout(this.tooltipDelay)
+    clearTimeout(this.tooltipDelay);
     tooltip(null);
   }
   updateILike(nextReactions) {
-    const { reactions } = this.props;
-    const myId = msgGen.users.getUser('me').get('id');
+    const { reactions, myId } = this.props;
     const { iLike } = this.state;
 
     if (typeof iLike === 'undefined' || reactions !== nextReactions) {
@@ -108,37 +104,29 @@ class HOCReactions extends PureComponent {
     }
   }
   renderButton() {
-    const { commentId: cId } = this.props;
     const { iLike } = this.state;
-    let className = 'reactions__button';
+
     let iconClass = 'reactions__heart';
-
-    if (this.isLoading('reaction')) {
-      className += ' reactions__button--loading';
-    }
-
     if (iLike) {
       iconClass += ' reactions__heart--liked';
     }
 
-    const labelAction = iLike ? 'Unlike' : 'Like';
     const onClick = iLike ? this.onRemoveReaction : this.onAddReaction;
 
     return (
-      <div onClick={onClick} className={className}>
+      <div onClick={onClick} className="reactions__button">
         <Icon icon="Heart" className={iconClass} />
       </div>
     )
   }
   renderLikers() {
-    const { reactions, commentId, commentView } = this.props;
+    const { reactions } = this.props;
 
     if (!reactions || !reactions.size) {
       return undefined;
     }
 
     const { iLike } = this.state;
-    let likeString = reactions.size;
     let className = 'reactions__label';
 
     if (iLike) {
@@ -146,21 +134,12 @@ class HOCReactions extends PureComponent {
     }
 
     return (
-      <div className={className}>
-        {likeString}
-      </div>
+      <div className={className}>{reactions.size}</div>
     )
   }
   render() {
-    const { commentId } = this.props;
-    let className = 'reactions';
-
-    if (commentId) {
-      className += ' reactions--comment'
-    }
-
     return (
-      <div className={className} onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
+      <div className="reactions" onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
         {this.renderButton()}
         {this.renderLikers()}
       </div>
@@ -172,9 +151,10 @@ class HOCReactions extends PureComponent {
 
 HOCReactions.propTypes = {};
 
-function mapStateToProps() {
-  return {};
-}
+const mapStateToProps = state => ({
+  myId: state.getIn(['me', 'id']),
+});
+
 export default connect(mapStateToProps, {
   tooltip: a.main.tooltip,
   addReaction: ca.posts.addReaction,

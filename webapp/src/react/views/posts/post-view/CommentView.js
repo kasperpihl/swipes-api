@@ -7,7 +7,7 @@ import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
-import Reactions from 'components/reactions/Reactions';
+import HOCReactions from 'components/reactions/HOCReactions';
 import './styles/comment-view.scss';
 
 class CommentView extends PureComponent {
@@ -125,12 +125,11 @@ class CommentView extends PureComponent {
     )
   }
   renderReaction() {
-    const { comment, delegate, postId } = this.props;
+    const { comment, postId } = this.props;
 
     return (
-      <Reactions
+      <HOCReactions
         reactions={comment.get('reactions')}
-        delegate={delegate}
         postId={postId}
         commentId={comment.get('id')}
       />
