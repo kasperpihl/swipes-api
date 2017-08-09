@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
+import * as ca from 'swipes-core-js/actions';
+import { setupDelegate, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import AssigneeTooltip from 'components/assigning/AssigneeTooltip';
@@ -14,9 +14,8 @@ class HOCReactions extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-
-    setupDelegate(this, 'onAddReaction', 'onRemoveReaction');
-    bindAll(this, ['onEnter', 'onLeave']);
+    setupLoading(this);
+    bindAll(this, ['onEnter', 'onLeave', 'onAddReaction', 'onRemoveReaction']);
   }
   componentWillMount() {
     this.updateILike(this.props.reactions);
@@ -26,6 +25,41 @@ class HOCReactions extends PureComponent {
   }
   componentWillUnmount() {
     clearTimeout(this.tooltipDelay);
+  }
+  onAddReaction() {
+    const { postId, commentId, addReaction, commentAddReaction } = this.props;
+    const runFunc = commentId ? commentAddReaction : addReaction;
+
+    this.setLoading('reaction');
+    runFunc({
+      post_id: postId,
+      reaction: 'like',
+      comment_id: commentId || null,
+    }).then((res) => {
+      if(res.ok) {
+        window.analytics.sendEvent('Reaction added', {
+          'Where': commentId ? 'Comment' : 'Post',
+        });
+      }
+      this.clearLoading('reaction')
+    });
+  }
+  onRemoveReaction() {
+    const { postId, commentId, removeReaction, commentRemoveReaction } = this.props;
+    const runFunc = commentId ? commentRemoveReaction : removeReaction;
+
+    this.setLoading('reaction');
+    runFunc({
+      post_id: postId,
+      comment_id: commentId,
+    }).then((res) => {
+      if(res.ok) {
+        window.analytics.sendEvent('Reaction removed', {
+          'Where': commentId ? 'Comment' : 'Post',
+        });
+      }
+      this.clearLoading('reaction')
+    });
   }
   onEnter(e) {
     const { reactions } = this.props;
@@ -74,12 +108,12 @@ class HOCReactions extends PureComponent {
     }
   }
   renderButton() {
-    const { isLoading, commentId: cId } = this.props;
+    const { commentId: cId } = this.props;
     const { iLike } = this.state;
     let className = 'reactions__button';
     let iconClass = 'reactions__heart';
 
-    if (isLoading) {
+    if (this.isLoading('reaction')) {
       className += ' reactions__button--loading';
     }
 
@@ -88,7 +122,7 @@ class HOCReactions extends PureComponent {
     }
 
     const labelAction = iLike ? 'Unlike' : 'Like';
-    const onClick = iLike ? this.onRemoveReactionCached(cId) : this.onAddReactionCached(cId);
+    const onClick = iLike ? this.onRemoveReaction : this.onAddReaction;
 
     return (
       <div onClick={onClick} className={className}>
@@ -110,15 +144,6 @@ class HOCReactions extends PureComponent {
     if (iLike) {
       className += ' reactions__label--liked';
     }
-
-    /*if (!commentId) {
-      const userIds = reactions.map(r => r.get('created_by'));
-      const nameString = msgGen.users.getNames(userIds, {
-        number: 2,
-        capitalize: true,
-      });
-      likeString = `${nameString} like this.`;
-    }*/
 
     return (
       <div className={className}>
@@ -152,4 +177,8 @@ function mapStateToProps() {
 }
 export default connect(mapStateToProps, {
   tooltip: a.main.tooltip,
+  addReaction: ca.posts.addReaction,
+  commentAddReaction: ca.posts.commentAddReaction,
+  commentRemoveReaction: ca.posts.commentRemoveReaction,
+  removeReaction: ca.posts.removeReaction,
 })(HOCReactions);

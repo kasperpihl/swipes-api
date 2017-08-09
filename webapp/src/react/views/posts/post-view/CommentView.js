@@ -78,15 +78,6 @@ class CommentView extends PureComponent {
     return resArray;
   }
   renderMessage() {
-    /*
-    <!USTFL9YVE|Tihomir> hi beauty
-
-    [
-      <a href>T</a>,
-       hi beauty
-    ]
-
-    */
     const { comment } = this.props;
 
     const newLinesArray = comment.get('message').split('\n');
@@ -134,15 +125,14 @@ class CommentView extends PureComponent {
     )
   }
   renderReaction() {
-    const { comment, delegate, loadingReaction } = this.props;
+    const { comment, delegate, postId } = this.props;
 
     return (
       <Reactions
         reactions={comment.get('reactions')}
-        isLoading={loadingReaction}
         delegate={delegate}
+        postId={postId}
         commentId={comment.get('id')}
-        fromFeed
       />
     );
   }

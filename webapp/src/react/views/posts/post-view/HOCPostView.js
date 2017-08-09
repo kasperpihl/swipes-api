@@ -34,41 +34,6 @@ class HOCPostView extends PureComponent {
 
     preview(target, post.getIn(['attachments', i]));
   }
-  onAddReaction(commentId) {
-    const { post, addReaction, commentAddReaction } = this.props;
-    const runFunc = commentId ? commentAddReaction : addReaction;
-
-    this.setLoading(`${commentId || ''}reaction`);
-    runFunc({
-      post_id: post.get('id'),
-      reaction: 'like',
-      comment_id: commentId || null,
-    }).then((res) => {
-      if(res.ok) {
-        window.analytics.sendEvent('Reaction added', {
-          'Where': commentId ? 'Comment' : 'Post',
-        });
-      }
-      this.clearLoading(`${commentId || ''}reaction`)
-    });
-  }
-  onRemoveReaction(commentId) {
-    const { post, removeReaction, commentRemoveReaction } = this.props;
-    const runFunc = commentId ? commentRemoveReaction : removeReaction;
-
-    this.setLoading(`${commentId || ''}reaction`);
-    runFunc({
-      post_id: post.get('id'),
-      comment_id: commentId,
-    }).then((res) => {
-      if(res.ok) {
-        window.analytics.sendEvent('Reaction removed', {
-          'Where': commentId ? 'Comment' : 'Post',
-        });
-      }
-      this.clearLoading(`${commentId || ''}reaction`)
-    });
-  }
   onHeaderContextClick() {
     const { openSecondary, post, target } = this.props;
     openSecondary(target, navForContext(post.get('context')));
