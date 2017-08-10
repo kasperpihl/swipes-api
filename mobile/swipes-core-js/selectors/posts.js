@@ -1,20 +1,38 @@
 import { createSelector } from 'reselect'
 import { searchSelectorFromKeys } from '../classes/utils';
 
-const getFilterId = (state, props) => props.filterId;
+const getRelatedFilter = (state, props) => props.relatedFilter;
+const getContext = (state, props) => props.context;
 const getPosts = (state) => state.get('posts');
 
-export const getSortedIds = createSelector(
-  [ getPosts, getFilterId ],
-  (posts, filterId) => {
-    if(filterId) {
-      posts = posts.filter(p => p.getIn(['context', 'id']) === filterId);
-    }
+export const getSorted = createSelector(
+  [ getPosts ],
+  (posts) => {
     return posts.toList().sort((a, b) => {
       return b.get('created_at').localeCompare(a.get('created_at'));
-    }).map(p => p.get('id'));
+    });
   }
 )
+
+export const getRelatedList = createSelector(
+  [ getSorted, getRelatedFilter ],
+  (posts, filters) => posts.filter(p => (filters.indexOf(p.getIn(['context', 'id'])) > -1)),
+)
+
+export const getContextList = createSelector(
+  [ getSorted, getContext ],
+  (posts, context) => {
+    if(context && context.id) {
+      return posts.filter(p => p.getIn(['context', 'id']) === context.id)
+    } else if (context && context.get('id')) {
+      return posts.filter(p => p.getIn(['context', 'id']) === context.get('id'));
+    }
+    return posts;
+  }
+)
+/*
+
+*/
 
 export const searchablePosts = createSelector(
   [ getPosts ],

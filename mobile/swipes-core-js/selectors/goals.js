@@ -1,8 +1,9 @@
-import { createSelector } from 'reselect'
+import { createSelector } from 'reselect';
 import { searchSelectorFromKeys } from '../classes/utils';
 import GoalsUtil from '../classes/goals-util';
 
 const getGoals = (state) => state.get('goals');
+const getMilestones = state => state.get('milestones');
 const getMyId = state => state.getIn(['me', 'id']);
 
 export const assignedToMe = createSelector(
@@ -13,6 +14,25 @@ export const assignedToMe = createSelector(
     return !helper.getIsCompleted() && currentAssignees.find(uId => uId === userId);
   }).sort((g1, g2) => g2.get('created_at').localeCompare(g1.get('created_at'))),
 );
+
+export const assignedGroupedByMilestone = createSelector(
+  [ assignedToMe, getMilestones ],
+  (goals, milestones) => {
+    const grouped = goals.groupBy(g => g.get('milestone_id') || 'none');
+    return grouped.sortBy(
+      (v, k) => k,
+      (m1id, m2id) => {
+        // make sure no milestone is last
+        if(m1id === 'none' || m2id === 'none') {
+          return m1id === 'none' ? 1 : -1;
+        }
+        const m1 = milestones.get(m1id);
+        const m2 = milestones.get(m2id);
+        return m1.get('created_at').localeCompare(m2.get('created_at'));
+      }
+    )
+  }
+)
 
 export const searchAbleGoals = createSelector(
   [ getGoals ],

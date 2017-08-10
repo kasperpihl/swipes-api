@@ -15,4 +15,10 @@
   &__title {
     @include font(12px, $deepBlue-100, 15px, 500);
   }
+  &__icon-container {
+  }
+  &__icon {
+    @include size(24px);
+    @include svg-color($deepBlue-100);
+  }
 }

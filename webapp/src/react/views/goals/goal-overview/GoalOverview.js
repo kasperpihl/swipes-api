@@ -81,8 +81,11 @@ class GoalOverview extends PureComponent {
           delegate={delegate}
         >
           <HOCDiscussButton
-            filterId={goal.get('id')}
-            filterTitle={goal.get('title')}
+            context={{
+              id: goal.get('id'),
+              title: goal.get('title'),
+            }}
+            relatedFilter={msgGen.goals.getRelatedFilter(goal)}
             taggedUsers={helper.getAllAssigneesButMe().toArray()}
           />
           <Button

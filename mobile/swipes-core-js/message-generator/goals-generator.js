@@ -7,6 +7,12 @@ export default class Goals {
     this.store = store;
     this.parent = parent;
   }
+  getGoal(goal) {
+    if (typeof goal === 'string') {
+      return this.store.getState().getIn(['goals', goal]);
+    }
+    return goal;
+  }
   getType(goalType) {
     const goalTypes = {
       current: 'Current goals',
@@ -14,6 +20,17 @@ export default class Goals {
       starred: 'Starred goals',
     };
     return goalTypes[goalType] || 'All goals';
+  }
+  getRelatedFilter(goalId) {
+    const goal = this.getGoal(goalId);
+    if(!goal) {
+      return [];
+    }
+    const helper = new GoalsUtil(goal);
+    return helper.getOrderedAttachments().toList().filter(
+      a => a.getIn(['link', 'service', 'name']) === 'swipes' && a.getIn(['link', 'service', 'type']) === 'note'
+    ).map(a => a.getIn(['link', 'service', 'id'])).toJS();
+
   }
   getSubtitle(goal) {
     const helper = new GoalsUtil(goal);

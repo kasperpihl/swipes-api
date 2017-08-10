@@ -94,17 +94,6 @@ export default class GoalsUtil {
   getStepTitleFromId(id) {
     return this.goal.getIn(['steps', id, 'title']);
   }
-  getStepTitlesBetweenIds(from, to) {
-    let show = false;
-    let titles = fromJS([]);
-    this.goal.get('step_order').forEach((sId) => {
-      if ([from, to].indexOf(sId) !== -1) show = !show;
-      if (show) {
-        titles = titles.push(this.goal.getIn(['steps', sId, 'title']));
-      }
-    });
-    return titles;
-  }
 
   getAllAssignees() {
     const assignees = new Set();

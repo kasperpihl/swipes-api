@@ -24,6 +24,14 @@ export default class Milestones {
     }
     return 'any milestone';
   }
+  getRelatedFilter(milestoneId) {
+    const milestone = this.getMilestone(milestoneId);
+    if(!milestone) {
+      return [];
+    }
+    return milestone.get('goal_order').toJS()
+
+  }
   getSubtitle(milestoneId) {
     const milestone = this.getMilestone(milestoneId);
     const helper = new MilestonesUtil(milestone);

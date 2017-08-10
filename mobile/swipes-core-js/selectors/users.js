@@ -53,7 +53,7 @@ export const autoComplete = createSelector(
     let fuse = new Fuse(list, options); // "list" is the item array
     return fuse.search(autoCompleteString || '').map((res) => {
       const { item } = res;
-      const user = msgGen.users.getUser(item);
+      const user = msgGen.users.getUser(item.id);
       const profilePic = msgGen.users.getPhoto(user);
       res.resultItem = {
         title: msgGen.users.getFullName(user),

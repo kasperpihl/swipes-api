@@ -28,6 +28,23 @@ export const getGroupedGoals = createSelector(
   }
 )
 
+export const getGrouped = createSelector(
+  [ getMilestones ],
+  (milestones) => {
+    let gm = milestones.sort((a, b) => {
+      if (a.get('closed_at') && b.get('closed_at')) {
+        return b.get('closed_at').localeCompare(a.get('closed_at'));
+      } else if (a.get('closed_at') || b.get('closed_at')) {
+        return a.get('closed_at') ? 1 : -1;
+      }
+      return a.get('created_at').localeCompare(b.get('created_at'));
+    }).groupBy(m => m.get('closed_at') ? 'Closed' : 'Open');
+    gm = gm.set('Closed', gm.get('Closed') || List());
+    gm = gm.set('Open', gm.get('Open') || List());
+    return gm;
+  }
+);
+
 export const search = searchSelectorFromKeys([
   'title',
 ], getMilestones);

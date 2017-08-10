@@ -39,8 +39,11 @@ class MilestoneOverview extends PureComponent {
             text="Add goal"
           />
           <HOCDiscussButton
-            filterId={m.get('id')}
-            filterTitle={m.get('title')}
+            context={{
+              id: m.get('id'),
+              title: m.get('title'),
+            }}
+            relatedFilter={msgGen.milestones.getRelatedFilter(m)}
           />
           <Button
             icon="ThreeDots"

@@ -19,27 +19,25 @@ class HOCPostFeed extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = { limit: 10 };
+    this.state = { limit: 10, tabs: null, tabIndex: 0 };
   }
-  componentDidMount() {
+  componentWillMount() {
+    this.updateTabs(this.props);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.updateTabs(nextProps);
   }
   onReachedEnd() {
     this.setState({ limit: this.state.limit + 10 });
   }
   onNewPost() {
-    const { navPush, filterId, filterTitle } = this.props;
-    let context = null;
-    if(filterId) {
-      context = {
-        id: filterId,
-        title: filterTitle
-      };
-    }
+    const { navPush, context } = this.props;
+
     navPush({
       id: 'CreatePost',
       title: 'New post',
       props: {
-        context,
+        context: context || null,
       },
     })
   }
@@ -54,15 +52,42 @@ class HOCPostFeed extends PureComponent {
       }
     })
   }
+  updateTabs(props) {
+    const { tabs } = this.state;
+    let dTabs = tabs;
+    if(props.context && !dTabs) {
+      dTabs = ['This context'];
+    }
+    if(props.relatedPosts && props.relatedPosts.size && dTabs.length < 2) {
+      dTabs = dTabs.concat('Related');
+    }
+    if(!props.context && dTabs) {
+      dTabs = null;
+    }
+    if(dTabs !== tabs) {
+      this.setState({ tabs: dTabs, tabIndex: 0 });
+    }
+  }
+  tabDidChange(index) {
+    const { tabIndex } = this.state;
+    if (tabIndex !== index) {
+      this.setState({
+        tabIndex: index,
+      });
+    }
+  }
   render() {
-    const { posts, filterTitle } = this.props;
-    const { limit } = this.state;
+    const { posts, context, relatedPosts } = this.props;
+    const { limit, tabs, tabIndex } = this.state;
 
     return (
       <PostFeed
         posts={posts}
+        tabIndex={tabIndex}
+        tabs={tabs}
+        relatedPosts={relatedPosts}
         limit={limit}
-        filterTitle={filterTitle}
+        context={context}
         delegate={this}
       />
     );
@@ -71,10 +96,18 @@ class HOCPostFeed extends PureComponent {
 
 // const { string } = PropTypes;
 HOCPostFeed.propTypes = {};
-function mapStateToProps(state, ownProps) {
-  return {
-    posts: cs.posts.getSortedIds(state, ownProps),
-  };
+function mapStateToProps(state, props) {
+  const obj = {};
+  if(props.context) {
+    obj.posts = cs.posts.getContextList(state, props);
+    if(props.relatedFilter) {
+      obj.relatedPosts = cs.posts.getRelatedList(state, props);
+    }
+  } else {
+    obj.posts = cs.posts.getSorted(state);
+  }
+
+  return obj;
 }
 export default navWrapper(connect(mapStateToProps, {
 })(HOCPostFeed));

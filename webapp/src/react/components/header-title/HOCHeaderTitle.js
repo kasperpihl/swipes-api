@@ -84,7 +84,7 @@ const { object, string, array, oneOfType, element } = PropTypes;
 HOCHeaderTitle.propTypes = {
   title: string,
   placeholder: string,
-  subtitle: oneOfType([string, element]),
+  subtitle: oneOfType([string, element, array]),
   delegate: object,
   children: oneOfType([object, array]),
 };

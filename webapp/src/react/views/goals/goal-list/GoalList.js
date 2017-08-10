@@ -7,6 +7,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Button from 'Button';
 // import Icon from 'Icon';
+import Section from 'components/section/Section';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 
 import './styles/goals-list.scss';
@@ -53,14 +54,24 @@ class GoalList extends Component {
       );
     }
 
+
     const i = 0;
-    return goals.toArray().map(goal => (
-      <HOCGoalListItem
-        goalId={goal.get('id')}
-        delegate={delegate}
-        key={goal.get('id')}
-      />
-    ));
+    return goals.map((lGoals, section) => (
+      <Section
+        title={msgGen.milestones.getName(section)}
+        icon={section === 'none' ? 'MiniMilestone' : 'MiniMilestone'}
+        key={section}
+      >
+        {lGoals.toArray().map(goal => (
+          <HOCGoalListItem
+            goalId={goal.get('id')}
+            delegate={delegate}
+            key={goal.get('id')}
+          />
+        ))}
+      </Section>
+
+    )).toArray();
   }
   render() {
     const { savedState } = this.props;
@@ -80,16 +91,10 @@ class GoalList extends Component {
   }
 }
 
-const { object: obj, number, array, bool, string, func } = PropTypes;
+const { object: obj, func } = PropTypes;
 
 GoalList.propTypes = {
-  tabs: array,
-  numberOfStars: number,
-  showFilter: bool,
-  filterProp: list,
-  filterLabel: string,
   getLoading: func,
-  tabIndex: number,
   delegate: obj,
 };
 

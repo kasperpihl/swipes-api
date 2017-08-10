@@ -196,8 +196,10 @@ class HOCSideNote extends PureComponent {
         >
           {buttonHtml}
           <HOCDiscussButton
-            filterId={note.get('id')}
-            filterTitle={title}
+            context={{
+              id: note.get('id'),
+              title,
+            }}
           />
         </HOCHeaderTitle>
       </div>

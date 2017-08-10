@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { List } from 'immutable';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import MilestoneList from './MilestoneList';
@@ -64,26 +65,13 @@ class HOCMilestoneList extends PureComponent {
   render() {
     const { milestones } = this.props;
     const { tabs, tabIndex } = this.state;
-    const group = milestones.sort(
-      (a, b) => {
-        if (a.get('closed_at') && b.get('closed_at')) {
-          return b.get('closed_at').localeCompare(a.get('closed_at'));
-        } else if (a.get('closed_at')) {
-          return 1;
-        } else if (b.get('closed_at')) {
-          return -1;
-        } else {
-          return a.get('created_at').localeCompare(b.get('created_at'));
-        }
-      }
-    ).groupBy(m => m.get('closed_at') ? 'Closed' : 'Open');
 
     return (
       <MilestoneList
         delegate={this}
-        milestones={group.get(tabs[tabIndex]) || emptyList}
+        milestones={milestones.get(tabs[tabIndex])}
         tabs={tabs.map((t) => {
-          const size = (group.get(t) && group.get(t).size) || 0;
+          const size = milestones.get(t).size;
           if (size) {
             t += ` (${size})`;
           }
@@ -98,7 +86,7 @@ class HOCMilestoneList extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    milestones: state.get('milestones'),
+    milestones: cs.milestones.getGrouped(state),
   };
 }
 

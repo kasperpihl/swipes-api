@@ -4,9 +4,10 @@ import React, { PureComponent } from 'react'
 import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import HOCPostView from '../post-view/HOCPostView';
 import Button from 'Button';
+import TabBar from 'components/tab-bar/TabBar';
 // import Icon from 'Icon';
+import HOCPostView from '../post-view/HOCPostView';
 import './styles/post-feed.scss';
 
 const DISTANCE = 200;
@@ -29,23 +30,44 @@ class PostFeed extends PureComponent {
     }
   }
   renderHeader() {
-    const { filterTitle } = this.props;
+    const { context } = this.props;
+    const title = context && context.get('title');
     return (
-      <HOCHeaderTitle title="Discussions" subtitle={filterTitle && `re. ${filterTitle}`} border>
-        <Button primary text="Create Post" onClick={this.onNewPost} />
-      </HOCHeaderTitle>
+      <div className="post-feed__header">
+        <HOCHeaderTitle title="Discussions" subtitle={title && `re. ${title}`} border>
+          <Button primary text="Create Post" onClick={this.onNewPost} />
+        </HOCHeaderTitle>
+        {this.renderTabbar()}
+      </div>
+
+    )
+  }
+  renderTabbar() {
+    const { tabs, tabIndex, delegate, posts, relatedPosts } = this.props;
+    if(!tabs) {
+      return undefined;
+    }
+    return (
+      <TabBar
+        delegate={delegate}
+        tabs={tabs.map((t, i) => {
+          return `${t} (${(i === 0) ? posts.size : relatedPosts.size})`;
+        })}
+        activeTab={tabIndex}
+      />
     )
   }
   renderPosts() {
-    const { posts, delegate, limit } = this.props;
+    const { posts, delegate, limit, relatedPosts, tabIndex } = this.props;
 
-    return posts.map((pId, i) => {
+    const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
+    return renderPosts.map((p, i) => {
       if(i >= limit ) {
         return undefined;
       }
       return (
-        <div className="post-feed__item" key={pId}>
-          <HOCPostView postId={pId} fromFeed />
+        <div className="post-feed__item" key={p.get('id')}>
+          <HOCPostView postId={p.get('id')} fromFeed />
         </div>
       )
     }).toArray();

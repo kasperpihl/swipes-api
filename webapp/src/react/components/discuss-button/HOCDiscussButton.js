@@ -21,26 +21,23 @@ class HOCDiscussButton extends PureComponent {
   componentDidMount() {
   }
   onFeed() {
-    const { openSecondary, target, filterId, filterTitle } = this.props;
+    const { openSecondary, target, context, relatedFilter } = this.props;
     openSecondary(target, {
       id: 'PostFeed',
       title: 'Discussions',
       props: {
-        filterId,
-        filterTitle,
+        context,
+        relatedFilter,
       },
     });
   }
   onDiscuss() {
-    const { navPush, target, filterId, filterTitle, taggedUsers } = this.props;
+    const { navPush, target, context, taggedUsers } = this.props;
     navPush(target, {
       id: 'CreatePost',
       title: 'Create Post',
       props: {
-        context: {
-          title: filterTitle,
-          id: filterId,
-        },
+        context,
         taggedUsers
       },
     });
@@ -51,10 +48,10 @@ class HOCDiscussButton extends PureComponent {
     )
   }
   renderRightSide() {
-    const { posts } = this.props;
+    const { counter } = this.props;
 
     return (
-      <div className="discuss-button__button" onClick={this.onFeed}>{posts.size}</div>
+      <div className="discuss-button__button" onClick={this.onFeed}>{counter}</div>
     )
   }
   render() {
@@ -70,10 +67,18 @@ class HOCDiscussButton extends PureComponent {
 
 HOCDiscussButton.propTypes = {};
 
-function mapStateToProps(state, ownProps) {
-  return {
-    posts: cs.posts.getSortedIds(state, ownProps),
-  };
+function mapStateToProps(state, props) {
+  let counter = 0;
+  if(props.context) {
+    counter += cs.posts.getContextList(state, props).size;
+    if(props.relatedFilter) {
+      counter += cs.posts.getRelatedList(state, props).size;
+    }
+  } else {
+    counter = cs.posts.getSorted(state).size;
+  }
+
+  return { counter };
 }
 
 export default navWrapper(connect(mapStateToProps, {

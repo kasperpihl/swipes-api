@@ -4,17 +4,14 @@ import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { connect } from 'react-redux';
-import { fromJS, Set } from 'immutable';
 import { map } from 'react-immutable-proptypes';
-import { setupDelegate, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import {
   EditorState,
   convertToRaw,
 } from 'draft-js';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import GoalList from './GoalList';
-
-/* global msgGen*/
 
 class HOCGoalList extends PureComponent {
   constructor(props) {
@@ -88,11 +85,9 @@ class HOCGoalList extends PureComponent {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    goals: cs.goals.assignedToMe(state),
-  };
-}
+const mapStateToProps = state => ({
+  goals: cs.goals.assignedGroupedByMilestone(state),
+});
 
 
 const { func, object } = PropTypes;
