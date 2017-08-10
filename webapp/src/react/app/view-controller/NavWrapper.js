@@ -34,6 +34,7 @@ const wrap = (ComponentToWrap) => {
         saveState,
         openSecondary,
         popSecondary,
+        openModal,
       } = this.context;
       // what we do is basically rendering `ComponentToWrap`
       // with an added `theme` prop, like a hook
@@ -46,6 +47,7 @@ const wrap = (ComponentToWrap) => {
           saveState={saveState}
           openSecondary={openSecondary}
           popSecondary={popSecondary}
+          openModal={openModal}
         />
       )
     }
@@ -57,6 +59,7 @@ const wrap = (ComponentToWrap) => {
     saveState: func,
     openSecondary: func,
     popSecondary: func,
+    openModal: func,
   };
   return NavWrapper;
 }

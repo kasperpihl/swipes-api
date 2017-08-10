@@ -31,9 +31,9 @@ class HOCPostFeed extends PureComponent {
     this.setState({ limit: this.state.limit + 10 });
   }
   onNewPost() {
-    const { navPush, context } = this.props;
+    const { openModal, context } = this.props;
 
-    navPush({
+    openModal({
       id: 'CreatePost',
       title: 'New post',
       props: {
@@ -64,6 +64,7 @@ class HOCPostFeed extends PureComponent {
     if(!props.context && dTabs) {
       dTabs = null;
     }
+
     if(dTabs !== tabs) {
       this.setState({ tabs: dTabs, tabIndex: 0 });
     }
@@ -96,18 +97,14 @@ class HOCPostFeed extends PureComponent {
 
 // const { string } = PropTypes;
 HOCPostFeed.propTypes = {};
-function mapStateToProps(state, props) {
-  const obj = {};
-  if(props.context) {
-    obj.posts = cs.posts.getContextList(state, props);
-    if(props.relatedFilter) {
-      obj.relatedPosts = cs.posts.getRelatedList(state, props);
-    }
-  } else {
-    obj.posts = cs.posts.getSorted(state);
-  }
-
-  return obj;
+const makeMapStateToProps = () => {
+  const getFilteredList = cs.posts.makeGetFilteredList();
+  const getRelatedList = cs.posts.makeGetRelatedList();
+  return (state, props) => ({
+    posts: getFilteredList(state, props),
+    relatedPosts: getRelatedList(state, props),
+  });
 }
-export default navWrapper(connect(mapStateToProps, {
+
+export default navWrapper(connect(makeMapStateToProps, {
 })(HOCPostFeed));

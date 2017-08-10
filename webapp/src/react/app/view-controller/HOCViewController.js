@@ -10,6 +10,7 @@ import { setupCachedCallback, debounce, bindAll } from 'swipes-core-js/classes/u
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
+import HOCModal from './HOCModal';
 
 const DEFAULT_MIN_WIDTH = 500;
 const DEFAULT_MAX_WIDTH = 800;
@@ -26,6 +27,7 @@ class HOCViewController extends PureComponent {
     };
     this.onPopCached = setupCachedCallback(props.pop, this);
     this.onPushCached = setupCachedCallback(props.push, this);
+    this.onOpenModalCached = setupCachedCallback(props.modal, this);
     this.onOpenSecondary = setupCachedCallback(props.openSecondary, this);
     this.onSaveState = setupCachedCallback(props.saveState, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
@@ -266,6 +268,7 @@ class HOCViewController extends PureComponent {
         saveState={this.onSaveState(target)}
         openSecondary={this.onOpenSecondary(target)}
         popSecondary={this.onPopCached('secondary')}
+        openModal={this.onOpenModalCached(target)}
       >
         <section
           className={className}
@@ -278,6 +281,7 @@ class HOCViewController extends PureComponent {
             key={navigation.getIn([target, 'id']) + navigation.getIn([target, 'stack']).size}
             {...props}
           />
+          <HOCModal target={target} />
         </section>
       </ContextWrapper>
     );
@@ -312,6 +316,7 @@ HOCViewController.propTypes = {
 const ConnectedHOCViewController = connect(mapStateToProps, {
   pop: a.navigation.pop,
   push: a.navigation.push,
+  modal: a.main.modal,
   toggleLock: a.navigation.toggleLock,
   openSecondary: a.navigation.openSecondary,
   saveState: a.navigation.saveState,

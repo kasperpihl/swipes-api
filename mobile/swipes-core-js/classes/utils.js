@@ -557,7 +557,7 @@ export function setupLoading(ctx) {
       _loadingStates,
     }
   }
-  function setLoading(name, label, duration) {
+  function setLoading(name, label, duration, callback) {
     if (unmounted) {
       return;
     }
@@ -567,9 +567,9 @@ export function setupLoading(ctx) {
     }
     _loadingStates = Object.assign({}, _loadingStates, { [name]: newState });
     ctx.setState({ _loadingStates });
-    setClearTimer(name, duration);
+    setClearTimer(name, duration, callback);
   }
-  function clearLoading(name, label, duration) {
+  function clearLoading(name, label, duration, callback) {
     if (unmounted) {
       return;
     }
@@ -581,13 +581,16 @@ export function setupLoading(ctx) {
     }
     _loadingStates = Object.assign({}, _loadingStates, { [name]: newState });
     ctx.setState({ _loadingStates });
-    setClearTimer(name, duration);
+    setClearTimer(name, duration, callback);
   }
-  setClearTimer = (name, duration) => {
+  setClearTimer = (name, duration, callback) => {
     clearTimeout(timers[name]);
     if (typeof duration === 'number') {
       timers[name] = setTimeout(() => {
         if (!unmounted) {
+          if(typeof callback === 'function') {
+            callback();
+          }
           clearLoading(name);
         }
       }, duration);

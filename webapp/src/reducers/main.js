@@ -8,6 +8,10 @@ const initialState = fromJS({
   isHydrated: false,
   versionInfo: {},
   successState: false,
+  modals: {
+    primary: null,
+    secondary: null,
+  }
 });
 
 export default function main(state = initialState, action) {
@@ -27,6 +31,13 @@ export default function main(state = initialState, action) {
     // ======================================================
     case types.TOOLTIP: {
       return state.set('tooltip', payload);
+    }
+
+    // ======================================================
+    // Modals
+    // ======================================================
+    case types.NAVIGATION_MODAL: {
+      return state.setIn(['modals', payload.target], payload.modal || null)
     }
 
     // ======================================================

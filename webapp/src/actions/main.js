@@ -11,6 +11,13 @@ export const setFullscreen = toggle => ({ type: types.SET_FULLSCREEN, payload: {
 export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 
 // ======================================================
+// Modal
+// ======================================================
+export function modal(target, modal) {
+  return { type: types.NAVIGATION_MODAL, payload: { modal, target }};
+}
+
+// ======================================================
 // Context Menu
 // ======================================================
 export const contextMenu = payload => (dp, getState) => {

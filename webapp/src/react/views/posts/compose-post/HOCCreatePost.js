@@ -120,19 +120,26 @@ class HOCCreatePost extends PureComponent {
 
   }
   onPostClick(e) {
-    const { createPost, navPop } = this.props;
+    const { createPost, navPop, hideModal } = this.props;
     const { post } = this.state;
     this.setLoading('post');
 
     createPost(convertObjToUnderscore(post.toJS())).then((res) => {
       if (res.ok) {
+        this.clearLoading('post', 'Posted', 1500, () => {
+          console.log('clear');
+          if(hideModal) {
+            hideModal();
+          } else {
+            navPop();
+          }
+        });
         window.analytics.sendEvent('Post created', {
           'Type': post.get('type'),
           'Tagged people': post.get('taggedUsers').size,
           'Attachments': post.get('attachments').size,
           'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
         });
-        navPop();
       } else {
         this.clearLoading('post', '!Something went wrong');
       }
@@ -175,12 +182,13 @@ class HOCCreatePost extends PureComponent {
   }
 
   render() {
-    const { myId } = this.props;
+    const { myId, hideModal } = this.props;
     const { post } = this.state;
 
     return (
       <CreatePost
         ref="create"
+        hideModal={hideModal}
         post={post}
         myId={myId}
         delegate={this}

@@ -29,6 +29,10 @@ class CreatePost extends PureComponent {
     )
   }
   renderHeader() {
+    const { hideModal } = this.props;
+    if(hideModal) {
+      return undefined;
+    }
 
     return (
       <HOCHeaderTitle title="Create Post" subtitle={this.renderSubtitle()} border />

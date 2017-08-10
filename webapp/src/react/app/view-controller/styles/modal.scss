@@ -1,0 +1,28 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 9;
+  &--shown {
+    opacity: 1;
+    transition: visibility 0s 0s, opacity .15s;
+    background: rgba(255, 255, 255, .5);
+    visibility: visible;
+  }
+  &__content {
+    background-color: $bg;
+    border-radius: 6px;
+    box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
+    overflow: hidden;
+    max-width: 500px;
+    max-height: 400px;
+    margin: 20% auto;
+  }
+}

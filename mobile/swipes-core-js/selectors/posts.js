@@ -1,9 +1,10 @@
-import { createSelector } from 'reselect'
+import { createSelector } from 'reselect';
+import createCachedSelector from 're-reselect';
 import { searchSelectorFromKeys } from '../classes/utils';
 
 const getRelatedFilter = (state, props) => props.relatedFilter;
 const getContext = (state, props) => props.context;
-const getPosts = (state) => state.get('posts');
+const getPosts = state => state.get('posts');
 
 export const getSorted = createSelector(
   [ getPosts ],
@@ -14,13 +15,14 @@ export const getSorted = createSelector(
   }
 )
 
-export const getRelatedList = createSelector(
+export const makeGetRelatedList = () => createSelector(
   [ getSorted, getRelatedFilter ],
-  (posts, filters) => posts.filter(p => (filters.indexOf(p.getIn(['context', 'id'])) > -1)),
-)
+  (posts, fs) => posts.filter(p => (fs && fs.indexOf(p.getIn(['context', 'id'])) > -1)),
+);
 
-export const getContextList = createSelector(
-  [ getSorted, getContext ],
+export const makeGetFilteredList = () => createSelector(
+  getSorted,
+  getContext,
   (posts, context) => {
     if(context && context.id) {
       return posts.filter(p => p.getIn(['context', 'id']) === context.id)
@@ -29,7 +31,7 @@ export const getContextList = createSelector(
     }
     return posts;
   }
-)
+);
 /*
 
 */

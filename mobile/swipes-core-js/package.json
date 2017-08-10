@@ -15,8 +15,9 @@
     "babel-preset-stage-2": "^6.24.1"
   },
   "dependencies": {
-    "reselect": "^3.0.1",
     "fuse.js": "^3.0.5",
+    "re-reselect": "^0.6.3",
+    "reselect": "^3.0.1",
     "valjs": "0.0.27"
   }
 }

@@ -32,8 +32,8 @@ class HOCDiscussButton extends PureComponent {
     });
   }
   onDiscuss() {
-    const { navPush, target, context, taggedUsers } = this.props;
-    navPush(target, {
+    const { navPush, target, context, taggedUsers, openModal } = this.props;
+    openModal(target, {
       id: 'CreatePost',
       title: 'Create Post',
       props: {
@@ -66,22 +66,20 @@ class HOCDiscussButton extends PureComponent {
 // const { string } = PropTypes;
 
 HOCDiscussButton.propTypes = {};
-
-function mapStateToProps(state, props) {
-  let counter = 0;
-  if(props.context) {
-    counter += cs.posts.getContextList(state, props).size;
+const makeMapStateToProps = () => {
+  const getFilteredList = cs.posts.makeGetFilteredList();
+  const getRelatedList = cs.posts.makeGetRelatedList();
+  return (state, props) => {
+    let counter = getFilteredList(state, props).size;
     if(props.relatedFilter) {
-      counter += cs.posts.getRelatedList(state, props).size;
+      counter += getRelatedList(state, props).size;
     }
-  } else {
-    counter = cs.posts.getSorted(state).size;
+    return { counter };
   }
-
-  return { counter };
 }
 
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(makeMapStateToProps, {
   openSecondary: a.navigation.openSecondary,
   navPush: a.navigation.push,
+  openModal: a.main.modal,
 })(HOCDiscussButton));

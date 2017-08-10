@@ -34,68 +34,9 @@
   user-select: none !important;
 }
 
-// overlay (Browser etc.)
-
-.overlay {
-  @include size(100%, calc(100% - 38px));
-  background: $bg;
-  left: 0; top: 38px;
-  opacity: 0;
-  position:fixed;
-  visibility: hidden;
-  z-index: 9;
-  transition: visibility 0s .3s, opacity 0s .3s;
-}
-
-// Modal component
-
-.g-modal {
-  @include size(100%);
-  @include flex();
-  left: 0; top: 0;
-  opacity: 0;
-  position: fixed;
-  visibility: hidden;
-  z-index: 9999;
-  transition: visibility 0s .3s, opacity .3s;
-}
-
-
 // ======================================================
 // Elements
 // ======================================================
-
-.overlay {
-
-  &__anim-wrap {
-    @include size(100%);
-  }
-
-  &__actions {
-    @include flex(flex);
-    right: 30px; top: 79px;
-    position: fixed;
-  }
-
-  &__action {
-    transition: .15s;
-  }
-}
-
-.g-modal {
-
-  &__transition {
-    @include size();
-    @include flex();
-  }
-
-  &__overlay {
-    @include size(100%);
-    background-color: rgba($deepBlue-100, .96);
-    left: 0; top: 0;
-    position: fixed;
-  }
-}
 
 .gradient-bg {
 
@@ -157,29 +98,5 @@
         //pointer-events: none;
       }
     }
-  }
-}
-
-// Misc
-
-.overlay {
-
-  &--opaque{
-    background: rgba(255,255,255,0.8);
-  }
-
-  &--shown {
-    opacity: 1;
-    visibility: visible;
-    transition: visibility 0s 0s, opacity .15s;
-  }
-}
-
-.g-modal {
-
-  &--shown {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0s 0s, opacity .3s;
   }
 }
