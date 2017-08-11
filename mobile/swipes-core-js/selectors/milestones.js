@@ -10,7 +10,6 @@ const getMilestones = (state) => state.get('milestones');
 export const getGoals = createSelector(
   [ getMilestone, getAllGoals ],
   (milestone, goals) => milestone.get('goal_order')
-    .reverse()
     .map(gId => goals.get(gId)),
 )
 

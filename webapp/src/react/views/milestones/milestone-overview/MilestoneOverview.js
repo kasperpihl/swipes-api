@@ -6,6 +6,7 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
+import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 import Section from 'components/section/Section';
 import Button from 'Button';
 import Icon from 'Icon';
@@ -64,17 +65,24 @@ class MilestoneOverview extends PureComponent {
     );
   }
   renderList(group) {
-    const { delegate, groupedGoals } = this.props;
+    const { delegate, groupedGoals, milestone } = this.props;
 
-    return (
-      groupedGoals.get(group).map(g => (
-        <HOCGoalListItem
-          goalId={g.get('id')}
-          key={g.get('id')}
-          delegate={delegate}
+    let renderedGoals = groupedGoals.get(group).map(g => (
+      <HOCGoalListItem
+        goalId={g.get('id')}
+        key={g.get('id')}
+        delegate={delegate}
+      />
+    ));
+    if(group === 'Current') {
+      renderedGoals = renderedGoals.push(
+        <HOCAddGoalItem
+          key="add"
+          milestoneId={milestone.get('id')}
         />
-      ))
-    );
+      )
+    }
+    return renderedGoals;
   }
 
   renderRightSection() {

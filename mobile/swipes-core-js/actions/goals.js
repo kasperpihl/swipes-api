@@ -1,5 +1,6 @@
 import {
   string,
+  array,
 } from 'valjs';
 
 import * as a from './';
@@ -8,7 +9,8 @@ import { valAction } from '../classes/utils';
 export const create = valAction('goals.create', [
   string.min(1).max(155).require(),
   string,
-], (title, milestoneId) => (d, getState) => {
+  array.of(string),
+], (title, milestoneId, assignees) => (d, getState) => {
   // d(a.onboarding.complete('create-goal'));
   if (milestoneId) {
     d(a.onboarding.complete('add-goal-milestone'));
@@ -16,6 +18,7 @@ export const create = valAction('goals.create', [
   return d(a.api.request('goals.create', {
     goal: {
       title,
+      assignees: assignees || [],
     },
     milestone_id: milestoneId,
     organization_id: getState().getIn(['me', 'organizations', 0, 'id']),

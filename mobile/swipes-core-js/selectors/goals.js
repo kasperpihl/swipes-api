@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { List } from 'immutable';
 import { searchSelectorFromKeys } from '../classes/utils';
 import GoalsUtil from '../classes/goals-util';
 
@@ -18,7 +19,8 @@ export const assignedToMe = createSelector(
 export const assignedGroupedByMilestone = createSelector(
   [ assignedToMe, getMilestones ],
   (goals, milestones) => {
-    const grouped = goals.groupBy(g => g.get('milestone_id') || 'none');
+    let grouped = goals.groupBy(g => g.get('milestone_id') || 'none');
+    grouped = grouped.set('none', grouped.get('none') || List());
     return grouped.sortBy(
       (v, k) => k,
       (m1id, m2id) => {
