@@ -55,10 +55,10 @@ class StepList extends PureComponent {
     });
     e.stopPropagation();
   }
-  onAutoCompleteSelect(id) {
+  onAutoCompleteSelect(item) {
     let { addStepAssignees, addStepValue } = this.state;
-    if(!addStepAssignees.contains(id)) {
-      addStepAssignees = addStepAssignees.push(id);
+    if(!addStepAssignees.contains(item.id)) {
+      addStepAssignees = addStepAssignees.push(item.id);
     }
     const msgArr = addStepValue.split('@');
     addStepValue = msgArr.slice(0, -1).join('@');
