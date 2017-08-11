@@ -19,6 +19,7 @@ class Assigning extends Component {
   componentDidMount() {
     const { size } = this.props;
     const assigning = this.refs.assigning;
+
     if (assigning.classList.contains('assignees--custom-size')) {
       assigning.style.setProperty('--assigneesSize', `${size}px`);
     }
@@ -93,7 +94,7 @@ class Assigning extends Component {
     let morePeople;
 
     if (assignees.size > (maxImages + 1)) {
-      morePeople = <div className="assignees__profile assignees__profile--more">+{assignees.size - maxImages}</div>;
+      morePeople = <div className="assignees__profile assignees__profile--more">{assignees.size - maxImages}</div>;
     }
 
     return (

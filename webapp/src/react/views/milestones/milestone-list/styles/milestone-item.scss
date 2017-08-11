@@ -71,7 +71,7 @@
     path {
       stroke-miterlimit: 10;
       stroke-width: 36px;
-      transition: .4s ease;
+      transition: stroke-width .4s ease, opacity .3s ease, fill .3s ease, stroke .3s ease;
     }
 
     &--bg {
@@ -79,7 +79,7 @@
     }
 
     &--fg {
-      @include svg-color($tisho-green);
+      @include svg-color($dark-green);
     }
 
     &--closed {
@@ -155,7 +155,7 @@
 
   #{$b}__number {
     @include flexContainer('row', center, center);
-    @include font(12px, $deepBlue-100, 15px, 300);
+    @include font(9px, transparent, 9px, 500);
     @include size(54px);
     background-color: $bg;
     border-radius: 50%;
@@ -163,7 +163,7 @@
     opacity: 0;
     position: absolute;
     transform: scale3d(1, 1, 1);
-    transition: .4s ease;
+    transition: transform .4s ease, opacity .1s .4s ease, color .4s ease;
     user-select: none;
   }
 }
@@ -176,7 +176,7 @@
   $b: &;
 
   &:hover {
-    box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+    box-shadow: 0 3px 6px 0 rgba(1,13,46,0.24);
     transition: .25s ease;
 
     #{$b}__progress {
@@ -185,21 +185,18 @@
     }
 
     #{$b}__svg {
-
-      &--bg  path {
+      
+      &--bg path {
+        @include svg-color($dark-green);
+        opacity: .1;
         stroke-width: 30px;
-        transition: .4s ease;
+        transition: stroke-width .4s ease, opacity .3s ease, fill .3s ease, stroke .3s ease;
       }
 
       &--fg path {
         stroke-width: 48px;
         transition: .4s ease;
       }
-    }
-
-    .header__title {
-      @include font($c: $blue-100);
-      transition: .25s ease;
     }
 
     .header__svg {
@@ -214,9 +211,10 @@
     }
 
     .progress__number {
+      @include font(9px, $deepBlue-100, 9px, 500);
       opacity: 1;
-      transform: scale3d(2, 2, 1);
-      transition: transform .4s ease, opacity .2s ease;
+      transform: scale3d(2.2, 2.2, 1);
+      transition: transform .4s ease, opacity .2s ease, color .4s ease;
     }
   }
 }

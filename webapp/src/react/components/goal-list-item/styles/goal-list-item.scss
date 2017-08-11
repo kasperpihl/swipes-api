@@ -15,6 +15,7 @@ $contHeight: 66px;
   @include size(100%, $contHeight);
   @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
   border-bottom: 1px solid $deepBlue-6;
+  padding: 0 6px;
   overflow: hidden;
   transition: .2s ease;
   will-change: height;
@@ -67,7 +68,6 @@ $contHeight: 66px;
     @include size(100%);
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
     @include heightSpecifications($contHeight, auto);
-    padding: 0 6px;
   }
 
   &__title {

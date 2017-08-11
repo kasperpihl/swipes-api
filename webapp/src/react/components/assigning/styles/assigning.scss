@@ -73,7 +73,7 @@ $compSize: 30px;
 
     &--more {
       @include flex();
-      @include font(12px, $deepBlue-60, 18px, bold);
+      @include font(12px, $deepBlue-80, 18px, 500);
       background-color: $deepBlue-10;
     }
 
