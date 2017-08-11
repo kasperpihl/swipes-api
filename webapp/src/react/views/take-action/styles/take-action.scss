@@ -1,0 +1,25 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+// ======================================================
+// Block
+// ======================================================
+
+.take-action {
+  @include size(100%, auto);
+  @include flexContainer('column');
+  animation: fadeList .6s ease forwards;
+  z-index: 3;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.take-action {
+
+  &__header {
+    @include size(100%, auto);
+  }
+
+}

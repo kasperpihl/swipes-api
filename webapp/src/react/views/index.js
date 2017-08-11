@@ -3,7 +3,6 @@ import Billing from './account/billing/HOCBilling';
 import Browser from './browser/HOCBrowser';
 import CreatePost from './posts/compose-post/HOCCreatePost';
 import Find from './find/HOCFind';
-import GoalList from './goals/goal-list/HOCGoalList';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import ActivityFeed from './goals/activity-feed/HOCActivityFeed';
 import Onboarding from './onboarding/HOCOnboarding';
@@ -19,8 +18,7 @@ import Organization from './account/organization/HOCOrganization';
 import Search from './search/HOCSearch';
 import Services from './account/services/Services';
 import SideNote from './side-note/HOCSideNote';
-import Slack from './slack/HOCSlack';
-import Store from './store/HOCStore';
+import TakeAction from './take-action/HOCTakeAction';
 
 export {
   AccountList,
@@ -29,7 +27,7 @@ export {
   Browser,
   CreatePost,
   Find,
-  GoalList,
+  TakeAction,
   GoalOverview,
   Onboarding,
   MilestoneList,
@@ -44,6 +42,4 @@ export {
   Search,
   Services,
   SideNote,
-  Slack,
-  Store,
 };

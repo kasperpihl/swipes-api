@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { List } from 'immutable';
-import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
+
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
-import Button from 'Button';
-// import Icon from 'Icon';
-import Section from 'components/section/Section';
 import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 
-import './styles/goals-list.scss';
+import './styles/take-action.scss';
 
-class GoalList extends Component {
+class TakeAction extends Component {
   constructor(props) {
     super(props);
     setupDelegate(this, 'onScroll');
@@ -70,7 +66,7 @@ class GoalList extends Component {
         onScroll={this.onScroll}
         initialScroll={initialScroll}
       >
-        <div className="goals-list">
+        <div className="take-action">
           {this.renderList()}
         </div>
       </SWView>
@@ -80,9 +76,9 @@ class GoalList extends Component {
 
 const { object: obj, func } = PropTypes;
 
-GoalList.propTypes = {
+TakeAction.propTypes = {
   getLoading: func,
   delegate: obj,
 };
 
-export default GoalList;
+export default TakeAction;
