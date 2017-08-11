@@ -25,6 +25,16 @@
     border-radius: 50%;
   }
 
+  .progress-number {
+    @include size(120px);
+    @include centerAbsolute();
+    @include flexContainer('row', center, center);
+    background-color: $bg;
+    border-radius: 50%;
+    opacity: 0;
+    transition: .2s ease;
+  }
+
   .last-activity {
     $b: &;
     $flexIgnoreList: '#{$b}__left', '#{$b}__icon}';
@@ -70,7 +80,7 @@
 
     path {
       stroke-miterlimit: 10;
-      stroke-width: 36px;
+      stroke-width: 48px;
       transition: stroke-width .4s ease, opacity .3s ease, fill .3s ease, stroke .3s ease;
     }
 
@@ -155,17 +165,28 @@
 
   #{$b}__number {
     @include flexContainer('row', center, center);
-    @include font(9px, transparent, 9px, 500);
     @include size(54px);
     background-color: $bg;
     border-radius: 50%;
     left: calc(50% - (54px / 2)); top: calc(50% - (54px / 2));
-    opacity: 0;
     position: absolute;
+    opacity: 0;
     transform: scale3d(1, 1, 1);
-    transition: transform .4s ease, opacity .1s .4s ease, color .4s ease;
+    transition: transform .25s ease, opacity .1s .25s ease;
     user-select: none;
   }
+}
+
+.progress-number__number {
+    @include flexContainer('row', center, center);
+    @include font(18px, $deepBlue-70, 18px, 500);
+    @include size(120px);
+    background-color: $bg;
+    border-radius: 50%;
+    left: calc(50% - (120px / 2)); top: calc(50% - (120px / 2));
+    position: absolute;
+    transform: scale3d(1, 1, 1);
+    user-select: none;
 }
 
 // ======================================================
@@ -188,13 +209,13 @@
       
       &--bg path {
         @include svg-color($dark-green);
-        opacity: .1;
-        stroke-width: 30px;
+        opacity: .2;
+        // stroke-width: 24px;
         transition: stroke-width .4s ease, opacity .3s ease, fill .3s ease, stroke .3s ease;
       }
 
       &--fg path {
-        stroke-width: 48px;
+        // stroke-width: 33px;
         transition: .4s ease;
       }
     }
@@ -210,11 +231,15 @@
       opacity: 0;
     }
 
+    .progress-number {
+      opacity: 1;
+      transition: .2s .25s ease;
+    }
+
     .progress__number {
-      @include font(9px, $deepBlue-100, 9px, 500);
       opacity: 1;
       transform: scale3d(2.2, 2.2, 1);
-      transition: transform .4s ease, opacity .2s ease, color .4s ease;
+      transition: transform .25s ease, opacity .2s ease;
     }
   }
 }

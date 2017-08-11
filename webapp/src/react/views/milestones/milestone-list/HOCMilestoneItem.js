@@ -69,7 +69,10 @@ class HOCMilestoneItem extends PureComponent {
         />
         <div className="progress">
           <div className="progress__dot" />
-          <div className="progress__number">{`${percentage}%`}</div>
+          <div className="progress__number"></div>
+        </div>
+        <div className="progress-number">
+          <div className="progress-number__number">{`${percentage}%`}</div>
         </div>
       </div>
     );
