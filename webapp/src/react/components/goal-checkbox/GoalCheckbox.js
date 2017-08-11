@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
@@ -11,7 +11,7 @@ class GoalCheckbox extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
-    // setupDelegate(this);
+    setupDelegate(this, 'onGoalCheckboxClick');
     // this.callDelegate.bindAll('onLinkClick')
   }
   componentDidMount() {
@@ -25,7 +25,7 @@ class GoalCheckbox extends PureComponent {
     }
 
     return (
-      <div className={className}>
+      <div className={className} onClick={this.onGoalCheckboxClick}>
 
       </div>
     )

@@ -62,16 +62,19 @@ class GoalOverview extends PureComponent {
     );
   }
   renderHeader() {
-    const { goal, getLoading, delegate } = this.props;
+    const { goal, getLoading, delegate, isLoading } = this.props;
     const helper = this.getHelper();
     const title = getLoading('title').loadingLabel;
 
     return (
       <div className="goal-overview__header">
-        <GoalCheckbox />
+        <GoalCheckbox
+          completed={helper.getIsCompleted()}
+          loading={isLoading('completing')}
+          delegate={delegate}
+        />
         <HOCHeaderTitle
           title={title || goal.get('title')}
-          subtitle={msgGen.goals.getSubtitle(goal)}
           delegate={delegate}
         >
           <HOCAssigning
@@ -156,7 +159,11 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
-  renderSuccessFooter(handoff) {
+  renderSuccessFooter() {
+    const { handoff } = this.props;
+    if (!handoff) {
+      return undefined;
+    }
     let icon = 'ActivityCheckmark';
     let iconClass = 'success-footer__icon';
 
@@ -187,36 +194,6 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
-  renderFooter() {
-    const { handoff, getLoading } = this.props;
-    if (handoff) {
-      return this.renderSuccessFooter(handoff);
-    }
-    const helper = this.getHelper();
-
-    let buttonLabel = 'Complete goal';
-    let label;
-    if (helper.getIsCompleted()) {
-      buttonLabel = 'Incomplete goal';
-      label = 'This goal is completed';
-    }
-
-    return (
-      <div className="handoff-bar">
-        <div className="handoff-bar__label">
-          {label}
-        </div>
-        <div className="handoff-bar__actions">
-          <Button
-            text={buttonLabel}
-            {...getLoading('completing') }
-            primary
-            onClick={this.onBarClick}
-          />
-        </div>
-      </div>
-    );
-  }
   render() {
     const { goal } = this.props;
 
@@ -225,7 +202,7 @@ class GoalOverview extends PureComponent {
     }
 
     return (
-      <SWView header={this.renderHeader()} footer={this.renderFooter()}>
+      <SWView header={this.renderHeader()} footer={this.renderSuccessFooter()}>
         <div className="goal-overview" data-id={goal.get('id')}>
           {this.renderLeft()}
           {this.renderRight()}

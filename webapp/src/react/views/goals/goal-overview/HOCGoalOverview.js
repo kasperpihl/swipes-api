@@ -85,6 +85,19 @@ class HOCGoalOverview extends PureComponent {
       }
     });
   }
+  onGoalCheckboxClick() {
+    const { incompleteGoal, completeGoal } = this.props;
+    const helper = this.getHelper();
+    const actionFunc = helper.getIsCompleted() ? incompleteGoal : completeGoal;
+    this.setLoading('completing')
+    actionFunc(helper.getId()).then((res) => {
+      if(res && res.ok) {
+        this.clearLoading('completing')
+      } else {
+        this.clearLoading('completing', '!Something went wrong');
+      }
+    })
+  }
 
   onHandoffMessage(handoff) {
     const helper = this.getHelper();
@@ -105,19 +118,6 @@ class HOCGoalOverview extends PureComponent {
   onStepDidComplete(handoff) {
     this.clearLoading('completing');
     this.setState({ handoff });
-  }
-  onBarClick() {
-    const { incompleteGoal, completeGoal } = this.props;
-    const helper = this.getHelper();
-    const actionFunc = helper.getIsCompleted() ? incompleteGoal : completeGoal;
-    this.setLoading('completing')
-    actionFunc(helper.getId()).then((res) => {
-      if(res && res.ok) {
-        this.clearLoading('completing')
-      } else {
-        this.clearLoading('completing', '!Something went wrong');
-      }
-    })
   }
   onCloseHandoff() {
     this.setState({ handoff: null });
