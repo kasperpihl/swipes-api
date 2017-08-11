@@ -1,0 +1,21 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+.goal-checkbox {
+  @include size(36px);
+  border-radius: 50%;
+  border: 2px solid $deepBlue-80;
+  flex: none;
+
+  &:hover {
+    background-color: red;
+  }
+
+  &--completed {
+    background-color: green;
+
+    &:hover {
+      background-color: purple;
+    }
+  }
+}

@@ -11,7 +11,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-console.log('hi');
+import GoalCheckbox from 'components/goal-checkbox/GoalCheckbox';
 import Button from 'Button';
 import Icon from 'Icon';
 import './styles/goal-overview.scss';
@@ -52,7 +52,7 @@ class GoalOverview extends PureComponent {
           yourself: true,
           number: 3,
         })}”</b>
-    );
+      );
     }
 
     if (!handoff.completed) {
@@ -73,10 +73,11 @@ class GoalOverview extends PureComponent {
   renderHeader() {
     const { goal, getLoading, delegate } = this.props;
     const helper = this.getHelper();
-
     const title = getLoading('title').loadingLabel;
+
     return (
-      <div className="add-goal__header">
+      <div className="goal-overview__header">
+        <GoalCheckbox />
         <HOCHeaderTitle
           title={title || goal.get('title')}
           subtitle={msgGen.goals.getSubtitle(goal)}
@@ -99,7 +100,7 @@ class GoalOverview extends PureComponent {
           <Button
             icon="ThreeDots"
             onClick={this.onContext}
-            {...getLoading('dots')}
+            {...getLoading('dots') }
           />
         </HOCHeaderTitle>
       </div>
@@ -217,7 +218,7 @@ class GoalOverview extends PureComponent {
         <div className="handoff-bar__actions">
           <Button
             text={buttonLabel}
-            {...getLoading('completing')}
+            {...getLoading('completing') }
             primary
             onClick={this.onBarClick}
           />

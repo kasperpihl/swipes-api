@@ -40,6 +40,11 @@
 .goal-overview {
   $b: &;
 
+  &__header {
+    @include size(100%, auto);
+    @include flexContainer('row', left, top);
+  }
+
   &__column {
     will-change: width, padding;
 
