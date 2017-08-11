@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate, miniIconForId, } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
@@ -51,6 +51,8 @@ class PostComposer extends PureComponent {
 
     return (
       <div className="post-composer__subtitle">
+        <Icon icon={miniIconForId(post.getIn(['context', 'id']))} className="create-post__svg" />
+        {post.getIn(['context', 'title'])}
         <StyledText
           text={string}
           delegate={delegate}
