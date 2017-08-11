@@ -10,7 +10,9 @@ import './styles/goal-checkbox.scss';
 class GoalCheckbox extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      rendered: false
+    }
     setupDelegate(this, 'onGoalCheckboxClick');
     // this.callDelegate.bindAll('onLinkClick')
   }
@@ -18,6 +20,8 @@ class GoalCheckbox extends PureComponent {
   }
   render() {
     const { completed } = this.props;
+    const { rendered } = this.state;
+
     let className = 'goal-checkbox';
 
     if (completed) {

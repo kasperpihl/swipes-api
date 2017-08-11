@@ -74,7 +74,7 @@ class StepListItem extends PureComponent {
             index={i}
             assignees={step.get('assignees')}
             rounded
-            size={24}
+            size={30}
           />
         </div>
       </div>
@@ -95,7 +95,7 @@ class StepListItem extends PureComponent {
       return this.renderEditStep(step, i);
     }
 
-    let hoverIcon = 'ActivityCheckmark';
+    let hoverIcon = 'ChecklistCheckmark';
     let className = 'step-list-item';
 
     let title = step.get('title');

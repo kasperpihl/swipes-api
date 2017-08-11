@@ -65,6 +65,7 @@ $contHeight: 66px;
 
   &__content {
     $flexIgnoreList: '#{$b}__circle';
+
     @include size(100%);
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
     @include heightSpecifications($contHeight, auto);
@@ -93,7 +94,7 @@ $contHeight: 66px;
   }
 
   &__assigning {
-    @include size(auto, 30px);
+    @include size(auto, 36px);
     padding-left: 12px;
   }
 }
