@@ -24,7 +24,7 @@ class HOCMilestoneList extends PureComponent {
   }
   componentWillMount() {
     this.setState({
-      tabs: ['Open', 'Closed'],
+      tabs: ['Current Milestones', 'Achieved'],
       tabIndex: 0,
     });
   }

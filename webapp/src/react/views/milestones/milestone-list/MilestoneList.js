@@ -24,9 +24,7 @@ class MilestoneList extends PureComponent {
     const { getLoading, tabs, tabIndex, delegate } = this.props;
     return (
       <div className="milestone-list__header">
-        <HOCHeaderTitle title="Plan">
-
-        </HOCHeaderTitle>
+        <HOCHeaderTitle title="Plan" />
 
         <TabBar delegate={delegate} tabs={tabs} activeTab={tabIndex} />
       </div>
@@ -45,27 +43,16 @@ class MilestoneList extends PureComponent {
     )).toArray());
   }
   renderAddMilestone() {
-    const { delegate } = this.props;
+    const { delegate, tabIndex } = this.props;
+    if(tabIndex > 0) {
+      return undefined;
+    }
     return (
       <AddMilestone
         delegate={delegate}
         {...this.props.bindLoading()}
       />
     )
-  }
-  renderEmptyState() {
-    const { tabIndex } = this.props;
-
-    return (
-      <div className="milestone-empty">
-        <div className="milestone-empty__content">
-          {tabIndex === 0 ?
-            'This is the beginning of something great, a project or a big achievement for the team. Add your first milestone and set the goals for it.' :
-            'Shhh, the team is hard at work and things are still in progress. No closed milestones yet.'}
-          <div className="milestone-empty__action">{tabIndex === 0 ? 'Add a milestone' : ''}</div>
-        </div>
-      </div>
-    );
   }
   render() {
     const { milestones } = this.props;

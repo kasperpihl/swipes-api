@@ -17,14 +17,16 @@ import './styles/goals-list.scss';
 class GoalList extends Component {
   constructor(props) {
     super(props);
-    setupDelegate(this, 'onScroll', 'onAddGoal');
+    setupDelegate(this, 'onScroll');
   }
   renderHeader() {
-    const { getLoading } = this.props;
+    const { getLoading, title, subtitle } = this.props;
     return (
       <div className="goals-list__header">
-        <HOCHeaderTitle title="Take Action">
-        </HOCHeaderTitle>
+        <HOCHeaderTitle
+          title={title || 'Take Action'}
+          subtitle={subtitle || undefined}
+        />
       </div>
     );
   }
