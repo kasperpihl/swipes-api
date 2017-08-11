@@ -7,6 +7,11 @@ const getGoals = (state) => state.get('goals');
 const getMilestones = state => state.get('milestones');
 const getMyId = state => state.getIn(['me', 'id']);
 
+export const withoutMilestone = createSelector(
+  [ getGoals ],
+  goals => goals.filter(g => !g.get('milestone_id')),
+);
+
 export const assignedToMe = createSelector(
   [ getGoals, getMyId ],
   (goals, userId) => goals.filter((g) => {

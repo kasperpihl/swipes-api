@@ -9,7 +9,7 @@ import TabBar from 'components/tab-bar/TabBar';
 // import Icon from 'Icon';
 import HOCMilestoneItem from './HOCMilestoneItem';
 import AddMilestone from './AddMilestone';
-
+import HOCNoMilestone from './HOCNoMilestone';
 import './styles/milestone-list.scss';
 
 class MilestoneList extends PureComponent {
@@ -34,13 +34,15 @@ class MilestoneList extends PureComponent {
   }
   renderList() {
     const { milestones, delegate } = this.props;
-    return milestones.map(m => (
+    return [
+      <HOCNoMilestone key="no" />
+    ].concat(milestones.map(m => (
       <HOCMilestoneItem
         key={m.get('id')}
         milestone={m}
         delegate={delegate}
       />
-    )).toArray();
+    )).toArray());
   }
   renderAddMilestone() {
     const { delegate } = this.props;
