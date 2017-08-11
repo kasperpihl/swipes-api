@@ -31,15 +31,6 @@ class GoalOverview extends PureComponent {
     const helper = this.getHelper();
 
     const myName = msgGen.users.getName(myId, { disableYou: true });
-    /*if (!handoff.toId) {
-      return (
-        <span>
-          Great work {myName}! {"You've"} just completed the goal{' '}
-          <b>“{truncateString(goal.get('title'), 19)}”</b>.<br />
-          Send a message to the team to congratulate them for the achievement.
-        </span>
-      );
-    }*/
     const step = helper.getStepById(handoff.stepId);
     const title = truncateString(step.get('title'), 19);
 
