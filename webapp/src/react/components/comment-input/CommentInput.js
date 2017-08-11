@@ -51,10 +51,10 @@ class CommentInput extends PureComponent {
 
     //this.bouncedSearch(value, ['users'], e.target.getBoundingClientRect(), this);
   }
-  onAutoCompleteSelect(id) {
+  onAutoCompleteSelect(item) {
     let { message } = this.state;
     const sel = window.getSelection();
-    const firstName = msgGen.users.getFirstName(id);
+    const firstName = msgGen.users.getFirstName(item.id);
     message = message.replace('&nbsp;', ' ');
     // message = message.replace(/\s/g, ' ');
     let index = message.lastIndexOf(sel.anchorNode.textContent.replace(/\s/g, ' '));
@@ -65,7 +65,7 @@ class CommentInput extends PureComponent {
     let testStr = message.substr(index, sel.anchorOffset);
     const atIndex = testStr.lastIndexOf('@');
     testStr = testStr.substr(atIndex);
-    const aNode = `<a contenteditable="false" href="#" data-server="<!${id}|${firstName}>" style="display:inline-block;">${firstName}</a>&nbsp;`;
+    const aNode = `<a contenteditable="false" href="#" data-server="<!${item.id}|${firstName}>" style="display:inline-block;">${firstName}</a>&nbsp;`;
     message = message.substr(0, index + atIndex) + aNode + message.substr(index + atIndex + testStr.length);
     if(message.substr(-5) === '</a> '){
       message = message.substr(0, message.length - 1) + '&nbsp;';

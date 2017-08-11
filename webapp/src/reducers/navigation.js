@@ -3,10 +3,10 @@ import * as types from 'constants';
 
 const initialState = fromJS({
   primary: {
-    id: 'Onboarding',
+    id: 'MilestoneList',
     stack: [{
-      id: 'Onboarding',
-      title: 'Onboarding',
+      id: 'MilestoneList',
+      title: 'Plan',
     }],
   },
   secondary: {
