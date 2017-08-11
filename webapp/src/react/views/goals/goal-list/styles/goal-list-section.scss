@@ -1,0 +1,54 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.goal-list-section {
+  @include size(100%, auto);
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.goal-list-section {
+  $b: &;
+
+  &__header {
+    @include size(100%, 37px);
+    @include flexContainer('row', between, center);
+    border-bottom: 1px solid $deepBlue-15;
+  }
+
+  &__side {
+    @include size(auto, 100%);
+    @include flexContainer('row', left, center);
+  }
+
+  &__mini-svg {
+    @include size(18px);
+    @include svg-color($deepBlue-100);
+  }
+
+  &__title {
+    // @include font(12px, $deepBlue-90, 18px, 500);
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 500;
+    letter-spacing: .3px;
+    padding-left: 3px;
+  }
+}
+
+// ======================================================
+// Targeting
+// ======================================================
+
+.goal-list-section {
+
+  &:not(:first-child) {
+    margin-top: 24px;
+  }
+}

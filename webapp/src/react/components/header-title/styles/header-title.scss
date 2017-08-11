@@ -1,8 +1,8 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
-$h: 99px;
-$noSubH: 60px;
+$h: 63px;
+$noSubH: 39px;
 
 // ======================================================
 // Block
@@ -13,6 +13,7 @@ $noSubH: 60px;
   $flexIgnoreList: '#{$b}__actions';
 
   @include size(100%, $h);
+  margin-bottom: 36px;
 
   &--no-subtitle {
     height: $noSubH;
@@ -34,13 +35,14 @@ $noSubH: 60px;
 
   &__title {
     @include size(100%, auto);
-    @include font(30px, $deepBlue-100, 39px, 500);
+    @include font(24px, $deepBlue-100, 36px);
+    letter-spacing: -.3px;
     @include truncateString();
   }
 
   &__subtitle {
     @include size(100%, auto);
-    @include font(12px, $deepBlue-40, 400);
+    @include font(12px, $deepBlue-60, 18px);
     margin-top: 6px;
   }
 

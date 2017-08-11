@@ -8,6 +8,7 @@ import SWView from 'SWView';
 import Button from 'Button';
 // import Icon from 'Icon';
 import Section from 'components/section/Section';
+import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 
 import './styles/goals-list.scss';
@@ -17,7 +18,6 @@ class GoalList extends Component {
     super(props);
     setupDelegate(this, 'onScroll', 'onAddGoal');
   }
-
   renderHeader() {
     const { getLoading } = this.props;
     return (
@@ -54,12 +54,12 @@ class GoalList extends Component {
       );
     }
 
-
     const i = 0;
+
     return goals.map((lGoals, section) => (
-      <Section
+      <GoalListSection
         title={msgGen.milestones.getName(section)}
-        icon={section === 'none' ? 'MiniMilestone' : 'MiniMilestone'}
+        icon={section === 'none' ? 'MiniNoMilestone' : 'MiniMilestone'}
         key={section}
       >
         {lGoals.toArray().map(goal => (
@@ -69,14 +69,14 @@ class GoalList extends Component {
             key={goal.get('id')}
           />
         ))}
-      </Section>
+      </GoalListSection>
 
     )).toArray();
   }
   render() {
     const { savedState } = this.props;
-
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
+
     return (
       <SWView
         header={this.renderHeader()}

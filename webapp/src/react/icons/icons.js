@@ -75,6 +75,7 @@ import Milestones from './svgs/milestones.svg';
 import MilestoneProgress from './svgs/milestone-progress.svg';
 import MiniGoal from './svgs/mini-goal.svg';
 import MiniMilestone from './svgs/mini-milestone.svg';
+import MiniNoMilestone from './svgs/mini-no-milestone.svg';
 import MiniNote from './svgs/mini-note.svg';
 import Minus from './svgs/minus.svg';
 import Note from './svgs/note.svg';
@@ -207,6 +208,7 @@ export {
   Milestones,
   MiniGoal,
   MiniMilestone,
+  MiniNoMilestone,
   MiniNote,
   Minus,
   Note,
