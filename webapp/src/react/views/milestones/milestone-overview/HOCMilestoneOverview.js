@@ -7,7 +7,6 @@ import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'classes/react-utils';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import HOCGoalSelector from 'context-menus/goal-selector/HOCGoalSelector';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 // import { map, list } from 'react-immutable-proptypes';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -87,21 +86,11 @@ class HOCMilestoneOverview extends PureComponent {
       },
     });
   }
-  onDiscuss(e) {
-    const { navPush, milestone } = this.props;
-    navPush({
-      id: 'CreatePost',
-      title: 'Create Post',
-      props: {
-        context: {
-          title: milestone.get('title'),
-          id: milestone.get('id'),
-        },
-      },
-    });
-  }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
+    options.positionY = 0;
+    options.excludeY = false;
+    options.alignX = 'left';
     const { milestone, renameMilestone, inputMenu } = this.props;
     inputMenu({
       ...options,
@@ -119,44 +108,7 @@ class HOCMilestoneOverview extends PureComponent {
   onClose() {
 
   }
-  onAddGoalToMilestone(goalId) {
-    const { goals, milestone, addGoalToMilestone } = this.props;
-    const goal = goals.get(goalId);
-    if (goal.get('milestone_id') !== milestone.get('id')) {
-      this.setLoading('add');
-      addGoalToMilestone(milestone.get('id'), goalId).then((res) => {
-        if (res && res.ok) {
-          this.clearLoading('add');
-        } else {
-          this.clearLoading('add', '!Something went wrong', 3000);
-        }
-      });
-    }
-  }
-  onCreateGoal(title) {
-    const { milestone, createGoal } = this.props;
-    this.setLoading('add');
-    createGoal(title, milestone.get('id')).then((res) => {
-      if (res && res.ok) {
-        this.clearLoading('add');
-        window.analytics.sendEvent('Goal added', {});
-      } else {
-        this.clearLoading('add', '!Something went wrong', 3000);
-      }
-    });
-  }
-  onAddGoals(e) {
-    const { contextMenu, milestone } = this.props;
-    const options = this.getOptionsForE(e);
-    contextMenu({
-      component: HOCGoalSelector,
-      options,
-      props: {
-        milestoneId: milestone.get('id'),
-        delegate: this,
-      },
-    });
-  }
+
   onGoalClick(goalId) {
     const { navPush } = this.props;
     window.analytics.sendEvent('Goal opened', {});
@@ -209,6 +161,4 @@ export default navWrapper(connect(mapStateToProps, {
   openMilestone: ca.milestones.open,
   renameMilestone: ca.milestones.rename,
   confirm: a.menus.confirm,
-  addGoalToMilestone: ca.milestones.addGoal,
-  createGoal: ca.goals.create,
 })(HOCMilestoneOverview));

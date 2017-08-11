@@ -24,38 +24,21 @@ class GoalList extends Component {
     return (
       <div className="goals-list__header">
         <HOCHeaderTitle title="Take Action">
-          <Button
-            text="Add a goal"
-            primary
-            {...getLoading('add') }
-            onClick={this.onAddGoal}
-          />
         </HOCHeaderTitle>
       </div>
     );
   }
   renderList() {
     const { goals, delegate, myId } = this.props;
-
+    const addGoal = (
+      <HOCAddGoalItem
+        key="add"
+        defAssignees={[myId]}
+      />
+    )
     if (!goals.size) {
-      return (
-        <div className="goals-empty-state">
-          <div className="goals-empty-state__title">Goals</div>
-          <div className="goals-empty-state__message">
-            Here you can create new goals,&nbsp;
-            {'track current ones and accomplish them with your team. Let\'s get started.'}
-          </div>
-          <Button
-            primary
-            text="Create a goal"
-            className="goals-empty-state__button"
-            onClick={this.onAddGoal}
-          />
-        </div>
-      );
+      return addGoal;
     }
-
-    const i = 0;
 
     return goals.map((lGoals, section) => (
       <GoalListSection
@@ -70,12 +53,7 @@ class GoalList extends Component {
             key={goal.get('id')}
           />
         ))}
-        {section === 'none' ? (
-          <HOCAddGoalItem
-            key="add"
-            defAssignees={[myId]}
-          />
-        ) : null}
+        {section === 'none' ? addGoal : null}
       </GoalListSection>
 
     )).toArray();

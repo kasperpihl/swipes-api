@@ -94,6 +94,9 @@ export default class GoalsUtil {
   getStepTitleFromId(id) {
     return this.goal.getIn(['steps', id, 'title']);
   }
+  getAssignees() {
+    return this.goal.get('assignees') || fromJS([]);
+  }
 
   getAllAssignees() {
     const assignees = new Set();

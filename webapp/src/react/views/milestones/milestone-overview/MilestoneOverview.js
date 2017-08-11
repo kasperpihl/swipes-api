@@ -31,12 +31,6 @@ class MilestoneOverview extends PureComponent {
           delegate={delegate}
           subtitle={msgGen.milestones.getSubtitle(m)}
         >
-          <Button
-            primary
-            onClick={this.onAddGoals}
-            {...getLoading('add')}
-            text="Add goal"
-          />
           <HOCDiscussButton
             context={{
               id: m.get('id'),

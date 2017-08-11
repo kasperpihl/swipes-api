@@ -10,6 +10,8 @@ import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
+import HOCAssigning from 'components/assigning/HOCAssigning';
+console.log('hi');
 import Button from 'Button';
 import Icon from 'Icon';
 import './styles/goal-overview.scss';
@@ -80,6 +82,12 @@ class GoalOverview extends PureComponent {
           subtitle={msgGen.goals.getSubtitle(goal)}
           delegate={delegate}
         >
+          <HOCAssigning
+            assignees={helper.getAssignees()}
+            delegate={delegate}
+            rounded
+            size={36}
+          />
           <HOCDiscussButton
             context={{
               id: goal.get('id'),
