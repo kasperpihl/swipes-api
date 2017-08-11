@@ -8,20 +8,28 @@ import * as cs from 'swipes-core-js/selectors';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 class HOCNoMilestone extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+    this.onClick = this.onClick.bind(this);
     // setupLoading(this);
+  }
+  onClick() {
+    const { navPush } = this.props;
+    navPush({
+      id: 'NoMilestoneOverview',
+      title: 'No Milestone',
+    });
   }
   componentDidMount() {
   }
   render() {
     const { counter } = this.props;
     return (
-      <div>{counter}</div>
+      <div onClick={this.onClick}>{counter}</div>
     );
   }
 }
@@ -33,5 +41,5 @@ const mapStateToProps = (state) => ({
   counter: cs.goals.withoutMilestone(state).size,
 });
 
-export default connect(mapStateToProps, {
-})(HOCNoMilestone);
+export default navWrapper(connect(mapStateToProps, {
+})(HOCNoMilestone));
