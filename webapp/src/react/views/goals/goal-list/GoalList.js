@@ -10,6 +10,7 @@ import Button from 'Button';
 import Section from 'components/section/Section';
 import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
+import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 
 import './styles/goals-list.scss';
 
@@ -34,7 +35,7 @@ class GoalList extends Component {
     );
   }
   renderList() {
-    const { goals, delegate } = this.props;
+    const { goals, delegate, myId } = this.props;
 
     if (!goals.size) {
       return (
@@ -69,6 +70,12 @@ class GoalList extends Component {
             key={goal.get('id')}
           />
         ))}
+        {section === 'none' ? (
+          <HOCAddGoalItem
+            key="add"
+            defAssignees={[myId]}
+          />
+        ) : null}
       </GoalListSection>
 
     )).toArray();

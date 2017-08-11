@@ -13,8 +13,6 @@ import Icon from 'Icon';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import './styles/milestone-overview.scss';
 
-const PROGRESS_DASH = 320.4876403808594;
-
 class MilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);

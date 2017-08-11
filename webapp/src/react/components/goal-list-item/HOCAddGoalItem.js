@@ -20,11 +20,13 @@ class HOCAddGoalItem extends PureComponent {
       assignees: fromJS(props.defAssignees || []),
       milestoneId: props.milestoneId || null,
     };
+
     this.acOptions = {
       types: ['users'],
       delegate: this,
       trigger: "@",
-    }
+    };
+
     bindAll(this, ['onChange', 'onKeyDown']);
     // setupLoading(this);
   }

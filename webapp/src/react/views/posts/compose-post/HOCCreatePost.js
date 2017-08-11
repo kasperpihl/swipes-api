@@ -42,7 +42,6 @@ class HOCCreatePost extends PureComponent {
     setupLoading(this);
   }
   componentDidMount() {
-
   }
   onAutoCompleteSelect(item) {
     let { post } = this.state;

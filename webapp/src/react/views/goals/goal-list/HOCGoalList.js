@@ -72,7 +72,7 @@ class HOCGoalList extends PureComponent {
   }
 
   render() {
-    const { savedState, goals } = this.props;
+    const { savedState, goals, myId } = this.props;
 
     return (
       <GoalList
@@ -80,6 +80,7 @@ class HOCGoalList extends PureComponent {
         savedState={savedState}
         {...this.bindLoading()}
         delegate={this}
+        myId={myId}
       />
     );
   }
@@ -87,6 +88,7 @@ class HOCGoalList extends PureComponent {
 
 const mapStateToProps = state => ({
   goals: cs.goals.assignedGroupedByMilestone(state),
+  myId: state.getIn(['me', 'id']),
 });
 
 
