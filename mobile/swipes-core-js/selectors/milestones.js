@@ -37,9 +37,9 @@ export const getGrouped = createSelector(
         return a.get('closed_at') ? 1 : -1;
       }
       return a.get('created_at').localeCompare(b.get('created_at'));
-    }).groupBy(m => m.get('closed_at') ? 'Closed' : 'Open');
-    gm = gm.set('Closed', gm.get('Closed') || List());
-    gm = gm.set('Open', gm.get('Open') || List());
+    }).groupBy(m => m.get('closed_at') ? 'Achieved' : 'Current Milestones');
+    gm = gm.set('Achieved', gm.get('Achieved') || List());
+    gm = gm.set('Current Milestones', gm.get('Current Milestones') || List());
     return gm;
   }
 );

@@ -13,23 +13,3 @@
     padding: 0 30px;
   }
 }
-
-.milestone-empty {
-  @include size(100%);
-  @include flexContainer('column', center, center);
-  @include font(15px, $deepBlue-40, 24px);
-
-  &__content {
-    @include size(425px, auto);
-    @include flexContainer('column', center, center);
-    text-align: center;
-  }
-
-  &__action {
-    @include font($c: $blue-100);
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}

@@ -9,7 +9,7 @@ const getMyId = state => state.getIn(['me', 'id']);
 
 export const withoutMilestone = createSelector(
   [ getGoals ],
-  goals => goals.filter(g => !g.get('milestone_id')),
+  goals => goals.filter(g => !g.get('milestone_id') && !g.get('completed_at')),
 );
 
 export const assignedToMe = createSelector(
