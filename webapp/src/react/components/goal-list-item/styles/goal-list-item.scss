@@ -16,7 +16,7 @@ $contHeight: 66px;
   @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
   border-bottom: 1px solid $deepBlue-6;
   overflow: hidden;
-  transition: .5s ease;
+  transition: .2s ease;
   will-change: height;
 }
 
@@ -47,34 +47,35 @@ $contHeight: 66px;
 // ======================================================
 
 .goal-list-item {
+  $b: &;
 
-  &__indicator {
-    @include size(42px, 100%);
+  &__circle {
+    @include size(30px);
     @include flexContainer('row', center, center);
-    transform-origin: 50% 50%;
-    z-index: 100;
+    border: 2px solid $deepBlue-50;
+    border-radius: 50%;
   }
 
-  &__dot {
-    @include size(6px);
-    background-color: $deepBlue-20;
-    border-radius: 50%;
-    transform-origin: 50% 50%;
-    transition: .3s ease;
-    pointer-events: none;
+  &__completed-svg {
+    @include size(18px);
+    @include svg-color(white);
+    display: none;
   }
 
   &__content {
+    $flexIgnoreList: '#{$b}__circle';
     @include size(100%);
-    @include flexContainer('column', left, center);
+    @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
     @include heightSpecifications($contHeight, auto);
+    padding: 0 6px;
   }
 
   &__title {
     @include size(calc(100% - 50px), auto);
-    @include font(18px, $deepBlue-80, 24px);
+    @include font(18px, $deepBlue-90, 24px);
     @include truncateString();
-    transition: color .1s ease;
+    transition: .2s ease;
+    padding-left: 18px;
   }
 
   &__subtitle {
@@ -97,47 +98,6 @@ $contHeight: 66px;
   }
 }
 
-// progress-bar
-
-.goal-list-item {
-  $b: &;
-
-  .progress-bar {
-    @include size(100%, 20px);
-    @include flexContainer('row', left, center);
-    // background-color: $bg;
-    left: 1px; bottom: -20px;
-    position: absolute;
-    transition: .2s ease;
-
-    & > * {
-      opacity: 0;
-      transition: .2s ease;
-    }
-
-    &__frame {
-      @include size(180px, 9px);
-      border: 1px solid $deepBlue-20;
-      border-radius: 100px;
-    }
-
-    &__fill {
-      @include size(initial, 5px);
-      @include widthSpecifications(3%, 176px);
-      background-color: $deepBlue-100;
-      border-radius: 100px;
-      margin-top: 1px;
-      margin-left: 1px;
-    }
-
-    &__status {
-      @include font(12px, $deepBlue-60);
-      margin-left: 18px;
-    }
-  }
-}
-
-
 // ======================================================
 // Modifiers
 // ======================================================
@@ -146,33 +106,23 @@ $contHeight: 66px;
   $b: &;
 
   &--completed {
+    @include size(100%, 49px);
 
-    #{$b}__dot {
+    #{$b}__circle {
+      @include size(24px);
       background-color: $green-color;
+      border: none;
     }
-  }
 
-  &--starred {
-    background-color: $blue-5;
-
-    #{$b}__dot {
-      background-color: $blue-100;
+    #{$b}__completed-svg {
+      display: flex;
     }
-  }
 
-  .progress-bar {
-    &--empty {
-      .progress-bar__status {
-          margin-left: 0;
-       }
+    #{$b}__title {
+      @include size(100%, auto);
+      @include font(15px, $deepBlue-50, 24px);
+      padding-left: 12px;
     }
-  }
-
-  &--to-starred {
-    @include size(100%, 0px);
-    opacity: 0;
-    transition: height .5s ease, opacity .4s ease;
-    will-change: height;
   }
 }
 
@@ -183,32 +133,13 @@ $contHeight: 66px;
 .goal-list-item {
   $b: &;
 
-  &:not(#{&}--to-starred) {
-    &:hover {
+  &:hover {
+    background-color: $blue-5;
+    transition: .2s ease;
 
-      #{$b}__title {
-        color: $blue-100;
-        transition: color .15s ease;
-      }
-
-      #{$b}__dot {
-        transform-origin: 50% 50%;
-        transform: scale3d(2,2,1);
-        transition: .25s cubic-bezier(1,0,.47,.59);
-      }
-    }
-
-    #{$b}__indicator {
-
-      &:hover {
-
-        #{$b}__dot {
-          background-color: $blue-100;
-          transform-origin: 50% 50%;
-          transform: scale3d(3,3,1);
-          transition: .25s cubic-bezier(1,0,.47,.59);
-        }
-      }
+    #{$b}__title {
+      @include font($c: $blue-100);
+      transition: .2s ease;    
     }
   }
 }

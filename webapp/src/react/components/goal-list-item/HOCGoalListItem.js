@@ -11,6 +11,7 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 
 import './styles/goal-list-item.scss';
 /* global msgGen */
+
 class HOCGoalListItem extends PureComponent {
   constructor(props) {
     super(props);
@@ -18,7 +19,6 @@ class HOCGoalListItem extends PureComponent {
     setupDelegate(this, 'onGoalClick').setGlobals(props.goalId);
     bindAll(this, ['onClick']);
   }
-
   onClick(e) {
     const selection = window.getSelection();
 
@@ -26,12 +26,10 @@ class HOCGoalListItem extends PureComponent {
       this.onGoalClick(e);
     }
   }
-
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);
   }
-
   renderAssignees() {
     const { goal } = this.props;
     const helper = this.getHelper();
@@ -49,7 +47,6 @@ class HOCGoalListItem extends PureComponent {
   }
   render() {
     const { goal } = this.props;
-
     const helper = this.getHelper();
     const isActive = !helper.getIsCompleted();
 
@@ -62,7 +59,9 @@ class HOCGoalListItem extends PureComponent {
     return (
       <div className={className}>
         <div className="goal-list-item__content" onClick={this.onClick}>
-          <div className="goal-list-item__circle" />
+          <div className="goal-list-item__circle">
+            <Icon className="goal-list-item__completed-svg" icon="ChecklistCheckmark" />
+          </div>
           <div className="goal-list-item__title">{goal.get('title')}</div>
         </div>
         <div className="goal-list-item__assigning">
@@ -73,10 +72,6 @@ class HOCGoalListItem extends PureComponent {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  goal: state.getIn(['goals', ownProps.goalId]),
-});
-
 const { object } = PropTypes;
 
 HOCGoalListItem.propTypes = {
@@ -84,6 +79,10 @@ HOCGoalListItem.propTypes = {
   delegate: object,
   filter: map,
 };
+
+const mapStateToProps = (state, ownProps) => ({
+  goal: state.getIn(['goals', ownProps.goalId]),
+});
 
 export default connect(mapStateToProps, {
 })(HOCGoalListItem);
