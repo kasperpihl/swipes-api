@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';

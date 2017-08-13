@@ -4,7 +4,7 @@ import { list } from 'react-immutable-proptypes';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import './styles/onboarding.scss';
 
 const CIRCLE_LENGTH = 190;

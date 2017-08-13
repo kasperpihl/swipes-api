@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Icon from 'Icon';
 import Button from 'Button';
 import { map } from 'react-immutable-proptypes';
-import { iconForService, setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { iconForService, bindAll } from 'swipes-core-js/classes/utils';
 
 import './styles/find-item.scss';
 

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';

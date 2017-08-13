@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate, miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';

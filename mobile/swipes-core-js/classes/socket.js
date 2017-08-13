@@ -1,7 +1,8 @@
 import { fromJS } from 'immutable';
+import { setupDelegate } from 'react-delegate';
 import * as types from '../constants';
 
-import { bindAll, setupDelegate } from './utils';
+import { bindAll } from './utils';
 import * as a from '../actions';
 
 export default class Socket {
