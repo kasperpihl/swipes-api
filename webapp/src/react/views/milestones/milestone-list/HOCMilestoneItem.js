@@ -77,46 +77,11 @@ class HOCMilestoneItem extends PureComponent {
       </div>
     );
   }
-  renderLastActivity() {
-    const { goals } = this.state;
-    let lastActivity;
-    let goalId;
-
-    goals.forEach((g) => {
-      const helper = new GoalsUtil(g);
-      const last = helper.getLastActivity();
-      if (!lastActivity || last.get('done_at') > lastActivity.get('done_at')) {
-        lastActivity = last;
-        goalId = helper.getId();
-      }
-    });
-
-    const userId = lastActivity && lastActivity.get('done_by');
-
-    return (
-      <div className="last-activity">
-        <div className="last-activity__left">
-          {
-            userId ? (
-              <HOCAssigning assignees={[userId]} />
-            ) : (
-                undefined
-              )
-          }
-        </div>
-        <div className="last-activity__right">
-          <div className="last-activity__name">Kasper</div>
-          <div className="last-activity__label">completed goal “Notifications”</div>
-        </div>
-      </div>
-    );
-  }
   render() {
     return (
       <div className="milestone" onClick={this.onOpenMilestone}>
         {this.renderHeader()}
         {this.renderProgress()}
-        {/* {this.renderLastActivity()} */}
       </div>
     );
   }

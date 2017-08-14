@@ -26,7 +26,7 @@
 }
 
 .public-DraftEditor-content {
-  @include font(15px, $deepBlue-80, 27px);
+  @include font(15px, $deepBlue-80, 24px);
   width: 100%;
   height: inherit;
   min-height: 49vh;
@@ -35,12 +35,16 @@
   padding: 45px 0;
   padding-top: 21px;
 
+  &::selection {
+    background-color: red;
+  }
+
   & h1 {
-    @include font(27px, $deepBlue-100, 60px, 400);
+    @include font(24px, $deepBlue-100, 42px, 400);
   }
 
   & h2 {
-    @include font(21px, $deepBlue-100, 57px, 400);
+    @include font(18px, $deepBlue-100, 57px, 400);
   }
 
   & ul {
@@ -64,7 +68,7 @@
 }
 
 .public-DraftEditorPlaceholder-root {
-  @include font(15px, $deepBlue-30, 27px);
+  @include font(15px, $deepBlue-30, 24px);
   position: absolute;
   z-index: 0;
   left: 1px; top: 21px;
@@ -111,6 +115,10 @@
 .public-DraftStyleDefault-block {
   position: relative;
   white-space: pre-wrap;
+
+  ::selection {
+    background: $yellow-color; /* WebKit/Blink Browsers */
+  }
 }
 
 .public-DraftStyleDefault-ltr {

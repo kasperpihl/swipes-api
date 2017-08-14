@@ -18,7 +18,7 @@
 
 .ChecklistEditorBlock {
   &__text {
-    @include font(15px, $deepBlue-80, 27px);
+    @include font(15px, $deepBlue-80, 24px);
     cursor: text;
     word-wrap: break-word;
   }
@@ -34,7 +34,7 @@
   &--checked {
 
     #{$b}__text {
-      @include font(15px, $deepBlue-30, 27px);
+      @include font(15px, $deepBlue-30, 24px);
     }
   }
 }

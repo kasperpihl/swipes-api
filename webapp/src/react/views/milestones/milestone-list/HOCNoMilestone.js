@@ -8,7 +8,9 @@ import * as cs from 'swipes-core-js/selectors';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import Icon from 'Icon';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import './styles/no-milestone.scss';
 
 class HOCNoMilestone extends PureComponent {
   constructor(props) {
@@ -26,10 +28,39 @@ class HOCNoMilestone extends PureComponent {
   }
   componentDidMount() {
   }
+  renderHeader() {
+
+    return (
+      <div className="header">
+        <div className="header__left">
+          <div className="header__title">Goals with no milestone</div>
+        </div>
+        <div className="header__icon">
+          <Icon icon="ArrowRightLong" className="header__svg" />
+        </div>
+      </div>
+    )
+  }
+  renderBody() {
+    const { counter } = this.props;
+
+    return (
+      <div className="no-milestone-item__body">
+        <div className="no-milestone-item__subtitle">{counter}</div>
+        <Icon icon="NoMilestone" className="no-milestone-item__svg" />
+        <div className="no-milestone-item__circle">
+          <div className="no-milestone-item__dot" />
+        </div>
+      </div>
+    )
+  }
   render() {
     const { counter } = this.props;
     return (
-      <div onClick={this.onClick}>{counter}</div>
+      <div className="no-milestone-item" onClick={this.onClick}>
+        {this.renderHeader()}
+        {this.renderBody()}
+      </div>
     );
   }
 }

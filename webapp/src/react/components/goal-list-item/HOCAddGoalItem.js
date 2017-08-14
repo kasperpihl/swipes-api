@@ -19,6 +19,7 @@ class HOCAddGoalItem extends PureComponent {
       title: '',
       assignees: fromJS(props.defAssignees || []),
       milestoneId: props.milestoneId || null,
+      addFocus: false,
     };
 
     this.acOptions = {
@@ -27,17 +28,28 @@ class HOCAddGoalItem extends PureComponent {
       trigger: "@",
     };
 
-    bindAll(this, ['onChange', 'onKeyDown']);
-    // setupLoading(this);
+    bindAll(this, ['onChange', 'onKeyDown', 'onFocus', 'onBlur']);
+    setupLoading(this);
   }
   componentDidMount() {
   }
+  onFocus() {
+    this.setState({ addFocus: true });
+  }
+  onBlur(i) {
+    this.setState({ addFocus: false });
+  }
   onGoalAdd() {
     console.log('add me!');
-    const { createGoal } = this.props;
+    const { createGoal } = this.props;
     const { title, assignees, milestoneId } = this.state;
+
+    this.setLoading('add', 'Adding...');
+
     createGoal(title, milestoneId, assignees.toJS()).then((res) => {
-      if(res.ok) {
+      this.clearLoading('add');
+
+      if (res.ok) {
         this.setState({
           title: '',
           assignees: fromJS(this.props.defAssignees || []),
@@ -63,7 +75,7 @@ class HOCAddGoalItem extends PureComponent {
   }
   onAutoCompleteSelect(item) {
     let { assignees, title } = this.state;
-    if(!assignees.contains(item.id)) {
+    if (!assignees.contains(item.id)) {
       assignees = assignees.push(item.id);
     }
     const msgArr = title.split('@');
@@ -87,26 +99,43 @@ class HOCAddGoalItem extends PureComponent {
   }
   render() {
     const { placeholder } = this.props;
-    const { title, assignees } = this.state;
+    const { title, assignees, addFocus } = this.state;
+    let value = title;
+
+    let addClass = 'add-goal-item';
+
+    if (addFocus || title.length) {
+      addClass += ' add-goal-item--focused';
+    }
+
+    if (this.isLoading('add')) {
+      addClass += ' add-goal-item--loading';
+      value = this.getLoading('add').loadingLabel;
+    }
 
     return (
-      <div className="add-goal-item">
+      <div className={addClass}>
         <AutoCompleteInput
           nodeType="input"
           type="text"
           className="add-goal-item__input"
-          value={title}
+          value={value}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
           placeholder={placeholder || 'Add new goal'}
           options={this.acOptions}
         />
-        <div className="add-step__assignees">
+        <div className="add-goal-item__indicator">
+          <div className="add-goal-item__loader" />
+        </div>
+        <div className="add-goal-item__assignees">
           <HOCAssigning
             assignees={assignees}
             delegate={this}
             rounded
-            size={24}
+            size={36}
           />
         </div>
       </div>

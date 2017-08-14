@@ -7,7 +7,7 @@
 
 .add-milestone {
   @include size(calc(33% - 15px), auto);
-  @include widthSpecifications(300px, 50%);
+  @include widthSpecifications(300px, 33%);
   border-radius: 6px;
   flex-basis: 300px;
   flex-basis: 33%;
@@ -135,7 +135,7 @@
   $b: &;
 
   &:hover {
-    box-shadow: 0 1px 20px 3px rgba(5,57,128,0.1);
+    box-shadow: 0 3px 6px 0 rgba(1,13,46,0.24);
     transition: .25s ease;
 
     #{$b}__body {

@@ -5,7 +5,7 @@
   $b: &;
 
 	@include size(auto, 18px);
-  @include font(15px, $deepBlue-80, 27px);
+  @include font(15px, $deepBlue-80, 24px);
 	padding-left: 30px;
   user-select: none;
   margin: 0;

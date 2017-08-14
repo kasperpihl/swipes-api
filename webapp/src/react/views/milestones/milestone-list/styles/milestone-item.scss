@@ -8,7 +8,7 @@
 
 .milestone {
   @include size(calc(33% - 15px), auto);
-  @include widthSpecifications(300px, 50%);
+  @include widthSpecifications(300px, 33%);
   border-radius: 6px;
   flex-basis: 300px;
   flex-basis: 33%;

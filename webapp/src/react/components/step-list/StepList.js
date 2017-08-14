@@ -57,7 +57,7 @@ class StepList extends PureComponent {
   }
   onAutoCompleteSelect(item) {
     let { addStepAssignees, addStepValue } = this.state;
-    if(!addStepAssignees.contains(item.id)) {
+    if (!addStepAssignees.contains(item.id)) {
       addStepAssignees = addStepAssignees.push(item.id);
     }
     const msgArr = addStepValue.split('@');
@@ -125,13 +125,16 @@ class StepList extends PureComponent {
 
     let addClass = 'add-step';
     let value = addStepValue;
+
     if (isLoading('add')) {
       addClass += ' add-step--loading';
       value = getLoading('add').loadingLabel;
     }
+
     if (addFocus || addStepValue.length) {
       addClass += ' add-step--focused';
     }
+
     const placeholder = this.getPlaceholder();
 
     return (

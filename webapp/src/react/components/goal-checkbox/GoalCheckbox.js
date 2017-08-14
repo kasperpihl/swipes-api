@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
 // import Button from 'Button';
-// import Icon from 'Icon';
+import Icon from 'Icon';
 import './styles/goal-checkbox.scss';
 
 class GoalCheckbox extends PureComponent {
@@ -30,7 +30,7 @@ class GoalCheckbox extends PureComponent {
 
     return (
       <div className={className} onClick={this.onGoalCheckboxClick}>
-
+        <Icon icon="ChecklistCheckmark" className="goal-checkbox__svg" />
       </div>
     )
   }

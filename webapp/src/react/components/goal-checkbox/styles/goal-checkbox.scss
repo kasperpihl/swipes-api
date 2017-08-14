@@ -3,20 +3,27 @@
 
 .goal-checkbox {
   @include size(36px);
-  border-radius: 50%;
+  @include flexContainer('row', center, center) {
+    flex: none; 
+  };
   border: 2px solid $deepBlue-30;
-  flex: none;
+  border-radius: 50%;
   margin-right: 12px;
+  transition: .2s ease;
+
+  &__svg {
+    @include size(18px);
+    @include svg-color(white);
+  }
 
   &:hover {
-    background-color: red;
+    background-color: rgba($green-color, .5);
+    border-color: rgba($green-color, .1);
+    transition: .2s ease;
   }
 
   &--completed {
-    background-color: green;
-
-    &:hover {
-      background-color: purple;
-    }
+    background-color: $green-color;
+    transition: .2s ease;
   }
 }

@@ -80,6 +80,7 @@ import MiniNote from './svgs/mini-note.svg';
 import Minus from './svgs/minus.svg';
 import Note from './svgs/note.svg';
 import Notification from './svgs/notification.svg';
+import NoMilestone from './svgs/no-milestone.svg';
 import Onboarding from './svgs/onboarding.svg';
 import OrderedList from './svgs/ordered-list.svg';
 import Person from './svgs/person.svg';
@@ -213,6 +214,7 @@ export {
   Minus,
   Note,
   Notification,
+  NoMilestone,
   Onboarding,
   OrderedList,
   Person,
