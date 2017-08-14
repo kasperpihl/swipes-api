@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { List } from 'immutable';
 import GoalsUtil from '../classes/goals-util';
 import { timeAgo } from '../classes/time-utils';
 
@@ -31,6 +32,14 @@ export default class Goals {
       a => a.getIn(['link', 'service', 'name']) === 'swipes' && a.getIn(['link', 'service', 'type']) === 'note'
     ).map(a => a.getIn(['link', 'service', 'id'])).toJS();
 
+  }
+  getAssignees(goalId) {
+    const goal = this.getGoal(goalId);
+    if(!goal) {
+      return List([]);
+    }
+    const helper = new GoalsUtil(goal);
+    return helper.getAssignees();
   }
   getSubtitle(goal) {
     const helper = new GoalsUtil(goal);
