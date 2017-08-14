@@ -13,13 +13,11 @@ class GoalCheckbox extends PureComponent {
     this.state = {
       rendered: false
     }
+
     setupDelegate(this, 'onGoalCheckboxClick');
-    // this.callDelegate.bindAll('onLinkClick')
-  }
-  componentDidMount() {
   }
   render() {
-    const { completed } = this.props;
+    const { completed, loading } = this.props;
     const { rendered } = this.state;
 
     let className = 'goal-checkbox';
@@ -28,9 +26,18 @@ class GoalCheckbox extends PureComponent {
       className += ' goal-checkbox--completed'
     }
 
+    if (loading) {
+      className += ' goal-checkbox--loading'
+    }
+
     return (
       <div className={className} onClick={this.onGoalCheckboxClick}>
         <Icon icon="ChecklistCheckmark" className="goal-checkbox__svg" />
+        <div className="goal-checkbox__loader">
+          <svg className="goal-checkbox__spinner" viewBox="0 0 50 50">
+            <circle className="goal-checkbox__path" cx="25" cy="25" r="20" fill="none" />
+          </svg>
+        </div>
       </div>
     )
   }

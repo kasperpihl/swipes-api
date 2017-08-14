@@ -1,6 +1,10 @@
 @import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
+// ======================================================
+// Block
+// ======================================================
+
 .goal-checkbox {
   @include size(36px);
   @include flexContainer('row', center, center) {
@@ -10,11 +14,72 @@
   border-radius: 50%;
   margin-right: 12px;
   transition: .2s ease;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.goal-checkbox {
 
   &__svg {
     @include size(18px);
     @include svg-color(white);
   }
+
+  &__loader {
+    @include size(36px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .2s ease;
+    position: absolute;
+    left: -2px; top: -2px;
+  }
+
+  &__spinner {
+    @include size(36px);
+    @include svg-color($blue-100);
+    animation: rotateSpinner 2s linear infinite;
+  }
+
+  &__path {
+		stroke-linecap: round;
+    animation: dashSpinner 1.5s ease infinite;
+    stroke-width: 3;
+	}
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.goal-checkbox {
+  $b: &;
+
+  &--completed {
+    background-color: $green-color;
+    border-color: $green-color;
+    transition: .2s ease;
+  }
+  
+  &--loading {
+    background-color: transparent;
+    border: 2px solid transparent;
+    transition: .2s ease;
+
+    #{$b}__loader {
+      opacity: 1;
+      pointer-events: none;
+      transition: .2s ease;
+    }
+  }
+}
+
+// ======================================================
+// Hover
+// ======================================================
+
+.goal-checkbox {
 
   &:hover {
     background-color: rgba($green-color, .5);
@@ -22,8 +87,34 @@
     transition: .2s ease;
   }
 
-  &--completed {
-    background-color: $green-color;
+  &--loading:hover {
+    background-color: rgba($green-color, 0);
+    border-color: rgba($green-color, 0);
     transition: .2s ease;
+  }
+}
+
+// ======================================================
+// Animations
+// ======================================================
+
+@keyframes rotateSpinner {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dashSpinner {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
   }
 }
