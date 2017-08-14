@@ -17,25 +17,37 @@ class PostFeed extends PureComponent {
     super(props)
     setupDelegate(this, 'onPostClick', 'onNewPost', 'onReachedEnd');
     this.onScroll = this.onScroll.bind(this);
-    this.state = {}
+    this.state = {
+      showLine: false,
+    };
     this.lastEnd = 0;
   }
   componentDidMount() {
   }
   onScroll(e) {
-    if(e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
-      if(this.lastEnd < e.target.scrollTop + DISTANCE) {
+    const { showLine } = this.state;
+    let newShowLine = e.target.scrollTop > 0;
+
+    if (showLine !== newShowLine) {
+      this.setState({ showLine: newShowLine })
+    }
+
+    if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
+      if (this.lastEnd < e.target.scrollTop + DISTANCE) {
         this.onReachedEnd();
         this.lastEnd = e.target.scrollTop;
       }
     }
+
   }
   renderHeader() {
     const { context } = this.props;
     const title = context && context.get('title');
+    const { showLine } = this.state;
+
     return (
       <div className="post-feed__header">
-        <HOCHeaderTitle title="Discussions" subtitle={title && `re. ${title}`} border>
+        <HOCHeaderTitle title="Discussions" subtitle={title && `re. ${title}`} border={showLine}>
           <Button primary text="Create Post" onClick={this.onNewPost} />
         </HOCHeaderTitle>
         {this.renderTabbar()}
@@ -45,7 +57,7 @@ class PostFeed extends PureComponent {
   }
   renderTabbar() {
     const { tabs, tabIndex, delegate, posts, relatedPosts } = this.props;
-    if(!tabs) {
+    if (!tabs) {
       return undefined;
     }
     return (
@@ -63,7 +75,7 @@ class PostFeed extends PureComponent {
 
     const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
     return renderPosts.map((p, i) => {
-      if(i >= limit ) {
+      if (i >= limit) {
         return undefined;
       }
       return (

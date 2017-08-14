@@ -19,33 +19,6 @@
     @include font(12px, $deepBlue-40, 18px);
   }
 
-  &__type {
-    @include font(12px, white, 18px, 500);
-    border-radius: 3px;
-    padding: 3px 9px;
-    margin-left: 1px;
-
-    &--green {
-      background-color: #1cc05d;
-      border: 1px solid #1cc05d;
-    }
-
-    &--yellow {
-      background-color: #ffb337;
-      border: 1px solid #ffb337;
-    }
-
-    &--blue {
-      background-color: #007aff;
-      border: 1px solid #007aff;
-    }
-
-    &--purple {
-      background-color: #7900ff;
-      border: 1px solid #7900ff;
-    }
-  }
-
   &__title {
     @include font(15px, $deepBlue-100, 21px);
 

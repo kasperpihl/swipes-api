@@ -18,13 +18,15 @@ class HOCSearchResults extends PureComponent {
   }
   componentDidMount() {
   }
-  onClick(id, res) {
+  onClick(id, res) {
     const { openSecondary } = this.props;
+
     openSecondary(navForContext(id));
   }
   renderResults() {
-    const { results, limit } = this.props;
-    if(results && results.length) {
+    const { results, limit } = this.props;
+
+    if (results && results.length) {
       return results.map((res, i) => (i < limit) ? (
         <SearchResult
           key={res.item.id}
@@ -35,7 +37,6 @@ class HOCSearchResults extends PureComponent {
     }
   }
   render() {
-
     return (
       <div className="search-results">
         {this.renderResults()}

@@ -1,0 +1,59 @@
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+@import '~styles/_vars.scss/';
+@import '~styles/_mixins.scss/';
+
+// ======================================================
+// Block
+// ======================================================
+
+.goal-result {
+  $b: &;
+  $flexIgnoreList: '#{$b}__circle', '#{$b}__assignees';
+
+  @include size(100%, 61px);
+  @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+  padding: 0 6px;
+  transition: .2s ease;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.goal-result {
+
+  &__circle {
+    @include size(30px);
+    border: 2px solid $deepBlue-50;
+    border-radius: 50%;
+  }
+
+  &__title {
+    @include size(100%, auto);
+    @include font(15px, $deepBlue-90, 24px);
+    @include truncateString();
+    padding-left: 12px;
+    padding-right: 6px;
+    transition: .2s ease;
+  }
+}
+
+// ======================================================
+// Hovers
+// ======================================================
+
+.goal-result {
+  $b: &;
+
+  &:hover {
+    background-color: $blue-5;
+    transition: .2s ease;
+  
+    #{$b}__title {
+      @include font($c: $blue-100);
+      transition: .2s ease;
+    }
+  }
+}

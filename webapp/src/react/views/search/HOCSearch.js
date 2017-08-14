@@ -11,6 +11,12 @@ import { connect } from 'react-redux';
 import Search from './Search';
 
 class HOCSearch extends PureComponent {
+  static minWidth() {
+    return 600;
+  }
+  static maxWidth() {
+    return 660;
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -22,10 +28,10 @@ class HOCSearch extends PureComponent {
   componentDidMount() {
   }
   onChange(e) {
-    this.setState({ searchString: e.target.value });
+    this.setState({ searchString: e.target.value  });
   }
   render() {
-    const { searchString, limit } = this.state;
+    const { searchString, limit }  = this.state;
 
     return (
       <Search

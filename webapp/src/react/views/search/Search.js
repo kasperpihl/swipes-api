@@ -19,6 +19,7 @@ class Search extends PureComponent {
   }
   renderSearchField() {
     const { searchString } = this.props;
+
     return (
       <div className="search__field">
         <input type="text"
@@ -27,6 +28,7 @@ class Search extends PureComponent {
           value={searchString}
           onChange={this.onChange}
         />
+
         <Icon icon="Find" className="search__field-svg" />
       </div>
     )

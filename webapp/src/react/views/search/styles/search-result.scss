@@ -2,8 +2,5 @@
 @import '~styles/_mixins.scss';
 
 .search-result {
-  &__icon {
-    @include size(24px);
-    @include svg-color($deepBlue-30);
-  }
+  border-bottom: 1px solid $deepBlue-5;
 }
