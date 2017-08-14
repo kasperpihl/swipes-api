@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import {
   EditorState,
   Modifier,

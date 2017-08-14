@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback, URL_REGEX } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { URL_REGEX } from 'swipes-core-js/classes/utils';
 import TimeAgo from 'components/time-ago/TimeAgo';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 // import SWView from 'SWView';

@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react'
 import { SortableElement } from 'react-sortable-hoc';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate } from 'swipes-core-js/classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';

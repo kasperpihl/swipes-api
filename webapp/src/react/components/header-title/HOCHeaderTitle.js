@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import * as a from 'actions';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 
 import './styles/header-title.scss';
 

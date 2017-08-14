@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { map } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import ReactTextarea from 'react-textarea-autosize';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'components/loaders/Loader';
-import { setupCachedCallback, setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import ResultItem from 'components/result-item/ResultItem';
 
 

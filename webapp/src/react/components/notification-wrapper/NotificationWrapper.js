@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { mapContains, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { setupDelegate, attachmentIconForService, URL_REGEX } from 'swipes-core-js/classes/utils';
+import { attachmentIconForService, URL_REGEX } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import TimeAgo from 'components/time-ago/TimeAgo';
 
 import './styles/notification-item';

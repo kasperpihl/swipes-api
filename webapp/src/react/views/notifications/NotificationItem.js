@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
 // import SWView from 'SWView';
 // import Button from 'Button';

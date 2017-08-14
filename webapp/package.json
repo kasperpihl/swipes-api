@@ -30,6 +30,7 @@
     "prop-types": "^15.5.8",
     "re-reselect": "^0.6.3",
     "react": "^15.5.4",
+    "react-delegate": "^1.0.2",
     "react-dom": "^15.5.4",
     "react-dom-confetti": "0.0.7",
     "react-immutable-proptypes": "^2.1.0",

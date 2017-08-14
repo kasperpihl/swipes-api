@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+// import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 class GoalItemTooltip extends PureComponent {
   constructor(props) {

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import SignupInput from './SignupInput';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 // import { map, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import './styles/signup.scss';

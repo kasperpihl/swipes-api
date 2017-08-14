@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
-import { bindAll, setupDelegate, setupCachedCallback, debounce, getDeep } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { bindAll, setupCachedCallback, debounce, getDeep } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
