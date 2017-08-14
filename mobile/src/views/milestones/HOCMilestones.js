@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { List } from 'immutable';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import * as a from '../../actions';
+import * as cs from '../../../swipes-core-js/selectors';
 import HOCHeader from '../../components/header/HOCHeader';
 import { colors } from '../../utils/globalStyles';
 import MilestoneItem from './MilestoneItem';
@@ -33,7 +34,7 @@ class HOCMilestones extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Open', 'Closed'],
+      tabs: ['Current Milestones', 'Achieved'],
       tabIndex: 0,
       hasLoaded: false,
     };
@@ -85,19 +86,6 @@ class HOCMilestones extends PureComponent {
   renderHeader() {
     const { tabIndex, tabs } = this.state;
     const { milestones } = this.props;
-    const group = milestones.sort(
-      (a, b) => {
-        if (a.get('closed_at') && b.get('closed_at')) {
-          return b.get('closed_at').localeCompare(a.get('closed_at'));
-        } else if (a.get('closed_at')) {
-          return 1;
-        } else if (b.get('closed_at')) {
-          return -1;
-        } else {
-          return a.get('created_at').localeCompare(b.get('created_at'));
-        }
-      }
-    ).groupBy(m => m.get('closed_at') ? 'Closed' : 'Open');
 
     return (
       <HOCHeader
@@ -105,7 +93,7 @@ class HOCMilestones extends PureComponent {
         currentTab={tabIndex}
         delegate={this}
         tabs={tabs.map((t) => {
-          const size = (group.get(t) && group.get(t).size) || 0;
+          const size = (milestones.get(t) && milestones.get(t).size) || 0;
 
           if (size) {
             t += ` (${size})`;
@@ -124,8 +112,6 @@ class HOCMilestones extends PureComponent {
   renderList() {
     const { tabIndex, tabs, hasLoaded } = this.state;
     const { milestones } = this.props;
-    const group = milestones.groupBy(m => m.get('closed_at') ? 'Closed' : 'Open');
-    const milestonesToRender = group.get(tabs[tabIndex]) || emptyList;
 
     if (!hasLoaded) {
       return this.renderListLoader();
@@ -134,8 +120,8 @@ class HOCMilestones extends PureComponent {
     return (
       <ImmutableVirtualizedList
         style={styles.list}
-        immutableData={milestonesToRender}
-        renderRow={mS => this.renderMilestoneItem(mS)}
+        immutableData={milestones.get(tabs[tabIndex])}
+        renderRow={this.renderMilestoneItem}
         onScroll={window.onScroll}
         windowSize={2}
       />
@@ -153,7 +139,7 @@ class HOCMilestones extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    milestones: state.get('milestones'),
+    milestones: cs.milestones.getGrouped(state),
   };
 }
 

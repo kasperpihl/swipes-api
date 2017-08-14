@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
+import * as cs from '../../../swipes-core-js/selectors';
 import { colors } from '../../utils/globalStyles';
 import HOCGoalItem from './HOCGoalItem';
 
@@ -28,8 +29,6 @@ class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['current', 'starred', 'unassigned'],
-      tabIndex: 0,
       hasLoaded: false,
     };
 
@@ -63,26 +62,22 @@ class HOCGoalList extends PureComponent {
     }
   }
   renderHeader() {
-    const { filters } = this.props;
-    const { tabIndex, tabs } = this.state;
 
     return (
       <HOCHeader
-        title="Goals"
-        tabs={tabs.map((tId, i) => {
-          let title = filters.getIn([tId, 'title']);
-          const size = filters.getIn([tId, 'goals']).size;
-          if (i < (tabs.length - 1) && size) {
-            title += ` (${size})`;
-          }
-          return title;
-        })}
-        currentTab={tabIndex}
+        title="Take Action"
         delegate={this}
       />
     );
   }
-  renderGoal(gId, filterId) {
+  renderSectionHeader(v1, section) {
+    if(section === 'none') {
+      return <Text>No milestone</Text>;
+    }
+    return <Text>{msgGen.milestones.getName(section)}</Text>;
+  }
+  renderGoal(g) {
+    const gId = g.get('id');
     return <HOCGoalItem goalId={gId} key={gId} delegate={this} />;
   }
   renderListLoader() {
@@ -93,35 +88,19 @@ class HOCGoalList extends PureComponent {
     );
   }
   renderList() {
-    const { filters, goals, starredGoals: pG } = this.props;
-    const { tabIndex, tabs, hasLoaded } = this.state;
+    const { goals } = this.props;
+    const { hasLoaded } = this.state;
 
     if (!hasLoaded) {
       return this.renderListLoader();
     }
 
-    let goalFilter = filters.get(tabs[tabIndex]);
-
-    goalFilter = goalFilter.set('goals', goalFilter.get('goals').sort((g1, g2) => {
-      const g1PinI = pG.indexOf(g1);
-      const g2PinI = pG.indexOf(g2);
-
-      if (g1PinI > g2PinI) {
-        return -1;
-      }
-
-      if (g2PinI > g1PinI) {
-        return 1;
-      }
-
-      return goals.getIn([g2, 'created_at']).localeCompare(goals.getIn([g1, 'created_at']));
-    }));
-
     return (
       <ImmutableVirtualizedList
         style={styles.list}
-        immutableData={goalFilter.get('goals')}
-        renderRow={gId => this.renderGoal(gId, tabs[tabIndex])}
+        immutableData={goals}
+        renderRow={this.renderGoal}
+        renderSectionHeader={this.renderSectionHeader}
         onScroll={window.onScroll}
       />
     );
@@ -140,9 +119,7 @@ class HOCGoalList extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    goals: state.get('goals'),
-    filters: state.getIn(['filters', 'goals']),
-    starredGoals: state.getIn(['me', 'settings', 'starred_goals']),
+    goals: cs.goals.assignedGroupedByMilestone(state),
   };
 }
 

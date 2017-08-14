@@ -28,9 +28,6 @@ class LoadingModal extends PureComponent {
     showLoader(false);
   }
   render() {
-    console.log('====================================');
-    console.log('hi', this.state.loadingState);
-    console.log('====================================');
     return (
       <Modal
         animationType={'fade'}
