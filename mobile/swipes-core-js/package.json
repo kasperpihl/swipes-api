@@ -17,6 +17,7 @@
   "dependencies": {
     "fuse.js": "^3.0.5",
     "re-reselect": "^0.6.3",
+    "react-delegate": "^1.0.2",
     "reselect": "^3.0.1",
     "valjs": "0.0.27"
   }

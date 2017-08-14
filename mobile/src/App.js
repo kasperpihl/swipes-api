@@ -85,27 +85,21 @@ class App extends PureComponent {
   onIds(device) {
     if (device.userId) {
       this.playerId = device.userId;
-      console.log('id', device.userId);
       this.checkTagsAndUpdate();
     }
     // console.log('Device info: ', device);
   }
   checkTagsAndUpdate() {
-    console.log('checking tags');
     OneSignal.getTags((receivedTags) => {
       const { myId, isHydrated } = this.props;
       if (!receivedTags) {
         receivedTags = {};
       }
-      console.log('checked', receivedTags.swipesUserId, myId);
       if(isHydrated && !myId && receivedTags.swipesUserId) {
-        console.log('deleting swipesUserId');
         OneSignal.deleteTag("swipesUserId");
       } else if(isHydrated && myId && !receivedTags.swipesUserId) {
-        console.log('setting userId', myId);
         OneSignal.sendTag('swipesUserId', myId);
       }
-      // console.log(receivedTags);
     });
   }
   codePushStatusDidChange(status) {
