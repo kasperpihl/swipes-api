@@ -31,10 +31,9 @@ class MilestoneList extends PureComponent {
     );
   }
   renderList() {
-    const { milestones, delegate } = this.props;
-    return [
-      <HOCNoMilestone key="no" />
-    ].concat(milestones.map(m => (
+    const { milestones, delegate, tabIndex } = this.props;
+    let firstMilestones = tabIndex === 0 ? [<HOCNoMilestone key="no" />] : [];
+    return firstMilestones.concat(milestones.map(m => (
       <HOCMilestoneItem
         key={m.get('id')}
         milestone={m}
