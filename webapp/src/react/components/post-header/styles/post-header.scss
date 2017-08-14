@@ -27,6 +27,36 @@
     }
   }
 
+  &__type {
+    @include size(100%, auto);
+    @include font(12px, white, 18px, 500);
+    @include flexContainer('column', left, center);
+    border-radius: 3px;
+    padding: 3px 12px;
+    padding-left: 15px;
+    margin-left: 1px;
+
+    &--green {
+      background-color: #1cc05d;
+      border: 1px solid #1cc05d;
+    }
+
+    &--yellow {
+      background-color: #ffb337;
+      border: 1px solid #ffb337;
+    }
+
+    &--blue {
+      background-color: #007aff;
+      border: 1px solid #007aff;
+    }
+
+    &--purple {
+      background-color: #7900ff;
+      border: 1px solid #7900ff;
+    }
+  }
+
   &__styled-text {
     @include font(12px, $deepBlue-50, 18px, 500);
   }
