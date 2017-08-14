@@ -42,7 +42,7 @@ class HOCGoalListItem extends PureComponent {
         assignees={helper.getAllAssignees()}
         maxImages={2}
         rounded
-        size={34}
+        size={36}
       />
     );
   }

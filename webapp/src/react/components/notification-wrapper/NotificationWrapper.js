@@ -60,7 +60,7 @@ class NotificationItem extends Component {
               )
           }
           <TimeAgo
-            date={n.get('done_at')}
+            date={n.get('doneAt')}
             simple
           />
         </div>

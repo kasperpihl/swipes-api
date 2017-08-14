@@ -21,8 +21,8 @@ class HOCDiscussButton extends PureComponent {
   componentDidMount() {
   }
   onFeed() {
-    const { openSecondary, target, context, relatedFilter } = this.props;
-    openSecondary(target, {
+    const { openSecondary, context, relatedFilter } = this.props;
+    openSecondary({
       id: 'PostFeed',
       title: 'Discussions',
       props: {
@@ -32,8 +32,8 @@ class HOCDiscussButton extends PureComponent {
     });
   }
   onDiscuss() {
-    const { navPush, target, context, taggedUsers, openModal } = this.props;
-    openModal(target, {
+    const { context, taggedUsers, openModal } = this.props;
+    openModal({
       id: 'CreatePost',
       title: 'Create Post',
       props: {
@@ -79,7 +79,4 @@ const makeMapStateToProps = () => {
 }
 
 export default navWrapper(connect(makeMapStateToProps, {
-  openSecondary: a.navigation.openSecondary,
-  navPush: a.navigation.push,
-  openModal: a.main.modal,
 })(HOCDiscussButton));

@@ -10,9 +10,9 @@ import {
   convertToRaw,
 } from 'draft-js';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import GoalList from './GoalList';
+import TakeAction from './TakeAction';
 
-class HOCGoalList extends PureComponent {
+class HOCTakeAction extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -45,7 +45,7 @@ class HOCGoalList extends PureComponent {
     const { savedState, goals, myId } = this.props;
 
     return (
-      <GoalList
+      <TakeAction
         goals={goals}
         savedState={savedState}
         delegate={this}
@@ -55,14 +55,8 @@ class HOCGoalList extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  goals: cs.goals.assignedGroupedByMilestone(state),
-  myId: state.getIn(['me', 'id']),
-});
-
-
 const { func, object } = PropTypes;
-HOCGoalList.propTypes = {
+HOCTakeAction.propTypes = {
   goals: map,
   savedState: object,
   saveState: func,
@@ -71,6 +65,11 @@ HOCGoalList.propTypes = {
   delegate: object,
 };
 
+const mapStateToProps = state => ({
+  goals: cs.goals.assignedGroupedByMilestone(state),
+  myId: state.getIn(['me', 'id']),
+});
+
 export default navWrapper(connect(mapStateToProps, {
   saveCache: ca.cache.save,
-})(HOCGoalList));
+})(HOCTakeAction));

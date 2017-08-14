@@ -73,7 +73,7 @@ $contHeight: 66px;
 
   &__title {
     @include size(calc(100% - 50px), auto);
-    @include font(18px, $deepBlue-90, 24px);
+    @include font(15px, $deepBlue-90, 24px);
     @include truncateString();
     transition: .2s ease;
     padding-left: 18px;
@@ -140,7 +140,7 @@ $contHeight: 66px;
 
     #{$b}__title {
       @include font($c: $blue-100);
-      transition: .2s ease;    
+      transition: .2s ease;
     }
   }
 }
