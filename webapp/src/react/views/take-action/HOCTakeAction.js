@@ -33,6 +33,24 @@ class HOCTakeAction extends PureComponent {
       },
     });
   }
+  onGoalSectionClick(milestoneId) {
+    const { navPush } = this.props;
+    console.log(milestoneId);
+    if(milestoneId === 'none') {
+      navPush({
+        id: 'NoMilestoneOverview',
+        title: 'No Milestone',
+      });
+      return;
+    }
+    navPush({
+      id: 'MilestoneOverview',
+      title: 'Milestone overview',
+      props: {
+        milestoneId,
+      },
+    });
+  }
   saveState() {
     const { saveState } = this.props;
     const savedState = {

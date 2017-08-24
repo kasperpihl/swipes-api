@@ -40,6 +40,8 @@ class TakeAction extends Component {
 
     return goals.map((lGoals, section) => (
       <GoalListSection
+        delegate={delegate}
+        id={section}
         title={msgGen.milestones.getName(section)}
         icon={section === 'none' ? 'MiniNoMilestone' : 'MiniMilestone'}
         key={section}

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { setupDelegate } from 'react-delegate';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
@@ -11,16 +12,15 @@ class GoalListSection extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLinkClick')
+    setupDelegate(this, 'onGoalSectionClick');
   }
   componentDidMount() {
   }
   renderLeftSide() {
-    const { icon, title } = this.props;
+    const { icon, title, id } = this.props;
 
     return (
-      <div className="goal-list-section__side">
+      <div className="goal-list-section__side" onClick={this.onGoalSectionClickCached(id)}>
         <Icon className="goal-list-section__mini-svg" icon={icon} />
         <div className="goal-list-section__title">
           {title}
