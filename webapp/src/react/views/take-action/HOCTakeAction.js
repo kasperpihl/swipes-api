@@ -35,7 +35,6 @@ class HOCTakeAction extends PureComponent {
   }
   onGoalSectionClick(milestoneId) {
     const { navPush } = this.props;
-    console.log(milestoneId);
     if(milestoneId === 'none') {
       navPush({
         id: 'NoMilestoneOverview',

@@ -25,6 +25,15 @@
   &__side {
     @include size(auto, 100%);
     @include flexContainer('row', left, center);
+    &:hover {
+      #{$b}__title {
+        color: $blue-100;
+      }
+      #{$b}__mini-svg {
+        @include svg-color($blue-100);
+      }
+    }
+
   }
 
   &__mini-svg {
