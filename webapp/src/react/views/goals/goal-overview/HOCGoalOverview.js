@@ -41,18 +41,18 @@ class HOCGoalOverview extends PureComponent {
     this.setState({ editMode: !this.state.editMode });
   }
   onCreatePost(props) {
-    const { goal, navPush } = this.props;
+    const { goal, openModal } = this.props;
     props = props || {};
     props.context = {
       id: goal.get('id'),
       title: goal.get('title'),
     };
 
-    navPush({
+    openModal({
       id: 'CreatePost',
       title: 'Create Post',
       props,
-    })
+    });
   }
   onSeeAll() {
     const { openSecondary, goal, contextMenu } = this.props;
@@ -92,6 +92,11 @@ class HOCGoalOverview extends PureComponent {
     this.setLoading('completing')
     actionFunc(helper.getId()).then((res) => {
       if(res && res.ok) {
+        this.setState({
+          handoff: {
+            completed: !helper.getIsCompleted()
+          }
+        });
         this.clearLoading('completing')
       } else {
         this.clearLoading('completing', '!Something went wrong');

@@ -32,35 +32,53 @@ class GoalOverview extends PureComponent {
     const helper = this.getHelper();
 
     const myName = msgGen.users.getName(myId, { disableYou: true });
-    const step = helper.getStepById(handoff.stepId);
-    const title = truncateString(step.get('title'), 19);
 
     let personString = 'the next person';
-    let assignees = helper.getAssigneesForStepId(handoff.stepId);
-    assignees = handoff.completed ? helper.getAllAssignees() : assignees;
+    const assignees = helper.getAllAssignees();
     if (assignees.size) {
       personString = (
         <b>“{msgGen.users.getNames(assignees, {
-          yourself: true,
+          excludeId: 'me',
           number: 3,
         })}”</b>
       );
     }
 
+    const step = helper.getStepById(handoff.stepId);
+    if(step) {
+      const stepTitle = truncateString(step.get('title'), 19);
+      if (!handoff.completed) {
+        return (
+          <span>
+            Alright, {myName}. <b>“{stepTitle}”</b> needs some changes.<br />
+            Send a message to {personString} on what needs to be done.
+          </span>
+        );
+      }
+      return (
+        <span>
+          Great progress, {myName}! You completed <b>“{stepTitle}”</b><br />
+          Send a message to {personString} on how to take it from here.
+        </span>
+      );
+    }
+
+    const goalTitle = truncateString(goal.get('title'), 19);
     if (!handoff.completed) {
       return (
         <span>
-          Alright, {myName}. <b>“{title}”</b> needs some changes.<br />
+          Alright, {myName}. <b>“{goalTitle}”</b> needs some changes.<br />
           Send a message to {personString} on what needs to be done.
         </span>
       );
     }
     return (
       <span>
-        Great progress, {myName}! You completed <b>“{title}”</b><br />
-        Send a message to {personString} on how to take it from here.
+        You're all done, {myName}! You completed <b>“{goalTitle}”</b><br />
+        Send a message to congratulate {personString}.
       </span>
     );
+
   }
   renderHeader() {
     const { goal, getLoading, delegate, isLoading } = this.props;

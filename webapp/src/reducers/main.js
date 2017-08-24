@@ -61,7 +61,7 @@ export default function main(state = initialState, action) {
     // ======================================================
     // Success animation
     // ======================================================
-
+    case 'goals.complete':
     case 'goals.completeStep': {
       return state.set('successState', new Date());
     }
