@@ -1,5 +1,7 @@
 import { fromJS, Map } from 'immutable';
 import { createSelector } from 'reselect'
+import createCachedSelector from 're-reselect';
+
 import Fuse from 'fuse.js';
 import { funcWrap } from 'valjs';
 
@@ -10,12 +12,14 @@ export function searchSelectorFromKeys(keys, getAll) {
     list => list.toList().toJS(),
   );
   const options = getFuzzyOptionsWithKeys(keys);
-  return createSelector(
+  return createCachedSelector(
     [arraySelector, getSearchString],
     (list, string) => {
       let fuse = new Fuse(list, options); // "list" is the item array
       return fuse.search(string || '');
     }
+  )(
+    (state, props) => getSearchString(state, props) || ''
   )
 }
 
