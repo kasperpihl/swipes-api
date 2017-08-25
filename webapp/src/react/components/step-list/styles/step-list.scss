@@ -166,29 +166,23 @@
         font-style: italic;
       }
 
-      &:not(:placeholder-shown) + .add-step__indicator {
-        border: 2px solid $deepBlue-100;
-        color: rgba($deepBlue-100, 1);
-        transition: .3s ease;
-      }
     }
 
     &__indicator {
-      @include size(30px);
+      @include size(30px); //
       @include flexContainer('row', center, center);
-      border: 5px solid $deepBlue-20;
-      border-radius: 50%;
-      color: rgba($deepBlue-100, 0);
-      transition: .3s ease;
       margin-right: 18px;
-      transform: scale(.4);
-      order: 1;
+      &--number {
+        @include font(12px, $deepBlue-30, 18px, bold);
+
+      }
     }
 
     &--focused {
       .add-step__indicator {
-        transform: scale(1.0);
-        border: 2px solid $deepBlue-20;
+        .add-step__indicator--number {
+          @include font($c: $deepBlue-90);
+        }
       }
     }
 
@@ -372,23 +366,23 @@
     }
   }
 
-  
+
   &--completed #{$b}__indicator:hover {
-    
+
     .indicator {
       // background-color: $bg;
       // border: 2px solid $deepBlue-100;
-      
+
       &__number {
         // @include font($c: $deepBlue-100);
       }
-      
+
       &__svg {
         @include svg-color($bg);
       }
     }
   }
-  
+
   &--current:hover {
 
     .indicator {

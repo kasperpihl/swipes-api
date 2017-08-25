@@ -28,7 +28,7 @@ class HOCAttachments extends PureComponent {
     this.onPreviewCached = setupCachedCallback(this.onPreview, this);
     this.onContextMenuCached = setupCachedCallback(this.onContextMenu, this);
     this.onAddCached = setupCachedCallback(this.onAdd, this);
-    setupDelegate(this, 'onFlag', 'willOpenPreview');
+    setupDelegate(this, 'onFlag');
     bindAll(this, ['onChangeFiles', 'onPaste']);
     setupLoading(this);
   }
@@ -49,7 +49,6 @@ class HOCAttachments extends PureComponent {
     const selection = window.getSelection();
 
     if (selection.toString().length === 0) {
-      this.willOpenPreview(attachments.get(id), e);
       previewLink(this.context.target, attachments.get(id));
       window.analytics.sendEvent('Attachment opened', {
         Type: attachments.getIn([id, 'link', 'service', 'type']),
