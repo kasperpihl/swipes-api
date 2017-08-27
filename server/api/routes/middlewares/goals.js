@@ -13,6 +13,7 @@ import {
   dbGoalsCompleteStep,
   dbGoalsIncompleteStep,
   dbGoalsAppendWayToGoal,
+  dbGoalsAssign,
 } from './db_utils/goals';
 import {
   generateSlackLikeId,
@@ -50,6 +51,7 @@ const goalsCreate = valLocals('goalsCreate', {
     done_by: user_id,
     done_at: new Date(),
   }];
+  goal.assignees = [user_id];
   goal.steps = {};
   goal.step_order = [];
   goal.attachments = {};
@@ -563,6 +565,65 @@ const goalsAppendWayToGoalQueueMessage = valLocals('goalsAppendWayToGoalQueueMes
 
   return next();
 });
+const goalsAssign = valLocals('goalsAssign', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  assignees: array.of(string).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    assignees,
+  } = res.locals;
+
+  dbGoalsAssign({ user_id, goal_id, assignees })
+    .then((result) => {
+      const newVal = result.changes[0].new_val;
+      const oldVal = result.changes[0].old_val;
+      const newStepAssignees = newVal.assignees;
+      const oldStepAssignees = oldVal.assignees;
+      const diffAssignees = newStepAssignees.filter(a => !oldStepAssignees.find(b => b === a));
+
+      setLocals({
+        steps: newVal.steps,
+        assignees_diff: diffAssignees,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const goalsAssignQueueMessage = valLocals('goalsAssignQueueMessage', {
+  user_id: string.require(),
+  goal_id: string.require(),
+  assignees: array.of(string).require(),
+  assignees_diff: array.of(string).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    goal_id,
+    assignees,
+    assignees_diff,
+  } = res.locals;
+  const event_type = 'goal_assigned';
+  const queueMessage = {
+    user_id,
+    goal_id,
+    assignees,
+    assignees_diff,
+    event_type,
+    notification_id_sufix: `${goal_id}-${event_type}`,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: goal_id,
+  });
+
+  return next();
+});
 
 export {
   goalsCreate,
@@ -585,4 +646,6 @@ export {
   goalsCompleteQueueMessage,
   goalsIncompleteGoal,
   goalsIncompleteQueueMessage,
+  goalsAssign,
+  goalsAssignQueueMessage,
 };

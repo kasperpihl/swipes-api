@@ -26,6 +26,8 @@ import {
   goalsCompleteQueueMessage,
   goalsIncompleteGoal,
   goalsIncompleteQueueMessage,
+  goalsAssign,
+  goalsAssignQueueMessage,
 } from './middlewares/goals';
 import {
   stepsReorder,
@@ -225,6 +227,20 @@ authed.all('/goals.stepsReorder',
   valResponseAndSend({
     goal_id: string.require(),
     step_order: array.of(string).require(),
+  }));
+
+authed.all('/goals.assign',
+  valBody({
+    goal_id: string.require(),
+    assignees: array.of(string).require(),
+  }),
+  goalsAssign,
+  goalsAssignQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal_id: string.require(),
+    assignees: array.require(),
+    steps: object.require(),
   }));
 
 export {

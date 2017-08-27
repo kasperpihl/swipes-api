@@ -268,6 +268,41 @@ const dbGoalsAppendWayToGoal = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbGoalsAssign = funcWrap([
+  object.as({
+    user_id: string.require(),
+    goal_id: string.require(),
+    assignees: array.of(string).require(),
+  }).require(),
+], (err, { user_id, goal_id, assignees }) => {
+  if (err) {
+    throw new SwipesError(`dbGoalsAssign: ${err}`);
+  }
+
+  const q =
+    r.db('swipes')
+      .table('goals')
+      .get(goal_id)
+      .update((goal) => {
+        return {
+          assignees: r.expr([]).setUnion(assignees),
+          updated_at: r.now(),
+          steps: goal('step_order').map((stepId) => {
+            return r.expr([
+              stepId,
+              goal('steps')(stepId).merge({
+                assignees: goal('steps')(stepId)('assignees').default([]).setIntersection(assignees),
+                updated_at: r.now(),
+              }),
+            ]);
+          }).coerceTo('object'),
+        };
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbGoalsInsertSingle,
@@ -278,4 +313,5 @@ export {
   dbGoalsCompleteStep,
   dbGoalsIncompleteStep,
   dbGoalsAppendWayToGoal,
+  dbGoalsAssign,
 };

@@ -243,6 +243,7 @@ const stepsAssign = valLocals('stepsAssign', {
       const diffAssignees = newStepAssignees.filter(a => !oldStepAssignees.find(b => b === a));
 
       setLocals({
+        goal_assignees: newVal.assignees,
         assignees_diff: diffAssignees,
       });
 
@@ -254,6 +255,7 @@ const stepsAssign = valLocals('stepsAssign', {
 });
 const stepsAssignQueueMessage = valLocals('stepsAssignQueueMessage', {
   user_id: string.require(),
+  goal_id: string.require(),
   step_id: string.require(),
   assignees: array.of(string).require(),
   assignees_diff: array.of(string).require(),

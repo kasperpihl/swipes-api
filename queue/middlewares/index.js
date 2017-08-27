@@ -240,6 +240,23 @@ const step_assigned = notifyWrapper([
   notify.notifySendEventToAllInCompany,
 ]);
 
+const goal_assigned = notifyWrapper([
+  goals.goalsGetSingle,
+  goals.goalsAssignedNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      assignees_diff,
+    } = res.locals;
+
+    res.locals.user_ids = assignees_diff.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+
 const xendo_user_signup = xendoWrapper([
   xendo.xendoUserSignUp,
 ]);
@@ -448,6 +465,7 @@ export {
   goal_archived,
   goal_renamed,
   goal_loaded_way,
+  goal_assigned,
   step_completed,
   step_incompleted,
   milestone_created,

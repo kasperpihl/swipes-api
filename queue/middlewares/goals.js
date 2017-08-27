@@ -77,6 +77,29 @@ const goalsArchiveNotificationData = (req, res, next) => {
 
   return next();
 };
+const goalsAssignedNotificationData = (req, res, next) => {
+  const {
+    goal_id,
+    goal,
+    assignees,
+  } = res.locals;
+
+  res.locals.notificationData = {
+    target: {
+      id: goal_id,
+    },
+    meta: {
+      goal_title: goal.title,
+    },
+  };
+  res.locals.eventData = {
+    goal_id,
+    assignees,
+    steps: goal.steps,
+  };
+
+  return next();
+};
 
 export {
   goalsGetSingle,
@@ -85,4 +108,5 @@ export {
   goalsGeneralNotificationData,
   goalsLoadedWayNotificationData,
   goalsArchiveNotificationData,
+  goalsAssignedNotificationData,
 };

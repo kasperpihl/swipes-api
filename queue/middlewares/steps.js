@@ -82,6 +82,7 @@ const stepsAssignedNotificationData = (req, res, next) => {
     goal_id,
     step_id,
     assignees,
+    goal_assignees: goal.assignees,
   };
 
   return next();

@@ -95,6 +95,7 @@ authed.all('/steps.assign',
     goal_id: string.require(),
     step_id: string.require(),
     assignees: array.require(),
+    goal_assignees: array.require(),
   }));
 
 export {
