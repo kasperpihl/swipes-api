@@ -16,12 +16,12 @@ class TakeAction extends Component {
     setupDelegate(this, 'onScroll');
   }
   renderHeader() {
-    const { getLoading, title, subtitle } = this.props;
+    const { getLoading } = this.props;
     return (
       <div className="goals-list__header">
         <HOCHeaderTitle
-          title={title || 'Take Action'}
-          subtitle={subtitle || undefined}
+          title="Take Action"
+          subtitle="See all your responsibilities and work on the most important goals."
         />
       </div>
     );

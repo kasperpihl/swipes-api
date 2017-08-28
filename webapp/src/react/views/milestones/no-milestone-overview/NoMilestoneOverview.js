@@ -9,7 +9,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 // import './styles/NoMilestoneOverview.scss';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
-
+import './styles/no-milestone-overview.scss';
 
 class NoMilestoneOverview extends PureComponent {
   constructor(props) {

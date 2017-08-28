@@ -100,7 +100,7 @@ class GoalOverview extends PureComponent {
             assignees={helper.getAssignees()}
             delegate={delegate}
             rounded
-            size={36}
+            size={32}
           />
           <HOCDiscussButton
             context={{
