@@ -120,7 +120,7 @@ class StepList extends PureComponent {
   }
 
   renderAddStep() {
-    const { isLoading, getLoading, steps } = this.props;
+    const { isLoading, getLoading, stepOrder } = this.props;
     const { addFocus, addStepValue, addStepAssignees } = this.state;
 
     let addClass = 'add-step';
@@ -153,7 +153,7 @@ class StepList extends PureComponent {
           options={this.acOptions}
         />
         <div className="add-step__indicator">
-          <div className="add-step__indicator--number">{steps.size + 1}</div>
+          <div className="add-step__indicator--number">{stepOrder.size + 1}</div>
         </div>
         <div className="add-step__assignees">
           <HOCAssigning
