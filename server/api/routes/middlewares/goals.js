@@ -27,6 +27,7 @@ const goalsCreate = valLocals('goalsCreate', {
   user_id: string.require(),
   goal: object.as({
     title: string.min(1).require(),
+    assignees: array.of(string).require(),
   }),
   organization_id: string.require(),
   milestone_id: string,
@@ -51,7 +52,7 @@ const goalsCreate = valLocals('goalsCreate', {
     done_by: user_id,
     done_at: new Date(),
   }];
-  goal.assignees = [user_id];
+
   goal.steps = {};
   goal.step_order = [];
   goal.attachments = {};
