@@ -16,7 +16,7 @@ export const assignedToMe = createSelector(
   [ getGoals, getMyId ],
   (goals, userId) => goals.filter((g) => {
     const helper = new GoalsUtil(g);
-    const currentAssignees = helper.getCurrentAssignees();
+    const currentAssignees = helper.getAssignees();
     return !helper.getIsCompleted() && currentAssignees.find(uId => uId === userId);
   }).sort((g1, g2) => g2.get('created_at').localeCompare(g1.get('created_at'))),
 );

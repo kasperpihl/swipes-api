@@ -115,7 +115,7 @@ export default class Socket {
     };
   }
   sendPing() {
-    if (this.ws.readyState == this.ws.OPEN) {
+    if (this.ws.readyState == this.ws.OPEN && !this.isConnecting) {
       this.ws.send(JSON.stringify({ type: 'ping', id: 1 }));
     }
   }
@@ -137,7 +137,7 @@ export default class Socket {
       payload,
     } = data;
 
-    if (!type) {
+    if (!type || this.isConnecting) {
       return;
     }
     const socketData = Object.assign({ ok: true }, payload && payload.data);

@@ -46,7 +46,7 @@ export default function filterGoal(goal, filter) {
 
     // Check current goals for assignees filter
     if (goalType === 'current') {
-      const currentAssignees = helper.getCurrentAssignees();
+      const currentAssignees = helper.getAssignees();
       const isCurrentlyAssigned = currentAssignees.find(uId => uId === userId);
       if (!userId) {
         if (!currentAssignees.size) {

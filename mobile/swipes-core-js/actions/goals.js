@@ -39,6 +39,11 @@ export const rename = (goalId, title) => a.api.request('goals.rename', {
   title,
 });
 
+export const assign = (goalId, assignees) => a.api.request('goals.assign', {
+  goal_id: goalId,
+  assignees,
+});
+
 export const notify = (gId, notification) => a.api.request('goals.notify', {
   goal_id: gId,
   ...notification.toJS(),
