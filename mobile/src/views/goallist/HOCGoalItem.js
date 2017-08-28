@@ -119,7 +119,7 @@ class HOCGoalItem extends PureComponent {
   renderAssignees() {
     const { goal } = this.props;
     const helper = new GoalsUtil(goal);
-    const currentAssignees = helper.getAllAssignees();
+    const currentAssignees = helper.getAssignees();
 
     return (
       <View style={styles.assignees}>

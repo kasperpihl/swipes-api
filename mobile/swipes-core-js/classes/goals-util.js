@@ -114,7 +114,8 @@ export default class GoalsUtil {
     });
     return fromJS([...assignees]);
   }
-  getCurrentAssignees() {
+  getAssignees() {
+    return this.goal.get('assignees') || fromJS([]);
     const assignees = new Set();
     this.getOrderedSteps().forEach((s) => {
       if (!this.getIsStepCompleted(s)) {

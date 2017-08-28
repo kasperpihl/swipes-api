@@ -34,6 +34,14 @@ export default function goalsReducer(state = initialState, action) {
       }
       return state.setIn([payload.goal_id, 'title'], payload.title);
     }
+    case 'goals.assign':
+    case 'goal_assigneed': {
+      if(payload.steps) {
+        state = state.setIn([payload.goal_id, 'steps'], fromJS(payload.steps));
+      }
+      return state.setIn([payload.goal_id, 'assignees'], fromJS(payload.assignees));
+
+    }
     case 'goals.loadWay':
     case 'goal_load_way':
     case 'goals.complete':
@@ -52,6 +60,9 @@ export default function goalsReducer(state = initialState, action) {
     case 'steps.add': {
       if (state.getIn([payload.goal_id, 'steps', payload.step.id])) {
         return state;
+      }
+      if(payload.goal_assignees) {
+        state = state.setIn([payload.goal_id, 'assignees'], fromJS(payload.goal_assignees));
       }
       if (typeof payload.completed_at !== 'undefined') {
         state = state.setIn([payload.goal_id, 'completed_at'], payload.completed_at);
@@ -81,6 +92,9 @@ export default function goalsReducer(state = initialState, action) {
     }
     case 'step_assigned':
     case 'steps.assign': {
+      if(payload.goal_assignees) {
+        state = state.setIn([payload.goal_id, 'assignees'], fromJS(payload.goal_assignees));
+      }
       return state.setIn([
         payload.goal_id, 'steps', payload.step_id, 'assignees',
       ], fromJS(payload.assignees));

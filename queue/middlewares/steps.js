@@ -1,6 +1,7 @@
 const stepsAddedNotificationData = (req, res, next) => {
   const {
     goal_id,
+    goal_assignees,
     step,
     step_order,
     completed_at,
@@ -9,6 +10,7 @@ const stepsAddedNotificationData = (req, res, next) => {
   res.locals.notificationData = null;
   res.locals.eventData = {
     goal_id,
+    goal_assignees,
     step,
     step_order,
     completed_at,

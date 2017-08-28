@@ -29,6 +29,7 @@ const dbStepsAdd = funcWrap([
       .table('goals')
       .get(goal_id)
       .update({
+        assignees: r.row('assignees').default([]).setUnion(step.assignees),
         steps: {
           [step.id]: step,
         },

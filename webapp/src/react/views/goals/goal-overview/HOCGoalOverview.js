@@ -256,6 +256,27 @@ class HOCGoalOverview extends PureComponent {
       },
     });
   }
+  onAssign(i, e) {
+    const options = this.getOptionsForE(e);
+    const { selectAssignees, assignGoal, goal } = this.props;
+
+    options.actionLabel = 'Assign';
+    let overrideAssignees;
+    selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
+      } else if (overrideAssignees) {
+        assignGoal(goal.get('id'), overrideAssignees).then((res) => {
+          if(res.ok){
+            window.analytics.sendEvent('Goal assigned', {
+              'Number of assignees': overrideAssignees.length,
+            });
+          }
+        });
+      }
+    });
+    e.stopPropagation();
+  }
   viewDidLoad(stepList) {
     this.stepList = stepList;
   }
@@ -320,6 +341,7 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   archive: ca.goals.archive,
   contextMenu: a.main.contextMenu,
+  assignGoal: ca.goals.assign,
   renameGoal: ca.goals.rename,
   completeGoal: ca.goals.complete,
   incompleteGoal: ca.goals.incomplete,

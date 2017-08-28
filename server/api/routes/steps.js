@@ -40,6 +40,7 @@ authed.all('/steps.add',
   notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
+    goal_assignees: array.require(),
     step: object.as({
       id: string.require(),
       created_by: string.require(),
