@@ -47,10 +47,6 @@ $sidebarWidth: 84px;
   &__bottom-section {
     @include size(100%, auto);
     @include flexContainer('column', center, center);
-
-    & > .sidebar__item {
-      background-color: transparent;
-    }
   }
 
   &__section {
