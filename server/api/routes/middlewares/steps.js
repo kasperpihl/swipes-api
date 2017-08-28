@@ -39,6 +39,7 @@ const stepsAdd = valLocals('stepsAdd', {
       const changes = results.changes[0];
 
       setLocals({
+        goal_assignees: changes.new_val.assignees,
         step: changes.new_val.steps[mutatedStep.id],
         step_order: changes.new_val.step_order,
         completed_at: changes.new_val.completed_at,
@@ -53,6 +54,7 @@ const stepsAdd = valLocals('stepsAdd', {
 const stepsAddQueueMessage = valLocals('stepsAddQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
+  goal_assignees: array.require(),
   step: object.require(),
   step_order: array.require(),
   completed_at: any,
@@ -60,6 +62,7 @@ const stepsAddQueueMessage = valLocals('stepsAddQueueMessage', {
   const {
     user_id,
     goal_id,
+    goal_assignees,
     step,
     step_order,
     completed_at,
@@ -67,6 +70,7 @@ const stepsAddQueueMessage = valLocals('stepsAddQueueMessage', {
   const queueMessage = {
     user_id,
     goal_id,
+    goal_assignees,
     step,
     step_order,
     completed_at,
