@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
+import Icon from '../../components/icons/Icon';
 import * as cs from '../../../swipes-core-js/selectors';
 import { colors } from '../../utils/globalStyles';
 import HOCGoalItem from './HOCGoalItem';
@@ -22,8 +23,19 @@ const styles = StyleSheet.create({
   },
   loader: {
   },
+  sectionWrapper: {
+    height: 42,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: 'bold',
+    color: colors.deepBlue100
+  }
 });
-
 
 class HOCGoalList extends PureComponent {
   constructor(props) {
@@ -70,17 +82,30 @@ class HOCGoalList extends PureComponent {
       />
     );
   }
-  renderSectionHeader(v1, section) {
-    if(section === 'none') {
-      return <Text>No milestone</Text>;
+  renderSectionHeader(v1, section) {
+
+    if (section === 'none') {
+      return (
+        <View style={styles.sectionWrapper}>
+          <Text style={styles.sectionTitle}>No milestone</Text>
+        </View>
+      );
     }
-    return <Text>{msgGen.milestones.getName(section)}</Text>;
+
+    return (
+      <View style={styles.sectionWrapper}>
+        <Icon name="MiniGoal" fill={colors.deepBlue100} width="18" height="18" />
+        <Text style={[styles.sectionTitle, { paddingLeft: 3 }]}>{msgGen.milestones.getName(section)}</Text>
+      </View>
+    )
   }
   renderGoal(g) {
     const gId = g.get('id');
+
     return <HOCGoalItem goalId={gId} key={gId} delegate={this} />;
   }
   renderListLoader() {
+
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
