@@ -15,6 +15,16 @@ export default class Me {
   getMe(){
     return this.store.getState().get('me');
   }
+  isPaying() {
+    const me = this.getMe();
+    if(me) {
+      const org = me.getIn(['organizations', 0]);
+      if(org && org.get('stripe_subscription_id')) {
+        return true;
+      }
+    }
+    return false;
+  }
   isAdmin() {
     const me = this.getMe();
     if(me) {
