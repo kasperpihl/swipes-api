@@ -95,9 +95,9 @@ class App extends PureComponent {
       if (!receivedTags) {
         receivedTags = {};
       }
-      if(isHydrated && !myId && receivedTags.swipesUserId) {
+      if (isHydrated && !myId && receivedTags.swipesUserId) {
         OneSignal.deleteTag("swipesUserId");
-      } else if(isHydrated && myId && !receivedTags.swipesUserId) {
+      } else if (isHydrated && myId && !receivedTags.swipesUserId) {
         OneSignal.sendTag('swipesUserId', myId);
       }
     });

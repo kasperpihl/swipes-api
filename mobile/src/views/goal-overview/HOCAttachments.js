@@ -96,7 +96,6 @@ class HOCAttachments extends PureComponent {
         removeClippedSubviews={false}
         immutableData={attachmentOrder}
         renderRow={this.renderAttachment}
-        onScroll={window.onScroll}
       />
     );
   }

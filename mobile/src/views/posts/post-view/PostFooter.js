@@ -80,6 +80,7 @@ class PostFooter extends PureComponent {
 
     this.handleAddComment = this.handleAddComment.bind(this);
     this.handleBackButton = this.handleBackButton.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
 
     if (Platform.OS === "android") {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -97,6 +98,11 @@ class PostFooter extends PureComponent {
   }
   handleBackButton() {
     this.onNavigateBack()
+  }
+  handleInputChange(e) {
+    const text = e.nativeEvent.text;
+
+    
   }
   renderBackButton() {
     const { text } = this.state;
@@ -123,6 +129,7 @@ class PostFooter extends PureComponent {
             keyboardType="email-address"
             style={styles.input}
             onChangeText={(text) => this.setState({ text })}
+            onChange={this.handleInputChange}
             value={this.state.text}
             multiline={true}
             underlineColorAndroid="transparent"
