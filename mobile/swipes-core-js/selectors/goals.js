@@ -18,7 +18,7 @@ export const assignedToMe = createSelector(
     const helper = new GoalsUtil(g);
     const currentAssignees = helper.getAssignees();
     return !helper.getIsCompleted() && currentAssignees.find(uId => uId === userId);
-  }).sort((g1, g2) => g2.get('created_at').localeCompare(g1.get('created_at'))),
+  }).sort((g1, g2) => g1.get('created_at').localeCompare(g2.get('created_at'))),
 );
 
 export const assignedGroupedByMilestone = createSelector(
