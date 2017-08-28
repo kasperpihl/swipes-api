@@ -24,7 +24,10 @@ class MilestoneList extends PureComponent {
     const { getLoading, tabs, tabIndex, delegate } = this.props;
     return (
       <div className="milestone-list__header">
-        <HOCHeaderTitle title="Plan" />
+        <HOCHeaderTitle
+          title="Plan"
+          subtitle="Organize and see progress on your company's milestones." 
+        />
 
         <TabBar delegate={delegate} tabs={tabs} activeTab={tabIndex} />
       </div>

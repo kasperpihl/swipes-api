@@ -65,7 +65,10 @@ export default class Analytics {
         Intercom.registerIdentifiedUser({ email: msgGen.users.getEmail(me) });
         Intercom.updateUser({
           name: msgGen.users.getFullName(me),
+          'Is admin': msgGen.me.isAdmin(),
+          'Is paying': msgGen.me.isPaying(),
           email: msgGen.users.getEmail(me),
+          user_id: me.get('id'),
           created_at: me.get('created_at'),
           company: {
             id: orgId,

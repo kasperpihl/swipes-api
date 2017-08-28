@@ -67,7 +67,7 @@ export default class Analytics {
           name: msgGen.users.getFullName(me),
           'Is admin': msgGen.me.isAdmin(),
           'Is paying': msgGen.me.isPaying(),
-          id: me.get('id'),
+          user_id: me.get('id'),
           email: msgGen.users.getEmail(me),
           created_at: me.get('created_at'),
           company: {
