@@ -120,7 +120,9 @@ class HOCMilestoneOverview extends PureComponent {
       },
     });
   }
-
+  onInfoTabAction(i) {
+    console.log('hi', i);
+  }
   getOptionsForE(e) {
     return {
       boundingRect: e.target.getBoundingClientRect(),

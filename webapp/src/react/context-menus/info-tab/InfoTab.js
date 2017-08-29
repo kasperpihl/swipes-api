@@ -37,9 +37,8 @@ class InfoTab extends PureComponent {
       }
 
       return (
-        <div className="info-tab__action" key={act.title + i}>
+        <div className="info-tab__action" key={i} onClick={this.onInfoTabActionCached(i)}>
           {this.renderActionIcon(act.icon, iconClass)}
-          <div className="info-tab__action-title">{act.title}</div>
         </div>
       )
     })
