@@ -161,7 +161,6 @@ class HOCMilestones extends PureComponent {
         style={styles.list}
         immutableData={milestones.get(tabs[tabIndex])}
         renderRow={this.renderMilestoneItem}
-        onScroll={window.onScroll}
         windowSize={2}
       />
     );

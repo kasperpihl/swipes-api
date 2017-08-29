@@ -3,9 +3,13 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
+import * as ca from '../../../swipes-core-js/actions';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCGoalItem from '../goallist/HOCGoalItem';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
+import Icon from '../../components/icons/Icon';
+import RippleButton from '../../components/ripple-button/RippleButton';
+import CreateNewItemModal from '../../modals/CreateNewItemModal';
 import { colors } from '../../utils/globalStyles';
 
 const styles = StyleSheet.create({
@@ -21,8 +25,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  loader: {
-
+  fabWrapper: {
+    width: 60,
+    height: 60,
+    borderRadius: 60 / 2,
+    position: 'absolute',
+    bottom: 30,
+    right: 15,
+  },
+  fabButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 60 / 2,
+    backgroundColor: colors.blue100,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
@@ -35,10 +52,12 @@ class HOCMilestoneOverview extends PureComponent {
       routeNum: props.lastRoute,
       goals: this.getFilteredGoals(this.props.milestone, this.props.starredGoals),
       hasLoaded: false,
+      fabOpen: false
     };
 
     this.onActionButton = this.onActionButton.bind(this);
     this.renderGoal = this.renderGoal.bind(this);
+    this.handleModalState = this.handleModalState.bind(this);
   }
   componentDidMount() {
     this.renderActionButtons();
@@ -107,6 +126,26 @@ class HOCMilestoneOverview extends PureComponent {
     });
 
   }
+  onModalCreateAction(title, assignees, milestoneId ) {
+    const { createGoal } = this.props;
+
+    if (title.length > 0) {
+      createGoal(title, milestoneId, assignees.toJS()).then((res) => {
+        if (res.ok) {
+          this.handleModalState()
+        }
+      });
+    }
+  }
+  handleModalState() {
+    const { fabOpen } = this.state;
+
+    if (!fabOpen) {
+      this.setState({ fabOpen: true })
+    } else {
+      this.setState({ fabOpen: false })
+    }
+  }
   renderActionButtons() {
     this.props.setActionButtons({
       onClick: this.onActionButton,
@@ -154,15 +193,42 @@ class HOCMilestoneOverview extends PureComponent {
         style={styles.list}
         immutableData={goalList}
         renderRow={this.renderGoal}
-        onScroll={window.onScroll}
       />
     );
   }
+  renderFAB() {
+    const { fabOpen } = this.state;
+
+    if (fabOpen) {
+      return undefined;
+    }
+
+    return (
+      <View style={styles.fabWrapper}>
+        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.handleModalState}>
+          <View style={styles.fabButton}>
+            <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
+          </View>
+        </RippleButton>
+      </View>
+    );
+  }
   render() {
+    const { milestone } = this.props;
+
     return (
       <View style={styles.container}>
         {this.renderHeader()}
         {this.renderList()}
+        {this.renderFAB()}
+        <CreateNewItemModal
+          modalState={this.state.fabOpen}
+          defAssignees={[this.props.myId]}
+          placeholder="Add a new goal to a milestone"
+          actionLabel="Add goal"
+          milestoneId={milestone.get('id')}
+          delegate={this}
+        />
       </View>
     );
   }
@@ -172,9 +238,10 @@ function mapStateToProps(state, ownProps) {
   return {
     starredGoals: state.getIn(['me', 'settings', 'starred_goals']),
     milestone: state.getIn(['milestones', ownProps.milestoneId]),
+    myId: state.getIn(['me', 'id']),
   };
 }
 
 export default connect(mapStateToProps, {
-
+  createGoal: ca.goals.create,
 })(HOCMilestoneOverview);

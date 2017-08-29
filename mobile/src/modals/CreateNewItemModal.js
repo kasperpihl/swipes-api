@@ -115,6 +115,7 @@ class CreateNewItemModal extends PureComponent {
     this.setState({assignees: assignees})
 
     showModal();
+    this.handleModalState();
   }
   handleAssigning() {
     const { users, showModal } = this.props;
@@ -147,6 +148,7 @@ class CreateNewItemModal extends PureComponent {
       fullscreen: true,
     };
 
+    this.handleModalState();
     showModal(modal);
   }
   isActive() {
@@ -164,8 +166,8 @@ class CreateNewItemModal extends PureComponent {
           style={styles.input}
           onChangeText={(text) => this.setState({title: text})}
           underlineColorAndroid="transparent"
+          value={this.state.title}
           placeholder={placeholder}
-          autoFocus={true}
         />
       </View>
     )

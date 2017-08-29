@@ -5,6 +5,7 @@ import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import Icon from '../../components/icons/Icon';
 import RippleButton from '../../components/ripple-button/RippleButton';
+import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 import CreateNewItemModal from '../../modals/CreateNewItemModal';
 import * as cs from '../../../swipes-core-js/selectors';
 import * as ca from '../../../swipes-core-js/actions';
@@ -154,6 +155,10 @@ class HOCGoalList extends PureComponent {
       </View>
     );
   }
+  renderListFooter() {
+
+    return <EmptyListFooter />
+  }
   renderList() {
     const { goals } = this.props;
     const { hasLoaded } = this.state;
@@ -168,6 +173,7 @@ class HOCGoalList extends PureComponent {
         immutableData={goals}
         renderRow={this.renderGoal}
         renderSectionHeader={this.renderSectionHeader}
+        ListFooterComponent={this.renderListFooter}
       />
     );
   }

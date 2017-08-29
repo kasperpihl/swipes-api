@@ -158,7 +158,7 @@ class HOCGoalOverview extends PureComponent {
     );
   }
   renderStepList() {
-    const { goal } = this.props;
+    const { goal, me } = this.props;
     const helper = this.getHelper();
 
     return (
@@ -166,6 +166,7 @@ class HOCGoalOverview extends PureComponent {
         goal={goal}
         steps={helper.getOrderedSteps()}
         delegate={this}
+        myId={me.get('id')}
         {...this.bindLoading() }
       />
     );
