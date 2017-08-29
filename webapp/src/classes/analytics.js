@@ -8,7 +8,7 @@ const blockedMixpanelEvents = [
 export default class Analytics {
   constructor(store) {
     this.enable = !window.__DEV__;
-    // this.enable = true; // for testing on dev. turn off when done.
+    this.enable = true; // for testing on dev. turn off when done.
     if(this.enable){
       mixpanel.init("a1b6f31fc988c7e4a7f40c267e315f5d");
       Intercom("boot", {
@@ -65,6 +65,9 @@ export default class Analytics {
       if(this.enable){
         Intercom('update', {
           name: msgGen.users.getFullName(me),
+          'Is admin': msgGen.me.isAdmin(),
+          'Is paying': msgGen.me.isPaying(),
+          user_id: me.get('id'),
           email: msgGen.users.getEmail(me),
           created_at: me.get('created_at'),
           company: {

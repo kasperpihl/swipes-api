@@ -10,6 +10,7 @@
   @include flexContainer('column');
   animation: fadeList .6s ease forwards;
   z-index: 3;
+  padding-bottom: 30px;
 }
 
 // ======================================================
@@ -17,7 +18,6 @@
 // ======================================================
 
 .take-action {
-
   &__header {
     @include size(100%, auto);
   }

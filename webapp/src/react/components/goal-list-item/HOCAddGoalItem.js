@@ -135,7 +135,7 @@ class HOCAddGoalItem extends PureComponent {
             assignees={assignees}
             delegate={this}
             rounded
-            size={36}
+            size={32}
           />
         </div>
       </div>

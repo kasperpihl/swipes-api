@@ -9,7 +9,8 @@ const getMyId = state => state.getIn(['me', 'id']);
 
 export const withoutMilestone = createSelector(
   [ getGoals ],
-  goals => goals.filter(g => !g.get('milestone_id') && !g.get('completed_at')),
+  goals => goals.filter(g => !g.get('milestone_id') && !g.get('completed_at'))
+                .sort((g1, g2) => g1.get('created_at').localeCompare(g2.get('created_at'))),
 );
 
 export const assignedToMe = createSelector(

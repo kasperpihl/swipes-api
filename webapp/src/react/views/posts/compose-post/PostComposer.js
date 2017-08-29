@@ -24,6 +24,16 @@ class PostComposer extends PureComponent {
   }
   componentDidMount() {
   }
+  renderContextIcon() {
+    const { post } = this.props;
+    if(!post.getIn(['context', 'id'])) {
+      return undefined;
+    }
+    return (
+      <Icon icon={miniIconForId(post.getIn(['context', 'id']))} className="create-post__svg" />
+    )
+
+  }
   renderGeneratedSubtitle() {
     const { post, delegate } = this.props;
 
@@ -52,7 +62,7 @@ class PostComposer extends PureComponent {
 
     return (
       <div className="post-composer__subtitle">
-        <Icon icon={miniIconForId(post.getIn(['context', 'id']))} className="create-post__svg" />
+        {this.renderContextIcon()}
         {post.getIn(['context', 'title'])}
         <StyledText
           text={string}
