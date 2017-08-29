@@ -101,6 +101,7 @@ class GoalOverview extends PureComponent {
             delegate={delegate}
             rounded
             size={32}
+            tooltipAlign="bottom"
           />
           <HOCDiscussButton
             context={{

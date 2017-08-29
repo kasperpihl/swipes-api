@@ -42,12 +42,13 @@ class PostFeed extends PureComponent {
   }
   renderHeader() {
     const { context } = this.props;
-    const title = context && context.get('title');
+    let subtitle = context && context.get('title') && `re. ${context.get('title')}`;
+    subtitle = subtitle || 'Talk with your team and share the newest and latest.';
     const { showLine } = this.state;
 
     return (
       <div className="post-feed__header">
-        <HOCHeaderTitle title="Discussions" subtitle={title && `re. ${title}`} border={showLine}>
+        <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={showLine}>
           <Button primary text="Create Post" onClick={this.onNewPost} />
         </HOCHeaderTitle>
         {this.renderTabbar()}
