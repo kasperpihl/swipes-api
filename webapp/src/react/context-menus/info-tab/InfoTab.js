@@ -5,6 +5,7 @@ import { setupDelegate, setupCachedCallback } from 'react-delegate';
 // import { bindAll } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
 // import Button from 'Button';
+import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';
 import './styles/info-tab.scss';
 
@@ -90,9 +91,9 @@ class InfoTab extends PureComponent {
           {/* <Icon icon="Close" className="info-tab__about-icon" /> */}
           <div className="info-tab__about-title">{about.title}</div>
         </div>
-        <div className="info-tab__about-text">
+        <TextParser className="info-tab__about-text">
           {about.text}
-        </div>
+        </TextParser>
       </div>
     )
   }

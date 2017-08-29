@@ -8,7 +8,7 @@
 .info-tab {
   @include size(264px, 100%);
   @include heightSpecifications(initial, 500px);
-  background-color: rgba($deepBlue-100, 0.96);
+  background-color: $deepBlue-100; //rgba($deepBlue-100, 0.96);
   border-radius: 6px;
   overflow-y: auto;
   padding: 30px 12px;
@@ -47,7 +47,7 @@
 
   &__action-title {
     @include size(100%, auto);
-    @include font(12px, white, 18px, 500) 
+    @include font(12px, white, 18px, 500)
   }
 
   &__info {
@@ -69,13 +69,13 @@
   }
 
   &__info-title {
-    @include font(10px, white, 18px, 500);
-    text-transform: uppercase; 
+    @include font(10px, white, 18px, 600);
+    text-transform: uppercase;
   }
 
   &__info-text {
     @include font(12px, $deepBlue-50, 18px, 500);
-    margin-top: 3px; 
+    margin-top: 3px;
   }
 
   &__about {
@@ -89,7 +89,7 @@
   }
 
   &__about-title {
-    @include font(15px, white, 24px, 500); 
+    @include font(15px, white, 24px, 500);
   }
 
   &__about-icon {
@@ -98,7 +98,7 @@
   }
 
   &__about-text {
-    @include font(12px, $deepBlue-60, 18px, 500) 
+    @include font(12px, $deepBlue-60, 18px, 500)
   }
 }
 

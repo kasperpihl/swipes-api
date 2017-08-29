@@ -7,6 +7,7 @@ import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'classes/react-utils';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 // import { map, list } from 'react-immutable-proptypes';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -144,12 +145,13 @@ class HOCMilestoneOverview extends PureComponent {
     if (milestone.get('closed_at')) {
       achieveLbl = 'Move milestone to current';
     }
+    const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`
     return {
       actions: [
         { title: achieveLbl },
       ],
       info: [
-        { title: 'Created', text: '19 apr etc PLACEHOLDER' },
+        { title: 'Created', text: createdLbl },
       ],
       about: {
         title: 'What is a milestone?',
