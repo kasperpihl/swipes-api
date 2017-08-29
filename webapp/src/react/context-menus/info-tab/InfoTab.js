@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
-import { setupDelegate } from 'react-delegate';
+import { setupDelegate, setupCachedCallback } from 'react-delegate';
 // import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+// import { bindAll } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
@@ -14,6 +14,12 @@ class InfoTab extends PureComponent {
     this.state = {};
 
     setupDelegate(this, 'onInfoTabAction');
+    this.onActionClickCached = setupCachedCallback(this.onActionClick, this);
+  }
+  onActionClick(i, e) {
+    const { hide } = this.props;
+    hide();
+    this.onInfoTabAction(i, e);
   }
   renderActionIcon(icon, iconClass) {
     if (!icon) {
@@ -37,8 +43,9 @@ class InfoTab extends PureComponent {
       }
 
       return (
-        <div className="info-tab__action" key={i} onClick={this.onInfoTabActionCached(i)}>
+        <div className="info-tab__action" key={i} onClick={this.onActionClickCached(i)}>
           {this.renderActionIcon(act.icon, iconClass)}
+          <div className="info-tab__action-title">{act.title}</div>
         </div>
       )
     })
