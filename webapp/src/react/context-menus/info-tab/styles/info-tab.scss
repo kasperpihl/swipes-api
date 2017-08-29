@@ -1,6 +1,95 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.info-tab {
+// ======================================================
+// Block
+// ======================================================
 
+.info-tab {
+  @include size(264px, 100%);
+  @include heightSpecifications(initial, 500px);
+  background-color: rgba($deepBlue-100, 0.96);
+  border-radius: 6px;
+  overflow-y: auto;
+  padding: 30px 12px;
+}
+
+.info-tab {
+  $b: &;
+
+  &__actions {
+    @include size(100%, auto);
+  }
+
+  &__action {
+    $flexIgnoreList: '#{$b}__action-icon';
+    @include size(100%, 43px);
+    @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+    border-bottom: 1px solid $deepBlue-80;
+  }
+
+  &__action-icon {
+    @include size(24px);
+    @include svg-color($blue-100);
+
+    & &--danger {
+      @include svg-color($red-80)
+    }
+  }
+
+  &__action-title {
+    @include size(100%, auto);
+    @include font(12px, white, 18px, 500) 
+  }
+
+  &__info {
+    @include size(100%, auto);
+    border-bottom: 1px solid $deepBlue-80;
+    padding-bottom: 18px;
+    padding-top: 6px;
+  }
+
+  &__info-row {
+    @include size(100%, auto);
+    padding-top: 12px;
+  }
+
+  &__info-title-wrapper {
+    @include size(100%, auto);
+    @include flexContainer('row');
+  }
+
+  &__info-title {
+    @include font(10px, white, 18px, 500);
+    text-transform: uppercase; 
+  }
+
+  &__info-text {
+    @include font(12px, $deepBlue-50, 18px, 500);
+    margin-top: 3px; 
+  }
+
+  &__about {
+    @include size(100%, auto);
+    padding-top: 22px;
+  }
+
+  &__about-header {
+    @include size(100%, auto);
+    @include flexContainer('row', left, center);
+    padding-bottom: 6px;
+  }
+
+  &__about-title {
+    @include font(15px, white, 24px, 500); 
+  }
+
+  &__about-icon {
+    @include size(24px);
+    @include svg-color(white)
+  }
+
+  &__about-text {
+    @include font(12px, $deepBlue-60, 18px, 500) 
+  }
 }

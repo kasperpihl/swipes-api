@@ -32,7 +32,7 @@ class InfoTab extends PureComponent {
       return (
         <div className="info-tab__action">
           <Icon icon={act.icon} className={iconClass} />
-          <div className="info-tab__action-label">{act.title}</div>
+          <div className="info-tab__action-title">{act.title}</div>
         </div>
       )
     })
@@ -77,7 +77,7 @@ class InfoTab extends PureComponent {
           <Icon icon="Close" className="info-tab__about-icon" />
           <div className="info-tab__about-title">{about.title}</div>
         </div>
-        <div className="nfo-tab__about-text">
+        <div className="info-tab__about-text">
           {about.text}
         </div>
       </div>
