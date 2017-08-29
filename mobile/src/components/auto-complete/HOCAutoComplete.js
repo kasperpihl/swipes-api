@@ -18,6 +18,25 @@ class HOCAutoComplete extends PureComponent {
   }
   componentDidMount() {
   }
+  onChange(e, options) {
+    const { results, clear, search, autoComplete } = this.props;
+    const value = this.getValue(e.target);
+    const position = this.getCaretPosition(e.target);
+    let string = value.substr(0, position);
+    string = string.split('\n').reverse()[0];
+    let array = string.split(`${options.trigger}`);
+    if(array.length > 1) {
+      string = array[array.length - 1];
+    } else {
+      string = undefined;
+    }
+    if(string) {
+      search(string, options);
+    } else if(autoComplete.get('string')) {
+      clear();
+    }
+    //return false;
+  }
   render() {
     const { autoComplete, results } = this.props;
     return (

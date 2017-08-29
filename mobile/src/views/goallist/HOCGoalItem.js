@@ -62,10 +62,6 @@ class HOCGoalItem extends PureComponent {
       onClick: this.onModalGoalAction,
       items: fromJS([
         {
-          title: `${isStarred ? 'Unstar' : 'Star'} goal`,
-          index: 'pin',
-        },
-        {
           title: 'Archive',
           index: 'archive',
         },

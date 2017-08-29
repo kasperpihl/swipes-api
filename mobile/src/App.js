@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
+import HOCAutoComplete from './components/auto-complete/HOCAutoComplete';
 import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
 import HOCAndroidBackButton from './components/android-back-button/HOCAndroidBackButton';
 import HOCViewController from './navigation/view-controller/HOCViewController';
@@ -185,7 +186,6 @@ class App extends PureComponent {
         <View style={styles.wrapper}>
           <HOCViewController />
         </View>
-        <HOCAutoComplete />
         <LoadingModal />
         <ActionModal />
         <HOCTabNavigation />

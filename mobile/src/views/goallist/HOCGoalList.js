@@ -5,6 +5,7 @@ import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import Icon from '../../components/icons/Icon';
 import RippleButton from '../../components/ripple-button/RippleButton';
+import CreateNewItemModal from '../../modals/CreateNewItemModal';
 import * as cs from '../../../swipes-core-js/selectors';
 import * as ca from '../../../swipes-core-js/actions';
 import { colors, viewSize } from '../../utils/globalStyles';
@@ -53,63 +54,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  createActionWrapper: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,1)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  closeButtonWrapper: {
-    position: 'absolute',
-    width: 50,
-    height: 50,
-    top: 45,
-    right: 15,
-    backgroundColor: colors.deepBlue40,
-    borderRadius: 50 / 2,
-  },
-  closeButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputWrapper: {
-    width: viewSize.width - 30,
-    height: 60,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 4,
-  },
-  input: {
-    width: viewSize.width - 30,
-    fontSize: 15,
-    lineHeight: 18,
-    color: colors.deepBlue100,
-    paddingHorizontal: 15,
-  },
-  addWrapper: {
-    width: viewSize.width,
-    height: 54,
-    position: 'absolute',
-    left: 0,
-    bottom: 0,
-  },
-  addButton: {
-    width: viewSize.width,
-    height: 54,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.blue100,
-  },
-  addButtonTitle: {
-    fontSize: 15,
-    lineHeight: 18,
-    fontWeight: 'bold',
-    color: 'white'
-  }
 });
 
 class HOCGoalList extends PureComponent {
@@ -122,8 +66,7 @@ class HOCGoalList extends PureComponent {
     };
 
     this.renderGoal = this.renderGoal.bind(this);
-    this.handleFABPress = this.handleFABPress.bind(this);
-    this.onGoalAdd = this.onGoalAdd.bind(this);
+    this.handleModalState = this.handleModalState.bind(this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -152,19 +95,18 @@ class HOCGoalList extends PureComponent {
       this.setState({ tabIndex: index, hasLoaded: false });
     }
   }
-  onGoalAdd() {
-    const { myId, createGoal } = this.props;
-    const { text } = this.state;
+  onModalCreateAction(title, assignees, milestoneId ) {
+    const { createGoal } = this.props;
 
-    if (text.length > 0) {
-      createGoal(text, null, [myId]).then((res) => {
+    if (title.length > 0) {
+      createGoal(title, milestoneId, assignees.toJS()).then((res) => {
         if (res.ok) {
           this.setState({ fabOpen: false })
         }
       });
     }
   }
-  handleFABPress() {
+  handleModalState() {
     const { fabOpen } = this.state;
 
     if (!fabOpen) {
@@ -238,50 +180,13 @@ class HOCGoalList extends PureComponent {
 
     return (
       <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.handleFABPress}>
+        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.handleModalState}>
           <View style={styles.fabButton}>
             <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
           </View>
         </RippleButton>
       </View>
     );
-  }
-  renderCreateActionModal() {
-    const { fabOpen } = this.state;
-
-    return (
-      <Modal
-        animationType={"fade"}
-        transparent={true}
-        visible={fabOpen}
-        onRequestClose={this.handleFABPress}
-      >
-        <View style={styles.createActionWrapper}>
-          <View style={styles.closeButtonWrapper}>
-            <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.closeButton} onPress={this.handleFABPress}>
-              <View style={styles.closeButton}>
-                <Icon name="Close" width="24" height="24" fill={colors.bgColor} />
-              </View>
-            </RippleButton>
-          </View>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) => this.setState({text})}
-              underlineColorAndroid="transparent"
-              placeholder="Add a new goal"
-            />
-          </View>
-          <View style={styles.addWrapper}>
-            <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.addButton} onPress={this.onGoalAdd}>
-              <View style={styles.addButton}>
-                <Text style={styles.addButtonTitle}>Create new action</Text>
-              </View>
-            </RippleButton>
-          </View>
-        </View>
-      </Modal>
-    )
   }
   render() {
     return (
@@ -291,7 +196,13 @@ class HOCGoalList extends PureComponent {
           {this.renderList()}
         </View>
         {this.renderFAB()}
-        {this.renderCreateActionModal()}
+        <CreateNewItemModal
+          modalState={this.state.fabOpen}
+          defAssignees={[this.props.myId]}
+          placeholder="Add a new goal"
+          actionLabel="Add goal"
+          delegate={this}
+        />
       </View>
     );
   }
