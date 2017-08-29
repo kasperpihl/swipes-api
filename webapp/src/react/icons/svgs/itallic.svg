@@ -1,6 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
-  <g>
-    <rect stroke="transparent" opacity="0"/>
-    <path d="M12,22,14.8692,8.4336h2.5835L14.584,22Z" stroke="transparent"/>
-  </g>
+    <polygon points="12 22.566 14.869 9 17.453 9 14.584 22.566 12 22.566" fill-rule="evenodd" stroke="transparent"/>
 </svg>

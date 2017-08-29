@@ -14,13 +14,19 @@ import './styles/no-milestone-overview.scss';
 class NoMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      showLine: false,
+    }
     setupDelegate(this, 'onScroll');
   }
   renderHeader() {
+    const { showLine } = this.props;
+
     return (
       <div className="no-milestone-overview__header">
         <HOCHeaderTitle
           title="Goals without a milestone"
+          border={showLine}
         />
       </div>
     );

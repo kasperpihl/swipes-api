@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <g>
-    <rect width="24" height="24" fill="transparent" stroke="transparent"/>
-    <path d="M21,4H16V0H1V24H3V14H9v4H23V4ZM3,12V2H14V12Zm18,4H11V14h5V6h5Z" stroke="transparent"/>
+    <polygon points="20 6 20 15 8 15 8 17 22 17 22 15 22 6 20 6" stroke="transparent" />
+    <path d="M19,12V2H2V22H4V14H19ZM4,12V4H17v8Z" stroke="transparent" />
   </g>
 </svg>

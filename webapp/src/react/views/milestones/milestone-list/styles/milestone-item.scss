@@ -102,7 +102,7 @@
   $b: getElementSelectorInBlock(#{&}, '.milestone');
 
   #{$b}__left {
-    @include size(100%, auto);
+    @include size(calc(100% - 24px), auto);
     @include flexContainer('column', left, center);
   }
 
@@ -115,6 +115,7 @@
 
   #{$b}__icon {
     @include size(24px);
+    flex: none;
   }
 
   #{$b}__svg {

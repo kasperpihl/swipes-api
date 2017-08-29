@@ -25,7 +25,7 @@
 .goal-result {
 
   &__circle {
-    @include size(30px);
+    @include size(14px);
     border: 2px solid $deepBlue-50;
     border-radius: 50%;
   }

@@ -28,8 +28,6 @@ class Search extends PureComponent {
           value={searchString}
           onChange={this.onChange}
         />
-
-        <Icon icon="Find" className="search__field-svg" />
       </div>
     )
 

@@ -119,10 +119,5 @@
       transform: translate3d(0px, 0px, 0px);
       transition: .25s ease;
     }
-
-    #{$b}__svg {
-      @include centerAbsolute($addToTransform: rotate(180deg));
-      transition: 1s ease;
-    }
   }
 }

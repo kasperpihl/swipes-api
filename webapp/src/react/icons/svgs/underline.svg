@@ -1,9 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
   <g>
-    <rect width="30" height="30" fill="transparent" stroke="transparent" opacity="0"/>
-    <g>
-      <rect x="8" y="22" width="14" height="2" stroke="transparent"/>
-      <path d="M18,9v7a3,3,0,0,1-6,0V9H10v7a5,5,0,0,0,10,0V9Z" stroke="transparent"/>
-    </g>
+    <rect x="6" y="24" width="18" height="2" stroke="transparent"/>
+    <path d="M17.228,18.908H11.721l-1.153,3.311H8L13.371,8h2.217l5.381,14.219H18.391Zm-4.814-1.992h4.121l-2.06-5.898Z" stroke="transparent" fill-rule="evenodd"/>
   </g>
 </svg>

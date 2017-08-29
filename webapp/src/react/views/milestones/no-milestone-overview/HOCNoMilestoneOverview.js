@@ -15,12 +15,21 @@ import NoMilestoneOverview from './NoMilestoneOverview';
 class HOCNoMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showLine: false,
+    }
     // setupLoading(this);
   }
   componentDidMount() {
   }
   onScroll(e) {
+    const { showLine } = this.state;
+    let newShowLine = e.target.scrollTop > 0;
+
+    if (showLine !== newShowLine) {
+      this.setState({ showLine: newShowLine })
+    }
+
     this._scrollTop = e.target.scrollTop;
   }
   onGoalClick(goalId) {
@@ -44,6 +53,7 @@ class HOCNoMilestoneOverview extends PureComponent {
   }
   render() {
     const { savedState, goals, myId } = this.props;
+    const { showLine } = this.state;
 
     return (
       <NoMilestoneOverview
@@ -51,6 +61,7 @@ class HOCNoMilestoneOverview extends PureComponent {
         savedState={savedState}
         delegate={this}
         myId={myId}
+        showLine={showLine}
       />
     );
   }
