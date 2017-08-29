@@ -1,6 +1,15 @@
 import * as types from 'constants';
 import * as ca from 'swipes-core-js/actions';
+import { valAction } from 'swipes-core-js/classes/utils';
+import {
+  string,
+  object,
+  number,
+  array,
+  bool,
+} from 'valjs';
 import * as a from './';
+
 
 export const setMaximized = toggle => ({ type: types.SET_MAXIMIZED, payload: { toggle } });
 export const setFullscreen = toggle => ({ type: types.SET_FULLSCREEN, payload: { toggle } });
@@ -32,6 +41,34 @@ export const contextMenu = payload => (dp, getState) => {
   }
   dp({ type: types.CONTEXT_MENU, payload });
 };
+
+export const infoTab = valAction('infoTab', [
+  object.as({
+    top: number.require(),
+    bottom: number.require(),
+    left: number.require(),
+    right: number.require()
+  }).require(),
+  object.as({
+    actions: array.of(object.as({
+      title: string.require(),
+      icon: string,
+      danger: bool,
+    })),
+    info: array.of(object.as({
+      title: string.require(),
+      text: string.require(),
+      icon: string,
+      actionLabel: string,
+    })),
+    about: object.as({
+      title: string.require(),
+      text: string.require(),
+    }).require(),
+  }).require(),
+], (boundingRect, tabOptions) => (d, getState) => {
+  d({ type: 'HELLO WORLD'});
+});
 
 // ======================================================
 // Browser

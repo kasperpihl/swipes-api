@@ -68,7 +68,7 @@ class HOCGoalListItem extends PureComponent {
     return (
       <HOCAssigning
         assignees={helper.getAssignees()}
-        maxImages={2}
+        maxImages={1}
         delegate={this}
         rounded
         size={32}

@@ -13,6 +13,9 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import TakeAction from './TakeAction';
 
 class HOCTakeAction extends PureComponent {
+  static maxWidth() {
+    return 654;
+  }
   constructor(props) {
     super(props);
     this.state = {};

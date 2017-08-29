@@ -150,7 +150,13 @@ export function valAction(actionName, arrayArgs, actionHandler) {
     if (!valErr) {
       return actionHandler(...Array.prototype.slice.call(arguments, 1));
     }
-    console.warn(`Redux action [${actionName}]: ${valErr}`);
+    console.warn(`Schema for redux action: ${actionName}`);
+    arrayArgs.forEach((a, i) => {
+      console.log(`---- Argument ${i} ----`);
+      console.log(a.toString());
+      console.log(`--------------------`);
+    });
+    console.warn(`ERROR: ${valErr}`);
     return () => Promise.resolve();
   }
   return funcWrap(arrayArgs, handler);

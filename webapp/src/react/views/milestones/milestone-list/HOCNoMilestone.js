@@ -13,6 +13,9 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import './styles/no-milestone.scss';
 
 class HOCNoMilestone extends PureComponent {
+  static maxWidth() {
+    return 654;
+  }
   constructor(props) {
     super(props);
     this.state = {};
