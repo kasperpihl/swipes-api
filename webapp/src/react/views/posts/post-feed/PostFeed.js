@@ -8,6 +8,8 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
 import TabBar from 'components/tab-bar/TabBar';
 // import Icon from 'Icon';
+import HOCInfoButton from 'components/info-button/HOCInfoButton';
+
 import HOCPostView from '../post-view/HOCPostView';
 import './styles/post-feed.scss';
 
@@ -41,7 +43,7 @@ class PostFeed extends PureComponent {
 
   }
   renderHeader() {
-    const { context } = this.props;
+    const { context, delegate } = this.props;
     let subtitle = context && context.get('title') && `re. ${context.get('title')}`;
     subtitle = subtitle || 'Talk with your team and share the newest and latest.';
     const { showLine } = this.state;
@@ -50,6 +52,7 @@ class PostFeed extends PureComponent {
       <div className="post-feed__header">
         <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={showLine}>
           <Button primary text="Create Post" onClick={this.onNewPost} />
+          <HOCInfoButton delegate={delegate} />
         </HOCHeaderTitle>
         {this.renderTabbar()}
       </div>

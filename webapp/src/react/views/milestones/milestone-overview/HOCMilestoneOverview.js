@@ -42,35 +42,7 @@ class HOCMilestoneOverview extends PureComponent {
     const options = this.getOptionsForE(e);
     const delegate = {
       onItemAction: (item, i) => {
-        if (item.id === 'open') {
-          contextMenu(null);
-          this.setLoading('dots');
-          openMilestone(milestone.get('id')).then((res) => {
-            if (res.ok) {
-              this.clearLoading('dots', 'Opened', 2000);
-              window.analytics.sendEvent('Milestone opened', {});
-            } else {
-              this.clearLoading('dots', '!Something went wrong', 3000);
-            }
-          });
-          return;
-        }
-        confirm(Object.assign({}, options, {
-          title: 'Close milestone',
-          message: 'Incompleted goals will be unassigned from this milestone.',
-        }), (i) => {
-          if (i === 1) {
-            this.setLoading('dots');
-            closeMilestone(milestone.get('id')).then((res) => {
-              if (res.ok) {
-                this.clearLoading('dots', 'Closed', 2000);
-                window.analytics.sendEvent('Milestone closed', {});
-              } else {
-                this.clearLoading('dots', '!Something went wrong', 3000);
-              }
-            });
-          }
-        });
+
       },
     };
     const items = [{ id: 'close', title: 'Close milestone' }];
@@ -120,7 +92,44 @@ class HOCMilestoneOverview extends PureComponent {
       },
     });
   }
+  onInfoTabAction(i, e) {
+    const options = this.getOptionsForE(e);
+    const {
+      closeMilestone,
+      openMilestone,
+      confirm,
+      milestone,
+    } = this.props;
 
+    if (milestone.get('closed_at')) {
+      this.setLoading('dots');
+      openMilestone(milestone.get('id')).then((res) => {
+        if (res.ok) {
+          this.clearLoading('dots', 'Moved to current', 2000);
+          window.analytics.sendEvent('Milestone opened', {});
+        } else {
+          this.clearLoading('dots', '!Something went wrong', 3000);
+        }
+      });
+      return;
+    }
+    confirm(Object.assign({}, options, {
+      title: 'Mark milestone as achieved',
+      message: 'Incompleted goals will be moved to goals without milestone.',
+    }), (i) => {
+      if (i === 1) {
+        this.setLoading('dots');
+        closeMilestone(milestone.get('id')).then((res) => {
+          if (res.ok) {
+            this.clearLoading('dots', 'Moved to achieved', 2000);
+            window.analytics.sendEvent('Milestone closed', {});
+          } else {
+            this.clearLoading('dots', '!Something went wrong', 3000);
+          }
+        });
+      }
+    });
+  }
   getOptionsForE(e) {
     return {
       boundingRect: e.target.getBoundingClientRect(),
@@ -137,8 +146,7 @@ class HOCMilestoneOverview extends PureComponent {
     }
     return {
       actions: [
-        { title: 'Delete milestone' },
-        { title: 'Mark milestone as achieved' },
+        { title: achieveLbl },
       ],
       info: [
         { title: 'Created', text: '19 apr etc PLACEHOLDER' },

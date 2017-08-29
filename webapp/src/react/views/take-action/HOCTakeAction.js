@@ -62,6 +62,14 @@ class HOCTakeAction extends PureComponent {
       },
     });
   }
+  getInfoTabProps() {
+    return {
+      about: {
+        title: 'What is Take Action?',
+        text: 'Take Action is one of the 3 main sections of the Workspace: Plan, Take Action and Discuss.\n\nUnder Take Action you can see all the goals you are responsible for across the company milestones. You can evaluate what is the most important thing to work on and take action on it.'
+      },
+    }
+  }
   saveState() {
     const { saveState } = this.props;
     const savedState = {

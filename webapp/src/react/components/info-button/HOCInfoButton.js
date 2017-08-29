@@ -22,9 +22,12 @@ class HOCInfoButton extends PureComponent {
   }
   onClick(e) {
     const options = this.getOptionsForE(e);
-    const { contextMenu } = this.props;
+    const { contextMenu, delegate } = this.props;
 
     const tabProps = this.getInfoTabProps() || {};
+    if(!tabProps.delegate && delegate) {
+      tabProps.delegate = delegate;
+    }
     contextMenu({
       options,
       component: InfoTab,

@@ -10,6 +10,8 @@ import TabBar from 'components/tab-bar/TabBar';
 import HOCMilestoneItem from './HOCMilestoneItem';
 import AddMilestone from './AddMilestone';
 import HOCNoMilestone from './HOCNoMilestone';
+import HOCInfoButton from 'components/info-button/HOCInfoButton';
+
 import './styles/milestone-list.scss';
 
 class MilestoneList extends PureComponent {
@@ -26,8 +28,11 @@ class MilestoneList extends PureComponent {
       <div className="milestone-list__header">
         <HOCHeaderTitle
           title="Plan"
-          subtitle="Organize and see progress on your company's milestones." 
-        />
+          subtitle="Organize and see progress on your company's milestones.">
+          <HOCInfoButton
+            delegate={delegate}
+          />
+        </HOCHeaderTitle>
 
         <TabBar delegate={delegate} tabs={tabs} activeTab={tabIndex} />
       </div>

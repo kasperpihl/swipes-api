@@ -7,6 +7,7 @@ import SWView from 'SWView';
 import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
+import HOCInfoButton from 'components/info-button/HOCInfoButton';
 
 import './styles/take-action.scss';
 
@@ -16,14 +17,18 @@ class TakeAction extends Component {
     setupDelegate(this, 'onScroll');
   }
   renderHeader() {
-    const { getLoading, showLine } = this.props;
+    const { delegate, showLine, } = this.props;
+    
     return (
       <div className="goals-list__header">
         <HOCHeaderTitle
           border={showLine}
           title="Take Action"
-          subtitle="See all your responsibilities and work on the most important goals."
-        />
+          subtitle="See all your responsibilities and work on the most important goals.">
+          <HOCInfoButton
+            delegate={delegate}
+          />
+        </HOCHeaderTitle>
       </div>
     );
   }
