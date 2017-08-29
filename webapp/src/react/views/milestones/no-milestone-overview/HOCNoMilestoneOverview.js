@@ -13,6 +13,9 @@ import NoMilestoneOverview from './NoMilestoneOverview';
 
 
 class HOCNoMilestoneOverview extends PureComponent {
+  static maxWidth() {
+    return 654;
+  }
   constructor(props) {
     super(props);
     this.state = {};

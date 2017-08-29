@@ -114,12 +114,6 @@ class HOCGoalOverview extends PureComponent {
     });
   }
 
-  onStepWillComplete() {
-    this.setLoading('completing');
-  }
-  onStepDidFailComplete() {
-    this.clearLoading('completing');
-  }
   onStepDidComplete(handoff) {
     this.clearLoading('completing');
     this.setState({ handoff });
@@ -232,10 +226,10 @@ class HOCGoalOverview extends PureComponent {
     const {
       goal,
       contextMenu,
-      infoTab,
     } = this.props;
-    infoTab();
+
     const options = this.getOptionsForE(e);
+
     const delegate = {
       onItemAction: (item, i) => this[item.handler](options, item, i),
     };
@@ -342,7 +336,6 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   archive: ca.goals.archive,
-  infoTab: a.main.infoTab,
   contextMenu: a.main.contextMenu,
   assignGoal: ca.goals.assign,
   renameGoal: ca.goals.rename,

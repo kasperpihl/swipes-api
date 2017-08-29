@@ -62,6 +62,14 @@ class HOCMilestoneList extends PureComponent {
       });
     }
   }
+  getInfoTabProps() {
+    return {
+      about: {
+        title: 'What is Plan?',
+        text: 'Plan is one of the 3 main sections of the Workspace: Plan, Take Action and Discuss.\n\nUnder Plan you can set up a milestone for your team and track the progress you are making. Milestones can be projects, company objectives or ongoing company activities.',
+      },
+    }
+  }
   render() {
     const { milestones } = this.props;
     const { tabs, tabIndex } = this.state;
