@@ -11,23 +11,50 @@ class InfoTab extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
+    setupDelegate(this, 'onInfoTabAction');
   }
   renderActions() {
-
+    const { actions } = this.props;
+    if(!actions) {
+      return undefined;
+    }
+    return actions.map((act, i) => (
+      <div onClick={this.onInfoTabActionCached(i)}>
+        <Icon icon={act.icon} />
+        {act.title}
+      </div>
+    ))
   }
   renderInfo() {
+    const { info } = this.props;
+    if(!info) {
+      return undefined;
+    }
 
+    return info.map((obj, i) => (
+      <div>
+        {obj.title}
+        {obj.text}
+      </div>
+    ))
   }
   renderAbout() {
+    const { about } = this.props;
 
+    return (
+      <div className="about">
+        {about.title}
+        {about.text}
+      </div>
+    )
   }
   render() {
     return (
-      <div className="info-tab" />
+      <div className="info-tab">
+        {this.renderActions()}
+        {this.renderInfo()}
+        {this.renderAbout()}
+      </div>
     );
   }
 }
