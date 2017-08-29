@@ -49,7 +49,7 @@ class HOCInfoButton extends PureComponent {
     return (
       <Button
         onClick={this.onClick}
-        icon="i"
+        icon="Information"
         {...rest}
       />
     );

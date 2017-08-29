@@ -1,9 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <g>
-    <rect stroke="transparent" opacity="0"/>
-    <g>
-      <path d="M21.0005,15.9731H21V18.5a1.00011,1.00011,0,0,1-1,1H4a1.00011,1.00011,0,0,1-1-1v-5H1.0005v-.0044L1,13.5v5a3.00328,3.00328,0,0,0,3,3H20a3.00328,3.00328,0,0,0,3-3v-5H21.0005Z" stroke="transparent"/>
-      <polygon points="17.707 9.207 16.293 7.793 13 11.084 13 2.5 11 2.5 11 11.087 7.708 7.793 6.292 9.207 11.997 14.914 17.707 9.207" stroke="transparent"/>
-    </g>
+    <polygon points="15.293 8.878 13 11.171 13 5 11 5 11 11.173 8.707 8.879 7.293 10.293 11.998 15 16.707 10.293 15.293 8.878" stroke="transparent" />
+    <rect x="5" y="17" width="14" height="2" stroke="transparent" />
   </g>
 </svg>

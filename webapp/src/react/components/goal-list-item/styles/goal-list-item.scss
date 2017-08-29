@@ -59,7 +59,7 @@ $contHeight: 66px;
 
   &__completed-svg {
     @include size(18px);
-    @include svg-color($deepBlue-100);
+    @include svg-color(white);
     display: none;
   }
 

@@ -15,6 +15,13 @@ class InfoTab extends PureComponent {
 
     setupDelegate(this, 'onInfoTabAction');
   }
+  renderActionIcon(icon, iconClass) {
+    if (!icon) {
+      return undefined;
+    }
+
+    return <Icon icon={icon} className={iconClass} />
+  }
   renderActions() {
     const { actions } = this.props;
 
@@ -30,8 +37,8 @@ class InfoTab extends PureComponent {
       }
 
       return (
-        <div className="info-tab__action">
-          <Icon icon={act.icon} className={iconClass} />
+        <div className="info-tab__action" key={act.title + i}>
+          {this.renderActionIcon(act.icon, iconClass)}
           <div className="info-tab__action-title">{act.title}</div>
         </div>
       )
@@ -52,7 +59,7 @@ class InfoTab extends PureComponent {
 
     const infoHTML = info.map((info, i) => {
       return (
-        <div className="info-tab__info-row">
+        <div className="info-tab__info-row"  key={info.title + i}>
           <div className="info-tab__info-title-wrapper">
             <div className="info-tab__info-title">{info.title}</div>
             <div className="info-tab__info-action">{info.actionLabel}</div>
@@ -74,7 +81,7 @@ class InfoTab extends PureComponent {
     return (
       <div className="info-tab__about">
         <div className="info-tab__about-header">
-          <Icon icon="Close" className="info-tab__about-icon" />
+          {/* <Icon icon="Close" className="info-tab__about-icon" /> */}
           <div className="info-tab__about-title">{about.title}</div>
         </div>
         <div className="info-tab__about-text">

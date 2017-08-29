@@ -38,6 +38,7 @@ import Collection from './svgs/collection.svg';
 import CreateNote from './svgs/create-note.svg';
 import Decision from './svgs/decision.svg';
 import Deliver from './svgs/deliver.svg';
+import Delete from './svgs/delete.svg';
 import Desktop from './svgs/desktop.svg';
 import Desktop2x from './svgs/desktop2x.svg';
 import Dot from './svgs/dot.svg';
@@ -64,6 +65,7 @@ import HeaderOne from './svgs/header-one.svg';
 import HeaderTwo from './svgs/header-two.svg';
 import Heart from './svgs/heart.svg';
 import Hyperlink from './svgs/hyperlink.svg';
+import Information from './svgs/information.svg';
 import Itallic from './svgs/itallic.svg';
 import Iteration from './svgs/iteration.svg';
 import LargeList from './svgs/large-list.svg';
@@ -87,6 +89,7 @@ import Person from './svgs/person.svg';
 import Plus from './svgs/plus.svg';
 import Reaction from './svgs/reaction.svg';
 import Reload from './svgs/reload.svg';
+import Save from './svgs/save.svg';
 import SmallList from './svgs/small-list.svg';
 import Star from './svgs/star.svg';
 import Status from './svgs/status.svg';
@@ -172,6 +175,7 @@ export {
   CreateNote,
   Decision,
   Deliver,
+  Delete,
   Desktop,
   Desktop2x,
   Dot,
@@ -198,6 +202,7 @@ export {
   HeaderTwo,
   Heart,
   Hyperlink,
+  Information,
   Itallic,
   Iteration,
   LargeList,
@@ -221,6 +226,7 @@ export {
   Plus,
   Reaction,
   Reload,
+  Save,
   SmallList,
   Star,
   Status,

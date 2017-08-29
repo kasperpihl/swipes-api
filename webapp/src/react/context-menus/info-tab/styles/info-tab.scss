@@ -12,7 +12,12 @@
   border-radius: 6px;
   overflow-y: auto;
   padding: 30px 12px;
+  padding-top: 21px;
 }
+
+// ======================================================
+// Elements
+// ======================================================
 
 .info-tab {
   $b: &;
@@ -23,9 +28,12 @@
 
   &__action {
     $flexIgnoreList: '#{$b}__action-icon';
+
     @include size(100%, 43px);
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
     border-bottom: 1px solid $deepBlue-80;
+    transition: .2s ease;
+    padding-left: 12px;
   }
 
   &__action-icon {
@@ -47,6 +55,7 @@
     border-bottom: 1px solid $deepBlue-80;
     padding-bottom: 18px;
     padding-top: 6px;
+    margin-bottom: 12px;
   }
 
   &__info-row {
@@ -71,7 +80,6 @@
 
   &__about {
     @include size(100%, auto);
-    padding-top: 22px;
   }
 
   &__about-header {
@@ -91,5 +99,20 @@
 
   &__about-text {
     @include font(12px, $deepBlue-60, 18px, 500) 
+  }
+}
+
+// ======================================================
+// Hovers
+// ======================================================
+
+.info-tab {
+
+  &__action {
+
+    &:hover {
+      background-color: $deepBlue-80;
+      transition: .2s ease;
+    }
   }
 }
