@@ -11,6 +11,7 @@ import Section from 'components/section/Section';
 import Button from 'Button';
 import Icon from 'Icon';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
+import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import './styles/milestone-overview.scss';
 
 class MilestoneOverview extends PureComponent {
@@ -29,7 +30,6 @@ class MilestoneOverview extends PureComponent {
         <HOCHeaderTitle
           title={title || m.get('title')}
           delegate={delegate}
-          subtitle={msgGen.milestones.getSubtitle(m)}
         >
           <HOCDiscussButton
             context={{
@@ -38,9 +38,9 @@ class MilestoneOverview extends PureComponent {
             }}
             relatedFilter={msgGen.milestones.getRelatedFilter(m)}
           />
-          <Button
-            icon="ThreeDots"
-            onClick={this.onContext}
+
+          <HOCInfoButton
+            delegate={delegate}
             {...getLoading('dots')}
           />
         </HOCHeaderTitle>

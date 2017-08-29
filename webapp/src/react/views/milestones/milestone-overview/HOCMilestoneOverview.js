@@ -129,6 +129,26 @@ class HOCMilestoneOverview extends PureComponent {
       positionY: 10,
     };
   }
+  getInfoTabProps() {
+    const { milestone } = this.props;
+    let achieveLbl = 'Mark milestone as achieved';
+    if (milestone.get('closed_at')) {
+      achieveLbl = 'Move milestone to current';
+    }
+    return {
+      actions: [
+        { title: 'Delete milestone' },
+        { title: 'Mark milestone as achieved' },
+      ],
+      info: [
+        { title: 'Created', text: '19 apr etc PLACEHOLDER' },
+      ],
+      about: {
+        title: 'What is a milestone?',
+        text: 'A Milestone is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Milestone.\n\nTo keep your work organized, categorize goals for your Milestone with This week, Later or Completed.'
+      },
+    }
+  }
   render() {
     const { milestone, groupedGoals } = this.props;
 
