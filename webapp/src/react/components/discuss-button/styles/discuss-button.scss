@@ -6,15 +6,20 @@
   @include flexContainer('row');
   border: 1px solid $deepBlue-10;
   border-radius: 100px;
-  overflow: hidden;
+  overflow: hidden !important;
 
-  &__button {
+  & &__button {
     @include size(auto, 100%);
     @include flexContainer('row', center, center);
     @include font(12px, $deepBlue-60, 18px, 500);
     padding: 0 24px;
 
+    &:first-child {
+      @include border-radius(100px, 0, 100px, 0)
+    }
+
     &:last-child {
+      @include border-radius(0, 100px, 0, 100px) 
       border-left: 1px solid $deepBlue-10;
       padding: 0 15px;
       padding-right: 18px;

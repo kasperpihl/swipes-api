@@ -52,10 +52,6 @@ $compSize: 30px;
     border-radius: 6px;
     margin-right: -9px;
 
-    @include styleIfNumberOfElements(1) {
-      border: none;
-    }
-
     &--image {
 
       img {

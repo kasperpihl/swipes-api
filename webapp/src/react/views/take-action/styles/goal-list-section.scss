@@ -42,10 +42,10 @@
   }
 
   &__title {
-    @include font(12px, $deepBlue-90, 18px, 500);
+    @include font(13px, $deepBlue-90, 18px, 500);
     letter-spacing: .3px;
     padding-left: 3px;
-    padding-top: 2px;
+    padding-top: 3px;
   }
 }
 

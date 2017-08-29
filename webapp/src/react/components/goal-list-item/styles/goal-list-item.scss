@@ -51,7 +51,7 @@ $contHeight: 66px;
   $b: &;
 
   &__circle {
-    @include size(30px);
+    @include size(14px);
     @include flexContainer('row', center, center);
     border: 2px solid $deepBlue-50;
     border-radius: 50%;
@@ -59,7 +59,7 @@ $contHeight: 66px;
 
   &__completed-svg {
     @include size(18px);
-    @include svg-color(white);
+    @include svg-color($deepBlue-100);
     display: none;
   }
 
@@ -76,7 +76,7 @@ $contHeight: 66px;
     @include font(15px, $deepBlue-90, 24px);
     @include truncateString();
     transition: .2s ease;
-    padding-left: 18px;
+    padding-left: 12px;
   }
 
   &__subtitle {

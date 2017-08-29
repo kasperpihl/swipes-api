@@ -6,13 +6,14 @@
 // ======================================================
 
 .goal-checkbox {
-  @include size(36px);
+  @include size(30px);
   @include flexContainer('row', center, center) {
     flex: none; 
   };
   border: 2px solid $deepBlue-30;
   border-radius: 50%;
   margin-right: 12px;
+  margin-top: 3px;
   transition: .2s ease;
 }
 
