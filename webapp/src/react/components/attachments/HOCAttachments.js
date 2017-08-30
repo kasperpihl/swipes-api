@@ -18,6 +18,7 @@ import {
 } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
+import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import Attachment from './Attachment';
 import './styles/attachments';
 
@@ -85,21 +86,7 @@ class HOCAttachments extends PureComponent {
       },
     });
   }
-  onPaste(event) {
-    const items = (event.clipboardData || event.originalEvent.clipboardData).items;
-    let uploaded;
-    for (const index in items) {
-      const item = items[index];
-      if (item.kind === 'file') {
-        const blob = item.getAsFile();
-        const ts = moment().format('MMMM Do YYYY, h:mm:ss a');
-        blob.name = `Screenshot from (${ts}).png`;
-        this.onUploadFiles([blob]);
-        console.log(blob.name, blob.type);
-        break;
-      }
-    }
-  }
+
   onRename(id, currTitle, options) {
     const { targetId, inputMenu, renameAttachment } = this.props;
     inputMenu({
@@ -143,89 +130,18 @@ class HOCAttachments extends PureComponent {
       }
     });
   }
-  onAdd(which, e) {
-    const {
-      inputMenu,
-      targetId,
-      createNote,
-      openFind,
-    } = this.props;
-    const options = {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignY: 'center',
-      alignX: 'center',
-      buttonLabel: 'Add',
-    };
-    if (which === 'find') {
-      openFind(this.context.target, targetId);
-      return;
-    }
-    if (which === 'url') {
-      options.placeholder = 'Enter a URL';
-    } else if (which === 'note') {
-      options.placeholder = 'Title of the note';
-    }
-    inputMenu(options, (title) => {
-      if (title && title.length) {
-        this.setLoading('adding');
-        if (which === 'url') {
-          this.attachToTarget(which, title, title);
-        } else {
-          createNote(convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
-            if (res && res.ok) {
-              this.attachToTarget(which, res.note.id, title);
-            } else {
-              this.clearLoading('adding');
-            }
-          });
-        }
-      }
-    });
-  }
-  getSwipesLinkObj(type, id, title) {
-    const { myId } = this.props;
-    return {
-      service: {
-        name: 'swipes',
-        type,
-        id,
-      },
-      permission: {
-        account_id: myId,
-      },
-      meta: {
-        title,
-      },
-    };
-  }
-  onUploadFiles(files) {
-    const { uploadFiles, targetId } = this.props;
-    this.setLoading('adding');
-    uploadFiles(targetId, files).then((res) => {
-      if (res.ok) {
-        this.clearLoading('adding');
-        this.setState({ fileVal: '' });
-      } else {
-        this.clearLoading('adding', '!Something went wrong');
-      }
-    });
-  }
-  onChangeFiles(e) {
-    this.setState({ fileVal: e.target.value });
-    this.onUploadFiles(e.target.files);
-  }
-  attachToTarget(type, id, title) {
-    const linkObj = this.getSwipesLinkObj(type, id, title);
+  onAddedAttachment(att, clearLoading) {
     const { targetId, addAttachment } = this.props;
-    addAttachment(targetId, linkObj).then((res) => {
-      this.clearLoading('adding');
+    addAttachment(targetId, att.get('link').toJS(), att.get('title')).then((res) => {
+      clearLoading();
       if (res.ok) {
         window.analytics.sendEvent('Attachment added', {
-          Type: type,
+          Type: att.getIn(['link', 'service', 'type']),
           Service: 'swipes',
         });
       }
     });
+    return false;
   }
 
   renderEmpty() {
@@ -264,31 +180,12 @@ class HOCAttachments extends PureComponent {
     });
   }
   renderAddAttachments() {
-    let className = 'attachments__add-list';
-    if (this.getLoading('adding').loading) {
-      className += ' attachments__add-list--loading';
-    }
-    const { fileVal } = this.state;
-
     return (
-      <div className={className}>
-        <button
-          className="attachments__add-item"
-          onClick={this.onAddCached('url')}
-        >
-          Add URL
-        </button>
-        <button
-          className="attachments__add-item"
-          onClick={this.onAddCached('note')}
-        >
-          New Note
-        </button>
-        <label className="attachments__add-item">
-          Upload
-          <input value={fileVal} type="file" onChange={this.onChangeFiles} />
-        </label>
-        <div className="attachments__loader" />
+      <div className="attachments__add-list">
+        <HOCAttachButton
+          delegate={this}
+          text="Attach"
+        />
       </div>
     );
   }
@@ -305,7 +202,6 @@ class HOCAttachments extends PureComponent {
 
 const { func, object, string } = PropTypes;
 HOCAttachments.propTypes = {
-  createNote: func,
   addAttachment: func,
   removeAttachment: func,
   renameAttachment: func,
@@ -315,9 +211,7 @@ HOCAttachments.propTypes = {
   targetId: string,
   delegate: object,
   inputMenu: func,
-  myId: string,
   flags: list,
-  openFind: func,
   confirm: func,
   previewLink: func,
 };
@@ -326,9 +220,7 @@ HOCAttachments.contextTypes = {
 };
 
 function mapStateToProps(state) {
-  return {
-    myId: state.getIn(['me', 'id']),
-  };
+  return {}
 }
 
 export default connect(mapStateToProps, {
@@ -337,9 +229,7 @@ export default connect(mapStateToProps, {
   renameAttachment: ca.attachments.rename,
   contextMenu: a.main.contextMenu,
   createNote: ca.notes.create,
-  uploadFiles: ca.files.upload,
   inputMenu: a.menus.input,
   confirm: a.menus.confirm,
-  openFind: a.links.openFind,
   previewLink: a.links.preview,
 })(HOCAttachments);

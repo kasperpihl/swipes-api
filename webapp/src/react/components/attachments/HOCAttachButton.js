@@ -105,10 +105,13 @@ class HOCAttachButton extends PureComponent {
     const link = this.getSwipesLinkObj(type, id, title);
     const { createLink } = this.props;
     createLink(link).then((res) => {
-      this.clearLoading('attach');
+      let clear = undefined;
       if (res.ok) {
         const att = fromJS({ link: res.link, title });
-        this.onAddedAttachment(att);
+        clear = this.onAddedAttachment(att, this.clearLoading.bind(null, 'attach'));
+      }
+      if(clear === undefined){
+        this.clearLoading('attach');
       }
     });
   }
