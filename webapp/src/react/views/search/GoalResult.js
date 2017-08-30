@@ -30,7 +30,6 @@ class GoalResult extends PureComponent {
     let className = 'goal-result';
 
     if (result.item.completed_at) {
-      console.log('completed', result.item.title)
       className += ' goal-result--completed';
     }
 

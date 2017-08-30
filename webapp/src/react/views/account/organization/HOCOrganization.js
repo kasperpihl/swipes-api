@@ -47,7 +47,13 @@ class HOCOrganization extends PureComponent {
           'User': res.user.id,
         })
       } else {
-        this.clearLoading('invite', '!Something went wrong', 3000);
+        if(res.error.message) {
+          this.clearLoading('invite', '!' + res.error.message, 5000);
+        } else {
+          this.clearLoading('invite', '!Something went wrong', 3000);
+        }
+        console.log(res);
+
       }
     });
   }
