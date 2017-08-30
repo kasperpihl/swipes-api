@@ -28,6 +28,8 @@ const goalsCreate = valLocals('goalsCreate', {
   goal: object.as({
     title: string.min(1).require(),
     assignees: array.of(string).require(),
+    step_order: array,
+    steps: object,
   }),
   organization_id: string.require(),
   milestone_id: string,
@@ -52,13 +54,12 @@ const goalsCreate = valLocals('goalsCreate', {
     done_by: user_id,
     done_at: new Date(),
   }];
-
-  goal.steps = {};
-  goal.step_order = [];
+  goal.steps = goal.steps || {};
+  goal.step_order = goal.step_order || [];
   goal.attachments = {};
   goal.attachment_order = [];
   goal.milestone_id = milestone_id;
-  goal.completed_at = null;
+  goal.completed_at = goal.completed_at || null;
 
   setLocals({
     goal,

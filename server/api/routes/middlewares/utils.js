@@ -2,6 +2,7 @@ import {
   string,
   object,
   array,
+  date,
   funcWrap,
 } from 'valjs';
 import {
@@ -49,11 +50,13 @@ const stepsCreateStep = funcWrap([
     user_id: string.require(),
     title: string.require(),
     assignees: array.require(),
+    completed_at: date,
   }),
 ], (err, {
   user_id,
   title,
   assignees,
+  completed_at,
 }) => {
   if (err) {
     throw new SwipesError(`stepsCreateStep: ${err}`);
@@ -67,7 +70,7 @@ const stepsCreateStep = funcWrap([
     created_at: new Date(),
     created_by: user_id,
     updated_by: user_id,
-    completed_at: null,
+    completed_at: completed_at || null,
   };
 
   return step;

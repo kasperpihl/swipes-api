@@ -3,7 +3,6 @@ import r from 'rethinkdb';
 import {
   string,
   object,
-  array,
 } from 'valjs';
 import stripePackage from 'stripe';
 import {
