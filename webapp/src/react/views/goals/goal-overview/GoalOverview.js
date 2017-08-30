@@ -11,6 +11,7 @@ import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
+import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import GoalCheckbox from 'components/goal-checkbox/GoalCheckbox';
 import Button from 'Button';
@@ -111,10 +112,9 @@ class GoalOverview extends PureComponent {
             relatedFilter={msgGen.goals.getRelatedFilter(goal)}
             taggedUsers={helper.getAllAssigneesButMe().toArray()}
           />
-          <Button
-            icon="ThreeDots"
-            onClick={this.onContext}
-            {...getLoading('dots') }
+          <HOCInfoButton
+            delegate={delegate}
+            {...getLoading('dots')}
           />
         </HOCHeaderTitle>
       </div>

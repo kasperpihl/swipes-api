@@ -6,6 +6,7 @@ import { fromJS } from 'immutable';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
+import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TimeAgo from 'components/time-ago/TimeAgo';
 import {
@@ -18,6 +19,7 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import diff from 'classes/draft-util';
 
 import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
+import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 
@@ -123,6 +125,20 @@ class HOCSideNote extends PureComponent {
       this.saveNote(text);
     }
   }
+  getInfoTabProps() {
+    const { note } = this.props;
+    const createdLbl = `${dayStringForDate(note.get('created_at'))} by ${msgGen.users.getFullName(note.get('created_by'))}`
+
+    return {
+      info: [
+        { title: 'Created', text: createdLbl },
+      ],
+      about: {
+        title: 'What is a note',
+        text: 'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text blue and the options will appear.',
+      },
+    }
+  }
   saveNote(text, rev) {
     const {
       saveNote,
@@ -200,6 +216,9 @@ class HOCSideNote extends PureComponent {
               id: note.get('id'),
               title,
             }}
+          />
+          <HOCInfoButton
+            delegate={this}
           />
         </HOCHeaderTitle>
       </div>

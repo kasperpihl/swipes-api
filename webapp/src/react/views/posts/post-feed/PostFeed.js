@@ -27,13 +27,6 @@ class PostFeed extends PureComponent {
   componentDidMount() {
   }
   onScroll(e) {
-    const { showLine } = this.state;
-    let newShowLine = e.target.scrollTop > 0;
-
-    if (showLine !== newShowLine) {
-      this.setState({ showLine: newShowLine })
-    }
-
     if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
       if (this.lastEnd < e.target.scrollTop + DISTANCE) {
         this.onReachedEnd();
@@ -43,14 +36,13 @@ class PostFeed extends PureComponent {
 
   }
   renderHeader() {
-    const { context, delegate } = this.props;
+    const { context, delegate, tabs } = this.props;
     let subtitle = context && context.get('title') && `re. ${context.get('title')}`;
     subtitle = subtitle || 'Talk with your team and share the latest and greatest.';
-    const { showLine } = this.state;
 
     return (
       <div className="post-feed__header">
-        <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={showLine}>
+        <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={!tabs}>
           <Button primary text="Create Post" onClick={this.onNewPost} />
           <HOCInfoButton delegate={delegate} />
         </HOCHeaderTitle>

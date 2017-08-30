@@ -5,6 +5,7 @@ import { map } from 'react-immutable-proptypes';
 import { propsOrPop } from 'classes/react-utils';
 import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
+import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
@@ -138,8 +139,8 @@ class HOCGoalOverview extends PureComponent {
   onArchive(options) {
     const { goal, confirm, archive } = this.props;
     confirm(Object.assign({}, options, {
-      title: 'Archive goal',
-      message: 'This will make this goal inactive for all participants.',
+      title: 'Delete goal',
+      message: 'This will delete the goal permanently and cannot be undone.',
     }), (i) => {
       if (i === 1) {
         this.setLoading('dots');
@@ -222,36 +223,6 @@ class HOCGoalOverview extends PureComponent {
 
     });
   }
-  onContext(e) {
-    const {
-      goal,
-      contextMenu,
-    } = this.props;
-
-    const options = this.getOptionsForE(e);
-
-    const delegate = {
-      onItemAction: (item, i) => this[item.handler](options, item, i),
-    };
-    const items = [
-      { handler: 'onLoadWay', title: 'Load a way'},
-      { handler: 'onSaveWay', title: 'Save as a way'},
-      { handler: 'onEditMilestone', title: 'Add milestone' },
-      { handler: 'onSeeAll', title: 'View activity' },
-      { handler: 'onArchive', title: 'Archive Goal' },
-    ];
-    if(goal.get('milestone_id')){
-      items[2].title = 'Edit milestone';
-    }
-    contextMenu({
-      options,
-      component: TabMenu,
-      props: {
-        items,
-        delegate,
-      },
-    });
-  }
   onAssign(i, e) {
     const options = this.getOptionsForE(e);
     const { selectAssignees, assignGoal, goal } = this.props;
@@ -273,10 +244,33 @@ class HOCGoalOverview extends PureComponent {
     });
     e.stopPropagation();
   }
+  onInfoTabAction(i, e) {
+    const options = this.getOptionsForE(e);
+    const items = ['onLoadWay', 'onSaveWay', 'onArchive'];
+    this[items[i]](options);
+  }
   viewDidLoad(stepList) {
     this.stepList = stepList;
   }
-  
+  getInfoTabProps() {
+    const { goal } = this.props;
+
+    const createdLbl = `${dayStringForDate(goal.get('created_at'))} by ${msgGen.users.getFullName(goal.get('created_by'))}`
+    return {
+      actions: [
+        { title: 'Load a way', icon: 'Download' },
+        { title: 'Save as a way', icon: 'Save' },
+        { title: 'Delete goal', icon: 'Delete', danger: true },
+      ],
+      info: [
+        { title: 'Created', text: createdLbl },
+      ],
+      about: {
+        title: 'What is a goal',
+        text: 'A Goal is where work happens. Something needs to be done or delivered. Goals can be broken down into steps to show the next action.\n\nAll important links, documents, and notes can be attached to the goal so everyone is on the same page. You can discuss a goal or post an update via "Discuss".',
+      },
+    }
+  }
   getOptionsForE(e) {
     if (e && e.boundingRect) {
       return e;
