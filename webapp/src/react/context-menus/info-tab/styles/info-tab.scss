@@ -40,7 +40,7 @@
     @include size(24px);
     @include svg-color($blue-100);
 
-    & &--danger {
+    &#{&}--danger {
       @include svg-color($red-80)
     }
   }

@@ -166,6 +166,8 @@ $borderColor: $deepBlue-10;
     &#{$b}--icon-and-text {
       padding: 0 12px;
     }
+    
+
 
   }
 }
@@ -347,6 +349,7 @@ $borderColor: $deepBlue-10;
   &:not(&--small):after {
     @include size($btnSize);
   }
+
   &--loading {
     border-width: 0px;
     border-color: $deepBlue-10;
@@ -384,6 +387,21 @@ $borderColor: $deepBlue-10;
     #{$b}__svg {
       opacity: 0;
       transition: opacity .15s ease, margin .5s ease;
+    }
+
+
+  }
+
+  &#{&}--small#{&}--loading {
+
+    &:before {
+      @include size(28px);
+      left: 2px; top: 2px;
+    }
+
+    &:after {
+      left: 2px; top: 2px;
+      @include size($smallBtn - 2px);
     }
   }
 }
