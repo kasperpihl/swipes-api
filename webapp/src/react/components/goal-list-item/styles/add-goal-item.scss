@@ -13,6 +13,7 @@
   @include flexContainer('row', left, center, $flexIgnoreList);
   border-top: 1px solid $deepBlue-5;
   padding: 0 6px;
+  padding-right: 9px;
   transition: .15s ease;
 }
 
@@ -49,15 +50,13 @@
   }
 
   &__indicator {
-    @include size(30px);
+    @include size(14px);
     @include flexContainer('row', center, center);
-    border: 5px solid $deepBlue-20;
+    border: 2px solid $deepBlue-20;
     border-radius: 50%;
-    color: rgba($deepBlue-100, 0);
-    margin-right: 18px;
+    margin-right: 15px;
     order: 1;
-    transform: scale(.4);
-    transition: .3s ease;
+    transition: .2s ease;
   }
 
   &__loader {
@@ -98,8 +97,7 @@
 
   &--focused {
     .add-goal-item__indicator {
-      border: 2px solid $deepBlue-20;
-      transform: scale(1.0);
+      border: 2px solid $deepBlue-50;
     }
   }
 

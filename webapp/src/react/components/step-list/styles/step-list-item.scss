@@ -1,0 +1,178 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+// @import '~styles/_functions.scss';
+
+// ======================================================
+// Block
+// ======================================================
+
+.step-list-item {
+  $b: &;
+  $flexIgnoreList: '#{$b}__indicator', '#{$b}__assignees';
+
+  @include size(100%, auto);
+  @include flexContainer('row', left, stretch, $flexIgnoreList);
+  @include heightSpecifications(61px, initial);
+  background-color: $bg;
+  border-top: 1px solid $deepBlue-5;
+  transition: 0s;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.step-list-item {
+  $b: &;
+
+  &__sortable {
+    box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
+    padding: 0 15px;
+    z-index: 99999999999;
+  }
+
+  &__indicator {
+    @include size(49px, initial);
+    @include flexContainer('row', left, center);
+    transition: .15s ease;
+  }
+
+  &__title {
+    @include size(100%, initial);
+    @include font(15px, $deepBlue-90, 24px);
+    @include flexContainer('row', left, center);
+    padding: 18px 0;
+    transition: .15s ease;
+    cursor: text;
+  }
+
+  &__assignees {
+    @include flexContainer('row', center, center);
+    padding-left: 6px;
+    transition: .15s ease;
+  }
+}
+
+// step list number indicator
+
+.step-list-item {
+
+  .indicator {
+    $b: &;
+    @include size(30px);
+    @include flexContainer('row', center, center);
+    border-radius: 50%;
+    overflow: hidden;
+    transition: .15s ease;
+
+    &__number {
+      @include font(12px, $deepBlue-90, 18px, bold);
+      transition: .15s ease;
+    }
+
+    &__icon {
+      @include size(30px);
+      @include flexContainer('row', center, center);
+      position: absolute;
+      left: 0; top: 0;
+      opacity: 0;
+      transition: .15s ease;
+    }
+
+    &__svg {
+      @include size(18px);
+      @include svg-color($bg);
+    }
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.step-list-item {
+  $b: &;
+
+  &#{&}--completed {
+
+    .indicator {
+      background-color: $green-color;
+
+      &__number {
+        @include font($c: white); 
+      }
+    }
+
+    #{$b}__title {
+      @include font($c: $deepBlue-50);
+    }
+  }
+}
+
+// editing
+
+.step-list-item {
+  $b: &;
+
+  &--editing {
+    $flexIgnoreList: '#{$b}__remove', '#{$b}__assignees';
+
+    @include flexContainer('row', left, center, $flexIgnoreList);
+    padding: 12px 0;
+    transition: 0s;
+
+    #{$b}__remove {
+      padding-right: 13px;
+    }
+
+    input#{$b}__input {
+      @include size(100%, auto);
+      @include font(15px, $blue-100, 24px);
+      text-shadow: 0px 0px 0px $deepBlue-60;
+      -webkit-text-fill-color: transparent;
+      padding: 9px 0;
+      padding-right: 9px;
+
+      &:focus {
+        text-shadow: 0px 0px 0px $deepBlue-100;
+      }
+    }
+  }
+}
+
+// ======================================================
+// Hover
+// ======================================================
+
+.step-list-item {
+  $b: &;
+
+  &#{&}--completed #{&}__indicator:hover {
+
+    .indicator {
+
+      &__number {
+        opacity: 0;
+      }
+
+      &__icon {
+        opacity: 1;
+      }
+    }
+  }
+
+  &#{&}--current #{&}__indicator:hover {
+
+    .indicator {
+      background-color: $green-color;
+
+      &__number {
+        opacity: 0;
+      }
+
+      &__icon {
+        opacity: 1;
+      }
+    }
+  }
+}

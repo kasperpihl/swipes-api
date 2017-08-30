@@ -8,7 +8,7 @@ import { setupDelegate } from 'react-delegate';
 import Button from 'Button';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-// import './styles/step-list-item.scss';
+import './styles/step-list-item.scss';
 
 class StepListItem extends PureComponent {
   constructor(props) {

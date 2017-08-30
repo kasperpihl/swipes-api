@@ -133,6 +133,13 @@ $contHeight: 66px;
   }
 
   &#{&}--move-to-later {
+
+    &:hover {
+      #{$b}__assigning {
+        transform: translateX(-42px);
+        transition: .4s ease;
+      }
+    }
     
     #{$b}__move {
       @include size(36px);
@@ -181,11 +188,6 @@ $contHeight: 66px;
     #{$b}__title {
       @include font($c: $blue-100);
       transition: .2s ease;
-    }
-
-    #{$b}__assigning {
-      transform: translateX(-42px);
-      transition: .4s ease;
     }
 
     #{$b}__move {
