@@ -16,7 +16,7 @@ import './styles/post-feed.scss';
 const DISTANCE = 200;
 class PostFeed extends PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     setupDelegate(this, 'onPostClick', 'onNewPost', 'onReachedEnd');
     this.onScroll = this.onScroll.bind(this);
     this.state = {

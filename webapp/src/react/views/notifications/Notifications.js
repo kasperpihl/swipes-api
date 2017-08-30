@@ -18,8 +18,6 @@ class Notifications extends PureComponent {
     this.lastEnd = 0;
     this.onScroll = this.onScroll.bind(this);
   }
-  componentDidMount() {
-  }
   onScroll(e) {
     if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
       if (this.lastEnd < e.target.scrollTop + DISTANCE) {
@@ -27,7 +25,6 @@ class Notifications extends PureComponent {
         this.lastEnd = e.target.scrollTop;
       }
     }
-
   }
   renderHeader() {
     const { getLoading } = this.props;
