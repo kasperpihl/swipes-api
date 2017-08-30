@@ -64,6 +64,7 @@ class MilestoneOverview extends PureComponent {
         goalId={g.get('id')}
         key={g.get('id')}
         delegate={delegate}
+        fromMilestone={true}
       />
     ));
     if(group === 'Current') {

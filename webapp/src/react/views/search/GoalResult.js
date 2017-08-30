@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react'
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import Icon from 'Icon';
 import './styles/goal-result.scss';
 
 class GoalResult extends PureComponent {
@@ -26,12 +27,18 @@ class GoalResult extends PureComponent {
   }
   render() {
     const { result } = this.props;
-    if(result.item.completed_at) {
-      // IS COMPLETED
+    let className = 'goal-result';
+
+    if (result.item.completed_at) {
+      console.log('completed', result.item.title)
+      className += ' goal-result--completed';
     }
+
     return (
-      <div className="goal-result">
-        <div className="goal-result__circle" />
+      <div className={className}>
+        <div className="goal-result__circle">
+          <Icon icon="ChecklistCheckmark" className="goal-result__svg" />
+        </div>
         <div className="goal-result__title">{result.item.title}</div>
         {this.renderAssignees()}
       </div>

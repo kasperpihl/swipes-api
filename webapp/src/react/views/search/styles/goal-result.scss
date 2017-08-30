@@ -26,6 +26,7 @@
 
   &__circle {
     @include size(14px);
+    @include flexContainer('row', center, center);
     border: 2px solid $deepBlue-50;
     border-radius: 50%;
   }
@@ -37,6 +38,33 @@
     padding-left: 12px;
     padding-right: 6px;
     transition: .2s ease;
+  }
+
+  &__svg {
+    @include size(18px);
+    @include svg-color(white);
+    opacity: 0;
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.goal-result {
+  $b: &;
+
+  &#{&}--completed {
+
+    #{$b}__circle {
+      @include size(24px);
+      background-color: $green-color;
+      border: none;
+    }
+
+    #{$b}__svg {
+      opacity: 1;
+    }
   }
 }
 

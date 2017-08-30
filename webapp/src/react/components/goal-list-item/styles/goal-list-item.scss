@@ -95,7 +95,13 @@ $contHeight: 66px;
 
   &__assigning {
     @include size(auto, 36px);
+    @include flexContainer('row', left, center);
     padding-left: 12px;
+    transition: .4s ease;
+  }
+
+  &__move {
+    display: none;
   }
 }
 
@@ -106,7 +112,7 @@ $contHeight: 66px;
 .goal-list-item {
   $b: &;
 
-  &--completed {
+  &#{&}--completed {
     @include size(100%, 49px);
 
     #{$b}__circle {
@@ -125,6 +131,40 @@ $contHeight: 66px;
       padding-left: 12px;
     }
   }
+
+  &#{&}--move-to-later {
+    
+    #{$b}__move {
+      @include size(36px);
+      @include flexContainer('row', center, center);
+      border: 1px solid $deepBlue-10;
+      border-radius: 50%;
+      flex: none;
+      position: absolute;
+      right: 6px; top: 50%;
+      transform: translateY(-50%) scale(0);
+      opacity: 0;
+      transition: transform .4s ease, opacity .4s ease, background-color .1s ease;
+
+      &:hover {
+        background-color: $deepBlue-70;
+        border-color: $deepBlue-70;
+        transition: .1s ease;
+
+        #{$b}__move-svg {
+          @include svg-color(white);
+          transition: .1s ease;
+        }
+      }
+    }
+
+    #{$b}__move-svg {
+      @include size(24px);
+      @include svg-color($deepBlue-50);
+      transition: .1s ease;
+      transform: translateX(1px);
+    }
+  }
 }
 
 // ======================================================
@@ -141,6 +181,17 @@ $contHeight: 66px;
     #{$b}__title {
       @include font($c: $blue-100);
       transition: .2s ease;
+    }
+
+    #{$b}__assigning {
+      transform: translateX(-42px);
+      transition: .4s ease;
+    }
+
+    #{$b}__move {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+      transition: transform .4s ease, opacity .4s ease, background-color .1s ease;
     }
   }
 }

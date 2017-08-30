@@ -61,6 +61,7 @@ class HOCGoalListItem extends PureComponent {
   renderAssignees() {
     const { goal } = this.props;
     const helper = this.getHelper();
+
     if (helper.getIsCompleted()) {
       return undefined;
     }
@@ -71,12 +72,25 @@ class HOCGoalListItem extends PureComponent {
         maxImages={1}
         delegate={this}
         rounded
-        size={32}
+        size={36}
       />
     );
   }
+  renderMoveButton() {
+    const { fromMilestone } = this.props;
+
+    if (!fromMilestone) {
+      return undefined;
+    }
+
+    return (
+      <div className="goal-list-item__move">
+        <Icon className="goal-list-item__move-svg" icon="ArrowRightLine" />
+      </div>
+    )
+  }
   render() {
-    const { goal } = this.props;
+    const { goal, fromMilestone } = this.props;
     const helper = this.getHelper();
     const isActive = !helper.getIsCompleted();
 
@@ -84,6 +98,10 @@ class HOCGoalListItem extends PureComponent {
 
     if (!isActive) {
       className += ' goal-list-item--completed';
+    }
+
+    if (fromMilestone && true) { // Needs a check if is in later already
+      className += ' goal-list-item--move-to-later'
     }
 
     return (
@@ -94,6 +112,7 @@ class HOCGoalListItem extends PureComponent {
           </div>
           <div className="goal-list-item__title">{goal.get('title')}</div>
         </div>
+        {this.renderMoveButton()}
         <div className="goal-list-item__assigning">
           {this.renderAssignees()}
         </div>
