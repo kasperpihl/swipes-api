@@ -8,13 +8,26 @@ import Button from 'Button';
 import NotificationItem from './NotificationItem';
 import './styles/notifications.scss';
 
+const DISTANCE = 50;
+
 class Notifications extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
-    setupDelegate(this, 'onMarkAll');
+    setupDelegate(this, 'onMarkAll', 'onReachedEnd');
+    this.lastEnd = 0;
+    this.onScroll = this.onScroll.bind(this);
   }
   componentDidMount() {
+  }
+  onScroll(e) {
+    if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
+      if (this.lastEnd < e.target.scrollTop + DISTANCE) {
+        this.onReachedEnd();
+        this.lastEnd = e.target.scrollTop;
+      }
+    }
+
   }
   renderHeader() {
     const { getLoading } = this.props;
@@ -33,10 +46,10 @@ class Notifications extends PureComponent {
     )
   }
   renderNotifications() {
-    const { notifications, delegate } = this.props;
+    const { notifications, delegate, limit } = this.props;
 
     return notifications.map((n, i) => (
-      <NotificationItem notification={n} key={i} delegate={delegate}/>
+      (i < limit) ? <NotificationItem notification={n} key={i} delegate={delegate}/> : null
     )).toArray();
   }
   render() {
@@ -47,6 +60,7 @@ class Notifications extends PureComponent {
         <SWView
           noframe
           header={this.renderHeader()}
+          onScroll={this.onScroll}
         >
           {this.renderNotifications()}
         </SWView>

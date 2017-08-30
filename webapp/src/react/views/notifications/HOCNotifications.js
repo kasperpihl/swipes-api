@@ -11,7 +11,7 @@ import Notifications from './Notifications';
 class HOCNotifications extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { limit: 10 };
     setupLoading(this);
   }
   componentDidMount() {
@@ -23,6 +23,9 @@ class HOCNotifications extends PureComponent {
   }
   componentWillUnmount() {
     this._unmounted = true;
+  }
+  onReachedEnd() {
+    this.setState({ limit: this.state.limit + 10 });
   }
   onMark(ids) {
     const { markNotifications } = this.props;
@@ -53,8 +56,11 @@ class HOCNotifications extends PureComponent {
   render() {
     const { notifications } = this.props;
     const sortedNotifications = notifications; //.filter(n => !!n.get('event_type'));
+    const { limit } = this.state;
+    
     return (
       <Notifications
+        limit={limit}
         delegate={this}
         notifications={sortedNotifications}
         {...this.bindLoading()}
