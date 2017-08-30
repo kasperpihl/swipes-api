@@ -101,7 +101,7 @@ class StepList extends PureComponent {
     let placeholder = 'What is the next step? Add it here...';
     const { stepOrder } = this.props;
     if (!stepOrder.size) {
-      placeholder = 'What is the first step? Enter it here...';
+      placeholder = 'What is the first step? Add it here...';
     }
     return placeholder;
   }

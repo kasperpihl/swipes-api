@@ -72,7 +72,7 @@ class NoteEditor extends Component {
     }
     const placeHolder = (
       <div>
-        Write anything in me.
+        Write down anything - text, lists or tasks.
       </div>
     );
 

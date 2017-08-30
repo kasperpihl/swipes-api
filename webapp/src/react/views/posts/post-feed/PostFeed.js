@@ -7,6 +7,7 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
 import TabBar from 'components/tab-bar/TabBar';
+import TextParser from 'components/text-parser/TextParser';
 // import Icon from 'Icon';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 
@@ -38,7 +39,7 @@ class PostFeed extends PureComponent {
   getContextType() {
     const { context } = this.props;
     const contextType = typeForId(context.get('id')).toLowerCase();
-    
+
     return contextType;
   }
   renderHeader() {
@@ -75,23 +76,17 @@ class PostFeed extends PureComponent {
   renderEmptyState() {
     const { tabs } = this.props;
 
+    let text = 'This is a great place to share your thoughts with the team.';
     if (tabs) {
       const contextType = this.getContextType();
-
-      return (
-        <div className="post-feed__empty-state">
-          <div className="post-feed__empty-illustration"></div>
-          <div className="post-feed__empty-text">This is a great place to discuss this {contextType} with the team.</div>
-          <Button primary text="Create Post" onClick={this.onNewPost} />
-        </div>
-      )
+      text = `There is no discussions about this ${contextType} yet.\n\nYou can be the first to start one.`;
     }
 
     return (
       <div className="post-feed__empty-state">
         <div className="post-feed__empty-illustration"></div>
-        <div className="post-feed__empty-text">This is a great place to share your thoughts with the team.</div>
-        <Button primary text="Create Post" onClick={this.onNewPost} />
+        <div className="post-feed__empty-text"><TextParser>{text}</TextParser></div>
+        <Button primary text="Create a post" onClick={this.onNewPost} />
       </div>
     )
   }
