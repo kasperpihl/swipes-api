@@ -145,7 +145,7 @@ class HOCAttachments extends PureComponent {
   }
 
   renderEmpty() {
-    return <div className="attachments__empty">No attachments yet</div>;
+    return <div className="attachments__empty">Upload files, create notes or add other work related materials to the goal.</div>;
   }
 
   renderAttachments() {

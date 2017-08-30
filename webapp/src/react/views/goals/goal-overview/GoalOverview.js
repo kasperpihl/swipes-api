@@ -141,6 +141,22 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
+  renderEmptyState() {
+    const helper = this.getHelper();
+    const totalSteps = helper.getNumberOfSteps();
+
+    if (!totalSteps) {
+      return (
+        <div className="goal-overview__empty-state">
+          <div className="goal-overview__empty-arrows"></div>
+          <div className="goal-overview__empty-text">
+            Write down the steps for achieving this goal. <br />
+            Assign the responsibilities.
+          </div>
+        </div>
+      )
+    }
+  }
   renderLeft() {
     const { delegate, editMode } = this.props;
     const helper = this.getHelper();
@@ -159,6 +175,7 @@ class GoalOverview extends PureComponent {
           delegate={delegate}
           editMode={editMode}
         />
+        {this.renderEmptyState()}
       </div>
     );
   }
