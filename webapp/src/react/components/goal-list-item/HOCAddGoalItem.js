@@ -124,7 +124,7 @@ class HOCAddGoalItem extends PureComponent {
           onKeyDown={this.onKeyDown}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
-          placeholder={placeholder || 'Add new goal'}
+          placeholder={placeholder || 'Add a new goal'}
           options={this.acOptions}
         />
         <div className="add-goal-item__indicator">

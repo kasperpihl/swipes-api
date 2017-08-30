@@ -49,7 +49,7 @@ class PostFeed extends PureComponent {
     return (
       <div className="post-feed__header">
         <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={!tabs}>
-          <Button primary text="Create Post" onClick={this.onNewPost} />
+          <Button primary text="Create a post" onClick={this.onNewPost} />
           <HOCInfoButton delegate={delegate} />
         </HOCHeaderTitle>
         {this.renderTabbar()}

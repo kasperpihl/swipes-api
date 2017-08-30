@@ -46,7 +46,7 @@ class AddMilestone extends PureComponent {
           value={title}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
-          placeholder="Add new milestone"
+          placeholder="Add a new milestone"
         />
       </div>
     )

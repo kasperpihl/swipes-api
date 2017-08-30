@@ -59,7 +59,7 @@ class HOCAttachButton extends PureComponent {
       if (item.id === 'note') {
         options.placeholder = 'Title of the note';
       } else if (item.id === 'url') {
-        options.placeholder = 'Enter a URL';
+        options.placeholder = 'http://';
       }
       inputMenu(options, (title) => {
         if (title && title.length) {

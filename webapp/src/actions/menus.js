@@ -171,9 +171,24 @@ export const selectMilestone = (options, callback) => (d, getState) => {
 
 export const chooseAttachmentType = (options) => (d, getState) => new Promise((resolve) => {
   const items = [
-    { id: 'note', title: 'New Note', leftIcon: { icon: 'Note' }},
-    { id: 'url', title: 'Add URL', leftIcon: { icon: 'Hyperlink' }},
-    { id: 'upload', title: 'Upload file', leftIcon: { icon: 'File' }},
+    {
+      id: 'note',
+      title: 'Create a note',
+      leftIcon: { icon: 'Note' },
+      subtitle: 'Share longer texts, requirements or checklists.'
+    },
+    {
+      id: 'url',
+      title: 'Add a URL',
+      leftIcon: { icon: 'Hyperlink' },
+      subtitle: 'Attach useful information from the web.'
+    },
+    {
+      id: 'upload',
+      title: 'Upload a file',
+      leftIcon: { icon: 'File' },
+      subtitle: 'Add documents, presentations or photos.'
+    },
   ];
 
   const delegate = {
