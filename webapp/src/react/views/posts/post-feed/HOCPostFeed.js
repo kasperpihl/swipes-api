@@ -55,7 +55,7 @@ class HOCPostFeed extends PureComponent {
   getInfoTabProps() {
     return {
       about: {
-        title: 'What is Discuss?',
+        title: 'What is Discuss',
         text: 'Discuss is one of the 3 main sections of the Workspace: Plan, Take Action and Discuss.\n\nUnder Discuss you can communicate with your team. You can read the latest updates from your company, take part in discussions or share news with the rest of the team.'
       },
     }

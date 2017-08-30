@@ -154,7 +154,7 @@ class HOCMilestoneOverview extends PureComponent {
         { title: 'Created', text: createdLbl },
       ],
       about: {
-        title: 'What is a milestone?',
+        title: 'What is a milestone',
         text: 'A Milestone is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Milestone.\n\nTo keep your work organized, categorize goals for your Milestone with This week, Later or Completed.'
       },
     }

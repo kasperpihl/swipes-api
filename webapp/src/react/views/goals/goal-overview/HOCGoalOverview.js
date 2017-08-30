@@ -276,6 +276,7 @@ class HOCGoalOverview extends PureComponent {
   viewDidLoad(stepList) {
     this.stepList = stepList;
   }
+  
   getOptionsForE(e) {
     if (e && e.boundingRect) {
       return e;

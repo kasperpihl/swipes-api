@@ -26,7 +26,9 @@ class GoalResult extends PureComponent {
   }
   render() {
     const { result } = this.props;
-
+    if(result.item.completed_at) {
+      // IS COMPLETED
+    }
     return (
       <div className="goal-result">
         <div className="goal-result__circle" />

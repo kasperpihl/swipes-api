@@ -45,7 +45,7 @@ class PostFeed extends PureComponent {
   renderHeader() {
     const { context, delegate } = this.props;
     let subtitle = context && context.get('title') && `re. ${context.get('title')}`;
-    subtitle = subtitle || 'Talk with your team and share the newest and latest.';
+    subtitle = subtitle || 'Talk with your team and share the latest and greatest.';
     const { showLine } = this.state;
 
     return (
