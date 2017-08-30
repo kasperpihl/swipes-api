@@ -28,10 +28,20 @@ class HOCMilestoneOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
+    this.state = {
+      showLine: false,
+    };
     propsOrPop(this, 'milestone');
     setupLoading(this);
   }
+  onScroll(e) {
+    const { showLine } = this.state;
+    let newShowLine = e.target.scrollTop > 0;
 
+    if (showLine !== newShowLine) {
+      this.setState({ showLine: newShowLine })
+    }
+  }
   onContext(e) {
     const {
       closeMilestone,
@@ -161,6 +171,7 @@ class HOCMilestoneOverview extends PureComponent {
   }
   render() {
     const { milestone, groupedGoals } = this.props;
+    const { showLine } = this.state;
 
     return (
       <MilestoneOverview
@@ -168,6 +179,7 @@ class HOCMilestoneOverview extends PureComponent {
         milestone={milestone}
         groupedGoals={groupedGoals}
         delegate={this}
+        showLine={showLine}
       />
     );
   }

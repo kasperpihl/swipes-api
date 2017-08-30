@@ -30,13 +30,21 @@ class HOCGoalOverview extends PureComponent {
     bindAll(this, ['onContext']);
     propsOrPop(this, 'goal');
     this.state = {
-      tabIndex: 0,
+      showLine: false,
       editMode: false,
       handoff: null,
     };
     setupLoading(this);
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
+  }
+  onScroll(e) {
+    const { showLine } = this.state;
+    let newShowLine = e.target.scrollTop > 0;
+
+    if (showLine !== newShowLine) {
+      this.setState({ showLine: newShowLine })
+    }
   }
   onEditSteps() {
     this.setState({ editMode: !this.state.editMode });
@@ -284,15 +292,10 @@ class HOCGoalOverview extends PureComponent {
     const { goal, me } = this.props;
     return new GoalsUtil(goal, me.get('id'));
   }
-  tabDidChange(index) {
-    const { tabIndex } = this.state;
-    if (tabIndex !== index) {
-      this.setState({ tabIndex: index });
-    }
-  }
+
   render() {
     const { goal, me } = this.props;
-    const { tabIndex, editMode, handoff } = this.state;
+    const { editMode, handoff, showLine } = this.state;
 
     return (
       <GoalOverview
@@ -300,8 +303,8 @@ class HOCGoalOverview extends PureComponent {
         editMode={editMode}
         handoff={handoff}
         myId={me.get('id')}
-        tabIndex={tabIndex}
         delegate={this}
+        showLine={showLine}
         {...this.bindLoading()}
       />
     );

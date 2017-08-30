@@ -22,7 +22,7 @@ class GoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onDiscuss', 'onContext', 'onHandoff', 'onCloseHandoff', 'onBarClick', 'onEditSteps');
+    setupDelegate(this, 'onScroll', 'onHandoff', 'onCloseHandoff', 'onEditSteps');
   }
   getHelper() {
     const { goal, myId } = this.props;
@@ -82,12 +82,11 @@ class GoalOverview extends PureComponent {
 
   }
   renderHeader() {
-    const { goal, getLoading, delegate, isLoading } = this.props;
+    const { goal, getLoading, delegate, isLoading, showLine } = this.props;
     const helper = this.getHelper();
     const title = getLoading('title').loadingLabel;
-
     return (
-      <div className="goal-overview__header">
+      <div className={`goal-overview__header ${showLine ? 'goal-overview__header--border' : ''}`}>
         <GoalCheckbox
           completed={helper.getIsCompleted()}
           loading={isLoading('completing')}
@@ -222,7 +221,7 @@ class GoalOverview extends PureComponent {
     }
 
     return (
-      <SWView header={this.renderHeader()} footer={this.renderSuccessFooter()}>
+      <SWView header={this.renderHeader()} onScroll={this.onScroll} footer={this.renderSuccessFooter()}>
         <div className="goal-overview" data-id={goal.get('id')}>
           {this.renderLeft()}
           {this.renderRight()}

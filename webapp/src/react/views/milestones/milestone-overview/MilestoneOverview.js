@@ -18,18 +18,19 @@ class MilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss');
+    setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll');
   }
   componentDidMount() {
   }
   renderHeader() {
-    const { milestone: m, getLoading, delegate } = this.props;
+    const { milestone: m, getLoading, delegate, showLine } = this.props;
     const title = getLoading('title').loadingLabel;
     return (
       <div className="milestone-overview__header">
         <HOCHeaderTitle
           title={title || m.get('title')}
           delegate={delegate}
+          border={showLine}
         >
           <HOCDiscussButton
             context={{
@@ -92,7 +93,7 @@ class MilestoneOverview extends PureComponent {
   }
   render() {
     return (
-      <SWView header={this.renderHeader()}>
+      <SWView header={this.renderHeader()} onScroll={this.onScroll}>
         <div className="milestone-overview">
           {this.renderLeftSection()}
           {this.renderRightSection()}
