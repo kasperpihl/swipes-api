@@ -57,17 +57,42 @@
   }
 
   &__subtitle {
+    $flexIgnoreList: '#{$b}__context';
     @include size(100%, auto);
+    @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
     padding-left: 69px;
     margin-top: 9px;
   }
 
+  &__context {
+    @include font(12px, $deepBlue-50, 21px, 500) 
+    padding-right: 3px;
+
+    #{$b}__svg {
+      @include size(12px);
+      @include svg-color($deepBlue-40);
+      transform: translateY(1px) translateX(1px);
+      margin-right: 6px;
+    }
+  }
+
+  &__styled-text-wrapper {
+    padding-left: 16px;
+    
+    &:before {
+      @include font(12px, $deepBlue-50, 21px, 500);
+      content: '— ';
+      position: absolute;
+      left: 0;
+    }
+  }
+
   &__styled-text {
-    @include font(12px, $deepBlue-50, 18px, 500);
+    @include font(12px, $deepBlue-50, 21px, 500);
   }
 
   &__styled-button {
-    @include font(12px, $blue-100, 18px, 500);
+    @include font(12px, $blue-100, 21px, 500);
 
     &--people {
 
@@ -75,7 +100,7 @@
       &:after {
         content: '';
         position: absolute;
-        left: 0; top: 9px;
+        left: 0; top: 10.5px;
         @include size(0%, 1px);
         background-color: $blue-100;
         transition: .2s ease;
@@ -104,7 +129,7 @@
         &:after {
           @include size(100%, 1px);
           background-color: $blue-100;
-          transform: translateY(3px);
+          transform: translateY(-3px);
           transition: .15s ease;
         }
       }

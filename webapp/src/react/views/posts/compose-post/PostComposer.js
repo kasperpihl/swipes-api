@@ -30,7 +30,7 @@ class PostComposer extends PureComponent {
       return undefined;
     }
     return (
-      <Icon icon={miniIconForId(post.getIn(['context', 'id']))} className="create-post__svg" />
+      <Icon icon={miniIconForId(post.getIn(['context', 'id']))} className="post-composer__svg" />
     )
 
   }
@@ -39,7 +39,7 @@ class PostComposer extends PureComponent {
 
     const type = post.get('type');
 
-    let string = ['— ', {
+    let string = ['', {
       id: 'type',
       string: msgGen.posts.getPostComposeTypeTitle(type),
       className: 'post-composer__styled-button post-composer__styled-button--type'
@@ -62,13 +62,17 @@ class PostComposer extends PureComponent {
 
     return (
       <div className="post-composer__subtitle">
-        {this.renderContextIcon()}
-        {post.getIn(['context', 'title'])}
-        <StyledText
-          text={string}
-          delegate={delegate}
-          className="post-composer__styled-text"
-        />
+        <div className="post-composer__context">
+          {this.renderContextIcon()}
+          {post.getIn(['context', 'title'])}
+        </div>
+        <div className="post-composer__styled-text-wrapper">
+          <StyledText
+            text={string}
+            delegate={delegate}
+            className="post-composer__styled-text"
+          />
+        </div>
       </div>
     )
   }
