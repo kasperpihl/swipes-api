@@ -52,12 +52,20 @@ class CreatePost extends PureComponent {
 
     const attachments = post.get('attachments').map((att, i) => (
       <div key={i} className="post-attachment" onClick={this.onAttachmentClickCached(i)}>
-        <Icon
-          icon={attachmentIconForService(att.getIn(['link', 'service']))}
-          className="post-attachment__svg"
-        />
+        <div className="post-attachment__type-icon">
+          <Icon
+            icon={attachmentIconForService(att.getIn(['link', 'service']))}
+            className="post-attachment__svg"
+          />
+        </div>
         <div className="post-attachment__label">
           {att.get('title')}
+        </div>
+        <div className="post-attachment__delete-icon">
+          <Icon
+            icon="Close"
+            className="post-attachment__svg"
+          />
         </div>
       </div>
     ))
