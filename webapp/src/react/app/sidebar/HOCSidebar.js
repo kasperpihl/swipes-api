@@ -18,10 +18,19 @@ class HOCSidebar extends PureComponent {
     };
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onRightClickCached = setupCachedCallback(this.onClick, this);
+    this.onMouseDownCached = setupCachedCallback(this.onMouseDown, this);
+  }
+  onMouseDown(id, e) {
+    if(e.button === 1) {
+      this.onClick(id, 'secondary', e);
+    }
   }
   onClick(id, target, e) {
     const { navSet } = this.props;
 
+    if(e.which === 2 || e.which === 4) {
+      target = 'secondary';
+    }
     if (id === 'Notifications') {
       this.openNotifications(e);
       return;
@@ -109,6 +118,7 @@ class HOCSidebar extends PureComponent {
       <div
         onClick={this.onClickCached(item.id, 'primary')}
         onContextMenu={this.onRightClickCached(item.id, 'secondary')}
+        onMouseDown={this.onMouseDownCached(item.id)}
         className={className}
         key={item.id}
         data-id={item.id}
