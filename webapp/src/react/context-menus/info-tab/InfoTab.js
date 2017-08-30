@@ -40,12 +40,14 @@ class InfoTab extends PureComponent {
       let iconClass = 'info-tab__action-icon';
 
       if (act.danger) {
-        iconClass += ' info-tab__action-icon--danger'
+        iconClass += ' info-tab__action-icon--danger';
       }
 
       return (
         <div className="info-tab__action" key={i} onClick={this.onActionClickCached(i)}>
-          {this.renderActionIcon(act.icon, iconClass)}
+          <div className="info-tab__action-icon-wrapper">
+            {this.renderActionIcon(act.icon, iconClass)}
+          </div>
           <div className="info-tab__action-title">{act.title}</div>
         </div>
       )

@@ -33,7 +33,15 @@
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
     border-bottom: 1px solid $deepBlue-80;
     transition: .2s ease;
-    padding-left: 12px;
+  }
+
+  &__action-icon-wrapper {
+    @include size(24px);
+    margin: 0 3px;
+
+    &:empty {
+      @include size(0px);
+    }
   }
 
   &__action-icon {
