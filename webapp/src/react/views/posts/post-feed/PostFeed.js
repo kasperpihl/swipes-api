@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
-import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll, setupCachedCallback, typeForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
@@ -35,6 +35,12 @@ class PostFeed extends PureComponent {
     }
 
   }
+  getContextType() {
+    const { context } = this.props;
+    const contextType = typeForId(context.get('id')).toLowerCase();
+    
+    return contextType;
+  }
   renderHeader() {
     const { context, delegate, tabs } = this.props;
     let subtitle = context && context.get('title') && `re. ${context.get('title')}`;
@@ -66,8 +72,35 @@ class PostFeed extends PureComponent {
       />
     )
   }
+  renderEmptyState() {
+    const { tabs } = this.props;
+
+    if (tabs) {
+      const contextType = this.getContextType();
+
+      return (
+        <div className="post-feed__empty-state">
+          <div className="post-feed__empty-illustration"></div>
+          <div className="post-feed__empty-text">This is a great place to discuss this {contextType} with the team.</div>
+          <Button primary text="Create Post" onClick={this.onNewPost} />
+        </div>
+      )
+    }
+
+    return (
+      <div className="post-feed__empty-state">
+        <div className="post-feed__empty-illustration"></div>
+        <div className="post-feed__empty-text">This is a great place to share your thoughts with the team.</div>
+        <Button primary text="Create Post" onClick={this.onNewPost} />
+      </div>
+    )
+  }
   renderPosts() {
     const { posts, delegate, limit, relatedPosts, tabIndex } = this.props;
+
+    if (!posts.size) {
+      return this.renderEmptyState()
+    }
 
     const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
     return renderPosts.map((p, i) => {

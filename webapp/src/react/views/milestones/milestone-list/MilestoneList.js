@@ -39,9 +39,25 @@ class MilestoneList extends PureComponent {
       </div>
     );
   }
+  renderEmptyState() {
+
+    return (
+      <div className="milestones__empty-state">
+        <div className="milestones__empty-illustration"></div>
+        <div className="milestones__empty-text">
+        Ups! Your team is busy and working hard on the first milestone.<br /> Once a milestone is achieved it will show up in this hall of fame.
+        </div>
+      </div>
+    )
+  }
   renderList() {
     const { milestones, delegate, tabIndex } = this.props;
     let firstMilestones = tabIndex === 0 ? [<HOCNoMilestone key="no" />] : [];
+
+    if (tabIndex === 1 && milestones && milestones.size < 1) {
+      return this.renderEmptyState();
+    }
+
     return firstMilestones.concat(milestones.map(m => (
       <HOCMilestoneItem
         key={m.get('id')}

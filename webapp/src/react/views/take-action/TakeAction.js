@@ -40,9 +40,6 @@ class TakeAction extends Component {
         defAssignees={[myId]}
       />
     )
-    if (!goals.size) {
-      return addGoal;
-    }
 
     return goals.map((lGoals, section) => (
       <GoalListSection
@@ -64,6 +61,22 @@ class TakeAction extends Component {
 
     )).toArray();
   }
+  renderEmptyState() {
+    const { goals } = this.props;
+
+    if (goals.size === 1 && !goals.get('none').size) {
+      return (
+        <div className="take-action__empty-state">
+          <div className="take-action__empty-arrow"></div>
+          <div className="take-action__empty-text">
+            Add new goals for everything that needs to be done
+          </div>
+        </div>
+      )
+    }
+
+    return undefined;
+  }
   render() {
     const { savedState } = this.props;
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
@@ -76,6 +89,7 @@ class TakeAction extends Component {
       >
         <div className="take-action">
           {this.renderList()}
+          {this.renderEmptyState()}
         </div>
       </SWView>
     );

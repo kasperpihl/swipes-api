@@ -22,6 +22,16 @@ class MilestoneOverview extends PureComponent {
   }
   componentDidMount() {
   }
+  getNumberOfAllGoals() {
+    const { groupedGoals } = this.props;
+    let numberOfGoals = 0;
+
+    const calculateAll = groupedGoals.map((gG) => {
+      numberOfGoals = numberOfGoals + gG.size;
+    })
+
+    return numberOfGoals;
+  }
   renderHeader() {
     const { milestone: m, getLoading, delegate, showLine } = this.props;
     const title = getLoading('title').loadingLabel;
@@ -48,11 +58,51 @@ class MilestoneOverview extends PureComponent {
       </div>
     );
   }
+  renderEmptyState(group) {
+    const { groupedGoals } = this.props;
+    const numberOfAllGoals = this.getNumberOfAllGoals();
+
+    console.log(numberOfAllGoals)
+    
+    if (group === 'Current' && !numberOfAllGoals) {
+      return (
+        <div className="milestone-overview__empty-state milestone-overview__empty-state--current">
+          <div className="milestone-overview__empty-arrow"></div>
+          <div className="milestone-overview__empty-text">
+            Add new goals for everything that needs to<br /> be done to achieve this milestone.
+          </div>
+        </div>
+      )
+    }
+
+    if (group === 'Later' && !groupedGoals.get('Later').size) {
+      return (
+        <div className="milestone-overview__empty-state milestone-overview__empty-state--current">
+          <div className="milestone-overview__empty-text">
+            Move goals that need to be done later from this week into here
+          </div>
+        </div>
+      )
+    }
+
+    if (group === 'Completed' && !groupedGoals.get('Completed').size) {
+      return (
+        <div className="milestone-overview__empty-state milestone-overview__empty-state--current">
+          <div className="milestone-overview__empty-text">
+            You will see the progress of all completed goals here.
+          </div>
+        </div>
+      )
+    }
+
+    return undefined;
+  }
   renderLeftSection() {
     return (
       <section>
         <Section title="This week">
           {this.renderList('Current')}
+          {this.renderEmptyState('Current')}
         </Section>
       </section>
     );
@@ -68,6 +118,7 @@ class MilestoneOverview extends PureComponent {
         fromMilestone={true}
       />
     ));
+
     if(group === 'Current') {
       renderedGoals = renderedGoals.push(
         <HOCAddGoalItem
@@ -84,9 +135,11 @@ class MilestoneOverview extends PureComponent {
       <section>
         <Section title="Later">
           {this.renderList('Later')}
+          {this.renderEmptyState('Later')}
         </Section>
         <Section title="Completed">
           {this.renderList('Completed')}
+          {this.renderEmptyState('Completed')}
         </Section>
       </section>
     );

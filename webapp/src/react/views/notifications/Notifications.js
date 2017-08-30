@@ -42,8 +42,23 @@ class Notifications extends PureComponent {
       </div>
     )
   }
+  renderEmptyState() {
+
+    return (
+      <div className="notifications__empty-state">
+        <div className="notifications__empty-illustration"></div>
+        <div className="notifications__empty-text">
+          We'll let you know when there is something new for you.
+        </div>
+      </div>
+    )
+  }
   renderNotifications() {
     const { notifications, delegate, limit } = this.props;
+
+    if (!notifications.size) {
+      return this.renderEmptyState()
+    }
 
     return notifications.map((n, i) => (
       (i < limit) ? <NotificationItem notification={n} key={i} delegate={delegate}/> : null
