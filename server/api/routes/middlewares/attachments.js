@@ -18,32 +18,19 @@ import {
 
 const attachmentsCreate = valLocals('attachmentsCreate', {
   user_id: string.require(),
-  short_url: string.require(),
   link: object.require(),
+  title: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    short_url,
     link,
+    title,
   } = res.locals;
-  const title = link.meta.title;
-
-  delete link.meta;
-
-  link.permission = {
-    short_url,
-  };
-
-  if (link.service.type === 'url') {
-    if (/^(f|ht)tps?:\/\//.test(link.service.id) === false) {
-      link.service.id = `http://${link.service.id}`;
-    }
-  }
 
   const attachment = attachmentsCreateAttachment({
     user_id,
     link,
-    title,
+    title: title || link.meta.title,
   });
 
   setLocals({

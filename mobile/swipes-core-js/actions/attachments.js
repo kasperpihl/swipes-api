@@ -19,12 +19,14 @@ export const add = valAction('attachments.add', [
       title: string.require(),
     }).require(),
     permission: object.as({
-      account_id: string.require(),
+      short_url: string.require(),
     }).require(),
   }).require(),
-], (targetId, link) => (d) => d(a.api.request('attachments.add', {
+  string,
+], (targetId, link, title) => (d) => d(a.api.request('attachments.add', {
   target_id: targetId,
   link,
+  title,
 })));
 
 

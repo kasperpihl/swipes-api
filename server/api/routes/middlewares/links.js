@@ -135,11 +135,18 @@ const linksCreate = valLocals('linksCreate', {
   const {
     link,
   } = res.locals;
+
   const {
     service,
     meta,
     permission,
   } = link;
+
+  if (service.type === 'url') {
+    if (/^(f|ht)tps?:\/\//.test(service.id) === false) {
+      service.id = `http://${service.id}`;
+    }
+  }
 
   const checksum = hash({ service });
   const insert_doc = Object.assign({ checksum }, { service, meta });
