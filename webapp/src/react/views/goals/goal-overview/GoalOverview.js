@@ -100,7 +100,8 @@ class GoalOverview extends PureComponent {
             assignees={helper.getAssignees()}
             delegate={delegate}
             rounded
-            size={32}
+            key={helper.getAssignees().size ? 'assignees' : 'assign'}
+            size={helper.getAssignees().size ? 32 : 36}
             tooltipAlign="bottom"
           />
           <HOCDiscussButton

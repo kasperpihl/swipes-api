@@ -72,7 +72,7 @@ class HOCGoalListItem extends PureComponent {
         maxImages={1}
         delegate={this}
         rounded
-        size={36}
+        size={30}
       />
     );
   }
