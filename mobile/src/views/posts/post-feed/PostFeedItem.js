@@ -145,11 +145,14 @@ class PostFeed extends PureComponent {
     setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onOpenPost', 'onAttachmentClick');
     this.handleOpenPost = this.handleOpenPost.bind(this);
   }
-  handleOpenPost() {
+  handleOpenPost(type) {
     const { post } = this.props;
 
-
-    this.onOpenPost(post.get('id'))
+    if (type === 'comments') {
+     this.onOpenPost(post.get('id'), true)
+    } else {
+     this.onOpenPost(post.get('id'))
+    }
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
@@ -266,21 +269,15 @@ class PostFeed extends PureComponent {
   renderComments() {
     const { post } = this.props;
     const commentSize = post.get('comments').size;
+    let commentsString = commentsString = 'Write a comment';
 
-    if (commentSize === 0) {
-      return (
-        <RippleButton style={styles.commentsButton} onPress={this.handleOpenPost}>
-          <View style={styles.commentsButton}>
-            <Text style={styles.commentsButtonLabel}>Write a comment</Text>
-          </View>
-        </RippleButton>
-      )
+
+    if (commentSize > 0) {
+      commentsString = commentSize > 1 ? `${commentSize} Comments` : `${commentSize} Comment`;
     }
 
-    const commentsString = commentSize > 1 ? `${commentSize} Comments` : `${commentSize} Comment`;
-
     return (
-      <RippleButton style={styles.commentsButton} onPress={this.handleOpenPost}>
+      <RippleButton style={styles.commentsButton} onPress={this.onOpenPostCached(post.get('id'), true)}>
         <View style={styles.commentsButton}>
           <Text style={styles.commentsButtonLabel}>{commentsString}</Text>
         </View>

@@ -101,8 +101,6 @@ class PostFooter extends PureComponent {
   }
   handleInputChange(e) {
     const text = e.nativeEvent.text;
-
-    
   }
   renderBackButton() {
     const { text } = this.state;

@@ -24,10 +24,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    flex: 1,
+    alignSelf: "stretch",
     flexDirection: "row",
     paddingHorizontal: 15,
     paddingTop: 50,
+    paddingBottom: 11,
   },
   headerSide: {
     flex: 1,
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
   },
   messageWrapper: {
     paddingHorizontal: 15,
-    paddingTop: 21,
+    paddingTop: 10,
     paddingBottom: 18
   },
   message: {
@@ -161,17 +162,34 @@ class PostView extends PureComponent {
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
-      // this.refs.scrollView.scrollTo(0);
-
-      this.refs.scrollView.scrollToEnd({animated: true});
     }, 1);
 
-    setTimeout(() => {
-      this.refs.scrollView.scrollToEnd({animated: true});
-    }, 1000);
+    if (this.props.scrollToBottom) {
+      this.scrollToBottomTime();
+    }
+  }
+  componentWillUpdate(nextProps) {
+    if (this.state.hasLoaded && this.props.post.get('comments').size !== nextProps.post.get('comments').size) {
+      this.shouldScrollToBottom = true;
+    }
+  }
+  componentDidUpdate() {
+    if (this.shouldScrollToBottom) {
+      this.shouldScrollToBottom = false;
+
+      this.scrollToBottomTime();
+    }
   }
   componentWillUnmount() {
     clearTimeout(this.loadingTimeout);
+    clearTimeout(this.scrollTimer);
+  }
+  scrollToBottomTime() {
+    clearTimeout(this.scrollTimer);
+
+    this.scrollTimer = setTimeout(() => {
+      this.refs.scrollView.scrollToEnd({animated: true});
+    }, 1000);
   }
   renderLoader() {
     return (
@@ -383,10 +401,9 @@ class PostView extends PureComponent {
     if (!hasLoaded) {
       return this.renderLoader();
     }
-
+    
     return (
       <ScrollView style={{ flex: 1 }} ref="scrollView">
-        {this.renderPostHeader()}
         {this.renderMessage()}
         {this.renderAttachments()}
         {this.renderActions()}
@@ -399,6 +416,7 @@ class PostView extends PureComponent {
 
     return (
       <View style={styles.container} ref="scrollView">
+        {this.renderPostHeader()}
         {this.renderContent()}
         <PostFooter delegate={delegate} placeholder="Write a comment…" commmentLoading={this.state.commmentLoading} />
       </View>

@@ -110,7 +110,7 @@ class CreateNewItemModal extends PureComponent {
   onActionClick() {
     const { title, assignees, milestoneId } = this.state;
 
-    this.onModalCreateAction(title, assignees, milestoneId)
+    this.onModalCreateAction(title, assignees, milestoneId);
     this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
   }
   onCloseModal() {
@@ -276,7 +276,7 @@ class CreateNewItemModal extends PureComponent {
 
     return (
       <Modal
-        animationType={"fade"}
+        animationType={'fade'}
         transparent={true}
         visible={modalState}
         onRequestClose={this.onCloseModal}

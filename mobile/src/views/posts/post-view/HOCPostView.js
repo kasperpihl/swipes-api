@@ -96,9 +96,9 @@ class HOCPostView extends PureComponent {
     }
   }
   render() {
-    const { myId, post } = this.props;
+    const { myId, post, scrollToBottom } = this.props;
 
-    return <PostView myId={myId} post={post} delegate={this} commentLoading={this.state.commentLoading} />;
+    return <PostView myId={myId} post={post} delegate={this} commentLoading={this.state.commentLoading} scrollToBottom={scrollToBottom} />;
   }
 }
 

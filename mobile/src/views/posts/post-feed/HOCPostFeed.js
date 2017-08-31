@@ -48,14 +48,17 @@ class HOCPostFeed extends PureComponent {
       title: 'Create a Post',
     })
   }
-  onOpenPost(postId) {
+  onOpenPost(postId, scrollToBottom) {
     const { navPush } = this.props;
+
+    console.log('scrollToBottom', scrollToBottom)
 
     navPush({
       id: 'PostView',
       title: 'Post',
       props: {
         postId,
+        scrollToBottom: scrollToBottom
       }
     })
   }

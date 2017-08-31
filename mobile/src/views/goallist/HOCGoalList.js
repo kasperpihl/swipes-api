@@ -100,10 +100,8 @@ class HOCGoalList extends PureComponent {
     const { createGoal } = this.props;
 
     if (title.length > 0) {
+      this.setState({ fabOpen: false })
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {
-        if (res.ok) {
-          this.setState({ fabOpen: false })
-        }
       });
     }
   }
