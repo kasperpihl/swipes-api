@@ -23,6 +23,7 @@ import {
   organizationsCreateUpdateSubscriptionCustomer,
 } from './middlewares/organizations';
 import {
+  usersGetSingleWithOrganizations,
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   usersParseInvitationToken,
@@ -108,6 +109,7 @@ authed.all('/organizations.create',
   }),
   organizationsCreate,
   organizationsAddToUser,
+  usersGetSingleWithOrganizations,
   mapLocals((locals) => {
     return {
       original_user_id: locals.user_id,

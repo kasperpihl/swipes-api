@@ -260,14 +260,16 @@ const onboardingCommentsPost_2_2 = valLocals('onboardingCommentsPost_2_2', {
   return next();
 });
 const onboardingPost_3 = valLocals('onboardingPost_3', {
+  user: object.require(),
   original_user_id: string.require(),
   context: object.require(),
 }, (req, res, next, setLocals) => {
   const {
+    user,
     original_user_id,
     context,
   } = res.locals;
-  const message = 'Can you please help me fill in the messaging plan? My hands are full with the social media campaign and really need your help!';
+  const message = `${user.profile.first_name}, can you please help me fill in the messaging plan? My hands are full with the social media campaign and really need your help!`;
 
 
   setLocals({
@@ -339,15 +341,17 @@ const onboardingPost_4 = valLocals('onboardingPost_4', {
 });
 const onboardingCommentsPost_4_1 = valLocals('onboardingCommentsPost_4_1', {
   post: object.require(),
+  user: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     post,
+    user,
   } = res.locals;
 
   setLocals({
     user_id: 'USOFI',
     post_id: post.id,
-    message: 'That\'s a great post @User. I love how you engaged our fans into a discussion. Good job on that!',
+    message: `That's a great post ${user.profile.first_name}. I love how you engaged our fans into a discussion. Good job on that!`,
   });
 
   return next();
@@ -355,12 +359,14 @@ const onboardingCommentsPost_4_1 = valLocals('onboardingCommentsPost_4_1', {
 const onboardingPost_5 = valLocals('onboardingPost_5', {
   original_user_id: string.require(),
   goal: object.require(),
+  user: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     goal,
+    user,
   } = res.locals;
-  const message = `I'm half-way through the marketing plan but need someone else on the team to go through it. Who is our epic marketing person working on the mobile project?
+  const message = `I'm half-way through the marketing plan but need someone else on the team to go through it. ${user.profile.first_name} who is our epic marketing person working on the mobile project?
   
   Can we get her to join in and help out?`;
 
@@ -459,15 +465,17 @@ const onboardingPost_6 = valLocals('onboardingPost_6', {
 });
 const onboardingCommentsPost_6_1 = valLocals('onboardingCommentsPost_6_1', {
   post: object.require(),
+  user: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     post,
+    user,
   } = res.locals;
 
   setLocals({
     user_id: 'USOFI',
     post_id: post.id,
-    message: 'Nice work! It was so much fun to follow the storyline of the content and scroll along. You and the designer have done great work incorporating the mascots and building content & scenarious around them. I suggest we make the first section focus on Title & product images and keep the stories for the Product details page. What do you think about that?',
+    message: `Nice work, ${user.profile.first_name}! It was so much fun to follow the storyline of the content and scroll along. You and the designer have done great work incorporating the mascots and building content & scenarious around them. I suggest we make the first section focus on Title & product images and keep the stories for the Product details page. What do you think about that?`,
   });
 
   return next();
@@ -517,16 +525,18 @@ const onboardingCommentsPost_6_3 = valLocals('onboardingCommentsPost_6_3', {
 const onboardingCommentsPost_6_4 = valLocals('onboardingCommentsPost_6_4', {
   original_user_id: string.require(),
   post: object.require(),
+  user: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     post,
+    user,
   } = res.locals;
 
   setLocals({
     user_id: 'USOFI',
     post_id: post.id,
-    message: 'Wow, that\'s exactly as I imagined it as well. Great work! Let\'s move ahead with it and get the development team to update it!',
+    message: `Wow, that's exactly as I imagined it as well. Great work, ${user.profile.first_name}! Let's move ahead with it and get the development team to update it!`,
     reactions: [{
       created_by: original_user_id,
       reaction: 'like',
@@ -583,12 +593,14 @@ const onboardingPost_7 = valLocals('onboardingPost_7', {
 const onboardingPost_8 = valLocals('onboardingPost_8', {
   original_user_id: string.require(),
   context: object.require(),
+  user: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     context,
+    user,
   } = res.locals;
-  const message = `Hi, I've started filling in the requirements for the website but wasn't sure what your design constrains were.
+  const message = `Hi ${user.profile.first_name}, I've started filling in the requirements for the website but wasn't sure what your design constrains were.
   
   Can you please send them to me so I can update my part?`;
 
