@@ -29,14 +29,14 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   inputWrapper: {
-    alignSelf: 'stretch', 
+    alignSelf: 'stretch',
     flex: 1,
     maxHeight: 45,
     alignItems: 'center',
     borderRadius: 6,
   },
   input: {
-    alignSelf: 'stretch', 
+    alignSelf: 'stretch',
     flex: 1,
     fontSize: 15,
     lineHeight: 18,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   assigneeWrapper: {
-    alignSelf: 'stretch', 
+    alignSelf: 'stretch',
     flex: 1,
     maxHeight: 60,
     alignItems: 'center',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     color: colors.deepBlue80
   },
   actionWrapper: {
-    alignSelf: 'stretch', 
+    alignSelf: 'stretch',
     flex: 1,
     maxHeight: 70,
     alignItems: 'center',
@@ -89,7 +89,7 @@ class CreateNewItemModal extends PureComponent {
       assignees: fromJS(props.defAssignees || []),
       milestoneId: props.milestoneId || null,
     };
-    
+
     this.handleAssigning = this.handleAssigning.bind(this);
     this.onActionClick = this.onActionClick.bind(this);
     this.onCloseModal = this.onCloseModal.bind(this);
@@ -114,7 +114,7 @@ class CreateNewItemModal extends PureComponent {
     this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
   }
   onCloseModal() {
-    
+
     this.handleModalState();
     this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
   }
@@ -203,7 +203,7 @@ class CreateNewItemModal extends PureComponent {
   renderAssignees() {
     const { assignees } = this.state;
     const { defAssignees } = this.props;
-    
+
     if (!defAssignees) {
       return undefined;
     }
@@ -212,7 +212,7 @@ class CreateNewItemModal extends PureComponent {
       <RippleButton style={styles.assigneeWrapper} onPress={this.handleAssigning}>
         <View style={styles.assigneeWrapper}>
           <View style={styles.assigneeTextWrapper}>
-            <Text style={styles.assigneeText}>Assignees:</Text>  
+            <Text style={styles.assigneeText}>Assignees:</Text>
           </View>
           <HOCAssigning assignees={assignees} />
         </View>
@@ -239,7 +239,7 @@ class CreateNewItemModal extends PureComponent {
     )
   }
   renderContent() {
-    
+
     if (this.isActive()) {
       return (
         <View style={styles.contentWrapper}>
@@ -288,10 +288,10 @@ class CreateNewItemModal extends PureComponent {
           <View style={[styles.modalWrapper, modalSize]}>
             {this.renderInput()}
             {this.renderContent()}
-            {this.renderKeyboardSpacer()}
-          </View>
 
-         
+          </View>
+          {this.renderKeyboardSpacer()}
+
         </View>
       </Modal>
     )
