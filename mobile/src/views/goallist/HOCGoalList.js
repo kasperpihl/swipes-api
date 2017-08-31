@@ -204,6 +204,7 @@ class HOCGoalList extends PureComponent {
         {this.renderFAB()}
         <CreateNewItemModal
           modalState={this.state.fabOpen}
+          title=''
           defAssignees={[this.props.myId]}
           placeholder="Add a new goal"
           actionLabel="Add goal"

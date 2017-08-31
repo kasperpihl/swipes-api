@@ -52,7 +52,12 @@ class ActionModal extends PureComponent {
     modal.get('onClick')(selectedIndexes);
   }
   closeModal() {
-    const { showModal } = this.props;
+    const { showModal, modal } = this.props;
+    
+    if (modal.get('onClose')) {
+      console.log('get here?')
+      modal.get('onClose')();
+    }
 
     showModal();
   }

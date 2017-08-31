@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Modal, TextInput, TouchableWithoutFeedback, Pla
 import { setupDelegate } from 'react-delegate';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as a from '../actions';
 import * as ca from '../../swipes-core-js/actions';
 import Icon from '../components/icons/Icon';
@@ -93,6 +94,8 @@ class CreateNewItemModal extends PureComponent {
     
     this.handleAssigning = this.handleAssigning.bind(this);
     this.onActionClick = this.onActionClick.bind(this);
+    this.onCloseModal = this.onCloseModal.bind(this);
+    this.onAssigneeClose = this.onAssigneeClose.bind(this);
     setupDelegate(this, 'handleModalState', 'onModalCreateAction');
 
     if (Platform.OS === 'android') {
@@ -102,19 +105,39 @@ class CreateNewItemModal extends PureComponent {
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
+  componentWillUnmount() {
+    clearTimeout(this.showAssigneeModalTimeout);
+    clearTimeout(this.showNewItemModalTimeout);
+  }
   onActionClick() {
     const { title, assignees, milestoneId } = this.state;
 
     this.onModalCreateAction(title, assignees, milestoneId)
+    this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
+  }
+  onCloseModal() {
+    
+    this.handleModalState();
+    this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
   }
   onModalAssign(sortedUsers, data) {
     let { assignees } = this.state;
     const { showModal } = this.props;
     assignees = List(data.map(i => sortedUsers.getIn([i, 'id'])));
-    
+
+    clearTimeout(this.showAssigneeModalTimeout);
     showModal();
     this.setState({assignees: assignees})
-    this.handleModalState();
+    this.showNewItemModalTimeout = setTimeout(() => {
+      this.handleModalState();
+    }, 1)
+  }
+  onAssigneeClose() {
+    console.log('what about here?')
+    clearTimeout(this.showAssigneeModalTimeout);
+    this.showNewItemModalTimeout = setTimeout(() => {
+      this.handleModalState();
+    }, 1)
   }
   handleAssigning() {
     const { users, showModal } = this.props;
@@ -142,15 +165,17 @@ class CreateNewItemModal extends PureComponent {
     const modal = {
       title: 'Assign teammeates',
       onClick: this.onModalAssign.bind(this, sortedUsers),
+      onClose: this.onAssigneeClose,
       multiple: 'Assign',
       items: userInfoToActions,
       fullscreen: true,
     };
 
+    clearTimeout(this.showNewItemModalTimeout);
     this.handleModalState();
-    this.setTimeout(() => {
+    this.showAssigneeModalTimeout = setTimeout(() => {
       showModal(modal);
-    }, 5)
+    }, 1)
   }
   isActive() {
     const { title } = this.state;
@@ -198,7 +223,7 @@ class CreateNewItemModal extends PureComponent {
 
     return (
       <View style={styles.actionWrapper}>
-        <RippleButton rippleColor={'#FFFFFF'} rippleOpacity={.5} style={styles.actionButton} onPress={this.handleModalState}>
+        <RippleButton rippleColor={'#FFFFFF'} rippleOpacity={.5} style={styles.actionButton} onPress={this.onCloseModal}>
           <View style={[styles.actionButton, {backgroundColor: colors.deepBlue40}]}>
             <Text style={[styles.actionButtonLabel, { color: colors.deepBlue100 }]}>Cancel</Text>
           </View>
@@ -245,16 +270,18 @@ class CreateNewItemModal extends PureComponent {
         animationType={"fade"}
         transparent={true}
         visible={modalState}
-        onRequestClose={this.handleModalState}
+        onRequestClose={this.onCloseModal}
       >
         <View style={styles.createActionWrapper}>
-          <TouchableWithoutFeedback onPress={this.handleModalState}>
+          <TouchableWithoutFeedback onPress={this.onCloseModal}>
             <View style={styles.pressableOverlay} />
           </TouchableWithoutFeedback>
           <View style={[styles.modalWrapper, modalSize]}>
             {this.renderInput()}
             {this.renderContent()}
           </View>
+
+          <KeyboardSpacer />
         </View>
       </Modal>
     )
