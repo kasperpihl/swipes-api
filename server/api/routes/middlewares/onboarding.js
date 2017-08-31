@@ -10,7 +10,9 @@ import {
   generateWayFour,
 } from './onboarding/way_one';
 import {
-  // generateSlackLikeId,
+  dbOnboardingAddSingleNotification,
+} from './db_utils/onboarding';
+import {
   valLocals,
 } from '../../utils';
 
@@ -635,6 +637,45 @@ const onboardingCommentsPost_8_1 = valLocals('onboardingCommentsPost_8_1', {
 
   return next();
 });
+const onboardingNotificationPost = valLocals('onboardingNotificationPost', {
+  original_user_id: string.require(),
+  goal: object.require(),
+  post: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    original_user_id,
+    goal,
+    post,
+  } = res.locals;
+  const notification = {
+    created_at: new Date(),
+    id: `${original_user_id}-${post.id}-post_created`,
+    meta: {
+      context: {
+        id: goal.id,
+        title: goal.title,
+      },
+      created_by: 'USOFI',
+      event_type: 'post_created',
+      message: post.message,
+      type: 'question',
+    },
+    seen_at: null,
+    target: {
+      id: post.id,
+    },
+    updated_at: new Date(),
+    user_id: original_user_id,
+  };
+
+  dbOnboardingAddSingleNotification({ notification })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
 export {
   onboardingMilestoneData,
@@ -664,4 +705,5 @@ export {
   onboardingPost_7,
   onboardingPost_8,
   onboardingCommentsPost_8_1,
+  onboardingNotificationPost,
 };
