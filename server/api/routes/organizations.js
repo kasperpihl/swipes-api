@@ -40,16 +40,28 @@ import {
   onboardingGoalTwoData,
   onboardingGoalThreeData,
   onboardingGoalFourData,
+  onboardingAttachmentPost_1,
   onboardingPost_1,
   onboardingCommentsPost_1_1,
   onboardingPost_2,
   onboardingCommentsPost_2_1,
   onboardingCommentsPost_2_2,
   onboardingPost_3,
+  onboardingAttachmentPost_4,
   onboardingPost_4,
   onboardingCommentsPost_4_1,
   onboardingPost_5,
   onboardingCommentsPost_5_1,
+  onboardingAttachmentPost_6,
+  onboardingPost_6,
+  onboardingCommentsPost_6_1,
+  onboardingCommentsPost_6_2,
+  onboardingCommentsPost_6_3,
+  onboardingCommentsPost_6_4,
+  onboardingCommentsPost_6_5,
+  onboardingPost_7,
+  onboardingPost_8,
+  onboardingCommentsPost_8_1,
 } from './middlewares/onboarding';
 import {
   milestonesCreate,
@@ -75,6 +87,8 @@ import {
   waysModifyNotesContentInWayAttachments,
 } from './middlewares/ways';
 import {
+  linksCreate,
+  linksAddPermission,
   linksCreateBatch,
   linksAddPermissionBatch,
 } from './middlewares/links';
@@ -148,6 +162,21 @@ authed.all('/organizations.create',
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
   // Create post
+  onboardingAttachmentPost_1,
+  linksCreate,
+  linksAddPermission,
+  mapLocals((locals) => {
+    const link = locals.link;
+    const short_url = locals.short_url;
+    const linkWithPermissions = Object.assign({}, link, {
+      short_url,
+    });
+    const attachments = [{
+      link: linkWithPermissions,
+    }];
+
+    return { attachments };
+  }),
   onboardingPost_1,
   postsCreate,
   postsInsertSingle,
@@ -166,7 +195,7 @@ authed.all('/organizations.create',
   onboardingCommentsPost_2_2,
   postsCreateComment,
   postsAddComment,
-  // Goals two
+  // Goal two
   onboardingGoalTwoData,
   goalsCreate,
   goalsInsert,
@@ -182,18 +211,29 @@ authed.all('/organizations.create',
     const notesAttachment = locals.notesAttachment;
     const links = [];
 
+    // We need that later for the post context
+    let context;
+
     notes.forEach((note, i) => {
+      const title = notesAttachment[i].title;
       const options = {
+        title,
         type: 'note',
         id: note.id,
-        title: notesAttachment[i].title,
         account_id: locals.user_id,
       };
 
       links.push(getSwipesLinkObj({ ...options }));
+
+      if (title === 'Specifications') {
+        context = {
+          title,
+          id: note.id,
+        };
+      }
     });
 
-    return { links };
+    return { links, context };
   }),
   linksCreateBatch,
   linksAddPermissionBatch,
@@ -209,6 +249,12 @@ authed.all('/organizations.create',
   }),
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
+  onboardingPost_8,
+  postsCreate,
+  postsInsertSingle,
+  onboardingCommentsPost_8_1,
+  postsCreateComment,
+  postsAddComment,
   // Goals three
   onboardingGoalOneData,
   goalsCreate,
@@ -262,15 +308,33 @@ authed.all('/organizations.create',
   }),
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
+  // Create Post
   onboardingPost_3,
   postsCreate,
   postsInsertSingle,
+  // Create Post
+  onboardingAttachmentPost_4,
+  linksCreate,
+  linksAddPermission,
+  mapLocals((locals) => {
+    const link = locals.link;
+    const short_url = locals.short_url;
+    const linkWithPermissions = Object.assign({}, link, {
+      short_url,
+    });
+    const attachments = [{
+      link: linkWithPermissions,
+    }];
+
+    return { attachments };
+  }),
   onboardingPost_4,
   postsCreate,
   postsInsertSingle,
   onboardingCommentsPost_4_1,
   postsCreateComment,
   postsAddComment,
+  // Create Post
   onboardingPost_5,
   postsCreate,
   postsInsertSingle,
@@ -320,6 +384,45 @@ authed.all('/organizations.create',
   }),
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
+  // Create post
+  onboardingAttachmentPost_6,
+  linksCreate,
+  linksAddPermission,
+  mapLocals((locals) => {
+    const link = locals.link;
+    const short_url = locals.short_url;
+    const linkWithPermissions = Object.assign({}, link, {
+      short_url,
+    });
+    const attachments = [{
+      link: linkWithPermissions,
+    }];
+
+    return { attachments };
+  }),
+  onboardingPost_6,
+  postsCreate,
+  postsInsertSingle,
+  // Create comments for post
+  onboardingCommentsPost_6_1,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_6_2,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_6_3,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_6_4,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_6_5,
+  postsCreateComment,
+  postsAddComment,
+  // Create post
+  onboardingPost_7,
+  postsCreate,
+  postsInsertSingle,
   valResponseAndSend(),
 );
 

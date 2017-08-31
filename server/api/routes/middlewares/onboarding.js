@@ -1,6 +1,7 @@
 import {
   string,
   object,
+  array,
 } from 'valjs';
 import {
   generateWayOne,
@@ -121,13 +122,37 @@ const onboardingGoalFourData = valLocals('onboardingGoalFourData', {
 
   return next();
 });
+const onboardingAttachmentPost_1 = valLocals('onboardingAttachmentPost_1', {
+}, (req, res, next, setLocals) => {
+  const link = {
+    service: {
+      id: 'https://issuu.com/ninapatel/docs/m_m',
+      name: 'swipes',
+      type: 'url',
+    },
+    permission: {
+      account_id: 'USOFI',
+    },
+    meta: {
+      title: 'https://issuu.com/ninapatel/docs/m_m',
+    },
+  };
+
+  setLocals({
+    link,
+  });
+
+  return next();
+});
 const onboardingPost_1 = valLocals('onboardingPost_1', {
   original_user_id: string.require(),
   goal: object.require(),
+  attachments: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     goal,
+    attachments,
   } = res.locals;
   const message = `Hey, I'm making progress on the documents for the new website. I've added a few of the core ideas down.
 
@@ -136,6 +161,7 @@ const onboardingPost_1 = valLocals('onboardingPost_1', {
 
   setLocals({
     message,
+    attachments,
     user_id: 'USOFI',
     type: 'question',
     context: {
@@ -254,19 +280,48 @@ const onboardingPost_3 = valLocals('onboardingPost_3', {
 
   return next();
 });
+const onboardingAttachmentPost_4 = valLocals('onboardingAttachmentPost_4', {
+  original_user_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    original_user_id,
+  } = res.locals;
+  const link = {
+    service: {
+      id: 'https://www.facebook.com/mms/videos/vb.30634981956/10154663918731957/?type=2&theater',
+      name: 'swipes',
+      type: 'url',
+    },
+    permission: {
+      account_id: original_user_id,
+    },
+    meta: {
+      title: 'https://www.facebook.com/mms/videos/vb.30634981956/10154663918731957/?type=2&theater',
+    },
+  };
+
+  setLocals({
+    link,
+  });
+
+  return next();
+});
 const onboardingPost_4 = valLocals('onboardingPost_4', {
   original_user_id: string.require(),
   goal: object.require(),
+  attachments: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     goal,
+    attachments,
   } = res.locals;
   const message = 'Hey S.O.F.I. see this new campaign we made around a new chocolate recipe. I\'m a big fan. You?';
 
 
   setLocals({
     message,
+    attachments,
     user_id: original_user_id,
     type: 'information',
     context: {
@@ -344,13 +399,41 @@ const onboardingCommentsPost_5_1 = valLocals('onboardingCommentsPost_5_1', {
 
   return next();
 });
+const onboardingAttachmentPost_6 = valLocals('onboardingAttachmentPost_6', {
+  original_user_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    original_user_id,
+  } = res.locals;
+  const link = {
+    service: {
+      id: 'http://swipesapp.com/blog/why-create-a-better-way-of-working/',
+      name: 'swipes',
+      type: 'url',
+    },
+    permission: {
+      account_id: original_user_id,
+    },
+    meta: {
+      title: 'http://swipesapp.com/blog/why-create-a-better-way-of-working/',
+    },
+  };
+
+  setLocals({
+    link,
+  });
+
+  return next();
+});
 const onboardingPost_6 = valLocals('onboardingPost_6', {
   original_user_id: string.require(),
   goal: object.require(),
+  attachments: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     goal,
+    attachments,
   } = res.locals;
   const message = `Hey S.O.F.I. here is the test for the website. I focused on colors, multi-screen optimization and the fun mascots we've used before.
   
@@ -358,6 +441,7 @@ const onboardingPost_6 = valLocals('onboardingPost_6', {
 
   setLocals({
     message,
+    attachments,
     user_id: original_user_id,
     type: 'information',
     context: {
@@ -472,6 +556,73 @@ const onboardingCommentsPost_6_5 = valLocals('onboardingCommentsPost_6_5', {
 
   return next();
 });
+const onboardingPost_7 = valLocals('onboardingPost_7', {
+  original_user_id: string.require(),
+  goal: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    original_user_id,
+    goal,
+  } = res.locals;
+  const message = `The goal is completed! Thanks S.O.F.I. for the help! 
+  Can't wait to see it updated on the website!`;
+
+  setLocals({
+    message,
+    user_id: original_user_id,
+    type: 'announcement',
+    context: {
+      id: goal.id,
+      title: goal.title,
+    },
+    tagged_users: ['USOFI'],
+  });
+
+  return next();
+});
+const onboardingPost_8 = valLocals('onboardingPost_8', {
+  original_user_id: string.require(),
+  context: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    original_user_id,
+    context,
+  } = res.locals;
+  const message = `Hi, I've started filling in the requirements for the website but wasn't sure what your design constrains were.
+  
+  Can you please send them to me so I can update my part?`;
+
+  setLocals({
+    message,
+    context,
+    user_id: 'USOFI',
+    type: 'post',
+    tagged_users: [original_user_id],
+  });
+
+  return next();
+});
+const onboardingCommentsPost_8_1 = valLocals('onboardingCommentsPost_8_1', {
+  original_user_id: string.require(),
+  post: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    original_user_id,
+    post,
+  } = res.locals;
+
+  setLocals({
+    user_id: original_user_id,
+    post_id: post.id,
+    message: 'Sure, S.O.F.I. I\'ve added all the design requirements to the bottom of the doc. :)',
+    reactions: [{
+      created_by: 'USOFI',
+      reaction: 'like',
+    }],
+  });
+
+  return next();
+});
 
 export {
   onboardingMilestoneData,
@@ -479,20 +630,26 @@ export {
   onboardingGoalTwoData,
   onboardingGoalThreeData,
   onboardingGoalFourData,
+  onboardingAttachmentPost_1,
   onboardingPost_1,
   onboardingCommentsPost_1_1,
   onboardingPost_2,
   onboardingCommentsPost_2_1,
   onboardingCommentsPost_2_2,
   onboardingPost_3,
+  onboardingAttachmentPost_4,
   onboardingPost_4,
   onboardingCommentsPost_4_1,
   onboardingPost_5,
   onboardingCommentsPost_5_1,
+  onboardingAttachmentPost_6,
   onboardingPost_6,
   onboardingCommentsPost_6_1,
   onboardingCommentsPost_6_2,
   onboardingCommentsPost_6_3,
   onboardingCommentsPost_6_4,
   onboardingCommentsPost_6_5,
+  onboardingPost_7,
+  onboardingPost_8,
+  onboardingCommentsPost_8_1,
 };

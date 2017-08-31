@@ -6,10 +6,6 @@ import {
   date,
 } from 'valjs';
 import {
-  linksAddPermission,
-  linksCreate,
-} from './middlewares/links';
-import {
   attachmentsCreate,
   attachmentsInsert,
   attachmentsRename,
@@ -29,7 +25,6 @@ import {
 } from '../utils';
 import {
   service,
-  linkPermission,
   linkMeta,
 } from '../validators';
 
