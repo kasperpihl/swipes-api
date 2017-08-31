@@ -1,6 +1,7 @@
 import r from 'rethinkdb';
 import {
   string,
+  object,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -21,7 +22,21 @@ const dbOnboardingGetAll = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOnboardingAddSingleNotification = funcWrap([
+  object.as({
+    notification: object.require(),
+  }).require(),
+], (err, { notification }) => {
+  if (err) {
+    throw new SwipesError(`dbOnboardingAddSingleNotification: ${err}`);
+  }
+
+  const q = r.table('notifications').insert(notification);
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbOnboardingGetAll,
+  dbOnboardingAddSingleNotification,
 };

@@ -23,6 +23,7 @@ import {
   organizationsCreateUpdateSubscriptionCustomer,
 } from './middlewares/organizations';
 import {
+  usersGetSingleWithOrganizations,
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   usersParseInvitationToken,
@@ -62,6 +63,7 @@ import {
   onboardingPost_7,
   onboardingPost_8,
   onboardingCommentsPost_8_1,
+  onboardingNotificationPost,
 } from './middlewares/onboarding';
 import {
   milestonesCreate,
@@ -108,6 +110,7 @@ authed.all('/organizations.create',
   }),
   organizationsCreate,
   organizationsAddToUser,
+  usersGetSingleWithOrganizations,
   mapLocals((locals) => {
     return {
       original_user_id: locals.user_id,
@@ -252,6 +255,7 @@ authed.all('/organizations.create',
   onboardingPost_8,
   postsCreate,
   postsInsertSingle,
+  onboardingNotificationPost,
   onboardingCommentsPost_8_1,
   postsCreateComment,
   postsAddComment,
@@ -312,6 +316,8 @@ authed.all('/organizations.create',
   onboardingPost_3,
   postsCreate,
   postsInsertSingle,
+  // Create notification
+  onboardingNotificationPost,
   // Create Post
   onboardingAttachmentPost_4,
   linksCreate,
@@ -338,6 +344,9 @@ authed.all('/organizations.create',
   onboardingPost_5,
   postsCreate,
   postsInsertSingle,
+  // Create notification
+  onboardingNotificationPost,
+  // Add comments to post
   onboardingCommentsPost_5_1,
   postsCreateComment,
   postsAddComment,
