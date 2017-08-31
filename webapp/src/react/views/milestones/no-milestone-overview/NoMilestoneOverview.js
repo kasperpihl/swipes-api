@@ -5,7 +5,7 @@ import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 // import Button from 'Button';
-// import Icon from 'Icon';
+import Icon from 'Icon';
 // import './styles/NoMilestoneOverview.scss';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
@@ -16,8 +16,17 @@ class NoMilestoneOverview extends PureComponent {
     super(props);
     this.state = {
       showLine: false,
+      emptyStateOpacity: 1,
     }
     setupDelegate(this, 'onScroll');
+  }
+  onAddGoalItemInputChange(title) {
+    const { emptyStateOpacity } = this.state;
+    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
+
+    if (emptyStateOpacity !== newEmptyStateOpacity) {
+      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
+    }
   }
   renderHeader() {
     return (
@@ -28,6 +37,27 @@ class NoMilestoneOverview extends PureComponent {
         />
       </div>
     );
+  }
+  renderEmptyState() {
+    const { goals } = this.props;
+
+    if (!goals.size) {
+      return (
+        <div className="no-milestone-overview__empty-state" style={{ opacity: this.state.emptyStateOpacity }}>
+          <div className="no-milestone-overview__empty-arrow">
+            <Icon icon="ESArrow" className="no-milestone-overview__empty-arrow-svg" />
+          </div>
+          <div className="no-milestone-overview__empty-title">
+            Add a new goal
+          </div>
+          <div className="no-milestone-overview__empty-text">
+            Add new goals for everything that needs <br /> to be done.
+          </div>
+        </div>
+      )
+    }
+
+    return undefined;
   }
   renderList() {
     const { goals, delegate, myId } = this.props;
@@ -42,6 +72,7 @@ class NoMilestoneOverview extends PureComponent {
       <HOCAddGoalItem
         key="add"
         defAssignees={[myId]}
+        delegate={this}
       />
     ])
   }
@@ -57,6 +88,7 @@ class NoMilestoneOverview extends PureComponent {
       >
         <div className="no-milestone-overview">
           {this.renderList()}
+          {this.renderEmptyState()}
         </div>
       </SWView>
     );
