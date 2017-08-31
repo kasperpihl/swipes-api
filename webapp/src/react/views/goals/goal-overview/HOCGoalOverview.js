@@ -252,10 +252,12 @@ class HOCGoalOverview extends PureComponent {
     });
     e.stopPropagation();
   }
-  onInfoTabAction(i, e) {
-    const options = this.getOptionsForE(e);
+  onInfoTabAction(i, options, e) {
     const items = ['onLoadWay', 'onSaveWay', 'onArchive'];
     this[items[i]](options);
+  }
+  onInfoTabInfo(i, options, e) {
+    this.onEditMilestone(options);
   }
   viewDidLoad(stepList) {
     this.stepList = stepList;
@@ -264,6 +266,9 @@ class HOCGoalOverview extends PureComponent {
     const { goal } = this.props;
 
     const createdLbl = `${dayStringForDate(goal.get('created_at'))} by ${msgGen.users.getFullName(goal.get('created_by'))}`
+    const mileLbl = msgGen.milestones.getName(goal.get('milestone_id'));
+    const mileIcon = goal.get('milestone_id') ? 'MiniMilestone' : 'MiniNoMilestone';
+    const mileAct = goal.get('milestone_id') ? 'Edit milestone' : 'Add milestone';
     return {
       actions: [
         { title: 'Load a way', icon: 'Download' },
@@ -271,6 +276,7 @@ class HOCGoalOverview extends PureComponent {
         { title: 'Delete goal', icon: 'Delete', danger: true },
       ],
       info: [
+        { title: 'Milestone', text: mileLbl, icon: mileIcon, actionLabel: mileAct },
         { title: 'Created', text: createdLbl },
       ],
       about: {

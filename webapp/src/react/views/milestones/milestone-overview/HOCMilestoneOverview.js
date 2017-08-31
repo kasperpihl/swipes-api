@@ -103,8 +103,7 @@ class HOCMilestoneOverview extends PureComponent {
       },
     });
   }
-  onInfoTabAction(i, e) {
-    const options = this.getOptionsForE(e);
+  onInfoTabAction(i, options) {
     const {
       closeMilestone,
       openMilestone,

@@ -51,9 +51,9 @@ $topbarSize: 38px;
       }
     }
     &--expired {
-      background: red;
+      background: $red-80;
       .topbar__trial--label {
-        @include font(15px, white, 500);
+        @include font(12px, white, 500);
       }
     }
   }

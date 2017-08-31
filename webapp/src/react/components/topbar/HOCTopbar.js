@@ -141,12 +141,12 @@ class HOCTopbar extends PureComponent {
     if(!isAdmin || typeof daysLeft !== 'number') {
       return undefined;
     }
-    let text = `${daysLeft} day${daysLeft > 1 ? 's' : ''} left in trial`;
-    if(daysLeft <= 0) {
-      text = 'Unpaid subscription. Add credit card now.';
+    let text = `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left in trial`;
+    if(daysLeft < 0) {
+      text = 'Unpaid subscription. Add credit card.';
     }
     return (
-      <div className={`topbar__trial ${daysLeft <= 0 ? 'topbar__trial--expired': ''}`} >
+      <div className={`topbar__trial ${daysLeft < 0 ? 'topbar__trial--expired': ''}`} >
         <span className="topbar__trial--label" onClick={this.onUnpaid}>
           {text}
         </span>

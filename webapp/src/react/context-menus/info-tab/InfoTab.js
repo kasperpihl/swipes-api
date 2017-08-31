@@ -14,13 +14,19 @@ class InfoTab extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this, 'onInfoTabAction');
+    setupDelegate(this, 'onInfoTabAction', 'onInfoTabInfo');
     this.onActionClickCached = setupCachedCallback(this.onActionClick, this);
+    this.onInfoClickCached = setupCachedCallback(this.onInfoClick, this);
   }
   onActionClick(i, e) {
-    const { hide } = this.props;
+    const { hide, __options } = this.props;
     hide();
-    this.onInfoTabAction(i, e);
+    this.onInfoTabAction(i, __options, e);
+  }
+  onInfoClick(i, e) {
+    const { hide, __options } = this.props;
+    hide();
+    this.onInfoTabInfo(i, __options, e);
   }
   renderActionIcon(icon, iconClass) {
     if (!icon) {
@@ -71,7 +77,9 @@ class InfoTab extends PureComponent {
         <div className="info-tab__info-row"  key={info.title + i}>
           <div className="info-tab__info-title-wrapper">
             <div className="info-tab__info-title">{info.title}</div>
-            <div className="info-tab__info-action">{info.actionLabel}</div>
+            <div className="info-tab__info-action" onClick={this.onInfoClickCached(i)}>
+              {info.actionLabel}
+            </div>
           </div>
           <div className="info-tab__info-text">{info.text}</div>
         </div>
