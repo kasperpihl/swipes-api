@@ -173,15 +173,15 @@ export const chooseAttachmentType = (options) => (d, getState) => new Promise((r
   const items = [
     {
       id: 'note',
-      title: 'Create a note',
+      title: 'New note',
       leftIcon: { icon: 'Note' },
-      subtitle: 'Share longer texts, requirements or checklists.'
+      subtitle: 'Create a note to share more details'
     },
     {
       id: 'url',
-      title: 'Add a URL',
+      title: 'Add URL',
       leftIcon: { icon: 'Hyperlink' },
-      subtitle: 'Attach useful information from the web.'
+      subtitle: 'Share links to useful information from the web'
     },
     {
       id: 'upload',

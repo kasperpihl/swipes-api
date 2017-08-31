@@ -23,6 +23,15 @@ class HOCSearchResults extends PureComponent {
 
     openSecondary(navForContext(id));
   }
+  renderEmptyState(type) {
+    let emptyText = type === 'nosearch' ? 'Something got lost? Look up a keyword and we will help you find it' : 'Ups! Nothing found. We even searched our pockets, but no results.'
+
+    return (
+      <div className="search-results__empty-state">
+        <div className="search-results__empty-text">{emptyText}</div>
+      </div>
+    )
+  }
   renderResults() {
     const { results, limit } = this.props;
 
@@ -34,6 +43,14 @@ class HOCSearchResults extends PureComponent {
           result={res}
         />
       ) : null);
+    }
+
+    if (!results) {
+      return this.renderEmptyState('nosearch')
+    }
+
+    if (results && !results.length) {
+      return this.renderEmptyState('noresults')
     }
   }
   render() {
