@@ -6,7 +6,7 @@
 // ======================================================
 
 .welcome-message {
-  @include size(100%, auto);
+  @include size(100%);
 }
 
 // ======================================================
@@ -32,5 +32,23 @@
   &__svg {
     @include size(180px, 39px);
     @include svg-color($deepBlue-100);
+  }
+}
+
+
+// ======================================================
+// Empty states
+// ======================================================
+
+.welcome-message {
+
+  &__illustration {
+    @include size(100%, 30%);
+    @include flexContainer('column', center, center);
+    margin-bottom: 30px;
+  }
+
+  &__illustration-svg {
+    @include size(480px, 298px);
   }
 }

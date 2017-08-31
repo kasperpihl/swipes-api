@@ -12,7 +12,9 @@ class WelcomeMessage extends Component {
   render() {
     return (
       <div className="welcome-message">
-        <div className="welcome-message__illustration"></div>
+        <div className="welcome-message__illustration">
+          <Icon icon="ESWelcome" className="welcome-message__illustration-svg" />
+        </div>
         <div className="welcome-message__paragraph">This is the place for your team to communicate and create great work together.</div>
         <div className="welcome-message__paragraph">We are thrilled to have you here!</div>
         <div className="welcome-message__signature">
