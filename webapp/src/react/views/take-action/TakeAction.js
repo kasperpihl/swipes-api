@@ -8,13 +8,26 @@ import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import Icon from 'Icon';
 
 import './styles/take-action.scss';
 
 class TakeAction extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      emptyStateOpacity: 1,
+    }
+
     setupDelegate(this, 'onScroll');
+  }
+  onAddGoalItemInputChange(title) {
+    const { emptyStateOpacity } = this.state;
+    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
+
+    if (emptyStateOpacity !== newEmptyStateOpacity) {
+      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
+    }
   }
   renderHeader() {
     const { delegate, showLine, } = this.props;
@@ -38,6 +51,7 @@ class TakeAction extends Component {
       <HOCAddGoalItem
         key="add"
         defAssignees={[myId]}
+        delegate={this}
       />
     )
 
@@ -64,12 +78,17 @@ class TakeAction extends Component {
   renderEmptyState() {
     const { goals } = this.props;
 
-    if (goals.size === 1 && !goals.get('none').size) {
+     if (goals.size === 1 && !goals.get('none').size) {
       return (
-        <div className="take-action__empty-state">
-          <div className="take-action__empty-arrow"></div>
+        <div className="take-action__empty-state" style={{ opacity: this.state.emptyStateOpacity }}>
+          <div className="take-action__empty-arrow">
+            <Icon icon="ESArrow" className="take-action__empty-arrow-svg" />
+          </div>
+          <div className="take-action__empty-title">
+            Add a new goal
+          </div>
           <div className="take-action__empty-text">
-            Add new goals for everything that needs to be done
+            Add new goals for everything that needs <br /> to be done.
           </div>
         </div>
       )

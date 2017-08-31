@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import Button from 'Button';
-// import Icon from 'Icon';
+import Icon from 'Icon';
 import NotificationItem from './NotificationItem';
 import './styles/notifications.scss';
 
@@ -46,9 +46,14 @@ class Notifications extends PureComponent {
 
     return (
       <div className="notifications__empty-state">
-        <div className="notifications__empty-illustration"></div>
+        <div className="notifications__empty-illustration">
+          <Icon icon="ESNotifications" className="notifications__empty-svg"/>
+        </div>
+        <div className="notifications__empty-title">
+          It’s still and quiet
+        </div>
         <div className="notifications__empty-text">
-          We'll let you know when there is something new for you.
+          You will be notified here when there’s <br /> something new.
         </div>
       </div>
     )

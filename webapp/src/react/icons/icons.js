@@ -135,6 +135,17 @@ import ShapeTen from './svgs/shape-10.svg';
 import LoginIconOne from './svgs/login-background-1.svg';
 import LoginIconTwo from './svgs/login-background-2.svg';
 
+// Empty states
+
+import ESArrow from './empty-states/es-arrow.svg';
+import ESDiscussions from './empty-states/es-discussions.svg';
+import ESError from './empty-states/es-error.svg';
+import ESMilestoneAchieved from './empty-states/es-milestone-achieved.svg';
+import ESNoResults from './empty-states/es-no-results.svg';
+import ESNotifications from './empty-states/es-notifications.svg';
+import ESSearch from './empty-states/es-search.svg';
+import ESWelcome from './empty-states/es-welcome.svg';
+
 export {
   AirbnbLogo,
   AsanaLogo,
@@ -270,4 +281,13 @@ export {
   ShapeTen,
   LoginIconOne,
   LoginIconTwo,
+
+  ESArrow,
+  ESDiscussions,
+  ESError,
+  ESMilestoneAchieved,
+  ESNoResults,
+  ESNotifications,
+  ESSearch,
+  ESWelcome,
 };

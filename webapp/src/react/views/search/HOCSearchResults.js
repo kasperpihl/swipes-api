@@ -9,6 +9,7 @@ import { navForContext } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import Icon from 'Icon';
 import SearchResult from './SearchResult';
 
 class HOCSearchResults extends PureComponent {
@@ -24,11 +25,21 @@ class HOCSearchResults extends PureComponent {
     openSecondary(navForContext(id));
   }
   renderEmptyState(type) {
-    let emptyText = type === 'nosearch' ? 'Something got lost? Look up a keyword and we will help you find it' : 'Ups! Nothing found. We even searched our pockets, but no results.'
+    let emptyIcon = 'ESSearch';
+    let emptyTitle = (<div className="search-results__empty-title">LOOKING FOR SOMETHING?</div>)
+    let emptyText = (<div className="search-results__empty-text">Search for milestones, goals or <br /> discussions by keywords.</div>)
+    
+    if (type === 'noresults') {
+      emptyIcon = 'ESNoResults'
+      emptyTitle = (<div className="search-results__empty-title">Ups! Nothing found.</div>)
+      emptyText = (<div className="search-results__empty-text">We even searched our pockets but no results.</div>)
+    }
 
     return (
       <div className="search-results__empty-state">
-        <div className="search-results__empty-text">{emptyText}</div>
+        <Icon icon={emptyIcon} className="search-results__empty-svg" />
+        {emptyTitle}
+        {emptyText}
       </div>
     )
   }

@@ -17,7 +17,9 @@ import './styles/milestone-overview.scss';
 class MilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      emptyStateOpacity: 1,
+    };
     setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll');
   }
   componentDidMount() {
@@ -31,6 +33,14 @@ class MilestoneOverview extends PureComponent {
     })
 
     return numberOfGoals;
+  }
+  onAddGoalItemInputChange(title) {
+    const { emptyStateOpacity } = this.state;
+    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
+
+    if (emptyStateOpacity !== newEmptyStateOpacity) {
+      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
+    }
   }
   renderHeader() {
     const { milestone: m, getLoading, delegate, showLine } = this.props;
@@ -65,11 +75,18 @@ class MilestoneOverview extends PureComponent {
     console.log(numberOfAllGoals)
     
     if (group === 'Current' && !numberOfAllGoals) {
+    
+
       return (
-        <div className="milestone-overview__empty-state milestone-overview__empty-state--current">
-          <div className="milestone-overview__empty-arrow"></div>
+        <div className="milestone-overview__empty-state milestone-overview__empty-state--current" style={{ opacity: this.state.emptyStateOpacity }}>
+          <div className="milestone-overview__empty-arrow">
+            <Icon icon="ESArrow" className="milestone-overview__empty-arrow-svg" />
+          </div>
+          <div className="milestone-overview__empty-title">
+            Add a new goal
+          </div>
           <div className="milestone-overview__empty-text">
-            Add new goals for everything that needs to<br /> be done to achieve this milestone.
+            Add new goals for everything that needs <br /> to be done to achieve this milestone.
           </div>
         </div>
       )
@@ -77,9 +94,12 @@ class MilestoneOverview extends PureComponent {
 
     if (group === 'Later' && !groupedGoals.get('Later').size) {
       return (
-        <div className="milestone-overview__empty-state milestone-overview__empty-state--current">
+        <div className="milestone-overview__empty-state milestone-overview__empty-state--later">
+          <div className="milestone-overview__empty-title">
+            Set for later
+          </div>
           <div className="milestone-overview__empty-text">
-            Move goals that need to be done later from this week into here
+            Move goals that need to be done later <br />  from this week into here.
           </div>
         </div>
       )
@@ -87,10 +107,12 @@ class MilestoneOverview extends PureComponent {
 
     if (group === 'Completed' && !groupedGoals.get('Completed').size) {
       return (
-        <div className="milestone-overview__empty-state milestone-overview__empty-state--current">
-          <div className="milestone-overview__empty-text">
-            You will see the progress of all completed goals here.
+        <div className="milestone-overview__empty-state milestone-overview__empty-state--completed">
+          <div className="milestone-overview__empty-title">
+            TRACK PROGRESS
           </div>
+          <div className="milestone-overview__empty-text">
+            You will see the progress of all completed <br /> goals here</div>
         </div>
       )
     }
@@ -124,6 +146,7 @@ class MilestoneOverview extends PureComponent {
         <HOCAddGoalItem
           key="add"
           milestoneId={milestone.get('id')}
+          delegate={this}
         />
       )
     }

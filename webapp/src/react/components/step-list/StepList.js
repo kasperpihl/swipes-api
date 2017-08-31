@@ -28,7 +28,7 @@ class StepList extends PureComponent {
       addStepValue: '',
       addStepAssignees: fromJS([]),
     };
-    setupDelegate(this, 'onStepSort', 'onStepAdd', 'onStepRename');
+    setupDelegate(this, 'onStepSort', 'onStepAdd', 'onStepRename', 'onChangingAdd');
     bindAll(this, ['onSortEnd', 'onFocus', 'onBlur', 'onChange', 'onKeyDown']);
     this.acOptions = {
       types: ['users'],
@@ -67,6 +67,7 @@ class StepList extends PureComponent {
   onChange(e) {
     const value = e.target.value;
     this.setState({ addStepValue: value });
+    this.onChangingAdd(value)
   }
   onKeyDown(e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {

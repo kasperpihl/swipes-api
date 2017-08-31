@@ -17,7 +17,7 @@ class HOCStepList extends PureComponent {
     this.state.steps = helper.getOrderedSteps();
 
     setupLoading(this);
-    setupDelegate(this, 'viewDidLoad', 'onStepDidComplete');
+    setupDelegate(this, 'viewDidLoad', 'onStepDidComplete', 'onAddStepItemInputChange');
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.goal !== this.props.goal) {
@@ -162,6 +162,9 @@ class HOCStepList extends PureComponent {
       }
     });
 
+  }
+  onChangingAdd(title) {
+    this.onAddStepItemInputChange(title)
   }
   getHelper(overrideGoal) {
     const { goal, myId } = this.props;

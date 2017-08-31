@@ -12,4 +12,44 @@
   &__header {
     padding: 0 30px;
   }
+
+  &#{&}--empty-state {
+    @include size(100%)
+  }
+}
+
+// ======================================================
+// Empty states
+// ======================================================
+
+.milestone-list {
+
+  &__empty-state {
+    @include size(100%);
+    @include flexContainer('column', center, top);
+    padding-top: 3%;
+  }
+
+  &__empty-illustration {
+    @include size(100%, 60%);
+    @include flexContainer('column', center, center);
+    margin-bottom: 12px;
+  }
+
+  &__empty-svg {
+    @include size(auto, 100%);
+  }
+
+  &__empty-title {
+    @include font(11px, $deepBlue-100, 18px, bold) 
+    text-transform: uppercase;
+    pointer-events: all;
+  }
+
+  &__empty-text {
+    @include font(12px, $deepBlue-40, 18px);
+    margin-top: 9px;
+    text-align: center; 
+    pointer-events: all;
+  }
 }

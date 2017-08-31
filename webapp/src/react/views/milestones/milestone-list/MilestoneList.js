@@ -6,7 +6,7 @@ import SWView from 'SWView';
 import Button from 'Button';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
-// import Icon from 'Icon';
+import Icon from 'Icon';
 import HOCMilestoneItem from './HOCMilestoneItem';
 import AddMilestone from './AddMilestone';
 import HOCNoMilestone from './HOCNoMilestone';
@@ -42,10 +42,17 @@ class MilestoneList extends PureComponent {
   renderEmptyState() {
 
     return (
-      <div className="milestones__empty-state">
-        <div className="milestones__empty-illustration"></div>
-        <div className="milestones__empty-text">
-        Ups! Your team is busy and working hard on the first milestone.<br /> Once a milestone is achieved it will show up in this hall of fame.
+      <div className="milestone-list__empty-state">
+        <div className="milestone-list__empty-illustration">
+          <Icon icon="ESMilestoneAchieved" className="milestone-list__empty-svg"/>
+        </div>
+        <div className="milestone-list__empty-title">
+          the hall of fame
+        </div>
+        <div className="milestone-list__empty-text">
+          Seems like your team is sweating on getting there <br />
+          first milestone completed. <br />
+          All completed milestones can be found here.
         </div>
       </div>
     )
@@ -79,10 +86,16 @@ class MilestoneList extends PureComponent {
     )
   }
   render() {
-    const { milestones } = this.props;
+    const { milestones, tabIndex } = this.props;
+    let className = 'milestone-list';
+
+    if (tabIndex === 1 && milestones && milestones.size < 1) {
+      className += ' milestone-list--empty-state'
+    }
+
     return (
       <SWView noframe header={this.renderHeader()}>
-        <div className="milestone-list">
+        <div className={className}>
           {this.renderList()}
           {this.renderAddMilestone()}
         </div>

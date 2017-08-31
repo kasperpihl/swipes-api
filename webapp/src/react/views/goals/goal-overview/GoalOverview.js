@@ -120,7 +120,6 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
-
   renderStepListEditButton() {
     const helper = this.getHelper();
     if (!helper.getNumberOfSteps()) {
@@ -142,16 +141,21 @@ class GoalOverview extends PureComponent {
     );
   }
   renderEmptyState() {
+    const { emptyStateOpacity } = this.props;
     const helper = this.getHelper();
     const totalSteps = helper.getNumberOfSteps();
 
     if (!totalSteps) {
       return (
-        <div className="goal-overview__empty-state">
-          <div className="goal-overview__empty-arrows"></div>
+        <div className="goal-overview__empty-state" style={{ opacity: emptyStateOpacity }}>
+          <div className="goal-overview__empty-arrow">
+            <Icon icon="ESArrow" className="goal-overview__empty-arrow-svg" />
+          </div>
+          <div className="goal-overview__empty-title">
+            Add a new step
+          </div>
           <div className="goal-overview__empty-text">
-            Write down the steps for achieving this goal. <br />
-            Assign the responsibilities.
+            Add new steps for everything that needs <br /> to be done.
           </div>
         </div>
       )

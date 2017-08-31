@@ -8,6 +8,7 @@ import * as ca from 'swipes-core-js/actions';
 import { setupLoading, bindAll, toUnderscore } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
+import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import './styles/add-goal-item.scss';
@@ -29,6 +30,7 @@ class HOCAddGoalItem extends PureComponent {
     };
 
     bindAll(this, ['onChange', 'onKeyDown', 'onFocus', 'onBlur']);
+    setupDelegate(this, 'onAddGoalItemInputChange');
     setupLoading(this);
   }
   componentDidMount() {
@@ -85,6 +87,8 @@ class HOCAddGoalItem extends PureComponent {
   onChange(e) {
     const value = e.target.value;
     this.setState({ title: value });
+
+    this.onAddGoalItemInputChange(value);
   }
   onKeyDown(e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {

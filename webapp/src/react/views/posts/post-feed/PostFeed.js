@@ -8,7 +8,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
 import TabBar from 'components/tab-bar/TabBar';
 import TextParser from 'components/text-parser/TextParser';
-// import Icon from 'Icon';
+import Icon from 'Icon';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 
 import HOCPostView from '../post-view/HOCPostView';
@@ -76,15 +76,20 @@ class PostFeed extends PureComponent {
   renderEmptyState() {
     const { tabs } = this.props;
 
-    let text = 'This is a great place to share your thoughts with the team.';
+    let text = 'This is a great place to share ideas and keep each\nother up to date';
     if (tabs) {
       const contextType = this.getContextType();
-      text = `There is no discussions about this ${contextType} yet.\n\nYou can be the first to start one.`;
+      text = `There are no discussions about this ${contextType} yet.\nYou can be the first to start one.`;
     }
 
     return (
       <div className="post-feed__empty-state">
-        <div className="post-feed__empty-illustration"></div>
+        <div className="post-feed__empty-illustration">
+          <Icon icon="ESMilestoneAchieved" className="post-feed__empty-svg"/>
+        </div>
+        <div className="post-feed__empty-title">
+          start a discussion
+        </div>
         <div className="post-feed__empty-text"><TextParser>{text}</TextParser></div>
         <Button primary text="Create a post" onClick={this.onNewPost} />
       </div>
@@ -110,12 +115,19 @@ class PostFeed extends PureComponent {
     }).toArray();
   }
   render() {
+    const { posts } = this.props;
+    let className = 'post-feed';
+
+    if (!posts.size) {
+      className += ' post-feed--empty-state';
+    }
+
     return (
       <SWView
         header={this.renderHeader()}
         onScroll={this.onScroll}
       >
-        <div className="post-feed">
+        <div className={className}>
           {this.renderPosts()}
         </div>
       </SWView>

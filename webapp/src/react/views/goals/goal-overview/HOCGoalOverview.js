@@ -33,6 +33,7 @@ class HOCGoalOverview extends PureComponent {
       showLine: false,
       editMode: false,
       handoff: null,
+      emptyStateOpacity: 1,
     };
     setupLoading(this);
 
@@ -259,6 +260,14 @@ class HOCGoalOverview extends PureComponent {
   onInfoTabInfo(i, options, e) {
     this.onEditMilestone(options);
   }
+  onAddStepItemInputChange(title) {
+    const { emptyStateOpacity } = this.state;
+    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
+
+    if (emptyStateOpacity !== newEmptyStateOpacity) {
+      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
+    }
+  }
   viewDidLoad(stepList) {
     this.stepList = stepList;
   }
@@ -301,7 +310,7 @@ class HOCGoalOverview extends PureComponent {
 
   render() {
     const { goal, me } = this.props;
-    const { editMode, handoff, showLine } = this.state;
+    const { editMode, handoff, showLine, emptyStateOpacity } = this.state;
 
     return (
       <GoalOverview
@@ -311,6 +320,7 @@ class HOCGoalOverview extends PureComponent {
         myId={me.get('id')}
         delegate={this}
         showLine={showLine}
+        emptyStateOpacity={emptyStateOpacity}
         {...this.bindLoading()}
       />
     );
