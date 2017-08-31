@@ -161,6 +161,9 @@ class PostView extends PureComponent {
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
+      // this.refs.scrollView.scrollTo(0);
+
+      // this.refs.scrollView.scrollToEnd();
     }, 1);
   }
   componentWillUnmount() {
@@ -378,7 +381,7 @@ class PostView extends PureComponent {
     }
 
     return (
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }} ref="scrollView">
         {this.renderPostHeader()}
         {this.renderMessage()}
         {this.renderAttachments()}
@@ -391,7 +394,7 @@ class PostView extends PureComponent {
     const { delegate } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container} ref="scrollView">
         {this.renderContent()}
         <PostFooter delegate={delegate} placeholder="Write a comment…" commmentLoading={this.state.commmentLoading} />
       </View>

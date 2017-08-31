@@ -249,18 +249,25 @@ class CreateNewItemModal extends PureComponent {
 
     return undefined;
   }
+  renderKeyboardSpacer() {
+    if (Platform.OS === 'ios') {
+      return <KeyboardSpacer />;
+    }
+
+    return undefined;
+  }
   render() {
     const { modalState, defAssignees } = this.props;
     const { text } = this.state;
 
     let modalSize = {
-      width: viewSize.width / 2,
+      width: viewSize.width / 1.5,
       height: 45,
     }
 
     if (this.isActive()) {
       modalSize = {
-        width: viewSize.width / 1.5,
+        width: viewSize.width * .95,
         height: defAssignees ? 175 : 115,
       }
     }
@@ -279,9 +286,10 @@ class CreateNewItemModal extends PureComponent {
           <View style={[styles.modalWrapper, modalSize]}>
             {this.renderInput()}
             {this.renderContent()}
+            {this.renderKeyboardSpacer()}
           </View>
 
-          <KeyboardSpacer />
+         
         </View>
       </Modal>
     )
