@@ -10,6 +10,7 @@ import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
 import HOCAutoCompleting from 'components/auto-completing/HOCAutoCompleting';
 import HOCContextMenu from 'components/context-menu/HOCContextMenu';
 import HOCTooltip from 'components/tooltip/HOCTooltip';
+import HOCTrialExpired from 'components/trial-expired/HOCTrialExpired';
 
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
@@ -63,6 +64,7 @@ class Root extends PureComponent {
         {this.renderTopbar()}
         <HOCContextMenu />
         <HOCTooltip />
+        <HOCTrialExpired />
         <HOCAutoCompleting />
         <DevTools />
         <div className="content-wrapper">
