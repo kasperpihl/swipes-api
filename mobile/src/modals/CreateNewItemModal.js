@@ -111,10 +111,9 @@ class CreateNewItemModal extends PureComponent {
     let { assignees } = this.state;
     const { showModal } = this.props;
     assignees = List(data.map(i => sortedUsers.getIn([i, 'id'])));
-
-    this.setState({assignees: assignees})
-
+    
     showModal();
+    this.setState({assignees: assignees})
     this.handleModalState();
   }
   handleAssigning() {
@@ -149,7 +148,9 @@ class CreateNewItemModal extends PureComponent {
     };
 
     this.handleModalState();
-    showModal(modal);
+    this.setTimeout(() => {
+      showModal(modal);
+    }, 5)
   }
   isActive() {
     const { title } = this.state;
