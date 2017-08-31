@@ -32,8 +32,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch', 
     flex: 1,
     maxHeight: 45,
-    borderBottomColor: colors.blue100,
-    borderBottomWidth: 1,
     alignItems: 'center',
     borderRadius: 6,
   },
@@ -194,6 +192,10 @@ class CreateNewItemModal extends PureComponent {
           underlineColorAndroid="transparent"
           value={this.state.title}
           placeholder={placeholder}
+          autoFocus={true}
+          blurOnSubmit={true}
+          onSubmitEditing={this.onActionClick}
+          returnKeyType="send"
         />
       </View>
     )

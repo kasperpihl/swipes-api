@@ -76,6 +76,7 @@ class HOCPostView extends PureComponent {
       attachments,
     }).then(res => {
       this.setState({ commentLoading: false });
+
       if (res.ok) {
         window.analytics.sendEvent('Comment added', {});
       }

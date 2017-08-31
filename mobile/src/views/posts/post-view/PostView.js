@@ -163,8 +163,12 @@ class PostView extends PureComponent {
       this.setState({ hasLoaded: true });
       // this.refs.scrollView.scrollTo(0);
 
-      // this.refs.scrollView.scrollToEnd();
+      this.refs.scrollView.scrollToEnd({animated: true});
     }, 1);
+
+    setTimeout(() => {
+      this.refs.scrollView.scrollToEnd({animated: true});
+    }, 1000);
   }
   componentWillUnmount() {
     clearTimeout(this.loadingTimeout);
