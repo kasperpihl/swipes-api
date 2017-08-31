@@ -1,0 +1,54 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.trial {
+  $b: &;
+  @include size(100%, 100%);
+  position: absolute;
+  -webkit-app-region: drag;
+  flex: none;
+  user-select: none;
+  &__indicator {
+    @include flexContainer('row', right, center);
+    @include size(100%, 38px);
+    padding: 0 15px;
+    position: absolute;
+    left: 0; top: 0;
+    &--label {
+      @include font(15px, white, 300);
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+    &--expired {
+      background: $red-80;
+      .topbar__trial--label {
+        @include font(12px, white, 500);
+      }
+    }
+  }
+  &__popup {
+    @include size(100%, 100%);
+    position: absolute;
+    z-index: 999999;
+    background: rgba(0,0,0,0.5);
+    &--content {
+      position: absolute;
+      @include size(400px, 300px);
+      top: 50%;
+      left: 50%;
+      margin-left: -200px;
+      margin-top: -150px;
+      background: white;
+    }
+  }
+}
+
+// windows
+.platform-win32 {
+  .trial {
+    .trial__indicator {
+      @include flexContainer('row', left, center);
+    }
+  }
+}
