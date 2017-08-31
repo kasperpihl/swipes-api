@@ -66,9 +66,6 @@ export default class Socket {
     this.changeStatus('connecting');
     this.ws.onopen = () => {
       this.socket = true;
-      this._pingTimer = setInterval(() => {
-        this.sendPing();
-      }, 20000);
       let timestamp;
       const ready = this.store.getState().getIn(['connection', 'ready']);
       if(ready) {
@@ -80,6 +77,9 @@ export default class Socket {
       })).then((res) => {
         this.isConnecting = false;
         if (res && res.ok) {
+          this._pingTimer = setInterval(() => {
+            this.sendPing();
+          }, 20000);
           this.reconnect_attempts = 0;
           this.changeStatus('online');
         } else if (res && res.error) {

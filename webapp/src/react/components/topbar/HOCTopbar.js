@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 // now use events as onClick: this.onWinClickCached(i)
+import { Billing } from 'views';
 import Icon from 'Icon';
 import Button from 'Button';
 import './topbar.scss';
@@ -18,7 +19,7 @@ class HOCTopbar extends PureComponent {
     this.state = {
       secondsLeft: 0,
     };
-    bindAll(this, ['onDownload']);
+    bindAll(this, ['onDownload', 'onUnpaid']);
     this.onWinClickCached = setupCachedCallback(this.onWinClick, this);
   }
   componentWillReceiveProps(nextProps) {
@@ -28,6 +29,17 @@ class HOCTopbar extends PureComponent {
         this.updateSecondsLeft(nextProps.nextRetry);
       }
     }
+  }
+  onUnpaid(e) {
+    const { navSet, navPush } = this.props;
+    navSet('primary', {
+      id: 'AccountList',
+      title: 'Account',
+    })
+    navPush('primary', {
+      id: 'Billing',
+      title: 'Billing',
+    })
   }
   onWinClick(name) {
     window.ipcListener[name]();
@@ -123,18 +135,23 @@ class HOCTopbar extends PureComponent {
   }
   renderTrialIndicator() {
     const { me } = this.props;
-    if (process.env.NODE_ENV !== 'production') {
-      return (
-        <div className="topbar__trial">Development</div>
-      );
-    }
+
     const daysLeft = msgGen.orgs.getDaysLeft();
     const isAdmin = msgGen.me.isAdmin(me && me.get('id'));
-    if (!isAdmin || typeof daysLeft !== 'number' || daysLeft <= 0) {
+    if(!isAdmin || typeof daysLeft !== 'number') {
       return undefined;
     }
+    let text = `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left in trial`;
+    if(daysLeft < 0) {
+      text = 'Unpaid subscription. Add credit card.';
+    }
     return (
-      <div className="topbar__trial">{`${daysLeft} days left in trial`}</div>
+      <div className={`topbar__trial ${daysLeft < 0 ? 'topbar__trial--expired': ''}`} >
+        <span className="topbar__trial--label" onClick={this.onUnpaid}>
+          {text}
+        </span>
+      </div>
+
     );
   }
   renderWindowsActions() {
@@ -201,6 +218,8 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  navSet: a.navigation.set,
+  navPush: a.navigation.push,
 })(HOCTopbar);
 
 const { object, string, bool } = PropTypes;

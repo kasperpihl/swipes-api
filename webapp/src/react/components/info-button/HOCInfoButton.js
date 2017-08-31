@@ -28,6 +28,7 @@ class HOCInfoButton extends PureComponent {
     if(!tabProps.delegate && delegate) {
       tabProps.delegate = delegate;
     }
+    tabProps.__options = options;
     contextMenu({
       options,
       component: InfoTab,

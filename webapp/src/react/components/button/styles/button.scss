@@ -22,7 +22,7 @@ $borderColor: $deepBlue-10;
     flex: none;
     display: inline-flex;
   };
-  background-color: $bg;
+  // background-color: $bg;
   border-radius: 50px;
   border: 1px solid;
   border-color: $borderColor;
@@ -166,7 +166,7 @@ $borderColor: $deepBlue-10;
     &#{$b}--icon-and-text {
       padding: 0 12px;
     }
-    
+
 
 
   }
@@ -424,7 +424,7 @@ $borderColor: $deepBlue-10;
   $b: &;
 
   &--result {
-    pointer-events: none;
+    // pointer-events: none;
 
     #{$b}__svg {
       display: none;

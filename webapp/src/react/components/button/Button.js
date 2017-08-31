@@ -17,55 +17,10 @@ class Button extends PureComponent {
   constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
-    this.state = {
-      loading: props.loading || false,
-      errorState: false,
-      successState: false,
-    };
 
     bindAll(this, ['onMouseEnter', 'onMouseLeave']);
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.loading !== this.props.loading) {
-      if (nextProps.loading) {
-        this._loadTime = new Date().getTime();
-        this.setState({ loading: nextProps.loading });
-        clearTimeout(this._timer);
-      } else {
-        const nowTime = new Date().getTime();
-        const diff = (nowTime - this._loadTime);
-        if (diff < MIN_TIME) {
-          this._timer = setTimeout(() => {
-            this.setState({ loading: false });
-          }, MIN_TIME - diff);
-        } else {
-          this.setState({ loading: nextProps.loading });
-        }
-      }
-    }
 
-    if (nextProps.errorLabel !== this.props.errorLabel) {
-      this.setState({ errorState: !!nextProps.errorLabel });
-      clearTimeout(this._resultTimer);
-
-      this._resultTimer = setTimeout(() => {
-        this.setState({ errorState: false });
-      }, SUCCESS_TIMER);
-    }
-
-    if (nextProps.successLabel !== this.props.successLabel) {
-      this.setState({ successState: !!nextProps.successLabel });
-      clearTimeout(this._resultTimer);
-
-      this._resultTimer = setTimeout(() => {
-        this.setState({ successState: false });
-      }, SUCCESS_TIMER);
-    }
-  }
-  componentWillUnmount() {
-    clearTimeout(this._timer);
-    clearTimeout(this._resultTimer);
-  }
   onClick(e) {
     const { onClick, disabled } = this.props;
 
@@ -128,11 +83,10 @@ class Button extends PureComponent {
   }
   renderResultState() {
     const { successLabel, errorLabel } = this.props;
-    const { errorState, successState } = this.state;
     let label = '';
     let icon = '';
 
-    if (!successState && !errorState) {
+    if (!successLabel && !errorLabel) {
       return undefined;
     }
 
@@ -159,14 +113,14 @@ class Button extends PureComponent {
       tabIndex: tabIndexProps,
       loadTooltip,
       className: classNameFromButton,
-      loading: ldr,
+      loading,
       loadingLabel,
       errorLabel,
       successLabel,
       tooltipLabel,
       ...rest
     } = this.props;
-    const { loading, errorState, successState } = this.state;
+
     let className = 'g-button';
     const tabIndex = {};
 
@@ -203,11 +157,11 @@ class Button extends PureComponent {
       className += ' g-button--loading';
     }
 
-    if (errorState) {
+    if (errorLabel) {
       className += ' g-button--result g-button--error';
     }
 
-    if (successState) {
+    if (successLabel) {
       className += ' g-button--result g-button--success';
     }
 
