@@ -17,6 +17,40 @@ import {
   dbOnboardingGetAll,
 } from './db_utils/onboarding';
 
+const SOFI = {
+  activated: true,
+  created_at: new Date(),
+  email: 'sofi@swipesapp.com',
+  id: 'USOFI',
+  organizations: [
+    'O5767IOYF',
+  ],
+  profile: {
+    first_name: 'S.O.F.I.',
+  },
+  services: [],
+  settings: {
+    onboarding: {
+      completed: {
+        'create-account': true,
+      },
+      order: [
+        'create-account',
+        'personalize-swipes',
+        'watch-introduction-video',
+        'create-milestone',
+        'article-collect-feedback',
+        'invite-team',
+      ],
+    },
+    pinned_goals: [],
+    starred_goals: [],
+    subscriptions: {
+      goal_notify: true,
+    },
+  },
+  updated_at: new Date(),
+};
 const initGetData = valLocals('initGetData', {
   user_id: string.require(),
   timestamp: string.format('iso8601').require(),
@@ -121,6 +155,7 @@ const initGetData = valLocals('initGetData', {
         services: data[1],
         notifications: data[2].concat(data[3]),
         onboarding: data[4],
+        sofi: SOFI,
       });
 
       return next();
