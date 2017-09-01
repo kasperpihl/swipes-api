@@ -18,14 +18,10 @@ import {
 } from './db_utils/onboarding';
 
 const SOFI = {
-  activated: true,
   created_at: new Date(),
   email: 'sofi@swipesapp.com',
   is_sofi: true,
   id: 'USOFI',
-  organizations: [
-    'O5767IOYF',
-  ],
   profile: {
     first_name: 'S.O.F.I.',
     photos: {
@@ -33,27 +29,6 @@ const SOFI = {
       '64x64': 'https://s3.amazonaws.com/cdn.swipesapp.com/sofi/swipes-sofi.png',
       '96x96': 'https://s3.amazonaws.com/cdn.swipesapp.com/sofi/swipes-sofi.png',
       original: 'https://s3.amazonaws.com/cdn.swipesapp.com/sofi/swipes-sofi.png',
-    },
-  },
-  services: [],
-  settings: {
-    onboarding: {
-      completed: {
-        'create-account': true,
-      },
-      order: [
-        'create-account',
-        'personalize-swipes',
-        'watch-introduction-video',
-        'create-milestone',
-        'article-collect-feedback',
-        'invite-team',
-      ],
-    },
-    pinned_goals: [],
-    starred_goals: [],
-    subscriptions: {
-      goal_notify: true,
     },
   },
   updated_at: new Date(),

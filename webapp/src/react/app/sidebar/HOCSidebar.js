@@ -46,7 +46,6 @@ class HOCSidebar extends PureComponent {
       { id: 'MilestoneList', svg: 'Milestones' },
       { id: 'TakeAction', svg: 'Goals' },
       { id: 'PostFeed', svg: 'Messages' },
-      this.getRemainingOnboarding() ? { id: 'Onboarding', svg: 'Onboarding' } : undefined,
       // { id: 'Find', svg: 'Find' },
     ].filter(v => !!v);
   }
@@ -157,6 +156,7 @@ class HOCSidebar extends PureComponent {
       <div className="sidebar">
         <div className="sidebar__top-section">
           {this.renderItem({ id: 'Notifications', svg: 'Notification' })}
+          {this.getRemainingOnboarding() ? this.renderItem({ id: 'Onboarding', svg: 'Onboarding' }) : null}
         </div>
         <div className="sidebar__middle-section">
           <div className="sidebar__section">

@@ -47,8 +47,6 @@ const defaultSettings = {
       'create-account',
       'personalize-swipes',
       'watch-introduction-video',
-      'create-milestone',
-      'article-collect-feedback',
       'invite-team',
     ],
     completed: {
@@ -57,9 +55,7 @@ const defaultSettings = {
   },
   starred_goals: [],
   pinned_goals: [],
-  subscriptions: {
-    goal_notify: true,
-  },
+  subscriptions: {},
 };
 const userAvailability = valLocals('userAvailability', {
   email: string.format('email').require(),
