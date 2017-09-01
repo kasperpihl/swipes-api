@@ -1,8 +1,23 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.search-result {
-  border-bottom: 1px solid $deepBlue-5;
+// ======================================================
+// Block
+// ======================================================
+
+.search-results {
+  // border-bottom: 1px solid $deepBlue-5;
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.search-results {
+
+  &#{&}--empty-state {
+    @include size(100%)
+  }
 }
 
 // ======================================================
@@ -17,9 +32,15 @@
     padding-top: 60px;
   }
 
-  &__empty-svg {
-    @include size(360px);
+  &__empty-illustration {
+    @include size(100%, 60%);
+    @include flexContainer('column', center, center);
     margin-bottom: 12px;
+  }
+
+  &__empty-svg {
+    @include size(auto, 100%);
+    max-width: 360px;
     opacity: 0.8;
   }
 

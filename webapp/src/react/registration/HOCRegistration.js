@@ -141,15 +141,7 @@ class HOCRegistration extends Component {
     const { email, password, showWelcomeMessage } = this.state;
     const errorLabel = this.getLoading('signInButton').errorLabel;
 
-    return (
-      <div className="welcome__content">
-        {showWelcomeMessage ? (
-          <WelcomeMessage delegate={this} />
-        ) : (
-            <Signin email={email} password={password} delegate={this} errorLabel={errorLabel} />
-          )}
-      </div>
-    );
+    return showWelcomeMessage ? <WelcomeMessage delegate={this} /> : <Signin email={email} password={password} delegate={this} errorLabel={errorLabel} />;
   }
   renderFooter() {
     const { showWelcomeMessage } = this.state;
@@ -196,9 +188,9 @@ class HOCRegistration extends Component {
     return (
       <div className="welcome">
         <div className="welcome__card">
-          <SWView header={this.renderHeader()} footer={this.renderFooter()}>
-            {this.renderContent()}
-          </SWView>
+          {this.renderHeader()}
+          {this.renderContent()}
+          {this.renderFooter()}
         </div>
       </div>
     );

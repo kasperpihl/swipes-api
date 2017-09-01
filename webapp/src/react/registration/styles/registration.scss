@@ -29,8 +29,22 @@
 
 .welcome {
 
+  &__test {
+    @include size(100%);
+    // background-color: blue;
+
+    &:first-child {
+      // background-color: red;
+    }
+
+    &:last-child {
+      // background-color: green;
+    }
+  }
+
 	&__card {
 		@include size(100%);
+    @include flexContainer('column');
 		@include widthSpecifications(initial, 660px);
 		@include border-radius(6px, 6px, 0px, 0px);
 		animation: showSignIn 1s ease forwards;
@@ -46,8 +60,8 @@
 		padding-top: 8.5vh;
 	}
 
-	&__content {
-		@include size(100%, auto);
+	&__content-wrapper {
+		@include size(100%);
 		padding: 0 60px;
 	}
 

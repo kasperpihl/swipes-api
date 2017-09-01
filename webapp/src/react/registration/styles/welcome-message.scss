@@ -7,6 +7,8 @@
 
 .welcome-message {
   @include size(100%);
+  padding: 0 60px;
+  overflow-y: auto;
 }
 
 // ======================================================
@@ -17,16 +19,16 @@
 
   &__title {
     @include font(36px, $deepBlue-100, 48px, 300);
-    margin-bottom: 45px;
+    margin-bottom: 8%;
   }
 
   &__paragraph {
     @include font(15px, $deepBlue-80, 27px);
-    margin-bottom: 30px;
+    margin-bottom: 5%;
   }
 
   &__signature {
-    margin-top: 60px;
+    margin-top: 10%;
   }
 
   &__svg {
@@ -43,12 +45,12 @@
 .welcome-message {
 
   &__illustration {
-    @include size(100%, 30%);
+    @include size(100%, 45%);
     @include flexContainer('column', center, center);
-    margin-bottom: 30px;
+    margin-bottom: 5%;
   }
 
   &__illustration-svg {
-    @include size(480px, 298px);
+    @include size(auto, 100%);
   }
 }

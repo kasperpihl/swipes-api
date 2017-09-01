@@ -6,8 +6,11 @@
 // ======================================================
 
 .comment {
+  $b: &;
+  $flexIgnoreList: '#{$b}__profile-initials', '#{$b}__profile-pic';
+
   @include size(100%, auto);
-  @include flexContainer('row', left, top);
+  @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
   animation: fadeCommentin .25s ease-in-out forwards;
   opacity: 0;
   transform: translateY(10px);
@@ -34,6 +37,7 @@
   &__profile-initials {
     @include size(36px);
     @include flexContainer('row', center, center);
+    @include font(12px, $deepBlue-100); 
     background-color: $deepBlue-10;
     border-radius: 3px;
   }

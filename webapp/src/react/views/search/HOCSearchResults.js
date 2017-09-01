@@ -37,7 +37,9 @@ class HOCSearchResults extends PureComponent {
 
     return (
       <div className="search-results__empty-state">
-        <Icon icon={emptyIcon} className="search-results__empty-svg" />
+        <div className="search-results__empty-illustration">
+          <Icon icon={emptyIcon} className="search-results__empty-svg" />
+        </div>
         {emptyTitle}
         {emptyText}
       </div>
@@ -65,8 +67,15 @@ class HOCSearchResults extends PureComponent {
     }
   }
   render() {
+    const { results } = this.props;
+    let className = 'search-results';
+
+    if (!results || results && !results.length) {
+      className += ' search-results--empty-state'
+    }
+
     return (
-      <div className="search-results">
+      <div className={className}>
         {this.renderResults()}
       </div>
     );

@@ -70,6 +70,7 @@ class HOCTrial extends PureComponent {
   renderTrialIndicator() {
     const isAdmin = msgGen.me.isAdmin();
     const shouldShowPopup = this.shouldShowPopup();
+
     if(!isAdmin || shouldShowPopup) {
       return undefined;
     }
@@ -77,12 +78,14 @@ class HOCTrial extends PureComponent {
     const { daysLeft } = this.state;
 
     let text = `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left in trial`;
-    if(daysLeft < 0) {
+
+    if (daysLeft < 0) {
       text = 'Unpaid subscription. Add billing info.';
     }
+
     return (
       <div className={`trial__indicator ${daysLeft < 0 ? 'trial__indicator--expired': ''}`} >
-        <span className="trial__indicator--label" onClick={this.onUnpaid}>
+        <span className="trial__indicator-label" onClick={this.onUnpaid}>
           {text}
         </span>
       </div>
@@ -91,39 +94,46 @@ class HOCTrial extends PureComponent {
   renderTrialPopup() {
     const { daysLeft, dismissed } = this.state;
     const show = this.shouldShowPopup();
+
     if(!show) {
       return undefined;
     }
+
     let actionLbl = 'Add billing info to continue the service for your team.';
     const isAdmin = msgGen.me.isAdmin();
+
     if(!isAdmin) {
       actionLbl = 'Contact your admin to continue the service for your team';
     }
+
     return (
       <div className="trial__popup">
-        <div className="trial__popup--content">
-          <h3>Trial expired</h3>
-          <div>Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</div>
-          <div>⭐  Your progress is saved. {actionLbl}</div>
-          {isAdmin ? (
-            <Button
-              text="Add billing info"
-              primary
-              onClick={this.onUnpaid}
-            />
-          ) : null}
-          {(daysLeft >= -7) ? <Button
-            text="Dismiss"
-            onClick={this.onDismiss}
-          /> : null}
+        <div className="trial-popup">
+          <div className="trial-popup__title">Trial Expired</div>
+          <div className="trial-popup__paragraph">Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</div>
+          <div className="trial-popup__paragraph">⭐  Your progress is saved. {actionLbl}</div>
+          <div className="trial-popup__actions">
+            {(daysLeft >= -7) ? <Button
+              text="Dismiss"
+              onClick={this.onDismiss}
+            /> : null}
+            {isAdmin ? (
+              <Button
+                text="Add billing info"
+                primary
+                onClick={this.onUnpaid}
+              />
+            ) : null}
+          </div>
         </div>
       </div>
     )
   }
   render() {
     const { subscribed } = this.props;
-    if(subscribed) {
-      return <div />;
+
+    if (subscribed) {
+      return null;
     }
 
     return (

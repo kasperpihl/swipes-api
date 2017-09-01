@@ -7,7 +7,7 @@
 
 .comment-input {
   $b: &;
-  $flexIgnoreList: '#{$b}__image', '#{$b}__initials', '#{$b}__icon-button';
+  $flexIgnoreList: '#{$b}__image', '#{$b}__profile-initials', '#{$b}__profile-pic', '#{$b}__icon-button';
 
   @include size(100%, auto);
   &__section {
@@ -36,8 +36,8 @@
   &__profile-initials {
     @include size(36px);
     @include flexContainer('row', center, center);
+    @include font(12px, $deepBlue-100); 
     background-color: $deepBlue-10;
-    border-radius: 3px;
   }
 
   &__textarea-wrapper {
@@ -48,12 +48,14 @@
     margin-left: 6px;
     padding-right: 6px;
   }
+
   &__placeholder {
     @include font(12px, $deepBlue-50, 15px);
     position: absolute;
     display: none;
     left: 6px;
     pointer-events: none;
+
     &--shown {
       display: block;
     }
