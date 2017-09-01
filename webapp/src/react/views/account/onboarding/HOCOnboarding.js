@@ -36,6 +36,9 @@ class HOCOnboarding extends PureComponent {
         id: 'SwipesIntro',
         title: 'Swipes Intro',
       });
+      setTimeout(() => {
+        complete(item.get('id'));
+      }, 2000);
     } else if(item.get('id') === 'invite-team') {
       openSecondary({
         id: 'Organization',
@@ -79,7 +82,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default navWrapper(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   complete: ca.onboarding.complete,
   browser: a.main.browser,
-})(HOCOnboarding));
+})(navWrapper(HOCOnboarding));

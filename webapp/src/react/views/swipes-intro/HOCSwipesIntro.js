@@ -8,9 +8,16 @@ import { connect } from 'react-redux';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SwipesIntro from './SwipesIntro';
 
 class HOCSwipesIntro extends PureComponent {
+  static minWidth() {
+    return 720;
+  }
+  static maxWidth() {
+    return 720;
+  }
   constructor(props) {
     super(props);
     this.state = {};
@@ -32,4 +39,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-})(HOCSwipesIntro);
+})(navWrapper(HOCSwipesIntro));
