@@ -10,12 +10,13 @@
   $flexIgnoreList: '#{$b}__image', '#{$b}__profile-initials', '#{$b}__profile-pic', '#{$b}__icon-button';
 
   @include size(100%, auto);
-  &__section {
-    @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
-  }
   @include heightSpecifications(38px, initial);
   border: 1px solid #E5E6EA;
   background-color: #FFFFFF;
+
+  &__section {
+    @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
+  }
 }
 
 // ======================================================
