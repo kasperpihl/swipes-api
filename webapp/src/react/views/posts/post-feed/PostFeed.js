@@ -98,11 +98,10 @@ class PostFeed extends PureComponent {
   renderPosts() {
     const { posts, delegate, limit, relatedPosts, tabIndex } = this.props;
 
-    if (!posts.size) {
+    const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
+    if (!renderPosts.size) {
       return this.renderEmptyState()
     }
-
-    const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
     return renderPosts.map((p, i) => {
       if (i >= limit) {
         return undefined;
