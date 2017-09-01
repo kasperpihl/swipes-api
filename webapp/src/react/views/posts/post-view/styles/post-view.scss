@@ -56,7 +56,7 @@
   }
 
   &__profile-initials {
-    @include size(60px);
+    @include size(42px);
     @include flexContainer('row', center, center);
     background-color: $deepBlue-10;
     border-radius: 3px;
