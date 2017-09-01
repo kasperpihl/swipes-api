@@ -4,16 +4,56 @@ import {
   array,
 } from 'valjs';
 import {
+  milestonesCreate,
+  milestonesInsert,
+} from './milestones';
+import {
+  goalsCreate,
+  goalsInsert,
+  goalsAppendWayToGoal,
+} from './goals';
+import {
+  postsCreate,
+  postsInsertSingle,
+  postsCreateComment,
+  postsAddComment,
+} from './posts';
+import {
+  notesCreate,
+} from './notes';
+import {
+  waysModifyStepsAndAttachmentsInWay,
+  waysGetNoteContentFromWayAttachmets,
+  waysModifyNotesContentInWayAttachments,
+} from './ways';
+import {
+  linksCreate,
+  linksAddPermission,
+  linksCreateBatch,
+  linksAddPermissionBatch,
+} from './links';
+import {
+  usersGetSingleWithOrganizations,
+} from './users';
+import {
   generateWayOne,
-  generateWayTwo,
-  generateWayThree,
-  generateWayFour,
 } from './onboarding/way_one';
+import {
+  generateWayTwo,
+} from './onboarding/way_two';
+import {
+  generateWayThree,
+} from './onboarding/way_three';
+import {
+  generateWayFour,
+} from './onboarding/way_four';
 import {
   dbOnboardingAddSingleNotification,
 } from './db_utils/onboarding';
 import {
   valLocals,
+  mapLocals,
+  getSwipesLinkObj,
 } from '../../utils';
 
 const SOFI_ID = 'USOFI';
@@ -676,6 +716,342 @@ const onboardingNotificationPost = valLocals('onboardingNotificationPost', {
       return next(err);
     });
 });
+const onboardingGetMiddlewares = [
+  usersGetSingleWithOrganizations,
+  mapLocals((locals) => {
+    return {
+      original_user_id: locals.user_id,
+    };
+  }),
+    // Creating onboarding content
+    // Milestone
+  onboardingMilestoneData,
+  milestonesCreate,
+  milestonesInsert,
+    // Goal one
+  onboardingGoalThreeData,
+  goalsCreate,
+  goalsInsert,
+  mapLocals(locals => ({
+    goal_id: locals.goal.id,
+  })),
+    // Loading a way
+  waysModifyStepsAndAttachmentsInWay,
+  waysGetNoteContentFromWayAttachmets,
+  mapLocals(locals => ({
+    text: locals.texts,
+  })),
+  notesCreate,
+  mapLocals((locals) => {
+    const notes = locals.notes;
+    const notesAttachment = locals.notesAttachment;
+    const links = [];
+
+    notes.forEach((note, i) => {
+      const options = {
+        type: 'note',
+        id: note.id,
+        title: notesAttachment[i].title,
+        account_id: locals.user_id,
+      };
+
+      links.push(getSwipesLinkObj({ ...options }));
+    });
+
+    return { links };
+  }),
+  linksCreateBatch,
+  linksAddPermissionBatch,
+  mapLocals((locals) => {
+    const short_urls = locals.short_urls;
+    const links = locals.links.map((link, i) => {
+      return Object.assign({}, link, {
+        short_url: short_urls[i],
+      });
+    });
+
+    return { links };
+  }),
+  waysModifyNotesContentInWayAttachments,
+  goalsAppendWayToGoal,
+    // Create post
+  onboardingAttachmentPost_1,
+  linksCreate,
+  linksAddPermission,
+  mapLocals((locals) => {
+    const link = locals.link;
+    const short_url = locals.short_url;
+    const linkWithPermissions = Object.assign({}, link, {
+      short_url,
+    });
+    const attachments = [{
+      link: linkWithPermissions,
+    }];
+
+    return { attachments };
+  }),
+  onboardingPost_1,
+  postsCreate,
+  postsInsertSingle,
+    // Create comments for post
+  onboardingCommentsPost_1_1,
+  postsCreateComment,
+  postsAddComment,
+    // Create second post
+  onboardingPost_2,
+  postsCreate,
+  postsInsertSingle,
+    // Create comments for second post
+  onboardingCommentsPost_2_1,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_2_2,
+  postsCreateComment,
+  postsAddComment,
+  // Goal two
+  onboardingGoalTwoData,
+  goalsCreate,
+  goalsInsert,
+  mapLocals(locals => ({
+    goal_id: locals.goal.id,
+  })),
+  // Loading a way
+  waysModifyStepsAndAttachmentsInWay,
+  waysGetNoteContentFromWayAttachmets,
+  mapLocals(locals => ({
+    text: locals.texts,
+  })),
+  notesCreate,
+  mapLocals((locals) => {
+    const notes = locals.notes;
+    const notesAttachment = locals.notesAttachment;
+    const links = [];
+
+    // We need that later for the post context
+    let context;
+
+    notes.forEach((note, i) => {
+      const title = notesAttachment[i].title;
+      const options = {
+        title,
+        type: 'note',
+        id: note.id,
+        account_id: locals.user_id,
+      };
+
+      links.push(getSwipesLinkObj({ ...options }));
+
+      if (title === 'Specifications') {
+        context = {
+          title,
+          id: note.id,
+        };
+      }
+    });
+
+    return { links, context };
+  }),
+  linksCreateBatch,
+  linksAddPermissionBatch,
+  mapLocals((locals) => {
+    const short_urls = locals.short_urls;
+    const links = locals.links.map((link, i) => {
+      return Object.assign({}, link, {
+        short_url: short_urls[i],
+      });
+    });
+
+    return { links };
+  }),
+  waysModifyNotesContentInWayAttachments,
+  goalsAppendWayToGoal,
+  onboardingPost_8,
+  postsCreate,
+  postsInsertSingle,
+  onboardingNotificationPost,
+  onboardingCommentsPost_8_1,
+  postsCreateComment,
+  postsAddComment,
+  // Goals three
+  onboardingGoalOneData,
+  goalsCreate,
+  goalsInsert,
+  mapLocals(locals => ({
+    goal_id: locals.goal.id,
+  })),
+  // Loading a way
+  waysModifyStepsAndAttachmentsInWay,
+  waysGetNoteContentFromWayAttachmets,
+  mapLocals(locals => ({
+    text: locals.texts,
+  })),
+  notesCreate,
+  mapLocals((locals) => {
+    const notes = locals.notes;
+    const notesAttachment = locals.notesAttachment;
+    const links = [];
+      // We need this for the past
+    let context = {};
+
+    notes.forEach((note, i) => {
+      const title = notesAttachment[i].title;
+      const options = {
+        title,
+        type: 'note',
+        id: note.id,
+        account_id: locals.user_id,
+      };
+
+      links.push(getSwipesLinkObj({ ...options }));
+
+      if (title === 'Messaging') {
+        context = {
+          title,
+          id: note.id,
+        };
+      }
+    });
+
+    return { links, context };
+  }),
+  linksCreateBatch,
+  linksAddPermissionBatch,
+  mapLocals((locals) => {
+    const short_urls = locals.short_urls;
+    const links = locals.links.map((link, i) => {
+      return Object.assign({}, link, {
+        short_url: short_urls[i],
+      });
+    });
+
+    return { links };
+  }),
+  waysModifyNotesContentInWayAttachments,
+  goalsAppendWayToGoal,
+    // Create Post
+  onboardingPost_3,
+  postsCreate,
+  postsInsertSingle,
+    // Create notification
+  onboardingNotificationPost,
+    // Create Post
+  onboardingAttachmentPost_4,
+  linksCreate,
+  linksAddPermission,
+  mapLocals((locals) => {
+    const link = locals.link;
+    const short_url = locals.short_url;
+    const linkWithPermissions = Object.assign({}, link, {
+      short_url,
+    });
+    const attachments = [{
+      link: linkWithPermissions,
+    }];
+
+    return { attachments };
+  }),
+  onboardingPost_4,
+  postsCreate,
+  postsInsertSingle,
+  onboardingCommentsPost_4_1,
+  postsCreateComment,
+  postsAddComment,
+  // Create Post
+  onboardingPost_5,
+  postsCreate,
+  postsInsertSingle,
+  // Create notification
+  onboardingNotificationPost,
+  // Add comments to post
+  onboardingCommentsPost_5_1,
+  postsCreateComment,
+  postsAddComment,
+  // Goals four
+  onboardingGoalFourData,
+  goalsCreate,
+  goalsInsert,
+  mapLocals(locals => ({
+    goal_id: locals.goal.id,
+  })),
+  // Loading a way
+  waysModifyStepsAndAttachmentsInWay,
+  waysGetNoteContentFromWayAttachmets,
+  mapLocals(locals => ({
+    text: locals.texts,
+  })),
+  notesCreate,
+  mapLocals((locals) => {
+    const notes = locals.notes;
+    const notesAttachment = locals.notesAttachment;
+    const links = [];
+
+    notes.forEach((note, i) => {
+      const options = {
+        type: 'note',
+        id: note.id,
+        title: notesAttachment[i].title,
+        account_id: locals.user_id,
+      };
+
+      links.push(getSwipesLinkObj({ ...options }));
+    });
+
+    return { links };
+  }),
+  linksCreateBatch,
+  linksAddPermissionBatch,
+  mapLocals((locals) => {
+    const short_urls = locals.short_urls;
+    const links = locals.links.map((link, i) => {
+      return Object.assign({}, link, {
+        short_url: short_urls[i],
+      });
+    });
+
+    return { links };
+  }),
+  waysModifyNotesContentInWayAttachments,
+  goalsAppendWayToGoal,
+    // Create post
+  onboardingAttachmentPost_6,
+  linksCreate,
+  linksAddPermission,
+  mapLocals((locals) => {
+    const link = locals.link;
+    const short_url = locals.short_url;
+    const linkWithPermissions = Object.assign({}, link, {
+      short_url,
+    });
+    const attachments = [{
+      link: linkWithPermissions,
+    }];
+
+    return { attachments };
+  }),
+  onboardingPost_6,
+  postsCreate,
+  postsInsertSingle,
+    // Create comments for post
+  onboardingCommentsPost_6_1,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_6_2,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_6_3,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_6_4,
+  postsCreateComment,
+  postsAddComment,
+  onboardingCommentsPost_6_5,
+  postsCreateComment,
+  postsAddComment,
+    // Create post
+  onboardingPost_7,
+  postsCreate,
+  postsInsertSingle,
+];
 
 export {
   onboardingMilestoneData,
@@ -706,4 +1082,5 @@ export {
   onboardingPost_8,
   onboardingCommentsPost_8_1,
   onboardingNotificationPost,
+  onboardingGetMiddlewares,
 };

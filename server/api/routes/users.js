@@ -4,6 +4,7 @@ import {
   object,
   any,
 } from 'valjs';
+import MiddlewareComposer from './middleware_composer';
 import {
   organizationConcatUsers,
 } from './middlewares/utils';
@@ -45,6 +46,9 @@ import {
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
+import {
+  onboardingGetMiddlewares,
+} from './middlewares/onboarding';
 import {
   valBody,
   sendResponse,
@@ -113,6 +117,28 @@ notAuthed.all('/users.signup',
   })),
   organizationsCreate,
   organizationsAddToUser,
+  (originalReq, originalRes, originalNext) => {
+    const {
+      organization_name,
+    } = originalRes.locals;
+
+    if (!organization_name) {
+      return originalNext();
+    }
+
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...onboardingGetMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
   userSignupQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
