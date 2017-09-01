@@ -26,7 +26,7 @@ export function propsOrPop(ctx, ...propNames) {
   }
   ctx.render = () => {
     if(!checkProps()) {
-      return <div />;
+      return null;
     }
     return currRender.bind(ctx)();
   }

@@ -239,7 +239,7 @@ class GoalOverview extends PureComponent {
     const { goal } = this.props;
 
     if (!goal) {
-      return <div />;
+      return null;
     }
 
     return (
