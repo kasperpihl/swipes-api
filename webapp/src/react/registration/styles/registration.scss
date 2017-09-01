@@ -57,7 +57,7 @@
 	&__header {
 		@include size(100%, auto);
 		padding: 0 60px;
-		padding-top: 8.5vh;
+		padding-top: 3vh;
 	}
 
 	&__content-wrapper {
@@ -141,7 +141,7 @@
 .welcome {
 
 	&__logo {
-		padding-bottom: 5.8vh;
+		padding-bottom: 3vh;
 	}
 
 	&__svg {
