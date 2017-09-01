@@ -12,6 +12,7 @@ import {
   goalsCreate,
   goalsInsert,
   goalsAppendWayToGoal,
+  goalsCompleteGoal,
 } from './goals';
 import {
   postsCreate,
@@ -148,7 +149,6 @@ const onboardingGoalFourData = valLocals('onboardingGoalFourData', {
     goal: {
       title: 'Website copy',
       assignees: [SOFI_ID, original_user_id],
-      completed_at: new Date(),
     },
   });
 
@@ -1015,7 +1015,8 @@ const onboardingGetMiddlewares = [
   }),
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
-    // Create post
+  goalsCompleteGoal,
+  // Create post
   onboardingAttachmentPost_6,
   linksCreate,
   linksAddPermission,
