@@ -21,6 +21,7 @@ import PostView from './posts/post-view/HOCPostView';
 import Preview from './preview/HOCPreview';
 import Search from './search/HOCSearch';
 import SideNote from './side-note/HOCSideNote';
+import SwipesIntro from './swipes-intro/SwipesIntro';
 import TakeAction from './take-action/HOCTakeAction';
 
 export {
@@ -30,7 +31,6 @@ export {
   Browser,
   CreatePost,
   Find,
-  TakeAction,
   GoalOverview,
   Onboarding,
   MilestoneList,
@@ -46,4 +46,6 @@ export {
   Search,
   Services,
   SideNote,
+  SwipesIntro,
+  TakeAction,
 };
