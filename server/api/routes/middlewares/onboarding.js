@@ -6,6 +6,7 @@ import {
 import {
   milestonesCreate,
   milestonesInsert,
+  milestonesAddGoal,
 } from './milestones';
 import {
   goalsCreate,
@@ -720,6 +721,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     goal_id: locals.goal.id,
   })),
+  milestonesAddGoal,
     // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,
@@ -806,6 +808,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     goal_id: locals.goal.id,
   })),
+  milestonesAddGoal,
   // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,
@@ -870,6 +873,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     goal_id: locals.goal.id,
   })),
+  milestonesAddGoal,
   // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,
@@ -970,6 +974,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     goal_id: locals.goal.id,
   })),
+  milestonesAddGoal,
   // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,

@@ -3,6 +3,7 @@ import {
   string,
   object,
   array,
+  date,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -28,6 +29,7 @@ const goalsCreate = valLocals('goalsCreate', {
   goal: object.as({
     title: string.min(1).require(),
     assignees: array.of(string).require(),
+    completed_at: date,
     step_order: array,
     steps: object,
   }),
@@ -40,8 +42,6 @@ const goalsCreate = valLocals('goalsCreate', {
     organization_id,
     milestone_id = null,
   } = res.locals;
-
-  console.log(milestone_id);
 
   goal.id = generateSlackLikeId('G');
   goal.organization_id = organization_id;
