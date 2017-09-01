@@ -129,8 +129,10 @@ class HOCGoalList extends PureComponent {
 
     return (
       <View style={styles.sectionWrapper}>
-        <Icon name={sectionIcon} fill={colors.deepBlue100} width="18" height="18" />
-        <Text style={[styles.sectionTitle, { paddingLeft: 6 }]}>{sectionTitle}</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Icon name={sectionIcon} fill={colors.deepBlue100} width="18" height="18" />
+          <Text style={[styles.sectionTitle, { paddingLeft: 6 }]}>{sectionTitle}</Text>
+        </View>
       </View>
     )
   }
