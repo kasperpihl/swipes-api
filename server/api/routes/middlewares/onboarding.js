@@ -74,18 +74,15 @@ const onboardingMilestoneData = valLocals('onboardingMilestoneData', {
 const onboardingGoalOneData = valLocals('onboardingGoalOneData', {
   original_user_id: string.require(),
   organizationId: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     organizationId,
-    milestone,
   } = res.locals;
 
   setLocals({
     way: generateWayOne(original_user_id),
     organization_id: organizationId,
-    milestone_id: milestone.id,
     goal: {
       title: 'Marketing campaign',
       assignees: [SOFI_ID, original_user_id],
@@ -97,18 +94,15 @@ const onboardingGoalOneData = valLocals('onboardingGoalOneData', {
 const onboardingGoalTwoData = valLocals('onboardingGoalTwoData', {
   original_user_id: string.require(),
   organizationId: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     organizationId,
-    milestone,
   } = res.locals;
 
   setLocals({
     way: generateWayTwo(original_user_id),
     organization_id: organizationId,
-    milestone_id: milestone.id,
     goal: {
       title: 'Development',
       assignees: [SOFI_ID, original_user_id],
@@ -120,18 +114,15 @@ const onboardingGoalTwoData = valLocals('onboardingGoalTwoData', {
 const onboardingGoalThreeData = valLocals('onboardingGoalThreeData', {
   original_user_id: string.require(),
   organizationId: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     organizationId,
-    milestone,
   } = res.locals;
 
   setLocals({
     way: generateWayThree(original_user_id),
     organization_id: organizationId,
-    milestone_id: milestone.id,
     goal: {
       title: 'Design',
       assignees: [SOFI_ID, original_user_id],
@@ -143,18 +134,15 @@ const onboardingGoalThreeData = valLocals('onboardingGoalThreeData', {
 const onboardingGoalFourData = valLocals('onboardingGoalFourData', {
   original_user_id: string.require(),
   organizationId: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     organizationId,
-    milestone,
   } = res.locals;
 
   setLocals({
     way: generateWayFour(original_user_id),
     organization_id: organizationId,
-    milestone_id: milestone.id,
     goal: {
       title: 'Website copy',
       assignees: [SOFI_ID, original_user_id],
@@ -194,7 +182,6 @@ const onboardingPost_1 = valLocals('onboardingPost_1', {
   const {
     original_user_id,
     goal,
-    attachments,
   } = res.locals;
   const message = `Hey, I'm making progress on the documents for the new website. I've added a few of the core ideas down.
 
@@ -203,7 +190,6 @@ const onboardingPost_1 = valLocals('onboardingPost_1', {
 
   setLocals({
     message,
-    attachments,
     user_id: 'USOFI',
     type: 'question',
     context: {
@@ -358,14 +344,12 @@ const onboardingPost_4 = valLocals('onboardingPost_4', {
   const {
     original_user_id,
     goal,
-    attachments,
   } = res.locals;
   const message = 'Hey S.O.F.I. see this new campaign we made around a new chocolate recipe. I\'m a big fan. You?';
 
 
   setLocals({
     message,
-    attachments,
     user_id: original_user_id,
     type: 'information',
     context: {
@@ -481,7 +465,6 @@ const onboardingPost_6 = valLocals('onboardingPost_6', {
   const {
     original_user_id,
     goal,
-    attachments,
   } = res.locals;
   const message = `Hey S.O.F.I. here is the test for the website. I focused on colors, multi-screen optimization and the fun mascots we've used before.
   
@@ -489,7 +472,6 @@ const onboardingPost_6 = valLocals('onboardingPost_6', {
 
   setLocals({
     message,
-    attachments,
     user_id: original_user_id,
     type: 'information',
     context: {
@@ -797,15 +779,20 @@ const onboardingGetMiddlewares = [
   onboardingPost_1,
   postsCreate,
   postsInsertSingle,
-    // Create comments for post
+  mapLocals((locals) => {
+    return {
+      attachments: null,
+    };
+  }),
+  // Create comments for post
   onboardingCommentsPost_1_1,
   postsCreateComment,
   postsAddComment,
-    // Create second post
+  // Create second post
   onboardingPost_2,
   postsCreate,
   postsInsertSingle,
-    // Create comments for second post
+  // Create comments for second post
   onboardingCommentsPost_2_1,
   postsCreateComment,
   postsAddComment,
@@ -958,6 +945,11 @@ const onboardingGetMiddlewares = [
   onboardingPost_4,
   postsCreate,
   postsInsertSingle,
+  mapLocals((locals) => {
+    return {
+      attachments: null,
+    };
+  }),
   onboardingCommentsPost_4_1,
   postsCreateComment,
   postsAddComment,
@@ -1037,7 +1029,12 @@ const onboardingGetMiddlewares = [
   onboardingPost_6,
   postsCreate,
   postsInsertSingle,
-    // Create comments for post
+  mapLocals((locals) => {
+    return {
+      attachments: null,
+    };
+  }),
+  // Create comments for post
   onboardingCommentsPost_6_1,
   postsCreateComment,
   postsAddComment,

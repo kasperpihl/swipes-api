@@ -41,6 +41,8 @@ const goalsCreate = valLocals('goalsCreate', {
     milestone_id = null,
   } = res.locals;
 
+  console.log(milestone_id);
+
   goal.id = generateSlackLikeId('G');
   goal.organization_id = organization_id;
   goal.created_at = new Date();
