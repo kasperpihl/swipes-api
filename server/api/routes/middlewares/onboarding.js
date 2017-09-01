@@ -6,11 +6,13 @@ import {
 import {
   milestonesCreate,
   milestonesInsert,
+  milestonesAddGoal,
 } from './milestones';
 import {
   goalsCreate,
   goalsInsert,
   goalsAppendWayToGoal,
+  goalsCompleteGoal,
 } from './goals';
 import {
   postsCreate,
@@ -57,6 +59,7 @@ import {
 } from '../../utils';
 
 const SOFI_ID = 'USOFI';
+const MAX_LENGHT = 50;
 const onboardingMilestoneData = valLocals('onboardingMilestoneData', {
   organizationId: string.require(),
 }, (req, res, next, setLocals) => {
@@ -74,18 +77,15 @@ const onboardingMilestoneData = valLocals('onboardingMilestoneData', {
 const onboardingGoalOneData = valLocals('onboardingGoalOneData', {
   original_user_id: string.require(),
   organizationId: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     organizationId,
-    milestone,
   } = res.locals;
 
   setLocals({
     way: generateWayOne(original_user_id),
     organization_id: organizationId,
-    milestone_id: milestone.id,
     goal: {
       title: 'Marketing campaign',
       assignees: [SOFI_ID, original_user_id],
@@ -97,18 +97,15 @@ const onboardingGoalOneData = valLocals('onboardingGoalOneData', {
 const onboardingGoalTwoData = valLocals('onboardingGoalTwoData', {
   original_user_id: string.require(),
   organizationId: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     organizationId,
-    milestone,
   } = res.locals;
 
   setLocals({
     way: generateWayTwo(original_user_id),
     organization_id: organizationId,
-    milestone_id: milestone.id,
     goal: {
       title: 'Development',
       assignees: [SOFI_ID, original_user_id],
@@ -120,18 +117,15 @@ const onboardingGoalTwoData = valLocals('onboardingGoalTwoData', {
 const onboardingGoalThreeData = valLocals('onboardingGoalThreeData', {
   original_user_id: string.require(),
   organizationId: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     organizationId,
-    milestone,
   } = res.locals;
 
   setLocals({
     way: generateWayThree(original_user_id),
     organization_id: organizationId,
-    milestone_id: milestone.id,
     goal: {
       title: 'Design',
       assignees: [SOFI_ID, original_user_id],
@@ -143,22 +137,18 @@ const onboardingGoalThreeData = valLocals('onboardingGoalThreeData', {
 const onboardingGoalFourData = valLocals('onboardingGoalFourData', {
   original_user_id: string.require(),
   organizationId: string.require(),
-  milestone: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
     organizationId,
-    milestone,
   } = res.locals;
 
   setLocals({
     way: generateWayFour(original_user_id),
     organization_id: organizationId,
-    milestone_id: milestone.id,
     goal: {
       title: 'Website copy',
       assignees: [SOFI_ID, original_user_id],
-      completed_at: new Date(),
     },
   });
 
@@ -194,7 +184,6 @@ const onboardingPost_1 = valLocals('onboardingPost_1', {
   const {
     original_user_id,
     goal,
-    attachments,
   } = res.locals;
   const message = `Hey, I'm making progress on the documents for the new website. I've added a few of the core ideas down.
 
@@ -203,7 +192,6 @@ const onboardingPost_1 = valLocals('onboardingPost_1', {
 
   setLocals({
     message,
-    attachments,
     user_id: 'USOFI',
     type: 'question',
     context: {
@@ -358,14 +346,12 @@ const onboardingPost_4 = valLocals('onboardingPost_4', {
   const {
     original_user_id,
     goal,
-    attachments,
   } = res.locals;
   const message = 'Hey S.O.F.I. see this new campaign we made around a new chocolate recipe. I\'m a big fan. You?';
 
 
   setLocals({
     message,
-    attachments,
     user_id: original_user_id,
     type: 'information',
     context: {
@@ -481,7 +467,6 @@ const onboardingPost_6 = valLocals('onboardingPost_6', {
   const {
     original_user_id,
     goal,
-    attachments,
   } = res.locals;
   const message = `Hey S.O.F.I. here is the test for the website. I focused on colors, multi-screen optimization and the fun mascots we've used before.
   
@@ -489,7 +474,6 @@ const onboardingPost_6 = valLocals('onboardingPost_6', {
 
   setLocals({
     message,
-    attachments,
     user_id: original_user_id,
     type: 'information',
     context: {
@@ -697,7 +681,7 @@ const onboardingNotificationPost = valLocals('onboardingNotificationPost', {
       },
       created_by: 'USOFI',
       event_type: 'post_created',
-      message: post.message,
+      message: post.message.substr(0, MAX_LENGHT),
       type: 'question',
     },
     seen_at: null,
@@ -723,18 +707,22 @@ const onboardingGetMiddlewares = [
       original_user_id: locals.user_id,
     };
   }),
-    // Creating onboarding content
-    // Milestone
+  // Creating onboarding content
+  // Milestone
   onboardingMilestoneData,
   milestonesCreate,
   milestonesInsert,
-    // Goal one
+  mapLocals(locals => ({
+    milestone_id: locals.milestone.id,
+  })),
+  // Goal one
   onboardingGoalThreeData,
   goalsCreate,
   goalsInsert,
   mapLocals(locals => ({
     goal_id: locals.goal.id,
   })),
+  milestonesAddGoal,
     // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,
@@ -786,6 +774,7 @@ const onboardingGetMiddlewares = [
     });
     const attachments = [{
       link: linkWithPermissions,
+      title: link.meta.title,
     }];
 
     return { attachments };
@@ -793,15 +782,20 @@ const onboardingGetMiddlewares = [
   onboardingPost_1,
   postsCreate,
   postsInsertSingle,
-    // Create comments for post
+  mapLocals((locals) => {
+    return {
+      attachments: [],
+    };
+  }),
+  // Create comments for post
   onboardingCommentsPost_1_1,
   postsCreateComment,
   postsAddComment,
-    // Create second post
+  // Create second post
   onboardingPost_2,
   postsCreate,
   postsInsertSingle,
-    // Create comments for second post
+  // Create comments for second post
   onboardingCommentsPost_2_1,
   postsCreateComment,
   postsAddComment,
@@ -815,6 +809,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     goal_id: locals.goal.id,
   })),
+  milestonesAddGoal,
   // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,
@@ -879,6 +874,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     goal_id: locals.goal.id,
   })),
+  milestonesAddGoal,
   // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,
@@ -946,6 +942,7 @@ const onboardingGetMiddlewares = [
     });
     const attachments = [{
       link: linkWithPermissions,
+      title: link.meta.title,
     }];
 
     return { attachments };
@@ -953,6 +950,11 @@ const onboardingGetMiddlewares = [
   onboardingPost_4,
   postsCreate,
   postsInsertSingle,
+  mapLocals((locals) => {
+    return {
+      attachments: [],
+    };
+  }),
   onboardingCommentsPost_4_1,
   postsCreateComment,
   postsAddComment,
@@ -973,6 +975,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     goal_id: locals.goal.id,
   })),
+  milestonesAddGoal,
   // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,
@@ -1012,7 +1015,8 @@ const onboardingGetMiddlewares = [
   }),
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
-    // Create post
+  goalsCompleteGoal,
+  // Create post
   onboardingAttachmentPost_6,
   linksCreate,
   linksAddPermission,
@@ -1024,6 +1028,7 @@ const onboardingGetMiddlewares = [
     });
     const attachments = [{
       link: linkWithPermissions,
+      title: link.meta.title,
     }];
 
     return { attachments };
@@ -1031,7 +1036,12 @@ const onboardingGetMiddlewares = [
   onboardingPost_6,
   postsCreate,
   postsInsertSingle,
-    // Create comments for post
+  mapLocals((locals) => {
+    return {
+      attachments: [],
+    };
+  }),
+  // Create comments for post
   onboardingCommentsPost_6_1,
   postsCreateComment,
   postsAddComment,
@@ -1054,33 +1064,5 @@ const onboardingGetMiddlewares = [
 ];
 
 export {
-  onboardingMilestoneData,
-  onboardingGoalOneData,
-  onboardingGoalTwoData,
-  onboardingGoalThreeData,
-  onboardingGoalFourData,
-  onboardingAttachmentPost_1,
-  onboardingPost_1,
-  onboardingCommentsPost_1_1,
-  onboardingPost_2,
-  onboardingCommentsPost_2_1,
-  onboardingCommentsPost_2_2,
-  onboardingPost_3,
-  onboardingAttachmentPost_4,
-  onboardingPost_4,
-  onboardingCommentsPost_4_1,
-  onboardingPost_5,
-  onboardingCommentsPost_5_1,
-  onboardingAttachmentPost_6,
-  onboardingPost_6,
-  onboardingCommentsPost_6_1,
-  onboardingCommentsPost_6_2,
-  onboardingCommentsPost_6_3,
-  onboardingCommentsPost_6_4,
-  onboardingCommentsPost_6_5,
-  onboardingPost_7,
-  onboardingPost_8,
-  onboardingCommentsPost_8_1,
-  onboardingNotificationPost,
   onboardingGetMiddlewares,
 };

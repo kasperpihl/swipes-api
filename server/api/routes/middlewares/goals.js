@@ -3,6 +3,7 @@ import {
   string,
   object,
   array,
+  date,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,
@@ -59,7 +60,7 @@ const goalsCreate = valLocals('goalsCreate', {
   goal.attachments = {};
   goal.attachment_order = [];
   goal.milestone_id = milestone_id;
-  goal.completed_at = goal.completed_at || null;
+  goal.completed_at = null;
 
   setLocals({
     goal,

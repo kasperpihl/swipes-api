@@ -41,7 +41,6 @@ $sidebarWidth: 84px;
   &__middle-section {
     @include size(100%);
     @include flexContainer('column', center, center);
-    padding-top: 38px;
   }
 
   &__bottom-section {

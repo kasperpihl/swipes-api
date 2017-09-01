@@ -27,7 +27,6 @@ class HOCGoalOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    bindAll(this, ['onContext']);
     propsOrPop(this, 'goal');
     this.state = {
       showLine: false,

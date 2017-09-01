@@ -97,7 +97,6 @@ export default class Users {
   getName(userId, options) {
     options = options || {};
     const state = this.store.getState();
-    const users = state.get('users');
     const me = state.get('me');
 
     if (userId === 'none') {
@@ -106,18 +105,16 @@ export default class Users {
     if (userId === 'me') {
       userId = me.get('id');
     }
-    if (users) {
-      const user = users.get(userId);
-      if (user) {
-        if (user.get('id') === me.get('id') && !options.disableYou) {
-          if(options.capitalize) {
-            return options.yourself ? 'Yourself' : 'You';
-          }
-          return options.yourself ? 'yourself' : 'you';
+    const user = this.getUser(userId);
+    if (user) {
+      if (user.get('id') === me.get('id') && !options.disableYou) {
+        if(options.capitalize) {
+          return options.yourself ? 'Yourself' : 'You';
         }
-
-        return this.getFirstName(user);
+        return options.yourself ? 'yourself' : 'you';
       }
+
+      return this.getFirstName(user);
     }
 
     return 'anyone';

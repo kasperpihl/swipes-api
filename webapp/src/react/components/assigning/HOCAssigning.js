@@ -37,7 +37,7 @@ class HOCAssigning extends PureComponent {
       tooltipAlign,
     } = this.props;
     const { users } = this.state;
-    // const { stateAssignees } = this.state;
+
     return (
       <Assigning
         maxImages={maxImages}

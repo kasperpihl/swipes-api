@@ -11,7 +11,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   let currentRecent = state.getIn(['cache', 'recentAssignees']) || [];
   if (typeof currentRecent.size !== 'undefined') {
     currentRecent = currentRecent.toJS();
-    const disabledUsers = state.getIn(['me', 'organizations', 0, 'disabled_users']);
+    const disabledUsers = state.getIn(['me', 'organizations', 0, 'disabled_users']) || fromJS([]);
     currentRecent = currentRecent.filter(r => !disabledUsers.contains(r));
   }
 

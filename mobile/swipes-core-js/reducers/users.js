@@ -23,6 +23,7 @@ export default function usersReducer(state = initialState, action) {
   switch (type) {
     case 'init': {
       let tempState = reducerInitToMap(payload, 'users', state);
+      tempState = tempState.set('USOFI', fromJS(payload.sofi));
       if(payload.me.organizations[0]){
         tempState = updateStateFromOrg(tempState, payload.me.organizations[0]);
       }

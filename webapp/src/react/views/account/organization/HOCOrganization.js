@@ -244,7 +244,7 @@ HOCOrganization.propTypes = {};
 
 function mapStateToProps(state) {
   return {
-    users: cs.users.getSorted(state),
+    users: cs.users.getAllButSofi(state),
     me: state.get('me'),
     organization: state.getIn(['me', 'organizations', 0]),
   };

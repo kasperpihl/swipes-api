@@ -135,12 +135,12 @@ $contHeight: 66px;
   &#{&}--move-to-later {
 
     &:hover {
-      #{$b}__assigning {
-        transform: translateX(-42px);
-        transition: .4s ease;
-      }
+      // #{$b}__assigning {
+      //   transform: translateX(-42px);
+      //   transition: .4s ease;
+      // }
     }
-    
+
     #{$b}__move {
       @include size(36px);
       @include flexContainer('row', center, center);
