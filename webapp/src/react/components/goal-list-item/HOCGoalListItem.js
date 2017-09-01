@@ -112,7 +112,7 @@ class HOCGoalListItem extends PureComponent {
           </div>
           <div className="goal-list-item__title">{goal.get('title')}</div>
         </div>
-        {this.renderMoveButton()}
+        {/* {this.renderMoveButton()} */}
         <div className="goal-list-item__assigning">
           {this.renderAssignees()}
         </div>
