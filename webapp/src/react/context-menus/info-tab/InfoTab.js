@@ -81,7 +81,12 @@ class InfoTab extends PureComponent {
               {info.actionLabel}
             </div>
           </div>
-          <div className="info-tab__info-text">{info.text}</div>
+          <div className="info-tab__info-text">
+            {info.icon ? (
+              <Icon icon={info.icon} className="info-tab__info-svg" />
+            ) : null}
+            {info.text}
+          </div>
         </div>
       )
     })

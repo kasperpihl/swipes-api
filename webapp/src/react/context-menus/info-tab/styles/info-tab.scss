@@ -69,11 +69,19 @@
   &__info-row {
     @include size(100%, auto);
     padding-top: 12px;
+
+    &:hover {
+
+      #{$b}__info-action {
+        opacity: 1;
+        transition: .15s ease;
+      }
+    }
   }
 
   &__info-title-wrapper {
     @include size(100%, auto);
-    @include flexContainer('row');
+    @include flexContainer('row', left, center);
   }
 
   &__info-title {
@@ -81,8 +89,27 @@
     text-transform: uppercase;
   }
 
+  &__info-action {
+    @include font(10px, $blue-100, 18px, 600);
+    margin-left: 6px;
+    opacity: 0;
+    transition: .15s ease;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__info-svg {
+    @include size(18px)
+    @include svg-color($deepBlue-50);
+    margin-top: -3px;
+    margin-right: 3px;
+  }
+
   &__info-text {
     @include font(12px, $deepBlue-50, 18px, 500);
+    @include flexContainer('row', left, center);
     margin-top: 3px;
   }
 

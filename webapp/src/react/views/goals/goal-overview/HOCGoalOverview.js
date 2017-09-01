@@ -276,7 +276,7 @@ class HOCGoalOverview extends PureComponent {
     const createdLbl = `${dayStringForDate(goal.get('created_at'))} by ${msgGen.users.getFullName(goal.get('created_by'))}`
     const mileLbl = msgGen.milestones.getName(goal.get('milestone_id'));
     const mileIcon = goal.get('milestone_id') ? 'MiniMilestone' : 'MiniNoMilestone';
-    const mileAct = goal.get('milestone_id') ? 'Edit milestone' : 'Add milestone';
+    const mileAct = goal.get('milestone_id') ? 'edit' : 'add';
     return {
       actions: [
         { title: 'Load a way', icon: 'Download' },
