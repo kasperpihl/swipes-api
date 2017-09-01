@@ -56,6 +56,7 @@
 
   &__empty-illustration {
     margin-bottom: 12px;
+    opacity: 0.8;
   }
 
   &__empty-svg {
@@ -63,7 +64,7 @@
   }
 
   &__empty-title {
-    @include font(11px, $deepBlue-100, 18px, bold) 
+    @include font(11px, $deepBlue-100, 18px, bold)
     text-transform: uppercase;
     pointer-events: all;
   }
@@ -71,7 +72,7 @@
   &__empty-text {
     @include font(12px, $deepBlue-40, 18px);
     margin-top: 9px;
-    text-align: center; 
+    text-align: center;
     pointer-events: all;
   }
 }

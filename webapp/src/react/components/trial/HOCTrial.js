@@ -64,12 +64,12 @@ class HOCTrial extends PureComponent {
   shouldShowPopup() {
     const { isAccount } = this.props;
     const { daysLeft, dismissed } = this.state;
-    return (!isAccount && (daysLeft < -7 || daysLeft < 0 && !dismissed));
+    const isAdmin = msgGen.me.isAdmin();
+    return (!isAccount && (daysLeft < -7 || (isAdmin && daysLeft < 0 && !dismissed)));
   }
   renderTrialIndicator() {
     const isAdmin = msgGen.me.isAdmin();
     const shouldShowPopup = this.shouldShowPopup();
-    console.log('is account');
     if(!isAdmin || shouldShowPopup) {
       return undefined;
     }
@@ -94,19 +94,28 @@ class HOCTrial extends PureComponent {
     if(!show) {
       return undefined;
     }
-
+    let actionLbl = 'Add billing info to continue the service for your team.';
+    const isAdmin = msgGen.me.isAdmin();
+    if(!isAdmin) {
+      actionLbl = 'Contact your admin to continue the service for your team';
+    }
     return (
       <div className="trial__popup">
         <div className="trial__popup--content">
-          <Button
-            text="Add billing info"
-            primary
-            onClick={this.onUnpaid}
-          />
-          <Button
+          <h3>Trial expired</h3>
+          <div>Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</div>
+          <div>⭐  Your progress is saved. {actionLbl}</div>
+          {isAdmin ? (
+            <Button
+              text="Add billing info"
+              primary
+              onClick={this.onUnpaid}
+            />
+          ) : null}
+          {(daysLeft >= -7) ? <Button
             text="Dismiss"
             onClick={this.onDismiss}
-          />
+          /> : null}
         </div>
       </div>
     )

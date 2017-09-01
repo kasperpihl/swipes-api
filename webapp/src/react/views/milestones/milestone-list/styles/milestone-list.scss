@@ -33,15 +33,17 @@
   &__empty-illustration {
     @include size(100%, 60%);
     @include flexContainer('column', center, center);
+    opacity: 0.8;
     margin-bottom: 12px;
   }
 
   &__empty-svg {
     @include size(auto, 100%);
+    max-width: 360px;
   }
 
   &__empty-title {
-    @include font(11px, $deepBlue-100, 18px, bold) 
+    @include font(11px, $deepBlue-100, 18px, bold)
     text-transform: uppercase;
     pointer-events: all;
   }
@@ -49,7 +51,7 @@
   &__empty-text {
     @include font(12px, $deepBlue-40, 18px);
     margin-top: 9px;
-    text-align: center; 
+    text-align: center;
     pointer-events: all;
   }
 }

@@ -28,10 +28,10 @@ class HOCSearchResults extends PureComponent {
     let emptyIcon = 'ESSearch';
     let emptyTitle = (<div className="search-results__empty-title">LOOKING FOR SOMETHING?</div>)
     let emptyText = (<div className="search-results__empty-text">Search for milestones, goals or <br /> discussions by keywords.</div>)
-    
+
     if (type === 'noresults') {
       emptyIcon = 'ESNoResults'
-      emptyTitle = (<div className="search-results__empty-title">Ups! Nothing found.</div>)
+      emptyTitle = (<div className="search-results__empty-title">Oops! Nothing found.</div>)
       emptyText = (<div className="search-results__empty-text">We even searched our pockets but no results.</div>)
     }
 
