@@ -723,12 +723,15 @@ const onboardingGetMiddlewares = [
       original_user_id: locals.user_id,
     };
   }),
-    // Creating onboarding content
-    // Milestone
+  // Creating onboarding content
+  // Milestone
   onboardingMilestoneData,
   milestonesCreate,
   milestonesInsert,
-    // Goal one
+  mapLocals(locals => ({
+    milestone_id: locals.milestone.id,
+  })),
+  // Goal one
   onboardingGoalThreeData,
   goalsCreate,
   goalsInsert,
@@ -786,6 +789,7 @@ const onboardingGetMiddlewares = [
     });
     const attachments = [{
       link: linkWithPermissions,
+      title: link.meta.title,
     }];
 
     return { attachments };
@@ -946,6 +950,7 @@ const onboardingGetMiddlewares = [
     });
     const attachments = [{
       link: linkWithPermissions,
+      title: link.meta.title,
     }];
 
     return { attachments };
@@ -1024,6 +1029,7 @@ const onboardingGetMiddlewares = [
     });
     const attachments = [{
       link: linkWithPermissions,
+      title: link.meta.title,
     }];
 
     return { attachments };
@@ -1054,33 +1060,5 @@ const onboardingGetMiddlewares = [
 ];
 
 export {
-  onboardingMilestoneData,
-  onboardingGoalOneData,
-  onboardingGoalTwoData,
-  onboardingGoalThreeData,
-  onboardingGoalFourData,
-  onboardingAttachmentPost_1,
-  onboardingPost_1,
-  onboardingCommentsPost_1_1,
-  onboardingPost_2,
-  onboardingCommentsPost_2_1,
-  onboardingCommentsPost_2_2,
-  onboardingPost_3,
-  onboardingAttachmentPost_4,
-  onboardingPost_4,
-  onboardingCommentsPost_4_1,
-  onboardingPost_5,
-  onboardingCommentsPost_5_1,
-  onboardingAttachmentPost_6,
-  onboardingPost_6,
-  onboardingCommentsPost_6_1,
-  onboardingCommentsPost_6_2,
-  onboardingCommentsPost_6_3,
-  onboardingCommentsPost_6_4,
-  onboardingCommentsPost_6_5,
-  onboardingPost_7,
-  onboardingPost_8,
-  onboardingCommentsPost_8_1,
-  onboardingNotificationPost,
   onboardingGetMiddlewares,
 };
