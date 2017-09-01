@@ -58,6 +58,7 @@ import {
 } from '../../utils';
 
 const SOFI_ID = 'USOFI';
+const MAX_LENGHT = 50;
 const onboardingMilestoneData = valLocals('onboardingMilestoneData', {
   organizationId: string.require(),
 }, (req, res, next, setLocals) => {
@@ -680,7 +681,7 @@ const onboardingNotificationPost = valLocals('onboardingNotificationPost', {
       },
       created_by: 'USOFI',
       event_type: 'post_created',
-      message: post.message,
+      message: post.message.substr(0, MAX_LENGHT),
       type: 'question',
     },
     seen_at: null,
