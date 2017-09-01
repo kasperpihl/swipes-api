@@ -18,12 +18,12 @@ class HOCAssigning extends PureComponent {
     this.setState({ users: this.getUsersFromAssignees(nextProps.users, nextProps.assignees) });
   }
   getUsersFromAssignees(users, assignees) {
-    const { myId, sofi } = this.props;
+    const { myId } = this.props;
     let filteredUsers = List(assignees);
     if (filteredUsers.contains(myId)) {
       filteredUsers = filteredUsers.filter(uId => uId !== myId).insert(0, myId);
     }
-    filteredUsers = filteredUsers.map(aId => aId === 'USOFI' ? sofi : users.get(aId));
+    filteredUsers = filteredUsers.map(aId => users.get(aId));
 
     return filteredUsers;
   }
@@ -56,7 +56,6 @@ function mapStateToProps(state, ownProps) {
   return {
     myId: state.getIn(['me', 'id']),
     users: state.get('users'),
-    sofi: state.getIn(['global', 'sofi']),
   }
 }
 

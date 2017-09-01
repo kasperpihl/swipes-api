@@ -5,9 +5,6 @@ export default class Users {
   getUser(user) {
     if (typeof user === 'string') {
       const state = this.store.getState();
-      if(user === 'USOFI') {
-        return state.getIn(['global', 'sofi']);
-      }
       const users = state.get('users');
       if (user === 'me') { return state.get('me'); }
       return users.get(user);

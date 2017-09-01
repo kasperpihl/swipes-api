@@ -27,9 +27,14 @@ export const getSorted = createSelector(
   (users) => users.sort(nameSort),
 );
 
+export const getAllButSofi = createSelector(
+  [getSorted],
+  (users) => users.filter(u => !u.get('is_sofi')),
+);
+
 export const getActive = createSelector(
   [getSorted],
-  (users) => users.filter(u => !u.get('disabled')),
+  (users) => users.filter(u => !u.get('disabled') && !u.get('is_sofi')),
 );
 export const getActiveArray = createSelector(
   [getActive],

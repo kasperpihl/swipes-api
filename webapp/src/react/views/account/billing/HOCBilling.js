@@ -4,6 +4,7 @@ import { StripeProvider, Elements } from 'react-stripe-elements';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
@@ -70,7 +71,7 @@ HOCBilling.propTypes = {};
 function mapStateToProps(state) {
   return {
     organization: state.getIn(['me', 'organizations', 0]),
-    users: state.get('users'),
+    users: cs.users.getAllButSofi(state),
   };
 }
 

@@ -21,6 +21,7 @@ const SOFI = {
   activated: true,
   created_at: new Date(),
   email: 'sofi@swipesapp.com',
+  is_sofi: true,
   id: 'USOFI',
   organizations: [
     'O5767IOYF',
