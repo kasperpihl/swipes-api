@@ -49,6 +49,7 @@ class MilestoneOverview extends PureComponent {
       <div className="milestone-overview__header">
         <HOCHeaderTitle
           title={title || m.get('title')}
+          titleIcon="Milestones"
           delegate={delegate}
           border={showLine}
         >

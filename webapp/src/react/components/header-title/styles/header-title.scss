@@ -33,6 +33,21 @@ $noSubH: 39px + $bottomPadding;
 .header-title {
   $b: &;
 
+  &__title-icon {
+    @include size(42px);
+    @include flexContainer('row', center, center) {
+      flex: none;
+    };
+    background-color: $deepBlue-10;
+    border-radius: 3px;
+    margin-right: 12px;
+  }
+
+  &__title-svg {
+    @include size(24px);
+    @include svg-color($deepBlue-100);
+  }
+
   &__title {
     @include size(100%, auto);
     @include font(24px, $deepBlue-100, 36px);

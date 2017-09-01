@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import * as a from 'actions';
 import { setupDelegate } from 'react-delegate';
+import Icon from 'Icon';
 
 import './styles/header-title.scss';
 
@@ -37,6 +38,19 @@ export default class HOCHeaderTitle extends Component {
       />
     );
   }
+  renderTitleIcon() {
+    const { titleIcon } = this.props;
+
+    if (!titleIcon) {
+      return undefined;
+    }
+
+    return (
+      <div className="header-title__title-icon">
+        <Icon icon={titleIcon} className="header-title__title-svg" />
+      </div>
+    )
+  }
   renderTitle() {
     const { title, subtitle, subtitleElement } = this.props;
 
@@ -57,7 +71,7 @@ export default class HOCHeaderTitle extends Component {
     return this.renderTitle();
   }
   render() {
-    const { children, subtitle, border } = this.props;
+    const { children, subtitle, border} = this.props;
     let className = 'header-title';
 
     if (!subtitle) {
@@ -70,6 +84,7 @@ export default class HOCHeaderTitle extends Component {
 
     return (
       <div className={className}>
+        {this.renderTitleIcon()}
         {this.renderContent()}
         <div className="header-title__actions">
           {children}
