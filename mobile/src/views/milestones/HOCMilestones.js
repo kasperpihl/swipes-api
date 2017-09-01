@@ -59,6 +59,7 @@ class HOCMilestones extends PureComponent {
 
     this.renderMilestoneItem = this.renderMilestoneItem.bind(this);
     this.handleModalState = this.handleModalState.bind(this);
+    this.onHeaderTap = this.onHeaderTap.bind(this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -81,6 +82,9 @@ class HOCMilestones extends PureComponent {
     if (index !== this.state.tabIndex) {
       this.setState({ tabIndex: index, hasLoaded: false });
     }
+  }
+  onHeaderTap() {
+    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
   onOpenMilestone(milestone) {
     const { navPush } = this.props;
@@ -158,6 +162,7 @@ class HOCMilestones extends PureComponent {
 
     return (
       <ImmutableVirtualizedList
+        ref="scrollView"
         style={styles.list}
         immutableData={milestones.get(tabs[tabIndex])}
         renderRow={this.renderMilestoneItem}

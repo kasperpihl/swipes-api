@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation } from "react-native";
 import ParsedText from "react-native-parsed-text";
+
 import { setupDelegate, attachmentIconForService } from "../../../swipes-core-js/classes/utils";
 import { timeAgo } from "../../../swipes-core-js/classes/time-utils";
 import Reactions from "../reactions/Reactions";
@@ -141,11 +142,13 @@ class CommentView extends PureComponent {
     );
   }
   renderText(matchingString, matches) {
+    console.log(matches)
     return matches[2];
   }
   renderMessage() {
     const { comment } = this.props;
-    const message = comment.get("message");
+    const name = msgGen.users.getFullName(comment.get("created_by"));
+    const message = `<!${comment.get("created_by")}|${name}> ` + comment.get("message");
 
     return (
       <View style={styles.messageWrapper}>
@@ -153,10 +156,10 @@ class CommentView extends PureComponent {
           style={styles.message}
           parse={[
             { type: "url", style: styles.url, onPress: this.onOpenUrl },
-            { pattern: /<!([A-Z0-9]*)\|(.*?)>/gi, style: styles.nameLabel, renderText: this.renderText},
+            { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText},
           ]}
         >
-          {message}
+         {message}
         </ParsedText>
       </View>
     );
@@ -215,7 +218,6 @@ class CommentView extends PureComponent {
       <View style={styles.container}>
         {this.renderProfilePic()}
         <View style={styles.content}>
-          {this.renderName()}
           {this.renderMessage()}
           {this.renderAttachments()}
           {this.renderSubLine()}

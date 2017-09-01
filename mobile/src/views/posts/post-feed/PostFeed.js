@@ -48,6 +48,7 @@ class PostFeed extends PureComponent {
     setupDelegate(this, 'onNewPost');
 
     this.renderFeedItem = this.renderFeedItem.bind(this);
+    this.onHeaderTap = this.onHeaderTap.bind(this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -66,10 +67,13 @@ class PostFeed extends PureComponent {
   componentWillUnmount() {
     clearTimeout(this.loadingTimeout);
   }
+  onHeaderTap() {
+    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
+  }
   renderHeader() {
 
     return (
-      <HOCHeader title="Discuss" />
+      <HOCHeader title="Discuss" delegate={this} />
     );
   }
   renderFeedItem(post) {
@@ -94,6 +98,7 @@ class PostFeed extends PureComponent {
 
     return (
       <ImmutableVirtualizedList
+        ref="scrollView"
         style={styles.list}
         immutableData={posts}
         renderRow={this.renderFeedItem}

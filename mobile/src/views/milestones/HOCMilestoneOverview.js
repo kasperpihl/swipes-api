@@ -58,6 +58,7 @@ class HOCMilestoneOverview extends PureComponent {
     this.onActionButton = this.onActionButton.bind(this);
     this.renderGoal = this.renderGoal.bind(this);
     this.handleModalState = this.handleModalState.bind(this);
+    this.onHeaderTap = this.onHeaderTap.bind(this);
   }
   componentDidMount() {
     this.renderActionButtons();
@@ -137,6 +138,9 @@ class HOCMilestoneOverview extends PureComponent {
       });
     }
   }
+  onHeaderTap() {
+    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
+  }
   handleModalState() {
     const { fabOpen } = this.state;
 
@@ -189,6 +193,7 @@ class HOCMilestoneOverview extends PureComponent {
 
     return (
       <ImmutableVirtualizedList
+        ref="scrollView"
         key={tab}
         style={styles.list}
         immutableData={goalList}

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import Tabs from '../tabs/Tabs';
@@ -57,7 +57,7 @@ class HOCHeader extends PureComponent {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    setupDelegate(this, 'onChangeTab');
+    setupDelegate(this, 'onChangeTab', 'onHeaderTap');
     this.onSelect = this.onSelect.bind(this);
   }
   componentWillMount() {
@@ -152,13 +152,17 @@ class HOCHeader extends PureComponent {
 
     return (
       <View onLayout={event => this.measureView(event)} style={[styles.container, { marginTop, paddingBottom, borderBottomWidth }]}>
-        <View style={[styles.topContainer, { opacity }]}>
-          <Text style={styles.title}>{this.props.title}</Text>
-          <View style={styles.children}>
-            {children}
+        <TouchableWithoutFeedback onPress={this.onHeaderTap}>
+          <View>
+            <View style={[styles.topContainer, { opacity }]}>
+              <Text style={styles.title}>{this.props.title}</Text>
+              <View style={styles.children}>
+                {children}
+              </View>
+            </View>
+            {this.renderSubtitle()}
           </View>
-        </View>
-        {this.renderSubtitle()}
+        </TouchableWithoutFeedback>
         <ScrollView style={[styles.bottomContainer, { opacity }]} horizontal showsHorizontalScrollIndicator={false} alwaysBounceHorizontal={false} >
           {this.renderTabs()}
         </ScrollView>

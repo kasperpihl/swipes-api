@@ -68,6 +68,7 @@ class HOCGoalList extends PureComponent {
 
     this.renderGoal = this.renderGoal.bind(this);
     this.handleModalState = this.handleModalState.bind(this);
+    this.onHeaderTap = this.onHeaderTap.bind(this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -104,6 +105,9 @@ class HOCGoalList extends PureComponent {
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {
       });
     }
+  }
+  onHeaderTap() {
+    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
   handleModalState() {
     const { fabOpen } = this.state;
@@ -161,6 +165,7 @@ class HOCGoalList extends PureComponent {
 
     return (
       <ImmutableListView
+        ref="scrollView"
         style={styles.list}
         immutableData={goals}
         renderRow={this.renderGoal}

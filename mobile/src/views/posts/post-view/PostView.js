@@ -157,6 +157,8 @@ class PostView extends PureComponent {
       hasLoaded: false,
     };
 
+    this.onHeaderTap = this.onHeaderTap.bind(this);
+
     setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext', 'onAttachmentClick');
   }
   componentDidMount() {
@@ -190,6 +192,10 @@ class PostView extends PureComponent {
     this.scrollTimer = setTimeout(() => {
       this.refs.scrollView.scrollToEnd({animated: true});
     }, 1000);
+  }
+  onHeaderTap() {
+    clearTimeout(this.scrollTimer);
+    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
   renderLoader() {
     return (
@@ -282,7 +288,7 @@ class PostView extends PureComponent {
   }
   renderPostHeader() {
     return (
-      <RippleButton onPress={this.handleOpenPost}>
+      <RippleButton onPress={this.onHeaderTap}>
         <View style={styles.header}>
           {this.renderProfilePic()}
           <View style={styles.headerSide}>
