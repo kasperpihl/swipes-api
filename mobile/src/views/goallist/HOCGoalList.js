@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, ActivityIndicator, Modal, TextInput } from 'react-native';
-import ImmutableVirtualizedList from 'react-native-immutable-list-view';
+import { ImmutableListView } from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import Icon from '../../components/icons/Icon';
 import RippleButton from '../../components/ripple-button/RippleButton';
@@ -25,13 +25,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  loader: {
-  },
   sectionWrapper: {
+    alignSelf: 'stretch',
     height: 42,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
+    backgroundColor: 'white',
   },
   sectionTitle: {
     fontSize: 12,
@@ -124,19 +124,13 @@ class HOCGoalList extends PureComponent {
     );
   }
   renderSectionHeader(v1, section) {
-
-    if (section === 'none') {
-      return (
-        <View style={styles.sectionWrapper}>
-          <Text style={styles.sectionTitle}>No milestone</Text>
-        </View>
-      );
-    }
+    let sectionTitle = section === 'none' ? 'No milestone' : msgGen.milestones.getName(section);
+    let sectionIcon = section === 'none' ? 'MiniNoMilestone' : 'MiniMilestone';
 
     return (
       <View style={styles.sectionWrapper}>
-        <Icon name="MiniGoal" fill={colors.deepBlue100} width="18" height="18" />
-        <Text style={[styles.sectionTitle, { paddingLeft: 6 }]}>{msgGen.milestones.getName(section)}</Text>
+        <Icon name={sectionIcon} fill={colors.deepBlue100} width="18" height="18" />
+        <Text style={[styles.sectionTitle, { paddingLeft: 6 }]}>{sectionTitle}</Text>
       </View>
     )
   }
@@ -166,7 +160,7 @@ class HOCGoalList extends PureComponent {
     }
 
     return (
-      <ImmutableVirtualizedList
+      <ImmutableListView
         style={styles.list}
         immutableData={goals}
         renderRow={this.renderGoal}
