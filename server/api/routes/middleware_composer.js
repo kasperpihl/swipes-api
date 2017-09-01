@@ -12,7 +12,7 @@ class MiddlewareComposer {
     this.stack = args;
     this.res = {};
     this.res.locals = Object.assign({}, req);
-    this.counter = 0;
+    // this.counter = 0;
   }
   next(err) {
     const {
@@ -22,7 +22,7 @@ class MiddlewareComposer {
       stack,
     } = this;
 
-    console.log(this.counter++);
+    // console.log(this.counter++);
 
     const boundNext = next.bind(this);
     let fn = stack.shift();
