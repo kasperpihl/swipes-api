@@ -31,6 +31,11 @@ class HOCOnboarding extends PureComponent {
         id: 'TakeAction',
         title: 'Goals',
       });
+    } else if(item.get('id') === 'open-swipes-intro') {
+      openSecondary({
+        id: 'SwipesIntro',
+        title: 'Swipes Intro',
+      });
     } else if(item.get('id') === 'invite-team') {
       openSecondary({
         id: 'Organization',

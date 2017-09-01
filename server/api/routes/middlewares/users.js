@@ -46,6 +46,7 @@ const defaultSettings = {
     order: [
       'create-account',
       'personalize-swipes',
+      'open-swipes-intro',
       'watch-introduction-video',
       'invite-team',
     ],
