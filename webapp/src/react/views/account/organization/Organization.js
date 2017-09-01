@@ -106,6 +106,7 @@ class Organization extends PureComponent {
         <Button
           onClick={this.onInvite}
           text="Invite"
+          className="organization__cta"
           {...getLoading('invite')}
           primary
         />

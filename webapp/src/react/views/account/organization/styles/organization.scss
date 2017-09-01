@@ -72,7 +72,7 @@
   }
 
   &__input-wrapper {
-    @include size(auto, 48px);
+    @include size(100%, 48px);
     @include flexContainer('row');
     border: 1px solid $deepBlue-20;
     border-radius: 3px;
@@ -83,11 +83,11 @@
     padding: 0 18px;
 
     &:first-child {
-      @include size(240px, 100%);
+      @include size(60%, 100%);
     }
 
     &:last-child {
-      @include size(289px, 100%);
+      @include size(100%);
 
       &:after {
         content: '';
@@ -98,5 +98,9 @@
         background-color: $deepBlue-20;
       }
     }
+  }
+
+  &__cta {
+    margin-left: 15px;
   }
 }
