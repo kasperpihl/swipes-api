@@ -72,10 +72,8 @@ class MilestoneOverview extends PureComponent {
     const { groupedGoals } = this.props;
     const numberOfAllGoals = this.getNumberOfAllGoals();
 
-    console.log(numberOfAllGoals)
-    
     if (group === 'Current' && !numberOfAllGoals) {
-    
+
 
       return (
         <div className="milestone-overview__empty-state milestone-overview__empty-state--current" style={{ opacity: this.state.emptyStateOpacity }}>
@@ -96,7 +94,7 @@ class MilestoneOverview extends PureComponent {
       return (
         <div className="milestone-overview__empty-state milestone-overview__empty-state--later">
           <div className="milestone-overview__empty-title">
-            Set for later
+            Set for later (coming soon)
           </div>
           <div className="milestone-overview__empty-text">
             Move goals that need to be done later <br />  from this week into here.

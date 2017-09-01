@@ -50,7 +50,7 @@ class MilestoneList extends PureComponent {
           the hall of fame
         </div>
         <div className="milestone-list__empty-text">
-          Seems like your team is sweating on getting there <br />
+          Seems like your team is sweating on getting their <br />
           first milestone completed. <br />
           All completed milestones can be found here.
         </div>

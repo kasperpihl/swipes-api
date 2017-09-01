@@ -48,14 +48,16 @@
     @include size(100%, 60%);
     @include flexContainer('column', center, center);
     margin-bottom: 12px;
+    opacity: 0.8;
   }
 
   &__empty-svg {
     @include size(auto, 100%);
+    max-width: 360px;
   }
 
   &__empty-title {
-    @include font(11px, $deepBlue-100, 18px, bold) 
+    @include font(11px, $deepBlue-100, 18px, bold)
     text-transform: uppercase;
     pointer-events: all;
   }
@@ -64,7 +66,7 @@
     @include font(12px, $deepBlue-40, 18px);
     margin-top: 9px;
     margin-bottom: 18px;
-    text-align: center; 
+    text-align: center;
     pointer-events: all;
   }
 }
