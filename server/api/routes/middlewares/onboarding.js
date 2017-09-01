@@ -781,7 +781,7 @@ const onboardingGetMiddlewares = [
   postsInsertSingle,
   mapLocals((locals) => {
     return {
-      attachments: null,
+      attachments: [],
     };
   }),
   // Create comments for post
@@ -947,7 +947,7 @@ const onboardingGetMiddlewares = [
   postsInsertSingle,
   mapLocals((locals) => {
     return {
-      attachments: null,
+      attachments: [],
     };
   }),
   onboardingCommentsPost_4_1,
@@ -1031,7 +1031,7 @@ const onboardingGetMiddlewares = [
   postsInsertSingle,
   mapLocals((locals) => {
     return {
-      attachments: null,
+      attachments: [],
     };
   }),
   // Create comments for post
