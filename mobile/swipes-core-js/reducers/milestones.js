@@ -41,6 +41,13 @@ export default function milestonesReducer(state = initialState, action) {
       }
       return state;
     }
+    case 'milestones.delete':
+    case 'milestone_deleted': {
+      if (!state.get(payload.milestone_id)) {
+        return state;
+      }
+      return state.delete(payload.milestone_id);
+    }
     case 'milestones.create':
     case 'milestone_created': {
       return state.set(payload.milestone.id, fromJS(payload.milestone));

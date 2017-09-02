@@ -54,6 +54,17 @@ authed.all('/milestones.create',
     milestone: object.require(),
   }));
 
+// T_TODO: here is the specs
+// event: milestone_deleted
+authed.all('/milestones.delete',
+  valBody({
+    milestone_id: string.require(),
+  }),
+  valResponseAndSend({
+    milestone_id: string.require(),
+    goal_ids: array.of(string),
+  }));
+
 authed.all('/milestones.close',
   valBody({
     milestone_id: string.require(),

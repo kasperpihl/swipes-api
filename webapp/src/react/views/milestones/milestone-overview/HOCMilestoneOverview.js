@@ -103,7 +103,29 @@ class HOCMilestoneOverview extends PureComponent {
       },
     });
   }
+  onDelete(options) {
+    const { milestone, confirm, deleteMilestone } = this.props;
+    confirm(Object.assign({}, options, {
+      title: 'Delete milestone',
+      message: 'This will delete this milestone and all goals in it. Are you sure?',
+    }), (i) => {
+      if (i === 1) {
+        this.setLoading('dots');
+        deleteMilestone(milestone.get('id')).then((res) => {
+          if(res.ok){
+            window.analytics.sendEvent('Milestone deleted', {});
+          }
+          if (!res || !res.ok) {
+            this.clearLoading('dots', '!Something went wrong');
+          }
+        });
+      }
+    });
+  }
   onInfoTabAction(i, options) {
+    if(i === 1) {
+      return this.onDelete(options);
+    }
     const {
       closeMilestone,
       openMilestone,
@@ -158,6 +180,7 @@ class HOCMilestoneOverview extends PureComponent {
     return {
       actions: [
         { title: achieveLbl },
+        { title: 'Delete milestone', icon: 'Delete', danger: true },
       ],
       info: [
         { title: 'Created', text: createdLbl },
@@ -200,6 +223,7 @@ export default navWrapper(connect(mapStateToProps, {
   inputMenu: a.menus.input,
   closeMilestone: ca.milestones.close,
   openMilestone: ca.milestones.open,
+  deleteMilestone: ca.milestones.deleteMilestone,
   renameMilestone: ca.milestones.rename,
   confirm: a.menus.confirm,
 })(HOCMilestoneOverview));

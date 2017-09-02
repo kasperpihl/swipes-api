@@ -167,6 +167,10 @@ class MilestoneOverview extends PureComponent {
     );
   }
   render() {
+    const { milestone } = this.props;
+    if (!milestone) {
+      return null;
+    }
     return (
       <SWView header={this.renderHeader()} onScroll={this.onScroll}>
         <div className="milestone-overview">

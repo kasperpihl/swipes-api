@@ -160,6 +160,17 @@ export default function goalsReducer(state = initialState, action) {
     case 'milestone_goal_added': {
       return state.setIn([payload.goal_id, 'milestone_id'], payload.milestone_id);
     }
+    case 'milestones.delete':
+    case 'milestone_deleted': {
+      if(payload.goal_ids) {
+        payload.goal_ids.forEach(gId => {
+          if (state.get(gId)) {
+            state = state.delete(gId);
+          }
+        });
+      }
+      return state;
+    }
     case 'me.updateSettings':
     case 'settings_updated': {
       const stars = payload.settings.starred_goals;

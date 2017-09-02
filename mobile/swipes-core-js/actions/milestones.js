@@ -50,6 +50,11 @@ export const rename = valAction('milestones.rename', [
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 })));
 
+export const deleteMilestone = valAction('milestones.delete', [
+  string.require(),
+], (milestoneId) => (d, getState) => d(a.api.request('milestones.delete', {
+  milestone_id: milestoneId
+})));
 
 export const open = valAction('milestones.open', [
   string.require(),

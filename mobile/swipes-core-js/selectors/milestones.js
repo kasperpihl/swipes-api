@@ -9,8 +9,12 @@ const getMilestones = (state) => state.get('milestones');
 
 export const getGoals = createSelector(
   [ getMilestone, getAllGoals ],
-  (milestone, goals) => milestone.get('goal_order')
-    .map(gId => goals.get(gId)),
+  (milestone, goals) => {
+    if(!milestone) {
+      return List();
+    }
+    return milestone.get('goal_order').map(gId => goals.get(gId));
+  }
 )
 
 export const getGroupedGoals = createSelector(
