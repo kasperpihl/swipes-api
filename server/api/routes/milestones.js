@@ -22,6 +22,8 @@ import {
   milestonesRenameQueueMessage,
   milestonesGoalsReorder,
   milestonesGoalsReorderQueueMessage,
+  milestonesDelete,
+  milestonesDeleteQueueMessage,
 } from './middlewares/milestones';
 import {
   goalsAddMilestone,
@@ -54,12 +56,13 @@ authed.all('/milestones.create',
     milestone: object.require(),
   }));
 
-// T_TODO: here is the specs
-// event: milestone_deleted
 authed.all('/milestones.delete',
   valBody({
     milestone_id: string.require(),
   }),
+  milestonesDelete,
+  milestonesDeleteQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     milestone_id: string.require(),
     goal_ids: array.of(string),

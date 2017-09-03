@@ -142,6 +142,34 @@ const dbMilestonesGoalsReorder = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbMilestonesDelete = funcWrap([
+  object.as({
+    milestone_id: string.require(),
+  }).require(),
+], (err, { milestone_id }) => {
+  if (err) {
+    throw new SwipesError(`dbMilestonesDelete: ${err}`);
+  }
+
+  const q =
+    r.table('milestones')
+      .get(milestone_id)
+      .update({
+        deleted: true,
+        updated_at: r.now(),
+      }, {
+        returnChanges: 'always',
+      }).do((result) => {
+        return r.table('goals').getAll(r.args(result('changes').nth(0)('new_val')('goal_order').default([]))).update({
+          archived: true,
+          updated_at: r.now(),
+        }).do(() => {
+          return result('changes').nth(0)('new_val')('goal_order').default([]);
+        });
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbMilestonesInsertSingle,
@@ -150,4 +178,5 @@ export {
   dbMilestonesRemoveGoal,
   dbMilestonesMigrateIncompleteGoals,
   dbMilestonesGoalsReorder,
+  dbMilestonesDelete,
 };
