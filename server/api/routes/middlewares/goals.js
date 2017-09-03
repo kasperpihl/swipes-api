@@ -3,7 +3,6 @@ import {
   string,
   object,
   array,
-  date,
 } from 'valjs';
 import {
   dbGoalsInsertSingle,

@@ -1,18 +1,5 @@
 import dbGetSingleMilestone from '../db_utils/milestones';
-import {
-  getHistoryIndex,
-  createNotificationTarget,
-} from '../utils';
-import {
-  SwipesError,
-} from '../swipes-error';
 
-const notificationMeta = (milestone) => {
-  return {
-    type: 'milestone',
-    title: milestone.title,
-  };
-};
 const milestonesGetSingle = (req, res, next) => {
   const {
     milestone_id,
