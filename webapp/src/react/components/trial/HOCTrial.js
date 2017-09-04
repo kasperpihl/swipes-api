@@ -71,7 +71,7 @@ class HOCTrial extends PureComponent {
     const isAdmin = msgGen.me.isAdmin();
     const shouldShowPopup = this.shouldShowPopup();
 
-    if (!isAdmin || shouldShowPopup) {
+    if(!isAdmin || shouldShowPopup) {
       return undefined;
     }
 
@@ -111,8 +111,7 @@ class HOCTrial extends PureComponent {
     return (
       <div className="trial__popup">
         <div className="trial-popup">
-          <div className="trial-popup__pretitle">Dear {name},</div>
-          <div className="trial-popup__title">Your free trial has expired</div>
+          <div className="trial-popup__title">Dear {name}, your free trial has expired.</div>
           <div className="trial-popup__paragraph">Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</div>
           <div className="trial-popup__paragraph">⭐&nbsp;&nbsp;Your progress is saved. {actionLbl}</div>
           <div className="trial-popup__actions">

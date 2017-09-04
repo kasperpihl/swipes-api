@@ -58,16 +58,17 @@
 
   #{$b}__pretitle {
     @include size(100%, auto);
-    @include font(15px, $deepBlue-50, 18px, 500); 
+    @include font(17px, $deepBlue-50, 20px, 500); 
     padding: 15px 0;
+    padding-top: 30px;
   }
 
   #{$b}__title {
     @include size(100%, auto);
-    @include font(18px, $deepBlue-80, 21px);
+    @include font(16px, $deepBlue-80, 21px);
     font-family: 'Aktiv-Grotesk';
-    padding-bottom: 30px;
-    text-align: center;
+    padding: 30px 0;
+    padding-top: 45px;
   }
 
   #{$b}__paragraph {
