@@ -146,15 +146,17 @@ class HOCMilestoneOverview extends PureComponent {
   getInfoTabProps() {
     const { milestone } = this.props;
     let achieveLbl = 'Mark milestone as achieved';
+    let achieveIcon = 'MilestoneAchieve';
     let complete = true;
     if (milestone.get('closed_at')) {
       complete = false,
+      achieveIcon = 'MiniMilestone';
       achieveLbl = 'Move milestone to current';
     }
     const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`
     return {
       actions: [
-        { title: achieveLbl, complete },
+        { title: achieveLbl, complete, icon: achieveIcon },
         { title: 'Delete milestone', icon: 'Delete', danger: true },
       ],
       info: [
