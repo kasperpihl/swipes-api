@@ -125,7 +125,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
       }
     },
     props: {
-      search: 'Search for name or email',
+      search: 'Search for name',
       delegate,
       initialTabIndex,
       ...options,

@@ -47,6 +47,9 @@ export default class NotificationsGenerator {
     }
     return userId;
   }
+  parseMessage(message) {
+    return message.replace(/<![A-Z0-9]*\|(.*?)>/gi, (t1, name) => name);
+  }
   getStyledTextForNotification(n, boldStyle) {
     const meta = n.get('meta');
     const { users, posts } = this.parent;
@@ -64,12 +67,12 @@ export default class NotificationsGenerator {
         text.push(` ${posts.getPostTypeTitle(meta.get('type'))}`);
         text.push(` and tagged `);
         text.push(boldText('users', 'you', boldStyle));
-        text.push(`: "${meta.get('message')}"'`);
+        text.push(`: "${this.parseMessage(meta.get('message'))}"'`);
         break;
       }
       case 'post_reaction_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
-        text.push(` liked your ${meta.get('type')}: "${meta.get('message')}"`);
+        text.push(` liked your ${meta.get('type')}: "${this.parseMessage(meta.get('message'))}"`);
         break;
       }
       case 'post_comment_added': {
@@ -77,12 +80,12 @@ export default class NotificationsGenerator {
         const byMe = meta.get('created_by') === users.getUser('me');
         const preFix = byMe ? 'your ' : posts.getPrefixForType(meta.get('type'));
         const followString = byMe ? '' : ' you follow';
-        text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${meta.get('message')}"`);
+        text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${this.parseMessage(meta.get('message'))}"`);
         break;
       }
       case 'post_comment_reaction_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
-        text.push(` liked your comment: "${meta.get('message')}"`);
+        text.push(` liked your comment: "${this.parseMessage(meta.get('message'))}"`);
         break;
       }
       case 'post_comment_mention': {
