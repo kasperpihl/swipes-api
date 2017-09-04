@@ -49,6 +49,10 @@ class InfoTab extends PureComponent {
         iconClass += ' info-tab__action-icon--danger';
       }
 
+      if (act.complete) {
+        iconClass += ' info-tab__action-icon--complete';
+      }
+
       return (
         <div className="info-tab__action" key={i} onClick={this.onActionClickCached(i)}>
           <div className="info-tab__action-icon-wrapper">
@@ -103,7 +107,7 @@ class InfoTab extends PureComponent {
     return (
       <div className="info-tab__about">
         <div className="info-tab__about-header">
-          {/* <Icon icon="Close" className="info-tab__about-icon" /> */}
+          <Icon icon="Question" className="info-tab__about-icon" />
           <div className="info-tab__about-title">{about.title}</div>
         </div>
         <TextParser className="info-tab__about-text">

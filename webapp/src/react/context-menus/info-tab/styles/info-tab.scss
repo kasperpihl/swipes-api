@@ -51,6 +51,10 @@
     &#{&}--danger {
       @include svg-color($red-80)
     }
+
+    &#{&}--danger {
+      @include svg-color($green-color)
+    }
   }
 
   &__action-title {
@@ -125,11 +129,12 @@
 
   &__about-title {
     @include font(15px, white, 24px, 500);
+    padding-left: 6px;
   }
 
   &__about-icon {
     @include size(24px);
-    @include svg-color(white)
+    @include svg-color(white);
   }
 
   &__about-text {

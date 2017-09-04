@@ -73,6 +73,7 @@ import Linux from './svgs/linux.svg';
 import LogoLoader from './svgs/logo-loader.svg';
 import Logout from './svgs/logout.svg';
 import Messages from './svgs/messages.svg';
+import MilestoneAchieved from './svgs/milestone-achieved.svg';
 import Milestones from './svgs/milestones.svg';
 import MilestoneProgress from './svgs/milestone-progress.svg';
 import MiniGoal from './svgs/mini-goal.svg';
@@ -112,6 +113,7 @@ import WindowsMinimize from './svgs/windows-minimize.svg';
 import WindowsUnmaximize from './svgs/windows-unmaximize.svg';
 import MessageColored from './svgs/message-colored.svg';
 import AnnouncementColored from './svgs/announcement-colored.svg';
+import Question from './svgs/question.svg';
 import QuestionColored from './svgs/question-colored.svg';
 import InformationColored from './svgs/information-colored.svg';
 
@@ -221,6 +223,7 @@ export {
   LogoLoader,
   Logout,
   Messages,
+  MilestoneAchieved,
   MilestoneProgress,
   Milestones,
   MiniGoal,
@@ -260,6 +263,7 @@ export {
   WindowsUnmaximize,
   MessageColored,
   AnnouncementColored,
+  Question,
   QuestionColored,
   InformationColored,
 
