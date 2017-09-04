@@ -135,7 +135,7 @@ class HOCSideNote extends PureComponent {
       ],
       about: {
         title: 'What is a note',
-        text: 'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text blue and the options will appear.',
+        text: 'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text with your mouse and the options will appear.',
       },
     }
   }
