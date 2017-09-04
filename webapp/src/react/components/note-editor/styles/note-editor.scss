@@ -35,10 +35,6 @@
   padding: 45px 0;
   padding-top: 21px;
 
-  &::selection {
-    background-color: red;
-  }
-
   & h1 {
     @include font(24px, $deepBlue-100, 42px, 400);
   }
