@@ -19,7 +19,9 @@ class HOCNoMilestoneOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = { limit: 20 };
+    const { savedState } = props;
+    const initialLimit = (savedState && savedState.get('limit')) || 25;
+    this.state = { limit: initialLimit };
     this.lastEnd = 0;
     // setupLoading(this);
   }
@@ -29,14 +31,14 @@ class HOCNoMilestoneOverview extends PureComponent {
     this._scrollTop = e.target.scrollTop;
     if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
       if (this.lastEnd < e.target.scrollTop + DISTANCE) {
-        this.setState({ limit: this.state.limit + 20 });
+        this.setState({ limit: this.state.limit + 25 });
         this.lastEnd = e.target.scrollTop;
       }
     }
   }
   onGoalClick(goalId) {
     const { navPush } = this.props;
-
+    this.saveState();
     window.analytics.sendEvent('Goal opened', {});
     navPush({
       id: 'GoalOverview',
@@ -48,8 +50,10 @@ class HOCNoMilestoneOverview extends PureComponent {
   }
   saveState() {
     const { saveState } = this.props;
+    const { limit } = this.state;
     const savedState = {
       scrollTop: this._scrollTop,
+      limit,
     }; // state if this gets reopened
     saveState(savedState);
   }
