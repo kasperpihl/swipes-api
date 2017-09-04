@@ -38,7 +38,7 @@
   }
 
   &__indicator-label {
-    @include font(15px, white, 300);
+    @include font(15px, white, 400);
 
     &:hover{
       text-decoration: underline;
@@ -70,9 +70,12 @@
   }
 
   #{$b}__actions {
-    @include size(70%, 100%);
-    @include flexContainer('row', around, center);
-    margin-left: 30%;
+    @include size(100%);
+    @include flexContainer('row', right, center);
+
+    & a.g-button:not(:last-child) {
+      margin-right: 20px;
+    }
   }
 }
 
@@ -85,11 +88,7 @@
   &__indicator {
 
     &#{&}--expired {
-      background: red;
-
-      .topbar__trial--label {
-        color: blue;
-      }
+      background: $red-100;
     }
   }
 }

@@ -89,7 +89,7 @@ $contHeight: 66px;
   &__label {
     @include size(100%, auto);
     @include font(12px, $deepBlue-50, 15px);
-    @include truncateString();
+    @include clampString(1);
     transition: .25s ease;
   }
 
