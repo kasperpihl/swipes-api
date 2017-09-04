@@ -59,19 +59,19 @@ class MilestoneList extends PureComponent {
   }
   renderList() {
     const { milestones, delegate, tabIndex, limit } = this.props;
-    let firstMilestones = tabIndex === 0 ? [<HOCNoMilestone key="no" />] : [];
+    let lastMilestones = tabIndex === 0 ? [<HOCNoMilestone key="no" />] : [];
 
     if (tabIndex === 1 && milestones && milestones.size < 1) {
       return this.renderEmptyState();
     }
-    let i = firstMilestones.length;
-    return firstMilestones.concat(milestones.map(m => (i++ <= limit) ? (
+    let i = lastMilestones.length;
+    return milestones.map(m => (i++ <= limit) ? (
       <HOCMilestoneItem
         key={m.get('id')}
         milestone={m}
         delegate={delegate}
       />
-    ) : null).toArray());
+    ) : null).toArray().concat(lastMilestones);
   }
   renderAddMilestone() {
     const { delegate, tabIndex } = this.props;
@@ -101,8 +101,8 @@ class MilestoneList extends PureComponent {
         initialScroll={initialScroll}
       >
         <div className={className}>
-          {this.renderList()}
           {this.renderAddMilestone()}
+          {this.renderList()}
         </div>
       </SWView>
     );

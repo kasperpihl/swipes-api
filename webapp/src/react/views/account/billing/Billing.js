@@ -40,7 +40,8 @@ class Billing extends PureComponent {
   }
   getShowPrice() {
     const { billingStatus, users } = this.props;
-    const numberOfUsers = users.filter(u => !u.get('disabled')).size;
+    const numberOfUsers = users.filter(u => !u.get('disabled') && !u.get('pending')).size;
+
     let price = 9;
     let months = 1;
     let postfix = ' monthly';
@@ -53,7 +54,7 @@ class Billing extends PureComponent {
   }
   getPrice() {
     const { billingStatus, users } = this.props;
-    const numberOfUsers = users.filter(u => !u.get('disabled')).size;
+    const numberOfUsers = users.filter(u => !u.get('disabled') && !u.get('pending')).size;
     let price = 9;
     let months = 1;
     if (billingStatus === 'yearly') {
@@ -173,7 +174,7 @@ class Billing extends PureComponent {
   }
   render() {
     const { organization, users } = this.props;
-    const numberOfUsers = users.filter(u => !u.get('disabled')).size;
+    const numberOfUsers = users.filter(u => !u.get('disabled') && !u.get('pending')).size;
     return (
       <SWView
         header={this.renderHeader()}

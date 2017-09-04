@@ -40,7 +40,7 @@ export const getGrouped = createSelector(
       } else if (a.get('closed_at') || b.get('closed_at')) {
         return a.get('closed_at') ? 1 : -1;
       }
-      return a.get('created_at').localeCompare(b.get('created_at'));
+      return b.get('created_at').localeCompare(a.get('created_at'));
     }).groupBy(m => m.get('closed_at') ? 'Achieved' : 'Current Milestones');
     gm = gm.set('Achieved', gm.get('Achieved') || List());
     gm = gm.set('Current Milestones', gm.get('Current Milestones') || List());
