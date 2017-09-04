@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 // import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
+import { setupDelegate } from 'react-delegate';
 import * as cs from 'swipes-core-js/selectors';
 import { navForContext } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
@@ -16,12 +17,13 @@ class HOCSearchResults extends PureComponent {
   constructor(props) {
     super(props);
     // setupLoading(this);
+    setupDelegate(this, 'willOpenResult');
   }
   componentDidMount() {
   }
   onClick(id, res) {
     const { openSecondary } = this.props;
-
+    this.willOpenResult(id);
     openSecondary(navForContext(id));
   }
   renderEmptyState(type) {
