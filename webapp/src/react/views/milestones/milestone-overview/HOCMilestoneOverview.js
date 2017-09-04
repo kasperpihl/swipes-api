@@ -42,33 +42,6 @@ class HOCMilestoneOverview extends PureComponent {
       this.setState({ showLine: newShowLine })
     }
   }
-  onContext(e) {
-    const {
-      closeMilestone,
-      openMilestone,
-      contextMenu,
-      confirm,
-      milestone,
-    } = this.props;
-    const options = this.getOptionsForE(e);
-    const delegate = {
-      onItemAction: (item, i) => {
-
-      },
-    };
-    const items = [{ id: 'close', title: 'Close milestone' }];
-    if (milestone.get('closed_at')) {
-      items[0] = { id: 'open', title: 'Open milestone' };
-    }
-    contextMenu({
-      options,
-      component: TabMenu,
-      props: {
-        items,
-        delegate,
-      },
-    });
-  }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
     options.positionY = 0;
@@ -173,13 +146,15 @@ class HOCMilestoneOverview extends PureComponent {
   getInfoTabProps() {
     const { milestone } = this.props;
     let achieveLbl = 'Mark milestone as achieved';
+    let complete = true;
     if (milestone.get('closed_at')) {
+      complete = false,
       achieveLbl = 'Move milestone to current';
     }
     const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`
     return {
       actions: [
-        { title: achieveLbl },
+        { title: achieveLbl, complete },
         { title: 'Delete milestone', icon: 'Delete', danger: true },
       ],
       info: [
