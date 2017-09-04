@@ -12,7 +12,7 @@ $contHeight: 66px;
   $b: &;
   $flexIgnoreList: '#{$b}__indicator', '#{$b}__assigning';
 
-  @include size(100%, $contHeight);
+  @include size(100%, auto);
   @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
   border-bottom: 1px solid $deepBlue-6;
   padding: 0 6px;
@@ -74,8 +74,8 @@ $contHeight: 66px;
   &__title {
     @include size(100%, auto);
     @include font(15px, $deepBlue-90, 24px);
-    @include clampString(1);
     transition: .2s ease;
+    padding: 20px 0;
     padding-left: 12px;
   }
 

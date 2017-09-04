@@ -101,6 +101,7 @@ class HOCPreviewNote extends PureComponent {
     return (
       <HOCHeader
         title={noteTitle}
+        subtitle="Read only"
       />
     );
   }

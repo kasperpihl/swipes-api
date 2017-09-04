@@ -152,10 +152,10 @@ class GoalOverview extends PureComponent {
             <Icon icon="ESArrow" className="goal-overview__empty-arrow-svg" />
           </div>
           <div className="goal-overview__empty-title">
-            Add a new step
+            Add steps for how to reach this goal.
           </div>
           <div className="goal-overview__empty-text">
-            Add new steps for everything that needs <br /> to be done.
+              Make a step for every action and <br /> assign it.
           </div>
         </div>
       )
