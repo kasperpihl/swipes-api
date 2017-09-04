@@ -71,11 +71,7 @@ class HOCTrial extends PureComponent {
     const isAdmin = msgGen.me.isAdmin();
     const shouldShowPopup = this.shouldShowPopup();
 
-    // if(!isAdmin || shouldShowPopup) {
-    //   return undefined;
-    // }
-
-    if(false) {
+    if (!isAdmin || shouldShowPopup) {
       return undefined;
     }
 
@@ -100,11 +96,7 @@ class HOCTrial extends PureComponent {
     const { me } = this.props;
     const show = this.shouldShowPopup();
 
-    // if(!show) {
-    //   return undefined;
-    // }
-
-    if(false) {
+    if(!show) {
       return undefined;
     }
 
@@ -143,9 +135,9 @@ class HOCTrial extends PureComponent {
   render() {
     const { subscribed } = this.props;
 
-    // if (subscribed) {
-    //   return null;
-    // }
+    if (subscribed) {
+      return null;
+    }
 
     return (
       <div className="trial">
