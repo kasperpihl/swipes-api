@@ -36,6 +36,11 @@ class CommentInput extends PureComponent {
       this.forceToEnd = false;
     }
   }
+  onAttachmentClose(i) {
+    this.setState({
+      attachments: this.state.attachments.delete(i),
+    });
+  }
   onAddedAttachment(att) {
     let { attachments } = this.state;
     attachments = attachments.push(att);
@@ -69,10 +74,33 @@ class CommentInput extends PureComponent {
     const aNode = `<a contenteditable="false" href="#" data-server="<!${item.id}|${firstName}>" style="display:inline-block;">${firstName}</a>`;
     message = message.substr(0, index + atIndex) + aNode + message.substr(index + atIndex + testStr.length);
     if(message.substr(-4) === '</a>'){
-      message = message.substr(0, message.length) + '<br />';
+      message = message.substr(0, message.length) + '<br/>';
     }
     this.forceToEnd = true;
     this.setState({ message });
+  }
+  onPaste(e) {
+    e.preventDefault();
+    var text = e.clipboardData.getData("text/plain");
+    text = text.replace(/<br\s*\/?>/ig, "\r\n");
+    var tempDiv = document.createElement("DIV");
+    tempDiv.innerHTML = text;
+    var entityMap = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+      '/': '&#x2F;',
+      '`': '&#x60;',
+      '=': '&#x3D;'
+    };
+    text = text.replace(/[&<>"'`=\/]/g, function (s) {
+      return entityMap[s];
+    });
+    text = tempDiv.innerHTML.replace("\r\n", '<br/>');
+
+    document.execCommand("insertHTML", false, text);
   }
   handleTextareaFocus() {
     const { textarea } = this.refs;
@@ -133,7 +161,7 @@ class CommentInput extends PureComponent {
     return (
       <div className="comment-input__attachments">
         {attachments.map((att, i) => (
-          <HOCAttachmentItem attachment={att} key={i} />
+          <HOCAttachmentItem attachment={att} key={i} index={i} delegate={this} />
         ))}
       </div>
     )
@@ -164,7 +192,11 @@ class CommentInput extends PureComponent {
     const placeholder = 'Write a comment';
 
     return (
-      <div className="comment-input__textarea-wrapper">
+      <div
+        className="comment-input__textarea-wrapper"
+        onPaste={this.onPaste}
+        tabIndex="1"
+      >
         <AutoCompleteInput
           className="comment-input__textarea"
           html={message}
@@ -173,7 +205,11 @@ class CommentInput extends PureComponent {
           onChange={this.onCommentChange}
           onKeyDown={this.handleKeyDown}
         />
-        <div className={`comment-input__placeholder ${message.length ? '' : 'comment-input__placeholder--shown'}`}>
+        <div
+          className={`comment-input__placeholder ${message.length ? '' : 'comment-input__placeholder--shown'}`}
+          onPaste={this.onPaste}
+          tabIndex="1"
+        >
           {placeholder}
         </div>
         <HOCAttachButton

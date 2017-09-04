@@ -6,7 +6,8 @@ import {
   objectToArray,
 } from '../utils';
 
-const MAX_LENGHT = 50;
+// const MAX_LENGHT = 50;
+const cutTextRegExp = new RegExp(/^(.{50}[^\s]*).*/);
 const uniqueCommentUserIds = (comments) => {
   const userIds = [];
   const commentsArray = objectToArray(comments);
@@ -75,7 +76,7 @@ const postCreatedNotificationData = (req, res, next) => {
     meta: {
       created_by: user_id,
       type: post.type,
-      message: post.message.substr(0, MAX_LENGHT),
+      message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
     },
   };
@@ -110,7 +111,7 @@ const postCommentAddedNotificationData = (req, res, next) => {
     },
     meta: {
       user_ids: uniqueCommentUserIds(post.comments),
-      message: post.message.substr(0, MAX_LENGHT),
+      message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
       type: post.type,
       created_by: comment.created_by,
@@ -135,7 +136,7 @@ const postCommentMentionNotificationData = (req, res, next) => {
       id: post.id,
     },
     meta: {
-      message: post.message.substr(0, MAX_LENGHT),
+      message: post.message.replace(cutTextRegExp, '$1'),
       mentioned_by: comment.created_by,
     },
   };
@@ -167,7 +168,7 @@ const postReactionAddedNotificationData = (req, res, next) => {
     meta: {
       last_reaction: lastReaction,
       user_ids: post.reactions.map(r => r.created_by),
-      message: post.message.substr(0, MAX_LENGHT),
+      message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
       type: post.type,
     },
@@ -220,7 +221,7 @@ const postCommentReactionAddedNotificationData = (req, res, next) => {
     meta: {
       last_reaction: lastReaction,
       user_ids: comment.reactions.map(r => r.created_by),
-      message: comment.message.substr(0, MAX_LENGHT),
+      message: comment.message.replace(cutTextRegExp, '$1'),
     },
   };
   res.locals.eventData = {
