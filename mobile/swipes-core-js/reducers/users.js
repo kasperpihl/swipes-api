@@ -8,14 +8,19 @@ const updateStateFromOrg = (state, org) => {
   let tempState = state;
   const disabledUsers = org.disabled_users || [];
   const pendingUsers = org.pending_users || [];
+  const activeUsers = org.active_users || [];
   state.forEach((u) => {
     const isDisabled = !!(disabledUsers.indexOf(u.get('id')) > -1)
     if(!!u.get('disabled') !== isDisabled) {
-      tempState = state.setIn([u.get('id'), 'disabled'], isDisabled);
+      tempState = tempState.setIn([u.get('id'), 'disabled'], isDisabled);
     }
     const isPending = !!(pendingUsers.indexOf(u.get('id')) > -1);
     if(!!u.get('pending') !== isPending) {
-      tempState = state.setIn([u.get('id'), 'pending'], isPending);
+      tempState = tempState.setIn([u.get('id'), 'pending'], isPending);
+    }
+    const isActive = !!(activeUsers.indexOf(u.get('id')) > -1);
+    if(!!u.get('active') !== isActive) {
+      tempState = tempState.setIn([u.get('id'), 'active'], isActive);
     }
   });
   return tempState;
