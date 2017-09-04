@@ -66,10 +66,10 @@ class CommentInput extends PureComponent {
     let testStr = message.substr(index, sel.anchorOffset);
     const atIndex = testStr.lastIndexOf('@');
     testStr = testStr.substr(atIndex);
-    const aNode = `<a contenteditable="false" href="#" data-server="<!${item.id}|${firstName}>" style="display:inline-block;">${firstName}</a>&nbsp;`;
+    const aNode = `<a contenteditable="false" href="#" data-server="<!${item.id}|${firstName}>" style="display:inline-block;">${firstName}</a>`;
     message = message.substr(0, index + atIndex) + aNode + message.substr(index + atIndex + testStr.length);
-    if(message.substr(-5) === '</a> '){
-      message = message.substr(0, message.length - 1) + '&nbsp;';
+    if(message.substr(-4) === '</a>'){
+      message = message.substr(0, message.length) + '<br />';
     }
     this.forceToEnd = true;
     this.setState({ message });

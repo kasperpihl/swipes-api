@@ -80,6 +80,7 @@
       }
     }
     #{$b}__timestamp {
+
       &:hover {
         color: $blue-100;
       }
@@ -90,5 +91,6 @@
     @include size(12px);
     @include svg-color($deepBlue-40);
     margin-right: 6px;
+    transform: translateY(-1px);
   }
 }

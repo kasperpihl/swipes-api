@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import './styles/image';
 
 class Image extends Component {
@@ -15,23 +14,14 @@ class Image extends Component {
     this.state = {
       rawSize: false,
     };
-    bindAll(this, ['toggleRawSize']);
-  }
-  toggleRawSize() {
-    const { rawSize } = this.state;
-    this.setState({ rawSize: !rawSize });
+
   }
   render() {
     const { file } = this.props;
     const { rawSize } = this.state;
-    let className = 'preview-image';
-
-    if (rawSize) {
-      className += ' preview-image--full-size';
-    }
 
     return (
-      <div className={className} onClick={this.toggleRawSize}>
+      <div className="preview-image" >
         <img
           onLoad={this.props.onLoad}
           onError={this.props.onError}

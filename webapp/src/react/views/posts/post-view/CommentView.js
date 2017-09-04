@@ -25,7 +25,7 @@ class CommentView extends PureComponent {
     }
   }
   openReactions() {
-    console.log('hihihihih');
+
   }
   renderProfilePic() {
     const { comment } = this.props;

@@ -29,19 +29,6 @@
 
 .welcome {
 
-  &__test {
-    @include size(100%);
-    // background-color: blue;
-
-    &:first-child {
-      // background-color: red;
-    }
-
-    &:last-child {
-      // background-color: green;
-    }
-  }
-
 	&__card {
 		@include size(100%);
     @include flexContainer('column');
@@ -68,7 +55,7 @@
 	&__footer {
 		@include size(100%, 11vh);
 		@include flexContainer('row', between, center);
-		padding: 0 90px;
+		padding: 0 60px;
 	}
 }
 

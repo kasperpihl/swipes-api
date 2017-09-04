@@ -204,10 +204,10 @@ class HOCGoalOverview extends PureComponent {
         this.setLoading('dots');
         createWay(title, helper.getObjectForWay()).then((res) => {
           if(res.ok){
-            this.clearLoading('dots', 'Saved way');
+            this.clearLoading('dots', 'Saved way', 3000);
           }
           else {
-            this.clearLoading('dots', '!Something went wrong');
+            this.clearLoading('dots', '!Something went wrong', 3000);
           }
         });
       }
@@ -221,10 +221,10 @@ class HOCGoalOverview extends PureComponent {
         this.setLoading('dots');
         goalLoadWay(helper.getId(), way.get('id')).then((res) => {
           if(res.ok){
-            this.clearLoading('dots', 'Loaded way');
+            this.clearLoading('dots', 'Loaded way', 3000);
           }
           else {
-            this.clearLoading('dots', '!Something went wrong');
+            this.clearLoading('dots', '!Something went wrong', 3000);
           }
         });
       }

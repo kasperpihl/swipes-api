@@ -29,7 +29,7 @@
     @include size(120px);
     @include centerAbsolute();
     @include flexContainer('row', center, center);
-    background-color: $bg;
+    // background-color: $bg;
     border-radius: 50%;
     opacity: 0;
     transition: .2s ease;
@@ -182,7 +182,7 @@
     @include flexContainer('row', center, center);
     @include font(18px, $deepBlue-70, 18px, 500);
     @include size(120px);
-    background-color: $bg;
+    // background-color: $bg;
     border-radius: 50%;
     left: calc(50% - (120px / 2)); top: calc(50% - (120px / 2));
     position: absolute;
@@ -234,7 +234,7 @@
 
     .progress-number {
       opacity: 1;
-      transition: .2s .25s ease;
+      transition: .5s ease;
     }
 
     .progress__number {

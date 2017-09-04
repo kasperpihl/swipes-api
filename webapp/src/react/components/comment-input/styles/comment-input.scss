@@ -79,6 +79,10 @@
     &:focus {
       outline: none;
     }
+
+    a {
+      @include font(12px, $blue-100, 18px);
+    }
   }
 
   &__icon-wrapper {

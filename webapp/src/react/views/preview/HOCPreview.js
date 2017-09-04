@@ -161,8 +161,8 @@ class HOCPreviewModal extends PureComponent {
         <div className="preview-no-preview__header">Can’t display preview</div>
         <div className="preview-no-preview__text">
           Unfortunately this file format is not supported yet. You can: <br />
-          1. Click “Open in” > “Browser” to see preview in browser <br />
-          2. Click “Attach to goal” to attach the file to a goal of your choice <br />
+          1. Click “Open in Browser” to see preview in browser <br />
+          2. Click “Download” to save the file to your computer <br />
         </div>
       </div>
     );
