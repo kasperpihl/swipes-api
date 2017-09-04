@@ -114,7 +114,7 @@ export function reducerInitToMap(payload, key, state) {
   }
   payload[key].forEach((obj) => {
     collection = collection.set(obj.id, fromJS(obj));
-    if(obj.archived) {
+    if(obj.archived || obj.deleted) {
       collection = collection.delete(obj.id);
     }
   })
