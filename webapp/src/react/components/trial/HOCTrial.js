@@ -152,7 +152,7 @@ const mapStateToProps = (state) => ({
   me: state.get('me'),
   subscribed: state.getIn(['me', 'organizations', 0, 'stripe_subscription_id']),
   trial: state.getIn(['me', 'organizations', 0, 'trial']),
-  isAccount: (state.getIn(['navigation', 'primary', 'stack', 1, 'id']) === 'Billing')
+  isAccount: (state.getIn(['navigation', 'primary', 'id']) === 'AccountList')
 });
 
 export default connect(mapStateToProps, {
