@@ -85,6 +85,7 @@
   &__message {
     @include size(360px, auto);
     @include font(15px, $deepBlue-90, 21px);
+    @include clampString(9);
     margin-top: 12px;
   }
 }

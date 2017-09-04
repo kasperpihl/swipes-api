@@ -150,7 +150,7 @@ class HOCMilestoneOverview extends PureComponent {
     let complete = true;
     if (milestone.get('closed_at')) {
       complete = false,
-      achieveIcon = 'MiniMilestone';
+      achieveIcon = 'Milestone';
       achieveLbl = 'Move milestone to current';
     }
     const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`

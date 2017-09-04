@@ -8,6 +8,7 @@ import { miniIconForId } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import TimeAgo from 'components/time-ago/TimeAgo';
 import StyledText from 'components/styled-text/StyledText';
+import TextParser from 'components/text-parser/TextParser';
 import './styles/post-result.scss';
 
 class PostResult extends PureComponent {
@@ -145,7 +146,9 @@ class PostResult extends PureComponent {
 
     return (
       <div className="post-result__message">
-        {item.message}
+        <TextParser>
+          {item.message}
+        </TextParser>
       </div>
     )
   }

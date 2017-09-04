@@ -43,6 +43,7 @@ class InfoTab extends PureComponent {
     }
 
     const actionsHTML = actions.map((act, i) => {
+      console.log(act);
       let iconClass = 'info-tab__action-icon';
 
       if (act.danger) {

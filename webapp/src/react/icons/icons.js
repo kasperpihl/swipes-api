@@ -73,7 +73,8 @@ import Linux from './svgs/linux.svg';
 import LogoLoader from './svgs/logo-loader.svg';
 import Logout from './svgs/logout.svg';
 import Messages from './svgs/messages.svg';
-import MilestoneAchieved from './svgs/milestone-achieved.svg';
+import MilestoneAchieve from './svgs/milestone-achieve.svg';
+import Milestone from './svgs/milestone.svg';
 import Milestones from './svgs/milestones.svg';
 import MilestoneProgress from './svgs/milestone-progress.svg';
 import MiniGoal from './svgs/mini-goal.svg';
@@ -223,8 +224,9 @@ export {
   LogoLoader,
   Logout,
   Messages,
-  MilestoneAchieved,
+  MilestoneAchieve,
   MilestoneProgress,
+  Milestone,
   Milestones,
   MiniGoal,
   MiniMilestone,

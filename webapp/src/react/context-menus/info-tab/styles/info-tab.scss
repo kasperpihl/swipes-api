@@ -27,7 +27,7 @@
   }
 
   &__action {
-    $flexIgnoreList: '#{$b}__action-icon';
+    $flexIgnoreList: '#{$b}__action-icon-wrapper';
 
     @include size(100%, 43px);
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
@@ -36,8 +36,8 @@
   }
 
   &__action-icon-wrapper {
-    @include size(24px);
-    margin: 0 3px;
+    @include size(42px);
+    @include flexContainer('row', center, center);
 
     &:empty {
       @include size(0px);
@@ -52,14 +52,14 @@
       @include svg-color($red-80)
     }
 
-    &#{&}--danger {
+    &#{&}--complete {
       @include svg-color($green-color)
     }
   }
 
   &__action-title {
     @include size(100%, auto);
-    @include font(12px, white, 18px, 500)
+    @include font(12px, white, 18px, 500);
   }
 
   &__info {
