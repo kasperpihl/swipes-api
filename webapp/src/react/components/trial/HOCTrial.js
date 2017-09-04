@@ -71,7 +71,11 @@ class HOCTrial extends PureComponent {
     const isAdmin = msgGen.me.isAdmin();
     const shouldShowPopup = this.shouldShowPopup();
 
-    if(!isAdmin || shouldShowPopup) {
+    // if(!isAdmin || shouldShowPopup) {
+    //   return undefined;
+    // }
+
+    if(false) {
       return undefined;
     }
 
@@ -93,13 +97,19 @@ class HOCTrial extends PureComponent {
   }
   renderTrialPopup() {
     const { daysLeft, dismissed } = this.state;
+    const { me } = this.props;
     const show = this.shouldShowPopup();
 
-    if(!show) {
+    // if(!show) {
+    //   return undefined;
+    // }
+
+    if(false) {
       return undefined;
     }
 
     let actionLbl = 'Add billing info to continue the service for your team.';
+    const name = msgGen.users.getFirstName(me.get('id'));
     const isAdmin = msgGen.me.isAdmin();
 
     if(!isAdmin) {
@@ -109,7 +119,8 @@ class HOCTrial extends PureComponent {
     return (
       <div className="trial__popup">
         <div className="trial-popup">
-          <div className="trial-popup__title">Trial Expired</div>
+          <div className="trial-popup__pretitle">Dear {name},</div>
+          <div className="trial-popup__title">Your free trial has expired</div>
           <div className="trial-popup__paragraph">Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</div>
           <div className="trial-popup__paragraph">⭐&nbsp;&nbsp;Your progress is saved. {actionLbl}</div>
           <div className="trial-popup__actions">
@@ -132,9 +143,9 @@ class HOCTrial extends PureComponent {
   render() {
     const { subscribed } = this.props;
 
-    if (subscribed) {
-      return null;
-    }
+    // if (subscribed) {
+    //   return null;
+    // }
 
     return (
       <div className="trial">
