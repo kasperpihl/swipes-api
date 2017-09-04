@@ -38,6 +38,9 @@ class HOCTrial extends PureComponent {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+  onExtend() {
+    window.open('mailto:help@swipesapp.com?subject=Trial%20extension&body=Dear%20Swipes%20Team,%0D%0A%0D%0ACan%20you%20please%20extend%20my%20free%20trial%20because%20me%20and%20my%20team%20want%20to...')
+  }
   onUnpaid(e) {
     const { navSet, navPush } = this.props;
     this.onDismiss();
@@ -118,6 +121,10 @@ class HOCTrial extends PureComponent {
             {(daysLeft >= -7) ? <Button
               text="Dismiss"
               onClick={this.onDismiss}
+            /> : null}
+            {isAdmin ? <Button
+              text="Request extension"
+              onClick={this.onExtend}
             /> : null}
             {isAdmin ? (
               <Button
