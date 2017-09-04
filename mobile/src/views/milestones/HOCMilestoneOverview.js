@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import ImmutableVirtualizedList from 'react-native-immutable-list-view';
+import { ImmutableListView } from 'react-native-immutable-list-view';
 import * as ca from '../../../swipes-core-js/actions';
+import * as cs from '../../../swipes-core-js/selectors';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCGoalItem from '../goallist/HOCGoalItem';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
@@ -50,7 +51,6 @@ class HOCMilestoneOverview extends PureComponent {
       tabs: ['Current', 'Completed'],
       tabIndex: 0,
       routeNum: props.lastRoute,
-      goals: this.getFilteredGoals(this.props.milestone, this.props.starredGoals),
       hasLoaded: false,
       fabOpen: false
     };
@@ -83,25 +83,7 @@ class HOCMilestoneOverview extends PureComponent {
   componentWillUnmount() {
     clearTimeout(this.loadingTimeout);
   }
-  getFilteredGoals(milestone, starredGoals) {
-    const goals = msgGen.milestones.getGoals(milestone);
-    let gg = goals.sort((g1, g2) => {
-      const g1StarI = starredGoals.indexOf(g1.get('id'));
-      const g2StarI = starredGoals.indexOf(g2.get('id'));
-      if (g1StarI > g2StarI) {
-        return -1;
-      }
-      if (g2StarI > g1StarI) {
-        return 1;
-      }
-      return 0;
-    }).groupBy(g => new GoalsUtil(g).getIsCompleted() ? 'Completed' : 'Current');
 
-    // Make sure there if no current or completed to add an empty list
-    gg = gg.set('Current', gg.get('Current') || List());
-    gg = gg.set('Completed', gg.get('Completed') || List());
-    return gg;
-  }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
       this.setState({ tabIndex: index, hasLoaded: false });
@@ -182,17 +164,18 @@ class HOCMilestoneOverview extends PureComponent {
     );
   }
   renderList() {
-    const { tabs, tabIndex, goals, hasLoaded } = this.state;
-
-    if (!hasLoaded) {
-      return this.renderListLoader();
-    }
+    const { tabs, tabIndex, hasLoaded } = this.state;
+    const { groupedGoals } = this.props;
+    
+    // if (!hasLoaded) {
+    //   return this.renderListLoader();
+    // }
 
     const tab = tabs[tabIndex];
-    const goalList = goals.get(tab);
+    const goalList = groupedGoals.get(tab);
 
     return (
-      <ImmutableVirtualizedList
+      <ImmutableListView
         ref="scrollView"
         key={tab}
         style={styles.list}
@@ -241,8 +224,8 @@ class HOCMilestoneOverview extends PureComponent {
 
 function mapStateToProps(state, ownProps) {
   return {
-    starredGoals: state.getIn(['me', 'settings', 'starred_goals']),
     milestone: state.getIn(['milestones', ownProps.milestoneId]),
+    groupedGoals: cs.milestones.getGroupedGoals(state, ownProps),
     myId: state.getIn(['me', 'id']),
   };
 }

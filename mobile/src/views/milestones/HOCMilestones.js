@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import ImmutableVirtualizedList from 'react-native-immutable-list-view';
+import { ImmutableListView } from 'react-native-immutable-list-view';
 import * as a from '../../actions';
 import * as cs from '../../../swipes-core-js/selectors';
 import * as ca from '../../../swipes-core-js/actions';
@@ -132,7 +132,7 @@ class HOCMilestones extends PureComponent {
 
     return (
       <HOCHeader
-        title="Milestones"
+        title="Plan"
         currentTab={tabIndex}
         delegate={this}
         tabs={tabs.map((t) => {
@@ -161,7 +161,7 @@ class HOCMilestones extends PureComponent {
     }
 
     return (
-      <ImmutableVirtualizedList
+      <ImmutableListView
         ref="scrollView"
         style={styles.list}
         immutableData={milestones.get(tabs[tabIndex])}

@@ -105,7 +105,7 @@
     &--btn {
       @include size(30px);
       @include flex();
-      border: 1px solid $deepBlue-10;
+      // border: 1px solid $deepBlue-10;
       border-radius: 50%;
 
       svg {

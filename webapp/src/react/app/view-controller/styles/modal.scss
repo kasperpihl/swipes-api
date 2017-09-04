@@ -1,29 +1,57 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
-.modal {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  visibility: hidden;
-  opacity: 0;
-  z-index: 9;
+// ======================================================
+// Block
+// ======================================================
 
-  &--shown {
-    opacity: 1;
-    transition: visibility 0s 0s, opacity .15s;
-    background: rgba(255, 255, 255, .5);
-    visibility: visible;
-  }
+.modal {
+  @include size(100%);
+  position: absolute;
+  left: 0; top: 0;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 9;
+}
+
+// ======================================================
+// Element
+// ======================================================
+
+.modal {
+
   &__content {
+    @include widthSpecifications(initial, 540px);
+    @include heightSpecifications(initial, 400px);
     background-color: $bg;
     border-radius: 6px;
     box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
-    overflow: hidden;
-    max-width: 540px;
-    max-height: 400px;
     margin: 20% auto;
+    // overflow: hidden;
+  }
+
+  &__close-button {
+    @include size(36px);
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 1px 20px 3px rgba($blue-160, .1);
+    position: absolute;
+    right: 0; top: 0;
+    transform: translate(40%, -40%);
+    z-index: 9999;
+  }
+}
+
+// ======================================================
+// Modifiers
+// ======================================================
+
+.modal {
+
+  &--shown {
+    background: rgba(255, 255, 255, .5);
+    opacity: 1;
+    transition: visibility 0s 0s, opacity .15s;
+    visibility: visible;
   }
 }

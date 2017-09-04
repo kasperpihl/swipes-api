@@ -23,39 +23,6 @@ import { colors, viewSize } from '../../utils/globalStyles';
 
 const PROGRESS_DASH = 320.4876403808594;
 
-// const styles = StyleSheet.create({
-//   button: {
-//     flex: 1,
-//     minHeight: 72,
-//   },
-//   milestone: {
-//     flex: 1,
-//     minHeight: 72,
-//     paddingHorizontal: 15,
-//     paddingVertical: 15,
-//     flexDirection: 'column',
-//     alignItems: 'flex-start',
-//   },
-//   title: {
-//     fontSize: 16.5,
-//     lineHeight: 21,
-//     color: colors.deepBlue100,
-//   },
-//   subtitle: {
-//     fontSize: 12,
-//     lineHeight: 18,
-//     color: colors.deepBlue40,
-//   },
-//   seperator: {
-//     width: viewSize.width - 30,
-//     height: 1,
-//     backgroundColor: colors.deepBlue5,
-//     position: 'absolute',
-//     left: 15,
-//     bottom: 0,
-//   },
-// });
-
 class MilestoneItem extends Component {
   constructor(props) {
     super(props);
@@ -107,9 +74,7 @@ class MilestoneItem extends Component {
     const { goals } = this.state;
     const numberOfGoals = goals.size;
     const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
-
     const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
-
     const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
 
     return (

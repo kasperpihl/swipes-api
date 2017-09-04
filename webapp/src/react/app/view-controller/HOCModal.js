@@ -9,6 +9,7 @@ import * as views from 'views';
 import { bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import Button from 'Button';
 import './styles/modal.scss';
 
 class HOCModal extends PureComponent {
@@ -48,6 +49,9 @@ class HOCModal extends PureComponent {
     const props = this.getProps();
     return (
       <div className="modal__content">
+        <div className="modal__close-button">
+          <Button icon="Close" onClick={this.hideModal} />
+        </div>
         <Comp hideModal={this.hideModal} {...props} />
       </div>
     );

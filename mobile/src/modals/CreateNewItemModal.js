@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     elevation: 4,
     borderRadius: 6,
+    overflow: 'hidden', 
   },
   inputWrapper: {
     alignSelf: 'stretch',

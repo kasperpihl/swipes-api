@@ -55,6 +55,8 @@ export const preview = att => (d, getState) => {
   });
 
   if (service.get('name') === 'swipes') {
+    console.log('type', service.get('type'));
+
     if (service.get('type') === 'note') {
       d(a.navigation.push(activeSliderIndex, {
         id: 'PreviewNote',
@@ -74,6 +76,9 @@ export const preview = att => (d, getState) => {
         if (Platform.OS === 'ios') {
           d(a.loading.showLoader(false));
         }
+        
+        console.log(res.preview)
+
         OpenFile.openDoc([{
           url: res.preview.file.url,
           fileName: res.preview.header.title,
