@@ -53,7 +53,7 @@ class HOCBilling extends PureComponent {
     const { organization, users } = this.props;
 
     let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || window.location.hostname === 'staging.swipesapp.com') {
       token = 'pk_test_0pUn7s5EyQy7GeAg93QrsJl9';
     }
     return (
