@@ -162,7 +162,7 @@ class HOCViewController extends PureComponent {
       const w = sizes[i];
       const style = {
         width: `${w}px`,
-        transform: `translate3d(${runningX}px, 0px, 0px)`,
+        transform: `translate3d(${parseInt(runningX, 10)}px, 0px, 0px)`,
         zIndex: 2 - i,
       };
       runningX += (w + SPACING);
@@ -179,7 +179,7 @@ class HOCViewController extends PureComponent {
         if (target === 'secondary') {
           left = width - w - SPACING;
         }
-        style.transform = `translate3d(${left}px, ${top}px, 0px)`;
+        style.transform = `translate3d(${parseInt(left, 10)}px, ${top}px, 0px)`;
       }
       if (fullscreen) {
         if (fullscreen === target) {
