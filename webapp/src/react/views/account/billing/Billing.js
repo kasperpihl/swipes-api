@@ -33,7 +33,7 @@ class Billing extends PureComponent {
       errorMessage: '',
       successState: true,
     };
-    setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess');
+    setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage');
     bindAll(this, ['onChange', 'onSubmit']);
   }
   componentDidMount() {
@@ -183,8 +183,13 @@ class Billing extends PureComponent {
             {this.renderToggle()}
             <div className="payment__toggle-subtitle">
               You have {numberOfUsers} users in {organization.get('name')}. {`That's ${this.getShowPrice()}`}
-            </div>
 
+            </div>
+            <Button
+              text="Manage team"
+              primary
+              onClick={this.onManage}
+            />
           </div>
           {this.renderBottomSection()}
         </div>

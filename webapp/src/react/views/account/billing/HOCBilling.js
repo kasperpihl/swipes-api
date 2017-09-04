@@ -41,6 +41,13 @@ class HOCBilling extends PureComponent {
       this.setState({ billingStatus: plan });
     }
   }
+  onManage() {
+    const { navPush } = this.props;
+    navPush({
+      id: 'Organization',
+      title: 'Manage team',
+    });
+  }
   render() {
     const { billingStatus } = this.state;
     const { organization, users } = this.props;

@@ -3,19 +3,20 @@
 
 .payment {
   @include size(100%, auto);
-  @include flexContainer('column', center);  
+  @include flexContainer('column', center);
 
   &__toggle {
     @include size(100%, auto);
     @include flexContainer('column', center);
     padding-top: 30px;
+    padding-bottom: 55px;
   }
 
   &__toggle-subtitle {
     @include size(420px, auto);
     @include font(12px, $deepBlue-60, 21px, 500);
     padding-top: 19px;
-    padding-bottom: 60px;
+    padding-bottom: 5px;
   }
 
   &__cta {
@@ -118,7 +119,7 @@
     border: 1px solid $blue-100;
     border-radius: 3px;
     overflow: hidden;
-    
+
     &__section {
       @include size(100%);
       cursor: pointer;
@@ -159,7 +160,7 @@
     }
 
     &--first {
-      
+
       & #{$b}__section:first-child {
         background-color: $blue-100;
         color: white;
@@ -172,7 +173,7 @@
     }
 
     &--second {
-      
+
       & #{$b}__section:last-child  {
         background-color: $blue-100;
         color: white;
