@@ -46,7 +46,9 @@ class NotificationItem extends PureComponent {
       <div className={className} onClick={this.onNotificationOpenCached(n)}>
         {this.renderProfilePic()}
         <div className="notification-item__content">
-          <StyledText text={text} className="notification-item__styled-text" />
+          <div className="notification-item__message">
+            <StyledText text={text} className="notification-item__styled-text" />
+          </div>
           <div className="notification-item__timestamp">{timestamp}</div>
         </div>
       </div>
