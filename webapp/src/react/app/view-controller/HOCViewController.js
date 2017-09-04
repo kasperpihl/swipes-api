@@ -60,6 +60,7 @@ class HOCViewController extends PureComponent {
     if (fullscreen) {
       this.setState({ fullscreen: null });
     }
+    this.setState({ onTop: 'primary' });
     navSet('secondary', null);
   }
   onUnderlay(target) {
