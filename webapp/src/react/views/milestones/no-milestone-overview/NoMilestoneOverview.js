@@ -17,7 +17,7 @@ class NoMilestoneOverview extends PureComponent {
     this.state = {
       showLine: false,
       emptyStateOpacity: 1,
-    }
+    };
     setupDelegate(this, 'onScroll');
   }
   onAddGoalItemInputChange(title) {
@@ -60,15 +60,15 @@ class NoMilestoneOverview extends PureComponent {
     return undefined;
   }
   renderList() {
-    const { goals, delegate, myId } = this.props;
-
-    return goals.map(goal => (
+    const { goals, delegate, myId, limit } = this.props;
+    let i = 0;
+    return goals.map(goal => (i++ <= limit) ? (
       <HOCGoalListItem
         goalId={goal.get('id')}
         delegate={delegate}
         key={goal.get('id')}
       />
-    )).toArray().concat([
+    ) : null).toArray().concat([
       <HOCAddGoalItem
         key="add"
         defAssignees={[myId]}

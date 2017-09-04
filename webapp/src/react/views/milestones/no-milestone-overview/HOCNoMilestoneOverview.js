@@ -11,6 +11,7 @@ import * as cs from 'swipes-core-js/selectors';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import NoMilestoneOverview from './NoMilestoneOverview';
 
+const DISTANCE = 100;
 
 class HOCNoMilestoneOverview extends PureComponent {
   static maxWidth() {
@@ -18,13 +19,20 @@ class HOCNoMilestoneOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { limit: 20 };
+    this.lastEnd = 0;
     // setupLoading(this);
   }
   componentDidMount() {
   }
   onScroll(e) {
     this._scrollTop = e.target.scrollTop;
+    if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
+      if (this.lastEnd < e.target.scrollTop + DISTANCE) {
+        this.setState({ limit: this.state.limit + 20 });
+        this.lastEnd = e.target.scrollTop;
+      }
+    }
   }
   onGoalClick(goalId) {
     const { navPush } = this.props;
@@ -47,6 +55,7 @@ class HOCNoMilestoneOverview extends PureComponent {
   }
   render() {
     const { savedState, goals, myId } = this.props;
+    const { limit } = this.state;
 
     return (
       <NoMilestoneOverview
@@ -54,6 +63,7 @@ class HOCNoMilestoneOverview extends PureComponent {
         savedState={savedState}
         delegate={this}
         myId={myId}
+        limit={limit}
       />
     );
   }
