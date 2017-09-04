@@ -8,13 +8,14 @@ import Button from 'Button';
 import Icon from 'Icon';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
+import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import PostComposer from './PostComposer';
 import './styles/create-post.scss';
 
 class CreatePost extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this, 'onButtonClick', 'onPostClick', 'onContextClick', 'onChangeFiles', 'onAttachmentClick');
+    setupDelegate(this, 'onButtonClick', 'onPostClick', 'onContextClick', 'onChangeFiles');
   }
   renderSubtitle() {
     const { post } = this.props;
@@ -45,29 +46,18 @@ class CreatePost extends PureComponent {
     return <PostComposer myId={myId} post={post} delegate={delegate} />
   }
   renderAttachments() {
-    const { post } = this.props;
+    const { post, delegate } = this.props;
     if(!post.get('attachments').size) {
       return undefined;
     }
 
     const attachments = post.get('attachments').map((att, i) => (
-      <div key={i} className="post-attachment" onClick={this.onAttachmentClickCached(i)}>
-        <div className="post-attachment__type-icon">
-          <Icon
-            icon={attachmentIconForService(att.getIn(['link', 'service']))}
-            className="post-attachment__svg"
-          />
-        </div>
-        <div className="post-attachment__label">
-          {att.get('title')}
-        </div>
-        <div className="post-attachment__delete-icon">
-          <Icon
-            icon="Close"
-            className="post-attachment__svg"
-          />
-        </div>
-      </div>
+      <HOCAttachmentItem
+        attachment={att}
+        index={i}
+        key={i}
+        delegate={delegate}
+      />
     ))
     return (
       <div className="create-post__attachments">

@@ -55,11 +55,8 @@ class HOCCreatePost extends PureComponent {
   componentWillUnmount() {
     this.throttledSaveState.clear();
   }
-  onAttachmentClick(i) {
-    const { post } = this.state;
-    const { preview, target } = this.props;
-
-    preview(target, post.getIn(['attachments', i]));
+  onAttachmentClose(i) {
+    this.updatePost(this.state.post.updateIn(['attachments'], atts => atts.delete(i)));
   }
   onSelectAssignees(e) {
     const options = this.getOptionsForE(e);
