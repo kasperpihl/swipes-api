@@ -31,7 +31,7 @@ class TakeAction extends Component {
   }
   renderHeader() {
     const { delegate, showLine, } = this.props;
-    
+
     return (
       <div className="goals-list__header">
         <HOCHeaderTitle

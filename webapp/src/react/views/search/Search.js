@@ -12,7 +12,7 @@ class Search extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onChange');
+    setupDelegate(this, 'onChange', 'onScroll');
     // this.callDelegate.bindAll('onLala');
   }
   componentDidMount() {
@@ -33,17 +33,24 @@ class Search extends PureComponent {
 
   }
   renderResults() {
-    const { searchString, limit } = this.props;
+    const { searchString, limit, delegate } = this.props;
     return (
       <HOCSearchResults
         searchString={searchString}
         limit={limit}
+        delegate={delegate}
       />
     )
   }
   render() {
+    const { initialScroll } = this.props;
+
     return (
-      <SWView header={this.renderSearchField()}>
+      <SWView
+        header={this.renderSearchField()}
+        onScroll={this.onScroll}
+        initialScroll={initialScroll}
+      >
         {this.renderResults()}
       </SWView>
 
