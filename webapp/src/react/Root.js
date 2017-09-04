@@ -64,7 +64,7 @@ class Root extends PureComponent {
         {this.renderTopbar()}
         <HOCContextMenu />
         <HOCTooltip />
-        <HOCTrial />
+        <Route path="/" exact={true} render={() => (<HOCTrial />)} />
         <HOCAutoCompleting />
         <DevTools />
         <div className="content-wrapper">

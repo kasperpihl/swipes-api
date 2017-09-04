@@ -18,7 +18,7 @@ class MilestoneList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onAddGoal');
+    setupDelegate(this, 'onAddGoal', 'onScroll');
   }
   componentDidMount() {
   }
@@ -58,20 +58,20 @@ class MilestoneList extends PureComponent {
     )
   }
   renderList() {
-    const { milestones, delegate, tabIndex } = this.props;
+    const { milestones, delegate, tabIndex, limit } = this.props;
     let firstMilestones = tabIndex === 0 ? [<HOCNoMilestone key="no" />] : [];
 
     if (tabIndex === 1 && milestones && milestones.size < 1) {
       return this.renderEmptyState();
     }
-
-    return firstMilestones.concat(milestones.map(m => (
+    let i = firstMilestones.length;
+    return firstMilestones.concat(milestones.map(m => (i++ <= limit) ? (
       <HOCMilestoneItem
         key={m.get('id')}
         milestone={m}
         delegate={delegate}
       />
-    )).toArray());
+    ) : null).toArray());
   }
   renderAddMilestone() {
     const { delegate, tabIndex } = this.props;
@@ -86,7 +86,7 @@ class MilestoneList extends PureComponent {
     )
   }
   render() {
-    const { milestones, tabIndex } = this.props;
+    const { milestones, tabIndex, initialScroll } = this.props;
     let className = 'milestone-list';
 
     if (tabIndex === 1 && milestones && milestones.size < 1) {
@@ -94,7 +94,12 @@ class MilestoneList extends PureComponent {
     }
 
     return (
-      <SWView noframe header={this.renderHeader()}>
+      <SWView
+        noframe
+        header={this.renderHeader()}
+        onScroll={this.onScroll}
+        initialScroll={initialScroll}
+      >
         <div className={className}>
           {this.renderList()}
           {this.renderAddMilestone()}

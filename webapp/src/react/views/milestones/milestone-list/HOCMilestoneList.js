@@ -10,6 +10,7 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import MilestoneList from './MilestoneList';
 
 const emptyList = List();
+const DISTANCE = 200;
 
 class HOCMilestoneList extends PureComponent {
   static minWidth() {
@@ -20,18 +21,38 @@ class HOCMilestoneList extends PureComponent {
   }
   constructor(props) {
     super(props);
+    const { savedState } = props;
+    const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
+    const initialLimit = (savedState && savedState.get('limit')) || 15;
+    this.state = {
+      limit: initialLimit,
+      initialScroll,
+    };
+    this.lastEnd = 0;
     setupLoading(this);
   }
   componentWillMount() {
+    const { savedState } = this.props;
+    const initialTabIndex = (savedState && savedState.get('tabIndex')) || 0;
     this.setState({
       tabs: ['Current Milestones', 'Achieved'],
-      tabIndex: 0,
+      tabIndex: initialTabIndex,
     });
   }
   componentDidMount() {
   }
+  onScroll(e) {
+    this._scrollTop = e.target.scrollTop;
+    if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
+      if (this.lastEnd < e.target.scrollTop + DISTANCE) {
+        this.setState({ limit: this.state.limit + 15 });
+        this.lastEnd = e.target.scrollTop;
+      }
+    }
+  }
   onOpenMilestone(milestoneId) {
     const { navPush } = this.props;
+    this.saveState();
     navPush({
       id: 'MilestoneOverview',
       title: 'Milestone overview',
@@ -54,6 +75,17 @@ class HOCMilestoneList extends PureComponent {
       });
     }
   }
+  saveState() {
+    const { saveState } = this.props;
+    const { limit, tabIndex } = this.state;
+
+    const savedState = {
+      limit,
+      scrollTop: this._scrollTop,
+      tabIndex,
+    }; // state if this gets reopened
+    saveState(savedState);
+  }
   tabDidChange(index) {
     const { tabIndex } = this.state;
     if (tabIndex !== index) {
@@ -72,11 +104,13 @@ class HOCMilestoneList extends PureComponent {
   }
   render() {
     const { milestones } = this.props;
-    const { tabs, tabIndex } = this.state;
+    const { tabs, tabIndex, limit, initialScroll } = this.state;
 
     return (
       <MilestoneList
         delegate={this}
+        limit={limit}
+        initialScroll={initialScroll}
         milestones={milestones.get(tabs[tabIndex])}
         tabs={tabs.map((t) => {
           const size = milestones.get(t).size;
