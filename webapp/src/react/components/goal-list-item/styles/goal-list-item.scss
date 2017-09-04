@@ -66,21 +66,21 @@ $contHeight: 66px;
   &__content {
     $flexIgnoreList: '#{$b}__circle';
 
-    @include size(100%);
+    @include size(100%, auto);
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
     @include heightSpecifications($contHeight, auto);
   }
 
   &__title {
-    @include size(calc(100% - 50px), auto);
+    @include size(100%, auto);
     @include font(15px, $deepBlue-90, 24px);
-    @include truncateString();
+    @include clampString(1);
     transition: .2s ease;
     padding-left: 12px;
   }
 
   &__subtitle {
-    @include size(calc(100% - 50px), auto);
+    @include size(100%, auto);
     @include flex(center, flex-start);
     @include flexContainer('row', left, center);
     overflow: hidden;
