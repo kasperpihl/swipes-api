@@ -62,7 +62,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   const allUsers = () => cs.users.getActive(state).map(u => resultForUser(u)).toArray();
 
   const searchForUser = q => cs.users.search(state, {searchString:  q}).map((res) => {
-    return resultForUserId(res.item);
+    return resultForUserId(res.item.id);
   });
 
   const getRecent = () => currentRecent.map(uId => resultForUserId(uId));
@@ -125,7 +125,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
       }
     },
     props: {
-      search: 'Search for name',
+      search: 'Search for name or email',
       delegate,
       initialTabIndex,
       ...options,

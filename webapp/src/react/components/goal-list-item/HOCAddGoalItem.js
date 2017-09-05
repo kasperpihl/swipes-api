@@ -63,14 +63,16 @@ class HOCAddGoalItem extends PureComponent {
     const options = this.getOptionsForE(e);
     const { selectAssignees } = this.props;
     const { assignees } = this.state;
-    options.actionLabel = 'Assign';
     let overrideAssignees;
-
+    options.onClose = () => {
+      this.refs.autocomplete.refs.input.focus();
+      if (overrideAssignees) {
+        this.setState({ assignees: fromJS(overrideAssignees) });
+      }
+    }
     selectAssignees(options, assignees.toJS(), (newAssignees) => {
       if (newAssignees) {
         overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        this.setState({ assignees: fromJS(overrideAssignees) });
       }
     });
     e.stopPropagation();
@@ -122,6 +124,7 @@ class HOCAddGoalItem extends PureComponent {
         <AutoCompleteInput
           nodeType="input"
           type="text"
+          ref="autocomplete"
           className="add-goal-item__input"
           value={value}
           onChange={this.onChange}
@@ -139,7 +142,7 @@ class HOCAddGoalItem extends PureComponent {
             assignees={assignees}
             delegate={this}
             rounded
-            size={36}
+            size={30}
           />
         </div>
       </div>

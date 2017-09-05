@@ -26,6 +26,9 @@ export const contextMenu = payload => (dp, getState) => {
   if (cMenu && typeof cMenu.onClose === 'function') {
     cMenu.onClose();
   }
+  if (cMenu && cMenu.props && typeof cMenu.props.onClose === 'function') {
+    cMenu.props.onClose();
+  }
   dp({ type: types.CONTEXT_MENU, payload });
 };
 

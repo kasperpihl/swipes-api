@@ -24,12 +24,9 @@ class HOCGoalListItem extends PureComponent {
     const options = this.getOptionsForE(e);
     const { selectAssignees, assignGoal, goal } = this.props;
 
-    options.actionLabel = 'Assign';
     let overrideAssignees;
-    selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
+    options.onClose = () => {
+      if (overrideAssignees) {
         assignGoal(goal.get('id'), overrideAssignees).then((res) => {
           if(res.ok){
             window.analytics.sendEvent('Goal assigned', {
@@ -37,6 +34,11 @@ class HOCGoalListItem extends PureComponent {
             });
           }
         });
+      }
+    }
+    selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
       }
     });
     e.stopPropagation();

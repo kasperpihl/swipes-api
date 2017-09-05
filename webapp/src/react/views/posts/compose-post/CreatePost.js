@@ -43,7 +43,7 @@ class CreatePost extends PureComponent {
   renderComposer() {
     const { delegate, post, myId } = this.props;
 
-    return <PostComposer myId={myId} post={post} delegate={delegate} />
+    return <PostComposer myId={myId} post={post} ref="composer" delegate={delegate} />
   }
   renderAttachments() {
     const { post, delegate } = this.props;
