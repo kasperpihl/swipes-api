@@ -4,6 +4,7 @@ import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import { colors } from '../../utils/globalStyles';
 import NotificationItem from './NotificationItem';
+import Icon from '../../components/icons/Icon';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,9 +54,22 @@ class Notifications extends PureComponent {
 
     return <NotificationItem notification={n} delegate={delegate} />
   }
+  renderEmptyState() {
+
+    return (
+      <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+        <Icon name="ESNotification" width="290" height="300"  />
+        <Text style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>You will be notified here when{"\n"} there’s something new.</Text>
+      </View>
+    )
+  }
   renderList() {
     const { hasLoaded } = this.state;
     const { notifications } = this.props;
+
+    if (!notifications || !notifications.size) {
+      return this.renderEmptyState();
+    }
 
     if (!hasLoaded) {
       return this.renderListLoader();

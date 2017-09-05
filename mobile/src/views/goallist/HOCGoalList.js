@@ -157,9 +157,22 @@ class HOCGoalList extends PureComponent {
 
     return <EmptyListFooter />
   }
+  renderEmptyState() {
+
+    return (
+      <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+        <Icon name="ESTakeAction" width="290" height="300"  />
+        <Text style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24 }}>Add your first goal</Text>
+      </View>
+    )
+  }
   renderList() {
     const { goals } = this.props;
     const { hasLoaded } = this.state;
+
+    if (goals.size === 1 && !goals.get('none').size) {
+      return this.renderEmptyState();
+    }
 
     if (!hasLoaded) {
       return this.renderListLoader();

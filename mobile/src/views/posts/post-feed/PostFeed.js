@@ -91,9 +91,22 @@ class PostFeed extends PureComponent {
   renderFooter() {
     return <EmptyListFooter />;
   }
+  renderEmptyState() {
+
+    return (
+      <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+        <Icon name="ESDiscussion" width="290" height="300"  />
+        <Text style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Start a discussion or share an idea</Text>
+      </View>
+    )
+  }
   renderList() {
     const { posts } = this.props;
     const { hasLoaded } = this.state;
+    
+    if (!posts.size) {
+      return this.renderEmptyState()
+    }
 
     if (!hasLoaded) {
       return this.renderListLoader();

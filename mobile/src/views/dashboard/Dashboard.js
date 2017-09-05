@@ -5,6 +5,7 @@ import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import { colors } from '../../utils/globalStyles';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
+import Icon from '../../components/icons/Icon';
 
 class Dashboard extends PureComponent {
   constructor(props) {
@@ -44,15 +45,6 @@ class Dashboard extends PureComponent {
 
     if (!hasLoaded || !notifications) {
       return this.renderListLoader();
-    }
-
-    if (!notifications.size) {
-      return (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyStateTitle}>Notifications</Text>
-          <Text style={styles.emptyStateMessage}>Here you get notified on the newest and latest from your team. Never miss your turn to take action and stay up–to–date with your team's progress.</Text>
-        </View>
-      );
     }
 
     return (

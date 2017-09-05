@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
@@ -156,9 +156,22 @@ class HOCMilestones extends PureComponent {
 
     return <EmptyListFooter />
   }
+  renderEmptyState() {
+
+    return (
+      <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+        <Icon name="ESPlan" width="193" height="200"  />
+        <Text style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Create your first team Milestone</Text>
+      </View>
+    )
+  }
   renderList() {
     const { tabIndex, tabs, hasLoaded } = this.state;
     const { milestones } = this.props;
+
+    if (milestones.get(tabs[tabIndex]) || !milestones.get(tabs[tabIndex]).size) {
+      return this.renderEmptyState();
+    }
 
     if (!hasLoaded) {
       return this.renderListLoader();

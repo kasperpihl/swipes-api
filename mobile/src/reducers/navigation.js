@@ -9,9 +9,9 @@ const initialState = fromJS({
     {
       routes: [
         {
-          id: 'GoalList',
-          title: 'Plan',
-          icon: 'Goals',
+          id: 'Notifications',
+          title: 'Notifications',
+          icon: 'Notification',
         },
       ],
     },
@@ -19,7 +19,7 @@ const initialState = fromJS({
       routes: [
         {
           id: 'Milestones',
-          title: 'Take action',
+          title: 'Plan',
           icon: 'Milestones',
         },
       ],
@@ -27,9 +27,9 @@ const initialState = fromJS({
     {
       routes: [
         {
-          id: 'Notifications',
-          title: 'Notifications',
-          icon: 'Notification',
+          id: 'GoalList',
+          title: 'Take Action',
+          icon: 'Goals',
         },
       ],
     },

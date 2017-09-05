@@ -42,14 +42,14 @@ class HOCTabNavigation extends PureComponent {
     this.state = {
       rootRoutes: [
         {
-          icon: "Goals"
+          icon: "Notification",
+          counter: props.counter,
         },
         {
           icon: "Milestones"
         },
         {
-          icon: "Notification",
-          counter: props.counter,
+          icon: "Goals"
         },
         {
           icon: "Messages"
