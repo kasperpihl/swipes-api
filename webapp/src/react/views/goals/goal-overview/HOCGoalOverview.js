@@ -237,17 +237,20 @@ class HOCGoalOverview extends PureComponent {
 
     options.actionLabel = 'Assign';
     let overrideAssignees;
-    selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        assignGoal(goal.get('id'), overrideAssignees).then((res) => {
+    options.onClose = () => {
+      if (overrideAssignees) {
+       assignGoal(goal.get('id'), overrideAssignees).then((res) => {
           if(res.ok){
             window.analytics.sendEvent('Goal assigned', {
               'Number of assignees': overrideAssignees.length,
             });
           }
         });
+      }
+    }
+    selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
       }
     });
     e.stopPropagation();

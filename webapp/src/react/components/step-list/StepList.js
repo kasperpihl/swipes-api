@@ -39,18 +39,20 @@ class StepList extends PureComponent {
   componentDidMount() {
   }
   onAssign(i, e) {
-    console.log('lalala')
     const options = this.getOptionsForE(e);
     const { selectAssignees } = this.props;
     const assignees = this.state.addStepAssignees;
-    options.actionLabel = 'Assign';
-    let overrideAssignees;
 
+    let overrideAssignees;
+    options.onClose = () => {
+      this.refs.addStepInput.refs.input.focus();
+      if (overrideAssignees) {
+        this.setState({ addStepAssignees: fromJS(overrideAssignees) });
+      }
+    }
     selectAssignees(options, assignees.toJS(), (newAssignees) => {
       if (newAssignees) {
         overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        this.setState({ addStepAssignees: fromJS(overrideAssignees) });
       }
     });
     e.stopPropagation();

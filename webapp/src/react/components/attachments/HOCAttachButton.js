@@ -24,7 +24,7 @@ class HOCAttachButton extends PureComponent {
     this.state = {
       fileVal: '',
     };
-    setupDelegate(this, 'onAddedAttachment');
+    setupDelegate(this, 'onAddedAttachment', 'onAttachButtonCloseOverlay');
     setupLoading(this);
     bindAll(this, ['onChooseAttachment', 'onChangeFiles']);
   }
@@ -49,7 +49,7 @@ class HOCAttachButton extends PureComponent {
   onChooseAttachment(e) {
     const { chooseAttachmentType, inputMenu, createNote } = this.props;
     const options = this.getOptionsForE(e);
-
+    options.onClose = this.onAttachButtonCloseOverlay;
     chooseAttachmentType(options).then((item) => {
       if (item.id === 'upload') {
         this.refs.upload.click();

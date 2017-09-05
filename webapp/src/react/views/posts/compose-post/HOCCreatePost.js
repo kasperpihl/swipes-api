@@ -10,7 +10,9 @@ import {
   navForContext,
   attachmentIconForService,
   throttle,
+  getDeep,
   typeForId,
+  bindAll
 } from 'swipes-core-js/classes/utils';
 
 // import { map, list } from 'react-immutable-proptypes';
@@ -37,11 +39,15 @@ class HOCCreatePost extends PureComponent {
         context: props.context || null,
       }),
     };
+    bindAll(this, ['onFocus']);
     this.throttledSaveState = throttle(this.saveState.bind(this), 500);
 
     setupLoading(this);
   }
   componentDidMount() {
+  }
+  componentWillUnmount() {
+    this.throttledSaveState.clear();
   }
   onAutoCompleteSelect(item) {
     let { post } = this.state;
@@ -52,11 +58,14 @@ class HOCCreatePost extends PureComponent {
     post = post.set('message', msgArr.slice(0, -1).join('@'));
     this.updatePost(post);
   }
-  componentWillUnmount() {
-    this.throttledSaveState.clear();
-  }
   onAttachmentClose(i) {
     this.updatePost(this.state.post.updateIn(['attachments'], atts => atts.delete(i)));
+  }
+  onFocus() {
+    const input = getDeep(this, 'refs.create.refs.composer.refs.textarea.refs.input');
+    if(input) {
+      input.focus()
+    }
   }
   onSelectAssignees(e) {
     const options = this.getOptionsForE(e);
@@ -64,7 +73,10 @@ class HOCCreatePost extends PureComponent {
 
     const existingAssignees = this.state.post.get('taggedUsers').toJS();
 
-    selectAssignees(Object.assign({ actionLabel: 'Done' }, options), existingAssignees, (assignees) => {
+
+    selectAssignees(Object.assign({
+      onClose: this.onFocus,
+    }, options), existingAssignees, (assignees) => {
       let { post } = this.state;
       if (assignees) {
         this.updatePost(post.set('taggedUsers', fromJS(assignees)));
@@ -95,6 +107,7 @@ class HOCCreatePost extends PureComponent {
     };
     contextMenu({
       options,
+      onClose: this.onFocus,
       component: TabMenu,
       props: {
         delegate,
@@ -123,7 +136,6 @@ class HOCCreatePost extends PureComponent {
     createPost(convertObjToUnderscore(post.toJS())).then((res) => {
       if (res.ok) {
         this.clearLoading('post', 'Posted', 1500, () => {
-          console.log('clear');
           if(hideModal) {
             hideModal();
           } else {
@@ -152,9 +164,10 @@ class HOCCreatePost extends PureComponent {
       this.onChooseNotificationType(e);
     } else if (type === 'users') {
       this.onSelectAssignees(e);
-    } else if (type === 'attach') {
-      this.onChooseAttachment(e);
     }
+  }
+  onAttachButtonCloseOverlay() {
+    this.onFocus();
   }
   onAddedAttachment(att) {
     const { post } = this.state;

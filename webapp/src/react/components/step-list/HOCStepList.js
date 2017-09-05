@@ -85,21 +85,9 @@ class HOCStepList extends PureComponent {
       assignees = step.get('assignees');
     }
 
-
-
-    options.actionLabel = 'Assign';
-    if(assignees.size){
-      options.actionLabel = 'Reassign';
-    }
     let overrideAssignees;
-    selectAssignees(options, assignees.toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      } else if (overrideAssignees) {
-        if(i === 'add') {
-          this.setState({ addStepAssignees: fromJS(overrideAssignees) });
-          return;
-        }
+    options.onClose = () => {
+      if (overrideAssignees) {
         const clearCB = this.clearLoading.bind(null, step.get('id'));
         this.setLoading(step.get('id'), 'Assigning...');
         assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res) => {
@@ -110,6 +98,11 @@ class HOCStepList extends PureComponent {
             });
           }
         });
+      }
+    }
+    selectAssignees(options, assignees.toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
       }
     });
     e.stopPropagation();

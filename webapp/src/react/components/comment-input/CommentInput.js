@@ -37,6 +37,7 @@ class CommentInput extends PureComponent {
     }
   }
   onAttachmentClose(i) {
+    this.onAttachButtonCloseOverlay();
     this.setState({
       attachments: this.state.attachments.delete(i),
     });
@@ -101,6 +102,12 @@ class CommentInput extends PureComponent {
     text = tempDiv.innerHTML.replace("\r\n", '<br/>');
 
     document.execCommand("insertHTML", false, text);
+  }
+  onAttachButtonCloseOverlay() {
+    const input = getDeep(this, 'refs.textarea.refs.input.htmlEl');
+    if(input) {
+      this.placeCaretAtEnd(input);
+    }
   }
   handleTextareaFocus() {
     const { textarea } = this.refs;
