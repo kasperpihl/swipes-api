@@ -120,7 +120,7 @@ class CommentView extends PureComponent {
     return (
       <div className="comment__attachments">
         {attachments.map((att, i) => (
-          <HOCAttachmentItem attachment={att} key={i} />
+          <HOCAttachmentItem attachment={att} key={i} noClose />
         ))}
       </div>
     )
