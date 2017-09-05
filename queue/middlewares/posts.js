@@ -78,6 +78,7 @@ const postCreatedNotificationData = (req, res, next) => {
       type: post.type,
       message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
+      push: true,
     },
   };
   res.locals.eventData = {
@@ -136,8 +137,10 @@ const postCommentMentionNotificationData = (req, res, next) => {
       id: post.id,
     },
     meta: {
-      message: post.message.replace(cutTextRegExp, '$1'),
+      post_message: post.message.replace(cutTextRegExp, '$1'),
+      comment_message: comment.message.replace(cutTextRegExp, '$1'),
       mentioned_by: comment.created_by,
+      push: true,
     },
   };
   res.locals.eventData = {

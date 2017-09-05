@@ -122,8 +122,10 @@ class CommentInput extends PureComponent {
     message = message.replace(/<a.*?(<![A-Z0-9]*\|.*?>).*?>.*?<\/a>/gi, "$1");
     message = message.replace(/<br\s*\/?>/ig, "\r\n");
     message = message.replace('&nbsp;', ' ');
-    this.onAddComment(message, attachments.toJS(), e);
-    this.setState({ message: '', attachments: fromJS([]) });
+    if(message.length) {
+      this.onAddComment(message, attachments.toJS(), e);
+      this.setState({ message: '', attachments: fromJS([]) });
+    }
   }
   handleKeyDown(e) {
     if (e.keyCode === 13 && !e.shiftKey) {

@@ -26,6 +26,20 @@ class HOCAttachmentItem extends PureComponent {
     e.stopPropagation();
     this.onAttachmentClose(index, e);
   }
+  renderCloseButton() {
+    const { noClose } = this.props;
+    if(noClose) {
+      return null;
+    }
+    return (
+      <div className="attachment-item__delete-icon" onClick={this.onClose}>
+        <Icon
+          icon="Close"
+          className="attachment-item__svg"
+        />
+      </div>
+    );
+  }
   render() {
     const { attachment } = this.props;
     return (
@@ -39,12 +53,7 @@ class HOCAttachmentItem extends PureComponent {
         <div className="attachment-item__label">
           {attachment.get('title')}
         </div>
-        <div className="attachment-item__delete-icon" onClick={this.onClose}>
-          <Icon
-            icon="Close"
-            className="attachment-item__svg"
-          />
-        </div>
+        {this.renderCloseButton()}
       </div>
     );
   }

@@ -114,7 +114,7 @@ class PostView extends PureComponent {
     return (
       <div className="post__attachments">
         {post.get('attachments').map((att, i) => (
-          <HOCAttachmentItem attachment={att} key={i} />
+          <HOCAttachmentItem attachment={att} key={i} noClose />
         ))}
       </div>
     )
