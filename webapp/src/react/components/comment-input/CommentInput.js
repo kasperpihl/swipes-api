@@ -9,7 +9,7 @@ import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import ReactTextarea from 'react-textarea-autosize';
 // import SWView from 'SWView';
-// import Button from 'Button';
+import Button from 'Button';
 import Icon from 'Icon';
 import './styles/comment-input.scss';
 class CommentInput extends PureComponent {
@@ -185,6 +185,16 @@ class CommentInput extends PureComponent {
       </div>
     )
   }
+  renderSendButton() {
+    const { message } = this.state;
+    let className = 'comment-input__send-button';
+
+    if (message.length > 0) {
+      className += ' comment-input__send-button--active'
+    }
+
+    return <Button icon="Send" frameless className={className} onClick={this.handleSend} />
+  }
   renderTextarea() {
     const { message } = this.state;
     const { delegate } = this.props;
@@ -216,6 +226,7 @@ class CommentInput extends PureComponent {
           delegate={this}
           frameless
         />
+        {this.renderSendButton()}
         {/* <div className="comment-input__icon-wrapper">
           <Icon icon="Attach" className="comment-input__svg" />
         </div> */}

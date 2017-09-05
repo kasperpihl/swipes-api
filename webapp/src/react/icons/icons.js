@@ -92,6 +92,7 @@ import Plus from './svgs/plus.svg';
 import Reaction from './svgs/reaction.svg';
 import Reload from './svgs/reload.svg';
 import Save from './svgs/save.svg';
+import Send from './svgs/send.svg';
 import SmallList from './svgs/small-list.svg';
 import Star from './svgs/star.svg';
 import Status from './svgs/status.svg';
@@ -243,6 +244,7 @@ export {
   Reaction,
   Reload,
   Save,
+  Send,
   SmallList,
   Star,
   Status,

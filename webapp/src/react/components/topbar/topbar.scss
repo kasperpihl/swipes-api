@@ -13,6 +13,7 @@ $topbarSize: 38px;
   -webkit-app-region: drag;
   flex: none;
   user-select: none;
+  z-index: 99;
 }
 
 // ======================================================
@@ -37,6 +38,7 @@ $topbarSize: 38px;
   &__header {
     @include size(100%, 60px);
     @include flexContainer('row', center, center);
+    padding-bottom: 23px;
   }
 
 

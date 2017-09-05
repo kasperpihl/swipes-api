@@ -45,9 +45,10 @@
     $flexIgnoreList: '#{$b}__icon-wrapper';
 
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
-    width: 100%;
     margin-left: 6px;
     padding-right: 6px;
+    outline: none;
+    width: 100%;
   }
 
   &__placeholder {
@@ -108,12 +109,24 @@
     @include svg-color($deepBlue-30);
     transition: .2s ease;
   }
+
+  &__send-button {
+    width: 0px !important;
+    min-width: 0px !important;
+
+    &#{&}--active {
+      width: auto !important;
+      min-width: 36px !important;
+    }
+  }
+
   &__attachments{
     @include size(100%, auto);
     @include flexContainer('row') {
       flex-wrap: wrap;
     };
     padding-left: 36px;
+
     .attachment-item {
       margin-right: 6px;
     }
