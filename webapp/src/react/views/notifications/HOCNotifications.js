@@ -33,9 +33,11 @@ class HOCNotifications extends PureComponent {
       return;
     }
     this.setLoading('marking');
-    markNotifications(ids).then(() => {
-      if (!this._unmounted) {
-        this.clearLoading('marking');
+    markNotifications(ids).then((res) => {
+      if(res && res.ok) {
+        this.clearLoading('marking', 'Marked', 3000);
+      } else {
+        this.clearLoading('marking', '!Something went wrong', 3000);
       }
     });
   }
@@ -57,7 +59,7 @@ class HOCNotifications extends PureComponent {
     const { notifications } = this.props;
     const sortedNotifications = notifications; //.filter(n => !!n.get('event_type'));
     const { limit } = this.state;
-    
+
     return (
       <Notifications
         limit={limit}

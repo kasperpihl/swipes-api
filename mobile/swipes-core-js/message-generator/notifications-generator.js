@@ -48,6 +48,7 @@ export default class NotificationsGenerator {
     return userId;
   }
   parseMessage(message) {
+    message = message || '';
     return message.replace(/<![A-Z0-9]*\|(.*?)>/gi, (t1, name) => name);
   }
   getStyledTextForNotification(n, boldStyle) {
@@ -90,7 +91,7 @@ export default class NotificationsGenerator {
       }
       case 'post_comment_mention': {
         text.push(boldText('send', users.getName(meta.get('mentioned_by'), { capitalize: true }), boldStyle));
-        text.push(` mentioned you in a comment`);
+        text.push(` mentioned you in a comment: "${this.parseMessage(meta.get('comment_message'))}"`);
         break;
       }
       default: {
@@ -102,30 +103,26 @@ export default class NotificationsGenerator {
   }
   getDesktopNotification(n) {
     const meta = n.get('meta');
+    if(!meta.get('push')) {
+      return undefined;
+    }
     const notif = {
       id: n.get('id'),
       target: n.get('target').toJS(),
     };
     switch (meta.get('event_type')) {
-      case 'step_assigned': {
-        notif.title = 'You got assigned to a step';
-        break;
-      }
       case 'post_created': {
+        const name = this.parent.users.getName(meta.get('created_by'), { capitalize: true });
+        notif.title = `${name} mentioned you in a post`;
+        notif.message = this.parseMessage(meta.get('message'));
         break;
       }
-      case 'post_reaction_added': {
+      case 'post_comment_mention': {
+        const name = this.parent.users.getName(meta.get('mentioned_by'), { capitalize: true });
+        notif.title = `${name} mentioned you in a comment`;
+        notif.message = this.parseMessage(meta.get('comment_message'));
         break;
       }
-      case 'post_comment_added': {
-        break;
-      }
-      case 'post_comment_reaction_added': {
-        break;
-      }
-    }
-    if (!notif.title) {
-      return undefined;
     }
     return notif;
   }

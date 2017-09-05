@@ -1,5 +1,7 @@
 import { main, navigation } from 'actions';
+import { fromJS } from 'immutable';
 import * as ca from 'swipes-core-js/actions';
+import { navForContext } from 'swipes-core-js/classes/utils';
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
@@ -69,7 +71,7 @@ export default class IpcListener {
     });
 
     desktopNotification.onclick = () => {
-      this.store.dispatch(navigation.openSecondary('primary', navForContext(notification.target)));
+      this.store.dispatch(navigation.openSecondary('primary', navForContext(fromJS(notification.target))));
       this.store.dispatch(ca.notifications.mark([notification.id]));
       const remWin = remote.getCurrentWindow();
       remWin.focus();
