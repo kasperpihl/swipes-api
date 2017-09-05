@@ -152,6 +152,10 @@ class HOCMilestones extends PureComponent {
       <MilestoneItem milestone={milestone} delegate={this} />
     );
   }
+  renderListFooter() {
+
+    return <EmptyListFooter />
+  }
   renderList() {
     const { tabIndex, tabs, hasLoaded } = this.state;
     const { milestones } = this.props;
@@ -166,6 +170,7 @@ class HOCMilestones extends PureComponent {
         style={styles.list}
         immutableData={milestones.get(tabs[tabIndex])}
         renderRow={this.renderMilestoneItem}
+        renderFooter={this.renderListFooter}
         windowSize={2}
       />
     );

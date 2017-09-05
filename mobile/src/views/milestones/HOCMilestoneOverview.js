@@ -9,6 +9,7 @@ import HOCHeader from '../../components/header/HOCHeader';
 import HOCGoalItem from '../goallist/HOCGoalItem';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import Icon from '../../components/icons/Icon';
+import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import CreateNewItemModal from '../../modals/CreateNewItemModal';
 import { colors } from '../../utils/globalStyles';
@@ -163,13 +164,17 @@ class HOCMilestoneOverview extends PureComponent {
       </View>
     );
   }
+  renderListFooter() {
+
+    return <EmptyListFooter />
+  }
   renderList() {
     const { tabs, tabIndex, hasLoaded } = this.state;
     const { groupedGoals } = this.props;
     
-    // if (!hasLoaded) {
-    //   return this.renderListLoader();
-    // }
+    if (!hasLoaded) {
+      return this.renderListLoader();
+    }
 
     const tab = tabs[tabIndex];
     const goalList = groupedGoals.get(tab);
@@ -181,6 +186,7 @@ class HOCMilestoneOverview extends PureComponent {
         style={styles.list}
         immutableData={goalList}
         renderRow={this.renderGoal}
+        renderFooter={this.renderListFooter}
       />
     );
   }

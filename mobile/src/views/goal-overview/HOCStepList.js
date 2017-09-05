@@ -6,6 +6,7 @@ import { ImmutableListView } from 'react-native-immutable-list-view';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
+import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 import { colors, viewSize } from '../../utils/globalStyles';
 import RippleButton from '../../components/ripple-button/RippleButton';
 import CreateNewItemModal from '../../modals/CreateNewItemModal';
@@ -169,6 +170,10 @@ class HOCStepList extends PureComponent {
       </View>
     )
   }
+  renderListFooter() {
+
+    return <EmptyListFooter />
+  }
   render() {
     const { steps, isLoading, getLoading } = this.props;
 
@@ -177,6 +182,7 @@ class HOCStepList extends PureComponent {
         <ImmutableListView
           immutableData={steps.map(s => s.set('title', isLoading(s.get('id')) ? getLoading(s.get('id')).loadingLabel : s.get('title')))}
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
+          renderFooter={this.renderListFooter}
         />
         {this.renderFAB()}
         <CreateNewItemModal

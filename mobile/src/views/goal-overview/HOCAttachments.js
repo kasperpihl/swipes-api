@@ -96,6 +96,7 @@ class HOCAttachments extends PureComponent {
         removeClippedSubviews={false}
         immutableData={attachmentOrder}
         renderRow={this.renderAttachment}
+        renderFooter={this.renderFooter}
       />
     );
   }

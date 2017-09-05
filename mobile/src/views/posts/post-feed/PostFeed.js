@@ -88,6 +88,9 @@ class PostFeed extends PureComponent {
       </View>
     );
   }
+  renderFooter() {
+    return <EmptyListFooter />;
+  }
   renderList() {
     const { posts } = this.props;
     const { hasLoaded } = this.state;
@@ -102,6 +105,7 @@ class PostFeed extends PureComponent {
         style={styles.list}
         immutableData={posts}
         renderRow={this.renderFeedItem}
+        renderFooter={this.renderFooter}
         onScroll={window.onScroll}
       />
     )
