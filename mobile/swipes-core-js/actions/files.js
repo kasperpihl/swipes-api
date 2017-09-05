@@ -61,24 +61,3 @@ export const create = (files) => (d, getState) => new Promise((resolve) => {
     resolve(localRes);
   })
 });
-
-export const upload = (targetId, files) => (d, getState) => new Promise((resolve) => {
-  // First do S3 upload
-  const file = files[0];
-  const fileName = file.name;
-  const orgId = getState().getIn(['me', 'organizations', 0, 'id']);
-
-  d(uploadToS3(files)).then((s3res) => {
-    if (!s3res.ok) {
-      return resolve(s3res);
-    }
-    return d(a.api.request('files.upload', {
-      target_id: targetId,
-      organization_id: orgId,
-      file_name: fileName,
-      s3_url: s3res.s3Url,
-    }))
-  }).then((localRes) => {
-    resolve(localRes);
-  })
-});

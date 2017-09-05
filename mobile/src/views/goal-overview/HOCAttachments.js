@@ -23,7 +23,7 @@ class HOCAttachments extends PureComponent {
     this.attachmentPress = setupCachedCallback(this.attachmentPress, this);
   }
   onAddAttachment() {
-    const { upload, goal, loading } = this.props;
+    const { createLink, createFile, addAttachment, goal, loading } = this.props;
 
     const options = {
       title: 'Attach image',
@@ -54,12 +54,42 @@ class HOCAttachments extends PureComponent {
         };
         console.log('res', response);
         loading(true);
-        upload(goal.get('id'), [file]).then((res) => {
-          console.log(res);
+        let _title;
+        createFile([file]).then((fileRes) => {
+          if(!fileRes || !fileRes.ok) return new Promise((r, reject) => reject());
+
+          const { id, title } = fileRes.file;
+
+          _title = title;
+          return createLink(this.getSwipesLinkObj('file', id, title));
+
+        }).then((linkRes) => {
+          if(!linkRes || !linkRes.ok) return new Promise((r, reject) => reject());
+
+          return addAttachment(goal.get('id'), linkRes.link, _title);
+        }).then((attRes) => {
           loading();
-        });
+        }).catch(() => {
+          loading();
+        })
       }
     });
+  }
+  getSwipesLinkObj(type, id, title) {
+    const { me } = this.props;
+    return {
+      service: {
+        name: 'swipes',
+        type,
+        id,
+      },
+      permission: {
+        account_id: me.get('id'),
+      },
+      meta: {
+        title,
+      },
+    };
   }
   attachmentPress(att) {
     const { preview } = this.props;
@@ -169,5 +199,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   preview: a.links.preview,
   loading: a.loading.showLoader,
-  upload: ca.files.upload,
+  addAttachment: ca.attachments.add,
+  createFile: ca.files.create,
+  createLink: ca.links.create,
 })(HOCAttachments);
