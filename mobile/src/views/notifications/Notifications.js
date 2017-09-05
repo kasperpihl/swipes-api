@@ -67,12 +67,12 @@ class Notifications extends PureComponent {
     const { hasLoaded } = this.state;
     const { notifications } = this.props;
 
-    if (!notifications || !notifications.size) {
-      return this.renderEmptyState();
-    }
-
     if (!hasLoaded) {
       return this.renderListLoader();
+    }
+
+    if (!notifications || !notifications.size) {
+      return this.renderEmptyState();
     }
 
     return (

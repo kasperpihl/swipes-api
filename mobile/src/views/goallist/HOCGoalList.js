@@ -9,6 +9,7 @@ import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter'
 import CreateNewItemModal from '../../modals/CreateNewItemModal';
 import * as cs from '../../../swipes-core-js/selectors';
 import * as ca from '../../../swipes-core-js/actions';
+import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import { colors, viewSize } from '../../utils/globalStyles';
 import HOCGoalItem from './HOCGoalItem';
 
@@ -69,6 +70,9 @@ class HOCGoalList extends PureComponent {
     this.renderGoal = this.renderGoal.bind(this);
     this.handleModalState = this.handleModalState.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
+    this.renderSectionHeader = this.renderSectionHeader.bind(this);
+
+    this.navigateToMilestoneCached = setupCachedCallback(this.navigateToMilestone, this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -109,6 +113,21 @@ class HOCGoalList extends PureComponent {
   onHeaderTap() {
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
+  navigateToMilestone(milestoneId) {
+    const { navPush } = this.props;
+
+    if (milestoneId !== 'none') {
+      const overview = {
+        id: 'MilestoneOverview',
+        title: 'Milestone overview',
+        props: {
+          milestoneId: milestoneId,
+        },
+      };
+
+      navPush(overview);
+    }
+  }
   handleModalState() {
     const { fabOpen } = this.state;
 
@@ -127,17 +146,19 @@ class HOCGoalList extends PureComponent {
       />
     );
   }
-  renderSectionHeader(v1, section) {
-    let sectionTitle = section === 'none' ? 'No milestone' : msgGen.milestones.getName(section);
-    let sectionIcon = section === 'none' ? 'MiniNoMilestone' : 'MiniMilestone';
+  renderSectionHeader(v1, sectionId) {
+    let sectionTitle = sectionId === 'none' ? 'No milestone' : msgGen.milestones.getName(sectionId);
+    let sectionIcon = sectionId === 'none' ? 'MiniNoMilestone' : 'MiniMilestone';
 
     return (
-      <View style={styles.sectionWrapper}>
-        <View style={{flexDirection: 'row'}}>
-          <Icon name={sectionIcon} fill={colors.deepBlue100} width="18" height="18" />
-          <Text style={[styles.sectionTitle, { paddingLeft: 6 }]}>{sectionTitle}</Text>
+      <RippleButton onPress={this.navigateToMilestoneCached(sectionId)}>
+        <View style={styles.sectionWrapper}>
+          <View style={{flexDirection: 'row'}}>
+            <Icon name={sectionIcon} fill={colors.deepBlue100} width="18" height="18" />
+            <Text style={[styles.sectionTitle, { paddingLeft: 6 }]}>{sectionTitle}</Text>
+          </View>
         </View>
-      </View>
+      </RippleButton>
     )
   }
   renderGoal(g) {
@@ -170,12 +191,12 @@ class HOCGoalList extends PureComponent {
     const { goals } = this.props;
     const { hasLoaded } = this.state;
 
-    if (goals.size === 1 && !goals.get('none').size) {
-      return this.renderEmptyState();
-    }
-
     if (!hasLoaded) {
       return this.renderListLoader();
+    }
+
+    if (goals.size === 1 && !goals.get('none').size) {
+      return this.renderEmptyState();
     }
 
     return (

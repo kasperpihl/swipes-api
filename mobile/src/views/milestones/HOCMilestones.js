@@ -169,12 +169,12 @@ class HOCMilestones extends PureComponent {
     const { tabIndex, tabs, hasLoaded } = this.state;
     const { milestones } = this.props;
 
-    if (milestones.get(tabs[tabIndex]) || !milestones.get(tabs[tabIndex]).size) {
-      return this.renderEmptyState();
-    }
-
     if (!hasLoaded) {
       return this.renderListLoader();
+    }
+
+    if (!milestones.get(tabs[tabIndex]).size) {
+      return this.renderEmptyState();
     }
 
     return (

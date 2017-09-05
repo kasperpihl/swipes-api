@@ -74,7 +74,7 @@ class HOCTabNavigation extends PureComponent {
     if (nextProps.counter !== this.props.counter) {
       const { rootRoutes } = this.state;
 
-      rootRoutes[2].counter = nextProps.counter;
+      rootRoutes[0].counter = nextProps.counter;
       this.setState({ rootRoutes });
     }
   }

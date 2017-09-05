@@ -103,13 +103,13 @@ class PostFeed extends PureComponent {
   renderList() {
     const { posts } = this.props;
     const { hasLoaded } = this.state;
-    
-    if (!posts.size) {
-      return this.renderEmptyState()
-    }
 
     if (!hasLoaded) {
       return this.renderListLoader();
+    }
+    
+    if (!posts.size) {
+      return this.renderEmptyState()
     }
 
     return (

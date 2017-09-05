@@ -139,7 +139,7 @@ class HOCGoalOverview extends PureComponent {
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
     const totalSteps = helper.getNumberOfSteps();
-    const tabs = [`Steps(${numberOfCompleted}/${totalSteps})`, 'Activity', `Attachments(${goal.get('attachment_order').size})`];
+    const tabs = [`Steps(${numberOfCompleted}/${totalSteps})`, `Attachments(${goal.get('attachment_order').size})`];
 
     return (
       <HOCHeader
@@ -199,8 +199,6 @@ class HOCGoalOverview extends PureComponent {
     if (tabIndex === 0) {
       return this.renderStepList();
     } else if (tabIndex === 1) {
-      return this.renderActivity();
-    } else if (tabIndex === 2) {
       return this.renderAttachments();
     }
 
