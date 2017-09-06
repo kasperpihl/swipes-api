@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import codePush from 'react-native-code-push';
-import { View, TextInput, StyleSheet, Text, ScrollView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, TextInput, StyleSheet, Text, ScrollView, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RippleButton from '../../components/ripple-button/RippleButton';
@@ -30,10 +30,17 @@ class Login extends PureComponent {
     this.keyboardDidShow = this.keyboardDidShow.bind(this);
     this.keyboardDidHide = this.keyboardDidHide.bind(this);
     this.focusNext = this.focusNext.bind(this);
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
   }
   componentDidMount() {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+  }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
   }
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
@@ -70,12 +77,6 @@ class Login extends PureComponent {
     this.refs.passwordInput.focus();
   }
   renderButton() {
-    const { keyboardOpen } = this.state;
-
-    // if (keyboardOpen) {
-    //   return undefined;
-    // }
-
     return (
       <RippleButton onPress={this.signIn}>
         <View style={styles.button}>
@@ -116,6 +117,19 @@ class Login extends PureComponent {
       </View>
     )
   }
+  renderTitle() {
+    const { keyboardOpen } = this.state;
+
+    if (keyboardOpen) {
+      return undefined;
+    }
+
+    return (
+      <View style={styles.titleWrapper}>
+        <Text style={styles.titleLabel}>Sign in to your Workspace</Text>
+      </View>
+    )
+  }
   render() {
     const { version } = this.state;
     return (
@@ -123,9 +137,7 @@ class Login extends PureComponent {
         <View style={styles.container}>
           {this.renderGradient()}
           <ScrollView keyboardShouldPersistTaps="always">
-            <View style={styles.titleWrapper}>
-              <Text style={styles.titleLabel}>Sign in to your Workspace</Text>
-            </View>
+            {this.renderTitle()}
             <View style={styles.form}>
               <View style={styles.inputWrapper}>
                 <TextInput
