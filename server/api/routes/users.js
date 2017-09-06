@@ -38,7 +38,7 @@ import {
   organizationsCreate,
   organizationsAddToUser,
   organizationsGetSingle,
-  organizationsCreateUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionCustomer,
 } from './middlewares/organizations';
 import {
   xendoRemoveServiceFromUserQueueMessage,
@@ -107,7 +107,7 @@ notAuthed.all('/users.signup',
     organization_id: locals.organizationId,
   })),
   organizationsGetSingle,
-  organizationsCreateUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionCustomer,
   userActivatedUserSignUpQueueMessage,
   notificationsPushToQueue,
   userGetInfoForToken,

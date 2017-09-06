@@ -112,7 +112,7 @@ class HOCOrganization extends PureComponent {
     this.setLoading(uId);
     enableUser(organization.get('id'), uId).then((res) => {
       if(res.ok){
-        this.clearLoading(uId, `Deactivated`, 3000);
+        this.clearLoading(uId, `Activated`, 3000);
       } else {
         this.clearLoading(uId, '!Something went wrong', 3000);
       }
