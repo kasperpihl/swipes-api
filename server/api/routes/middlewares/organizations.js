@@ -460,7 +460,7 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
     return next(new SwipesError(err));
   });
 });
-const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCreateUpdateSubscriptionCustomer', {
+const organizationsCreateSubscriptionCustomer = valLocals('organizationsCreateSubscriptionCustomer', {
   organization: object,
 }, (req, res, next, setLocals) => {
   const {
@@ -480,23 +480,74 @@ const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCr
     quantity: organization.active_users.length,
   };
   const args = [];
-  let funcName = '';
 
-  if (!organization.stripe_customer_id) {
+  if (!stripe_customer_id) {
     return next();
   }
 
-  if (organization.stripe_subscription_id) {
-    funcName = 'update';
-    args.push(organization.stripe_subscription_id);
-  } else {
-    funcName = 'create';
-    subscription.customer = stripe_customer_id;
-  }
+  subscription.customer = stripe_customer_id;
 
   args.push(subscription);
 
-  return stripe.subscriptions[funcName](...args)
+  return stripe.subscriptions.create(...args)
+    .then((subscription) => {
+      const stripeSubscriptionId = subscription.id;
+
+      dbOrganizationsUpdateStripeSubscriptionId({
+        organization_id: organization.id,
+        stripe_subscription_id: stripeSubscriptionId,
+      })
+      .then((result) => {
+        const changes = result.changes[0];
+        const organization = changes.new_val || changes.old_val;
+
+        setLocals({
+          organization,
+        });
+
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
+      });
+    }).catch((err) => {
+      return next(new SwipesError(err));
+    });
+});
+const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSubscriptionCustomer', {
+  organization: object,
+}, (req, res, next, setLocals) => {
+  const {
+    organization,
+  } = res.locals;
+
+  if (!organization) {
+    return next();
+  }
+
+  const {
+    plan,
+    stripe_customer_id,
+    stripe_subscription_id,
+  } = organization;
+  const subscription = {
+    plan: plan === 'yearly' ? stripeConfig.yearlyPlanId : stripeConfig.monthlyPlanId,
+    quantity: organization.active_users.length,
+  };
+  const args = [];
+
+  if (!stripe_customer_id) {
+    return next();
+  }
+
+  if (!stripe_subscription_id) {
+    return next(new SwipesError('There is no stripe_subscription_id'));
+  }
+
+  args.push(stripe_subscription_id);
+  args.push(subscription);
+
+  return stripe.subscriptions.update(...args)
     .then((subscription) => {
       const stripeSubscriptionId = subscription.id;
 
@@ -522,6 +573,7 @@ const organizationsCreateUpdateSubscriptionCustomer = valLocals('organizationsCr
     });
 });
 
+
 export {
   organizationsCreate,
   organizationsAddToUser,
@@ -539,5 +591,6 @@ export {
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
   organizationsCheckIsEnableValid,
-  organizationsCreateUpdateSubscriptionCustomer,
+  organizationsCreateSubscriptionCustomer,
+  organizationsUpdateSubscriptionCustomer,
 };
