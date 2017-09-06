@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import PDF from 'react-pdf';
-
+import { Page } from 'react-pdf';
+import { Document } from 'react-pdf/build/entry.webpack';
+console.log("hi");
 class PDFRender extends PureComponent {
   constructor(props) {
     super(props);
@@ -10,13 +11,16 @@ class PDFRender extends PureComponent {
     const { file, scale, page, onDocumentComplete } = this.props;
 
     return (
-      <PDF
+      <Document
         file={file}
-        scale={scale}
-        onDocumentLoad={onDocumentComplete}
-        pageIndex={page}
+        onLoadSuccess={onDocumentComplete}
         loading={(<span />)}
-      />
+      >
+        <Page
+          pageIndex={page}
+          scale={scale}
+        />
+      </Document>
     );
   }
 }

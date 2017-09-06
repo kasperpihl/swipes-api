@@ -1,4 +1,4 @@
-import createLogger from 'redux-logger';
+import { createLogger } from 'redux-logger'
 
 const ignoredActions = ['API_REQUEST', 'API_SUCCESS']; // Ignore actions from Logger
 let cacheImmutable = null;
