@@ -19,7 +19,11 @@
   &__header {
     @include size(100%, 37px);
     @include flexContainer('row', between, center);
+    background-color: white;
     border-bottom: 1px solid $deepBlue-15;
+    left: 0; top: 0;
+    position: sticky;
+    z-index: 99;
   }
 
   &__side {
