@@ -11,7 +11,7 @@ const initialState = fromJS({
   modals: {
     primary: null,
     secondary: null,
-  }
+  },
 });
 
 export default function main(state = initialState, action) {
@@ -37,7 +37,7 @@ export default function main(state = initialState, action) {
     // Modals
     // ======================================================
     case types.NAVIGATION_MODAL: {
-      return state.setIn(['modals', payload.target], payload.modal || null)
+      return state.setIn(['modals', payload.target], payload.modal || null);
     }
 
     // ======================================================
@@ -61,9 +61,8 @@ export default function main(state = initialState, action) {
     // ======================================================
     // Success animation
     // ======================================================
-    case 'goals.complete':
-    case 'goals.completeStep': {
-      return state.set('successState', new Date());
+    case types.SUCCESS_GRADIENT: {
+      return state.set('successState', new Date()).set('successColor', payload.color || 'green');
     }
 
     default:

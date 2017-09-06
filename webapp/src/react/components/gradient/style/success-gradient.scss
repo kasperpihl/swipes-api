@@ -11,15 +11,18 @@
   &__gradient {
     @include size(100%);
     background: linear-gradient(135deg, rgba(147,247,190,1) 0%, rgba(34,208,112,1) 100%);
+    &--red {
+      background: linear-gradient(135deg, #EC6583 0%, #F8A39D 100%);
+    }
     opacity: 0;
-    transition: 2s cubic-bezier(.92,0,.52,.99);
+    transition: 0.9s ease-in;
   }
 
   &--active {
 
     #{$b}__gradient {
       opacity: 1;
-      transition: .35s ease-in;
+      transition: .3s ease-in;
     }
   }
 }

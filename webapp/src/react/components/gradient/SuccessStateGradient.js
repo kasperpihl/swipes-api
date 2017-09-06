@@ -25,7 +25,7 @@ class SuccessStateGradient extends PureComponent {
     }, 700);
   }
   render() {
-    const { successState } = this.props;
+    const { successState, successColor } = this.props;
     const { activePulse } = this.state;
 
     let gradientClass = 'success-gradient';
@@ -35,7 +35,7 @@ class SuccessStateGradient extends PureComponent {
 
     return (
       <div className={gradientClass}>
-        <div className="success-gradient__gradient" />
+        <div className={`success-gradient__gradient success-gradient__gradient--${successColor || ''}`} />
       </div>
     );
   }
@@ -44,6 +44,7 @@ class SuccessStateGradient extends PureComponent {
 function mapStateToProps(state) {
   return {
     successState: state.getIn(['main', 'successState']),
+    successColor: state.getIn(['main', 'successColor']),
   };
 }
 

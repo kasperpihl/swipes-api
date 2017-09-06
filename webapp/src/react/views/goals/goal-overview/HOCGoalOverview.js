@@ -40,10 +40,10 @@ class HOCGoalOverview extends PureComponent {
   }
   onScroll(e) {
     const { showLine } = this.state;
-    let newShowLine = e.target.scrollTop > 0;
+    const newShowLine = e.target.scrollTop > 0;
 
     if (showLine !== newShowLine) {
-      this.setState({ showLine: newShowLine })
+      this.setState({ showLine: newShowLine });
     }
   }
   onEditSteps() {
@@ -95,22 +95,25 @@ class HOCGoalOverview extends PureComponent {
     });
   }
   onGoalCheckboxClick() {
-    const { incompleteGoal, completeGoal } = this.props;
+    const { incompleteGoal, completeGoal, successGradient } = this.props;
     const helper = this.getHelper();
     const actionFunc = helper.getIsCompleted() ? incompleteGoal : completeGoal;
-    this.setLoading('completing')
+    this.setLoading('completing');
     actionFunc(helper.getId()).then((res) => {
-      if(res && res.ok) {
+      if (res && res.ok) {
+        if (!helper.getIsCompleted()) {
+          successGradient();
+        }
         this.setState({
           handoff: {
-            completed: !helper.getIsCompleted()
-          }
+            completed: !helper.getIsCompleted(),
+          },
         });
-        this.clearLoading('completing')
+        this.clearLoading('completing');
       } else {
         this.clearLoading('completing', '!Something went wrong');
       }
-    })
+    });
   }
 
   onHandoffMessage(handoff) {
@@ -119,11 +122,15 @@ class HOCGoalOverview extends PureComponent {
 
     console.log(i, handoff);
     this.onCreatePost({
-      taggedUsers: assignees.toArray()
+      taggedUsers: assignees.toArray(),
     });
   }
 
   onStepDidComplete(handoff) {
+    const { successGradient } = this.props;
+    if (handoff.completed) {
+      successGradient();
+    }
     this.clearLoading('completing');
     this.setState({ handoff });
   }
@@ -153,7 +160,7 @@ class HOCGoalOverview extends PureComponent {
       if (i === 1) {
         this.setLoading('dots');
         archive(goal.get('id')).then((res) => {
-          if(res.ok){
+          if (res.ok) {
             window.analytics.sendEvent('Goal archived', {});
           }
           if (!res || !res.ok) {
@@ -172,25 +179,25 @@ class HOCGoalOverview extends PureComponent {
       let funcToCall;
       let action = 'added';
       let milestoneId = goal.get('milestone_id');
-      if(milestoneRes.id === 'none' && goal.get('milestone_id')){
+      if (milestoneRes.id === 'none' && goal.get('milestone_id')) {
         funcToCall = removeGoalFromMilestone;
         action = 'removed';
-      } else if(milestoneRes.id !== 'none' && milestoneRes.id !== goal.get('milestone_id')){
+      } else if (milestoneRes.id !== 'none' && milestoneRes.id !== goal.get('milestone_id')) {
         funcToCall = addGoalToMilestone;
         milestoneId = milestoneRes.id;
       }
-      if(funcToCall){
+      if (funcToCall) {
         this.setLoading('dots');
         funcToCall(milestoneId, goal.get('id')).then((res) => {
-          if(res.ok) {
+          if (res.ok) {
             this.clearLoading('dots', `Milestone ${action}`, 3000);
             window.analytics.sendEvent(`Milestone ${action}`, {});
           } else {
             this.clearLoading('dots', '!Something went wrong', 3000);
           }
-        })
+        });
       }
-    })
+    });
   }
   onSaveWay(options) {
     const { createWay, inputMenu } = this.props;
@@ -200,35 +207,32 @@ class HOCGoalOverview extends PureComponent {
       placeholder: 'What should we call the way?',
       buttonLabel: 'Save',
     }, (title) => {
-      if(title && title.length) {
+      if (title && title.length) {
         this.setLoading('dots');
         createWay(title, helper.getObjectForWay()).then((res) => {
-          if(res.ok){
+          if (res.ok) {
             this.clearLoading('dots', 'Saved way', 3000);
-          }
-          else {
+          } else {
             this.clearLoading('dots', '!Something went wrong', 3000);
           }
         });
       }
-    })
+    });
   }
   onLoadWay(options) {
     const { loadWay, goalLoadWay } = this.props;
     const helper = this.getHelper();
     loadWay(options, (way) => {
-      if(way) {
+      if (way) {
         this.setLoading('dots');
         goalLoadWay(helper.getId(), way.get('id')).then((res) => {
-          if(res.ok){
+          if (res.ok) {
             this.clearLoading('dots', 'Loaded way', 3000);
-          }
-          else {
+          } else {
             this.clearLoading('dots', '!Something went wrong', 3000);
           }
         });
       }
-
     });
   }
   onAssign(i, e) {
@@ -239,15 +243,15 @@ class HOCGoalOverview extends PureComponent {
     let overrideAssignees;
     options.onClose = () => {
       if (overrideAssignees) {
-       assignGoal(goal.get('id'), overrideAssignees).then((res) => {
-          if(res.ok){
-            window.analytics.sendEvent('Goal assigned', {
+        assignGoal(goal.get('id'), overrideAssignees).then((res) => {
+          if (res.ok) {
+           window.analytics.sendEvent('Goal assigned', {
               'Number of assignees': overrideAssignees.length,
             });
-          }
+         }
         });
       }
-    }
+    };
     selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
       if (newAssignees) {
         overrideAssignees = newAssignees;
@@ -267,7 +271,7 @@ class HOCGoalOverview extends PureComponent {
     const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
 
     if (emptyStateOpacity !== newEmptyStateOpacity) {
-      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
+      this.setState({ emptyStateOpacity: newEmptyStateOpacity });
     }
   }
   viewDidLoad(stepList) {
@@ -276,7 +280,7 @@ class HOCGoalOverview extends PureComponent {
   getInfoTabProps() {
     const { goal } = this.props;
 
-    const createdLbl = `${dayStringForDate(goal.get('created_at'))} by ${msgGen.users.getFullName(goal.get('created_by'))}`
+    const createdLbl = `${dayStringForDate(goal.get('created_at'))} by ${msgGen.users.getFullName(goal.get('created_by'))}`;
     const mileLbl = msgGen.milestones.getName(goal.get('milestone_id'));
     const mileIcon = goal.get('milestone_id') ? 'MiniMilestone' : 'MiniNoMilestone';
     const mileAct = goal.get('milestone_id') ? 'edit' : 'add';
@@ -294,7 +298,7 @@ class HOCGoalOverview extends PureComponent {
         title: 'What is a goal',
         text: 'A Goal is where work happens. Something needs to be done or delivered. Goals can be broken down into steps to show the next action.\n\nAll important links, documents, and notes can be attached to the goal so everyone is on the same page. You can discuss a goal or post an update via "Discuss".',
       },
-    }
+    };
   }
   getOptionsForE(e) {
     if (e && e.boundingRect) {
@@ -364,6 +368,7 @@ export default connect(mapStateToProps, {
   selectMilestone: a.menus.selectMilestone,
   addGoalToMilestone: ca.milestones.addGoal,
   removeGoalFromMilestone: ca.milestones.removeGoal,
+  successGradient: a.main.successGradient,
   confirm: a.menus.confirm,
   inputMenu: a.menus.input,
   preview: a.links.preview,

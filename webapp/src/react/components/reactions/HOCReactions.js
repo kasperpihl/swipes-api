@@ -27,18 +27,19 @@ class HOCReactions extends PureComponent {
     clearTimeout(this.tooltipDelay);
   }
   onAddReaction() {
-    const { postId, commentId, addReaction, commentAddReaction } = this.props;
+    const { postId, commentId, addReaction, commentAddReaction, successGradient } = this.props;
     const runFunc = commentId ? commentAddReaction : addReaction;
 
+    successGradient('red');
     this.setState({ iLike: true });
     runFunc({
       post_id: postId,
       reaction: 'like',
       comment_id: commentId || null,
     }).then((res) => {
-      if(res.ok) {
+      if (res.ok) {
         window.analytics.sendEvent('Reaction added', {
-          'Where': commentId ? 'Comment' : 'Post',
+          Where: commentId ? 'Comment' : 'Post',
         });
       }
     });
@@ -52,9 +53,9 @@ class HOCReactions extends PureComponent {
       post_id: postId,
       comment_id: commentId,
     }).then((res) => {
-      if(res.ok) {
+      if (res.ok) {
         window.analytics.sendEvent('Reaction removed', {
-          'Where': commentId ? 'Comment' : 'Post',
+          Where: commentId ? 'Comment' : 'Post',
         });
       }
     });
@@ -118,7 +119,7 @@ class HOCReactions extends PureComponent {
       <div onClick={onClick} className="reactions__button">
         <Icon icon="Heart" className={iconClass} />
       </div>
-    )
+    );
   }
   renderLikers() {
     const { reactions } = this.props;
@@ -136,7 +137,7 @@ class HOCReactions extends PureComponent {
 
     return (
       <div className={className}>{reactions.size}</div>
-    )
+    );
   }
   render() {
     return (
@@ -157,6 +158,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
+  successGradient: a.main.successGradient,
   tooltip: a.main.tooltip,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,
