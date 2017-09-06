@@ -226,7 +226,6 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-<<<<<<< ours
 		A71BD5251E83031800350326 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 14344677E3334144BAAF85FE /* BVLinearGradient.xcodeproj */;
