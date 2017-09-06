@@ -80,7 +80,7 @@ class MilestoneItem extends Component {
     return (
       <View style={styles.progressWheelContainer}>
         <View style={styles.shadowWheel}>
-          <Svg viewBox="0 0 150 150" width="150" height="150" >
+          <Svg viewBox="0 0 150 150" width="90" height="90" >
             <Path
               d="M75,24a51,51,0,1,0,51,51A51,51,0,0,0,75,24"
               stroke={colors.deepBlue5}
@@ -90,7 +90,7 @@ class MilestoneItem extends Component {
           </Svg>
         </View>
         <View style={styles.progressWheel}>
-          <Svg viewBox="0 0 150 150" width="150" height="150" >
+          <Svg viewBox="0 0 150 150" width="90" height="90" >
             <Path
               d="M75,24a51,51,0,1,0,51,51A51,51,0,0,0,75,24"
               stroke={colors.tishoGreen}
@@ -109,11 +109,15 @@ class MilestoneItem extends Component {
 
     return (
       <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.button} onPress={this.openMilestone}>
+      <View style={styles.button}>
+        {this.renderProgressWheel()}
         <View style={styles.container}>
           {this.renderHeader()}
           {this.renderProgressCounter()}
-          {this.renderProgressWheel()}
         </View>
+
+        <View style={styles.border} />
+      </View>
       </RippleButton>
     )
   }
@@ -125,50 +129,59 @@ export default MilestoneItem;
 const styles = StyleSheet.create({
   button: {
     flex: 1,
+    flexDirection: 'row',
+    height: 126,
+    paddingHorizontal: 15,
+    paddingVertical: 18,
+  },
+  border: {
+    width: viewSize.width - 30,
+    height: 1,
+    position: 'absolute',
+    left: 0, bottom: 0,
+    backgroundColor: colors.deepBlue5,
+    marginHorizontal: 15,
   },
   container: {
-    width: viewSize.width - 30,
-    marginHorizontal: 15,
-    marginVertical: 4.5,
-    paddingBottom: 15,
+    flex: 1,
+    flexDirection: 'column',
+    paddingLeft: 24,
   },
   titleWrapper: {
     alignSelf: 'stretch',
-    height: 57,
     justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue5,
   },
   title: {
-    fontSize: 21,
-    lineHeight: 27,
+    fontSize: 18,
+    lineHeight: 24,
     color: colors.deepBlue100,
   },
   counterWrapper: {
     alignSelf: 'stretch',
-    height: 30,
     justifyContent: 'center',
+    paddingTop: 6,
   },
   counter: {
     fontSize: 12,
-    lineHeight: 15,
+    lineHeight: 18,
+    fontWeight: '500', 
     color: colors.deepBlue50,
   },
   shadowWheel: {
-    width: 150,
-    height: 150,
+    width: 90,
+    height: 90,
     position: 'absolute',
   },
   progressWheelContainer: {
     alignSelf: 'stretch',
-    height: 150,
+    height: 90,
     justifyContent: 'center',
     alignItems: 'center'
   },
   progressWheel: {
-    width: 150,
-    height: 150,
-    borderRadius: 150 / 2,
+    width: 90,
+    height: 90,
+    borderRadius: 90 / 2,
     transform: [
       { rotateY: '180deg' }
     ]

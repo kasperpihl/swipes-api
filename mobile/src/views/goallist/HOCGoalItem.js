@@ -54,8 +54,6 @@ class HOCGoalItem extends PureComponent {
 
   onPin() {
     const { showModal, goal } = this.props;
-    const isStarred = !!goal.get('starred');
-
 
     const modal = {
       title: 'Goal',
@@ -85,21 +83,27 @@ class HOCGoalItem extends PureComponent {
     this.onPushStack(overview);
   }
   completedDot() {
+
+    return (
+      <View style={styles.dotWrapper}>
+        <View style={styles.completedDot} />
+      </View>
+    )
+  }
+  renderDot() {
     const { goal } = this.props;
     const helper = new GoalsUtil(goal);
     const isCompleted = helper.getIsCompleted();
 
     if (isCompleted) {
-
-      return (
-        <View style={styles.completedWrapper}>
-          <View style={styles.completedDot} />
-        </View>
-      )
+      return this.completedDot();
     }
 
-
-    return undefined;
+    return (
+      <View style={styles.dotWrapper}>
+        <View style={styles.regularDot} />
+      </View>
+    )
   }
   renderContent() {
     const { goal, filter } = this.props;
@@ -108,7 +112,6 @@ class HOCGoalItem extends PureComponent {
     return (
       <View style={styles.content}>
         <Text style={styles.title}>{goal.get('title')}</Text>
-        <Text style={styles.status} numberOfLines={2}>{status}</Text>
       </View>
     );
   }
@@ -119,7 +122,7 @@ class HOCGoalItem extends PureComponent {
 
     return (
       <View style={styles.assignees}>
-        <HOCAssigning assignees={currentAssignees} />
+        <HOCAssigning assignees={currentAssignees} maxImages={1} />
       </View>
     );
   }
@@ -127,14 +130,10 @@ class HOCGoalItem extends PureComponent {
     const { goal } = this.props;
     let rowStyles = styles.row;
 
-    if (goal.get('starred')) {
-      rowStyles = [styles.row, styles.starredRow];
-    }
-
     return (
       <RippleButton onPress={this.openOverview} onLongPress={this.onPin}>
         <View style={rowStyles}>
-          {this.completedDot()}
+          {this.renderDot()}
           {this.renderContent()}
           {this.renderAssignees()}
           <View style={styles.seperator} />
@@ -159,27 +158,32 @@ export default connect(mapStateToProps, {
 const styles = StyleSheet.create({
   row: {
     flex: 1,
-    minHeight: 72,
+    minHeight: 64,
     paddingHorizontal: 15,
     paddingVertical: 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'stretch',
   },
-  completedWrapper: {
+  dotWrapper: {
     width: 30,
     height: 30,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 3,
   },
   completedDot: {
-    width: 9,
-    height: 9,
+    width: 14,
+    height: 14,
     backgroundColor: colors.greenColor,
-    borderRadius: 4.5,
+    borderRadius: 14 /2,
   },
-  starredRow: {
-    backgroundColor: colors.blue5,
+  regularDot:{
+    width: 10,
+    height: 10,
+    borderRadius: 10 /2,
+    borderWidth: 2,
+    borderColor: colors.deepBlue50,
   },
   seperator: {
     width: viewSize.width - 30,
@@ -200,6 +204,7 @@ const styles = StyleSheet.create({
     fontSize: 16.5,
     lineHeight: 21,
     color: colors.deepBlue100,
+    includeFontPadding: false,
   },
   status: {
     fontSize: 12,

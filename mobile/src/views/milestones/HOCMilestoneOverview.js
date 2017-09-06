@@ -43,13 +43,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyTitle: {
+    fontSize: 11,
+    color: colors.deepBlue100,
+    fontWeight: 'bold', 
+  },
+  emptyText: {
+    fontSize: 12,
+    color: colors.deepBlue40,
+    lineHeight: 18,
+    textAlign: 'center',
+    paddingTop: 9,
+  },
 });
 
 class HOCMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Current', 'Completed'],
+      tabs: ['Current', 'Later', 'Completed'],
       tabIndex: 0,
       routeNum: props.lastRoute,
       hasLoaded: false,
@@ -150,7 +167,8 @@ class HOCMilestoneOverview extends PureComponent {
         title={milestone.get('title')}
         currentTab={tabIndex}
         delegate={this}
-        tabs={tabs}
+        tabs={tabs.map((t, i) => i === 0 ? 'This week' : t)}
+        icon="Milestones"
       />
     );
   }
@@ -168,6 +186,28 @@ class HOCMilestoneOverview extends PureComponent {
 
     return <EmptyListFooter />
   }
+  renderEmptyState(group) {
+    let title;
+    let text;
+    
+    if (group === 'Current') {
+      title = 'Add a new goal';
+      text = 'Add new goals for everything that needs \n to be done to achieve this milestone.';
+    } else if (group === 'Later') {
+      title = 'set for later (coming soon)';
+      text = 'Move goals that need to be done later \n from this week into here.';
+    } else if (group === 'Completed') {
+      title = 'TRACK PROGRESS';
+      text = 'You will see the progress of all completed \n goals here';
+    }
+
+    return (
+      <View style={styles.emptyState}>
+        <Text style={styles.emptyTitle}>{title.toUpperCase()}</Text>
+        <Text style={styles.emptyText}>{text}</Text>
+      </View>
+    )    
+  }
   renderList() {
     const { tabs, tabIndex, hasLoaded } = this.state;
     const { groupedGoals } = this.props;
@@ -178,6 +218,10 @@ class HOCMilestoneOverview extends PureComponent {
 
     const tab = tabs[tabIndex];
     const goalList = groupedGoals.get(tab);
+
+    if (!goalList.size) {
+      return this.renderEmptyState(tab)
+    }
 
     return (
       <ImmutableListView

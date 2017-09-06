@@ -49,7 +49,7 @@ class Assignees extends Component {
         );
       }
       return undefined;
-    });
+    }).reverse();
 
     let morePeople;
 

@@ -57,6 +57,7 @@ class HOCGoalOverview extends PureComponent {
     clearTimeout(this.loadingTimeout);
   }
   onComplete(step) {
+    console.log('step', step)
     if (this.isLoading(step.get('id'))) {
       return;
     }

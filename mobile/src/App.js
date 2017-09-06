@@ -128,9 +128,9 @@ class App extends PureComponent {
   onOpened(openResult) {
     const { isHydrated, token, ready, sliderChange } = this.props;
     if (ready) {
-      sliderChange(2);
+      sliderChange(0);
     } else {
-      this.forwardToIndex = 2;
+      this.forwardToIndex = 0;
     }
   }
   renderLoader() {

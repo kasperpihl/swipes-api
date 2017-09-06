@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimatio
 import { connect } from 'react-redux';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import Tabs from '../tabs/Tabs';
+import Icon from '../icons/Icon';
 import { colors } from '../../utils/globalStyles';
 
 const styles = StyleSheet.create({
@@ -16,6 +17,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flexDirection: 'row',
+    alignItems: 'center', 
   },
   bottomContainer: {
     flexDirection: 'row',
@@ -94,13 +96,18 @@ class HOCHeader extends PureComponent {
   renderSubtitle() {
     const { subtitle } = this.props;
 
+    console.log(subtitle);
+
     if (!subtitle) {
       return undefined;
     }
 
     if (typeof subtitle === 'string') {
+      console.log(subtitle);
       return (
-        <Text style={styles.subtitle}>{subtitle}</Text>
+        <View style={{ alignSelf: 'stretch', height: 21 }} >
+          <Text style={styles.subtitle}>{subtitle}</Text>
+        </View>
       )
     } else {
       return subtitle;
@@ -126,6 +133,29 @@ class HOCHeader extends PureComponent {
         {renderTabs}
       </Tabs>
     );
+  }
+  renderHeaderIcon() {
+    const { icon } = this.props;
+
+    if (!icon) {
+      return undefined;
+    }
+
+    return (
+      <View style={{
+        width: 36,
+        height: 36,
+        backgroundColor: colors.deepBlue10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 9,
+        marginTop: 6,
+        borderRadius: 2,
+        flex: 0,
+      }} >
+        <Icon name={icon} width="24" height="24" fill={colors.deepBlue80} />
+      </View>
+    )
   }
   render() {
     const { headerHeight } = this.state;
@@ -153,8 +183,9 @@ class HOCHeader extends PureComponent {
     return (
       <View onLayout={event => this.measureView(event)} style={[styles.container, { marginTop, paddingBottom, borderBottomWidth }]}>
         <TouchableWithoutFeedback onPress={this.onHeaderTap}>
-          <View>
+          <View style={{ flexDirection: 'column' }}>
             <View style={[styles.topContainer, { opacity }]}>
+              {this.renderHeaderIcon()}
               <Text style={styles.title}>{this.props.title}</Text>
               <View style={styles.children}>
                 {children}

@@ -259,7 +259,12 @@ export default {
     viewBox: DEF_VIEWBOX,
   },
   Milestones: {
-    svg: <Path d="M18,5V1H2V23H4V13H7v4H22V5ZM4,11V3H16v8Zm16,4H9V13h9V7h2Z" />,
+    svg: (
+      <G>
+        <Polygon points="20,6,20,15,8,15,8,17,22,17,22,15,22,6,20,6" stroke="transparent" />
+        <Path d="M19,12V2H2V22H4V14H19ZM4,12V4H17v8Z" stroke="transparent" />
+      </G>
+    ),
     viewBox: DEF_VIEWBOX,
   },
   MilestonesActive: {
@@ -286,9 +291,7 @@ export default {
   MiniNoMilestone: {
     svg: (
       <G>
-        <Polygon points="6,10,6,6,4.881,4,4,4,4,6,4,10,4,12,4,16,6,16,6,12,9.5,12,8.345,10,6,10" />
-        <Polygon points="13,6,13,10,14.119,12,15,12,15,10,15,6,15,4,9.5,4,10.655,6,13,6" />
-        <Polygon points="7.191,2,4.881,2,11.809,14,14.119,14,7.191,2" />
+        <Path d="M8.3811,3H4V15H6V11h9V3ZM6,9V5H7.22607L9.5354,9Zm7,0H11.84521L9.53589,5H13Z" stroke="transparent"/>
       </G>
     ),
     viewBox: '0 0 18 18',

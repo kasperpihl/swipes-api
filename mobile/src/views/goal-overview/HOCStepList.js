@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Modal, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput, Vibration } from 'react-native';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable'; 
+import * as a from '../../actions';
 import * as ca from '../../../swipes-core-js/actions';
 import { ImmutableListView } from 'react-native-immutable-list-view';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils';
+import { setupDelegate, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import HOCAssigning from '../../components/assignees/HOCAssigning';
 import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
 import { colors, viewSize } from '../../utils/globalStyles';
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: colors.deepBlue5,
   },
@@ -32,8 +34,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: colors.deepBlue90,
   },
   indicatorCompleted: {
     backgroundColor: colors.greenColor,
@@ -87,6 +87,8 @@ class HOCStepList extends PureComponent {
     setupDelegate(this, 'onComplete');
 
     this.renderSteps = this.renderSteps.bind(this);
+    this.onPressCached = setupCachedCallback(this.onPress, this);
+    this.onModalGoalActionCached = setupCachedCallback(this.onModalGoalAction, this);
     this.handleModalState = this.handleModalState.bind(this);
     this.onStepAdd = this.onStepAdd.bind(this);
   }
@@ -94,6 +96,41 @@ class HOCStepList extends PureComponent {
     const { goal } = this.props;
 
     return new GoalsUtil(goal);
+  }
+  onModalGoalAction(step, i) {
+    const { showModal } = this.props;
+    console.log(i.get('index'));
+    if (i.get('index') === 'complete') {
+      console.log('gets to completed');
+      this.onComplete(step);
+      showModal();
+    } else if (i.get('index') === 'assign') {
+      console.log('assign');
+      showModal();
+    }
+
+  }
+  onPress(step) {
+    const { showModal, goal } = this.props;
+    const helper = this.getHelper();
+    const completeLabel = helper.getIsStepCompleted(step) ? 'Incomplete step' : 'Complete step';
+
+    const modal = {
+      title: 'Step actions',
+      onClick: this.onModalGoalActionCached(step),
+      items: fromJS([
+        {
+          title: completeLabel,
+          index: 'complete',
+        },
+        {
+          title: 'Reassign step',
+          index: 'assign',
+        },
+      ]),
+    };
+
+    showModal(modal);
   }
   onModalCreateAction(title, assignees, milestoneId ) {
     const { addStep, goal } = this.props;
@@ -138,7 +175,7 @@ class HOCStepList extends PureComponent {
     }
 
     return (
-      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onCompleteCached(step)}>
+      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onPressCached(step)}>
         <View style={styles.step}>
           <View style={[styles.indicator, indicatorStyles]}>
             <Text style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
@@ -147,7 +184,7 @@ class HOCStepList extends PureComponent {
             <Text style={[styles.titleLabel, titleStyles]}>{title}</Text>
           </View>
           <View style={[styles.assignees, { opacity }]}>
-            <HOCAssigning assignees={step.get('assignees')} />
+            <HOCAssigning assignees={step.get('assignees')} maxImages={1} />
           </View>
         </View>
       </RippleButton>
@@ -205,4 +242,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   addStep: ca.steps.add,
+  showModal: a.modals.show,
 })(HOCStepList);
