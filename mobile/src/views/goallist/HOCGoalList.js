@@ -126,6 +126,14 @@ class HOCGoalList extends PureComponent {
       };
 
       navPush(overview);
+    } else {
+      const overview = {
+        id: 'NoMilestoneOverview',
+        title: 'No Milestone overview',
+        props: {},
+      };
+
+      navPush(overview);
     }
   }
   handleModalState() {

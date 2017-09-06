@@ -329,6 +329,15 @@ export default {
     ),
     viewBox: DEF_VIEWBOX,
   },
+  NoMilestone: {
+    svg: (
+      <G>
+        <Path d="M118.854,14.1748A74.98184,74.98184,0,0,0,14.175,118.85461Z" stroke="transparent" />
+        <Path d="M135.825,31.14539,31.146,135.8252A74.98184,74.98184,0,0,0,135.825,31.14539Z" stroke="transparent" />
+      </G>
+    ),
+    viewBox: '0 0 150 150',
+  },
   Person: {
     svg: (
       <G>

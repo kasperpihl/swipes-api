@@ -43,6 +43,59 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  noMilestoneWrapper: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    height: 126,
+    paddingHorizontal: 15,
+    paddingVertical: 18,
+  },
+  border: {
+    width: viewSize.width - 30,
+    height: 1,
+    position: 'absolute',
+    left: 0, bottom: 0,
+    backgroundColor: colors.deepBlue5,
+    marginHorizontal: 15,
+  },
+  noMilestoneTitle: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingLeft: 24,
+  },
+  title: {
+    fontSize: 18,
+    lineHeight: 24,
+    color: colors.deepBlue100,
+  },
+  counter: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: '500', 
+    color: colors.deepBlue50,
+    paddingTop: 6,
+  },
+  noMilestoneSVG:{
+    width: 90,
+    height: 90,
+  },
+  noMilestoneCircle:{
+    width: 45,
+    height: 45,
+    position: 'absolute',
+    left: 45 / 2, top: 45 / 2,
+    backgroundColor: 'white',
+    borderRadius: 45 / 2, 
+  },
+  noMilestoneDot:{
+    width: 6,
+    height: 6,
+    position: 'absolute',
+    borderRadius: 3,
+    backgroundColor: colors.deepBlue100,
+    position: 'absolute',
+    left: (45 / 2) - 3, top: (45 / 2) - 3,
+  },
 });
 
 const emptyList = List();
@@ -60,6 +113,8 @@ class HOCMilestones extends PureComponent {
     this.renderMilestoneItem = this.renderMilestoneItem.bind(this);
     this.handleModalState = this.handleModalState.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
+    this.renderListFooter = this.renderListFooter.bind(this);
+    this.onOpenNoMilestone = this.onOpenNoMilestone.bind(this);
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -85,6 +140,18 @@ class HOCMilestones extends PureComponent {
   }
   onHeaderTap() {
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
+  }
+  onOpenNoMilestone() {
+    const { navPush } = this.props;
+
+    const overview = {
+      id: 'NoMilestoneOverview',
+      title: 'No Milestone overview',
+      props: {
+      },
+    };
+
+    navPush(overview);
   }
   onOpenMilestone(milestone) {
     const { navPush } = this.props;
@@ -152,9 +219,33 @@ class HOCMilestones extends PureComponent {
       <MilestoneItem milestone={milestone} delegate={this} />
     );
   }
+  renderNoMilestoneItems() {
+    const { counter } = this.props;
+
+    return (
+      <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.noMilestoneWrapper} onPress={this.onOpenNoMilestone}>
+        <View style={styles.noMilestoneWrapper}>
+          <View style={styles.noMilestoneSVG}>
+            <Icon name="NoMilestone" width="90" height="90" fill={colors.deepBlue5} />
+            <View style={styles.noMilestoneCircle}><View style={styles.noMilestoneDot} /></View>
+          </View>
+          <View style={styles.noMilestoneTitle}>
+            <Text style={styles.title}>Goals with no milestones</Text>
+            <Text style={styles.counter}>{counter}</Text>
+          </View>
+          <View style={styles.border} />
+        </View>
+      </RippleButton>
+    )
+  }
   renderListFooter() {
 
-    return <EmptyListFooter />
+    return (
+      <View>
+        {this.renderNoMilestoneItems()}
+        <EmptyListFooter />
+      </View>
+    )
   }
   renderEmptyState() {
 
@@ -225,6 +316,7 @@ class HOCMilestones extends PureComponent {
 function mapStateToProps(state) {
   return {
     milestones: cs.milestones.getGrouped(state),
+    counter: cs.goals.withoutMilestone(state).size
   };
 }
 

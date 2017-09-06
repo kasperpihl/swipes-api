@@ -109,15 +109,15 @@ class MilestoneItem extends Component {
 
     return (
       <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.button} onPress={this.openMilestone}>
-      <View style={styles.button}>
-        {this.renderProgressWheel()}
-        <View style={styles.container}>
-          {this.renderHeader()}
-          {this.renderProgressCounter()}
-        </View>
+        <View style={styles.button}>
+          {this.renderProgressWheel()}
+          <View style={styles.container}>
+            {this.renderHeader()}
+            {this.renderProgressCounter()}
+          </View>
 
-        <View style={styles.border} />
-      </View>
+          <View style={styles.border} />
+        </View>
       </RippleButton>
     )
   }
