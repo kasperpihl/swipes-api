@@ -71,8 +71,6 @@ if (env !== 'dev') {
   }));
 }
 
-app.use('/workflows', express.static(`${__dirname}/../workflows`));
-
 // Webhooks route
 app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed*/);
 

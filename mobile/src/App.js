@@ -55,6 +55,7 @@ class App extends PureComponent {
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+    window.getHeaders = this.getHeaders.bind(this);
   }
   componentWillMount() {
     OneSignal.addEventListener('ids', this.onIds);
@@ -238,8 +239,6 @@ function mapStateToProps(state) {
 
 const codePushOptions = {
   checkFrequency: codePush.CheckFrequency.MANUAL,
-  installMode: codePush.InstallMode.IMMEDIATE,
-  updateDialog: true,
 };
 
 export default codePush(codePushOptions)(connect(mapStateToProps, {

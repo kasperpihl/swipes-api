@@ -7,6 +7,7 @@ import DeviceInfo from 'react-native-device-info';
 import App from './App';
 import configureStore from './store/configureStore';
 import { init } from '../swipes-core-js';
+import UpdateHandler from './utils/update-handler';
 import Analytics from './utils/analytics';
 import * as a from './actions';
 const store = configureStore();
@@ -21,13 +22,9 @@ window.__PLATFORM__ = Platform.OS;
 window.__VERSION__ = version;
 window.__WITHOUT_NOTES__ = true;
 window.analytics = new Analytics(store);
-window.getHeaders = () => ({
-  'sw-platform': Platform.OS,
-  'sw-version': window.__VERSION__,
-  'sw-app-version': DeviceInfo.getVersion(),
-});
 
 init(store);
+window.updateHandler = new UpdateHandler(store);
 window.onScroll = (function (store) {
   const animationTime = 300;
   const movement = 50;
