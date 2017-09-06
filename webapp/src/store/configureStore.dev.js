@@ -1,4 +1,4 @@
-import createLogger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 
 let cacheImmutable = null;
 let cacheObject = null;

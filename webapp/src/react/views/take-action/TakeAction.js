@@ -17,7 +17,7 @@ class TakeAction extends Component {
     super(props);
     this.state = {
       emptyStateOpacity: 1,
-    }
+    };
 
     setupDelegate(this, 'onScroll');
   }
@@ -26,18 +26,18 @@ class TakeAction extends Component {
     const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
 
     if (emptyStateOpacity !== newEmptyStateOpacity) {
-      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
+      this.setState({ emptyStateOpacity: newEmptyStateOpacity });
     }
   }
   renderHeader() {
-    const { delegate, showLine, } = this.props;
+    const { delegate, showLine } = this.props;
 
     return (
       <div className="goals-list__header">
         <HOCHeaderTitle
-          border={showLine}
           title="Take Action"
-          subtitle="See all your responsibilities and work on the most important goals.">
+          subtitle="See all your responsibilities and work on the most important goals."
+        >
           <HOCInfoButton
             delegate={delegate}
           />
@@ -53,7 +53,7 @@ class TakeAction extends Component {
         defAssignees={[myId]}
         delegate={this}
       />
-    )
+    );
 
     return goals.map((lGoals, section) => (
       <GoalListSection
@@ -78,9 +78,9 @@ class TakeAction extends Component {
   renderEmptyState() {
     const { goals } = this.props;
 
-     if (goals.size === 1 && !goals.get('none').size) {
+    if (goals.size === 1 && !goals.get('none').size) {
       return (
-        <div className="take-action__empty-state" style={{ opacity: this.state.emptyStateOpacity }}>
+         <div className="take-action__empty-state" style={{ opacity: this.state.emptyStateOpacity }}>
           <div className="take-action__empty-arrow">
             <Icon icon="ESArrow" className="take-action__empty-arrow-svg" />
           </div>
@@ -91,7 +91,7 @@ class TakeAction extends Component {
             Add new goals for everything that needs <br /> to be done.
           </div>
         </div>
-      )
+       );
     }
 
     return undefined;

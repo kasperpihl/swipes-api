@@ -46,11 +46,12 @@ class PDFViewer extends PureComponent {
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }
-  onDocumentComplete({ total }) {
+  onDocumentComplete({ pdfInfo }) {
+    console.log(pdfInfo);
     const { fileLoaded } = this.props;
     const { loaded } = this.state;
 
-    this.setState({ pages: total });
+    this.setState({ pages: pdfInfo.numPages });
     this.setState({ loaded: true });
 
     if (fileLoaded) {
