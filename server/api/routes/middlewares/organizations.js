@@ -536,12 +536,8 @@ const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSu
   };
   const args = [];
 
-  if (!stripe_customer_id) {
+  if (!stripe_customer_id || !stripe_subscription_id) {
     return next();
-  }
-
-  if (!stripe_subscription_id) {
-    return next(new SwipesError('There is no stripe_subscription_id'));
   }
 
   args.push(stripe_subscription_id);
