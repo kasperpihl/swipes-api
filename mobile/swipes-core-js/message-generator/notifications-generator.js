@@ -56,6 +56,10 @@ export default class NotificationsGenerator {
     const { users, posts } = this.parent;
     const text = [];
     switch (meta.get('event_type')) {
+      case 'goal_assigned': {
+        text.push(`You've been assigned to the goal: "${meta.get('goal_title')}"`);
+        break;
+      }
       case 'step_assigned': {
         const count = meta.get('step_assign_count');
         text.push('You have been assigned to ');
