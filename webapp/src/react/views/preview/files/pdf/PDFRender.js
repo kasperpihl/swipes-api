@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Page } from 'react-pdf';
 import { Document } from 'react-pdf/build/entry.webpack';
-console.log("hi");
+
 class PDFRender extends PureComponent {
   constructor(props) {
     super(props);
