@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate, attachmentIconForService, iconForId } from '../../../../swipes-core-js/classes/utils';
+import { setupDelegate, attachmentIconForService, miniIconForId } from '../../../../swipes-core-js/classes/utils';
 import { colors, viewSize } from '../../../utils/globalStyles';
 import HOCHeader from '../../../components/header/HOCHeader'
 import RippleButton from '../../../components/ripple-button/RippleButton';
@@ -71,16 +71,34 @@ const styles = StyleSheet.create({
   },
   styledWrapper: {
     flex: 1,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingHorizontal: 15,
+    paddingTop: 21,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  textStyle: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: colors.deepBlue50,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+    flexWrap: 'wrap', 
   },
   boldStyle: {
-    color: colors.deepBlue100
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 18,
+    color: colors.blue100,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   subtitle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 6,
+    fontSize: 12,
+    lineHeight: 18,
+    color: colors.deepBlue50,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+    flexWrap: 'wrap', 
   },
   subtitleLabel: {
     fontSize: 12,
@@ -90,7 +108,7 @@ const styles = StyleSheet.create({
   },
   attachments: {
     paddingHorizontal: 15,
-    marginTop: 30,
+    marginTop: 21,
   },
   attachment: {
     flex: 1,
@@ -104,6 +122,7 @@ const styles = StyleSheet.create({
     borderColor: colors.deepBlue10,
   },
   attachmentLabel: {
+    flex: 1,
     fontSize: 12,
     color: colors.deepBlue80,
     fontWeight: '500',
@@ -136,7 +155,7 @@ class PostCreate extends PureComponent {
       this.setState({ inputHeight: e.nativeEvent.contentSize.height })
     }
   }
-  renderSubtitle() {
+  renderContext() {
     const { post } = this.props;
     const context = post.get('context');
 
@@ -145,10 +164,8 @@ class PostCreate extends PureComponent {
     }
 
     return (
-      <View style={styles.subtitle}>
-        <Icon name={iconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} />
-        <Text style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text>
-      </View>
+      [<Icon key="icon" name={miniIconForId(post.getIn(['context', 'id']))} width="18" height="18" fill={colors.deepBlue40} style={{marginTop: -2 }} />,
+      <Text key="title" style={[styles.subtitle, {paddingHorizontal: 3, marginTop: -2 }]}>{post.getIn(['context', 'title'])}</Text>]
     )
   }
   renderHeader() {
@@ -232,10 +249,15 @@ class PostCreate extends PureComponent {
 
     return (
       <View style={styles.styledWrapper}>
-        <StyledText
-          text={string}
-          textStyle={styles.textStyle}
-        />
+        <View style={{ flexDirection: 'row' }}>
+          {this.renderContext()}
+        </View>
+        <View style={{ flex: 1 }}>
+          <StyledText
+            text={string}
+            textStyle={styles.textStyle}
+          />
+        </View>
       </View>
     )
   }
@@ -269,7 +291,6 @@ class PostCreate extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
-        {/*this.renderHeader()*/}
         <ScrollView style={{ flex: 1 }}>
           <View style={[styles.createHeader, { paddingTop: 44}]}>
             {this.renderProfilePic()}

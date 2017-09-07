@@ -10,22 +10,22 @@ class RippleButton extends PureComponent {
   renderString() {
     const { text, textStyle } = this.props;
 
-    return (
-      <View>
-        <Text style={{ includeFontPadding: false }}>
-          {text.map((t, i) => {
-            if (typeof t === 'string') {
-              return <Text key={t.id + '' + (i * 0.5)} style={textStyle}>{t}</Text>;
-            }
+    console.log(text, textStyle);
 
-            return (
-              <Text key={t.id + '' + i} style={t.boldStyle}>
-                {t.string}
-              </Text>
-            );
-          })}
-        </Text>
-      </View>
+    return (
+      <Text style={{ includeFontPadding: false, alignSelf: 'stretch', flexWrap: 'wrap' }}>
+        {text.map((t, i) => {
+          if (typeof t === 'string') {
+            return <Text key={t.id + '' + (i * 0.5)} style={textStyle}>{t}</Text>;
+          }
+
+          return (
+            <Text key={t.id + '' + i} style={t.boldStyle}>
+              {t.string}
+            </Text>
+          );
+        })}
+      </Text>
     )
   }
   render() {
