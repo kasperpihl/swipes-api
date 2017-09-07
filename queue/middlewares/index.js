@@ -229,8 +229,8 @@ const step_reordered = notifyWrapper([
 
 const step_assigned = notifyWrapper([
   goals.goalsGetSingle,
-  steps.stepsAssignedNotificationData,
-  steps.stepsAssignedUsersNotificationDataMap,
+  goals.goalsAssignedNotificationData,
+  goals.goalsAssignedUsersNotificationDataMap,
   (req, res, next) => {
     const {
       user_id,

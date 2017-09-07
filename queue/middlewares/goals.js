@@ -100,6 +100,33 @@ const goalsAssignedNotificationData = (req, res, next) => {
 
   return next();
 };
+const goalsAssignedUsersNotificationDataMap = (req, res, next) => {
+  const {
+    goal,
+    assignees_diff,
+  } = res.locals;
+  const usersNotificationDataMetaMap = {};
+
+  assignees_diff.forEach((assigneeId) => {
+    let step_assign_count = 0;
+
+    goal.step_order.forEach((stepId) => {
+      if (goal.steps[stepId].assignees.includes(assigneeId)) {
+        step_assign_count += 1;
+      }
+    });
+
+    usersNotificationDataMetaMap[assigneeId] = {
+      step_assign_count,
+    };
+
+    step_assign_count = 0;
+  });
+
+  res.locals.usersNotificationDataMetaMap = usersNotificationDataMetaMap;
+
+  return next();
+};
 
 export {
   goalsGetSingle,
@@ -109,4 +136,5 @@ export {
   goalsLoadedWayNotificationData,
   goalsArchiveNotificationData,
   goalsAssignedNotificationData,
+  goalsAssignedUsersNotificationDataMap,
 };

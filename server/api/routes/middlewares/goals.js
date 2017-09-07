@@ -600,22 +600,25 @@ const goalsAssign = valLocals('goalsAssign', {
 const goalsAssignQueueMessage = valLocals('goalsAssignQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
-  assignees: array.of(string).require(),
   assignees_diff: array.of(string).require(),
+  assignees: array.of(string),
+  goal_assignees: array.of(string),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     goal_id,
-    assignees,
     assignees_diff,
+    assignees,
+    goal_assignees,
   } = res.locals;
+  const checkedAssignees = assignees || goal_assignees || [];
   const event_type = 'goal_assigned';
   const queueMessage = {
     user_id,
     goal_id,
-    assignees,
     assignees_diff,
     event_type,
+    assignees: checkedAssignees,
     notification_id_sufix: `${goal_id}-${event_type}`,
   };
 
