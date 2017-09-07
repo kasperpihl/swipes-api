@@ -540,6 +540,8 @@ const goalsAppendWayToGoal = valLocals('goalsAppendWayToGoal', {
       const goal = changes.new_val || changes.old_val;
 
       setLocals({
+        assignees,
+        assignees_diff: assignees,
         goal,
       });
 

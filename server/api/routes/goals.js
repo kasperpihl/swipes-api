@@ -214,6 +214,8 @@ authed.all('/goals.loadWay',
   goalsAppendWayToGoal,
   goalsAppendWayToGoalQueueMessage,
   notificationsPushToQueue,
+  goalsAssignQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
   }));
