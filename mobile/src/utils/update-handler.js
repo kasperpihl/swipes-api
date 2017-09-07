@@ -5,9 +5,9 @@ export default class UpdateHandler {
   constructor(store) {
     this.store = store;
     window.getHeaders = this.getHeaders.bind(this);
-    codePush.getUpdateMetadata().then((package) => {
-      if(package) {
-        this.codePushVersion = package.label;
+    codePush.getUpdateMetadata().then((pkg) => {
+      if(pkg) {
+        this.codePushVersion = pkg.label;
       }
     })
   }
