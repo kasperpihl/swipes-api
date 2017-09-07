@@ -63,6 +63,8 @@ const goalsCreate = valLocals('goalsCreate', {
 
   setLocals({
     goal,
+    assignees: goal.assignees,
+    assignees_diff: goal.assignees,
   });
 
   return next();
@@ -611,7 +613,7 @@ const goalsAssignQueueMessage = valLocals('goalsAssignQueueMessage', {
     assignees,
     goal_assignees,
   } = res.locals;
-  const checkedAssignees = assignees || goal_assignees || [];
+  const checkedAssignees = goal_assignees || assignees ||  [];
   const event_type = 'goal_assigned';
   const queueMessage = {
     user_id,
