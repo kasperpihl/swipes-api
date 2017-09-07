@@ -246,8 +246,9 @@ const dbGoalsAppendWayToGoal = funcWrap([
     step_order: array.require(),
     attachments: object.require(),
     attachment_order: array.require(),
+    assignees: array.require(),
   }),
-], (err, { goal_id, steps, step_order, attachments, attachment_order }) => {
+], (err, { goal_id, steps, step_order, attachments, attachment_order, assignees }) => {
   if (err) {
     throw new SwipesError(`dbGoalsAppendWayToGoal: ${err}`);
   }
@@ -256,6 +257,7 @@ const dbGoalsAppendWayToGoal = funcWrap([
     r.table('goals')
       .get(goal_id)
       .update({
+        assignees: r.row('assignees').setUnion(assignees),
         steps: r.row('steps').merge(steps),
         step_order: r.row('step_order').setUnion(step_order),
         attachments: r.row('attachments').merge(attachments),

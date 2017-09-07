@@ -108,8 +108,8 @@ export default class GoalsUtil {
   getAllAssigneesButMe() {
     const assignees = new Set();
     this.getOrderedSteps().forEach((s) => {
-      s.get('assignees').forEach(aId => {
-        if(aId !== this.id) assignees.add(aId);
+      s.get('assignees').forEach((aId) => {
+        if (aId !== this.id) assignees.add(aId);
       });
     });
     return fromJS([...assignees]);
@@ -158,6 +158,7 @@ export default class GoalsUtil {
   getObjectForWay() {
     return {
       title: this.goal.get('title'),
+      assignees: this.goal.get('assignees'),
       steps: this.goal.get('steps').map(g => g.delete('completed_at')).filter(g => this.goal.get('step_order').includes(g.get('id'))),
       step_order: this.goal.get('step_order'),
       attachments: this.goal.get('attachments'),

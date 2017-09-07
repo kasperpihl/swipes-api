@@ -90,6 +90,10 @@ const linksAddPermissionBatch = valLocals('linksAddPermissionBatch', {
 
   addPermissionsToALinks({ user_id, mappedPermissions })
     .then((result) => {
+      if (!result.changes) {
+        return next();
+      }
+
       const short_urls = result.changes.map(change => change.new_val.id);
 
       setLocals({
@@ -193,13 +197,20 @@ const linksCreateBatch = valLocals('linksCreateBatch', {
     insert_docs.push(insert_doc);
   });
 
+  setLocals({
+    permissions,
+  });
+
   createLinkBatch({ insert_docs })
     .then((result) => {
+      if (!result.changes) {
+        return next();
+      }
+
       const inserted = result.changes.map(change => change.new_val);
 
       setLocals({
         links: inserted,
-        permissions,
       });
 
       return next();

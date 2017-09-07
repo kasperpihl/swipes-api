@@ -531,9 +531,10 @@ const goalsAppendWayToGoal = valLocals('goalsAppendWayToGoal', {
     step_order,
     attachments,
     attachment_order,
+    assignees,
   } = goal;
 
-  dbGoalsAppendWayToGoal({ goal_id, steps, step_order, attachments, attachment_order })
+  dbGoalsAppendWayToGoal({ goal_id, steps, step_order, attachments, attachment_order, assignees })
     .then((results) => {
       const changes = results.changes[0];
       const goal = changes.new_val || changes.old_val;
