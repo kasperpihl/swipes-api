@@ -26,14 +26,8 @@ const styles = StyleSheet.create({
     }),
     position: 'absolute',
     left: 0, top: 0,
-<<<<<<< HEAD
-    alignItems: 'center', 
-    justifyContent: 'center', 
-=======
-    backgroundColor: colors.red80,
     alignItems: 'center',
-    justifyContent: 'center',
->>>>>>> 0ee0850b1... minor fix
+    justifyContent: 'center', 
   },
   statusMessage: {
     fontSize: 12,
