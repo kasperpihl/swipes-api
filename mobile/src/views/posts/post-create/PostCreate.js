@@ -26,24 +26,30 @@ const styles = StyleSheet.create({
   },
   createHeader: {
     flex: 1,
-    paddingTop: 15,
+    paddingTop: 21,
     paddingHorizontal: 15,
     flexDirection: 'row',
   },
+  header: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    paddingTop: 44,
+    paddingHorizontal: 15,
+  },
   profilePicWrapper: {
-    width: 48,
-    height: 48,
-    borderRadius: 3,
+    width: 45,
+    height: 45,
+    borderRadius: 45 / 2,
   },
   profilePic: {
-    width: 48,
-    height: 48,
-    borderRadius: 3,
+    width: 45,
+    height: 45,
+    borderRadius: 45 / 2,
   },
   initials: {
-    width: 48,
-    height: 48,
-    borderRadius: 3,
+    width: 45,
+    height: 45,
+    borderRadius: 45 / 2,
     backgroundColor: colors.deepBlue100,
     alignItems: 'center',
     justifyContent: 'center',
@@ -56,49 +62,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     margin: 0,
+    fontSize: 18,
     paddingLeft: 15,
-    fontSize: 15,
     color: colors.deepBlue100,
     lineHeight: 21,
     textAlignVertical: 'top',
-    ...Platform.select({
-      ios: {
-        height: 25 * 3,
-      },
-    }),
-  },
-  actionButtons: {
-    position: 'absolute',
-    width: viewSize.width,
-    height: 54,
-    left: 0, bottom: 0,
-    zIndex: 999,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  actionButton: {
-    height: 36,
-    paddingLeft: 9,
-    paddingRight: 15,
-    flexDirection: 'row',
-    backgroundColor: colors.blue5,
-    borderRadius: 36 / 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 4.5,
-    overflow: 'hidden',
-  },
-  actionButtonLabel: {
-    fontSize: 15,
-    color: colors.deepBlue70,
-    paddingLeft: 6,
     includeFontPadding: false,
-    paddingTop: 1,
   },
   styledWrapper: {
     flex: 1,
-    paddingLeft: 78,
+    paddingLeft: 15,
     paddingRight: 15,
   },
   boldStyle: {
@@ -142,10 +115,11 @@ class PostCreate extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-
+      inputHeight: 21,
     }
 
-    setupDelegate(this, 'onMessageChange', 'onTag', 'onChangeType', 'onAddAttachment', 'onAttachmentClick');
+    setupDelegate(this, 'onMessageChange', 'onAttachmentClick');
+    this.onContentSizeChange = this.onContentSizeChange.bind(this);
 
     if (Platform.OS === "android") {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -153,6 +127,13 @@ class PostCreate extends PureComponent {
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
+  }
+  onContentSizeChange(e) {
+    const { inputHeight } = this.state;
+
+    if (inputHeight !== e.nativeEvent.contentSize.height) {
+      this.setState({ inputHeight: e.nativeEvent.contentSize.height })
+    }
   }
   renderSubtitle() {
     const { post } = this.props;
@@ -171,7 +152,11 @@ class PostCreate extends PureComponent {
   }
   renderHeader() {
 
-    return <HOCHeader title="Create a Post" subtitle={this.renderSubtitle()} />
+    return (
+      <View style={styles.header}>
+        {this.renderProfilePic()}
+      </View>
+    )
   }
   renderProfilePic() {
     const { myId } = this.props;
@@ -196,19 +181,23 @@ class PostCreate extends PureComponent {
   }
   renderTextArea() {
     const { myId, post } = this.props;
-    const placeholder = `What do you want to discuss, ${msgGen.users.getFirstName(myId)}?`;
+    const { inputHeight} = this.state;
+    const placeholder = 'What\'s on your mind?';
+    const lineNumbers = parseInt(inputHeight / 21);
+    const iOSInputHeight = Platform.OS === 'ios' ? { height: inputHeight } : {};
 
     return (
       <TextInput
-        numberOfLines={3}
+        numberOfLines={lineNumbers}
         multiline
         autoFocus
         onChangeText={this.onMessageChange}
         value={post.get('message')}
         autoCapitalize="sentences"
-        style={styles.input}
+        style={[styles.input, iOSInputHeight]}
         underlineColorAndroid="transparent"
         placeholder={placeholder}
+        onContentSizeChange={this.onContentSizeChange}
       />
     )
   }
@@ -247,17 +236,6 @@ class PostCreate extends PureComponent {
       </View>
     )
   }
-  renderButton(icon, label, func) {
-
-    return (
-      <RippleButton onPress={func}>
-        <View style={styles.actionButton}>
-          <Icon name={icon} width="24" height="24" fill={colors.blue100} />
-          <Text style={styles.actionButtonLabel}>{label}</Text>
-        </View>
-      </RippleButton>
-    )
-  }
   renderAttachments() {
     const { post } = this.props;
 
@@ -285,29 +263,18 @@ class PostCreate extends PureComponent {
       </View>
     )
   }
-  renderActionButtons() {
-
-    return (
-      <View style={styles.actionButtons}>
-        {this.renderButton('Assign', 'Tag', this.onTag)}
-        {this.renderButton('Type', 'Type', this.onChangeType)}
-        {this.renderButton('Attachment', 'Attach', this.onAddAttachment)}
-      </View>
-    )
-  }
   render() {
     return (
-      <View style={[styles.container, { paddingBottom: 54 }]}>
-        {this.renderHeader()}
+      <View style={styles.container}>
+        {/*this.renderHeader()*/}
         <ScrollView style={{ flex: 1 }}>
-          <View style={styles.createHeader}>
+          <View style={[styles.createHeader, { paddingTop: 44}]}>
             {this.renderProfilePic()}
             {this.renderTextArea()}
           </View>
           {this.renderStyledText()}
           {this.renderAttachments()}
         </ScrollView>
-        {this.renderActionButtons()}
       </View>
     )
   }

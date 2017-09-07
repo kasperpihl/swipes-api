@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   actionBar: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignSelf: "stretch",
   },
   textButton: {
     flex: 1,
@@ -98,7 +98,7 @@ class HOCActionBar extends PureComponent {
     let extraStyles = {};
 
     if (align === 'right') {
-      extraStyles = { alignSelf: 'flex-end' }
+      extraStyles = { marginLeft: 'auto'}
     }
 
     return (
@@ -109,7 +109,7 @@ class HOCActionBar extends PureComponent {
         onPress={onPress}
         key={key}
       >
-        <View style={styles.iconButton}>
+        <View style={[styles.iconButton, extraStyles ]}>
           {seperator ? <View style={styles.verticalSeperator} /> : undefined}
           <Icon
             name={button.icon}
@@ -124,7 +124,7 @@ class HOCActionBar extends PureComponent {
   renderLeftIcon() {
     const { activeRoutes, actionButtons } = this.props;
 
-    if (Platform.OS === "ios") {
+    if (Platform.OS === "android") {
       return this.renderIconButton(
         "nav",
         { icon: "ArrowLeftLine" },
@@ -132,7 +132,7 @@ class HOCActionBar extends PureComponent {
       );
     }
 
-    if (Platform.OS === "android") {
+    if (Platform.OS === "ios") {
       // Please no one ever judge me here. I needed to get flex's space-between to work :(
       return <View />
     }
@@ -144,7 +144,7 @@ class HOCActionBar extends PureComponent {
 
     if (actionButtons && actionButtons.get("buttons")) {
       return actionButtons.get("buttons").map((b, i) => {
-        const seperator = i === 0 && Platform.OS === "android" ? false : true;
+        let seperator = i === 0 && Platform.OS === "ios" ? false : true;
 
         if (b.text) {
           return this.renderTextButton(i, b, this.onActionClick(i), seperator);

@@ -41,6 +41,12 @@ class HOCPostCreate extends PureComponent {
     const { createPost, navPop } = this.props;
 
     if (i === 0) {
+      this.onTag();
+    } else if (i === 1) {
+      this.onChangeType();
+    } else if (i === 2) {
+      this.onAddAttachment();
+    } else if (i === 3) {
       createPost(convertObjToUnderscore(post.toJS())).then((res) => {
         if (res.ok) {
           window.analytics.sendEvent('Post created', {
@@ -219,6 +225,9 @@ class HOCPostCreate extends PureComponent {
   }
   renderActionButtons() {
     actionButtons = [
+      { icon: 'Assign' },
+      { icon: 'Type' },
+      { icon: 'Attachment' },
       { icon: 'Send', align: 'right' },
     ];
 

@@ -69,7 +69,7 @@ class TabNavigationItem extends Component {
   renderUpdate() {
     const { updateAvailable, icon } = this.props;
     
-    if (updateAvailable) {
+    if (!updateAvailable) {
       return undefined;
     }
 
