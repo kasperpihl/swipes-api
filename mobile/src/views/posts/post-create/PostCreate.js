@@ -130,6 +130,7 @@ class PostCreate extends PureComponent {
   }
   onContentSizeChange(e) {
     const { inputHeight } = this.state;
+    console.log(this.refs.input);
 
     if (inputHeight !== e.nativeEvent.contentSize.height) {
       this.setState({ inputHeight: e.nativeEvent.contentSize.height })
@@ -188,6 +189,7 @@ class PostCreate extends PureComponent {
 
     return (
       <TextInput
+        ref="input"
         numberOfLines={lineNumbers}
         multiline
         autoFocus
@@ -198,6 +200,7 @@ class PostCreate extends PureComponent {
         underlineColorAndroid="transparent"
         placeholder={placeholder}
         onContentSizeChange={this.onContentSizeChange}
+        scrollEnabled={false}
       />
     )
   }
