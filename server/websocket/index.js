@@ -27,10 +27,10 @@ const websocketStart = (server) => {
   const WebSocketServer = ws.Server;
   const wss = new WebSocketServer({ server, path: '/ws' });
 
-  wss.on('connection', (socket) => {
+  wss.on('connection', (socket, req) => {
     // you might use location.query.token to authenticate or share sessions
     // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
-    const url_parsed = url.parse(socket.upgradeReq.url, true);
+    const url_parsed = url.parse(req.url, true);
     const token = url_parsed.query.token;
 
     const user_id = auth(token);
