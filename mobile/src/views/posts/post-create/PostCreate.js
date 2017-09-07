@@ -82,10 +82,8 @@ const styles = StyleSheet.create({
     color: colors.deepBlue50,
     includeFontPadding: false,
     textAlignVertical: 'center',
-    flexWrap: 'wrap', 
   },
   boldStyle: {
-    flex: 1,
     fontSize: 12,
     lineHeight: 18,
     color: colors.blue100,
@@ -98,7 +96,6 @@ const styles = StyleSheet.create({
     color: colors.deepBlue50,
     includeFontPadding: false,
     textAlignVertical: 'center',
-    flexWrap: 'wrap', 
   },
   subtitleLabel: {
     fontSize: 12,

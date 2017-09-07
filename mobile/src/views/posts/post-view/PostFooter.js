@@ -124,7 +124,6 @@ class PostFooter extends PureComponent {
       <View style={styles.textareaWrapper}>
         <View style={styles.textareaBorder}>
           <TextInput
-            keyboardType="email-address"
             style={styles.input}
             onChangeText={(text) => this.setState({ text })}
             onChange={this.handleInputChange}
