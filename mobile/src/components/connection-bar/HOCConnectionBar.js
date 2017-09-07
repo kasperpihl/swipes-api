@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 // import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading } from '../../../swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import { colors, viewSize } from '../../utils/globalStyles';
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     }),
     position: 'absolute',
     left: 0, top: 0,
-    backgroundColor: colors.red80,
     alignItems: 'center', 
     justifyContent: 'center', 
   },
@@ -41,9 +40,9 @@ class HOCConnectionBar extends PureComponent {
     super(props);
     this.state = {
       secondsLeft: 0,
+      connected: false,
     };
-    this.state = {};
-    // setupLoading(this);
+    setupLoading(this);
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -61,29 +60,48 @@ class HOCConnectionBar extends PureComponent {
 
     const { status, versionInfo, ready, reconnectAttempt } = nextProps;
 
-    const { secondsLeft } = this.state;
+    const { secondsLeft, connected } = this.state;
     let statusMessage = null;
+    let statusColor = null;
 
     if (versionInfo && versionInfo.get('updateRequired')) {
       statusMessage = 'Offline - new version required';
+      statusColor = colors.red80;
     } else if (versionInfo && versionInfo.get('updateAvailable')) {
       statusMessage = 'New version available';
+      statusColor = colors.red80;
     } else if (versionInfo && versionInfo.get('reloadRequired')) {
       statusMessage = 'Offline - new version required';
+      statusColor = colors.red80;
     } else if (versionInfo && versionInfo.get('reloadAvailable')) {
       statusMessage = 'New version available';
+      statusColor = colors.red80;
     } else if (status === 'offline') {
       statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
+      statusColor = colors.red80;
     } else if (status === 'connecting') {
       statusMessage = 'Connecting...';
+      statusColor = colors.yellowColor;
+    }
+
+    if (status === 'online' && this.props.status === 'connecting') {
+      statusMessage = 'Connected';
+      statusColor = colors.greenColor;
+
+      this.connectedTimer = setTimeout(() => {
+        this.setState({ statusMessage: null });
+      }, 1337)
     }
 
     if (statusMessage !== this.state.statusMessage) {
-      this.setState({ statusMessage });
+      this.setState({ statusMessage, statusColor });
     }
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
+  }
+  componentWillUnmount() {
+    clearTimeout(this.connectedTimer);
   }
   updateSecondsLeft(nextRetry) {
     nextRetry = nextRetry || this.props.nextRetry;
@@ -102,14 +120,14 @@ class HOCConnectionBar extends PureComponent {
   }
   render() {
     const { token } = this.props;
-    const { statusMessage } = this.state;
+    const { statusMessage, statusColor } = this.state;
 
     if (!statusMessage || !token) {
       return null;
     }
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {backgroundColor: statusColor}]}>
         <Text style={styles.statusMessage}>{statusMessage}</Text>
       </View>
     );

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar, Alert } from 'react-native';
+import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import codePush from 'react-native-code-push';
 import LinearGradient from 'react-native-linear-gradient';
@@ -59,17 +59,6 @@ class App extends PureComponent {
     OneSignal.addEventListener('ids', this.onIds);
     OneSignal.addEventListener('opened', this.onOpened);
     OneSignal.inFocusDisplaying(2);
-    codePush.getUpdateMetadata().then((data) => {
-      console.log(data);
-      Alert.alert(
-        'Alert Title',
-        JSON.stringify(data || {empty: true}),
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        { cancelable: false }
-      );
-    })
   }
   componentDidMount() {
     //this.checkTagsAndUpdate();
