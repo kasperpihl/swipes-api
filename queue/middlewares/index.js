@@ -376,10 +376,11 @@ const post_comment_mention = notifyWrapper([
   posts.postCommentMentionNotificationData,
   (req, res, next) => {
     const {
+      user_id,
       mention_ids,
     } = res.locals;
 
-    res.locals.user_ids = mention_ids;
+    res.locals.user_ids = mention_ids.filter(userId => userId !== user_id);
 
     return next();
   },
