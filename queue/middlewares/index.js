@@ -227,27 +227,10 @@ const step_reordered = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const step_assigned = notifyWrapper([
-  goals.goalsGetSingle,
-  goals.goalsAssignedNotificationData,
-  goals.goalsAssignedUsersNotificationDataMap,
-  (req, res, next) => {
-    const {
-      user_id,
-      assignees_diff,
-    } = res.locals;
-
-    res.locals.user_ids = assignees_diff.filter((userId) => { return userId !== user_id; });
-
-    return next();
-  },
-  notify.notifyMultipleUsers,
-  notify.notifySendEventToAllInCompany,
-]);
-
 const goal_assigned = notifyWrapper([
   goals.goalsGetSingle,
   goals.goalsAssignedNotificationData,
+  goals.goalsAssignedUsersNotificationDataMap,
   (req, res, next) => {
     const {
       user_id,
@@ -393,10 +376,11 @@ const post_comment_mention = notifyWrapper([
   posts.postCommentMentionNotificationData,
   (req, res, next) => {
     const {
+      user_id,
       mention_ids,
     } = res.locals;
 
-    res.locals.user_ids = mention_ids;
+    res.locals.user_ids = mention_ids.filter(userId => userId !== user_id);
 
     return next();
   },
@@ -492,7 +476,6 @@ export {
   step_renamed,
   step_deleted,
   step_reordered,
-  step_assigned,
   xendo_user_signup,
   xendo_remove_service_from_user,
   xendo_add_service_to_user,

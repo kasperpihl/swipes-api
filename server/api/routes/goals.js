@@ -83,6 +83,8 @@ authed.all('/goals.create',
   milestonesAddGoal,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
+  goalsAssignQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
     milestone_id: string,

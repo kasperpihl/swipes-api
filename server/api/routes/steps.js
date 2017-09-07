@@ -40,6 +40,8 @@ authed.all('/steps.add',
   stepsAdd,
   stepsAddQueueMessage,
   notificationsPushToQueue,
+  goalsAssignQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
     goal_assignees: array.require(),

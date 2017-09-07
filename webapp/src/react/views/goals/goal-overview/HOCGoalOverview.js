@@ -239,7 +239,6 @@ class HOCGoalOverview extends PureComponent {
     const options = this.getOptionsForE(e);
     const { selectAssignees, assignGoal, goal } = this.props;
 
-    options.actionLabel = 'Assign';
     let overrideAssignees;
     options.onClose = () => {
       if (overrideAssignees) {

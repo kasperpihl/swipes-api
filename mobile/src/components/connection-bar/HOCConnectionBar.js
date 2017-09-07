@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0, top: 0,
     alignItems: 'center',
-    justifyContent: 'center', 
+    justifyContent: 'center',
   },
   statusMessage: {
     fontSize: 12,
@@ -40,7 +40,6 @@ class HOCConnectionBar extends PureComponent {
     super(props);
     this.state = {
       secondsLeft: 0,
-      connected: false,
     };
     setupLoading(this);
 
@@ -57,51 +56,12 @@ class HOCConnectionBar extends PureComponent {
         this.updateSecondsLeft(nextProps.nextRetry);
       }
     }
-
-    const { status, versionInfo, ready, reconnectAttempt } = nextProps;
-
-    const { secondsLeft, connected } = this.state;
-    let statusMessage = null;
-    let statusColor = null;
-
-    if (versionInfo && versionInfo.get('updateRequired')) {
-      statusMessage = 'Offline - new version required';
-      statusColor = colors.red80;
-    } else if (versionInfo && versionInfo.get('updateAvailable')) {
-      statusMessage = 'New version available';
-      statusColor = colors.red80;
-    } else if (versionInfo && versionInfo.get('reloadRequired')) {
-      statusMessage = 'Offline - new version required';
-      statusColor = colors.red80;
-    } else if (versionInfo && versionInfo.get('reloadAvailable')) {
-      statusMessage = 'New version available';
-      statusColor = colors.red80;
-    } else if (status === 'offline') {
-      statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
-      statusColor = colors.red80;
-    } else if (status === 'connecting') {
-      statusMessage = 'Connecting...';
-      statusColor = colors.yellowColor;
-    }
-
-    if (status === 'online' && this.props.status === 'connecting') {
-      statusMessage = 'Connected';
-      statusColor = colors.greenColor;
-
-      this.connectedTimer = setTimeout(() => {
-        this.setState({ statusMessage: null });
-      }, 1337)
-    }
-
-    if (statusMessage !== this.state.statusMessage) {
-      this.setState({ statusMessage, statusColor });
+    if (nextProps.status === 'online' && this.props.status === 'connecting') {
+      this.setLoading('connected', 'Connected', 1337);
     }
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
-  }
-  componentWillUnmount() {
-    clearTimeout(this.connectedTimer);
   }
   updateSecondsLeft(nextRetry) {
     nextRetry = nextRetry || this.props.nextRetry;
@@ -118,17 +78,53 @@ class HOCConnectionBar extends PureComponent {
     const now = new Date().getTime();
     return time.getTime() - now;
   }
+  getStatusMessage() {
+    const { status, versionInfo, ready, reconnectAttempt } = this.props;
+
+    const { secondsLeft } = this.state;
+    let message = null;
+    let color = null;
+
+    if (versionInfo && versionInfo.get('updateRequired')) {
+      message = 'Offline - new version required';
+      color = colors.red80;
+    } else if (versionInfo && versionInfo.get('updateAvailable')) {
+      message = 'New version available';
+      color = colors.red80;
+    } else if (versionInfo && versionInfo.get('reloadRequired')) {
+      message = 'Offline - new version required';
+      color = colors.red80;
+    } else if (versionInfo && versionInfo.get('reloadAvailable')) {
+      message = 'New version available';
+      color = colors.red80;
+    } else if (status === 'offline') {
+      message = `Offline - retrying in ${secondsLeft} seconds`;
+      color = colors.red80;
+    } else if (status === 'connecting') {
+      message = 'Connecting...';
+      color = colors.yellowColor;
+    } else if (this.isLoading('connected')) {
+      message = 'Connected';
+      color = colors.greenColor;
+    }
+
+    return {
+      message,
+      color,
+    };
+  }
   render() {
     const { token } = this.props;
-    const { statusMessage, statusColor } = this.state;
+    const { statusColor } = this.state;
+    const status = this.getStatusMessage();
 
-    if (!statusMessage || !token) {
+    if (!status.message || !token) {
       return null;
     }
 
     return (
-      <View style={[styles.container, {backgroundColor: statusColor}]}>
-        <Text style={styles.statusMessage}>{statusMessage}</Text>
+      <View style={[styles.container, {backgroundColor: status.color}]}>
+        <Text style={styles.statusMessage}>{status.message}</Text>
       </View>
     );
   }
