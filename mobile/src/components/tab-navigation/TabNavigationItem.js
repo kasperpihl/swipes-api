@@ -34,6 +34,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '500',
     color: 'white',
+  },
+  updateWrapper: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    position: 'absolute',
+    right: 20, top: 10,
+    backgroundColor: colors.red100,
   }
 });
 
@@ -59,16 +67,14 @@ class TabNavigationItem extends Component {
 
   }
   renderUpdate() {
-    const { updateAvailable } = this.props;
+    const { updateAvailable, icon } = this.props;
     
-    if (!updateAvailable) {
+    if (updateAvailable) {
       return undefined;
     }
 
     return (
-      <View style={styles.updateWrapper}>
-        <Icon name="Close" width="24" height="24" />
-      </View>
+      <View style={styles.updateWrapper}></View>
     )
   }
   render() {
