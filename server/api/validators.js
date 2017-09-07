@@ -9,6 +9,7 @@ import {
 const goalMoreStrict =
   object.as({
     title: string.require(),
+    assignees: array.of(string).require(),
     steps: object.of(object.as({
       id: string.require(),
       title: string.require(),
