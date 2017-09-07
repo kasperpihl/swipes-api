@@ -55,7 +55,6 @@ class App extends PureComponent {
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
-    window.getHeaders = this.getHeaders.bind(this);
   }
   componentWillMount() {
     OneSignal.addEventListener('ids', this.onIds);
