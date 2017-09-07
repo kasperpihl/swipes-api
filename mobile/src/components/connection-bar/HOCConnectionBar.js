@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
@@ -14,10 +14,25 @@ import { colors, viewSize } from '../../utils/globalStyles';
 const styles = StyleSheet.create({
   container: {
     width: viewSize.width,
-    height: 55,
+    ...Platform.select({
+      ios: {
+        height: 44,
+        paddingTop: 20,
+      },
+      android: {
+        height: 48,
+        paddingTop: 24,
+      }
+    }),
     position: 'absolute',
     left: 0, top: 0,
-    backgroundColor: colors.red80, 
+    backgroundColor: colors.red80,
+    alignItems: 'center', 
+    justifyContent: 'center', 
+  },
+  statusMessage: {
+    fontSize: 12,
+    color: 'white',
   }
 })
 
@@ -29,6 +44,10 @@ class HOCConnectionBar extends PureComponent {
     };
     this.state = {};
     // setupLoading(this);
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
   }
   componentDidMount() {
   }
@@ -39,6 +58,32 @@ class HOCConnectionBar extends PureComponent {
         this.updateSecondsLeft(nextProps.nextRetry);
       }
     }
+
+    const { status, versionInfo, ready, reconnectAttempt } = nextProps;
+
+    const { secondsLeft } = this.state;
+    let statusMessage = null;
+
+    if (versionInfo && versionInfo.get('updateRequired')) {
+      statusMessage = 'Offline - new version required';
+    } else if (versionInfo && versionInfo.get('updateAvailable')) {
+      statusMessage = 'New version available';
+    } else if (versionInfo && versionInfo.get('reloadRequired')) {
+      statusMessage = 'Offline - new version required';
+    } else if (versionInfo && versionInfo.get('reloadAvailable')) {
+      statusMessage = 'New version available';
+    } else if (status === 'offline') {
+      statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
+    } else if (status === 'connecting') {
+      statusMessage = 'Connecting...';
+    }
+
+    if (statusMessage !== this.state.statusMessage) {
+      this.setState({ statusMessage });
+    }
+  }
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
   }
   updateSecondsLeft(nextRetry) {
     nextRetry = nextRetry || this.props.nextRetry;
@@ -55,51 +100,18 @@ class HOCConnectionBar extends PureComponent {
     const now = new Date().getTime();
     return time.getTime() - now;
   }
-  renderStatusIndicator() {
-    const { status, versionInfo, ready, token, reconnectAttempt } = this.props;
-    if (!token) {
-      return undefined;
-    }
-    const { secondsLeft } = this.state;
-    let className = 'topbar__status';
-    let statusMessage;
-
-    if (versionInfo && versionInfo.get('updateRequired')) {
-      statusMessage = 'Offline - new version required';
-    } else if (versionInfo && versionInfo.get('updateAvailable')) {
-      statusMessage = 'New version available';
-    } else if (versionInfo && versionInfo.get('reloadRequired')) {
-      statusMessage = 'Offline - new version required';
-    } else if (versionInfo && versionInfo.get('reloadAvailable')) {
-      statusMessage = 'New version available';
-    } else if (status === 'offline' && ready) {
-      if (reconnectAttempt > 4) {
-        statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
-      }
-    } else if (status === 'connecting' && ready) {
-      if (reconnectAttempt > 4) {
-        statusMessage = 'Connecting...';
-      }
-    }
-
-    if (statusMessage) {
-      className += ' topbar__status--shown';
-    }
-
-    return (
-      <div className={className}>
-        <div className="topbar__header">
-          <div className="topbar__title">
-            {statusMessage}
-          </div>
-          {btn}
-        </div>
-      </div>
-    );
-  }
   render() {
+    const { token } = this.props;
+    const { statusMessage } = this.state;
+
+    if (!statusMessage || !token) {
+      return null;
+    }
+
     return (
-      <View style={styles.container} />
+      <View style={styles.container}>
+        <Text style={styles.statusMessage}>{statusMessage}</Text>
+      </View>
     );
   }
 }
@@ -113,6 +125,7 @@ const mapStateToProps = (state) => ({
   reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),
   ready: state.getIn(['connection', 'ready']),
   status: state.getIn(['connection', 'status']),
+  token: state.getIn(['connection', 'token']),
 });
 
 export default connect(mapStateToProps, {
