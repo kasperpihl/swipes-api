@@ -55,7 +55,8 @@ class HOCTabNavigation extends PureComponent {
           icon: "Messages"
         },
         {
-          icon: "Person"
+          icon: "Person",
+          updateAvailable: false,
         }
       ]
     };
@@ -67,16 +68,33 @@ class HOCTabNavigation extends PureComponent {
         UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
+  componentWillMount() {
+    this.checkForUpdate(this.props);
+  }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
   componentWillReceiveProps(nextProps) {
+    const { rootRoutes } = this.state;
     if (nextProps.counter !== this.props.counter) {
-      const { rootRoutes } = this.state;
-
       rootRoutes[0].counter = nextProps.counter;
       this.setState({ rootRoutes });
     }
+
+    this.checkForUpdate(nextProps);
+  }
+  checkForUpdate(nextProps) {
+    const { versionInfo } = nextProps;
+    const { rootRoutes } = this.state;
+
+    if (versionInfo && 
+      (versionInfo.get('updateAvailable') || 
+        versionInfo.get('reloadRequired') || 
+        versionInfo.get('reloadAvailable') || 
+        versionInfo.get('updateRequired'))) {
+        rootRoutes[4].updateAvailable = true;
+        this.setState({ rootRoutes });
+      }
   }
   handlePress(i) {
     const { sliderChange, activeSliderIndex } = this.props;
@@ -161,10 +179,11 @@ function mapStateToProps(state) {
     actionButtons: state.getIn(["navigation", "actionButtons"]),
     activeSliderIndex,
     routes: state.getIn(["navigation", "sliders", activeSliderIndex, "routes"]),
-    counter: state.getIn(['connection', 'notificationCounter'])
+    counter: state.getIn(['connection', 'notificationCounter']),
+    versionInfo: state.getIn(['connection', 'versionInfo']),
   };
 }
 
 export default connect(mapStateToProps, {
-  sliderChange: a.navigation.sliderChange
+  sliderChange: a.navigation.sliderChange,
 })(HOCTabNavigation);

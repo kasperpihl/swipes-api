@@ -58,6 +58,19 @@ class TabNavigationItem extends Component {
     )
 
   }
+  renderUpdate() {
+    const { updateAvailable } = this.props;
+    
+    if (!updateAvailable) {
+      return undefined;
+    }
+
+    return (
+      <View style={styles.updateWrapper}>
+        <Icon name="Close" width="24" height="24" />
+      </View>
+    )
+  }
   render() {
     const { icon, index, fill } = this.props;
 
@@ -66,6 +79,7 @@ class TabNavigationItem extends Component {
         <View style={styles.navItem}>
           <Icon name={icon} width="24" height="24" fill={fill} />
           {this.renderCounter()}
+          {this.renderUpdate()}
         </View>
       </RippleButton>
     );
