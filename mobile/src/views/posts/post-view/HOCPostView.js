@@ -12,11 +12,17 @@ class HOCPostView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      commentLoading: false
+      commentLoading: false,
+      routeNum: props.lastRoute,
     };
   }
   componentDidMount() {
     this.hideActionBar();
+  }
+  componentWillUpdate(nextProps) {
+    if (this.state.routeNum === nextProps.lastRoute) {
+      this.hideActionBar();
+    }
   }
   hideActionBar() {
     const { setActionButtons } = this.props;
