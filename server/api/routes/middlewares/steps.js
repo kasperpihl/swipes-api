@@ -242,9 +242,9 @@ const stepsAssign = valLocals('stepsAssign', {
     .then((result) => {
       const newVal = result.changes[0].new_val;
       const oldVal = result.changes[0].old_val;
-      const newStepAssignees = newVal.steps[step_id].assignees;
-      const oldStepAssignees = oldVal.steps[step_id].assignees;
-      const diffAssignees = newStepAssignees.filter(a => !oldStepAssignees.find(b => b === a));
+      const newGoalAssignees = newVal.assignees;
+      const oldGoalAssignees = oldVal.assignees;
+      const diffAssignees = newGoalAssignees.filter(a => !oldGoalAssignees.find(b => b === a));
 
       setLocals({
         goal_assignees: newVal.assignees,
@@ -257,38 +257,6 @@ const stepsAssign = valLocals('stepsAssign', {
       return next(err);
     });
 });
-const stepsAssignQueueMessage = valLocals('stepsAssignQueueMessage', {
-  user_id: string.require(),
-  goal_id: string.require(),
-  step_id: string.require(),
-  assignees: array.of(string).require(),
-  assignees_diff: array.of(string).require(),
-}, (req, res, next, setLocals) => {
-  const {
-    user_id,
-    goal_id,
-    step_id,
-    assignees,
-    assignees_diff,
-  } = res.locals;
-  const event_type = 'step_assigned';
-  const queueMessage = {
-    user_id,
-    goal_id,
-    step_id,
-    assignees,
-    assignees_diff,
-    event_type,
-    notification_id_sufix: `${goal_id}-${event_type}`,
-  };
-
-  setLocals({
-    queueMessage,
-    messageGroupId: goal_id,
-  });
-
-  return next();
-});
 
 export {
   stepsAdd,
@@ -300,5 +268,4 @@ export {
   stepsRenameQueueMessage,
   stepsDeleteQueueMessage,
   stepsReorderQueueMessage,
-  stepsAssignQueueMessage,
 };

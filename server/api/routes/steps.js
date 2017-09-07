@@ -14,8 +14,10 @@ import {
   stepsAddQueueMessage,
   stepsRenameQueueMessage,
   stepsDeleteQueueMessage,
-  stepsAssignQueueMessage,
 } from './middlewares/steps';
+import {
+  goalsAssignQueueMessage
+} from './middlewares/goals';
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
@@ -90,7 +92,7 @@ authed.all('/steps.assign',
     assignees: array.of(string).require(),
   }),
   stepsAssign,
-  stepsAssignQueueMessage,
+  goalsAssignQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     goal_id: string.require(),
