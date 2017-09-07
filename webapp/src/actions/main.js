@@ -15,7 +15,7 @@ export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 // Modal
 // ======================================================
 export function modal(target, modal) {
-  return { type: types.NAVIGATION_MODAL, payload: { modal, target }};
+  return { type: types.NAVIGATION_MODAL, payload: { modal, target } };
 }
 
 // ======================================================
@@ -36,7 +36,7 @@ export const contextMenu = payload => (dp, getState) => {
 // Browser
 // ======================================================
 export const browser = (from, url, onLoad) => (dp) => {
-  if(!window.ipcListener.isElectron){
+  if (!window.ipcListener.isElectron) {
     return window.open(url);
   }
   return dp(a.navigation.openSecondary(from, {
@@ -47,9 +47,15 @@ export const browser = (from, url, onLoad) => (dp) => {
       url,
       onLoad,
     },
-  }))
-
+  }));
 };
+
+// ======================================================
+// Success gradient
+// ======================================================
+export function successGradient(color) {
+  return { type: types.SUCCESS_GRADIENT, payload: { color } };
+}
 
 // ======================================================
 // Account related

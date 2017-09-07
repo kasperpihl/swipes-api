@@ -35,7 +35,7 @@ export default function goalsReducer(state = initialState, action) {
       return state.setIn([payload.goal_id, 'title'], payload.title);
     }
     case 'goals.assign':
-    case 'goal_assigneed': {
+    case 'goal_assigned': {
       if(payload.steps) {
         state = state.setIn([payload.goal_id, 'steps'], fromJS(payload.steps));
       }
@@ -43,7 +43,7 @@ export default function goalsReducer(state = initialState, action) {
 
     }
     case 'goals.loadWay':
-    case 'goal_load_way':
+    case 'goal_loaded_way':
     case 'goals.complete':
     case 'goal_completed':
     case 'goals.incomplete':

@@ -52,7 +52,7 @@ class HOCNotifications extends PureComponent {
     if(!n.get('seen_at')){
       this.onMark([n.get('id')]);
     }
-    openSecondary('primary', nav);
+    openSecondary('secondary', nav);
     hide();
   }
   render() {

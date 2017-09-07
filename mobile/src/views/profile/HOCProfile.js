@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import codePush from 'react-native-code-push';
 import { connect } from 'react-redux';
 import * as a from '../../actions';
 import HOCHeader from '../../components/header/HOCHeader';
@@ -31,6 +32,9 @@ class HOCProfile extends PureComponent {
   }
   onActionButton(i) {
     // console.log('action!', i);
+  }
+  onUpdate() {
+    codePush.sync({ installMode: codePush.InstallMode.IMMEDIATE });
   }
   renderActionButtons() {
     this.props.setActionButtons({
@@ -76,6 +80,11 @@ class HOCProfile extends PureComponent {
           <RippleButton style={styles.logOutButton} onPress={this.onLogOut}>
             <View style={styles.logOut}>
               <Text style={styles.logOutLabel}>Log out</Text>
+            </View>
+          </RippleButton>
+          <RippleButton style={styles.logOutButton} onPress={this.onUpdate}>
+            <View style={styles.logOut}>
+              <Text style={styles.logOutLabel}>Update</Text>
             </View>
           </RippleButton>
         </View>

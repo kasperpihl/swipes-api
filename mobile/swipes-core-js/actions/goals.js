@@ -11,10 +11,6 @@ export const create = valAction('goals.create', [
   string,
   array.of(string),
 ], (title, milestoneId, assignees) => (d, getState) => {
-  // d(a.onboarding.complete('create-goal'));
-  if (milestoneId) {
-    d(a.onboarding.complete('add-goal-milestone'));
-  }
   return d(a.api.request('goals.create', {
     goal: {
       title,

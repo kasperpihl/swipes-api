@@ -8,7 +8,6 @@ import { valAction } from '../classes/utils';
 export const create = valAction('milestones.create', [
   string.min(1).max(155).require(),
 ], (title) => (d, getState) => {
-  d(a.onboarding.complete('create-milestone'));
   return d(a.api.request('milestones.create', {
     title,
     restricted: false,
@@ -21,7 +20,6 @@ export const addGoal = valAction('milestones.addGoal', [
   string.require(),
 ], (milestoneId, goalId) => (d, getState) => {
   const currentMilestoneId = getState().getIn(['goals', goalId, 'milestone_id']);
-  d(a.onboarding.complete('add-goal-milestone'));
   return d(a.api.request('milestones.addGoal', {
     goal_id: goalId,
     current_milestone_id: currentMilestoneId,
