@@ -11,6 +11,16 @@ export default class UpdateHandler {
       }
     })
   }
+  updateStuff() {
+    const APP_STORE_LINK = 'itms://itunes.apple.com/us/app/apple-store/myiosappid?mt=8';
+    const PLAY_STORE_LINK = 'market://details?id=myandroidappid';
+    if(Platform.OS =='ios'){
+      Linking.openURL(APP_STORE_LINK).catch(err => console.error('An error occurred', err));
+    }
+    else{
+      Linking.openURL(PLAY_STORE_LINK).catch(err => console.error('An error occurred', err));
+    }
+  }
   getHeaders() {
     const headers = {
       'sw-version': window.__VERSION__,
