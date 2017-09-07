@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
@@ -9,6 +9,17 @@ import { connect } from 'react-redux';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import { colors, viewSize } from '../../utils/globalStyles';
+
+const styles = StyleSheet.create({
+  container: {
+    width: viewSize.width,
+    height: 55,
+    position: 'absolute',
+    left: 0, top: 0,
+    backgroundColor: colors.red80, 
+  }
+})
 
 class HOCConnectionBar extends PureComponent {
   constructor(props) {
@@ -88,7 +99,7 @@ class HOCConnectionBar extends PureComponent {
   }
   render() {
     return (
-      <View />
+      <View style={styles.container} />
     );
   }
 }

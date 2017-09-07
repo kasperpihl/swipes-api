@@ -7,14 +7,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Login from './views/login/Login';
 import Icon from './components/icons/Icon';
-import HOCAutoComplete from './components/auto-complete/HOCAutoComplete';
 import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
 import HOCAndroidBackButton from './components/android-back-button/HOCAndroidBackButton';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 import { colors, viewSize } from './utils/globalStyles';
 import LoadingModal from './modals/LoadingModal';
 import ActionModal from './modals/action-modal/ActionModal';
-import DevTools from './components/dev-tools/DevTools';
+import HOCConnectionBar from './components/connection-bar/HOCConnectionBar';
 import * as a from './actions';
 
 const styles = StyleSheet.create({
@@ -114,28 +113,6 @@ class App extends PureComponent {
       }
     });
   }
-  codePushStatusDidChange(status) {
-    switch (status) {
-      case codePush.SyncStatus.CHECKING_FOR_UPDATE:
-        console.log('Checking for updates.');
-        break;
-      case codePush.SyncStatus.DOWNLOADING_PACKAGE:
-        console.log('Downloading package.');
-        break;
-      case codePush.SyncStatus.INSTALLING_UPDATE:
-        console.log('Installing update.');
-        break;
-      case codePush.SyncStatus.UP_TO_DATE:
-        console.log('Up-to-date.');
-        break;
-      case codePush.SyncStatus.UPDATE_INSTALLED:
-        console.log('Update installed.');
-        break;
-    }
-  }
-  codePushDownloadDidProgress(progress) {
-    console.log(`${progress.receivedBytes} of ${progress.totalBytes} received.`);
-  }
   onOpened(openResult) {
     const { isHydrated, token, ready, sliderChange } = this.props;
     if (ready) {
@@ -200,7 +177,7 @@ class App extends PureComponent {
         <LoadingModal />
         <ActionModal />
         <HOCTabNavigation />
-        {/*<DevTools />*/}
+        <HOCConnectionBar />
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}
       </View>
