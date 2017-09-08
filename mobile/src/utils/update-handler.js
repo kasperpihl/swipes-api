@@ -22,14 +22,14 @@ export default class UpdateHandler {
     }
   }
   getHeaders() {
+    const pre = `sw-${Platform.OS}`;
     const headers = {
-      'sw-version': window.__VERSION__,
       'sw-platform': window.__PLATFORM__,
-      'sw-app-version': DeviceInfo.getVersion(),
-      'sw-build-number': DeviceInfo.getBuildNumber(),
+      [`${pre}-version`]: DeviceInfo.getVersion(),
+      [`${pre}-build-number`]: DeviceInfo.getBuildNumber(),
     };
     if(this.codePushVersion) {
-      headers['sw-code-push-version'] = this.codePushVersion;
+      headers[`${pre}-code-push-version`] = this.codePushVersion;
     }
 
     return headers;
