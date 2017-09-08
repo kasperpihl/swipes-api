@@ -6,60 +6,113 @@ import {
   SwipesError,
 } from './swipes-error';
 import {
-  getNewestElectronVersion,
   getDownloadLinks,
 } from '../api/utils';
 
-const parseVersionString = (version) => {
-  const x = version.split('.');
-  const major = parseInt(x[0], 10) || 0;
-  const minor = parseInt(x[1], 10) || 0;
-  const patch = parseInt(x[2], 10) || 0;
+const newerVersionExist = (client, server) => {
+  server = server || '';
+  client = client || '';
 
-  return {
-    major,
-    minor,
-    patch,
-  };
-};
+  let newerVersion = false;
+  if(server.indexOf('.') > -1) {
+
+    const serverVals = server.split('.');
+    const clientVals = client.split('.');
+    serverVals.forEach((serverVal, i) => {
+      const clientVal = clientVals[i];
+      if(serverVals > clientVals) {
+        newerVersion = true;
+      }
+    })
+  } else {
+    newerVersion = (server > client);
+  }
+
+  return newerVersion;
+} 
+
+const makeUpdateHandler = (res, next) => {
+  let didRun = false;
+
+  const updateHandler = (prefix, isRequired, version,  url) => {
+    if(didRun) return;
+    didRun = true;
+
+    const _locals = { [`${prefix}_available`]: version }
+    if(url) _locals[`${prefix}_url`] = url;
+    if(isRequired) {
+      _locals[`${prefix}_required`] = true;
+      return next(new SwipesError(`${prefix}_required`, _locals));
+    }
+
+    Object.entries(_locals).forEach(([key, value]) => {
+      res.locals[key] = value;
+    });
+
+    return next();
+  }
+  updateHandler.next = () => !didRun && next();
+  return updateHandler;
+}
+
+
 const checkForUpdates = (req, res, next) => {
-  const electronVersion = req.header('sw-electron-version');
-  const arch = req.header('sw-electron-arch');
-  const localVersion = req.header('sw-version');
+  const { versions } = res.locals.config;
 
+  const handleUpdate = makeUpdateHandler(res, next);
+
+  const testHeaders = (prefix, url, ...headers) => {
+    let required = false;
+    let hasNewerVersion = false;
+    let version = null;
+    headers.forEach((header) => {
+      const clientVersion = req.header(`sw-${header}`);
+      const serverVersion = versions[header];
+      const requiredServerVersion = versions[`min-${header}`];
+      if(newerVersionExist(clientVersion, serverVersion)) {
+        hasNewerVersion = true;
+        if(!version) {
+          version = serverVersion;
+        }
+      }
+      if(newerVersionExist(clientVersion, requiredServerVersion)) {
+        required = true;
+      }
+    });
+    if(hasNewerVersion) {
+      handleUpdate(prefix, required, version, url);
+    };
+  };
+  const testReload = (...args) => testHeaders('reload', ...args);
+  const testUpdate = (...args) => testHeaders('update', ...args);
+
+  
   const platform = req.header('sw-platform');
-  if (platform === 'web' || electronVersion) {
-
-    if(electronVersion) {
-      const latest = parseVersionString(getNewestElectronVersion());
-      const running = parseVersionString(electronVersion);
-      if (latest.major > running.major) {
-        return next(new SwipesError('update_required', {
-          update_required: true,
-          update_available: getNewestElectronVersion(),
-          update_url: getDownloadLinks()[platform], // electronUrls[platform][arch]
-        }));
-      }
-      if (latest.minor > running.minor || latest.patch > running.patch) {
-        res.locals.update_available = localVersion;
-        res.locals.update_url = getDownloadLinks()[platform];
-      }
+  switch(platform) {
+    case 'ios': {
+      testUpdate(null, 'ios-build-number');
+      testReload(null, 'ios-code-push-version');
+      break;
     }
-
-    const latest = parseVersionString(version);
-    const running = parseVersionString(localVersion);
-    if (latest.major > running.major || latest.minor > running.minor) {
-      return next(new SwipesError('reload_required', {
-        reload_required: true,
-        reload_available: version,
-      }));
+    case 'android': {
+      testUpdate(null, 'android-build-number');
+      testReload(null, 'android-code-push-version');
+      break;
     }
-    if (latest.patch > running.patch) {
-      res.locals.reload_available = version;
+    case 'darwin':
+    case 'linux':
+    case 'win32': {
+      testUpdate(getDownloadLinks()[platform], 'electron-version');
+      testReload(null, 'web-version');
+      break;
+    }
+    case 'web': {
+      testReload(null, 'web-version');
+      break;
     }
   }
 
-  return next();
+  return handleUpdate.next();
 };
 
 export default checkForUpdates;

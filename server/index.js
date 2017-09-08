@@ -11,6 +11,7 @@ import {
   authCheckToken,
 } from './middlewares/jwt-auth-middleware';
 import checkForUpdates from './middlewares/check-updates-middleware';
+import getConfig from './middlewares/get-config';
 import handleJsonError from './middlewares/errors';
 import {
   swipesErrorMiddleware,
@@ -83,10 +84,12 @@ app.use('/v1', (req, res, next) => {
   res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
   return next();
 });
-// No authed routes goes here
-app.use('/v1', routes.v1NotAuthed);
+// Get the config table into res.locals.config
+app.use('/v1', getConfig);
 // Checking for updates
 app.use('/v1', checkForUpdates);
+// No authed routes goes here
+app.use('/v1', routes.v1NotAuthed);
 // Validation of user's token
 app.use('/v1', authParseToken, authCheckToken);
 // Authed routes goes here

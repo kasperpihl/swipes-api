@@ -7,7 +7,7 @@ export default class UpdateHandler {
     window.getHeaders = this.getHeaders.bind(this);
     codePush.getUpdateMetadata().then((pkg) => {
       if(pkg) {
-        this.codePushVersion = pkg.label;
+        this.codePushVersion = pkg.label.substr(1);
       }
     })
   }
