@@ -36,7 +36,7 @@ export const assignedGroupedByMilestone = createSelector(
         }
         const m1 = milestones.get(m1id);
         const m2 = milestones.get(m2id);
-        return m1.get('created_at').localeCompare(m2.get('created_at'));
+        return m2.get('created_at').localeCompare(m1.get('created_at'));
       }
     )
   }
