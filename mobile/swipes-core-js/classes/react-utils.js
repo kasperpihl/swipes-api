@@ -1,6 +1,7 @@
 import React from 'react';
 
 export function propsOrPop(ctx, ...propNames) {
+  let hasPopped = false;
   const currCWM = ctx.componentWillMount;
   const currCWRP = ctx.componentWillReceiveProps;
   const currRender = ctx.render;
@@ -9,7 +10,10 @@ export function propsOrPop(ctx, ...propNames) {
     const propsToCheck = props || ctx.props;
     const missing = propNames.find((key) => !propsToCheck[key]);
     if (missing && typeof ctx.props.navPop === 'function') {
-      if(pop) ctx.props.navPop();
+      if(pop && !hasPopped){
+        ctx.props.navPop();
+        hasPopped = true;
+      } 
       return false;
     }
     return true;
