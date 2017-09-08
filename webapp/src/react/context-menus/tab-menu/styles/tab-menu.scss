@@ -98,7 +98,8 @@ $sectionHeight: 52px;
   }
 
   &__close {
-    @include centerAbsolute(vertical, right);
+    position: absolute;
+    right: 0; top: calc(50% - (36px / 2));
     opacity: 0;
     pointer-events: none;
     transition: .15s ease;
