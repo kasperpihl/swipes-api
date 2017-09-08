@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, Linking } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import codePush from 'react-native-code-push';
 
