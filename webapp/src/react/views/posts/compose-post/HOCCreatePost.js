@@ -62,7 +62,7 @@ class HOCCreatePost extends PureComponent {
     this.updatePost(this.state.post.updateIn(['attachments'], atts => atts.delete(i)));
   }
   onFocus() {
-    const input = getDeep(this, 'refs.create.refs.composer.refs.textarea.refs.input');
+    const input = getDeep(this, 'refs.create.refs.composer.refs.textarea.refs.textarea');
     if(input) {
       input.focus()
     }
