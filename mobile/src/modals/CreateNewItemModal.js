@@ -101,8 +101,12 @@ class CreateNewItemModal extends PureComponent {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+  componentWillUpdate(nextProps) {
+    // Because of RN bug, see: https://github.com/facebook/react-native/issues/8562
+
+    if (nextProps.modalState) {
+      LayoutAnimation.easeInEaseOut();
+    }
   }
   componentWillUnmount() {
     clearTimeout(this.showAssigneeModalTimeout);
@@ -115,9 +119,8 @@ class CreateNewItemModal extends PureComponent {
     this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
   }
   onCloseModal() {
-
-    this.handleModalState();
     this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
+    this.handleModalState();
   }
   onModalAssign(sortedUsers, data) {
     let { assignees } = this.state;

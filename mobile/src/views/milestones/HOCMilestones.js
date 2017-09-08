@@ -27,22 +27,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  fabWrapper: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
-    position: 'absolute',
-    bottom: 30,
-    right: 15,
-  },
-  fabButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
-    backgroundColor: colors.blue100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   noMilestoneWrapper: {
     alignSelf: 'stretch',
     flexDirection: 'row',
@@ -80,12 +64,12 @@ const styles = StyleSheet.create({
     height: 90,
   },
   noMilestoneCircle:{
-    width: 45,
-    height: 45,
+    width: 32,
+    height: 32,
     position: 'absolute',
-    left: 45 / 2, top: 45 / 2,
+    left: 45 - (32 / 2), top: 45 - (32 / 2),
     backgroundColor: 'white',
-    borderRadius: 45 / 2, 
+    borderRadius: 32 / 2, 
   },
   noMilestoneDot:{
     width: 6,
@@ -94,7 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: colors.deepBlue100,
     position: 'absolute',
-    left: (45 / 2) - 3, top: (45 / 2) - 3,
+    left: 16 - 3, top: 16 - 3,
   },
 });
 
@@ -211,7 +195,13 @@ class HOCMilestones extends PureComponent {
 
           return t;
         })}
-      />
+      >
+        <RippleButton onPress={this.handleModalState}>
+          <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+          </View>
+        </RippleButton>
+      </HOCHeader>
     );
   }
   renderMilestoneItem(milestone) {
@@ -279,29 +269,11 @@ class HOCMilestones extends PureComponent {
       />
     );
   }
-  renderFAB() {
-    const { fabOpen } = this.state;
-
-    if (fabOpen) {
-      return undefined;
-    }
-
-    return (
-      <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.handleModalState}>
-          <View style={styles.fabButton}>
-            <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
-          </View>
-        </RippleButton>
-      </View>
-    );
-  }
   render() {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
         {this.renderList()}
-        {this.renderFAB()}
         <CreateNewItemModal
           modalState={this.state.fabOpen}
           placeholder="Add a new milestone"

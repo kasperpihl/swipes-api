@@ -30,8 +30,8 @@ class HOCPostCreate extends PureComponent {
   componentDidMount() {
     this.renderActionButtons();
   }
-  componentDidUpdate(prevProps) {
-    if (!prevProps.isActive && this.props.isActive) {
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.isActive && this.props.isActive || !prevState.post.get('type') !== this.state.post.get('type')) {
       this.renderActionButtons();
     }
   }
@@ -216,12 +216,23 @@ class HOCPostCreate extends PureComponent {
   updatePost(post) {
     this.setState({ post });
   }
+  getIconForType() {
+    const type = this.state.post.get('type');
+
+    switch (type) {
+      case 'message': return 'MessageMono';
+      case 'question': return 'QuestionMono';
+      case 'announcement': return 'AnnouncementMono';
+      case 'information': return 'InformationMono';
+      default: return 'MessageColored';
+    }
+  }
   renderActionButtons() {
     actionButtons = [
       { icon: 'Assign' },
-      { icon: 'Type' },
+      { icon: this.getIconForType() },
       { icon: 'Attachment' },
-      { icon: 'Send', align: 'right' },
+      { icon: 'Send', seperator: 'left', staticSize: true },
     ];
 
     this.props.setActionButtons({

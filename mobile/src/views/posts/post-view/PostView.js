@@ -409,7 +409,7 @@ class PostView extends PureComponent {
     }
     
     return (
-      <ScrollView style={{ flex: 1 }} ref="scrollView">
+      <ScrollView style={{ flex: 1 }} ref="scrollView" alwaysBounceVertical={false}>
         {this.renderMessage()}
         {this.renderAttachments()}
         {this.renderActions()}

@@ -27,23 +27,32 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   iconButton: {
-    width: 54,
-    height: 54,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
   },
   textButtonLabel: {
     fontSize: 12,
+    lineHeight: 24,
+    fontWeight: '500',
     color: colors.blue100,
     fontWeight: "bold"
   },
-  verticalSeperator: {
+  verticalSeperatorLeft: {
     width: 1,
-    height: 20,
+    height: 40,
     position: "absolute",
     left: 0,
-    top: 17,
+    top: 7,
+    backgroundColor: colors.deepBlue10
+  },
+  verticalSeperatorRight: {
+    width: 1,
+    height: 40,
+    position: "absolute",
+    right: 0,
+    top: 7,
     backgroundColor: colors.deepBlue10
   }
 });
@@ -77,6 +86,9 @@ class HOCActionBar extends PureComponent {
     }
   }
   renderTextButton(key, button, onPress, seperator) {
+    const text = button.text.toUpperCase();
+
+
     return (
       <RippleButton
         rippleColor={colors.blue100}
@@ -86,37 +98,41 @@ class HOCActionBar extends PureComponent {
         key={key}
       >
         <View style={styles.textButton}>
-          {seperator ? <View style={styles.verticalSeperator} /> : undefined}
+          {button.seperator && button.seperator === 'left' ? <View style={styles.verticalSeperatorLeft} /> : undefined}
           <Text style={styles.textButtonLabel}>
-            {button.text}
+            {text}
           </Text>
+          {button.seperator && button.seperator === 'right' ? <View style={styles.verticalSeperatorRight} /> : undefined}
         </View>
       </RippleButton>
     );
   }
-  renderIconButton(key, button, onPress, seperator, align) {
+  renderIconButton(key, button, onPress, seperator, staticSize) {
     let extraStyles = {};
 
-    if (align === 'right') {
-      extraStyles = { marginLeft: 'auto'}
+    console.log(key, button, seperator, staticSize);
+
+    if (button.staticSize) {
+      extraStyles = {
+        maxWidth: 64
+      }
     }
 
     return (
       <RippleButton
-        rippleColor={colors.blue100}
         style={[styles.iconButton, extraStyles ]}
-        rippleOpacity={0.8}
         onPress={onPress}
         key={key}
       >
         <View style={[styles.iconButton, extraStyles ]}>
-          {seperator ? <View style={styles.verticalSeperator} /> : undefined}
+          {button.seperator && button.seperator === 'left' ? <View style={styles.verticalSeperatorLeft} /> : undefined}
           <Icon
             name={button.icon}
             width="24"
             height="24"
-            fill={colors.blue100}
+            fill={colors.deepBlue50}
           />
+          {button.seperator && button.seperator === 'right' ? <View style={styles.verticalSeperatorRight} /> : undefined}
         </View>
       </RippleButton>
     );
@@ -124,15 +140,15 @@ class HOCActionBar extends PureComponent {
   renderLeftIcon() {
     const { activeRoutes, actionButtons } = this.props;
 
-    if (Platform.OS === "ios") {
+    if (Platform.OS === "android") {
       return this.renderIconButton(
         "nav",
-        { icon: "ArrowLeftLine" },
+        { icon: "ArrowLeftLine", seperator: 'right', staticSize: true },
         this.onPop
       );
     }
 
-    if (Platform.OS === "adnroid") {
+    if (Platform.OS === "ios") {
       // Please no one ever judge me here. I needed to get flex's space-between to work :(
       return <View />
     }
@@ -147,11 +163,11 @@ class HOCActionBar extends PureComponent {
         let seperator = i === 0 && Platform.OS === "ios" ? false : true;
 
         if (b.text) {
-          return this.renderTextButton(i, b, this.onActionClick(i), seperator);
+          return this.renderTextButton(i, b, this.onActionClick(i));
         }
 
         if (b.icon) {
-          return this.renderIconButton(i, b, this.onActionClick(i), seperator, b.align);
+          return this.renderIconButton(i, b, this.onActionClick(i));
         }
       });
     }

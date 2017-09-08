@@ -40,22 +40,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.deepBlue100
   },
-  fabWrapper: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
-    position: 'absolute',
-    bottom: 30,
-    right: 15,
-  },
-  fabButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
-    backgroundColor: colors.blue100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });
 
 class HOCGoalList extends PureComponent {
@@ -151,7 +135,13 @@ class HOCGoalList extends PureComponent {
       <HOCHeader
         title="Take Action"
         delegate={this}
-      />
+      >
+        <RippleButton onPress={this.handleModalState}>
+          <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+          </View>
+        </RippleButton>
+      </HOCHeader>
     );
   }
   renderSectionHeader(v1, sectionId) {
@@ -219,23 +209,6 @@ class HOCGoalList extends PureComponent {
       />
     );
   }
-  renderFAB() {
-    const { fabOpen } = this.state;
-
-    if (fabOpen) {
-      return undefined;
-    }
-
-    return (
-      <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.handleModalState}>
-          <View style={styles.fabButton}>
-            <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
-          </View>
-        </RippleButton>
-      </View>
-    );
-  }
   render() {
     return (
       <View style={styles.container}>
@@ -243,7 +216,6 @@ class HOCGoalList extends PureComponent {
         <View style={styles.list}>
           {this.renderList()}
         </View>
-        {this.renderFAB()}
         <CreateNewItemModal
           modalState={this.state.fabOpen}
           title=''

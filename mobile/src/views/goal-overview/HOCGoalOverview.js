@@ -8,7 +8,6 @@ import { setupLoading } from '../../../swipes-core-js/classes/utils';
 import { propsOrPop } from '../../../swipes-core-js/classes/react-utils';
 import * as ca from '../../../swipes-core-js/actions';
 import HOCHeader from '../../components/header/HOCHeader';
-import HOCHistory from './HOCHistory';
 import HOCStepList from './HOCStepList';
 import HOCAttachments from './HOCAttachments';
 import { colors, viewSize } from '../../utils/globalStyles';
@@ -151,13 +150,6 @@ class HOCGoalOverview extends PureComponent {
         currentTab={this.state.tabIndex}
         delegate={this}
       />
-    );
-  }
-  renderActivity() {
-    const { goal } = this.props;
-
-    return (
-      <HOCHistory goal={goal} delegate={this} />
     );
   }
   renderStepList() {

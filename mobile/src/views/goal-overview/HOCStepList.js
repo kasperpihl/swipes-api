@@ -81,12 +81,13 @@ class HOCStepList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      fabOpen: false
+      modalState: false
     };
 
     setupDelegate(this, 'onComplete');
 
     this.renderSteps = this.renderSteps.bind(this);
+    this.renderListFooter = this.renderListFooter.bind(this);
     this.onPressCached = setupCachedCallback(this.onPress, this);
     this.onModalGoalActionCached = setupCachedCallback(this.onModalGoalAction, this);
     this.handleModalState = this.handleModalState.bind(this);
@@ -138,20 +139,18 @@ class HOCStepList extends PureComponent {
     const { addStep, goal } = this.props;
 
     addStep(goal.get('id'), title, assignees).then((res) => {
-
-      if(res.ok){
-        this.handleModalState()
-      }
+      this.handleModalState();
     });
   }
   handleModalState() {
-    const { fabOpen } = this.state;
+    const { modalState } = this.state;
 
-    if (!fabOpen) {
-      this.setState({ fabOpen: true })
+    if (!modalState) {
+      this.setState({ modalState: true })
     } else {
-      this.setState({ fabOpen: false })
+      this.setState({ modalState: false });
     }
+
   }
   onStepAdd() {
 
@@ -192,26 +191,21 @@ class HOCStepList extends PureComponent {
       </RippleButton>
     );
   }
-  renderFAB() {
-    const { fabOpen } = this.state;
-
-    if (fabOpen) {
-      return undefined;
-    }
-
-    return (
-      <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.handleModalState}>
-          <View style={styles.fabButton}>
-            <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
-          </View>
-        </RippleButton>
-      </View>
-    )
-  }
   renderListFooter() {
 
-    return <EmptyListFooter />
+    return (
+      <View>
+        <RippleButton onPress={this.handleModalState}>
+          <View style={{width: viewSize.width - 30, height: 60, flexDirection: 'row', marginHorizontal: 15, alignItems: 'center'}}>
+            <View style={styles.indicator}>
+              <Text style={styles.indicatorLabel}>{this.props.steps.size + 1}</Text>
+            </View>
+            <Text style={{ paddingLeft: 22, fontSize: 15, lineHeight: 24, color: colors.deepBlue50 }}>Add a step</Text>
+          </View>
+        </RippleButton>
+        <EmptyListFooter />
+      </View>
+    )
   }
   render() {
     const { steps, isLoading, getLoading } = this.props;
@@ -223,9 +217,8 @@ class HOCStepList extends PureComponent {
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
           renderFooter={this.renderListFooter}
         />
-        {this.renderFAB()}
         <CreateNewItemModal
-          modalState={this.state.fabOpen}
+          modalState={this.state.modalState}
           defAssignees={[this.props.myId]}
           placeholder="Add a new step"
           actionLabel="Add step"

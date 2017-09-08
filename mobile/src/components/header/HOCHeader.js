@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { setupDelegate } from '../../../swipes-core-js/classes/utils';
 import Tabs from '../tabs/Tabs';
 import Icon from '../icons/Icon';
-import { colors } from '../../utils/globalStyles';
+import { colors, viewSize } from '../../utils/globalStyles';
 
 const styles = StyleSheet.create({
   container: {
+    width: viewSize.width - 30,
     marginHorizontal: 15,
     paddingTop: 33,
     flexDirection: 'column',
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flexDirection: 'row',
-    alignItems: 'center', 
+    alignItems: 'center',
   },
   bottomContainer: {
     flexDirection: 'row',
@@ -153,6 +154,12 @@ class HOCHeader extends PureComponent {
       </View>
     )
   }
+  renderTitle() {
+
+    return (
+      <Text style={styles.title}>{this.props.title}</Text>
+    )
+  }
   render() {
     const { headerHeight } = this.state;
     const { tabs, children, collapsed } = this.props;
@@ -178,18 +185,20 @@ class HOCHeader extends PureComponent {
 
     return (
       <View onLayout={event => this.measureView(event)} style={[styles.container, { marginTop, paddingBottom, borderBottomWidth }]}>
-        <TouchableWithoutFeedback onPress={this.onHeaderTap}>
-          <View style={{ flexDirection: 'column' }}>
-            <View style={[styles.topContainer, { opacity }]}>
-              {this.renderHeaderIcon()}
-              <Text style={styles.title}>{this.props.title}</Text>
-              <View style={styles.children}>
-                {children}
+        <View style={{ flexDirection: 'row', alignSelf: 'stretch' }}>
+          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={this.onHeaderTap}>
+            <View style={{ flexDirection: 'column', flex: 1 }}>
+              <View style={[styles.topContainer, { opacity }]}>
+                {this.renderHeaderIcon()}
+                {this.renderTitle()}
               </View>
+              {this.renderSubtitle()}
             </View>
-            {this.renderSubtitle()}
+          </TouchableWithoutFeedback>
+          <View style={styles.children}>
+            {children}
           </View>
-        </TouchableWithoutFeedback>
+        </View>
         <ScrollView style={[styles.bottomContainer, { opacity }]} horizontal showsHorizontalScrollIndicator={false} alwaysBounceHorizontal={false} >
           {this.renderTabs()}
         </ScrollView>

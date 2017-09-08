@@ -10,8 +10,6 @@ class RippleButton extends PureComponent {
   renderString() {
     const { text, textStyle } = this.props;
 
-    console.log(text, textStyle);
-
     return (
       <Text style={{ includeFontPadding: false, alignSelf: 'stretch', flexWrap: 'wrap' }}>
         {text.map((t, i) => {
