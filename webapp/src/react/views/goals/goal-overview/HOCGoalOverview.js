@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
-import { propsOrPop } from 'classes/react-utils';
+import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';

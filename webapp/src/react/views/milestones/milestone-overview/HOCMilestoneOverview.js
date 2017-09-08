@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-import { propsOrPop } from 'classes/react-utils';
+import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
