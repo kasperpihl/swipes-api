@@ -1,6 +1,7 @@
 const generateWayTwo = (user_id) => {
   return {
     goal: {
+      assignees: [],
       attachment_order: [
         'b',
         'a',
