@@ -124,7 +124,7 @@ class HOCActionBar extends PureComponent {
   renderLeftIcon() {
     const { activeRoutes, actionButtons } = this.props;
 
-    if (Platform.OS === "android") {
+    if (Platform.OS === "ios") {
       return this.renderIconButton(
         "nav",
         { icon: "ArrowLeftLine" },
@@ -132,7 +132,7 @@ class HOCActionBar extends PureComponent {
       );
     }
 
-    if (Platform.OS === "ios") {
+    if (Platform.OS === "adnroid") {
       // Please no one ever judge me here. I needed to get flex's space-between to work :(
       return <View />
     }

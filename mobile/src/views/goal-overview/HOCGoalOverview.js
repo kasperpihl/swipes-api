@@ -5,6 +5,7 @@ import { fromJS } from 'immutable';
 import * as a from '../../actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupLoading } from '../../../swipes-core-js/classes/utils';
+import { propsOrPop } from '../../../swipes-core-js/classes/react-utils';
 import * as ca from '../../../swipes-core-js/actions';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCHistory from './HOCHistory';
@@ -17,9 +18,10 @@ class HOCGoalOverview extends PureComponent {
     super(props);
     this.state = {
       tabIndex: 0,
-      routeNum: props.lastRoute,
       hasLoaded: false,
     };
+
+    propsOrPop(this, 'goal');
 
     this.closeView = this.closeView.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
@@ -40,7 +42,7 @@ class HOCGoalOverview extends PureComponent {
   }
   componentWillUpdate(nextProps) {
     LayoutAnimation.easeInEaseOut();
-    if (this.state.routeNum === nextProps.lastRoute) {
+    if (!this.props.isActive && nextProps.isActive) {
       this.renderActionButtons();
     }
   }
@@ -206,6 +208,7 @@ class HOCGoalOverview extends PureComponent {
     return undefined;
   }
   render() {
+    const { goal } = this.props;
     const { tabIndex } = this.state;
 
     return (

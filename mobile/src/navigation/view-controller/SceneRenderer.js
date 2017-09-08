@@ -36,7 +36,6 @@ class SceneRenderer extends PureComponent {
             navPush={this.navPushCached(sliderIndex)}
             navPop={this.navPopCached(activeSliderIndex)}
             setActionButtons={setActionButtons}
-            lastRoute={routes.size}
             {...route.props}
           />
         </View>

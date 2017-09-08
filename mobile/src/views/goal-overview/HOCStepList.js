@@ -98,14 +98,16 @@ class HOCStepList extends PureComponent {
     return new GoalsUtil(goal);
   }
   onModalGoalAction(step, i) {
-    const { showModal } = this.props;
-    console.log(i.get('index'));
+    const { showModal, assignStep, goal } = this.props;
+
     if (i.get('index') === 'complete') {
-      console.log('gets to completed');
       this.onComplete(step);
       showModal();
     } else if (i.get('index') === 'assign') {
-      console.log('assign');
+      const assignees = step.get('assignees');
+      
+      // assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res)
+
       showModal();
     }
 
@@ -242,5 +244,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   addStep: ca.steps.add,
+  assignStep: ca.steps.assign,
   showModal: a.modals.show,
 })(HOCStepList);

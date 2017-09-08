@@ -30,9 +30,8 @@ const styles = StyleSheet.create({
 class HOCPreviewNote extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      routeNum: props.lastRoute,
-    };
+    this.state = {};
+
     this.onWebviewMessage = this.onWebviewMessage.bind(this);
     this.renderLoading = this.renderLoading.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
@@ -44,7 +43,7 @@ class HOCPreviewNote extends PureComponent {
     }, 1);
   }
   componentWillUpdate(nextProps) {
-    if (this.state.routeNum === nextProps.lastRoute) {
+    if (!this.props.isActive && nextProps.isActive) {
       this.renderActionButtons();
     }
   }

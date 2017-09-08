@@ -214,6 +214,7 @@ class HOCGoalList extends PureComponent {
         immutableData={goals}
         renderRow={this.renderGoal}
         renderSectionHeader={this.renderSectionHeader}
+        stickySectionHeadersEnabled={true}
         renderFooter={this.renderListFooter}
       />
     );

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as a from '../actions';
-import * as ca from '../../swipes-core-js/actions';
+import * as cs from '../../swipes-core-js/selectors';
 import Icon from '../components/icons/Icon';
 import RippleButton from '../components/ripple-button/RippleButton';
 import HOCAssigning from '../components/assignees/HOCAssigning';
@@ -142,11 +142,7 @@ class CreateNewItemModal extends PureComponent {
     const { users, showModal } = this.props;
     let { assignees } = this.state;
 
-    const sortedUsers = users.sort(
-      (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
-    ).toList();
-
-    const userInfoToActions = sortedUsers.map((u, i) => {
+    const userInfoToActions = users.map((u, i) => {
       const selected = this.state.assignees.indexOf(u.get('id')) > -1;
 
       const obj = {
@@ -163,7 +159,7 @@ class CreateNewItemModal extends PureComponent {
 
     const modal = {
       title: 'Assign teammeates',
-      onClick: this.onModalAssign.bind(this, sortedUsers),
+      onClick: this.onModalAssign.bind(this, users),
       onClose: this.onAssigneeClose,
       multiple: 'Assign',
       items: userInfoToActions,
@@ -301,7 +297,7 @@ class CreateNewItemModal extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    users: state.get('users'),
+    users: cs.users.getActive(state),
   };
 }
 

@@ -95,15 +95,11 @@ class HOCHeader extends PureComponent {
   }
   renderSubtitle() {
     const { subtitle } = this.props;
-
-    console.log(subtitle);
-
     if (!subtitle) {
       return undefined;
     }
 
     if (typeof subtitle === 'string') {
-      console.log(subtitle);
       return (
         <View style={{ alignSelf: 'stretch', height: 21 }} >
           <Text style={styles.subtitle}>{subtitle}</Text>

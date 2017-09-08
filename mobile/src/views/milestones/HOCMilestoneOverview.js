@@ -5,6 +5,7 @@ import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
 import * as ca from '../../../swipes-core-js/actions';
 import * as cs from '../../../swipes-core-js/selectors';
+import { propsOrPop } from '../../../swipes-core-js/classes/react-utils';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCGoalItem from '../goallist/HOCGoalItem';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
@@ -68,10 +69,11 @@ class HOCMilestoneOverview extends PureComponent {
     this.state = {
       tabs: ['Current', 'Later', 'Completed'],
       tabIndex: 0,
-      routeNum: props.lastRoute,
       hasLoaded: false,
       fabOpen: false
     };
+
+    propsOrPop(this, 'milestone');
 
     this.onActionButton = this.onActionButton.bind(this);
     this.renderGoal = this.renderGoal.bind(this);
@@ -85,7 +87,7 @@ class HOCMilestoneOverview extends PureComponent {
     }, 1);
   }
   componentWillUpdate(nextProps) {
-    if (this.state.routeNum === nextProps.lastRoute) {
+    if (!this.props.isActive && nextProps.isActive) {
       this.renderActionButtons();
     }
   }

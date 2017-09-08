@@ -13,14 +13,13 @@ class HOCPostView extends PureComponent {
     super(props);
     this.state = {
       commentLoading: false,
-      routeNum: props.lastRoute,
     };
   }
   componentDidMount() {
     this.hideActionBar();
   }
   componentWillUpdate(nextProps) {
-    if (this.state.routeNum === nextProps.lastRoute) {
+    if (nextProps.isActive && !this.props.isActive) {
       this.hideActionBar();
     }
   }

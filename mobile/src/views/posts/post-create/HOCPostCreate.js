@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from '../../../actions';
 import * as ca from '../../../../swipes-core-js/actions';
+import * as cs from '../../../../swipes-core-js/selectors';
 import { setupLoading, convertObjToUnderscore, navForContext, typeForId } from '../../../../swipes-core-js/classes/utils';
 import moment from 'moment';
 import mime from 'react-native-mime-types';
 import ImagePicker from 'react-native-image-picker';
-// import { map, list } from 'react-immutable-proptypes';
 import { fromJS, List } from 'immutable';
 import PostCreate from './PostCreate';
 
@@ -21,7 +21,6 @@ class HOCPostCreate extends PureComponent {
         taggedUsers: props.taggedUsers || [],
         context: props.context || null,
       }),
-      routeNum: props.lastRoute,
     };
 
     this.onActionButton = this.onActionButton.bind(this);
@@ -32,7 +31,7 @@ class HOCPostCreate extends PureComponent {
     this.renderActionButtons();
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.routeNum !== this.props.routeNum && this.props.routeNum === this.state.routeNum) {
+    if (!prevProps.isActive && this.props.isActive) {
       this.renderActionButtons();
     }
   }
@@ -56,8 +55,6 @@ class HOCPostCreate extends PureComponent {
             'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
           });
           navPop();
-        } else {
-
         }
       })
     }
@@ -88,10 +85,6 @@ class HOCPostCreate extends PureComponent {
   onTag() {
     const { users, showModal } = this.props;
     let { post } = this.state;
-
-    const sortedUsers = users.sort(
-      (b, c) => msgGen.users.getFirstName(b).localeCompare(msgGen.users.getFirstName(c)),
-    ).toList();
 
     const userInfoToActions = sortedUsers.map((u, i) => {
       const selected = this.state.post.get('taggedUsers').indexOf(u.get('id')) > -1;
@@ -257,7 +250,7 @@ HOCPostCreate.propTypes = {};
 function mapStateToProps(state) {
   return {
     myId: state.getIn(['me', 'id']),
-    users: state.get('users'),
+    users: cs.users.getActive(state),
   };
 }
 
