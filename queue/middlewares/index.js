@@ -98,7 +98,7 @@ const user_invited = notifyWrapper([
 const user_signup = [
   organizations.organizationsGetSingle,
   emails.usersWelcomeEmail,
-  users.usersSubscribeToMailChimp,
+  // users.usersSubscribeToMailChimp,
 ];
 
 const goal_renamed = notifyWrapper([
