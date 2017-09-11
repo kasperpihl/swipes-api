@@ -13,8 +13,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     backgroundColor: 'rgba(0, 12, 47, 0.96)',
-    borderBottomWidth: 1,
-    borderBottomColor: 'red',
     flexDirection: 'column',
   },
   aboutWrapper: {
