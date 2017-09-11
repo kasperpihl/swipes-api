@@ -101,6 +101,13 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
       if (err) {
         console.log('AMAZON QUEUE ERR', err);
       }
+
+      setLocals({
+        queueMessage: null,
+        messageGroupId: null,
+      });
+
+      return next();
     });
   } else {
     request.post({
@@ -111,15 +118,15 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
       if (error) {
         console.log(error, 'Error pushing to queue!');
       }
+
+      setLocals({
+        queueMessage: null,
+        messageGroupId: null,
+      });
+
+      return next();
     });
   }
-
-  setLocals({
-    queueMessage: null,
-    messageGroupId: null,
-  });
-
-  return next();
 });
 
 export {

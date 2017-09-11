@@ -57,7 +57,15 @@ export default class NotificationsGenerator {
     const text = [];
     switch (meta.get('event_type')) {
       case 'goal_assigned': {
-        text.push(`You've been assigned to the goal: "${meta.get('goal_title')}"`);
+        const count = meta.get('step_assign_count') || 0;
+        if(count > 0) {
+          text.push('You have been assigned to ');
+          text.push(boldText('count', `${count} step${count > 1 ? 's' : ''}`, boldStyle));
+          text.push(` in: "${meta.get('goal_title')}"`);
+        } else {
+          text.push(`You've been assigned to the goal: "${meta.get('goal_title')}"`);
+        }
+
         break;
       }
       case 'step_assigned': {

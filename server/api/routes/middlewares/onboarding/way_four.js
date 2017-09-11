@@ -1,6 +1,7 @@
 const generateWayFour = (user_id) => {
   return {
     goal: {
+      assignees: [],
       attachment_order: [
         'a',
         'b',

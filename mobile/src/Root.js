@@ -19,12 +19,13 @@ if (window.__DEV__ || DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging') {
 }
 
 window.__PLATFORM__ = Platform.OS;
-window.__VERSION__ = version;
+window.__VERSION__ = DeviceInfo.getReadableVersion();
 window.__WITHOUT_NOTES__ = true;
 window.analytics = new Analytics(store);
+window.updateHandler = new UpdateHandler(store);
 
 init(store);
-window.updateHandler = new UpdateHandler(store);
+
 window.onScroll = (function (store) {
   const animationTime = 300;
   const movement = 50;

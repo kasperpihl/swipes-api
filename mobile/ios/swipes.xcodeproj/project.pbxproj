@@ -253,6 +253,20 @@
 			remoteGlobalIDString = 139D7E881E25C6D100323FB7;
 			remoteInfo = "double-conversion";
 		};
+		A72D2A3A1F629D0D0090F05E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D383D3C1EBD27B6005632C8;
+			remoteInfo = "third-party-tvOS";
+		};
+		A72D2A3C1F629D0D0090F05E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D383D621EBD27B9005632C8;
+			remoteInfo = "double-conversion-tvOS";
+		};
 		A73117621EF9EB2200660C92 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EDA2955DD0594B72BD1EB82E /* RNDeviceInfo.xcodeproj */;
@@ -301,13 +315,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 2791E7F51BB3C10A00FD32EA;
 			remoteInfo = RCTBrowserTests;
-		};
-		A76AA1BB1F00E7C400451306 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A2D980F5AB2A42ED831D5948 /* RNFileOpener.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DB8F70EF1CD3047700E71D6D;
-			remoteInfo = RNFileOpener;
 		};
 		A771E67D1EE077FB00A94F50 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -413,7 +420,6 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		833C994490934B419CBC7F9D /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
 		8800CDCEB56E462480DEDD13 /* libRNReactNativeDocViewer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNReactNativeDocViewer.a; sourceTree = "<group>"; };
-		A2D980F5AB2A42ED831D5948 /* RNFileOpener.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFileOpener.xcodeproj; path = "../node_modules/react-native-file-opener/ios/RNFileOpener.xcodeproj"; sourceTree = "<group>"; };
 		A453A189D8064ED0AB80D9B0 /* RNMixpanel.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNMixpanel.xcodeproj; path = "../node_modules/react-native-mixpanel/RNMixpanel.xcodeproj"; sourceTree = "<group>"; };
 		A53E6A361A2D439EA92DE4F6 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		A73117731EF9F2D200660C92 /* Intercom.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Intercom.framework; sourceTree = "<group>"; };
@@ -574,6 +580,7 @@
 			isa = PBXGroup;
 			children = (
 				146834041AC3E56700842450 /* libReact.a */,
+				3DAD3EA31DF850E9000B6D8A /* libReact.a */,
 				3DAD3EA51DF850E9000B6D8A /* libyoga.a */,
 				3DAD3EA71DF850E9000B6D8A /* libyoga.a */,
 				3DAD3EA91DF850E9000B6D8A /* libcxxreact.a */,
@@ -581,8 +588,9 @@
 				3DAD3EAD1DF850E9000B6D8A /* libjschelpers.a */,
 				3DAD3EAF1DF850E9000B6D8A /* libjschelpers.a */,
 				A72936D31F00C38300D72059 /* libthird-party.a */,
+				A72D2A3B1F629D0D0090F05E /* libthird-party.a */,
 				A72936D51F00C38300D72059 /* libdouble-conversion.a */,
-				3DAD3EA31DF850E9000B6D8A /* libReact-tvOS.a */,
+				A72D2A3D1F629D0D0090F05E /* libdouble-conversion.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -631,7 +639,6 @@
 				A453A189D8064ED0AB80D9B0 /* RNMixpanel.xcodeproj */,
 				EDA2955DD0594B72BD1EB82E /* RNDeviceInfo.xcodeproj */,
 				425165852169407AA074E011 /* RNImagePicker.xcodeproj */,
-				A2D980F5AB2A42ED831D5948 /* RNFileOpener.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -740,14 +747,6 @@
 			children = (
 				A73D8A0D1ED39E5C001E3840 /* libRCTBrowser.a */,
 				A73D8A0F1ED39E5C001E3840 /* RCTBrowserTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A76AA1961F00E7C400451306 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A76AA1BC1F00E7C400451306 /* libRNFileOpener.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -938,10 +937,6 @@
 					ProjectRef = EDA2955DD0594B72BD1EB82E /* RNDeviceInfo.xcodeproj */;
 				},
 				{
-					ProductGroup = A76AA1961F00E7C400451306 /* Products */;
-					ProjectRef = A2D980F5AB2A42ED831D5948 /* RNFileOpener.xcodeproj */;
-				},
-				{
 					ProductGroup = A72936AA1F00B70F00D72059 /* Products */;
 					ProjectRef = 425165852169407AA074E011 /* RNImagePicker.xcodeproj */;
 				},
@@ -1069,10 +1064,10 @@
 			remoteRef = 3DAD3E981DF850E9000B6D8A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3DAD3EA31DF850E9000B6D8A /* libReact-tvOS.a */ = {
+		3DAD3EA31DF850E9000B6D8A /* libReact.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libReact-tvOS.a";
+			path = libReact.a;
 			remoteRef = 3DAD3EA21DF850E9000B6D8A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1174,6 +1169,20 @@
 			remoteRef = A72936D41F00C38300D72059 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		A72D2A3B1F629D0D0090F05E /* libthird-party.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libthird-party.a";
+			remoteRef = A72D2A3A1F629D0D0090F05E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A72D2A3D1F629D0D0090F05E /* libdouble-conversion.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libdouble-conversion.a";
+			remoteRef = A72D2A3C1F629D0D0090F05E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		A73117631EF9EB2200660C92 /* libRNDeviceInfo.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1221,13 +1230,6 @@
 			fileType = wrapper.cfbundle;
 			path = RCTBrowserTests.xctest;
 			remoteRef = A73D8A0E1ED39E5C001E3840 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A76AA1BC1F00E7C400451306 /* libRNFileOpener.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNFileOpener.a;
-			remoteRef = A76AA1BB1F00E7C400451306 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A771E67E1EE077FB00A94F50 /* libCodePush.a */ = {

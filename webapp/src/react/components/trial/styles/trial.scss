@@ -13,6 +13,7 @@
 }
 
 .trial .trial-popup {
+  pointer-events: all;
   @include size(500px, 300px);
   @include flexContainer('column');
   @include centerAbsolute();
@@ -28,16 +29,18 @@
 // ======================================================
 
 .trial {
-
+  pointer-events: none;
   &__indicator {
     @include flexContainer('row', right, center);
     @include size(100%, 38px);
     padding: 0 15px;
     position: absolute;
     left: 0; top: 0;
+    pointer-events: none;
   }
 
   &__indicator-label {
+    pointer-events: all;
     @include font(15px, white, 400);
 
     &:hover{
