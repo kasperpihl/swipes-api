@@ -4,7 +4,9 @@ import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import HOCHeader from '../../components/header/HOCHeader';
 import { colors } from '../../utils/globalStyles';
 import NotificationItem from './NotificationItem';
+import RippleButton from '../../components/ripple-button/RippleButton';
 import Icon from '../../components/icons/Icon';
+import { setupDelegate } from 'react-delegate';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,6 +31,7 @@ class Notifications extends PureComponent {
     };
 
     this.renderNotifications = this.renderNotifications.bind(this);
+    setupDelegate(this, 'onMarkAll');
   }
   componentDidMount() {
     this.loadingTimeout = setTimeout(() => {
@@ -40,7 +43,15 @@ class Notifications extends PureComponent {
   }
   renderHeader() {
 
-    return <HOCHeader title="Notifications" />
+    return (
+      <HOCHeader title="Notifications">
+        <RippleButton onPress={this.onMarkAll}>
+          <View style={{ height: 44, paddingHorizontal: 6, alignItems: 'center', flexDirection: 'row' }}>
+            <Text style={{ fontSize: 13, color: colors.deepBlue50 }}>Mark all as read</Text>
+          </View>
+        </RippleButton>
+      </HOCHeader>
+    )
   }
   renderListLoader() {
     return (

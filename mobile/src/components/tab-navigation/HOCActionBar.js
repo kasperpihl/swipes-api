@@ -110,8 +110,6 @@ class HOCActionBar extends PureComponent {
   renderIconButton(key, button, onPress, seperator, staticSize) {
     let extraStyles = {};
 
-    console.log(key, button, seperator, staticSize);
-
     if (button.staticSize) {
       extraStyles = {
         maxWidth: 64
@@ -140,17 +138,12 @@ class HOCActionBar extends PureComponent {
   renderLeftIcon() {
     const { activeRoutes, actionButtons } = this.props;
 
-    if (Platform.OS === "android") {
+    if (Platform.OS === "ios") {
       return this.renderIconButton(
         "nav",
         { icon: "ArrowLeftLine", seperator: 'right', staticSize: true },
         this.onPop
       );
-    }
-
-    if (Platform.OS === "ios") {
-      // Please no one ever judge me here. I needed to get flex's space-between to work :(
-      return <View />
     }
 
     return undefined;
@@ -160,8 +153,6 @@ class HOCActionBar extends PureComponent {
 
     if (actionButtons && actionButtons.get("buttons")) {
       return actionButtons.get("buttons").map((b, i) => {
-        let seperator = i === 0 && Platform.OS === "ios" ? false : true;
-
         if (b.text) {
           return this.renderTextButton(i, b, this.onActionClick(i));
         }

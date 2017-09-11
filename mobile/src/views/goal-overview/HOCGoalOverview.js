@@ -24,7 +24,6 @@ class HOCGoalOverview extends PureComponent {
 
     this.closeView = this.closeView.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
-    this.onModalAskForAction = this.onModalAskForAction.bind(this);
 
     setupLoading(this);
 
@@ -41,6 +40,7 @@ class HOCGoalOverview extends PureComponent {
   }
   componentWillUpdate(nextProps) {
     LayoutAnimation.easeInEaseOut();
+
     if (!this.props.isActive && nextProps.isActive) {
       this.renderActionButtons();
     }
@@ -76,38 +76,19 @@ class HOCGoalOverview extends PureComponent {
       }
     });
   }
-  onModalAskForAction(i) {
-    const { goal, showModal } = this.props;
-    const type = i.get('title').toLowerCase();
-
-    const notify = {
-      id: 'Notify',
-      title: 'Notify',
-      props: {
-        goalId: goal.get('id'),
-        notify: {
-          notification_type: type,
-          request: true,
-        },
-      },
-    };
-
-    showModal();
-    this.openNotify(notify);
-  }
   onActionButton(i) {
     const { goal, navPush } = this.props;
     const helper = this.getHelper();
 
     navPush({
-      id: 'PostCreate',
-      title: 'Create Post',
+      id: 'PostFeed',
+      title: 'Discussions',
       props: {
         context: {
           title: goal.get('title'),
           id: goal.get('id'),
         },
-        taggedUsers: helper.getAllAssigneesButMe().toArray()
+        relatedFilter: msgGen.goals.getRelatedFilter(goal)
       },
     });
 
@@ -129,10 +110,11 @@ class HOCGoalOverview extends PureComponent {
     navPop();
   }
   renderActionButtons() {
+    console.log(this.props.goal.toJS())
     this.props.setActionButtons({
       onClick: this.onActionButton,
       buttons: [
-        { text: 'Discuss' },
+        { text: 'Discussions' },
       ],
     });
   }

@@ -2,15 +2,61 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from '../../../actions';
 import * as ca from '../../../../swipes-core-js/actions';
+import * as cs from '../../../../swipes-core-js/selectors';
 import PostFeed from './PostFeed';
 
 class HOCPostFeed extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      hasLoaded: false
+    };
     // setupLoading(this)
   }
+  componentWillMount() {
+    this.updateTabs(this.props);
+  }
   componentDidMount() {
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ hasLoaded: true });
+    }, 1);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.updateTabs(nextProps);
+  }
+  componentDidUpdate(prevProps) {
+    if (!this.state.hasLoaded) {
+      clearTimeout(this.loadingTimeout);
+
+      this.loadingTimeout = setTimeout(() => {
+        this.setState({ hasLoaded: true });
+      }, 1);
+    }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
+  }
+  updateTabs(props) {
+    const { tabs } = this.state;
+    let dTabs = tabs;
+    if(props.context && !dTabs) {
+      dTabs = ['This context'];
+    }
+    if(props.relatedPosts && props.relatedPosts.size && dTabs.length < 2) {
+      dTabs = dTabs.concat('Related');
+    }
+    if(!props.context && dTabs) {
+      dTabs = null;
+    }
+
+    if(dTabs !== tabs) {
+      this.setState({ tabs: dTabs, tabIndex: 0 });
+    }
+  }
+  onChangeTabs(index) {
+    if (index !== this.state.tabIndex) {
+      this.setState({ tabIndex: index, hasLoaded: false });
+    }
   }
   onAddReaction(post, commentId) {
     const { addReaction, commentAddReaction } = this.props;
@@ -41,17 +87,18 @@ class HOCPostFeed extends PureComponent {
     browser(url);
   }
   onNewPost() {
-    const { navPush } = this.props;
+    const { navPush, context } = this.props;
 
     navPush({
       id: 'PostCreate',
       title: 'Create a Post',
+      props: {
+        context
+      }
     })
   }
   onOpenPost(postId, scrollToBottom) {
     const { navPush } = this.props;
-
-    console.log('scrollToBottom', scrollToBottom)
 
     navPush({
       id: 'PostView',
@@ -65,12 +112,11 @@ class HOCPostFeed extends PureComponent {
   onAttachmentClick(i, post) {
     const { preview } = this.props;
 
-    console.log('are you here????')
-
     preview(post.getIn(['attachments', i]));
   }
   render() {
-    const { posts } = this.props;
+    const { posts, counter, relatedPosts } = this.props;
+    const { tabs, tabIndex } = this.state;
 
     const sortedPosts = posts.sort((a, b) => {
       return b.get('created_at').localeCompare(a.get('created_at'));
@@ -80,18 +126,35 @@ class HOCPostFeed extends PureComponent {
       <PostFeed
         posts={sortedPosts}
         delegate={this}
+        tabIndex={tabIndex}
+        tabs={tabs}
+        relatedPosts={relatedPosts}
+        hasLoaded={this.state.hasLoaded}
       />
     );
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    posts: state.get('posts'),
-  };
+function makeMapStateToProps() {
+  const getFilteredList = cs.posts.makeGetFilteredList();
+  const getRelatedList = cs.posts.makeGetRelatedList();
+  
+  return (state, props) => {
+    let counter = getFilteredList(state, props).size;
+
+    if(props.relatedFilter) {
+      counter += getRelatedList(state, props).size;
+    }
+
+    return {
+      posts: getFilteredList(state, props),
+      relatedPosts: getRelatedList(state, props),
+      counter
+    };
+  }
 }
 
-export default connect(mapStateToProps, {
+export default connect(makeMapStateToProps, {
   preview: a.links.preview,
   browser: a.links.browser,
   addReaction: ca.posts.addReaction,

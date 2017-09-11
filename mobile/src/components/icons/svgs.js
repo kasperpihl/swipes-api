@@ -115,11 +115,31 @@ export default {
     ),
     viewBox: DEF_VIEWBOX,
   },
+  Delete: {
+    svg: (
+      <G>
+        <Path d="M21,6H3V8H5V21H19V8h2ZM17,19H7V8H17Z" />
+        <Rect x="7" y="3" width="10" height="2" />
+        <Rect x="9" y="9" width="2" height="9" />
+        <Rect x="13" y="9" width="2" height="9" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
+  },
   Deliver: {
 
   },
   Dot: {
 
+  },
+  Download: {
+    svg: (
+      <G>
+        <Polygon points="15.293,8.878,13,11.171,13,5,11,5,11,11.173,8.707,8.879,7.293,10.293,11.998,15,16.707,10.293,15.293,8.878" />
+        <Rect x="5" y="17" width="14" height="2" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
   },
   Email: {
 
@@ -365,6 +385,10 @@ export default {
   },
   Reply: {
     svg: <Path d="M21,12,14,6V9H11A6.99339,6.99339,0,0,0,5.12158,19.792,6.00255,6.00255,0,0,1,11,15h3v3Z" />,
+    viewBox: DEF_VIEWBOX,
+  },
+  Save: {
+    svg: <Path d="M17,3H3V21H21V3ZM15,5V9H9V5ZM13,19V17h2v2Zm6,0H17V15H11v4H5V5H7v6H17V5h2Z" />,
     viewBox: DEF_VIEWBOX,
   },
   Send: {

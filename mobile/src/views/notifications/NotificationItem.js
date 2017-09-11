@@ -20,19 +20,16 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   profilePicWrapper: {
-    width: 54,
-    height: 54,
-    borderRadius: 3,
+    width: 66,
+    height: 66,
   },
   profilePic: {
-    width: 54,
-    height: 54,
-    borderRadius: 3,
+    width: 66,
+    height: 66,
   },
   initials: {
-    width: 54,
-    height: 54,
-    borderRadius: 3,
+    width: 66,
+    height: 66,
     backgroundColor: colors.deepBlue100,
     alignItems: 'center',
     justifyContent: 'center',
@@ -47,13 +44,13 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: colors.deepBlue100,
-    fontSize: 12,
+    fontSize: 13,
     lineHeight: 15,
   },
   boldStyle: {
-    fontWeight: '500',
+    fontWeight: 'bold',
     color: colors.deepBlue100,
-    fontSize: 12,
+    fontSize: 13,
     lineHeight: 15,
   },
   timestampWrapper: {

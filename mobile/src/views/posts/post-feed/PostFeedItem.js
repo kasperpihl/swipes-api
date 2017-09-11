@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
-import { setupDelegate, iconForId, attachmentIconForService } from '../../../../swipes-core-js/classes/utils';
+import { setupDelegate, miniIconForId, attachmentIconForService } from '../../../../swipes-core-js/classes/utils';
 import { timeAgo } from '../../../../swipes-core-js/classes/time-utils';
 import { colors, viewSize } from '../../../utils/globalStyles';
 import HOCHeader from '../../../components/header/HOCHeader';
@@ -218,7 +218,7 @@ class PostFeed extends PureComponent {
     const timeStamp = timeAgo(post.get('created_at'), true);
     const seperator = post.get('context') ? <Text style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text > : undefined;
     const contextTitle = post.get('context') ? <Text style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text> : undefined;
-    const icon = post.get('context') ? <Icon name={iconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
+    const icon = post.get('context') ? <Icon name={miniIconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
     const padding = post.get('context') ? 5 : 0;
 
     return (

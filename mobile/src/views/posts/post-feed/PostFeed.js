@@ -27,39 +27,35 @@ const styles = StyleSheet.create({
 class PostFeed extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { hasLoaded: false, };
+    this.state = { };
 
-    setupDelegate(this, 'onNewPost');
+    setupDelegate(this, 'onNewPost', 'onChangeTabs');
 
     this.renderFeedItem = this.renderFeedItem.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
   }
-  componentDidMount() {
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-  }
-  componentDidUpdate(prevProps) {
-    if (!this.state.hasLoaded) {
-      clearTimeout(this.loadingTimeout);
-
-      this.loadingTimeout = setTimeout(() => {
-        this.setState({ hasLoaded: true });
-      }, 1);
-    }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
-  }
   onHeaderTap() {
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
+  onChangeTab(index) {
+    this.onChangeTabs(index);
+  }
   renderHeader() {
+    const { tabIndex, tabs } = this.props;
+    let tabObj = {};
+
+    if (tabs) {
+      tabObj = {
+        tabs: tabs,
+        currentTab: tabIndex
+      }
+    }
 
     return (
       <HOCHeader
         title="Discuss"
         delegate={this}
+        {...tabObj}
       >
         <RippleButton onPress={this.onNewPost}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
@@ -94,8 +90,7 @@ class PostFeed extends PureComponent {
     )
   }
   renderList() {
-    const { posts } = this.props;
-    const { hasLoaded } = this.state;
+    const { posts, relatedPosts, tabIndex, hasLoaded } = this.props;
 
     if (!hasLoaded) {
       return this.renderListLoader();
@@ -105,11 +100,13 @@ class PostFeed extends PureComponent {
       return this.renderEmptyState()
     }
 
+    const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
+
     return (
       <ImmutableVirtualizedList
         ref="scrollView"
         style={styles.list}
-        immutableData={posts}
+        immutableData={renderPosts}
         renderRow={this.renderFeedItem}
         renderFooter={this.renderFooter}
         onScroll={window.onScroll}

@@ -67,23 +67,22 @@ class HOCPreviewNote extends PureComponent {
     const { noteId, noteTitle, navPush } = this.props;
 
     navPush({
-      id: 'PostCreate',
-      title: 'Create Post',
+      id: 'PostFeed',
+      title: 'Discussions',
       props: {
         context: {
           title: noteTitle,
           id: noteId,
-        },
+        }
       },
     });
-
   }
   renderActionButtons() {
 
     this.props.setActionButtons({
       onClick: this.onActionButton,
       buttons: [
-        { text: 'Discuss' },
+        { text: 'Discussions' },
       ],
     });
   }

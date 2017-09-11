@@ -86,7 +86,7 @@ class HOCPostCreate extends PureComponent {
     const { users, showModal } = this.props;
     let { post } = this.state;
 
-    const userInfoToActions = sortedUsers.map((u, i) => {
+    const userInfoToActions = users.map((u, i) => {
       const selected = this.state.post.get('taggedUsers').indexOf(u.get('id')) > -1;
 
       const obj = {
@@ -103,7 +103,7 @@ class HOCPostCreate extends PureComponent {
 
     const modal = {
       title: 'Tag teammates',
-      onClick: this.onModalTag.bind(this, sortedUsers),
+      onClick: this.onModalTag.bind(this, users),
       multiple: 'Tag',
       items: userInfoToActions,
       fullscreen: true,

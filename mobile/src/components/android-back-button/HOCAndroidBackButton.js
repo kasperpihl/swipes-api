@@ -22,8 +22,8 @@ class HOCAndroidBackButton extends PureComponent {
     if (routeAmount > 1) {
       navPop(activeSliderIndex);
       return true;
-    } else if (routeAmount === 1 && activeSliderIndex !== 0) {
-      sliderChange(0);
+    } else if (routeAmount === 1 && activeSliderIndex !== 2) {
+      sliderChange(2);
       return true;
     }
 

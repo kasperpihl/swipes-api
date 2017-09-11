@@ -87,7 +87,11 @@ class HOCMilestoneOverview extends PureComponent {
     }, 1);
   }
   componentWillUpdate(nextProps) {
+    console.log('props', this.props.isActive);
+    console.log('nextProps', nextProps.isActive);
+
     if (!this.props.isActive && nextProps.isActive) {
+      console.log('render buttons')
       this.renderActionButtons();
     }
   }
@@ -118,13 +122,14 @@ class HOCMilestoneOverview extends PureComponent {
     const { navPush, milestone } = this.props;
 
     navPush({
-      id: 'PostCreate',
-      title: 'Create Post',
+      id: 'PostFeed',
+      title: 'Discussions',
       props: {
         context: {
           title: milestone.get('title'),
           id: milestone.get('id'),
         },
+        relatedFilter: msgGen.milestones.getRelatedFilter(milestone)
       },
     });
 
@@ -156,7 +161,7 @@ class HOCMilestoneOverview extends PureComponent {
     this.props.setActionButtons({
       onClick: this.onActionButton,
       buttons: [
-        { text: 'Discuss' },
+        { text: 'Discussions' },
       ],
     });
   }

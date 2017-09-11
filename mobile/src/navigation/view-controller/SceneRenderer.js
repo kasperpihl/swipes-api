@@ -25,7 +25,7 @@ class SceneRenderer extends PureComponent {
     this.navPopCached = setupCachedCallback(props.navPop);
   }
   render() {
-    const { activeSliderIndex, routes, setActionButtons, route, navPush } = this.props;
+    const { activeSliderIndex, routes, setActionButtons, route, navPush, isActive } = this.props;
     const Comp = views[route.id];
     const sliderIndex = `${activeSliderIndex}`;
 
@@ -36,6 +36,7 @@ class SceneRenderer extends PureComponent {
             navPush={this.navPushCached(sliderIndex)}
             navPop={this.navPopCached(activeSliderIndex)}
             setActionButtons={setActionButtons}
+            isActive={isActive}
             {...route.props}
           />
         </View>
