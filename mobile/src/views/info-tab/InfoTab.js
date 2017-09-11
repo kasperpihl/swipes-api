@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Platform } from 'react-native';
 // import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from '../../utils/globalStyles';
 import Icon from '../../components/icons/Icon';
@@ -7,9 +7,9 @@ import Icon from '../../components/icons/Icon';
 const styles = StyleSheet.create({
 	container: {
     width: viewSize.width,
-    height: viewSize.height - 55,
+    height: (Platform.OS === 'ios') ? viewSize.height - 55 - 20 : viewSize.height - 55,
     position: 'absolute',
-    left: 0, top: 24,
+    left: 0, top: (Platform.OS === 'ios') ? 20 : 24,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     backgroundColor: 'rgba(0, 12, 47, 0.96)',
