@@ -4,6 +4,7 @@ import main from './main';
 import navigation from './navigation';
 import modals from './modals';
 import loading from './loading';
+import infoTab from './infotab';
 
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   navigation,
   modals,
   loading,
+  infoTab,
 });
 
 export default rootReducer;

@@ -6,6 +6,7 @@ import * as a from '../../actions';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
 import { setupLoading } from '../../../swipes-core-js/classes/utils';
 import { propsOrPop } from '../../../swipes-core-js/classes/react-utils';
+import { dayStringForDate } from '../../../swipes-core-js/classes/time-utils';
 import * as ca from '../../../swipes-core-js/actions';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCStepList from './HOCStepList';
@@ -18,12 +19,14 @@ class HOCGoalOverview extends PureComponent {
     this.state = {
       tabIndex: 0,
       hasLoaded: false,
+      showingInfoTab: false,
     };
 
     propsOrPop(this, 'goal');
 
     this.closeView = this.closeView.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
+    this.onActionPress = this.onActionPress.bind(this);
 
     setupLoading(this);
 
@@ -38,11 +41,11 @@ class HOCGoalOverview extends PureComponent {
       this.setState({ hasLoaded: true });
     }, 1);
   }
-  componentWillUpdate(nextProps) {
+  componentWillUpdate(nextProps, nextState) {
     LayoutAnimation.easeInEaseOut();
 
-    if (!this.props.isActive && nextProps.isActive) {
-      this.renderActionButtons();
+    if (!this.props.isActive && nextProps.isActive || this.state.showingInfoTab !== nextState.showingInfoTab) {
+      this.renderActionButtons(nextState.showingInfoTab);
     }
   }
   componentDidUpdate(prevProps) {
@@ -57,8 +60,10 @@ class HOCGoalOverview extends PureComponent {
   componentWillUnmount() {
     clearTimeout(this.loadingTimeout);
   }
+  onActionPress(index) {
+    console.warn('gets here', index)
+  }
   onComplete(step) {
-    console.log('step', step)
     if (this.isLoading(step.get('id'))) {
       return;
     }
@@ -77,21 +82,53 @@ class HOCGoalOverview extends PureComponent {
     });
   }
   onActionButton(i) {
-    const { goal, navPush } = this.props;
+    const { goal, navPush, toggleInfoTab } = this.props;
+    const { showingInfoTab } = this.state;
     const helper = this.getHelper();
 
-    navPush({
-      id: 'PostFeed',
-      title: 'Discussions',
-      props: {
-        context: {
-          title: goal.get('title'),
-          id: goal.get('id'),
-        },
-        relatedFilter: msgGen.goals.getRelatedFilter(goal)
-      },
-    });
+    if (showingInfoTab) {
+      if (i === 0) {
+        toggleInfoTab();
+        this.setState({ showingInfoTab: false })
+      }
+    } else {
+      if (i === 0) {
+        navPush({
+          id: 'PostFeed',
+          title: 'Discussions',
+          props: {
+            context: {
+              title: goal.get('title'),
+              id: goal.get('id'),
+            },
+            relatedFilter: msgGen.goals.getRelatedFilter(goal)
+          },
+        }); 
+      } else if (i === 1) {
+        const createdLbl = `${dayStringForDate(goal.get('created_at'))} by ${msgGen.users.getFullName(goal.get('created_by'))}`;
+        const mileLbl = msgGen.milestones.getName(goal.get('milestone_id'));
+        const mileIcon = goal.get('milestone_id') ? 'MiniMilestone' : 'MiniNoMilestone';
+        const mileAct = goal.get('milestone_id') ? 'edit' : 'add';
+        this.setState({ showingInfoTab: true })
 
+        toggleInfoTab({
+          delegate: this,
+          actions: [
+            { title: 'Load a way', icon: 'Download' },
+            { title: 'Save as a way', icon: 'Save' },
+            { title: 'Delete goal', icon: 'Delete', danger: true },
+          ],
+          info: [
+            { title: 'Milestone', text: mileLbl, icon: mileIcon, actionLabel: mileAct },
+            { title: 'Created', text: createdLbl },
+          ],
+          about: {
+            title: 'What is a goal',
+            text: 'A Goal is where work happens. Something needs to be done or delivered. Goals can be broken down into steps to show the next action.\n\nAll important links, documents, and notes can be attached to the goal so everyone is on the same page. You can discuss a goal or post an update via "Discuss".',
+          },
+        })
+      }
+    }
   }
   onChangeTab(index) {
     const { hasLoaded } = this.state;
@@ -109,14 +146,25 @@ class HOCGoalOverview extends PureComponent {
 
     navPop();
   }
-  renderActionButtons() {
-    console.log(this.props.goal.toJS())
-    this.props.setActionButtons({
-      onClick: this.onActionButton,
-      buttons: [
-        { text: 'Discussions' },
-      ],
-    });
+  renderActionButtons(showingInfoTab) {
+
+    if (showingInfoTab) {
+      this.props.setActionButtons({
+        onClick: this.onActionButton,
+        buttons: [
+          { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true }
+        ],
+      });
+    } else {
+      this.props.setActionButtons({
+        onClick: this.onActionButton,
+        buttons: [
+          { text: 'Discussions' },
+          { icon: 'Info', seperator: 'left', staticSize: true }
+        ],
+      });
+    }
+    
   }
   renderHeader() {
     const { goal, goalId } = this.props;
@@ -223,6 +271,7 @@ function mapStateToProps(state, ownProps) {
 }
 export default connect(mapStateToProps, {
   showModal: a.modals.show,
+  toggleInfoTab: a.infotab.showInfoTab,
   completeStep: ca.goals.completeStep,
   incompleteStep: ca.goals.incompleteStep,
 })(HOCGoalOverview);

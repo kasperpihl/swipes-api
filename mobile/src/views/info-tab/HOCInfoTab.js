@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
@@ -19,9 +18,9 @@ class HOCInfoTab extends PureComponent {
   componentDidMount() {
   }
   render() {
-    return (
-      <InfoTab infoTab={this.props.infoTab} />
-    );
+    const { infoTab } = this.props;
+
+    return <InfoTab infoTab={infoTab} delegate={infoTab.get('delegate')} />;
   }
 }
 // const { string } = PropTypes;
@@ -29,6 +28,7 @@ class HOCInfoTab extends PureComponent {
 HOCInfoTab.propTypes = {};
 
 const mapStateToProps = (state) => ({
+  infoTab: state.get('infoTab'),
 });
 
 export default connect(mapStateToProps, {

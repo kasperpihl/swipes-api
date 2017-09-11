@@ -107,22 +107,29 @@ class HOCActionBar extends PureComponent {
       </RippleButton>
     );
   }
-  renderIconButton(key, button, onPress, seperator, staticSize) {
-    let extraStyles = {};
+  renderIconButton(key, button, onPress) {
+    let maxWidthStyles = {};
+    let alignStyles = {};
 
     if (button.staticSize) {
-      extraStyles = {
-        maxWidth: 64
+      maxWidthStyles = {
+        maxWidth: 64,
+      }
+    }
+
+    if (button.alignEnd) {
+      alignStyles = {
+        marginLeft: 'auto'
       }
     }
 
     return (
       <RippleButton
-        style={[styles.iconButton, extraStyles ]}
+        style={[styles.iconButton, maxWidthStyles, alignStyles]}
         onPress={onPress}
         key={key}
       >
-        <View style={[styles.iconButton, extraStyles ]}>
+        <View style={[styles.iconButton, maxWidthStyles, alignStyles]}>
           {button.seperator && button.seperator === 'left' ? <View style={styles.verticalSeperatorLeft} /> : undefined}
           <Icon
             name={button.icon}

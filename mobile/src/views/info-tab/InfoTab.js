@@ -1,15 +1,16 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ScrollView, Platform } from 'react-native';
-// import { setupDelegate } from 'react-delegate';
+import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from '../../utils/globalStyles';
 import Icon from '../../components/icons/Icon';
+import RippleButton from '../../components/ripple-button/RippleButton';
 
 const styles = StyleSheet.create({
 	container: {
     width: viewSize.width,
-    height: (Platform.OS === 'ios') ? viewSize.height - 55 - 20 : viewSize.height - 55,
+    height: (Platform.OS === 'ios') ? viewSize.height - 54 - 20 : viewSize.height - 54,
     position: 'absolute',
-    left: 0, top: (Platform.OS === 'ios') ? 20 : 24,
+    left: 0,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     backgroundColor: 'rgba(0, 12, 47, 0.96)',
@@ -96,14 +97,26 @@ class InfoTab extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLala');
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
   }
-  componentDidMount() {
+  componentWillUpdate() {
+    LayoutAnimation.configureNext(LayoutAnimation.create(300, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.infoTab.size) {
+      setupDelegate(this, 'onActionPress');
+    }
   }
   renderAbout() {
-    const { infoTab: iT } = this.props;
-    const { about } = iT;
+    const { infoTab } = this.props;
+    const about = infoTab.get('about');
+
+    if (!about) {
+      return undefined;
+    }
 
     return (
       <View style={styles.aboutWrapper}>
@@ -118,8 +131,12 @@ class InfoTab extends PureComponent {
     )
   }
   renderInfo() {
-    const { infoTab: iT } = this.props;
-    const { info } = iT;
+    const { infoTab } = this.props;
+    const info = infoTab.get('info');
+
+    if (!info) {
+      return undefined;
+    }
 
     const renderInfo = info.map((inf, i) => {
       return (
@@ -145,19 +162,25 @@ class InfoTab extends PureComponent {
 
   }
   renderActions() {
-    const { infoTab: iT } = this.props;
-    const { actions } = iT;
+    const { infoTab, delegate } = this.props;
+    const actions = infoTab.get('actions');
+
+    if (!actions) {
+      return undefined;
+    }
 
     const renderActions = actions.map((a, i) => {
       const actionColor = a.danger ? colors.red80 : colors.blue100;
 
       return (
-        <View style={styles.actionWrapper} key={a.icon}>
-          <View style={[styles.actionButton, { backgroundColor: actionColor }]}>
-            <Icon name={a.icon} width="24" height="24" fill="white" />
+        <RippleButton onPress={this.onActionPressCached(i)} key={a.icon}>
+          <View style={styles.actionWrapper}>
+            <View style={[styles.actionButton, { backgroundColor: actionColor }]}>
+              <Icon name={a.icon} width="24" height="24" fill="white" />
+            </View>
+            <Text style={styles.actionLabel}>{a.title}</Text>
           </View>
-          <Text style={styles.actionLabel}>{a.title}</Text>
-        </View>
+        </RippleButton>
       )
     })
 
@@ -170,8 +193,15 @@ class InfoTab extends PureComponent {
     )
   }
   render() {
+    const { infoTab } = this.props;
+    let topPosition = viewSize.height; 
+
+    if (infoTab.size) {
+      topPosition = Platform.OS === 'ios' ? 20 : 24;
+    }
+
     return (
-      <View style={styles.container} >
+      <View style={[styles.container, { top: topPosition }]} >
         <ScrollView style={{height: viewSize.height - 55 - 140, borderBottomWidth: 1, borderBottomColor: colors.deepBlue80, }}>
         	{this.renderAbout()}
           {this.renderInfo()}

@@ -159,22 +159,6 @@ class App extends PureComponent {
       return undefined;
     }
 
-    const infoTab = {
-      actions: [
-        { title: 'Load a way', icon: 'Download' },
-        { title: 'Save as a way', icon: 'Save' },
-        { title: 'Delete goal', icon: 'Delete', danger: true },
-      ],
-      info: [
-        { title: 'Milestone', text: '2017 Week 37', icon: 'MiniMilestone', actionLabel: 'edit' },
-        { title: 'Created', text: 'Last Friday by Kristjan Vool' },
-      ],
-      about: {
-        title: 'What is a goal',
-        text: 'A Goal is where work happens. Something needs to be done or delivered. Goals can be broken down into steps to show the next action.\n\nAll important links, documents, and notes can be attached to the goal so everyone is on the same page. You can discuss a goal or post an update via "Discuss".',
-      },
-    };
-
     return (
       <View style={styles.app}>
         <View style={styles.wrapper}>
@@ -182,7 +166,7 @@ class App extends PureComponent {
         </View>
         <LoadingModal />
         <ActionModal />
-        <HOCInfoTab infoTab={infoTab} />
+        <HOCInfoTab/>
         <HOCTabNavigation />
         <HOCConnectionBar />
         {this.renderBackButton()}
