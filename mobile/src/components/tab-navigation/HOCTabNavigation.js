@@ -150,6 +150,14 @@ class HOCTabNavigation extends PureComponent {
 
     return navItems;
   }
+  renderNavChanger() {
+
+    return (
+      <View style={{ width: viewSize.width, height: viewSize.height, position: 'absolute', left: 0, top: 0, backgroundColor: 'red'}}>
+        
+      </View>
+    )
+  }
   render() {
     const { routes, actionButtons } = this.props;
     const topBorderStyles = routes.size > 1 ? 0 : 1;
@@ -167,6 +175,7 @@ class HOCTabNavigation extends PureComponent {
       <View style={[navStyles, { borderTopWidth: topBorderStyles }]}>
         {this.renderNavItems()}
         {this.renderSlider()}
+        {this.renderNavChanger()}
       </View>
     );
   }
