@@ -2,12 +2,12 @@ import React, { PureComponent } from "react";
 import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation } from "react-native";
 import ParsedText from "react-native-parsed-text";
 
-import { setupDelegate, attachmentIconForService } from "../../../swipes-core-js/classes/utils";
-import { timeAgo } from "../../../swipes-core-js/classes/time-utils";
+import { setupDelegate, attachmentIconForService } from "swipes-core-js/classes/utils";
+import { timeAgo } from "swipes-core-js/classes/time-utils";
+import { colors, viewSize } from "globalStyles";
+import Icon from "Icon";
+import RippleButton from "RippleButton";
 import Reactions from "../reactions/Reactions";
-import { colors, viewSize } from "../../utils/globalStyles";
-import Icon from "../icons/Icon";
-import RippleButton from "../ripple-button/RippleButton";
 
 const styles = StyleSheet.create({
   container: {

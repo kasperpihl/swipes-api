@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
 // import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import * as a from "../../../actions";
-import * as ca from "../../../../swipes-core-js/actions";
-import { mobileNavForContext } from '../../../utils/utils';
+import * as a from "actions";
+import * as ca from "swipes-core-js/actions";
+import { mobileNavForContext } from 'utils/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import PostView from "./PostView";

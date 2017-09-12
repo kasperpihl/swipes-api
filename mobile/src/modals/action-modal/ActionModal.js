@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
-import * as a from '../../actions';
-import { colors, viewSize } from '../../utils/globalStyles';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import Icon from '../../components/icons/Icon';
+import * as a from 'actions';
+import { colors, viewSize } from 'globalStyles';
+import RippleButton from 'RippleButton';
+import Icon from 'Icon';
 import ActionModalList from './ActionModalList';
 
 class ActionModal extends PureComponent {

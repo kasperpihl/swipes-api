@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react'
 import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation, ActivityIndicator } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate } from '../../../../swipes-core-js/classes/utils';
-import { colors, viewSize } from '../../../utils/globalStyles';
-import RippleButton from '../../../components/ripple-button/RippleButton';
-import Icon from '../../../components/icons/Icon';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { colors, viewSize } from 'globalStyles';
+import RippleButton from 'RippleButton';
+import Icon from 'Icon';
 
 const styles = StyleSheet.create({
   container: {

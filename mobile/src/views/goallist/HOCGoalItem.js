@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, Alert, Vibration } from 'react-native';
 import { fromJS } from 'immutable';
-import HOCAssigning from '../../components/assignees/HOCAssigning';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import * as a from '../../actions';
-import * as ca from '../../../swipes-core-js/actions';
-import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import { colors, viewSize } from '../../utils/globalStyles';
+import { setupDelegate } from 'react-delegate';
+import * as ca from 'swipes-core-js/actions';
+import * as a from 'actions';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import HOCAssigning from 'components/assignees/HOCAssigning';
+import RippleButton from 'RippleButton';
+import { colors, viewSize } from 'globalStyles';
 
 class HOCGoalItem extends PureComponent {
   constructor(props) {

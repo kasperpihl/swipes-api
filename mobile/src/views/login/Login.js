@@ -4,9 +4,9 @@ import codePush from 'react-native-code-push';
 import { View, TextInput, StyleSheet, Text, ScrollView, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import { colors, viewSize } from '../../utils/globalStyles';
-import { api } from '../../../swipes-core-js/actions';
+import RippleButton from 'RippleButton';
+import { colors, viewSize } from 'globalStyles';
+import { api } from 'swipes-core-js/actions';
 
 class Login extends PureComponent {
   constructor(props) {

@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import * as a from '../actions';
-import { setupCachedCallback } from '../../swipes-core-js/classes/utils';
-import { colors, viewSize } from '../utils/globalStyles';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { colors, viewSize } from 'globalStyles';
 
 class LoadingModal extends PureComponent {
   constructor(props) {

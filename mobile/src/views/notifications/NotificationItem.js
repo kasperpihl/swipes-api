@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import { timeAgo } from '../../../swipes-core-js/classes/time-utils';
-import { colors, viewSize } from '../../utils/globalStyles';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import StyledText from '../../components/styled-text/StyledText';
-import Icon from '../../components/icons/Icon';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import { colors, viewSize } from 'globalStyles';
+import RippleButton from 'RippleButton';
+import StyledText from 'components/styled-text/StyledText';
+import Icon from 'Icon';
 
 const styles = StyleSheet.create({
   container: {

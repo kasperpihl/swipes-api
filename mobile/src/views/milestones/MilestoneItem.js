@@ -16,10 +16,10 @@ import Svg, {
   Defs,
   Stop
 } from 'react-native-svg';
-import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import { colors, viewSize } from '../../utils/globalStyles';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import RippleButton from 'RippleButton';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { colors, viewSize } from 'globalStyles';
 
 const PROGRESS_DASH = 320.4876403808594;
 

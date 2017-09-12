@@ -4,12 +4,12 @@ import { setupDelegate } from 'react-delegate';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import * as a from '../actions';
-import * as cs from '../../swipes-core-js/selectors';
-import Icon from '../components/icons/Icon';
-import RippleButton from '../components/ripple-button/RippleButton';
-import HOCAssigning from '../components/assignees/HOCAssigning';
-import { colors, viewSize } from '../utils/globalStyles';
+import * as a from 'actions';
+import * as cs from 'swipes-core-js/selectors';
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
+import HOCAssigning from 'components/assignees/HOCAssigning';
+import { colors, viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   createActionWrapper: {

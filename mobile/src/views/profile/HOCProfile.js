@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import codePush from 'react-native-code-push';
 import { connect } from 'react-redux';
-import * as a from '../../actions';
-import HOCHeader from '../../components/header/HOCHeader';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import { viewSize, colors } from '../../utils/globalStyles';
+import * as a from 'actions';
+import HOCHeader from 'HOCHeader';
+import RippleButton from 'RippleButton';
+import { viewSize, colors } from 'globalStyles';
 
 class HOCProfile extends PureComponent {
   constructor(props) {

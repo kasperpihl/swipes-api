@@ -3,7 +3,7 @@ import { BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import AndroidBackButton from 'react-native-android-back-button';
-import * as a from '../../actions';
+import * as a from 'actions';
 
 class HOCAndroidBackButton extends PureComponent {
   constructor(props) {

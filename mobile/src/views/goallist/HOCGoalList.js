@@ -2,15 +2,15 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, ActivityIndicator, Modal, TextInput } from 'react-native';
 import { ImmutableListView } from 'react-native-immutable-list-view';
-import HOCHeader from '../../components/header/HOCHeader';
-import Icon from '../../components/icons/Icon';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
-import CreateNewItemModal from '../../modals/CreateNewItemModal';
-import * as cs from '../../../swipes-core-js/selectors';
-import * as ca from '../../../swipes-core-js/actions';
-import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
-import { colors, viewSize } from '../../utils/globalStyles';
+import HOCHeader from 'HOCHeader';
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
+import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
+import CreateNewItemModal from 'modals/CreateNewItemModal';
+import * as cs from 'swipes-core-js/selectors';
+import * as ca from 'swipes-core-js/actions';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { colors, viewSize } from 'globalStyles';
 import HOCGoalItem from './HOCGoalItem';
 
 const styles = StyleSheet.create({

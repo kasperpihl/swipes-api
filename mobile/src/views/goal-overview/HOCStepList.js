@@ -2,17 +2,17 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, Vibration } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable'; 
-import * as a from '../../actions';
-import * as ca from '../../../swipes-core-js/actions';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 import { ImmutableListView } from 'react-native-immutable-list-view';
-import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import { setupDelegate, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
-import HOCAssigning from '../../components/assignees/HOCAssigning';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
-import { colors, viewSize } from '../../utils/globalStyles';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import CreateNewItemModal from '../../modals/CreateNewItemModal';
-import Icon from '../../components/icons/Icon';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import HOCAssigning from 'components/assignees/HOCAssigning';
+import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
+import { colors, viewSize } from 'globalStyles';
+import RippleButton from 'RippleButton';
+import CreateNewItemModal from 'modals/CreateNewItemModal';
+import Icon from 'Icon';
 
 const styles = StyleSheet.create({
   container: {

@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react'
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
-import HOCHeader from '../../components/header/HOCHeader';
-import { colors } from '../../utils/globalStyles';
+import HOCHeader from 'HOCHeader';
+import { colors } from 'globalStyles';
 import NotificationItem from './NotificationItem';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import Icon from '../../components/icons/Icon';
+import RippleButton from 'RippleButton';
+import Icon from 'Icon';
 import { setupDelegate } from 'react-delegate';
 
 const styles = StyleSheet.create({

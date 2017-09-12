@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, WebView, StyleSheet } from 'react-native';
-import Icon from '../../components/icons/Icon';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import { colors, viewSize } from '../../utils/globalStyles';
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
+import { colors, viewSize } from 'globalStyles';
 
 class InternalWebview extends Component {
   constructor(props) {

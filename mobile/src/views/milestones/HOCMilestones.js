@@ -3,16 +3,16 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
-import * as a from '../../actions';
-import * as cs from '../../../swipes-core-js/selectors';
-import * as ca from '../../../swipes-core-js/actions';
-import HOCHeader from '../../components/header/HOCHeader';
-import { colors, viewSize } from '../../utils/globalStyles';
+import * as a from 'actions';
+import * as cs from 'swipes-core-js/selectors';
+import * as ca from 'swipes-core-js/actions';
+import HOCHeader from 'HOCHeader';
+import { colors, viewSize } from 'globalStyles';
+import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
+import CreateNewItemModal from 'modals/CreateNewItemModal';
+import RippleButton from 'RippleButton';
+import Icon from 'Icon';
 import MilestoneItem from './MilestoneItem';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
-import CreateNewItemModal from '../../modals/CreateNewItemModal';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import Icon from '../../components/icons/Icon';
 
 const styles = StyleSheet.create({
   container: {

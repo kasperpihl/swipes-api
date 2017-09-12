@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import HOCAssigning from '../../components/assignees/HOCAssigning';
-import Icon from '../../components/icons/Icon';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import { colors } from '../../utils/globalStyles';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import HOCAssigning from 'components/assignees/HOCAssigning';
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
+import { colors } from 'globalStyles';
 
 const styles = StyleSheet.create({
   containerButton: {

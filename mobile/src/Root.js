@@ -6,10 +6,10 @@ import DeviceInfo from 'react-native-device-info';
 
 import App from './App';
 import configureStore from './store/configureStore';
-import { init } from '../swipes-core-js';
-import UpdateHandler from './utils/update-handler';
-import Analytics from './utils/analytics';
-import * as a from './actions';
+import { init } from 'swipes-core-js';
+import UpdateHandler from 'utils/update-handler';
+import Analytics from 'utils/analytics';
+import * as a from 'actions';
 const store = configureStore();
 
 if (window.__DEV__ || DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging') {

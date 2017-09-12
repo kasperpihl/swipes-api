@@ -1,7 +1,7 @@
 /* global amplitude, Intercom */
 import mixpanel from 'react-native-mixpanel';
 import Intercom from 'react-native-intercom';
-import { bindAll } from '../../swipes-core-js/classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import DeviceInfo from 'react-native-device-info';
 const blockedMixpanelEvents = [
 

@@ -6,7 +6,7 @@ import {
 } from 'react-native-custom-tabs';
 import OpenFile from 'react-native-doc-viewer';
 import * as a from './';
-import * as ca from '../../swipes-core-js/actions';
+import * as ca from 'swipes-core-js/actions';
 
 // ======================================================
 // Url

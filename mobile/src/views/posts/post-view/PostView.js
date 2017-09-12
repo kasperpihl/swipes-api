@@ -2,15 +2,15 @@ import React, { PureComponent } from "react";
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
 import ParsedText from "react-native-parsed-text";
 import { List } from "immutable";
-import { setupDelegate, iconForId, attachmentIconForService } from "../../../../swipes-core-js/classes/utils";
-import { timeAgo } from "../../../../swipes-core-js/classes/time-utils";
-import { colors, viewSize } from "../../../utils/globalStyles";
-import HOCHeader from "../../../components/header/HOCHeader";
-import StyledText from "../../../components/styled-text/StyledText";
-import Icon from "../../../components/icons/Icon";
-import RippleButton from "../../../components/ripple-button/RippleButton";
-import Reactions from "../../../components/reactions/Reactions";
-import CommentView from "../../../components/comment-view/CommentView";
+import { setupDelegate, iconForId, attachmentIconForService } from "swipes-core-js/classes/utils";
+import { timeAgo } from "swipes-core-js/classes/time-utils";
+import { colors, viewSize } from "globalStyles";
+import HOCHeader from "HOCHeader";
+import StyledText from "components/styled-text/StyledText";
+import Icon from "Icon";
+import RippleButton from "RippleButton";
+import Reactions from "components/reactions/Reactions";
+import CommentView from "components/comment-view/CommentView";
 import PostFooter from './PostFooter';
 
 const styles = StyleSheet.create({

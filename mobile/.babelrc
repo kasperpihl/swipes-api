@@ -1,3 +1,22 @@
 {
-  "presets": ["react-native"]
+  "presets": ["react-native"],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "AfterInteractions": "./src/components/after-interactions/AfterInteractions",
+        "Icon": "./src/components/icons/Icon",
+        "HOCHeader": "./src/components/header/HOCHeader",
+        "RippleButton": "./src/components/ripple-button/RippleButton",
+        "swipes-core-js": "./swipes-core-js",
+        "components": "./src/components/",
+        "globalStyles": "./src/utils/globalStyles",
+        "actions": "./src/actions",
+        "constants": "./src/constants",
+        "modals": "./src/modals",
+        "views": "./src/views",
+        "utils": "./src/utils",
+      }
+    }]
+  ]
 }

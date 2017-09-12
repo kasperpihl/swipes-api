@@ -1,40 +1,20 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from '../../../actions';
-import * as ca from '../../../../swipes-core-js/actions';
-import * as cs from '../../../../swipes-core-js/selectors';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 import PostFeed from './PostFeed';
 
 class HOCPostFeed extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      hasLoaded: false
-    };
-    // setupLoading(this)
+    this.state = {};
   }
   componentWillMount() {
     this.updateTabs(this.props);
   }
-  componentDidMount() {
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-  }
   componentWillReceiveProps(nextProps) {
     this.updateTabs(nextProps);
-  }
-  componentDidUpdate(prevProps) {
-    if (!this.state.hasLoaded) {
-      clearTimeout(this.loadingTimeout);
-
-      this.loadingTimeout = setTimeout(() => {
-        this.setState({ hasLoaded: true });
-      }, 1);
-    }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
   }
   updateTabs(props) {
     const { tabs } = this.state;
@@ -129,7 +109,6 @@ class HOCPostFeed extends PureComponent {
         tabIndex={tabIndex}
         tabs={tabs}
         relatedPosts={relatedPosts}
-        hasLoaded={this.state.hasLoaded}
       />
     );
   }

@@ -2,16 +2,16 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, Platform, UIManager, LayoutAnimation, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
-import * as a from '../../actions';
-import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import { setupLoading } from '../../../swipes-core-js/classes/utils';
-import { propsOrPop } from '../../../swipes-core-js/classes/react-utils';
-import { dayStringForDate } from '../../../swipes-core-js/classes/time-utils';
-import * as ca from '../../../swipes-core-js/actions';
-import HOCHeader from '../../components/header/HOCHeader';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import { propsOrPop } from 'swipes-core-js/classes/react-utils';
+import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import * as ca from 'swipes-core-js/actions';
+import * as a from 'actions';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import HOCHeader from 'HOCHeader';
+import { colors, viewSize } from 'globalStyles';
 import HOCStepList from './HOCStepList';
 import HOCAttachments from './HOCAttachments';
-import { colors, viewSize } from '../../utils/globalStyles';
 
 class HOCGoalOverview extends PureComponent {
   constructor(props) {

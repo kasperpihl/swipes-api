@@ -1,6 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
-import * as types from '../constants/ActionTypes';
+import * as types from 'constants/ActionTypes';
 
 const initialState = fromJS({
   overlay: null,

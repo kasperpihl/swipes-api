@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { ImmutableListView } from 'react-native-immutable-list-view';
-import * as cs from '../../../swipes-core-js/selectors';
-import HOCHeader from '../../components/header/HOCHeader';
-import HOCGoalItem from '../goallist/HOCGoalItem';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
-import { colors } from '../../utils/globalStyles';
+import * as cs from 'swipes-core-js/selectors';
+import HOCHeader from 'HOCHeader';
+import HOCGoalItem from 'views/goallist/HOCGoalItem';
+import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
+import { colors } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {

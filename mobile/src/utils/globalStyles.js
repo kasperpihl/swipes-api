@@ -8,11 +8,14 @@ const { width: ww, height: wh } = Dimensions.get('window');
 
 const VIEW_HEIGHT = Platform.OS === 'android' ? wh - 24 : wh;
 const VIEW_WIDTH = ww;
+const STATUSBAR_HEIGHT = Platform.OS === 'android' ? 24 : 20;
 
 export const viewSize = {
   width: VIEW_WIDTH,
   height: VIEW_HEIGHT,
 };
+
+export const statusbarHeight = STATUSBAR_HEIGHT;
 
 export const colors = {
   deepBlue4: '#F7F7F8',

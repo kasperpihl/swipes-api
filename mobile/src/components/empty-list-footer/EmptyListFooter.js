@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { viewSize } from '../../utils/globalStyles';
+import { viewSize } from 'globalStyles';
 
 class EmptyListFooter extends PureComponent {
   render() {

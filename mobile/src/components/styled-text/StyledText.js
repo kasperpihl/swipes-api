@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../../utils/globalStyles';
+import { colors } from 'globalStyles';
 
 class RippleButton extends PureComponent {
   constructor(props) {

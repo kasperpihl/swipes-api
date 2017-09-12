@@ -13,12 +13,12 @@ import {
 } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate, attachmentIconForService, miniIconForId } from '../../../../swipes-core-js/classes/utils';
-import { colors, viewSize } from '../../../utils/globalStyles';
-import HOCHeader from '../../../components/header/HOCHeader'
-import RippleButton from '../../../components/ripple-button/RippleButton';
-import StyledText from '../../../components/styled-text/StyledText';
-import Icon from '../../../components/icons/Icon';
+import { setupDelegate, attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
+import { colors, viewSize } from 'globalStyles';
+import HOCHeader from 'HOCHeader'
+import RippleButton from 'RippleButton';
+import StyledText from 'components/styled-text/StyledText';
+import Icon from 'Icon';
 
 const styles = StyleSheet.create({
   container: {

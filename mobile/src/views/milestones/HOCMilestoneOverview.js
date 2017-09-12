@@ -3,19 +3,19 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
-import * as a from '../../actions';
-import * as ca from '../../../swipes-core-js/actions';
-import * as cs from '../../../swipes-core-js/selectors';
-import { propsOrPop } from '../../../swipes-core-js/classes/react-utils';
-import { dayStringForDate } from '../../../swipes-core-js/classes/time-utils';
-import HOCHeader from '../../components/header/HOCHeader';
-import HOCGoalItem from '../goallist/HOCGoalItem';
-import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
-import Icon from '../../components/icons/Icon';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import CreateNewItemModal from '../../modals/CreateNewItemModal';
-import { colors } from '../../utils/globalStyles';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
+import { propsOrPop } from 'swipes-core-js/classes/react-utils';
+import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import HOCHeader from 'HOCHeader';
+import HOCGoalItem from 'views/goallist/HOCGoalItem';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import Icon from 'Icon';
+import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
+import RippleButton from 'RippleButton';
+import CreateNewItemModal from 'modals/CreateNewItemModal';
+import { colors } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {

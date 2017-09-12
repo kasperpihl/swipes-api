@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { setupDelegate } from 'react-delegate';
-import { colors, viewSize } from '../../utils/globalStyles';
-import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
-import Icon from '../../components/icons/Icon';
-import RippleButton from '../../components/ripple-button/RippleButton';
+import { colors, viewSize } from 'globalStyles';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
 
 const styles = StyleSheet.create({
   container: {

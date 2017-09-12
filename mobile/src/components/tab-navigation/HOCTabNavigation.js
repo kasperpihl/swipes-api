@@ -7,18 +7,18 @@ import {
   UIManager,
   LayoutAnimation
 } from "react-native";
-import { setupCachedCallback } from "../../../swipes-core-js/classes/utils";
-import * as a from "../../actions";
+import { setupCachedCallback } from "swipes-core-js/classes/utils";
+import * as a from "actions";
 import HOCActionBar from "./HOCActionBar";
 import TabNavigationItem from "./TabNavigationItem";
-import { colors, viewSize } from "../../utils/globalStyles";
+import NavChanger from "./NavChanger";
+import { colors, viewSize } from "globalStyles";
 
 const styles = StyleSheet.create({
   nav: {
     width: viewSize.width,
     height: 54,
     flexDirection: "row",
-    borderTopColor: colors.deepBlue5,
     zIndex: 100,
     backgroundColor: colors.bgColor
   },
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     width: viewSize.width,
     height: 0,
     flexDirection: "row",
-    borderTopColor: colors.deepBlue5,
     zIndex: 100,
     backgroundColor: colors.bgColor
   },
@@ -151,16 +150,11 @@ class HOCTabNavigation extends PureComponent {
     return navItems;
   }
   renderNavChanger() {
-
-    return (
-      <View style={{ width: viewSize.width, height: viewSize.height, position: 'absolute', left: 0, top: 0, backgroundColor: 'red'}}>
-        
-      </View>
-    )
+    
+    return <NavChanger delegate={this} />
   }
   render() {
     const { routes, actionButtons } = this.props;
-    const topBorderStyles = routes.size > 1 ? 0 : 1;
     let navStyles = styles.nav;
 
     if (routes.size > 1 && !actionButtons.size && Platform.OS === "android") {
@@ -172,9 +166,11 @@ class HOCTabNavigation extends PureComponent {
     }
 
     return (
-      <View style={[navStyles, { borderTopWidth: topBorderStyles }]}>
-        {this.renderNavItems()}
-        {this.renderSlider()}
+      <View>
+        <View style={navStyles}>
+          {this.renderNavItems()}
+          {this.renderSlider()}
+        </View>
         {this.renderNavChanger()}
       </View>
     );

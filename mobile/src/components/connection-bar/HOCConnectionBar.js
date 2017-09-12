@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 // import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
-import { setupLoading } from '../../../swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-import { colors, viewSize } from '../../utils/globalStyles';
+import { colors, viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import * as views from '../../views';
-import { viewSize } from '../../utils/globalStyles';
+import { viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   viewController: {

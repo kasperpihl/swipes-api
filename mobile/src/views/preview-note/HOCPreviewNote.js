@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
 import { View, WebView, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import * as a from '../../actions';
-import { dayStringForDate } from '../../../swipes-core-js/classes/time-utils';
-import { bindAll } from '../../../swipes-core-js/classes/utils';
+import * as a from 'actions';
+import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 // import * as ca from 'swipes-core-js/actions';
 // import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-import HOCHeader from '../../components/header/HOCHeader';
-import { colors } from '../../utils/globalStyles';
+import HOCHeader from 'HOCHeader';
+import { colors } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {

@@ -5,8 +5,8 @@ import {
   Image,
   Text,
 } from 'react-native';
-import Icon from '../icons/Icon';
-import { colors } from '../../utils/globalStyles';
+import Icon from 'Icon';
+import { colors } from 'globalStyles';
 
 class Assignees extends Component {
   constructor(props) {

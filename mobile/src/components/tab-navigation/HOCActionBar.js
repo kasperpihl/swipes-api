@@ -8,11 +8,11 @@ import {
   UIManager,
   LayoutAnimation,
 } from 'react-native';
-import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
-import * as a from '../../actions';
-import Icon from '../icons/Icon';
-import RippleButton from '../ripple-button/RippleButton';
-import { colors, viewSize } from '../../utils/globalStyles';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import * as a from 'actions';
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
+import { colors, viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   actionBar: {

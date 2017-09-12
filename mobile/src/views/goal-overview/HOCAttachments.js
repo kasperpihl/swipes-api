@@ -5,13 +5,13 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import ImagePicker from 'react-native-image-picker';
-import { attachmentIconForService, setupCachedCallback } from '../../../swipes-core-js/classes/utils';
-import EmptyListFooter from '../../components/empty-list-footer/EmptyListFooter';
-import Icon from '../../components/icons/Icon';
-import * as a from '../../actions';
-import * as ca from '../../../swipes-core-js/actions';
-import RippleButton from '../../components/ripple-button/RippleButton';
-import { colors } from '../../utils/globalStyles';
+import { attachmentIconForService, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
+import Icon from 'Icon';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
+import RippleButton from 'RippleButton';
+import { colors } from 'globalStyles';
 
 
 class HOCAttachments extends PureComponent {

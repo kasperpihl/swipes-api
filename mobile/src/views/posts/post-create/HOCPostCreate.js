@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from '../../../actions';
-import * as ca from '../../../../swipes-core-js/actions';
-import * as cs from '../../../../swipes-core-js/selectors';
-import { setupLoading, convertObjToUnderscore, navForContext, typeForId } from '../../../../swipes-core-js/classes/utils';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
+import { setupLoading, convertObjToUnderscore, navForContext, typeForId } from 'swipes-core-js/classes/utils';
 import moment from 'moment';
 import mime from 'react-native-mime-types';
 import ImagePicker from 'react-native-image-picker';

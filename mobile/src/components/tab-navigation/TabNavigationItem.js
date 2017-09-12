@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import { colors } from '../../utils/globalStyles';
-import Icon from '../icons/Icon';
-import RippleButton from '../ripple-button/RippleButton';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { colors } from 'globalStyles';
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
 
 const styles = StyleSheet.create({
   navItem: {

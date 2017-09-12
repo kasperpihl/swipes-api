@@ -5,17 +5,17 @@ import OneSignal from 'react-native-onesignal';
 import codePush from 'react-native-code-push';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import Login from './views/login/Login';
-import HOCInfoTab from './views/info-tab/HOCInfoTab';
-import Icon from './components/icons/Icon';
-import HOCTabNavigation from './components/tab-navigation/HOCTabNavigation';
-import HOCAndroidBackButton from './components/android-back-button/HOCAndroidBackButton';
+import Login from 'views/login/Login';
+import HOCInfoTab from 'views/info-tab/HOCInfoTab';
+import Icon from 'components/icons/Icon';
+import HOCTabNavigation from 'components/tab-navigation/HOCTabNavigation';
+import HOCAndroidBackButton from 'components/android-back-button/HOCAndroidBackButton';
+import { colors, viewSize } from 'utils/globalStyles';
+import LoadingModal from 'modals/LoadingModal';
+import ActionModal from 'modals/action-modal/ActionModal';
+import HOCConnectionBar from 'components/connection-bar/HOCConnectionBar';
+import * as a from 'actions';
 import HOCViewController from './navigation/view-controller/HOCViewController';
-import { colors, viewSize } from './utils/globalStyles';
-import LoadingModal from './modals/LoadingModal';
-import ActionModal from './modals/action-modal/ActionModal';
-import HOCConnectionBar from './components/connection-bar/HOCConnectionBar';
-import * as a from './actions';
 
 const styles = StyleSheet.create({
   app: {

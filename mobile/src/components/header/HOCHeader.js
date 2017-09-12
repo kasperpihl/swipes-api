@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { setupDelegate } from '../../../swipes-core-js/classes/utils';
-import Tabs from '../tabs/Tabs';
-import Icon from '../icons/Icon';
-import { colors, viewSize } from '../../utils/globalStyles';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import Tabs from 'components/tabs/Tabs';
+import Icon from 'Icon';
+import { colors, viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {

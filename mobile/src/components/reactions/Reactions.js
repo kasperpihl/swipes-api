@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import * as a from '../../actions';
-import { setupDelegate, bindAll } from '../../../swipes-core-js/classes/utils';
-import RippleButton from '../ripple-button/RippleButton';
-import Icon from '../icons/Icon';
-import { colors } from '../../utils/globalStyles';
+import * as a from 'actions';
+import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
+import RippleButton from 'RippleButton';
+import Icon from 'Icon';
+import { colors } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {

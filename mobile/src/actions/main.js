@@ -1,5 +1,5 @@
-import * as ca from '../../swipes-core-js/actions';
-import * as types from '../constants/ActionTypes';
+import * as ca from 'swipes-core-js/actions';
+import * as types from 'constants/ActionTypes';
 
 // ======================================================
 // Account related

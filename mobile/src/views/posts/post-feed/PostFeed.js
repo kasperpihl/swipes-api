@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
-import { setupDelegate } from '../../../../swipes-core-js/classes/utils';
-import { colors, viewSize } from '../../../utils/globalStyles';
-import RippleButton from '../../../components/ripple-button/RippleButton';
-import EmptyListFooter from '../../../components/empty-list-footer/EmptyListFooter';
-import Icon from '../../../components/icons/Icon';
-import HOCHeader from '../../../components/header/HOCHeader';
+import { setupDelegate } from 'swipes-core-js/classes/utils';
+import Icon from 'Icon';
+import HOCHeader from 'HOCHeader';
+import AfterInteractions from 'AfterInteractions';
+import RippleButton from 'RippleButton';
+import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
+import { colors, viewSize } from 'globalStyles';
 import PostFeedItem from './PostFeedItem';
 
 const styles = StyleSheet.create({
@@ -16,11 +17,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-  },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 
@@ -90,11 +86,7 @@ class PostFeed extends PureComponent {
     )
   }
   renderList() {
-    const { posts, relatedPosts, tabIndex, hasLoaded } = this.props;
-
-    if (!hasLoaded) {
-      return this.renderListLoader();
-    }
+    const { posts, relatedPosts, tabIndex } = this.props;
     
     if (!posts.size) {
       return this.renderEmptyState()
@@ -103,14 +95,16 @@ class PostFeed extends PureComponent {
     const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
 
     return (
-      <ImmutableVirtualizedList
-        ref="scrollView"
-        style={styles.list}
-        immutableData={renderPosts}
-        renderRow={this.renderFeedItem}
-        renderFooter={this.renderFooter}
-        onScroll={window.onScroll}
-      />
+      <AfterInteractions loadingProps={tabIndex}>
+        <ImmutableVirtualizedList
+          ref="scrollView"
+          style={styles.list}
+          immutableData={renderPosts}
+          renderRow={this.renderFeedItem}
+          renderFooter={this.renderFooter}
+          onScroll={window.onScroll}
+        />
+      </AfterInteractions>
     )
   }
   render() {
