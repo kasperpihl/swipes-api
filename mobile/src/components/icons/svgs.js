@@ -287,6 +287,32 @@ export default {
     ),
     viewBox: DEF_VIEWBOX,
   },
+  MilestoneAchieve: {
+    svg: (
+      <G>
+        <Rect x="10" y="8" width="2" height="2" />
+        <Rect x="8" y="6" width="2" height="2" />
+        <Rect x="8" y="10" width="2" height="2" />
+        <Rect x="12" y="10" width="2" height="2" />
+        <Rect x="14" y="8" width="2" height="2" />
+        <Rect x="10" y="12" width="2" height="2" />
+        <Rect x="14" y="12" width="2" height="2" />
+        <Rect x="12" y="6" width="2" height="2" />
+        <Rect x="16" y="10" width="2" height="2" />
+        <Rect x="16" y="6" width="2" height="2" />
+        <Rect x="6" y="6" width="2" height="12" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
+  },
+  Milestone: {
+    svg: (
+      <G>
+        <Path d="M8,6H6V18H8V14h9V6Zm7,6H8V8h7Z" />
+      </G>
+    ),
+    viewBox: DEF_VIEWBOX,
+  },
   Milestones: {
     svg: (
       <G>

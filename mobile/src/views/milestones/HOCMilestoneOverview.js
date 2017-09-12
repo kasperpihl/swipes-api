@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
+import * as a from '../../actions';
 import * as ca from '../../../swipes-core-js/actions';
 import * as cs from '../../../swipes-core-js/selectors';
 import { propsOrPop } from '../../../swipes-core-js/classes/react-utils';
+import { dayStringForDate } from '../../../swipes-core-js/classes/time-utils';
 import HOCHeader from '../../components/header/HOCHeader';
 import HOCGoalItem from '../goallist/HOCGoalItem';
 import GoalsUtil from '../../../swipes-core-js/classes/goals-util';
@@ -70,7 +72,8 @@ class HOCMilestoneOverview extends PureComponent {
       tabs: ['Current', 'Later', 'Completed'],
       tabIndex: 0,
       hasLoaded: false,
-      fabOpen: false
+      fabOpen: false,
+      showingInfoTab: false,
     };
 
     propsOrPop(this, 'milestone');
@@ -79,20 +82,19 @@ class HOCMilestoneOverview extends PureComponent {
     this.renderGoal = this.renderGoal.bind(this);
     this.handleModalState = this.handleModalState.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
+    this.onActionPress = this.onActionPress.bind(this);
   }
   componentDidMount() {
     this.renderActionButtons();
+
     this.loadingTimeout = setTimeout(() => {
       this.setState({ hasLoaded: true });
     }, 1);
   }
-  componentWillUpdate(nextProps) {
-    console.log('props', this.props.isActive);
-    console.log('nextProps', nextProps.isActive);
+  componentWillUpdate(nextProps, nextState) {
 
-    if (!this.props.isActive && nextProps.isActive) {
-      console.log('render buttons')
-      this.renderActionButtons();
+    if (!this.props.isActive && nextProps.isActive || this.state.showingInfoTab !== nextState.showingInfoTab) {
+      this.renderActionButtons(nextState.showingInfoTab);
     }
   }
   componentDidUpdate(prevProps) {
@@ -118,21 +120,59 @@ class HOCMilestoneOverview extends PureComponent {
 
     navPush(goalOverview);
   }
+  onActionPress(index) {
+    console.warn('infotab action', index)
+  }
   onActionButton(i) {
-    const { navPush, milestone } = this.props;
+    const { navPush, milestone, toggleInfoTab } = this.props;
+    const { showingInfoTab } = this.state;
 
-    navPush({
-      id: 'PostFeed',
-      title: 'Discussions',
-      props: {
-        context: {
-          title: milestone.get('title'),
-          id: milestone.get('id'),
-        },
-        relatedFilter: msgGen.milestones.getRelatedFilter(milestone)
-      },
-    });
+    if (showingInfoTab) {
+      if (i === 0) {
+        toggleInfoTab();
+        this.setState({ showingInfoTab: false })
+      }
+    } else {
+      if (i === 0) {
+        navPush({
+          id: 'PostFeed',
+          title: 'Discussions',
+          props: {
+            context: {
+              title: milestone.get('title'),
+              id: milestone.get('id'),
+            },
+            relatedFilter: msgGen.milestones.getRelatedFilter(milestone)
+          },
+        });
+      } else if (i === 1) {
+        let achieveLbl = 'Mark milestone as achieved';
+        let achieveIcon = 'MilestoneAchieve';
+        let complete = true;
+        if (milestone.get('closed_at')) {
+          complete = false,
+          achieveIcon = 'Milestone';
+          achieveLbl = 'Move milestone to current';
+        }
+        const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`
+        this.setState({ showingInfoTab: true });
 
+        toggleInfoTab({
+          onPress: this.onActionPress,
+          actions: [
+            { title: achieveLbl, complete, icon: achieveIcon },
+            { title: 'Delete milestone', icon: 'Delete', danger: true },
+          ],
+          info: [
+            { title: 'Created', text: createdLbl },
+          ],
+          about: {
+            title: 'What is a milestone',
+            text: 'A Milestone is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Milestone.\n\nTo keep your work organized, categorize goals for your Milestone with This week, Later or Completed.'
+          },
+        })
+      }
+    }
   }
   onModalCreateAction(title, assignees, milestoneId ) {
     const { createGoal } = this.props;
@@ -157,13 +197,24 @@ class HOCMilestoneOverview extends PureComponent {
       this.setState({ fabOpen: false })
     }
   }
-  renderActionButtons() {
-    this.props.setActionButtons({
-      onClick: this.onActionButton,
-      buttons: [
-        { text: 'Discussions' },
-      ],
-    });
+  renderActionButtons(showingInfoTab) {
+
+    if (showingInfoTab) {
+      this.props.setActionButtons({
+        onClick: this.onActionButton,
+        buttons: [
+          { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true }
+        ],
+      });
+    } else {
+      this.props.setActionButtons({
+        onClick: this.onActionButton,
+        buttons: [
+          { text: 'Discussions' },
+          { icon: 'Info', seperator: 'left', staticSize: true }
+        ],
+      });
+    }
   }
   renderHeader() {
     const { tabIndex, tabs } = this.state;
@@ -289,4 +340,5 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   createGoal: ca.goals.create,
+  toggleInfoTab: a.infotab.showInfoTab,
 })(HOCMilestoneOverview);

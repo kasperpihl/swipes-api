@@ -112,10 +112,8 @@ class HOCGoalOverview extends PureComponent {
         this.setState({ showingInfoTab: true })
 
         toggleInfoTab({
-          delegate: this,
+          onPress: this.onActionPress,
           actions: [
-            { title: 'Load a way', icon: 'Download' },
-            { title: 'Save as a way', icon: 'Save' },
             { title: 'Delete goal', icon: 'Delete', danger: true },
           ],
           info: [
@@ -256,9 +254,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  loader: {
-
   },
 });
 

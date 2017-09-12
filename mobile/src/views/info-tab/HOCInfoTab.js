@@ -20,7 +20,7 @@ class HOCInfoTab extends PureComponent {
   render() {
     const { infoTab } = this.props;
 
-    return <InfoTab infoTab={infoTab} delegate={infoTab.get('delegate')} />;
+    return <InfoTab infoTab={infoTab} />;
   }
 }
 // const { string } = PropTypes;

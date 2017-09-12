@@ -2,19 +2,19 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from '../../utils/globalStyles';
+import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
 import Icon from '../../components/icons/Icon';
 import RippleButton from '../../components/ripple-button/RippleButton';
 
 const styles = StyleSheet.create({
 	container: {
     width: viewSize.width,
-    height: (Platform.OS === 'ios') ? viewSize.height - 54 - 20 : viewSize.height - 54,
+    height: Platform.OS === 'ios' ? viewSize.height - 54 + 20 : viewSize.height - 54 + 24,
     position: 'absolute',
     left: 0,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
     backgroundColor: 'rgba(0, 12, 47, 0.96)',
     flexDirection: 'column',
+    paddingTop: Platform.OS === 'ios' ? 20 : 24,
   },
   aboutWrapper: {
     marginHorizontal: 15,
@@ -98,17 +98,19 @@ class InfoTab extends PureComponent {
     super(props);
     this.state = {};
 
+    this.onActionCached = setupCachedCallback(this.onAction, this);
+
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
   componentWillUpdate() {
-    LayoutAnimation.configureNext(LayoutAnimation.create(300, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
+    LayoutAnimation.configureNext(LayoutAnimation.create(250, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.infoTab.size) {
-      setupDelegate(this, 'onActionPress');
-    }
+  onAction(index) {
+    const { infoTab } = this.props;
+
+    infoTab.get('onPress')(index);
   }
   renderAbout() {
     const { infoTab } = this.props;
@@ -170,10 +172,18 @@ class InfoTab extends PureComponent {
     }
 
     const renderActions = actions.map((a, i) => {
-      const actionColor = a.danger ? colors.red80 : colors.blue100;
+      let actionColor = colors.blue100;
+
+      if (a.danger) {
+        actionColor = colors.red80;
+      }
+
+      if (a.complete) {
+        actionColor = colors.greenColor;
+      }
 
       return (
-        <RippleButton onPress={this.onActionPressCached(i)} key={a.icon}>
+        <RippleButton onPress={this.onActionCached(i)} key={a.icon}>
           <View style={styles.actionWrapper}>
             <View style={[styles.actionButton, { backgroundColor: actionColor }]}>
               <Icon name={a.icon} width="24" height="24" fill="white" />
@@ -194,10 +204,10 @@ class InfoTab extends PureComponent {
   }
   render() {
     const { infoTab } = this.props;
-    let topPosition = viewSize.height; 
+    let topPosition = viewSize.height + 30; 
 
     if (infoTab.size) {
-      topPosition = Platform.OS === 'ios' ? 20 : 24;
+      topPosition = 0;
     }
 
     return (
