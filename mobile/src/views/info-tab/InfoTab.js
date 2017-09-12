@@ -68,19 +68,16 @@ const styles = StyleSheet.create({
   actionContainer: {
     minHeight: 140,
     justifyContent: 'center',
-    backgroundColor: 'green',
   },
   actionScroll: {
     paddingHorizontal: 15,
-    backgroundColor: 'red',
   },
   actionWrapper: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 24,
-    backgroundColor: 'purple',
-    marginTop: -15,
+    marginTop: Platform.OS === 'ios' ? -15 : 0,
   },
   actionButton: {
     width: 66,

@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     height: 40,
     position: 'absolute',
     left: 0,
-    top: -7,
+    top: Platform.OS === 'ios' ? -7 : 7,
     backgroundColor: colors.deepBlue10,
   },
   verticalSeperatorRight: {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     height: 40,
     position: 'absolute',
     right: 0,
-    top: 7,
+    top: Platform.OS === 'ios' ? -7 : 7,
     backgroundColor: colors.deepBlue10,
   },
 });
