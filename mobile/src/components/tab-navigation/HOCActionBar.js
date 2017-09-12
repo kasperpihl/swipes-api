@@ -1,60 +1,60 @@
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import {
   View,
   Text,
   StyleSheet,
   Platform,
   UIManager,
-  LayoutAnimation
-} from "react-native";
-import { setupCachedCallback } from "../../../swipes-core-js/classes/utils";
-import * as a from "../../actions";
-import Icon from "../icons/Icon";
-import RippleButton from "../ripple-button/RippleButton";
-import { colors, viewSize } from "../../utils/globalStyles";
+  LayoutAnimation,
+} from 'react-native';
+import { setupCachedCallback } from '../../../swipes-core-js/classes/utils';
+import * as a from '../../actions';
+import Icon from '../icons/Icon';
+import RippleButton from '../ripple-button/RippleButton';
+import { colors, viewSize } from '../../utils/globalStyles';
 
 const styles = StyleSheet.create({
   actionBar: {
     flex: 1,
-    flexDirection: "row",
-    alignSelf: "stretch",
+    flexDirection: 'row',
+    alignSelf: 'stretch',
   },
   textButton: {
     flex: 1,
-    alignSelf: "stretch",
-    alignItems: "center",
-    justifyContent: "center",
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconButton: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
   textButtonLabel: {
     fontSize: 12,
     lineHeight: 24,
     fontWeight: '500',
     color: colors.blue100,
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   verticalSeperatorLeft: {
     width: 1,
     height: 40,
-    position: "absolute",
+    position: 'absolute',
     left: 0,
-    top: 7,
-    backgroundColor: colors.deepBlue10
+    top: -7,
+    backgroundColor: colors.deepBlue10,
   },
   verticalSeperatorRight: {
     width: 1,
     height: 40,
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     top: 7,
-    backgroundColor: colors.deepBlue10
-  }
+    backgroundColor: colors.deepBlue10,
+  },
 });
 
 class HOCActionBar extends PureComponent {
@@ -62,7 +62,7 @@ class HOCActionBar extends PureComponent {
     super(props);
     this.state = {};
 
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental &&
         UIManager.setLayoutAnimationEnabledExperimental(true);
     }
@@ -81,8 +81,8 @@ class HOCActionBar extends PureComponent {
   onActionClick(i, e) {
     const { actionButtons } = this.props;
 
-    if (actionButtons.get("onClick")) {
-      actionButtons.get("onClick")(i, e);
+    if (actionButtons.get('onClick')) {
+      actionButtons.get('onClick')(i, e);
     }
   }
   renderTextButton(key, button, onPress, seperator) {
@@ -114,13 +114,13 @@ class HOCActionBar extends PureComponent {
     if (button.staticSize) {
       maxWidthStyles = {
         maxWidth: 64,
-      }
+      };
     }
 
     if (button.alignEnd) {
       alignStyles = {
-        marginLeft: 'auto'
-      }
+        marginLeft: 'auto',
+      };
     }
 
     return (
@@ -145,11 +145,11 @@ class HOCActionBar extends PureComponent {
   renderLeftIcon() {
     const { activeRoutes, actionButtons } = this.props;
 
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       return this.renderIconButton(
-        "nav",
-        { icon: "ArrowLeftLine", seperator: 'right', staticSize: true },
-        this.onPop
+        'nav',
+        { icon: 'ArrowLeftLine', seperator: 'right', staticSize: true },
+        this.onPop,
       );
     }
 
@@ -158,8 +158,8 @@ class HOCActionBar extends PureComponent {
   renderButtons() {
     const { actionButtons } = this.props;
 
-    if (actionButtons && actionButtons.get("buttons")) {
-      return actionButtons.get("buttons").map((b, i) => {
+    if (actionButtons && actionButtons.get('buttons')) {
+      return actionButtons.get('buttons').map((b, i) => {
         if (b.text) {
           return this.renderTextButton(i, b, this.onActionClick(i));
         }
@@ -185,15 +185,15 @@ class HOCActionBar extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  const sliderIndex = state.getIn(["navigation", "sliderIndex"]);
+  const sliderIndex = state.getIn(['navigation', 'sliderIndex']);
 
   return {
-    actionButtons: state.getIn(["navigation", "actionButtons"]),
+    actionButtons: state.getIn(['navigation', 'actionButtons']),
     activeSliderIndex: sliderIndex,
-    activeRoutes: state.getIn(["navigation", "sliders", sliderIndex, "routes"])
+    activeRoutes: state.getIn(['navigation', 'sliders', sliderIndex, 'routes']),
   };
 }
 
 export default connect(mapStateToProps, {
-  navPop: a.navigation.pop
+  navPop: a.navigation.pop,
 })(HOCActionBar);
