@@ -4,7 +4,7 @@
     ["module-resolver", {
       "root": ["./src"],
       "alias": {
-        "AfterInteractions": "./src/components/after-interactions/AfterInteractions",
+        "InteractionsHandlerWrapper": "./src/components/interactions-handler-wrapper/InteractionsHandlerWrapper",
         "Icon": "./src/components/icons/Icon",
         "HOCHeader": "./src/components/header/HOCHeader",
         "RippleButton": "./src/components/ripple-button/RippleButton",

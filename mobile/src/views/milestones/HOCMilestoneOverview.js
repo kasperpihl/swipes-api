@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
@@ -9,6 +9,7 @@ import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import HOCHeader from 'HOCHeader';
+import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
 import HOCGoalItem from 'views/goallist/HOCGoalItem';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
@@ -24,11 +25,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-  },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   fabWrapper: {
     width: 60,
@@ -71,7 +67,6 @@ class HOCMilestoneOverview extends PureComponent {
     this.state = {
       tabs: ['Current', 'Later', 'Completed'],
       tabIndex: 0,
-      hasLoaded: false,
       fabOpen: false,
       showingInfoTab: false,
     };
@@ -86,10 +81,6 @@ class HOCMilestoneOverview extends PureComponent {
   }
   componentDidMount() {
     this.renderActionButtons();
-
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
   }
   componentWillUpdate(nextProps, nextState) {
 
@@ -97,22 +88,9 @@ class HOCMilestoneOverview extends PureComponent {
       this.renderActionButtons(nextState.showingInfoTab);
     }
   }
-  componentDidUpdate(prevProps) {
-    if (!this.state.hasLoaded) {
-      clearTimeout(this.loadingTimeout);
-
-      this.loadingTimeout = setTimeout(() => {
-        this.setState({ hasLoaded: true });
-      }, 1);
-    }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
-  }
-
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index, hasLoaded: false });
+      this.setState({ tabIndex: index });
     }
   }
   onPushStack(goalOverview) {
@@ -233,15 +211,7 @@ class HOCMilestoneOverview extends PureComponent {
   renderGoal(goal) {
     return <HOCGoalItem goalId={goal.get('id')} delegate={this} />;
   }
-  renderListLoader() {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
-      </View>
-    );
-  }
   renderListFooter() {
-
     return <EmptyListFooter />
   }
   renderEmptyState(group) {
@@ -267,13 +237,8 @@ class HOCMilestoneOverview extends PureComponent {
     )    
   }
   renderList() {
-    const { tabs, tabIndex, hasLoaded } = this.state;
+    const { tabs, tabIndex } = this.state;
     const { groupedGoals } = this.props;
-    
-    if (!hasLoaded) {
-      return this.renderListLoader();
-    }
-
     const tab = tabs[tabIndex];
     const goalList = groupedGoals.get(tab);
 
@@ -282,14 +247,16 @@ class HOCMilestoneOverview extends PureComponent {
     }
 
     return (
-      <ImmutableListView
-        ref="scrollView"
-        key={tab}
-        style={styles.list}
-        immutableData={goalList}
-        renderRow={this.renderGoal}
-        renderFooter={this.renderListFooter}
-      />
+      <InteractionsHandlerWrapper loadingProps={tabIndex}>
+        <ImmutableListView
+          ref="scrollView"
+          key={tab}
+          style={styles.list}
+          immutableData={goalList}
+          renderRow={this.renderGoal}
+          renderFooter={this.renderListFooter}
+        />
+      </InteractionsHandlerWrapper>
     );
   }
   renderFAB() {

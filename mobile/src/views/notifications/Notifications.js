@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react'
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
-import HOCHeader from 'HOCHeader';
+import { setupDelegate } from 'react-delegate';
 import { colors } from 'globalStyles';
-import NotificationItem from './NotificationItem';
+import HOCHeader from 'HOCHeader';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
-import { setupDelegate } from 'react-delegate';
+import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import NotificationItem from './NotificationItem';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,30 +17,15 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });
 
 class Notifications extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      hasLoaded: false,
-    };
+    this.state = {};
 
     this.renderNotifications = this.renderNotifications.bind(this);
     setupDelegate(this, 'onMarkAll');
-  }
-  componentDidMount() {
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
   }
   renderHeader() {
 
@@ -75,24 +61,21 @@ class Notifications extends PureComponent {
     )
   }
   renderList() {
-    const { hasLoaded } = this.state;
     const { notifications } = this.props;
-
-    if (!hasLoaded) {
-      return this.renderListLoader();
-    }
 
     if (!notifications || !notifications.size) {
       return this.renderEmptyState();
     }
 
     return (
-      <ImmutableVirtualizedList
-        style={styles.list}
-        immutableData={notifications}
-        renderRow={this.renderNotifications}
-        onScroll={window.onScroll}
-      />
+      <InteractionsHandlerWrapper>
+        <ImmutableVirtualizedList
+          style={styles.list}
+          immutableData={notifications}
+          renderRow={this.renderNotifications}
+          onScroll={window.onScroll}
+        />
+      </InteractionsHandlerWrapper>
     );
   }
   render() {

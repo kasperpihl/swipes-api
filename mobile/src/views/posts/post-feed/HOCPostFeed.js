@@ -35,7 +35,7 @@ class HOCPostFeed extends PureComponent {
   }
   onChangeTabs(index) {
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index, hasLoaded: false });
+      this.setState({ tabIndex: index });
     }
   }
   onAddReaction(post, commentId) {

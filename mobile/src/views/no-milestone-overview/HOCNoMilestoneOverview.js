@@ -5,6 +5,7 @@ import { ImmutableListView } from 'react-native-immutable-list-view';
 import * as cs from 'swipes-core-js/selectors';
 import HOCHeader from 'HOCHeader';
 import HOCGoalItem from 'views/goallist/HOCGoalItem';
+import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import { colors } from 'globalStyles';
 
@@ -16,39 +17,15 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });
 
 class HOCNoMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      hasLoaded: false,
-    };
+    this.state = {};
 
     this.renderGoal = this.renderGoal.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
-  }
-  componentDidMount() {
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-  }
-  componentDidUpdate(prevProps) {
-    if (!this.state.hasLoaded) {
-      clearTimeout(this.loadingTimeout);
-
-      this.loadingTimeout = setTimeout(() => {
-        this.setState({ hasLoaded: true });
-      }, 1);
-    }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
   }
   onPushStack(goalOverview) {
     const { navPush } = this.props;
@@ -77,21 +54,18 @@ class HOCNoMilestoneOverview extends PureComponent {
     return <EmptyListFooter />
   }
   renderList() {
-    const { hasLoaded } = this.state;
     const { goals } = this.props;
 
-    if (!hasLoaded) {
-      return this.renderListLoader();
-    }
-
     return (
-      <ImmutableListView
-        ref="scrollView"
-        style={styles.list}
-        immutableData={goals}
-        renderRow={this.renderGoal}
-        renderFooter={this.renderListFooter}
-      />
+      <InteractionsHandlerWrapper>
+        <ImmutableListView
+          ref="scrollView"
+          style={styles.list}
+          immutableData={goals}
+          renderRow={this.renderGoal}
+          renderFooter={this.renderListFooter}
+        />
+      </InteractionsHandlerWrapper>
     )
   }
   render() {

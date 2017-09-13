@@ -11,6 +11,9 @@ html, body {
   padding-top: 30px;
   overflow-y: auto;
 
+  // for iOS scroll fix possibly
+  -webkit-overflow-scrolling: touch;
+
 	&__loader {
 		@include size(50%, auto);
 		margin: 0 auto;

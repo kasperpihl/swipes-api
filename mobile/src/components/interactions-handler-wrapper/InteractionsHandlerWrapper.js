@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
 })
 
-class AfterInteractions extends PureComponent {
+class InteractionsHandlerWrapper extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,6 +65,6 @@ class AfterInteractions extends PureComponent {
   }
 }
 
-export default AfterInteractions
+export default InteractionsHandlerWrapper
 
-AfterInteractions.propTypes = {};
+InteractionsHandlerWrapper.propTypes = {};

@@ -7,6 +7,7 @@ import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
+import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
 import * as cs from 'swipes-core-js/selectors';
 import * as ca from 'swipes-core-js/actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
@@ -20,11 +21,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-  },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   sectionWrapper: {
     alignSelf: 'stretch',
@@ -46,7 +42,6 @@ class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      hasLoaded: false,
       fabOpen: false,
       text: '',
     };
@@ -58,32 +53,10 @@ class HOCGoalList extends PureComponent {
 
     this.navigateToMilestoneCached = setupCachedCallback(this.navigateToMilestone, this);
   }
-  componentDidMount() {
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-  }
-  componentDidUpdate(prevProps) {
-    if (!this.state.hasLoaded) {
-      clearTimeout(this.loadingTimeout);
-
-      this.loadingTimeout = setTimeout(() => {
-        this.setState({ hasLoaded: true });
-      }, 1);
-    }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
-  }
   onPushStack(route) {
     const { navPush } = this.props;
 
     navPush(route);
-  }
-  onChangeTab(index) {
-    if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index, hasLoaded: false });
-    }
   }
   onModalCreateAction(title, assignees, milestoneId ) {
     const { createGoal } = this.props;
@@ -164,14 +137,6 @@ class HOCGoalList extends PureComponent {
 
     return <HOCGoalItem goalId={gId} key={gId} delegate={this} />;
   }
-  renderListLoader() {
-
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
-      </View>
-    );
-  }
   renderListFooter() {
 
     return <EmptyListFooter />
@@ -189,24 +154,22 @@ class HOCGoalList extends PureComponent {
     const { goals } = this.props;
     const { hasLoaded } = this.state;
 
-    if (!hasLoaded) {
-      return this.renderListLoader();
-    }
-
     if (goals.size === 1 && !goals.get('none').size) {
       return this.renderEmptyState();
     }
 
     return (
-      <ImmutableListView
-        ref="scrollView"
-        style={styles.list}
-        immutableData={goals}
-        renderRow={this.renderGoal}
-        renderSectionHeader={this.renderSectionHeader}
-        stickySectionHeadersEnabled={true}
-        renderFooter={this.renderListFooter}
-      />
+      <InteractionsHandlerWrapper>
+        <ImmutableListView
+          ref="scrollView"
+          style={styles.list}
+          immutableData={goals}
+          renderRow={this.renderGoal}
+          renderSectionHeader={this.renderSectionHeader}
+          stickySectionHeadersEnabled={true}
+          renderFooter={this.renderListFooter}
+        />
+      </InteractionsHandlerWrapper>
     );
   }
   render() {

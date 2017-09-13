@@ -9,6 +9,7 @@ import * as ca from 'swipes-core-js/actions';
 import * as a from 'actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCHeader from 'HOCHeader';
+import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
 import { colors, viewSize } from 'globalStyles';
 import HOCStepList from './HOCStepList';
 import HOCAttachments from './HOCAttachments';
@@ -18,7 +19,6 @@ class HOCGoalOverview extends PureComponent {
     super(props);
     this.state = {
       tabIndex: 0,
-      hasLoaded: false,
       showingInfoTab: false,
     };
 
@@ -36,10 +36,6 @@ class HOCGoalOverview extends PureComponent {
   }
   componentDidMount() {
     this.renderActionButtons();
-
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
   }
   componentWillUpdate(nextProps, nextState) {
     LayoutAnimation.easeInEaseOut();
@@ -47,18 +43,6 @@ class HOCGoalOverview extends PureComponent {
     if (!this.props.isActive && nextProps.isActive || this.state.showingInfoTab !== nextState.showingInfoTab) {
       this.renderActionButtons(nextState.showingInfoTab);
     }
-  }
-  componentDidUpdate(prevProps) {
-    if (!this.state.hasLoaded) {
-      clearTimeout(this.loadingTimeout);
-
-      this.loadingTimeout = setTimeout(() => {
-        this.setState({ hasLoaded: true });
-      }, 1);
-    }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
   }
   onActionPress(index) {
     console.warn('gets here', index)
@@ -132,7 +116,7 @@ class HOCGoalOverview extends PureComponent {
     const { hasLoaded } = this.state;
 
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index, hasLoaded: false });
+      this.setState({ tabIndex: index });
     }
   }
   getHelper() {
@@ -185,39 +169,32 @@ class HOCGoalOverview extends PureComponent {
     const helper = this.getHelper();
 
     return (
-      <HOCStepList
-        goal={goal}
-        steps={helper.getOrderedSteps()}
-        delegate={this}
-        myId={me.get('id')}
-        {...this.bindLoading() }
-      />
+      <InteractionsHandlerWrapper>
+        <HOCStepList
+          goal={goal}
+          steps={helper.getOrderedSteps()}
+          delegate={this}
+          myId={me.get('id')}
+          {...this.bindLoading() }
+        />
+      </InteractionsHandlerWrapper>
     );
   }
   renderAttachments() {
     const { goal } = this.props;
 
     return (
-      <HOCAttachments
-        attachments={goal.get('attachments')}
-        attachmentOrder={goal.get('attachment_order')}
-        goal={goal}
-      />
-    );
-  }
-  renderListLoader() {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
-      </View>
+      <InteractionsHandlerWrapper>
+        <HOCAttachments
+          attachments={goal.get('attachments')}
+          attachmentOrder={goal.get('attachment_order')}
+          goal={goal}
+        />
+      </InteractionsHandlerWrapper>
     );
   }
   renderContent() {
     const { tabIndex, hasLoaded } = this.state;
-
-    if (!hasLoaded) {
-      return this.renderListLoader();
-    }
 
     if (tabIndex === 0) {
       return this.renderStepList();
@@ -249,11 +226,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-  },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 

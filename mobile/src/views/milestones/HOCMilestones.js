@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
@@ -9,6 +9,7 @@ import * as ca from 'swipes-core-js/actions';
 import HOCHeader from 'HOCHeader';
 import { colors, viewSize } from 'globalStyles';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
+import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
@@ -21,11 +22,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-  },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   noMilestoneWrapper: {
     alignSelf: 'stretch',
@@ -90,7 +86,6 @@ class HOCMilestones extends PureComponent {
     this.state = {
       tabs: ['Current Milestones', 'Achieved'],
       tabIndex: 0,
-      hasLoaded: false,
       fabOpen: false,
     };
 
@@ -100,26 +95,9 @@ class HOCMilestones extends PureComponent {
     this.renderListFooter = this.renderListFooter.bind(this);
     this.onOpenNoMilestone = this.onOpenNoMilestone.bind(this);
   }
-  componentDidMount() {
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-  }
-  componentDidUpdate(prevProps) {
-    if (!this.state.hasLoaded) {
-      clearTimeout(this.loadingTimeout);
-
-      this.loadingTimeout = setTimeout(() => {
-        this.setState({ hasLoaded: true });
-      }, 1);
-    }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
-  }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
-      this.setState({ tabIndex: index, hasLoaded: false });
+      this.setState({ tabIndex: index });
     }
   }
   onHeaderTap() {
@@ -169,13 +147,6 @@ class HOCMilestones extends PureComponent {
     } else {
       this.setState({ fabOpen: false })
     }
-  }
-  renderListLoader() {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
-      </View>
-    );
   }
   renderHeader() {
     const { tabIndex, tabs } = this.state;
@@ -247,26 +218,24 @@ class HOCMilestones extends PureComponent {
     )
   }
   renderList() {
-    const { tabIndex, tabs, hasLoaded } = this.state;
+    const { tabIndex, tabs } = this.state;
     const { milestones } = this.props;
-
-    if (!hasLoaded) {
-      return this.renderListLoader();
-    }
 
     if (!milestones.get(tabs[tabIndex]).size) {
       return this.renderEmptyState();
     }
 
     return (
-      <ImmutableListView
-        ref="scrollView"
-        style={styles.list}
-        immutableData={milestones.get(tabs[tabIndex])}
-        renderRow={this.renderMilestoneItem}
-        renderFooter={this.renderListFooter}
-        windowSize={2}
-      />
+      <InteractionsHandlerWrapper loadingProps={tabIndex}>
+        <ImmutableListView
+          ref="scrollView"
+          style={styles.list}
+          immutableData={milestones.get(tabs[tabIndex])}
+          renderRow={this.renderMilestoneItem}
+          renderFooter={this.renderListFooter}
+          windowSize={2}
+        />
+      </InteractionsHandlerWrapper>
     );
   }
   render() {

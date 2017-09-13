@@ -11,6 +11,7 @@ import Icon from "Icon";
 import RippleButton from "RippleButton";
 import Reactions from "components/reactions/Reactions";
 import CommentView from "components/comment-view/CommentView";
+import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
 import PostFooter from './PostFooter';
 
 const styles = StyleSheet.create({
@@ -153,19 +154,13 @@ const styles = StyleSheet.create({
 class PostView extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      hasLoaded: false,
-    };
+    this.state = {};
 
     this.onHeaderTap = this.onHeaderTap.bind(this);
 
     setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext', 'onAttachmentClick');
   }
   componentDidMount() {
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
-
     if (this.props.scrollToBottom) {
       this.scrollToBottomTime();
     }
@@ -183,7 +178,6 @@ class PostView extends PureComponent {
     }
   }
   componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
     clearTimeout(this.scrollTimer);
   }
   scrollToBottomTime() {
@@ -196,13 +190,6 @@ class PostView extends PureComponent {
   onHeaderTap() {
     clearTimeout(this.scrollTimer);
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
-  }
-  renderLoader() {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator color={colors.blue100} size="large" style={styles.loader} />
-      </View>
-    );
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
@@ -402,19 +389,15 @@ class PostView extends PureComponent {
     );
   }
   renderContent() {
-    const { hasLoaded } = this.state;
-
-    if (!hasLoaded) {
-      return this.renderLoader();
-    }
-    
     return (
-      <ScrollView style={{ flex: 1 }} ref="scrollView" alwaysBounceVertical={false}>
-        {this.renderMessage()}
-        {this.renderAttachments()}
-        {this.renderActions()}
-        {this.renderComments()}
-      </ScrollView>
+      <InteractionsHandlerWrapper>
+        <ScrollView style={{ flex: 1 }} ref="scrollView" alwaysBounceVertical={false}>
+          {this.renderMessage()}
+          {this.renderAttachments()}
+          {this.renderActions()}
+          {this.renderComments()}
+        </ScrollView>
+      </InteractionsHandlerWrapper>
     )
   }
   render() {

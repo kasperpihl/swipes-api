@@ -25,15 +25,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  loader: {
-  },
 });
 
 class HOCPreviewNote extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      hasLoaded: false,
       showingInfoTab: false,
     };
 
@@ -41,18 +38,11 @@ class HOCPreviewNote extends PureComponent {
   }
   componentDidMount() {
     this.renderActionButtons();
-
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ hasLoaded: true });
-    }, 1);
   }
   componentWillUpdate(nextProps, nextState) {
     if (!this.props.isActive && nextProps.isActive || this.state.showingInfoTab !== nextState.showingInfoTab) {
       this.renderActionButtons(nextState.showingInfoTab);
     }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.loadingTimeout);
   }
   onWebviewMessage(e) {
     const data = JSON.parse(e.nativeEvent.data);
