@@ -39,6 +39,8 @@ class HOCTabNavigation extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      showNavChanger: false,
+      navChangerActive: false,
       rootRoutes: [
         {
           icon: "Notification",
@@ -54,13 +56,15 @@ class HOCTabNavigation extends PureComponent {
           icon: "Messages"
         },
         {
-          icon: "Person",
+          icon: "NavSwap",
           updateAvailable: false,
+          showMiniSwap: false,
         }
       ]
     };
 
     this.handlePressCached = setupCachedCallback(this.handlePress, this);
+    this.handleNavChange = this.handleNavChange.bind(this);
 
     if (Platform.OS === "android") {
       UIManager.setLayoutAnimationEnabledExperimental &&
@@ -95,22 +99,57 @@ class HOCTabNavigation extends PureComponent {
         this.setState({ rootRoutes });
       }
   }
+  onNavChangeAction(type) {
+    const { sliderChange } = this.props;
+    const { rootRoutes } = this.state;
+
+    if (type === 'Update') {
+      this.handleNavChange(6, type);
+    } else if (type === 'Profile') {
+      this.handleNavChange(4, type);
+    } else if (type === 'Find') {
+      this.handleNavChange(5, type);
+    } else {
+      this.setState({ showNavChanger: false });
+    }
+  }
+  handleNavChange(index, icon) {
+    const { sliderChange } = this.props;
+    const { rootRoutes } = this.state;
+
+    sliderChange(index);
+    rootRoutes[4].icon = icon;
+    rootRoutes[4].showMiniSwap = true;
+    this.setState({ showNavChanger: false, rootRoutes });
+  }
   handlePress(i) {
     const { sliderChange, activeSliderIndex } = this.props;
+    const { showNavChanger, navChangerActive, rootRoutes } = this.state;
 
-    if (i !== activeSliderIndex) {
-      sliderChange(i);
+    if (i !== activeSliderIndex || navChangerActive && parseInt(i) !== 4) {
+      if (parseInt(i) === 4) {
+        this.setState({ showNavChanger: true, navChangerActive: true });
+      } else {
+        rootRoutes[4].icon = 'NavSwap';
+        rootRoutes[4].showMiniSwap = false;
+        this.setState({ showNavChanger: false, navChangerActive: false, rootRoutes });
+        sliderChange(i);
+      }
+    } 
+
+    if (parseInt(i) === 4 && showNavChanger) {
+      this.setState({ showNavChanger: false, navChangerActive: false })
     }
   }
   renderSlider() {
     const { activeSliderIndex, routes } = this.props;
-    const sliderPosPercentage = activeSliderIndex * 20;
+    const { navChangerActive } = this.state;
+    const sliderPosPercentage =  navChangerActive ? 4 * 20 : activeSliderIndex * 20;
     const sliderPosPixel = sliderPosPercentage * viewSize.width / 100;
     const sliderPos = routes.size > 1 ? 0 : sliderPosPixel;
     const sliderWidth = routes.size > 1 ? viewSize.width : viewSize.width / 5;
-    const sliderHeight = routes.size > 1 ? 1 : 2;
-    const sliderColor =
-      routes.size > 1 ? colors.deepBlue10 : colors.deepBlue100;
+    const sliderHeight = routes.size > 1 ? 1 : 54;
+    const sliderColor = routes.size > 1 ? colors.deepBlue10 : colors.deepBlue5;
 
     return (
       <View
@@ -128,6 +167,8 @@ class HOCTabNavigation extends PureComponent {
   }
   renderNavItems() {
     const { activeSliderIndex, routes } = this.props;
+    const { navChangerActive } = this.state;
+    const sliderIndex = navChangerActive ? navChangerActive : activeSliderIndex
 
     if (routes.size > 1) {
       return <HOCActionBar />;
@@ -140,9 +181,11 @@ class HOCTabNavigation extends PureComponent {
           icon={r.icon}
           counter={r.counter}
           index={i}
-          fill={colors.deepBlue100}
           key={`navbutton-${i}`}
           delegate={this}
+          activeSliderIndex={sliderIndex}
+          showMiniSwap={r.showMiniSwap}
+          updateAvailable={r.updateAvailable}
         />
       );
     });
@@ -150,6 +193,11 @@ class HOCTabNavigation extends PureComponent {
     return navItems;
   }
   renderNavChanger() {
+    const { showNavChanger } = this.state;
+
+    if (!showNavChanger) {
+      return undefined;
+    }
     
     return <NavChanger delegate={this} />
   }
@@ -168,8 +216,8 @@ class HOCTabNavigation extends PureComponent {
     return (
       <View>
         <View style={navStyles}>
-          {this.renderNavItems()}
           {this.renderSlider()}
+          {this.renderNavItems()}
         </View>
         {this.renderNavChanger()}
       </View>

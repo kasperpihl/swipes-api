@@ -9,6 +9,8 @@ import PostFeed from './posts/post-feed/HOCPostFeed';
 import PostView from './posts/post-view/HOCPostView';
 import PostCreate from './posts/post-create/HOCPostCreate';
 import Notifications from './notifications/HOCNotifications';
+import Update from './update/HOCUpdate';
+import Search from './search/HOCSearch';
 
 export {
   GoalOverview,
@@ -21,5 +23,7 @@ export {
   PostView,
   PostCreate,
   Notifications,
-  NoMilestoneOverview
+  NoMilestoneOverview,
+  Update,
+  Search
 };

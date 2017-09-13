@@ -51,6 +51,24 @@ const initialState = fromJS({
         },
       ],
     },
+    {
+      routes: [
+        {
+          id: 'Search',
+          title: 'Search',
+          icon: 'Find',
+        },
+      ],
+    },
+    {
+      routes: [
+        {
+          id: 'Update',
+          title: 'Update',
+          icon: 'Person',
+        },
+      ],
+    },
   ],
 });
 

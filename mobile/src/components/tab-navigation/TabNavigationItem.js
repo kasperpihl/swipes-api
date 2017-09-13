@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import { colors } from 'globalStyles';
@@ -35,17 +35,28 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'white',
   },
-  updateWrapper: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+  miniUpdate: {
+    width: 18,
+    height: 18,
+    borderRadius: 18 / 2,
     position: 'absolute',
-    right: 20, top: 10,
-    backgroundColor: colors.red100,
+    right: 6, top: 6,
+    backgroundColor: colors.blue100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  miniSwap: {
+    width: 18,
+    height: 18,
+    borderRadius: 18 / 2,
+    position: 'absolute',
+    right: 6, top: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });
 
-class TabNavigationItem extends Component {
+class TabNavigationItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -66,26 +77,43 @@ class TabNavigationItem extends Component {
     )
 
   }
+  renderSideIcon(icon) {
+    const fill = icon === 'MiniUpdate' ? 'white' : colors.deepBlue40;
+    const sideIconStyles = icon === 'MiniUpdate' ? styles.miniUpdate : styles.miniSwap;
+
+    return (
+      <View style={sideIconStyles}>
+        <Icon name={icon} width="18" height="18" />
+      </View>
+    )
+  }
   renderUpdate() {
-    const { updateAvailable, icon } = this.props;
+    const { updateAvailable } = this.props;
     
     if (!updateAvailable) {
       return undefined;
     }
 
-    return (
-      <View style={styles.updateWrapper}></View>
-    )
+    return this.renderSideIcon('MiniUpdate')
+  }
+  renderMiniSwap() {
+    const { updateAvailable, showMiniSwap } = this.props;
+
+    if (showMiniSwap && !updateAvailable) {
+      return this.renderSideIcon('MiniNavSwap')
+    }
   }
   render() {
-    const { icon, index, fill } = this.props;
+    const { icon, index, activeSliderIndex } = this.props;
+    const iconFill = parseInt(activeSliderIndex) === index ? colors.deepBlue100 : colors.deepBlue40;
 
     return (
       <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached('' + index)}>
         <View style={styles.navItem}>
-          <Icon name={icon} width="24" height="24" fill={fill} />
+          <Icon name={icon} width="24" height="24" fill={iconFill} />
           {this.renderCounter()}
           {this.renderUpdate()}
+          {this.renderMiniSwap()}
         </View>
       </RippleButton>
     );
