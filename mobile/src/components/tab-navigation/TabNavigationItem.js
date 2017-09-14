@@ -82,7 +82,7 @@ class TabNavigationItem extends PureComponent {
     const sideIconStyles = icon === 'MiniUpdate' ? styles.miniUpdate : styles.miniSwap;
 
     return (
-      <View style={{width: (viewSize.width / 5), height: 54, position: 'absolute', left: 0, top: 0, backgroundColor: 'yellow', alignItems: 'flex-end'}}>
+      <View style={{width: (viewSize.width / 5), height: 54, position: 'absolute', left: 0, top: 0, right: 0, backgroundColor: 'yellow', alignItems: 'flex-end'}}>
         <View style={sideIconStyles}>
           <Icon name={icon} width="18" height="18" />
         </View>
