@@ -9,7 +9,8 @@ html, body {
   @include size(100%);
 	background-color: rgba(56,149,252, 1);
   padding-top: 30px;
-  overflow-y: auto;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 
   // for iOS scroll fix possibly
   -webkit-overflow-scrolling: touch;

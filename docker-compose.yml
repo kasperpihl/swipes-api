@@ -1,0 +1,30 @@
+version: '3.3'
+
+services:
+  node-js:
+    build: ./server
+    volumes:
+      - ./server/dist:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 5000:80
+# nginx:
+#     build: ./nginx
+#     # links:
+#     #     - node1:node1
+#     #     - node2:node2
+#     #     - node3:node3
+#     ports:
+#         - "80:80"
+# node1:
+#     build: ./server
+#     ports:
+#         - "5000"
+# node2:
+#     build: ./server
+#     ports:
+#         - "5000"
+# node3:
+#     build: ./server
+#     ports:
+#         - "5000"

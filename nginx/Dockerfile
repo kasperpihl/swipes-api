@@ -8,7 +8,7 @@
 FROM library/nginx:1.13.5
 
 # Copy config over
-COPY ./swipes.conf /etc/nginx/sites-enabled/swipes
+# COPY ./swipes.conf /etc/nginx/sites-enabled/swipes
 
 # Define mountable directories.
 VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx", "/var/www/html"]
