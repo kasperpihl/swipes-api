@@ -2,6 +2,7 @@
   "presets": ["react-native"],
   "plugins": [
     ["module-resolver", {
+      "cwd": "babelrc",
       "root": ["./src"],
       "alias": {
         "InteractionsHandlerWrapper": "./src/components/interactions-handler-wrapper/InteractionsHandlerWrapper",
