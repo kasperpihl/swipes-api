@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
-import { colors } from 'globalStyles';
+import { colors, viewSize } from 'globalStyles';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     borderRadius: 18 / 2,
-    position: 'absolute',
-    right: 6, top: 6,
+    marginTop: 6,
+    marginRight: 6,
     alignItems: 'center',
     justifyContent: 'center',
   }
@@ -82,8 +82,10 @@ class TabNavigationItem extends PureComponent {
     const sideIconStyles = icon === 'MiniUpdate' ? styles.miniUpdate : styles.miniSwap;
 
     return (
-      <View style={sideIconStyles}>
-        <Icon name={icon} width="18" height="18" />
+      <View style={{width: (viewSize.width / 5), height: 54, position: 'absolute', left: 0, top: 0, backgroundColor: 'yellow', alignItems: 'flex-end'}}>
+        <View style={sideIconStyles}>
+          <Icon name={icon} width="18" height="18" />
+        </View>
       </View>
     )
   }
@@ -110,10 +112,10 @@ class TabNavigationItem extends PureComponent {
     return (
       <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached('' + index)}>
         <View style={styles.navItem}>
-          <Icon name={icon} width="24" height="24" fill={iconFill} />
-          {this.renderCounter()}
           {this.renderUpdate()}
           {this.renderMiniSwap()}
+          <Icon name={icon} width="24" height="24" fill={iconFill} />
+          {this.renderCounter()}
         </View>
       </RippleButton>
     );
