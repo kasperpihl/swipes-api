@@ -9,12 +9,12 @@ import { colors, viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   footer: {
     width: viewSize.width,
     height: 54,
-    flexDirection: "row",
+    flexDirection: 'row',
     zIndex: 100,
     backgroundColor: colors.bgColor,
     borderTopWidth: 1,
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     height: 40,
     position: 'absolute',
     right: 0,
-    top: Platform.OS === 'ios' ? -7 : 7,
+    top: 7,
     backgroundColor: colors.deepBlue10,
   },
   inputHolder: {
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 18,
     color: colors.deepBlue100,
-    paddingHorizontal: 18
-  }
+    paddingHorizontal: 18,
+  },
 });
 
 class Search extends PureComponent {
@@ -85,11 +85,11 @@ class Search extends PureComponent {
         <TextInput
           onChangeText={this.onChange}
           value={this.props.searchString}
-          placeholder='Search something'
-          returnKeyType='search'
+          placeholder="Search something"
+          returnKeyType="search"
         />
       </View>
-    )
+    );
   }
   renderResults() {
     const { toSearchString, delegate } = this.props;
@@ -99,10 +99,9 @@ class Search extends PureComponent {
         searchString={toSearchString}
         delegate={delegate}
       />
-    )
+    );
   }
   renderArrowIcon() {
-
     if (Platform.OS === 'android') return undefined;
 
     return (
@@ -112,63 +111,61 @@ class Search extends PureComponent {
           <View style={styles.arrowIconSeperator} />
         </View>
       </RippleButton>
-    )
+    );
   }
   renderClearInput() {
     if (!this.props.searchString.length) return undefined;
-    
+
     return (
       <RippleButton
-        style={{width: 42, height: 42, overflow: 'hidden', borderRadius: 100, borderWidth: 1, borderColor: 'transparent'}}
+        style={{ width: 42, height: 42, overflow: 'hidden', borderRadius: 100, borderWidth: 1, borderColor: 'transparent' }}
         onPress={this.clearInput}
       >
         <View style={styles.clearInputWrapper} >
           <Icon name="Close" width="24" height="24" fill={colors.deepBlue100} />
         </View>
       </RippleButton>
-    )
+    );
   }
   renderInput() {
-
     return (
       <View style={styles.inputHolder}>
-       <View style={styles.inputWrapper} >
-         <TextInput
-            style={styles.inputStyles} 
-            onChangeText={this.onChange}
-            value={this.props.searchString}
-            placeholder='Search'
-            returnKeyType='search'
-            underlineColorAndroid='transparent'
-            blurOnSubmit={true}
-            onSubmitEditing={this.onSearch}
-            placeholderTextColor={colors.deepBlue50}
-          />
-          {this.renderClearInput()}
-        </View>
+        <View style={styles.inputWrapper} >
+          <TextInput
+           style={styles.inputStyles}
+           onChangeText={this.onChange}
+           value={this.props.searchString}
+           placeholder="Search"
+           returnKeyType="search"
+           underlineColorAndroid="transparent"
+           blurOnSubmit
+           onSubmitEditing={this.onSearch}
+           placeholderTextColor={colors.deepBlue50}
+         />
+         {this.renderClearInput()}
+       </View>
       </View>
-    )
+    );
   }
   renderFooter() {
-
     return (
       <View style={styles.footer}>
         {this.renderArrowIcon()}
         {this.renderInput()}
       </View>
-    )
+    );
   }
   render() {
     return (
       <View style={styles.container}>
-      	{this.renderResults()}
+        {this.renderResults()}
         {this.renderFooter()}
       </View>
     );
   }
 }
 
-export default Search
+export default Search;
 
 // const { string } = PropTypes;
 
