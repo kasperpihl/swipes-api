@@ -216,7 +216,7 @@ class PostFeed extends PureComponent {
   renderHeaderSubtitle() {
     const { post } = this.props;
     const timeStamp = timeAgo(post.get('created_at'), true);
-    const seperator = post.get('context') ? <Text style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text > : undefined;
+    const seperator = post.get('context') ? <Text style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
     const contextTitle = post.get('context') ? <Text style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text> : undefined;
     const icon = post.get('context') ? <Icon name={miniIconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
     const padding = post.get('context') ? 5 : 0;

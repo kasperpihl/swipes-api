@@ -25,6 +25,7 @@ class InteractionsHandlerWrapper extends PureComponent {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.loadingProps !== this.props.loadingProps) {
+      console.warn('change')
       this.handleInteractionManager();
     }
   }

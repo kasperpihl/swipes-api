@@ -80,7 +80,7 @@ class TabNavigationItem extends PureComponent {
     const sideIconStyles = icon === 'MiniUpdate' ? styles.miniUpdate : styles.miniSwap;
 
     return (
-      <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, right: 0, backgroundColor: 'yellow', alignItems: 'flex-end' }}>
+      <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, right: 0, alignItems: 'flex-end' }}>
         <View style={sideIconStyles}>
           <Icon name={icon} width="18" height="18" />
         </View>
@@ -111,7 +111,7 @@ class TabNavigationItem extends PureComponent {
       <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached(`${index}`)}>
         <View style={styles.navItem}>
 
-          <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, backgroundColor: 'red', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name={icon} width="24" height="24" fill={iconFill} />
           </View>
           {this.renderCounter()}

@@ -74,14 +74,20 @@ class HOCTabNavigation extends PureComponent {
   componentWillMount() {
     this.checkForUpdate(this.props);
   }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
-  }
-  componentWillReceiveProps(nextProps) {
+  componentWillUpdate(nextProps, nextState) {
     const { rootRoutes } = this.state;
+
+    LayoutAnimation.easeInEaseOut();
+
     if (nextProps.counter !== this.props.counter) {
       rootRoutes[0].counter = nextProps.counter;
       this.setState({ rootRoutes });
+    }
+
+    if (nextProps.activeSliderIndex !== this.props.activeSliderIndex && nextProps.activeSliderIndex < 4  && nextState.navChangerActive) {
+        rootRoutes[4].icon = 'NavSwap';
+        rootRoutes[4].showMiniSwap = false;
+        this.setState({ showNavChanger: false, navChangerActive: false, rootRoutes });
     }
 
     this.checkForUpdate(nextProps);

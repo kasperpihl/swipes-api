@@ -39,7 +39,7 @@ export default {
     viewBox: DEF_VIEWBOX,
   },
   ArrowLeftLine: {
-    svg: <Polygon points="16.293,19.778,17,19.071,9.929,12,17,4.929,16.293,4.222,8.515,12,16.293,19.778" />,
+    svg: <Polygon points="8,12,9.414,13.4,9.414,13.4,15.071,19,16.485,17.6,10.828,12,16.485,6.4,15.071,5,9.414,10.6,9.414,10.6,8,12" fillRule="evenodd"/>,
     viewBox: DEF_VIEWBOX,
   },
   ArrowRightLine: {
@@ -82,7 +82,7 @@ export default {
   },
   ChecklistCheckmark: {
     svg: <Polygon points="11.768,14.268,7.438,11.768,6.438,13.5,12.5,17,18,7.474,16.268,6.474,11.768,14.268" />,
-    viewBox: DEF_VIEWBOX,
+    viewBox: '0 0 18 18',
   },
   Checkmark: {
 
