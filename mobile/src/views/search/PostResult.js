@@ -1,32 +1,139 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
-// import './styles/PostResult.scss';
-import { colors } from 'globalStyles';
+import ParsedText from 'react-native-parsed-text';
+import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import StyledText from 'components/styled-text/StyledText';
+import Icon from 'Icon';
+import { colors, viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {
+    alignSelf: 'stretch',
+    paddingTop: 12,
+  },
+  header: {
     flex: 1,
-    paddingVertical: 12,
+    flexDirection: 'row',
+  },
+  headerSide: {
+    flex: 1,
+    paddingLeft: 12,
+  },
+  profilePicWrapper: {
+    width: 48,
+    height: 48,
+    borderRadius: 3,
+  },
+  profilePic: {
+    width: 48,
+    height: 48,
+    borderRadius: 3,
+  },
+  initials: {
+    width: 48,
+    height: 48,
+    borderRadius: 3,
+    backgroundColor: colors.deepBlue100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  initialsLabel: {
+    fontSize: 28,
+    color: colors.bgColor,
+  },
+  textStyle: {
+    fontSize: 15,
+    lineHeight: 18,
+    color: colors.deepBlue40,
+    includeFontPadding: false,
+  },
+  boldStyle: {
+    fontSize: 15,
+    lineHeight: 18,
+    color: colors.deepBlue100,
+    includeFontPadding: false,
+  },
+  subtitle: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue50,
-    paddingHorizontal: 6,
+    paddingTop: 5,
   },
-})
+  subtitleLabel: {
+    fontSize: 12,
+    lineHeight: 15,
+    color: colors.deepBlue40,
+  },
+  messageWrapper: {
+    paddingHorizontal: 15,
+    paddingTop: 21,
+    paddingBottom: 18,
+  },
+  message: {
+    fontSize: 18,
+    color: colors.deepBlue100,
+    lineHeight: 27,
+    fontWeight: '300',
+  },
+  url: {
+    fontSize: 18,
+    color: colors.blue100,
+    lineHeight: 27,
+    fontWeight: '300',
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 54,
+    alignSelf: 'stretch',
+  },
+  actionsSeperator: {
+    width: viewSize.width - 30,
+    height: 1,
+    backgroundColor: colors.deepBlue10,
+    position: 'absolute',
+    left: 15, top: 0,
+  },
+  commentsButton: {
+    paddingHorizontal: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  reactionWrapper: {
+    paddingHorizontal: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'stretch',
+  },
+  attachments: {
+    paddingHorizontal: 15,
+  },
+  attachment: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+    height: 48,
+    paddingHorizontal: 12,
+    borderRadius: 1,
+    borderWidth: 1,
+    borderColor: colors.deepBlue10,
+  },
+  attachmentLabel: {
+    fontSize: 12,
+    color: colors.deepBlue80,
+    fontWeight: '500',
+    paddingLeft: 12,
+  }
+});
 
 class PostResult extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    // setupDelegate(this);
+    setupDelegate(this, 'onOpenUrl');
     // this.callDelegate.bindAll('onLala');
   }
   componentDidMount() {
@@ -109,9 +216,10 @@ class PostResult extends PureComponent {
   renderSubtitle() {
     const { result } = this.props;
     const { item: post } = result;
+    const timeStamp = timeAgo(post.created_at, true);
     const seperator = post.context ? <Text style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
     const contextTitle = post.context ? <Text style={styles.subtitleLabel}>{post.context.title}</Text> : undefined;
-    const icon = post.context ? <Icon name={miniIconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
+    const icon = post.context ? <Icon name={miniIconForId(post.context.id)} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
     const padding = post.context ? 5 : 0;
 
     return (
@@ -127,10 +235,10 @@ class PostResult extends PureComponent {
   }
   renderType() {
     const type = this.getType();
-    const typeStyleColor = styles.typeWrapperColor + type.color
+    const typeStyleColor = styles[type.color];
 
     return (
-      <View styles={[styles.typeWrapper, typeStyleColor]}>
+      <View style={[styles.typeWrapper, typeStyleColor]}>
         <Text>{type.label}</Text>
       </View>
     )
@@ -138,13 +246,13 @@ class PostResult extends PureComponent {
   renderHeader() {
 
     return (
-      <div className="post-result__header">
-        <div className="post-result__titles">
+      <View style={styles.header}>
+        <View style={styles.titles}>
           {this.renderGeneratedTitle()}
           {this.renderSubtitle()}
-        </div>
+        </View>
         {this.renderType()}
-      </div>
+      </View>
     )
   }
   renderMessage() {
@@ -152,17 +260,31 @@ class PostResult extends PureComponent {
     const { item } = result;
 
     return (
-      <div className="post-result__message">
-        <TextParser>
+      <View style={styles.messageWrapper}>
+        <ParsedText
+          style={styles.message}
+          parse={
+            [
+              { type: 'url', style: styles.url, onPress: this.onOpenUrl },
+            ]
+          }
+        >
           {item.message}
-        </TextParser>
-      </div>
+        </ParsedText>
+
+      </View>
     )
   }
   render() {
     return (
       <View style={styles.container} >
-        <Text>Hi, this is a post</Text>
+        <View style={styles.profileImage} >
+          {this.renderProfileImage()}
+        </View>
+        <View style={styles.rightContent} >
+          {this.renderHeader()}
+          {this.renderMessage()}
+        </View>
       </View>
     );
   }
