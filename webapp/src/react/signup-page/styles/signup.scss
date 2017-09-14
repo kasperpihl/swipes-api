@@ -256,6 +256,10 @@ h3.subtitle {
 		@include size(100%, 60px);
 	}
 
+  .title-container {
+    padding-top: 21px;
+  }
+
 	.breadcrumbs {
 		@include size(auto, 60px);
 	}
