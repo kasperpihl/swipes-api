@@ -8,8 +8,6 @@ import RippleButton from 'RippleButton';
 const styles = StyleSheet.create({
   navItem: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   counter: {
     position: 'absolute',
@@ -19,7 +17,7 @@ const styles = StyleSheet.create({
       },
       android: {
         right: 3, top: 3,
-      }
+      },
     }),
     paddingHorizontal: 6,
     minWidth: 21,
@@ -40,7 +38,8 @@ const styles = StyleSheet.create({
     height: 18,
     borderRadius: 18 / 2,
     position: 'absolute',
-    right: 6, top: 6,
+    right: 6,
+    top: 6,
     backgroundColor: colors.blue100,
     alignItems: 'center',
     justifyContent: 'center',
@@ -53,7 +52,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 });
 
 class TabNavigationItem extends PureComponent {
@@ -74,35 +73,34 @@ class TabNavigationItem extends PureComponent {
       <View style={styles.counter}>
         <Text style={styles.counterLabel}>{counter}</Text>
       </View>
-    )
-
+    );
   }
   renderSideIcon(icon) {
     const fill = icon === 'MiniUpdate' ? 'white' : colors.deepBlue40;
     const sideIconStyles = icon === 'MiniUpdate' ? styles.miniUpdate : styles.miniSwap;
 
     return (
-      <View style={{width: (viewSize.width / 5), height: 54, position: 'absolute', left: 0, top: 0, right: 0, backgroundColor: 'yellow', alignItems: 'flex-end'}}>
+      <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, right: 0, backgroundColor: 'yellow', alignItems: 'flex-end' }}>
         <View style={sideIconStyles}>
           <Icon name={icon} width="18" height="18" />
         </View>
       </View>
-    )
+    );
   }
   renderUpdate() {
     const { updateAvailable } = this.props;
-    
+
     if (!updateAvailable) {
       return undefined;
     }
 
-    return this.renderSideIcon('MiniUpdate')
+    return this.renderSideIcon('MiniUpdate');
   }
   renderMiniSwap() {
     const { updateAvailable, showMiniSwap } = this.props;
 
     if (showMiniSwap && !updateAvailable) {
-      return this.renderSideIcon('MiniNavSwap')
+      return this.renderSideIcon('MiniNavSwap');
     }
   }
   render() {
@@ -110,12 +108,15 @@ class TabNavigationItem extends PureComponent {
     const iconFill = parseInt(activeSliderIndex) === index ? colors.deepBlue100 : colors.deepBlue40;
 
     return (
-      <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached('' + index)}>
+      <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached(`${index}`)}>
         <View style={styles.navItem}>
+
+          <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, backgroundColor: 'red', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name={icon} width="24" height="24" fill={iconFill} />
+          </View>
+          {this.renderCounter()}
           {this.renderUpdate()}
           {this.renderMiniSwap()}
-          <Icon name={icon} width="24" height="24" fill={iconFill} />
-          {this.renderCounter()}
         </View>
       </RippleButton>
     );
