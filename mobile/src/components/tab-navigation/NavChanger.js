@@ -53,7 +53,7 @@ class NavChanger extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      transfromAnim: new Animated.Value(450),
+      transfromAnim: new Animated.Value(150),
     };
 
     setupDelegate(this, 'onNavChangeAction')
@@ -62,11 +62,11 @@ class NavChanger extends PureComponent {
     Animated.timing(this.state.transfromAnim, {
       toValue: 0,
       easing: Easing.bezier(.71,.35,.57,1.44),
-      duration: 750,
+      duration: 450,
       useNativeDriver: true
     }).start();
   }
-  renderAction(icon, label, order) {
+  renderAction(icon, label) {
     let { transfromAnim } = this.state;
 
     return (
@@ -84,9 +84,9 @@ class NavChanger extends PureComponent {
     
     return (
       <View style={styles.actionsWrapper}>
-        {this.renderAction('Update', 'Updates', 3)}
-        {this.renderAction('Profile', 'Profile', 2)}
-        {this.renderAction('Find', 'Search', 1)}
+        {this.renderAction('Update', 'Updates')}
+        {this.renderAction('Profile', 'Profile')}
+        {this.renderAction('Find', 'Search')}
       </View>
     )
   }

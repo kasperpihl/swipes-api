@@ -19,6 +19,17 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15,
   },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyLabel: {
+    fontSize: 15,
+    color: colors.deepBlue70,
+    lineHeight: 21,
+    textAlign: 'center'
+  }
 });
 
 class HOCSearchResults extends PureComponent {
@@ -29,6 +40,19 @@ class HOCSearchResults extends PureComponent {
     setupDelegate(this, 'willOpenResult');
   }
   componentDidMount() {
+  }
+  renderEmptyState(type) {
+    let label = 'Search for plans, goals or\n discussions by keywords.'
+
+    if (type === 'noresults') {
+      label = 'Oops! Nothing found.'
+    }
+
+    return (
+      <View style={styles.emptyState} >
+        <Text style={styles.emptyLabel} >{label}</Text>
+      </View>
+    )
   }
   renderResultRow(result) {
     return <SearchResult result={result} delegate={this.props.delegate} />
@@ -52,6 +76,10 @@ class HOCSearchResults extends PureComponent {
         />
       );
     }
+
+    if (!results) return this.renderEmptyState('nosearch');
+
+    if (results && !results.length) return this.renderEmptyState('noresults')
 
     return undefined;
   }

@@ -11,6 +11,8 @@ class HOCSearch extends PureComponent {
       searchString: '',
       toSearchString: ''
     };
+
+    this.onOpenSearchResult = this.onOpenSearchResult.bind(this);
   }
   componentDidMount() {
     const { setActionButtons } = this.props;
@@ -18,6 +20,15 @@ class HOCSearch extends PureComponent {
     setActionButtons({
       hide: true
     })
+  }
+  componentWillUpdate(nextProps) {
+    const { setActionButtons } = this.props;
+
+    if (nextProps.isActive && !this.props.isActive) {
+      setActionButtons({
+        hide: true
+      })
+    }
   }
   onChange(value) {
     this.setState({ searchString: value  });
@@ -27,7 +38,33 @@ class HOCSearch extends PureComponent {
     this.setState({ toSearchString: searchString })
   }
   onOpenSearchResult(id, res) {
-    console.warn(id)
+    const { navPush } = this.props;
+
+    if (id.startsWith('M')) {
+      navPush({
+        id: 'MilestoneOverview',
+        title: 'Milestone overview',
+        props: {
+          milestoneId: id,
+        },
+      })
+    } else if (id.startsWith('G')) {
+      navPush({
+        id: 'GoalOverview',
+        title: 'Goal overview',
+        props: {
+          goalId: id,
+        },
+      })
+    } else if (id.startsWith('P')) {
+      navPush({
+        id: 'PostView',
+        title: 'Post',
+        props: {
+          postId: id
+        }
+      })
+    }
   }
   onPopNav() {
     const { sliderChange } = this.props;
