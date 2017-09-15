@@ -118,25 +118,25 @@ const organizationsGetInfoFromInvitationToken = valLocals('organizationsGetInfoF
     organization_id: organizationId,
     fields,
   })
-  .then((results) => {
-    const {
-      me,
-      organization,
-      invited_by,
-    } = results;
+    .then((results) => {
+      const {
+        me,
+        organization,
+        invited_by,
+      } = results;
 
-    setLocals({
-      me,
-      organization,
-      invited_by,
-      download_links: getDownloadLinks(),
+      setLocals({
+        me,
+        organization,
+        invited_by,
+        download_links: getDownloadLinks(),
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
     });
-
-    return next();
-  })
-  .catch((err) => {
-    return next(err);
-  });
 });
 const organizationsGetSingle = valLocals('organizationsGetSingle', {
   organization_id: string,
@@ -443,19 +443,19 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
       stripe_customer_id: stripeCustomerId,
       plan,
     })
-    .then((result) => {
-      const changes = result.changes[0];
-      const organization = changes.new_val || changes.old_val;
+      .then((result) => {
+        const changes = result.changes[0];
+        const organization = changes.new_val || changes.old_val;
 
-      setLocals({
-        organization,
+        setLocals({
+          organization,
+        });
+
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
       });
-
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
-    });
   }).catch((err) => {
     return next(new SwipesError(err));
   });
@@ -497,19 +497,19 @@ const organizationsCreateSubscriptionCustomer = valLocals('organizationsCreateSu
         organization_id: organization.id,
         stripe_subscription_id: stripeSubscriptionId,
       })
-      .then((result) => {
-        const changes = result.changes[0];
-        const organization = changes.new_val || changes.old_val;
+        .then((result) => {
+          const changes = result.changes[0];
+          const organization = changes.new_val || changes.old_val;
 
-        setLocals({
-          organization,
+          setLocals({
+            organization,
+          });
+
+          return next();
+        })
+        .catch((err) => {
+          return next(err);
         });
-
-        return next();
-      })
-      .catch((err) => {
-        return next(err);
-      });
     }).catch((err) => {
       return next(new SwipesError(err));
     });
@@ -551,19 +551,19 @@ const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSu
         organization_id: organization.id,
         stripe_subscription_id: stripeSubscriptionId,
       })
-      .then((result) => {
-        const changes = result.changes[0];
-        const organization = changes.new_val || changes.old_val;
+        .then((result) => {
+          const changes = result.changes[0];
+          const organization = changes.new_val || changes.old_val;
 
-        setLocals({
-          organization,
+          setLocals({
+            organization,
+          });
+
+          return next();
+        })
+        .catch((err) => {
+          return next(err);
         });
-
-        return next();
-      })
-      .catch((err) => {
-        return next(err);
-      });
     }).catch((err) => {
       return next(new SwipesError(err));
     });
