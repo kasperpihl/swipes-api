@@ -39,24 +39,7 @@ $topbarSize: 38px;
     @include flexContainer('row', center, center);
   }
 
-  &__trial {
-    @include size(100%);
-    padding: 0 15px;
-    position: absolute;
-    left: 0; top: 0;
-    &--label {
-      @include font(15px, white, 300);
-      &:hover{
-        text-decoration: underline;
-      }
-    }
-    &--expired {
-      background: $red-80;
-      .topbar__trial--label {
-        @include font(12px, white, 500);
-      }
-    }
-  }
+
   &__unpaid {
     position: absolute;
     right: 5px; top: 5px;

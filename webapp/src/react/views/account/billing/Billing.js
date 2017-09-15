@@ -47,7 +47,7 @@ class Billing extends PureComponent {
     if (billingStatus === 'yearly') {
       price = 6;
       months = 12;
-      postfix = ` annually ($${price * months}/month)`;
+      postfix = ` annually ($${price * numberOfUsers}/month)`;
     }
     return `$${price * months * numberOfUsers}${postfix}`;
   }

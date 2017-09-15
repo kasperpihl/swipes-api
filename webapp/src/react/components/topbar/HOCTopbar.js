@@ -19,7 +19,7 @@ class HOCTopbar extends PureComponent {
     this.state = {
       secondsLeft: 0,
     };
-    bindAll(this, ['onDownload', 'onUnpaid']);
+    bindAll(this, ['onDownload']);
     this.onWinClickCached = setupCachedCallback(this.onWinClick, this);
   }
   componentWillReceiveProps(nextProps) {
@@ -29,17 +29,6 @@ class HOCTopbar extends PureComponent {
         this.updateSecondsLeft(nextProps.nextRetry);
       }
     }
-  }
-  onUnpaid(e) {
-    const { navSet, navPush } = this.props;
-    navSet('primary', {
-      id: 'AccountList',
-      title: 'Account',
-    })
-    navPush('primary', {
-      id: 'Billing',
-      title: 'Billing',
-    })
   }
   onWinClick(name) {
     window.ipcListener[name]();
@@ -133,27 +122,6 @@ class HOCTopbar extends PureComponent {
       <Button primary small text="Reload" onClick={this.onReload} className="topbar__retry-btn" />
     );
   }
-  renderTrialIndicator() {
-    const { me } = this.props;
-
-    const daysLeft = msgGen.orgs.getDaysLeft();
-    const isAdmin = msgGen.me.isAdmin(me && me.get('id'));
-    if(!isAdmin || typeof daysLeft !== 'number') {
-      return undefined;
-    }
-    let text = `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left in trial`;
-    if(daysLeft < 0) {
-      text = 'Unpaid subscription. Add credit card.';
-    }
-    return (
-      <div className={`topbar__trial ${daysLeft < 0 ? 'topbar__trial--expired': ''}`} >
-        <span className="topbar__trial--label" onClick={this.onUnpaid}>
-          {text}
-        </span>
-      </div>
-
-    );
-  }
   renderWindowsActions() {
     const { isMaximized, isFullscreen } = this.props;
     let toggleMaximizeIcon = 'WindowsMaximize';
@@ -194,7 +162,6 @@ class HOCTopbar extends PureComponent {
   render() {
     return (
       <div className="topbar">
-        {this.renderTrialIndicator()}
         {this.renderStatusIndicator()}
         {this.renderWindowsActions()}
       </div>
@@ -218,8 +185,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  navSet: a.navigation.set,
-  navPush: a.navigation.push,
 })(HOCTopbar);
 
 const { object, string, bool } = PropTypes;
