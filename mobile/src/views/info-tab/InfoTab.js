@@ -126,10 +126,10 @@ class InfoTab extends PureComponent {
       <View style={styles.aboutWrapper}>
         <View style={styles.aboutHeader}>
           <Icon name="QuestionMono" width="24" height="24" fill="white" />
-          <Text style={styles.aboutTitle}>{about.title}</Text>
+          <Text selectable={true} style={styles.aboutTitle}>{about.title}</Text>
         </View>
         <View style={styles.aboutTextWrapper}>
-          <Text style={styles.aboutText}>{about.text}</Text>
+          <Text selectable={true} style={styles.aboutText}>{about.text}</Text>
         </View>
       </View>
     );
@@ -144,14 +144,14 @@ class InfoTab extends PureComponent {
 
     const renderInfo = info.map((inf, i) => (
       <View style={styles.infoRow} key={inf.title}>
-        <Text style={styles.infoTitle}>{inf.title.toUpperCase()}</Text>
+        <Text selectable={true} style={styles.infoTitle}>{inf.title.toUpperCase()}</Text>
         <View style={styles.infoContent}>
           {inf.icon ? (
             <Icon name={inf.icon} width="18" height="18" fill={colors.deepBlue50} style={{ marginRight: 6 }} />
           ) : (
             undefined
           )}
-          <Text style={styles.infoText}>{inf.text}</Text>
+          <Text selectable={true} style={styles.infoText}>{inf.text}</Text>
         </View>
       </View>
     ));
@@ -187,7 +187,7 @@ class InfoTab extends PureComponent {
             <View style={[styles.actionButton, { backgroundColor: actionColor }]}>
               <Icon name={a.icon} width="24" height="24" fill="white" />
             </View>
-            <Text style={styles.actionLabel}>{a.title}</Text>
+            <Text selectable={true} style={styles.actionLabel}>{a.title}</Text>
           </View>
         </RippleButton>
       );

@@ -61,7 +61,7 @@ class HOCProfile extends PureComponent {
 
     return (
       <View style={styles.initialsView}>
-        <Text style={styles.initialsLetters}>{initials}</Text>
+        <Text selectable={true} style={styles.initialsLetters}>{initials}</Text>
       </View>
     );
   }
@@ -73,18 +73,18 @@ class HOCProfile extends PureComponent {
         {this.renderHeader()}
         <View style={styles.profile}>
           {this.renderProfile()}
-          <Text style={styles.name}>{msgGen.users.getFullName(me)}</Text>
+          <Text selectable={true} style={styles.name}>{msgGen.users.getFullName(me)}</Text>
           <View style={styles.seperator} />
-          <Text style={styles.orgName}>{me.getIn(['organizations', 0, 'name'])}</Text>
+          <Text selectable={true} style={styles.orgName}>{me.getIn(['organizations', 0, 'name'])}</Text>
 
           <RippleButton style={styles.logOutButton} onPress={this.onLogOut}>
             <View style={styles.logOut}>
-              <Text style={styles.logOutLabel}>Log out</Text>
+              <Text selectable={true} style={styles.logOutLabel}>Log out</Text>
             </View>
           </RippleButton>
           <RippleButton style={styles.logOutButton} onPress={this.onUpdate}>
             <View style={styles.logOut}>
-              <Text style={styles.logOutLabel}>Update</Text>
+              <Text selectable={true} style={styles.logOutLabel}>Update</Text>
             </View>
           </RippleButton>
         </View>

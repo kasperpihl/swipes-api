@@ -231,7 +231,7 @@ class PostView extends PureComponent {
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text style={styles.initialsLabel}>
+          <Text selectable={true} style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>
@@ -248,10 +248,10 @@ class PostView extends PureComponent {
     const { post } = this.props;
     const timeStamp = timeAgo(post.get("created_at"), true);
     const seperator = post.get("context")
-      ? <Text style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text>
+      ? <Text selectable={true} style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text>
       : undefined;
     const contextTitle = post.get("context")
-      ? <Text style={styles.subtitleLabel}>
+      ? <Text selectable={true} style={styles.subtitleLabel}>
         {post.getIn(["context", "title"])}
       </Text>
       : undefined;
@@ -263,10 +263,10 @@ class PostView extends PureComponent {
     return (
       <View style={styles.subtitle}>
         {icon}
-        <Text style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
+        <Text selectable={true} style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
           {contextTitle}
           {seperator}
-          <Text style={styles.subtitleLabel}>
+          <Text selectable={true} style={styles.subtitleLabel}>
             {timeStamp}
           </Text>
         </Text>
@@ -317,7 +317,7 @@ class PostView extends PureComponent {
             height="24"
             fill={colors.deepBlue80}
           />
-          <Text style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+          <Text selectable={true} style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
         </View>
       </RippleButton>
     ))
@@ -342,7 +342,7 @@ class PostView extends PureComponent {
     return (
       <RippleButton style={styles.navButton} onPress={this.onNavigateToContext}>
         <View style={styles.navButton}>
-          <Text style={styles.navButtonLabel}>Open "{newTitle}"</Text>
+          <Text selectable={true} style={styles.navButtonLabel}>Open "{newTitle}"</Text>
           <Icon name="ArrowRightLine" width="24" height="24" fill={colors.deepBlue50} />
         </View>
       </RippleButton>

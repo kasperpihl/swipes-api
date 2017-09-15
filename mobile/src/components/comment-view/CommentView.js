@@ -116,7 +116,7 @@ class CommentView extends PureComponent {
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text style={styles.initialsLabel}>
+          <Text selectable={true} style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>
@@ -135,7 +135,7 @@ class CommentView extends PureComponent {
 
     return (
       <View style={styles.nameWrapper}>
-        <Text style={styles.nameLabel}>
+        <Text selectable={true} style={styles.nameLabel}>
           {name}
         </Text>
       </View>
@@ -180,7 +180,7 @@ class CommentView extends PureComponent {
             height="24"
             fill={colors.deepBlue80}
           />
-          <Text style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+          <Text selectable={true} style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
         </View>
       </RippleButton>
     ))
@@ -204,7 +204,7 @@ class CommentView extends PureComponent {
         >
         </Reactions>
         <View>
-          <Text style={styles.timestamp}>
+          <Text selectable={true} style={styles.timestamp}>
             {"  "} • {"  "}{timestamp}
           </Text>
         </View>

@@ -108,7 +108,7 @@ class HOCAttachments extends PureComponent {
           <View style={styles.icon}>
             <Icon name={icon} width="24" height="24" fill={colors.deepBlue100} />
           </View>
-          <Text style={styles.label} ellipsizeMode="tail">{at.get('title')}</Text>
+          <Text selectable={true} style={styles.label} ellipsizeMode="tail">{at.get('title')}</Text>
         </View>
       </RippleButton>
     );

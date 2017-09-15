@@ -84,7 +84,7 @@ class ActionModalItem extends Component {
 
     return (
       <View style={[styles.titleWrapper, extraTitleStyles]}>
-        <Text style={styles.title}>{item.get('title')}</Text>
+        <Text selectable={true} style={styles.title}>{item.get('title')}</Text>
       </View>
     );
   }

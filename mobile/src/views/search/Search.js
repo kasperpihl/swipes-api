@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
     backgroundColor: colors.bgColor,
     borderTopWidth: 1,
-    borderTopColor: colors.deepBlue5,
+    borderTopColor: colors.deepBlue10,
   },
   arrowIconWrapper: {
     width: 64,
@@ -141,6 +141,7 @@ class Search extends PureComponent {
            blurOnSubmit
            onSubmitEditing={this.onSearch}
            placeholderTextColor={colors.deepBlue50}
+           autoFocus={true}
          />
          {this.renderClearInput()}
        </View>

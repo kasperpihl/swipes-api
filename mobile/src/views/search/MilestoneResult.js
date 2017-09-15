@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue50,
+    borderBottomColor: colors.deepBlue10,
     paddingHorizontal: 6,
   },
   iconWrapper: {
@@ -51,7 +51,7 @@ class MilestoneResult extends PureComponent {
           <Icon name="MiniMilestone" width="18" height="18" fill={colors.deepBlue100} />
         </View>
         <View style={styles.titleWrapper}>
-          <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>{result.item.title}</Text>
+          <Text selectable={true} style={styles.title} ellipsizeMode="tail" numberOfLines={1}>{result.item.title}</Text>
         </View>
       </View>
     );

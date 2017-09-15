@@ -92,7 +92,7 @@ class NotificationItem extends PureComponent {
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text style={styles.initialsLabel}>
+          <Text selectable={true} style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>
@@ -123,7 +123,7 @@ class NotificationItem extends PureComponent {
     return (
       <View style={styles.timestampWrapper}>
         <Icon name={icon} width="24" height="24" />
-        <Text style={styles.timestampLabel}>{timestamp}</Text>
+        <Text selectable={true} style={styles.timestampLabel}>{timestamp}</Text>
       </View>
     )
   }

@@ -111,7 +111,7 @@ class HOCGoalItem extends PureComponent {
 
     return (
       <View style={styles.content}>
-        <Text style={styles.title}>{goal.get('title')}</Text>
+        <Text selectable={true} style={styles.title}>{goal.get('title')}</Text>
       </View>
     );
   }

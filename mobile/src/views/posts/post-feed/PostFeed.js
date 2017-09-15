@@ -81,7 +81,7 @@ class PostFeed extends PureComponent {
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
         <Icon name="ESDiscussion" width="290" height="300"  />
-        <Text style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Start a discussion or share an idea</Text>
+        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Start a discussion or share an idea</Text>
       </View>
     )
   }

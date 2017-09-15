@@ -103,7 +103,7 @@ class HOCHeader extends PureComponent {
     if (typeof subtitle === 'string') {
       return (
         <View style={{ alignSelf: 'stretch', height: 21 }} >
-          <Text style={styles.subtitle}>{subtitle}</Text>
+          <Text selectable={true} style={styles.subtitle}>{subtitle}</Text>
         </View>
       )
     } else {
@@ -118,7 +118,7 @@ class HOCHeader extends PureComponent {
     }
 
     const renderTabs = tabs.map((t, i) => (
-      <Text name={i} key={i} style={styles.tabTitle}>{t}</Text>
+      <Text selectable={true} name={i} key={i} style={styles.tabTitle}>{t}</Text>
     ));
 
     return (
@@ -157,7 +157,7 @@ class HOCHeader extends PureComponent {
   renderTitle() {
 
     return (
-      <Text style={styles.title}>{this.props.title}</Text>
+      <Text selectable={true} style={styles.title}>{this.props.title}</Text>
     )
   }
   render() {

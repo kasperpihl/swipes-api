@@ -102,7 +102,7 @@ class ActionModal extends PureComponent {
 
       return (
         <View style={[styles.titleWrapper, titleStyles]}>
-          <Text style={styles.title}>
+          <Text selectable={true} style={styles.title}>
             {modal.get('title')}
           </Text>
           {this.renderCloseButton()}
@@ -133,7 +133,7 @@ class ActionModal extends PureComponent {
           onPress={this.onMultipleClick}
         >
           <View style={styles.cta}>
-            <Text style={styles.ctaTitle}>{modal.get('multiple')}</Text>
+            <Text selectable={true} style={styles.ctaTitle}>{modal.get('multiple')}</Text>
           </View>
         </RippleButton>
       );

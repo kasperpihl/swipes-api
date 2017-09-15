@@ -212,7 +212,7 @@ class CreateNewItemModal extends PureComponent {
       <RippleButton style={styles.assigneeWrapper} onPress={this.handleAssigning}>
         <View style={styles.assigneeWrapper}>
           <View style={styles.assigneeTextWrapper}>
-            <Text style={styles.assigneeText}>Assignees:</Text>
+            <Text selectable={true} style={styles.assigneeText}>Assignees:</Text>
           </View>
           <HOCAssigning assignees={assignees} />
         </View>
@@ -227,12 +227,12 @@ class CreateNewItemModal extends PureComponent {
       <View style={styles.actionWrapper}>
         <RippleButton rippleColor={'#FFFFFF'} rippleOpacity={.5} style={styles.actionButton} onPress={this.onCloseModal}>
           <View style={[styles.actionButton, {backgroundColor: colors.deepBlue40}]}>
-            <Text style={[styles.actionButtonLabel, { color: colors.deepBlue100 }]}>Cancel</Text>
+            <Text selectable={true} style={[styles.actionButtonLabel, { color: colors.deepBlue100 }]}>Cancel</Text>
           </View>
         </RippleButton>
         <RippleButton  rippleColor={'#FFFFFF'} rippleOpacity={.5} style={styles.actionButton} onPress={this.onActionClick}>
           <View style={[styles.actionButton, {backgroundColor: colors.blue100}]}>
-            <Text style={[styles.actionButtonLabel, { color: 'white' }]}>{actionLabel}</Text>
+            <Text selectable={true} style={[styles.actionButtonLabel, { color: 'white' }]}>{actionLabel}</Text>
           </View>
         </RippleButton>
       </View>

@@ -200,7 +200,7 @@ class PostFeed extends PureComponent {
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text style={styles.initialsLabel}>
+          <Text selectable={true} style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>
@@ -216,18 +216,18 @@ class PostFeed extends PureComponent {
   renderHeaderSubtitle() {
     const { post } = this.props;
     const timeStamp = timeAgo(post.get('created_at'), true);
-    const seperator = post.get('context') ? <Text style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
-    const contextTitle = post.get('context') ? <Text style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text> : undefined;
+    const seperator = post.get('context') ? <Text selectable={true} style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
+    const contextTitle = post.get('context') ? <Text selectable={true} style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text> : undefined;
     const icon = post.get('context') ? <Icon name={miniIconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
     const padding = post.get('context') ? 5 : 0;
 
     return (
       <View style={styles.subtitle}>
         {icon}
-        <Text style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
+        <Text selectable={true} style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
           {contextTitle}
           {seperator}
-          <Text style={styles.subtitleLabel}>{timeStamp}</Text>
+          <Text selectable={true} style={styles.subtitleLabel}>{timeStamp}</Text>
         </Text>
       </View>
     )
@@ -279,7 +279,7 @@ class PostFeed extends PureComponent {
     return (
       <RippleButton style={styles.commentsButton} onPress={this.onOpenPostCached(post.get('id'), true)}>
         <View style={styles.commentsButton}>
-          <Text style={styles.commentsButtonLabel}>{commentsString}</Text>
+          <Text selectable={true} style={styles.commentsButtonLabel}>{commentsString}</Text>
         </View>
       </RippleButton>
     )
@@ -319,7 +319,7 @@ class PostFeed extends PureComponent {
             height="24"
             fill={colors.deepBlue80}
           />
-          <Text style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+          <Text selectable={true} style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
         </View>
       </RippleButton>
     ))

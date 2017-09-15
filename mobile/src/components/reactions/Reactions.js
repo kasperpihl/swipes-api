@@ -96,7 +96,7 @@ class HOCReactions extends PureComponent {
     return (
 
       <View style={styles.likers}>
-        <Text style={[styles.likeButtonLabel, { color: labelColor }]}>
+        <Text selectable={true} style={[styles.likeButtonLabel, { color: labelColor }]}>
           {likeString}
         </Text>
       </View>

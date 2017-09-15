@@ -47,7 +47,7 @@ class MilestoneItem extends Component {
     const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
 
     return (
-      <Text style={styles.subtitle}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
+      <Text selectable={true} style={styles.subtitle}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
     );
   }
   renderHeader() {
@@ -55,7 +55,7 @@ class MilestoneItem extends Component {
 
     return (
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>{milestone.get('title')}</Text>
+        <Text selectable={true} style={styles.title}>{milestone.get('title')}</Text>
       </View>
     )
   }
@@ -66,7 +66,7 @@ class MilestoneItem extends Component {
 
     return (
       <View style={styles.counterWrapper}>
-        <Text style={styles.counter}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
+        <Text selectable={true} style={styles.counter}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
       </View>
     )
   }

@@ -11,14 +11,14 @@ class RippleButton extends PureComponent {
     const { text, textStyle } = this.props;
 
     return (
-      <Text style={{ includeFontPadding: false, alignSelf: 'stretch', flexWrap: 'wrap' }}>
+      <Text selectable={true} style={{ includeFontPadding: false, alignSelf: 'stretch', flexWrap: 'wrap' }}>
         {text.map((t, i) => {
           if (typeof t === 'string') {
-            return <Text key={t.id + '' + (i * 0.5)} style={textStyle}>{t}</Text>;
+            return <Text selectable={true} key={t.id + '' + (i * 0.5)} style={textStyle}>{t}</Text>;
           }
 
           return (
-            <Text key={t.id + '' + i} style={t.boldStyle}>
+            <Text selectable={true} key={t.id + '' + i} style={t.boldStyle}>
               {t.string}
             </Text>
           );

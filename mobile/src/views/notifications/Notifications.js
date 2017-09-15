@@ -33,7 +33,7 @@ class Notifications extends PureComponent {
       <HOCHeader title="Notifications">
         <RippleButton onPress={this.onMarkAll}>
           <View style={{ height: 44, paddingHorizontal: 6, alignItems: 'center', flexDirection: 'row' }}>
-            <Text style={{ fontSize: 13, color: colors.deepBlue50 }}>Mark all as read</Text>
+            <Text selectable={true} style={{ fontSize: 13, color: colors.deepBlue50 }}>Mark all as read</Text>
           </View>
         </RippleButton>
       </HOCHeader>
@@ -56,7 +56,7 @@ class Notifications extends PureComponent {
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
         <Icon name="ESNotification" width="290" height="300"  />
-        <Text style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>You will be notified here when{"\n"} there’s something new.</Text>
+        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>You will be notified here when{"\n"} there’s something new.</Text>
       </View>
     )
   }

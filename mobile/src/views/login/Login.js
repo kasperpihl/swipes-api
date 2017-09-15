@@ -80,7 +80,7 @@ class Login extends PureComponent {
     return (
       <RippleButton onPress={this.signIn}>
         <View style={styles.button}>
-          <Text style={styles.buttonLabel}>Sign in</Text>
+          <Text selectable={true} style={styles.buttonLabel}>Sign in</Text>
         </View>
       </RippleButton>
     )
@@ -113,7 +113,7 @@ class Login extends PureComponent {
 
     return (
       <View style={styles.errorWrapper}>
-        <Text style={styles.errorLabel}>{errorMessage}</Text>
+        <Text selectable={true} style={styles.errorLabel}>{errorMessage}</Text>
       </View>
     )
   }
@@ -126,7 +126,7 @@ class Login extends PureComponent {
 
     return (
       <View style={styles.titleWrapper}>
-        <Text style={styles.titleLabel}>Sign in to your Workspace</Text>
+        <Text selectable={true} style={styles.titleLabel}>Sign in to your Workspace</Text>
       </View>
     )
   }

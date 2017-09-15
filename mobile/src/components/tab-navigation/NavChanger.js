@@ -58,7 +58,7 @@ class NavChanger extends PureComponent {
     return (
       <RippleButton style={styles.actionButton} onPress={this.onNavChangeActionCached(icon)}>
         <View style={styles.actionWrapper}>
-          <Text style={styles.actionLabel}>{label}</Text>
+          <Text selectable={true} style={styles.actionLabel}>{label}</Text>
           <View style={styles.actionIcon}>
             <Icon name={icon} width="24" height="24" fill={colors.deepBlue40} />
           </View>

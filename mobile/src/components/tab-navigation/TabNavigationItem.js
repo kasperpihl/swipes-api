@@ -71,7 +71,7 @@ class TabNavigationItem extends PureComponent {
 
     return (
       <View style={styles.counter}>
-        <Text style={styles.counterLabel}>{counter}</Text>
+        <Text selectable={true} style={styles.counterLabel}>{counter}</Text>
       </View>
     );
   }

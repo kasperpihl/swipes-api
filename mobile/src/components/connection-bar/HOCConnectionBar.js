@@ -129,7 +129,7 @@ class HOCConnectionBar extends PureComponent {
 
     return (
       <View style={[styles.container, {backgroundColor: status.color}]}>
-        <Text style={styles.statusMessage}>{status.message}</Text>
+        <Text selectable={true} style={styles.statusMessage}>{status.message}</Text>
       </View>
     );
   }

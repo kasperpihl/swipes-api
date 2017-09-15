@@ -11,29 +11,35 @@ import { colors, viewSize } from 'globalStyles';
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
-    paddingTop: 12,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.deepBlue10,
+  },
+  headerWrapper: {
+    flex: 1,
+    flexDirection: 'row',
   },
   header: {
     flex: 1,
     flexDirection: 'row',
+    paddingLeft: 12,
   },
   headerSide: {
     flex: 1,
     paddingLeft: 12,
   },
-  profilePicWrapper: {
-    width: 48,
-    height: 48,
-    borderRadius: 3,
+  profileImage: {
+    width: 51,
+    height: 51,
   },
   profilePic: {
-    width: 48,
-    height: 48,
+    width: 51,
+    height: 51,
     borderRadius: 3,
   },
   initials: {
-    width: 48,
-    height: 48,
+    width: 51,
+    height: 51,
     borderRadius: 3,
     backgroundColor: colors.deepBlue100,
     alignItems: 'center',
@@ -41,19 +47,25 @@ const styles = StyleSheet.create({
   },
   initialsLabel: {
     fontSize: 28,
-    color: colors.bgColor,
+    color: 'white',
   },
   textStyle: {
-    fontSize: 15,
-    lineHeight: 18,
+    fontSize: 12,
+    lineHeight: 15,
     color: colors.deepBlue40,
     includeFontPadding: false,
   },
   boldStyle: {
-    fontSize: 15,
-    lineHeight: 18,
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '500',
     color: colors.deepBlue100,
     includeFontPadding: false,
+  },
+  titles: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingRight: 9,
   },
   subtitle: {
     flexDirection: 'row',
@@ -65,68 +77,44 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     color: colors.deepBlue40,
   },
+  typeWrapper: {
+    paddingHorizontal: 12,
+    paddingVertical: 3,
+    borderRadius: 3,
+    height: 24,
+  },
+  Yellow: {
+    backgroundColor: '#ffb337',
+  },
+  Purple: {
+    backgroundColor: '#007aff',
+  },
+  Blue: {
+    backgroundColor: '#7900ff',
+  },
+  Green: {
+    backgroundColor: '#1cc05d'
+  },
+  typeLabel: {
+    fontSize: 11,
+    lineHeight: 18,
+    fontWeight: 'bold',
+    includeFontPadding: false,
+    color: 'white',
+  },
   messageWrapper: {
-    paddingHorizontal: 15,
-    paddingTop: 21,
-    paddingBottom: 18,
+    paddingTop: 12,
   },
   message: {
-    fontSize: 18,
-    color: colors.deepBlue100,
-    lineHeight: 27,
-    fontWeight: '300',
+    fontSize: 15,
+    color: colors.deepBlue90,
+    lineHeight: 21,
   },
   url: {
-    fontSize: 18,
+    fontSize: 15,
     color: colors.blue100,
-    lineHeight: 27,
-    fontWeight: '300',
+    lineHeight: 21,
   },
-  actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 54,
-    alignSelf: 'stretch',
-  },
-  actionsSeperator: {
-    width: viewSize.width - 30,
-    height: 1,
-    backgroundColor: colors.deepBlue10,
-    position: 'absolute',
-    left: 15, top: 0,
-  },
-  commentsButton: {
-    paddingHorizontal: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  reactionWrapper: {
-    paddingHorizontal: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'stretch',
-  },
-  attachments: {
-    paddingHorizontal: 15,
-  },
-  attachment: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 6,
-    height: 48,
-    paddingHorizontal: 12,
-    borderRadius: 1,
-    borderWidth: 1,
-    borderColor: colors.deepBlue10,
-  },
-  attachmentLabel: {
-    fontSize: 12,
-    color: colors.deepBlue80,
-    fontWeight: '500',
-    paddingLeft: 12,
-  }
 });
 
 class PostResult extends PureComponent {
@@ -134,7 +122,6 @@ class PostResult extends PureComponent {
     super(props);
     this.state = {};
     setupDelegate(this, 'onOpenUrl');
-    // this.callDelegate.bindAll('onLala');
   }
   componentDidMount() {
   }
@@ -161,12 +148,12 @@ class PostResult extends PureComponent {
     const initials = msgGen.users.getInitials(userId);
 
     if (image) {
-      return <Image source={{ uri: image }}  />
+      return <Image style={styles.profilePic}  source={{ uri: image }}  />
     }
 
     return (
-      <View>
-        <Text>
+      <View style={styles.initials} >
+        <Text style={styles.initialsLabel} >
           {initials}
         </Text>
       </View>
@@ -217,18 +204,18 @@ class PostResult extends PureComponent {
     const { result } = this.props;
     const { item: post } = result;
     const timeStamp = timeAgo(post.created_at, true);
-    const seperator = post.context ? <Text style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
-    const contextTitle = post.context ? <Text style={styles.subtitleLabel}>{post.context.title}</Text> : undefined;
-    const icon = post.context ? <Icon name={miniIconForId(post.context.id)} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
+    const seperator = post.context ? <Text selectable={true} style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
+    const contextTitle = post.context ? <Text selectable={true} style={styles.subtitleLabel}>{post.context.title}</Text> : undefined;
+    const icon = post.context ? <Icon name={miniIconForId(post.context.id)} width="18" height="18" fill={colors.deepBlue40} /> : undefined;
     const padding = post.context ? 5 : 0;
 
     return (
       <View style={styles.subtitle}>
         {icon}
-        <Text style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
+        <Text selectable={true} style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
           {contextTitle}
           {seperator}
-          <Text style={styles.subtitleLabel}>{timeStamp}</Text>
+          <Text selectable={true} style={styles.subtitleLabel}>{timeStamp}</Text>
         </Text>
       </View>
     )
@@ -239,7 +226,7 @@ class PostResult extends PureComponent {
 
     return (
       <View style={[styles.typeWrapper, typeStyleColor]}>
-        <Text>{type.label}</Text>
+        <Text style={styles.typeLabel}>{type.label.toUpperCase()}</Text>
       </View>
     )
   }
@@ -277,14 +264,14 @@ class PostResult extends PureComponent {
   }
   render() {
     return (
-      <View style={styles.container} >
-        <View style={styles.profileImage} >
-          {this.renderProfileImage()}
-        </View>
-        <View style={styles.rightContent} >
+      <View style={styles.container}>
+        <View style={styles.headerWrapper} >
+          <View style={styles.profileImage}>
+            {this.renderProfileImage()}
+          </View>
           {this.renderHeader()}
-          {this.renderMessage()}
         </View>
+        {this.renderMessage()}
       </View>
     );
   }

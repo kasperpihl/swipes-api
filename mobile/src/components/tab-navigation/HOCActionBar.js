@@ -99,7 +99,7 @@ class HOCActionBar extends PureComponent {
       >
         <View style={styles.textButton}>
           {button.seperator && button.seperator === 'left' ? <View style={styles.verticalSeperatorLeft} /> : undefined}
-          <Text style={styles.textButtonLabel}>
+          <Text selectable={true} style={styles.textButtonLabel}>
             {text}
           </Text>
           {button.seperator && button.seperator === 'right' ? <View style={styles.verticalSeperatorRight} /> : undefined}

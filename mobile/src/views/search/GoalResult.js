@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue50,
+    borderBottomColor: colors.deepBlue10,
     paddingHorizontal: 6,
   },
   completedIndicator: {
@@ -90,7 +90,7 @@ class GoalResult extends PureComponent {
       <View style={styles.container} >
         {this.renderIndicator()}
         <View style={styles.titleWrapper} >
-          <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1} >{result.item.title}</Text>
+          <Text selectable={true} style={styles.title} ellipsizeMode="tail" numberOfLines={1} >{result.item.title}</Text>
         </View>
         {this.renderAssignees()}
       </View>

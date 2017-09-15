@@ -231,8 +231,8 @@ class HOCMilestoneOverview extends PureComponent {
 
     return (
       <View style={styles.emptyState}>
-        <Text style={styles.emptyTitle}>{title.toUpperCase()}</Text>
-        <Text style={styles.emptyText}>{text}</Text>
+        <Text selectable={true} style={styles.emptyTitle}>{title.toUpperCase()}</Text>
+        <Text selectable={true} style={styles.emptyText}>{text}</Text>
       </View>
     )    
   }

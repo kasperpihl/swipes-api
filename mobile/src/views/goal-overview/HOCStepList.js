@@ -179,10 +179,10 @@ class HOCStepList extends PureComponent {
       <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onPressCached(step)}>
         <View style={styles.step}>
           <View style={[styles.indicator, indicatorStyles]}>
-            <Text style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
+            <Text selectable={true} style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
           </View>
           <View style={styles.title}>
-            <Text style={[styles.titleLabel, titleStyles]}>{title}</Text>
+            <Text selectable={true} style={[styles.titleLabel, titleStyles]}>{title}</Text>
           </View>
           <View style={[styles.assignees, { opacity }]}>
             <HOCAssigning assignees={step.get('assignees')} maxImages={1} />
@@ -198,9 +198,9 @@ class HOCStepList extends PureComponent {
         <RippleButton onPress={this.handleModalState}>
           <View style={{width: viewSize.width - 30, height: 60, flexDirection: 'row', marginHorizontal: 15, alignItems: 'center'}}>
             <View style={styles.indicator}>
-              <Text style={styles.indicatorLabel}>{this.props.steps.size + 1}</Text>
+              <Text selectable={true} style={styles.indicatorLabel}>{this.props.steps.size + 1}</Text>
             </View>
-            <Text style={{ paddingLeft: 22, fontSize: 15, lineHeight: 24, color: colors.deepBlue50 }}>Add a step</Text>
+            <Text selectable={true} style={{ paddingLeft: 22, fontSize: 15, lineHeight: 24, color: colors.deepBlue50 }}>Add a step</Text>
           </View>
         </RippleButton>
         <EmptyListFooter />
