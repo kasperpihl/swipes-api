@@ -84,7 +84,7 @@ class NavChanger extends PureComponent {
     
     return (
       <View style={styles.actionsWrapper}>
-        {this.renderAction('Update', 'New Update', 3)}
+        {this.renderAction('Update', 'Updates', 3)}
         {this.renderAction('Profile', 'Profile', 2)}
         {this.renderAction('Find', 'Search', 1)}
       </View>
