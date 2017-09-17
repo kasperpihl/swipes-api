@@ -44,7 +44,8 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/organizations.create',
+authed.all(
+  '/organizations.create',
   valBody({
     organization_name: string.require(),
   }),
@@ -53,7 +54,8 @@ authed.all('/organizations.create',
   valResponseAndSend(),
 );
 
-authed.all('/organizations.promoteToAdmin',
+authed.all(
+  '/organizations.promoteToAdmin',
   valBody({
     user_to_promote_id: string.require(),
     organization_id: string.require(),
@@ -71,7 +73,8 @@ authed.all('/organizations.promoteToAdmin',
   }),
 );
 
-authed.all('/organizations.demoteAnAdmin',
+authed.all(
+  '/organizations.demoteAnAdmin',
   valBody({
     user_to_demote_id: string.require(),
     organization_id: string.require(),
@@ -89,7 +92,8 @@ authed.all('/organizations.demoteAnAdmin',
   }),
 );
 
-authed.all('/organizations.transferOwnership',
+authed.all(
+  '/organizations.transferOwnership',
   valBody({
     user_to_transfer_id: string.require(),
     organization_id: string.require(),
@@ -114,7 +118,8 @@ authed.all('/organizations.transferOwnership',
   }),
 );
 
-authed.all('/organizations.disableUser',
+authed.all(
+  '/organizations.disableUser',
   valBody({
     user_to_disable_id: string.require(),
     organization_id: string.require(),
@@ -139,7 +144,8 @@ authed.all('/organizations.disableUser',
     organization: object.require(),
   }),
 );
-authed.all('/organizations.enableUser',
+authed.all(
+  '/organizations.enableUser',
   valBody({
     user_to_enable_id: string.require(),
     organization_id: string.require(),
@@ -164,7 +170,8 @@ authed.all('/organizations.enableUser',
   }),
 );
 
-authed.all('/organizations.createStripeCustomer',
+authed.all(
+  '/organizations.createStripeCustomer',
   valBody({
     organization_id: string.require(),
     stripe_token: string.require(),
@@ -192,7 +199,8 @@ authed.all('/organizations.createStripeCustomer',
   }),
 );
 
-notAuthed.all('/organizations.getInfoFromInvitationToken',
+notAuthed.all(
+  '/organizations.getInfoFromInvitationToken',
   valBody({
     invitation_token: string.require(),
   }),
