@@ -24,7 +24,11 @@
   onesignalKey = @"420ca44f-378a-4ce5-adb7-18cef4b689c0";
 #endif
 
-  self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions appId:onesignalKey];
+  self.oneSignal = [[RCTOneSignal alloc]
+                    initWithLaunchOptions:launchOptions
+                    appId:onesignalKey
+                    settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNotification) }
+                    ];
   
   NSURL *jsCodeLocation;
 #ifdef DEBUG
