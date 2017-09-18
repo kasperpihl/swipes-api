@@ -503,7 +503,7 @@ export function debounce(func, wait, immediate) {
   return debounced;
 }
 
-export function throttle(func, wait) {
+export function throttle(func, wait, lock) {
   let ctx;
   let args;
   let rtn;
@@ -523,8 +523,9 @@ export function throttle(func, wait) {
     args = arguments;
     const delta = new Date() - last;
     if (!timeoutID) {
+      const callback = lock ? clear : call;
       if (delta >= wait) call();
-      else timeoutID = setTimeout(call, wait - delta);
+      else timeoutID = setTimeout(callback, wait - delta);
     }
 
     return rtn;
