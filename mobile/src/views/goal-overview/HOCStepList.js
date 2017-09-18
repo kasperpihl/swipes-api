@@ -191,6 +191,10 @@ class HOCStepList extends PureComponent {
       </RippleButton>
     );
   }
+  renderEmpty() {
+
+    return <View />
+  }
   renderListFooter() {
 
     return (
@@ -215,6 +219,7 @@ class HOCStepList extends PureComponent {
         <ImmutableListView
           immutableData={steps.map(s => s.set('title', isLoading(s.get('id')) ? getLoading(s.get('id')).loadingLabel : s.get('title')))}
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
+          renderEmptyInList={this.renderEmpty}
           renderFooter={this.renderListFooter}
         />
         <CreateNewItemModal

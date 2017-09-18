@@ -94,7 +94,7 @@ class NavChanger extends PureComponent {
   renderActions() {
     
     return (
-      <RippleButton onPress={this.onNavClose}>
+      <RippleButton style={styles.actionsWrapper} onPress={this.onNavClose}>
         <View style={styles.actionsWrapper}>
           {this.renderAction('Update', 'Updates')}
           {this.renderAction('Profile', 'Profile')}
