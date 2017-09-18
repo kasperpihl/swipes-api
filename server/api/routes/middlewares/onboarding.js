@@ -61,31 +61,31 @@ import {
 const SOFI_ID = 'USOFI';
 const MAX_LENGHT = 50;
 const onboardingMilestoneData = valLocals('onboardingMilestoneData', {
-  organizationId: string.require(),
+  organization_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    organizationId,
+    organization_id,
   } = res.locals;
 
   setLocals({
+    organization_id,
     title: 'Example: Website update',
-    organization_id: organizationId,
   });
 
   return next();
 });
 const onboardingGoalOneData = valLocals('onboardingGoalOneData', {
   original_user_id: string.require(),
-  organizationId: string.require(),
+  organization_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
-    organizationId,
+    organization_id,
   } = res.locals;
 
   setLocals({
+    organization_id,
     way: generateWayOne(original_user_id),
-    organization_id: organizationId,
     goal: {
       title: 'Marketing campaign',
       assignees: [SOFI_ID, original_user_id],
@@ -96,16 +96,16 @@ const onboardingGoalOneData = valLocals('onboardingGoalOneData', {
 });
 const onboardingGoalTwoData = valLocals('onboardingGoalTwoData', {
   original_user_id: string.require(),
-  organizationId: string.require(),
+  organization_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
-    organizationId,
+    organization_id,
   } = res.locals;
 
   setLocals({
+    organization_id,
     way: generateWayTwo(original_user_id),
-    organization_id: organizationId,
     goal: {
       title: 'Development',
       assignees: [SOFI_ID, original_user_id],
@@ -116,16 +116,16 @@ const onboardingGoalTwoData = valLocals('onboardingGoalTwoData', {
 });
 const onboardingGoalThreeData = valLocals('onboardingGoalThreeData', {
   original_user_id: string.require(),
-  organizationId: string.require(),
+  organization_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
-    organizationId,
+    organization_id,
   } = res.locals;
 
   setLocals({
+    organization_id,
     way: generateWayThree(original_user_id),
-    organization_id: organizationId,
     goal: {
       title: 'Design',
       assignees: [SOFI_ID, original_user_id],
@@ -136,16 +136,16 @@ const onboardingGoalThreeData = valLocals('onboardingGoalThreeData', {
 });
 const onboardingGoalFourData = valLocals('onboardingGoalFourData', {
   original_user_id: string.require(),
-  organizationId: string.require(),
+  organization_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     original_user_id,
-    organizationId,
+    organization_id,
   } = res.locals;
 
   setLocals({
+    organization_id,
     way: generateWayFour(original_user_id),
-    organization_id: organizationId,
     goal: {
       title: 'Website copy',
       assignees: [SOFI_ID, original_user_id],
@@ -723,7 +723,7 @@ const onboardingGetMiddlewares = [
     goal_id: locals.goal.id,
   })),
   milestonesAddGoal,
-    // Loading a way
+  // Loading a way
   waysModifyStepsAndAttachmentsInWay,
   waysGetNoteContentFromWayAttachmets,
   mapLocals(locals => ({
@@ -762,7 +762,7 @@ const onboardingGetMiddlewares = [
   }),
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
-    // Create post
+  // Create post
   onboardingAttachmentPost_1,
   linksCreate,
   linksAddPermission,
@@ -886,7 +886,7 @@ const onboardingGetMiddlewares = [
     const notes = locals.notes;
     const notesAttachment = locals.notesAttachment;
     const links = [];
-      // We need this for the past
+    // We need this for the past
     let context = {};
 
     notes.forEach((note, i) => {
@@ -924,13 +924,13 @@ const onboardingGetMiddlewares = [
   }),
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
-    // Create Post
+  // Create Post
   onboardingPost_3,
   postsCreate,
   postsInsertSingle,
-    // Create notification
+  // Create notification
   onboardingNotificationPost,
-    // Create Post
+  // Create Post
   onboardingAttachmentPost_4,
   linksCreate,
   linksAddPermission,
@@ -1057,7 +1057,7 @@ const onboardingGetMiddlewares = [
   onboardingCommentsPost_6_5,
   postsCreateComment,
   postsAddComment,
-    // Create post
+  // Create post
   onboardingPost_7,
   postsCreate,
   postsInsertSingle,

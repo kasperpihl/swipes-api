@@ -4,7 +4,6 @@ import {
   object,
   any,
 } from 'valjs';
-import MiddlewareComposer from './middleware_composer';
 import {
   organizationConcatUsers,
 } from './middlewares/utils';
@@ -25,10 +24,10 @@ import {
   usersCreateTempUnactivatedUser,
   usersSendInvitationQueueMessage,
   usersActivateUserSignUp,
-  usersParseInvitationToken,
   userActivatedUserSignUpQueueMessage,
   usersInvitedUserQueueMessage,
   userSignupQueueMessage,
+  usersAddPendingOrganization,
 } from './middlewares/users';
 import {
   meUpdateSettings,
@@ -39,6 +38,7 @@ import {
   organizationsAddToUser,
   organizationsGetSingle,
   organizationsUpdateSubscriptionCustomer,
+  organizationsAddPendingUsers,
 } from './middlewares/organizations';
 import {
   xendoRemoveServiceFromUserQueueMessage,
@@ -46,9 +46,6 @@ import {
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
-import {
-  onboardingGetMiddlewares,
-} from './middlewares/onboarding';
 import {
   valBody,
   sendResponse,
@@ -97,51 +94,28 @@ notAuthed.all(
     password: string.min(1).require(),
     first_name: string.max(32).require(),
     last_name: string.max(32).require(),
-    organization_name: string,
-    invitation_token: string,
+    // invitation_token: string,
   }),
   mapLocals(locals => ({
     email: locals.email.toLowerCase(),
   })),
   userAvailability,
-  usersParseInvitationToken,
+  // usersParseInvitationToken,
   usersActivateUserSignUp,
-  mapLocals(locals => ({
-    organization_id: locals.organizationId,
-  })),
-  organizationsGetSingle,
-  organizationsUpdateSubscriptionCustomer,
-  userActivatedUserSignUpQueueMessage,
-  notificationsPushToQueue,
+  // mapLocals(locals => ({ THIS IS FOR JOINING
+  //   organization_id: locals.organizationId,
+  // })),
+  // organizationsGetSingle, THIS IS FOR JOINING
+  // organizationsUpdateSubscriptionCustomer, THIS IS FOR JOINING
+  // userActivatedUserSignUpQueueMessage, THIS IS FOR JOINING
+  // notificationsPushToQueue, THIS IS FOR JOINING
   userGetInfoForToken,
   userSignUp,
   mapLocals(locals => ({
     user_id: locals.userId,
   })),
-  organizationsCreate,
-  organizationsAddToUser,
-  (originalReq, originalRes, originalNext) => {
-    const {
-      organization_name,
-    } = originalRes.locals;
-
-    if (!organization_name) {
-      return originalNext();
-    }
-
-    const composer = new MiddlewareComposer(
-      originalRes.locals,
-      ...onboardingGetMiddlewares,
-      (req, res, next) => {
-        return originalNext();
-      },
-      (err, req, res, next) => {
-        return originalNext(err);
-      },
-    );
-
-    return composer.run();
-  },
+  // organizationsCreate,
+  // organizationsAddToUser,
   userSignupQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
@@ -186,6 +160,8 @@ authed.all(
   })),
   usersGetByEmailWithFields,
   usersCreateTempUnactivatedUser,
+  organizationsAddPendingUsers,
+  usersAddPendingOrganization,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),

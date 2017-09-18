@@ -17,18 +17,18 @@ const notifyWrapper = (middlewares) => {
   return [
     users.usersGetSingleWithOrganizations,
   ]
-  .concat(middlewares)
-  .concat([
-    notify.notifyInsertMultipleNotifications,
-    notify.notifyCommonRethinkdb,
-  ]);
+    .concat(middlewares)
+    .concat([
+      notify.notifyInsertMultipleNotifications,
+      notify.notifyCommonRethinkdb,
+    ]);
 };
 const xendoWrapper = (middlewares) => {
   return [
     xendo.xendoSwipesCredentials,
     xendo.xendoRefreshSwipesToken,
   ]
-  .concat(middlewares);
+    .concat(middlewares);
 };
 const goal_created = notifyWrapper([
   goals.goalsGetSingle,
@@ -96,7 +96,7 @@ const user_invited = notifyWrapper([
 ]);
 
 const user_signup = [
-  organizations.organizationsGetSingle,
+  // organizations.organizationsGetSingle,
   emails.usersWelcomeEmail,
   // users.usersSubscribeToMailChimp,
 ];
@@ -275,7 +275,12 @@ const profile_updated = notifyWrapper([
 ]);
 
 const organization_updated = notifyWrapper([
-  organizations.organizationsUpdatedNotificationData,
+  organizations.organizationsCreatedUpdatedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const organization_created = notifyWrapper([
+  organizations.organizationsCreatedUpdatedNotificationData,
   notify.notifyAllInCompany,
 ]);
 
@@ -488,6 +493,7 @@ export {
   user_signup,
   profile_updated,
   organization_updated,
+  organization_created,
   post_created,
   post_comment_added,
   post_reaction_added,

@@ -16,6 +16,7 @@ import {
   dbOrganizationsEnableUser,
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
   dbOrganizationsUpdateStripeSubscriptionId,
+  dbOrganizationsAddPendingUser,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -34,16 +35,12 @@ const stripe = stripePackage(stripeConfig.secretKey);
 
 const organizationsCreate = valLocals('organizationsCreate', {
   user_id: string.require(),
-  organization_name: string,
+  organization_name: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     organization_name,
   } = res.locals;
-
-  if (!organization_name) {
-    return next();
-  }
 
   const organizationId = generateSlackLikeId('O');
   const organization = {
@@ -62,9 +59,12 @@ const organizationsCreate = valLocals('organizationsCreate', {
   };
 
   return dbOrganizationsCreate({ organization })
-    .then(() => {
+    .then((result) => {
+      const organization = result.changes[0].new_val;
+
       setLocals({
-        organizationId,
+        organization,
+        organization_id: organization.id,
       });
 
       return next();
@@ -75,19 +75,40 @@ const organizationsCreate = valLocals('organizationsCreate', {
 });
 const organizationsAddToUser = valLocals('organizationsAddToUser', {
   user_id: string.require(),
-  organizationId: string,
+  organization_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    organizationId,
+    organization_id,
   } = res.locals;
 
-  if (!organizationId) {
-    return next();
-  }
-
-  return dbUsersAddOrganization({ user_id, organizationId })
+  return dbUsersAddOrganization({ user_id, organization_id })
     .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsAddPendingUsers = valLocals('organizationsAddPendingUsers', {
+  organization_id: string.require(),
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user,
+  } = res.locals;
+  const userId = user.id;
+
+  dbOrganizationsAddPendingUser({ organization_id, user_id: userId })
+    .then((result) => {
+      const organizationChanges = result.changes[0];
+      const organization = organizationChanges.new_val || organizationChanges.old_val;
+
+      setLocals({
+        organization,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -376,6 +397,27 @@ const organizationsEnableUser = valLocals('organizationsEnableUser', {
       return next(err);
     });
 });
+const organizationsCreatedQueueMessage = valLocals('organizationsCreatedQueueMessage', {
+  user_id: string.require(),
+  organization: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    organization,
+    event_type: 'organization_created',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: organization.id,
+  });
+
+  return next();
+});
 const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMessage', {
   user_id: string.require(),
   organization: object.require(),
@@ -589,4 +631,6 @@ export {
   organizationsCheckIsEnableValid,
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
+  organizationsAddPendingUsers,
+  organizationsCreatedQueueMessage,
 };

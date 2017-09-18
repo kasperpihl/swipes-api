@@ -88,7 +88,8 @@ const usersWelcomeEmail = (req, res, next) => {
       content: first_name,
     }, {
       name: 'COMPANY_NAME',
-      content: organization.name,
+      content: '',
+      // content: organization.name,
     }],
   }];
   const to = [

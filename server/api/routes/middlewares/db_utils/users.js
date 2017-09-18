@@ -150,9 +150,9 @@ const dbUsersGetByEmailWithFields = funcWrap([
 const dbUsersAddOrganization = funcWrap([
   object.as({
     user_id: string.require(),
-    organizationId: string.require(),
+    organization_id: string.require(),
   }).require(),
-], (err, { user_id, organizationId }) => {
+], (err, { user_id, organization_id }) => {
   if (err) {
     throw new SwipesError(`dbUsersAddOrganization: ${err}`);
   }
@@ -161,7 +161,8 @@ const dbUsersAddOrganization = funcWrap([
     r.table('users')
       .get(user_id)
       .update({
-        organizations: r.row('organizations').default([]).setUnion([organizationId]),
+        organizations: [organization_id],
+        pending_organizations: r.row('pending_organizations').default([]).difference([organization_id]),
         updated_at: r.now(),
       });
 
@@ -198,19 +199,36 @@ const dbUsersActivateAfterSignUp = funcWrap([
     updated_at: r.now(),
   }, {
     returnChanges: 'always',
-  })
-    .do((result) => {
-      return result('changes').nth(0)('new_val');
-    })
-    .do((user) => {
-      return r.table('organizations').get(user('organizations').nth(0)).update((organization) => {
-        return {
-          active_users: organization('active_users').default([]).setUnion([user('id')]),
-          pending_users: organization('pending_users').default([]).difference([user('id')]),
-          updated_at: r.now(),
-        };
-      });
-    });
+  });
+    // .do((result) => {
+    //   return result('changes').nth(0)('new_val');
+    // })
+    // .do((user) => {
+    //   return r.table('organizations').get(user('organizations').nth(0)).update((organization) => {
+    //     return {
+    //       active_users: organization('active_users').default([]).setUnion([user('id')]),
+    //       pending_users: organization('pending_users').default([]).difference([user('id')]),
+    //       updated_at: r.now(),
+    //     };
+    //   });
+    // });
+
+  return db.rethinkQuery(q);
+});
+const dbUsersAddPendingOrganization = funcWrap([
+  object.as({
+    user_id: string.require(),
+    organization_id: string.require(),
+  }).require(),
+], (err, { user_id, organization_id }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersAddPendingOrganization: ${err}`);
+  }
+
+  const q = r.table('users').get(user_id).update({
+    pending_organizations: r.row('pending_organizations').default([]).setUnion([organization_id]),
+    updated_at: r.now(),
+  });
 
   return db.rethinkQuery(q);
 });
@@ -276,4 +294,5 @@ export {
   dbUsersGetByEmail,
   dbUsersResetPassword,
   dbUsersGetByIdWithFields,
+  dbUsersAddPendingOrganization,
 };

@@ -19,18 +19,20 @@ const dbOrganizationsCreate = funcWrap([
     throw new SwipesError(`dbOrganizationsCreate: ${err}`);
   }
 
-  const q = r.table('organizations').insert(organization);
+  const q = r.table('organizations').insert(organization, {
+    returnChanges: 'always',
+  });
 
   return db.rethinkQuery(q);
 });
-const dbOrganizationsAddUser = funcWrap([
+const dbOrganizationsAddPendingUser = funcWrap([
   object.as({
-    user_id: string.require(),
     organization_id: string.require(),
+    user_id: string.require(),
   }).require(),
 ], (err, { user_id, organization_id }) => {
   if (err) {
-    throw new SwipesError(`dbOrganizationsAddUser: ${err}`);
+    throw new SwipesError(`dbOrganizationsAddPendingUser: ${err}`);
   }
 
   const q =
@@ -61,11 +63,11 @@ const dbOrganizationsGetInfoFromInvitationToken = funcWrap([
       me: r.table('users').get(user_id).pluck('invited_by', 'email', 'profile', 'activated'),
       organization: r.table('organizations').get(organization_id).pluck('name'),
     })
-    .do((result) => {
-      return result.merge({
-        invited_by: r.table('users').get(result('me')('invited_by')).pluck('id', 'profile'),
+      .do((result) => {
+        return result.merge({
+          invited_by: r.table('users').get(result('me')('invited_by')).pluck('id', 'profile'),
+        });
       });
-    });
 
   return db.rethinkQuery(q);
 });
@@ -261,7 +263,7 @@ const dbOrganizationsUpdateStripeSubscriptionId = funcWrap([
 
 export {
   dbOrganizationsCreate,
-  dbOrganizationsAddUser,
+  dbOrganizationsAddPendingUser,
   dbOrganizationsGetInfoFromInvitationToken,
   dbOrganizationsGetSingle,
   dbOrganizationsPromoteToAdmin,

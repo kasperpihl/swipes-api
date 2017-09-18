@@ -3,6 +3,7 @@ import {
   string,
   object,
 } from 'valjs';
+import MiddlewareComposer from './middleware_composer';
 import {
   organizationsCreate,
   organizationsAddToUser,
@@ -22,11 +23,13 @@ import {
   organizationsCheckIsEnableValid,
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
+  organizationsCreatedQueueMessage,
 } from './middlewares/organizations';
 import {
+  usersCheckIfInOrganization,
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
-  usersParseInvitationToken,
+  // usersParseInvitationToken,
   usersGetByIdWithFields,
 } from './middlewares/users';
 import {
@@ -35,6 +38,9 @@ import {
 import {
   organizationConcatUsers,
 } from './middlewares/utils';
+import {
+  onboardingGetMiddlewares,
+} from './middlewares/onboarding';
 import {
   valBody,
   valResponseAndSend,
@@ -49,8 +55,30 @@ authed.all(
   valBody({
     organization_name: string.require(),
   }),
+  mapLocals(locals => ({
+    fields: ['organizations'],
+    userToGetId: locals.user_id,
+  })),
+  usersGetByIdWithFields,
+  usersCheckIfInOrganization,
   organizationsCreate,
   organizationsAddToUser,
+  (originalReq, originalRes, originalNext) => {
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...onboardingGetMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
+  organizationsCreatedQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend(),
 );
 
@@ -199,20 +227,20 @@ authed.all(
   }),
 );
 
-notAuthed.all(
-  '/organizations.getInfoFromInvitationToken',
-  valBody({
-    invitation_token: string.require(),
-  }),
-  usersParseInvitationToken,
-  organizationsGetInfoFromInvitationToken,
-  valResponseAndSend({
-    me: object,
-    download_links: object.require(),
-    organization: object,
-    invited_by: object,
-  }),
-);
+// notAuthed.all(
+//   '/organizations.getInfoFromInvitationToken',
+//   valBody({
+//     invitation_token: string.require(),
+//   }),
+//   // usersParseInvitationToken,
+//   organizationsGetInfoFromInvitationToken,
+//   valResponseAndSend({
+//     me: object,
+//     download_links: object.require(),
+//     organization: object,
+//     invited_by: object,
+//   }),
+// );
 
 export {
   authed,

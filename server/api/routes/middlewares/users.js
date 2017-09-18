@@ -7,6 +7,7 @@ import {
   number,
   object,
   array,
+  bool,
 } from 'valjs';
 import {
   getClientIp,
@@ -27,6 +28,7 @@ import {
   dbUsersActivateAfterSignUp,
   dbUsersGetByEmail,
   dbUsersGetByIdWithFields,
+  dbUsersAddPendingOrganization,
 } from './db_utils/users';
 import {
   dbOrganizationsAddUser,
@@ -60,26 +62,28 @@ const defaultSettings = {
 };
 const userAvailability = valLocals('userAvailability', {
   email: string.format('email').require(),
-  invitation_token: string,
 }, (req, res, next, setLocals) => {
   const {
     email,
-    invitation_token,
   } = res.locals;
 
   return dbUsersGetByEmail({ email })
     .then((result) => {
       const user = result[0];
+      console.log(user);
+      let userId;
 
-      if (invitation_token && user.activated === false) {
-        return next();
-      }
-
-      if (user) {
+      if (user && user.activated === true) {
         return next(new SwipesError('There is a user with that email'));
-      }
+      } else if (user && user.activated === false) {
+        userId = user.id;
 
-      const userId = generateSlackLikeId('U');
+        setLocals({
+          userActivated: false,
+        });
+      } else {
+        userId = generateSlackLikeId('U');
+      }
 
       setLocals({
         userId,
@@ -91,46 +95,46 @@ const userAvailability = valLocals('userAvailability', {
       return next(err);
     });
 });
-const usersParseInvitationToken = valLocals('usersParseInvitationToken', {
-  invitation_token: string,
-}, (req, res, next, setLocals) => {
-  const {
-    invitation_token,
-  } = res.locals;
+// const usersParseInvitationToken = valLocals('usersParseInvitationToken', {
+//   invitation_token: string,
+// }, (req, res, next, setLocals) => {
+//   const {
+//     invitation_token,
+//   } = res.locals;
 
-  if (!invitation_token || invitation_token === 'SW-091959') {
-    return next();
-  }
+//   if (!invitation_token || invitation_token === 'SW-091959') {
+//     return next();
+//   }
 
-  try {
-    const content = jwt.decode(invitation_token, invitationTokenSecret);
+//   try {
+//     const content = jwt.decode(invitation_token, invitationTokenSecret);
 
-    setLocals({
-      userId: content.user_id,
-      organizationId: content.organization_id,
-    });
+//     setLocals({
+//       userId: content.user_id,
+//       organizationId: content.organization_id,
+//     });
 
-    return next();
-  } catch (err) {
-    return next(new SwipesError('Invalid invitation token'));
-  }
-});
+//     return next();
+//   } catch (err) {
+//     return next(new SwipesError('Invalid invitation token'));
+//   }
+// });
 const usersActivateUserSignUp = valLocals('usersActivateUserSignUp', {
   userId: string.require(),
   password: string.min(1).require(),
   first_name: string.max(32).require(),
   last_name: string.max(32).require(),
-  invitation_token: string,
+  userActivated: bool,
 }, (req, res, next, setLocals) => {
   const {
     userId,
     password,
     first_name,
     last_name,
-    invitation_token,
+    userActivated,
   } = res.locals;
 
-  if (!invitation_token) {
+  if (userActivated !== false) {
     return next();
   }
 
@@ -145,12 +149,12 @@ const usersActivateUserSignUp = valLocals('usersActivateUserSignUp', {
     user_id: userId,
     password: passwordSha1,
   })
-  .then(() => {
-    return next();
-  })
-  .catch((err) => {
-    return next(err);
-  });
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
 });
 const userSignUp = valLocals('userSignUp', {
   userId: string.require(),
@@ -159,7 +163,7 @@ const userSignUp = valLocals('userSignUp', {
   last_name: string.require(),
   password: string.min(1).require(),
   tokenInfo: object.require(),
-  invitation_token: string,
+  userActivated: bool,
 }, (req, res, next, setLocals) => {
   const {
     userId,
@@ -168,7 +172,7 @@ const userSignUp = valLocals('userSignUp', {
     last_name,
     password,
     tokenInfo,
-    invitation_token,
+    userActivated,
   } = res.locals;
 
   const tokens = createTokens({
@@ -178,11 +182,12 @@ const userSignUp = valLocals('userSignUp', {
     dbTokensInsertSingle({ token: tokens.token, tokenInfo }),
   ];
 
-  if (!invitation_token) {
+  if (userActivated === undefined) {
     const userDoc = {
       id: userId,
       services: [],
       organizations: [],
+      pending_organizations: [],
       email,
       profile: {
         first_name,
@@ -199,17 +204,17 @@ const userSignUp = valLocals('userSignUp', {
   }
 
   return Promise.all(promises)
-  .then(() => {
-    setLocals({
-      userId,
-      token: tokens.shortToken,
-    });
+    .then(() => {
+      setLocals({
+        userId,
+        token: tokens.shortToken,
+      });
 
-    return next();
-  })
-  .catch((err) => {
-    return next(err);
-  });
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
 });
 const userActivatedUserSignUpQueueMessage = valLocals('userActivatedUserSignUpQueueMessage', {
   userId: string.require(),
@@ -509,7 +514,8 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
   const userDoc = {
     id: generateSlackLikeId('U'),
     services: [],
-    organizations: [organization_id],
+    organizations: [],
+    pending_organizations: [organization_id],
     email,
     profile: {
       first_name,
@@ -522,28 +528,51 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
   };
 
   if (!user) {
-    return Promise.all([
-      dbUsersCreate({ user: userDoc }),
-      dbOrganizationsAddUser({ user_id: userDoc.id, organization_id }),
-    ])
-    .then((results) => {
-      const userChanges = results[0].changes[0];
-      const organizationChanges = results[1].changes[0];
-      const user = userChanges.new_val;
-      const organization = organizationChanges.new_val || organizationChanges.old_val;
+    dbUsersCreate({ user: userDoc })
+      .then((result) => {
+        const userChanges = result.changes[0];
+        const user = userChanges.new_val;
 
-      setLocals({
-        user,
-        organization,
+        setLocals({
+          user,
+        });
+
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
       });
+  } else {
+    return next();
+  }
+});
+const usersAddPendingOrganization = valLocals('usersAddPendingOrganization', {
+  organization_id: string.require(),
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user,
+  } = res.locals;
+  const userId = user.id;
 
+  dbUsersAddPendingOrganization({ user_id: userId, organization_id })
+    .then(() => {
       return next();
     })
     .catch((err) => {
       return next(err);
     });
-  } else if (user.organizations.length > 0 && user.organizations[0] !== organization_id) {
-    return next(new SwipesError('This user is already in another organization.'));
+});
+const usersCheckIfInOrganization = valLocals('usersCheckIfInOrganization', {
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user,
+  } = res.locals;
+
+  if (user.organizations.length > 0) {
+    return next(new SwipesError('This user is already in an organization'));
   }
 
   return next();
@@ -630,19 +659,19 @@ const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
 });
 const userSignupQueueMessage = valLocals('userSubscribeToMailChimpQueueMessage', {
   email: string.format('email').require(),
-  organizationId: string.require(),
+  // organizationId: string.require(),
   first_name: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     email,
-    organizationId,
+    // organizationId,
     first_name,
   } = res.locals;
 
   const queueMessage = {
     email,
     first_name,
-    organization_id: organizationId,
+    // organization_id: organizationId,
     event_type: 'user_signup',
   };
 
@@ -672,9 +701,10 @@ export {
   usersCreateTempUnactivatedUser,
   usersSendInvitationQueueMessage,
   usersActivateUserSignUp,
-  usersParseInvitationToken,
   userActivatedUserSignUpQueueMessage,
   usersInvitedUserQueueMessage,
   userSignupQueueMessage,
   usersGetByIdWithFields,
+  usersAddPendingOrganization,
+  usersCheckIfInOrganization,
 };

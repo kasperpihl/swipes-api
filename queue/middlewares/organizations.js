@@ -15,7 +15,7 @@ const organizationsGetSingle = (req, res, next) => {
       return next(err);
     });
 };
-const organizationsUpdatedNotificationData = (req, res, next) => {
+const organizationsCreatedUpdatedNotificationData = (req, res, next) => {
   const {
     organization,
   } = res.locals;
@@ -31,5 +31,5 @@ const organizationsUpdatedNotificationData = (req, res, next) => {
 
 export {
   organizationsGetSingle,
-  organizationsUpdatedNotificationData,
+  organizationsCreatedUpdatedNotificationData,
 };
