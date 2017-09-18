@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     height: viewSize.height - NAV_BAR_HEIGHT + statusbarHeight,
     position: 'absolute',
     left: 0, top: -viewSize.height + NAV_BAR_HEIGHT - statusbarHeight,
-    backgroundColor: 'rgba(255, 255, 255, .95)'
   },
   actionsWrapper: {
     flex: 1,
@@ -30,12 +29,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 12,
   },
+  actionLabelWrapper: {
+    height: 54,
+    paddingLeft: ((viewSize.width / 5) - 24) / 2,
+    paddingRight: 12,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    backgroundColor: colors.deepBlue10,
+  },
   actionLabel: {
     fontSize: 13,
     fontWeight: '500',
     lineHeight: 18,
     color: colors.deepBlue100,
-    paddingRight: 12,
   },
   actionIcon: {
     height: 54,
@@ -43,8 +52,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.deepBlue10,
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopLeftRadius: 6,
-    borderBottomLeftRadius: 6,
   },
   animatePosStart: {}
 })
@@ -56,13 +63,13 @@ class NavChanger extends PureComponent {
       transfromAnim: new Animated.Value(150),
     };
 
-    setupDelegate(this, 'onNavChangeAction')
+    setupDelegate(this, 'onNavChangeAction', 'onNavClose')
   }
   componentDidMount() {
     Animated.timing(this.state.transfromAnim, {
       toValue: 0,
-      easing: Easing.bezier(.71,.35,.57,1.44),
-      duration: 450,
+      easing: Easing.linear,
+      duration: 250,
       useNativeDriver: true
     }).start();
   }
@@ -70,24 +77,30 @@ class NavChanger extends PureComponent {
     let { transfromAnim } = this.state;
 
     return (
-      <RippleButton style={styles.actionButton} onPress={this.onNavChangeActionCached(icon)}>
         <Animated.View style={[styles.actionWrapper, { transform: [{translateY: transfromAnim}] }]}>
-          <Text selectable={true} style={styles.actionLabel}>{label}</Text>
-          <View style={styles.actionIcon}>
-            <Icon name={icon} width="24" height="24" fill={colors.deepBlue40} />
-          </View>
+          <RippleButton style={styles.actionButton} onPress={this.onNavChangeActionCached(icon)}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.actionLabelWrapper} >
+                <Text selectable={true} style={styles.actionLabel}>{label}</Text>
+              </View>
+              <View style={styles.actionIcon}>
+                <Icon name={icon} width="24" height="24" fill={colors.deepBlue40} />
+              </View>
+            </View>
+          </RippleButton>
         </Animated.View>
-      </RippleButton>
     )
   }
   renderActions() {
     
     return (
-      <View style={styles.actionsWrapper}>
-        {this.renderAction('Update', 'Updates')}
-        {this.renderAction('Profile', 'Profile')}
-        {this.renderAction('Find', 'Search')}
-      </View>
+      <RippleButton onPress={this.onNavClose}>
+        <View style={styles.actionsWrapper}>
+          {this.renderAction('Update', 'Updates')}
+          {this.renderAction('Profile', 'Profile')}
+          {this.renderAction('Find', 'Search')}
+        </View>
+      </RippleButton>
     )
   }
   render() {

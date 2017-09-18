@@ -185,6 +185,7 @@ class HOCMilestoneOverview extends PureComponent {
         buttons: [
           { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true }
         ],
+        hideBackButton: true,
       });
     } else {
       this.props.setActionButtons({

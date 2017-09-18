@@ -58,9 +58,27 @@ const styles = StyleSheet.create({
 class TabNavigationItem extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      icon: props.icon
+    };
 
     setupDelegate(this, 'handlePress');
+  }
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.icon !== this.props.icon) {
+      this.setState({ icon: nextProps.icon })
+    }
+  }
+  renderIcon() {
+    const { iconFill } = this.props;
+    const { icon } = this.state;
+
+    return (
+      <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name={icon} width="24" height="24" fill={iconFill} />
+      </View>
+    )
   }
   renderCounter() {
     const { counter } = this.props;
@@ -112,9 +130,7 @@ class TabNavigationItem extends PureComponent {
     return (
       <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached(`${index}`)}>
         <View style={styles.navItem}>
-          <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name={icon} width="24" height="24" fill={iconFill} />
-          </View>
+          {this.renderIcon()}
           {this.renderCounter()}
           {this.renderUpdate()}
           {this.renderMiniSwap()}

@@ -105,6 +105,9 @@ class HOCTabNavigation extends PureComponent {
         this.setState({ rootRoutes });
       }
   }
+  onNavClose() {
+    this.setState({ showNavChanger: false, navChangerActive: false })
+  }
   onNavChangeAction(type) {
     const { sliderChange, navPush } = this.props;
     const { rootRoutes } = this.state;
@@ -154,8 +157,8 @@ class HOCTabNavigation extends PureComponent {
     const sliderPosPixel = sliderPosPercentage * viewSize.width / 100;
     const sliderPos = routes.size > 1 ? 0 : sliderPosPixel;
     const sliderWidth = routes.size > 1 ? viewSize.width : viewSize.width / 5;
-    const sliderHeight = routes.size > 1 ? 1 : 54;
-    const sliderColor = routes.size > 1 ? colors.deepBlue10 : colors.deepBlue5;
+    const sliderHeight = routes.size > 1 ? 1 : 2;
+    const sliderColor = routes.size > 1 ? colors.deepBlue10 : colors.deepBlue100;
 
     return (
       <View

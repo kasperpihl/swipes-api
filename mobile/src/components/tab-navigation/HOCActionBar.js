@@ -145,6 +145,8 @@ class HOCActionBar extends PureComponent {
   renderLeftIcon() {
     const { activeRoutes, actionButtons } = this.props;
 
+    if (actionButtons.get('hideBackButton')) return undefined;
+
     if (Platform.OS === 'ios') {
       return this.renderIconButton(
         'nav',
