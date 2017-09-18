@@ -71,8 +71,9 @@ class TabNavigationItem extends PureComponent {
     }
   }
   renderIcon() {
-    const { iconFill } = this.props;
+    const { activeSliderIndex, index } = this.props;
     const { icon } = this.state;
+    const iconFill = parseInt(activeSliderIndex) === index ? colors.deepBlue100 : colors.deepBlue40;
 
     return (
       <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
@@ -124,8 +125,7 @@ class TabNavigationItem extends PureComponent {
     return undefined;
   }
   render() {
-    const { icon, index, activeSliderIndex } = this.props;
-    const iconFill = parseInt(activeSliderIndex) === index ? colors.deepBlue100 : colors.deepBlue40;
+    const { index, activeSliderIndex } = this.props;
 
     return (
       <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached(`${index}`)}>

@@ -177,7 +177,7 @@ class HOCTabNavigation extends PureComponent {
   renderNavItems() {
     const { activeSliderIndex, routes } = this.props;
     const { navChangerActive } = this.state;
-    const sliderIndex = navChangerActive ? navChangerActive : activeSliderIndex
+    const sliderIndex = navChangerActive ? 4 : activeSliderIndex
 
     if (routes.size > 1) {
       return <HOCActionBar />;
