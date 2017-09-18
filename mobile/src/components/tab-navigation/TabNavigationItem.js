@@ -102,6 +102,8 @@ class TabNavigationItem extends PureComponent {
     if (showMiniSwap && !updateAvailable) {
       return this.renderSideIcon('MiniNavSwap');
     }
+
+    return undefined;
   }
   render() {
     const { icon, index, activeSliderIndex } = this.props;
@@ -110,7 +112,6 @@ class TabNavigationItem extends PureComponent {
     return (
       <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached(`${index}`)}>
         <View style={styles.navItem}>
-
           <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name={icon} width="24" height="24" fill={iconFill} />
           </View>

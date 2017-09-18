@@ -84,10 +84,10 @@ class HOCTabNavigation extends PureComponent {
       this.setState({ rootRoutes });
     }
 
-    if (nextProps.activeSliderIndex !== this.props.activeSliderIndex && nextProps.activeSliderIndex < 4  && nextState.navChangerActive) {
-        rootRoutes[4].icon = 'NavSwap';
-        rootRoutes[4].showMiniSwap = false;
-        this.setState({ showNavChanger: false, navChangerActive: false, rootRoutes });
+    if (nextProps.activeSliderIndex !== this.props.activeSliderIndex && nextProps.activeSliderIndex < 4 && nextState.navChangerActive) {
+      rootRoutes[4].icon = 'NavSwap';
+      rootRoutes[4].showMiniSwap = false;
+      this.setState({ showNavChanger: false, navChangerActive: false, rootRoutes });
     }
 
     this.checkForUpdate(nextProps);
@@ -106,7 +106,7 @@ class HOCTabNavigation extends PureComponent {
       }
   }
   onNavChangeAction(type) {
-    const { sliderChange } = this.props;
+    const { sliderChange, navPush } = this.props;
     const { rootRoutes } = this.state;
 
     if (type === 'Update') {
@@ -245,4 +245,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   sliderChange: a.navigation.sliderChange,
+  navPush: a.navigation.push
 })(HOCTabNavigation);

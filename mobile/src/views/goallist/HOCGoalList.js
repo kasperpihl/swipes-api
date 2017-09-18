@@ -7,7 +7,7 @@ import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import * as cs from 'swipes-core-js/selectors';
 import * as ca from 'swipes-core-js/actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
@@ -159,7 +159,7 @@ class HOCGoalList extends PureComponent {
     }
 
     return (
-      <InteractionsHandlerWrapper>
+      <WaitForUI>
         <ImmutableListView
           ref="scrollView"
           style={styles.list}
@@ -169,7 +169,7 @@ class HOCGoalList extends PureComponent {
           stickySectionHeadersEnabled={true}
           renderFooter={this.renderListFooter}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     );
   }
   render() {

@@ -11,7 +11,7 @@ import Icon from "Icon";
 import RippleButton from "RippleButton";
 import Reactions from "components/reactions/Reactions";
 import CommentView from "components/comment-view/CommentView";
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import PostFooter from './PostFooter';
 
 const styles = StyleSheet.create({
@@ -390,14 +390,14 @@ class PostView extends PureComponent {
   }
   renderContent() {
     return (
-      <InteractionsHandlerWrapper>
+      <WaitForUI>
         <ScrollView style={{ flex: 1 }} ref="scrollView" alwaysBounceVertical={false}>
           {this.renderMessage()}
           {this.renderAttachments()}
           {this.renderActions()}
           {this.renderComments()}
         </ScrollView>
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     )
   }
   render() {

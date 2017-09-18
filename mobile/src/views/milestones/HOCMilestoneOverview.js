@@ -8,8 +8,9 @@ import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import HOCHeader from 'HOCHeader';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import HOCGoalItem from 'views/goallist/HOCGoalItem';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
@@ -72,12 +73,7 @@ class HOCMilestoneOverview extends PureComponent {
     };
 
     propsOrPop(this, 'milestone');
-
-    this.onActionButton = this.onActionButton.bind(this);
-    this.renderGoal = this.renderGoal.bind(this);
-    this.handleModalState = this.handleModalState.bind(this);
-    this.onHeaderTap = this.onHeaderTap.bind(this);
-    this.onActionPress = this.onActionPress.bind(this);
+    bindAll(this, ['onActionButton', 'renderGoal', 'handleModalState', 'onHeaderTap', 'onActionPress', 'onInfoTabClose',]);
   }
   componentDidMount() {
     this.renderActionButtons();
@@ -100,6 +96,11 @@ class HOCMilestoneOverview extends PureComponent {
   }
   onActionPress(index) {
     console.warn('infotab action', index)
+  }
+  onInfoTabClose() {
+    if (this.state.showingInfoTab) {
+      this.setState({ showingInfoTab: false });
+    }
   }
   onActionButton(i) {
     const { navPush, milestone, toggleInfoTab } = this.props;
@@ -137,6 +138,7 @@ class HOCMilestoneOverview extends PureComponent {
 
         toggleInfoTab({
           onPress: this.onActionPress,
+          onClose: this.onInfoTabClose,
           actions: [
             { title: achieveLbl, complete, icon: achieveIcon },
             { title: 'Delete milestone', icon: 'Delete', danger: true },
@@ -247,7 +249,7 @@ class HOCMilestoneOverview extends PureComponent {
     }
 
     return (
-      <InteractionsHandlerWrapper loadingProps={tabIndex}>
+      <WaitForUI waitIndex={tabIndex}>
         <ImmutableListView
           ref="scrollView"
           key={tab}
@@ -256,7 +258,7 @@ class HOCMilestoneOverview extends PureComponent {
           renderRow={this.renderGoal}
           renderFooter={this.renderListFooter}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     );
   }
   renderFAB() {

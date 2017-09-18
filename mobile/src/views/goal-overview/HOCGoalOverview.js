@@ -9,7 +9,7 @@ import * as ca from 'swipes-core-js/actions';
 import * as a from 'actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCHeader from 'HOCHeader';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import { colors, viewSize } from 'globalStyles';
 import HOCStepList from './HOCStepList';
 import HOCAttachments from './HOCAttachments';
@@ -27,6 +27,7 @@ class HOCGoalOverview extends PureComponent {
     this.closeView = this.closeView.bind(this);
     this.onActionButton = this.onActionButton.bind(this);
     this.onActionPress = this.onActionPress.bind(this);
+    this.onInfoTabClose = this.onInfoTabClose.bind(this);
 
     setupLoading(this);
 
@@ -46,6 +47,11 @@ class HOCGoalOverview extends PureComponent {
   }
   onActionPress(index) {
     console.warn('gets here', index)
+  }
+  onInfoTabClose() {
+    if (this.state.showingInfoTab) {
+      this.setState({ showingInfoTab: false });
+    }
   }
   onComplete(step) {
     if (this.isLoading(step.get('id'))) {
@@ -97,6 +103,7 @@ class HOCGoalOverview extends PureComponent {
 
         toggleInfoTab({
           onPress: this.onActionPress,
+          onClose: this.onInfoTabClose,
           actions: [
             { title: 'Delete goal', icon: 'Delete', danger: true },
           ],
@@ -169,7 +176,7 @@ class HOCGoalOverview extends PureComponent {
     const helper = this.getHelper();
 
     return (
-      <InteractionsHandlerWrapper>
+      <WaitForUI>
         <HOCStepList
           goal={goal}
           steps={helper.getOrderedSteps()}
@@ -177,20 +184,20 @@ class HOCGoalOverview extends PureComponent {
           myId={me.get('id')}
           {...this.bindLoading() }
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     );
   }
   renderAttachments() {
     const { goal } = this.props;
 
     return (
-      <InteractionsHandlerWrapper>
+      <WaitForUI>
         <HOCAttachments
           attachments={goal.get('attachments')}
           attachmentOrder={goal.get('attachment_order')}
           goal={goal}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     );
   }
   renderContent() {

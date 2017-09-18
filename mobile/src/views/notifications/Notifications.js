@@ -6,7 +6,7 @@ import { colors } from 'globalStyles';
 import HOCHeader from 'HOCHeader';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import NotificationItem from './NotificationItem';
 
 const styles = StyleSheet.create({
@@ -68,14 +68,14 @@ class Notifications extends PureComponent {
     }
 
     return (
-      <InteractionsHandlerWrapper>
+      <WaitForUI>
         <ImmutableVirtualizedList
           style={styles.list}
           immutableData={notifications}
           renderRow={this.renderNotifications}
           onScroll={window.onScroll}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     );
   }
   render() {

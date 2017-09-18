@@ -5,7 +5,7 @@ import { ImmutableListView } from 'react-native-immutable-list-view';
 import * as cs from 'swipes-core-js/selectors';
 import HOCHeader from 'HOCHeader';
 import HOCGoalItem from 'views/goallist/HOCGoalItem';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import { colors } from 'globalStyles';
 
@@ -57,7 +57,7 @@ class HOCNoMilestoneOverview extends PureComponent {
     const { goals } = this.props;
 
     return (
-      <InteractionsHandlerWrapper>
+      <WaitForUI>
         <ImmutableListView
           ref="scrollView"
           style={styles.list}
@@ -65,7 +65,7 @@ class HOCNoMilestoneOverview extends PureComponent {
           renderRow={this.renderGoal}
           renderFooter={this.renderListFooter}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     )
   }
   render() {

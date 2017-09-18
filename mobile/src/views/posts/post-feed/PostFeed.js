@@ -4,7 +4,7 @@ import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import HOCHeader from 'HOCHeader';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import RippleButton from 'RippleButton';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import { colors, viewSize } from 'globalStyles';
@@ -95,7 +95,7 @@ class PostFeed extends PureComponent {
     const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
 
     return (
-      <InteractionsHandlerWrapper loadingProps={tabIndex}>
+      <WaitForUI waitIndex={tabIndex}>
         <ImmutableVirtualizedList
           ref="scrollView"
           style={styles.list}
@@ -104,7 +104,7 @@ class PostFeed extends PureComponent {
           renderFooter={this.renderFooter}
           onScroll={window.onScroll}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     )
   }
   render() {

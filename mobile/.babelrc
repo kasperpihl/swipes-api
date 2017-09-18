@@ -5,7 +5,7 @@
       "cwd": "babelrc",
       "root": ["./src"],
       "alias": {
-        "InteractionsHandlerWrapper": "./src/components/interactions-handler-wrapper/InteractionsHandlerWrapper",
+        "WaitForUI": "./src/components/wait-for-ui/WaitForUI",
         "Icon": "./src/components/icons/Icon",
         "HOCHeader": "./src/components/header/HOCHeader",
         "RippleButton": "./src/components/ripple-button/RippleButton",

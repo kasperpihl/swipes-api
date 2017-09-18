@@ -9,7 +9,7 @@ import * as ca from 'swipes-core-js/actions';
 import HOCHeader from 'HOCHeader';
 import { colors, viewSize } from 'globalStyles';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
@@ -226,7 +226,7 @@ class HOCMilestones extends PureComponent {
     }
 
     return (
-      <InteractionsHandlerWrapper loadingProps={tabIndex}>
+      <WaitForUI waitIndex={tabIndex}>
         <ImmutableListView
           ref="scrollView"
           style={styles.list}
@@ -235,7 +235,7 @@ class HOCMilestones extends PureComponent {
           renderFooter={this.renderListFooter}
           windowSize={2}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     );
   }
   render() {

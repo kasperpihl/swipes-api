@@ -109,6 +109,13 @@ class InfoTab extends PureComponent {
   componentWillUpdate() {
     LayoutAnimation.configureNext(LayoutAnimation.create(250, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
   }
+  componentWillReceiveProps(nextProps) {
+    const { infoTab } = this.props;
+
+    if (infoTab.size && !nextProps.infoTab.size) {
+      infoTab.get('onClose')();
+    }
+  }
   onAction(index) {
     const { infoTab } = this.props;
 
@@ -163,7 +170,7 @@ class InfoTab extends PureComponent {
     );
   }
   renderActions() {
-    const { infoTab, delegate } = this.props;
+    const { infoTab } = this.props;
     const actions = infoTab.get('actions');
 
     if (!actions) {
