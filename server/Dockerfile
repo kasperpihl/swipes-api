@@ -1,9 +1,3 @@
-#
-# Nginx Dockerfile
-#
-# https://github.com/dockerfile/nginx
-#
-
 # Pull base image.
 FROM node:6.9.5
 
@@ -25,4 +19,4 @@ EXPOSE 5000
 CMD ["npm","start"]
 
 # Setting the user
-# USER node
+USER node
