@@ -34,23 +34,19 @@ const styles = StyleSheet.create({
     height: 54,
     paddingLeft: ((viewSize.width / 5) - ICON_SIZE) / 2,
     paddingRight: 12,
-    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
     borderTopLeftRadius: 6,
     borderBottomLeftRadius: 6,
-    backgroundColor: colors.deepBlue10,
   },
   actionLabel: {
     fontSize: 13,
     fontWeight: '500',
     lineHeight: 18,
-    color: colors.deepBlue100,
   },
   actionIcon: {
     height: 54,
     width: viewSize.width / 5,
-    backgroundColor: colors.deepBlue10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -74,22 +70,27 @@ class NavChanger extends PureComponent {
       useNativeDriver: true
     }).start();
   }
-  renderAction(icon, label) {
+  renderAction(icon, label, updateable) {
+    let { updateAvailable } = this.props;
     let { transfromAnim } = this.state;
+    let buttonBg = updateable && updateAvailable ? colors.blue100 : colors.deepBlue10;
+    let iconFill = updateable && updateAvailable ? 'white' : colors.deepBlue40;
+    let labelColor = updateable && updateAvailable ? 'white' : colors.deepBlue100;
+
 
     return (
-        <Animated.View style={[styles.actionWrapper, { transform: [{translateY: transfromAnim}] }]}>
-          <RippleButton ref="rippleButton" style={styles.actionButton} onPress={this.onNavChangeActionCached(icon)}>
-            <View style={{flexDirection: 'row', backgroundColor: 'purple', zIndex: 9999 }}>
-              <View style={styles.actionLabelWrapper} >
-                <Text selectable={true} style={styles.actionLabel}>{label}</Text>
-              </View>
-              <View style={styles.actionIcon}>
-                <Icon name={icon} width="24" height="24" fill={colors.deepBlue40} />
-              </View>
+      <Animated.View style={[styles.actionWrapper, { transform: [{translateY: transfromAnim}] }]}>
+        <RippleButton ref="rippleButton" style={styles.actionButton} onPress={this.onNavChangeActionCached(icon)}>
+          <View style={{flexDirection: 'row', zIndex: 9999 }}>
+            <View style={[styles.actionLabelWrapper, { backgroundColor: buttonBg }]} >
+              <Text style={[styles.actionLabel, { color: labelColor }]}>{label}</Text>
             </View>
-          </RippleButton>
-        </Animated.View>
+            <View style={[styles.actionIcon, { backgroundColor: buttonBg }]}>
+              <Icon name={icon} width="24" height="24" fill={iconFill} />
+            </View>
+          </View>
+        </RippleButton>
+      </Animated.View>
     )
   }
   renderActions() {
@@ -97,7 +98,7 @@ class NavChanger extends PureComponent {
     return (
       <TouchableOpacity style={styles.actionsWrapper} activeOpacity={1} onPress={this.onNavClose}>
         <View style={styles.actionsWrapper}>
-          {this.renderAction('Update', 'Updates')}
+          {this.renderAction('Update', 'Updates', true)}
           {this.renderAction('Profile', 'Profile')}
           {this.renderAction('Find', 'Search')}
         </View>

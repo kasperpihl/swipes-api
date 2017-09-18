@@ -202,13 +202,13 @@ class HOCTabNavigation extends PureComponent {
     return navItems;
   }
   renderNavChanger() {
-    const { showNavChanger } = this.state;
+    const { showNavChanger, rootRoutes } = this.state;
 
     if (!showNavChanger) {
       return undefined;
     }
     
-    return <NavChanger delegate={this} />
+    return <NavChanger delegate={this} updateAvailable={rootRoutes[4].updateAvailable} />
   }
   render() {
     const { routes, actionButtons } = this.props;
