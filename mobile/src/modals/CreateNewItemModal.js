@@ -135,7 +135,6 @@ class CreateNewItemModal extends PureComponent {
     }, 1)
   }
   onAssigneeClose() {
-    console.log('what about here?')
     clearTimeout(this.showAssigneeModalTimeout);
     this.showNewItemModalTimeout = setTimeout(() => {
       this.handleModalState();

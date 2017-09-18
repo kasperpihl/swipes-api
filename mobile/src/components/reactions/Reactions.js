@@ -48,8 +48,6 @@ class HOCReactions extends PureComponent {
     const { post, commentId: cId } = this.props;
     const { iLike } = this.state;
 
-    console.log('cId', cId);
-
     if (iLike) {
       this.onRemoveReaction(post, cId)
     } else {

@@ -75,8 +75,6 @@ export const preview = att => (d, getState) => {
         if (Platform.OS === 'ios') {
           d(a.loading.showLoader(false));
         }
-        
-        console.log(res.preview)
 
         OpenFile.openDoc([{
           url: res.preview.file.url,

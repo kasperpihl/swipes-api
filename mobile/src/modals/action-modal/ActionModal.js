@@ -55,7 +55,6 @@ class ActionModal extends PureComponent {
     const { showModal, modal } = this.props;
     
     if (modal.get('onClose')) {
-      console.log('get here?')
       modal.get('onClose')();
     }
 

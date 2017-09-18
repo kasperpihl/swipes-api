@@ -7,6 +7,7 @@ import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 
 const NAV_BAR_HEIGHT = 54;
+const ICON_SIZE = 24;
 
 const styles = StyleSheet.create({
   container: {
@@ -29,12 +30,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 12,
   },
-  actionButton: {
-    zIndex: 9999,
-  },
   actionLabelWrapper: {
     height: 54,
-    paddingLeft: ((viewSize.width / 5) - 24) / 2,
+    paddingLeft: ((viewSize.width / 5) - ICON_SIZE) / 2,
     paddingRight: 12,
     backgroundColor: 'red',
     justifyContent: 'center',
@@ -66,7 +64,8 @@ class NavChanger extends PureComponent {
       transfromAnim: new Animated.Value(150),
     };
 
-    setupDelegate(this, 'onNavChangeAction', 'onNavClose')
+    setupDelegate(this, 'onNavChangeAction', 'onNavClose');
+    this.onPress = this.onPress.bind(this);
   }
   componentDidMount() {
     Animated.timing(this.state.transfromAnim, {
@@ -76,13 +75,16 @@ class NavChanger extends PureComponent {
       useNativeDriver: true
     }).start();
   }
+  onPress(e) {
+    console.warn('fancy')
+  }
   renderAction(icon, label) {
     let { transfromAnim } = this.state;
 
     return (
         <Animated.View style={[styles.actionWrapper, { transform: [{translateY: transfromAnim}] }]}>
-          <RippleButton style={styles.actionButton} onPress={this.onNavChangeActionCached(icon)}>
-            <View style={{flexDirection: 'row'}}>
+          <RippleButton ref="rippleButton" style={styles.actionButton} onPress={this.onPress}>
+            <View style={{flexDirection: 'row', backgroundColor: 'purple', zIndex: 9999 }}>
               <View style={styles.actionLabelWrapper} >
                 <Text selectable={true} style={styles.actionLabel}>{label}</Text>
               </View>

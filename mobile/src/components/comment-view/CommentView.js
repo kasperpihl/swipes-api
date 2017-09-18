@@ -142,7 +142,6 @@ class CommentView extends PureComponent {
     );
   }
   renderText(matchingString, matches) {
-    console.log(matches)
     return matches[2];
   }
   renderMessage() {
