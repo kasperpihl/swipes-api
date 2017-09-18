@@ -59,7 +59,8 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-notAuthed.all('/users.signin',
+notAuthed.all(
+  '/users.signin',
   valBody({
     email: string.format('email').require(),
     password: string.min(1).require(),
@@ -86,9 +87,11 @@ notAuthed.all('/users.signin',
   userSignIn,
   valResponseAndSend({
     token: string.require(),
-  }));
+  }),
+);
 
-notAuthed.all('/users.signup',
+notAuthed.all(
+  '/users.signup',
   valBody({
     email: string.format('email').require(),
     password: string.min(1).require(),
@@ -144,14 +147,17 @@ notAuthed.all('/users.signup',
   valResponseAndSend({
     user_id: string.require(),
     token: string.require(),
-  }));
+  }),
+);
 
-authed.all('/users.signout',
-    usersRevokeToken,
-    valResponseAndSend(),
-  );
+authed.all(
+  '/users.signout',
+  usersRevokeToken,
+  valResponseAndSend(),
+);
 
-authed.post('/users.serviceDisconnect',
+authed.post(
+  '/users.serviceDisconnect',
   valBody({
     account_id: string.require(),
   }),
@@ -165,7 +171,8 @@ authed.post('/users.serviceDisconnect',
   valResponseAndSend(),
 );
 
-authed.all('/users.invite',
+authed.all(
+  '/users.invite',
   valBody({
     organization_id: string.require(),
     first_name: string.require(),
@@ -193,7 +200,8 @@ authed.all('/users.invite',
   }),
 );
 
-notAuthed.all('/users.unsubscribe',
+notAuthed.all(
+  '/users.unsubscribe',
   valBody({
     email: string.format('email').require(),
     email_type: any.of('goal_notify'),
