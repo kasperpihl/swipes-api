@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
+import { View, Text, StyleSheet, Animated, Easing, TouchableOpacity } from 'react-native';
 // import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import { colors, viewSize, statusbarHeight  } from 'globalStyles';
@@ -65,7 +65,6 @@ class NavChanger extends PureComponent {
     };
 
     setupDelegate(this, 'onNavChangeAction', 'onNavClose');
-    this.onPress = this.onPress.bind(this);
   }
   componentDidMount() {
     Animated.timing(this.state.transfromAnim, {
@@ -75,15 +74,12 @@ class NavChanger extends PureComponent {
       useNativeDriver: true
     }).start();
   }
-  onPress(e) {
-    console.warn('fancy')
-  }
   renderAction(icon, label) {
     let { transfromAnim } = this.state;
 
     return (
         <Animated.View style={[styles.actionWrapper, { transform: [{translateY: transfromAnim}] }]}>
-          <RippleButton ref="rippleButton" style={styles.actionButton} onPress={this.onPress}>
+          <RippleButton ref="rippleButton" style={styles.actionButton} onPress={this.onNavChangeActionCached(icon)}>
             <View style={{flexDirection: 'row', backgroundColor: 'purple', zIndex: 9999 }}>
               <View style={styles.actionLabelWrapper} >
                 <Text selectable={true} style={styles.actionLabel}>{label}</Text>
@@ -99,13 +95,13 @@ class NavChanger extends PureComponent {
   renderActions() {
     
     return (
-      <RippleButton style={styles.actionsWrapper} onPress={this.onNavClose}>
+      <TouchableOpacity style={styles.actionsWrapper} activeOpacity={1} onPress={this.onNavClose}>
         <View style={styles.actionsWrapper}>
           {this.renderAction('Update', 'Updates')}
           {this.renderAction('Profile', 'Profile')}
           {this.renderAction('Find', 'Search')}
         </View>
-      </RippleButton>
+      </TouchableOpacity>
     )
   }
   render() {

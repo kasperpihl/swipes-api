@@ -14,12 +14,12 @@ class RippleButton extends PureComponent {
     } : null;
   }
   renderIosButton() {
-    const { children, rippleColor, rippleOpacity, onPress, onLongPress, ...props } = this.props;
+    const { children, rippleColor, rippleOpacity, ...props } = this.props;
     const defaultRippleColor = rippleColor || colors.deepBlue40;
     const opacity = rippleOpacity ? 1 - rippleOpacity : 0.8;
 
     return (
-      <MaterialRippleButton rippleColor={defaultRippleColor} rippleOpacity={rippleOpacity} onPress={onPress} onLongPress={onLongPress} {...props}>
+      <MaterialRippleButton rippleColor={defaultRippleColor} rippleOpacity={opacity} {...props}>
         {children}
       </MaterialRippleButton>
     );
