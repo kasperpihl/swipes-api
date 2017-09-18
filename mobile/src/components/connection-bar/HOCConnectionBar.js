@@ -118,11 +118,6 @@ class HOCConnectionBar extends PureComponent {
     const { statusColor } = this.state;
     const status = this.getStatusMessage();
 
-    // Because bothering me
-    if (window.__DEV__) {
-      return null;
-    }
-
     if (!status.message || !token) {
       return null;
     }

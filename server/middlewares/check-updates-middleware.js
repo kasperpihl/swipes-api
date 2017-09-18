@@ -20,12 +20,12 @@ const newerVersionExist = (client, server) => {
     const clientVals = client.split('.');
     serverVals.forEach((serverVal, i) => {
       const clientVal = clientVals[i];
-      if(serverVals > clientVals) {
+      if(parseInt(serverVal, 10) > parseInt(clientVal, 10)) {
         newerVersion = true;
       }
     })
   } else {
-    newerVersion = (server > client);
+    newerVersion = (parseInt(server, 10) > parseInt(client, 10));
   }
 
   return newerVersion;
@@ -67,12 +67,13 @@ const checkForUpdates = (req, res, next) => {
     let version = null;
     headers.forEach((header) => {
       const clientVersion = req.header(`sw-${header}`);
-      const serverVersion = versions[header];
-      const requiredServerVersion = versions[`min-${header}`];
-      if(newerVersionExist(clientVersion, serverVersion)) {
+      const newestServerVersion = versions[`newest-${header}`];
+      const requiredServerVersion = versions[`required-${header}`];
+
+      if(newerVersionExist(clientVersion, newestServerVersion)) {
         hasNewerVersion = true;
         if(!version) {
-          version = serverVersion;
+          version = newestServerVersion;
         }
       }
       if(newerVersionExist(clientVersion, requiredServerVersion)) {
