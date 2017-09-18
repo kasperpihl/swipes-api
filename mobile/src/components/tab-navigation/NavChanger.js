@@ -29,6 +29,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 12,
   },
+  actionButton: {
+    zIndex: 9999,
+  },
   actionLabelWrapper: {
     height: 54,
     paddingLeft: ((viewSize.width / 5) - 24) / 2,
