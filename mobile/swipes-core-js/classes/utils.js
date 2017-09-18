@@ -517,6 +517,13 @@ export function throttle(func, wait, lock) {
     ctx = null;
     args = null;
   }
+  function clear() {
+    if (timeoutID) {
+      clearTimeout(timeoutID);
+      timeoutID = 0;
+      last = 0;
+    }
+  };
 
   function throttled() {
     ctx = this;
@@ -531,13 +538,7 @@ export function throttle(func, wait, lock) {
     return rtn;
   }
   throttled.isRunning = () => !!timeoutID;
-  throttled.clear = () => {
-    if (timeoutID) {
-      clearTimeout(timeoutID);
-      timeoutID = 0;
-      last = 0;
-    }
-  };
+  throttled.clear = clear;
   return throttled;
 }
 

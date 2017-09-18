@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback, throttle } from 'swipes-core-js/classes/utils';
 import * as views from '../../views';
 import { viewSize } from 'globalStyles';
 
@@ -21,7 +21,7 @@ class SceneRenderer extends PureComponent {
     super(props);
     this.state = {};
 
-    this.navPushCached = setupCachedCallback(props.navPush);
+    this.navPushCached = setupCachedCallback(throttle(props.navPush, 350, true));
     this.navPopCached = setupCachedCallback(props.navPop);
   }
   render() {
