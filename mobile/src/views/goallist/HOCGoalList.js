@@ -106,7 +106,7 @@ class HOCGoalList extends PureComponent {
 
     return (
       <HOCHeader
-        title="Take PAction"
+        title="Take Action"
         delegate={this}
       >
         <RippleButton onPress={this.handleModalState}>

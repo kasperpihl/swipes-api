@@ -98,7 +98,7 @@ def getVersion() {
     return version;
 }
 
-def updatedVerionName = getVersion().androidVersionName
+def updatedVersionName = getVersion().androidVersionName
 def updatedVersionCode = getVersion().androidVersionCode
 
 android {
@@ -110,7 +110,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode updatedVersionCode
-        versionName updatedVerionName
+        versionName updatedVersionName
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
