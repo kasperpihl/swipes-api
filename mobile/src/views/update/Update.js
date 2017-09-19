@@ -34,7 +34,7 @@ class Update extends PureComponent {
     let label = Platform.OS === 'ios' ? 'Update from App Store' : 'Update from Play Store';
     let callback = this.onUpdate;
 
-    if (!(versionInfo.get('reloadAvailable') || versionInfo.get('updateAvailable'))) return undefined;
+    if (!versionInfo.get('reloadAvailable') && !versionInfo.get('updateAvailable')) return undefined;
 
     if (versionInfo.get('reloadAvailable')) {
       label = 'Install now and reload app';

@@ -27,15 +27,12 @@ class HOCUpdate extends PureComponent {
   onUpdate() {
     const { versionInfo } = this.props;
     const url = versionInfo.get('updateUrl');
+
     if(!url) {
       return;
     }
-    if(Platform.OS === 'ios'){
-      Linking.openURL(url).catch(err => console.error('An error occurred', err));
-    }
-    else{
-      Linking.openURL(url).catch(err => console.error('An error occurred', err));
-    }
+
+    Linking.openURL(url).catch(err => console.error('An error occurred', err));
   }
   render() {
     const { versionInfo } = this.props;
