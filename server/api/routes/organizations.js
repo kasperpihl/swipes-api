@@ -93,7 +93,7 @@ authed.all(
   mapLocals(locals => ({
     fields: ['organizations'],
     userToGetId: locals.user_id,
-    user_to_activate: locals.user_id,
+    user_to_activate_id: locals.user_id,
   })),
   usersGetByIdWithFields,
   usersCheckIfInOrganization,

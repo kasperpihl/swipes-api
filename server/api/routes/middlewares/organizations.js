@@ -17,6 +17,7 @@ import {
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
   dbOrganizationsUpdateStripeSubscriptionId,
   dbOrganizationsAddPendingUser,
+  dbOrganizationsActivateUser,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -393,14 +394,14 @@ const organizationsDisableUser = valLocals('organizationsDisableUser', {
 });
 const organizationsActivateUser = valLocals('organizationsActivateUser', {
   organization_id: string.require(),
-  user_to_activate: string.require(),
+  user_to_activate_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     organization_id,
-    user_to_activate,
+    user_to_activate_id,
   } = res.locals;
 
-  dbOrganizationsActivateUser({ organization_id, user_to_activate })
+  dbOrganizationsActivateUser({ organization_id, user_to_activate_id })
     .then((result) => {
       const changes = result.changes[0];
       const organization = changes.new_val || changes.old_val;
@@ -461,15 +462,16 @@ const organizationsCreatedQueueMessage = valLocals('organizationsCreatedQueueMes
   return next();
 });
 const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMessage', {
-  user_id: string.require(),
   organization: object.require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
     organization,
   } = res.locals;
   const queueMessage = {
-    user_id,
+    // we are using the owner_id here because is some cases the user_id is not
+    // in the organization anymore when this middleware gets called
+    // for example: organization.leave
+    user_id: organization.owner_id,
     organization,
     event_type: 'organization_updated',
   };

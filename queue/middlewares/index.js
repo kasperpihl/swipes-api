@@ -276,17 +276,7 @@ const profile_updated = notifyWrapper([
 
 const organization_updated = notifyWrapper([
   organizations.organizationsCreatedUpdatedNotificationData,
-  (req, res, next) => {
-    const {
-      user_id,
-    } = res.locals;
-
-    res.locals.user_ids = [user_id];
-
-    return next();
-  },
-  notify.notifyMultipleUsers,
-  notify.notifySendEventToAllInCompany,
+  notify.notifyAllInCompany,
 ]);
 
 const organization_created = notifyWrapper([
