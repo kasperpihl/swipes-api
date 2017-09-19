@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
         paddingTop: 24,
       }
     }),
-    position: 'absolute',
-    left: 0, top: 0,
+    marginBottom: Platform.OS === 'ios' ? -20 : -24,
+    zIndex: 9999,
     alignItems: 'center',
     justifyContent: 'center',
   },

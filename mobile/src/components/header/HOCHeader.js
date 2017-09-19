@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     color: colors.deepBlue100,
-    fontSize: 24,
     fontWeight: 'bold',
+    fontSize: 21,
     lineHeight: 36,
   },
   subtitle: {
@@ -131,6 +131,11 @@ class HOCHeader extends PureComponent {
       </Tabs>
     );
   }
+  renderHeaderAction() {
+    const { headerAction } = this.props;
+
+    return headerAction;
+  }
   renderHeaderIcon() {
     const { icon } = this.props;
 
@@ -157,7 +162,7 @@ class HOCHeader extends PureComponent {
   renderTitle() {
 
     return (
-      <Text selectable={true} style={styles.title}>{this.props.title}</Text>
+      <Text style={styles.title}>{this.props.title}</Text>
     )
   }
   render() {
@@ -190,6 +195,7 @@ class HOCHeader extends PureComponent {
             <View style={{ flexDirection: 'column', flex: 1 }}>
               <View style={[styles.topContainer, { opacity }]}>
                 {this.renderHeaderIcon()}
+                {this.renderHeaderAction()}
                 {this.renderTitle()}
               </View>
               {this.renderSubtitle()}

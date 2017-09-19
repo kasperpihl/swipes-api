@@ -65,7 +65,7 @@ class NavChanger extends PureComponent {
   componentDidMount() {
     Animated.timing(this.state.transfromAnim, {
       toValue: 0,
-      easing: Easing.linear,
+      easing: Easing.easeOut,
       duration: 250,
       useNativeDriver: true
     }).start();
@@ -76,7 +76,6 @@ class NavChanger extends PureComponent {
     let buttonBg = updateable && updateAvailable ? colors.blue100 : colors.deepBlue10;
     let iconFill = updateable && updateAvailable ? 'white' : colors.deepBlue40;
     let labelColor = updateable && updateAvailable ? 'white' : colors.deepBlue100;
-
 
     return (
       <Animated.View style={[styles.actionWrapper, { transform: [{translateY: transfromAnim}] }]}>

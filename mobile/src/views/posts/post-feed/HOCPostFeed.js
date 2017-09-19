@@ -97,14 +97,10 @@ class HOCPostFeed extends PureComponent {
   render() {
     const { posts, counter, relatedPosts } = this.props;
     const { tabs, tabIndex } = this.state;
-
-    const sortedPosts = posts.sort((a, b) => {
-      return b.get('created_at').localeCompare(a.get('created_at'));
-    });
-
+    
     return (
       <PostFeed
-        posts={sortedPosts}
+        posts={posts}
         delegate={this}
         tabIndex={tabIndex}
         tabs={tabs}
