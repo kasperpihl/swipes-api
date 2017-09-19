@@ -271,6 +271,24 @@ const organizationsCheckOwnerRights = valLocals('organizationsCheckOwnerRights',
 
   return next();
 });
+const organizationsCheckOwnerRightsNot = valLocals('organizationsCheckOwnerRightsNot', {
+  user_id: string.require(),
+  organization: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization,
+  } = res.locals;
+  const {
+    owner_id,
+  } = organization;
+
+  if (owner_id === user_id) {
+    return next(new SwipesError('Owners can\'t do this action'));
+  }
+
+  return next();
+});
 const organizationsPromoteToAdmin = valLocals('organizationsPromoteToAdmin', {
   organization_id: string.require(),
   user_to_promote_id: string.require(),
@@ -658,4 +676,5 @@ export {
   organizationsAddPendingUsers,
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
+  organizationsCheckOwnerRightsNot,
 };

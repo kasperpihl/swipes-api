@@ -25,6 +25,7 @@ import {
   organizationsUpdateSubscriptionCustomer,
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
+  organizationsCheckOwnerRightsNot,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
@@ -101,6 +102,28 @@ authed.all(
   organizationsUpdateSubscriptionCustomer,
   userActivatedUserSignUpQueueMessage,
   notificationsPushToQueue,
+  mapLocals(locals => ({
+    organization: organizationConcatUsers(locals),
+  })),
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization: object.require(),
+  }),
+);
+
+authed.all(
+  '/organizations.leave',
+  valBody({
+    organization_id: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckOwnerRightsNot,
+  mapLocals(locals => ({
+    user_to_disable_id: locals.user_id,
+  })),
+  organizationsDisableUser,
+  organizationsUpdateSubscriptionCustomer,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),
