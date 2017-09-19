@@ -19,6 +19,7 @@ $contHeight: 66px;
   overflow: hidden;
   // transition: .2s ease;
   will-change: height;
+  background-color: $bg;
 }
 
 .goal-item-tooltip {
