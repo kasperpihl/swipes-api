@@ -200,18 +200,6 @@ const dbUsersActivateAfterSignUp = funcWrap([
   }, {
     returnChanges: 'always',
   });
-    // .do((result) => {
-    //   return result('changes').nth(0)('new_val');
-    // })
-    // .do((user) => {
-    //   return r.table('organizations').get(user('organizations').nth(0)).update((organization) => {
-    //     return {
-    //       active_users: organization('active_users').default([]).setUnion([user('id')]),
-    //       pending_users: organization('pending_users').default([]).difference([user('id')]),
-    //       updated_at: r.now(),
-    //     };
-    //   });
-    // });
 
   return db.rethinkQuery(q);
 });
