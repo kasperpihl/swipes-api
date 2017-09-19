@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import { Platform, Linking } from 'react-native';
+
+import codePush from 'react-native-code-push';
+import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import * as cs from 'swipes-core-js/selectors';
 import Update from './Update';
@@ -13,9 +16,35 @@ class HOCUpdate extends PureComponent {
   }
   componentDidMount() {
   }
+  onReload() {
+    const { loading } = this.props;
+    loading(true);
+
+    codePush.sync({
+      installMode: codePush.InstallMode.IMMEDIATE,
+    });
+  }
+  onUpdate() {
+    const { versionInfo } = this.props;
+    const url = versionInfo.get('updateUrl');
+    if(!url) {
+      return;
+    }
+    if(Platform.OS === 'ios'){
+      Linking.openURL(APP_STORE_LINK).catch(err => console.error('An error occurred', err));
+    }
+    else{
+      Linking.openURL(PLAY_STORE_LINK).catch(err => console.error('An error occurred', err));
+    }
+  }
   render() {
+    const { versionInfo } = this.props;
+
     return (
-      <Update />
+      <Update 
+        versionInfo={versionInfo}
+        delegate={this}
+      />
     );
   }
 }
@@ -24,7 +53,9 @@ class HOCUpdate extends PureComponent {
 HOCUpdate.propTypes = {};
 
 const mapStateToProps = (state) => ({
+  versionInfo: state.getIn(['connection', 'versionInfo']),
 });
 
 export default connect(mapStateToProps, {
+  loading: a.loading.showLoader,
 })(HOCUpdate);
