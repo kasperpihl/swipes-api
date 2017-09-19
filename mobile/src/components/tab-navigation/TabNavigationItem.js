@@ -77,7 +77,6 @@ class TabNavigationItem extends PureComponent {
     }
   }
   componentWillReceiveProps(nextProps) {
-
     if (nextProps.icon !== this.props.icon) {
       this.setState({ icon: undefined });
 
@@ -87,7 +86,7 @@ class TabNavigationItem extends PureComponent {
     }
   }
   componentWillUpdate() {
-    LayoutAnimation.configureNext(LayoutAnimation.create(1, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
+    // LayoutAnimation.configureNext(LayoutAnimation.create(1, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
   }
   componentWillUnmount() {
     clearTimeout(this.iconChangeTimeout);
