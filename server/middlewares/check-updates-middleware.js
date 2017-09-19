@@ -91,12 +91,12 @@ const checkForUpdates = (req, res, next) => {
   const platform = req.header('sw-platform');
   switch(platform) {
     case 'ios': {
-      testUpdate(null, 'ios-build-number', 'https://beta.itunes.apple.com/v1/app/1250630942');
+      testUpdate('https://beta.itunes.apple.com/v1/app/1250630942', 'ios-build-number');
       testReload(null, 'ios-code-push-version');
       break;
     }
     case 'android': {
-      testUpdate(null, 'android-build-number', 'market://details?id=com.swipesapp.release');
+      testUpdate('market://details?id=com.swipesapp.release', 'android-build-number');
       testReload(null, 'android-code-push-version');
       break;
     }

@@ -31,10 +31,10 @@ class HOCUpdate extends PureComponent {
       return;
     }
     if(Platform.OS === 'ios'){
-      Linking.openURL(APP_STORE_LINK).catch(err => console.error('An error occurred', err));
+      Linking.openURL(url).catch(err => console.error('An error occurred', err));
     }
     else{
-      Linking.openURL(PLAY_STORE_LINK).catch(err => console.error('An error occurred', err));
+      Linking.openURL(url).catch(err => console.error('An error occurred', err));
     }
   }
   render() {
