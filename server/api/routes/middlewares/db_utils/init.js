@@ -62,10 +62,10 @@ const initMe = funcWrap([
           milestones:
              r.table('milestones')
                .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
-              .filter((milestone) => {
-                return milestone('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
-              })
-              .coerceTo('ARRAY'),
+               .filter((milestone) => {
+                 return milestone('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+               })
+               .coerceTo('ARRAY'),
         });
       })
       .do((user) => {
