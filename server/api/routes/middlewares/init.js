@@ -1,12 +1,16 @@
 import Promise from 'bluebird';
 import {
   string,
+  object,
   bool,
 } from 'valjs';
 import {
   valLocals,
 } from '../../utils';
-import initMe from './db_utils/init';
+import {
+  dbInit,
+  dbInitWithoutOrganization,
+} from './db_utils/init';
 import {
   servicesGetAll,
 } from './db_utils/services';
@@ -33,20 +37,27 @@ const SOFI = {
   },
   updated_at: new Date(),
 };
-const initGetData = valLocals('initGetData', {
+const init = valLocals('init', {
   user_id: string.require(),
+  user: object.require(),
   timestamp: string.format('iso8601').require(),
   full_fetch: bool.require(),
   without_notes: bool,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    user,
     timestamp,
     full_fetch,
     without_notes,
   } = res.locals;
+
+  if (user.organizations.length === 0) {
+    return next();
+  }
+
   const promiseArrayQ = [
-    initMe(user_id, timestamp, full_fetch, without_notes),
+    dbInit(user_id, timestamp, full_fetch, without_notes),
     servicesGetAll(timestamp, full_fetch),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
@@ -65,7 +76,7 @@ const initGetData = valLocals('initGetData', {
 
   const now = new Date().toISOString();
 
-  Promise.all(promiseArrayQ)
+  return Promise.all(promiseArrayQ)
     .then((data) => {
       const me = data[0];
       let users = [];
@@ -146,5 +157,41 @@ const initGetData = valLocals('initGetData', {
       return next(err);
     });
 });
+const initWithoutOrganization = valLocals('initWithoutOrganization', {
+  user_id: string.require(),
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    user,
+  } = res.locals;
 
-export default initGetData;
+  if (user.organizations.length > 0) {
+    return next();
+  }
+
+  return dbInitWithoutOrganization(user_id)
+    .then((me) => {
+      const now = new Date().toISOString();
+      const pending_organizations = me.pending_organizations || [];
+
+      delete me.pending_organizations;
+
+      setLocals({
+        me,
+        pending_organizations,
+        timestamp: now,
+        sofi: SOFI,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+
+export {
+  init,
+  initWithoutOrganization,
+};

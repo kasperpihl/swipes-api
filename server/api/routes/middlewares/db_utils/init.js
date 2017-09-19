@@ -9,14 +9,14 @@ import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
 
-const initMe = funcWrap([
+const dbInit = funcWrap([
   string.require(),
   string.format('iso8601').require(),
   bool.require(),
   bool,
 ], (err, user_id, timestamp, full_fetch, without_notes = false) => {
   if (err) {
-    throw new SwipesError(`initMe: ${err}`);
+    throw new SwipesError(`dbInit: ${err}`);
   }
 
   const q =
@@ -145,5 +145,29 @@ const initMe = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbInitWithoutOrganization = funcWrap([
+  string.require(),
+], (err, user_id) => {
+  if (err) {
+    throw new SwipesError(`dbInitWithoutOrganization: ${err}`);
+  }
 
-export default initMe;
+  const q =
+    r.table('users')
+      .get(user_id)
+      .without(['password', 'xendoCredentials', { services: 'auth_data' }])
+      .merge({
+        pending_organizations:
+          r.table('organizations')
+            .getAll(r.args(r.row('pending_organizations')))
+            .pluck('id', 'name')
+            .coerceTo('ARRAY'),
+      });
+
+  return db.rethinkQuery(q);
+});
+
+export {
+  dbInit,
+  dbInitWithoutOrganization,
+};

@@ -5,7 +5,13 @@ import {
   object,
   array,
 } from 'valjs';
-import initGetData from './middlewares/init';
+import {
+  init,
+  initWithoutOrganization,
+} from './middlewares/init';
+import {
+  usersGetByIdWithFields,
+} from './middlewares/users';
 import {
   valBody,
   valResponseAndSend,
@@ -24,22 +30,27 @@ authed.all(
   mapLocals(l => ({
     full_fetch: !l.timestamp,
     timestamp: l.timestamp === null ? new Date(1970, 1, 1).toISOString() : l.timestamp,
+    userToGetId: l.user_id,
+    fields: ['organizations'],
   })),
-  initGetData,
+  usersGetByIdWithFields,
+  initWithoutOrganization,
+  init,
   valResponseAndSend({
     me: object.require(),
     timestamp: string.format('iso8601').require(),
-    users: array.of(object).require(),
-    goals: array.of(object).require(),
-    milestones: array.of(object).require(),
-    ways: array.of(object).require(),
-    notes: array.of(object).require(),
-    posts: array.of(object).require(),
-    services: array.of(object).require(),
-    sofi: object.require(),
-    notifications: array.of(object).require(),
-    onboarding: array.of(object).require(),
     full_fetch: bool.require(),
+    sofi: object.require(),
+    users: array.of(object),
+    goals: array.of(object),
+    milestones: array.of(object),
+    ways: array.of(object),
+    notes: array.of(object),
+    posts: array.of(object),
+    services: array.of(object),
+    notifications: array.of(object),
+    onboarding: array.of(object),
+    pending_organizations: array.of(object),
   }),
 );
 
