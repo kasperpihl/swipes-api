@@ -15,7 +15,8 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/init',
+authed.all(
+  '/init',
   valBody({
     timestamp: string.format('iso8601'),
     without_notes: bool,
@@ -39,7 +40,8 @@ authed.all('/init',
     notifications: array.of(object).require(),
     onboarding: array.of(object).require(),
     full_fetch: bool.require(),
-  }));
+  }),
+);
 
 export {
   notAuthed,

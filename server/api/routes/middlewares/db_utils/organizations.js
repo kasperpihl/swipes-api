@@ -201,6 +201,7 @@ const dbOrganizationsActivateUser = funcWrap([
       .update({
         active_users: r.row('active_users').default([]).setUnion([user_to_activate_id]),
         pending_users: r.row('pending_users').default([]).difference([user_to_activate_id]),
+        disabled_users: r.row('disabled_users').default([]).difference([user_to_activate_id]),
         updated_at: r.now(),
       }, {
         returnChanges: true,
@@ -224,12 +225,14 @@ const dbOrganizationsEnableUser = funcWrap([
       .update({
         pending_users: r.row('pending_users').default([]).setUnion([user_to_enable_id]),
         disabled_users: r.row('disabled_users').default([]).difference([user_to_enable_id]),
+        active_users: r.row('active_users').default([]).difference([user_to_enable_id]),
         updated_at: r.now(),
       }, {
         returnChanges: true,
       }).do((result) => {
         return r.table('users').get(user_to_enable_id).update((user) => {
           return {
+            organizations: user('organizations').default([]).difference([organization_id]),
             pending_organizations: user('pending_organizations').default([]).setUnion([organization_id]),
           };
         }).do(() => {
