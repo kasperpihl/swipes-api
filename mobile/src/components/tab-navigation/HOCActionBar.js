@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: colors.blue100,
     fontWeight: 'bold',
+    includeFontPadding: false,
+    textAlignVertical: 'center'
   },
   verticalSeperatorLeft: {
     width: 1,

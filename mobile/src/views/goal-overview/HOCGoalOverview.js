@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation, Alert } from 'react-native';
+import { View, StyleSheet, Platform, UIManager, LayoutAnimation, Alert, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -56,7 +56,7 @@ class HOCGoalOverview extends PureComponent {
     const overrideAssignees = List(data.map(i => sortedUsers.getIn([i, 'id'])));
 
     assignGoal(goal.get('id'), overrideAssignees).then((res) => {
-
+      
     })
     showModal();
   }
@@ -65,8 +65,14 @@ class HOCGoalOverview extends PureComponent {
     const helper = this.getHelper();
     const actionFunc = helper.getIsCompleted() ? incompleteGoal : completeGoal;
 
-    actionFunc((helper.getId())).then((res) => {
+    this.setLoading('completing');
 
+    actionFunc((helper.getId())).then((res) => {
+      if (res && res.ok) {
+        this.clearLoading('completing');
+      } else {
+        this.clearLoading('completing', '!Something went wrong');
+      }
     })
   }
   handleAssigning() {
@@ -240,6 +246,15 @@ class HOCGoalOverview extends PureComponent {
     
   }
   renderGoalComplete() {
+    
+    if (this.isLoading('completing')) {
+      return (
+        <View style={{width: 36, height: 36, alignItems: 'center', justifyContent: 'center', marginRight: 12, marginTop: 5 }}>
+          <ActivityIndicator color={colors.greenColor} size='small' />
+        </View>
+      )
+    }
+
     const helper = this.getHelper();
     const isCompleted = helper.getIsCompleted();
     let extraStyles = {

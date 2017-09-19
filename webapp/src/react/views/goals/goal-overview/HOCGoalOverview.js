@@ -120,7 +120,6 @@ class HOCGoalOverview extends PureComponent {
     const helper = this.getHelper();
     const assignees = helper.getAllAssigneesButMe();
 
-    console.log(i, handoff);
     this.onCreatePost({
       taggedUsers: assignees.toArray(),
     });
