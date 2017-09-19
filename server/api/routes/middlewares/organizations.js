@@ -373,6 +373,30 @@ const organizationsDisableUser = valLocals('organizationsDisableUser', {
       return next(err);
     });
 });
+const organizationsActivateUser = valLocals('organizationsActivateUser', {
+  organization_id: string.require(),
+  user_to_activate: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_to_activate,
+  } = res.locals;
+
+  dbOrganizationsActivateUser({ organization_id, user_to_activate })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        organization,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 const organizationsEnableUser = valLocals('organizationsEnableUser', {
   organization_id: string.require(),
   user_to_enable_id: string.require(),
@@ -633,4 +657,5 @@ export {
   organizationsUpdateSubscriptionCustomer,
   organizationsAddPendingUsers,
   organizationsCreatedQueueMessage,
+  organizationsActivateUser,
 };

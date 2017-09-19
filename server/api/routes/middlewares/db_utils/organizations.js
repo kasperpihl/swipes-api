@@ -183,6 +183,29 @@ const dbOrganizationsDisableUser = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOrganizationsActivateUser = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    user_to_activate_id: string.require(),
+  }).require(),
+], (err, { organization_id, user_to_activate_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsActivateUser: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        active_users: r.row('active_users').default([]).setUnion([user_to_activate_id]),
+        pending_users: r.row('pending_users').default([]).difference([user_to_activate_id]),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 const dbOrganizationsEnableUser = funcWrap([
   object.as({
     organization_id: string.require(),
@@ -273,4 +296,5 @@ export {
   dbOrganizationsEnableUser,
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
   dbOrganizationsUpdateStripeSubscriptionId,
+  dbOrganizationsActivateUser,
 };

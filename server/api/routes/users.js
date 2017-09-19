@@ -102,9 +102,6 @@ notAuthed.all(
   userAvailability,
   // usersParseInvitationToken,
   usersActivateUserSignUp,
-  // mapLocals(locals => ({ THIS IS FOR JOINING
-  //   organization_id: locals.organizationId,
-  // })),
   // organizationsGetSingle, THIS IS FOR JOINING
   // organizationsUpdateSubscriptionCustomer, THIS IS FOR JOINING
   // userActivatedUserSignUpQueueMessage, THIS IS FOR JOINING
@@ -114,8 +111,6 @@ notAuthed.all(
   mapLocals(locals => ({
     user_id: locals.userId,
   })),
-  // organizationsCreate,
-  // organizationsAddToUser,
   userSignupQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({

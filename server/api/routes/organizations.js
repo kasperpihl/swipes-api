@@ -24,6 +24,7 @@ import {
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
   organizationsCreatedQueueMessage,
+  organizationsActivateUser,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
@@ -31,6 +32,7 @@ import {
   usersComparePasswordSignIn,
   // usersParseInvitationToken,
   usersGetByIdWithFields,
+  userActivatedUserSignUpQueueMessage,
 } from './middlewares/users';
 import {
   notificationsPushToQueue,
@@ -80,6 +82,33 @@ authed.all(
   organizationsCreatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend(),
+);
+
+authed.all(
+  '/organizations.join',
+  valBody({
+    organization_id: string.require(),
+  }),
+  mapLocals(locals => ({
+    fields: ['organizations'],
+    userToGetId: locals.user_id,
+    user_to_activate: locals.user_id,
+  })),
+  usersGetByIdWithFields,
+  usersCheckIfInOrganization,
+  organizationsActivateUser,
+  organizationsAddToUser,
+  organizationsUpdateSubscriptionCustomer,
+  userActivatedUserSignUpQueueMessage,
+  notificationsPushToQueue,
+  mapLocals(locals => ({
+    organization: organizationConcatUsers(locals),
+  })),
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization: object.require(),
+  }),
 );
 
 authed.all(

@@ -32,6 +32,7 @@ import {
 } from './db_utils/users';
 import {
   dbOrganizationsAddUser,
+  dbOrganizationsActivateUser,
 } from './db_utils/organizations';
 import {
   dbTokensInsertSingle,
