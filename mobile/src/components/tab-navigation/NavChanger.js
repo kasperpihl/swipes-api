@@ -66,7 +66,7 @@ class NavChanger extends PureComponent {
     Animated.timing(this.state.transfromAnim, {
       toValue: 0,
       easing: Easing.easeOut,
-      duration: 250,
+      duration: 150,
       useNativeDriver: true
     }).start();
   }
