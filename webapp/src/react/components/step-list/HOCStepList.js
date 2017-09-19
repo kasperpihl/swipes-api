@@ -28,6 +28,9 @@ class HOCStepList extends PureComponent {
   componentDidMount() {
     this.viewDidLoad(this);
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   onStepAdd(title, assignees) {
     const { addStep, goal } = this.props;
     this.setLoading('add', 'Adding...');
@@ -113,21 +116,17 @@ class HOCStepList extends PureComponent {
     }
     const { reorder } = this.props;
     const helper = this.getHelper();
-    const stepOrder = helper.getStepOrder();
     const newStepOrder = helper.getNewStepOrder(oldIndex, newIndex);
-    const max = (oldIndex > newIndex) ? oldIndex : newIndex;
-    const min = (oldIndex < newIndex) ? oldIndex : newIndex;
 
-    this.setLoading(stepOrder.get(oldIndex), 'Reordering');
-    for(let i = min ; i <= max ; i++) {
-      //this.setLoading(stepOrder.get(i), 'Reordering...');
-      this.setState({ tempOrder: newStepOrder });
-    }
+    this.setLoading(newStepOrder.get(newIndex), 'Reordering...');
+    this.setState({ tempOrder: newStepOrder });
+
     reorder(helper.getId(), newStepOrder).then((res) => {
-      console.log('ressy', res);
-      this.setState({tempOrder: null});
-      for(let i = min ; i <= max ; i++) {
-        this.clearLoading(stepOrder.get(i));
+      if(!this._unmounted) {
+        console.log('ressy', res);
+        this.clearLoading(newStepOrder.get(newIndex));
+        this.setState({tempOrder: null});
+        
       }
     });
   }

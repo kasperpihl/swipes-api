@@ -25,6 +25,8 @@ export default function milestonesReducer(state = initialState, action) {
     case 'milestone_renamed': {
       return state.setIn([payload.milestone_id, 'title'], payload.title);
     }
+    case 'milestones.goalsReorder': 
+    case 'milestone_goals_reordered':
     case 'goal_created':
     case 'goals.create':
     case 'goals.archive':

@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
+import { SortableElement, SortableContainer } from 'react-sortable-hoc';
+import { getParentByClass, bindAll } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
@@ -14,15 +16,17 @@ import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import './styles/milestone-overview.scss';
 
+const SortableSection = SortableContainer(Section, { withRef: true})
+const SortableGoal = SortableElement(HOCGoalListItem);
+
 class MilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       emptyStateOpacity: 1,
     };
-    setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll');
-  }
-  componentDidMount() {
+    bindAll(this, ['getContainer', 'onSortEnd']);
+    setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll', 'onStepSort');
   }
   getNumberOfAllGoals() {
     const { groupedGoals } = this.props;
@@ -41,6 +45,16 @@ class MilestoneOverview extends PureComponent {
     if (emptyStateOpacity !== newEmptyStateOpacity) {
       this.setState({ emptyStateOpacity: newEmptyStateOpacity })
     }
+  }
+  onSortStart() {
+    document.body.classList.add("no-select");
+  }
+  onSortEnd(obj, e) {
+    document.body.classList.remove("no-select");
+    this.onStepSort(obj, e);
+  }
+  getContainer(el) {
+    return getParentByClass(el.refs.section, 'sw-view__scroll');
   }
   renderHeader() {
     const { milestone: m, getLoading, delegate, showLine } = this.props;
@@ -121,20 +135,37 @@ class MilestoneOverview extends PureComponent {
   renderLeftSection() {
     return (
       <section>
-        <Section title="This week">
+        <SortableSection
+          lockAxis="y"
+          distance={5}
+          onSortStart={this.onSortStart}
+          onSortEnd={this.onSortEnd}
+          getContainer={this.getContainer}
+          lockToContainerEdges
+          helperClass="step-list-item__sortable"
+
+          title="This week"
+        >
           {this.renderList('Current')}
           {this.renderEmptyState('Current')}
-        </Section>
+        </SortableSection>
       </section>
     );
   }
   renderList(group) {
-    const { delegate, groupedGoals, milestone } = this.props;
+    const { delegate, groupedGoals, milestone, tempOrder, getLoading } = this.props;
 
-    let renderedGoals = groupedGoals.get(group).map(g => (
-      <HOCGoalListItem
-        goalId={g.get('id')}
-        key={g.get('id')}
+    const groupToRun = (group === 'Current' && tempOrder) ? tempOrder : groupedGoals.get(group);
+    const Element = group === 'Current' ? SortableGoal : HOCGoalListItem;
+    let renderedGoals = groupToRun.map((g, i) => (
+      <Element
+        index={i}
+        disabled={!!tempOrder}
+        collection={group}
+
+        {...getLoading((typeof g === 'string') ? g : g.get('id'))}
+        goalId={(typeof g === 'string') ? g : g.get('id')}
+        key={(typeof g === 'string') ? g : g.get('id')}
         delegate={delegate}
         fromMilestone={true}
       />

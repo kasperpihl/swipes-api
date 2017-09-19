@@ -39,6 +39,11 @@ export const removeGoal = valAction('milestones.removeGoal', [
   }));
 });
 
+export const reorderGoals = (milestoneId, goalOrder) => a.api.request('milestones.goalsReorder', {
+  milestone_id: milestoneId,
+  goal_order: goalOrder,
+});
+
 export const rename = valAction('milestones.rename', [
   string.require(),
   string.require(),

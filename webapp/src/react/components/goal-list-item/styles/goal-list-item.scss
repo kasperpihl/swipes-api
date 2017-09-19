@@ -17,7 +17,7 @@ $contHeight: 66px;
   border-bottom: 1px solid $deepBlue-6;
   padding: 0 6px;
   overflow: hidden;
-  transition: .2s ease;
+  // transition: .2s ease;
   will-change: height;
 }
 
@@ -183,11 +183,11 @@ $contHeight: 66px;
 
   &:hover {
     background-color: $blue-5;
-    transition: .2s ease;
+    // transition: .2s ease;
 
     #{$b}__title {
       @include font($c: $blue-100);
-      transition: .2s ease;
+      // transition: .2s ease;
     }
 
     #{$b}__move {
