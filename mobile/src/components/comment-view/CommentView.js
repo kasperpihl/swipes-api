@@ -116,7 +116,7 @@ class CommentView extends PureComponent {
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text selectable={true} style={styles.initialsLabel}>
+          <Text style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>

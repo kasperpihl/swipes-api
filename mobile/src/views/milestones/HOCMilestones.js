@@ -191,8 +191,8 @@ class HOCMilestones extends PureComponent {
             <View style={styles.noMilestoneCircle}><View style={styles.noMilestoneDot} /></View>
           </View>
           <View style={styles.noMilestoneTitle}>
-            <Text selectable={true} style={styles.title}>Goals with no milestones</Text>
-            <Text selectable={true} style={styles.counter}>{counter}</Text>
+            <Text style={styles.title}>Goals with no milestones</Text>
+            <Text style={styles.counter}>{counter}</Text>
           </View>
           <View style={styles.border} />
         </View>
@@ -202,7 +202,7 @@ class HOCMilestones extends PureComponent {
   renderListFooter() {
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         {this.renderNoMilestoneItems()}
         <EmptyListFooter />
       </View>

@@ -44,7 +44,7 @@ class Assignees extends Component {
         }
         return (
           <View key={i} style={styles.initialWrapper}>
-            <Text selectable={true} style={styles.initial}>{firstLetter}</Text>
+            <Text style={styles.initial}>{firstLetter}</Text>
           </View>
         );
       }
@@ -54,7 +54,7 @@ class Assignees extends Component {
     let morePeople;
 
     if (assignees.size > (maxImages + 1)) {
-      morePeople = <View style={[styles.morePeople, { zIndex: 1 }]}><Text selectable={true} style={styles.morePeopleText}>+{assignees.size - maxImages}</Text></View>;
+      morePeople = <View style={[styles.morePeople, { zIndex: 1 }]}><Text style={styles.morePeopleText}>+{assignees.size - maxImages}</Text></View>;
     }
 
     return (
