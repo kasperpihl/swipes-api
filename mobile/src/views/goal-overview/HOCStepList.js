@@ -80,9 +80,7 @@ const styles = StyleSheet.create({
 class HOCStepList extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      modalState: false
-    };
+    this.state = {};
 
     setupDelegate(this, 'onComplete');
 
@@ -138,19 +136,22 @@ class HOCStepList extends PureComponent {
   onModalCreateAction(title, assignees, milestoneId ) {
     const { addStep, goal } = this.props;
 
-    addStep(goal.get('id'), title, assignees).then((res) => {
-      this.handleModalState();
-    });
+    addStep(goal.get('id'), title, assignees).then((res) => {});
   }
   handleModalState() {
-    const { modalState } = this.state;
+    const { navPush } = this.props;
 
-    if (!modalState) {
-      this.setState({ modalState: true })
-    } else {
-      this.setState({ modalState: false });
-    }
-
+    navPush({
+      id: 'CreateNewItemModal',
+      title: 'CreateNewItemModal',
+      props: {
+        title: '',
+          defAssignees: [this.props.myId],
+          placeholder: "Add a new step",
+          actionLabel: "Add step",
+          delegate: this
+      }
+    })
   }
   onStepAdd() {
 
@@ -221,13 +222,6 @@ class HOCStepList extends PureComponent {
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
           renderEmptyInList={this.renderEmpty}
           renderFooter={this.renderListFooter}
-        />
-        <CreateNewItemModal
-          modalState={this.state.modalState}
-          defAssignees={[this.props.myId]}
-          placeholder="Add a new step"
-          actionLabel="Add step"
-          delegate={this}
         />
       </View>
     );

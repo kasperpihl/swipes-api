@@ -11,6 +11,7 @@ import PostCreate from './posts/post-create/HOCPostCreate';
 import Notifications from './notifications/HOCNotifications';
 import Update from './update/HOCUpdate';
 import Search from './search/HOCSearch';
+import CreateNewItemModal from 'modals/CreateNewItemModal';
 
 export {
   GoalOverview,
@@ -25,5 +26,6 @@ export {
   Notifications,
   NoMilestoneOverview,
   Update,
-  Search
+  Search,
+  CreateNewItemModal
 };

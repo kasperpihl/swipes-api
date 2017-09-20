@@ -86,11 +86,10 @@ class HOCMilestones extends PureComponent {
     this.state = {
       tabs: ['Current Milestones', 'Achieved'],
       tabIndex: 0,
-      fabOpen: false,
     };
 
     this.renderMilestoneItem = this.renderMilestoneItem.bind(this);
-    this.handleModalState = this.handleModalState.bind(this);
+    this.openCreateMilestoneModal = this.openCreateMilestoneModal.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
     this.renderListFooter = this.renderListFooter.bind(this);
     this.onOpenNoMilestone = this.onOpenNoMilestone.bind(this);
@@ -129,24 +128,25 @@ class HOCMilestones extends PureComponent {
     navPush(overview);
   }
   onModalCreateAction(title) {
-    const { createMilestone } = this.props;
+    const { createMilestone, navPop } = this.props;
 
     if (title.length > 0) {
-      createMilestone(title).then((res) => {
-        if (res && res.ok) {
-          this.handleModalState()
-        }
-      });
+      createMilestone(title).then((res) => {});
     }
   }
-  handleModalState() {
-    const { fabOpen } = this.state;
+  openCreateMilestoneModal() {
+    const { navPush } = this.props;
 
-    if (!fabOpen) {
-      this.setState({ fabOpen: true })
-    } else {
-      this.setState({ fabOpen: false })
-    }
+    navPush({
+      id: 'CreateNewItemModal',
+      title: 'CreateNewItemModal',
+      props: {
+        title: '',
+        placeholder: "Add a new milestone",
+        actionLabel: "Add milestone",
+        delegate: this
+      }
+    })
   }
   renderHeader() {
     const { tabIndex, tabs } = this.state;
@@ -167,7 +167,7 @@ class HOCMilestones extends PureComponent {
           return t;
         })}
       >
-        <RippleButton onPress={this.handleModalState}>
+        <RippleButton onPress={this.openCreateMilestoneModal}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
           </View>
@@ -243,12 +243,6 @@ class HOCMilestones extends PureComponent {
       <View style={styles.container}>
         {this.renderHeader()}
         {this.renderList()}
-        <CreateNewItemModal
-          modalState={this.state.fabOpen}
-          placeholder="Add a new milestone"
-          actionLabel="Add milestone"
-          delegate={this}
-        />
       </View>
     );
   }

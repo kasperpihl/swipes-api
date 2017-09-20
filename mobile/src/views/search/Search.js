@@ -60,9 +60,10 @@ const styles = StyleSheet.create({
   inputStyles: {
     flex: 1,
     fontSize: 13,
-    lineHeight: 18,
     color: colors.deepBlue100,
     paddingHorizontal: 18,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });
 

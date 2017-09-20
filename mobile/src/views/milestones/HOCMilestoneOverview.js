@@ -68,12 +68,11 @@ class HOCMilestoneOverview extends PureComponent {
     this.state = {
       tabs: ['Current', 'Later', 'Completed'],
       tabIndex: 0,
-      fabOpen: false,
       showingInfoTab: false,
     };
 
     propsOrPop(this, 'milestone');
-    bindAll(this, ['onActionButton', 'renderGoal', 'handleModalState', 'onHeaderTap', 'onActionPress', 'onInfoTabClose',]);
+    bindAll(this, ['onActionButton', 'renderGoal', 'openCreateGoalModal', 'onHeaderTap', 'onActionPress', 'onInfoTabClose',]);
   }
   componentDidMount() {
     this.renderActionButtons();
@@ -158,24 +157,27 @@ class HOCMilestoneOverview extends PureComponent {
     const { createGoal } = this.props;
 
     if (title.length > 0) {
-      createGoal(title, milestoneId, assignees.toJS()).then((res) => {
-        if (res.ok) {
-          this.handleModalState()
-        }
-      });
+      createGoal(title, milestoneId, assignees.toJS()).then((res) => {});
     }
   }
   onHeaderTap() {
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
-  handleModalState() {
-    const { fabOpen } = this.state;
+  openCreateGoalModal() {
+    const { navPush, milestone } = this.props;
 
-    if (!fabOpen) {
-      this.setState({ fabOpen: true })
-    } else {
-      this.setState({ fabOpen: false })
-    }
+    navPush({
+      id: 'CreateNewItemModal',
+      title: 'CreateNewItemModal',
+      props: {
+        title: '',
+        defAssignees: [this.props.myId],
+        placeholder: "Add a new goal to a milestone",
+        actionLabel: "Add goal",
+        milestoneId: milestone.get('id'),
+        delegate: this
+      }
+    })
   }
   renderActionButtons(showingInfoTab) {
 
@@ -271,7 +273,7 @@ class HOCMilestoneOverview extends PureComponent {
 
     return (
       <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.handleModalState}>
+        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.openCreateGoalModal}>
           <View style={styles.fabButton}>
             <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
           </View>
@@ -287,14 +289,6 @@ class HOCMilestoneOverview extends PureComponent {
         {this.renderHeader()}
         {this.renderList()}
         {this.renderFAB()}
-        <CreateNewItemModal
-          modalState={this.state.fabOpen}
-          defAssignees={[this.props.myId]}
-          placeholder="Add a new goal to a milestone"
-          actionLabel="Add goal"
-          milestoneId={milestone.get('id')}
-          delegate={this}
-        />
       </View>
     );
   }

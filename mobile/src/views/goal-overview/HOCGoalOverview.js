@@ -55,9 +55,7 @@ class HOCGoalOverview extends PureComponent {
     const { showModal, assignGoal, goal } = this.props;
     const overrideAssignees = List(data.map(i => sortedUsers.getIn([i, 'id'])));
 
-    assignGoal(goal.get('id'), overrideAssignees).then((res) => {
-      
-    })
+    assignGoal(goal.get('id'), overrideAssignees).then((res) => {})
     showModal();
   }
   handleCompleteGoal() {
@@ -297,7 +295,7 @@ class HOCGoalOverview extends PureComponent {
     );
   }
   renderStepList() {
-    const { goal, me } = this.props;
+    const { goal, me, navPush } = this.props;
     const helper = this.getHelper();
 
     return (
@@ -307,6 +305,7 @@ class HOCGoalOverview extends PureComponent {
           steps={helper.getOrderedSteps()}
           delegate={this}
           myId={me.get('id')}
+          navPush={navPush}
           {...this.bindLoading() }
         />
       </WaitForUI>
@@ -329,9 +328,11 @@ class HOCGoalOverview extends PureComponent {
     const { goal } = this.props;
 
     return (
-      <AssigneesList
-        assignees={goal.get('assignees')}
-      />
+      <WaitForUI>
+        <AssigneesList
+          assignees={goal.get('assignees')}
+        />
+      </WaitForUI>
     )
   }
   renderContent() {

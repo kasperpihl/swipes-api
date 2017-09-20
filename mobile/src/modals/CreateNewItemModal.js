@@ -1,5 +1,5 @@
 import React, { PureComponent} from 'react';
-import { View, Text, StyleSheet, Modal, TextInput, TouchableWithoutFeedback, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput, TouchableWithoutFeedback, Platform, UIManager, LayoutAnimation, Keyboard } from 'react-native';
 import { setupDelegate } from 'react-delegate';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
@@ -40,9 +40,10 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     flex: 1,
     fontSize: 15,
-    lineHeight: 18,
     color: colors.deepBlue100,
     paddingHorizontal: 15,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   contentWrapper: {
     flex: 1,
@@ -89,6 +90,7 @@ class CreateNewItemModal extends PureComponent {
       title: '',
       assignees: fromJS(props.defAssignees || []),
       milestoneId: props.milestoneId || null,
+      keyboardOpen: false,
     };
 
     this.handleAssigning = this.handleAssigning.bind(this);
@@ -102,11 +104,7 @@ class CreateNewItemModal extends PureComponent {
     }
   }
   componentWillUpdate(nextProps) {
-    // Because of RN bug, see: https://github.com/facebook/react-native/issues/8562
-
-    if (nextProps.modalState) {
-      LayoutAnimation.easeInEaseOut();
-    }
+    LayoutAnimation.easeInEaseOut();
   }
   componentWillUnmount() {
     clearTimeout(this.showAssigneeModalTimeout);
@@ -114,13 +112,22 @@ class CreateNewItemModal extends PureComponent {
   }
   onActionClick() {
     const { title, assignees, milestoneId } = this.state;
+    const { navPop } = this.props;
 
-    this.onModalCreateAction(title, assignees, milestoneId);
-    this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
+    if (title.length) {
+      Keyboard.dismiss;
+      this.onModalCreateAction(title, assignees, milestoneId);
+      setTimeout(() => {
+        navPop();
+      }, 1)
+    }
   }
   onCloseModal() {
-    this.setState({title: '', assignees: fromJS(this.props.defAssignees || []), milestoneId: this.props.milestoneId || null});
-    this.handleModalState();
+    const { navPop } = this.props;
+    Keyboard.dismiss;
+    setTimeout(() => {
+      navPop()
+    }, 1)
   }
   onModalAssign(sortedUsers, data) {
     let { assignees } = this.state;
@@ -192,7 +199,6 @@ class CreateNewItemModal extends PureComponent {
           value={this.state.title}
           placeholder={placeholder}
           autoFocus={true}
-          blurOnSubmit={true}
           onSubmitEditing={this.onActionClick}
           returnKeyType="send"
         />
@@ -274,25 +280,15 @@ class CreateNewItemModal extends PureComponent {
     }
 
     return (
-      <Modal
-        animationType={'fade'}
-        transparent={true}
-        visible={modalState}
-        onRequestClose={this.onCloseModal}
-      >
+      <View style={{ flex: 1, backgroundColor: colors.deepBlue100  }}>
         <View style={styles.createActionWrapper}>
-          <TouchableWithoutFeedback onPress={this.onCloseModal}>
-            <View style={styles.pressableOverlay} />
-          </TouchableWithoutFeedback>
           <View style={[styles.modalWrapper, modalSize]}>
             {this.renderInput()}
             {this.renderContent()}
-
           </View>
           {this.renderKeyboardSpacer()}
-
         </View>
-      </Modal>
+      </View>
     )
   }
 }
