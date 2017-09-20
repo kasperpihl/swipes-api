@@ -48,6 +48,17 @@ export const getGrouped = createSelector(
   }
 );
 
+export const getCurrent = createSelector(
+  [ getMilestones ],
+  (milestones) => milestones.filter(m => !m.get('closed_at')).sort((m1, m2) => {
+    return msgGen.milestones.getName(m1).localeCompare(msgGen.milestones.getName(m2));
+  }),
+);
+
 export const search = searchSelectorFromKeys([
   'title',
 ], getMilestones);
+
+export const searchCurrent = searchSelectorFromKeys([
+  'title',
+], getCurrent);
