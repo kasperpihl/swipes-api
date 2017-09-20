@@ -24,20 +24,17 @@ import {
   usersCreateTempUnactivatedUser,
   usersSendInvitationQueueMessage,
   usersActivateUserSignUp,
-  userActivatedUserSignUpQueueMessage,
   usersInvitedUserQueueMessage,
   userSignupQueueMessage,
   usersAddPendingOrganization,
+  usersParseInvitationToken,
+  userCheckEmailVsTokenEmail,
 } from './middlewares/users';
 import {
   meUpdateSettings,
   meUpdateSettingsQueueMessage,
 } from './middlewares/me';
 import {
-  organizationsCreate,
-  organizationsAddToUser,
-  organizationsGetSingle,
-  organizationsUpdateSubscriptionCustomer,
   organizationsAddPendingUsers,
 } from './middlewares/organizations';
 import {
@@ -94,18 +91,15 @@ notAuthed.all(
     password: string.min(1).require(),
     first_name: string.max(32).require(),
     last_name: string.max(32).require(),
-    // invitation_token: string,
+    invitation_token: string,
   }),
   mapLocals(locals => ({
     email: locals.email.toLowerCase(),
   })),
+  usersParseInvitationToken,
+  userCheckEmailVsTokenEmail,
   userAvailability,
-  // usersParseInvitationToken,
   usersActivateUserSignUp,
-  // organizationsGetSingle, THIS IS FOR JOINING
-  // organizationsUpdateSubscriptionCustomer, THIS IS FOR JOINING
-  // userActivatedUserSignUpQueueMessage, THIS IS FOR JOINING
-  // notificationsPushToQueue, THIS IS FOR JOINING
   userGetInfoForToken,
   userSignUp,
   mapLocals(locals => ({

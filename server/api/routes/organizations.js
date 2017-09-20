@@ -31,7 +31,7 @@ import {
   usersCheckIfInOrganization,
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
-  // usersParseInvitationToken,
+  usersParseInvitationToken,
   usersGetByIdWithFields,
   userActivatedUserSignUpQueueMessage,
   usersLeaveOrganizationQueueMessage,
@@ -285,20 +285,20 @@ authed.all(
   }),
 );
 
-// notAuthed.all(
-//   '/organizations.getInfoFromInvitationToken',
-//   valBody({
-//     invitation_token: string.require(),
-//   }),
-//   // usersParseInvitationToken,
-//   organizationsGetInfoFromInvitationToken,
-//   valResponseAndSend({
-//     me: object,
-//     download_links: object.require(),
-//     organization: object,
-//     invited_by: object,
-//   }),
-// );
+notAuthed.all(
+  '/organizations.getInfoFromInvitationToken',
+  valBody({
+    invitation_token: string.require(),
+  }),
+  usersParseInvitationToken,
+  organizationsGetInfoFromInvitationToken,
+  valResponseAndSend({
+    me: object,
+    download_links: object.require(),
+    organization: object,
+    invited_by: object,
+  }),
+);
 
 export {
   authed,

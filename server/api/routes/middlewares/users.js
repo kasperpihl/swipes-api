@@ -67,7 +67,6 @@ const userAvailability = valLocals('userAvailability', {
   return dbUsersGetByEmail({ email })
     .then((result) => {
       const user = result[0];
-      console.log(user);
       let userId;
 
       if (user && user.activated === true) {
@@ -92,30 +91,50 @@ const userAvailability = valLocals('userAvailability', {
       return next(err);
     });
 });
-// const usersParseInvitationToken = valLocals('usersParseInvitationToken', {
-//   invitation_token: string,
-// }, (req, res, next, setLocals) => {
-//   const {
-//     invitation_token,
-//   } = res.locals;
+const userCheckEmailVsTokenEmail = valLocals('userCheckEmailVsTokenEmail', {
+  email: string.format('email').require(),
+  token_email: string,
+}, (req, res, next, setLocals) => {
+  const {
+    email,
+    token_email,
+  } = res.locals;
 
-//   if (!invitation_token || invitation_token === 'SW-091959') {
-//     return next();
-//   }
+  if (!token_email) {
+    return next();
+  }
 
-//   try {
-//     const content = jwt.decode(invitation_token, invitationTokenSecret);
+  if (token_email !== email) {
+    return next(new SwipesError('The email can\'t be different from the one that you have been invited from '));
+  }
 
-//     setLocals({
-//       userId: content.user_id,
-//       organizationId: content.organization_id,
-//     });
+  return next();
+});
+const usersParseInvitationToken = valLocals('usersParseInvitationToken', {
+  invitation_token: string,
+}, (req, res, next, setLocals) => {
+  const {
+    invitation_token,
+  } = res.locals;
 
-//     return next();
-//   } catch (err) {
-//     return next(new SwipesError('Invalid invitation token'));
-//   }
-// });
+  if (!invitation_token) {
+    return next();
+  }
+
+  try {
+    const content = jwt.decode(invitation_token, invitationTokenSecret);
+
+    setLocals({
+      userId: content.user_id,
+      organizationId: content.organization_id,
+      token_email: content.email,
+    });
+
+    return next();
+  } catch (err) {
+    return next(new SwipesError('Invalid invitation token'));
+  }
+});
 const usersActivateUserSignUp = valLocals('usersActivateUserSignUp', {
   userId: string.require(),
   password: string.min(1).require(),
@@ -575,15 +594,20 @@ const usersCheckIfInOrganization = valLocals('usersCheckIfInOrganization', {
   return next();
 });
 const usersCreateInvitationToken = valLocals('usersCreateInvitationToken', {
+  email: string.require(),
   organization_id: string.require(),
   user: object.require(),
 }, (req, res, next, setLocals) => {
   const {
+    email,
     organization_id,
     user,
   } = res.locals;
-  const userId = user.id;
+  const {
+    userId,
+  } = user.id;
   const invitationToken = jwt.encode({
+    email,
     organization_id,
     user_id: userId,
   }, invitationTokenSecret);
@@ -752,4 +776,6 @@ export {
   usersCheckIfInOrganization,
   usersLeaveOrganizationQueueMessage,
   usersDisabledQueueMessage,
+  usersParseInvitationToken,
+  userCheckEmailVsTokenEmail,
 };
