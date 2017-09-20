@@ -34,6 +34,8 @@ import {
   // usersParseInvitationToken,
   usersGetByIdWithFields,
   userActivatedUserSignUpQueueMessage,
+  usersLeaveOrganizationQueueMessage,
+  usersDisabledQueueMessage,
 } from './middlewares/users';
 import {
   notificationsPushToQueue,
@@ -129,6 +131,8 @@ authed.all(
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
+  usersLeaveOrganizationQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
   }),
@@ -219,6 +223,8 @@ authed.all(
     organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  usersDisabledQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),

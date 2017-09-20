@@ -96,6 +96,16 @@ const usersSubscribeToMailChimp = (req, res, next) => {
       return next(err);
     });
 };
+const organizationDisabledLeftNotificationData = (req, res, next) => {
+  const {
+    organization_id,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = { organization_id };
+
+  return next();
+};
 
 export {
   usersGetSingleWithOrganizations,
@@ -103,4 +113,5 @@ export {
   usersActivatedNotificationData,
   usersInvitedNotificationData,
   usersSubscribeToMailChimp,
+  organizationDisabledLeftNotificationData,
 };

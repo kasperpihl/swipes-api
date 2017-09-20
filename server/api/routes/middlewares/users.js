@@ -598,6 +598,50 @@ const usersCreateInvitationToken = valLocals('usersCreateInvitationToken', {
 
   return next();
 });
+const usersLeaveOrganizationQueueMessage = valLocals('usersLeaveOrganizationQueueMessage', {
+  user_id: string.require(),
+  organization_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization_id,
+  } = res.locals;
+
+  const queueMessage = {
+    user_id,
+    organization_id,
+    event_type: 'user_organization_left',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: user_id,
+  });
+
+  return next();
+});
+const usersDisabledQueueMessage = valLocals('usersDisabledQueueMessage', {
+  user_id: string.require(),
+  organization_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization_id,
+  } = res.locals;
+
+  const queueMessage = {
+    user_id,
+    organization_id,
+    event_type: 'user_disabled',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: user_id,
+  });
+
+  return next();
+});
 const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessage', {
   user_id: string.require(),
   organization_id: string.require(),
@@ -708,4 +752,6 @@ export {
   usersGetByIdWithFields,
   usersAddPendingOrganization,
   usersCheckIfInOrganization,
+  usersLeaveOrganizationQueueMessage,
+  usersDisabledQueueMessage,
 };

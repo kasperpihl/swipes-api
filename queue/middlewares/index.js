@@ -101,6 +101,18 @@ const user_signup = [
   // users.usersSubscribeToMailChimp,
 ];
 
+const user_organization_left = [
+  users.organizationDisabledLeftNotificationData,
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
+
+const user_disabled = [
+  users.organizationDisabledLeftNotificationData,
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
+
 const goal_renamed = notifyWrapper([
   goals.goalsRenamedNotificationData,
   notify.notifyAllInCompany,
@@ -493,6 +505,8 @@ export {
   user_activated,
   user_invited,
   user_signup,
+  user_organization_left,
+  user_disabled,
   profile_updated,
   organization_updated,
   organization_created,
