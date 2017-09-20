@@ -26,13 +26,20 @@ class HOCUpdate extends PureComponent {
   }
   onUpdate() {
     const { versionInfo } = this.props;
-    const url = versionInfo.get('updateUrl');
+    let url = versionInfo.get('updateUrl');
 
     if(!url) {
       return;
     }
+    if(Platform.OS === 'ios') {
+      Linking.canOpenURL(url).then(supported => {
+        if(!supported) url = 'itms-apps://itunes.apple.com/us/app/apple-store/id899247664?mt=8';
+        Linking.openURL(url).catch(err => console.error('An error occurred', err));
+      })
+    } else {
+      Linking.openURL(url).catch(err => console.error('An error occurred', err));
+    }
 
-    Linking.openURL(url).catch(err => console.error('An error occurred', err));
   }
   render() {
     const { versionInfo } = this.props;

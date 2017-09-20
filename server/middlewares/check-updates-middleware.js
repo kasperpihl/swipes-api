@@ -10,8 +10,8 @@ import {
 } from '../api/utils';
 
 const newerVersionExist = (client, server) => {
-  server = server || '';
-  client = client || '';
+  server = server || '0';
+  client = client || '0';
 
   let newerVersion = false;
   if(server.indexOf('.') > -1) {
@@ -20,7 +20,7 @@ const newerVersionExist = (client, server) => {
     const clientVals = client.split('.');
     serverVals.forEach((serverVal, i) => {
       const clientVal = clientVals[i];
-      if(parseInt(serverVal, 10) > parseInt(clientVal, 10)) {
+      if(parseInt(serverVal || '0', 10) > parseInt(clientVal || '0', 10)) {
         newerVersion = true;
       }
     })
