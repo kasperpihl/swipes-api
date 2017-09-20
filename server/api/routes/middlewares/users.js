@@ -31,10 +31,6 @@ import {
   dbUsersAddPendingOrganization,
 } from './db_utils/users';
 import {
-  dbOrganizationsAddUser,
-  dbOrganizationsActivateUser,
-} from './db_utils/organizations';
-import {
   dbTokensInsertSingle,
   dbTokensRevoke,
 } from './db_utils/tokens';
@@ -529,7 +525,7 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
   };
 
   if (!user) {
-    dbUsersCreate({ user: userDoc })
+    return dbUsersCreate({ user: userDoc })
       .then((result) => {
         const userChanges = result.changes[0];
         const user = userChanges.new_val;
@@ -543,9 +539,9 @@ const usersCreateTempUnactivatedUser = valLocals('usersCreateTempUnactivatedUser
       .catch((err) => {
         return next(err);
       });
-  } else {
-    return next();
   }
+
+  return next();
 });
 const usersAddPendingOrganization = valLocals('usersAddPendingOrganization', {
   organization_id: string.require(),
@@ -658,7 +654,9 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
   } = res.locals;
 
   const userId = user.id;
-  const first_name = user.profile.first_name;
+  const {
+    first_name,
+  } = user.profile.first_name;
   const queueMessage = {
     organization_id,
     email,
