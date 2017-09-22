@@ -118,7 +118,7 @@ class HOCTrial extends PureComponent {
           <div className="trial-popup__paragraph">Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</div>
           <div className="trial-popup__paragraph">⭐&nbsp;&nbsp;Your progress is saved. {actionLbl}</div>
           <div className="trial-popup__actions">
-            {(daysLeft >= -7) ? <Button
+            {(daysLeft > -7) ? <Button
               text="Dismiss"
               onClick={this.onDismiss}
             /> : null}

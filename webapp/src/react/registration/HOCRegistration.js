@@ -110,7 +110,7 @@ class HOCRegistration extends Component {
     this.props.request('users.signin', data).then((res) => {
       if (!res.ok) {
         let label = '!Something went wrong :/';
-        console.log('res', res);
+
         if (res.error && res.error.message) {
           label = '!' + res.error.message;
           if (label === "!body /users.signin: Invalid object['email']: did not match format") {

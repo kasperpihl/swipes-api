@@ -34,12 +34,13 @@ class Root extends PureComponent {
     if (path === '/unsubscribe') {
       return;
     }
-    if ((path === '/' || path === '/login') && !window.ipcListener.isElectron) {
-      history.push('/signup');
-    }
+    // if (path === '/' && !window.ipcListener.isElectron) {
+    //   history.push('/welcome');
+    // }
     if (path === '/' && isHydrated && !token) {
       history.push('/login');
     }
+
     if (path === '/login' && isHydrated && token) {
       history.push('/');
     }
@@ -84,7 +85,7 @@ class Root extends PureComponent {
             const HOCSignupPage = require('src/react/signup-page/HOCSignupPage').default;
             return <HOCSignupPage key="signup" />
           }} />
-          <Route path="/download" render={() => {
+          <Route path="/welcome" render={() => {
             const HOCSignupPage = require('src/react/signup-page/HOCSignupPage').default;
             return <HOCSignupPage key="signup" forceDownload />
           }} />

@@ -36,9 +36,6 @@ $errorColor: $red-80;
       outline: none;
     }
 
-    &:not([type="password"]) {
-      user-select: none;
-    }
   }
 
   &__label {

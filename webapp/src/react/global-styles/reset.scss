@@ -31,10 +31,13 @@ textarea {
   cursor: default;
   font-family: 'Aktiv-Grotesk', Helvetica, Arial, sans-serif;
   list-style: none;
+  text-rendering: optimizeLegibility !important; 
+  transform: rotate(-0.0000000001deg);
+  -webkit-font-smoothing: antialiased !important;
   margin: 0;
   padding: 0;
   text-decoration: none;
-  stroke-width: 2px;
+  // stroke-width: 2px;
   position: relative;
 
   &::-webkit-input-placeholder {
