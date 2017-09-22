@@ -12,6 +12,7 @@
         "swipes-core-js": "./swipes-core-js",
         "components": "./src/components/",
         "globalStyles": "./src/utils/globalStyles",
+        "styles": "./src/utils/styles",
         "actions": "./src/actions",
         "constants": "./src/constants",
         "modals": "./src/modals",
