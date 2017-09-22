@@ -81,11 +81,11 @@ class HOCPostFeed extends PureComponent {
     const { navPush } = this.props;
 
     navPush({
-      id: 'TestPostView',
+      id: 'PostView',
       title: 'Post',
       props: {
-        // postId,
-        // scrollToBottom: scrollToBottom
+        postId,
+        scrollToBottom: scrollToBottom
       }
     })
   }

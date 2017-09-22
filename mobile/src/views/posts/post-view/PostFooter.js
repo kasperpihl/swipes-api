@@ -1,13 +1,11 @@
 import React, { PureComponent } from 'react'
 import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation, ActivityIndicator } from 'react-native';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import { colors, viewSize } from 'globalStyles';
 import RippleButton from 'RippleButton';
 import ParsedText from "react-native-parsed-text";
 import Icon from 'Icon';
+import ExpandingTextInput from 'components/expanding-text-input/ExpandingTextInput';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +20,6 @@ const styles = StyleSheet.create({
     maxWidth: 64,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'green'
   },
   verticalSeperatorRight: {
     width: 1,
@@ -34,31 +31,29 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     flex: 1,
-    height: 54,
+    minHeight: 54,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: 'blue',
   },
   inputBorder: {
-    flex: 1,
+    alignSelf: 'stretch',
+    minHeight: 54 - (6 * 2),
     borderColor: colors.deepBlue10,
     borderWidth: 1,
-    borderRadius: 100,
-  },
-  input: {
-    padding: 0,
-    margin: 0,
-    fontSize: 12,
-    color: colors.deepBlue80,
-    lineHeight: 15,
-    textAlignVertical: 'top',
-    includeFontPadding: false,
-    backgroundColor: 'purple',
-  },
-  message: {
+    borderRadius: 25,
     paddingVertical: 12,
     paddingHorizontal: 18,
-    backgroundColor: colors.deepBlue5,
+  },
+  input: {
+    alignSelf: 'stretch',
+    padding: 0,
+    margin: 0,
+    fontSize: 13,
+    color: colors.deepBlue80,
+    lineHeight: 18,
+    includeFontPadding: false,
+  },
+  message: {
     borderRadius: 18,
     fontSize: 13,
     color: colors.deepBlue80,
@@ -199,44 +194,35 @@ class PostFooter extends PureComponent {
     )
   }
   render() {
-        // {this.renderBackButton()}
-        // {this.renderInput()}
-        // {this.renderActions()}
-
-
-
     const { placeholder } = this.props;
-    const { inputHeight: iH } = this.state;
-    const lineNumbers = parseInt(inputHeight / 15);
-    const inputHeight = { height: iH };
 
     return (
+
       <View style={styles.container}>
-
-        <View style={styles.inputWrapper} >
-          <TextInput
-            onChangeText={(text) => this.setState({ text })}
-            numberOfLines={lineNumbers}
-            multiline={true}
-            style={[styles.input, inputHeight]}
-            underlineColorAndroid="transparent"
-            autoCapitalize="sentences"
-            autoCorrect={true}
-            placeholder={placeholder}
-            onContentSizeChange={this.onContentSizeChange}
-          >
-            <ParsedText
-              style={styles.message}
-              selectable={true}
-              parse={[
-                { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText},
-              ]}
+        <View style={styles.inputWrapper}>
+          <View style={styles.inputBorder}>
+            <ExpandingTextInput
+              onChangeText={(text) => this.setState({ text })}
+              style={styles.input}
+              underlineColorAndroid="transparent"
+              autoCapitalize="sentences"
+              autoCorrect={true}
+              placeholder={placeholder}
+              minRows={1}
+              maxRows={5}
             >
-              {this.state.text}
-            </ParsedText>
-          </TextInput>
+              <ParsedText
+                  style={styles.message}
+                  selectable={true}
+                  parse={[
+                    { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText},
+                  ]}
+                >
+                {this.state.text}
+              </ParsedText>
+            </ExpandingTextInput>
+          </View>
         </View>
-
       </View>
     )
   }
