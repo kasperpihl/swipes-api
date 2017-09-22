@@ -175,9 +175,11 @@ class PostView extends PureComponent {
   scrollToBottomTime() {
     clearTimeout(this.scrollTimer);
 
-    this.scrollTimer = setTimeout(() => {
-      this.refs.scrollView.scrollToEnd({animated: true});
-    }, 1000);
+    if (this.refs.scrollView) {
+      this.scrollTimer = setTimeout(() => {
+        this.refs.scrollView.scrollToEnd({animated: true});
+      }, 1000);
+    }
   }
   onHeaderTap() {
     clearTimeout(this.scrollTimer);
