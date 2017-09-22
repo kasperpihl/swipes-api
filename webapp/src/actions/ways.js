@@ -1,13 +1,14 @@
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 
 export const load = (options, callback) => (d, getState) => {
-  const loadWays = () => getState().getIn([
-    'ways',
-  ]).sort((b, c) => b.get('title').localeCompare(c.get('title'))).toArray();
   const deletingIds = {};
   const resultForWay = (way) => {
+    if(typeof way === 'string') {
+      way = getState().getIn(['ways', way]);
+    }
     const obj = {
       id: way.get('id'),
       title: way.get('title'),
@@ -23,12 +24,12 @@ export const load = (options, callback) => (d, getState) => {
     }
     return obj;
   };
-  const searchForWay = q => loadWays().map((w) => {
-    if (w.get('title').toLowerCase().startsWith(q.toLowerCase())) {
-      return resultForWay(w);
-    }
-    return null;
-  }).filter(v => !!v);
+
+  const allWays = () => cs.ways.getSorted(getState()).map(w => resultForWay(w)).toArray();
+  
+  const searchForWay = q => cs.ways.search(getState(), {
+    searchString: q,
+  }).map(res => resultForWay(res.item.id))
   let tabMenu;
 
   const delegate = {
@@ -36,7 +37,7 @@ export const load = (options, callback) => (d, getState) => {
       tabMenu = tMenu;
     },
     resultsForSearch: query => searchForWay(query),
-    resultsForAll: () => loadWays().map(w => resultForWay(w)),
+    resultsForAll: () => allWays(),
     onItemAction: (obj, side) => {
       if (side === 'right') {
         deletingIds[obj.id] = true;

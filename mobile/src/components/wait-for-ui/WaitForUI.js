@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
 })
 
-class InteractionsHandlerWrapper extends PureComponent {
+class WaitForUI extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,15 +24,10 @@ class InteractionsHandlerWrapper extends PureComponent {
     });
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.loadingProps !== this.props.loadingProps) {
-      console.warn('change')
-      this.handleInteractionManager();
-    }
+    if (nextProps.waitIndex !== this.props.waitIndex) this.handleInteractionManager();
   }
   componentWillUnmount() {
-    if (this.interactionHandle) {
-      this.interactionHandle.cancel();
-    }
+    if (this.interactionHandle) this.interactionHandle.cancel();
   }
   handleInteractionManager() {
     if (this.interactionHandle) this.interactionHandle.cancel();
@@ -66,6 +61,6 @@ class InteractionsHandlerWrapper extends PureComponent {
   }
 }
 
-export default InteractionsHandlerWrapper
+export default WaitForUI
 
-InteractionsHandlerWrapper.propTypes = {};
+WaitForUI.propTypes = {};

@@ -8,8 +8,9 @@ import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import HOCHeader from 'HOCHeader';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import HOCGoalItem from 'views/goallist/HOCGoalItem';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
@@ -67,17 +68,11 @@ class HOCMilestoneOverview extends PureComponent {
     this.state = {
       tabs: ['Current', 'Later', 'Completed'],
       tabIndex: 0,
-      fabOpen: false,
       showingInfoTab: false,
     };
 
     propsOrPop(this, 'milestone');
-
-    this.onActionButton = this.onActionButton.bind(this);
-    this.renderGoal = this.renderGoal.bind(this);
-    this.handleModalState = this.handleModalState.bind(this);
-    this.onHeaderTap = this.onHeaderTap.bind(this);
-    this.onActionPress = this.onActionPress.bind(this);
+    bindAll(this, ['onActionButton', 'renderGoal', 'openCreateGoalModal', 'onHeaderTap', 'onActionPress', 'onInfoTabClose',]);
   }
   componentDidMount() {
     this.renderActionButtons();
@@ -100,6 +95,11 @@ class HOCMilestoneOverview extends PureComponent {
   }
   onActionPress(index) {
     console.warn('infotab action', index)
+  }
+  onInfoTabClose() {
+    if (this.state.showingInfoTab) {
+      this.setState({ showingInfoTab: false });
+    }
   }
   onActionButton(i) {
     const { navPush, milestone, toggleInfoTab } = this.props;
@@ -137,6 +137,7 @@ class HOCMilestoneOverview extends PureComponent {
 
         toggleInfoTab({
           onPress: this.onActionPress,
+          onClose: this.onInfoTabClose,
           actions: [
             { title: achieveLbl, complete, icon: achieveIcon },
             { title: 'Delete milestone', icon: 'Delete', danger: true },
@@ -156,24 +157,27 @@ class HOCMilestoneOverview extends PureComponent {
     const { createGoal } = this.props;
 
     if (title.length > 0) {
-      createGoal(title, milestoneId, assignees.toJS()).then((res) => {
-        if (res.ok) {
-          this.handleModalState()
-        }
-      });
+      createGoal(title, milestoneId, assignees.toJS()).then((res) => {});
     }
   }
   onHeaderTap() {
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
-  handleModalState() {
-    const { fabOpen } = this.state;
+  openCreateGoalModal() {
+    const { navPush, milestone } = this.props;
 
-    if (!fabOpen) {
-      this.setState({ fabOpen: true })
-    } else {
-      this.setState({ fabOpen: false })
-    }
+    navPush({
+      id: 'CreateNewItemModal',
+      title: 'CreateNewItemModal',
+      props: {
+        title: '',
+        defAssignees: [this.props.myId],
+        placeholder: "Add a new goal to a milestone",
+        actionLabel: "Add goal",
+        milestoneId: milestone.get('id'),
+        delegate: this
+      }
+    })
   }
   renderActionButtons(showingInfoTab) {
 
@@ -183,6 +187,7 @@ class HOCMilestoneOverview extends PureComponent {
         buttons: [
           { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true }
         ],
+        hideBackButton: true,
       });
     } else {
       this.props.setActionButtons({
@@ -247,7 +252,7 @@ class HOCMilestoneOverview extends PureComponent {
     }
 
     return (
-      <InteractionsHandlerWrapper loadingProps={tabIndex}>
+      <WaitForUI waitIndex={tabIndex}>
         <ImmutableListView
           ref="scrollView"
           key={tab}
@@ -256,7 +261,7 @@ class HOCMilestoneOverview extends PureComponent {
           renderRow={this.renderGoal}
           renderFooter={this.renderListFooter}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     );
   }
   renderFAB() {
@@ -268,7 +273,7 @@ class HOCMilestoneOverview extends PureComponent {
 
     return (
       <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.handleModalState}>
+        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.openCreateGoalModal}>
           <View style={styles.fabButton}>
             <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
           </View>
@@ -284,14 +289,6 @@ class HOCMilestoneOverview extends PureComponent {
         {this.renderHeader()}
         {this.renderList()}
         {this.renderFAB()}
-        <CreateNewItemModal
-          modalState={this.state.fabOpen}
-          defAssignees={[this.props.myId]}
-          placeholder="Add a new goal to a milestone"
-          actionLabel="Add goal"
-          milestoneId={milestone.get('id')}
-          delegate={this}
-        />
       </View>
     );
   }

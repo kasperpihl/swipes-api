@@ -522,7 +522,7 @@ export default {
         <Polygon points="9,8,9,13,12,8,9,8" />
       </G>
     ),
-    viewBox: DEF_VIEWBOX,
+    viewBox: '0 0 18 18',
   },
   MessageColored: {
     svg: (

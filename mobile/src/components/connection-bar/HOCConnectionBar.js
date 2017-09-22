@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
         paddingTop: 24,
       }
     }),
-    position: 'absolute',
-    left: 0, top: 0,
+    marginBottom: Platform.OS === 'ios' ? -20 : -24,
+    zIndex: 9999,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -85,17 +85,8 @@ class HOCConnectionBar extends PureComponent {
     let message = null;
     let color = null;
 
-    if (versionInfo && versionInfo.get('updateRequired')) {
+    if (versionInfo && (versionInfo.get('updateRequired') || versionInfo.get('reloadRequired'))) {
       message = 'Offline - new version required';
-      color = colors.red80;
-    } else if (versionInfo && versionInfo.get('updateAvailable')) {
-      message = 'New version available';
-      color = colors.red80;
-    } else if (versionInfo && versionInfo.get('reloadRequired')) {
-      message = 'Offline - new version required';
-      color = colors.red80;
-    } else if (versionInfo && versionInfo.get('reloadAvailable')) {
-      message = 'New version available';
       color = colors.red80;
     } else if (status === 'offline') {
       message = `Offline - retrying in ${secondsLeft} seconds`;
@@ -117,11 +108,6 @@ class HOCConnectionBar extends PureComponent {
     const { token } = this.props;
     const { statusColor } = this.state;
     const status = this.getStatusMessage();
-
-    // Because bothering me
-    if (window.__DEV__) {
-      return null;
-    }
 
     if (!status.message || !token) {
       return null;

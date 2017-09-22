@@ -503,7 +503,7 @@ export function debounce(func, wait, immediate) {
   return debounced;
 }
 
-export function throttle(func, wait) {
+export function throttle(func, wait, lock) {
   let ctx;
   let args;
   let rtn;
@@ -517,26 +517,28 @@ export function throttle(func, wait) {
     ctx = null;
     args = null;
   }
-
-  function throttled() {
-    ctx = this;
-    args = arguments;
-    const delta = new Date() - last;
-    if (!timeoutID) {
-      if (delta >= wait) call();
-      else timeoutID = setTimeout(call, wait - delta);
-    }
-
-    return rtn;
-  }
-  throttled.isRunning = () => !!timeoutID;
-  throttled.clear = () => {
+  function clear() {
     if (timeoutID) {
       clearTimeout(timeoutID);
       timeoutID = 0;
       last = 0;
     }
   };
+
+  function throttled() {
+    ctx = this;
+    args = arguments;
+    const delta = new Date() - last;
+    if (!timeoutID) {
+      const callback = lock ? clear : call;
+      if (delta >= wait) call();
+      else timeoutID = setTimeout(callback, wait - delta);
+    }
+
+    return rtn;
+  }
+  throttled.isRunning = () => !!timeoutID;
+  throttled.clear = clear;
   return throttled;
 }
 

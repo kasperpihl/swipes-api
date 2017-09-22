@@ -18,7 +18,7 @@ class HOCGoalItem extends PureComponent {
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
-    this.onPin = this.onPin.bind(this);
+    this.onLongPress = this.onLongPress.bind(this);
     this.onModalGoalAction = this.onModalGoalAction.bind(this);
     this.openOverview = this.openOverview.bind(this);
     this.onArchiveGoal = this.onArchiveGoal.bind(this);
@@ -36,10 +36,7 @@ class HOCGoalItem extends PureComponent {
   onModalGoalAction(i) {
     const { togglePinGoal, goal, showModal } = this.props;
 
-    if (i.get('index') === 'pin') {
-      togglePinGoal(goal.get('id'));
-      showModal();
-    } else if (i.get('index') === 'archive') {
+    if (i.get('index') === 'archive') {
       Alert.alert(
         'Archive goal',
         'This will make this goal inactive for all participants.',
@@ -52,7 +49,7 @@ class HOCGoalItem extends PureComponent {
     }
   }
 
-  onPin() {
+  onLongPress() {
     const { showModal, goal } = this.props;
 
     const modal = {
@@ -111,7 +108,7 @@ class HOCGoalItem extends PureComponent {
 
     return (
       <View style={styles.content}>
-        <Text selectable={true} style={styles.title}>{goal.get('title')}</Text>
+        <Text style={styles.title}>{goal.get('title')}</Text>
       </View>
     );
   }
@@ -131,7 +128,7 @@ class HOCGoalItem extends PureComponent {
     let rowStyles = styles.row;
 
     return (
-      <RippleButton onPress={this.openOverview} onLongPress={this.onPin}>
+      <RippleButton onPress={this.openOverview} onLongPress={this.onLongPress}>
         <View style={rowStyles}>
           {this.renderDot()}
           {this.renderContent()}
@@ -150,7 +147,6 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  togglePinGoal: ca.me.togglePinGoal,
   archive: ca.goals.archive,
   showModal: a.modals.show,
 })(HOCGoalItem);

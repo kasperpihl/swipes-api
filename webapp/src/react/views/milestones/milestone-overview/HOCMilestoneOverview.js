@@ -34,6 +34,9 @@ class HOCMilestoneOverview extends PureComponent {
     propsOrPop(this, 'milestone');
     setupLoading(this);
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   onScroll(e) {
     const { showLine } = this.state;
     let newShowLine = e.target.scrollTop > 0;
@@ -41,6 +44,36 @@ class HOCMilestoneOverview extends PureComponent {
     if (showLine !== newShowLine) {
       this.setState({ showLine: newShowLine })
     }
+  }
+  getNewGoalOrder(oldIndex, newIndex) {
+  }
+  onStepSort({collection, oldIndex, newIndex}) {
+    if(oldIndex === newIndex){
+      return;
+    }
+
+    const { reorderGoals, milestone, groupedGoals } = this.props;
+    const currentGoalOrder = milestone.get('goal_order');
+    let tempOrder = groupedGoals.get(collection).map(g => g.get('id'));
+    const movedId = tempOrder.get(oldIndex);
+    const tempGoalOrder = tempOrder.delete(oldIndex).insert(newIndex, movedId);
+
+    oldIndex = currentGoalOrder.findIndex((gId) => gId === groupedGoals.getIn([collection, oldIndex, 'id']));
+    newIndex = currentGoalOrder.findIndex((gId) => gId === groupedGoals.getIn([collection, newIndex, 'id']));
+    const newGoalOrder = milestone.get('goal_order').delete(oldIndex).insert(newIndex, movedId);
+
+    this.setLoading(movedId, 'Reordering...');
+    this.setState({ tempOrder: tempGoalOrder });
+
+    reorderGoals(milestone.get('id'), newGoalOrder).then((res) => {
+      if(!this._unmounted) {
+        console.log('ressy', res);
+        this.setState({tempOrder: null});
+        this.clearLoading(movedId);
+      }
+      
+    });
+
   }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
@@ -170,11 +203,12 @@ class HOCMilestoneOverview extends PureComponent {
   }
   render() {
     const { milestone, groupedGoals } = this.props;
-    const { showLine } = this.state;
+    const { showLine, tempOrder } = this.state;
 
     return (
       <MilestoneOverview
         {...this.bindLoading()}
+        tempOrder={tempOrder}
         milestone={milestone}
         groupedGoals={groupedGoals}
         delegate={this}
@@ -200,6 +234,7 @@ export default navWrapper(connect(mapStateToProps, {
   inputMenu: a.menus.input,
   closeMilestone: ca.milestones.close,
   openMilestone: ca.milestones.open,
+  reorderGoals: ca.milestones.reorderGoals,
   deleteMilestone: ca.milestones.deleteMilestone,
   renameMilestone: ca.milestones.rename,
   confirm: a.menus.confirm,

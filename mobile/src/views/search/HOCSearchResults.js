@@ -5,7 +5,7 @@ import { List } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import * as cs from 'swipes-core-js/selectors';
 import { ImmutableListView } from 'react-native-immutable-list-view';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import { colors } from 'globalStyles';
 import SearchResult from './SearchResult';

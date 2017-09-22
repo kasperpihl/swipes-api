@@ -7,10 +7,12 @@ import NoMilestoneOverview from './no-milestone-overview/HOCNoMilestoneOverview'
 import PreviewNote from './preview-note/HOCPreviewNote';
 import PostFeed from './posts/post-feed/HOCPostFeed';
 import PostView from './posts/post-view/HOCPostView';
+import TestPostView from './posts/post-view/TestPostView';
 import PostCreate from './posts/post-create/HOCPostCreate';
 import Notifications from './notifications/HOCNotifications';
 import Update from './update/HOCUpdate';
 import Search from './search/HOCSearch';
+import CreateNewItemModal from 'modals/CreateNewItemModal';
 
 export {
   GoalOverview,
@@ -25,5 +27,7 @@ export {
   Notifications,
   NoMilestoneOverview,
   Update,
-  Search
+  Search,
+  CreateNewItemModal,
+  TestPostView
 };

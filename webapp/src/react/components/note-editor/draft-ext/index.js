@@ -11,8 +11,10 @@ const standardIterators = [
   'handleKeyCommand',
   'handleReturn',
   'keyBindingFn',
+  'onEnter',
   'onChange',
   'onDownArrow',
+  'onEsc',
   'onTab',
   'onUpArrow',
 ];
@@ -30,13 +32,13 @@ const generateBlockRenderMaps = (blocks) => {
 export default function Setup(ctx, plugins) {
   const subscriber = new Subscriber();
   if (typeof ctx !== 'object') {
-    return console.warn('DraftExt: Second argument (ctx) must be an object');
+    return console.warn('DraftExt: First argument (ctx) must be an object');
   }
   if (typeof ctx.setEditorState !== 'function') {
-    return console.warn('DraftExt: Context must have setEditorState function');
+    return console.warn('DraftExt: First argument (ctx) must have setEditorState function');
   }
   if (typeof ctx.getEditorState !== 'function') {
-    return console.warn('DraftExt: Context must have getEditorState function');
+    return console.warn('DraftExt: First argument (ctx) must have getEditorState function');
   }
   function createPluginIterator(funcName) {
     return function pluginIterator() {
@@ -48,6 +50,9 @@ export default function Setup(ctx, plugins) {
         }
       }
       subscriber.notify(funcName, ctx, ...args);
+      if (plugins.extensions) {
+        plugins.extensions.forEach(iterator);
+      }
       if (plugins.decorators) {
         plugins.decorators.forEach(iterator);
       }

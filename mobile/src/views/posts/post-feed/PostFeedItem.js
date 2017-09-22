@@ -13,12 +13,7 @@ import Reactions from 'components/reactions/Reactions';
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
-    paddingTop: 12,
-  },
-  seperator: {
-    alignSelf: 'stretch',
-    height: 18,
-    backgroundColor: colors.deepBlue4,
+    paddingTop: 24,
   },
   header: {
     flex: 1,
@@ -30,19 +25,19 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   profilePicWrapper: {
-    width: 48,
-    height: 48,
-    borderRadius: 3,
+    width: 54,
+    height: 54,
+    borderRadius: 54 / 2,
   },
   profilePic: {
-    width: 48,
-    height: 48,
-    borderRadius: 3,
+    width: 54,
+    height: 54,
+    borderRadius: 54 / 2,
   },
   initials: {
-    width: 48,
-    height: 48,
-    borderRadius: 3,
+    width: 54,
+    height: 54,
+    borderRadius: 54 / 2,
     backgroundColor: colors.deepBlue100,
     alignItems: 'center',
     justifyContent: 'center',
@@ -52,14 +47,15 @@ const styles = StyleSheet.create({
     color: colors.bgColor,
   },
   textStyle: {
-    fontSize: 15,
+    fontSize: 13,
     lineHeight: 18,
     color: colors.deepBlue40,
     includeFontPadding: false,
   },
   boldStyle: {
-    fontSize: 15,
+    fontSize: 13,
     lineHeight: 18,
+    fontWeight: 'bold',
     color: colors.deepBlue100,
     includeFontPadding: false,
   },
@@ -69,26 +65,24 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   subtitleLabel: {
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: 13,
+    lineHeight: 18,
     color: colors.deepBlue40,
   },
   messageWrapper: {
     paddingHorizontal: 15,
-    paddingTop: 21,
+    paddingTop: 18,
     paddingBottom: 18,
   },
   message: {
-    fontSize: 18,
-    color: colors.deepBlue100,
-    lineHeight: 27,
-    fontWeight: '300',
+    fontSize: 15,
+    color: colors.deepBlue80,
+    lineHeight: 21,
   },
   url: {
-    fontSize: 18,
+    fontSize: 15,
     color: colors.blue100,
-    lineHeight: 27,
-    fontWeight: '300',
+    lineHeight: 21,
   },
   actions: {
     flexDirection: 'row',
@@ -105,18 +99,26 @@ const styles = StyleSheet.create({
     left: 15, top: 0,
   },
   commentsButton: {
+    height: 54,
     paddingHorizontal: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  commentsButtonLabel: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: colors.deepBlue100,
+    includeFontPadding: false,
+  },
   reactionWrapper: {
-    paddingHorizontal: 15,
+    height: 54,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
   },
   attachments: {
     paddingHorizontal: 15,
+    marginBottom: 6,
   },
   attachment: {
     flex: 1,
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     height: 48,
     paddingHorizontal: 12,
-    borderRadius: 1,
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: colors.deepBlue10,
   },
@@ -134,6 +136,21 @@ const styles = StyleSheet.create({
     color: colors.deepBlue80,
     fontWeight: '500',
     paddingLeft: 12,
+  },
+  typeWrapper: {
+    alignSelf: 'stretch',
+    marginBottom: 6,
+    alignItems: 'flex-end',
+    paddingRight: 15,
+  },
+  typeLabel: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: 'white',
+    borderTopLeftRadius: 100,
+    borderBottomLeftRadius: 100,
   }
 });
 
@@ -153,6 +170,33 @@ class PostFeed extends PureComponent {
     } else {
      this.onOpenPost(post.get('id'))
     }
+  }
+  getInfoForType(type) {
+
+    switch (type) {
+      case 'announcement':
+        return { label: 'Announcement', color: '#ffb337' }
+      case 'question':
+        return { label: 'Question', color: '#7900ff' }
+      case 'information':
+        return { label: 'Information', color: '#007aff' }
+      case 'post':
+      default:
+        return { label: 'Post', color: '#1cc05d' }
+    }
+  }
+  renderType() {
+    const { post } = this.props;
+    const type = post.get('type');
+    const typeInfo = this.getInfoForType(type);
+
+    return (
+      <View style={styles.typeWrapper}>
+        <View>
+          <Text style={[styles.typeLabel, {backgroundColor: typeInfo.color }]}>{typeInfo.label.toUpperCase()}</Text>
+        </View>
+      </View>
+    )
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
@@ -279,7 +323,7 @@ class PostFeed extends PureComponent {
     return (
       <RippleButton style={styles.commentsButton} onPress={this.onOpenPostCached(post.get('id'), true)}>
         <View style={styles.commentsButton}>
-          <Text selectable={true} style={styles.commentsButtonLabel}>{commentsString}</Text>
+          <Text style={styles.commentsButtonLabel}>{commentsString}</Text>
         </View>
       </RippleButton>
     )
@@ -290,6 +334,7 @@ class PostFeed extends PureComponent {
     return (
       <View style={styles.actions}>
         <View style={styles.actionsSeperator} />
+        {this.renderComments()}
         <View style={styles.reactionWrapper}>
           <Reactions
             reactions={post.get('reactions')}
@@ -297,14 +342,7 @@ class PostFeed extends PureComponent {
             delegate={delegate}
           />
         </View>
-        {this.renderComments()}
       </View>
-    )
-  }
-  renderSeperator() {
-
-    return (
-      <View style={styles.seperator} />
     )
   }
   renderAttachments() {
@@ -333,11 +371,11 @@ class PostFeed extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
+        {this.renderType()}
         {this.renderHeader()}
         {this.renderMessage()}
         {this.renderAttachments()}
         {this.renderActions()}
-        {this.renderSeperator()}
       </View>
     );
   }

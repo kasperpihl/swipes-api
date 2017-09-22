@@ -77,17 +77,17 @@ class HOCTabNavigation extends PureComponent {
   componentWillUpdate(nextProps, nextState) {
     const { rootRoutes } = this.state;
 
-    LayoutAnimation.easeInEaseOut();
+    LayoutAnimation.configureNext(LayoutAnimation.create(300, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
 
     if (nextProps.counter !== this.props.counter) {
       rootRoutes[0].counter = nextProps.counter;
       this.setState({ rootRoutes });
     }
 
-    if (nextProps.activeSliderIndex !== this.props.activeSliderIndex && nextProps.activeSliderIndex < 4  && nextState.navChangerActive) {
-        rootRoutes[4].icon = 'NavSwap';
-        rootRoutes[4].showMiniSwap = false;
-        this.setState({ showNavChanger: false, navChangerActive: false, rootRoutes });
+    if (nextProps.activeSliderIndex !== this.props.activeSliderIndex && nextProps.activeSliderIndex < 4 && nextState.navChangerActive) {
+      rootRoutes[4].icon = 'NavSwap';
+      rootRoutes[4].showMiniSwap = false;
+      this.setState({ showNavChanger: false, navChangerActive: false, rootRoutes });
     }
 
     this.checkForUpdate(nextProps);
@@ -105,8 +105,11 @@ class HOCTabNavigation extends PureComponent {
         this.setState({ rootRoutes });
       }
   }
+  onNavClose() {
+    this.setState({ showNavChanger: false, navChangerActive: false })
+  }
   onNavChangeAction(type) {
-    const { sliderChange } = this.props;
+    const { sliderChange, navPush } = this.props;
     const { rootRoutes } = this.state;
 
     if (type === 'Update') {
@@ -154,8 +157,8 @@ class HOCTabNavigation extends PureComponent {
     const sliderPosPixel = sliderPosPercentage * viewSize.width / 100;
     const sliderPos = routes.size > 1 ? 0 : sliderPosPixel;
     const sliderWidth = routes.size > 1 ? viewSize.width : viewSize.width / 5;
-    const sliderHeight = routes.size > 1 ? 1 : 54;
-    const sliderColor = routes.size > 1 ? colors.deepBlue10 : colors.deepBlue5;
+    const sliderHeight = routes.size > 1 ? 1 : 2;
+    const sliderColor = routes.size > 1 ? colors.deepBlue10 : colors.deepBlue100;
 
     return (
       <View
@@ -174,7 +177,7 @@ class HOCTabNavigation extends PureComponent {
   renderNavItems() {
     const { activeSliderIndex, routes } = this.props;
     const { navChangerActive } = this.state;
-    const sliderIndex = navChangerActive ? navChangerActive : activeSliderIndex
+    const sliderIndex = navChangerActive ? 4 : activeSliderIndex
 
     if (routes.size > 1) {
       return <HOCActionBar />;
@@ -199,13 +202,13 @@ class HOCTabNavigation extends PureComponent {
     return navItems;
   }
   renderNavChanger() {
-    const { showNavChanger } = this.state;
+    const { showNavChanger, rootRoutes } = this.state;
 
     if (!showNavChanger) {
       return undefined;
     }
     
-    return <NavChanger delegate={this} />
+    return <NavChanger delegate={this} updateAvailable={rootRoutes[4].updateAvailable} />
   }
   render() {
     const { routes, actionButtons } = this.props;
@@ -245,4 +248,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   sliderChange: a.navigation.sliderChange,
+  navPush: a.navigation.push
 })(HOCTabNavigation);

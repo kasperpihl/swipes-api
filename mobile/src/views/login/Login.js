@@ -20,7 +20,7 @@ class Login extends PureComponent {
     };
 
     codePush.getUpdateMetadata().then((pack) => {
-      console.log('pack', pack);
+      // console.log('pack', pack);
       if (pack) {
         this.setState({ version: pack.label });
       }

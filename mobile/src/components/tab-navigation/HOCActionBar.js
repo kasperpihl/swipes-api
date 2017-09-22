@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: colors.blue100,
     fontWeight: 'bold',
+    includeFontPadding: false,
+    textAlignVertical: 'center'
   },
   verticalSeperatorLeft: {
     width: 1,
@@ -144,6 +146,8 @@ class HOCActionBar extends PureComponent {
   }
   renderLeftIcon() {
     const { activeRoutes, actionButtons } = this.props;
+
+    if (actionButtons.get('hideBackButton')) return undefined;
 
     if (Platform.OS === 'ios') {
       return this.renderIconButton(

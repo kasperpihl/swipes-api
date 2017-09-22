@@ -12,8 +12,9 @@ import Analytics from 'utils/analytics';
 import * as a from 'actions';
 const store = configureStore();
 
-if (window.__DEV__ || DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging') {
+if (window.__DEV__ || DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging' || DeviceInfo.getBundleId() === 'com.swipesapp.androidstaging') {
   window.__API_URL__ = 'https://staging.swipesapp.com';
+  // window.__API_URL__ = 'http://192.168.88.111:5000';
 } else {
   window.__API_URL__ = 'https://live.swipesapp.com';
 }

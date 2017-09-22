@@ -34,7 +34,7 @@ class HOCPreviewNote extends PureComponent {
       showingInfoTab: false,
     };
 
-    bindAll(this, ['onWebviewMessage', 'renderLoading', 'onActionButton', 'onActionPress'])
+    bindAll(this, ['onWebviewMessage', 'renderLoading', 'onActionButton', 'onActionPress', 'onInfoTabClose'])
   }
   componentDidMount() {
     this.renderActionButtons();
@@ -54,6 +54,11 @@ class HOCPreviewNote extends PureComponent {
   }
   onActionPress(index) {
     console.warn('infotab action', index)
+  }
+  onInfoTabClose() {
+    if (this.state.showingInfoTab) {
+      this.setState({ showingInfoTab: false });
+    }
   }
   generateNoteUrl() {
     const { token, orgId, noteId } = this.props;
@@ -87,6 +92,7 @@ class HOCPreviewNote extends PureComponent {
 
         toggleInfoTab({
           onPress: this.onActionPress,
+          onClose: this.onInfoTabClose,
           info: [
             { title: 'Created', text: 'Need real text here' },
           ],
@@ -105,6 +111,7 @@ if (showingInfoTab) {
         buttons: [
           { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true }
         ],
+        hideBackButton: true,
       });
     } else {
       this.props.setActionButtons({

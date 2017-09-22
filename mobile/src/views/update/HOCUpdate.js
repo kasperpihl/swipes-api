@@ -1,15 +1,12 @@
 import React, { PureComponent } from 'react';
-import { View, Text } from 'react-native';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import { Platform, Linking } from 'react-native';
+
+import codePush from 'react-native-code-push';
+import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
-// import Update from './Update';
+import Update from './Update';
 
 class HOCUpdate extends PureComponent {
   constructor(props) {
@@ -19,9 +16,39 @@ class HOCUpdate extends PureComponent {
   }
   componentDidMount() {
   }
+  onReload() {
+    const { loading } = this.props;
+    loading(true);
+
+    codePush.sync({
+      installMode: codePush.InstallMode.IMMEDIATE,
+    });
+  }
+  onUpdate() {
+    const { versionInfo } = this.props;
+    let url = versionInfo.get('updateUrl');
+
+    if(!url) {
+      return;
+    }
+    if(Platform.OS === 'ios') {
+      Linking.canOpenURL(url).then(supported => {
+        if(!supported) url = 'itms-apps://itunes.apple.com/us/app/apple-store/id899247664?mt=8';
+        Linking.openURL(url).catch(err => console.error('An error occurred', err));
+      })
+    } else {
+      Linking.openURL(url).catch(err => console.error('An error occurred', err));
+    }
+
+  }
   render() {
+    const { versionInfo } = this.props;
+
     return (
-      <View><Text>this is fucking update</Text></View>
+      <Update 
+        versionInfo={versionInfo}
+        delegate={this}
+      />
     );
   }
 }
@@ -30,7 +57,9 @@ class HOCUpdate extends PureComponent {
 HOCUpdate.propTypes = {};
 
 const mapStateToProps = (state) => ({
+  versionInfo: state.getIn(['connection', 'versionInfo']),
 });
 
 export default connect(mapStateToProps, {
+  loading: a.loading.showLoader,
 })(HOCUpdate);

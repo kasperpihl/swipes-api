@@ -10,7 +10,6 @@ import {
   setupDelegate,
   truncateString,
 } from 'swipes-core-js/classes/utils';
-import { SortableElement } from 'react-sortable-hoc';
 import Icon from 'Icon';
 import Button from 'Button';
 import HOCAssigning from 'components/assigning/HOCAssigning';

@@ -7,7 +7,7 @@ import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import * as cs from 'swipes-core-js/selectors';
 import * as ca from 'swipes-core-js/actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
@@ -42,12 +42,11 @@ class HOCGoalList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      fabOpen: false,
       text: '',
     };
 
     this.renderGoal = this.renderGoal.bind(this);
-    this.handleModalState = this.handleModalState.bind(this);
+    this.openCreateGoalModal = this.openCreateGoalModal.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
     this.renderSectionHeader = this.renderSectionHeader.bind(this);
 
@@ -62,8 +61,10 @@ class HOCGoalList extends PureComponent {
     const { createGoal } = this.props;
 
     if (title.length > 0) {
-      this.setState({ fabOpen: false })
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {
+        if (res && res.ok) {
+          console.warn('goal added')
+        }
       });
     }
   }
@@ -93,14 +94,20 @@ class HOCGoalList extends PureComponent {
       navPush(overview);
     }
   }
-  handleModalState() {
-    const { fabOpen } = this.state;
+  openCreateGoalModal() {
+    const { navPush } = this.props;
 
-    if (!fabOpen) {
-      this.setState({ fabOpen: true })
-    } else {
-      this.setState({ fabOpen: false })
-    }
+    navPush({
+      id: 'CreateNewItemModal',
+      title: 'CreateNewItemModal',
+      props: {
+        title: '',
+        defAssignees: [this.props.myId],
+        placeholder: "Add a new goal",
+        actionLabel: "Add goal",
+        delegate: this
+      }
+    })
   }
   renderHeader() {
 
@@ -109,7 +116,7 @@ class HOCGoalList extends PureComponent {
         title="Take Action"
         delegate={this}
       >
-        <RippleButton onPress={this.handleModalState}>
+        <RippleButton onPress={this.openCreateGoalModal}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
           </View>
@@ -159,7 +166,7 @@ class HOCGoalList extends PureComponent {
     }
 
     return (
-      <InteractionsHandlerWrapper>
+      <WaitForUI>
         <ImmutableListView
           ref="scrollView"
           style={styles.list}
@@ -169,24 +176,16 @@ class HOCGoalList extends PureComponent {
           stickySectionHeadersEnabled={true}
           renderFooter={this.renderListFooter}
         />
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     );
   }
   render() {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
-        <View style={styles.list}>
-          {this.renderList()}
-        </View>
-        <CreateNewItemModal
-          modalState={this.state.fabOpen}
-          title=''
-          defAssignees={[this.props.myId]}
-          placeholder="Add a new goal"
-          actionLabel="Add goal"
-          delegate={this}
-        />
+          <View style={styles.list}>
+            {this.renderList()}
+          </View>
       </View>
     );
   }

@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from "actions";
 import Search from './Search';
+import WaitForUI from 'WaitForUI';
 
 class HOCSearch extends PureComponent {
   constructor(props) {
@@ -74,7 +75,7 @@ class HOCSearch extends PureComponent {
   render() {
     const { searchString, toSearchString }  = this.state;
 
-    return <Search searchString={searchString} toSearchString={toSearchString} delegate={this} />
+    return <WaitForUI><Search searchString={searchString} toSearchString={toSearchString} delegate={this} /></WaitForUI>
   }
 }
 

@@ -660,6 +660,7 @@
 				00E356EF1AD99517003FC87E /* swipesTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				99DFE1D06D8F4BF1A75EF886 /* Frameworks */,
+				A798B3111F73B06300B58B02 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -767,6 +768,23 @@
 				A7D22BEA1F60120C00BCC99A /* libRNSVG-tvOS.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A798B3111F73B06300B58B02 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				C4045E371D8A4EC7B4303277 /* libBVLinearGradient.a */,
+				833C994490934B419CBC7F9D /* libRNSVG.a */,
+				6A827217E56F4363B9121DB5 /* libRCTOneSignal.a */,
+				B7C39509E9794B9495047D7D /* libDBCustomTabs.a */,
+				22C46A2F49E9428F8580247F /* libCodePush.a */,
+				8800CDCEB56E462480DEDD13 /* libRNReactNativeDocViewer.a */,
+				B8C36BC4529247F092B9F8F4 /* libRNIntercom.a */,
+				1CFC60260C7E4C84AAEF0DC5 /* libRNMixpanel.a */,
+				B334DF70149B46349AA0CFE2 /* libRNDeviceInfo.a */,
+				EBB8F8D7ED924D589B4DA993 /* libRNImagePicker.a */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		A7C255051ECF61C900BD007D /* Products */ = {

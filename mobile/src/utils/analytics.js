@@ -46,7 +46,7 @@ export default class Analytics {
       if(blockedMixpanelEvents.indexOf(name) === -1){
         mixpanel.trackWithProperties(name, props);
       } else {
-        console.log('blocked mixpanel event', name);
+        // console.log('blocked mixpanel event', name);
       }
 
     }

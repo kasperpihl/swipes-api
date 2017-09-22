@@ -41,32 +41,25 @@ export const input = (options, callback) => (d) => {
 
 export const selectMilestone = (options, callback) => (d, getState) => {
 
-  const state = getState();
-  const milestones = state.get('milestones');
-
-  const resultForMilestone = (milestone) => {
+  const resultForMilestone = (milestoneId) => {
     const obj = {
-      id: milestone.get('id'),
-      title: msgGen.milestones.getName(milestone),
-      selected: options.selectedId === milestone.get('id'),
+      id: milestoneId,
+      title: msgGen.milestones.getName(milestoneId),
+      selected: options.selectedId === milestoneId,
     };
     return obj;
   };
 
-  const sortedMilestones = () => milestones.sort((m1, m2) => {
-    return msgGen.users.getFirstName(m1).localeCompare(msgGen.users.getFirstName(m2));
-  }).toArray();
-
   const defItems = [];
-  if(!options.disableAny){
-    defItems.push({ id: null, title: 'Any milestone' });
-  }
   defItems.push({ id: 'none', title: 'No milestone' });
-  const allMilestones = () => defItems.concat(sortedMilestones().map(m => resultForMilestone(m)));
+  
+  const allMilestones = () => defItems.concat(
+    cs.milestones.getCurrent(getState()).map(m => resultForMilestone(m.get('id'))).toArray()
+  );
 
-  const searchForMilestone = q => sortedMilestones().filter((m) => {
-    return (msgGen.milestones.getName(m).toLowerCase().startsWith(q.toLowerCase()))
-  }).map(m => resultForMilestone(m));
+  const searchForMilestone = q => cs.milestones.searchCurrent(getState(), { 
+    searchString: q 
+  }).map(res => resultForMilestone(res.item.id));
 
   const delegate = {
     onItemAction: (item) => {

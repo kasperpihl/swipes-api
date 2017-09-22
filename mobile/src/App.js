@@ -161,6 +161,7 @@ class App extends PureComponent {
 
     return (
       <View style={styles.app}>
+        <HOCConnectionBar />
         <View style={styles.wrapper}>
           <HOCViewController />
         </View>
@@ -168,7 +169,6 @@ class App extends PureComponent {
         <ActionModal />
         <HOCInfoTab/>
         <HOCTabNavigation />
-        <HOCConnectionBar />
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}
       </View>

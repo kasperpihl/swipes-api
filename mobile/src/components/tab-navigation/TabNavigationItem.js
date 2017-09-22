@@ -1,5 +1,12 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { 
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  UIManager,
+  LayoutAnimation
+} from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import { colors, viewSize } from 'globalStyles';
 import Icon from 'Icon';
@@ -58,9 +65,44 @@ const styles = StyleSheet.create({
 class TabNavigationItem extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      icon: props.icon
+    };
 
     setupDelegate(this, 'handlePress');
+
+    if (Platform.OS === "android") {
+      UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.icon !== this.props.icon) {
+      this.setState({ icon: undefined });
+
+      this.iconChangeTimeout = setTimeout(() => {
+        this.setState({ icon: nextProps.icon })
+      }, 1)
+    }
+  }
+  componentWillUpdate() {
+    // LayoutAnimation.configureNext(LayoutAnimation.create(1, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
+  }
+  componentWillUnmount() {
+    clearTimeout(this.iconChangeTimeout);
+  }
+  renderIcon() {
+    const { activeSliderIndex, index } = this.props;
+    const { icon } = this.state;
+    const iconFill = parseInt(activeSliderIndex) === index ? colors.deepBlue100 : colors.deepBlue40;
+
+    if (!icon) return undefined;
+
+    return (
+      <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name={icon} width="24" height="24" fill={iconFill} />
+      </View>
+    )
   }
   renderCounter() {
     const { counter } = this.props;
@@ -82,7 +124,7 @@ class TabNavigationItem extends PureComponent {
     return (
       <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, right: 0, alignItems: 'flex-end' }}>
         <View style={sideIconStyles}>
-          <Icon name={icon} width="18" height="18" />
+          <Icon name={icon} width="18" height="18" fill={fill} />
         </View>
       </View>
     );
@@ -102,18 +144,16 @@ class TabNavigationItem extends PureComponent {
     if (showMiniSwap && !updateAvailable) {
       return this.renderSideIcon('MiniNavSwap');
     }
+
+    return undefined;
   }
   render() {
-    const { icon, index, activeSliderIndex } = this.props;
-    const iconFill = parseInt(activeSliderIndex) === index ? colors.deepBlue100 : colors.deepBlue40;
+    const { index, activeSliderIndex } = this.props;
 
     return (
       <RippleButton rippleColor={colors.deepBlue100} rippleOpacity={0.8} style={styles.navItem} onPress={this.handlePressCached(`${index}`)}>
         <View style={styles.navItem}>
-
-          <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name={icon} width="24" height="24" fill={iconFill} />
-          </View>
+          {this.renderIcon()}
           {this.renderCounter()}
           {this.renderUpdate()}
           {this.renderMiniSwap()}

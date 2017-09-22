@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import ParsedText from "react-native-parsed-text";
 import { List } from "immutable";
 import { setupDelegate, iconForId, attachmentIconForService } from "swipes-core-js/classes/utils";
@@ -11,18 +11,13 @@ import Icon from "Icon";
 import RippleButton from "RippleButton";
 import Reactions from "components/reactions/Reactions";
 import CommentView from "components/comment-view/CommentView";
-import InteractionsHandlerWrapper from 'InteractionsHandlerWrapper';
+import WaitForUI from 'WaitForUI';
 import PostFooter from './PostFooter';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignSelf: "stretch",
-  },
-  loaderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   header: {
     alignSelf: "stretch",
@@ -36,19 +31,19 @@ const styles = StyleSheet.create({
     paddingLeft: 12
   },
   profilePicWrapper: {
-    width: 48,
-    height: 48,
-    borderRadius: 3
+    width: 54,
+    height: 54,
+    borderRadius: 54 / 2
   },
   profilePic: {
-    width: 48,
-    height: 48,
-    borderRadius: 3
+    width: 54,
+    height: 54,
+    borderRadius: 54 / 2
   },
   initials: {
-    width: 48,
-    height: 48,
-    borderRadius: 3,
+    width: 54,
+    height: 54,
+    borderRadius: 54 / 2,
     backgroundColor: colors.deepBlue100,
     alignItems: "center",
     justifyContent: "center"
@@ -58,16 +53,17 @@ const styles = StyleSheet.create({
     color: colors.bgColor
   },
   textStyle: {
-    fontSize: 15,
+    fontSize: 13,
     lineHeight: 18,
     color: colors.deepBlue40,
-    includeFontPadding: false
+    includeFontPadding: false,
   },
   boldStyle: {
-    fontSize: 15,
+    fontSize: 13,
     lineHeight: 18,
+    fontWeight: 'bold',
     color: colors.deepBlue100,
-    includeFontPadding: false
+    includeFontPadding: false,
   },
   subtitle: {
     flexDirection: "row",
@@ -75,33 +71,30 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   subtitleLabel: {
-    fontSize: 12,
-    lineHeight: 15,
-    color: colors.deepBlue40
+    fontSize: 13,
+    lineHeight: 18,
+    color: colors.deepBlue40,
   },
   messageWrapper: {
     paddingHorizontal: 15,
-    paddingTop: 10,
-    paddingBottom: 18
+    paddingTop: 18,
+    paddingBottom: 18,
   },
   message: {
-    fontSize: 18,
-    color: colors.deepBlue100,
-    lineHeight: 27,
-    fontWeight: "300"
+    fontSize: 15,
+    color: colors.deepBlue80,
+    lineHeight: 21,
   },
   url: {
-    fontSize: 18,
+    fontSize: 15,
     color: colors.blue100,
-    lineHeight: 27,
-    fontWeight: "300"
+    lineHeight: 21,
   },
   actions: {
     flexDirection: "row",
     justifyContent: "space-between",
     height: 54,
     alignSelf: "stretch",
-    paddingHorizontal: 15,
   },
   actionsSeperator: {
     width: viewSize.width - 30,
@@ -112,7 +105,6 @@ const styles = StyleSheet.create({
     top: 0
   },
   comments: {
-    backgroundColor: colors.deepBlue4,
     paddingHorizontal: 15,
     paddingBottom: 21,
   },
@@ -139,7 +131,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     height: 48,
     paddingHorizontal: 12,
-    borderRadius: 1,
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: colors.deepBlue10,
   },
@@ -390,21 +382,21 @@ class PostView extends PureComponent {
   }
   renderContent() {
     return (
-      <InteractionsHandlerWrapper>
+      <WaitForUI>
         <ScrollView style={{ flex: 1 }} ref="scrollView" alwaysBounceVertical={false}>
           {this.renderMessage()}
           {this.renderAttachments()}
           {this.renderActions()}
           {this.renderComments()}
         </ScrollView>
-      </InteractionsHandlerWrapper>
+      </WaitForUI>
     )
   }
   render() {
     const { delegate } = this.props;
 
     return (
-      <View style={styles.container} ref="scrollView">
+      <View style={styles.container}>
         {this.renderPostHeader()}
         {this.renderContent()}
         <PostFooter delegate={delegate} placeholder="Write a comment…" commmentLoading={this.state.commmentLoading} />
