@@ -7,7 +7,6 @@ class ExpandingTextInput extends PureComponent {
     this.state = {}
 
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
   }
   componentWillMount() {
     const { style } = this.props;
@@ -16,26 +15,25 @@ class ExpandingTextInput extends PureComponent {
       this.setState({ lineHeight: StyleSheet.flatten(style).lineHeight, inputHeight: StyleSheet.flatten(style).lineHeight})
     }
   }
+  componentWillUnmount() {
+    clearTimeout(this._contentTimer);
+  }
   getInputSize() {
     const { minRows, maxRows } = this.props;
     const { inputHeight, lineHeight } = this.state;
     const current = Math.round((inputHeight / lineHeight));
+    // console.log('current', current, 'inputHeight', inputHeight);
   
     return Math.min(Math.max(minRows, current), maxRows);
   }
-  onKeyPress(e) {
-    const numberOfLines = this.getInputSize();
-    console.log('hi')
-    if (e.key === 'Enter' && numberOfLines >= 5) {
-      
-    }
-  }
   onContentSizeChange(e) {
     const { inputHeight } = this.state;
-    const numberOfLines = this.getInputSize();
-
+    clearTimeout(this._contentTimer);
     if (inputHeight !== e.nativeEvent.contentSize.height) {
-      this.setState({ inputHeight: Math.round(e.nativeEvent.contentSize.height) })
+      const height = e.nativeEvent.contentSize.height;
+      this._contentTimer = setTimeout(() => {
+        this.setState({ inputHeight: Math.round(height) })
+      }, 50);
     }
   }
   render() {
@@ -44,31 +42,16 @@ class ExpandingTextInput extends PureComponent {
     const lineNumbers = this.getInputSize();
     const iOSInputHeight = Platform.OS === 'ios' ? { height: (this.getInputSize() * lineHeight) } : {};
 
-    if (children) {
-      return (
-        <TextInput
-          numberOfLines={lineNumbers}
-          multiline={true}
-          style={[style, iOSInputHeight]}
-          onContentSizeChange={this.onContentSizeChange}
-          onKeyPress={this.onKeyPress}
-          {...rest}
-        >
-          {children}
-        </TextInput>
-      )
-    }
-
-
     return (
       <TextInput
         numberOfLines={lineNumbers}
         multiline={true}
         style={[style, iOSInputHeight]}
         onContentSizeChange={this.onContentSizeChange}
-        onKeyPress={this.onKeyPress}
         {...rest}
-      />
+      >
+        {children}
+      </TextInput>
     )
   }
 }
