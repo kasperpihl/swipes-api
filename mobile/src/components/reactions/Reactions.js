@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, Touchable
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
-import RippleButton from 'RippleButton';
 import Icon from 'Icon';
 import { colors } from 'globalStyles';
 
@@ -11,14 +10,18 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'row',
+    height: 54,
+    paddingHorizontal: 15,
   },
   likeButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   likeButtonLabel: {
-    paddingRight: 5,
+    paddingHorizontal: 5,
     fontSize: 12,
+    includeFontPadding: false,
+    marginTop: 3,
   },
 })
 
@@ -73,11 +76,9 @@ class HOCReactions extends PureComponent {
     const heartStroke = iLike ? colors.red80 : colors.deepBlue40;
 
     return (
-      <TouchableOpacity onPress={this.handleLike}>
-        <View style={styles.likeButton}>
-          <Icon name="Heart" width="24" height="24" fill={heartFill} stroke={heartStroke} />
-        </View>
-      </TouchableOpacity>
+      <View style={styles.likeButton}>
+        <Icon name="Heart" width="24" height="24" fill={heartFill} stroke={heartStroke} />
+      </View>
     )
   }
   renderLikers() {
@@ -101,14 +102,17 @@ class HOCReactions extends PureComponent {
     )
   }
   render() {
-    const { children } = this.props;
+    const { children, height } = this.props;
+    const heightStyles = height ? { height: height } : {};
 
     return (
-      <View style={styles.container}>
-        {this.renderButton()}
-        {this.renderLikers()}
-        {children}
-      </View>
+      <TouchableOpacity onPress={this.handleLike}>
+        <View style={[styles.container, heightStyles]}>
+          {this.renderLikers()}
+          {this.renderButton()}
+          {children}
+        </View>
+      </TouchableOpacity>
     );
   }
 }

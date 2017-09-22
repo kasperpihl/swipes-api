@@ -12,31 +12,33 @@ import Reactions from "../reactions/Reactions";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf: "stretch",
-    flexDirection: 'row',
     marginTop: 21,
+    flexDirection: 'row',
   },
   content: {
     flex: 1,
-    paddingLeft: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   profilePicWrapper: {
-    width: 36,
-    height: 36,
-    borderRadius: 3
+    width: 42,
+    height: 42,
+    borderRadius: 42 / 2,
+    marginRight: 12,
   },
   profilePic: {
-    width: 36,
-    height: 36,
-    borderRadius: 3
+    width: 42,
+    height: 42,
+    borderRadius: 42 / 2,
   },
   initials: {
-    width: 36,
-    height: 36,
-    borderRadius: 3,
+    width: 42,
+    height: 42,
+    borderRadius: 42 / 2,
     backgroundColor: colors.deepBlue100,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginRight: 12,
   },
   initialsLabel: {
     fontSize: 28,
@@ -45,18 +47,23 @@ const styles = StyleSheet.create({
   nameWrapper: {
   },
   nameLabel: {
-    fontSize: 12,
+    fontSize: 13,
     color: colors.deepBlue100,
     fontWeight: '500',
-    lineHeight: 15
+    lineHeight: 18
   },
   messageWrapper: {
-    paddingTop: 3,
+    flex: 1,
   },
   message: {
-    fontSize: 12,
-    color: colors.deepBlue100,
-    lineHeight: 15,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    backgroundColor: colors.deepBlue5,
+    borderRadius: 18,
+    fontSize: 13,
+    color: colors.deepBlue80,
+    lineHeight: 18,
+    alignSelf: 'flex-start'
   },
   url: {
     fontSize: 12,
@@ -91,6 +98,9 @@ const styles = StyleSheet.create({
     color: colors.deepBlue80,
     fontWeight: '500',
     paddingLeft: 12,
+  },
+  reactionsWrapper: {
+    flex: 0,
   }
 });
 
@@ -149,19 +159,35 @@ class CommentView extends PureComponent {
     const name = msgGen.users.getFullName(comment.get("created_by"));
     const message = `<!${comment.get("created_by")}|${name}> ` + comment.get("message");
 
+
     return (
       <View style={styles.messageWrapper}>
         <ParsedText
           style={styles.message}
+          selectable={true}
           parse={[
             { type: "url", style: styles.url, onPress: this.onOpenUrl },
             { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText},
           ]}
         >
-         {message}
+          {message}
         </ParsedText>
       </View>
     );
+  }
+  renderReactions() {
+    const { comment, delegate } = this.props;
+
+    return (
+      <View style={styles.reactionsWrapper} >
+        <Reactions
+          reactions={comment.get("reactions")}
+          delegate={delegate}
+          commentId={comment.get("id")}
+          height={42}
+        />
+      </View>
+    )
   }
   renderAttachments() {
     const { comment } = this.props;
@@ -216,12 +242,8 @@ class CommentView extends PureComponent {
     return (
       <View style={styles.container}>
         {this.renderProfilePic()}
-        <View style={styles.content}>
-          {this.renderMessage()}
-          {this.renderAttachments()}
-          {this.renderSubLine()}
-        </View>
-
+        {this.renderMessage()}
+        {this.renderReactions()}
       </View>
     )
   }

@@ -115,8 +115,10 @@ class CreateNewItemModal extends PureComponent {
     const { navPop } = this.props;
 
     if (title.length) {
+      this.refs.textInput.blur();
       Keyboard.dismiss;
       this.onModalCreateAction(title, assignees, milestoneId);
+      
       setTimeout(() => {
         navPop();
       }, 1)
@@ -124,7 +126,10 @@ class CreateNewItemModal extends PureComponent {
   }
   onCloseModal() {
     const { navPop } = this.props;
+
+    this.refs.textInput.blur();
     Keyboard.dismiss;
+
     setTimeout(() => {
       navPop()
     }, 1)
@@ -193,6 +198,7 @@ class CreateNewItemModal extends PureComponent {
     return (
       <View style={[styles.inputWrapper, { backgroundColor: inputBg }]}>
         <TextInput
+          ref="textInput"
           style={styles.input}
           onChangeText={(text) => this.setState({title: text})}
           underlineColorAndroid="transparent"
