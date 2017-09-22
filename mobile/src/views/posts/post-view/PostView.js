@@ -8,6 +8,7 @@ import { colors, viewSize } from "globalStyles";
 import HOCHeader from "HOCHeader";
 import StyledText from "components/styled-text/StyledText";
 import Icon from "Icon";
+import * as gs from 'styles';
 import RippleButton from "RippleButton";
 import Reactions from "components/reactions/Reactions";
 import CommentView from "components/comment-view/CommentView";
