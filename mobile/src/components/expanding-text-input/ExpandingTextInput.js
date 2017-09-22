@@ -22,15 +22,17 @@ class ExpandingTextInput extends PureComponent {
     const { minRows, maxRows } = this.props;
     const { inputHeight, lineHeight } = this.state;
     const current = Math.round((inputHeight / lineHeight));
-    // console.log('current', current, 'inputHeight', inputHeight);
   
     return Math.min(Math.max(minRows, current), maxRows);
   }
   onContentSizeChange(e) {
     const { inputHeight } = this.state;
+    // Home made debouncer
     clearTimeout(this._contentTimer);
+
     if (inputHeight !== e.nativeEvent.contentSize.height) {
       const height = e.nativeEvent.contentSize.height;
+      
       this._contentTimer = setTimeout(() => {
         this.setState({ inputHeight: Math.round(height) })
       }, 50);

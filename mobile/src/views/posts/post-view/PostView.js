@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 50,
     paddingBottom: 11,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.deepBlue20,
   },
   headerSide: {
     flex: 1,
