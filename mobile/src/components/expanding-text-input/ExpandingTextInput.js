@@ -25,7 +25,7 @@ class ExpandingTextInput extends PureComponent {
   }
   onKeyPress(e) {
     const numberOfLines = this.getInputSize();
-
+    console.log('hi')
     if (e.key === 'Enter' && numberOfLines >= 5) {
       
     }
