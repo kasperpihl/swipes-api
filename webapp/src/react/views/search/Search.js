@@ -24,7 +24,7 @@ class Search extends PureComponent {
       <div className="search__field">
         <input type="text"
           autoFocus
-          placeholder="Search for goals, milestones and posts"
+          placeholder="Search for goals, plans and posts"
           value={searchString}
           onChange={this.onChange}
         />

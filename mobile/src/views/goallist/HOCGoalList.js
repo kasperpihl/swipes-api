@@ -125,7 +125,7 @@ class HOCGoalList extends PureComponent {
     );
   }
   renderSectionHeader(v1, sectionId) {
-    let sectionTitle = sectionId === 'none' ? 'No milestone' : msgGen.milestones.getName(sectionId);
+    let sectionTitle = sectionId === 'none' ? 'No plan' : msgGen.milestones.getName(sectionId);
     let sectionIcon = sectionId === 'none' ? 'MiniNoMilestone' : 'MiniMilestone';
 
     return (

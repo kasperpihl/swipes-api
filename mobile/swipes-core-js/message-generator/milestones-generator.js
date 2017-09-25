@@ -16,13 +16,13 @@ export default class Milestones {
   }
   getName(milestoneId) {
     if (milestoneId === 'none') {
-      return 'No milestone';
+      return 'No plan';
     }
     const milestone = this.getMilestone(milestoneId);
     if (milestone) {
       return milestone.get('title');
     }
-    return 'Any milestone';
+    return 'Any plan';
   }
   getRelatedFilter(milestoneId) {
     const milestone = this.getMilestone(milestoneId);
