@@ -23,7 +23,7 @@ class HOCNoMilestone extends PureComponent {
     const { navPush } = this.props;
     navPush({
       id: 'NoMilestoneOverview',
-      title: 'No Milestone',
+      title: 'No Plan',
     });
   }
   componentDidMount() {
@@ -33,7 +33,7 @@ class HOCNoMilestone extends PureComponent {
     return (
       <div className="header">
         <div className="header__left">
-          <div className="header__title">Goals with no milestone</div>
+          <div className="header__title">Goals without a plan</div>
         </div>
         <div className="header__icon">
           <Icon icon="ArrowRightLong" className="header__svg" />
