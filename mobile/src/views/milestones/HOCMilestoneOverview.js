@@ -124,13 +124,13 @@ class HOCMilestoneOverview extends PureComponent {
           },
         });
       } else if (i === 1) {
-        let achieveLbl = 'Mark milestone as achieved';
+        let achieveLbl = 'Mark plan as achieved';
         let achieveIcon = 'MilestoneAchieve';
         let complete = true;
         if (milestone.get('closed_at')) {
           complete = false,
           achieveIcon = 'Milestone';
-          achieveLbl = 'Move milestone to current';
+          achieveLbl = 'Move plan to current';
         }
         const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`
         this.setState({ showingInfoTab: true });
@@ -140,14 +140,14 @@ class HOCMilestoneOverview extends PureComponent {
           onClose: this.onInfoTabClose,
           actions: [
             { title: achieveLbl, complete, icon: achieveIcon },
-            { title: 'Delete milestone', icon: 'Delete', danger: true },
+            { title: 'Delete plan', icon: 'Delete', danger: true },
           ],
           info: [
             { title: 'Created', text: createdLbl },
           ],
           about: {
-            title: 'What is a milestone',
-            text: 'A Milestone is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Milestone.\n\nTo keep your work organized, categorize goals for your Milestone with This week, Later or Completed.'
+            title: 'What is a plan',
+            text: 'A Plan is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Plan.\n\nTo keep your work organized, categorize goals for your Plan with This week, Later or Completed.'
           },
         })
       }
@@ -172,7 +172,7 @@ class HOCMilestoneOverview extends PureComponent {
       props: {
         title: '',
         defAssignees: [this.props.myId],
-        placeholder: "Add a new goal to a milestone",
+        placeholder: "Add a new goal to a plan",
         actionLabel: "Add goal",
         milestoneId: milestone.get('id'),
         delegate: this
@@ -225,7 +225,7 @@ class HOCMilestoneOverview extends PureComponent {
     
     if (group === 'Current') {
       title = 'Add a new goal';
-      text = 'Add new goals for everything that needs \n to be done to achieve this milestone.';
+      text = 'Add new goals for everything that needs \n to be done to achieve this plan.';
     } else if (group === 'Later') {
       title = 'set for later (coming soon)';
       text = 'Move goals that need to be done later \n from this week into here.';

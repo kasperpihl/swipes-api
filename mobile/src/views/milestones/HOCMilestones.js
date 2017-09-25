@@ -84,7 +84,7 @@ class HOCMilestones extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Current Milestones', 'Achieved'],
+      tabs: ['Current plans', 'Achieved'],
       tabIndex: 0,
     };
 
@@ -107,7 +107,7 @@ class HOCMilestones extends PureComponent {
 
     const overview = {
       id: 'NoMilestoneOverview',
-      title: 'No Milestone overview',
+      title: 'Goals without a plan',
       props: {
       },
     };
@@ -119,7 +119,7 @@ class HOCMilestones extends PureComponent {
 
     const overview = {
       id: 'MilestoneOverview',
-      title: 'Milestone overview',
+      title: 'Plan overview',
       props: {
         milestoneId: milestone.get('id'),
       },
@@ -142,8 +142,8 @@ class HOCMilestones extends PureComponent {
       title: 'CreateNewItemModal',
       props: {
         title: '',
-        placeholder: "Add a new milestone",
-        actionLabel: "Add milestone",
+        placeholder: "Add a new plan",
+        actionLabel: "Add plan",
         delegate: this
       }
     })
