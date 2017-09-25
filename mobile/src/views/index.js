@@ -11,6 +11,7 @@ import PostCreate from './posts/post-create/HOCPostCreate';
 import Notifications from './notifications/HOCNotifications';
 import Update from './update/HOCUpdate';
 import Search from './search/HOCSearch';
+import AttachmentView from './posts/post-view/HOCAttachmentView'
 import CreateNewItemModal from 'modals/CreateNewItemModal';
 
 export {
@@ -27,5 +28,6 @@ export {
   NoMilestoneOverview,
   Update,
   Search,
-  CreateNewItemModal
+  CreateNewItemModal,
+  AttachmentView
 };

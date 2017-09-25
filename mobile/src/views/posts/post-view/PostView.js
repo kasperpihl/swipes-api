@@ -404,7 +404,7 @@ class PostView extends PureComponent {
       <View style={styles.container}>
         {this.renderPostHeader()}
         {this.renderContent()}
-        <PostFooter delegate={delegate} placeholder="Write a comment…" commmentLoading={this.state.commmentLoading} />
+        <PostFooter ref="postFooter" navPush={this.props.navPush} delegate={delegate} placeholder="Write a comment…" commmentLoading={this.state.commmentLoading} />
       </View>
     );
   }

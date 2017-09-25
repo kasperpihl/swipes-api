@@ -15,9 +15,8 @@ const styles = StyleSheet.create({
   row: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('row', 'stretch', 'center'),
+    ...gs.mixins.padding(15),
     minHeight: 64,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
   },
   dotWrapper: {
     ...gs.mixins.size(30),
@@ -31,9 +30,8 @@ const styles = StyleSheet.create({
   },
   regularDot:{
     ...gs.mixins.size(10),
+    ...gs.mixins.border(2, gs.colors.deepBlue50),
     borderRadius: 10 /2,
-    borderWidth: 2,
-    borderColor: gs.colors.deepBlue50,
   },
   seperator: {
     ...gs.mixins.size(viewSize.width - 30, 1),

@@ -279,15 +279,13 @@ class PostFeed extends PureComponent {
   renderHeader() {
 
     return (
-      <RippleButton onPress={this.handleOpenPost}>
-        <View style={styles.header}>
-          {this.renderProfilePic()}
-          <View style={styles.headerSide}>
-            {this.renderGeneratedTitle()}
-            {this.renderHeaderSubtitle()}
-          </View>
+      <View style={styles.header}>
+        {this.renderProfilePic()}
+        <View style={styles.headerSide}>
+          {this.renderGeneratedTitle()}
+          {this.renderHeaderSubtitle()}
         </View>
-      </RippleButton>
+      </View>
     )
   }
   renderMessage() {
@@ -371,9 +369,13 @@ class PostFeed extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
-        {this.renderType()}
-        {this.renderHeader()}
-        {this.renderMessage()}
+        <RippleButton onPress={this.handleOpenPost}>
+          <View>
+            {this.renderType()}
+            {this.renderHeader()}
+            {this.renderMessage()}
+          </View>
+        </RippleButton>
         {this.renderAttachments()}
         {this.renderActions()}
       </View>

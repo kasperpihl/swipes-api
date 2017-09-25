@@ -46,6 +46,7 @@ class ExpandingTextInput extends PureComponent {
 
     return (
       <TextInput
+        ref='expandingTextInput'
         numberOfLines={lineNumbers}
         multiline={true}
         style={[style, iOSInputHeight]}

@@ -5,98 +5,80 @@ import ParsedText from "react-native-parsed-text";
 import { setupDelegate, attachmentIconForService } from "swipes-core-js/classes/utils";
 import { timeAgo } from "swipes-core-js/classes/time-utils";
 import { colors, viewSize } from "globalStyles";
+import * as gs from 'styles';
 import Icon from "Icon";
 import RippleButton from "RippleButton";
 import Reactions from "../reactions/Reactions";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('row'),
     marginTop: 21,
-    flexDirection: 'row',
   },
   content: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('row', 'between', 'top'),
   },
   profilePicWrapper: {
-    width: 42,
-    height: 42,
+    ...gs.mixins.size(42),
     borderRadius: 42 / 2,
     marginRight: 12,
   },
   profilePic: {
-    width: 42,
-    height: 42,
+    ...gs.mixins.size(42),
     borderRadius: 42 / 2,
   },
   initials: {
-    width: 42,
-    height: 42,
+    ...gs.mixins.size(42),
+    ...gs.mixins.flex('center'),
     borderRadius: 42 / 2,
     backgroundColor: colors.deepBlue100,
-    alignItems: "center",
-    justifyContent: "center",
     marginRight: 12,
   },
   initialsLabel: {
-    fontSize: 28,
-    color: colors.bgColor
+    ...gs.mixins.font(28, gs.colors.bgColor),
   },
   nameWrapper: {
   },
   nameLabel: {
-    fontSize: 13,
-    color: colors.deepBlue100,
-    fontWeight: '500',
-    lineHeight: 18
+    ...gs.mixins.font(13, gs.colors.deepBlue100, 18, '500'),
   },
   messageWrapper: {
-    flex: 1,
-  },
-  message: {
-    paddingVertical: 12,
-    paddingHorizontal: 18,
+    ...gs.mixins.padding(12, 18),
+    ...gs.mixins.size(1),
     backgroundColor: colors.deepBlue5,
     borderRadius: 18,
-    fontSize: 13,
-    color: colors.deepBlue80,
-    lineHeight: 18,
+  },
+  message: {
+    ...gs.mixins.font(13, gs.colors.deepBlue100, 18),
     alignSelf: 'flex-start'
   },
   url: {
-    fontSize: 12,
-    color: colors.blue100,
-    lineHeight: 15,
+    ...gs.mixins.font(12, gs.colors.blue100, 15),
   },
   actions: {
-    flexDirection: "row",
-    alignItems: 'center',
+    ...gs.mixins.flex('row', 'center'),
     paddingTop: 6,
   },
   timestamp: {
     fontSize: 12,
   },
   attachments: {
-    paddingHorizontal: 0,
-    marginTop: 3,
+    marginTop: 12,
+    alignSelf: 'stretch',
   },
   attachment: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('row', 'left', 'center'),
+    ...gs.mixins.border(1, gs.colors.deepBlue10),
     marginBottom: 3,
     height: 48,
     paddingHorizontal: 12,
-    borderRadius: 1,
-    borderWidth: 1,
-    borderColor: colors.deepBlue10,
+    borderRadius: 6,
   },
   attachmentLabel: {
-    fontSize: 12,
-    color: colors.deepBlue80,
-    fontWeight: '500',
+    ...gs.mixins.font(12, gs.colors.deepBlue80, 12, '500'),
     paddingLeft: 12,
   },
   reactionsWrapper: {
@@ -172,6 +154,7 @@ class CommentView extends PureComponent {
         >
           {message}
         </ParsedText>
+        {this.renderAttachments()}
       </View>
     );
   }

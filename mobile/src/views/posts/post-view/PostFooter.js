@@ -1,57 +1,71 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
+import * as gs from 'styles';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
 import ExpandingTextInput from 'components/expanding-text-input/ExpandingTextInput';
+import HOCAttachButton from 'components/attach-button/HOCAttachButton';
 
 const styles = StyleSheet.create({
   container: {
+    ...gs.mixins.border(1, gs.colors.deepBlue20, 'top'),
+    ...gs.mixins.flex('row'),
     width: viewSize.width,
     minHeight: 54,
-    borderTopWidth: 1,
-    borderTopColor: colors.deepBlue20,
-    flexDirection: 'row',
   },
   backButton: {
-    flex: 1,
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
+    flex: 0,
+    minWidth: 64,
     maxWidth: 64,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   inputWrapper: {
-    flex: 1,
+    ...gs.mixins.size(1),
+    ...gs.mixins.padding(6, 0, 6, 12),
     minHeight: 54,
-    paddingVertical: 6,
-    paddingLeft: 12,
   },
   inputBorder: {
-    alignSelf: 'stretch',
+    ...gs.mixins.border(1, gs.colors.deepBlue10),
+    ...gs.mixins.flex('row', 'left', 'center'),
+    alignSelf: 'stretch', 
     minHeight: 54 - (6 * 2),
-    borderColor: colors.deepBlue10,
-    borderWidth: 1,
     borderRadius: 25,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
   },
   input: {
+    ...gs.mixins.size(1),
+    ...gs.mixins.font(13, gs.colors.deepBlue80, 18),
+    ...gs.mixins.padding(12, 0, 12, 18),
+    ...gs.mixins.margin(),
     alignSelf: 'stretch',
-    padding: 0,
-    margin: 0,
-    fontSize: 13,
-    color: colors.deepBlue80,
-    lineHeight: 18,
-    includeFontPadding: false,
+  },
+  attachmentContainer: {
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
+    flex: 0,
+    minWidth: 48,
+    maxWidth: 48,
+    minHeight: 48,
+  },
+  numberOfAttachments: {
+    ...gs.mixins.padding(3, 8),
+    ...gs.mixins.flex('center'),
+    backgroundColor: '#007AFF',
+    borderRadius: 24 / 2,
+  },
+  numberOfAttachmentsLabel: {
+    ...gs.mixins.font(13, 'white'),
   },
   actions: {
-    flex: 1,
+    ...gs.mixins.size(1),
     maxWidth: 64,
   },
   iconButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
   }
 });
 
@@ -59,12 +73,15 @@ class PostFooter extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      text: ''
+      text: '',
+      attachments: fromJS([]),
     }
-    setupDelegate(this, 'onAddComment', 'onNavigateBack');
+    setupDelegate(this, 'onAddComment', 'onNavigateBack', 'onAutoFocus');
 
     this.handleAddComment = this.handleAddComment.bind(this);
     this.handleBackButton = this.handleBackButton.bind(this);
+    this.handleAttach = this.handleAttach.bind(this);
+    this.handleOpenAttachments = this.handleOpenAttachments.bind(this);
 
     if (Platform.OS === "android") {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -73,11 +90,34 @@ class PostFooter extends PureComponent {
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
-  handleAddComment() {
-    const { text } = this.state;
+  handleOpenAttachments() {
+    const { navPush } = this.props;
+    const { attachments } = this.state;
 
-    this.onAddComment(text, []);
-    this.setState({ text: '' });
+    this.onAutoFocus();
+    Keyboard.dismiss();
+
+    navPush({
+      id: 'AttachmentView',
+      title: 'Attachment',
+      props: {
+        delegate: this,
+        initialAttachments: attachments
+      },
+    })
+  }
+  handleAttach(att) {
+    const { attachments } = this.state;
+
+    this.setState({
+      attachments: attachments.push(att)
+    })
+  }
+  handleAddComment() {
+    const { text, attachments } = this.state;
+
+    this.onAddComment(text, attachments);
+    this.setState({ text: '', attachments: fromJS([]) });
     Keyboard.dismiss();
   }
   handleBackButton() {
@@ -110,7 +150,7 @@ class PostFooter extends PureComponent {
     return (
       <RippleButton rippleColor={colors.blue100} rippleOpacity={0.2} onPress={this.handleAddComment}>
         <View style={styles.iconButton}>
-          <Icon name="Send" width="24" height="24" fill={colors.blue100} />
+          <Icon name="Send" width="24" height="24" fill={gs.colors.blue100} />
         </View>
       </RippleButton>
     )
@@ -122,8 +162,34 @@ class PostFooter extends PureComponent {
       </View>
     )
   }
+  renderAttachmentButton() {
+    const { attachments } = this.state;
+    
+    if (!attachments.size) {
+
+      return (
+        <TouchableOpacity onPress={this.handleOpenAttachments}>
+          <View style={styles.attachmentContainer}>
+            <Icon name="Attachment" width="24" height="24" fill={gs.colors.blue100} />
+          </View>
+        </TouchableOpacity>
+      )
+    }
+
+    return (
+      <TouchableOpacity onPress={this.handleOpenAttachments}>
+        <View style={styles.attachmentContainer}>
+          <View style={styles.numberOfAttachments}>
+            <Text style={styles.numberOfAttachmentsLabel}>{attachments.size}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
+
+  }
   render() {
     const { placeholder } = this.props;
+    const { attachments } = this.state;
 
     return (
 
@@ -132,6 +198,7 @@ class PostFooter extends PureComponent {
         <View style={styles.inputWrapper}>
           <View style={styles.inputBorder}>
             <ExpandingTextInput
+              ref="input"
               onChangeText={(text) => this.setState({ text })}
               style={styles.input}
               underlineColorAndroid="transparent"
@@ -142,6 +209,7 @@ class PostFooter extends PureComponent {
               maxRows={2}
               value={this.state.text}
             />
+            {this.renderAttachmentButton()}
           </View>
         </View>
         {this.renderActions()}
