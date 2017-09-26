@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { StatusBar } from 'react-native';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
@@ -43,6 +44,11 @@ class HOCModal extends PureComponent {
         style={modalStyles}
         coverScreen={true}
       >
+        <StatusBar
+          translucent
+          backgroundColor="rgba(0, 0, 0, 0.50)"
+          animated
+        />
         {Comp ? <Comp {...compProps} /> : null}
       </Modal>
     );
