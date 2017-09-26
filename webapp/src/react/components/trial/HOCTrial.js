@@ -65,7 +65,7 @@ class HOCTrial extends PureComponent {
     const { isAccount } = this.props;
     const { daysLeft, dismissed } = this.state;
     const isAdmin = msgGen.me.isAdmin();
-    return (!isAccount && (daysLeft < -7 || (isAdmin && daysLeft < 0 && !dismissed)));
+    return (!isAccount && (daysLeft <= -7 || (isAdmin && daysLeft < 0 && !dismissed)));
   }
   renderTrialIndicator() {
     const isAdmin = msgGen.me.isAdmin();
@@ -111,7 +111,7 @@ class HOCTrial extends PureComponent {
         <div className="trial-popup">
           <div className="trial-popup__title">Trial Expired</div>
           <div className="trial-popup__paragraph">Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</div>
-          <div className="trial-popup__paragraph">⭐  Your progress is saved. {actionLbl}</div>
+          <div className="trial-popup__paragraph">⭐&nbsp;&nbsp;Your progress is saved. {actionLbl}</div>
           <div className="trial-popup__actions">
             {(daysLeft >= -7) ? <Button
               text="Dismiss"
