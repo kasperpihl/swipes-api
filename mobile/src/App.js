@@ -166,7 +166,6 @@ class App extends PureComponent {
         <View style={styles.wrapper}>
           <HOCViewController />
         </View>
-        <ActionModal />
         <HOCModal />
         <HOCInfoTab/>
         <HOCTabNavigation />
