@@ -37,7 +37,7 @@ class HOCNoMilestoneOverview extends PureComponent {
   }
   renderHeader() {
 
-    return <HOCHeader title="Goals without a milestone" delegate={this} />
+    return <HOCHeader title="Goals without a plan" delegate={this} />
   }
   renderListLoader() {
     return (

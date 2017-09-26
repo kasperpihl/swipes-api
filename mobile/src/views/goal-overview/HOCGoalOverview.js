@@ -195,7 +195,7 @@ class HOCGoalOverview extends PureComponent {
             { title: 'Delete goal', icon: 'Delete', danger: true },
           ],
           info: [
-            { title: 'Milestone', text: mileLbl, icon: mileIcon, actionLabel: mileAct },
+            { title: 'Plan', text: mileLbl, icon: mileIcon, actionLabel: mileAct },
             { title: 'Created', text: createdLbl },
           ],
           about: {

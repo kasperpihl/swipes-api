@@ -213,7 +213,7 @@ class HOCMilestones extends PureComponent {
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
         <Icon name="ESPlan" width="193" height="200"  />
-        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Create your first team Milestone</Text>
+        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Create your team's first plan</Text>
       </View>
     )
   }
