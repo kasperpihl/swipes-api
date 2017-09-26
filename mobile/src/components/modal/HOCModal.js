@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
@@ -43,7 +44,13 @@ class HOCModal extends PureComponent {
         style={modalStyles}
         coverScreen={true}
       >
-        {Comp ? <Comp {...compProps} /> : null}
+        {Comp ? (
+          <TouchableWithoutFeedback onPress={this.onClose}>
+            <View style={{ flex: 1 }}>
+              <Comp {...compProps} />
+            </View>
+          </TouchableWithoutFeedback>
+        ) : null}
       </Modal>
     );
   }
