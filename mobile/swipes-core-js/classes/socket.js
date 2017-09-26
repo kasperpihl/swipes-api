@@ -79,7 +79,7 @@ export default class Socket {
         if (res && res.ok) {
           this._pingTimer = setInterval(() => {
             this.sendPing();
-          }, 20000);
+          }, 5000);
           this.reconnect_attempts = 0;
           this.changeStatus('online');
         } else if (res && res.error) {
