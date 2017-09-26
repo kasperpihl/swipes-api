@@ -9,10 +9,13 @@ import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
 import WaitForUI from 'WaitForUI';
 import * as cs from 'swipes-core-js/selectors';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { colors, viewSize } from 'globalStyles';
 import HOCGoalItem from './HOCGoalItem';
+
+import LoadingModal from 'modals/LoadingModal';
 
 const styles = StyleSheet.create({
   container: {
@@ -95,6 +98,12 @@ class HOCGoalList extends PureComponent {
     }
   }
   openCreateGoalModal() {
+    const { showModal } = this.props;
+    showModal({
+      component: LoadingModal,
+    })
+    return;
+    //
     const { navPush } = this.props;
 
     navPush({
@@ -200,4 +209,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   createGoal: ca.goals.create,
+  showModal: a.main.modal,
 })(HOCGoalList);

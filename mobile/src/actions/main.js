@@ -14,3 +14,8 @@ export const signout = cb => dp => dp(ca.api.request('users.signout')).then((res
     dp({ type: types.RESET_STATE });
   }
 });
+
+
+export function modal(payload) {
+  return { type: types.SHOW_MODAL, payload };
+}

@@ -15,6 +15,7 @@ import LoadingModal from 'modals/LoadingModal';
 import ActionModal from 'modals/action-modal/ActionModal';
 import HOCConnectionBar from 'components/connection-bar/HOCConnectionBar';
 import * as a from 'actions';
+import HOCModal from 'components/modal/HOCModal';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 
 const styles = StyleSheet.create({
@@ -167,6 +168,7 @@ class App extends PureComponent {
         </View>
         <LoadingModal />
         <ActionModal />
+        <HOCModal />
         <HOCInfoTab/>
         <HOCTabNavigation />
         {this.renderBackButton()}
