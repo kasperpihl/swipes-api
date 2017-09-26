@@ -22,7 +22,7 @@ class SceneRenderer extends PureComponent {
     this.state = {};
 
     this.navPushCached = setupCachedCallback(throttle(props.navPush, 350, true));
-    this.navPopCached = setupCachedCallback(props.navPop);
+    this.navPopCached = setupCachedCallback(throttle(props.navPop, 350, true));
   }
   render() {
     const { activeSliderIndex, routes, setActionButtons, route, navPush, isActive } = this.props;
