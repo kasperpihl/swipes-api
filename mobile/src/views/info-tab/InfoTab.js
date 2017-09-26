@@ -107,7 +107,7 @@ class InfoTab extends PureComponent {
     }
   }
   componentWillUpdate() {
-    LayoutAnimation.configureNext(LayoutAnimation.create(250, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
+    // LayoutAnimation.configureNext(// LayoutAnimation.create(250, // LayoutAnimation.Types.easeOut, // LayoutAnimation.Properties.opacity));
   }
   componentWillReceiveProps(nextProps) {
     const { infoTab } = this.props;

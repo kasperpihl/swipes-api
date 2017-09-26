@@ -47,7 +47,7 @@ class ActionModalItem extends Component {
     setupDelegate(this, 'onItemPress');
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   renderLeftIcon() {
     const { item } = this.props;
@@ -105,8 +105,7 @@ class ActionModalItem extends Component {
   }
   render() {
     const { item, singleRender } = this.props;
-    const isSelected = item.get('selected');
-    const backgroundColor = isSelected ? colors.blue5 : colors.bgColor;
+    const backgroundColor = item.get('selected') ? colors.blue5 : colors.bgColor;
 
     let extraStyle = {
 
@@ -119,7 +118,7 @@ class ActionModalItem extends Component {
     }
 
     return (
-      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item.get('index'), item)}>
+      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item.get('id'), item)}>
         <View style={[styles.container, extraStyle, { backgroundColor }]}>
           {this.renderLeftIcon()}
           {this.renderTitle()}

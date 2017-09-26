@@ -77,7 +77,7 @@ class HOCTabNavigation extends PureComponent {
   componentWillUpdate(nextProps, nextState) {
     const { rootRoutes } = this.state;
 
-    LayoutAnimation.configureNext(LayoutAnimation.create(300, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
+    // LayoutAnimation.configureNext(// LayoutAnimation.create(300, // LayoutAnimation.Types.easeOut, // LayoutAnimation.Properties.opacity));
 
     if (nextProps.counter !== this.props.counter) {
       rootRoutes[0].counter = nextProps.counter;

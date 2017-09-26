@@ -96,12 +96,6 @@ class HOCGoalList extends PureComponent {
     }
   }
   openCreateGoalModal() {
-    const { showLoading } = this.props;
-
-    showLoading(true)
-
-    return;
-    //
     const { navPush } = this.props;
 
     navPush({
@@ -207,5 +201,4 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   createGoal: ca.goals.create,
-  showLoading: a.main.loading,
 })(HOCGoalList);

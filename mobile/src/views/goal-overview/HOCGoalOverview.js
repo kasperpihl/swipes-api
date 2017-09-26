@@ -45,18 +45,16 @@ class HOCGoalOverview extends PureComponent {
     this.renderActionButtons();
   }
   componentWillUpdate(nextProps, nextState) {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
 
     if (!this.props.isActive && nextProps.isActive || this.state.showingInfoTab !== nextState.showingInfoTab) {
       this.renderActionButtons(nextState.showingInfoTab);
     }
   }
-  onModalAssign(sortedUsers, data) {
-    const { showModal, assignGoal, goal } = this.props;
-    const overrideAssignees = List(data.map(i => sortedUsers.getIn([i, 'id'])));
+  onModalAssign(selectedIds) {
+    const { assignGoal, goal } = this.props;
 
-    assignGoal(goal.get('id'), overrideAssignees).then((res) => {})
-    showModal();
+    assignGoal(goal.get('id'), selectedIds.toJS())
   }
   handleCompleteGoal() {
     const { incompleteGoal, completeGoal } = this.props;
@@ -74,38 +72,14 @@ class HOCGoalOverview extends PureComponent {
     })
   }
   handleAssigning() {
-    const { users, showModal, goal, toggleInfoTab } = this.props;
-    const assignees = goal.get('assignees');
-
-    const userInfoToActions = users.map((u, i) => {
-      const selected = assignees.indexOf(u.get('id')) > -1;
-
-      const obj = {
-        title: `${msgGen.users.getFirstName(u.get('id'))} ${msgGen.users.getLastName(u.get('id'))}`,
-        selected,
-        index: i,
-        leftIcon: {
-          user: u.get('id'),
-        },
-      };
-
-      return fromJS(obj);
-    });
-
-    const modal = {
-      title: 'Assign teammeates',
-      onClick: this.onModalAssign.bind(this, users),
-      multiple: 'Assign',
-      items: userInfoToActions,
-      fullscreen: true,
-    };
-    
+    const {  assignModal, goal, toggleInfoTab } = this.props;
     this.setState({ showingInfoTab: false })
     toggleInfoTab();
 
-    setTimeout(() => {
-      showModal(modal);
-    }, 1)
+    assignModal({
+      selectedIds: goal.get('assignees'),
+      onActionPress: (selectedIds) => this.setState({assignees: selectedIds}),
+    });
   }
   onActionPress(index) {
     if (index === 0) {
@@ -377,12 +351,11 @@ const styles = StyleSheet.create({
 function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
-    users: cs.users.getActive(state),
     me: state.get('me'),
   };
 }
 export default connect(mapStateToProps, {
-  showModal: a.modals.show,
+  assignModal: a.modals.assign,
   toggleInfoTab: a.infotab.showInfoTab,
   completeStep: ca.goals.completeStep,
   incompleteStep: ca.goals.incompleteStep,

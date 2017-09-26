@@ -3,10 +3,17 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-import { setupLoading, convertObjToUnderscore, navForContext, typeForId } from 'swipes-core-js/classes/utils';
+import { 
+  setupLoading, 
+  convertObjToUnderscore, 
+  navForContext, 
+  typeForId,
+  bindAll,
+} from 'swipes-core-js/classes/utils';
 import moment from 'moment';
 import mime from 'react-native-mime-types';
 import ImagePicker from 'react-native-image-picker';
+import ActionModal from 'modals/action-modal/ActionModal';
 import { fromJS, List } from 'immutable';
 import PostCreate from './PostCreate';
 
@@ -23,8 +30,7 @@ class HOCPostCreate extends PureComponent {
       }),
     };
 
-    this.onActionButton = this.onActionButton.bind(this);
-    this.onModalChangeType = this.onModalChangeType.bind(this);
+    bindAll(this, ['onModalTag', 'onModalChangeType', 'onActionButton']);
 
   }
   componentDidMount() {
@@ -61,83 +67,45 @@ class HOCPostCreate extends PureComponent {
 
   }
   onMessageChange(text) {
-    let { post } = this.state;
-    post = post.set('message', text);
-
-    this.setState({ post });
+    const { post } = this.state;
+    this.updatePost(post.set('message', text));
   }
-  onModalTag(sortedUsers, data) {
-    let { post } = this.state;
-    const { showModal } = this.props;
-    post = post.setIn(['taggedUsers'], List(data.map(i => sortedUsers.getIn([i, 'id']))));
-
-    this.updatePost(post);
-
-    showModal();
+  onModalTag(selectedIds) {
+    const { post } = this.state;
+    this.updatePost(post.setIn(['taggedUsers'], selectedIds));
   }
-  onModalChangeType(i) {
-    const { showModal } = this.props;
-
-    this.setState({ post: this.state.post.set('type', i.get('index')) });
-
-    showModal();
+  onModalChangeType(id) {
+    const { post } = this.state;
+    this.updatePost(post.set('type', id));
   }
   onTag() {
-    const { users, showModal } = this.props;
-    let { post } = this.state;
-
-    const userInfoToActions = users.map((u, i) => {
-      const selected = this.state.post.get('taggedUsers').indexOf(u.get('id')) > -1;
-
-      const obj = {
-        title: `${msgGen.users.getFirstName(u.get('id'))} ${msgGen.users.getLastName(u.get('id'))}`,
-        selected,
-        index: i,
-        leftIcon: {
-          user: u.get('id'),
-        },
-      };
-
-      return fromJS(obj);
-    });
-
-    const modal = {
+    const { assignModal } = this.props;
+    const { post } = this.state;
+    assignModal({
       title: 'Tag teammates',
-      onClick: this.onModalTag.bind(this, users),
-      multiple: 'Tag',
-      items: userInfoToActions,
-      fullscreen: true,
-    };
-
-    showModal(modal);
+      actionLabel: 'Tag',
+      selectedIds: post.get('taggedUsers'),
+      onActionPress: this.onModalTag,
+    });
   }
   onChangeType() {
     const { showModal } = this.props;
 
-    const modal = {
+    const props = {
       title: 'Change type',
-      onClick: this.onModalChangeType,
+      onItemPress: this.onModalChangeType,
       items: fromJS([
-        {
-          title: 'Make a post',
-          index: 'message',
-        },
-        {
-          title: 'Ask a question',
-          index: 'question',
-        },
-        {
-          title: 'Make an announcement',
-          index: 'announcement',
-        },
-        {
-          title: 'Share information',
-          index: 'information',
-        },
+        { id: 'message', title: 'Make a post' },
+        { id: 'question', title: 'Ask a question' },
+        { id: 'announcement', title: 'Make an announcement' },
+        { id: 'information', title: 'Share information' },
       ]),
     };
 
-    showModal(modal);
+    showModal({
+      component: ActionModal,
+      props,
+    });
   }
   onAttachmentClick(i) {
     const { preview } = this.props;
@@ -258,13 +226,13 @@ HOCPostCreate.propTypes = {};
 function mapStateToProps(state) {
   return {
     myId: state.getIn(['me', 'id']),
-    users: cs.users.getActive(state),
   };
 }
 
 export default connect(mapStateToProps, {
   createPost: ca.posts.create,
-  showModal: a.modals.show,
+  showModal: a.main.modal,
+  assignModal: a.modals.assign,
   showLoading: a.main.loading,
   createFile: ca.files.create,
   createLink: ca.links.create,

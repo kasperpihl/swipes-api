@@ -45,7 +45,7 @@ class HOCReactions extends PureComponent {
     this.updateILike(nextProps.reactions);
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   handleLike() {
     const { post, commentId: cId } = this.props;

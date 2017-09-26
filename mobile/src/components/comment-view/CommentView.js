@@ -98,7 +98,7 @@ class CommentView extends PureComponent {
     setupDelegate(this, 'onOpenUrl', 'onAttachmentClick')
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   renderProfilePic() {
     const { comment } = this.props;

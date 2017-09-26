@@ -95,7 +95,7 @@ class PostFooter extends PureComponent {
     }
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   handleOpenAttachments() {
     const { navPush } = this.props;

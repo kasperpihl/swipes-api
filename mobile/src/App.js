@@ -66,7 +66,7 @@ class App extends PureComponent {
     //this.checkTagsAndUpdate();
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   componentDidUpdate(prevProps) {
     if (this.props.ready && this.forwardToIndex) {
@@ -166,7 +166,6 @@ class App extends PureComponent {
         <View style={styles.wrapper}>
           <HOCViewController />
         </View>
-        <ActionModal />
         <HOCModal />
         <HOCInfoTab/>
         <HOCTabNavigation />
