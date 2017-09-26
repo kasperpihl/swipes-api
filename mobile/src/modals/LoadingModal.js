@@ -15,8 +15,9 @@ export default class LoadingModal extends PureComponent {
 // define your styles
 const styles = StyleSheet.create({
   modal: {
-    width: viewSize.width,
-    height: viewSize.height,
+    width: viewSize.width * .5,
+    height: viewSize.height * .5,
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',

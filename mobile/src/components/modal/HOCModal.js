@@ -28,6 +28,9 @@ class HOCModal extends PureComponent {
     const { modal } = this.props;
     const isOpen = !!modal;
     let Comp;
+    const modalStyles = {
+      backgroundColor: 'transparent',
+    };
     if(modal && modal.component) {
       Comp = modal.component;
     }
@@ -37,6 +40,7 @@ class HOCModal extends PureComponent {
       <Modal 
         isOpen={isOpen}
         onClosed={this.onClose}
+        style={modalStyles}
         coverScreen={true}
       >
         {Comp ? <Comp {...compProps} /> : null}
