@@ -21,6 +21,7 @@ class HOCAndroidBackButton extends PureComponent {
 
     if (infoTab.size) {
       toggleInfoTab();
+
       return true;
     }
 
