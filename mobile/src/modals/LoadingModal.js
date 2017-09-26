@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     height: viewSize.height,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     position: 'absolute',
     left: 0,
     top: 0,

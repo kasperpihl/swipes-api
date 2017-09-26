@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
+import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
@@ -14,9 +14,15 @@ class HOCModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+
+    this.onClose = this.onClose.bind(this);
     // setupLoading(this);
   }
   componentDidMount() {
+  }
+  onClose() {
+    const { showModal } = this.props;
+    showModal();
   }
   render() {
     const { modal } = this.props;
@@ -29,7 +35,10 @@ class HOCModal extends PureComponent {
 
     return (
       <Modal 
-        isOpen={isOpen}>
+        isOpen={isOpen}
+        onClosed={this.onClose}
+        coverScreen={true}
+      >
         {Comp ? <Comp {...compProps} /> : null}
       </Modal>
     );

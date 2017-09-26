@@ -99,9 +99,11 @@ class HOCGoalList extends PureComponent {
   }
   openCreateGoalModal() {
     const { showModal } = this.props;
+
     showModal({
       component: LoadingModal,
     })
+
     return;
     //
     const { navPush } = this.props;
