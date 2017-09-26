@@ -60,9 +60,14 @@ export default class Socket {
     }
     this.isConnecting = true;
 
-    const wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
+    let wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
+    wsUrl = `${wsUrl}?token=${this.token}`;
+    const headers = Object.entries((window.getHeaders && window.getHeaders()) || {});
+    headers.forEach(([key, value]) => {
+      // wsUrl = `${wsUrl}&${key}=${value}`;
+    });
 
-    this.ws = new WebSocket(`${wsUrl}?token=${this.token}`);
+    this.ws = new WebSocket(wsUrl);
     this.changeStatus('connecting');
     this.ws.onopen = () => {
       this.socket = true;
@@ -116,7 +121,10 @@ export default class Socket {
   }
   sendPing() {
     if (this.ws.readyState == this.ws.OPEN && !this.isConnecting) {
-      this.ws.send(JSON.stringify({ type: 'ping', id: 1 }));
+      this.ws.send(JSON.stringify({
+        type: 'ping',
+        id: 1,
+      }));
     }
   }
   changeStatus(status, nextRetry) {
