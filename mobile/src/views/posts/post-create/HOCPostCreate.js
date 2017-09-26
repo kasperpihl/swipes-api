@@ -79,30 +79,13 @@ class HOCPostCreate extends PureComponent {
     this.updatePost(post.set('type', id));
   }
   onTag() {
-    const { users, showModal } = this.props;
-    let { post } = this.state;
-
-    const userInfoToActions = users.map(u => fromJS({
-      id: u.get('id'),
-      title: msgGen.users.getFullName(u.get('id')),
-      leftIcon: {
-        user: u.get('id'),
-      },
-    }));
-
-    const props = {
+    const { assignModal } = this.props;
+    const { post } = this.state;
+    assignModal({
       title: 'Tag teammates',
-      multiple: true,
       actionLabel: 'Tag',
+      selectedIds: post.get('taggedUsers'),
       onActionPress: this.onModalTag,
-      selectedIds: this.state.post.get('taggedUsers'),
-      items: userInfoToActions,
-      fullscreen: true,
-    };
-
-    showModal({
-      component: ActionModal,
-      props,
     });
   }
   onChangeType() {
@@ -243,13 +226,13 @@ HOCPostCreate.propTypes = {};
 function mapStateToProps(state) {
   return {
     myId: state.getIn(['me', 'id']),
-    users: cs.users.getActive(state),
   };
 }
 
 export default connect(mapStateToProps, {
   createPost: ca.posts.create,
   showModal: a.main.modal,
+  assignModal: a.modals.assign,
   showLoading: a.main.loading,
   createFile: ca.files.create,
   createLink: ca.links.create,

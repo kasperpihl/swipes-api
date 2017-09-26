@@ -65,7 +65,7 @@ class HOCModal extends PureComponent {
               <View style={styles.backDrop}>
               </View>
             </TouchableWithoutFeedback>
-            <Comp {...compProps} />
+            <Comp {...compProps} closeModal={this.onClose} />
           </View>
         ) : null}
       </Modal>

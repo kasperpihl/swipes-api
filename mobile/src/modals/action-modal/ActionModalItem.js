@@ -47,7 +47,7 @@ class ActionModalItem extends Component {
     setupDelegate(this, 'onItemPress');
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   renderLeftIcon() {
     const { item } = this.props;

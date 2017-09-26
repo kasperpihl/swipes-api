@@ -96,7 +96,6 @@ class CreateNewItemModal extends PureComponent {
     this.handleAssigning = this.handleAssigning.bind(this);
     this.onActionClick = this.onActionClick.bind(this);
     this.onCloseModal = this.onCloseModal.bind(this);
-    this.onAssigneeClose = this.onAssigneeClose.bind(this);
     setupDelegate(this, 'handleModalState', 'onModalCreateAction');
 
     if (Platform.OS === 'android') {
@@ -104,7 +103,7 @@ class CreateNewItemModal extends PureComponent {
     }
   }
   componentWillUpdate(nextProps) {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   componentWillUnmount() {
     clearTimeout(this.showAssigneeModalTimeout);
@@ -134,57 +133,13 @@ class CreateNewItemModal extends PureComponent {
       navPop()
     }, 1)
   }
-  onModalAssign(sortedUsers, data) {
-    let { assignees } = this.state;
-    const { showModal } = this.props;
-    assignees = List(data.map(i => sortedUsers.getIn([i, 'id'])));
-
-    clearTimeout(this.showAssigneeModalTimeout);
-    showModal();
-    this.setState({assignees: assignees})
-    this.showNewItemModalTimeout = setTimeout(() => {
-      this.handleModalState();
-    }, 1)
-  }
-  onAssigneeClose() {
-    clearTimeout(this.showAssigneeModalTimeout);
-    this.showNewItemModalTimeout = setTimeout(() => {
-      this.handleModalState();
-    }, 1)
-  }
   handleAssigning() {
-    const { users, showModal } = this.props;
-    let { assignees } = this.state;
-
-    const userInfoToActions = users.map((u, i) => {
-      const selected = this.state.assignees.indexOf(u.get('id')) > -1;
-
-      const obj = {
-        title: `${msgGen.users.getFirstName(u.get('id'))} ${msgGen.users.getLastName(u.get('id'))}`,
-        selected,
-        index: i,
-        leftIcon: {
-          user: u.get('id'),
-        },
-      };
-
-      return fromJS(obj);
-    });
-
-    const modal = {
-      title: 'Assign teammeates',
-      onClick: this.onModalAssign.bind(this, users),
-      onClose: this.onAssigneeClose,
-      multiple: 'Assign',
-      items: userInfoToActions,
-      fullscreen: true,
-    };
-
-    clearTimeout(this.showNewItemModalTimeout);
-    this.handleModalState();
-    this.showAssigneeModalTimeout = setTimeout(() => {
-      showModal(modal);
-    }, 1)
+    const { assignModal } = this.props;
+    const { assignees } = this.state;
+    assignModal({
+      selectedIds: assignees,
+      onActionPress: (selectedIds) => this.setState({assignees: selectedIds}),
+    })
   }
   isActive() {
     const { title } = this.state;
@@ -293,11 +248,9 @@ class CreateNewItemModal extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  return {
-    users: cs.users.getActive(state),
-  };
+  return {};
 }
 
 export default connect(mapStateToProps, {
-  showModal: a.modals.show,
+  assignModal: a.modals.assign,
 })(CreateNewItemModal);

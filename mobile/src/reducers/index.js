@@ -3,7 +3,6 @@ import * as coreReducers from 'swipes-core-js/reducers';
 import main from './main';
 import navigation from './navigation';
 import modals from './modals';
-import loading from './loading';
 import infoTab from './infotab';
 
 
@@ -12,7 +11,6 @@ const rootReducer = combineReducers({
   main,
   navigation,
   modals,
-  loading,
   infoTab,
 });
 

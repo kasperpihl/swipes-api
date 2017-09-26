@@ -73,7 +73,7 @@ class HOCActionBar extends PureComponent {
     this.onActionClick = setupCachedCallback(this.onActionClick, this);
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   onPop() {
     const { activeSliderIndex, navPop } = this.props;

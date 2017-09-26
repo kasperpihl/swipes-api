@@ -66,7 +66,7 @@ class App extends PureComponent {
     //this.checkTagsAndUpdate();
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   componentDidUpdate(prevProps) {
     if (this.props.ready && this.forwardToIndex) {

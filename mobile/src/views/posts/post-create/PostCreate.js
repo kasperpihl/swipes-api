@@ -142,7 +142,7 @@ class PostCreate extends PureComponent {
     }
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   onContentSizeChange(e) {
     const { inputHeight } = this.state;

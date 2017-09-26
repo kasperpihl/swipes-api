@@ -70,7 +70,7 @@ class HOCGoalItem extends PureComponent {
     setupDelegate(this, 'onPushStack');
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   onArchiveGoal() {
     const { goal, archive, showModal } = this.props;
