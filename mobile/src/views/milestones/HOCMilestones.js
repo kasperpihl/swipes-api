@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   noMilestoneWrapper: {
     alignSelf: 'stretch',
     flexDirection: 'row',
+    flex: 1,
     height: 126,
     paddingHorizontal: 15,
     paddingVertical: 18,
@@ -182,6 +183,11 @@ class HOCMilestones extends PureComponent {
   }
   renderNoMilestoneItems() {
     const { counter } = this.props;
+    const { tabIndex } = this.state;
+
+    if( tabIndex !== 0) {
+      return null;
+    }
 
     return (
       <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.noMilestoneWrapper} onPress={this.onOpenNoMilestone}>
@@ -191,7 +197,7 @@ class HOCMilestones extends PureComponent {
             <View style={styles.noMilestoneCircle}><View style={styles.noMilestoneDot} /></View>
           </View>
           <View style={styles.noMilestoneTitle}>
-            <Text style={styles.title}>Goals with no milestones</Text>
+            <Text style={styles.title}>Goals without a plan</Text>
             <Text style={styles.counter}>{counter}</Text>
           </View>
           <View style={styles.border} />
