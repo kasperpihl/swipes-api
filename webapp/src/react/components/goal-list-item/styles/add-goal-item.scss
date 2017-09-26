@@ -13,7 +13,7 @@
   @include flexContainer('row', left, center, $flexIgnoreList);
   border-top: 1px solid $deepBlue-5;
   padding: 0 6px;
-  padding-right: 9px;
+  padding-right: 6px;
   transition: .15s ease;
 }
 
@@ -27,7 +27,7 @@
   &__assignees {
     @include flexContainer('row', center, center);
     padding-left: 6px;
-    transition: .15s ease;
+    transition: .2s ease;
     order: 3;
   }
 
@@ -56,6 +56,16 @@
     border-radius: 50%;
     margin-right: 15px;
     order: 1;
+    transition: .2s ease;
+  }
+
+  &__button {
+    @include size(36px);
+    position: absolute;
+    right: 6px; top: calc(50% - (36px / 2) + 4px);
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0);
     transition: .2s ease;
   }
 
@@ -94,6 +104,21 @@
 
 .add-goal-item {
   $b: &;
+
+  &--active {
+
+    #{$b}__assignees {
+      margin-right: 46px;
+      transition: .2s ease;
+    }
+
+    #{$b}__button {
+      opacity: 1;
+      pointer-events: all;
+      transform: scale(1);
+      transition: .2s .2s ease;
+    }
+  }
 
   &--focused {
     .add-goal-item__indicator {

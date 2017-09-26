@@ -19,20 +19,25 @@ const styles = StyleSheet.create({
   backButton: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
-    // flex: 0,
     minWidth: 64,
     maxWidth: 64,
   },
   inputWrapper: {
     ...gs.mixins.size(1),
-    ...gs.mixins.padding(6, 0, 6, 0),
+    ...Platform.select({
+      ios: {
+        ...gs.mixins.padding(6, 0),
+      },
+      android: {
+        ...gs.mixins.padding(6, 0, 6, 12),
+      },
+    }),
     minHeight: 54,
   },
   inputBorder: {
     ...gs.mixins.border(1, gs.colors.deepBlue10),
     ...gs.mixins.flex('row', 'left', 'center'),
     ...gs.mixins.padding(12, 0, 12, 18),
-    backgroundColor: 'red',
     alignSelf: 'stretch', 
     minHeight: 54 - (6 * 2),
     borderRadius: 25,
@@ -40,21 +45,17 @@ const styles = StyleSheet.create({
   input: {
     ...gs.mixins.size(1),
     ...gs.mixins.font(13, gs.colors.deepBlue80, 18),
-    
-    ...gs.mixins.margin(0),
     alignSelf: 'stretch',
-    backgroundColor: 'blue',
   },
   attachmentContainer: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
-    // flex: 0,
     minWidth: 48,
     maxWidth: 48,
     minHeight: 48,
   },
   numberOfAttachments: {
-    ...gs.mixins.padding(3, 8),
+    ...gs.mixins.padding(4, 8, 3, 8),
     ...gs.mixins.flex('center'),
     backgroundColor: '#007AFF',
     borderRadius: 24 / 2,
@@ -176,7 +177,7 @@ class PostFooter extends PureComponent {
       return (
         <TouchableOpacity onPress={this.handleOpenAttachments}>
           <View style={styles.attachmentContainer}>
-            <Icon name="Attachment" width="24" height="24" fill={gs.colors.blue100} />
+            <Icon name="Attachment" width="24" height="24" fill={gs.colors.deepBlue50} />
           </View>
         </TouchableOpacity>
       )

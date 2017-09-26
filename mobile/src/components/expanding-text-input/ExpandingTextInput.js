@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { View, TextInput, StyleSheet, Platform } from 'react-native';
+import * as gs from 'styles';
 
 class ExpandingTextInput extends PureComponent {
   constructor(props) {
@@ -49,7 +50,10 @@ class ExpandingTextInput extends PureComponent {
         ref='expandingTextInput'
         numberOfLines={lineNumbers}
         multiline={true}
-        style={[style, iOSInputHeight]}
+        style={[{
+          ...gs.mixins.padding(0),
+          ...gs.mixins.margin(0),
+        }, style, iOSInputHeight]}
         onContentSizeChange={this.onContentSizeChange}
         {...rest}
       >
