@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import { StatusBar } from 'react-native';
-// import PropTypes from 'prop-types';
+
+import { TouchableWithoutFeedback, View, StyleSheet ,StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
@@ -10,6 +10,16 @@ import * as a from 'actions';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import Modal from 'react-native-modalbox';
+import { viewSize } from 'globalStyles';
+import * as gs from 'styles';
+
+const styles = StyleSheet.create({
+  backDrop: {
+    ...gs.mixins.size(viewSize.width, viewSize.height),
+    position: 'absolute',
+    left: 0, top: 0
+  }
+})
 
 class HOCModal extends PureComponent {
   constructor(props) {
@@ -36,6 +46,7 @@ class HOCModal extends PureComponent {
       Comp = modal.component;
     }
     const compProps = (modal && modal.props);
+    const modalProps = (modal && modal.modalProps);
 
     return (
       <Modal 
@@ -43,13 +54,17 @@ class HOCModal extends PureComponent {
         onClosed={this.onClose}
         style={modalStyles}
         coverScreen={true}
+        {...modalProps}
       >
-        <StatusBar
-          translucent
-          backgroundColor="rgba(0, 0, 0, 0.50)"
-          animated
-        />
-        {Comp ? <Comp {...compProps} /> : null}
+        {Comp ? (
+          <View style={{ flex: 1}}>
+            <TouchableWithoutFeedback onPress={this.onClose}>
+              <View style={styles.backDrop}>
+              </View>
+            </TouchableWithoutFeedback>
+            <Comp {...compProps} />
+          </View>
+        ) : null}
       </Modal>
     );
   }

@@ -37,7 +37,7 @@ class HOCAttachmentView extends PureComponent {
     };
   }
   onAddAttachment() {
-    const { createFile, createLink, loading } = this.props;
+    const { createFile, createLink, showLoading } = this.props;
 
     const options = {
       title: 'Attach image',
@@ -63,14 +63,14 @@ class HOCAttachmentView extends PureComponent {
           type,
         };
 
-        loading(true);
+        showLoading(true);
 
         createFile([file]).then((fileRes) => {
           if (fileRes.ok) {
             const link = this.getSwipesLinkObj('file', fileRes.file.id, fileRes.file.title);
 
             createLink(link).then((res) => {
-              loading();
+              showLoading();
               if (res.ok) {
                 const att = fromJS({ link: res.link, title: fileRes.file.title });
                 const { attachments } = this.state;
@@ -85,7 +85,7 @@ class HOCAttachmentView extends PureComponent {
                 
             })
           } else {
-            loading();
+            showLoading();
           }
         });
       }
@@ -113,7 +113,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  loading: a.loading.showLoader,
+  showLoading: a.main.loading,
   createFile: ca.files.create,
   createLink: ca.links.create,
   preview: a.links.preview,

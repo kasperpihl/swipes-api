@@ -15,8 +15,6 @@ import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { colors, viewSize } from 'globalStyles';
 import HOCGoalItem from './HOCGoalItem';
 
-import LoadingModal from 'modals/LoadingModal';
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -98,11 +96,9 @@ class HOCGoalList extends PureComponent {
     }
   }
   openCreateGoalModal() {
-    const { showModal } = this.props;
+    const { showLoading } = this.props;
 
-    showModal({
-      component: LoadingModal,
-    })
+    showLoading(true)
 
     return;
     //
@@ -211,5 +207,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   createGoal: ca.goals.create,
-  showModal: a.main.modal,
+  showLoading: a.main.loading,
 })(HOCGoalList);
