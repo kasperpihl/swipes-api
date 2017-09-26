@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
@@ -94,7 +94,26 @@ class HOCMilestoneOverview extends PureComponent {
     navPush(goalOverview);
   }
   onActionPress(index) {
-    console.warn('infotab action', index)
+    const { milestone, openMilestone, closeMilestone, deleteMilestone, toggleInfoTab } = this.props;
+
+    if (index === 0) {
+      if (milestone.get('closed_at')) {
+        openMilestone(milestone.get('id'));
+      } else {
+        closeMilestone(milestone.get('id'));
+      }
+
+    } else if (index === 1) {
+      Alert.alert(
+        'Delete plan',
+        'This will delete this plan and all goals in it. Are you sure?',
+        [
+          { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+          { text: 'OK', onPress: () => { deleteMilestone(milestone.get('id')); toggleInfoTab(); } },
+        ],
+        { cancelable: true },
+      );
+    }
   }
   onInfoTabClose() {
     if (this.state.showingInfoTab) {
@@ -305,4 +324,7 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps, {
   createGoal: ca.goals.create,
   toggleInfoTab: a.infotab.showInfoTab,
+  closeMilestone: ca.milestones.close,
+  openMilestone: ca.milestones.open,
+  deleteMilestone: ca.milestones.deleteMilestone,
 })(HOCMilestoneOverview);

@@ -81,10 +81,10 @@ class HOCGoalItem extends PureComponent {
   onModalGoalAction(i) {
     const { togglePinGoal, goal, showModal } = this.props;
 
-    if (i.get('index') === 'archive') {
+    if (i.get('index') === 'delete') {
       Alert.alert(
-        'Archive goal',
-        'This will make this goal inactive for all participants.',
+        'Delete goal',
+        'This is remove this goal for all participants.',
         [
           { text: 'Cancel', onPress: () => showModal(), style: 'cancel' },
           { text: 'OK', onPress: () => this.onArchiveGoal() },
@@ -102,8 +102,8 @@ class HOCGoalItem extends PureComponent {
       onClick: this.onModalGoalAction,
       items: fromJS([
         {
-          title: 'Archive',
-          index: 'archive',
+          title: 'Delete',
+          index: 'delete',
         },
       ]),
     };

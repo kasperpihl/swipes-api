@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   aboutText: {
     fontSize: 13,
     lineHeight: 18,
-    color: colors.deepBlue60,
+    color: colors.deepBlue20,
   },
   infoWrapper: {
     marginHorizontal: 15,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 13,
     lineHeight: 18,
-    color: colors.deepBlue60,
+    color: colors.deepBlue20,
   },
   actionContainer: {
     minHeight: 140,
@@ -154,7 +154,7 @@ class InfoTab extends PureComponent {
         <Text selectable={true} style={styles.infoTitle}>{inf.title.toUpperCase()}</Text>
         <View style={styles.infoContent}>
           {inf.icon ? (
-            <Icon name={inf.icon} width="18" height="18" fill={colors.deepBlue50} style={{ marginRight: 6 }} />
+            <Icon name={inf.icon} width="18" height="18" fill={colors.deepBlue20} style={{ marginRight: 6 }} />
           ) : (
             undefined
           )}

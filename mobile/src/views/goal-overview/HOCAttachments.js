@@ -12,6 +12,7 @@ import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import RippleButton from 'RippleButton';
 import { colors } from 'globalStyles';
+import * as gs from 'styles';
 
 
 class HOCAttachments extends PureComponent {
@@ -96,6 +97,14 @@ class HOCAttachments extends PureComponent {
 
     preview(att);
   }
+  renderEmptyState() {
+
+    return (
+      <View style={styles.emptyState}>
+        <Text style={styles.emptyStateLabel}>No attached materials to this goal. Attach an image from your phone with the "+" button.</Text>
+      </View>
+    )
+  }
   renderAttachment(attachment) {
     const { attachments } = this.props;
 
@@ -121,6 +130,8 @@ class HOCAttachments extends PureComponent {
       attachmentOrder,
     } = this.props;
 
+    if (!attachmentOrder.size) return this.renderEmptyState();
+
     return (
       <ImmutableVirtualizedList
         removeClippedSubviews={false}
@@ -145,7 +156,6 @@ class HOCAttachments extends PureComponent {
     return (
       <View style={styles.container}>
         {this.renderAttachmentList()}
-
         {this.renderFAB()}
       </View>
     );
@@ -154,39 +164,41 @@ class HOCAttachments extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    ...gs.mixins.size(1),
   },
   attachment: {
-    flex: 1,
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('row', 'left', 'center'),
+    ...gs.mixins.padding(0, 15),
     minHeight: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15,
   },
   icon: {
     paddingRight: 9,
   },
   label: {
-    color: colors.deepBlue100,
-    fontSize: 15,
-    lineHeight: 18,
+    ...gs.mixins.font(15, gs.colors.deepBlue100, 18),
   },
   fabWrapper: {
-    width: 60,
-    height: 60,
+    ...gs.mixins.size(60),
     borderRadius: 60 / 2,
     position: 'absolute',
-    bottom: 30,
-    right: 15,
+    right: 15, bottom: 30,
   },
   fabButton: {
-    width: 60,
-    height: 60,
+    ...gs.mixins.size(60),
+    ...gs.mixins.flex('center'),
+    backgroundColor: gs.colors.blue100,
     borderRadius: 60 / 2,
-    backgroundColor: colors.blue100,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  emptyState: {
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
+    ...gs.mixins.padding(0, 70),
+  },
+  emptyStateLabel: {
+    ...gs.mixins.font(13, gs.colors.deepBlue60, 18),
+    textAlign: 'center'
+  }
 });
 
 

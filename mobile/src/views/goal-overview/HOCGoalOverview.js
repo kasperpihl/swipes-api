@@ -114,8 +114,8 @@ class HOCGoalOverview extends PureComponent {
 
     if (index === 1) {
       Alert.alert(
-        'Archive goal',
-        'This will make this goal inactive for all participants.',
+        'Delete goal',
+        'This is remove this goal for all participants.',
         [
           { text: 'Cancel', style: 'cancel' },
           { text: 'OK', onPress: () => this.onArchive()},
