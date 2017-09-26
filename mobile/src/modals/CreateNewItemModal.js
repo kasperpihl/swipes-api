@@ -262,13 +262,7 @@ class CreateNewItemModal extends PureComponent {
 
     return undefined;
   }
-  renderKeyboardSpacer() {
-    if (Platform.OS === 'ios') {
-      return <KeyboardSpacer />;
-    }
 
-    return undefined;
-  }
   render() {
     const { modalState, defAssignees } = this.props;
     const { text } = this.state;
@@ -292,7 +286,6 @@ class CreateNewItemModal extends PureComponent {
             {this.renderInput()}
             {this.renderContent()}
           </View>
-          {this.renderKeyboardSpacer()}
         </View>
       </View>
     )
