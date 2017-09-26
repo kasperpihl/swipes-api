@@ -51,13 +51,32 @@ export default class HOCHeaderTitle extends Component {
       </div>
     )
   }
+  renderLeftChildren() {
+    const { leftChildren } = this.props;
+
+    if (leftChildren) return leftChildren;
+
+    return undefined;
+  }
+  renderSubtitle() {
+    const { subtitle } = this.props;
+
+    if (!subtitle) return undefined;
+
+    if (typeof subtitle === 'string') {
+      return <div className="header-title__subtitle">{subtitle}</div>
+    }
+
+    return subtitle;
+
+  }
   renderTitle() {
-    const { title, subtitle, subtitleElement } = this.props;
+    const { title, subtitleElement } = this.props;
 
     return (
       <div className="header-title__title" key="header-title" onClick={this.onTitleClick}>
         {title}
-        <div className="header-title__subtitle">{subtitle}</div>
+        {this.renderSubtitle()}
       </div>
     );
   }
@@ -85,6 +104,7 @@ export default class HOCHeaderTitle extends Component {
     return (
       <div className={className}>
         {this.renderTitleIcon()}
+        {this.renderLeftChildren()}
         {this.renderContent()}
         <div className="header-title__actions">
           {children}

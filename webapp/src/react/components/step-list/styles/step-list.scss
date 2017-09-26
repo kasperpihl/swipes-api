@@ -49,7 +49,7 @@
     &__assignees {
       @include flexContainer('row', center, center);
       padding-left: 6px;
-      transition: .15s ease;
+      transition: .2s ease;
       order: 3;
     }
 
@@ -63,16 +63,25 @@
         @include font(15px, $deepBlue-30, 24px);
         font-style: italic;
       }
+    }
 
+    &__button {
+      @include size(36px);
+      position: absolute;
+      right: 6px; top: calc(50% - (36px / 2) + 4px);
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0);
+      transition: .2s ease;
     }
 
     &__indicator {
       @include size(30px); //
       @include flexContainer('row', center, center);
       margin-right: 18px;
+
       &--number {
         @include font(12px, $deepBlue-30, 18px, bold);
-
       }
     }
 
@@ -116,6 +125,21 @@
 
 .add-step {
   $b: &;
+
+  &--active {
+
+    #{$b}__assignees {
+      margin-right: 46px;
+      transition: .2s ease;
+    }
+
+    #{$b}__button {
+      opacity: 1;
+      pointer-events: all;
+      transform: scale(1);
+      transition: .2s .2s ease;
+    }
+  }
 
   &--loading {
 

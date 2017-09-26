@@ -28,7 +28,7 @@ class StepList extends PureComponent {
       addStepAssignees: fromJS([]),
     };
     setupDelegate(this, 'onStepSort', 'onStepAdd', 'onStepRename', 'onChangingAdd');
-    bindAll(this, ['onSortEnd', 'onFocus', 'onBlur', 'onChange', 'onKeyDown']);
+    bindAll(this, ['onSortEnd', 'onFocus', 'onBlur', 'onChange', 'onKeyDown', 'onAddStep']);
     this.acOptions = {
       types: ['users'],
       delegate: this,
@@ -79,6 +79,9 @@ class StepList extends PureComponent {
         addStepAssignees: fromJS([]),
       });
     }
+  }
+  onAddStep() {
+    console.log('hi')
   }
   onFocus() {
     this.setState({ addFocus: true });
@@ -133,6 +136,10 @@ class StepList extends PureComponent {
       value = getLoading('add').loadingLabel;
     }
 
+    if (addStepValue.length && !isLoading('add')) {
+      addClass += ' add-step--active'
+    }
+
     if (addFocus || addStepValue.length) {
       addClass += ' add-step--focused';
     }
@@ -165,6 +172,9 @@ class StepList extends PureComponent {
             rounded
             size={24}
           />
+        </div>
+        <div className="add-step__button">
+          <Button icon="subdirectory_arrow_left" small frameless onClick={this.onAddStep} />
         </div>
       </div>
     );
