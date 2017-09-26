@@ -19,18 +19,20 @@ const styles = StyleSheet.create({
   backButton: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
-    flex: 0,
+    // flex: 0,
     minWidth: 64,
     maxWidth: 64,
   },
   inputWrapper: {
     ...gs.mixins.size(1),
-    ...gs.mixins.padding(6, 0, 6, 12),
+    ...gs.mixins.padding(6, 0, 6, 0),
     minHeight: 54,
   },
   inputBorder: {
     ...gs.mixins.border(1, gs.colors.deepBlue10),
     ...gs.mixins.flex('row', 'left', 'center'),
+    ...gs.mixins.padding(12, 0, 12, 18),
+    backgroundColor: 'red',
     alignSelf: 'stretch', 
     minHeight: 54 - (6 * 2),
     borderRadius: 25,
@@ -38,14 +40,15 @@ const styles = StyleSheet.create({
   input: {
     ...gs.mixins.size(1),
     ...gs.mixins.font(13, gs.colors.deepBlue80, 18),
-    ...gs.mixins.padding(12, 0, 12, 18),
-    ...gs.mixins.margin(),
+    
+    ...gs.mixins.margin(0),
     alignSelf: 'stretch',
+    backgroundColor: 'blue',
   },
   attachmentContainer: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
-    flex: 0,
+    // flex: 0,
     minWidth: 48,
     maxWidth: 48,
     minHeight: 48,
@@ -66,6 +69,9 @@ const styles = StyleSheet.create({
   iconButton: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
+    minWidth: 64,
+    maxWidth: 64,
+    minHeight: 54,
   }
 });
 
@@ -148,7 +154,7 @@ class PostFooter extends PureComponent {
     }
 
     return (
-      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.2} onPress={this.handleAddComment}>
+      <RippleButton style={styles.iconButton} rippleColor={colors.blue100} rippleOpacity={0.2} onPress={this.handleAddComment}>
         <View style={styles.iconButton}>
           <Icon name="Send" width="24" height="24" fill={gs.colors.blue100} />
         </View>
@@ -192,7 +198,6 @@ class PostFooter extends PureComponent {
     const { attachments } = this.state;
 
     return (
-
       <View style={styles.container}>
         {this.renderBackButton()}
         <View style={styles.inputWrapper}>
@@ -206,7 +211,7 @@ class PostFooter extends PureComponent {
               autoCorrect={true}
               placeholder={placeholder}
               minRows={1}
-              maxRows={2}
+              maxRows={4}
               value={this.state.text}
             />
             {this.renderAttachmentButton()}
