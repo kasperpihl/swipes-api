@@ -43,10 +43,10 @@ const styles = StyleSheet.create({
     ...gs.mixins.font(28, gs.colors.bgColor)
   },
   textStyle: {
-    ...gs.mixins.size(13, gs.colors.deepBlue40, 18),
+    ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
   },
   boldStyle: {
-    ...gs.mixins.size(13, gs.colors.deepBlue100, 18, 'bold'),
+    ...gs.mixins.font(13, gs.colors.deepBlue100, 18, 'bold'),
   },
   subtitle: {
     ...gs.mixins.flex('row', 'left', 'center'),
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   attachmentLabel: {
-    ...gs.mixins.size(12, gs.colors.deepBlue80, '500'),
+    ...gs.mixins.font(12, gs.colors.deepBlue80, '500'),
     paddingLeft: 12,
   },
   typeWrapper: {

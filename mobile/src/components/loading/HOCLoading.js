@@ -10,12 +10,18 @@ import { connect } from 'react-redux';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import * as gs from 'styles';
+import { viewSize, statusbarHeight } from 'globalStyles';
+
+const MODAL_HEIGHT = viewSize.height + statusbarHeight;
 
 const styles = StyleSheet.create({
   modal: {
-    ...gs.mixins.size(1),
+    ...gs.mixins.size(viewSize.width, MODAL_HEIGHT),
     ...gs.mixins.flex('column', 'center', 'center'),
-    backgroundColor: 'transparent'
+    backgroundColor: 'rgba(0, 0, 0, .5)',
+    position: 'absolute',
+    left: 0,
+    top: 0,
   },
   loadingLabel: {
     ...gs.mixins.padding(12, 0),
