@@ -39,10 +39,7 @@ export const assign = (props) => (d, getState) => {
     ...props
   };
 
-  d(action({
-    component: ActionModal,
-    props: renderedProps,
-  }));
+  d(action(renderedProps));
 }
 
 export const alert = (props, extraArgs) => (d) => {
@@ -58,7 +55,7 @@ export const alert = (props, extraArgs) => (d) => {
   }));
 } 
 
-export const loading = (isLoading, props) => (d) {
+export const loading = (isLoading, props) => (d) => {
   if(!isLoading) {
     return d(modal());
   }
