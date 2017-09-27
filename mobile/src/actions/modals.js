@@ -1,5 +1,6 @@
 import ActionModal from 'modals/action-modal/ActionModal';
 import AlertModal from 'modals/AlertModal';
+import LoadingModal from 'modals/LoadingModal';
 import { modal } from './main';
 import { fromJS } from 'immutable';
 import * as cs from 'swipes-core-js/selectors';
@@ -44,7 +45,7 @@ export const assign = (props) => (d, getState) => {
   }));
 }
 
-export const alert = (props, extraArgs) => (d, getState) => {
+export const alert = (props, extraArgs) => (d) => {
 
   const renderedProps = {
     ...props,
@@ -56,3 +57,16 @@ export const alert = (props, extraArgs) => (d, getState) => {
     ...extraArgs,
   }));
 } 
+
+export const loading = (isLoading, props) => (d) {
+  if(!isLoading) {
+    return d(modal());
+  }
+  return d(modal({
+    component: LoadingModal,
+    props: props || null,
+    modalProps: {
+      isDisabled: true,
+    }
+  }));
+}

@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RippleButton from 'RippleButton';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import * as gs from 'styles';
 import { viewSize } from 'globalStyles';
+import { setupCachedCallback } from 'react-delegate';
 
 const styles = StyleSheet.create({
   alert: {
@@ -51,8 +53,21 @@ class AlertModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+    this.onPressCached = setupCachedCallback(this.onPress, this);
+
   }
   componentDidMount() {
+  }
+  onPress(id, e) {
+    console.log(id);
+    const { onConfirmPress, onCancelPress, closeModal } = this.props;
+    closeModal();
+    if (id === 'confirm' && typeof onConfirmPress === 'function') {
+      onConfirmPress(e);
+    }
+    if (id === 'cancel' && typeof onCancelPress === 'function') {
+      onCancelPress(e);
+    }
   }
   renderTitle() {
     const { title } = this.props;
@@ -84,12 +99,12 @@ class AlertModal extends PureComponent {
     
     return (
       <View style={styles.actionsWrapper}>
-        <RippleButton style={styles.actionButton} onPress={this.props.onConfirmPress}>
+        <RippleButton style={styles.actionButton} onPress={this.onPressCached('cancel')}>
           <View style={styles.action}>
             <Text style={[styles.actionLabel, { color: gs.colors.red80 }]}>CANCEL</Text>
           </View>
         </RippleButton>
-        <RippleButton style={styles.actionButton} onPress={this.props.onConfirmPress}>
+        <RippleButton style={styles.actionButton} onPress={this.onPressCached('confirm')}>
           <View style={styles.action}>
             <Text style={[styles.actionLabel, { color: gs.colors.blue100 }]}>OK</Text>
           </View>
