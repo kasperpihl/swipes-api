@@ -1,7 +1,6 @@
 import { Map, List } from 'immutable';
 import * as types from '../constants';
 import { bindAll } from './utils';
-import filterGoal from './filter-goals';
 
 export default class FilterHandler {
   constructor(store) {
@@ -9,68 +8,9 @@ export default class FilterHandler {
     bindAll(this, ['storeChange']);
     store.subscribe(this.storeChange);
   }
-  removeGoalFromFilters(filters, g) {
-    return filters.map(f => f.updateIn(['goals'], goals => goals && goals.delete(g.get('id'))));
-  }
-  checkAndApplyFiltersForGoal(filters, g, limit) {
-    return filters.map((f) => {
-      if(limit && !limit.get(f.get('id'))){
-        return f;
-      }
-      let filter = f.get('filter');
-      if (filter.get('userId') && filter.get('userId') === 'me') {
-        filter = filter.set('userId', this.myId);
-      }
-      const isInFilter = filterGoal(g, filter);
-      if (isInFilter) {
-        f = f.updateIn(['goals'], goals => goals.add(g.get('id')));
-      } else if (f.get('goals')) {
-        f = f.updateIn(['goals'], goals => goals.delete(g.get('id')));
-      }
-      return f;
-    });
-  }
   storeChange() {
     const state = this.store.getState();
     this.myId = state.getIn(['me', 'id']);
-
-    const orgFilters = state.get('filters');
-    let filters = orgFilters;
-
-    const orgGoalFilters = filters.get('goals');
-    let goalFilters = orgGoalFilters;
-
-    let diffFilters;
-    if(this.prevFilters && filters !== this.prevFilters){
-
-      diffFilters = filters.get('goals').filter(
-        (f, k) => f.get('filter') !== this.prevFilters.getIn(['goals', k, 'filter'])
-      ).map(f => f.get('id'));
-    }
-
-    const goals = state.get('goals');
-    if (goals !== this.previousGoals || (diffFilters && diffFilters.size)) {
-      this.previousGoals = this.previousGoals || Map();
-      goals.forEach((g, k) => {
-        const prev = this.previousGoals.get(k);
-        if (prev !== g) {
-          // console.log('goal changed', g.get('title'));
-          goalFilters = this.checkAndApplyFiltersForGoal(goalFilters, g);
-        } else if(diffFilters && diffFilters.size){
-          goalFilters = this.checkAndApplyFiltersForGoal(goalFilters, g, diffFilters);
-        }
-      });
-      this.previousGoals.forEach((g, k) => {
-        if (!goals.get(k)) {
-          // console.log('goal removed', g.get('title'));
-          goalFilters = this.removeGoalFromFilters(goalFilters, g);
-        }
-      });
-      if (goalFilters !== orgGoalFilters) {
-        this.previousGoals = goals;
-        filters = filters.set('goals', goalFilters);
-      }
-    }
 
     const notifications = state.get('notifications');
     const lastReadTs = state.getIn(['me', 'settings', 'last_read_ts']);
@@ -93,11 +33,6 @@ export default class FilterHandler {
           window.ipcListener.setBadgeCount(`${counter || ''}`);
         }
       }
-    }
-
-    if (filters !== orgFilters) {
-      this.prevFilters = filters;
-      this.store.dispatch({ type: types.UPDATE_FILTERS, payload: { filters } });
     }
   }
 }
