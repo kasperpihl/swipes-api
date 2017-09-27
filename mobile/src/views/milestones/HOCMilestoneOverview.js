@@ -94,7 +94,14 @@ class HOCMilestoneOverview extends PureComponent {
     navPush(goalOverview);
   }
   onActionPress(index) {
-    const { milestone, openMilestone, closeMilestone, deleteMilestone, toggleInfoTab } = this.props;
+    const { 
+      milestone, 
+      openMilestone, 
+      closeMilestone, 
+      deleteMilestone, 
+      toggleInfoTab,
+      alertModal,
+    } = this.props;
 
     if (index === 0) {
       if (milestone.get('closed_at')) {
@@ -106,15 +113,14 @@ class HOCMilestoneOverview extends PureComponent {
       }
 
     } else if (index === 1) {
-      Alert.alert(
-        'Delete plan',
-        'This will delete this plan and all goals in it. Are you sure?',
-        [
-          { text: 'Cancel', onPress: () => {}, style: 'cancel' },
-          { text: 'OK', onPress: () => { deleteMilestone(milestone.get('id')); toggleInfoTab(); } },
-        ],
-        { cancelable: true },
-      );
+      alertModal({
+        title: 'Delete plan',
+        message: 'This will delete this plan and all goals in it. Are you sure?',
+        onConfirmPress: () => {
+          deleteMilestone(milestone.get('id')); 
+          toggleInfoTab();
+        },
+      })
     }
   }
   onInfoTabClose() {
@@ -326,6 +332,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   createGoal: ca.goals.create,
+  alertModal: a.modals.alert,
   toggleInfoTab: a.infotab.showInfoTab,
   closeMilestone: ca.milestones.close,
   openMilestone: ca.milestones.open,

@@ -76,20 +76,17 @@ class HOCGoalOverview extends PureComponent {
     });
   }
   onActionPress(index) {
+    const { alertModal } = this.props;
     if (index === 0) {
       this.handleAssigning()
     }
 
     if (index === 1) {
-      Alert.alert(
-        'Delete goal',
-        'This is remove this goal for all participants.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'OK', onPress: () => this.onArchive()},
-        ],
-        { cancelable: true },
-      );
+      alertModal({
+        title: 'Delete goal',
+        message: 'This will remove this goal for all participants.',
+        onConfirmPress: this.onArchive,
+      })
     }
   }
   onInfoTabClose() {
@@ -350,6 +347,7 @@ function mapStateToProps(state, ownProps) {
 }
 export default connect(mapStateToProps, {
   assignModal: a.modals.assign,
+  alertModal: a.modals.alert,
   toggleInfoTab: a.infotab.showInfoTab,
   completeStep: ca.goals.completeStep,
   incompleteStep: ca.goals.incompleteStep,
