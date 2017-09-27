@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
@@ -89,13 +89,6 @@ class PostFooter extends PureComponent {
     this.handleBackButton = this.handleBackButton.bind(this);
     this.handleAttach = this.handleAttach.bind(this);
     this.handleOpenAttachments = this.handleOpenAttachments.bind(this);
-
-    if (Platform.OS === "android") {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-  componentWillUpdate() {
-    // LayoutAnimation.easeInEaseOut();
   }
   handleOpenAttachments() {
     const { navPush } = this.props;

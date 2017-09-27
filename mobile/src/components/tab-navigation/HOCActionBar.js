@@ -5,8 +5,6 @@ import {
   Text,
   StyleSheet,
   Platform,
-  UIManager,
-  LayoutAnimation,
 } from 'react-native';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
@@ -64,16 +62,8 @@ class HOCActionBar extends PureComponent {
     super(props);
     this.state = {};
 
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental &&
-        UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-
     this.onPop = this.onPop.bind(this);
     this.onActionClick = setupCachedCallback(this.onActionClick, this);
-  }
-  componentWillUpdate() {
-    // LayoutAnimation.easeInEaseOut();
   }
   onPop() {
     const { activeSliderIndex, navPop } = this.props;

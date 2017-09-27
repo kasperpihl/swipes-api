@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -36,17 +36,11 @@ class HOCGoalOverview extends PureComponent {
     this.handleCompleteGoal = this.handleCompleteGoal.bind(this);
 
     setupLoading(this);
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
   }
   componentDidMount() {
     this.renderActionButtons();
   }
   componentWillUpdate(nextProps, nextState) {
-    // LayoutAnimation.easeInEaseOut();
-
     if (!this.props.isActive && nextProps.isActive || this.state.showingInfoTab !== nextState.showingInfoTab) {
       this.renderActionButtons(nextState.showingInfoTab);
     }

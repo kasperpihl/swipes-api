@@ -8,8 +8,6 @@ import {
   StyleSheet,
   Keyboard,
   Platform,
-  UIManager,
-  LayoutAnimation
 } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
@@ -136,13 +134,6 @@ class PostCreate extends PureComponent {
 
     setupDelegate(this, 'onMessageChange', 'onAttachmentClick');
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
-
-    if (Platform.OS === "android") {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-  componentWillUpdate() {
-    // LayoutAnimation.easeInEaseOut();
   }
   onContentSizeChange(e) {
     const { inputHeight } = this.state;

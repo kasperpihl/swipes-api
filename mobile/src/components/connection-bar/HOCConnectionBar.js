@@ -61,7 +61,7 @@ class HOCConnectionBar extends PureComponent {
     }
   }
   componentWillUpdate() {
-    // LayoutAnimation.easeInEaseOut();
+    LayoutAnimation.easeInEaseOut();
   }
   updateSecondsLeft(nextRetry) {
     nextRetry = nextRetry || this.props.nextRetry;

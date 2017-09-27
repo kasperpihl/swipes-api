@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import HOCAssigning from 'components/assignees/HOCAssigning';
 import Icon from 'Icon';
@@ -40,14 +40,7 @@ class ActionModalItem extends Component {
     super(props);
     this.state = {};
 
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-
     setupDelegate(this, 'onItemPress');
-  }
-  componentWillUpdate() {
-    // LayoutAnimation.easeInEaseOut();
   }
   renderLeftIcon() {
     const { item } = this.props;

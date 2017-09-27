@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Platform } from 'react-native';
 import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from 'globalStyles';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
@@ -101,13 +101,6 @@ class InfoTab extends PureComponent {
     this.state = {};
 
     this.onActionCached = setupCachedCallback(this.onAction, this);
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-  componentWillUpdate() {
-    // LayoutAnimation.configureNext(// LayoutAnimation.create(250, // LayoutAnimation.Types.easeOut, // LayoutAnimation.Properties.opacity));
   }
   componentWillReceiveProps(nextProps) {
     const { infoTab } = this.props;

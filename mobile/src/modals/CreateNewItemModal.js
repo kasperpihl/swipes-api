@@ -103,7 +103,7 @@ class CreateNewItemModal extends PureComponent {
     }
   }
   componentWillUpdate(nextProps) {
-    // LayoutAnimation.easeInEaseOut();
+    LayoutAnimation.easeInEaseOut();
   }
   componentWillUnmount() {
     clearTimeout(this.showAssigneeModalTimeout);

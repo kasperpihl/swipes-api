@@ -40,7 +40,7 @@ class Login extends PureComponent {
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
   }
   componentWillUpdate() {
-    // LayoutAnimation.easeInEaseOut();
+    LayoutAnimation.easeInEaseOut();
   }
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, Alert, Vibration } from 'react-native';
+import { View, Text, StyleSheet, Alert, Vibration } from 'react-native';
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import * as ca from 'swipes-core-js/actions';
@@ -60,17 +60,11 @@ class HOCGoalItem extends PureComponent {
     super(props);
     this.state = {};
 
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
     this.onLongPress = this.onLongPress.bind(this);
     this.onModalGoalAction = this.onModalGoalAction.bind(this);
     this.openOverview = this.openOverview.bind(this);
     this.onArchiveGoal = this.onArchiveGoal.bind(this);
     setupDelegate(this, 'onPushStack');
-  }
-  componentWillUpdate() {
-    // LayoutAnimation.easeInEaseOut();
   }
   onArchiveGoal() {
     const { goal, archive } = this.props;
