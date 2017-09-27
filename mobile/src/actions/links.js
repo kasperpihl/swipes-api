@@ -68,12 +68,12 @@ export const preview = att => (d, getState) => {
     } else if (service.get('type') === 'url') {
       d(browser(service.get('id')));
     } else if (service.get('type') === 'file') {
-      d(a.main.loading(true));
+      d(a.modals.loading(true));
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
         if (Platform.OS === 'ios') {
-          d(a.main.loading(false));
+          d(a.modals.loading(false));
         }
 
         OpenFile.openDoc([{

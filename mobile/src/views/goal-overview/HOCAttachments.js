@@ -24,7 +24,7 @@ class HOCAttachments extends PureComponent {
     this.attachmentPress = setupCachedCallback(this.attachmentPress, this);
   }
   onAddAttachment() {
-    const { createLink, createFile, addAttachment, goal, showLoading } = this.props;
+    const { createLink, createFile, addAttachment, goal, loadingModal } = this.props;
 
     const options = {
       title: 'Attach image',
@@ -54,7 +54,7 @@ class HOCAttachments extends PureComponent {
           type,
         };
         console.log('res', response);
-        showLoading(true);
+        loadingModal(true);
         let _title;
         createFile([file]).then((fileRes) => {
           if(!fileRes || !fileRes.ok) return new Promise((r, reject) => reject());
@@ -69,9 +69,9 @@ class HOCAttachments extends PureComponent {
 
           return addAttachment(goal.get('id'), linkRes.link, _title);
         }).then((attRes) => {
-          showLoading();
+          loadingModal();
         }).catch(() => {
-          showLoading();
+          loadingModal();
         })
       }
     });
@@ -210,7 +210,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   preview: a.links.preview,
-  showLoading: a.main.loading,
+  loadingModal: a.modals.loading,
   addAttachment: ca.attachments.add,
   createFile: ca.files.create,
   createLink: ca.links.create,

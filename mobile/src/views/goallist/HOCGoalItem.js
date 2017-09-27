@@ -77,17 +77,14 @@ class HOCGoalItem extends PureComponent {
 
     archive(goal.get('id'));
   }
-  onConfirmPress(e) {
-
-  }
   onModalGoalAction(id) {
     const { togglePinGoal, goal, alertModal } = this.props;
-    console.log('hi', id);
+
     if (id === 'delete') {
       alertModal({
         title: 'Delete goal',
         message: 'This will remove this goal for all participants.',
-        onConfirmPress: this.onConfirmPress,
+        onConfirmPress: this.onArchiveGoal,
       });
     }
   }
@@ -95,7 +92,7 @@ class HOCGoalItem extends PureComponent {
   onLongPress() {
     const { actionModal, goal } = this.props;
 
-    Vibration.vibrate(50);
+    Vibration.vibrate(5);
     actionModal({
       title: 'Goal',
       onItemPress: this.onModalGoalAction,
