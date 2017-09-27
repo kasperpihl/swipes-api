@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.deepBlue10,
     position: 'absolute',
-    left: 15, top: 0,
+    left: 15, bottom: 0,
   },
   commentsButton: {
     height: 54,
@@ -331,7 +331,6 @@ class PostFeed extends PureComponent {
 
     return (
       <View style={styles.actions}>
-        <View style={styles.actionsSeperator} />
         {this.renderComments()}
         <View style={styles.reactionWrapper}>
           <Reactions
@@ -340,6 +339,7 @@ class PostFeed extends PureComponent {
             delegate={delegate}
           />
         </View>
+        <View style={styles.actionsSeperator} />
       </View>
     )
   }

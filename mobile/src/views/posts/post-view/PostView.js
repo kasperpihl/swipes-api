@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: 54,
     alignSelf: "stretch",
+    paddingRight: 15,
   },
   actionsSeperator: {
     width: viewSize.width - 30,
@@ -168,7 +169,6 @@ class PostView extends PureComponent {
   componentDidUpdate() {
     if (this.shouldScrollToBottom) {
       this.shouldScrollToBottom = false;
-
       this.scrollToBottomTime();
     }
   }

@@ -78,11 +78,15 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   attachmentLabel: {
+    ...gs.mixins.size(1),
     ...gs.mixins.font(12, gs.colors.deepBlue80, 12, '500'),
     paddingLeft: 12,
   },
   reactionsWrapper: {
+    ...gs.mixins.flex('row', 'center', 'center'),
+    width: 50,
     flex: 0,
+    marginRight: -15,
   }
 });
 

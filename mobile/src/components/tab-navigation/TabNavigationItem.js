@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     ...Platform.select({
       ios: {
-        right: -10, top: 3,
+        left: ((viewSize.width / 5) / 2) + 6, top: 3,
       },
       android: {
-        right: 3, top: 3,
+        left: ((viewSize.width / 5) / 2) + 6, top: 3,
       },
     }),
     paddingHorizontal: 6,

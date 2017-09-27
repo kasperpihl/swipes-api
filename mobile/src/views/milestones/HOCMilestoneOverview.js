@@ -99,8 +99,10 @@ class HOCMilestoneOverview extends PureComponent {
     if (index === 0) {
       if (milestone.get('closed_at')) {
         openMilestone(milestone.get('id'));
+        toggleInfoTab();
       } else {
         closeMilestone(milestone.get('id'));
+        toggleInfoTab();
       }
 
     } else if (index === 1) {
@@ -177,6 +179,7 @@ class HOCMilestoneOverview extends PureComponent {
 
     if (title.length > 0) {
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {});
+      this.setState({ tabIndex: 0 });
     }
   }
   onHeaderTap() {
