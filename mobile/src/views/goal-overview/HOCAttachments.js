@@ -54,7 +54,7 @@ class HOCAttachments extends PureComponent {
           type,
         };
         console.log('res', response);
-        showLoading(true);
+        showLoading('Uploading');
         let _title;
         createFile([file]).then((fileRes) => {
           if(!fileRes || !fileRes.ok) return new Promise((r, reject) => reject());

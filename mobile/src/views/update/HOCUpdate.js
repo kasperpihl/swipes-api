@@ -18,7 +18,7 @@ class HOCUpdate extends PureComponent {
   }
   onReload() {
     const { showLoading } = this.props;
-    showLoading(true);
+    showLoading('Updating');
 
     codePush.sync({
       installMode: codePush.InstallMode.IMMEDIATE,

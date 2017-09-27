@@ -68,13 +68,10 @@ export const preview = att => (d, getState) => {
     } else if (service.get('type') === 'url') {
       d(browser(service.get('id')));
     } else if (service.get('type') === 'file') {
-      d(a.main.loading(true));
+      d(a.main.loading('Loading Preview'));
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
-        if (Platform.OS === 'ios') {
-          // d(a.main.loading(false));
-        }
 
         OpenFile.openDoc([{
           url: res.preview.file.url,
@@ -82,9 +79,6 @@ export const preview = att => (d, getState) => {
 
         }], (error, url) => {
           d(a.main.loading(false));
-          if (Platform.OS === 'android') {
-            // d(a.main.loading(false));
-          }
         });
       });
     }

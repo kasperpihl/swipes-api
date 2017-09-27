@@ -61,7 +61,7 @@ class HOCAttachButton extends PureComponent {
           type,
         };
 
-        showLoading(true);
+        showLoading('Uploading');
 
         createFile([file]).then((fileRes) => {
           if (fileRes.ok) {
