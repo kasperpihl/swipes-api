@@ -73,7 +73,7 @@ export const preview = att => (d, getState) => {
         short_url: permission.get('short_url'),
       })).then((res) => {
         if (Platform.OS === 'ios') {
-          d(a.modals.loading(false));
+          // d(a.modals.loading(false));
         }
 
         OpenFile.openDoc([{
@@ -81,8 +81,9 @@ export const preview = att => (d, getState) => {
           fileName: res.preview.header.title,
 
         }], (error, url) => {
+          d(a.main.loading(false));
           if (Platform.OS === 'android') {
-            d(a.main.loading(false));
+            // d(a.main.loading(false));
           }
         });
       });

@@ -388,7 +388,7 @@ class PostView extends PureComponent {
   renderContent() {
     return (
       <WaitForUI>
-        <ScrollView style={{ flex: 1 }} ref="scrollView" alwaysBounceVertical={false}>
+        <ScrollView style={{ flex: 1 }} ref="scrollView">
           {this.renderMessage()}
           {this.renderAttachments()}
           {this.renderActions()}

@@ -105,17 +105,11 @@ class CreateNewItemModal extends PureComponent {
   componentWillUpdate(nextProps) {
     LayoutAnimation.easeInEaseOut();
   }
-  componentWillUnmount() {
-    clearTimeout(this.showAssigneeModalTimeout);
-    clearTimeout(this.showNewItemModalTimeout);
-  }
   onActionClick() {
     const { title, assignees, milestoneId } = this.state;
     const { navPop } = this.props;
 
     if (title.length) {
-      this.refs.textInput.blur();
-      Keyboard.dismiss;
       this.onModalCreateAction(title, assignees, milestoneId);
       
       setTimeout(() => {
@@ -125,10 +119,6 @@ class CreateNewItemModal extends PureComponent {
   }
   onCloseModal() {
     const { navPop } = this.props;
-
-    this.refs.textInput.blur();
-    Keyboard.dismiss;
-
     setTimeout(() => {
       navPop()
     }, 1)
