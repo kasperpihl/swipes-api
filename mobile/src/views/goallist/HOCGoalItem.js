@@ -8,8 +8,6 @@ import * as a from 'actions';
 import * as gs from 'styles';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCAssigning from 'components/assignees/HOCAssigning';
-import ActionModal from 'modals/action-modal/ActionModal';
-import AlertModal from 'modals/AlertModal';
 import RippleButton from 'RippleButton';
 import { viewSize } from 'globalStyles';
 
@@ -83,24 +81,22 @@ class HOCGoalItem extends PureComponent {
 
   }
   onModalGoalAction(id) {
-    const { togglePinGoal, goal, showModal } = this.props;
+    const { togglePinGoal, goal, alertModal } = this.props;
 
     if (id === 'delete') {
-      showModal({
-        component: AlertModal,
-        props: {
-          title: 'Delete goal',
-          message: 'This will remove this goal for all participants.',
-          onConfirmPress: this.onConfirmPress,
-        }
+      alertModal({
+        title: 'Delete goal',
+        message: 'This will remove this goal for all participants.',
+        onConfirmPress: this.onConfirmPress,
       });
     }
   }
 
   onLongPress() {
-    const { showModal, goal } = this.props;
+    const { actionModal, goal } = this.props;
 
-    const props = {
+    Vibration.vibrate(50);
+    actionModal({
       title: 'Goal',
       onItemPress: this.onModalGoalAction,
       items: fromJS([
@@ -109,12 +105,6 @@ class HOCGoalItem extends PureComponent {
           id: 'delete',
         },
       ]),
-    };
-
-    Vibration.vibrate(50);
-    showModal({
-      component: ActionModal,
-      props,
     });
   }
   openOverview() {
@@ -199,5 +189,6 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   archive: ca.goals.archive,
-  showModal: a.main.modal,
+  actionModal: a.modals.action,
+  alertModal: a.modals.alert,
 })(HOCGoalItem);

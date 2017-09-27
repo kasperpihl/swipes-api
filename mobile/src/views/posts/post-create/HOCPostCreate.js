@@ -13,7 +13,6 @@ import {
 import moment from 'moment';
 import mime from 'react-native-mime-types';
 import ImagePicker from 'react-native-image-picker';
-import ActionModal from 'modals/action-modal/ActionModal';
 import { fromJS, List } from 'immutable';
 import PostCreate from './PostCreate';
 
@@ -89,9 +88,9 @@ class HOCPostCreate extends PureComponent {
     });
   }
   onChangeType() {
-    const { showModal } = this.props;
-
-    const props = {
+    const { actionModal } = this.props;
+    
+    actionModal({
       title: 'Change type',
       onItemPress: this.onModalChangeType,
       items: fromJS([
@@ -100,11 +99,6 @@ class HOCPostCreate extends PureComponent {
         { id: 'announcement', title: 'Make an announcement' },
         { id: 'information', title: 'Share information' },
       ]),
-    };
-
-    showModal({
-      component: ActionModal,
-      props,
     });
   }
   onAttachmentClick(i) {
@@ -231,7 +225,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   createPost: ca.posts.create,
-  showModal: a.main.modal,
+  actionModal: a.modals.action,
   assignModal: a.modals.assign,
   showLoading: a.main.loading,
   createFile: ca.files.create,

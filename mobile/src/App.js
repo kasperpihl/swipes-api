@@ -11,8 +11,6 @@ import Icon from 'components/icons/Icon';
 import HOCTabNavigation from 'components/tab-navigation/HOCTabNavigation';
 import HOCAndroidBackButton from 'components/android-back-button/HOCAndroidBackButton';
 import { colors, viewSize } from 'utils/globalStyles';
-import LoadingModal from 'modals/LoadingModal';
-import ActionModal from 'modals/action-modal/ActionModal';
 import HOCConnectionBar from 'components/connection-bar/HOCConnectionBar';
 import * as a from 'actions';
 import HOCModal from 'components/modal/HOCModal';

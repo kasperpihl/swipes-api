@@ -1,7 +1,21 @@
 import ActionModal from 'modals/action-modal/ActionModal';
+import AlertModal from 'modals/AlertModal';
 import { modal } from './main';
 import { fromJS } from 'immutable';
 import * as cs from 'swipes-core-js/selectors';
+
+export const action = (props, extraArgs) => (d, getState) => {
+
+  const renderedProps = {
+    ...props,
+  };
+
+  d(modal({
+    component: ActionModal,
+    props: renderedProps,
+    ...extraArgs,
+  }));
+} 
 
 export const assign = (props) => (d, getState) => {
 
@@ -24,8 +38,21 @@ export const assign = (props) => (d, getState) => {
     ...props
   };
 
-  d(modal({
+  d(action({
     component: ActionModal,
     props: renderedProps,
   }));
 }
+
+export const alert = (props, extraArgs) => (d, getState) => {
+
+  const renderedProps = {
+    ...props,
+  };
+
+  d(modal({
+    component: AlertModal,
+    props: renderedProps,
+    ...extraArgs,
+  }));
+} 

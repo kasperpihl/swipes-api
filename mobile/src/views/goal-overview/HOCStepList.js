@@ -12,7 +12,6 @@ import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import { colors, viewSize } from 'globalStyles';
 import RippleButton from 'RippleButton';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
-import ActionModal from 'modals/action-modal/ActionModal';
 import Icon from 'Icon';
 
 const styles = StyleSheet.create({
@@ -110,11 +109,11 @@ class HOCStepList extends PureComponent {
 
   }
   onPress(step) {
-    const { showModal, goal } = this.props;
+    const { actionModal, goal } = this.props;
     const helper = this.getHelper();
     const completeLabel = helper.getIsStepCompleted(step) ? 'Incomplete step' : 'Complete step';
 
-    const props = {
+    actionModal({
       title: 'Step actions',
       onActionPress: this.onModalGoalActionCached(step),
       items: fromJS([
@@ -127,11 +126,6 @@ class HOCStepList extends PureComponent {
           index: 'assign',
         },
       ]),
-    };
-
-    showModal({
-      component: ActionModal,
-      props,
     });
   }
   onModalCreateAction(title, assignees, milestoneId ) {
@@ -238,5 +232,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addStep: ca.steps.add,
   assignStep: ca.steps.assign,
-  showModal: a.main.modal,
+  actionModal: a.modals.action,
 })(HOCStepList);
