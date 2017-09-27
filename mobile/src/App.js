@@ -151,7 +151,6 @@ class App extends PureComponent {
         <View style={styles.wrapper}>
           <HOCViewController />
         </View>
-        <HOCModal />
         <HOCInfoTab/>
         <HOCTabNavigation />
         {this.renderBackButton()}
@@ -175,6 +174,7 @@ class App extends PureComponent {
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
+        <HOCModal />
         <HOCLoading />
       </View>
     );

@@ -35,7 +35,7 @@ class HOCModal extends PureComponent {
       blockNew: false,
     };
 
-    bindAll(this, ['onClose', 'onDidClose']);
+    bindAll(this, ['onClose', 'onDidClose', 'onClosingState']);
     // setupLoading(this);
   }
   componentDidMount() {
@@ -47,12 +47,22 @@ class HOCModal extends PureComponent {
       this.setState({ blockNew: true });
     }
   }
+  onClosingState(closing) {
+    this.closingState = closing;
+    console.log('closing state', closing);
+  }
   onClose() {
     const { showModal } = this.props;
     showModal();
   }
   onDidClose() {
+    console.log('closed', this.closingState);
+    if(this.closingState) {
+      this.closingState = false;
+      this.onClose();
+    }
     this.setState({ blockNew: false });
+
   }
   renderComponent(isOpen) {
     if(!isOpen) {
@@ -89,7 +99,7 @@ class HOCModal extends PureComponent {
         isOpen={isOpen}
         style={styles.modal}
         onClosed={this.onDidClose}
-        coverScreen={Platform.OS === 'android'}
+        onClosingState={this.onClosingState}
         {...modalProps}
       >
         {this.renderComponent(isOpen)}
