@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   emptyState: {
     ...gs.mixins.size(1),
-    ...gs.mixins.flex('center'),
+    ...gs.mixins.flex('column', 'center', 'center'),
   },
   emptyTitle: {
     ...gs.mixins.font(11, gs.colors.deepBlue100, 11, 'bold'),

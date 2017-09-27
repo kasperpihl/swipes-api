@@ -9,7 +9,7 @@ import RippleButton from 'RippleButton';
 const styles = StyleSheet.create({
   container: {
     width: viewSize.width,
-    height: Platform.OS === 'ios' ? viewSize.height - 54 + 20 : viewSize.height - 54 + 24,
+    height: Platform.OS === 'ios' ? viewSize.height - 54 + 20 : viewSize.height - 54,
     position: 'absolute',
     left: 0,
     backgroundColor: 'rgba(0, 12, 47, 0.96)',

@@ -217,6 +217,7 @@ export default class ActionModal extends PureComponent {
       modalStyles = {
         width: viewSize.width,
         height: viewSize.height,
+        paddingTop: statusbarHeight,
       };
       animationStyle = 'slide';
     }

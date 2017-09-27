@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    paddingBottom: 30,
+    paddingBottom: 15,
   },
   actionWrapper: {
     width: viewSize.width,
