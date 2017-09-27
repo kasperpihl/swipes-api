@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { Keyboard } from 'react-native';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
@@ -9,6 +10,7 @@ import {
   navForContext, 
   typeForId,
   bindAll,
+  getDeep,
 } from 'swipes-core-js/classes/utils';
 import moment from 'moment';
 import mime from 'react-native-mime-types';
@@ -29,7 +31,7 @@ class HOCPostCreate extends PureComponent {
       }),
     };
 
-    bindAll(this, ['onModalTag', 'onModalChangeType', 'onActionButton']);
+    bindAll(this, ['onModalTag', 'onModalChangeType', 'onActionButton', 'onModalDismiss']);
 
   }
   componentDidMount() {
@@ -77,19 +79,26 @@ class HOCPostCreate extends PureComponent {
     const { post } = this.state;
     this.updatePost(post.set('type', id));
   }
+  onModalDismiss() {
+    const input = getDeep(this, 'refs.postCreate.refs.input');
+    if(input) {
+      input.focus();
+    }
+  }
   onTag() {
     const { assignModal } = this.props;
     const { post } = this.state;
+    Keyboard.dismiss();
     assignModal({
       title: 'Tag teammates',
       actionLabel: 'Tag',
       selectedIds: post.get('taggedUsers'),
       onActionPress: this.onModalTag,
-    });
+    }, { onDidClose: this.onModalDismiss });
   }
   onChangeType() {
     const { actionModal } = this.props;
-    
+    Keyboard.dismiss();
     actionModal({
       title: 'Change type',
       onItemPress: this.onModalChangeType,
@@ -99,7 +108,7 @@ class HOCPostCreate extends PureComponent {
         { id: 'announcement', title: 'Make an announcement' },
         { id: 'information', title: 'Share information' },
       ]),
-    });
+    }, { onDidClose: this.onModalDismiss });
   }
   onAttachmentClick(i) {
     const { preview } = this.props;
@@ -205,6 +214,7 @@ class HOCPostCreate extends PureComponent {
 
     return (
       <PostCreate
+        ref="postCreate"
         post={post}
         myId={myId}
         delegate={this}
