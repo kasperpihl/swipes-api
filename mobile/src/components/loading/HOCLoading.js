@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import * as gs from 'styles';
 import { viewSize, statusbarHeight } from 'globalStyles';
 
-const MODAL_HEIGHT = viewSize.height + statusbarHeight;
+const MODAL_HEIGHT = viewSize.height;
 
 const styles = StyleSheet.create({
   modal: {

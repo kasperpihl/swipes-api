@@ -6,7 +6,7 @@ import {
 
 const { width: ww, height: wh } = Dimensions.get('window');
 
-const VIEW_HEIGHT = Platform.OS === 'android' ? wh - 24 : wh;
+const VIEW_HEIGHT = wh;
 const VIEW_WIDTH = ww;
 const STATUSBAR_HEIGHT = Platform.OS === 'android' ? 24 : 20;
 

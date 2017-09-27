@@ -4,7 +4,7 @@ import { colors, viewSize, statusbarHeight } from '../../../utils/globalStyles';
 export const styles = StyleSheet.create({
   container: {
     width: viewSize.width,
-    height: viewSize.height + statusbarHeight,
+    height: viewSize.height,
     backgroundColor: colors.bg
   },
   input: {

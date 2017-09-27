@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     width: viewSize.width,
-    height: viewSize.height + statusbarHeight,
+    height: viewSize.height,
     alignItems: 'center',
     justifyContent: 'center',
   },

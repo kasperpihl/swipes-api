@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     ...gs.mixins.flex('center'),
   },
   backDrop: {
-    ...gs.mixins.size(viewSize.width, viewSize.height + statusbarHeight),
+    ...gs.mixins.size(viewSize.width, viewSize.height),
     position: 'absolute',
     left: 0, top: 0
   }

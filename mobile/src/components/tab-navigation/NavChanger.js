@@ -12,7 +12,7 @@ const ICON_SIZE = 24;
 const styles = StyleSheet.create({
   container: {
     width: viewSize.width,
-    height: viewSize.height - NAV_BAR_HEIGHT + statusbarHeight,
+    height: viewSize.height - NAV_BAR_HEIGHT,
     position: 'absolute',
     left: 0, top: -viewSize.height + NAV_BAR_HEIGHT - statusbarHeight,
   },
