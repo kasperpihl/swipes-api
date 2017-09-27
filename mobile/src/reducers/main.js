@@ -16,6 +16,9 @@ export default function main(state = initialState, action) {
     case types.SHOW_MODAL: {
       return state.set('modal', payload || null);
     }
+    case types.SET_LOADING: {
+      return state.set('loading', payload || null);
+    }
     default: {
       return state;
     }

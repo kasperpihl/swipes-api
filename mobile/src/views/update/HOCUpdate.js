@@ -17,8 +17,8 @@ class HOCUpdate extends PureComponent {
   componentDidMount() {
   }
   onReload() {
-    const { loadingModal } = this.props;
-    loadingModal(true);
+    const { showLoading } = this.props;
+    showLoading(true);
 
     codePush.sync({
       installMode: codePush.InstallMode.IMMEDIATE,
@@ -61,5 +61,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  loadingModal: a.modals.loading,
+  showLoading: a.main.loading,
 })(HOCUpdate);

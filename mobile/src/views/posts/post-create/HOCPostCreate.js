@@ -108,7 +108,7 @@ class HOCPostCreate extends PureComponent {
     preview(post.getIn(['attachments', i]));
   }
   onAddAttachment() {
-    const { createFile, createLink, loadingModal } = this.props;
+    const { createFile, createLink, showLoading } = this.props;
 
     const options = {
       title: 'Attach image',
@@ -134,14 +134,14 @@ class HOCPostCreate extends PureComponent {
           type,
         };
 
-        loadingModal(true);
+        showLoading(true);
 
         createFile([file]).then((fileRes) => {
           if (fileRes.ok) {
             const link = this.getSwipesLinkObj('file', fileRes.file.id, fileRes.file.title);
 
             createLink(link).then((res) => {
-              loadingModal();
+              showLoading();
               if (res.ok) {
                 const att = fromJS({ link: res.link, title: fileRes.file.title });
                 const { post } = this.state;
@@ -150,7 +150,7 @@ class HOCPostCreate extends PureComponent {
 
             })
           } else {
-            loadingModal();
+            showLoading();
           }
         });
       }
@@ -227,7 +227,7 @@ export default connect(mapStateToProps, {
   createPost: ca.posts.create,
   actionModal: a.modals.action,
   assignModal: a.modals.assign,
-  loadingModal: a.modals.loading,
+  showLoading: a.main.loading,
   createFile: ca.files.create,
   createLink: ca.links.create,
   preview: a.links.preview,

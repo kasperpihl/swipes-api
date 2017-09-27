@@ -15,6 +15,7 @@ import * as gs from 'styles';
 import HOCConnectionBar from 'components/connection-bar/HOCConnectionBar';
 import * as a from 'actions';
 import HOCModal from 'components/modal/HOCModal';
+import HOCLoading from 'components/loading/HOCLoading';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 
 const styles = StyleSheet.create({
@@ -59,6 +60,7 @@ class App extends PureComponent {
       }, 1);
 
     }
+    console.log('fu');
     if (prevProps.myId !== this.props.myId) {
       this.checkTagsAndUpdate();
     }
@@ -173,6 +175,7 @@ class App extends PureComponent {
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
+        <HOCLoading />
       </View>
     );
   }
