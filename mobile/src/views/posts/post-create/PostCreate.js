@@ -278,7 +278,7 @@ class PostCreate extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps='never'>
           <View style={[styles.createHeader, { paddingTop: 44}]}>
             {this.renderProfilePic()}
             {this.renderTextArea()}
