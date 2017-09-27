@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
-import { colors, viewSize } from 'globalStyles';
+import { colors, viewSize, statusbarHeight } from 'globalStyles';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
 import ActionModalList from './ActionModalList';
@@ -216,7 +216,7 @@ export default class ActionModal extends PureComponent {
     if (fullscreen) {
       modalStyles = {
         width: viewSize.width,
-        height: viewSize.height,
+        height: viewSize.height + statusbarHeight,
       };
       animationStyle = 'slide';
     }

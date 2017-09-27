@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     width: viewSize.width,
     height: 54,
     flexDirection: "row",
-    zIndex: 100,
     backgroundColor: colors.bgColor
   },
   navHidden: {

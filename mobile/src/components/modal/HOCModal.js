@@ -10,7 +10,7 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import Modal from 'react-native-modalbox';
-import { viewSize } from 'globalStyles';
+import { viewSize, statusbarHeight } from 'globalStyles';
 import * as gs from 'styles';
 
 const styles = StyleSheet.create({
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     ...gs.mixins.flex('center'),
   },
   backDrop: {
-    ...gs.mixins.size(viewSize.width, viewSize.height),
+    ...gs.mixins.size(viewSize.width, viewSize.height + statusbarHeight),
     position: 'absolute',
     left: 0, top: 0
   }

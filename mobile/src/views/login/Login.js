@@ -5,7 +5,7 @@ import { View, TextInput, StyleSheet, Text, ScrollView, Platform, UIManager, Lay
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RippleButton from 'RippleButton';
-import { colors, viewSize } from 'globalStyles';
+import { colors, viewSize, statusbarHeight } from 'globalStyles';
 import { api } from 'swipes-core-js/actions';
 
 class Login extends PureComponent {
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     width: viewSize.width,
-    height: viewSize.height + 24,
+    height: viewSize.height + statusbarHeight,
     alignItems: 'center',
     justifyContent: 'center',
   },
