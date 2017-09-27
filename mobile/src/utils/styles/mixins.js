@@ -1,24 +1,60 @@
 import * as colors from './colors';
 
-export function font(fontSize = 13, color = colors.deepBlue100, lineHeight = 18, fontWeight = '400') {
+export function font(fontSize, color, lineHeight, fontWeight) {
+  if (typeof lineHeight === 'string' && !fontWeight) {
+    return {
+      fontSize,
+      color,
+      fontWeight: lineHeight,
+      includeFontPadding: false,
+    };
+  } 
+
   return {
-    fontSize,
-    color,
-    lineHeight,
-    fontWeight,
-    includeFontPadding: false,
-  };
+      fontSize,
+      color,
+      lineHeight,
+      fontWeight, 
+      includeFontPadding: false,
+    };
+}
+
+export function borderRadius(...args) {
+  const amountOfArguments = args.length;
+
+  if (amountOfArguments === 1) {
+    return {
+      borderRadius: args[0],
+    }
+  } else if (amountOfArguments === 4) {
+    return {
+      borderTopLeftRadius: args[0],
+      borderTopRightRadius: args[1],
+      borderBottomRightRadius: args[2],
+      borderBottomLeftRadius: args[3],
+    }
+  }
 }
 
 export function border(size, color, side) {
 
   if (side) {
-    const uppercaseSide = side.charAt(0).toUpperCase() + side.slice(1);
+    
+    if (typeof side === 'string') {
+      const uppercaseSide = side.charAt(0).toUpperCase() + side.slice(1);
 
-    return {
-      [`border${uppercaseSide}Width`]: size,
-      [`border${uppercaseSide}Color`]: color,
+      return {
+        [`border${uppercaseSide}Width`]: size,
+        [`border${uppercaseSide}Color`]: color,
+      }
+    } else {
+      return {
+        borderWidth: size,
+        borderColor: color,
+        borderRadius: side,
+      }
     }
+
   }
 
   return {

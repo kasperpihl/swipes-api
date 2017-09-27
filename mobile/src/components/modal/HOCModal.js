@@ -60,7 +60,6 @@ class HOCModal extends PureComponent {
         isOpen={isOpen}
         onClosed={this.onDidClose}
         style={modalStyles}
-        coverScreen={true}
         {...modalProps}
       >
         {Comp ? (

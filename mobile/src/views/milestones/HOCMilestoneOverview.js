@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
@@ -18,45 +18,25 @@ import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import RippleButton from 'RippleButton';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
 import { colors } from 'globalStyles';
+import * as gs from 'styles';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: colors.bgColor,
+    ...gs.mixins.size(1),
+    backgroundColor: gs.colors.bgColor,
   },
   list: {
-    flex: 1,
-  },
-  fabWrapper: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
-    position: 'absolute',
-    bottom: 30,
-    right: 15,
-  },
-  fabButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
-    backgroundColor: colors.blue100,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...gs.mixins.size(1),
   },
   emptyState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
   },
   emptyTitle: {
-    fontSize: 11,
-    color: colors.deepBlue100,
-    fontWeight: 'bold', 
+    ...gs.mixins.font(11, gs.colors.deepBlue100, 11, 'bold'),
   },
   emptyText: {
-    fontSize: 12,
-    color: colors.deepBlue40,
-    lineHeight: 18,
+    ...gs.mixins.font(12, gs.colors.deepBlue40, 18),
     textAlign: 'center',
     paddingTop: 9,
   },
@@ -238,7 +218,13 @@ class HOCMilestoneOverview extends PureComponent {
         delegate={this}
         tabs={tabs.map((t, i) => i === 0 ? 'This week' : t)}
         icon="Milestones"
-      />
+      >
+        <RippleButton onPress={this.openCreateGoalModal}>
+          <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+          </View>
+        </RippleButton>
+      </HOCHeader>
     );
   }
   renderGoal(goal) {
@@ -292,23 +278,6 @@ class HOCMilestoneOverview extends PureComponent {
       </WaitForUI>
     );
   }
-  renderFAB() {
-    const { fabOpen } = this.state;
-
-    if (fabOpen) {
-      return undefined;
-    }
-
-    return (
-      <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.openCreateGoalModal}>
-          <View style={styles.fabButton}>
-            <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
-          </View>
-        </RippleButton>
-      </View>
-    );
-  }
   render() {
     const { milestone } = this.props;
 
@@ -316,7 +285,6 @@ class HOCMilestoneOverview extends PureComponent {
       <View style={styles.container}>
         {this.renderHeader()}
         {this.renderList()}
-        {this.renderFAB()}
       </View>
     );
   }
