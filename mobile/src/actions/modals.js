@@ -17,7 +17,7 @@ export const action = (props, extraArgs) => (d, getState) => {
   }));
 } 
 
-export const assign = (props) => (d, getState) => {
+export const assign = (props, extraArgs) => (d, getState) => {
 
   const users = cs.users.getActive(getState());
 
@@ -38,7 +38,7 @@ export const assign = (props) => (d, getState) => {
     ...props
   };
 
-  d(action(renderedProps));
+  d(action(renderedProps, extraArgs));
 }
 
 export const alert = (props, extraArgs) => (d) => {

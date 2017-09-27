@@ -44,22 +44,27 @@ class HOCModal extends PureComponent {
     const { modal } = this.props;
     const nextModal = nextProps.modal;
     if(modal && modal !== nextModal) {
+      if(typeof modal.onDidClose === 'function') {
+        this._onDidCloseHandler = modal.onDidClose;
+      }
       this.setState({ blockNew: true });
     }
   }
   onClosingState(closing) {
     this.closingState = closing;
-    console.log('closing state', closing);
   }
   onClose() {
     const { showModal } = this.props;
     showModal();
   }
   onDidClose() {
-    console.log('closed', this.closingState);
     if(this.closingState) {
       this.closingState = false;
       this.onClose();
+    }
+    if(this._onDidCloseHandler) {
+      this._onDidCloseHandler();
+      this._onDidCloseHandler = null;
     }
     this.setState({ blockNew: false });
 

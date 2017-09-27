@@ -126,9 +126,15 @@ class CreateNewItemModal extends PureComponent {
   handleAssigning() {
     const { assignModal } = this.props;
     const { assignees } = this.state;
+    Keyboard.dismiss();
     assignModal({
       selectedIds: assignees,
       onActionPress: (selectedIds) => this.setState({assignees: selectedIds}),
+    }, {
+      onDidClose: () => {
+        console.log('closed from callback!');
+        this.refs.textInput.focus();
+      }
     })
   }
   isActive() {
