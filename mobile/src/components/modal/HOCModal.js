@@ -54,11 +54,11 @@ class HOCModal extends PureComponent {
     }
     const compProps = (modal && modal.props);
     const modalProps = (modal && modal.modalProps);
-    console.log('comp', modal, Comp)
+
     return (
       <Modal 
         isOpen={isOpen}
-        onClosed={this.onClose}
+        onClosed={this.onDidClose}
         style={modalStyles}
         coverScreen={true}
         {...modalProps}

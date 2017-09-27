@@ -82,7 +82,7 @@ class HOCGoalItem extends PureComponent {
   }
   onModalGoalAction(id) {
     const { togglePinGoal, goal, alertModal } = this.props;
-
+    console.log('hi', id);
     if (id === 'delete') {
       alertModal({
         title: 'Delete goal',

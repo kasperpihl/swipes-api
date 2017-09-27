@@ -85,7 +85,7 @@ export default class ActionModal extends PureComponent {
       }
       this.setState({ selectedIds });
     } else if(onItemPress) {
-      closeModal();
+      // closeModal();
       onItemPress(itemId, item, e);
     }
   } 

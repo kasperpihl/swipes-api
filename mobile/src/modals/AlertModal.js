@@ -79,12 +79,12 @@ class AlertModal extends PureComponent {
     
     return (
       <View style={styles.actionsWrapper}>
-        <RippleButton onPress={this.props.onConfirmPress}>
+        <RippleButton style={styles.action} onPress={this.props.onConfirmPress}>
           <View style={styles.action}>
             <Text style={[styles.actionLabel, { color: gs.colors.red80 }]}>CANCEL</Text>
           </View>
         </RippleButton>
-        <RippleButton onPress={this.props.onConfirmPress}>
+        <RippleButton style={styles.action} onPress={this.props.onConfirmPress}>
           <View style={styles.action}>
             <Text style={[styles.actionLabel, { color: gs.colors.blue100 }]}>OK</Text>
           </View>
