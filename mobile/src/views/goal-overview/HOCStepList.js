@@ -104,7 +104,10 @@ class HOCStepList extends PureComponent {
     } else if (i.get('id') === 'assign') {
       const assignees = step.get('assignees');
 
-      // assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res)
+      assignModal({
+        selectedIds: assignees,
+        onActionPress: (selectedIds) => assignStep(goal.get('id'), step.get('id'), selectedIds.toJS()),
+      });
     }
 
   }
@@ -230,6 +233,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  assignModal: a.modals.assign,
   addStep: ca.steps.add,
   assignStep: ca.steps.assign,
   actionModal: a.modals.action,

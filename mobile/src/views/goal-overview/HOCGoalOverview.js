@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import * as ca from 'swipes-core-js/actions';
@@ -28,13 +28,8 @@ class HOCGoalOverview extends PureComponent {
 
     propsOrPop(this, 'goal');
 
-    this.closeView = this.closeView.bind(this);
-    this.onActionButton = this.onActionButton.bind(this);
-    this.onActionPress = this.onActionPress.bind(this);
-    this.onInfoTabClose = this.onInfoTabClose.bind(this);
-    this.onArchive = this.onArchive.bind(this);
-    this.handleCompleteGoal = this.handleCompleteGoal.bind(this);
 
+    bindAll(this, ['onModalAssign', 'closeView', 'onActionButton', 'onActionPress', 'onInfoTabClose', 'onArchive', 'handleCompleteGoal']);
     setupLoading(this);
   }
   componentDidMount() {
@@ -47,8 +42,13 @@ class HOCGoalOverview extends PureComponent {
   }
   onModalAssign(selectedIds) {
     const { assignGoal, goal } = this.props;
+    const { tabIndex } = this.state;
+    
+    assignGoal(goal.get('id'), selectedIds.toJS());
 
-    assignGoal(goal.get('id'), selectedIds.toJS())
+    if (tabIndex !== 2) {
+      this.setState({ tabIndex: 2 })
+    }
   }
   handleCompleteGoal() {
     const { incompleteGoal, completeGoal } = this.props;
@@ -72,7 +72,7 @@ class HOCGoalOverview extends PureComponent {
 
     assignModal({
       selectedIds: goal.get('assignees'),
-      onActionPress: (selectedIds) => this.setState({assignees: selectedIds}),
+      onActionPress: this.onModalAssign,
     });
   }
   onActionPress(index) {
