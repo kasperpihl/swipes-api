@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   messageWrapper: {
-    ...gs.mixins.padding(15, 0),
+    ...gs.mixins.padding(15, 0, 30, 0),
   },
   message: {
     ...gs.mixins.font(15, gs.colors.deepBlue50),
@@ -30,6 +30,11 @@ const styles = StyleSheet.create({
   actionsWrapper: {
     ...gs.mixins.border(1, gs.colors.deepBlue20, 'top'),
     ...gs.mixins.flex('row', 'left', 'center'),
+  },
+  actionButton: {
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
+    alignSelf: 'stretch',
   },
   action: {
     ...gs.mixins.size(1),
@@ -79,12 +84,12 @@ class AlertModal extends PureComponent {
     
     return (
       <View style={styles.actionsWrapper}>
-        <RippleButton style={styles.action} onPress={this.props.onConfirmPress}>
+        <RippleButton style={styles.actionButton} onPress={this.props.onConfirmPress}>
           <View style={styles.action}>
             <Text style={[styles.actionLabel, { color: gs.colors.red80 }]}>CANCEL</Text>
           </View>
         </RippleButton>
-        <RippleButton style={styles.action} onPress={this.props.onConfirmPress}>
+        <RippleButton style={styles.actionButton} onPress={this.props.onConfirmPress}>
           <View style={styles.action}>
             <Text style={[styles.actionLabel, { color: gs.colors.blue100 }]}>OK</Text>
           </View>
