@@ -12,6 +12,7 @@ import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import { colors, viewSize } from 'globalStyles';
 import RippleButton from 'RippleButton';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
+import ActionModal from 'modals/action-modal/ActionModal';
 import Icon from 'Icon';
 
 const styles = StyleSheet.create({
@@ -97,17 +98,14 @@ class HOCStepList extends PureComponent {
     return new GoalsUtil(goal);
   }
   onModalGoalAction(step, i) {
-    const { showModal, assignStep, goal } = this.props;
+    const { assignStep, goal, assignModal } = this.props;
 
-    if (i.get('index') === 'complete') {
+    if (i.get('id') === 'complete') {
       this.onComplete(step);
-      showModal();
-    } else if (i.get('index') === 'assign') {
+    } else if (i.get('id') === 'assign') {
       const assignees = step.get('assignees');
-      
-      // assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res)
 
-      showModal();
+      // assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res)
     }
 
   }
@@ -116,9 +114,9 @@ class HOCStepList extends PureComponent {
     const helper = this.getHelper();
     const completeLabel = helper.getIsStepCompleted(step) ? 'Incomplete step' : 'Complete step';
 
-    const modal = {
+    const props = {
       title: 'Step actions',
-      onClick: this.onModalGoalActionCached(step),
+      onActionPress: this.onModalGoalActionCached(step),
       items: fromJS([
         {
           title: completeLabel,
@@ -131,7 +129,10 @@ class HOCStepList extends PureComponent {
       ]),
     };
 
-    showModal(modal);
+    showModal({
+      component: ActionModal,
+      props,
+    });
   }
   onModalCreateAction(title, assignees, milestoneId ) {
     const { addStep, goal } = this.props;
@@ -237,5 +238,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addStep: ca.steps.add,
   assignStep: ca.steps.assign,
-  showModal: a.modals.show,
+  showModal: a.main.modal,
 })(HOCStepList);

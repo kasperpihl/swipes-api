@@ -14,6 +14,10 @@ import { viewSize } from 'globalStyles';
 import * as gs from 'styles';
 
 const styles = StyleSheet.create({
+  container: {
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
+  },
   backDrop: {
     ...gs.mixins.size(viewSize.width, viewSize.height),
     position: 'absolute',
@@ -50,7 +54,7 @@ class HOCModal extends PureComponent {
     }
     const compProps = (modal && modal.props);
     const modalProps = (modal && modal.modalProps);
-
+    console.log('comp', modal, Comp)
     return (
       <Modal 
         isOpen={isOpen}
@@ -60,7 +64,7 @@ class HOCModal extends PureComponent {
         {...modalProps}
       >
         {Comp ? (
-          <View style={{ flex: 1}}>
+          <View style={styles.container}>
             <TouchableWithoutFeedback onPress={this.onClose}>
               <View style={styles.backDrop}>
               </View>

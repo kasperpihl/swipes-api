@@ -8,6 +8,8 @@ import * as a from 'actions';
 import * as gs from 'styles';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCAssigning from 'components/assignees/HOCAssigning';
+import ActionModal from 'modals/action-modal/ActionModal';
+import AlertModal from 'modals/AlertModal';
 import RippleButton from 'RippleButton';
 import { viewSize } from 'globalStyles';
 
@@ -73,43 +75,47 @@ class HOCGoalItem extends PureComponent {
     // LayoutAnimation.easeInEaseOut();
   }
   onArchiveGoal() {
-    const { goal, archive, showModal } = this.props;
+    const { goal, archive } = this.props;
 
     archive(goal.get('id'));
-    showModal();
   }
-  onModalGoalAction(i) {
+  onConfirmPress(e) {
+
+  }
+  onModalGoalAction(id) {
     const { togglePinGoal, goal, showModal } = this.props;
 
-    if (i.get('index') === 'delete') {
-      Alert.alert(
-        'Delete goal',
-        'This is remove this goal for all participants.',
-        [
-          { text: 'Cancel', onPress: () => showModal(), style: 'cancel' },
-          { text: 'OK', onPress: () => this.onArchiveGoal() },
-        ],
-        { cancelable: true },
-      );
+    if (id === 'delete') {
+      showModal({
+        component: AlertModal,
+        props: {
+          title: 'Delete goal',
+          message: 'This will remove this goal for all participants.',
+          onConfirmPress: this.onConfirmPress,
+        }
+      });
     }
   }
 
   onLongPress() {
     const { showModal, goal } = this.props;
 
-    const modal = {
+    const props = {
       title: 'Goal',
-      onClick: this.onModalGoalAction,
+      onItemPress: this.onModalGoalAction,
       items: fromJS([
         {
           title: 'Delete',
-          index: 'delete',
+          id: 'delete',
         },
       ]),
     };
 
     Vibration.vibrate(50);
-    showModal(modal);
+    showModal({
+      component: ActionModal,
+      props,
+    });
   }
   openOverview() {
     const { goal } = this.props;
@@ -193,5 +199,5 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   archive: ca.goals.archive,
-  showModal: a.modals.show,
+  showModal: a.main.modal,
 })(HOCGoalItem);

@@ -70,32 +70,33 @@ export default class ActionModal extends PureComponent {
     bindAll(this, ['onActionPress', 'onClose']);
     // this.onButtonClick = setupCachedCallback(this.onButtonClick, this);
   }
-  onItemPress(itemIndex, item, e) {
+  onItemPress(itemId, item, e) {
     let { selectedIds } = this.state;
     const { multiple, onItemPress, closeModal } = this.props;
 
-    if(multiple && !item.get('id')) {
+    if(multiple && !itemId) {
       console.warn('items for action modal should have id to use multiselect');
     }
-    if (multiple && item.get('id')) {
-      if(!selectedIds.contains(item.get('id'))) {
-        selectedIds = selectedIds.push(item.get('id'));
+    if (multiple && itemId) {
+      if(!selectedIds.contains(itemId)) {
+        selectedIds = selectedIds.push(itemId);
       } else {
-        selectedIds = selectedIds.filter(id => id !== item.get('id'));
+        selectedIds = selectedIds.filter(id => id !== itemId);
       }
       this.setState({ selectedIds });
     } else if(onItemPress) {
-      onItemPress(itemIndex, item, e);
       closeModal();
+      onItemPress(itemId, item, e);
     }
   } 
   onActionPress(e) {
     const { selectedIds } = this.state;
     const { onActionPress, closeModal } = this.props;
+    closeModal();
     if(onActionPress){
       onActionPress(selectedIds, e);
     }
-    closeModal();
+    
   }
   onClose() {
     const { closeModal } = this.props;
