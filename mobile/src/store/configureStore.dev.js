@@ -27,8 +27,19 @@ const transformState = (state) => {
   cacheImmutable = state;
   return cacheObject;
 };
+
+const logger = store => next => action => {
+  if(action.type !== 'pong') {
+    console.info(action.type, action);
+  }
+  let result = next(action)
+  
+  return result
+}
+
 export default {
   middlewares: [
+    logger,
     // createLogger(
     //   {
     //     stateTransformer: transformState, // state => state.toJS(),

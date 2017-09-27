@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 
-import { TouchableWithoutFeedback, View, StyleSheet ,StatusBar } from 'react-native';
+import { TouchableWithoutFeedback, View, StyleSheet ,StatusBar, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import Modal from 'react-native-modalbox';
@@ -14,6 +14,9 @@ import { viewSize } from 'globalStyles';
 import * as gs from 'styles';
 
 const styles = StyleSheet.create({
+  modal: {
+    backgroundColor: 'transparent',
+  },
   container: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
@@ -28,49 +31,68 @@ const styles = StyleSheet.create({
 class HOCModal extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      blockNew: false,
+    };
 
-    this.onClose = this.onClose.bind(this);
+    bindAll(this, ['onClose', 'onDidClose']);
     // setupLoading(this);
   }
   componentDidMount() {
+  }
+  componentWillReceiveProps(nextProps) {
+    const { modal } = this.props;
+    const nextModal = nextProps.modal;
+    if(modal && modal !== nextModal) {
+      this.setState({ blockNew: true });
+    }
   }
   onClose() {
     const { showModal } = this.props;
     showModal();
   }
   onDidClose() {
-    console.log('did close yir');
+    this.setState({ blockNew: false });
   }
-  render() {
+  renderComponent(isOpen) {
+    if(!isOpen) {
+      return null;
+    }
+
     const { modal } = this.props;
-    const isOpen = !!modal;
+
     let Comp;
-    const modalStyles = {
-      backgroundColor: 'transparent',
-    };
     if(modal && modal.component) {
       Comp = modal.component;
     }
     const compProps = (modal && modal.props);
-    const modalProps = (modal && modal.modalProps);
 
     return (
-      <Modal 
+      <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={this.onClose}>
+          <View style={styles.backDrop}>
+          </View>
+        </TouchableWithoutFeedback>
+        <Comp {...compProps} closeModal={this.onClose} />
+      </View>
+    )
+  }
+  render() {
+    const { modal } = this.props;
+    const { blockNew } = this.state;
+    const isOpen = !blockNew && !!modal;
+    
+    const modalProps = (!blockNew && modal && modal.modalProps) || {};
+
+    return (
+      <Modal
         isOpen={isOpen}
+        style={styles.modal}
         onClosed={this.onDidClose}
-        style={modalStyles}
+        coverScreen={Platform.OS === 'android'}
         {...modalProps}
       >
-        {Comp ? (
-          <View style={styles.container}>
-            <TouchableWithoutFeedback onPress={this.onClose}>
-              <View style={styles.backDrop}>
-              </View>
-            </TouchableWithoutFeedback>
-            <Comp {...compProps} closeModal={this.onClose} />
-          </View>
-        ) : null}
+        {this.renderComponent(isOpen)}
       </Modal>
     );
   }
