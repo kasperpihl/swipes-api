@@ -96,12 +96,12 @@ class HOCStepList extends PureComponent {
 
     return new GoalsUtil(goal);
   }
-  onModalGoalAction(step, i) {
+  onModalGoalAction(step, id) {
     const { assignStep, goal, assignModal } = this.props;
-
-    if (i.get('id') === 'complete') {
+    console.log('UAJAJA', id);
+    if (id === 'complete') {
       this.onComplete(step);
-    } else if (i.get('id') === 'assign') {
+    } else if (id === 'assign') {
       const assignees = step.get('assignees');
 
       // assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res)
@@ -115,15 +115,15 @@ class HOCStepList extends PureComponent {
 
     actionModal({
       title: 'Step actions',
-      onActionPress: this.onModalGoalActionCached(step),
+      onItemPress: this.onModalGoalActionCached(step),
       items: fromJS([
         {
           title: completeLabel,
-          index: 'complete',
+          id: 'complete',
         },
         {
           title: 'Reassign step',
-          index: 'assign',
+          id: 'assign',
         },
       ]),
     });

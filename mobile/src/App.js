@@ -60,7 +60,7 @@ class App extends PureComponent {
       }, 1);
 
     }
-    console.log('fu');
+
     if (prevProps.myId !== this.props.myId) {
       this.checkTagsAndUpdate();
     }
