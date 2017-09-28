@@ -80,9 +80,7 @@ class HOCAttachmentView extends PureComponent {
                   attachments: attachments.push(att)
                 })
               } else {
-                console.warn('faled', res.err)
               }
-                
             })
           } else {
             showLoading();

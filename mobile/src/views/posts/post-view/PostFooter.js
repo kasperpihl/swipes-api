@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
@@ -82,6 +82,7 @@ class PostFooter extends PureComponent {
     this.state = {
       text: '',
       attachments: fromJS([]),
+      isLoadingComment: false,
     }
     setupDelegate(this, 'onAddComment', 'onNavigateBack', 'onAutoFocus');
 
@@ -89,6 +90,14 @@ class PostFooter extends PureComponent {
     this.handleBackButton = this.handleBackButton.bind(this);
     this.handleAttach = this.handleAttach.bind(this);
     this.handleOpenAttachments = this.handleOpenAttachments.bind(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    const { isLoadingComment } = this.state;
+    
+    if (isLoadingComment !== nextProps.isLoading('commenting')) {
+      this.setState({ isLoadingComment: nextProps.isLoading('commenting') })
+    }
+
   }
   handleOpenAttachments() {
     const { navPush } = this.props;
@@ -139,12 +148,17 @@ class PostFooter extends PureComponent {
     )
   }
   renderSendButton() {
-    const { commentLoading } = this.props;
+    const { isLoadingComment } = this.state;
 
-    if (commentLoading) {
-      <View style={styles.iconButton}>
-        <ActivityIndicator color={colors.blue100} />
-      </View>
+    console.warn(isLoadingComment)
+  
+    if (isLoadingComment) {
+
+      return (
+        <View style={styles.iconButton}>
+          <ActivityIndicator color={colors.blue100} />
+        </View>
+      )
     }
 
     return (

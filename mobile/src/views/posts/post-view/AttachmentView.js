@@ -48,6 +48,11 @@ class AttachmentView extends PureComponent {
     setupDelegate(this, 'onAddAttachment', 'onAttachmentPress');
   }
   componentDidMount() {
+    const { attachments } = this.props;
+    
+    if (!attachments.size) {
+      this.onAddAttachment();
+    }
   }
   renderHeader() {
 
