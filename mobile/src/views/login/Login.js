@@ -136,44 +136,46 @@ class Login extends PureComponent {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {this.renderGradient()}
-          <ScrollView keyboardShouldPersistTaps="always">
-            {this.renderTitle()}
-            <View style={styles.form}>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={email => this.setState({ email })}
-                  value={this.state.email}
-                  placeholder="Email"
-                  onSubmitEditing={this.focusNext}
-                  placeholderTextColor="white"
-                  returnKeyType="next"
-                  underlineColorAndroid="transparent"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
+          <View style={{flex: 1}}>
+            <ScrollView keyboardShouldPersistTaps="always">
+              {this.renderTitle()}
+              <View style={styles.form}>
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={email => this.setState({ email })}
+                    value={this.state.email}
+                    placeholder="Email"
+                    onSubmitEditing={this.focusNext}
+                    placeholderTextColor="white"
+                    returnKeyType="next"
+                    underlineColorAndroid="transparent"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    ref="passwordInput"
+                    style={styles.input2}
+                    onChangeText={password => this.setState({ password })}
+                    value={this.state.password}
+                    returnKeyType="go"
+                    placeholder="Password"
+                    placeholderTextColor="white"
+                    secureTextEntry
+                    onSubmitEditing={this.signIn}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                </View>
               </View>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  ref="passwordInput"
-                  style={styles.input2}
-                  onChangeText={password => this.setState({ password })}
-                  value={this.state.password}
-                  returnKeyType="go"
-                  placeholder="Password"
-                  placeholderTextColor="white"
-                  secureTextEntry
-                  onSubmitEditing={this.signIn}
-                  underlineColorAndroid="transparent"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
-              </View>
-            </View>
-            {this.renderButton()}
+              {this.renderButton()}
+            </ScrollView>
             {this.renderErrorLabel()}
-          </ScrollView>
+          </View>
           {this.renderKeyboardSpacer()}
         </View>
       </TouchableWithoutFeedback>
