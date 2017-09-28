@@ -206,7 +206,7 @@ class PostView extends PureComponent {
     }
   }
   scrollToBottom() {
-    console.log('hit', this.shouldScrollToBottom, this.refs.scrollView);
+    console.warn('hit', this.shouldScrollToBottom);
     if (this.shouldScrollToBottom && this.refs.scrollView) {
       this.shouldScrollToBottom = false;
       this.refs.scrollView.scrollToEnd({animated: true});
@@ -437,6 +437,7 @@ class PostView extends PureComponent {
           style={{ flex: 1 }} 
           ref="scrollView"
           onLayout={(e) => {
+            console.warn('is triggered')
             this.shouldScrollToBottom = true;
             this.scrollToBottom();
           }}

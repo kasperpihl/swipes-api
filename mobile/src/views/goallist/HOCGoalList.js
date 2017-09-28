@@ -160,7 +160,6 @@ class HOCGoalList extends PureComponent {
   }
   renderList() {
     const { goals } = this.props;
-    const { hasLoaded } = this.state;
 
     if (goals.size === 1 && !goals.get('none').size) {
       return this.renderEmptyState();

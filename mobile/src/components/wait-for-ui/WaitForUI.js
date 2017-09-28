@@ -39,6 +39,7 @@ class WaitForUI extends PureComponent {
   }
   handleInteractionManager() {
     if (this.interactionHandle) this.interactionHandle.cancel();
+
     this.setState({ interactionsComplete: false });
 
     this.interactionHandle = InteractionManager.runAfterInteractions(() => {

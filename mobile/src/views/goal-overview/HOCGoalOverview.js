@@ -172,7 +172,6 @@ class HOCGoalOverview extends PureComponent {
     }
   }
   onChangeTab(index) {
-    const { hasLoaded } = this.state;
 
     if (index !== this.state.tabIndex) {
       this.setState({ tabIndex: index });
@@ -301,7 +300,7 @@ class HOCGoalOverview extends PureComponent {
     )
   }
   renderContent() {
-    const { tabIndex, hasLoaded } = this.state;
+    const { tabIndex } = this.state;
 
     if (tabIndex === 0) {
       return this.renderStepList();
