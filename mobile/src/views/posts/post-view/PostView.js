@@ -1,10 +1,10 @@
 import React, { PureComponent } from "react";
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, Platform, Keyboard, UIManager, LayoutAnimation } from "react-native";
 import ParsedText from "react-native-parsed-text";
 import { List } from "immutable";
-import { setupDelegate, iconForId, attachmentIconForService } from "swipes-core-js/classes/utils";
+import { setupDelegate, iconForId, attachmentIconForService, bindAll } from "swipes-core-js/classes/utils";
 import { timeAgo } from "swipes-core-js/classes/time-utils";
-import { colors, viewSize } from "globalStyles";
+import { colors, viewSize, statusbarHeight } from "globalStyles";
 import HOCHeader from "HOCHeader";
 import StyledText from "components/styled-text/StyledText";
 import Icon from "Icon";
@@ -150,11 +150,21 @@ const styles = StyleSheet.create({
 class PostView extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      collapseHeader: false,
+      headerHeight: 0,
+    };
 
-    this.onHeaderTap = this.onHeaderTap.bind(this);
-
+    bindAll(this, ['onHeaderTap', 'keyboardDidShow', 'keyboardDidHide'])
     setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext', 'onAttachmentClick');
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+  componentWillMount () {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
   }
   componentDidMount() {
     if (this.props.scrollToBottom) {
@@ -162,6 +172,8 @@ class PostView extends PureComponent {
     }
   }
   componentWillUpdate(nextProps) {
+    LayoutAnimation.easeInEaseOut();
+
     if (this.state.hasLoaded && this.props.post.get('comments').size !== nextProps.post.get('comments').size) {
       this.shouldScrollToBottom = true;
     }
@@ -174,6 +186,24 @@ class PostView extends PureComponent {
   }
   componentWillUnmount() {
     clearTimeout(this.scrollTimer);
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+  keyboardDidShow () {
+    this.setState({ collapseHeader: true });
+  }
+  keyboardDidHide () {
+    this.setState({ collapseHeader: false });
+  }
+  measureView(event) {
+    this.getHeaderHeight(event.nativeEvent.layout.height);
+  }
+  getHeaderHeight(height) {
+    const { headerHeight } = this.state;
+
+    if (headerHeight !== height) {
+      this.setState({ headerHeight: height });
+    }
   }
   scrollToBottomTime() {
     clearTimeout(this.scrollTimer);
@@ -271,16 +301,33 @@ class PostView extends PureComponent {
     );
   }
   renderPostHeader() {
+    const { headerHeight, collapseHeader } = this.state;
+
+    let marginTop = 0;
+    // let opacity = 1;
+    let paddingBottom = 0;
+
+    if (collapseHeader) {
+      marginTop = -headerHeight + statusbarHeight;
+      paddingBottom = statusbarHeight;
+
+      if (Platform.OS === 'ios') {
+        // opacity = 0;
+      }
+    }
+
     return (
-      <RippleButton onPress={this.onHeaderTap}>
-        <View style={styles.header}>
-          {this.renderProfilePic()}
-          <View style={styles.headerSide}>
-            {this.renderGeneratedTitle()}
-            {this.renderHeaderSubtitle()}
+      <View style={{ marginTop, paddingBottom }} onLayout={event => this.measureView(event)}>
+        <RippleButton onPress={this.onHeaderTap}>
+          <View style={styles.header}>
+            {this.renderProfilePic()}
+            <View style={styles.headerSide}>
+              {this.renderGeneratedTitle()}
+              {this.renderHeaderSubtitle()}
+            </View>
           </View>
-        </View>
-      </RippleButton>
+        </RippleButton>
+      </View>
     );
   }
   renderMessage() {
