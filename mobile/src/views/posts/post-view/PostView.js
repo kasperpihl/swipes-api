@@ -163,8 +163,11 @@ class PostView extends PureComponent {
     }
   }
   componentWillMount () {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+    const keyboardInEvent = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow';
+    const keyboardOutEvent = Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide';
+
+    this.keyboardDidShowListener = Keyboard.addListener(keyboardInEvent, this.keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener(keyboardOutEvent, this.keyboardDidHide);
   }
   componentDidMount() {
     if (this.props.scrollToBottom) {
