@@ -155,7 +155,7 @@ class PostView extends PureComponent {
       headerHeight: 0,
     };
 
-    bindAll(this, ['onHeaderTap', 'keyboardDidShow', 'keyboardDidHide', 'scrollToBottom'])
+    bindAll(this, ['onHeaderTap', 'keyboardShow', 'keyboardHide', 'scrollToBottom'])
     setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext', 'onAttachmentClick');
 
     if (Platform.OS === 'android') {
@@ -166,11 +166,11 @@ class PostView extends PureComponent {
     if (this.props.initialScrollToBottom) {
       this.shouldScrollToBottom = true;
     }
-    const keyboardInEvent = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow';
-    const keyboardOutEvent = Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide';
+    const showEvent = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow';
+    const hideEvent = Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide';
 
-    this.keyboardDidShowListener = Keyboard.addListener(keyboardInEvent, this.keyboardDidShow);
-    this.keyboardDidHideListener = Keyboard.addListener(keyboardOutEvent, this.keyboardDidHide);
+    this.keyboardShowListener = Keyboard.addListener(showEvent, this.keyboardShow);
+    this.keyboardHideListener = Keyboard.addListener(hideEvent, this.keyboardHide);
   }
 
   componentWillUpdate(nextProps) {
@@ -185,14 +185,13 @@ class PostView extends PureComponent {
     this.scrollToBottom();
   }
   componentWillUnmount() {
-    clearTimeout(this.scrollTimer);
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
+    this.keyboardShowListener.remove();
+    this.keyboardHideListener.remove();
   }
-  keyboardDidShow () {
+  keyboardShow () {
     this.setState({ collapseHeader: true });
   }
-  keyboardDidHide () {
+  keyboardHide () {
     this.setState({ collapseHeader: false });
   }
   measureView(event) {
@@ -206,14 +205,12 @@ class PostView extends PureComponent {
     }
   }
   scrollToBottom() {
-    console.warn('hit', this.shouldScrollToBottom);
     if (this.shouldScrollToBottom && this.refs.scrollView) {
       this.shouldScrollToBottom = false;
       this.refs.scrollView.scrollToEnd({animated: true});
     }
   }
   onHeaderTap() {
-    clearTimeout(this.scrollTimer);
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
   renderGeneratedTitle() {
@@ -437,7 +434,6 @@ class PostView extends PureComponent {
           style={{ flex: 1 }} 
           ref="scrollView"
           onLayout={(e) => {
-            console.warn('is triggered')
             this.shouldScrollToBottom = true;
             this.scrollToBottom();
           }}
