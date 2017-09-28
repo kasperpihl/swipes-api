@@ -1,13 +1,7 @@
-<<<<<<< HEAD
-import React, { PureComponent } from 'react'
-import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
-=======
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
->>>>>>> 393dc5750... refactored attachments and made the post att work like comments
 import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
 import * as gs from 'styles';

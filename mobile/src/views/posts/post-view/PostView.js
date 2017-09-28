@@ -461,7 +461,7 @@ class PostView extends PureComponent {
           navPush={this.props.navPush} 
           delegate={delegate} 
           placeholder="Write a comment…" 
-          isLoading={...bindLoading()} 
+          {...bindLoading()} 
         />
       </View>
     );
