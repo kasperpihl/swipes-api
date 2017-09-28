@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   attachmentLabel: {
     ...gs.mixins.size(1),
-    ...gs.mixins.font(12, gs.colors.deepBlue80, 12, '500'),
+    ...gs.mixins.font(12, gs.colors.deepBlue80, '500'),
     paddingLeft: 12,
   },
   reactionsWrapper: {
