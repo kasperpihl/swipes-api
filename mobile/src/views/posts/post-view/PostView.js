@@ -184,6 +184,7 @@ class PostView extends PureComponent {
     this.scrollToBottom();
   }
   componentWillUnmount() {
+    if (this.interactionHandle) this.interactionHandle.cancel();
     this.keyboardShowListener.remove();
     this.keyboardHideListener.remove();
   }
@@ -204,7 +205,8 @@ class PostView extends PureComponent {
     }
   }
   scrollToBottom() {
-    InteractionManager.runAfterInteractions(() => {
+    if (this.interactionHandle) this.interactionHandle.cancel();
+    this.interactionHandle = InteractionManager.runAfterInteractions(() => {
       if (this.shouldScrollToBottom && this.refs.scrollView) {
         this.shouldScrollToBottom = false;
         this.refs.scrollView.scrollToEnd({animated: true});
@@ -434,6 +436,10 @@ class PostView extends PureComponent {
         <ScrollView 
           style={{ flex: 1 }} 
           ref="scrollView"
+          onContentSizeChange={() => {
+            this.shouldScrollToBottom = true;
+            this.scrollToBottom();
+          }}
           onLayout={(e) => {
             this.shouldScrollToBottom = true;
             this.scrollToBottom();
