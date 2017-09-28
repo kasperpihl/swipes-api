@@ -149,8 +149,6 @@ class PostFooter extends PureComponent {
   }
   renderSendButton() {
     const { isLoadingComment } = this.state;
-
-    console.warn(isLoadingComment)
   
     if (isLoadingComment) {
 

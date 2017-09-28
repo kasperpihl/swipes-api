@@ -3,9 +3,12 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { ImmutableListView } from 'react-native-immutable-list-view';
 import * as cs from 'swipes-core-js/selectors';
+import * as ca from 'swipes-core-js/actions';
 import HOCHeader from 'HOCHeader';
 import HOCGoalItem from 'views/goallist/HOCGoalItem';
 import WaitForUI from 'WaitForUI';
+import RippleButton from 'RippleButton';
+import Icon from 'Icon';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import { colors } from 'globalStyles';
 
@@ -26,6 +29,8 @@ class HOCNoMilestoneOverview extends PureComponent {
 
     this.renderGoal = this.renderGoal.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
+    this.openCreateGoalModal = this.openCreateGoalModal.bind(this);
+
   }
   onPushStack(goalOverview) {
     const { navPush } = this.props;
@@ -35,9 +40,38 @@ class HOCNoMilestoneOverview extends PureComponent {
   onHeaderTap() {
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
-  renderHeader() {
+  openCreateGoalModal() {
+    const { navPush } = this.props;
 
-    return <HOCHeader title="Goals without a plan" delegate={this} />
+    navPush({
+      id: 'CreateNewItemModal',
+      title: 'CreateNewItemModal',
+      props: {
+        title: '',
+        defAssignees: [this.props.myId],
+        placeholder: "Add a new goal",
+        actionLabel: "Add goal",
+        delegate: this
+      }
+    })
+  }
+  onModalCreateAction(title, assignees, milestoneId ) {
+    const { createGoal } = this.props;
+
+    if (title.length > 0) {
+      createGoal(title, milestoneId, assignees.toJS());
+    }
+  }
+  renderHeader() {
+    return (
+      <HOCHeader title="Goals without a plan" delegate={this}>
+        <RippleButton onPress={this.openCreateGoalModal}>
+          <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+          </View>
+        </RippleButton>
+      </HOCHeader>
+    )
   }
   renderListLoader() {
     return (
@@ -88,5 +122,5 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, {
-
+  createGoal: ca.goals.create,
 })(HOCNoMilestoneOverview);

@@ -172,8 +172,8 @@ class Login extends PureComponent {
               </View>
             </View>
             {this.renderButton()}
+            {this.renderErrorLabel()}
           </ScrollView>
-          {this.renderErrorLabel()}
           {this.renderKeyboardSpacer()}
         </View>
       </TouchableWithoutFeedback>
