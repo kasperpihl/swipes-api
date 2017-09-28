@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import { setupDelegate, bindAll, getDeep } from 'swipes-core-js/classes/utils';
 import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
 import * as gs from 'styles';
@@ -71,7 +71,7 @@ class HOCPostFooter extends PureComponent {
       isLoadingComment: false,
     }
     setupDelegate(this, 'onAddComment', 'onNavigateBack', 'onAutoFocus');
-    bindAll(this, ['handleAddComment', 'handleAttach']);
+    bindAll(this, ['handleAddComment', 'handleAttach', 'focusInput']);
   }
 
   onAddAttachment() {
@@ -107,6 +107,13 @@ class HOCPostFooter extends PureComponent {
     this.onAddComment(text, attachments);
     this.setState({ text: '', attachments: fromJS([]) });
     Keyboard.dismiss();
+  }
+  focusInput() {
+    const input = getDeep(this, 'refs.input.refs.expandingTextInput');
+
+    if (!this.isFocused && input) {
+      input.focus();
+    }
   }
   renderBackButton() {
     const { text } = this.state;
@@ -152,26 +159,30 @@ class HOCPostFooter extends PureComponent {
     return (
       <View style={styles.container}>
         {this.renderBackButton()}
-        <View style={styles.inputWrapper}>
-          <View style={styles.inputBorder}>
-            <ExpandingTextInput
-              ref="input"
-              onChangeText={(text) => this.setState({ text })}
-              style={styles.input}
-              underlineColorAndroid="transparent"
-              autoCapitalize="sentences"
-              autoCorrect={true}
-              placeholder={placeholder}
-              minRows={1}
-              maxRows={4}
-              value={this.state.text}
-            />
-            <AttachButton 
-              numberOfAttachments={attachments.size} 
-              delegate={this} 
-            />
+        <TouchableWithoutFeedback onPress={this.focusInput}>
+          <View style={styles.inputWrapper}>
+            <View style={styles.inputBorder}>
+              <ExpandingTextInput
+                ref="input"
+                onChangeText={(text) => this.setState({ text })}
+                style={styles.input}
+                underlineColorAndroid="transparent"
+                autoCapitalize="sentences"
+                autoCorrect={true}
+                placeholder={placeholder}
+                minRows={1}
+                maxRows={4}
+                value={this.state.text}
+                onFocus={() => {this.isFocused = true}}
+                onBlur={() => {this.isFocused = false}}
+              />
+              <AttachButton 
+                numberOfAttachments={attachments.size} 
+                delegate={this} 
+              />
+            </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
         <View style={styles.actions}>
           {this.renderSendButton()}
         </View>
