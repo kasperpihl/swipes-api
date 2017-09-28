@@ -155,7 +155,7 @@ class PostView extends PureComponent {
       headerHeight: 0,
     };
 
-    bindAll(this, ['onHeaderTap', 'keyboardDidShow', 'keyboardDidHide'])
+    bindAll(this, ['onHeaderTap', 'keyboardDidShow', 'keyboardDidHide', 'scrollToBottom'])
     setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext', 'onAttachmentClick');
 
     if (Platform.OS === 'android') {
@@ -163,29 +163,26 @@ class PostView extends PureComponent {
     }
   }
   componentWillMount () {
+    if (this.props.initialScrollToBottom) {
+      this.shouldScrollToBottom = true;
+    }
     const keyboardInEvent = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow';
     const keyboardOutEvent = Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide';
 
     this.keyboardDidShowListener = Keyboard.addListener(keyboardInEvent, this.keyboardDidShow);
     this.keyboardDidHideListener = Keyboard.addListener(keyboardOutEvent, this.keyboardDidHide);
   }
-  componentDidMount() {
-    if (this.props.scrollToBottom) {
-      this.scrollToBottomTime();
-    }
-  }
+
   componentWillUpdate(nextProps) {
     LayoutAnimation.easeInEaseOut();
 
-    if (this.state.hasLoaded && this.props.post.get('comments').size !== nextProps.post.get('comments').size) {
+    if (this.props.post.get('comments').size !== nextProps.post.get('comments').size) {
       this.shouldScrollToBottom = true;
     }
   }
   componentDidUpdate() {
-    if (this.shouldScrollToBottom) {
-      this.shouldScrollToBottom = false;
-      this.scrollToBottomTime();
-    }
+    console.log('hi, update');
+    this.scrollToBottom();
   }
   componentWillUnmount() {
     clearTimeout(this.scrollTimer);
@@ -208,13 +205,11 @@ class PostView extends PureComponent {
       this.setState({ headerHeight: height });
     }
   }
-  scrollToBottomTime() {
-    clearTimeout(this.scrollTimer);
-
-    if (this.refs.scrollView) {
-      this.scrollTimer = setTimeout(() => {
-        this.refs.scrollView.scrollToEnd({animated: true});
-      }, 1000);
+  scrollToBottom() {
+    console.log('hit', this.shouldScrollToBottom, this.refs.scrollView);
+    if (this.shouldScrollToBottom && this.refs.scrollView) {
+      this.shouldScrollToBottom = false;
+      this.refs.scrollView.scrollToEnd({animated: true});
     }
   }
   onHeaderTap() {
@@ -437,8 +432,15 @@ class PostView extends PureComponent {
   }
   renderContent() {
     return (
-      <WaitForUI>
-        <ScrollView style={{ flex: 1 }} ref="scrollView">
+      <WaitForUI onRendered={this.scrollToBottom}>
+        <ScrollView 
+          style={{ flex: 1 }} 
+          ref="scrollView"
+          onLayout={(e) => {
+            this.shouldScrollToBottom = true;
+            this.scrollToBottom();
+          }}
+        >
           {this.renderMessage()}
           {this.renderAttachments()}
           {this.renderActions()}
@@ -458,7 +460,8 @@ class PostView extends PureComponent {
         {this.renderContent()}
         <PostFooter 
           ref="postFooter" 
-          navPush={this.props.navPush} 
+          navPush={this.props.navPush}
+          onFocus={this.scrollToBottom} 
           delegate={delegate} 
           placeholder="Write a comment…" 
           {...bindLoading()} 

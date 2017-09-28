@@ -127,7 +127,7 @@ class HOCPostView extends PureComponent {
               post={post}
               delegate={this}
               {...this.bindLoading()}
-              scrollToBottom={scrollToBottom}
+              initialScrollToBottom={scrollToBottom}
               navPush={this.props.navPush} 
             />;
   }

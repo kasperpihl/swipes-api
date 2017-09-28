@@ -173,7 +173,12 @@ class HOCPostFooter extends PureComponent {
                 minRows={1}
                 maxRows={4}
                 value={this.state.text}
-                onFocus={() => {this.isFocused = true}}
+                onFocus={() => { 
+                  this.isFocused = true;
+                  if(this.props.onFocus) {
+                    this.props.onFocus();
+                  }
+                }}
                 onBlur={() => {this.isFocused = false}}
               />
               <AttachButton 
