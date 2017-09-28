@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View, Text, StyleSheet, Image, ScrollView, Platform, Keyboard, UIManager, LayoutAnimation } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, Platform, Keyboard, UIManager, LayoutAnimation, InteractionManager } from "react-native";
 import ParsedText from "react-native-parsed-text";
 import { List } from "immutable";
 import { setupDelegate, iconForId, attachmentIconForService, bindAll } from "swipes-core-js/classes/utils";
@@ -181,7 +181,6 @@ class PostView extends PureComponent {
     }
   }
   componentDidUpdate() {
-    console.log('hi, update');
     this.scrollToBottom();
   }
   componentWillUnmount() {
@@ -205,10 +204,12 @@ class PostView extends PureComponent {
     }
   }
   scrollToBottom() {
-    if (this.shouldScrollToBottom && this.refs.scrollView) {
-      this.shouldScrollToBottom = false;
-      this.refs.scrollView.scrollToEnd({animated: true});
-    }
+    InteractionManager.runAfterInteractions(() => {
+      if (this.shouldScrollToBottom && this.refs.scrollView) {
+        this.shouldScrollToBottom = false;
+        this.refs.scrollView.scrollToEnd({animated: true});
+      }
+    });
   }
   onHeaderTap() {
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
