@@ -103,7 +103,9 @@ class HOCPostFooter extends PureComponent {
   }
   handleAddComment() {
     const { text, attachments } = this.state;
-
+    if(!text || !text.length) {
+      return;
+    }
     this.onAddComment(text, attachments);
     this.setState({ text: '', attachments: fromJS([]) });
     Keyboard.dismiss();
@@ -173,13 +175,8 @@ class HOCPostFooter extends PureComponent {
                 minRows={1}
                 maxRows={4}
                 value={this.state.text}
-                onFocus={() => { 
-                  this.isFocused = true;
-                  if(this.props.onFocus) {
-                    this.props.onFocus();
-                  }
-                }}
-                onBlur={() => {this.isFocused = false}}
+                onFocus={() => { this.isFocused = true }}
+                onBlur={() => { this.isFocused = false }}
               />
               <AttachButton 
                 numberOfAttachments={attachments.size} 

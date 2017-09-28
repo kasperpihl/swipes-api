@@ -32,9 +32,7 @@ class WaitForUI extends PureComponent {
   componentDidUpdate(prevProps, prevState) {
     const { onRendered } = this.props;
     if(this.state.interactionsComplete && !prevState.interactionsComplete && onRendered) {
-      setTimeout(() => {
-        onRendered();
-      }, 1);
+      onRendered();
     }
   }
   handleInteractionManager() {
