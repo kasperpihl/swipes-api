@@ -146,7 +146,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   browser: a.links.browser,
-  preview: a.links.preview,
+  preview: a.attachments.preview,
   addComment: ca.posts.addComment,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,

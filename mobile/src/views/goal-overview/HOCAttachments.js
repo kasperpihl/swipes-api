@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
-import moment from 'moment';
-import mime from 'react-native-mime-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
-import ImagePicker from 'react-native-image-picker';
 import { attachmentIconForService, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import Icon from 'Icon';
@@ -24,73 +21,14 @@ class HOCAttachments extends PureComponent {
     this.attachmentPress = setupCachedCallback(this.attachmentPress, this);
   }
   onAddAttachment() {
-    const { createLink, createFile, addAttachment, goal, showLoading } = this.props;
+    const { uploadAttachment, addAttachment, goal, showLoading } = this.props;
 
-    const options = {
-      title: 'Attach image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const type = mime.lookup(response.uri) || 'application/octet-stream';
-        const ext = mime.extension(type);
-        const name = response.fileName
-          || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
-        const file = {
-          name,
-          uri: response.uri,
-          type,
-        };
-        console.log('res', response);
-        showLoading('Uploading');
-        let _title;
-        createFile([file]).then((fileRes) => {
-          if(!fileRes || !fileRes.ok) return new Promise((r, reject) => reject());
-
-          const { id, title } = fileRes.file;
-
-          _title = title;
-          return createLink(this.getSwipesLinkObj('file', id, title));
-
-        }).then((linkRes) => {
-          if(!linkRes || !linkRes.ok) return new Promise((r, reject) => reject());
-
-          return addAttachment(goal.get('id'), linkRes.link, _title);
-        }).then((attRes) => {
-          showLoading();
-        }).catch(() => {
-          showLoading();
-        })
-      }
+    uploadAttachment((att) => {
+      showLoading('Adding to goal');
+      addAttachment(goal.get('id'), att.get('link').toJS()).then((res) => {
+        showLoading();
+      });
     });
-  }
-  getSwipesLinkObj(type, id, title) {
-    const { me } = this.props;
-    return {
-      service: {
-        name: 'swipes',
-        type,
-        id,
-      },
-      permission: {
-        account_id: me.get('id'),
-      },
-      meta: {
-        title,
-      },
-    };
   }
   attachmentPress(att) {
     const { preview } = this.props;
@@ -203,15 +141,12 @@ const styles = StyleSheet.create({
 
 
 function mapStateToProps(state) {
-  return {
-    me: state.get('me'),
-  };
+  return {};
 }
 
 export default connect(mapStateToProps, {
-  preview: a.links.preview,
+  uploadAttachment: a.attachments.upload,
   showLoading: a.main.loading,
+  preview: a.attachments.preview,
   addAttachment: ca.attachments.add,
-  createFile: ca.files.create,
-  createLink: ca.links.create,
 })(HOCAttachments);

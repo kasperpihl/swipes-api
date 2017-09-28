@@ -9,16 +9,13 @@ const styles = StyleSheet.create({
   attachmentContainer: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
-    flex: 0,
     minWidth: 48,
     maxWidth: 48,
     minHeight: 48,
   },
   numberOfAttachments: {
-    ...gs.mixins.padding(3, 8),
+    ...gs.mixins.padding(4, 8, 3, 8),
     ...gs.mixins.flex('center'),
-    minWidth: 24,
-    minHeight: 24,
     backgroundColor: '#007AFF',
     borderRadius: 24 / 2,
   },
@@ -30,15 +27,7 @@ const styles = StyleSheet.create({
 class AttachButton extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
     setupDelegate(this, 'onAddAttachment');
-    
-    this.handleAttach = this.handleAttach.bind(this);
-  }
-  componentDidMount() {
-  }
-  handleAttach() {
-    this.onAddAttachment();
   }
   renderIcon() {
     const { numberOfAttachments } = this.props;
@@ -55,7 +44,7 @@ class AttachButton extends PureComponent {
   }
   render() {
     return (
-      <TouchableOpacity onPress={this.handleAttach}>
+      <TouchableOpacity onPress={this.onAddAttachment}>
         <View style={styles.attachmentContainer}>
           {this.renderIcon()}
         </View>

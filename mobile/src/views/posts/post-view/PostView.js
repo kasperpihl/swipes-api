@@ -448,7 +448,7 @@ class PostView extends PureComponent {
     )
   }
   render() {
-    const { delegate, isLoading } = this.props;
+    const { delegate, bindLoading } = this.props;
 
 
 
@@ -456,7 +456,13 @@ class PostView extends PureComponent {
       <View style={styles.container}>
         {this.renderPostHeader()}
         {this.renderContent()}
-        <PostFooter ref="postFooter" navPush={this.props.navPush} delegate={delegate} placeholder="Write a comment…" isLoading={isLoading} />
+        <PostFooter 
+          ref="postFooter" 
+          navPush={this.props.navPush} 
+          delegate={delegate} 
+          placeholder="Write a comment…" 
+          isLoading={...bindLoading()} 
+        />
       </View>
     );
   }

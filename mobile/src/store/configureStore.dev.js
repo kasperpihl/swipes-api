@@ -39,7 +39,7 @@ const logger = store => next => action => {
 
 export default {
   middlewares: [
-    // logger,
+    logger,
     // createLogger(
     //   {
     //     stateTransformer: transformState, // state => state.toJS(),

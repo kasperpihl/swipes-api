@@ -1,12 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
-import moment from 'moment';
-import mime from 'react-native-mime-types';
-import ImagePicker from 'react-native-image-picker';
 import { setupDelegate } from 'react-delegate';
 import * as a from 'actions';
-import * as ca from 'swipes-core-js/actions';
 import AttachmentView from './AttachmentView'
 
 class HOCAttachmentView extends PureComponent {
@@ -18,75 +13,15 @@ class HOCAttachmentView extends PureComponent {
 
     setupDelegate(this, 'handleAttach');
   }
-  componentDidMount() {
-  }
-  getSwipesLinkObj(type, id, title) {
-    const { myId } = this.props;
-    return {
-      service: {
-        name: 'swipes',
-        type,
-        id,
-      },
-      permission: {
-        account_id: myId,
-      },
-      meta: {
-        title,
-      },
-    };
-  }
   onAddAttachment() {
-    const { createFile, createLink, showLoading } = this.props;
+    const { uploadAttachment } = this.props;
+    uploadAttachment((att) => {
+      const { attachments } = this.state;
+      this.handleAttach(att);
 
-    const options = {
-      title: 'Attach image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
-    ImagePicker.showImagePicker(options, (response) => {
-
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
-      } else {
-        const type = mime.lookup(response.uri) || 'application/octet-stream';
-        const ext = mime.extension(type);
-        const name = response.fileName
-          || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
-        const file = {
-          name,
-          uri: response.uri,
-          type,
-        };
-
-        showLoading('Uploading');
-
-        createFile([file]).then((fileRes) => {
-          if (fileRes.ok) {
-            const link = this.getSwipesLinkObj('file', fileRes.file.id, fileRes.file.title);
-
-            createLink(link).then((res) => {
-              showLoading();
-              if (res.ok) {
-                const att = fromJS({ link: res.link, title: fileRes.file.title });
-                const { attachments } = this.state;
-                this.handleAttach(att);
-
-                this.setState({
-                  attachments: attachments.push(att)
-                })
-              } else {
-              }
-            })
-          } else {
-            showLoading();
-          }
-        });
-      }
+      this.setState({
+        attachments: attachments.push(att)
+      })
     });
   }
   onAttachmentPress(att) {
@@ -106,13 +41,9 @@ class HOCAttachmentView extends PureComponent {
 
 HOCAttachmentView.propTypes = {};
 
-const mapStateToProps = (state) => ({
-  myId: state.getIn(['me', 'id']),
-});
+const mapStateToProps = (state) => ({});
 
 export default connect(mapStateToProps, {
-  showLoading: a.main.loading,
-  createFile: ca.files.create,
-  createLink: ca.links.create,
-  preview: a.links.preview,
+  uploadAttachment: a.attachments.upload,
+  preview: a.attachments.preview,
 })(HOCAttachmentView);

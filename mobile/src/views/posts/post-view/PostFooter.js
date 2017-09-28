@@ -1,13 +1,21 @@
+<<<<<<< HEAD
 import React, { PureComponent } from 'react'
 import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
+=======
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableOpacity } from 'react-native';
+import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
+>>>>>>> 393dc5750... refactored attachments and made the post att work like comments
 import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
 import * as gs from 'styles';
+import * as a from 'actions';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
 import ExpandingTextInput from 'components/expanding-text-input/ExpandingTextInput';
-import HOCAttachButton from 'components/attach-button/HOCAttachButton';
+import AttachButton from 'components/attach-button/AttachButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,8 +27,8 @@ const styles = StyleSheet.create({
   backButton: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
-    minWidth: 64,
-    maxWidth: 64,
+    minWidth: 54,
+    maxWidth: 54,
   },
   inputWrapper: {
     ...gs.mixins.size(1),
@@ -47,36 +55,20 @@ const styles = StyleSheet.create({
     ...gs.mixins.font(13, gs.colors.deepBlue80, 18),
     alignSelf: 'stretch',
   },
-  attachmentContainer: {
-    ...gs.mixins.size(1),
-    ...gs.mixins.flex('center'),
-    minWidth: 48,
-    maxWidth: 48,
-    minHeight: 48,
-  },
-  numberOfAttachments: {
-    ...gs.mixins.padding(4, 8, 3, 8),
-    ...gs.mixins.flex('center'),
-    backgroundColor: '#007AFF',
-    borderRadius: 24 / 2,
-  },
-  numberOfAttachmentsLabel: {
-    ...gs.mixins.font(13, 'white'),
-  },
   actions: {
     ...gs.mixins.size(1),
-    maxWidth: 64,
+    maxWidth: 54,
   },
   iconButton: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('center'),
-    minWidth: 64,
-    maxWidth: 64,
+    minWidth: 54,
+    maxWidth: 54,
     minHeight: 54,
   }
 });
 
-class PostFooter extends PureComponent {
+class HOCPostFooter extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -85,25 +77,18 @@ class PostFooter extends PureComponent {
       isLoadingComment: false,
     }
     setupDelegate(this, 'onAddComment', 'onNavigateBack', 'onAutoFocus');
-
-    this.handleAddComment = this.handleAddComment.bind(this);
-    this.handleBackButton = this.handleBackButton.bind(this);
-    this.handleAttach = this.handleAttach.bind(this);
-    this.handleOpenAttachments = this.handleOpenAttachments.bind(this);
+    bindAll(this, ['handleAddComment', 'handleAttach']);
   }
-  componentWillReceiveProps(nextProps) {
-    const { isLoadingComment } = this.state;
-    
-    if (isLoadingComment !== nextProps.isLoading('commenting')) {
-      this.setState({ isLoadingComment: nextProps.isLoading('commenting') })
-    }
 
-  }
-  handleOpenAttachments() {
-    const { navPush } = this.props;
+  onAddAttachment() {
+    const { navPush, uploadAttachment } = this.props;
     const { attachments } = this.state;
 
     this.onAutoFocus();
+    if(!attachments.size) {
+      return uploadAttachment(this.handleAttach);
+    }
+    
     Keyboard.dismiss();
 
     navPush({
@@ -129,9 +114,6 @@ class PostFooter extends PureComponent {
     this.setState({ text: '', attachments: fromJS([]) });
     Keyboard.dismiss();
   }
-  handleBackButton() {
-    this.onNavigateBack()
-  }
   renderBackButton() {
     const { text } = this.state;
 
@@ -140,7 +122,7 @@ class PostFooter extends PureComponent {
     }
 
     return (
-      <RippleButton onPress={this.handleBackButton}>
+      <RippleButton onPress={this.onNavigateBack}>
         <View style={styles.backButton}>
           <Icon name="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue80} />
         </View>
@@ -148,9 +130,9 @@ class PostFooter extends PureComponent {
     )
   }
   renderSendButton() {
-    const { isLoadingComment } = this.state;
+    const { isLoading } = this.props;
   
-    if (isLoadingComment) {
+    if (isLoading('commenting')) {
 
       return (
         <View style={styles.iconButton}>
@@ -167,38 +149,8 @@ class PostFooter extends PureComponent {
       </RippleButton>
     )
   }
-  renderActions() {
-    return (
-      <View style={styles.actions}>
-        {this.renderSendButton()}
-      </View>
-    )
-  }
-  renderAttachmentButton() {
-    const { attachments } = this.state;
-    
-    if (!attachments.size) {
 
-      return (
-        <TouchableOpacity onPress={this.handleOpenAttachments}>
-          <View style={styles.attachmentContainer}>
-            <Icon name="Attachment" width="24" height="24" fill={gs.colors.deepBlue50} />
-          </View>
-        </TouchableOpacity>
-      )
-    }
 
-    return (
-      <TouchableOpacity onPress={this.handleOpenAttachments}>
-        <View style={styles.attachmentContainer}>
-          <View style={styles.numberOfAttachments}>
-            <Text style={styles.numberOfAttachmentsLabel}>{attachments.size}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    )
-
-  }
   render() {
     const { placeholder } = this.props;
     const { attachments } = this.state;
@@ -220,15 +172,23 @@ class PostFooter extends PureComponent {
               maxRows={4}
               value={this.state.text}
             />
-            {this.renderAttachmentButton()}
+            <AttachButton 
+              numberOfAttachments={attachments.size} 
+              delegate={this} 
+            />
           </View>
         </View>
-        {this.renderActions()}
+        <View style={styles.actions}>
+          {this.renderSendButton()}
+        </View>
       </View>
     )
   }
 }
+const mapStateToProps = (state) => ({
+});
 
-export default PostFooter
-// const { string } = PropTypes;
-PostFooter.propTypes = {};
+export default connect(mapStateToProps, {
+  uploadAttachment: a.attachments.upload,
+})(HOCPostFooter);
+

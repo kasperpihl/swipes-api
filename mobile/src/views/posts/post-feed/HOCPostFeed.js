@@ -130,7 +130,7 @@ function makeMapStateToProps() {
 }
 
 export default connect(makeMapStateToProps, {
-  preview: a.links.preview,
+  preview: a.attachments.preview,
   browser: a.links.browser,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,

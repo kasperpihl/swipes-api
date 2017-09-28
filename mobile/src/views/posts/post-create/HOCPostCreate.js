@@ -12,9 +12,7 @@ import {
   bindAll,
   getDeep,
 } from 'swipes-core-js/classes/utils';
-import moment from 'moment';
-import mime from 'react-native-mime-types';
-import ImagePicker from 'react-native-image-picker';
+
 import { fromJS, List } from 'immutable';
 import PostCreate from './PostCreate';
 
@@ -31,15 +29,25 @@ class HOCPostCreate extends PureComponent {
       }),
     };
 
-    bindAll(this, ['onModalTag', 'onModalChangeType', 'onActionButton', 'onModalDismiss']);
+    bindAll(this, ['onModalTag', 'onModalChangeType', 'onActionButton', 'onFocusTextarea', 'handleAttach']);
 
   }
   componentDidMount() {
+    console.log('mount');
     this.renderActionButtons();
   }
   componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.isActive && this.props.isActive || !prevState.post.get('type') !== this.state.post.get('type')) {
-      this.renderActionButtons();
+    if(this.props.isActive) {
+      if(!prevProps.isActive) this.onFocusTextarea();
+
+      const { post } = this.state;
+      const prevPost = prevState.post;
+      if(!prevProps.isActive ||
+          prevPost.get('type') !== post.get('type') || 
+          prevPost.get('attachments').size !== post.get('attachments').size) {
+        console.log('on update');
+        this.renderActionButtons();
+      }
     }
   }
   onActionButton(i) {
@@ -79,7 +87,7 @@ class HOCPostCreate extends PureComponent {
     const { post } = this.state;
     this.updatePost(post.set('type', id));
   }
-  onModalDismiss() {
+  onFocusTextarea() {
     const input = getDeep(this, 'refs.postCreate.refs.input');
     if(input) {
       input.focus();
@@ -94,7 +102,7 @@ class HOCPostCreate extends PureComponent {
       actionLabel: 'Tag',
       selectedIds: post.get('taggedUsers'),
       onActionPress: this.onModalTag,
-    }, { onDidClose: this.onModalDismiss });
+    }, { onDidClose: this.onFocusTextarea });
   }
   onChangeType() {
     const { actionModal } = this.props;
@@ -108,7 +116,7 @@ class HOCPostCreate extends PureComponent {
         { id: 'announcement', title: 'Make an announcement' },
         { id: 'information', title: 'Share information' },
       ]),
-    }, { onDidClose: this.onModalDismiss });
+    }, { onDidClose: this.onFocusTextarea });
   }
   onAttachmentClick(i) {
     const { preview } = this.props;
@@ -117,70 +125,29 @@ class HOCPostCreate extends PureComponent {
     preview(post.getIn(['attachments', i]));
   }
   onAddAttachment() {
-    const { createFile, createLink, showLoading } = this.props;
+    const { navPush, uploadAttachment } = this.props;
+    const { post } = this.state;
+    const attachments = post.get('attachments');
 
-    const options = {
-      title: 'Attach image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
+    if(!attachments.size) {
+      return uploadAttachment(this.handleAttach, this.onFocusTextarea);
+    }
+
+    navPush({
+      id: 'AttachmentView',
+      title: 'Attachment',
+      props: {
+        delegate: this,
+        initialAttachments: attachments
       },
-    };
-
-    ImagePicker.showImagePicker(options, (response) => {
-
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
-      } else {
-        const type = mime.lookup(response.uri) || 'application/octet-stream';
-        const ext = mime.extension(type);
-        const name = response.fileName
-          || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
-        const file = {
-          name,
-          uri: response.uri,
-          type,
-        };
-
-        showLoading('Uploading');
-
-        createFile([file]).then((fileRes) => {
-          if (fileRes.ok) {
-            const link = this.getSwipesLinkObj('file', fileRes.file.id, fileRes.file.title);
-
-            createLink(link).then((res) => {
-              showLoading();
-              if (res.ok) {
-                const att = fromJS({ link: res.link, title: fileRes.file.title });
-                const { post } = this.state;
-                this.setState({ post: post.updateIn(['attachments'], (atts) => atts.push(att)) });
-              }
-
-            })
-          } else {
-            showLoading();
-          }
-        });
-      }
     });
   }
-  getSwipesLinkObj(type, id, title) {
-    const { myId } = this.props;
-    return {
-      service: {
-        name: 'swipes',
-        type,
-        id,
-      },
-      permission: {
-        account_id: myId,
-      },
-      meta: {
-        title,
-      },
-    };
+  handleAttach(att) {
+    const { post } = this.state;
+    this.setState({ post: post.updateIn(['attachments'], (atts) => atts.push(att)) });
+    this.onFocusTextarea();
   }
+
   updatePost(post) {
     this.setState({ post });
   }
@@ -196,10 +163,13 @@ class HOCPostCreate extends PureComponent {
     }
   }
   renderActionButtons() {
+    const { post } = this.state;
+    const size = post.get('attachments').size;
+
     actionButtons = [
       { icon: 'Assign' },
       { icon: this.getIconForType() },
-      { icon: 'Attachment' },
+      size ? { number: size } : { icon: 'Attachment' },
       { icon: 'Send', seperator: 'left', staticSize: true },
     ];
 
@@ -235,10 +205,8 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   createPost: ca.posts.create,
+  uploadAttachment: a.attachments.upload,
   actionModal: a.modals.action,
   assignModal: a.modals.assign,
-  showLoading: a.main.loading,
-  createFile: ca.files.create,
-  createLink: ca.links.create,
-  preview: a.links.preview,
+  preview: a.attachments.preview,
 })(HOCPostCreate);
