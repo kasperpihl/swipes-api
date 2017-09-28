@@ -17,7 +17,7 @@ class Update extends PureComponent {
   }
   renderUpdateLabel() {
     const { versionInfo } = this.props;
-    let titleLabel = 'No updates available';
+    let titleLabel = 'Nothing new. We will notify here you when there is a new product update.';
     
     if (versionInfo.get('reloadAvailable') || versionInfo.get('updateAvailable')) {
       titleLabel = 'A new version is available'
