@@ -63,11 +63,7 @@ export default class HOCHeaderTitle extends Component {
 
     if (!subtitle) return undefined;
 
-    if (typeof subtitle === 'string') {
-      return <div className="header-title__subtitle">{subtitle}</div>
-    }
-
-    return subtitle;
+    return <div className="header-title__subtitle">{subtitle}</div>;
 
   }
   renderTitle() {
