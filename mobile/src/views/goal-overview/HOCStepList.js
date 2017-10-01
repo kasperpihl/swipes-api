@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, Vibration } from 'react-native';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable'; 
+import { fromJS } from 'immutable';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { ImmutableListView } from 'react-native-immutable-list-view';
@@ -98,7 +98,6 @@ class HOCStepList extends PureComponent {
   }
   onModalGoalAction(step, id) {
     const { assignStep, goal, assignModal } = this.props;
-    console.log('UAJAJA', id);
     if (id === 'complete') {
       this.onComplete(step);
     } else if (id === 'assign') {
@@ -111,7 +110,7 @@ class HOCStepList extends PureComponent {
     }
 
   }
-  onPress(step) {
+  onPress(stepId, step) {
     const { actionModal, goal } = this.props;
     const helper = this.getHelper();
     const completeLabel = helper.getIsStepCompleted(step) ? 'Incomplete step' : 'Complete step';
@@ -175,7 +174,7 @@ class HOCStepList extends PureComponent {
     }
 
     return (
-      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onPressCached(step)}>
+      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onPressCached(step.get('id'), step)}>
         <View style={styles.step}>
           <View style={[styles.indicator, indicatorStyles]}>
             <Text selectable={true} style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>

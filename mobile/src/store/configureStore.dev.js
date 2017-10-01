@@ -33,13 +33,13 @@ const logger = store => next => action => {
     console.info(action.type, action);
   }
   let result = next(action)
-  
+
   return result
 }
 
 export default {
   middlewares: [
-    // logger,
+    logger,
     // createLogger(
     //   {
     //     stateTransformer: transformState, // state => state.toJS(),

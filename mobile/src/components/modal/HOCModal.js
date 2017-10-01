@@ -96,11 +96,12 @@ class HOCModal extends PureComponent {
     const { modal } = this.props;
     const { blockNew } = this.state;
     const isOpen = !blockNew && !!modal;
-    
+
     const modalProps = (!blockNew && modal && modal.modalProps) || {};
 
     return (
       <Modal
+        backdropPressToClose={false}
         isOpen={isOpen}
         style={styles.modal}
         onClosed={this.onDidClose}
