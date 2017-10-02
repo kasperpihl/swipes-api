@@ -51,7 +51,7 @@ export const selectMilestone = (options, callback) => (d, getState) => {
   };
 
   const defItems = [];
-  defItems.push({ id: 'none', title: 'No milestone' });
+  defItems.push({ id: 'none', title: 'No plan' });
   
   const allMilestones = () => defItems.concat(
     cs.milestones.getCurrent(getState()).map(m => resultForMilestone(m.get('id'))).toArray()
@@ -73,7 +73,7 @@ export const selectMilestone = (options, callback) => (d, getState) => {
     options,
     component: TabMenu,
     props: {
-      search: 'Search for milestone',
+      search: 'Search for plan',
       delegate,
     },
   }));
