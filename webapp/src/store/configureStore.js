@@ -2,6 +2,7 @@ import { compose, applyMiddleware, createStore } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import thunk from 'redux-thunk';
 import Immutable, { Map } from 'immutable';
+import localForage from "localforage";
 import rootReducer from 'reducers';
 import dev from './configureStore.dev';
 
@@ -26,6 +27,7 @@ export default function configureStore(preloadedState) {
   );
 
   persistStore(store, {
+    storage: localForage,
     blacklist: ['main', 'search', 'toasty', 'filters', 'autoComplete'],
   });
   window.getState = store.getState;

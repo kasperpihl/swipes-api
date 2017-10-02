@@ -37,6 +37,7 @@ class Root extends PureComponent {
     // if (path === '/' && !window.ipcListener.isElectron) {
     //   history.push('/welcome');
     // }
+
     if (path === '/' && isHydrated && !token) {
       history.push('/login');
     }
