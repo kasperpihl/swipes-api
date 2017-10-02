@@ -22,8 +22,6 @@ export default class HistoryGenerator {
       subtitle: true,
       attachments: true,
       message: true,
-      seenBy: true,
-      reply: true,
     };
     def = Object.assign(def, options);
 
@@ -33,8 +31,6 @@ export default class HistoryGenerator {
       title: def.title ? this.getTitle(helper.getId(), h) : null,
       subtitle: def.subtitle ? this.getSubtitle(helper.getId(), h) : null,
       userId: h.get('done_by'),
-      seenBy: def.seenBy ? this.getSeenByForHistory(h) : null,
-      reply: def.reply ? this.getReplyButtonForHistory(h) : null,
       message: def.message ? h.get('message') : null,
       icon: def.icon ? this.getIcon(h) : null,
       attachments: def.attachments ? this.getAttachments(helper.getId(), h) : null,
@@ -102,19 +98,7 @@ export default class HistoryGenerator {
         return h.get('type');
     }
   }
-  getSeenByForHistory(h) {
-    const me = this.store.getState().get('me');
 
-    if(!h || h.get('done_by') !== me.get('id') || h.get('type') !== 'goal_notify'){
-      return undefined;
-    }
-
-    if (h.get('seen_by')) {
-      return h.get('seen_by').filter(id => id !== me.get('id'));
-    }
-    return [];
-
-  }
   getSubtitle(id, h) {
     const helper = this._getHelper(id);
     switch (h.get('type')) {
@@ -125,15 +109,6 @@ export default class HistoryGenerator {
       default:
         return undefined;
     }
-  }
-  getReplyButtonForHistory(id, h) {
-    const myId = this.store.getState().getIn(['me', 'id']);
-    const helper = this._getHelper(id);
-
-    if (!h || h.get('type') !== 'goal_notify' || !h.get('assignees').contains(myId)) {
-      return false;
-    }
-    return true;
   }
   getAttachments(id, h) {
     const helper = this._getHelper(id);

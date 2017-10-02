@@ -37,7 +37,6 @@ module.exports = {
   },
   entry: {
     app: './src/index',
-    jira: './src/jira-index',
     note: './src/react/pages/external-note-view/ExternalNoteView',
     reset: './src/react/pages/reset/Reset',
     // vendor: Object.keys(require("./package.json").dependencies),
@@ -52,11 +51,6 @@ module.exports = {
       template: 'statics/page.html',
       chunks: ['reset'],
       filename: 'reset.html'
-    }),
-    new HtmlWebpackPlugin({
-      template: 'statics/page.html',
-      chunks: ['jira'],
-      filename: 'jira-auth.html'
     }),
     new HtmlWebpackPlugin({
       template: 'statics/page.html',

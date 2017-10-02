@@ -5,12 +5,6 @@ import { Route, withRouter } from 'react-router-dom';
 
 import * as a from 'actions';
 import Gradient from 'components/gradient/Gradient';
-import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
-//import HOCApp from 'src/react/app/HOCApp';
-import HOCAutoCompleting from 'components/auto-completing/HOCAutoCompleting';
-import HOCContextMenu from 'components/context-menu/HOCContextMenu';
-import HOCTooltip from 'components/tooltip/HOCTooltip';
-import HOCTrial from 'components/trial/HOCTrial';
 
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
@@ -18,7 +12,7 @@ import 'src/react/global-styles/app.scss';
 let DevTools = 'div';
 
 if (process.env.NODE_ENV !== 'production') {
-  DevTools = require('src/DevTools').default; // eslint-disable-line global-require
+  DevTools = require('components/dev-tools/DevTools').default; // eslint-disable-line global-require
 }
 
 class Root extends PureComponent {
@@ -53,6 +47,22 @@ class Root extends PureComponent {
     }
     return undefined;
   }
+  renderAppComponents(name) {
+    const arr = ['SuccessStateGradient', 'HOCAutoCompleting', 'HOCContextMenu', 'HOCTooltip', 'HOCTrial'];
+    return arr.map((name) => (
+      <Route path="/" exact key={name} render={() => {
+        const Comps = {
+          SuccessStateGradient: require('components/gradient/SuccessStateGradient').default,
+          HOCAutoCompleting: require('components/auto-completing/HOCAutoCompleting').default,
+          HOCContextMenu: require('components/context-menu/HOCContextMenu').default,
+          HOCTooltip: require('components/tooltip/HOCTooltip').default,
+          HOCTrial: require('components/trial/HOCTrial').default,
+        };
+        const Comp = Comps[name];
+        return <Comp />;
+      }} />
+    ))
+  }
   render() {
     const { isMaximized, isFullscreen, lastConnect } = this.props;
     let className = `platform-${window.ipcListener.platform}`;
@@ -62,19 +72,15 @@ class Root extends PureComponent {
     return (
       <div id="app" className={className}>
         <Gradient />
-        <SuccessStateGradient />
         {this.renderTopbar()}
-        <HOCContextMenu />
-        <HOCTooltip />
-        <Route path="/" exact={true} render={() => (<HOCTrial />)} />
-        <HOCAutoCompleting />
+        {this.renderAppComponents()}
         <DevTools />
         <div className="content-wrapper">
           <Route path="/unsubscribe" render={() => {
             const HOCUnsubscribe = require('src/react/pages/unsubscribe/HOCUnsubscribe').default;
             return <HOCUnsubscribe />;
           }} />
-          <Route path="/" exact={true} render={() => {
+          <Route path="/" exact render={() => {
             const HOCApp = require('src/react/app/HOCApp').default;
             return <HOCApp />;
           }} />
@@ -84,7 +90,7 @@ class Root extends PureComponent {
           }} />
           <Route path="/signup" render={() => {
             const HOCSignupPage = require('src/react/browser-compatible/pages/signup/HOCCompatibleSignup').default;
-            return <HOCSignupPage key="signup" />
+            return <HOCSignupPage />
           }} />
         </div>
       </div>

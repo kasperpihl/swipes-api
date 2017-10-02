@@ -28,7 +28,7 @@ export default function configureStore(preloadedState) {
 
   persistStore(store, {
     storage: localForage,
-    blacklist: ['main', 'search', 'toasty', 'filters', 'autoComplete'],
+    blacklist: ['main', 'search', 'filters', 'autoComplete'],
   });
   window.getState = store.getState;
   if (!isProd) {
