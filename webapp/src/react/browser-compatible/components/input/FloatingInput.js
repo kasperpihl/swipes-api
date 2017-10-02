@@ -3,9 +3,9 @@ import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
-import './styles/signup-input.scss';
+import './styles/floating-input.scss';
 
-class SignupInput extends PureComponent {
+class FloatingInput extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -104,8 +104,8 @@ class SignupInput extends PureComponent {
   }
 }
 
-export default SignupInput;
+export default FloatingInput;
 
 // const { string } = PropTypes;
 
-SignupInput.propTypes = {};
+FloatingInput.propTypes = {};

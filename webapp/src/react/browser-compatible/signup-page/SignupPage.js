@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import SignupInput from './SignupInput';
+import FloatingInput from '../components/input/FloatingInput';
 import { setupDelegate } from 'react-delegate';
 // import { map, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
@@ -85,7 +85,7 @@ class SignupPage extends PureComponent {
     const value = this.props.formData.get(key) || '';
 
     return (
-      <SignupInput
+      <FloatingInput
         key={key}
         inputKey={key}
         type={type}

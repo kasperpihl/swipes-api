@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
 import { apiRequest, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
-import SignupInput from 'src/react/signup-page/SignupInput';
+import FloatingInput from 'src/react/browser-compatible/components/input/FloatingInput';
 import Icon from 'Icon';
 
 import './styles/reset.scss';
