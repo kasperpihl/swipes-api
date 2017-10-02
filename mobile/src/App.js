@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation, StatusBar } from 'react-native';
+import { View, StyleSheet, Platform, StatusBar } from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import codePush from 'react-native-code-push';
 import LinearGradient from 'react-native-linear-gradient';
@@ -11,37 +11,29 @@ import Icon from 'components/icons/Icon';
 import HOCTabNavigation from 'components/tab-navigation/HOCTabNavigation';
 import HOCAndroidBackButton from 'components/android-back-button/HOCAndroidBackButton';
 import { colors, viewSize } from 'utils/globalStyles';
-import LoadingModal from 'modals/LoadingModal';
-import ActionModal from 'modals/action-modal/ActionModal';
+import * as gs from 'styles';
 import HOCConnectionBar from 'components/connection-bar/HOCConnectionBar';
 import * as a from 'actions';
+import HOCModal from 'components/modal/HOCModal';
+import HOCLoading from 'components/loading/HOCLoading';
 import HOCViewController from './navigation/view-controller/HOCViewController';
 
 const styles = StyleSheet.create({
   app: {
-    flex: 1,
-    backgroundColor: colors.bgColor,
-    flexDirection: 'column',
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('column'),
+    backgroundColor: gs.colors.bgColor,
   },
   wrapper: {
-    flex: 1,
+    ...gs.mixins.size(1),
     backgroundColor: colors.bgColor,
   },
-  page: {
-    width: viewSize.width,
-    backgroundColor: 'red',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   gradient: {
+    ...gs.mixins.size(viewSize.width, viewSize.height + 24),
+    ...gs.mixins.flex('center'),
     position: 'absolute',
     left: 0,
     top: 0,
-    width: viewSize.width,
-    height: viewSize.height + 24,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 
@@ -51,10 +43,6 @@ class App extends PureComponent {
     super(props);
     this.onIds = this.onIds.bind(this);
     this.onOpened = this.onOpened.bind(this);
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
   }
   componentWillMount() {
     OneSignal.addEventListener('ids', this.onIds);
@@ -64,9 +52,6 @@ class App extends PureComponent {
   componentDidMount() {
     //this.checkTagsAndUpdate();
   }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
-  }
   componentDidUpdate(prevProps) {
     if (this.props.ready && this.forwardToIndex) {
       setTimeout(() => {
@@ -75,6 +60,7 @@ class App extends PureComponent {
       }, 1);
 
     }
+
     if (prevProps.myId !== this.props.myId) {
       this.checkTagsAndUpdate();
     }
@@ -165,8 +151,6 @@ class App extends PureComponent {
         <View style={styles.wrapper}>
           <HOCViewController />
         </View>
-        <LoadingModal />
-        <ActionModal />
         <HOCInfoTab/>
         <HOCTabNavigation />
         {this.renderBackButton()}
@@ -190,6 +174,8 @@ class App extends PureComponent {
         {this.renderLoader()}
         {this.renderLogin()}
         {this.renderApp()}
+        <HOCModal />
+        <HOCLoading />
       </View>
     );
   }

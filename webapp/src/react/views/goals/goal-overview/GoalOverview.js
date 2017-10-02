@@ -81,20 +81,30 @@ class GoalOverview extends PureComponent {
     );
 
   }
+  renderGoalCheckBox() {
+    const { goal, getLoading, delegate, isLoading, showLine } = this.props;
+    const helper = this.getHelper();
+    const title = getLoading('title').loadingLabel;
+
+    return (
+      <GoalCheckbox
+        completed={helper.getIsCompleted()}
+        loading={isLoading('completing')}
+        delegate={delegate}
+      />
+    )
+  }
   renderHeader() {
     const { goal, getLoading, delegate, isLoading, showLine } = this.props;
     const helper = this.getHelper();
     const title = getLoading('title').loadingLabel;
+
     return (
       <div className={`goal-overview__header ${showLine ? 'goal-overview__header--border' : ''}`}>
-        <GoalCheckbox
-          completed={helper.getIsCompleted()}
-          loading={isLoading('completing')}
-          delegate={delegate}
-        />
         <HOCHeaderTitle
           title={title || goal.get('title')}
           delegate={delegate}
+          leftChildren={this.renderGoalCheckBox()}
         >
           <HOCAssigning
             assignees={helper.getAssignees()}

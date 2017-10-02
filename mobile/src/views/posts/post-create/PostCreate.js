@@ -8,8 +8,6 @@ import {
   StyleSheet,
   Keyboard,
   Platform,
-  UIManager,
-  LayoutAnimation
 } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
@@ -136,13 +134,6 @@ class PostCreate extends PureComponent {
 
     setupDelegate(this, 'onMessageChange', 'onAttachmentClick');
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
-
-    if (Platform.OS === "android") {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
   }
   onContentSizeChange(e) {
     const { inputHeight } = this.state;
@@ -257,43 +248,16 @@ class PostCreate extends PureComponent {
       </View>
     )
   }
-  renderAttachments() {
-    const { post } = this.props;
 
-    if (!post.get('attachments').size) {
-      return undefined;
-    }
-
-    const attachments = post.get('attachments').map((att, i) => (
-      <RippleButton onPress={this.onAttachmentClickCached(i, post)} key={i}>
-        <View style={styles.attachment}>
-          <Icon
-            name={attachmentIconForService(att.getIn(['link', 'service']))}
-            width="24"
-            height="24"
-            fill={colors.deepBlue80}
-          />
-          <Text selectable={true} style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
-        </View>
-      </RippleButton>
-    ))
-
-    return (
-      <View style={styles.attachments}>
-        {attachments}
-      </View>
-    )
-  }
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps='never'>
           <View style={[styles.createHeader, { paddingTop: 44}]}>
             {this.renderProfilePic()}
             {this.renderTextArea()}
           </View>
           {this.renderStyledText()}
-          {this.renderAttachments()}
         </ScrollView>
       </View>
     )

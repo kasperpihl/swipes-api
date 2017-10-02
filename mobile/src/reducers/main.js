@@ -3,9 +3,8 @@ import { REHYDRATE } from 'redux-persist/constants';
 import * as types from 'constants/ActionTypes';
 
 const initialState = fromJS({
-  overlay: null,
+  modal: null,
   isHydrated: false,
-  versionInfo: {},
 });
 
 export default function main(state = initialState, action) {
@@ -13,6 +12,12 @@ export default function main(state = initialState, action) {
   switch (type) {
     case REHYDRATE: {
       return state.set('isHydrated', true);
+    }
+    case types.SHOW_MODAL: {
+      return state.set('modal', payload || null);
+    }
+    case types.SET_LOADING: {
+      return state.set('loading', payload || null);
     }
     default: {
       return state;

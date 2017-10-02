@@ -1,210 +1,17 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
-import { colors, viewSize } from 'globalStyles';
+import { colors, viewSize, statusbarHeight } from 'globalStyles';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
 import ActionModalList from './ActionModalList';
 
-class ActionModal extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modal: null,
-    };
-
-    this.closeModal = this.closeModal.bind(this);
-    this.onMultipleClick = this.onMultipleClick.bind(this);
-    // this.onButtonClick = setupCachedCallback(this.onButtonClick, this);
-  }
-  componentWillReceiveProps(nextProps) {
-    const { modal } = this.state;
-
-    if (nextProps.modal.size > 1 && !modal) {
-      this.setState({ modal: nextProps.modal });
-    } else if (nextProps.modal.size < 1 && modal) {
-      this.setState({ modal: null });
-    }
-  }
-  onItemPress(itemIndex, item, e) {
-    let { modal } = this.state;
-    if (modal.get('multiple')) {
-      modal = modal.updateIn(['items'], items => items.map((dItem, i) => {
-        if (itemIndex === dItem.get('index')) {
-          return dItem.set('selected', !dItem.get('selected'));
-        }
-        return dItem;
-      }));
-      this.setState({ modal });
-    } else {
-      modal.get('onClick')(item);
-    }
-  }
-  onMultipleClick() {
-    const { modal } = this.state;
-    const selectedIndexes = [];
-    modal.get('items').forEach((item, i) => {
-      if (item.get('selected')) {
-        selectedIndexes.push(i);
-      }
-    });
-    modal.get('onClick')(selectedIndexes);
-  }
-  closeModal() {
-    const { showModal, modal } = this.props;
-    
-    if (modal.get('onClose')) {
-      modal.get('onClose')();
-    }
-
-    showModal();
-  }
-  renderCloseButton() {
-    const { modal } = this.props;
-
-    if (!modal.get('fullscreen')) {
-      return undefined;
-    }
-
-    const closeButtonStyles = {
-      width: 60,
-      height: 60,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginRight: -15,
-    };
-
-    return (
-      <RippleButton style={closeButtonStyles} rippleColor={colors.deepBlue60} rippleOpacity={0.8} onPress={this.closeModal}>
-        <View style={closeButtonStyles}>
-          <Icon name="Close" width="24" height="24" fill={colors.deepBlue80} />
-        </View>
-      </RippleButton>
-    );
-  }
-  renderTitle() {
-    const { modal } = this.state;
-
-    if (modal && modal.get('title')) {
-      let titleStyles = {
-        height: 60,
-      };
-
-      if (modal.get('fullscreen')) {
-        titleStyles = {
-          height: 90,
-          borderBottomWidth: 1,
-          borderBottomColor: colors.deepBlue10,
-        };
-      }
-
-      return (
-        <View style={[styles.titleWrapper, titleStyles]}>
-          <Text selectable={true} style={styles.title}>
-            {modal.get('title')}
-          </Text>
-          {this.renderCloseButton()}
-        </View>
-      );
-    }
-
-    return undefined;
-  }
-  renderList() {
-    const { modal } = this.state;
-
-    if (modal && modal.get('items')) {
-      return <ActionModalList listItems={modal.get('items')} fullscreen={modal.get('fullscreen')} scrollable={modal.get('scrollable')} multiple={modal.get('multiple')} delegate={this} />;
-    }
-
-    return undefined;
-  }
-  renderAction() {
-    const { modal } = this.state;
-
-    if (modal && modal.get('multiple')) {
-      return (
-        <RippleButton
-          rippleColor={colors.blue100}
-          rippleOpacity={0.8}
-          style={styles.ctaButton}
-          onPress={this.onMultipleClick}
-        >
-          <View style={styles.cta}>
-            <Text selectable={true} style={styles.ctaTitle}>{modal.get('multiple')}</Text>
-          </View>
-        </RippleButton>
-      );
-    }
-
-    return undefined;
-  }
-  render() {
-    const { modal } = this.props;
-    let modalStyles = {
-      width: viewSize.width * 0.8,
-      maxWidth: 275,
-      elevation: 5,
-      shadowColor: colors.deepBlue100,
-      shadowOffset: {
-        width: 0, height: 1,
-      },
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
-    };
-
-    let animationStyle = 'fade';
-
-    if (modal.get('fullscreen')) {
-      modalStyles = {
-        width: viewSize.width,
-        height: viewSize.height,
-      };
-      animationStyle = 'slide';
-    }
-
-    return (
-      <Modal
-        animationType={animationStyle}
-        transparent
-        visible={!!this.state.modal}
-        onRequestClose={this.closeModal}
-      >
-        <View style={styles.modal}>
-          <TouchableWithoutFeedback onPress={this.closeModal}>
-            <View style={styles.tappableOverlay} />
-          </TouchableWithoutFeedback>
-          <View style={[styles.modalBox, modalStyles]}>
-            {this.renderTitle()}
-            {this.renderList()}
-            {this.renderAction()}
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-}
 
 // define your styles
 const styles = StyleSheet.create({
-  modal: {
-    width: viewSize.width,
-    height: viewSize.height,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
-  tappableOverlay: {
-    width: viewSize.width,
-    height: viewSize.height,
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
   modalBox: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -225,16 +32,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.deepBlue80,
     paddingLeft: 15,
-  },
-  selectionWrapper: {
-    width: 30,
-    height: 30,
-    borderWidth: 1,
-    marginHorizontal: 10,
-    borderColor: colors.deepBlue20,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   ctaButton: {
     flex: 1,
@@ -263,12 +60,174 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps(state) {
-  return {
-    modal: state.getIn(['modals', 'modal']),
-  };
-}
 
-export default connect(mapStateToProps, {
-  showModal: a.modals.show,
-})(ActionModal);
+export default class ActionModal extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedIds: fromJS(props.selectedIds || []),
+    }
+    bindAll(this, ['onActionPress', 'onClose']);
+    // this.onButtonClick = setupCachedCallback(this.onButtonClick, this);
+  }
+  onItemPress(itemId, item, e) {
+    let { selectedIds } = this.state;
+    const { multiple, onItemPress, closeModal } = this.props;
+
+    if(multiple && !itemId) {
+      console.warn('items for action modal should have id to use multiselect');
+    }
+    if (multiple && itemId) {
+      if(!selectedIds.contains(itemId)) {
+        selectedIds = selectedIds.push(itemId);
+      } else {
+        selectedIds = selectedIds.filter(id => id !== itemId);
+      }
+      this.setState({ selectedIds });
+    } else if(onItemPress) {
+      closeModal();
+      onItemPress(itemId, item, e);
+    }
+  } 
+  onActionPress(e) {
+    const { selectedIds } = this.state;
+    const { onActionPress, closeModal } = this.props;
+    closeModal();
+    if(onActionPress){
+      onActionPress(selectedIds, e);
+    }
+    
+  }
+  onClose() {
+    const { closeModal } = this.props;
+    closeModal();
+  }
+
+  renderCloseButton() {
+    const { fullscreen } = this.props;
+
+    if (!fullscreen) {
+      return undefined;
+    }
+
+    const closeButtonStyles = {
+      width: 60,
+      height: 60,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: -15,
+    };
+
+    return (
+      <RippleButton 
+        style={closeButtonStyles} 
+        rippleColor={colors.deepBlue60} 
+        rippleOpacity={0.8} 
+        onPress={this.onClose}>
+        <View style={closeButtonStyles}>
+          <Icon name="Close" width="24" height="24" fill={colors.deepBlue80} />
+        </View>
+      </RippleButton>
+    );
+  }
+  renderTitle() {
+    const { title, fullscreen } = this.props;
+
+    if (title) {
+      let titleStyles = {
+        height: 60,
+      };
+
+      if (fullscreen) {
+        titleStyles = {
+          height: 90,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.deepBlue10,
+        };
+      }
+
+      return (
+        <View style={[styles.titleWrapper, titleStyles]}>
+          <Text selectable={true} style={styles.title}>
+            {title}
+          </Text>
+          {this.renderCloseButton()}
+        </View>
+      );
+    }
+
+    return undefined;
+  }
+  renderList() {
+    const { items, fullscreen, scrollable, multiple } = this.props;
+    const { selectedIds } = this.state;
+
+    if (items) {
+      return (
+        <ActionModalList 
+          selectedIds={selectedIds}
+          listItems={items}
+          fullscreen={fullscreen}
+          scrollable={scrollable} 
+          multiple={multiple} 
+          delegate={this} 
+        />
+      );
+    }
+
+    return undefined;
+  }
+  renderAction() {
+    const { multiple, actionLabel } = this.props;
+
+    if (multiple) {
+      return (
+        <RippleButton
+          rippleColor={colors.blue100}
+          rippleOpacity={0.8}
+          style={styles.ctaButton}
+          onPress={this.onActionPress}
+        >
+          <View style={styles.cta}>
+            <Text selectable={true} style={styles.ctaTitle}>{actionLabel || 'Confirm'}</Text>
+          </View>
+        </RippleButton>
+      );
+    }
+
+    return undefined;
+  }
+  render() {
+    const { fullscreen } = this.props;
+    let modalStyles = {
+      width: viewSize.width * 0.8,
+      maxWidth: 275,
+      elevation: 5,
+      shadowColor: colors.deepBlue100,
+      shadowOffset: {
+        width: 0, height: 1,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+    };
+
+    let animationStyle = 'fade';
+
+    if (fullscreen) {
+      modalStyles = {
+        width: viewSize.width,
+        height: viewSize.height,
+        paddingTop: statusbarHeight,
+      };
+      animationStyle = 'slide';
+    }
+
+    return (
+      <View style={[styles.modalBox, modalStyles]}>
+        {this.renderTitle()}
+        {this.renderList()}
+        {this.renderAction()}
+      </View>
+    );
+  }
+}

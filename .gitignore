@@ -39,6 +39,5 @@ node_modules
 !.elasticbeanstalk/*.global.yml
 
 
-# Ignore the runscripts from now on
-runscript.sh
-win-runscript.bat
+# Ignore dist folder for docker builds
+nginx/dist

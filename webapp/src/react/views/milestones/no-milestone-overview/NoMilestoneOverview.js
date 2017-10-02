@@ -32,7 +32,7 @@ class NoMilestoneOverview extends PureComponent {
     return (
       <div className="no-milestone-overview__header">
         <HOCHeaderTitle
-          title="Goals without a milestone"
+          title="Goals without a plan"
           border
         />
       </div>

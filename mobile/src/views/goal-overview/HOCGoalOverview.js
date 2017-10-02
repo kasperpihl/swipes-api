@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Platform, UIManager, LayoutAnimation, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import * as ca from 'swipes-core-js/actions';
@@ -28,35 +28,27 @@ class HOCGoalOverview extends PureComponent {
 
     propsOrPop(this, 'goal');
 
-    this.closeView = this.closeView.bind(this);
-    this.onActionButton = this.onActionButton.bind(this);
-    this.onActionPress = this.onActionPress.bind(this);
-    this.onInfoTabClose = this.onInfoTabClose.bind(this);
-    this.onArchive = this.onArchive.bind(this);
-    this.handleCompleteGoal = this.handleCompleteGoal.bind(this);
 
+    bindAll(this, ['onModalAssign', 'closeView', 'onActionButton', 'onActionPress', 'onInfoTabClose', 'onArchive', 'handleCompleteGoal']);
     setupLoading(this);
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
   }
   componentDidMount() {
     this.renderActionButtons();
   }
   componentWillUpdate(nextProps, nextState) {
-    LayoutAnimation.easeInEaseOut();
-
     if (!this.props.isActive && nextProps.isActive || this.state.showingInfoTab !== nextState.showingInfoTab) {
       this.renderActionButtons(nextState.showingInfoTab);
     }
   }
-  onModalAssign(sortedUsers, data) {
-    const { showModal, assignGoal, goal } = this.props;
-    const overrideAssignees = List(data.map(i => sortedUsers.getIn([i, 'id'])));
+  onModalAssign(selectedIds) {
+    const { assignGoal, goal } = this.props;
+    const { tabIndex } = this.state;
+    
+    assignGoal(goal.get('id'), selectedIds.toJS());
 
-    assignGoal(goal.get('id'), overrideAssignees).then((res) => {})
-    showModal();
+    if (tabIndex !== 2) {
+      this.setState({ tabIndex: 2 })
+    }
   }
   handleCompleteGoal() {
     const { incompleteGoal, completeGoal } = this.props;
@@ -74,54 +66,27 @@ class HOCGoalOverview extends PureComponent {
     })
   }
   handleAssigning() {
-    const { users, showModal, goal, toggleInfoTab } = this.props;
-    const assignees = goal.get('assignees');
-
-    const userInfoToActions = users.map((u, i) => {
-      const selected = assignees.indexOf(u.get('id')) > -1;
-
-      const obj = {
-        title: `${msgGen.users.getFirstName(u.get('id'))} ${msgGen.users.getLastName(u.get('id'))}`,
-        selected,
-        index: i,
-        leftIcon: {
-          user: u.get('id'),
-        },
-      };
-
-      return fromJS(obj);
-    });
-
-    const modal = {
-      title: 'Assign teammeates',
-      onClick: this.onModalAssign.bind(this, users),
-      multiple: 'Assign',
-      items: userInfoToActions,
-      fullscreen: true,
-    };
-    
+    const {  assignModal, goal, toggleInfoTab } = this.props;
     this.setState({ showingInfoTab: false })
     toggleInfoTab();
 
-    setTimeout(() => {
-      showModal(modal);
-    }, 1)
+    assignModal({
+      selectedIds: goal.get('assignees'),
+      onActionPress: this.onModalAssign,
+    });
   }
   onActionPress(index) {
+    const { alertModal } = this.props;
     if (index === 0) {
       this.handleAssigning()
     }
 
     if (index === 1) {
-      Alert.alert(
-        'Archive goal',
-        'This will make this goal inactive for all participants.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'OK', onPress: () => this.onArchive()},
-        ],
-        { cancelable: true },
-      );
+      alertModal({
+        title: 'Delete goal',
+        message: 'This will remove this goal for all participants.',
+        onConfirmPress: this.onArchive,
+      })
     }
   }
   onInfoTabClose() {
@@ -195,7 +160,7 @@ class HOCGoalOverview extends PureComponent {
             { title: 'Delete goal', icon: 'Delete', danger: true },
           ],
           info: [
-            { title: 'Milestone', text: mileLbl, icon: mileIcon, actionLabel: mileAct },
+            { title: 'Plan', text: mileLbl, icon: mileIcon, actionLabel: mileAct },
             { title: 'Created', text: createdLbl },
           ],
           about: {
@@ -207,7 +172,6 @@ class HOCGoalOverview extends PureComponent {
     }
   }
   onChangeTab(index) {
-    const { hasLoaded } = this.state;
 
     if (index !== this.state.tabIndex) {
       this.setState({ tabIndex: index });
@@ -336,7 +300,7 @@ class HOCGoalOverview extends PureComponent {
     )
   }
   renderContent() {
-    const { tabIndex, hasLoaded } = this.state;
+    const { tabIndex } = this.state;
 
     if (tabIndex === 0) {
       return this.renderStepList();
@@ -377,12 +341,12 @@ const styles = StyleSheet.create({
 function mapStateToProps(state, ownProps) {
   return {
     goal: state.getIn(['goals', ownProps.goalId]),
-    users: cs.users.getActive(state),
     me: state.get('me'),
   };
 }
 export default connect(mapStateToProps, {
-  showModal: a.modals.show,
+  assignModal: a.modals.assign,
+  alertModal: a.modals.alert,
   toggleInfoTab: a.infotab.showInfoTab,
   completeStep: ca.goals.completeStep,
   incompleteStep: ca.goals.incompleteStep,

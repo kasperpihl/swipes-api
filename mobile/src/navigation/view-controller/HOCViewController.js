@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { StyleSheet, Platform, Keyboard, AppState } from 'react-native';
 import NavigationExperimental from 'react-native-navigation-experimental-compat';
 import * as a from 'actions';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback, throttle } from 'swipes-core-js/classes/utils';
 import SceneRenderer from './SceneRenderer';
 import { viewSize } from 'globalStyles';
 
@@ -31,7 +31,7 @@ class HOCViewController extends PureComponent {
 
     this.renderScene = this.renderScene.bind(this);
     this.onAppStateChange = this.onAppStateChange.bind(this);
-    this.navPopCached = setupCachedCallback(props.navPop);
+    this.navPopCached = setupCachedCallback(throttle(props.navPop, 350, true));
   }
   componentDidMount() {
     window.analytics.sendEvent('App loaded', {});

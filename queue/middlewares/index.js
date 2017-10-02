@@ -354,7 +354,7 @@ const post_comment_created_by_push_notification = [
     } = res.locals;
     const user_ids = [];
 
-    if (user_id !== post.created_by && !mention_ids.includes(user_id)) {
+    if (user_id !== post.created_by && !mention_ids.includes(post.created_by)) {
       user_ids.push(post.created_by);
     }
 

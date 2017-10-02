@@ -99,7 +99,7 @@ class MilestoneOverview extends PureComponent {
             Add a new goal
           </div>
           <div className="milestone-overview__empty-text">
-            Add new goals for everything that needs <br /> to be done to achieve this milestone.
+            Add new goals for everything that needs <br /> to be done to achieve this plan.
           </div>
         </div>
       )

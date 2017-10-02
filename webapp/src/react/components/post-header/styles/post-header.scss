@@ -4,7 +4,9 @@
 .post-header {
   $b: &;
   $flexIgnoreList: '#{$b}__actions';
+
   @include flexContainer('row', left, top, $selectorsToIgnoreFlex: $flexIgnoreList);
+  padding-left: 18px;
 
   &__content {
     @include size(100%, auto);

@@ -1,12 +1,25 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import codePush from 'react-native-code-push';
-import { View, TextInput, StyleSheet, Text, ScrollView, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { 
+  View,
+  TextInput,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Platform,
+  UIManager,
+  LayoutAnimation,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ActivityIndicator 
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RippleButton from 'RippleButton';
-import { colors, viewSize } from 'globalStyles';
+import { colors, viewSize, statusbarHeight } from 'globalStyles';
 import { api } from 'swipes-core-js/actions';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 
 class Login extends PureComponent {
   constructor(props) {
@@ -18,6 +31,8 @@ class Login extends PureComponent {
       keyboardOpen: false,
       errorMessage: '',
     };
+
+    setupLoading(this);
 
     codePush.getUpdateMetadata().then((pack) => {
       // console.log('pack', pack);
@@ -36,8 +51,11 @@ class Login extends PureComponent {
     }
   }
   componentDidMount() {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+    const keyboardInEvent = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow';
+    const keyboardOutEvent = Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide';
+
+    this.keyboardDidShowListener = Keyboard.addListener(keyboardInEvent, this.keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener(keyboardOutEvent, this.keyboardDidHide);
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -57,11 +75,15 @@ class Login extends PureComponent {
     const { email, password } = this.state;
 
     this.setState({ errorMessage: '' })
+    this.setLoading('loging');
 
     request('users.signin', {
       email: email.toLowerCase(),
       password,
     }).then((res) => {
+
+      this.clearLoading('loging');
+
       if (res.error && res.error.message) {
         let label = res.error.message;
 
@@ -77,6 +99,15 @@ class Login extends PureComponent {
     this.refs.passwordInput.focus();
   }
   renderButton() {
+    
+    if (this.isLoading('loging')) {
+      return (
+        <View style={styles.button}>
+          <ActivityIndicator color='white' />
+        </View>
+      )
+    }
+
     return (
       <RippleButton onPress={this.signIn}>
         <View style={styles.button}>
@@ -136,44 +167,46 @@ class Login extends PureComponent {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {this.renderGradient()}
-          <ScrollView keyboardShouldPersistTaps="always">
-            {this.renderTitle()}
-            <View style={styles.form}>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={email => this.setState({ email })}
-                  value={this.state.email}
-                  placeholder="Email"
-                  onSubmitEditing={this.focusNext}
-                  placeholderTextColor="white"
-                  returnKeyType="next"
-                  underlineColorAndroid="transparent"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
+          <View style={{flex: 1}}>
+            <ScrollView keyboardShouldPersistTaps="always">
+              {this.renderTitle()}
+              <View style={styles.form}>
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={email => this.setState({ email })}
+                    value={this.state.email}
+                    placeholder="Email"
+                    onSubmitEditing={this.focusNext}
+                    placeholderTextColor="white"
+                    returnKeyType="next"
+                    underlineColorAndroid="transparent"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    ref="passwordInput"
+                    style={styles.input2}
+                    onChangeText={password => this.setState({ password })}
+                    value={this.state.password}
+                    returnKeyType="go"
+                    placeholder="Password"
+                    placeholderTextColor="white"
+                    secureTextEntry
+                    onSubmitEditing={this.signIn}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                </View>
               </View>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  ref="passwordInput"
-                  style={styles.input2}
-                  onChangeText={password => this.setState({ password })}
-                  value={this.state.password}
-                  returnKeyType="go"
-                  placeholder="Password"
-                  placeholderTextColor="white"
-                  secureTextEntry
-                  onSubmitEditing={this.signIn}
-                  underlineColorAndroid="transparent"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
-              </View>
-            </View>
-            {this.renderButton()}
-          </ScrollView>
-          {this.renderErrorLabel()}
+              {this.renderButton()}
+            </ScrollView>
+            {this.renderErrorLabel()}
+          </View>
           {this.renderKeyboardSpacer()}
         </View>
       </TouchableWithoutFeedback>
@@ -221,7 +254,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     width: viewSize.width,
-    height: viewSize.height + 24,
+    height: viewSize.height,
     alignItems: 'center',
     justifyContent: 'center',
   },

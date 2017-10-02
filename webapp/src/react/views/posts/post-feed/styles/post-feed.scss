@@ -32,6 +32,22 @@
   }
 }
 
+.post-feed {
+
+  &__subtitle-wrapper {
+    @include size(100%, auto);
+    @include flexContainer('row', left, center);
+  }
+
+  &__subtitle-icon {
+    @include size(18px);
+    @include svg-color($deepBlue-40);
+    flex: none;
+    margin-right: 3px;
+    margin-top: 6px;
+  }
+}
+
 // ======================================================
 // Empty states
 // ======================================================

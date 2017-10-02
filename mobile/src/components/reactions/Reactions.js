@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
@@ -33,19 +33,12 @@ class HOCReactions extends PureComponent {
     setupDelegate(this, 'onAddReaction', 'onRemoveReaction');
 
     this.handleLike = this.handleLike.bind(this);
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
   }
   componentWillMount() {
     this.updateILike(this.props.reactions);
   }
   componentWillReceiveProps(nextProps) {
     this.updateILike(nextProps.reactions);
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
   }
   handleLike() {
     const { post, commentId: cId } = this.props;

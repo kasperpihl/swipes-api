@@ -29,8 +29,15 @@ class WaitForUI extends PureComponent {
   componentWillUnmount() {
     if (this.interactionHandle) this.interactionHandle.cancel();
   }
+  componentDidUpdate(prevProps, prevState) {
+    const { onRendered } = this.props;
+    if(this.state.interactionsComplete && !prevState.interactionsComplete && onRendered) {
+      onRendered();
+    }
+  }
   handleInteractionManager() {
     if (this.interactionHandle) this.interactionHandle.cancel();
+
     this.setState({ interactionsComplete: false });
 
     this.interactionHandle = InteractionManager.runAfterInteractions(() => {

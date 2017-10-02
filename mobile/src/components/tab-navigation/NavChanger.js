@@ -12,7 +12,7 @@ const ICON_SIZE = 24;
 const styles = StyleSheet.create({
   container: {
     width: viewSize.width,
-    height: viewSize.height - NAV_BAR_HEIGHT + statusbarHeight,
+    height: viewSize.height - NAV_BAR_HEIGHT,
     position: 'absolute',
     left: 0, top: -viewSize.height + NAV_BAR_HEIGHT - statusbarHeight,
   },
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    paddingBottom: 30,
+    paddingBottom: 15,
   },
   actionWrapper: {
     width: viewSize.width,

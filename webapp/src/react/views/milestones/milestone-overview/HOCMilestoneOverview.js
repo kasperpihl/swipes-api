@@ -144,7 +144,7 @@ class HOCMilestoneOverview extends PureComponent {
       openMilestone(milestone.get('id')).then((res) => {
         if (res.ok) {
           this.clearLoading('dots', 'Moved to current', 2000);
-          window.analytics.sendEvent('Milestone opened', {});
+          window.analytics.sendEvent('Plan opened', {});
         } else {
           this.clearLoading('dots', '!Something went wrong', 3000);
         }
@@ -160,7 +160,7 @@ class HOCMilestoneOverview extends PureComponent {
         closeMilestone(milestone.get('id')).then((res) => {
           if (res.ok) {
             this.clearLoading('dots', 'Moved to achieved', 2000);
-            window.analytics.sendEvent('Milestone closed', {});
+            window.analytics.sendEvent('Plan closed', {});
           } else {
             this.clearLoading('dots', '!Something went wrong', 3000);
           }
@@ -178,26 +178,26 @@ class HOCMilestoneOverview extends PureComponent {
   }
   getInfoTabProps() {
     const { milestone } = this.props;
-    let achieveLbl = 'Mark milestone as achieved';
+    let achieveLbl = 'Mark plan as achieved';
     let achieveIcon = 'MilestoneAchieve';
     let complete = true;
     if (milestone.get('closed_at')) {
       complete = false,
       achieveIcon = 'Milestone';
-      achieveLbl = 'Move milestone to current';
+      achieveLbl = 'Move plan to current';
     }
     const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`
     return {
       actions: [
         { title: achieveLbl, complete, icon: achieveIcon },
-        { title: 'Delete milestone', icon: 'Delete', danger: true },
+        { title: 'Delete plan', icon: 'Delete', danger: true },
       ],
       info: [
         { title: 'Created', text: createdLbl },
       ],
       about: {
-        title: 'What is a milestone',
-        text: 'A Milestone is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Milestone.\n\nTo keep your work organized, categorize goals for your Milestone with This week, Later or Completed.'
+        title: 'What is a plan',
+        text: 'A Plan is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Plan.\n\nTo keep your work organized, categorize goals for your Plan with This week, Later or Completed.'
       },
     }
   }

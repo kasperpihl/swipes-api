@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, viewSize } from '../../../utils/globalStyles';
+import { colors, viewSize, statusbarHeight } from '../../../utils/globalStyles';
 
 export const styles = StyleSheet.create({
   container: {

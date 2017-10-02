@@ -79,13 +79,12 @@ class HOCPostFeed extends PureComponent {
   }
   onOpenPost(postId, scrollToBottom) {
     const { navPush } = this.props;
-
     navPush({
-      id: 'TestPostView',
+      id: 'PostView',
       title: 'Post',
       props: {
-        // postId,
-        // scrollToBottom: scrollToBottom
+        postId,
+        scrollToBottom: scrollToBottom
       }
     })
   }
@@ -130,7 +129,7 @@ function makeMapStateToProps() {
 }
 
 export default connect(makeMapStateToProps, {
-  preview: a.links.preview,
+  preview: a.attachments.preview,
   browser: a.links.browser,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,

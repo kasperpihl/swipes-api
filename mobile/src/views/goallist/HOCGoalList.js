@@ -9,6 +9,7 @@ import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
 import WaitForUI from 'WaitForUI';
 import * as cs from 'swipes-core-js/selectors';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { colors, viewSize } from 'globalStyles';
@@ -125,7 +126,7 @@ class HOCGoalList extends PureComponent {
     );
   }
   renderSectionHeader(v1, sectionId) {
-    let sectionTitle = sectionId === 'none' ? 'No milestone' : msgGen.milestones.getName(sectionId);
+    let sectionTitle = sectionId === 'none' ? 'No plan' : msgGen.milestones.getName(sectionId);
     let sectionIcon = sectionId === 'none' ? 'MiniNoMilestone' : 'MiniMilestone';
 
     return (
@@ -159,7 +160,6 @@ class HOCGoalList extends PureComponent {
   }
   renderList() {
     const { goals } = this.props;
-    const { hasLoaded } = this.state;
 
     if (goals.size === 1 && !goals.get('none').size) {
       return this.renderEmptyState();

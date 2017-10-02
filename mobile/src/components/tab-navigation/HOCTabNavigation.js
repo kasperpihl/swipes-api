@@ -13,13 +13,13 @@ import HOCActionBar from "./HOCActionBar";
 import TabNavigationItem from "./TabNavigationItem";
 import NavChanger from "./NavChanger";
 import { colors, viewSize } from "globalStyles";
+import * as gs from 'styles';
 
 const styles = StyleSheet.create({
   nav: {
     width: viewSize.width,
     height: 54,
     flexDirection: "row",
-    zIndex: 100,
     backgroundColor: colors.bgColor
   },
   navHidden: {
@@ -77,7 +77,7 @@ class HOCTabNavigation extends PureComponent {
   componentWillUpdate(nextProps, nextState) {
     const { rootRoutes } = this.state;
 
-    LayoutAnimation.configureNext(LayoutAnimation.create(300, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
+    LayoutAnimation.easeInEaseOut();
 
     if (nextProps.counter !== this.props.counter) {
       rootRoutes[0].counter = nextProps.counter;

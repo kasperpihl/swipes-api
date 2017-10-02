@@ -93,9 +93,6 @@ class HOCPreviewNote extends PureComponent {
         toggleInfoTab({
           onPress: this.onActionPress,
           onClose: this.onInfoTabClose,
-          info: [
-            { title: 'Created', text: 'Need real text here' },
-          ],
           about: {
             title: 'What is a note',
             text: 'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text with your mouse and the options will appear.',

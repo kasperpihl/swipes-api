@@ -3,7 +3,9 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import * as a from "actions";
 import * as ca from "swipes-core-js/actions";
+import { getDeep } from 'swipes-core-js/classes/utils';
 import { mobileNavForContext } from 'utils/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import PostView from "./PostView";
@@ -14,6 +16,8 @@ class HOCPostView extends PureComponent {
     this.state = {
       commentLoading: false,
     };
+
+    setupLoading(this);
   }
   componentDidMount() {
     this.hideActionBar();
@@ -23,12 +27,25 @@ class HOCPostView extends PureComponent {
       this.hideActionBar();
     }
   }
+  componentDidUpdate(prevProps) {
+    if (!prevProps.isActive && this.props.isActive && this.shouldAutoFocus) {
+      this.shouldAutoFocus = false;
+      const input = getDeep(this, 'refs.postView.refs.postFooter.refs.input.refs.expandingTextInput');
+
+      if (input && input.focus) {
+        input.focus();
+      }
+    }
+  }
   hideActionBar() {
     const { setActionButtons } = this.props;
 
     setActionButtons({
       hide: true
     });
+  }
+  onAutoFocus() {
+    this.shouldAutoFocus = true
   }
   onOpenUrl(url) {
     const { browser } = this.props;
@@ -74,16 +91,17 @@ class HOCPostView extends PureComponent {
   onAddComment(message, attachments) {
     const { addComment, postId } = this.props;
 
-    this.setState({ commentLoading: true });
+    this.setLoading('commenting');
     addComment({
       post_id: postId,
       message,
       attachments,
     }).then(res => {
-      this.setState({ commentLoading: false });
-
       if (res.ok) {
+        this.clearLoading('commenting');
         window.analytics.sendEvent('Comment added', {});
+      } else {
+        this.clearLoading('commenting', '!Someting went wrong');
       }
     });
   }
@@ -103,7 +121,15 @@ class HOCPostView extends PureComponent {
   render() {
     const { myId, post, scrollToBottom } = this.props;
 
-    return <PostView myId={myId} post={post} delegate={this} commentLoading={this.state.commentLoading} scrollToBottom={scrollToBottom} />;
+    return <PostView
+              ref="postView"
+              myId={myId}
+              post={post}
+              delegate={this}
+              {...this.bindLoading()}
+              initialScrollToBottom={scrollToBottom}
+              navPush={this.props.navPush} 
+            />;
   }
 }
 
@@ -120,7 +146,7 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   browser: a.links.browser,
-  preview: a.links.preview,
+  preview: a.attachments.preview,
   addComment: ca.posts.addComment,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,

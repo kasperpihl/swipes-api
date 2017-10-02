@@ -33,6 +33,9 @@ class MilestoneItem extends Component {
     this.openMilestone = this.openMilestone.bind(this);
     setupDelegate(this, 'onOpenMilestone');
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState({ goals: this.getFilteredGoals(nextProps.milestone) })
+  }
   getFilteredGoals(milestone) {
     return msgGen.milestones.getGoals(milestone);
   }

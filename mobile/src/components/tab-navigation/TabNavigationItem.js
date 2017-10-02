@@ -3,34 +3,25 @@ import {
   View,
   Text,
   StyleSheet,
-  Platform,
-  UIManager,
-  LayoutAnimation
 } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import { colors, viewSize } from 'globalStyles';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
+import * as gs from 'styles';
 
 const styles = StyleSheet.create({
   navItem: {
-    flex: 1,
+    ...gs.mixins.size(1),
   },
   counter: {
+    ...gs.mixins.flex('center'),
     position: 'absolute',
-    ...Platform.select({
-      ios: {
-        right: -10, top: 3,
-      },
-      android: {
-        right: 3, top: 3,
-      },
-    }),
-    paddingHorizontal: 6,
+    left: ((viewSize.width / 5) / 2) + 6,
+    top: 3,
+    paddingHorizontal: 4,
     minWidth: 21,
     height: 21,
-    alignItems: 'center',
-    justifyContent: 'center',
     borderRadius: 14,
     backgroundColor: colors.red80,
     zIndex: 999,
@@ -70,11 +61,6 @@ class TabNavigationItem extends PureComponent {
     };
 
     setupDelegate(this, 'handlePress');
-
-    if (Platform.OS === "android") {
-      UIManager.setLayoutAnimationEnabledExperimental &&
-        UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.icon !== this.props.icon) {
@@ -84,9 +70,6 @@ class TabNavigationItem extends PureComponent {
         this.setState({ icon: nextProps.icon })
       }, 1)
     }
-  }
-  componentWillUpdate() {
-    // LayoutAnimation.configureNext(LayoutAnimation.create(1, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
   }
   componentWillUnmount() {
     clearTimeout(this.iconChangeTimeout);

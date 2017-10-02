@@ -28,7 +28,7 @@ class MilestoneList extends PureComponent {
       <div className="milestone-list__header">
         <HOCHeaderTitle
           title="Plan"
-          subtitle="Organize and see progress on your company's milestones."
+          subtitle="Organize and see progress on your company's plans."
         >
           <HOCInfoButton
             delegate={delegate}
@@ -51,8 +51,8 @@ class MilestoneList extends PureComponent {
         </div>
         <div className="milestone-list__empty-text">
           Seems like your team is sweating on getting their <br />
-          first milestone completed. <br />
-          All completed milestones can be found here.
+          first plan completed. <br />
+          All completed plans can be found here.
         </div>
       </div>
     )

@@ -18,45 +18,25 @@ import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import RippleButton from 'RippleButton';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
 import { colors } from 'globalStyles';
+import * as gs from 'styles';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: colors.bgColor,
+    ...gs.mixins.size(1),
+    backgroundColor: gs.colors.bgColor,
   },
   list: {
-    flex: 1,
-  },
-  fabWrapper: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
-    position: 'absolute',
-    bottom: 30,
-    right: 15,
-  },
-  fabButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
-    backgroundColor: colors.blue100,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...gs.mixins.size(1),
   },
   emptyState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('column', 'center', 'center'),
   },
   emptyTitle: {
-    fontSize: 11,
-    color: colors.deepBlue100,
-    fontWeight: 'bold', 
+    ...gs.mixins.font(11, gs.colors.deepBlue100, 11, 'bold'),
   },
   emptyText: {
-    fontSize: 12,
-    color: colors.deepBlue40,
-    lineHeight: 18,
+    ...gs.mixins.font(12, gs.colors.deepBlue40, 18),
     textAlign: 'center',
     paddingTop: 9,
   },
@@ -94,7 +74,34 @@ class HOCMilestoneOverview extends PureComponent {
     navPush(goalOverview);
   }
   onActionPress(index) {
-    console.warn('infotab action', index)
+    const { 
+      milestone, 
+      openMilestone, 
+      closeMilestone, 
+      deleteMilestone, 
+      toggleInfoTab,
+      alertModal,
+    } = this.props;
+
+    if (index === 0) {
+      if (milestone.get('closed_at')) {
+        openMilestone(milestone.get('id'));
+        toggleInfoTab();
+      } else {
+        closeMilestone(milestone.get('id'));
+        toggleInfoTab();
+      }
+
+    } else if (index === 1) {
+      alertModal({
+        title: 'Delete plan',
+        message: 'This will delete this plan and all goals in it. Are you sure?',
+        onConfirmPress: () => {
+          deleteMilestone(milestone.get('id')); 
+          toggleInfoTab();
+        },
+      })
+    }
   }
   onInfoTabClose() {
     if (this.state.showingInfoTab) {
@@ -124,13 +131,13 @@ class HOCMilestoneOverview extends PureComponent {
           },
         });
       } else if (i === 1) {
-        let achieveLbl = 'Mark milestone as achieved';
+        let achieveLbl = 'Mark plan as achieved';
         let achieveIcon = 'MilestoneAchieve';
         let complete = true;
         if (milestone.get('closed_at')) {
           complete = false,
           achieveIcon = 'Milestone';
-          achieveLbl = 'Move milestone to current';
+          achieveLbl = 'Move plan to current';
         }
         const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`
         this.setState({ showingInfoTab: true });
@@ -140,14 +147,14 @@ class HOCMilestoneOverview extends PureComponent {
           onClose: this.onInfoTabClose,
           actions: [
             { title: achieveLbl, complete, icon: achieveIcon },
-            { title: 'Delete milestone', icon: 'Delete', danger: true },
+            { title: 'Delete plan', icon: 'Delete', danger: true },
           ],
           info: [
             { title: 'Created', text: createdLbl },
           ],
           about: {
-            title: 'What is a milestone',
-            text: 'A Milestone is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Milestone.\n\nTo keep your work organized, categorize goals for your Milestone with This week, Later or Completed.'
+            title: 'What is a plan',
+            text: 'A Plan is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Plan.\n\nTo keep your work organized, categorize goals for your Plan with This week, Later or Completed.'
           },
         })
       }
@@ -158,6 +165,7 @@ class HOCMilestoneOverview extends PureComponent {
 
     if (title.length > 0) {
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {});
+      this.setState({ tabIndex: 0 });
     }
   }
   onHeaderTap() {
@@ -172,7 +180,7 @@ class HOCMilestoneOverview extends PureComponent {
       props: {
         title: '',
         defAssignees: [this.props.myId],
-        placeholder: "Add a new goal to a milestone",
+        placeholder: "Add a new goal to a plan",
         actionLabel: "Add goal",
         milestoneId: milestone.get('id'),
         delegate: this
@@ -210,7 +218,13 @@ class HOCMilestoneOverview extends PureComponent {
         delegate={this}
         tabs={tabs.map((t, i) => i === 0 ? 'This week' : t)}
         icon="Milestones"
-      />
+      >
+        <RippleButton onPress={this.openCreateGoalModal}>
+          <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+          </View>
+        </RippleButton>
+      </HOCHeader>
     );
   }
   renderGoal(goal) {
@@ -225,7 +239,7 @@ class HOCMilestoneOverview extends PureComponent {
     
     if (group === 'Current') {
       title = 'Add a new goal';
-      text = 'Add new goals for everything that needs \n to be done to achieve this milestone.';
+      text = 'Add new goals for everything that needs \n to be done to achieve this plan.';
     } else if (group === 'Later') {
       title = 'set for later (coming soon)';
       text = 'Move goals that need to be done later \n from this week into here.';
@@ -264,23 +278,6 @@ class HOCMilestoneOverview extends PureComponent {
       </WaitForUI>
     );
   }
-  renderFAB() {
-    const { fabOpen } = this.state;
-
-    if (fabOpen) {
-      return undefined;
-    }
-
-    return (
-      <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.openCreateGoalModal}>
-          <View style={styles.fabButton}>
-            <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
-          </View>
-        </RippleButton>
-      </View>
-    );
-  }
   render() {
     const { milestone } = this.props;
 
@@ -288,7 +285,6 @@ class HOCMilestoneOverview extends PureComponent {
       <View style={styles.container}>
         {this.renderHeader()}
         {this.renderList()}
-        {this.renderFAB()}
       </View>
     );
   }
@@ -304,5 +300,9 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   createGoal: ca.goals.create,
+  alertModal: a.modals.alert,
   toggleInfoTab: a.infotab.showInfoTab,
+  closeMilestone: ca.milestones.close,
+  openMilestone: ca.milestones.open,
+  deleteMilestone: ca.milestones.deleteMilestone,
 })(HOCMilestoneOverview);

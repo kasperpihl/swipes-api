@@ -55,6 +55,12 @@ $borderColor: $deepBlue-10;
       text-transform: uppercase;
     }
   }
+
+  .material-icons {
+    @include font(18px, $mainColor);
+    padding-top: 2px;
+    padding-left: 2px;
+  }
 }
 
 // Result states

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, Vibration } from 'react-native';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable'; 
+import { fromJS } from 'immutable';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { ImmutableListView } from 'react-native-immutable-list-view';
@@ -96,42 +96,39 @@ class HOCStepList extends PureComponent {
 
     return new GoalsUtil(goal);
   }
-  onModalGoalAction(step, i) {
-    const { showModal, assignStep, goal } = this.props;
-
-    if (i.get('index') === 'complete') {
+  onModalGoalAction(step, id) {
+    const { assignStep, goal, assignModal } = this.props;
+    if (id === 'complete') {
       this.onComplete(step);
-      showModal();
-    } else if (i.get('index') === 'assign') {
+    } else if (id === 'assign') {
       const assignees = step.get('assignees');
-      
-      // assignStep(goal.get('id'), step.get('id'), overrideAssignees).then((res)
 
-      showModal();
+      assignModal({
+        selectedIds: assignees,
+        onActionPress: (selectedIds) => assignStep(goal.get('id'), step.get('id'), selectedIds.toJS()),
+      });
     }
 
   }
-  onPress(step) {
-    const { showModal, goal } = this.props;
+  onPress(stepId, step) {
+    const { actionModal, goal } = this.props;
     const helper = this.getHelper();
     const completeLabel = helper.getIsStepCompleted(step) ? 'Incomplete step' : 'Complete step';
 
-    const modal = {
+    actionModal({
       title: 'Step actions',
-      onClick: this.onModalGoalActionCached(step),
+      onItemPress: this.onModalGoalActionCached(step),
       items: fromJS([
         {
           title: completeLabel,
-          index: 'complete',
+          id: 'complete',
         },
         {
           title: 'Reassign step',
-          index: 'assign',
+          id: 'assign',
         },
       ]),
-    };
-
-    showModal(modal);
+    });
   }
   onModalCreateAction(title, assignees, milestoneId ) {
     const { addStep, goal } = this.props;
@@ -177,7 +174,7 @@ class HOCStepList extends PureComponent {
     }
 
     return (
-      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onPressCached(step)}>
+      <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onPressCached(step.get('id'), step)}>
         <View style={styles.step}>
           <View style={[styles.indicator, indicatorStyles]}>
             <Text selectable={true} style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
@@ -235,7 +232,8 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  assignModal: a.modals.assign,
   addStep: ca.steps.add,
   assignStep: ca.steps.assign,
-  showModal: a.modals.show,
+  actionModal: a.modals.action,
 })(HOCStepList);

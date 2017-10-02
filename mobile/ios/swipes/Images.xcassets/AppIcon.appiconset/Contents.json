@@ -37,8 +37,8 @@
       "scale" : "3x"
     },
     {
-      "idiom" : "iphone",
       "size" : "60x60",
+      "idiom" : "iphone",
       "filename" : "icon-ios@120x120.png",
       "scale" : "2x"
     },
@@ -47,6 +47,12 @@
       "idiom" : "iphone",
       "filename" : "icon-ios@180x180.png",
       "scale" : "3x"
+    },
+    {
+      "size" : "1024x1024",
+      "idiom" : "ios-marketing",
+      "filename" : "swipes-logo-appstore.png",
+      "scale" : "1x"
     }
   ],
   "info" : {

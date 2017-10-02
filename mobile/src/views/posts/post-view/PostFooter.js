@@ -1,247 +1,201 @@
-import React, { PureComponent } from 'react'
-import { View, Text, TextInput, StyleSheet, Keyboard, Platform, UIManager, LayoutAnimation, ActivityIndicator } from 'react-native';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import { setupDelegate, bindAll, getDeep } from 'swipes-core-js/classes/utils';
+import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
+import * as gs from 'styles';
+import * as a from 'actions';
 import RippleButton from 'RippleButton';
-import ParsedText from "react-native-parsed-text";
 import Icon from 'Icon';
+import ExpandingTextInput from 'components/expanding-text-input/ExpandingTextInput';
+import AttachButton from 'components/attach-button/AttachButton';
 
 const styles = StyleSheet.create({
   container: {
+    ...gs.mixins.border(1, gs.colors.deepBlue20, 'top'),
+    ...gs.mixins.flex('row'),
     width: viewSize.width,
     minHeight: 54,
-    borderTopWidth: 1,
-    borderTopColor: colors.deepBlue5,
-    flexDirection: 'row'
   },
   backButton: {
-    flex: 1,
-    maxWidth: 64,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'green'
-  },
-  verticalSeperatorRight: {
-    width: 1,
-    height: 40,
-    position: 'absolute',
-    right: 0,
-    top: Platform.OS === 'ios' ? -7 : 7,
-    backgroundColor: colors.deepBlue10,
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
+    minWidth: 54,
+    maxWidth: 54,
   },
   inputWrapper: {
-    flex: 1,
-    height: 54,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: 'blue',
+    ...gs.mixins.size(1),
+    ...Platform.select({
+      ios: {
+        ...gs.mixins.padding(6, 0),
+      },
+      android: {
+        ...gs.mixins.padding(6, 0, 6, 12),
+      },
+    }),
+    minHeight: 54,
   },
   inputBorder: {
-    flex: 1,
-    borderColor: colors.deepBlue10,
-    borderWidth: 1,
-    borderRadius: 100,
+    ...gs.mixins.border(1, gs.colors.deepBlue10),
+    ...gs.mixins.flex('row', 'left', 'center'),
+    ...gs.mixins.padding(12, 0, 12, 18),
+    alignSelf: 'stretch', 
+    minHeight: 54 - (6 * 2),
+    borderRadius: 25,
   },
   input: {
-    padding: 0,
-    margin: 0,
-    fontSize: 12,
-    color: colors.deepBlue80,
-    lineHeight: 15,
-    textAlignVertical: 'top',
-    includeFontPadding: false,
-    backgroundColor: 'purple',
-  },
-  message: {
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    backgroundColor: colors.deepBlue5,
-    borderRadius: 18,
-    fontSize: 13,
-    color: colors.deepBlue80,
-    lineHeight: 18,
-    alignSelf: 'flex-start'
-  },
-  nameLabel: {
-    fontSize: 13,
-    color: colors.deepBlue100,
-    fontWeight: '500',
-    lineHeight: 18
+    ...gs.mixins.size(1),
+    ...gs.mixins.font(13, gs.colors.deepBlue80, 18),
+    alignSelf: 'stretch',
   },
   actions: {
-    flex: 1,
-    maxWidth: 64,
-    backgroundColor: 'red'
+    ...gs.mixins.size(1),
+    maxWidth: 54,
+  },
+  iconButton: {
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('center'),
+    minWidth: 54,
+    maxWidth: 54,
+    minHeight: 54,
   }
 });
 
-class PostFooter extends PureComponent {
+class HOCPostFooter extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       text: '',
-      inputHeight: 15
+      attachments: fromJS([]),
+      isLoadingComment: false,
     }
-    setupDelegate(this, 'onAddComment', 'onNavigateBack');
+    setupDelegate(this, 'onAddComment', 'onNavigateBack', 'onAutoFocus');
+    bindAll(this, ['handleAddComment', 'handleAttach', 'focusInput']);
+  }
 
-    this.handleAddComment = this.handleAddComment.bind(this);
-    this.handleBackButton = this.handleBackButton.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.onContentSizeChange = this.onContentSizeChange.bind(this);
+  onAddAttachment() {
+    const { navPush, uploadAttachment } = this.props;
+    const { attachments } = this.state;
 
-    if (Platform.OS === "android") {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    this.onAutoFocus();
+    if(!attachments.size) {
+      return uploadAttachment(this.handleAttach);
     }
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
-  }
-  onContentSizeChange(e) {
-    const { inputHeight } = this.state;
+    
+    Keyboard.dismiss();
 
-    if (inputHeight !== e.nativeEvent.contentSize.height) {
-      this.setState({ inputHeight: e.nativeEvent.contentSize.height })
-    }
+    navPush({
+      id: 'AttachmentView',
+      title: 'Attachment',
+      props: {
+        delegate: this,
+        initialAttachments: attachments
+      },
+    })
   }
-  handleFocus() {
-    const { inputActive } = this.state;
-  
-    if (!inputActive) this.setState({ inputActive: true })
+  handleAttach(att) {
+    const { attachments } = this.state;
+
+    this.setState({
+      attachments: attachments.push(att)
+    })
   }
   handleAddComment() {
-    const { text } = this.state;
-
-    this.onAddComment(text, []);
-    this.setState({ text: '' });
+    const { text, attachments } = this.state;
+    if(!text || !text.length) {
+      return;
+    }
+    this.onAddComment(text, attachments);
+    this.setState({ text: '', attachments: fromJS([]) });
     Keyboard.dismiss();
   }
-  handleBackButton() {
-    this.onNavigateBack()
+  focusInput() {
+    const input = getDeep(this, 'refs.input.refs.expandingTextInput');
+
+    if (!this.isFocused && input) {
+      input.focus();
+    }
   }
   renderBackButton() {
     const { text } = this.state;
 
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'android') {
       return undefined;
     }
-         /* <Icon name="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue80} />
-          <View style={styles.verticalSeperatorRight} /> */
 
     return (
-      <RippleButton onPress={this.handleBackButton}>
+      <RippleButton onPress={this.onNavigateBack}>
         <View style={styles.backButton}>
+          <Icon name="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue80} />
         </View>
       </RippleButton>
     )
   }
   renderSendButton() {
-    const { commentLoading } = this.props;
+    const { isLoading } = this.props;
+  
+    if (isLoading('commenting')) {
 
-    if (commentLoading) {
-      <View style={styles.iconButton}>
-        <ActivityIndicator color={colors.blue100} />
-      </View>
+      return (
+        <View style={styles.iconButton}>
+          <ActivityIndicator color={colors.blue100} />
+        </View>
+      )
     }
 
     return (
-      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.2} onPress={this.handleAddComment}>
+      <RippleButton style={styles.iconButton} rippleColor={colors.blue100} rippleOpacity={0.2} onPress={this.handleAddComment}>
         <View style={styles.iconButton}>
-          <Icon name="Send" width="24" height="24" fill={colors.blue100} />
+          <Icon name="Send" width="24" height="24" fill={gs.colors.blue100} />
         </View>
       </RippleButton>
     )
   }
-  renderText(matchingString, matches) {
-    return matches[2];
-  }
-  renderInput() {
-    const { placeholder } = this.props;
-    const { inputHeight: iH } = this.state;
-    const lineNumbers = parseInt(inputHeight / 15);
-    const inputHeight = { height: iH };
-    
-    return(
-      <View style={styles.inputWrapper}>
-        <View style={styles.inputBorder}>
-          <TextInput
-            onChangeText={(text) => this.setState({ text })}
-            numberOfLines={lineNumbers}
-            multiline={true}
-            style={[styles.input, inputHeight]}
-            underlineColorAndroid="transparent"
-            autoCapitalize="sentences"
-            autoCorrect={true}
-            placeholder={placeholder}
-            onContentSizeChange={this.onContentSizeChange}
-          >
-            <ParsedText
-              style={styles.message}
-              selectable={true}
-              parse={[
-                { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText},
-              ]}
-            >
-              {this.state.text}
-            </ParsedText>
-          </TextInput>
-        </View>
-      </View>
-    )
-  }
-  renderActions() {
-    return (
-      <View style={styles.actions}>
-        
-      </View>
-    )
-  }
+
+
   render() {
-        // {this.renderBackButton()}
-        // {this.renderInput()}
-        // {this.renderActions()}
-
-
-
     const { placeholder } = this.props;
-    const { inputHeight: iH } = this.state;
-    const lineNumbers = parseInt(inputHeight / 15);
-    const inputHeight = { height: iH };
+    const { attachments } = this.state;
 
     return (
       <View style={styles.container}>
-
-        <View style={styles.inputWrapper} >
-          <TextInput
-            onChangeText={(text) => this.setState({ text })}
-            numberOfLines={lineNumbers}
-            multiline={true}
-            style={[styles.input, inputHeight]}
-            underlineColorAndroid="transparent"
-            autoCapitalize="sentences"
-            autoCorrect={true}
-            placeholder={placeholder}
-            onContentSizeChange={this.onContentSizeChange}
-          >
-            <ParsedText
-              style={styles.message}
-              selectable={true}
-              parse={[
-                { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText},
-              ]}
-            >
-              {this.state.text}
-            </ParsedText>
-          </TextInput>
+        {this.renderBackButton()}
+        <TouchableWithoutFeedback onPress={this.focusInput}>
+          <View style={styles.inputWrapper}>
+            <View style={styles.inputBorder}>
+              <ExpandingTextInput
+                ref="input"
+                onChangeText={(text) => this.setState({ text })}
+                style={styles.input}
+                underlineColorAndroid="transparent"
+                autoCapitalize="sentences"
+                autoCorrect={true}
+                placeholder={placeholder}
+                minRows={1}
+                maxRows={4}
+                value={this.state.text}
+                onFocus={() => { this.isFocused = true }}
+                onBlur={() => { this.isFocused = false }}
+              />
+              <AttachButton 
+                numberOfAttachments={attachments.size} 
+                delegate={this} 
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+        <View style={styles.actions}>
+          {this.renderSendButton()}
         </View>
-
       </View>
     )
   }
 }
+const mapStateToProps = (state) => ({
+});
 
-export default PostFooter
-// const { string } = PropTypes;
-PostFooter.propTypes = {};
+export default connect(mapStateToProps, {
+  uploadAttachment: a.attachments.upload,
+})(HOCPostFooter);
+

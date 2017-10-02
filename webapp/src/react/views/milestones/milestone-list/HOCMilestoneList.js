@@ -35,7 +35,7 @@ class HOCMilestoneList extends PureComponent {
     const { savedState } = this.props;
     const initialTabIndex = (savedState && savedState.get('tabIndex')) || 0;
     this.setState({
-      tabs: ['Current Milestones', 'Achieved'],
+      tabs: ['Current plans', 'Achieved'],
       tabIndex: initialTabIndex,
     });
   }
@@ -55,7 +55,7 @@ class HOCMilestoneList extends PureComponent {
     this.saveState();
     navPush({
       id: 'MilestoneOverview',
-      title: 'Milestone overview',
+      title: 'Plan overview',
       props: {
         milestoneId,
       },
@@ -68,7 +68,7 @@ class HOCMilestoneList extends PureComponent {
       createMilestone(title).then((res) => {
         if (res && res.ok) {
           this.clearLoading('add');
-          window.analytics.sendEvent('Milestone created', {});
+          window.analytics.sendEvent('Plan created', {});
         } else {
           this.clearLoading('add', '!Something went wrong');
         }
@@ -98,7 +98,7 @@ class HOCMilestoneList extends PureComponent {
     return {
       about: {
         title: 'What is Plan',
-        text: 'Plan is one of the 3 main sections of the Workspace: Plan, Take Action and Discuss.\n\nUnder Plan you can set up a milestone for your team and track the progress you are making. Milestones can be projects, company objectives or ongoing company activities.',
+        text: 'Plan is one of the 3 main sections of the Workspace: Plan, Take Action and Discuss.\n\nHere you can make plans for your team and track the progress you are making. Plans can be projects, company objectives or ongoing company activities.',
       },
     }
   }

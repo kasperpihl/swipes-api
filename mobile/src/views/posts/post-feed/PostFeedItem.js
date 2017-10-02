@@ -4,6 +4,7 @@ import ParsedText from 'react-native-parsed-text';
 import { setupDelegate, miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
 import { colors, viewSize } from 'globalStyles';
+import * as gs from 'styles';
 import HOCHeader from 'HOCHeader';
 import StyledText from 'components/styled-text/StyledText';
 import Icon from 'Icon';
@@ -16,141 +17,103 @@ const styles = StyleSheet.create({
     paddingTop: 24,
   },
   header: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingHorizontal: 15,
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('row'),
+    ...gs.mixins.padding(0 ,15),
   },
   headerSide: {
-    flex: 1,
+    ...gs.mixins.size(1),
     paddingLeft: 12,
   },
   profilePicWrapper: {
-    width: 54,
-    height: 54,
-    borderRadius: 54 / 2,
+    ...gs.mixins.size(54),
+    ...gs.mixins.borderRadius(54 / 2),
   },
   profilePic: {
-    width: 54,
-    height: 54,
-    borderRadius: 54 / 2,
+    ...gs.mixins.size(54),
+    ...gs.mixins.borderRadius(54 / 2),
   },
   initials: {
-    width: 54,
-    height: 54,
-    borderRadius: 54 / 2,
-    backgroundColor: colors.deepBlue100,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...gs.mixins.size(54),
+    ...gs.mixins.flex('center'),
+    ...gs.mixins.borderRadius(54 / 2),
+    backgroundColor: gs.colors.deepBlue100,
   },
   initialsLabel: {
-    fontSize: 28,
-    color: colors.bgColor,
+    ...gs.mixins.font(28, gs.colors.bgColor)
   },
   textStyle: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: colors.deepBlue40,
-    includeFontPadding: false,
+    ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
   },
   boldStyle: {
-    fontSize: 13,
-    lineHeight: 18,
-    fontWeight: 'bold',
-    color: colors.deepBlue100,
-    includeFontPadding: false,
+    ...gs.mixins.font(13, gs.colors.deepBlue100, 18, 'bold'),
   },
   subtitle: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    ...gs.mixins.flex('row', 'left', 'center'),
     paddingTop: 5,
   },
   subtitleLabel: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: colors.deepBlue40,
+    ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
   },
   messageWrapper: {
-    paddingHorizontal: 15,
-    paddingTop: 18,
-    paddingBottom: 18,
+    ...gs.mixins.padding(18, 15),
   },
   message: {
-    fontSize: 15,
-    color: colors.deepBlue80,
-    lineHeight: 21,
+    ...gs.mixins.font(15, gs.colors.deepBlue80, 21),
   },
   url: {
-    fontSize: 15,
-    color: colors.blue100,
-    lineHeight: 21,
+    ...gs.mixins.font(15, gs.colors.blue100, 21),
   },
   actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 54,
+    ...gs.mixins.flex('row', 'between', 'center'),
     alignSelf: 'stretch',
+    height: 54,
   },
   actionsSeperator: {
-    width: viewSize.width - 30,
-    height: 1,
-    backgroundColor: colors.deepBlue10,
+    ...gs.mixins.size(viewSize.width - 30, 1),
+    backgroundColor: gs.colors.deepBlue10,
     position: 'absolute',
-    left: 15, top: 0,
+    left: 15, bottom: 0,
   },
   commentsButton: {
+    ...gs.mixins.flex('center'),
+    ...gs.mixins.padding(0, 15),
     height: 54,
-    paddingHorizontal: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   commentsButtonLabel: {
-    fontSize: 13,
-    fontWeight: '500',
-    color: colors.deepBlue100,
-    includeFontPadding: false,
+    ...gs.mixins.font(13, gs.colors.deepBlue100, '500')
   },
   reactionWrapper: {
+    ...gs.mixins.flex('center'),
     height: 54,
-    alignItems: 'center',
-    justifyContent: 'center',
     alignSelf: 'stretch',
   },
   attachments: {
-    paddingHorizontal: 15,
+    ...gs.mixins.padding(0, 15),
     marginBottom: 6,
   },
   attachment: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 6,
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('row', 'left', 'center'),
+    ...gs.mixins.padding(0, 12),
+    ...gs.mixins.border(1, gs.colors.deepBlue10, 6),
     height: 48,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.deepBlue10,
+    marginBottom: 6,
   },
   attachmentLabel: {
-    fontSize: 12,
-    color: colors.deepBlue80,
-    fontWeight: '500',
+    ...gs.mixins.font(12, gs.colors.deepBlue80, '500'),
     paddingLeft: 12,
   },
   typeWrapper: {
     alignSelf: 'stretch',
-    marginBottom: 6,
     alignItems: 'flex-end',
+    marginBottom: 6,
     paddingRight: 15,
   },
   typeLabel: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    fontSize: 11,
-    fontWeight: 'bold',
-    color: 'white',
-    borderTopLeftRadius: 100,
-    borderBottomLeftRadius: 100,
+    ...gs.mixins.padding(4, 12),
+    ...gs.mixins.font(11, 'white', 'bold'),
+    ...gs.mixins.borderRadius(100, 0, 0, 100),
   }
 });
 
@@ -279,15 +242,13 @@ class PostFeed extends PureComponent {
   renderHeader() {
 
     return (
-      <RippleButton onPress={this.handleOpenPost}>
-        <View style={styles.header}>
-          {this.renderProfilePic()}
-          <View style={styles.headerSide}>
-            {this.renderGeneratedTitle()}
-            {this.renderHeaderSubtitle()}
-          </View>
+      <View style={styles.header}>
+        {this.renderProfilePic()}
+        <View style={styles.headerSide}>
+          {this.renderGeneratedTitle()}
+          {this.renderHeaderSubtitle()}
         </View>
-      </RippleButton>
+      </View>
     )
   }
   renderMessage() {
@@ -333,7 +294,6 @@ class PostFeed extends PureComponent {
 
     return (
       <View style={styles.actions}>
-        <View style={styles.actionsSeperator} />
         {this.renderComments()}
         <View style={styles.reactionWrapper}>
           <Reactions
@@ -342,6 +302,7 @@ class PostFeed extends PureComponent {
             delegate={delegate}
           />
         </View>
+        <View style={styles.actionsSeperator} />
       </View>
     )
   }
@@ -371,9 +332,13 @@ class PostFeed extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
-        {this.renderType()}
-        {this.renderHeader()}
-        {this.renderMessage()}
+        <RippleButton onPress={this.handleOpenPost}>
+          <View>
+            {this.renderType()}
+            {this.renderHeader()}
+            {this.renderMessage()}
+          </View>
+        </RippleButton>
         {this.renderAttachments()}
         {this.renderActions()}
       </View>

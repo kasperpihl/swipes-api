@@ -5,11 +5,10 @@ import {
   Text,
   StyleSheet,
   Platform,
-  UIManager,
-  LayoutAnimation,
 } from 'react-native';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
+import * as gs from 'styles';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 import { colors, viewSize } from 'globalStyles';
@@ -41,6 +40,15 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: 'center'
   },
+  numberContainer: {
+    ...gs.mixins.padding(4, 8, 3, 8),
+    ...gs.mixins.flex('center'),
+    backgroundColor: '#007AFF',
+    borderRadius: 24 / 2,
+  },
+  numberLabel: {
+    ...gs.mixins.font(13, 'white'),
+  },
   verticalSeperatorLeft: {
     width: 1,
     height: 40,
@@ -64,16 +72,8 @@ class HOCActionBar extends PureComponent {
     super(props);
     this.state = {};
 
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental &&
-        UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-
     this.onPop = this.onPop.bind(this);
     this.onActionClick = setupCachedCallback(this.onActionClick, this);
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
   }
   onPop() {
     const { activeSliderIndex, navPop } = this.props;
@@ -125,6 +125,23 @@ class HOCActionBar extends PureComponent {
       };
     }
 
+    let renderedContent = (
+      <Icon
+        name={button.icon}
+        width="24"
+        height="24"
+        fill={colors.deepBlue50}
+      />
+    );
+
+    if(button.number) {
+      renderedContent = (
+        <View style={styles.numberContainer}>
+          <Text style={styles.numberLabel}>{button.number}</Text>
+        </View>
+      )
+    }
+
     return (
       <RippleButton
         style={[styles.iconButton, maxWidthStyles, alignStyles]}
@@ -133,12 +150,7 @@ class HOCActionBar extends PureComponent {
       >
         <View style={[styles.iconButton, maxWidthStyles, alignStyles]}>
           {button.seperator && button.seperator === 'left' ? <View style={styles.verticalSeperatorLeft} /> : undefined}
-          <Icon
-            name={button.icon}
-            width="24"
-            height="24"
-            fill={colors.deepBlue50}
-          />
+          {renderedContent}
           {button.seperator && button.seperator === 'right' ? <View style={styles.verticalSeperatorRight} /> : undefined}
         </View>
       </RippleButton>
@@ -168,7 +180,7 @@ class HOCActionBar extends PureComponent {
           return this.renderTextButton(i, b, this.onActionClick(i));
         }
 
-        if (b.icon) {
+        if (b.icon || b.number) {
           return this.renderIconButton(i, b, this.onActionClick(i));
         }
       });

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
-import { bindAll, setupCachedCallback, typeForId } from 'swipes-core-js/classes/utils';
+import { bindAll, setupCachedCallback, typeForId, miniIconForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
@@ -34,7 +34,6 @@ class PostFeed extends PureComponent {
         this.lastEnd = e.target.scrollTop;
       }
     }
-
   }
   getContextType() {
     const { context } = this.props;
@@ -42,9 +41,27 @@ class PostFeed extends PureComponent {
 
     return contextType;
   }
+  renderHeaderSubtitle(title) {
+    const { context } = this.props;
+
+    if (context && context.get('title') && context.get('id')) {
+      const icon = miniIconForId(context.get('id'));
+
+      return (
+        <div className="post-feed__subtitle-wrapper">
+          <Icon icon={icon} className="post-feed__subtitle-icon" />
+          <div className="header-title__subtitle">{context.get('title')}</div>
+        </div>
+      )
+    }
+
+
+    return undefined;
+    
+  }
   renderHeader() {
     const { context, delegate, tabs } = this.props;
-    let subtitle = context && context.get('title') && `re. ${context.get('title')}`;
+    let subtitle = context && context.get('title') && this.renderHeaderSubtitle();
     subtitle = subtitle || 'Talk with your team and share the latest and greatest.';
 
     return (

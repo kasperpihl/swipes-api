@@ -1,10 +1,10 @@
 import React, { PureComponent } from "react";
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, Platform, Keyboard, UIManager, LayoutAnimation, InteractionManager } from "react-native";
 import ParsedText from "react-native-parsed-text";
 import { List } from "immutable";
-import { setupDelegate, iconForId, attachmentIconForService } from "swipes-core-js/classes/utils";
+import { setupDelegate, iconForId, attachmentIconForService, bindAll } from "swipes-core-js/classes/utils";
 import { timeAgo } from "swipes-core-js/classes/time-utils";
-import { colors, viewSize } from "globalStyles";
+import { colors, viewSize, statusbarHeight } from "globalStyles";
 import HOCHeader from "HOCHeader";
 import StyledText from "components/styled-text/StyledText";
 import Icon from "Icon";
@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 50,
     paddingBottom: 11,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.deepBlue20,
   },
   headerSide: {
     flex: 1,
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: 54,
     alignSelf: "stretch",
+    paddingRight: 15,
   },
   actionsSeperator: {
     width: viewSize.width - 30,
@@ -147,41 +150,70 @@ const styles = StyleSheet.create({
 class PostView extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      collapseHeader: false,
+      headerHeight: 0,
+    };
 
-    this.onHeaderTap = this.onHeaderTap.bind(this);
-
+    bindAll(this, ['onHeaderTap', 'keyboardShow', 'keyboardHide', 'scrollToBottom'])
     setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext', 'onAttachmentClick');
-  }
-  componentDidMount() {
-    if (this.props.scrollToBottom) {
-      this.scrollToBottomTime();
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
+  componentWillMount () {
+    if (this.props.initialScrollToBottom) {
+      this.shouldScrollToBottom = true;
+    }
+    const showEvent = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow';
+    const hideEvent = Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide';
+
+    this.keyboardShowListener = Keyboard.addListener(showEvent, this.keyboardShow);
+    this.keyboardHideListener = Keyboard.addListener(hideEvent, this.keyboardHide);
+  }
+
   componentWillUpdate(nextProps) {
-    if (this.state.hasLoaded && this.props.post.get('comments').size !== nextProps.post.get('comments').size) {
+    LayoutAnimation.easeInEaseOut();
+
+    if (this.props.post.get('comments').size !== nextProps.post.get('comments').size) {
       this.shouldScrollToBottom = true;
     }
   }
   componentDidUpdate() {
-    if (this.shouldScrollToBottom) {
-      this.shouldScrollToBottom = false;
-
-      this.scrollToBottomTime();
-    }
+    this.scrollToBottom();
   }
   componentWillUnmount() {
-    clearTimeout(this.scrollTimer);
+    if (this.interactionHandle) this.interactionHandle.cancel();
+    this.keyboardShowListener.remove();
+    this.keyboardHideListener.remove();
   }
-  scrollToBottomTime() {
-    clearTimeout(this.scrollTimer);
+  keyboardShow () {
+    this.setState({ collapseHeader: true });
+  }
+  keyboardHide () {
+    this.setState({ collapseHeader: false });
+  }
+  measureView(event) {
+    this.getHeaderHeight(event.nativeEvent.layout.height);
+  }
+  getHeaderHeight(height) {
+    const { headerHeight } = this.state;
 
-    this.scrollTimer = setTimeout(() => {
-      this.refs.scrollView.scrollToEnd({animated: true});
-    }, 1000);
+    if (headerHeight !== height) {
+      this.setState({ headerHeight: height });
+    }
+  }
+  scrollToBottom() {
+    if (this.interactionHandle) this.interactionHandle.cancel();
+    this.interactionHandle = InteractionManager.runAfterInteractions(() => {
+      if (this.shouldScrollToBottom && this.refs.scrollView) {
+        this.shouldScrollToBottom = false;
+        this.refs.scrollView.scrollToEnd({animated: true});
+      }
+    });
   }
   onHeaderTap() {
-    clearTimeout(this.scrollTimer);
     this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
   renderGeneratedTitle() {
@@ -267,16 +299,33 @@ class PostView extends PureComponent {
     );
   }
   renderPostHeader() {
+    const { headerHeight, collapseHeader } = this.state;
+
+    let marginTop = 0;
+    // let opacity = 1;
+    let paddingBottom = 0;
+
+    if (collapseHeader) {
+      marginTop = -headerHeight + statusbarHeight;
+      paddingBottom = statusbarHeight;
+
+      if (Platform.OS === 'ios') {
+        // opacity = 0;
+      }
+    }
+
     return (
-      <RippleButton onPress={this.onHeaderTap}>
-        <View style={styles.header}>
-          {this.renderProfilePic()}
-          <View style={styles.headerSide}>
-            {this.renderGeneratedTitle()}
-            {this.renderHeaderSubtitle()}
+      <View style={{ marginTop, paddingBottom }} onLayout={event => this.measureView(event)}>
+        <RippleButton onPress={this.onHeaderTap}>
+          <View style={styles.header}>
+            {this.renderProfilePic()}
+            <View style={styles.headerSide}>
+              {this.renderGeneratedTitle()}
+              {this.renderHeaderSubtitle()}
+            </View>
           </View>
-        </View>
-      </RippleButton>
+        </RippleButton>
+      </View>
     );
   }
   renderMessage() {
@@ -383,8 +432,19 @@ class PostView extends PureComponent {
   }
   renderContent() {
     return (
-      <WaitForUI>
-        <ScrollView style={{ flex: 1 }} ref="scrollView" alwaysBounceVertical={false}>
+      <WaitForUI onRendered={this.scrollToBottom}>
+        <ScrollView 
+          style={{ flex: 1 }} 
+          ref="scrollView"
+          onContentSizeChange={() => {
+            this.shouldScrollToBottom = true;
+            this.scrollToBottom();
+          }}
+          onLayout={(e) => {
+            this.shouldScrollToBottom = true;
+            this.scrollToBottom();
+          }}
+        >
           {this.renderMessage()}
           {this.renderAttachments()}
           {this.renderActions()}
@@ -394,13 +454,22 @@ class PostView extends PureComponent {
     )
   }
   render() {
-    const { delegate } = this.props;
+    const { delegate, bindLoading } = this.props;
+
+
 
     return (
       <View style={styles.container}>
         {this.renderPostHeader()}
         {this.renderContent()}
-        <PostFooter delegate={delegate} placeholder="Write a comment…" commmentLoading={this.state.commmentLoading} />
+        <PostFooter 
+          ref="postFooter" 
+          navPush={this.props.navPush}
+          onFocus={this.scrollToBottom} 
+          delegate={delegate} 
+          placeholder="Write a comment…" 
+          {...bindLoading()} 
+        />
       </View>
     );
   }

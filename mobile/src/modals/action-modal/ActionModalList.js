@@ -34,17 +34,25 @@ class ActionModalList extends Component {
   }
   renderlistItem(item) {
     const { multiple, delegate } = this.props;
-    return <ActionModalItem item={item} multiple={multiple} delegate={delegate} />;
+    return (
+      <ActionModalItem 
+        item={item} 
+        multiple={multiple} 
+        delegate={delegate} 
+      />
+    );
   }
   render() {
-    const { listItems, multiple, scrollable, fullscreen } = this.props;
+    const { listItems, multiple, scrollable, fullscreen, selectedIds } = this.props;
 
     if (scrollable || fullscreen) {
       return (
         <ImmutableVirtualizedList
           style={styles.list}
           keyboardShouldPersistTaps="always"
-          immutableData={listItems}
+          immutableData={listItems.map(
+            item => item.set('selected', selectedIds.contains(item.get('id')))
+          )}
           renderRow={this.renderlistItem}
         />
       );

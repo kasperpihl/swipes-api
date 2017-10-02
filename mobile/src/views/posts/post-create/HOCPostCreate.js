@@ -1,12 +1,18 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { Keyboard } from 'react-native';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-import { setupLoading, convertObjToUnderscore, navForContext, typeForId } from 'swipes-core-js/classes/utils';
-import moment from 'moment';
-import mime from 'react-native-mime-types';
-import ImagePicker from 'react-native-image-picker';
+import { 
+  setupLoading, 
+  convertObjToUnderscore, 
+  navForContext, 
+  typeForId,
+  bindAll,
+  getDeep,
+} from 'swipes-core-js/classes/utils';
+
 import { fromJS, List } from 'immutable';
 import PostCreate from './PostCreate';
 
@@ -23,16 +29,25 @@ class HOCPostCreate extends PureComponent {
       }),
     };
 
-    this.onActionButton = this.onActionButton.bind(this);
-    this.onModalChangeType = this.onModalChangeType.bind(this);
+    bindAll(this, ['onModalTag', 'onModalChangeType', 'onActionButton', 'onFocusTextarea', 'handleAttach']);
 
   }
   componentDidMount() {
+    console.log('mount');
     this.renderActionButtons();
   }
   componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.isActive && this.props.isActive || !prevState.post.get('type') !== this.state.post.get('type')) {
-      this.renderActionButtons();
+    if(this.props.isActive) {
+      if(!prevProps.isActive) this.onFocusTextarea();
+
+      const { post } = this.state;
+      const prevPost = prevState.post;
+      if(!prevProps.isActive ||
+          prevPost.get('type') !== post.get('type') || 
+          prevPost.get('attachments').size !== post.get('attachments').size) {
+        console.log('on update');
+        this.renderActionButtons();
+      }
     }
   }
   onActionButton(i) {
@@ -61,83 +76,47 @@ class HOCPostCreate extends PureComponent {
 
   }
   onMessageChange(text) {
-    let { post } = this.state;
-    post = post.set('message', text);
-
-    this.setState({ post });
+    const { post } = this.state;
+    this.updatePost(post.set('message', text));
   }
-  onModalTag(sortedUsers, data) {
-    let { post } = this.state;
-    const { showModal } = this.props;
-    post = post.setIn(['taggedUsers'], List(data.map(i => sortedUsers.getIn([i, 'id']))));
-
-    this.updatePost(post);
-
-    showModal();
+  onModalTag(selectedIds) {
+    const { post } = this.state;
+    this.updatePost(post.setIn(['taggedUsers'], selectedIds));
   }
-  onModalChangeType(i) {
-    const { showModal } = this.props;
-
-    this.setState({ post: this.state.post.set('type', i.get('index')) });
-
-    showModal();
+  onModalChangeType(id) {
+    const { post } = this.state;
+    this.updatePost(post.set('type', id));
+  }
+  onFocusTextarea() {
+    const input = getDeep(this, 'refs.postCreate.refs.input');
+    if(input) {
+      input.focus();
+    }
   }
   onTag() {
-    const { users, showModal } = this.props;
-    let { post } = this.state;
-
-    const userInfoToActions = users.map((u, i) => {
-      const selected = this.state.post.get('taggedUsers').indexOf(u.get('id')) > -1;
-
-      const obj = {
-        title: `${msgGen.users.getFirstName(u.get('id'))} ${msgGen.users.getLastName(u.get('id'))}`,
-        selected,
-        index: i,
-        leftIcon: {
-          user: u.get('id'),
-        },
-      };
-
-      return fromJS(obj);
-    });
-
-    const modal = {
+    const { assignModal } = this.props;
+    const { post } = this.state;
+    Keyboard.dismiss();
+    assignModal({
       title: 'Tag teammates',
-      onClick: this.onModalTag.bind(this, users),
-      multiple: 'Tag',
-      items: userInfoToActions,
-      fullscreen: true,
-    };
-
-    showModal(modal);
+      actionLabel: 'Tag',
+      selectedIds: post.get('taggedUsers'),
+      onActionPress: this.onModalTag,
+    }, { onDidClose: this.onFocusTextarea });
   }
   onChangeType() {
-    const { showModal } = this.props;
-
-    const modal = {
+    const { actionModal } = this.props;
+    Keyboard.dismiss();
+    actionModal({
       title: 'Change type',
-      onClick: this.onModalChangeType,
+      onItemPress: this.onModalChangeType,
       items: fromJS([
-        {
-          title: 'Make a post',
-          index: 'message',
-        },
-        {
-          title: 'Ask a question',
-          index: 'question',
-        },
-        {
-          title: 'Make an announcement',
-          index: 'announcement',
-        },
-        {
-          title: 'Share information',
-          index: 'information',
-        },
+        { id: 'message', title: 'Make a post' },
+        { id: 'question', title: 'Ask a question' },
+        { id: 'announcement', title: 'Make an announcement' },
+        { id: 'information', title: 'Share information' },
       ]),
-    };
-
-    showModal(modal);
+    }, { onDidClose: this.onFocusTextarea });
   }
   onAttachmentClick(i) {
     const { preview } = this.props;
@@ -146,70 +125,29 @@ class HOCPostCreate extends PureComponent {
     preview(post.getIn(['attachments', i]));
   }
   onAddAttachment() {
-    const { createFile, createLink, loading } = this.props;
+    const { navPush, uploadAttachment } = this.props;
+    const { post } = this.state;
+    const attachments = post.get('attachments');
 
-    const options = {
-      title: 'Attach image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
+    if(!attachments.size) {
+      return uploadAttachment(this.handleAttach, this.onFocusTextarea);
+    }
+
+    navPush({
+      id: 'AttachmentView',
+      title: 'Attachment',
+      props: {
+        delegate: this,
+        initialAttachments: attachments
       },
-    };
-
-    ImagePicker.showImagePicker(options, (response) => {
-
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
-      } else {
-        const type = mime.lookup(response.uri) || 'application/octet-stream';
-        const ext = mime.extension(type);
-        const name = response.fileName
-          || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
-        const file = {
-          name,
-          uri: response.uri,
-          type,
-        };
-
-        loading(true);
-
-        createFile([file]).then((fileRes) => {
-          if (fileRes.ok) {
-            const link = this.getSwipesLinkObj('file', fileRes.file.id, fileRes.file.title);
-
-            createLink(link).then((res) => {
-              loading();
-              if (res.ok) {
-                const att = fromJS({ link: res.link, title: fileRes.file.title });
-                const { post } = this.state;
-                this.setState({ post: post.updateIn(['attachments'], (atts) => atts.push(att)) });
-              }
-
-            })
-          } else {
-            loading();
-          }
-        });
-      }
     });
   }
-  getSwipesLinkObj(type, id, title) {
-    const { myId } = this.props;
-    return {
-      service: {
-        name: 'swipes',
-        type,
-        id,
-      },
-      permission: {
-        account_id: myId,
-      },
-      meta: {
-        title,
-      },
-    };
+  handleAttach(att) {
+    const { post } = this.state;
+    this.setState({ post: post.updateIn(['attachments'], (atts) => atts.push(att)) });
+    this.onFocusTextarea();
   }
+
   updatePost(post) {
     this.setState({ post });
   }
@@ -225,10 +163,13 @@ class HOCPostCreate extends PureComponent {
     }
   }
   renderActionButtons() {
+    const { post } = this.state;
+    const size = post.get('attachments').size;
+
     actionButtons = [
       { icon: 'Assign' },
       { icon: this.getIconForType() },
-      { icon: 'Attachment' },
+      size ? { number: size } : { icon: 'Attachment' },
       { icon: 'Send', seperator: 'left', staticSize: true },
     ];
 
@@ -243,6 +184,7 @@ class HOCPostCreate extends PureComponent {
 
     return (
       <PostCreate
+        ref="postCreate"
         post={post}
         myId={myId}
         delegate={this}
@@ -258,15 +200,13 @@ HOCPostCreate.propTypes = {};
 function mapStateToProps(state) {
   return {
     myId: state.getIn(['me', 'id']),
-    users: cs.users.getActive(state),
   };
 }
 
 export default connect(mapStateToProps, {
   createPost: ca.posts.create,
-  showModal: a.modals.show,
-  loading: a.loading.showLoader,
-  createFile: ca.files.create,
-  createLink: ca.links.create,
-  preview: a.links.preview,
+  uploadAttachment: a.attachments.upload,
+  actionModal: a.modals.action,
+  assignModal: a.modals.assign,
+  preview: a.attachments.preview,
 })(HOCPostCreate);

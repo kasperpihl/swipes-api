@@ -45,7 +45,8 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/posts.create',
+authed.all(
+  '/posts.create',
   valBody({
     organization_id: string.require(),
     message: string.min(1).require(),
@@ -69,7 +70,8 @@ authed.all('/posts.create',
   }),
 );
 
-authed.all('/posts.follow',
+authed.all(
+  '/posts.follow',
   valBody({
     post_id: string.require(),
   }),
@@ -82,7 +84,8 @@ authed.all('/posts.follow',
   }),
 );
 
-authed.all('/posts.unfollow',
+authed.all(
+  '/posts.unfollow',
   valBody({
     post_id: string.require(),
   }),
@@ -95,7 +98,8 @@ authed.all('/posts.unfollow',
   }),
 );
 
-authed.all('/posts.archive',
+authed.all(
+  '/posts.archive',
   valBody({
     post_id: string.require(),
   }),
@@ -107,7 +111,8 @@ authed.all('/posts.archive',
   }),
 );
 
-authed.all('/posts.addComment',
+authed.all(
+  '/posts.addComment',
   valBody({
     post_id: string.require(),
     message: string.min(1).require(),
@@ -130,7 +135,8 @@ authed.all('/posts.addComment',
   }),
 );
 
-authed.all('/posts.addReaction',
+authed.all(
+  '/posts.addReaction',
   valBody({
     post_id: string.require(),
     reaction: string.require(),
@@ -145,7 +151,8 @@ authed.all('/posts.addReaction',
   }),
 );
 
-authed.all('/posts.removeReaction',
+authed.all(
+  '/posts.removeReaction',
   valBody({
     post_id: string.require(),
   }),
@@ -158,24 +165,26 @@ authed.all('/posts.removeReaction',
   }),
 );
 
-authed.all('/posts.commentAddReaction',
-valBody({
-  post_id: string.require(),
-  comment_id: string.require(),
-  reaction: string.require(),
-}),
-postsCreateReaction,
-postsCommentAddReaction,
-postsCommentAddReactionQueueMessage,
-notificationsPushToQueue,
-valResponseAndSend({
-  post_id: string.require(),
-  comment_id: string.require(),
-  reaction: object.require(),
-}),
+authed.all(
+  '/posts.commentAddReaction',
+  valBody({
+    post_id: string.require(),
+    comment_id: string.require(),
+    reaction: string.require(),
+  }),
+  postsCreateReaction,
+  postsCommentAddReaction,
+  postsCommentAddReactionQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    post_id: string.require(),
+    comment_id: string.require(),
+    reaction: object.require(),
+  }),
 );
 
-authed.all('/posts.commentRemoveReaction',
+authed.all(
+  '/posts.commentRemoveReaction',
   valBody({
     post_id: string.require(),
     comment_id: string.require(),

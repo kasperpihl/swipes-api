@@ -16,11 +16,18 @@ class HOCAndroidBackButton extends PureComponent {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
   onBackPress() {
-    const { activeSliderIndex, sliders, navPop, sliderChange, infoTab, toggleInfoTab } = this.props;
+    const { activeSliderIndex, sliders, navPop, sliderChange, infoTab, toggleInfoTab, modal, showModal } = this.props;
     const routeAmount = sliders.getIn([activeSliderIndex, 'routes']).size;
+
+    if (modal) {
+      showModal();
+
+      return true;
+    }
 
     if (infoTab.size) {
       toggleInfoTab();
+
       return true;
     }
 
@@ -52,6 +59,7 @@ function mapStateToProps(state) {
     activeSliderIndex: state.getIn(['navigation', 'sliderIndex']),
     sliders: state.getIn(['navigation', 'sliders']),
     infoTab: state.get('infoTab'),
+    modal: state.getIn(['main', 'modal'])
   };
 }
 
@@ -59,4 +67,5 @@ export default connect(mapStateToProps, {
   navPop: a.navigation.pop,
   sliderChange: a.navigation.sliderChange,
   toggleInfoTab: a.infotab.showInfoTab,
+  showModal: a.main.modal
 })(HOCAndroidBackButton);

@@ -1,70 +1,102 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation, Alert, Vibration } from 'react-native';
+import { View, Text, StyleSheet, Alert, Vibration } from 'react-native';
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import * as ca from 'swipes-core-js/actions';
 import * as a from 'actions';
+import * as gs from 'styles';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCAssigning from 'components/assignees/HOCAssigning';
 import RippleButton from 'RippleButton';
-import { colors, viewSize } from 'globalStyles';
+import { viewSize } from 'globalStyles';
+
+const styles = StyleSheet.create({
+  row: {
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('row', 'stretch', 'center'),
+    ...gs.mixins.padding(15),
+    minHeight: 64,
+  },
+  dotWrapper: {
+    ...gs.mixins.size(30),
+    ...gs.mixins.flex('center'),
+    paddingTop: 3,
+  },
+  completedDot: {
+    ...gs.mixins.size(14),
+    backgroundColor: gs.colors.greenColor,
+    borderRadius: 14 /2,
+  },
+  regularDot:{
+    ...gs.mixins.size(10),
+    ...gs.mixins.border(2, gs.colors.deepBlue50),
+    borderRadius: 10 /2,
+  },
+  seperator: {
+    ...gs.mixins.size(viewSize.width - 30, 1),
+    backgroundColor: gs.colors.deepBlue5,
+    position: 'absolute',
+    left: 15, bottom: 0,
+  },
+  assignees: {
+    justifyContent: 'center',
+  },
+  content: {
+    ...gs.mixins.size(1),
+    justifyContent: 'center',
+  },
+  title: {
+    ...gs.mixins.font(16.5, gs.colors.deepBlue100, 21),
+  },
+  status: {
+    ...gs.mixins.font(12, gs.colors.deepBlue40, 18),
+  },
+});
+
 
 class HOCGoalItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
 
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
     this.onLongPress = this.onLongPress.bind(this);
     this.onModalGoalAction = this.onModalGoalAction.bind(this);
     this.openOverview = this.openOverview.bind(this);
     this.onArchiveGoal = this.onArchiveGoal.bind(this);
     setupDelegate(this, 'onPushStack');
   }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
-  }
   onArchiveGoal() {
-    const { goal, archive, showModal } = this.props;
+    const { goal, archive } = this.props;
 
     archive(goal.get('id'));
-    showModal();
   }
-  onModalGoalAction(i) {
-    const { togglePinGoal, goal, showModal } = this.props;
+  onModalGoalAction(id) {
+    const { togglePinGoal, goal, alertModal } = this.props;
 
-    if (i.get('index') === 'archive') {
-      Alert.alert(
-        'Archive goal',
-        'This will make this goal inactive for all participants.',
-        [
-          { text: 'Cancel', onPress: () => showModal(), style: 'cancel' },
-          { text: 'OK', onPress: () => this.onArchiveGoal() },
-        ],
-        { cancelable: true },
-      );
+    if (id === 'delete') {
+      alertModal({
+        title: 'Delete goal',
+        message: 'This will remove this goal for all participants.',
+        onConfirmPress: this.onArchiveGoal,
+      });
     }
   }
 
   onLongPress() {
-    const { showModal, goal } = this.props;
+    const { actionModal, goal } = this.props;
 
-    const modal = {
+    Vibration.vibrate(5);
+    actionModal({
       title: 'Goal',
-      onClick: this.onModalGoalAction,
+      onItemPress: this.onModalGoalAction,
       items: fromJS([
         {
-          title: 'Archive',
-          index: 'archive',
+          title: 'Delete',
+          id: 'delete',
         },
       ]),
-    };
-
-    Vibration.vibrate(50);
-    showModal(modal);
+    });
   }
   openOverview() {
     const { goal } = this.props;
@@ -148,63 +180,6 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   archive: ca.goals.archive,
-  showModal: a.modals.show,
+  actionModal: a.modals.action,
+  alertModal: a.modals.alert,
 })(HOCGoalItem);
-
-const styles = StyleSheet.create({
-  row: {
-    flex: 1,
-    minHeight: 64,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
-  dotWrapper: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 3,
-  },
-  completedDot: {
-    width: 14,
-    height: 14,
-    backgroundColor: colors.greenColor,
-    borderRadius: 14 /2,
-  },
-  regularDot:{
-    width: 10,
-    height: 10,
-    borderRadius: 10 /2,
-    borderWidth: 2,
-    borderColor: colors.deepBlue50,
-  },
-  seperator: {
-    width: viewSize.width - 30,
-    height: 1,
-    backgroundColor: colors.deepBlue5,
-    position: 'absolute',
-    left: 15,
-    bottom: 0,
-  },
-  assignees: {
-    justifyContent: 'center',
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 16.5,
-    lineHeight: 21,
-    color: colors.deepBlue100,
-    includeFontPadding: false,
-  },
-  status: {
-    fontSize: 12,
-    lineHeight: 18,
-    color: colors.deepBlue40,
-  },
-});

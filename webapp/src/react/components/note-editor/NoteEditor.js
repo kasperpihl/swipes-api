@@ -10,7 +10,7 @@ import { setupDelegate } from 'react-delegate';
 import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';
 import DefaultBlocks from './blocks/default/DefaultBlocks';
-import CodeBlock from './blocks/code/CodeBlock';
+// import CodeBlock from './blocks/code/CodeBlock';
 import MediumEditor from './medium-editor/MediumEditor';
 import DraftExt from './draft-ext';
 
@@ -26,7 +26,7 @@ class NoteEditor extends Component {
         NoteLink,
       ],
       blocks: [
-        CodeBlock,
+        // CodeBlock,
         ChecklistBlock,
         DefaultBlocks,
       ],

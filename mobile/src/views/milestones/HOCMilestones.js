@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   noMilestoneWrapper: {
     alignSelf: 'stretch',
     flexDirection: 'row',
+    flex: 1,
     height: 126,
     paddingHorizontal: 15,
     paddingVertical: 18,
@@ -84,7 +85,7 @@ class HOCMilestones extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Current Milestones', 'Achieved'],
+      tabs: ['Current plans', 'Achieved'],
       tabIndex: 0,
     };
 
@@ -107,7 +108,7 @@ class HOCMilestones extends PureComponent {
 
     const overview = {
       id: 'NoMilestoneOverview',
-      title: 'No Milestone overview',
+      title: 'Goals without a plan',
       props: {
       },
     };
@@ -119,7 +120,7 @@ class HOCMilestones extends PureComponent {
 
     const overview = {
       id: 'MilestoneOverview',
-      title: 'Milestone overview',
+      title: 'Plan overview',
       props: {
         milestoneId: milestone.get('id'),
       },
@@ -142,8 +143,8 @@ class HOCMilestones extends PureComponent {
       title: 'CreateNewItemModal',
       props: {
         title: '',
-        placeholder: "Add a new milestone",
-        actionLabel: "Add milestone",
+        placeholder: "Add a new plan",
+        actionLabel: "Add plan",
         delegate: this
       }
     })
@@ -182,6 +183,11 @@ class HOCMilestones extends PureComponent {
   }
   renderNoMilestoneItems() {
     const { counter } = this.props;
+    const { tabIndex } = this.state;
+
+    if( tabIndex !== 0) {
+      return null;
+    }
 
     return (
       <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.noMilestoneWrapper} onPress={this.onOpenNoMilestone}>
@@ -191,7 +197,7 @@ class HOCMilestones extends PureComponent {
             <View style={styles.noMilestoneCircle}><View style={styles.noMilestoneDot} /></View>
           </View>
           <View style={styles.noMilestoneTitle}>
-            <Text style={styles.title}>Goals with no milestones</Text>
+            <Text style={styles.title}>Goals without a plan</Text>
             <Text style={styles.counter}>{counter}</Text>
           </View>
           <View style={styles.border} />
@@ -213,7 +219,7 @@ class HOCMilestones extends PureComponent {
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
         <Icon name="ESPlan" width="193" height="200"  />
-        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Create your first team Milestone</Text>
+        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Create your team's first plan</Text>
       </View>
     )
   }

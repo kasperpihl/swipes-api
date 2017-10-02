@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginRight: -9,
   },
   initial: {
-    fontSize: 15,
+    fontSize: 9,
     color: 'white',
     fontWeight: 'bold',
   },

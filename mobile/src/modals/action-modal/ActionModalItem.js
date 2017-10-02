@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
 import HOCAssigning from 'components/assignees/HOCAssigning';
 import Icon from 'Icon';
@@ -40,14 +40,7 @@ class ActionModalItem extends Component {
     super(props);
     this.state = {};
 
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-
     setupDelegate(this, 'onItemPress');
-  }
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
   }
   renderLeftIcon() {
     const { item } = this.props;
@@ -105,8 +98,7 @@ class ActionModalItem extends Component {
   }
   render() {
     const { item, singleRender } = this.props;
-    const isSelected = item.get('selected');
-    const backgroundColor = isSelected ? colors.blue5 : colors.bgColor;
+    const backgroundColor = item.get('selected') ? colors.blue5 : colors.bgColor;
 
     let extraStyle = {
 
@@ -119,7 +111,7 @@ class ActionModalItem extends Component {
     }
 
     return (
-      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item.get('index'), item)}>
+      <RippleButton rippleColor={colors.blue100} rippleOpacity={0.8} style={[styles.containerButton, extraStyle]} onPress={this.onItemPressCached(item.get('id'), item)}>
         <View style={[styles.container, extraStyle, { backgroundColor }]}>
           {this.renderLeftIcon()}
           {this.renderTitle()}

@@ -11,6 +11,7 @@ import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
+import Button from 'Button';
 import './styles/add-goal-item.scss';
 
 class HOCAddGoalItem extends PureComponent {
@@ -29,7 +30,7 @@ class HOCAddGoalItem extends PureComponent {
       trigger: "@",
     };
 
-    bindAll(this, ['onChange', 'onKeyDown', 'onFocus', 'onBlur']);
+    bindAll(this, ['onChange', 'onKeyDown', 'onFocus', 'onBlur', 'onGoalAdd']);
     setupDelegate(this, 'onAddGoalItemInputChange');
     setupLoading(this);
   }
@@ -114,6 +115,10 @@ class HOCAddGoalItem extends PureComponent {
       addClass += ' add-goal-item--focused';
     }
 
+    if (title.length && !this.isLoading('add')) {
+      addClass += ' add-goal-item--active'
+    }
+
     if (this.isLoading('add')) {
       addClass += ' add-goal-item--loading';
       value = this.getLoading('add').loadingLabel;
@@ -144,6 +149,9 @@ class HOCAddGoalItem extends PureComponent {
             rounded
             size={30}
           />
+        </div>
+        <div className="add-goal-item__button">
+          <Button icon="subdirectory_arrow_left" small frameless onClick={this.onGoalAdd} />
         </div>
       </div>
     );

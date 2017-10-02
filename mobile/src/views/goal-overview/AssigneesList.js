@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     flex: 0,
   },
   initialsLabel: {
-    fontSize: 28,
+    fontSize: 12,
     color: colors.bgColor,
     includeFontPadding: false,
   },

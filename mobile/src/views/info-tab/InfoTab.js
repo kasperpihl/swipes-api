@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Platform } from 'react-native';
 import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from 'globalStyles';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
@@ -9,7 +9,7 @@ import RippleButton from 'RippleButton';
 const styles = StyleSheet.create({
   container: {
     width: viewSize.width,
-    height: Platform.OS === 'ios' ? viewSize.height - 54 + 20 : viewSize.height - 54 + 24,
+    height: Platform.OS === 'ios' ? viewSize.height - 54 + 20 : viewSize.height - 54,
     position: 'absolute',
     left: 0,
     backgroundColor: 'rgba(0, 12, 47, 0.96)',
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   aboutText: {
     fontSize: 13,
     lineHeight: 18,
-    color: colors.deepBlue60,
+    color: colors.deepBlue20,
   },
   infoWrapper: {
     marginHorizontal: 15,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 13,
     lineHeight: 18,
-    color: colors.deepBlue60,
+    color: colors.deepBlue20,
   },
   actionContainer: {
     minHeight: 140,
@@ -101,13 +101,6 @@ class InfoTab extends PureComponent {
     this.state = {};
 
     this.onActionCached = setupCachedCallback(this.onAction, this);
-
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-  componentWillUpdate() {
-    LayoutAnimation.configureNext(LayoutAnimation.create(250, LayoutAnimation.Types.easeOut, LayoutAnimation.Properties.opacity));
   }
   componentWillReceiveProps(nextProps) {
     const { infoTab } = this.props;
@@ -154,7 +147,7 @@ class InfoTab extends PureComponent {
         <Text selectable={true} style={styles.infoTitle}>{inf.title.toUpperCase()}</Text>
         <View style={styles.infoContent}>
           {inf.icon ? (
-            <Icon name={inf.icon} width="18" height="18" fill={colors.deepBlue50} style={{ marginRight: 6 }} />
+            <Icon name={inf.icon} width="18" height="18" fill={colors.deepBlue20} style={{ marginRight: 6 }} />
           ) : (
             undefined
           )}
