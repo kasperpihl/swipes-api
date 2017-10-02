@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
-import FloatingInput from '../components/input/FloatingInput';
+import FloatingInput from 'compatible/components/input/FloatingInput';
 import { setupDelegate } from 'react-delegate';
 // import { map, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import './styles/signup.scss';
 
-class SignupPage extends PureComponent {
+class CompatibleSignup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -121,8 +121,8 @@ class SignupPage extends PureComponent {
   }
 }
 
-export default SignupPage;
+export default CompatibleSignup;
 
 // const { string } = PropTypes;
 
-SignupPage.propTypes = {};
+CompatibleSignup.propTypes = {};

@@ -6,9 +6,8 @@ import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
-import SignupPage from './SignupPage';
-import SignupHeader from './SignupHeader';
-import DownloadPage from './DownloadPage';
+import CompatibleSignup from './CompatibleSignup';
+import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
 import './styles/signup.scss';
 const defLinks = {
@@ -19,7 +18,7 @@ const defLinks = {
   ios: 'http://swipesapp.com/download-ios',
 };
 
-class HOCSignupPage extends PureComponent {
+class HOCCompatibleSignup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -107,7 +106,7 @@ class HOCSignupPage extends PureComponent {
     }
 
     return (
-      <SignupPage
+      <CompatibleSignup
         formData={formData}
         delegate={this}
         organization={organization}
@@ -121,17 +120,15 @@ class HOCSignupPage extends PureComponent {
     const { token } = this.props;
 
     return (
-      <div className="signup">
-        <div className="card">
-          {this.renderContent()}
-        </div>
-      </div>
+      <CompatibleCard>
+        {this.renderContent()}
+      </CompatibleCard>
     );
   }
 }
 // const { string } = PropTypes;
 
-HOCSignupPage.propTypes = {};
+HOCCompatibleSignup.propTypes = {};
 
 function mapStateToProps(state) {
   return {
@@ -142,4 +139,4 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps, {
   request: ca.api.request,
   signup: ca.users.signup,
-})(HOCSignupPage));
+})(HOCCompatibleSignup));

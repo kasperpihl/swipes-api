@@ -21,6 +21,7 @@ module.exports = {
       reducers: path.resolve(__dirname, 'src/reducers'),
       constants: path.resolve(__dirname, 'src/constants/ActionTypes'),
       'context-menus': path.resolve(__dirname, 'src/react/context-menus'),
+      compatible: path.resolve(__dirname, 'src/react/browser-compatible'),
       components: path.resolve(__dirname, 'src/react/components'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),
       'swipes-core-js': path.resolve(__dirname, 'src/../../mobile/swipes-core-js'),
