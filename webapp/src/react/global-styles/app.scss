@@ -39,10 +39,9 @@
 // ======================================================
 
 .gradient-bg {
-
   &__gradient {
+    background-color: rgba(56,149,252, 1);
     @include size(100%);
-    opacity: .7; // TODO: Fix later with Stefan
   }
 }
 

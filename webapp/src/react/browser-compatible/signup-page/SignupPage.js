@@ -24,12 +24,12 @@ class SignupPage extends PureComponent {
     if (!organization) {
       return 'Sign up to try the Swipes Workspace for a 14-day free trial. No credit card required. After the trial, continue using the Workspace for $9 per user / month.';
     }
-    return 'Your team is waiting for you. Sign up to join them';
+    return 'Your team is waiting for you. Sign up to join them.';
   }
   generateTitle() {
     const { organization, inviter } = this.props;
     if (!organization) {
-      return 'Sign up organization';
+      return 'New account to Swipes Workspace.';
     }
 
     return `Join ${msgGen.users.getFirstName(inviter)} and the ${organization.get('name')} team`;
@@ -87,7 +87,7 @@ class SignupPage extends PureComponent {
     );
   }
   renderFooter() {
-    const { inviter } = this.props;
+  const { inviter } = this.props;
 
     const isLoading = this.props.getLoading('signupButton').loading;
 

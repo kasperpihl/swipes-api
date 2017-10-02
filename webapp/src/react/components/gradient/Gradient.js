@@ -35,7 +35,7 @@ class Gradient extends PureComponent {
     }
 
     return (
-      <div className="gradient-bg" style={styles}>
+      <div className="gradient-bg">
         <div className="gradient-bg__gradient" style={styles} />
       </div>
     );

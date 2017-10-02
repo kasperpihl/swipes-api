@@ -25,15 +25,13 @@ class HOCSignupPage extends PureComponent {
     this.state = {
       formData: Map(),
       invitationToken: window.getURLParameter('invitation_token'),
-      hasLoaded: false,
     };
 
     setupLoading(this);
   }
-  componentDidMount() {
-    console.log('did mount');
+  componentWillMount() {
     window.analytics.sendEvent('Signup opened', {});
-    const { request, forceDownload, history } = this.props;
+    const { request, history } = this.props;
     const { formData, invitationToken } = this.state;
     if(invitationToken) {
       this.setLoading('signup');
@@ -95,11 +93,18 @@ class HOCSignupPage extends PureComponent {
       formData,
       organization,
       invitedBy,
-      hasLoaded,
       invitationToken,
     } = this.state;
 
     const { token } = this.props;
+    
+    if (this.getLoading('signup').loading) {
+      return (
+        <div className="signup__loader">
+          <img src="https://media.giphy.com/media/cZDRRGVuNMLOo/giphy.gif" alt="" />
+        </div>
+      );
+    }
 
     return (
       <SignupPage
@@ -113,16 +118,11 @@ class HOCSignupPage extends PureComponent {
     );
   }
   render() {
-    const { token, forceDownload } = this.props;
-    const headerProps = {
-      crumbs: ['SIGNUP', 'DOWNLOAD'],
-      activeCrumb: forceDownload ? 1 : 0,
-    };
+    const { token } = this.props;
+
     return (
       <div className="signup">
-        <SignupHeader {...headerProps} mobile />
         <div className="card">
-          <SignupHeader {...headerProps} />
           {this.renderContent()}
         </div>
       </div>
