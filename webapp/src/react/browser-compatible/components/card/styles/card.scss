@@ -3,17 +3,42 @@
 
 .card-wrapper {
   @include size(100%);
-  padding-top: 30px;
   overflow-y: auto;
+  padding-top: 30px;
   -webkit-overflow-scrolling: touch;
-  & .card {
-    @include size(100%, auto);
-    @include heightSpecifications(100%, initial);
-    @include widthSpecifications(initial, 600px);
-    @include border-radius(3px, 3px, 0px, 0px);
-    background-color: white;
-    box-shadow: 0 6px 12px 1px rgba(0,12,47,0.3);
-    margin: 0 auto;
-    padding: 0 60px;
+}
+
+.card-wrapper .card {
+  @include size(100%, auto);
+  @include heightSpecifications(100%, initial);
+  @include widthSpecifications(initial, 600px);
+  @include border-radius(3px, 3px, 0px, 0px);
+  background-color: white;
+  box-shadow: 0 6px 12px 1px rgba(0,12,47,0.3);
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+// ======================================================
+// Media Queries
+// ======================================================
+
+@media (max-width: 600px) {
+  .card-wrapper {
+    padding-top: 0;
+  }
+
+  .card-wrapper .card {
+    padding: 0 24px;
+  }
+}
+
+@media (max-height: 800px) {
+  .card-wrapper {
+    padding-top: 0;
+  }
+
+  .card-wrapper .card {
+    @include border-radius(0px, 0px, 0px, 0px);
   }
 }

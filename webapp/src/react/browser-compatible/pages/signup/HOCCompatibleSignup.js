@@ -62,9 +62,15 @@ class HOCCompatibleSignup extends PureComponent {
     const { formData } = this.state;
     this.setState({ formData: formData.set(key, e.target.value) });
   }
-  onClick() {
+  onSignup() {
     const { formData, invitationToken, me } = this.state;
     const { signup, createOrgRequest, history } = this.props;
+    
+    if (this.isLoading('signupButton')) {
+      return;
+    }
+
+
     this.setLoading('signupButton');
     signup({
       first_name: formData.get('firstName'),

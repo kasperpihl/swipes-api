@@ -1,0 +1,65 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+@import '~styles/_functions.scss';
+
+// ======================================================
+// Block
+// ======================================================
+
+.compatible-assignees {
+  @include size(auto, 48px);
+  float: right;
+  margin-right: 15px;
+}
+
+.compatible-assignees .assignee {
+  @include size(32px);
+  border: 1px solid white;
+  background-color: white;
+  border-radius: 50%;
+  float: right;
+  margin-top: -16px;
+  top: 50%;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.compatible-assignees .assignee {
+  $b: findElementinBlock(#{&}, '.assignee');
+
+  img#{$b}__profile-pic {
+    @include size(30px);
+    border-radius: 50%;
+  }
+
+  p#{$b}__initials {
+    @include font(12px, white, 500); 
+    @include size(30px);
+    background-color: $deepBlue-100;
+    border-radius: 50%;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    transform: translate(1px, 1px);
+    -ms-transform: translate(1px, 1px);
+  }
+}
+
+
+// ======================================================
+// Media quary
+// ======================================================
+
+@media (max-width: 600px) {
+  .compatible-assignees {
+    @include size(initial, 48px);
+    display: inline-block;
+    float: initial;
+    left: 50%;
+    margin: 17px 15px 29px 0;
+    transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+  }
+}

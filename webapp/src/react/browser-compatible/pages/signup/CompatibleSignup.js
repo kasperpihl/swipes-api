@@ -1,22 +1,23 @@
 import React, { PureComponent } from 'react';
-import FloatingInput from 'compatible/components/input/FloatingInput';
 import { setupDelegate } from 'react-delegate';
 // import { map, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
+import FloatingInput from 'compatible/components/input/FloatingInput';
+import CompatibleHeader from 'compatible/components/header/CompatibleHeader'
 import './styles/signup.scss';
 
 class CompatibleSignup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onClick');
+    setupDelegate(this, 'onSignup');
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
   componentDidMount() {
   }
   handleKeyDown(e) {
     if (e.keyCode === 13) {
-      this.onClick();
+      this.onSignup();
     }
   }
   getSubtitle() {
@@ -34,41 +35,12 @@ class CompatibleSignup extends PureComponent {
 
     return `Join ${msgGen.users.getFirstName(inviter)} and the ${organization.get('name')} team`;
   }
-  renderPeople() {
-    const { inviter } = this.props;
-    if (!inviter) {
-      return undefined;
-    }
-    const photoSrc = msgGen.users.getPhoto(inviter);
-    if (!photoSrc) {
-      return undefined;
-    }
-    return (
-      <div className="assignees">
-        <div className="assignee">
-          <img src={photoSrc} alt="" />
-        </div>
-      </div>
-    );
-  }
   renderHeader() {
-    return [
-      <div key="1" className="title-container">
-        {this.renderPeople()}
-        <h1 className="title">{this.generateTitle()}</h1>
-      </div>,
-      <h3 key="2" className="subtitle">{this.getSubtitle()}</h3>,
-    ];
-  }
-  renderForm() {
+    const { inviter } = this.props;
+    
     return (
-      <div className="form">
-        {this.renderInputField('email', 'email', 'Email')}
-        {this.renderInputField('firstName', 'text', 'First name')}
-        {this.renderInputField('lastName', 'text', 'Last name')}
-        {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
-      </div>
-    );
+      <CompatibleHeader title={this.generateTitle()} subtitle={this.getSubtitle()} assignee={inviter} />
+    )
   }
   renderInputField(key, type, placeholder, props) {
     const { delegate } = this.props;
@@ -86,14 +58,23 @@ class CompatibleSignup extends PureComponent {
       />
     );
   }
+  renderForm() {
+    return (
+      <div className="form">
+        {this.renderInputField('email', 'email', 'Email')}
+        {this.renderInputField('firstName', 'text', 'First name')}
+        {this.renderInputField('lastName', 'text', 'Last name')}
+        {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
+      </div>
+    );
+  }
   renderFooter() {
-  const { inviter } = this.props;
-
+    const { inviter } = this.props;
     const isLoading = this.props.getLoading('signupButton').loading;
 
     return (
       <div className="footer">
-        <div className="button" ref="button" onClick={this.onClick}>
+        <a className="footer__button" ref="button" onClick={this.onSignup}>
           {
             isLoading ? (
               <Icon icon="loader" width="12" height="12" />
@@ -101,8 +82,8 @@ class CompatibleSignup extends PureComponent {
               'Sign up'
             )
           }
-        </div>
-        <div className="footer-sentence">
+        </a>
+        <div className="footer__sentence">
           By signing up you agree to the <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">Terms of service</a>
         </div>
       </div>
@@ -110,11 +91,9 @@ class CompatibleSignup extends PureComponent {
   }
   render() {
     return (
-      <div className="singup-wrapper">
+      <div className="compatible-signup">
         {this.renderHeader()}
-
         {this.renderForm()}
-
         {this.renderFooter()}
       </div>
     );

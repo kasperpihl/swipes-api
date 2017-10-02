@@ -1,6 +1,104 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+// ======================================================
+// Block
+// ======================================================
+
 .compatible-login {
-  
+  padding-top: 30px;
+}
+
+.compatible-login .form {
+  margin-top: 40px;
+}
+
+.compatible-login .footer {
+  @include size(100%, auto);
+  padding: 69px 0;
+  padding-top: 90px;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.compatible-signup .footer {
+  $b: findElementInBlock(#{&}, '.footer');
+
+  #{$b}__reset-password {
+    @include size(auto, 36px);
+    @include font(12px, $deepBlue100);
+    padding: 0 12px;
+    float: left;
+    cursor: pointer;
+    z-index: 2;
+
+    &:after {
+      @include size(100%, 2px);
+      background-color: rgba($deepBlue100, .3);
+      left: 0; bottom: 0;
+      position: absolute;
+    }
+
+    &:hover, &:focus {
+      background-color: $blue-80;
+
+      &:after {
+        background-color: rgba($deepBlue100, 1);
+      }
+    }
+  }
+
+  a#{$b}__button {
+    @include size(auto, 36px);
+    @include font(12px, white, 36px, 500);
+    background-color: $blue-100;
+    border-radius: 100px;
+    padding: 0 12px;
+    float: right;
+    margin-left: 21px;
+    cursor: pointer;
+    z-index: 2;
+
+    &:hover, &:focus {
+      background-color: $blue-80;
+    }
+  }
+}
+
+// ======================================================
+// Media quary
+// ======================================================
+
+@media (max-width: 600px) {
+
+  .compatible-signup .form {
+    margin-top: 30px;
+  }
+
+  .compatible-signup .footer {
+    $b: findElementInBlock(#{&}, '.footer');
+
+    a#{$b}__button {
+      float: initial;
+      left: 50%;
+      transform: translateX(-50%) !important;
+      -ms-transform: translateX(-50%) !important;
+      margin: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+@media (max-height: 800px) {
+
+  .compatible-signup .form {
+    margin-top: 30px;
+  }
+
+  .compatible-signup .footer {
+    padding: 42px 0;
+  }
 }

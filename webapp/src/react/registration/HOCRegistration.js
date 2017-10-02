@@ -51,11 +51,8 @@ class HOCRegistration extends Component {
             message: 'We will send you an email to change your password.',
           });
         });
-
       }
     });
-
-
   }
   handleEmailChange(value) {
     const { loading } = this.state;

@@ -46,3 +46,22 @@
 
   @return $x2;
 }
+
+
+// new getElementSelectorInBlock
+
+@function findElementInBlock($elementPath, $block) {
+  $selector: str-find($elementPath, $block);
+
+  @return $selector;
+}
+
+@function str-find($string, $search) {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, $index)
+  }
+
+  @return $string;
+};

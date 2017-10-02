@@ -1,244 +1,98 @@
-@import '~styles/_vars.scss/';
 @import '~styles/_mixins.scss/';
 
-html, body {
-	@include size(100%);
+// ======================================================
+// Block
+// ======================================================
+
+.compatible-signup {
+  padding-top: 30px;
 }
 
-.header {
-	@include size(100%, 90px);
-	vertical-align: center;
-
-	&--mobile {
-		padding: 0 24px;
-		display: none;
-	}
+.compatible-signup .form {
+	margin-top: 40px;
 }
 
-.breadcrumbs {
-	@include size(auto, 90px);
-	float: left;
-}
-
-.breadcrumb {
-	@include font(11px, $deepBlue-20, 24px, 500);
-	display: inline-block;
-	margin-right: 12px;
-	top: 50%;
-  transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	text-transform: uppercase;
-
-	&--active {
-		@include font($c: $deepBlue-60)
-	}
-}
-
-.logo {
-	float: right;
-	top: 50%;
-  transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-
-	svg {
-		@include size(24px);
-		@include svg-color($deepBlue-20)
-		margin-right: 3px;
-	}
-}
-
-.title-container {
-	@include size(100%, auto);
-}
-
-.title {
-	@include font(36px, $deepBlue-90, 48px, 300);
-	display: table-cell;
-}
-
-.assignees {
-	@include size(auto, 48px);
-	float: right;
-	margin-left: 15px;
-}
-
-.assignee {
-	@include size(32px);
-	border: 1px solid white;
-	background-color: white;
-	border-radius: 50%;
-	float: right;
-	top: 50%;
-  transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-
-	img {
-		@include size(30px);
-		border-radius: 50%;
-	}
-
-	&:not(:last-child) {
-		margin-left: -9px;
-	}
-}
-
-h3.subtitle {
-	@include font(15px, $deepBlue-60, 24px, 400);
-	margin-top: 12px;
-}
-
-.form {
-	margin-top: 81px;
-}
-
-.footer {
+.compatible-signup .footer {
 	@include size(100%, auto);
 	padding: 69px 0;
+  padding-top: 90px;
 }
 
-.footer-sentence {
-	@include font(12px, $deepBlue-40, 18px, 500);
-	text-align: right;
-	margin-top: 9px;
+// ======================================================
+// Elements
+// ======================================================
 
-	a {
-		@include font(12px, $blue-100, 18px, 500);
+.compatible-signup .footer {
+  $b: findElementInBlock(#{&}, '.footer');
+
+  a#{$b}__button {
+    @include size(auto, 36px);
+    @include font(12px, white, 36px, 500);
+    background-color: $blue-100;
+    border-radius: 100px;
+    padding: 0 12px;
+    float: right;
+    margin-left: 21px;
     cursor: pointer;
+    z-index: 2;
 
-    &:hover {
-      text-decoration: underline;
+    &:hover, &:focus {
+      background-color: $blue-80;
     }
-	}
+  }
+
+  #{$b}__sentence {
+    @include font(12px, $deepBlue-40, 18px, 500);
+    text-align: right;
+    margin-top: 9px;
+
+    & a {
+      @include font(12px, $blue-100, 18px, 500);
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
-.button {
-	@include size(auto, 36px);
-	@include font(12px, white, 36px, 500);
-	background-color: $blue-100;
-	border-radius: 100px;
-	padding: 0 12px;
-	float: right;
-	margin-left: 21px;
-	cursor: pointer;
-	z-index: 2;
-
-	&:hover {
-		background-color: $blue-80;
-	}
-}
-
+// ======================================================
+// Media quary
+// ======================================================
 
 @media (max-width: 600px) {
-  .signup {
-    padding-top: 0px;
-  }
 
-	.card {
-		padding: 0 24px;
-	}
-
-	.header {
-		display: none;
-	}
-
-	.header.header--mobile {
-		display: block;
-		padding-bottom: 12px;
-
-		.breadcrumb {
-			@include font($c: white);
-			opacity: .3;
-			top: 100%;
-			transform: translateY(-36px);
-			-ms-transform: translateY(-36px);
-
-			&--active {
-				@include font($c: white);
-				opacity: 1;
-			}
-		}
-
-		.logo {
-			top: 100%;
-			transform: translateY(-26px);
-			-ms-transform: translateY(-26px);
-
-			svg {
-				@include svg-color(white);
-			}
-		}
-	}
-
-	.assignees {
-		@include size(initial, 48px);
-		float: initial;
-		left: 50%;
-		display: inline-block;
-		transform: translateX(-50%);
-		-ms-transform: translateX(-50%);
-		margin-top: 29px;
-		margin-bottom: 17px;
-		margin-left: 0;
-	}
-
-	h1.title {
-		@include font(30px, $deepBlue-90, 39px, 300);
-		display: block;
-		text-align: center;
-	}
-
-	h3.subtitle {
-		display: block;
-		text-align: center;
-	}
-
-	.form {
-		margin-top: 51px;
-	}
-
-	.footer-sentence {
-		text-align: center;
-	}
-	.footer {
-		.button {
-			float: initial;
-			left: 50%;
-			transform: translateX(-50%) !important;
-				-ms-transform: translateX(-50%) !important;
-			margin: 0;
-			display: inline-block;
-			vertical-align: middle;
-		}
-	}
-}
-
-
-@media (max-height: 800px) {
-	.signup {
-		padding-top: 0px;
-	}
-
-	.card {
-		@include border-radius(0px, 0px, 0px, 0px);
-	}
-
-	.header {
-		@include size(100%, 60px);
-	}
-
-  .title-container {
-    padding-top: 21px;
-  }
-
-	.breadcrumbs {
-		@include size(auto, 60px);
-	}
-
-	.form {
+	.compatible-signup .form {
 		margin-top: 30px;
 	}
 
-	.footer {
+  .compatible-signup .footer {
+    $b: findElementInBlock(#{&}, '.footer');
+
+    a#{$b}__button {
+      float: initial;
+      left: 50%;
+      transform: translateX(-50%) !important;
+      -ms-transform: translateX(-50%) !important;
+      margin: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    #{$b}__sentence {
+      text-align: center;
+    }
+  }
+}
+
+@media (max-height: 800px) {
+
+	.compatible-signup .form {
+		margin-top: 30px;
+	}
+
+	.compatible-signup .footer {
 		padding: 42px 0;
 	}
 }
