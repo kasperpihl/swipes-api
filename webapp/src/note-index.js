@@ -12,7 +12,6 @@ if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
 }
 
-
 render(
   <ExternalNoteView />, document.getElementById('content'),
 );
