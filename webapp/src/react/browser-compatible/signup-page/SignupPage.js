@@ -20,23 +20,18 @@ class SignupPage extends PureComponent {
     }
   }
   getSubtitle() {
-    const { organization, inviter, createOrganization } = this.props;
-    if (createOrganization) {
-      return 'You are invited to try the Swipes Workspace for a 14-day free trial. Start your trial by signing up. No credit card required. After the trial, continue using the Workspace for $9 per user / month.';
-    }
-    if (!inviter) {
-      return 'Hint: Swipes Personal users are getting invites.';
+    const { organization } = this.props;
+    if (!organization) {
+      return 'Sign up to try the Swipes Workspace for a 14-day free trial. No credit card required. After the trial, continue using the Workspace for $9 per user / month.';
     }
     return 'Your team is waiting for you. Sign up to join them';
   }
   generateTitle() {
-    const { organization, inviter, createOrganization } = this.props;
-    if (createOrganization) {
+    const { organization, inviter } = this.props;
+    if (!organization) {
       return 'Sign up organization';
     }
-    if (!inviter) {
-      return 'Swipes Workspace is invite only';
-    }
+
     return `Join ${msgGen.users.getFirstName(inviter)} and the ${organization.get('name')} team`;
   }
   renderPeople() {
@@ -66,13 +61,8 @@ class SignupPage extends PureComponent {
     ];
   }
   renderForm() {
-    const { createOrganization: cO, inviter } = this.props;
-    if (!cO && !inviter) {
-      return undefined;
-    }
     return (
       <div className="form">
-        {cO ? this.renderInputField('organizationName', 'text', 'Organization name') : undefined}
         {this.renderInputField('email', 'email', 'Email')}
         {this.renderInputField('firstName', 'text', 'First name')}
         {this.renderInputField('lastName', 'text', 'Last name')}
@@ -97,10 +87,8 @@ class SignupPage extends PureComponent {
     );
   }
   renderFooter() {
-    const { createOrganization: cO, inviter } = this.props;
-    if (!cO && !inviter) {
-      return undefined;
-    }
+    const { inviter } = this.props;
+
     const isLoading = this.props.getLoading('signupButton').loading;
 
     return (
