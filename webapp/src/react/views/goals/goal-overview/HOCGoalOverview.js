@@ -189,8 +189,8 @@ class HOCGoalOverview extends PureComponent {
         this.setLoading('dots');
         funcToCall(milestoneId, goal.get('id')).then((res) => {
           if (res.ok) {
-            this.clearLoading('dots', `Milestone ${action}`, 3000);
-            window.analytics.sendEvent(`Milestone ${action}`, {});
+            this.clearLoading('dots', `Plan ${action}`, 3000);
+            window.analytics.sendEvent(`Plan ${action}`, {});
           } else {
             this.clearLoading('dots', '!Something went wrong', 3000);
           }
