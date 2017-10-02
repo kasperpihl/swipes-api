@@ -1,0 +1,9 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+.gradient-bg {
+  @include size(100%);
+  left: 0; top: 0;
+  position: fixed;
+  z-index: -1;
+}

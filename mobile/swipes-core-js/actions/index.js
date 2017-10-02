@@ -3,7 +3,6 @@ import * as attachments from './attachments';
 import * as autoComplete from './auto-complete';
 import * as cache from './cache';
 import * as files from './files';
-import * as filters from './filters';
 import * as goals from './goals';
 import * as links from './links';
 import * as me from './me';
@@ -23,7 +22,6 @@ export {
   autoComplete,
   cache,
   files,
-  filters,
   goals,
   links,
   me,

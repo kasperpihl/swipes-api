@@ -1,8 +1,7 @@
 import autoComplete from './auto-complete';
 import cache from './cache';
 import connection from './connection';
-import filters from './filters';
-import global from './global';
+import globals from './globals';
 import goals from './goals';
 import me from './me';
 import milestones from './milestones';
@@ -18,8 +17,7 @@ export {
   autoComplete,
   cache,
   connection,
-  filters,
-  global,
+  globals,
   goals,
   me,
   milestones,

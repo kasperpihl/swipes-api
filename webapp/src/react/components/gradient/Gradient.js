@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import gradient from 'swipes-core-js/classes/gradient';
 
+import './style/gradient.scss';
+
 class Gradient extends PureComponent {
   constructor(props) {
     super(props);
@@ -27,17 +29,13 @@ class Gradient extends PureComponent {
   }
   render() {
     const styles = gradient.getGradientStyles();
-    if (process.env.NODE_ENV !== 'production') {
-      // styles.opacity = 0.3;
-    }
+
     if (this.state.gradientPos) {
       styles.backgroundPosition = `${this.state.gradientPos}% 50%`;
     }
 
     return (
-      <div className="gradient-bg">
-        <div className="gradient-bg__gradient" style={styles} />
-      </div>
+      <div className="gradient-bg" style={styles} />
     );
   }
 }

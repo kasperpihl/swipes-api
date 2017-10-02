@@ -5,6 +5,10 @@ import createCachedSelector from 're-reselect';
 import Fuse from 'fuse.js';
 import { funcWrap } from 'valjs';
 
+export function getURLParameter(name) {
+  return decodeURIComponent((new  RegExp(`[?|&]${name}=` + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null; // eslint-disable-line
+}
+
 export function searchSelectorFromKeys(keys, getAll) {
   const getSearchString = (state, props) => props.searchString;
   const arraySelector = createSelector(

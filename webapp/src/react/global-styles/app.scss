@@ -23,31 +23,9 @@
   overflow: hidden;
 }
 
-.gradient-bg {
-  @include size(100%);
-  left: 0; top: 0;
-  position: fixed;
-  z-index: -1;
-}
-
 .no-select {
   user-select: none !important;
 }
-
-// ======================================================
-// Elements
-// ======================================================
-
-.gradient-bg {
-  &__gradient {
-    background-color: rgba(56,149,252, 1);
-    @include size(100%);
-  }
-}
-
-// ======================================================
-// Modifiers
-// ======================================================
 
 // OS specific modifiers
 
