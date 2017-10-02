@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
@@ -23,7 +23,7 @@ class HOCCompatibleSignup extends PureComponent {
     super(props);
     this.state = {
       formData: Map(),
-      invitationToken: window.getURLParameter('invitation_token'),
+      invitationToken: getURLParameter('invitation_token'),
     };
 
     setupLoading(this);

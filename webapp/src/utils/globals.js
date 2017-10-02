@@ -3,7 +3,6 @@ import { version } from '../../package.json';
 window.__VERSION__ = version;
 window.__DEV__ = (process.env.NODE_ENV !== 'production');
 window.__API_URL__ = `${location.origin}`;
-window.getURLParameter = name => decodeURIComponent((new RegExp(`[?|&]${name}=` + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null; // eslint-disable-line
 
 // Detect which browser and what version.
 const browserRes = (function(){

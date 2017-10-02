@@ -12,7 +12,7 @@
     "start": "webpack-dev-server --progress",
     "prebuild": "npm run clean-and-copy",
     "build": "webpack --progress",
-    "postinstall": "cd ../mobile/swipes-core-js; npm install && cd ../../webapp; path-exists ./src/Tester.js && echo 'Tester.js found' || ncp ./src/tester-sample.js ./src/Tester.js"
+    "postinstall": "cd ../mobile/swipes-core-js; npm install"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -50,7 +50,8 @@
     "redux-persist-immutable": "^4.3.1",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
-    "valjs": "0.0.28"
+    "valjs": "0.0.28",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
@@ -72,13 +73,13 @@
     "html-webpack-plugin": "^2.30.1",
     "ncp": "^2.0.0",
     "node-sass": "^4.5.3",
-    "path-exists-cli": "^1.0.0",
     "react-addons-perf": "^15.4.2",
     "react-hot-loader": "^3.0.0-beta.6",
     "react-svg-loader": "^2.0.0-alpha.1",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"

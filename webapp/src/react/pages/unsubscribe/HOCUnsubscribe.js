@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import './styles/unsubscribe.scss';
@@ -15,8 +15,8 @@ class HOCUnsubscribe extends PureComponent {
   }
   componentWillMount() {
     const { request } = this.props;
-    const email = window.getURLParameter('email');
-    const emailType = window.getURLParameter('email_type');
+    const email = getURLParameter('email');
+    const emailType = getURLParameter('email_type');
     this.setLoading('unsubscribe', 'Unsubscribing...');
     request('users.unsubscribe', {
       email,

@@ -6,7 +6,7 @@ import React, { PureComponent } from 'react'
 // import Button from 'Button';
 import { miniIconForId } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
-import TimeAgo from 'components/time-ago/TimeAgo';
+import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import StyledText from 'components/styled-text/StyledText';
 import TextParser from 'components/text-parser/TextParser';
 import './styles/post-result.scss';

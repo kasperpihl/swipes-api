@@ -62,6 +62,9 @@ module.exports = {
       template: 'statics/index.html',
       chunks: ['app']
     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common' // Specify the common bundle's name.
+    })
 
 
   ],
@@ -86,18 +89,14 @@ module.exports = {
         } ]
       },
       {
-        test: /\.(eot|ttf|woff|woff2)$/,
-        // Inline small woff files and output them below font/.
+        test: /\.(woff)$/,
         use: [{
-          loader: 'file-loader',
+          loader: 'url-loader',
           options: {
-            name: 'fonts/[name].[hash:6].[ext]'
+            limit: 65000
           }
-        }],
+        }]
       },
-      /*{ test: /\.(ttf|woff|woff2)?$/,
-        loader: 'file?name=fonts/[name].[hash:6].[ext]'
-      },*/
       {
         test: /\.(png|jpg|jpeg|gif)?$/,
         use: [{
@@ -107,19 +106,6 @@ module.exports = {
             name: 'img/[name]-[hash:6].[ext]'
           }
         }]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'autoprefixer-loader',
-            options: {
-              browsers: '> 1%'
-            }
-          }
-        ],
       },
       {
         test: /\.scss$/,
@@ -148,8 +134,7 @@ module.exports = {
     contentBase: './dist',
     inline: true,
     proxy: {
-      '/v1/**': Object.assign({}, apiRedirect),
-      '/s/**': Object.assign({}, apiRedirect)
+      '/v1/**': Object.assign({}, apiRedirect)
     },
     historyApiFallback: true
   }

@@ -8,7 +8,7 @@ import SWView from 'SWView';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import TimeAgo from 'components/time-ago/TimeAgo';
+import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import {
   convertToRaw,
   EditorState,

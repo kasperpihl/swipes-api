@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { bindAll } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import { bindAll } from '../classes/utils';
+import { timeAgo } from '../classes/time-utils';
 
 const MAX = 5000;
 const MIN = 3000;

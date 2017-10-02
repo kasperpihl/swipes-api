@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import 'whatwg-fetch';
 import 'src/utils/globals';
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -31,18 +32,11 @@ const delegate = {
 }
 init(store, delegate);
 
-let Tester;
-if (process.env.NODE_ENV !== 'production') {
-  Tester = require('./Tester').default; // eslint-disable-line
-}
-
 render(
   <Provider store={store}>
-    {Tester || (
-      <BrowserRouter>
-        <Root />
-      </BrowserRouter>
-    )}
+    <BrowserRouter>
+      <Root />
+    </BrowserRouter>
   </Provider>
   , document.getElementById('content'),
 );

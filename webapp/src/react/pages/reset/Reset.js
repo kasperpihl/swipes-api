@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
-import { apiRequest, bindAll, setupLoading } from 'swipes-core-js/classes/utils';
+import { apiRequest, bindAll, setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
 import FloatingInput from 'src/react/browser-compatible/components/input/FloatingInput';
 import Icon from 'Icon';
 

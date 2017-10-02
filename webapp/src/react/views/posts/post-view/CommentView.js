@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { URL_REGEX } from 'swipes-core-js/classes/utils';
-import TimeAgo from 'components/time-ago/TimeAgo';
+import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 // import SWView from 'SWView';
 // import Button from 'Button';

@@ -5,7 +5,7 @@ import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import { attachmentIconForService, URL_REGEX } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-import TimeAgo from 'components/time-ago/TimeAgo';
+import TimeAgo from 'swipes-core-js/components/TimeAgo';
 
 import './styles/notification-item';
 
