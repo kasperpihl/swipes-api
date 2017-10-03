@@ -62,6 +62,12 @@ class HOCCompatibleSignup extends PureComponent {
     const { formData } = this.state;
     this.setState({ formData: formData.set(key, e.target.value) });
   }
+  onNavigateToLogin(e) {
+    const { history } = this.props;
+    history.push('/login');
+
+    return false;
+  }
   onSignup() {
     const { formData, invitationToken, me } = this.state;
     const { signup, createOrgRequest, history } = this.props;
@@ -105,7 +111,7 @@ class HOCCompatibleSignup extends PureComponent {
     
     if (this.getLoading('signup').loading) {
       return (
-        <div className="signup__loader">
+        <div className="compatible-signup__loader">
           <img src="https://media.giphy.com/media/cZDRRGVuNMLOo/giphy.gif" alt="" />
         </div>
       );

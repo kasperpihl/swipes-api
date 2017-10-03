@@ -22,19 +22,53 @@
 // Elements
 // ======================================================
 
+.compatible-signup {
+
+  &__loader {
+    @include widthSpecifications(initial, 100%);
+    margin: 0 auto;
+
+    img {
+      @include widthSpecifications(initial, 100%);
+      left: 50%;
+      transform: translateX(-50%) !important;
+      -ms-transform: translateX(-50%) !important;
+    }
+  }
+}
+
 .compatible-signup .footer {
   $b: findElementInBlock(#{&}, '.footer');
 
+  p#{$b}__switch {
+    @include font(12px, $deepBlue-40, 18px, 500);
+    text-align: center;
+    margin-top: 9px;
+    padding: 0 15px;
+
+    & a {
+      @include font(12px, $blue-100, 18px, 500);
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
   a#{$b}__button {
-    @include size(auto, 36px);
+    @include size(250px, 36px);
     @include font(12px, white, 36px, 500);
     background-color: $blue-100;
-    border-radius: 100px;
-    padding: 0 12px;
-    float: right;
-    margin-left: 21px;
+    display: inline-block;
+    float: initial;
     cursor: pointer;
     z-index: 2;
+    left: 50%;
+    text-align: center;
+    transform: translateX(-50%) !important;
+    -ms-transform: translateX(-50%) !important;
+    vertical-align: middle;
 
     &:hover, &:focus {
       background-color: $blue-80;
@@ -43,8 +77,8 @@
 
   #{$b}__sentence {
     @include font(12px, $deepBlue-40, 18px, 500);
-    text-align: right;
-    margin-top: 9px;
+    text-align: center;
+    margin-top: 30px;
 
     & a {
       @include font(12px, $blue-100, 18px, 500);
@@ -66,24 +100,6 @@
 	.compatible-signup .form {
 		margin-top: 30px;
 	}
-
-  .compatible-signup .footer {
-    $b: findElementInBlock(#{&}, '.footer');
-
-    a#{$b}__button {
-      float: initial;
-      left: 50%;
-      transform: translateX(-50%) !important;
-      -ms-transform: translateX(-50%) !important;
-      margin: 0;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    #{$b}__sentence {
-      text-align: center;
-    }
-  }
 }
 
 @media (max-height: 800px) {

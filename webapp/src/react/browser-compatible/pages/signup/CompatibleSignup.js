@@ -10,7 +10,7 @@ class CompatibleSignup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onSignup');
+    setupDelegate(this, 'onSignup', 'onNavigateToLogin');
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
   componentDidMount() {
@@ -83,6 +83,9 @@ class CompatibleSignup extends PureComponent {
             )
           }
         </a>
+        <p className="footer__switch">
+          Already have an account? <a href="" className="footer__switch-button" onClick={this.onNavigateToLogin}>Sign in here</a>
+        </p>
         <div className="footer__sentence">
           By signing up you agree to the <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">Terms of service</a>
         </div>
