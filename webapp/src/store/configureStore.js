@@ -1,7 +1,7 @@
 import { compose, applyMiddleware, createStore } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import thunk from 'redux-thunk';
-import Immutable, { Map } from 'immutable';
+import Immutable, { fromJS } from 'immutable';
 import localForage from "localforage";
 import rootReducer from 'reducers';
 import dev from './configureStore.dev';
@@ -10,7 +10,7 @@ const isProd = (process.env.NODE_ENV === 'production');
 const middlewares = isProd ? [] : dev.middlewares;
 
 export default function configureStore(preloadedState) {
-  preloadedState = preloadedState || Map();
+  preloadedState = fromJS(preloadedState || {});
 
   const enhancer = compose(
     applyMiddleware(
