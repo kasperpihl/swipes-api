@@ -62,7 +62,7 @@ export function successGradient(color) {
 // ======================================================
 export const forceLogout = () => {
   window.analytics.logout();
-  localStorage.clear();
+  localForage.clear();
   window.location.replace('/');
 };
 export const signout = cb => dp => dp(ca.api.request('users.signout')).then((res) => {

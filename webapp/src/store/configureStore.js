@@ -31,6 +31,7 @@ export default function configureStore(preloadedState) {
     blacklist: ['main', 'search', 'filters', 'autoComplete'],
   });
   window.getState = store.getState;
+  window.localForage = localForage;
   if (!isProd) {
     window.dispatch = store.dispatch;
     window.Immutable = Immutable;

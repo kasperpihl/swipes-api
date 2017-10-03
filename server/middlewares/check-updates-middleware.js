@@ -18,9 +18,15 @@ const newerVersionExist = (client, server) => {
 
     const serverVals = server.split('.');
     const clientVals = client.split('.');
+    let isBigger = false;
     serverVals.forEach((serverVal, i) => {
-      const clientVal = clientVals[i];
-      if(parseInt(serverVal || '0', 10) > parseInt(clientVal || '0', 10)) {
+
+      const clientVal = parseInt(clientVals[i] || '0', 10);
+      serverVal = parseInt(serverVal || '0', 10);
+      if(clientVal > serverVal) {
+        isBigger = true;
+      }
+      if(serverVal > clientVal && !isBigger) {
         newerVersion = true;
       }
     })

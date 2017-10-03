@@ -24,7 +24,7 @@ class HOCCompatibleLogin extends PureComponent {
   }
   onNavigateToSignup(e) {
     const { history } = this.props;
-    history.push('/signup');
+    history.push('/register');
 
     return false;
   }

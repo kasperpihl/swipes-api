@@ -39,6 +39,7 @@ export const request = (options, data) => (d, getState) => {
   } else {
     command = options.command;
   }
+
   options = options || {};
 
   let body = Object.assign({}, {

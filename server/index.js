@@ -86,10 +86,10 @@ app.use('/v1', (req, res, next) => {
 });
 // Get the config table into res.locals.config
 app.use('/v1', getConfig);
-// Checking for updates
-app.use('/v1', checkForUpdates);
 // No authed routes goes here
 app.use('/v1', routes.v1NotAuthed);
+// Checking for updates
+app.use('/v1', checkForUpdates);
 // Validation of user's token
 app.use('/v1', authParseToken, authCheckToken);
 // Authed routes goes here
