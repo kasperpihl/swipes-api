@@ -49,18 +49,18 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'statics/page.html',
-      chunks: ['reset'],
+      chunks: ['reset', 'common'],
       filename: 'reset.html'
     }),
     new HtmlWebpackPlugin({
       template: 'statics/page.html',
-      chunks: ['note'],
+      chunks: ['note', 'common'],
       filename: 'note.html'
     }),
 
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
-      chunks: ['app']
+      chunks: ['app', 'common']
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common' // Specify the common bundle's name.
