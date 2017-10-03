@@ -33,7 +33,37 @@ class HOCCompatibleLogin extends PureComponent {
     this.setState({ formData: formData.set(key, e.target.value) });
   }
   onSignin() {
+    const { request, history } = this.props;
+    const { formData } = this.state;
+
+    if (this.isLoading('signInButton')) {
+      return;
+    }
     
+    this.setLoading('signInButton');
+
+    request('users.signin', {
+      email: formData.get('email'),
+      password: formData.get('password')
+    }).then((res) => {
+      if (!res.ok) {
+        let label = '!Something went wrong :/';
+
+        if (res.error && res.error.message) {
+          label = '!' + res.error.message;
+
+          if (label === "!body /users.signin: Invalid object['email']: did not match format") {
+            label = '!Not a valid email';
+          }
+        }
+
+        this.clearLoading('signInButton', label);
+      } else {
+        history.push('/');
+        window.analytics.sendEvent('Logged in', {});
+        this.clearLoading('signInButton');
+      }
+    });
   }
   onResetPassword(email) {
     const { request } = this.props;

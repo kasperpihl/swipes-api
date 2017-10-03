@@ -30,7 +30,7 @@ class CompatibleLogin extends PureComponent {
   }
   handleKeyDown(e) {
     if (e.keyCode === 13) {
-      this.onSignup();
+      this.onSignin();
     }
   }
   renderHeader() {
@@ -71,7 +71,7 @@ class CompatibleLogin extends PureComponent {
 
     return (
       <div className="footer">
-        <CompatibleButton title="Log in" onClick={this.onSignup} {...getLoading('signinButton')}/>
+        <CompatibleButton title="Log in" onClick={this.onSignin} {...getLoading('signInButton')}/>
         <p className="footer__switch">
           Don't have an account yet? <a href="" className="footer__switch-button" onClick={this.onNavigateToSignup}>Sign up now</a>
         </p>

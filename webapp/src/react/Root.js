@@ -33,11 +33,11 @@ class Root extends PureComponent {
     // }
 
     if (path === '/' && isHydrated && !token) {
-      history.push('/login');
+      // history.push('/login');
     }
 
     if (path === '/login' && isHydrated && token) {
-      history.push('/');
+      // history.push('/');
     }
   }
   renderTopbar() {
