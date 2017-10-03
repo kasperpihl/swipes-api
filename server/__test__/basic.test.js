@@ -12,7 +12,6 @@ const locals = {};
 
 // const deleteProps
 const updateLocals = (res, fields) => {
-  console.log(fields);
   fields.forEach((field) => {
     if (typeof field === 'object') {
       locals[field.key] = res[field.value];
@@ -196,13 +195,33 @@ test('goal create', () => {
     },
   })
     .then((result) => {
-      console.log(result);
       const goal = updateLocals(result.goal, [{
         key: 'goal_id',
         value: 'id',
-      }, 'updated_at', 'created_at', 'created_by', 'organization_id', 'history']);
+      }, 'updated_at', 'created_at', 'created_by', 'organization_id', 'history', 'assignees']);
 
       result.goal = goal;
+      expect(result).toMatchSnapshot();
+    });
+});
+
+test('post create type post', () => {
+  return rpap.post({
+    url: '/posts.create',
+    body: {
+      message: 'test post',
+      organization_id: locals.organization.id,
+      type: 'post',
+      token: locals.token,
+    },
+  })
+    .then((result) => {
+      const post = updateLocals(result.post, [{
+        key: 'post_id',
+        value: 'id',
+      }, 'updated_at', 'created_at', 'created_by', 'organization_id', 'followers']);
+
+      result.post = post;
       expect(result).toMatchSnapshot();
     });
 });

@@ -10,9 +10,6 @@ exports[`goal create 1`] = `
 Object {
   "goal": Object {
     "archived": false,
-    "assignees": Array [
-      "UOF07Q186",
-    ],
     "attachment_order": Array [],
     "attachments": Object {},
     "completed_at": null,
@@ -40,6 +37,22 @@ Object {
     "title": "Test milestone",
   },
   "ok": true,
+}
+`;
+
+exports[`post create type post 1`] = `
+Object {
+  "ok": true,
+  "post": Object {
+    "archived": false,
+    "attachments": Array [],
+    "comments": Object {},
+    "context": Object {},
+    "message": "test post",
+    "reactions": Array [],
+    "tagged_users": Array [],
+    "type": "post",
+  },
 }
 `;
 
