@@ -155,12 +155,16 @@ authed.all(
     organization: organizationConcatUsers(locals),
   })),
   usersCreateInvitationToken,
+  mapLocals(locals => ({
+    invitation_token: locals.invitationToken,
+  })),
   usersInvitedUserQueueMessage,
   notificationsPushToQueue,
   usersSendInvitationQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     user: object.require(),
+    invitation_token: string.require(),
     organization: object,
   }),
 );

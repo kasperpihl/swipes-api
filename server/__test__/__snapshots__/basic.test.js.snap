@@ -1,6 +1,67 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`creating organization 1`] = `
+Object {
+  "ok": true,
+}
+`;
+
+exports[`goal create 1`] = `
+Object {
+  "goal": Object {
+    "archived": false,
+    "assignees": Array [
+      "UOF07Q186",
+    ],
+    "attachment_order": Array [],
+    "attachments": Object {},
+    "completed_at": null,
+    "milestone_id": null,
+    "step_order": Array [],
+    "steps": Object {},
+    "title": "Test goal",
+  },
+  "ok": true,
+}
+`;
+
+exports[`inviting user 1`] = `
+Object {
+  "ok": true,
+}
+`;
+
+exports[`milestone create 1`] = `
+Object {
+  "milestone": Object {
+    "closed_at": null,
+    "due_date": null,
+    "goal_order": Array [],
+    "title": "Test milestone",
+  },
+  "ok": true,
+}
+`;
+
+exports[`sign in 1`] = `
+Object {
+  "ok": true,
+}
+`;
+
+exports[`sign out 1`] = `
+Object {
+  "ok": true,
+}
+`;
+
 exports[`sign up new user 1`] = `
+Object {
+  "ok": true,
+}
+`;
+
+exports[`sign up with invitation token 1`] = `
 Object {
   "ok": true,
 }

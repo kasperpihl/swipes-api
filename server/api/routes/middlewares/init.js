@@ -136,6 +136,8 @@ const init = valLocals('init', {
         delete me.notes;
       }
 
+      const pending_organizations = me.pending_organizations || [];
+
       setLocals({
         me,
         users,
@@ -144,6 +146,7 @@ const init = valLocals('init', {
         ways,
         notes,
         posts,
+        pending_organizations,
         timestamp: now,
         services: data[1],
         notifications: data[2].concat(data[3]),

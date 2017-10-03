@@ -68,7 +68,7 @@
     "production": "pm2 reload pm2_config.json --env production && pm2 save",
     "server": "nodemon ./dist/index.js",
     "start": "npm-run-all --parallel server watch",
-    "test": "jest"
+    "test": "jest --env=node"
   },
   "jest": {
     "testEnvironment": "node"

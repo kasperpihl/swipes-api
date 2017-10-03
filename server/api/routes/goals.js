@@ -59,27 +59,27 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/goals.create',
+authed.all(
+  '/goals.create',
   valBody({
     goal: object.as({
       title: string.min(1).require(),
+      assignees: array.of(string).require(),
     }).require(),
     organization_id: string.require(),
     milestone_id: string,
   }),
   goalsCreate,
   goalsInsert,
-  mapLocals(
-    (locals) => {
-      const {
-        goal,
-      } = locals;
+  mapLocals((locals) => {
+    const {
+      goal,
+    } = locals;
 
-      return {
-        goal_id: goal.id,
-      };
-    },
-  ),
+    return {
+      goal_id: goal.id,
+    };
+  }),
   milestonesAddGoal,
   goalsCreateQueueMessage,
   notificationsPushToQueue,
@@ -89,9 +89,11 @@ authed.all('/goals.create',
     goal: object.require(),
     milestone_id: string,
     goal_order: array,
-  }));
+  }),
+);
 
-authed.all('/goals.complete',
+authed.all(
+  '/goals.complete',
   valBody({
     goal_id: string.require(),
   }),
@@ -100,9 +102,11 @@ authed.all('/goals.complete',
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
-  }));
+  }),
+);
 
-authed.all('/goals.incomplete',
+authed.all(
+  '/goals.incomplete',
   valBody({
     goal_id: string.require(),
   }),
@@ -111,9 +115,11 @@ authed.all('/goals.incomplete',
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
-  }));
+  }),
+);
 
-authed.all('/goals.completeStep',
+authed.all(
+  '/goals.completeStep',
   valBody({
     goal_id: string.require(),
     step_id: string.require(),
@@ -123,9 +129,11 @@ authed.all('/goals.completeStep',
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
-  }));
+  }),
+);
 
-authed.all('/goals.incompleteStep',
+authed.all(
+  '/goals.incompleteStep',
   valBody({
     goal_id: string.require(),
     step_id: string.require(),
@@ -135,9 +143,11 @@ authed.all('/goals.incompleteStep',
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
-  }));
+  }),
+);
 
-authed.all('/goals.rename',
+authed.all(
+  '/goals.rename',
   valBody({
     goal_id: string.require(),
     title: string.min(1).require(),
@@ -148,9 +158,11 @@ authed.all('/goals.rename',
   valResponseAndSend({
     goal_id: string.require(),
     title: string.require(),
-  }));
+  }),
+);
 
-authed.all('/goals.archive',
+authed.all(
+  '/goals.archive',
   valBody({
     goal_id: string.require(),
   }),
@@ -165,9 +177,11 @@ authed.all('/goals.archive',
     goal_id: string.require(),
     milestone_id: string,
     goal_order: array,
-  }));
+  }),
+);
 
-authed.all('/goals.loadWay',
+authed.all(
+  '/goals.loadWay',
   valBody({
     goal_id: string.require(),
     way_id: string.require(),
@@ -218,9 +232,11 @@ authed.all('/goals.loadWay',
   notificationsPushToQueue,
   valResponseAndSend({
     goal: object.require(),
-  }));
+  }),
+);
 
-authed.all('/goals.stepsReorder',
+authed.all(
+  '/goals.stepsReorder',
   valBody({
     goal_id: string.require(),
     step_order: array.of(string).require(),
@@ -231,9 +247,11 @@ authed.all('/goals.stepsReorder',
   valResponseAndSend({
     goal_id: string.require(),
     step_order: array.of(string).require(),
-  }));
+  }),
+);
 
-authed.all('/goals.assign',
+authed.all(
+  '/goals.assign',
   valBody({
     goal_id: string.require(),
     assignees: array.of(string).require(),
@@ -245,7 +263,8 @@ authed.all('/goals.assign',
     goal_id: string.require(),
     assignees: array.require(),
     steps: object.require(),
-  }));
+  }),
+);
 
 export {
   authed,
