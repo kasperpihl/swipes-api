@@ -10,7 +10,7 @@ const isProd = (process.env.NODE_ENV === 'production');
 const middlewares = isProd ? [] : dev.middlewares;
 
 export default function configureStore(preloadedState) {
-  preloadedState = Map();
+  preloadedState = preloadedState || Map();
 
   const enhancer = compose(
     applyMiddleware(

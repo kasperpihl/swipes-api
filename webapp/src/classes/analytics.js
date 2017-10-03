@@ -7,7 +7,7 @@ const blockedMixpanelEvents = [
 
 export default class Analytics {
   constructor(store) {
-    this.enable = !window.__DEV__;
+    this.enable = !store.getState().getIn(['globals', 'isDev']);
     // this.enable = true; // for testing on dev. turn off when done.
     if(this.enable){
       mixpanel.init("a1b6f31fc988c7e4a7f40c267e315f5d");
@@ -22,13 +22,18 @@ export default class Analytics {
 
   }
   getDefaultEventProps() {
+    const state = this.store.getState();
+    const isElectron = state.getIn(['globals', 'isElectron']);
+    const version = state.getIn(['globals', 'version']);
+    const platform = state.getIn(['globals', 'platform']);
+    const electronVersion = state.getIn(['globals', 'sw-electron-version']);
     const defs = {
-      _Client: window.ipcListener.isElectron ? 'Electron' : 'Web',
-      '_Web version': window.__VERSION__,
-      _Platform: window.ipcListener.platform,
+      _Client: isElectron ? 'Electron' : 'Web',
+      '_Web version': version,
+      _Platform: platform,
     };
-    if (window.ipcListener.version) {
-      defs['_Electron version'] = window.ipcListener.version;
+    if (electronVersion) {
+      defs['_Electron version'] = electronVersion;
     }
     return defs;
   }

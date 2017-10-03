@@ -9,13 +9,11 @@ const blockedMixpanelEvents = [
 
 export default class Analytics {
   constructor(store) {
-    this.enable = !window.__DEV__;
+    this.enable = !store.getState().getIn(['globals', 'isDev']);
+
     // this.enable = true; // for testing on dev. turn off when done.
     if(this.enable){
       mixpanel.sharedInstanceWithToken("a1b6f31fc988c7e4a7f40c267e315f5d");
-      /*Intercom("boot", {
-        app_id: "q8xibmac",
-      });*/
     }
     this.store = store;
     this.userId = null;
@@ -24,11 +22,13 @@ export default class Analytics {
 
   }
   getDefaultEventProps() {
+    const state = this.store.getState();
+    const version = state.getIn(['globals', 'version']);
+    const platform = state.getIn(['globals', 'platform']);
     const defs = {
       _Client: 'ReactNative',
-      '_Version': window.__VERSION__,
-      _Platform: window.__PLATFORM__,
-      '_App version': DeviceInfo.getVersion(),
+      '_Version': version,
+      _Platform: platform,
     };
     return defs;
   }

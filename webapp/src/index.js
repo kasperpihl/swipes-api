@@ -1,11 +1,11 @@
 import 'babel-polyfill';
 import 'whatwg-fetch';
-import 'src/utils/globals';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
+import getGlobals from 'src/utils/globals';
 import configureStore from 'src/store/configureStore';
 
 import Analytics from 'classes/analytics';
@@ -20,7 +20,9 @@ if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
 }
 
-const store = configureStore();
+const store = configureStore({
+  globals: getGlobals()
+});
 
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);

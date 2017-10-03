@@ -22,14 +22,9 @@ if (isElectron) {
 export default class IpcListener {
   constructor(store) {
     this.store = store;
-    this.platform = 'web';
-    window.getHeaders = this.getHeaders.bind(this);
     if (isElectron) {
       remote.getCurrentWindow().removeAllListeners();
       this.isElectron = true;
-      this.platform = window.process.platform;
-      this.version = remote.getGlobal('version');
-      this.arch = window.process.arch;
       ipcRenderer.on('oauth-success', (event, arg) => {
         store.dispatch(ca.me.handleOAuthSuccess(arg.serviceName, arg.queryString));
       });
@@ -76,19 +71,6 @@ export default class IpcListener {
       const remWin = remote.getCurrentWindow();
       remWin.focus();
     };
-  }
-  getHeaders() {
-    const headers = {
-      'sw-web-version': window.__VERSION__,
-      'sw-platform': this.platform,
-    };
-    if(this.version) {
-      headers['sw-electron-version'] = this.version;
-    }
-    if(this.arch) {
-      headers['sw-electron-arch'] = this.arch;
-    }
-    return headers;
   }
   preloadUrl(script) {
     if (!isElectron) {
