@@ -29,7 +29,6 @@ textarea {
   border: none;
   box-sizing: border-box;
   cursor: default;
-  font-family: 'Aktiv-Grotesk', Helvetica, Arial, sans-serif;
   list-style: none;
   text-rendering: optimizeLegibility !important; 
   transform: rotate(-0.0000000001deg);
@@ -83,36 +82,4 @@ html, body {
   text-rendering: optimizeLegibility !important;
   transform: rotate(-0.0000000001deg);
   -webkit-font-smoothing: antialiased !important;
-}
-
-::-webkit-scrollbar {
-  // width: 0;
-}
-
-h1 {
-  font-size: 66px;
-}
-
-h2 {
-  font-size: 56px;
-}
-
-h3 {
-  font-size: 45px;
-}
-
-h4 {
-  font-size: 34px;
-}
-
-h5 {
-  font-size: 24px;
-}
-
-h6 {
-  font-size: 20px;
-}
-
-p {
-  font-size: 15px;
 }

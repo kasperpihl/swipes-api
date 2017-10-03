@@ -9,7 +9,9 @@ const CompatibleAssignees = (props) => {
   const {
     assignee,
   } = props;
+  console.log(assignee)
   const photoSrc = msgGen.users.getPhoto(assignee);
+  console.log(msgGen.users.getPhoto(assignee))
 
   return (
     <div className="compatible-assignees">

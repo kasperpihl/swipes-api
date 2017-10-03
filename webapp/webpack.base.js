@@ -127,6 +127,7 @@ module.exports = {
           }
         ],
       }
+      
     ]
   },
   devServer: {

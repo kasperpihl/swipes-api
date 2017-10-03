@@ -92,6 +92,10 @@ class Root extends PureComponent {
             const HOCCompatibleSignup = require('src/react/browser-compatible/pages/signup/HOCCompatibleSignup').default;
             return <HOCCompatibleSignup />
           }} />
+          <Route path="/welcome/" render={() => {
+            const HOCCompatibleWelcome = require('src/react/browser-compatible/pages/welcome/HOCCompatibleWelcome').default;
+            return <HOCCompatibleWelcome />
+          }} />
         </div>
       </div>
     );

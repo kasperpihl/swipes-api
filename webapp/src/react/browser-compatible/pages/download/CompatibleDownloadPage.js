@@ -85,55 +85,31 @@ class ComaptibleDownloadPage extends PureComponent {
   render() {
     const { downloadLinks } = this.props;
 
-    <div className="download-page">
-      <CompatibleHeader
-        title='Awesome! Download the Swipes Workspace'
-        subtitle='Start working with your team from anywhere'
-      />
-      <div className="section">
-        <div className="section__title">Desktop</div>
-        {this.renderDesktopDownloads()}
-      </div>
-      <div className="section section--coming-soon">
-        <div className="section__title">Mobile (In beta)</div>
-        <div className="section__devices">
-          <a href={downloadLinks.ios} target="_blank" className="device">
-            <Icon icon="" className="device__svg" />
-            <p>iOS</p>
-          </a>
-          <a href={downloadLinks.android} target="_blank" className="device">
-            <Icon icon="" className="device__svg" />
-            <p>Android</p>
-          </a>
+    return (
+      <div className="download-page">
+        <CompatibleHeader
+          title='Awesome! Download the Swipes Workspace'
+          subtitle='Start working with your team from anywhere'
+        />
+        <div className="section">
+          <div className="section__title">Desktop</div>
+          {this.renderDesktopDownloads()}
+        </div>
+        <div className="section section--coming-soon">
+          <div className="section__title">Mobile (In beta)</div>
+          <div className="section__devices">
+            <a href={downloadLinks.ios} target="_blank" className="device">
+              <Icon icon="" className="device__svg" />
+              <p>iOS</p>
+            </a>
+            <a href={downloadLinks.android} target="_blank" className="device">
+              <Icon icon="" className="device__svg" />
+              <p>Android</p>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-
-    // return (
-    //   <div className="download-page">
-    //     <h1 className="title">Awesome! Download the Swipes Workspace</h1>
-    //     <h3 className="subtitle">Start working with your team from anywhere</h3>
-    //     <div className="section">
-    //       <div className="section-title">Desktop</div>
-    //       {this.renderDesktopDownloads()}
-    //     </div>
-
-    //     <div className="section section--coming-soon">
-    //       <div className="section-title">Mobile (In beta)</div>
-
-    //       <div className="device-wrapper">
-    //         <a href={downloadLinks.ios} target="_blank" className="device">
-    //           <Icon icon="IphoneDevice" className="devicesvg" />
-    //           <p>iOS</p>
-    //         </a>
-    //         <a href={downloadLinks.android} target="_blank" className="device">
-    //           <Icon icon="AndroidDevice" className="device-svg" />
-    //           <p>Android</p>
-    //         </a>
-    //       </div>
-    //     </div>
-    //   </div>
-    // );
+    )
   }
 }
 
