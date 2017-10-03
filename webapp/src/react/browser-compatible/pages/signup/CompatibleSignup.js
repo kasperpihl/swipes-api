@@ -4,6 +4,7 @@ import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader'
+import CompatibleButton from 'compatible/components/button/CompatibleButton'
 import './styles/signup.scss';
 
 class CompatibleSignup extends PureComponent {
@@ -69,20 +70,11 @@ class CompatibleSignup extends PureComponent {
     );
   }
   renderFooter() {
-    const { inviter } = this.props;
-    const isLoading = this.props.getLoading('signupButton').loading;
+    const { inviter, getLoading } = this.props;
 
     return (
       <div className="footer">
-        <a className="footer__button" ref="button" onClick={this.onSignup}>
-          {
-            isLoading ? (
-              <Icon icon="loader" width="12" height="12" />
-            ) : (
-              'Sign up'
-            )
-          }
-        </a>
+        <CompatibleButton title="Sign up" onClick={this.onSignup} {...getLoading('signupButton')}/>
         <p className="footer__switch">
           Already have an account? <a href="" className="footer__switch-button" onClick={this.onNavigateToLogin}>Sign in here</a>
         </p>

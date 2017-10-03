@@ -56,25 +56,6 @@
     }
   }
 
-  a#{$b}__button {
-    @include size(250px, 36px);
-    @include font(12px, white, 36px, 500);
-    background-color: $blue-100;
-    display: inline-block;
-    float: initial;
-    cursor: pointer;
-    z-index: 2;
-    left: 50%;
-    text-align: center;
-    transform: translateX(-50%) !important;
-    -ms-transform: translateX(-50%) !important;
-    vertical-align: middle;
-
-    &:hover, &:focus {
-      background-color: $blue-80;
-    }
-  }
-
   #{$b}__sentence {
     @include font(12px, $deepBlue-40, 18px, 500);
     text-align: center;

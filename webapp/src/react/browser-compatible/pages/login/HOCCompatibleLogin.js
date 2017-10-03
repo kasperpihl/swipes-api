@@ -1,27 +1,43 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
+import { Map } from 'immutable';
 import CompatibleLogin from './CompatibleLogin';
+import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
 class HOCCompatibleLogin extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
-    // setupLoading(this);
+    this.state = {
+      formData: Map(),
+    };
+    setupLoading(this);
   }
   componentDidMount() {
+  }
+  onNavigateToSignup(e) {
+    const { history } = this.props;
+    history.push('/signup');
+
+    return false;
+  }
+  onChange(key, e) {
+    const { formData } = this.state;
+    this.setState({ formData: formData.set(key, e.target.value) });
   }
   onSignin() {
     
   }
   onResetPassword(email) {
+    const { request } = this.props;
+
     if (email && email.length) {
       request('me.sendResetEmail', {
         email: email,
@@ -31,8 +47,16 @@ class HOCCompatibleLogin extends PureComponent {
     }
   }
   render() {
+    const { formData } = this.state;
+
     return (
-      <CompatibleLogin delegate={this} />
+      <CompatibleCard>
+        <CompatibleLogin
+          delegate={this}
+          formData={formData}
+          {...this.bindLoading()}
+        />
+      </CompatibleCard>
     );
   }
 }
@@ -43,6 +67,6 @@ HOCCompatibleLogin.propTypes = {};
 const mapStateToProps = (state) => ({
 });
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   request: ca.api.request,
-})(HOCCompatibleLogin);
+})(HOCCompatibleLogin));

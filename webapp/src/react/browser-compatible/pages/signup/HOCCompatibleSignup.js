@@ -58,15 +58,15 @@ class HOCCompatibleSignup extends PureComponent {
   componentWillUnmount(){
     this._unmounted = true;
   }
-  onChange(key, e) {
-    const { formData } = this.state;
-    this.setState({ formData: formData.set(key, e.target.value) });
-  }
   onNavigateToLogin(e) {
     const { history } = this.props;
     history.push('/login');
 
     return false;
+  }
+  onChange(key, e) {
+    const { formData } = this.state;
+    this.setState({ formData: formData.set(key, e.target.value) });
   }
   onSignup() {
     const { formData, invitationToken, me } = this.state;

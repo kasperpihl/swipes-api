@@ -23,46 +23,48 @@
 // Elements
 // ======================================================
 
-.compatible-signup .footer {
+.compatible-login .footer {
   $b: findElementInBlock(#{&}, '.footer');
 
   #{$b}__reset-password {
-    @include size(auto, 36px);
-    @include font(12px, $deepBlue100);
-    padding: 0 12px;
-    float: left;
-    cursor: pointer;
+    text-align: center;
     z-index: 2;
+    margin-top: 30px;
 
-    &:after {
-      @include size(100%, 2px);
-      background-color: rgba($deepBlue100, .3);
-      left: 0; bottom: 0;
-      position: absolute;
-    }
-
-    &:hover, &:focus {
-      background-color: $blue-80;
-
+    a {
+      @include font(12px, $deepBlue-100);
+      padding: 9px 0;
+      
       &:after {
-        background-color: rgba($deepBlue100, 1);
+        content: '';
+        @include size(100%, 2px);
+        background-color: rgba($deepBlue-100, .3);
+        left: 0; bottom: 0;
+        position: absolute;
+      }
+
+      &:hover {
+
+        &:after {
+          background-color: rgba($deepBlue-100, 1);
+        }
       }
     }
   }
 
-  a#{$b}__button {
-    @include size(auto, 36px);
-    @include font(12px, white, 36px, 500);
-    background-color: $blue-100;
-    border-radius: 100px;
-    padding: 0 12px;
-    float: right;
-    margin-left: 21px;
-    cursor: pointer;
-    z-index: 2;
+  p#{$b}__switch {
+    @include font(12px, $deepBlue-40, 18px, 500);
+    text-align: center;
+    margin-top: 9px;
+    padding: 0 15px;
 
-    &:hover, &:focus {
-      background-color: $blue-80;
+    & a {
+      @include font(12px, $blue-100, 18px, 500);
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
@@ -75,20 +77,6 @@
 
   .compatible-signup .form {
     margin-top: 30px;
-  }
-
-  .compatible-signup .footer {
-    $b: findElementInBlock(#{&}, '.footer');
-
-    a#{$b}__button {
-      float: initial;
-      left: 50%;
-      transform: translateX(-50%) !important;
-      -ms-transform: translateX(-50%) !important;
-      margin: 0;
-      display: inline-block;
-      vertical-align: middle;
-    }
   }
 }
 
