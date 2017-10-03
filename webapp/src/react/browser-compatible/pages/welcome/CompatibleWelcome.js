@@ -42,15 +42,23 @@ class CompatibleWelcome extends PureComponent {
       <CompatibleHeader title="Hi folks" subtitle={subtitle} />
     )
   }
+  renderInviter(user) {
+
+    return (
+      <div className="inviter">
+        <img src="https://unsplash.it/30" alt=""/>
+      </div>
+    )
+  }
   renderRow(name, inviter) {
-    
+
     return (
       <div className="row" key={name}>
-        <div className="row__name">{name}</div>
-        <div className="row__inviter">
-          <CompatibleAssignees assignee={inviter} />
+        <div className="row__item row__name">{name}</div>
+        <div className="row__item row__inviter">
+          {this.renderInviter(inviter)}
         </div>
-        <div className="row__button">
+        <div className="row__item row__button">
           <Icon icon="ArrowRightLong" className="row__svg" />
         </div>
       </div>
@@ -63,17 +71,27 @@ class CompatibleWelcome extends PureComponent {
     return (
       <div className="table">
         <div className="table__header">
-          <div className="col">
-            <div className="col__name">Organization name</div>
-            <div className="col__inviter">Invited by</div>
-          </div>
+          <div className="col col--name">Organization name</div>
+          <div className="col col--inviter">Invited by</div>
+          <div className="clearfix"></div>
         </div>
         {renderRows}
       </div>
     )
   }
   renderCreateOrg() {
-
+    
+    return (
+      <div className="create-org">
+        <label htmlFor="create-org-input" className="create-org__wrapper">
+          <input id="create-org-input" type="text" className="create-org__input" placeholder=" " />
+          <div className="create-org__label">Enter Org name</div>
+          <div className="create-org__button">
+            <Icon icon="ArrowRightLong" className="create-org__svg" />
+          </div>
+        </label>
+      </div>
+    )
   }
   renderDownloadNav() {
 
@@ -83,7 +101,13 @@ class CompatibleWelcome extends PureComponent {
     return (
       <div className="compatible-welcome">
         {this.renderHeader()}
+        <h4 className="compatible-welcome__header">
+          Join an organization you've been invited to
+        </h4>
         {this.renderJoinOrg()}
+        <h4 className="compatible-welcome__header">
+          Create a new organization
+        </h4>
         {this.renderCreateOrg()}
         {this.renderDownloadNav()}
       </div>

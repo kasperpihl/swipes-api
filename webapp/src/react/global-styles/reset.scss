@@ -83,3 +83,11 @@ html, body {
   transform: rotate(-0.0000000001deg);
   -webkit-font-smoothing: antialiased !important;
 }
+
+.clearfix {
+  clear: both;
+}
+
+.clearfixleft {
+  clear: left;
+}

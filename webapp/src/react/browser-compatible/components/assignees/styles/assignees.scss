@@ -8,8 +8,8 @@
 
 .compatible-assignees {
   @include size(auto, 48px);
-  float: right;
   margin-right: 15px;
+  display: table-cell;
 }
 
 .compatible-assignees .assignee {
@@ -17,7 +17,6 @@
   border: 1px solid white;
   background-color: white;
   border-radius: 50%;
-  float: right;
   margin-top: -16px;
   top: 50%;
 }
@@ -47,6 +46,20 @@
   }
 }
 
+// ======================================================
+// Modifiers
+// ======================================================
+
+.compatible-assignees {
+
+  &#{&}--left {
+    float: left;
+  }
+
+  &#{&}--right {
+    float: right;
+  }
+}
 
 // ======================================================
 // Media quary

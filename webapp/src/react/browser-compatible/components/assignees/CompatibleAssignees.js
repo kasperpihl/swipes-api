@@ -8,13 +8,17 @@ import './styles/assignees.scss';
 const CompatibleAssignees = (props) => {
   const {
     assignee,
+    float
   } = props;
-  console.log(assignee)
   const photoSrc = msgGen.users.getPhoto(assignee);
-  console.log(msgGen.users.getPhoto(assignee))
+  let className = 'compatible-assignees';
+
+  if (float && typeof float === 'string') {
+    className += ` compatible-assignees--${float}`
+  }
 
   return (
-    <div className="compatible-assignees">
+    <div className={className}>
       <div className="assignee">
         {photoSrc ? (
           <img src={photoSrc} className="assignee__profile-pic" />
