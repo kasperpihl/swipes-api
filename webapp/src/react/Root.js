@@ -23,25 +23,26 @@ class Root extends PureComponent {
     this.checkLoginStatus();
   }
   checkLoginStatus() {
-    const { location, token, isHydrated, history } = this.props;
+    const { location, token, isHydrated, history, isElectron } = this.props;
     const path = location.pathname;
     if (path === '/unsubscribe') {
       return;
     }
-    // if (path === '/' && !window.ipcListener.isElectron) {
+    // if (path === '/' && !isElectron) {
     //   history.push('/welcome');
     // }
 
     if (path === '/' && isHydrated && !token) {
-      // history.push('/login');
+      history.push('/login');
     }
 
     if (path === '/login' && isHydrated && token) {
-      // history.push('/');
+      history.push('/');
     }
   }
   renderTopbar() {
-    if (window.ipcListener.isElectron) {
+    const { isElectron } = this.props;
+    if (isElectron) {
       const HOCTopbar = require('components/topbar/HOCTopbar').default;
       return <HOCTopbar />;
     }
@@ -64,8 +65,8 @@ class Root extends PureComponent {
     ))
   }
   render() {
-    const { isMaximized, isFullscreen, lastConnect } = this.props;
-    let className = `platform-${window.ipcListener.platform}`;
+    const { isMaximized, isFullscreen, lastConnect, platform } = this.props;
+    let className = `platform-${platform}`;
     if (isMaximized) className += ' window-is-maximized';
     if (isFullscreen) className += ' window-is-fullscreen';
 
@@ -107,6 +108,8 @@ const mapStateToProps = (state) => ({
   isFullscreen: state.getIn(['main', 'isFullscreen']),
   isHydrated: state.getIn(['main', 'isHydrated']),
   token: state.getIn(['connection', 'token']),
+  isElectron: state.getIn(['globals', 'isElectron']),
+  platform: state.getIn(['globals', 'platform']),
 })
 
 export default withRouter(connect(mapStateToProps, {

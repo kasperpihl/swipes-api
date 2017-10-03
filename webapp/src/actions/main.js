@@ -35,8 +35,8 @@ export const contextMenu = payload => (dp, getState) => {
 // ======================================================
 // Browser
 // ======================================================
-export const browser = (from, url, onLoad) => (dp) => {
-  if (!window.ipcListener.isElectron) {
+export const browser = (from, url, onLoad) => (dp, getState) => {
+  if (!getState().getIn(['globals', 'isElectron'])) {
     return window.open(url);
   }
   return dp(a.navigation.openSecondary(from, {

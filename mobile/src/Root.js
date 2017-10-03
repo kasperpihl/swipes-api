@@ -7,23 +7,21 @@ import DeviceInfo from 'react-native-device-info';
 import App from './App';
 import configureStore from './store/configureStore';
 import { init } from 'swipes-core-js';
-import UpdateHandler from 'utils/update-handler';
+import getGlobals from 'utils/globals';
 import Analytics from 'utils/analytics';
+import codePush from 'react-native-code-push';
 import * as a from 'actions';
-const store = configureStore();
 
-if (window.__DEV__ || DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging' || DeviceInfo.getBundleId() === 'com.swipesapp.androidstaging') {
-  window.__API_URL__ = 'https://staging.swipesapp.com';
-  // window.__API_URL__ = 'http://192.168.88.111:5000';
-} else {
-  window.__API_URL__ = 'https://live.swipesapp.com';
-}
 
-window.__PLATFORM__ = Platform.OS;
-window.__VERSION__ = DeviceInfo.getReadableVersion();
-window.__WITHOUT_NOTES__ = true;
+const store = configureStore({
+  globals: getGlobals(),
+});
+codePush.getUpdateMetadata().then(pkg => pkg && store.dispatch({ 
+  type: 'UPDATE_API_HEADERS', 
+  payload: { [`sw-${Platform.OS}-code-push-version`]: pkg.label.substr(1) },
+}))
+
 window.analytics = new Analytics(store);
-window.updateHandler = new UpdateHandler(store);
 
 init(store);
 

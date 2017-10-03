@@ -46,9 +46,11 @@ export default class Socket {
     this.timer = setTimeout(this.connect.bind(this), time);
   }
   connect() {
-    let url = window.__API_URL__;
+    const { getStore } = this.store;
+    let url = getState().getIn(['globals', 'apiUrl']);
+    const withoutNotes = getState().getIn(['globals', 'withoutNotes']);
     if (!url) {
-      console.warn('Socket requires window.__API_URL__ to be set');
+      console.warn('Socket requires globals reducer to have apiUrl to be set');
       return;
     }
 
@@ -62,23 +64,19 @@ export default class Socket {
 
     let wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
     wsUrl = `${wsUrl}?token=${this.token}`;
-    const headers = Object.entries((window.getHeaders && window.getHeaders()) || {});
-    headers.forEach(([key, value]) => {
-      // wsUrl = `${wsUrl}&${key}=${value}`;
-    });
 
     this.ws = new WebSocket(wsUrl);
     this.changeStatus('connecting');
     this.ws.onopen = () => {
       this.socket = true;
       let timestamp;
-      const ready = this.store.getState().getIn(['connection', 'ready']);
+      const ready = getState().getIn(['connection', 'ready']);
       if(ready) {
-        timestamp = this.store.getState().getIn(['connection', 'lastConnect']);
+        timestamp = getState().getIn(['connection', 'lastConnect']);
       }
       this.store.dispatch(a.api.request('init', {
         timestamp: timestamp || null,
-        without_notes: !!window.__WITHOUT_NOTES__,
+        without_notes: withoutNotes,
       })).then((res) => {
         this.isConnecting = false;
         if (res && res.ok) {

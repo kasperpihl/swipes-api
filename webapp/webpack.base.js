@@ -64,6 +64,7 @@ module.exports = {
       chunks: ['app', 'common']
     }),
     new webpack.optimize.CommonsChunkPlugin({
+      chunks: ['./react/global-styles/reset.scss'],
       name: 'common' // Specify the common bundle's name.
     })
 

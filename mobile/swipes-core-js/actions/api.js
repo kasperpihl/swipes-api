@@ -31,7 +31,7 @@ const handleUpdatesNeeded = (payload, state, dispatch) => {
 };
 
 export const request = (options, data) => (d, getState) => {
-  const apiUrl = `${window.__API_URL__}/v1/`;
+  const apiUrl = `${getState().getIn(['globals', 'apiUrl'])}/v1/`;
   let command;
   if (typeof options !== 'object') {
     command = `${options}`;
@@ -54,7 +54,8 @@ export const request = (options, data) => (d, getState) => {
       reload_required: reloadRequired,
     });
   }
-  const extraHeaders = (window.getHeaders && window.getHeaders()) || {};
+  const apiHeaders = getState().getIn(['globals', 'apiHeaders']);
+  const extraHeaders = (apiHeaders && apiHeaders.toJS()) || {};
 
   const headers = new Headers({
     ...extraHeaders,

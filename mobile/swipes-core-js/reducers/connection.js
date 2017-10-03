@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
+import { version } from '../../package.json';
 import * as types from '../constants';
-import { hasMinorChange } from '../classes/utils';
 
 const initialState = fromJS({
   lastConnect: null,
@@ -22,7 +22,7 @@ export default function connectionReducer(state = initialState, action) {
   switch (type) {
     case ('init'): {
       return state.set('lastConnect', payload.timestamp)
-        .set('lastVersion', window.__VERSION__)
+        .set('lastVersion', version)
         .set('ready', true);
     }
     case REHYDRATE:
@@ -32,7 +32,7 @@ export default function connectionReducer(state = initialState, action) {
         return initialState.set('token', connection.get('token'))
           .set('lastConnect', connection.get('lastConnect'))
           .set('lastVersion', connection.get('lastVersion'))
-          .set('ready', window.__VERSION__ === connection.get('lastVersion'));
+          .set('ready', version === connection.get('lastVersion'));
       }
       return state;
     case types.SET_UPDATE_STATUS: {

@@ -84,7 +84,9 @@ authed.all(
   },
   organizationsCreatedQueueMessage,
   notificationsPushToQueue,
-  valResponseAndSend(),
+  valResponseAndSend({
+    organization: object.require(),
+  }),
 );
 
 authed.all(

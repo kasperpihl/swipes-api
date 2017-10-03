@@ -61,9 +61,9 @@ class HOCPreviewNote extends PureComponent {
     }
   }
   generateNoteUrl() {
-    const { token, orgId, noteId } = this.props;
+    const { token, orgId, noteId, apiUrl } = this.props;
 
-    return `${window.__API_URL__}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`;
+    return `${apiUrl}/note.html?token=${token}&note_id=${noteId}&organization_id=${orgId}`;
   }
   onActionButton(i) {
     const { noteId, noteTitle, navPush, toggleInfoTab } = this.props;
@@ -102,7 +102,7 @@ class HOCPreviewNote extends PureComponent {
     }
   }
   renderActionButtons(showingInfoTab) {
-if (showingInfoTab) {
+    if (showingInfoTab) {
       this.props.setActionButtons({
         onClick: this.onActionButton,
         buttons: [
@@ -164,6 +164,7 @@ function mapStateToProps(state) {
   return {
     token: state.getIn(['connection', 'token']),
     orgId: state.getIn(['me', 'organizations', 0, 'id']),
+    apiUrl: state.getIn(['globals', 'apiUrl']),
   };
 }
 
