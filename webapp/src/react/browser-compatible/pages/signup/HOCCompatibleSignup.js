@@ -10,13 +10,6 @@ import CompatibleSignup from './CompatibleSignup';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
 import './styles/signup.scss';
-const defLinks = {
-  darwin: 'http://swipesapp.com/download-mac',
-  win32: 'http://swipesapp.com/download-win',
-  linux: 'http://swipesapp.com/download-linux',
-  android: 'http://swipesapp.com/download-android',
-  ios: 'http://swipesapp.com/download-ios',
-};
 
 class HOCCompatibleSignup extends PureComponent {
   constructor(props) {

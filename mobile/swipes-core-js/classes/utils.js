@@ -116,12 +116,15 @@ export function reducerInitToMap(payload, key, state) {
   if(!payload.full_fetch) {
     collection = state;
   }
-  payload[key].forEach((obj) => {
-    collection = collection.set(obj.id, fromJS(obj));
-    if(obj.archived || obj.deleted) {
-      collection = collection.delete(obj.id);
-    }
-  })
+  if(payload[key]) {
+    payload[key].forEach((obj) => {
+      collection = collection.set(obj.id, fromJS(obj));
+      if(obj.archived || obj.deleted) {
+        collection = collection.delete(obj.id);
+      }
+    })
+  }
+  
   return collection;
 }
 

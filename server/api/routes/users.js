@@ -181,9 +181,7 @@ notAuthed.all(
   mapLocals(locals => ({
     user_id: locals.user.id,
     settings: {
-      subscriptions: {
-        goal_notify: false,
-      },
+      subscriptions: {},
     },
   })),
   meUpdateSettings,

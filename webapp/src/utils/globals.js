@@ -17,11 +17,24 @@ const browserRes = (function(){
   return M.join(' ');
 })().split(' ');
 
+const isBrowserSupported = (browser, ver) => {
+  browser = browser.toLowerCase();
+  ver = parseInt(ver, 10);
+  switch(browser){
+    case 'chrome': return ver >= 55;
+    case 'safari': return ver >= 9;
+    case 'firefox': return ver >= 55; 
+    default:
+      return false;
+  }
+}
+
 export default function getGlobals() {
   const globals = {
     apiUrl: location.origin,
     browser: browserRes[0],
     browserVersion: browserRes[1],
+    isBrowserSupported: isBrowserSupported(browserRes[0], browserRes[1]),
     isDev: (process.env.NODE_ENV !== 'production'),
     isElectron: (window.process && window.process.versions.electron),
     version,

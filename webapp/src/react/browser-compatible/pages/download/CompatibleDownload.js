@@ -2,10 +2,19 @@ import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
+import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader'
 import './styles/download-page.scss';
 
-class ComaptibleDownloadPage extends PureComponent {
+const downloadLinks = {
+  darwin: 'http://swipesapp.com/download-mac',
+  win32: 'http://swipesapp.com/download-win',
+  linux: 'http://swipesapp.com/download-linux',
+  android: 'http://swipesapp.com/download-android',
+  ios: 'http://swipesapp.com/download-ios',
+};
+
+class ComaptibleDownload extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -35,7 +44,6 @@ class ComaptibleDownloadPage extends PureComponent {
     return this[type]();
   }
   renderWindows(firstType) {
-    const { downloadLinks } = this.props;
     if(firstType === 'renderWindows') {
       return undefined;
     }
@@ -47,7 +55,6 @@ class ComaptibleDownloadPage extends PureComponent {
     );
   }
   renderMac(firstType) {
-    const { downloadLinks } = this.props;
     if(firstType === 'renderMac') {
       return undefined;
     }
@@ -59,7 +66,6 @@ class ComaptibleDownloadPage extends PureComponent {
     );
   }
   renderLinux(firstType) {
-    const { downloadLinks } = this.props;
     if(firstType === 'renderLinux') {
       return undefined;
     }
@@ -83,38 +89,39 @@ class ComaptibleDownloadPage extends PureComponent {
     );
   }
   render() {
-    const { downloadLinks } = this.props;
 
     return (
-      <div className="download-page">
-        <CompatibleHeader
-          title='Awesome! Download the Swipes Workspace'
-          subtitle='Start working with your team from anywhere'
-        />
-        <div className="section">
-          <div className="section__title">Desktop</div>
-          {this.renderDesktopDownloads()}
-        </div>
-        <div className="section section--coming-soon">
-          <div className="section__title">Mobile (In beta)</div>
-          <div className="section__devices">
-            <a href={downloadLinks.ios} target="_blank" className="device">
-              <Icon icon="" className="device__svg" />
-              <p>iOS</p>
-            </a>
-            <a href={downloadLinks.android} target="_blank" className="device">
-              <Icon icon="" className="device__svg" />
-              <p>Android</p>
-            </a>
+      <CompatibleCard>
+        <div className="download-page">
+          <CompatibleHeader
+            title='Awesome! Download the Swipes Workspace'
+            subtitle='Start working with your team from anywhere'
+          />
+          <div className="section">
+            <div className="section__title">Desktop</div>
+            {this.renderDesktopDownloads()}
+          </div>
+          <div className="section section--coming-soon">
+            <div className="section__title">Mobile</div>
+            <div className="section__devices">
+              <a href={downloadLinks.ios} target="_blank" className="device">
+                <Icon icon="" className="device__svg" />
+                <p>iOS</p>
+              </a>
+              <a href={downloadLinks.android} target="_blank" className="device">
+                <Icon icon="" className="device__svg" />
+                <p>Android</p>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      </CompatibleCard>
     )
   }
 }
 
-export default ComaptibleDownloadPage;
+export default ComaptibleDownload;
 
 // const { string } = PropTypes;
 
-ComaptibleDownloadPage.propTypes = {};
+ComaptibleDownload.propTypes = {};

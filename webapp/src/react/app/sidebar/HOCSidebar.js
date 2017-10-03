@@ -141,7 +141,6 @@ class HOCSidebar extends PureComponent {
   }
   renderProfile() {
     const { me } = this.props;
-
     if (!me) {
       return undefined;
     }

@@ -23,22 +23,16 @@ class Root extends PureComponent {
     this.checkLoginStatus();
   }
   checkLoginStatus() {
-    const { location, token, isHydrated, history, isElectron } = this.props;
+    const { location, token, isHydrated, history } = this.props;
     const path = location.pathname;
-    if (path === '/unsubscribe') {
-      return;
-    }
-    // if (path === '/' && !isElectron) {
-    //   history.push('/welcome');
-    // }
 
+    if(['/login', '/register', '/welcome'].indexOf(path) > -1 && isHydrated && token) {
+      history.replace('/');
+    }
     if (path === '/' && isHydrated && !token) {
-      history.push('/login');
+      history.replace('/register');
     }
 
-    if (path === '/login' && isHydrated && token) {
-      history.push('/');
-    }
   }
   renderTopbar() {
     const { isElectron } = this.props;
@@ -65,7 +59,7 @@ class Root extends PureComponent {
     ))
   }
   render() {
-    const { isMaximized, isFullscreen, lastConnect, platform } = this.props;
+    const { isMaximized, isFullscreen, platform, isBrowserSupported } = this.props;
     let className = `platform-${platform}`;
     if (isMaximized) className += ' window-is-maximized';
     if (isFullscreen) className += ' window-is-fullscreen';
@@ -82,20 +76,24 @@ class Root extends PureComponent {
             return <HOCUnsubscribe />;
           }} />
           <Route path="/" exact render={() => {
-            const HOCApp = require('src/react/app/HOCApp').default;
-            return <HOCApp />;
+            const Comp = require('src/react/app/HOCApp').default;
+            return <Comp />;
           }} />
-          <Route path="/(signin|login)/" render={() => {
-            const HOCCompatibleLogin = require('src/react/browser-compatible/pages/login/HOCCompatibleLogin').default;
-            return <HOCCompatibleLogin />
+          <Route path="/download" render={() => {
+            const Comp = require('compatible/pages/download/CompatibleDownload').default;
+            return <Comp />;
           }} />
-          <Route path="/(signup|register)/" render={() => {
-            const HOCCompatibleSignup = require('src/react/browser-compatible/pages/signup/HOCCompatibleSignup').default;
-            return <HOCCompatibleSignup />
+          <Route path="/login" render={() => {
+            const Comp = require('compatible/pages/login/HOCCompatibleLogin').default;
+            return <Comp />
           }} />
-          <Route path="/welcome/" render={() => {
-            const HOCCompatibleWelcome = require('src/react/browser-compatible/pages/welcome/HOCCompatibleWelcome').default;
-            return <HOCCompatibleWelcome />
+          <Route path="/register" render={() => {
+            const Comp = require('compatible/pages/signup/HOCCompatibleSignup').default;
+            return <Comp />
+          }} />
+          <Route path="/welcome" render={() => {
+            const Comp = require('compatible/pages/welcome/HOCCompatibleWelcome').default;
+            return <Comp />
           }} />
         </div>
       </div>
@@ -109,6 +107,7 @@ const mapStateToProps = (state) => ({
   isHydrated: state.getIn(['main', 'isHydrated']),
   token: state.getIn(['connection', 'token']),
   isElectron: state.getIn(['globals', 'isElectron']),
+  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
   platform: state.getIn(['globals', 'platform']),
 })
 
@@ -122,3 +121,4 @@ Root.propTypes = {
   isFullscreen: bool,
   isMaximized: bool,
 };
+ 

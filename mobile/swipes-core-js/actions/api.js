@@ -103,7 +103,7 @@ export const request = (options, data) => (d, getState) => {
         resolve(res);
       }).catch((e) => {
         console.log('err', e);
-        if (__DEV__) {
+        if (getState().getIn(['globals', 'isDev'])) {
           console.warn(command, e);
         }
         resolve({ ok: false, error: e });

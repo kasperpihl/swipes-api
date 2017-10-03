@@ -5,11 +5,6 @@ var path = require('path');
 var NODE_ENV = process.env.NODE_ENV;
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const apiRedirect = {
-  target: 'http://localhost:5000',
-  secure: false,
-  xfwd: false
-}
 module.exports = {
   context: __dirname,
   devtool: 'eval',
@@ -64,10 +59,9 @@ module.exports = {
       chunks: ['app', 'common']
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      chunks: ['./react/global-styles/reset.scss'],
+      minChunks: 3,
       name: 'common' // Specify the common bundle's name.
     })
-
 
   ],
   module: {
@@ -137,7 +131,11 @@ module.exports = {
     contentBase: './dist',
     inline: true,
     proxy: {
-      '/v1/**': Object.assign({}, apiRedirect)
+      '/v1/**': {
+        target: 'http://localhost:5000',
+        secure: false,
+        xfwd: false
+      }
     },
     historyApiFallback: true
   }

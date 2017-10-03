@@ -6,7 +6,9 @@ export default class Users {
     if (typeof user === 'string') {
       const state = this.store.getState();
       const users = state.get('users');
-      if (user === 'me') { return state.get('me'); }
+      if (user === 'me' || state.getIn(['me', 'id']) === user) { 
+        return state.get('me'); 
+      }
       return users.get(user);
     }
     return user;

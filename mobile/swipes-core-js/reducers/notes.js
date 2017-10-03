@@ -33,9 +33,12 @@ export default function notesReducer(state = initialState, action) {
   switch (type) {
     case 'init': {
       let server = Map();
-      payload.notes.forEach((note) => {
-        server = server.set(note.id, fromJS(note));
-      });
+      if(payload.notes) {
+        payload.notes.forEach((note) => {
+          server = server.set(note.id, fromJS(note));
+        });
+      }
+
       return state.set('server', server);
     }
     case types.NOTE_CACHE: {

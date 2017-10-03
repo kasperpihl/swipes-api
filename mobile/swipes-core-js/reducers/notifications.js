@@ -15,6 +15,9 @@ export default function notificationsReducer(state = initialState, action) {
       }
       return state;
     case 'init': {
+      if (!payload || !payload.notifications){
+        return state;
+      }
       if (payload.full_fetch) {
         return fromJS(payload.notifications).sort(sortFn);
       }
