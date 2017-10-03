@@ -84,13 +84,13 @@ class Root extends PureComponent {
             const HOCApp = require('src/react/app/HOCApp').default;
             return <HOCApp />;
           }} />
-          <Route path="/login" render={() => {
-            const HOCRegistration = require('src/react/registration/HOCRegistration').default;
-            return <HOCRegistration />;
+          <Route path="/(signin|login)/" render={() => {
+            const HOCCompatibleLogin = require('src/react/browser-compatible/pages/login/HOCCompatibleLogin').default;
+            return <HOCCompatibleLogin />
           }} />
-          <Route path="/signup" render={() => {
-            const HOCSignupPage = require('src/react/browser-compatible/pages/signup/HOCCompatibleSignup').default;
-            return <HOCSignupPage />
+          <Route path="/(signup|register)/" render={() => {
+            const HOCCompatibleSignup = require('src/react/browser-compatible/pages/signup/HOCCompatibleSignup').default;
+            return <HOCCompatibleSignup />
           }} />
         </div>
       </div>
