@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Redirect } from 'react-router-dom';
 
 import * as a from 'actions';
 import Gradient from 'components/gradient/Gradient';
@@ -23,14 +23,14 @@ class Root extends PureComponent {
     this.checkLoginStatus();
   }
   checkLoginStatus() {
-    const { location, token, isHydrated, history } = this.props;
+    const { location, token, isHydrated, setUrl } = this.props;
     const path = location.pathname;
 
     if(['/login', '/register', '/welcome'].indexOf(path) > -1 && isHydrated && token) {
-      history.replace('/');
+      setUrl('/');
     }
     if (path === '/' && isHydrated && !token) {
-      history.replace('/register');
+      setUrl('/register');
     }
 
   }
@@ -58,6 +58,15 @@ class Root extends PureComponent {
       }} />
     ))
   }
+  renderRedirect() {
+    const { location, goToUrl, setUrl } = this.props;
+    if(goToUrl && location.pathname !== goToUrl) {
+      return <Redirect to={goToUrl} push />
+    } else if(goToUrl && location === goToUrl) {
+      setUrl(null);
+    }
+    return null;
+  }
   render() {
     const { isMaximized, isFullscreen, platform, isBrowserSupported } = this.props;
     let className = `platform-${platform}`;
@@ -66,6 +75,7 @@ class Root extends PureComponent {
 
     return (
       <div id="app" className={className}>
+        {this.renderRedirect()}
         <Gradient />
         {this.renderTopbar()}
         {this.renderAppComponents()}
@@ -109,10 +119,11 @@ const mapStateToProps = (state) => ({
   isElectron: state.getIn(['globals', 'isElectron']),
   isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
   platform: state.getIn(['globals', 'platform']),
+  goToUrl: state.getIn(['navigation', 'url']),
 })
 
 export default withRouter(connect(mapStateToProps, {
-
+  setUrl: a.navigation.url,
 })(Root));
 
 const { bool } = PropTypes;

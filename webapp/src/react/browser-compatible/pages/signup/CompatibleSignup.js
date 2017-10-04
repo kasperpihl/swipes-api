@@ -3,8 +3,9 @@ import { setupDelegate } from 'react-delegate';
 // import { map, list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import FloatingInput from 'compatible/components/input/FloatingInput';
-import CompatibleHeader from 'compatible/components/header/CompatibleHeader'
-import CompatibleButton from 'compatible/components/button/CompatibleButton'
+import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
+import CompatibleButton from 'compatible/components/button/CompatibleButton';
+import { Link } from 'react-router-dom';
 import './styles/signup.scss';
 
 class CompatibleSignup extends PureComponent {
@@ -76,7 +77,7 @@ class CompatibleSignup extends PureComponent {
       <div className="footer">
         <CompatibleButton title="Sign up" onClick={this.onSignup} {...getLoading('signupButton')}/>
         <p className="footer__switch">
-          Already have an account? <a href="" className="footer__switch-button" onClick={this.onNavigateToLogin}>Sign in here</a>
+          Already have an account? <Link to="/login" className="footer__switch-button">Sign in here</Link>
         </p>
         <div className="footer__sentence">
           By signing up you agree to the <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">Terms of service</a>

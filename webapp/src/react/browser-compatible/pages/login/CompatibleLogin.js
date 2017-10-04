@@ -6,6 +6,7 @@ import Icon from 'Icon';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
+import { Link } from 'react-router-dom';
 import './styles/login.scss';
 
 class CompatibleLogin extends PureComponent {
@@ -13,7 +14,7 @@ class CompatibleLogin extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this, 'onSignin', 'onResetPassword', 'onNavigateToSignup');
+    setupDelegate(this, 'onSignin', 'onResetPassword');
     bindAll(this, ['handleKeyDown', 'handleReset']);
   }
   componentDidMount() {
@@ -73,7 +74,7 @@ class CompatibleLogin extends PureComponent {
       <div className="footer">
         <CompatibleButton title="Log in" onClick={this.onSignin} {...getLoading('signInButton')}/>
         <p className="footer__switch">
-          Don't have an account yet? <a href="" className="footer__switch-button" onClick={this.onNavigateToSignup}>Sign up now</a>
+          Don't have an account yet? <Link to="/register" className="footer__switch-button">Sign up now</Link>
         </p>
         <div className="footer__reset-password">
           <a href="" onClick={this.handleReset}>Reset password</a>

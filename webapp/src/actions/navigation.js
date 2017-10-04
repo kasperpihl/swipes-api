@@ -1,6 +1,8 @@
 import * as types from 'constants';
 import { randomString } from 'swipes-core-js/classes/utils';
 
+export const url = (payload) => ({ type: types.NAVIGATION_URL, payload });
+
 export function set(target, obj) {
   return (dispatch, getState) => {
     const isLocked = getState().getIn(['navigation', 'locked']);

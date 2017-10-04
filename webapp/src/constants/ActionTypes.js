@@ -8,6 +8,7 @@ export const CONTEXT_MENU = 'CONTEXT_MENU';
 export const SUCCESS_GRADIENT = 'SUCCESS_GRADIENT';
 
 // Navigation
+export const NAVIGATION_URL = 'NAVIGATION_URL';
 export const NAVIGATION_SET = 'NAVIGATION_SET';
 export const NAVIGATION_PUSH = 'NAVIGATION_PUSH';
 export const NAVIGATION_POP = 'NAVIGATION_POP';

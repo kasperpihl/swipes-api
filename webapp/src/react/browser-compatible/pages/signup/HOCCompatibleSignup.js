@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-// import * as a from 'actions';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
@@ -23,7 +22,7 @@ class HOCCompatibleSignup extends PureComponent {
   }
   componentWillMount() {
     window.analytics.sendEvent('Signup opened', {});
-    const { request, history } = this.props;
+    const { request } = this.props;
     const { formData, invitationToken } = this.state;
     if(invitationToken) {
       this.setLoading('signup');
@@ -31,7 +30,6 @@ class HOCCompatibleSignup extends PureComponent {
       request('organizations.getInfoFromInvitationToken', {
         invitation_token: invitationToken,
       }).then((res) => {
-        console.log('token', res);
         if (res && res.ok && res.me && !this._unmounted) {
           const me = fromJS(res.me);
           window.analytics.sendEvent('Invitation opened', {});
@@ -51,19 +49,13 @@ class HOCCompatibleSignup extends PureComponent {
   componentWillUnmount(){
     this._unmounted = true;
   }
-  onNavigateToLogin(e) {
-    const { history } = this.props;
-    history.push('/login');
-
-    return false;
-  }
   onChange(key, e) {
     const { formData } = this.state;
     this.setState({ formData: formData.set(key, e.target.value) });
   }
   onSignup() {
     const { formData, invitationToken, me } = this.state;
-    const { signup, createOrgRequest, history } = this.props;
+    const { signup, createOrgRequest, setUrl } = this.props;
     
     if (this.isLoading('signupButton')) {
       return;
@@ -87,7 +79,7 @@ class HOCCompatibleSignup extends PureComponent {
             // 'Minutes since invite':
           });
         }
-        history.push('/');
+        setUrl('/');
       }
       console.log('ressy', res);
     });
@@ -141,7 +133,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   request: ca.api.request,
   signup: ca.users.signup,
-})(HOCCompatibleSignup));
+  setUrl: a.navigation.url,
+})(HOCCompatibleSignup);

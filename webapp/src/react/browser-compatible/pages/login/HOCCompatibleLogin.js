@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-// import * as a from 'actions';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
@@ -22,18 +21,12 @@ class HOCCompatibleLogin extends PureComponent {
   }
   componentDidMount() {
   }
-  onNavigateToSignup(e) {
-    const { history } = this.props;
-    history.push('/register');
-
-    return false;
-  }
   onChange(key, e) {
     const { formData } = this.state;
     this.setState({ formData: formData.set(key, e.target.value) });
   }
   onSignin() {
-    const { request, history } = this.props;
+    const { request, setUrl } = this.props;
     const { formData } = this.state;
 
     if (this.isLoading('signInButton')) {
@@ -59,7 +52,7 @@ class HOCCompatibleLogin extends PureComponent {
 
         this.clearLoading('signInButton', label);
       } else {
-        history.push('/');
+        setUrl('/')
         window.analytics.sendEvent('Logged in', {});
         this.clearLoading('signInButton');
       }
@@ -97,6 +90,7 @@ HOCCompatibleLogin.propTypes = {};
 const mapStateToProps = (state) => ({
 });
 
-export default withRouter(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   request: ca.api.request,
-})(HOCCompatibleLogin));
+  setUrl: a.navigation.url,
+})(HOCCompatibleLogin);

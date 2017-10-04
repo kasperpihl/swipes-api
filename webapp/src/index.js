@@ -4,6 +4,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { createLocation } from 'history';
 
 import getGlobals from 'src/utils/globals';
 import configureStore from 'src/store/configureStore';
@@ -36,7 +37,7 @@ init(store, delegate);
 
 render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter forceRefresh={false}>
       <Root />
     </BrowserRouter>
   </Provider>
