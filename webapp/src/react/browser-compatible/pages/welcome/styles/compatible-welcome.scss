@@ -77,6 +77,13 @@
   cursor: pointer;
   -ms-transition: .35s ease;
 
+  p {
+    @include font(12px, $blue-100, 24px, 500);
+    margin: 0;padding: 0;
+    transition: .35s ease;
+    -ms-transition: .35s ease;
+  }
+
   &:hover {
     padding-top: 9px;
     background-color: $blue-20;
@@ -93,14 +100,6 @@
       transition: .35s ease;
       -ms-transition: .35s ease;
     }
-  }
-
-
-  p {
-    @include font(12px, $blue-100, 24px, 500);
-    margin: 0;padding: 0;
-    transition: .35s ease;
-    -ms-transition: .35s ease;
   }
 }
 
