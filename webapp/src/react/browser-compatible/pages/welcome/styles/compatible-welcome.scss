@@ -155,9 +155,7 @@
 
     &:not(:placeholder-shown) + .create-org__label {
       @include font(11px, $deepBlue-50, 15px) 
-      top: -20px;
-      transform: translateY(0px);
-      -ms-transform: translateY(0px);
+      top: 0;
       transition: .2s ease;
     }
 
@@ -167,9 +165,7 @@
 
       & + .create-org__label {
         @include font(11px, $deepBlue-50, 15px) 
-        top: -20px;
-        transform: translateY(0px);
-        -ms-transform: translateY(0px);
+        top: 0;
         transition: .2s ease;
       }
 
