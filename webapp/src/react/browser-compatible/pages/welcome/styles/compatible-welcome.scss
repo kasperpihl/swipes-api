@@ -101,6 +101,7 @@
   #{$b}__item {
     display: table-cell;
     height: 60px;
+    vertical-align: middle;
   }
 
   #{$b}__name {
@@ -134,6 +135,10 @@
   margin-top: 30px;
 
   label#{&}__wrapper {
+  }
+
+  #{$b}__wrap {
+    @include size(100%, 45px);
   }
 
   input#{&}__input {
@@ -197,7 +202,7 @@
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
     position: absolute;
-    top: -12px; right: 0;
+    top: 0; right: 0;
     border-left: 1px solid $deepBlue-20;
     transition: .2s ease;
   }

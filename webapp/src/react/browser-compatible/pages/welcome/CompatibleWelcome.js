@@ -84,10 +84,12 @@ class CompatibleWelcome extends PureComponent {
     return (
       <div className="create-org">
         <label htmlFor="create-org-input" className="create-org__wrapper">
-          <input id="create-org-input" type="text" className="create-org__input" placeholder=" " />
-          <div className="create-org__label">Enter Org name</div>
-          <div className="create-org__button">
-            <Icon icon="ArrowRightLong" className="create-org__svg" />
+          <div className="create-org__wrap">
+            <input id="create-org-input" type="text" className="create-org__input" placeholder=" " />
+            <div className="create-org__label">Enter Org name</div>
+            <div className="create-org__button">
+              <Icon icon="ArrowRightLong" className="create-org__svg" />
+            </div>
           </div>
         </label>
       </div>
