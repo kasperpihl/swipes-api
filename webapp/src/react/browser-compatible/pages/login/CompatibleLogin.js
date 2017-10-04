@@ -15,20 +15,11 @@ class CompatibleLogin extends PureComponent {
     this.state = {};
 
     setupDelegate(this, 'onSignin', 'onResetPassword');
-    bindAll(this, ['handleKeyDown', 'handleReset']);
+    bindAll(this, ['handleKeyDown']);
   }
   componentDidMount() {
   }
-  handleReset(e) {
-    e.preventDefault();
-    const result = window.prompt('Enter your email to reset your password', 'Your email');
 
-    if (result) {
-      this.onResetPassword(result);
-    }
-
-    return false;
-  }
   handleKeyDown(e) {
     if (e.keyCode === 13) {
       this.onSignin();
@@ -77,7 +68,7 @@ class CompatibleLogin extends PureComponent {
           Don't have an account yet? <Link to="/register" className="footer__switch-button">Sign up now</Link>
         </p>
         <div className="footer__reset-password">
-          <a href="" onClick={this.handleReset}>Reset password</a>
+          <a href="" onClick={this.onResetPassword}>Reset password</a>
         </div>
       </div>
     );

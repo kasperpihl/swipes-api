@@ -4,6 +4,14 @@ import { connect } from 'react-redux';
 import { Route, withRouter, Redirect } from 'react-router-dom';
 
 import * as a from 'actions';
+
+import HOCUnsubscribe from 'src/react/pages/unsubscribe/HOCUnsubscribe';
+import CompatibleDownload from 'compatible/pages/download/CompatibleDownload';
+import HOCCompatibleLogin from 'compatible/pages/login/HOCCompatibleLogin';
+import HOCCompatibleSignup from 'compatible/pages/signup/HOCCompatibleSignup';
+import HOCCompatibleWelcome from 'compatible/pages/welcome/HOCCompatibleWelcome';
+
+import HOCContextMenu from 'components/context-menu/HOCContextMenu';
 import Gradient from 'components/gradient/Gradient';
 
 import 'src/react/global-styles/reset.scss';
@@ -17,27 +25,36 @@ if (process.env.NODE_ENV !== 'production') {
 
 class Root extends PureComponent {
   componentDidMount() {
-    this.checkLoginStatus();
+    this.checkRedirects();
   }
   componentDidUpdate() {
     const { setUrl } = this.props;
-    this.checkLoginStatus();
+    this.checkRedirects();
     if(this.clearUrl) {
       setUrl(null);
       this.clearUrl = false;
     }
   }
-  checkLoginStatus() {
-    const { location, token, isHydrated, setUrl } = this.props;
+  checkRedirects() {
+    const { location, token, isHydrated, setUrl, numberOfOrgs } = this.props;
     const path = location.pathname;
 
-    if(['/login', '/register', '/welcome'].indexOf(path) > -1 && isHydrated && token) {
-      setUrl('/');
+    if(isHydrated && !token) {
+      if (['/', '/welcome'].indexOf(path) > -1) {
+        setUrl('/register');
+      }
     }
-    if (path === '/' && isHydrated && !token) {
-      setUrl('/register');
+    if(isHydrated && token) {
+      if(['/login', '/register'].indexOf(path) > -1) {
+        setUrl('/');
+      }
+      if(path === '/' && !numberOfOrgs) {
+        setUrl('/welcome');
+      }
+      if(path === '/welcome' && numberOfOrgs) {
+        setUrl('/');
+      }
     }
-
   }
   renderTopbar() {
     const { isElectron } = this.props;
@@ -46,22 +63,6 @@ class Root extends PureComponent {
       return <HOCTopbar />;
     }
     return undefined;
-  }
-  renderAppComponents(name) {
-    const arr = ['SuccessStateGradient', 'HOCAutoCompleting', 'HOCContextMenu', 'HOCTooltip', 'HOCTrial'];
-    return arr.map((name) => (
-      <Route path="/" exact key={name} render={() => {
-        const Comps = {
-          SuccessStateGradient: require('components/gradient/SuccessStateGradient').default,
-          HOCAutoCompleting: require('components/auto-completing/HOCAutoCompleting').default,
-          HOCContextMenu: require('components/context-menu/HOCContextMenu').default,
-          HOCTooltip: require('components/tooltip/HOCTooltip').default,
-          HOCTrial: require('components/trial/HOCTrial').default,
-        };
-        const Comp = Comps[name];
-        return <Comp />;
-      }} />
-    ))
   }
   renderRedirect() {
     const { location, goToUrl } = this.props;
@@ -82,41 +83,25 @@ class Root extends PureComponent {
       <div id="app" className={className}>
         {this.renderRedirect()}
         <Gradient />
+        <HOCContextMenu />
         {this.renderTopbar()}
-        {this.renderAppComponents()}
         <DevTools />
-        <div className="content-wrapper">
-          <Route path="/unsubscribe" render={() => {
-            const HOCUnsubscribe = require('src/react/pages/unsubscribe/HOCUnsubscribe').default;
-            return <HOCUnsubscribe />;
-          }} />
-          <Route path="/" exact render={() => {
-            const Comp = require('src/react/app/HOCApp').default;
-            return <Comp />;
-          }} />
-          <Route path="/download" render={() => {
-            const Comp = require('compatible/pages/download/CompatibleDownload').default;
-            return <Comp />;
-          }} />
-          <Route path="/login" render={() => {
-            const Comp = require('compatible/pages/login/HOCCompatibleLogin').default;
-            return <Comp />
-          }} />
-          <Route path="/register" render={() => {
-            const Comp = require('compatible/pages/signup/HOCCompatibleSignup').default;
-            return <Comp />
-          }} />
-          <Route path="/welcome" render={() => {
-            const Comp = require('compatible/pages/welcome/HOCCompatibleWelcome').default;
-            return <Comp />
-          }} />
-        </div>
+        <Route path="/" exact render={() => {
+          const Comp = require('src/react/app/HOCApp').default;
+          return <Comp />;
+        }} />
+        <Route path="/unsubscribe" component={HOCUnsubscribe} />
+        <Route path="/download" component={CompatibleDownload} />
+        <Route path="/login" component={HOCCompatibleLogin} />
+        <Route path="/register" component={HOCCompatibleSignup} />
+        <Route path="/welcome" component={HOCCompatibleWelcome} />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
+  numberOfOrgs: state.getIn(['me', 'organizations']) && state.getIn(['me', 'organizations']).size,
   isMaximized: state.getIn(['main', 'isMaximized']),
   isFullscreen: state.getIn(['main', 'isFullscreen']),
   isHydrated: state.getIn(['main', 'isHydrated']),

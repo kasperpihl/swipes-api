@@ -58,16 +58,41 @@ class HOCCompatibleLogin extends PureComponent {
       }
     });
   }
-  onResetPassword(email) {
-    const { request } = this.props;
+  onResetPassword(e) {
+    e.preventDefault();
+    const { request, inputMenu, isElectron, confirm } = this.props;
+    const { formData } = this.state;
 
-    if (email && email.length) {
-      request('me.sendResetEmail', {
-        email: email,
-      }).then((res) => {
+    if(isElectron) {
+      const options = { boundingRect: e.target.getBoundingClientRect() };
+      inputMenu({
+        ...options,
+        placeholder: 'Email',
+        text: formData.get('email'),
+        buttonLabel: 'Reset',
+      }, (resetEmail) => {
+        if (resetEmail && resetEmail.length) {
+          request('me.sendResetEmail', {
+            email: resetEmail,
+          }).then((res) => {
+            confirm({
+              ...options,
+              actions: [{ text: 'Okay' }],
+              title: 'Reset password',
+              message: 'We will send you an email to change your password.',
+            });
+          });
+        }
+      });
+    } else {
+      const result = window.prompt('Enter your email to reset your password', 'Your email');
+      if(!result) return false;
+      request('me.sendResetEmail', { email: result }).then((res) => {
         window.alert('We will send you an email to change your password.');
       });
     }
+      
+    return false;
   }
   render() {
     const { formData } = this.state;
@@ -88,9 +113,12 @@ class HOCCompatibleLogin extends PureComponent {
 HOCCompatibleLogin.propTypes = {};
 
 const mapStateToProps = (state) => ({
+  isElectron: state.getIn(['globals', 'isElectron']),
 });
 
 export default connect(mapStateToProps, {
+  inputMenu: a.menus.input,
+  confirm: a.menus.confirm,
   request: ca.api.request,
   setUrl: a.navigation.url,
 })(HOCCompatibleLogin);

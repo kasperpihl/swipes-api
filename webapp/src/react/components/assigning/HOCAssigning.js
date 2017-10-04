@@ -23,7 +23,7 @@ class HOCAssigning extends PureComponent {
     if (filteredUsers.contains(myId)) {
       filteredUsers = filteredUsers.filter(uId => uId !== myId).insert(0, myId);
     }
-    filteredUsers = filteredUsers.map(aId => users.get(aId));
+    filteredUsers = filteredUsers.map(aId => users.get(aId)).filter(v => !!v);
 
     return filteredUsers;
   }

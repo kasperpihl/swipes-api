@@ -63,24 +63,26 @@ export default class Analytics {
 
     if (me && me.get('id') && me.get('id') !== this.userId) {
 
-      const org = me.getIn(['organizations', 0]);
-      const orgId = me.getIn(['organizations', 0, 'id']);
-      const orgName = me.getIn(['organizations', 0, 'name']);
       this.userId = me.get('id');
       if(this.enable){
-        Intercom('update', {
+        const intercomObj = {
           name: msgGen.users.getFullName(me),
           'Is admin': msgGen.me.isAdmin(),
           'Is paying': msgGen.me.isPaying(),
           user_id: me.get('id'),
           email: msgGen.users.getEmail(me),
           created_at: me.get('created_at'),
-          company: {
-            id: orgId,
-            name: orgName,
+        };
+        const org = me.getIn(['organizations', 0]);
+      
+        if(org) {
+          intercomObj.company = {
+            id: org.get('id'),
+            name: org.get('name'),
             created_at: org.get('created_at'),
           }
-        });
+        }
+        Intercom('update', intercomObj);
         mixpanel.identify(this.userId);
       }
     }
