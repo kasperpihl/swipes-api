@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 // import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
-import CompatibleHeader from 'compatible/components/header/CompatibleHeader'
+import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import './styles/download-page.scss';
 
 const downloadLinks = {
@@ -14,7 +14,7 @@ const downloadLinks = {
   ios: 'http://swipesapp.com/download-ios',
 };
 
-class ComaptibleDownload extends PureComponent {
+class CompatibleDownload extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -49,7 +49,7 @@ class ComaptibleDownload extends PureComponent {
     }
     return (
       <a href={downloadLinks.win32} target="_blank" className="device">
-        <Icon icon="WindowsDevice" className="device__svg" />
+        <Icon icon="WindowsDevice" className="device-svg" />
         <p>Windows</p>
       </a>
     );
@@ -60,7 +60,7 @@ class ComaptibleDownload extends PureComponent {
     }
     return (
       <a href={downloadLinks.darwin} target="_blank" className="device">
-        <Icon icon="MacDevice" className="device__svg" />
+        <Icon icon="MacDevice" className="device-svg" />
         <p>MacOS</p>
       </a>
     );
@@ -71,7 +71,7 @@ class ComaptibleDownload extends PureComponent {
     }
     return (
       <a href={downloadLinks.linux} target="_blank" className="device">
-        <Icon icon="LinuxDevice" className="device__svg" />
+        <Icon icon="LinuxDevice" className="device-svg" />
         <p>Linux</p>
       </a>
     );
@@ -80,7 +80,7 @@ class ComaptibleDownload extends PureComponent {
     const type = this.desktopCheck();
 
     return (
-      <div className="section__devices">
+      <div className="device-wrapper">
         {this.renderFirst(type)}
         {this.renderMac(type)}
         {this.renderWindows(type)}
@@ -89,39 +89,37 @@ class ComaptibleDownload extends PureComponent {
     );
   }
   render() {
-
     return (
       <CompatibleCard>
         <div className="download-page">
-          <CompatibleHeader
-            title='Awesome! Download the Swipes Workspace'
-            subtitle='Start working with your team from anywhere'
-          />
+          <CompatibleHeader title="Awesome! Download the Swipes Workspace" subtitle="Start working with your team from anywhere" />
           <div className="section">
-            <div className="section__title">Desktop</div>
+            <div className="section-title">Desktop</div>
             {this.renderDesktopDownloads()}
           </div>
+
           <div className="section section--coming-soon">
-            <div className="section__title">Mobile</div>
-            <div className="section__devices">
+            <div className="section-title">Mobile (In beta)</div>
+
+            <div className="device-wrapper">
               <a href={downloadLinks.ios} target="_blank" className="device">
-                <Icon icon="" className="device__svg" />
+                <Icon icon="IphoneDevice" className="device-svg" />
                 <p>iOS</p>
               </a>
               <a href={downloadLinks.android} target="_blank" className="device">
-                <Icon icon="" className="device__svg" />
+                <Icon icon="AndroidDevice" className="device-svg" />
                 <p>Android</p>
               </a>
             </div>
           </div>
         </div>
       </CompatibleCard>
-    )
+    );
   }
 }
 
-export default ComaptibleDownload;
+export default CompatibleDownload;
 
 // const { string } = PropTypes;
 
-ComaptibleDownload.propTypes = {};
+CompatibleDownload.propTypes = {};
