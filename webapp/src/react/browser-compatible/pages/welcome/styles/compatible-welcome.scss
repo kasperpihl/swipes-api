@@ -52,8 +52,10 @@
 
   img {
     @include size(30px);
-    @include centerAbsolute(vertical);
     border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 30px - 15px;
   }
 }
 
@@ -109,7 +111,7 @@
   }
 
   #{$b}__inviter {
-    width: 100px;
+    @include size(100px, 60px);
   }
 
   #{$b}__button {
@@ -118,8 +120,9 @@
 
   #{$b}__svg {
     @include size(24px);
-    @include centerAbsolute();
     @include svg-color($deepBlue-50);
+    position: absolute;
+    left: 18px; top: 18px;
     transition: .15s ease;
   }
 }
@@ -205,8 +208,10 @@
 
   &__svg {
     @include size(24px);
-    @include centerAbsolute();
     @include svg-color($deepBlue-50);
+    position: absolute;
+    left: (60px / 2) - 12px;
+    top: (44px / 2) - 12px;
     transition: .2s ease;
   }
 }
