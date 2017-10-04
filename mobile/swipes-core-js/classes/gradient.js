@@ -77,7 +77,7 @@ const Gradient = {
   },
   getGradientStyles() {
     return {
-      background: `linear-gradient(to right, ${gradientColors.join(', ')})`,
+      backgroundImage: `linear-gradient(to right, ${gradientColors.join(', ')})`,
       backgroundSize: '1100% 1100%',
     };
   },
