@@ -50,9 +50,16 @@ class Root extends PureComponent {
       }
       if(path === '/' && !numberOfOrgs) {
         setUrl('/welcome');
+      } else if(path === '/' && !isBrowserSupported) {
+        setUrl('/notsupported');
       }
       if(path === '/welcome' && numberOfOrgs) {
-        setUrl('/');
+        if(isBrowserSupported) {
+          setUrl('/');
+        } else {
+          setUrl('/notsupported');
+        }
+        
       }
     }
   }
@@ -90,6 +97,7 @@ class Root extends PureComponent {
           const Comp = require('src/react/app/HOCApp').default;
           return <Comp />;
         }} />
+        <Route path="/notsupported" component={CompatibleDownload} />
         <Route path="/unsubscribe" component={HOCUnsubscribe} />
         <Route path="/download" component={CompatibleDownload} />
         <Route path="/login" component={HOCCompatibleLogin} />
