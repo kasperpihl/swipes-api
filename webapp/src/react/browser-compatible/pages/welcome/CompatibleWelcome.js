@@ -9,6 +9,15 @@ import Icon from 'Icon';
 import styles from  './styles/compatible-welcome.scss';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
+import { Link } from 'react-router-dom';
+
+const downloadLinks = {
+  darwin: 'http://swipesapp.com/download-mac',
+  win32: 'http://swipesapp.com/download-win',
+  linux: 'http://swipesapp.com/download-linux',
+  android: 'http://swipesapp.com/download-android',
+  ios: 'http://swipesapp.com/download-ios',
+};
 
 const orgs = [
   {
@@ -33,6 +42,53 @@ class CompatibleWelcome extends PureComponent {
     // this.callDelegate.bindAll('onLala');
   }
   componentDidMount() {
+  }
+  desktopCheck() {
+    var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+    if(isMac){
+      return 'renderMac';
+    }
+    const isLinux = navigator.platform.toUpperCase().indexOf('LINUX')>=0;
+    if(isLinux){
+      return 'renderLinux';
+    }
+    return 'renderWindows';
+  }
+  renderFirst(type) {
+    return this[type]();
+  }
+  renderWindows(firstType) {
+    if(firstType === 'renderWindows') {
+      return undefined;
+    }
+    return (
+      <a href={downloadLinks.win32} target="_blank" className="device">
+        <Icon icon="WindowsDevice" className="device-svg" />
+        <p>Windows</p>
+      </a>
+    );
+  }
+  renderMac(firstType) {
+    if(firstType === 'renderMac') {
+      return undefined;
+    }
+    return (
+      <a href={downloadLinks.darwin} target="_blank" className="device">
+        <Icon icon="MacDevice" className="device-svg" />
+        <p>MacOS</p>
+      </a>
+    );
+  }
+  renderLinux(firstType) {
+    if(firstType === 'renderLinux') {
+      return undefined;
+    }
+    return (
+      <a href={downloadLinks.linux} target="_blank" className="device">
+        <Icon icon="LinuxDevice" className="device-svg" />
+        <p>Linux</p>
+      </a>
+    );
   }
   renderHeader() {
 
@@ -95,8 +151,17 @@ class CompatibleWelcome extends PureComponent {
       </div>
     )
   }
-  renderDownloadNav() {
+  renderDownload() {
+    const type = this.desktopCheck();
 
+    return (
+      <div className="device-wrapper">
+        {this.renderFirst(type)}
+        <p className="all-download">
+          <Link to="/download" className="all-download__link">See downloads for all platforms</Link>
+        </p>
+      </div>
+    );
   }
   render() {
 
@@ -111,7 +176,10 @@ class CompatibleWelcome extends PureComponent {
           Create a new organization
         </h4>
         {this.renderCreateOrg()}
-        {this.renderDownloadNav()}
+        <h4 className="compatible-welcome__header">
+          Want to just download the app and start working? Here you go
+        </h4>
+        {this.renderDownload()}
       </div>
     );
   }
