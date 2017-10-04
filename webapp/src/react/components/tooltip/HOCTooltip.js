@@ -1,8 +1,9 @@
-  import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-  import { connect } from 'react-redux';
-  import * as a from 'actions';
-  import { map } from 'react-immutable-proptypes';
+import { connect } from 'react-redux';
+import * as a from 'actions';
+import { map } from 'react-immutable-proptypes';
+import prefixAll from 'inline-style-prefixer/static';
 // import { fromJS } from 'immutable';
 
   import './styles/tooltip.scss';
@@ -155,7 +156,7 @@ import PropTypes from 'prop-types';
       const props = tooltip.props || {};
 
       return (
-        <div className="g-tooltip__content" style={this.state.styles} ref="tooltip">
+        <div className="g-tooltip__content" style={prefixAll(this.state.styles)} ref="tooltip">
           <Comp {...props} />
         </div>
       );

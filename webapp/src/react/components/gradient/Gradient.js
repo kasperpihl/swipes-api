@@ -28,7 +28,7 @@ class Gradient extends PureComponent {
     this.animationFrame = window.requestAnimationFrame(this.gradientStep);
   }
   render() {
-    const styles = gradient.getGradientStyles();
+    let styles = gradient.getGradientStyles();
 
     if (this.state.gradientPos) {
       styles.backgroundPosition = `${this.state.gradientPos}% 50%`;

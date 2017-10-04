@@ -5,6 +5,8 @@ import React, { PureComponent } from 'react';
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
+import prefixAll from 'inline-style-prefixer/static';
+import { resolveArrayValue } from 'css-in-js-utils';
 import ResultItem from 'components/result-item/ResultItem';
 import AutoCompleteItem from './AutoCompleteItem';
 import './styles/auto-completing.scss';
@@ -57,7 +59,7 @@ class AutoCompleting extends PureComponent {
     }
 
     return (
-      <div className={className} style={style}>
+      <div className={className} style={prefixAll(style)}>
         {this.renderResults()}
       </div>
     )

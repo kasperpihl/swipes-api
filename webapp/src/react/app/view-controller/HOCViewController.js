@@ -11,7 +11,7 @@ import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
 import HOCModal from './HOCModal';
-import prefixAll from 'inline-style-prefixer/static'
+import prefixAll from 'inline-style-prefixer/static';
 
 const DEFAULT_MIN_WIDTH = 500;
 const DEFAULT_MAX_WIDTH = 800;
