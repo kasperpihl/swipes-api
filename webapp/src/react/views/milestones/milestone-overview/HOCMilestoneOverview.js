@@ -112,14 +112,14 @@ class HOCMilestoneOverview extends PureComponent {
   onDelete(options) {
     const { milestone, confirm, deleteMilestone } = this.props;
     confirm(Object.assign({}, options, {
-      title: 'Delete milestone',
-      message: 'This will delete this milestone and all goals in it. Are you sure?',
+      title: 'Delete plan',
+      message: 'This will delete this plan and all goals in it. Are you sure?',
     }), (i) => {
       if (i === 1) {
         this.setLoading('dots');
         deleteMilestone(milestone.get('id')).then((res) => {
           if(res.ok){
-            window.analytics.sendEvent('Milestone deleted', {});
+            window.analytics.sendEvent('Plan deleted', {});
           }
           if (!res || !res.ok) {
             this.clearLoading('dots', '!Something went wrong');

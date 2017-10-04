@@ -20,7 +20,12 @@ class Root extends PureComponent {
     this.checkLoginStatus();
   }
   componentDidUpdate() {
+    const { setUrl } = this.props;
     this.checkLoginStatus();
+    if(this.clearUrl) {
+      setUrl(null);
+      this.clearUrl = false;
+    }
   }
   checkLoginStatus() {
     const { location, token, isHydrated, setUrl } = this.props;
@@ -59,11 +64,11 @@ class Root extends PureComponent {
     ))
   }
   renderRedirect() {
-    const { location, goToUrl, setUrl } = this.props;
+    const { location, goToUrl } = this.props;
     if(goToUrl && location.pathname !== goToUrl) {
       return <Redirect to={goToUrl} push />
-    } else if(goToUrl && location === goToUrl) {
-      setUrl(null);
+    } else if(goToUrl && location.pathname === goToUrl) {
+      this.clearUrl = true;
     }
     return null;
   }
