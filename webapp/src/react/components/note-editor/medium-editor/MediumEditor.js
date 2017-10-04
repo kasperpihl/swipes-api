@@ -6,6 +6,7 @@ import {
   getVisibleSelectionRect,
 } from 'draft-js';
 import ControlPanel from './ControlPanel';
+import prefixAll from 'inline-style-prefixer/static';
 
 const SPACING = 10;
 
@@ -239,7 +240,7 @@ class MediumEditor extends PureComponent {
       <ControlPanel
         show={showPanel}
         editorState={editorState}
-        style={style}
+        style={prefixAll(style)}
         delegate={delegate}
         setEditorState={delegate.setEditorState}
         ref="controlPanel"

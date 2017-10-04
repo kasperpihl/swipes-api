@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import prefixAll from 'inline-style-prefixer/static';
 import './styles/loader.scss';
 
 const TIMER = 150; // Milliseconds between moving the next block
@@ -126,7 +127,7 @@ class Loader extends Component {
         transition: `${TRANSITION}s cubic-bezier(0.86, 0, 0.07, 1)`,
         WebkitClipPath: this.clipPathForPosition(pos),
       };
-      return <div key={`rect-${radioCommand}`} style={styles} className={`rect ${radioCommand}`} />;
+      return <div key={`rect-${radioCommand}`} style={prefixAll(styles)} className={`rect ${radioCommand}`} />;
     });
   }
   renderText(text, textStyle) {

@@ -28,7 +28,7 @@ export default function configureStore(preloadedState) {
 
   window.persistor = persistStore(store, {
     storage: AsyncStorage,
-    blacklist: ['notes', 'navigation', 'filters', 'main', 'loading', 'autoComplete', 'infoTab'],
+    blacklist: ['notes', 'navigation',  'main',  'autoComplete', 'infoTab', 'globals'],
   });
 
   return store;

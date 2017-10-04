@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import Measure from 'react-measure';
 import { debounce, bindAll } from 'swipes-core-js/classes/utils';
+import prefixAll from 'inline-style-prefixer/static';
 
 import './styles/context-menu';
 
@@ -177,7 +178,7 @@ class HOCContextMenu extends PureComponent {
     const styles = this.state.styles;
     return (
       <Measure onMeasure={this.bouncedResize}>
-        <div className="context-menu__content" ref="menu" style={styles} key={key}>
+        <div className="context-menu__content" ref="menu" style={prefixAll(styles)} key={key}>
           <Comp hide={this.hideContextMenu} {...props} />
         </div>
       </Measure>
