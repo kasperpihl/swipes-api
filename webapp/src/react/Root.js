@@ -9,6 +9,7 @@ import HOCUnsubscribe from 'src/react/pages/unsubscribe/HOCUnsubscribe';
 import CompatibleDownload from 'compatible/pages/download/CompatibleDownload';
 import HOCCompatibleLogin from 'compatible/pages/login/HOCCompatibleLogin';
 import HOCCompatibleSignup from 'compatible/pages/signup/HOCCompatibleSignup';
+import HOCCompatibleInvite from 'compatible/pages/invite/HOCCompatibleInvite';
 import HOCCompatibleWelcome from 'compatible/pages/welcome/HOCCompatibleWelcome';
 
 import HOCContextMenu from 'components/context-menu/HOCContextMenu';
@@ -102,6 +103,7 @@ class Root extends PureComponent {
         <Route path="/download" component={CompatibleDownload} />
         <Route path="/login" component={HOCCompatibleLogin} />
         <Route path="/register" component={HOCCompatibleSignup} />
+        <Route path="/invite" component={HOCCompatibleInvite} />
         <Route path="/welcome" component={HOCCompatibleWelcome} />
       </div>
     );
