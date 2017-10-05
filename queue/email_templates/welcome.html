@@ -40,6 +40,9 @@
 			padding:0;
 			width:100%;
 		}
+		.mcnPreviewText{
+			display:none !important;
+		}
 		#outlook a{
 			padding:0;
 		}
@@ -288,7 +291,7 @@
 		#templateBody .mcnTextContent,#templateBody .mcnTextContent p{
 			/*@editable*/color:#4c546d;
 			/*@editable*/font-family:'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
-			/*@editable*/font-size:16px;
+			/*@editable*/font-size:15px;
 			/*@editable*/line-height:150%;
 			/*@editable*/text-align:left;
 		}
@@ -539,6 +542,9 @@
 
 }</style></head>
     <body>
+		<!--*|IF:MC_PREVIEW_TEXT|*-->
+		<!--[if !gte mso 9]><!----><span class="mcnPreviewText" style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">*|MC_PREVIEW_TEXT|*</span><!--<![endif]-->
+		<!--*|END:IF|*-->
         <center>
             <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
                 <tr>
@@ -662,7 +668,7 @@
                         
                             <h1 class="null"><span style="font-family:helvetica neue,helvetica,arial,verdana,sans-serif">Welcome on board, *|NAME|*!</span></h1>
 <br>
-We are thrilled to have you and the *|COMPANY_NAME|* team join forces in the <a href="http://swipesapp.com" target="_blank">Swipes Workspace</a>. We promise to make this the best teamwork experience.<br>
+We are thrilled to have you and your team join forces in the <a href="http://swipesapp.com" target="_blank">Swipes Workspace</a>.<br>
 &nbsp;
                         </td>
                     </tr>
@@ -681,12 +687,12 @@ We are thrilled to have you and the *|COMPANY_NAME|* team join forces in the <a 
 </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnButtonBlock" style="min-width:100%;">
     <tbody class="mcnButtonBlockOuter">
         <tr>
-            <td style="padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top" align="left" class="mcnButtonBlockInner">
-                <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: separate !important;border-top-left-radius: 100px;border-top-right-radius: 100px;border-bottom-right-radius: 100px;border-bottom-left-radius: 100px;background-color: #007AFF;">
+            <td style="padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top" align="center" class="mcnButtonBlockInner">
+                <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: separate !important;border-radius: 100px;background-color: #007AFF;">
                     <tbody>
                         <tr>
-                            <td align="center" valign="middle" class="mcnButtonContent" style="font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif; font-size: 16px; padding: 18px;">
-                                <a class="mcnButton " title="Download the app" href="https://live.swipesapp.com/download" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">Download the app</a>
+                            <td align="center" valign="middle" class="mcnButtonContent" style="font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; padding: 18px;">
+                                <a class="mcnButton " title="Confirm your email" href="*|CONFIRMATION_LINK|*" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">Confirm your email</a>
                             </td>
                         </tr>
                     </tbody>
@@ -731,13 +737,9 @@ We are thrilled to have you and the *|COMPANY_NAME|* team join forces in the <a 
                         
                             <h1 class="null">What is the Swipes Workspace?</h1>
 <br>
-It's the place where your team comes together to achieve goals.<br>
+The Workspace is the place that unites the work of your team. It makes it easier for everyone to get on the&nbsp;same page, exchange constructive feedback and take joy in work. Even when work happens across skills and time zones.<br>
 <br>
-Teamwork is all about getting aligned and hitting the flow. But you know and we know it's not as easy as it sounds!<br>
-<br>
-In the Workspace, however, it is quite simple: You have your team, communication and files, all in one place. Everything is organized around the common goals, you can see what to work on next, share your progress, give each other feedback and see how everyone’s part adds up to the big effort.<br>
-<br>
-We hope this will bring your team closer and make everyone happy about the work they do. Let us know if you have any questions or feedback. We’d love to hear from you.<br>
+We hope this will bring your team closer and make everyone happier about the work they do. Let us know if you have any questions and feedback. We’d love to hear from you.<br>
 <br>
 &nbsp;
                         </td>

@@ -40,6 +40,7 @@ import {
 } from './db_utils/xendo';
 
 const invitationTokenSecret = 'very_s3cret_invit@tion_secr3t';
+const confirmationTokenSecret = 'very_s3cret_c@nfirmation_secr3t';
 const defaultSettings = {
   onboarding: {
     order: [
@@ -618,6 +619,25 @@ const usersCreateInvitationToken = valLocals('usersCreateInvitationToken', {
 
   return next();
 });
+const usersCreateConfirmationToken = valLocals('usersCreateConfirmationToken', {
+  email: string.require(),
+  user_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    email,
+    user_id,
+  } = res.locals;
+  const confirmationToken = jwt.encode({
+    email,
+    user_id,
+  }, confirmationTokenSecret);
+
+  setLocals({
+    confirmationToken,
+  });
+
+  return next();
+});
 const usersLeaveOrganizationQueueMessage = valLocals('usersLeaveOrganizationQueueMessage', {
   user_id: string.require(),
   organization_id: string.require(),
@@ -724,21 +744,21 @@ const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
 
   return next();
 });
-const userSignupQueueMessage = valLocals('userSubscribeToMailChimpQueueMessage', {
+const userSignupQueueMessage = valLocals('userSignupQueueMessage', {
   email: string.format('email').require(),
-  // organizationId: string.require(),
+  confirmation_token: string.require(),
   first_name: string.require(),
 }, (req, res, next, setLocals) => {
   const {
     email,
-    // organizationId,
+    confirmation_token,
     first_name,
   } = res.locals;
 
   const queueMessage = {
     email,
+    confirmation_token,
     first_name,
-    // organization_id: organizationId,
     event_type: 'user_signup',
   };
 
@@ -765,6 +785,7 @@ export {
   userGetInfoForToken,
   usersRevokeToken,
   usersCreateInvitationToken,
+  usersCreateConfirmationToken,
   usersCreateTempUnactivatedUser,
   usersSendInvitationQueueMessage,
   usersActivateUserSignUp,

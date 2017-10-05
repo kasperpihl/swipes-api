@@ -74,8 +74,9 @@ const usersWelcomeEmail = (req, res, next) => {
   const {
     email,
     first_name,
-    organization,
+    confirmation_token,
   } = res.locals;
+  const host = config.get('host');
   const template_name = 'welcome-email';
   const template_content = [{
     name: '',
@@ -87,9 +88,8 @@ const usersWelcomeEmail = (req, res, next) => {
       name: 'NAME',
       content: first_name,
     }, {
-      name: 'COMPANY_NAME',
-      content: '',
-      // content: organization.name,
+      name: 'CONFIRMATION_LINK',
+      content: `${host}confirm-email?confirmation_token=${confirmation_token}`,
     }],
   }];
   const to = [
