@@ -45,8 +45,10 @@ class HOCCompatibleLogin extends PureComponent {
         if (res.error && res.error.message) {
           label = '!' + res.error.message;
 
-          if (label === "!body /users.signin: Invalid object['email']: did not match format") {
-            label = '!Not a valid email';
+          if (label.startsWith('!body /users.signin: Invalid object[')) {
+            let invalidProp = label.split('[')[1].split(']')[0].replace('\'', '').replace('\'', '');
+
+            label = `!Not a valid ${invalidProp}`;
           }
         }
 

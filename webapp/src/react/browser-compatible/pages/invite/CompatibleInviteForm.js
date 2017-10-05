@@ -27,7 +27,7 @@ class CompatibleInviteForm extends PureComponent {
 
     this.setState({ numberOfInputs: numberOfInputs + 1 })
   }
-  renderInput(i) {
+  renderInput(i, autoFocusState) {
 
     const labelTargetForName = `compatible-invite-name-${i}`;
     const labelTargetForEmail = `compatible-invite-email-${i}`;
@@ -37,7 +37,7 @@ class CompatibleInviteForm extends PureComponent {
         <div className="input-row__wrapper">
           <label htmlFor={labelTargetForName}>
             <div className="input-row__inner-wrapper">
-              <input type="text" id={labelTargetForName} className="compatible-invite-form__input" placeholder=" " />
+              <input type="text" id={labelTargetForName} className="compatible-invite-form__input" placeholder=" " autoFocus={autoFocusState} />
               <div className="compatible-invite-form__input-label">First name</div>
             </div>
           </label>
@@ -60,7 +60,8 @@ class CompatibleInviteForm extends PureComponent {
     let renderInputs = [];
     
     for (var i = numberOfInputs - 1; i >= 0; i--) {
-      renderInputs.push(this.renderInput(i))
+      const autoFocusState = i === 0;
+      renderInputs.push(this.renderInput(i, autoFocusState))
     }
 
     return (

@@ -40,8 +40,8 @@
     background-color: $deepBlue-5;
     transition: .15s ease;
 
-    #{$b}__svg {
-      @include svg-color($blue-100);
+    #{$b}__button {
+      @include font($c: $blue-100) 
       transition: .15s ease;
     }
   }
@@ -58,67 +58,6 @@
     left: 0;
     top: 30px - 15px;
   }
-}
-
-.compatible-welcome .device-wrapper {
-  @include size(100%, auto);
-  margin-top: 24px;
-  text-align: center;
-  overflow:hidden;
-}
-
-.compatible-welcome .device {
-  @include size(100%, 150px);
-  background-color: $blue-5;
-  border-radius: 6px;
-  display: inline-block;
-  padding-top: 15px;
-  transition: .35s ease;
-  cursor: pointer;
-  -ms-transition: .35s ease;
-
-  p {
-    @include font(12px, $blue-100, 24px, 500);
-    margin: 0;padding: 0;
-    transition: .35s ease;
-    -ms-transition: .35s ease;
-  }
-
-  &:hover {
-    padding-top: 9px;
-    background-color: $blue-20;
-    transition: .35s ease;
-    -ms-transition: .35s ease;
-
-    .device-svg {
-      @include svg-color($blue-100);
-      transition: .35s ease;
-      -ms-transition: .35s ease;
-    }
-
-    p {
-      transition: .35s ease;
-      -ms-transition: .35s ease;
-    }
-  }
-}
-
-.compatible-welcome .device-svg {
-  @include size(100px);
-  @include svg-color($blue-60);
-  margin: 0;padding: 0;
-  transition: .35s ease;
-  -ms-transition: .35s ease;
-}
-
-
-.compatible-welcome .all-download__link {
-  @include font(12px, $blue-100);
-  cursor: pointer;
-}
-
-.compatible-welcome .all-download {
-  padding-top: 15px;
 }
 
 // ======================================================
@@ -177,14 +116,11 @@
   }
 
   #{$b}__button {
+    @include font(11px, $deepBlue-50, 500); 
     width: 60px;
-  }
-
-  #{$b}__svg {
-    @include size(24px);
-    @include svg-color($deepBlue-50);
-    position: absolute;
-    left: 18px; top: 18px;
+    padding-right: 15px;
+    text-align: right;
+    text-transform: uppercase;
     transition: .15s ease;
   }
 }
@@ -236,10 +172,16 @@
 
       & ~ .create-org__button {
         background-color: $blue-100;
+        border-left: 1px solid $blue-100;
         transition: .2s ease;
 
         .create-org__svg {
           @include svg-color(white);
+          transition: .2s ease;
+        }
+
+        &:hover {
+          background-color: $blue-80;
           transition: .2s ease;
         }
       }
@@ -266,6 +208,35 @@
     top: 0; right: 0;
     border-left: 1px solid $deepBlue-20;
     transition: .2s ease;
+
+    &:hover {
+      background-color: $deepBlue-20;
+      transition: .2s ease;
+
+      #{$b}__svg {
+        @include svg-color($deepBlue-100);
+        transition: .2s ease;
+      }
+    }
+
+    &#{$b}__button--loading {
+      background-color: $blue-100;
+      border-left: 1px solid $blue-100;
+      transition: .2s ease;
+
+      .create-org__svg {
+        opacity: 0;
+        @include svg-color(white);
+        transition: .2s ease;
+      }
+
+      .create-org__loading {
+        @include size(12px)
+        position: absolute;
+        left: (60px / 2) - 6px;
+        top: (44px / 2) - 6px;      
+      }
+    }
   }
 
   &__svg {

@@ -26,6 +26,13 @@
 .compatible-login .footer {
   $b: findElementInBlock(#{&}, '.footer');
 
+  #{$b}__error-label {
+    @include font(13px, $red-80, 18px);
+    margin-bottom: 15px;
+    margin-top: -30px;
+    text-align: center;
+  }
+
   #{$b}__reset-password {
     text-align: center;
     z-index: 2;

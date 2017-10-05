@@ -56,7 +56,7 @@ class Root extends PureComponent {
 
     if(isHydrated && !token) {
       if (['/', '/welcome', '/invite', '/notsupported', '/download'].indexOf(path) > -1) {
-        setUrl('/register');
+        // setUrl('/register');
       }
     }
     if(isHydrated && token) {

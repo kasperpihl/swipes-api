@@ -63,18 +63,26 @@ class CompatibleSignup extends PureComponent {
   renderForm() {
     return (
       <div className="form">
-        {this.renderInputField('email', 'email', 'Email')}
+        {this.renderInputField('email', 'email', 'Email', { autoFocus: true })}
         {this.renderInputField('firstName', 'text', 'First name')}
         {this.renderInputField('lastName', 'text', 'Last name')}
         {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
       </div>
     );
   }
+  renderFormError() {
+    const { getLoading } = this.props;
+
+    return (
+      <div className="footer__error-label">{getLoading('signupButton').errorLabel}</div>
+    )
+  }
   renderFooter() {
-    const { inviter, getLoading } = this.props;
+    const { inviter, isLoading, getLoading } = this.props;
 
     return (
       <div className="footer">
+        {getLoading('signupButton').errorLabel && this.renderFormError()}
         <CompatibleButton title="Sign up" onClick={this.onSignup} {...getLoading('signupButton')}/>
         <p className="footer__switch">
           Already have an account? <Link to="/login" className="footer__switch-button">Sign in here</Link>

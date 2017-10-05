@@ -70,8 +70,8 @@ class HOCCompatibleSignup extends PureComponent {
       password: formData.get('password'),
       invitation_token: invitationToken || null,
     }).then((res) => {
-      this.clearLoading('signupButton');
       if (res.ok) {
+        this.clearLoading('signupButton');
         window.analytics.sendEvent('Signed up', {});
         if(me && me.get('invited_by')) {
           window.analytics.sendEvent('Invitation accepted', {
@@ -80,8 +80,21 @@ class HOCCompatibleSignup extends PureComponent {
           });
         }
         setUrl('/welcome');
+      } else {
+        let label = '!Something went wrong :/';
+
+        if (res.error && res.error.message) {
+          label = '!' + res.error.message;
+
+          if (label.startsWith('!body /users.signup: Invalid object')) {
+            let invalidProp = label.split('[')[1].split(']')[0].replace('\'', '').replace('\'', '');
+
+            label = `!Not a valid ${invalidProp}`;
+          }
+        }
+
+        this.clearLoading('signupButton', label);
       }
-      console.log('ressy', res);
     });
   }
   renderContent() {

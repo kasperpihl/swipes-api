@@ -22,8 +22,16 @@ class HOCCompatibleWelcome extends PureComponent {
   }
   onOrganizationJoin(orgId, e) {
     const { joinOrg, setUrl } = this.props;
+
+    if (this.isJoining) {
+      return;
+    }
+
     this.setLoading(orgId);
+    this.isJoining = true;
+
     joinOrg(orgId).then((res) => {
+      this.isJoining = false;
       if(!res.ok) {
         this.clearLoading(orgId, '!Something went wrong', 5000);
       } else {
@@ -34,13 +42,20 @@ class HOCCompatibleWelcome extends PureComponent {
   }
   onOrganizationCreate(name, e) {
     const { createOrg, setUrl } = this.props;
-    
+
+    if (this.isJoining || !name.length) {
+      return;
+    }
+
+    this.isJoining = true;
     this.setLoading('creating');
+
     createOrg(name).then((res) => {
+      this.isJoining = false;
       if(!res.ok) {
         this.clearLoading('creating', '!Something went wrong', 5000);
       } else {
-        this.clearLoading(orgId);
+        this.clearLoading('creating');
         setUrl('/invite');
       }
     })

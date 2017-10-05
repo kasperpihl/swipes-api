@@ -17,7 +17,6 @@ const CompatibleButton = (props) => {
     title,
     onClick
   } = props;
-  const label = errorLabel || successLabel || title;
 
   return (
     <a className="compatible-button" onClick={onClick}>
@@ -25,7 +24,7 @@ const CompatibleButton = (props) => {
         loading ? (
           <Icon icon="loader" width="12" height="12" />
         ) : (
-          label
+          title
         )
       }
     </a>

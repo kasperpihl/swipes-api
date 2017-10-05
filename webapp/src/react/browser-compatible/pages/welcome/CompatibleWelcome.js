@@ -61,15 +61,18 @@ class CompatibleWelcome extends PureComponent {
   }
   renderRow(org) {
     const { getLoading } = this.props;
-    // getLoading(org.get('id')); 
     const id = org.get('id');
     const name = org.get('name');
 
     return (
-      <div className="row" key={id}>
+      <div className="row" key={id}  onClick={this.onOrganizationJoinCached(id)}>
         <div className="row__item row__name">{name}</div>
-        <div className="row__item row__button" onClick={this.onOrganizationJoinCached(id)}>
-          <Icon icon="ArrowRightLong" className="row__svg" />
+        <div className="row__item row__button">
+          {getLoading(id).loading ? (
+            <Icon icon="darkloader" width="12" height="12" />
+          ) : (
+            'Join'
+          )}
         </div>
       </div>
     )
@@ -79,11 +82,8 @@ class CompatibleWelcome extends PureComponent {
 
     const pendingOrgs = me.get('pending_organizations');
     if(!pendingOrgs || !pendingOrgs.size) {
-      return (
-        <h3 className="compatible-header__subtitle">
-          Get someone to invite your email: "{me.get('email')}" to their organization.
-        </h3>
-      );
+      const title = `Get someone to invite your email: "${me.get('email')}" to their organization.`
+      return <CompatibleSubHeader title={title} />
     }
 
     const renderRows = pendingOrgs.map(o => this.renderRow(o)).toArray();
@@ -100,8 +100,9 @@ class CompatibleWelcome extends PureComponent {
   }
   renderCreateOrg() {
     const { getLoading } = this.props;
-    // getLoading('creating');
     const { createText } = this.state;
+    const buttonClass = getLoading('creating').loading ? 'create-org__button create-org__button--loading' : 'create-org__button';
+
     return (
       <div className="create-org">
         <label htmlFor="create-org-input" className="create-org__wrapper">
@@ -116,8 +117,12 @@ class CompatibleWelcome extends PureComponent {
               onChange={this.onChange} 
             />
             <div className="create-org__label">Enter Org name</div>
-            <div className="create-org__button" onClick={this.onCreate}>
-              <Icon icon="ArrowRightLong" className="create-org__svg" />
+            <div className={buttonClass} onClick={this.onCreate}>
+              {getLoading('creating').loading ? (
+                <Icon icon="loader" width="12" height="12" className="create-org__loading" />
+              ) : (
+                <Icon icon="ArrowRightLong" className="create-org__svg" />
+              )}
             </div>
           </div>
         </label>
