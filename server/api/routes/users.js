@@ -177,6 +177,20 @@ authed.all(
   }),
 );
 
+authed.all(
+  '/users.resendConfirmEmail',
+  valBody({
+    confirmation_token: string.require(),
+  }),
+  usersCreateConfirmationToken,
+  mapLocals(locals => ({
+    confirmation_token: locals.confirmationToken,
+  })),
+  userSignupQueueMessage,
+  notificationsPushToQueue,
+  sendResponse,
+);
+
 notAuthed.all(
   '/users.confirmEmail',
   valBody({
