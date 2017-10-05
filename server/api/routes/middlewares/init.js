@@ -136,7 +136,7 @@ const init = valLocals('init', {
         delete me.notes;
       }
 
-      const pending_organizations = me.pending_organizations || [];
+      me.has_organization = true;
 
       setLocals({
         me,
@@ -146,7 +146,6 @@ const init = valLocals('init', {
         ways,
         notes,
         posts,
-        pending_organizations,
         timestamp: now,
         services: data[1],
         notifications: data[2].concat(data[3]),
@@ -176,13 +175,11 @@ const initWithoutOrganization = valLocals('initWithoutOrganization', {
   return dbInitWithoutOrganization(user_id)
     .then((me) => {
       const now = new Date().toISOString();
-      const pending_organizations = me.pending_organizations || [];
 
-      delete me.pending_organizations;
+      me.has_organization = false;
 
       setLocals({
         me,
-        pending_organizations,
         timestamp: now,
         sofi: SOFI,
       });
