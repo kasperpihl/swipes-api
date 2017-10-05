@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll } from 'swipes-core-js/classes/utils';
-// import { setupDelegate } from 'react-delegate';
+import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
 // import Button from 'Button';
 import { Link } from 'react-router-dom';
