@@ -87,7 +87,7 @@ class HOCCompatibleLogin extends PureComponent {
         }
       });
     } else {
-      const result = window.prompt('Enter your email to reset your password', 'Your email');
+      const result = window.prompt('Enter your email to reset your password', formData.get('email'));
       if(!result) return false;
       request('me.sendResetEmail', { email: result }).then((res) => {
         window.alert('We will send you an email to change your password.');
