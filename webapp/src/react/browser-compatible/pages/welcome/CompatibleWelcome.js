@@ -8,6 +8,7 @@ import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 import styles from  './styles/compatible-welcome.scss';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
+import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
 import { Link } from 'react-router-dom';
@@ -139,6 +140,7 @@ class CompatibleWelcome extends PureComponent {
         {this.renderJoinOrg()}
         <CompatibleSubHeader title="Create a new organization" />
         {this.renderCreateOrg()}
+        <HOCLogoutButton />
       </div>
     );
   }

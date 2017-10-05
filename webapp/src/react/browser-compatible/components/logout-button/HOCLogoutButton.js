@@ -5,19 +5,23 @@ import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import Icon from 'Icon';
+import './styles/logout-button.scss'
 
 class HOCLogoutButton extends PureComponent {
   constructor(props) {
     super(props);
-    // setupLoading(this);
+    setupLoading(this);
+
+    bindAll(this, ['onLogout']);
   }
   componentDidMount() {
   }
   onLogout() {
-    const { signout isElectron, confirm } = this.props;
+    const { isElectron, confirm } = this.props;
     if(isElectron) {
       const options = { boundingRect: e.target.getBoundingClientRect() };
       confirm({
@@ -35,7 +39,9 @@ class HOCLogoutButton extends PureComponent {
     }
   }
   doLogout() {
+    const { signout } = this.props;
     this.setLoading('loggingout');
+
     signout(() => {
       this.clearLoading('loggingout');
     });
@@ -44,13 +50,16 @@ class HOCLogoutButton extends PureComponent {
     return <div>Loading</div>;
   }
   render() {
-    const { children } = this.props;
-    if(this.getLoading('loggingout')) {
-      return this.renderLoader();
-    }
-    return React.cloneElement(children, {
-      onClick: this.onLogout
-    })
+
+    return (
+      <div className="compatible-logout" onClick={this.onLogout}>
+        {this.getLoading('loggingout').loading ? (
+          <Icon icon="darkloader" width="12" height="12" className="compatible-logout__loading" />
+        ) : (
+          <Icon icon="Logout" className="compatible-logout__svg" />
+        )}
+      </div>
+    )
   }
 }
 // const { string } = PropTypes;

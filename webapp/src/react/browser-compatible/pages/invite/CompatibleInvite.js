@@ -5,6 +5,7 @@ import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
+import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import CompatibleInviteForm from './CompatibleInviteForm';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
@@ -38,6 +39,7 @@ class CompatibleInvite extends PureComponent {
         <CompatibleSubHeader title="Add people to your org" />
         {this.renderInviteForm()}
         <div className="clearfix"></div>
+        <HOCLogoutButton />
       </div>
     );
   }

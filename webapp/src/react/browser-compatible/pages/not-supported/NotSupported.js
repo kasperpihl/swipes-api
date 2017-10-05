@@ -10,6 +10,7 @@ import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import DownloadForDevice from 'compatible/components/download-for-device/DownloadForDevice';
+import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import './styles/not-supported.scss';
 
 class NotSupported extends PureComponent {
@@ -55,6 +56,9 @@ class NotSupported extends PureComponent {
         <div className="not-supported__empty-space-block" />
         <CompatibleHeader title="What else can I do?" />
         {this.renderActions()}
+        <HOCLogoutButton>
+          <div>logout</div>
+        </HOCLogoutButton>
       </div>
     );
   }
