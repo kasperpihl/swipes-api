@@ -114,3 +114,35 @@
     left: 0; top: 3px;
   }
 }
+
+@media (max-width: 600px) {
+  .compatible-invite-form {
+
+    &__add-button {
+      display: block;
+      float: initial;
+      text-align: center;
+      padding: 0;
+      margin: 15px 0;
+    }
+
+    &__add-svg {
+      float: initial;
+      transform: translateY(7px);
+    }
+  }
+
+  .compatible-invite-form .input-row {
+    $b: '.input-row';
+
+    #{$b}__wrapper {
+      width: 100% !important;
+      display: block;
+    }
+
+    #{$b}__seperator {
+      @include size(100%, 1px);
+      left: 0; top: -1px;
+    }
+  }
+}

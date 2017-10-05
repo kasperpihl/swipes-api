@@ -8,10 +8,11 @@
 
 .compatible-invite {
   padding: 30px 0;
+  overflow: hidden;
 }
 
 .compatible-invite .form {
-
+  padding-top: 30px;
 }
 
 // ======================================================
@@ -28,63 +29,14 @@
   }
 }
 
-.compatible-invite .device-wrapper {
-  @include size(100%, auto);
-  margin-top: 24px;
-  text-align: center;
-  overflow:hidden;
-}
+@media (max-width: 600px) {
+  .compatible-invite .form {
+    $b: '.form';
 
-.compatible-invite .device {
-  @include size(100%, 150px);
-  background-color: $blue-5;
-  border-radius: 6px;
-  display: inline-block;
-  padding-top: 15px;
-  transition: .35s ease;
-  cursor: pointer;
-  -ms-transition: .35s ease;
-
-  p {
-    @include font(12px, $blue-100, 24px, 500);
-    margin: 0;padding: 0;
-    transition: .35s ease;
-    -ms-transition: .35s ease;
-  }
-
-  &:hover {
-    padding-top: 9px;
-    background-color: $blue-20;
-    transition: .35s ease;
-    -ms-transition: .35s ease;
-
-    .device-svg {
-      @include svg-color($blue-100);
-      transition: .35s ease;
-      -ms-transition: .35s ease;
-    }
-
-    p {
-      transition: .35s ease;
-      -ms-transition: .35s ease;
+    #{$b}__send-button {
+      display: block;
+      float: initial;
+      margin-top: 9px;
     }
   }
-}
-
-.compatible-invite .device-svg {
-  @include size(100px);
-  @include svg-color($blue-60);
-  margin: 0;padding: 0;
-  transition: .35s ease;
-  -ms-transition: .35s ease;
-}
-
-
-.compatible-invite .all-download__link {
-  @include font(12px, $blue-100);
-  cursor: pointer;
-}
-
-.compatible-invite .all-download {
-  padding-top: 15px;
 }
