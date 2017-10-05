@@ -21,6 +21,7 @@ import {
   usersComparePasswordSignIn,
   usersRevokeToken,
   usersCreateInvitationToken,
+  usersCreateConfirmationToken,
   usersCreateTempUnactivatedUser,
   usersSendInvitationQueueMessage,
   usersActivateUserSignUp,
@@ -104,6 +105,10 @@ notAuthed.all(
   userSignUp,
   mapLocals(locals => ({
     user_id: locals.userId,
+  })),
+  usersCreateConfirmationToken,
+  mapLocals(locals => ({
+    confirmation_token: locals.confirmationToken,
   })),
   userSignupQueueMessage,
   notificationsPushToQueue,
