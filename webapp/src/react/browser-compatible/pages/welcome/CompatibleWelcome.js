@@ -97,6 +97,8 @@ class CompatibleWelcome extends PureComponent {
     )
   }
   renderCreateOrg() {
+    const { getLoading } = this.props;
+    // getLoading('creating');
     const { createText } = this.state;
     return (
       <div className="create-org">

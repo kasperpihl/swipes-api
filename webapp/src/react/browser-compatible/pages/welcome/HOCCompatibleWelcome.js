@@ -21,12 +21,10 @@ class HOCCompatibleWelcome extends PureComponent {
   componentDidMount() {
   }
   onOrganizationCreate(name, e) {
-    console.log('hi', name);
     const { createOrg, setUrl } = this.props;
     
     this.setLoading('creating');
     createOrg(name).then((res) => {
-      console.log('res', res);
       if(!res.ok) {
         this.clearLoading('creating', '!Something went wrong', 5000);
       } else {
