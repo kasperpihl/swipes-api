@@ -16,7 +16,7 @@ class HOCLogoutButton extends PureComponent {
   }
   componentDidMount() {
   }
-  onLogout() {
+  onLogout(e) {
     const { signout isElectron, confirm } = this.props;
     if(isElectron) {
       const options = { boundingRect: e.target.getBoundingClientRect() };
