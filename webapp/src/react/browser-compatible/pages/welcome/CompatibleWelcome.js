@@ -36,8 +36,6 @@ class CompatibleWelcome extends PureComponent {
   }
   componentDidMount() {
   }
-<<<<<<< HEAD
-=======
   onChange(e) {
     this.setState({ createText: e.target.value });
   }
@@ -53,7 +51,6 @@ class CompatibleWelcome extends PureComponent {
       this.onOrganizationCreate(createText, e);
     }
   }
->>>>>>> 291ecf8ed... tweaking around welcome for adding
   renderHeader() {
 
     const subtitle = 'We\'re  glad to see that you have signed up. Here you can create a new org or join an existing one that you have been invited to.'
