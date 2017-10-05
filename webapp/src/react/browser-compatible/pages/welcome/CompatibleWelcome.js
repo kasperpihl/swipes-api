@@ -13,21 +13,6 @@ import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHe
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
 import { Link } from 'react-router-dom';
 
-const orgs = [
-  {
-    orgName: 'Swipes',
-    inviter: 'UZTYMBVGO',
-  },
-  {
-    orgName: 'Fill & Stroke',
-    inviter: 'UZTYMBVGO',
-  },
-  {
-    orgName: 'Harlem Globetrotters',
-    inviter: 'UZTYMBVGO',
-  },
-];
-
 class CompatibleWelcome extends PureComponent {
   constructor(props) {
     super(props);

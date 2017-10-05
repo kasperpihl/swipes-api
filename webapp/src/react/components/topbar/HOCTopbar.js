@@ -6,8 +6,6 @@ import { map } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 
-// now use events as onClick: this.onWinClickCached(i)
-import { Billing } from 'views';
 import Icon from 'Icon';
 import Button from 'Button';
 import './topbar.scss';
@@ -160,6 +158,10 @@ class HOCTopbar extends PureComponent {
     );
   }
   render() {
+    const { isElectron } = this.props;
+    if (!isElectron) {
+      return null;
+    }
     return (
       <div className="topbar">
         {this.renderStatusIndicator()}
@@ -173,6 +175,7 @@ class HOCTopbar extends PureComponent {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
+    isElectron: state.getIn(['globals', 'isElectron']),
     nextRetry: state.getIn(['connection', 'nextRetry']),
     versionInfo: state.getIn(['connection', 'versionInfo']),
     reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),
