@@ -33,6 +33,9 @@ const clearDatabase = () => {
   const clearUser2Q = r.table('users').filter({
     email: 'tihomir+jest2@swipesapp.com',
   }).delete();
+  const clearUser3Q = r.table('users').filter({
+    email: 'tihomir+jest3@swipesapp.com',
+  }).delete();
   const clearOrganizationQ = r.table('organizations').get(organization_id).delete();
   const clearPostsQ = r.table('posts').filter({ organization_id }).delete();
   const clearMilestonesQ = r.table('milestones').filter({ organization_id }).delete();
@@ -40,6 +43,7 @@ const clearDatabase = () => {
   const promises = [
     db.rethinkQuery(clearUserQ),
     db.rethinkQuery(clearUser2Q),
+    db.rethinkQuery(clearUser3Q),
     db.rethinkQuery(clearOrganizationQ),
     db.rethinkQuery(clearPostsQ),
     db.rethinkQuery(clearMilestonesQ),
@@ -133,6 +137,49 @@ test('sign up with invitation token', () => {
       expect(result).toMatchSnapshot();
     });
 });
+
+test('organization join', () => {
+  let user_3_token = null;
+
+  return rpap.post({
+    url: '/users.signup',
+    body: {
+      email: 'tihomir+jest3@swipesapp.com',
+      password: 'jestit',
+      first_name: 'Jest',
+      last_name: 'Jestov',
+    },
+  })
+    .then((result) => {
+      user_3_token = result.token;
+
+
+      return rpap.post({
+        url: '/users.invite',
+        body: {
+          organization_id: locals.organization.id,
+          first_name: 'Jest2',
+          email: 'tihomir+jest3@swipesapp.com',
+          token: locals.token,
+        },
+      });
+    })
+    .then((result) => {
+      return rpap.post({
+        url: '/organizations.join',
+        body: {
+          organization_id: locals.organization.id,
+          token: user_3_token,
+        },
+      })
+        .then((result) => {
+          expect(result).toMatchObject({
+            organization: expect.any(Object),
+          });
+          expect(updateLocals(result, ['organization'])).toMatchSnapshot();
+        });
+    });
+}, 20000);
 
 test('init', () => {
   return rpap.post({
