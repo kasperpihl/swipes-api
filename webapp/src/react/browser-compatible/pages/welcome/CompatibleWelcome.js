@@ -31,7 +31,7 @@ class CompatibleWelcome extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { createText: '' };
-    setupDelegate(this, 'onOrganizationCreate');
+    setupDelegate(this, 'onOrganizationCreate', 'onOrganizationJoin');
     bindAll(this, ['onKeyDown', 'onChange', 'onCreate']);
   }
   componentDidMount() {
@@ -59,12 +59,16 @@ class CompatibleWelcome extends PureComponent {
       <CompatibleHeader title="Welcome to Swipes." subtitle={subtitle} />
     )
   }
-  renderRow(name) {
+  renderRow(org) {
+    const { getLoading } = this.props;
+    // getLoading(org.get('id')); 
+    const id = org.get('id');
+    const name = org.get('name');
 
     return (
-      <div className="row" key={name}>
+      <div className="row" key={id}>
         <div className="row__item row__name">{name}</div>
-        <div className="row__item row__button">
+        <div className="row__item row__button" onClick={this.onOrganizationJoinCached(id)}>
           <Icon icon="ArrowRightLong" className="row__svg" />
         </div>
       </div>
@@ -82,7 +86,7 @@ class CompatibleWelcome extends PureComponent {
       );
     }
 
-    const renderRows = pendingOrgs.map(o => this.renderRow(o.get('name'))).toArray();
+    const renderRows = pendingOrgs.map(o => this.renderRow(o)).toArray();
 
     return (
       <div className="table">

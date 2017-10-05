@@ -20,6 +20,18 @@ class HOCCompatibleWelcome extends PureComponent {
 
   componentDidMount() {
   }
+  onOrganizationJoin(orgId, e) {
+    const { joinOrg, setUrl } = this.props;
+    this.setLoading(orgId);
+    joinOrg(orgId).then((res) => {
+      if(!res.ok) {
+        this.clearLoading(orgId, '!Something went wrong', 5000);
+      } else {
+        this.clearLoading(orgId);
+        setUrl('/download');
+      }
+    })
+  }
   onOrganizationCreate(name, e) {
     const { createOrg, setUrl } = this.props;
     
@@ -28,6 +40,7 @@ class HOCCompatibleWelcome extends PureComponent {
       if(!res.ok) {
         this.clearLoading('creating', '!Something went wrong', 5000);
       } else {
+        this.clearLoading(orgId);
         setUrl('/invite');
       }
     })
@@ -55,5 +68,6 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   createOrg: ca.organizations.create,
+  joinOrg: ca.organizations.join,
   setUrl: a.navigation.url,
 })(HOCCompatibleWelcome);
