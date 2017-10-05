@@ -29,6 +29,7 @@ import {
   dbUsersGetByEmail,
   dbUsersGetByIdWithFields,
   dbUsersAddPendingOrganization,
+  dbUsersConfirmEmail,
 } from './db_utils/users';
 import {
   dbTokensInsertSingle,
@@ -129,6 +130,25 @@ const usersParseInvitationToken = valLocals('usersParseInvitationToken', {
       userId: content.user_id,
       organizationId: content.organization_id,
       token_email: content.email,
+    });
+
+    return next();
+  } catch (err) {
+    return next(new SwipesError('Invalid invitation token'));
+  }
+});
+const usersParseConfirmationToken = valLocals('usersParseConfirmationToken', {
+  confirmation_token: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    confirmation_token,
+  } = res.locals;
+
+  try {
+    const content = jwt.decode(confirmation_token, confirmationTokenSecret);
+
+    setLocals({
+      userId: content.user_id,
     });
 
     return next();
@@ -620,15 +640,12 @@ const usersCreateInvitationToken = valLocals('usersCreateInvitationToken', {
   return next();
 });
 const usersCreateConfirmationToken = valLocals('usersCreateConfirmationToken', {
-  email: string.require(),
   user_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    email,
     user_id,
   } = res.locals;
   const confirmationToken = jwt.encode({
-    email,
     user_id,
   }, confirmationTokenSecret);
 
@@ -717,6 +734,24 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
 
   return next();
 });
+const usersConfirmEmailQueueMessage = valLocals('usersConfirmEmailQueueMessage', {
+  user_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    event_type: 'user_confirm',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: user_id,
+  });
+
+  return next();
+});
 const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
   user: object.require(),
   organization: object,
@@ -769,6 +804,21 @@ const userSignupQueueMessage = valLocals('userSignupQueueMessage', {
 
   return next();
 });
+const usersConfirmEmail = valLocals('usersConfirmEmail', {
+  user_id: string.require(),
+}, (req, res, next) => {
+  const {
+    user_id,
+  } = res.locals;
+
+  return dbUsersConfirmEmail({ user_id })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
 export {
   usersComparePasswordSignIn,
@@ -798,5 +848,8 @@ export {
   usersLeaveOrganizationQueueMessage,
   usersDisabledQueueMessage,
   usersParseInvitationToken,
+  usersParseConfirmationToken,
   userCheckEmailVsTokenEmail,
+  usersConfirmEmail,
+  usersConfirmEmailQueueMessage,
 };

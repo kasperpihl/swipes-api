@@ -106,6 +106,12 @@ const organizationDisabledLeftNotificationData = (req, res, next) => {
 
   return next();
 };
+const confirmEmailNotificationData = (req, res, next) => {
+  res.locals.notificationData = null;
+  res.locals.eventData = { confirmed: true };
+
+  return next();
+};
 
 export {
   usersGetSingleWithOrganizations,
@@ -114,4 +120,5 @@ export {
   usersInvitedNotificationData,
   usersSubscribeToMailChimp,
   organizationDisabledLeftNotificationData,
+  confirmEmailNotificationData,
 };

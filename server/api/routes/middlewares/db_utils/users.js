@@ -203,6 +203,22 @@ const dbUsersActivateAfterSignUp = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbUsersConfirmEmail = funcWrap([
+  object.as({
+    user_id: string.require(),
+  }).require(),
+], (err, { user_id }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersActivateAfterSignUp: ${err}`);
+  }
+
+  const q = r.table('users').get(user_id).update({
+    confirmed: true,
+    updated_at: r.now(),
+  });
+
+  return db.rethinkQuery(q);
+});
 const dbUsersAddPendingOrganization = funcWrap([
   object.as({
     user_id: string.require(),
@@ -283,4 +299,5 @@ export {
   dbUsersResetPassword,
   dbUsersGetByIdWithFields,
   dbUsersAddPendingOrganization,
+  dbUsersConfirmEmail,
 };
