@@ -29,7 +29,10 @@ import {
   userSignupQueueMessage,
   usersAddPendingOrganization,
   usersParseInvitationToken,
+  usersParseConfirmationToken,
   userCheckEmailVsTokenEmail,
+  usersConfirmEmail,
+  usersConfirmEmailQueueMessage,
 } from './middlewares/users';
 import {
   meUpdateSettings,
@@ -172,6 +175,32 @@ authed.all(
     invitation_token: string.require(),
     organization: object,
   }),
+);
+
+authed.all(
+  '/users.resendConfirmEmail',
+  valBody({
+    confirmation_token: string.require(),
+  }),
+  usersCreateConfirmationToken,
+  mapLocals(locals => ({
+    confirmation_token: locals.confirmationToken,
+  })),
+  userSignupQueueMessage,
+  notificationsPushToQueue,
+  sendResponse,
+);
+
+notAuthed.all(
+  '/users.confirmEmail',
+  valBody({
+    confirmation_token: string.require(),
+  }),
+  usersParseConfirmationToken,
+  usersConfirmEmail,
+  usersConfirmEmailQueueMessage,
+  notificationsPushToQueue,
+  sendResponse,
 );
 
 notAuthed.all(

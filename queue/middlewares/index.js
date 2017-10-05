@@ -101,6 +101,12 @@ const user_signup = [
   // users.usersSubscribeToMailChimp,
 ];
 
+const user_confirm = [
+  users.confirmEmailNotificationData,
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
+
 const user_organization_left = [
   users.organizationDisabledLeftNotificationData,
   notify.notifySingleUser,
@@ -507,6 +513,7 @@ export {
   user_signup,
   user_organization_left,
   user_disabled,
+  user_confirm,
   profile_updated,
   organization_updated,
   organization_created,
