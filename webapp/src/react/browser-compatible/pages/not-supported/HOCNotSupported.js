@@ -19,10 +19,13 @@ class HOCNotSupported extends PureComponent {
   }
   componentDidMount() {
   }
+  onLeaveOrg() {
+    
+  }
   render() {
     return (
       <CompatibleCard>
-        <NotSupported />
+        <NotSupported delegate={this} />
       </CompatibleCard>
     );
   }
