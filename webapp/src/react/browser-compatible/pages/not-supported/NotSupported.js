@@ -16,7 +16,7 @@ class NotSupported extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    // setupDelegate(this);
+    setupDelegate(this, 'onLeaveOrg');
     // this.callDelegate.bindAll('onLala');
   }
   componentDidMount() {
@@ -31,7 +31,7 @@ class NotSupported extends PureComponent {
             Invite more people to your org, which by the way is Swipes
           </div>
           <div className="not-supported__option-title">
-            <Link to="/download" className="not-supported__link">Invite peeps</Link>
+            <Link to="/invite" className="not-supported__link">Invite peeps</Link>
           </div>
         </div>
         <CompatibleSubHeader title="Leave current org"/>
@@ -40,7 +40,7 @@ class NotSupported extends PureComponent {
             You are currently a part of Swipes. If you wish to leave that organization please press the button bellow. After leaving the org, the following things will happen within the org and your account
           </div>
           <div className="not-supported__option-title">
-            <Link to="/download" className="not-supported__link">Leave org</Link>
+            <a className="not-supported__link" onClick={this.onLeaveOrg}>Leave org</a>
           </div>
         </div>
       </div>
