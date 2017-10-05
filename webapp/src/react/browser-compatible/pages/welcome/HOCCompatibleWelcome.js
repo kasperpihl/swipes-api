@@ -33,10 +33,12 @@ class HOCCompatibleWelcome extends PureComponent {
     })
   }
   render() {
+    const { me } = this.props;
     return (
       <CompatibleCard>
         <CompatibleWelcome
           delegate={this}
+          me={me}
           {...this.bindLoading()}
         />
       </CompatibleCard>
@@ -48,6 +50,7 @@ class HOCCompatibleWelcome extends PureComponent {
 HOCCompatibleWelcome.propTypes = {};
 
 const mapStateToProps = (state) => ({
+  me: state.get('me'),
 });
 
 export default connect(mapStateToProps, {

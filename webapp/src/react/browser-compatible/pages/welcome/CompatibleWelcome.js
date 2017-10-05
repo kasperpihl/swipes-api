@@ -53,28 +53,17 @@ class CompatibleWelcome extends PureComponent {
   }
   renderHeader() {
 
-    const subtitle = 'We\'re  glad to see that you have signed up. Here you can create a new org or join an existing one that you have been invited to.'
+    const subtitle = 'First we need you be part of an organization. You have two options.'
 
     return (
-      <CompatibleHeader title="Hi folks" subtitle={subtitle} />
+      <CompatibleHeader title="Welcome to Swipes." subtitle={subtitle} />
     )
   }
-  renderInviter(user) {
-
-    return (
-      <div className="inviter">
-        <img src="https://unsplash.it/30" alt=""/>
-      </div>
-    )
-  }
-  renderRow(name, inviter) {
+  renderRow(name) {
 
     return (
       <div className="row" key={name}>
         <div className="row__item row__name">{name}</div>
-        <div className="row__item row__inviter">
-          {this.renderInviter(inviter)}
-        </div>
         <div className="row__item row__button">
           <Icon icon="ArrowRightLong" className="row__svg" />
         </div>
@@ -82,14 +71,23 @@ class CompatibleWelcome extends PureComponent {
     )
   }
   renderJoinOrg() {
+    const { me } = this.props;
 
-    const renderRows = orgs.map((o, i) => this.renderRow(o.orgName, o.inviter));
+    const pendingOrgs = me.get('pending_organizations');
+    if(!pendingOrgs || !pendingOrgs.size) {
+      return (
+        <h3 className="compatible-header__subtitle">
+          Get someone to invite your email: "{me.get('email')}" to their organization.
+        </h3>
+      );
+    }
+
+    const renderRows = pendingOrgs.map(o => this.renderRow(o.get('name'))).toArray();
 
     return (
       <div className="table">
         <div className="table__header">
-          <div className="col col--name">Organization name</div>
-          <div className="col col--inviter">Invited by</div>
+          <div className="col col--name">Current invitations</div>
           <div className="clearfix"></div>
         </div>
         {renderRows}
@@ -128,7 +126,7 @@ class CompatibleWelcome extends PureComponent {
     return (
       <div className="compatible-welcome">
         {this.renderHeader()}
-        <CompatibleSubHeader title="Join an organization you've been invited to" />
+        <CompatibleSubHeader title="Get invited to an organization." />
         {this.renderJoinOrg()}
         <CompatibleSubHeader title="Create a new organization" />
         {this.renderCreateOrg()}

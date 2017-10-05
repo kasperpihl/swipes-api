@@ -4,10 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import SwipesLoader from 'components/loaders/SwipesLoader';
-import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
-import HOCAutoCompleting from 'components/auto-completing/HOCAutoCompleting';
-import HOCTooltip from 'components/tooltip/HOCTooltip';
-import HOCTrial from 'components/trial/HOCTrial';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
 
@@ -25,10 +21,6 @@ class HOCApp extends PureComponent {
     }
     return (
       <div className="content-wrapper">
-        <SuccessStateGradient />
-        <HOCAutoCompleting />
-        <HOCTooltip />
-        <HOCTrial />
         <HOCSidebar />
         <HOCViewController />
       </div>

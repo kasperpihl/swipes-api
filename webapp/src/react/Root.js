@@ -13,6 +13,11 @@ import HOCCompatibleInvite from 'compatible/pages/invite/HOCCompatibleInvite';
 import HOCCompatibleWelcome from 'compatible/pages/welcome/HOCCompatibleWelcome';
 import HOCNotSupported from 'compatible/pages/not-supported/HOCNotSupported';
 
+import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
+import HOCAutoCompleting from 'components/auto-completing/HOCAutoCompleting';
+import HOCTooltip from 'components/tooltip/HOCTooltip';
+import HOCTrial from 'components/trial/HOCTrial';
+
 import HOCContextMenu from 'components/context-menu/HOCContextMenu';
 import Gradient from 'components/gradient/Gradient';
 
@@ -51,7 +56,7 @@ class Root extends PureComponent {
 
     if(isHydrated && !token) {
       if (['/', '/welcome', '/invite', '/notsupported', '/download'].indexOf(path) > -1) {
-        // setUrl('/register');
+        setUrl('/register');
       }
     }
     if(isHydrated && token) {
@@ -101,6 +106,10 @@ class Root extends PureComponent {
         {this.renderRedirect()}
         <Gradient />
         <HOCContextMenu />
+        <SuccessStateGradient />
+        <HOCAutoCompleting />
+        <HOCTooltip />
+        <HOCTrial />
         {this.renderTopbar()}
         <DevTools />
         <Route path="/" exact render={() => {

@@ -55,7 +55,11 @@ class HOCOnboarding extends PureComponent {
 
   }
   render() {
-    const { onboarding, userOnboarding } = this.props;
+    const { onboarding, userOnboarding, hasOrg, me } = this.props;
+    console.log(onboarding.toJS(), userOnboarding.toJS(), me.toJS())
+    if(!hasOrg) {
+      return null;
+    }
     const items = userOnboarding.get('order').map(
       (id) => onboarding.get(id).set('completed', !!userOnboarding.getIn(['completed',id]))
     );
@@ -77,6 +81,8 @@ HOCOnboarding.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    me: state.get('me'),
+    hasOrg: state.getIn(['me', 'has_organization']),
     onboarding: state.get('onboarding'),
     userOnboarding: state.getIn(['me', 'settings', 'onboarding']),
   };
