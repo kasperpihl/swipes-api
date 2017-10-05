@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import { setupDelegate } from 'react-delegate';
+import { bindAll } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
@@ -30,12 +30,30 @@ const orgs = [
 class CompatibleWelcome extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLala');
+    this.state = { createText: '' };
+    setupDelegate(this, 'onOrganizationCreate');
+    bindAll(this, ['onKeyDown', 'onChange', 'onCreate']);
   }
   componentDidMount() {
   }
+<<<<<<< HEAD
+=======
+  onChange(e) {
+    this.setState({ createText: e.target.value });
+  }
+  onKeyDown(e) {
+    if(e.keyCode === 13) {
+      this.onCreate(e);
+      e.preventDefault();
+    }
+  }
+  onCreate(e) {
+    const { createText } = this.state;
+    if(createText.length) {
+      this.onOrganizationCreate(createText, e);
+    }
+  }
+>>>>>>> 291ecf8ed... tweaking around welcome for adding
   renderHeader() {
 
     const subtitle = 'We\'re  glad to see that you have signed up. Here you can create a new org or join an existing one that you have been invited to.'
@@ -82,14 +100,22 @@ class CompatibleWelcome extends PureComponent {
     )
   }
   renderCreateOrg() {
-    
+    const { createText } = this.state;
     return (
       <div className="create-org">
         <label htmlFor="create-org-input" className="create-org__wrapper">
           <div className="create-org__wrap">
-            <input id="create-org-input" type="text" className="create-org__input" placeholder=" " />
+            <input 
+              id="create-org-input" 
+              type="text" 
+              className="create-org__input" 
+              placeholder=" "
+              onKeyDown={this.onKeyDown}
+              value={createText}
+              onChange={this.onChange} 
+            />
             <div className="create-org__label">Enter Org name</div>
-            <div className="create-org__button">
+            <div className="create-org__button" onClick={this.onCreate}>
               <Icon icon="ArrowRightLong" className="create-org__svg" />
             </div>
           </div>
@@ -97,6 +123,7 @@ class CompatibleWelcome extends PureComponent {
       </div>
     )
   }
+
   render() {
 
     return (

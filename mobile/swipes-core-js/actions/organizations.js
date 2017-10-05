@@ -1,6 +1,18 @@
 import * as ca from './';
 
 // ======================================================
+export const create = (name) => ca.api.request('organizations.create', {
+  organization_name: name,
+});
+
+export const join = (orgId) => ca.api.request('organizations.join', {
+  organization_id: orgId,
+});
+
+export const leave = (orgId) => ca.api.request('organizations.leave', {
+  organization_id: orgId,
+});
+
 export const promoteToAdmin = (orgId, userId) => ca.api.request('organizations.promoteToAdmin', {
   organization_id: orgId,
   user_to_promote_id: userId,

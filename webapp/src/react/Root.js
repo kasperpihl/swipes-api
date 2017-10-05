@@ -38,11 +38,19 @@ class Root extends PureComponent {
     }
   }
   checkRedirects() {
-    const { location, token, isHydrated, setUrl, numberOfOrgs } = this.props;
+    const { 
+      location,
+      token,
+      isHydrated,
+      setUrl,
+      numberOfOrgs,
+      isBrowserSupported,
+    } = this.props;
+
     const path = location.pathname;
 
     if(isHydrated && !token) {
-      if (['/', '/welcome'].indexOf(path) > -1) {
+      if (['/', '/welcome', '/invite', '/notsupported', '/download'].indexOf(path) > -1) {
         setUrl('/register');
       }
     }
@@ -106,6 +114,7 @@ class Root extends PureComponent {
         <Route path="/register" component={HOCCompatibleSignup} />
         <Route path="/invite" component={HOCCompatibleInvite} />
         <Route path="/welcome" component={HOCCompatibleWelcome} />
+        
       </div>
     )
   }

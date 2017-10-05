@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import CompatibleWelcome from './CompatibleWelcome';
@@ -15,14 +15,32 @@ class HOCCompatibleWelcome extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    // setupLoading(this);
+    setupLoading(this);
   }
+
   componentDidMount() {
+  }
+  onOrganizationCreate(name, e) {
+    console.log('hi', name);
+    const { createOrg, setUrl } = this.props;
+    
+    this.setLoading('creating');
+    createOrg(name).then((res) => {
+      console.log('res', res);
+      if(!res.ok) {
+        this.clearLoading('creating', '!Something went wrong', 5000);
+      } else {
+        setUrl('/invite');
+      }
+    })
   }
   render() {
     return (
       <CompatibleCard>
-        <CompatibleWelcome />
+        <CompatibleWelcome
+          delegate={this}
+          {...this.bindLoading()}
+        />
       </CompatibleCard>
     );
   }
@@ -35,4 +53,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
+  createOrg: ca.organizations.create,
+  setUrl: a.navigation.url,
 })(HOCCompatibleWelcome);
