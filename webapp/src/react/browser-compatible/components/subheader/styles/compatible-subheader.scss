@@ -1,0 +1,8 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+// @import '~styles/_functions.scss';
+
+h4.compatible-subheader {
+  @include font(24px, $deepBlue-90, 300);
+  padding-top: 45px;
+}

@@ -11,6 +11,7 @@ import HOCCompatibleLogin from 'compatible/pages/login/HOCCompatibleLogin';
 import HOCCompatibleSignup from 'compatible/pages/signup/HOCCompatibleSignup';
 import HOCCompatibleInvite from 'compatible/pages/invite/HOCCompatibleInvite';
 import HOCCompatibleWelcome from 'compatible/pages/welcome/HOCCompatibleWelcome';
+import HOCNotSupported from 'compatible/pages/not-supported/HOCNotSupported';
 
 import HOCContextMenu from 'components/context-menu/HOCContextMenu';
 import Gradient from 'components/gradient/Gradient';
@@ -98,7 +99,7 @@ class Root extends PureComponent {
           const Comp = require('src/react/app/HOCApp').default;
           return <Comp />;
         }} />
-        <Route path="/notsupported" component={CompatibleDownload} />
+        <Route path="/notsupported" component={HOCNotSupported} />
         <Route path="/unsubscribe" component={HOCUnsubscribe} />
         <Route path="/download" component={CompatibleDownload} />
         <Route path="/login" component={HOCCompatibleLogin} />
@@ -106,7 +107,7 @@ class Root extends PureComponent {
         <Route path="/invite" component={HOCCompatibleInvite} />
         <Route path="/welcome" component={HOCCompatibleWelcome} />
       </div>
-    );
+    )
   }
 }
 

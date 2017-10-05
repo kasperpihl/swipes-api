@@ -1,0 +1,78 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+// @import '~styles/_functions.scss';
+
+// ======================================================
+// Block
+// ======================================================
+
+.download-for-device {
+  @include size(100%, auto);
+  margin-top: 24px;
+  text-align: center;
+  overflow:hidden;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+.download-for-device {
+
+  &__device {
+    @include size(100%, 150px);
+    background-color: $blue-5;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    padding-top: 15px;
+    transition: .35s ease;
+    -ms-transition: .35s ease;
+
+    p {
+      @include font(12px, $blue-100, 24px, 500);
+      margin: 0;padding: 0;
+      transition: .35s ease;
+      -ms-transition: .35s ease;
+    }
+  }
+
+  &__device-svg {
+    @include size(100px);
+    @include svg-color($blue-60);
+    margin: 0;padding: 0;
+    transition: .35s ease;
+    -ms-transition: .35s ease;
+  }
+
+  &__all-devices {
+    padding-top: 15px;
+  }
+
+  &__all-devices-link {
+    @include font(12px, $blue-100);
+    cursor: pointer;
+  }
+}
+
+
+// ======================================================
+// Hovers
+// ======================================================
+
+.download-for-device {
+  $b: &;
+
+  &__device:hover {
+    background-color: $blue-20;
+    padding-top: 9px;
+    transition: .35s ease;
+    -ms-transition: .35s ease;
+
+    #{$b}__device-svg {
+      @include svg-color($blue-100);
+      transition: .35s ease;
+      -ms-transition: .35s ease;
+    }
+  }
+}
