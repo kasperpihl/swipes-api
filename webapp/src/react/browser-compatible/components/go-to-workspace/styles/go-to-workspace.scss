@@ -1,0 +1,50 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+// @import '~styles/_functions.scss';
+
+.to-workspace {
+  $b: &;
+
+  @include size(100%, auto);
+
+  &__wrapper {
+    @include size(100%, 150px);
+    margin-top: 15px;
+    float: initial !important;
+    display: block;
+    background-color: $blue-5;
+    border-radius: 6px;
+    padding-top: 15px;
+    text-align: center;
+    transition: .35s ease;
+    -ms-transition: .35s ease;
+
+    p {
+      @include font(12px, $blue-100, 24px, 500);
+      margin: 0;padding: 0;
+      transition: .35s ease;
+      -ms-transition: .35s ease;
+    }
+
+    &:hover {
+      padding-top: 9px;
+      background-color: $blue-20;
+      transition: .35s ease;
+      -ms-transition: .35s ease;
+
+      #{$b}__svg {
+        @include svg-color($blue-100);
+        transition: .35s ease;
+        -ms-transition: .35s ease;
+      }
+    }
+  }
+
+  &__svg {
+    @include size(100px);
+    @include svg-color($blue-60);
+    margin: 0;padding: 10px;
+    transition: .35s ease;
+    -ms-transition: .35s ease;
+  }
+}

@@ -9,6 +9,7 @@ import CompatibleBackButton from 'compatible/components/compatible-back-button/C
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import CompatibleInviteForm from './CompatibleInviteForm';
+import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import { Link } from 'react-router-dom';
 import './styles/compatible-invite.scss';
@@ -35,6 +36,7 @@ class CompatibleInvite extends PureComponent {
         <div className="form__send-button">
           <CompatibleButton onClick={this.onSendInvites} title="Send Invites" />
         </div>
+        <div className="clearfix"></div>
       </div>
     )
   }
@@ -49,7 +51,7 @@ class CompatibleInvite extends PureComponent {
         <CompatibleHeader title="New Org Title" subtitle="You have now created a new org, here you can invite others or download the app" />
         <CompatibleSubHeader title="Add people to your org" />
         {this.renderInviteForm()}
-        <div className="clearfix"></div>
+        <GoToWorkspace />
       </div>
     );
   }
