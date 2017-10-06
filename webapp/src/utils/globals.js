@@ -25,9 +25,9 @@ const isBrowserSupported = (browser, ver) => {
   browser = browser.toLowerCase();
   ver = parseInt(ver, 10);
   switch(browser){
-    case 'chrome': return ver >= 55;
-    case 'safari': return ver >= 9;
-    case 'firefox': return ver >= 55; 
+    case 'chrome': return ver >= 50;
+    case 'safari': return ver >= 10;
+    case 'firefox': return ver >= 50;
     default:
       return false;
   }
