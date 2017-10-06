@@ -7,7 +7,7 @@ import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
+// import { map, list +} from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import CompatibleInvite from './CompatibleInvite';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
@@ -48,15 +48,30 @@ class HOCCompatibleInvite extends PureComponent {
     invites.forEach((inv, i) => {
       const email = inv.get('email');
       const firstName = inv.get('firstName');
-      if(this.isLoading(i) || this.getLoading(i).successLabel || !email.length) return;
+      if(!email.length && firstName.length) return;
 
-      if(string.format('email').test(email)) {
-        return this.clearLoading(i, '!Invalid email');
+      if(this.isLoading(i) || this.getLoading(i).successLabel) return;
+      
+      let emailError;
+      let nameError;
+
+      if(!email.length && firstName.length) {
+        emailError = '!Missing email';
+      } else if(email.length && !firstName.length) {
+        nameError = '!Missing name';
       }
-      console.log('sending', i);
+      if(string.format('email').test(email)) {
+        emailError = '!Invalid email';
+      }
+      
+      this.clearLoading(i+'email', emailError);
+      this.clearLoading(i+'name', nameError);
+      if(emailError || nameError) { 
+        return;
+      }
+      
       this.setLoading(i);
       sendInvite(firstName, email).then((res) => {
-        console.log('clear', i, res);
         if(res.ok) {
           this.clearLoading(i, 'Invited');
         } else {
