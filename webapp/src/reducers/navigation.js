@@ -22,7 +22,7 @@ export default function history(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case types.NAVIGATION_URL: {
-      return state.set('url', payload);
+      return state.set('url', payload.url);
     }
     case types.NAVIGATION_SET: {
       return state.update((s) => {

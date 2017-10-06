@@ -1,24 +1,15 @@
 import React, { PureComponent } from 'react';
-import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as a from 'actions';
-import SwipesLoader from 'components/loaders/SwipesLoader';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCSidebar from './sidebar/HOCSidebar';
 
 class HOCApp extends PureComponent {
-  componentDidMount() {
-    window.analytics.sendEvent('App loaded', {});
-  }
-  renderLoader() {
-    return <SwipesLoader center text="Loading" size={90} />;
-  }
   render() {
     const { ready } = this.props;
-    if (!ready) {
-      return this.renderLoader();
+    if(!ready) {
+      return null;
     }
+
     return (
       <div className="content-wrapper">
         <HOCSidebar />
@@ -28,17 +19,11 @@ class HOCApp extends PureComponent {
   }
 }
 
-const { bool } = PropTypes;
-
-HOCApp.propTypes = {
-  ready: bool,
-};
-
 function mapStateToProps(state) {
   return {
-    ready: state.getIn(['connection', 'ready']),
+    ready: state.getIn(['me', 'has_organization']),
   };
 }
 
-export default withRouter(connect(mapStateToProps, {
-})(HOCApp));
+export default connect(mapStateToProps, {
+})(HOCApp);

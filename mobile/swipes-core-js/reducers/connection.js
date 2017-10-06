@@ -7,7 +7,9 @@ const initialState = fromJS({
   lastConnect: null,
   lastVersion: null,
   token: null,
-  ready: false,
+  forceFullFetch: false,
+  readyInOrg: false,
+  hasConnected: false,
   notificationCounter: 0,
   status: 'offline',
   versionInfo: {},
@@ -23,16 +25,20 @@ export default function connectionReducer(state = initialState, action) {
     case ('init'): {
       return state.set('lastConnect', payload.timestamp)
         .set('lastVersion', version)
-        .set('ready', true);
+        .set('forceFullFetch', false)
+        .set('hasConnected', true)
+        .set('readyInOrg', payload.me.has_organization);
     }
     case REHYDRATE:
       if (action && action.payload && action.payload.connection) {
         const { connection } = action.payload;
-
+        const sameVersion = version === connection.get('lastVersion');
         return initialState.set('token', connection.get('token'))
           .set('lastConnect', connection.get('lastConnect'))
           .set('lastVersion', connection.get('lastVersion'))
-          .set('ready', version === connection.get('lastVersion'));
+          .set('forceFullFetch', !sameVersion)
+          .set('hasConnected', sameVersion && connection.get('hasConnected'))
+          .set('readyInOrg', sameVersion && connection.get('readyInOrg'));
       }
       return state;
     case types.SET_UPDATE_STATUS: {

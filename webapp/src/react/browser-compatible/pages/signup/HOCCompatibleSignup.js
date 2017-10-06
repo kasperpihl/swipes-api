@@ -79,7 +79,7 @@ class HOCCompatibleSignup extends PureComponent {
             // 'Minutes since invite':
           });
         }
-        setUrl('/welcome');
+        setUrl('/');
       } else {
         let label = '!Something went wrong :/';
 

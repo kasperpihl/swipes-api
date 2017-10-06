@@ -17,38 +17,58 @@ export default class Socket {
   storeChange() {
     const state = this.store.getState();
     this.token = state.getIn(['connection', 'token']);
-    if (this.socket && !this.token) {
-      if (this.ws && this.ws.readyState == this.ws.OPEN) {
-        this.ws.close();
-      }
+
+    const isConnected = this.ws && this.ws.readyState == this.ws.OPEN;
+    const forceFullFetch = getState().getIn(['connection', 'forceFullFetch']);
+
+    if (isConnected && (!this.token || forceFullFetch)) {
+      this.ws.close();
     }
-    if (this.token && !this.socket && !this.isConnecting) {
-      if (!this.timer) {
-        this.timedConnect(this.timerForAttempt());
-      }
-    }
-  }
-  timerForAttempt() {
-    switch (this.reconnect_attempts) {
-      case 0: return 0;
-      case 1:
-      case 2:
-      case 3: return 500;
-      case 4: return 1000;
-      case 5: return 5000;
-      case 6: return 10000;
-      case 7: return 30000;
-      default: return 180000;
+    if (this.token && !isConnected) {
+      this.timedConnect(this.timerForAttempt());
     }
   }
   timedConnect(time) {
+    if(this.isConnecting) { 
+      return;
+    }
     clearTimeout(this.timer);
     this.timer = setTimeout(this.connect.bind(this), time);
+  }
+  fetchInit() {
+    const { getStore } = this.store;
+    const forceFullFetch = getState().getIn(['connection', 'forceFullFetch']);
+    const withoutNotes = getState().getIn(['globals', 'withoutNotes']);
+
+    let timestamp;
+    
+    if(!forceFullFetch) {
+      timestamp = getState().getIn(['connection', 'lastConnect']);
+    }
+    this.store.dispatch(a.api.request('init', {
+      timestamp: timestamp || null,
+      without_notes: withoutNotes,
+    })).then((res) => {
+      this.isConnecting = false;
+      if (res && res.ok) {
+        this._pingTimer = setInterval(() => {
+          this.sendPing();
+        }, 5000);
+        this.reconnect_attempts = 0;
+        this.changeStatus('online');
+      } else if (res && res.error) {
+        if (res.error.message === 'not_authed') {
+          this.forceLogout();
+        } else {
+          this.ws.close();
+        }
+      }
+    });
   }
   connect() {
     const { getStore } = this.store;
     let url = getState().getIn(['globals', 'apiUrl']);
-    const withoutNotes = getState().getIn(['globals', 'withoutNotes']);
+    
     if (!url) {
       console.warn('Socket requires globals reducer to have apiUrl to be set');
       return;
@@ -68,32 +88,8 @@ export default class Socket {
     this.ws = new WebSocket(wsUrl);
     this.changeStatus('connecting');
     this.ws.onopen = () => {
-      this.socket = true;
-      let timestamp;
-      const ready = getState().getIn(['connection', 'ready']);
-      if(ready) {
-        timestamp = getState().getIn(['connection', 'lastConnect']);
-      }
-      this.store.dispatch(a.api.request('init', {
-        timestamp: timestamp || null,
-        without_notes: withoutNotes,
-      })).then((res) => {
-        this.isConnecting = false;
-        if (res && res.ok) {
-          this._pingTimer = setInterval(() => {
-            this.sendPing();
-          }, 5000);
-          this.reconnect_attempts = 0;
-          this.changeStatus('online');
-        } else if (res && res.error) {
-          if (res.error.message === 'not_authed') {
-            this.forceLogout();
-          } else {
-            this.ws.close();
-          }
-        }
-      });
-    };
+      this.fetchInit();
+    }
 
     this.ws.onmessage = this.message;
 
@@ -102,28 +98,20 @@ export default class Socket {
       clearInterval(this._pingTimer);
       this.reconnect_attempts += 1;
 
-      const time = this.timerForAttempt();
+      
       let nextRetry;
 
       if (this.token) {
-        this.timedConnect(time);
+        const time = this.timerForAttempt();
+        this.timedConnect(time, true);
         nextRetry = new Date();
         nextRetry.setSeconds(nextRetry.getSeconds() + (time / 1000));
       } else {
         this.reconnect_attempts = 0;
-        this.socket = false;
         this.timer = undefined;
       }
       this.changeStatus('offline', nextRetry);
     };
-  }
-  sendPing() {
-    if (this.ws.readyState == this.ws.OPEN && !this.isConnecting) {
-      this.ws.send(JSON.stringify({
-        type: 'ping',
-        id: 1,
-      }));
-    }
   }
   changeStatus(status, nextRetry) {
     this.status = status;
@@ -148,6 +136,10 @@ export default class Socket {
     }
     const socketData = Object.assign({ ok: true }, payload && payload.data);
     this.store.dispatch({ type, payload: socketData });
+
+    this.handleNotifications(payload);
+  }
+  handleNotifications(payload) {
     if (payload && payload.notification_data && Object.keys(payload.notification_data).length) {
       this.store.dispatch({
         type: types.NOTIFICATION_ADD,
@@ -161,6 +153,27 @@ export default class Socket {
           window.ipcListener.sendNotification(nToSend);
         }
       }
+    }
+  }
+  sendPing() {
+    if (this.ws.readyState == this.ws.OPEN && !this.isConnecting) {
+      this.ws.send(JSON.stringify({
+        type: 'ping',
+        id: 1,
+      }));
+    }
+  }
+  timerForAttempt() {
+    switch (this.reconnect_attempts) {
+      case 0: return 0;
+      case 1:
+      case 2:
+      case 3: return 500;
+      case 4: return 1000;
+      case 5: return 5000;
+      case 6: return 10000;
+      case 7: return 30000;
+      default: return 180000;
     }
   }
 }
