@@ -54,7 +54,7 @@ class HOCCompatibleLogin extends PureComponent {
 
         this.clearLoading('signInButton', label);
       } else {
-        setUrl('/')
+        setUrl('/');
         window.analytics.sendEvent('Logged in', {});
         this.clearLoading('signInButton');
       }

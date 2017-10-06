@@ -181,7 +181,7 @@ function mapStateToProps(state) {
     reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),
     isMaximized: state.getIn(['main', 'isMaximized']),
     isFullscreen: state.getIn(['main', 'isFullscreen']),
-    ready: state.getIn(['connection', 'ready']),
+    ready: state.getIn(['connection', 'readyInOrg']),
     status: state.getIn(['connection', 'status']),
     token: state.getIn(['connection', 'token']),
   };

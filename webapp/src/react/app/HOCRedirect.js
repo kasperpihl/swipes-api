@@ -22,6 +22,7 @@ class HOCRedirect extends PureComponent {
       setUrl,
       hasOrg,
       isBrowserSupported,
+      hasConnected,
     } = this.props;
 
     if(goToUrl && location.pathname === goToUrl) {
@@ -37,7 +38,7 @@ class HOCRedirect extends PureComponent {
         setUrl('/register');
       }
     }
-    if(isHydrated && token) {
+    if(isHydrated && hasConnected) {
       if(['/login', '/register'].indexOf(path) > -1) {
         setUrl('/');
       }
@@ -73,6 +74,7 @@ const mapStateToProps = (state) => ({
   hasOrg: state.getIn(['me', 'has_organization']),
   isHydrated: state.getIn(['main', 'isHydrated']),
   token: state.getIn(['connection', 'token']),
+  hasConnected: state.getIn(['connection', 'hasConnected']),
   isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
   goToUrl: state.getIn(['navigation', 'url']),
 });

@@ -10,6 +10,7 @@ import HOCCompatibleInvite from 'compatible/pages/invite/HOCCompatibleInvite';
 import HOCCompatibleWelcome from 'compatible/pages/welcome/HOCCompatibleWelcome';
 import HOCNotSupported from 'compatible/pages/not-supported/HOCNotSupported';
 
+import SwipesLoader from 'components/loaders/SwipesLoader';
 import HOCRedirect from 'src/react/app/HOCRedirect';
 import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
 import HOCAutoCompleting from 'components/auto-completing/HOCAutoCompleting';
@@ -30,6 +31,26 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 class Root extends PureComponent {
+  renderRoutes() {
+    const { status, hasConnected, isHydrated } = this.props;
+    if(!isHydrated || (!hasConnected && status === 'connecting')) {
+      return <SwipesLoader center text="Loading" size={90} />;
+    }
+    return [
+      <Route key="1" path="/" exact render={() => {
+        const { readyInOrg } = this.props;
+        const Comp = require('src/react/app/HOCApp').default;
+        return (readyInOrg && <Comp />) || null;
+      }} />,
+      <Route key="2" path="/notsupported" component={HOCNotSupported} />,
+      <Route key="3" path="/unsubscribe" component={HOCUnsubscribe} />,
+      <Route key="4" path="/download" component={CompatibleDownload} />,
+      <Route key="5" path="/login" component={HOCCompatibleLogin} />,
+      <Route key="6" path="/register" component={HOCCompatibleSignup} />,
+      <Route key="7" path="/invite" component={HOCCompatibleInvite} />,
+      <Route key="8" path="/welcome" component={HOCCompatibleWelcome} />,
+    ];
+  }
   render() {
     const { isMaximized, isFullscreen, platform } = this.props;
     let className = `platform-${platform}`;
@@ -47,28 +68,20 @@ class Root extends PureComponent {
         <HOCTooltip />
         <HOCTrial />
         <DevTools />
-        <Route path="/" exact render={() => {
-          const Comp = require('src/react/app/HOCApp').default;
-          return <Comp />;
-        }} />
-        <Route path="/notsupported" component={HOCNotSupported} />
-        <Route path="/unsubscribe" component={HOCUnsubscribe} />
-        <Route path="/download" component={CompatibleDownload} />
-        <Route path="/login" component={HOCCompatibleLogin} />
-        <Route path="/register" component={HOCCompatibleSignup} />
-        <Route path="/invite" component={HOCCompatibleInvite} />
-        <Route path="/welcome" component={HOCCompatibleWelcome} />
-        
+        {this.renderRoutes()}
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
+  isHydrated: state.getIn(['main', 'isHydrated']),
   isMaximized: state.getIn(['main', 'isMaximized']),
   isFullscreen: state.getIn(['main', 'isFullscreen']),
-
   platform: state.getIn(['globals', 'platform']),
+  status: state.getIn(['connection', 'status']),
+  hasConnected: state.getIn(['connection', 'hasConnected']),
+  readyInOrg: state.getIn(['connection', 'readyInOrg']),
 });
 
 export default withRouter(connect(mapStateToProps, {

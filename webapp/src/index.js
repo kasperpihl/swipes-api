@@ -1,5 +1,5 @@
-import 'babel-polyfill';
-import 'whatwg-fetch';
+import 'src/utils/polyfills';
+
 import React from 'react';
 import { Provider } from 'react-redux';
 import { render } from 'react-dom';
@@ -16,17 +16,13 @@ import { init } from 'swipes-core-js';
 import * as a from 'actions';
 import Root from './react/Root';
 
-const regeneratorRuntime = require('babel-runtime/regenerator'); // eslint-disable-line
-if (!regeneratorRuntime.default) {
-  regeneratorRuntime.default = regeneratorRuntime;
-}
-
 const store = configureStore({
   globals: getGlobals()
 });
 
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
+
 const delegate = {
   forceLogout: () => {
     store.dispatch(a.main.forceLogout);
