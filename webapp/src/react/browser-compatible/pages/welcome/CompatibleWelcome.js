@@ -102,7 +102,7 @@ class CompatibleWelcome extends PureComponent {
               value={createText}
               onChange={this.onChange} 
             />
-            <div className="create-org__label">Enter Org name</div>
+            <div className="create-org__label">Name of organization</div>
             <div className={buttonClass} onClick={this.onCreate}>
               {getLoading('creating').loading ? (
                 <Icon icon="loader" width="12" height="12" className="create-org__loading" />

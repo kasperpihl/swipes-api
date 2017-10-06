@@ -15,19 +15,24 @@ import './styles/compatible-invite.scss';
 class CompatibleInvite extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
-    // setupDelegate(this);
+    setupDelegate(this, 'onSendInvites');
     // this.callDelegate.bindAll('onLala');
   }
   componentDidMount() {
   }
+  
   renderInviteForm() {
+    const { delegate, bindLoading, invites } = this.props;
 
     return (
       <div className="form">
-        <CompatibleInviteForm />
+        <CompatibleInviteForm 
+          invites={invites} 
+          delegate={delegate}
+          {...bindLoading()}
+        />
         <div className="form__send-button">
-          <CompatibleButton title="Send Invites" />
+          <CompatibleButton onClick={this.onSendInvites} title="Send Invites" />
         </div>
       </div>
     )
