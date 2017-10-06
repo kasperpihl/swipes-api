@@ -46,13 +46,16 @@ class HOCCompatibleInvite extends PureComponent {
     const { sendInvite } = this.props;
 
     invites.forEach((inv, i) => {
-      if(this.isLoading(i) || this.getLoading(i).successLabel) return;
-      if(inv.get('email').length && string.format('email').test(inv)) {
+      const email = inv.get('email');
+      const firstName = inv.get('firstName');
+      if(this.isLoading(i) || this.getLoading(i).successLabel || !email.length) return;
+
+      if(string.format('email').test(email)) {
         return this.clearLoading(i, '!Invalid email');
       }
       console.log('sending', i);
       this.setLoading(i);
-      sendInvite(inv.get('firstName'), inv.get('email')).then((res) => {
+      sendInvite(firstName, email).then((res) => {
         console.log('clear', i, res);
         if(res.ok) {
           this.clearLoading(i, 'Invited');
