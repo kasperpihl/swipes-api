@@ -57,7 +57,7 @@ class HOCLogoutButton extends PureComponent {
         {this.getLoading('loggingout').loading ? (
           <Icon icon="darkloader" width="12" height="12" className="compatible-logout__loading" />
         ) : (
-          <Icon icon="Logout" className="compatible-logout__svg" />
+          <div className="compatible-logout__label">Log out</div>
         )}
       </div>
     )

@@ -23,16 +23,27 @@ class CompatibleInviteForm extends PureComponent {
 
     const { getLoading } = this.props;
     const lState = getLoading(i);
+    const nameError = getLoading(i + 'name').errorLabel;
+    const emailError = getLoading(i + 'email').errorLabel;
     const isLoading = lState.loading;
     const successLabel = lState.successLabel;
-    const errorLabel = lState.errorLabel;
     const labelTargetForName = `compatible-invite-name-${i}`;
     const labelTargetForEmail = `compatible-invite-email-${i}`;
 
-    const isDisabled = !!(lState.loading || lState.successLabel)
+    const isDisabled = !!(lState.loading || lState.successLabel);
+    let className = 'input-row';
+
+    if (nameError) className += ' input-row--error input-row--name-error';
+    if (emailError) className += ' input-row--error input-row--email-error';
+
+    const nameLabel = nameError ? nameError : 'First name';
+    const emailLabel = emailError ? emailError : 'name@company.com';
+
+    console.log(nameError, emailError)
+
 
     return (
-      <div className="input-row" key={i}>
+      <div className={className} key={i}>
         <div className="input-row__wrapper">
           <label htmlFor={labelTargetForName}>
             <div className="input-row__inner-wrapper">
@@ -46,13 +57,13 @@ class CompatibleInviteForm extends PureComponent {
                 value={obj.get('firstName')}
                 onChange={this.onNameChangeCached(i)}
               />
-              <div className="compatible-invite-form__input-label">First name</div>
+              <div className="compatible-invite-form__input-label">{nameLabel}</div>
             </div>
           </label>
         </div>
 
         <div className="input-row__wrapper">
-        <div className="input-row__seperator"></div>
+          <div className="input-row__seperator"></div>
           <label htmlFor={labelTargetForEmail}>
             <div className="input-row__inner-wrapper">
               <input 
@@ -64,7 +75,7 @@ class CompatibleInviteForm extends PureComponent {
                 value={obj.get('email')}
                 onChange={this.onEmailChangeCached(i)}
               />
-              <div className="compatible-invite-form__input-label">name@company.com</div>
+              <div className="compatible-invite-form__input-label">{emailLabel}</div>
             </div>
           </label>
         </div>

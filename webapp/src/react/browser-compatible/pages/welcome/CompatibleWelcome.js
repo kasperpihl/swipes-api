@@ -74,15 +74,16 @@ class CompatibleWelcome extends PureComponent {
 
     const renderRows = pendingOrgs.map(o => this.renderRow(o)).toArray();
 
-    return (
-      <div className="table">
-        <div className="table__header">
-          <div className="col col--name">Current invitations</div>
-          <div className="clearfix"></div>
-        </div>
-        {renderRows}
-      </div>
-    )
+    return ([
+          <CompatibleSubHeader title="Get invited to an organization." key="1" />,
+          <div className="table" key="2">
+            <div className="table__header">
+              <div className="col col--name">Current invitations</div>
+              <div className="clearfix"></div>
+            </div>
+            {renderRows}
+          </div>
+        ])
   }
   renderCreateOrg() {
     const { getLoading } = this.props;
@@ -121,7 +122,6 @@ class CompatibleWelcome extends PureComponent {
     return (
       <div className="compatible-welcome">
         {this.renderHeader()}
-        <CompatibleSubHeader title="Get invited to an organization." />
         {this.renderJoinOrg()}
         <CompatibleSubHeader title="Create a new organization" />
         {this.renderCreateOrg()}

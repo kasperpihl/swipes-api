@@ -7,21 +7,19 @@ $iconSize: 24px;
 $loaderSize: 12px;
 
 .compatible-logout {
-  @include size($btnSize);
+  @include size(auto, $btnSize);
   border: 1px solid $deepBlue-50;
-  border-radius: 50%;
+  border-radius: 18px;
   float: right;
   margin-top: 30px;
+  transition: .2s ease;
 }
 
 .compatible-logout {
 
-  &__svg {
-    @include size($iconSize);
-    @include svg-color($deepBlue-50);
-    left: ($btnSize / 2) - ($iconSize / 2) - 1px;
-    top: ($btnSize / 2) - ($iconSize / 2) - 1px;
-    position: absolute;
+  &__label {
+    @include font(13px, $deepBlue-50, 34px);
+    padding: 0 15px; 
   }
 
   &__loading {
@@ -36,5 +34,6 @@ $loaderSize: 12px;
 
   &:hover {
     background-color: $deepBlue-6;
+    transition: .2s ease;
   }
 }

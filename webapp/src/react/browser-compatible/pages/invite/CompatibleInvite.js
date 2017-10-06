@@ -44,7 +44,6 @@ class CompatibleInvite extends PureComponent {
         <CompatibleSubHeader title="Add people to your org" />
         {this.renderInviteForm()}
         <div className="clearfix"></div>
-        <HOCLogoutButton />
       </div>
     );
   }

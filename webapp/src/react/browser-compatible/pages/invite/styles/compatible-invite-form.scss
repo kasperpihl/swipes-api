@@ -116,6 +116,46 @@
   }
 }
 
+// ======================================================
+// Modifiers
+// ======================================================
+
+.compatible-invite-form .input-row {
+    $b: '.input-row';
+
+    &#{$b}--error {
+      border: 1px solid $red-80;
+    }
+
+    &#{$b}--name-error {
+
+      #{$b}__wrapper {
+        
+        &:first-child {
+          .compatible-invite-form__input-label {
+            @include font($c: $red-80); 
+          }
+        }
+      }
+    }
+
+    &#{$b}--email-error {
+      
+      #{$b}__wrapper {
+        
+        &:last-child {
+          .compatible-invite-form__input-label {
+            @include font($c: $red-80); 
+          }
+        }
+      }
+    }
+}
+
+// ======================================================
+// Media query
+// ======================================================
+
 @media (max-width: 600px) {
   .compatible-invite-form {
 
