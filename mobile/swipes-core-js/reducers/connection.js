@@ -55,6 +55,12 @@ export default function connectionReducer(state = initialState, action) {
     // ======================================================
     // Authorization methods
     // ======================================================
+    case 'organizations.create':
+    case 'organization_created': {
+      return state.set('forceFullFetch', true)
+                  .set('readyInOrg', false)
+                  .set('hasConnected', false);
+    }
     case 'users.signin':
     case 'users.signup': {
       return state.set('token', payload.token);
