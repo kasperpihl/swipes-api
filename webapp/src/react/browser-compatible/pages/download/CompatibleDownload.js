@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import Icon from 'Icon';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
+import CompatibleBackButton from 'compatible/components/compatible-back-button/CompatibleBackButton';
 import './styles/download-page.scss';
 
 const downloadLinks = {
@@ -88,10 +89,15 @@ class CompatibleDownload extends PureComponent {
       </div>
     );
   }
+  renderBackButton() {
+
+    return <CompatibleBackButton />;
+  }
   render() {
     return (
       <CompatibleCard>
         <div className="download-page">
+          {this.renderBackButton()}
           <CompatibleHeader title="Awesome! Download the Swipes Workspace" subtitle="Start working with your team from anywhere" />
           <div className="section">
             <div className="section-title">Desktop</div>

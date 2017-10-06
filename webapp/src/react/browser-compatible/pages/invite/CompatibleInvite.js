@@ -5,6 +5,7 @@ import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
+import CompatibleBackButton from 'compatible/components/compatible-back-button/CompatibleBackButton';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import CompatibleInviteForm from './CompatibleInviteForm';
@@ -37,9 +38,14 @@ class CompatibleInvite extends PureComponent {
       </div>
     )
   }
+  renderBackButton() {
+
+    return <CompatibleBackButton />;
+  }
   render() {
     return (
       <div className="compatible-invite">
+        {this.renderBackButton()}
         <CompatibleHeader title="New Org Title" subtitle="You have now created a new org, here you can invite others or download the app" />
         <CompatibleSubHeader title="Add people to your org" />
         {this.renderInviteForm()}
