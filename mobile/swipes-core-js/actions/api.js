@@ -103,7 +103,7 @@ export const request = (options, data) => (d, getState) => {
         // Let's return a promise for convenience.
         resolve(res);
       }).catch((e) => {
-        console.log('err', e);
+        console.log(e);
         if (getState().getIn(['globals', 'isDev'])) {
           console.warn(command, e);
         }
