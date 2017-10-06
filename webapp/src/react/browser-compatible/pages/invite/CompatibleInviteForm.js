@@ -26,9 +26,10 @@ class CompatibleInviteForm extends PureComponent {
     const isLoading = lState.loading;
     const successLabel = lState.successLabel;
     const errorLabel = lState.errorLabel;
-
     const labelTargetForName = `compatible-invite-name-${i}`;
     const labelTargetForEmail = `compatible-invite-email-${i}`;
+
+    const isDisabled = !!(lState.loading || lState.successLabel)
 
     return (
       <div className="input-row" key={i}>
@@ -41,7 +42,7 @@ class CompatibleInviteForm extends PureComponent {
                 className="compatible-invite-form__input" 
                 placeholder=" " 
                 autoFocus={i === 0} 
-                disabled={!!(lState.loading || lState.successLabel)}
+                disabled={isDisabled}
                 value={obj.get('firstName')}
                 onChange={this.onNameChangeCached(i)}
               />
@@ -59,6 +60,7 @@ class CompatibleInviteForm extends PureComponent {
                 id={labelTargetForEmail}
                 className="compatible-invite-form__input"
                 placeholder=" "
+                disabled={isDisabled}
                 value={obj.get('email')}
                 onChange={this.onEmailChangeCached(i)}
               />
