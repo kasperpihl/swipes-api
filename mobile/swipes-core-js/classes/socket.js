@@ -35,6 +35,63 @@ export default class Socket {
     clearTimeout(this.timer);
     this.timer = setTimeout(this.connect.bind(this), time);
   }
+  connect() {
+    const { getStore } = this.store;
+    let url = getState().getIn(['globals', 'apiUrl']);
+    
+    if (!url) {
+      console.warn('Socket requires globals reducer to have apiUrl to be set');
+      return;
+    }
+
+    if (url.includes('localhost')) {
+      url = 'http://localhost:5000';
+    }
+    if (this.isConnecting) {
+      return;
+    }
+    this.isConnecting = true;
+    this.changeStatus('connecting');
+
+    this.openSocket(url);
+    
+  }
+  openSocket(url) {
+    if(!window.WebSocket) {
+      return fetchInit();
+    }
+
+    let wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
+    wsUrl = `${wsUrl}?token=${this.token}`;
+
+    this.ws = new WebSocket(wsUrl);
+
+    this.ws.onopen = () => {
+      this.fetchInit();
+    }
+
+    this.ws.onmessage = this.message;
+
+    this.ws.onclose = () => {
+      this.isConnecting = false;
+      clearInterval(this._pingTimer);
+      this.reconnect_attempts += 1;
+
+      
+      let nextRetry;
+
+      if (this.token) {
+        const time = this.timerForAttempt();
+        this.timedConnect(time, true);
+        nextRetry = new Date();
+        nextRetry.setSeconds(nextRetry.getSeconds() + (time / 1000));
+      } else {
+        this.reconnect_attempts = 0;
+        this.timer = undefined;
+      }
+      this.changeStatus('offline', nextRetry);
+    };
+  }
   fetchInit() {
     const { getStore } = this.store;
     const forceFullFetch = getState().getIn(['connection', 'forceFullFetch']);
@@ -65,54 +122,7 @@ export default class Socket {
       }
     });
   }
-  connect() {
-    const { getStore } = this.store;
-    let url = getState().getIn(['globals', 'apiUrl']);
-    
-    if (!url) {
-      console.warn('Socket requires globals reducer to have apiUrl to be set');
-      return;
-    }
-
-    if (url.includes('localhost')) {
-      url = 'http://localhost:5000';
-    }
-    if (this.isConnecting) {
-      return;
-    }
-    this.isConnecting = true;
-
-    let wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
-    wsUrl = `${wsUrl}?token=${this.token}`;
-
-    this.ws = new WebSocket(wsUrl);
-    this.changeStatus('connecting');
-    this.ws.onopen = () => {
-      this.fetchInit();
-    }
-
-    this.ws.onmessage = this.message;
-
-    this.ws.onclose = () => {
-      this.isConnecting = false;
-      clearInterval(this._pingTimer);
-      this.reconnect_attempts += 1;
-
-      
-      let nextRetry;
-
-      if (this.token) {
-        const time = this.timerForAttempt();
-        this.timedConnect(time, true);
-        nextRetry = new Date();
-        nextRetry.setSeconds(nextRetry.getSeconds() + (time / 1000));
-      } else {
-        this.reconnect_attempts = 0;
-        this.timer = undefined;
-      }
-      this.changeStatus('offline', nextRetry);
-    };
-  }
+  
   changeStatus(status, nextRetry) {
     this.status = status;
     this.store.dispatch({
