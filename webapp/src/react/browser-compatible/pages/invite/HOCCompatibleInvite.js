@@ -63,9 +63,10 @@ class HOCCompatibleInvite extends PureComponent {
       if(string.format('email').test(email)) {
         emailError = '!Invalid email';
       }
-      if(emailError || nameError) {
-        this.clearLoading(i+'email', emailError);
-        this.clearLoading(i+'name', nameError);
+      
+      this.clearLoading(i+'email', emailError);
+      this.clearLoading(i+'name', nameError);
+      if(emailError || nameError) { 
         return;
       }
       
