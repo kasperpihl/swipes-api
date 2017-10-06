@@ -48,7 +48,7 @@ class HOCCompatibleInvite extends PureComponent {
     invites.forEach((inv, i) => {
       const email = inv.get('email');
       const firstName = inv.get('firstName');
-      if(!email.length && firstName.length) return;
+      if(!email.length && !firstName.length) return;
 
       if(this.isLoading(i) || this.getLoading(i).successLabel) return;
       
