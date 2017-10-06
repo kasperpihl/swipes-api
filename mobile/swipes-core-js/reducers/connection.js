@@ -56,6 +56,7 @@ export default function connectionReducer(state = initialState, action) {
     // Authorization methods
     // ======================================================
     case 'organizations.create':
+    case 'organizations.join':
     case 'organization_created': {
       return state.set('forceFullFetch', true)
                   .set('readyInOrg', false)
