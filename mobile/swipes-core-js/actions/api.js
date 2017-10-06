@@ -1,5 +1,4 @@
 import * as types from '../constants';
-import axios from 'axios';
 
 const handleUpdatesNeeded = (payload, state, dispatch) => {
   if (!payload) {
@@ -57,11 +56,15 @@ export const request = (options, data) => (d, getState) => {
     });
   }
   const apiHeaders = getState().getIn(['globals', 'apiHeaders']);
-  const headers = (apiHeaders && apiHeaders.toJS()) || {};
+  const extraHeaders = (apiHeaders && apiHeaders.toJS()) || {};
+
+  const headers = new Headers({
+    ...extraHeaders,
+  });
 
   if (!options.formData) {
     body = JSON.stringify(body);
-    headers['Content-Type'] = 'application/json';
+    headers.append('Content-Type', 'application/json');
   } else {
     const values = Object.entries(body);
     body = new FormData();
@@ -71,21 +74,16 @@ export const request = (options, data) => (d, getState) => {
   }
 
   const serData = {
-
-    method: 'post',
-    url: apiUrl + command,
+    method: 'POST',
     headers,
-    data: body,
+    body,
   };
-  console.log('data', data)
   return new Promise((resolve, reject) => {
-    axios(serData)
+    fetch(apiUrl + command, serData)
       .then((r) => {
-        if(r.status !== 200) {
-          return Promise.reject({ message: r.statusText, code: r.status });
-        }
-        const res = r.data;
-        
+        if (r && r.ok) return r.json();
+        return Promise.reject({ message: r.statusText, code: r.status });
+      }).then((res) => {
         state = getState();
         handleUpdatesNeeded(res, state, d);
 
