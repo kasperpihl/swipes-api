@@ -90,10 +90,11 @@ const user_activated = notifyWrapper([
   emails.usersAcceptedInvitationEmail,
 ]);
 
-const user_invited = notifyWrapper([
+const user_invited = [
   users.usersInvitedNotificationData,
-  notify.notifyAllInCompany,
-]);
+  notify.notifySingleUser,
+  notify.notifyCommonRethinkdb,
+];
 
 const user_signup = [
   // organizations.organizationsGetSingle,
@@ -299,6 +300,11 @@ const organization_updated = notifyWrapper([
 
 const organization_created = notifyWrapper([
   organizations.organizationsCreatedUpdatedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
+const organization_user_invited = notifyWrapper([
+  organizations.organizationsUsersInvitedNotificationData,
   notify.notifyAllInCompany,
 ]);
 
@@ -517,6 +523,7 @@ export {
   profile_updated,
   organization_updated,
   organization_created,
+  organization_user_invited,
   post_created,
   post_comment_added,
   post_reaction_added,

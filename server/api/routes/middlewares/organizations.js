@@ -699,6 +699,33 @@ const organizationsCancelSubscription = valLocals('organizationsCancelSubscripti
       return next(new SwipesError(err));
     });
 });
+const organizationsUsersInvitedUserQueueMessage = valLocals('organizationsUsersInvitedUserQueueMessage', {
+  user: object.require(),
+  organization: object,
+}, (req, res, next, setLocals) => {
+  const {
+    user,
+    organization,
+  } = res.locals;
+
+  if (!organization) {
+    return next();
+  }
+
+  const userId = user.id;
+  const queueMessage = {
+    organization,
+    user_id: userId,
+    event_type: 'organization_user_invited',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: userId,
+  });
+
+  return next();
+});
 
 export {
   organizationsCreate,
@@ -724,4 +751,5 @@ export {
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
   organizationsCheckOwnerRightsNot,
+  organizationsUsersInvitedUserQueueMessage,
 };
