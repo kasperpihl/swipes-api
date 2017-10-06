@@ -40,6 +40,7 @@
     left: 0; top: 0;
     background-color: $blue-5;
     z-index: -1;
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
     -webkit-clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
     // transition: .25s ease-out;
 
@@ -52,6 +53,7 @@
     left: 0; top: 0;
     // background-color: $blue-20;
     z-index: -1;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
     -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
     transition: .25s ease-out;
 
@@ -103,11 +105,13 @@
     transition: .25s ease-in;
 
     &:before {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
       -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
       transition: .25s ease-in;
     }
 
     &:after {
+      // clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
       // -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
       transition: .25s ease-out;
     }

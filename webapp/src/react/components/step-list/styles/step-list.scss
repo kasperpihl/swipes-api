@@ -104,6 +104,7 @@
         content: '';
         border-radius: 50%;
         background-color: $blue-100;
+        clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
         -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
         opacity: 0;
         transition: .2s ease;

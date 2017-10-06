@@ -46,7 +46,7 @@
     background-color: $deepBlue-100;
     left: 0; bottom: -1px;
     position: absolute;
-    transition: -webkit-clip-path .2s ease-in-out;
+    transition: -webkit-clip-path .2s ease-in-out, clip-path .2s ease-in-out;
     z-index: 2;
   }
 

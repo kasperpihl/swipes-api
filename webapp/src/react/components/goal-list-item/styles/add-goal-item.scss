@@ -82,6 +82,7 @@
       opacity: 0;
       position: absolute;
       transition: .2s ease;
+      clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
       -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
     }
 
