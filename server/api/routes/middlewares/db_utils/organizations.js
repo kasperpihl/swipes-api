@@ -269,7 +269,7 @@ const dbOrganizationsUpdateStripeCustomerIdAndPlan = funcWrap([
 const dbOrganizationsUpdateStripeSubscriptionId = funcWrap([
   object.as({
     organization_id: string.require(),
-    stripe_subscription_id: string.require(),
+    stripe_subscription_id: string,
   }).require(),
 ], (err, { organization_id, stripe_subscription_id }) => {
   if (err) {

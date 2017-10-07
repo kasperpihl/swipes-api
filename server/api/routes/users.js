@@ -40,6 +40,7 @@ import {
 } from './middlewares/me';
 import {
   organizationsAddPendingUsers,
+  organizationsUsersInvitedUserQueueMessage,
 } from './middlewares/organizations';
 import {
   xendoRemoveServiceFromUserQueueMessage,
@@ -166,6 +167,8 @@ authed.all(
   mapLocals(locals => ({
     invitation_token: locals.invitationToken,
   })),
+  organizationsUsersInvitedUserQueueMessage,
+  notificationsPushToQueue,
   usersInvitedUserQueueMessage,
   notificationsPushToQueue,
   usersSendInvitationQueueMessage,

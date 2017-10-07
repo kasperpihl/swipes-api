@@ -654,7 +654,78 @@ const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSu
       return next(new SwipesError(err));
     });
 });
+const organizationsCancelSubscription = valLocals('organizationsCancelSubscription', {
+  organization: object,
+}, (req, res, next, setLocals) => {
+  const {
+    organization,
+  } = res.locals;
 
+  if (!organization) {
+    return next();
+  }
+
+  const {
+    stripe_subscription_id,
+  } = organization;
+  const args = [];
+
+  if (!stripe_subscription_id) {
+    return next(new SwipesError('This organization does not have an active subscription'));
+  }
+
+  args.push(stripe_subscription_id);
+
+  return stripe.subscriptions.del(...args)
+    .then((subscription) => {
+      dbOrganizationsUpdateStripeSubscriptionId({
+        organization_id: organization.id,
+        stripe_subscription_id: null,
+      })
+        .then((result) => {
+          const changes = result.changes[0];
+          const organization = changes.new_val || changes.old_val;
+
+          setLocals({
+            organization,
+          });
+
+          return next();
+        })
+        .catch((err) => {
+          return next(err);
+        });
+    }).catch((err) => {
+      return next(new SwipesError(err));
+    });
+});
+const organizationsUsersInvitedUserQueueMessage = valLocals('organizationsUsersInvitedUserQueueMessage', {
+  user: object.require(),
+  organization: object,
+}, (req, res, next, setLocals) => {
+  const {
+    user,
+    organization,
+  } = res.locals;
+
+  if (!organization) {
+    return next();
+  }
+
+  const userId = user.id;
+  const queueMessage = {
+    organization,
+    user_id: userId,
+    event_type: 'organization_user_invited',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: userId,
+  });
+
+  return next();
+});
 
 export {
   organizationsCreate,
@@ -675,8 +746,10 @@ export {
   organizationsCheckIsEnableValid,
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
+  organizationsCancelSubscription,
   organizationsAddPendingUsers,
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
   organizationsCheckOwnerRightsNot,
+  organizationsUsersInvitedUserQueueMessage,
 };

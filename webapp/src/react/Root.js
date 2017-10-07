@@ -68,9 +68,9 @@ class Root extends PureComponent {
         <SuccessStateGradient />
         <HOCAutoCompleting />
         <HOCTooltip />
-        <HOCTrial />
         <DevTools />
         {this.renderRoutes()}
+        <Route path="/" component={HOCTrial} />
       </div>
     )
   }

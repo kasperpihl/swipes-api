@@ -766,8 +766,9 @@ const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
   }
 
   const userId = user.id;
+  const organizationId = organization.id;
   const queueMessage = {
-    organization,
+    organization_id: organizationId,
     user_id: userId,
     event_type: 'user_invited',
   };

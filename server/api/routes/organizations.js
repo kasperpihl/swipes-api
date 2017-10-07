@@ -23,6 +23,7 @@ import {
   organizationsCheckIsEnableValid,
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
+  organizationsCancelSubscription,
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
   organizationsCheckOwnerRightsNot,
@@ -282,6 +283,24 @@ authed.all(
   })),
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
+  valResponseAndSend({
+    organization: object.require(),
+  }),
+);
+
+authed.all(
+  '/organizations.cancelSubscription',
+  valBody({
+    organization_id: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsCancelSubscription,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  mapLocals(locals => ({
+    organization: organizationConcatUsers(locals),
+  })),
   valResponseAndSend({
     organization: object.require(),
   }),

@@ -60,12 +60,11 @@ const usersActivatedNotificationData = (req, res, next) => {
 };
 const usersInvitedNotificationData = (req, res, next) => {
   const {
-    user,
-    organization,
+    organization_id,
   } = res.locals;
 
   res.locals.notificationData = null;
-  res.locals.eventData = { user, organization };
+  res.locals.eventData = { pending_organization_id: organization_id };
 
   return next();
 };
