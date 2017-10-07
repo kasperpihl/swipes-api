@@ -338,6 +338,36 @@ const organizationsDemoteAnAdmin = valLocals('organizationsDemoteAnAdmin', {
       return next(err);
     });
 });
+const organizationsChangeStripeCustomerEmail = valLocals('organizationsChangeStripeCustomerEmail', {
+  organization: object.require(),
+  user: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization,
+    user,
+  } = res.locals;
+  const {
+    email,
+  } = user;
+  const {
+    stripe_customer_id,
+  } = organization;
+  const args = [];
+
+  if (!stripe_customer_id) {
+    return next();
+  }
+
+  args.push(stripe_customer_id);
+  args.push({ email });
+
+  return stripe.customers.update(...args)
+    .then(() => {
+      return next();
+    }).catch((err) => {
+      return next(new SwipesError(err));
+    });
+});
 const organizationsTransferOwnership = valLocals('organizationsTransferOwnership', {
   user_id: string.require(),
   organization_id: string.require(),
@@ -752,4 +782,5 @@ export {
   organizationsActivateUser,
   organizationsCheckOwnerRightsNot,
   organizationsUsersInvitedUserQueueMessage,
+  organizationsChangeStripeCustomerEmail,
 };

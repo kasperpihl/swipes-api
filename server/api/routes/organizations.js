@@ -27,6 +27,7 @@ import {
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
   organizationsCheckOwnerRightsNot,
+  organizationsChangeStripeCustomerEmail,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
@@ -194,6 +195,12 @@ authed.all(
   usersComparePasswordSignIn,
   organizationsGetSingle,
   organizationsCheckOwnerRights,
+  mapLocals(locals => ({
+    fields: ['email'],
+    userToGetId: locals.user_to_transfer_id,
+  })),
+  usersGetByIdWithFields,
+  organizationsChangeStripeCustomerEmail,
   organizationsTransferOwnership,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
