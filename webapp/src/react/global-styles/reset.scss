@@ -84,6 +84,12 @@ html, body {
   -webkit-font-smoothing: antialiased !important;
 }
 
+@-moz-document url-prefix() { 
+  body {
+    overflow-x: hidden;
+  }
+}
+
 .clearfix {
   clear: both;
 }

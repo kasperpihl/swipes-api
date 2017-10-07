@@ -1,0 +1,69 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+// @import '~styles/_functions.scss';
+
+@import url('https://fonts.googleapis.com/css?family=Teko');
+
+
+.dashboard {
+  @include size(100%);
+  @include flexContainer('column', left, top);
+  background-color: $blue-5;
+  padding: 0 82px;
+}
+
+.dashboard {
+
+  &__header {
+    @include size(100%, 115px);
+    @include flexContainer('row', between, bottom);
+    border-bottom: 4px solid rgba($deepBlue-100, .1);
+    flex: none;
+    padding-bottom: 21px;
+  }
+
+  &__title {
+    @include font(21px, $deepBlue-100, 27px); 
+  }
+
+  &__logo {
+    @include size(30px);
+    @include flexContainer('row', center, center);
+  }
+
+  &__svg {
+    @include size(30px);
+    @include svg-color($blue-100);
+    transform: translateY(5px);
+  }
+
+  &__card-wrapper {
+    @include size(100%);
+    @include flexContainer('row');
+    padding-top: 45px;
+    padding-bottom: 88px;
+  }
+}
+
+.dashboard .card {
+  $b: '.card';
+
+  @include size(100%);
+  @include flexContainer('row', center, center);
+  background-color: white;
+  box-shadow: 0 4px 4px 0 rgba(0,12,47,0.2);
+
+  #{$b}__number {
+    @include font(300px, $blue-100, 300px);
+    font-family: 'Teko'; 
+  }
+
+  #{$b}__label {
+    @include font(60px, $deepBlue-60, 69px, 300); 
+    @include size(100%, auto);
+    left: 0; bottom: 48px;
+    position: absolute;
+    text-transform: uppercase;
+    text-align: center;
+  }
+}

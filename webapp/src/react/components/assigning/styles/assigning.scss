@@ -11,7 +11,8 @@ $compSize: 30px;
   $b: &;
   --assigneesSize: 30px;
 
-  @include size(auto, var(--assigneesSize, $compSize));
+  @include size(auto, $compSize);
+  @include size(auto, var(--assigneesSize));
   @include flexContainer(null) {
     flex: none;
   };
@@ -46,6 +47,7 @@ $compSize: 30px;
   }
 
   &__profile {
+    @include size($compSize !important);
     @include size(var(--assigneesSize, $compSize) !important);
     border: 2px solid white;
     box-sizing: content-box;
@@ -55,6 +57,7 @@ $compSize: 30px;
     &--image {
 
       img {
+        @include size($compSize);
         @include size(var(--assigneesSize, $compSize));
         border-radius: 6px;
       }
@@ -81,6 +84,7 @@ $compSize: 30px;
   }
 
   &__assign {
+    @include size($compSize);
     @include size(var(--assigneesSize, $compSize));
     @include flexContainer('row', center, center);
     border: 1px solid $deepBlue-10;

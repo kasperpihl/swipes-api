@@ -11,7 +11,7 @@ class HOCRedirect extends PureComponent {
   }
   componentDidUpdate() {
     this.checkRedirects();
-  }
+  } 
   checkRedirects() {
     // Reset if any 
     const { 
