@@ -1,301 +1,151 @@
-import AirbnbLogo from './svgs/airbnb-logo.svg';
-import AsanaLogo from './svgs/asana-logo.svg';
-import DriveLogo from './svgs/drive-logo.svg';
-import DropboxLogo from './svgs/dropbox-logo.svg';
-import GmailLogo from './svgs/gmail-logo.svg';
-import JiraLogo from './svgs/jira-logo.svg';
-import SlackLogo from './svgs/slack-logo.svg';
-import SwipesLogo from './svgs/swipes-logo.svg';
-import SwipesLogoText from './svgs/swipes-logo-text.svg';
-import SwipesLogoEmpty from './svgs/swipes-logo-empty.svg';
-import SwipesLogoFull from './svgs/swipes-full-icon.svg';
-import SwipesSignature from './svgs/signature.svg';
+export { default as AirbnbLogo } from './svgs/airbnb-logo.svg';
+export { default as AsanaLogo } from './svgs/asana-logo.svg';
+export { default as DriveLogo } from './svgs/drive-logo.svg';
+export { default as DropboxLogo } from './svgs/dropbox-logo.svg';
+export { default as GmailLogo } from './svgs/gmail-logo.svg';
+export { default as JiraLogo } from './svgs/jira-logo.svg';
+export { default as SlackLogo } from './svgs/slack-logo.svg';
+export { default as SwipesLogo } from './svgs/swipes-logo.svg';
+export { default as SwipesLogoText } from './svgs/swipes-logo-text.svg';
+export { default as SwipesLogoEmpty } from './svgs/swipes-logo-empty.svg';
+export { default as SwipesLogoFull } from './svgs/swipes-full-icon.svg';
+export { default as SwipesSignature } from './svgs/signature.svg';
 // TagColleague
 
-import ActivityCheckmark from './svgs/activity-checkmark.svg';
-import AddPerson from './svgs/add-person.svg';
-import AddToCollection from './svgs/add-to-collection.svg';
-import Apple from './svgs/apple.svg';
-import Archive from './svgs/archive.svg';
-import ArrowLeftLine from './svgs/arrow-left-line.svg';
-import ArrowRightFull from './svgs/arrow-right-full.svg';
-import ArrowRightLine from './svgs/arrow-right-line.svg';
-import ArrowRightLong from './svgs/arrow-right-long.svg';
-import Assign from './svgs/assign.svg';
-import Assets from './svgs/assets.svg';
-import Attach from './svgs/attach2.svg';
-import Bold from './svgs/bold.svg';
-import Breadcrumb from './svgs/breadcrumb.svg';
-import Calendar from './svgs/calendar.svg';
-import Checklist from './svgs/checklist.svg';
-import ChecklistCheckmark from './svgs/checklist-checkmark.svg';
-import Checkmark from './svgs/checkmark.svg';
-import Circle from './svgs/circle.svg';
-import CircleCheckmark from './svgs/circle-checkmark.svg';
-import Close from './svgs/close.svg';
-import CloseSmall from './svgs/close-small.svg';
-import Collection from './svgs/collection.svg';
-import CreateNote from './svgs/create-note.svg';
-import Decision from './svgs/decision.svg';
-import Deliver from './svgs/deliver.svg';
-import Delete from './svgs/delete.svg';
-import Desktop from './svgs/desktop.svg';
-import Desktop2x from './svgs/desktop2x.svg';
-import Dot from './svgs/dot.svg';
-import Download from './svgs/download.svg';
-import Download2x from './svgs/download2x.svg';
-import Earth from './svgs/earth.svg';
-import Earth2x from './svgs/earth2x.svg';
-import Email from './svgs/email.svg';
-import Eye from './svgs/eye.svg';
-import Feedback from './svgs/feedback.svg';
-import File from './svgs/file.svg';
-import Find from './svgs/find.svg';
-import Flag from './svgs/flag.svg';
-import Folder from './svgs/folder.svg';
-import FromFullscreen from './svgs/from-fullscreen.svg';
-import Goal from './svgs/goal.svg';
-import Goals from './svgs/goals.svg';
-import GotAssigned from './svgs/got-assigned.svg';
-import GotNotified from './svgs/got-notified.svg';
-import GotUnassigned from './svgs/got-unassigned.svg';
-import Handoff from './svgs/handoff.svg';
-import Hashtag from './svgs/hashtag.svg';
-import HeaderOne from './svgs/header-one.svg';
-import HeaderTwo from './svgs/header-two.svg';
-import Heart from './svgs/heart.svg';
-import Hyperlink from './svgs/hyperlink.svg';
-import Information from './svgs/information.svg';
-import Itallic from './svgs/itallic.svg';
-import Iteration from './svgs/iteration.svg';
-import LargeList from './svgs/large-list.svg';
-import Linux from './svgs/linux.svg';
-import LogoLoader from './svgs/logo-loader.svg';
-import Logout from './svgs/logout.svg';
-import Messages from './svgs/messages.svg';
-import MilestoneAchieve from './svgs/milestone-achieve.svg';
-import Milestone from './svgs/milestone.svg';
-import Milestones from './svgs/milestones.svg';
-import MilestoneProgress from './svgs/milestone-progress.svg';
-import MiniGoal from './svgs/mini-goal.svg';
-import MiniMilestone from './svgs/mini-milestone.svg';
-import MiniNoMilestone from './svgs/mini-no-milestone.svg';
-import MiniNote from './svgs/mini-note.svg';
-import Minus from './svgs/minus.svg';
-import Note from './svgs/note.svg';
-import Notification from './svgs/notification.svg';
-import NoMilestone from './svgs/no-milestone.svg';
-import Onboarding from './svgs/onboarding.svg';
-import OrderedList from './svgs/ordered-list.svg';
-import Person from './svgs/person.svg';
-import Plus from './svgs/plus.svg';
-import Reaction from './svgs/reaction.svg';
-import Reload from './svgs/reload.svg';
-import Save from './svgs/save.svg';
-import Send from './svgs/send.svg';
-import SmallList from './svgs/small-list.svg';
-import Star from './svgs/star.svg';
-import Status from './svgs/status.svg';
-import Store from './svgs/store.svg';
-import TagColleague from './svgs/tag-colleague.svg';
-import ThreeDots from './svgs/three-dots.svg';
-import ToFullscreen from './svgs/to-fullscreen.svg';
-import Trash from './svgs/trash.svg';
-import Unassign from './svgs/unassign.svg';
-import Underline from './svgs/underline.svg';
-import UnorderedList from './svgs/unordered-list.svg';
-import Upload from './svgs/upload.svg';
-import Vote from './svgs/vote.svg';
-import WindowLock from './svgs/window-lock.svg';
-import WindowUnlock from './svgs/window-unlock.svg';
-import Windows from './svgs/windows.svg';
-import WindowsClose from './svgs/windows-close.svg';
-import WindowsMaximize from './svgs/windows-maximize.svg';
-import WindowsMinimize from './svgs/windows-minimize.svg';
-import WindowsUnmaximize from './svgs/windows-unmaximize.svg';
-import MessageColored from './svgs/message-colored.svg';
-import AnnouncementColored from './svgs/announcement-colored.svg';
-import Question from './svgs/question.svg';
-import QuestionColored from './svgs/question-colored.svg';
-import InformationColored from './svgs/information-colored.svg';
+export { default as ActivityCheckmark } from './svgs/activity-checkmark.svg';
+export { default as AddPerson } from './svgs/add-person.svg';
+export { default as AddToCollection } from './svgs/add-to-collection.svg';
+export { default as Apple } from './svgs/apple.svg';
+export { default as Archive } from './svgs/archive.svg';
+export { default as ArrowLeftLine } from './svgs/arrow-left-line.svg';
+export { default as ArrowRightFull } from './svgs/arrow-right-full.svg';
+export { default as ArrowRightLine } from './svgs/arrow-right-line.svg';
+export { default as ArrowRightLong } from './svgs/arrow-right-long.svg';
+export { default as Assign } from './svgs/assign.svg';
+export { default as Assets } from './svgs/assets.svg';
+export { default as Attach } from './svgs/attach2.svg';
+export { default as Bold } from './svgs/bold.svg';
+export { default as Breadcrumb } from './svgs/breadcrumb.svg';
+export { default as Calendar } from './svgs/calendar.svg';
+export { default as Checklist } from './svgs/checklist.svg';
+export { default as ChecklistCheckmark } from './svgs/checklist-checkmark.svg';
+export { default as Checkmark } from './svgs/checkmark.svg';
+export { default as Circle } from './svgs/circle.svg';
+export { default as CircleCheckmark } from './svgs/circle-checkmark.svg';
+export { default as Close } from './svgs/close.svg';
+export { default as CloseSmall } from './svgs/close-small.svg';
+export { default as Collection } from './svgs/collection.svg';
+export { default as CreateNote } from './svgs/create-note.svg';
+export { default as Decision } from './svgs/decision.svg';
+export { default as Deliver } from './svgs/deliver.svg';
+export { default as Delete } from './svgs/delete.svg';
+export { default as Desktop } from './svgs/desktop.svg';
+export { default as Desktop2x } from './svgs/desktop2x.svg';
+export { default as Dot } from './svgs/dot.svg';
+export { default as Download } from './svgs/download.svg';
+export { default as Download2x } from './svgs/download2x.svg';
+export { default as Earth } from './svgs/earth.svg';
+export { default as Earth2x } from './svgs/earth2x.svg';
+export { default as Email } from './svgs/email.svg';
+export { default as Eye } from './svgs/eye.svg';
+export { default as Feedback } from './svgs/feedback.svg';
+export { default as File } from './svgs/file.svg';
+export { default as Find } from './svgs/find.svg';
+export { default as Flag } from './svgs/flag.svg';
+export { default as Folder } from './svgs/folder.svg';
+export { default as FromFullscreen } from './svgs/from-fullscreen.svg';
+export { default as Goal } from './svgs/goal.svg';
+export { default as Goals } from './svgs/goals.svg';
+export { default as GotAssigned } from './svgs/got-assigned.svg';
+export { default as GotNotified } from './svgs/got-notified.svg';
+export { default as GotUnassigned } from './svgs/got-unassigned.svg';
+export { default as Handoff } from './svgs/handoff.svg';
+export { default as Hashtag } from './svgs/hashtag.svg';
+export { default as HeaderOne } from './svgs/header-one.svg';
+export { default as HeaderTwo } from './svgs/header-two.svg';
+export { default as Heart } from './svgs/heart.svg';
+export { default as Hyperlink } from './svgs/hyperlink.svg';
+export { default as Information } from './svgs/information.svg';
+export { default as Itallic } from './svgs/itallic.svg';
+export { default as Iteration } from './svgs/iteration.svg';
+export { default as LargeList } from './svgs/large-list.svg';
+export { default as Linux } from './svgs/linux.svg';
+export { default as LogoLoader } from './svgs/logo-loader.svg';
+export { default as Logout } from './svgs/logout.svg';
+export { default as Messages } from './svgs/messages.svg';
+export { default as MilestoneAchieve } from './svgs/milestone-achieve.svg';
+export { default as Milestone } from './svgs/milestone.svg';
+export { default as Milestones } from './svgs/milestones.svg';
+export { default as MilestoneProgress } from './svgs/milestone-progress.svg';
+export { default as MiniGoal } from './svgs/mini-goal.svg';
+export { default as MiniMilestone } from './svgs/mini-milestone.svg';
+export { default as MiniNoMilestone } from './svgs/mini-no-milestone.svg';
+export { default as MiniNote } from './svgs/mini-note.svg';
+export { default as Minus } from './svgs/minus.svg';
+export { default as Note } from './svgs/note.svg';
+export { default as Notification } from './svgs/notification.svg';
+export { default as NoMilestone } from './svgs/no-milestone.svg';
+export { default as Onboarding } from './svgs/onboarding.svg';
+export { default as OrderedList } from './svgs/ordered-list.svg';
+export { default as Person } from './svgs/person.svg';
+export { default as Plus } from './svgs/plus.svg';
+export { default as Reaction } from './svgs/reaction.svg';
+export { default as Reload } from './svgs/reload.svg';
+export { default as Save } from './svgs/save.svg';
+export { default as Send } from './svgs/send.svg';
+export { default as SmallList } from './svgs/small-list.svg';
+export { default as Star } from './svgs/star.svg';
+export { default as Status } from './svgs/status.svg';
+export { default as Store } from './svgs/store.svg';
+export { default as TagColleague } from './svgs/tag-colleague.svg';
+export { default as ThreeDots } from './svgs/three-dots.svg';
+export { default as ToFullscreen } from './svgs/to-fullscreen.svg';
+export { default as Trash } from './svgs/trash.svg';
+export { default as Unassign } from './svgs/unassign.svg';
+export { default as Underline } from './svgs/underline.svg';
+export { default as UnorderedList } from './svgs/unordered-list.svg';
+export { default as Upload } from './svgs/upload.svg';
+export { default as Vote } from './svgs/vote.svg';
+export { default as WindowLock } from './svgs/window-lock.svg';
+export { default as WindowUnlock } from './svgs/window-unlock.svg';
+export { default as Windows } from './svgs/windows.svg';
+export { default as WindowsClose } from './svgs/windows-close.svg';
+export { default as WindowsMaximize } from './svgs/windows-maximize.svg';
+export { default as WindowsMinimize } from './svgs/windows-minimize.svg';
+export { default as WindowsUnmaximize } from './svgs/windows-unmaximize.svg';
+export { default as MessageColored } from './svgs/message-colored.svg';
+export { default as AnnouncementColored } from './svgs/announcement-colored.svg';
+export { default as Question } from './svgs/question.svg';
+export { default as QuestionColored } from './svgs/question-colored.svg';
+export { default as InformationColored } from './svgs/information-colored.svg';
 
-import WindowsDevice from './svgs/windows-device.svg';
-import MacDevice from './svgs/mac-device.svg';
-import LinuxDevice from './svgs/linux-device.svg';
-import IphoneDevice from './svgs/iphone-device.svg';
-import AndroidDevice from './svgs/android-device.svg';
+export { default as WindowsDevice } from './svgs/windows-device.svg';
+export { default as MacDevice } from './svgs/mac-device.svg';
+export { default as LinuxDevice } from './svgs/linux-device.svg';
+export { default as IphoneDevice } from './svgs/iphone-device.svg';
+export { default as AndroidDevice } from './svgs/android-device.svg';
 
-import ShapeOne from './svgs/shape-1.svg';
-import ShapeTwo from './svgs/shape-2.svg';
-import ShapeThree from './svgs/shape-3.svg';
-import ShapeFour from './svgs/shape-4.svg';
-import ShapeFive from './svgs/shape-5.svg';
-import ShapeSix from './svgs/shape-6.svg';
-import ShapeSeven from './svgs/shape-7.svg';
-import ShapeEight from './svgs/shape-8.svg';
-import ShapeNine from './svgs/shape-9.svg';
-import ShapeTen from './svgs/shape-10.svg';
+export { default as ShapeOne } from './svgs/shape-1.svg';
+export { default as ShapeTwo } from './svgs/shape-2.svg';
+export { default as ShapeThree } from './svgs/shape-3.svg';
+export { default as ShapeFour } from './svgs/shape-4.svg';
+export { default as ShapeFive } from './svgs/shape-5.svg';
+export { default as ShapeSix } from './svgs/shape-6.svg';
+export { default as ShapeSeven } from './svgs/shape-7.svg';
+export { default as ShapeEight } from './svgs/shape-8.svg';
+export { default as ShapeNine } from './svgs/shape-9.svg';
+export { default as ShapeTen } from './svgs/shape-10.svg';
 
-import LoginIconOne from './svgs/login-background-1.svg';
-import LoginIconTwo from './svgs/login-background-2.svg';
+export { default as LoginIconOne } from './svgs/login-background-1.svg';
+export { default as LoginIconTwo } from './svgs/login-background-2.svg';
 
 // Empty states
 
-import ESArrow from './empty-states/es-arrow.svg';
-import ESDiscussions from './empty-states/es-discussions.svg';
-import ESError from './empty-states/es-error.svg';
-import ESMilestoneAchieved from './empty-states/es-milestone-achieved.svg';
-import ESNoResults from './empty-states/es-no-results.svg';
-import ESNotifications from './empty-states/es-notifications.svg';
-import ESSearch from './empty-states/es-search.svg';
-import ESWelcome from './empty-states/es-welcome.svg';
-
-export {
-  AirbnbLogo,
-  AsanaLogo,
-  DriveLogo,
-  DropboxLogo,
-  GmailLogo,
-  JiraLogo,
-  SlackLogo,
-  SwipesLogo,
-  SwipesLogoText,
-  SwipesLogoEmpty,
-  SwipesLogoFull,
-  SwipesSignature,
-
-  ActivityCheckmark,
-  AddPerson,
-  AddToCollection,
-  Apple,
-  Archive,
-  ArrowLeftLine,
-  ArrowRightFull,
-  ArrowRightLine,
-  ArrowRightLong,
-  Assets,
-  Attach,
-  Assign,
-  Bold,
-  Breadcrumb,
-  Calendar,
-  Checklist,
-  ChecklistCheckmark,
-  Checkmark,
-  Circle,
-  CircleCheckmark,
-  Close,
-  CloseSmall,
-  Collection,
-  CreateNote,
-  Decision,
-  Deliver,
-  Delete,
-  Desktop,
-  Desktop2x,
-  Dot,
-  Download,
-  Download2x,
-  Earth,
-  Earth2x,
-  Email,
-  Eye,
-  Feedback,
-  File,
-  Find,
-  Flag,
-  Folder,
-  FromFullscreen,
-  Goal,
-  Goals,
-  GotAssigned,
-  GotNotified,
-  GotUnassigned,
-  Handoff,
-  Hashtag,
-  HeaderOne,
-  HeaderTwo,
-  Heart,
-  Hyperlink,
-  Information,
-  Itallic,
-  Iteration,
-  LargeList,
-  Linux,
-  LogoLoader,
-  Logout,
-  Messages,
-  MilestoneAchieve,
-  MilestoneProgress,
-  Milestone,
-  Milestones,
-  MiniGoal,
-  MiniMilestone,
-  MiniNoMilestone,
-  MiniNote,
-  Minus,
-  Note,
-  Notification,
-  NoMilestone,
-  Onboarding,
-  OrderedList,
-  Person,
-  Plus,
-  Reaction,
-  Reload,
-  Save,
-  Send,
-  SmallList,
-  Star,
-  Status,
-  Store,
-  TagColleague,
-  ThreeDots,
-  ToFullscreen,
-  Trash,
-  Unassign,
-  Underline,
-  UnorderedList,
-  Upload,
-  Vote,
-  WindowLock,
-  WindowUnlock,
-  Windows,
-  WindowsClose,
-  WindowsMaximize,
-  WindowsMinimize,
-  WindowsUnmaximize,
-  MessageColored,
-  AnnouncementColored,
-  Question,
-  QuestionColored,
-  InformationColored,
-
-  WindowsDevice,
-  MacDevice,
-  LinuxDevice,
-  IphoneDevice,
-  AndroidDevice,
-
-  ShapeOne,
-  ShapeTwo,
-  ShapeThree,
-  ShapeFour,
-  ShapeFive,
-  ShapeSix,
-  ShapeSeven,
-  ShapeEight,
-  ShapeNine,
-  ShapeTen,
-  LoginIconOne,
-  LoginIconTwo,
-
-  ESArrow,
-  ESDiscussions,
-  ESError,
-  ESMilestoneAchieved,
-  ESNoResults,
-  ESNotifications,
-  ESSearch,
-  ESWelcome,
-};
+export { default as ESArrow } from './empty-states/es-arrow.svg';
+export { default as ESDiscussions } from './empty-states/es-discussions.svg';
+export { default as ESError } from './empty-states/es-error.svg';
+export { default as ESMilestoneAchieved } from './empty-states/es-milestone-achieved.svg';
+export { default as ESNoResults } from './empty-states/es-no-results.svg';
+export { default as ESNotifications } from './empty-states/es-notifications.svg';
+export { default as ESSearch } from './empty-states/es-search.svg';
+export { default as ESWelcome } from './empty-states/es-welcome.svg';

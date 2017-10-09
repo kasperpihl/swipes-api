@@ -14,6 +14,8 @@ const downloadLinks = {
   darwin: 'http://swipesapp.com/download-mac',
   win32: 'http://swipesapp.com/download-win',
   linux: 'http://swipesapp.com/download-linux',
+  android: 'http://swipesapp.com/download-android',
+  ios: 'http://swipesapp.com/download-ios',
 };
 
 class DownloadForDevice extends PureComponent {
@@ -27,17 +29,56 @@ class DownloadForDevice extends PureComponent {
   }
   desktopCheck() {
     var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+
     if(isMac){
       return 'renderMac';
     }
+
     const isLinux = navigator.platform.toUpperCase().indexOf('LINUX')>=0;
+
     if(isLinux){
       return 'renderLinux';
     }
+
     return 'renderWindows';
+  }
+  mobileCheck() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    if (/windows phone/i.test(userAgent)) {
+        return undefined;
+    }
+
+    if (/android/i.test(userAgent)) {
+        return "renderAndroid";
+    }
+
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return "renderIos";
+    }
+
+    return undefined;
   }
   renderFirst(type) {
     return this[type]();
+  }
+  renderAndroid() {
+    
+    return (
+      <a href={downloadLinks.android} target="_blank" className="download-for-device__device">
+        <Icon icon="AndroidDevice" className="download-for-device__device-svg" />
+        <p>Android</p>
+      </a>
+    )
+  }
+  renderIos() {
+    
+    return (
+      <a href={downloadLinks.ios} target="_blank" className="download-for-device__device">
+        <Icon icon="AndroidDevice" className="download-for-device__device-svg" />
+        <p>IphoneDevice</p>
+      </a>
+    )
   }
   renderWindows(firstType) {
     if(firstType === 'renderWindows') {
@@ -73,7 +114,9 @@ class DownloadForDevice extends PureComponent {
     );
   }
   render() {
-    const type = this.desktopCheck();
+    const desktopType = this.desktopCheck();
+    const mobileType = this.mobileCheck();
+    const type = mobileType ? mobileType : desktopType;
 
     return (
       <div className="download-for-device">
