@@ -177,9 +177,41 @@ const dbOrganizationsDisableUser = funcWrap([
           return {
             organizations: user('organizations').default([]).difference([organization_id]),
             pending_organizations: user('pending_organizations').default([]).difference([organization_id]),
+            updated_at: r.now(),
           };
         }).do(() => {
           return result;
+        });
+      });
+
+  return db.rethinkQuery(q);
+});
+const dbOrganizationsDisableAllUsers = funcWrap([
+  object.as({
+    organization_id: string.require(),
+  }).require(),
+], (err, { organization_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsDisableAllUsers: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        active_users: [],
+        pending_users: [],
+        disabled_users: r.row('disabled_users').default([]).setUnion(r.row('active_users')),
+        updated_at: r.now(),
+      }, {
+        returnChanges: 'always',
+      }).do((result) => {
+        return r.table('users').getAll(r.args(result('changes').nth(0)('old_val')('active_users').default([]).setUnion(result('changes').nth(0)('new_val')('pending_users').default([])))).update((user) => {
+          return {
+            organizations: user('organizations').default([]).difference([organization_id]),
+            pending_organizations: user('pending_organizations').default([]).difference([organization_id]),
+            updated_at: r.now(),
+          };
         });
       });
 
@@ -302,4 +334,5 @@ export {
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
   dbOrganizationsUpdateStripeSubscriptionId,
   dbOrganizationsActivateUser,
+  dbOrganizationsDisableAllUsers,
 };

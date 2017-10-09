@@ -13,6 +13,7 @@ import {
   dbOrganizationsDemoteAnAdmin,
   dbOrganizationsTransferOwnership,
   dbOrganizationsDisableUser,
+  dbOrganizationsDisableAllUsers,
   dbOrganizationsEnableUser,
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
   dbOrganizationsUpdateStripeSubscriptionId,
@@ -422,6 +423,21 @@ const organizationsDisableUser = valLocals('organizationsDisableUser', {
       return next(err);
     });
 });
+const organizationsDisableAllUsers = valLocals('organizationsDisableAllUsers', {
+  organization_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+  } = res.locals;
+
+  dbOrganizationsDisableAllUsers({ organization_id })
+    .then((result) => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 const organizationsActivateUser = valLocals('organizationsActivateUser', {
   organization_id: string.require(),
   user_to_activate_id: string.require(),
@@ -701,7 +717,7 @@ const organizationsCancelSubscription = valLocals('organizationsCancelSubscripti
   const args = [];
 
   if (!stripe_subscription_id) {
-    return next(new SwipesError('This organization does not have an active subscription'));
+    return next();
   }
 
   args.push(stripe_subscription_id);
@@ -769,6 +785,7 @@ export {
   organizationsCheckOwnerRights,
   organizationsTransferOwnership,
   organizationsDisableUser,
+  organizationsDisableAllUsers,
   organizationsEnableUser,
   organizationsCreateStripeCustomer,
   organizationsCheckOwnerDisabledUser,
