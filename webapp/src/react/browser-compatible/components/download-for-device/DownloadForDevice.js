@@ -45,16 +45,12 @@ class DownloadForDevice extends PureComponent {
   mobileCheck() {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-    if (/windows phone/i.test(userAgent)) {
-        return undefined;
-    }
-
     if (/android/i.test(userAgent)) {
-        return "renderAndroid";
+      return "renderAndroid";
     }
 
     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return "renderIos";
+      return "renderIos";
     }
 
     return undefined;
@@ -76,7 +72,7 @@ class DownloadForDevice extends PureComponent {
     return (
       <a href={downloadLinks.ios} target="_blank" className="download-for-device__device">
         <Icon icon="AndroidDevice" className="download-for-device__device-svg" />
-        <p>IphoneDevice</p>
+        <p>iOS</p>
       </a>
     )
   }

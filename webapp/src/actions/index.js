@@ -12,5 +12,4 @@ export {
   goals,
   menus,
   ways,
-
 };

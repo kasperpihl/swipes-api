@@ -85,7 +85,7 @@ class CompatibleInviteForm extends PureComponent {
           <label htmlFor={labelTargetForEmail}>
             <div className="input-row__inner-wrapper">
               <input 
-                type="text"
+                type="email"
                 id={labelTargetForEmail}
                 className="compatible-invite-form__input"
                 placeholder=" "
