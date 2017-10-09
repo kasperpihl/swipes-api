@@ -82,6 +82,10 @@ section.view-container {
     @include size(100%);
     overflow-y: auto;
     will-change: width;
+
+    @supports (-ms-ime-align: auto) {
+      overflow-x: hidden;
+    }
   }
 
   &__container {
