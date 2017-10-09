@@ -14,7 +14,7 @@ import './styles/organization.scss';
 class Organization extends PureComponent {
   constructor(props) {
     super(props);
-    setupDelegate(this, 'onInvite', 'onKeyDown', 'onContext', 'onChange');
+    setupDelegate(this, 'onInvite', 'onKeyDown', 'onContext', 'onChange', 'onThreeDots');
   }
   renderActionButton(u) {
     const { isAdmin, getLoading } = this.props;
@@ -114,12 +114,18 @@ class Organization extends PureComponent {
     );
   }
   renderHeader() {
-    const { organization, tabIndex, delegate, tabs } = this.props;
+    const { organization, tabIndex, delegate, tabs, getLoading } = this.props;
     const title = `Team account`;
 
     return (
       <div className="orgnization__header">
-        <HOCHeaderTitle title={title} subtitle="Invite your team and manage access" />
+        <HOCHeaderTitle title={title} subtitle="Invite your team and manage access">
+          <Button
+            icon="ThreeDots"
+            onClick={this.onThreeDots}
+            {...getLoading('threedots')}
+          />
+        </HOCHeaderTitle>
         <TabBar tabs={tabs} delegate={delegate} activeTab={tabIndex} />
       </div>
     );

@@ -118,6 +118,57 @@ class HOCOrganization extends PureComponent {
       }
     });
   }
+  onThreeDots(e) {
+    const { contextMenu, organization, me, confirm, leaveOrg, deleteOrg } = this.props;
+    const options = this.getOptionsForE(e);
+    const isOwner = organization.get('owner_id') === me.get('id');
+    const items = [{
+      title: 'Delete organization',
+      subtitle: 'All users will be thrown out and your subscription will be cancelled',
+    }];
+    if(!isOwner) {
+      items[0].title = 'Leave organization';
+      items[0].subtitle = 'Leave ' + organization.get('name') + ' to be part of another organization';
+    } else {
+      items.push({ 
+        title: 'Leave organization', 
+        disabled: true, 
+        subtitle: 'The owner cannot leave the organization' 
+      });
+    }
+    const delegate = {
+      onItemAction: (item) => {
+        confirm(Object.assign({}, options, {
+          title: items[0].title,
+          message: 'This cannot be undone. Are you sure?',
+        }), (i) => {
+          if (i === 1) {
+            const actionFunc = isOwner ? deleteOrg : leaveOrg;
+            this.setLoading('threedots');
+            actionFunc().then((res) => {
+              if(!res.ok) {
+                this.clearLoading('threedots', '!Something went wrong');
+              } else {
+                this.clearLoading('threedots');
+              }
+            })
+          }
+        });
+      },
+    };
+
+    contextMenu({
+      options,
+      component: TabMenu,
+      props: {
+        delegate,
+        items,
+        style: {
+          width: '360px',
+        },
+      },
+    });
+  }
   onContext(uId, e) {
     const { contextMenu, organization, users } = this.props;
     const user = users.get(uId);
@@ -252,6 +303,9 @@ function mapStateToProps(state) {
 
 export default navWrapper(connect(mapStateToProps, {
   invite: ca.users.invite,
+  confirm: a.menus.confirm,
+  deleteOrg: ca.organizations.deleteOrg,
+  leaveOrg: ca.organizations.leave,
   completeOnboarding: ca.onboarding.complete,
   demoteAnAdmin: ca.organizations.demoteAnAdmin,
   disableUser: ca.organizations.disableUser,

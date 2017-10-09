@@ -56,11 +56,7 @@ class HOCCompatibleWelcome extends PureComponent {
       if(!res.ok) {
         this.clearLoading('creating', '!Something went wrong', 5000);
       } else {
-        console.log('finished');
-        this.setLoading('creating', null, 1000, () => {
-          console.log('change to invite');
-          setUrl('/invite');
-        });
+        setUrl('/invite', { push: true });
       }
     })
   }

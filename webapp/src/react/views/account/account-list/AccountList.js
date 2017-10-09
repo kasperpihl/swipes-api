@@ -17,7 +17,7 @@ class AccountList extends PureComponent {
   renderHeader() {
     return (
       <div className="account-list__header">
-        <HOCHeaderTitle title="Account" />
+        <HOCHeaderTitle title={msgGen.users.getFullName('me')} subtitle={msgGen.me.getOrg().get('name')}/>
       </div>
     );
   }

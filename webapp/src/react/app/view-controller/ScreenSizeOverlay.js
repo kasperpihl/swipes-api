@@ -21,10 +21,8 @@ class ScreenSizeOverlay extends PureComponent {
     bindAll(this, ['updateWindowDimensions']);
   }
   componentDidMount() {
-  }
-  componentDidMount() {
-  this.updateWindowDimensions();
-  window.addEventListener('resize', this.updateWindowDimensions);
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions);
@@ -32,7 +30,7 @@ class ScreenSizeOverlay extends PureComponent {
   updateWindowDimensions() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-
+    console.log('hi', width, height);
     if ((width < 800 || height < 600) && !this.state.tooSmall) {
       this.setState({ tooSmall: true })
     } else if ((width >= 800 && height >= 600) && this.state.tooSmall) {

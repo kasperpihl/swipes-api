@@ -12,6 +12,9 @@ export default class Me {
     }
     return false;
   }
+  getOrg() {
+    return this.getMe().getIn(['organizations', 0]);
+  }
   getMe(){
     return this.store.getState().get('me');
   }

@@ -13,6 +13,10 @@ export const leave = (orgId) => (d, getState) => d(ca.api.request('organizations
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 }));
 
+export const deleteOrg = (orgId) => (d, getState) => d(ca.api.request('organizations.delete', {
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+}));
+
 export const promoteToAdmin = (orgId, userId) => ca.api.request('organizations.promoteToAdmin', {
   organization_id: orgId,
   user_to_promote_id: userId,

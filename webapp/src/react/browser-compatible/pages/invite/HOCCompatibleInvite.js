@@ -82,6 +82,9 @@ class HOCCompatibleInvite extends PureComponent {
   }
   render() {
     const { invites } = this.state;
+    const { readyInOrg } = this.props;
+    if(!readyInOrg) return null;
+
     return (
       <CompatibleCard>
         <CompatibleInvite 
@@ -98,6 +101,7 @@ class HOCCompatibleInvite extends PureComponent {
 HOCCompatibleInvite.propTypes = {};
 
 const mapStateToProps = (state) => ({
+  readyInOrg: state.getIn(['connection', 'readyInOrg']),
 });
 
 export default connect(mapStateToProps, {

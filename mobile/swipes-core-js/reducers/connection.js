@@ -55,6 +55,8 @@ export default function connectionReducer(state = initialState, action) {
     // ======================================================
     // Authorization methods
     // ======================================================
+    case 'organizations.delete':
+    case 'organizations.leave':
     case 'organizations.create':
     case 'organizations.join':
     case 'organization_created': {

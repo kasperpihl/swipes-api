@@ -34,12 +34,15 @@ class HOCRedirect extends PureComponent {
     const path = location.pathname;
 
     if(isHydrated && !token) {
-      if (['/', '/welcome', '/invite', '/notsupported', '/download'].indexOf(path) > -1) {
+      if (['/', '/welcome', '/invite', '/notsupported'].indexOf(path) > -1) {
         setUrl('/login');
       }
     }
     if(isHydrated && hasConnected) {
       if(['/login', '/register'].indexOf(path) > -1) {
+        setUrl('/');
+      }
+      if(path === '/notsupported' && isBrowserSupported) {
         setUrl('/');
       }
       if(path === '/' && !hasOrg) {

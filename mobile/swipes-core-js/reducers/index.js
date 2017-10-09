@@ -1,31 +1,14 @@
-import autoComplete from './auto-complete';
-import cache from './cache';
-import connection from './connection';
-import globals from './globals';
-import goals from './goals';
-import me from './me';
-import milestones from './milestones';
-import notes from './notes';
-import notifications from './notifications';
-import onboarding from './onboarding';
-import posts from './posts';
-import services from './services';
-import users from './users';
-import ways from './ways';
-
-export {
-  autoComplete,
-  cache,
-  connection,
-  globals,
-  goals,
-  me,
-  milestones,
-  notes,
-  notifications,
-  onboarding,
-  posts,
-  services,
-  users,
-  ways,
-};
+export { default as autoComplete } from './auto-complete';
+export { default as cache } from './cache';
+export { default as connection } from './connection';
+export { default as globals } from './globals';
+export { default as goals } from './goals';
+export { default as me } from './me';
+export { default as milestones } from './milestones';
+export { default as notes } from './notes';
+export { default as notifications } from './notifications';
+export { default as onboarding } from './onboarding';
+export { default as posts } from './posts';
+export { default as services } from './services';
+export { default as users } from './users';
+export { default as ways } from './ways';
