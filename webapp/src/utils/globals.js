@@ -28,9 +28,9 @@ const isBrowserSupported = (browser, ver) => {
     case 'chrome': return ver >= 50;
     case 'safari': return ver >= 10;
     case 'firefox': return ver >= 50;
-    case 'edge': return ver >= 10;
+    case 'edge': return ver >= 14;
     default:
-      return true;
+      return false;
   }
 }
 
