@@ -37,5 +37,6 @@
   &__svg {
     @include size(24px);
     @include svg-color(white);
+    pointer-events: none;
   }
 }

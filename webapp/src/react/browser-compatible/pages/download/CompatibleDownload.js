@@ -155,6 +155,18 @@ class CompatibleDownload extends PureComponent {
       </div>
     ])
   }
+  renderWebSection() {
+    const isMobile = this.mobileCheck();
+
+    if (isMobile) return null;
+
+    return (
+      <div className="section">
+        <div className="section-title">Web version</div>
+        <GoToWorkspace noTitle={true} />
+      </div>
+    )
+  }
   render() {
     return (
       <CompatibleCard>
@@ -162,10 +174,6 @@ class CompatibleDownload extends PureComponent {
           {this.renderBackButton()}
           <CompatibleHeader title="Awesome! Download the Swipes Workspace" subtitle="Start working with your team from anywhere" />
           {this.renderDownloadSections()}
-          <div className="section">
-            <div className="section-title">Web version</div>
-            <GoToWorkspace noTitle={true} />
-          </div>
         </div>
       </CompatibleCard>
     );
