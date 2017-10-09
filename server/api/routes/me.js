@@ -34,7 +34,8 @@ const authed = express.Router();
 const notAuthed = express.Router();
 const multipart = express.Router();
 
-authed.all('/me.updateSettings',
+authed.all(
+  '/me.updateSettings',
   valBody({
     settings: object.require(),
   }),
@@ -43,9 +44,11 @@ authed.all('/me.updateSettings',
   notificationsPushToQueue,
   valResponseAndSend({
     settings: object.require(),
-  }));
+  }),
+);
 
-authed.all('/me.updateProfile',
+authed.all(
+  '/me.updateProfile',
   valBody({
     profile: object.require(),
   }),
@@ -55,9 +58,11 @@ authed.all('/me.updateProfile',
   valResponseAndSend({
     user_id: string.require(),
     profile: object.require(),
-  }));
+  }),
+);
 
-multipart.post('/me.uploadProfilePhoto',
+multipart.post(
+  '/me.uploadProfilePhoto',
   meUploadProfilePhoto,
   authParseToken,
   authCheckToken,
@@ -72,7 +77,8 @@ multipart.post('/me.uploadProfilePhoto',
   }),
 );
 
-notAuthed.post('/me.sendResetEmail',
+notAuthed.post(
+  '/me.sendResetEmail',
   valBody({
     email: string.format('email').require(),
   }),
@@ -86,7 +92,8 @@ notAuthed.post('/me.sendResetEmail',
   valResponseAndSend(),
 );
 
-notAuthed.post('/me.verifyResetToken',
+notAuthed.post(
+  '/me.verifyResetToken',
   valBody({
     token: string.require(),
   }),
@@ -94,7 +101,8 @@ notAuthed.post('/me.verifyResetToken',
   valResponseAndSend(),
 );
 
-notAuthed.post('/me.resetPassword',
+notAuthed.post(
+  '/me.resetPassword',
   valBody({
     token: string.require(),
     password: string.min(1).require(),
