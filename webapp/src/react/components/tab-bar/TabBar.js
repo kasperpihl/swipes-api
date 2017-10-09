@@ -32,10 +32,11 @@ class TabBar extends Component {
       });
 
       tabWidths.reduce((previousValue, currentValue) => {
+
         sliderClipsArr.push(
           {
-            start: ((previousValue * 100) / tabBarWidth),
-            end: ((((previousValue + currentValue) - 30) * 100) / tabBarWidth),
+            start: previousValue,
+            width: currentValue - 30,
           },
         );
 
@@ -50,12 +51,14 @@ class TabBar extends Component {
     const { activeTab } = this.props;
 
     let styles = {
-      WebkitClipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
+      left: 0,
+      width: 0,
     };
 
     if (sliderClips.length && sliderClips[activeTab]) {
       styles = {
-        WebkitClipPath: `polygon(${sliderClips[activeTab].start}% 0%, ${sliderClips[activeTab].end}% 0%, ${sliderClips[activeTab].end}% 100%, ${sliderClips[activeTab].start}% 100%)`,
+        left: sliderClips[activeTab].start + 'px',
+        width: sliderClips[activeTab].width + 'px',
       };
     }
 
