@@ -143,7 +143,7 @@ section.view-container {
   }
   &--no-scroll {
     #{$b}__scroll {
-      overflow: hidden;
+      overflow: initial;
     }
   }
 }

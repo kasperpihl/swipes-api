@@ -4,12 +4,16 @@
 
 .sw-loader-wrap {
   @include size(100%);
-  @include flexContainer('row', center, center);
 
   &__svg {
     @include size($width: 60px);
     @include svg-color($bg);
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
     animation: pulsateLoader 2s linear infinite;
+    -ms-animation: pulsateLoader 2s linear infinite;
   }
 }
 
