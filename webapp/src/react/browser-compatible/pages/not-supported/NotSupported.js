@@ -22,27 +22,39 @@ class NotSupported extends PureComponent {
   }
   componentDidMount() {
   }
+  renderLeaveOrDelete() {
+    const { me, organization } = this.props;
+    const isOwner = me.get('id') === organization.get('owner_id');
+
+    let desc = `Leave the organization: ${organization.get('name')}. You will be available to join a new organization.`;
+    let buttonTitle = 'Leave organization'; 
+    if(isOwner) {
+      desc = `Delete your organization ${organization.get('name')}. This will throw out all the current users from the organization as well.`;
+      buttonTitle = 'Delete organization';
+    }
+    return (
+      <div className="not-supported__option-wrapper">
+        <div className="not-supported__desc">{desc}</div>
+        <div className="not-supported__option-title">
+          <a className="not-supported__link" onClick={this.onLeaveOrg}>{buttonTitle}</a>
+        </div>
+      </div>
+    )
+  }
   renderActions() {
+    const { organization } = this.props;
 
     return (
       <div className="not-supported__actions">
         <div className="not-supported__option-wrapper">
           <div className="not-supported__desc">
-            Invite more people to your org, which by the way is Swipes
+            {`Invite more people to ${organization.get('name')}. Gather your whole team.`}
           </div>
           <div className="not-supported__option-title">
-            <Link to="/invite" className="not-supported__link">Invite peeps</Link>
+            <Link to="/invite" className="not-supported__link">Invite people</Link>
           </div>
         </div>
-
-        <div className="not-supported__option-wrapper">
-          <div className="not-supported__desc">
-            You are currently a part of Swipes. If you wish to leave that organization please press the button bellow. After leaving the org, the following things will happen within the org and your account
-          </div>
-          <div className="not-supported__option-title">
-            <a className="not-supported__link" onClick={this.onLeaveOrg}>Leave org</a>
-          </div>
-        </div>
+        {this.renderLeaveOrDelete()}
       </div>
     )
   }

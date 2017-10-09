@@ -4,7 +4,6 @@ import React, { PureComponent } from 'react';
 import Icon from 'Icon';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
-import CompatibleBackButton from 'compatible/components/compatible-back-button/CompatibleBackButton';
 import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
 import './styles/download-page.scss';
 
@@ -106,10 +105,6 @@ class CompatibleDownload extends PureComponent {
       </div>
     );
   }
-  renderBackButton() {
-
-    return <CompatibleBackButton />;
-  }
   renderDownloadSections() {
     const isMobile = this.mobileCheck();
 
@@ -171,7 +166,6 @@ class CompatibleDownload extends PureComponent {
     return (
       <CompatibleCard>
         <div className="download-page">
-          {this.renderBackButton()}
           <CompatibleHeader title="Awesome! Download the Swipes Workspace" subtitle="Start working with your team from anywhere" />
           {this.renderDownloadSections()}
           {this.renderWebSection()}

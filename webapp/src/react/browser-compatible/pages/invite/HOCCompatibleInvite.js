@@ -82,12 +82,12 @@ class HOCCompatibleInvite extends PureComponent {
   }
   render() {
     const { invites } = this.state;
-    const { readyInOrg } = this.props;
+    const { readyInOrg, isBrowserSupported } = this.props;
     if(!readyInOrg) return null;
 
     return (
       <CompatibleCard>
-        <CompatibleInvite 
+        <CompatibleInvite
           delegate={this} 
           invites={invites}
           {...this.bindLoading()}
@@ -101,6 +101,7 @@ class HOCCompatibleInvite extends PureComponent {
 HOCCompatibleInvite.propTypes = {};
 
 const mapStateToProps = (state) => ({
+  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
   readyInOrg: state.getIn(['connection', 'readyInOrg']),
 });
 
