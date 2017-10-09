@@ -50,7 +50,7 @@ class HOCCompatibleInvite extends PureComponent {
       const firstName = inv.get('firstName');
       if(!email.length && !firstName.length) return;
 
-      if(this.isLoading(i) || this.getLoading(i).successLabel) return;
+      if(this.isLoading(i) || this.getLoading(i).success) return;
       
       let emailError;
       let nameError;

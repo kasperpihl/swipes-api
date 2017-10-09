@@ -84,7 +84,7 @@ class GoalOverview extends PureComponent {
   renderGoalCheckBox() {
     const { goal, getLoading, delegate, isLoading, showLine } = this.props;
     const helper = this.getHelper();
-    const title = getLoading('title').loadingLabel;
+    const title = getLoading('title').loading;
 
     return (
       <GoalCheckbox
@@ -97,7 +97,7 @@ class GoalOverview extends PureComponent {
   renderHeader() {
     const { goal, getLoading, delegate, isLoading, showLine } = this.props;
     const helper = this.getHelper();
-    const title = getLoading('title').loadingLabel;
+    const title = getLoading('title').loading;
 
     return (
       <div className={`goal-overview__header ${showLine ? 'goal-overview__header--border' : ''}`}>

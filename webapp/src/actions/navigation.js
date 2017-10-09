@@ -1,9 +1,9 @@
 import * as types from 'constants';
 import { randomString } from 'swipes-core-js/classes/utils';
 
-export const url = (url) => (d, getState) => {
+export const url = (url, options) => (d, getState) => {
   if(getState().getIn(['navigation', 'url']) === url) return;
-  d({ type: types.NAVIGATION_URL, payload: { url } });
+  d({ type: types.NAVIGATION_URL, payload: { url, options } });
 }
 
 export function set(target, obj) {

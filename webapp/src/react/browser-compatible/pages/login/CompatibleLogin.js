@@ -62,7 +62,7 @@ class CompatibleLogin extends PureComponent {
     const { getLoading } = this.props;
     console.lo
     return (
-      <div className="footer__error-label">{getLoading('signInButton').errorLabel}</div>
+      <div className="footer__error-label">{getLoading('signInButton').error}</div>
     )
   }
   renderFooter() {
@@ -70,7 +70,7 @@ class CompatibleLogin extends PureComponent {
 
     return (
       <div className="footer">
-        {getLoading('signInButton').errorLabel && this.renderFormError()}
+        {getLoading('signInButton').error && this.renderFormError()}
         <CompatibleButton title="Log in" onClick={this.onSignin} {...getLoading('signInButton')}/>
         <p className="footer__switch">
           Don't have an account yet? <Link to="/register" className="footer__switch-button">Sign up now</Link>

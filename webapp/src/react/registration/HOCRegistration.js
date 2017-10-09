@@ -136,13 +136,13 @@ class HOCRegistration extends Component {
   }
   renderContent() {
     const { email, password, showWelcomeMessage } = this.state;
-    const errorLabel = this.getLoading('signInButton').errorLabel;
+    const errorLabel = this.getLoading('signInButton').error;
 
     return showWelcomeMessage ? <WelcomeMessage delegate={this} /> : <Signin email={email} password={password} delegate={this} errorLabel={errorLabel} />;
   }
   renderFooter() {
     const { showWelcomeMessage } = this.state;
-    const isLoading = this.getLoading('signInButton').loading;
+    const isLoading = this.isLoading('signInButton');
     let resetClass = 'welcome__reset';
     let continueClass = 'welcome__continue';
 

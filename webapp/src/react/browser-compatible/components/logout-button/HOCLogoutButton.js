@@ -23,21 +23,16 @@ class HOCLogoutButton extends PureComponent {
   onLogout(e) {
     const { isElectron, confirm } = this.props;
 
-    if(isElectron) {
-      const options = { boundingRect: e.target.getBoundingClientRect() };
-      confirm({
-        ...options,
-        title: 'Log out',
-        message: 'Do you want to log out?',
-      }, (i) => {
-        if(i === 1){
-          this.doLogout();
-        }
-      });
-    } else {
-      const result = window.confirm('Do you want to log out?');
-      if(result) this.doLogout();
-    }
+    const options = { boundingRect: e.target.getBoundingClientRect() };
+    confirm({
+      ...options,
+      title: 'Log out',
+      message: 'Do you want to log out?',
+    }, (i) => {
+      if(i === 1){
+        this.doLogout();
+      }
+    });
   }
   doLogout() {
     const { signout } = this.props;
@@ -54,7 +49,7 @@ class HOCLogoutButton extends PureComponent {
 
     return (
       <div className="compatible-logout" onClick={this.onLogout}>
-        {this.getLoading('loggingout').loading ? (
+        {this.isLoading('loggingout') ? (
           <Icon icon="darkloader" width="12" height="12" className="compatible-logout__loading" />
         ) : (
           <div className="compatible-logout__label">Log out</div>

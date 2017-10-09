@@ -83,16 +83,16 @@ class Button extends PureComponent {
     );
   }
   renderResultState() {
-    const { successLabel, errorLabel } = this.props;
+    const { success, error } = this.props;
     let label = '';
     let icon = '';
 
-    if (!successLabel && !errorLabel) {
+    if (!success && !error) {
       return undefined;
     }
 
-    label = successLabel || errorLabel;
-    icon = successLabel ? 'Checkmark' : 'Close';
+    label = success || error;
+    icon = success ? 'Checkmark' : 'Close';
 
     return (
       <div className="g-button__result-state">
@@ -115,9 +115,8 @@ class Button extends PureComponent {
       loadTooltip,
       className: classNameFromButton,
       loading,
-      loadingLabel,
-      errorLabel,
-      successLabel,
+      error,
+      success,
       tooltipLabel,
       ...rest
     } = this.props;
@@ -158,11 +157,11 @@ class Button extends PureComponent {
       className += ' g-button--loading';
     }
 
-    if (errorLabel) {
+    if (error) {
       className += ' g-button--result g-button--error';
     }
 
-    if (successLabel) {
+    if (success) {
       className += ' g-button--result g-button--success';
     }
 
@@ -201,8 +200,8 @@ const { string, bool, func } = PropTypes;
 
 Button.propTypes = {
   onClick: func,
-  errorLabel: string,
-  successLabel: string,
+  error: string,
+  success: string,
   className: string,
   primary: bool,
   icon: string,
@@ -210,7 +209,7 @@ Button.propTypes = {
   small: bool,
   alignIcon: string,
   disabled: bool,
-  loading: bool,
+  loading: string,
   frameless: bool,
 };
 

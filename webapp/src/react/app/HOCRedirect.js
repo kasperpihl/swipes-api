@@ -61,7 +61,7 @@ class HOCRedirect extends PureComponent {
   render() {
     const { location, goToUrl } = this.props;
     if(goToUrl && location.pathname !== goToUrl) {
-      return <Redirect to={goToUrl} push />
+      return <Redirect to={goToUrl} />
     }
     return null;
   }

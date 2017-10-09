@@ -19,7 +19,7 @@ class HOCNotSupported extends PureComponent {
   }
   componentDidMount() {
   }
-  onLeaveOrg() {
+  onLeaveOrg(e) {
     
   }
   render() {

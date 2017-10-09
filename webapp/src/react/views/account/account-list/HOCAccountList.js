@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
+import * as ca from 'swipes-core-js/actions';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -18,7 +19,6 @@ class HOCAccountList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggingOut: false,
       sections: [
         {
           id: 'Profile',
@@ -47,6 +47,7 @@ class HOCAccountList extends PureComponent {
         }
       ].filter(v => !!v),
     };
+    setupLoading(this);
   }
   componentDidMount() {
   }
@@ -59,9 +60,9 @@ class HOCAccountList extends PureComponent {
       message: 'Do you want to log out?',
     }), (i) => {
       if (i === 1) {
-        this.setState({ isLoggingOut: true });
+        this.setLoading('logout');
         signout(() => {
-          this.setState({ isLoggingOut: false });
+          this.clearLoading('logout');
         });
       }
     });
@@ -92,7 +93,7 @@ class HOCAccountList extends PureComponent {
       <AccountList
         sections={sections}
         delegate={this}
-        isLoggingOut={isLoggingOut}
+        {...this.bindLoading()}
       />
     );
   }

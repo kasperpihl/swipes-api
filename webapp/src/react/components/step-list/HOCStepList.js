@@ -66,7 +66,7 @@ class HOCStepList extends PureComponent {
     const { goal, renameStep } = this.props;
     const helper = this.getHelper();
     const step = helper.getStepByIndex(i);
-    if(this.getLoading(step.get('id')).loading){
+    if(this.isLoading(step.get('id'))){
       return;
     }
     this.setLoading(step.get('id'), 'Renaming...');

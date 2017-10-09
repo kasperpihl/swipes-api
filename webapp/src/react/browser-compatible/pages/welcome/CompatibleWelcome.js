@@ -46,7 +46,7 @@ class CompatibleWelcome extends PureComponent {
     )
   }
   renderRow(org) {
-    const { getLoading } = this.props;
+    const { isLoading } = this.props;
     const id = org.get('id');
     const name = org.get('name');
 
@@ -54,7 +54,7 @@ class CompatibleWelcome extends PureComponent {
       <div className="row" key={id}  onClick={this.onOrganizationJoinCached(id)}>
         <div className="row__item row__name">{name}</div>
         <div className="row__item row__button">
-          {getLoading(id).loading ? (
+          {isLoading(id) ? (
             <Icon icon="darkloader" width="12" height="12" />
           ) : (
             'Join'
@@ -86,9 +86,9 @@ class CompatibleWelcome extends PureComponent {
         ])
   }
   renderCreateOrg() {
-    const { getLoading } = this.props;
+    const { isLoading } = this.props;
     const { createText } = this.state;
-    const buttonClass = getLoading('creating').loading ? 'create-org__button create-org__button--loading' : 'create-org__button';
+    const buttonClass = isLoading('creating') ? 'create-org__button create-org__button--loading' : 'create-org__button';
 
     return (
       <div className="create-org">
@@ -105,7 +105,7 @@ class CompatibleWelcome extends PureComponent {
             />
             <div className="create-org__label">Name of organization</div>
             <div className={buttonClass} onClick={this.onCreate}>
-              {getLoading('creating').loading ? (
+              {isLoading('creating') ? (
                 <Icon icon="loader" width="12" height="12" className="create-org__loading" />
               ) : (
                 <Icon icon="ArrowRightLong" className="create-org__svg" />

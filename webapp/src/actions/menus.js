@@ -4,7 +4,12 @@ import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
 import * as cs from 'swipes-core-js/selectors';
 import * as a from './';
 
-export const confirm = (options, callback) => (d) => {
+export const confirm = (options, callback) => (d, getState) => {
+  const isBrowserSupported = getState().getIn(['globals', 'isBrowserSupported']);
+  if(!isBrowserSupported) {
+    const res = window.confirm(options.message || options.title);
+    return callback(res ? 1 : 0);
+  }
   d(a.main.contextMenu({
     options,
     component: Confirmation,
@@ -22,7 +27,34 @@ export const confirm = (options, callback) => (d) => {
   }));
 };
 
-export const input = (options, callback) => (d) => {
+export const alert = (options, callback) => (d, getState) => {
+  const isBrowserSupported = getState().getIn(['globals', 'isBrowserSupported']);
+  if(!isBrowserSupported) {
+    return window.alert(options.message || options.title);
+  }
+  d(a.main.contextMenu({
+    options,
+    component: Confirmation,
+    props: {
+      title: options.title,
+      message: options.message,
+      actions: options.actions || [{ text: 'Okay' }],
+      onClick: (i) => {
+        d(a.main.contextMenu(null));
+        if (callback) {
+          callback(i);
+        }
+      },
+    },
+  }));
+}
+
+export const input = (options, callback) => (d, getState) => {
+  const isBrowserSupported = getState().getIn(['globals', 'isBrowserSupported']);
+  if(!isBrowserSupported) {
+    const res = window.prompt(options.placeholder, options.text);
+    return callback(res);
+  }
   d(a.main.contextMenu({
     options,
     component: InputMenu,

@@ -21,7 +21,7 @@ class HOCCompatibleWelcome extends PureComponent {
   componentDidMount() {
   }
   onOrganizationJoin(orgId, e) {
-    const { joinOrg, setUrl } = this.props;
+    const { joinOrg, setUrl, isElectron } = this.props;
 
     if (this.isJoining) {
       return;
@@ -35,8 +35,9 @@ class HOCCompatibleWelcome extends PureComponent {
       if(!res.ok) {
         this.clearLoading(orgId, '!Something went wrong', 5000);
       } else {
-        this.clearLoading(orgId);
-        setUrl('/download');
+        this.setLoading(orgId, null, 100, () => {
+          isElectron ? setUrl('/') : setUrl('/download');
+        });
       }
     })
   }
@@ -55,8 +56,11 @@ class HOCCompatibleWelcome extends PureComponent {
       if(!res.ok) {
         this.clearLoading('creating', '!Something went wrong', 5000);
       } else {
-        this.clearLoading('creating');
-        setUrl('/invite');
+        console.log('finished');
+        this.setLoading('creating', null, 1000, () => {
+          console.log('change to invite');
+          setUrl('/invite');
+        });
       }
     })
   }
@@ -79,6 +83,7 @@ HOCCompatibleWelcome.propTypes = {};
 
 const mapStateToProps = (state) => ({
   me: state.get('me'),
+  isElectron: state.getIn(['globals', 'isElectron']),
 });
 
 export default connect(mapStateToProps, {

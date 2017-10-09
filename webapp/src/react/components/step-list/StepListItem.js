@@ -41,13 +41,13 @@ class StepListItem extends PureComponent {
     }
   }
   renderEditStep(step, i) {
-    const { delegate, getLoading } = this.props;
+    const { delegate, getLoading, isLoading } = this.props;
     let { title } = this.state;
     title = title || step.get('title');
     let className = 'step-list-item step-list-item--editing';
 
-    if (getLoading(step.get('id')).loading) {
-      title = getLoading(step.get('id')).loadingLabel;
+    if (isLoading(step.get('id'))) {
+      title = getLoading(step.get('id')).loading;
       className += ' step-list-item--loading';
     }
 
@@ -101,7 +101,7 @@ class StepListItem extends PureComponent {
 
     let title = step.get('title');
     if (isLoading(step.get('id'))) {
-      title = getLoading(step.get('id')).loadingLabel;
+      title = getLoading(step.get('id')).loading;
       className += ' step-list-item--loading';
     }
 

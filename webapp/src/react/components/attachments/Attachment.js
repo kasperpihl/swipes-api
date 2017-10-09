@@ -12,7 +12,7 @@ const Attachment = (props) => {
     onContextMenu,
     onClick,
     flagged,
-    loadingLabel,
+    loading,
     enableFlagging,
   } = props;
 
@@ -25,7 +25,7 @@ const Attachment = (props) => {
   if (enableFlagging) {
     className += ' attachment--flagable';
   }
-  if (loadingLabel) {
+  if (loading) {
     className += ' attachment--loading';
   }
 
@@ -36,7 +36,7 @@ const Attachment = (props) => {
           <Icon icon={icon} className="attachment__svg" />
         </div>
         <div className="attachment__words">
-          {loadingLabel || title}
+          {loading || title}
         </div>
       </div>
       <div className="attachment__actions">
@@ -59,7 +59,7 @@ Attachment.propTypes = {
   flagged: bool,
   icon: string,
   title: string,
-  loadingLabel: string,
+  loading: string,
   enableFlagging: bool,
   onFlag: func,
   onContextMenu: func,

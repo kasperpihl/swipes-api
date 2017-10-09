@@ -107,7 +107,7 @@ class HOCCompatibleSignup extends PureComponent {
 
     const { token } = this.props;
     
-    if (this.getLoading('signup').loading) {
+    if (this.isLoading('signup')) {
       return (
         <div className="compatible-signup__loader">
           <img src="https://media.giphy.com/media/cZDRRGVuNMLOo/giphy.gif" alt="" />

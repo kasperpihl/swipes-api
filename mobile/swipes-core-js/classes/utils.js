@@ -576,31 +576,24 @@ export function setupLoading(ctx) {
       _loadingStates,
     }
   }
-  function setLoading(name, label, duration, callback) {
-    if (unmounted) {
-      return;
-    }
-    const newState = { loading: true };
-    if (label) {
-      newState.loadingLabel = label;
-    }
+  function updateLoadingState(name, prop, label, duration, callback) {
+    if (unmounted) return;
+
+    let newState = {};
+    if(prop) newState[prop] = label;
+
     _loadingStates = Object.assign({}, _loadingStates, { [name]: newState });
     ctx.setState({ _loadingStates });
     setClearTimer(name, duration, callback);
   }
+  function setLoading(name, label, duration, callback) {
+    updateLoadingState(name, 'loading', label || 'Loading', duration, callback);
+  }
   function clearLoading(name, label, duration, callback) {
-    if (unmounted) {
-      return;
-    }
-    const newState = { loading: false };
     if (label && label.substr(0, 1) === '!') {
-      newState.errorLabel = label.substr(1);
-    } else if (label) {
-      newState.successLabel = label;
-    }
-    _loadingStates = Object.assign({}, _loadingStates, { [name]: newState });
-    ctx.setState({ _loadingStates });
-    setClearTimer(name, duration, callback);
+      return updateLoadingState(name, 'error', label.substr(1), duration, callback);
+    } 
+    updateLoadingState(name, 'success', label, duration, callback);
   }
   setClearTimer = (name, duration, callback) => {
     clearTimeout(timers[name]);

@@ -24,12 +24,8 @@ export default class IpcListener {
     this.store = store;
     if (isElectron) {
       remote.getCurrentWindow().removeAllListeners();
-      this.isElectron = true;
       ipcRenderer.on('oauth-success', (event, arg) => {
         store.dispatch(ca.me.handleOAuthSuccess(arg.serviceName, arg.queryString));
-      });
-      ipcRenderer.on('alert-message', (event, arg) => {
-        alert(arg.message);
       });
 
       // Deal with windows maximize stuff

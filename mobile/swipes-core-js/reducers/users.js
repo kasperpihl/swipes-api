@@ -43,7 +43,7 @@ export default function usersReducer(state = initialState, action) {
     case 'profile_updated': {
       return state.mergeIn([payload.user_id, 'profile'], fromJS(payload.profile));
     }
-    case 'user_invited':
+    case 'organization_user_invited':
     case 'users.invite':{
       return state.set(payload.user.id, fromJS(payload.user));
     }

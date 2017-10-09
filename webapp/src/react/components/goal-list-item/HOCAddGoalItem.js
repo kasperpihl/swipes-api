@@ -122,7 +122,7 @@ class HOCAddGoalItem extends PureComponent {
 
     if (this.isLoading('add')) {
       addClass += ' add-goal-item--loading';
-      value = this.getLoading('add').loadingLabel;
+      value = this.getLoading('add').loading;
     }
 
     return (

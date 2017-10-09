@@ -133,7 +133,7 @@ class StepList extends PureComponent {
 
     if (isLoading('add')) {
       addClass += ' add-step--loading';
-      value = getLoading('add').loadingLabel;
+      value = getLoading('add').loading;
     }
 
     if (addStepValue.length && !isLoading('add')) {

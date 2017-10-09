@@ -33,9 +33,9 @@ class HOCUnsubscribe extends PureComponent {
     return (
       <div className="unsubscribe">
         <div className="unsubscribe__text">
-          {this.getLoading('unsubscribe').loadingLabel}
-          {this.getLoading('unsubscribe').successLabel}
-          {this.getLoading('unsubscribe').errorLabel}
+          {this.getLoading('unsubscribe').loading}
+          {this.getLoading('unsubscribe').success}
+          {this.getLoading('unsubscribe').error}
         </div>
       </div>
     );

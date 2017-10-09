@@ -92,7 +92,7 @@ class HOCGoalListItem extends PureComponent {
     )
   }
   render() {
-    const { goal, fromMilestone, loadingLabel } = this.props;
+    const { goal, fromMilestone, loading } = this.props;
     const helper = this.getHelper();
     const isActive = !helper.getIsCompleted();
 
@@ -112,7 +112,7 @@ class HOCGoalListItem extends PureComponent {
           <div className="goal-list-item__circle">
             <Icon className="goal-list-item__completed-svg" icon="ChecklistCheckmark" />
           </div>
-          <div className="goal-list-item__title">{loadingLabel || goal.get('title')}</div>
+          <div className="goal-list-item__title">{loading || goal.get('title')}</div>
         </div>
         {/* {this.renderMoveButton()} */}
         <div className="goal-list-item__assigning">

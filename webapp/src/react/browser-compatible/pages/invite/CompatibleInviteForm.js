@@ -19,9 +19,9 @@ class CompatibleInviteForm extends PureComponent {
   }
   componentDidMount() {
   }
-  renderLoader(isLoading, successLabel) {
+  renderLoader(isLoading, success) {
     
-    if (!isLoading && !successLabel) {
+    if (!isLoading && !success) {
       return undefined;
     }
 
@@ -33,7 +33,7 @@ class CompatibleInviteForm extends PureComponent {
       )
     }
 
-    if (successLabel) {
+    if (success) {
       return (
         <div className="input-row__states">
           <Icon icon="ChecklistCheckmark" className="input-row__success" />
@@ -44,11 +44,11 @@ class CompatibleInviteForm extends PureComponent {
   renderInput(i, obj) {
     const { getLoading } = this.props;
     const lState = getLoading(i);
-    const nameError = getLoading(i + 'name').errorLabel;
-    const emailError = getLoading(i + 'email').errorLabel;
-    const isLoading = lState.loading;
-    const successLabel = lState.successLabel;
-    const isDisabled = !!(lState.loading || lState.successLabel);
+    const nameError = getLoading(i + 'name').error;
+    const emailError = getLoading(i + 'email').error;
+    const isLoading = !!lState.loading;
+    const success = lState.success;
+    const isDisabled = !!(lState.loading || lState.success);
 
     const labelTargetForName = `compatible-invite-name-${i}`;
     const labelTargetForEmail = `compatible-invite-email-${i}`;
@@ -98,7 +98,7 @@ class CompatibleInviteForm extends PureComponent {
           </label>
         </div>
 
-        {this.renderLoader(isLoading, successLabel)}
+        {this.renderLoader(isLoading, success)}
       </div>
     )
   }

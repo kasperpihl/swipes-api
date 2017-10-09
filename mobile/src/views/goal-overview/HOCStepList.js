@@ -215,7 +215,7 @@ class HOCStepList extends PureComponent {
     return (
       <View style={styles.container}>
         <ImmutableListView
-          immutableData={steps.map(s => s.set('title', isLoading(s.get('id')) ? getLoading(s.get('id')).loadingLabel : s.get('title')))}
+          immutableData={steps.map(s => s.set('title', isLoading(s.get('id')) ? getLoading(s.get('id')).loading : s.get('title')))}
           renderRow={(step, sectionIndex, stepIndex) => this.renderSteps(step, sectionIndex, stepIndex)}
           renderEmptyInList={this.renderEmpty}
           renderFooter={this.renderListFooter}

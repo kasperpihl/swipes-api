@@ -53,21 +53,21 @@ class Profile extends PureComponent {
     this.setState({ editing: !editing });
   }
   renderLoaderForKey(key) {
-    const { getLoading } = this.props;
+    const { getLoading, isLoading } = this.props;
 
-    if (getLoading(key).loading) {
+    if (isLoading(key)) {
       return (
         <svg className="spinner" viewBox="0 0 50 50">
           <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
         </svg>
       );
-    } else if (getLoading(key).errorLabel) {
+    } else if (getLoading(key).error) {
       return (
-        <div className="profile__error-icon" data-error={getLoading(key).errorLabel}>
+        <div className="profile__error-icon" data-error={getLoading(key).error}>
           <Icon icon="Close" className="profile__svg" />
         </div>
       );
-    } else if (getLoading(key).successLabel) {
+    } else if (getLoading(key).success) {
       return (
         <div className="profile__success-icon">
           <Icon icon="ActivityCheckmark" className="profile__svg" />
@@ -87,8 +87,7 @@ class Profile extends PureComponent {
     );
   }
   renderProfileImage() {
-    const { me, getLoading } = this.props;
-    const isLoading = getLoading('uploadImage').loading;
+    const { me, isLoading } = this.props;
     const initials = msgGen.users.getInitials(me);
     const profilePic = msgGen.users.getPhoto(me);
 
@@ -111,7 +110,7 @@ class Profile extends PureComponent {
           className="profile-header__file-input"
           ref="imageUpload"
         />
-        <div className={`profile-header__loading ${isLoading ? 'profile-header__loading--show' : ''}`}>
+        <div className={`profile-header__loading ${isLoading('uploadImage') ? 'profile-header__loading--show' : ''}`}>
           <svg className="spinner" viewBox="0 0 50 50">
             <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
           </svg>

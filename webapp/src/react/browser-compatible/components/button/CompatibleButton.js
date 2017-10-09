@@ -11,9 +11,8 @@ import './styles/compatible-button.scss';
 const CompatibleButton = (props) => {
   const {
     loading,
-    loadingLabel,
-    errorLabel,
-    successLabel,
+    error,
+    success,
     title,
     onClick
   } = props;

@@ -35,7 +35,7 @@ class AccountList extends PureComponent {
     ));
   }
   render() {
-    const { isLoggingOut } = this.props;
+    const { getLoading } = this.props;
 
     return (
       <SWView noframe header={this.renderHeader()}>
@@ -44,7 +44,7 @@ class AccountList extends PureComponent {
         </div>
         <Button
           icon="Logout"
-          loading={isLoggingOut}
+          {...getLoading('logout')}
           className="account-button"
           onClick={this.onLogout}
         />

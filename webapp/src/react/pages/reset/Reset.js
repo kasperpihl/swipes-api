@@ -63,8 +63,8 @@ class Reset extends PureComponent {
     )
   }
   renderForm() {
-    const successLabel = this.getLoading('reset').successLabel;
-    if(this.isLoading('verify') || successLabel){
+    const success = this.getLoading('reset').success;
+    if(this.isLoading('verify') || success){
       return undefined;
     }
     return (
@@ -107,12 +107,12 @@ class Reset extends PureComponent {
     )
   }
   renderSuccess() {
-    const successLabel = this.getLoading('reset').successLabel;
-    if(!successLabel) {
+    const success = this.getLoading('reset').success;
+    if(!success) {
       return undefined;
     }
     return (
-      <div className="success">{successLabel}</div>
+      <div className="success">{success}</div>
     )
   }
 

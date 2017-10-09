@@ -58,7 +58,7 @@ class MilestoneOverview extends PureComponent {
   }
   renderHeader() {
     const { milestone: m, getLoading, delegate, showLine } = this.props;
-    const title = getLoading('title').loadingLabel;
+    const title = getLoading('title').loading;
     return (
       <div className="milestone-overview__header">
         <HOCHeaderTitle

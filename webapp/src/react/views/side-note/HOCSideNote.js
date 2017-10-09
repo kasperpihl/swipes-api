@@ -251,7 +251,7 @@ class HOCSideNote extends PureComponent {
             editorState={editorState}
             onBlur={this.onBlur}
             delegate={this}
-            disabled={this.getLoading('conflict').loading}
+            disabled={this.isLoading('conflict')}
           />
         </div>
       </SWView>

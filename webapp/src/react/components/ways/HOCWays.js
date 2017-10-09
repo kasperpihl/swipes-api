@@ -69,13 +69,13 @@ class HOCWays extends PureComponent {
     });
   }
   renderLoader() {
-    if (!this.getLoading('way').loading) {
+    if (!this.isLoading('way')) {
       return undefined;
     }
     return <Loader center size={60} />;
   }
   renderTemplates() {
-    if (this.getLoading('way').loading) {
+    if (this.isLoading('way')) {
       return undefined;
     }
     return templates.map((t, i) => (
