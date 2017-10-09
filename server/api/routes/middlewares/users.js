@@ -765,10 +765,14 @@ const usersInvitedUserQueueMessage = valLocals('usersInvitedUserQueueMessage', {
     return next();
   }
 
+  const {
+    id,
+    name,
+  } = organization;
   const userId = user.id;
-  const organizationId = organization.id;
   const queueMessage = {
-    organization_id: organizationId,
+    organization_id: id,
+    organization_name: name,
     user_id: userId,
     event_type: 'user_invited',
   };
