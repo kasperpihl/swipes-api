@@ -26,7 +26,6 @@ class NotSupported extends PureComponent {
 
     return (
       <div className="not-supported__actions">
-        <CompatibleSubHeader title="Invite people"/>
         <div className="not-supported__option-wrapper">
           <div className="not-supported__desc">
             Invite more people to your org, which by the way is Swipes
@@ -35,7 +34,7 @@ class NotSupported extends PureComponent {
             <Link to="/invite" className="not-supported__link">Invite peeps</Link>
           </div>
         </div>
-        <CompatibleSubHeader title="Leave current org"/>
+
         <div className="not-supported__option-wrapper">
           <div className="not-supported__desc">
             You are currently a part of Swipes. If you wish to leave that organization please press the button bellow. After leaving the org, the following things will happen within the org and your account
@@ -48,13 +47,14 @@ class NotSupported extends PureComponent {
     )
   }
   render() {
+    const { subtitle } = this.props;
     return (
       <div className="not-supported">
-        <CompatibleHeader title="Sorry, your browser is not supported" />
-        <CompatibleSubHeader title="Download the app"/>
+        <CompatibleHeader title="Your browser is not supported" subtitle={subtitle} />
+        <CompatibleSubHeader title="You can use one of our apps instead."/>
         <DownloadForDevice />
         <div className="not-supported__empty-space-block" />
-        <CompatibleHeader title="What else can I do?" />
+        <CompatibleSubHeader title="What else can I do?" />
         {this.renderActions()}
         <HOCLogoutButton>
           <div>logout</div>

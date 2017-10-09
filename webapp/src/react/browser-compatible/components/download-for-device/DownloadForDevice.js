@@ -83,7 +83,7 @@ class DownloadForDevice extends PureComponent {
     return (
       <a href={downloadLinks.win32} target="_blank" className="download-for-device__device">
         <Icon icon="WindowsDevice" className="download-for-device__device-svg" />
-        <p>Windows</p>
+        <p>Download for Windows</p>
       </a>
     );
   }
@@ -94,7 +94,7 @@ class DownloadForDevice extends PureComponent {
     return (
       <a href={downloadLinks.darwin} target="_blank" className="download-for-device__device">
         <Icon icon="MacDevice" className="download-for-device__device-svg" />
-        <p>MacOS</p>
+        <p>Download for macOS</p>
       </a>
     );
   }
@@ -105,7 +105,7 @@ class DownloadForDevice extends PureComponent {
     return (
       <a href={downloadLinks.linux} target="_blank" className="download-for-device__device">
         <Icon icon="LinuxDevice" className="download-for-device__device-svg" />
-        <p>Linux</p>
+        <p>Download for Linux</p>
       </a>
     );
   }
@@ -118,7 +118,7 @@ class DownloadForDevice extends PureComponent {
       <div className="download-for-device">
         {this.renderFirst(type)}
         <p className="download-for-device__all-devices">
-          <Link to="/download" className="download-for-device__all-devices-link">See downloads for all platforms</Link>
+          <Link to="/download" className="download-for-device__all-devices-link">See all available platforms</Link>
         </p>
       </div>
     );
