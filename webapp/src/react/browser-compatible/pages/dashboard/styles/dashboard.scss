@@ -59,9 +59,9 @@
   }
 
   #{$b}__label {
-    @include font(60px, $deepBlue-60, 69px, 300); 
+    @include font(60px, $deepBlue-100, 69px); 
     @include size(100%, auto);
-    left: 0; bottom: 48px;
+    left: 0; bottom: 90px;
     position: absolute;
     text-transform: uppercase;
     text-align: center;

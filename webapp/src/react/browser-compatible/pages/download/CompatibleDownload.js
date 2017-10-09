@@ -5,6 +5,7 @@ import Icon from 'Icon';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleBackButton from 'compatible/components/compatible-back-button/CompatibleBackButton';
+import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
 import './styles/download-page.scss';
 
 const downloadLinks = {
@@ -161,6 +162,10 @@ class CompatibleDownload extends PureComponent {
           {this.renderBackButton()}
           <CompatibleHeader title="Awesome! Download the Swipes Workspace" subtitle="Start working with your team from anywhere" />
           {this.renderDownloadSections()}
+          <div className="section">
+            <div className="section-title">Web version</div>
+            <GoToWorkspace noTitle={true} />
+          </div>
         </div>
       </CompatibleCard>
     );

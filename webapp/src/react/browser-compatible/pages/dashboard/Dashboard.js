@@ -12,11 +12,19 @@ import './styles/dashboard.scss';
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      animatedNumbers: true
+    };
     // setupDelegate(this);
     // this.callDelegate.bindAll('onLala');
+    this.toggleNumberState = this.toggleNumberState.bind(this);
   }
   componentDidMount() {
+  }
+  toggleNumberState() {
+    const { animatedNumbers } = this.state;
+
+    this.setState({ animatedNumbers: !animatedNumbers })
   }
   renderHeader() {
     
@@ -24,9 +32,26 @@ class Dashboard extends PureComponent {
     return (
       <div className="dashboard__header">
         <div className="dashboard__title">The Work of Teams. United.</div>
-        <div className="dashboard__logo">
+        <div className="dashboard__logo" onClick={this.toggleNumberState}>
           <Icon icon="SwipesLogoEmpty" className="dashboard__svg" />
         </div>
+      </div>
+    )
+  }
+  renderNumbers() {
+    const { animatedNumbers } = this.state;
+
+    if (animatedNumbers) {
+      return (
+        <div className="card__number">
+          <AnimateNumber number={10000} speed={50}/>
+        </div>
+      )
+    }
+    
+    return (
+      <div className="card__number">
+        0
       </div>
     )
   }
@@ -35,9 +60,7 @@ class Dashboard extends PureComponent {
     return (
       <div className="dashboard__card-wrapper">
         <div className="card">
-          <div className="card__number">
-            <AnimateNumber number={1000} speed={2}/>
-          </div>
+          {this.renderNumbers()}
           <div className="card__label">users</div>
         </div>
       </div>

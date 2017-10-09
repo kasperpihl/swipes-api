@@ -19,8 +19,13 @@
 
 .content-wrapper {
   @include size(100%);
-  @include flex(flex);
+  @include flexContainer('column');
   overflow: hidden;
+
+  &__app {
+    @include size(100%);
+    @include flex(flex);
+  }
 }
 
 .no-select {
