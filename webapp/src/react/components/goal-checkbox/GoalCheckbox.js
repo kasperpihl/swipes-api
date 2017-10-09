@@ -5,6 +5,7 @@ import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
+import RotateLoader from 'components/loaders/RotateLoader';
 import './styles/goal-checkbox.scss';
 
 class GoalCheckbox extends PureComponent {
@@ -34,9 +35,7 @@ class GoalCheckbox extends PureComponent {
       <div className={className} onClick={this.onGoalCheckboxClick}>
         <Icon icon="ChecklistCheckmark" className="goal-checkbox__svg" />
         <div className="goal-checkbox__loader">
-          <svg className="goal-checkbox__spinner" viewBox="0 0 50 50">
-            <circle className="goal-checkbox__path" cx="25" cy="25" r="20" fill="none" />
-          </svg>
+          <RotateLoader size={30} />
         </div>
       </div>
     )

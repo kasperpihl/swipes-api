@@ -10,6 +10,7 @@ import { setupLoading, bindAll, toUnderscore } from 'swipes-core-js/classes/util
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import RotateLoader from 'components/loaders/RotateLoader';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import Button from 'Button';
 import './styles/add-goal-item.scss';
@@ -140,7 +141,9 @@ class HOCAddGoalItem extends PureComponent {
           options={this.acOptions}
         />
         <div className="add-goal-item__indicator">
-          <div className="add-goal-item__loader" />
+          <div className="add-goal-item__loader">
+            <RotateLoader size={24} />
+          </div>
         </div>
         <div className="add-goal-item__assignees">
           <HOCAssigning

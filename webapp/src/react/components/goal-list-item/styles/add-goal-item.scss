@@ -72,30 +72,8 @@
   &__loader {
     @include size(24px);
     border-radius: 50%;
-
-    &:before {
-      @include size(24px);
-      background-color: $blue-100;
-      border-radius: 50%;
-      content: '';
-      left: 0; top: 0;
-      opacity: 0;
-      position: absolute;
-      transition: .2s ease;
-      clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-    }
-
-    &:after {
-      @include size(18px);
-      background-color: $bg;
-      border-radius: 50%;
-      content: '';
-      left: 3px; top: 3px;
-      opacity: 0;
-      position: absolute;
-      transition: .2s .2s ease;
-    }
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -136,17 +114,8 @@
     }
 
     #{$b}__loader {
-      animation: rotateAddLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
-
-      &:before {
-        opacity: 1;
-        transition: .2s .2s ease;
-      }
-
-      &:after {
-        opacity: 1;
-        transition: 0s .2s ease;
-      }
+      opacity: 1;
+      transition: .2s;
     }
   }
 }

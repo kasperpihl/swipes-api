@@ -29,25 +29,13 @@
   }
 
   &__loader {
-    @include size(36px);
+    @include size(30px);
     opacity: 0;
     pointer-events: none;
     transition: .2s ease;
     position: absolute;
     left: -2px; top: -2px;
   }
-
-  &__spinner {
-    @include size(36px);
-    @include svg-color($blue-100);
-    animation: rotateSpinner 2s linear infinite;
-  }
-
-  &__path {
-		stroke-linecap: round;
-    animation: dashSpinner 1.5s ease infinite;
-    stroke-width: 3;
-	}
 }
 
 // ======================================================
@@ -92,30 +80,5 @@
     background-color: rgba($green-color, 0);
     border-color: rgba($green-color, 0);
     transition: .2s ease;
-  }
-}
-
-// ======================================================
-// Animations
-// ======================================================
-
-@keyframes rotateSpinner {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes dashSpinner {
-  0% {
-    stroke-dasharray: 1, 150;
-    stroke-dashoffset: 0;
-  }
-  50% {
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -35;
-  }
-  100% {
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -124;
   }
 }

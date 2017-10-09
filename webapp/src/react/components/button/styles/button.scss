@@ -326,35 +326,8 @@ $borderColor: $deepBlue-10;
 .g-button {
   $b: &;
 
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0;
-    @include size($btnSize);
-    border: 0px solid $primaryColor;
-    border-radius: 50%;
-    border-width: 3px;
-    border-color: $deepBlue-10;
-    opacity: 0;
-    transition: .2s ease;
-  }
-
-  &:after {
-    content: '';
-    position: absolute;
-    left: 0; top: 0;
-
-    @include size($smallBtn);
-    border: 0px solid $primaryColor;
-    border-radius: 50%;
-    transform: rotate(-45deg);
-    clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-    -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-    opacity: 0;
-    transition: .3s -.3s ease;
-  }
-  &:not(&--small):after {
-    @include size($btnSize);
+  #{$b}__loader {
+    display: none;
   }
 
   &--loading {
@@ -363,27 +336,13 @@ $borderColor: $deepBlue-10;
     transition: all .3s ease, border-width .3s ease, border-color .3s .5s ease;
     pointer-events: none;
 
-    &:hover {
-      background-color: $bg;
+    #{$b}__loader {
+      padding: 1px;
+      display: block;
     }
 
-    &:before {
-      opacity: 1;
-      transition: .3s .5s ease;
-    }
-    &:after {
-      content: '';
-      position: absolute;
-      left: 0; top: 0;
-      @include size($btnSize);
-      border: 3px solid $primaryColor;
-      border-radius: 50%;
-      transform: rotate(-45deg);
-      clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-      opacity: 1;
-      transition: border-width .15s .25s ease, opacity .15s .25s ease;
-      animation: rotateBtnLoader 1s .25s cubic-bezier(.56,.31,.52,.78) infinite;
+    & > *:not(#{$b}__loader) {
+      display: none;
     }
 
     #{$b}__text {
@@ -398,29 +357,6 @@ $borderColor: $deepBlue-10;
     }
 
 
-  }
-
-  &#{&}--small#{&}--loading {
-
-    &:before {
-      @include size(28px);
-      left: 2px; top: 2px;
-    }
-
-    &:after {
-      left: 2px; top: 2px;
-      @include size($smallBtn - 2px);
-    }
-  }
-}
-
-@keyframes rotateBtnLoader {
-  from {
-    transform: rotate(-45deg);
-  }
-
-  to {
-    transform: rotate(315deg);
   }
 }
 

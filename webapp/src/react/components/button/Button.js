@@ -8,6 +8,7 @@ import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
 // import { fromJS } from 'immutable';
 import Icon from 'Icon';
 import ButtonTooltip from './ButtonTooltip';
+import RotateLoader from 'components/loaders/RotateLoader';
 import './styles/button.scss';
 
 const MIN_TIME = 1000;
@@ -173,6 +174,8 @@ class Button extends PureComponent {
       className += ` ${classNameFromButton}`;
     }
 
+    const loaderSize = small ? 28 : 34;
+
     return (
       <a
         ref="button"
@@ -186,6 +189,9 @@ class Button extends PureComponent {
         {this.renderIcon()}
         {this.renderText()}
         {this.renderResultState()}
+        <div className="g-button__loader">
+          <RotateLoader size={loaderSize} />
+        </div>
       </a>
     );
   }

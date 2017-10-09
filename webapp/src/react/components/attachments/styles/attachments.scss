@@ -21,39 +21,6 @@
 
 .attachments {
 
-  &__loader {
-    @include size(24px);
-    border-radius: 50%;
-    opacity: 0;
-    transition: .2s;    
-    position: absolute;
-    pointer-events: none;
-
-    &:before {
-      @include size(24px);
-      position: absolute;
-      left: 0; top: 0;
-      content: '';
-      border-radius: 50%;
-      background-color: $blue-100;
-      clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-      -webkit-clip-path: polygon(100% 0, 100% 50%, 50% 50%, 50% 0);
-      opacity: 0;
-      transition: .2s ease;
-    }
-
-    &:after {
-      @include size(18px);
-      position: absolute;
-      left: 3px; top: 3px;
-      content: '';
-      border-radius: 50%;
-      background-color: $bg;
-      opacity: 0;
-      transition: .2s .2s ease;
-    }
-  }
-
   &__svg {
     @include size(24px);
     @include svg-color($blue-100);
