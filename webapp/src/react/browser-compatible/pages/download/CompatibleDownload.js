@@ -109,31 +109,58 @@ class CompatibleDownload extends PureComponent {
 
     return <CompatibleBackButton />;
   }
+  renderDownloadSections() {
+    const isMobile = this.mobileCheck();
+
+    if (isMobile) {
+      return ([
+        <div className="section section--coming-soon" key="mobile">
+          <div className="section-title">Mobile (In beta)</div>
+          <div className="device-wrapper">
+            <a href={downloadLinks.ios} target="_blank" className="device">
+              <Icon icon="IphoneDevice" className="device-svg" />
+              <p>iOS</p>
+            </a>
+            <a href={downloadLinks.android} target="_blank" className="device">
+              <Icon icon="AndroidDevice" className="device-svg" />
+              <p>Android</p>
+            </a>
+          </div>
+        </div>,
+        <div className="section" key="desktop">
+          <div className="section-title">Desktop</div>
+          {this.renderDesktopDownloads()}
+        </div>
+      ])
+    }
+
+    return ([
+      <div className="section" key="desktop">
+        <div className="section-title">Desktop</div>
+        {this.renderDesktopDownloads()}
+      </div>,
+      <div className="section section--coming-soon" key="mobile">
+        <div className="section-title">Mobile (In beta)</div>
+        <div className="device-wrapper">
+          <a href={downloadLinks.ios} target="_blank" className="device">
+            <Icon icon="IphoneDevice" className="device-svg" />
+            <p>iOS</p>
+          </a>
+          <a href={downloadLinks.android} target="_blank" className="device">
+            <Icon icon="AndroidDevice" className="device-svg" />
+            <p>Android</p>
+          </a>
+        </div>
+      </div>
+    ])
+  }
   render() {
     return (
       <CompatibleCard>
         <div className="download-page">
           {this.renderBackButton()}
           <CompatibleHeader title="Awesome! Download the Swipes Workspace" subtitle="Start working with your team from anywhere" />
-          <div className="section">
-            <div className="section-title">Desktop</div>
-            {this.renderDesktopDownloads()}
-          </div>
-
-          <div className="section section--coming-soon">
-            <div className="section-title">Mobile (In beta)</div>
-
-            <div className="device-wrapper">
-              <a href={downloadLinks.ios} target="_blank" className="device">
-                <Icon icon="IphoneDevice" className="device-svg" />
-                <p>iOS</p>
-              </a>
-              <a href={downloadLinks.android} target="_blank" className="device">
-                <Icon icon="AndroidDevice" className="device-svg" />
-                <p>Android</p>
-              </a>
-            </div>
-          </div>
+          {this.renderDownloadSections()}
         </div>
       </CompatibleCard>
     );
