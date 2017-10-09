@@ -7,6 +7,7 @@ import { setupDelegate } from 'react-delegate';
 // import Button from 'Button';
 import { Link } from 'react-router-dom';
 import Icon from 'Icon';
+import RotateLoader from 'components/loaders/RotateLoader';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import DownloadForDevice from 'compatible/components/download-for-device/DownloadForDevice';
@@ -23,8 +24,9 @@ class NotSupported extends PureComponent {
   componentDidMount() {
   }
   renderLeaveOrDelete() {
-    const { me, organization } = this.props;
+    const { me, organization, isLoading } = this.props;
     const isOwner = me.get('id') === organization.get('owner_id');
+
 
     let desc = `Leave the organization: ${organization.get('name')}. You will be available to join a new organization.`;
     let buttonTitle = 'Leave organization'; 
@@ -37,6 +39,7 @@ class NotSupported extends PureComponent {
         <div className="not-supported__desc">{desc}</div>
         <div className="not-supported__option-title">
           <a className="not-supported__link" onClick={this.onLeaveOrg}>{buttonTitle}</a>
+          {isLoading && isLoading('delete') && <RotateLoader size={19} />}
         </div>
       </div>
     )
@@ -68,9 +71,7 @@ class NotSupported extends PureComponent {
         <div className="not-supported__empty-space-block" />
         <CompatibleSubHeader title="What else can I do?" />
         {this.renderActions()}
-        <HOCLogoutButton>
-          <div>logout</div>
-        </HOCLogoutButton>
+        <HOCLogoutButton />
       </div>
     );
   }

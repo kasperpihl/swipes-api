@@ -28,8 +28,18 @@
 
   }
 
+  &__option-title {
+    display: table;
+
+    & > * {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+
   &__link {
     @include font($c: $blue-100);
+    padding-right: 9px;
 
     &:hover {
       text-decoration: underline;
