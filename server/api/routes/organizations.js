@@ -14,8 +14,10 @@ import {
   organizationsDemoteAnAdmin,
   organizationsUpdatedQueueMessage,
   organizationsCheckOwnerRights,
+  organizationsCheckOwnerRightsNot,
   organizationsTransferOwnership,
   organizationsDisableUser,
+  organizationsDisableAllUsers,
   organizationsEnableUser,
   organizationsCreateStripeCustomer,
   organizationsCheckOwnerDisabledUser,
@@ -26,7 +28,6 @@ import {
   organizationsCancelSubscription,
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
-  organizationsCheckOwnerRightsNot,
   organizationsChangeStripeCustomerEmail,
 } from './middlewares/organizations';
 import {
@@ -311,6 +312,20 @@ authed.all(
   valResponseAndSend({
     organization: object.require(),
   }),
+);
+
+authed.all(
+  '/organizations.delete',
+  valBody({
+    organization_id: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckOwnerRights,
+  organizationsCancelSubscription,
+  organizationsDisableAllUsers,
+  // usersLeaveOrganizationQueueMessage,
+  // notificationsPushToQueue,
+  valResponseAndSend(),
 );
 
 notAuthed.all(
