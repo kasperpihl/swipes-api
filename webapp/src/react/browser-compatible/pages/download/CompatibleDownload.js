@@ -174,6 +174,7 @@ class CompatibleDownload extends PureComponent {
           {this.renderBackButton()}
           <CompatibleHeader title="Awesome! Download the Swipes Workspace" subtitle="Start working with your team from anywhere" />
           {this.renderDownloadSections()}
+          {this.renderWebSection()}
         </div>
       </CompatibleCard>
     );

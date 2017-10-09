@@ -30,15 +30,26 @@ class ScreenSizeOverlay extends PureComponent {
   updateWindowDimensions() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    console.log('hi', width, height);
+
     if ((width < 800 || height < 600) && !this.state.tooSmall) {
       this.setState({ tooSmall: true })
     } else if ((width >= 800 && height >= 600) && this.state.tooSmall) {
       this.setState({ tooSmall: false })
     }
+
+    this.setState({ width, height });
+  }
+  renderCurrentSize() {
+    const { width, height } = this.state;
+    
+    return (
+      <div className="screen-size-overlay__current-size">
+        {`${width}x${height}`}
+      </div>
+    )
   }
   render() {
-    const { tooSmall } = this.state;
+    const { tooSmall, width, height } = this.state;
     let className = 'screen-size-overlay';
 
     if (tooSmall) className += ' screen-size-overlay--too-small';
@@ -52,6 +63,7 @@ class ScreenSizeOverlay extends PureComponent {
         <div className="screen-size-overlay__subtitle">
           The minimum supported size is 800x600 pixels
         </div>
+        {this.renderCurrentSize()}
       </div>
     );
   }

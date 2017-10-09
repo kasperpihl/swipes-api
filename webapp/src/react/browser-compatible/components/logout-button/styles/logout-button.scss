@@ -6,6 +6,10 @@ $btnSize: 36px;
 $iconSize: 24px;
 $loaderSize: 12px;
 
+// ======================================================
+// Block
+// ======================================================
+
 .compatible-logout {
   @include size(auto, $btnSize);
   border: 1px solid $deepBlue-50;
@@ -15,6 +19,10 @@ $loaderSize: 12px;
   transition: .2s ease;
 }
 
+// ======================================================
+// Elements
+// ======================================================
+
 .compatible-logout {
 
   &__label {
@@ -22,18 +30,42 @@ $loaderSize: 12px;
     padding: 0 15px; 
   }
 
-  &__loading {
-    @include size($loaderSize);
-    left: ($btnSize / 2) - ($loaderSize / 2) - 1px;
-    top: ($btnSize / 2) - ($loaderSize / 2) - 1px;
-    position: absolute;
+  &__loader {
+    @include size($btnSize);
+    display: none;
   }
 }
 
+// ======================================================
+// Modifiers
+// ======================================================
+
+.compatible-logout {
+  $b: &;
+
+  &#{&}--loading {
+    border: none;
+
+    #{$b}__label {
+      display: none;
+    }
+    
+    #{$b}__loader {
+      display: block;
+    }
+  }
+}
+
+// ======================================================
+// Hovers
+// ======================================================
+
 .compatible-logout {
 
-  &:hover {
-    background-color: $deepBlue-6;
-    transition: .2s ease;
+  &:not(&#{&}--loading) {
+    &:hover {
+      background-color: $deepBlue-6;
+      transition: .2s ease;
+    }
   }
 }

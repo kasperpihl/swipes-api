@@ -8,6 +8,7 @@ import * as a from 'actions';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
+import RotateLoader from 'components/loaders/RotateLoader';
 import Icon from 'Icon';
 import './styles/logout-button.scss'
 
@@ -46,14 +47,16 @@ class HOCLogoutButton extends PureComponent {
     return <div>Loading</div>;
   }
   render() {
+    let className = 'compatible-logout';
+
+    if (this.isLoading('loggingout')) className += ' compatible-logout--loading'
 
     return (
-      <div className="compatible-logout" onClick={this.onLogout}>
-        {this.isLoading('loggingout') ? (
-          <Icon icon="darkloader" width="12" height="12" className="compatible-logout__loading" />
-        ) : (
-          <div className="compatible-logout__label">Log out</div>
-        )}
+      <div className={className} onClick={this.onLogout}>
+        <div className="compatible-logout__loader">
+          <RotateLoader size={36} />
+        </div>  
+        <div className="compatible-logout__label">Log out</div>
       </div>
     )
   }

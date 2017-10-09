@@ -13,6 +13,10 @@
     display: none;
   }
 
+  &__current-size {
+    display: none;
+  }
+
   &#{&}--too-small {
     @include size(100%);
     @include flexContainer('column', center, center);
@@ -33,6 +37,15 @@
       margin-top: 12px;
       display: block;
       text-align: center;
+    }
+
+    #{$b}__current-size {
+      @include font(12px, white); 
+      background-color: $red-80;
+      display: block;
+      position: fixed;
+      right: 0; top: 0;
+      padding: 9px 15px;
     }
   }
 }
