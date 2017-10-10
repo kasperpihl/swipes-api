@@ -30,6 +30,9 @@ const View = SwipesStyles('div', {
     '& + &': {
       'background': 'green',
     },
+    ':hover': {
+
+    },
     '& ~ #{siblingRef}': {
       'background': 'purple',
     },
