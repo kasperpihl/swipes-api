@@ -308,6 +308,21 @@ const organization_user_invited = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const organization_deleted = notifyWrapper([
+  organizations.organizationsDeletedNotificationData,
+  (req, res, next) => {
+    const {
+      users_to_notify,
+    } = res.locals;
+
+    res.locals.user_ids = users_to_notify;
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+
 const post_created = notifyWrapper([
   posts.postsGetSingle,
   posts.postCreatedNotificationData,
@@ -524,6 +539,7 @@ export {
   organization_updated,
   organization_created,
   organization_user_invited,
+  organization_deleted,
   post_created,
   post_comment_added,
   post_reaction_added,

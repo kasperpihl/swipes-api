@@ -39,9 +39,20 @@ const organizationsUsersInvitedNotificationData = (req, res, next) => {
 
   return next();
 };
+const organizationsDeletedNotificationData = (req, res, next) => {
+  const {
+    organization_id,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = { organization_id };
+
+  return next();
+};
 
 export {
   organizationsGetSingle,
   organizationsCreatedUpdatedNotificationData,
   organizationsUsersInvitedNotificationData,
+  organizationsDeletedNotificationData,
 };

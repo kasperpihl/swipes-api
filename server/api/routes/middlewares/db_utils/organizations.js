@@ -212,7 +212,10 @@ const dbOrganizationsDisableAllUsers = funcWrap([
             pending_organizations: user('pending_organizations').default([]).difference([organization_id]),
             updated_at: r.now(),
           };
-        });
+        })
+          .do(() => {
+            return result;
+          });
       });
 
   return db.rethinkQuery(q);
