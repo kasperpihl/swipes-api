@@ -320,7 +320,6 @@ const organization_deleted = notifyWrapper([
     return next();
   },
   notify.notifyMultipleUsers,
-  notify.notifySendEventToAllInCompany,
 ]);
 
 const post_created = notifyWrapper([
