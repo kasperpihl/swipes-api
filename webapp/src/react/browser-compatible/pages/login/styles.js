@@ -24,7 +24,7 @@ const SwipesStyles = (EL, styles) => {
     styles = { default: styles };
   }  
 
-  const className = `.${EL}-${Math.random().toString(36).slice(2)}`;
+  const className = `${EL}-${Math.random().toString(36).slice(2)}`;
   const styleHandler = new StyleDomHandler(className, styles);
 
   class StyledElement extends PureComponent {
@@ -38,16 +38,26 @@ const SwipesStyles = (EL, styles) => {
       styleHandler.subscribe(nextProps, this.props);
     }
     render() {
-      const {
-        className:cN,
-        ...rest,
-      } = this.props;
 
-      return <EL className={className} {...rest}>{this.props.children}</EL>;
+      const variables = styleHandler.getVariables();
+      let computedClassName = className;
+      variables.forEach(vari => {
+        if(this.props[vari]) {
+          computedClassName += ` ${vari}`;
+        }
+      });
+      const newProps = {};
+      Object.entries(this.props).forEach(([name, value]) => {
+        if(name !== 'className' && variables.indexOf(name) === -1) {
+          newProps[name] = value;
+        }
+      })
+
+      return <EL className={computedClassName} {...newProps}>{this.props.children}</EL>;
     }
   }
 
-  StyledElement.ref = className;
+  StyledElement.ref = `.${className}`;
 
   return StyledElement;
 }

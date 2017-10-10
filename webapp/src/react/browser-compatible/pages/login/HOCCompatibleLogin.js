@@ -11,30 +11,28 @@ import { connect } from 'react-redux';
 
 import SwipesStyles from './styles';
 
-let size = '60px';
-
 const View = SwipesStyles('div', {
   default : {
     'width': '100px',
     'height': '100px',
     'background': 'red',
     'animation': 'example 5s linear 2s infinite alternate',
-    '@keyframes example': {
-      'from': {
-        'transform': 'rotate(0deg)'
-      },
-      'to': {
-        'transform': 'rotate(360deg)'
-      }
-    },
+    // '@keyframes example': {
+    //   'from': {
+    //     'transform': 'rotate(0deg)'
+    //   },
+    //   'to': {
+    //     'transform': 'rotate(360deg)'
+    //   }
+    // },
     '& + &': {
-      'background': 'green',
+      'background': 'purple',
     },
     ':hover': {
 
     },
     '& ~ #{siblingRef}': {
-      'background': 'purple',
+      'background': 'black',
     },
     '& > #{siblingRef}': {
       'background': 'yellow',
@@ -47,17 +45,17 @@ const View = SwipesStyles('div', {
     },
     '&::placeholder': {
       'color': 'green',
-    }
+    },
     '&:after': {
       'content': '&'
-    }
-    '@media (max-width: 600px)': {
-      'width': '600px',
-
-      '& #{childRef}' : {
-        'width': '10px',
-      }
     },
+    // '@media (max-width: 600px)': {
+    //   'width': '600px',
+
+    //   '& #{childRef}' : {
+    //     'width': '10px',
+    //   }
+    // },
   },
   small: {
     'width': '50px',
@@ -66,6 +64,9 @@ const View = SwipesStyles('div', {
 
     '& ~ #{siblingRef}': {
       'background': 'gray',
+    },
+    '& + &': {
+      'background': 'purple',
     },
   }
 });
@@ -136,9 +137,11 @@ class HOCCompatibleLogin extends PureComponent {
   componentDidMount() {
   }
   render() {
-
     return (
-      <View small>hi</View>
+      <div>
+        <View>hi</View>
+        <View siblingRef={View.ref}>hi</View>
+      </div>
     );
   }
 }

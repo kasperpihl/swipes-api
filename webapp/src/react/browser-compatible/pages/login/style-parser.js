@@ -9,7 +9,7 @@ export default class StyleParser {
   
 
   getPropValuesForKey(key) {
-    return (this.props[key] && this.props[key].map((prop) => prop.value)) || [];
+    return (this.props[key] && Object.keys(this.props[key])) || [];
   }
   printStyleSheet() {
     let styleString = '';
@@ -21,8 +21,8 @@ export default class StyleParser {
   parseValue(target, value) {
     
   }
-  generateStyle(target, styles) {
-    target = target.replace(/&/gi, this.className);
+  generateStyle(target, styles, prop) {
+    target = target.replace(/&/gi, '.' + this.className + (prop || ''));
     let targets = [ target ];
 
     const mutatedStyles = Object.assign({}, styles);
@@ -30,17 +30,16 @@ export default class StyleParser {
       // console.log(key, typeof val, val);
       if(typeof val === 'object') {
         delete mutatedStyles[key];
-        return this.generateStyle(key, val);
+        return this.generateStyle(key, val, prop);
       }
     });
 
     const matches = target.match(VARREGEX);
     if(matches && matches.length) {
       if(matches.length > 1) return console.warn('We only support one variable pr key');
-      const propValues = this.getPropValuesForKey(matches[0]);
+      const propValues = this.getPropValuesForKey(matches[0].substr(2, matches[0].length - 3));
       targets = propValues.map(prop => target.replace(VARREGEX, prop));
     }
-    console.log('mutated', mutatedStyles);
 
     if(targets.length && Object.keys(mutatedStyles).length) {
       targets.forEach(target => this.styleArray.push({ target, value: mutatedStyles }));
@@ -50,11 +49,11 @@ export default class StyleParser {
     this.props = props;
     Object.entries(this.styles).forEach(([key, val]) => {
       if(key === 'default') {
-        this.generateStyle(this.className, val);
+        this.generateStyle('.' + this.className, val);
       } else {
-        this.generateStyle(this.className + '.' + key, val);
+        this.generateStyle('.' + this.className + '.' + key, val, '.' + key);
       }
     });
-    console.log(this.printStyleSheet());
+    return this.printStyleSheet();
   }
 }
