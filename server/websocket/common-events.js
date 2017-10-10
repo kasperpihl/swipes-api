@@ -15,7 +15,7 @@ const commonEvents = (socket, userId) => {
     r.table('events')
       .filter((e) => {
         return e('user_id').eq(userId)
-              .and(r.expr(specialEvents).contains(e('type')).not());
+          .and(r.expr(specialEvents).contains(e('type')).not());
       })
       .changes();
 
