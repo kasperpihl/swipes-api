@@ -18,7 +18,7 @@ export default class Socket {
     const state = this.store.getState();
     this.token = state.getIn(['connection', 'token']);
 
-    const forceFullFetch = getState().getIn(['connection', 'forceFullFetch']);
+    const forceFullFetch = state.getIn(['connection', 'forceFullFetch']);
 
     if (this.isSocketConnected && (!this.token || forceFullFetch)) {
       this.forceClose();
@@ -60,7 +60,7 @@ export default class Socket {
     this.timer = setTimeout(this.connect.bind(this), time);
   }
   connect() {
-    const { getStore } = this.store;
+    const { getState } = this.store;
     let url = getState().getIn(['globals', 'apiUrl']);
     
     if (!url) {
@@ -114,7 +114,7 @@ export default class Socket {
   }
   fetchInit() {
     this.isSocketConnected = true;
-    const { getStore } = this.store;
+    const { getState } = this.store;
     const forceFullFetch = getState().getIn(['connection', 'forceFullFetch']);
     const withoutNotes = getState().getIn(['globals', 'withoutNotes']);
 

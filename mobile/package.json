@@ -18,7 +18,7 @@
     "react": "16.0.0-alpha.12",
     "react-delegate": "^1.0.3",
     "react-immutable-proptypes": "^2.1.0",
-    "react-native": "^0.48.1",
+    "react-native": "^0.48.4",
     "react-native-android-back-button": "^0.3.0",
     "react-native-autogrow-textinput": "^4.1.0",
     "react-native-browser": "^0.6.2",
