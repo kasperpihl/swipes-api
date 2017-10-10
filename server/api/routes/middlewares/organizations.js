@@ -2,6 +2,7 @@ import config from 'config';
 import r from 'rethinkdb';
 import {
   string,
+  array,
   object,
 } from 'valjs';
 import stripePackage from 'stripe';
@@ -432,11 +433,40 @@ const organizationsDisableAllUsers = valLocals('organizationsDisableAllUsers', {
 
   dbOrganizationsDisableAllUsers({ organization_id })
     .then((result) => {
+      const oldVal = result.changes[0].old_val;
+      const users = oldVal.active_users.concat(oldVal.pending_users);
+
+      setLocals({
+        users_to_notify: users,
+      });
+
       return next();
     })
     .catch((err) => {
       return next(err);
     });
+});
+const organizationsDeletedQueueMessage = valLocals('organizationsDeletedQueueMessage', {
+  users_to_notify: array.require(),
+  organization_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    users_to_notify,
+    organization_id,
+  } = res.locals;
+
+  const queueMessage = {
+    users_to_notify,
+    organization_id,
+    event_type: 'organization_deleted',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: organization_id,
+  });
+
+  return next();
 });
 const organizationsActivateUser = valLocals('organizationsActivateUser', {
   organization_id: string.require(),
@@ -800,4 +830,5 @@ export {
   organizationsCheckOwnerRightsNot,
   organizationsUsersInvitedUserQueueMessage,
   organizationsChangeStripeCustomerEmail,
+  organizationsDeletedQueueMessage,
 };

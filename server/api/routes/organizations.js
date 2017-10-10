@@ -29,6 +29,7 @@ import {
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
   organizationsChangeStripeCustomerEmail,
+  organizationsDeletedQueueMessage,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
@@ -323,8 +324,8 @@ authed.all(
   organizationsCheckOwnerRights,
   organizationsCancelSubscription,
   organizationsDisableAllUsers,
-  // usersLeaveOrganizationQueueMessage,
-  // notificationsPushToQueue,
+  organizationsDeletedQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend(),
 );
 
