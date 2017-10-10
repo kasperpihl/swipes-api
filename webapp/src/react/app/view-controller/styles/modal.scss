@@ -21,6 +21,7 @@
 .modal {
 
   &__content {
+    @include size(90%, auto);
     @include widthSpecifications(initial, 540px);
     @include heightSpecifications(initial, 400px);
     background-color: $bg;

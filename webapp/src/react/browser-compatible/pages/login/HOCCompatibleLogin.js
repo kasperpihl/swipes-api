@@ -45,6 +45,16 @@ const View = SwipesStyles('div', {
     '&::placeholder': {
       'color': 'green',
     }
+    '&:after': {
+      'content': '&'
+    }
+    '@media (max-width: 600px)': {
+      'width': '600px',
+
+      '& #{childRef}' : {
+        'width': '10px',
+      }
+    },
   },
   small: {
     'width': '50px',
@@ -95,6 +105,12 @@ const View = SwipesStyles('div', {
 //     }
 //     to {
 //       transform: rotate(360deg)
+//     }
+//   }
+
+//   @media (max-width: 600px) {
+//     .view {
+//       width: 600px;
 //     }
 //   }
 
