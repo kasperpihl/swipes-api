@@ -29,12 +29,13 @@ const SwipesStyles = (EL, styles) => {
         ...rest,
       } = this.props;
 
-      return <EL className={`${cN} ${className}`} {...rest}>{this.props.children}</EL>;
+      return <EL className={`${cN}`} {...rest}>{this.props.children}</EL>;
     }
   }
 
   return StyledElement;
 }
-StyledElement.ref = cN;
+
+// StyledElement.ref = cN;
 
 export default SwipesStyles;

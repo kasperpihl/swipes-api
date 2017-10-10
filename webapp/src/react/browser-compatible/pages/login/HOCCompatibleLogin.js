@@ -11,64 +11,100 @@ import { connect } from 'react-redux';
 
 import SwipesStyles from './styles';
 
-const WrapperView = SwipesStyles('div', {
-  width: '100px',
-  height: '100px',
-  background: 'red',
-  
-  after: {
+let size = '60px';
 
-  },
-  before: {
-
-  }
-});
-const FlexContainer = SwipesStyles('div', {
-  width: '100px',
-  height: '100px',
-  background: 'red',
-});
-
-const WrapperCell = SwipesStyles('div', {
-  width: '100px',
-  height: '100px',
-  background: 'red',
-
-  hover: {
-    children: 'WrapperItem'
-  }
-});
-const WrapperItem = SwipesStyles('span', {
-  default: {
-    background: 'green',
-    '#{hoverRef}:first-child': {
-      ':hover': {
+const View = SwipesStyles('div', {
+  default : {
+    'width': '100px',
+    'height': '100px',
+    'background': 'red',
+    'animation': 'example 5s linear 2s infinite alternate',
+    '@keyframes example': {
+      'from': {
+        'transform': 'rotate(0deg)'
       },
-      background: 'blue',
+      'to': {
+        'transform': 'rotate(360deg)'
+      }
+    },
+    '& + &': {
+      'background': 'green',
+    },
+    '& ~ #{siblingRef}': {
+      'background': 'purple',
+    },
+    '& > #{siblingRef}': {
+      'background': 'yellow',
+    },
+    '& #{siblingRef}': {
+      'background': 'pink',
+    },
+    '&:not(& + #{siblingRef})': {
+      'color': 'darkblue',
     },
   },
-  disabled: {
-    background: 'black'
+  small: {
+    'width': '50px',
+    'height': '50px',
+    'background': 'green',
   }
-})
+});
+
+// <style>
+//   .view {
+//     width: 100px;
+//     height: 100px;
+//     background: red;
+//     animation: example 5s linear 2s infinite alternate;
+//   }
+
+//   .view + .view {
+//     background: green;
+//   }
+
+//   .view ~ .siblingRef {
+//     background: purple;
+//   }
+
+//   .view > .siblingRef {
+//     background: yellow;
+//   }
+
+//   .view .siblingRef {
+//     background: pink;
+//   }
+
+//   .view:not(.view + .siblingRef) {
+//     color: darkblue;
+//   }
+
+//   @keyframes example {
+//    from {
+//       transform: rotate(0deg)
+//     }
+//     to {
+//       transform: rotate(360deg)
+//     }
+//   }
+
+//   .view.small {
+//     width: 50px;
+//     height: 50px;
+//     background: green;
+//   }
+// </style>
 
 class HOCCompatibleLogin extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+  componentDidMount() {
+  }
   render() {
-    let className = 'asdasd'
+
     return (
-      <div>
-        <WrapperCell>
-          <WrapperItem type="top">
-            hello
-          </WrapperItem>
-          <WrapperItem hoverRef={WrapperCell.ref}>
-            hello
-          </WrapperItem>
-          <WrapperItem type="bottom" hoverRef={WrapperItem.ref}>
-            hello
-          </WrapperItem>
-        </WrapperCell>
-      </div>
+      <View small>hi</View>
     );
   }
 }
