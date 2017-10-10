@@ -14,7 +14,11 @@ export default class StyleParser {
   printStyleSheet() {
     let styleString = '';
     this.styleArray.forEach(({target, value}) => {
-      styleString += `${target} ${JSON.stringify(value).replace(/\"/g, "").replace(/\,/g, ";")}\r\n`;
+      styleString += `\r\n${target} {\r\n`;
+        Object.entries(value).forEach(([styleProp, styleValue]) => {
+          styleString += `  ${styleProp}: ${styleValue};\r\n`;
+        })
+      styleString += '}';
     })
     return styleString;
   }
