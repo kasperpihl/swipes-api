@@ -42,6 +42,9 @@ const View = SwipesStyles('div', {
     '&:not(& + #{siblingRef})': {
       'color': 'darkblue',
     },
+    '&::placeholder': {
+      'color': 'green',
+    }
   },
   small: {
     'width': '50px',
@@ -80,6 +83,10 @@ const View = SwipesStyles('div', {
 
 //   .view:not(.view + .siblingRef) {
 //     color: darkblue;
+//   }
+
+//   .view::placeholder {
+//     color: green;
 //   }
 
 //   @keyframes example {
