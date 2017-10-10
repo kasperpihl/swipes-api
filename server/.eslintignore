@@ -1,5 +1,0 @@
-# this is not working.....
-/__test__/*
-
-# Ignore built files except build/index.js
-dist/*
