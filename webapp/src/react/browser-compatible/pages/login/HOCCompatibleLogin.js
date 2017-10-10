@@ -47,6 +47,10 @@ const View = SwipesStyles('div', {
     'width': '50px',
     'height': '50px',
     'background': 'green',
+
+    '& ~ #{siblingRef}': {
+      'background': 'gray',
+    },
   }
 });
 
@@ -91,6 +95,10 @@ const View = SwipesStyles('div', {
 //     width: 50px;
 //     height: 50px;
 //     background: green;
+//   }
+
+//   .view.small ~ .siblingRef {
+//     background: gray;
 //   }
 // </style>
 
