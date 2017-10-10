@@ -30,6 +30,8 @@ import {
   organizationsActivateUser,
   organizationsChangeStripeCustomerEmail,
   organizationsDeletedQueueMessage,
+  organizationsAddPendingUsers,
+  organizationsUsersInvitedUserQueueMessage,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
@@ -40,6 +42,11 @@ import {
   userActivatedUserSignUpQueueMessage,
   usersLeaveOrganizationQueueMessage,
   usersDisabledQueueMessage,
+  usersCreateInvitationToken,
+  usersCreateTempUnactivatedUser,
+  usersSendInvitationQueueMessage,
+  usersInvitedUserQueueMessage,
+  usersAddPendingOrganization,
 } from './middlewares/users';
 import {
   notificationsPushToQueue,
@@ -327,6 +334,43 @@ authed.all(
   organizationsDeletedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend(),
+);
+
+authed.all(
+  '/organizations.inviteUser',
+  valBody({
+    organization_id: string.require(),
+    first_name: string.require(),
+    email: string.require(),
+  }),
+  mapLocals(locals => ({
+    email: locals.email.toLowerCase(),
+  })),
+  mapLocals(() => ({
+    fields: [],
+  })),
+  usersGetByEmailWithFields,
+  usersCreateTempUnactivatedUser,
+  organizationsAddPendingUsers,
+  usersAddPendingOrganization,
+  mapLocals(locals => ({
+    organization: organizationConcatUsers(locals),
+  })),
+  usersCreateInvitationToken,
+  mapLocals(locals => ({
+    invitation_token: locals.invitationToken,
+  })),
+  organizationsUsersInvitedUserQueueMessage,
+  notificationsPushToQueue,
+  usersInvitedUserQueueMessage,
+  notificationsPushToQueue,
+  usersSendInvitationQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    user: object.require(),
+    invitation_token: string.require(),
+    organization: object,
+  }),
 );
 
 notAuthed.all(

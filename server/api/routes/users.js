@@ -1,12 +1,8 @@
 import express from 'express';
 import {
   string,
-  object,
   any,
 } from 'valjs';
-import {
-  organizationConcatUsers,
-} from './middlewares/utils';
 import {
   userAvailability,
   userSignUp,
@@ -20,14 +16,9 @@ import {
   usersGetByEmailWithFields,
   usersComparePasswordSignIn,
   usersRevokeToken,
-  usersCreateInvitationToken,
   usersCreateConfirmationToken,
-  usersCreateTempUnactivatedUser,
-  usersSendInvitationQueueMessage,
   usersActivateUserSignUp,
-  usersInvitedUserQueueMessage,
   userSignupQueueMessage,
-  usersAddPendingOrganization,
   usersParseInvitationToken,
   usersParseConfirmationToken,
   userCheckEmailVsTokenEmail,
@@ -38,10 +29,6 @@ import {
   meUpdateSettings,
   meUpdateSettingsQueueMessage,
 } from './middlewares/me';
-import {
-  organizationsAddPendingUsers,
-  organizationsUsersInvitedUserQueueMessage,
-} from './middlewares/organizations';
 import {
   xendoRemoveServiceFromUserQueueMessage,
 } from './middlewares/xendo';
@@ -141,43 +128,6 @@ authed.post(
   xendoRemoveServiceFromUserQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend(),
-);
-
-authed.all(
-  '/users.invite',
-  valBody({
-    organization_id: string.require(),
-    first_name: string.require(),
-    email: string.require(),
-  }),
-  mapLocals(locals => ({
-    email: locals.email.toLowerCase(),
-  })),
-  mapLocals(() => ({
-    fields: [],
-  })),
-  usersGetByEmailWithFields,
-  usersCreateTempUnactivatedUser,
-  organizationsAddPendingUsers,
-  usersAddPendingOrganization,
-  mapLocals(locals => ({
-    organization: organizationConcatUsers(locals),
-  })),
-  usersCreateInvitationToken,
-  mapLocals(locals => ({
-    invitation_token: locals.invitationToken,
-  })),
-  organizationsUsersInvitedUserQueueMessage,
-  notificationsPushToQueue,
-  usersInvitedUserQueueMessage,
-  notificationsPushToQueue,
-  usersSendInvitationQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    user: object.require(),
-    invitation_token: string.require(),
-    organization: object,
-  }),
 );
 
 authed.all(
