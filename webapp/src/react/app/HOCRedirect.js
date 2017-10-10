@@ -29,8 +29,6 @@ class HOCRedirect extends PureComponent {
       setUrl(null);
     }
 
-    return;
-
     const path = location.pathname;
 
     if(isHydrated && !token) {

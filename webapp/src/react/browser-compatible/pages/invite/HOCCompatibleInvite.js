@@ -19,7 +19,7 @@ class HOCCompatibleInvite extends PureComponent {
       invites: fromJS([
         { firstName: '', email: '' },
         { firstName: '', email: '' },
-        { firstName: '', email: '' },
+        // { firstName: '', email: '' },
       ]) 
     };
     setupLoading(this);
