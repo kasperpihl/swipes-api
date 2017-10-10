@@ -71,16 +71,17 @@ export default class StyleDomHandler {
   }
   _updateDomElement() {
     const newChildEl = document.createTextNode(this.parser.run(this._props));
+
     if(this._childEl) {
       this._domEl.replaceChild(newChildEl, this._childEl);
     } else {
       this._domEl.appendChild(newChildEl);
     }
     this._childEl = newChildEl;
-    
   }
   _addDomElement() {
     document.head.appendChild(this._domEl);
+    this._updateDomElement();
   }
   _removeDomElement() {
     document.head.removeChild(this._domEl);

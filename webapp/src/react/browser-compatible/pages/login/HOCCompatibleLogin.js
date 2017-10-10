@@ -11,62 +11,21 @@ import { connect } from 'react-redux';
 
 import SwipesStyles from './styles';
 
-const View = SwipesStyles('div', {
+const Container = SwipesStyles('div', {
   default : {
     'width': '100px',
     'height': '100px',
     'background': 'red',
-    'animation': 'example 5s linear 2s infinite alternate',
-    // '@keyframes example': {
-    //   'from': {
-    //     'transform': 'rotate(0deg)'
-    //   },
-    //   'to': {
-    //     'transform': 'rotate(360deg)'
-    //   }
-    // },
-    '& + &': {
-      'background': 'purple',
-    },
-    ':hover': {
+  }
+});
 
-    },
-    '& ~ #{siblingRef}': {
-      'background': 'black',
-    },
-    '& > #{siblingRef}': {
-      'background': 'yellow',
-    },
-    '& #{siblingRef}': {
-      'background': 'pink',
-    },
-    '&:not(& + #{siblingRef})': {
-      'color': 'darkblue',
-    },
-    '&::placeholder': {
-      'color': 'green',
-    },
-    '&:after': {
-      'content': '&'
-    },
-    // '@media (max-width: 600px)': {
-    //   'width': '600px',
-
-    //   '& #{childRef}' : {
-    //     'width': '10px',
-    //   }
-    // },
-  },
-  small: {
+const InnerView = SwipesStyles('div', {
+  default : {
     'width': '50px',
     'height': '50px',
     'background': 'green',
-
-    '& ~ #{siblingRef}': {
-      'background': 'gray',
-    },
-    '& + &': {
-      'background': 'purple',
+    '#{hoverRef}:hover &': {
+      'background': 'blue',
     },
   }
 });
@@ -138,10 +97,9 @@ class HOCCompatibleLogin extends PureComponent {
   }
   render() {
     return (
-      <div>
-        <View>hi</View>
-        <View siblingRef={View.ref}><View>hi</View></View>
-      </div>
+      <Container>
+        <InnerView hoverRef={Container.ref}></InnerView>
+      </Container>
     );
   }
 }
