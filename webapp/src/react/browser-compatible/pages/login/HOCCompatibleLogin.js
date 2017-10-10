@@ -140,7 +140,7 @@ class HOCCompatibleLogin extends PureComponent {
     return (
       <div>
         <View>hi</View>
-        <View siblingRef={View.ref}>hi</View>
+        <View siblingRef={View.ref}><View>hi</View></View>
       </div>
     );
   }
