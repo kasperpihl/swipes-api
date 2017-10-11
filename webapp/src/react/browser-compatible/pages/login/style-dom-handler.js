@@ -51,7 +51,6 @@ export default class StyleDomHandler {
     let needUpdate = false;
     this._variables.dynamic.forEach((key) => {
       if(!oldProps[key] && props[key]) {
-        console.log('adding add', key, '' + props[key]);
         this._addProp(key, '' + props[key]);
         needUpdate = true;
       }

@@ -98,7 +98,7 @@ class HOCCompatibleLogin extends PureComponent {
   render() {
     return (
       <Container>
-        <InnerView hoverRef={Container.ref}></InnerView>
+        <InnerView hoverRef={Container.ref}>Hi</InnerView>
       </Container>
     );
   }

@@ -38,9 +38,8 @@ const SwipesStyles = (EL, styles) => {
       styleHandler.subscribe(nextProps, this.props);
     }
     render() {
-
       const variables = styleHandler.getVariables();
-      let computedClassName = className;
+      let computedClassName = `${className} ${className}-default`;
       variables.forEach(vari => {
         if(this.props[vari]) {
           computedClassName += ` ${vari}`;
