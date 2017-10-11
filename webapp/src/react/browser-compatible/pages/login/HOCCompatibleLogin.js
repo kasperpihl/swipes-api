@@ -9,26 +9,86 @@ import { connect } from 'react-redux';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 
-import SwipesStyles from './styles';
+import swiss from './styles';
 
-const Container = SwipesStyles('div', {
-  default : {
-    'width': '100px',
-    'height': '100px',
-    'background': 'red',
-  }
-});
+swiss.addMixin('size', (width=null, height=null) => ({
+  width: width || 'auto',
+  height: height || width || 'auto',
+}));
 
-const InnerView = SwipesStyles('div', {
-  default : {
-    'width': '50px',
-    'height': '50px',
-    'background': 'green',
-    '#{hoverRef}:hover &': {
-      'background': 'blue',
+const Container = swiss('div', {
+  _size: '100px',
+  background: 'blue',
+  position: 'relative',
+  animation: 'example 5s linear 2s infinite alternate',
+  '@keyframes example': {
+    'from': {
+      'transform': 'rotate(0deg)'
     },
+    'to': {
+      'transform': 'rotate(360deg)'
+    }
+  },
+  '@media (max-width: 600px)': {
+    body: {
+      background: 'red',
+    }
+  },
+});
+
+const InnerView = swiss('div', {
+  default : {
+    width: '50px',
+    height: '50px',
+    background: 'green',
   }
 });
+
+//  default : {
+//     'width': '100px',
+//     'height': '100px',
+//     'background': 'red',
+//     'animation': 'example 5s linear 2s infinite alternate',
+//     '@keyframes example': {
+//       'from': {
+//         'transform': 'rotate(0deg)'
+//       },
+//       'to': {
+//         'transform': 'rotate(360deg)'
+//       }
+//     },
+//     '& + &': {
+//       'background': 'green',
+//     },
+//     ':hover': {
+
+//     },
+//     '& ~ #{siblingRef}': {
+//       'background': 'purple',
+//     },
+//     '& > #{siblingRef}': {
+//       'background': 'yellow',
+//     },
+//     '& #{siblingRef}': {
+//       'background': 'pink',
+//     },
+//     '&:not(& + #{siblingRef})': {
+//       'color': 'darkblue',
+//     },
+//     '&::placeholder': {
+//       'color': 'green',
+//     }
+//   },
+//   small: {
+//     'width': '50px',
+//     'height': '50px',
+//     'background': 'green',
+
+//     '& ~ #{siblingRef}': {
+//       'background': 'gray',
+//     },
+//   }
+// });
 
 // <style>
 //   .view {
@@ -98,7 +158,7 @@ class HOCCompatibleLogin extends PureComponent {
   render() {
     return (
       <Container>
-        <InnerView hoverRef={Container.ref}>Hi</InnerView>
+        <InnerView>Hi</InnerView>
       </Container>
     );
   }

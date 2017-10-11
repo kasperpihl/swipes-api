@@ -3,7 +3,7 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 const VARREGEX = /#{(.*?)}/gi;
 
 export default class StyleDomHandler {
-  constructor(className, styles) {
+  constructor(className, styles, mixins) {
     this.styles = styles;
     this._variables = {
       dynamic: [],
@@ -13,10 +13,9 @@ export default class StyleDomHandler {
     this._props = {};
 
     this._refCounter = 0;
-    this.parser = new StyleParser(className, styles);
+    this.parser = new StyleParser(className, styles, mixins);
     bindAll(this, ['subscribe', 'unsubscribe']);
     this._checkVariables();
-    console.log(this._props);
     this._domEl = document.createElement('style');
     this._domEl.type = 'text/css';
   }

@@ -1,39 +1,90 @@
 const VARREGEX = /#{(.*?)}/gi;
 
 export default class StyleParser {
-  constructor(className, styles) {
+  constructor(className, styles, mixins) {
     this.styles = styles;
     this.className = className;
+    this.mixins = mixins;
   }
 
-  getPropValuesForKey(key) {
-    return (this.props[key] && Object.keys(this.props[key])) || [];
-  }
+  // ======================================================
+  // Printing out the stylesheet
+  // ======================================================
   printStyleSheet() {
     let styleString = '';
     this.styleArray.forEach(({target, value}) => {
-      styleString += `${target} {\r\n`;
-        Object.entries(value).forEach(([styleProp, styleValue]) => {
-          styleString += `  ${styleProp}: ${styleValue};\r\n`;
-        })
-      styleString += '}\r\n';
+      styleString += `${target} ${this.recursiveParseStyleObject(value, 0)}`;
     })
     return styleString;
   }
-  parseValue(target, value) {
-    
+  recursiveParseStyleObject(styleObject, depth) {
+    let styleString = '{\r\n';
+    Object.entries(styleObject).forEach(([styleKey, styleValue]) => {
+      const parsedKey = this.parseStyleKey(styleKey);
+      let parsedValue;
+      let separator = '';
+      let ending = '\r\n';
+      if(typeof styleValue === 'object') {
+        parsedValue = this.recursiveParseStyleObject(styleValue, depth + 1);
+      } else {
+        separator = ': ';
+        ending = ';\r\n';
+        parsedValue = this.parseStyleValue(styleKey, styleValue);
+      }
+      // Properly handle indention.
+      for(let i = 0 ; i <= depth ; i++) styleString += '  ';
+
+      styleString += parsedKey + separator + parsedValue + ending;
+    })
+    for(let i = 0 ; i < depth ; i++) styleString += '  ';
+    styleString += '}\r\n';
+
+    return styleString;
   }
-  generateStyle(root, currentTarget, styles) {
+  parseStyleKey(styleKey) {
+    // Here we add support for camel case.
+    return styleKey.replace(/([A-Z])/g, g => '-' + g[0].toLowerCase());
+  }
+  parseStyleValue(styleKey, styleValue) {
+    // Modify the value
+    return styleValue + ';';
+  }
+
+
+  // ======================================================
+  // Generate the stylesheet to be printed
+  // ======================================================
+  
+  getPropValuesForKey(key) {
+    return (this.props[key] && Object.keys(this.props[key])) || [];
+  }
+
+  generateStyle(root, currentTarget, styles, noRecursive ) {
     const orgTarget = currentTarget;
     currentTarget = currentTarget.replace(/&/gi, root);
     let targets = [ currentTarget ];
 
-    const mutatedStyles = Object.assign({}, styles);
+    let mutatedStyles = Object.assign({}, styles);
     let currIndex = this.styleArray.length;
     Object.entries(styles).forEach(([key, val]) => {
-      if(typeof val === 'object') {
-        delete mutatedStyles[key];
-        return this.generateStyle(root, key, val);
+      if(key.startsWith('_')) {
+        const mixin = this.mixins[key];
+        if(typeof mixin === 'function') {
+          if(!Array.isArray(val)) {
+            val = [val];
+          }
+          const result = mixin(...val);
+          if(typeof result === 'object') {
+            mutatedStyles = Object.assign(mutatedStyles, result);
+          }
+          delete mutatedStyles[key];
+        }
+      }
+      else if(typeof val === 'object') {
+        if(!noRecursive) {
+          delete mutatedStyles[key];
+          return this.generateStyle(root, key, val, key.startsWith('@'));
+        }
       }
     });
 
@@ -54,7 +105,8 @@ export default class StyleParser {
     this.styleArray = [];
     this.props = props;
     Object.entries(this.styles).forEach(([key, val]) => {
-      const root = `.${this.className}.${this.className}-${key}`;
+      let root = `.${this.className}`;
+      if(key !== 'default') root += `.${this.className}-${key}`;
       this.generateStyle(root, root, val);
     });
     return this.printStyleSheet();

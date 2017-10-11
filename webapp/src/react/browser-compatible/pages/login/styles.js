@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import { fromJS } from 'immutable';
+import { randomString } from 'swipes-core-js/classes/utils';
 import StyleDomHandler from './style-dom-handler';
 
-let packageName = 'Swiss';
+let mixins = {};
+let packageName = 'swiss';
 
-const SwipesStyles = (EL, styles) => {
+const swiss = (EL, styles) => {
   // Support only the parameter as the styles (use a div then)
   if(typeof EL === 'object') {
     styles = EL;
@@ -23,9 +25,10 @@ const SwipesStyles = (EL, styles) => {
   if(!styles.default) {
     styles = { default: styles };
   }  
-
-  const className = `${EL}-${Math.random().toString(36).slice(2)}`;
-  const styleHandler = new StyleDomHandler(className, styles);
+  // make sure first char is a letter! css does not support classes that starts with num
+  const firstLetter = randomString(1, 'abcdefghijklmnopqrstuvwxyz');
+  const className = `${firstLetter + randomString(6)}`;
+  const styleHandler = new StyleDomHandler(className, styles, mixins);
 
   class StyledElement extends PureComponent {
     componentWillMount() {
@@ -39,10 +42,10 @@ const SwipesStyles = (EL, styles) => {
     }
     render() {
       const variables = styleHandler.getVariables();
-      let computedClassName = `${className} ${className}-default`;
+      let computedClassName = className;
       variables.forEach(vari => {
         if(this.props[vari]) {
-          computedClassName += ` ${vari}`;
+          computedClassName += ` ${className}-${vari}`;
         }
       });
       const newProps = {};
@@ -61,4 +64,19 @@ const SwipesStyles = (EL, styles) => {
   return StyledElement;
 }
 
-export default SwipesStyles;
+swiss.addMixin = (name, handler) => {
+  if(typeof name !== 'string') {
+    return console.warn('swiss addMixin: first argument should be name of mixin');
+  }
+  if(typeof handler !== 'function') {
+    return console.warn('swiss addMixin: second argument should be the mixin handler');
+  }
+  if(!name.startsWith('_')) {
+    name = `_${name}`;
+  }
+  mixins[name] = handler;
+}
+
+export default swiss;
+
+
