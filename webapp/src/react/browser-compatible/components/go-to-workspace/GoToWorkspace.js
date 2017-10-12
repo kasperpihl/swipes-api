@@ -20,12 +20,12 @@ class GoToWorkspace extends PureComponent {
   componentDidMount() {
   }
   render() {
-    const { noTitle } = this.props;
+    const { noTitle, to } = this.props;
 
     return (
       <div className="to-workspace">
         {!noTitle && <CompatibleSubHeader title="Go to the workspace" />}
-        <Link to="/" className="to-workspace__wrapper">
+        <Link to={to || '/'} className="to-workspace__wrapper">
           <Icon icon="SwipesLogoEmpty" className="to-workspace__svg" />
           <p>Go to the workspace</p>
         </Link>
@@ -34,7 +34,7 @@ class GoToWorkspace extends PureComponent {
   }
 }
 
-export default GoToWorkspace
+export default GoToWorkspace;
 
 // const { string } = PropTypes;
 

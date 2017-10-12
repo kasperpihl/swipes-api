@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withRouter } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll } from 'swipes-core-js/classes/utils';
@@ -36,19 +37,38 @@ class CompatibleInvite extends PureComponent {
       </div>
     )
   }
+  renderGoToWorkspace() {
+    const { location } = this.props;
+    if(!location.state || !location.state.goTo) {
+      return null;
+    }
+    const to = {
+      pathname: location.state.goTo,
+    };
+    if(location.state.goTo !== '/') {
+      to.state = { goTo: '/' };
+    }
+    return [
+      <br key="1" />,
+      <br key="2" />,
+      <GoToWorkspace noTitle to={to} key="3" />
+    ];
+  }
   render() {
+    const { location } = this.props;
+
     return (
       <div className="compatible-invite">
         <CompatibleHeader title="New Org Title" subtitle="You have now created a new org, here you can invite others or download the app" />
         <CompatibleSubHeader title="Gather your whole team. Invite them here." />
         {this.renderInviteForm()}
-        <GoToWorkspace />
+        {this.renderGoToWorkspace()}
       </div>
     );
   }
 }
 
-export default CompatibleInvite
+export default withRouter(CompatibleInvite)
 
 // const { string } = PropTypes;
 

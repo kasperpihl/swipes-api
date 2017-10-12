@@ -21,7 +21,7 @@ class HOCCompatibleWelcome extends PureComponent {
   componentDidMount() {
   }
   onOrganizationJoin(orgId, e) {
-    const { joinOrg, setUrl, isElectron } = this.props;
+    const { joinOrg, setUrl, isElectron, isBrowserSupported } = this.props;
 
     if (this.isJoining) {
       return;
@@ -35,14 +35,21 @@ class HOCCompatibleWelcome extends PureComponent {
       if(!res.ok) {
         this.clearLoading(orgId, '!Something went wrong', 5000);
       } else {
-        this.setLoading(orgId, null, 100, () => {
-          isElectron ? setUrl('/') : setUrl('/download');
-        });
+        if(!isElectron && isBrowserSupported) {
+          setUrl({
+            pathname: '/download',
+            state: { goTo: '/' },
+          });
+        } else if(isElectron) {
+          setUrl('/');
+        } else {
+          setUrl('/notsupported');
+        }
       }
     })
   }
   onOrganizationCreate(name, e) {
-    const { createOrg, setUrl } = this.props;
+    const { createOrg, setUrl, isBrowserSupported, isElectron } = this.props;
 
     if (this.isJoining || !name.length) {
       return;
@@ -56,7 +63,15 @@ class HOCCompatibleWelcome extends PureComponent {
       if(!res.ok) {
         this.clearLoading('creating', '!Something went wrong', 5000);
       } else {
-        setUrl('/invite', { push: true });
+        if(isBrowserSupported) {
+          setUrl({
+            pathname: '/invite',
+            state: { goTo: isElectron ? '/' : '/download' },
+          });
+        } else {
+          setUrl('/notsupported');
+        }
+        
       }
     })
   }
@@ -80,6 +95,7 @@ HOCCompatibleWelcome.propTypes = {};
 const mapStateToProps = (state) => ({
   me: state.get('me'),
   isElectron: state.getIn(['globals', 'isElectron']),
+  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
 });
 
 export default connect(mapStateToProps, {
