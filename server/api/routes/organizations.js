@@ -36,6 +36,7 @@ import {
 import {
   usersCheckIfInOrganization,
   usersGetByEmailWithFields,
+  usersGetByEmailWithoutFields,
   usersComparePasswordSignIn,
   usersParseInvitationToken,
   usersGetByIdWithFields,
@@ -348,9 +349,9 @@ authed.all(
     email: locals.email.toLowerCase(),
   })),
   mapLocals(() => ({
-    fields: [],
+    fields: ['password', 'xendoCredentials', { services: 'auth_data' }],
   })),
-  usersGetByEmailWithFields,
+  usersGetByEmailWithoutFields,
   usersCreateTempUnactivatedUser,
   organizationsAddPendingUsers,
   usersAddPendingOrganization,

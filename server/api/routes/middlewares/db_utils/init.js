@@ -22,6 +22,8 @@ const dbInit = funcWrap([
   const q =
     r.table('users')
       .get(user_id)
+      // if we change this some day - check where we use this filtering
+      // or make it global somehow
       .without(['password', 'xendoCredentials', { services: 'auth_data' }])
       .merge({
         organizations:

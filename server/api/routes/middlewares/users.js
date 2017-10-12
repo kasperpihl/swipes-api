@@ -30,6 +30,7 @@ import {
   dbUsersGetByIdWithFields,
   dbUsersAddPendingOrganization,
   dbUsersConfirmEmail,
+  dbUsersGetByEmailWithoutFields,
 } from './db_utils/users';
 import {
   dbTokensInsertSingle,
@@ -289,6 +290,29 @@ const usersGetByEmailWithFields = valLocals('usersGetByEmailWithFields', {
   } = res.locals;
 
   dbUsersGetByEmailWithFields({ email, fields })
+    .then((users) => {
+      const user = users[0];
+
+      setLocals({
+        user,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const usersGetByEmailWithoutFields = valLocals('usersGetByEmailWithoutFields', {
+  email: string.format('email').require(),
+  fields: array.of(string, object).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    email,
+    fields,
+  } = res.locals;
+
+  dbUsersGetByEmailWithoutFields({ email, fields })
     .then((users) => {
       const user = users[0];
 
@@ -848,6 +872,7 @@ export {
   usersInvitedUserQueueMessage,
   userSignupQueueMessage,
   usersGetByIdWithFields,
+  usersGetByEmailWithoutFields,
   usersAddPendingOrganization,
   usersCheckIfInOrganization,
   usersLeaveOrganizationQueueMessage,

@@ -147,6 +147,26 @@ const dbUsersGetByEmailWithFields = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbUsersGetByEmailWithoutFields = funcWrap([
+  object.as({
+    email: string.require(),
+    fields: array.of(string, object).require(),
+  }).require(),
+], (err, { email, fields }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersGetByEmailWithoutFields: ${err}`);
+  }
+
+  let q = r.table('users').filter({
+    email,
+  });
+
+  if (fields.length > 0) {
+    q = q.without(fields);
+  }
+
+  return db.rethinkQuery(q);
+});
 const dbUsersAddOrganization = funcWrap([
   object.as({
     user_id: string.require(),
@@ -300,4 +320,5 @@ export {
   dbUsersGetByIdWithFields,
   dbUsersAddPendingOrganization,
   dbUsersConfirmEmail,
+  dbUsersGetByEmailWithoutFields,
 };
