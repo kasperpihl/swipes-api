@@ -249,10 +249,25 @@ const dbUsersAddPendingOrganization = funcWrap([
     throw new SwipesError(`dbUsersAddPendingOrganization: ${err}`);
   }
 
-  const q = r.table('users').get(user_id).update({
-    pending_organizations: r.row('pending_organizations').default([]).setUnion([organization_id]),
-    updated_at: r.now(),
-  });
+  const q =
+  r.table('organizations')
+    .get(organization_id)
+    .update({
+      pending_users: r.row('pending_users').default([]).setUnion([user_id]),
+      disabled_users: r.row('disabled_users').default([]).difference([user_id]),
+      active_users: r.row('active_users').default([]).difference([user_id]),
+      updated_at: r.now(),
+    }, {
+      returnChanges: true,
+    }).do((result) => {
+      return r.table('users').get(user_id).update((user) => {
+        return {
+          pending_organizations: user('pending_organizations').default([]).setUnion([organization_id]),
+        };
+      }).do(() => {
+        return result;
+      });
+    });
 
   return db.rethinkQuery(q);
 });

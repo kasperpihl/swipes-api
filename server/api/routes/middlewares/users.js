@@ -618,7 +618,14 @@ const usersAddPendingOrganization = valLocals('usersAddPendingOrganization', {
   const userId = user.id;
 
   dbUsersAddPendingOrganization({ user_id: userId, organization_id })
-    .then(() => {
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        organization,
+      });
+
       return next();
     })
     .catch((err) => {
