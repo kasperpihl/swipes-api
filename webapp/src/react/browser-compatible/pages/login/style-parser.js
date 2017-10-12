@@ -47,7 +47,7 @@ export default class StyleParser {
   }
   parseStyleValue(styleKey, styleValue) {
     // Modify the value
-    return styleValue + ';';
+    return styleValue;
   }
 
 
@@ -77,8 +77,11 @@ export default class StyleParser {
           if(typeof result === 'object') {
             mutatedStyles = Object.assign(mutatedStyles, result);
           }
-          delete mutatedStyles[key];
+          
+        } else {
+          console.warn(`swiss: unknown mixin: ${key.slice(1)}`);
         }
+        delete mutatedStyles[key];
       }
       else if(typeof val === 'object') {
         if(!noRecursive) {

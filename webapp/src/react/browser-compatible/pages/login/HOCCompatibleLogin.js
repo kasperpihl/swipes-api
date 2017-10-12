@@ -10,6 +10,7 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import { Map } from 'immutable';
 import CompatibleLogin from './CompatibleLogin';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
+// import { fromJS } from 'immutable';
 
 class HOCCompatibleLogin extends PureComponent {
   constructor(props) {
