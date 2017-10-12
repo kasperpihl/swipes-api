@@ -106,5 +106,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  sendInvite: ca.users.invite,
+  sendInvite: ca.organizations.inviteUser,
 })(HOCCompatibleInvite);

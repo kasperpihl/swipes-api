@@ -678,23 +678,23 @@ const usersLeaveOrganizationQueueMessage = valLocals('usersLeaveOrganizationQueu
   return next();
 });
 const usersDisabledQueueMessage = valLocals('usersDisabledQueueMessage', {
-  user_id: string.require(),
+  user_to_disable_id: string.require(),
   organization_id: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    user_id,
+    user_to_disable_id,
     organization_id,
   } = res.locals;
 
   const queueMessage = {
-    user_id,
     organization_id,
+    user_id: user_to_disable_id,
     event_type: 'user_disabled',
   };
 
   setLocals({
     queueMessage,
-    messageGroupId: user_id,
+    messageGroupId: user_to_disable_id,
   });
 
   return next();

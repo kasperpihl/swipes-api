@@ -302,7 +302,7 @@ function mapStateToProps(state) {
 }
 
 export default navWrapper(connect(mapStateToProps, {
-  invite: ca.users.invite,
+  invite: ca.organizations.inviteUser,
   confirm: a.menus.confirm,
   deleteOrg: ca.organizations.deleteOrg,
   leaveOrg: ca.organizations.leave,

@@ -52,7 +52,7 @@ class Organization extends PureComponent {
             <HOCAssigning assignees={[u.get('id')]} rounded size={30} />
           </div>
           <div className="organization__user-name">
-            {msgGen.users.getFullName(u)}{u.get('activated') ? null : ' (pending)'}
+            {msgGen.users.getFullName(u)}{u.get('pending') ? ' (pending)' : null}
           </div>
           <div className="organization__user-email">
             {msgGen.users.getEmail(u)}

@@ -204,35 +204,20 @@ const organizationsCheckOwnerDisabledUser = valLocals('organizationsCheckOwnerDi
   return next();
 });
 const organizationsCheckIsDisableValid = valLocals('organizationsCheckIsDisableValid', {
-  organization_id: string.require(),
-  user: object.require(),
+  user_to_disable_id: string.require(),
+  organization: object.require(),
 }, (req, res, next, setLocals) => {
   const {
-    organization_id,
-    user,
+    user_to_disable_id,
+    organization,
   } = res.locals;
   const {
-    organizations,
-  } = user;
+    active_users,
+    pending_users,
+  } = organization;
 
-  if (!organizations.includes(organization_id)) {
+  if (!active_users.includes(user_to_disable_id) && !pending_users.includes(user_to_disable_id)) {
     return next(new SwipesError('This user is not part of that organization or it\'s disabled from it.'));
-  }
-
-  return next();
-});
-const organizationsCheckIsEnableValid = valLocals('organizationsCheckIsEnableValid', {
-  user: object.require(),
-}, (req, res, next, setLocals) => {
-  const {
-    user,
-  } = res.locals;
-  const {
-    organizations,
-  } = user;
-
-  if (organizations.length > 0) {
-    return next(new SwipesError('This user is part of another organization. Swipes does not support multiple organizations for now.'));
   }
 
   return next();
@@ -820,7 +805,6 @@ export {
   organizationsCreateStripeCustomer,
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
-  organizationsCheckIsEnableValid,
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
   organizationsCancelSubscription,
