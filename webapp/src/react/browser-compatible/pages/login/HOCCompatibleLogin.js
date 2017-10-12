@@ -16,17 +16,18 @@ swiss.addMixin('size', (width=null, height=null) => ({
   height: height || width || 'auto',
 }));
 
+
 const Container = swiss('div', {
   _size: '100px',
   background: 'blue',
   position: 'relative',
   animation: 'example 5s linear 2s infinite alternate',
   '@keyframes example': {
-    'from': {
-      'transform': 'rotate(0deg)'
+    from: {
+      transform: 'rotate(0deg)'
     },
-    'to': {
-      'transform': 'rotate(360deg)'
+    to: {
+      transform: 'rotate(360deg)'
     }
   },
   '@media (max-width: 600px)': {
@@ -34,6 +35,7 @@ const Container = swiss('div', {
       background: 'red',
     }
   },
+  
 });
 
 const InnerView = swiss('div', {
