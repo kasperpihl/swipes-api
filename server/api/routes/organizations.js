@@ -260,7 +260,7 @@ authed.all(
   }),
   organizationsGetSingle,
   mapLocals(locals => ({
-    fields: ['organizations'],
+    fields: ['id', 'organizations', 'email', 'profile'],
     userToGetId: locals.user_to_enable_id,
   })),
   usersGetByIdWithFields,
@@ -271,6 +271,12 @@ authed.all(
     organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  mapLocals(locals => ({
+    email: locals.user.email,
+  })),
+  usersCreateInvitationToken,
+  usersSendInvitationQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),

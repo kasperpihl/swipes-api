@@ -741,7 +741,7 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
   const userId = user.id;
   const {
     first_name,
-  } = user.profile.first_name;
+  } = user.profile;
   const queueMessage = {
     organization_id,
     email,
