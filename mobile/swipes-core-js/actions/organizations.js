@@ -13,6 +13,12 @@ export const leave = (orgId) => (d, getState) => d(ca.api.request('organizations
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 }));
 
+export const inviteUser = (firstName, email) => (d, getState) => d(ca.api.request('organizations.inviteUser', {
+  first_name: firstName,
+  email,
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+}));
+
 export const deleteOrg = (orgId) => (d, getState) => d(ca.api.request('organizations.delete', {
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 }));
@@ -42,3 +48,5 @@ export const createStripeCustomer = (token, plan) => (d, getState) => d(ca.api.r
   stripe_token: token,
   plan,
 }));
+
+

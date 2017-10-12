@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll } from 'swipes-core-js/classes/utils';
@@ -6,10 +7,9 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
 // import Button from 'Button';
 // import Icon from 'Icon';
-import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import './styles/screen-size-overlay.scss';
 
-class ScreenSizeOverlay extends PureComponent {
+class HOCScreenSizeOverlay extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,6 +49,10 @@ class ScreenSizeOverlay extends PureComponent {
     )
   }
   render() {
+    const { isDev } = this.props;
+    if(isDev) {
+      return null;
+    }
     const { tooSmall, width, height } = this.state;
     let className = 'screen-size-overlay';
 
@@ -69,8 +73,13 @@ class ScreenSizeOverlay extends PureComponent {
   }
 }
 
-export default ScreenSizeOverlay
+const mapStateToProps = (state) => ({
+  isDev: state.getIn(['globals', 'isDev']),
+});
+
+export default connect(mapStateToProps, {
+})(HOCScreenSizeOverlay);
 
 // const { string } = PropTypes;
 
-ScreenSizeOverlay.propTypes = {};
+HOCScreenSizeOverlay.propTypes = {};

@@ -44,8 +44,9 @@ export default function usersReducer(state = initialState, action) {
       return state.mergeIn([payload.user_id, 'profile'], fromJS(payload.profile));
     }
     case 'organization_user_invited':
-    case 'users.invite':{
-      return state.set(payload.user.id, fromJS(payload.user));
+    case 'organizations.inviteUser':{
+      const tempState = state.set(payload.user.id, fromJS(payload.user));
+      return updateStateFromOrg(tempState, payload.organization);
     }
     case 'organizations.enableUser':
     case 'organizations.disableUser':

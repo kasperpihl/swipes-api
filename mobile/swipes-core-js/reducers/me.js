@@ -45,6 +45,16 @@ export default function meReducer(state = initialState, action) {
         return service;
       }));
     }
+    case 'user_invited': {
+      const pendings = state.get('pending_organizations');
+      if(pendings && !pendings.find((o) => o.get('id') === payload.pending_organization_id)) {
+        return state.updateIn(['pending_organizations'], orgs => orgs.push(fromJS({
+          id: payload.pending_organization_id,
+          name: payload.pending_organization_name,
+        })));
+      }
+      return state;
+    }
     case 'service_removed': {
       return state.updateIn(['services'], services => services.filter(service => (service.get('id') !== payload.id)));
     }
