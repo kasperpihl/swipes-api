@@ -4,6 +4,7 @@ import Promise from 'bluebird';
 import {
   dbUsersGetSingleWithOrganizations,
   dbUsersGetMultipleWithFields,
+  dbUsersGetSingleWithFields,
 } from '../db_utils/users';
 
 const mailChimpListIds = [
@@ -41,6 +42,25 @@ const usersGetMultipleWithFields = (req, res, next) => {
   return dbUsersGetMultipleWithFields({ user_ids, fields })
     .then((usersWithFields) => {
       res.locals.usersWithFields = usersWithFields;
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
+const usersGetSingleWithFields = (req, res, next) => {
+  const {
+    user_id,
+  } = res.locals;
+  // We can make fields more dynamic at some point
+  const fields = [
+    'profile',
+  ];
+
+  return dbUsersGetSingleWithFields({ user_id, fields })
+    .then((userWithFields) => {
+      res.locals.userWithFields = userWithFields;
 
       return next();
     })
@@ -119,6 +139,7 @@ const confirmEmailNotificationData = (req, res, next) => {
 export {
   usersGetSingleWithOrganizations,
   usersGetMultipleWithFields,
+  usersGetSingleWithFields,
   usersActivatedNotificationData,
   usersInvitedNotificationData,
   usersSubscribeToMailChimp,

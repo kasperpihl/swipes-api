@@ -308,6 +308,12 @@ const organization_user_invited = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
+const organization_user_joined = notifyWrapper([
+  users.usersGetSingleWithFields,
+  organizations.organizationsUserJoinedNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const organization_deleted = notifyWrapper([
   organizations.organizationsDeletedNotificationData,
   (req, res, next) => {
@@ -538,6 +544,7 @@ export {
   organization_updated,
   organization_created,
   organization_user_invited,
+  organization_user_joined,
   organization_deleted,
   post_created,
   post_comment_added,

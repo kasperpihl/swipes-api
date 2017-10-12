@@ -49,10 +49,29 @@ const organizationsDeletedNotificationData = (req, res, next) => {
 
   return next();
 };
+const organizationsUserJoinedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    userWithFields,
+  } = res.locals;
+
+  res.locals.notificationData = {
+    target: {
+      id: user_id,
+    },
+    meta: {
+      first_name: userWithFields.profile.first_name,
+    },
+  };
+  res.locals.eventData = null;
+
+  return next();
+};
 
 export {
   organizationsGetSingle,
   organizationsCreatedUpdatedNotificationData,
   organizationsUsersInvitedNotificationData,
   organizationsDeletedNotificationData,
+  organizationsUserJoinedNotificationData,
 };

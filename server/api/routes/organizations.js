@@ -31,6 +31,7 @@ import {
   organizationsDeletedQueueMessage,
   organizationsAddPendingUsers,
   organizationsUsersInvitedUserQueueMessage,
+  organizationsUserJoinedQueueMessage,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
@@ -120,6 +121,8 @@ authed.all(
     organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  organizationsUserJoinedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
