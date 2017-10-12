@@ -20,6 +20,7 @@ module.exports = {
       components: path.resolve(__dirname, 'src/react/components'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),
       'swipes-core-js': path.resolve(__dirname, 'src/../../mobile/swipes-core-js'),
+      'react-swiss': path.resolve(__dirname, 'src/swiss/swiss'),
       icons: path.resolve(__dirname, 'src/react/icons'),
       actions: path.resolve(__dirname, 'src/actions'),
       views: path.resolve(__dirname, 'src/react/views'),
