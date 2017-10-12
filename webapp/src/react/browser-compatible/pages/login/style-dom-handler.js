@@ -1,5 +1,6 @@
 import StyleParser from './style-parser';
 import { bindAll } from 'swipes-core-js/classes/utils';
+import print from './style-printer';
 const VARREGEX = /#{(.*?)}/gi;
 
 export default class StyleDomHandler {
@@ -68,7 +69,9 @@ export default class StyleDomHandler {
     }
   }
   _updateDomElement() {
-    const newChildEl = document.createTextNode(this.parser.run(this._props));
+    const styleArray = this.parser.run(this._props);
+    const printedCss = print(styleArray);
+    const newChildEl = document.createTextNode(printedCss);
 
     if(this._childEl) {
       this._domEl.replaceChild(newChildEl, this._childEl);

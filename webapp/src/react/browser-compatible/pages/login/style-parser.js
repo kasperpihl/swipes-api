@@ -8,50 +8,6 @@ export default class StyleParser {
   }
 
   // ======================================================
-  // Printing out the stylesheet
-  // ======================================================
-  printStyleSheet() {
-    let styleString = '';
-    this.styleArray.forEach(({target, value}) => {
-      styleString += `${target} ${this.recursiveParseStyleObject(value, 0)}`;
-    })
-    return styleString;
-  }
-  recursiveParseStyleObject(styleObject, depth) {
-    let styleString = '{\r\n';
-    Object.entries(styleObject).forEach(([styleKey, styleValue]) => {
-      const parsedKey = this.parseStyleKey(styleKey);
-      let parsedValue;
-      let separator = '';
-      let ending = '\r\n';
-      if(typeof styleValue === 'object') {
-        parsedValue = this.recursiveParseStyleObject(styleValue, depth + 1);
-      } else {
-        separator = ': ';
-        ending = ';\r\n';
-        parsedValue = this.parseStyleValue(styleKey, styleValue);
-      }
-      // Properly handle indention.
-      for(let i = 0 ; i <= depth ; i++) styleString += '  ';
-
-      styleString += parsedKey + separator + parsedValue + ending;
-    })
-    for(let i = 0 ; i < depth ; i++) styleString += '  ';
-    styleString += '}\r\n';
-
-    return styleString;
-  }
-  parseStyleKey(styleKey) {
-    // Here we add support for camel case.
-    return styleKey.replace(/([A-Z])/g, g => '-' + g[0].toLowerCase());
-  }
-  parseStyleValue(styleKey, styleValue) {
-    // Modify the value
-    return styleValue;
-  }
-
-
-  // ======================================================
   // Generate the stylesheet to be printed
   // ======================================================
   
@@ -112,6 +68,6 @@ export default class StyleParser {
       if(key !== 'default') root += `.${this.className}-${key}`;
       this.generateStyle(root, root, val);
     });
-    return this.printStyleSheet();
+    return this.styleArray;
   }
 }
