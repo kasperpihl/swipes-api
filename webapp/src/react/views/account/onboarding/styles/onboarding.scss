@@ -22,6 +22,7 @@
 
     @include size(100%, 85px);
     @include flexContainer('row', left, center, $selectorsToIgnoreFlex: $flexIgnoreList);
+    transition: .1s ease;
   }
 
   &__indicator {
@@ -71,6 +72,7 @@
     margin: 0 21px;
     opacity: 0;
     transform: translateX(-10px);
+    transition: .2s ease;
 
     #{$b}__svg {
       @include svg-color($deepBlue-80);

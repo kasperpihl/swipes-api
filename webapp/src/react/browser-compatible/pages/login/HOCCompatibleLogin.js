@@ -1,165 +1,103 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
-
-import swiss from './styles';
-
-swiss.addMixin('size', (width=null, height=null) => ({
-  width: width || 'auto',
-  height: height || width || 'auto',
-}));
-
-const Container = swiss('div', {
-  _size: '100px',
-  background: 'blue',
-  position: 'relative',
-  animation: 'example 5s linear 2s infinite alternate',
-  '@keyframes example': {
-    'from': {
-      'transform': 'rotate(0deg)'
-    },
-    'to': {
-      'transform': 'rotate(360deg)'
-    }
-  },
-  '@media (max-width: 600px)': {
-    body: {
-      background: 'red',
-    }
-  },
-});
-
-const InnerView = swiss('div', {
-  default : {
-    width: '50px',
-    height: '50px',
-    background: 'green',
-  }
-});
-
-//  default : {
-//     'width': '100px',
-//     'height': '100px',
-//     'background': 'red',
-//     'animation': 'example 5s linear 2s infinite alternate',
-//     '@keyframes example': {
-//       'from': {
-//         'transform': 'rotate(0deg)'
-//       },
-//       'to': {
-//         'transform': 'rotate(360deg)'
-//       }
-//     },
-//     '& + &': {
-//       'background': 'green',
-//     },
-//     ':hover': {
-
-//     },
-//     '& ~ #{siblingRef}': {
-//       'background': 'purple',
-//     },
-//     '& > #{siblingRef}': {
-//       'background': 'yellow',
-//     },
-//     '& #{siblingRef}': {
-//       'background': 'pink',
-//     },
-//     '&:not(& + #{siblingRef})': {
-//       'color': 'darkblue',
-//     },
-//     '&::placeholder': {
-//       'color': 'green',
-//     }
-//   },
-//   small: {
-//     'width': '50px',
-//     'height': '50px',
-//     'background': 'green',
-
-//     '& ~ #{siblingRef}': {
-//       'background': 'gray',
-//     },
-//   }
-// });
-
-// <style>
-//   .view {
-//     width: 100px;
-//     height: 100px;
-//     background: red;
-//     animation: example 5s linear 2s infinite alternate;
-//   }
-
-//   .view + .view {
-//     background: green;
-//   }
-
-//   .view ~ .siblingRef {
-//     background: purple;
-//   }
-
-//   .view > .siblingRef {
-//     background: yellow;
-//   }
-
-//   .view .siblingRef {
-//     background: pink;
-//   }
-
-//   .view:not(.view + .siblingRef) {
-//     color: darkblue;
-//   }
-
-//   .view::placeholder {
-//     color: green;
-//   }
-
-//   @keyframes example {
-//    from {
-//       transform: rotate(0deg)
-//     }
-//     to {
-//       transform: rotate(360deg)
-//     }
-//   }
-
-//   @media (max-width: 600px) {
-//     .view {
-//       width: 600px;
-//     }
-//   }
-
-//   .view.small {
-//     width: 50px;
-//     height: 50px;
-//     background: green;
-//   }
-
-//   .view.small ~ .siblingRef {
-//     background: gray;
-//   }
-// </style>
+import { Map } from 'immutable';
+import CompatibleLogin from './CompatibleLogin';
+import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
 class HOCCompatibleLogin extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      formData: Map(),
+    };
+    setupLoading(this);
   }
   componentDidMount() {
   }
+  onChange(key, e) {
+    const { formData } = this.state;
+    this.setState({ formData: formData.set(key, e.target.value) });
+  }
+  onSignin() {
+    const { request, setUrl } = this.props;
+    const { formData } = this.state;
+
+    if (this.isLoading('signInButton')) {
+      return;
+    }
+    
+    this.setLoading('signInButton');
+
+    request('users.signin', {
+      email: formData.get('email'),
+      password: formData.get('password')
+    }).then((res) => {
+      if (!res.ok) {
+        let label = '!Something went wrong :/';
+
+        if (res.error && res.error.message) {
+          label = '!' + res.error.message;
+
+          if (label.startsWith('!body /users.signin: Invalid object[')) {
+            let invalidProp = label.split('[')[1].split(']')[0].replace('\'', '').replace('\'', '');
+
+            label = `!Not a valid ${invalidProp}`;
+          }
+        }
+
+        this.clearLoading('signInButton', label);
+      } else {
+        setUrl('/');
+        window.analytics.sendEvent('Logged in', {});
+        this.clearLoading('signInButton');
+      }
+    });
+  }
+  onResetPassword(e) {
+    e.preventDefault();
+    const { request, inputMenu, alert } = this.props;
+    const { formData } = this.state;
+
+    const options = { boundingRect: e.target.getBoundingClientRect() };
+    inputMenu({
+      ...options,
+      placeholder: 'Enter your email',
+      text: formData.get('email'),
+      buttonLabel: 'Reset',
+    }, (resetEmail) => {
+      if (resetEmail && resetEmail.length) {
+        request('me.sendResetEmail', {
+          email: resetEmail,
+        }).then((res) => {
+          alert({
+            ...options,
+            title: 'Reset password',
+            message: 'We will send you an email to change your password.',
+          });
+        });
+      }
+    });
+      
+    return false;
+  }
   render() {
+    const { formData } = this.state;
+
     return (
-      <Container>
-        <InnerView>Hi</InnerView>
-      </Container>
+      <CompatibleCard>
+        <CompatibleLogin
+          delegate={this}
+          formData={formData}
+          {...this.bindLoading()}
+        />
+      </CompatibleCard>
     );
   }
 }
@@ -167,8 +105,11 @@ class HOCCompatibleLogin extends PureComponent {
 
 HOCCompatibleLogin.propTypes = {};
 
-const mapStateToProps = (state) => ({
-});
+const mapStateToProps = (state) => ({});
 
 export default connect(mapStateToProps, {
+  inputMenu: a.menus.input,
+  alert: a.menus.alert,
+  request: ca.api.request,
+  setUrl: a.navigation.url,
 })(HOCCompatibleLogin);
