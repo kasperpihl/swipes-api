@@ -69,7 +69,7 @@ class CompatibleWelcome extends PureComponent {
     const pendingOrgs = me.get('pending_organizations');
     if(!pendingOrgs || !pendingOrgs.size) {
       const title = `Get someone to invite your email: "${me.get('email')}" to their organization.`
-      return <CompatibleSubHeader title={title} />
+      return <CompatibleHeader subtitle={title} />
     }
 
     const renderRows = pendingOrgs.map(o => this.renderRow(o)).toArray();
