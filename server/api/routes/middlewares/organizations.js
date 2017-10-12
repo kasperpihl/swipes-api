@@ -222,22 +222,6 @@ const organizationsCheckIsDisableValid = valLocals('organizationsCheckIsDisableV
 
   return next();
 });
-const organizationsCheckIsEnableValid = valLocals('organizationsCheckIsEnableValid', {
-  user: object.require(),
-}, (req, res, next, setLocals) => {
-  const {
-    user,
-  } = res.locals;
-  const {
-    organizations,
-  } = user;
-
-  if (organizations.length > 0) {
-    return next(new SwipesError('This user is part of another organization. Swipes does not support multiple organizations for now.'));
-  }
-
-  return next();
-});
 const organizationsCheckAdminRights = valLocals('organizationsCheckAdminRights', {
   user_id: string.require(),
   organization: object.require(),
@@ -821,7 +805,6 @@ export {
   organizationsCreateStripeCustomer,
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
-  organizationsCheckIsEnableValid,
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
   organizationsCancelSubscription,
