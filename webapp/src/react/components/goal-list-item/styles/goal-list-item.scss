@@ -114,7 +114,11 @@ $contHeight: 66px;
   $b: &;
 
   &#{&}--completed {
-    @include size(100%, 49px);
+    @include size(100%, auto);
+
+    #{$b}__content {
+      @include heightSpecifications(49px, initial);
+    }
 
     #{$b}__circle {
       @include size(24px);
@@ -129,7 +133,12 @@ $contHeight: 66px;
     #{$b}__title {
       @include size(100%, auto);
       @include font(15px, $deepBlue-50, 24px);
+      padding: 6px 0;
       padding-left: 12px;
+    }
+
+    #{$b}__assigning {
+      display: none;
     }
   }
 

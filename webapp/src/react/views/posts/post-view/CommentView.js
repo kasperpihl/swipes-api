@@ -29,7 +29,7 @@ class CommentView extends PureComponent {
   }
   renderProfilePic() {
     const { comment } = this.props;
-    const image = msgGen.users.getPhoto(comment.get('created_by'));
+    const image = msgGen.users.getPhoto(comment.get('created_by')); 
     const initials = msgGen.users.getInitials(comment.get('created_by'));
 
     if (!image) {
