@@ -22,7 +22,6 @@ const usersInvitationEmail = (req, res, next) => {
     name: '',
     content: '',
   }];
-  console.log(first_name);
   const merge_vars = [{
     rcpt: email,
     vars: [{
