@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import HOCViewController from './view-controller/HOCViewController';
 import HOCScreenSizeOverlay from './view-controller/HOCScreenSizeOverlay';
-import HOCDownloadApp from './view-controller/HOCDownloadApp';
 import HOCSidebar from './sidebar/HOCSidebar';
 
 class HOCApp extends PureComponent {
@@ -19,7 +18,6 @@ class HOCApp extends PureComponent {
           <HOCViewController />
         </div>
         <HOCScreenSizeOverlay />
-        <HOCDownloadApp />
       </div>
     );
   }
