@@ -35,7 +35,7 @@ const usersInvitationEmail = (req, res, next) => {
       content: organization.name,
     }, {
       name: 'INVITATION_LINK',
-      content: `${host}signup?invitation_token=${invitationToken}`,
+      content: `${host}register?invitation_token=${invitationToken}`,
     }],
   }];
   const to = [
