@@ -257,7 +257,6 @@ const userSignUp = valLocals('userSignUp', {
 const userActivatedUserSignUpQueueMessage = valLocals('userActivatedUserSignUpQueueMessage', {
   user_id: string.require(),
   invitation_token: string,
-  organization_id: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,

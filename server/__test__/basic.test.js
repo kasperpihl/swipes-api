@@ -96,7 +96,7 @@ test('creating organization', () => {
 
 test('inviting user', () => {
   return rpap.post({
-    url: '/users.invite',
+    url: '/organizations.inviteUser',
     body: {
       organization_id: locals.organization.id,
       first_name: 'Jest2',
@@ -153,9 +153,8 @@ test('organization join', () => {
     .then((result) => {
       user_3_token = result.token;
 
-
       return rpap.post({
-        url: '/users.invite',
+        url: '/organizations.inviteUser',
         body: {
           organization_id: locals.organization.id,
           first_name: 'Jest2',
@@ -195,16 +194,16 @@ test('init', () => {
         timestamp: expect.any(String),
         full_fetch: expect.any(Boolean),
         sofi: expect.any(Object),
-        users: expect.any(Array),
-        goals: expect.any(Array),
-        milestones: expect.any(Array),
-        ways: expect.any(Array),
-        notes: expect.any(Array),
-        posts: expect.any(Array),
-        services: expect.any(Array),
-        notifications: expect.any(Array),
-        onboarding: expect.any(Array),
-        pending_organizations: expect.any(Array),
+        // users: expect.any(Array),
+        // goals: expect.any(Array),
+        // milestones: expect.any(Array),
+        // ways: expect.any(Array),
+        // notes: expect.any(Array),
+        // posts: expect.any(Array),
+        // services: expect.any(Array),
+        // notifications: expect.any(Array),
+        // onboarding: expect.any(Array),
+        // pending_organizations: expect.any(Array),
       });
     });
 }, 10000);
@@ -250,7 +249,7 @@ test('goal create', () => {
       result.goal = goal;
       expect(result).toMatchSnapshot();
     });
-});
+}, 10000);
 
 test('post create type post', () => {
   return rpap.post({
@@ -271,7 +270,7 @@ test('post create type post', () => {
       result.post = post;
       expect(result).toMatchSnapshot();
     });
-});
+}, 10000);
 
 test('sign in', () => {
   return rpap.post({
@@ -285,6 +284,7 @@ test('sign in', () => {
       expect(result).toMatchObject({
         token: expect.any(String),
       });
+
       expect(updateLocals(result, ['token'])).toMatchSnapshot();
     });
 });
