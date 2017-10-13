@@ -12,8 +12,6 @@ class CompatibleInviteForm extends PureComponent {
   constructor(props) {
     super(props);
 
-    bindAll(this, ['handleAddInput']);
-
     setupDelegate(this, 'onNameChange', 'onEmailChange', 'onAddInput');
     // this.callDelegate.bindAll('onLala');
   }

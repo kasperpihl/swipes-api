@@ -25,7 +25,7 @@ class HOCRedirect extends PureComponent {
       hasConnected,
     } = this.props;
 
-    if(goToUrl && location.pathname === goToUrl) {
+    if(goToUrl && location.pathname === (goToUrl.to.pathname || goToUrl.to)) {
       setUrl(null);
     }
 
@@ -61,8 +61,8 @@ class HOCRedirect extends PureComponent {
   }
   render() {
     const { location, goToUrl } = this.props;
-    if(goToUrl && location.pathname !== goToUrl) {
-      return <Redirect to={goToUrl} />
+    if(goToUrl && location.pathname !== (goToUrl.to.pathname || goToUrl.to)) {
+      return <Redirect {...goToUrl} />
     }
     return null;
   }
@@ -78,6 +78,7 @@ const mapStateToProps = (state) => ({
   hasConnected: state.getIn(['connection', 'hasConnected']),
   isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
   goToUrl: state.getIn(['navigation', 'url']),
+
 });
 
 export default withRouter(connect(mapStateToProps, {

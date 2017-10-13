@@ -34,9 +34,15 @@ const notifyAllInCompany = (req, res, next) => {
   const {
     user,
   } = res.locals;
+  let {
+    organization = null,
+  } = res.locals;
 
   const usersIds = [];
-  const organization = user.organizations[0];
+  // in some cases we have the organization object and we have to keep the user object clean
+  // in other cases we have the user object with merged organization inside
+  // that thing probably needs refactoring
+  organization = organization || user.organizations[0];
 
   organization.active_users.forEach((userId) => {
     usersIds.push(userId);
@@ -90,9 +96,15 @@ const notifySendEventToAllInCompany = (req, res, next) => {
   const {
     user,
   } = res.locals;
+  let {
+    organization = null,
+  } = res.locals;
 
   const usersIds = [];
-  const organization = user.organizations[0];
+  // in some cases we have the organization object and we have to keep the user object clean
+  // in other cases we have the user object with merged organization inside
+  // that thing probably needs refactoring
+  organization = organization || user.organizations[0];
 
   organization.active_users.forEach((userId) => {
     usersIds.push(userId);

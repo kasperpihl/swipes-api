@@ -31,10 +31,12 @@ import {
   organizationsDeletedQueueMessage,
   organizationsAddPendingUsers,
   organizationsUsersInvitedUserQueueMessage,
+  organizationsUserJoinedQueueMessage,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
   usersGetByEmailWithFields,
+  usersGetByEmailWithoutFields,
   usersComparePasswordSignIn,
   usersParseInvitationToken,
   usersGetByIdWithFields,
@@ -120,6 +122,8 @@ authed.all(
     organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  organizationsUserJoinedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
@@ -256,7 +260,7 @@ authed.all(
   }),
   organizationsGetSingle,
   mapLocals(locals => ({
-    fields: ['organizations'],
+    fields: ['id', 'organizations', 'email', 'profile'],
     userToGetId: locals.user_to_enable_id,
   })),
   usersGetByIdWithFields,
@@ -267,6 +271,12 @@ authed.all(
     organization: organizationConcatUsers(locals),
   })),
   organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  mapLocals(locals => ({
+    email: locals.user.email,
+  })),
+  usersCreateInvitationToken,
+  usersSendInvitationQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
@@ -345,9 +355,9 @@ authed.all(
     email: locals.email.toLowerCase(),
   })),
   mapLocals(() => ({
-    fields: [],
+    fields: ['password', 'xendoCredentials', { services: 'auth_data' }],
   })),
-  usersGetByEmailWithFields,
+  usersGetByEmailWithoutFields,
   usersCreateTempUnactivatedUser,
   organizationsAddPendingUsers,
   usersAddPendingOrganization,

@@ -30,6 +30,7 @@ import {
   dbUsersGetByIdWithFields,
   dbUsersAddPendingOrganization,
   dbUsersConfirmEmail,
+  dbUsersGetByEmailWithoutFields,
 } from './db_utils/users';
 import {
   dbTokensInsertSingle,
@@ -289,6 +290,29 @@ const usersGetByEmailWithFields = valLocals('usersGetByEmailWithFields', {
   } = res.locals;
 
   dbUsersGetByEmailWithFields({ email, fields })
+    .then((users) => {
+      const user = users[0];
+
+      setLocals({
+        user,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const usersGetByEmailWithoutFields = valLocals('usersGetByEmailWithoutFields', {
+  email: string.format('email').require(),
+  fields: array.of(string, object).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    email,
+    fields,
+  } = res.locals;
+
+  dbUsersGetByEmailWithoutFields({ email, fields })
     .then((users) => {
       const user = users[0];
 
@@ -594,7 +618,14 @@ const usersAddPendingOrganization = valLocals('usersAddPendingOrganization', {
   const userId = user.id;
 
   dbUsersAddPendingOrganization({ user_id: userId, organization_id })
-    .then(() => {
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        organization,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -717,7 +748,7 @@ const usersSendInvitationQueueMessage = valLocals('usersSendInvitationQueueMessa
   const userId = user.id;
   const {
     first_name,
-  } = user.profile.first_name;
+  } = user.profile;
   const queueMessage = {
     organization_id,
     email,
@@ -848,6 +879,7 @@ export {
   usersInvitedUserQueueMessage,
   userSignupQueueMessage,
   usersGetByIdWithFields,
+  usersGetByEmailWithoutFields,
   usersAddPendingOrganization,
   usersCheckIfInOrganization,
   usersLeaveOrganizationQueueMessage,

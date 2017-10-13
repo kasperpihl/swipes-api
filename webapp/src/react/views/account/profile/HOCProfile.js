@@ -43,7 +43,7 @@ class HOCProfile extends PureComponent {
     }
   }
   onBlur(key) {
-    const { updateProfile } = this.props;
+    const { updateProfile, completeOnboarding } = this.props;
     const value = this.state[key];
     const orgVal = this.valueForKey(key);
     if(value !== orgVal){
@@ -51,6 +51,7 @@ class HOCProfile extends PureComponent {
       const serverKey = this.getKeyForServer(key);
       updateProfile({ [serverKey]: value }).then((res) => {
         if(res && res.ok) {
+          completeOnboarding('personalize-swipes');
           this.clearLoading(key, 'success', 1500);
         } else {
           this.clearLoading(key, '!Something went wrong');

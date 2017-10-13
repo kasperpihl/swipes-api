@@ -16,14 +16,20 @@ const initialState = fromJS({
   counters: {},
   locked: false,
   url: null,
-  urlOptions: null,
 });
 
 export default function history(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case types.NAVIGATION_URL: {
-      return state.set('url', payload.url).set('urlOptions', payload.options);
+      let val = payload.url;
+      if(payload.url) {
+        val = {
+          to: payload.url,
+          ...payload.options
+        };
+      }
+      return state.set('url', val);
     }
     case types.NAVIGATION_SET: {
       return state.update((s) => {

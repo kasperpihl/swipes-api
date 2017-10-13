@@ -25,6 +25,7 @@ export default function meReducer(state = initialState, action) {
       }
       return state;
     }
+    case 'organizations.inviteUser':
     case 'organizations.enableUser':
     case 'organizations.disableUser':
     case 'organizations.createStripeCustomer':

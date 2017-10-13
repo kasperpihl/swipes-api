@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 
-import swiss from './styles';
+import swiss from 'react-swiss';
 
 swiss.addMixin('size', (width=null, height=null) => ({
   width: width || 'auto',
@@ -150,7 +150,7 @@ const InnerView = swiss('div', {
 //   }
 // </style>
 
-class HOCCompatibleLogin extends PureComponent {
+class SwissTester extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {}
@@ -167,10 +167,10 @@ class HOCCompatibleLogin extends PureComponent {
 }
 // const { string } = PropTypes;
 
-HOCCompatibleLogin.propTypes = {};
+SwissTester.propTypes = {};
 
 const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-})(HOCCompatibleLogin);
+})(SwissTester);

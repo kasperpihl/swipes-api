@@ -1,10 +1,6 @@
-import React, { PureComponent } from 'react';
-import { fromJS } from 'immutable';
-import { randomString } from 'swipes-core-js/classes/utils';
-import StyleDomHandler from './style-dom-handler';
+import componentWrapper from './component-wrapper';
 
 let mixins = {};
-let packageName = 'swiss';
 
 const swiss = (EL, styles) => {
   // Support only the parameter as the styles (use a div then)
@@ -15,53 +11,19 @@ const swiss = (EL, styles) => {
   
   // Make sure we got the right parameters
   if(!styles || typeof styles !== 'object') {
-    return console.warn(`${packageName} needs styles object as first or second parameter`);
+    return console.warn('swiss needs styles object as first or second parameter');
   }
   if(!EL || typeof EL !== 'string') {
-    return console.warn(`${packageName} needs the first parameter to be a string of the desired html element`);
+    return console.warn('swiss needs first parameter to be the desired html tag as a string');
   }
   
   // Assume styles are the default if default is not provided
   if(!styles.default) {
     styles = { default: styles };
-  }  
-  // make sure first char is a letter! css does not support classes that starts with num
-  const firstLetter = randomString(1, 'abcdefghijklmnopqrstuvwxyz');
-  const className = `${firstLetter + randomString(6)}`;
-  const styleHandler = new StyleDomHandler(className, styles, mixins);
-
-  class StyledElement extends PureComponent {
-    componentWillMount() {
-      styleHandler.subscribe(this.props);
-    }
-    componentWillUnmount() {
-      styleHandler.unsubscribe(this.props);
-    }
-    componentWillReceiveProps(nextProps) {
-      styleHandler.subscribe(nextProps, this.props);
-    }
-    render() {
-      const variables = styleHandler.getVariables();
-      let computedClassName = className;
-      variables.forEach(vari => {
-        if(this.props[vari]) {
-          computedClassName += ` ${className}-${vari}`;
-        }
-      });
-      const newProps = {};
-      Object.entries(this.props).forEach(([name, value]) => {
-        if(name !== 'className' && variables.indexOf(name) === -1) {
-          newProps[name] = value;
-        }
-      })
-
-      return <EL className={computedClassName} {...newProps}>{this.props.children}</EL>;
-    }
   }
 
-  StyledElement.ref = `.${className}`;
+  return componentWrapper(EL, styles, mixins);
 
-  return StyledElement;
 }
 
 swiss.addMixin = (name, handler) => {

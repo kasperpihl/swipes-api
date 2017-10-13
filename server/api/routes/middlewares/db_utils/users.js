@@ -147,6 +147,26 @@ const dbUsersGetByEmailWithFields = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbUsersGetByEmailWithoutFields = funcWrap([
+  object.as({
+    email: string.require(),
+    fields: array.of(string, object).require(),
+  }).require(),
+], (err, { email, fields }) => {
+  if (err) {
+    throw new SwipesError(`dbUsersGetByEmailWithoutFields: ${err}`);
+  }
+
+  let q = r.table('users').filter({
+    email,
+  });
+
+  if (fields.length > 0) {
+    q = q.without(fields);
+  }
+
+  return db.rethinkQuery(q);
+});
 const dbUsersAddOrganization = funcWrap([
   object.as({
     user_id: string.require(),
@@ -229,10 +249,25 @@ const dbUsersAddPendingOrganization = funcWrap([
     throw new SwipesError(`dbUsersAddPendingOrganization: ${err}`);
   }
 
-  const q = r.table('users').get(user_id).update({
-    pending_organizations: r.row('pending_organizations').default([]).setUnion([organization_id]),
-    updated_at: r.now(),
-  });
+  const q =
+  r.table('organizations')
+    .get(organization_id)
+    .update({
+      pending_users: r.row('pending_users').default([]).setUnion([user_id]),
+      disabled_users: r.row('disabled_users').default([]).difference([user_id]),
+      active_users: r.row('active_users').default([]).difference([user_id]),
+      updated_at: r.now(),
+    }, {
+      returnChanges: true,
+    }).do((result) => {
+      return r.table('users').get(user_id).update((user) => {
+        return {
+          pending_organizations: user('pending_organizations').default([]).setUnion([organization_id]),
+        };
+      }).do(() => {
+        return result;
+      });
+    });
 
   return db.rethinkQuery(q);
 });
@@ -300,4 +335,5 @@ export {
   dbUsersGetByIdWithFields,
   dbUsersAddPendingOrganization,
   dbUsersConfirmEmail,
+  dbUsersGetByEmailWithoutFields,
 };

@@ -544,6 +544,24 @@ const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMes
 
   return next();
 });
+const organizationsUserJoinedQueueMessage = valLocals('organizationsUserJoinedQueueMessage', {
+  user_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+  } = res.locals;
+  const queueMessage = {
+    user_id,
+    event_type: 'organization_user_joined',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: organization_id,
+  });
+
+  return next();
+});
 const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCustomer', {
   organization_id: string.require(),
   organization: object.require(),
@@ -815,4 +833,5 @@ export {
   organizationsUsersInvitedUserQueueMessage,
   organizationsChangeStripeCustomerEmail,
   organizationsDeletedQueueMessage,
+  organizationsUserJoinedQueueMessage,
 };
