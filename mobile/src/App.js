@@ -6,6 +6,7 @@ import codePush from 'react-native-code-push';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Login from 'views/login/Login';
+import WelcomeScreen from 'views/welcome/WelcomeScreen';
 import HOCInfoTab from 'views/info-tab/HOCInfoTab';
 import Icon from 'components/icons/Icon';
 import HOCTabNavigation from 'components/tab-navigation/HOCTabNavigation';
@@ -41,6 +42,9 @@ const styles = StyleSheet.create({
 class App extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      showLogin: false,
+    }
     this.onIds = this.onIds.bind(this);
     this.onOpened = this.onOpened.bind(this);
   }
@@ -68,6 +72,13 @@ class App extends PureComponent {
   componentWillUnmount() {
     OneSignal.removeEventListener('ids', this.onIds);
     OneSignal.removeEventListener('opened', this.onOpened);
+  }
+  onShowLogin() {
+    const { showLogin } = this.state;
+
+    if (!showLogin) {
+      this.setState({ showLogin: true });
+    }
   }
   onIds(device) {
     if (device.userId) {
@@ -98,9 +109,9 @@ class App extends PureComponent {
     }
   }
   renderLoader() {
-    const { ready } = this.props;
+    const { ready, isHydrated, token } = this.props;
 
-    if (ready) {
+    if (isHydrated) {
       return undefined;
     }
 
@@ -117,9 +128,14 @@ class App extends PureComponent {
   }
   renderLogin() {
     const { token, isHydrated } = this.props;
+    const { showLogin } = this.state;
 
     if (token || !isHydrated) {
       return undefined;
+    }
+
+    if (!showLogin) {
+      return <WelcomeScreen delegate={this} />
     }
 
     return <Login />;
@@ -185,7 +201,7 @@ function mapStateToProps(state) {
   return {
     token: state.getIn(['connection', 'token']),
     myId: state.getIn(['me', 'id']),
-    ready: state.getIn(['connection', 'ready']),
+    ready: state.getIn(['connection', 'readyInOrg']),
     isHydrated: state.getIn(['main', 'isHydrated']),
   };
 }
