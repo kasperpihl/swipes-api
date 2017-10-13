@@ -547,13 +547,16 @@ const organizationsUpdatedQueueMessage = valLocals('organizationsUpdatedQueueMes
 const organizationsUserJoinedQueueMessage = valLocals('organizationsUserJoinedQueueMessage', {
   user_id: string.require(),
   organization_id: string.require(),
+  organization: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     organization_id,
+    organization,
   } = res.locals;
   const queueMessage = {
     user_id,
+    organization_name: organization.name,
     event_type: 'organization_user_joined',
   };
 

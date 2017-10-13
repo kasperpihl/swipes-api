@@ -52,14 +52,22 @@ const organizationsDeletedNotificationData = (req, res, next) => {
 const organizationsUserJoinedNotificationData = (req, res, next) => {
   const {
     user_id,
+    organization_name,
     userWithFields,
   } = res.locals;
+  const usersNotificationDataMetaMap = {};
+
+  usersNotificationDataMetaMap[user_id] = {
+    is_me: true,
+  };
+  res.locals.usersNotificationDataMetaMap = usersNotificationDataMetaMap;
 
   res.locals.notificationData = {
     target: {
       id: user_id,
     },
     meta: {
+      organization_name,
       first_name: userWithFields.profile.first_name,
     },
   };
