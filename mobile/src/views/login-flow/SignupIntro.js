@@ -4,11 +4,11 @@ import { setupDelegate } from 'react-delegate';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
 import * as gs from 'styles';
-import { colors } from 'globalStyles';
+import { colors, viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   container: {
-    ...gs.mixins.size(1),
+    ...gs.mixins.size(viewSize.width, viewSize.height),
     backgroundColor: colors.blue100,
     ...gs.mixins.padding(30, 30, 0, 30),
   },

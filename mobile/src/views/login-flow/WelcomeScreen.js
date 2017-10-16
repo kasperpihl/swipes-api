@@ -8,11 +8,11 @@ import { colors, viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    ...gs.mixins.size(1),
+    ...gs.mixins.size(viewSize.width, viewSize.height),
   },
   container: {
     ...gs.mixins.size(1),
-    ...gs.mixins.padding(33, 30, 0, 30),
+    ...gs.mixins.padding(60, 30, 0, 30),
   },
   logoWrapper: {
     ...gs.mixins.padding(0, 0, (viewSize.height * .03), 0),

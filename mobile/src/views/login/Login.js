@@ -20,6 +20,70 @@ import RippleButton from 'RippleButton';
 import { colors, viewSize, statusbarHeight } from 'globalStyles';
 import { api } from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import * as gs from 'styles';
+
+const styles = StyleSheet.create({
+  container: {
+    ...gs.mixins.size(viewSize.width, viewSize.height),
+    ...gs.mixins.flex('row', 'center', 'top'),
+  },
+  errorWrapper: {
+    ...gs.mixins.padding(15, 30),
+    position: 'absolute',
+    left: 0, bottom: 0,
+    backgroundColor: colors.deepBlue100,
+    width: viewSize.width,
+  },
+  errorLabel: {
+    ...gs.mixins.font(12, 'white', 15),
+    textAlign: 'center',
+  },
+  titleWrapper: {
+    width: viewSize.width,
+    marginTop: 60,
+    paddingHorizontal: 15,
+    backgroundColor: 'transparent',
+  },
+  titleLabel: {
+    ...gs.mixins.font(29, 'white', 51, 'bold'),
+  },
+  gradient: {
+    ...gs.mixins.size(viewSize.width, viewSize.height),
+    position: 'absolute',
+    left: 0,
+    top: 0,
+  },
+  form: {
+    width: viewSize.width,
+    marginTop: 45,
+  },
+  inputWrapper: {
+    ...gs.mixins.border(1, 'white', 'bottom'),
+    width: viewSize.width - 30,
+    marginLeft: 15,
+  },
+  input: {
+    ...gs.mixins.size(viewSize.width - 30, 50),
+    ...gs.mixins.font(15, 'white', 21),
+  },
+  input2: {
+    ...gs.mixins.size(viewSize.width - 30, 50),
+    ...gs.mixins.font(15, 'white', 21),
+    marginTop: 30,
+  },
+  button: {
+    ...gs.mixins.border(1, 'white'),
+    ...gs.mixins.borderRadius(3),
+    ...gs.mixins.flex('center'),
+    ...gs.mixins.margin(60, 0, 30, 15),
+    ...gs.mixins.size(viewSize.width - 30, 61),
+    backgroundColor: 'transparent',
+  },
+  buttonLabel: {
+    ...gs.mixins.font(12, 'white', 'bold'),
+    backgroundColor: 'transparent',
+  },
+});
 
 class Login extends PureComponent {
   constructor(props) {
@@ -217,89 +281,3 @@ class Login extends PureComponent {
 export default connect(null, {
   request: api.request,
 })(Login);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  errorWrapper: {
-    position: 'absolute',
-    left: 0, bottom: 0,
-    backgroundColor: colors.deepBlue100,
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-    width: viewSize.width,
-  },
-  errorLabel: {
-    textAlign: 'center',
-    color: colors.bgColor,
-    fontSize: 12,
-    lineHeight: 15,
-  },
-  titleWrapper: {
-    width: viewSize.width,
-    marginTop: 60,
-    paddingHorizontal: 15,
-    backgroundColor: 'transparent',
-  },
-  titleLabel: {
-    fontSize: 39,
-    fontWeight: 'bold',
-    lineHeight: 51,
-    color: 'white',
-  },
-  gradient: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: viewSize.width,
-    height: viewSize.height,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  form: {
-    width: viewSize.width,
-    marginTop: 45,
-  },
-  inputWrapper: {
-    width: viewSize.width - 30,
-    marginLeft: 15,
-    borderBottomColor: 'white',
-    borderBottomWidth: 1
-  },
-  input: {
-    width: viewSize.width - 30,
-    height: 50,
-    color: 'white',
-    fontSize: 15,
-    lineHeight: 21,
-  },
-  input2: {
-    width: viewSize.width - 30,
-    height: 50,
-    color: 'white',
-    fontSize: 15,
-    lineHeight: 21,
-    marginTop: 30,
-  },
-  button: {
-    width: viewSize.width - 30,
-    height: 61,
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: 'white',
-    borderWidth: 1,
-    borderRadius: 3,
-    marginLeft: 15,
-    marginTop: 60,
-    marginBottom: 30,
-  },
-  buttonLabel: {
-    color: 'white',
-    backgroundColor: 'transparent',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-});
