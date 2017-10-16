@@ -83,7 +83,7 @@ class HOCLoginFlow extends PureComponent {
     if (showLogin || showSignupIntro) {
 
       if (showLogin) {
-        return <Login />;
+        return <Login  delegate={this} />;
       }
 
       return <SignupIntro delegate={this} />;

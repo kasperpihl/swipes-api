@@ -17,6 +17,8 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RippleButton from 'RippleButton';
+import Icon from 'Icon';
+import { setupDelegate } from 'react-delegate';
 import { colors, viewSize, statusbarHeight } from 'globalStyles';
 import { api } from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -45,13 +47,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   titleLabel: {
-    ...gs.mixins.font(29, 'white', 51, 'bold'),
+    ...gs.mixins.font(30, 'white', 34, '300'),
   },
   gradient: {
     ...gs.mixins.size(viewSize.width, viewSize.height),
     position: 'absolute',
     left: 0,
     top: 0,
+  },
+  backButtonWrapper: {
+    ...gs.mixins.size(44),
+    ...gs.mixins.flex('center'),
+  },
+  backButton: {
+    ...gs.mixins.size(44),
+    ...gs.mixins.flex('center'),
+    marginLeft: -15,
+    marginRight: 15,
   },
   form: {
     width: viewSize.width,
@@ -96,6 +108,7 @@ class Login extends PureComponent {
       errorMessage: '',
     };
 
+    setupDelegate(this, 'onShowWelcome')
     setupLoading(this);
 
     codePush.getUpdateMetadata().then((pack) => {
@@ -212,6 +225,18 @@ class Login extends PureComponent {
       </View>
     )
   }
+  renderBackButton() {
+
+    if (Platform.OS === 'android') return undefined;
+
+    return (
+      <RippleButton style={styles.backButton} onPress={this.onShowWelcome}>
+        <View style={styles.backButtonWrapper}>
+          <Icon name="ArrowLeftLine" width="24" height="24" fill="white" />
+        </View>
+      </RippleButton>
+    )
+  }
   renderTitle() {
     const { keyboardOpen } = this.state;
 
@@ -220,7 +245,8 @@ class Login extends PureComponent {
     }
 
     return (
-      <View style={styles.titleWrapper}>
+      <View style={[styles.titleWrapper, { flexDirection: 'row' }]}>
+        {this.renderBackButton()}
         <Text selectable={true} style={styles.titleLabel}>Sign in to your Workspace</Text>
       </View>
     )
