@@ -66,6 +66,9 @@ export default function posts (state = initialState, action) {
         return reactions.filter(r => r.get('created_by') !== payload.user_id);
       });
     }
+    case types.RESET_STATE: {
+      return initialState;
+    }
     default:
       return state
   }

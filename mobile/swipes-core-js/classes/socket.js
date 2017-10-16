@@ -138,7 +138,7 @@ export default class Socket {
   changeStatus(status, nextRetry) {
     this.status = status;
     this.store.dispatch({
-      type: types.SET_STATUS,
+      type: types.SET_CONNECTION_STATUS,
       payload: {
         status,
         reconnectAttempt: this.reconnect_attempts,
@@ -155,6 +155,12 @@ export default class Socket {
 
     if (!type || (this.isConnecting && type !== 'pong')) {
       return;
+    }
+    if(type === 'token_revoked') {
+      const currToken = this.store.getState().getIn(['connection', 'token']);
+      if (payload.token_to_revoke === currToken) {
+        this.store.disatch({ type: types.RESET_STATE });
+      }
     }
     const socketData = Object.assign({ ok: true }, payload && payload.data);
     this.store.dispatch({ type, payload: socketData });

@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import * as coreTypes from 'swipes-core-js/constants';
 import * as types from 'constants';
 
 const initialState = fromJS({
@@ -61,6 +62,9 @@ export default function history(state = initialState, action) {
         }
         return s.butLast();
       });
+    }
+    case coreTypes.RESET_STATE: {
+      return initialState;
     }
     default:
       return state;

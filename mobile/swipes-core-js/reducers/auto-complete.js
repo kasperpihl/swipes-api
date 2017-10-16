@@ -14,7 +14,8 @@ export default function autoComplete (state = initialState, action) {
     case types.AUTO_COMPLETE: {
       return state.merge(payload);
     }
-    case types.AUTO_COMPLETE_CLEAR: {
+    case types.AUTO_COMPLETE_CLEAR:
+    case types.RESET_STATE: {
       return initialState;
     }
     default:{

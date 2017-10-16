@@ -48,7 +48,7 @@ export default function connectionReducer(state = initialState, action) {
     case types.SET_UPDATE_STATUS: {
       return state.mergeIn(['versionInfo'], fromJS(payload));
     }
-    case types.SET_STATUS: {
+    case types.SET_CONNECTION_STATUS: {
       return state.set('status', payload.status)
         .set('nextRetry', payload.nextRetry)
         .set('reconnectAttempt', payload.reconnectAttempt);
@@ -71,18 +71,6 @@ export default function connectionReducer(state = initialState, action) {
     case 'users.signin':
     case 'users.signup': {
       return state.set('token', payload.token);
-    }
-    case 'token_revoked': {
-      const currToken = state.get('token');
-      if (payload.token_to_revoke !== currToken) {
-        return state;
-      }
-      return initialState;
-    }
-    case 'users.signout': {
-      return state.set('readyInOrg', false)
-                  .set('hasConnected', false)
-                  .set('token', null);
     }
     case types.RESET_STATE: {
       return initialState;

@@ -6,7 +6,6 @@ import { randomString } from 'swipes-core-js/classes/utils';
 const initialState = fromJS({
   overlay: null,
   isHydrated: false,
-  versionInfo: {},
   successState: false,
   modals: {
     primary: null,
@@ -46,16 +45,6 @@ export default function main(state = initialState, action) {
     case types.CONTEXT_MENU: {
       const pl = payload && Object.assign({}, payload, { id: randomString(5) });
       return state.set('contextMenu', pl);
-    }
-
-    // ======================================================
-    // Preview
-    // ======================================================
-    case types.PREVIEW_LOADING: {
-      return state.set('preview', Map({ loading: true }));
-    }
-    case types.PREVIEW: {
-      return state.set('preview', Map(payload));
     }
 
     // ======================================================

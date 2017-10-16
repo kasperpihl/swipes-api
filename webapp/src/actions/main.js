@@ -1,5 +1,6 @@
 import * as types from 'constants';
 import * as ca from 'swipes-core-js/actions';
+import * as coreTypes from 'swipes-core-js/constants';
 import * as a from './';
 
 
@@ -60,17 +61,17 @@ export function successGradient(color) {
 // ======================================================
 // Account related
 // ======================================================
-export const forceLogout = () => {
+export const forceLogout = (dp) => {
   window.analytics.logout();
-  localForage.clear();
-  window.location.replace('/login');
+  dp({ type: coreTypes.RESET_STATE });
 };
+
 export const signout = cb => dp => dp(ca.api.request('users.signout')).then((res) => {
   if (cb) {
     cb(res);
   }
   if (res && res.ok) {
-    forceLogout();
+    dp(forceLogout);
   }
 });
 
