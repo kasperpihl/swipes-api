@@ -6,7 +6,6 @@ import {
   SwipesError,
 } from '../middlewares/swipes-error';
 
-const getNewestElectronVersion = () => '0.0.5';
 const getDownloadLinks = () => {
   // if (config.get('env') === 'staging') {
   // }
@@ -206,7 +205,6 @@ const valBody = (schema, middleware) => (req, res, next) => {
 export {
   generateSlackLikeId,
   camelCaseToUnderscore,
-  getNewestElectronVersion,
   getDownloadLinks,
   sendResponse,
   valResponseAndSend,

@@ -15,7 +15,6 @@
     "postinstall": "cd ../mobile/swipes-core-js; npm install"
   },
   "dependencies": {
-    "axios": "^0.16.2",
     "babel-polyfill": "^6.26.0",
     "blueimp-load-image": "^2.17.0",
     "deep-equal": "^1.0.1",
