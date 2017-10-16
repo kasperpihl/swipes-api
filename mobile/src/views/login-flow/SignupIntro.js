@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
     ...gs.mixins.font(15, 'white', 20),
   },
   button: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    marginTop: 30,
   },
   buttonWrapper: { 
     backgroundColor: 'white',
-    marginTop: 30,
   },
   buttonLabel: {
     ...gs.mixins.padding(15, 30),

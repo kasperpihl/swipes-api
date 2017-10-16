@@ -5,52 +5,42 @@ import { setupDelegate } from 'react-delegate';
 import { colors, viewSize, statusbarHeight  } from 'globalStyles';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
+import * as gs from 'styles';
 
 const NAV_BAR_HEIGHT = 54;
 const ICON_SIZE = 24;
 
 const styles = StyleSheet.create({
   container: {
-    width: viewSize.width,
-    height: viewSize.height - NAV_BAR_HEIGHT,
+    ...gs.mixins.size(viewSize.width, (viewSize.height - NAV_BAR_HEIGHT)),
     position: 'absolute',
     left: 0, top: -viewSize.height + NAV_BAR_HEIGHT - statusbarHeight,
   },
   actionsWrapper: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('column', 'bottom', 'right'),
     paddingBottom: 15,
   },
   actionWrapper: {
-    width: viewSize.width,
-    height: 54,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    ...gs.mixins.size(viewSize.width, 54),
+    ...gs.mixins.flex('row', 'right', 'center'),
     marginTop: 12,
   },
   actionLabelWrapper: {
+    ...gs.mixins.flex('center'),
     height: 54,
     paddingLeft: ((viewSize.width / 5) - ICON_SIZE) / 2,
     paddingRight: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderTopLeftRadius: 6,
     borderBottomLeftRadius: 6,
   },
   actionLabel: {
-    fontSize: 13,
-    fontWeight: '500',
-    lineHeight: 18,
+    ...gs.mixins.font(13, colors.deepBlue100, 18, '500'),
   },
   actionIcon: {
-    height: 54,
-    width: viewSize.width / 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...gs.mixins.size(viewSize.width / 5, 54),
+    ...gs.mixins.flex('center'),
   },
-  animatePosStart: {}
 })
 
 class NavChanger extends PureComponent {
@@ -100,6 +90,7 @@ class NavChanger extends PureComponent {
           {this.renderAction('Update', 'Updates', true)}
           {this.renderAction('Profile', 'Profile')}
           {this.renderAction('Find', 'Search')}
+          {this.renderAction('QuestionMono', 'Help')}
         </View>
       </TouchableOpacity>
     )

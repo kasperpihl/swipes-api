@@ -109,7 +109,7 @@ class HOCTabNavigation extends PureComponent {
     this.setState({ showNavChanger: false, navChangerActive: false })
   }
   onNavChangeAction(type) {
-    const { sliderChange, navPush } = this.props;
+    const { sliderChange, navPush, browser } = this.props;
     const { rootRoutes } = this.state;
 
     if (type === 'Update') {
@@ -118,6 +118,9 @@ class HOCTabNavigation extends PureComponent {
       this.handleNavChange(4, type);
     } else if (type === 'Find') {
       this.handleNavChange(5, type);
+    } else if (type === 'QuestionMono') {
+      browser('https://support.swipesapp.com/hc/en-us/categories/115000489025-Swipes-Workspace');
+      this.setState({ showNavChanger: false, navChangerActive: false });
     } else {
       this.setState({ showNavChanger: false });
     }
@@ -247,6 +250,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  browser: a.links.browser,
   sliderChange: a.navigation.sliderChange,
   navPush: a.navigation.push
 })(HOCTabNavigation);
