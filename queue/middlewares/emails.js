@@ -89,7 +89,7 @@ const usersWelcomeEmail = (req, res, next) => {
       content: first_name,
     }, {
       name: 'CONFIRMATION_LINK',
-      content: `${host}confirm-email?confirmation_token=${confirmation_token}`,
+      content: `${host}confirm?confirmation_token=${confirmation_token}`,
     }],
   }];
   const to = [
