@@ -32,7 +32,7 @@ class SwipesIntro extends PureComponent {
     return (
       <SWView header={this.renderHeader()}>
         <div className="swipes-intro">
-          <img src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/swipes-workspace-learn-diagram.png" />
+          <img src="https://s3-us-west-2.amazonaws.com/live.swipesapp.com/uploads/ONY8E94FL/1508152151-URU3EUPOE/swipes-workspace-learn-diagram.png" />
         </div>
       </SWView>
     );
