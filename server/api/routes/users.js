@@ -150,6 +150,9 @@ notAuthed.all(
     confirmation_token: string.require(),
   }),
   usersParseConfirmationToken,
+  mapLocals(locals => ({
+    user_id: locals.userId,
+  })),
   usersConfirmEmail,
   usersConfirmEmailQueueMessage,
   notificationsPushToQueue,
