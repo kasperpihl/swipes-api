@@ -11,7 +11,7 @@ export default class Socket {
     this.delegate = delegate;
     setupDelegate(this, 'forceLogout');
     this.reconnect_attempts = 0;
-    bindAll(this, ['message', 'changeStatus', 'storeChange']);
+    bindAll(this, ['message', 'changeStatus', 'storeChange', 'onCloseHandler']);
     store.subscribe(this.storeChange);
   }
   storeChange() {
@@ -23,25 +23,22 @@ export default class Socket {
     if (this.isSocketConnected && (!this.token || forceFullFetch)) {
       this.forceClose();
     }
-    if (this.token && !this.isSocketConnected) {
+    if (this.token && !this.isSocketConnected && !this.hasTimer) {
       this.timedConnect(this.timerForAttempt());
     }
   }
-  forceClose() {
-    if(this.ws) {
+  forceClose(killSocket) {
+    if(this.ws && killSocket) {
       this.ws.close();
     } else {
       this.onCloseHandler();
     }
   }
   onCloseHandler() {
-    this.isSocketConnected = false;
     this.isConnecting = false;
-    clearInterval(this._pingTimer);
     this.reconnect_attempts += 1;
     this.changeStatus('offline', nextRetry);
     let nextRetry;
-
     if (this.token) {
       const time = this.timerForAttempt();
       this.timedConnect(time, true);
@@ -58,6 +55,7 @@ export default class Socket {
     }
     clearTimeout(this.timer);
     this.timer = setTimeout(this.connect.bind(this), time);
+    this.hasTimer = true;
   }
   connect() {
     const { getState } = this.store;
@@ -74,6 +72,7 @@ export default class Socket {
     if (this.isConnecting) {
       return;
     }
+    this.hasTimer = false;
     this.isConnecting = true;
     this.changeStatus('connecting');
 
@@ -91,26 +90,20 @@ export default class Socket {
     this.ws = new WebSocket(wsUrl);
 
     this.ws.onopen = () => {
+      this.isSocketConnected = true;
+      this._pingTimer = setInterval(() => {
+        this.sendPing();
+      }, 5000);
       this.fetchInit();
     }
 
     this.ws.onmessage = this.message;
 
     this.ws.onclose = () => {
+      this.isSocketConnected = false;
+      clearInterval(this._pingTimer);
       this.onCloseHandler();
-      let nextRetry;
-
-      if (this.token) {
-        const time = this.timerForAttempt();
-        this.timedConnect(time, true);
-        nextRetry = new Date();
-        nextRetry.setSeconds(nextRetry.getSeconds() + (time / 1000));
-      } else {
-        this.reconnect_attempts = 0;
-        this.timer = undefined;
-      }
-      
-    };
+    }
   }
   fetchInit() {
     this.isSocketConnected = true;
@@ -129,9 +122,6 @@ export default class Socket {
     })).then((res) => {
       this.isConnecting = false;
       if (res && res.ok) {
-        this._pingTimer = setInterval(() => {
-          this.sendPing();
-        }, 5000);
         this.reconnect_attempts = 0;
         this.changeStatus('online');
       } else if (res && res.error) {
@@ -162,7 +152,7 @@ export default class Socket {
       payload,
     } = data;
 
-    if (!type || this.isConnecting) {
+    if (!type || (this.isConnecting && type !== 'pong')) {
       return;
     }
     const socketData = Object.assign({ ok: true }, payload && payload.data);
@@ -187,7 +177,7 @@ export default class Socket {
     }
   }
   sendPing() {
-    if (this.ws && this.ws.readyState == this.ws.OPEN && !this.isConnecting) {
+    if (this.ws && this.ws.readyState == this.ws.OPEN) {
       this.ws.send(JSON.stringify({
         type: 'ping',
         id: 1,
@@ -195,6 +185,8 @@ export default class Socket {
     }
   }
   timerForAttempt() {
+    const maintenance = this.store.getState().getIn(['connection', 'versionInfo', 'maintenance']);
+    if(maintenance) return 180000;
     switch (this.reconnect_attempts) {
       case 0: return 0;
       case 1:

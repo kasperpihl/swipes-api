@@ -9,17 +9,20 @@ const handleUpdatesNeeded = (payload, state, dispatch) => {
   const updateUrl = state.getIn(['connection', 'versionInfo', 'updateUrl']);
   const reloadAvailable = state.getIn(['connection', 'versionInfo', 'reloadAvailable']);
   const reloadRequired = state.getIn(['connection', 'versionInfo', 'reloadRequired']);
+  const maintenance = state.getIn(['connection', 'versionInfo', 'maintenance']);
 
   if (
     payload.update_required !== updateRequired ||
     payload.update_available !== updateAvailable ||
     payload.update_url !== updateUrl ||
     payload.reload_required !== reloadRequired ||
-    payload.reload_available !== reloadAvailable
+    payload.reload_available !== reloadAvailable ||
+    payload.maintenance !== maintenance
   ) {
     dispatch({
       type: types.SET_UPDATE_STATUS,
       payload: {
+        maintenance: payload.maintenance,
         updateRequired: payload.update_required,
         updateAvailable: payload.update_available,
         updateUrl: payload.update_url,

@@ -16,6 +16,7 @@ import handleJsonError from './middlewares/errors';
 import {
   swipesErrorMiddleware,
 } from './middlewares/swipes-error';
+import { SwipesError } from './middlewares/swipes-error';
 import * as routes from './api/routes';
 
 require('winston-loggly-bulk');
@@ -86,6 +87,12 @@ app.use('/v1', (req, res, next) => {
 });
 // Get the config table into res.locals.config
 app.use('/v1', getConfig);
+app.use('/v1', (req, res, next) => {
+  if(res.locals.config.maintenance) {
+    return next(new SwipesError('maintenance', { maintenance: true }));
+  }
+  return next();
+})
 // No authed routes goes here
 app.use('/v1', routes.v1NotAuthed);
 // Checking for updates

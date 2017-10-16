@@ -67,7 +67,11 @@ class HOCTopbar extends PureComponent {
     let statusMessage;
     let btn;
 
-    if (versionInfo && versionInfo.get('updateRequired')) {
+    if (versionInfo && versionInfo.get('maintenance')) {
+      statusMessage = 'Offline - under maintenance.';
+      btn = this.renderRetryBtn();
+    }
+    else if (versionInfo && versionInfo.get('updateRequired')) {
       statusMessage = 'Offline - new version required';
       btn = this.renderDownloadBtn();
     } else if (versionInfo && versionInfo.get('updateAvailable')) {
@@ -121,7 +125,10 @@ class HOCTopbar extends PureComponent {
     );
   }
   renderWindowsActions() {
-    const { isMaximized, isFullscreen } = this.props;
+    const { isMaximized, isFullscreen, isElectron } = this.props;
+    if(!isElectron) { 
+      return null;
+    }
     let toggleMaximizeIcon = 'WindowsMaximize';
     let toggleMaximizeFunc = 'maximize';
 
@@ -158,8 +165,8 @@ class HOCTopbar extends PureComponent {
     );
   }
   render() {
-    const { isElectron } = this.props;
-    if (!isElectron) {
+    const { isBrowserSupported } = this.props;
+    if (!isBrowserSupported) {
       return null;
     }
     return (
@@ -175,6 +182,7 @@ class HOCTopbar extends PureComponent {
 function mapStateToProps(state) {
   return {
     me: state.get('me'),
+    isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
     isElectron: state.getIn(['globals', 'isElectron']),
     nextRetry: state.getIn(['connection', 'nextRetry']),
     versionInfo: state.getIn(['connection', 'versionInfo']),
