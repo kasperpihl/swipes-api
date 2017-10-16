@@ -29,10 +29,11 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'white',
-    marginTop: 30,
+    marginTop: (Platform.OS === 'ios') ? 30 : 0,
   },
   buttonWrapper: { 
     backgroundColor: 'white',
+    marginTop: (Platform.OS === 'android') ? 30 : 0,
   },
   buttonLabel: {
     ...gs.mixins.padding(15, 30),
