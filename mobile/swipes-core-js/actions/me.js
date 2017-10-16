@@ -1,4 +1,21 @@
 import { request } from './api';
+export const init = () => (d, getState) => {
+  const state = getState();
+  const forceFullFetch = state.getIn(['connection', 'forceFullFetch']);
+  const withoutNotes = state.getIn(['globals', 'withoutNotes']);
+  const lastConnect = state.getIn(['connection', 'lastConnect']);
+  const me = state.get('me');
+
+  const options = {
+    without_notes: withoutNotes,
+  };
+
+  if(!forceFullFetch && lastConnect) {
+    options.timestamp = lastConnect;
+  }
+
+  return d(request('init', options));
+}
 
 export const disconnectService = aId => request('users.serviceDisconnect', { account_id: aId });
 

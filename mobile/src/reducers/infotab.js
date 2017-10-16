@@ -10,6 +10,9 @@ export default function infoTab (state = initialState, action) {
     case types.SHOW_INFOTAB: {
       return Map(payload);
     }
+    case types.RESET_STATE: {
+      return initialState;
+    }
     default: {
       return state;
     }

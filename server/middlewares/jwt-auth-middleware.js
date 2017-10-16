@@ -38,8 +38,8 @@ const authCheckToken = (req, res, next) => {
 
       return next();
     })
-    .catch(() => {
-      return res.status(200).json({ ok: false, error: 'not_authed' });
+    .catch((e) => {
+      return res.status(200).json({ ok: false, error: 'database_error' });
     });
 };
 

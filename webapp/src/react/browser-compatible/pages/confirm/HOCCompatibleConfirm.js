@@ -38,13 +38,15 @@ class HOCCompatibleConfirm extends PureComponent {
     this._unmounted = true;
   }
   renderResult() {
-    const lState = this.getLoading('confirm');
-    return lState.loading || lState.success || lState.error;
+    
+    
   }
   render() {
+    const lState = this.getLoading('confirm');
+    const title = lState.loading || lState.success || lState.error;
     return (
       <CompatibleCard>
-        {this.renderResult()}
+        <h1>{title}</h1>
       </CompatibleCard>
     );
   }

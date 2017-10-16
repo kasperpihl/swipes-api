@@ -19,6 +19,9 @@ export default function main(state = initialState, action) {
     case types.SET_LOADING: {
       return state.set('loading', payload || null);
     }
+    case types.RESET_STATE: {
+      return initialState;
+    }
     default: {
       return state;
     }

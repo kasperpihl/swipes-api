@@ -5,6 +5,9 @@ import * as types from '../constants';
 import { bindAll } from './utils';
 import * as a from '../actions';
 
+const PING_TIMER = 5000;
+const EXPECTED_PONG = 7000;
+
 export default class Socket {
   constructor(store, delegate) {
     this.store = store;
@@ -38,7 +41,6 @@ export default class Socket {
     this.isConnecting = false;
     this.isConnected = false;
     this.reconnect_attempts += 1;
-    this.changeStatus('offline', nextRetry);
     let nextRetry;
     if (this.token) {
       const time = this.timerForAttempt();
@@ -49,9 +51,10 @@ export default class Socket {
       this.reconnect_attempts = 0;
       this.timer = undefined;
     }
+    this.changeStatus('offline', nextRetry);
   }
   timedConnect(time) {
-    if(this.isConnecting) { 
+    if(this.isConnecting || this.hasTimer) { 
       return;
     }
     clearTimeout(this.timer);
@@ -107,30 +110,14 @@ export default class Socket {
     }
   }
   fetchInit() {
-    const { getState } = this.store;
-    const forceFullFetch = getState().getIn(['connection', 'forceFullFetch']);
-    const withoutNotes = getState().getIn(['globals', 'withoutNotes']);
-
-    let timestamp;
-    
-    if(!forceFullFetch) {
-      timestamp = getState().getIn(['connection', 'lastConnect']);
-    }
-    this.store.dispatch(a.api.request('init', {
-      timestamp: timestamp || null,
-      without_notes: withoutNotes,
-    })).then((res) => {
+    this.store.dispatch(a.me.init()).then((res) => {
       this.isConnecting = false;
       this.isConnected = true;
       if (res && res.ok) {
         this.reconnect_attempts = 0;
         this.changeStatus('online');
       } else if (res && res.error) {
-        if (res.error.message === 'not_authed') {
-          this.forceLogout();
-        } else {
-          this.forceClose();
-        }
+        this.forceClose();
       }
     });
   }
@@ -153,8 +140,11 @@ export default class Socket {
       payload,
     } = data;
 
-    if (!type || (this.isConnecting && type !== 'pong')) {
+    if (!type || (!this.isConnected && type !== 'pong')) {
       return;
+    }
+    if(type === 'pong') {
+      this.lastPong = new Date().getTime();
     }
     if(type === 'token_revoked') {
       const currToken = this.store.getState().getIn(['connection', 'token']);
@@ -184,11 +174,20 @@ export default class Socket {
     }
   }
   sendPing() {
+    
+    
     if (this.ws && this.ws.readyState == this.ws.OPEN) {
-      this.ws.send(JSON.stringify({
-        type: 'ping',
-        id: 1,
-      }));
+      const now = new Date().getTime();
+      console.log(now - this.lastPong)
+      if(this.lastPong && (now - this.lastPong > EXPECTED_PONG)) {
+        this.forceClose(true);
+      } else {
+        this.ws.send(JSON.stringify({
+          type: 'ping',
+          id: 1,
+        }));
+      }
+      
     }
   }
   timerForAttempt() {
