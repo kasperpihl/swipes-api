@@ -42,9 +42,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     ...gs.mixins.size(44),
-    position: 'absolute',
-    left: 30,
-    top: 30,
   },
 })
 
