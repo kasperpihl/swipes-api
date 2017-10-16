@@ -15,9 +15,24 @@ const styles = StyleSheet.create({
   backButtonWrapper: {
     ...gs.mixins.size(44),
     ...gs.mixins.flex('center'),
-    marginTop: 16,
-    marginLeft: -16,
-    marginRight: 16,
+    ...Platform.select({
+      android: {
+        marginTop: 16,
+        marginLeft: -16,
+        marginRight: 16,
+      }
+    })
+  },
+  backButton: {
+    ...gs.mixins.size(44),
+    ...gs.mixins.flex('center'),
+    ...Platform.select({
+      ios: {
+        marginTop: 16,
+        marginLeft: -16,
+        marginRight: 16,
+      }
+    })
   },
   title: {
     ...gs.mixins.font(30, 'white', 34, '300'),
@@ -39,9 +54,6 @@ const styles = StyleSheet.create({
     ...gs.mixins.padding(15, 30),
     ...gs.mixins.font(16, colors.blue100),
     textAlign: 'center',
-  },
-  backButton: {
-    ...gs.mixins.size(44),
   },
 })
 
