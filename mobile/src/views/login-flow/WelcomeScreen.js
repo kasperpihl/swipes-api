@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 
   },
   title: {
-    ...gs.mixins.font(36, colors.deepBlue100, 48, '300'),
+    ...gs.mixins.font(30, colors.deepBlue100, 33, '300'),
     marginBottom: (viewSize.height * .04),
   },
   textWrapper: {
@@ -40,6 +40,12 @@ const styles = StyleSheet.create({
     ...gs.mixins.padding(15, 30),
     ...gs.mixins.font(16, 'white'),
     textAlign: 'center',
+  },
+  signupButtonLabel: {
+    ...gs.mixins.padding(15, 15),
+    ...gs.mixins.font(16, colors.deepBlue50),
+    textAlign: 'center',
+    textDecorationLine: 'underline'
   }
 })
 
@@ -47,7 +53,7 @@ class WelcomeScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onShowLogin');
+    setupDelegate(this, 'onShowLogin', 'onShowSignupIntro');
   }
   componentDidMount() {
   }
@@ -58,15 +64,19 @@ class WelcomeScreen extends PureComponent {
         <View style={styles.container}>
           <Text style={styles.title}>Welcome to your Workspace</Text>
           <View style={styles.illustration}>
-            <Icon name="ESWelcome" width="304" height="190" />
+            <Icon name="ESWelcome" width={viewSize.width - 60} height="190" />
           </View>
           <View style={styles.textWrapper}>
             <Text style={styles.text}>This is the place for your team to communicate and create great work together.</Text>
-            <Text style={[styles.text, { marginTop: 21 }]}>We are thrilled to have you here!</Text>
           </View>
           <RippleButton rippleColor="#FFFFFF" style={styles.button} onPress={this.onShowLogin}>
             <View style={styles.buttonWrapper}>
-              <Text style={styles.buttonLabel}>Let's get started</Text>
+              <Text style={styles.buttonLabel}>Sign in</Text>
+            </View>
+          </RippleButton>
+          <RippleButton style={styles.signupButton} onPress={this.onShowSignupIntro}>
+            <View style={styles.signupButtonWrapper}>
+              <Text style={styles.signupButtonLabel}>New user?</Text>
             </View>
           </RippleButton>
         </View>

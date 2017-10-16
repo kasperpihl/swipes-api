@@ -80,6 +80,8 @@
     @include flexContainer('row') {
       flex-wrap: wrap;
     };
+    padding-left: 18px;
+
     .attachment-item {
       border: 1px solid $deepBlue-5;
       margin-right: 6px;

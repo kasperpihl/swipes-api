@@ -5,8 +5,7 @@ import OneSignal from 'react-native-onesignal';
 import codePush from 'react-native-code-push';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import Login from 'views/login/Login';
-import WelcomeScreen from 'views/welcome/WelcomeScreen';
+import HOCLoginFlow from 'views/login-flow/HOCLoginFlow';
 import HOCInfoTab from 'views/info-tab/HOCInfoTab';
 import Icon from 'components/icons/Icon';
 import HOCTabNavigation from 'components/tab-navigation/HOCTabNavigation';
@@ -42,9 +41,7 @@ const styles = StyleSheet.create({
 class App extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      showLogin: false,
-    }
+
     this.onIds = this.onIds.bind(this);
     this.onOpened = this.onOpened.bind(this);
   }
@@ -72,13 +69,6 @@ class App extends PureComponent {
   componentWillUnmount() {
     OneSignal.removeEventListener('ids', this.onIds);
     OneSignal.removeEventListener('opened', this.onOpened);
-  }
-  onShowLogin() {
-    const { showLogin } = this.state;
-
-    if (!showLogin) {
-      this.setState({ showLogin: true });
-    }
   }
   onIds(device) {
     if (device.userId) {
@@ -128,17 +118,12 @@ class App extends PureComponent {
   }
   renderLogin() {
     const { token, isHydrated } = this.props;
-    const { showLogin } = this.state;
 
     if (token || !isHydrated) {
       return undefined;
     }
 
-    if (!showLogin) {
-      return <WelcomeScreen delegate={this} />
-    }
-
-    return <Login />;
+    return <HOCLoginFlow />
   }
   renderBackButton() {
     if (Platform.OS === 'android') {
