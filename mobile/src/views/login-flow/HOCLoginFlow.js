@@ -73,9 +73,9 @@ class HOCLoginFlow extends PureComponent {
     });
   }
   onShowSignup() {
-    const { browser } = this.props;
+    const { browser, apiUrl } = this.props;
 
-    browser('https://workspace.swipesapp.com/register');
+    browser(`${apiUrl}/register`);
   }
   renderSecondScreen() {
     const { showLogin, showSignupIntro } = this.state;
@@ -117,6 +117,7 @@ class HOCLoginFlow extends PureComponent {
 HOCLoginFlow.propTypes = {};
 
 const mapStateToProps = (state) => ({
+  apiUrl: state.getIn(['globals', 'apiUrl']),
 });
 
 export default connect(mapStateToProps, {

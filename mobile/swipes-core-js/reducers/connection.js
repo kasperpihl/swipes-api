@@ -33,12 +33,16 @@ export default function connectionReducer(state = initialState, action) {
       if (action && action.payload && action.payload.connection) {
         const { connection } = action.payload;
         const sameVersion = version === connection.get('lastVersion');
-        return initialState.set('token', connection.get('token'))
-          .set('lastConnect', connection.get('lastConnect'))
-          .set('lastVersion', connection.get('lastVersion'))
-          .set('forceFullFetch', !sameVersion)
-          .set('hasConnected', sameVersion && connection.get('hasConnected'))
-          .set('readyInOrg', sameVersion && connection.get('readyInOrg'));
+        if(connection.get('token')) {
+          return initialState.set('token', connection.get('token'))
+            .set('lastConnect', connection.get('lastConnect'))
+            .set('lastVersion', connection.get('lastVersion'))
+            .set('forceFullFetch', !sameVersion)
+            .set('hasConnected', sameVersion && connection.get('hasConnected'))
+            .set('readyInOrg', sameVersion && connection.get('readyInOrg'));
+        }
+        return initialState;
+        
       }
       return state;
     case types.SET_UPDATE_STATUS: {
@@ -74,6 +78,11 @@ export default function connectionReducer(state = initialState, action) {
         return state;
       }
       return initialState;
+    }
+    case 'users.signout': {
+      return state.set('readyInOrg', false)
+                  .set('hasConnected', false)
+                  .set('token', null);
     }
     case types.RESET_STATE: {
       return initialState;

@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 export default function getGlobals() {
-  let apiUrl = 'https://live.swipesapp.com';
+  let apiUrl = 'https://workspace.swipesapp.com';
   if( window.__DEV__ || 
     DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging' || 
     DeviceInfo.getBundleId() === 'com.swipesapp.androidstaging') {

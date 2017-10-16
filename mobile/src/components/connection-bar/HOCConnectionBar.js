@@ -85,15 +85,18 @@ class HOCConnectionBar extends PureComponent {
     let message = null;
     let color = null;
 
-    if (versionInfo && (versionInfo.get('updateRequired') || versionInfo.get('reloadRequired'))) {
+    if (status === 'connecting') {
+      message = 'Connecting...';
+      color = colors.yellowColor;
+    } else  if (versionInfo && versionInfo.get('maintenance')) {
+      message = 'Offline - under maintenance';
+      color = colors.red80;
+    } else if (versionInfo && (versionInfo.get('updateRequired') || versionInfo.get('reloadRequired'))) {
       message = 'Offline - new version required';
       color = colors.red80;
     } else if (status === 'offline') {
       message = `Offline - retrying in ${secondsLeft} seconds`;
       color = colors.red80;
-    } else if (status === 'connecting') {
-      message = 'Connecting...';
-      color = colors.yellowColor;
     } else if (this.isLoading('connected')) {
       message = 'Connected';
       color = colors.greenColor;

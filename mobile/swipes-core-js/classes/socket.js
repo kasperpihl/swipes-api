@@ -20,10 +20,10 @@ export default class Socket {
 
     const forceFullFetch = state.getIn(['connection', 'forceFullFetch']);
 
-    if (this.isSocketConnected && (!this.token || forceFullFetch)) {
-      this.forceClose();
+    if (this.isConnected && (!this.token || forceFullFetch)) {
+      this.forceClose(!this.token);
     }
-    if (this.token && !this.isSocketConnected && !this.hasTimer) {
+    if (this.token && !this.isConnecting && !this.isConnected && !this.hasTimer) {
       this.timedConnect(this.timerForAttempt());
     }
   }
@@ -36,6 +36,7 @@ export default class Socket {
   }
   onCloseHandler() {
     this.isConnecting = false;
+    this.isConnected = false;
     this.reconnect_attempts += 1;
     this.changeStatus('offline', nextRetry);
     let nextRetry;
@@ -80,7 +81,7 @@ export default class Socket {
     
   }
   openSocket(url) {
-    if(!window.WebSocket) {
+    if(!window.WebSocket || this.isSocketConnected) {
       return this.fetchInit();
     }
 
@@ -106,7 +107,6 @@ export default class Socket {
     }
   }
   fetchInit() {
-    this.isSocketConnected = true;
     const { getState } = this.store;
     const forceFullFetch = getState().getIn(['connection', 'forceFullFetch']);
     const withoutNotes = getState().getIn(['globals', 'withoutNotes']);
@@ -121,6 +121,7 @@ export default class Socket {
       without_notes: withoutNotes,
     })).then((res) => {
       this.isConnecting = false;
+      this.isConnected = true;
       if (res && res.ok) {
         this.reconnect_attempts = 0;
         this.changeStatus('online');

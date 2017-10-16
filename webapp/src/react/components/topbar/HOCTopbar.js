@@ -67,7 +67,10 @@ class HOCTopbar extends PureComponent {
     let statusMessage;
     let btn;
 
-    if (versionInfo && versionInfo.get('maintenance')) {
+    if (status === 'connecting') {
+      statusMessage = 'Connecting...';
+    }
+    else if (versionInfo && versionInfo.get('maintenance')) {
       statusMessage = 'Offline - under maintenance.';
       btn = this.renderRetryBtn();
     }
@@ -87,10 +90,6 @@ class HOCTopbar extends PureComponent {
       if (reconnectAttempt > 4) {
         statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
         btn = this.renderRetryBtn();
-      }
-    } else if (status === 'connecting' && ready) {
-      if (reconnectAttempt > 4) {
-        statusMessage = 'Connecting...';
       }
     }
 
