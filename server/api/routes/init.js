@@ -10,9 +10,6 @@ import {
   initWithoutOrganization,
 } from './middlewares/init';
 import {
-  usersGetByIdWithFields,
-} from './middlewares/users';
-import {
   valBody,
   valResponseAndSend,
   mapLocals,
@@ -24,16 +21,14 @@ const notAuthed = express.Router();
 authed.all(
   '/init',
   valBody({
+    organization_id: string,
     timestamp: string.format('iso8601'),
     without_notes: bool,
   }),
   mapLocals(l => ({
     full_fetch: !l.timestamp,
     timestamp: l.timestamp === null ? new Date(1970, 1, 1).toISOString() : l.timestamp,
-    userToGetId: l.user_id,
-    fields: ['organizations'],
   })),
-  usersGetByIdWithFields,
   initWithoutOrganization,
   init,
   valResponseAndSend({

@@ -29,11 +29,14 @@ const dbNotificationsMarkAsSeen = funcWrap([
 const dbNotificationsGetAllByIdOrderByTs = funcWrap([
   object.as({
     user_id: string.require(),
+    organization_id: string.require(),
     filter: object.require(),
     timestamp: string.format('iso8601').require(),
   }).require(),
 ], (err, {
-  user_id, filter = {},
+  user_id,
+  organization_id,
+  filter = {},
   filterDefaultOption,
   timestamp,
 }) => {
@@ -43,7 +46,7 @@ const dbNotificationsGetAllByIdOrderByTs = funcWrap([
 
   const q =
     r.table('notifications')
-      .getAll(user_id, { index: 'user_id' })
+      .getAll([user_id, organization_id], { index: 'user_id_organization_id' })
       .filter((notification) => {
         return notification('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
       })

@@ -39,20 +39,20 @@ const SOFI = {
 };
 const init = valLocals('init', {
   user_id: string.require(),
-  user: object.require(),
   timestamp: string.format('iso8601').require(),
   full_fetch: bool.require(),
+  organization_id: string,
   without_notes: bool,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    user,
     timestamp,
     full_fetch,
+    organization_id = null,
     without_notes,
   } = res.locals;
 
-  if (user.organizations.length === 0) {
+  if (!organization_id) {
     return next();
   }
 
@@ -61,12 +61,14 @@ const init = valLocals('init', {
     servicesGetAll(timestamp, full_fetch),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
+      organization_id,
       filter: { sender: false },
       filterDefaultOption: true,
       timestamp,
     }),
     dbNotificationsGetAllByIdOrderByTs({
       user_id,
+      organization_id,
       filter: { sender: true },
       filterDefaultOption: false,
       timestamp,
@@ -161,14 +163,14 @@ const init = valLocals('init', {
 });
 const initWithoutOrganization = valLocals('initWithoutOrganization', {
   user_id: string.require(),
-  user: object.require(),
+  organization_id: string,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    user,
+    organization_id = null,
   } = res.locals;
 
-  if (user.organizations.length > 0) {
+  if (organization_id) {
     return next();
   }
 
