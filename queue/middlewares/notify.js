@@ -169,6 +169,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     uniqueUsersToNotify,
     notificationData,
     usersNotificationDataMetaMap = {},
+    organization_id = null,
   } = res.locals;
 
   if (notificationData === null) {
@@ -193,6 +194,7 @@ const notifyInsertMultipleNotifications = (req, res, next) => {
     const notification = {
       // because mutation is the root of all evil
       // we are mutating the data object few lines down
+      organization_id,
       id: `${userId}-${notification_id_sufix}`,
       user_id: userId,
       seen_at: null,

@@ -247,6 +247,16 @@ const step_reordered = notifyWrapper([
 ]);
 
 const goal_assigned = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
   goals.goalsGetSingle,
   goals.goalsAssignedNotificationData,
   goals.goalsAssignedUsersNotificationDataMap,
@@ -310,6 +320,15 @@ const organization_user_invited = notifyWrapper([
 
 const organization_user_joined = notifyWrapper([
   users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
   organizations.organizationsUserJoinedNotificationData,
   notify.notifyAllInCompany,
 ]);
@@ -329,6 +348,16 @@ const organization_deleted = notifyWrapper([
 ]);
 
 const post_created = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
   posts.postsGetSingle,
   posts.postCreatedNotificationData,
   (req, res, next) => {
@@ -402,6 +431,16 @@ const post_archived = notifyWrapper([
 ]);
 
 const post_comment_added = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
   posts.postsGetSingle,
   posts.postCommentAddedNotificationData,
   (req, res, next) => {
@@ -421,6 +460,16 @@ const post_comment_added = notifyWrapper([
   notify.notifySendEventToAllInCompany,
 ]);
 const post_comment_mention = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
   posts.postsGetSingle,
   posts.postCommentMentionNotificationData,
   (req, res, next) => {
@@ -438,6 +487,16 @@ const post_comment_mention = notifyWrapper([
 ]);
 
 const post_reaction_added = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
   posts.postsGetSingle,
   posts.postReactionAddedNotificationData,
   (req, res, next) => {
@@ -464,6 +523,16 @@ const post_reaction_removed = notifyWrapper([
 ]);
 
 const post_comment_reaction_added = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
   posts.postsGetSingleCommentFollowers,
   posts.postCommentReactionAddedNotificationData,
   (req, res, next) => {

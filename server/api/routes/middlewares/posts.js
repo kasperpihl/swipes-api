@@ -538,7 +538,9 @@ const postsCommentAddReaction = valLocals('postsCommentAddReaction', {
     reaction,
   } = res.locals;
 
-  dbPostsCommentAddReaction({ user_id, post_id, comment_id, reaction })
+  dbPostsCommentAddReaction({
+ user_id, post_id, comment_id, reaction 
+})
     .then(() => {
       return next();
     })
