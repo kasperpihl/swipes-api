@@ -39,23 +39,24 @@ const SOFI = {
 };
 const init = valLocals('init', {
   user_id: string.require(),
+  user: object.require(),
   timestamp: string.format('iso8601').require(),
   full_fetch: bool.require(),
-  organization_id: string,
   without_notes: bool,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    user,
     timestamp,
     full_fetch,
-    organization_id = null,
     without_notes,
   } = res.locals;
 
-  if (!organization_id) {
+  if (!(user.organizations.length > 0)) {
     return next();
   }
 
+  const organization_id = user.organizations[0];
   const promiseArrayQ = [
     dbInit(user_id, timestamp, full_fetch, without_notes),
     servicesGetAll(timestamp, full_fetch),
@@ -163,14 +164,14 @@ const init = valLocals('init', {
 });
 const initWithoutOrganization = valLocals('initWithoutOrganization', {
   user_id: string.require(),
-  organization_id: string,
+  user: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    organization_id = null,
+    user,
   } = res.locals;
 
-  if (organization_id) {
+  if (user.organizations.length > 0) {
     return next();
   }
 
