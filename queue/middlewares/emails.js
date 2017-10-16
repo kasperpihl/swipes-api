@@ -77,7 +77,7 @@ const usersWelcomeEmail = (req, res, next) => {
     confirmation_token,
   } = res.locals;
   const host = config.get('host');
-  const template_name = 'welcome-email';
+  const template_name = 'new-welcome-email';
   const template_content = [{
     name: '',
     content: '',
