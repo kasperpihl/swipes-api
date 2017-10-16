@@ -654,9 +654,7 @@ const usersCreateInvitationToken = valLocals('usersCreateInvitationToken', {
     organization_id,
     user,
   } = res.locals;
-  const {
-    userId,
-  } = user.id;
+  const userId = user.id;
   const invitationToken = jwt.encode({
     email,
     organization_id,
