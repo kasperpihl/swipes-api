@@ -33,7 +33,7 @@ class HOCRedirect extends PureComponent {
 
     if(isHydrated && !token) {
       if (['/', '/welcome', '/invite', '/notsupported'].indexOf(path) > -1) {
-        // setUrl('/login');
+        setUrl('/login');
       }
     }
     if(isHydrated && hasConnected) {
