@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation } from "react-native";
+import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback } from "react-native";
 import ParsedText from "react-native-parsed-text";
 
 import { setupDelegate, attachmentIconForService } from "swipes-core-js/classes/utils";
@@ -11,6 +11,9 @@ import RippleButton from "RippleButton";
 import Reactions from "../reactions/Reactions";
 
 const styles = StyleSheet.create({
+  wrapper: {
+    ...gs.mixins.size(1),
+  },
   container: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('row'),
@@ -87,22 +90,44 @@ const styles = StyleSheet.create({
     width: 50,
     flex: 0,
     marginRight: -15,
+  },
+  timestamp: {
+    paddingLeft: 54,
+  },
+  timestampLabel: {
+    ...gs.mixins.font(12, colors.deepBlue50),
+    ...gs.mixins.padding(9, 6),
   }
 });
 
 class CommentView extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      commentActive: false
+    };
 
     if (Platform.OS === "android") {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
+    this.handleActiveState = this.handleActiveState.bind(this);
+    this.disableActiveState = this.disableActiveState.bind(this);
+
     setupDelegate(this, 'onOpenUrl', 'onAttachmentClick')
   }
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
+  }
+  disableActiveState() {
+    const { commentActive } = this.state;
+
+    if (commentActive) this.setState({ commentActive: false })
+  }
+  handleActiveState() {
+    const { commentActive } = this.state;
+
+    this.setState({ commentActive: !commentActive })
   }
   renderProfilePic() {
     const { comment } = this.props;
@@ -142,12 +167,19 @@ class CommentView extends PureComponent {
   }
   renderMessage() {
     const { comment } = this.props;
+    const { commentActive } = this.state;
     const name = msgGen.users.getFullName(comment.get("created_by"));
     const message = `<!${comment.get("created_by")}|${name}> ` + comment.get("message");
+    let extraStyles = {};
 
+    if (commentActive) {
+      extraStyles = {
+        backgroundColor: colors.deepBlue20
+      }
+    }
 
     return (
-      <View style={styles.messageWrapper}>
+      <View style={[styles.messageWrapper, extraStyles]}>
         <ParsedText
           style={styles.message}
           selectable={true}
@@ -161,6 +193,24 @@ class CommentView extends PureComponent {
         {this.renderAttachments()}
       </View>
     );
+  }
+  renderTimestamp() {
+    const { comment } = this.props;
+    const { commentActive } = this.state;
+    const timestamp = timeAgo(comment.get("created_at"), true);
+
+    if (commentActive) {
+      return (
+        <View style={styles.timestamp}>
+          <Text style={styles.timestampLabel}>
+            {timestamp}
+          </Text>
+        </View>
+      )
+    }
+
+    return undefined;
+
   }
   renderReactions() {
     const { comment, delegate } = this.props;
@@ -205,7 +255,6 @@ class CommentView extends PureComponent {
   }
   renderSubLine() {
     const { comment, delegate, loadingReaction } = this.props;
-    const timestamp = timeAgo(comment.get("created_at"), true);
 
     return (
       <View style={styles.actions}>
@@ -227,11 +276,16 @@ class CommentView extends PureComponent {
     const { comment } = this.props;
 
     return (
-      <View style={styles.container}>
-        {this.renderProfilePic()}
-        {this.renderMessage()}
-        {this.renderReactions()}
-      </View>
+      <TouchableWithoutFeedback onPress={this.disableActiveState} onLongPress={this.handleActiveState}>
+        <View style={styles.wrapper}>
+          <View style={styles.container}>
+            {this.renderProfilePic()}
+            {this.renderMessage()}
+            {this.renderReactions()}
+          </View>
+          {this.renderTimestamp()}
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 }
