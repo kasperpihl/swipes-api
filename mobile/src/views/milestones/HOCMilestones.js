@@ -13,7 +13,7 @@ import WaitForUI from 'WaitForUI';
 import CreateNewItemModal from 'modals/CreateNewItemModal';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
-import MilestoneItem from './MilestoneItem';
+import HOCMilestoneItem from './HOCMilestoneItem';
 
 const styles = StyleSheet.create({
   container: {
@@ -178,7 +178,7 @@ class HOCMilestones extends PureComponent {
   }
   renderMilestoneItem(milestone) {
     return (
-      <MilestoneItem milestone={milestone} delegate={this} />
+      <HOCMilestoneItem milestoneId={milestone.get('id')} delegate={this} />
     );
   }
   renderNoMilestoneItems() {
