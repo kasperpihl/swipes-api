@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   },
   initialsLabel: {
     ...gs.mixins.font(28, gs.colors.bgColor),
+    backgroundColor: 'transparent',
   },
   nameWrapper: {
   },

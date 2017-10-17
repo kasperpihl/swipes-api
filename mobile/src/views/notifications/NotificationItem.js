@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   initialsLabel: {
     fontSize: 28,
-    color: colors.bgColor,
+    color: 'transparent',
   },
   content: {
     flex: 1,

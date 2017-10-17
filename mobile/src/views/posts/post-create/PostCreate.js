@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   initialsLabel: {
     fontSize: 28,
-    color: colors.bgColor,
+    color: 'transparent',
   },
   input: {
     flex: 1,

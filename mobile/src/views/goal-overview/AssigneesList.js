@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   initialsLabel: {
     fontSize: 12,
-    color: colors.bgColor,
+    color: 'transparent',
     includeFontPadding: false,
   },
   assigneeLabelWrapper: {

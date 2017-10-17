@@ -17,113 +17,83 @@ import PostFooter from './PostFooter';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    ...gs.mixins.size(1),
     alignSelf: "stretch",
   },
   header: {
+    ...gs.mixins.flex('row'),
+    ...gs.mixins.padding(50, 15, 11, 15),
+    ...gs.mixins.border(1, gs.colors.deepBlue20, 'bottom'),
     alignSelf: "stretch",
-    flexDirection: "row",
-    paddingHorizontal: 15,
-    paddingTop: 50,
-    paddingBottom: 11,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.deepBlue20,
   },
   headerSide: {
-    flex: 1,
+    ...gs.mixins.size(1),
     paddingLeft: 12
   },
   profilePicWrapper: {
-    width: 54,
-    height: 54,
+    ...gs.mixins.size(54),
     borderRadius: 54 / 2
   },
   profilePic: {
-    width: 54,
-    height: 54,
+    ...gs.mixins.size(54),
     borderRadius: 54 / 2
   },
   initials: {
-    width: 54,
-    height: 54,
-    borderRadius: 54 / 2,
+    ...gs.mixins.size(54),
+    ...gs.mixins.flex('center'),
     backgroundColor: colors.deepBlue100,
-    alignItems: "center",
-    justifyContent: "center"
+    borderRadius: 54 / 2,
   },
   initialsLabel: {
-    fontSize: 28,
-    color: colors.bgColor
+    ...gs.mixins.font(28, 'white'),
+    backgroundColor: 'transparent'
   },
   textStyle: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: colors.deepBlue40,
-    includeFontPadding: false,
+    ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
   },
   boldStyle: {
-    fontSize: 13,
-    lineHeight: 18,
-    fontWeight: 'bold',
-    color: colors.deepBlue100,
-    includeFontPadding: false,
+    ...gs.mixins.font(13, gs.colors.deepBlue100, 18, 'bold'),
   },
   subtitle: {
-    flexDirection: "row",
-    alignItems: "center",
+    ...gs.mixins.flex('row', 'left', 'center'),
     paddingTop: 5
   },
   subtitleLabel: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: colors.deepBlue40,
+    ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
   },
   messageWrapper: {
+    ...gs.mixins.padding(18, 15),
     ...gs.mixins.flex('row', 'left', 'center'),
-    paddingHorizontal: 15,
-    paddingTop: 18,
-    paddingBottom: 18,
   },
   message: {
     ...gs.mixins.size(1),
-    fontSize: 15,
-    color: colors.deepBlue80,
-    lineHeight: 21,
+    ...gs.mixins.font(15, gs.colors.deepBlue80, 21),
   },
   url: {
-    fontSize: 15,
-    color: colors.blue100,
-    lineHeight: 21,
+    ...gs.mixins.font(15, gs.colors.blue100, 21),
   },
   actions: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    height: 54,
+    ...gs.mixins.flex('row', 'right'),
     alignSelf: "stretch",
+    height: 54,
     paddingRight: 15,
   },
   actionsSeperator: {
-    width: viewSize.width - 30,
-    height: 1,
+    ...gs.mixins.size(viewSize.width - 30, 1),
     backgroundColor: colors.deepBlue10,
     position: "absolute",
     left: 15,
     top: 0
   },
   comments: {
-    paddingHorizontal: 15,
-    paddingBottom: 21,
+    ...gs.mixins.padding(0, 15, 21, 15),
   },
   navButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    ...gs.mixins.flex('center'),
     paddingLeft: 6,
   },
   navButtonLabel: {
-    color: colors.deepBlue50,
-    fontSize: 12,
-    lineHeight: 15,
+    ...gs.mixins.font(12, gs.colors.deepBlue50, 15),
     paddingRight: 6,
   },
   attachments: {
@@ -131,20 +101,16 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   attachment: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 6,
+    ...gs.mixins.size(1),
+    ...gs.mixins.flex('row', 'left', 'center'),
+    ...gs.mixins.border(1, gs.colors.deepBlue10),
+    ...gs.mixins.borderRadius(6),
     height: 48,
+    marginBottom: 6,
     paddingHorizontal: 12,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.deepBlue10,
   },
   attachmentLabel: {
-    fontSize: 12,
-    color: colors.deepBlue80,
-    fontWeight: '500',
+    ...gs.mixins.font(12, gs.colors.deepBlue80, '500'),
     paddingLeft: 12,
   },
   reactionWrapper: {
@@ -337,7 +303,7 @@ class PostView extends PureComponent {
     );
   }
   renderMessage() {
-    const { post } = this.props;
+    const { post, delegate } = this.props;
     const message = post.get("message");
 
     return (

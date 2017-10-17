@@ -337,7 +337,7 @@ class Login extends PureComponent {
         <View style={styles.container}>
           {this.renderGradient()}
           <View style={{flex: 1}}>
-            <ScrollView keyboardShouldPersistTaps="never">
+            <ScrollView keyboardShouldPersistTaps="always">
               {this.renderTitle()}
               {this.renderForm()}
               {this.renderButton()}

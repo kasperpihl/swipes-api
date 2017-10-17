@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
     backgroundColor: gs.colors.deepBlue100,
   },
   initialsLabel: {
-    ...gs.mixins.font(28, gs.colors.bgColor)
+    ...gs.mixins.font(28, gs.colors.bgColor),
+    backgroundColor: 'transparent'
   },
   textStyle: {
     ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
@@ -62,7 +63,6 @@ const styles = StyleSheet.create({
   message: {
     ...gs.mixins.size(1),
     ...gs.mixins.font(15, gs.colors.deepBlue80, 21),
-    alignSelf: 'flex-start',
   },
   url: {
     ...gs.mixins.font(15, gs.colors.blue100, 21),
@@ -256,7 +256,7 @@ class PostFeed extends PureComponent {
     )
   }
   renderMessage() {
-    const { post } = this.props;
+    const { post, delegate } = this.props;
     const message = post.get('message');
 
     return (

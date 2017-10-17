@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   initialsLabel: {
     fontSize: 28,
     color: 'white',
+    backgroundColor: 'transparent'
   },
   textStyle: {
     fontSize: 12,

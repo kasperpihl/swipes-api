@@ -132,6 +132,7 @@ class HOCLoginFlow extends PureComponent {
         showsHorizontalScrollIndicator={false}
         style={{ flex: 1 }}
         ref="scrollView"
+        keyboardShouldPersistTaps="always"
       >
         <View style={{ width: viewSize.width }}>
           <WelcomeScreen delegate={this} />
