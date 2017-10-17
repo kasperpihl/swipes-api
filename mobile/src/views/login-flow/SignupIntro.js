@@ -90,10 +90,13 @@ class SignupIntro extends PureComponent {
         </View>
 
         <Text style={styles.paragraph}>
+          This is the mobile companion to the desktop Swipes Workspace app. Use the app on your desktop or on the web for the ultimate experience.
+        </Text>
+        <Text style={[styles.paragraph, { marginTop: 21 }]}>
           If your company already has an account, just ask the Account Admin to invite you.
         </Text>
         <Text style={[styles.paragraph, { marginTop: 21 }]}>
-          if you want to start a new company account, it's a free for 14 days. You can register on workspace.swipesapp.com/register
+          If you want to start a new company account, it's free for 14 days.
         </Text>
 
         <RippleButton rippleColor="#FFFFFF" style={styles.button} onPress={this.onShowSignup}>
