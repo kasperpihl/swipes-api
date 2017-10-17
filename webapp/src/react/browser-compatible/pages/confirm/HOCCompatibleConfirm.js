@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
+import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 // import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 // import * s from 'selectors';
@@ -43,10 +44,11 @@ class HOCCompatibleConfirm extends PureComponent {
   }
   render() {
     const lState = this.getLoading('confirm');
-    const title = lState.loading || lState.success || lState.error;
+    const subtitle = lState.loading || lState.success || lState.error;
+
     return (
       <CompatibleCard>
-        <h1>{title}</h1>
+        <CompatibleHeader title="confirming your email" subtitle={subtitle}/>
       </CompatibleCard>
     );
   }
