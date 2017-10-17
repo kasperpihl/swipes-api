@@ -20,7 +20,7 @@ export default function main(state = initialState, action) {
       return state.set('loading', payload || null);
     }
     case types.RESET_STATE: {
-      return initialState;
+      return initialState.set('isHydrated', state.get('isHydrated'));
     }
     default: {
       return state;

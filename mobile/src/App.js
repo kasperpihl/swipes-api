@@ -99,22 +99,20 @@ class App extends PureComponent {
     }
   }
   renderLoader() {
-    const { ready, isHydrated, token } = this.props;
-
-    if (isHydrated) {
-      return undefined;
+    const { isHydrated, readyInOrg, status } = this.props;
+    if(!isHydrated || (!readyInOrg && status === 'connecting')) {
+      return (
+        <LinearGradient
+          start={{ x: 0.0, y: 0.0 }}
+          end={{ x: 1.0, y: 0.5 }}
+          colors={[colors.bgGradientFrom, colors.bgGradientTo]}
+          style={styles.gradient}
+        >
+          <Icon name="SwipesLogoText" fill={colors.bgColor} width="90" />
+        </LinearGradient>
+      );
     }
-
-    return (
-      <LinearGradient
-        start={{ x: 0.0, y: 0.0 }}
-        end={{ x: 1.0, y: 0.5 }}
-        colors={[colors.bgGradientFrom, colors.bgGradientTo]}
-        style={styles.gradient}
-      >
-        <Icon name="SwipesLogoText" fill={colors.bgColor} width="90" />
-      </LinearGradient>
-    );
+    return undefined;
   }
   renderLogin() {
     const { token, isHydrated } = this.props;
@@ -140,9 +138,9 @@ class App extends PureComponent {
     return undefined;
   }
   renderApp() {
-    const { token, ready } = this.props;
+    const { token, readyInOrg, isHydrated } = this.props;
 
-    if (!token || !ready) {
+    if (!isHydrated || !token || !readyInOrg) {
       return undefined;
     }
 
@@ -186,7 +184,8 @@ function mapStateToProps(state) {
   return {
     token: state.getIn(['connection', 'token']),
     myId: state.getIn(['me', 'id']),
-    ready: state.getIn(['connection', 'readyInOrg']),
+    readyInOrg: state.getIn(['connection', 'readyInOrg']),
+    status: state.getIn(['connection', 'status']),
     isHydrated: state.getIn(['main', 'isHydrated']),
   };
 }
