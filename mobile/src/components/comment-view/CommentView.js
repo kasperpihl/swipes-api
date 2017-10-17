@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   reactionsWrapper: {
     ...gs.mixins.flex('row', 'center', 'center'),
-    width: 50,
+    width: 75,
     flex: 0,
     marginRight: -15,
   },
