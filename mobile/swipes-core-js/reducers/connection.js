@@ -32,7 +32,6 @@ export default function connectionReducer(state = initialState, action) {
                   .set('readyInOrg', payload.me.has_organization);
     }
     case REHYDRATE:
-      console.log('REHYDRATE', state.get('lastVersion'), payload.connection.get('lastVersion'));
       if (action && action.payload && action.payload.connection) {
         const { connection } = action.payload;
         let newState = initialState.set('lastVersion', state.get('lastVersion'));
