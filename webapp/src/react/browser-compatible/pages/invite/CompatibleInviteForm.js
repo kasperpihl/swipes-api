@@ -18,10 +18,6 @@ class CompatibleInviteForm extends PureComponent {
   componentDidMount() {
   }
   renderLoader(isLoading, success) {
-    
-    if (!isLoading && !success) {
-      return undefined;
-    }
 
     if (isLoading) {
       return (
@@ -38,6 +34,8 @@ class CompatibleInviteForm extends PureComponent {
         </div>
       )
     }
+
+    return undefined;
   }
   renderInput(i, obj) {
     const { getLoading } = this.props;

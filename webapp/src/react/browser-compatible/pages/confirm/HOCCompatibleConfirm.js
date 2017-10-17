@@ -10,7 +10,7 @@ import * as ca from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
-import swiss from 'swiss';
+import swiss from 'react-swiss';
 
 const Wrapper = swiss({
   marginTop: 33,
