@@ -3,6 +3,7 @@ import { View, BackHandler, Platform, UIManager, LayoutAnimation, ScrollView, St
 import { connect } from "react-redux";
 import { viewSize } from 'globalStyles';
 import * as a from "actions";
+import * as ca from 'swipes-core-js/actions';
 import Login from 'views/login/Login';
 import SignupIntro from './SignupIntro';
 import WelcomeScreen from './WelcomeScreen';
@@ -95,8 +96,17 @@ class HOCLoginFlow extends PureComponent {
       }
     })
   }
-  handleResetPassword() {
-    console.warn('reseting the password')
+  handleResetPassword(resetEmail) {
+    const { alertModal, request } = this.props;
+    request('me.sendResetEmail', {
+      email: resetEmail,
+    }).then((res) => {
+      alertModal({
+        title: 'Reset password',
+        message: 'We will send you an email to change your password.',
+      });
+    });
+    
   }
   renderSecondScreen() {
     const { showLogin, showSignupIntro, modalOpen } = this.state;
@@ -144,4 +154,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   browser: a.links.browser,
   promptModal: a.modals.prompt,
+  alertModal: a.modals.alert,
+  request: ca.api.request,
 })(HOCLoginFlow);

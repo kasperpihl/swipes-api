@@ -55,7 +55,6 @@ class HOCModal extends PureComponent {
   }
   onClose() {
     const { showModal } = this.props;
-    console.warn('closing')
     showModal();
   }
   onDidClose() {
@@ -110,7 +109,7 @@ class HOCModal extends PureComponent {
         {...modalProps}
       >
         {this.renderComponent(isOpen)}
-      {Platform.OS === 'ios' && <KeyboardSpacer />}
+        {Platform.OS === 'ios' && <KeyboardSpacer />}
       </Modal>
     );
   }
