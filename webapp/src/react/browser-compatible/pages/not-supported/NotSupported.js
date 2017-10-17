@@ -26,14 +26,14 @@ class NotSupported extends PureComponent {
   renderLeaveOrDelete() {
     const { me, organization, isLoading } = this.props;
     const isOwner = me.get('id') === organization.get('owner_id');
-
-
     let desc = `Leave the organization: ${organization.get('name')}. You will be available to join a new organization.`;
     let buttonTitle = 'Leave organization'; 
+
     if(isOwner) {
       desc = `Delete your organization ${organization.get('name')}. This will throw out all the current users from the organization as well.`;
       buttonTitle = 'Delete organization';
     }
+
     return (
       <div className="not-supported__option-wrapper">
         <div className="not-supported__desc">{desc}</div>

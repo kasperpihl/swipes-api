@@ -32,7 +32,9 @@ const styles = StyleSheet.create({
   logOut: {
     ...gs.mixins.border(1, gs.colors.deepBlue100),
     ...gs.mixins.borderRadius(3),
-    marginTop: 30,
+    position: 'absolute',
+    right: 30,
+    bottom: 30,    
   },
   logOutLabel: {
     ...gs.mixins.padding(15, 30),
