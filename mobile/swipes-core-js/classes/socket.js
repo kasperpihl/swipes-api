@@ -6,14 +6,14 @@ import { bindAll } from './utils';
 import * as a from '../actions';
 
 const PING_TIMER = 5000;
-const EXPECTED_PONG = 7000;
+const EXPECTED_PONG = 9000;
 
 export default class Socket {
   constructor(store, delegate) {
     this.store = store;
     this.reconnect_attempts = 0;
     bindAll(this, ['message', 'changeStatus', 'storeChange', 'onCloseHandler']);
-    const version = store.getState(['globals', 'version']);
+    const version = store.getState().getIn(['globals', 'version']);
     store.dispatch({ type: types.SET_LAST_VERSION, payload: { version } });
     store.subscribe(this.storeChange);
   }
@@ -24,7 +24,7 @@ export default class Socket {
     const forceFullFetch = state.getIn(['connection', 'forceFullFetch']);
 
     if (this.isConnected && (!this.token || forceFullFetch)) {
-      this.forceClose(!this.token);
+      this.forceClose(true);
     }
     if (this.token && !this.isConnecting && !this.isConnected && !this.hasTimer) {
       this.timedConnect(this.timerForAttempt());
