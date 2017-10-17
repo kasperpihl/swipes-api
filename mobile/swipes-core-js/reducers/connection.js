@@ -32,24 +32,26 @@ export default function connectionReducer(state = initialState, action) {
                   .set('readyInOrg', payload.me.has_organization);
     }
     case REHYDRATE:
+      console.log('REHYDRATE', state.get('lastVersion'), payload.connection.get('lastVersion'));
       if (action && action.payload && action.payload.connection) {
         const { connection } = action.payload;
+        let newState = initialState.set('lastVersion', state.get('lastVersion'));
         if(connection.get('token')) {
-          return initialState.set('token', connection.get('token'))
+          newState = initialState.set('token', connection.get('token'))
             .set('lastConnect', connection.get('lastConnect'))
             .set('lastVersion', connection.get('lastVersion'))
             .set('hasConnected', connection.get('hasConnected'))
             .set('readyInOrg', connection.get('readyInOrg'));
+          if(state.get('lastVersion') !== connection.get('lastVersion')) {
+            newState = forceRefresh(newState);
+          }
         }
-        return initialState;
+        return newState;
         
       }
       return state;
     case types.SET_LAST_VERSION: {
-      if(state.get('lastVersion') === payload.version) {
-        return state;
-      }
-      return forceRefresh(state.set('lastVersion', payload.version));
+      return state.set('lastVersion', payload.version);
     }
     case types.SET_UPDATE_STATUS: {
       return state.mergeIn(['versionInfo'], fromJS(payload));
