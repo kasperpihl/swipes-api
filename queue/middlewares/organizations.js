@@ -71,7 +71,7 @@ const organizationsUserJoinedNotificationData = (req, res, next) => {
       first_name: userWithFields.profile.first_name,
     },
   };
-  res.locals.eventData = null;
+  res.locals.eventData = {};
 
   return next();
 };
