@@ -97,15 +97,26 @@ class AlertModal extends PureComponent {
       </View>
     )
   }
-  renderActions() {
-    
-    return (
-      <View style={styles.actionsWrapper}>
+  renderCancelButton() {
+    const { onCancelPress } = this.props;
+
+    if (onCancelPress) {
+      return (
         <RippleButton style={styles.actionButton} onPress={this.onPressCached('cancel')}>
           <View style={styles.action}>
             <Text style={[styles.actionLabel, { color: gs.colors.red80 }]}>CANCEL</Text>
           </View>
         </RippleButton>
+      )
+    }
+
+    return undefined;
+  }
+  renderActions() {
+    
+    return (
+      <View style={styles.actionsWrapper}>
+        {this.renderCancelButton()}
         <RippleButton style={styles.actionButton} onPress={this.onPressCached('confirm')}>
           <View style={styles.action}>
             <Text style={[styles.actionLabel, { color: gs.colors.blue100 }]}>OK</Text>
