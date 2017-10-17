@@ -7,6 +7,12 @@
   left: 50%;
   width: 360px;
   transform: translateY(-50%) translateX(-50%);
+
+
+  .loading {
+    text-align: center;
+  }
+
   .button {
     margin-top: 10px;
     @include size(auto, 36px);

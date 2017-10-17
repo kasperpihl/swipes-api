@@ -98,6 +98,7 @@ class HOCLoginFlow extends PureComponent {
   }
   handleResetPassword(resetEmail) {
     const { alertModal, request } = this.props;
+
     request('me.sendResetEmail', {
       email: resetEmail,
     }).then((res) => {

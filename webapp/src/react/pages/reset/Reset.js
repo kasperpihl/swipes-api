@@ -79,7 +79,7 @@ class Reset extends PureComponent {
     const { newPass } = this.state;
 
     return (
-      <SignupInput
+      <FloatingInput
         type="password"
         placeholder="Your new password"
         delegate={this}

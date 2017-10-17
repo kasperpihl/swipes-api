@@ -139,9 +139,9 @@ class HOCTrial extends PureComponent {
     )
   }
   render() {
-    const { subscribed } = this.props;
+    const { subscribed, organization } = this.props;
 
-    if (subscribed) {
+    if (subscribed || !organization || !organization.size) {
       return null;
     }
 
@@ -160,6 +160,7 @@ HOCTrial.propTypes = {};
 const mapStateToProps = (state) => ({
   me: state.get('me'),
   subscribed: state.getIn(['me', 'organizations', 0, 'stripe_subscription_id']),
+  organization: state.getIn(['me', 'organizations']),
   trial: state.getIn(['me', 'organizations', 0, 'trial']),
   isAccount: (state.getIn(['navigation', 'primary', 'id']) === 'AccountList')
 });
