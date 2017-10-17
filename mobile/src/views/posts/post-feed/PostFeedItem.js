@@ -57,9 +57,12 @@ const styles = StyleSheet.create({
   },
   messageWrapper: {
     ...gs.mixins.padding(18, 15),
+    ...gs.mixins.flex('row', 'left', 'center'),
   },
   message: {
+    ...gs.mixins.size(1),
     ...gs.mixins.font(15, gs.colors.deepBlue80, 21),
+    alignSelf: 'flex-start',
   },
   url: {
     ...gs.mixins.font(15, gs.colors.blue100, 21),
@@ -84,9 +87,10 @@ const styles = StyleSheet.create({
     ...gs.mixins.font(13, gs.colors.deepBlue100, '500')
   },
   reactionWrapper: {
-    ...gs.mixins.flex('center'),
-    height: 54,
-    alignSelf: 'stretch',
+    ...gs.mixins.size(75, 54),
+    ...gs.mixins.flex('row', 'right', 'top'),
+    marginRight: -15,
+    flex: 0,
   },
   attachments: {
     ...gs.mixins.padding(0, 15),
@@ -267,7 +271,13 @@ class PostFeed extends PureComponent {
         >
           {message}
         </ParsedText>
-
+        <View style={styles.reactionWrapper}>
+          <Reactions
+            reactions={post.get('reactions')}
+            post={post}
+            delegate={delegate}
+          />
+        </View>
       </View>
     )
   }
@@ -295,13 +305,6 @@ class PostFeed extends PureComponent {
     return (
       <View style={styles.actions}>
         {this.renderComments()}
-        <View style={styles.reactionWrapper}>
-          <Reactions
-            reactions={post.get('reactions')}
-            post={post}
-            delegate={delegate}
-          />
-        </View>
         <View style={styles.actionsSeperator} />
       </View>
     )

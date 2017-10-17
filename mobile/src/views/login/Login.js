@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   resetButton: {
-    
+    backgroundColor: 'transparent'
   },
   resetLabel: {
     ...gs.mixins.font(12, 'white'),
@@ -275,7 +275,7 @@ class Login extends PureComponent {
   renderResetPassword() {
 
     return (
-      <RippleButton onPress={this.onOpenResetModal}>
+      <RippleButton onPress={this.onOpenResetModal} style={styles.resetButton}>
         <View style={styles.resetButton}>
           <Text style={styles.resetLabel}>
             Reset my password

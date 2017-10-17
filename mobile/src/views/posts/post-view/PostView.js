@@ -79,11 +79,13 @@ const styles = StyleSheet.create({
     color: colors.deepBlue40,
   },
   messageWrapper: {
+    ...gs.mixins.flex('row', 'left', 'center'),
     paddingHorizontal: 15,
     paddingTop: 18,
     paddingBottom: 18,
   },
   message: {
+    ...gs.mixins.size(1),
     fontSize: 15,
     color: colors.deepBlue80,
     lineHeight: 21,
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     height: 54,
     alignSelf: "stretch",
     paddingRight: 15,
@@ -144,7 +146,13 @@ const styles = StyleSheet.create({
     color: colors.deepBlue80,
     fontWeight: '500',
     paddingLeft: 12,
-  }
+  },
+  reactionWrapper: {
+    ...gs.mixins.size(75, 54),
+    ...gs.mixins.flex('row', 'right', 'top'),
+    marginRight: -15,
+    flex: 0,
+  },
 });
 
 class PostView extends PureComponent {
@@ -340,6 +348,13 @@ class PostView extends PureComponent {
         >
           {message}
         </ParsedText>
+        <View style={styles.reactionWrapper}>
+          <Reactions
+            reactions={post.get("reactions")}
+            post={post}
+            delegate={delegate}
+          />
+        </View>
       </View>
     );
   }
@@ -396,11 +411,6 @@ class PostView extends PureComponent {
     return (
       <View style={styles.actions}>
         <View style={styles.actionsSeperator} />
-        <Reactions
-          reactions={post.get("reactions")}
-          post={post}
-          delegate={delegate}
-        />
         {this.renderOpenContextButton()}
       </View>
     );

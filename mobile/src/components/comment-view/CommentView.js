@@ -276,7 +276,7 @@ class CommentView extends PureComponent {
     const { comment } = this.props;
 
     return (
-      <TouchableWithoutFeedback onPress={this.disableActiveState} onLongPress={this.handleActiveState}>
+      <TouchableWithoutFeedback onPress={this.handleActiveState}>
         <View style={styles.wrapper}>
           <View style={styles.container}>
             {this.renderProfilePic()}
