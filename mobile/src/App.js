@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import HOCLoginFlow from 'views/login-flow/HOCLoginFlow';
 import HOCInfoTab from 'views/info-tab/HOCInfoTab';
+import HOCNoOrg from 'views/no-org/HOCNoOrg';
 import Icon from 'components/icons/Icon';
 import HOCTabNavigation from 'components/tab-navigation/HOCTabNavigation';
 import HOCAndroidBackButton from 'components/android-back-button/HOCAndroidBackButton';
@@ -99,8 +100,8 @@ class App extends PureComponent {
     }
   }
   renderLoader() {
-    const { isHydrated, readyInOrg, status } = this.props;
-    if(!isHydrated || (!readyInOrg && status === 'connecting')) {
+    const { isHydrated, hasConnected, status } = this.props;
+    if(!isHydrated || (!hasConnected && status === 'connecting')) {
       return (
         <LinearGradient
           start={{ x: 0.0, y: 0.0 }}
@@ -138,12 +139,13 @@ class App extends PureComponent {
     return undefined;
   }
   renderNoOrg() {
-    const { token, readyInOrg, isHydrated, hasConnected } = this.props;
+    const { token, readyInOrg, isHydrated, hasConnected, status } = this.props;
 
     if (!isHydrated || !token || !hasConnected || readyInOrg) {
       return undefined;
     }
-    return <View><Text>Hi</Text></View>
+
+    return <HOCNoOrg />
   }
   renderApp() {
     const { token, readyInOrg, isHydrated } = this.props;
