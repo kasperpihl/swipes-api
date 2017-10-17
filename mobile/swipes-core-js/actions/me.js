@@ -8,6 +8,7 @@ export const init = () => (d, getState) => {
 
   const options = {
     without_notes: withoutNotes,
+    timestamp: null,
   };
 
   if(!forceFullFetch && lastConnect) {

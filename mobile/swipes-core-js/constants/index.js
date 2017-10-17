@@ -7,6 +7,7 @@ export const CACHE_SAVE = 'CACHE_SAVE';
 export const CACHE_REMOVE = 'CACHE_REMOVE';
 export const CACHE_CLEAR = 'CACHE_CLEAR';
 export const RESET_STATE = 'RESET_STATE';
+export const SET_LAST_VERSION = 'SET_LAST_VERSION';
 
 // filters
 export const UPDATE_FILTERS = 'UPDATE_FILTERS';

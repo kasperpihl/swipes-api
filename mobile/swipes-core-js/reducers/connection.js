@@ -1,6 +1,5 @@
 import { fromJS } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
-import { version } from '../../package.json';
 import * as types from '../constants';
 
 const initialState = fromJS({
@@ -14,6 +13,10 @@ const initialState = fromJS({
   status: 'offline',
   versionInfo: {},
 });
+const forceRefresh = (state) => state.set('lastConnect', null)
+                                    .set('forceFullFetch', true)
+                                    .set('hasConnected', false)
+                                    .set('readyInOrg', false);
 
 export default function connectionReducer(state = initialState, action) {
   const {
@@ -24,27 +27,30 @@ export default function connectionReducer(state = initialState, action) {
   switch (type) {
     case ('init'): {
       return state.set('lastConnect', payload.timestamp)
-        .set('lastVersion', version)
-        .set('forceFullFetch', false)
-        .set('hasConnected', true)
-        .set('readyInOrg', payload.me.has_organization);
+                  .set('forceFullFetch', false)
+                  .set('hasConnected', true)
+                  .set('readyInOrg', payload.me.has_organization);
     }
     case REHYDRATE:
       if (action && action.payload && action.payload.connection) {
         const { connection } = action.payload;
-        const sameVersion = version === connection.get('lastVersion');
         if(connection.get('token')) {
           return initialState.set('token', connection.get('token'))
             .set('lastConnect', connection.get('lastConnect'))
             .set('lastVersion', connection.get('lastVersion'))
-            .set('forceFullFetch', !sameVersion)
-            .set('hasConnected', sameVersion && connection.get('hasConnected'))
-            .set('readyInOrg', sameVersion && connection.get('readyInOrg'));
+            .set('hasConnected', connection.get('hasConnected'))
+            .set('readyInOrg', connection.get('readyInOrg'));
         }
         return initialState;
         
       }
       return state;
+    case types.SET_LAST_VERSION: {
+      if(state.get('lastVersion') === payload.version) {
+        return state;
+      }
+      return forceRefresh(state.set('lastVersion', payload.version));
+    }
     case types.SET_UPDATE_STATUS: {
       return state.mergeIn(['versionInfo'], fromJS(payload));
     }
@@ -64,9 +70,7 @@ export default function connectionReducer(state = initialState, action) {
     case 'organizations.create':
     case 'organizations.join':
     case 'organization_created': {
-      return state.set('forceFullFetch', true)
-                  .set('readyInOrg', false)
-                  .set('hasConnected', false);
+      return forceRefresh(state);
     }
     case 'users.signin':
     case 'users.signup': {

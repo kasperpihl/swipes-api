@@ -11,10 +11,10 @@ const EXPECTED_PONG = 7000;
 export default class Socket {
   constructor(store, delegate) {
     this.store = store;
-    this.delegate = delegate;
-    setupDelegate(this, 'forceLogout');
     this.reconnect_attempts = 0;
     bindAll(this, ['message', 'changeStatus', 'storeChange', 'onCloseHandler']);
+    const version = store.getState(['globals', 'version']);
+    store.dispatch({ type: types.SET_LAST_VERSION, payload: { version } });
     store.subscribe(this.storeChange);
   }
   storeChange() {
@@ -104,6 +104,7 @@ export default class Socket {
     this.ws.onmessage = this.message;
 
     this.ws.onclose = () => {
+      this.lastPong = null;
       this.isSocketConnected = false;
       clearInterval(this._pingTimer);
       this.onCloseHandler();
@@ -149,7 +150,7 @@ export default class Socket {
     if(type === 'token_revoked') {
       const currToken = this.store.getState().getIn(['connection', 'token']);
       if (payload.token_to_revoke === currToken) {
-        this.store.disatch({ type: types.RESET_STATE });
+        return this.store.disatch({ type: types.RESET_STATE });
       }
     }
     const socketData = Object.assign({ ok: true }, payload && payload.data);
@@ -174,11 +175,8 @@ export default class Socket {
     }
   }
   sendPing() {
-    
-    
     if (this.ws && this.ws.readyState == this.ws.OPEN) {
       const now = new Date().getTime();
-      console.log(now - this.lastPong)
       if(this.lastPong && (now - this.lastPong > EXPECTED_PONG)) {
         this.forceClose(true);
       } else {
