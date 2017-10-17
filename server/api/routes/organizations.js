@@ -278,6 +278,8 @@ authed.all(
   usersCreateInvitationToken,
   usersSendInvitationQueueMessage,
   notificationsPushToQueue,
+  usersInvitedUserQueueMessage,
+  notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
   }),

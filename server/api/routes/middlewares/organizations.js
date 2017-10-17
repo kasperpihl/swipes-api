@@ -554,10 +554,12 @@ const organizationsUserJoinedQueueMessage = valLocals('organizationsUserJoinedQu
     organization_id,
     organization,
   } = res.locals;
+  const event_type = 'organization_user_joined';
   const queueMessage = {
+    event_type,
     user_id,
     organization_name: organization.name,
-    event_type: 'organization_user_joined',
+    notification_id_sufix: `${organization_id}-${event_type}`,
   };
 
   setLocals({
