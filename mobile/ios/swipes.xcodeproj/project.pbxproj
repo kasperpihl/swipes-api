@@ -1487,7 +1487,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.swipesapp.iosstaging;
 				PRODUCT_NAME = SwipesDev;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1617,7 +1617,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.swipesapp.iosstaging;
 				PRODUCT_NAME = SwipesStaging;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Staging;
@@ -1748,7 +1748,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.swipesapp.ios;
 				PRODUCT_NAME = Swipes;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
