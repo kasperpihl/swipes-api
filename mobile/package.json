@@ -1,7 +1,7 @@
 {
   "name": "swipes",
   "version": "0.0.1",
-  "androidVersionName": "0.14.0",
+  "androidVersionName": "1.0.0",
   "androidVersionCode": 15,
   "private": true,
   "scripts": {

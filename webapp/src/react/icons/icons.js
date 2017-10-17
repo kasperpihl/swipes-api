@@ -149,3 +149,4 @@ export { default as ESNoResults } from './empty-states/es-no-results.svg';
 export { default as ESNotifications } from './empty-states/es-notifications.svg';
 export { default as ESSearch } from './empty-states/es-search.svg';
 export { default as ESWelcome } from './empty-states/es-welcome.svg';
+export { default as ESNotSupported } from './empty-states/es-not-supported.svg';

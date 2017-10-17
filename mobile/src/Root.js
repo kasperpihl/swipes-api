@@ -12,7 +12,6 @@ import Analytics from 'utils/analytics';
 import codePush from 'react-native-code-push';
 import * as a from 'actions';
 
-
 const store = configureStore({
   globals: getGlobals(),
 });

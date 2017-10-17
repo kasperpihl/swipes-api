@@ -17,6 +17,13 @@
 
 .not-supported {
 
+  &__illustration {
+    @include size(50%, auto);
+    margin-left: 50%;
+    transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+  }
+
   &__empty-space-block {
     @include size(100%, 30px);
   }
