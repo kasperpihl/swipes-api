@@ -56,6 +56,7 @@ const usersGetSingleWithFields = (req, res, next) => {
   // We can make fields more dynamic at some point
   const fields = [
     'profile',
+    'organizations',
   ];
 
   return dbUsersGetSingleWithFields({ user_id, fields })
