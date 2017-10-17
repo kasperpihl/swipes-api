@@ -14,6 +14,7 @@ export default class Socket {
     this.reconnect_attempts = 0;
     bindAll(this, ['message', 'changeStatus', 'storeChange', 'onCloseHandler']);
     const version = store.getState().getIn(['globals', 'version']);
+    // Send in the current version. We use this to check if its different from last open
     store.dispatch({ type: types.SET_LAST_VERSION, payload: { version } });
     store.subscribe(this.storeChange);
   }

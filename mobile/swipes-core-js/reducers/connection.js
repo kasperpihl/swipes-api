@@ -42,6 +42,7 @@ export default function connectionReducer(state = initialState, action) {
             .set('lastVersion', connection.get('lastVersion'))
             .set('hasConnected', connection.get('hasConnected'))
             .set('readyInOrg', connection.get('readyInOrg'));
+          // Check if the stored version is different for the one that's loaded on open
           if(state.get('lastVersion') !== connection.get('lastVersion')) {
             newState = forceRefresh(newState);
           }

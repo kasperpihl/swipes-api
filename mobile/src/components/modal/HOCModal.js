@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { TouchableWithoutFeedback, View, StyleSheet ,StatusBar, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
@@ -90,6 +90,7 @@ class HOCModal extends PureComponent {
           </View>
         </TouchableWithoutFeedback>
         <Comp {...compProps} closeModal={this.onClose} />
+
       </View>
     )
   }
@@ -110,6 +111,7 @@ class HOCModal extends PureComponent {
         {...modalProps}
       >
         {this.renderComponent(isOpen)}
+      {Platform.OS === 'ios' && <KeyboardSpacer />}
       </Modal>
     );
   }
