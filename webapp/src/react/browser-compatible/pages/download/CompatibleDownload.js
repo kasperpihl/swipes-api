@@ -136,7 +136,7 @@ class CompatibleDownload extends PureComponent {
         {this.renderDesktopDownloads()}
       </div>,
       <div className="section section--coming-soon" key="mobile">
-        <div className="section-title">Mobile (In beta)</div>
+        <div className="section-title">Mobile</div>
         <div className="device-wrapper">
           <a href={downloadLinks.ios} target="_blank" className="device">
             <Icon icon="IphoneDevice" className="device-svg" />
@@ -166,7 +166,7 @@ class CompatibleDownload extends PureComponent {
     return (
       <CompatibleCard>
         <div className="download-page">
-          <CompatibleHeader title="Awesome! Download the Swipes Workspace" subtitle="Start working with your team from anywhere" />
+          <CompatibleHeader title="Download the Workspace" subtitle="Start working with your team from anywhere" />
           {this.renderDownloadSections()}
           {this.renderWebSection()}
         </div>

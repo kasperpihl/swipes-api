@@ -24,15 +24,18 @@ class CompatibleSignup extends PureComponent {
   }
   getSubtitle() {
     const { organization } = this.props;
+
     if (!organization) {
-      return 'Sign up to try the Swipes Workspace for a 14-day free trial. No credit card required. After the trial, continue using the Workspace for $9 per user / month.';
+      return 'In the Workspace, you unite the work of your team. Start your 14-day free trial by signing up. No credit card required. ';
     }
+
     return 'Your team is waiting for you. Sign up to join them.';
   }
   generateTitle() {
     const { organization, inviter } = this.props;
+
     if (!organization) {
-      return 'New account to Swipes Workspace.';
+      return 'Get Started';
     }
 
     return `Join ${msgGen.users.getFirstName(inviter)} and the ${organization.get('name')} team`;
@@ -40,9 +43,11 @@ class CompatibleSignup extends PureComponent {
   renderHeader() {
     const { inviter } = this.props;
     
-    return (
-      <CompatibleHeader title={this.generateTitle()} subtitle={this.getSubtitle()} assignee={inviter} />
-    )
+    return ([
+      <CompatibleHeader center title={this.generateTitle()} assignee={inviter} key="title" />,
+      <Icon icon="ESMilestoneAchieved" className="compatible-signup__illustration" key="illustration" />, 
+      <CompatibleHeader subtitle={this.getSubtitle()} key="subtitle" />
+    ])
   }
   renderInputField(key, type, placeholder, props) {
     const { delegate } = this.props;

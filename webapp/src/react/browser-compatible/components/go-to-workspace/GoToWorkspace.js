@@ -27,7 +27,7 @@ class GoToWorkspace extends PureComponent {
         {!noTitle && <CompatibleSubHeader title="Go to the workspace" />}
         <Link to={to || '/'} className="to-workspace__wrapper">
           <Icon icon="SwipesLogoEmpty" className="to-workspace__svg" />
-          <p>Go to the workspace</p>
+          <p>Go to your Workspace</p>
         </Link>
       </div>
     );

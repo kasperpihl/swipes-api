@@ -39,10 +39,10 @@ class CompatibleWelcome extends PureComponent {
   }
   renderHeader() {
 
-    const subtitle = 'First we need you be part of an organization. You have two options.'
+    const subtitle = 'You can join your team in an existing organization in the Workspace. Just accept the invitation for it.'
 
     return (
-      <CompatibleHeader title="Welcome to Swipes." subtitle={subtitle} />
+      <CompatibleHeader title="Great! Now let’s join in your organization" subtitle={subtitle} />
     )
   }
   renderRow(org) {
@@ -75,10 +75,10 @@ class CompatibleWelcome extends PureComponent {
     const renderRows = pendingOrgs.map(o => this.renderRow(o)).toArray();
 
     return ([
-          <CompatibleSubHeader title="Get invited to an organization." key="1" />,
+          <CompatibleSubHeader title="Join an organization" key="1" />,
           <div className="table" key="2">
             <div className="table__header">
-              <div className="col col--name">Current invitations</div>
+              <div className="col col--name">You are invite to:</div>
               <div className="clearfix"></div>
             </div>
             {renderRows}
@@ -103,7 +103,7 @@ class CompatibleWelcome extends PureComponent {
               value={createText}
               onChange={this.onChange} 
             />
-            <div className="create-org__label">Name of organization</div>
+            <div className="create-org__label">Name of company</div>
             <div className={buttonClass} onClick={this.onCreate}>
               {isLoading('creating') ? (
                 <Icon icon="loader" width="12" height="12" className="create-org__loading" />
@@ -122,6 +122,8 @@ class CompatibleWelcome extends PureComponent {
     return (
       <div className="compatible-welcome">
         {this.renderHeader()}
+        <div className="compatible-welcome__hint">Hint: If you haven’t received an invitation yet, ask your Account Admin for one. 😉</div>
+        <CompatibleSubHeader subtitle="If your company does not have a Workspace account yet, create one below and invite your team." />
         {this.renderJoinOrg()}
         <CompatibleSubHeader title="Create a new organization" />
         {this.renderCreateOrg()}

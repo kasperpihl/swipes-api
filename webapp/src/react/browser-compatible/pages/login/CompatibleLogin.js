@@ -27,12 +27,14 @@ class CompatibleLogin extends PureComponent {
   }
   renderHeader() {
     const { inviter } = this.props;
-    const title = 'This is a title';
-    const subtitle = 'This is a subtitle';
+    const title = 'Welcome to your Workspace';
+    const subtitle = 'This is the place for your team to communicate and create great work together.';
     
-    return (
-      <CompatibleHeader title={title} subtitle={subtitle} />
-    )
+    return ([
+      <CompatibleHeader title={title} key="title"/>,
+      <Icon icon="ESWelcome" className="compatible-login__illustration" key="illus"/>,
+      <CompatibleHeader subtitle={subtitle} key="subtitle"/>
+    ])
   }
   renderInputField(key, type, placeholder, props) {
     const { delegate } = this.props;
@@ -60,7 +62,7 @@ class CompatibleLogin extends PureComponent {
   }
   renderFormError() {
     const { getLoading } = this.props;
-    console.lo
+
     return (
       <div className="footer__error-label">{getLoading('signInButton').error}</div>
     )

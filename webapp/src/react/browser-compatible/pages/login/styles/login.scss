@@ -23,6 +23,17 @@
 // Elements
 // ======================================================
 
+.compatible-login {
+  
+  &__illustration {
+    @include size(60%, auto);
+    margin: 30px 0;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+  }
+}
+
 .compatible-login .footer {
   $b: findElementInBlock(#{&}, '.footer');
 

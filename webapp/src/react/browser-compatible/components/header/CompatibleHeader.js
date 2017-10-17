@@ -11,10 +11,11 @@ const CompatibleHeader = (props) => {
     assignee,
     title,
     subtitle,
+    center
   } = props;
 
   return (
-    <div className="compatible-header">
+    <div className={center ? 'compatible-header compatible-header--center' : 'compatible-header'}>
       <div className="compatible-header__title-container">
         {assignee && <CompatibleAssignees assignee={assignee} float="right" />}
         <h1 className="compatible-header__title">{title}</h1>

@@ -59,8 +59,7 @@ class CompatibleInvite extends PureComponent {
 
     return (
       <div className="compatible-invite">
-        <CompatibleHeader title="New Org Title" subtitle="You have now created a new org, here you can invite others or download the app" />
-        <CompatibleSubHeader title="Gather your whole team. Invite them here." />
+        <CompatibleHeader title="Your Workspace is ready!" subtitle="Invite your team to join in or download the app below." />
         {this.renderInviteForm()}
         {this.renderGoToWorkspace()}
       </div>

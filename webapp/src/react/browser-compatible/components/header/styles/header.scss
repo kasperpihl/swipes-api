@@ -8,6 +8,10 @@
 
 .compatible-header {
   @include size(100%, auto);
+
+  &#{&}--center {
+    text-align: center;
+  }
 }
 
 // ======================================================

@@ -24,6 +24,13 @@
 
 .compatible-signup {
 
+  &__illustration {
+    @include size(50%, auto);
+    margin-left: 50%;
+    transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+  }
+
   &__loader {
     @include widthSpecifications(initial, 100%);
     margin: 0 auto;
