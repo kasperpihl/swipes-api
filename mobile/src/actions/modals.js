@@ -1,5 +1,6 @@
 import ActionModal from 'modals/action-modal/ActionModal';
 import AlertModal from 'modals/AlertModal';
+import PromptModal from 'modals/PromptModal';
 import { modal } from './main';
 import { fromJS } from 'immutable';
 import * as cs from 'swipes-core-js/selectors';
@@ -49,6 +50,19 @@ export const alert = (props, extraArgs) => (d) => {
 
   d(modal({
     component: AlertModal,
+    props: renderedProps,
+    ...extraArgs,
+  }));
+} 
+
+export const prompt = (props, extraArgs) => (d) => {
+
+  const renderedProps = {
+    ...props,
+  };
+
+  d(modal({
+    component: PromptModal,
     props: renderedProps,
     ...extraArgs,
   }));

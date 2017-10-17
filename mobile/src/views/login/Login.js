@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     ...gs.mixins.border(1, 'white'),
     ...gs.mixins.borderRadius(3),
     ...gs.mixins.flex('center'),
-    ...gs.mixins.margin(60, 0, 30, 15),
+    ...gs.mixins.margin(60, 0, 15, 15),
     ...gs.mixins.size(viewSize.width - 30, 61),
     backgroundColor: 'transparent',
   },
@@ -95,6 +95,14 @@ const styles = StyleSheet.create({
     ...gs.mixins.font(12, 'white', 'bold'),
     backgroundColor: 'transparent',
   },
+  resetButton: {
+    
+  },
+  resetLabel: {
+    ...gs.mixins.font(12, 'white'),
+    ...gs.mixins.padding(22, 0),
+    textAlign: 'center',
+  }
 });
 
 class Login extends PureComponent {
@@ -108,7 +116,7 @@ class Login extends PureComponent {
       errorMessage: '',
     };
 
-    setupDelegate(this, 'onShowWelcome')
+    setupDelegate(this, 'onShowWelcome', 'onOpenResetModal')
     setupLoading(this);
 
     codePush.getUpdateMetadata().then((pack) => {
@@ -142,7 +150,11 @@ class Login extends PureComponent {
     this.keyboardDidHideListener.remove();
   }
   keyboardDidShow() {
-    this.setState({ keyboardOpen: true });
+    const { modalOpen } = this.props;
+
+    if (!modalOpen) {
+      this.setState({ keyboardOpen: true });
+    }
   }
   keyboardDidHide() {
     this.setState({ keyboardOpen: false });
@@ -176,10 +188,19 @@ class Login extends PureComponent {
     this.refs.passwordInput.focus();
   }
   renderButton() {
+    const { keyboardOpen } = this.state;
+    let extraButtonStyles = {};
+
+    if (keyboardOpen) {
+      extraButtonStyles = {
+        ...gs.mixins.margin(15, 0, 15, 15),
+      }
+    }
+
     
     if (this.isLoading('loging')) {
       return (
-        <View style={styles.button}>
+        <View style={[styles.button, extraButtonStyles]}>
           <ActivityIndicator color='white' />
         </View>
       )
@@ -187,7 +208,7 @@ class Login extends PureComponent {
 
     return (
       <RippleButton onPress={this.signIn}>
-        <View style={styles.button}>
+        <View style={[styles.button, extraButtonStyles]}>
           <Text selectable={true} style={styles.buttonLabel}>Sign in</Text>
         </View>
       </RippleButton>
@@ -251,6 +272,64 @@ class Login extends PureComponent {
       </View>
     )
   }
+  renderResetPassword() {
+
+    return (
+      <RippleButton onPress={this.onOpenResetModal}>
+        <View style={styles.resetButton}>
+          <Text style={styles.resetLabel}>
+            Reset my password
+          </Text>
+        </View>
+      </RippleButton>
+    )
+  }
+  renderForm() {
+    const { keyboardOpen } = this.state;
+    let extraFormStyles = {};
+
+    if (keyboardOpen) {
+      extraFormStyles = {
+        marginTop: 33
+      }
+    }
+
+    return (
+      <View style={[styles.form, extraFormStyles]}>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            onChangeText={email => this.setState({ email })}
+            value={this.state.email}
+            placeholder="Email"
+            onSubmitEditing={this.focusNext}
+            placeholderTextColor="white"
+            returnKeyType="next"
+            underlineColorAndroid="transparent"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            ref="passwordInput"
+            style={styles.input2}
+            onChangeText={password => this.setState({ password })}
+            value={this.state.password}
+            returnKeyType="go"
+            placeholder="Password"
+            placeholderTextColor="white"
+            secureTextEntry
+            onSubmitEditing={this.signIn}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
+      </View>
+    )
+  }
   render() {
     const { version } = this.state;
     return (
@@ -258,42 +337,11 @@ class Login extends PureComponent {
         <View style={styles.container}>
           {this.renderGradient()}
           <View style={{flex: 1}}>
-            <ScrollView keyboardShouldPersistTaps="always">
+            <ScrollView keyboardShouldPersistTaps="never">
               {this.renderTitle()}
-              <View style={styles.form}>
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                    placeholder="Email"
-                    onSubmitEditing={this.focusNext}
-                    placeholderTextColor="white"
-                    returnKeyType="next"
-                    underlineColorAndroid="transparent"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                </View>
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    ref="passwordInput"
-                    style={styles.input2}
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                    returnKeyType="go"
-                    placeholder="Password"
-                    placeholderTextColor="white"
-                    secureTextEntry
-                    onSubmitEditing={this.signIn}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                </View>
-              </View>
+              {this.renderForm()}
               {this.renderButton()}
+              {this.renderResetPassword()}
             </ScrollView>
             {this.renderErrorLabel()}
           </View>

@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import RippleButton from 'RippleButton';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import * as gs from 'styles';
-import { viewSize } from 'globalStyles';
+import { viewSize, colors } from 'globalStyles';
 import { setupCachedCallback } from 'react-delegate';
 
 const styles = StyleSheet.create({
-  alert: {
+  prompt: {
     width: viewSize.width * .8,
     ...gs.mixins.padding(0, 15),
     backgroundColor: 'white',
@@ -22,12 +21,12 @@ const styles = StyleSheet.create({
     ...gs.mixins.font(18, gs.colors.deepBlue100, 21),
     textAlign: 'center'
   },
-  messageWrapper: {
-    ...gs.mixins.padding(15, 0, 30, 0),
+  contentWrapper: {
+    // backgroundColor: '#333ddd',
   },
-  message: {
-    ...gs.mixins.font(15, gs.colors.deepBlue50),
-    textAlign: 'center'
+  input: {
+    ...gs.mixins.size(viewSize.width - 30, 50),
+    ...gs.mixins.font(15, colors.deepBlue100, 21),
   },
   actionsWrapper: {
     ...gs.mixins.border(1, gs.colors.deepBlue20, 'top'),
@@ -49,22 +48,23 @@ const styles = StyleSheet.create({
   }
 })
 
-class AlertModal extends PureComponent {
+class PromptModal extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.onPressCached = setupCachedCallback(this.onPress, this);
+    this.state = {
+      text: props.initValue || '',
+    };
 
+    this.onPressCached = setupCachedCallback(this.onPress, this);
   }
   componentDidMount() {
   }
   onPress(id, e) {
     const { onConfirmPress, onCancelPress, closeModal } = this.props;
-
     closeModal();
 
     if (id === 'confirm' && typeof onConfirmPress === 'function') {
-      onConfirmPress(e);
+      onConfirmPress(e, this.state.text);
     }
 
     if (id === 'cancel' && typeof onCancelPress === 'function') {
@@ -78,22 +78,37 @@ class AlertModal extends PureComponent {
 
     return (
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>
-          {title}
-        </Text>
+        <Text style={styles.title}>{title}</Text>
       </View>
     )
   }
-  renderText() {
-    const { message } = this.props;
-    
-    if (!message) return undefined;
+  renderContent() {
+    const { placeholder: ph, keyboardType: kT } = this.props;
+    const placeholder = ph || 'Placeholder';
+    const keyboardType = kT || 'default';
+    let extraArgs = {};
+
+    if (keyboardType === 'email-address') {
+      extraArgs = {
+        autoCapitalize: 'none',
+        autoCorrect: false
+      }
+    }
 
     return (
-      <View style={styles.messageWrapper}>
-        <Text style={styles.message}>
-          {message}
-        </Text>
+      <View style={styles.contentWrapper}>
+        <TextInput
+          style={styles.input}
+          onChangeText={text => this.setState({ text })}
+          value={this.state.text}
+          placeholder={placeholder}
+          onSubmitEditing={this.focusNext}
+          placeholderTextColor={colors.deepBlue50}
+          underlineColorAndroid="transparent"
+          keyboardType={keyboardType}
+          autoFocus={true}
+          {...extraArgs}
+        />
       </View>
     )
   }
@@ -116,17 +131,17 @@ class AlertModal extends PureComponent {
   }
   render() {
     return (
-      <View style={styles.alert}>
+      <View style={styles.prompt}>
         {this.renderTitle()}
-        {this.renderText()}
+        {this.renderContent()}
         {this.renderActions()}
       </View>
     );
   }
 }
 
-export default AlertModal
+export default PromptModal
 
 // const { string } = PropTypes;
 
-AlertModal.propTypes = {};
+PromptModal.propTypes = {};

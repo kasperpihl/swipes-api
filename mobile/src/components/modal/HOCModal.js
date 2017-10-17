@@ -55,6 +55,7 @@ class HOCModal extends PureComponent {
   }
   onClose() {
     const { showModal } = this.props;
+    console.warn('closing')
     showModal();
   }
   onDidClose() {

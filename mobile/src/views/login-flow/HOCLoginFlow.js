@@ -19,6 +19,7 @@ class HOCLoginFlow extends PureComponent {
     this.state = {
       showLogin: false,
       showSignupIntro: false,
+      modalOpen: false,
     };
 
     this.onBackPress = this.onBackPress.bind(this);
@@ -77,13 +78,33 @@ class HOCLoginFlow extends PureComponent {
 
     browser(`${apiUrl}/register`);
   }
+  onOpenResetModal() {
+    const { promptModal } = this.props;
+    this.setState({ modalOpen: true });
+
+    promptModal({
+      title: 'Reset password',
+      placeholder: 'Enter your email',
+      keyboardType: 'email-address',
+      onConfirmPress: (e, email) => {
+        this.handleResetPassword(email);
+        this.setState({ modalOpen: false });
+      },
+      onCancelPress: () => {
+        this.setState({ modalOpen: false });
+      }
+    })
+  }
+  handleResetPassword() {
+    console.warn('reseting the password')
+  }
   renderSecondScreen() {
-    const { showLogin, showSignupIntro } = this.state;
+    const { showLogin, showSignupIntro, modalOpen } = this.state;
 
     if (showLogin || showSignupIntro) {
 
       if (showLogin) {
-        return <Login  delegate={this} />;
+        return <Login  delegate={this} modalOpen={modalOpen}/>;
       }
 
       return <SignupIntro delegate={this} />;
@@ -122,4 +143,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   browser: a.links.browser,
+  promptModal: a.modals.prompt,
 })(HOCLoginFlow);
