@@ -67,10 +67,19 @@ export default function connectionReducer(state = initialState, action) {
     // ======================================================
     // Authorization methods
     // ======================================================
+    case 'organization_updated': {
+      if(state.get('readyInOrg')) {
+        return state;
+      }
+      return forceRefresh(state);
+    }
     case 'organizations.delete':
     case 'organizations.leave':
+    case 'user_organization_left':
     case 'organizations.create':
     case 'organizations.join':
+    case 'organization_deleted':
+    case 'user_disabled':
     case 'organization_created': {
       return forceRefresh(state);
     }

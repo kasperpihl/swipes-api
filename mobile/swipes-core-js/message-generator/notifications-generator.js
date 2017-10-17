@@ -68,6 +68,20 @@ export default class NotificationsGenerator {
 
         break;
       }
+      case 'organization_user_joined': {
+        if(meta.get('is_me')) {
+          text.push(boldText('name', 'You', boldStyle));
+          text.push(' have joined the ');
+          text.push(boldText('org', meta.get('organization_name'), boldStyle)) 
+          text.push(' team. Welcome!');
+        } else {
+          text.push(boldText('name', meta.get('first_name'), boldStyle));
+          text.push(' have joined the ');
+          text.push(boldText('org', meta.get('organization_name'), boldStyle)) 
+          text.push(' team.');
+        }
+        break;
+      }
       case 'step_assigned': {
         const count = meta.get('step_assign_count');
         text.push('You have been assigned to ');
@@ -107,7 +121,7 @@ export default class NotificationsGenerator {
         break;
       }
       default: {
-        // console.log('unknown notification', n.toJS());
+        console.log('unknown notification', n.toJS());
         text.push('I don\t know what to say (unknown notification)');
       }
     }
