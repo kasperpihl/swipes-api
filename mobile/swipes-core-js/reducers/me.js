@@ -46,6 +46,9 @@ export default function meReducer(state = initialState, action) {
         return service;
       }));
     }
+    case 'user_disabled': {
+      return state.set('organizations', fromJS([])).set('has_organization', false);
+    }
     case 'user_invited': {
       const pendings = state.get('pending_organizations');
       if(pendings && !pendings.find((o) => o.get('id') === payload.pending_organization_id)) {

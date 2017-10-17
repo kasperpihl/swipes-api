@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Platform, StatusBar } from 'react-native';
+import { View, StyleSheet, Platform, StatusBar, Text } from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import codePush from 'react-native-code-push';
 import LinearGradient from 'react-native-linear-gradient';
@@ -137,6 +137,14 @@ class App extends PureComponent {
 
     return undefined;
   }
+  renderNoOrg() {
+    const { token, readyInOrg, isHydrated, hasConnected } = this.props;
+
+    if (!isHydrated || !token || !hasConnected || readyInOrg) {
+      return undefined;
+    }
+    return <View><Text>Hi</Text></View>
+  }
   renderApp() {
     const { token, readyInOrg, isHydrated } = this.props;
 
@@ -172,6 +180,7 @@ class App extends PureComponent {
         />
         {this.renderLoader()}
         {this.renderLogin()}
+        {this.renderNoOrg()}
         {this.renderApp()}
         <HOCModal />
         <HOCLoading />
@@ -185,6 +194,7 @@ function mapStateToProps(state) {
     token: state.getIn(['connection', 'token']),
     myId: state.getIn(['me', 'id']),
     readyInOrg: state.getIn(['connection', 'readyInOrg']),
+    hasConnected: state.getIn(['connection', 'hasConnected']),
     status: state.getIn(['connection', 'status']),
     isHydrated: state.getIn(['main', 'isHydrated']),
   };

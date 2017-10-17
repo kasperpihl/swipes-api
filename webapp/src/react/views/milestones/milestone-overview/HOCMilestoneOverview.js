@@ -152,7 +152,7 @@ class HOCMilestoneOverview extends PureComponent {
       return;
     }
     confirm(Object.assign({}, options, {
-      title: 'Mark milestone as achieved',
+      title: 'Mark plan as achieved',
       message: 'Incompleted goals will be moved to goals without milestone.',
     }), (i) => {
       if (i === 1) {
