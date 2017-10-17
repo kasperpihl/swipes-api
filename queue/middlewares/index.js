@@ -333,7 +333,7 @@ const organization_user_joined = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const organization_deleted = notifyWrapper([
+const organization_deleted = [
   organizations.organizationsDeletedNotificationData,
   (req, res, next) => {
     const {
@@ -345,7 +345,8 @@ const organization_deleted = notifyWrapper([
     return next();
   },
   notify.notifyMultipleUsers,
-]);
+  notify.notifyCommonRethinkdb,
+];
 
 const post_created = notifyWrapper([
   users.usersGetSingleWithFields,
