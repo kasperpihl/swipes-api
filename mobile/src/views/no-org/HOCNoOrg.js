@@ -7,16 +7,17 @@ import * as a from 'actions';
 import ParsedText from "react-native-parsed-text";
 import * as gs from 'styles';
 import RippleButton from 'RippleButton';
+import Icon from 'Icon';
 
 const styles = StyleSheet.create({
   container: {
     ...gs.mixins.size(1),
-    ...gs.mixins.flex('column', 'center', 'center'),
-    ...gs.mixins.padding(0, 30),
+    ...gs.mixins.flex('column', 'center', 'top'),
+    ...gs.mixins.padding(50, 30, 0, 30),
   },
   title: {
-    ...gs.mixins.font(30, gs.colors.deepBlue100, '300'),
-    textAlign: 'center'
+    ...gs.mixins.font(24, gs.colors.deepBlue100, '300'),
+    marginBottom: 30,
   },
   paragraph: {
     ...gs.mixins.font(14, gs.colors.deepBlue60, 18),
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     ...gs.mixins.padding(15),
     marginTop: 30,
     }
-})
+});
 
 class HOCNoOrg extends PureComponent {
   constructor(props) {
@@ -52,6 +53,11 @@ class HOCNoOrg extends PureComponent {
     this.onLogOut = this.onLogOut.bind(this);
   }
   componentDidMount() {
+  }
+  getSVGSize(oldWidth, newWidth, oldHeight) {
+    const newHeight = (newWidth * oldHeight) / oldWidth;
+
+    return newHeight;
   }
   onOpenUrl() {
     const { browser, apiUrl } = this.props;
@@ -87,12 +93,14 @@ class HOCNoOrg extends PureComponent {
     )
   }
   render() {
+    const svgHeight = this.getSVGSize(480, (gs.layout.width - 60), 300);
+
     return (
       <View style={styles.container}>
         <Text style={styles.title}>
           Seems like you are not part of an organization yet.
         </Text>
-
+        <Icon name="ESWelcome" width={(gs.layout.width - 60)} height={svgHeight} />
         <ParsedText
           style={styles.paragraph}
           parse={[
