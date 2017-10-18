@@ -6,10 +6,9 @@ const VARREGEX = /#{(.*?)}/gi;
 export default class StyleDomHandler {
   constructor(className, styles, mixins) {
     this.styles = styles;
-
     this._props = {};
-
     this._refCounter = 0;
+    this._totalCounter = 0;
     this.parser = new StyleParser(className, styles, mixins);
     bindAll(this, ['subscribe', 'unsubscribe', '_updateDomElement']);
     this._domEl = document.createElement('style');
@@ -18,51 +17,36 @@ export default class StyleDomHandler {
   getVariables() {
     return this.parser.getPropsInfo();
   }
-  subscribe(props, oldProps) {
-    if(!oldProps) { // This is when the component mounts, if oldProps, it updates!
-      this._incrementRef();
-    }
-    this._checkPropsAndUpdateDOM(props, oldProps);
+  subscribe(props) {
+    this._incrementRef();
+    const refNum = ++this._totalCounter;
+    this._props[refNum] = {};
+    this._checkPropsAndUpdateDOM(refNum, props);
+    return refNum;
   }
-  unsubscribe(props) {
-    this._checkPropsAndUpdateDOM({}, props);
+  update(id, props, oldProps) {
+    this._checkPropsAndUpdateDOM(refNum, props, oldProps);
+  }
+  unsubscribe(id) {
+    delete this._props[id];
     this._decrementRef();
   }
-  _addProp(key, value) {
-    if(typeof this._props[key] === 'undefined') {
-      this._props[key] = {};
-    }
-    if(typeof this._props[key][value] === 'undefined') {
-      this._props[key][value] = 1;
-    } else {
-      this._props[key][value] = this._props[key][value] + 1;
-    }
-  }
-  _removeProp(key, value) {
-    this._props[key][value] = this._props[key][value] - 1;
-    if(this._props[key][value] === 0) {
-      delete this._props[key][value];
-    }
-  }
-  _checkPropsAndUpdateDOM(props, oldProps) {
+  _checkPropsAndUpdateDOM(refNum, props, oldProps) {
     oldProps = oldProps || {};
     let needUpdate = false;
 
     this.getVariables().allProps.forEach((key) => {
-      if(!oldProps[key] && props[key]) {
-        this._addProp(key, '' + props[key]);
+      if((!oldProps[key] && props[key]) ||
+        (props[key] && oldProps[key] && (''+props[key] !== oldProps[key]))) {
+        this._props[refNum][key] = '' + props[key];
         needUpdate = true;
       }
       if(oldProps[key] && !props[key]) {
-        this._removeProp(key);
-        needUpdate = true;
-      }
-      if(props[key] && oldProps[key] && (''+props[key] !== oldProps[key])) {
-        this._removeProp(key, ''+props[key]);
-        this._addProp(key, oldProps[key]);
+        delete this._props[refNum][key];
         needUpdate = true;
       }
     });
+    console.log('propp', this._props);
     if(needUpdate) {
       window.cancelAnimationFrame(this._updateFrame);
       this._updateFrame = window.requestAnimationFrame(this._updateDomElement);

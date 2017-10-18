@@ -11,17 +11,17 @@ export default function componentWrapper(EL, styles, mixins) {
 
   class StyledElement extends PureComponent {
     componentWillMount() {
-      styleHandler.subscribe(this.props);
+      this.refNum = styleHandler.subscribe(this.props);
     }
     componentWillUnmount() {
-      styleHandler.unsubscribe(this.props);
+      styleHandler.unsubscribe(this.refNum, this.props);
     }
     componentWillReceiveProps(nextProps) {
-      styleHandler.subscribe(nextProps, this.props);
+      styleHandler.update(this.refNum, nextProps, this.props);
     }
     render() {
       const { keyProps, valueProps, allProps } = styleHandler.getVariables();
-      let computedClassName = className;
+      let computedClassName = `${className} sw-${this.refNum}`;
       keyProps.forEach(vari => {
         if(this.props[vari]) {
           computedClassName += ` ${className}-${vari}`;
@@ -43,6 +43,6 @@ export default function componentWrapper(EL, styles, mixins) {
       return <EL className={computedClassName} {...newProps}>{this.props.children}</EL>;
     }
   }
-  StyledElement.ref = '.' + className;
+  StyledElement.ref = `.${className}`;
   return StyledElement;
 }

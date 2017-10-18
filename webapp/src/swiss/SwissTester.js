@@ -53,14 +53,14 @@ const InnerView = swiss('div', {
     height: '50px',
     background: 'green',  
     '@media (max-width: 1600px)': {
-      '#{hoverRef} &': {
+      '#{active}': {
         background: 'red',
       },
+      '#{hoverRef}:hover &': {
+        background: 'yellow',
+      }
     },
   },
-  active: {
-    background: 'blue',
-  }
 });
 
 //  default : {
@@ -177,8 +177,8 @@ class SwissTester extends PureComponent {
   render() {
     return (
       <Container>
+        <InnerView hoverRef={Container.ref} active={true}>Hi</InnerView>
         <InnerView hoverRef={Container.ref}>Hi</InnerView>
-        <InnerView hoverRef=".test">Hi</InnerView>
         <InnerView hoverRef=".lala">Hi</InnerView>
       </Container>
     );

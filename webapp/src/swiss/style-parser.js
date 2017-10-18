@@ -28,26 +28,36 @@ export default class StyleParser {
   }
 
   getAllKeysFromRoot(rootTarget, styleKey) {
-    const orgStyleKey = styleKey;
-    // Replace '&' signs with the current root.
-    styleKey = orgStyleKey.replace(/&/gi, rootTarget);
-
-    // Check for variables in key.
+    const styleKeys = [];
+    
     const keyVariables = styleKey.match(VARREGEX);
     if(keyVariables && keyVariables.length) {
-      if(keyVariables.length > 1) return console.warn('We only support one variable pr key: ', root, orgStyleKey);
-      // Turning "#{var}" into "var"
-      const actualKey = keyVariables[0].substr(2, keyVariables[0].length - 3);
-      this.valueProps.add(actualKey);
-      this.allProps.add(actualKey);
-      const propValues = this.getPropValuesForKey(actualKey);
-      styleKey = propValues.map(prop => styleKey.replace(VARREGEX, prop));
+      keyVariables.forEach(vari => {
+        const actualKey = vari.substr(2, vari.length - 3);
+        this.valueProps.add(actualKey);
+        this.allProps.add(actualKey);
+      })
+      Object.entries(this.props).forEach(([refNum, props]) => {
+        let localStyleKey = styleKey.replace(/&/gi, `.sw-${refNum}${rootTarget}`);
+        keyVariables.forEach((propKey) => {
+          const actualKey = propKey.substr(2, propKey.length - 3);
+          let value = this.props[refNum][actualKey];
+          if(this.props[refNum][actualKey]) {
+            if(!value.startsWith('.')){
+              value = `.${this.className}-${actualKey}-${value}`;
+            }
+            localStyleKey = localStyleKey.replace(new RegExp(propKey, 'g'), value);
+          }
+        })
+        if(!localStyleKey.match(VARREGEX)) {
+          styleKeys.push(localStyleKey);
+        }
+      })
+    } else {
+      styleKeys.push(styleKey.replace(/&/gi, rootTarget));
     }
 
-    if(!Array.isArray(styleKey)) {
-      styleKey = [ styleKey ];
-    }
-    return styleKey;
+    return styleKeys;
   }
 
   // ======================================================
