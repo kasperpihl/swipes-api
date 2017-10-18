@@ -33,9 +33,16 @@ export default function notesReducer(state = initialState, action) {
   switch (type) {
     case 'init': {
       let server = Map();
+      if(!payload.full_fetch) {
+        server = state.get('server');
+      }
+
       if(payload.notes) {
         payload.notes.forEach((note) => {
           server = server.set(note.id, fromJS(note));
+          if(note.archived || note.deleted) {
+            server = collection.delete(note.id);
+          }
         });
       }
 
