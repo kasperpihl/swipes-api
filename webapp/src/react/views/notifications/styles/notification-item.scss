@@ -51,7 +51,8 @@ $imgSize: 54px;
   }
 
   &__message {
-    @include clampString(2)
+    overflow: hidden;
+    max-height: 31px;
   }
 
   &__styled-text {

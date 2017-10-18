@@ -65,25 +65,24 @@ class CompatibleWelcome extends PureComponent {
   }
   renderJoinOrg() {
     const { me } = this.props;
-
     const pendingOrgs = me.get('pending_organizations');
+    
     if(!pendingOrgs || !pendingOrgs.size) {
-      const title = `Get someone to invite your email: "${me.get('email')}" to their organization.`
-      return <CompatibleHeader subtitle={title} />
+      return undefined;
     }
 
     const renderRows = pendingOrgs.map(o => this.renderRow(o)).toArray();
 
     return ([
-          <CompatibleSubHeader title="Join an organization" key="1" />,
-          <div className="table" key="2">
-            <div className="table__header">
-              <div className="col col--name">You are invite to:</div>
-              <div className="clearfix"></div>
-            </div>
-            {renderRows}
-          </div>
-        ])
+      <CompatibleSubHeader title="If your company does not have a Workspace account yet, create one below and invite your team." key="1" />,
+      <div className="table" key="2">
+        <div className="table__header">
+          <div className="col col--name">You are invite to:</div>
+          <div className="clearfix"></div>
+        </div>
+        {renderRows}
+      </div>
+    ])
   }
   renderCreateOrg() {
     const { isLoading } = this.props;
@@ -118,11 +117,13 @@ class CompatibleWelcome extends PureComponent {
   }
 
   render() {
+    const { me } = this.props;
+    const hint = `Hint: If you haven’t received an invitation for ${me.get('email')} yet, ask your Account Admin for one. 😉`;
 
     return (
       <div className="compatible-welcome">
         {this.renderHeader()}
-        <div className="compatible-welcome__hint">Hint: If you haven’t received an invitation yet, ask your Account Admin for one. 😉</div>
+        <div className="compatible-welcome__hint">{hint}</div>
         <CompatibleSubHeader subtitle="If your company does not have a Workspace account yet, create one below and invite your team." />
         {this.renderJoinOrg()}
         <CompatibleSubHeader title="Create a new organization" />
