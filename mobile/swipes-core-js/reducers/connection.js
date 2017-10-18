@@ -38,7 +38,7 @@ export default function connectionReducer(state = initialState, action) {
         if(connection.get('token')) {
           newState = initialState.set('token', connection.get('token'))
             .set('lastConnect', connection.get('lastConnect'))
-            .set('lastVersion', connection.get('lastVersion'))
+            .set('lastVersion', state.get('lastVersion'))
             .set('hasConnected', connection.get('hasConnected'))
             .set('readyInOrg', connection.get('readyInOrg'));
           // Check if the stored version is different for the one that's loaded on open
