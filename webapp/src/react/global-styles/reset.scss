@@ -30,8 +30,7 @@ textarea {
   box-sizing: border-box;
   cursor: default;
   list-style: none;
-  text-rendering: optimizeLegibility !important; 
-  transform: rotate(-0.0000000001deg);
+  text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;
   margin: 0;
   padding: 0;
@@ -80,7 +79,6 @@ html, body {
   padding: 0;
   font-smooth: always;
   text-rendering: optimizeLegibility !important;
-  transform: rotate(-0.0000000001deg);
   -webkit-font-smoothing: antialiased !important;
 }
 
