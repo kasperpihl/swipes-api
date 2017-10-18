@@ -1,3 +1,18 @@
+/*
+[] support media queries
+[] support key modification hook
+[] support value modification hook
+[] support variables in values
+Website
+Webapp
+Mobile
+Backend
+Integrations
+QA
+*/
+
+
+
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -19,7 +34,7 @@ swiss.addMixin('size', (width=null, height=null) => ({
 const Container = swiss('div', {
   _size: '100px',
   backgroundColor: 'blue',
-  animation: 'example .5s ease-in infinite alternate',
+  animation: 'example2 .5s ease-in infinite alternate',
   '@keyframes example': {
     '0%': {
       transform: 'rotate(0deg)  scale(1)'
