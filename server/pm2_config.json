@@ -36,20 +36,20 @@
     "env_production" : {
        "SW_ENV": "production",
        "SW_VALJS_DEBUG": false,
-       "SW_ORIGIN": "https://live.swipesapp.com",
-       "SW_WEBHOOKS_HOST": "https://live.swipesapp.com/",
+       "SW_ORIGIN": "https://workspace.swipesapp.com",
+       "SW_WEBHOOKS_HOST": "https://workspace.swipesapp.com/",
        "SW_API_PORT": "5000",
        "SW_CLIENT_PORT": "443",
 
-       "SW_DROPBOX_REDIRECT_URI": "https://live.swipesapp.com/oauth-success.html",
-       "SW_GOOGLE_REDIRECT_URI": "https://live.swipesapp.com/oauth-success.html",
+       "SW_DROPBOX_REDIRECT_URI": "https://workspace.swipesapp.com/oauth-success.html",
+       "SW_GOOGLE_REDIRECT_URI": "https://workspace.swipesapp.com/oauth-success.html",
 
-       "SW_SLACK_REDIRECT_URI": "https://live.swipesapp.com/oauth-success.html",
+       "SW_SLACK_REDIRECT_URI": "https://workspace.swipesapp.com/oauth-success.html",
 
-       "SW_GMAIL_REDIRECT_URI": "https://live.swipesapp.com/oauth-success.html",
+       "SW_GMAIL_REDIRECT_URI": "https://workspace.swipesapp.com/oauth-success.html",
 
-       "SW_JIRA_AUTH_URL": "https://live.swipesapp.com/jira-auth.html",
-       "SW_JIRA_REDIRECT_URI": "https://live.swipesapp.com/oauth-success.html",
+       "SW_JIRA_AUTH_URL": "https://workspace.swipesapp.com/jira-auth.html",
+       "SW_JIRA_REDIRECT_URI": "https://workspace.swipesapp.com/oauth-success.html",
 
        "SW_AMAZON_QUEUE_HOST": "https://sqs.us-west-2.amazonaws.com/745159268654/SwipesLive.fifo",
 
