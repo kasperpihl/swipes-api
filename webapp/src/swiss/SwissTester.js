@@ -47,9 +47,12 @@ const Container = swiss('div', {
     }
   },
   '@media (max-width: 600px)': {
-    body: {
+    background: 'red',
+  },
+  '@media (max-width: 600px)': {
+    '& > *': {
       background: 'red',
-    }
+    },
   },
 });
 
