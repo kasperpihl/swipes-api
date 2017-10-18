@@ -41,7 +41,7 @@ export default function notesReducer(state = initialState, action) {
         payload.notes.forEach((note) => {
           server = server.set(note.id, fromJS(note));
           if(note.archived || note.deleted) {
-            server = collection.delete(note.id);
+            server = server.delete(note.id);
           }
         });
       }

@@ -20,16 +20,22 @@ export default function componentWrapper(EL, styles, mixins) {
       styleHandler.subscribe(nextProps, this.props);
     }
     render() {
-      const variables = styleHandler.getVariables();
+      const { keyProps, valueProps, allProps } = styleHandler.getVariables();
       let computedClassName = className;
-      variables.forEach(vari => {
+      keyProps.forEach(vari => {
         if(this.props[vari]) {
           computedClassName += ` ${className}-${vari}`;
         }
       });
+      valueProps.forEach(vari => {
+        if(this.props[vari]) {
+          computedClassName += ` ${className}-${vari}-${this.props[vari]}`;
+        }
+      });
+
       const newProps = {};
       Object.entries(this.props).forEach(([name, value]) => {
-        if(name !== 'className' && variables.indexOf(name) === -1) {
+        if(name !== 'className' && allProps.indexOf(name) === -1) {
           newProps[name] = value;
         }
       })
@@ -37,6 +43,6 @@ export default function componentWrapper(EL, styles, mixins) {
       return <EL className={computedClassName} {...newProps}>{this.props.children}</EL>;
     }
   }
-  StyledElement.ref = className;
+  StyledElement.ref = '.' + className;
   return StyledElement;
 }
