@@ -44,8 +44,10 @@ const commonEvents = (socket, userId) => {
           payload,
           updated_at: new Date().toISOString(),
         }), (error) => {
-          console.log(error);
-          socket.close();
+          if (error) {
+            console.log(error);
+            socket.close();
+          }
         });
       });
     });

@@ -59,8 +59,10 @@ const websocketStart = (server) => {
     });
 
     socket.send(JSON.stringify({ type: 'hello', payload: 'world' }), (error) => {
-      console.log(error);
-      socket.close();
+      if (error) {
+        console.log(error);
+        socket.close();
+      }
     });
 
     userServices(socket, user_id);

@@ -30,8 +30,10 @@ const notes = (socket, userId) => {
             const payload = row.new_val;
 
             socket.send(JSON.stringify({ type, payload: { data: payload } }), (error) => {
-              console.log(error);
-              socket.close();
+              if (error) {
+                console.log(error);
+                socket.close();
+              }
             });
           });
         })
