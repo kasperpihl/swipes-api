@@ -2,12 +2,6 @@ import 'src/utils/polyfills';
 
 import React from 'react';
 import { render } from 'react-dom';
-// import SwissTester from 'src/swiss/SwissTester';
-// render(
-//   <SwissTester />
-//   , document.getElementById('content'),
-// );
-
 
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
