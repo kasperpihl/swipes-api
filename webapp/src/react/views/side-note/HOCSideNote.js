@@ -127,7 +127,7 @@ class HOCSideNote extends PureComponent {
   }
   getInfoTabProps() {
     const { note } = this.props;
-    const createdLbl = `${dayStringForDate(note.get('created_at'))} by ${msgGen.users.getFullName(note.get('created_by'))}`
+    const createdLbl = `${dayStringForDate(note.get('created_at'))} by ${msgGen.users.getFullName(note.get('created_by'))}`;
 
     return {
       info: [
@@ -137,7 +137,7 @@ class HOCSideNote extends PureComponent {
         title: 'What is a note',
         text: 'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text with your mouse and the options will appear.',
       },
-    }
+    };
   }
   saveNote(text, rev) {
     const {
@@ -183,20 +183,20 @@ class HOCSideNote extends PureComponent {
   renderHeader() {
     const { target, note, latestRev, title } = this.props;
     const name = msgGen.users.getName(note.get('updated_by'), { yourself: true });
-    let subtitle = [
+    const subtitle = [
       `Updated by ${name} `,
       <TimeAgo
         key="ts"
         date={note.get('updated_at')}
       />,
-    ]
+    ];
     let buttonHtml;
     if (latestRev < (note.get('rev') || 1)) {
       subtitle[0] = `CONFLICT. Updated by ${name} `;
       buttonHtml = (
         <Button
           primary
-          {...this.getLoading('conflict') }
+          {...this.getLoading('conflict')}
           text="Resolve now"
           onClick={this.onResolveConflict}
         />

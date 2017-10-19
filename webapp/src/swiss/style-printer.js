@@ -13,13 +13,14 @@ const parseStyleValue = (styleKey, styleValue) => {
 const recursiveParseStyleObject = (styleObject, depth) => {
   let styleString = '{\r\n';
   Object.entries(styleObject).forEach(([styleKey, styleValue]) => {
-    const parsedKey = parseStyleKey(styleKey);
+    let parsedKey = styleKey;
     let parsedValue;
     let separator = '';
     let ending = '\r\n';
     if(typeof styleValue === 'object') {
       parsedValue = recursiveParseStyleObject(styleValue, depth + 1);
     } else {
+      parsedKey = parseStyleKey(styleKey);
       separator = ': ';
       ending = ';\r\n';
       parsedValue = parseStyleValue(styleKey, styleValue);
@@ -38,8 +39,8 @@ const recursiveParseStyleObject = (styleObject, depth) => {
 
 export default function print(styleArray) {
   let styleString = '';
-  styleArray.forEach(({target, value}) => {
-    styleString += `${target} ${recursiveParseStyleObject(value, 0)}`;
+  styleArray.forEach(({styleKey, styleValue}) => {
+    styleString += `${styleKey} ${recursiveParseStyleObject(styleValue, 0)}`;
   })
   return styleString;
 }  

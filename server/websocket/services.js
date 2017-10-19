@@ -84,7 +84,12 @@ const userServices = (socket, userId) => {
           payload = payload[0];
         }
 
-        socket.send(JSON.stringify({ type, payload: { data: payload } }));
+        socket.send(JSON.stringify({ type, payload: { data: payload } }), (error) => {
+          if (error) {
+            console.log(error);
+            socket.close();
+          }
+        });
       });
     });
 };

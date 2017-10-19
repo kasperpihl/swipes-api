@@ -14,15 +14,6 @@ QA
 
 
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 
 import swiss from 'react-swiss';
 
@@ -35,6 +26,9 @@ const Container = swiss('div', {
   _size: '100px',
   backgroundColor: 'blue',
   animation: 'example2 .5s ease-in infinite alternate',
+  '&:hover': {
+    backgroundColor: 'red',
+  },
   '@keyframes example': {
     '0%': {
       transform: 'rotate(0deg)  scale(1)'
@@ -46,19 +40,27 @@ const Container = swiss('div', {
       transform: 'rotate(360deg)  scale(1)'
     }
   },
-  '@media (max-width: 600px)': {
-    body: {
-      background: 'red',
-    }
+  '@media (max-width: 1600px)': {
+    '&': {
+      backgroundColor: 'purple',
+    },
   },
 });
 
 const InnerView = swiss('div', {
-  default : {
+  default: {
     width: '50px',
     height: '50px',
-    background: 'green',
-  }
+    background: 'green',  
+    '@media (max-width: 1600px)': {
+      '#{active}': {
+        background: 'red',
+      },
+      '#{hoverRef}:hover &': {
+        background: 'yellow',
+      }
+    },
+  },
 });
 
 //  default : {
@@ -175,17 +177,13 @@ class SwissTester extends PureComponent {
   render() {
     return (
       <Container>
-        <InnerView>Hi</InnerView>
+        <InnerView hoverRef={Container.ref} active={true}>Hi</InnerView>
+        <InnerView hoverRef={Container.ref}>Hi</InnerView>
+        <InnerView hoverRef=".lala">Hi</InnerView>
       </Container>
     );
   }
 }
 // const { string } = PropTypes;
 
-SwissTester.propTypes = {};
-
-const mapStateToProps = (state) => ({
-});
-
-export default connect(mapStateToProps, {
-})(SwissTester);
+export default SwissTester;

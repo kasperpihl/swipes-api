@@ -47,7 +47,12 @@ const commonEventsMultiple = (socket, userId) => {
           type,
           payload,
           updated_at: new Date().toISOString(),
-        }));
+        }), (error) => {
+          if (error) {
+            console.log(error);
+            socket.close();
+          }
+        });
       });
     });
 };

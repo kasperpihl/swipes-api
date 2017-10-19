@@ -29,7 +29,12 @@ const notes = (socket, userId) => {
             const type = 'note_updated';
             const payload = row.new_val;
 
-            socket.send(JSON.stringify({ type, payload: { data: payload } }));
+            socket.send(JSON.stringify({ type, payload: { data: payload } }), (error) => {
+              if (error) {
+                console.log(error);
+                socket.close();
+              }
+            });
           });
         })
         .catch((err) => {

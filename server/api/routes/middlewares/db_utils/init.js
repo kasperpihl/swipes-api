@@ -91,6 +91,9 @@ const dbInit = funcWrap([
             notes:
               r.table('notes')
                 .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+                .filter((note) => {
+                  return note('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+                })
                 .coerceTo('ARRAY'),
           }),
           user.merge({ notes: [] }),
