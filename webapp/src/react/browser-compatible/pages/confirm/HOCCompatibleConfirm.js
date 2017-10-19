@@ -10,11 +10,6 @@ import * as ca from 'swipes-core-js/actions';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
-import swiss from 'react-swiss';
-
-const Wrapper = swiss({
-  marginTop: 33,
-})
 
 class HOCCompatibleConfirm extends PureComponent {
   constructor(props) {
@@ -49,9 +44,9 @@ class HOCCompatibleConfirm extends PureComponent {
 
     return (
       <CompatibleCard>
-        <Wrapper>
+        <div style={{ marginTop: '36px' }}>
           <CompatibleHeader title="confirming your email" subtitle={subtitle} />
-        </Wrapper>
+        </div>
       </CompatibleCard>
     );
   }
