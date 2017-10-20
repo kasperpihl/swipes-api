@@ -11,7 +11,6 @@ import HOCCompatibleWelcome from 'compatible/pages/welcome/HOCCompatibleWelcome'
 import HOCCompatibleConfirm from 'compatible/pages/confirm/HOCCompatibleConfirm';
 import HOCNotSupported from 'compatible/pages/not-supported/HOCNotSupported';
 import Dashboard from 'compatible/pages/dashboard/Dashboard';
-import SwissTester from 'src/swiss/SwissTester';
 
 import SwipesLoader from 'components/loaders/SwipesLoader';
 import HOCRedirect from 'src/react/app/HOCRedirect';
@@ -54,7 +53,6 @@ class Root extends PureComponent {
       <Route key="8" path="/welcome" component={HOCCompatibleWelcome} />,
       <Route key="9" path="/dashboard" component={Dashboard} />,
       <Route key="10" path="/confirm" component={HOCCompatibleConfirm} />,
-      <Route key="11" path="/swiss" component={SwissTester} />,
     ];
   }
   render() {
