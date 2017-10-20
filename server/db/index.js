@@ -77,10 +77,10 @@ const rethinkdb = {
             }
 
             return resolve(results);
-          }).error((err) => {
+          }).catch((err) => {
             return reject(err);
           });
-      }).error((err) => {
+      }).catch((err) => {
         return reject(err);
       });
     });
