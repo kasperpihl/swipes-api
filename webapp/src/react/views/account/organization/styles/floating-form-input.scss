@@ -31,10 +31,6 @@ $errorColor: $red-80;
     &:focus {
       outline: none;
     }
-
-    &:not([type="password"]) {
-      user-select: none;
-    }
   }
 
   &__label {
@@ -43,7 +39,6 @@ $errorColor: $red-80;
     left: 0; bottom: 50%;
     transform: translateY(50%);
     transition: .2s ease-in-out;
-    user-select: none;
     cursor: text;
     background-color: #fff;
     padding: 0 6px;
