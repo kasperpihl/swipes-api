@@ -26,7 +26,7 @@
 // ======================================================
 
 .compatible-assignees .assignee {
-  $b: findElementinBlock(#{&}, '.assignee');
+  $b: '.assignee';
 
   img#{$b}__profile-pic {
     @include size(30px);
