@@ -45,16 +45,15 @@ class HOCNotSupported extends PureComponent {
     });
   }
   render() {
-    const { browser: b, browserVersion: bV, me, organization } = this.props;
+    const { me, organization } = this.props;
     
     if(!organization) return null;
 
-    const subtitle = `You are using ${b} (${bV}). Supported browsers: Chrome (50+), Firefox (50+), Safari (10+) and Edge (14+)`;
+    // let subtitle = `You are using ${b} (${bV}). Supported browsers: Chrome (50+), Firefox (50+), Safari (10+) and Edge (14+)`;
 
     return (
       <CompatibleCard>
         <NotSupported 
-          subtitle={subtitle}
           delegate={this}
           me={me}
           organization={organization}
@@ -69,8 +68,6 @@ class HOCNotSupported extends PureComponent {
 HOCNotSupported.propTypes = {};
 
 const mapStateToProps = (state) => ({
-  browser: state.getIn(['globals', 'browser']),
-  browserVersion: state.getIn(['globals', 'browserVersion']),
   me: state.get('me'),
   organization: state.getIn(['me', 'organizations', 0]),
 });

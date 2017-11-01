@@ -40,6 +40,7 @@ export default function getGlobals() {
     browser: browserRes[0],
     browserVersion: browserRes[1],
     isBrowserSupported: isBrowserSupported(browserRes[0], browserRes[1]),
+    isMobile,
     isDev: (process.env.NODE_ENV !== 'production'),
     isElectron: (window.process && window.process.versions.electron),
     version,
