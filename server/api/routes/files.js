@@ -43,6 +43,7 @@ authed.all(
     file: object.as({
       id: string.require(),
       title: string.require(),
+      original_title: string.require(),
     }).require(),
   }),
 );
