@@ -39,7 +39,7 @@ class HOCAttachButton extends PureComponent {
     this.setLoading('attach');
     createFile(files).then((res) => {
       if (res.ok) {
-        this.createLinkFromTypeIdTitle('file', res.file.id, res.file.title);
+        this.createLinkFromTypeIdTitle('file', res.file.id, res.file.original_title);
         this.setState({ fileVal: '' });
       } else {
         this.clearLoading('attach', '!Something went wrong');

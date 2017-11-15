@@ -93,7 +93,9 @@ const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
   const ext = nameArr[nameArr.length - 1];
   const contentType = mime.lookup(ext) || 'application/octet-stream';
 
-  dbFilesAdd({ user_id, organization_id, slug_file_name, s3_url, fileId, contentType })
+  dbFilesAdd({
+    user_id, organization_id, slug_file_name, s3_url, fileId, contentType,
+  })
     .then((results) => {
       const changes = results.changes[0];
 
@@ -109,12 +111,13 @@ const filesAddToFilesTable = valLocals('filesAddToFilesTable', {
             account_id: user_id,
           },
           meta: {
-            title: slug_file_name,
+            title: file_name,
           },
         },
         file: {
           id: fileId,
           title: slug_file_name,
+          original_title: file_name,
         },
       });
 

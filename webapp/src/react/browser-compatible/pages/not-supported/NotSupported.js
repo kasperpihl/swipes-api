@@ -62,13 +62,9 @@ class NotSupported extends PureComponent {
     )
   }
   render() {
-    const { subtitle } = this.props;
     return (
       <div className="not-supported">
-        <CompatibleHeader title="Ooops! Your browser is not supported."/>
-        <Icon icon="ESNotSupported" className="not-supported__illustration" />
-        <CompatibleHeader subtitle={subtitle} />
-        <CompatibleSubHeader title="Hey! You can use one of the apps instead."/>
+        <CompatibleHeader title="Please download our apps to get started."/>
         <DownloadForDevice />
         <div className="not-supported__empty-space-block" />
         <CompatibleSubHeader title="What else can I do?" />

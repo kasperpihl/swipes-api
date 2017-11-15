@@ -103,7 +103,9 @@ const attachmentsRename = valLocals('attachmentsRename', {
     title,
   } = res.locals;
 
-  dbAttachmentsRename({ user_id, target_id, attachment_id, title })
+  dbAttachmentsRename({
+    user_id, target_id, attachment_id, title,
+  })
     .then(() => {
       return next();
     })
