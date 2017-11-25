@@ -6,7 +6,7 @@ import React, { PureComponent } from 'react';
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
-import AnimateNumber from 'react-animate-number';
+// import AnimateNumber from 'react-animate-number';
 import './styles/dashboard.scss';
 
 class Dashboard extends PureComponent {
@@ -44,7 +44,7 @@ class Dashboard extends PureComponent {
     if (animatedNumbers) {
       return (
         <div className="card__number">
-          <AnimateNumber number={10000} speed={50}/>
+          {/*<AnimateNumber number={10000} speed={50}/>*/}
         </div>
       )
     }

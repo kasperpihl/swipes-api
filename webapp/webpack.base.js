@@ -121,6 +121,19 @@ module.exports = {
             }
           }
         ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'autoprefixer-loader',
+            options: {
+              browsers: '> 1%'
+            }
+          }
+        ],
       }
       
     ]
