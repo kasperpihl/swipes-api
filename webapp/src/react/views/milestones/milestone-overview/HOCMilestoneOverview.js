@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { DragDropContext } from 'react-beautiful-dnd';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
@@ -32,6 +33,7 @@ class HOCMilestoneOverview extends PureComponent {
       showLine: false,
     };
     propsOrPop(this, 'milestone');
+    bindAll(this, ['onDragStart', 'onDragEnd']);
     setupLoading(this);
   }
   componentWillUnmount() {
@@ -94,8 +96,12 @@ class HOCMilestoneOverview extends PureComponent {
       }
     });
   }
-  onClose() {
-
+  onDragStart() {
+    document.body.classList.add("no-select");
+  }
+  onDragEnd(result) {
+    document.body.classList.remove("no-select");
+    console.log('onDragEnd', result);
   }
 
   onGoalClick(goalId) {
@@ -206,14 +212,18 @@ class HOCMilestoneOverview extends PureComponent {
     const { showLine, tempOrder } = this.state;
 
     return (
-      <MilestoneOverview
-        {...this.bindLoading()}
-        tempOrder={tempOrder}
-        milestone={milestone}
-        groupedGoals={groupedGoals}
-        delegate={this}
-        showLine={showLine}
-      />
+      <DragDropContext
+        onDragStart={this.onDragStart}
+        onDragEnd={this.onDragEnd}>
+        <MilestoneOverview
+          {...this.bindLoading()}
+          tempOrder={tempOrder}
+          milestone={milestone}
+          groupedGoals={groupedGoals}
+          delegate={this}
+          showLine={showLine}
+        />
+      </DragDropContext>
     );
   }
 }

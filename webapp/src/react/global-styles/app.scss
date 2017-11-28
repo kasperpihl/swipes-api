@@ -12,6 +12,11 @@
   @include flex(flex);
 }
 
+#draggable {
+  @include size(100%);
+  position: absolute;
+  pointer-events: none;
+}
 #app {
   @include size(100%);
   @include flex(column);

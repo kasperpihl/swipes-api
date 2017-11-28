@@ -11,6 +11,7 @@ module.exports = {
   resolve: {
     modules: [ path.join(__dirname, 'node_modules') ],
     alias: {
+      // 'react-swiss': path.resolve(__dirname, '../../react-swiss/dist/es'),
       src: path.resolve(__dirname, 'src'),
       app: path.resolve(__dirname, 'src/react/app'),
       reducers: path.resolve(__dirname, 'src/reducers'),

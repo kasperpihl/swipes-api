@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { SortableElement, SortableContainer } from 'react-sortable-hoc';
+import { Droppable } from 'react-beautiful-dnd';
 import { getParentByClass, bindAll } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -14,6 +15,7 @@ import Button from 'Button';
 import Icon from 'Icon';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
 import './styles/milestone-overview.scss';
 
 const SortableSection = SortableContainer(Section, { withRef: true})
@@ -45,16 +47,6 @@ class MilestoneOverview extends PureComponent {
     if (emptyStateOpacity !== newEmptyStateOpacity) {
       this.setState({ emptyStateOpacity: newEmptyStateOpacity })
     }
-  }
-  onSortStart() {
-    document.body.classList.add("no-select");
-  }
-  onSortEnd(obj, e) {
-    document.body.classList.remove("no-select");
-    this.onStepSort(obj, e);
-  }
-  getContainer(el) {
-    return getParentByClass(el.refs.section, 'sw-view__scroll');
   }
   renderHeader() {
     const { milestone: m, getLoading, delegate, showLine } = this.props;
@@ -133,22 +125,16 @@ class MilestoneOverview extends PureComponent {
     return undefined;
   }
   renderLeftSection() {
+    const { milestone } = this.props;
+
     return (
       <section>
-        <SortableSection
-          lockAxis="y"
-          distance={5}
-          onSortStart={this.onSortStart}
-          onSortEnd={this.onSortEnd}
-          getContainer={this.getContainer}
-          lockToContainerEdges
-          helperClass="step-list-item__sortable"
-
-          title="This week"
-        >
-          {this.renderList('Current')}
-          {this.renderEmptyState('Current')}
-        </SortableSection>
+        <Section title="Now">
+          <DroppableGoalList 
+            droppableId="now"
+            items={milestone.get('goal_order')}
+          />
+        </Section>
       </section>
     );
   }
