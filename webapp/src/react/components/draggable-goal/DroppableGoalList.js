@@ -7,6 +7,7 @@ class DroppableGoalList extends PureComponent {
   render() {
     const { 
       items,
+      children,
       goalProps,
       ...rest
     } = this.props;
@@ -24,6 +25,7 @@ class DroppableGoalList extends PureComponent {
               />
             ))}
             {provided.placeholder}
+            {children}
           </ListContainer>
         )}
       </Droppable>

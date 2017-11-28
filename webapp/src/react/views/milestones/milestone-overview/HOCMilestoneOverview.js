@@ -12,7 +12,7 @@ import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 // import { map, list } from 'react-immutable-proptypes';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import { List } from 'immutable';
+import { List, fromJS } from 'immutable';
 import {
   EditorState,
   convertToRaw,
@@ -31,6 +31,11 @@ class HOCMilestoneOverview extends PureComponent {
     super(props);
     this.state = {
       showLine: false,
+      order: fromJS({
+        now: props.milestone.get('goal_order'),
+        later: [],
+        completed: [],
+      }),
     };
     propsOrPop(this, 'milestone');
     bindAll(this, ['onDragStart', 'onDragEnd']);
@@ -102,6 +107,19 @@ class HOCMilestoneOverview extends PureComponent {
   onDragEnd(result) {
     document.body.classList.remove("no-select");
     console.log('onDragEnd', result);
+    if (!result.destination) {
+      return;
+    }
+
+    let { order } = this.state;
+
+    const { droppableId: source, index: sourceI } = result.source;
+    const { droppableId: dest, index: destI } = result.destination;
+    const res = order.getIn([source, sourceI]);
+    order = order.deleteIn([source, sourceI]);
+    order = order.updateIn([dest], (arr) => arr.insert(destI, res));
+
+    this.setState({ order });
   }
 
   onGoalClick(goalId) {
@@ -209,13 +227,14 @@ class HOCMilestoneOverview extends PureComponent {
   }
   render() {
     const { milestone, groupedGoals } = this.props;
-    const { showLine, tempOrder } = this.state;
+    const { showLine, tempOrder, order } = this.state;
 
     return (
       <DragDropContext
         onDragStart={this.onDragStart}
         onDragEnd={this.onDragEnd}>
         <MilestoneOverview
+          order={order}
           {...this.bindLoading()}
           tempOrder={tempOrder}
           milestone={milestone}

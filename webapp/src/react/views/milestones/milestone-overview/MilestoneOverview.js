@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import { SortableElement, SortableContainer } from 'react-sortable-hoc';
 import { Droppable } from 'react-beautiful-dnd';
+import { fromJS } from 'immutable';
 import { getParentByClass, bindAll } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -27,7 +28,6 @@ class MilestoneOverview extends PureComponent {
     this.state = {
       emptyStateOpacity: 1,
     };
-    bindAll(this, ['getContainer', 'onSortEnd']);
     setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll', 'onStepSort');
   }
   getNumberOfAllGoals() {
@@ -124,64 +124,20 @@ class MilestoneOverview extends PureComponent {
 
     return undefined;
   }
-  renderLeftSection() {
-    const { milestone } = this.props;
-
+  renderDroppableList(section) {
+    const { order } = this.props;
+    const id = section.toLowerCase();
     return (
       <section>
-        <Section title="Now">
+        <Section title={section}>
           <DroppableGoalList 
-            droppableId="now"
-            items={milestone.get('goal_order')}
-          />
+            droppableId={id}
+            items={order.get(id)}>
+            {this.renderEmptyState(section)}
+          </DroppableGoalList>
         </Section>
       </section>
-    );
-  }
-  renderList(group) {
-    const { delegate, groupedGoals, milestone, tempOrder, getLoading } = this.props;
-
-    const groupToRun = (group === 'Current' && tempOrder) ? tempOrder : groupedGoals.get(group);
-    const Element = group === 'Current' ? SortableGoal : HOCGoalListItem;
-    let renderedGoals = groupToRun.map((g, i) => (
-      <Element
-        index={i}
-        disabled={!!tempOrder}
-        collection={group}
-
-        {...getLoading((typeof g === 'string') ? g : g.get('id'))}
-        goalId={(typeof g === 'string') ? g : g.get('id')}
-        key={(typeof g === 'string') ? g : g.get('id')}
-        delegate={delegate}
-        fromMilestone={true}
-      />
-    ));
-
-    if(group === 'Current') {
-      renderedGoals = renderedGoals.push(
-        <HOCAddGoalItem
-          key="add"
-          milestoneId={milestone.get('id')}
-          delegate={this}
-        />
-      )
-    }
-    return renderedGoals;
-  }
-
-  renderRightSection() {
-    return (
-      <section>
-        <Section title="Later">
-          {this.renderList('Later')}
-          {this.renderEmptyState('Later')}
-        </Section>
-        <Section title="Completed">
-          {this.renderList('Completed')}
-          {this.renderEmptyState('Completed')}
-        </Section>
-      </section>
-    );
+    )
   }
   render() {
     const { milestone } = this.props;
@@ -191,8 +147,9 @@ class MilestoneOverview extends PureComponent {
     return (
       <SWView header={this.renderHeader()} onScroll={this.onScroll}>
         <div className="milestone-overview">
-          {this.renderLeftSection()}
-          {this.renderRightSection()}
+          {this.renderDroppableList('Later')}
+          {this.renderDroppableList('Now')}
+          {this.renderDroppableList('Completed')}
         </div>
       </SWView>
     );
