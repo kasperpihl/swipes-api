@@ -95,7 +95,7 @@ class MilestoneOverview extends PureComponent {
 
     if (group === 'later' && !groupedGoals.get('later').size) {
       return (
-        <FlexWrapper column fill center>
+        <FlexWrapper column center>
           <Title>
             Set for later
           </Title>
@@ -108,7 +108,7 @@ class MilestoneOverview extends PureComponent {
 
     if (group === 'done' && !groupedGoals.get('done').size) {
       return (
-        <FlexWrapper column fill center>
+        <FlexWrapper column center>
           <Title>
             TRACK PROGRESS
           </Title>

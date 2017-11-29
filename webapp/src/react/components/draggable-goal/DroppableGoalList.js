@@ -9,7 +9,7 @@ class DroppableGoalList extends PureComponent {
     const { 
       items,
       children,
-      goalProps,
+      goalProps,  
       ...rest
     } = this.props;
 
