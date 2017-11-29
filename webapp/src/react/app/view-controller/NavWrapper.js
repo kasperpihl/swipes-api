@@ -8,17 +8,17 @@ const DEFAULT_MAX_WIDTH = 800;
 
 const wrap = (ComponentToWrap) => {
   class NavWrapper extends Component {
-    static minWidth() {
-      if(typeof ComponentToWrap.minWidth === 'function') {
-        return ComponentToWrap.minWidth();
-      }
-      return DEFAULT_MIN_WIDTH;
-    }
     static maxWidth() {
       if(typeof ComponentToWrap.maxWidth === 'function') {
         return ComponentToWrap.maxWidth();
       }
       return DEFAULT_MAX_WIDTH;
+    }
+    static sizes() {
+      if(typeof ComponentToWrap.sizes === 'function') {
+        return ComponentToWrap.sizes();
+      }
+      return [];
     }
     static fullscreen() {
       if(typeof ComponentToWrap.fullscreen === 'function') {
