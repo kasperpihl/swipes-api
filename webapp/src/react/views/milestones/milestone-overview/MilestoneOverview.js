@@ -19,8 +19,8 @@ class MilestoneOverview extends PureComponent {
     this.state = {
       emptyStateOpacity: 1,
       tabs: ['Later', 'Now', 'Completed'],
-      tabLeftIndex: 1,
-      tabRightIndex: 2,
+      tabLeftIndex: 0,
+      tabRightIndex: 1,
     };
     setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll', 'onStepSort');
   }
@@ -34,10 +34,16 @@ class MilestoneOverview extends PureComponent {
 
     return numberOfGoals;
   }
-  tabDidChange(state, index) {
-    if(index !== this.state[state]) {
+  tabDidChange(key, i) {
+    if(i !== this.state[key]) {
+      const reverseKey = key === 'tabLeftIndex' ? 'tabRightIndex' : 'tabLeftIndex';
+      let reverseI = this.state[reverseKey];
+      if(i === reverseI) {
+        reverseI = (i === 0) ? 2 : i - 1;
+      }
       this.setState({
-        [state]: index
+        [key]: i,
+        [reverseKey]: reverseI,
       });
     }
   }
