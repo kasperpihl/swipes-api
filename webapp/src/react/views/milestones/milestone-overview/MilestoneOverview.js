@@ -2,25 +2,16 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
-import { SortableElement, SortableContainer } from 'react-sortable-hoc';
-import { Droppable } from 'react-beautiful-dnd';
-import { fromJS } from 'immutable';
-import { getParentByClass, bindAll } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
-import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 import Section from 'components/section/Section';
-import Button from 'Button';
-import Icon from 'Icon';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
-import './styles/milestone-overview.scss';
-
-const SortableSection = SortableContainer(Section, { withRef: true})
-const SortableGoal = SortableElement(HOCGoalListItem);
+import Flex from 'swiss-components/Flex';
+import Wrapper from 'swiss-components/Wrapper';
 
 class MilestoneOverview extends PureComponent {
   constructor(props) {
@@ -51,8 +42,9 @@ class MilestoneOverview extends PureComponent {
   renderHeader() {
     const { milestone: m, getLoading, delegate, showLine } = this.props;
     const title = getLoading('title').loading;
+
     return (
-      <div className="milestone-overview__header">
+      <Wrapper>
         <HOCHeaderTitle
           title={title || m.get('title')}
           titleIcon="Milestones"
@@ -72,7 +64,7 @@ class MilestoneOverview extends PureComponent {
             {...getLoading('dots')}
           />
         </HOCHeaderTitle>
-      </div>
+      </Wrapper>
     );
   }
   renderEmptyState(group) {
@@ -127,30 +119,27 @@ class MilestoneOverview extends PureComponent {
   renderDroppableList(section) {
     const { order } = this.props;
     const id = section.toLowerCase();
+
     return (
-      <section>
+      <Wrapper expand={Flex} gutter fill>
         <Section title={section}>
-          <DroppableGoalList 
-            droppableId={id}
-            items={order.get(id)}>
-            {this.renderEmptyState(section)}
-          </DroppableGoalList>
+          <DroppableGoalList droppableId={id} items={order.get(id)} />
         </Section>
-      </section>
+      </Wrapper>
     )
   }
   render() {
-    const { milestone } = this.props;
-    if (!milestone) {
-      return null;
-    }
+    const { milestone, wrapperWidth } = this.props;
+
+    if (!milestone) return null;
+
     return (
       <SWView header={this.renderHeader()} onScroll={this.onScroll}>
-        <div className="milestone-overview">
+        <Wrapper expand={Flex} horizontal="between">
           {this.renderDroppableList('Later')}
           {this.renderDroppableList('Now')}
           {this.renderDroppableList('Completed')}
-        </div>
+        </Wrapper>
       </SWView>
     );
   }

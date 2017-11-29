@@ -11,6 +11,7 @@ class DroppableGoalList extends PureComponent {
       goalProps,
       ...rest
     } = this.props;
+
     return (
       <Droppable {...rest}>
         {(provided, snapshot) => (

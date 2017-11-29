@@ -22,7 +22,7 @@ import MilestoneOverview from './MilestoneOverview';
 
 class HOCMilestoneOverview extends PureComponent {
   static sizes() {
-    return [640, 900];
+    return [750, 1100];
   }
   constructor(props) {
     super(props);
@@ -226,6 +226,8 @@ class HOCMilestoneOverview extends PureComponent {
     const { milestone, groupedGoals } = this.props;
     const { showLine, tempOrder, order } = this.state;
 
+    console.log(this.props);
+
     return (
       <DragDropContext
         onDragStart={this.onDragStart}
@@ -238,6 +240,7 @@ class HOCMilestoneOverview extends PureComponent {
           groupedGoals={groupedGoals}
           delegate={this}
           showLine={showLine}
+          wrapperWidth={this.props.width}
         />
       </DragDropContext>
     );

@@ -17,6 +17,8 @@ import { init } from 'swipes-core-js';
 import * as a from 'actions';
 import Root from './react/Root';
 
+import 'swiss';
+
 const store = configureStore({
   globals: getGlobals()
 });

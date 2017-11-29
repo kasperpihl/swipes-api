@@ -27,7 +27,9 @@ module.exports = {
       Icon: path.resolve(__dirname, 'src/react/icons/Icon'),
       SWView: path.resolve(__dirname, 'src/react/app/view-controller/SWView'),
       Button: path.resolve(__dirname, 'src/react/components/button/Button'),
-      classes: path.resolve(__dirname, 'src/classes')
+      classes: path.resolve(__dirname, 'src/classes'),
+      swiss: path.resolve(__dirname, 'src/swiss'),
+      'swiss-components': path.resolve(__dirname, 'src/swiss/components'),
     },
     extensions: ['.js', '.scss']
   },
