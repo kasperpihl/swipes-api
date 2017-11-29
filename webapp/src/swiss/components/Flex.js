@@ -11,6 +11,9 @@ export default element({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  flexNone: {
+    flex: 'none',
+  },
   'horizontal=left': {
     justifyContent: 'flex-start',
   },
@@ -70,15 +73,4 @@ export default element({
       justifyContent: 'space-around',
     },
   },
-  gutter: {
-    '&:not(:last-child):after': {
-      _size: [`#{gutterSize=30}px`, '100%'],
-      backgroundColor: 'purple',
-      content: '',
-
-      column: {
-        _size: ['100%', `#{gutterSize=30}px`],
-      }
-    }
-  }
 });

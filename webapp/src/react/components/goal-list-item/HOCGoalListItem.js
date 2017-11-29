@@ -3,15 +3,47 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
+import { element } from 'react-swiss';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import FlexWrapper from 'swiss-components/FlexWrapper';
+import Flex from 'swiss-components/Flex';
+import Wrapper from 'swiss-components/Wrapper';
 
 import './styles/goal-list-item.scss';
 /* global msgGen */
+
+const GoalItem = element({
+  backgroundColor: 'white',
+  borderBottom: '1px solid $deepBlue10',
+  minHeight: '60px',
+  overflow: 'hidden',
+  padding: '12px',
+});
+
+const StatusDot = element({
+  _size: '12px',
+  borderRadius: '50%',
+  
+  'status=Later': {
+    backgroundColor: '$deepBlue30',
+  },
+  'status=Now': {
+    backgroundColor: '$yellowColor',
+  },
+  'status=Done': {
+    backgroundColor: '#12d668'
+  },
+});
+
+const GoalTitle = element({
+  _font: ['15px', '$deepBlue90', '24px', '400'],
+  padding: '0 18px',
+})
 
 class HOCGoalListItem extends PureComponent {
   constructor(props) {
@@ -78,47 +110,25 @@ class HOCGoalListItem extends PureComponent {
       />
     );
   }
-  renderMoveButton() {
-    const { fromMilestone } = this.props;
-
-    if (!fromMilestone) {
-      return undefined;
-    }
-
-    return (
-      <div className="goal-list-item__move">
-        <Icon className="goal-list-item__move-svg" icon="ArrowRightLine" />
-      </div>
-    )
-  }
   render() {
     const { goal, fromMilestone, loading } = this.props;
     const helper = this.getHelper();
     const isActive = !helper.getIsCompleted();
+    let status = 'Now';
 
-    let className = 'goal-list-item';
-
-    if (!isActive) {
-      className += ' goal-list-item--completed';
-    }
-
-    if (fromMilestone && true) { // Needs a check if is in later already
-      className += ' goal-list-item--move-to-later'
-    }
+    if (!isActive) status = 'Done'
 
     return (
-      <div className={className}>
-        <div className="goal-list-item__content" onClick={this.onClick}>
-          <div className="goal-list-item__circle">
-            <Icon className="goal-list-item__completed-svg" icon="ChecklistCheckmark" />
-          </div>
-          <div className="goal-list-item__title">{loading || goal.get('title')}</div>
-        </div>
-        {/* {this.renderMoveButton()} */}
-        <div className="goal-list-item__assigning">
-          {this.renderAssignees()}
-        </div>
-      </div>
+      <GoalItem expand={FlexWrapper} vertical="center">
+        <StatusDot expand={Flex} status={status} flexNone />
+        <GoalTitle
+          expand={Wrapper}
+          status={status}
+        >
+          {loading || goal.get('title')}
+        </GoalTitle>
+        {this.renderAssignees()}
+      </GoalItem>
     );
   }
 }

@@ -12,6 +12,21 @@ import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
 import FlexWrapper from 'swiss-components/FlexWrapper';
 import Wrapper from 'swiss-components/Wrapper';
+import { element } from 'react-swiss';
+
+const Title = element({
+  _font: ['11px', '$deepBlue80', '18px', 'bold'],
+  textTransform: 'uppercase',
+  paddingTop: '60px',
+});
+
+const Text = element({
+  _widthSpecifications: ['initial', '230px'],
+  _font: ['12px', '$deepBlue50', '18px', '400'],
+  paddingTop: '6px',
+  textAlign: 'center',
+});
+
 
 class MilestoneOverview extends PureComponent {
   constructor(props) {
@@ -47,14 +62,6 @@ class MilestoneOverview extends PureComponent {
       });
     }
   }
-  onAddGoalItemInputChange(title) {
-    const { emptyStateOpacity } = this.state;
-    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
-
-    if (emptyStateOpacity !== newEmptyStateOpacity) {
-      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
-    }
-  }
   renderHeader() {
     const { milestone: m, getLoading, delegate, showLine } = this.props;
     const title = getLoading('title').loading;
@@ -85,97 +92,100 @@ class MilestoneOverview extends PureComponent {
   }
   renderEmptyState(group) {
     const { groupedGoals } = this.props;
-    const numberOfAllGoals = this.getNumberOfAllGoals();
-
-    if (group === 'Current' && !numberOfAllGoals) {
-
-
-      return (
-        <div className="milestone-overview__empty-state milestone-overview__empty-state--current" style={{ opacity: this.state.emptyStateOpacity }}>
-          <div className="milestone-overview__empty-arrow">
-            <Icon icon="ESArrow" className="milestone-overview__empty-arrow-svg" />
-          </div>
-          <div className="milestone-overview__empty-title">
-            Add a new goal
-          </div>
-          <div className="milestone-overview__empty-text">
-            Add new goals for everything that needs <br /> to be done to achieve this plan.
-          </div>
-        </div>
-      )
-    }
 
     if (group === 'Later' && !groupedGoals.get('Later').size) {
       return (
-        <div className="milestone-overview__empty-state milestone-overview__empty-state--later">
-          <div className="milestone-overview__empty-title">
-            Set for later (coming soon)
-          </div>
-          <div className="milestone-overview__empty-text">
+        <FlexWrapper column fill center>
+          <Title>
+            Set for later
+          </Title>
+          <Text>
             Move goals that need to be done later <br />  from this week into here.
-          </div>
-        </div>
+          </Text>
+        </FlexWrapper>
       )
     }
 
     if (group === 'Completed' && !groupedGoals.get('Completed').size) {
       return (
-        <div className="milestone-overview__empty-state milestone-overview__empty-state--completed">
-          <div className="milestone-overview__empty-title">
+        <FlexWrapper column fill center>
+          <Title>
             TRACK PROGRESS
-          </div>
-          <div className="milestone-overview__empty-text">
-            You will see the progress of all completed <br /> goals here</div>
-        </div>
+          </Title>
+          <Text>
+            You will see the progress of all completed <br /> goals here
+          </Text>
+        </FlexWrapper>
       )
     }
 
     return undefined;
   }
-  renderDroppableList(section) {
-    const { order } = this.props;
+  renderDroppableList(section, renderSection) {
+    const { order, delegate, milestone } = this.props;
     const id = section.toLowerCase();
 
+    if (renderSection) {
+      return (
+        <FlexWrapper>
+          <Section title={section}>
+            <DroppableGoalList droppableId={id} items={order.get(id)}>
+              {section === 'Now' && (
+                <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
+              )}
+              
+              {this.renderEmptyState(section)}
+            </DroppableGoalList>
+          </Section>
+        </FlexWrapper>
+      )
+    }
+
     return (
-      <FlexWrapper gutter fill>
-        <Section title={section}>
-          <DroppableGoalList droppableId={id} items={order.get(id)} />
-        </Section>
-      </FlexWrapper>
+      <DroppableGoalList droppableId={id} items={order.get(id)}>
+        {this.renderEmptyState(section)}
+      </DroppableGoalList>
     )
   }
   renderDualTabs() {
     const { viewWidth } = this.props;
-    if(viewWidth >= 900) {
+
+    if (viewWidth !== 750) {
       return undefined;
     }
 
     const { tabs, tabRightIndex, tabLeftIndex } = this.state;
     const lef = { tabDidChange: (i) => this.tabDidChange('tabLeftIndex', i) };
     const rig = { tabDidChange: (i) => this.tabDidChange('tabRightIndex', i) };
+
     return (
-      <FlexWrapper gutter horizontal="between">
+      <FlexWrapper horizontal="between">
         <Wrapper>
           <TabBar tabs={tabs} delegate={lef} activeTab={tabLeftIndex} />
-          {this.renderDroppableList(tabs[tabLeftIndex])}
+          {this.renderDroppableList(tabs[tabLeftIndex], false)}
         </Wrapper>
+        <FlexWrapper width={30} flexNone />
         <Wrapper>
           <TabBar tabs={tabs} delegate={rig} activeTab={tabRightIndex} />
-          {this.renderDroppableList(tabs[tabRightIndex])}
+          {this.renderDroppableList(tabs[tabRightIndex], false)}
         </Wrapper>
       </FlexWrapper>
     )
   }
   renderThreeSections() {
     const { viewWidth } = this.props;
-    if(viewWidth < 900) {
+
+    if (viewWidth !== 1100) {
       return undefined;
     }
+
     return (
       <FlexWrapper horizontal="between">
-        {this.renderDroppableList('Later')}
-        {this.renderDroppableList('Now')}
-        {this.renderDroppableList('Completed')}
+        {this.renderDroppableList('Later', true)}
+        <FlexWrapper width={30} flexNone />
+        {this.renderDroppableList('Now', true)}
+        <FlexWrapper width={30} flexNone />
+        {this.renderDroppableList('Completed', true)}
       </FlexWrapper>
     );
   }

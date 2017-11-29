@@ -1,4 +1,6 @@
+import React from 'react';
 import { element } from 'react-swiss';
+import Flex from './Flex';
 
 export default element({
   _size: ['100%', 'auto'],
@@ -36,4 +38,4 @@ export default element({
       _size: ['auto', '100vh']
     },
   }
-})
+});

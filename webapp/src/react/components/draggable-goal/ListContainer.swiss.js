@@ -1,7 +1,6 @@
 import { element } from 'react-swiss';
 
 const ListContainer = element({
-  minHeight: '300px',
   transition: '.2s ease',
 
   isDraggingOver: {
