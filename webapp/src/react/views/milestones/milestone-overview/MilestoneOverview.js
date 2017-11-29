@@ -10,7 +10,7 @@ import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
-import Flex from 'swiss-components/Flex';
+import FlexWrapper from 'swiss-components/FlexWrapper';
 import Wrapper from 'swiss-components/Wrapper';
 
 class MilestoneOverview extends PureComponent {
@@ -137,11 +137,11 @@ class MilestoneOverview extends PureComponent {
     const id = section.toLowerCase();
 
     return (
-      <Wrapper expand={Flex} gutter fill>
+      <FlexWrapper gutter fill>
         <Section title={section}>
           <DroppableGoalList droppableId={id} items={order.get(id)} />
         </Section>
-      </Wrapper>
+      </FlexWrapper>
     )
   }
   renderDualTabs() {
@@ -154,7 +154,7 @@ class MilestoneOverview extends PureComponent {
     const lef = { tabDidChange: (i) => this.tabDidChange('tabLeftIndex', i) };
     const rig = { tabDidChange: (i) => this.tabDidChange('tabRightIndex', i) };
     return (
-      <Wrapper expand={Flex} gutter horizontal="between">
+      <FlexWrapper gutter horizontal="between">
         <Wrapper>
           <TabBar tabs={tabs} delegate={lef} activeTab={tabLeftIndex} />
           {this.renderDroppableList(tabs[tabLeftIndex])}
@@ -163,7 +163,7 @@ class MilestoneOverview extends PureComponent {
           <TabBar tabs={tabs} delegate={rig} activeTab={tabRightIndex} />
           {this.renderDroppableList(tabs[tabRightIndex])}
         </Wrapper>
-      </Wrapper>
+      </FlexWrapper>
     )
   }
   renderThreeSections() {
@@ -172,11 +172,11 @@ class MilestoneOverview extends PureComponent {
       return undefined;
     }
     return (
-      <Wrapper expand={Flex} horizontal="between">
+      <FlexWrapper horizontal="between">
         {this.renderDroppableList('Later')}
         {this.renderDroppableList('Now')}
         {this.renderDroppableList('Completed')}
-      </Wrapper>
+      </FlexWrapper>
     );
   }
   render() {
