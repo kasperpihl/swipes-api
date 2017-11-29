@@ -21,11 +21,8 @@ import {
 import MilestoneOverview from './MilestoneOverview';
 
 class HOCMilestoneOverview extends PureComponent {
-  static minWidth() {
-    return 840;
-  }
-  static maxWidth() {
-    return 900;
+  static sizes() {
+    return [640, 900];
   }
   constructor(props) {
     super(props);
@@ -246,9 +243,6 @@ class HOCMilestoneOverview extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
-
-HOCMilestoneOverview.propTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {

@@ -22,7 +22,7 @@ class HOCViewController extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      width: 0,
+      width: 1200,
       onTop: 'secondary',
       fullscreen: null,
     };
@@ -79,20 +79,32 @@ class HOCViewController extends PureComponent {
     const { toggleLock } = this.props;
     toggleLock();
   }
-  getMinMaxForView(View) {
-    const minMax = [DEFAULT_MIN_WIDTH, DEFAULT_MAX_WIDTH];
-    if (typeof View.minWidth === 'function') {
-      minMax[0] = View.minWidth();
+  getSizeForView(View) {
+
+    if(typeof View === 'undefined') {
+      return 0;
     }
-    if (typeof View.maxWidth === 'function') {
-      minMax[1] = View.maxWidth();
+
+    const { width } = this.state;
+    if(typeof View.sizes === 'function') {
+      const sizes = View.sizes();
+
+      for(let i = sizes.length - 1 ; i >= 0 ; i--) {
+        const size = sizes[i];
+        if((width - OVERLAY_LEFT_MIN - size) >= 0) {
+          return size;
+        }
+      }
     }
-    minMax.push(minMax[1] - minMax[0]);
-    return minMax;
+
+    let maxWidth = DEFAULT_MAX_WIDTH;
+    if(typeof View.maxWidth === 'function') {
+      maxWidth = View.maxWidth();
+    }
+    return Math.min(maxWidth, width - OVERLAY_LEFT_MIN);
   }
   getRemainingSpace(sizes) {
-    let { width } = this.state;
-    width = width || 1200;
+    const { width } = this.state;
     let spacing = SPACING;
     if (sizes[1] > 0) {
       spacing += SPACING;
@@ -105,54 +117,19 @@ class HOCViewController extends PureComponent {
       this.setState({ width: this.refs.controller.clientWidth });
     }
   }
-  determineSizesForWidths(pMinMax, sMinMax) {
-    if (!sMinMax) {
-      sMinMax = [0, 0, 0];
-    }
-    const { width } = this.state;
-
-    const sizes = [pMinMax[0], sMinMax[0]];
-    let remaining = this.getRemainingSpace(sizes);
-    if (remaining > 0) {
-      const pDiff = pMinMax[2]; // 200
-      const sDiff = sMinMax[2]; // 600
-      const diff = pDiff - sDiff;
-      if (diff < 0) {
-        sizes[1] += Math.min(remaining, Math.abs(diff));
-      } else if (diff > 0) {
-        sizes[0] += Math.min(remaining, diff);
-      }
-      remaining = this.getRemainingSpace(sizes);
-      const equalSplit = Math.min(pDiff, sDiff);
-      if (remaining > 0 && equalSplit > 0) {
-        const toAdd = Math.min(remaining / 2, equalSplit);
-        sizes[0] += toAdd;
-        sizes[1] += toAdd;
-      }
-    }
-    if (remaining < 0) {
-      sizes[0] = Math.min((width - OVERLAY_LEFT_MIN - SPACING), pMinMax[1]);
-      sizes[1] = Math.min((width - OVERLAY_LEFT_MIN - SPACING), sMinMax[1]);
-    }
-    return sizes;
-  }
   renderViewControllers() {
     const { navigation } = this.props;
     const { width, onTop, fullscreen } = this.state;
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
-    const pSize = navigation.getIn(['primary', 'stack']).size;
     const PView = views[(pView && pView.get('id'))] || views.NotFound;
-    const pMinMax = this.getMinMaxForView(PView);
 
     // Secondary view
     const sView = navigation.getIn(['secondary', 'stack']).last();
-    const sSize = navigation.getIn(['secondary', 'stack']).size;
     const SView = sView ? (views[sView.get('id')] || views.NotFound) : undefined;
-    const sMinMax = sView ? this.getMinMaxForView(SView) : 0;
 
-    const sizes = this.determineSizesForWidths(pMinMax, sMinMax);
+    const sizes = [this.getSizeForView(PView), this.getSizeForView(SView)];
 
     const remainingSpace = this.getRemainingSpace(sizes);
     const isOverlay = (SView && (remainingSpace < 0));
