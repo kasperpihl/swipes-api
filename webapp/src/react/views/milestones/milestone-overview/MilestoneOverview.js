@@ -33,7 +33,7 @@ class MilestoneOverview extends PureComponent {
     super(props);
     this.state = {
       emptyStateOpacity: 1,
-      tabs: ['Later', 'Now', 'Completed'],
+      tabs: ['Later', 'Now', 'Done'],
       tabLeftIndex: 0,
       tabRightIndex: 1,
     };
@@ -93,7 +93,7 @@ class MilestoneOverview extends PureComponent {
   renderEmptyState(group) {
     const { groupedGoals } = this.props;
 
-    if (group === 'Later' && !groupedGoals.get('Later').size) {
+    if (group === 'later' && !groupedGoals.get('later').size) {
       return (
         <FlexWrapper column fill center>
           <Title>
@@ -106,7 +106,7 @@ class MilestoneOverview extends PureComponent {
       )
     }
 
-    if (group === 'Completed' && !groupedGoals.get('Completed').size) {
+    if (group === 'done' && !groupedGoals.get('done').size) {
       return (
         <FlexWrapper column fill center>
           <Title>
@@ -134,7 +134,7 @@ class MilestoneOverview extends PureComponent {
                 <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
               )}
               
-              {this.renderEmptyState(section)}
+              {this.renderEmptyState(id)}
             </DroppableGoalList>
           </Section>
         </FlexWrapper>
@@ -185,7 +185,7 @@ class MilestoneOverview extends PureComponent {
         <FlexWrapper width={30} flexNone />
         {this.renderDroppableList('Now', true)}
         <FlexWrapper width={30} flexNone />
-        {this.renderDroppableList('Completed', true)}
+        {this.renderDroppableList('Done', true)}
       </FlexWrapper>
     );
   }

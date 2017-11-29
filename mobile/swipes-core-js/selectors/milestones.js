@@ -18,16 +18,9 @@ export const getGoals = createSelector(
 )
 
 export const getGroupedGoals = createSelector(
-  [ getGoals, ],
-  goals => {
-    let gg = goals.groupBy(g => {
-      const helper = new GoalsUtil(g);
-      return helper.getIsCompleted() ? 'Completed' : 'Current';
-    });
-    gg = gg.set('Current', gg.get('Current') || List());
-    gg = gg.set('Completed', gg.get('Completed') || List());
-    gg = gg.set('Later', gg.get('Later') || List());
-    return gg;
+  [ getMilestone, getAllGoals ],
+  (m, goals) => {
+    return m.get('goal_order').map(l => l.map(gId => goals.get(gId)));
   }
 )
 
