@@ -34,7 +34,7 @@ const wrap = (ComponentToWrap) => {
         openSecondary,
         popSecondary,
         openModal,
-        width,
+        viewWidth,
       } = this.context;
       // what we do is basically rendering `ComponentToWrap`
       // with an added `theme` prop, like a hook
@@ -42,7 +42,7 @@ const wrap = (ComponentToWrap) => {
         <ComponentToWrap
           {...this.props}
           target={target}
-          width={width}
+          viewWidth={viewWidth}
           navPop={navPop}
           navPush={navPush}
           saveState={saveState}
@@ -55,7 +55,7 @@ const wrap = (ComponentToWrap) => {
   }
   NavWrapper.contextTypes = {
     target: string,
-    width: number,
+    viewWidth: number,
     navPop: func,
     navPush: func,
     saveState: func,

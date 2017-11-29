@@ -12,11 +12,11 @@ class ContextWrapper extends Component {
       openSecondary,
       popSecondary,
       openModal,
-      width,
+      viewWidth,
     } = this.props;
     return {
       target,
-      width,
+      viewWidth,
       navPop,
       navPush,
       saveState,
@@ -37,7 +37,7 @@ const { string, element, func, number } = PropTypes;
 
 ContextWrapper.childContextTypes = {
   target: string,
-  width: number,
+  viewWidth: number,
   navPop: func,
   navPush: func,
   openModal: func,

@@ -18,6 +18,9 @@ class MilestoneOverview extends PureComponent {
     super(props);
     this.state = {
       emptyStateOpacity: 1,
+      tabs: ['Later', 'Now', 'Completed'],
+      tabLeftIndex: 1,
+      tabRightIndex: 2,
     };
     setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll', 'onStepSort');
   }
@@ -30,6 +33,13 @@ class MilestoneOverview extends PureComponent {
     })
 
     return numberOfGoals;
+  }
+  tabDidChange(state, index) {
+    if(index !== this.state[state]) {
+      this.setState({
+        [state]: index
+      });
+    }
   }
   onAddGoalItemInputChange(title) {
     const { emptyStateOpacity } = this.state;
@@ -128,18 +138,50 @@ class MilestoneOverview extends PureComponent {
       </Wrapper>
     )
   }
+  renderDualTabs() {
+    const { viewWidth } = this.props;
+    if(viewWidth >= 900) {
+      return undefined;
+    }
+
+    const { tabs, tabRightIndex, tabLeftIndex } = this.state;
+    const lef = { tabDidChange: (i) => this.tabDidChange('tabLeftIndex', i) };
+    const rig = { tabDidChange: (i) => this.tabDidChange('tabRightIndex', i) };
+    return (
+      <Wrapper expand={Flex} gutter horizontal="between">
+        <Wrapper>
+          <TabBar tabs={tabs} delegate={lef} activeTab={tabLeftIndex} />
+          {this.renderDroppableList(tabs[tabLeftIndex])}
+        </Wrapper>
+        <Wrapper>
+          <TabBar tabs={tabs} delegate={rig} activeTab={tabRightIndex} />
+          {this.renderDroppableList(tabs[tabRightIndex])}
+        </Wrapper>
+      </Wrapper>
+    )
+  }
+  renderThreeSections() {
+    const { viewWidth } = this.props;
+    if(viewWidth < 900) {
+      return undefined;
+    }
+    return (
+      <Wrapper expand={Flex} horizontal="between">
+        {this.renderDroppableList('Later')}
+        {this.renderDroppableList('Now')}
+        {this.renderDroppableList('Completed')}
+      </Wrapper>
+    );
+  }
   render() {
-    const { milestone, wrapperWidth } = this.props;
+    const { milestone } = this.props;
 
     if (!milestone) return null;
 
     return (
       <SWView header={this.renderHeader()} onScroll={this.onScroll}>
-        <Wrapper expand={Flex} horizontal="between">
-          {this.renderDroppableList('Later')}
-          {this.renderDroppableList('Now')}
-          {this.renderDroppableList('Completed')}
-        </Wrapper>
+        {this.renderThreeSections()}
+        {this.renderDualTabs()}
       </SWView>
     );
   }

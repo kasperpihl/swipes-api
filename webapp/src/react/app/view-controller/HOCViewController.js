@@ -253,7 +253,7 @@ class HOCViewController extends PureComponent {
       <ContextWrapper
         target={target}
         key={target}
-        width={options.width}
+        viewWidth={options.width}
         navPop={this.onPopCached(target)}
         navPush={this.onPushCached(target)}
         saveState={this.onSaveState(target)}
