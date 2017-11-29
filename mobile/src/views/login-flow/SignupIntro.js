@@ -95,12 +95,6 @@ class SignupIntro extends PureComponent {
         <Text style={[styles.paragraph, { marginTop: 21 }]}>
           If your company already has an account, just ask the Account Admin to invite you.
         </Text>
-
-        {/*<RippleButton rippleColor="#FFFFFF" style={styles.button} onPress={this.onShowSignup}>
-          <View style={styles.buttonWrapper}>
-            <Text style={styles.buttonLabel}>Register</Text>
-          </View>
-        </RippleButton>*/}
       </View>
     );
   }

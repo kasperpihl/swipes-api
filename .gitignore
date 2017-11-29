@@ -7,6 +7,9 @@ package-lock.json
 # Logs
 logs
 *.log
+swipes-website.sublime-project
+swipes-website.sublime-workspace
+
 
 # Runtime data
 pids
