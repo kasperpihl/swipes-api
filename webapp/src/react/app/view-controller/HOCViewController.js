@@ -13,7 +13,6 @@ import './styles/view-controller';
 import HOCModal from './HOCModal';
 import prefixAll from 'inline-style-prefixer/static';
 
-const DEFAULT_MIN_WIDTH = 500;
 const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 20;
 const OVERLAY_LEFT_MIN = 120;
@@ -22,7 +21,7 @@ class HOCViewController extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      width: 1200,
+      appWidth: 1200,
       onTop: 'secondary',
       fullscreen: null,
     };
@@ -33,12 +32,12 @@ class HOCViewController extends PureComponent {
     this.onSaveState = setupCachedCallback(props.saveState, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
     this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
-    bindAll(this, ['onClose', 'updateWidth', 'onToggleLock']);
-    this.bouncedUpdate = debounce(this.updateWidth, 50);
+    bindAll(this, ['onClose', 'updateAppWidth', 'onToggleLock']);
+    this.bouncedUpdateAppWidth = debounce(this.updateAppWidth, 50);
   }
   componentDidMount() {
-    this.updateWidth();
-    window.addEventListener('resize', this.bouncedUpdate);
+    this.updateAppWidth();
+    window.addEventListener('resize', this.bouncedUpdateAppWidth);
   }
   componentWillReceiveProps(nextProps) {
     const nav = this.props.navigation;
@@ -85,13 +84,13 @@ class HOCViewController extends PureComponent {
       return 0;
     }
 
-    const { width } = this.state;
+    const { appWidth } = this.state;
     if(typeof View.sizes === 'function') {
       const sizes = View.sizes();
 
       for(let i = sizes.length - 1 ; i >= 0 ; i--) {
         const size = sizes[i];
-        if((width - OVERLAY_LEFT_MIN - size) >= 0) {
+        if((appWidth - OVERLAY_LEFT_MIN - size) >= 0) {
           return size;
         }
       }
@@ -101,25 +100,21 @@ class HOCViewController extends PureComponent {
     if(typeof View.maxWidth === 'function') {
       maxWidth = View.maxWidth();
     }
-    return Math.min(maxWidth, width - OVERLAY_LEFT_MIN);
+    return Math.min(maxWidth, appWidth - OVERLAY_LEFT_MIN);
   }
   getRemainingSpace(sizes) {
-    const { width } = this.state;
-    let spacing = SPACING;
-    if (sizes[1] > 0) {
-      spacing += SPACING;
-    }
-    return width - spacing - sizes.reduce((c, b) => c + b);
+    const { appWidth } = this.state;
+    return appWidth - SPACING - sizes.reduce((c, b) => c + b);
   }
 
-  updateWidth() {
+  updateAppWidth() {
     if (!this._unmounted) {
-      this.setState({ width: this.refs.controller.clientWidth });
+      this.setState({ appWidth: this.refs.controller.clientWidth });
     }
   }
   renderViewControllers() {
     const { navigation } = this.props;
-    const { width, onTop, fullscreen } = this.state;
+    const { appWidth, onTop, fullscreen } = this.state;
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
@@ -136,40 +131,47 @@ class HOCViewController extends PureComponent {
 
     let runningX = isOverlay ? 0 : remainingSpace / 2;
     return [pView, sView].map((currentView, i) => {
-      const target = (i === 0) ? 'primary' : 'secondary';
-      const xClass = [];
-      const w = sizes[i];
-      const style = {
-        width: `${w}px`,
-        transform: `translate3d(${parseInt(runningX, 10)}px, 0px, 0px)`,
-        zIndex: 2 - i,
+
+      const width = sizes[i];
+      const options = {
+        view: currentView,
+        target: (i === 0) ? 'primary' : 'secondary',
+        classes: [],
+        width,
+        styles: {
+          width: `${width}px`,
+          transform: `translate3d(${parseInt(runningX, 10)}px, 0px, 0px)`,
+          zIndex: 2 - i,
+        }
       };
-      runningX += (w + SPACING);
+
+      runningX += (width + SPACING);
+
       if (isOverlay) {
         let top = 0;
         let left = 0;
-        if (target === onTop) {
-          style.zIndex = 3;
-          xClass.push('view-container--overlay');
+        if (options.target === onTop) {
+          options.styles.zIndex = 3;
+          options.classes.push('view-container--overlay');
         } else {
-          xClass.push('view-container--underlay');
+          options.classes.push('view-container--underlay');
           top = 20;
         }
-        if (target === 'secondary') {
-          left = width - w - SPACING;
+        if (options.target === 'secondary') {
+          left = appWidth - width - SPACING;
         }
-        style.transform = `translate3d(${parseInt(left, 10)}px, ${top}px, 0px)`;
+        options.styles.transform = `translate3d(${parseInt(left, 10)}px, ${top}px, 0px)`;
       }
       if (fullscreen) {
-        if (fullscreen === target) {
-          xClass.push('view-container--fullscreen');
-          style.zIndex = 4;
+        if (fullscreen === options.target) {
+          options.classes.push('view-container--fullscreen');
+          options.styles.zIndex = 4;
         } else {
-          xClass.push('view-container--not-fullscreen');
+          options.classes.push('view-container--not-fullscreen');
         }
       }
 
-      return currentView ? this.renderContent(currentView, target, style, xClass) : undefined;
+      return this.renderContent(options);
     });
   }
   renderCardHeader(target, canFullscreen) {
@@ -219,15 +221,21 @@ class HOCViewController extends PureComponent {
       </div>
     );
   }
-  renderContent(currentView, target, style, xClasses) {
-    const { navigation } = this.props;
-    const View = views[currentView.get('id')] || views.NotFound;
-    let props = {};
-    if (currentView.get('props')) {
-      props = currentView.get('props').toObject();
+  renderContent(options) {
+    if(!options.view) {
+      return undefined;
     }
 
-    const className = ['view-container', `view-container--${target}`].concat(xClasses).join(' ');
+    const { navigation } = this.props;
+
+    const { target, classes } = options;
+    const View = views[options.view.get('id')] || views.NotFound;
+    let props = {};
+    if (options.view.get('props')) {
+      props = options.view.get('props').toObject();
+    }
+
+    const className = ['view-container', `view-container--${target}`].concat(classes).join(' ');
 
     let canFullscreen = false;
     if (typeof View.fullscreen === 'function') {
@@ -235,13 +243,14 @@ class HOCViewController extends PureComponent {
     }
 
     let onClick;
-    if (xClasses.indexOf('view-container--underlay') !== -1) {
+    if (classes.indexOf('view-container--underlay') !== -1) {
       onClick = this.onUnderlayCached(target);
     }
     return (
       <ContextWrapper
         target={target}
         key={target}
+        width={options.width}
         navPop={this.onPopCached(target)}
         navPush={this.onPushCached(target)}
         saveState={this.onSaveState(target)}
@@ -251,7 +260,7 @@ class HOCViewController extends PureComponent {
       >
         <section
           className={className}
-          style={prefixAll(style)}
+          style={prefixAll(options.styles)}
           onClick={onClick}
         >
           {this.renderCardHeader(target, canFullscreen)}
