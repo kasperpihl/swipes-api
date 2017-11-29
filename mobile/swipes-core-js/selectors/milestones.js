@@ -13,7 +13,7 @@ export const getGoals = createSelector(
     if(!milestone) {
       return List();
     }
-    return milestone.get('goal_order').map(gId => goals.get(gId));
+    return msgGen.milestones.getGoals(milestone, goals);
   }
 )
 

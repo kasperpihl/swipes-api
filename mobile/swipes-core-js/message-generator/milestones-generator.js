@@ -24,21 +24,24 @@ export default class Milestones {
     }
     return 'Any plan';
   }
+
   getRelatedFilter(milestoneId) {
     const milestone = this.getMilestone(milestoneId);
     if(!milestone) {
       return [];
     }
-    return milestone.get('goal_order').toJS()
+    return this.getGoalIds(milestone).toJS()
 
   }
-
-  getGoals(milestoneId, overrideGoals) {
+  getGoalIds(milestoneId, overrideGoals) {
     const milestone = this.getMilestone(milestoneId);
+    return milestone.getIn(['goal_order', 'later']).concat(
+                  milestone.getIn(['goal_order', 'now'])).concat(
+                  milestone.getIn(['goal_order', 'done']))
+  }
+  getGoals(milestoneId, overrideGoals) { 
     const state = this.store.getState();
     const goals = overrideGoals || state.get('goals');
-    return milestone.get('goal_order')
-                    .reverse()
-                    .map(gId => goals.get(gId));
+    return this.getGoalIds(milestoneId, overrideGoals).map(gId => goals.get(gId));
   }
 }

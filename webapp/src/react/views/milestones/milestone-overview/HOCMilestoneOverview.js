@@ -28,11 +28,7 @@ class HOCMilestoneOverview extends PureComponent {
     super(props);
     this.state = {
       showLine: false,
-      order: fromJS({
-        now: props.milestone.get('goal_order'),
-        later: [],
-        completed: [],
-      }),
+      order: props.milestone.get('goal_order'),
     };
     propsOrPop(this, 'milestone');
     bindAll(this, ['onDragStart', 'onDragEnd']);
