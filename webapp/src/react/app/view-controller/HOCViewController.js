@@ -14,8 +14,8 @@ import HOCModal from './HOCModal';
 import prefixAll from 'inline-style-prefixer/static';
 
 const DEFAULT_MAX_WIDTH = 800;
-const SPACING = 20;
-const OVERLAY_LEFT_MIN = 120;
+const SPACING = 15;
+const OVERLAY_LEFT_MIN = 90;
 
 class HOCViewController extends PureComponent {
   constructor(props) {
@@ -78,19 +78,21 @@ class HOCViewController extends PureComponent {
     const { toggleLock } = this.props;
     toggleLock();
   }
-  getSizeForView(View) {
-
+  getSizeForView(View, hasTwoViews) {
+    
     if(typeof View === 'undefined') {
       return 0;
     }
 
     const { appWidth } = this.state;
+    const spacing = hasTwoViews ? OVERLAY_LEFT_MIN : SPACING;
+
     if(typeof View.sizes === 'function') {
       const sizes = View.sizes();
 
       for(let i = sizes.length - 1 ; i >= 0 ; i--) {
         const size = sizes[i];
-        if((appWidth - OVERLAY_LEFT_MIN - size) >= 0) {
+        if((appWidth - spacing - size) >= 0) {
           return size;
         }
       }
@@ -100,7 +102,7 @@ class HOCViewController extends PureComponent {
     if(typeof View.maxWidth === 'function') {
       maxWidth = View.maxWidth();
     }
-    return Math.min(maxWidth, appWidth - OVERLAY_LEFT_MIN);
+    return Math.min(maxWidth, appWidth - spacing);
   }
   getRemainingSpace(sizes) {
     const { appWidth } = this.state;
@@ -124,7 +126,8 @@ class HOCViewController extends PureComponent {
     const sView = navigation.getIn(['secondary', 'stack']).last();
     const SView = sView ? (views[sView.get('id')] || views.NotFound) : undefined;
 
-    const sizes = [this.getSizeForView(PView), this.getSizeForView(SView)];
+    const hasTwo = !!SView;
+    const sizes = [this.getSizeForView(PView, hasTwo), this.getSizeForView(SView, hasTwo)];
 
     const remainingSpace = this.getRemainingSpace(sizes);
     const isOverlay = (SView && (remainingSpace < 0));
