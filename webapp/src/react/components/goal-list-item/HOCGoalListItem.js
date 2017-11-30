@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
-import { element } from 'react-swiss';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
@@ -14,36 +13,11 @@ import FlexWrapper from 'swiss-components/FlexWrapper';
 import Flex from 'swiss-components/Flex';
 import Wrapper from 'swiss-components/Wrapper';
 
-import './styles/goal-list-item.scss';
 /* global msgGen */
 
-const GoalItem = element({
-  backgroundColor: 'white',
-  borderBottom: '1px solid $deepBlue10',
-  minHeight: '60px',
-  overflow: 'hidden',
-  padding: '12px',
-});
-
-const StatusDot = element({
-  _size: '12px',
-  borderRadius: '50%',
-  
-  'status=Later': {
-    backgroundColor: '$deepBlue30',
-  },
-  'status=Now': {
-    backgroundColor: '$yellowColor',
-  },
-  'status=Done': {
-    backgroundColor: '#12d668'
-  },
-});
-
-const GoalTitle = element({
-  _font: ['15px', '$deepBlue90', '24px', '400'],
-  padding: '0 18px',
-})
+import GoalItem from './styles/GoalItem.swiss';
+import GoalTitle from './styles/GoalTitle.swiss';
+import StatusDot from './styles/StatusDot.swiss';
 
 class HOCGoalListItem extends PureComponent {
   constructor(props) {
@@ -54,7 +28,7 @@ class HOCGoalListItem extends PureComponent {
   }
   onAssign(i, e) {
     const options = this.getOptionsForE(e);
-    const { selectAssignees, assignGoal, goal } = this.props;
+    const { selectAssignees, assignGoal, goal, inTakeAction } = this.props;
 
     let overrideAssignees;
     options.onClose = () => {
@@ -93,10 +67,10 @@ class HOCGoalListItem extends PureComponent {
     };
   }
   renderAssignees() {
-    const { goal } = this.props;
+    const { goal, inTakeAction } = this.props;
     const helper = this.getHelper();
 
-    if (helper.getIsCompleted()) {
+    if (helper.getIsCompleted() || inTakeAction) {
       return undefined;
     }
 
@@ -111,7 +85,7 @@ class HOCGoalListItem extends PureComponent {
     );
   }
   render() {
-    const { goal, fromMilestone, loading } = this.props;
+    const { goal, fromMilestone, loading, inTakeAction } = this.props;
     const helper = this.getHelper();
     const isActive = !helper.getIsCompleted();
     let status = 'Now';
@@ -119,11 +93,13 @@ class HOCGoalListItem extends PureComponent {
     if (!isActive) status = 'Done'
 
     return (
-      <GoalItem expand={FlexWrapper} vertical="center">
+      <GoalItem expand={FlexWrapper} vertical="center" onClick={this.onGoalClick}>
         <StatusDot expand={Flex} status={status} flexNone />
         <GoalTitle
+          inTakeAction={inTakeAction}
           expand={Wrapper}
           status={status}
+          hoverRef={GoalItem.ref}
         >
           {loading || goal.get('title')}
         </GoalTitle>

@@ -9,7 +9,8 @@ class DroppableGoalList extends PureComponent {
     const { 
       items,
       children,
-      goalProps,  
+      goalProps,
+      renderEmptyState,
       ...rest
     } = this.props;
 
@@ -29,6 +30,7 @@ class DroppableGoalList extends PureComponent {
               />
             ))}
             {provided.placeholder}
+            {renderEmptyState && renderEmptyState(snapshot.isDraggingOver)}
             {children}
           </ListContainer>
         )}

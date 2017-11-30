@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate } from 'react-delegate';
+import { setupDelegate, setupCachedCallback } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
@@ -12,6 +12,7 @@ import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
 import FlexWrapper from 'swiss-components/FlexWrapper';
 import Wrapper from 'swiss-components/Wrapper';
+import Hideable from 'swiss-components/Hideable';
 import { element } from 'react-swiss';
 
 const Title = element({
@@ -37,6 +38,7 @@ class MilestoneOverview extends PureComponent {
       tabLeftIndex: 0,
       tabRightIndex: 1,
     };
+    this.renderEmptyStateCached = setupCachedCallback(this.renderEmptyState, this);
     setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll', 'onStepSort');
   }
   getNumberOfAllGoals() {
@@ -90,12 +92,12 @@ class MilestoneOverview extends PureComponent {
       </Wrapper>
     );
   }
-  renderEmptyState(group) {
+  renderEmptyState(group, isDraggingOver) {
     const { groupedGoals } = this.props;
 
     if (group === 'Later' && !groupedGoals.get('later').size) {
       return (
-        <FlexWrapper column center>
+        <FlexWrapper expand={Hideable} hidden={isDraggingOver} column center>
           <Title>
             Set for later
           </Title>
@@ -108,7 +110,7 @@ class MilestoneOverview extends PureComponent {
 
     if (group === 'Done' && !groupedGoals.get('done').size) {
       return (
-        <FlexWrapper column center>
+        <FlexWrapper expand={Hideable} hidden={isDraggingOver} column center>
           <Title>
             TRACK PROGRESS
           </Title>
@@ -129,12 +131,10 @@ class MilestoneOverview extends PureComponent {
       return (
         <FlexWrapper>
           <Section title={section}>
-            <DroppableGoalList droppableId={id} items={order.get(id)}>
+            <DroppableGoalList droppableId={id} items={order.get(id)} renderEmptyState={this.renderEmptyStateCached(section)}>
               {section === 'Now' && (
                 <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
               )}
-              
-              {this.renderEmptyState(section)}
             </DroppableGoalList>
           </Section>
         </FlexWrapper>
@@ -142,9 +142,7 @@ class MilestoneOverview extends PureComponent {
     }
 
     return (
-      <DroppableGoalList droppableId={id} items={order.get(id)}>
-        {this.renderEmptyState(section)}
-      </DroppableGoalList>
+      <DroppableGoalList droppableId={id} items={order.get(id)} renderEmptyState={this.renderEmptyStateCached(section)} />
     )
   }
   renderDualTabs() {

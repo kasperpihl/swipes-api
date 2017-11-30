@@ -17,7 +17,7 @@
   $b: &;
 
   &__header {
-    @include size(100%, 37px);
+    @include size(100%, 43px);
     @include flexContainer('row', between, center);
     background-color: white;
     border-bottom: 1px solid $deepBlue-15;

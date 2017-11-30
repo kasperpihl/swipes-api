@@ -13,8 +13,8 @@
   @include flexContainer('row', left, center, $flexIgnoreList);
   background-color: #fff;
   border-top: 1px solid $deepBlue-5;
-  padding: 0 6px;
-  padding-right: 6px;
+  padding: 0 12px;
+  padding-right: 0;
   transition: .15s ease;
 }
 
