@@ -26,15 +26,12 @@ import {
   milestonesGoalsReorderQueueMessage,
   milestonesDelete,
   milestonesDeleteQueueMessage,
+  milestonesGoalMiddlewares,
 } from './middlewares/milestones';
 import {
   goalsAddMilestone,
   goalsRemoveMilestone,
   goalsGetSingle,
-  goalsCompleteGoal,
-  goalsCompleteQueueMessage,
-  goalsIncompleteGoal,
-  goalsIncompleteQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -187,23 +184,11 @@ authed.all(
   milestonesGoalsReorder,
   milestonesGoalsReorderQueueMessage,
   notificationsPushToQueue,
+  milestonesGoalMiddlewares,
   (originalReq, originalRes, originalNext) => {
     const {
-      destination,
+      goalMiddlewares,
     } = originalRes.locals;
-    let goalMiddlewares = [];
-
-    if (destination === 'done') {
-      goalMiddlewares = [
-        goalsCompleteGoal,
-        goalsCompleteQueueMessage,
-      ];
-    } else {
-      goalMiddlewares = [
-        goalsIncompleteGoal,
-        goalsIncompleteQueueMessage,
-      ];
-    }
 
     const composer = new MiddlewareComposer(
       originalRes.locals,

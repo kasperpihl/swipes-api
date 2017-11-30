@@ -7,6 +7,12 @@ import {
   any,
 } from 'valjs';
 import {
+  goalsCompleteGoal,
+  goalsCompleteQueueMessage,
+  goalsIncompleteGoal,
+  goalsIncompleteQueueMessage,
+} from './goals';
+import {
   dbMilestonesInsertSingle,
   dbMilestonesUpdateSingle,
   dbMilestonesAddGoal,
@@ -486,6 +492,33 @@ const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
 
   return next();
 });
+const milestonesGoalMiddlewares = valLocals('milestonesGoalMiddlewares', {
+  destination: any.of('now', 'later', 'done').require(),
+}, (req, res, next, setLocals) => {
+  const {
+    destination,
+  } = res.locals;
+
+  let goalMiddlewares = [];
+
+  if (destination === 'done') {
+    goalMiddlewares = [
+      goalsCompleteGoal,
+      goalsCompleteQueueMessage,
+    ];
+  } else {
+    goalMiddlewares = [
+      goalsIncompleteGoal,
+      goalsIncompleteQueueMessage,
+    ];
+  }
+
+  setLocals({
+    goalMiddlewares,
+  });
+
+  return next();
+});
 
 export {
   milestonesCreate,
@@ -506,4 +539,5 @@ export {
   milestonesGoalsReorderQueueMessage,
   milestonesDelete,
   milestonesDeleteQueueMessage,
+  milestonesGoalMiddlewares,
 };
