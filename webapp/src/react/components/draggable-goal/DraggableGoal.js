@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
@@ -27,7 +27,7 @@ class DraggableGoal extends PureComponent {
       <Draggable draggableId={item} {...rest}>
         {(provided, snapshot) => {
           return (
-            <Wrapper autoSize>
+            <Fragment>
               {this.renderOrNotPortal(provided.draggableStyle, (
                 <Wrapper
                   autoSize
@@ -39,7 +39,7 @@ class DraggableGoal extends PureComponent {
                 </Wrapper>
               ))}
               {provided.placeholder}
-            </Wrapper>
+            </Fragment>
           );
         }}
       </Draggable>
