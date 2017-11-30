@@ -147,19 +147,19 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     user_id,
     type,
   })
-  .then((results) => {
-    const changes = results.changes[0].new_val || results.changes[0].old_val;
+    .then((results) => {
+      const changes = results.changes[0].new_val || results.changes[0].old_val;
 
-    setLocals({
-      goal: changes,
-      type,
+      setLocals({
+        goal: changes,
+        type,
+      });
+
+      return next();
+    })
+    .catch((error) => {
+      return next(error);
     });
-
-    return next();
-  })
-  .catch((error) => {
-    return next(error);
-  });
 });
 const goalsIncompleteStep = valLocals('goalsIncompleteStep', {
   goal_id: string.require(),
@@ -179,19 +179,19 @@ const goalsIncompleteStep = valLocals('goalsIncompleteStep', {
     user_id,
     type,
   })
-  .then((results) => {
-    const changes = results.changes[0].new_val || results.changes[0].old_val;
+    .then((results) => {
+      const changes = results.changes[0].new_val || results.changes[0].old_val;
 
-    setLocals({
-      goal: changes,
-      type,
+      setLocals({
+        goal: changes,
+        type,
+      });
+
+      return next();
+    })
+    .catch((error) => {
+      return next(error);
     });
-
-    return next();
-  })
-  .catch((error) => {
-    return next(error);
-  });
 });
 const goalsInsert = valLocals('goalsInsert', {
   goal: object.require(),
@@ -534,7 +534,9 @@ const goalsAppendWayToGoal = valLocals('goalsAppendWayToGoal', {
     assignees,
   } = goal;
 
-  dbGoalsAppendWayToGoal({ goal_id, steps, step_order, attachments, attachment_order, assignees })
+  dbGoalsAppendWayToGoal({
+    goal_id, steps, step_order, attachments, attachment_order, assignees,
+  })
     .then((results) => {
       const changes = results.changes[0];
       const goal = changes.new_val || changes.old_val;
@@ -616,7 +618,7 @@ const goalsAssignQueueMessage = valLocals('goalsAssignQueueMessage', {
     assignees,
     goal_assignees,
   } = res.locals;
-  const checkedAssignees = goal_assignees || assignees ||  [];
+  const checkedAssignees = goal_assignees || assignees || [];
   const event_type = 'goal_assigned';
   const queueMessage = {
     user_id,

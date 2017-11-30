@@ -195,8 +195,10 @@ authed.all(
   })),
   notesCreate,
   mapLocals((locals) => {
-    const notes = locals.notes;
-    const notesAttachment = locals.notesAttachment;
+    const {
+      notes,
+      notesAttachment,
+    } = locals;
     const links = [];
 
     notes.forEach((note, i) => {
@@ -215,7 +217,9 @@ authed.all(
   linksCreateBatch,
   linksAddPermissionBatch,
   mapLocals((locals) => {
-    const short_urls = locals.short_urls;
+    const {
+      short_urls,
+    } = locals;
     const links = locals.links.map((link, i) => {
       return Object.assign({}, link, {
         short_url: short_urls[i],

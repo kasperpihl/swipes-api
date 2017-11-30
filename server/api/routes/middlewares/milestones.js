@@ -422,7 +422,7 @@ const milestonesGoalsReorder = valLocals('milestonesGoalsReorder', {
 const milestonesGoalsReorderQueueMessage = valLocals('milestonesGoalsReorderQueueMessage', {
   user_id: string.require(),
   milestone_id: string.require(),
-  goal_order: array.of(string).require(),
+  goal_order: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
