@@ -90,7 +90,7 @@ authed.all(
   valResponseAndSend({
     goal: object.require(),
     milestone_id: string,
-    goal_order: array,
+    goal_order: object,
   }),
 );
 
@@ -216,7 +216,7 @@ authed.all(
   valResponseAndSend({
     goal_id: string.require(),
     milestone_id: string,
-    goal_order: array,
+    goal_order: object,
   }),
 );
 

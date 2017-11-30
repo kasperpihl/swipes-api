@@ -91,7 +91,7 @@ authed.all(
   valResponseAndSend({
     milestone_id: string.require(),
     closed_at: date.require(),
-    goal_order: array.require(),
+    goal_order: object.require(),
     goal_ids: array,
   }),
 );
@@ -133,7 +133,7 @@ authed.all(
     goal_id: string.require(),
     milestone_id: string.require(),
     old_milestone_id: string,
-    goal_order: array.require(),
+    goal_order: object.require(),
   }),
 );
 
@@ -153,7 +153,7 @@ authed.all(
   valResponseAndSend({
     goal_id: string.require(),
     milestone_id: string.require(),
-    goal_order: array.require(),
+    goal_order: object.require(),
   }),
 );
 
@@ -181,6 +181,7 @@ authed.all(
     destination: any.of('now', 'later', 'done').require(),
     position: number.require(),
   }),
+  goalsGetSingle,
   milestonesGoalsReorder,
   milestonesGoalsReorderQueueMessage,
   notificationsPushToQueue,

@@ -324,7 +324,7 @@ const goalsGetSingle = valLocals('goalsGetSingle', {
 const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
   goal: object.require(),
-  goal_order: array,
+  goal_order: object,
   milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
