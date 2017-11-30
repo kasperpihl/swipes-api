@@ -28,6 +28,7 @@ import {
   goalsIncompleteQueueMessage,
   goalsAssign,
   goalsAssignQueueMessage,
+  goalsMilestonesMiddlewares,
 } from './middlewares/goals';
 import {
   stepsReorder,
@@ -49,6 +50,7 @@ import {
   linksCreateBatch,
   linksAddPermissionBatch,
 } from './middlewares/links';
+import MiddlewareComposer from './middleware_composer';
 import {
   valBody,
   mapLocals,
@@ -100,6 +102,25 @@ authed.all(
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  (originalReq, originalRes, originalNext) => {
+    const {
+      milestonesMiddlewares,
+    } = originalRes.locals;
+
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...milestonesMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
   valResponseAndSend({
     goal: object.require(),
   }),
@@ -113,6 +134,25 @@ authed.all(
   goalsIncompleteGoal,
   goalsIncompleteQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  (originalReq, originalRes, originalNext) => {
+    const {
+      milestonesMiddlewares,
+    } = originalRes.locals;
+
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...milestonesMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
   valResponseAndSend({
     goal: object.require(),
   }),

@@ -5,6 +5,13 @@ import {
   array,
 } from 'valjs';
 import {
+  milestonesGoalsReorder,
+  milestonesGoalsReorderQueueMessage,
+} from './milestones';
+import {
+  notificationsPushToQueue,
+} from './notifications';
+import {
   dbGoalsInsertSingle,
   dbGoalsUpdateSingle,
   dbGoalsGetSingle,
@@ -636,6 +643,40 @@ const goalsAssignQueueMessage = valLocals('goalsAssignQueueMessage', {
 
   return next();
 });
+const goalsMilestonesMiddlewares = valLocals('goalsMilestonesMiddlewares', {
+  goal: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    goal,
+  } = res.locals;
+
+  let milestonesMiddlewares = [];
+
+  if (goal.completed_at) {
+    setLocals({
+      destination: 'done',
+    });
+  } else {
+    setLocals({
+      destination: 'now',
+    });
+  }
+
+  milestonesMiddlewares = [
+    milestonesGoalsReorder,
+    milestonesGoalsReorderQueueMessage,
+    notificationsPushToQueue,
+  ];
+
+  setLocals({
+    milestone_id: goal.milestone_id,
+    goal_id: goal.id,
+    position: 0,
+    milestonesMiddlewares,
+  });
+
+  return next();
+});
 
 export {
   goalsCreate,
@@ -660,4 +701,5 @@ export {
   goalsIncompleteQueueMessage,
   goalsAssign,
   goalsAssignQueueMessage,
+  goalsMilestonesMiddlewares,
 };

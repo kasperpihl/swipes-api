@@ -26,7 +26,7 @@ import {
   milestonesGoalsReorderQueueMessage,
   milestonesDelete,
   milestonesDeleteQueueMessage,
-  milestonesGoalMiddlewares,
+  milestonesGoalsMiddlewares,
 } from './middlewares/milestones';
 import {
   goalsAddMilestone,
@@ -184,15 +184,15 @@ authed.all(
   milestonesGoalsReorder,
   milestonesGoalsReorderQueueMessage,
   notificationsPushToQueue,
-  milestonesGoalMiddlewares,
+  milestonesGoalsMiddlewares,
   (originalReq, originalRes, originalNext) => {
     const {
-      goalMiddlewares,
+      goalsMiddlewares,
     } = originalRes.locals;
 
     const composer = new MiddlewareComposer(
       originalRes.locals,
-      ...goalMiddlewares,
+      ...goalsMiddlewares,
       (req, res, next) => {
         return originalNext();
       },

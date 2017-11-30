@@ -13,6 +13,9 @@ import {
   goalsIncompleteQueueMessage,
 } from './goals';
 import {
+  notificationsPushToQueue,
+} from './notifications';
+import {
   dbMilestonesInsertSingle,
   dbMilestonesUpdateSingle,
   dbMilestonesAddGoal,
@@ -492,29 +495,31 @@ const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
 
   return next();
 });
-const milestonesGoalMiddlewares = valLocals('milestonesGoalMiddlewares', {
+const milestonesGoalsMiddlewares = valLocals('milestonesGoalsMiddlewares', {
   destination: any.of('now', 'later', 'done').require(),
 }, (req, res, next, setLocals) => {
   const {
     destination,
   } = res.locals;
 
-  let goalMiddlewares = [];
+  let goalsMiddlewares = [];
 
   if (destination === 'done') {
-    goalMiddlewares = [
+    goalsMiddlewares = [
       goalsCompleteGoal,
       goalsCompleteQueueMessage,
     ];
   } else {
-    goalMiddlewares = [
+    goalsMiddlewares = [
       goalsIncompleteGoal,
       goalsIncompleteQueueMessage,
     ];
   }
 
+  goalsMiddlewares.push(notificationsPushToQueue);
+
   setLocals({
-    goalMiddlewares,
+    goalsMiddlewares,
   });
 
   return next();
@@ -539,5 +544,5 @@ export {
   milestonesGoalsReorderQueueMessage,
   milestonesDelete,
   milestonesDeleteQueueMessage,
-  milestonesGoalMiddlewares,
+  milestonesGoalsMiddlewares,
 };
