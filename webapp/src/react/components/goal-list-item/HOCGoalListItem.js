@@ -52,6 +52,8 @@ class HOCGoalListItem extends PureComponent {
   onClick(e) {
     const selection = window.getSelection();
 
+    console.log('hi mofo')
+
     if (selection.toString().length === 0) {
       this.onGoalClick(e);
     }

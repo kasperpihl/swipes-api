@@ -72,7 +72,6 @@ class MilestoneOverview extends PureComponent {
       <Wrapper>
         <HOCHeaderTitle
           title={title || m.get('title')}
-          titleIcon="Milestones"
           delegate={delegate}
           border={showLine}
         >
@@ -152,13 +151,17 @@ class MilestoneOverview extends PureComponent {
         items={order.get(id)}
         renderEmptyState={this.renderEmptyStateCached(section)}
         goalProps={{ delegate }}
-      />
+      >
+        {section === 'Now' && (
+          <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
+        )}
+      </DroppableGoalList>
     )
   }
   renderDualTabs() {
     const { viewWidth } = this.props;
 
-    if (viewWidth !== 750) {
+    if (viewWidth >= 1100) {
       return undefined;
     }
 
@@ -183,7 +186,7 @@ class MilestoneOverview extends PureComponent {
   renderThreeSections() {
     const { viewWidth } = this.props;
 
-    if (viewWidth !== 1100) {
+    if (viewWidth < 1100) {
       return undefined;
     }
 
