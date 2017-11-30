@@ -4,13 +4,13 @@ export default element({
   _size: '12px',
   borderRadius: '50%',
   
-  'status=Later': {
+  'status=Later|later': {
     backgroundColor: '$deepBlue30',
   },
-  'status=Now': {
+  'status=Now|now': {
     backgroundColor: '$yellowColor',
   },
-  'status=Done': {
+  'status=Done|done': {
     backgroundColor: '#12d668'
   },
 });

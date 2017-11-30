@@ -93,9 +93,9 @@ class MilestoneOverview extends PureComponent {
     );
   }
   renderEmptyState(group, isDraggingOver) {
-    const { groupedGoals } = this.props;
+    const { order } = this.props;
 
-    if (group === 'Later' && !groupedGoals.get('later').size) {
+    if (group === 'Later' && !order.get('later').size) {
       return (
         <FlexWrapper expand={Hideable} hidden={isDraggingOver} column center>
           <Title>
@@ -108,7 +108,7 @@ class MilestoneOverview extends PureComponent {
       )
     }
 
-    if (group === 'Done' && !groupedGoals.get('done').size) {
+    if (group === 'Done' && !order.get('done').size) {
       return (
         <FlexWrapper expand={Hideable} hidden={isDraggingOver} column center>
           <Title>
@@ -126,6 +126,10 @@ class MilestoneOverview extends PureComponent {
   renderDroppableList(section, renderSection) {
     const { order, delegate, milestone } = this.props;
     const id = section.toLowerCase();
+    const goalProps = {
+      delegate,
+      status: section,
+    };
 
     if (renderSection) {
       return (
@@ -135,7 +139,7 @@ class MilestoneOverview extends PureComponent {
               droppableId={id}
               items={order.get(id)}
               renderEmptyState={this.renderEmptyStateCached(section)}
-              goalProps={{ delegate }}
+              goalProps={goalProps}
             >
               {section === 'Now' && (
                 <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
@@ -151,7 +155,7 @@ class MilestoneOverview extends PureComponent {
         droppableId={id}
         items={order.get(id)}
         renderEmptyState={this.renderEmptyStateCached(section)}
-        goalProps={{ delegate }}
+        goalProps={goalProps}
       />
     )
   }
