@@ -70,9 +70,14 @@ class HOCGoalListItem extends PureComponent {
   }
   renderAssignees() {
     const { goal, inTakeAction } = this.props;
+    let { status } = this.props;
     const helper = this.getHelper();
 
-    if (helper.getIsCompleted() || inTakeAction) {
+    if (!status) {
+      status = helper.getIsCompleted() ? 'Done' : 'Now';
+    }
+
+    if (status === 'Done' || inTakeAction) {
       return undefined;
     }
 
@@ -82,7 +87,7 @@ class HOCGoalListItem extends PureComponent {
         maxImages={1}
         delegate={this}
         rounded
-        size={30}
+        size={26}
       />
     );
   }
@@ -92,7 +97,7 @@ class HOCGoalListItem extends PureComponent {
 
     if(!status) {
       const helper = this.getHelper();
-      status = helper.getIsCompleted() ? 'done' : 'now'
+      status = helper.getIsCompleted() ? 'Done' : 'Now'
     }
 
     return (
