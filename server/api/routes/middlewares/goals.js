@@ -98,7 +98,6 @@ const goalsCompleteGoal = valLocals('goalsCompleteGoal', {
       setLocals({
         type,
         goal: changes.new_val,
-        oldGoal: changes.old_val,
       });
 
       return next();
@@ -129,7 +128,6 @@ const goalsIncompleteGoal = valLocals('goalsIncompleteGoal', {
       setLocals({
         type,
         goal: changes.new_val,
-        oldGoal: changes.old_val,
       });
 
       return next();
@@ -647,22 +645,12 @@ const goalsAssignQueueMessage = valLocals('goalsAssignQueueMessage', {
 });
 const goalsMilestonesMiddlewares = valLocals('goalsMilestonesMiddlewares', {
   goal: object.require(),
-  oldGoal: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     goal,
-    oldGoal,
   } = res.locals;
 
   let milestonesMiddlewares = [];
-
-  if (goal.completed_at === oldGoal.completed_at) {
-    setLocals({
-      milestonesMiddlewares,
-    });
-
-    return next();
-  }
 
   if (goal.completed_at) {
     setLocals({

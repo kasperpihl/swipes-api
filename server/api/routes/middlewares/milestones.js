@@ -496,11 +496,20 @@ const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
   return next();
 });
 const milestonesGoalsMiddlewares = valLocals('milestonesGoalsMiddlewares', {
+  goal: object.require(),
   destination: any.of('now', 'later', 'done').require(),
 }, (req, res, next, setLocals) => {
   const {
+    goal,
     destination,
   } = res.locals;
+
+  if (
+    (goal.completed_at === null && destination !== 'done') ||
+    (goal.completed_at && destination === 'done')
+  ) {
+    return next();
+  }
 
   let goalsMiddlewares = [];
 
