@@ -131,7 +131,12 @@ class MilestoneOverview extends PureComponent {
       return (
         <FlexWrapper>
           <Section title={section}>
-            <DroppableGoalList droppableId={id} items={order.get(id)} renderEmptyState={this.renderEmptyStateCached(section)}>
+            <DroppableGoalList
+              droppableId={id}
+              items={order.get(id)}
+              renderEmptyState={this.renderEmptyStateCached(section)}
+              goalProps={{ delegate }}
+            >
               {section === 'Now' && (
                 <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
               )}
@@ -142,7 +147,12 @@ class MilestoneOverview extends PureComponent {
     }
 
     return (
-      <DroppableGoalList droppableId={id} items={order.get(id)} renderEmptyState={this.renderEmptyStateCached(section)} />
+      <DroppableGoalList
+        droppableId={id}
+        items={order.get(id)}
+        renderEmptyState={this.renderEmptyStateCached(section)}
+        goalProps={{ delegate }}
+      />
     )
   }
   renderDualTabs() {
