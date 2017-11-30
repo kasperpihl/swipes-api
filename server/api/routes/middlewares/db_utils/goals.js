@@ -143,7 +143,9 @@ const dbGoalsCompleteStep = funcWrap([
     user_id: string.require(),
     type: string.require(),
   }),
-], (err, { goal_id, step_id, user_id, type }) => {
+], (err, {
+  goal_id, step_id, user_id, type,
+}) => {
   if (err) {
     throw new SwipesError(`dbGoalsCompleteStep: ${err}`);
   }
@@ -181,8 +183,8 @@ const dbGoalsCompleteStep = funcWrap([
             }).filter((step) => {
               return step('id').ne(step_id).and(step('completed_at').ne(null));
             })
-            .count()
-            .eq(goal('step_order').filter(stepId => stepId.ne(step_id)).count()),
+              .count()
+              .eq(goal('step_order').filter(stepId => stepId.ne(step_id)).count()),
             r.now(),
             null,
           ),
@@ -202,7 +204,9 @@ const dbGoalsIncompleteStep = funcWrap([
     user_id: string.require(),
     type: string.require(),
   }),
-], (err, { goal_id, step_id, user_id, type }) => {
+], (err, {
+  goal_id, step_id, user_id, type,
+}) => {
   if (err) {
     throw new SwipesError(`dbGoalsIncompleteStep: ${err}`);
   }
@@ -248,7 +252,9 @@ const dbGoalsAppendWayToGoal = funcWrap([
     attachment_order: array.require(),
     assignees: array.require(),
   }),
-], (err, { goal_id, steps, step_order, attachments, attachment_order, assignees }) => {
+], (err, {
+  goal_id, steps, step_order, attachments, attachment_order, assignees,
+}) => {
   if (err) {
     throw new SwipesError(`dbGoalsAppendWayToGoal: ${err}`);
   }
