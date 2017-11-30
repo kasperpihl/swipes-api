@@ -88,11 +88,12 @@ class HOCGoalListItem extends PureComponent {
   }
   render() {
     const { goal, fromMilestone, loading, inTakeAction } = this.props;
-    const helper = this.getHelper();
-    const isActive = !helper.getIsCompleted();
-    let status = 'Now';
+    let { status } = this.props;
 
-    if (!isActive) status = 'Done'
+    if(!status) {
+      const helper = this.getHelper();
+      status = helper.getIsCompleted() ? 'done' : 'now'
+    }
 
     return (
       <GoalItem expand={FlexWrapper} vertical="center" onClick={this.onGoalClick}>

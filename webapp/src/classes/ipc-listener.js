@@ -35,6 +35,15 @@ export default class IpcListener {
       remWin.on('maximize', () => {
         store.dispatch(main.setMaximized(true));
       });
+      remWin.on('toggle-find', () => {
+        this.store.dispatch(navigation.set('primary', {
+          id: 'Search',
+          title: 'Search',
+        }))
+      });
+      remWin.on('clear', () => {
+        localForage.clear();
+      });
       remWin.on('unmaximize', () => {
         store.dispatch(main.setMaximized(false));
       });

@@ -4,19 +4,10 @@ import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
-import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
-// import { map, list } from 'react-immutable-proptypes';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import { List, fromJS } from 'immutable';
-import {
-  EditorState,
-  convertToRaw,
-} from 'draft-js';
 
 import MilestoneOverview from './MilestoneOverview';
 
@@ -28,8 +19,8 @@ class HOCMilestoneOverview extends PureComponent {
     super(props);
     this.state = {
       showLine: false,
-      order: props.milestone.get('goal_order'),
     };
+    this.reorderQueue = [];
     propsOrPop(this, 'milestone');
     bindAll(this, ['onDragStart', 'onDragEnd']);
     setupLoading(this);
@@ -44,36 +35,6 @@ class HOCMilestoneOverview extends PureComponent {
     if (showLine !== newShowLine) {
       this.setState({ showLine: newShowLine })
     }
-  }
-  getNewGoalOrder(oldIndex, newIndex) {
-  }
-  onStepSort({collection, oldIndex, newIndex}) {
-    if(oldIndex === newIndex){
-      return;
-    }
-
-    const { reorderGoals, milestone, groupedGoals } = this.props;
-    const currentGoalOrder = milestone.get('goal_order');
-    let tempOrder = groupedGoals.get(collection).map(g => g.get('id'));
-    const movedId = tempOrder.get(oldIndex);
-    const tempGoalOrder = tempOrder.delete(oldIndex).insert(newIndex, movedId);
-
-    oldIndex = currentGoalOrder.findIndex((gId) => gId === groupedGoals.getIn([collection, oldIndex, 'id']));
-    newIndex = currentGoalOrder.findIndex((gId) => gId === groupedGoals.getIn([collection, newIndex, 'id']));
-    const newGoalOrder = milestone.get('goal_order').delete(oldIndex).insert(newIndex, movedId);
-
-    this.setLoading(movedId, 'Reordering...');
-    this.setState({ tempOrder: tempGoalOrder });
-
-    reorderGoals(milestone.get('id'), newGoalOrder).then((res) => {
-      if(!this._unmounted) {
-        console.log('ressy', res);
-        this.setState({tempOrder: null});
-        this.clearLoading(movedId);
-      }
-      
-    });
-
   }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
@@ -94,25 +55,50 @@ class HOCMilestoneOverview extends PureComponent {
       }
     });
   }
+  isGoalLoading(goalId) {
+    return this.isLoading(goalId);
+  }
   onDragStart() {
     document.body.classList.add("no-select");
   }
+
   onDragEnd(result) {
     document.body.classList.remove("no-select");
-    console.log('onDragEnd', result);
     if (!result.destination) {
       return;
     }
-
-    let { order } = this.state;
+    const { tempOrder } = this.state;
+    const { milestone, reorderGoals, successGradient } = this.props;
+    let order = tempOrder || milestone.get('goal_order');
 
     const { droppableId: source, index: sourceI } = result.source;
     const { droppableId: dest, index: destI } = result.destination;
-    const res = order.getIn([source, sourceI]);
+    if(dest === 'done' && source !== 'done') {
+      successGradient('green');
+    }
+    const goalId = order.getIn([source, sourceI]);
     order = order.deleteIn([source, sourceI]);
-    order = order.updateIn([dest], (arr) => arr.insert(destI, res));
+    order = order.updateIn([dest], (arr) => arr.insert(destI, goalId));
 
-    this.setState({ order });
+    this.setState({ tempOrder: order });
+    this.reorderQueue.push([milestone.get('id'), goalId, dest, destI]);
+    this.onNextReorder();
+  }
+  onNextReorder() {
+    if(this.isReordering) {
+      return;
+    }
+    const { reorderGoals } = this.props;
+    this.isReordering = true;
+    const args = this.reorderQueue.shift();
+    reorderGoals(...args).then((res) => {
+      this.isReordering = false;
+      if(!res.ok || !this.reorderQueue.length) {
+        !this._unmounted && this.setState({ tempOrder: null });
+      } else if(this.reorderQueue.length) {
+        this.onNextReorder();
+      }
+    });
   }
 
   onGoalClick(goalId) {
@@ -219,19 +205,17 @@ class HOCMilestoneOverview extends PureComponent {
     }
   }
   render() {
-    const { milestone, groupedGoals, viewWidth } = this.props;
-    const { showLine, tempOrder, order } = this.state;
+    const { milestone, viewWidth } = this.props;
+    const { showLine, tempOrder } = this.state;
 
     return (
       <DragDropContext
         onDragStart={this.onDragStart}
         onDragEnd={this.onDragEnd}>
         <MilestoneOverview
-          order={order}
+          order={tempOrder || milestone.get('goal_order')}
           {...this.bindLoading()}
-          tempOrder={tempOrder}
           milestone={milestone}
-          groupedGoals={groupedGoals}
           delegate={this}
           showLine={showLine}
           viewWidth={viewWidth}
@@ -244,13 +228,13 @@ class HOCMilestoneOverview extends PureComponent {
 function mapStateToProps(state, ownProps) {
   return {
     goals: state.get('goals'),
-    groupedGoals: cs.milestones.getGroupedGoals(state, ownProps),
     milestone: state.getIn(['milestones', ownProps.milestoneId]),
   };
 }
 
 export default navWrapper(connect(mapStateToProps, {
   contextMenu: a.main.contextMenu,
+  successGradient: a.main.successGradient,
   inputMenu: a.menus.input,
   closeMilestone: ca.milestones.close,
   openMilestone: ca.milestones.open,

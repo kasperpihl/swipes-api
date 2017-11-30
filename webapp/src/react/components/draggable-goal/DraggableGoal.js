@@ -20,6 +20,7 @@ class DraggableGoal extends PureComponent {
     const {
       item,
       delegate,
+      status,
       ...rest,
     } = this.props;
 
@@ -35,7 +36,11 @@ class DraggableGoal extends PureComponent {
                   style={provided.draggableStyle}
                   {...provided.dragHandleProps}
                 >
-                  <HOCGoalListItem goalId={item} delegate={delegate} />
+                  <HOCGoalListItem
+                    goalId={item}
+                    delegate={delegate}
+                    status={status} 
+                  />
                 </Wrapper>
               ))}
               {provided.placeholder}
