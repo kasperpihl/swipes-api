@@ -1,8 +1,10 @@
 import r from 'rethinkdb';
 import {
   string,
+  number,
   object,
   array,
+  any,
 } from 'valjs';
 import {
   dbMilestonesInsertSingle,
@@ -326,13 +328,13 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   eventType: string,
 }, (req, res, next, setLocals) => {
   const {
-  goal_ids,
-  current_milestone_id,
-} = res.locals;
+    goal_ids,
+    current_milestone_id,
+  } = res.locals;
   let {
-  milestone_id,
-  eventType,
-} = res.locals;
+    milestone_id,
+    eventType,
+  } = res.locals;
 
   if (!milestone_id && !current_milestone_id) {
     return next();
@@ -341,20 +343,20 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   milestone_id = current_milestone_id || milestone_id;
 
   return dbMilestonesRemoveGoal({ goal_ids, milestone_id })
-  .then((result) => {
-    const changes = result.changes[0].new_val || result.changes[0].old_val;
-    eventType = goal_ids.length > 0 ? eventType : 'milestone_goal_removed';
+    .then((result) => {
+      const changes = result.changes[0].new_val || result.changes[0].old_val;
+      eventType = goal_ids.length > 0 ? eventType : 'milestone_goal_removed';
 
-    setLocals({
-      eventType,
-      goal_order: changes.goal_order,
+      setLocals({
+        eventType,
+        goal_order: changes.goal_order,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
     });
-
-    return next();
-  })
-  .catch((err) => {
-    return next(err);
-  });
 });
 const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMessage', {
   user_id: string.require(),
@@ -387,15 +389,30 @@ const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMes
 });
 const milestonesGoalsReorder = valLocals('milestonesGoalsReorder', {
   milestone_id: string.require(),
-  goal_order: array.of(string).require(),
+  goal_id: string.require(),
+  destination: any.of('now', 'later', 'done').require(),
+  position: number.require(),
 }, (req, res, next, setLocals) => {
   const {
     milestone_id,
-    goal_order,
+    goal_id,
+    destination,
+    position,
   } = res.locals;
 
-  dbMilestonesGoalsReorder({ milestone_id, goal_order })
-    .then(() => {
+  dbMilestonesGoalsReorder({
+    milestone_id,
+    goal_id,
+    destination,
+    position,
+  })
+    .then((results) => {
+      const changes = results.changes[0];
+
+      setLocals({
+        goal_order: changes.new_val.goal_order,
+      });
+
       return next();
     })
     .catch((err) => {

@@ -1,8 +1,10 @@
 import r from 'rethinkdb';
 import {
   string,
+  number,
   object,
   array,
+  any,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -125,9 +127,16 @@ const dbMilestonesMigrateIncompleteGoals = funcWrap([
 const dbMilestonesGoalsReorder = funcWrap([
   object.as({
     milestone_id: string.require(),
-    goal_order: array.of(string).require(),
+    goal_id: string.require(),
+    destination: any.of('now', 'later', 'done').require(),
+    position: number.require(),
   }).require(),
-], (err, { milestone_id, goal_order }) => {
+], (err, {
+  milestone_id,
+  goal_id,
+  destination,
+  position,
+}) => {
   if (err) {
     throw new SwipesError(`dbMilestonesGoalsReorder: ${err}`);
   }
@@ -135,9 +144,25 @@ const dbMilestonesGoalsReorder = funcWrap([
   const q =
     r.table('milestones')
       .get(milestone_id)
-      .update({
-        goal_order,
-        updated_at: r.now(),
+      .update((milestone) => {
+        return milestone.merge({
+          goal_order: {
+            now: milestone('goal_order')('now').setDifference([goal_id]),
+            later: milestone('goal_order')('later').setDifference([goal_id]),
+            done: milestone('goal_order')('done').setDifference([goal_id]),
+          },
+        }).merge((milestone) => {
+          return milestone.merge({
+            goal_order: {
+              [destination]: milestone('goal_order')(destination).insertAt(position, goal_id).default(() => {
+                return milestone('goal_order')(destination).insertAt(milestone('goal_order')(destination).count(), goal_id);
+              }),
+            },
+            updated_at: r.now(),
+          });
+        });
+      }, {
+        returnChanges: 'always',
       });
 
   return db.rethinkQuery(q);
