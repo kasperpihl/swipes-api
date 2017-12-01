@@ -354,7 +354,7 @@ const goalsArchiveQueueMessage = valLocals('goalsArchiveQueueMessage', {
   goal_id: string.require(),
   eventType: string.require(),
   milestone_id: string,
-  goal_order: array,
+  goal_order: object,
 }, (req, res, next, setLocals) => {
   const {
     user_id,

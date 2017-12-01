@@ -55,7 +55,11 @@ const dbMilestonesAddGoal = funcWrap([
     r.table('milestones')
       .get(milestone_id)
       .update({
-        goal_order: r.row('goal_order').default([]).setUnion([goal_id]),
+        goal_order: {
+          now: r.row('goal_order')('now').default([]).difference(goal_id).insertAt(0, goal_id),
+          later: r.row('goal_order')('later').default([]).difference(goal_id),
+          done: r.row('goal_order')('done').default([]).difference(goal_id),
+        },
         updated_at: r.now(),
       }, {
         returnChanges: true,
@@ -77,7 +81,11 @@ const dbMilestonesRemoveGoal = funcWrap([
     r.table('milestones')
       .get(milestone_id)
       .update({
-        goal_order: r.row('goal_order').default([]).difference(goal_ids),
+        goal_order: {
+          now: r.row('goal_order')('now').default([]).difference(goal_ids),
+          later: r.row('goal_order')('later').default([]).difference(goal_ids),
+          done: r.row('goal_order')('done').default([]).difference(goal_ids),
+        },
         updated_at: r.now(),
       }, {
         returnChanges: true,
@@ -98,10 +106,10 @@ const dbMilestonesMigrateIncompleteGoals = funcWrap([
   const q =
     r.db('swipes')
       .table('milestones')
-      .get(milestone_id)('goal_order').do((goal_ids) => {
+      .get(milestone_id)('goal_order').do((goal_order) => {
         return r.db('swipes')
           .table('goals')
-          .getAll(r.args(goal_ids))
+          .getAll(r.args(goal_order('now').add(goal_order('later')).add(goal_order('done'))))
           .filter({
             archived: false,
             completed_at: null,
@@ -185,12 +193,16 @@ const dbMilestonesDelete = funcWrap([
       }, {
         returnChanges: 'always',
       }).do((result) => {
-        return r.table('goals').getAll(r.args(result('changes').nth(0)('new_val')('goal_order').default([]))).update({
-          archived: true,
-          updated_at: r.now(),
-        }).do(() => {
-          return result('changes').nth(0)('new_val')('goal_order').default([]);
-        });
+        return r.table('goals')
+          .getAll(r.args(result('changes').nth(0)('new_val')('goal_order')('now'))
+            .add(r.args(result('changes').nth(0)('new_val')('goal_order')('later')))
+            .add(r.args(result('changes').nth(0)('new_val')('goal_order')('done'))))
+          .update({
+            archived: true,
+            updated_at: r.now(),
+          }).do(() => {
+            return result('changes').nth(0)('new_val')('goal_order');
+          });
       });
 
   return db.rethinkQuery(q);
