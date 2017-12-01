@@ -143,7 +143,7 @@ class HOCGoalList extends PureComponent {
   renderGoal(g) {
     const gId = g.get('id');
 
-    return <HOCGoalItem goalId={gId} key={gId} delegate={this} />;
+    return <HOCGoalItem goalId={gId} key={gId} delegate={this} inTakeAction />;
   }
   renderListFooter() {
 

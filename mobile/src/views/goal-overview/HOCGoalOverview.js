@@ -212,31 +212,30 @@ class HOCGoalOverview extends PureComponent {
     if (this.isLoading('completing')) {
       return (
         <View style={{width: 36, height: 36, alignItems: 'center', justifyContent: 'center', marginRight: 12, marginTop: 5 }}>
-          <ActivityIndicator color={colors.greenColor} size='small' />
+          <ActivityIndicator color={colors.greenColor} size='large' />
         </View>
       )
     }
 
     const helper = this.getHelper();
     const isCompleted = helper.getIsCompleted();
+    let iconColor = colors.deepBlue50;
     let extraStyles = {
-      backgroundColor: 'transparent',
-      borderWidth: 2,
-      borderColor: colors.deepBlue50,
+      backgroundColor: '#ffd776',
     };
 
     if (isCompleted) {
       extraStyles = {
         backgroundColor: colors.greenColor,
-        borderWidth: 2,
-        borderColor: colors.greenColor,
       }
+
+      iconColor = 'white';
     }
 
     return (
       <RippleButton onPress={this.handleCompleteGoal}>
-        <View style={[ extraStyles, { width: 36, height: 36, borderRadius: 36 / 2, marginRight: 12, marginTop: 5, paddingHorizontal: 4, paddingVertical: 4 }]}>
-          <Icon name="ChecklistCheckmark" width="18" height="18" fill="white" />
+        <View style={[ extraStyles, { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 36 / 2, marginRight: 12, marginTop: 5 }]}>
+          <Icon name="ChecklistCheckmark" width="18" height="18" fill={iconColor} style={{ marginLeft: -6, marginTop: -6 }} />
         </View>
       </RippleButton>
     )

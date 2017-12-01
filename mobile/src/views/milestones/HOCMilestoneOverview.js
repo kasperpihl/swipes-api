@@ -217,7 +217,6 @@ class HOCMilestoneOverview extends PureComponent {
         currentTab={tabIndex}
         delegate={this}
         tabs={tabs}
-        icon="Milestones"
       >
         <RippleButton onPress={this.openCreateGoalModal}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
@@ -241,7 +240,7 @@ class HOCMilestoneOverview extends PureComponent {
       title = 'Add a new goal';
       text = 'Add new goals for everything that needs \n to be done to achieve this plan.';
     } else if (group === 'Later') {
-      title = 'set for later (coming soon)';
+      title = 'set for later';
       text = 'Move goals that need to be done later \n from this week into here.';
     } else if (group === 'Done') {
       title = 'TRACK PROGRESS';

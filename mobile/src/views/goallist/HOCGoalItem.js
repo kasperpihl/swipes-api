@@ -10,6 +10,7 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCAssigning from 'components/assignees/HOCAssigning';
 import RippleButton from 'RippleButton';
 import { viewSize } from 'globalStyles';
+const DOT_SIZE = 10;
 
 const styles = StyleSheet.create({
   row: {
@@ -19,22 +20,26 @@ const styles = StyleSheet.create({
     minHeight: 64,
   },
   dotWrapper: {
-    ...gs.mixins.size(30),
+    ...gs.mixins.size(40),
     ...gs.mixins.flex('center'),
-    paddingTop: 3,
   },
-  completedDot: {
-    ...gs.mixins.size(14),
+  doneDot: {
+    ...gs.mixins.size(DOT_SIZE),
     backgroundColor: gs.colors.greenColor,
-    borderRadius: 14 /2,
+    borderRadius: DOT_SIZE / 2,
   },
-  regularDot:{
-    ...gs.mixins.size(10),
-    ...gs.mixins.border(2, gs.colors.deepBlue50),
-    borderRadius: 10 /2,
+  nowDot:{
+    ...gs.mixins.size(DOT_SIZE),
+    backgroundColor: gs.colors.yellowColor,
+    borderRadius: DOT_SIZE / 2,
+  },
+  laterDot:{
+    ...gs.mixins.size(DOT_SIZE),
+    backgroundColor: gs.colors.deepBlue50,
+    borderRadius: DOT_SIZE / 2,
   },
   seperator: {
-    ...gs.mixins.size(viewSize.width - 30, 1),
+    ...gs.mixins.size(viewSize.width - 40, 1),
     backgroundColor: gs.colors.deepBlue5,
     position: 'absolute',
     left: 15, bottom: 0,
@@ -72,7 +77,7 @@ class HOCGoalItem extends PureComponent {
     archive(goal.get('id'));
   }
   onModalGoalAction(id) {
-    const { togglePinGoal, goal, alertModal } = this.props;
+    const { togglePinGoal, goal, alertModal, reorderGoals, setLoading } = this.props;
 
     if (id === 'delete') {
       alertModal({
@@ -80,22 +85,51 @@ class HOCGoalItem extends PureComponent {
         message: 'This will remove this goal for all participants.',
         onConfirmPress: this.onArchiveGoal,
       });
+    } else if (['now', 'later', 'done'].indexOf(id) > -1) {
+      const loadingLabel = `Moving to ${id}`;
+
+      setLoading(loadingLabel);
+      reorderGoals(goal.get('milestone_id'), goal.get('id'), id, 0).then((res) => {
+        setLoading();
+      });
     }
   }
 
   onLongPress() {
-    const { actionModal, goal } = this.props;
+    const { actionModal, goal, inTakeAction } = this.props;
+    const status = msgGen.goals.getStatus(goal);
+
+    let items = [{
+      title: 'Delete',
+      id: 'delete',
+    }];
+
+    if (!inTakeAction && goal.get('milestone_id')) {
+      if(status !== 'later') {
+        items.push({
+          title: 'Move to later',
+          id: 'later',
+        });
+      }
+      if(status !== 'now') {
+        items.push({
+          title: 'Move to now',
+          id: 'now',
+        });
+      }
+      if(status !== 'done') {
+        items.push({
+          title: 'Move to done',
+          id: 'done',
+        });
+      }
+    }
 
     Vibration.vibrate(5);
     actionModal({
       title: 'Goal',
       onItemPress: this.onModalGoalAction,
-      items: fromJS([
-        {
-          title: 'Delete',
-          id: 'delete',
-        },
-      ]),
+      items: fromJS(items),
     });
   }
   openOverview() {
@@ -111,26 +145,15 @@ class HOCGoalItem extends PureComponent {
 
     this.onPushStack(overview);
   }
-  completedDot() {
-
-    return (
-      <View style={styles.dotWrapper}>
-        <View style={styles.completedDot} />
-      </View>
-    )
-  }
   renderDot() {
     const { goal } = this.props;
-    const helper = new GoalsUtil(goal);
-    const isCompleted = helper.getIsCompleted();
+    const status = msgGen.goals.getStatus(goal);
 
-    if (isCompleted) {
-      return this.completedDot();
-    }
+    const dotStyles = styles[`${status}Dot`];
 
     return (
       <View style={styles.dotWrapper}>
-        <View style={styles.regularDot} />
+        <View style={dotStyles} />
       </View>
     )
   }
@@ -178,7 +201,9 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
+  reorderGoals: ca.milestones.reorderGoals,
   archive: ca.goals.archive,
   actionModal: a.modals.action,
   alertModal: a.modals.alert,
+  setLoading: a.main.loading,
 })(HOCGoalItem);

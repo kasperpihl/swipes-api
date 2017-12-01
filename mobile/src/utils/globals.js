@@ -9,6 +9,7 @@ export default function getGlobals() {
       apiUrl = 'https://staging.swipesapp.com';
   }
   const pre = `sw-${Platform.OS}`;
+
   return {
     apiUrl,
     isDev: window.__DEV__,
