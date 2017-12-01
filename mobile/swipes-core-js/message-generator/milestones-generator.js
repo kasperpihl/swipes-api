@@ -40,6 +40,18 @@ export default class Milestones {
     
     return all.toList();
   }
+  getStatusForGoalId(milestoneId, goalId) {
+    const milestone = this.getMilestone(milestoneId);
+    let status = 'now';
+    if(milestone) {
+      milestone.get('goal_order').forEach((goals, label) => {
+        if(goals.contains(goalId)) {
+          status = label;
+        }
+      })
+    }
+    return status;
+  }
 
   getRelatedFilter(milestoneId) {
     const milestone = this.getMilestone(milestoneId);
