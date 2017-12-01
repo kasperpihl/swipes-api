@@ -188,7 +188,7 @@ authed.all(
   milestonesGoalsMiddlewares,
   (originalReq, originalRes, originalNext) => {
     const {
-      goalsMiddlewares,
+      goalsMiddlewares = [],
     } = originalRes.locals;
 
     const composer = new MiddlewareComposer(

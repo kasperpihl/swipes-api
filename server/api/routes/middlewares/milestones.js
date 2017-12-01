@@ -513,8 +513,8 @@ const milestonesGoalsMiddlewares = valLocals('milestonesGoalsMiddlewares', {
   } = res.locals;
 
   if (
-    (goal.completed_at === null && destination !== 'done') ||
-    (goal.completed_at && destination === 'done')
+    (!goal.completed_at && destination !== 'done') ||
+    (goal.completed_at !== null && destination === 'done')
   ) {
     return next();
   }
