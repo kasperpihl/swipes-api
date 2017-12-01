@@ -45,7 +45,11 @@ const milestonesCreate = valLocals('milestonesCreate', {
     id: generateSlackLikeId('M'),
     title,
     organization_id,
-    goal_order: [],
+    goal_order: {
+      now: [],
+      later: [],
+      done: [],
+    },
     due_date: due_date || null,
     created_by: user_id,
     created_at: new Date(),
@@ -303,7 +307,7 @@ const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage',
   goal_id: string.require(),
   milestone_id: string.require(),
   old_milestone_id: string,
-  goal_order: array.require(),
+  goal_order: object.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -371,7 +375,7 @@ const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMes
   user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string.require(),
-  goal_order: array.require(),
+  goal_order: object.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -462,7 +466,11 @@ const milestonesDelete = valLocals('milestonesDelete', {
   dbMilestonesDelete({ milestone_id })
     .then((goal_order) => {
       setLocals({
-        goal_ids: goal_order,
+        goal_ids: [
+          ...goal_order.now,
+          ...goal_order.later,
+          ...goal_order.done,
+        ],
       });
 
       return next();
