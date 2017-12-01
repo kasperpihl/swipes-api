@@ -216,7 +216,7 @@ class HOCMilestoneOverview extends PureComponent {
         title={milestone.get('title')}
         currentTab={tabIndex}
         delegate={this}
-        tabs={tabs.map((t, i) => i === 0 ? 'This week' : t)}
+        tabs={tabs}
         icon="Milestones"
       >
         <RippleButton onPress={this.openCreateGoalModal}>
