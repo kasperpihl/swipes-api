@@ -46,7 +46,7 @@ class HOCMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Current', 'Later', 'Completed'],
+      tabs: ['Now', 'Later', 'Done'],
       tabIndex: 0,
       showingInfoTab: false,
     };
@@ -237,13 +237,13 @@ class HOCMilestoneOverview extends PureComponent {
     let title;
     let text;
     
-    if (group === 'Current') {
+    if (group === 'Now') {
       title = 'Add a new goal';
       text = 'Add new goals for everything that needs \n to be done to achieve this plan.';
     } else if (group === 'Later') {
       title = 'set for later (coming soon)';
       text = 'Move goals that need to be done later \n from this week into here.';
-    } else if (group === 'Completed') {
+    } else if (group === 'Done') {
       title = 'TRACK PROGRESS';
       text = 'You will see the progress of all completed \n goals here';
     }
@@ -257,9 +257,9 @@ class HOCMilestoneOverview extends PureComponent {
   }
   renderList() {
     const { tabs, tabIndex } = this.state;
-    const { groupedGoals } = this.props;
+    const { milestone, groupedGoals } = this.props;
     const tab = tabs[tabIndex];
-    const goalList = groupedGoals.get(tab);
+    const goalList = groupedGoals.get(tab.toLowerCase());
 
     if (!goalList.size) {
       return this.renderEmptyState(tab)
