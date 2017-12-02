@@ -668,9 +668,10 @@ const goalsMilestonesMiddlewares = valLocals('goalsMilestonesMiddlewares', {
     notificationsPushToQueue,
   ];
 
+  console.log(goal);
+
   setLocals({
     milestone_id: goal.milestone_id,
-    goal_id: goal.id,
     position: 0,
     milestonesMiddlewares,
   });

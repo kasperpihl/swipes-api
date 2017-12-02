@@ -78,6 +78,9 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
     messageGroupId,
   } = res.locals;
 
+  console.log(queueMessage);
+  console.log(messageGroupId);
+
   if (!queueMessage || !messageGroupId) {
     return next();
   }
