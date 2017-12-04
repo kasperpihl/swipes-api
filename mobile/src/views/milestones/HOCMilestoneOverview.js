@@ -46,8 +46,8 @@ class HOCMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Now', 'Later', 'Done'],
-      tabIndex: 0,
+      tabs: ['Later', 'Now', 'Done'],
+      tabIndex: 1,
       showingInfoTab: false,
     };
 
