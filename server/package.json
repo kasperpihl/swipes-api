@@ -1,11 +1,11 @@
 {
   "name": "SwipesAPI",
-  "version": "0.24.32",
+  "version": "0.24.38",
   "description": "Swipes REST API",
   "author": "Tihomir Valkanov <tihomir@swipesapp.com>",
   "dependencies": {
     "asana": "^0.15.0",
-    "aws-sdk": "^2.109.0",
+    "aws-sdk": "^2.162.0",
     "babel-plugin-transform-builtin-extend": "^1.1.0",
     "bluebird": "3.5.0",
     "body-parser": "1.x",

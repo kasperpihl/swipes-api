@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { setupDelegate } from 'react-delegate';
 import PropTypes from 'prop-types';
 
 import './styles/view-controller.scss';
@@ -10,10 +11,15 @@ class SWView extends Component {
     };
   }
   componentDidMount() {
-    const { initialScroll } = this.props;
+    const { initialScroll, scrollToBottom } = this.props;
 
     if (initialScroll > 0) {
       this.refs.scroller.scrollTop = initialScroll;
+    }
+
+    if (scrollToBottom) {
+      const scroller = this.refs.scroller;
+      scroller.scrollTop = scroller.scrollHeight;
     }
   }
   renderHeader() {

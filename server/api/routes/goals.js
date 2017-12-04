@@ -106,7 +106,12 @@ authed.all(
   (originalReq, originalRes, originalNext) => {
     const {
       milestonesMiddlewares,
+      milestone_id,
     } = originalRes.locals;
+
+    if (!milestone_id) {
+      return originalNext();
+    }
 
     const composer = new MiddlewareComposer(
       originalRes.locals,
@@ -138,7 +143,12 @@ authed.all(
   (originalReq, originalRes, originalNext) => {
     const {
       milestonesMiddlewares,
+      milestone_id,
     } = originalRes.locals;
+
+    if (!milestone_id) {
+      return originalNext();
+    }
 
     const composer = new MiddlewareComposer(
       originalRes.locals,

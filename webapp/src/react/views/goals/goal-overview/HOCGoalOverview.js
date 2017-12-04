@@ -16,11 +16,8 @@ import GoalOverview from './GoalOverview';
 /* global msgGen */
 
 class HOCGoalOverview extends PureComponent {
-  static minWidth() {
-    return 840;
-  }
-  static maxWidth() {
-    return 900;
+  static sizes() {
+    return [840, 900];
   }
   static fullscreen() {
     return false;

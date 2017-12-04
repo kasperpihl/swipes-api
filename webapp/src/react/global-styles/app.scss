@@ -26,6 +26,7 @@
   @include size(100%);
   @include flexContainer('column');
   overflow: hidden;
+  z-index: 1;
 
   &__app {
     @include size(100%);

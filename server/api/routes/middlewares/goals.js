@@ -670,7 +670,6 @@ const goalsMilestonesMiddlewares = valLocals('goalsMilestonesMiddlewares', {
 
   setLocals({
     milestone_id: goal.milestone_id,
-    goal_id: goal.id,
     position: 0,
     milestonesMiddlewares,
   });

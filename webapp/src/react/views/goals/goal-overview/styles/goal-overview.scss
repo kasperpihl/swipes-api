@@ -263,10 +263,18 @@
     transform: translateY(-42px) translateX(35%);
     transition: .15s ease;
     pointer-events: none;
+
+    @media screen and (max-width: 1100px) {
+      transform: translateY(40px) translateX(0px);
+    }
   }
 
   &__empty-arrow {
     padding-bottom: 30px;
+
+    @media screen and (max-width: 1100px) {
+      display: none;
+    }
   }
 
   &__empty-arrow-svg {
