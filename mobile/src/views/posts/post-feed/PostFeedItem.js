@@ -262,7 +262,7 @@ class PostFeed extends PureComponent {
     return (
       <View style={styles.messageWrapper}>
         <RippleButton onPress={this.handleOpenPost}>
-         <View>
+         <View style={{ flex: 1 }}>
           <ParsedText
             style={styles.message}
             parse={
