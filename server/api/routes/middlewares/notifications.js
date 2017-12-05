@@ -1,7 +1,7 @@
 import config from 'config';
 import request from 'request';
 import AWS from 'aws-sdk';
-import hash from 'object-hash';
+import randomstring from 'randomstring';
 import {
   string,
   object,
@@ -83,7 +83,6 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
   }
 
   const message = queueMessage;
-  const messageDeduplicationId = hash({ message });
 
   if (env !== 'dev') {
     AWS.config.update({ accessKeyId, secretAccessKey });
@@ -94,7 +93,11 @@ const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
       MessageBody: JSON.stringify(payload),
       QueueUrl: queueHost,
       MessageGroupId: messageGroupId,
-      MessageDeduplicationId: messageDeduplicationId,
+      // T
+      // That's a hack right now. We should review all the event and see which one are really for FIFO
+      // and which one are for regular queue and split them.
+      // Which one should be deduplicated and which one should not in interval of 5 minutes
+      MessageDeduplicationId: randomstring.generate(),
     };
 
     sqs.sendMessage(sqsParams, (err, data) => {

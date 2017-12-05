@@ -27,13 +27,15 @@ const camelCaseToUnderscore = (word) => {
 };
 const getClientIp = (req) => {
   const ip = req.headers['x-forwarded-for'] ?
-              req.headers['x-forwarded-for'].split(',')[0] :
-              req.connection.remoteAddress;
+    req.headers['x-forwarded-for'].split(',')[0] :
+    req.connection.remoteAddress;
 
   return ip;
 };
 
-const getSwipesLinkObj = ({ type, id, title, account_id }) => {
+const getSwipesLinkObj = ({
+  type, id, title, account_id,
+}) => {
   return {
     service: {
       id,
@@ -139,7 +141,7 @@ const setLocals = (name, res, next, state) => {
   return null;
 };
 
-const mapLocals = (handler) => (req, res, next) => {
+const mapLocals = handler => (req, res, next) => {
   // let's validate the params #inception! :D
   const error = valjs({ handler }, object.as({
     handler: func.require(),
