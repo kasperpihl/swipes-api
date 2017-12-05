@@ -261,8 +261,8 @@ class PostFeed extends PureComponent {
 
     return (
       <View style={styles.messageWrapper}>
-        <RippleButton onPress={this.handleOpenPost}>
-         <View style={{ flex: 1 }}>
+        <RippleButton onPress={this.handleOpenPost} style={{ flex: 1 }}>
+         <View style={{ flex: 1, alignSelf: 'stretch', ...gs.mixins.flex('row', 'left', 'center') }}>
           <ParsedText
             style={styles.message}
             parse={
