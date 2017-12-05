@@ -26,8 +26,8 @@ import * as gs from 'styles';
 
 const styles = StyleSheet.create({
   container: {
-    ...gs.mixins.size(viewSize.width, viewSize.height),
     ...gs.mixins.flex('row', 'center', 'top'),
+    flex: 1,
   },
   errorWrapper: {
     ...gs.mixins.padding(15, 30),
@@ -331,17 +331,31 @@ class Login extends PureComponent {
     )
   }
   render() {
-    const { version } = this.state;
+    const { version, keyboardOpen } = this.state;
+
+    let scrollViewWrapperStyles = {
+      flex: 1,
+    }
+
+    if (keyboardOpen) {
+      scrollViewWrapperStyles = {
+        ...gs.mixins.flex('column', 'left', 'center'),
+        flex: 1,
+      }
+    }
+
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {this.renderGradient()}
-          <View style={{flex: 1}}>
-            <ScrollView keyboardShouldPersistTaps="always">
-              {this.renderTitle()}
-              {this.renderForm()}
-              {this.renderButton()}
-              {this.renderResetPassword()}
+          <View style={{flex: 1 }}>
+            <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={scrollViewWrapperStyles}>
+              <View>
+                {this.renderTitle()}
+                {this.renderForm()}
+                {this.renderButton()}
+                {this.renderResetPassword()}
+              </View>
             </ScrollView>
             {this.renderErrorLabel()}
           </View>
