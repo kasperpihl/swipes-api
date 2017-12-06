@@ -59,13 +59,11 @@ class HOCModal extends PureComponent {
     const { showModal } = this.props;
     showModal();
   }
-  renderComponent(isOpen) {
-    if(!isOpen) {
+  renderComponent() {
+    const { modal } = this.props;
+    if(!modal) {
       return null;
     }
-
-    const { modal } = this.props;
-
     let Comp;
     if(modal && modal.component) {
       Comp = modal.component;
@@ -83,20 +81,18 @@ class HOCModal extends PureComponent {
     )
   }
   render() {
-    const { modal } = this.props;
-    const isOpen = !!modal;
-
-    if (!isOpen) return null;
-
+    const { modal } = this.props;
     return (
-      <View style={{
+      <View 
+        pointerEvents={modal ? 'auto' : 'none'}
+        style={{
         width: viewSize.width,
         height: viewSize.height,
         position: 'absolute',
         left: 0,
         top: 0,
       }}>
-        {this.renderComponent(isOpen)}
+        {this.renderComponent()}
         <KeyboardSpacer />
       </View>
     )
