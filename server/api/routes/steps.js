@@ -16,7 +16,7 @@ import {
   stepsDeleteQueueMessage,
 } from './middlewares/steps';
 import {
-  goalsAssignQueueMessage
+  goalsAssignQueueMessage,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -29,7 +29,8 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/steps.add',
+authed.all(
+  '/steps.add',
   valBody({
     goal_id: string.require(),
     step: object.as({
@@ -56,9 +57,11 @@ authed.all('/steps.add',
     }).require(),
     step_order: array.require(),
     completed_at: any,
-  }));
+  }),
+);
 
-authed.all('/steps.rename',
+authed.all(
+  '/steps.rename',
   valBody({
     goal_id: string.require(),
     step_id: string.require(),
@@ -71,9 +74,11 @@ authed.all('/steps.rename',
     goal_id: string.require(),
     step_id: string.require(),
     title: string.min(1).require(),
-  }));
+  }),
+);
 
-authed.all('/steps.delete',
+authed.all(
+  '/steps.delete',
   valBody({
     goal_id: string.require(),
     step_id: string.require(),
@@ -85,9 +90,11 @@ authed.all('/steps.delete',
     goal_id: string.require(),
     step_id: string.require(),
     completed_at: any,
-  }));
+  }),
+);
 
-authed.all('/steps.assign',
+authed.all(
+  '/steps.assign',
   valBody({
     goal_id: string.require(),
     step_id: string.require(),
@@ -101,7 +108,8 @@ authed.all('/steps.assign',
     step_id: string.require(),
     assignees: array.require(),
     goal_assignees: array.require(),
-  }));
+  }),
+);
 
 export {
   authed,

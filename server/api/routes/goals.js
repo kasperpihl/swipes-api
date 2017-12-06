@@ -177,6 +177,35 @@ authed.all(
   goalsCompleteStep,
   goalsCompleteStepQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  (originalReq, originalRes, originalNext) => {
+    const {
+      milestonesMiddlewares,
+      goal,
+    } = originalRes.locals;
+    const {
+      milestone_id,
+    } = goal;
+
+    if (!milestone_id || goal.completed_at === null) {
+      return originalNext();
+    }
+
+    originalRes.locals.milestone_id = milestone_id;
+
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...milestonesMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
   valResponseAndSend({
     goal: object.require(),
   }),
@@ -191,6 +220,35 @@ authed.all(
   goalsIncompleteStep,
   goalsIncompleteStepQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  (originalReq, originalRes, originalNext) => {
+    const {
+      milestonesMiddlewares,
+      goal,
+    } = originalRes.locals;
+    const {
+      milestone_id,
+    } = goal;
+
+    if (!milestone_id || goal.completed_at !== null) {
+      return originalNext();
+    }
+
+    originalRes.locals.milestone_id = milestone_id;
+
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...milestonesMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
   valResponseAndSend({
     goal: object.require(),
   }),

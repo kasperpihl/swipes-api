@@ -56,9 +56,9 @@ const dbMilestonesAddGoal = funcWrap([
       .get(milestone_id)
       .update({
         goal_order: {
-          now: r.row('goal_order')('now').default([]).difference(goal_id).insertAt(0, goal_id),
-          later: r.row('goal_order')('later').default([]).difference(goal_id),
-          done: r.row('goal_order')('done').default([]).difference(goal_id),
+          now: r.row('goal_order')('now').default([]).difference([goal_id]).insertAt(0, goal_id),
+          later: r.row('goal_order')('later').default([]).difference([goal_id]),
+          done: r.row('goal_order')('done').default([]).difference([goal_id]),
         },
         updated_at: r.now(),
       }, {
