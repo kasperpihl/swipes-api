@@ -350,13 +350,13 @@ class Login extends PureComponent {
           {this.renderGradient()}
           <View style={{flex: 1 }}>
             <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={scrollViewWrapperStyles}>
-              <View>
+              <View style={scrollViewWrapperStyles}>
                 {this.renderTitle()}
                 {this.renderForm()}
                 {this.renderButton()}
                 {this.renderResetPassword()}
+                {this.renderErrorLabel()}
               </View>
-              {this.renderErrorLabel()}
               {this.renderKeyboardSpacer()}
             </ScrollView>
           </View>
