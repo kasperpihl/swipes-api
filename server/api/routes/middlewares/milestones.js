@@ -277,17 +277,21 @@ const milestonesRenameQueueMessage = valLocals('milestonesRenameQueueMessage', {
 const milestonesAddGoal = valLocals('milestonesAddGoal', {
   goal_id: string.require(),
   milestone_id: string,
+  goal: object,
 }, (req, res, next, setLocals) => {
   const {
     goal_id,
     milestone_id,
+    goal,
   } = res.locals;
 
   if (!milestone_id) {
     return next();
   }
 
-  return dbMilestonesAddGoal({ goal_id, milestone_id })
+  const destination = goal.completed_at ? 'done' : 'now';
+
+  return dbMilestonesAddGoal({ goal_id, milestone_id, destination })
     .then((result) => {
       const changes = result.changes[0].new_val || result.changes[0].old_val;
 

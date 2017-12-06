@@ -45,8 +45,9 @@ const dbMilestonesAddGoal = funcWrap([
   object.as({
     goal_id: string.require(),
     milestone_id: string.require(),
+    destination: string.require(),
   }).require(),
-], (err, { goal_id, milestone_id }) => {
+], (err, { goal_id, milestone_id, destination }) => {
   if (err) {
     throw new SwipesError(`dbMilestonesAddGoal: ${err}`);
   }
@@ -54,13 +55,20 @@ const dbMilestonesAddGoal = funcWrap([
   const q =
     r.table('milestones')
       .get(milestone_id)
-      .update({
-        goal_order: {
-          now: r.row('goal_order')('now').default([]).difference([goal_id]).insertAt(0, goal_id),
-          later: r.row('goal_order')('later').default([]).difference([goal_id]),
-          done: r.row('goal_order')('done').default([]).difference([goal_id]),
-        },
-        updated_at: r.now(),
+      .update((milestone) => {
+        return milestone.merge({
+          goal_order: {
+            now: milestone('goal_order')('now').default([]).difference([goal_id]),
+            later: milestone('goal_order')('later').default([]).difference([goal_id]),
+            done: milestone('goal_order')('done').default([]).difference([goal_id]),
+          },
+          updated_at: r.now(),
+        }).merge({
+          goal_order: {
+            [destination]: milestone('goal_order')(destination).default([]).insertAt(0, goal_id),
+          },
+          updated_at: r.now(),
+        });
       }, {
         returnChanges: true,
       });
