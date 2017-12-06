@@ -64,7 +64,7 @@ class HOCGoalList extends PureComponent {
     if (title.length > 0) {
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {
         if (res && res.ok) {
-          console.warn('goal added')
+          // console.warn('goal added')
         }
       });
     }
@@ -160,8 +160,6 @@ class HOCGoalList extends PureComponent {
   }
   renderList() {
     const { goals } = this.props;
-
-    console.log(goals.toJS())
 
     if (goals.size === 1 && !goals.get('none').size) {
       return this.renderEmptyState();

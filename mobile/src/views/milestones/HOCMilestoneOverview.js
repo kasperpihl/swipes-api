@@ -169,7 +169,7 @@ class HOCMilestoneOverview extends PureComponent {
     }
   }
   onHeaderTap() {
-    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
+    this.refs.scrollView.listViewRef.scrollTo({x: 0, y: 0, animated: true})
   }
   openCreateGoalModal() {
     const { navPush, milestone } = this.props;

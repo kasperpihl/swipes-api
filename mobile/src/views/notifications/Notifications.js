@@ -25,12 +25,16 @@ class Notifications extends PureComponent {
     this.state = {};
 
     this.renderNotifications = this.renderNotifications.bind(this);
+    this.onHeaderTap = this.onHeaderTap.bind(this);
     setupDelegate(this, 'onMarkAll');
+  }
+  onHeaderTap() {
+    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
   }
   renderHeader() {
 
     return (
-      <HOCHeader title="Notifications">
+      <HOCHeader title="Notifications" delegate={this}>
         <RippleButton onPress={this.onMarkAll}>
           <View style={{ height: 44, paddingHorizontal: 6, alignItems: 'center', flexDirection: 'row' }}>
             <Text selectable={true} style={{ fontSize: 13, color: colors.deepBlue50 }}>Mark all as read</Text>
@@ -70,6 +74,7 @@ class Notifications extends PureComponent {
     return (
       <WaitForUI>
         <ImmutableVirtualizedList
+          ref="scrollView"
           style={styles.list}
           immutableData={notifications}
           renderRow={this.renderNotifications}
