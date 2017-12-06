@@ -202,9 +202,9 @@ const dbMilestonesDelete = funcWrap([
         returnChanges: 'always',
       }).do((result) => {
         return r.table('goals')
-          .getAll(r.args(result('changes').nth(0)('new_val')('goal_order')('now'))
-            .add(r.args(result('changes').nth(0)('new_val')('goal_order')('later')))
-            .add(r.args(result('changes').nth(0)('new_val')('goal_order')('done'))))
+          .getAll(r.args(result('changes').nth(0)('new_val')('goal_order')('now')
+            .add(result('changes').nth(0)('new_val')('goal_order')('later'))
+            .add(result('changes').nth(0)('new_val')('goal_order')('done'))))
           .update({
             archived: true,
             updated_at: r.now(),
