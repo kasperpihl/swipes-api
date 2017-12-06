@@ -89,9 +89,8 @@ class HOCLoginFlow extends PureComponent {
       keyboardType: 'email-address',
       onConfirmPress: (e, email) => {
         this.handleResetPassword(email);
-        this.setState({ modalOpen: false });
       },
-      onCancelPress: () => {
+      onClose: () => {
         this.setState({ modalOpen: false });
       }
     })

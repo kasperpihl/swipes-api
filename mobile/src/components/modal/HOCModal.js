@@ -9,7 +9,6 @@ import * as a from 'actions';
 import { bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-import Modal from 'react-native-modalbox';
 import { viewSize, statusbarHeight } from 'globalStyles';
 import * as gs from 'styles';
 
@@ -23,6 +22,8 @@ const styles = StyleSheet.create({
   },
   backDrop: {
     ...gs.mixins.size(viewSize.width, viewSize.height),
+    backgroundColor: gs.colors.deepBlue100,
+    opacity: .9,
     position: 'absolute',
     left: 0, top: 0
   }
@@ -31,11 +32,9 @@ const styles = StyleSheet.create({
 class HOCModal extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      blockNew: false,
-    };
 
-    bindAll(this, ['onClose', 'onDidClose', 'onClosingState']);
+
+    bindAll(this, ['onClose']);
     // setupLoading(this);
   }
   componentDidMount() {
@@ -45,29 +44,13 @@ class HOCModal extends PureComponent {
     const nextModal = nextProps.modal;
     if(modal && modal !== nextModal) {
       if(typeof modal.onDidClose === 'function') {
-        this._onDidCloseHandler = modal.onDidClose;
+        modal.onDidClose();
       }
-      this.setState({ blockNew: true });
     }
-  }
-  onClosingState(closing) {
-    this.closingState = closing;
   }
   onClose() {
     const { showModal } = this.props;
     showModal();
-  }
-  onDidClose() {
-    if(this.closingState) {
-      this.closingState = false;
-      this.onClose();
-    }
-    if(this._onDidCloseHandler) {
-      this._onDidCloseHandler();
-      this._onDidCloseHandler = null;
-    }
-    this.setState({ blockNew: false });
-
   }
   renderComponent(isOpen) {
     if(!isOpen) {
@@ -94,24 +77,22 @@ class HOCModal extends PureComponent {
   }
   render() {
     const { modal } = this.props;
-    const { blockNew } = this.state;
-    const isOpen = !blockNew && !!modal;
+    const isOpen = !!modal;
 
-    const modalProps = (!blockNew && modal && modal.modalProps) || {};
+    if (!isOpen) return null;
 
     return (
-      <Modal
-        backdropPressToClose={false}
-        isOpen={isOpen}
-        style={styles.modal}
-        onClosed={this.onDidClose}
-        onClosingState={this.onClosingState}
-        {...modalProps}
-      >
+      <View style={{
+        width: viewSize.width,
+        height: viewSize.height,
+        position: 'absolute',
+        left: 0,
+        top: 0,
+      }}>
         {this.renderComponent(isOpen)}
-        {Platform.OS === 'ios' && <KeyboardSpacer />}
-      </Modal>
-    );
+        <KeyboardSpacer />
+      </View>
+    )
   }
 }
 // const { string } = PropTypes;
