@@ -115,7 +115,7 @@ class HOCGoalOverview extends PureComponent {
 
   onHandoffMessage(handoff) {
     const helper = this.getHelper();
-    const assignees = helper.getAllAssigneesButMe();
+    const assignees = helper.getAssigneesButMe();
 
     this.onCreatePost({
       taggedUsers: assignees.toArray(),
@@ -139,7 +139,7 @@ class HOCGoalOverview extends PureComponent {
 
     if (handoff) {
       const helper = this.getHelper();
-      const taggedUsers = helper.getAllAssigneesButMe();
+      const taggedUsers = helper.getAssigneesButMe();
 
       this.onCreatePost({
         taggedUsers: taggedUsers.toArray(),

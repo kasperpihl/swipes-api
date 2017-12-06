@@ -35,7 +35,7 @@ class GoalOverview extends PureComponent {
     const myName = msgGen.users.getName(myId, { disableYou: true });
 
     let personString = 'the next person';
-    const assignees = helper.getAllAssignees();
+    const assignees = helper.getAssignees();
     if (assignees.size) {
       personString = (
         <b>“{msgGen.users.getNames(assignees, {
@@ -120,7 +120,7 @@ class GoalOverview extends PureComponent {
               title: goal.get('title'),
             }}
             relatedFilter={msgGen.goals.getRelatedFilter(goal)}
-            taggedUsers={helper.getAllAssigneesButMe().toArray()}
+            taggedUsers={helper.getAssigneesButMe().toArray()}
           />
           <HOCInfoButton
             delegate={delegate}
