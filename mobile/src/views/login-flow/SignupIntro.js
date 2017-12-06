@@ -88,12 +88,11 @@ class SignupIntro extends PureComponent {
             New to Swipes Workspace?
           </Text>
         </View>
-
         <Text style={styles.paragraph}>
-          This is the mobile companion to the desktop Swipes Workspace app. Get started with the new company account from there. 
+          This is the mobile companion of the desktop tool. Start with a new company account by registering online or via the app on your computer. 
         </Text>
         <Text style={[styles.paragraph, { marginTop: 21 }]}>
-          If your company already has an account, just ask the Account Admin to invite you.
+          If your company already has an account, just ask the Account Admin to invite you to the team
         </Text>
       </View>
     );

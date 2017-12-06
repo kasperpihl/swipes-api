@@ -21,7 +21,7 @@ export const assignedToMe = createSelector(
     const mId = g.get('milestone_id');
     if(!helper.getIsCompleted() && currentAssignees.find(uId => uId === userId)) {
       const order = milestones.getIn([mId, 'goal_order', 'now']);
-      if(order && order.find(gId => gId === g.get('id'))) {
+      if(!mId || (order && order.find(gId => gId === g.get('id')))) {
         return true;
       }
     }
