@@ -356,10 +356,10 @@ class Login extends PureComponent {
                 {this.renderButton()}
                 {this.renderResetPassword()}
               </View>
+              {this.renderErrorLabel()}
+              {this.renderKeyboardSpacer()}
             </ScrollView>
-            {this.renderErrorLabel()}
           </View>
-          {this.renderKeyboardSpacer()}
         </View>
       </TouchableWithoutFeedback>
     );
