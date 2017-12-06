@@ -138,7 +138,7 @@ class PostCreate extends PureComponent {
   onContentSizeChange(e) {
     const { inputHeight } = this.state;
 
-    if (inputHeight !== e.nativeEvent.contentSize.height) {
+    if (inputHeight !== e.nativeEvent.contentSize.height && e.nativeEvent.contentSize.height > 21) {
       this.setState({ inputHeight: e.nativeEvent.contentSize.height })
     }
   }

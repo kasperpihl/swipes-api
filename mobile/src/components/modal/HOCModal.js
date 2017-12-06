@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { TouchableWithoutFeedback, View, StyleSheet ,StatusBar, Platform } from 'react-native';
+import { TouchableWithoutFeedback, View, StyleSheet ,StatusBar, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
@@ -36,8 +36,15 @@ class HOCModal extends PureComponent {
 
     bindAll(this, ['onClose']);
     // setupLoading(this);
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
   }
   componentDidMount() {
+  }
+  componenetWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
   }
   componentWillReceiveProps(nextProps) {
     const { modal } = this.props;
