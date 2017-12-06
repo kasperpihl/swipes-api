@@ -17,6 +17,8 @@ import {
 } from './middlewares/steps';
 import {
   goalsAssignQueueMessage,
+  goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
 } from './middlewares/goals';
 import {
   notificationsPushToQueue,
@@ -43,6 +45,8 @@ authed.all(
   notificationsPushToQueue,
   goalsAssignQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
   valResponseAndSend({
     goal_id: string.require(),
     goal_assignees: array.require(),
@@ -86,6 +90,8 @@ authed.all(
   stepsDelete,
   stepsDeleteQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
   valResponseAndSend({
     goal_id: string.require(),
     step_id: string.require(),
