@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   Platform,
+  ActivityIndicator
 } from 'react-native';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import * as a from 'actions';
@@ -125,6 +126,7 @@ class HOCActionBar extends PureComponent {
       };
     }
 
+
     let renderedContent = (
       <Icon
         name={button.icon}
@@ -134,11 +136,17 @@ class HOCActionBar extends PureComponent {
       />
     );
 
-    if(button.number) {
+    if (button.number) {
       renderedContent = (
         <View style={styles.numberContainer}>
           <Text style={styles.numberLabel}>{button.number}</Text>
         </View>
+      )
+    }
+
+    if (button.icon === 'loading') {
+      renderedContent = (
+        <ActivityIndicator color={colors.blue100} size="small" />
       )
     }
 

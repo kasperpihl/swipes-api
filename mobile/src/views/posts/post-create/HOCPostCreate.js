@@ -39,6 +39,7 @@ class HOCPostCreate extends PureComponent {
       'onAddAttachment'
     ]);
 
+    setupLoading(this);
   }
   componentDidMount() {
     console.log('mount');
@@ -69,17 +70,26 @@ class HOCPostCreate extends PureComponent {
     } else if (i === 2) {
       this.onChooseAttachmentTypeToAdd();
     } else if (i === 3) {
-      createPost(convertObjToUnderscore(post.toJS())).then((res) => {
-        if (res.ok) {
-          window.analytics.sendEvent('Post created', {
-            'Type': post.get('type'),
-            'Tagged people': post.get('taggedUsers').size,
-            'Attachments': post.get('attachments').size,
-            'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
-          });
-          navPop();
-        }
-      })
+      if (this.isLoading('posting')) {
+
+      } else {
+        this.setLoading('posting');
+        this.renderActionButtons();
+        createPost(convertObjToUnderscore(post.toJS())).then((res) => {
+          this.clearLoading('posting');
+          this.renderActionButtons();
+          if (res.ok) {
+            window.analytics.sendEvent('Post created', {
+              'Type': post.get('type'),
+              'Tagged people': post.get('taggedUsers').size,
+              'Attachments': post.get('attachments').size,
+              'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
+            });
+            navPop();
+          }
+        })
+      }
+
     }
 
   }
@@ -187,11 +197,13 @@ class HOCPostCreate extends PureComponent {
     const { post } = this.state;
     const size = post.get('attachments').size;
 
+    const sendIcon = this.isLoading('posting') ? 'loading' : 'Send';
+
     actionButtons = [
       { icon: 'Assign' },
       { icon: this.getIconForType() },
       size ? { number: size } : { icon: 'Attachment' },
-      { icon: 'Send', seperator: 'left', staticSize: true },
+      { icon: sendIcon, seperator: 'left', staticSize: true },
     ];
 
     this.props.setActionButtons({
