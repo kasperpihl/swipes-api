@@ -165,7 +165,7 @@ class HOCMilestoneOverview extends PureComponent {
 
     if (title.length > 0) {
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {});
-      this.setState({ tabIndex: 0 });
+      this.setState({ tabIndex: 1 });
     }
   }
   onHeaderTap() {

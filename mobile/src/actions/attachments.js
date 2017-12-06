@@ -30,7 +30,6 @@ export const upload = (type, successCB, errCB) => (d, getState) => {
 
 
   if (type === 'url') {
-    console.log('got here')
     d(a.modals.prompt({
       title: 'Add URL',
       placeholder: 'https://',
