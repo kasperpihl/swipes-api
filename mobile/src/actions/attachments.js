@@ -11,9 +11,9 @@ import * as ca from 'swipes-core-js/actions';
 // ======================================================
 // Upload attacment
 // ======================================================
-export const upload = (successCB, errCB) => (d, getState) => {
+export const upload = (type, successCB, errCB) => (d, getState) => {
   const myId = getState().getIn(['me', 'id']);
-  
+
   const getSwipesLinkObj = (type, id, title) => ({
     service: {
       name: 'swipes',
@@ -28,56 +28,77 @@ export const upload = (successCB, errCB) => (d, getState) => {
     },
   });
 
-  const options = {
-    title: 'Attach image',
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
-  };
 
-  ImagePicker.showImagePicker(options, (response) => {
-
-    if (response.didCancel || response.error || response.customButton) {
-      if(errCB) {
-        errCB();
+  if (type === 'url') {
+    console.log('got here')
+    d(a.modals.prompt({
+      title: 'Add URL',
+      placeholder: 'https://',
+      keyboardType: 'url',
+      onConfirmPress: (e, url) => {
+        d(ca.links.create(getSwipesLinkObj(type, url, url))).then((res) => {
+          if (res.ok) {
+            const att = fromJS({ link: res.link, title: url });
+            if (successCB) successCB(att);
+          }
+        })
+      },
+      onClose: () => {
+        if (errCB()) errCB();
       }
-      return;
-    }
-
-    const type = mime.lookup(response.uri) || 'application/octet-stream';
-    const ext = mime.extension(type);
-    const name = response.fileName
-      || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
-    const file = {
-      name,
-      uri: response.uri,
-      type,
+    }))
+  } else if (type === 'image') {
+    const options = {
+      title: 'Attach image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
     };
 
-    d(a.main.loading('Uploading'));
+    ImagePicker.showImagePicker(options, (response) => {
 
-    d(ca.files.create([file])).then((fileRes) => {
-      if (fileRes.ok) {
-        const link = getSwipesLinkObj('file', fileRes.file.id, fileRes.file.title);
-
-        d(ca.links.create(link)).then((res) => {
-          d(a.main.loading());
-          if (res.ok) {
-            const att = fromJS({ link: res.link, title: fileRes.file.title });
-            if(successCB) successCB(att);
-
-          } else {
-            if(errCB) errCB(res.err);
-            console.warn('faled', res.err)
-          }
-            
-        })
-      } else {
-        d(a.main.loading());
+      if (response.didCancel || response.error || response.customButton) {
+        if(errCB) {
+          errCB();
+        }
+        return;
       }
+
+      const type = mime.lookup(response.uri) || 'application/octet-stream';
+      const ext = mime.extension(type);
+      const name = response.fileName
+        || `Photo ${moment().format('MMMM Do YYYY, h:mm:ss a')}.${ext}`;
+      const file = {
+        name,
+        uri: response.uri,
+        type,
+      };
+
+      d(a.main.loading('Uploading'));
+
+      d(ca.files.create([file])).then((fileRes) => {
+        if (fileRes.ok) {
+          const link = getSwipesLinkObj('file', fileRes.file.id, fileRes.file.title);
+
+          d(ca.links.create(link)).then((res) => {
+            d(a.main.loading());
+            if (res.ok) {
+              const att = fromJS({ link: res.link, title: fileRes.file.title });
+              if(successCB) successCB(att);
+
+            } else {
+              if(errCB) errCB(res.err);
+              console.warn('faled', res.err)
+            }
+              
+          })
+        } else {
+          d(a.main.loading());
+        }
+      });
     });
-  });
+  }
 }
 
 

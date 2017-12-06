@@ -29,7 +29,15 @@ class HOCPostCreate extends PureComponent {
       }),
     };
 
-    bindAll(this, ['onModalTag', 'onModalChangeType', 'onActionButton', 'onFocusTextarea', 'handleAttach']);
+    bindAll(this, [
+      'onModalTag',
+      'onModalChangeType',
+      'onActionButton',
+      'onFocusTextarea',
+      'handleAttach',
+      'onChooseAttachmentTypeToAdd',
+      'onAddAttachment'
+    ]);
 
   }
   componentDidMount() {
@@ -59,7 +67,7 @@ class HOCPostCreate extends PureComponent {
     } else if (i === 1) {
       this.onChangeType();
     } else if (i === 2) {
-      this.onAddAttachment();
+      this.onChooseAttachmentTypeToAdd();
     } else if (i === 3) {
       createPost(convertObjToUnderscore(post.toJS())).then((res) => {
         if (res.ok) {
@@ -124,23 +132,36 @@ class HOCPostCreate extends PureComponent {
 
     preview(post.getIn(['attachments', i]));
   }
-  onAddAttachment() {
-    const { navPush, uploadAttachment } = this.props;
+  onChooseAttachmentTypeToAdd() {
+    const { actionModal, navPush } = this.props;
     const { post } = this.state;
     const attachments = post.get('attachments');
 
-    if(!attachments.size) {
-      return uploadAttachment(this.handleAttach, this.onFocusTextarea);
+    if (attachments.size) {
+      navPush({
+        id: 'AttachmentView',
+        title: 'Attachment',
+        props: {
+          delegate: this,
+          initialAttachments: attachments
+        },
+      });
+    } else {
+      Keyboard.dismiss();
+      actionModal({
+        title: 'Add attachment',
+        onItemPress: this.onAddAttachment,
+        items: fromJS([
+          { id: 'url', title: 'Add a URL' },
+          { id: 'image', title: 'Upload an image' },
+        ]),
+      }, { onDidClose: this.onFocusTextarea });
     }
+  }
+  onAddAttachment(id) {
+    const { uploadAttachment } = this.props;
 
-    navPush({
-      id: 'AttachmentView',
-      title: 'Attachment',
-      props: {
-        delegate: this,
-        initialAttachments: attachments
-      },
-    });
+    uploadAttachment(id, this.handleAttach, this.onFocusTextarea);
   }
   handleAttach(att) {
     const { post } = this.state;
@@ -206,7 +227,9 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   createPost: ca.posts.create,
   uploadAttachment: a.attachments.upload,
+  createLink: ca.links.create,
   actionModal: a.modals.action,
   assignModal: a.modals.assign,
+  promptModal: a.modals.prompt,
   preview: a.attachments.preview,
 })(HOCPostCreate);

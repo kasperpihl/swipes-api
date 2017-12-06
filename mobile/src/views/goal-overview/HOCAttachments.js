@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
 import { attachmentIconForService, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
@@ -16,14 +17,27 @@ class HOCAttachments extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.onChooseAttachmentTypeToAdd = this.onChooseAttachmentTypeToAdd.bind(this);
     this.renderAttachment = this.renderAttachment.bind(this);
     this.onAddAttachment = this.onAddAttachment.bind(this);
     this.attachmentPress = setupCachedCallback(this.attachmentPress, this);
   }
-  onAddAttachment() {
+   onChooseAttachmentTypeToAdd() {
+    const { actionModal } = this.props;
+
+    actionModal({
+      title: 'Add attachment',
+      onItemPress: this.onAddAttachment,
+      items: fromJS([
+        { id: 'url', title: 'Add a URL' },
+        { id: 'image', title: 'Upload an image' },
+      ]),
+    });
+  }
+  onAddAttachment(id) {
     const { uploadAttachment, addAttachment, goal, showLoading } = this.props;
 
-    uploadAttachment((att) => {
+    uploadAttachment(id, (att) => {
       showLoading('Adding to goal');
       addAttachment(goal.get('id'), att.get('link').toJS()).then((res) => {
         showLoading();
@@ -82,7 +96,7 @@ class HOCAttachments extends PureComponent {
   renderFAB() {
     return (
       <View style={styles.fabWrapper}>
-        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.onAddAttachment}>
+        <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.onChooseAttachmentTypeToAdd}>
           <View style={styles.fabButton}>
             <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
           </View>
@@ -149,4 +163,5 @@ export default connect(mapStateToProps, {
   showLoading: a.main.loading,
   preview: a.attachments.preview,
   addAttachment: ca.attachments.add,
+  actionModal: a.modals.action,
 })(HOCAttachments);
