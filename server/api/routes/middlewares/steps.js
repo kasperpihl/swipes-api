@@ -37,13 +37,14 @@ const stepsAdd = valLocals('stepsAdd', {
   dbStepsAdd({ goal_id, step: mutatedStep })
     .then((results) => {
       const changes = results.changes[0];
-      const newVal = changes.new_val;
-      const oldVal = changes.old_val;
-      const newGoalAssignees = newVal.assignees;
-      const oldGoalAssignees = oldVal.assignees;
+      const newGoal = changes.new_val;
+      const oldGoal = changes.old_val;
+      const newGoalAssignees = newGoal.assignees;
+      const oldGoalAssignees = oldGoal.assignees;
       const diffAssignees = newGoalAssignees.filter(a => !oldGoalAssignees.find(b => b === a));
 
       setLocals({
+        goal: newGoal,
         goal_assignees: changes.new_val.assignees,
         step: changes.new_val.steps[mutatedStep.id],
         step_order: changes.new_val.step_order,
@@ -103,7 +104,9 @@ const stepsRename = valLocals('stepsRename', {
     title,
   } = res.locals;
 
-  dbStepsRename({ user_id, goal_id, step_id, title })
+  dbStepsRename({
+    user_id, goal_id, step_id, title,
+  })
     .then(() => {
       return next();
     })
@@ -154,6 +157,7 @@ const stepsDelete = valLocals('stepsDelete', {
       const changes = results.changes[0];
 
       setLocals({
+        goal: changes.new_val,
         completed_at: changes.new_val.completed_at,
       });
 
@@ -244,7 +248,9 @@ const stepsAssign = valLocals('stepsAssign', {
     assignees,
   } = res.locals;
 
-  dbStepsAssign({ user_id, goal_id, step_id, assignees })
+  dbStepsAssign({
+    user_id, goal_id, step_id, assignees,
+  })
     .then((result) => {
       const newVal = result.changes[0].new_val;
       const oldVal = result.changes[0].old_val;

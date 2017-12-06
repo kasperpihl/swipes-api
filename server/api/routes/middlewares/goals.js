@@ -22,6 +22,7 @@ import {
   dbGoalsAppendWayToGoal,
   dbGoalsAssign,
 } from './db_utils/goals';
+import MiddlewareComposer from '../middleware_composer';
 import {
   generateSlackLikeId,
   valLocals,
@@ -676,6 +677,32 @@ const goalsMilestonesMiddlewares = valLocals('goalsMilestonesMiddlewares', {
 
   return next();
 });
+const goalsMilestonesMiddlewaresRunComposer = valLocals('goalsMilestonesMiddlewaresRunComposer', {
+  milestonesMiddlewares: array.require(),
+  milestone_id: string,
+}, (originalReq, originalRes, originalNext, setLocals) => {
+  const {
+    milestonesMiddlewares,
+    milestone_id,
+  } = originalRes.locals;
+
+  if (!milestone_id) {
+    return originalNext();
+  }
+
+  const composer = new MiddlewareComposer(
+    originalRes.locals,
+    ...milestonesMiddlewares,
+    (req, res, next) => {
+      return originalNext();
+    },
+    (err, req, res, next) => {
+      return originalNext(err);
+    },
+  );
+
+  return composer.run();
+});
 
 export {
   goalsCreate,
@@ -701,4 +728,5 @@ export {
   goalsAssign,
   goalsAssignQueueMessage,
   goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
 };

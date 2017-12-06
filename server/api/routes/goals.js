@@ -29,6 +29,7 @@ import {
   goalsAssign,
   goalsAssignQueueMessage,
   goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
 } from './middlewares/goals';
 import {
   stepsReorder,
@@ -103,29 +104,7 @@ authed.all(
   goalsCompleteQueueMessage,
   notificationsPushToQueue,
   goalsMilestonesMiddlewares,
-  (originalReq, originalRes, originalNext) => {
-    const {
-      milestonesMiddlewares,
-      milestone_id,
-    } = originalRes.locals;
-
-    if (!milestone_id) {
-      return originalNext();
-    }
-
-    const composer = new MiddlewareComposer(
-      originalRes.locals,
-      ...milestonesMiddlewares,
-      (req, res, next) => {
-        return originalNext();
-      },
-      (err, req, res, next) => {
-        return originalNext(err);
-      },
-    );
-
-    return composer.run();
-  },
+  goalsMilestonesMiddlewaresRunComposer,
   valResponseAndSend({
     goal: object.require(),
   }),
@@ -140,29 +119,7 @@ authed.all(
   goalsIncompleteQueueMessage,
   notificationsPushToQueue,
   goalsMilestonesMiddlewares,
-  (originalReq, originalRes, originalNext) => {
-    const {
-      milestonesMiddlewares,
-      milestone_id,
-    } = originalRes.locals;
-
-    if (!milestone_id) {
-      return originalNext();
-    }
-
-    const composer = new MiddlewareComposer(
-      originalRes.locals,
-      ...milestonesMiddlewares,
-      (req, res, next) => {
-        return originalNext();
-      },
-      (err, req, res, next) => {
-        return originalNext(err);
-      },
-    );
-
-    return composer.run();
-  },
+  goalsMilestonesMiddlewaresRunComposer,
   valResponseAndSend({
     goal: object.require(),
   }),
