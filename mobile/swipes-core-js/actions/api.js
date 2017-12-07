@@ -85,7 +85,7 @@ export const request = (options, data) => (d, getState) => {
   return new Promise((resolve, reject) => {
     fetch(apiUrl + command, serData)
       .then((r) => {
-        if(r && r.url && !apiUrl.startWith('https://staging') && r.url.startsWith('https://staging')) {
+        if(r && r.url && !apiUrl.startsWith('https://staging') && r.url.startsWith('https://staging')) {
           redirectUrl = r.url;
         }
         if (r && r.ok) return r.json();
