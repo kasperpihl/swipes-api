@@ -81,16 +81,22 @@ export const request = (options, data) => (d, getState) => {
     headers,
     body,
   };
+  let redirectUrl;
   return new Promise((resolve, reject) => {
     fetch(apiUrl + command, serData)
       .then((r) => {
+        if(r && r.redirected) {
+          redirectUrl = r.url;
+        }
         if (r && r.ok) return r.json();
         return Promise.reject({ message: r.statusText, code: r.status });
       }).then((res) => {
         state = getState();
         handleUpdatesNeeded(res, state, d);
-
         if (res && res.ok) {
+          if(redirectUrl) {
+            res.redirectUrl = redirectUrl;
+          }
           d({
             type: command,
             payload: res,

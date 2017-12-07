@@ -89,6 +89,10 @@ export default class Socket {
       return this.fetchInit();
     }
 
+    if(this.forceConnectUrl) {
+      url = this.forceConnectUrl;
+      this.forceConnectUrl = null;
+    }
     let wsUrl = `${url.replace(/http(s)?/, 'ws$1')}/ws`;
     wsUrl = `${wsUrl}?token=${this.token}`;
 
@@ -113,6 +117,10 @@ export default class Socket {
   }
   fetchInit() {
     this.store.dispatch(a.me.init()).then((res) => {
+      if(res.redirectUrl) {
+        // The api was redirected. Connect to staging
+        this.forceConnectUrl = 'https://staging.swipesapp.com';
+      }
       this.isConnecting = false;
       this.isConnected = true;
       if (res && res.ok) {
