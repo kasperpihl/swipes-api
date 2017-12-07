@@ -78,7 +78,6 @@ class Notifications extends PureComponent {
           style={styles.list}
           immutableData={notifications}
           renderRow={this.renderNotifications}
-          onScroll={window.onScroll}
         />
       </WaitForUI>
     );

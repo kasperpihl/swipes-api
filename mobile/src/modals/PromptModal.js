@@ -88,7 +88,7 @@ class PromptModal extends PureComponent {
     const keyboardType = kT || 'default';
     let extraArgs = {};
 
-    if (keyboardType === 'email-address') {
+    if (keyboardType === 'email-address' || keyboardType === 'url') {
       extraArgs = {
         autoCapitalize: 'none',
         autoCorrect: false

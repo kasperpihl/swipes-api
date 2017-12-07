@@ -102,7 +102,6 @@ class PostFeed extends PureComponent {
           immutableData={renderPosts}
           renderRow={this.renderFeedItem}
           renderFooter={this.renderFooter}
-          onScroll={window.onScroll}
         />
       </WaitForUI>
     )
