@@ -316,6 +316,13 @@
 			remoteGlobalIDString = 2791E7F51BB3C10A00FD32EA;
 			remoteInfo = RCTBrowserTests;
 		};
+		A76261A91FD93C64002F5F79 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A453A189D8064ED0AB80D9B0 /* RNMixpanel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5EAEEA411F0555B100C6FED8;
+			remoteInfo = "RNMixpanel-tvOS";
+		};
 		A771E67D1EE077FB00A94F50 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE5D7F13F5F044E4BB64A325 /* CodePush.xcodeproj */;
@@ -730,6 +737,7 @@
 			isa = PBXGroup;
 			children = (
 				A73117721EF9EB2200660C92 /* libRNMixpanel.a */,
+				A76261AA1FD93C64002F5F79 /* libRNMixpanel-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1247,6 +1255,13 @@
 			fileType = wrapper.cfbundle;
 			path = RCTBrowserTests.xctest;
 			remoteRef = A73D8A0E1ED39E5C001E3840 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A76261AA1FD93C64002F5F79 /* libRNMixpanel-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNMixpanel-tvOS.a";
+			remoteRef = A76261A91FD93C64002F5F79 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A771E67E1EE077FB00A94F50 /* libCodePush.a */ = {
