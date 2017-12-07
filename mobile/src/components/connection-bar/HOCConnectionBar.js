@@ -63,12 +63,15 @@ class HOCConnectionBar extends PureComponent {
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   updateSecondsLeft(nextRetry) {
     nextRetry = nextRetry || this.props.nextRetry;
     const secUnrounded = this.secondsToTime(nextRetry) / 1000;
     const secRounded = parseInt(secUnrounded, 10);
     const remainder = Math.max(((secUnrounded - secRounded) * 1000) + 1, 10);
-    if (this.state.secondsLeft !== secRounded) {
+    if (!this.unmounted && this.state.secondsLeft !== secRounded) {
       this.setState({ secondsLeft: secRounded });
     }
     clearTimeout(this._retryTimer);

@@ -5,7 +5,6 @@ const initialState = fromJS({ server: {}});
 
 const handleNoteUpdate = (state, note) => {
   const id = note.get('id');
-  console.log(state.toJS(), note.toJS());
   if (!state.getIn(['server', id]) || state.getIn(['server', id, 'rev']) < note.get('rev')) {
     state = state.setIn(['server', id], note);
   }
