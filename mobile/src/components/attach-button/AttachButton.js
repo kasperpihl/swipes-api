@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 class AttachButton extends PureComponent {
   constructor(props) {
     super(props);
-    setupDelegate(this, 'onAddAttachment');
+    setupDelegate(this, 'onChooseAttachmentTypeToAdd');
   }
   renderIcon() {
     const { numberOfAttachments } = this.props;
@@ -44,7 +44,7 @@ class AttachButton extends PureComponent {
   }
   render() {
     return (
-      <TouchableOpacity onPress={this.onAddAttachment}>
+      <TouchableOpacity onPress={this.onChooseAttachmentTypeToAdd}>
         <View style={styles.attachmentContainer}>
           {this.renderIcon()}
         </View>

@@ -9,17 +9,24 @@ import {
 
 import './styles/check-list';
 
+class ChecklistWrapper extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <ul className="checklist-ul">
+        {this.props.children}
+      </ul>
+    );
+  }
+}
+
 export default class ChecklistBlock extends Component {
   static blockRenderMap() {
     return Map({
       checklist: {
         element: 'li',
-        wrapper: {
-          type: 'ul',
-          props: {
-            className: 'checklist-ul',
-          },
-        },
       },
     });
   }

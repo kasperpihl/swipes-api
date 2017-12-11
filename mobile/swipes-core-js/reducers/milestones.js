@@ -25,7 +25,7 @@ export default function milestonesReducer(state = initialState, action) {
     case 'milestone_renamed': {
       return state.setIn([payload.milestone_id, 'title'], payload.title);
     }
-    case 'milestones.goalsReorder': 
+    case 'milestones.goalsReorder':
     case 'milestone_goals_reordered':
     case 'goal_created':
     case 'goals.create':
@@ -36,7 +36,7 @@ export default function milestonesReducer(state = initialState, action) {
     case 'milestones.addGoal':
     case 'milestone_goal_added': {
       if (payload.old_milestone_id) {
-        state = state.updateIn([payload.old_milestone_id, 'goal_order'], order => order.filter(id => id !== payload.goal_id));
+        state = state.updateIn([payload.old_milestone_id, 'goal_order'], cat => cat.map(order => order.filter(id => id !== payload.goal_id)));
       }
       if (payload.milestone_id && payload.goal_order) {
         return state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));

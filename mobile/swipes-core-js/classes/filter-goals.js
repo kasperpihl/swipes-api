@@ -34,7 +34,7 @@ export default function filterGoal(goal, filter) {
   if (userId) {
     // Check all/completed goals for assignees filter
     if (!goalType || goalType === 'completed') {
-      const allInvolved = helper.getAllAssignees();
+      const allInvolved = helper.getAssignees();
       const hasUser = (allInvolved.indexOf(userId) > -1);
       if (userId !== 'none' && userId && !hasUser) {
         return false;

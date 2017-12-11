@@ -11,6 +11,7 @@ module.exports = {
   resolve: {
     modules: [ path.join(__dirname, 'node_modules') ],
     alias: {
+      // 'react-swiss': path.resolve(__dirname, '../../react-swiss/dist/es'),
       src: path.resolve(__dirname, 'src'),
       app: path.resolve(__dirname, 'src/react/app'),
       reducers: path.resolve(__dirname, 'src/reducers'),
@@ -26,7 +27,9 @@ module.exports = {
       Icon: path.resolve(__dirname, 'src/react/icons/Icon'),
       SWView: path.resolve(__dirname, 'src/react/app/view-controller/SWView'),
       Button: path.resolve(__dirname, 'src/react/components/button/Button'),
-      classes: path.resolve(__dirname, 'src/classes')
+      classes: path.resolve(__dirname, 'src/classes'),
+      swiss: path.resolve(__dirname, 'src/swiss'),
+      'swiss-components': path.resolve(__dirname, 'src/swiss/components'),
     },
     extensions: ['.js', '.scss']
   },
@@ -118,6 +121,19 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               outputStyle: 'expanded',
+            }
+          }
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'autoprefixer-loader',
+            options: {
+              browsers: '> 1%'
             }
           }
         ],

@@ -46,8 +46,8 @@ class HOCMilestoneOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Current', 'Later', 'Completed'],
-      tabIndex: 0,
+      tabs: ['Later', 'Now', 'Done'],
+      tabIndex: 1,
       showingInfoTab: false,
     };
 
@@ -165,11 +165,11 @@ class HOCMilestoneOverview extends PureComponent {
 
     if (title.length > 0) {
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {});
-      this.setState({ tabIndex: 0 });
+      this.setState({ tabIndex: 1 });
     }
   }
   onHeaderTap() {
-    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
+    this.refs.scrollView.listViewRef.scrollTo({x: 0, y: 0, animated: true})
   }
   openCreateGoalModal() {
     const { navPush, milestone } = this.props;
@@ -216,8 +216,7 @@ class HOCMilestoneOverview extends PureComponent {
         title={milestone.get('title')}
         currentTab={tabIndex}
         delegate={this}
-        tabs={tabs.map((t, i) => i === 0 ? 'This week' : t)}
-        icon="Milestones"
+        tabs={tabs}
       >
         <RippleButton onPress={this.openCreateGoalModal}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
@@ -237,13 +236,13 @@ class HOCMilestoneOverview extends PureComponent {
     let title;
     let text;
     
-    if (group === 'Current') {
+    if (group === 'Now') {
       title = 'Add a new goal';
       text = 'Add new goals for everything that needs \n to be done to achieve this plan.';
     } else if (group === 'Later') {
-      title = 'set for later (coming soon)';
+      title = 'set for later';
       text = 'Move goals that need to be done later \n from this week into here.';
-    } else if (group === 'Completed') {
+    } else if (group === 'Done') {
       title = 'TRACK PROGRESS';
       text = 'You will see the progress of all completed \n goals here';
     }
@@ -257,9 +256,9 @@ class HOCMilestoneOverview extends PureComponent {
   }
   renderList() {
     const { tabs, tabIndex } = this.state;
-    const { groupedGoals } = this.props;
+    const { milestone, groupedGoals } = this.props;
     const tab = tabs[tabIndex];
-    const goalList = groupedGoals.get(tab);
+    const goalList = groupedGoals.get(tab.toLowerCase());
 
     if (!goalList.size) {
       return this.renderEmptyState(tab)

@@ -261,16 +261,20 @@ class PostFeed extends PureComponent {
 
     return (
       <View style={styles.messageWrapper}>
-        <ParsedText
-          style={styles.message}
-          parse={
-            [
-              { type: 'url', style: styles.url, onPress: this.onOpenUrl },
-            ]
-          }
-        >
-          {message}
-        </ParsedText>
+        <RippleButton onPress={this.handleOpenPost} style={{ flex: 1 }}>
+         <View style={{ flex: 1, alignSelf: 'stretch', ...gs.mixins.flex('row', 'left', 'center') }}>
+          <ParsedText
+            style={styles.message}
+            parse={
+              [
+                { type: 'url', style: styles.url, onPress: this.onOpenUrl },
+              ]
+            }
+          >
+            {message}
+          </ParsedText>
+         </View> 
+        </RippleButton>
         <View style={styles.reactionWrapper}>
           <Reactions
             reactions={post.get('reactions')}
@@ -339,9 +343,9 @@ class PostFeed extends PureComponent {
           <View>
             {this.renderType()}
             {this.renderHeader()}
-            {this.renderMessage()}
           </View>
         </RippleButton>
+        {this.renderMessage()}
         {this.renderAttachments()}
         {this.renderActions()}
       </View>

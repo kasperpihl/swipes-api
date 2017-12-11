@@ -49,7 +49,6 @@ class HOCInfoButton extends PureComponent {
       delegate,
       ...rest,
     } = this.props;
-    console.log(rest);
 
     return (
       <Button

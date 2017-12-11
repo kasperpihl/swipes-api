@@ -16,11 +16,8 @@ import GoalOverview from './GoalOverview';
 /* global msgGen */
 
 class HOCGoalOverview extends PureComponent {
-  static minWidth() {
-    return 840;
-  }
-  static maxWidth() {
-    return 900;
+  static sizes() {
+    return [840, 900];
   }
   static fullscreen() {
     return false;
@@ -118,7 +115,7 @@ class HOCGoalOverview extends PureComponent {
 
   onHandoffMessage(handoff) {
     const helper = this.getHelper();
-    const assignees = helper.getAllAssigneesButMe();
+    const assignees = helper.getAssigneesButMe();
 
     this.onCreatePost({
       taggedUsers: assignees.toArray(),
@@ -142,7 +139,7 @@ class HOCGoalOverview extends PureComponent {
 
     if (handoff) {
       const helper = this.getHelper();
-      const taggedUsers = helper.getAllAssigneesButMe();
+      const taggedUsers = helper.getAssigneesButMe();
 
       this.onCreatePost({
         taggedUsers: taggedUsers.toArray(),

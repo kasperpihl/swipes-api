@@ -1,126 +1,11 @@
-@import '~styles/_vars.scss';
-@import '~styles/_mixins.scss';
 
-// ======================================================
-// Block
-// ======================================================
-
-.milestone-overview {
-  $b: &;
-  $flexIgnoreList: 'section:last-child';
-
-  @include size(100%, auto);
-  @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
-}
-
-// ======================================================
-// Sections
-// ======================================================
-
-.milestone-overview {
-
-  section {
-
-    &:first-child {
-      @include size(100%, auto);
-      padding-right: 60px;
-    }
-
-    &:last-child {
-      @include size(270px, auto);
-    }
-  }
-}
-
-// ======================================================
-// Progress
-// ======================================================
-
-.milestone-overview .milestone-progress {
-  $b: getElementSelectorInBlock(#{&}, '.milestone-overview');
-  margin-bottom: 30px;
-
-  @include size(100%, 212px);
-
-  #{$b}__subtitle {
-    @include size(100%, auto);
-    @include font(12px, $deepBlue-50, 15px);
-    margin-top: 6px;
-  }
-
-  #{$b}__inner {
-    @include size(54px);
-    @include centerAbsolute();
-    @include flexContainer('row', center, center);
-    background-color: $bg;
-    border-radius: 50%;
-  }
-
-  #{$b}__dot {
-    @include size(6px);
-    background-color: $deepBlue-100;
-    border-radius: 50%;
-    transition: .4s ease;
-    opacity: 0;
-    background-color: $tisho-green;
-  }
-
-  #{$b}__number {
-    @include size(54px);
-    @include flexContainer('row', center, center);
-    @include font(12px, $deepBlue-100, 15px, 300);
-    background-color: $bg;
-    border-radius: 50%;
-    left: calc(50% - (54px / 2)); top: calc(50% - (54px / 2));
-    opacity: 1;
-    position: absolute;
-    transform: scale(2);
-    transition: .4s ease;
-    z-index: 3;
-  }
-
-  #{$b}__svg {
-    @include size(150px);
-    @include centerAbsolute($addToTransform: rotateY(180deg));
-    transition: .5s ease;
-
-    path {
-      stroke-miterlimit: 10;
-      stroke-width: 48px;
-      transition: .4s ease;
-    }
-
-    &--bg {
-      @include svg-color($deepBlue-5);
-
-      path {
-        stroke-width: 48px;
-        transition: .4s ease;
-      }
-    }
-
-    &--fg {
-      @include svg-color($tisho-green);
-      stroke-dasharray: 320.4876403808594;
-
-      path {
-        stroke-width: 48px;
-        transition: .4s ease;
-      }
-    }
-
-    &--closed {
-      @include svg-color($deepBlue-30);
-    }
-  }
-}
 
 
 // ======================================================
 // Empty states
 // ======================================================
 
-.milestone-overview {
+/* .milestone-overview {
 
   &__empty-state {
     @include size(100%, auto);
@@ -163,4 +48,4 @@
     text-align: center; 
     pointer-events: all;
   }
-}
+} */

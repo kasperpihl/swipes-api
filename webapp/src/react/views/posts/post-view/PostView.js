@@ -193,6 +193,7 @@ class PostView extends PureComponent {
       <SWView
         noframe
         disableScroll={fromFeed}
+        scrollToBottom={!fromFeed}
       >
 
         {this.renderHeader()}

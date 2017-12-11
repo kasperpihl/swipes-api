@@ -9,9 +9,15 @@ import * as ca from 'swipes-core-js/actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import FlexWrapper from 'swiss-components/FlexWrapper';
+import Flex from 'swiss-components/Flex';
+import Wrapper from 'swiss-components/Wrapper';
 
-import './styles/goal-list-item.scss';
 /* global msgGen */
+
+import GoalItem from './styles/GoalItem.swiss';
+import GoalTitle from './styles/GoalTitle.swiss';
+import StatusDot from './styles/StatusDot.swiss';
 
 class HOCGoalListItem extends PureComponent {
   constructor(props) {
@@ -22,7 +28,7 @@ class HOCGoalListItem extends PureComponent {
   }
   onAssign(i, e) {
     const options = this.getOptionsForE(e);
-    const { selectAssignees, assignGoal, goal } = this.props;
+    const { selectAssignees, assignGoal, goal, inTakeAction } = this.props;
 
     let overrideAssignees;
     options.onClose = () => {
@@ -46,6 +52,8 @@ class HOCGoalListItem extends PureComponent {
   onClick(e) {
     const selection = window.getSelection();
 
+    console.log('hi mofo')
+
     if (selection.toString().length === 0) {
       this.onGoalClick(e);
     }
@@ -61,10 +69,15 @@ class HOCGoalListItem extends PureComponent {
     };
   }
   renderAssignees() {
-    const { goal } = this.props;
+    const { goal, inTakeAction } = this.props;
+    let { status } = this.props;
     const helper = this.getHelper();
 
-    if (helper.getIsCompleted()) {
+    if (!status) {
+      status = helper.getIsCompleted() ? 'Done' : 'Now';
+    }
+
+    if (status === 'Done' || inTakeAction) {
       return undefined;
     }
 
@@ -74,51 +87,32 @@ class HOCGoalListItem extends PureComponent {
         maxImages={1}
         delegate={this}
         rounded
-        size={30}
+        size={26}
       />
     );
   }
-  renderMoveButton() {
-    const { fromMilestone } = this.props;
-
-    if (!fromMilestone) {
-      return undefined;
-    }
-
-    return (
-      <div className="goal-list-item__move">
-        <Icon className="goal-list-item__move-svg" icon="ArrowRightLine" />
-      </div>
-    )
-  }
   render() {
-    const { goal, fromMilestone, loading } = this.props;
-    const helper = this.getHelper();
-    const isActive = !helper.getIsCompleted();
+    const { goal, fromMilestone, loading, inTakeAction } = this.props;
+    let { status } = this.props;
 
-    let className = 'goal-list-item';
-
-    if (!isActive) {
-      className += ' goal-list-item--completed';
-    }
-
-    if (fromMilestone && true) { // Needs a check if is in later already
-      className += ' goal-list-item--move-to-later'
+    if(!status) {
+      const helper = this.getHelper();
+      status = helper.getIsCompleted() ? 'Done' : 'Now'
     }
 
     return (
-      <div className={className}>
-        <div className="goal-list-item__content" onClick={this.onClick}>
-          <div className="goal-list-item__circle">
-            <Icon className="goal-list-item__completed-svg" icon="ChecklistCheckmark" />
-          </div>
-          <div className="goal-list-item__title">{loading || goal.get('title')}</div>
-        </div>
-        {/* {this.renderMoveButton()} */}
-        <div className="goal-list-item__assigning">
-          {this.renderAssignees()}
-        </div>
-      </div>
+      <GoalItem expand={FlexWrapper} vertical="center" onClick={this.onGoalClick}>
+        <StatusDot expand={Flex} status={status} flexNone />
+        <GoalTitle
+          inTakeAction={inTakeAction}
+          expand={Wrapper}
+          status={status}
+          hoverRef={GoalItem.ref}
+        >
+          {loading || goal.get('title')}
+        </GoalTitle>
+        {this.renderAssignees()}
+      </GoalItem>
     );
   }
 }

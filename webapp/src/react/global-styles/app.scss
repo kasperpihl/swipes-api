@@ -12,6 +12,11 @@
   @include flex(flex);
 }
 
+#draggable {
+  @include size(100%);
+  position: absolute;
+  pointer-events: none;
+}
 #app {
   @include size(100%);
   @include flex(column);
@@ -21,6 +26,7 @@
   @include size(100%);
   @include flexContainer('column');
   overflow: hidden;
+  z-index: 1;
 
   &__app {
     @include size(100%);

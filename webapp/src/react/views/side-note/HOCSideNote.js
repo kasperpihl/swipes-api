@@ -30,6 +30,9 @@ const maxWidth = 820;
 /* global msgGen */
 
 class HOCSideNote extends PureComponent {
+  static sizes() {
+    return [600, 900];
+  }
   static maxWidth() {
     return maxWidth;
   }

@@ -5,6 +5,13 @@ import {
   array,
 } from 'valjs';
 import {
+  milestonesGoalsReorder,
+  milestonesGoalsReorderQueueMessage,
+} from './milestones';
+import {
+  notificationsPushToQueue,
+} from './notifications';
+import {
   dbGoalsInsertSingle,
   dbGoalsUpdateSingle,
   dbGoalsGetSingle,
@@ -15,6 +22,7 @@ import {
   dbGoalsAppendWayToGoal,
   dbGoalsAssign,
 } from './db_utils/goals';
+import MiddlewareComposer from '../middleware_composer';
 import {
   generateSlackLikeId,
   valLocals,
@@ -147,19 +155,19 @@ const goalsCompleteStep = valLocals('goalsCompleteStep', {
     user_id,
     type,
   })
-  .then((results) => {
-    const changes = results.changes[0].new_val || results.changes[0].old_val;
+    .then((results) => {
+      const changes = results.changes[0].new_val || results.changes[0].old_val;
 
-    setLocals({
-      goal: changes,
-      type,
+      setLocals({
+        goal: changes,
+        type,
+      });
+
+      return next();
+    })
+    .catch((error) => {
+      return next(error);
     });
-
-    return next();
-  })
-  .catch((error) => {
-    return next(error);
-  });
 });
 const goalsIncompleteStep = valLocals('goalsIncompleteStep', {
   goal_id: string.require(),
@@ -179,19 +187,19 @@ const goalsIncompleteStep = valLocals('goalsIncompleteStep', {
     user_id,
     type,
   })
-  .then((results) => {
-    const changes = results.changes[0].new_val || results.changes[0].old_val;
+    .then((results) => {
+      const changes = results.changes[0].new_val || results.changes[0].old_val;
 
-    setLocals({
-      goal: changes,
-      type,
+      setLocals({
+        goal: changes,
+        type,
+      });
+
+      return next();
+    })
+    .catch((error) => {
+      return next(error);
     });
-
-    return next();
-  })
-  .catch((error) => {
-    return next(error);
-  });
 });
 const goalsInsert = valLocals('goalsInsert', {
   goal: object.require(),
@@ -317,7 +325,7 @@ const goalsGetSingle = valLocals('goalsGetSingle', {
 const goalsCreateQueueMessage = valLocals('goalsCreateQueueMessage', {
   user_id: string.require(),
   goal: object.require(),
-  goal_order: array,
+  goal_order: object,
   milestone_id: string,
 }, (req, res, next, setLocals) => {
   const {
@@ -347,7 +355,7 @@ const goalsArchiveQueueMessage = valLocals('goalsArchiveQueueMessage', {
   goal_id: string.require(),
   eventType: string.require(),
   milestone_id: string,
-  goal_order: array,
+  goal_order: object,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -534,7 +542,9 @@ const goalsAppendWayToGoal = valLocals('goalsAppendWayToGoal', {
     assignees,
   } = goal;
 
-  dbGoalsAppendWayToGoal({ goal_id, steps, step_order, attachments, attachment_order, assignees })
+  dbGoalsAppendWayToGoal({
+    goal_id, steps, step_order, attachments, attachment_order, assignees,
+  })
     .then((results) => {
       const changes = results.changes[0];
       const goal = changes.new_val || changes.old_val;
@@ -616,7 +626,7 @@ const goalsAssignQueueMessage = valLocals('goalsAssignQueueMessage', {
     assignees,
     goal_assignees,
   } = res.locals;
-  const checkedAssignees = goal_assignees || assignees ||  [];
+  const checkedAssignees = goal_assignees || assignees || [];
   const event_type = 'goal_assigned';
   const queueMessage = {
     user_id,
@@ -633,6 +643,65 @@ const goalsAssignQueueMessage = valLocals('goalsAssignQueueMessage', {
   });
 
   return next();
+});
+const goalsMilestonesMiddlewares = valLocals('goalsMilestonesMiddlewares', {
+  goal: object.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    goal,
+  } = res.locals;
+
+  let milestonesMiddlewares = [];
+
+  if (goal.completed_at) {
+    setLocals({
+      destination: 'done',
+    });
+  } else {
+    setLocals({
+      destination: 'now',
+    });
+  }
+
+  milestonesMiddlewares = [
+    milestonesGoalsReorder,
+    milestonesGoalsReorderQueueMessage,
+    notificationsPushToQueue,
+  ];
+
+  setLocals({
+    milestone_id: goal.milestone_id,
+    position: 0,
+    milestonesMiddlewares,
+  });
+
+  return next();
+});
+const goalsMilestonesMiddlewaresRunComposer = valLocals('goalsMilestonesMiddlewaresRunComposer', {
+  milestonesMiddlewares: array.require(),
+  milestone_id: string,
+}, (originalReq, originalRes, originalNext, setLocals) => {
+  const {
+    milestonesMiddlewares,
+    milestone_id,
+  } = originalRes.locals;
+
+  if (!milestone_id) {
+    return originalNext();
+  }
+
+  const composer = new MiddlewareComposer(
+    originalRes.locals,
+    ...milestonesMiddlewares,
+    (req, res, next) => {
+      return originalNext();
+    },
+    (err, req, res, next) => {
+      return originalNext(err);
+    },
+  );
+
+  return composer.run();
 });
 
 export {
@@ -658,4 +727,6 @@ export {
   goalsIncompleteQueueMessage,
   goalsAssign,
   goalsAssignQueueMessage,
+  goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
 };

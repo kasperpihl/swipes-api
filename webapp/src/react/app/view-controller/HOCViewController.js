@@ -13,16 +13,15 @@ import './styles/view-controller';
 import HOCModal from './HOCModal';
 import prefixAll from 'inline-style-prefixer/static';
 
-const DEFAULT_MIN_WIDTH = 500;
 const DEFAULT_MAX_WIDTH = 800;
-const SPACING = 20;
-const OVERLAY_LEFT_MIN = 120;
+const SPACING = 15;
+const OVERLAY_LEFT_MIN = 90;
 
 class HOCViewController extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      width: 0,
+      appWidth: 1200,
       onTop: 'secondary',
       fullscreen: null,
     };
@@ -33,12 +32,12 @@ class HOCViewController extends PureComponent {
     this.onSaveState = setupCachedCallback(props.saveState, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
     this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
-    bindAll(this, ['onClose', 'updateWidth', 'onToggleLock']);
-    this.bouncedUpdate = debounce(this.updateWidth, 50);
+    bindAll(this, ['onClose', 'updateAppWidth', 'onToggleLock']);
+    this.bouncedUpdateAppWidth = debounce(this.updateAppWidth, 50);
   }
   componentDidMount() {
-    this.updateWidth();
-    window.addEventListener('resize', this.bouncedUpdate);
+    this.updateAppWidth();
+    window.addEventListener('resize', this.bouncedUpdateAppWidth);
   }
   componentWillReceiveProps(nextProps) {
     const nav = this.props.navigation;
@@ -79,120 +78,103 @@ class HOCViewController extends PureComponent {
     const { toggleLock } = this.props;
     toggleLock();
   }
-  getMinMaxForView(View) {
-    const minMax = [DEFAULT_MIN_WIDTH, DEFAULT_MAX_WIDTH];
-    if (typeof View.minWidth === 'function') {
-      minMax[0] = View.minWidth();
+  getSizeForView(View, hasTwoViews) {
+    
+    if(typeof View === 'undefined') {
+      return 0;
     }
-    if (typeof View.maxWidth === 'function') {
-      minMax[1] = View.maxWidth();
+
+    const { appWidth } = this.state;
+    const spacing = hasTwoViews ? OVERLAY_LEFT_MIN : SPACING;
+
+    if(typeof View.sizes === 'function') {
+      const sizes = View.sizes();
+
+      for(let i = sizes.length - 1 ; i >= 0 ; i--) {
+        const size = sizes[i];
+        if((appWidth - spacing - size) >= 0) {
+          return size;
+        }
+      }
     }
-    minMax.push(minMax[1] - minMax[0]);
-    return minMax;
+
+    let maxWidth = DEFAULT_MAX_WIDTH;
+    if(typeof View.maxWidth === 'function') {
+      maxWidth = View.maxWidth();
+    }
+    return Math.min(maxWidth, appWidth - spacing);
   }
   getRemainingSpace(sizes) {
-    let { width } = this.state;
-    width = width || 1200;
-    let spacing = SPACING;
-    if (sizes[1] > 0) {
-      spacing += SPACING;
-    }
-    return width - spacing - sizes.reduce((c, b) => c + b);
+    const { appWidth } = this.state;
+    return appWidth - SPACING - sizes.reduce((c, b) => c + b);
   }
 
-  updateWidth() {
+  updateAppWidth() {
     if (!this._unmounted) {
-      this.setState({ width: this.refs.controller.clientWidth });
+      this.setState({ appWidth: this.refs.controller.clientWidth });
     }
-  }
-  determineSizesForWidths(pMinMax, sMinMax) {
-    if (!sMinMax) {
-      sMinMax = [0, 0, 0];
-    }
-    const { width } = this.state;
-
-    const sizes = [pMinMax[0], sMinMax[0]];
-    let remaining = this.getRemainingSpace(sizes);
-    if (remaining > 0) {
-      const pDiff = pMinMax[2]; // 200
-      const sDiff = sMinMax[2]; // 600
-      const diff = pDiff - sDiff;
-      if (diff < 0) {
-        sizes[1] += Math.min(remaining, Math.abs(diff));
-      } else if (diff > 0) {
-        sizes[0] += Math.min(remaining, diff);
-      }
-      remaining = this.getRemainingSpace(sizes);
-      const equalSplit = Math.min(pDiff, sDiff);
-      if (remaining > 0 && equalSplit > 0) {
-        const toAdd = Math.min(remaining / 2, equalSplit);
-        sizes[0] += toAdd;
-        sizes[1] += toAdd;
-      }
-    }
-    if (remaining < 0) {
-      sizes[0] = Math.min((width - OVERLAY_LEFT_MIN - SPACING), pMinMax[1]);
-      sizes[1] = Math.min((width - OVERLAY_LEFT_MIN - SPACING), sMinMax[1]);
-    }
-    return sizes;
   }
   renderViewControllers() {
     const { navigation } = this.props;
-    const { width, onTop, fullscreen } = this.state;
+    const { appWidth, onTop, fullscreen } = this.state;
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
-    const pSize = navigation.getIn(['primary', 'stack']).size;
     const PView = views[(pView && pView.get('id'))] || views.NotFound;
-    const pMinMax = this.getMinMaxForView(PView);
 
     // Secondary view
     const sView = navigation.getIn(['secondary', 'stack']).last();
-    const sSize = navigation.getIn(['secondary', 'stack']).size;
     const SView = sView ? (views[sView.get('id')] || views.NotFound) : undefined;
-    const sMinMax = sView ? this.getMinMaxForView(SView) : 0;
 
-    const sizes = this.determineSizesForWidths(pMinMax, sMinMax);
+    const hasTwo = !!SView;
+    const sizes = [this.getSizeForView(PView, hasTwo), this.getSizeForView(SView, hasTwo)];
 
     const remainingSpace = this.getRemainingSpace(sizes);
     const isOverlay = (SView && (remainingSpace < 0));
 
     let runningX = isOverlay ? 0 : remainingSpace / 2;
     return [pView, sView].map((currentView, i) => {
-      const target = (i === 0) ? 'primary' : 'secondary';
-      const xClass = [];
-      const w = sizes[i];
-      const style = {
-        width: `${w}px`,
-        transform: `translate3d(${parseInt(runningX, 10)}px, 0px, 0px)`,
-        zIndex: 2 - i,
+
+      const width = sizes[i];
+      const options = {
+        view: currentView,
+        target: (i === 0) ? 'primary' : 'secondary',
+        classes: [],
+        width,
+        styles: {
+          width: `${width}px`,
+          transform: `translate3d(${parseInt(runningX, 10)}px, 0px, 0px)`,
+          zIndex: 2 - i,
+        }
       };
-      runningX += (w + SPACING);
+
+      runningX += (width + SPACING);
+
       if (isOverlay) {
         let top = 0;
         let left = 0;
-        if (target === onTop) {
-          style.zIndex = 3;
-          xClass.push('view-container--overlay');
+        if (options.target === onTop) {
+          options.styles.zIndex = 3;
+          options.classes.push('view-container--overlay');
         } else {
-          xClass.push('view-container--underlay');
+          options.classes.push('view-container--underlay');
           top = 20;
         }
-        if (target === 'secondary') {
-          left = width - w - SPACING;
+        if (options.target === 'secondary') {
+          left = appWidth - width - SPACING;
         }
-        style.transform = `translate3d(${parseInt(left, 10)}px, ${top}px, 0px)`;
+        options.styles.transform = `translate3d(${parseInt(left, 10)}px, ${top}px, 0px)`;
       }
       if (fullscreen) {
-        if (fullscreen === target) {
-          xClass.push('view-container--fullscreen');
-          style.zIndex = 4;
+        if (fullscreen === options.target) {
+          options.classes.push('view-container--fullscreen');
+          options.styles.zIndex = 4;
         } else {
-          xClass.push('view-container--not-fullscreen');
+          options.classes.push('view-container--not-fullscreen');
         }
       }
 
-      return currentView ? this.renderContent(currentView, target, style, xClass) : undefined;
+      return this.renderContent(options);
     });
   }
   renderCardHeader(target, canFullscreen) {
@@ -242,15 +224,21 @@ class HOCViewController extends PureComponent {
       </div>
     );
   }
-  renderContent(currentView, target, style, xClasses) {
-    const { navigation } = this.props;
-    const View = views[currentView.get('id')] || views.NotFound;
-    let props = {};
-    if (currentView.get('props')) {
-      props = currentView.get('props').toObject();
+  renderContent(options) {
+    if(!options.view) {
+      return undefined;
     }
 
-    const className = ['view-container', `view-container--${target}`].concat(xClasses).join(' ');
+    const { navigation } = this.props;
+
+    const { target, classes } = options;
+    const View = views[options.view.get('id')] || views.NotFound;
+    let props = {};
+    if (options.view.get('props')) {
+      props = options.view.get('props').toObject();
+    }
+
+    const className = ['view-container', `view-container--${target}`].concat(classes).join(' ');
 
     let canFullscreen = false;
     if (typeof View.fullscreen === 'function') {
@@ -258,13 +246,14 @@ class HOCViewController extends PureComponent {
     }
 
     let onClick;
-    if (xClasses.indexOf('view-container--underlay') !== -1) {
+    if (classes.indexOf('view-container--underlay') !== -1) {
       onClick = this.onUnderlayCached(target);
     }
     return (
       <ContextWrapper
         target={target}
         key={target}
+        viewWidth={options.width}
         navPop={this.onPopCached(target)}
         navPush={this.onPushCached(target)}
         saveState={this.onSaveState(target)}
@@ -274,7 +263,7 @@ class HOCViewController extends PureComponent {
       >
         <section
           className={className}
-          style={prefixAll(style)}
+          style={prefixAll(options.styles)}
           onClick={onClick}
         >
           {this.renderCardHeader(target, canFullscreen)}

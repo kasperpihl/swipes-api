@@ -19,6 +19,8 @@
 
   &__timestamp {
     @include font(12px, $deepBlue-40, 18px);
+    flex: none;
+    white-space: nowrap;
   }
 
   &__title {
@@ -35,8 +37,7 @@
     @include flexContainer('column', left, center);
     border-radius: 3px;
     padding: 3px 12px;
-    padding-left: 15px;
-    margin-left: 1px;
+    margin-left: 6px;
 
     &--green {
       background-color: #1cc05d;
@@ -68,7 +69,7 @@
   }
 
   &__subtitle {
-    @include flexContainer('row', left, center);
+    @include flexContainer('row', left, top);
     @include font(12px, $deepBlue-50, 18px, 500);
 
     #{$b}__span-link {
@@ -92,7 +93,8 @@
   &__svg {
     @include size(12px);
     @include svg-color($deepBlue-40);
+    flex: none;
     margin-right: 6px;
-    transform: translateY(-1px);
+    transform: translateY(3px);
   }
 }

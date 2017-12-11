@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { TouchableWithoutFeedback, View, StyleSheet ,StatusBar, Platform } from 'react-native';
+import { TouchableWithoutFeedback, View, StyleSheet ,StatusBar, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 // import * as ca from 'swipes-core-js/actions';
@@ -9,7 +9,6 @@ import * as a from 'actions';
 import { bindAll } from 'swipes-core-js/classes/utils';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-import Modal from 'react-native-modalbox';
 import { viewSize, statusbarHeight } from 'globalStyles';
 import * as gs from 'styles';
 
@@ -23,6 +22,8 @@ const styles = StyleSheet.create({
   },
   backDrop: {
     ...gs.mixins.size(viewSize.width, viewSize.height),
+    backgroundColor: gs.colors.deepBlue100,
+    opacity: .9,
     position: 'absolute',
     left: 0, top: 0
   }
@@ -31,51 +32,38 @@ const styles = StyleSheet.create({
 class HOCModal extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      blockNew: false,
-    };
 
-    bindAll(this, ['onClose', 'onDidClose', 'onClosingState']);
+
+    bindAll(this, ['onClose']);
     // setupLoading(this);
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
   }
   componentDidMount() {
+  }
+  componenetWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
   }
   componentWillReceiveProps(nextProps) {
     const { modal } = this.props;
     const nextModal = nextProps.modal;
     if(modal && modal !== nextModal) {
       if(typeof modal.onDidClose === 'function') {
-        this._onDidCloseHandler = modal.onDidClose;
+        modal.onDidClose();
       }
-      this.setState({ blockNew: true });
     }
-  }
-  onClosingState(closing) {
-    this.closingState = closing;
   }
   onClose() {
     const { showModal } = this.props;
     showModal();
   }
-  onDidClose() {
-    if(this.closingState) {
-      this.closingState = false;
-      this.onClose();
-    }
-    if(this._onDidCloseHandler) {
-      this._onDidCloseHandler();
-      this._onDidCloseHandler = null;
-    }
-    this.setState({ blockNew: false });
-
-  }
-  renderComponent(isOpen) {
-    if(!isOpen) {
+  renderComponent() {
+    const { modal } = this.props;
+    if(!modal) {
       return null;
     }
-
-    const { modal } = this.props;
-
     let Comp;
     if(modal && modal.component) {
       Comp = modal.component;
@@ -93,25 +81,21 @@ class HOCModal extends PureComponent {
     )
   }
   render() {
-    const { modal } = this.props;
-    const { blockNew } = this.state;
-    const isOpen = !blockNew && !!modal;
-
-    const modalProps = (!blockNew && modal && modal.modalProps) || {};
-
+    const { modal } = this.props;
     return (
-      <Modal
-        backdropPressToClose={false}
-        isOpen={isOpen}
-        style={styles.modal}
-        onClosed={this.onDidClose}
-        onClosingState={this.onClosingState}
-        {...modalProps}
-      >
-        {this.renderComponent(isOpen)}
-        {Platform.OS === 'ios' && <KeyboardSpacer />}
-      </Modal>
-    );
+      <View 
+        pointerEvents={modal ? 'auto' : 'none'}
+        style={{
+        width: viewSize.width,
+        height: viewSize.height,
+        position: 'absolute',
+        left: 0,
+        top: 0,
+      }}>
+        {this.renderComponent()}
+        <KeyboardSpacer />
+      </View>
+    )
   }
 }
 // const { string } = PropTypes;

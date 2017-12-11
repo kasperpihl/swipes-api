@@ -13,11 +13,8 @@ const emptyList = List();
 const DISTANCE = 200;
 
 class HOCMilestoneList extends PureComponent {
-  static minWidth() {
-    return 654;
-  }
-  static maxWidth() {
-    return 954;
+  static sizes() {
+    return [654, 954];
   }
   constructor(props) {
     super(props);

@@ -64,7 +64,7 @@ class HOCGoalList extends PureComponent {
     if (title.length > 0) {
       createGoal(title, milestoneId, assignees.toJS()).then((res) => {
         if (res && res.ok) {
-          console.warn('goal added')
+          // console.warn('goal added')
         }
       });
     }
@@ -143,7 +143,7 @@ class HOCGoalList extends PureComponent {
   renderGoal(g) {
     const gId = g.get('id');
 
-    return <HOCGoalItem goalId={gId} key={gId} delegate={this} />;
+    return <HOCGoalItem goalId={gId} key={gId} delegate={this} inTakeAction />;
   }
   renderListFooter() {
 

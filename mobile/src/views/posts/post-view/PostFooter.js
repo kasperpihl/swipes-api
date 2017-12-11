@@ -71,28 +71,37 @@ class HOCPostFooter extends PureComponent {
       isLoadingComment: false,
     }
     setupDelegate(this, 'onAddComment', 'onNavigateBack', 'onAutoFocus');
-    bindAll(this, ['handleAddComment', 'handleAttach', 'focusInput']);
+    bindAll(this, ['handleAddComment', 'handleAttach', 'focusInput', 'onChooseAttachmentTypeToAdd', 'onAddAttachment']);
   }
-
-  onAddAttachment() {
-    const { navPush, uploadAttachment } = this.props;
+  onChooseAttachmentTypeToAdd() {
+    const { actionModal, navPush } = this.props;
     const { attachments } = this.state;
 
-    this.onAutoFocus();
-    if(!attachments.size) {
-      return uploadAttachment(this.handleAttach);
+    if (attachments.size) {
+      navPush({
+        id: 'AttachmentView',
+        title: 'Attachment',
+        props: {
+          delegate: this,
+          initialAttachments: attachments
+        },
+      });
+    } else {
+      Keyboard.dismiss();
+      actionModal({
+        title: 'Add attachment',
+        onItemPress: this.onAddAttachment,
+        items: fromJS([
+          { id: 'url', title: 'Add a URL' },
+          { id: 'image', title: 'Upload an image' },
+        ]),
+      }, { onDidClose: this.onFocusTextarea });
     }
-    
-    Keyboard.dismiss();
+  }
+  onAddAttachment(id) {
+    const { uploadAttachment } = this.props;
 
-    navPush({
-      id: 'AttachmentView',
-      title: 'Attachment',
-      props: {
-        delegate: this,
-        initialAttachments: attachments
-      },
-    })
+    uploadAttachment(id, this.handleAttach, this.focusInput);
   }
   handleAttach(att) {
     const { attachments } = this.state;
@@ -197,5 +206,6 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   uploadAttachment: a.attachments.upload,
+  actionModal: a.modals.action,
 })(HOCPostFooter);
 

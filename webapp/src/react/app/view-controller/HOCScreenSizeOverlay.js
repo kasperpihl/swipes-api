@@ -9,6 +9,9 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 // import Icon from 'Icon';
 import './styles/screen-size-overlay.scss';
 
+const MIN_WIDTH = 1000;
+const MIN_HEIGHT = 600;
+
 class HOCScreenSizeOverlay extends PureComponent {
   constructor(props) {
     super(props);
@@ -31,9 +34,9 @@ class HOCScreenSizeOverlay extends PureComponent {
     const width = window.innerWidth;
     const height = window.innerHeight;
 
-    if ((width < 800 || height < 600) && !this.state.tooSmall) {
+    if ((width < MIN_WIDTH || height < MIN_HEIGHT) && !this.state.tooSmall) {
       this.setState({ tooSmall: true })
-    } else if ((width >= 800 && height >= 600) && this.state.tooSmall) {
+    } else if ((width >= MIN_WIDTH && height >= MIN_HEIGHT) && this.state.tooSmall) {
       this.setState({ tooSmall: false })
     }
 
@@ -51,7 +54,7 @@ class HOCScreenSizeOverlay extends PureComponent {
   render() {
     const { isDev } = this.props;
     if(isDev) {
-      return null;
+     return null;
     }
     const { tooSmall, width, height } = this.state;
     let className = 'screen-size-overlay';
@@ -65,7 +68,7 @@ class HOCScreenSizeOverlay extends PureComponent {
         </div>
 
         <div className="screen-size-overlay__subtitle">
-          The minimum supported size is 800x600 pixels
+          The minimum supported size is {MIN_WIDTH}x{MIN_HEIGHT} pixels
         </div>
         {this.renderCurrentSize()}
       </div>

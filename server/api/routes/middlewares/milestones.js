@@ -1,9 +1,20 @@
 import r from 'rethinkdb';
 import {
   string,
+  number,
   object,
   array,
+  any,
 } from 'valjs';
+import {
+  goalsCompleteGoal,
+  goalsCompleteQueueMessage,
+  goalsIncompleteGoal,
+  goalsIncompleteQueueMessage,
+} from './goals';
+import {
+  notificationsPushToQueue,
+} from './notifications';
 import {
   dbMilestonesInsertSingle,
   dbMilestonesUpdateSingle,
@@ -34,7 +45,11 @@ const milestonesCreate = valLocals('milestonesCreate', {
     id: generateSlackLikeId('M'),
     title,
     organization_id,
-    goal_order: [],
+    goal_order: {
+      now: [],
+      later: [],
+      done: [],
+    },
     due_date: due_date || null,
     created_by: user_id,
     created_at: new Date(),
@@ -262,17 +277,21 @@ const milestonesRenameQueueMessage = valLocals('milestonesRenameQueueMessage', {
 const milestonesAddGoal = valLocals('milestonesAddGoal', {
   goal_id: string.require(),
   milestone_id: string,
+  goal: object,
 }, (req, res, next, setLocals) => {
   const {
     goal_id,
     milestone_id,
+    goal,
   } = res.locals;
 
   if (!milestone_id) {
     return next();
   }
 
-  return dbMilestonesAddGoal({ goal_id, milestone_id })
+  const destination = goal.completed_at ? 'done' : 'now';
+
+  return dbMilestonesAddGoal({ goal_id, milestone_id, destination })
     .then((result) => {
       const changes = result.changes[0].new_val || result.changes[0].old_val;
 
@@ -292,7 +311,7 @@ const milestonesAddGoalQueueMessage = valLocals('milestonesAddGoalQueueMessage',
   goal_id: string.require(),
   milestone_id: string.require(),
   old_milestone_id: string,
-  goal_order: array.require(),
+  goal_order: object.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -326,13 +345,13 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   eventType: string,
 }, (req, res, next, setLocals) => {
   const {
-  goal_ids,
-  current_milestone_id,
-} = res.locals;
+    goal_ids,
+    current_milestone_id,
+  } = res.locals;
   let {
-  milestone_id,
-  eventType,
-} = res.locals;
+    milestone_id,
+    eventType,
+  } = res.locals;
 
   if (!milestone_id && !current_milestone_id) {
     return next();
@@ -341,26 +360,26 @@ const milestonesRemoveGoal = valLocals('milestonesRemoveGoal', {
   milestone_id = current_milestone_id || milestone_id;
 
   return dbMilestonesRemoveGoal({ goal_ids, milestone_id })
-  .then((result) => {
-    const changes = result.changes[0].new_val || result.changes[0].old_val;
-    eventType = goal_ids.length > 0 ? eventType : 'milestone_goal_removed';
+    .then((result) => {
+      const changes = result.changes[0].new_val || result.changes[0].old_val;
+      eventType = goal_ids.length > 0 ? eventType : 'milestone_goal_removed';
 
-    setLocals({
-      eventType,
-      goal_order: changes.goal_order,
+      setLocals({
+        eventType,
+        goal_order: changes.goal_order,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
     });
-
-    return next();
-  })
-  .catch((err) => {
-    return next(err);
-  });
 });
 const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMessage', {
   user_id: string.require(),
   goal_id: string.require(),
   milestone_id: string.require(),
-  goal_order: array.require(),
+  goal_order: object.require(),
   eventType: string.require(),
 }, (req, res, next, setLocals) => {
   const {
@@ -387,15 +406,30 @@ const milestonesRemoveGoalQueueMessage = valLocals('milestonesRemoveGoalQueueMes
 });
 const milestonesGoalsReorder = valLocals('milestonesGoalsReorder', {
   milestone_id: string.require(),
-  goal_order: array.of(string).require(),
+  goal_id: string.require(),
+  destination: any.of('now', 'later', 'done').require(),
+  position: number.require(),
 }, (req, res, next, setLocals) => {
   const {
     milestone_id,
-    goal_order,
+    goal_id,
+    destination,
+    position,
   } = res.locals;
 
-  dbMilestonesGoalsReorder({ milestone_id, goal_order })
-    .then(() => {
+  dbMilestonesGoalsReorder({
+    milestone_id,
+    goal_id,
+    destination,
+    position,
+  })
+    .then((results) => {
+      const changes = results.changes[0];
+
+      setLocals({
+        goal_order: changes.new_val.goal_order,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -405,7 +439,7 @@ const milestonesGoalsReorder = valLocals('milestonesGoalsReorder', {
 const milestonesGoalsReorderQueueMessage = valLocals('milestonesGoalsReorderQueueMessage', {
   user_id: string.require(),
   milestone_id: string.require(),
-  goal_order: array.of(string).require(),
+  goal_order: object.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
@@ -436,7 +470,11 @@ const milestonesDelete = valLocals('milestonesDelete', {
   dbMilestonesDelete({ milestone_id })
     .then((goal_order) => {
       setLocals({
-        goal_ids: goal_order,
+        goal_ids: [
+          ...goal_order.now,
+          ...goal_order.later,
+          ...goal_order.done,
+        ],
       });
 
       return next();
@@ -469,6 +507,44 @@ const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
 
   return next();
 });
+const milestonesGoalsMiddlewares = valLocals('milestonesGoalsMiddlewares', {
+  goal: object.require(),
+  destination: any.of('now', 'later', 'done').require(),
+}, (req, res, next, setLocals) => {
+  const {
+    goal,
+    destination,
+  } = res.locals;
+
+  if (
+    (!goal.completed_at && destination !== 'done') ||
+    (goal.completed_at !== null && destination === 'done')
+  ) {
+    return next();
+  }
+
+  let goalsMiddlewares = [];
+
+  if (destination === 'done') {
+    goalsMiddlewares = [
+      goalsCompleteGoal,
+      goalsCompleteQueueMessage,
+    ];
+  } else {
+    goalsMiddlewares = [
+      goalsIncompleteGoal,
+      goalsIncompleteQueueMessage,
+    ];
+  }
+
+  goalsMiddlewares.push(notificationsPushToQueue);
+
+  setLocals({
+    goalsMiddlewares,
+  });
+
+  return next();
+});
 
 export {
   milestonesCreate,
@@ -489,4 +565,5 @@ export {
   milestonesGoalsReorderQueueMessage,
   milestonesDelete,
   milestonesDeleteQueueMessage,
+  milestonesGoalsMiddlewares,
 };

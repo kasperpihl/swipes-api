@@ -28,6 +28,8 @@ import {
   goalsIncompleteQueueMessage,
   goalsAssign,
   goalsAssignQueueMessage,
+  goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
 } from './middlewares/goals';
 import {
   stepsReorder,
@@ -49,6 +51,7 @@ import {
   linksCreateBatch,
   linksAddPermissionBatch,
 } from './middlewares/links';
+import MiddlewareComposer from './middleware_composer';
 import {
   valBody,
   mapLocals,
@@ -88,7 +91,7 @@ authed.all(
   valResponseAndSend({
     goal: object.require(),
     milestone_id: string,
-    goal_order: array,
+    goal_order: object,
   }),
 );
 
@@ -100,6 +103,8 @@ authed.all(
   goalsCompleteGoal,
   goalsCompleteQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
   valResponseAndSend({
     goal: object.require(),
   }),
@@ -113,6 +118,8 @@ authed.all(
   goalsIncompleteGoal,
   goalsIncompleteQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  goalsMilestonesMiddlewaresRunComposer,
   valResponseAndSend({
     goal: object.require(),
   }),
@@ -127,6 +134,35 @@ authed.all(
   goalsCompleteStep,
   goalsCompleteStepQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  (originalReq, originalRes, originalNext) => {
+    const {
+      milestonesMiddlewares,
+      goal,
+    } = originalRes.locals;
+    const {
+      milestone_id,
+    } = goal;
+
+    if (!milestone_id || goal.completed_at === null) {
+      return originalNext();
+    }
+
+    originalRes.locals.milestone_id = milestone_id;
+
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...milestonesMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
   valResponseAndSend({
     goal: object.require(),
   }),
@@ -141,6 +177,35 @@ authed.all(
   goalsIncompleteStep,
   goalsIncompleteStepQueueMessage,
   notificationsPushToQueue,
+  goalsMilestonesMiddlewares,
+  (originalReq, originalRes, originalNext) => {
+    const {
+      milestonesMiddlewares,
+      goal,
+    } = originalRes.locals;
+    const {
+      milestone_id,
+    } = goal;
+
+    if (!milestone_id || goal.completed_at !== null) {
+      return originalNext();
+    }
+
+    originalRes.locals.milestone_id = milestone_id;
+
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...milestonesMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
   valResponseAndSend({
     goal: object.require(),
   }),
@@ -176,7 +241,7 @@ authed.all(
   valResponseAndSend({
     goal_id: string.require(),
     milestone_id: string,
-    goal_order: array,
+    goal_order: object,
   }),
 );
 
@@ -195,8 +260,10 @@ authed.all(
   })),
   notesCreate,
   mapLocals((locals) => {
-    const notes = locals.notes;
-    const notesAttachment = locals.notesAttachment;
+    const {
+      notes,
+      notesAttachment,
+    } = locals;
     const links = [];
 
     notes.forEach((note, i) => {
@@ -215,7 +282,9 @@ authed.all(
   linksCreateBatch,
   linksAddPermissionBatch,
   mapLocals((locals) => {
-    const short_urls = locals.short_urls;
+    const {
+      short_urls,
+    } = locals;
     const links = locals.links.map((link, i) => {
       return Object.assign({}, link, {
         short_url: short_urls[i],

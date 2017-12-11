@@ -1,4 +1,4 @@
-import { List } from 'immutable';
+import { List, Set } from 'immutable';
 import MilestonesUtil from '../classes/milestones-util';
 import { timeAgo } from '../classes/time-utils';
 
@@ -24,21 +24,55 @@ export default class Milestones {
     }
     return 'Any plan';
   }
+  getAssignees(milestoneId) {
+    let goals = this.getGoals(milestoneId);
+    if(milestoneId === 'none') {
+      goals = this.store.getState().get('goals').filter(g => !g.get('milestone_id'));
+    }
+    if(!goals) {
+      return List();
+    }
+    let all = new Set();
+    goals.forEach((goal) => {
+      const assignees = this.parent.goals.getAssignees(goal);
+      all = all.union(assignees);
+    });
+    
+    return all.toList();
+  }
+  getStatusForGoalId(milestoneId, goalId) {
+    const milestone = this.getMilestone(milestoneId);
+    let status = 'now';
+    if(milestone) {
+      milestone.get('goal_order').forEach((goals, label) => {
+        if(goals.contains(goalId)) {
+          status = label;
+        }
+      })
+    }
+    return status;
+  }
+
   getRelatedFilter(milestoneId) {
     const milestone = this.getMilestone(milestoneId);
     if(!milestone) {
       return [];
     }
-    return milestone.get('goal_order').toJS()
+    return this.getGoalIds(milestone).toJS()
 
   }
-
-  getGoals(milestoneId, overrideGoals) {
+  getGoalIds(milestoneId, overrideGoals) {
     const milestone = this.getMilestone(milestoneId);
+    if(!milestone) {
+      return List();
+    }
+    return milestone.getIn(['goal_order', 'later']).concat(
+                  milestone.getIn(['goal_order', 'now'])).concat(
+                  milestone.getIn(['goal_order', 'done']))
+  }
+  getGoals(milestoneId, overrideGoals) { 
     const state = this.store.getState();
     const goals = overrideGoals || state.get('goals');
-    return milestone.get('goal_order')
-                    .reverse()
-                    .map(gId => goals.get(gId));
+    return this.getGoalIds(milestoneId, overrideGoals).map(gId => goals.get(gId));
   }
 }

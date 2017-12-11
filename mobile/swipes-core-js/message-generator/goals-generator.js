@@ -25,6 +25,17 @@ export default class Goals {
     ).map(a => a.getIn(['link', 'service', 'id'])).toJS();
 
   }
+  getStatus(goalId) {
+    const goal = this.getGoal(goalId);
+    if(!goal) {
+      return 'now';
+    }
+    if(goal.get('milestone_id')) {
+      return this.parent.milestones.getStatusForGoalId(goal.get('milestone_id'), goal.get('id'));
+    }
+    const helper = new GoalsUtil(goal);
+    return helper.getIsCompleted() ? 'done' : 'now';
+  }
   getAssignees(goalId) {
     const goal = this.getGoal(goalId);
     if(!goal) {

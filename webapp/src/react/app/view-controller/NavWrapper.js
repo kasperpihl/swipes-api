@@ -1,24 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-const { string, func } = PropTypes;
+const { string, func, number } = PropTypes;
 
-const DEFAULT_MIN_WIDTH = 500;
 const DEFAULT_MAX_WIDTH = 800;
 
 const wrap = (ComponentToWrap) => {
   class NavWrapper extends Component {
-    static minWidth() {
-      if(typeof ComponentToWrap.minWidth === 'function') {
-        return ComponentToWrap.minWidth();
-      }
-      return DEFAULT_MIN_WIDTH;
-    }
     static maxWidth() {
       if(typeof ComponentToWrap.maxWidth === 'function') {
         return ComponentToWrap.maxWidth();
       }
       return DEFAULT_MAX_WIDTH;
+    }
+    static sizes() {
+      if(typeof ComponentToWrap.sizes === 'function') {
+        return ComponentToWrap.sizes();
+      }
+      return [];
     }
     static fullscreen() {
       if(typeof ComponentToWrap.fullscreen === 'function') {
@@ -35,6 +34,7 @@ const wrap = (ComponentToWrap) => {
         openSecondary,
         popSecondary,
         openModal,
+        viewWidth,
       } = this.context;
       // what we do is basically rendering `ComponentToWrap`
       // with an added `theme` prop, like a hook
@@ -42,6 +42,7 @@ const wrap = (ComponentToWrap) => {
         <ComponentToWrap
           {...this.props}
           target={target}
+          viewWidth={viewWidth}
           navPop={navPop}
           navPush={navPush}
           saveState={saveState}
@@ -54,6 +55,7 @@ const wrap = (ComponentToWrap) => {
   }
   NavWrapper.contextTypes = {
     target: string,
+    viewWidth: number,
     navPop: func,
     navPush: func,
     saveState: func,

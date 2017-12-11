@@ -60,6 +60,7 @@ class TakeAction extends Component {
         delegate={delegate}
         id={section}
         title={msgGen.milestones.getName(section)}
+        milestoneId={section}
         icon={section === 'none' ? 'MiniNoMilestone' : 'MiniMilestone'}
         key={section}
       >
@@ -68,6 +69,7 @@ class TakeAction extends Component {
             goalId={goal.get('id')}
             delegate={delegate}
             key={goal.get('id')}
+            inTakeAction={true}
           />
         ))}
         {section === 'none' ? addGoal : null}

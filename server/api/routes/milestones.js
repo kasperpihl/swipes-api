@@ -1,9 +1,11 @@
 import express from 'express';
 import {
   string,
+  number,
   object,
   array,
   date,
+  any,
 } from 'valjs';
 import {
   milestonesCreate,
@@ -24,6 +26,7 @@ import {
   milestonesGoalsReorderQueueMessage,
   milestonesDelete,
   milestonesDeleteQueueMessage,
+  milestonesGoalsMiddlewares,
 } from './middlewares/milestones';
 import {
   goalsAddMilestone,
@@ -33,6 +36,7 @@ import {
 import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
+import MiddlewareComposer from './middleware_composer';
 import {
   valBody,
   valResponseAndSend,
@@ -42,7 +46,8 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/milestones.create',
+authed.all(
+  '/milestones.create',
   valBody({
     title: string.require(),
     organization_id: string.require(),
@@ -54,9 +59,11 @@ authed.all('/milestones.create',
   notificationsPushToQueue,
   valResponseAndSend({
     milestone: object.require(),
-  }));
+  }),
+);
 
-authed.all('/milestones.delete',
+authed.all(
+  '/milestones.delete',
   valBody({
     milestone_id: string.require(),
   }),
@@ -66,9 +73,11 @@ authed.all('/milestones.delete',
   valResponseAndSend({
     milestone_id: string.require(),
     goal_ids: array.of(string),
-  }));
+  }),
+);
 
-authed.all('/milestones.close',
+authed.all(
+  '/milestones.close',
   valBody({
     milestone_id: string.require(),
     migrate_to_milestone_id: string,
@@ -82,11 +91,13 @@ authed.all('/milestones.close',
   valResponseAndSend({
     milestone_id: string.require(),
     closed_at: date.require(),
-    goal_order: array.require(),
+    goal_order: object.require(),
     goal_ids: array,
-  }));
+  }),
+);
 
-authed.all('/milestones.open',
+authed.all(
+  '/milestones.open',
   valBody({
     milestone_id: string.require(),
   }),
@@ -96,9 +107,11 @@ authed.all('/milestones.open',
   notificationsPushToQueue,
   valResponseAndSend({
     milestone_id: string.require(),
-  }));
+  }),
+);
 
-authed.all('/milestones.addGoal',
+authed.all(
+  '/milestones.addGoal',
   valBody({
     goal_id: string.require(),
     milestone_id: string.require(),
@@ -120,11 +133,12 @@ authed.all('/milestones.addGoal',
     goal_id: string.require(),
     milestone_id: string.require(),
     old_milestone_id: string,
-    goal_order: array.require(),
+    goal_order: object.require(),
   }),
 );
 
-authed.all('/milestones.removeGoal',
+authed.all(
+  '/milestones.removeGoal',
   valBody({
     goal_id: string.require(),
     milestone_id: string.require(),
@@ -139,11 +153,12 @@ authed.all('/milestones.removeGoal',
   valResponseAndSend({
     goal_id: string.require(),
     milestone_id: string.require(),
-    goal_order: array.require(),
+    goal_order: object.require(),
   }),
 );
 
-authed.all('/milestones.rename',
+authed.all(
+  '/milestones.rename',
   valBody({
     milestone_id: string.require(),
     title: string.require(),
@@ -158,17 +173,40 @@ authed.all('/milestones.rename',
   }),
 );
 
-authed.all('/milestones.goalsReorder',
+authed.all(
+  '/milestones.goalsReorder',
   valBody({
     milestone_id: string.require(),
-    goal_order: array.of(string).require(),
+    goal_id: string.require(),
+    destination: any.of('now', 'later', 'done').require(),
+    position: number.require(),
   }),
+  goalsGetSingle,
   milestonesGoalsReorder,
   milestonesGoalsReorderQueueMessage,
   notificationsPushToQueue,
+  milestonesGoalsMiddlewares,
+  (originalReq, originalRes, originalNext) => {
+    const {
+      goalsMiddlewares = [],
+    } = originalRes.locals;
+
+    const composer = new MiddlewareComposer(
+      originalRes.locals,
+      ...goalsMiddlewares,
+      (req, res, next) => {
+        return originalNext();
+      },
+      (err, req, res, next) => {
+        return originalNext(err);
+      },
+    );
+
+    return composer.run();
+  },
   valResponseAndSend({
     milestone_id: string.require(),
-    goal_order: array.of(string).require(),
+    goal_order: object.require(),
   }),
 );
 

@@ -14,11 +14,18 @@ export const withoutMilestone = createSelector(
 );
 
 export const assignedToMe = createSelector(
-  [ getGoals, getMyId ],
-  (goals, userId) => goals.filter((g) => {
+  [ getGoals, getMyId, getMilestones ],
+  (goals, userId, milestones) => goals.filter((g) => {
     const helper = new GoalsUtil(g);
     const currentAssignees = helper.getAssignees();
-    return !helper.getIsCompleted() && currentAssignees.find(uId => uId === userId);
+    const mId = g.get('milestone_id');
+    if(!helper.getIsCompleted() && currentAssignees.find(uId => uId === userId)) {
+      const order = milestones.getIn([mId, 'goal_order', 'now']);
+      if(!mId || (order && order.find(gId => gId === g.get('id')))) {
+        return true;
+      }
+    }
+    return false;
   }).sort((g1, g2) => g1.get('created_at').localeCompare(g2.get('created_at'))),
 );
 

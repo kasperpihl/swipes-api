@@ -41,15 +41,16 @@ $noSubH: 39px + $bottomPadding;
 
   &__title {
     @include size(100%, auto);
-    @include font(24px, $deepBlue-100, 36px);
-    letter-spacing: -.3px;
+    @include font(30px, $deepBlue-100, 42px, 500);
     @include truncateString();
+    letter-spacing: -.6px;
   }
 
   &__subtitle {
     @include size(100%, auto);
     @include font(12px, $deepBlue-60, 18px);
     @include truncateString();
+    letter-spacing: .1px;
     margin-top: 6px;
   }
 
@@ -69,8 +70,8 @@ $noSubH: 39px + $bottomPadding;
   }
 
   &__actions {
-    @include size(auto, 39px);
-    @include flexContainer();
+    @include size(auto, 42px);
+    @include flexContainer('row', right, center);
     margin-left: 30px;
 
     &:empty {

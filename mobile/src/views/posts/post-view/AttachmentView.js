@@ -45,13 +45,13 @@ class AttachmentView extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this, 'onAddAttachment', 'onAttachmentPress');
+    setupDelegate(this, 'onChooseAttachmentTypeToAdd', 'onAttachmentPress');
   }
   componentDidMount() {
     const { attachments } = this.props;
     
     if (!attachments.size) {
-      this.onAddAttachment();
+      this.onChooseAttachmentTypeToAdd();
     }
   }
   renderHeader() {
@@ -60,7 +60,7 @@ class AttachmentView extends PureComponent {
        <HOCHeader
         title="Attachments"
       >
-        <RippleButton onPress={this.onAddAttachment}>
+        <RippleButton onPress={this.onChooseAttachmentTypeToAdd}>
           <View style={styles.addAttachmentButton}>
             <Icon name="Plus" width="24" height="24" fill={gs.colors.deepBlue80} />
           </View>

@@ -81,7 +81,6 @@ class HOCLoginFlow extends PureComponent {
   }
   onOpenResetModal() {
     const { promptModal } = this.props;
-    this.setState({ modalOpen: true });
 
     promptModal({
       title: 'Reset password',
@@ -89,10 +88,6 @@ class HOCLoginFlow extends PureComponent {
       keyboardType: 'email-address',
       onConfirmPress: (e, email) => {
         this.handleResetPassword(email);
-        this.setState({ modalOpen: false });
-      },
-      onCancelPress: () => {
-        this.setState({ modalOpen: false });
       }
     })
   }
@@ -110,12 +105,13 @@ class HOCLoginFlow extends PureComponent {
     
   }
   renderSecondScreen() {
-    const { showLogin, showSignupIntro, modalOpen } = this.state;
+    const { showLogin, showSignupIntro } = this.state;
+    const { modal } = this.props;
 
     if (showLogin || showSignupIntro) {
 
       if (showLogin) {
-        return <Login  delegate={this} modalOpen={modalOpen}/>;
+        return <Login  delegate={this} modalOpen={!!modal}/>;
       }
 
       return <SignupIntro delegate={this} />;
@@ -151,6 +147,7 @@ HOCLoginFlow.propTypes = {};
 
 const mapStateToProps = (state) => ({
   apiUrl: state.getIn(['globals', 'apiUrl']),
+  modal: state.getIn(['main', 'modal']),
 });
 
 export default connect(mapStateToProps, {

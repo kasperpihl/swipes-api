@@ -6,6 +6,7 @@ import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
 // import Button from 'Button';
 import Icon from 'Icon';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import './styles/goal-list-section.scss';
 
 class GoalListSection extends PureComponent {
@@ -28,6 +29,24 @@ class GoalListSection extends PureComponent {
       </div>
     )
   }
+  renderRightSide() {
+    const { milestoneId } = this.props;
+    
+    if (milestoneId === 'none') return null;
+
+    const assignees = msgGen.milestones.getAssignees(milestoneId);
+
+    if (!assignees || !assignees.size) return null;
+
+    return (
+      <HOCAssigning
+        assignees={assignees}
+        maxImages={5}
+        rounded
+        size={26}
+      />
+    );
+  }
   renderGoals() {
     const { children } = this.props;
 
@@ -42,6 +61,7 @@ class GoalListSection extends PureComponent {
       <div className="goal-list-section">
         <div className="goal-list-section__header">
           {this.renderLeftSide()}
+          {this.renderRightSide()}
         </div>
         {this.renderGoals()}
       </div>

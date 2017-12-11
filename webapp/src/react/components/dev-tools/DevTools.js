@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 /* global Perf*/
 
-window.Perf = require('react-addons-perf');
+// window.Perf = require('react-addons-perf');
 // Exported from redux-devtools
 
 class DevTools extends PureComponent {
@@ -19,11 +19,11 @@ class DevTools extends PureComponent {
   }
   toggleRecording() {
     if (this.state.recording) {
-      Perf.stop();
-      Perf.printWasted();
+      // Perf.stop();
+      // Perf.printWasted();
       this.setState({ recording: false });
     } else {
-      Perf.start();
+      // Perf.start();
       this.setState({ recording: true });
     }
   }

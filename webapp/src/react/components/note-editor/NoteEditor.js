@@ -48,6 +48,10 @@ class NoteEditor extends Component {
       this.setEditorState(this.plugins.getEditorStateWithDecorators(raw), true);
     }
   }
+  componentDidCatch(error, info) {
+    // Display fallback UI
+    console.log(error, info);    
+  }
   getEditorState() {
     return this.props.editorState;
   }
@@ -95,7 +99,7 @@ class NoteEditor extends Component {
       mediumEditor,
     } = this.props;
     if (!editorState) {
-      return <div ref="editor"/>;
+      return <div ref="editor" />;
     }
 
 

@@ -63,6 +63,7 @@ class Root extends PureComponent {
 
     return (
       <div id="app" className={className}>
+        <div id="draggable"></div>
         <HOCTopbar />
         <HOCRedirect />
         <Gradient />
