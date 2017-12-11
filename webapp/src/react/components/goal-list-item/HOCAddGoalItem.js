@@ -153,8 +153,8 @@ class HOCAddGoalItem extends PureComponent {
             size={26}
           />
         </div>
-        <div className="add-goal-item__button">
-          <Button icon="subdirectory_arrow_left" small frameless onClick={this.onGoalAdd} />
+        <div className="add-goal-item__button" onClick={this.onGoalAdd} >
+          <Button icon="subdirectory_arrow_left" small frameless/>
         </div>
       </div>
     );
