@@ -97,7 +97,7 @@ const checkForUpdates = (req, res, next) => {
   const platform = req.header('sw-platform');
   switch(platform) {
     case 'ios': {
-      testUpdate('itms-apps://itunes.apple.com/app/1250630942', 'ios-build-number');
+      testUpdate('itms-apps://itunes.apple.com/app/apple-store/id1250630942?mt=8', 'ios-build-number');
       testReload(null, 'ios-code-push-version');
       break;
     }
