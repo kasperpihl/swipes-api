@@ -67,68 +67,68 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all(
-  '/organizations.create',
-  valBody({
-    organization_name: string.require(),
-  }),
-  mapLocals(locals => ({
-    fields: ['organizations'],
-    userToGetId: locals.user_id,
-  })),
-  usersGetByIdWithFields,
-  usersCheckIfInOrganization,
-  organizationsCreate,
-  organizationsAddToUser,
-  (originalReq, originalRes, originalNext) => {
-    const composer = new MiddlewareComposer(
-      originalRes.locals,
-      ...onboardingGetMiddlewares,
-      (req, res, next) => {
-        return originalNext();
-      },
-      (err, req, res, next) => {
-        return originalNext(err);
-      },
-    );
+// authed.all(
+//   '/organizations.create',
+//   valBody({
+//     organization_name: string.require(),
+//   }),
+//   mapLocals(locals => ({
+//     fields: ['organizations'],
+//     userToGetId: locals.user_id,
+//   })),
+//   usersGetByIdWithFields,
+//   usersCheckIfInOrganization,
+//   organizationsCreate,
+//   organizationsAddToUser,
+//   (originalReq, originalRes, originalNext) => {
+//     const composer = new MiddlewareComposer(
+//       originalRes.locals,
+//       ...onboardingGetMiddlewares,
+//       (req, res, next) => {
+//         return originalNext();
+//       },
+//       (err, req, res, next) => {
+//         return originalNext(err);
+//       },
+//     );
 
-    return composer.run();
-  },
-  organizationsCreatedQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    organization: object.require(),
-  }),
-);
+//     return composer.run();
+//   },
+//   organizationsCreatedQueueMessage,
+//   notificationsPushToQueue,
+//   valResponseAndSend({
+//     organization: object.require(),
+//   }),
+// );
 
-authed.all(
-  '/organizations.join',
-  valBody({
-    organization_id: string.require(),
-  }),
-  mapLocals(locals => ({
-    fields: ['organizations'],
-    userToGetId: locals.user_id,
-    user_to_activate_id: locals.user_id,
-  })),
-  usersGetByIdWithFields,
-  usersCheckIfInOrganization,
-  organizationsActivateUser,
-  organizationsAddToUser,
-  organizationsUpdateSubscriptionCustomer,
-  userActivatedUserSignUpQueueMessage,
-  notificationsPushToQueue,
-  mapLocals(locals => ({
-    organization: organizationConcatUsers(locals),
-  })),
-  organizationsUpdatedQueueMessage,
-  notificationsPushToQueue,
-  organizationsUserJoinedQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    organization: object.require(),
-  }),
-);
+// authed.all(
+//   '/organizations.join',
+//   valBody({
+//     organization_id: string.require(),
+//   }),
+//   mapLocals(locals => ({
+//     fields: ['organizations'],
+//     userToGetId: locals.user_id,
+//     user_to_activate_id: locals.user_id,
+//   })),
+//   usersGetByIdWithFields,
+//   usersCheckIfInOrganization,
+//   organizationsActivateUser,
+//   organizationsAddToUser,
+//   organizationsUpdateSubscriptionCustomer,
+//   userActivatedUserSignUpQueueMessage,
+//   notificationsPushToQueue,
+//   mapLocals(locals => ({
+//     organization: organizationConcatUsers(locals),
+//   })),
+//   organizationsUpdatedQueueMessage,
+//   notificationsPushToQueue,
+//   organizationsUserJoinedQueueMessage,
+//   notificationsPushToQueue,
+//   valResponseAndSend({
+//     organization: object.require(),
+//   }),
+// );
 
 authed.all(
   '/organizations.leave',
@@ -224,66 +224,66 @@ authed.all(
   }),
 );
 
-authed.all(
-  '/organizations.disableUser',
-  valBody({
-    user_to_disable_id: string.require(),
-    organization_id: string.require(),
-  }),
-  organizationsGetSingle,
-  mapLocals(locals => ({
-    fields: ['organizations'],
-    userToGetId: locals.user_to_disable_id,
-  })),
-  usersGetByIdWithFields,
-  organizationsCheckIsDisableValid,
-  organizationsCheckOwnerDisabledUser,
-  organizationsCheckAdminRights,
-  organizationsDisableUser,
-  organizationsUpdateSubscriptionCustomer,
-  mapLocals(locals => ({
-    organization: organizationConcatUsers(locals),
-  })),
-  organizationsUpdatedQueueMessage,
-  notificationsPushToQueue,
-  usersDisabledQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    organization: object.require(),
-  }),
-);
-authed.all(
-  '/organizations.enableUser',
-  valBody({
-    user_to_enable_id: string.require(),
-    organization_id: string.require(),
-  }),
-  organizationsGetSingle,
-  mapLocals(locals => ({
-    fields: ['id', 'organizations', 'email', 'profile'],
-    userToGetId: locals.user_to_enable_id,
-  })),
-  usersGetByIdWithFields,
-  organizationsCheckAdminRights,
-  organizationsEnableUser,
-  organizationsUpdateSubscriptionCustomer,
-  mapLocals(locals => ({
-    organization: organizationConcatUsers(locals),
-  })),
-  organizationsUpdatedQueueMessage,
-  notificationsPushToQueue,
-  mapLocals(locals => ({
-    email: locals.user.email,
-  })),
-  usersCreateInvitationToken,
-  usersSendInvitationQueueMessage,
-  notificationsPushToQueue,
-  usersInvitedUserQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    organization: object.require(),
-  }),
-);
+// authed.all(
+//   '/organizations.disableUser',
+//   valBody({
+//     user_to_disable_id: string.require(),
+//     organization_id: string.require(),
+//   }),
+//   organizationsGetSingle,
+//   mapLocals(locals => ({
+//     fields: ['organizations'],
+//     userToGetId: locals.user_to_disable_id,
+//   })),
+//   usersGetByIdWithFields,
+//   organizationsCheckIsDisableValid,
+//   organizationsCheckOwnerDisabledUser,
+//   organizationsCheckAdminRights,
+//   organizationsDisableUser,
+//   organizationsUpdateSubscriptionCustomer,
+//   mapLocals(locals => ({
+//     organization: organizationConcatUsers(locals),
+//   })),
+//   organizationsUpdatedQueueMessage,
+//   notificationsPushToQueue,
+//   usersDisabledQueueMessage,
+//   notificationsPushToQueue,
+//   valResponseAndSend({
+//     organization: object.require(),
+//   }),
+// );
+// authed.all(
+//   '/organizations.enableUser',
+//   valBody({
+//     user_to_enable_id: string.require(),
+//     organization_id: string.require(),
+//   }),
+//   organizationsGetSingle,
+//   mapLocals(locals => ({
+//     fields: ['id', 'organizations', 'email', 'profile'],
+//     userToGetId: locals.user_to_enable_id,
+//   })),
+//   usersGetByIdWithFields,
+//   organizationsCheckAdminRights,
+//   organizationsEnableUser,
+//   organizationsUpdateSubscriptionCustomer,
+//   mapLocals(locals => ({
+//     organization: organizationConcatUsers(locals),
+//   })),
+//   organizationsUpdatedQueueMessage,
+//   notificationsPushToQueue,
+//   mapLocals(locals => ({
+//     email: locals.user.email,
+//   })),
+//   usersCreateInvitationToken,
+//   usersSendInvitationQueueMessage,
+//   notificationsPushToQueue,
+//   usersInvitedUserQueueMessage,
+//   notificationsPushToQueue,
+//   valResponseAndSend({
+//     organization: object.require(),
+//   }),
+// );
 
 authed.all(
   '/organizations.createStripeCustomer',
@@ -346,42 +346,42 @@ authed.all(
   valResponseAndSend(),
 );
 
-authed.all(
-  '/organizations.inviteUser',
-  valBody({
-    organization_id: string.require(),
-    first_name: string.require(),
-    email: string.require(),
-  }),
-  mapLocals(locals => ({
-    email: locals.email.toLowerCase(),
-  })),
-  mapLocals(() => ({
-    fields: ['password', 'xendoCredentials', { services: 'auth_data' }],
-  })),
-  usersGetByEmailWithoutFields,
-  usersCreateTempUnactivatedUser,
-  organizationsAddPendingUsers,
-  usersAddPendingOrganization,
-  mapLocals(locals => ({
-    organization: organizationConcatUsers(locals),
-  })),
-  usersCreateInvitationToken,
-  mapLocals(locals => ({
-    invitation_token: locals.invitationToken,
-  })),
-  organizationsUsersInvitedUserQueueMessage,
-  notificationsPushToQueue,
-  usersInvitedUserQueueMessage,
-  notificationsPushToQueue,
-  usersSendInvitationQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    user: object.require(),
-    invitation_token: string.require(),
-    organization: object,
-  }),
-);
+// authed.all(
+//   '/organizations.inviteUser',
+//   valBody({
+//     organization_id: string.require(),
+//     first_name: string.require(),
+//     email: string.require(),
+//   }),
+//   mapLocals(locals => ({
+//     email: locals.email.toLowerCase(),
+//   })),
+//   mapLocals(() => ({
+//     fields: ['password', 'xendoCredentials', { services: 'auth_data' }],
+//   })),
+//   usersGetByEmailWithoutFields,
+//   usersCreateTempUnactivatedUser,
+//   organizationsAddPendingUsers,
+//   usersAddPendingOrganization,
+//   mapLocals(locals => ({
+//     organization: organizationConcatUsers(locals),
+//   })),
+//   usersCreateInvitationToken,
+//   mapLocals(locals => ({
+//     invitation_token: locals.invitationToken,
+//   })),
+//   organizationsUsersInvitedUserQueueMessage,
+//   notificationsPushToQueue,
+//   usersInvitedUserQueueMessage,
+//   notificationsPushToQueue,
+//   usersSendInvitationQueueMessage,
+//   notificationsPushToQueue,
+//   valResponseAndSend({
+//     user: object.require(),
+//     invitation_token: string.require(),
+//     organization: object,
+//   }),
+// );
 
 notAuthed.all(
   '/organizations.getInfoFromInvitationToken',
