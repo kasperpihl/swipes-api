@@ -1,47 +1,41 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+.input-check-demo {
+  @include size(18px);
+  margin-right: 9px;
+  border-radius: 3px;
+  border: solid 1px $blue-100;
+
+  .sw-checkbox__icon {
+    @include size(18px);
+    @include svg-color($blue-100);
+    @include flex();
+    left: -1px; top: -1px;
+    position: absolute;
+    stroke-width: 3px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  &#{&}--checked {
+    border: solid 1px $deepBlue-20;
+    box-shadow: 0 0 3px 0 $blue-100;
+
+    .sw-checkbox__icon {
+      opacity: 1;
+    }
+  }
+}
+
 .sw-checkbox {
   $b: &;
 
 	@include size(auto, 18px);
   @include font(15px, $deepBlue-80, 24px);
-	padding-left: 30px;
+	// padding-left: 30px;
   user-select: none;
   margin: 0;
-
-	&__input {
-		position: absolute;
-		z-index: -1;
-		opacity: 0;
-	}
-
-	&__indicator {
-		@include size(18px);
-		position: absolute;
-		border-radius: 3px;
-		border: solid 1px $blue-100;
-		left: 0; top: 0;
-    transition: .1s;
-	}
-
-  &__icon {
-    @include size(18px);
-    @include svg-color($blue-100);
-    @include flex();
-    position: absolute;
-    left: -1px;
-    top: -1px;
-    stroke-width: 3px;
-    opacity: 0;
-    transition: .1s;
-  }
-
-	// hover state for unchecked
-
-	&:hover &__input ~ &__indicator {
-    box-shadow: 0 0 3px 0 $blue-100;
-	}
 
   // checked styles
 
@@ -50,27 +44,4 @@
     transition: .15s ease-in-out;
     text-decoration: line-through;
   }
-
-	& &__input:checked ~ &__indicator {
-    border: solid 1px $deepBlue-20;
-
-		#{$b}__icon {
-      @include svg-color($blue-100);
-		  opacity: 1;
-		}
-	}
-
-	// hover state for checked
-
-	&:hover &__input:checked ~ &__indicator {
-    box-shadow: 0 0 3px 0 $deepBlue-30;
-	}
-
-  & &__input:disabled ~ &__indicator {
-    border: solid 1px $deepBlue-20;
-  }
-
-  & &__input:disabled ~ &__indicator, & &__input:disabled ~ &__label {
-		cursor: not-allowed;
-	}
 }

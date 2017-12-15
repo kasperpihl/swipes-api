@@ -13,27 +13,35 @@ class Checkbox extends Component {
     const { onChange } = this.props;
 
     if (onChange) {
-      onChange(this.refs.checkboxInput.checked);
+      onChange();
     }
   }
   render() {
     const { label, checked, disable } = this.props;
+    let className = 'input-check-demo';
 
-    return (
-      <label className="sw-checkbox">
-        <input
+    if (checked) {
+      className += ' input-check-demo--checked'
+    }
+    
+
+/*        <input
           ref="checkboxInput"
           checked={checked}
           onChange={this.onChange}
           type="checkbox"
           className="sw-checkbox__input"
           disabled={!!disable}
-        />
-        <div className="sw-checkbox__indicator">
+        />*/
+
+    return (
+      <div className="sw-checkbox">
+
+        <div className={className} onClick={this.onChange}>
           <Icon icon="ChecklistCheckmark" className="sw-checkbox__icon" />
         </div>
         <div className="sw-checkbox__label">{label}</div>
-      </label>
+      </div>
     );
   }
 }

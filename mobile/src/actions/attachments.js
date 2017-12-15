@@ -137,11 +137,14 @@ export const preview = att => (d, getState) => {
         short_url: permission.get('short_url'),
       })).then((res) => {
 
+        console.log('res1111', res)
+
         OpenFile.openDoc([{
           url: res.preview.file.url,
           fileName: res.preview.header.title,
 
         }], (error, url) => {
+          console.log('res', error, url)
           d(a.main.loading(false));
         });
       });

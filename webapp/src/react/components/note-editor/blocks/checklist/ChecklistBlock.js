@@ -32,6 +32,7 @@ export default class ChecklistBlock extends Component {
   }
   static blockRendererFn(ctx, contentBlock) {
     const type = contentBlock.getType();
+
     if (type === 'checklist') {
       return {
         component: this,
@@ -41,6 +42,7 @@ export default class ChecklistBlock extends Component {
         },
       };
     }
+
     return null;
   }
   static onUpArrow(ctx, e) {
@@ -120,6 +122,7 @@ export default class ChecklistBlock extends Component {
   }
   static keyBindingFn(ctx, e) {
     const editorState = ctx.getEditorState();
+    const selection = editorState.getSelection();
     // left key
     if (e.keyCode === 37) {
       const selection = editorState.getSelection();
@@ -218,6 +221,8 @@ export default class ChecklistBlock extends Component {
     const { ctx, checked } = blockProps;
     const newChecked = !checked;
 
+    console.log(newChecked, !checked);
+
     this.updateBlockMetadata(ctx, block.getKey(), { checked: newChecked });
 
     // I also stop propagation, return focus to the editor and set some state here, but that's probably specific to my app
@@ -232,7 +237,7 @@ export default class ChecklistBlock extends Component {
     if (checked) {
       className += ' ChecklistEditorBlock--checked';
     }
-
+    
     return (
       <div className={className}>
         <Checkbox checked={checked} onChange={this.toggleChecked} />
