@@ -72,7 +72,7 @@ class AddMilestone extends PureComponent {
           <Icon icon="Plus" className={iconClassName} />
         </div>
         <div className={loaderClassName}>
-          <Loader center size={60} />
+          {isLoading('add') && <Loader center size={60} />}
         </div>
       </div>
     )
@@ -89,7 +89,6 @@ class AddMilestone extends PureComponent {
     if (isLoading('add')) {
       className += ' add-milestone--loading'
     }
-
 
     return (
       <div className={className} onClick={this.handleFocus}>
