@@ -221,8 +221,6 @@ export default class ChecklistBlock extends Component {
     const { ctx, checked } = blockProps;
     const newChecked = !checked;
 
-    console.log(newChecked, !checked);
-
     this.updateBlockMetadata(ctx, block.getKey(), { checked: newChecked });
 
     // I also stop propagation, return focus to the editor and set some state here, but that's probably specific to my app

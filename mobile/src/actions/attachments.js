@@ -7,7 +7,6 @@ import * as a from './';
 import * as ca from 'swipes-core-js/actions';
 
 
-
 // ======================================================
 // Upload attacment
 // ======================================================
@@ -40,12 +39,12 @@ export const upload = (type, successCB, errCB) => (d, getState) => {
             const att = fromJS({ link: res.link, title: url });
             if (successCB) successCB(att);
           }
-        })
+        });
       },
       onClose: () => {
         if (errCB()) errCB();
-      }
-    }))
+      },
+    }));
   } else if (type === 'image') {
     const options = {
       title: 'Attach image',
@@ -56,9 +55,8 @@ export const upload = (type, successCB, errCB) => (d, getState) => {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-
       if (response.didCancel || response.error || response.customButton) {
-        if(errCB) {
+        if (errCB) {
           errCB();
         }
         return;
@@ -84,21 +82,19 @@ export const upload = (type, successCB, errCB) => (d, getState) => {
             d(a.main.loading());
             if (res.ok) {
               const att = fromJS({ link: res.link, title: fileRes.file.title });
-              if(successCB) successCB(att);
-
+              if (successCB) successCB(att);
             } else {
-              if(errCB) errCB(res.err);
-              console.warn('faled', res.err)
+              if (errCB) errCB(res.err);
+              console.warn('faled', res.err);
             }
-              
-          })
+          });
         } else {
           d(a.main.loading());
         }
       });
     });
   }
-}
+};
 
 
 // ======================================================
@@ -119,7 +115,6 @@ export const preview = att => (d, getState) => {
   });
 
   if (service.get('name') === 'swipes') {
-
     if (service.get('type') === 'note') {
       d(a.navigation.push(activeSliderIndex, {
         id: 'PreviewNote',
@@ -136,15 +131,11 @@ export const preview = att => (d, getState) => {
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
-
-        console.log('res1111', res)
-
         OpenFile.openDoc([{
           url: res.preview.file.url,
           fileName: res.preview.header.title,
 
         }], (error, url) => {
-          console.log('res', error, url)
           d(a.main.loading(false));
         });
       });
