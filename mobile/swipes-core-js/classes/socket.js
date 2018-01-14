@@ -74,7 +74,7 @@ export default class Socket {
     if (url.includes('localhost')) {
       url = 'http://localhost:5000';
     }
-    if (this.isConnecting) {
+    if (this.isConnecting || this.forceOffline) {
       return;
     }
     this.hasTimer = false;
@@ -127,6 +127,9 @@ export default class Socket {
         this.reconnect_attempts = 0;
         this.changeStatus('online');
       } else if (res && res.error) {
+        if(['reload_required', 'update_required'].indexOf(res.error.message) > -1) {
+          this.forceOffline = true;
+        }
         this.forceClose();
       }
     });
