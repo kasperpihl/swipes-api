@@ -3,7 +3,7 @@ import * as types from 'constants/ActionTypes';
 
 const initialState = fromJS({
   actionButtons: {},
-  sliderIndex: 2,
+  sliderIndex: 1,
   collapsed: false,
   sliders: [
     {

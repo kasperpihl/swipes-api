@@ -170,7 +170,7 @@ class Login extends PureComponent {
       email: email.toLowerCase(),
       password,
     }).then((res) => {
-
+      console.log('res sigin', res)
       this.clearLoading('loging');
 
       if (res.error && res.error.message) {

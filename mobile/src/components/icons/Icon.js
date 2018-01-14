@@ -1,7 +1,7 @@
 import React from 'react';
-import SvgIcon from 'react-native-svg-icon';
+import { View, Text } from 'react-native';
 import svgs from './svgs';
 
-const Icon = (props) => <SvgIcon {...props} svgs={svgs} />;
+const Icon = (props) => <View><Text>svg</Text></View>
 
 export default Icon;
