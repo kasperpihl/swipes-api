@@ -64,8 +64,8 @@ class WelcomeScreen extends PureComponent {
         <View style={styles.container}>
           <Text style={styles.title}>Welcome to your Workspace</Text>
           <View style={styles.illustration}>
-            <Icon name="ESWelcome" width={viewSize.width - 60} height="190" />
-          </View>
+            <Icon icon="ESWelcome" width={viewSize.width - 60} height="190" />
+          </View> 
           <View style={styles.textWrapper}>
             <Text style={styles.text}>This is the place for your team to communicate and create great work together.</Text>
           </View>

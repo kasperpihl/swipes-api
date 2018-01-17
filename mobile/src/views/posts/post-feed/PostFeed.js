@@ -55,7 +55,7 @@ class PostFeed extends PureComponent {
       >
         <RippleButton onPress={this.onNewPost}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+            <Icon icon="Plus" width="24" height="24" fill={colors.deepBlue80} />
           </View>
         </RippleButton>
       </HOCHeader>
@@ -80,7 +80,7 @@ class PostFeed extends PureComponent {
 
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-        <Icon name="ESDiscussion" width="290" height="300"  />
+        <Icon icon="ESDiscussion" width="290" height="300"  />
         <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Start a discussion or share an idea</Text>
       </View>
     )

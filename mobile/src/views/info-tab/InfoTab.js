@@ -125,7 +125,7 @@ class InfoTab extends PureComponent {
     return (
       <View style={styles.aboutWrapper}>
         <View style={styles.aboutHeader}>
-          <Icon name="QuestionMono" width="24" height="24" fill="white" />
+          <Icon icon="QuestionMono" width="24" height="24" fill="white" />
           <Text selectable={true} style={styles.aboutTitle}>{about.title}</Text>
         </View>
         <View style={styles.aboutTextWrapper}>
@@ -147,7 +147,7 @@ class InfoTab extends PureComponent {
         <Text selectable={true} style={styles.infoTitle}>{inf.title.toUpperCase()}</Text>
         <View style={styles.infoContent}>
           {inf.icon ? (
-            <Icon name={inf.icon} width="18" height="18" fill={colors.deepBlue20} style={{ marginRight: 6 }} />
+            <Icon icon={inf.icon} width="18" height="18" fill={colors.deepBlue20} style={{ marginRight: 6 }} />
           ) : (
             undefined
           )}
@@ -185,7 +185,7 @@ class InfoTab extends PureComponent {
         <RippleButton onPress={this.onActionCached(i)} key={a.icon}>
           <View style={styles.actionWrapper}>
             <View style={[styles.actionButton, { backgroundColor: actionColor }]}>
-              <Icon name={a.icon} width="24" height="24" fill="white" />
+              <Icon icon={a.icon} width="24" height="24" fill="white" />
             </View>
             <Text selectable={true} style={styles.actionLabel}>{a.title}</Text>
           </View>

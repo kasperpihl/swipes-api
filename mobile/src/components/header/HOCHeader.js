@@ -155,7 +155,7 @@ class HOCHeader extends PureComponent {
         borderRadius: 2,
         flex: 0,
       }} >
-        <Icon name={icon} width="24" height="24" fill={colors.deepBlue80} />
+        <Icon icon={icon} width="24" height="24" fill={colors.deepBlue80} />
       </View>
     )
   }

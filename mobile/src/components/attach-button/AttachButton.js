@@ -33,7 +33,7 @@ class AttachButton extends PureComponent {
     const { numberOfAttachments } = this.props;
     
     if (!numberOfAttachments) {
-      return <Icon name="Attachment" width="24" height="24" fill={gs.colors.blue100} />
+      return <Icon icon="Attachment" width="24" height="24" fill={gs.colors.blue100} />
     }
     
     return (

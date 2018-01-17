@@ -151,7 +151,7 @@ class PostCreate extends PureComponent {
     }
 
     return (
-      [<Icon key="icon" name={miniIconForId(post.getIn(['context', 'id']))} width="18" height="18" fill={colors.deepBlue40} style={{marginTop: -2 }} />,
+      [<Icon key="icon" icon={miniIconForId(post.getIn(['context', 'id']))} width="18" height="18" fill={colors.deepBlue40} style={{marginTop: -2 }} />,
       <Text selectable={true} key="title" style={[styles.subtitle, {paddingHorizontal: 3, marginTop: -2 }]}>{post.getIn(['context', 'title'])}</Text>]
     )
   }

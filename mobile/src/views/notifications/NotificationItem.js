@@ -122,7 +122,7 @@ class NotificationItem extends PureComponent {
 
     return (
       <View style={styles.timestampWrapper}>
-        <Icon name={icon} width="24" height="24" />
+        <Icon icon={icon} width="24" height="24" />
         <Text selectable={true} style={styles.timestampLabel}>{timestamp}</Text>
       </View>
     )

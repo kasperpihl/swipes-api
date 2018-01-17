@@ -109,7 +109,7 @@ class App extends PureComponent {
           colors={[colors.bgGradientFrom, colors.bgGradientTo]}
           style={styles.gradient}
         >
-          <Icon name="SwipesLogoText" fill={colors.bgColor} width="90" />
+          <Icon icon="SwipesLogoText" fill={colors.bgColor} width="90" />
         </LinearGradient>
       );
     }

@@ -229,7 +229,7 @@ class PostFeed extends PureComponent {
     const timeStamp = timeAgo(post.get('created_at'), true);
     const seperator = post.get('context') ? <Text selectable={true} style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
     const contextTitle = post.get('context') ? <Text selectable={true} style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text> : undefined;
-    const icon = post.get('context') ? <Icon name={miniIconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
+    const icon = post.get('context') ? <Icon icon={miniIconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
     const padding = post.get('context') ? 5 : 0;
 
     return (
@@ -320,7 +320,7 @@ class PostFeed extends PureComponent {
       <RippleButton onPress={this.onAttachmentClickCached(i, post)} key={i}>
         <View style={styles.attachment}>
           <Icon
-            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            icon={attachmentIconForService(att.getIn(['link', 'service']))}
             width="24"
             height="24"
             fill={colors.deepBlue80}

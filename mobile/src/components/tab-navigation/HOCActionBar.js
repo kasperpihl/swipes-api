@@ -129,7 +129,7 @@ class HOCActionBar extends PureComponent {
 
     let renderedContent = (
       <Icon
-        name={button.icon}
+        icon={button.icon}
         width="24"
         height="24"
         fill={colors.deepBlue50}

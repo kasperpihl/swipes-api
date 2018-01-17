@@ -255,7 +255,7 @@ class PostView extends PureComponent {
       </Text>
       : undefined;
     const icon = post.get("context")
-      ? <Icon name={iconForId(post.getIn(["context", "id"]))} width="12" height="12" fill={colors.deepBlue40} />
+      ? <Icon icon={iconForId(post.getIn(["context", "id"]))} width="12" height="12" fill={colors.deepBlue40} />
       : undefined;
     const padding = post.get("context") ? 5 : 0;
 
@@ -335,7 +335,7 @@ class PostView extends PureComponent {
       <RippleButton onPress={this.onAttachmentClickCached(i, post)} key={i}>
         <View style={styles.attachment}>
           <Icon
-            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            icon={attachmentIconForService(att.getIn(['link', 'service']))}
             width="24"
             height="24"
             fill={colors.deepBlue80}
@@ -366,7 +366,7 @@ class PostView extends PureComponent {
       <RippleButton style={styles.navButton} onPress={this.onNavigateToContext}>
         <View style={styles.navButton}>
           <Text selectable={true} style={styles.navButtonLabel}>Open "{newTitle}"</Text>
-          <Icon name="ArrowRightLine" width="24" height="24" fill={colors.deepBlue50} />
+          <Icon icon="ArrowRightLine" width="24" height="24" fill={colors.deepBlue50} />
         </View>
       </RippleButton>
     )

@@ -48,7 +48,7 @@ class MilestoneResult extends PureComponent {
     return (
       <View style={styles.container} >
         <View style={styles.iconWrapper} >
-          <Icon name="MiniMilestone" width="18" height="18" fill={colors.deepBlue100} />
+          <Icon icon="MiniMilestone" width="18" height="18" fill={colors.deepBlue100} />
         </View>
         <View style={styles.titleWrapper}>
           <Text selectable={true} style={styles.title} ellipsizeMode="tail" numberOfLines={1}>{result.item.title}</Text>

@@ -18,7 +18,7 @@ class Assignees extends Component {
   renderAddAssignees() {
     return (
       <View style={styles.icon}>
-        <Icon name="Person" fill={colors.deepBlue40} width="24" height="24" />
+        <Icon icon="Person" fill={colors.deepBlue40} width="24" height="24" />
       </View>
     );
   }

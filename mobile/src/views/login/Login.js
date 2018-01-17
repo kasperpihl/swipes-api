@@ -253,7 +253,7 @@ class Login extends PureComponent {
     return (
       <RippleButton style={styles.backButton} onPress={this.onShowWelcome}>
         <View style={styles.backButtonWrapper}>
-          <Icon name="ArrowLeftLine" width="24" height="24" fill="white" />
+          <Icon icon="ArrowLeftLine" width="24" height="24" fill="white" />
         </View>
       </RippleButton>
     )
