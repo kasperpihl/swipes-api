@@ -14,9 +14,9 @@ import checkForUpdates from './middlewares/check-updates-middleware';
 import getConfig from './middlewares/get-config';
 import handleJsonError from './middlewares/errors';
 import {
+  SwipesError,
   swipesErrorMiddleware,
 } from './middlewares/swipes-error';
-import { SwipesError } from './middlewares/swipes-error';
 import * as routes from './api/routes';
 
 require('winston-loggly-bulk');
@@ -74,7 +74,7 @@ if (env !== 'dev') {
 }
 
 // Webhooks route
-app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed*/);
+app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */);
 
 app.use('/v1', routes.v1Multipart);
 
@@ -89,21 +89,21 @@ app.use('/v1', (req, res, next) => {
 app.use('/v1', getConfig);
 app.use('/v1', (req, res, next) => {
   let shouldRedirect = false;
-  if(res.locals.config.redirectToStaging) {
+  if (res.locals.config.redirectToStaging) {
     Object.entries(res.locals.config.redirectToStaging).forEach(([header, rVal]) => {
-      if(''+rVal === ''+req.header(`sw-${header}`)) {
+      if (`${rVal}` === `${req.header(`sw-${header}`)}`) {
         shouldRedirect = true;
       }
     });
-    if(shouldRedirect) {
-      return res.redirect(307, 'https://staging.swipesapp.com/v1' + req.path);
+    if (shouldRedirect) {
+      return res.redirect(307, `https://staging.swipesapp.com/v1${req.path}`);
     }
   }
-  if(res.locals.config.maintenance) {
+  if (res.locals.config.maintenance) {
     return next(new SwipesError('maintenance', { maintenance: true }));
   }
   return next();
-})
+});
 // No authed routes goes here
 app.use('/v1', routes.v1NotAuthed);
 // Checking for updates

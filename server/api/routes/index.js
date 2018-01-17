@@ -19,6 +19,7 @@ import * as me from './me';
 import * as organizations from './organizations';
 import * as dashboard from './dashboard';
 import * as posts from './posts';
+import * as exporter from './export_plans_csv';
 
 const v1NotAuthed = [
   users.notAuthed,
@@ -47,6 +48,7 @@ const v1Authed = [
   me.authed,
   organizations.authed,
   posts.authed,
+  exporter.authed,
 ];
 const v1Multipart = [
   me.multipart,
