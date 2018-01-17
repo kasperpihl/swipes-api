@@ -12,6 +12,39 @@ import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
 
+const dbMilestonesGetNoClosedByUserId = funcWrap([
+  object.as({
+    user_id: string.require(),
+  }).require(),
+], (err, { user_id }) => {
+  if (err) {
+    throw new SwipesError(`dbMilestonesGetAllByUserId: ${err}`);
+  }
+
+  const q =
+  r.table('users')
+    .get(user_id)
+    .without(['password', 'xendoCredentials', { services: 'auth_data' }])
+    .merge({
+      organizations:
+      r.table('organizations')
+        .getAll(r.args(r.row('organizations')))
+        .coerceTo('ARRAY'),
+    })
+    .do((user) => {
+      return user.merge({
+        milestones:
+         r.table('milestones')
+           .getAll(user('organizations')(0)('id'), { index: 'organization_id' })
+           .filter((m) => {
+             return m('closed_at').eq(null);
+           })
+           .coerceTo('ARRAY'),
+      });
+    });
+
+  return db.rethinkQuery(q);
+});
 const dbMilestonesInsertSingle = funcWrap([
   object.as({
     milestone: object.require(),
@@ -224,4 +257,5 @@ export {
   dbMilestonesMigrateIncompleteGoals,
   dbMilestonesGoalsReorder,
   dbMilestonesDelete,
+  dbMilestonesGetNoClosedByUserId,
 };
