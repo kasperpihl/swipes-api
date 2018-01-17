@@ -4,6 +4,7 @@ import { Route, withRouter } from 'react-router-dom';
 
 import HOCUnsubscribe from 'src/react/pages/unsubscribe/HOCUnsubscribe';
 import HOCCompatibleDownload from 'compatible/pages/download/HOCCompatibleDownload';
+import HOCPlanCSVExporter from 'compatible/pages/plan-csv-exporter/HOCPlanCSVExporter';
 import HOCCompatibleLogin from 'compatible/pages/login/HOCCompatibleLogin';
 import HOCCompatibleSignup from 'compatible/pages/signup/HOCCompatibleSignup';
 import HOCCompatibleInvite from 'compatible/pages/invite/HOCCompatibleInvite';
@@ -47,12 +48,13 @@ class Root extends PureComponent {
       <Route key="2" path="/notsupported" component={HOCNotSupported} />,
       <Route key="3" path="/unsubscribe" component={HOCUnsubscribe} />,
       <Route key="4" path="/download" component={HOCCompatibleDownload} />,
-      <Route key="5" path="/login" component={HOCCompatibleLogin} />,
-      <Route key="6" path="/register" component={HOCCompatibleSignup} />,
-      <Route key="7" path="/invite" component={HOCCompatibleInvite} />,
-      <Route key="8" path="/welcome" component={HOCCompatibleWelcome} />,
-      <Route key="9" path="/dashboard" component={Dashboard} />,
-      <Route key="10" path="/confirm" component={HOCCompatibleConfirm} />,
+      <Route key="5" path="/plan-csv-exporter" component={HOCPlanCSVExporter} />,
+      <Route key="6" path="/login" component={HOCCompatibleLogin} />,
+      <Route key="7" path="/register" component={HOCCompatibleSignup} />,
+      <Route key="8" path="/invite" component={HOCCompatibleInvite} />,
+      <Route key="9" path="/welcome" component={HOCCompatibleWelcome} />,
+      <Route key="10" path="/dashboard" component={Dashboard} />,
+      <Route key="11" path="/confirm" component={HOCCompatibleConfirm} />,
     ];
   }
   render() {

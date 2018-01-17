@@ -6,7 +6,9 @@ import {
 } from '../api/routes/middlewares/db_utils/tokens';
 
 const authParseToken = (req, res, next) => {
-  const token = res.locals.token;
+  const {
+    token,
+  } = res.locals;
 
   if (token) {
     const parsedToken = parseToken(token);
