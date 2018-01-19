@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import Svg, { G, Path, Polygon, Circle, Rect, Line, Polyline, Ellipse } from 'react-native-svg';
 import svgs from './svgs';
 

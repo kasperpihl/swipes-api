@@ -6,7 +6,7 @@ export default function getGlobals() {
   if( window.__DEV__ || 
     DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging' || 
     DeviceInfo.getBundleId() === 'com.swipesapp.androidstaging') {
-      apiUrl = 'https://workspace.swipesapp.com';
+      apiUrl = 'https://staging.swipesapp.com';
   }
   const pre = `sw-${Platform.OS}`;
 
