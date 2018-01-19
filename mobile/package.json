@@ -19,7 +19,7 @@
     "react-delegate": "^1.0.3",
     "react-immutable-proptypes": "^2.1.0",
     "react-native": "^0.52.0",
-    "react-native-autogrow-textinput": "^4.1.0",
+    "react-native-autogrow-textinput": "^5.0.0",
     "react-native-browser": "^0.6.2",
     "react-native-code-push": "^5.0.0-beta",
     "react-native-custom-tabs": "^0.1.6",
