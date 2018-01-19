@@ -131,9 +131,7 @@ const mapStateToProps = (state, ownProps) => ({
   goals: state.get('goals'),
 });
 
-export default connect(mapStateToProps, {
-
-})(HOCMilestoneItem);
+export default connect(mapStateToProps, {})(HOCMilestoneItem);
 
 const styles = StyleSheet.create({
   button: {
