@@ -3,7 +3,6 @@ import * as a from './';
 const sendFile = (presignedURL, file, callback) => {
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
-    console.log(xhr);
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
         callback({ ok: true });
