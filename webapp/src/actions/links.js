@@ -42,6 +42,7 @@ export const preview = (from, att, targetId) => (d) => {
       props: {
         // K_TODO: Backward compatibility remove || permission.get('shortUrl')
         loadPreview: permission.get('short_url') || permission.get('shortUrl') || link.toJS(),
+        title: title,
         targetId,
       },
     }));
