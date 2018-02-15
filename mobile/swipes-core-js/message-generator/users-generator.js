@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default class Users {
   constructor(store) {
     this.store = store;
@@ -6,8 +8,8 @@ export default class Users {
     if (typeof user === 'string') {
       const state = this.store.getState();
       const users = state.get('users');
-      if (user === 'me' || state.getIn(['me', 'id']) === user) { 
-        return state.get('me'); 
+      if (user === 'me' || state.getIn(['me', 'id']) === user) {
+        return state.get('me');
       }
       return users.get(user);
     }
@@ -16,7 +18,7 @@ export default class Users {
 
   getEmail(userId) {
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     return user.get('email');
@@ -29,14 +31,14 @@ export default class Users {
     const sizeString = `${size}x${size}`;
 
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     return user.getIn(['profile', 'photos', sizeString]);
   }
   getFirstName(userId) {
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     const firstName = user.getIn(['profile', 'first_name']) || '';
@@ -44,7 +46,7 @@ export default class Users {
   }
   getLastName(userId) {
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     const lastName = user.getIn(['profile', 'last_name']) || '';
@@ -52,28 +54,28 @@ export default class Users {
   }
   getRole(userId) {
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     return user.getIn(['profile', 'role']) || '';
   }
   getBio(userId) {
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     return user.getIn(['profile', 'bio']) || '';
   }
   getOrganizationName(userId) {
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     return user.getIn(['organizations', 0, 'name']);
   }
   getInitials(userId) {
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     let initials = this.getFirstName(user).substring(0, 1);
@@ -85,7 +87,7 @@ export default class Users {
   }
   getFullName(userId) {
     const user = this.getUser(userId);
-    if(!user) {
+    if (!user) {
       return undefined;
     }
     const firstName = this.getFirstName(user);
@@ -110,7 +112,7 @@ export default class Users {
     const user = this.getUser(userId);
     if (user) {
       if (user.get('id') === me.get('id') && !options.disableYou) {
-        if(options.capitalize) {
+        if (options.capitalize) {
           return options.yourself ? 'Yourself' : 'You';
         }
         return options.yourself ? 'yourself' : 'you';
@@ -123,26 +125,42 @@ export default class Users {
   }
   getNames(userIds, options) {
     options = options || {};
+
     const state = this.store.getState();
-    if (!userIds || !userIds.size) {
-      return 'no one';
-    }
     const me = state.get('me');
-    const preferId = options.preferId || me.get('id');
-    let excludeId = options.excludeId;
-    const numberOfNames = options.number || 1;
+    const {
+      preferId = me.get('id'),
+      number = 1,
+      quotes = false,
+      bold = false,
+      defaultString = null,
+    } = options;
+    let {
+      excludeId = null,
+    } = options;
+
+    if (!userIds || !userIds.size) {
+      return defaultString || 'no one';
+    }
+
+    const numberOfNames = number;
+
     if (excludeId === 'me') {
       excludeId = me.get('id');
     }
+
     if (userIds.includes(excludeId)) {
-      userIds = userIds.filter(uId => uId !== excludeId)
+      userIds = userIds.filter(uId => uId !== excludeId);
     }
+
     if (userIds.includes(preferId)) {
       userIds = userIds.filter(uId => uId !== preferId).insert(0, preferId);
     }
+
     const names = userIds.map(uId => this.getName(uId, options));
     let nameString = '';
     let i = 0;
+
     do {
       const name = names.get(i);
       if (i < numberOfNames && name) {
@@ -154,10 +172,27 @@ export default class Users {
       }
       i += 1;
     } while (i < numberOfNames && i < names.size);
+
     if (names.size && i < names.size) {
       const extra = (names.size - i);
       nameString += ` & ${extra} other${extra > 1 ? 's' : ''}`;
     }
+
+    if (nameString.length === 0) {
+      // the default string is taken as it is. Without respecting `quotes` or `bold` options
+      nameString = defaultString;
+
+      return nameString;
+    }
+
+    if (quotes) {
+      nameString = `"${nameString}"`;
+    }
+
+    if (bold) {
+      nameString = <b>{nameString}</b>;
+    }
+
     return nameString;
   }
 }

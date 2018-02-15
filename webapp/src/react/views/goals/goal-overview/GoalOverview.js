@@ -34,16 +34,16 @@ class GoalOverview extends PureComponent {
 
     const myName = msgGen.users.getName(myId, { disableYou: true });
 
-    let personString = 'the next person';
     const assignees = helper.getAssignees();
-    if (assignees.size) {
-      personString = (
-        <b>“{msgGen.users.getNames(assignees, {
-          excludeId: 'me',
-          number: 3,
-        })}”</b>
-      );
-    }
+    const personString = (
+      msgGen.users.getNames(assignees, {
+        excludeId: 'me',
+        number: 3,
+        defaultString: 'the next person',
+        bold: true,
+        quotes: true,
+      })
+    );
 
     const step = helper.getStepById(handoff.stepId);
     if(step) {
