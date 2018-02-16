@@ -3,8 +3,6 @@ import express from 'express';
 import config from 'config';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import winston from 'winston';
-import expressWinston from 'express-winston';
 import websocketStart from './websocket';
 import {
   authParseToken,
@@ -18,32 +16,9 @@ import {
   swipesErrorMiddleware,
 } from './middlewares/swipes-error';
 import * as routes from './api/routes';
+import logger from './logger';
 
-require('winston-loggly-bulk');
-
-const logglyConfig = config.get('loggly');
 const env = config.get('env');
-const transports = [];
-
-if (env !== 'dev') {
-  expressWinston.bodyBlacklist.push('token', 'password', 'text', 'title');
-  expressWinston.requestWhitelist.push('body');
-  expressWinston.responseWhitelist.push('body');
-
-  transports.push(new winston.transports.Loggly({
-    subdomain: logglyConfig.subdomain,
-    token: logglyConfig.token,
-    tags: [logglyConfig.tags],
-    json: true,
-  }));
-
-  winston.add(winston.transports.Loggly, {
-    token: logglyConfig.token,
-    subdomain: logglyConfig.subdomain,
-    tags: [logglyConfig.tags],
-    json: true,
-  });
-}
 
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
@@ -55,23 +30,13 @@ app.use(cors({
   exposedHeaders: 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range',
 }));
 
-if (env !== 'dev') {
-  app.use(expressWinston.logger({
-    transports,
-    responseFilter: (res, propName) => {
-      if (propName === 'body') {
-        delete res[propName].token;
-        delete res[propName].password;
-        delete res[propName].text;
-        delete res[propName].title;
+app.use((req, res, next) => {
+  // need to filter things here!
+  // expressWinston.bodyBlacklist.push('token', 'password', 'text', 'title');
+  logger.log('info', req, res, { tags: 'input' });
 
-        return res[propName];
-      }
-
-      return res[propName];
-    },
-  }));
-}
+  return next();
+});
 
 // Webhooks route
 app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */);
@@ -116,11 +81,6 @@ app.use('/v1', routes.v1Authed);
 // // ========================================================================
 // // Error handlers / they should be at the end of the middleware stack
 // // ========================================================================
-if (env !== 'dev') {
-  app.use(expressWinston.errorLogger({
-    transports,
-  }));
-}
 
 const debugErrorHandling = (err, req, res, next) => {
   if (err && env === 'dev') {
@@ -130,6 +90,9 @@ const debugErrorHandling = (err, req, res, next) => {
   return next(err);
 };
 const unhandledServerError = (err, req, res, next) => {
+  if (env !== 'dev') {
+    logger.log('error', err, { tags: 'internal server error' });
+  }
   if (err) {
     return res.status(500).send({ ok: false, err });
   }
@@ -147,7 +110,7 @@ app.use(unhandledServerError);
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
   if (env !== 'dev') {
-    winston.log('fatal', err);
+    logger.log('error', err, { tags: 'fatal' });
   } else {
     console.error(err);
   }
