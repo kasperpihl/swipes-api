@@ -71,8 +71,9 @@ app.use('/v1', routes.v1NotAuthed);
 app.use('/v1', checkForUpdates);
 // Validation of user's token
 app.use('/v1', authParseToken, authCheckToken);
-// Logging input
+// Logging input to aws
 app.use((req, res, next) => {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const allowed = ['token', 'password', 'text', 'title'];
   const filteredBody = Object.keys(req.body)
     .filter(key => !allowed.includes(key))
@@ -84,6 +85,7 @@ app.use((req, res, next) => {
     }, {});
 
   logger.log('info', {
+    ip,
     user_id: res.locals.user_id,
     headers: req.headers,
     params: req.params,
