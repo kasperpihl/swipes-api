@@ -4,11 +4,9 @@ import CloudWatchTransport from 'winston-aws-cloudwatch';
 
 const env = config.get('env');
 const cloudWatchConfig = config.get('awsCloudWatch');
-
 const logger = new winston.Logger();
 
-console.log(cloudWatchConfig);
-if (env !== 'dev') {
+if (env === 'dev') {
   logger.add(winston.transports.Console, {
     timestamp: true,
     colorize: true,
@@ -30,7 +28,10 @@ const logConfig = {
   },
 };
 
-logger.add(CloudWatchTransport, logConfig);
+// put a check for the dev
+if (env !== 'dev') {
+  logger.add(CloudWatchTransport, logConfig);
+}
 
 logger.level = process.env.LOG_LEVEL || 'silly';
 

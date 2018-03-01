@@ -30,14 +30,6 @@ app.use(cors({
   exposedHeaders: 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range',
 }));
 
-app.use((req, res, next) => {
-  // need to filter things here!
-  // expressWinston.bodyBlacklist.push('token', 'password', 'text', 'title');
-  logger.log('info', req, res, { tags: 'input' });
-
-  return next();
-});
-
 // Webhooks route
 app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */);
 
@@ -54,19 +46,23 @@ app.use('/v1', (req, res, next) => {
 app.use('/v1', getConfig);
 app.use('/v1', (req, res, next) => {
   let shouldRedirect = false;
+
   if (res.locals.config.redirectToStaging) {
     Object.entries(res.locals.config.redirectToStaging).forEach(([header, rVal]) => {
       if (`${rVal}` === `${req.header(`sw-${header}`)}`) {
         shouldRedirect = true;
       }
     });
+
     if (shouldRedirect) {
       return res.redirect(307, `https://staging.swipesapp.com/v1${req.path}`);
     }
   }
+
   if (res.locals.config.maintenance) {
     return next(new SwipesError('maintenance', { maintenance: true }));
   }
+
   return next();
 });
 // No authed routes goes here
@@ -75,6 +71,29 @@ app.use('/v1', routes.v1NotAuthed);
 app.use('/v1', checkForUpdates);
 // Validation of user's token
 app.use('/v1', authParseToken, authCheckToken);
+// Logging input
+app.use((req, res, next) => {
+  const allowed = ['token', 'password', 'text', 'title'];
+  const filteredBody = Object.keys(req.body)
+    .filter(key => !allowed.includes(key))
+    .reduce((obj, key) => {
+      return {
+        ...obj,
+        [key]: req.body[key],
+      };
+    }, {});
+
+  logger.log('info', {
+    user_id: res.locals.user_id,
+    headers: req.headers,
+    params: req.params,
+    query: req.query,
+    body: filteredBody,
+    route: req.originalUrl,
+  });
+
+  return next();
+});
 // Authed routes goes here
 app.use('/v1', routes.v1Authed);
 
@@ -91,7 +110,7 @@ const debugErrorHandling = (err, req, res, next) => {
 };
 const unhandledServerError = (err, req, res, next) => {
   if (env !== 'dev') {
-    logger.log('error', err, { tags: 'internal server error' });
+    logger.log('error', err);
   }
   if (err) {
     return res.status(500).send({ ok: false, err });
@@ -110,7 +129,7 @@ app.use(unhandledServerError);
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', (err) => {
   if (env !== 'dev') {
-    logger.log('error', err, { tags: 'fatal' });
+    logger.log('error', err);
   } else {
     console.error(err);
   }
