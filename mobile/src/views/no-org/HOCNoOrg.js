@@ -102,7 +102,7 @@ class HOCNoOrg extends PureComponent {
         <Text style={styles.title}>
           Seems like you are not part of an organization yet.
         </Text>
-        <Icon name="ESWelcome" width={(gs.layout.width - 60)} height={svgHeight} />
+        <Icon icon="ESWelcome" width={(gs.layout.width - 60)} height={svgHeight} />
         <ParsedText
           style={styles.paragraph}
           parse={[

@@ -85,12 +85,14 @@ export const request = (options, data) => (d, getState) => {
   return new Promise((resolve, reject) => {
     fetch(apiUrl + command, serData)
       .then((r) => {
+        console.log('fetch r', r)
         if(r && r.url && !apiUrl.startsWith('https://staging') && r.url.startsWith('https://staging')) {
           redirectUrl = r.url;
         }
         if (r && r.ok) return r.json();
         return Promise.reject({ message: r.statusText, code: r.status });
       }).then((res) => {
+        console.log('then r', res)
         state = getState();
         handleUpdatesNeeded(res, state, d);
         if (res && res.ok) {
@@ -113,6 +115,7 @@ export const request = (options, data) => (d, getState) => {
         resolve(res);
       }).catch((e) => {
         console.log(JSON.stringify(e));
+        console.log('error', JSON.stringify(e));
         if (getState().getIn(['globals', 'isDev'])) {
           console.warn(command, e);
         }

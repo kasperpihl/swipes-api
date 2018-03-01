@@ -123,8 +123,8 @@ class HOCOrganization extends PureComponent {
     const options = this.getOptionsForE(e);
     const isOwner = organization.get('owner_id') === me.get('id');
     const items = [{
-      title: 'Delete organization',
-      subtitle: 'All users will be thrown out and your subscription will be cancelled',
+      title: 'Delete account',
+      subtitle: 'Your account will be closed and all users removed. Any subscription will be canceled.',
     }];
     if(!isOwner) {
       items[0].title = 'Leave organization';

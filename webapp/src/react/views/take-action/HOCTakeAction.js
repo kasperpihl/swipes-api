@@ -1,3 +1,7 @@
+/*
+  If a goal has 
+*/
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import * as a from 'actions';

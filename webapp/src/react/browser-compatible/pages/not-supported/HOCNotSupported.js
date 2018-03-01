@@ -25,7 +25,7 @@ class HOCNotSupported extends PureComponent {
 
     const options = { boundingRect: e.target.getBoundingClientRect() };
     
-    const title = isOwner ? 'Delete organization' : 'Leave organization';
+    const title = isOwner ? 'Delete account' : 'Leave organization';
   
     confirm(Object.assign({}, options, {
       title,

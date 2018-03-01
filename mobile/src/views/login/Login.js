@@ -170,7 +170,7 @@ class Login extends PureComponent {
       email: email.toLowerCase(),
       password,
     }).then((res) => {
-
+      console.log('res sigin', res)
       this.clearLoading('loging');
 
       if (res.error && res.error.message) {
@@ -253,7 +253,7 @@ class Login extends PureComponent {
     return (
       <RippleButton style={styles.backButton} onPress={this.onShowWelcome}>
         <View style={styles.backButtonWrapper}>
-          <Icon name="ArrowLeftLine" width="24" height="24" fill="white" />
+          <Icon icon="ArrowLeftLine" width="24" height="24" fill="white" />
         </View>
       </RippleButton>
     )

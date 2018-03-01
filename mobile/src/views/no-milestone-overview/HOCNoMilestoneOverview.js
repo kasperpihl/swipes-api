@@ -67,7 +67,7 @@ class HOCNoMilestoneOverview extends PureComponent {
       <HOCHeader title="Goals without a plan" delegate={this}>
         <RippleButton onPress={this.openCreateGoalModal}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+            <Icon icon="Plus" width="24" height="24" fill={colors.deepBlue80} />
           </View>
         </RippleButton>
       </HOCHeader>

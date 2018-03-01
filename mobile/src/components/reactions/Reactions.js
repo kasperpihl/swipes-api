@@ -70,7 +70,7 @@ class HOCReactions extends PureComponent {
 
     return (
       <View style={styles.likeButton}>
-        <Icon name="Heart" width="24" height="24" fill={heartFill} stroke={heartStroke} />
+        <Icon icon="Heart" width="24" height="24" fill={heartFill} stroke={heartStroke} />
       </View>
     )
   }

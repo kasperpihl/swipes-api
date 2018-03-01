@@ -207,7 +207,7 @@ class PostResult extends PureComponent {
     const timeStamp = timeAgo(post.created_at, true);
     const seperator = post.context ? <Text selectable={true} style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
     const contextTitle = post.context ? <Text selectable={true} style={styles.subtitleLabel}>{post.context.title}</Text> : undefined;
-    const icon = post.context ? <Icon name={miniIconForId(post.context.id)} width="18" height="18" fill={colors.deepBlue40} /> : undefined;
+    const icon = post.context ? <Icon icon={miniIconForId(post.context.id)} width="18" height="18" fill={colors.deepBlue40} /> : undefined;
     const padding = post.context ? 5 : 0;
 
     return (

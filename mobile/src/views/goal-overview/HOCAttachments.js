@@ -67,7 +67,7 @@ class HOCAttachments extends PureComponent {
       <RippleButton rippleColor={colors.deepBlue60} style={styles.attachment} rippleOpacity={0.8} key={attachment} onPress={this.attachmentPress(at)}>
         <View style={styles.attachment}>
           <View style={styles.icon}>
-            <Icon name={icon} width="24" height="24" fill={colors.deepBlue100} />
+            <Icon icon={icon} width="24" height="24" fill={colors.deepBlue100} />
           </View>
           <Text selectable={true} style={styles.label} ellipsizeMode="tail">{at.get('title')}</Text>
         </View>
@@ -98,7 +98,7 @@ class HOCAttachments extends PureComponent {
       <View style={styles.fabWrapper}>
         <RippleButton rippleColor={colors.bgColor} rippleOpacity={0.5} style={styles.fabButton} onPress={this.onChooseAttachmentTypeToAdd}>
           <View style={styles.fabButton}>
-            <Icon name="Plus" width="24" height="24" fill={colors.bgColor} />
+            <Icon icon="Plus" width="24" height="24" fill={colors.bgColor} />
           </View>
         </RippleButton>
       </View>

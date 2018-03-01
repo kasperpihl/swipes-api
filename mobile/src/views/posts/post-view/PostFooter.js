@@ -136,7 +136,7 @@ class HOCPostFooter extends PureComponent {
     return (
       <RippleButton onPress={this.onNavigateBack}>
         <View style={styles.backButton}>
-          <Icon name="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue80} />
+          <Icon icon="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue80} />
         </View>
       </RippleButton>
     )
@@ -156,7 +156,7 @@ class HOCPostFooter extends PureComponent {
     return (
       <RippleButton style={styles.iconButton} rippleColor={colors.blue100} rippleOpacity={0.2} onPress={this.handleAddComment}>
         <View style={styles.iconButton}>
-          <Icon name="Send" width="24" height="24" fill={gs.colors.blue100} />
+          <Icon icon="Send" width="24" height="24" fill={gs.colors.blue100} />
         </View>
       </RippleButton>
     )

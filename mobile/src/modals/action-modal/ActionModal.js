@@ -125,7 +125,7 @@ export default class ActionModal extends PureComponent {
         rippleOpacity={0.8} 
         onPress={this.onClose}>
         <View style={closeButtonStyles}>
-          <Icon name="Close" width="24" height="24" fill={colors.deepBlue80} />
+          <Icon icon="Close" width="24" height="24" fill={colors.deepBlue80} />
         </View>
       </RippleButton>
     );

@@ -238,7 +238,7 @@ class CommentView extends PureComponent {
       <RippleButton onPress={this.onAttachmentClickCached(i, comment)} key={i}>
         <View style={styles.attachment}>
           <Icon
-            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            icon={attachmentIconForService(att.getIn(['link', 'service']))}
             width="24"
             height="24"
             fill={colors.deepBlue80}

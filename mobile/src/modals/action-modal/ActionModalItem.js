@@ -54,7 +54,7 @@ class ActionModalItem extends Component {
     } else if (item.getIn(['leftIcon', 'icon'])) {
       return (
         <View style={styles.leftIcon}>
-          <Icon name={item.getIn(['leftIcon', 'icon'])} width="24" height="24" fill={colors.deepBlue80} />
+          <Icon icon={item.getIn(['leftIcon', 'icon'])} width="24" height="24" fill={colors.deepBlue80} />
         </View>
       );
     }

@@ -59,7 +59,7 @@ class Notifications extends PureComponent {
 
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-        <Icon name="ESNotification" width="290" height="300"  />
+        <Icon icon="ESNotification" width="290" height="300"  />
         <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>You will be notified here when{"\n"} there’s something new.</Text>
       </View>
     )

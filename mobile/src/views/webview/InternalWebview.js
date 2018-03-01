@@ -20,7 +20,7 @@ class InternalWebview extends Component {
       <View style={styles.navbar}>
         <RippleButton onPress={this.closeWebview}>
           <View style={styles.icon}>
-            <Icon name="Close" width="24" height="24" fill={colors.deepBlue80} />
+            <Icon icon="Close" width="24" height="24" fill={colors.deepBlue80} />
           </View>
         </RippleButton>
         <View style={styles.titleWrap}>

@@ -1,4 +1,4 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
 import { BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
@@ -44,14 +44,6 @@ class HOCAndroidBackButton extends PureComponent {
     return null;
   }
 }
-
-const { string, func } = PropTypes;
-
-HOCAndroidBackButton.propTypes = {
-  sliders: list,
-  navPop: func,
-  sliderChange: func,
-};
 
 function mapStateToProps(state) {
   return {

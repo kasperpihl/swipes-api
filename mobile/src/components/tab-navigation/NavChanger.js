@@ -75,7 +75,7 @@ class NavChanger extends PureComponent {
               <Text style={[styles.actionLabel, { color: labelColor }]}>{label}</Text>
             </View>
             <View style={[styles.actionIcon, { backgroundColor: buttonBg }]}>
-              <Icon name={icon} width="24" height="24" fill={iconFill} />
+              <Icon icon={icon} width="24" height="24" fill={iconFill} />
             </View>
           </View>
         </RippleButton>

@@ -45,11 +45,6 @@
     "bucketName": "SW_AWSS3_BUCKET_NAME",
     "url": "SW_AWSS3_URL"
   },
-  "loggly": {
-    "token": "SW_LOGGLY_TOKEN",
-    "tags": "SW_LOGGLY_TAGS",
-    "subdomain": "SW_LOGGLY_SUBDOMAIN"
-  },
   "stripe": {
     "publishableKey": "SW_STRIPE_PUBLISHABLE_KEY",
     "secretKey": "SW_STRIPE_SECRET_KEY",

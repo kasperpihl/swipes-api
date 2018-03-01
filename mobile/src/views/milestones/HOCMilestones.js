@@ -170,7 +170,7 @@ class HOCMilestones extends PureComponent {
       >
         <RippleButton onPress={this.openCreateMilestoneModal}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+            <Icon icon="Plus" width="24" height="24" fill={colors.deepBlue80} />
           </View>
         </RippleButton>
       </HOCHeader>
@@ -193,7 +193,7 @@ class HOCMilestones extends PureComponent {
       <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.noMilestoneWrapper} onPress={this.onOpenNoMilestone}>
         <View style={styles.noMilestoneWrapper}>
           <View style={styles.noMilestoneSVG}>
-            <Icon name="NoMilestone" width="90" height="90" fill={colors.deepBlue5} />
+            <Icon icon="NoMilestone" width="90" height="90" fill={colors.deepBlue5} />
             <View style={styles.noMilestoneCircle}><View style={styles.noMilestoneDot} /></View>
           </View>
           <View style={styles.noMilestoneTitle}>
@@ -218,7 +218,7 @@ class HOCMilestones extends PureComponent {
 
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-        <Icon name="ESPlan" width="193" height="200"  />
+        <Icon icon="ESPlan" width="193" height="200"  />
         <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Create your team's first plan</Text>
       </View>
     )

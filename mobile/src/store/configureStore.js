@@ -1,5 +1,7 @@
 import { compose, applyMiddleware, createStore } from 'redux';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
+import FilesystemStorage from 'redux-persist-filesystem-storage';
+
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import thunk from 'redux-thunk';
 import { fromJS } from 'immutable';
@@ -27,7 +29,7 @@ export default function configureStore(preloadedState) {
   );
 
   window.persistor = persistStore(store, {
-    storage: AsyncStorage,
+    storage: Platform.OS === 'android' ? FilesystemStorage : AsyncStorage,
     blacklist: ['notes', 'navigation',  'main',  'autoComplete', 'infoTab', 'globals'],
   });
 

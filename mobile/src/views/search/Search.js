@@ -108,7 +108,7 @@ class Search extends PureComponent {
     return (
       <RippleButton onPress={this.onPopNav}>
         <View style={styles.arrowIconWrapper}>
-          <Icon name="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue50} />
+          <Icon icon="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue50} />
           <View style={styles.arrowIconSeperator} />
         </View>
       </RippleButton>
@@ -123,7 +123,7 @@ class Search extends PureComponent {
         onPress={this.clearInput}
       >
         <View style={styles.clearInputWrapper} >
-          <Icon name="Close" width="24" height="24" fill={colors.deepBlue100} />
+          <Icon icon="Close" width="24" height="24" fill={colors.deepBlue100} />
         </View>
       </RippleButton>
     );

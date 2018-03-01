@@ -179,12 +179,14 @@ class HOCPreviewModal extends PureComponent {
     );
   }
   renderHeader() {
+    const { title:propTitle } = this.props;
     const { preview } = this.state;
     const { header } = preview || {};
     const { title, subtitle } = header || {};
 
+    const renderedTitle = propTitle || title;
     return (
-      <HOCHeaderTitle title={title} subtitle={subtitle} />
+      <HOCHeaderTitle title={renderedTitle} subtitle={subtitle} />
     );
   }
   renderRow(row) {

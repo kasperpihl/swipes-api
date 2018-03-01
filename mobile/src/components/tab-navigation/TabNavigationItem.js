@@ -83,7 +83,7 @@ class TabNavigationItem extends PureComponent {
 
     return (
       <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
-        <Icon name={icon} width="24" height="24" fill={iconFill} />
+        <Icon icon={icon} width="24" height="24" fill={iconFill} />
       </View>
     )
   }
@@ -107,7 +107,7 @@ class TabNavigationItem extends PureComponent {
     return (
       <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, right: 0, alignItems: 'flex-end' }}>
         <View style={sideIconStyles}>
-          <Icon name={icon} width="18" height="18" fill={fill} />
+          <Icon icon={icon} width="18" height="18" fill={fill} />
         </View>
       </View>
     );
