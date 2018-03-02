@@ -54,6 +54,11 @@
     }
   }
 
+  &__tutorial_section {
+    @include flex(row, space-between);
+    margin-top: 50px;
+  }
+
   &__content {
     @include size(100%, auto);
   }
@@ -78,6 +83,15 @@
       @include svg-color($deepBlue-80);
       transition: .2s ease;
     }
+  }
+
+  &__tutorial_image {
+    margin-top: 20px;
+    opacity: 0.6;
+    transform: translateY(0px);
+    filter: grayscale(100%);
+    transition: .2s ease;
+    cursor: pointer;
   }
 }
 
@@ -221,5 +235,12 @@
       transform: translateX(0px);
       transition: .2s ease;
     }
+  }
+
+  &__tutorial_image:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+    transform: translateY(5px);
+    transition: .2s ease;
   }
 }

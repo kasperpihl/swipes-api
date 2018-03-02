@@ -57,6 +57,16 @@ class HOCOnboarding extends PureComponent {
     }
 
   }
+  onClickTutorial() {
+    const { browser, target,} = this.props;
+
+    browser(target, 'https://youtu.be/tyRJeiZOnfI');
+  }
+  onClickBlog() {
+    const { browser, target,} = this.props;
+
+    browser(target, 'https://swipesapp.com/blog');
+  }
   render() {
     const { onboarding, userOnboarding, hasOrg, me } = this.props;
     console.log(onboarding.toJS(), userOnboarding.toJS(), me.toJS())
@@ -74,6 +84,7 @@ class HOCOnboarding extends PureComponent {
     );
   }
 }
+
 const { func } = PropTypes;
 
 HOCOnboarding.propTypes = {
