@@ -2,7 +2,11 @@ import React, { PureComponent, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import Wrapper from 'swiss-components/Wrapper';
+import { element } from 'react-swiss';
+
+const Wrapper = element('div', {
+  _size: 'auto',
+})
 
 const _dragEl = document.getElementById('draggable');
 
@@ -31,7 +35,6 @@ class DraggableGoal extends PureComponent {
             <Fragment>
               {this.renderOrNotPortal(provided.draggableStyle, (
                 <Wrapper
-                  autoSize
                   innerRef={provided.innerRef}
                   style={provided.draggableStyle}
                   {...provided.dragHandleProps}

@@ -10,24 +10,16 @@ import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
-import FlexWrapper from 'swiss-components/FlexWrapper';
-import Wrapper from 'swiss-components/Wrapper';
-import Hideable from 'swiss-components/Hideable';
 import { element } from 'react-swiss';
+import sw from './MilestoneOverview.swiss';
 
-const Title = element({
-  _font: ['11px', '$deepBlue80', '18px', 'bold'],
-  textTransform: 'uppercase',
-  paddingTop: '60px',
-});
-
-const Text = element({
-  _widthSpecifications: ['initial', '230px'],
-  _font: ['12px', '$deepBlue50', '18px', '400'],
-  paddingTop: '6px',
-  textAlign: 'center',
-});
-
+const Wrapper = element('div', sw.Wrapper);
+const Title = element('div', sw.Title);
+const Text = element('div', sw.Text);
+const Spacer = element('div', sw.Spacer);
+const EmptyStateWrapper = element('div', sw.EmptyStateWrapper);
+const DroppableWrapper = element('div', sw.DroppableWrapper);
+const TabWrapper = element('div', sw.TabWrapper);
 
 class MilestoneOverview extends PureComponent {
   constructor(props) {
@@ -96,27 +88,27 @@ class MilestoneOverview extends PureComponent {
 
     if (group === 'Later' && !order.get('later').size) {
       return (
-        <FlexWrapper expand={Hideable} hidden={isDraggingOver} column center>
+        <EmptyStateWrapper hidden={isDraggingOver}>
           <Title>
             Set for later
           </Title>
           <Text>
             Move goals that need to be done later <br />  from this week into here.
           </Text>
-        </FlexWrapper>
+        </EmptyStateWrapper>
       )
     }
 
     if (group === 'Done' && !order.get('done').size) {
       return (
-        <FlexWrapper expand={Hideable} hidden={isDraggingOver} column center>
+        <EmptyStateWrapper hidden={isDraggingOver}>
           <Title>
             TRACK PROGRESS
           </Title>
           <Text>
             You will see the progress of all completed <br /> goals here
           </Text>
-        </FlexWrapper>
+        </EmptyStateWrapper>
       )
     }
 
@@ -132,7 +124,7 @@ class MilestoneOverview extends PureComponent {
 
     if (renderSection) {
       return (
-        <FlexWrapper>
+        <DroppableWrapper>
           <Section title={section}>
             <DroppableGoalList
               droppableId={id}
@@ -145,7 +137,7 @@ class MilestoneOverview extends PureComponent {
               )}
             </DroppableGoalList>
           </Section>
-        </FlexWrapper>
+        </DroppableWrapper>
       )
     }
 
@@ -174,17 +166,17 @@ class MilestoneOverview extends PureComponent {
     const rig = { tabDidChange: (i) => this.tabDidChange('tabRightIndex', i) };
 
     return (
-      <FlexWrapper horizontal="between">
+      <TabWrapper>
         <Wrapper>
           <TabBar tabs={tabs} delegate={lef} activeTab={tabLeftIndex} />
           {this.renderDroppableList(tabs[tabLeftIndex], false)}
         </Wrapper>
-        <FlexWrapper width={30} flexNone />
+        <Spacer />
         <Wrapper>
           <TabBar tabs={tabs} delegate={rig} activeTab={tabRightIndex} />
           {this.renderDroppableList(tabs[tabRightIndex], false)}
         </Wrapper>
-      </FlexWrapper>
+      </TabWrapper>
     )
   }
   renderThreeSections() {
@@ -195,13 +187,13 @@ class MilestoneOverview extends PureComponent {
     }
 
     return (
-      <FlexWrapper horizontal="between">
+      <TabWrapper>
         {this.renderDroppableList('Later', true)}
-        <FlexWrapper width={30} flexNone />
+        <Spacer />
         {this.renderDroppableList('Now', true)}
-        <FlexWrapper width={30} flexNone />
+        <Spacer />
         {this.renderDroppableList('Done', true)}
-      </FlexWrapper>
+      </TabWrapper>
     );
   }
   render() {
