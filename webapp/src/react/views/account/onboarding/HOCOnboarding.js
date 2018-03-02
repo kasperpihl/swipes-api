@@ -44,6 +44,9 @@ class HOCOnboarding extends PureComponent {
         id: 'Organization',
         title: 'Team account',
       });
+      setTimeout(() => {
+        complete(item.get('id'));
+      }, 2000);
     }
     else if(item.get('url')) {
       setTimeout(() => {
