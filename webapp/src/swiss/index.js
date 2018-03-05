@@ -14,10 +14,10 @@ import hexToRGBA from './plugins/hexToRGB'
 
 addVariables(colors, screenSize);
 
-addPlugin('parseKeyValue', keyValue => {
+addPlugin('parseKeyValue', (key, value) => {
   return {
-    key: keyValue.key,
-    value: hexToRGBA(keyValue.value),
+    key: key,
+    value: hexToRGBA(value),
   }
 });
 

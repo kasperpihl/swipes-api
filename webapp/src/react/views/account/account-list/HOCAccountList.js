@@ -33,7 +33,7 @@ class HOCAccountList extends PureComponent {
         {
           id: 'Onboarding',
           title: 'Onboarding',
-          subtitle: 'Learn how to use get started with Swipes',
+          subtitle: 'Get started with the Swipes Workspace',
         },
         msgGen.me.isAdmin() ? {
           id: 'Billing',

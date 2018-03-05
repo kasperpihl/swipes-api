@@ -44,6 +44,9 @@ class HOCOnboarding extends PureComponent {
         id: 'Organization',
         title: 'Team account',
       });
+      setTimeout(() => {
+        complete(item.get('id'));
+      }, 2000);
     }
     else if(item.get('url')) {
       setTimeout(() => {
@@ -53,6 +56,16 @@ class HOCOnboarding extends PureComponent {
       browser(target, item.get('url'));
     }
 
+  }
+  onClickTutorial() {
+    const { browser, target,} = this.props;
+
+    browser(target, 'https://youtu.be/tyRJeiZOnfI');
+  }
+  onClickBlog() {
+    const { browser, target,} = this.props;
+
+    browser(target, 'https://swipesapp.com/blog');
   }
   render() {
     const { onboarding, userOnboarding, hasOrg, me } = this.props;
@@ -71,6 +84,7 @@ class HOCOnboarding extends PureComponent {
     );
   }
 }
+
 const { func } = PropTypes;
 
 HOCOnboarding.propTypes = {

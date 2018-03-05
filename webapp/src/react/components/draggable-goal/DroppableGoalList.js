@@ -1,8 +1,17 @@
 import React, { PureComponent } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
+import { element } from 'react-swiss';
 import DraggableGoal from './DraggableGoal';
-import ListContainer from './ListContainer.swiss';
-import Wrapper from 'swiss-components/Wrapper';
+
+const ListContainer = element('div', {
+  _size: '100%',
+  transition: '.2s ease',
+
+  isDraggingOver: {
+    backgroundColor: '$deepBlue10',
+    transition: '.2s ease',
+  }
+});
 
 class DroppableGoalList extends PureComponent {
   render() {
@@ -18,8 +27,6 @@ class DroppableGoalList extends PureComponent {
       <Droppable {...rest}>
         {(provided, snapshot) => (
           <ListContainer
-            expand={Wrapper}
-            fill
             innerRef={provided.innerRef}
             isDraggingOver={snapshot.isDraggingOver}>
             {items.map(item => (

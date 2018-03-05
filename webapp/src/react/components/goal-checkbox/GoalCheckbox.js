@@ -10,9 +10,11 @@ import RotateLoader from 'components/loaders/RotateLoader';
 
 
 import { element } from 'react-swiss';
-import FlexWrapper from 'swiss-components/FlexWrapper';
 
-const CheckboxWrapper = element({
+const CheckboxWrapper = element('div', {
+  _flex: ['center'],
+  flex: 'none',
+  _size: '36px',
   backgroundColor: '$yellowColor',
   borderRadius: '50px',
   marginRight: '18px',
@@ -36,7 +38,7 @@ const CheckboxWrapper = element({
   }
 });
 
-const IconWrapper = element({
+const IconWrapper = element('div', {
   _size: '36px',
   _flex: 'center',
 
@@ -63,7 +65,7 @@ const IconWrapper = element({
 
 });
 
-const LoaderWrapper = element({
+const LoaderWrapper = element('div', {
   _size: '36px',
   _alignAbsolute: 0,
   opacity: 0,
@@ -87,11 +89,6 @@ class GoalCheckbox extends PureComponent {
     
     return (
       <CheckboxWrapper
-        expand={FlexWrapper}
-        width={36}
-        height={36}
-        center
-        flexNone
         completed={completed}
         loading={loading}
         onClick={this.onGoalCheckboxClick}

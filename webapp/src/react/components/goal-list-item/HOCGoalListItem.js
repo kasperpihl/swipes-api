@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { element } from 'react-swiss';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
@@ -9,15 +10,13 @@ import * as ca from 'swipes-core-js/actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import FlexWrapper from 'swiss-components/FlexWrapper';
-import Flex from 'swiss-components/Flex';
-import Wrapper from 'swiss-components/Wrapper';
 
+import sw from './GoalListItem.swiss';
 /* global msgGen */
 
-import GoalItem from './styles/GoalItem.swiss';
-import GoalTitle from './styles/GoalTitle.swiss';
-import StatusDot from './styles/StatusDot.swiss';
+const GoalItem = element('div', sw.GoalItem);
+const GoalTitle = element('div', sw.GoalTitle);
+const StatusDot = element('div', sw.StatusDot);
 
 class HOCGoalListItem extends PureComponent {
   constructor(props) {
@@ -101,11 +100,10 @@ class HOCGoalListItem extends PureComponent {
     }
 
     return (
-      <GoalItem expand={FlexWrapper} vertical="center" onClick={this.onGoalClick}>
-        <StatusDot expand={Flex} status={status} flexNone />
+      <GoalItem onClick={this.onGoalClick}>
+        <StatusDot status={status} />
         <GoalTitle
           inTakeAction={inTakeAction}
-          expand={Wrapper}
           status={status}
           hoverRef={GoalItem.ref}
         >
