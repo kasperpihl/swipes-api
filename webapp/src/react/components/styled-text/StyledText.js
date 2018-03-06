@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 // import Icon from 'Icon';
 import './styles/styled-text.scss';
 

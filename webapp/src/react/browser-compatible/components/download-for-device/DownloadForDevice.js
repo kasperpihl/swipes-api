@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 // import { bindAll } from 'swipes-core-js/classes/utils';
 // import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 import Icon from 'Icon';
 import { Link } from 'react-router-dom';
 import './styles/download-for-device.scss';

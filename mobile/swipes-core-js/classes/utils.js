@@ -624,8 +624,6 @@ export function setupLoading(ctx) {
 }
 
 
-
-
 const unescapeMap = {
   '&amp;': '&',
   '&nbsp;': '\u00A0',

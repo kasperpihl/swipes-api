@@ -5,7 +5,7 @@ import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 // import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
 import './styles/notification-item.scss';

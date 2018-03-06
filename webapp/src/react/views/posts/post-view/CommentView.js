@@ -1,55 +1,31 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+import { element } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { URL_REGEX, unescaper } from 'swipes-core-js/classes/utils';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
-import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
-// import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
-import HOCReactions from 'components/reactions/HOCReactions';
+import HOCAssigning from 'components/assigning/HOCAssigning';
+
+import PostAttachment from './PostAttachment';
+import PostReactions from './PostReactions';
+import sw from './CommentView.swiss';
+
 import './styles/comment-view.scss';
+
+const Container = element('div', sw.Container);
+const Picture = element('div', sw.Picture);
+const Content = element('div', sw.Content);
+const Actions = element('div', sw.Actions);
+const Name = element('div', sw.Name);
+const Timestamp = element(TimeAgo, sw.Timestamp);
+const Message = element('div', sw.Message);
+const Attachments = element('div', sw.Attachments);
 
 class CommentView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
 
-    this.openReactions = this.openReactions.bind(this);
     setupDelegate(this, 'onLinkClick', 'shouldScroll');
-  }
-  openReactions() {
-
-  }
-  renderProfilePic() {
-    const { comment } = this.props;
-    const image = msgGen.users.getPhoto(comment.get('created_by')); 
-    const initials = msgGen.users.getInitials(comment.get('created_by'));
-
-    if (!image) {
-      return (
-        <div className="comment__profile-initials">
-          {initials}
-        </div>
-      );
-    }
-
-    return (
-      <div className="comment__profile-pic">
-        <img src={image} />
-      </div>
-    );
-  }
-  renderName() {
-    const { comment } = this.props;
-    const name = msgGen.users.getFullName(comment.get('created_by'));
-
-    return (
-      <span className="comment__name">
-        {name}
-      </span>
-    );
   }
   renderStuff(regex, inputArray, renderMethod) {
     let resArray = [];
@@ -100,12 +76,10 @@ class CommentView extends PureComponent {
       );
     });
 
-    console.log(comment.get('message'));
-
     return (
-      <span className="comment__content">
+      <Message>
         {message}
-      </span>
+      </Message>
     );
   }
   renderAttachments() {
@@ -115,48 +89,41 @@ class CommentView extends PureComponent {
       return undefined;
     }
     return (
-      <div className="comment__attachments">
+      <Attachments>
         {attachments.map((att, i) => (
-          <HOCAttachmentItem attachment={att} key={i} noClose />
+          <PostAttachment attachment={att} key={i} />
         ))}
-      </div>
+      </Attachments>
     )
   }
-  renderReaction() {
-    const { comment, postId } = this.props;
-
-    return (
-      <HOCReactions
-        reactions={comment.get('reactions')}
-        postId={postId}
-        commentId={comment.get('id')}
-      />
-    );
-  }
   render() {
-    const { comment } = this.props;
+    const { comment, postId } = this.props;
+    const attachments = comment.get('attachments');
+    const name = msgGen.users.getFullName(comment.get('created_by'));
 
     return (
-      <div className="comment" ref="comment">
-        {this.renderProfilePic()}
-        <div className="comment__side">
-          <div className="comment__section">
-            {this.renderName()}
-            {this.renderMessage()}
-            <TimeAgo
-              className="comment__timestamp"
-              prefix=" — "
-              simple
-              date={comment.get('created_at')}
-            />
-          </div>
+      <Container>
+        <Picture>
+          <HOCAssigning assignees={[comment.get('created_by')]} rounded size={36} />
+        </Picture>
+        <Content>
+          <Name>
+            {name}
+            <Timestamp prefix=" — " simple date={comment.get('created_at')} />
+          </Name>
+          {this.renderMessage()}
           {this.renderAttachments()}
-        </div>
-        <div className="comment__reactions">
-          {this.renderReaction()}
-        </div>
-      </div>
-    );
+        </Content>
+        <Actions>
+          <PostReactions
+            alignRight
+            reactions={comment.get('reactions')}
+            postId={postId}
+            commentId={comment.get('id')}
+          />
+        </Actions>
+      </Container>
+    )
   }
 }
 

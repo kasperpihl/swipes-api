@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindAll } from 'swipes-core-js/classes/utils';
 // import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 // import Icon from 'Icon';
 import './styles/screen-size-overlay.scss';
 

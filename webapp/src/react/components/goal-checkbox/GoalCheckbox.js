@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 import Icon from 'Icon';
 import RotateLoader from 'components/loaders/RotateLoader';
 // import './styles/goal-checkbox.scss';

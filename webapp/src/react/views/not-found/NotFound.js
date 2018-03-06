@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 // import Icon from 'Icon';
 // import './styles/NotFound.scss';
 

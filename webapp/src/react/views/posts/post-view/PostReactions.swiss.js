@@ -2,10 +2,22 @@ export default {
   Container: {
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',
+    hoverClass: {
+      hasNoLikes: {
+        opacity: 0,
+        '.#{hoverClass} &': {
+          opacity: 1
+        },  
+      },
+    }
   },
   HeartButton: {
     _size: ['30px', '36px'],
     _flex: ['row', 'left', 'center'],
+    alignRight: {
+      _size: ['36px', '36px'],
+      _flex: ['row', 'center', 'center'],
+    },
   },
   HeartSvg: {
     _size: '24px',

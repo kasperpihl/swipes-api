@@ -12,9 +12,9 @@ export default {
     paddingTop: '9px',
     marginTop: '9px',
     '&:not(:first-child)': {
-      borderTop: '1px solid $deepBlue10',
+      // borderTop: '1px solid $deepBlue10',
       paddingTop: '24px',
-      marginTop: '23px',
+      marginTop: '50px',
     },
   },
   Footer: {

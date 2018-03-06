@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 // import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 import Icon from 'Icon';
 import Loader from 'components/loaders/Loader';
 import './styles/add-milestone.scss';

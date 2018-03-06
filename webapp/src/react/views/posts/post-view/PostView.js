@@ -17,6 +17,7 @@ import sw from './PostView.swiss';
 
 const PostMessage = element('div', sw.PostMessage);
 const PostActions = element('div', sw.PostActions);
+const ActionSpacer = element('div', sw.ActionSpacer);
 const PostAttachments = element('div', sw.PostAttachments);
 
 const MAX_COMMENTS_FEED = 3;
@@ -28,6 +29,19 @@ class PostView extends PureComponent {
 
     setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick');
   }
+  renderAttachments() {
+    const { post } = this.props;
+    if(!post.get('attachments') || !post.get('attachments').size) {
+      return null;
+    }
+    return (
+      <PostAttachments>
+        {post.get('attachments').map((att, i) => (
+          <PostAttachment attachment={att} key={i} />
+        ))}
+      </PostAttachments>
+    )
+  }
   renderHeader() {
     const { post, delegate, fromFeed } = this.props;
     let commentTitle = 'Write a comment';
@@ -35,18 +49,17 @@ class PostView extends PureComponent {
     return (
       <PostHeader post={post}>
         {this.renderMessage()}
-        <PostAttachments>
-          {post.get('attachments').map((att, i) => (
-            <PostAttachment attachment={att} key={i} />
-          ))}
-        </PostAttachments>
+        {this.renderAttachments()}
         <PostActions>
           <PostReactions
             reactions={post.get('reactions')}
             postId={post.get('id')}
           />
-          <Button icon="Comment" compact>{commentTitle}</Button>
+          <Button icon="Comment" className="button" compact>{commentTitle}</Button>
+          <ActionSpacer />
+          <Button icon="ThreeDots" compact />
         </PostActions>
+        {this.renderComments()}
       </PostHeader>
     )
   }
@@ -101,49 +114,42 @@ class PostView extends PureComponent {
     )
   }
   renderComments() {
-    const { post, delegate, myId, fromFeed, aCSearch, aCClear } = this.props;
+    const { post, fromFeed } = this.props;
+
+    if(!post.get('comments') || !post.get('comments').size) {
+      return null;
+    }
     const comments = post.get('comments');
     let renderComments = undefined;
 
-    if (comments && comments.size) {
-      let sortedComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at')));
+    let sortedComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at')));
 
-      if (fromFeed && comments.size > MAX_COMMENTS_FEED) {
-        sortedComments = sortedComments.slice(-MAX_COMMENTS_FEED + 1)
-      }
-
-      renderComments = sortedComments.map((c, i) => (
-        <CommentView
-          isLast={i === comments.size - 1}
-          comment={c}
-          postId={post.get('id')}
-          key={c.get('id')}
-          delegate={delegate}
-        />
-      )).toArray();
+    if (fromFeed && comments.size > MAX_COMMENTS_FEED) {
+      sortedComments = sortedComments.slice(-MAX_COMMENTS_FEED + 1)
     }
 
-    let className = 'post__comments';
-
-    if (!fromFeed) {
-      className += ' post__comments--single'
-    }
-
-    return (
-      <div className={className}>
-        {this.renderViewMoreComments()}
-        {renderComments}
-        <CommentInput
+    return sortedComments.map((c, i) => (
+      <CommentView
+        isLast={i === comments.size - 1}
+        comment={c}
+        postId={post.get('id')}
+        key={c.get('id')}
+        delegate={delegate}
+      />
+    )).toArray();
+    /*
+    <CommentInput
           myId={myId}
           delegate={delegate}
           aCSearch={aCSearch}
           aCClear={aCClear}
         />
-      </div>
-    );
+        */
   }
+
   render() {
-    const { fromFeed } = this.props;
+    const { delegate, myId, fromFeed, aCSearch, aCClear } = this.props;
+
     return (
       <SWView
         noframe
@@ -151,7 +157,6 @@ class PostView extends PureComponent {
         scrollToBottom={!fromFeed}
       >
         {this.renderHeader()}
-        {this.renderComments()}
       </SWView>
     )
   }

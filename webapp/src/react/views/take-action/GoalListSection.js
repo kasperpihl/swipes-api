@@ -4,7 +4,7 @@ import { setupDelegate } from 'react-delegate';
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import './styles/goal-list-section.scss';

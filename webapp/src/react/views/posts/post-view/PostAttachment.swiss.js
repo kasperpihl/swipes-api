@@ -1,6 +1,7 @@
 export default {
   ATag: {
     background: '$light',
+    maxWidth: '200px',
     borderRadius: '15px',
     paddingLeft: '6px',
     paddingRight: '12px',
@@ -27,6 +28,9 @@ export default {
     color: '$middle',
     fontSize: '12px',
     lineHeight: '18px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
     fontWeight: 400,
     '.attachment-container:hover &': {
       

@@ -6,7 +6,7 @@ import ResultItem from 'components/result-item/ResultItem';
 // import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 // import Icon from 'Icon';
 import './styles/mention-text-input.scss';
 

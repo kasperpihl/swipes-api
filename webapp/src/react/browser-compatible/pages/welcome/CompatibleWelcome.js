@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 import Icon from 'Icon';
 import styles from  './styles/compatible-welcome.scss';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';

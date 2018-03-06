@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-// import Button from 'Button';
+
 import Icon from 'Icon';
 // import './styles/NoMilestoneOverview.scss';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';

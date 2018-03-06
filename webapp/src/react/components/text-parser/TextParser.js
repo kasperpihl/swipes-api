@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { setupDelegate } from 'react-delegate';
 import { URL_REGEX } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 // import Icon from 'Icon';
 // import './styles/TextParser.scss';
 

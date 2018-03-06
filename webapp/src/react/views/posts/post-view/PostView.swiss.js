@@ -8,14 +8,29 @@ export default {
   },
   PostActions: {
     _size: ['100%', 'auto'],
+    _flex: ['row', 'left', 'center'],
     marginTop: '12px',
     borderTop: '1px solid $light',
+    '& > *:not(:last-child)': {
+      marginRight: '10px',
+    },
+    '& .button': {
+      flex: 'none',
+    }
+  },
+  ActionSpacer: {
+    width: '100%',
   },
   PostAttachments: {
     _flex: ['row', 'left', 'center'],
-    marginTop: '12px',
+    flexWrap: 'wrap',
+    marginTop: '6px',
+    '& > *': {
+      marginTop: '6px',
+    },
     '& > *:not(:last-child)': {
       marginRight: '6px',
     }
-  }
+  },
+
 }

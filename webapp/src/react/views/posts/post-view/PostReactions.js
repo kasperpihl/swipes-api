@@ -108,23 +108,37 @@ class Reactions extends PureComponent {
       }
     }
   }
-  
-  render() {
+  renderButton() {
     const { iLike } = this.state;
-    const { reactions } = this.props;
-
+    const { alignRight } = this.props;
     const onClick = iLike ? this.onRemoveReaction : this.onAddReaction;
 
     return (
+      <HeartButton alignRight={!!alignRight} className="heart-button" onClick={onClick}>
+        <HeartSvg icon="Heart" liked={iLike}/>
+      </HeartButton>
+    )
+  }
+  renderString() {
+    const { iLike } = this.state;
+    const { reactions } = this.props;
+
+    return (
+      <LikeString 
+        show={reactions && !!reactions.size}
+        liked={iLike}>
+        {reactions && reactions.size}
+      </LikeString>
+    )
+  }
+  
+  render() {
+    const { alignRight } = this.props;
+
+    return (
       <Container onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
-        <HeartButton className="heart-button" onClick={onClick}>
-          <HeartSvg icon="Heart" liked={iLike}/>
-        </HeartButton>
-        <LikeString 
-          show={reactions && !!reactions.size}
-          liked={iLike}>
-          {reactions && reactions.size}
-        </LikeString>
+        {alignRight ? this.renderString() : this.renderButton()}
+        {alignRight ? this.renderButton() : this.renderString()}
       </Container>
     );
   }

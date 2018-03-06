@@ -4,7 +4,7 @@ import loadPage from 'src/react/pages/load';
 // import { map, list } from 'react-immutable-proptypes';
 import { bindAll, getURLParameter } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';
-// import Button from 'Button';
+
 // import Icon from 'Icon';
 
 import NoteEditor from 'components/note-editor/NoteEditor';
