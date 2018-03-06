@@ -17,12 +17,14 @@ export default {
   },
   GoalTitle: {
     _size: ['100%', 'auto'],
-    _font: ['15px', '$deepBlue90', '24px', '400'],
+    _font: ['15px', '24px', '400'],
+    color: '$deepBlue90',
     padding: '0 18px',
     transition: '.2s ease',
 
     inTakeAction: {
-      _font: ['15px', '$deepBlue90', '24px', '500'],
+      _font: ['15px', '24px', '500'],
+      color: '$deepBlue90',
     },
 
     '#{hoverRef}:hover &': {

@@ -10,6 +10,8 @@ import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
 import './styles/post-header.scss';
 
+import sw from './PostHeader';
+
 class PostHeader extends PureComponent {
   constructor(props) {
     super(props);

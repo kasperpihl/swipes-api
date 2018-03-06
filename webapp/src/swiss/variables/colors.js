@@ -1,4 +1,12 @@
 export default {
+  light: '#F2F4F6',
+  middle: '#697685',
+  dark: '#182432',
+
+  announcement: '#F2A623',
+  question: '#4E62DE',
+  information: '#2981D8',
+
   deepBlue4: '#F7F7F8',
   deepBlue5: '#f2f3f4',
   deepBlue10: '#e5e6ea',

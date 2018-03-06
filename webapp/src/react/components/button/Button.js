@@ -1,13 +1,7 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { tooltip } from 'actions/main';
-// import * as ca from 'swipes-core-js/actions';
 import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import Icon from 'Icon';
-import ButtonTooltip from './ButtonTooltip';
 import RotateLoader from 'components/loaders/RotateLoader';
 import './styles/button.scss';
 
@@ -18,8 +12,6 @@ class Button extends PureComponent {
   constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
-
-    bindAll(this, ['onMouseEnter', 'onMouseLeave']);
   }
 
   onClick(e) {
@@ -30,37 +22,6 @@ class Button extends PureComponent {
     }
 
     this.refs.button.blur();
-  }
-  onMouseEnter(e) {
-    const { loadTooltip, tooltipLabel } = this.props;
-    const target = getParentByClass(e.target, 'g-button');
-    const position = 'top';
-
-    if (!tooltipLabel) {
-      return undefined;
-    }
-
-    const data = {
-      component: ButtonTooltip,
-      props: {
-        label: tooltipLabel,
-      },
-      options: {
-        boundingRect: target.getBoundingClientRect(),
-        position,
-      },
-    };
-
-    loadTooltip(data);
-  }
-  onMouseLeave() {
-    const { loadTooltip, tooltipLabel } = this.props;
-
-    if (!tooltipLabel) {
-      return undefined;
-    }
-
-    loadTooltip(null);
   }
   renderIcon() {
     const { icon } = this.props;
@@ -112,12 +73,10 @@ class Button extends PureComponent {
       frameless,
       selected,
       tabIndex: tabIndexProps,
-      loadTooltip,
       className: classNameFromButton,
       loading,
       error,
       success,
-      tooltipLabel,
       ...rest
     } = this.props;
 
@@ -149,10 +108,6 @@ class Button extends PureComponent {
       tabIndex.tabIndex = '-1';
     }
 
-    if (tabIndexProps) {
-      tabIndex.tabIndex = tabIndexProps;
-    }
-
     if (loading) {
       className += ' g-button--loading';
     }
@@ -179,11 +134,9 @@ class Button extends PureComponent {
       <a
         ref="button"
         className={className}
+        {...tabIndex}
         {...rest}
         onClick={this.onClick}
-        {...tabIndex}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
       >
         {this.renderIcon()}
         {this.renderText()}
@@ -213,10 +166,4 @@ Button.propTypes = {
   frameless: bool,
 };
 
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps, {
-  loadTooltip: tooltip,
-})(Button);
+export default Button;

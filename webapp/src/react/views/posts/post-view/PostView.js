@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
+import { element } from 'react-swiss';
 import {
   bindAll,
   setupDelegate,
@@ -13,12 +14,17 @@ import SWView from 'SWView';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
-import PostHeader from 'components/post-header/PostHeader';
 import HOCReactions from 'components/reactions/HOCReactions';
 import CommentView from './CommentView';
 // import Button from 'Button';
 import Icon from 'Icon';
 import './styles/post-view.scss';
+import PostHeader from './PostHeader';
+
+import sw from './PostView.swiss';
+
+const PostMessage = element('div', sw.PostMessage);
+const PostActions = element('div', sw.PostActions);
 
 const MAX_COMMENTS_FEED = 3;
 
@@ -29,48 +35,16 @@ class PostView extends PureComponent {
 
     setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick');
   }
-  renderProfilePic() {
-    const { post } = this.props;
-    const image = msgGen.users.getPhoto(post.get('created_by'));
-    const initials = msgGen.users.getInitials(post.get('created_by'));
-
-    if (!image) {
-      return (
-        <div className="post__profile-initials">
-          {initials}
-        </div>
-      )
-    }
-
-    return (
-      <div className="post__profile-pic">
-        <img src={image} />
-      </div>
-    )
-  }
   renderHeader() {
-    const { post, delegate } = this.props;
+    const { post, delegate, fromFeed } = this.props;
 
     return (
-      <div className="post__header">
-        <div className="post__left">
-          {this.renderProfilePic()}
-        </div>
-        <div className="post__right">
-          <PostHeader post={post} delegate={delegate} />
-          <div className="post__message-wrapper">
-            {this.renderMessage()}
-            {this.renderPostActions()}
-          </div>
-          {this.renderAttachments()}
-        </div>
-      </div>
+      <PostHeader post={post}>
+        {this.renderMessage()}
+        {this.renderAttachments()}
+        {this.renderPostActions()}
+      </PostHeader>
     )
-  }
-  renderFooter() {
-    const { delegate, myId } = this.props;
-
-    return <CommentInput myId={myId} delegate={delegate} />
   }
   renderMessage() {
     const { post } = this.props;
@@ -101,9 +75,9 @@ class PostView extends PureComponent {
 
 
       return (
-        <div className="post__message">
+        <PostMessage>
           {message}
-        </div>
+        </PostMessage>
       )
     }
 
@@ -123,12 +97,12 @@ class PostView extends PureComponent {
     const { post } = this.props;
 
     return (
-      <div className="post__actions">
+      <PostActions>
         <HOCReactions
           reactions={post.get('reactions')}
           postId={post.get('id')}
         />
-      </div>
+      </PostActions>
     )
   }
   renderViewMoreComments() {

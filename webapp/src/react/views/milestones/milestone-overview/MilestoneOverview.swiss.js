@@ -3,13 +3,15 @@ export default {
     _size: ['100%', 'auto'],
   },
   Title: {
-    _font: ['11px', '$deepBlue80', '18px', 'bold'],
+    _font: ['11px', '18px', 'bold'],
+    color: '$deepBlue80',
     textTransform: 'uppercase',
     paddingTop: '60px',
   },
   Text: {
     _widthSpecifications: ['initial', '230px'],
-    _font: ['12px', '$deepBlue50', '18px', '400'],
+    _font: ['12px', '18px', '400'],
+    color: '$deepBlue50',
     paddingTop: '6px',
     textAlign: 'center',
   },
