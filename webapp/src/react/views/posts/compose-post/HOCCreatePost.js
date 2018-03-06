@@ -44,8 +44,6 @@ class HOCCreatePost extends PureComponent {
 
     setupLoading(this);
   }
-  componentDidMount() {
-  }
   componentWillUnmount() {
     this.throttledSaveState.clear();
   }

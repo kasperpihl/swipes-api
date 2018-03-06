@@ -36,8 +36,6 @@ class Billing extends PureComponent {
     setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage');
     bindAll(this, ['onChange', 'onSubmit']);
   }
-  componentDidMount() {
-  }
   getShowPrice() {
     const { billingStatus, users } = this.props;
     const numberOfUsers = users.filter(u => u.get('active')).size;

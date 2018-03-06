@@ -22,8 +22,6 @@ class HOCPostView extends PureComponent {
 
     setupLoading(this)
   }
-  componentDidMount() {
-  }
   shouldScroll() {
     const { fromFeed } = this.props;
 

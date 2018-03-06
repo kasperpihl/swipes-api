@@ -35,6 +35,7 @@ export { default as CircleCheckmark } from './svgs/circle-checkmark.svg';
 export { default as Close } from './svgs/close.svg';
 export { default as CloseSmall } from './svgs/close-small.svg';
 export { default as Collection } from './svgs/collection.svg';
+export { default as Comment } from './svgs/comment.svg';
 export { default as CreateNote } from './svgs/create-note.svg';
 export { default as Decision } from './svgs/decision.svg';
 export { default as Deliver } from './svgs/deliver.svg';

@@ -21,8 +21,6 @@ class NoteDiffTester extends PureComponent {
     this.onStateCached = setupCachedCallback(this.onState, this);
     bindAll(this, ['onOriginalBlur', 'onDiff']);
   }
-  componentDidMount() {
-  }
   onOriginalBlur() {
     this.setState(this.getDefaultState(this.state.serverOriginal));
   }

@@ -15,8 +15,6 @@ class Search extends PureComponent {
     setupDelegate(this, 'onChange', 'onScroll');
     // this.callDelegate.bindAll('onLala');
   }
-  componentDidMount() {
-  }
   renderSearchField() {
     const { searchString } = this.props;
 

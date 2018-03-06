@@ -10,8 +10,6 @@ class Filter extends Component {
     this.state = {};
     this.onClickCached = setupCachedCallback(this.onClick, this);
   }
-  componentDidMount() {
-  }
   onClick(id, obj, e) {
     const { onClick } = this.props;
     if (onClick) {

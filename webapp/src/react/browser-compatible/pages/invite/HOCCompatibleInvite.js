@@ -25,8 +25,6 @@ class HOCCompatibleInvite extends PureComponent {
     };
     setupLoading(this);
   }
-  componentDidMount() {
-  }
   onNameChange(i, e) {
     let { invites } = this.state;
     invites = invites.setIn([i, 'firstName'], e.target.value);

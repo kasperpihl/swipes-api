@@ -19,8 +19,6 @@ class ExternalNoteView extends PureComponent {
   componentWillMount() {
     this.loadNote();
   }
-  componentDidMount() {
-  }
   setEditorState(editorState) {
     if(!this.state.editorState) {
       this.setState({ editorState });

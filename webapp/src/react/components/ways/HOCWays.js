@@ -43,8 +43,6 @@ class HOCWays extends PureComponent {
     super(props);
     setupLoading(this);
   }
-  componentDidMount() {
-  }
 
   onTemplateClick(tpl) {
     const { loadWay, goalId } = this.props;

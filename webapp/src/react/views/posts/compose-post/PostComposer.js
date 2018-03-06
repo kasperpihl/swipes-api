@@ -22,8 +22,6 @@ class PostComposer extends PureComponent {
       trigger: "@",
     }
   }
-  componentDidMount() {
-  }
   renderContextIcon() {
     const { post } = this.props;
     if(!post.getIn(['context', 'id'])) {

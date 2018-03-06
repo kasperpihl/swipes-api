@@ -21,8 +21,6 @@ class NotSupported extends PureComponent {
     setupDelegate(this, 'onLeaveOrg');
     // this.callDelegate.bindAll('onLala');
   }
-  componentDidMount() {
-  }
   renderLeaveOrDelete() {
     const { me, organization, isLoading } = this.props;
     const isOwner = me.get('id') === organization.get('owner_id');

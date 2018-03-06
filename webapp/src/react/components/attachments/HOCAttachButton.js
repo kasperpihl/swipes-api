@@ -28,8 +28,6 @@ class HOCAttachButton extends PureComponent {
     setupLoading(this);
     bindAll(this, ['onChooseAttachment', 'onChangeFiles']);
   }
-  componentDidMount() {
-  }
   onChangeFiles(e) {
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);

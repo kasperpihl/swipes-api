@@ -16,8 +16,6 @@ class AutoCompleting extends PureComponent {
     super(props)
     this.state = {}
   }
-  componentDidMount() {
-  }
   renderResults() {
     const { results, selectedIndex, alignToTop, autoComplete } = this.props;
     if(!results) {

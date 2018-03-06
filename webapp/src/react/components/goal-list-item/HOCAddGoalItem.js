@@ -35,8 +35,6 @@ class HOCAddGoalItem extends PureComponent {
     setupDelegate(this, 'onAddGoalItemInputChange');
     setupLoading(this);
   }
-  componentDidMount() {
-  }
   onFocus() {
     this.setState({ addFocus: true });
   }

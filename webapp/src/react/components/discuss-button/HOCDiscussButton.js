@@ -18,8 +18,6 @@ class HOCDiscussButton extends PureComponent {
     bindAll(this, ['onDiscuss', 'onFeed']);
     // setupLoading(this);
   }
-  componentDidMount() {
-  }
   onFeed() {
     const { openSecondary, context, relatedFilter } = this.props;
     openSecondary({

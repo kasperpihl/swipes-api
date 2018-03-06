@@ -15,8 +15,6 @@ class CompatibleSignup extends PureComponent {
     setupDelegate(this, 'onSignup', 'onNavigateToLogin');
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
-  componentDidMount() {
-  }
   handleKeyDown(e) {
     if (e.keyCode === 13) {
       this.onSignup();

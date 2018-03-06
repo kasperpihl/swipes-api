@@ -17,9 +17,6 @@ class HOCCompatibleWelcome extends PureComponent {
     this.state = {};
     setupLoading(this);
   }
-
-  componentDidMount() {
-  }
   onOrganizationJoin(orgId, e) {
     const { joinOrg, setUrl, isElectron, isBrowserSupported } = this.props;
 

@@ -21,12 +21,6 @@ class Services extends Component {
     super(props);
     bindAll(this, ['clickedDisconnect', 'clickedConnect']);
   }
-  componentDidMount() {
-    // this.checkForDropboxFolder();
-  }
-  componentDidUpdate() {
-    // this.checkForDropboxFolder();
-  }
   getOptionsForE() {
     return {
       boundingRect: document.body.getBoundingClientRect(),

@@ -15,8 +15,6 @@ class GoalListSection extends PureComponent {
     this.state = {}
     setupDelegate(this, 'onGoalSectionClick');
   }
-  componentDidMount() {
-  }
   renderLeftSide() {
     const { icon, title, id } = this.props;
 

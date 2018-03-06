@@ -19,8 +19,6 @@ class Dashboard extends PureComponent {
     // this.callDelegate.bindAll('onLala');
     this.toggleNumberState = this.toggleNumberState.bind(this);
   }
-  componentDidMount() {
-  }
   toggleNumberState() {
     const { animatedNumbers } = this.state;
 

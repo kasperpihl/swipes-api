@@ -15,8 +15,6 @@ class CompatibleInviteForm extends PureComponent {
     setupDelegate(this, 'onNameChange', 'onEmailChange', 'onAddInput');
     // this.callDelegate.bindAll('onLala');
   }
-  componentDidMount() {
-  }
   renderLoader(isLoading, success) {
 
     if (isLoading) {

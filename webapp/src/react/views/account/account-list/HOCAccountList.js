@@ -49,8 +49,6 @@ class HOCAccountList extends PureComponent {
     };
     setupLoading(this);
   }
-  componentDidMount() {
-  }
   onLogout(e) {
     const { confirm, signout } = this.props;
     const options = this.getOptionsForE(e);

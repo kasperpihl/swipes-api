@@ -17,8 +17,6 @@ class StepListItem extends PureComponent {
     setupDelegate(this, 'onStepCheck', 'onStepRemove', 'onStepClick', 'onStepRename');
     bindAll(this, ['onChange', 'onBlur', 'onKeyDown']);
   }
-  componentDidMount() {
-  }
   onKeyDown(e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {
       e.target.blur();

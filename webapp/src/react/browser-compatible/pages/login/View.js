@@ -9,14 +9,6 @@ import React, { PureComponent } from 'react';
 // import './styles/View.scss';
 
 class View extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
-  }
   render() {
     console.log('props view', this.props);
     console.log('props view', this);

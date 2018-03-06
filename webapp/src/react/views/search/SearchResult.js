@@ -15,8 +15,6 @@ class SearchResult extends PureComponent {
     setupDelegate(this, 'onClick');
     // this.callDelegate.bindAll('onLala');
   }
-  componentDidMount() {
-  }
   getTitle() {
     const { result } = this.props;
     const { item } = result;

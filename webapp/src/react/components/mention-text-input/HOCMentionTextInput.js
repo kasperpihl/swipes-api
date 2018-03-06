@@ -19,8 +19,6 @@ class HOCMentionTextInput extends PureComponent {
     };
     // setupLoading(this);
   }
-  componentDidMount() {
-  }
   onTextChange(event, newValue, newPlainTextValue, mentions) {
     const { onChange } = this.props;
 

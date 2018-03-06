@@ -19,8 +19,6 @@ class HOCLogoutButton extends PureComponent {
 
     bindAll(this, ['onLogout']);
   }
-  componentDidMount() {
-  }
   onLogout(e) {
     const { isElectron, confirm } = this.props;
 

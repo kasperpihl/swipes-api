@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
-import { URL_REGEX } from 'swipes-core-js/classes/utils';
+import { URL_REGEX, unescaper } from 'swipes-core-js/classes/utils';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 // import SWView from 'SWView';
@@ -18,8 +18,6 @@ class CommentView extends PureComponent {
 
     this.openReactions = this.openReactions.bind(this);
     setupDelegate(this, 'onLinkClick', 'shouldScroll');
-  }
-  componentDidMount() {
   }
   openReactions() {
 
@@ -78,7 +76,7 @@ class CommentView extends PureComponent {
   renderMessage() {
     const { comment } = this.props;
 
-    const newLinesArray = comment.get('message').split('\n');
+    const newLinesArray = unescaper(comment.get('message')).split('\n');
     const newLinesCount = newLinesArray.length - 1;
     const message = newLinesArray.map((item, key) => {
       const newLine = newLinesCount === key ? null : (<br />);
@@ -101,6 +99,8 @@ class CommentView extends PureComponent {
         <span key={key}>{item}{newLine}</span>
       );
     });
+
+    console.log(comment.get('message'));
 
     return (
       <span className="comment__content">

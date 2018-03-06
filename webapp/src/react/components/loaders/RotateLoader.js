@@ -15,8 +15,6 @@ class RotateLoader extends PureComponent {
     // setupDelegate(this);
     // this.callDelegate.bindAll('onLala');
   }
-  componentDidMount() {
-  }
   render() {
     const { size, color, bgColor } = this.props;
     

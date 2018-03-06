@@ -20,8 +20,6 @@ class HOCCompatibleLogin extends PureComponent {
     };
     setupLoading(this);
   }
-  componentDidMount() {
-  }
   onChange(key, e) {
     const { formData } = this.state;
     this.setState({ formData: formData.set(key, e.target.value) });

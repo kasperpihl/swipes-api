@@ -11,14 +11,7 @@ import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHe
 import './styles/go-to-workspace.scss';
 
 class GoToWorkspace extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
-  }
+
   render() {
     const { noTitle, to } = this.props;
 

@@ -17,9 +17,6 @@ class CompatibleLogin extends PureComponent {
     setupDelegate(this, 'onSignin', 'onResetPassword');
     bindAll(this, ['handleKeyDown']);
   }
-  componentDidMount() {
-  }
-
   handleKeyDown(e) {
     if (e.keyCode === 13) {
       this.onSignin();

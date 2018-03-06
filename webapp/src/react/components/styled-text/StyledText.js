@@ -13,8 +13,6 @@ class StyledText extends PureComponent {
     this.state = {};
     setupDelegate(this, 'onTextClick', 'onTextMouseEnter', 'onTextMouseLeave');
   }
-  componentDidMount() {
-  }
   render() {
     const { text, textStyle, className } = this.props;
 

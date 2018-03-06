@@ -14,8 +14,6 @@ class BrowseSectionList extends Component {
     setupDelegate(this, 'clickedItem', 'onContextClick').setGlobals(props.depth);
     // now use events as onClick: this.clickedItemCached(i)
   }
-  componentDidMount() {
-  }
   renderSectionItems(items) {
     const { selectedId } = this.props;
     if (!items || !items.length) {

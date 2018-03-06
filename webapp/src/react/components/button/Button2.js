@@ -13,34 +13,35 @@ class Button extends PureComponent {
     super(props);
     this.state = {};
   }
-  componentDidMount() {
-  }
   renderIcon() {
-    const { icon } = this.props;
+    const { icon, compact } = this.props;
     if(!icon) {
       return null;
     }
     return (
-      <IconContainer>
+      <IconContainer compact={compact}>
         <IconComp icon={icon} />
       </IconContainer>
     )
   }
   renderText() {
-    const { children } = this.props;
+    const { children, compact } = this.props;
     if(!children) {
       return null;
     }
     return (
-      <Text>{children}</Text>
+      <Text compact={compact}>{children}</Text>
     );
   }
   render() {
     const {
+      children,
+      compact,
+      icon,
       ...rest,
     } = this.props;
     return (
-      <ATag className="gl-button">
+      <ATag className="gl-button" {...rest}>
         {this.renderIcon()}
         {this.renderText()}
       </ATag>

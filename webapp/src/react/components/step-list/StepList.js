@@ -35,8 +35,6 @@ class StepList extends PureComponent {
       trigger: "@",
     }
   }
-  componentDidMount() {
-  }
   onAssign(i, e) {
     const options = this.getOptionsForE(e);
     const { selectAssignees } = this.props;

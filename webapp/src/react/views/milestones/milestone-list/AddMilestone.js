@@ -20,8 +20,6 @@ class AddMilestone extends PureComponent {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
   }
-  componentDidMount() {
-  }
   onChange(e) {
     this.setState({ title: e.target.value });
   }

@@ -16,12 +16,6 @@ const downloadLinks = {
 };
 
 class CompatibleDownload extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-  }
   desktopCheck() {
     var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 

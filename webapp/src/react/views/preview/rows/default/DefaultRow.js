@@ -6,12 +6,6 @@ import Icon from 'Icon';
 import './styles/default-row.scss';
 
 class DefaultRow extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-  }
   renderIcon(icon) {
     if (!icon) {
       return undefined;

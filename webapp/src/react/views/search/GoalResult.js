@@ -13,8 +13,6 @@ class GoalResult extends PureComponent {
     // setupDelegate(this);
     // this.callDelegate.bindAll('onLinkClick')
   }
-  componentDidMount() {
-  }
   renderAssignees() {
     const { result } = this.props;
     const assignees = msgGen.goals.getAssignees(result.item.id);

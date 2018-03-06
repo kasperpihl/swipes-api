@@ -16,8 +16,6 @@ class NotificationItem extends PureComponent {
     this.state = {}
     setupDelegate(this, 'onNotificationOpen');
   }
-  componentDidMount() {
-  }
   renderProfilePic() {
     const { notification: n } = this.props;
 

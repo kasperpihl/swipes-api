@@ -13,8 +13,6 @@ class TextParser extends PureComponent {
     super(props);
     setupDelegate(this, 'onLinkClick');
   }
-  componentDidMount() {
-  }
   renderStuff(regex, inputArray, renderMethod) {
     let resArray = [];
     if(typeof inputArray === 'string') {

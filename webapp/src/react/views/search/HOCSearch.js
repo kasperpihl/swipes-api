@@ -30,8 +30,6 @@ class HOCSearch extends PureComponent {
     };
     // setupLoading(this);
   }
-  componentDidMount() {
-  }
   onChange(e) {
     this.setState({ searchString: e.target.value  });
   }

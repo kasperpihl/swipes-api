@@ -23,8 +23,6 @@ class HOCSwipesIntro extends PureComponent {
     this.state = {};
     // setupLoading(this);
   }
-  componentDidMount() {
-  }
   render() {
     return (
       <SwipesIntro />

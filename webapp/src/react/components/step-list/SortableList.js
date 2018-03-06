@@ -10,12 +10,6 @@ import { SortableContainer } from 'react-sortable-hoc';
 import StepListItem from './StepListItem';
 
 class SortableList extends PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-  componentDidMount() {
-  }
   render() {
     const {
       stepOrder,

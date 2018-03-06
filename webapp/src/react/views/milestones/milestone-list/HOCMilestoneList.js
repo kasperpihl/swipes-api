@@ -36,8 +36,6 @@ class HOCMilestoneList extends PureComponent {
       tabIndex: initialTabIndex,
     });
   }
-  componentDidMount() {
-  }
   onScroll(e) {
     this._scrollTop = e.target.scrollTop;
     if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {

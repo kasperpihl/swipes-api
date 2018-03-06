@@ -9,8 +9,6 @@ class ActivityFeed extends PureComponent {
     super(props);
     this.state = {};
   }
-  componentDidMount() {
-  }
   renderActivity() {
     const { goal, delegate } = this.props;
     const opts = {

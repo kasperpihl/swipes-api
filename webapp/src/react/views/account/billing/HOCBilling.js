@@ -20,8 +20,6 @@ class HOCBilling extends PureComponent {
 
     setupLoading(this);
   }
-  componentDidMount() {
-  }
   onSubmitSuccess(token) {
     const { createStripeCustomer } = this.props;
     const { billingStatus } = this.state;

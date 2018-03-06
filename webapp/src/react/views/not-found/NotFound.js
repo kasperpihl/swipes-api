@@ -11,8 +11,6 @@ class NotFound extends PureComponent {
     super(props)
     this.state = {}
   }
-  componentDidMount() {
-  }
   render() {
     return (
       <div className="not-found">

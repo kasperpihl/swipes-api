@@ -24,8 +24,6 @@ class HOCOrganization extends PureComponent {
     };
     setupLoading(this);
   }
-  componentDidMount() {
-  }
   onChange(key, val) {
     this.setState({ [key]: val});
   }

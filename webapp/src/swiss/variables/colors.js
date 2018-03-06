@@ -2,6 +2,7 @@ export default {
   light: '#F2F4F6',
   middle: '#697685',
   dark: '#182432',
+  red: '#FD6E6C',
 
   announcement: '#F2A623',
   question: '#4E62DE',

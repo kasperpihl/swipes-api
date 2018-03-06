@@ -25,8 +25,6 @@ class HOCNoMilestoneOverview extends PureComponent {
     this.lastEnd = 0;
     // setupLoading(this);
   }
-  componentDidMount() {
-  }
   onScroll(e) {
     this._scrollTop = e.target.scrollTop;
     if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {

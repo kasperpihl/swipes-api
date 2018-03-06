@@ -26,8 +26,6 @@ class HOCNoMilestone extends PureComponent {
       title: 'No Plan',
     });
   }
-  componentDidMount() {
-  }
   renderHeader() {
 
     return (

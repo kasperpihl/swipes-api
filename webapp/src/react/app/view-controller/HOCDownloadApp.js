@@ -22,8 +22,6 @@ class HOCDownloadApp extends PureComponent {
 
     this.closeToolbar = this.closeToolbar.bind(this);
   }
-  componentDidMount() {
-  }
   closeToolbar() {
     const { showToolbar } = this.state;
 

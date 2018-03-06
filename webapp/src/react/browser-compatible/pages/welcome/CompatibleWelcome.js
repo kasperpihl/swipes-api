@@ -20,8 +20,6 @@ class CompatibleWelcome extends PureComponent {
     setupDelegate(this, 'onOrganizationCreate', 'onOrganizationJoin');
     bindAll(this, ['onKeyDown', 'onChange', 'onCreate']);
   }
-  componentDidMount() {
-  }
   onChange(e) {
     this.setState({ createText: e.target.value });
   }

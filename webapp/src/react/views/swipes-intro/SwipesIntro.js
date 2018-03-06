@@ -16,8 +16,6 @@ class SwipesIntro extends PureComponent {
     // setupDelegate(this);
     // this.callDelegate.bindAll('onLala');
   }
-  componentDidMount() {
-  }
   renderHeader() {
 
     return (

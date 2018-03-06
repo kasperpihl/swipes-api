@@ -20,8 +20,6 @@ class MilestoneList extends PureComponent {
     this.state = {};
     setupDelegate(this, 'onAddGoal', 'onScroll');
   }
-  componentDidMount() {
-  }
   renderHeader() {
     const { getLoading, tabs, tabIndex, delegate } = this.props;
     return (

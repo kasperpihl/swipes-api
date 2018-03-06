@@ -1,22 +1,14 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { element } from 'react-swiss';
-import {
-  bindAll,
-  setupDelegate,
-  setupCachedCallback,
-  URL_REGEX,
-  attachmentIconForService,
-} from 'swipes-core-js/classes/utils';
+import { setupDelegate, URL_REGEX } from 'swipes-core-js/classes/utils';
 import { List } from 'immutable';
 import SWView from 'SWView';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
-import HOCAssigning from 'components/assigning/HOCAssigning';
 import CommentInput from 'components/comment-input/CommentInput';
-import HOCReactions from 'components/reactions/HOCReactions';
 import CommentView from './CommentView';
-// import Button from 'Button';
+import PostAttachment from './PostAttachment';
+import Button from 'components/button/Button2';
+import PostReactions from './PostReactions';
 import Icon from 'Icon';
 import './styles/post-view.scss';
 import PostHeader from './PostHeader';
@@ -25,6 +17,7 @@ import sw from './PostView.swiss';
 
 const PostMessage = element('div', sw.PostMessage);
 const PostActions = element('div', sw.PostActions);
+const PostAttachments = element('div', sw.PostAttachments);
 
 const MAX_COMMENTS_FEED = 3;
 
@@ -37,12 +30,23 @@ class PostView extends PureComponent {
   }
   renderHeader() {
     const { post, delegate, fromFeed } = this.props;
+    let commentTitle = 'Write a comment';
 
     return (
       <PostHeader post={post}>
         {this.renderMessage()}
-        {this.renderAttachments()}
-        {this.renderPostActions()}
+        <PostAttachments>
+          {post.get('attachments').map((att, i) => (
+            <PostAttachment attachment={att} key={i} />
+          ))}
+        </PostAttachments>
+        <PostActions>
+          <PostReactions
+            reactions={post.get('reactions')}
+            postId={post.get('id')}
+          />
+          <Button icon="Comment" compact>{commentTitle}</Button>
+        </PostActions>
       </PostHeader>
     )
   }
@@ -81,29 +85,6 @@ class PostView extends PureComponent {
       )
     }
 
-  }
-  renderAttachments() {
-    const { post } = this.props;
-
-    return (
-      <div className="post__attachments">
-        {post.get('attachments').map((att, i) => (
-          <HOCAttachmentItem attachment={att} key={i} noClose />
-        ))}
-      </div>
-    )
-  }
-  renderPostActions() {
-    const { post } = this.props;
-
-    return (
-      <PostActions>
-        <HOCReactions
-          reactions={post.get('reactions')}
-          postId={post.get('id')}
-        />
-      </PostActions>
-    )
   }
   renderViewMoreComments() {
     const { fromFeed, post } = this.props;
@@ -169,7 +150,6 @@ class PostView extends PureComponent {
         disableScroll={fromFeed}
         scrollToBottom={!fromFeed}
       >
-
         {this.renderHeader()}
         {this.renderComments()}
       </SWView>
@@ -178,5 +158,3 @@ class PostView extends PureComponent {
 }
 
 export default PostView
-// const { string } = PropTypes;
-PostView.propTypes = {};

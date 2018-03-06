@@ -39,8 +39,6 @@ class PostFeed extends PureComponent {
     };
     this.lastEnd = 0;
   }
-  componentDidMount() {
-  }
   onScroll(e) {
     if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
       if (this.lastEnd < e.target.scrollTop + DISTANCE) {

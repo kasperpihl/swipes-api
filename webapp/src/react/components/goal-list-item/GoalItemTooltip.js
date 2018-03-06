@@ -3,12 +3,6 @@ import React, { PureComponent } from 'react';
 // import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 class GoalItemTooltip extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-  }
   render() {
     return (
       <div className="goal-item-tooltip" key={this.props.goalId}>{this.props.tooltipText}</div>

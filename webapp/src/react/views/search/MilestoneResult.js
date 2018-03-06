@@ -14,8 +14,6 @@ class MilestoneResult extends PureComponent {
     // setupDelegate(this);
     // this.callDelegate.bindAll('onLinkClick')
   }
-  componentDidMount() {
-  }
   render() {
     const { result } = this.props;
 

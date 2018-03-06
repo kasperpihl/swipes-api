@@ -18,8 +18,6 @@ class PostResult extends PureComponent {
     // setupDelegate(this);
     // this.callDelegate.bindAll('onLinkClick')
   }
-  componentDidMount() {
-  }
   getType() {
     const { result } = this.props;
     const type = result.item.type;

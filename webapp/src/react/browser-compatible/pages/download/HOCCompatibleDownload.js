@@ -11,12 +11,6 @@ import { connect } from 'react-redux';
 import CompatibleDownload from './CompatibleDownload';
 
 class HOCCompatibleDownload extends PureComponent {
-  constructor(props) {
-    super(props);
-    // setupLoading(this);
-  }
-  componentDidMount() {
-  }
   render() {
     return (
       <CompatibleDownload 

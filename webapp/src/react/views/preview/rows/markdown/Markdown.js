@@ -6,12 +6,6 @@ import ReactMarkdown from 'react-markdown';
 import './styles/markdown.scss';
 
 class Markdown extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-  }
   render() {
     const { content, indentLeft } = this.props;
     let className = 'markdown';

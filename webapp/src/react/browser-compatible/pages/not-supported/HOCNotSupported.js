@@ -17,8 +17,6 @@ class HOCNotSupported extends PureComponent {
     this.state = {};
     setupLoading(this);
   }
-  componentDidMount() {
-  }
   onLeaveOrg(e) {
     const { me, organization, confirm, deleteOrg, leaveOrg } = this.props;
     const isOwner = me.get('id') === organization.get('owner_id');

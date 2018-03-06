@@ -16,8 +16,6 @@ class MentionTextInput extends PureComponent {
     this.state = {};
     setupDelegate(this, 'onTextChange', 'onFindUsers');
   }
-  componentDidMount() {
-  }
   renderSuggestion(entry, search, highlightedDisplay, index) {
     const user = msgGen.users.getUser(entry.id);
     let leftIcon = { src: msgGen.users.getPhoto(user) };

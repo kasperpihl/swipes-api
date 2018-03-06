@@ -8,6 +8,14 @@ export default {
   },
   PostActions: {
     _size: ['100%', 'auto'],
+    marginTop: '12px',
     borderTop: '1px solid $light',
   },
+  PostAttachments: {
+    _flex: ['row', 'left', 'center'],
+    marginTop: '12px',
+    '& > *:not(:last-child)': {
+      marginRight: '6px',
+    }
+  }
 }

@@ -19,14 +19,6 @@ const downloadLinks = {
 };
 
 class DownloadForDevice extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
-  }
   desktopCheck() {
     var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 

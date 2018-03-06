@@ -10,8 +10,6 @@ class HandoffWriteMessage extends Component {
     super(props);
     this.onHandoffChange = this.onHandoffChange.bind(this);
   }
-  componentDidMount() {
-  }
   onHandoffChange(e) {
     const { onChange } = this.props;
     onChange(e.target.value, e);

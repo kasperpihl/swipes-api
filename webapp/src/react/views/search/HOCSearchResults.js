@@ -19,8 +19,6 @@ class HOCSearchResults extends PureComponent {
     // setupLoading(this);
     setupDelegate(this, 'willOpenResult');
   }
-  componentDidMount() {
-  }
   onClick(id, res) {
     const { openSecondary } = this.props;
     this.willOpenResult(id);
