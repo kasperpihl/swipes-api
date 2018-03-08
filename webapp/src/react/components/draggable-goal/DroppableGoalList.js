@@ -5,12 +5,6 @@ import DraggableGoal from './DraggableGoal';
 
 const ListContainer = element('div', {
   _size: '100%',
-  transition: '.2s ease',
-
-  isDraggingOver: {
-    backgroundColor: '$deepBlue10',
-    transition: '.2s ease',
-  }
 });
 
 class DroppableGoalList extends PureComponent {
@@ -29,9 +23,10 @@ class DroppableGoalList extends PureComponent {
           <ListContainer
             innerRef={provided.innerRef}
             isDraggingOver={snapshot.isDraggingOver}>
-            {items.map(item => (
+            {items.map((item, index) => (
               <DraggableGoal
                 key={item}
+                index={index}
                 item={item} 
                 {...goalProps}
               />

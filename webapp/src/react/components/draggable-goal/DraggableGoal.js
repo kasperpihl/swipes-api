@@ -6,6 +6,9 @@ import { element } from 'react-swiss';
 
 const Wrapper = element('div', {
   _size: 'auto',
+  background: '$light',
+  borderRadius: '3px',
+  marginBottom: '3px',
 })
 
 const _dragEl = document.getElementById('draggable');
@@ -33,10 +36,10 @@ class DraggableGoal extends PureComponent {
         {(provided, snapshot) => {
           return (
             <Fragment>
-              {this.renderOrNotPortal(provided.draggableStyle, (
+              {this.renderOrNotPortal(provided.draggableProps.style, (
                 <Wrapper
                   innerRef={provided.innerRef}
-                  style={provided.draggableStyle}
+                  {...provided.draggableProps}
                   {...provided.dragHandleProps}
                 >
                   <HOCGoalListItem

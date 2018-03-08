@@ -42,7 +42,6 @@ class HOCAddGoalItem extends PureComponent {
     this.setState({ addFocus: false });
   }
   onGoalAdd() {
-    console.log('add me!');
     const { createGoal } = this.props;
     const { title, assignees, milestoneId } = this.state;
 
@@ -140,7 +139,7 @@ class HOCAddGoalItem extends PureComponent {
         />
         <div className="add-goal-item__indicator">
           <div className="add-goal-item__loader">
-            <RotateLoader size={24} />
+            <RotateLoader size={30} />
           </div>
         </div>
         <div className="add-goal-item__assignees">
@@ -148,7 +147,7 @@ class HOCAddGoalItem extends PureComponent {
             assignees={assignees}
             delegate={this}
             rounded
-            size={26}
+            size={30}
           />
         </div>
         <div className="add-goal-item__button" onClick={this.onGoalAdd} >

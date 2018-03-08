@@ -201,7 +201,6 @@ class Profile extends PureComponent {
         <div className="profile-form__row" onClick={this.onEditCached('bioInput')}>
           <div className="profile-form__title">BIO</div>
           <ReactTextarea
-            ref="bioInput"
             minRows={1}
             maxRows={6}
             value={bio}

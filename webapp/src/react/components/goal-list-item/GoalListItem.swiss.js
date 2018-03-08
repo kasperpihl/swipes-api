@@ -2,12 +2,11 @@ export default {
   GoalItem: {
     _flex: ['row', 'left', 'center'],
     _size: ['100%', 'auto'],
-    backgroundColor: 'white',
-    borderBottom: '1px solid $deepBlue10',
+    // backgroundColor: 'white',
+    // borderBottom: '1px solid $deepBlue10',
     minHeight: '60px',
     overflow: 'hidden',
     padding: '12px',
-    paddingRight: 0,
     transition: '.2s ease',
 
     '&:hover': {
@@ -19,7 +18,7 @@ export default {
     _size: ['100%', 'auto'],
     _font: ['15px', '24px', '400'],
     color: '$deepBlue90',
-    padding: '0 18px',
+    padding: '0 12px',
     transition: '.2s ease',
 
     inTakeAction: {

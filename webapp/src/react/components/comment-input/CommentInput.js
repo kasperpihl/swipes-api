@@ -1,14 +1,10 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback, debounce, getDeep } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
-import ReactTextarea from 'react-textarea-autosize';
-// import SWView from 'SWView';
 import Button from 'Button';
 import Icon from 'Icon';
 import './styles/comment-input.scss';

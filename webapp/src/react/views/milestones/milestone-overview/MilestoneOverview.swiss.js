@@ -38,4 +38,22 @@ export default {
     _size: ['100%', 'auto'],
     _flex: ['row', 'between'],
   },
+  Section: {
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'left', 'top'],
+  },
+  SectionTitle: {
+    _size: ['100%', '66px'],
+    paddingTop: '24px',
+    flex: 'none',
+    _font: ['12px', '18px', 500],
+    color: '$dark',
+    borderBottom: '1px solid $light',
+    marginBottom: '24px',
+  },
+  Footer: {
+    _size: ['100%', '54px'],
+    borderTop: '1px solid $light',
+    _flex: ['row', 'right', 'center'],
+  },
 }

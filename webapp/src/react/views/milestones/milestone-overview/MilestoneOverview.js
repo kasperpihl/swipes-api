@@ -1,20 +1,21 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate, setupCachedCallback } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
-import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
 import { element } from 'react-swiss';
+
 import sw from './MilestoneOverview.swiss';
 
 const Wrapper = element('div', sw.Wrapper);
+const Footer = element('div', sw.Footer);
 const Title = element('div', sw.Title);
+const Section = element('div', sw.Section);
+const SectionTitle = element('div', sw.SectionTitle);
 const Text = element('div', sw.Text);
 const Spacer = element('div', sw.Spacer);
 const EmptyStateWrapper = element('div', sw.EmptyStateWrapper);
@@ -66,20 +67,7 @@ class MilestoneOverview extends PureComponent {
           title={title || m.get('title')}
           delegate={delegate}
           border={showLine}
-        >
-          <HOCDiscussButton
-            context={{
-              id: m.get('id'),
-              title: m.get('title'),
-            }}
-            relatedFilter={msgGen.milestones.getRelatedFilter(m)}
-          />
-
-          <HOCInfoButton
-            delegate={delegate}
-            {...getLoading('dots')}
-          />
-        </HOCHeaderTitle>
+        />
       </Wrapper>
     );
   }
@@ -125,7 +113,8 @@ class MilestoneOverview extends PureComponent {
     if (renderSection) {
       return (
         <DroppableWrapper>
-          <Section title={section}>
+          <Section>
+            <SectionTitle>{section}</SectionTitle>
             <DroppableGoalList
               droppableId={id}
               items={order.get(id)}
@@ -137,6 +126,7 @@ class MilestoneOverview extends PureComponent {
               )}
             </DroppableGoalList>
           </Section>
+          
         </DroppableWrapper>
       )
     }
@@ -196,13 +186,35 @@ class MilestoneOverview extends PureComponent {
       </TabWrapper>
     );
   }
+  renderFooter() {
+    const { milestone: m, getLoading, delegate } = this.props;
+
+    return (
+      <Footer>
+        <HOCDiscussButton
+          context={{
+            id: m.get('id'),
+            title: m.get('title'),
+          }}
+          relatedFilter={msgGen.milestones.getRelatedFilter(m)}
+        />
+        <HOCInfoButton
+          delegate={delegate}
+          {...getLoading('dots')}
+        />
+      </Footer>
+    )
+  }
   render() {
     const { milestone } = this.props;
 
     if (!milestone) return null;
 
     return (
-      <SWView header={this.renderHeader()} onScroll={this.onScroll}>
+      <SWView
+        header={this.renderHeader()}
+        footer={this.renderFooter()}
+        onScroll={this.onScroll}>
         {this.renderThreeSections()}
         {this.renderDualTabs()}
       </SWView>
