@@ -1,13 +1,5 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import Icon from 'Icon';
 import { Link } from 'react-router-dom';
 import './styles/download-app.scss'
@@ -45,13 +37,7 @@ class HOCDownloadApp extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCDownloadApp.propTypes = {};
-
-const mapStateToProps = (state) => ({
+export default connect((state) => ({
   isElectron: state.getIn(['globals', 'isElectron'])
-});
-
-export default connect(mapStateToProps, {
-})(HOCDownloadApp);
+}, {})(HOCDownloadApp);

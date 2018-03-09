@@ -10,7 +10,6 @@ import Browser from './browser/HOCBrowser';
 import CreatePost from './posts/compose-post/HOCCreatePost';
 import Find from './find/HOCFind';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
-import ActivityFeed from './goals/activity-feed/HOCActivityFeed';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
 import MilestoneOverview from './milestones/milestone-overview/HOCMilestoneOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
@@ -26,7 +25,6 @@ import TakeAction from './take-action/HOCTakeAction';
 
 export {
   AccountList,
-  ActivityFeed,
   Billing,
   Browser,
   CreatePost,

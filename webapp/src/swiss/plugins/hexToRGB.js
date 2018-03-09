@@ -28,7 +28,6 @@ const hexToRGBA = (value) => {
     }
   });
 
-
   const getHex = ((a, b) => {
     const possibleHex = b;
     

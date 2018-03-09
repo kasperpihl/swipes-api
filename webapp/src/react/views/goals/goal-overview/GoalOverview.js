@@ -13,7 +13,6 @@ import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import HOCInfoButton from 'components/info-button/HOCInfoButton';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import GoalCheckbox from 'components/goal-checkbox/GoalCheckbox';
 import Button from 'Button';
 import Icon from 'Icon';
 import './styles/goal-overview.scss';
@@ -81,19 +80,6 @@ class GoalOverview extends PureComponent {
     );
 
   }
-  renderGoalCheckBox() {
-    const { goal, getLoading, delegate, isLoading, showLine } = this.props;
-    const helper = this.getHelper();
-    const title = getLoading('title').loading;
-
-    return (
-      <GoalCheckbox
-        completed={helper.getIsCompleted()}
-        loading={isLoading('completing')}
-        delegate={delegate}
-      />
-    )
-  }
   renderHeader() {
     const { goal, getLoading, delegate, isLoading, showLine } = this.props;
     const helper = this.getHelper();
@@ -104,7 +90,6 @@ class GoalOverview extends PureComponent {
         <HOCHeaderTitle
           title={title || goal.get('title')}
           delegate={delegate}
-          leftChildren={this.renderGoalCheckBox()}
         >
           <HOCAssigning
             assignees={helper.getAssignees()}
