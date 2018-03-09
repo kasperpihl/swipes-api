@@ -1,7 +1,3 @@
-// darkGrey
-// lightGray
-// grey
-
 export default {
   ATag: {
     userSelect: 'none',
@@ -10,7 +6,7 @@ export default {
     width: 'auto',
   },
   IconContainer: {
-    background: '$light',
+    background: '$sw4',
     _size: '36px',
     _flex: 'center',
     borderRadius: '18px',
@@ -18,20 +14,18 @@ export default {
       background: 'none',
       borderRadius: 0,
     },
-    '.gl-button:hover &': {
-      // background: 'yellow',
-    },
   },
   Icon: {
-    _svgColor: '$middle',
+    _svgColor: '$sw2',
     _size: '24px',
     '.gl-button:hover &': {
+      _svgColor: '$blue',
     },
   },
   Text: {
     paddingTop: '1px',
     paddingLeft: '6px',
-    color: '$middle',
+    color: '$sw2',
     fontSize: '12px',
     lineHeight: '18px',
     fontWeight: 400,
@@ -39,7 +33,7 @@ export default {
       paddingLeft: 0,
     },
     '.gl-button:hover &': {
-      
+      color: '$blue',
     },
   }
 }

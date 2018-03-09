@@ -4,17 +4,17 @@ export default {
     _font: ['15px', '24px', 300],
     marginTop: '12px',
     maxWidth: '420px',
-    color: '$dark'
+    color: '$sw1'
   },
   PostActions: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'center'],
     marginTop: '12px',
-    borderTop: '1px solid $light',
+    borderTop: '1px solid $sw4',
     '& > *:not(:last-child)': {
       marginRight: '10px',
     },
-    '& .button': {
+    '& .gl-button': {
       flex: 'none',
     }
   },

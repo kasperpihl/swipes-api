@@ -47,13 +47,13 @@ export default {
     paddingTop: '24px',
     flex: 'none',
     _font: ['12px', '18px', 500],
-    color: '$dark',
-    borderBottom: '1px solid $light',
+    color: '$sw1',
+    borderBottom: '1px solid $sw4',
     marginBottom: '24px',
   },
   Footer: {
     _size: ['100%', '54px'],
-    borderTop: '1px solid $light',
+    borderTop: '1px solid $sw4',
     _flex: ['row', 'right', 'center'],
   },
 }

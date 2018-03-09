@@ -15,14 +15,14 @@ const CheckboxWrapper = element('div', {
   _flex: ['center'],
   flex: 'none',
   _size: '36px',
-  backgroundColor: '$yellowColor',
+  backgroundColor: '$yellow',
   borderRadius: '50px',
   marginRight: '18px',
   marginTop: '3px',
   transition: '.2s ease',
 
   '&:hover': {
-    backgroundColor: 'rgba($yellowColor, .7)'
+    backgroundColor: 'rgba($yellow, .7)'
   },
 
   completed: {

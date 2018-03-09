@@ -6,7 +6,7 @@ import { element } from 'react-swiss';
 
 const Wrapper = element('div', {
   _size: 'auto',
-  background: '$light',
+  background: '$sw4',
   borderRadius: '3px',
   marginBottom: '3px',
 })

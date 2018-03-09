@@ -21,7 +21,7 @@ export default {
   },
   HeartSvg: {
     _size: '24px',
-    stroke: '$middle',
+    stroke: '$sw2',
     fill: 'transparent',
     transition: '.2s ease',
     '.heart-button:hover &': {
@@ -42,7 +42,7 @@ export default {
   LikeString: {
     opacity: 0,
     _font: ['12px', '18px', 400],
-    color: '$middle',
+    color: '$sw2',
     show: {
       opacity: 1,
     },

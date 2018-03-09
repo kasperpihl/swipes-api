@@ -19,15 +19,15 @@ export default {
   },
   Name: {
     _font: ['12px', '18px', 500],
-    color: '$dark',
+    color: '$sw1',
   },
   Timestamp: {
     _font: ['12px', '18px', 400],
-    color: '$middle',
+    color: '$sw2',
   },
   Message: {
     _font: ['12px', '18px', 300],
-    color: '$dark',
+    color: '$sw1',
   },
   Attachments: {
     marginTop: '6px',

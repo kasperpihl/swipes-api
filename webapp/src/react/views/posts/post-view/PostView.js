@@ -55,7 +55,7 @@ class PostView extends PureComponent {
             reactions={post.get('reactions')}
             postId={post.get('id')}
           />
-          <Button icon="Comment" className="button" compact>{commentTitle}</Button>
+          <Button icon="Comment" compact>{commentTitle}</Button>
           <ActionSpacer />
           <Button icon="ThreeDots" compact />
         </PostActions>

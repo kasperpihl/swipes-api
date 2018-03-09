@@ -1,6 +1,6 @@
 export default {
   ATag: {
-    background: '$light',
+    background: '$sw4',
     maxWidth: '200px',
     borderRadius: '15px',
     paddingLeft: '6px',
@@ -9,31 +9,26 @@ export default {
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',
     width: 'auto',
+    '&:hover': {
+      background: '$sw3',
+    }
   },
   IconContainer: {
     _size: '30px',
     _flex: 'center',
-    '.attachment-container:hover &': {
-      // background: 'yellow',
-    },
   },
   Icon: {
-    _svgColor: '$middle',
+    _svgColor: '$sw2',
     _size: '24px',
-    '.attachment-container:hover &': {
-    },
   },
   Text: {
     paddingTop: '1px',
-    color: '$middle',
+    color: '$sw2',
     fontSize: '12px',
     lineHeight: '18px',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     fontWeight: 400,
-    '.attachment-container:hover &': {
-      
-    },
   }
 }

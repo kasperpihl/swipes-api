@@ -17,11 +17,11 @@ export default {
     width: '100%',
   },
   NameTitle: {
-    color: '$dark',
+    color: '$sw1',
     _font: ['15px', '24px', 400],
   },
   Subtitle: {
-    color: '$middle',
+    color: '$sw2',
     marginTop: '3px',
     _font: ['12px', '18px', 400],
   },

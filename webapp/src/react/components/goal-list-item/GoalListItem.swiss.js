@@ -7,23 +7,17 @@ export default {
     minHeight: '60px',
     overflow: 'hidden',
     padding: '12px',
-    transition: '.2s ease',
-
-    '&:hover': {
-      backgroundColor: '$blue5',
-      transition: '.2s ease',
-    }
   },
   GoalTitle: {
     _size: ['100%', 'auto'],
     _font: ['15px', '24px', '400'],
-    color: '$deepBlue90',
+    color: '$sw1',
     padding: '0 12px',
     transition: '.2s ease',
 
     inTakeAction: {
       _font: ['15px', '24px', '500'],
-      color: '$deepBlue90',
+      color: '$sw1',
     },
 
     '#{hoverRef}:hover &': {
@@ -38,13 +32,13 @@ export default {
     borderRadius: '50%',
     
     'status=Later|later': {
-      backgroundColor: '$deepBlue30',
+      backgroundColor: '$sw2',
     },
     'status=Now|now': {
-      backgroundColor: '$yellowColor',
+      backgroundColor: '$yellow',
     },
     'status=Done|done': {
-      backgroundColor: '#12d668'
+      backgroundColor: '$green'
     },
   },
 }
