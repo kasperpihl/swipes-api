@@ -79,7 +79,7 @@ class HOCHeader extends PureComponent {
     this.setState({ page: nextProps.currentTab });
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   onSelect(el) {
     this.onChangeTab(el.props.name);

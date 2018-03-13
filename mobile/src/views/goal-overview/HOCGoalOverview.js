@@ -234,8 +234,8 @@ class HOCGoalOverview extends PureComponent {
 
     return (
       <RippleButton onPress={this.handleCompleteGoal}>
-        <View style={[ extraStyles, { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 36 / 2, marginRight: 12, marginTop: 5 }]}>
-          <Icon icon="ChecklistCheckmark" width="18" height="18" fill={iconColor} style={{ marginLeft: -6, marginTop: -6 }} />
+        <View style={[ extraStyles, { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 36 / 2, marginRight: 12, marginTop: 5, paddingRight: 6, paddingBottom: 6 }]}>
+          <Icon icon="ChecklistCheckmark" width="18" height="18" fill={iconColor} />
         </View>
       </RippleButton>
     )
