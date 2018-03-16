@@ -6,8 +6,7 @@ import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback, typeForId, miniIconForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import Button from 'Button';
-import Button2 from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button2';
 import TabBar from 'components/tab-bar/TabBar';
 import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';
@@ -85,9 +84,10 @@ class PostFeed extends PureComponent {
     )
   }
   renderFooter() {
+    const { delegate } = this.props;
     return (
       <Footer>
-        <Button2 icon="Plus" onClick={this.onNewPost}>Create new post</Button2>
+        <Button icon="Plus" onClick={this.onNewPost}>Create new post</Button>
         <HOCInfoButton delegate={delegate} />
       </Footer>
     )
@@ -125,7 +125,7 @@ class PostFeed extends PureComponent {
           start a discussion
         </EmptyTitle>
         <EmptyText><TextParser>{text}</TextParser></EmptyText>
-        <Button primary text="Create a post" onClick={this.onNewPost} />
+        <Button onClick={this.onNewPost}>Create a post</Button>
       </EmptyState>
     )
   }

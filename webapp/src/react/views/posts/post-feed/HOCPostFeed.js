@@ -1,13 +1,8 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import HOCCreatePost from 'src/react/views/posts/compose-post/HOCCreatePost';
 import PostFeed from './PostFeed';
 
 class HOCPostFeed extends PureComponent {
@@ -34,8 +29,9 @@ class HOCPostFeed extends PureComponent {
     const { openModal, context } = this.props;
 
     openModal({
-      id: 'CreatePost',
+      component: HOCCreatePost,
       title: 'New post',
+      position: 'bottom',
       props: {
         context: context || null,
       },

@@ -21,8 +21,7 @@ class DroppableGoalList extends PureComponent {
       <Droppable {...rest}>
         {(provided, snapshot) => (
           <ListContainer
-            innerRef={provided.innerRef}
-            isDraggingOver={snapshot.isDraggingOver}>
+            innerRef={provided.innerRef}>
             {items.map((item, index) => (
               <DraggableGoal
                 key={item}

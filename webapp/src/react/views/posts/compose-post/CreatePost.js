@@ -1,21 +1,33 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+import { element } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
-import SWView from 'SWView';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button2';
 import Icon from 'Icon';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
+import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
+
 import PostComposer from './PostComposer';
+import sw from './CreatePost.swiss';
+
 import './styles/create-post.scss';
+
+const Wrapper = element('div', sw.Wrapper);
+const ComposerWrapper = element('div', sw.ComposerWrapper);
+const StyledAutoCompleteInput = element(AutoCompleteInput, sw.AutoCompleteInput);
 
 class CreatePost extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this, 'onButtonClick', 'onPostClick', 'onContextClick', 'onChangeFiles');
+    setupDelegate(this, 'onButtonClick', 'onPostClick', 'onContextClick', 'onChangeFiles', 'onMessageChange');
+    this.acOptions = {
+      types: ['users'],
+      delegate: props.delegate,
+      trigger: "@",
+    }
   }
   renderSubtitle() {
     const { post } = this.props;
@@ -29,21 +41,6 @@ class CreatePost extends PureComponent {
         {post.getIn(['context', 'title'])}
       </div>
     )
-  }
-  renderHeader() {
-    const { hideModal } = this.props;
-    if(hideModal) {
-      return undefined;
-    }
-
-    return (
-      <HOCHeaderTitle title="Create Post" subtitle={this.renderSubtitle()} border />
-    )
-  }
-  renderComposer() {
-    const { delegate, post, myId } = this.props;
-
-    return <PostComposer myId={myId} post={post} ref="composer" delegate={delegate} />
   }
   renderAttachments() {
     const { post, delegate } = this.props;
@@ -94,20 +91,32 @@ class CreatePost extends PureComponent {
     )
   }
   render() {
+    const { myId, post } = this.props;
+    const placeholder = `What do you want to discuss, ${msgGen.users.getFirstName(myId)}?`;
+
     return (
-      <SWView
-        header={this.renderHeader()}
-      >
-        {this.renderComposer()}
+      <Wrapper>
+        <ComposerWrapper>
+          <HOCAssigning
+            assignees={[myId]}
+            rounded
+            size={30}
+          />
+          <StyledAutoCompleteInput //ReactTextarea //
+            value={post.get('message')}
+            minRows={3}
+            maxRows={9}
+            onChange={this.onMessageChange}
+            placeholder={placeholder}
+            autoFocus
+            options={this.acOptions}
+          />
+        </ComposerWrapper>
         {this.renderAttachments()}
         {this.renderActions()}
-      </SWView>
+      </Wrapper>
     )
   }
 }
 
 export default CreatePost
-
-// const { string } = PropTypes;
-
-CreatePost.propTypes = {};

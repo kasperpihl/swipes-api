@@ -1,15 +1,8 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import { setupDelegate } from 'react-delegate';
-// import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button2';
 import InfoTab from 'context-menus/info-tab/InfoTab';
 
 class HOCInfoButton extends PureComponent {
@@ -59,9 +52,6 @@ class HOCInfoButton extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
-
-HOCInfoButton.propTypes = {};
 
 export default connect(null, {
   contextMenu: a.main.contextMenu,

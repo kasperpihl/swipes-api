@@ -15,7 +15,6 @@ import Dashboard from 'compatible/pages/dashboard/Dashboard';
 
 import SwipesLoader from 'components/loaders/SwipesLoader';
 import HOCRedirect from 'src/react/app/HOCRedirect';
-import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
 import HOCAutoCompleting from 'components/auto-completing/HOCAutoCompleting';
 import HOCTooltip from 'components/tooltip/HOCTooltip';
 import HOCTopbar from 'components/topbar/HOCTopbar';
@@ -70,7 +69,6 @@ class Root extends PureComponent {
         <HOCRedirect />
         <Gradient />
         <HOCContextMenu />
-        <SuccessStateGradient />
         <HOCAutoCompleting />
         <HOCTooltip />
         <DevTools />

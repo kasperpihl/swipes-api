@@ -22,7 +22,7 @@ export default {
     _flex: ['row', 'between', 'center'],
     background: 'white',
     padding: '9px 12px',
-    borderTop: '1px solid #F2F4F6',
+    borderTop: '1px solid $sw4',
   },
   SubtitleWrapper: {
     _flex: ['row', 'left', 'center'],
@@ -30,7 +30,7 @@ export default {
   },
   SubtitleIcon: {
     _size: '18px',
-    _svgColor: '$deepBlue40',
+    _svgColor: '$sw2',
     flex: 'none',
     marginRight: '3px',
     marginTop: '6px',
@@ -52,13 +52,13 @@ export default {
   },
   EmptyTitle: {
     _font: ['11px', '18px', 'bold'],
-    color: '$deepBlue100',
+    color: '$sw1',
     textTransform: 'uppercase',
     pointerEvents: 'all',
   },
   EmptyText: {
     _font: ['12px', '18px'],
-    color: '$deepBlue40',
+    color: '$sw2',
     marginTop: '9px',
     marginBottom: '18px',
     textAlign: 'center',

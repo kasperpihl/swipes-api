@@ -1,16 +1,32 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+import { element } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId, } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
-import Button from 'Button';
-import Icon from 'Icon';
-import StyledText from 'components/styled-text/StyledText';
 import ReactTextarea from 'react-textarea-autosize';
-import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
+import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 
 import './styles/post-composer.scss';
+
+const ComposerWrapper = element('div', {
+  _flex: ['row', 'left', 'top'],
+  padding: '18px 24px 18px 30px',
+});
+const StyledAutoCompleteInput = element(AutoCompleteInput, {
+  _font: ['15px', '24px', 300],
+  color: '$sw1',
+  paddingLeft: '21px',
+  paddingTop: '5px',
+  resize: 'none',
+  width: '100%',
+  '&::-webkit-input-placeholder': {
+    color: '$sw2',
+    fontStyle: 'italic',
+  },
+  '&:focus': {
+    outline: 'none',
+  },
+});
 
 class PostComposer extends PureComponent {
   constructor(props) {
@@ -74,52 +90,26 @@ class PostComposer extends PureComponent {
       </div>
     )
   }
-  renderProfilePic() {
-    const { myId } = this.props;
-    const image = msgGen.users.getPhoto(myId);
-    const initials = msgGen.users.getInitials(myId);
-
-    if (!image) {
-      return (
-        <div className="post-composer__profile-initials">
-          {initials}
-        </div>
-      )
-    }
-
-    return (
-      <div className="post-composer__profile-pic">
-        <img src={image} />
-      </div>
-    )
-  }
-  renderTextarea() {
+  render() {
     const { myId, post } = this.props;
     const placeholder = `What do you want to discuss, ${msgGen.users.getFirstName(myId)}?`;
-
     return (
-      <div className="post-composer__text-wrapper">
-        {this.renderProfilePic()}
-        <AutoCompleteInput //ReactTextarea //
-          className="post-composer__textarea"
+      <ComposerWrapper>
+        <HOCAssigning
+          assignees={[myId]}
+          rounded
+          size={30}
+        />
+        <StyledAutoCompleteInput //ReactTextarea //
           value={post.get('message')}
           minRows={3}
           maxRows={9}
-          ref="textarea"
           onChange={this.onMessageChange}
           placeholder={placeholder}
           autoFocus
           options={this.acOptions}
         />
-      </div>
-    )
-  }
-  render() {
-    return (
-      <div className="post-composer">
-        {this.renderTextarea()}
-        {this.renderGeneratedSubtitle()}
-      </div>
+      </ComposerWrapper>
     )
   }
 }

@@ -60,17 +60,6 @@ class HOCGoalOverview extends PureComponent {
       props,
     });
   }
-  onSeeAll() {
-    const { openSecondary, goal, contextMenu } = this.props;
-    contextMenu();
-    openSecondary({
-      id: 'ActivityFeed',
-      title: 'ActivityFeed',
-      props: {
-        goalId: goal.get('id'),
-      },
-    });
-  }
   onClickURL(nI, url) {
     const { browser, target } = this.props;
     browser(target, url);

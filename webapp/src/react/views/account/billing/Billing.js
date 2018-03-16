@@ -31,7 +31,6 @@ class Billing extends PureComponent {
     super(props);
     this.state = {
       errorMessage: '',
-      successState: true,
     };
     setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage');
     bindAll(this, ['onChange', 'onSubmit']);

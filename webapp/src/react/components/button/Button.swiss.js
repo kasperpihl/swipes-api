@@ -10,10 +10,16 @@ export default {
     _size: '36px',
     _flex: 'center',
     borderRadius: '18px',
+    '!compact': {
+      '.gl-button:hover &': {
+        opacity: .7,
+      },    
+    },
     compact: {
       background: 'none',
       borderRadius: 0,
     },
+
   },
   Icon: {
     _svgColor: '$sw2',

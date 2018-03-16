@@ -10,7 +10,7 @@ import { setupCachedCallback, debounce, bindAll } from 'swipes-core-js/classes/u
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
-import HOCModal from './HOCModal';
+import Modal from 'src/react/app/modal/Modal';
 import prefixAll from 'inline-style-prefixer/static';
 
 const DEFAULT_MAX_WIDTH = 800;
@@ -272,7 +272,7 @@ class HOCViewController extends PureComponent {
             key={navigation.getIn([target, 'id']) + navigation.getIn([target, 'stack']).size}
             {...props}
           />
-          <HOCModal target={target} />
+          <Modal target={target} />
         </section>
       </ContextWrapper>
     );
