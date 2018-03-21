@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-// import { fromJS } from 'immutable';
 import PostView from './PostView';
 
 class HOCPostView extends PureComponent {

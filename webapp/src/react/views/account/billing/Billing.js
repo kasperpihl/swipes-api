@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-// import PropTypes from 'prop-types';
+
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';

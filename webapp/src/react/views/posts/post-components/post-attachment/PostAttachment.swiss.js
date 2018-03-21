@@ -10,7 +10,7 @@ export default {
     display: 'inline-flex',
     width: 'auto',
     '&:hover': {
-      background: '$sw3',
+      opacity: .7,
     }
   },
   IconContainer: {
@@ -20,9 +20,25 @@ export default {
   Icon: {
     _svgColor: '$sw2',
     _size: '24px',
+    isContext: {
+      _size: '18px',
+      hasCloseIcon: {
+        _size: '24px',
+      }
+    },
+    '!hasCloseIcon': {
+      '.attachment-container:hover &': {    
+        _svgColor: '$blue',
+      }
+    },
+    
+    hasCloseIcon: {
+      '.icon-container:hover &': {
+        _svgColor: '$blue',
+      }
+    }
   },
   Text: {
-    paddingTop: '1px',
     color: '$sw2',
     fontSize: '12px',
     lineHeight: '18px',
@@ -30,5 +46,13 @@ export default {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     fontWeight: 400,
+    '.attachment-container:hover &': {
+      color: '$blue',
+    },
+    hasCloseIcon: {
+      '.icon-container:hover + &': {
+        color: '$sw2',
+      }
+    }
   }
 }

@@ -1,11 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
 import { setupDelegate } from 'react-delegate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
 import './styles/milestone-item.scss';
@@ -84,15 +80,7 @@ class HOCMilestoneItem extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCMilestoneItem.propTypes = {};
-
-function mapStateToProps(state, ownProps) {
-  return {
-    goals: state.get('goals'),
-  };
-}
-
-export default connect(mapStateToProps, {
-})(HOCMilestoneItem);
+export default connect(state => ({
+  goals: state.get('goals'),
+}))(HOCMilestoneItem);

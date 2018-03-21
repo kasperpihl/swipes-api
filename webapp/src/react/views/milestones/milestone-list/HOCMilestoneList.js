@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-// import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -121,12 +120,8 @@ class HOCMilestoneList extends PureComponent {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    milestones: cs.milestones.getGrouped(state),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(state => ({
+  milestones: cs.milestones.getGrouped(state),
+}), {
   createMilestone: ca.milestones.create,
 })(HOCMilestoneList));

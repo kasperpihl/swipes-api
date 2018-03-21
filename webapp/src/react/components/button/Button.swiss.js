@@ -21,6 +21,9 @@ export default {
   IconContainer: {
     _size: '36px',
     _flex: 'center',
+    compact: {
+      _size: '30px',
+    }
   },
   Icon: {
     _svgColor: '$sw2',

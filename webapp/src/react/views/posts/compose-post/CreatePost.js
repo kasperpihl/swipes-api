@@ -5,6 +5,7 @@ import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/
 import Button from 'src/react/components/button/Button2';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
+import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 
 import sw from './CreatePost.swiss';
@@ -21,25 +22,28 @@ const Seperator = element('div', sw.Seperator);
 class CreatePost extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign');
+    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign', 'onAttachmentClick', 'onContextClick', 'onAttachmentClose', 'onContextClose');
     this.acOptions = {
       types: ['users'],
       delegate: props.delegate,
       trigger: "@",
     }
   }
-  renderSubtitle() {
+  renderContext() {
     const { post } = this.props;
     if (!post.get('context')) {
       return undefined;
     }
 
     return (
-      <div className="create-post__context" onClick={this.onContextClick}>
-        <Icon icon={miniIconForId(post.getIn(['context', 'id']))} className="create-post__svg" />
-        {post.getIn(['context', 'title'])}
-      </div>
-    )
+      <PostAttachment
+        icon={miniIconForId(post.getIn(['context', 'id']))}
+        title={post.getIn(['context', 'title'])}
+        onClick={this.onContextClick}
+        onClose={this.onContextClose}
+        isContext
+      />
+    );
   }
   renderAttachments() {
     const { post, delegate } = this.props;
@@ -47,23 +51,23 @@ class CreatePost extends PureComponent {
       return undefined;
     }
 
-    const attachments = post.get('attachments').map((att, i) => (
-      <HOCAttachmentItem
-        attachment={att}
-        index={i}
-        key={i}
-        delegate={delegate}
-      />
-    ))
-    return (
-      <div className="create-post__attachments">
-        {attachments}
-      </div>
-    )
+    return post.get('attachments').map((att, i) => {
+      const icon = attachmentIconForService(att.getIn(['link', 'service']));
+      return (
+        <PostAttachment
+          title={att.get('title')}
+          key={i}
+          onClick={this.onAttachmentClickCached(i)}
+          onClose={this.onAttachmentCloseCached(i)}
+          icon={icon}
+        />
+      )
+    });
   }
   renderActionBar() {
     const { getLoading, delegate, post } = this.props;
     const hasAssignees = post.get('taggedUsers') && !!post.get('taggedUsers').size;
+    const hasAttachments = post.get('context') || post.get('attachments').size
     return (
       <ActionBar>
         <AssignSection>
@@ -80,8 +84,15 @@ class CreatePost extends PureComponent {
             compact={hasAssignees}
           />
         </AssignSection>
-        {hasAssignees && <Seperator />}
-        <AttachSection>
+        <Seperator />
+        <AttachSection notEmpty={hasAttachments}>
+          {this.renderContext()}
+          {this.renderAttachments()}
+          <HOCAttachButton
+            delegate={delegate}
+            sideLabel={!hasAttachments && 'Attach'}
+            compact={hasAttachments}
+          />
         </AttachSection>
         <Button
           title="Post"
@@ -108,7 +119,7 @@ class CreatePost extends PureComponent {
             rounded
             size={30}
           />
-          <StyledAutoCompleteInput
+          <StyledACInput
             acRef={(c) => { this.input = c; }}
             value={post.get('message')}
             minRows={3}

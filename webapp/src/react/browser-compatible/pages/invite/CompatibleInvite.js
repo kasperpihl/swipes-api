@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router-dom';
-// import PropTypes from 'prop-types';
+
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';

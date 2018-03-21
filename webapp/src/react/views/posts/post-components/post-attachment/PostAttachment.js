@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { element } from 'react-swiss';
-import { attachmentIconForService } from 'swipes-core-js/classes/utils';
-import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Icon from 'Icon';
-import * as a from 'actions';
 import sw from './PostAttachment.swiss';
 
 const ATag = element('a', sw.ATag);
@@ -13,39 +9,56 @@ const IconContainer = element('div', sw.IconContainer);
 const IconComp = element(Icon, sw.Icon);
 
 class PostAttachment extends PureComponent {
-  onClick = () => {
-    const { attachment, target, preview } = this.props;
-    preview(target, attachment);
+  constructor(props) {
+    super(props);
+    this.state = {
+      showCloseIcon: null,
+    };
+  }
+  onClick = (e) => {
+    const { onClick } = this.props;
+    e.stopPropagation();
+    onClick(e);
   }
   onClose = (e) => {
-    const { onClose, attachment, index } = this.props;
-    e.stopPropagation();
-    onClose(attachment, index);
+    const { onClose } = this.props;
+    if(typeof onClose === 'function') {
+      e.stopPropagation();
+      onClose(e);
+    }
   }
-  renderCloseButton() {
-    const { onClose } = this.props;
-    if(typeof onClose !== 'function') {
-      return null;
+  onMouseEnter = () => {
+    if(typeof this.props.onClose === 'function') {
+      this.setState({ showCloseIcon: 'Close' });
+    }
+  }
+  onMouseLeave = () => {
+    if(this.state.showCloseIcon) {
+      this.setState({ showCloseIcon: null });
     }
   }
 
   render() {
-    const {
-      attachment,
-    } = this.props;
-    const icon = attachmentIconForService(attachment.getIn(['link', 'service']));
+    const { showCloseIcon } = this.state;
 
     return (
-      <ATag className="attachment-container" onClick={this.onClick}>
-        <IconContainer>
-          <IconComp icon={icon} />
+      <ATag 
+        className="attachment-container"
+        onClick={this.onClick}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
+        <IconContainer className="icon-container" onClick={this.onClose}>
+          <IconComp
+            icon={showCloseIcon || this.props.icon}
+            isContext={!!this.props.isContext}
+            hasCloseIcon={!!showCloseIcon}
+          />
         </IconContainer>
-        <Text>{attachment.get('title')}</Text>
+        <Text hasCloseIcon={!!showCloseIcon}>{this.props.title}</Text>
       </ATag>
     );
   }
 }
 
-export default navWrapper(connect(null, {
-  preview: a.links.preview,
-})(PostAttachment));
+export default PostAttachment;

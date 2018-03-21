@@ -19,11 +19,12 @@ export default {
     },
   },
   ActionBar: {
-    _flex: ['row', 'left', 'center'],
+    _flex: ['row', 'left', 'top'],
     padding: '12px 30px',
     borderTop: '1px solid $sw4',
   },
   Seperator: {
+    marginTop: '6px',
     width: '2px',
     marginLeft: '12px',
     marginRight: '12px',
@@ -32,8 +33,19 @@ export default {
   },
   AssignSection: {
     _flex: ['row', 'left', 'center'],
+    paddingRight: '6px',
   },
   AttachSection: {
     width: '100%',
+    _flex: ['row', 'left', 'top'],
+    flexWrap: 'wrap',
+    '& > *:not(:last-child)': {
+      marginRight: '6px',
+    },
+    notEmpty: {
+      '& > *': {
+        marginTop: '3px',
+      }
+    }
   },
 }

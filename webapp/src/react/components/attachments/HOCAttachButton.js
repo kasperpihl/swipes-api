@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
@@ -9,7 +9,7 @@ import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 // import { map, list } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button2';
 import { fromJS } from 'immutable';
 import {
   EditorState,
@@ -130,7 +130,6 @@ class HOCAttachButton extends PureComponent {
     return (
       <div className={`attach-button ${className||''}`}>
         <Button
-          className="attach-button__button"
           onClick={this.onChooseAttachment}
           {...this.getLoading('attach')}
           icon="Attach"

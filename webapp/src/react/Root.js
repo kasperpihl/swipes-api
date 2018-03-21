@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
 
 import HOCUnsubscribe from 'src/react/pages/unsubscribe/HOCUnsubscribe';
-import HOCCompatibleDownload from 'compatible/pages/download/HOCCompatibleDownload';
+import CompatibleDownload from 'compatible/pages/download/CompatibleDownload';
 import HOCPlanCSVExporter from 'compatible/pages/plan-csv-exporter/HOCPlanCSVExporter';
 import HOCCompatibleLogin from 'compatible/pages/login/HOCCompatibleLogin';
 import HOCCompatibleSignup from 'compatible/pages/signup/HOCCompatibleSignup';
@@ -46,7 +46,7 @@ class Root extends PureComponent {
       }} />,
       <Route key="2" path="/notsupported" component={HOCNotSupported} />,
       <Route key="3" path="/unsubscribe" component={HOCUnsubscribe} />,
-      <Route key="4" path="/download" component={HOCCompatibleDownload} />,
+      <Route key="4" path="/download" component={CompatibleDownload} />,
       <Route key="5" path="/plan-csv-exporter" component={HOCPlanCSVExporter} />,
       <Route key="6" path="/login" component={HOCCompatibleLogin} />,
       <Route key="7" path="/register" component={HOCCompatibleSignup} />,

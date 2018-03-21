@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import * as a from 'actions';

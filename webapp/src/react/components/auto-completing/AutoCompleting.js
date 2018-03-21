@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
+
 // import { map, list } from 'react-immutable-proptypes';
 // import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 // import SWView from 'SWView';

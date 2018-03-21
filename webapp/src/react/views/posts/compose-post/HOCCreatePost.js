@@ -1,22 +1,18 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import * as cs from 'swipes-core-js/selectors';
 
 import {
   setupLoading,
   convertObjToUnderscore,
   navForContext,
-  attachmentIconForService,
   throttle,
   getDeep,
   typeForId,
   bindAll
 } from 'swipes-core-js/classes/utils';
 
-// import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -57,8 +53,16 @@ class HOCCreatePost extends PureComponent {
     post = post.set('message', msgArr.slice(0, -1).join('@'));
     this.updatePost(post);
   }
+  onAttachmentClick(i) {
+    const { preview, target } = this.props;
+    const { post } = this.state;
+    preview(target, post.getIn(['attachments', i]));
+  }
   onAttachmentClose(i) {
     this.updatePost(this.state.post.updateIn(['attachments'], atts => atts.delete(i)));
+  }
+  onContextClose() {
+    this.updatePost(this.state.post.set('context', null));
   }
   onFocus() {
     const input = getDeep(this, 'refs.create.refs.composer.refs.textarea.refs.textarea');
@@ -118,15 +122,12 @@ class HOCCreatePost extends PureComponent {
     });
   }
 
-  onTextClick(id, obj, e) {
-    let { post } = this.state;
-    if (obj.id === 'type') {
-      this.onChooseNotificationType(e);
-    } else {
-      this.updatePost(post.set('taggedUsers', post.get('taggedUsers').filter(uid => uid !== obj.id)));
-    }
-
+  onContextClick() {
+    const { openSecondary, target } = this.props;
+    const { post } = this.state;
+    openSecondary(target, navForContext(post.get('context')));
   }
+
   onPostClick(e) {
     const { createPost, navPop, hideModal } = this.props;
     const { post } = this.state;
@@ -202,6 +203,7 @@ class HOCCreatePost extends PureComponent {
 export default navWrapper(connect(state => ({
   myId: state.getIn(['me', 'id']),
 }), {
+  openSecondary: a.navigation.openSecondary,
   selectAssignees: a.goals.selectAssignees,
   contextMenu: a.main.contextMenu,
   preview: a.links.preview,

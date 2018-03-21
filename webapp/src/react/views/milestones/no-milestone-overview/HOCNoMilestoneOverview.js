@@ -1,13 +1,6 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
 import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import NoMilestoneOverview from './NoMilestoneOverview';
 
@@ -70,14 +63,8 @@ class HOCNoMilestoneOverview extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCNoMilestoneOverview.propTypes = {};
-
-const mapStateToProps = (state) => ({
+export default navWrapper(connect(state => ({
   goals: cs.goals.withoutMilestone(state),
   myId: state.getIn(['me', 'id']),
-})
-
-export default navWrapper(connect(mapStateToProps, {
-})(HOCNoMilestoneOverview));
+}))(HOCNoMilestoneOverview));

@@ -21,7 +21,7 @@ class Button extends PureComponent {
       return null;
     }
     return (
-      <IconContainer>
+      <IconContainer compact={compact}>
         <IconComp icon={icon} />
       </IconContainer>
     )

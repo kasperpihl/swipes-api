@@ -1,11 +1,7 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import './styles/unsubscribe.scss';
 
 class HOCUnsubscribe extends PureComponent {
@@ -41,14 +37,7 @@ class HOCUnsubscribe extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCUnsubscribe.propTypes = {};
-
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   request: ca.api.request,
 })(HOCUnsubscribe);
