@@ -25,20 +25,4 @@ export default {
     marginTop: '3px',
     _font: ['12px', '18px', 400],
   },
-  PostType: {
-    _font: ['11px', '18px', 500],
-    marginTop: '3px',
-    textTransform: 'capitalize',
-    color: '$information',
-    '&:after': {
-      content: '',
-      display: 'inline-block',
-      width: '12px',
-      height: '12px',
-      transform: 'translateY(2px)',
-      marginLeft: '6px',
-      borderRadius: '6px',
-      backgroundColor: '$information',
-    },
-  },
 }

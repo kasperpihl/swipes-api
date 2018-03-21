@@ -3,6 +3,15 @@ export default {
     _flex: ['row', 'left', 'top'],
     padding: '18px 24px 18px 30px',
   },
+  TypeWrapper: {
+    _size: ['auto', '24px'],
+    _flex: ['row', 'right', 'bottom'],
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    paddingRight: '24px',
+    zIndex: 1,
+  },
   AutoCompleteInput: {
     _font: ['15px', '24px', 300],
     color: '$sw1',

@@ -8,7 +8,7 @@ export default {
     visibility: 'hidden',
     zIndex: 9,
     show: {
-      background: 'rgba(255, 255, 255, .5)',
+      background: 'rgba(255, 255, 255, .8)',
       opacity: 1,
       transition: 'visibility 0s 0s, opacity .15s',
       visibility: 'visible',

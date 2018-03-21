@@ -29,6 +29,7 @@ class PostView extends PureComponent {
 
     setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick');
   }
+  
   renderAttachments() {
     const { post } = this.props;
     if(!post.get('attachments') || !post.get('attachments').size) {

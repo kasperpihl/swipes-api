@@ -16,9 +16,9 @@ import {
 import { fromJS } from 'immutable';
 import TabMenu from 'context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import CreatePost from './CreatePost';
+import PostCreate from './PostCreate';
 
-class HOCCreatePost extends PureComponent {
+class HOCPostCreate extends PureComponent {
   static maxWidth() {
     return 600;
   }
@@ -188,7 +188,7 @@ class HOCCreatePost extends PureComponent {
     const { post } = this.state;
 
     return (
-      <CreatePost
+      <PostCreate
         ref="create"
         hideModal={hideModal}
         post={post}
@@ -208,4 +208,4 @@ export default navWrapper(connect(state => ({
   contextMenu: a.main.contextMenu,
   preview: a.links.preview,
   createPost: ca.posts.create,
-})(HOCCreatePost));
+})(HOCPostCreate));

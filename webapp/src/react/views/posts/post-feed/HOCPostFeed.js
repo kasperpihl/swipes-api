@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as cs from 'swipes-core-js/selectors';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import HOCCreatePost from 'src/react/views/posts/compose-post/HOCCreatePost';
+import HOCPostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
 import PostFeed from './PostFeed';
 
 class HOCPostFeed extends PureComponent {
@@ -29,7 +29,7 @@ class HOCPostFeed extends PureComponent {
     const { openModal, context } = this.props;
 
     openModal({
-      component: HOCCreatePost,
+      component: HOCPostCreate,
       title: 'New post',
       position: 'bottom',
       props: {

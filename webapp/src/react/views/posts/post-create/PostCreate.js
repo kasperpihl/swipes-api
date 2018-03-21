@@ -7,11 +7,13 @@ import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
+import PostType from '../post-components/post-type/PostType';
 
-import sw from './CreatePost.swiss';
+import sw from './PostCreate.swiss';
 
 const Wrapper = element('div');
 const ComposerWrapper = element('div', sw.ComposerWrapper);
+const TypeWrapper = element('div', sw.TypeWrapper);
 const StyledACInput = element(ACInput, sw.AutoCompleteInput);
 const ActionBar = element('div', sw.ActionBar);
 const AssignSection = element('div', sw.AssignSection);
@@ -19,10 +21,10 @@ const AttachSection = element('div', sw.AttachSection);
 const Seperator = element('div', sw.Seperator);
 
 
-class CreatePost extends PureComponent {
+class PostCreate extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign', 'onAttachmentClick', 'onContextClick', 'onAttachmentClose', 'onContextClose');
+    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign', 'onAttachmentClick', 'onContextClick', 'onAttachmentClose', 'onContextClose', 'onChooseNotificationType');
     this.acOptions = {
       types: ['users'],
       delegate: props.delegate,
@@ -113,6 +115,9 @@ class CreatePost extends PureComponent {
 
     return (
       <Wrapper>
+        <TypeWrapper>
+          <PostType type={post.get('type')} onClick={this.onChooseNotificationType} />
+        </TypeWrapper>
         <ComposerWrapper>
           <HOCAssigning
             assignees={[myId]}
@@ -136,4 +141,4 @@ class CreatePost extends PureComponent {
   }
 }
 
-export default CreatePost
+export default PostCreate

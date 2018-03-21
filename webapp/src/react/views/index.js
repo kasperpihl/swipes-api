@@ -5,9 +5,7 @@ import Organization from './account/organization/HOCOrganization';
 import Profile from './account/profile/HOCProfile';
 import Services from './account/services/Services';
 import Onboarding from './account/onboarding/HOCOnboarding';
-
 import Browser from './browser/HOCBrowser';
-import CreatePost from './posts/compose-post/HOCCreatePost';
 import Find from './find/HOCFind';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
@@ -15,6 +13,7 @@ import MilestoneOverview from './milestones/milestone-overview/HOCMilestoneOverv
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
 import NotFound from './not-found/NotFound';
 import Notifications from './notifications/HOCNotifications';
+import PostCreate from './posts/post-create/HOCPostCreate';
 import PostFeed from './posts/post-feed/HOCPostFeed';
 import PostView from './posts/post-view/HOCPostView';
 import Preview from './preview/HOCPreview';
@@ -27,7 +26,6 @@ export {
   AccountList,
   Billing,
   Browser,
-  CreatePost,
   Find,
   GoalOverview,
   Onboarding,
@@ -36,6 +34,7 @@ export {
   NoMilestoneOverview,
   NotFound,
   Notifications,
+  PostCreate,
   PostFeed,
   PostView,
   Preview,

@@ -55,7 +55,7 @@ class HOCGoalOverview extends PureComponent {
     };
 
     openModal({
-      id: 'CreatePost',
+      id: 'PostCreate',
       title: 'Create Post',
       props,
     });
