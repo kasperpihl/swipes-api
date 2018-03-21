@@ -5,7 +5,7 @@ import * as a from 'actions';
 import * as cs from 'swipes-core-js/selectors';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import PostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
+import PostCreate from 'src/react/views/discuss/post-create/HOCPostCreate';
 import sw from './DiscussButton.swiss';
 
 const Wrapper = element('div', sw.Wrapper);

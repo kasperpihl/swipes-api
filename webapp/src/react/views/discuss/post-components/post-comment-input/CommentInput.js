@@ -232,9 +232,6 @@ class CommentInput extends PureComponent {
           frameless
         />
         {this.renderSendButton()}
-        {/* <div className="comment-input__icon-wrapper">
-          <Icon icon="Attach" className="comment-input__svg" />
-        </div> */}
       </div>
     )
   }

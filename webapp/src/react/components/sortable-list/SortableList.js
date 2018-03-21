@@ -6,7 +6,7 @@ const SortableItem = SortableElement(({ index, delegate, value }) => delegate.re
 const SortableList = ({ items, delegate, elementProps }) => {
 
   return (
-    <div className="sortable-list" ref="root">
+    <div ref="root">
       {items.map((value, index) => (
         <SortableItem key={index} value={value} index={index} delegate={delegate} {...elementProps} />
       ))}

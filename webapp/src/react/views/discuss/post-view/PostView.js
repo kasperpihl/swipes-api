@@ -4,7 +4,7 @@ import { setupDelegate, URL_REGEX } from 'swipes-core-js/classes/utils';
 import { List } from 'immutable';
 import SWView from 'SWView';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
-import CommentInput from 'components/comment-input/CommentInput';
+import CommentInput from '../post-components/post-comment-input/CommentInput';
 import CommentView from './CommentView';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import Button from 'components/button/Button2';

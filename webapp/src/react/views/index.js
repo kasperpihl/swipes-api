@@ -13,9 +13,9 @@ import MilestoneOverview from './milestones/milestone-overview/HOCMilestoneOverv
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
 import NotFound from './not-found/NotFound';
 import Notifications from './notifications/HOCNotifications';
-import PostCreate from './posts/post-create/HOCPostCreate';
-import PostFeed from './posts/post-feed/HOCPostFeed';
-import PostView from './posts/post-view/HOCPostView';
+import PostCreate from './discuss/post-create/HOCPostCreate';
+import PostFeed from './discuss/post-feed/HOCPostFeed';
+import PostView from './discuss/post-view/HOCPostView';
 import Preview from './preview/HOCPreview';
 import Search from './search/HOCSearch';
 import SideNote from './side-note/HOCSideNote';
