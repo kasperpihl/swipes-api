@@ -5,8 +5,8 @@ import { URL_REGEX, unescaper } from 'swipes-core-js/classes/utils';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
-import PostAttachment from './PostAttachment';
-import PostReactions from './PostReactions';
+import PostAttachment from '../post-components/post-attachment/PostAttachment';
+import PostReactions from '../post-components/post-reactions/PostReactions';
 import sw from './CommentView.swiss';
 
 import './styles/comment-view.scss';

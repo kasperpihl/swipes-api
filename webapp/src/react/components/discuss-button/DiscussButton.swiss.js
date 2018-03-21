@@ -38,7 +38,7 @@ export default {
     right: {
       borderTopRightRadius: '18px',
       borderBottomRightRadius: '18px',
-      _font: ['12px', '18px', 600],
+      _font: ['12px', '18px', 500],
     }
   },
 }

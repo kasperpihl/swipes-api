@@ -5,7 +5,6 @@ import * as a from 'actions';
 import * as cs from 'swipes-core-js/selectors';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import './styles/discuss-button.scss';
 import CreatePost from 'src/react/views/posts/compose-post/HOCCreatePost';
 import sw from './DiscussButton.swiss';
 

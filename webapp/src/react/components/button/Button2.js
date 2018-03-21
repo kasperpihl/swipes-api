@@ -4,8 +4,10 @@ import Icon from 'Icon';
 import sw from './Button.swiss';
 
 const ATag = element('a', sw.ATag);
-const Text = element('div', sw.Text);
+const Title = element('div', sw.Title);
+const Background = element('div', sw.Background);
 const IconContainer = element('div', sw.IconContainer);
+const SideLabel = element('div', sw.SideLabel);
 const IconComp = element(Icon, sw.Icon);
 
 class Button extends PureComponent {
@@ -19,31 +21,42 @@ class Button extends PureComponent {
       return null;
     }
     return (
-      <IconContainer compact={compact}>
+      <IconContainer>
         <IconComp icon={icon} />
       </IconContainer>
     )
   }
-  renderText() {
-    const { children, compact } = this.props;
-    if(!children) {
+  renderTitle() {
+    const { title, compact, icon } = this.props;
+
+    return title && (
+      <Title compact={compact} hasIcon={!!icon}>{title}</Title>
+    );
+  }
+  renderSideLabel() {
+    const { sideLabel, compact } = this.props;
+    if(!sideLabel) {
       return null;
     }
-    return (
-      <Text compact={compact}>{children}</Text>
-    );
+    return sideLabel && (
+      <SideLabel compact={compact}>{sideLabel}</SideLabel>
+    )
   }
   render() {
     const {
-      children,
+      title,
+      sideLabel,
       compact,
       icon,
       ...rest,
     } = this.props;
     return (
       <ATag className="gl-button" {...rest}>
-        {this.renderIcon()}
-        {this.renderText()}
+        <Background compact={compact}>
+          {this.renderIcon()}
+          {this.renderTitle()}
+        </Background>
+        {this.renderSideLabel()}
       </ATag>
     );
   }

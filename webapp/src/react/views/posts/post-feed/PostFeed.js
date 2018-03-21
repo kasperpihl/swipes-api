@@ -87,7 +87,7 @@ class PostFeed extends PureComponent {
     const { delegate } = this.props;
     return (
       <Footer>
-        <Button icon="Plus" onClick={this.onNewPost}>Create new post</Button>
+        <Button icon="Plus" onClick={this.onNewPost} sideLabel="Create new post" />
         <HOCInfoButton delegate={delegate} />
       </Footer>
     )
@@ -125,7 +125,7 @@ class PostFeed extends PureComponent {
           start a discussion
         </EmptyTitle>
         <EmptyText><TextParser>{text}</TextParser></EmptyText>
-        <Button onClick={this.onNewPost}>Create a post</Button>
+        <Button onClick={this.onNewPost} title="Create a post" />
       </EmptyState>
     )
   }

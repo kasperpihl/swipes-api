@@ -26,10 +26,8 @@ export default {
     _font: ['12px', '18px', 400],
   },
   PostType: {
+    _font: ['11px', '18px', 500],
     marginTop: '3px',
-    fontSize: '11px',
-    lineHeight: '18px',
-    fontWeight: 500,
     textTransform: 'capitalize',
     color: '$information',
     '&:after': {

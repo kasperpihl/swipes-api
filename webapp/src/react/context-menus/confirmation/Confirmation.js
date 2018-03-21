@@ -1,33 +1,21 @@
 import React, { Component } from 'react';
+import { element } from 'react-swiss';
 import PropTypes from 'prop-types';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import Button from 'Button';
 
-import './styles/confirmation.scss';
+import sw from './Confirmation.swiss';
+
+const Wrapper = element('div', sw.Wrapper);
+const Title = element('div', sw.Title);
+const Message = element('div', sw.Message);
+const Actions = element('div', sw.Actions);
 
 class Confirmation extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.onClickCached = setupCachedCallback(props.onClick, this);
-  }
-  renderTitle() {
-    const { title } = this.props;
-
-    if (!title) {
-      return undefined;
-    }
-
-    return <div className="confirmation__title">{title}</div>;
-  }
-  renderMessage() {
-    const { message } = this.props;
-
-    if (!message) {
-      return undefined;
-    }
-
-    return <div className="confirmation__message">{message}</div>;
   }
   renderActions() {
     let { actions } = this.props;
@@ -50,22 +38,23 @@ class Confirmation extends Component {
 
       const isLast = (actions.length - 1) === i;
 
-      return <Button primary={isLast} {...props} key={i} onClick={this.onClickCached(i)} className="confirmation__button" />;
+      return <Button primary={isLast} {...props} key={i} onClick={this.onClickCached(i)} />;
     });
 
     return (
-      <div className="confirmation__actions">
+      <Actions>
         {renderButtons}
-      </div>
+      </Actions>
     );
   }
   render() {
+    const { title, message } = this.props;
     return (
-      <div className="confirmation">
-        {this.renderTitle()}
-        {this.renderMessage()}
+      <Wrapper>
+        {title && <Title>{title}</Title>}
+        {message && <Message>{message}</Message>}
         {this.renderActions()}
-      </div>
+      </Wrapper>
     );
   }
 }

@@ -5,21 +5,22 @@ export default {
     display: 'inline-flex',
     width: 'auto',
   },
-  IconContainer: {
+  Background: {
+    _flex: ['row', 'left', 'center'],
     background: '$sw4',
-    _size: '36px',
-    _flex: 'center',
     borderRadius: '18px',
     '!compact': {
       '.gl-button:hover &': {
         opacity: .7,
-      },    
+      },
     },
     compact: {
       background: 'none',
-      borderRadius: 0,
     },
-
+  },
+  IconContainer: {
+    _size: '36px',
+    _flex: 'center',
   },
   Icon: {
     _svgColor: '$sw2',
@@ -28,13 +29,22 @@ export default {
       _svgColor: '$blue',
     },
   },
-  Text: {
-    paddingTop: '1px',
-    paddingLeft: '6px',
+  Title: {
+    _font: ['12px', '18px', 400],
     color: '$sw2',
-    fontSize: '12px',
-    lineHeight: '18px',
-    fontWeight: 400,
+    padding: '9px 18px',
+    hasIcon: {
+      paddingLeft: '0px',
+    },
+    '.gl-button:hover &': {
+      color: '$blue',
+    },
+  },
+  SideLabel: {
+    _font: ['12px', '18px', 400],
+    paddingTop: '1px',
+    paddingLeft: '12px',
+    color: '$sw2',
     compact: {
       paddingLeft: 0,
     },

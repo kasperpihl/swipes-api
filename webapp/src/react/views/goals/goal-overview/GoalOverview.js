@@ -195,8 +195,8 @@ class GoalOverview extends PureComponent {
 
     return (
       <Footer>
-        <Button icon="Checkmark">Complete goal</Button>
-        <Button icon="Attach">Add attachment</Button>
+        <Button icon="Checkmark" sideLabel="Complete goal" />
+        <Button icon="Attach" sideLabel="Add attachment" />
         <Spacer className="spacer" />
         <HOCDiscussButton
           context={{
@@ -237,9 +237,9 @@ class GoalOverview extends PureComponent {
         <div className="success-footer__actions">
           <Button
             onClick={this.onHandoff}
-            className="success-footer__action">
-            Write Message
-          </Button>
+            className="success-footer__action"
+            title="Write Message"
+          />
         </div>
         <div className="success-footer__close" onClick={this.onCloseHandoff}>
           <Icon icon="Close" className="success-footer__svg" />

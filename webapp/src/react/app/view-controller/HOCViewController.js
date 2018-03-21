@@ -211,11 +211,9 @@ class HOCViewController extends PureComponent {
       />
     ) : undefined;
 
-    const hideBreadCrumbs = !closeButton && !lockButton && !fullscreenButton;
-
     return (
       <div className="view-container__header">
-        <HOCBreadCrumbs target={target} hidden={hideBreadCrumbs} />
+        <HOCBreadCrumbs target={target} />
         <div className="view-container__actions">
           {fullscreenButton}
           {lockButton}

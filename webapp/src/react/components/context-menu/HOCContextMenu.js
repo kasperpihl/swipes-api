@@ -1,13 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { element } from 'react-swiss';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import Measure from 'react-measure';
 import { debounce, bindAll } from 'swipes-core-js/classes/utils';
 import prefixAll from 'inline-style-prefixer/static';
 
-import './styles/context-menu';
+import sw from './ContextMenu.swiss';
 
+const Wrapper = element('div', sw.Wrapper);
+const Content = element('div', sw.Content);
 
 class HOCContextMenu extends PureComponent {
   constructor(props) {
@@ -39,12 +42,12 @@ class HOCContextMenu extends PureComponent {
     }
   }
   fitToScreen() {
-    if (this.refs.menu) {
+    if (this.menuRef) {
       const { styles } = this.state;
       const dStyle = {};
 
-      const vw = this.refs.menu.clientWidth;
-      const vh = this.refs.menu.clientHeight;
+      const vw = this.menuRef.clientWidth;
+      const vh = this.menuRef.clientHeight;
 
       const ww = window.innerWidth;
       const wh = window.innerHeight;
@@ -178,28 +181,25 @@ class HOCContextMenu extends PureComponent {
     const styles = this.state.styles;
     return (
       <Measure onMeasure={this.bouncedResize}>
-        <div className="context-menu__content" ref="menu" style={prefixAll(styles)} key={key}>
+        <Content
+          innerRef={(c) => { this.menuRef = c; }}
+          style={prefixAll(styles)}>
           <Comp hide={this.hideContextMenu} {...props} />
-        </div>
+        </Content>
       </Measure>
     );
   }
   render() {
-    const {
-      contextMenu,
-    } = this.props;
-    let className = 'context-menu';
-    if (contextMenu) {
-      className += ' context-menu--shown';
-    }
+    const { contextMenu } = this.props;
 
     return (
-      <div
-        className={className}
+      <Wrapper
+        className="context-menu"
+        shown={contextMenu}
         onClick={this.clickedBackground}
       >
         {this.renderContextMenu(contextMenu)}
-      </div>
+      </Wrapper>
     );
   }
 }

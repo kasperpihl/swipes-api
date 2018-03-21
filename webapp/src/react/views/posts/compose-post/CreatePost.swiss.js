@@ -18,4 +18,22 @@ export default {
       outline: 'none',
     },
   },
+  ActionBar: {
+    _flex: ['row', 'left', 'center'],
+    padding: '12px 30px',
+    borderTop: '1px solid $sw4',
+  },
+  Seperator: {
+    width: '2px',
+    marginLeft: '12px',
+    marginRight: '12px',
+    height: '24px',
+    background: '$sw4',
+  },
+  AssignSection: {
+    _flex: ['row', 'left', 'center'],
+  },
+  AttachSection: {
+    width: '100%',
+  },
 }

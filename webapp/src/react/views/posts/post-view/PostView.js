@@ -6,12 +6,12 @@ import SWView from 'SWView';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import CommentInput from 'components/comment-input/CommentInput';
 import CommentView from './CommentView';
-import PostAttachment from './PostAttachment';
+import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import Button from 'components/button/Button2';
-import PostReactions from './PostReactions';
+import PostReactions from '../post-components/post-reactions/PostReactions';
 import Icon from 'Icon';
 import './styles/post-view.scss';
-import PostHeader from './PostHeader';
+import PostHeader from '../post-components/post-header/PostHeader';
 
 import sw from './PostView.swiss';
 
@@ -55,7 +55,7 @@ class PostView extends PureComponent {
             reactions={post.get('reactions')}
             postId={post.get('id')}
           />
-          <Button icon="Comment" compact>{commentTitle}</Button>
+          <Button icon="Comment" compact sideLabel={commentTitle} />
           <ActionSpacer />
           <Button icon="ThreeDots" compact />
         </PostActions>

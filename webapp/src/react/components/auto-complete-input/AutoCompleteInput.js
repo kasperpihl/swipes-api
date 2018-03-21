@@ -38,6 +38,7 @@ class AutoCompleteInput extends PureComponent {
       onChange,
       onBlur,
       delegate,
+      acRef,
       ...rest,
     } = this.props;
 
@@ -54,7 +55,7 @@ class AutoCompleteInput extends PureComponent {
         onKeyUp={this.handlerCached('onKeyUp')}
         onChange={this.handlerCached('onChange')}
         onBlur={this.handlerCached('onBlur')}
-        ref="input"
+        ref={acRef}
         {...rest}
       />
     );

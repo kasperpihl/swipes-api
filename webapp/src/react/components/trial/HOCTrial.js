@@ -1,13 +1,7 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
 import { bindAll } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import Button from 'Button';
 import './styles/trial.scss';
 
@@ -19,7 +13,6 @@ class HOCTrial extends PureComponent {
       dismissed: false,
     };
     bindAll(this, ['onUnpaid', 'onDismiss', 'updateDaysLeft']);
-    // setupLoading(this);
   }
   componentDidMount() {
     if(!this.props.subscribed) {
@@ -153,9 +146,6 @@ class HOCTrial extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
-
-HOCTrial.propTypes = {};
 
 const mapStateToProps = (state) => ({
   me: state.get('me'),

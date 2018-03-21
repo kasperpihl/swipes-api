@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
+
 import {
   setupLoading,
   convertObjToUnderscore,
@@ -65,7 +66,7 @@ class HOCCreatePost extends PureComponent {
       input.focus()
     }
   }
-  onSelectAssignees(e) {
+  onAssign(i, e) {
     const options = this.getOptionsForE(e);
     const { selectAssignees } = this.props;
 
@@ -157,13 +158,6 @@ class HOCCreatePost extends PureComponent {
 
     this.updatePost(post);
   }
-  onButtonClick(type, e) {
-    if (type === 'type') {
-      this.onChooseNotificationType(e);
-    } else if (type === 'users') {
-      this.onSelectAssignees(e);
-    }
-  }
   onAttachButtonCloseOverlay() {
     this.onFocus();
   }
@@ -205,17 +199,9 @@ class HOCCreatePost extends PureComponent {
   }
 }
 
-// const { string } = PropTypes;
-
-HOCCreatePost.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    myId: state.getIn(['me', 'id']),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(state => ({
+  myId: state.getIn(['me', 'id']),
+}), {
   selectAssignees: a.goals.selectAssignees,
   contextMenu: a.main.contextMenu,
   preview: a.links.preview,

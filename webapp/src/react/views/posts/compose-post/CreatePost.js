@@ -3,26 +3,25 @@ import { element } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Button from 'src/react/components/button/Button2';
-import Icon from 'Icon';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
-import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
-import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
+import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 
-import PostComposer from './PostComposer';
 import sw from './CreatePost.swiss';
 
-import './styles/create-post.scss';
-
-const Wrapper = element('div', sw.Wrapper);
+const Wrapper = element('div');
 const ComposerWrapper = element('div', sw.ComposerWrapper);
-const StyledAutoCompleteInput = element(AutoCompleteInput, sw.AutoCompleteInput);
+const StyledACInput = element(ACInput, sw.AutoCompleteInput);
+const ActionBar = element('div', sw.ActionBar);
+const AssignSection = element('div', sw.AssignSection);
+const AttachSection = element('div', sw.AttachSection);
+const Seperator = element('div', sw.Seperator);
+
 
 class CreatePost extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this, 'onButtonClick', 'onPostClick', 'onContextClick', 'onChangeFiles', 'onMessageChange');
+    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign');
     this.acOptions = {
       types: ['users'],
       delegate: props.delegate,
@@ -62,32 +61,39 @@ class CreatePost extends PureComponent {
       </div>
     )
   }
-  renderActions() {
-    const { getLoading, delegate } = this.props;
-
-
+  renderActionBar() {
+    const { getLoading, delegate, post } = this.props;
+    const hasAssignees = post.get('taggedUsers') && !!post.get('taggedUsers').size;
     return (
-      <div className="create-post__actions">
-        <HOCAttachButton
-          delegate={delegate}
-          frameless
-          text="Attach"
-        />
+      <ActionBar>
+        <AssignSection>
+          {hasAssignees && (<HOCAssigning
+            assignees={post.get('taggedUsers')}
+            rounded
+            delegate={delegate}
+            size={24}
+          />)}
+          <Button
+            sideLabel={!hasAssignees && 'Assign'}
+            icon="Person"
+            onClick={this.onAssignCached('0')}
+            compact={hasAssignees}
+          />
+        </AssignSection>
+        {hasAssignees && <Seperator />}
+        <AttachSection>
+        </AttachSection>
         <Button
-          text="Tag Colleagues"
-          className="create-post__button"
-          onClick={this.onButtonClickCached('users')}
-          frameless
-          icon="TagColleague"
-        />
-        <Button
-          primary
-          text="Post"
+          title="Post"
           onClick={this.onPostClick}
           {...getLoading('post') }
-          className="create-post__button"
         />
-      </div>
+        <Button
+          icon="Close"
+          compact
+          onClick={this.props.hideModal}
+        />
+      </ActionBar>
     )
   }
   render() {
@@ -102,7 +108,8 @@ class CreatePost extends PureComponent {
             rounded
             size={30}
           />
-          <StyledAutoCompleteInput //ReactTextarea //
+          <StyledAutoCompleteInput
+            acRef={(c) => { this.input = c; }}
             value={post.get('message')}
             minRows={3}
             maxRows={9}
@@ -112,8 +119,7 @@ class CreatePost extends PureComponent {
             options={this.acOptions}
           />
         </ComposerWrapper>
-        {this.renderAttachments()}
-        {this.renderActions()}
+        {this.renderActionBar()}
       </Wrapper>
     )
   }
