@@ -1,12 +1,6 @@
 import React, { PureComponent } from 'react'
 import { SortableContainer } from 'react-sortable-hoc';
 
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
-
-// import Icon from 'Icon';
-// import './styles/SortableList.scss';
 import StepListItem from './StepListItem';
 
 class SortableList extends PureComponent {

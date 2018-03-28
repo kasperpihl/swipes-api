@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react'
 import { element } from 'react-swiss';
-import { setupDelegate, URL_REGEX } from 'swipes-core-js/classes/utils';
+import { setupDelegate, URL_REGEX, attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
 import { List } from 'immutable';
 import SWView from 'SWView';
+import { MentionsInput, Mention } from 'react-mentions';
+
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
-import CommentInput from '../post-components/post-comment-input/CommentInput';
+import PostCommentInput from '../post-components/post-comment-input/PostCommentInput';
 import CommentView from './CommentView';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import Button from 'components/button/Button2';
@@ -19,48 +21,88 @@ const PostMessage = element('div', sw.PostMessage);
 const PostActions = element('div', sw.PostActions);
 const ActionSpacer = element('div', sw.ActionSpacer);
 const PostAttachments = element('div', sw.PostAttachments);
-
+const StyledMentions = element(MentionsInput, {
+  width: '100%',
+});
 const MAX_COMMENTS_FEED = 3;
 
 class PostView extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      text: '<!U1234|Kasper>'
+    };
 
-    setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick');
+    setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick', 'onContextClick');
   }
-  
-  renderAttachments() {
-    const { post } = this.props;
-    if(!post.get('attachments') || !post.get('attachments').size) {
-      return null;
+  onComment = () => {
+    const { post } = this.props;
+    if(!post.get('comments').size) {
+      this.setState({ forceInput: true });
+    } else {
+      this.onOpenPost();
     }
+  }
+  renderContext() {
+    const { post } = this.props;
     return (
-      <PostAttachments>
-        {post.get('attachments').map((att, i) => (
-          <PostAttachment attachment={att} key={i} />
-        ))}
-      </PostAttachments>
-    )
+      <PostAttachment
+        icon={miniIconForId(post.getIn(['context', 'id']))}
+        title={post.getIn(['context', 'title'])}
+        onClick={this.onContextClick}
+        isContext
+      />
+    );
+  }
+  renderAttachments() {
+    const { post } = this.props;
+
+    return post.get('attachments').map((att, i) => {
+      const icon = attachmentIconForService(att.getIn(['link', 'service']));
+      return (
+        <PostAttachment
+          title={att.get('title')}
+          key={i}
+          onClick={this.onAttachmentClickCached(i, att)}
+          icon={icon}
+        />
+      )
+    });
   }
   renderHeader() {
     const { post, delegate, fromFeed } = this.props;
-    let commentTitle = 'Write a comment';
+    let commentTitle = post.get('comments').size || 'Write a comment';
+    if(post.get('comments').size > MAX_COMMENTS_FEED) {
+      commentTitle = `See all ${post.get('comments').size} comments`;
+    }
 
     return (
-      <PostHeader post={post}>
+      <PostHeader
+        onSubtitleClick={fromFeed && this.onOpenPost}
+        post={post}>
         {this.renderMessage()}
-        {this.renderAttachments()}
+        {(!!post.get('context') || !!post.get('attachments').size) && (
+          <PostAttachments>
+            {post.get('context') && this.renderContext()}
+            {this.renderAttachments()}
+          </PostAttachments>
+        )}
         <PostActions>
           <PostReactions
             reactions={post.get('reactions')}
             postId={post.get('id')}
           />
-          <Button icon="Comment" compact sideLabel={commentTitle} />
+          <Button
+            icon="Comment"
+            compact
+            onClick={this.onComment}
+            sideLabel={commentTitle}
+          />
           <ActionSpacer />
           <Button icon="ThreeDots" compact />
         </PostActions>
         {this.renderComments()}
+        {this.renderCommentInput()}
       </PostHeader>
     )
   }
@@ -79,7 +121,6 @@ class PostView extends PureComponent {
             item.splice(1 + i + i, 0, (
               <a
                 onClick={this.onLinkClickCached(url)}
-                className="notification__link"
                 key={'link' + i}
               >
                 {url}
@@ -114,6 +155,20 @@ class PostView extends PureComponent {
       </div>
     )
   }
+  renderCommentInput() {
+    const { delegate, myId, post } = this.props;
+    const { forceInput, text } = this.state;
+
+    if(post.get('comments').size || forceInput) {
+
+      return (
+        <PostCommentInput
+          myId={myId}
+          delegate={delegate}
+        />
+      )
+    }
+  }
   renderComments() {
     const { post, fromFeed } = this.props;
 
@@ -138,18 +193,10 @@ class PostView extends PureComponent {
         delegate={delegate}
       />
     )).toArray();
-    /*
-    <CommentInput
-          myId={myId}
-          delegate={delegate}
-          aCSearch={aCSearch}
-          aCClear={aCClear}
-        />
-        */
   }
 
   render() {
-    const { delegate, myId, fromFeed, aCSearch, aCClear } = this.props;
+    const { delegate, myId, fromFeed } = this.props;
 
     return (
       <SWView

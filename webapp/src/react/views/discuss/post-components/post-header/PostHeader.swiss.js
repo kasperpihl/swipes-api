@@ -24,5 +24,11 @@ export default {
     color: '$sw2',
     marginTop: '3px',
     _font: ['12px', '18px', 400],
+    'clickable': {
+      '&:hover': {
+        color: '$blue',
+      }
+    }
+    
   },
 }

@@ -9,7 +9,7 @@ import Browser from './browser/HOCBrowser';
 import Find from './find/HOCFind';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
-import MilestoneOverview from './milestones/milestone-overview/HOCMilestoneOverview';
+import PlanOverview from './plan/plan-overview/HOCPlanOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
 import NotFound from './not-found/NotFound';
 import Notifications from './notifications/HOCNotifications';
@@ -19,7 +19,7 @@ import PostView from './discuss/post-view/HOCPostView';
 import Preview from './preview/HOCPreview';
 import Search from './search/HOCSearch';
 import SideNote from './side-note/HOCSideNote';
-import SwipesIntro from './swipes-intro/SwipesIntro';
+import SwipesIntro from './account/swipes-intro/SwipesIntro';
 import TakeAction from './take-action/HOCTakeAction';
 
 export {
@@ -30,10 +30,10 @@ export {
   GoalOverview,
   Onboarding,
   MilestoneList,
-  MilestoneOverview,
   NoMilestoneOverview,
   NotFound,
   Notifications,
+  PlanOverview,
   PostCreate,
   PostFeed,
   PostView,

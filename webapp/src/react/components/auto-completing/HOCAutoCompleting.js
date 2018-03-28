@@ -23,11 +23,14 @@ class HOCAutoCompleting extends PureComponent {
       this.setState({ selectedIndex: 0 });
     }
   }
+  onSelect = (e) => {
+    this.selectionIndex = e.target.selectionStart;
+    console.log(this.selectionIndex, e.target);
+  }
   onChange(e, options) {
     const { results, clear, search, autoComplete } = this.props;
-    const value = this.getValue(e.target);
-    const position = this.getCaretPosition(e.target);
-    let string = value.substr(0, position);
+    const value = e.target.value;
+    let string = value.substr(0, this.selectionIndex);
     string = string.split('\n').reverse()[0];
     let array = string.split(`${options.trigger}`);
     if(array.length > 1) {
@@ -96,34 +99,12 @@ class HOCAutoCompleting extends PureComponent {
     const { clear, results, autoComplete } = this.props;
     const delegate = autoComplete.getIn(['options', 'delegate']);
     if(delegate && typeof delegate.onAutoCompleteSelect === 'function' && results.length) {
-      delegate.onAutoCompleteSelect(results[i].item);
+      delegate.onAutoCompleteSelect(results[i].item, this.selectionIndex);
     }
     clear();
   }
   getValue(target) {
-    const sel = window.getSelection();
-    if(target.nodeName === 'INPUT') {
-      return target.value;
-    }
-    return sel.anchorNode.textContent;
-  }
-  getCaretPosition(editableDiv) {
-    if(typeof editableDiv.selectionStart !== 'undefined'){
-      return editableDiv.selectionStart;
-    }
-    var caretPos = 0,
-      sel, range;
-    if (window.getSelection) {
-      sel = window.getSelection();
-      if (sel.rangeCount) {
-        range = sel.getRangeAt(0);
-        if (range.commonAncestorContainer.parentNode == editableDiv) {
-          caretPos = range.endOffset;
-        }
-      }
-    }
-
-    return caretPos;
+    return target.value;
   }
   render() {
     const { autoComplete, results } = this.props;

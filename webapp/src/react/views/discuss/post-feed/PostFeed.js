@@ -10,7 +10,7 @@ import Button from 'src/react/components/button/Button2';
 import TabBar from 'components/tab-bar/TabBar';
 import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import InfoButton from 'components/info-button/InfoButton';
 
 import sw from './PostFeed.swiss';
 import HOCPostView from '../post-view/HOCPostView';
@@ -88,7 +88,7 @@ class PostFeed extends PureComponent {
     return (
       <Footer>
         <Button icon="Plus" onClick={this.onNewPost} sideLabel="Create new post" />
-        <HOCInfoButton delegate={delegate} />
+        <InfoButton delegate={delegate} />
       </Footer>
     )
   }

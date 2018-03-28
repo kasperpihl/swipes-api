@@ -1,13 +1,15 @@
 import React, { PureComponent } from 'react'
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
-import { bindAll, setupCachedCallback, debounce, getDeep } from 'swipes-core-js/classes/utils';
+import { bindAll, debounce, getDeep } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import Button from 'Button';
 import Icon from 'Icon';
 import './styles/comment-input.scss';
+
+
 class CommentInput extends PureComponent {
   constructor(props) {
     super(props)
@@ -171,25 +173,6 @@ class CommentInput extends PureComponent {
       </div>
     )
   }
-  renderProfilePic() {
-    const { myId } = this.props;
-    const image = msgGen.users.getPhoto(myId);
-    const initials = msgGen.users.getInitials(myId);
-
-    if (!image) {
-      return (
-        <div className="comment-input__profile-initials">
-          {initials}
-        </div>
-      )
-    }
-
-    return (
-      <div className="comment-input__profile-pic">
-        <img src={image} />
-      </div>
-    )
-  }
   renderSendButton() {
     const { message } = this.state;
     let className = 'comment-input__send-button';
@@ -254,5 +237,3 @@ class CommentInput extends PureComponent {
 }
 
 export default CommentInput
-// const { string } = PropTypes;
-CommentInput.propTypes = {};

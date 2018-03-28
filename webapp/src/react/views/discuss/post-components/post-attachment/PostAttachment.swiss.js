@@ -15,6 +15,7 @@ export default {
   },
   IconContainer: {
     _size: '30px',
+    flex: 'none',
     _flex: 'center',
   },
   Icon: {

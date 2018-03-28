@@ -23,7 +23,6 @@ export default {
   },
   Content: {
     _size: ['100%', 'auto'],
-    background: '$sw5',
     'position=bottom': {
       borderTop: '1px solid $sw4',
     },

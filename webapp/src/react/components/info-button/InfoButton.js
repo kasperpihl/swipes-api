@@ -5,7 +5,7 @@ import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button2';
 import InfoTab from 'context-menus/info-tab/InfoTab';
 
-class HOCInfoButton extends PureComponent {
+class InfoButton extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -55,4 +55,4 @@ class HOCInfoButton extends PureComponent {
 
 export default connect(null, {
   contextMenu: a.main.contextMenu,
-})(HOCInfoButton);
+})(InfoButton);

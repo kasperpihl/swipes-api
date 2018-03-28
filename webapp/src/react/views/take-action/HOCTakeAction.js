@@ -60,7 +60,7 @@ class HOCTakeAction extends PureComponent {
       return;
     }
     navPush({
-      id: 'MilestoneOverview',
+      id: 'PlanOverview',
       title: 'Plan overview',
       props: {
         milestoneId,

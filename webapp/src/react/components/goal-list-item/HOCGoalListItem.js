@@ -100,12 +100,12 @@ class HOCGoalListItem extends PureComponent {
     }
 
     return (
-      <GoalItem onClick={this.onGoalClick}>
+      <GoalItem className="goal-item" onClick={this.onGoalClick}>
         <StatusDot status={status} />
         <GoalTitle
           inTakeAction={inTakeAction}
           status={status}
-          hoverRef={GoalItem.ref}
+          hoverRef=".goal-item"
         >
           {loading || goal.get('title')}
         </GoalTitle>

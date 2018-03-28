@@ -6,12 +6,12 @@ import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import MilestoneList from './MilestoneList';
+import PlanList from './PlanList';
 
 const emptyList = List();
 const DISTANCE = 200;
 
-class HOCMilestoneList extends PureComponent {
+class HOCPlanList extends PureComponent {
   static sizes() {
     return [654, 954];
   }
@@ -101,7 +101,7 @@ class HOCMilestoneList extends PureComponent {
     const { tabs, tabIndex, limit, initialScroll } = this.state;
 
     return (
-      <MilestoneList
+      <PlanList
         delegate={this}
         limit={limit}
         initialScroll={initialScroll}
@@ -124,4 +124,4 @@ export default navWrapper(connect(state => ({
   milestones: cs.milestones.getGrouped(state),
 }), {
   createMilestone: ca.milestones.create,
-})(HOCMilestoneList));
+})(HOCPlanList));

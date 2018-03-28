@@ -21,7 +21,7 @@ export default {
     },
 
     '#{hoverRef}:hover &': {
-      color: '$blue100',
+      color: '$blue',
       transition: '.2s ease'
     }
   },

@@ -35,7 +35,7 @@ class HOCDiscussButton extends PureComponent {
     openModal({
       component: PostCreate,
       title: 'Create Post',
-      position: 'bottom',
+      position: 'center',
       props: {
         context,
         taggedUsers

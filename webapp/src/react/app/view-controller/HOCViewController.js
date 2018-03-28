@@ -21,7 +21,7 @@ class HOCViewController extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      appWidth: 1200,
+      appWidth: -1,
       onTop: 'secondary',
       fullscreen: null,
     };
@@ -117,6 +117,8 @@ class HOCViewController extends PureComponent {
   renderViewControllers() {
     const { navigation } = this.props;
     const { appWidth, onTop, fullscreen } = this.state;
+    if(appWidth === -1) return null;
+
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();

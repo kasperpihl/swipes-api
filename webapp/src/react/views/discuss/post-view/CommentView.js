@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { element } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
-import { URL_REGEX, unescaper } from 'swipes-core-js/classes/utils';
+import { URL_REGEX, unescaper, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
@@ -25,7 +25,7 @@ class CommentView extends PureComponent {
     super(props);
     this.state = {};
 
-    setupDelegate(this, 'onLinkClick', 'shouldScroll');
+    setupDelegate(this, 'onLinkClick', 'shouldScroll', 'onAttachmentClick');
   }
   renderStuff(regex, inputArray, renderMethod) {
     let resArray = [];
@@ -84,15 +84,23 @@ class CommentView extends PureComponent {
   }
   renderAttachments() {
     const { comment } = this.props;
-    const attachments = comment.get('attachments');
-    if(!attachments || !attachments.size) {
+
+    if(!comment.get('attachments') || !comment.get('attachments').size) {
       return undefined;
     }
     return (
       <Attachments>
-        {attachments.map((att, i) => (
-          <PostAttachment attachment={att} key={i} />
-        ))}
+        {comment.get('attachments').map((att, i) => {
+          const icon = attachmentIconForService(att.getIn(['link', 'service']));
+          return (
+            <PostAttachment
+              title={att.get('title')}
+              key={i}
+              onClick={this.onAttachmentClickCached(i, att)}
+              icon={icon}
+            />
+          );
+        })}
       </Attachments>
     )
   }
@@ -128,5 +136,3 @@ class CommentView extends PureComponent {
 }
 
 export default CommentView;
-// const { string } = PropTypes;
-CommentView.propTypes = {};

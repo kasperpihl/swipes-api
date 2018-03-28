@@ -31,7 +31,7 @@ class HOCPostFeed extends PureComponent {
     openModal({
       component: HOCPostCreate,
       title: 'New post',
-      position: 'bottom',
+      position: 'center',
       props: {
         context: context || null,
       },

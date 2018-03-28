@@ -5,13 +5,14 @@ import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/
 import Button from 'src/react/components/button/Button2';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
+import ReactTextarea from 'react-textarea-autosize';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import PostType from '../post-components/post-type/PostType';
 
 import sw from './PostCreate.swiss';
 
-const Wrapper = element('div');
+const Wrapper = element('div', sw.Wrapper);
 const ComposerWrapper = element('div', sw.ComposerWrapper);
 const TypeWrapper = element('div', sw.TypeWrapper);
 const StyledACInput = element(ACInput, sw.AutoCompleteInput);
@@ -101,11 +102,6 @@ class PostCreate extends PureComponent {
           onClick={this.onPostClick}
           {...getLoading('post') }
         />
-        <Button
-          icon="Close"
-          compact
-          onClick={this.props.hideModal}
-        />
       </ActionBar>
     )
   }
@@ -125,13 +121,15 @@ class PostCreate extends PureComponent {
             size={30}
           />
           <StyledACInput
-            acRef={(c) => { this.input = c; }}
+            nodeType={ReactTextarea}
+            innerRef={(c) => { this.input = c; }}
             value={post.get('message')}
             minRows={3}
-            maxRows={9}
+            maxRows={17}
             onChange={this.onMessageChange}
             placeholder={placeholder}
             autoFocus
+            onSelect={e => console.log(e)}
             options={this.acOptions}
           />
         </ComposerWrapper>

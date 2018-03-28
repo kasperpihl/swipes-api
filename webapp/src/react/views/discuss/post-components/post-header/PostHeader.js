@@ -1,7 +1,9 @@
 import React from 'react';
 import { element } from 'react-swiss';
+
 import sw from './PostHeader.swiss';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import PostType from '../post-type/PostType';
 
 const PostHeaderWrapper = element('div', sw.PostHeaderWrapper);
@@ -14,8 +16,17 @@ const RightSide = element('div', sw.RightSide);
 const PostHeader = (props) => {
   const {
     post,
+    onSubtitleClick,
     children,
   } = props;
+
+  let subtitle = 'posted';
+  if(post.get('tagged_users') && post.get('tagged_users').size) {
+    let names = msgGen.users.getNames(post.get('tagged_users'), {
+      number: 100,
+    });
+    subtitle += ` to ${names}`;
+  }
 
   return (
     <PostHeaderWrapper>
@@ -27,7 +38,9 @@ const PostHeader = (props) => {
           <NameTitle>{msgGen.users.getFullName(post.get('created_by'))}</NameTitle>
           <PostType type={post.get('type')} />
         </NameTypeWrapper>
-        <Subtitle>posted to Tisho and Kasper - 2min ago</Subtitle>
+        <Subtitle clickable={!!onSubtitleClick} onClick={onSubtitleClick}>
+          {subtitle} — <TimeAgo simple date={post.get('created_at')}
+        /></Subtitle>
         {children}
       </RightSide>
     </PostHeaderWrapper>

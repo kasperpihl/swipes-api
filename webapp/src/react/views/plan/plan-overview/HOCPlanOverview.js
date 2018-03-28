@@ -9,9 +9,9 @@ import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
-import MilestoneOverview from './MilestoneOverview';
+import PlanOverview from './PlanOverview';
 
-class HOCMilestoneOverview extends PureComponent {
+class HOCPlanOverview extends PureComponent {
   static sizes() {
     return [750, 1100];
   }
@@ -207,12 +207,12 @@ class HOCMilestoneOverview extends PureComponent {
   render() {
     const { milestone, viewWidth } = this.props;
     const { showLine, tempOrder } = this.state;
-
+    
     return (
       <DragDropContext
         onDragStart={this.onDragStart}
         onDragEnd={this.onDragEnd}>
-        <MilestoneOverview
+        <PlanOverview
           order={tempOrder || milestone.get('goal_order')}
           {...this.bindLoading()}
           milestone={milestone}
@@ -242,4 +242,4 @@ export default navWrapper(connect(mapStateToProps, {
   deleteMilestone: ca.milestones.deleteMilestone,
   renameMilestone: ca.milestones.rename,
   confirm: a.menus.confirm,
-})(HOCMilestoneOverview));
+})(HOCPlanOverview));

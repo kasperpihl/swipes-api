@@ -6,6 +6,7 @@ export default {
   },
   Picture: {
     flex: 'none',
+    marginLeft: '3px',
     _size: '36px',
   },
   Content: {

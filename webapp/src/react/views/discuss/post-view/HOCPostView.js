@@ -1,10 +1,29 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as a from 'actions';
+import Fuse from 'fuse.js';
 import * as ca from 'swipes-core-js/actions';
+import * as cs from 'swipes-core-js/selectors';
 import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostView from './PostView';
+
+const options = {
+  shouldSort: true,
+  includeScore: true,
+  includeMatches: true,
+  // location: 0,
+  // id: 'id',
+  threshold: 0.5,
+  // distance: 1000,
+  maxPatternLength: 32,
+  minMatchCharLength: 2,
+  keys: [
+    'email',
+    'profile.first_name',
+    'profile.last_name',
+  ],
+};
 
 class HOCPostView extends PureComponent {
   static maxWidth() {
@@ -24,22 +43,32 @@ class HOCPostView extends PureComponent {
 
     return !fromFeed;
   }
-  onAttachmentClick(i) {
-    const { preview, target, post } = this.props;
+  onAttachmentClick(i, att) {
+    const { preview, target } = this.props;
 
-    preview(target, post.getIn(['attachments', i]));
+    preview(target, att);
   }
-  onHeaderContextClick() {
+  onContextClick() {
     const { openSecondary, post, target } = this.props;
     openSecondary(target, navForContext(post.get('context')));
+  }
+  onSearch(text, callback) {
+    if(!text) callback([]);
+    let fuse = new Fuse(this.props.users, options);
+    callback(fuse.search(text).map((res) => ({
+      id: res.item.id,
+      display: msgGen.users.getFirstName(res.item.id),
+    })));
   }
   onLinkClick(url) {
     const { browser, target } = this.props;
     browser(target, url);
   }
-  onOpenPost(postId) {
-    const { openSecondary, post, target } = this.props;
-    openSecondary(target, navForContext(postId));
+  onOpenPost() {
+    const { openSecondary, post, target, fromFeed } = this.props;
+    if(fromFeed) {
+      openSecondary(target, navForContext(post.get('id')));
+    }
   }
   onAddComment(message, attachments, e) {
     const { addComment, postId } = this.props;
@@ -55,13 +84,11 @@ class HOCPostView extends PureComponent {
     })
   }
   render() {
-    const { myId, post, fromFeed, aCSearch, aCClear } = this.props;
+    const { myId, post, fromFeed } = this.props;
 
     return (
       <PostView
         fromFeed={fromFeed}
-        aCSearch={aCSearch}
-        aCClear={aCClear}
         myId={myId}
         post={post}
         delegate={this}
@@ -71,21 +98,13 @@ class HOCPostView extends PureComponent {
   }
 }
 
-// const { string } = PropTypes;
 
-HOCPostView.propTypes = {};
-
-function mapStateToProps(state, ownProps) {
-  return {
-    myId: state.getIn(['me', 'id']),
-    post: state.getIn(['posts', ownProps.postId])
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect((state, ownProps) => ({
+  myId: state.getIn(['me', 'id']),
+  post: state.getIn(['posts', ownProps.postId]),
+  users: cs.users.getActiveArray(state),
+}), {
   openSecondary: a.navigation.openSecondary,
-  aCSearch: ca.autoComplete.search,
-  aCClear: ca.autoComplete.clear,
   addComment: ca.posts.addComment,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,

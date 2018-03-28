@@ -12,7 +12,7 @@ import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import InfoButton from 'components/info-button/InfoButton';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import Button from 'src/react/components/button/Button2';
 import Icon from 'Icon';
@@ -206,7 +206,7 @@ class GoalOverview extends PureComponent {
           relatedFilter={msgGen.goals.getRelatedFilter(goal)}
           taggedUsers={helper.getAssigneesButMe().toArray()}
         />
-        <HOCInfoButton
+        <InfoButton
           delegate={delegate}
           {...getLoading('dots')}
         />

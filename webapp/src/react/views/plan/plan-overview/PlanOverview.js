@@ -5,11 +5,11 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import InfoButton from 'components/info-button/InfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
 import { element } from 'react-swiss';
 
-import sw from './MilestoneOverview.swiss';
+import sw from './PlanOverview.swiss';
 
 const Wrapper = element('div', sw.Wrapper);
 const Footer = element('div', sw.Footer);
@@ -22,7 +22,7 @@ const EmptyStateWrapper = element('div', sw.EmptyStateWrapper);
 const DroppableWrapper = element('div', sw.DroppableWrapper);
 const TabWrapper = element('div', sw.TabWrapper);
 
-class MilestoneOverview extends PureComponent {
+class PlanOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -109,29 +109,7 @@ class MilestoneOverview extends PureComponent {
       delegate,
       status: section,
     };
-
-    if (renderSection) {
-      return (
-        <DroppableWrapper>
-          <Section>
-            <SectionTitle>{section}</SectionTitle>
-            <DroppableGoalList
-              droppableId={id}
-              items={order.get(id)}
-              renderEmptyState={this.renderEmptyStateCached(section)}
-              goalProps={goalProps}
-            >
-              {section === 'Now' && (
-                <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
-              )}
-            </DroppableGoalList>
-          </Section>
-          
-        </DroppableWrapper>
-      )
-    }
-
-    return (
+    const droppableGoalList = (
       <DroppableGoalList
         droppableId={id}
         items={order.get(id)}
@@ -142,6 +120,23 @@ class MilestoneOverview extends PureComponent {
           <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
         )}
       </DroppableGoalList>
+    );
+
+    if (renderSection) {
+      return (
+        <DroppableWrapper>
+          <Section>
+            <SectionTitle>{section}</SectionTitle>
+            {droppableGoalList}
+          </Section>
+        </DroppableWrapper>
+      )
+    }
+
+    return (
+      <Section>
+        {droppableGoalList}
+      </Section>
     )
   }
   renderDualTabs() {
@@ -198,7 +193,7 @@ class MilestoneOverview extends PureComponent {
           }}
           relatedFilter={msgGen.milestones.getRelatedFilter(m)}
         />
-        <HOCInfoButton
+        <InfoButton
           delegate={delegate}
           {...getLoading('dots')}
         />
@@ -222,8 +217,4 @@ class MilestoneOverview extends PureComponent {
   }
 }
 
-export default MilestoneOverview;
-
-// const { string } = PropTypes;
-
-MilestoneOverview.propTypes = {};
+export default PlanOverview;

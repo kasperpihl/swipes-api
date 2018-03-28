@@ -6,7 +6,7 @@ import { fromJS } from 'immutable';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import InfoButton from 'components/info-button/InfoButton';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import {
@@ -221,7 +221,7 @@ class HOCSideNote extends PureComponent {
               title,
             }}
           />
-          <HOCInfoButton
+          <InfoButton
             delegate={this}
           />
         </HOCHeaderTitle>

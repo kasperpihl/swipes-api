@@ -1,6 +1,6 @@
 import { addMixin } from 'react-swiss';
 
-addMixin('alignAbsolute', (x=null, y=null) => {
+addMixin('alignAbsolute', (getProp, x=null, y=null) => {
   const res = {
     position: 'absolute',
     left: x || 0,

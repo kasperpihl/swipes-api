@@ -41,10 +41,10 @@ export default {
   Section: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'left', 'top'],
+    paddingTop: '24px',
   },
   SectionTitle: {
-    _size: ['100%', '66px'],
-    paddingTop: '24px',
+    _size: ['100%', '42px'],
     flex: 'none',
     _font: ['12px', '18px', 500],
     color: '$sw1',

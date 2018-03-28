@@ -9,6 +9,7 @@ export default {
   PostActions: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'center'],
+    paddingLeft: '9px',
     marginTop: '12px',
     borderTop: '1px solid $sw4',
     '& > *:not(:last-child)': {
