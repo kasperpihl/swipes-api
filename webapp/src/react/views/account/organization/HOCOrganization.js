@@ -6,7 +6,7 @@ import * as cs from 'swipes-core-js/selectors';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 // import { fromJS } from 'immutable';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Organization from './Organization';
 

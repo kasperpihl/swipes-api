@@ -16,7 +16,7 @@ import {
 import Button from 'Button';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import diff from 'classes/draft-util';
+import diff from 'src/classes/draft-util';
 
 import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';

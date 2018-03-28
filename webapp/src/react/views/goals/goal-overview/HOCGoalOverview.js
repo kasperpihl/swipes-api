@@ -10,7 +10,7 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import GoalOverview from './GoalOverview';
 
 /* global msgGen */

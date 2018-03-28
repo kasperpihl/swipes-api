@@ -5,7 +5,7 @@ import { map } from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import Button from 'Button';
 import * as a from 'actions';
-import * as views from 'views';
+import * as views from 'src/react/views';
 import { setupCachedCallback, debounce, bindAll } from 'swipes-core-js/classes/utils';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';

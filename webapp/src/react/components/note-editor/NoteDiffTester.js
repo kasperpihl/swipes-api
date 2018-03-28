@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
-import diff from 'classes/draft-util';
+import diff from 'src/classes/draft-util';
 import Button from 'Button';
 import {
   convertToRaw,

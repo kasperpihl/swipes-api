@@ -14,7 +14,7 @@ import {
 } from 'swipes-core-js/classes/utils';
 
 import { fromJS } from 'immutable';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostCreate from './PostCreate';
 

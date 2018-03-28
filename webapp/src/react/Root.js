@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
 
@@ -90,5 +91,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default withRouter(connect(mapStateToProps, {
-})(Root));
+})(hot(module)(Root)));
  

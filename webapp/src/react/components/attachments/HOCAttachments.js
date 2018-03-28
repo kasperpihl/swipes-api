@@ -17,7 +17,7 @@ import {
   bindAll,
 } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import Attachment from './Attachment';
 import './styles/attachments';

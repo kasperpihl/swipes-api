@@ -6,7 +6,7 @@ import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import * as a from 'actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
-import HOCNotifications from 'views/notifications/HOCNotifications';
+import HOCNotifications from 'src/react/views/notifications/HOCNotifications';
 
 import './styles/sidebar.scss';
 

@@ -1,4 +1,4 @@
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import { fromJS, List } from 'immutable';
 import { cache } from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';

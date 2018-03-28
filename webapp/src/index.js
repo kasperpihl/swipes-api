@@ -10,14 +10,14 @@ import { createLocation } from 'history';
 import getGlobals from 'src/utils/globals';
 import configureStore from 'src/store/configureStore';
 
-import Analytics from 'classes/analytics';
-import IpcListener from 'classes/ipc-listener';
+import Analytics from 'src/classes/analytics';
+import IpcListener from 'src/classes/ipc-listener';
 
 import { init } from 'swipes-core-js';
 import * as a from 'actions';
 import Root from './react/Root';
 
-import 'swiss';
+import './swiss';
 
 const store = configureStore({
   globals: getGlobals()
