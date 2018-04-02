@@ -1,4 +1,5 @@
 import r from 'rethinkdb';
+import Promise from 'bluebird';
 // import * as Knex from 'knex';
 import db from '../../db';
 
@@ -51,12 +52,73 @@ const organizations = r.table('organizations');
 
 console.log('Picking information!');
 
+const organizations_users_relationships = [];
+
 db.rethinkQuery(organizations, { dbConfig })
   .then((results) => {
-    // console.log(results);
+    console.log('Preparing queries!');
+
     const rows = results.filter((o) => {
       return o.trial.ending_at;
     }).map((row) => {
+      if (row.admins) {
+        row.admins.forEach((element) => {
+          organizations_users_relationships.push({
+            organization_id: row.id,
+            user_id: element,
+            admin: true,
+            active: true,
+            pending: false,
+            disabled: false,
+            owner: false,
+          });
+        });
+      }
+
+      if (row.disabled_users) {
+        row.disabled_users.forEach((element) => {
+          organizations_users_relationships.push({
+            organization_id: row.id,
+            user_id: element,
+            admin: false,
+            active: false,
+            pending: false,
+            disabled: true,
+            owner: false,
+          });
+        });
+      }
+
+      if (row.pending_users) {
+        row.pending_users.forEach((element) => {
+          organizations_users_relationships.push({
+            organization_id: row.id,
+            user_id: element,
+            admin: false,
+            active: false,
+            pending: true,
+            disabled: false,
+            owner: false,
+          });
+        });
+      }
+
+      if (row.active_users) {
+        row.active_users.forEach((element) => {
+          if (!organizations_users_relationships.find(e => e.user_id === element)) {
+            organizations_users_relationships.push({
+              organization_id: row.id,
+              user_id: element,
+              admin: false,
+              active: true,
+              pending: false,
+              disabled: false,
+              owner: element === row.owner_id,
+            });
+          }
+        });
+      }
+
       return {
         id: row.id,
         name: row.name,
@@ -68,42 +130,15 @@ db.rethinkQuery(organizations, { dbConfig })
         invitation_code: row.invitation_code || null,
         trial_ending: row.trial.ending_at,
         trial_started: row.trial.started_at,
-        active_users: row.active_users || [],
-        admins: row.admins || [],
-        disabled_users: row.disabled_users || [],
-        owner_id: row.owner_id,
-        pending_users: row.pending_users || [],
       };
     });
 
-    // console.log(rows);
-
-    return pg.batchInsert('organizations', rows)
-      .returning('id');
-
-    // const sqlValues = [];
-
-    // results.forEach((el) => {
-    //   sqlValues.push(`(${el.id},
-    //       ${el.name},
-    //       ${el.created_at},
-    //       ${el.updated_at},
-    //       ${el.name_to_compare},
-    //       ${el.plan},
-    //       ${el.stripe_customer_id},
-    //       ${el.stripe_subscription_id},
-    //       ${el.invitation_code},
-    //       ${el.trial.ending_at},
-    //       ${el.trial.started_at},
-    //       ${el.active_users},
-    //       ${el.admins},
-    //       ${el.disabled_users},
-    //       ${el.owner_id},
-    //       ${el.pending_users})`);
-    // });
+    return Promise.all([
+      pg.batchInsert('organizations', rows),
+      pg.batchInsert('organizations_users', organizations_users_relationships),
+    ]);
   })
-  .then((ids) => {
-    console.log(ids);
+  .then(() => {
     console.log('Done!');
 
     process.exit();
