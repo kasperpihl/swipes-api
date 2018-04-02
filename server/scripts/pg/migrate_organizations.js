@@ -70,7 +70,7 @@ db.rethinkQuery(organizations, { dbConfig })
             active: true,
             pending: false,
             disabled: false,
-            owner: false,
+            owner: element === row.owner_id,
           });
         });
       }
