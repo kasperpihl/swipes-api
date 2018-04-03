@@ -47,7 +47,6 @@ if (!dbConfig) {
   process.exit();
 }
 
-// const user_id = 'USTFL9YVE';
 const organizations = r.table('organizations');
 
 console.log('Picking information!');
