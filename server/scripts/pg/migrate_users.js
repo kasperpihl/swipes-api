@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import Promise from 'bluebird';
+// import Promise from 'bluebird';
 // import * as Knex from 'knex';
 import db from '../../db';
 
