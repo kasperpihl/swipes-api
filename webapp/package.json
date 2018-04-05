@@ -32,7 +32,7 @@
     "prop-types": "^15.6.1",
     "re-reselect": "1.0.1",
     "react": "16.2.0",
-    "react-beautiful-dnd": "^5.0.0",
+    "react-beautiful-dnd": "^6.0.1",
     "react-delegate": "1.0.3",
     "react-dom": "16.2.0",
     "react-dom-confetti": "0.0.8",

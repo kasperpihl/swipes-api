@@ -6,6 +6,7 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
 
 import sw from './PlanListItem.swiss';
+const Wrapper = element('div', sw.Wrapper);
 
 class PlanListItem extends PureComponent {
   constructor(props) {
@@ -23,20 +24,6 @@ class PlanListItem extends PureComponent {
   getFilteredGoals(milestone) {
     return msgGen.milestones.getGoals(milestone);
   }
-  renderHeader() {
-    const { milestone } = this.props;
-
-    return (
-      <div className="header">
-        <div className="header__left">
-          <div className="header__title">{milestone.get('title')}</div>
-        </div>
-        <div className="header__icon">
-          <Icon icon="ArrowRightLong" className="header__svg" />
-        </div>
-      </div>
-    );
-  }
   renderProgress() {
     const { milestone } = this.props;
     const { goals } = this.state;
@@ -44,31 +31,7 @@ class PlanListItem extends PureComponent {
     const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
     const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
     const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
-    let progressClassName = 'milestone__svg milestone__svg--fg';
 
-    if (milestone.get('closed_at')) {
-      progressClassName += ' milestone__svg--closed';
-    }
-
-    return (
-      <div className="milestone__progress">
-        <div className="milestone__subtitle">{`${numberOfCompletedGoals} / ${numberOfGoals}`}</div>
-        <Icon icon="MilestoneProgress" className="milestone__svg milestone__svg--bg" />
-        <Icon
-          icon="MilestoneProgress"
-          className={progressClassName}
-          strokeDasharray={PROGRESS_DASH}
-          strokeDashoffset={svgDashOffset}
-        />
-        <div className="progress">
-          <div className="progress__dot" />
-          <div className="progress__number"></div>
-        </div>
-        <div className="progress-number">
-          <div className="progress-number__number">{`${percentage}%`}</div>
-        </div>
-      </div>
-    );
   }
   render() {
     return (

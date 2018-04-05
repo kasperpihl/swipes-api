@@ -8,7 +8,6 @@ import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput'
 import ReactTextarea from 'react-textarea-autosize';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-import PostType from '../post-components/post-type/PostType';
 
 import sw from './PostCreate.swiss';
 
@@ -25,7 +24,7 @@ const Seperator = element('div', sw.Seperator);
 class PostCreate extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign', 'onAttachmentClick', 'onContextClick', 'onAttachmentClose', 'onContextClose', 'onChooseNotificationType');
+    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign', 'onAttachmentClick', 'onContextClick', 'onAttachmentClose', 'onContextClose');
     this.acOptions = {
       types: ['users'],
       delegate: props.delegate,
@@ -111,9 +110,6 @@ class PostCreate extends PureComponent {
 
     return (
       <Wrapper>
-        <TypeWrapper>
-          <PostType type={post.get('type')} onClick={this.onChooseNotificationType} />
-        </TypeWrapper>
         <ComposerWrapper>
           <HOCAssigning
             assignees={[myId]}

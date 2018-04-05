@@ -4,10 +4,9 @@ import { element } from 'react-swiss';
 import sw from './PostHeader.swiss';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
-import PostType from '../post-type/PostType';
 
 const PostHeaderWrapper = element('div', sw.PostHeaderWrapper);
-const NameTypeWrapper = element('div', sw.NameTypeWrapper);
+const NameWrapper = element('div', sw.NameWrapper);
 const NameTitle = element('div', sw.NameTitle);
 const Subtitle = element('div', sw.Subtitle);
 const LeftSide = element('div', sw.LeftSide);
@@ -34,10 +33,9 @@ const PostHeader = (props) => {
         <HOCAssigning assignees={[post.get('created_by')]} rounded size={42} />
       </LeftSide>
       <RightSide>
-        <NameTypeWrapper>
+        <NameWrapper>
           <NameTitle>{msgGen.users.getFullName(post.get('created_by'))}</NameTitle>
-          <PostType type={post.get('type')} />
-        </NameTypeWrapper>
+        </NameWrapper>
         <Subtitle clickable={!!onSubtitleClick} onClick={onSubtitleClick}>
           {subtitle} — <TimeAgo simple date={post.get('created_at')}
         /></Subtitle>

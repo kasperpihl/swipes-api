@@ -12,7 +12,7 @@ export default {
     _flex: ['column', 'left', 'top'],
     paddingLeft: '18px',
   },
-  NameTypeWrapper: {
+  NameWrapper: {
     _flex: ['row', 'between', 'top'],
     width: '100%',
   },
