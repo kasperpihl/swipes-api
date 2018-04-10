@@ -7,8 +7,9 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
 
 import styles from './PlanListItem.swiss';
+
 const Wrapper = styleElement('div', styles, 'Wrapper');
-const ProgressBar = styleElement('div', styles, 'ProgressBar');
+const ProgressBar = styleElement('div', styles, 'ProgressBar').debug();
 const TextWrapper = styleElement('div', styles, 'TextWrapper');
 const Title = styleElement('div', styles, 'Title');
 const Subtitle = styleElement('div', styles, 'Subtitle');
@@ -51,7 +52,6 @@ class PlanListItem extends PureComponent {
       } 
       return goal.getIsCompleted();
     }).size;
-    console.log(plan.get('title'), numberOfSteps, numberOfCompletedSteps);
     const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
 
     const stepPercentage = numberOfSteps ? parseInt((numberOfCompletedSteps / numberOfSteps) * 100, 10) : 0;

@@ -44,7 +44,6 @@ export default {
         if(!stepPercentage) return '0%';
         const remainingPercentage = 100 - Math.max(goalPercentage, 4);
         const extraWidth = (remainingPercentage / 100) * stepPercentage;
-        console.log(goalPercentage, remainingPercentage, stepPercentage, extraWidth);
         return `${goalPercentage + extraWidth}%`;
       },
       height: '24px',

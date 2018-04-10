@@ -1,12 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
+import { styleElement } from 'react-swiss';
 
 import Icon from 'Icon';
-import './styles/compatible-button.scss';
+import styles from './CompatibleButton.swiss';
+
+const ATag = styleElement('div', styles, 'ATag');
 
 const CompatibleButton = (props) => {
   const {
@@ -18,7 +16,7 @@ const CompatibleButton = (props) => {
   } = props;
 
   return (
-    <a className="compatible-button" onClick={onClick}>
+    <ATag onClick={onClick}>
       {
         loading ? (
           <Icon icon="loader" width="12" height="12" />
@@ -26,15 +24,8 @@ const CompatibleButton = (props) => {
           title
         )
       }
-    </a>
+    </ATag>
   );
 };
 
 export default CompatibleButton;
-
-const { string, func } = PropTypes;
-
-CompatibleButton.propTypes = {
-  title: string,
-  onClick: func,
-};
