@@ -1,6 +1,5 @@
 import React from 'react';
 import { styleElement } from 'react-swiss';
-
 import Icon from 'Icon';
 import styles from './CompatibleButton.swiss';
 
