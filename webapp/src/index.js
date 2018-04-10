@@ -22,6 +22,14 @@ import './swiss';
 const store = configureStore({
   globals: getGlobals()
 });
+if (process.env.NODE_ENV !== 'production') {
+  window.openTester = () => {
+    store.dispatch({
+      type: 'DEV_OPEN_TESTER'
+    })
+  }
+  
+}
 
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);

@@ -15,6 +15,9 @@ class InputMenu extends Component {
     this.state = { text: props.text || '' };
     bindAll(this, ['onAdd', 'onHandleKeyUp', 'onChange']);
   }
+  componentDidMount() {
+    this.input.focus();
+  }
   onHandleKeyUp(e) {
     if (e.keyCode === 13) {
       this.onAdd();
@@ -47,6 +50,7 @@ class InputMenu extends Component {
           onKeyUp={this.onHandleKeyUp}
           type="text"
           autoFocus
+          innerRef={(c) => this.input = c}
         />
         <Button
           primary

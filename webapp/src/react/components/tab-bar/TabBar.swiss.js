@@ -1,9 +1,9 @@
 export default {
-  TabWrapper: {
+  Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'top'],
   },
-  TabItem: {
+  Item: {
     _flex: 'center',
     _font: ['12px', '18px', 500],
     padding: '6px 0',

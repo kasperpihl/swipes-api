@@ -12,9 +12,11 @@ import InfoButton from 'components/info-button/InfoButton';
 
 import styles from './PlanList.swiss';
 
+styleElement.group('PlanList');
 const Wrapper = styleElement('div', styles, 'Wrapper');
 const HeaderWrapper = styleElement('div', styles, 'HeaderWrapper');
 const Footer = styleElement('div', styles, 'Footer');
+styleElement.groupEnd();
 
 class PlanList extends PureComponent {
   constructor(props) {

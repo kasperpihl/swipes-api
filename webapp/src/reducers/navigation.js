@@ -18,6 +18,14 @@ const initialState = fromJS({
   locked: false,
   url: null,
 });
+// Add support for Tester View
+const testerState = initialState.set('primary', fromJS({
+  id: 'Tester',
+  stack: [{
+    id: 'Tester',
+    title: 'Tester'
+  }]
+}));
 
 export default function history(state = initialState, action) {
   const { payload, type } = action;
@@ -62,6 +70,9 @@ export default function history(state = initialState, action) {
         }
         return s.butLast();
       });
+    }
+    case 'DEV_OPEN_TESTER': {
+      return testerState;
     }
     case coreTypes.RESET_STATE: {
       return initialState;

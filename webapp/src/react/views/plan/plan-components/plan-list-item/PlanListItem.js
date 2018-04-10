@@ -8,11 +8,13 @@ import Icon from 'Icon';
 
 import styles from './PlanListItem.swiss';
 
+styleElement.group('PlanListItem');
 const Wrapper = styleElement('div', styles, 'Wrapper');
 const ProgressBar = styleElement('div', styles, 'ProgressBar').debug();
 const TextWrapper = styleElement('div', styles, 'TextWrapper');
 const Title = styleElement('div', styles, 'Title');
 const Subtitle = styleElement('div', styles, 'Subtitle');
+styleElement.groupEnd();
 
 class PlanListItem extends PureComponent {
   constructor(props) {

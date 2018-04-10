@@ -53,7 +53,7 @@ class Button extends PureComponent {
     }
 
     label = success || error;
-    icon = success ? 'Checkmark' : 'Close';
+    icon = success ? 'CircleCheckmark' : 'Close';
 
     return (
       <div className="g-button__result-state">

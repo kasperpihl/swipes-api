@@ -11,7 +11,7 @@ export default {
     _size: ['100%', '54px'],
     _flex: ['row', 'between', 'center'],
     padding: '9px 12px',
-    borderTop: '1px solid $sw3',
+    borderTop: '1px solid $sw4',
 
   },
 }

@@ -22,6 +22,7 @@ import Search from './search/HOCSearch';
 import SideNote from './side-note/HOCSideNote';
 import SwipesIntro from './account/swipes-intro/SwipesIntro';
 import TakeAction from './take-action/HOCTakeAction';
+import Tester from './tester/Tester';
 
 export {
   AccountList,
@@ -47,4 +48,5 @@ export {
   SideNote,
   SwipesIntro,
   TakeAction,
+  Tester,
 };

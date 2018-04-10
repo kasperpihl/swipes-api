@@ -11,6 +11,7 @@ import { styleElement } from 'react-swiss';
 
 import styles from './PlanOverview.swiss';
 
+styleElement.group('PlanOverview');
 const Wrapper = styleElement('div', styles, 'Wrapper');
 const Footer = styleElement('div', styles, 'Footer');
 const Title = styleElement('div', styles, 'Title');
@@ -21,6 +22,7 @@ const Spacer = styleElement('div', styles, 'Spacer');
 const EmptyStateWrapper = styleElement('div', styles, 'EmptyStateWrapper');
 const DroppableWrapper = styleElement('div', styles, 'DroppableWrapper');
 const TabWrapper = styleElement('div', styles, 'TabWrapper');
+styleElement.groupEnd();
 
 class PlanOverview extends PureComponent {
   constructor(props) {

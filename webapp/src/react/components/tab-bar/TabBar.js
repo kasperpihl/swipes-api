@@ -5,8 +5,10 @@ import { setupDelegate } from 'react-delegate';
 
 import styles from './TabBar.swiss';
 
-const TabWrapper = styleElement('div', styles, 'TabWrapper');
-const TabItem = styleElement('div', styles, 'TabItem');
+styleElement.group('TabBar');
+const TabWrapper = styleElement('div', styles, 'Wrapper');
+const TabItem = styleElement('div', styles, 'Item');
+styleElement.groupEnd();
 
 class TabBar extends Component {
   constructor(props) {
