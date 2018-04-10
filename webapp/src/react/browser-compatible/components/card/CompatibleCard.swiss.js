@@ -13,6 +13,7 @@ export default {
     maxWidth: '600px',
     minHeight: '100%',
     maxHeight: 'initial',
+    // BUG
     // When using sw5 here the ugly loader that we have there is on white background === mess
     backgroundColor: '$sw5',
     boxShadow: '0 6px 12px 1px rgba(0,12,47,0.3)',
