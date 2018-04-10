@@ -9,3 +9,4 @@ import './mixins/_flex';
 import './mixins/_svgColor';
 import './mixins/_truncateString';
 import './mixins/_alignAbsolute';
+import './mixins/_borderRadius';

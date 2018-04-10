@@ -6,8 +6,8 @@ export default {
   },
   Assignee: {
     _size: ['32px'],
-    border: '1px solid white',
-    backgroundColor: 'white',
+    border: '1px solid $sw5',
+    backgroundColor: '$sw5',
     borderRadius: '50%',
     marginTop: '-16px',
     top: '50%',
@@ -22,7 +22,7 @@ export default {
   Initials: {
     _size: ['30px'],
     _font: ['12px', '30px', 500],
-    color: 'white',
+    color: '$sw5',
     backgroundColor: '$blue',
     borderRadius: '50%',
     textAlign: 'center',

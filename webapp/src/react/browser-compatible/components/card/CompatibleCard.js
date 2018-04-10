@@ -1,15 +1,18 @@
 import React from 'react';
+import { styleElement } from 'react-swiss';
+import styles from './CompatibleCard.swiss';
 
-import './styles/card.scss';
+const CardWrapper = styleElement('div', styles, 'CardWrapper');
+const Card = styleElement('div', styles, 'Card');
 
 const CompatibleCard = ({ children }) => {
 
   return (
-    <div className="card-wrapper">
-      <div className="card">
+    <CardWrapper>
+      <Card>
         {children}
-      </div>
-    </div>
+      </Card>
+    </CardWrapper>
   );
 };
 
