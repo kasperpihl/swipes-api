@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Button from 'src/react/components/button/Button2';
@@ -9,16 +9,16 @@ import ReactTextarea from 'react-textarea-autosize';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 
-import sw from './PostCreate.swiss';
+import styles from './PostCreate.swiss';
 
-const Wrapper = element('div', sw.Wrapper);
-const ComposerWrapper = element('div', sw.ComposerWrapper);
-const TypeWrapper = element('div', sw.TypeWrapper);
-const StyledACInput = element(ACInput, sw.AutoCompleteInput);
-const ActionBar = element('div', sw.ActionBar);
-const AssignSection = element('div', sw.AssignSection);
-const AttachSection = element('div', sw.AttachSection);
-const Seperator = element('div', sw.Seperator);
+const Wrapper = styleElement('div', styles, 'Wrapper');
+const ComposerWrapper = styleElement('div', styles, 'ComposerWrapper');
+const TypeWrapper = styleElement('div', styles, 'TypeWrapper');
+const StyledACInput = styleElement(ACInput, styles, 'AutoCompleteInput');
+const ActionBar = styleElement('div', styles, 'ActionBar');
+const AssignSection = styleElement('div', styles, 'AssignSection');
+const AttachSection = styleElement('div', styles, 'AttachSection');
+const Seperator = styleElement('div', styles, 'Seperator');
 
 
 class PostCreate extends PureComponent {

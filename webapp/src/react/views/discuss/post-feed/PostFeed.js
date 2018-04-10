@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { element } from 'react-swiss';
+import { styleElement} from 'react-swiss';
 
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
@@ -12,20 +12,20 @@ import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';
 import InfoButton from 'components/info-button/InfoButton';
 
-import sw from './PostFeed.swiss';
+import styles from './PostFeed.swiss';
 import HOCPostView from '../post-view/HOCPostView';
 
-const Container = element('div', sw.Container);
-const PostItem = element('div', sw.PostItem);
-const SubtitleWrapper = element('div', sw.SubtitleWrapper);
-const SubtitleIcon = element(Icon, sw.SubtitleIcon);
-const EmptyState = element('div', sw.EmptyState);
-const EmptyIllustration = element('div', sw.EmptyIllustration);
-const EmptySvg = element(Icon, sw.EmptySvg);
-const EmptyTitle = element('div', sw.EmptyTitle);
-const EmptyText = element('div', sw.EmptyText);
-const Footer = element('div', sw.Footer);
-const Div = element('div');
+const Container = styleElement('div', styles, 'Container');
+const PostItem = styleElement('div', styles, 'PostItem');
+const SubtitleWrapper = styleElement('div', styles, 'SubtitleWrapper');
+const SubtitleIcon = styleElement(Icon, styles, 'SubtitleIcon');
+const EmptyState = styleElement('div', styles, 'EmptyState');
+const EmptyIllustration = styleElement('div', styles, 'EmptyIllustration');
+const EmptySvg = styleElement(Icon, styles, 'EmptySvg');
+const EmptyTitle = styleElement('div', styles, 'EmptyTitle');
+const EmptyText = styleElement('div', styles, 'EmptyText');
+const Footer = styleElement('div', styles, 'Footer');
+const Div = styleElement('div');
 
 const DISTANCE = 200;
 class PostFeed extends PureComponent {

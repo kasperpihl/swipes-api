@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import PropTypes from 'prop-types';
 import Button from 'Button';
 import { bindAll } from 'swipes-core-js/classes/utils';
 
-import sw from './InputMenu.swiss';
+import styles from './InputMenu.swiss';
 
-const Wrapper = element('div', sw.Wrapper);
-const Input = element('input', sw.Input);
+const Wrapper = styleElement('div', styles, 'Wrapper');
+const Input = styleElement('input', styles, 'Input');
 
 class InputMenu extends Component {
   constructor(props) {

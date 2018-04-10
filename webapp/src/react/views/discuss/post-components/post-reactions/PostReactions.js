@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupDelegate } from 'react-delegate';
@@ -8,12 +8,12 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 import AssigneeTooltip from 'components/assigning/AssigneeTooltip';
 import Icon from 'Icon';
 
-import sw from './PostReactions.swiss';
+import styles from './PostReactions.swiss';
 
-const Container = element('div', sw.Container);
-const HeartButton = element('div', sw.HeartButton);
-const HeartSvg = element(Icon, sw.HeartSvg);
-const LikeString = element('div', sw.LikeString);
+const Container = styleElement('div', styles, 'Container');
+const HeartButton = styleElement('div', styles, 'HeartButton');
+const HeartSvg = styleElement(Icon, styles, 'HeartSvg');
+const LikeString = styleElement('div', styles, 'LikeString');
 
 class Reactions extends PureComponent {
   constructor(props) {

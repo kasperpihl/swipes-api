@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import * as a from 'actions';
 import * as cs from 'swipes-core-js/selectors';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostCreate from 'src/react/views/discuss/post-create/HOCPostCreate';
-import sw from './DiscussButton.swiss';
+import styles from './DiscussButton.swiss';
 
-const Wrapper = element('div', sw.Wrapper);
-const ButtonSide = element('div', sw.ButtonSide);
-const Seperator = element('div', sw.Seperator);
+const Wrapper = styleElement('div', styles, 'Wrapper');
+const ButtonSide = styleElement('div', styles, 'ButtonSide');
+const Seperator = styleElement('div', styles, 'Seperator');
 
 class HOCDiscussButton extends PureComponent {
   constructor(props) {

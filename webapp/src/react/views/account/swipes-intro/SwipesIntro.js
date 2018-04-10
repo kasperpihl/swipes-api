@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import sw from './SwipesIntro.swiss';
+import styles from './SwipesIntro.swiss';
 
-const Wrapper = element('div', sw.Wrapper);
-const Img = element('img', sw.Img);
+const Wrapper = styleElement('div', styles, 'Wrapper');
+const Img = styleElement('img', styles, 'Img');
 
 const SwipesIntro = () => (
   <SWView 

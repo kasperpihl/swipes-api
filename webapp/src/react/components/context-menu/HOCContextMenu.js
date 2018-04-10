@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import Measure from 'react-measure';
 import { debounce, bindAll } from 'swipes-core-js/classes/utils';
 import prefixAll from 'inline-style-prefixer/static';
 
-import sw from './ContextMenu.swiss';
+import styles from './ContextMenu.swiss';
 
-const Wrapper = element('div', sw.Wrapper);
-const Content = element('div', sw.Content);
+const Wrapper = styleElement('div', styles, 'Wrapper');
+const Content = styleElement('div', styles, 'Content');
 
 class HOCContextMenu extends PureComponent {
   constructor(props) {

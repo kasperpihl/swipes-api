@@ -22,7 +22,7 @@ module.exports = {
   resolve: {
     modules: [ path.join(__dirname, 'node_modules') ],
     alias: {
-      // 'react-swiss': path.resolve(__dirname, '../../react-swiss/dist/es'),
+      // 'react-swiss': path.resolve(__dirname, '../../opensource/react-swiss/dist/es'),
       src: path.resolve(__dirname, 'src'),
       reducers: path.resolve(__dirname, 'src/reducers'),
       constants: path.resolve(__dirname, 'src/constants/ActionTypes'),

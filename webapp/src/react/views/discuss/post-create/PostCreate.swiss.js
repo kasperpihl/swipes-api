@@ -1,6 +1,6 @@
 export default {
   Wrapper: {
-    boxShadow: '0 1px 20px 3px rgba(5,57,128,0.1)',
+    boxShadow: '0 1px 20px 3px rgba($sw1  ,0.1)',
     background: '$sw5',
     width: '90%',
     borderRadius: '5px',

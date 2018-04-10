@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import Icon from 'Icon';
-import sw from './Button.swiss';
+import styles from './Button.swiss';
 
-const ATag = element('a', sw.ATag);
-const Title = element('div', sw.Title);
-const Background = element('div', sw.Background);
-const IconContainer = element('div', sw.IconContainer);
-const SideLabel = element('div', sw.SideLabel);
-const IconComp = element(Icon, sw.Icon);
+const ATag = styleElement('a', styles, 'ATag');
+const Title = styleElement('div', styles, 'Title');
+const Background = styleElement('div', styles, 'Background');
+const IconContainer = styleElement('div', styles, 'IconContainer');
+const SideLabel = styleElement('div', styles, 'SideLabel');
+const IconComp = styleElement(Icon, styles, 'Icon');
 
 class Button extends PureComponent {
   constructor(props) {

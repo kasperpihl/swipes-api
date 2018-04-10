@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { truncateString } from 'swipes-core-js/classes/utils';
@@ -17,10 +17,10 @@ import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import Button from 'src/react/components/button/Button2';
 import Icon from 'Icon';
 import './styles/goal-overview.scss';
-import sw from './GoalOverview.swiss';
+import styles from './GoalOverview.swiss';
 
-const Footer = element('div', sw.Footer);
-const Spacer = element('div', sw.Spacer);
+const Footer = styleElement('div', styles, 'Footer');
+const Spacer = styleElement('div', styles, 'Spacer');
 
 /* global msgGen */
 class GoalOverview extends PureComponent {

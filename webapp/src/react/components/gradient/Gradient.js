@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
 import gradient from 'swipes-core-js/classes/gradient';
-import { element } from 'react-swiss';
-import sw from './Gradient.swiss';
+import { styleElement } from 'react-swiss';
+import styles from './Gradient.swiss';
 
-const GradientWrapper = element('div', sw.GradientWrapper);
-const SuccessGradient = element('div', sw.SuccessGradient);
+const GradientWrapper = styleElement('div', styles, 'GradientWrapper');
+const SuccessGradient = styleElement('div', styles, 'SuccessGradient');
 
 class Gradient extends PureComponent {
   constructor(props) {

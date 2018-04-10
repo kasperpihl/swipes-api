@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
 import prefixAll from 'inline-style-prefixer/static';
 // import { fromJS } from 'immutable';
 
-import sw from './Tooltip.swiss';
+import styles from './Tooltip.swiss';
 
-const Wrapper = element('div', sw.Wrapper);
-const Content = element('div', sw.Content);
+const Wrapper = styleElement('div', styles, 'Wrapper');
+const Content = styleElement('div', styles, 'Content');
 
 const SPACING = 20;
 

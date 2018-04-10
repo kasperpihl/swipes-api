@@ -4,14 +4,14 @@ export default {
   },
   Title: {
     _font: ['11px', '18px', 'bold'],
-    color: '$deepBlue80',
+    color: '$sw2',
     textTransform: 'uppercase',
     paddingTop: '60px',
   },
   Text: {
     _widthSpecifications: ['initial', '230px'],
     _font: ['12px', '18px', '400'],
-    color: '$deepBlue50',
+    color: '$sw2',
     paddingTop: '6px',
     textAlign: 'center',
   },

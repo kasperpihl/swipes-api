@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import DraggableGoal from './DraggableGoal';
 
-const ListContainer = element('div', {
+const ListContainer = styleElement('div', {
   _size: '100%',
 });
 

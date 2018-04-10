@@ -12,7 +12,7 @@ const emptyList = List();
 const DISTANCE = 200;
 
 class HOCPlanList extends PureComponent {
-  static sizes() {
+  static  sizes() {
     return [654, 954];
   }
   constructor(props) {
@@ -97,7 +97,7 @@ class HOCPlanList extends PureComponent {
     }
   }
   render() {
-    const { milestones } = this.props;
+    const { plans } = this.props;
     const { tabs, tabIndex, limit, initialScroll } = this.state;
 
     return (
@@ -105,9 +105,9 @@ class HOCPlanList extends PureComponent {
         delegate={this}
         limit={limit}
         initialScroll={initialScroll}
-        milestones={milestones.get(tabs[tabIndex])}
+        plans={plans.get(tabs[tabIndex])}
         tabs={tabs.map((t) => {
-          const size = milestones.get(t).size;
+          const size = plans.get(t).size;
           if (size) {
             t += ` (${size})`;
           }
@@ -121,7 +121,7 @@ class HOCPlanList extends PureComponent {
 }
 
 export default navWrapper(connect(state => ({
-  milestones: cs.milestones.getGrouped(state),
+  plans: cs.milestones.getGrouped(state),
 }), {
   createMilestone: ca.milestones.create,
 })(HOCPlanList));

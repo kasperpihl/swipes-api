@@ -43,7 +43,7 @@ class HOCSidebar extends PureComponent {
   }
   getNavItems() {
     return [
-      { id: 'MilestoneList', svg: 'Milestones' },
+      { id: 'PlanList', svg: 'Milestones' },
       { id: 'TakeAction', svg: 'Goals' },
       { id: 'PostFeed', svg: 'Messages' },
       // { id: 'Find', svg: 'Find' },
@@ -53,7 +53,7 @@ class HOCSidebar extends PureComponent {
     switch (id) {
       case 'PostFeed':
         return 'Discuss';
-      case 'MilestoneList':
+      case 'PlanList':
         return 'Plan';
       case 'TakeAction':
         return 'Take Action';

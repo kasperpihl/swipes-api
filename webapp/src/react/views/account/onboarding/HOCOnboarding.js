@@ -23,7 +23,7 @@ class HOCOnboarding extends PureComponent {
       });
     } else if (['add-goal-milestone', 'create-milestone'].indexOf(item.get('id')) > -1) {
       openSecondary({
-        id: 'MilestoneList',
+        id: 'PlanList',
         title: 'Plan',
       });
     } else if(item.get('id') === 'create-goal') {

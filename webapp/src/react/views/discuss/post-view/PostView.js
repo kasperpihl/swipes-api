@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import { setupDelegate, URL_REGEX, attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
 import { List } from 'immutable';
 import SWView from 'SWView';
@@ -15,13 +15,13 @@ import Icon from 'Icon';
 import './styles/post-view.scss';
 import PostHeader from '../post-components/post-header/PostHeader';
 
-import sw from './PostView.swiss';
+import styles from './PostView.swiss';
 
-const PostMessage = element('div', sw.PostMessage);
-const PostActions = element('div', sw.PostActions);
-const ActionSpacer = element('div', sw.ActionSpacer);
-const PostAttachments = element('div', sw.PostAttachments);
-const StyledMentions = element(MentionsInput, {
+const PostMessage = styleElement('div', styles, 'PostMessage');
+const PostActions = styleElement('div', styles, 'PostActions');
+const ActionSpacer = styleElement('div', styles, 'ActionSpacer');
+const PostAttachments = styleElement('div', styles, 'PostAttachments');
+const StyledMentions = styleElement(MentionsInput, {
   width: '100%',
 });
 const MAX_COMMENTS_FEED = 3;

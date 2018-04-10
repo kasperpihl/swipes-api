@@ -1,17 +1,20 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
+import { styleElement } from 'react-swiss';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 import Icon from 'Icon';
-import HOCMilestoneItem from './HOCMilestoneItem';
+import Button from 'src/react/components/button/Button2';
+import PlanListItem from '../plan-components/plan-list-item/PlanListItem';
 // import HOCNoMilestone from './HOCNoMilestone';
 import InfoButton from 'components/info-button/InfoButton';
 
-import './styles/milestone-list.scss';
-import sw from './PlanList.swiss';
+import styles from './PlanList.swiss';
 
-const Wrapper = element('div', sw.Wrapper);
+const Wrapper = styleElement('div', styles, 'Wrapper');
+const HeaderWrapper = styleElement('div', styles, 'HeaderWrapper');
+const Footer = styleElement('div', styles, 'Footer');
 
 class PlanList extends PureComponent {
   constructor(props) {
@@ -21,18 +24,27 @@ class PlanList extends PureComponent {
   }
   renderHeader() {
     const { tabs, tabIndex, delegate } = this.props;
-    return (
-      <div className="milestone-list__header">
+    return ( 
+      <HeaderWrapper>
         <HOCHeaderTitle
           title="Plan"
           subtitle="Organize and see progress on your company's plans."
         />
-        <TabBar delegate={delegate} tabs={tabs} activeTab={tabIndex} />
-      </div>
+        <TabBar key="2" delegate={delegate} tabs={tabs} activeTab={tabIndex} />
+      </HeaderWrapper>
     );
   }
   renderFooter() {
+    const { delegate } = this.props;
 
+    return (
+      <Footer>
+        <Button icon="Plus" sideLabel="Create new plan" />
+        <InfoButton
+          delegate={delegate}
+        />
+      </Footer>
+    )
   }
   renderEmptyState() {
 
@@ -53,40 +65,30 @@ class PlanList extends PureComponent {
     )
   }
   renderList() {
-    const { milestones, delegate, tabIndex, limit } = this.props;
-    let lastMilestones = []; //tabIndex === 0 ? [<HOCNoMilestone key="no" />] : [];
-
-    if (tabIndex === 1 && milestones && milestones.size < 1) {
-      return this.renderEmptyState();
-    }
-    let i = lastMilestones.length;
-    return milestones.map(m => (i++ <= limit) ? (
-      <HOCMilestoneItem
-        key={m.get('id')}
-        milestone={m}
+    const { plans, delegate, tabIndex, limit } = this.props;
+    let i = 0;
+    return plans.map(p => (i++ <= limit) ? (
+      <PlanListItem
+        key={p.get('id')}
+        plan={p}
         delegate={delegate}
       />
-    ) : null).toArray().concat(lastMilestones);
+    ) : null).toArray();
   }
 
   render() {
-    const { milestones, tabIndex, initialScroll } = this.props;
-    let className = 'milestone-list';
-
-    if (tabIndex === 1 && milestones && milestones.size < 1) {
-      className += ' milestone-list--empty-state'
-    }
+    const { initialScroll } = this.props;
 
     return (
       <SWView
-        noframe
         header={this.renderHeader()}
+        footer={this.renderFooter()}
         onScroll={this.onScroll}
         initialScroll={initialScroll}
       >
-        <div className={className}>
+        <Wrapper>
           {this.renderList()}
-        </div>
+        </Wrapper>
       </SWView>
     );
   }

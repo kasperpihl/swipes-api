@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import { fromJS } from 'immutable';
 
 import { setupDelegate } from 'react-delegate';
@@ -11,16 +11,15 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import Button from 'src/react/components/button/Button2';
 
-import sw from './PostCommentInput.swiss';
+import styles from './PostCommentInput.swiss';
 
-const Container = element('div', sw.Container);
-const Picture = element('div', sw.Picture);
-const Content = element('div', sw.Content);
-const Actions = element('div', sw.Actions);
-const Attachments = element('div', sw.Attachments);
-const StyledButton = element(Button, sw.StyledButton);
-const StyledMentions = element(MentionsInput, sw.StyledMentions);
-const StyledMention = element(Mention, sw.StyledMention);
+const Container = styleElement('div', styles, 'Container');
+const Picture = styleElement('div', styles, 'Picture');
+const Content = styleElement('div', styles, 'Content');
+const Actions = styleElement('div', styles, 'Actions');
+const Attachments = styleElement('div', styles, 'Attachments');
+const StyledMentions = styleElement(MentionsInput, styles, 'StyledMentions');
+const StyledMention = styleElement(Mention, styles, 'StyledMention');
 
 
 class PostCommentInput extends PureComponent {

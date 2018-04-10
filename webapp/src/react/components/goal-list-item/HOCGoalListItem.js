@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
@@ -11,12 +11,12 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
-import sw from './GoalListItem.swiss';
+import styles from './GoalListItem.swiss';
 /* global msgGen */
 
-const GoalItem = element('div', sw.GoalItem);
-const GoalTitle = element('div', sw.GoalTitle);
-const StatusDot = element('div', sw.StatusDot);
+const GoalItem = styleElement('div', styles, 'GoalItem');
+const GoalTitle = styleElement('div', styles, 'GoalTitle');
+const StatusDot = styleElement('div', styles, 'StatusDot');
 
 class HOCGoalListItem extends PureComponent {
   constructor(props) {

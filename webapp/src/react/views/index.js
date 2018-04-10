@@ -9,6 +9,7 @@ import Browser from './browser/HOCBrowser';
 import Find from './find/HOCFind';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
+import PlanList from './plan/plan-list/HOCPlanList';
 import PlanOverview from './plan/plan-overview/HOCPlanOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
 import NotFound from './not-found/NotFound';
@@ -33,6 +34,7 @@ export {
   NoMilestoneOverview,
   NotFound,
   Notifications,
+  PlanList,
   PlanOverview,
   PostCreate,
   PostFeed,

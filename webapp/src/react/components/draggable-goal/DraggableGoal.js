@@ -2,9 +2,9 @@ import React, { PureComponent, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 
-const Wrapper = element('div', {
+const Wrapper = styleElement('div', {
   _size: 'auto',
   background: '$sw4',
   borderRadius: '3px',

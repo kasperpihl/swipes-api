@@ -4,9 +4,9 @@ import * as types from 'constants';
 
 const initialState = fromJS({
   primary: {
-    id: 'MilestoneList',
+    id: 'PlanList',
     stack: [{
-      id: 'MilestoneList',
+      id: 'PlanList',
       title: 'Plan',
     }],
   },

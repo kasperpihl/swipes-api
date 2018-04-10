@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { element } from 'react-swiss';
+import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import * as a from 'actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 
-import sw from './BreadCrumbs.swiss';
+import styles from './BreadCrumbs.swiss';
 
-const Wrapper = element('div', sw.Wrapper);
-const Crumb = element('div', sw.Crumb);
-const Title = element('div', sw.Title);
-const Seperator = element('div', sw.Seperator);
-const CrumbIcon = element(Icon, sw.Icon);
+const Wrapper = styleElement('div', styles, 'Wrapper');
+const Crumb = styleElement('div', styles, 'Crumb');
+const Title = styleElement('div', styles, 'Title');
+const Seperator = styleElement('div', styles, 'Seperator');
+const CrumbIcon = styleElement(Icon, styles, 'Icon');
 
 class HOCBreadCrumbs extends Component {
   constructor(props) {
