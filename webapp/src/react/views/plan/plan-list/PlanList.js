@@ -22,7 +22,7 @@ class PlanList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onAddGoal', 'onScroll');
+    setupDelegate(this, 'onAddGoal', 'onScroll', 'onAddPlan');
   }
   renderHeader() {
     const { tabs, tabIndex, delegate } = this.props;
@@ -37,11 +37,16 @@ class PlanList extends PureComponent {
     );
   }
   renderFooter() {
-    const { delegate } = this.props;
+    const { delegate, getLoading } = this.props;
 
     return (
       <Footer>
-        <Button icon="Plus" sideLabel="Create new plan" />
+        <Button
+          icon="Plus"
+          sideLabel="Create new plan"
+          onClick={this.onAddPlan}
+          {...getLoading('add')}
+        />
         <InfoButton
           delegate={delegate}
         />

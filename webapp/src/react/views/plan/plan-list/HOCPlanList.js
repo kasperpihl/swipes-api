@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -55,19 +56,28 @@ class HOCPlanList extends PureComponent {
       },
     });
   }
-  onAddMilestone(title) {
-    const { createMilestone } = this.props;
-    if (title && title.length && !this.isLoading('add')) {
-      this.setLoading('add');
-      createMilestone(title).then((res) => {
-        if (res && res.ok) {
-          this.clearLoading('add');
-          window.analytics.sendEvent('Plan created', {});
-        } else {
-          this.clearLoading('add', '!Something went wrong');
-        }
-      });
-    }
+  onAddPlan(e) {
+    const options = { boundingRect: e.target.getBoundingClientRect() };
+    const { createPlan, inputMenu } = this.props;
+    inputMenu({
+      ...options,
+      placeholder: 'Title of the plan',
+      text: '',
+      buttonLabel: 'Create',
+    }, (title) => {
+      if (title && title.length && !this.isLoading('add')) {
+        this.setLoading('add', 'Adding');
+        createPlan(title).then((res) => {
+          if (res && res.ok) {
+            this.clearLoading('add', 'Plan created', 3000);
+            window.analytics.sendEvent('Plan created', {});
+          } else {
+            this.clearLoading('add', '!Something went wrong');
+          }
+        });
+      }
+    });
+    
   }
   saveState() {
     const { saveState } = this.props;
@@ -123,5 +133,6 @@ class HOCPlanList extends PureComponent {
 export default navWrapper(connect(state => ({
   plans: cs.milestones.getGrouped(state),
 }), {
-  createMilestone: ca.milestones.create,
+  inputMenu: a.menus.input,
+  createPlan: ca.milestones.create,
 })(HOCPlanList));

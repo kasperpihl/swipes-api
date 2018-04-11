@@ -14,7 +14,6 @@ import PlanOverview from './plan/plan-overview/HOCPlanOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
 import NotFound from './not-found/NotFound';
 import Notifications from './notifications/HOCNotifications';
-import PostCreate from './discuss/post-create/HOCPostCreate';
 import PostFeed from './discuss/post-feed/HOCPostFeed';
 import PostView from './discuss/post-view/HOCPostView';
 import Preview from './preview/HOCPreview';
@@ -37,7 +36,6 @@ export {
   Notifications,
   PlanList,
   PlanOverview,
-  PostCreate,
   PostFeed,
   PostView,
   Preview,
