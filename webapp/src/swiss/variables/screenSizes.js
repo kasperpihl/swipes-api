@@ -15,4 +15,6 @@ addVariables({
   max1200: 'screen and (max-width: 1200px)',
   max1400: 'screen and (max-width: 1400px)',
   max1600: 'screen and (max-width: 1600px)',
+
+  maxH950: 'screen and (max-height: 950px)',
 });
