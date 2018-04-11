@@ -13,6 +13,10 @@ addVariables({
   post: '#76B56D',
 
   blue: '#0070E0',
+  blue5: '#F0F7FF',
+  blue20: '#CCE4FF',
+  blue60: '#66AFFF',
+
   red: '#FD6150',
   green: '#1DD465',
   yellow: '#FFB038',

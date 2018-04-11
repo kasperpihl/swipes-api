@@ -3,40 +3,37 @@ export default {
     _size: ['100%', 'auto'],
   },
   ToWorkspace: {
-    _size: ['100%', '115px'],
+    _size: ['100%', '150px'],
+    _borderRadius: '6px',
     marginTop: '15px',
     float: 'initial !important',
     display: 'block',
-    backgroundColor: '$blue',
-    _borderRadius: ['6px'],
+    backgroundColor: '$blue5',
     paddingTop: '15px',
     textAlign: 'center',
     transition: '.35s ease',
-
-    // p {
-    //   @include font(12px, $blue-100, 24px, 500);
-    //   margin: 0;padding: 0;
-    //   transition: .35s ease;
-    //   -ms-transition: .35s ease;
-    // }
-
-    '&hover': {
+    '& p': {
+      _font: ['12px', '24px', '500'],
+      margin: 0,
+      padding: 0,
+      transition: '.35s ease',
+      color: '$blue',
+    },
+    '&:hover': {
       paddingTop: '9px',
-      backgroundColor: '$blue',
+      backgroundColor: '$blue20',
       transition: '.35s ease',
     }
-
-    // #{$b}__svg {
-    //   @include svg-color($blue-100);
-    //   transition: .35s ease;
-    //   -ms-transition: .35s ease;
-    // }
   },
   SVG: {
     _size: ['100px'],
-    // @include svg-color($blue-60);
+    _svgColor: '$blue60',
     margin: '0',
     padding: '10px',
     transition: '.35s ease',
+    '.svg-hover:hover &': {
+      _svgColor: '$blue',
+      transition: '.35s ease',
+    }
   }
 }
