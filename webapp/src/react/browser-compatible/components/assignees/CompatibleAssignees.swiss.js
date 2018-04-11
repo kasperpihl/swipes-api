@@ -3,6 +3,14 @@ export default {
     _size: ['auto', '48px'],
     marginLeft: '15px',
     display: 'table-cell',
+    '@media $max600': {
+      _size: ['initial', '48px'],
+      display: 'inline-block',
+      float: 'initial',
+      left: '50%',
+      margin: '17px 15px 29px 0',
+      transform: 'translateX(-50%)',
+    },
   },
   Assignee: {
     _size: ['32px'],
@@ -11,9 +19,7 @@ export default {
     borderRadius: '50%',
     marginTop: '-16px',
     top: '50%',
-    float: {
-      float: '#{float}',
-    },
+    float: '#{float}',
   },
   ProfilePic: {
     _size: ['30px'],
@@ -31,16 +37,3 @@ export default {
     transform: 'translate(1px, 1px)',
   },
 }
-
-// NOT IMPLEMENTED YET
-// @media (max-width: 600px) {
-//   .compatible-assignees {
-//     @include size(initial, 48px);
-//     display: inline-block;
-//     float: initial;
-//     left: 50%;
-//     margin: 17px 15px 29px 0;
-//     transform: translateX(-50%);
-//     -ms-transform: translateX(-50%);
-//   }
-// }
