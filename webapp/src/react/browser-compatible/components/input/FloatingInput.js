@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
-// import { map, list } from 'react-immutable-proptypes';
+import { styleElement } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
-import './styles/floating-input.scss';
+import styles from './FloatingInput.swiss';
+
+const FloatingInputWrapper = styleElement('div', styles, 'FloatingInputWrapper');
 
 class FloatingInput extends PureComponent {
   constructor(props) {
@@ -13,7 +15,7 @@ class FloatingInput extends PureComponent {
       floatValue: 0 || props.value.length,
       visiblePassword: false,
     };
-    bindAll(this, ['floatFocus', 'floatBlur', 'showPassword', 'hidePassword']);
+    bindAll(this, ['floatFocus', 'floatBlur']);
     setupDelegate(this, 'onClick', 'onChange');
   }
   componentWillReceiveProps(nextProps) {
@@ -41,45 +43,15 @@ class FloatingInput extends PureComponent {
 
     this.setState({ floatValue: inputVal });
   }
-  showPassword() {
-    const { visiblePassword } = this.state;
-
-    if (!visiblePassword) {
-      this.setState({ visiblePassword: true });
-    }
-  }
-  hidePassword() {
-    const { visiblePassword } = this.state;
-
-    if (visiblePassword) {
-      this.setState({ visiblePassword: false });
-    }
-  }
   render() {
     const { inputKey, type, placeholder, value, props } = this.props;
     const { visiblePassword, float, floatValue } = this.state;
-    let floatingClass = 'floating-input';
-    let iconClass = 'floating-input__icon';
-    let newType = type;
-
-    if (float) {
-      floatingClass += ' floating-input--active';
-    }
-
-    if (floatValue > 0) {
-      floatingClass += ' floating-input--standby';
-    }
-
-    if (type === 'password' && value.length > 0) {
-      iconClass += ' floating-input__icon--visible';
-      newType = visiblePassword ? 'text' : type;
-    }
 
     return (
-      <div className={floatingClass}>
+      <FloatingInputWrapper active={!!float} standBy={floatValue > 0}>
         <input
           ref="floatingInput"
-          type={newType}
+          type={type}
           value={value}
           id={inputKey}
           onFocus={this.floatFocus}
@@ -90,16 +62,7 @@ class FloatingInput extends PureComponent {
           {...props}
         />
         <label htmlFor={inputKey}>{placeholder}</label>
-
-        <div
-          className={iconClass}
-          onMouseDown={this.showPassword}
-          onMouseUp={this.hidePassword}
-          onMouseLeave={this.hidePassword}
-        >
-          <Icon icon="Eye" className="floating-input__svg" />
-        </div>
-      </div>
+      </FloatingInputWrapper>
     );
   }
 }
