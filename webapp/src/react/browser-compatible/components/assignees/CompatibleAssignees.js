@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { styleElement } from 'react-swiss';
 import styles from './CompatibleAssignees.swiss';
 
-const CompatibleAssigneesWrapper = styleElement('div', styles, 'CompatibleAssignees');
+const CompatibleAssigneesWrapper = styleElement('div', styles, 'CompatibleAssigneesWrapper');
 const Assignee = styleElement('div', styles, 'Assignee');
 const ProfilePic = styleElement('img', styles, 'ProfilePic');
 const Initials = styleElement('p', styles, 'Initials');
@@ -31,9 +31,9 @@ const CompatibleAssignees = (props) => {
 
 export default CompatibleAssignees;
 
-const { string, func } = PropTypes;
+const { string, object, func } = PropTypes;
 
 CompatibleAssignees.propTypes = {
-  assignee: string,
+  assignee: object,
   float: string,
 };

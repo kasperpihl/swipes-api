@@ -4,9 +4,8 @@ export default {
     marginLeft: '15px',
     display: 'table-cell',
     '@media $max600': {
-      _size: ['initial', '48px'],
+      _size: ['auto', '48px'],
       display: 'inline-block',
-      float: 'initial',
       left: '50%',
       margin: '17px 15px 29px 0',
       transform: 'translateX(-50%)',

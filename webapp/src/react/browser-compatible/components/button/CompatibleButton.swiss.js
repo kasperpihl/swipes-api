@@ -5,7 +5,6 @@ export default {
     color: '$sw5',
     backgroundColor: '$blue',
     display: 'inline-block',
-    float: 'initial',
     cursor: 'pointer',
     zIndex: 2,
     left: '50%',

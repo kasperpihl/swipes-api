@@ -6,7 +6,6 @@ export default {
     _size: ['100%', '150px'],
     _borderRadius: '6px',
     marginTop: '15px',
-    float: 'initial !important',
     display: 'block',
     backgroundColor: '$blue5',
     paddingTop: '15px',

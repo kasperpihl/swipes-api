@@ -15,10 +15,8 @@ export default {
   Card: {
     _size: ['100%', 'auto'],
     _borderRadius: ['3px', '3px', '0px', '0px'],
-    minWidth: 'initial',
     maxWidth: '600px',
     minHeight: '100%',
-    maxHeight: 'initial',
     backgroundColor: '$sw5',
     boxShadow: '0 6px 12px 1px rgba(0,12,47,0.3)',
     margin: '0 auto',

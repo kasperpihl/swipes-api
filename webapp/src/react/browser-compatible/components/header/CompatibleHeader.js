@@ -28,10 +28,10 @@ const CompatibleHeader = (props) => {
 
 export default CompatibleHeader;
 
-const { string, func } = PropTypes;
+const { string, object, func } = PropTypes;
 
 CompatibleHeader.propTypes = {
-  assignee: string,
+  assignee: object,
   title: string,
   subtitle: string,
 };
