@@ -1,11 +1,15 @@
 import React, { PureComponent } from 'react';
-
 import { connect } from 'react-redux';
+import { styleElement } from 'react-swiss';
 import * as a from 'actions';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import RotateLoader from 'components/loaders/RotateLoader';
 import Icon from 'Icon';
-import './styles/logout-button.scss'
+import styles from './LogoutButton.swiss';
+
+const LogoutButtonWrapper = styleElement('div', styles, 'LogoutButtonWrapper');
+const Label = styleElement('div', styles, 'Label');
+const Loader = styleElement('div', styles, 'Loader');
 
 class HOCLogoutButton extends PureComponent {
   constructor(props) {
@@ -40,17 +44,14 @@ class HOCLogoutButton extends PureComponent {
     return <div>Loading</div>;
   }
   render() {
-    let className = 'compatible-logout';
-
-    if (this.isLoading('loggingout')) className += ' compatible-logout--loading'
 
     return (
-      <div className={className} onClick={this.onLogout}>
-        <div className="compatible-logout__loader">
+      <LogoutButtonWrapper loading={this.isLoading('loggingout')} onClick={this.onLogout}>
+        <Loader loading={this.isLoading('loggingout')}>
           <RotateLoader size={36} />
-        </div>  
-        <div className="compatible-logout__label">Log out</div>
-      </div>
+        </Loader>  
+        <Label loading={this.isLoading('loggingout')}>Log out</Label>
+      </LogoutButtonWrapper>
     )
   }
 }
