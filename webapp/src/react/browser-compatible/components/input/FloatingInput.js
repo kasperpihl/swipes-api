@@ -57,7 +57,6 @@ class FloatingInput extends PureComponent {
           onFocus={this.floatFocus}
           onBlur={this.floatBlur}
           onChange={this.onChangeCached(inputKey)}
-          className="floating-input__input"
           autoComplete="off"
           {...props}
         />
