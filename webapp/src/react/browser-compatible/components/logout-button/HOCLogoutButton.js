@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'react-swiss';
+import { styleElement, SwissProvider } from 'react-swiss';
 import * as a from 'actions';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import RotateLoader from 'components/loaders/RotateLoader';
@@ -46,12 +46,14 @@ class HOCLogoutButton extends PureComponent {
   render() {
 
     return (
-      <LogoutButtonWrapper loading={this.isLoading('loggingout')} onClick={this.onLogout}>
-        <Loader loading={this.isLoading('loggingout')}>
-          <RotateLoader size={36} />
-        </Loader>  
-        <Label loading={this.isLoading('loggingout')}>Log out</Label>
-      </LogoutButtonWrapper>
+      <SwissProvider loading={this.isLoading('loggingout')}>
+        <LogoutButtonWrapper onClick={this.onLogout}>
+          <Loader>
+            <RotateLoader size={36} />
+          </Loader>
+          <Label>Log out</Label>
+        </LogoutButtonWrapper>
+      </SwissProvider>
     )
   }
 }
