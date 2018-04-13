@@ -14,9 +14,9 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import styles from './GoalListItem.swiss';
 /* global msgGen */
 
-const GoalItem = styleElement('div', styles, 'GoalItem');
-const GoalTitle = styleElement('div', styles, 'GoalTitle');
-const StatusDot = styleElement('div', styles, 'StatusDot');
+const GoalItem = styleElement('div', styles.GoalItem);
+const GoalTitle = styleElement('div', styles.GoalTitle);
+const StatusDot = styleElement('div', styles.StatusDot);
 
 class HOCGoalListItem extends PureComponent {
   constructor(props) {

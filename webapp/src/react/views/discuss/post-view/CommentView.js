@@ -4,21 +4,19 @@ import { setupDelegate } from 'react-delegate';
 import { URL_REGEX, unescaper, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import PostReactions from '../post-components/post-reactions/PostReactions';
 import styles from './CommentView.swiss';
-
 import './styles/comment-view.scss';
 
-const Container = styleElement('div', styles, 'Container');
-const Picture = styleElement('div', styles, 'Picture');
-const Content = styleElement('div', styles, 'Content');
-const Actions = styleElement('div', styles, 'Actions');
-const Name = styleElement('div', styles, 'Name');
-const Timestamp = styleElement(TimeAgo, styles, 'Timestamp');
-const Message = styleElement('div', styles, 'Message');
-const Attachments = styleElement('div', styles, 'Attachments');
+const Container = styleElement('div', styles.Container);
+const Picture = styleElement('div', styles.Picture);
+const Content = styleElement('div', styles.Content);
+const Actions = styleElement('div', styles.Actions);
+const Name = styleElement('div', styles.Name);
+const Timestamp = styleElement(TimeAgo, styles.Timestamp);
+const Message = styleElement('div', styles.Message);
+const Attachments = styleElement('div', styles.Attachments);
 
 class CommentView extends PureComponent {
   constructor(props) {

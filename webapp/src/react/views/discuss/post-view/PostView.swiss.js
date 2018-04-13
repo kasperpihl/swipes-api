@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   PostMessage: {
     _size: ['100%', 'auto'],
     _font: ['15px', '24px', 300],
@@ -34,4 +36,4 @@ export default {
     }
   },
 
-}
+});

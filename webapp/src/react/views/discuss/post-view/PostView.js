@@ -4,7 +4,6 @@ import { setupDelegate, URL_REGEX, attachmentIconForService, miniIconForId } fro
 import { List } from 'immutable';
 import SWView from 'SWView';
 import { MentionsInput, Mention } from 'react-mentions';
-
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import PostCommentInput from '../post-components/post-comment-input/PostCommentInput';
 import CommentView from './CommentView';
@@ -14,13 +13,12 @@ import PostReactions from '../post-components/post-reactions/PostReactions';
 import Icon from 'Icon';
 import './styles/post-view.scss';
 import PostHeader from '../post-components/post-header/PostHeader';
-
 import styles from './PostView.swiss';
 
-const PostMessage = styleElement('div', styles, 'PostMessage');
-const PostActions = styleElement('div', styles, 'PostActions');
-const ActionSpacer = styleElement('div', styles, 'ActionSpacer');
-const PostAttachments = styleElement('div', styles, 'PostAttachments');
+const PostMessage = styleElement('div', styles.PostMessage);
+const PostActions = styleElement('div', styles.PostActions);
+const ActionSpacer = styleElement('div', styles.ActionSpacer);
+const PostAttachments = styleElement('div', styles.PostAttachments);
 const StyledMentions = styleElement(MentionsInput, {
   width: '100%',
 });

@@ -3,13 +3,13 @@ import { styleElement, addGlobalStyles, SwissProvider } from 'react-swiss';
 import Icon from 'Icon';
 import styles from './Button.swiss';
 
-const ATag = styleElement('a', styles, 'ATag');
-const Title = styleElement('div', styles, 'Title');
-const Background = styleElement('div', styles, 'Background');
-const IconContainer = styleElement('div', styles, 'IconContainer');
-const SideLabel = styleElement('div', styles, 'SideLabel');
-const IconComp = styleElement(Icon, styles, 'Icon');
-const LoaderCircle = styleElement('div', styles, 'LoaderCircle');
+const ATag = styleElement('a', styles.ATag);
+const Title = styleElement('div', styles.Title);
+const Background = styleElement('div', styles.Background);
+const IconContainer = styleElement('div', styles.IconContainer);
+const SideLabel = styleElement('div', styles.SideLabel);
+const IconComp = styleElement(Icon, styles.Icon);
+const LoaderCircle = styleElement('div', styles.LoaderCircle);
 
 addGlobalStyles({
   '@keyframes button-loader': {

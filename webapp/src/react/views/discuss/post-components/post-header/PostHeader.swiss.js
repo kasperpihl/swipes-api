@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   PostHeaderWrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'top'],
@@ -31,4 +33,4 @@ export default {
     }
     
   },
-}
+});

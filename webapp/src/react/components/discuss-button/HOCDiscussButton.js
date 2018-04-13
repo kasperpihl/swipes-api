@@ -8,9 +8,9 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostCreate from 'src/react/views/discuss/post-create/HOCPostCreate';
 import styles from './DiscussButton.swiss';
 
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const ButtonSide = styleElement('div', styles, 'ButtonSide');
-const Seperator = styleElement('div', styles, 'Seperator');
+const Wrapper = styleElement('div', styles.Wrapper);
+const ButtonSide = styleElement('div', styles.ButtonSide);
+const Seperator = styleElement('div', styles.Seperator);
 
 class HOCDiscussButton extends PureComponent {
   constructor(props) {

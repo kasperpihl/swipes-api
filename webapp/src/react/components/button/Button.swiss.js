@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   ATag: {
     userSelect: 'none',
     _flex: ['row', 'left', 'center'],
@@ -82,4 +84,4 @@ export default {
     borderRadius: '100%',
     animation: 'button-loader 1.0s infinite ease-in-out',
   },
-}
+});

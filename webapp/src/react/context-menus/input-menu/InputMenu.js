@@ -3,11 +3,10 @@ import { styleElement } from 'react-swiss';
 import PropTypes from 'prop-types';
 import Button from 'Button';
 import { bindAll } from 'swipes-core-js/classes/utils';
-
 import styles from './InputMenu.swiss';
 
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const Input = styleElement('input', styles, 'Input');
+const Wrapper = styleElement('div', styles.Wrapper);
+const Input = styleElement('input', styles.Input);
 
 class InputMenu extends Component {
   constructor(props) {

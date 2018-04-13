@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react'
 import { styleElement} from 'react-swiss';
-
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback, typeForId, miniIconForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
@@ -11,20 +9,19 @@ import TabBar from 'components/tab-bar/TabBar';
 import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';
 import InfoButton from 'components/info-button/InfoButton';
-
 import styles from './PostFeed.swiss';
 import HOCPostView from '../post-view/HOCPostView';
 
-const Container = styleElement('div', styles, 'Container');
-const PostItem = styleElement('div', styles, 'PostItem');
-const SubtitleWrapper = styleElement('div', styles, 'SubtitleWrapper');
-const SubtitleIcon = styleElement(Icon, styles, 'SubtitleIcon');
-const EmptyState = styleElement('div', styles, 'EmptyState');
-const EmptyIllustration = styleElement('div', styles, 'EmptyIllustration');
-const EmptySvg = styleElement(Icon, styles, 'EmptySvg');
-const EmptyTitle = styleElement('div', styles, 'EmptyTitle');
-const EmptyText = styleElement('div', styles, 'EmptyText');
-const Footer = styleElement('div', styles, 'Footer');
+const Container = styleElement('div', styles.Container);
+const PostItem = styleElement('div', styles.PostItem);
+const SubtitleWrapper = styleElement('div', styles.SubtitleWrapper);
+const SubtitleIcon = styleElement(Icon, styles.SubtitleIcon);
+const EmptyState = styleElement('div', styles.EmptyState);
+const EmptyIllustration = styleElement('div', styles.EmptyIllustration);
+const EmptySvg = styleElement(Icon, styles.EmptySvg);
+const EmptyTitle = styleElement('div', styles.EmptyTitle);
+const EmptyText = styleElement('div', styles.EmptyText);
+const Footer = styleElement('div', styles.Footer);
 const Div = styleElement('div');
 
 const DISTANCE = 200;

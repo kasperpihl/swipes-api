@@ -1,16 +1,15 @@
 import React from 'react';
 import { styleElement } from 'react-swiss';
-
 import styles from './PostHeader.swiss';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 
-const PostHeaderWrapper = styleElement('div', styles, 'PostHeaderWrapper');
-const NameWrapper = styleElement('div', styles, 'NameWrapper');
-const NameTitle = styleElement('div', styles, 'NameTitle');
-const Subtitle = styleElement('div', styles, 'Subtitle');
-const LeftSide = styleElement('div', styles, 'LeftSide');
-const RightSide = styleElement('div', styles, 'RightSide');
+const PostHeaderWrapper = styleElement('div', styles.PostHeaderWrapper);
+const NameWrapper = styleElement('div', styles.NameWrapper);
+const NameTitle = styleElement('div', styles.NameTitle);
+const Subtitle = styleElement('div', styles.Subtitle);
+const LeftSide = styleElement('div', styles.LeftSide);
+const RightSide = styleElement('div', styles.RightSide);
 
 const PostHeader = (props) => {
   const {

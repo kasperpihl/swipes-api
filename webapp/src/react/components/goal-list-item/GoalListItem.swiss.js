@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   GoalItem: {
     _flex: ['row', 'left', 'center'],
     _size: ['100%', 'auto'],
@@ -41,4 +43,4 @@ export default {
       backgroundColor: '$green'
     },
   },
-}
+});

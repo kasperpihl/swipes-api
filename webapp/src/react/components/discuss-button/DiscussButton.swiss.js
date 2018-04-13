@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Wrapper: {
     _size: ['auto', '36px'],
     _flex: 'row',
@@ -41,4 +43,4 @@ export default {
       _font: ['12px', '18px', 500],
     }
   },
-}
+});

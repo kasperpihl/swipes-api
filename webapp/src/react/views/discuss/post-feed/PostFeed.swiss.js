@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Container: {
     _size: ['100%', 'auto'],
     paddingBottom: '30px',
@@ -64,4 +66,4 @@ export default {
     textAlign: 'center',
     pointerEvents: 'all',
   }
-}
+});

@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Wrapper: {
     _size: ['auto', '90px'],
     _flex: ['row', 'left', 'center'],
@@ -19,4 +21,4 @@ export default {
       color: '$sw2',
     },
   }
-}
+});

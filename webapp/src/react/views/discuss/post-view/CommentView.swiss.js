@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Container: {
     _flex: ['row', 'left', 'top'],
     marginTop: '12px',
@@ -33,4 +35,4 @@ export default {
   Attachments: {
     marginTop: '6px',
   },
-}
+});

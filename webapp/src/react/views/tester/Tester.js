@@ -1,20 +1,18 @@
 import React, { PureComponent } from 'react';
-import { styleElement, toggleGroup } from 'react-swiss';
+import { styleElement, styleSheet, toggleGroup } from 'react-swiss';
 import Button from 'src/react/components/button/Button2';
 // import styles from './Tester.swiss';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-const styles = {
+const styles = styleSheet({
   Wrapper: {
     _flex: ['column', 'left', 'center'],
     '& > *': {
       margin: '10px',
     }
   }
-};
+});
 
-styleElement.group('Tester');
-const Wrapper = styleElement('div', styles, 'Wrapper');
-styleElement.groupEnd();
+const Wrapper = styleElement('div', styles.Wrapper);
 
 class Tester extends PureComponent {
   constructor(props) {
