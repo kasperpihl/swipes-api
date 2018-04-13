@@ -1,25 +1,22 @@
 import React, { PureComponent } from 'react'
 import { styleElement } from 'react-swiss';
 import { fromJS } from 'immutable';
-
 import { setupDelegate } from 'react-delegate';
 import { MentionsInput, Mention } from 'react-mentions';
 import { getDeep } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import Button from 'src/react/components/button/Button2';
-
 import styles from './PostCommentInput.swiss';
 
-const Container = styleElement('div', styles, 'Container');
-const Picture = styleElement('div', styles, 'Picture');
-const Content = styleElement('div', styles, 'Content');
-const Actions = styleElement('div', styles, 'Actions');
-const Attachments = styleElement('div', styles, 'Attachments');
-const StyledMentions = styleElement(MentionsInput, styles, 'StyledMentions');
-const StyledMention = styleElement(Mention, styles, 'StyledMention');
+const Container = styleElement('div', styles.Container);
+const Picture = styleElement('div', styles.Picture);
+const Content = styleElement('div', styles.Content);
+const Actions = styleElement('div', styles.Actions);
+const Attachments = styleElement('div', styles.Attachments);
+const StyledMentions = styleElement(MentionsInput, styles.StyledMentions);
+const StyledMention = styleElement(Mention, styles.StyledMention);
 
 
 class PostCommentInput extends PureComponent {

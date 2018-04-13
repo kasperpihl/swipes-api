@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet('PlanOverview', {
   Wrapper: {
     _size: ['100%', 'auto'],
   },
@@ -60,4 +62,4 @@ export default {
       marginRight: '12px',
     },
   },
-}
+});

@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   GradientWrapper: {
     _size: '100%',
     backgroundColor: 'rgba(56,149,252, 1)',
@@ -22,4 +24,4 @@ export default {
       transition: '.3s ease-in',
     }
   },
-}
+});

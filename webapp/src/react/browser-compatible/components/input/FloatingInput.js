@@ -5,7 +5,7 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import styles from './FloatingInput.swiss';
 
-const FloatingInputWrapper = styleElement('div', styles, 'FloatingInputWrapper');
+const FloatingInputWrapper = styleElement('div', styles.FloatingInputWrapper);
 
 class FloatingInput extends PureComponent {
   constructor(props) {

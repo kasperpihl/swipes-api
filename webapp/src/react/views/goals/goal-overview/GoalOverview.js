@@ -5,7 +5,6 @@ import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { truncateString } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-
 import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCStepList from 'components/step-list/HOCStepList';
@@ -19,8 +18,8 @@ import Icon from 'Icon';
 import './styles/goal-overview.scss';
 import styles from './GoalOverview.swiss';
 
-const Footer = styleElement('div', styles, 'Footer');
-const Spacer = styleElement('div', styles, 'Spacer');
+const Footer = styleElement('div', styles.Footer);
+const Spacer = styleElement('div', styles.Spacer);
 
 /* global msgGen */
 class GoalOverview extends PureComponent {

@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Wrapper: {
     _size: '100%',
     left: 0,
@@ -18,4 +20,4 @@ export default {
     _size: 'auto',
     position: 'absolute',
   },
-}
+});

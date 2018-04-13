@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   ATag: {
     _size: ['250px', '36px'],
     _font: ['12px', '36px', 500],
@@ -15,4 +17,4 @@ export default {
       opacity: '0.8'
     }
   }
-}
+})

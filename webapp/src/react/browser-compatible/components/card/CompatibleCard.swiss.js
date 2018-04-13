@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   CardWrapper: {
     _size: ['100%'],
     overflowY: 'auto',
@@ -28,4 +30,4 @@ export default {
       _borderRadius: ['0px', '0px', '0px', '0px'],
     },
   }
-}
+});

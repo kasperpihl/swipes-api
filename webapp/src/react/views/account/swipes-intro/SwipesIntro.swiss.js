@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Wrapper: {
     _size: ['100%', 'auto'],
     padding: '30px 0',
@@ -6,4 +8,4 @@ export default {
   Img: {
     _size: ['100%', 'auto'],
   },
-}
+});

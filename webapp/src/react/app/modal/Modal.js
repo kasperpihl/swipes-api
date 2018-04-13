@@ -3,11 +3,10 @@ import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
 import * as a from 'actions';
 import { bindAll } from 'swipes-core-js/classes/utils';
-
 import styles from './Modal.swiss';
 
-const Container = styleElement('div', styles, 'Container');
-const Content = styleElement('div', styles, 'Content');
+const Container = styleElement('div', styles.Container);
+const Content = styleElement('div', styles.Content);
 
 class HOCModal extends PureComponent {
   constructor(props) {

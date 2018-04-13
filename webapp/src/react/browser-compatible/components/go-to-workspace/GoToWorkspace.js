@@ -5,9 +5,9 @@ import Icon from 'Icon';
 import styles from './GoToWorkspace.swiss';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 
-const ToWorkspaceWrapper = styleElement('div', styles, 'ToWorkspaceWrapper');
-const ToWorkspace = styleElement(Link, styles, 'ToWorkspace');
-const SVG = styleElement(Icon, styles, 'SVG');
+const ToWorkspaceWrapper = styleElement('div', styles.ToWorkspaceWrapper);
+const ToWorkspace = styleElement(Link, styles.ToWorkspace);
+const SVG = styleElement(Icon, styles.SVG);
 
 class GoToWorkspace extends PureComponent {
 

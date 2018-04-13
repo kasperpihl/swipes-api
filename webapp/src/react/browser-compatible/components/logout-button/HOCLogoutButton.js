@@ -7,9 +7,9 @@ import RotateLoader from 'components/loaders/RotateLoader';
 import Icon from 'Icon';
 import styles from './LogoutButton.swiss';
 
-const LogoutButtonWrapper = styleElement('div', styles, 'LogoutButtonWrapper');
-const Label = styleElement('div', styles, 'Label');
-const Loader = styleElement('div', styles, 'Loader');
+const LogoutButtonWrapper = styleElement('div', styles.LogoutButtonWrapper);
+const Label = styleElement('div', styles.Label);
+const Loader = styleElement('div', styles.Loader);
 
 class HOCLogoutButton extends PureComponent {
   constructor(props) {

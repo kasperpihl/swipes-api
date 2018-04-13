@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   DownloadForDeviceWrapper: {
     _size: ['100%', 'auto'],
     marginTop: '24px',
@@ -43,4 +45,4 @@ export default {
     _font: ['12px', '$blue'],
     cursor: 'pointer',
   },
-}
+});

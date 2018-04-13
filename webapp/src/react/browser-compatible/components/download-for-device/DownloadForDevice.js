@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { styleElement } from 'react-swiss';
 import styles from './DownloadForDevice.swiss';
 
-const DownloadForDeviceWrapper = styleElement('div', styles, 'DownloadForDeviceWrapper');
-const Device = styleElement('a', styles, 'Device');
-const DeviceSVG = styleElement(Icon, styles, 'DeviceSVG');
-const AllDevices = styleElement('p', styles, 'AllDevices');
-const AllDevicesLink = styleElement(Link, styles, 'AllDevicesLink');
+const DownloadForDeviceWrapper = styleElement('div', styles.DownloadForDeviceWrapper);
+const Device = styleElement('a', styles.Device);
+const DeviceSVG = styleElement(Icon, styles.DeviceSVG);
+const AllDevices = styleElement('p', styles.AllDevices);
+const AllDevicesLink = styleElement(Link, styles.AllDevicesLink);
 
 const downloadLinks = {
   darwin: 'http://swipesapp.com/download-mac',

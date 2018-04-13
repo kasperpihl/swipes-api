@@ -3,13 +3,12 @@ import { styleElement } from 'react-swiss';
 import PropTypes from 'prop-types';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import Button from 'Button';
-
 import styles from './Confirmation.swiss';
 
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const Title = styleElement('div', styles, 'Title');
-const Message = styleElement('div', styles, 'Message');
-const Actions = styleElement('div', styles, 'Actions');
+const Wrapper = styleElement('div', styles.Wrapper);
+const Title = styleElement('div', styles.Title);
+const Message = styleElement('div', styles.Message);
+const Actions = styleElement('div', styles.Actions);
 
 class Confirmation extends Component {
   constructor(props) {

@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   CompatibleAssigneesWrapper: {
     _size: ['auto', '48px'],
     marginLeft: '15px',
@@ -35,4 +37,4 @@ export default {
     verticalAlign: 'middle',
     transform: 'translate(1px, 1px)',
   },
-}
+})

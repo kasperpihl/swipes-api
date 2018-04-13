@@ -4,8 +4,8 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import styles from './SwipesIntro.swiss';
 
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const Img = styleElement('img', styles, 'Img');
+const Wrapper = styleElement('div', styles.Wrapper);
+const Img = styleElement('img', styles.Img);
 
 const SwipesIntro = () => (
   <SWView 

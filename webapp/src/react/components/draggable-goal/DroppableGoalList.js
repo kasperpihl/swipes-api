@@ -2,10 +2,9 @@ import React, { PureComponent } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { styleElement } from 'react-swiss';
 import DraggableGoal from './DraggableGoal';
+import styles from './DroppableGoalList.swiss';
 
-const ListContainer = styleElement('div', {
-  _size: '100%',
-});
+const ListContainer = styleElement('div', styles.ListContainer);
 
 class DroppableGoalList extends PureComponent {
   render() {

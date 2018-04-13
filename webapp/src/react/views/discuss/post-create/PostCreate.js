@@ -8,17 +8,16 @@ import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput'
 import ReactTextarea from 'react-textarea-autosize';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-
 import styles from './PostCreate.swiss';
 
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const ComposerWrapper = styleElement('div', styles, 'ComposerWrapper');
-const TypeWrapper = styleElement('div', styles, 'TypeWrapper');
-const StyledACInput = styleElement(ACInput, styles, 'AutoCompleteInput');
-const ActionBar = styleElement('div', styles, 'ActionBar');
-const AssignSection = styleElement('div', styles, 'AssignSection');
-const AttachSection = styleElement('div', styles, 'AttachSection');
-const Seperator = styleElement('div', styles, 'Seperator');
+const Wrapper = styleElement('div', styles.Wrapper);
+const ComposerWrapper = styleElement('div', styles.ComposerWrapper);
+const TypeWrapper = styleElement('div', styles.TypeWrapper);
+const StyledACInput = styleElement(ACInput, styles.AutoCompleteInput);
+const ActionBar = styleElement('div', styles.ActionBar);
+const AssignSection = styleElement('div', styles.AssignSection);
+const AttachSection = styleElement('div', styles.AttachSection);
+const Seperator = styleElement('div', styles.Seperator);
 
 
 class PostCreate extends PureComponent {

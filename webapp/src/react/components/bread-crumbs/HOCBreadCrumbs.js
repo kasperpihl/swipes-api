@@ -9,11 +9,11 @@ import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 
 import styles from './BreadCrumbs.swiss';
 
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const Crumb = styleElement('div', styles, 'Crumb');
-const Title = styleElement('div', styles, 'Title');
-const Seperator = styleElement('div', styles, 'Seperator');
-const CrumbIcon = styleElement(Icon, styles, 'Icon');
+const Wrapper = styleElement('div', styles.Wrapper);
+const Crumb = styleElement('div', styles.Crumb);
+const Title = styleElement('div', styles.Title);
+const Seperator = styleElement('div', styles.Seperator);
+const CrumbIcon = styleElement(Icon, styles.Icon);
 
 class HOCBreadCrumbs extends Component {
   constructor(props) {

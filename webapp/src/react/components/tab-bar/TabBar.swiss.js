@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet('TabBar', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'top'],
@@ -32,4 +34,4 @@ export default {
       marginRight: '24px',
     }
   }
-}
+});

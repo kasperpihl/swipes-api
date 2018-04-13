@@ -3,14 +3,9 @@ import { createPortal } from 'react-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import { styleElement } from 'react-swiss';
+import styles from './DraggableGoal.swiss';
 
-const Wrapper = styleElement('div', {
-  _size: 'auto',
-  background: '$sw4',
-  borderRadius: '3px',
-  marginBottom: '3px',
-})
-
+const Wrapper = styleElement('div', styles.Wrapper);
 const _dragEl = document.getElementById('draggable');
 
 class DraggableGoal extends PureComponent {

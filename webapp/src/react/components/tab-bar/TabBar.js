@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styleElement } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
-
 import styles from './TabBar.swiss';
 
-styleElement.group('TabBar');
-const TabWrapper = styleElement('div', styles, 'Wrapper');
-const TabItem = styleElement('div', styles, 'Item');
-styleElement.groupEnd();
+const TabWrapper = styleElement('div', styles.Wrapper);
+const TabItem = styleElement('div', styles.Item);
 
 class TabBar extends Component {
   constructor(props) {

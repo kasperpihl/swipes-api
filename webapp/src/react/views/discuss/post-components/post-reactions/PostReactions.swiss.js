@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Container: {
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',
@@ -50,4 +52,4 @@ export default {
       color: '$red',
     }
   }
-}
+});

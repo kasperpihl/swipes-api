@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet('PlanList', {
   Wrapper: {
     _flex: ['column', 'center', 'top'],
   },
@@ -14,4 +16,4 @@ export default {
     borderTop: '1px solid $sw4',
 
   },
-}
+});

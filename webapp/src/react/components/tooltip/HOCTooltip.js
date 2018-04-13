@@ -5,13 +5,10 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import { map } from 'react-immutable-proptypes';
 import prefixAll from 'inline-style-prefixer/static';
-// import { fromJS } from 'immutable';
-
 import styles from './Tooltip.swiss';
 
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const Content = styleElement('div', styles, 'Content');
-
+const Wrapper = styleElement('div', styles.Wrapper);
+const Content = styleElement('div', styles.Content);
 const SPACING = 20;
 
 class HOCTooltip extends PureComponent {

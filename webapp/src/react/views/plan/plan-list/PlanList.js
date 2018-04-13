@@ -7,16 +7,12 @@ import TabBar from 'components/tab-bar/TabBar';
 import Icon from 'Icon';
 import Button from 'src/react/components/button/Button2';
 import PlanListItem from '../plan-components/plan-list-item/PlanListItem';
-// import HOCNoMilestone from './HOCNoMilestone';
 import InfoButton from 'components/info-button/InfoButton';
-
 import styles from './PlanList.swiss';
 
-styleElement.group('PlanList');
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const HeaderWrapper = styleElement('div', styles, 'HeaderWrapper');
-const Footer = styleElement('div', styles, 'Footer');
-styleElement.groupEnd();
+const Wrapper = styleElement('div', styles.Wrapper);
+const HeaderWrapper = styleElement('div', styles.HeaderWrapper);
+const Footer = styleElement('div', styles.Footer);
 
 class PlanList extends PureComponent {
   constructor(props) {

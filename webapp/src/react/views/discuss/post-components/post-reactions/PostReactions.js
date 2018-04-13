@@ -7,13 +7,12 @@ import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import AssigneeTooltip from 'components/assigning/AssigneeTooltip';
 import Icon from 'Icon';
-
 import styles from './PostReactions.swiss';
 
-const Container = styleElement('div', styles, 'Container');
-const HeartButton = styleElement('div', styles, 'HeartButton');
-const HeartSvg = styleElement(Icon, styles, 'HeartSvg');
-const LikeString = styleElement('div', styles, 'LikeString');
+const Container = styleElement('div', styles.Container);
+const HeartButton = styleElement('div', styles.HeartButton);
+const HeartSvg = styleElement(Icon, styles.HeartSvg);
+const LikeString = styleElement('div', styles.LikeString);
 
 class Reactions extends PureComponent {
   constructor(props) {

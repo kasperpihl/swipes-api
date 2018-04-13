@@ -3,7 +3,7 @@ import { styleElement } from 'react-swiss';
 import Icon from 'Icon';
 import styles from './CompatibleButton.swiss';
 
-const ATag = styleElement('div', styles, 'ATag');
+const ATag = styleElement('div', styles.ATag);
 
 const CompatibleButton = (props) => {
   const {

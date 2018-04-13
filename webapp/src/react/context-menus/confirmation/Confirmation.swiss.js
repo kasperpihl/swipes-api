@@ -1,5 +1,8 @@
+import { styleSheet } from 'react-swiss';
+
 const containerWidth = '390px';
-export default {
+
+export default styleSheet({
   Wrapper: {
     _size: [containerWidth, 'auto'],
     background: '$sw5',
@@ -24,5 +27,4 @@ export default {
       marginLeft: '15px',
     }
   }
-}
-
+});

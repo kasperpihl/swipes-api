@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { styleElement } from 'react-swiss';
 import styles from './CompatibleSubHeader.swiss';
 
-const CompatibleSubHeaderWrapper = styleElement('h4', styles, 'CompatibleSubHeaderWrapper');
+const CompatibleSubHeaderWrapper = styleElement('h4', styles.CompatibleSubHeaderWrapper);
 
 const CompatibleSubHeader = (props) => {
   const {

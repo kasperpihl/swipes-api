@@ -4,8 +4,8 @@ import { styleElement } from 'react-swiss';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
 import styles from './CompatibleHeader.swiss';
 
-const HeaderWrapper = styleElement('div', styles, 'HeaderWrapper');
-const TitleContainer = styleElement('div', styles, 'TitleContainer');
+const HeaderWrapper = styleElement('div', styles.HeaderWrapper);
+const TitleContainer = styleElement('div', styles.TitleContainer);
 
 const CompatibleHeader = (props) => {
   const {

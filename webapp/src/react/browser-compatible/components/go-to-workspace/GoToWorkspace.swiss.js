@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   ToWorkspaceWrapper: {
     _size: ['100%', 'auto'],
   },
@@ -35,4 +37,4 @@ export default {
       transition: '.35s ease',
     }
   }
-}
+});

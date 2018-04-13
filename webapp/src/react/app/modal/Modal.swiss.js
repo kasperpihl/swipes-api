@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Container: {
     _size: '100%',
     position: 'absolute',
@@ -30,4 +32,4 @@ export default {
       borderBottom: '1px solid $sw4',
     },
   },
-}
+});

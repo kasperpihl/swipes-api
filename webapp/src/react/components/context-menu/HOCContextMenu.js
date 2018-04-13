@@ -6,11 +6,10 @@ import * as a from 'actions';
 import Measure from 'react-measure';
 import { debounce, bindAll } from 'swipes-core-js/classes/utils';
 import prefixAll from 'inline-style-prefixer/static';
-
 import styles from './ContextMenu.swiss';
 
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const Content = styleElement('div', styles, 'Content');
+const Wrapper = styleElement('div', styles.Wrapper);
+const Content = styleElement('div', styles.Content);
 
 class HOCContextMenu extends PureComponent {
   constructor(props) {

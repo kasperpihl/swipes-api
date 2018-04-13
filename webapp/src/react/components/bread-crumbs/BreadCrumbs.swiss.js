@@ -1,6 +1,8 @@
+import { styleSheet } from 'react-swiss';
+
 const navbarH = '48px';
 
-export default {
+export default styleSheet({
   Wrapper: {
     _size: ['100%', navbarH],
     _flex: '',
@@ -44,4 +46,4 @@ export default {
       },
     }
   },
-}
+});

@@ -3,10 +3,10 @@ import { styleElement } from 'react-swiss';
 import Icon from 'Icon';
 import styles from './PostAttachment.swiss';
 
-const ATag = styleElement('a', styles, 'ATag');
-const Text = styleElement('div', styles, 'Text');
-const IconContainer = styleElement('div', styles, 'IconContainer');
-const IconComp = styleElement(Icon, styles, 'Icon');
+const ATag = styleElement('a', styles.ATag);
+const Text = styleElement('div', styles.Text);
+const IconContainer = styleElement('div', styles.IconContainer);
+const IconComp = styleElement(Icon, styles.Icon);
 
 class PostAttachment extends PureComponent {
   constructor(props) {

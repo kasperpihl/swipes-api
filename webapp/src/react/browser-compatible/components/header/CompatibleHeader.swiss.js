@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   HeaderWrapper: {
     _size: ['100%', 'auto'],
     '& .center': {
@@ -31,4 +33,4 @@ export default {
       },
     },
   },
-}
+})

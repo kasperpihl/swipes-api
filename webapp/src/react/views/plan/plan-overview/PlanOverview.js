@@ -8,21 +8,18 @@ import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import InfoButton from 'components/info-button/InfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
 import { styleElement } from 'react-swiss';
-
 import styles from './PlanOverview.swiss';
 
-styleElement.group('PlanOverview');
-const Wrapper = styleElement('div', styles, 'Wrapper');
-const Footer = styleElement('div', styles, 'Footer');
-const Title = styleElement('div', styles, 'Title');
-const Section = styleElement('div', styles, 'Section');
-const SectionTitle = styleElement('div', styles, 'SectionTitle');
-const Text = styleElement('div', styles, 'Text');
-const Spacer = styleElement('div', styles, 'Spacer');
-const EmptyStateWrapper = styleElement('div', styles, 'EmptyStateWrapper');
-const DroppableWrapper = styleElement('div', styles, 'DroppableWrapper');
-const TabWrapper = styleElement('div', styles, 'TabWrapper');
-styleElement.groupEnd();
+const Wrapper = styleElement('div', styles.Wrapper);
+const Footer = styleElement('div', styles.Footer);
+const Title = styleElement('div', styles.Title);
+const Section = styleElement('div', styles.Section);
+const SectionTitle = styleElement('div', styles.SectionTitle);
+const Text = styleElement('div', styles.Text);
+const Spacer = styleElement('div', styles.Spacer);
+const EmptyStateWrapper = styleElement('div', styles.EmptyStateWrapper);
+const DroppableWrapper = styleElement('div', styles.DroppableWrapper);
+const TabWrapper = styleElement('div', styles.TabWrapper);
 
 class PlanOverview extends PureComponent {
   constructor(props) {

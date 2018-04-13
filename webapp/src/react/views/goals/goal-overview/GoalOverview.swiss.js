@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   Footer: {
     _size: ['100%', '54px'],
     borderTop: '1px solid $sw4',
@@ -14,4 +16,4 @@ export default {
   Spacer: {
     width: '100%',
   },
-}
+});

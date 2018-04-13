@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   LogoutButtonWrapper: {
     _size: ['auto', '36px'],
     _borderRadius: '18px',
@@ -31,4 +33,4 @@ export default {
       display: 'block',
     }
   }
-}
+})

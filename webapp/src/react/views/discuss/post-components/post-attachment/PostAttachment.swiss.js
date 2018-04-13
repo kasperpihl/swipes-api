@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   ATag: {
     background: '$sw4',
     maxWidth: '200px',
@@ -56,4 +58,4 @@ export default {
       }
     }
   }
-}
+});

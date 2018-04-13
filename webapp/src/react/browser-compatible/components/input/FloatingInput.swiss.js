@@ -1,4 +1,6 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   FloatingInputWrapper: {
     _size: ['100%', 'auto'],
     padding: '15px 0',
@@ -47,4 +49,4 @@ export default {
       }
     }
   }
-}
+})
