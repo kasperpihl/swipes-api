@@ -5,18 +5,17 @@ export default styleSheet({
     _size: ['100%', 'auto'],
     padding: '15px 0',
     paddingBottom: '0',
-    '& input': {
+    '& > input': {
       _size: ['inherit', 'auto'],
       _font: ['16px', '27px', '400'],
-      lineHeight: '16px',
       color: '$sw1',
       backgroundColor: 'transparent',
       border: 'none',
-      borderBotton: '1px solid $sw4',
+      borderBottom: '1px solid $sw4',
       padding: '5px 0',
       paddingTop: '27px',
       transition: '.2s ease-in-out',
-      '& focus': {
+      '&:focus': {
         outline: 'none',
       },
       '& label': {

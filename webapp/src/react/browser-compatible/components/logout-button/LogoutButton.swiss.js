@@ -11,9 +11,11 @@ export default styleSheet({
     loading: {
       border: 'none',
     },
-    '&:hover': {
-      backgroundColor: '$sw3',
-      transition: '.2s ease',
+    '!loading': {
+      '&:hover': {
+        backgroundColor: '$sw3',
+        transition: '.2s ease',
+      }
     }
   },
   Label: {
