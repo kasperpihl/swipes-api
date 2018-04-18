@@ -29,7 +29,7 @@ class HOCDownloadApp extends PureComponent {
 
     return (
       <div className="download-app">
-        For the best experience we recommend you to <Link to="/download" className="download-app__link"> download a desktop app</Link>
+        For the best experience we recommend you to <Link to="/download" className="download-app__link"> download our desktop app</Link>
         <div className="download-app__close-btn" onClick={this.closeToolbar}>
           <Icon icon="Close" className="download-app__svg" />
         </div>

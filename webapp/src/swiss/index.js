@@ -10,3 +10,5 @@ import './mixins/_svgColor';
 import './mixins/_truncateString';
 import './mixins/_alignAbsolute';
 import './mixins/_borderRadius';
+
+import './global-styles/default-draft-styles';

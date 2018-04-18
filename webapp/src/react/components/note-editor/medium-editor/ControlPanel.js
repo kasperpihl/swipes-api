@@ -68,7 +68,6 @@ class ControlPanel extends Component {
       this.addLink();
     }
     if (e.keyCode === 27) {
-      console.log('up', e.keyCode);
       this.setState({ showInput: false });
       this.onFocus();
     }

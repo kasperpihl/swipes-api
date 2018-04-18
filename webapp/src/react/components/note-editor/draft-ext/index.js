@@ -17,6 +17,7 @@ const standardIterators = [
   'onEsc',
   'onTab',
   'onUpArrow',
+  'onBlur',
 ];
 
 const generateBlockRenderMaps = (blocks) => {
@@ -29,7 +30,7 @@ const generateBlockRenderMaps = (blocks) => {
   return renderMap;
 };
 
-export default function Setup(ctx, plugins) {
+export default function Setup(ctx, plugins = {}) {
   const subscriber = new Subscriber();
   if (typeof ctx !== 'object') {
     return console.warn('DraftExt: First argument (ctx) must be an object');
@@ -85,6 +86,6 @@ export default function Setup(ctx, plugins) {
     },
   };
   standardIterators.forEach((n) => { obj.bind[n] = createPluginIterator(n); });
-  obj.bind.blockRenderMap = generateBlockRenderMaps(plugins.blocks);
+  obj.bind.blockRenderMap = generateBlockRenderMaps(plugins.blocks || []);
   return obj;
 }

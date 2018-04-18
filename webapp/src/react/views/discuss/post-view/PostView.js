@@ -3,7 +3,6 @@ import { styleElement } from 'react-swiss';
 import { setupDelegate, URL_REGEX, attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
 import { List } from 'immutable';
 import SWView from 'SWView';
-import { MentionsInput, Mention } from 'react-mentions';
 import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import PostCommentInput from '../post-components/post-comment-input/PostCommentInput';
 import CommentView from './CommentView';
@@ -19,17 +18,13 @@ const PostMessage = styleElement('div', styles.PostMessage);
 const PostActions = styleElement('div', styles.PostActions);
 const ActionSpacer = styleElement('div', styles.ActionSpacer);
 const PostAttachments = styleElement('div', styles.PostAttachments);
-const StyledMentions = styleElement(MentionsInput, {
-  width: '100%',
-});
+
 const MAX_COMMENTS_FEED = 3;
 
 class PostView extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      text: '<!U1234|Kasper>'
-    };
+    this.state = {};
 
     setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick', 'onContextClick');
   }
@@ -155,13 +150,15 @@ class PostView extends PureComponent {
   }
   renderCommentInput() {
     const { delegate, myId, post } = this.props;
-    const { forceInput, text } = this.state;
+    const { forceInput } = this.state;
 
     if(post.get('comments').size || forceInput) {
 
       return (
         <PostCommentInput
           myId={myId}
+          postId={post.get('id')}
+          autoFocus={forceInput}
           delegate={delegate}
         />
       )

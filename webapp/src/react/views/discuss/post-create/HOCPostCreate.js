@@ -28,9 +28,9 @@ class HOCPostCreate extends PureComponent {
     const savedState = props.savedState && props.savedState.get('post');
 
     this.state = {
+      editorState: null,
       post: savedState || fromJS({
         message: props.message || '',
-        type: props.type || 'post',
         attachments: props.attachments || [],
         taggedUsers: props.taggedUsers || [],
         context: props.context || null,
@@ -49,8 +49,6 @@ class HOCPostCreate extends PureComponent {
     if(!post.get('taggedUsers').contains(item.id)) {
       post = post.updateIn(['taggedUsers'], (taggedUsers) => taggedUsers.push(item.id));
     }
-    const msgArr = post.get('message').split('@');
-    post = post.set('message', msgArr.slice(0, -1).join('@'));
     this.updatePost(post);
   }
   onAttachmentClick(i) {
@@ -130,7 +128,11 @@ class HOCPostCreate extends PureComponent {
 
   onPostClick(e) {
     const { createPost, navPop, hideModal } = this.props;
-    const { post } = this.state;
+    let { post } = this.state;
+    if(!this.editorState) return;
+    const message = this.editorState.getCurrentContent().getPlainText();
+    if(!message.length) return;
+    post = post.set('message', message);
     this.setLoading('post');
 
     createPost(convertObjToUnderscore(post.toJS())).then((res) => {
@@ -143,21 +145,17 @@ class HOCPostCreate extends PureComponent {
           }
         });
         window.analytics.sendEvent('Post created', {
-          'Type': post.get('type'),
           'Tagged people': post.get('taggedUsers').size,
           'Attachments': post.get('attachments').size,
           'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
         });
       } else {
-        this.clearLoading('post', '!Something went wrong');
+        this.clearLoading('post', '!Error', 3000);
       }
     })
   }
-  onMessageChange(e) {
-    let { post } = this.state;
-    post = post.set('message', e.target.value);
-
-    this.updatePost(post);
+  onMessageChange(editorState) {
+    this.editorState = editorState;
   }
   onAttachButtonCloseOverlay() {
     this.onFocus();

@@ -14,7 +14,7 @@ import DefaultBlocks from './blocks/default/DefaultBlocks';
 import MediumEditor from './medium-editor/MediumEditor';
 import DraftExt from './draft-ext';
 
-import './styles/note-editor.scss';
+// import './styles/note-editor.scss';
 
 class NoteEditor extends Component {
   constructor(props) {

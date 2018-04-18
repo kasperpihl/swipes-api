@@ -4,7 +4,7 @@ import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Button from 'src/react/components/button/Button2';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
-import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
+import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput2';
 import ReactTextarea from 'react-textarea-autosize';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
@@ -13,7 +13,6 @@ import styles from './PostCreate.swiss';
 const Wrapper = styleElement('div', styles.Wrapper);
 const ComposerWrapper = styleElement('div', styles.ComposerWrapper);
 const TypeWrapper = styleElement('div', styles.TypeWrapper);
-const StyledACInput = styleElement(ACInput, styles.AutoCompleteInput);
 const ActionBar = styleElement('div', styles.ActionBar);
 const AssignSection = styleElement('div', styles.AssignSection);
 const AttachSection = styleElement('div', styles.AttachSection);
@@ -23,12 +22,7 @@ const Seperator = styleElement('div', styles.Seperator);
 class PostCreate extends PureComponent {
   constructor(props) {
     super(props)
-    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign', 'onAttachmentClick', 'onContextClick', 'onAttachmentClose', 'onContextClose');
-    this.acOptions = {
-      types: ['users'],
-      delegate: props.delegate,
-      trigger: "@",
-    }
+    setupDelegate(this, 'onPostClick', 'onMessageChange', 'onAssign', 'onAttachmentClick', 'onContextClick', 'onAttachmentClose', 'onContextClose', 'onAutoCompleteSelect');
   }
   renderContext() {
     const { post } = this.props;
@@ -115,17 +109,11 @@ class PostCreate extends PureComponent {
             rounded
             size={30}
           />
-          <StyledACInput
-            nodeType={ReactTextarea}
-            innerRef={(c) => { this.input = c; }}
-            value={post.get('message')}
-            minRows={3}
-            maxRows={17}
+          <ACInput
+            wrapperRef={(c) => { this.input = c; }}
             onChange={this.onMessageChange}
             placeholder={placeholder}
-            autoFocus
-            onSelect={e => console.log(e)}
-            options={this.acOptions}
+            onAutoCompleteSelect={this.onAutoCompleteSelect}
           />
         </ComposerWrapper>
         {this.renderActionBar()}

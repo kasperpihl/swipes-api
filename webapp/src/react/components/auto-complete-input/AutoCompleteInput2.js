@@ -7,21 +7,11 @@ import {
   getDefaultKeyBinding,
   EditorState,
   Modifier,
-  SelectionState,
   getVisibleSelectionRect,
 } from 'draft-js';
 import DraftExt from 'src/react/components/note-editor/draft-ext';
 import Mention from './Mention';
-
-const styles = {
-  Wrapper: {
-    _flex: ['row', 'center', 'center'],
-    padding: '10px',
-    '& .DraftEditor-root': {
-      width: '100%',
-    }
-  },
-};
+import styles from './AutoCompleteInput.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 
@@ -43,8 +33,8 @@ class Tester extends PureComponent {
     return this.state.editorState;
   }
   setEditorState(editorState) {
-    this.setState({ editorState });
     this.handleAutoComplete(editorState);
+    this.setState({ editorState });
     if(this.props.onChange) {
       this.props.onChange(editorState);
     }
@@ -89,6 +79,10 @@ class Tester extends PureComponent {
     editorState = EditorState.acceptSelection(editorState, selection);
     
     this.setState({ editorState });
+
+    if(this.props.onAutoCompleteSelect){
+      this.props.onAutoCompleteSelect(item);
+    }
   }
   handleAutoComplete(editorState) {
     const { search, clear, string } = this.props;
@@ -127,6 +121,9 @@ class Tester extends PureComponent {
     if(results) {
       return 'handled';
     }
+    if(this.props.onReturn) {
+      return this.props.onReturn(e);
+    }
   }
   onBlur() {
     this.props.clear();
@@ -135,12 +132,18 @@ class Tester extends PureComponent {
     return getDefaultKeyBinding(e);
   }
   render() {
+    const {
+      wrapperRef,
+      editorRef,
+      className,
+      placeholder,
+    } = this.props;
     return (
-      <Wrapper>
+      <Wrapper ref={wrapperRef} className={className}>
         <Editor
-          ref="editor"
+          ref={editorRef}
           editorState={this.state.editorState}
-          placeholder="Write what's on your mind"
+          placeholder={placeholder}
           {...this.plugins.bind}
         />
       </Wrapper>

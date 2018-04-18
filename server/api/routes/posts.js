@@ -50,7 +50,6 @@ authed.all(
   valBody({
     organization_id: string.require(),
     message: string.min(1).require(),
-    type: string.require(),
     attachments: array.of(object),
     tagged_users: array.of(string),
     context: object.as({
