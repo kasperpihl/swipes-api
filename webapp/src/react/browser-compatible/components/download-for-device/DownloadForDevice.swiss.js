@@ -21,7 +21,7 @@ export default styleSheet({
       padding: '0',
       transition: '.35s ease',
     },
-    '&hover': {
+    '&:hover': {
       backgroundColor: '$blue20',
       paddingTop: '9px',
       transition: '.35s ease',
