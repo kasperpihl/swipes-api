@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
-import { map } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Onboarding from './Onboarding';
 
@@ -85,24 +82,12 @@ class HOCOnboarding extends PureComponent {
   }
 }
 
-const { func } = PropTypes;
-
-HOCOnboarding.propTypes = {
-  onboarding: map,
-  userOnboarding: map,
-  complete : func,
-};
-
-function mapStateToProps(state) {
-  return {
-    me: state.get('me'),
-    hasOrg: state.getIn(['me', 'has_organization']),
-    onboarding: state.get('onboarding'),
-    userOnboarding: state.getIn(['me', 'settings', 'onboarding']),
-  };
-}
-
-export default connect(mapStateToProps, {
+export default connect(state => ({
+  me: state.get('me'),
+  hasOrg: state.getIn(['me', 'has_organization']),
+  onboarding: state.get('onboarding'),
+  userOnboarding: state.getIn(['me', 'settings', 'onboarding']),
+}), {
   complete: ca.onboarding.complete,
   browser: mainActions.browser,
 })(navWrapper(HOCOnboarding));

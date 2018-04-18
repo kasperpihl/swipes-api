@@ -65,17 +65,10 @@ class HOCBilling extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCBilling.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    organization: state.getIn(['me', 'organizations', 0]),
-    users: cs.users.getAllButSofi(state),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(state => ({
+  organization: state.getIn(['me', 'organizations', 0]),
+  users: cs.users.getAllButSofi(state),
+}), {
   createStripeCustomer: ca.organizations.createStripeCustomer,
 })(HOCBilling));

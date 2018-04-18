@@ -99,8 +99,6 @@ class HOCPostFeed extends PureComponent {
   }
 }
 
-// const { string } = PropTypes;
-HOCPostFeed.propTypes = {};
 const makeMapStateToProps = () => {
   const getFilteredList = cs.posts.makeGetFilteredList();
   const getRelatedList = cs.posts.makeGetRelatedList();
@@ -110,5 +108,4 @@ const makeMapStateToProps = () => {
   });
 }
 
-export default navWrapper(connect(makeMapStateToProps, {
-})(HOCPostFeed));
+export default navWrapper(connect(makeMapStateToProps)(HOCPostFeed));

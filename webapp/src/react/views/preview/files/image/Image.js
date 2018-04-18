@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import './styles/image';
 
 class Image extends Component {
@@ -35,11 +34,3 @@ class Image extends Component {
 }
 
 export default Image;
-
-const { object, func } = PropTypes;
-
-Image.propTypes = {
-  file: object,
-  onError: func,
-  onLoad: func,
-};

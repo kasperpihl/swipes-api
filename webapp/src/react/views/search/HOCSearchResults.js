@@ -10,7 +10,6 @@ import SearchResult from './SearchResult';
 class HOCSearchResults extends PureComponent {
   constructor(props) {
     super(props);
-    // setupLoading(this);
     setupDelegate(this, 'willOpenResult');
   }
   onClick(id, res) {
@@ -75,15 +74,8 @@ class HOCSearchResults extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCSearchResults.propTypes = {};
 
-function mapStateToProps(state, props) {
-  return {
-    results: cs.global.search(state, props),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
-})(HOCSearchResults));
+export default navWrapper(connect(state => ({
+  results: cs.global.search(state, props),
+}))(HOCSearchResults));

@@ -117,8 +117,4 @@ class DownloadForDevice extends PureComponent {
   }
 }
 
-export default DownloadForDevice
-
-// const { string } = PropTypes;
-
-DownloadForDevice.propTypes = {};
+export default DownloadForDevice;

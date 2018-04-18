@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
@@ -323,28 +321,10 @@ class HOCGoalOverview extends PureComponent {
   }
 }
 
-const { func } = PropTypes;
-
-HOCGoalOverview.propTypes = {
-  goal: map,
-  confirm: func,
-  me: map,
-  navPop: func,
-  inputMenu: func,
-  archive: func,
-  openSecondary: func,
-  renameGoal: func,
-  contextMenu: func,
-};
-
-function mapStateToProps(state, ownProps) {
-  return {
-    goal: state.getIn(['goals', ownProps.goalId]),
-    me: state.get('me'),
-  };
-}
-
-export default connect(mapStateToProps, {
+export default connect((state, props) => ({
+  goal: state.getIn(['goals', props.goalId]),
+  me: state.get('me'),
+}), {
   archive: ca.goals.archive,
   contextMenu: mainActions.contextMenu,
   assignGoal: ca.goals.assign,

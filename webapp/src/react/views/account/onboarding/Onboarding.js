@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { list } from 'react-immutable-proptypes';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -108,10 +106,3 @@ class Onboarding extends PureComponent {
 }
 
 export default Onboarding;
-
-const { object } = PropTypes;
-
-Onboarding.propTypes = {
-  delegate: object,
-  items: list,
-};

@@ -10,9 +10,7 @@ import './styles/search-result.scss';
 class SearchResult extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
     setupDelegate(this, 'onClick');
-    // this.callDelegate.bindAll('onLala');
   }
   getTitle() {
     const { result } = this.props;
@@ -49,8 +47,4 @@ class SearchResult extends PureComponent {
   }
 }
 
-export default SearchResult
-
-// const { string } = PropTypes;
-
-SearchResult.propTypes = {};
+export default SearchResult;

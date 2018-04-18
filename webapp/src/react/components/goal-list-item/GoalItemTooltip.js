@@ -1,17 +1,7 @@
-import React, { PureComponent } from 'react';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import React from 'react';
 
-class GoalItemTooltip extends PureComponent {
-  render() {
-    return (
-      <div className="goal-item-tooltip" key={this.props.goalId}>{this.props.tooltipText}</div>
-    );
-  }
-}
-
-export default GoalItemTooltip;
-
-// const { string } = PropTypes;
-
-GoalItemTooltip.propTypes = {};
+export default (props) => (
+  <div className="goal-item-tooltip" key={this.props.goalId}>
+    {this.props.tooltipText}
+  </div>
+);

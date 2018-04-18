@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import PDFViewer from './PDFViewer';
 
 class PDF extends Component {
@@ -21,11 +20,3 @@ class PDF extends Component {
 }
 
 export default PDF;
-
-const { object, func } = PropTypes;
-
-PDF.propTypes = {
-  file: object,
-  onLoad: func,
-  onError: func,
-};

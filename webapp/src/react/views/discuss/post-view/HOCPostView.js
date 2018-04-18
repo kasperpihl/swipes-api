@@ -57,9 +57,9 @@ class HOCPostView extends PureComponent {
 }
 
 
-export default navWrapper(connect((state, ownProps) => ({
+export default navWrapper(connect((state, props) => ({
   myId: state.getIn(['me', 'id']),
-  post: state.getIn(['posts', ownProps.postId]),
+  post: state.getIn(['posts', props.postId]),
 }), {
   openSecondary: navigationActions.openSecondary,
   preview: linkActions.preview,

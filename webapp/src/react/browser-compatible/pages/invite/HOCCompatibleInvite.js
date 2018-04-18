@@ -89,15 +89,11 @@ class HOCCompatibleInvite extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCCompatibleInvite.propTypes = {};
 
-const mapStateToProps = (state) => ({
+export default connect(state => ({
   isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
   readyInOrg: state.getIn(['connection', 'readyInOrg']),
-});
-
-export default connect(mapStateToProps, {
+}), {
   sendInvite: ca.organizations.inviteUser,
 })(HOCCompatibleInvite);

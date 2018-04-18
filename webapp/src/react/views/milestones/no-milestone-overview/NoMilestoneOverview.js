@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
-
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 
 import Icon from 'Icon';
-// import './styles/NoMilestoneOverview.scss';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 import './styles/no-milestone-overview.scss';
@@ -95,8 +92,4 @@ class NoMilestoneOverview extends PureComponent {
   }
 }
 
-export default NoMilestoneOverview
-
-// const { string } = PropTypes;
-
-NoMilestoneOverview.propTypes = {};
+export default NoMilestoneOverview;

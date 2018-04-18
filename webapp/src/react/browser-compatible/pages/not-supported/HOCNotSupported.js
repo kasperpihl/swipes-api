@@ -57,16 +57,11 @@ class HOCNotSupported extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCNotSupported.propTypes = {};
-
-const mapStateToProps = (state) => ({
+export default connect(state => ({
   me: state.get('me'),
   organization: state.getIn(['me', 'organizations', 0]),
-});
-
-export default connect(mapStateToProps, {
+}), {
   confirm: menuActions.confirm,
   deleteOrg: ca.organizations.deleteOrg,
   leaveOrg: ca.organizations.leave,

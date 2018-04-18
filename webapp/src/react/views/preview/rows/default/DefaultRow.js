@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import Icon from 'Icon';
-// import { map, list } from 'react-immutable-proptypes';
 
 import './styles/default-row.scss';
 
@@ -60,12 +58,3 @@ class DefaultRow extends PureComponent {
 }
 
 export default DefaultRow;
-
-const { string, object, func, bool } = PropTypes;
-
-DefaultRow.propTypes = {
-  leftIcon: object,
-  title: string,
-  onClick: func,
-  secondary: bool,
-};

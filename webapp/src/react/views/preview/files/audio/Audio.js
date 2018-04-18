@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import './styles/audio';
 
@@ -36,11 +35,3 @@ class Audio extends Component {
 }
 
 export default Audio;
-
-const { object, func } = PropTypes;
-
-Audio.propTypes = {
-  file: object,
-  onError: func,
-  onLoad: func,
-};

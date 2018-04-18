@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
@@ -170,7 +168,3 @@ class CompatibleDownload extends PureComponent {
 }
 
 export default CompatibleDownload;
-
-// const { string } = PropTypes;
-
-CompatibleDownload.propTypes = {};

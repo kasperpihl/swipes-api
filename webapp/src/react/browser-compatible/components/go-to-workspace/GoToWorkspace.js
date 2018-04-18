@@ -27,7 +27,3 @@ class GoToWorkspace extends PureComponent {
 }
 
 export default GoToWorkspace;
-
-// const { string } = PropTypes;
-
-GoToWorkspace.propTypes = {};

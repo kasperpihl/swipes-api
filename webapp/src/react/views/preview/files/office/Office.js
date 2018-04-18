@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { bindAll } from 'swipes-core-js/classes/utils';
 
 import './styles/office.scss';
 
@@ -31,11 +29,3 @@ class Office extends PureComponent {
 }
 
 export default Office;
-
-const { object, func } = PropTypes;
-
-Office.propTypes = {
-  file: object,
-  onError: func,
-  onLoad: func,
-};

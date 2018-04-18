@@ -44,10 +44,8 @@ class HOCModal extends PureComponent {
   }
 }
 
-const mapStateToProps = (state, props) => ({
+export default connect((state, props) => ({
   modal: state.getIn(['main', 'modals', props.target]),
-})
-
-export default connect(mapStateToProps, {
+}), {
   clear: mainActions.modal,
 })(HOCModal);

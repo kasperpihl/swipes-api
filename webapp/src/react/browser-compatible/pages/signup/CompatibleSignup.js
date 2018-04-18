@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-// import { map, list } from 'react-immutable-proptypes';
+
 import Icon from 'Icon';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
@@ -108,7 +108,3 @@ class CompatibleSignup extends PureComponent {
 }
 
 export default CompatibleSignup;
-
-// const { string } = PropTypes;
-
-CompatibleSignup.propTypes = {};

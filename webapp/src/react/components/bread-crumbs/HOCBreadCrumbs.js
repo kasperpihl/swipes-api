@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
-import { list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
@@ -62,20 +60,8 @@ class HOCBreadCrumbs extends Component {
   }
 }
 
-const { func, string } = PropTypes;
-
-HOCBreadCrumbs.propTypes = {
-  target: string.isRequired,
-  history: list,
-  pop: func,
-};
-
-function mapStateToProps(state, ownProps) {
-  return {
-    history: state.getIn(['navigation', ownProps.target, 'stack']),
-  };
-}
-
-export default connect(mapStateToProps, {
+export default connect((state, props) => ({
+  history: state.getIn(['navigation', props.target, 'stack']),
+}), {
   pop: navigationActions.pop,
 })(HOCBreadCrumbs);

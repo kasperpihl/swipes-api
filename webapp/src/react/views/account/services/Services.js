@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { bindAll, queryStringToObject } from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
@@ -144,27 +142,10 @@ class Services extends Component {
   }
 }
 
-const { func, string } = PropTypes;
-
-Services.propTypes = {
-  disconnectService: func,
-  popSecondary: func,
-  target: string,
-  myServices: list,
-  confirm: func,
-  browser: func,
-  handleOAuthSuccess: func,
-  services: map,
-};
-
-function mapStateToProps(state) {
-  return {
-    services: state.get('services'),
-    myServices: state.getIn(['me', 'services']),
-  };
-}
-
-const ConnectedServices = navWrapper(connect(mapStateToProps, {
+const ConnectedServices = navWrapper(connect(state => ({
+  services: state.get('services'),
+  myServices: state.getIn(['me', 'services']),
+}), {
   browser: mainActions.browser,
   handleOAuthSuccess: ca.me.handleOAuthSuccess,
   disconnectService: ca.me.disconnectService,

@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
@@ -8,7 +7,6 @@ import * as ca from 'swipes-core-js/actions';
 import { setupDelegate } from 'react-delegate';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import { map } from 'react-immutable-proptypes';
 import StepList from './StepList';
 
 class HOCStepList extends PureComponent {
@@ -214,20 +212,3 @@ export default connect((state, oP) => ({
   renameStep: ca.steps.rename,
   assignStep: ca.steps.assign,
 })(HOCStepList);
-
-const { string, object, func, bool } = PropTypes;
-
-HOCStepList.propTypes = {
-  goal: map,
-  completeStep: func,
-  addStep: func,
-  renameStep: func,
-  removeStep: func,
-  confirm: func,
-  myId: string,
-  editMode: bool,
-  tooltip: func,
-  delegate: object,
-  selectAssignees: func,
-  assignStep: func,
-};

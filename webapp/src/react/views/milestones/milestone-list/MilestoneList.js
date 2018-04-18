@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import Button from 'Button';
@@ -108,7 +106,3 @@ class MilestoneList extends PureComponent {
 }
 
 export default MilestoneList;
-
-// const { string } = PropTypes;
-
-MilestoneList.propTypes = {};

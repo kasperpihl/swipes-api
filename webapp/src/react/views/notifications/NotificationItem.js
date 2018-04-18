@@ -1,12 +1,7 @@
 import React, { PureComponent } from 'react'
-
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
-// import SWView from 'SWView';
-
-// import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
 import './styles/notification-item.scss';
 
@@ -54,6 +49,4 @@ class NotificationItem extends PureComponent {
   }
 }
 
-export default NotificationItem
-// const {string} = PropTypes;
-NotificationItem.propTypes = {};
+export default NotificationItem;

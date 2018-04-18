@@ -91,8 +91,4 @@ class CompatibleLogin extends PureComponent {
   }
 }
 
-export default CompatibleLogin
-
-// const { string } = PropTypes;
-
-CompatibleLogin.propTypes = {};
+export default CompatibleLogin;

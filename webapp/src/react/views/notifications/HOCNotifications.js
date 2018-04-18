@@ -69,14 +69,9 @@ class HOCNotifications extends PureComponent {
   }
 }
 
-// const { string } = PropTypes;
-HOCNotifications.propTypes = {};
-function mapStateToProps(state) {
-  return {
-    notifications: state.get('notifications'),
-  };
-}
-export default connect(mapStateToProps, {
+export default connect(state => ({
+  notifications: state.get('notifications'),
+}), {
   openSecondary: navigationActions.openSecondary,
   markNotifications: ca.notifications.mark,
   setLastReadTs: ca.notifications.setLastReadTs,

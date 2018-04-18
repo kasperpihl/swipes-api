@@ -1,9 +1,5 @@
 import React, { PureComponent } from 'react';
-
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
 
 import { Link } from 'react-router-dom';
 import Icon from 'Icon';
@@ -73,8 +69,4 @@ class NotSupported extends PureComponent {
   }
 }
 
-export default NotSupported
-
-// const { string } = PropTypes;
-
-NotSupported.propTypes = {};
+export default NotSupported;

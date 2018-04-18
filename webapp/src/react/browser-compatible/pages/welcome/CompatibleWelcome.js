@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
 
-// import { map, list } from 'react-immutable-proptypes';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
 
 import Icon from 'Icon';
 import styles from  './styles/compatible-welcome.scss';
@@ -132,8 +130,4 @@ class CompatibleWelcome extends PureComponent {
   }
 }
 
-export default CompatibleWelcome
-
-// const { string } = PropTypes;
-
-CompatibleWelcome.propTypes = {};
+export default CompatibleWelcome;

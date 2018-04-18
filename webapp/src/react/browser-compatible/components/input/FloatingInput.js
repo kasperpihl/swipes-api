@@ -67,7 +67,3 @@ class FloatingInput extends PureComponent {
 }
 
 export default FloatingInput;
-
-// const { string } = PropTypes;
-
-FloatingInput.propTypes = {};

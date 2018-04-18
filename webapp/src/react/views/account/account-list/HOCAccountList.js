@@ -95,17 +95,10 @@ class HOCAccountList extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCAccountList.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    me: state.get('me'),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(state => ({
+  me: state.get('me'),
+}), {
   signout: mainActions.signout,
   browser: mainActions.browser,
   confirm: menuActions.confirm,

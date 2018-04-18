@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
@@ -262,29 +260,14 @@ class HOCSideNote extends PureComponent {
   }
 }
 
-const { string, func, object, number } = PropTypes;
-HOCSideNote.propTypes = {
-  note: map,
-  serverOrg: map,
-  latestRev: number,
-  id: string,
-  browser: func,
-  organizationId: string,
-  cacheNote: func,
-  title: string,
-  saveNote: func,
-  cachedText: object,
-  target: string,
-};
-
-function mapStateToProps(state, ownProps) {
-  let cachedText = state.getIn(['notes', 'cache', ownProps.id, 'text']);
+function mapStateToProps(state, props) {
+  let cachedText = state.getIn(['notes', 'cache', props.id, 'text']);
   if (!cachedText) {
-    cachedText = state.getIn(['notes', 'cache', ownProps.id, '_savingText']);
+    cachedText = state.getIn(['notes', 'cache', props.id, '_savingText']);
   }
 
-  const note = state.getIn(['notes', 'server', ownProps.id]);
-  let serverOrg = state.getIn(['notes', 'cache', ownProps.id, 'serverOrg']);
+  const note = state.getIn(['notes', 'server', props.id]);
+  let serverOrg = state.getIn(['notes', 'cache', props.id, 'serverOrg']);
   serverOrg = serverOrg || note;
   const latestRev = serverOrg.get('rev') || 1;
 

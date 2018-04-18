@@ -59,11 +59,9 @@ class HOCLogoutButton extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => ({
+export default connect(state => ({
   isElectron: state.getIn(['globals', 'isElectron']),
-});
-
-export default connect(mapStateToProps, {
+}), {
   confirm: menuActions.confirm,
   signout: mainActions.signout,
 })(HOCLogoutButton);

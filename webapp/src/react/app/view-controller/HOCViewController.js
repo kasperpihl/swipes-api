@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import Button from 'Button';
 import * as mainActions from 'src/redux/main/mainActions';
@@ -288,24 +286,9 @@ class HOCViewController extends PureComponent {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    navigation: state.get('navigation'),
-  };
-}
-
-const { func } = PropTypes;
-HOCViewController.propTypes = {
-  navigation: map,
-  saveState: func,
-  openSecondary: func,
-  toggleLock: func,
-  push: func,
-  navSet: func,
-  pop: func,
-};
-
-const ConnectedHOCViewController = connect(mapStateToProps, {
+export default connect(state => ({
+  navigation: state.get('navigation'),
+}), {
   pop: navigationActions.pop,
   push: navigationActions.push,
   modal: mainActions.modal,
@@ -314,4 +297,3 @@ const ConnectedHOCViewController = connect(mapStateToProps, {
   saveState: navigationActions.saveState,
   navSet: navigationActions.set,
 })(HOCViewController);
-export default ConnectedHOCViewController;

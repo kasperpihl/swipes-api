@@ -161,8 +161,4 @@ class PostFeed extends PureComponent {
   }
 }
 
-export default PostFeed
-
-// const { string } = PropTypes;
-
-PostFeed.propTypes = {};
+export default PostFeed;

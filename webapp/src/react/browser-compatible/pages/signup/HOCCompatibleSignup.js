@@ -135,17 +135,10 @@ class HOCCompatibleSignup extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCCompatibleSignup.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    token: state.getIn(['connection', 'token']),
-  };
-}
-
-export default connect(mapStateToProps, {
+export default connect(state => ({
+  token: state.getIn(['connection', 'token']),
+}), {
   request: ca.api.request,
   signup: ca.users.signup,
   setUrl: navigationActions.url,

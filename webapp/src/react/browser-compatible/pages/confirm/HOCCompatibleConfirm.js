@@ -45,13 +45,7 @@ class HOCCompatibleConfirm extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCCompatibleConfirm.propTypes = {};
-
-const mapStateToProps = (state) => ({
-});
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   confirmEmail: ca.users.confirmEmail,
 })(HOCCompatibleConfirm);

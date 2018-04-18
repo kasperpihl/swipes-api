@@ -226,14 +226,10 @@ class HOCPlanOverview extends PureComponent {
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    goals: state.get('goals'),
-    milestone: state.getIn(['milestones', ownProps.milestoneId]),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect((state, props) => ({
+  goals: state.get('goals'),
+  milestone: state.getIn(['milestones', props.milestoneId]),
+}), {
   contextMenu: mainActions.contextMenu,
   successGradient: mainActions.successGradient,
   inputMenu: menuActions.input,

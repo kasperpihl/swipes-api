@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Search from './Search';
 
@@ -20,7 +19,6 @@ class HOCSearch extends PureComponent {
       initialScroll,
       limit: 25,
     };
-    // setupLoading(this);
   }
   onChange(e) {
     this.setState({ searchString: e.target.value  });
@@ -53,13 +51,5 @@ class HOCSearch extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCSearch.propTypes = {};
-
-function mapStateToProps() {
-  return {};
-}
-
-export default navWrapper(connect(mapStateToProps, {
-})(HOCSearch));
+export default navWrapper(HOCSearch);

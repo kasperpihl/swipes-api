@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { setOptions, Page } from 'react-pdf';
-
 import { Document } from 'react-pdf/dist/entry.webpack';
 
 setOptions({
@@ -31,12 +29,3 @@ class PDFRender extends PureComponent {
 }
 
 export default PDFRender;
-
-const { string, number, func } = PropTypes;
-
-PDFRender.propTypes = {
-  file: string,
-  scale: number,
-  page: number,
-  onDocumentComplete: func,
-};

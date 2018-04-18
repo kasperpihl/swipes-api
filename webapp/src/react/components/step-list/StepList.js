@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import { list, map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import {
   bindAll,
@@ -206,16 +204,3 @@ class StepList extends PureComponent {
 }
 
 export default StepList;
-
-const { func, number, object, bool } = PropTypes;
-
-StepList.propTypes = {
-  steps: map,
-  stepOrder: list,
-  editMode: bool,
-  tooltip: func,
-  delegate: object,
-  currentStepIndex: number,
-  getLoading: func,
-  isLoading: func,
-};

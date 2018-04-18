@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import './styles/svg';
 
 class SVG extends Component {
@@ -52,11 +50,3 @@ class SVG extends Component {
 }
 
 export default SVG;
-
-const { object, func } = PropTypes;
-
-SVG.propTypes = {
-  file: object,
-  onError: func,
-  onLoad: func,
-};

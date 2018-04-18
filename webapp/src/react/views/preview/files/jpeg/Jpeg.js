@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import loadImage from 'blueimp-load-image';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import './styles/jpeg';
 
 class Jpeg extends Component {
@@ -16,7 +14,6 @@ class Jpeg extends Component {
     this.state = {
       rawSize: false,
     };
-    bindAll(this, ['toggleRawSize']);
     loadImage(props.file.url, (img) => {
       if(img.type === "error") {
         this.props.onError("Error loading image ");
@@ -29,7 +26,7 @@ class Jpeg extends Component {
       // crossOrigin: 'anonymous',
     });
   }
-  toggleRawSize() {
+  toggleRawSize = () => {
     const { rawSize } = this.state;
     this.setState({ rawSize: !rawSize });
   }
@@ -57,11 +54,3 @@ class Jpeg extends Component {
 }
 
 export default Jpeg;
-
-const { object, func } = PropTypes;
-
-Jpeg.propTypes = {
-  file: object,
-  onError: func,
-  onLoad: func,
-};

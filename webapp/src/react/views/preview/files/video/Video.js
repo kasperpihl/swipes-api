@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import './styles/video';
 
 class Video extends Component {
@@ -35,11 +33,3 @@ class Video extends Component {
 }
 
 export default Video;
-
-const { object, func } = PropTypes;
-
-Video.propTypes = {
-  file: object,
-  onError: func,
-  onLoad: func,
-};

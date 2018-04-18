@@ -45,5 +45,3 @@ class PlanCSVExporter extends PureComponent {
 }
 
 export default PlanCSVExporter;
-
-PlanCSVExporter.propTypes = {};

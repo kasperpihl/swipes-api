@@ -81,17 +81,12 @@ class HOCCompatibleWelcome extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCCompatibleWelcome.propTypes = {};
-
-const mapStateToProps = (state) => ({
+export default connect(state => ({
   me: state.get('me'),
   isElectron: state.getIn(['globals', 'isElectron']),
   isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-});
-
-export default connect(mapStateToProps, {
+}), {
   createOrg: ca.organizations.create,
   joinOrg: ca.organizations.join,
   setUrl: navigationActions.url,

@@ -1,13 +1,7 @@
-/*
-  If a goal has 
-*/
-
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import {
   EditorState,
   convertToRaw,
@@ -98,21 +92,9 @@ class HOCTakeAction extends PureComponent {
   }
 }
 
-const { func, object } = PropTypes;
-HOCTakeAction.propTypes = {
-  goals: map,
-  savedState: object,
-  saveState: func,
-  openSecondary: func,
-  navPush: func,
-  delegate: object,
-};
-
-const mapStateToProps = state => ({
+export default navWrapper(connect(state => ({
   goals: cs.goals.assignedGroupedByMilestone(state),
   myId: state.getIn(['me', 'id']),
-});
-
-export default navWrapper(connect(mapStateToProps, {
+}), {
   saveCache: ca.cache.save,
 })(HOCTakeAction));

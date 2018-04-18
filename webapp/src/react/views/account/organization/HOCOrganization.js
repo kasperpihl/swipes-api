@@ -286,19 +286,12 @@ class HOCOrganization extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCOrganization.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    users: cs.users.getAllButSofi(state),
-    me: state.get('me'),
-    organization: state.getIn(['me', 'organizations', 0]),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(state => ({
+  users: cs.users.getAllButSofi(state),
+  me: state.get('me'),
+  organization: state.getIn(['me', 'organizations', 0]),
+}), {
   invite: ca.organizations.inviteUser,
   confirm: menuActions.confirm,
   deleteOrg: ca.organizations.deleteOrg,

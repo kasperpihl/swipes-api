@@ -1,9 +1,5 @@
 import React, { PureComponent } from 'react'
-
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
-// import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
 
 import Icon from 'Icon';
 import Loader from 'components/loaders/Loader';
@@ -97,8 +93,4 @@ class AddMilestone extends PureComponent {
   }
 }
 
-export default AddMilestone
-
-// const { string } = PropTypes;
-
-AddMilestone.propTypes = {};
+export default AddMilestone;

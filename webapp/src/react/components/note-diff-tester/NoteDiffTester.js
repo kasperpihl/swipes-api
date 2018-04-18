@@ -123,7 +123,3 @@ class NoteDiffTester extends PureComponent {
 }
 
 export default NoteDiffTester;
-
-// const { string } = PropTypes;
-
-NoteDiffTester.propTypes = {};

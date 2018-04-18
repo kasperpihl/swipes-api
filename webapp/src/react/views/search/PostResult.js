@@ -1,9 +1,5 @@
 import React, { PureComponent } from 'react'
 
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
-
 import { miniIconForId } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
@@ -12,12 +8,6 @@ import TextParser from 'components/text-parser/TextParser';
 import './styles/post-result.scss';
 
 class PostResult extends PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {}
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLinkClick')
-  }
   getType() {
     const { result } = this.props;
     const type = result.item.type;
@@ -166,5 +156,3 @@ class PostResult extends PureComponent {
 }
 
 export default PostResult
-// const { string } = PropTypes;
-PostResult.propTypes = {};

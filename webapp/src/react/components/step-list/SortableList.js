@@ -31,8 +31,4 @@ class SortableList extends PureComponent {
   }
 }
 
-export default SortableContainer(SortableList, { withRef: true})
-
-// const { string } = PropTypes;
-
-SortableList.propTypes = {};
+export default SortableContainer(SortableList, { withRef: true});

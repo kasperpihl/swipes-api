@@ -39,8 +39,4 @@ class DroppableGoalList extends PureComponent {
   }
 }
 
-export default DroppableGoalList
-
-// const { string } = PropTypes;
-
-DroppableGoalList.propTypes = {};
+export default DroppableGoalList;

@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
-
-// import { map, list } from 'react-immutable-proptypes';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-
 import Icon from 'Icon';
 import './styles/compatible-invite-form.scss';
 
@@ -118,8 +114,4 @@ class CompatibleInviteForm extends PureComponent {
   }
 }
 
-export default CompatibleInviteForm
-
-// const { string } = PropTypes;
-
-CompatibleInviteForm.propTypes = {};
+export default CompatibleInviteForm;

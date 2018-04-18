@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
-// import Icon from 'Icon';
+
 import './styles/billing.scss';
 
 const style = {
@@ -197,7 +196,3 @@ class Billing extends PureComponent {
 }
 
 export default injectStripe(Billing);
-
-// const {string} = PropTypes;
-
-Billing.propTypes = {};

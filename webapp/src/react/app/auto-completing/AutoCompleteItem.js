@@ -35,8 +35,4 @@ class AutoCompleteItem extends PureComponent {
   }
 }
 
-export default AutoCompleteItem
-
-// const { string } = PropTypes;
-
-AutoCompleteItem.propTypes = {};
+export default AutoCompleteItem;

@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 
@@ -241,10 +240,3 @@ class PDFViewer extends PureComponent {
   }
 }
 export default PDFViewer;
-
-const { func, string } = PropTypes;
-
-PDFViewer.propTypes = {
-  fileLoaded: func,
-  file: string,
-};

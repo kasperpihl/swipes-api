@@ -70,7 +70,7 @@ class Root extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => ({
+export default withRouter(connect(state => ({
   isHydrated: state.getIn(['main', 'isHydrated']),
   isMaximized: state.getIn(['main', 'isMaximized']),
   isFullscreen: state.getIn(['main', 'isFullscreen']),
@@ -78,8 +78,5 @@ const mapStateToProps = (state) => ({
   status: state.getIn(['connection', 'status']),
   hasConnected: state.getIn(['connection', 'hasConnected']),
   readyInOrg: state.getIn(['connection', 'readyInOrg']),
-});
-
-export default withRouter(connect(mapStateToProps, {
-})(hot(module)(Root)));
+}))(hot(module)(Root)));
  

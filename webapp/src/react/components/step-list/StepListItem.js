@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react'
 import { SortableElement } from 'react-sortable-hoc';
 
-// import { map, list } from 'react-immutable-proptypes';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
+
 import Button from 'Button';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
@@ -138,7 +137,3 @@ class StepListItem extends PureComponent {
 }
 
 export default SortableElement(StepListItem)
-
-// const { string } = PropTypes;
-
-StepListItem.propTypes = {};

@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { styleElement } from 'react-swiss';
-import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { truncateString } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
@@ -265,15 +263,3 @@ class GoalOverview extends PureComponent {
 }
 
 export default GoalOverview;
-
-const { string, object, bool, func } = PropTypes;
-
-GoalOverview.propTypes = {
-  goal: map,
-  handoff: object,
-  myId: string,
-  editMode: bool,
-  isLoading: func,
-  getLoading: func,
-  delegate: object,
-};

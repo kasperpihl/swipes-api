@@ -59,10 +59,6 @@ class HOCAttachmentItem extends PureComponent {
   }
 }
 
-function mapStateToProps() {
-  return {};
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(null, {
   preview: linkActions.preview,
 })(HOCAttachmentItem));

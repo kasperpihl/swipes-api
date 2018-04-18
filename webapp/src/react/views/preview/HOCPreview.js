@@ -285,14 +285,6 @@ class HOCPreviewModal extends PureComponent {
             onClick={b.force_download ? undefined : this.onClickButtonCached(i)}
           />
         ))}
-        {/* <Button
-          key="attach"
-          text="Attach to Goal"
-          primary
-          {...this.getLoading('attach')}
-          onClick={this.onAttach}
-          className="preview-footer__btn"
-        /> */}
       </div>
     );
   }
@@ -309,24 +301,12 @@ class HOCPreviewModal extends PureComponent {
   }
 }
 
-const { object, func, oneOfType, string } = PropTypes;
-
-HOCPreviewModal.propTypes = {
-  browser: func,
-  targetId: string,
-  addAttachment: func,
-  request: func,
-  loadPreview: oneOfType([object, string]),
-};
 HOCPreviewModal.contextTypes = {
-  target: string,
+  target: PropTypes.string,
 };
 
-function mapStateToProps() {
-  return {};
-}
 
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(null, {
   request: ca.api.request,
   addAttachment: ca.attachments.add,
   browser: mainActions.browser,

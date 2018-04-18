@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
-// import { map, list } from 'react-immutable-proptypes';
 
 import './styles/markdown.scss';
 
@@ -19,10 +18,3 @@ class Markdown extends PureComponent {
 }
 
 export default Markdown;
-
-const { string, bool } = PropTypes;
-
-Markdown.propTypes = {
-  content: string,
-  indentLeft: bool,
-};

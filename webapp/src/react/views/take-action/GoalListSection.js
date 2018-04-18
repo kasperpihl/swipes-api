@@ -63,6 +63,4 @@ class GoalListSection extends PureComponent {
   }
 }
 
-export default GoalListSection
-// const { string } = PropTypes;
-GoalListSection.propTypes = {};
+export default GoalListSection;

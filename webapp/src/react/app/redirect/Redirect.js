@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter, Redirect as RedirectDOM } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 
-class HOCRedirect extends PureComponent {
+class Redirect extends PureComponent {
   componentDidMount() {
     this.checkRedirects();
   }
@@ -61,25 +61,19 @@ class HOCRedirect extends PureComponent {
   render() {
     const { location, goToUrl } = this.props;
     if(goToUrl && location.pathname !== (goToUrl.to.pathname || goToUrl.to)) {
-      return <Redirect {...goToUrl} />
+      return <RedirectDOM {...goToUrl} />
     }
     return null;
   }
 }
-// const { string } = PropTypes;
 
-HOCRedirect.propTypes = {};
-
-const mapStateToProps = (state) => ({
+export default withRouter(connect(state => ({
   hasOrg: state.getIn(['me', 'has_organization']),
   isHydrated: state.getIn(['main', 'isHydrated']),
   token: state.getIn(['connection', 'token']),
   hasConnected: state.getIn(['connection', 'hasConnected']),
   isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
   goToUrl: state.getIn(['navigation', 'url']),
-
-});
-
-export default withRouter(connect(mapStateToProps, {
+}), {
   setUrl: navigationActions.url,
-})(HOCRedirect));
+})(Redirect));

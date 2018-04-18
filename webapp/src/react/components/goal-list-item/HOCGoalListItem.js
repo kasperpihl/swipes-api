@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { styleElement } from 'react-swiss';
-import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import * as ca from 'swipes-core-js/actions';
@@ -115,19 +113,9 @@ class HOCGoalListItem extends PureComponent {
   }
 }
 
-const { object } = PropTypes;
-
-HOCGoalListItem.propTypes = {
-  goal: map,
-  delegate: object,
-  filter: map,
-};
-
-const mapStateToProps = (state, ownProps) => ({
-  goal: state.getIn(['goals', ownProps.goalId]),
-});
-
-export default connect(mapStateToProps, {
+export default connect((state, props) => ({
+  goal: state.getIn(['goals', props.goalId]),
+}), {
   selectAssignees: goalActions.selectAssignees,
   assignGoal: ca.goals.assign,
 })(HOCGoalListItem);

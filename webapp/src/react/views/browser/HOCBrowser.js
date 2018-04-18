@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import SWView from 'SWView';
 import Webview from 'components/webview/Webview';
@@ -133,18 +131,6 @@ class HOCBrowser extends PureComponent {
   }
 }
 
-const { string, func } = PropTypes;
-HOCBrowser.propTypes = {
-  url: string,
-  onLoad: func,
-  me: map,
-};
-
-function mapStateToProps(state) {
-  return {
-    me: state.get('me'),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
-})(HOCBrowser));
+export default navWrapper(connect(state => ({
+  me: state.get('me'),
+}))(HOCBrowser));
