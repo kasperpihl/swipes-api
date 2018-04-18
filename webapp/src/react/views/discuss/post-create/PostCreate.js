@@ -4,7 +4,7 @@ import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Button from 'src/react/components/button/Button2';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
-import ACInput from 'src/react/components/auto-complete-input/AutoCompleteInput2';
+import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput2';
 import ReactTextarea from 'react-textarea-autosize';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
@@ -109,7 +109,7 @@ class PostCreate extends PureComponent {
             rounded
             size={30}
           />
-          <ACInput
+          <AutoCompleteInput
             wrapperRef={(c) => { this.input = c; }}
             onChange={this.onMessageChange}
             placeholder={placeholder}

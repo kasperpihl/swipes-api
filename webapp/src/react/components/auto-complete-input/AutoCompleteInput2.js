@@ -29,6 +29,13 @@ class Tester extends PureComponent {
     };
     this.onChange = this.setEditorState;
   }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.reset && nextProps.reset !== this.props.reset) {
+      this.setState({
+        editorState: this.plugins.getEditorStateWithDecorators()
+      });
+    }
+  }
   getEditorState() {
     return this.state.editorState;
   }
@@ -78,7 +85,7 @@ class Tester extends PureComponent {
     selection = selection.set('anchorOffset', targetO).set('focusOffset', targetO);
     editorState = EditorState.acceptSelection(editorState, selection);
     
-    this.setState({ editorState });
+    this.setEditorState(editorState);
 
     if(this.props.onAutoCompleteSelect){
       this.props.onAutoCompleteSelect(item);

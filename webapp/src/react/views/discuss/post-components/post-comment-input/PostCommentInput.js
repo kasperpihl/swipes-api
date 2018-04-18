@@ -7,6 +7,7 @@ import * as ca from 'swipes-core-js/actions';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import Button from 'src/react/components/button/Button2';
+import editorStateToPlainMention from 'src/utils/editorStateToPlainMention';
 
 import styles from './PostCommentInput.swiss';
 
@@ -21,6 +22,7 @@ class PostCommentInput extends PureComponent {
     super(props)
     this.state = {
       attachments: fromJS([]),
+      resetDate: new Date(),
     };
 
   }
@@ -31,18 +33,26 @@ class PostCommentInput extends PureComponent {
   }
   onReturn = (e) => {
     if(!e.shiftKey) {
-      console.log('send!')
+      console.log('send!');
+      this.onAddComment();
       return 'handled';
     }
   }
+  onChange = (editorState) => {
+    this.editorState = editorState;
+  }
   onAddComment() {
     const { attachments } = this.state;
-    const { addComment } = this.props;
+    const { addComment, postId } = this.props;
+    const message = editorStateToPlainMention(this.editorState);
+    this.setState({
+      resetDate: new Date(),
+    })
 
     addComment({
       post_id: postId,
       attachments,
-      message: '//',
+      message,
     }).then((res) => {
       if (res.ok) {
         window.analytics.sendEvent('Comment added', {});
@@ -87,6 +97,8 @@ class PostCommentInput extends PureComponent {
             editorRef={c => this.textarea = c}
             placeholder={placeholder}
             onReturn={this.onReturn}
+            onChange={this.onChange}
+            reset={this.state.resetDate}
           />
         </Content>
       </Container>
