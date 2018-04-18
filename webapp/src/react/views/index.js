@@ -6,7 +6,6 @@ import Profile from './account/profile/HOCProfile';
 import Services from './account/services/Services';
 import Onboarding from './account/onboarding/HOCOnboarding';
 import Browser from './browser/HOCBrowser';
-import Find from './find/HOCFind';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
 import PlanList from './plan/plan-list/HOCPlanList';
@@ -27,7 +26,6 @@ export {
   AccountList,
   Billing,
   Browser,
-  Find,
   GoalOverview,
   Onboarding,
   MilestoneList,
