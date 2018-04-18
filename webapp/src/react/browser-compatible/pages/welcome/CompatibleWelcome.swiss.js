@@ -84,7 +84,7 @@ export default styleSheet({
   },
   Input: {
     _size: ['100%', '45px'],
-    _font: ['15px', '60px'],
+    _font: ['15px', '25px'],
     _borderRadius: '6px',
     color: '$sw2',
     border: '1px solid $sw4',
@@ -94,12 +94,6 @@ export default styleSheet({
       _font: ['11px', '15px'],
       color: '$sw3',
     },
-    // :placeholder-shown is not supported almost anywhere. Why we are using it in a browser compatible page?
-    // &:not(:placeholder-shown) + .create-org__label {
-    //   @include font(11px, $deepBlue-50, 15px) 
-    //   top: 0;
-    //   transition: .2s ease;
-    // }
     '&:focus': {
       border: '1px solid $blue',
       transition: '.2s ease',
@@ -130,19 +124,27 @@ export default styleSheet({
     right: '0',
     borderLeft: '1px solid $sw4',
     transition: '.2s ease',
-    '&:hover': {
-      backgroundColor: '$sw4',
-      transition: '.2s ease',
-    },
     'loading': {
       backgroundColor: '$blue',
       borderLeft: '1px solid $blue',
       transition: '.2s ease',
     },
+    '!loading': {
+      '&:hover': {
+        backgroundColor: '$sw4',
+        transition: '.2s ease',
+      },
+    },
     'focused': {
       backgroundColor: '$blue',
       borderLeft: '1px solid $blue',
       transition: '.2s ease',
+      '!loading': {
+        '&:hover': {
+          backgroundColor: '$blue80',
+          transition: '.2s ease',
+        }
+      }
     }
   },
   SVG: {
@@ -152,13 +154,11 @@ export default styleSheet({
     left: '18px',
     top: '10px',
     transition: '.2s ease',
-    '!focused && .button-hover:hover': {
-      _svgColor: '$sw1',
-      transition: '.2s ease',
-    },
-    'focused && .button-hover:hover': {
-      _svgColor: '$blue80',
-      transition: '.2s ease',
+    '!focused': {
+      '.button-hover:hover &': {
+        _svgColor: '$sw1',
+        transition: '.2s ease',
+      }
     },
     'focused': {
       _svgColor: 'white',
@@ -168,7 +168,7 @@ export default styleSheet({
   Loader: {
     _size: '12px',
     position: 'absolute',
-    left: '12px',
-    top: '10px',
+    left: '23px',
+    top: '15px',
   }
 });

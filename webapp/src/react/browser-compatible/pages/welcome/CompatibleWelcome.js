@@ -3,30 +3,29 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import { styleElement, SwissProvider } from 'react-swiss';
 import Icon from 'Icon';
-import styles from  './styles/compatible-welcome.scss';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
 import { Link } from 'react-router-dom';
-import styles2 from './CompatibleWelcome.swiss';
+import styles from './CompatibleWelcome.swiss';
 
-const CompatibleWelcomeWrapper = styleElement('div', styles2.CompatibleWelcomeWrapper);
-const Hint = styleElement('div', styles2.Hint);
-const Table = styleElement('div', styles2.Table);
-const TableHeader = styleElement('div', styles2.TableHeader);
-const TableCol = styleElement('div', styles2.TableCol);
-const ClearFix = styleElement('div', styles2.ClearFix);
-const TableRow = styleElement('div', styles2.TableRow);
-const RowItemName = styleElement('div', styles2.RowItemName);
-const RowItemButton = styleElement('div', styles2.RowItemButton);
-const CreateOrganization = styleElement('div', styles2.CreateOrganization);
-const InputWrapper = styleElement('div', styles2.InputWrapper);
-const Input = styleElement('input', styles2.Input);
-const Label = styleElement('div', styles2.Label);
-const Button = styleElement('div', styles2.Button);
-const Loader = styleElement(Icon, styles2.Loader);
-const SVG = styleElement(Icon, styles2.SVG);
+const CompatibleWelcomeWrapper = styleElement('div', styles.CompatibleWelcomeWrapper);
+const Hint = styleElement('div', styles.Hint);
+const Table = styleElement('div', styles.Table);
+const TableHeader = styleElement('div', styles.TableHeader);
+const TableCol = styleElement('div', styles.TableCol);
+const ClearFix = styleElement('div', styles.ClearFix);
+const TableRow = styleElement('div', styles.TableRow);
+const RowItemName = styleElement('div', styles.RowItemName);
+const RowItemButton = styleElement('div', styles.RowItemButton);
+const CreateOrganization = styleElement('div', styles.CreateOrganization);
+const InputWrapper = styleElement('div', styles.InputWrapper);
+const Input = styleElement('input', styles.Input);
+const Label = styleElement('div', styles.Label);
+const Button = styleElement('div', styles.Button);
+const Loader = styleElement(Icon, styles.Loader);
+const SVG = styleElement(Icon, styles.SVG);
 
 class CompatibleWelcome extends PureComponent {
   constructor(props) {
@@ -123,7 +122,7 @@ class CompatibleWelcome extends PureComponent {
 
     return (
 
-      <SwissProvider focused={focused} float={float}>
+      <SwissProvider loading={isLoading('creating')} focused={focused} float={float}>
         <CreateOrganization>
           <label htmlFor="create-org-input">
             <InputWrapper>
@@ -140,7 +139,7 @@ class CompatibleWelcome extends PureComponent {
                 onBlur={this.onBlur} 
               />
               <Label>Name of company</Label>
-              <Button loading={isLoading('creating')} className="button-hover" onClick={this.onCreate}>
+              <Button className="button-hover" onClick={this.onCreate}>
                 {isLoading('creating') ? (
                   <Loader icon="loader" width="12" height="12" />
                 ) : (
