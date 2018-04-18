@@ -1,9 +1,10 @@
-import * as a from 'actions';
+import * as navigationActions from '../navigation/navigationActions';
+import * as mainActions from '../main/mainActions';
 
 // ======================================================
 // Open find
 // ======================================================
-export const openFind = (from, targetId) => d => d(a.navigation.openSecondary(from, {
+export const openFind = (from, targetId) => d => d(navigationActions.openSecondary(from, {
   id: 'Find',
   placeholder: 'Search across Dropbox, Asana, Slack...',
   title: 'Find',
@@ -24,7 +25,7 @@ export const preview = (from, att, targetId) => (d) => {
   const permission = link.get('permission') || link;
 
   if (service.get('name') === 'swipes' && service.get('type') === 'note') {
-    d(a.navigation.openSecondary(from, {
+    d(navigationActions.openSecondary(from, {
       id: 'SideNote',
       title: 'Note',
       props: {
@@ -33,9 +34,9 @@ export const preview = (from, att, targetId) => (d) => {
       },
     }));
   } else if (service.get('name') === 'swipes' && service.get('type') === 'url') {
-    d(a.main.browser(from, service.get('id')));
+    d(mainActions.browser(from, service.get('id')));
   } else {
-    d(a.navigation.openSecondary(from, {
+    d(navigationActions.openSecondary(from, {
       id: 'Preview',
       title: 'Preview',
       showTitleInCrumb: true,

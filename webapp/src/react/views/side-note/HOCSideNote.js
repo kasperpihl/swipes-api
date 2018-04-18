@@ -20,7 +20,7 @@ import diff from 'src/classes/draft-util';
 
 import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 
 import './styles/side-note';
@@ -300,5 +300,5 @@ function mapStateToProps(state, ownProps) {
 export default navWrapper(connect(mapStateToProps, {
   saveNote: ca.notes.save,
   cacheNote: ca.notes.cache,
-  browser: a.main.browser,
+  browser: mainActions.browser,
 })(HOCSideNote));

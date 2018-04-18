@@ -4,7 +4,6 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { connect } from 'react-redux';

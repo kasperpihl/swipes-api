@@ -1,10 +1,19 @@
 import { compose, applyMiddleware, createStore } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
+import { combineReducers } from 'redux-immutable';
 import thunk from 'redux-thunk';
 import Immutable, { fromJS } from 'immutable';
 import localForage from "localforage";
-import rootReducer from 'reducers';
+import * as reducers from './reducers';
+import * as coreReducers from 'swipes-core-js/reducers';
+
 import dev from './configureStore.dev';
+
+const rootReducer = combineReducers({
+  ...coreReducers,
+  ...reducers,
+});
+
 
 const isProd = (process.env.NODE_ENV === 'production');
 const middlewares = isProd ? [] : dev.middlewares;

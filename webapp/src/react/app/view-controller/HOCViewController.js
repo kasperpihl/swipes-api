@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { map } from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import Button from 'Button';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as views from 'src/react/views';
 import { setupCachedCallback, debounce, bindAll } from 'swipes-core-js/classes/utils';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
@@ -305,12 +306,12 @@ HOCViewController.propTypes = {
 };
 
 const ConnectedHOCViewController = connect(mapStateToProps, {
-  pop: a.navigation.pop,
-  push: a.navigation.push,
-  modal: a.main.modal,
-  toggleLock: a.navigation.toggleLock,
-  openSecondary: a.navigation.openSecondary,
-  saveState: a.navigation.saveState,
-  navSet: a.navigation.set,
+  pop: navigationActions.pop,
+  push: navigationActions.push,
+  modal: mainActions.modal,
+  toggleLock: navigationActions.toggleLock,
+  openSecondary: navigationActions.openSecondary,
+  saveState: navigationActions.saveState,
+  navSet: navigationActions.set,
 })(HOCViewController);
 export default ConnectedHOCViewController;

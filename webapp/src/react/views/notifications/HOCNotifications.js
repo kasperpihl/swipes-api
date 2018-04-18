@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
 
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import Notifications from './Notifications';
 
 class HOCNotifications extends PureComponent {
@@ -79,7 +77,7 @@ function mapStateToProps(state) {
   };
 }
 export default connect(mapStateToProps, {
-  openSecondary: a.navigation.openSecondary,
+  openSecondary: navigationActions.openSecondary,
   markNotifications: ca.notifications.mark,
   setLastReadTs: ca.notifications.setLastReadTs,
 })(HOCNotifications);

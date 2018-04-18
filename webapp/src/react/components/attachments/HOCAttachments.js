@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { list, map } from 'react-immutable-proptypes';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
+import * as linkActions from 'src/redux/link/linkActions';
 import {
   EditorState,
   convertToRaw,
@@ -226,9 +228,9 @@ export default connect(mapStateToProps, {
   addAttachment: ca.attachments.add,
   removeAttachment: ca.attachments.remove,
   renameAttachment: ca.attachments.rename,
-  contextMenu: a.main.contextMenu,
+  contextMenu: mainActions.contextMenu,
   createNote: ca.notes.create,
-  inputMenu: a.menus.input,
-  confirm: a.menus.confirm,
-  previewLink: a.links.preview,
+  inputMenu: menuActions.input,
+  confirm: menuActions.confirm,
+  previewLink: linkActions.preview,
 })(HOCAttachments);

@@ -5,8 +5,8 @@ import { styleElement } from 'react-swiss';
 import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as goalActions from 'src/redux/goal/goalActions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
@@ -128,6 +128,6 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 export default connect(mapStateToProps, {
-  selectAssignees: a.goals.selectAssignees,
+  selectAssignees: goalActions.selectAssignees,
   assignGoal: ca.goals.assign,
 })(HOCGoalListItem);

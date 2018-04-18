@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import { map } from 'react-immutable-proptypes';
 // import { fromJS } from 'immutable';
@@ -104,5 +104,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   complete: ca.onboarding.complete,
-  browser: a.main.browser,
+  browser: mainActions.browser,
 })(navWrapper(HOCOnboarding));

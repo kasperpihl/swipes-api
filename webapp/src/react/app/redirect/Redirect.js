@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as a from 'actions';
-
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 class HOCRedirect extends PureComponent {
   componentDidMount() {
@@ -82,5 +81,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default withRouter(connect(mapStateToProps, {
-  setUrl: a.navigation.url,
+  setUrl: navigationActions.url,
 })(HOCRedirect));

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
-import * as a from 'actions';
 import { bindAll } from 'swipes-core-js/classes/utils';
+import * as mainActions from 'src/redux/main/mainActions';
 import styles from './Modal.swiss';
 
 const Container = styleElement('div', styles.Container);
@@ -49,5 +49,5 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  clear: a.main.modal,
+  clear: mainActions.modal,
 })(HOCModal);

@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as linkActions from 'src/redux/link/linkActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import { navForContext } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostView from './PostView';
@@ -59,7 +61,7 @@ export default navWrapper(connect((state, ownProps) => ({
   myId: state.getIn(['me', 'id']),
   post: state.getIn(['posts', ownProps.postId]),
 }), {
-  openSecondary: a.navigation.openSecondary,
-  preview: a.links.preview,
-  browser: a.main.browser,
+  openSecondary: navigationActions.openSecondary,
+  preview: linkActions.preview,
+  browser: mainActions.browser,
 })(HOCPostView));

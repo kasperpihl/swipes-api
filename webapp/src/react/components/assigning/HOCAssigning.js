@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Assigning from './Assigning';
@@ -74,5 +74,5 @@ HOCAssigning.propTypes = {
 };
 
 export default connect(mapStateToProps, {
-  tooltip: a.main.tooltip,
+  tooltip: mainActions.tooltip,
 })(HOCAssigning);

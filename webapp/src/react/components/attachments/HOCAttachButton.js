@@ -1,14 +1,10 @@
 import React, { PureComponent } from 'react';
 
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import Button from 'src/react/components/button/Button2';
 import { fromJS } from 'immutable';
 import {
@@ -146,19 +142,12 @@ class HOCAttachButton extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCAttachButton.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    myId: state.getIn(['me', 'id']),
-  };
-}
-
-export default connect(mapStateToProps, {
-  inputMenu: a.menus.input,
-  chooseAttachmentType: a.menus.chooseAttachmentType,
+export default connect(state => ({
+  myId: state.getIn(['me', 'id']),
+}), {
+  inputMenu: menuActions.input,
+  chooseAttachmentType: menuActions.chooseAttachmentType,
   createLink: ca.links.create,
   createNote: ca.notes.create,
   createFile: ca.files.create,

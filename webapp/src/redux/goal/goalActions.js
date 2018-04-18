@@ -2,7 +2,7 @@ import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import { fromJS, List } from 'immutable';
 import { cache } from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-import * as a from './';
+import * as mainActions from '../main/mainActions';
 
 export const selectAssignees = (options, assignees, callback) => (d, getState) => {
   assignees = assignees || [];
@@ -88,7 +88,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
         assignees.splice(index, 1);
       }
       if (side === 'enter') {
-        d(a.main.contextMenu(null));
+        d(mainActions.contextMenu(null));
       }
       callback(assignees);
       tabMenu.reload();
@@ -116,7 +116,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
     initialTabIndex = 0;
   }
 
-  d(a.main.contextMenu({
+  d(mainActions.contextMenu({
     options,
     component: TabMenu,
     onClose: () => {

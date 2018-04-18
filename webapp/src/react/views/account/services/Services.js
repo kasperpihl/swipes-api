@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { bindAll, queryStringToObject } from 'swipes-core-js/classes/utils';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import SWView from 'SWView';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -164,9 +165,9 @@ function mapStateToProps(state) {
 }
 
 const ConnectedServices = navWrapper(connect(mapStateToProps, {
-  browser: a.main.browser,
+  browser: mainActions.browser,
   handleOAuthSuccess: ca.me.handleOAuthSuccess,
   disconnectService: ca.me.disconnectService,
-  confirm: a.menus.confirm,
+  confirm: menuActions.confirm,
 })(Services));
 export default ConnectedServices;

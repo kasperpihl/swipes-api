@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { styleElement } from 'react-swiss';
-import * as a from 'actions';
 import * as cs from 'swipes-core-js/selectors';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostCreate from 'src/react/views/discuss/post-create/HOCPostCreate';
 import styles from './DiscussButton.swiss';
@@ -13,13 +11,7 @@ const ButtonSide = styleElement('div', styles.ButtonSide);
 const Seperator = styleElement('div', styles.Seperator);
 
 class HOCDiscussButton extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    bindAll(this, ['onDiscuss', 'onFeed']);
-    // setupLoading(this);
-  }
-  onFeed() {
+  onFeed = () => {
     const { openSecondary, context, relatedFilter } = this.props;
     openSecondary({
       id: 'PostFeed',
@@ -30,7 +22,7 @@ class HOCDiscussButton extends PureComponent {
       },
     });
   }
-  onDiscuss() {
+  onDiscuss = () => {
     const { context, taggedUsers, openModal } = this.props;
     openModal({
       component: PostCreate,

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { list } from 'react-immutable-proptypes';
-import * as a from 'actions';
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 

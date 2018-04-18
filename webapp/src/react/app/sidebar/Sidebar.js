@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import * as a from 'actions';
 import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import HOCNotifications from 'src/react/views/notifications/HOCNotifications';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 import './styles/sidebar.scss';
 
@@ -175,6 +176,6 @@ export default connect(state => ({
   navId: state.getIn(['navigation', 'primary', 'id']),
   notificationCounter: state.getIn(['connection', 'notificationCounter']),
 }), {
-  navSet: a.navigation.set,
-  contextMenu: a.main.contextMenu,
+  navSet: navigationActions.set,
+  contextMenu: mainActions.contextMenu,
 })(Sidebar);

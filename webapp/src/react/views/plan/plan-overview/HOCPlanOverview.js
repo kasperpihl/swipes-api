@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
@@ -233,13 +234,13 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default navWrapper(connect(mapStateToProps, {
-  contextMenu: a.main.contextMenu,
-  successGradient: a.main.successGradient,
-  inputMenu: a.menus.input,
+  contextMenu: mainActions.contextMenu,
+  successGradient: mainActions.successGradient,
+  inputMenu: menuActions.input,
   closeMilestone: ca.milestones.close,
   openMilestone: ca.milestones.open,
   reorderGoals: ca.milestones.reorderGoals,
   deleteMilestone: ca.milestones.deleteMilestone,
   renameMilestone: ca.milestones.rename,
-  confirm: a.menus.confirm,
+  confirm: menuActions.confirm,
 })(HOCPlanOverview));

@@ -1,4 +1,4 @@
-import * as types from 'constants';
+import * as types from '../constants';
 import { randomString } from 'swipes-core-js/classes/utils';
 
 export const url = (url, options) => (d, getState) => {

@@ -2,7 +2,7 @@ import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import Confirmation from 'src/react/context-menus/confirmation/Confirmation';
 import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
 import * as cs from 'swipes-core-js/selectors';
-import * as a from './';
+import * as mainActions from '../main/mainActions';
 
 export const confirm = (options, callback) => (d, getState) => {
   const isBrowserSupported = getState().getIn(['globals', 'isBrowserSupported']);
@@ -10,7 +10,7 @@ export const confirm = (options, callback) => (d, getState) => {
     const res = window.confirm(options.message || options.title);
     return callback(res ? 1 : 0);
   }
-  d(a.main.contextMenu({
+  d(mainActions.contextMenu({
     options,
     component: Confirmation,
     props: {
@@ -18,7 +18,7 @@ export const confirm = (options, callback) => (d, getState) => {
       message: options.message,
       actions: options.actions,
       onClick: (i) => {
-        d(a.main.contextMenu(null));
+        d(mainActions.contextMenu(null));
         if (callback) {
           callback(i);
         }
@@ -32,7 +32,7 @@ export const alert = (options, callback) => (d, getState) => {
   if(!isBrowserSupported) {
     return window.alert(options.message || options.title);
   }
-  d(a.main.contextMenu({
+  d(mainActions.contextMenu({
     options,
     component: Confirmation,
     props: {
@@ -40,7 +40,7 @@ export const alert = (options, callback) => (d, getState) => {
       message: options.message,
       actions: options.actions || [{ text: 'Okay' }],
       onClick: (i) => {
-        d(a.main.contextMenu(null));
+        d(mainActions.contextMenu(null));
         if (callback) {
           callback(i);
         }
@@ -55,13 +55,13 @@ export const input = (options, callback) => (d, getState) => {
     const res = window.prompt(options.placeholder, options.text);
     return callback(res);
   }
-  d(a.main.contextMenu({
+  d(mainActions.contextMenu({
     options,
     component: InputMenu,
     props: {
       ...options,
       onResult: (title) => {
-        d(a.main.contextMenu(null));
+        d(mainActions.contextMenu(null));
         if (callback) {
           callback(title);
         }
@@ -96,12 +96,12 @@ export const selectMilestone = (options, callback) => (d, getState) => {
   const delegate = {
     onItemAction: (item) => {
       callback(item);
-      d(a.main.contextMenu(null));
+      d(mainActions.contextMenu(null));
     },
     resultsForAll: () => allMilestones(),
     resultsForSearch: query => searchForMilestone(query),
   };
-  d(a.main.contextMenu({
+  d(mainActions.contextMenu({
     options,
     component: TabMenu,
     props: {
@@ -135,11 +135,11 @@ export const chooseAttachmentType = (options) => (d, getState) => new Promise((r
 
   const delegate = {
     onItemAction: (item) => {
-      d(a.main.contextMenu(null));
+      d(mainActions.contextMenu(null));
       resolve(item);
     },
   };
-  d(a.main.contextMenu({
+  d(mainActions.contextMenu({
     options,
     component: TabMenu,
     props: {

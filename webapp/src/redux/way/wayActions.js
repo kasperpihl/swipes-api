@@ -1,7 +1,7 @@
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
+import * as mainActions from '../main/mainActions';
 
 export const load = (options, callback) => (d, getState) => {
   const deletingIds = {};
@@ -49,12 +49,12 @@ export const load = (options, callback) => (d, getState) => {
       } else {
         const way = getState().getIn(['ways', obj.id]);
         callback(way);
-        d(a.main.contextMenu(null));
+        d(mainActions.contextMenu(null));
       }
     },
   };
 
-  d(a.main.contextMenu({
+  d(mainActions.contextMenu({
     options,
     component: TabMenu,
     props: {

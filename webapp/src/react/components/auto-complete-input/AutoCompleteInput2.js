@@ -53,7 +53,7 @@ class Tester extends PureComponent {
     contentState = Modifier.replaceText(
       contentState,
       selection,
-      displayName + ' ',
+      displayName,
     );
     selection = selection.set('focusOffset', this.selStart + displayName.length);
 
@@ -74,7 +74,7 @@ class Tester extends PureComponent {
 
     editorState = EditorState.set(editorState, { currentContent: contentState });
 
-    const targetO = selection.get('focusOffset') + 1;
+    const targetO = selection.get('focusOffset');
     selection = selection.set('anchorOffset', targetO).set('focusOffset', targetO);
     editorState = EditorState.acceptSelection(editorState, selection);
     

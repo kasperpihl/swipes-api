@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
@@ -149,5 +148,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   request: ca.api.request,
   signup: ca.users.signup,
-  setUrl: a.navigation.url,
+  setUrl: navigationActions.url,
 })(HOCCompatibleSignup);

@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as linkActions from 'src/redux/link/linkActions';
+import * as goalActions from 'src/redux/goal/goalActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 
 import {
@@ -201,9 +204,9 @@ class HOCPostCreate extends PureComponent {
 export default navWrapper(connect(state => ({
   myId: state.getIn(['me', 'id']),
 }), {
-  openSecondary: a.navigation.openSecondary,
-  selectAssignees: a.goals.selectAssignees,
-  contextMenu: a.main.contextMenu,
-  preview: a.links.preview,
+  openSecondary: navigationActions.openSecondary,
+  selectAssignees: goalActions.selectAssignees,
+  contextMenu: mainActions.contextMenu,
+  preview: linkActions.preview,
   createPost: ca.posts.create,
 })(HOCPostCreate));

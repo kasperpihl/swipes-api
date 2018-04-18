@@ -14,6 +14,5 @@ export default styleSheet('PlanList', {
     _flex: ['row', 'between', 'center'],
     padding: '9px 12px',
     borderTop: '1px solid $sw4',
-
   },
 });

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button2';
 import InfoTab from 'src/react/context-menus/info-tab/InfoTab';
@@ -11,7 +11,6 @@ class InfoButton extends PureComponent {
     this.state = {};
     this.onClick = this.onClick.bind(this);
     setupDelegate(this, 'getInfoTabProps');
-    // setupLoading(this);
   }
   onClick(e) {
     const options = this.getOptionsForE(e);
@@ -54,5 +53,5 @@ class InfoButton extends PureComponent {
 }
 
 export default connect(null, {
-  contextMenu: a.main.contextMenu,
+  contextMenu: mainActions.contextMenu,
 })(InfoButton);

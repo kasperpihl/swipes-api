@@ -24,8 +24,6 @@ module.exports = {
     alias: {
       // 'react-swiss': path.resolve(__dirname, '../../opensource/react-swiss/dist/es'),
       src: path.resolve(__dirname, 'src'),
-      reducers: path.resolve(__dirname, 'src/reducers'),
-      constants: path.resolve(__dirname, 'src/constants/ActionTypes'),
       compatible: path.resolve(__dirname, 'src/react/browser-compatible'),
       components: path.resolve(__dirname, 'src/react/components'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),

@@ -1,13 +1,9 @@
 import React, { PureComponent } from 'react';
 
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import CompatibleWelcome from './CompatibleWelcome';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
@@ -98,5 +94,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   createOrg: ca.organizations.create,
   joinOrg: ca.organizations.join,
-  setUrl: a.navigation.url,
+  setUrl: navigationActions.url,
 })(HOCCompatibleWelcome);

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
+
 import Button from 'Button';
 import './styles/trial.scss';
 
@@ -152,6 +153,6 @@ export default connect(state => ({
   trial: state.getIn(['me', 'organizations', 0, 'trial']),
   isAccount: (state.getIn(['navigation', 'primary', 'id']) === 'AccountList')
 }), {
-  navSet: a.navigation.set,
-  navPush: a.navigation.push,
+  navSet: navigationActions.set,
+  navPush: navigationActions.push,
 })(Trial);

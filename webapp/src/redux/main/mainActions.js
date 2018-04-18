@@ -1,8 +1,7 @@
-import * as types from 'constants';
+import * as types from '../constants';
 import * as ca from 'swipes-core-js/actions';
 import * as coreTypes from 'swipes-core-js/constants';
-import * as a from './';
-
+import * as navigationActions from '../navigation/navigationActions';
 
 export const setMaximized = toggle => ({ type: types.SET_MAXIMIZED, payload: { toggle } });
 export const setFullscreen = toggle => ({ type: types.SET_FULLSCREEN, payload: { toggle } });
@@ -40,7 +39,7 @@ export const browser = (from, url, onLoad) => (dp, getState) => {
   if (!getState().getIn(['globals', 'isElectron'])) {
     return window.open(url);
   }
-  return dp(a.navigation.openSecondary(from, {
+  return dp(navigationActions.openSecondary(from, {
     id: 'Browser',
     showTitleInCrumb: true,
     title: 'Browser',
@@ -75,20 +74,3 @@ export const signout = cb => dp => dp(ca.api.request('users.signout')).then((res
   }
 });
 
-
-// ======================================================
-// Search
-// ======================================================
-export const search = query => (dp) => {
-  dp({ type: types.SEARCH, query });
-  if (!query || !query.length) {
-    return dp({ type: types.SEARCH_RESULTS, result: null });
-  }
-  return dp(ca.api.request('search', { q: query })).then((res) => {
-    if (res && res.ok) {
-      dp({ type: types.SEARCH_RESULTS, result: res.mappedResults });
-    } else {
-      dp({ type: types.SEARCH_ERROR });
-    }
-  });
-};

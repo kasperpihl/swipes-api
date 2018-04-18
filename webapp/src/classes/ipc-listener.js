@@ -1,4 +1,5 @@
-import { main, navigation } from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import { fromJS } from 'immutable';
 import * as ca from 'swipes-core-js/actions';
 import { navForContext } from 'swipes-core-js/classes/utils';
@@ -31,12 +32,12 @@ export default class IpcListener {
       // Deal with windows maximize stuff
       const remWin = remote.getCurrentWindow();
 
-      store.dispatch(main.setMaximized(remWin.isMaximized()));
+      store.dispatch(mainActions.setMaximized(remWin.isMaximized()));
       remWin.on('maximize', () => {
-        store.dispatch(main.setMaximized(true));
+        store.dispatch(mainActions.setMaximized(true));
       });
       remWin.on('toggle-find', () => {
-        this.store.dispatch(navigation.set('primary', {
+        this.store.dispatch(navigationActions.set('primary', {
           id: 'Search',
           title: 'Search',
         }))
@@ -45,18 +46,18 @@ export default class IpcListener {
         localForage.clear();
       });
       remWin.on('unmaximize', () => {
-        store.dispatch(main.setMaximized(false));
+        store.dispatch(mainActions.setMaximized(false));
       });
 
       // Deal with fullScreen
-      store.dispatch(main.setFullscreen(remWin.isFullScreen()));
+      store.dispatch(mainActions.setFullscreen(remWin.isFullScreen()));
       remWin.on('enter-full-screen', () => {
-        store.dispatch(main.setMaximized(remWin.isMaximized()));
-        store.dispatch(main.setFullscreen(remWin.isFullScreen()));
+        store.dispatch(mainActions.setMaximized(remWin.isMaximized()));
+        store.dispatch(mainActions.setFullscreen(remWin.isFullScreen()));
       });
       remWin.on('leave-full-screen', () => {
-        store.dispatch(main.setMaximized(remWin.isMaximized()));
-        store.dispatch(main.setFullscreen(remWin.isFullScreen()));
+        store.dispatch(mainActions.setMaximized(remWin.isMaximized()));
+        store.dispatch(mainActions.setFullscreen(remWin.isFullScreen()));
       });
     }
   }
@@ -71,7 +72,7 @@ export default class IpcListener {
     });
 
     desktopNotification.onclick = () => {
-      this.store.dispatch(navigation.openSecondary('primary', navForContext(fromJS(notification.target))));
+      this.store.dispatch(navigationActions.openSecondary('primary', navForContext(fromJS(notification.target))));
       this.store.dispatch(ca.notifications.mark([notification.id]));
       const remWin = remote.getCurrentWindow();
       remWin.focus();

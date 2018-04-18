@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -299,7 +300,7 @@ function mapStateToProps(state) {
 
 export default navWrapper(connect(mapStateToProps, {
   invite: ca.organizations.inviteUser,
-  confirm: a.menus.confirm,
+  confirm: menuActions.confirm,
   deleteOrg: ca.organizations.deleteOrg,
   leaveOrg: ca.organizations.leave,
   completeOnboarding: ca.onboarding.complete,
@@ -307,5 +308,5 @@ export default navWrapper(connect(mapStateToProps, {
   disableUser: ca.organizations.disableUser,
   enableUser: ca.organizations.enableUser,
   promoteToAdmin: ca.organizations.promoteToAdmin,
-  contextMenu: a.main.contextMenu,
+  contextMenu: mainActions.contextMenu,
 })(HOCOrganization));

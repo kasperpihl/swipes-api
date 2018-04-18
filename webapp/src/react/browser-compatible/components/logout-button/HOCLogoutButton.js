@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { styleElement, SwissProvider } from 'react-swiss';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import RotateLoader from 'components/loaders/RotateLoader';
 import Icon from 'Icon';
@@ -63,6 +64,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  confirm: a.menus.confirm,
-  signout: a.main.signout,
+  confirm: menuActions.confirm,
+  signout: mainActions.signout,
 })(HOCLogoutButton);

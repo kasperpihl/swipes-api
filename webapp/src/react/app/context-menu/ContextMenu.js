@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
-import * as a from 'actions';
 import Measure from 'react-measure';
+import * as mainActions from 'src/redux/main/mainActions';
 import { debounce } from 'swipes-core-js/classes/utils';
 import prefixAll from 'inline-style-prefixer/static';
 import styles from './ContextMenu.swiss';
@@ -207,5 +207,5 @@ class ContextMenu extends PureComponent {
 export default connect(state => ({
   contextMenu: state.getIn(['main', 'contextMenu']),
 }), {
-  hide: a.main.contextMenu,
+  hide: mainActions.contextMenu,
 })(ContextMenu);

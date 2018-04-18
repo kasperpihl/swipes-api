@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
 import * as coreTypes from 'swipes-core-js/constants';
-import * as types from 'constants';
+import * as types from '../constants';
 
 const initialState = fromJS({
   primary: {

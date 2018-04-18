@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { styleElement } from 'react-swiss';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
@@ -146,8 +146,8 @@ class Reactions extends PureComponent {
 export default connect(state => ({
   myId: state.getIn(['me', 'id']),
 }), {
-  successGradient: a.main.successGradient,
-  tooltip: a.main.tooltip,
+  successGradient: mainActions.successGradient,
+  tooltip: mainActions.tooltip,
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,
   commentRemoveReaction: ca.posts.commentRemoveReaction,

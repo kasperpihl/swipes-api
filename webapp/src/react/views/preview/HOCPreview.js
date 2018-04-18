@@ -7,7 +7,7 @@ import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import * as Files from './files';
@@ -329,5 +329,5 @@ function mapStateToProps() {
 export default navWrapper(connect(mapStateToProps, {
   request: ca.api.request,
   addAttachment: ca.attachments.add,
-  browser: a.main.browser,
+  browser: mainActions.browser,
 })(HOCPreviewModal));

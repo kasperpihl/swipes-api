@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
 
 import { connect } from 'react-redux';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
+import * as goalActions from 'src/redux/goal/goalActions';
 import { setupLoading, bindAll, toUnderscore } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assigning/HOCAssigning';
@@ -157,15 +154,8 @@ class HOCAddGoalItem extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCAddGoalItem.propTypes = {};
-
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps, {
-  selectAssignees: a.goals.selectAssignees,
+export default connect(null, {
+  selectAssignees: goalActions.selectAssignees,
   createGoal: ca.goals.create,
 })(HOCAddGoalItem);

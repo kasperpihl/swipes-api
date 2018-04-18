@@ -7,7 +7,13 @@ import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import * as a from 'actions';
+
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
+import * as linkActions from 'src/redux/link/linkActions';
+import * as goalActions from 'src/redux/goal/goalActions';
+import * as wayActions from 'src/redux/way/wayActions';
+
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
@@ -340,21 +346,21 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   archive: ca.goals.archive,
-  contextMenu: a.main.contextMenu,
+  contextMenu: mainActions.contextMenu,
   assignGoal: ca.goals.assign,
   renameGoal: ca.goals.rename,
   completeGoal: ca.goals.complete,
   incompleteGoal: ca.goals.incomplete,
-  loadWay: a.ways.load,
+  loadWay: wayActions.load,
   goalLoadWay: ca.goals.loadWay,
   createWay: ca.ways.create,
-  selectAssignees: a.goals.selectAssignees,
-  selectMilestone: a.menus.selectMilestone,
+  selectAssignees: goalActions.selectAssignees,
+  selectMilestone: menuActions.selectMilestone,
   addGoalToMilestone: ca.milestones.addGoal,
   removeGoalFromMilestone: ca.milestones.removeGoal,
-  successGradient: a.main.successGradient,
-  confirm: a.menus.confirm,
-  inputMenu: a.menus.input,
-  preview: a.links.preview,
-  browser: a.main.browser,
+  successGradient: mainActions.successGradient,
+  confirm: menuActions.confirm,
+  inputMenu: menuActions.input,
+  preview: linkActions.preview,
+  browser: mainActions.browser,
 })(navWrapper(HOCGoalOverview));

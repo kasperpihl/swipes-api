@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import * as a from 'actions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -133,6 +133,6 @@ class HOCPlanList extends PureComponent {
 export default navWrapper(connect(state => ({
   plans: cs.milestones.getGrouped(state),
 }), {
-  inputMenu: a.menus.input,
+  inputMenu: menuActions.input,
   createPlan: ca.milestones.create,
 })(HOCPlanList));
