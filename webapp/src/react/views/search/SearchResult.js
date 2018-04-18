@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { iconForId } from 'swipes-core-js/classes/utils';
 import MileStoneResult from './MilestoneResult';

@@ -1,18 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-
-// import Icon from 'Icon';
 import './styles/styled-text.scss';
 
 class StyledText extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    setupDelegate(this, 'onTextClick', 'onTextMouseEnter', 'onTextMouseLeave');
-  }
   render() {
     const { text, textStyle, className } = this.props;
 
@@ -31,9 +21,6 @@ class StyledText extends PureComponent {
           } = t;
           return (
             <button
-              onMouseEnter={this.onTextMouseEnterCached(t.id, t)}
-              onMouseLeave={this.onTextMouseLeaveCached(t.id, t)}
-              onClick={this.onTextClickCached(t.id, t)}
               className={`styled-text__selector ${className || ''}`}
               key={t.id + '' + i}
               {...rest}

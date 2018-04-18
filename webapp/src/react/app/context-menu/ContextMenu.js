@@ -23,6 +23,7 @@ class ContextMenu extends PureComponent {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.contextMenu && nextProps.contextMenu !== this.props.contextMenu) {
+      this.didFit = false;
       this.setState({ styles: this.stylesForOptions(nextProps.contextMenu.options) });
     }
   }
@@ -39,7 +40,7 @@ class ContextMenu extends PureComponent {
     }
   }
   fitToScreen() {
-    if (this.menuRef) {
+    if (this.menuRef && !this.didFit) {
       const { styles } = this.state;
       const dStyle = {};
 
@@ -99,8 +100,10 @@ class ContextMenu extends PureComponent {
 
       if (dStyle.top || dStyle.bottom || dStyle.left || dStyle.right) {
         if (dStyle.top !== styles.top || dStyle.bottom !== styles.bottom) {
+          this.didFit = true;
           this.setState({ styles: Object.assign({}, styles, dStyle) });
         } else if (dStyle.left !== styles.left || dStyle.right !== styles.right) {
+          this.didFit = true;
           this.setState({ styles: Object.assign({}, styles, dStyle) });
         }
       }
