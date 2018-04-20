@@ -26,7 +26,6 @@ class Image extends Component {
   render() {
     const { file } = this.props;
     const { fullSize } = this.state;
-    console.log('hi', file);
 
     return (
       <SwissProvider fullSize={fullSize}>

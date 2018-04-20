@@ -24,10 +24,6 @@ addGlobalStyles({
 })
 
 class Button extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
   renderIcon(status) {
     let { icon } = this.props;
     if(!icon && status === 'default') {
@@ -82,6 +78,7 @@ class Button extends PureComponent {
       loading,
       error,
       success,
+      className,
       ...rest,
     } = this.props;
 
@@ -95,7 +92,7 @@ class Button extends PureComponent {
         hasIcon={status !== 'default' || !!icon}
         compact={compact}
         status={status}>
-        <ATag className="gl-button" {...rest}>
+        <ATag className={`gl-button ${className || ''}`.trim()} {...rest}>
           <Background>
             {this.renderIcon(status)}
             {this.renderTitle(status)}
