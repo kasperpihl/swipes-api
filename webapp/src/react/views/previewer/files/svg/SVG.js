@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import './styles/svg';
+import { styleElement } from 'react-swiss';
+
+import styles from './SVG.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
 
 class SVG extends Component {
   static supportContentType(contentType) {
@@ -41,8 +45,7 @@ class SVG extends Component {
     const { renderedSVG } = this.state;
 
     return (
-      <div
-        className="preview-svg"
+      <Wrapper
         dangerouslySetInnerHTML={{ __html: renderedSVG }}
       />
     );

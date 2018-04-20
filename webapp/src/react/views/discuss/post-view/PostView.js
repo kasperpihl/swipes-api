@@ -10,7 +10,6 @@ import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import Button from 'components/button/Button2';
 import PostReactions from '../post-components/post-reactions/PostReactions';
 import Icon from 'Icon';
-import './styles/post-view.scss';
 import PostHeader from '../post-components/post-header/PostHeader';
 import styles from './PostView.swiss';
 

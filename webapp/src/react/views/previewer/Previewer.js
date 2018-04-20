@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { styleElement } from 'react-swiss';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button2';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -12,7 +13,17 @@ import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import * as Files from './files';
 import * as Rows from './rows';
-import './preview.scss';
+// import './preview.scss';
+import styles from './Previewer.swiss';
+
+const ContentWrapper = styleElement('div', styles.ContentWrapper);
+const FileWrapper = styleElement('div', styles.FileWrapper);
+const LoaderWrapper = styleElement('div', styles.LoaderWrapper);
+const NoPreviewWrapper = styleElement('div', styles.NoPreviewWrapper);
+const NoPreviewHeader = styleElement('div', styles.NoPreviewHeader);
+const NoPreviewText = styleElement('div', styles.NoPreviewText);
+const Footer = styleElement('div', styles.Footer);
+const FooterButton = styleElement(Button, styles.FooterButton);
 
 class HOCPreviewModal extends PureComponent {
   static minWidth() {
@@ -157,14 +168,14 @@ class HOCPreviewModal extends PureComponent {
   }
   renderNoPreview() {
     return (
-      <div className="preview-no-preview">
-        <div className="preview-no-preview__header">Can’t display preview</div>
-        <div className="preview-no-preview__text">
+      <NoPreviewWrapper>
+        <NoPreviewHeader>Can’t display preview</NoPreviewHeader>
+        <NoPreviewText>
           Unfortunately this file format is not supported yet. You can: <br />
           1. Click “Open in Browser” to see preview in browser <br />
           2. Click “Download” to save the file to your computer <br />
-        </div>
-      </div>
+        </NoPreviewText>
+      </NoPreviewWrapper>
     );
   }
   renderLoader() {
@@ -173,9 +184,9 @@ class HOCPreviewModal extends PureComponent {
       return undefined;
     }
     return (
-      <div className="preview-loader">
+      <LoaderWrapper>
         <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
-      </div>
+      </LoaderWrapper>
     );
   }
   renderHeader() {
@@ -225,21 +236,16 @@ class HOCPreviewModal extends PureComponent {
   }
   renderFile(file) {
     const Comp = this.getComponentForFile(file);
-    const { fileLoading } = this.state;
-    let className = 'preview-file';
-    if (fileLoading) {
-      className += ' preview-file--hidden';
-    }
 
     return (
-      <div className={className}>
+      <FileWrapper hidden={!!this.state.fileLoading}>
         <Comp
           file={file}
           onLoad={this.onFileLoaded}
           onError={this.onFileError}
           delegate={this}
         />
-      </div>
+      </FileWrapper>
     );
   }
   renderContent() {
@@ -274,18 +280,17 @@ class HOCPreviewModal extends PureComponent {
     }
 
     return (
-      <div className="preview-footer">
+      <Footer>
         {buttons.map((b, i) => (
-          <Button
+          <FooterButton
             key={i}
-            className="preview-footer__btn"
             download={b.force_download}
             href={b.force_download ? b.url : undefined}
-            text={b.title}
+            title={b.title}
             onClick={b.force_download ? undefined : this.onClickButtonCached(i)}
           />
         ))}
-      </div>
+      </Footer>
     );
   }
   render() {

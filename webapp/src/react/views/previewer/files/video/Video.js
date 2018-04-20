@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import './styles/video';
+import { styleElement, addGlobalStyles } from 'react-swiss';
+
+import styles from './Video.swiss';
+
+addGlobalStyles(styles.GlobalStyles);
+const Wrapper = styleElement('div', styles.Wrapper);
+const Player = styleElement('video', styles.Player);
 
 class Video extends Component {
   static supportContentType(contentType) {
@@ -10,24 +16,20 @@ class Video extends Component {
       'video/ogg',
     ].indexOf(contentType) !== -1);
   }
-  constructor(props) {
-    super(props);
-  }
   render() {
     const { file } = this.props;
     const className = 'preview-video';
 
     return (
-      <div className={className}>
-        <video
+      <Wrapper>
+        <Player
           autoPlay
           onLoadedData={this.props.onLoad}
           onError={this.props.onError}
           src={file.url}
-          className="preview-video__player"
           controls
         />
-      </div>
+      </Wrapper>
     );
   }
 }

@@ -8,7 +8,7 @@ import BrowserNavBar from './BrowserNavBar';
 
 import './styles/browser';
 
-class HOCBrowser extends PureComponent {
+class Browser extends PureComponent {
   static minWidth() {
     return 800;
   }
@@ -133,4 +133,4 @@ class HOCBrowser extends PureComponent {
 
 export default navWrapper(connect(state => ({
   me: state.get('me'),
-}))(HOCBrowser));
+}))(Browser));

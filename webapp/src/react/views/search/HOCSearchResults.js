@@ -19,13 +19,27 @@ class HOCSearchResults extends PureComponent {
   }
   renderEmptyState(type) {
     let emptyIcon = 'ESSearch';
-    let emptyTitle = (<div className="search-results__empty-title">LOOKING FOR SOMETHING?</div>)
-    let emptyText = (<div className="search-results__empty-text">Search for plans, goals or <br /> discussions by keywords.</div>)
+    let emptyTitle = (
+      <div className="search-results__empty-title">LOOKING FOR SOMETHING?</div>
+    );
+    let emptyText = (
+      <div className="search-results__empty-text">
+        Search for plans, goals or
+        <br />
+        discussions by keywords.
+      </div>
+    );
 
     if (type === 'noresults') {
-      emptyIcon = 'ESNoResults'
-      emptyTitle = (<div className="search-results__empty-title">Oops! Nothing found.</div>)
-      emptyText = (<div className="search-results__empty-text">We even searched our pockets but no results.</div>)
+      emptyIcon = 'ESNoResults';
+      emptyTitle = (
+        <div className="search-results__empty-title">Oops! Nothing found.</div>
+      );
+      emptyText = (
+        <div className="search-results__empty-text">
+          We even searched our pockets but no results.
+        </div>
+      );
     }
 
     return (
@@ -76,6 +90,6 @@ class HOCSearchResults extends PureComponent {
 }
 
 
-export default navWrapper(connect(state => ({
+export default navWrapper(connect((state, props) => ({
   results: cs.global.search(state, props),
 }))(HOCSearchResults));

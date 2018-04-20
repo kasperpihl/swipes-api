@@ -62,7 +62,7 @@ class PlanListItem extends PureComponent {
     const { plan } = this.props;
     const [goalPercentage, stepPercentage] = this.getProgress();
     return (
-      <Wrapper onClick={this.onOpenMilestone}>
+      <Wrapper onClick={this.onOpenMilestone} className="hover-class">
         <ProgressBar
           goalPercentage={goalPercentage}
           stepPercentage={stepPercentage}

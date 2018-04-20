@@ -37,7 +37,7 @@ export const preview = (from, att, targetId) => (d) => {
     d(mainActions.browser(from, service.get('id')));
   } else {
     d(navigationActions.openSecondary(from, {
-      id: 'Preview',
+      id: 'Previewer',
       title: 'Preview',
       showTitleInCrumb: true,
       props: {

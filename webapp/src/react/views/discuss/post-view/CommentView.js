@@ -7,7 +7,6 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import PostReactions from '../post-components/post-reactions/PostReactions';
 import styles from './CommentView.swiss';
-import './styles/comment-view.scss';
 
 const Container = styleElement('div', styles.Container);
 const Picture = styleElement('div', styles.Picture);

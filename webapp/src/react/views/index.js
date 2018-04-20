@@ -5,9 +5,8 @@ import Organization from './account/organization/HOCOrganization';
 import Profile from './account/profile/HOCProfile';
 import Services from './account/services/Services';
 import Onboarding from './account/onboarding/HOCOnboarding';
-import Browser from './browser/HOCBrowser';
+import Browser from './browser/Browser';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
-import MilestoneList from './milestones/milestone-list/HOCMilestoneList';
 import PlanList from './plan/plan-list/HOCPlanList';
 import PlanOverview from './plan/plan-overview/HOCPlanOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
@@ -15,7 +14,7 @@ import NotFound from './not-found/NotFound';
 import Notifications from './notifications/HOCNotifications';
 import PostFeed from './discuss/post-feed/HOCPostFeed';
 import PostView from './discuss/post-view/HOCPostView';
-import Preview from './preview/HOCPreview';
+import Previewer from './previewer/Previewer';
 import Search from './search/HOCSearch';
 import SideNote from './side-note/HOCSideNote';
 import SwipesIntro from './account/swipes-intro/SwipesIntro';
@@ -28,7 +27,6 @@ export {
   Browser,
   GoalOverview,
   Onboarding,
-  MilestoneList,
   NoMilestoneOverview,
   NotFound,
   Notifications,
@@ -36,7 +34,7 @@ export {
   PlanOverview,
   PostFeed,
   PostView,
-  Preview,
+  Previewer,
   Profile,
   Organization,
   Search,

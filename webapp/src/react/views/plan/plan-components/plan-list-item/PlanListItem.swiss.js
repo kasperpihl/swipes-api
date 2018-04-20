@@ -14,7 +14,10 @@ export default styleSheet('PlanListItem', {
   },
   Title: {
     _font: ['15px', '24px', 300],
-    color: '$sw1'
+    color: '$sw1',
+    '.hover-class:hover &': {
+      color: '$blue',
+    }
   },
   Subtitle: {
     _font: ['12px', '18px', 400],
@@ -26,6 +29,9 @@ export default styleSheet('PlanListItem', {
     background: 'rgba($green, 0.1)',
     borderRadius: '12px',
     overflow: 'hidden',
+    '.hover-class:hover &': {
+      opacity: .9
+    },
     '&:before': {
       content: '',
       position: 'absolute',

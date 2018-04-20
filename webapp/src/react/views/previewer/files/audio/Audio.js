@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { bindAll } from 'swipes-core-js/classes/utils';
-import './styles/audio';
+import { styleElement } from 'react-swiss';
+
+import styles from './Audio.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
 
 class Audio extends Component {
   static supportContentType(contentType) {
@@ -13,15 +16,11 @@ class Audio extends Component {
 
     ].indexOf(contentType) !== -1);
   }
-  constructor(props) {
-    super(props);
-  }
   render() {
     const { file } = this.props;
-    let className = 'preview-audio';
 
     return (
-      <div className={className}>
+      <Wrapper>
         <audio
           autoPlay
           onLoadedData={this.props.onLoad}
@@ -29,7 +28,7 @@ class Audio extends Component {
           src={file.url}
           controls
         />
-      </div>
+      </Wrapper>
     );
   }
 }

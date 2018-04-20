@@ -9,7 +9,7 @@ export default (props) => {
       <div className="milestone-result__icon">
         <Icon icon="MiniMilestone" className="milestone-result__svg" />
       </div>
-      <div className="milestone-result__title">{result.item.title}</div>
+      <div className="milestone-result__title">{props.result.item.title}</div>
     </div>
   );
 };

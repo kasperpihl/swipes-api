@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import loadImage from 'blueimp-load-image';
-import './styles/jpeg';
+import { styleElement } from 'react-swiss';
+
+import styles from './Jpeg.swiss';
+
+const Image = styleElement('div', styles.Image);
 
 class Jpeg extends Component {
   static supportContentType(contentType) {
@@ -12,7 +16,7 @@ class Jpeg extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rawSize: false,
+      fullSize: false,
     };
     loadImage(props.file.url, (img) => {
       if(img.type === "error") {
@@ -26,29 +30,20 @@ class Jpeg extends Component {
       // crossOrigin: 'anonymous',
     });
   }
-  toggleRawSize = () => {
-    const { rawSize } = this.state;
-    this.setState({ rawSize: !rawSize });
+  onToggle = () => {
+    const { fullSize } = this.state;
+    this.setState({ fullSize: !fullSize });
   }
   render() {
     const { file } = this.props;
-    const { rawSize } = this.state;
-    let className = 'preview-jpeg';
-
-    if (rawSize) {
-      className += ' preview-jpeg--full-size';
-    }
+    const { fullSize } = this.state;
 
     return (
-      <div ref={(cont) => { this.cont = cont; }} className={className} onClick={this.toggleRawSize}>
-        {/*<img
-          onLoad={this.props.onLoad}
-          onError={this.props.onError}
-          src={file.url}
-          className="preview-jpeg__image"
-          role="presentation"
-        />*/}
-      </div>
+      <Image
+        innerRef={(c) => { this.cont = c; }}
+        onClick={this.onToggle}
+        fullSize={fullSize}
+      />
     );
   }
 }
