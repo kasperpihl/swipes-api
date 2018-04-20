@@ -3,9 +3,11 @@ import { StripeProvider, Elements } from 'react-stripe-elements';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
+
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Billing from './Billing';
+import ChangeCyclePopup from './ChangeCyclePopup';
 
 class HOCBilling extends PureComponent {
   constructor(props) {
@@ -30,9 +32,16 @@ class HOCBilling extends PureComponent {
     });
   }
   onSwitchPlan(plan) {
-    const { organization } = this.props;
+    const { organization, openModal } = this.props;
     if (!organization.get('stripe_subscription_id')) {
       this.setState({ billingStatus: plan });
+    } else {
+      openModal({
+        component: ChangeCyclePopup,
+        title: 'Change stuff',
+        position: 'center',
+        props: {},
+      });
     }
   }
   onManage() {

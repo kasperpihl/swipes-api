@@ -4,7 +4,7 @@ export default styleSheet('PlanListItem', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'center'],
-    padding: '24px 12px',
+    padding: '18px 12px',
     borderBottom: '1px solid $sw4',
   },
   TextWrapper: {

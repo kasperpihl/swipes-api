@@ -1,9 +1,11 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
+import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCAssigning from 'components/assigning/HOCAssigning';
+import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
 import Icon from 'Icon';
 import styles from './PlanListItem.swiss';
 
@@ -25,6 +27,27 @@ class PlanListItem extends PureComponent {
     this.setState({
       goals: this.getFilteredGoals(nextProps.plan),
     });
+  }
+  onMouseEnter = (e) => {
+    const { tooltip } = this.props;
+    const data = {
+      component: PlanProgressTooltip,
+      props: {
+        numberOfGoals: 1,
+        numberOfSteps: 2
+      },
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        position: 'right',
+      },
+    };
+
+    tooltip(data);
+  }
+  onMouseLeave = () => {
+    const { tooltip } = this.props;
+
+    tooltip(null);
   }
   getFilteredGoals(plan) {
     return msgGen.milestones.getGoals(plan);
@@ -55,6 +78,9 @@ class PlanListItem extends PureComponent {
 
     const stepPercentage = numberOfSteps ? parseInt((numberOfCompletedSteps / numberOfSteps) * 100, 10) : 0;
 
+    this.goalPercentage = percentage;
+    this.stepPercentage = stepPercentage;
+    
     return [percentage, stepPercentage];
 
   }
@@ -64,6 +90,8 @@ class PlanListItem extends PureComponent {
     return (
       <Wrapper onClick={this.onOpenMilestone} className="hover-class">
         <ProgressBar
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
           goalPercentage={goalPercentage}
           stepPercentage={stepPercentage}
         />
@@ -78,4 +106,6 @@ class PlanListItem extends PureComponent {
 
 export default connect(state => ({
   goals: state.get('goals'),
-}))(PlanListItem);
+}), {
+  tooltip: mainActions.tooltip,
+})(PlanListItem);
