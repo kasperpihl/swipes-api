@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-// import Button from 'Button';
 import Icon from 'Icon';
 import './styles/compatible-invite-form.scss';
 
@@ -14,8 +10,6 @@ class CompatibleInviteForm extends PureComponent {
 
     setupDelegate(this, 'onNameChange', 'onEmailChange', 'onAddInput');
     // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
   }
   renderLoader(isLoading, success) {
 
@@ -120,8 +114,4 @@ class CompatibleInviteForm extends PureComponent {
   }
 }
 
-export default CompatibleInviteForm
-
-// const { string } = PropTypes;
-
-CompatibleInviteForm.propTypes = {};
+export default CompatibleInviteForm;

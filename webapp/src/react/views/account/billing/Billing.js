@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
-// import Icon from 'Icon';
+
 import './styles/billing.scss';
 
 const style = {
@@ -31,12 +30,9 @@ class Billing extends PureComponent {
     super(props);
     this.state = {
       errorMessage: '',
-      successState: true,
     };
     setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage');
     bindAll(this, ['onChange', 'onSubmit']);
-  }
-  componentDidMount() {
   }
   getShowPrice() {
     const { billingStatus, users } = this.props;
@@ -200,7 +196,3 @@ class Billing extends PureComponent {
 }
 
 export default injectStripe(Billing);
-
-// const {string} = PropTypes;
-
-Billing.propTypes = {};

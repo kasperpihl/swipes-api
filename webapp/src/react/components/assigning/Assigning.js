@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
-import { map, mapContains, listOf } from 'react-immutable-proptypes';
 import Icon from 'Icon';
 import AssigneeTooltip from './AssigneeTooltip';
 
@@ -135,18 +133,3 @@ class Assigning extends Component {
 }
 
 export default Assigning;
-
-const { string, func, number, bool } = PropTypes;
-
-Assigning.propTypes = {
-  assignees: listOf(mapContains({
-    name: string,
-    profile_pic: string,
-  })),
-  maxImages: number,
-  onClick: func,
-  rounded: bool,
-  size: number,
-  tooltip: func,
-  tooltipAlign: string,
-};

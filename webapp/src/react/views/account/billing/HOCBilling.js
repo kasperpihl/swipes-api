@@ -1,15 +1,13 @@
 import React, { PureComponent } from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
+
 import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Billing from './Billing';
+import ChangeCyclePopup from './ChangeCyclePopup';
 
 class HOCBilling extends PureComponent {
   constructor(props) {
@@ -19,8 +17,6 @@ class HOCBilling extends PureComponent {
     };
 
     setupLoading(this);
-  }
-  componentDidMount() {
   }
   onSubmitSuccess(token) {
     const { createStripeCustomer } = this.props;
@@ -36,9 +32,16 @@ class HOCBilling extends PureComponent {
     });
   }
   onSwitchPlan(plan) {
-    const { organization } = this.props;
+    const { organization, openModal } = this.props;
     if (!organization.get('stripe_subscription_id')) {
       this.setState({ billingStatus: plan });
+    } else {
+      openModal({
+        component: ChangeCyclePopup,
+        title: 'Change stuff',
+        position: 'center',
+        props: {},
+      });
     }
   }
   onManage() {
@@ -71,17 +74,10 @@ class HOCBilling extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCBilling.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    organization: state.getIn(['me', 'organizations', 0]),
-    users: cs.users.getAllButSofi(state),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(state => ({
+  organization: state.getIn(['me', 'organizations', 0]),
+  users: cs.users.getAllButSofi(state),
+}), {
   createStripeCustomer: ca.organizations.createStripeCustomer,
 })(HOCBilling));

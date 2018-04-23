@@ -7,8 +7,6 @@ import {
 
 import './styles/index.scss';
 
-// import { map, list } from 'react-immutable-proptypes';
-
 class CodeBlock extends PureComponent {
   static getDecorator() {
     return new PrismDecorator();
@@ -69,9 +67,6 @@ class CodeBlock extends PureComponent {
     super(props);
     this.state = {};
   }
-
-  componentDidMount() {
-  }
   render() {
     return (
       <div className="codeBlock" />
@@ -80,7 +75,3 @@ class CodeBlock extends PureComponent {
 }
 
 export default CodeBlock;
-
-// const { string } = PropTypes;
-
-CodeBlock.propTypes = {};

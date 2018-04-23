@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   Editor,
   getDefaultKeyBinding,
@@ -10,11 +9,8 @@ import { setupDelegate } from 'react-delegate';
 import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';
 import DefaultBlocks from './blocks/default/DefaultBlocks';
-// import CodeBlock from './blocks/code/CodeBlock';
 import MediumEditor from './medium-editor/MediumEditor';
 import DraftExt from './draft-ext';
-
-import './styles/note-editor.scss';
 
 class NoteEditor extends Component {
   constructor(props) {
@@ -26,7 +22,6 @@ class NoteEditor extends Component {
         NoteLink,
       ],
       blocks: [
-        // CodeBlock,
         ChecklistBlock,
         DefaultBlocks,
       ],
@@ -115,14 +110,3 @@ class NoteEditor extends Component {
 }
 
 export default NoteEditor;
-
-const { bool, func, object } = PropTypes;
-
-NoteEditor.propTypes = {
-  onBlur: func,
-  rawState: object,
-  delegate: object,
-  editorState: object,
-  mediumEditor: bool,
-  readOnly: bool,
-};

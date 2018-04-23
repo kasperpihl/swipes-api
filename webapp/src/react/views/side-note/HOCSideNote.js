@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import InfoButton from 'components/info-button/InfoButton';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import {
@@ -16,11 +14,11 @@ import {
 import Button from 'Button';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import diff from 'classes/draft-util';
+import diff from 'src/classes/draft-util';
 
 import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 
 import './styles/side-note';
@@ -221,7 +219,7 @@ class HOCSideNote extends PureComponent {
               title,
             }}
           />
-          <HOCInfoButton
+          <InfoButton
             delegate={this}
           />
         </HOCHeaderTitle>
@@ -262,29 +260,14 @@ class HOCSideNote extends PureComponent {
   }
 }
 
-const { string, func, object, number } = PropTypes;
-HOCSideNote.propTypes = {
-  note: map,
-  serverOrg: map,
-  latestRev: number,
-  id: string,
-  browser: func,
-  organizationId: string,
-  cacheNote: func,
-  title: string,
-  saveNote: func,
-  cachedText: object,
-  target: string,
-};
-
-function mapStateToProps(state, ownProps) {
-  let cachedText = state.getIn(['notes', 'cache', ownProps.id, 'text']);
+function mapStateToProps(state, props) {
+  let cachedText = state.getIn(['notes', 'cache', props.id, 'text']);
   if (!cachedText) {
-    cachedText = state.getIn(['notes', 'cache', ownProps.id, '_savingText']);
+    cachedText = state.getIn(['notes', 'cache', props.id, '_savingText']);
   }
 
-  const note = state.getIn(['notes', 'server', ownProps.id]);
-  let serverOrg = state.getIn(['notes', 'cache', ownProps.id, 'serverOrg']);
+  const note = state.getIn(['notes', 'server', props.id]);
+  let serverOrg = state.getIn(['notes', 'cache', props.id, 'serverOrg']);
   serverOrg = serverOrg || note;
   const latestRev = serverOrg.get('rev') || 1;
 
@@ -300,5 +283,5 @@ function mapStateToProps(state, ownProps) {
 export default navWrapper(connect(mapStateToProps, {
   saveNote: ca.notes.save,
   cacheNote: ca.notes.cache,
-  browser: a.main.browser,
+  browser: mainActions.browser,
 })(HOCSideNote));

@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
+import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
 
 import HOCUnsubscribe from 'src/react/pages/unsubscribe/HOCUnsubscribe';
-import HOCCompatibleDownload from 'compatible/pages/download/HOCCompatibleDownload';
+import CompatibleDownload from 'compatible/pages/download/CompatibleDownload';
 import HOCPlanCSVExporter from 'compatible/pages/plan-csv-exporter/HOCPlanCSVExporter';
 import HOCCompatibleLogin from 'compatible/pages/login/HOCCompatibleLogin';
 import HOCCompatibleSignup from 'compatible/pages/signup/HOCCompatibleSignup';
@@ -11,27 +12,18 @@ import HOCCompatibleInvite from 'compatible/pages/invite/HOCCompatibleInvite';
 import HOCCompatibleWelcome from 'compatible/pages/welcome/HOCCompatibleWelcome';
 import HOCCompatibleConfirm from 'compatible/pages/confirm/HOCCompatibleConfirm';
 import HOCNotSupported from 'compatible/pages/not-supported/HOCNotSupported';
-import Dashboard from 'compatible/pages/dashboard/Dashboard';
 
-import SwipesLoader from 'components/loaders/SwipesLoader';
-import HOCRedirect from 'src/react/app/HOCRedirect';
-import SuccessStateGradient from 'components/gradient/SuccessStateGradient';
-import HOCAutoCompleting from 'components/auto-completing/HOCAutoCompleting';
-import HOCTooltip from 'components/tooltip/HOCTooltip';
-import HOCTopbar from 'components/topbar/HOCTopbar';
-import HOCTrial from 'components/trial/HOCTrial';
-
-import HOCContextMenu from 'components/context-menu/HOCContextMenu';
-import Gradient from 'components/gradient/Gradient';
+import SwipesLoader from 'src/react/components/loaders/SwipesLoader';
+import Redirect from 'src/react/app/redirect/Redirect';
+import HOCAutoCompleting from 'src/react/app/auto-completing/HOCAutoCompleting';
+import Trial from 'src/react/app/trial/Trial';
+import Tooltip from 'src/react/app/tooltip/Tooltip';
+import Topbar from 'src/react/app/topbar/Topbar';
+import ContextMenu from 'src/react/app/context-menu/ContextMenu';
+import Gradient from 'src/react/app/gradient/Gradient';
 
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
-
-let DevTools = 'div';
-
-if (process.env.NODE_ENV !== 'production') {
-  DevTools = require('components/dev-tools/DevTools').default; // eslint-disable-line global-require
-}
 
 class Root extends PureComponent {
   renderRoutes() {
@@ -42,19 +34,18 @@ class Root extends PureComponent {
     return [
       <Route key="1" path="/" exact render={() => {
         const { readyInOrg } = this.props;
-        const Comp = require('src/react/app/HOCApp').default;
+        const Comp = require('src/react/app/App').default;
         return (readyInOrg && <Comp />) || null;
       }} />,
       <Route key="2" path="/notsupported" component={HOCNotSupported} />,
       <Route key="3" path="/unsubscribe" component={HOCUnsubscribe} />,
-      <Route key="4" path="/download" component={HOCCompatibleDownload} />,
+      <Route key="4" path="/download" component={CompatibleDownload} />,
       <Route key="5" path="/plan-csv-exporter" component={HOCPlanCSVExporter} />,
       <Route key="6" path="/login" component={HOCCompatibleLogin} />,
       <Route key="7" path="/register" component={HOCCompatibleSignup} />,
       <Route key="8" path="/invite" component={HOCCompatibleInvite} />,
       <Route key="9" path="/welcome" component={HOCCompatibleWelcome} />,
-      <Route key="10" path="/dashboard" component={Dashboard} />,
-      <Route key="11" path="/confirm" component={HOCCompatibleConfirm} />,
+      <Route key="10" path="/confirm" component={HOCCompatibleConfirm} />,
     ];
   }
   render() {
@@ -66,22 +57,20 @@ class Root extends PureComponent {
     return (
       <div id="app" className={className}>
         <div id="draggable"></div>
-        <HOCTopbar />
-        <HOCRedirect />
+        <Topbar />
+        <Redirect />
         <Gradient />
-        <HOCContextMenu />
-        <SuccessStateGradient />
+        <ContextMenu />
         <HOCAutoCompleting />
-        <HOCTooltip />
-        <DevTools />
+        <Tooltip />
         {this.renderRoutes()}
-        <Route path="/" component={HOCTrial} />
+        <Route path="/" component={Trial} />
       </div>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
+export default withRouter(connect(state => ({
   isHydrated: state.getIn(['main', 'isHydrated']),
   isMaximized: state.getIn(['main', 'isMaximized']),
   isFullscreen: state.getIn(['main', 'isFullscreen']),
@@ -89,8 +78,5 @@ const mapStateToProps = (state) => ({
   status: state.getIn(['connection', 'status']),
   hasConnected: state.getIn(['connection', 'hasConnected']),
   readyInOrg: state.getIn(['connection', 'readyInOrg']),
-});
-
-export default withRouter(connect(mapStateToProps, {
-})(Root));
+}))(hot(module)(Root)));
  

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 
 class ContextWrapper extends Component {
   getChildContext() {

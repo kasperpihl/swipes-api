@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { fromJS } from 'immutable';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Organization from './Organization';
 
@@ -23,8 +22,6 @@ class HOCOrganization extends PureComponent {
       tabIndex: 0,
     };
     setupLoading(this);
-  }
-  componentDidMount() {
   }
   onChange(key, val) {
     this.setState({ [key]: val});
@@ -289,21 +286,14 @@ class HOCOrganization extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCOrganization.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    users: cs.users.getAllButSofi(state),
-    me: state.get('me'),
-    organization: state.getIn(['me', 'organizations', 0]),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
+export default navWrapper(connect(state => ({
+  users: cs.users.getAllButSofi(state),
+  me: state.get('me'),
+  organization: state.getIn(['me', 'organizations', 0]),
+}), {
   invite: ca.organizations.inviteUser,
-  confirm: a.menus.confirm,
+  confirm: menuActions.confirm,
   deleteOrg: ca.organizations.deleteOrg,
   leaveOrg: ca.organizations.leave,
   completeOnboarding: ca.onboarding.complete,
@@ -311,5 +301,5 @@ export default navWrapper(connect(mapStateToProps, {
   disableUser: ca.organizations.disableUser,
   enableUser: ca.organizations.enableUser,
   promoteToAdmin: ca.organizations.promoteToAdmin,
-  contextMenu: a.main.contextMenu,
+  contextMenu: mainActions.contextMenu,
 })(HOCOrganization));

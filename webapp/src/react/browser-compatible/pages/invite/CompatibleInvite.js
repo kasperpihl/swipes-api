@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router-dom';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
+
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
@@ -68,7 +66,3 @@ class CompatibleInvite extends PureComponent {
 }
 
 export default withRouter(CompatibleInvite)
-
-// const { string } = PropTypes;
-
-CompatibleInvite.propTypes = {};

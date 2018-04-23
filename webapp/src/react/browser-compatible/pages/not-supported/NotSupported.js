@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-// import Button from 'Button';
+
 import { Link } from 'react-router-dom';
 import Icon from 'Icon';
 import RotateLoader from 'components/loaders/RotateLoader';
@@ -20,8 +16,6 @@ class NotSupported extends PureComponent {
     this.state = {};
     setupDelegate(this, 'onLeaveOrg');
     // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
   }
   renderLeaveOrDelete() {
     const { me, organization, isLoading } = this.props;
@@ -75,8 +69,4 @@ class NotSupported extends PureComponent {
   }
 }
 
-export default NotSupported
-
-// const { string } = PropTypes;
-
-NotSupported.propTypes = {};
+export default NotSupported;

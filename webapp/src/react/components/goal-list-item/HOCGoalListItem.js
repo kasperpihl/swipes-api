@@ -1,22 +1,20 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { element } from 'react-swiss';
-import { map } from 'react-immutable-proptypes';
+import { styleElement } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as goalActions from 'src/redux/goal/goalActions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
-import sw from './GoalListItem.swiss';
+import styles from './GoalListItem.swiss';
 /* global msgGen */
 
-const GoalItem = element('div', sw.GoalItem);
-const GoalTitle = element('div', sw.GoalTitle);
-const StatusDot = element('div', sw.StatusDot);
+const GoalItem = styleElement('div', styles.GoalItem);
+const GoalTitle = styleElement('div', styles.GoalTitle);
+const StatusDot = styleElement('div', styles.StatusDot);
 
 class HOCGoalListItem extends PureComponent {
   constructor(props) {
@@ -86,7 +84,7 @@ class HOCGoalListItem extends PureComponent {
         maxImages={1}
         delegate={this}
         rounded
-        size={26}
+        size={30}
       />
     );
   }
@@ -100,12 +98,12 @@ class HOCGoalListItem extends PureComponent {
     }
 
     return (
-      <GoalItem onClick={this.onGoalClick}>
+      <GoalItem className="goal-item" onClick={this.onGoalClick}>
         <StatusDot status={status} />
         <GoalTitle
           inTakeAction={inTakeAction}
           status={status}
-          hoverRef={GoalItem.ref}
+          hoverRef=".goal-item"
         >
           {loading || goal.get('title')}
         </GoalTitle>
@@ -115,19 +113,9 @@ class HOCGoalListItem extends PureComponent {
   }
 }
 
-const { object } = PropTypes;
-
-HOCGoalListItem.propTypes = {
-  goal: map,
-  delegate: object,
-  filter: map,
-};
-
-const mapStateToProps = (state, ownProps) => ({
-  goal: state.getIn(['goals', ownProps.goalId]),
-});
-
-export default connect(mapStateToProps, {
-  selectAssignees: a.goals.selectAssignees,
+export default connect((state, props) => ({
+  goal: state.getIn(['goals', props.goalId]),
+}), {
+  selectAssignees: goalActions.selectAssignees,
   assignGoal: ca.goals.assign,
 })(HOCGoalListItem);

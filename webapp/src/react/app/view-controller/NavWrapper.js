@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+
 const { string, func, number } = PropTypes;
 
 const DEFAULT_MAX_WIDTH = 800;

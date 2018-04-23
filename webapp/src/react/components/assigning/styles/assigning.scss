@@ -49,7 +49,7 @@ $compSize: 30px;
   &__profile {
     @include size($compSize !important);
     @include size(var(--assigneesSize, $compSize) !important);
-    border: 2px solid white;
+    // border: 2px solid white;
     box-sizing: content-box;
     border-radius: 6px;
     margin-right: -9px;

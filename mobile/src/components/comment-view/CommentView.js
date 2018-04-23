@@ -118,7 +118,7 @@ class CommentView extends PureComponent {
     setupDelegate(this, 'onOpenUrl', 'onAttachmentClick')
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   disableActiveState() {
     const { commentActive } = this.state;

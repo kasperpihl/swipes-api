@@ -43,7 +43,13 @@
     "accessKey": "SW_AWSS3_ACCESS_KEY",
     "secretKey": "SW_AWSS3_SECRET_KEY",
     "bucketName": "SW_AWSS3_BUCKET_NAME",
+    "region": "SW_AWSS3_REGION",
     "url": "SW_AWSS3_URL"
+  },
+  "awsCloudWatch": {
+    "accessKey": "SW_AWS_CLOUD_WATCH_ACCESS_KEY",
+    "secretKey": "SW_AWSS3_CLOUD_WATCH_SECRET_KEY",
+    "region": "SW_AWSS3_CLOUD_WATCH_REGION"
   },
   "stripe": {
     "publishableKey": "SW_STRIPE_PUBLISHABLE_KEY",

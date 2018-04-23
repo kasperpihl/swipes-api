@@ -180,7 +180,7 @@ class HOCStepList extends PureComponent {
             <Text selectable={true} style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
           </View>
           <View style={styles.title}>
-            <Text selectable={true} style={[styles.titleLabel, titleStyles]}>{title}</Text>
+            <Text style={[styles.titleLabel, titleStyles]}>{title}</Text>
           </View>
           <View style={[styles.assignees, { opacity }]}>
             <HOCAssigning assignees={step.get('assignees')} maxImages={1} />

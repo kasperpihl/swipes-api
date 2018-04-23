@@ -7,7 +7,7 @@ import SWView from 'SWView';
 import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import InfoButton from 'components/info-button/InfoButton';
 import Icon from 'Icon';
 
 import './styles/take-action.scss';
@@ -38,7 +38,7 @@ class TakeAction extends Component {
           title="Take Action"
           subtitle="See all your responsibilities and work on the most important goals."
         >
-          <HOCInfoButton
+          <InfoButton
             delegate={delegate}
           />
         </HOCHeaderTitle>

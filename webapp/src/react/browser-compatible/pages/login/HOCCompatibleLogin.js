@@ -1,16 +1,13 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as menuActions from 'src/redux/menu/menuActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import CompatibleLogin from './CompatibleLogin';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
-// import { fromJS } from 'immutable';
 
 class HOCCompatibleLogin extends PureComponent {
   constructor(props) {
@@ -19,8 +16,6 @@ class HOCCompatibleLogin extends PureComponent {
       formData: Map(),
     };
     setupLoading(this);
-  }
-  componentDidMount() {
   }
   onChange(key, e) {
     const { formData } = this.state;
@@ -102,15 +97,10 @@ class HOCCompatibleLogin extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCCompatibleLogin.propTypes = {};
-
-const mapStateToProps = (state) => ({});
-
-export default connect(mapStateToProps, {
-  inputMenu: a.menus.input,
-  alert: a.menus.alert,
+export default connect(null, {
+  inputMenu: menuActions.input,
+  alert: menuActions.alert,
   request: ca.api.request,
-  setUrl: a.navigation.url,
+  setUrl: navigationActions.url,
 })(HOCCompatibleLogin);

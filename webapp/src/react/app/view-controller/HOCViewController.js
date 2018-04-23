@@ -1,16 +1,15 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import Button from 'Button';
-import * as a from 'actions';
-import * as views from 'views';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
+import * as views from 'src/react/views';
 import { setupCachedCallback, debounce, bindAll } from 'swipes-core-js/classes/utils';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
-import HOCModal from './HOCModal';
+import Modal from 'src/react/app/modal/Modal';
 import prefixAll from 'inline-style-prefixer/static';
 
 const DEFAULT_MAX_WIDTH = 800;
@@ -21,7 +20,7 @@ class HOCViewController extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      appWidth: 1200,
+      appWidth: -1,
       onTop: 'secondary',
       fullscreen: null,
     };
@@ -117,6 +116,8 @@ class HOCViewController extends PureComponent {
   renderViewControllers() {
     const { navigation } = this.props;
     const { appWidth, onTop, fullscreen } = this.state;
+    if(appWidth === -1) return null;
+
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
@@ -211,11 +212,9 @@ class HOCViewController extends PureComponent {
       />
     ) : undefined;
 
-    const hideBreadCrumbs = !closeButton && !lockButton && !fullscreenButton;
-
     return (
       <div className="view-container__header">
-        <HOCBreadCrumbs target={target} hidden={hideBreadCrumbs} />
+        <HOCBreadCrumbs target={target} />
         <div className="view-container__actions">
           {fullscreenButton}
           {lockButton}
@@ -272,7 +271,7 @@ class HOCViewController extends PureComponent {
             key={navigation.getIn([target, 'id']) + navigation.getIn([target, 'stack']).size}
             {...props}
           />
-          <HOCModal target={target} />
+          <Modal target={target} />
         </section>
       </ContextWrapper>
     );
@@ -287,30 +286,14 @@ class HOCViewController extends PureComponent {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    navigation: state.get('navigation'),
-  };
-}
-
-const { func } = PropTypes;
-HOCViewController.propTypes = {
-  navigation: map,
-  saveState: func,
-  openSecondary: func,
-  toggleLock: func,
-  push: func,
-  navSet: func,
-  pop: func,
-};
-
-const ConnectedHOCViewController = connect(mapStateToProps, {
-  pop: a.navigation.pop,
-  push: a.navigation.push,
-  modal: a.main.modal,
-  toggleLock: a.navigation.toggleLock,
-  openSecondary: a.navigation.openSecondary,
-  saveState: a.navigation.saveState,
-  navSet: a.navigation.set,
+export default connect(state => ({
+  navigation: state.get('navigation'),
+}), {
+  pop: navigationActions.pop,
+  push: navigationActions.push,
+  modal: mainActions.modal,
+  toggleLock: navigationActions.toggleLock,
+  openSecondary: navigationActions.openSecondary,
+  saveState: navigationActions.saveState,
+  navSet: navigationActions.set,
 })(HOCViewController);
-export default ConnectedHOCViewController;

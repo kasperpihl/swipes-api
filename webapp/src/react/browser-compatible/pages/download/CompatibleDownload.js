@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
@@ -16,12 +14,6 @@ const downloadLinks = {
 };
 
 class CompatibleDownload extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-  }
   desktopCheck() {
     var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 
@@ -176,7 +168,3 @@ class CompatibleDownload extends PureComponent {
 }
 
 export default CompatibleDownload;
-
-// const { string } = PropTypes;
-
-CompatibleDownload.propTypes = {};

@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react'
 import { SortableElement } from 'react-sortable-hoc';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
+
 import Button from 'Button';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
@@ -16,8 +15,6 @@ class StepListItem extends PureComponent {
     this.state = {};
     setupDelegate(this, 'onStepCheck', 'onStepRemove', 'onStepClick', 'onStepRename');
     bindAll(this, ['onChange', 'onBlur', 'onKeyDown']);
-  }
-  componentDidMount() {
   }
   onKeyDown(e) {
     if (e.keyCode === 13 && e.target.value.length > 0) {
@@ -140,7 +137,3 @@ class StepListItem extends PureComponent {
 }
 
 export default SortableElement(StepListItem)
-
-// const { string } = PropTypes;
-
-StepListItem.propTypes = {};

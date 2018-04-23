@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { map } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import ReactTextarea from 'react-textarea-autosize';
@@ -201,7 +199,6 @@ class Profile extends PureComponent {
         <div className="profile-form__row" onClick={this.onEditCached('bioInput')}>
           <div className="profile-form__title">BIO</div>
           <ReactTextarea
-            ref="bioInput"
             minRows={1}
             maxRows={6}
             value={bio}
@@ -253,16 +250,3 @@ class Profile extends PureComponent {
 }
 
 export default Profile;
-
-const { object, string, func } = PropTypes;
-
-Profile.propTypes = {
-  firstName: string,
-  lastName: string,
-  role: string,
-  bio: string,
-  email: string,
-  delegate: object,
-  me: map,
-  getLoading: func,
-};

@@ -507,7 +507,7 @@ const post_reaction_added = notifyWrapper([
     } = res.locals;
     const {
       created_by,
-    } = post.created_by;
+    } = post;
 
     res.locals.user_ids = post.followers.filter((userId) => {
       return created_by === userId && userId !== user_id;

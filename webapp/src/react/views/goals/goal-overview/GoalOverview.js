@@ -1,22 +1,24 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { map } from 'react-immutable-proptypes';
+import { styleElement } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { truncateString } from 'swipes-core-js/classes/utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-
 import SWView from 'SWView';
 import HOCAttachments from 'components/attachments/HOCAttachments';
 import HOCStepList from 'components/step-list/HOCStepList';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Section from 'components/section/Section';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
-import HOCAssigning from 'components/assigning/HOCAssigning';
-import GoalCheckbox from 'components/goal-checkbox/GoalCheckbox';
-import Button from 'Button';
+import InfoButton from 'components/info-button/InfoButton';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
+import Button from 'src/react/components/button/Button2';
 import Icon from 'Icon';
 import './styles/goal-overview.scss';
+import styles from './GoalOverview.swiss';
+
+const Footer = styleElement('div', styles.Footer);
+const Spacer = styleElement('div', styles.Spacer);
+
 /* global msgGen */
 class GoalOverview extends PureComponent {
   constructor(props) {
@@ -81,19 +83,6 @@ class GoalOverview extends PureComponent {
     );
 
   }
-  renderGoalCheckBox() {
-    const { goal, getLoading, delegate, isLoading, showLine } = this.props;
-    const helper = this.getHelper();
-    const title = getLoading('title').loading;
-
-    return (
-      <GoalCheckbox
-        completed={helper.getIsCompleted()}
-        loading={isLoading('completing')}
-        delegate={delegate}
-      />
-    )
-  }
   renderHeader() {
     const { goal, getLoading, delegate, isLoading, showLine } = this.props;
     const helper = this.getHelper();
@@ -104,27 +93,14 @@ class GoalOverview extends PureComponent {
         <HOCHeaderTitle
           title={title || goal.get('title')}
           delegate={delegate}
-          leftChildren={this.renderGoalCheckBox()}
         >
           <HOCAssigning
             assignees={helper.getAssignees()}
             delegate={delegate}
             rounded
             key={helper.getAssignees().size ? 'assignees' : 'assign'}
-            size={helper.getAssignees().size ? 32 : 36}
+            size={30}
             tooltipAlign="bottom"
-          />
-          <HOCDiscussButton
-            context={{
-              id: goal.get('id'),
-              title: goal.get('title'),
-            }}
-            relatedFilter={msgGen.goals.getRelatedFilter(goal)}
-            taggedUsers={helper.getAssigneesButMe().toArray()}
-          />
-          <HOCInfoButton
-            delegate={delegate}
-            {...getLoading('dots')}
           />
         </HOCHeaderTitle>
       </div>
@@ -210,6 +186,30 @@ class GoalOverview extends PureComponent {
       </div>
     );
   }
+  renderFooter() {
+    const { goal, getLoading, delegate } = this.props;
+    const helper = this.getHelper();
+
+    return (
+      <Footer>
+        <Button icon="Checkmark" sideLabel="Complete goal" />
+        <Button icon="Attach" sideLabel="Add attachment" />
+        <Spacer className="spacer" />
+        <HOCDiscussButton
+          context={{
+            id: goal.get('id'),
+            title: goal.get('title'),
+          }}
+          relatedFilter={msgGen.goals.getRelatedFilter(goal)}
+          taggedUsers={helper.getAssigneesButMe().toArray()}
+        />
+        <InfoButton
+          delegate={delegate}
+          {...getLoading('dots')}
+        />
+      </Footer>
+    )
+  }
   renderSuccessFooter() {
     const { handoff } = this.props;
     if (!handoff) {
@@ -233,10 +233,9 @@ class GoalOverview extends PureComponent {
         </div>
         <div className="success-footer__actions">
           <Button
-            primary
             onClick={this.onHandoff}
-            text="Write Message"
             className="success-footer__action"
+            title="Write Message"
           />
         </div>
         <div className="success-footer__close" onClick={this.onCloseHandoff}>
@@ -253,7 +252,7 @@ class GoalOverview extends PureComponent {
     }
 
     return (
-      <SWView header={this.renderHeader()} onScroll={this.onScroll} footer={this.renderSuccessFooter()}>
+      <SWView header={this.renderHeader()} onScroll={this.onScroll} footer={this.renderFooter()}>
         <div className="goal-overview" data-id={goal.get('id')}>
           {this.renderLeft()}
           {this.renderRight()}
@@ -264,15 +263,3 @@ class GoalOverview extends PureComponent {
 }
 
 export default GoalOverview;
-
-const { string, object, bool, func } = PropTypes;
-
-GoalOverview.propTypes = {
-  goal: map,
-  handoff: object,
-  myId: string,
-  editMode: bool,
-  isLoading: func,
-  getLoading: func,
-  delegate: object,
-};

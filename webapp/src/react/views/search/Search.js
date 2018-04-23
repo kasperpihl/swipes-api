@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
-// import Button from 'Button';
+
 import Icon from 'Icon';
 import './styles/search.scss';
 import HOCSearchResults from './HOCSearchResults';
@@ -11,11 +10,7 @@ import HOCSearchResults from './HOCSearchResults';
 class Search extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
     setupDelegate(this, 'onChange', 'onScroll');
-    // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
   }
   renderSearchField() {
     const { searchString } = this.props;
@@ -59,7 +54,3 @@ class Search extends PureComponent {
 }
 
 export default Search
-
-// const { string } = PropTypes;
-
-Search.propTypes = {};

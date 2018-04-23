@@ -148,7 +148,7 @@ class PostView extends PureComponent {
   }
 
   componentWillUpdate(nextProps) {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
 
     if (this.props.post.get('comments').size !== nextProps.post.get('comments').size) {
       this.shouldScrollToBottom = true;

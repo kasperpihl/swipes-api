@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
+
 import { setupDelegate, setupCachedCallback } from 'react-delegate';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
-// import Button from 'Button';
+
 import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';
 import './styles/info-tab.scss';
@@ -128,8 +125,4 @@ class InfoTab extends PureComponent {
   }
 }
 
-export default InfoTab
-
-// const { string } = PropTypes;
-
-InfoTab.propTypes = {};
+export default InfoTab;

@@ -1,32 +1,29 @@
-export default {
+import { styleSheet } from 'react-swiss';
+
+export default styleSheet({
   GoalItem: {
     _flex: ['row', 'left', 'center'],
     _size: ['100%', 'auto'],
-    backgroundColor: 'white',
-    borderBottom: '1px solid $deepBlue10',
+    // backgroundColor: 'white',
+    // borderBottom: '1px solid $deepBlue10',
     minHeight: '60px',
     overflow: 'hidden',
     padding: '12px',
-    paddingRight: 0,
-    transition: '.2s ease',
-
-    '&:hover': {
-      backgroundColor: '$blue5',
-      transition: '.2s ease',
-    }
   },
   GoalTitle: {
     _size: ['100%', 'auto'],
-    _font: ['15px', '$deepBlue90', '24px', '400'],
-    padding: '0 18px',
+    _font: ['15px', '24px', '400'],
+    color: '$sw1',
+    padding: '0 12px',
     transition: '.2s ease',
 
     inTakeAction: {
-      _font: ['15px', '$deepBlue90', '24px', '500'],
+      _font: ['15px', '24px', '500'],
+      color: '$sw1',
     },
 
     '#{hoverRef}:hover &': {
-      color: '$blue100',
+      color: '$blue',
       transition: '.2s ease'
     }
   },
@@ -37,13 +34,13 @@ export default {
     borderRadius: '50%',
     
     'status=Later|later': {
-      backgroundColor: '$deepBlue30',
+      backgroundColor: '$sw2',
     },
     'status=Now|now': {
-      backgroundColor: '$yellowColor',
+      backgroundColor: '$yellow',
     },
     'status=Done|done': {
-      backgroundColor: '#12d668'
+      backgroundColor: '$green'
     },
   },
-}
+});

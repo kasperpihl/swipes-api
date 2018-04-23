@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Assigning from './Assigning';
@@ -52,27 +50,9 @@ class HOCAssigning extends PureComponent {
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    myId: state.getIn(['me', 'id']),
-    users: state.get('users'),
-  }
-}
-
-const { object, oneOfType, number, string, bool, array, func } = PropTypes;
-
-HOCAssigning.propTypes = {
-  tooltip: func,
-  myId: string,
-  users: map,
-  assignees: oneOfType([list, array]).isRequired,
-  index: oneOfType([number, string]),
-  delegate: object,
-  maxImages: number,
-  rounded: bool,
-  size: number,
-};
-
-export default connect(mapStateToProps, {
-  tooltip: a.main.tooltip,
+export default connect(state => ({
+  myId: state.getIn(['me', 'id']),
+  users: state.get('users'),
+}), {
+  tooltip: mainActions.tooltip,
 })(HOCAssigning);

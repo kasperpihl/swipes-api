@@ -10,8 +10,6 @@ class BrowserNavBar extends Component {
     setupDelegate(this, 'navbarAction');
 
   }
-  componentDidMount() {
-  }
   renderNavigation() {
     const {
       backEnabled,

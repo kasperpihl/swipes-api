@@ -1,5 +1,5 @@
-@import '~styles/_vars.scss/';
-@import '~styles/_mixins.scss/';
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
 
 $bigBtn: 36px;
 $smallBtn: 30px;
@@ -274,32 +274,6 @@ $borderColor: $deepBlue-10;
   }
 }
 
-// Icon and text hover
-
-.g-button {
-  $b: &;
-
-  // &--icon-and-text:hover {
-
-  //   #{$b}__svg {
-  //     transform: translateX(-6px);
-  //   }
-
-  //   #{$b}__text {
-  //     transform: translateX(6px);
-  //   }
-  // }
-
-  // &--reverse#{&}--icon-and-text:hover {
-  //   #{$b}__svg {
-  //     transform: translateX(6px);
-  //   }
-
-  //   #{$b}__text {
-  //     transform: translateX(-6px);
-  //   }
-  // }
-}
 
 // disabled hover
 

@@ -1,21 +1,9 @@
 import React, { PureComponent } from 'react'
 import { SortableContainer } from 'react-sortable-hoc';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
-// import './styles/SortableList.scss';
+
 import StepListItem from './StepListItem';
 
 class SortableList extends PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-  componentDidMount() {
-  }
   render() {
     const {
       stepOrder,
@@ -43,8 +31,4 @@ class SortableList extends PureComponent {
   }
 }
 
-export default SortableContainer(SortableList, { withRef: true})
-
-// const { string } = PropTypes;
-
-SortableList.propTypes = {};
+export default SortableContainer(SortableList, { withRef: true});

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-// import { map, list } from 'react-immutable-proptypes';
+
 import Icon from 'Icon';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
@@ -14,8 +14,6 @@ class CompatibleSignup extends PureComponent {
     this.state = {};
     setupDelegate(this, 'onSignup', 'onNavigateToLogin');
     this.handleKeyDown = this.handleKeyDown.bind(this);
-  }
-  componentDidMount() {
   }
   handleKeyDown(e) {
     if (e.keyCode === 13) {
@@ -110,7 +108,3 @@ class CompatibleSignup extends PureComponent {
 }
 
 export default CompatibleSignup;
-
-// const { string } = PropTypes;
-
-CompatibleSignup.propTypes = {};

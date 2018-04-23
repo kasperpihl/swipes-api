@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import Button from 'Button';
@@ -10,7 +8,7 @@ import Icon from 'Icon';
 import HOCMilestoneItem from './HOCMilestoneItem';
 import AddMilestone from './AddMilestone';
 import HOCNoMilestone from './HOCNoMilestone';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
+import InfoButton from 'components/info-button/InfoButton';
 
 import './styles/milestone-list.scss';
 
@@ -20,8 +18,6 @@ class MilestoneList extends PureComponent {
     this.state = {};
     setupDelegate(this, 'onAddGoal', 'onScroll');
   }
-  componentDidMount() {
-  }
   renderHeader() {
     const { getLoading, tabs, tabIndex, delegate } = this.props;
     return (
@@ -30,7 +26,7 @@ class MilestoneList extends PureComponent {
           title="Plan"
           subtitle="Organize and see progress on your company's plans."
         >
-          <HOCInfoButton
+          <InfoButton
             delegate={delegate}
           />
         </HOCHeaderTitle>
@@ -110,7 +106,3 @@ class MilestoneList extends PureComponent {
 }
 
 export default MilestoneList;
-
-// const { string } = PropTypes;
-
-MilestoneList.propTypes = {};

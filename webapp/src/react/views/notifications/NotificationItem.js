@@ -1,12 +1,7 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import { timeAgo } from 'swipes-core-js/classes/time-utils';
-// import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
 import StyledText from 'components/styled-text/StyledText';
 import './styles/notification-item.scss';
 
@@ -15,8 +10,6 @@ class NotificationItem extends PureComponent {
     super(props)
     this.state = {}
     setupDelegate(this, 'onNotificationOpen');
-  }
-  componentDidMount() {
   }
   renderProfilePic() {
     const { notification: n } = this.props;
@@ -56,6 +49,4 @@ class NotificationItem extends PureComponent {
   }
 }
 
-export default NotificationItem
-// const {string} = PropTypes;
-NotificationItem.propTypes = {};
+export default NotificationItem;

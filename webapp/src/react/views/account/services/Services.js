@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { bindAll, queryStringToObject } from 'swipes-core-js/classes/utils';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import SWView from 'SWView';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -20,12 +19,6 @@ class Services extends Component {
   constructor(props) {
     super(props);
     bindAll(this, ['clickedDisconnect', 'clickedConnect']);
-  }
-  componentDidMount() {
-    // this.checkForDropboxFolder();
-  }
-  componentDidUpdate() {
-    // this.checkForDropboxFolder();
   }
   getOptionsForE() {
     return {
@@ -149,30 +142,13 @@ class Services extends Component {
   }
 }
 
-const { func, string } = PropTypes;
-
-Services.propTypes = {
-  disconnectService: func,
-  popSecondary: func,
-  target: string,
-  myServices: list,
-  confirm: func,
-  browser: func,
-  handleOAuthSuccess: func,
-  services: map,
-};
-
-function mapStateToProps(state) {
-  return {
-    services: state.get('services'),
-    myServices: state.getIn(['me', 'services']),
-  };
-}
-
-const ConnectedServices = navWrapper(connect(mapStateToProps, {
-  browser: a.main.browser,
+const ConnectedServices = navWrapper(connect(state => ({
+  services: state.get('services'),
+  myServices: state.getIn(['me', 'services']),
+}), {
+  browser: mainActions.browser,
   handleOAuthSuccess: ca.me.handleOAuthSuccess,
   disconnectService: ca.me.disconnectService,
-  confirm: a.menus.confirm,
+  confirm: menuActions.confirm,
 })(Services));
 export default ConnectedServices;

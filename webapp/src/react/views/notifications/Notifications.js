@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import Button from 'Button';
@@ -86,6 +84,4 @@ class Notifications extends PureComponent {
   }
 }
 
-export default Notifications
-// const { string } = PropTypes;
-Notifications.propTypes = {};
+export default Notifications;

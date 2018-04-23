@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+
 import { setupDelegate } from 'react-delegate';
 import { iconForId } from 'swipes-core-js/classes/utils';
 import MileStoneResult from './MilestoneResult';
@@ -11,11 +10,7 @@ import './styles/search-result.scss';
 class SearchResult extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
     setupDelegate(this, 'onClick');
-    // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
   }
   getTitle() {
     const { result } = this.props;
@@ -52,8 +47,4 @@ class SearchResult extends PureComponent {
   }
 }
 
-export default SearchResult
-
-// const { string } = PropTypes;
-
-SearchResult.propTypes = {};
+export default SearchResult;

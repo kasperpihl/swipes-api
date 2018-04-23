@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
 import { setupDelegate } from 'react-delegate';
 import { attachmentIconForService, bindAll } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Icon from 'Icon';
+import * as linkActions from 'src/redux/link/linkActions';
 
 import './styles/attachment-item.scss';
 
@@ -59,10 +59,6 @@ class HOCAttachmentItem extends PureComponent {
   }
 }
 
-function mapStateToProps() {
-  return {};
-}
-
-export default navWrapper(connect(mapStateToProps, {
-  preview: a.links.preview,
+export default navWrapper(connect(null, {
+  preview: linkActions.preview,
 })(HOCAttachmentItem));

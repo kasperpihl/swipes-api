@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { list, map } from 'react-immutable-proptypes';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
+import * as linkActions from 'src/redux/link/linkActions';
 import {
   EditorState,
   convertToRaw,
@@ -17,7 +18,7 @@ import {
   bindAll,
 } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import Attachment from './Attachment';
 import './styles/attachments';
@@ -199,36 +200,18 @@ class HOCAttachments extends PureComponent {
   }
 }
 
-const { func, object, string } = PropTypes;
-HOCAttachments.propTypes = {
-  addAttachment: func,
-  removeAttachment: func,
-  renameAttachment: func,
-  contextMenu: func,
-  attachmentOrder: list,
-  attachments: map,
-  targetId: string,
-  delegate: object,
-  inputMenu: func,
-  flags: list,
-  confirm: func,
-  previewLink: func,
-};
 HOCAttachments.contextTypes = {
-  target: string,
+  target: PropTypes.string,
 };
 
-function mapStateToProps(state) {
-  return {}
-}
 
-export default connect(mapStateToProps, {
+export default connect(null, {
   addAttachment: ca.attachments.add,
   removeAttachment: ca.attachments.remove,
   renameAttachment: ca.attachments.rename,
-  contextMenu: a.main.contextMenu,
+  contextMenu: mainActions.contextMenu,
   createNote: ca.notes.create,
-  inputMenu: a.menus.input,
-  confirm: a.menus.confirm,
-  previewLink: a.links.preview,
+  inputMenu: menuActions.input,
+  confirm: menuActions.confirm,
+  previewLink: linkActions.preview,
 })(HOCAttachments);

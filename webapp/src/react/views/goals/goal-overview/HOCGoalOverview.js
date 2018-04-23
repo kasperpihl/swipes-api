@@ -1,16 +1,20 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
 import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import * as a from 'actions';
+
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
+import * as linkActions from 'src/redux/link/linkActions';
+import * as goalActions from 'src/redux/goal/goalActions';
+import * as wayActions from 'src/redux/way/wayActions';
+
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import GoalOverview from './GoalOverview';
 
 /* global msgGen */
@@ -55,20 +59,9 @@ class HOCGoalOverview extends PureComponent {
     };
 
     openModal({
-      id: 'CreatePost',
+      id: 'PostCreate',
       title: 'Create Post',
       props,
-    });
-  }
-  onSeeAll() {
-    const { openSecondary, goal, contextMenu } = this.props;
-    contextMenu();
-    openSecondary({
-      id: 'ActivityFeed',
-      title: 'ActivityFeed',
-      props: {
-        goalId: goal.get('id'),
-      },
     });
   }
   onClickURL(nI, url) {
@@ -328,44 +321,26 @@ class HOCGoalOverview extends PureComponent {
   }
 }
 
-const { func } = PropTypes;
-
-HOCGoalOverview.propTypes = {
-  goal: map,
-  confirm: func,
-  me: map,
-  navPop: func,
-  inputMenu: func,
-  archive: func,
-  openSecondary: func,
-  renameGoal: func,
-  contextMenu: func,
-};
-
-function mapStateToProps(state, ownProps) {
-  return {
-    goal: state.getIn(['goals', ownProps.goalId]),
-    me: state.get('me'),
-  };
-}
-
-export default connect(mapStateToProps, {
+export default connect((state, props) => ({
+  goal: state.getIn(['goals', props.goalId]),
+  me: state.get('me'),
+}), {
   archive: ca.goals.archive,
-  contextMenu: a.main.contextMenu,
+  contextMenu: mainActions.contextMenu,
   assignGoal: ca.goals.assign,
   renameGoal: ca.goals.rename,
   completeGoal: ca.goals.complete,
   incompleteGoal: ca.goals.incomplete,
-  loadWay: a.ways.load,
+  loadWay: wayActions.load,
   goalLoadWay: ca.goals.loadWay,
   createWay: ca.ways.create,
-  selectAssignees: a.goals.selectAssignees,
-  selectMilestone: a.menus.selectMilestone,
+  selectAssignees: goalActions.selectAssignees,
+  selectMilestone: menuActions.selectMilestone,
   addGoalToMilestone: ca.milestones.addGoal,
   removeGoalFromMilestone: ca.milestones.removeGoal,
-  successGradient: a.main.successGradient,
-  confirm: a.menus.confirm,
-  inputMenu: a.menus.input,
-  preview: a.links.preview,
-  browser: a.main.browser,
+  successGradient: mainActions.successGradient,
+  confirm: menuActions.confirm,
+  inputMenu: menuActions.input,
+  preview: linkActions.preview,
+  browser: mainActions.browser,
 })(navWrapper(HOCGoalOverview));

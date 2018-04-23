@@ -1,5 +1,5 @@
-@import '~styles/_vars.scss/';
-@import '~styles/_mixins.scss/';
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
 
 $bottomPadding: 36px;
 $h: 63px + $bottomPadding;
@@ -41,7 +41,7 @@ $noSubH: 39px + $bottomPadding;
 
   &__title {
     @include size(100%, auto);
-    @include font(30px, $deepBlue-100, 42px, 500);
+    @include font(30px, $deepBlue-100, 42px, 300);
     @include truncateString();
     letter-spacing: -.6px;
   }

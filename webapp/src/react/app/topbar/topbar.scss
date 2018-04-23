@@ -1,0 +1,119 @@
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
+
+$topbarSize: 38px;
+
+// ======================================================
+// Block
+// ======================================================
+
+.topbar {
+  $b: &;
+  @include size(100%, $topbarSize);
+  -webkit-app-region: drag;
+  flex: none;
+  user-select: none;
+}
+
+// ======================================================
+// Elements
+// ======================================================
+
+// topbar
+
+.topbar {
+  $b: &;
+
+  &__status {
+    @include size(100%, 100%);
+    background-color: rgba($bg, .7);
+    display: none;
+
+    &--shown {
+      display: block;
+      z-index: 99;
+    }
+  }
+
+  &__header {
+    @include size(100%, 60px);
+    @include flexContainer('row', center, center);
+    padding-bottom: 23px;
+  }
+
+
+  &__unpaid {
+    position: absolute;
+    right: 5px; top: 5px;
+  }
+}
+
+// Misc
+
+.topbar {
+  $b: &;
+
+  &__title {
+    @include font(12px, $deepBlue-100, 18px, 500);
+  }
+
+  &__retry-btn {
+    @include font($c: $deepBlue-100);
+    margin-left: 9px;
+    -webkit-app-region: no-drag;
+    border-color: $deepBlue-100;
+    background-color: transparent;
+
+    & > * {
+      @include font($c: $deepBlue-100 !important);
+    }
+
+    &:hover {
+      background-color: $deepBlue-100;
+
+      & > * {
+        @include font($c: $bg !important);
+      }
+    }
+  }
+}
+
+// Windows window actions
+
+.topbar {
+  $b: &;
+
+  &__window-actions {
+    @include size(auto, $topbarSize);
+    display: none;
+
+    position: absolute;
+    right: 0; top: 0;
+    -webkit-app-region: no-drag;
+  }
+
+  &__button {
+    @include size(50px, $topbarSize);
+    -webkit-app-region: no-drag;
+
+    &--minimize {
+
+      #{$b}__svg {
+        left: 50%; top: auto; bottom: 0;
+        transform: translateX(-50%) translateY(0%);
+      }
+    }
+
+    &:hover {
+      background-color: rgba($bg, .3);
+    }
+  }
+
+  &__svg {
+    @include size(24px);
+    @include svg-color($bg);
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}

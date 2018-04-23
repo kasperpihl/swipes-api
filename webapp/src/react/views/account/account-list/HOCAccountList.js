@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import AccountList from './AccountList';
 
@@ -48,8 +47,6 @@ class HOCAccountList extends PureComponent {
       ].filter(v => !!v),
     };
     setupLoading(this);
-  }
-  componentDidMount() {
   }
   onLogout(e) {
     const { confirm, signout } = this.props;
@@ -98,18 +95,11 @@ class HOCAccountList extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCAccountList.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    me: state.get('me'),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
-  signout: a.main.signout,
-  browser: a.main.browser,
-  confirm: a.menus.confirm,
+export default navWrapper(connect(state => ({
+  me: state.get('me'),
+}), {
+  signout: mainActions.signout,
+  browser: mainActions.browser,
+  confirm: menuActions.confirm,
 })(HOCAccountList));

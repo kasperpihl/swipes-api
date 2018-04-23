@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { list } from 'react-immutable-proptypes';
-import * as a from 'actions';
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 
@@ -109,13 +106,3 @@ export default class HOCHeaderTitle extends Component {
     );
   }
 }
-
-const { object, string, array, oneOfType, element } = PropTypes;
-
-HOCHeaderTitle.propTypes = {
-  title: string,
-  placeholder: string,
-  subtitle: oneOfType([string, element, array]),
-  delegate: object,
-  children: oneOfType([object, array]),
-};

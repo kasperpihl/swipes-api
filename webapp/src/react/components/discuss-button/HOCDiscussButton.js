@@ -1,26 +1,17 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
+import { styleElement } from 'react-swiss';
 import * as cs from 'swipes-core-js/selectors';
-import { bindAll } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import './styles/discuss-button.scss';
+import PostCreate from 'src/react/views/discuss/post-create/HOCPostCreate';
+import styles from './DiscussButton.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const ButtonSide = styleElement('div', styles.ButtonSide);
+const Seperator = styleElement('div', styles.Seperator);
 
 class HOCDiscussButton extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    bindAll(this, ['onDiscuss', 'onFeed']);
-    // setupLoading(this);
-  }
-  componentDidMount() {
-  }
-  onFeed() {
+  onFeed = () => {
     const { openSecondary, context, relatedFilter } = this.props;
     openSecondary({
       id: 'PostFeed',
@@ -31,41 +22,30 @@ class HOCDiscussButton extends PureComponent {
       },
     });
   }
-  onDiscuss() {
+  onDiscuss = () => {
     const { context, taggedUsers, openModal } = this.props;
     openModal({
-      id: 'CreatePost',
+      component: PostCreate,
       title: 'Create Post',
+      position: 'center',
       props: {
         context,
         taggedUsers
       },
     });
   }
-  renderLeftSide() {
-    return (
-      <div className="discuss-button__button" onClick={this.onDiscuss}>Discuss</div>
-    )
-  }
-  renderRightSide() {
-    const { counter } = this.props;
-
-    return (
-      <div className="discuss-button__button" onClick={this.onFeed}>{counter}</div>
-    )
-  }
   render() {
+    const { counter } = this.props;
     return (
-      <div className="discuss-button">
-        {this.renderLeftSide()}
-        {this.renderRightSide()}
-      </div>
+      <Wrapper className="discuss-wrapper">
+        <ButtonSide left onClick={this.onDiscuss}>Discuss</ButtonSide>
+        <Seperator />
+        <ButtonSide right onClick={this.onFeed}>{counter}</ButtonSide>
+      </Wrapper>
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCDiscussButton.propTypes = {};
 const makeMapStateToProps = () => {
   const getFilteredList = cs.posts.makeGetFilteredList();
   const getRelatedList = cs.posts.makeGetRelatedList();

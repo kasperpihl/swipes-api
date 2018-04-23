@@ -1,13 +1,5 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import Icon from 'Icon';
 import { Link } from 'react-router-dom';
 import './styles/download-app.scss'
@@ -21,8 +13,6 @@ class HOCDownloadApp extends PureComponent {
     // setupLoading(this);
 
     this.closeToolbar = this.closeToolbar.bind(this);
-  }
-  componentDidMount() {
   }
   closeToolbar() {
     const { showToolbar } = this.state;
@@ -39,7 +29,7 @@ class HOCDownloadApp extends PureComponent {
 
     return (
       <div className="download-app">
-        For the best experience we recommend you to <Link to="/download" className="download-app__link"> download a desktop app</Link>
+        For the best experience we recommend you to <Link to="/download" className="download-app__link"> download our desktop app</Link>
         <div className="download-app__close-btn" onClick={this.closeToolbar}>
           <Icon icon="Close" className="download-app__svg" />
         </div>
@@ -47,13 +37,7 @@ class HOCDownloadApp extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
 
-HOCDownloadApp.propTypes = {};
-
-const mapStateToProps = (state) => ({
+export default connect((state) => ({
   isElectron: state.getIn(['globals', 'isElectron'])
-});
-
-export default connect(mapStateToProps, {
-})(HOCDownloadApp);
+}, {})(HOCDownloadApp);

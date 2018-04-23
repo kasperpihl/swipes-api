@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { styleElement } from 'react-swiss';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindAll, traverseElement } from 'swipes-core-js/classes/utils';
@@ -7,8 +8,11 @@ import {
 } from 'draft-js';
 import ControlPanel from './ControlPanel';
 import prefixAll from 'inline-style-prefixer/static';
+import styles from './MediumEditor.swiss';
 
+const Wrapper = styleElement('div', styles.Wrapper);
 const SPACING = 10;
+
 
 class MediumEditor extends PureComponent {
   constructor(props) {
@@ -54,8 +58,7 @@ class MediumEditor extends PureComponent {
 
 
   onMouseUp(e) {
-    const { container } = this.refs;
-    const br = container.getBoundingClientRect();
+    const br = this.container.getBoundingClientRect();
     const scrollTop = this.getScrollTop();
     const x = e.pageX - br.left;
     const y = e.pageY - br.top - scrollTop;
@@ -70,11 +73,10 @@ class MediumEditor extends PureComponent {
     }, 1);
   }
   getScrollTop() {
-    const { container } = this.refs;
 
     let scrollTop = 0;
-    if (container) {
-      traverseElement(container, (el) => {
+    if (this.container) {
+      traverseElement(this.container, (el) => {
         if (el.scrollTop) {
           scrollTop = el.scrollTop;
           return true;
@@ -86,11 +88,10 @@ class MediumEditor extends PureComponent {
     return scrollTop;
   }
   getSelectionPosition() {
-    const { container } = this.refs;
 
     const selectionRect = getVisibleSelectionRect(window);
-    if (selectionRect && container) {
-      const br = container.getBoundingClientRect();
+    if (selectionRect && this.container) {
+      const br = this.container.getBoundingClientRect();
       const scrollTop = this.getScrollTop();
       selectionRect.top -= br.top + scrollTop;
       selectionRect.bottom -= br.bottom;
@@ -196,8 +197,7 @@ class MediumEditor extends PureComponent {
   handleContentOverlap(styles) {
     const position = this.getSelectionPosition();
     const { h } = this.getControlPanelSize();
-    const { container } = this.refs;
-    const wh = container.clientHeight;
+    const wh = this.container.clientHeight;
 
     const bottomY = styles.get('top') + h;
     const topY = styles.get('top');
@@ -216,9 +216,8 @@ class MediumEditor extends PureComponent {
   }
   handleBoundaries(styles) {
     const { w, h } = this.getControlPanelSize();
-    const { container } = this.refs;
-    const ww = container.clientWidth;
-    const wh = container.clientHeight;
+    const ww = this.container.clientWidth;
+    const wh = this.container.clientHeight;
 
     if (styles.get('left') < SPACING) {
       styles = styles.set('left', SPACING);
@@ -250,9 +249,8 @@ class MediumEditor extends PureComponent {
   render() {
     const { children } = this.props;
     return (
-      <div
-        ref="container"
-        className="medium-editor"
+      <Wrapper
+        innerRef={(c) => { this.container = c; }}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
         onMouseMove={this.onMouseMove}
@@ -260,7 +258,7 @@ class MediumEditor extends PureComponent {
       >
         {this.renderControlPanel()}
         {children}
-      </div>
+      </Wrapper>
     );
   }
 }

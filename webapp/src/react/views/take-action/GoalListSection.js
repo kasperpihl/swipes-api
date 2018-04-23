@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
-// import Button from 'Button';
+
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import './styles/goal-list-section.scss';
@@ -14,8 +10,6 @@ class GoalListSection extends PureComponent {
     super(props)
     this.state = {}
     setupDelegate(this, 'onGoalSectionClick');
-  }
-  componentDidMount() {
   }
   renderLeftSide() {
     const { icon, title, id } = this.props;
@@ -69,6 +63,4 @@ class GoalListSection extends PureComponent {
   }
 }
 
-export default GoalListSection
-// const { string } = PropTypes;
-GoalListSection.propTypes = {};
+export default GoalListSection;

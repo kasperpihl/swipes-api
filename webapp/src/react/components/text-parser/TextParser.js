@@ -1,19 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import { URL_REGEX } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
-// import './styles/TextParser.scss';
 
 class TextParser extends PureComponent {
   constructor(props) {
     super(props);
     setupDelegate(this, 'onLinkClick');
-  }
-  componentDidMount() {
   }
   renderStuff(regex, inputArray, renderMethod) {
     let resArray = [];

@@ -23,7 +23,6 @@ const postsCreate = valLocals('postsCreate', {
   user_id: string.require(),
   organization_id: string.require(),
   message: string.min(1).require(),
-  type: string.require(),
   attachments: array.of(object),
   tagged_users: array.of(string),
   context: object,
@@ -33,7 +32,6 @@ const postsCreate = valLocals('postsCreate', {
     user_id,
     organization_id,
     message,
-    type,
     attachments = [],
     tagged_users = [],
     context = {},
@@ -43,7 +41,6 @@ const postsCreate = valLocals('postsCreate', {
   const post = {
     organization_id,
     message,
-    type,
     attachments,
     tagged_users,
     context,

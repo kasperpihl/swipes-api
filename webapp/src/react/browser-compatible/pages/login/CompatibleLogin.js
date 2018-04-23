@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
+
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
@@ -17,9 +17,6 @@ class CompatibleLogin extends PureComponent {
     setupDelegate(this, 'onSignin', 'onResetPassword');
     bindAll(this, ['handleKeyDown']);
   }
-  componentDidMount() {
-  }
-
   handleKeyDown(e) {
     if (e.keyCode === 13) {
       this.onSignin();
@@ -94,8 +91,4 @@ class CompatibleLogin extends PureComponent {
   }
 }
 
-export default CompatibleLogin
-
-// const { string } = PropTypes;
-
-CompatibleLogin.propTypes = {};
+export default CompatibleLogin;

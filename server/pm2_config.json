@@ -50,7 +50,10 @@
        "SW_AMAZON_QUEUE_HOST": "https://sqs.us-west-2.amazonaws.com/745159268654/SwipesLive.fifo",
 
        "SW_AWSS3_BUCKET_NAME": "live.swipesapp.com",
-       "SW_AWSS3_URL": "https://s3-us-west-2.amazonaws.com/live.swipesapp.com/"
+       "SW_AWSS3_REGION": "us-west-2",
+       "SW_AWSS3_URL": "https://s3-us-west-2.amazonaws.com/live.swipesapp.com/",
+
+       "SW_AWSS3_CLOUD_WATCH_REGION": "us-west-2"
     }
   }]
 }

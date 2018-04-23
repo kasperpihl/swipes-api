@@ -17,6 +17,7 @@ export default class Socket {
     // Send in the current version. We use this to check if its different from last open
     store.dispatch({ type: types.SET_LAST_VERSION, payload: { version } });
     store.subscribe(this.storeChange);
+    window.addEventListener('beforeunload', () => this.forceClose(true) );
   }
   storeChange() {
     const state = this.store.getState();

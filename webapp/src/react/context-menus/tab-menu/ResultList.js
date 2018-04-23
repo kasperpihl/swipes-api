@@ -14,8 +14,6 @@ class ResultList extends Component {
     this.onActionCached = setupCachedCallback(this.onAction, this);
     setupDelegate(this, 'onItemAction');
   }
-  componentDidMount() {
-  }
   onAction(i, side, e) {
     const { results } = this.props;
     this.onItemAction(results[i], side, e);
