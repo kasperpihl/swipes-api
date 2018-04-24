@@ -25,7 +25,7 @@ class PostView extends PureComponent {
     super(props)
     this.state = {};
 
-    setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick', 'onContextClick');
+    setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick', 'onContextClick', 'onThreeDots');
   }
   onComment = () => {
     const { post } = this.props;
@@ -62,7 +62,7 @@ class PostView extends PureComponent {
     });
   }
   renderHeader() {
-    const { post, delegate, fromFeed } = this.props;
+    const { post, delegate, fromFeed, getLoading } = this.props;
     let commentTitle = post.get('comments').size || 'Write a comment';
     if(post.get('comments').size > MAX_COMMENTS_FEED) {
       commentTitle = `See all ${post.get('comments').size} comments`;
@@ -91,7 +91,12 @@ class PostView extends PureComponent {
             sideLabel={commentTitle}
           />
           <ActionSpacer />
-          <Button icon="ThreeDots" compact />
+          <Button
+            icon="ThreeDots"
+            compact
+            onClick={this.onThreeDots}
+            {...getLoading('threedots')}
+          />
         </PostActions>
         {this.renderComments()}
         {this.renderCommentInput()}

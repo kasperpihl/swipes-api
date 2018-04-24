@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as linkActions from 'src/redux/link/linkActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-import { navForContext } from 'swipes-core-js/classes/utils';
+import * as ca from 'swipes-core-js/actions';
+import { navForContext, setupLoading } from 'swipes-core-js/classes/utils';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostView from './PostView';
 
@@ -17,11 +20,19 @@ class HOCPostView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+
+    setupLoading(this);
   }
   shouldScroll() {
     const { fromFeed } = this.props;
 
     return !fromFeed;
+  }
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
   }
   onAttachmentClick(i, att) {
     const { preview, target } = this.props;
@@ -42,6 +53,47 @@ class HOCPostView extends PureComponent {
       openSecondary(target, navForContext(post.get('id')));
     }
   }
+  onThreeDots(e) {
+    const { contextMenu, confirm, archivePost, post } = this.props;
+    const options = this.getOptionsForE(e);
+    const items = [{
+      title: 'Delete post',
+      subtitle: 'The post will be no longer vissible to anyone in the organization.',
+    }];
+    const delegate = {
+      onItemAction: (item) => {
+        confirm(Object.assign({}, options, {
+          title: items[0].title,
+          message: 'This cannot be undone. Are you sure?',
+        }), (i) => {
+          if (i === 1) {
+            this.setLoading('threedots');
+            archivePost({
+              post_id: post.get('id'),
+            }).then((res) => {
+              if(!res.ok) {
+                this.clearLoading('threedots', '!Something went wrong');
+              } else {
+                this.clearLoading('threedots');
+              }
+            })
+          }
+        });
+      },
+    };
+
+    contextMenu({
+      options,
+      component: TabMenu,
+      props: {
+        delegate,
+        items,
+        style: {
+          width: '360px',
+        },
+      },
+    });
+  }
   render() {
     const { myId, post, fromFeed } = this.props;
 
@@ -51,6 +103,7 @@ class HOCPostView extends PureComponent {
         myId={myId}
         post={post}
         delegate={this}
+        {...this.bindLoading()}
       />
     );
   }
@@ -64,4 +117,7 @@ export default navWrapper(connect((state, props) => ({
   openSecondary: navigationActions.openSecondary,
   preview: linkActions.preview,
   browser: mainActions.browser,
+  confirm: menuActions.confirm,
+  contextMenu: mainActions.contextMenu,
+  archivePost: ca.posts.archive,
 })(HOCPostView));
