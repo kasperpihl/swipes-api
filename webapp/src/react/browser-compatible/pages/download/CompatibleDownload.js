@@ -1,9 +1,17 @@
 import React, { PureComponent } from 'react';
+import { styleElement } from 'react-swiss';
 import Icon from 'Icon';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
-import './styles/download-page.scss';
+import styles from './CompatibleDownload.swiss';
+
+const DownloadPageWrapper = styleElement('div', styles.DownloadPageWrapper);
+const Section = styleElement('div', styles.Section);
+const SectionTitle = styleElement('div', styles.SectionTitle);
+const DeviceWrapper = styleElement('div', styles.DeviceWrapper);
+const Device = styleElement('a', styles.Device);
+const DeviceSVG = styleElement(Icon, styles.DeviceSVG);
 
 const downloadLinks = {
   darwin: 'http://swipesapp.com/download-mac',
@@ -57,10 +65,10 @@ class CompatibleDownload extends PureComponent {
       return undefined;
     }
     return (
-      <a href={downloadLinks.win32} target="_blank" className="device">
-        <Icon icon="WindowsDevice" className="device-svg" />
+      <Device href={downloadLinks.win32} className="device-hover" target="_blank">
+        <DeviceSVG icon="WindowsDevice" />
         <p>Windows</p>
-      </a>
+      </Device>
     );
   }
   renderMac(firstType) {
@@ -68,10 +76,10 @@ class CompatibleDownload extends PureComponent {
       return undefined;
     }
     return (
-      <a href={downloadLinks.darwin} target="_blank" className="device">
-        <Icon icon="MacDevice" className="device-svg" />
+      <Device href={downloadLinks.darwin} className="device-hover" target="_blank">
+        <DeviceSVG icon="MacDevice" />
         <p>MacOS</p>
-      </a>
+      </Device>
     );
   }
   renderLinux(firstType) {
@@ -79,22 +87,22 @@ class CompatibleDownload extends PureComponent {
       return undefined;
     }
     return (
-      <a href={downloadLinks.linux} target="_blank" className="device">
-        <Icon icon="LinuxDevice" className="device-svg" />
+      <Device href={downloadLinks.linux} className="device-hover" target="_blank">
+        <DeviceSVG icon="LinuxDevice"/>
         <p>Linux</p>
-      </a>
+      </Device>
     );
   }
   renderDesktopDownloads() {
     const type = this.desktopCheck();
 
     return (
-      <div className="device-wrapper">
+      <DeviceWrapper>
         {this.renderFirst(type)}
         {this.renderMac(type)}
         {this.renderWindows(type)}
         {this.renderLinux(type)}
-      </div>
+      </DeviceWrapper>
     );
   }
   renderDownloadSections() {
@@ -102,44 +110,44 @@ class CompatibleDownload extends PureComponent {
 
     if (isMobile) {
       return ([
-        <div className="section section--coming-soon" key="mobile">
-          <div className="section-title">Mobile (In beta)</div>
-          <div className="device-wrapper">
-            <a href={downloadLinks.ios} target="_blank" className="device">
-              <Icon icon="IphoneDevice" className="device-svg" />
+        <Section key="mobile">
+          <SectionTitle className="section-title">Mobile (In beta)</SectionTitle>
+          <DeviceWrapper>
+            <Device href={downloadLinks.ios} className="device-hover" target="_blank">
+              <DeviceSVG icon="IphoneDevice" />
               <p>iOS</p>
-            </a>
-            <a href={downloadLinks.android} target="_blank" className="device">
-              <Icon icon="AndroidDevice" className="device-svg" />
+            </Device>
+            <Device href={downloadLinks.android} className="device-hover" target="_blank">
+              <DeviceSVG icon="AndroidDevice" />
               <p>Android</p>
-            </a>
-          </div>
-        </div>,
-        <div className="section" key="desktop">
-          <div className="section-title">Desktop</div>
+            </Device>
+          </DeviceWrapper>
+        </Section>,
+        <Section key="desktop">
+          <SectionTitle>Desktop</SectionTitle>
           {this.renderDesktopDownloads()}
-        </div>
+        </Section>
       ])
     }
 
     return ([
-      <div className="section" key="desktop">
-        <div className="section-title">Desktop</div>
+      <Section key="desktop">
+        <SectionTitle>Desktop</SectionTitle>
         {this.renderDesktopDownloads()}
-      </div>,
-      <div className="section section--coming-soon" key="mobile">
-        <div className="section-title">Mobile</div>
-        <div className="device-wrapper">
-          <a href={downloadLinks.ios} target="_blank" className="device">
-            <Icon icon="IphoneDevice" className="device-svg" />
+      </Section>,
+      <Section key="mobile">
+        <SectionTitle>Mobile</SectionTitle>
+        <DeviceWrapper>
+          <Device href={downloadLinks.ios} className="device-hover" target="_blank">
+            <DeviceSVG icon="IphoneDevice" />
             <p>iOS</p>
-          </a>
-          <a href={downloadLinks.android} target="_blank" className="device">
-            <Icon icon="AndroidDevice" className="device-svg" />
+          </Device>
+          <Device href={downloadLinks.android} className="device-hover" target="_blank">
+            <DeviceSVG icon="AndroidDevice" />
             <p>Android</p>
-          </a>
-        </div>
-      </div>
+          </Device>
+        </DeviceWrapper>
+      </Section>
     ])
   }
   renderWebSection() {
@@ -148,20 +156,20 @@ class CompatibleDownload extends PureComponent {
     if (isMobile) return null;
 
     return (
-      <div className="section">
-        <div className="section-title">Web version</div>
+      <Section className="section">
+        <SectionTitle>Web version</SectionTitle>
         <GoToWorkspace noTitle={true} />
-      </div>
+      </Section>
     )
   }
   render() {
     return (
       <CompatibleCard>
-        <div className="download-page">
+        <DownloadPageWrapper>
           <CompatibleHeader title="Download the Workspace" subtitle="Start working with your team from anywhere" />
           {this.renderDownloadSections()}
           {this.renderWebSection()}
-        </div>
+        </DownloadPageWrapper>
       </CompatibleCard>
     );
   }
