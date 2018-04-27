@@ -20,7 +20,7 @@ export default function meReducer(state = initialState, action) {
     case 'me.uploadProfilePhoto':
     case 'me.updateProfile':
     case 'profile_updated': {
-      if(payload.user_id === state.get('id')){
+      if (payload.user_id === state.get('id')) {
         return state.mergeIn(['profile'], fromJS(payload.profile));
       }
       return state;
@@ -51,7 +51,7 @@ export default function meReducer(state = initialState, action) {
     }
     case 'user_invited': {
       const pendings = state.get('pending_organizations');
-      if(pendings && !pendings.find((o) => o.get('id') === payload.pending_organization_id)) {
+      if (pendings && !pendings.find(o => o.get('id') === payload.pending_organization_id)) {
         return state.updateIn(['pending_organizations'], orgs => orgs.push(fromJS({
           id: payload.pending_organization_id,
           name: payload.pending_organization_name,

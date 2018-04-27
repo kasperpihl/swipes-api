@@ -780,7 +780,7 @@ const organizationsUpdateStripeSubscriptionPlan = valLocals('organizationsUpdate
       }],
     });
 
-    dbOrganizationsUpdateStripeSubscriptionPlan({
+    return dbOrganizationsUpdateStripeSubscriptionPlan({
       organization_id,
       plan: plan_to_change,
     })
@@ -797,8 +797,6 @@ const organizationsUpdateStripeSubscriptionPlan = valLocals('organizationsUpdate
       .catch((err) => {
         return next(err);
       });
-
-    return next();
   } catch (e) {
     return next(e);
   }
