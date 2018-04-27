@@ -585,7 +585,9 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
     stripe_token,
     plan,
   } = res.locals;
-  const email = ownerUser.email;
+  const {
+    email,
+  } = ownerUser;
 
   const args = [];
   let funcName = 'create';
@@ -693,8 +695,6 @@ const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSu
     organization,
   } = res.locals;
 
-  console.log(organization);
-
   if (!organization) {
     return next();
   }
@@ -741,6 +741,66 @@ const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSu
     }).catch((err) => {
       return next(new SwipesError(err));
     });
+});
+const organizationsCheckStripeProration = valLocals('organizationsCheckStripeProration', {
+  plan_to_change: string.require(),
+  organization: object,
+}, async (req, res, next, setLocals) => {
+  try {
+    const {
+      plan_to_change,
+      organization,
+    } = res.locals;
+
+    if (!organization) {
+      return next();
+    }
+
+    const mappedPlan = plan_to_change === 'yearly' ? stripeConfig.yearlyPlanId : stripeConfig.monthlyPlanId;
+    const {
+      plan,
+      stripe_customer_id,
+      stripe_subscription_id,
+    } = organization;
+
+    if (mappedPlan === plan) {
+      // Can't change the plan to the current one.
+      return next(new SwipesError(`You are already on the ${plan} plan.`));
+    }
+
+    const proration_date = Math.floor(Date.now() / 1000);
+    const subscription = await stripe.subscriptions.retrieve(stripe_subscription_id);
+    const items = [{
+      id: subscription.items.data[0].id,
+      plan: mappedPlan,
+    }];
+
+    const invoice = await stripe.invoices.retrieveUpcoming(stripe_customer_id, stripe_subscription_id, {
+      subscription_items: items,
+      subscription_proration_date: proration_date,
+    });
+
+    // https://stripe.com/docs/billing/subscriptions/prorations
+    // Calculate the proration cost:
+    const current_prorations = [];
+    let cost = 0;
+    for (let i = 0; i < invoice.lines.data.length; i++) {
+      const invoice_item = invoice.lines.data[i];
+      if (invoice_item.period.start === proration_date) {
+        current_prorations.push(invoice_item);
+        cost += invoice_item.amount;
+      }
+    }
+
+    setLocals({
+      proration_cost: cost,
+      invoice,
+    });
+
+    return next();
+  } catch (e) {
+    return next(e);
+  }
 });
 const organizationsCancelSubscription = valLocals('organizationsCancelSubscription', {
   organization: object,
@@ -834,6 +894,7 @@ export {
   organizationsCheckIsDisableValid,
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
+  organizationsCheckStripeProration,
   organizationsCancelSubscription,
   organizationsAddPendingUsers,
   organizationsCreatedQueueMessage,

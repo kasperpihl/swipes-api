@@ -1,7 +1,9 @@
 import express from 'express';
 import {
   string,
+  number,
   object,
+  any,
 } from 'valjs';
 import MiddlewareComposer from './middleware_composer';
 import {
@@ -24,6 +26,7 @@ import {
   organizationsCheckIsDisableValid,
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionCustomer,
+  organizationsCheckStripeProration,
   organizationsCancelSubscription,
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
@@ -311,6 +314,21 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
+  }),
+);
+
+authed.all(
+  '/organizations.checkStripeProration',
+  valBody({
+    organization_id: string.require(),
+    plan_to_change: any.of('monthly', 'yearly').require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckStripeProration,
+  valResponseAndSend({
+    plan_to_change: any.of('monthly', 'yearly').require(),
+    proration_cost: number.require(),
+    invoice: object.require(),
   }),
 );
 
