@@ -18,6 +18,7 @@ import {
   dbOrganizationsEnableUser,
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
   dbOrganizationsUpdateStripeSubscriptionId,
+  dbOrganizationsUpdateStripeSubscriptionPlan,
   dbOrganizationsAddPendingUser,
   dbOrganizationsActivateUser,
 } from './db_utils/organizations';
@@ -688,7 +689,7 @@ const organizationsCreateSubscriptionCustomer = valLocals('organizationsCreateSu
       return next(new SwipesError(err));
     });
 });
-const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSubscriptionCustomer', {
+const organizationsUpdateSubscriptionQuantity = valLocals('organizationsUpdateSubscriptionQuantity', {
   organization: object,
 }, (req, res, next, setLocals) => {
   const {
@@ -741,6 +742,66 @@ const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSu
     }).catch((err) => {
       return next(new SwipesError(err));
     });
+});
+const organizationsUpdateStripeSubscriptionPlan = valLocals('organizationsUpdateStripeSubscriptionPlan', {
+  organization_id: string.require(),
+  plan_to_change: string.require(),
+  organization: object,
+}, async (req, res, next, setLocals) => {
+  try {
+    const {
+      organization_id,
+      plan_to_change,
+      organization,
+    } = res.locals;
+
+    if (!organization) {
+      return next();
+    }
+
+    const mappedPlan = plan_to_change === 'yearly' ? stripeConfig.yearlyPlanId : stripeConfig.monthlyPlanId;
+    const {
+      plan,
+      stripe_subscription_id,
+    } = organization;
+
+    if (mappedPlan === plan) {
+      // Can't change the plan to the current one.
+      return next(new SwipesError(`You are already on the ${plan} plan.`));
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(stripe_subscription_id);
+
+    await stripe.subscriptions.update(stripe_subscription_id, {
+      items: [{
+        id: subscription.items.data[0].id,
+        plan: mappedPlan,
+        quantity: organization.active_users.length,
+      }],
+    });
+
+    dbOrganizationsUpdateStripeSubscriptionPlan({
+      organization_id,
+      plan: plan_to_change,
+    })
+      .then((result) => {
+        const changes = result.changes[0];
+        const organization = changes.new_val || changes.old_val;
+
+        setLocals({
+          organization,
+        });
+
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
+      });
+
+    return next();
+  } catch (e) {
+    return next(e);
+  }
 });
 const organizationsCheckStripeProration = valLocals('organizationsCheckStripeProration', {
   plan_to_change: string.require(),
@@ -893,7 +954,8 @@ export {
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
   organizationsCreateSubscriptionCustomer,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
+  organizationsUpdateStripeSubscriptionPlan,
   organizationsCheckStripeProration,
   organizationsCancelSubscription,
   organizationsAddPendingUsers,

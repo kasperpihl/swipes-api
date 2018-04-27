@@ -323,6 +323,28 @@ const dbOrganizationsUpdateStripeSubscriptionId = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOrganizationsUpdateStripeSubscriptionPlan = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    plan: string,
+  }).require(),
+], (err, { organization_id, plan }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsUpdateStripeSubscriptionPlan: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        plan,
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbOrganizationsCreate,
@@ -336,6 +358,7 @@ export {
   dbOrganizationsEnableUser,
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
   dbOrganizationsUpdateStripeSubscriptionId,
+  dbOrganizationsUpdateStripeSubscriptionPlan,
   dbOrganizationsActivateUser,
   dbOrganizationsDisableAllUsers,
 };

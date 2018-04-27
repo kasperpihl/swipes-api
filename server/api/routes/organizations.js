@@ -25,7 +25,8 @@ import {
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
   organizationsCreateSubscriptionCustomer,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
+  organizationsUpdateStripeSubscriptionPlan,
   organizationsCheckStripeProration,
   organizationsCancelSubscription,
   organizationsCreatedQueueMessage,
@@ -118,7 +119,7 @@ authed.all(
   usersCheckIfInOrganization,
   organizationsActivateUser,
   organizationsAddToUser,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
   userActivatedUserSignUpQueueMessage,
   notificationsPushToQueue,
   mapLocals(locals => ({
@@ -144,7 +145,7 @@ authed.all(
     user_to_disable_id: locals.user_id,
   })),
   organizationsDisableUser,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),
@@ -243,7 +244,7 @@ authed.all(
   organizationsCheckOwnerDisabledUser,
   organizationsCheckAdminRights,
   organizationsDisableUser,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),
@@ -269,7 +270,7 @@ authed.all(
   usersGetByIdWithFields,
   organizationsCheckAdminRights,
   organizationsEnableUser,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),
@@ -329,6 +330,21 @@ authed.all(
     plan_to_change: any.of('monthly', 'yearly').require(),
     proration_cost: number.require(),
     invoice: object.require(),
+  }),
+);
+
+authed.all(
+  '/organizations.changeStripeSubscriptionPlan',
+  valBody({
+    organization_id: string.require(),
+    plan_to_change: any.of('monthly', 'yearly').require(),
+  }),
+  organizationsGetSingle,
+  organizationsUpdateStripeSubscriptionPlan,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization: object.require(),
   }),
 );
 
