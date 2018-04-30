@@ -1,6 +1,6 @@
 import { List, Set } from 'immutable';
 import MilestonesUtil from '../classes/milestones-util';
-import { timeAgo } from '../classes/time-utils';
+import { timeAgo } from '../utils/time/timeAgo';
 
 export default class Milestones {
   constructor(store, parent) {

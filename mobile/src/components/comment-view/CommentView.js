@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation, To
 import ParsedText from "react-native-parsed-text";
 
 import { setupDelegate, attachmentIconForService } from "swipes-core-js/classes/utils";
-import { timeAgo } from "swipes-core-js/classes/time-utils";
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors, viewSize } from "globalStyles";
 import * as gs from 'styles';
 import Icon from "Icon";

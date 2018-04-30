@@ -7,7 +7,7 @@ import {
   Platform,
   ActivityIndicator
 } from 'react-native';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import * as a from 'actions';
 import * as gs from 'styles';
 import Icon from 'Icon';

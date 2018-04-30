@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 
 class AutoCompleteInput extends PureComponent {
   constructor(props) {

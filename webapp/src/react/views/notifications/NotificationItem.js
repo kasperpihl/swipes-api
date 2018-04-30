@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import StyledText from 'components/styled-text/StyledText';
 import './styles/notification-item.scss';
 

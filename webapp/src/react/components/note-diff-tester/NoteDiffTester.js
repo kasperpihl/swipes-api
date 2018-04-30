@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { styleElement } from 'react-swiss';
 import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
-import diff from 'src/classes/draft-util';
-import Button from 'Button';
+import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
+import Button from 'src/react/components/button/Button2';
 import {
   convertToRaw,
   convertFromRaw,
@@ -37,7 +37,7 @@ class NoteDiffTester extends PureComponent {
     const clientMod = convertToRaw(this.state.clientModified.getCurrentContent());
     const serverMod = convertToRaw(this.state.serverModified.getCurrentContent());
 
-    const newState = diff(serverOrg, serverMod, clientMod);
+    const newState = getDiffServerClient(serverOrg, serverMod, clientMod);
     let editorState = NoteEditor.getEmptyEditorState();
     editorState = EditorState.push(editorState, convertFromRaw(newState));
 
@@ -86,8 +86,7 @@ class NoteDiffTester extends PureComponent {
     if (!calculatedDiff) {
       return (
         <Button
-          text="Calculate Diff"
-          primary
+          title="Calculate Diff"
           onClick={this.onDiff}
         />
       );

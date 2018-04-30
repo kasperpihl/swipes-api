@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { setupCachedCallback, throttle } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
+import throttle from 'swipes-core-js/utils/throttle';
 import * as views from '../../views';
 import { viewSize } from 'globalStyles';
 

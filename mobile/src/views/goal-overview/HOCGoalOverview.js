@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import * as a from 'actions';

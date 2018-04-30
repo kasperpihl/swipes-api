@@ -6,12 +6,12 @@ import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { 
   setupLoading, 
-  convertObjToUnderscore, 
   navForContext, 
   typeForId,
   bindAll,
-  getDeep,
 } from 'swipes-core-js/classes/utils';
+import convertObjectKeysToUnderscore from 'swipes-core-js/utils/convertObjectKeysToUnderscore';
+import getDeep from 'swipes-core-js/utils/getDeep';
 
 import { fromJS, List } from 'immutable';
 import PostCreate from './PostCreate';
@@ -75,7 +75,7 @@ class HOCPostCreate extends PureComponent {
       } else {
         this.setLoading('posting');
         this.renderActionButtons();
-        createPost(convertObjToUnderscore(post.toJS())).then((res) => {
+        createPost(convertObjectKeysToUnderscore(post.toJS())).then((res) => {
           this.clearLoading('posting');
           this.renderActionButtons();
           if (res.ok) {

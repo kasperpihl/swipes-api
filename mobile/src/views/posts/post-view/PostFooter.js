@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
-import { setupDelegate, bindAll, getDeep } from 'swipes-core-js/classes/utils';
+import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
+import getDeep from 'swipes-core-js/utils/getDeep';
 import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
 import * as gs from 'styles';

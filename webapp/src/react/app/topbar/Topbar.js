@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 
 import Icon from 'Icon';
 import Button from 'Button';

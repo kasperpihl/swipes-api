@@ -13,7 +13,7 @@ export default styleSheet({
   Input: {
     _size: ['274px', 'auto'],
     _font: ['12px', '15px'],
-    borderBottom: '1px solid $sw4',
+    borderBottom: '1px solid $sw3',
     marginLeft: '36px',
     marginRight: '45px',
     padding: '9px 0',

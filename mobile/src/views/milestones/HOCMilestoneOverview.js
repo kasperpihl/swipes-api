@@ -7,7 +7,7 @@ import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import HOCHeader from 'HOCHeader';
 import WaitForUI from 'WaitForUI';

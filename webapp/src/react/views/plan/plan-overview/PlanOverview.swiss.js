@@ -50,12 +50,12 @@ export default styleSheet('PlanOverview', {
     flex: 'none',
     _font: ['12px', '18px', 500],
     color: '$sw1',
-    borderBottom: '1px solid $sw4',
+    borderBottom: '1px solid $sw3',
     marginBottom: '24px',
   },
   Footer: {
     _size: ['100%', '54px'],
-    borderTop: '1px solid $sw4',
+    borderTop: '1px solid $sw3',
     _flex: ['row', 'right', 'center'],
     padding: '9px 12px',
     '& > *:not(:last-child)': {

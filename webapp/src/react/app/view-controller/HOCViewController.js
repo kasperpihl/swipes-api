@@ -5,7 +5,8 @@ import Button from 'Button';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as views from 'src/react/views';
-import { setupCachedCallback, debounce, bindAll } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
+import debounce from 'swipes-core-js/utils/debounce';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
@@ -31,7 +32,6 @@ class HOCViewController extends PureComponent {
     this.onSaveState = setupCachedCallback(props.saveState, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
     this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
-    bindAll(this, ['onClose', 'updateAppWidth', 'onToggleLock']);
     this.bouncedUpdateAppWidth = debounce(this.updateAppWidth, 50);
   }
   componentDidMount() {
@@ -53,7 +53,7 @@ class HOCViewController extends PureComponent {
     this._unmounted = true;
     window.removeEventListener('resize', this.bouncedUpdate);
   }
-  onClose() {
+  onClose = () => {
     const { navSet } = this.props;
     const { fullscreen } = this.state;
     if (fullscreen) {
@@ -73,7 +73,7 @@ class HOCViewController extends PureComponent {
       this.setState({ fullscreen: target });
     }
   }
-  onToggleLock() {
+  onToggleLock = () => {
     const { toggleLock } = this.props;
     toggleLock();
   }
@@ -108,7 +108,7 @@ class HOCViewController extends PureComponent {
     return appWidth - SPACING - sizes.reduce((c, b) => c + b);
   }
 
-  updateAppWidth() {
+  updateAppWidth = () => {
     if (!this._unmounted) {
       this.setState({ appWidth: this.refs.controller.clientWidth });
     }

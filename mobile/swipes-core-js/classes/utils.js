@@ -41,24 +41,6 @@ export function getFuzzyOptionsWithKeys(keys) {
   }, { keys });
 }
 
-export function apiRequest(endpoint, params) {
-  const serData = {
-    method: 'POST',
-    headers: new Headers({ 'Content-Type': 'application/json' }),
-    body: JSON.stringify(params || {}),
-  };
-  return new Promise((resolve, reject) => {
-    fetch(`${location.origin}/v1/${endpoint}`, serData).then((r) => {
-      if (r && r.ok) return r.json();
-      resolve(null, { message: r.statusText, code: r.status });
-    }).then((res) => {
-      resolve(res);
-    }).catch((e) => {
-      resolve(null, e);
-    });
-  })
-}
-
 export const parseVersionString = (version) => {
   const x = version.split('.');
   const major = parseInt(x[0], 10) || 0;
@@ -71,36 +53,6 @@ export const parseVersionString = (version) => {
     patch,
   };
 };
-
-export function convertObjToUnderscore(obj) {
-  Object.keys(obj).forEach((key) => {
-    const newKey = toUnderscore(key);
-    if(newKey !== key){
-      obj[newKey] = obj[key];
-      delete obj[key];
-    }
-  });
-  return obj;
-}
-
-export function getDeep(obj, path) {
-  if(typeof obj === 'undefined' || typeof path !== 'string') {
-    return undefined;
-  }
-  const parts = path.split('.');
-  for(let i = 0 ; i < parts.length ; i++) {
-    const part = parts[i];
-    obj = obj[part];
-    if(typeof obj === 'undefined') {
-      return undefined;
-    }
-  }
-  return obj;
-}
-
-export function toUnderscore(string) {
-  return string.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();});
-}
 
 export function hasMinorChange(current, last) {
   if(!last){
@@ -130,27 +82,6 @@ export function reducerInitToMap(payload, key, state) {
 
 export const URL_REGEX = /(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?/gim;
 
-export function isShareURL(url) {
-  url = url || '';
-  const shareURLPrefix = `${window.location.origin}/s/`;
-  if (url.startsWith(shareURLPrefix)) {
-    return true;
-  }
-  return false;
-}
-export function setupTimer(string){
-  let startTime = new Date().getTime();
-  return function toggleTimer() {
-    if(!startTime) {
-      startTime = new Date().getTime();
-    } else {
-      const now = new Date().getTime();
-      const diff = now - startTime;
-      console.log(string || 'timer', `${diff}ms`);
-      startTime = undefined;
-    }
-  }
-}
 
 export function valAction(actionName, arrayArgs, actionHandler) {
   function handler(valErr) {
@@ -302,40 +233,6 @@ export function getParentByClass(target, className) {
   } while (!node && target && typeof target.getAttribute === 'function');
   return node;
 }
-export function nearestAttribute(target, attribute) {
-  let value;
-  do {
-    value = target.getAttribute(attribute);
-    target = target.parentNode;
-  } while (!value && typeof target.getAttribute === 'function');
-  return value;
-}
-
-export function setupDelegate(obj, ...delegateMethods) {
-  let globals = [];
-
-  const delegate = obj && (obj.delegate || (obj.props && obj.props.delegate));
-  obj.callDelegate = function callDelegate(name, ...rest) {
-    if (delegate && typeof delegate[name] === 'function') {
-      return delegate[name](...globals.concat(rest));
-    }
-
-    return undefined;
-  };
-
-  delegateMethods.forEach((funcName) => {
-    if(typeof funcName === 'string'){
-      obj[funcName] = obj.callDelegate.bind(null, funcName);
-      obj[`${funcName}Cached`] = setupCachedCallback(obj[funcName]);
-    }
-  })
-
-  return {
-    setGlobals: (...globalArgs) => {
-      globals = globals.concat(globalArgs);
-    }
-  }
-}
 
 export function queryStringToObject(query) {
   const object = {};
@@ -359,59 +256,12 @@ export function queryStringToObject(query) {
   return object;
 }
 
-
-export function setupCachedCallback(method, ctx) {
-  const cachedMethod = {};
-  return function cachedCallback(id) {
-    let index = id;
-    if(typeof index === 'object') {
-      index = JSON.stringify(id);
-    }
-    if (typeof index !== 'string') {
-      index = '' + index;
-    }
-
-    if (!cachedMethod[index]) {
-      const args = Array.from(arguments);
-      cachedMethod[index] = method.bind(ctx, ...args);
-    }
-    return cachedMethod[index];
-  };
-}
-
-export function requireParams() {
-  // if (typeof obj !== 'object') {
-  //   return console.warn('requireParams should be {varName}');
-  // }
-  //
-  // // let counter = 0;
-  // const keys = Object.keys(obj);
-  //
-  // keys.forEach((key) => {
-  //   if (typeof obj[key] === 'undefined') {
-  //     // console.warn(`Required params [${counter}]: ${key} not set in ${caller}`);
-  //   }
-  //   // counter += 1;
-  // });
-}
-
 export function truncateString(string, maxLength) {
   if (typeof string === 'string' && maxLength < string.length) {
     string = string.substr(0, maxLength);
     return `${string}...`;
   }
   return string;
-}
-
-export function shortUrlFromShareUrl(url) {
-  return url.split('/s/')[1].split('/')[0];
-}
-export function immuCompare(o1, o2, attr) {
-  let getMethod = 'get';
-  if (Array.isArray(attr)) {
-    getMethod = 'getIn';
-  }
-  return (o1[getMethod](attr) === o2[getMethod](attr));
 }
 
 export function bindAll(context, methodNames) {
@@ -435,118 +285,6 @@ export function randomString(length, possible) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
-}
-
-export function indexBy(arr, iterator) {
-  const object = {};
-  arr.forEach((val, i) => {
-    if (typeof iterator === 'string' && typeof val[iterator] === 'string') {
-      object[val[iterator]] = val;
-    } else if (typeof iterator === 'function') {
-      const res = iterator(val);
-      if (typeof res === 'string') {
-        object[res] = val;
-      } else {
-        object[i] = val;
-      }
-    } else {
-      object[i] = val;
-    }
-  });
-  return object;
-}
-
-export function debounce(func, wait, immediate) {
-  let timeout;
-  let args;
-  let context;
-  let timestamp;
-  let result;
-  let hasCalledSecondTime;
-  if (wait == null) wait = 100;
-
-  function later() {
-    const last = Date.now() - timestamp;
-
-    if (last < wait && last > 0) {
-      timeout = setTimeout(later, wait - last);
-    } else {
-      timeout = null;
-      if (!immediate || hasCalledSecondTime) {
-        result = func.apply(context, args);
-        context = args = null;
-        hasCalledSecondTime = undefined;
-      }
-    }
-  }
-
-  function debounced() {
-    context = this;
-    args = arguments;
-    timestamp = Date.now();
-    const callNow = immediate && !timeout;
-    const isSecondTime = immediate && timeout && !hasCalledSecondTime;
-    if (!timeout) timeout = setTimeout(later, wait);
-    if (callNow) {
-      result = func.apply(context, args);
-      context = args = null;
-    }
-    if (isSecondTime) {
-      hasCalledSecondTime = true;
-    }
-
-    return result;
-  }
-
-  debounced.isRunning = () => !!timeout;
-
-  debounced.clear = () => {
-    if (timeout) {
-      clearTimeout(timeout);
-      timeout = null;
-    }
-  };
-
-  return debounced;
-}
-
-export function throttle(func, wait, lock) {
-  let ctx;
-  let args;
-  let rtn;
-  let timeoutID; // caching
-  let last = 0;
-
-  function call() {
-    timeoutID = 0;
-    last = +new Date();
-    rtn = func.apply(ctx, args);
-    ctx = null;
-    args = null;
-  }
-  function clear() {
-    if (timeoutID) {
-      clearTimeout(timeoutID);
-      timeoutID = 0;
-      last = 0;
-    }
-  };
-
-  function throttled() {
-    ctx = this;
-    args = arguments;
-    const delta = new Date() - last;
-    if (!timeoutID) {
-      const callback = lock ? clear : call;
-      if (delta >= wait) call();
-      else timeoutID = setTimeout(callback, wait - delta);
-    }
-
-    return rtn;
-  }
-  throttled.isRunning = () => !!timeoutID;
-  throttled.clear = clear;
-  return throttled;
 }
 
 export function setupLoading(ctx) {
@@ -622,28 +360,3 @@ export function setupLoading(ctx) {
   ctx.bindLoading = bindLoading.bind(ctx);
 
 }
-
-
-const unescapeMap = {
-  '&amp;': '&',
-  '&nbsp;': '\u00A0',
-  '&lt;': '<',
-  '&gt;': '>',
-  '&quot;': '"',
-  '&#x27;': "'",
-  '&#x60;': '`',
-};
-
-const createEscaper = (map) => {
-  const escaper = (match) => map[match];
-
-  const source = '(?:' + Object.keys(map).join('|') + ')';
-  const testRegexp = RegExp(source);
-  const replaceRegexp = RegExp(source, 'g');
-  return (string) => {
-    string = string == null ? '' : '' + string;
-    return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
-  };
-};
-
-export const unescaper = createEscaper(unescapeMap);

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, ScrollView, Platform, Keyboard, UIManage
 import ParsedText from "react-native-parsed-text";
 import { List } from "immutable";
 import { setupDelegate, iconForId, attachmentIconForService, bindAll } from "swipes-core-js/classes/utils";
-import { timeAgo } from "swipes-core-js/classes/time-utils";
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors, viewSize, statusbarHeight } from "globalStyles";
 import HOCHeader from "HOCHeader";
 import StyledText from "components/styled-text/StyledText";

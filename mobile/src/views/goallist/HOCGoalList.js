@@ -11,7 +11,7 @@ import WaitForUI from 'WaitForUI';
 import * as cs from 'swipes-core-js/selectors';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import { colors, viewSize } from 'globalStyles';
 import HOCGoalItem from './HOCGoalItem';
 

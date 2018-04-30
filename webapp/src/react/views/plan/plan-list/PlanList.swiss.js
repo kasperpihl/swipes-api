@@ -6,13 +6,13 @@ export default styleSheet('PlanList', {
   },
   HeaderWrapper: {
     _size: ['100%', 'auto'],
-    borderBottom: '1px solid $sw4',
+    borderBottom: '1px solid $sw3',
     paddingBottom: '24px',
   },
   Footer: {
     _size: ['100%', '54px'],
     _flex: ['row', 'between', 'center'],
     padding: '9px 12px',
-    borderTop: '1px solid $sw4',
+    borderTop: '1px solid $sw3',
   },
 });

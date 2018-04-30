@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
 import { setupDelegate, miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors, viewSize } from 'globalStyles';
 import * as gs from 'styles';
 import HOCHeader from 'HOCHeader';

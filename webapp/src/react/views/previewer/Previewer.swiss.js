@@ -5,7 +5,7 @@ export default styleSheet('Previewer', {
     _size: ['100%', '60px'],
     _flex: ['row', 'right', 'center'],
     backgroundColor: '$sw5',
-    borderTop: '1px solid $sw4',
+    borderTop: '1px solid $sw3',
     padding: '0 30px',
   },
   FooterButton: {

@@ -12,11 +12,11 @@ export default styleSheet({
   },
   Background: {
     _flex: ['row', 'left', 'center'],
-    background: '$sw4',
     borderRadius: '18px',
     '!compact': {
+      border: '1px solid $sw3',
       '.gl-button:hover &': {
-        opacity: .7,
+        background: '$sw3',
       },
     },
     compact: {
@@ -31,7 +31,7 @@ export default styleSheet({
     }
   },
   Icon: {
-    _svgColor: '$sw2',
+    _svgColor: '$sw1',
     'status=success': {
       _svgColor: '$green'
     },
@@ -45,7 +45,7 @@ export default styleSheet({
   },
   Title: {
     _font: ['12px', '18px', 400],
-    color: '$sw2',
+    color: '$sw1',
     padding: '9px 18px',
     'status=success': {
       color: '$green'
@@ -64,7 +64,7 @@ export default styleSheet({
     _font: ['12px', '18px', 400],
     paddingTop: '1px',
     paddingLeft: '12px',
-    color: '$sw2',
+    color: '$sw1',
     'status=success': {
       color: '$green'
     },
@@ -80,7 +80,7 @@ export default styleSheet({
   },
   LoaderCircle: {
     _size: '30px',
-    backgroundColor: '$sw2',
+    backgroundColor: '$sw1',
     borderRadius: '100%',
     animation: 'button-loader 1.0s infinite ease-in-out',
   },

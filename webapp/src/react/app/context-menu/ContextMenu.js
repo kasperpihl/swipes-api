@@ -3,7 +3,7 @@ import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
 import Measure from 'react-measure';
 import * as mainActions from 'src/redux/main/mainActions';
-import { debounce } from 'swipes-core-js/classes/utils';
+import debounce from 'swipes-core-js/utils/debounce';
 import prefixAll from 'inline-style-prefixer/static';
 import styles from './ContextMenu.swiss';
 

@@ -11,7 +11,7 @@ export default styleSheet({
       color: '$sw1',
       backgroundColor: 'transparent',
       border: 'none',
-      borderBottom: '1px solid $sw4',
+      borderBottom: '1px solid $sw3',
       padding: '5px 0',
       paddingTop: '27px',
       transition: '.2s ease-in-out',

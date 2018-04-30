@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { StyleSheet, Platform, Keyboard, AppState } from 'react-native';
 import NavigationExperimental from 'react-native-navigation-experimental-compat';
 import * as a from 'actions';
-import { setupCachedCallback, throttle } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
+import throttle from 'swipes-core-js/utils/throttle';
 import SceneRenderer from './SceneRenderer';
 import { viewSize } from 'globalStyles';
 

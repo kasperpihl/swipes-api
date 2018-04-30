@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
-import { apiRequest, bindAll, setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
+import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
+import apiRequest from 'swipes-core-js/utils/apiRequest';
 import FloatingInput from 'src/react/browser-compatible/components/input/FloatingInput';
 import Icon from 'Icon';
 
@@ -13,7 +14,6 @@ class Reset extends PureComponent {
       newPass: '',
     }
     setupLoading(this);
-    bindAll(this, ['onReset', 'onChange', 'onKeyDown']);
   }
   componentWillMount() {
     this.setLoading('verify');
@@ -28,12 +28,12 @@ class Reset extends PureComponent {
       }
     })
   }
-  onKeyDown(e){
+  onKeyDown = (e) => {
     if(e.keyCode === 13) {
       this.onReset();
     }
   }
-  onReset() {
+  onReset = () => {
     const { newPass } = this.state;
     if(!newPass.length) {
       return;
@@ -51,7 +51,7 @@ class Reset extends PureComponent {
       console.log(res);
     })
   }
-  onChange(key, e) {
+  onChange = (key, e) => {
     this.setState({newPass: e.target.value});
   }
   renderLoading() {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
 import Icon from 'Icon';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 import styles from './BreadCrumbs.swiss';

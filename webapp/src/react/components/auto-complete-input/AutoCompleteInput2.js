@@ -5,10 +5,11 @@ import * as ca from 'swipes-core-js/actions';
 import {
   Editor,
   getDefaultKeyBinding,
-  EditorState,
-  Modifier,
   getVisibleSelectionRect,
 } from 'draft-js';
+import getTriggerIndexInSelection from 'src/utils/draft-js/getTriggerIndexInSelection';
+import insertMentionInSelection from 'src/utils/draft-js/insertMentionInSelection';
+import getTextToSearchInSelection from 'src/utils/draft-js/getTextToSearchInSelection';
 import DraftExt from 'src/react/components/note-editor/draft-ext';
 import Mention from './Mention';
 import styles from './AutoCompleteInput.swiss';
@@ -48,43 +49,9 @@ class Tester extends PureComponent {
   }
   onAutoCompleteSelect(item, i) {
     let { editorState } = this.state;
-    const displayName = msgGen.users.getFirstName(item.id);
-    const apiString = `<!${item.id}|${displayName}>`;
-
-    let contentState = editorState.getCurrentContent();
-    let selection = editorState.getSelection();
     
-    selection = selection.set('anchorOffset', this.selStart);
+    editorState = insertMentionInSelection(editorState, '@', item.id);
 
-    
-    contentState = Modifier.replaceText(
-      contentState,
-      selection,
-      displayName,
-    );
-    selection = selection.set('focusOffset', this.selStart + displayName.length);
-
-    contentState = contentState.createEntity(
-      'MENTION',
-      'IMMUTABLE',
-      {
-        apiString,
-      },
-    );
-    const entityKey = contentState.getLastCreatedEntityKey();
-
-    contentState = Modifier.applyEntity(
-      contentState,
-      selection,
-      entityKey,
-    );
-
-    editorState = EditorState.set(editorState, { currentContent: contentState });
-
-    const targetO = selection.get('focusOffset');
-    selection = selection.set('anchorOffset', targetO).set('focusOffset', targetO);
-    editorState = EditorState.acceptSelection(editorState, selection);
-    
     this.setEditorState(editorState);
 
     if(this.props.onAutoCompleteSelect){
@@ -93,30 +60,22 @@ class Tester extends PureComponent {
   }
   handleAutoComplete(editorState) {
     const { search, clear, string } = this.props;
-    const contentState = editorState.getCurrentContent();
-    const sel = editorState.getSelection();
+    const triggerIndex = getTriggerIndexInSelection(editorState, '@');
     let didSearch = false;
-    if(sel.get('anchorKey') === sel.get('focusKey') &&
-      sel.get('anchorOffset') === sel.get('focusOffset')
-      ) {
-      const block = contentState.getBlockForKey(sel.get('anchorKey'));
-      const textToIndex = block.get('text').substr(0, sel.get('anchorOffset'));
-      const triggerIndex = textToIndex.lastIndexOf('@');
-      if(triggerIndex > -1) {
-        this.selStart = triggerIndex;
-        const boundingRect = getVisibleSelectionRect(window);
-        if(boundingRect) {
-          const wh = window.outerHeight;
-          didSearch = true;
-          search(textToIndex.substr(triggerIndex + 1), {
-            delegate: this,
-            types: ['users'],
-            boundingRect,
-            identifier: `${sel.get('anchorKey')}-${triggerIndex}`,
-            showOnTop: (wh - boundingRect.bottom) < boundingRect.top,
-          });
-        }
-        
+    if(triggerIndex > -1) {
+      const boundingRect = getVisibleSelectionRect(window);
+      if(boundingRect) {
+        const wh = window.outerHeight;
+        didSearch = true;
+        const contentState = editorState.getCurrentContent();
+        const sel = editorState.getSelection();
+        search(getTextToSearchInSelection(editorState, '@'), {
+          delegate: this,
+          types: ['users'],
+          boundingRect,
+          identifier: `${sel.get('anchorKey')}-${triggerIndex}`,
+          showOnTop: (wh - boundingRect.bottom) < boundingRect.top,
+        });
       }
     }
     if(!didSearch && string) {

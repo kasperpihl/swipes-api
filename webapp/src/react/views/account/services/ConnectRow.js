@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { bindAll } from 'swipes-core-js/classes/utils';
 
 class ConnectRow extends Component {
-  constructor(props) {
-    super(props);
-    bindAll(this, ['clickedButton']);
-  }
-  clickedButton() {
+  clickedButton = () => {
     this.props.clickedButton(this.props.data);
   }
   render() {
@@ -34,12 +28,3 @@ class ConnectRow extends Component {
 }
 
 export default ConnectRow;
-
-ConnectRow.propTypes = {
-  data: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    subtitle: PropTypes.string,
-  }),
-  disconnect: PropTypes.bool,
-  clickedButton: PropTypes.func,
-};

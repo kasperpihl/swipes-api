@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { styleElement } from 'react-swiss';
 import PropTypes from 'prop-types';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import Button from 'Button';
 import styles from './Confirmation.swiss';
 

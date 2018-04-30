@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import ReactTextarea from 'react-textarea-autosize';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';

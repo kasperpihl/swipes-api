@@ -26,10 +26,10 @@ export default styleSheet({
   Content: {
     _size: ['100%', 'auto'],
     'position=bottom': {
-      borderTop: '1px solid $sw4',
+      borderTop: '1px solid $sw3',
     },
     'position=top': {
-      borderBottom: '1px solid $sw4',
+      borderBottom: '1px solid $sw3',
     },
   },
 });

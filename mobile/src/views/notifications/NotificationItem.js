@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { setupDelegate } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors, viewSize } from 'globalStyles';
 import RippleButton from 'RippleButton';
 import StyledText from 'components/styled-text/StyledText';

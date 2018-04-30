@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { fromJS, List, Map } from 'immutable';
-import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import { bindAll, setupLoading } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import * as mainActions from 'src/redux/main/mainActions';

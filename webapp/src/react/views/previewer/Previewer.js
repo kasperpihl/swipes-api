@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { styleElement } from 'react-swiss';
-import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import Button from 'src/react/components/button/Button2';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
@@ -47,7 +48,6 @@ class HOCPreviewModal extends PureComponent {
     }
 
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
-    bindAll(this, ['onFileLoaded', 'onFileError', 'onAttach']);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.loadPreview !== this.props.loadPreview) {
@@ -69,16 +69,16 @@ class HOCPreviewModal extends PureComponent {
     }
     e.target.blur();
   }
-  onFileError() {
+  onFileError = () => {
     this.setState({
       fileLoading: false,
       fileError: true,
     });
   }
-  onFileLoaded() {
+  onFileLoaded = () => {
     this.setState({ fileLoading: false });
   }
-  onAttach() {
+  onAttach = () => {
     const {
       targetId,
       loadPreview,

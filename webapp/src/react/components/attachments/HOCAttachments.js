@@ -11,12 +11,14 @@ import {
   convertToRaw,
 } from 'draft-js';
 import {
-  setupCachedCallback,
-  setupDelegate,
   setupLoading,
   attachmentIconForService,
-  bindAll,
 } from 'swipes-core-js/classes/utils';
+import {
+  setupCachedCallback,
+  setupDelegate,
+} from 'react-delegate';
+
 import Icon from 'Icon';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';

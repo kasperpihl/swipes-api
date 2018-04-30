@@ -1,5 +1,5 @@
 import * as types from '../constants';
-import { randomString } from 'swipes-core-js/classes/utils';
+import randomString from 'swipes-core-js/utils/randomString';
 
 export const url = (url, options) => (d, getState) => {
   if(getState().getIn(['navigation', 'url']) === url) return;

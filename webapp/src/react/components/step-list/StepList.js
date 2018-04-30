@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom';
 import { fromJS } from 'immutable';
 import {
   bindAll,
-  setupCachedCallback,
   getParentByClass,
-  setupDelegate,
   truncateString,
 } from 'swipes-core-js/classes/utils';
+import {
+  setupDelegate,
+  setupCachedCallback
+} from 'react-delegate';
+
 import Icon from 'Icon';
 import Button from 'Button';
 import HOCAssigning from 'components/assigning/HOCAssigning';

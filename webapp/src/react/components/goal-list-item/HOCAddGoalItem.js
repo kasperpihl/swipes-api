@@ -3,13 +3,14 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import * as goalActions from 'src/redux/goal/goalActions';
-import { setupLoading, bindAll, toUnderscore } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import camelCaseToUnderscore from 'swipes-core-js/utils/camelCaseToUnderscore';
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import RotateLoader from 'components/loaders/RotateLoader';
-import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
-import Button from 'Button';
+import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput2';
+import Button from 'src/react/components/button/Button2';
 import './styles/add-goal-item.scss';
 
 class HOCAddGoalItem extends PureComponent {
@@ -22,23 +23,16 @@ class HOCAddGoalItem extends PureComponent {
       addFocus: false,
     };
 
-    this.acOptions = {
-      types: ['users'],
-      delegate: this,
-      trigger: "@",
-    };
-
-    bindAll(this, ['onChange', 'onKeyDown', 'onFocus', 'onBlur', 'onGoalAdd']);
     setupDelegate(this, 'onAddGoalItemInputChange');
     setupLoading(this);
   }
-  onFocus() {
+  onFocus = () => {
     this.setState({ addFocus: true });
   }
-  onBlur(i) {
+  onBlur = (i) => {
     this.setState({ addFocus: false });
   }
-  onGoalAdd() {
+  onGoalAdd = () => {
     const { createGoal } = this.props;
     const { title, assignees, milestoneId } = this.state;
 
@@ -82,16 +76,11 @@ class HOCAddGoalItem extends PureComponent {
     title = msgArr.slice(0, -1).join('@');
     this.setState({ title, assignees });
   }
-  onChange(e) {
+  onChange = (e) => {
     const value = e.target.value;
     this.setState({ title: value });
 
     this.onAddGoalItemInputChange(value);
-  }
-  onKeyDown(e) {
-    if (e.keyCode === 13 && e.target.value.length > 0) {
-      this.onGoalAdd();
-    }
   }
   getOptionsForE(e) {
     return {
@@ -122,17 +111,12 @@ class HOCAddGoalItem extends PureComponent {
     return (
       <div className={addClass}>
         <AutoCompleteInput
-          nodeType="input"
-          type="text"
           ref="autocomplete"
-          className="add-goal-item__input"
           value={value}
           onChange={this.onChange}
-          onKeyDown={this.onKeyDown}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           placeholder={placeholder || 'Add a new goal'}
-          options={this.acOptions}
         />
         <div className="add-goal-item__indicator">
           <div className="add-goal-item__loader">
@@ -148,7 +132,7 @@ class HOCAddGoalItem extends PureComponent {
           />
         </div>
         <div className="add-goal-item__button" onClick={this.onGoalAdd} >
-          <Button icon="subdirectory_arrow_left" small frameless/>
+          <Button icon="subdirectory_arrow_left" compact />
         </div>
       </div>
     );

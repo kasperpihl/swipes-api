@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import StyledText from 'components/styled-text/StyledText';

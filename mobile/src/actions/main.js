@@ -1,6 +1,6 @@
 import * as ca from 'swipes-core-js/actions';
 import { fromJS } from 'immutable';
-import { randomString } from 'swipes-core-js/classes/utils';
+import randomString from 'swipes-core-js/utils/randomString';
 import * as types from 'constants/ActionTypes';
 
 // ======================================================

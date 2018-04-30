@@ -7,7 +7,7 @@ import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import { propsOrPop } from 'swipes-core-js/classes/react-utils';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 import PlanOverview from './PlanOverview';
