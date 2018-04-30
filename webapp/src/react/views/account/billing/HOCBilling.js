@@ -18,6 +18,11 @@ class HOCBilling extends PureComponent {
 
     setupLoading(this);
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.organization.get('plan') !== this.state.billingStatus) {
+      this.setState({ billingStatus: nextProps.organization.get('plan') });
+    }
+  }
   onSubmitSuccess(token) {
     const { createStripeCustomer } = this.props;
     const { billingStatus } = this.state;
@@ -54,11 +59,12 @@ class HOCBilling extends PureComponent {
   render() {
     const { billingStatus } = this.state;
     const { organization, users } = this.props;
-
     let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
+
     if (process.env.NODE_ENV !== 'production' || window.location.hostname === 'staging.swipesapp.com') {
       token = 'pk_test_0pUn7s5EyQy7GeAg93QrsJl9';
     }
+
     return (
       <StripeProvider apiKey={token}>
         <Elements>
