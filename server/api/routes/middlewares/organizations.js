@@ -834,16 +834,20 @@ const organizationsCheckStripeProration = valLocals('organizationsCheckStripePro
       plan: mappedPlan,
     }];
 
-    const invoice = await stripe.invoices.retrieveUpcoming(stripe_customer_id, stripe_subscription_id, {
-      subscription_items: items,
-      subscription_proration_date: proration_date,
-    });
+    const invoice = await stripe.invoices.retrieveUpcoming(
+      stripe_customer_id,
+      stripe_subscription_id,
+      {
+        subscription_items: items,
+        subscription_proration_date: proration_date,
+      },
+    );
 
     // https://stripe.com/docs/billing/subscriptions/prorations
     // Calculate the proration cost:
     const current_prorations = [];
     let cost = 0;
-    for (let i = 0; i < invoice.lines.data.length; i++) {
+    for (let i = 0; i < invoice.lines.data.length; i += 1) {
       const invoice_item = invoice.lines.data[i];
       if (invoice_item.period.start === proration_date) {
         current_prorations.push(invoice_item);
