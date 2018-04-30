@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { propsOrPop } from 'swipes-core-js/classes/react-utils';
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupLoading } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';

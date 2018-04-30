@@ -5,7 +5,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
-import { propsOrPop } from 'swipes-core-js/classes/react-utils';
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';

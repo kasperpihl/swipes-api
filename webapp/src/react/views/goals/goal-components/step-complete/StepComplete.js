@@ -7,12 +7,14 @@ import * as mainActions from 'src/redux/main/mainActions';
 import { styleElement, SwissProvider } from 'react-swiss';
 import styles from './StepComplete.swiss';
 
+import Icon from 'Icon';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const Text = styleElement('div', styles.Text);
+const StyledIcon = styleElement(Icon, styles.Icon);
 
 class StepComplete extends PureComponent {
-  onStepComplete() {
+  onComplete = () => {
     const { completeStep, goalId, stepId, successGradient } = this.props;
 
     completeStep(goalId, stepId).then((res) => {
@@ -23,7 +25,7 @@ class StepComplete extends PureComponent {
       }
     });
   }
-  onStepIncomplete() {
+  onIncomplete = () => {
     const { incompleteStep, goalId, stepId } = this.props;
 
     incompleteStep(goalId, stepId).then((res) => {
@@ -34,14 +36,18 @@ class StepComplete extends PureComponent {
     });
   }
   render() {
+    const { className, isComplete } = this.props;
     const hoverClass = this.props.hoverClass || '.step-complete-hover';
 
     return (
       <SwissProvider
         hoverClass={hoverClass}
-        isComplete={this.props.isComplete}>
-        <Wrapper>
+        isComplete={isComplete}>
+        <Wrapper
+          onClick={isComplete ? this.onIncomplete : this.onComplete}
+          className={`sc-wrapper ${className || ''}`.trim()}>
           <Text>{this.props.number}</Text>
+          <StyledIcon icon={isComplete ? 'Iteration' : 'Checkmark'} />
         </Wrapper>
       </SwissProvider>
     );

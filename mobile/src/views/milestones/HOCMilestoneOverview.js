@@ -6,7 +6,7 @@ import { ImmutableListView } from 'react-native-immutable-list-view';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-import { propsOrPop } from 'swipes-core-js/classes/react-utils';
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import HOCHeader from 'HOCHeader';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function propsOrPop(ctx, ...propNames) {
+export default function(ctx, ...propNames) {
   let hasPopped = false;
   const currCWM = ctx.componentWillMount;
   const currCWRP = ctx.componentWillReceiveProps;
