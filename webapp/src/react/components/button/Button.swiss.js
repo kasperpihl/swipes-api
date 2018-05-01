@@ -1,6 +1,17 @@
 import { styleSheet } from 'react-swiss';
 
 export default styleSheet({
+  GlobalStyles: {
+    '@keyframes button-loader': {
+      '0%': { 
+        WebkitTransform: 'scale(0)',
+      },
+      '100%': {
+        WebkitTransform: 'scale(1.0)',
+        opacity: 0,
+      }
+    }
+  },
   ATag: {
     userSelect: 'none',
     _flex: ['row', 'left', 'center'],

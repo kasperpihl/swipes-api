@@ -11,17 +11,7 @@ const SideLabel = styleElement('div', styles.SideLabel);
 const IconComp = styleElement(Icon, styles.Icon);
 const LoaderCircle = styleElement('div', styles.LoaderCircle);
 
-addGlobalStyles({
-  '@keyframes button-loader': {
-    '0%': { 
-      WebkitTransform: 'scale(0)',
-    },
-    '100%': {
-      WebkitTransform: 'scale(1.0)',
-      opacity: 0,
-    }
-  }
-})
+addGlobalStyles(styles.GlobalStyles);
 
 class Button extends PureComponent {
   renderIcon(status) {

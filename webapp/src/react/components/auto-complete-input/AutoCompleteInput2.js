@@ -16,7 +16,7 @@ import styles from './AutoCompleteInput.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 
-class Tester extends PureComponent {
+class AutoCompleteInput extends PureComponent {
   constructor(props) {
     super(props);
     
@@ -26,14 +26,14 @@ class Tester extends PureComponent {
       ],
     });
     this.state = {
-      editorState: this.plugins.getEditorStateWithDecorators(props.initialEditorState)
+      editorState: this.plugins.createEditorState(props.initialValue)
     };
     this.onChange = this.setEditorState;
   }
   componentWillReceiveProps(nextProps) {
     if(nextProps.reset && nextProps.reset !== this.props.reset) {
       this.setState({
-        editorState: this.plugins.getEditorStateWithDecorators()
+        editorState: this.plugins.createEditorState(nextProps.initialValue)
       });
     }
   }
@@ -123,4 +123,4 @@ export default connect(state => ({
 }), {
   search: ca.autoComplete.search,
   clear: ca.autoComplete.clear,
-})(Tester)
+})(AutoCompleteInput)

@@ -14,35 +14,41 @@ const Text = styleElement('div', styles.Text);
 const StyledIcon = styleElement(Icon, styles.Icon);
 
 class StepComplete extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   onComplete = () => {
     const { completeStep, goalId, stepId, successGradient } = this.props;
-
+    this.setState({ loading: true });
     completeStep(goalId, stepId).then((res) => {
+      this.setState({ loading: false });
       if (res && res.ok) {
         successGradient();
         window.analytics.sendEvent('Step completed', {});
-      } else {
       }
     });
   }
   onIncomplete = () => {
     const { incompleteStep, goalId, stepId } = this.props;
-
+    this.setState({ loading: true });
     incompleteStep(goalId, stepId).then((res) => {
+      this.setState({ loading: false });
       if (res && res.ok) {
         window.analytics.sendEvent('Step incompleted', {});
-      } else {
       }
     });
   }
   render() {
     const { className, isComplete } = this.props;
+    const { loading } = this.state;
     const hoverClass = this.props.hoverClass || '.step-complete-hover';
 
     return (
       <SwissProvider
         hoverClass={hoverClass}
-        isComplete={isComplete}>
+        isComplete={isComplete}
+        loading={loading}>
         <Wrapper
           onClick={isComplete ? this.onIncomplete : this.onComplete}
           className={`sc-wrapper ${className || ''}`.trim()}>

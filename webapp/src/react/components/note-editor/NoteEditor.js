@@ -32,15 +32,14 @@ class NoteEditor extends Component {
   componentDidMount() {
     const { editorState, rawState } = this.props;
     if (!editorState && rawState) {
-      this.setEditorState(this.plugins.getEditorStateWithDecorators(convertFromRaw(rawState)));
+      this.setEditorState(this.plugins.createEditorState(rawState));
     }
   }
   componentDidUpdate() {
     const { rawState } = this.props;
     if (rawState) {
-      const raw = convertFromRaw(rawState);
       this.refs.editor.blur();
-      this.setEditorState(this.plugins.getEditorStateWithDecorators(raw), true);
+      this.setEditorState(this.plugins.createEditorState(rawState), true);
     }
   }
   componentDidCatch(error, info) {

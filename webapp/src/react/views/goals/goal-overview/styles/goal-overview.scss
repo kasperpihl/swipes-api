@@ -1,6 +1,7 @@
 @import '~styles/_vars.scss';
 @import '~styles/_mixins.scss';
 
+
 // ======================================================
 // Block
 // ======================================================
@@ -12,11 +13,6 @@
   @include size(100%, auto);
   @include flexContainer('row', $selectorsToIgnoreFlex: $flexIgnoreList);
   padding-bottom: 30px;
-}
-
-.goal-side {
-  @include size(100%, auto);
-  margin-bottom: 60px;
 }
 
 
@@ -33,19 +29,14 @@
   }
 
   &__column {
-    will-change: width, padding;
-
     &--left {
       $width: calc(100% - 330px);
       @include size($width, auto);
       padding-right: 60px;
-      transition: width .5s ease, padding .5s ease;
     }
 
     &--right {
       @include size(330px,  auto);
-      opacity: 1;
-      transition: .5s ease;
     }
   }
 

@@ -2,6 +2,8 @@ import {
   DefaultDraftBlockRenderMap,
   EditorState,
   CompositeDecorator,
+  ContentState,
+  convertFromRaw,
 } from 'draft-js';
 import Subscriber from 'swipes-core-js/classes/subscriber';
 
@@ -70,7 +72,7 @@ export default function Setup(ctx, plugins = {}) {
   const obj = {
     bind: {},
     subscriber,
-    getEditorStateWithDecorators: (editorState) => {
+    createEditorState: (initialValue) => {
       const decorators = plugins.decorators && plugins.decorators.map(d => ({
         strategy: d.strategy,
         component: d,
@@ -78,11 +80,29 @@ export default function Setup(ctx, plugins = {}) {
           delegate: ctx,
         },
       }));
-      let edt = EditorState.createEmpty(new CompositeDecorator(decorators));
-      if (editorState) {
-        edt = EditorState.createWithContent(editorState, new CompositeDecorator(decorators));
+      
+      let contentState;
+      
+      if (typeof initialValue === 'string') {
+        // is just a string.
+        contentState = ContentState.createFromText(initialValue);
+      } else if(typeof initialValue === 'object' && typeof initialValue.get === 'function') {
+        if(typeof initialValue.getCurrentContent === 'function') {
+          // is EditorState object
+          contentState = initialValue.getCurrentContent();
+        } else if(typeof initialValue.getBlockMap === 'function') {
+          // is ContentState object alreay
+          contentState = initialValue;
+        }
+      } else if(typeof initialValue === 'object' && initialValue.blocks) {
+        // is raw format used for persistence
+        contentState = convertFromRaw(initialValue);
       }
-      return edt;
+      
+      if(contentState) {
+        return EditorState.createWithContent(contentState, new CompositeDecorator(decorators));
+      }
+      return EditorState.createEmpty(new CompositeDecorator(decorators));
     },
   };
   standardIterators.forEach((n) => { obj.bind[n] = createPluginIterator(n); });

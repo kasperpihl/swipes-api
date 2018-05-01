@@ -18,8 +18,10 @@ import './styles/goal-overview.scss';
 import styles from './GoalOverview.swiss';
 import StepItem from '../goal-components/step-item/StepItem';
 
+const Header = styleElement('div', styles.Header);
 const Footer = styleElement('div', styles.Footer);
-const StepList = styleElement('div', styles.StepList);
+const Wrapper = styleElement('div', styles.Wrapper);
+const Side = styleElement('div', styles.Side);
 
 /* global msgGen */
 class GoalOverview extends PureComponent {
@@ -38,7 +40,7 @@ class GoalOverview extends PureComponent {
     const title = getLoading('title').loading;
 
     return (
-      <div className={`goal-overview__header ${showLine ? 'goal-overview__header--border' : ''}`}>
+      <Header showLine={showLine}>
         <HOCHeaderTitle
           title={title || goal.get('title')}
           delegate={delegate}
@@ -64,30 +66,10 @@ class GoalOverview extends PureComponent {
             {...getLoading('dots')}
           />
         </HOCHeaderTitle>
-      </div>
+      </Header>
     );
   }
-  renderStepListEditButton() {
-    const helper = this.getHelper();
-    if (!helper.getNumberOfSteps()) {
-      return undefined;
-    }
-    const { editMode } = this.props;
-    let title = 'Edit';
-    let className = 'step-list__edit-button';
-
-    if (editMode) {
-      title = 'Done';
-      className += ' step-list__edit-button--done';
-    }
-
-    return (
-      <div className={className} onClick={this.onEditSteps}>
-        {title}
-      </div>
-    );
-  }
-  renderLeft() {
+  renderSteps() {
     const { delegate, editMode } = this.props;
     const helper = this.getHelper();
     const numberOfCompleted = helper.getNumberOfCompletedSteps();
@@ -97,40 +79,31 @@ class GoalOverview extends PureComponent {
       title = 'Add steps';
     }
     return (
-      <div className="goal-overview__column goal-overview__column--left">
-        <Section title={title} actions={this.renderStepListEditButton()} />
-        {this.renderSteps()}
-      </div>
+      <Side>
+        <Dropper droppableId="steps">
+          {helper.getOrderedSteps().map((step, i) => (
+            <Dragger draggableId={step.get('id')} index={i} key={step.get('id')}>
+              <StepItem goalId={helper.getId()} step={step} number={i + 1} />
+            </Dragger>
+          )).toArray()}
+        </Dropper>
+      </Side>
     );
   }
-  renderSteps() {
-    const helper = this.getHelper();
 
+  renderAttachments() {
+    const { delegate, goal, viewWidth } = this.props;
+    console.log(viewWidth);
     return (
-      <Dropper droppableId="steps">
-        {helper.getOrderedSteps().map((step, i) => (
-          <Dragger draggableId={step.get('id')} index={i} key={step.get('id')}>
-            <StepItem goalId={helper.getId()} step={step} number={i + 1} />
-          </Dragger>
-        )).toArray()}
-      </Dropper>
-    )
-  }
-  renderRight() {
-    const { delegate, goal } = this.props;
-
-    return (
-      <div className="goal-overview__column goal-overview__column--right">
-        <Section title="Attachments">
-          <HOCAttachments
-            key="attachments"
-            attachments={goal.get('attachments')}
-            attachmentOrder={goal.get('attachment_order')}
-            targetId={goal.get('id')}
-            delegate={delegate}
-          />
-        </Section>
-      </div>
+      <Side viewWidth={viewWidth} right>
+        <HOCAttachments
+          key="attachments"
+          attachments={goal.get('attachments')}
+          attachmentOrder={goal.get('attachment_order')}
+          targetId={goal.get('id')}
+          delegate={delegate}
+        />
+      </Side>
     );
   }
   renderFooter() {
@@ -157,10 +130,10 @@ class GoalOverview extends PureComponent {
 
     return (
       <SWView header={this.renderHeader()} onScroll={this.onScroll} footer={this.renderFooter()}>
-        <div className="goal-overview" data-id={goal.get('id')}>
-          {this.renderLeft()}
-          {this.renderRight()}
-        </div>
+        <Wrapper>
+          {this.renderSteps()}
+          {this.renderAttachments()}
+        </Wrapper>
       </SWView>
     );
   }

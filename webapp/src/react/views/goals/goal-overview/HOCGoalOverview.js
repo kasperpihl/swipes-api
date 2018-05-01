@@ -10,7 +10,6 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
-import * as linkActions from 'src/redux/link/linkActions';
 import * as goalActions from 'src/redux/goal/goalActions';
 import * as wayActions from 'src/redux/way/wayActions';
 
@@ -23,7 +22,7 @@ import GoalOverview from './GoalOverview';
 
 class HOCGoalOverview extends PureComponent {
   static sizes() {
-    return [840, 900];
+    return [825, 930];
   }
   static fullscreen() {
     return false;
@@ -45,10 +44,6 @@ class HOCGoalOverview extends PureComponent {
     if (showLine !== newShowLine) {
       this.setState({ showLine: newShowLine });
     }
-  }
-  onClickURL(nI, url) {
-    const { browser, target } = this.props;
-    browser(target, url);
   }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
@@ -89,9 +84,6 @@ class HOCGoalOverview extends PureComponent {
         this.clearLoading('completing', '!Something went wrong');
       }
     });
-  }
-  onGoalCheckboxClick() {
-    
   }
 
   onArchive(options) {
@@ -256,7 +248,7 @@ class HOCGoalOverview extends PureComponent {
   }
 
   render() {
-    const { goal, me } = this.props;
+    const { goal, me, viewWidth } = this.props;
     const { showLine } = this.state;
 
     return (
@@ -268,6 +260,7 @@ class HOCGoalOverview extends PureComponent {
           myId={me.get('id')}
           delegate={this}
           showLine={showLine}
+          viewWidth={viewWidth}
           {...this.bindLoading()}
         />
       </DragDropContext>
@@ -295,6 +288,4 @@ export default connect((state, props) => ({
   successGradient: mainActions.successGradient,
   confirm: menuActions.confirm,
   inputMenu: menuActions.input,
-  preview: linkActions.preview,
-  browser: mainActions.browser,
 })(navWrapper(HOCGoalOverview));

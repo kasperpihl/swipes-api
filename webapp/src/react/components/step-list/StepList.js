@@ -14,7 +14,6 @@ import {
 import Icon from 'Icon';
 import Button from 'Button';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import StepTooltip from './StepTooltip';
 import SortableList from './SortableList';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 

@@ -6,7 +6,7 @@ import StepComplete from '../step-complete/StepComplete';
 
 import styles from './StepItem.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper).debug();
+const Wrapper = styleElement('div', styles.Wrapper);
 const Title = styleElement('div', styles.Title);
 
 class StepItem extends PureComponent {
