@@ -30,6 +30,11 @@ export default styleSheet('TabBar', {
         transition: 'opacity .25s .1s',
       }
     },
+    '!active': {
+      '&:hover': {
+        color: '$sw1',
+      },
+    },
     '&:not(:last-child)': {
       marginRight: '24px',
     }
