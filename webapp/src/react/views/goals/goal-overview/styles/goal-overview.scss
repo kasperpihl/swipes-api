@@ -14,19 +14,6 @@
   padding-bottom: 30px;
 }
 
-.handoff-bar {
-  $b: &;
-  $flexIgnoreList: '#{$b}__actions';
-
-  @include size(100%, 60px);
-  @include flexContainer('row', left, center, $flexIgnoreList);
-  animation: showHandoffBar .4s .3s ease forwards;
-  background-color: $bg;
-  border-top: 1px solid $deepBlue-10;
-  padding: 0 30px;
-  transform: translateY(100%);
-}
-
 .goal-side {
   @include size(100%, auto);
   margin-bottom: 60px;
@@ -48,20 +35,11 @@
   &__column {
     will-change: width, padding;
 
-    &--left-lonely {
-      @include size(100%, auto);
-    }
-
     &--left {
       $width: calc(100% - 330px);
       @include size($width, auto);
       padding-right: 60px;
       transition: width .5s ease, padding .5s ease;
-    }
-
-    &--right-lonely {
-      @include size(0%, auto);
-      opacity: 0;
     }
 
     &--right {
@@ -79,140 +57,12 @@
     padding-top: 51px;
     transform: translateY(50px)
   }
-
-  &__progress {
-    @include size(100%, 48px);
-    @include flexContainer('row', left, center);
-    @include font(12px, $deepBlue-80, 15px, bold);
-    border-top: 1px solid $deepBlue-20;
-  }
-
-  &__last-activity {
-    padding-bottom: 60px;
-  }
 }
 
-.handoff-bar {
-
-  &__label {
-    @include size(100%, auto);
-    @include font(12px, $blue-100, 500);
-  }
-
-  &__actions {
-    @include size(auto);
-  }
-}
-
-.goal-side {
-
-  &__progress-bar {
-    @include size(100%, auto);
-    padding-bottom: 45px;
-
-    .progress-bar {
-      @include size(100%, 13px);
-      border-top: 1px solid $deepBlue-20;
-      border-bottom: 1px solid $deepBlue-20;
-
-      &__fill {
-        @include size(100%, 9px);
-        background-color: $green-color;
-        margin-top: 1px;
-        transition: .35s ease;
-      }
-
-      &__status {
-        @include font(12px, $deepBlue-80, 15px, bold);
-        position: absolute;
-        left: 0; top: 19px;
-      }
-    }
-  }
-}
-
-
-.success-footer {
-  $b: &;
-  $flexIgnoreList: '#{$b}__icon', '#{$b}__actions';
-
-  @include size(100%, 121px);
-  @include flexContainer('row', left, center, $flexIgnoreList);
-  animation: slideInFooter .4s ease forwards;
-  background-color: $blue-5;
-  border-top: 1px solid $deepBlue-10;
-  padding: 0 30px;
-  transform:  translate3d(0px, 100%, 0px);
-
-  &__icon {
-    @include size(60px);
-    @include flexContainer('row', center, center);
-    animation: bounceInIcon .4s .4s linear forwards;
-    background-color: $green-color;
-    border-radius: 50%;
-    opacity: 0;
-
-    &--backward {
-      background-color: $blue-100;
-    }
-
-    #{$b}__svg {
-      @include svg-color($bg);
-    }
-  }
-
-  &__content {
-    @include size(100%, auto);
-    @include font(15px, $deepBlue-80, 24px);
-    padding: 0 30px;
-
-    span {
-      b{
-        @include font(15px, $deepBlue-80, 24px, bold);
-      }
-    }
-  }
-
-  &__action {
-    background-color: $blue-5;
-  }
-
-  &__close {
-    @include size(24px);
-    position: absolute;
-    right: 9px; top: 9px;
-
-    #{$b}__svg {
-      @include svg-color($deepBlue-40);
-      transition: .15s ease;
-    }
-
-    &:hover {
-      #{$b}__svg {
-        @include svg-color($deepBlue-100);
-        transition: .15s ease;
-      }
-    }
-  }
-
-  &__svg {
-    @include size(24px);
-  }
-}
 
 // ======================================================
 // Animations
 // ======================================================
-
-@keyframes showHandoffBar {
-  from {
-    transform: translateY(100%);
-  }
-
-  to {
-    transform: translateY(0px);
-  }
-}
 
 @keyframes fadeUpAttachments {
   from {
@@ -223,75 +73,5 @@
   to {
     opacity: 1;
     transform: translateY(0px)
-  }
-}
-
-@keyframes slideInFooter {
-  to {
-    transform: translate3d(0px, 0px, 0px);
-  }
-}
-
-@keyframes bounceInIcon {
-  0% {
-    opacity: 0;
-    transform: scale(0.3) translate3d(0,0,0);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scale(1.1);
-  }
-  80% {
-    opacity: 1;
-    transform: scale(0.89);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translate3d(0,0,0);
-  }
-}
-
-// ======================================================
-// Empty states
-// ======================================================
-
-.goal-overview {
-
-  &__empty-state {
-    @include size(100%, auto);
-    @include flexContainer('column', center, top);
-    transform: translateY(-42px) translateX(35%);
-    transition: .15s ease;
-    pointer-events: none;
-
-    @media screen and (max-width: 1100px) {
-      transform: translateY(40px) translateX(0px);
-    }
-  }
-
-  &__empty-arrow {
-    padding-bottom: 30px;
-
-    @media screen and (max-width: 1100px) {
-      display: none;
-    }
-  }
-
-  &__empty-arrow-svg {
-    @include size(54px, 114px);
-    transform: translateX(calc(-50% + 3px));
-  }
-
-  &__empty-title {
-    @include font(11px, $deepBlue-100, 18px, bold) 
-    text-transform: uppercase;
-    pointer-events: all;
-  }
-
-  &__empty-text {
-    @include font(12px, $deepBlue-40, 18px);
-    margin-top: 9px;
-    text-align: center; 
-    pointer-events: all;
   }
 }

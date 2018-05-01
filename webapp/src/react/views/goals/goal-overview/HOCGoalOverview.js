@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { DragDropContext } from 'react-beautiful-dnd';
 import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import { fromJS, List, Map } from 'immutable';
 import { bindAll, setupLoading } from 'swipes-core-js/classes/utils';
@@ -32,9 +33,6 @@ class HOCGoalOverview extends PureComponent {
     propsOrPop(this, 'goal');
     this.state = {
       showLine: false,
-      editMode: false,
-      handoff: null,
-      emptyStateOpacity: 1,
     };
     setupLoading(this);
 
@@ -47,23 +45,6 @@ class HOCGoalOverview extends PureComponent {
     if (showLine !== newShowLine) {
       this.setState({ showLine: newShowLine });
     }
-  }
-  onEditSteps() {
-    this.setState({ editMode: !this.state.editMode });
-  }
-  onCreatePost(props) {
-    const { goal, openModal } = this.props;
-    props = props || {};
-    props.context = {
-      id: goal.get('id'),
-      title: goal.get('title'),
-    };
-
-    openModal({
-      id: 'PostCreate',
-      title: 'Create Post',
-      props,
-    });
   }
   onClickURL(nI, url) {
     const { browser, target } = this.props;
@@ -85,62 +66,34 @@ class HOCGoalOverview extends PureComponent {
       }
     });
   }
-  onGoalCheckboxClick() {
+  onIncompleteGoal() {
     const { incompleteGoal, completeGoal, successGradient } = this.props;
     const helper = this.getHelper();
-    const actionFunc = helper.getIsCompleted() ? incompleteGoal : completeGoal;
-    this.setLoading('completing');
-    actionFunc(helper.getId()).then((res) => {
+    this.setLoading('completing', 'Incompleting goal...');
+    incompleteGoal(helper.getId()).then((res) => {
       if (res && res.ok) {
-        if (!helper.getIsCompleted()) {
-          successGradient();
-        }
-        this.setState({
-          handoff: {
-            completed: !helper.getIsCompleted(),
-          },
-        });
         this.clearLoading('completing');
       } else {
         this.clearLoading('completing', '!Something went wrong');
       }
     });
   }
-
-  onHandoffMessage(handoff) {
-    const helper = this.getHelper();
-    const assignees = helper.getAssigneesButMe();
-
-    this.onCreatePost({
-      taggedUsers: assignees.toArray(),
+  onCompleteGoal() {
+    const { completeGoal, successGradient, goal } = this.props;
+    this.setLoading('completing', 'Completing goal...');
+    completeGoal(goal.get('id')).then((res) => {
+      if (res && res.ok) {
+        successGradient();
+        this.clearLoading('completing');
+      } else {
+        this.clearLoading('completing', '!Something went wrong');
+      }
     });
   }
-
-  onStepDidComplete(handoff) {
-    const { successGradient } = this.props;
-    if (handoff.completed) {
-      successGradient();
-    }
-    this.clearLoading('completing');
-    this.setState({ handoff });
+  onGoalCheckboxClick() {
+    
   }
-  onCloseHandoff() {
-    this.setState({ handoff: null });
-  }
-  onHandoff() {
-    const { handoff } = this.state;
-    const { me } = this.props;
 
-    if (handoff) {
-      const helper = this.getHelper();
-      const taggedUsers = helper.getAssigneesButMe();
-
-      this.onCreatePost({
-        taggedUsers: taggedUsers.toArray(),
-      });
-      this.setState({ handoff: null });
-    }
-  }
   onArchive(options) {
     const { goal, confirm, archive } = this.props;
     confirm(Object.assign({}, options, {
@@ -255,13 +208,12 @@ class HOCGoalOverview extends PureComponent {
   onInfoTabInfo(i, options, e) {
     this.onEditMilestone(options);
   }
-  onAddStepItemInputChange(title) {
-    const { emptyStateOpacity } = this.state;
-    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
+  onDragStart() {
+    document.body.classList.add("no-select");
+  }
 
-    if (emptyStateOpacity !== newEmptyStateOpacity) {
-      this.setState({ emptyStateOpacity: newEmptyStateOpacity });
-    }
+  onDragEnd(result) {
+    document.body.classList.remove("no-select");
   }
   viewDidLoad(stepList) {
     this.stepList = stepList;
@@ -305,19 +257,20 @@ class HOCGoalOverview extends PureComponent {
 
   render() {
     const { goal, me } = this.props;
-    const { editMode, handoff, showLine, emptyStateOpacity } = this.state;
+    const { showLine } = this.state;
 
     return (
-      <GoalOverview
-        goal={goal}
-        editMode={editMode}
-        handoff={handoff}
-        myId={me.get('id')}
-        delegate={this}
-        showLine={showLine}
-        emptyStateOpacity={emptyStateOpacity}
-        {...this.bindLoading()}
-      />
+      <DragDropContext
+        onDragStart={this.onDragStart}
+        onDragEnd={this.onDragEnd}>
+        <GoalOverview
+          goal={goal}
+          myId={me.get('id')}
+          delegate={this}
+          showLine={showLine}
+          {...this.bindLoading()}
+        />
+      </DragDropContext>
     );
   }
 }

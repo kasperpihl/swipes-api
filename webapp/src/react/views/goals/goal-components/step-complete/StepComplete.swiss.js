@@ -2,6 +2,7 @@ import { styleSheet } from 'react-swiss';
 
 export default styleSheet('StepComplete', {
   Wrapper: {
+    flex: 'none',
     _size: '36px',
     borderRadius: '18px',
     _flex: 'center',

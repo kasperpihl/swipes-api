@@ -42,7 +42,7 @@
     "react-router-dom": "4.2.2",
     "react-sortable-hoc": "0.6.8",
     "react-stripe-elements": "^1.6.0",
-    "react-swiss": "^0.2.18",
+    "react-swiss": "^0.2.19",
     "react-textarea-autosize": "^6.1.0",
     "redux": "3.7.2",
     "redux-immutable": "4.0.0",

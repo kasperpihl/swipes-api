@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { styleElement } from 'react-swiss';
-
+import { connect } from 'react-redux';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import StepComplete from '../step-complete/StepComplete';
 
 import styles from './StepItem.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
+const Wrapper = styleElement('div', styles.Wrapper).debug();
 const Title = styleElement('div', styles.Title);
 
 class StepItem extends PureComponent {
@@ -15,14 +14,20 @@ class StepItem extends PureComponent {
     const {
       number,
       step,
+      goalId,
     } = this.props;
 
     return (
       <Wrapper className="step-complete-hover">
-        <StepComplete number={1} />
+        <StepComplete
+          number={number}
+          goalId={goalId}
+          stepId={step.get('id')}
+          isComplete={!!step.get('completed_at')}
+        />
         <Title>{step.get('title')}</Title>
         <HOCAssigning
-          assignees={['me']}
+          assignees={step.get('assignees')}
           rounded
           size={24}
         />
@@ -31,6 +36,4 @@ class StepItem extends PureComponent {
   }
 }
 
-export default connect((state) => ({
-  step: state.getIn(['goals', 'G4PGUUMF2', 'steps', '5q2RHZ']),
-}), {})(StepItem);
+export default connect()(StepItem);
