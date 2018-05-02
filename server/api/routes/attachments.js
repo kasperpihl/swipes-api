@@ -10,11 +10,9 @@ import {
   attachmentsInsert,
   attachmentsRename,
   attachmentsDelete,
-  attachmentsReorder,
   attachmentsAddQueueMessage,
   attachmentsRenameQueueMessage,
   attachmentsDeleteQueueMessage,
-  attachmentsReorderQueueMessage,
 } from './middlewares/attachments';
 import {
   notificationsPushToQueue,
@@ -97,21 +95,6 @@ authed.all(
   valResponseAndSend({
     target_id: string.require(),
     attachment_id: string.require(),
-  }),
-);
-
-authed.all(
-  '/attachments.reorder',
-  valBody({
-    target_id: string.require(),
-    attachment_order: array.require(),
-  }),
-  attachmentsReorder,
-  attachmentsReorderQueueMessage,
-  notificationsPushToQueue,
-  valResponseAndSend({
-    target_id: string.require(),
-    attachment_order: array.require(),
   }),
 );
 

@@ -36,6 +36,10 @@ import {
   stepsReorderQueueMessage,
 } from './middlewares/steps';
 import {
+  attachmentsReorder,
+  attachmentsReorderQueueMessage,
+} from './middlewares/attachments';
+import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import {
@@ -316,6 +320,21 @@ authed.all(
   valResponseAndSend({
     goal_id: string.require(),
     step_order: array.of(string).require(),
+  }),
+);
+
+authed.all(
+  '/goals.attachmentsReorder',
+  valBody({
+    goal_id: string.require(),
+    attachment_order: array.of(string).require(),
+  }),
+  attachmentsReorder,
+  attachmentsReorderQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    goal_id: string.require(),
+    attachment_order: array.of(string).require(),
   }),
 );
 
