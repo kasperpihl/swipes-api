@@ -5,7 +5,6 @@ import * as ca from 'swipes-core-js/actions';
 import {
   setupLoading,
 } from 'swipes-core-js/classes/utils';
-import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import ChangeBillingPlan from './ChangeBillingPlan';
 
