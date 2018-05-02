@@ -8,6 +8,7 @@ import {
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,
+  postsEdit,
   postsCreateComment,
   postsAddComment,
   postsMentionsParseComment,
@@ -64,6 +65,24 @@ authed.all(
   notificationsPushToQueue,
   postsCreatedPushNotificationQueueMessage,
   notificationsPushToQueue,
+  valResponseAndSend({
+    post: object.require(),
+  }),
+);
+
+authed.all(
+  '/posts.edit',
+  valBody({
+    post_id: string.require(),
+    message: string.min(1).require(),
+    attachments: array.of(object).require(),
+    tagged_users: array.of(string).require(),
+  }),
+  postsEdit,
+  // postsEditedQueueMessage,
+  // notificationsPushToQueue,
+  // postsEditedPushNotificationQueueMessage,
+  // notificationsPushToQueue,
   valResponseAndSend({
     post: object.require(),
   }),

@@ -5,6 +5,7 @@ import {
 } from 'valjs';
 import {
   dbPostsInsertSingle,
+  dbPostsEditSingle,
   dbPostsAddComment,
   dbPostsAddReaction,
   dbPostsRemoveReaction,
@@ -86,6 +87,38 @@ const postsFollow = valLocals('postsFollow', {
 
   dbPostsFollow({ user_id, post_id })
     .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const postsEdit = valLocals('postsEdit', {
+  post_id: string.require(),
+  message: string.min(1).require(),
+  attachments: array.of(object).require(),
+  tagged_users: array.of(string).require(),
+}, (req, res, next, setLocals) => {
+  const {
+    post_id,
+    message,
+    attachments,
+    tagged_users,
+  } = res.locals;
+
+  dbPostsEditSingle({
+    post_id,
+    message,
+    attachments,
+    tagged_users,
+  })
+    .then((results) => {
+      const changes = results.changes[0];
+
+      setLocals({
+        post: changes.new_val,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -620,6 +653,7 @@ export {
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,
+  postsEdit,
   postsCreateComment,
   postsAddComment,
   postsAddCommentQueueMessage,

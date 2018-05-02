@@ -2,6 +2,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -19,6 +20,32 @@ const dbPostsInsertSingle = funcWrap([
   }
 
   const q = r.table('posts').insert(post);
+
+  return db.rethinkQuery(q);
+});
+
+const dbPostsEditSingle = funcWrap([
+  object.as({
+    post_id: string.require(),
+    message: string.min(1).require(),
+    attachments: array.of(object).require(),
+    tagged_users: array.of(string).require(),
+  }).require(),
+], (err, {
+  post_id, message, attachments, tagged_users,
+}) => {
+  if (err) {
+    throw new SwipesError(`dbPostsFollow: ${err}`);
+  }
+
+  const q = r.table('posts').get(post_id).update({
+    message,
+    attachments,
+    followers: tagged_users,
+    updated_at: r.now(),
+  }, {
+    returnChanges: true,
+  });
 
   return db.rethinkQuery(q);
 });
@@ -148,7 +175,9 @@ const dbPostsCommentAddReaction = funcWrap([
     comment_id: string.require(),
     reaction: object.require(),
   }).require(),
-], (err, { user_id, post_id, comment_id, reaction }) => {
+], (err, {
+  user_id, post_id, comment_id, reaction,
+}) => {
   if (err) {
     throw new SwipesError(`dbPostsCommentAddReaction: ${err}`);
   }
@@ -159,11 +188,9 @@ const dbPostsCommentAddReaction = funcWrap([
       .update((post) => {
         return post.merge({
           comments: {
-            [comment_id]: post('comments')(comment_id).merge(
-              {
-                reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)).prepend(reaction),
-              },
-            ),
+            [comment_id]: post('comments')(comment_id).merge({
+              reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)).prepend(reaction),
+            }),
           },
           updated_at: r.now(),
         });
@@ -188,11 +215,9 @@ const dbPostsCommentRemoveReaction = funcWrap([
       .update((post) => {
         return post.merge({
           comments: {
-            [comment_id]: post('comments')(comment_id).merge(
-              {
-                reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)),
-              },
-            ),
+            [comment_id]: post('comments')(comment_id).merge({
+              reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)),
+            }),
           },
           updated_at: r.now(),
         });
@@ -203,6 +228,7 @@ const dbPostsCommentRemoveReaction = funcWrap([
 
 export {
   dbPostsInsertSingle,
+  dbPostsEditSingle,
   dbPostsAddComment,
   dbPostsAddReaction,
   dbPostsRemoveReaction,
