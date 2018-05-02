@@ -45,7 +45,6 @@ class Sidebar extends PureComponent {
       { id: 'PlanList', svg: 'Milestones' },
       { id: 'TakeAction', svg: 'Goals' },
       { id: 'PostFeed', svg: 'Messages' },
-      // { id: 'Find', svg: 'Find' },
     ].filter(v => !!v);
   }
   getTitleForId(id) {
@@ -162,7 +161,7 @@ class Sidebar extends PureComponent {
           </div>
         </div>
         <div className="sidebar__bottom-section">
-          {this.renderItem({ id: 'Search', svg: 'Find' })}
+          {this.renderItem({ id: 'Search', svg: 'Search' })}
           {this.renderProfile()}
         </div>
       </div>
