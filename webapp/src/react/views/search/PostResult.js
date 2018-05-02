@@ -8,22 +8,7 @@ import TextParser from 'components/text-parser/TextParser';
 import './styles/post-result.scss';
 
 class PostResult extends PureComponent {
-  getType() {
-    const { result } = this.props;
-    const type = result.item.type;
 
-    switch (type) {
-      case 'announcement':
-        return { label: 'Announcement', color: 'yellow' }
-      case 'question':
-        return { label: 'Question', color: 'purple' }
-      case 'information':
-        return { label: 'Information', color: 'blue' }
-      case 'post':
-      default:
-        return { label: 'Post', color: 'green' }
-    }
-  }
   renderProfileImage() {
     const { result } = this.props;
     const userId = result.item.created_by;
@@ -106,16 +91,7 @@ class PostResult extends PureComponent {
       </div>
     );
   }
-  renderType() {
-    const type = this.getType();
-    const className = `post-result__type post-result__type--${type.color}`
 
-    return (
-      <div className={className}>
-        {type.label}
-      </div>
-    )
-  }
   renderHeader() {
 
     return (
@@ -124,7 +100,6 @@ class PostResult extends PureComponent {
           {this.renderGeneratedTitle()}
           {this.renderSubtitle()}
         </div>
-        {this.renderType()}
       </div>
     )
   }

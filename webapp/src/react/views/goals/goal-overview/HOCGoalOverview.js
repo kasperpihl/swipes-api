@@ -37,14 +37,6 @@ class HOCGoalOverview extends PureComponent {
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
   }
-  onScroll(e) {
-    const { showLine } = this.state;
-    const newShowLine = e.target.scrollTop > 0;
-
-    if (showLine !== newShowLine) {
-      this.setState({ showLine: newShowLine });
-    }
-  }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
     const { goal, renameGoal, inputMenu } = this.props;
@@ -170,6 +162,19 @@ class HOCGoalOverview extends PureComponent {
       }
     });
   }
+  onAddedAttachment(att, clearLoading) {
+    const { goal, addAttachment } = this.props;
+    addAttachment(goal.get('id'), att.get('link').toJS(), att.get('title')).then((res) => {
+      clearLoading();
+      if (res.ok) {
+        window.analytics.sendEvent('Attachment added', {
+          Type: att.getIn(['link', 'service', 'type']),
+          Service: 'swipes',
+        });
+      }
+    });
+    return false;
+  }
   onAssign(i, e) {
     const options = this.getOptionsForE(e);
     const { selectAssignees, assignGoal, goal } = this.props;
@@ -272,6 +277,7 @@ export default connect((state, props) => ({
   goal: state.getIn(['goals', props.goalId]),
   me: state.get('me'),
 }), {
+  addAttachment: ca.attachments.add,
   archive: ca.goals.archive,
   contextMenu: mainActions.contextMenu,
   assignGoal: ca.goals.assign,

@@ -53,6 +53,9 @@ export default class GoalsUtil {
   getIsCompleted() {
     return !!(this.goal && this.goal.get('completed_at')) || false;
   }
+  getCompletedBy() {
+    return !!(this.goal && this.goal.get('completed_by')) || false;
+  }
   amIAssigned() {
     const step = this.getCurrentStep();
     if (!step) {

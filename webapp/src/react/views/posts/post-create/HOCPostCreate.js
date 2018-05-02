@@ -85,41 +85,6 @@ class HOCPostCreate extends PureComponent {
       }
     });
   }
-  onChooseNotificationType(e) {
-    const { contextMenu } = this.props;
-    const options = this.getOptionsForE(e);
-
-    const items = [
-      { icon: 'MessageColored', type: 'post' },
-      { icon: 'QuestionColored', type: 'question' },
-      { icon: 'AnnouncementColored', type: 'announcement' },
-      { icon: 'InformationColored', type: 'information' }
-    ].map((i) => {
-      i.leftIcon = { icon: i.icon };
-      i.title = msgGen.posts.getPostComposeTypeTitle(i.type);
-      i.subtitle = msgGen.posts.getPostTypeSubtitle(i.type);
-      return i;
-    });
-
-    const delegate = {
-      onItemAction: (item) => {
-        contextMenu(null);
-        this.updatePost(this.state.post.set('type', item.type));
-      },
-    };
-    contextMenu({
-      options,
-      onClose: this.onFocus,
-      component: TabMenu,
-      props: {
-        delegate,
-        items,
-        style: {
-          width: '360px',
-        },
-      },
-    });
-  }
 
   onContextClick() {
     const { openSecondary, target } = this.props;

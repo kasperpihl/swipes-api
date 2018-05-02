@@ -69,7 +69,7 @@ class Profile extends PureComponent {
     } else if (getLoading(key).success) {
       return (
         <div className="profile__success-icon">
-          <Icon icon="ActivityCheckmark" className="profile__svg" />
+          <Icon icon="ChecklistCheckmark" className="profile__svg" />
         </div>
       );
     }

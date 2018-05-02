@@ -7,6 +7,7 @@ export default styleSheet('StepItem', {
     '&:hover': {
       background: '$sw4',
     },
+    borderTop: '1px solid $sw3',
   },
   Title: {
     _font: ['15px', '24px'],

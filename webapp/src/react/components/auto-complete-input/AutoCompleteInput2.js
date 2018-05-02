@@ -105,7 +105,7 @@ class AutoCompleteInput extends PureComponent {
       placeholder,
     } = this.props;
     return (
-      <Wrapper ref={wrapperRef} className={className}>
+      <Wrapper innerRef={wrapperRef} className={className}>
         <Editor
           ref={editorRef}
           editorState={this.state.editorState}
