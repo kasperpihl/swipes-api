@@ -32,7 +32,8 @@ import {
 const authed = express.Router();
 const notAuthed = express.Router();
 
-authed.all('/attachments.add',
+authed.all(
+  '/attachments.add',
   valBody({
     target_id: string.require(),
     link: object.as({
@@ -64,9 +65,11 @@ authed.all('/attachments.add',
       }).require(),
     }).require(),
     attachment_order: array.require(),
-  }));
+  }),
+);
 
-authed.all('/attachments.rename',
+authed.all(
+  '/attachments.rename',
   valBody({
     target_id: string.require(),
     attachment_id: string.require(),
@@ -79,9 +82,11 @@ authed.all('/attachments.rename',
     target_id: string.require(),
     attachment_id: string.require(),
     title: string.min(1).require(),
-  }));
+  }),
+);
 
-authed.all('/attachments.delete',
+authed.all(
+  '/attachments.delete',
   valBody({
     target_id: string.require(),
     attachment_id: string.require(),
@@ -92,9 +97,11 @@ authed.all('/attachments.delete',
   valResponseAndSend({
     target_id: string.require(),
     attachment_id: string.require(),
-  }));
+  }),
+);
 
-authed.all('/attachments.reorder',
+authed.all(
+  '/attachments.reorder',
   valBody({
     target_id: string.require(),
     attachment_order: array.require(),
@@ -105,7 +112,8 @@ authed.all('/attachments.reorder',
   valResponseAndSend({
     target_id: string.require(),
     attachment_order: array.require(),
-  }));
+  }),
+);
 
 export {
   authed,
