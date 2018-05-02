@@ -39,7 +39,7 @@ export default styleSheet({
     _flex: 'center',
     compact: {
       _size: '30px',
-    }
+    },
   },
   Icon: {
     _svgColor: '$sw1',

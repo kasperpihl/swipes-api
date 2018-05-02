@@ -31,6 +31,7 @@ export default function meReducer(state = initialState, action) {
     case 'organizations.createStripeCustomer':
     case 'organizations.promoteToAdmin':
     case 'organizations.demoteAnAdmin':
+    case 'organizations.changeStripeSubscriptionPlan':
     case 'organization_updated': {
       return state.mergeIn(['organizations', 0], fromJS(payload.organization));
     }

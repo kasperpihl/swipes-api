@@ -7,7 +7,7 @@ import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Billing from './Billing';
-import ChangeCyclePopup from './ChangeCyclePopup';
+import HOCChangeBillingPlan from './HOCChangeBillingPlan';
 
 class HOCBilling extends PureComponent {
   constructor(props) {
@@ -40,12 +40,15 @@ class HOCBilling extends PureComponent {
     const { organization, openModal } = this.props;
     if (!organization.get('stripe_subscription_id')) {
       this.setState({ billingStatus: plan });
-    } else {
+    } else if (this.state.billingStatus !== plan) {
       openModal({
-        component: ChangeCyclePopup,
-        title: 'Change stuff',
+        component: HOCChangeBillingPlan,
+        title: 'Change billing plan',
         position: 'center',
-        props: {},
+        props: {
+          plan,
+          currentPlan: this.state.billingStatus
+        },
       });
     }
   }

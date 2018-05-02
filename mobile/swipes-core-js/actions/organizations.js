@@ -1,15 +1,15 @@
 import * as ca from './';
 
 // ======================================================
-export const create = (name) => ca.api.request('organizations.create', {
+export const create = name => ca.api.request('organizations.create', {
   organization_name: name,
 });
 
-export const join = (orgId) => ca.api.request('organizations.join', {
+export const join = orgId => ca.api.request('organizations.join', {
   organization_id: orgId,
 });
 
-export const leave = (orgId) => (d, getState) => d(ca.api.request('organizations.leave', {
+export const leave = orgId => (d, getState) => d(ca.api.request('organizations.leave', {
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 }));
 
@@ -19,7 +19,7 @@ export const inviteUser = (firstName, email) => (d, getState) => d(ca.api.reques
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 }));
 
-export const deleteOrg = (orgId) => (d, getState) => d(ca.api.request('organizations.delete', {
+export const deleteOrg = orgId => (d, getState) => d(ca.api.request('organizations.delete', {
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
 }));
 
@@ -49,4 +49,8 @@ export const createStripeCustomer = (token, plan) => (d, getState) => d(ca.api.r
   plan,
 }));
 
+export const changeBillingPlan = plan => (d, getState) => d(ca.api.request('organizations.changeStripeSubscriptionPlan', {
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  plan_to_change: plan,
+}));
 
