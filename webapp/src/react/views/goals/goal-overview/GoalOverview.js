@@ -161,6 +161,7 @@ class GoalOverview extends PureComponent {
   }
   render() {
     const { goal } = this.props;
+    const { editMode } = this.state;
 
     if (!goal) {
       return null;
@@ -173,7 +174,10 @@ class GoalOverview extends PureComponent {
             <Section>
               STEPS
               {!!this.getHelper().getStepOrder().size && (
-                <Button title="Edit" onClick={this.onEdit} />
+                <Button 
+                  title={editMode ? 'Done' : 'Edit'}
+                  onClick={this.onEdit}
+                />
               )}
             </Section>
             {this.renderCompletedState()}
