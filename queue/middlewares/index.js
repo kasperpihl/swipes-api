@@ -404,6 +404,48 @@ const post_comment_mention_push_notification = [
   },
   notify.notifySendPushNotification,
 ];
+const post_edited = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
+  posts.postsGetSingle,
+  posts.postEditedNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      tagged_users_diff,
+    } = res.locals;
+
+    res.locals.user_ids = tagged_users_diff.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_edited_push_notification = [
+  users.usersGetSingleWithOrganizations,
+  posts.postsGetSingle,
+  posts.postEditedPushNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      tagged_users_diff,
+    } = res.locals;
+
+    res.locals.user_ids = tagged_users_diff.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifySendPushNotification,
+];
 const post_comment_created_by_push_notification = [
   users.usersGetSingleWithOrganizations,
   posts.postsGetSingle,
@@ -617,6 +659,7 @@ export {
   organization_user_joined,
   organization_deleted,
   post_created,
+  post_edited,
   post_comment_added,
   post_reaction_added,
   post_reaction_removed,
@@ -627,6 +670,7 @@ export {
   post_followed,
   post_comment_mention,
   post_created_push_notification,
+  post_edited_push_notification,
   post_comment_mention_push_notification,
   post_comment_created_by_push_notification,
 };

@@ -41,7 +41,8 @@ const dbPostsEditSingle = funcWrap([
   const q = r.table('posts').get(post_id).update({
     message,
     attachments,
-    followers: tagged_users,
+    tagged_users,
+    followers: r.row('followers').default([]).setDifference(r.row('tagged_users')).setUnion(tagged_users),
     updated_at: r.now(),
   }, {
     returnChanges: true,

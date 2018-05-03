@@ -114,9 +114,16 @@ const postsEdit = valLocals('postsEdit', {
   })
     .then((results) => {
       const changes = results.changes[0];
+      const newPost = changes.new_val;
+      const oldPost = changes.old_val;
+      const newTaggedUsers = newPost.tagged_users;
+      const oldTaggedUsers = oldPost.tagged_users;
+      const diffTaggedUsers = newTaggedUsers.filter(a => !oldTaggedUsers.find(b => b === a));
 
       setLocals({
-        post: changes.new_val,
+        post: newPost,
+        organization_id: newPost.organization_id,
+        tagged_users_diff: diffTaggedUsers,
       });
 
       return next();
@@ -194,6 +201,60 @@ const postsCreatedPushNotificationQueueMessage = valLocals('postsCreatedPushNoti
   const queueMessage = {
     organization_id,
     user_id,
+    event_type,
+    post_id: post.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post.id,
+  });
+
+  return next();
+});
+const postsEditedQueueMessage = valLocals('postsEditedQueueMessage', {
+  user_id: string.require(),
+  post: object.require(),
+  tagged_users_diff: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post,
+    tagged_users_diff,
+  } = res.locals;
+  const event_type = 'post_edited';
+  const queueMessage = {
+    user_id,
+    event_type,
+    tagged_users_diff,
+    notification_id_sufix: `${post.id}-${event_type}`,
+    post_id: post.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post.id,
+  });
+
+  return next();
+});
+const postsEditedPushNotificationQueueMessage = valLocals('postsEditedPushNotificationQueueMessage', {
+  organization_id: string.require(),
+  user_id: string.require(),
+  post: object.require(),
+  tagged_users_diff: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_id,
+    post,
+    tagged_users_diff,
+  } = res.locals;
+  const event_type = 'post_created_push_notification';
+  const queueMessage = {
+    organization_id,
+    user_id,
+    tagged_users_diff,
     event_type,
     post_id: post.id,
   };
@@ -654,6 +715,8 @@ export {
   postsInsertSingle,
   postsCreatedQueueMessage,
   postsEdit,
+  postsEditedQueueMessage,
+  postsEditedPushNotificationQueueMessage,
   postsCreateComment,
   postsAddComment,
   postsAddCommentQueueMessage,

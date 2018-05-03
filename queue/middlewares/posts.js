@@ -87,6 +87,30 @@ const postCreatedNotificationData = (req, res, next) => {
 
   return next();
 };
+const postEditedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    post,
+  } = res.locals;
+
+  res.locals.notificationData = {
+    target: {
+      id: post.id,
+    },
+    meta: {
+      created_by: user_id,
+      type: post.type,
+      message: post.message.replace(cutTextRegExp, '$1'),
+      context: post.context,
+      push: true,
+    },
+  };
+  res.locals.eventData = {
+    post,
+  };
+
+  return next();
+};
 const postArchivedNotificationData = (req, res, next) => {
   const {
     post_id,
@@ -279,6 +303,20 @@ const postCreatedPushNotificationData = (req, res, next) => {
 
   return next();
 };
+const postEditedPushNotificationData = (req, res, next) => {
+  const {
+    user,
+    post,
+  } = res.locals;
+
+  res.locals.pushMessage = {
+    contents: { en: post.message },
+    headings: { en: `${user.profile.first_name} tagged you on ${getPrefixForType(post.type)}${post.type}` },
+  };
+  res.locals.pushTargetId = post.id;
+
+  return next();
+};
 const postAddCommentMentionPushNotificationData = (req, res, next) => {
   const {
     user,
@@ -316,6 +354,7 @@ export {
   postsGetSingle,
   postsGetSingleCommentFollowers,
   postCreatedNotificationData,
+  postEditedNotificationData,
   postCommentAddedNotificationData,
   postReactionAddedNotificationData,
   postReactionRemovedNotificationData,
@@ -325,6 +364,7 @@ export {
   postFollowedUnfollowedNotificationData,
   postCommentMentionNotificationData,
   postCreatedPushNotificationData,
+  postEditedPushNotificationData,
   postAddCommentMentionPushNotificationData,
   postAddCommentCreatedByPushNotificationData,
 };
