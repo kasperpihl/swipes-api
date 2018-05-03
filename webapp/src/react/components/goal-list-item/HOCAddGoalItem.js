@@ -9,7 +9,7 @@ import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import RotateLoader from 'components/loaders/RotateLoader';
-import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput2';
+import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import Button from 'src/react/components/button/Button2';
 import './styles/add-goal-item.scss';
 

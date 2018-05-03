@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { styleElement } from 'react-swiss';
 import { fromJS } from 'immutable';
-import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput2';
+import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import * as ca from 'swipes-core-js/actions';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
@@ -93,8 +93,7 @@ class PostCommentInput extends PureComponent {
         </Picture>
         <Content>
           <AutoCompleteInput
-            ref={c => this.acInput = c}
-            editorRef={c => this.textarea = c}
+            innerRef={c => this.textarea = c}
             placeholder={placeholder}
             onReturn={this.onReturn}
             onChange={this.onChange}

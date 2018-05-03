@@ -2,8 +2,9 @@ import { addGlobalStyles } from 'react-swiss';
 
 addGlobalStyles({
   '.DraftEditor-editorContainer,.DraftEditor-root,.public-DraftEditor-content': {
-    height: 'inherit',
     textAlign: 'initial',
+    width: '100%',
+    height: 'auto',
   },
   '.public-DraftEditor-content[contenteditable=true]': {
     WebkitUserModify: 'read-write-plaintext-only',

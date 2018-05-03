@@ -14,8 +14,15 @@ export default styleSheet({
   Content: {
     _flex: ['column', 'left', 'top'],
     width: '100%',
-    paddingLeft: '12px',
-    paddingRight: '12px',
+    '& .public-DraftEditor-content, & .public-DraftEditorPlaceholder-root': {
+      _font: ['15px', '24px', 400],
+      color: '$sw1',
+      padding: '6px',
+      paddingLeft: '12px',
+    },
+    '& .public-DraftEditorPlaceholder-root': {
+      color: '$sw2',
+    },
   },
   Actions: {
     _flex: ['column', 'center', 'top'],
@@ -23,36 +30,9 @@ export default styleSheet({
   Attachments: {
     marginTop: '6px',
   },
-  StyledMentions: {
+  InputWrapper: {
+    _flex: ['row', 'center', 'center'],
     width: '100%',
-    borderRadius: '3px',
-    border: '1px solid $sw5',
-    '&__input,&__highlighter': {
-      _font: ['12px !important', '18px', 400],
-      color: '$sw1',
-      paddingLeft: '0px',
-      paddingTop: '9px',
-      paddingBottom: '9px',
-      paddingRight: '72px',
-      transition: 'padding 0.2s ease',
-    },
-    hasFocus: {
-      '&__input,&__highlighter': {
-        paddingLeft: '12px',
-        paddingRight: '60px',
-      },
-      border: '1px solid $sw3',
-      transition: 'padding 0.2s ease',
-    },
-    '&__input::-webkit-input-placeholder': {
-      fontStyle: 'italic',
-      color: '$sw2',
-    },
-    '&__input:focus': {
-      outline: 'none',
-    },
-  },
-  StyledMention: {
-    background: '$sw3',
+    
   },
 });

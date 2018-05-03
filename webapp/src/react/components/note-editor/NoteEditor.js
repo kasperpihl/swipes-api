@@ -10,14 +10,14 @@ import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';
 import DefaultBlocks from './blocks/default/DefaultBlocks';
 import MediumEditor from './medium-editor/MediumEditor';
-import DraftExt from './draft-ext';
+import setupDraftExtensions from 'src/utils/draft-js/setupDraftExtensions';
 
 class NoteEditor extends Component {
   constructor(props) {
     super(props);
 
     setupDelegate(this, 'onLinkClick', 'setEditorState');
-    this.plugins = DraftExt(this, {
+    this.plugins = setupDraftExtensions(this, {
       decorators: [
         NoteLink,
       ],

@@ -32,7 +32,7 @@ const generateBlockRenderMaps = (blocks) => {
   return renderMap;
 };
 
-export default function Setup(ctx, plugins = {}) {
+export default function(ctx, plugins = {}) {
   const subscriber = new Subscriber();
   if (typeof ctx !== 'object') {
     return console.warn('DraftExt: First argument (ctx) must be an object');

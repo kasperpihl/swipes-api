@@ -21,21 +21,21 @@ export default styleSheet({
     paddingRight: '24px',
     zIndex: 1,
   },
-  AutoCompleteInput: {
-    _font: ['15px', '24px', 300],
-    color: '$sw1',
-    paddingLeft: '21px',
-    paddingTop: '3px',
-    resize: 'none',
+  InputWrapper: {
+    _flex: ['row', 'center', 'center'],
+    
     width: '100%',
-    '&::-webkit-input-placeholder': {
-      color: '$sw2',
-      fontStyle: 'italic',
+    '& .public-DraftEditor-content, & .public-DraftEditorPlaceholder-root': {
+      _font: ['15px', '24px', 400],
+      color: '$sw1',
+      padding: '6px',
+      paddingLeft: '12px',
     },
-    '&:focus': {
-      outline: 'none',
+    '& .public-DraftEditorPlaceholder-root': {
+      color: '$sw2',
     },
   },
+
   ActionBar: {
     _flex: ['row', 'left', 'top'],
     padding: '12px 30px',

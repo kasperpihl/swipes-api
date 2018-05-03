@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { styleElement } from 'react-swiss';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import * as ca from 'swipes-core-js/actions';
 
-import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput2';
+import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import Icon from 'Icon';
 import Button from 'src/react/components/button/Button2';
@@ -16,68 +16,147 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const AssigneesWrapper = styleElement('div', styles.AssigneesWrapper);
 const SubmitWrapper = styleElement('div', styles.SubmitWrapper);
 const LeftIcon = styleElement(Icon, styles.LeftIcon);
+const InputWrapper = styleElement('div', styles.InputWrapper);
+const LoaderCircle = styleElement('div', styles.LoaderCircle);
+const ReuploadWrapper = styleElement('div', styles.ReuploadWrapper);
+const ErrorLabel = styleElement('div', styles.ErrorLabel);
 
 class StepAdd extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       assignees: fromJS([]),
+      queue: fromJS([]),
     }
-    setupLoading(this);
   }
   onAdd = () => {
-    const { addStep, goalId } = this.props;
-    const { assignees } = this.state;
+    let { queue, assignees } = this.state;
+
     let title;
     if(this.editorState) {
       title = this.editorState.getCurrentContent().getPlainText();
     }
-    if(!title || this.isLoading('add')) {
+    if(!title) {
       return;
     }
-    this.setState({ resetDate: new Date() });
-    this.setLoading('add', 'Adding...');
-    addStep(goalId, title, assignees.toJS()).then((res) => {
-      this.clearLoading('add');
-      if(res.ok){
-        window.analytics.sendEvent('Step added', {});
-      }
-    });
+
+    queue = queue.push(fromJS({
+      title,
+      assignees,
+      status: 'ready',
+    }));
+    this.setState({
+      resetDate: new Date(),
+      assignees: fromJS([]),
+      queue,
+    }, this.runQueue);
+    
   }
   onChange = (editorState) => {
     this.editorState = editorState;
+    this.setState({
+      textLength: editorState.getCurrentContent().getPlainText().length
+    })
   }
   onReturn = () => {
     this.onAdd();
     return 'handled';
   }
-  render() {
-    const { assignees, resetDate } = this.state;
-    return (
-      <Wrapper>
-        <LeftIcon icon="Plus" />
-        <AutoCompleteInput
-          onChange={this.onChange}
-          placeholder="Add new step"
-          onReturn={this.onReturn}
-          reset={resetDate}
-        />
+  onAutoCompleteSelect = (item) => {
+    let { assignees } = this.state;
+    if(!assignees.contains(item.id)) {
+      assignees = assignees.push(item.id);
+      this.setState({ assignees });
+    }
+  }
+  runQueue = () => {
+    if(this.running) return;
+
+    const { addStep, goalId } = this.props;
+    let { queue } = this.state;
+    const index = queue.findIndex((row) => row.get('status') === 'ready');
+
+    if(index === -1) return;
+
+    const { title, assignees } = queue.get(index).toJS();
+
+    this.running = true;
+    addStep(goalId, title, assignees).then((res) => {
+      this.running = false;
+      if(res.ok){
+        queue = queue.splice(index, 1);
+        window.analytics.sendEvent('Step added', {});
+      } else {
+        queue = queue.setIn([index, 'status'], 'error');
+      }
+      this.setState({ queue }, this.runQueue);
+    });
+  }
+  onClick = (i) => {
+    let { queue } = this.state;
+    queue = queue.setIn([i, 'status'], 'ready');
+    this.setState({ queue }, this.runQueue);
+  } 
+  renderPending() {
+
+    return this.state.queue.map((row, i) => (
+      <Wrapper key={i}>
+        {row.get('status') != 'error' && <LoaderCircle />}
+        {row.get('status') === 'error' && (
+          <ReuploadWrapper>
+            <Button icon="cloud_upload" onClick={this.onClick.bind(this, i)} />
+          </ReuploadWrapper>
+        )}
+
+        <InputWrapper>
+          <AutoCompleteInput
+            initialValue={row.get('title')}
+          />
+        </InputWrapper>
         <AssigneesWrapper>
           <HOCAssigning
-            assignees={assignees}
-            delegate={this}
+            assignees={row.get('assignees')}
             rounded
             size={24}
           />
         </AssigneesWrapper>
-        <SubmitWrapper>
-          <Button
-            icon="Enter"
-            compact
-            onClick={this.onAdd}
-          />
-        </SubmitWrapper>
       </Wrapper>
+    )).toArray();
+  }
+  render() {
+    const { assignees, resetDate, textLength } = this.state;
+    return (
+      <Fragment>
+        {this.renderPending()}
+        <Wrapper>
+          <LeftIcon icon="Plus" />
+          <InputWrapper>
+            <AutoCompleteInput
+              onChange={this.onChange}
+              placeholder="Add new step"
+              onReturn={this.onReturn}
+              onAutoCompleteSelect={this.onAutoCompleteSelect}
+              reset={resetDate}
+              clearMentions
+            />
+          </InputWrapper>
+          <AssigneesWrapper>
+            <HOCAssigning
+              assignees={assignees}
+              delegate={this}
+              rounded
+              size={24}
+            />
+          </AssigneesWrapper>
+          <SubmitWrapper hidden={!textLength}>
+            <Button
+              icon="Enter"
+              compact
+              onClick={this.onAdd}
+            />
+          </SubmitWrapper>
+        </Wrapper>
+      </Fragment>
     );
   }
 }

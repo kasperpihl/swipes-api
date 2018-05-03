@@ -4,7 +4,7 @@ import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Button from 'src/react/components/button/Button2';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
-import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput2';
+import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import styles from './PostCreate.swiss';
@@ -13,6 +13,7 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const ComposerWrapper = styleElement('div', styles.ComposerWrapper);
 const TypeWrapper = styleElement('div', styles.TypeWrapper);
 const ActionBar = styleElement('div', styles.ActionBar);
+const InputWrapper = styleElement('div', styles.InputWrapper);
 const AssignSection = styleElement('div', styles.AssignSection);
 const AttachSection = styleElement('div', styles.AttachSection);
 const Seperator = styleElement('div', styles.Seperator);
@@ -106,14 +107,17 @@ class PostCreate extends PureComponent {
           <HOCAssigning
             assignees={[myId]}
             rounded
-            size={30}
+            size={36}
           />
-          <AutoCompleteInput
-            wrapperRef={(c) => { this.input = c; }}
-            onChange={this.onMessageChange}
-            placeholder={placeholder}
-            onAutoCompleteSelect={this.onAutoCompleteSelect}
-          />
+          <InputWrapper>
+            <AutoCompleteInput
+              wrapperRef={(c) => { this.input = c; }}
+              onChange={this.onMessageChange}
+              placeholder={placeholder}
+              onAutoCompleteSelect={this.onAutoCompleteSelect}
+              autoFocus
+            />
+          </InputWrapper>
         </ComposerWrapper>
         {this.renderActionBar()}
       </Wrapper>

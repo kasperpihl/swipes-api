@@ -59,17 +59,16 @@ class StepItem extends PureComponent {
       number,
       step,
       goalId,
+      pending,
     } = this.props;
 
-    if(editMode) {
-
-    }
     return (
       <StepComplete
         number={number}
         goalId={goalId}
         stepId={step.get('id')}
         isComplete={!!step.get('completed_at')}
+        pending={pending}
       />
     )
   }
