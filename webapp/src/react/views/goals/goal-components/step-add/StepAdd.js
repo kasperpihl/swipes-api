@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { styleElement } from 'react-swiss';
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import randomString from 'swipes-core-js/utils/randomString';
 import * as ca from 'swipes-core-js/actions';
 
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
@@ -44,6 +45,7 @@ class StepAdd extends PureComponent {
       title,
       assignees,
       status: 'ready',
+      id: randomString(6),
     }));
     this.setState({
       resetDate: new Date(),
@@ -73,22 +75,22 @@ class StepAdd extends PureComponent {
     if(this.running) return;
 
     const { addStep, goalId } = this.props;
-    let { queue } = this.state;
-    const index = queue.findIndex((row) => row.get('status') === 'ready');
+    const index = this.state.queue.findIndex((row) => row.get('status') === 'ready');
 
     if(index === -1) return;
+    console.log('run', index, this.state.queue.toJS());
 
-    const { title, assignees } = queue.get(index).toJS();
+    const { title, assignees } = this.state.queue.get(index).toJS();
 
     this.running = true;
     addStep(goalId, title, assignees).then((res) => {
       this.running = false;
+      let queue = this.state.queue.setIn([index, 'status'], 'error');
       if(res.ok){
-        queue = queue.splice(index, 1);
+        queue = queue.splice(index, 1);  
         window.analytics.sendEvent('Step added', {});
-      } else {
-        queue = queue.setIn([index, 'status'], 'error');
       }
+      console.log('new queue', index, queue.toJS());
       this.setState({ queue }, this.runQueue);
     });
   }
@@ -100,7 +102,7 @@ class StepAdd extends PureComponent {
   renderPending() {
 
     return this.state.queue.map((row, i) => (
-      <Wrapper key={i}>
+      <Wrapper key={row.get('id')}>
         {row.get('status') != 'error' && <LoaderCircle />}
         {row.get('status') === 'error' && (
           <ReuploadWrapper>
