@@ -34,7 +34,7 @@ const dbAttachmentsAdd = funcWrap([
         attachments: {
           [attachment.id]: attachment,
         },
-        attachment_order: r.row('attachment_order').default([]).setUnion([attachment.id]),
+        attachment_order: r.row('attachment_order').default([]).prepend(attachment.id).setUnion([]),
         updated_at: r.now(),
       }, {
         returnChanges: true,
@@ -49,7 +49,9 @@ const dbAttachmentsRename = funcWrap([
     attachment_id: string.require(),
     title: string.min(1).require(),
   }).require(),
-], (err, { user_id, target_id, attachment_id, title }) => {
+], (err, {
+  user_id, target_id, attachment_id, title,
+}) => {
   if (err) {
     throw new SwipesError(`dbAttachmentsRename: ${err}`);
   }
@@ -166,8 +168,8 @@ const dbAttachmentsReorder = funcWrap([
 });
 
 export {
- dbAttachmentsAdd,
- dbAttachmentsRename,
- dbAttachmentsDelete,
- dbAttachmentsReorder,
+  dbAttachmentsAdd,
+  dbAttachmentsRename,
+  dbAttachmentsDelete,
+  dbAttachmentsReorder,
 };
