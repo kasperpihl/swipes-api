@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import { fromJS, List, Map } from 'immutable';
-import { bindAll, setupLoading } from 'swipes-core-js/classes/utils';
-import { setupCachedCallback } from 'react-delegate';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import getNewOrderFromResult from 'swipes-core-js/utils/getNewOrderFromResult';
@@ -35,51 +34,9 @@ class HOCGoalOverview extends PureComponent {
       showLine: false,
     };
     setupLoading(this);
-
-    this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
   }
   componentWillUnmount() {
     this._unmounted = true;
-  }
-  onTitleClick(e) {
-    const options = this.getOptionsForE(e);
-    const { goal, renameGoal, inputMenu } = this.props;
-    inputMenu({
-      ...options,
-      text: goal.get('title'),
-      buttonLabel: 'Rename',
-    }, (title) => {
-      if (title !== goal.get('title') && title.length) {
-        this.setLoading('title', 'Renaming...');
-        renameGoal(goal.get('id'), title).then(() => {
-          this.clearLoading('title');
-        });
-      }
-    });
-  }
-  onIncompleteGoal() {
-    const { incompleteGoal, completeGoal, successGradient } = this.props;
-    const helper = this.getHelper();
-    this.setLoading('completing', 'Incompleting goal...');
-    incompleteGoal(helper.getId()).then((res) => {
-      if (res && res.ok) {
-        this.clearLoading('completing');
-      } else {
-        this.clearLoading('completing', '!Something went wrong');
-      }
-    });
-  }
-  onCompleteGoal() {
-    const { completeGoal, successGradient, goal } = this.props;
-    this.setLoading('completing', 'Completing goal...');
-    completeGoal(goal.get('id')).then((res) => {
-      if (res && res.ok) {
-        successGradient();
-        this.clearLoading('completing');
-      } else {
-        this.clearLoading('completing', '!Something went wrong');
-      }
-    });
   }
 
   onArchive(options) {
@@ -123,42 +80,6 @@ class HOCGoalOverview extends PureComponent {
           if (res.ok) {
             this.clearLoading('dots', `Plan ${action}`, 3000);
             window.analytics.sendEvent(`Plan ${action}`, {});
-          } else {
-            this.clearLoading('dots', '!Something went wrong', 3000);
-          }
-        });
-      }
-    });
-  }
-  onSaveWay(options) {
-    const { createWay, inputMenu } = this.props;
-    const helper = this.getHelper();
-    inputMenu({
-      ...options,
-      placeholder: 'What should we call the way?',
-      buttonLabel: 'Save',
-    }, (title) => {
-      if (title && title.length) {
-        this.setLoading('dots');
-        createWay(title, helper.getObjectForWay()).then((res) => {
-          if (res.ok) {
-            this.clearLoading('dots', 'Saved way', 3000);
-          } else {
-            this.clearLoading('dots', '!Something went wrong', 3000);
-          }
-        });
-      }
-    });
-  }
-  onLoadWay(options) {
-    const { loadWay, goalLoadWay } = this.props;
-    const helper = this.getHelper();
-    loadWay(options, (way) => {
-      if (way) {
-        this.setLoading('dots');
-        goalLoadWay(helper.getId(), way.get('id')).then((res) => {
-          if (res.ok) {
-            this.clearLoading('dots', 'Loaded way', 3000);
           } else {
             this.clearLoading('dots', '!Something went wrong', 3000);
           }
@@ -215,29 +136,34 @@ class HOCGoalOverview extends PureComponent {
 
   onDragEnd = (result) => {
     document.body.classList.remove("no-select");
+    console.log(result);
     if (!result.destination) {
       return;
     }
-    const order = this.state.tempStepOrder || this.props.goal.get('step_order');
-    const tempStepOrder = getNewOrderFromResult(order, result);
-    this.setState({ tempStepOrder });
-    this.onNextReorder(tempStepOrder.toJS());
+    const { goal } = this.props;
+    const type = result.type;
+    const order = this.state[`${type}Order`] || goal.get(`${type}_order`);
+
+    const newOrder = getNewOrderFromResult(order, result);
+    this.setState({ [`${type}Order`]: newOrder });
+    this.onNextReorder(type, newOrder.toJS());
   }
-  onNextReorder(order) {
+  onNextReorder(type, order) {
     const { stepReorder, goal } = this.props;
+    const reorderFunc = this.props[`${type}Reorder`];
 
-    this.nextOrder = order;
-    if(this.isReordering) return;
+    this[`next-${type}`] = order;
+    if(this[`running-${type}`]) return;
 
-    this.nextOrder = null;
-    this.isReordering = true;
+    this[`next-${type}`] = null;
+    this[`running-${type}`] = true;
 
-    stepReorder(goal.get('id'), order).then((res) => {
-      this.isReordering = false;
+    reorderFunc(goal.get('id'), order).then((res) => {
+      this[`running-${type}`] = false;
       if(!res.ok || !this.nextOrder) {
-        !this._unmounted && this.setState({ tempStepOrder: null });
+        !this._unmounted && this.setState({ [`${type}Order`]: null });
       } else if(this.nextOrder) {
-        this.onNextReorder(this.nextOrder);
+        this.onNextReorder(type, this.nextOrder);
       }
     });
   }
@@ -283,7 +209,7 @@ class HOCGoalOverview extends PureComponent {
 
   render() {
     const { goal, me, viewWidth } = this.props;
-    const { tempStepOrder } = this.state;
+    const { stepOrder, attachmentOrder } = this.state;
 
     return (
       <DragDropContext
@@ -294,7 +220,8 @@ class HOCGoalOverview extends PureComponent {
           myId={me.get('id')}
           delegate={this}
           viewWidth={viewWidth}
-          tempStepOrder={tempStepOrder}
+          stepOrder={stepOrder}
+          attachmentOrder={attachmentOrder}
           {...this.bindLoading()}
         />
       </DragDropContext>
@@ -310,18 +237,15 @@ export default connect((state, props) => ({
   archive: ca.goals.archive,
   contextMenu: mainActions.contextMenu,
   assignGoal: ca.goals.assign,
-  renameGoal: ca.goals.rename,
-  completeGoal: ca.goals.complete,
-  incompleteGoal: ca.goals.incomplete,
   loadWay: wayActions.load,
   goalLoadWay: ca.goals.loadWay,
   createWay: ca.ways.create,
   selectAssignees: goalActions.selectAssignees,
   selectMilestone: menuActions.selectMilestone,
-  stepReorder: ca.steps.reorder,
+  stepReorder: ca.goals.stepsReorder,
+  attachmentReorder: ca.goals.attachmentsReorder,
   addGoalToMilestone: ca.milestones.addGoal,
   removeGoalFromMilestone: ca.milestones.removeGoal,
-  successGradient: mainActions.successGradient,
   confirm: menuActions.confirm,
   inputMenu: menuActions.input,
 })(navWrapper(HOCGoalOverview));

@@ -104,6 +104,11 @@ export default function goalsReducer(state = initialState, action) {
       return state.setIn([payload.goal_id, 'step_order'], fromJS(payload.step_order));
     }
 
+    case 'goals.attachmentsReorder':
+    case 'attachment_reordered': {
+      return state.setIn([payload.goal_id, 'attachment_order'], fromJS(payload.attachment_order));
+    }
+
     case 'goal_archived':
     case 'goals.archive': {
       if (!state.get(payload.goal_id)) {

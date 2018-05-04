@@ -64,3 +64,18 @@ export const incomplete = gId => a.api.request('goals.incomplete', {
 });
 
 export const archive = goalId => a.api.request('goals.archive', { goal_id: goalId });
+
+
+export const attachmentsReorder = valAction('goals.attachmentsReorder', [
+  string.require(),
+  array.of(string).require(),
+], (goalId, attachmentOrder) => (d) => d(a.api.request('goals.attachmentsReorder', {
+  goal_id: goalId,
+  attachment_order: attachmentOrder,
+})));
+
+export const stepsReorder = (goalId, stepOrder) => a.api.request('goals.stepsReorder', {
+  goal_id: goalId,
+  step_order: stepOrder,
+});
+

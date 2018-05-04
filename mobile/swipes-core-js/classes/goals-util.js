@@ -71,8 +71,19 @@ export default class GoalsUtil {
   getOrderedSteps() {
     return this.goal.get('step_order').map(id => this.goal.getIn(['steps', id]));
   }
+
+  getAttachmentById(id) {
+    if (!this.goal) {
+      return undefined;
+    }
+    return this.goal.getIn(['attachments', id]);
+  }
+  getAttachmentOrder() {
+    return this.goal.get('attachment_order');
+  }
+
   getOrderedAttachments() {
-    return this.goal.get('attachment_order').map(id => this.goal.getIn(['attachments', id]));
+    return this.getAttachmentOrder().map(id => this.goal.getIn(['attachments', id]));
   }
   getAttachmentsForFlags(flags) {
     flags = fromJS(flags || []);

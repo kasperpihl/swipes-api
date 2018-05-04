@@ -1,19 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
 export default styleSheet({
-  Footer: {
-    _size: ['100%', '54px'],
-    borderTop: '1px solid $sw3',
-    _flex: ['row', 'left', 'center'],
-    padding: '9px 12px',
-  },
-  Header: {
-    _size: ['100%', 'auto'],
-    _flex: ['row', 'left', 'top'],
-    showLine: {
-      borderBottom: '1px solid $sw3',
-    }
-  },
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'top'],

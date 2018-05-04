@@ -212,7 +212,6 @@ export default connect(null, {
   removeAttachment: ca.attachments.remove,
   renameAttachment: ca.attachments.rename,
   contextMenu: mainActions.contextMenu,
-  createNote: ca.notes.create,
   inputMenu: menuActions.input,
   confirm: menuActions.confirm,
   previewLink: linkActions.preview,

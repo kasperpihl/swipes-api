@@ -123,7 +123,6 @@ class HOCStepList extends PureComponent {
 
     reorder(helper.getId(), newStepOrder).then((res) => {
       if(!this._unmounted) {
-        console.log('ressy', res);
         this.clearLoading(newStepOrder.get(newIndex));
         this.setState({tempOrder: null});
         

@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { styleElement } from 'react-swiss';
-import { setupDelegate } from 'react-delegate';
 
 import Dropper from 'src/react/components/draggable-list/Dropper';
 import Dragger from 'src/react/components/draggable-list/Dragger';
@@ -8,19 +7,18 @@ import Dragger from 'src/react/components/draggable-list/Dragger';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import SWView from 'SWView';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
-import InfoButton from 'components/info-button/InfoButton';
-import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import Button from 'src/react/components/button/Button2';
 import './styles/goal-overview.scss';
 import styles from './GoalOverview.swiss';
 import Icon from 'Icon';
 import StepAdd from '../goal-components/step-add/StepAdd';
 import StepItem from '../goal-components/step-item/StepItem';
+import GoalHeader from '../goal-components/goal-header/GoalHeader';
+
+import GoalFooter from '../goal-components/goal-footer/GoalFooter';
+import GoalAttachment from '../goal-components/goal-attachment/GoalAttachment';
 
 const Header = styleElement('div', styles.Header);
-const Footer = styleElement('div', styles.Footer);
 const Wrapper = styleElement('div', styles.Wrapper);
 const Section = styleElement('div', styles.Section);
 
@@ -37,7 +35,6 @@ class GoalOverview extends PureComponent {
       editMode: false,
       showLine: false,
     };
-    setupDelegate(this, 'onCompleteGoal', 'onIncompleteGoal');
   }
   getHelper() {
     const { goal, myId } = this.props;
@@ -53,42 +50,6 @@ class GoalOverview extends PureComponent {
     if (showLine !== newShowLine) {
       this.setState({ showLine: newShowLine });
     }
-  }
-  renderHeader() {
-    const { showLine } = this.state;
-    const { goal, getLoading, delegate, isLoading } = this.props;
-    const helper = this.getHelper();
-    const title = getLoading('title').loading;
-
-    return (
-      <Header showLine={showLine}>
-        <HOCHeaderTitle
-          title={title || goal.get('title')}
-          delegate={delegate}
-        >
-          <HOCAssigning
-            assignees={helper.getAssignees()}
-            delegate={delegate}
-            rounded
-            key={helper.getAssignees().size ? 'assignees' : 'assign'}
-            size={30}
-            tooltipAlign="bottom"
-          />
-          <HOCDiscussButton
-            context={{
-              id: goal.get('id'),
-              title: goal.get('title'),
-            }}
-            relatedFilter={msgGen.goals.getRelatedFilter(goal)}
-            taggedUsers={helper.getAssigneesButMe().toArray()}
-          />
-          <InfoButton
-            delegate={delegate}
-            {...getLoading('dots')}
-          />
-        </HOCHeaderTitle>
-      </Header>
-    );
   }
   renderCompletedState() {
     const helper = this.getHelper();
@@ -108,14 +69,14 @@ class GoalOverview extends PureComponent {
     );
   }
   renderSteps() {
-    const { tempStepOrder } = this.props;
+    const { stepOrder } = this.props;
     const { editMode } = this.state;
     const helper = this.getHelper();
 
-    const order = tempStepOrder || helper.getStepOrder();
+    const order = stepOrder || helper.getStepOrder();
     return (
       <Fragment>
-        <Dropper droppableId="steps">
+        <Dropper droppableId="steps" type="step">
           {order.map((stepId, i) => {
             const step = helper.getStepById(stepId);
             return (
@@ -139,41 +100,50 @@ class GoalOverview extends PureComponent {
   }
 
   renderAttachments() {
-    const { delegate, goal, viewWidth } = this.props;
+    const { attachmentOrder } = this.props;
+    const helper = this.getHelper();
+
+    const order = attachmentOrder || helper.getAttachmentOrder();
     return (
-      <Side viewWidth={viewWidth} right>
-        <Section>
-          ATTACHMENTS
-          <HOCAttachButton delegate={delegate} />
-        </Section>
-      </Side>
+      <Dropper droppableId="attachments" type="attachment">
+        {order.map((attId, i) => {
+          const attachment = helper.getAttachmentById(attId);
+          return (
+            <Dragger
+              draggableId={attId}
+              index={i}
+              key={attId}>
+              <GoalAttachment
+                goalId={helper.getId()}
+                attachment={attachment}
+                id={attId}
+              />
+            </Dragger>
+          )
+        }).toArray()}
+      </Dropper>
     );
   }
-  renderFooter() {
-    const { goal, getLoading, delegate } = this.props;
-    const isComplete = this.getHelper().getIsCompleted();
-
-    return (
-      <Footer>
-        <Button
-          icon={isComplete ? 'Iteration' : 'Checkmark'}
-          sideLabel={isComplete ? 'Incomplete goal' : 'Complete goal'}
-          {...getLoading('completing')}
-          onClick={isComplete ? this.onIncompleteGoal : this.onCompleteGoal}
-        />
-      </Footer>
-    )
-  }
   render() {
-    const { goal } = this.props;
-    const { editMode } = this.state;
+    const { goal, viewWidth, delegate, getLoading } = this.props;
+    const { editMode, showLine } = this.state;
 
     if (!goal) {
       return null;
     }
 
     return (
-      <SWView header={this.renderHeader()} onScroll={this.onScroll} footer={this.renderFooter()}>
+      <SWView
+        header={(
+          <GoalHeader
+            goal={goal}
+            delegate={delegate}
+            showLine={showLine}
+            dotsLoading={getLoading('dots')}
+          />
+        )}
+        onScroll={this.onScroll}
+        footer={<GoalFooter goal={goal} />}>
         <Wrapper>
           <Side>
             <Section>
@@ -188,7 +158,13 @@ class GoalOverview extends PureComponent {
             {this.renderCompletedState()}
             {this.renderSteps()}
           </Side>
-          {this.renderAttachments()}
+          <Side viewWidth={viewWidth} right>
+            <Section>
+              ATTACHMENTS
+              <HOCAttachButton delegate={delegate} />
+            </Section>
+            {this.renderAttachments()}
+          </Side>
         </Wrapper>
       </SWView>
     );

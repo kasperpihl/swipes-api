@@ -185,16 +185,16 @@ const attachmentsDeleteQueueMessage = valLocals('attachmentsDeleteQueueMessage',
 });
 const attachmentsReorder = valLocals('attachmentsReorder', {
   user_id: string.require(),
-  target_id: string.require(),
+  goal_id: string.require(),
   attachment_order: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    target_id,
+    goal_id,
     attachment_order,
   } = res.locals;
 
-  dbAttachmentsReorder({ user_id, target_id, attachment_order })
+  dbAttachmentsReorder({ user_id, target_id: goal_id, attachment_order })
     .then(() => {
       return next();
     })
@@ -204,24 +204,24 @@ const attachmentsReorder = valLocals('attachmentsReorder', {
 });
 const attachmentsReorderQueueMessage = valLocals('attachmentsReorderQueueMessage', {
   user_id: string.require(),
-  target_id: string.require(),
+  goal_id: string.require(),
   attachment_order: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
-    target_id,
+    goal_id,
     attachment_order,
   } = res.locals;
   const queueMessage = {
     user_id,
-    target_id,
+    goal_id,
     attachment_order,
     event_type: 'attachment_reordered',
   };
 
   setLocals({
     queueMessage,
-    messageGroupId: target_id,
+    messageGroupId: goal_id,
   });
 
   return next();
