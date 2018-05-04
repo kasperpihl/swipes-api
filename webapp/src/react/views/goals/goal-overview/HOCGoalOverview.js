@@ -136,7 +136,6 @@ class HOCGoalOverview extends PureComponent {
 
   onDragEnd = (result) => {
     document.body.classList.remove("no-select");
-    console.log(result);
     if (!result.destination) {
       return;
     }

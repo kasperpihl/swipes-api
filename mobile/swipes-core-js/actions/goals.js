@@ -69,8 +69,8 @@ export const archive = goalId => a.api.request('goals.archive', { goal_id: goalI
 export const attachmentsReorder = valAction('goals.attachmentsReorder', [
   string.require(),
   array.of(string).require(),
-], (goalId, attachmentOrder) => (d) => d(a.api.request('goals.attachmentsReorder', {
-  goal_id: goalId,
+], (goalId, attachmentOrder) => (d) => d(a.api.request('attachments.reorder', {
+  target_id: goalId,
   attachment_order: attachmentOrder,
 })));
 
