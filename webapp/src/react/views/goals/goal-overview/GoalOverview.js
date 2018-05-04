@@ -108,25 +108,30 @@ class GoalOverview extends PureComponent {
     );
   }
   renderSteps() {
+    const { tempStepOrder } = this.props;
     const { editMode } = this.state;
     const helper = this.getHelper();
 
+    const order = tempStepOrder || helper.getStepOrder();
     return (
       <Fragment>
         <Dropper droppableId="steps">
-          {helper.getOrderedSteps().map((step, i) => (
-            <Dragger
-              draggableId={step.get('id')}
-              index={i}
-              key={step.get('id')}>
-              <StepItem
-                goalId={helper.getId()}
-                step={step}
-                number={i + 1}
-                editMode={editMode}
-              />
-            </Dragger>
-          )).toArray()}
+          {order.map((stepId, i) => {
+            const step = helper.getStepById(stepId);
+            return (
+              <Dragger
+                draggableId={step.get('id')}
+                index={i}
+                key={step.get('id')}>
+                <StepItem
+                  goalId={helper.getId()}
+                  step={step}
+                  number={i + 1}
+                  editMode={editMode}
+                />
+              </Dragger>
+            )
+          }).toArray()}
         </Dropper>
         <StepAdd goalId={helper.getId()} />
       </Fragment>

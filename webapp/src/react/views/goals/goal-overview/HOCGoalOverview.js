@@ -7,6 +7,7 @@ import { bindAll, setupLoading } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';
 import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import getNewOrderFromResult from 'swipes-core-js/utils/getNewOrderFromResult';
 
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
@@ -36,6 +37,9 @@ class HOCGoalOverview extends PureComponent {
     setupLoading(this);
 
     this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
+  }
+  componentWillUnmount() {
+    this._unmounted = true;
   }
   onTitleClick(e) {
     const options = this.getOptionsForE(e);
@@ -209,8 +213,33 @@ class HOCGoalOverview extends PureComponent {
     document.body.classList.add("no-select");
   }
 
-  onDragEnd(result) {
+  onDragEnd = (result) => {
     document.body.classList.remove("no-select");
+    if (!result.destination) {
+      return;
+    }
+    const order = this.state.tempStepOrder || this.props.goal.get('step_order');
+    const tempStepOrder = getNewOrderFromResult(order, result);
+    this.setState({ tempStepOrder });
+    this.onNextReorder(tempStepOrder.toJS());
+  }
+  onNextReorder(order) {
+    const { stepReorder, goal } = this.props;
+
+    this.nextOrder = order;
+    if(this.isReordering) return;
+
+    this.nextOrder = null;
+    this.isReordering = true;
+
+    stepReorder(goal.get('id'), order).then((res) => {
+      this.isReordering = false;
+      if(!res.ok || !this.nextOrder) {
+        !this._unmounted && this.setState({ tempStepOrder: null });
+      } else if(this.nextOrder) {
+        this.onNextReorder(this.nextOrder);
+      }
+    });
   }
   viewDidLoad(stepList) {
     this.stepList = stepList;
@@ -254,7 +283,7 @@ class HOCGoalOverview extends PureComponent {
 
   render() {
     const { goal, me, viewWidth } = this.props;
-    const { showLine } = this.state;
+    const { tempStepOrder } = this.state;
 
     return (
       <DragDropContext
@@ -264,8 +293,8 @@ class HOCGoalOverview extends PureComponent {
           goal={goal}
           myId={me.get('id')}
           delegate={this}
-          showLine={showLine}
           viewWidth={viewWidth}
+          tempStepOrder={tempStepOrder}
           {...this.bindLoading()}
         />
       </DragDropContext>
@@ -289,6 +318,7 @@ export default connect((state, props) => ({
   createWay: ca.ways.create,
   selectAssignees: goalActions.selectAssignees,
   selectMilestone: menuActions.selectMilestone,
+  stepReorder: ca.steps.reorder,
   addGoalToMilestone: ca.milestones.addGoal,
   removeGoalFromMilestone: ca.milestones.removeGoal,
   successGradient: mainActions.successGradient,

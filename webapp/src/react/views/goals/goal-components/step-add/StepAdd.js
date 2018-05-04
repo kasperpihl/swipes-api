@@ -78,7 +78,6 @@ class StepAdd extends PureComponent {
     const index = this.state.queue.findIndex((row) => row.get('status') === 'ready');
 
     if(index === -1) return;
-    console.log('run', index, this.state.queue.toJS());
 
     const { title, assignees } = this.state.queue.get(index).toJS();
 
@@ -90,7 +89,6 @@ class StepAdd extends PureComponent {
         queue = queue.splice(index, 1);  
         window.analytics.sendEvent('Step added', {});
       }
-      console.log('new queue', index, queue.toJS());
       this.setState({ queue }, this.runQueue);
     });
   }
