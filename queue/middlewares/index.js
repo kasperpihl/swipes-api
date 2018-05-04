@@ -502,6 +502,11 @@ const post_comment_added = notifyWrapper([
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
 ]);
+const post_comment_archived = notifyWrapper([
+  users.usersGetSingleWithFields,
+  posts.postCommentArchivedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
 const post_comment_mention = notifyWrapper([
   users.usersGetSingleWithFields,
   (req, res, next) => {
@@ -661,6 +666,7 @@ export {
   post_created,
   post_edited,
   post_comment_added,
+  post_comment_archived,
   post_reaction_added,
   post_reaction_removed,
   post_comment_reaction_added,

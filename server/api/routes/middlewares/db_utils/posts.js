@@ -128,6 +128,35 @@ const dbPostsAddComment = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbPostsArchiveComment = funcWrap([
+  object.as({
+    user_id: string.require(),
+    post_id: string.require(),
+    comment_id: string.require(),
+  }).require(),
+], (err, { user_id, post_id, comment_id }) => {
+  if (err) {
+    throw new SwipesError(`dbPostsArchiveComment: ${err}`);
+  }
+
+  const q =
+    r.db('swipes')
+      .table('posts')
+      .get(post_id)
+      .update({
+        comments: {
+          [comment_id]: {
+            archived: true,
+            updated_at: r.now(),
+            updated_by: user_id,
+          },
+        },
+        updated_at: r.now(),
+      });
+
+  return db.rethinkQuery(q);
+});
+
 const dbPostsAddReaction = funcWrap([
   object.as({
     user_id: string.require(),
@@ -238,4 +267,5 @@ export {
   dbPostsArchiveSingle,
   dbPostsUnfollow,
   dbPostsFollow,
+  dbPostsArchiveComment,
 };

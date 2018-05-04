@@ -14,6 +14,7 @@ import {
   dbPostsArchiveSingle,
   dbPostsUnfollow,
   dbPostsFollow,
+  dbPostsArchiveComment,
 } from './db_utils/posts';
 import {
   generateSlackLikeId,
@@ -515,6 +516,50 @@ const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
 
   return next();
 });
+const postsArchiveComment = valLocals('postsArchiveComment', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+  } = res.locals;
+
+  dbPostsArchiveComment({ user_id, post_id, comment_id })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const postsArchiveCommentQueueMessage = valLocals('postsArchiveCommentQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+  } = res.locals;
+  const event_type = 'comment_archived';
+  const queueMessage = {
+    user_id,
+    post_id,
+    comment_id,
+    event_type,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
 const postsCreateReaction = valLocals('postsCreateReaction', {
   user_id: string.require(),
   reaction: string.require(),
@@ -720,6 +765,8 @@ export {
   postsCreateComment,
   postsAddComment,
   postsAddCommentQueueMessage,
+  postsArchiveComment,
+  postsArchiveCommentQueueMessage,
   postsCreateReaction,
   postsAddReaction,
   postsAddReactionQueueMessage,

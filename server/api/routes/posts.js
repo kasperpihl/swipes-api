@@ -13,6 +13,8 @@ import {
   postsEditedPushNotificationQueueMessage,
   postsCreateComment,
   postsAddComment,
+  postsArchiveComment,
+  postsArchiveCommentQueueMessage,
   postsMentionsParseComment,
   postsAddCommentQueueMessage,
   postsCreateReaction,
@@ -152,6 +154,21 @@ authed.all(
   valResponseAndSend({
     post_id: string.require(),
     comment: object.require(),
+  }),
+);
+
+authed.all(
+  '/posts.archiveComment',
+  valBody({
+    post_id: string.require(),
+    comment_id: string.require(),
+  }),
+  postsArchiveComment,
+  postsArchiveCommentQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    post_id: string.require(),
+    comment_id: string.require(),
   }),
 );
 

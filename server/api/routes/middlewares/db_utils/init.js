@@ -56,6 +56,16 @@ const dbInit = funcWrap([
               .filter((post) => {
                 return post('archived').eq(false).or(post('archived').eq(!full_fetch));
               })
+              .map((post) => {
+                return post.merge({
+                  comments: post('comments').keys().filter((comment_id) => {
+                    return post('comments')(comment_id)('archived').ne(true);
+                  })
+                    .map((comment_id) => {
+                      return post('comments')(comment_id);
+                    }),
+                });
+              })
               .coerceTo('ARRAY'),
         });
       })

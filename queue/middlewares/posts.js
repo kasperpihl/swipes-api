@@ -174,6 +174,17 @@ const postCommentMentionNotificationData = (req, res, next) => {
 
   return next();
 };
+const postCommentArchivedNotificationData = (req, res, next) => {
+  const {
+    post_id,
+    comment_id,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = { post_id, comment_id };
+
+  return next();
+};
 const postReactionAddedNotificationData = (req, res, next) => {
   const {
     user_id,
@@ -356,6 +367,7 @@ export {
   postCreatedNotificationData,
   postEditedNotificationData,
   postCommentAddedNotificationData,
+  postCommentArchivedNotificationData,
   postReactionAddedNotificationData,
   postReactionRemovedNotificationData,
   postCommentReactionAddedNotificationData,
