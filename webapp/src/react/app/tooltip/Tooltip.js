@@ -161,13 +161,6 @@ class Tooltip extends PureComponent {
     );
   }
   render() {
-    const { tooltip } = this.props;
-    let className = 'g-tooltip';
-
-    if (tooltip) {
-      className += ' g-tooltip--shown';
-    }
-
     return (
       <Wrapper shown={!!this.props.tooltip}>
         {this.renderTooltip()}

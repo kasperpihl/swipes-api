@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { getParentByClass } from 'swipes-core-js/classes/utils';
+import getParentByClass from 'swipes-core-js/utils/getParentByClass';
 import { styleElement } from 'react-swiss';
 import styles from './AutoCompleting.swiss';
 

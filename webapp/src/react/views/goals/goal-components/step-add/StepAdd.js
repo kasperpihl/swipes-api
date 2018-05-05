@@ -7,7 +7,7 @@ import randomString from 'swipes-core-js/utils/randomString';
 import * as ca from 'swipes-core-js/actions';
 
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
-import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning2';
 import Icon from 'Icon';
 import Button from 'src/react/components/button/Button2';
 import styles from './StepAdd.swiss';
@@ -116,7 +116,7 @@ class StepAdd extends PureComponent {
         <AssigneesWrapper>
           <HOCAssigning
             assignees={row.get('assignees')}
-            rounded
+            maxImages={3}
             size={24}
           />
         </AssigneesWrapper>
@@ -144,7 +144,7 @@ class StepAdd extends PureComponent {
             <HOCAssigning
               assignees={assignees}
               delegate={this}
-              rounded
+              maxImages={3}
               size={24}
             />
           </AssigneesWrapper>

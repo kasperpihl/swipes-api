@@ -223,16 +223,6 @@ export function traverseElement(target, iterator) {
   } while (target);
   return target;
 }
-export function getParentByClass(target, className) {
-  let node;
-  do {
-    if (target.classList.contains(className)) {
-      node = target;
-    }
-    target = target.parentNode;
-  } while (!node && target && typeof target.getAttribute === 'function');
-  return node;
-}
 
 export function queryStringToObject(query) {
   const object = {};

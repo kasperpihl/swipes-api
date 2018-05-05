@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
+import getParentByClass from 'swipes-core-js/utils/getParentByClass';
+
 import Icon from 'Icon';
 import AssigneeTooltip from './AssigneeTooltip';
 

@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { bindAll, getParentByClass } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import RotateLoader from 'components/loaders/RotateLoader';
 import './styles/button.scss';
@@ -148,22 +146,5 @@ class Button extends PureComponent {
     );
   }
 }
-
-const { string, bool, func } = PropTypes;
-
-Button.propTypes = {
-  onClick: func,
-  error: string,
-  success: string,
-  className: string,
-  primary: bool,
-  icon: string,
-  text: string,
-  small: bool,
-  alignIcon: string,
-  disabled: bool,
-  loading: string,
-  frameless: bool,
-};
 
 export default Button;
