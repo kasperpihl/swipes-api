@@ -127,6 +127,7 @@ const postCommentAddedNotificationData = (req, res, next) => {
   const {
     post,
     comment_id,
+    mention_ids,
   } = res.locals;
   const comment = post.comments[comment_id];
 
@@ -135,41 +136,19 @@ const postCommentAddedNotificationData = (req, res, next) => {
       id: post.id,
     },
     meta: {
+      mention_ids,
       user_ids: uniqueCommentUserIds(post.comments),
-      message: post.message.replace(cutTextRegExp, '$1'),
+      post_message: post.message.replace(cutTextRegExp, '$1'),
+      comment_message: comment.message.replace(cutTextRegExp, '$1'),
       context: post.context,
       type: post.type,
       created_by: comment.created_by,
-    },
-  };
-  res.locals.eventData = {
-    post_id: post.id,
-    comment: post.comments[comment_id],
-  };
-
-  return next();
-};
-const postCommentMentionNotificationData = (req, res, next) => {
-  const {
-    post,
-    comment_id,
-  } = res.locals;
-  const comment = post.comments[comment_id];
-
-  res.locals.notificationData = {
-    target: {
-      id: post.id,
-    },
-    meta: {
-      post_message: post.message.replace(cutTextRegExp, '$1'),
-      comment_message: comment.message.replace(cutTextRegExp, '$1'),
-      mentioned_by: comment.created_by,
       push: true,
     },
   };
   res.locals.eventData = {
+    comment,
     post_id: post.id,
-    comment: post.comments[comment_id],
   };
 
   return next();
@@ -328,6 +307,22 @@ const postEditedPushNotificationData = (req, res, next) => {
 
   return next();
 };
+const postAddCommentFollowersPushNotificationData = (req, res, next) => {
+  const {
+    user,
+    post,
+    comment_id,
+  } = res.locals;
+  const comment = post.comments[comment_id];
+
+  res.locals.pushMessage = {
+    contents: { en: comment.message.replace(/<![A-Z0-9]*\|(.*?)>/gi, '$1') },
+    headings: { en: `${user.profile.first_name} wrote a new comment` },
+  };
+  res.locals.pushTargetId = post.id;
+
+  return next();
+};
 const postAddCommentMentionPushNotificationData = (req, res, next) => {
   const {
     user,
@@ -339,22 +334,6 @@ const postAddCommentMentionPushNotificationData = (req, res, next) => {
   res.locals.pushMessage = {
     contents: { en: comment.message.replace(/<![A-Z0-9]*\|(.*?)>/gi, '$1') },
     headings: { en: `${user.profile.first_name} mentioned you in a comment` },
-  };
-  res.locals.pushTargetId = post.id;
-
-  return next();
-};
-const postAddCommentCreatedByPushNotificationData = (req, res, next) => {
-  const {
-    user,
-    post,
-    comment_id,
-  } = res.locals;
-  const comment = post.comments[comment_id];
-
-  res.locals.pushMessage = {
-    contents: { en: comment.message.replace(/<![A-Z0-9]*\|(.*?)>/gi, '$1') },
-    headings: { en: `${user.profile.first_name} commented on your ${post.type}` },
   };
   res.locals.pushTargetId = post.id;
 
@@ -374,9 +353,8 @@ export {
   postCommentReactionRemovedNotificationData,
   postArchivedNotificationData,
   postFollowedUnfollowedNotificationData,
-  postCommentMentionNotificationData,
   postCreatedPushNotificationData,
   postEditedPushNotificationData,
+  postAddCommentFollowersPushNotificationData,
   postAddCommentMentionPushNotificationData,
-  postAddCommentCreatedByPushNotificationData,
 };

@@ -32,10 +32,9 @@ import {
   postsUnfollowQueueMessage,
   postsFollow,
   postsFollowQueueMessage,
-  postsMestionsQueueMessage,
   postsCreatedPushNotificationQueueMessage,
-  postsAddCommentPushNotificationQueueMessage,
-  postsAddCommentPushNotificationToCreatedByQueueMessage,
+  postsAddCommentFollowersPushNotificationQueueMessage,
+  postsAddCommentMentionsPushNotificationQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -141,15 +140,13 @@ authed.all(
     attachments: array.of(object),
   }),
   postsCreateComment,
-  postsAddComment,
   postsMentionsParseComment,
+  postsAddComment,
   postsAddCommentQueueMessage,
   notificationsPushToQueue,
-  postsMestionsQueueMessage,
+  postsAddCommentFollowersPushNotificationQueueMessage,
   notificationsPushToQueue,
-  postsAddCommentPushNotificationQueueMessage,
-  notificationsPushToQueue,
-  postsAddCommentPushNotificationToCreatedByQueueMessage,
+  postsAddCommentMentionsPushNotificationQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     post_id: string.require(),

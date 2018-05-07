@@ -109,8 +109,11 @@ const dbPostsAddComment = funcWrap([
     user_id: string.require(),
     post_id: string.require(),
     comment: object.require(),
+    mention_ids: array.require(),
   }).require(),
-], (err, { user_id, post_id, comment }) => {
+], (err, {
+  user_id, post_id, comment, mention_ids,
+}) => {
   if (err) {
     throw new SwipesError(`dbPostsAddComment: ${err}`);
   }
@@ -122,7 +125,7 @@ const dbPostsAddComment = funcWrap([
         comments: r.row('comments').merge({
           [comment.id]: comment,
         }),
-        followers: r.row('followers').default([]).setUnion([user_id]),
+        followers: r.row('followers').default([]).setUnion([user_id, ...mention_ids]),
         updated_at: r.now(),
       });
 
