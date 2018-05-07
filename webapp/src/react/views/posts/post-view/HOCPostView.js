@@ -53,30 +53,41 @@ class HOCPostView extends PureComponent {
       openSecondary(target, navForContext(post.get('id')));
     }
   }
+  onThreeDotsAction = options => action => {
+    action(options).then((res) => {
+      if(!res.ok) {
+        this.clearLoading('threedots', '!Something went wrong');
+      } else {
+        this.clearLoading('threedots');
+      }
+    })
+  }
   onThreeDots(e) {
     const { contextMenu, confirm, archivePost, post } = this.props;
     const options = this.getOptionsForE(e);
-    const items = [{
+    const items = [];
+
+    items.push({
+      id: 'archive',
       title: 'Delete post',
       subtitle: 'The post will be no longer vissible to anyone in the organization.',
-    }];
+    })
+
     const delegate = {
       onItemAction: (item) => {
         confirm(Object.assign({}, options, {
-          title: items[0].title,
+          title: item.title,
           message: 'This cannot be undone. Are you sure?',
         }), (i) => {
           if (i === 1) {
             this.setLoading('threedots');
-            archivePost({
-              post_id: post.get('id'),
-            }).then((res) => {
-              if(!res.ok) {
-                this.clearLoading('threedots', '!Something went wrong');
-              } else {
-                this.clearLoading('threedots');
+            switch (item.id) {
+              case 'archive': {
+                return this.onThreeDotsAction({
+                  post_id: post.get('id')
+                })(archivePost);
               }
-            })
+            }
           }
         });
       },
