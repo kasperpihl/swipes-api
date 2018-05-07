@@ -95,7 +95,7 @@ class PostCommentInput extends PureComponent {
           <AutoCompleteInput
             innerRef={c => this.textarea = c}
             placeholder={placeholder}
-            onReturn={this.onReturn}
+            handleReturn={this.onReturn}
             onChange={this.onChange}
             reset={this.state.resetDate}
           />

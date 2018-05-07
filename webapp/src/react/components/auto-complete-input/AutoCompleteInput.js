@@ -16,7 +16,6 @@ import Mention from './Mention';
 class AutoCompleteInput extends PureComponent {
   constructor(props) {
     super(props);
-    
     this.plugins = setupDraftExtensions(this, {
       decorators: [
         Mention,
@@ -35,7 +34,9 @@ class AutoCompleteInput extends PureComponent {
       this.setState({
         editorState: this.plugins.createEditorState(nextProps.initialValue)
       });
-      this.shouldFocus = true;
+      if(nextProps.autoFocus) {
+        this.shouldFocus = true;
+      }
     }
   }
   componentDidMount() {
@@ -105,20 +106,12 @@ class AutoCompleteInput extends PureComponent {
     if(results) {
       return 'handled';
     }
-    if(this.props.onReturn) {
-      return this.props.onReturn(e);
-    }
   }
-  onFocus() {
-    if(this.props.onFocus) {
-      this.props.onFocus();
-    }
+  onEscape() {
+    this.inputRef.blur();
   }
   onBlur() {
     this.props.clear();
-    if(this.props.onBlur) {
-      this.props.onBlur();
-    }
   }
   keyBindingFn(e) {
     return getDefaultKeyBinding(e);

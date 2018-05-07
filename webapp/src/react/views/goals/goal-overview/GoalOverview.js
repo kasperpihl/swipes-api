@@ -72,7 +72,6 @@ class GoalOverview extends PureComponent {
     const { stepOrder } = this.props;
     const { editMode } = this.state;
     const helper = this.getHelper();
-
     const order = stepOrder || helper.getStepOrder();
     return (
       <Fragment>
@@ -83,13 +82,22 @@ class GoalOverview extends PureComponent {
               <Dragger
                 draggableId={step.get('id')}
                 index={i}
+                passHandle
                 key={step.get('id')}>
-                <StepItem
-                  goalId={helper.getId()}
-                  step={step}
-                  number={i + 1}
-                  editMode={editMode}
-                />
+                {(provided, snapshot) => {
+                  console.log(provided);
+                  return (
+                  <StepItem
+                    goalId={helper.getId()}
+                    step={step}
+                    number={i + 1}
+                    editMode={editMode}
+                    dragProvided={provided}
+                  />
+                  )
+                }
+                }
+                
               </Dragger>
             )
           }).toArray()}

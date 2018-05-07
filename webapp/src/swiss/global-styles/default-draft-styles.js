@@ -5,12 +5,20 @@ addGlobalStyles({
     textAlign: 'initial',
     width: '100%',
     height: 'auto',
+    
   },
   '.public-DraftEditor-content[contenteditable=true]': {
     WebkitUserModify: 'read-write-plaintext-only',
   },
+  '.public-DraftEditor-content, .public-DraftEditorPlaceholder-root': {
+      _font: ['15px', '24px', 400],
+      color: '$sw1',
+    },
   '.DraftEditor-root': {
     position: 'relative',
+    '& *': {
+      cursor: 'text',
+    },
   },
   '.DraftEditor-editorContainer': {
     backgroundColor: 'rgba(255,255,255,0)',
@@ -44,7 +52,7 @@ addGlobalStyles({
     textAlign: 'right',
   },
   '.public-DraftEditorPlaceholder-root': {
-    color: '#9197a3',
+    color: '$sw2',
     position: 'absolute',
     zIndex: 1,
   },

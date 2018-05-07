@@ -147,11 +147,12 @@ class StepAdd extends PureComponent {
             <AutoCompleteInput
               onChange={this.onChange}
               placeholder="Add new step"
-              onReturn={this.onReturn}
+              handleReturn={this.onReturn}
               onFocus={this.onFocus}
               onBlur={this.onBlur}
               onAutoCompleteSelect={this.onAutoCompleteSelect}
               reset={resetDate}
+              autoFocus
               clearMentions
             />
           </InputWrapper>

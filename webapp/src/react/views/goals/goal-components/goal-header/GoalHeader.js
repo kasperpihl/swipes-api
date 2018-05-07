@@ -59,6 +59,7 @@ class GoalHeader extends PureComponent {
           <HOCAssigning
             assignees={helper.getAssignees()}
             delegate={delegate}
+            maxImages={5}
             size={30}
             tooltipAlign="bottom"
           />

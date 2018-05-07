@@ -15,10 +15,10 @@ const standardIterators = [
   'keyBindingFn',
   'onEnter',
   'onChange',
-  'onDownArrow',
-  'onEsc',
-  'onTab',
   'onUpArrow',
+  'onDownArrow',
+  'onEscape',
+  'onTab',
   'onFocus',
   'onBlur',
 ];
@@ -65,6 +65,9 @@ export default function(ctx, plugins = {}) {
       }
       if (!res && typeof ctx[funcName] === 'function') {
         res = ctx[funcName](...args);
+      }
+      if(!res && ctx.props && typeof ctx.props[funcName] === 'function') {
+        res = ctx.props[funcName](...args);
       }
 
       return res;

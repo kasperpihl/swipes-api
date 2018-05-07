@@ -32,12 +32,7 @@ export default styleSheet('StepAdd', {
     _flex: ['column'],
     width: '100%',
     '& .public-DraftEditor-content, & .public-DraftEditorPlaceholder-root': {
-      _font: ['15px', '24px', 400],
-      color: '$sw1',
       padding: '12px',
-    },
-    '& .public-DraftEditorPlaceholder-root': {
-      color: '$sw2',
     },
   },
   ReuploadWrapper: {

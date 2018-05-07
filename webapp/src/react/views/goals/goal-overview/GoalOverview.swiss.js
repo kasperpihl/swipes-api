@@ -37,4 +37,8 @@ export default styleSheet({
     _font: ['11px', '24px', 500],
     color: '$sw1',
   },
+  StepWrapper: {
+    _size: 'auto',
+    background: '$sw5',
+  },
 });

@@ -6,18 +6,29 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 
-import HOCAssigning from 'components/assigning/HOCAssigning';
+import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
+import HOCAssigning from 'components/assigning/HOCAssigning2';
 import StepComplete from '../step-complete/StepComplete';
 import Button from 'src/react/components/button/Button2';
+import Icon from 'Icon';
 import styles from './StepItem.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
-const Title = styleElement('div', styles.Title);
+const Drag = styleElement('div', styles.Drag);
+const AssignWrapper = styleElement('div', styles.AssignWrapper);
+const DragWrapper = styleElement('div', styles.DragWrapper);
 
 class StepItem extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);
+    this.state = {};
+  }
+  onChange = (editorState) => {
+    this.editorState = editorState;
+    this.setState({
+      plainText: editorState.getCurrentContent().getPlainText()
+    })
   }
   onStepRemove = (e) => {
     const { confirm, removeStep, goalId, step } = this.props;
@@ -40,40 +51,87 @@ class StepItem extends PureComponent {
       }
     });
   }
-  onStepRename(title) {
+  onStepRename() {
     const { goalId, renameStep, step } = this.props;
-    if(this.isLoading(step.get('id'))){
+    const { plainText } = this.state;
+    console.log('renaming', plainText);
+
+    if(!plainText || step.get('title') === plainText){
+      if(!plainText) {
+        this.setState({ resetDate: new Date() });
+      }
       return;
     }
-    this.setLoading(step.get('id'), 'Renaming...');
-    renameStep(goalId, step.get('id'), title).then((res) => {
-      this.clearLoading(step.get('id'));
+    renameStep(goalId, step.get('id'), plainText).then((res) => {
       if(res.ok){
         window.analytics.sendEvent('Step renamed', {});
       }
     });
   }
+  onAutoCompleteSelect = (item) => {
+    let { step } = this.props;
+    if(!step.get('assignees').contains(item.id)) {
+      this.onAssign(step.get('assignees').push(item.id));
+    }
+  }
+  onReturn = () => {
+    this.inputRef.blur();
+    return 'handled';
+  }
+  onBlur = () => {
+    this.onStepRename();
+  }
+  onAssigningClose(assignees) {
+    assignees && this.onAssign(assignees);
+  }
+  onAssign(assignees) {
+    const { assignStep, goalId, step } = this.props;
+    assignStep(goalId, step.get('id'), assignees.toJS()).then((res) => {
+      if(res.ok){
+        window.analytics.sendEvent('Step assigned', {
+          'Number of assignees': assignees.size,
+        });
+      }
+    });
+  }
   renderLeftSide() {
     const {
-      editMode,
       number,
       step,
       goalId,
-      pending,
+      editMode,
+      dragProvided,
     } = this.props;
-
+    if(editMode) {
+      return (
+          <Icon icon="reorder" />
+      )
+    }
     return (
       <StepComplete
         number={number}
         goalId={goalId}
         stepId={step.get('id')}
         isComplete={!!step.get('completed_at')}
-        pending={pending}
       />
     )
   }
-  renderInput() {
-    
+  renderMiddle() {
+    const { step } = this.props;
+    const { resetDate } = this.state;
+    return (
+      <AutoCompleteInput
+        innerRef={(c) => this.inputRef = c }
+        onChange={this.onChange}
+        placeholder="Edit this step"
+        initialValue={step.get('title')}
+        handleReturn={this.onReturn}
+        onAutoCompleteSelect={this.onAutoCompleteSelect}
+        onBlur={this.onBlur}
+        reset={resetDate}
+        clearMentions
+      />
+    )
   }
   renderRightSide() {
     const {
@@ -90,22 +148,27 @@ class StepItem extends PureComponent {
       )
     }
     return (
-      <HOCAssigning
-        assignees={step.get('assignees')}
-        rounded
-        size={24}
-      />
+      <AssignWrapper noAssignees={!step.get('assignees').size}>
+        <HOCAssigning
+          assignees={step.get('assignees')}
+          maxImages={3}
+          size={24}
+          delegate={this}
+        />
+      </AssignWrapper>
     )
   }
   render() {
-    const {
-      step,
-    } = this.props;
-
+    const { dragProvided } = this.props;
     return (
-      <Wrapper className="step-complete-hover">
-        {this.renderLeftSide()}
-        <Title>{step.get('title')}</Title>
+      <Wrapper
+        innerRef={dragProvided.innerRef}
+        {...dragProvided.draggableProps}
+        className="step-complete-hover assign-hover">
+        <DragWrapper {...dragProvided.dragHandleProps}>
+          {this.renderLeftSide()}
+        </DragWrapper>
+        {this.renderMiddle()}
         {this.renderRightSide()}
       </Wrapper>
     );

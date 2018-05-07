@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'Icon';
-import HOCAssigning from 'components/assigning/HOCAssigning';
+import HOCAssigning from 'components/assigning/HOCAssigning2';
 import { setupCachedCallback } from 'react-delegate';
 import HOCNotifications from 'src/react/views/notifications/HOCNotifications';
 import * as mainActions from 'src/redux/main/mainActions';
@@ -108,7 +108,7 @@ class Sidebar extends PureComponent {
     let image = <Icon icon={item.svg} className="sidebar__icon" />;
 
     if (item.id === 'AccountList') {
-      image = <HOCAssigning assignees={[item.personId]} rounded size={30} />;
+      image = <HOCAssigning assignees={[item.personId]} size={30} />;
     }
 
     return (

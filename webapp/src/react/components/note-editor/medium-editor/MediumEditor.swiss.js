@@ -26,7 +26,6 @@ export default styleSheet('MediumEditor', {
       height: 'inherit',
       minHeight: '49vh',
       textAlign: 'initial',
-      color: '$sw1',
       padding: '45px 0',
       paddingTop: '21px',
     },

@@ -8,11 +8,24 @@ export default styleSheet('StepItem', {
       background: '$sw4',
     },
     borderTop: '1px solid $sw3',
+    '& .public-DraftEditor-content, & .public-DraftEditorPlaceholder-root': {
+      padding: '12px 6px 12px 18px',
+    },
   },
-  Title: {
-    _font: ['15px', '24px'],
-    padding: '12px 6px 12px 18px',
-    width: '100%',
-    color: '$sw1',
+  AssignWrapper: {
+    'noAssignees': {
+      opacity: 0,
+      '.assign-hover:hover &': {
+        opacity: 1,
+      }
+    }
+  },
+  DragWrapper: {
+    _flex: 'center',
+    _size: '36px',
+    cursor: 'row-resize',
+    '& *': {
+      cursor: 'row-resize',
+    }
   }
 });
