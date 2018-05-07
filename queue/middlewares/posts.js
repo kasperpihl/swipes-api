@@ -20,18 +20,6 @@ const uniqueCommentUserIds = (comments) => {
 
   return Array.from(new Set(userIds));
 };
-const getPrefixForType = (type) => {
-  switch (type) {
-    case 'information':
-      return '';
-    case 'announcement':
-      return 'an ';
-    case 'question':
-    case 'post':
-    default:
-      return 'a ';
-  }
-};
 const postsGetSingle = (req, res, next) => {
   const {
     post_id,
@@ -75,7 +63,6 @@ const postCreatedNotificationData = (req, res, next) => {
     },
     meta: {
       created_by: user_id,
-      type: post.type,
       message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
       push: true,
@@ -99,7 +86,6 @@ const postEditedNotificationData = (req, res, next) => {
     },
     meta: {
       created_by: user_id,
-      type: post.type,
       message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
       push: true,
@@ -141,7 +127,6 @@ const postCommentAddedNotificationData = (req, res, next) => {
       post_message: post.message.replace(cutTextRegExp, '$1'),
       comment_message: comment.message.replace(cutTextRegExp, '$1'),
       context: post.context,
-      type: post.type,
       created_by: comment.created_by,
       push: true,
     },
@@ -187,7 +172,6 @@ const postReactionAddedNotificationData = (req, res, next) => {
       user_ids: post.reactions.map(r => r.created_by),
       message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
-      type: post.type,
     },
   };
   res.locals.eventData = {
@@ -287,7 +271,7 @@ const postCreatedPushNotificationData = (req, res, next) => {
 
   res.locals.pushMessage = {
     contents: { en: post.message },
-    headings: { en: `${user.profile.first_name} tagged you on ${getPrefixForType(post.type)}${post.type}` },
+    headings: { en: `${user.profile.first_name} tagged you on a post` },
   };
   res.locals.pushTargetId = post.id;
 
@@ -301,7 +285,7 @@ const postEditedPushNotificationData = (req, res, next) => {
 
   res.locals.pushMessage = {
     contents: { en: post.message },
-    headings: { en: `${user.profile.first_name} tagged you on ${getPrefixForType(post.type)}${post.type}` },
+    headings: { en: `${user.profile.first_name} tagged you on a post` },
   };
   res.locals.pushTargetId = post.id;
 
