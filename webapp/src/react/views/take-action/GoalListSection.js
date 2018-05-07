@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 
 import Icon from 'Icon';
-import HOCAssigning from 'components/assigning/HOCAssigning';
+import HOCAssigning from 'components/assigning/HOCAssigning2';
 import './styles/goal-list-section.scss';
 
 class GoalListSection extends PureComponent {
@@ -36,7 +36,6 @@ class GoalListSection extends PureComponent {
       <HOCAssigning
         assignees={assignees}
         maxImages={5}
-        rounded
         size={26}
       />
     );

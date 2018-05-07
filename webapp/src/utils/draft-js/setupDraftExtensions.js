@@ -19,6 +19,7 @@ const standardIterators = [
   'onEsc',
   'onTab',
   'onUpArrow',
+  'onFocus',
   'onBlur',
 ];
 

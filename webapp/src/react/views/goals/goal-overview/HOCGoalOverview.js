@@ -10,7 +10,6 @@ import getNewOrderFromResult from 'swipes-core-js/utils/getNewOrderFromResult';
 
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
-import * as goalActions from 'src/redux/goal/goalActions';
 import * as wayActions from 'src/redux/way/wayActions';
 
 import * as ca from 'swipes-core-js/actions';
@@ -100,28 +99,18 @@ class HOCGoalOverview extends PureComponent {
     });
     return false;
   }
-  onAssign(i, e) {
-    const options = this.getOptionsForE(e);
-    const { selectAssignees, assignGoal, goal } = this.props;
+  onAssigningClose(assignees) {
+    const { assignGoal, goal } = this.props;
 
-    let overrideAssignees;
-    options.onClose = () => {
-      if (overrideAssignees) {
-        assignGoal(goal.get('id'), overrideAssignees).then((res) => {
-          if (res.ok) {
-           window.analytics.sendEvent('Goal assigned', {
-              'Number of assignees': overrideAssignees.length,
-            });
-         }
-        });
-      }
-    };
-    selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      }
-    });
-    e.stopPropagation();
+    if(assignees) {
+      assignGoal(goal.get('id'), assignees.toJS()).then((res) => {
+        if (res.ok) {
+         window.analytics.sendEvent('Goal assigned', {
+            'Number of assignees': overrideAssignees.length,
+          });
+       }
+      });
+    }
   }
   onInfoTabAction(i, options, e) {
     const items = ['onLoadWay', 'onSaveWay', 'onArchive'];
@@ -159,10 +148,11 @@ class HOCGoalOverview extends PureComponent {
 
     reorderFunc(goal.get('id'), order).then((res) => {
       this[`running-${type}`] = false;
-      if(!res.ok || !this.nextOrder) {
+      if(!res.ok || !this[`next-${type}`]) {
+        this[`next-${type}`] = null;
         !this._unmounted && this.setState({ [`${type}Order`]: null });
-      } else if(this.nextOrder) {
-        this.onNextReorder(type, this.nextOrder);
+      } else if(this[`next-${type}`]) {
+        this.onNextReorder(type, this[`next-${type}`]);
       }
     });
   }
@@ -239,7 +229,6 @@ export default connect((state, props) => ({
   loadWay: wayActions.load,
   goalLoadWay: ca.goals.loadWay,
   createWay: ca.ways.create,
-  selectAssignees: goalActions.selectAssignees,
   selectMilestone: menuActions.selectMilestone,
   stepReorder: ca.goals.stepsReorder,
   attachmentReorder: ca.goals.attachmentsReorder,

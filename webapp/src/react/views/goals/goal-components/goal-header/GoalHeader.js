@@ -10,7 +10,7 @@ import * as ca from 'swipes-core-js/actions';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import InfoButton from 'components/info-button/InfoButton';
-import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning2';
 
 import styles from './GoalHeader.swiss';
 
@@ -59,8 +59,6 @@ class GoalHeader extends PureComponent {
           <HOCAssigning
             assignees={helper.getAssignees()}
             delegate={delegate}
-            rounded
-            key={helper.getAssignees().size ? 'assignees' : 'assign'}
             size={30}
             tooltipAlign="bottom"
           />

@@ -4,7 +4,7 @@ import { setupDelegate } from 'react-delegate';
 import { URL_REGEX, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import unescaper from 'swipes-core-js/utils/unescaper';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
-import HOCAssigning from 'components/assigning/HOCAssigning';
+import HOCAssigning from 'components/assigning/HOCAssigning2';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import PostReactions from '../post-components/post-reactions/PostReactions';
 import styles from './CommentView.swiss';
@@ -113,7 +113,7 @@ class CommentView extends PureComponent {
         plainMentionToContentState(this.props.comment.get('message'));
       }}>
         <Picture>
-          <HOCAssigning assignees={[comment.get('created_by')]} rounded size={36} />
+          <HOCAssigning assignees={[comment.get('created_by')]} size={36} />
         </Picture>
         <Content>
           <Name>

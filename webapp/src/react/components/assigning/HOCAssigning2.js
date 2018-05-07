@@ -38,8 +38,8 @@ class HOCAssigning extends PureComponent {
   }
 
   onClick = (e) => {
-    const { enableSelect, selectAssignees } = this.props;
-    if(!enableSelect) {
+    const { delegate, selectAssignees } = this.props;
+    if(!delegate) {
       return;
     }
     const { assignees } = this.state;
@@ -60,23 +60,15 @@ class HOCAssigning extends PureComponent {
     e.stopPropagation();
   }
   render() {
-    const {
-      maxImages,
-      index,
-      size,
-      tooltipAlign,
-      tooltip,
-    } = this.props;
     const { filteredUsers } = this.state;
 
     return (
       <Assigning
-        maxImages={maxImages || 1}
-        assignees={filteredUsers}
         onClick={this.onClick}
-        size={size||24}
-        tooltipAlign={tooltipAlign}
-        tooltip={tooltip}
+        {...this.props}
+        assignees={filteredUsers}
+        size={this.props.size||24}
+        maxImages={this.props.maxImages || 1}
       />
     );
   }

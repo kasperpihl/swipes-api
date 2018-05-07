@@ -15,7 +15,11 @@ export default styleSheet('StepAdd', {
   },
   AssigneesWrapper: {
     flex: 'none',
+    opacity: 0,
     paddingRight: '6px',
+    shown: {
+      opacity: 1,
+    }
   },
   SubmitWrapper: {
     _size: '36px',

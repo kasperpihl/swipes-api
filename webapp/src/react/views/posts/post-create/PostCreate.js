@@ -6,7 +6,7 @@ import Button from 'src/react/components/button/Button2';
 import HOCAttachButton from 'components/attachments/HOCAttachButton';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
-import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning2';
 import styles from './PostCreate.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
@@ -68,7 +68,6 @@ class PostCreate extends PureComponent {
         <AssignSection>
           {hasAssignees && (<HOCAssigning
             assignees={post.get('taggedUsers')}
-            rounded
             delegate={delegate}
             size={24}
           />)}
@@ -106,7 +105,6 @@ class PostCreate extends PureComponent {
         <ComposerWrapper>
           <HOCAssigning
             assignees={[myId]}
-            rounded
             size={36}
           />
           <InputWrapper>

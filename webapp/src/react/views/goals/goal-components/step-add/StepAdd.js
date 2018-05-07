@@ -60,9 +60,22 @@ class StepAdd extends PureComponent {
       textLength: editorState.getCurrentContent().getPlainText().length
     })
   }
+  onFocus = () => {
+    console.log('focused');
+    this.setState({ isFocused: true });
+  }
+  onBlur = () => {
+    console.log('blurred');
+    this.setState({ isFocused: false });
+  }
   onReturn = () => {
     this.onAdd();
     return 'handled';
+  }
+  onAssigningClose(assignees) {
+    if(assignees) {
+      this.setState({ assignees });
+    }
   }
   onAutoCompleteSelect = (item) => {
     let { assignees } = this.state;
@@ -124,7 +137,7 @@ class StepAdd extends PureComponent {
     )).toArray();
   }
   render() {
-    const { assignees, resetDate, textLength } = this.state;
+    const { assignees, resetDate, textLength, isFocused } = this.state;
     return (
       <Fragment>
         {this.renderPending()}
@@ -135,12 +148,14 @@ class StepAdd extends PureComponent {
               onChange={this.onChange}
               placeholder="Add new step"
               onReturn={this.onReturn}
+              onFocus={this.onFocus}
+              onBlur={this.onBlur}
               onAutoCompleteSelect={this.onAutoCompleteSelect}
               reset={resetDate}
               clearMentions
             />
           </InputWrapper>
-          <AssigneesWrapper>
+          <AssigneesWrapper shown={isFocused || textLength}>
             <HOCAssigning
               assignees={assignees}
               delegate={this}

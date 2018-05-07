@@ -10,7 +10,7 @@ class GoalResult extends PureComponent {
 
     return (
       <div className="goal-result__assignees">
-        <HOCAssigning assignees={assignees} rounded size={30} />
+        <HOCAssigning assignees={assignees} size={30} />
       </div>
     )
   }

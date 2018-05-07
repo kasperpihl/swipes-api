@@ -3,7 +3,6 @@ import { styleElement, SwissProvider } from 'react-swiss';
 import { List } from 'immutable';
 import Button from 'src/react/components/button/Button2';
 import styles from './Assigning.swiss';
-
 const Wrapper = styleElement('div', styles.Wrapper);
 const AbsoluteWrapper = styleElement('div', styles.AbsoluteWrapper);
 const WhiteBackground = styleElement('div', styles.WhiteBackground);
@@ -18,7 +17,10 @@ const TooltipImage = styleElement('div', styles.TooltipImage);
 
 class Assigning extends PureComponent {
   onMouseEnter = (e) => {
-    const { tooltip, tooltipAlign } = this.props;
+    const { tooltip, tooltipAlign, enableTooltip } = this.props;
+    if(enableTooltip) {
+      return;
+    }
 
     tooltip({
       component: this.renderTooltip,
@@ -35,7 +37,6 @@ class Assigning extends PureComponent {
   }
   renderTooltip = () => {
     const { assignees } = this.props;
-    console.log(assignees.size);
     return (
       <TooltipWrapper>
         {assignees.map((user, i) => (
