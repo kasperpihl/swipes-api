@@ -63,15 +63,17 @@ class HOCPostView extends PureComponent {
     })
   }
   onThreeDots(e) {
-    const { contextMenu, confirm, archivePost, post } = this.props;
+    const { contextMenu, confirm, archivePost, post, myId } = this.props;
     const options = this.getOptionsForE(e);
     const items = [];
 
-    items.push({
-      id: 'archive',
-      title: 'Delete post',
-      subtitle: 'The post will be no longer vissible to anyone in the organization.',
-    })
+    if (myId === post.get('created_by')) {
+      items.push({
+        id: 'archive',
+        title: 'Delete post',
+        subtitle: 'The post will be no longer vissible to anyone in the organization.',
+      })
+    }
 
     const delegate = {
       onItemAction: (item) => {
