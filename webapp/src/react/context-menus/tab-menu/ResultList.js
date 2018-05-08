@@ -15,8 +15,14 @@ class ResultList extends Component {
     setupDelegate(this, 'onItemAction');
   }
   onAction(i, side, e) {
-    const { results } = this.props;
-    this.onItemAction(results[i], side, e);
+    const { results, hide } = this.props;
+    const item = results[i];
+
+    this.onItemAction(item, side, e);
+
+    if (item.hideAfterClick === true) {
+      hide();
+    }
   }
   renderResults() {
     const { results } = this.props;

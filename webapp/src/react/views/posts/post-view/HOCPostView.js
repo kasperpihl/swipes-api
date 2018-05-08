@@ -70,12 +70,14 @@ class HOCPostView extends PureComponent {
     if (post.get('followers').includes(myId)) {
       items.push({
         id: 'unfollow',
+        hideAfterClick: true,
         title: 'Unfollow',
         subtitle: 'You will no longer receive notifications about this post.',
       })
     } else {
       items.push({
         id: 'follow',
+        hideAfterClick: true,
         title: 'Follow',
         subtitle: 'You will start receiving notifications about this post.',
       })
@@ -93,7 +95,7 @@ class HOCPostView extends PureComponent {
       onItemAction: (item) => {
         if (item.id !== 'archive') {
           this.setLoading('threedots');
-          
+
           switch (item.id) {
             case 'unfollow': {
               return this.onThreeDotsAction({
@@ -105,7 +107,7 @@ class HOCPostView extends PureComponent {
                 post_id: post.get('id')
               })(followPost);
             }
-          }          
+          }
         } else {
           confirm(Object.assign({}, options, {
             title: item.title,

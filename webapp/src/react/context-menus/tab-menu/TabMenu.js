@@ -179,13 +179,14 @@ class TabMenu extends Component {
       results,
       loading,
     } = this.state;
-    const { delegate } = this.props;
+    const { delegate, hide } = this.props;
 
     return (
       <ResultList
         delegate={delegate}
         results={results}
         loading={loading}
+        hide={hide}
       />
     );
   }
