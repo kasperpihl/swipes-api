@@ -1,5 +1,5 @@
-import * as types from '../constants';
 import { fromJS } from 'immutable';
+import * as types from '../constants';
 import { reducerInitToMap } from '../classes/utils';
 
 const initialState = fromJS({});
@@ -16,6 +16,32 @@ export default function posts(state = initialState, action) {
         return state;
       }
       return state.mergeIn([payload.post.id], fromJS(payload.post));
+    }
+    case 'post_followed':
+    case 'posts.follow': {
+      const {
+        post_id,
+        user_id,
+      } = payload;
+
+      if (!state.get(post_id)) {
+        return state;
+      }
+
+      return state.updateIn([post_id, 'followers'], followers => followers.insert(0, user_id));
+    }
+    case 'post_unfollowed':
+    case 'posts.unfollow': {
+      const {
+        post_id,
+        user_id,
+      } = payload;
+
+      if (!state.get(post_id)) {
+        return state;
+      }
+
+      return state.updateIn([post_id, 'followers'], followers => followers.filter(f => f !== user_id));
     }
     case 'post_archived':
     case 'posts.archive': {

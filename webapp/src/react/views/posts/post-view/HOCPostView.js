@@ -63,9 +63,23 @@ class HOCPostView extends PureComponent {
     })
   }
   onThreeDots(e) {
-    const { contextMenu, confirm, archivePost, post, myId } = this.props;
+    const { contextMenu, confirm, archivePost, followPost, unfollowPost, post, myId } = this.props;
     const options = this.getOptionsForE(e);
     const items = [];
+
+    if (post.get('followers').includes(myId)) {
+      items.push({
+        id: 'unfollow',
+        title: 'Unfollow',
+        subtitle: 'You will no longer receive notifications about this post.',
+      })
+    } else {
+      items.push({
+        id: 'follow',
+        title: 'Follow',
+        subtitle: 'You will start receiving notifications about this post.',
+      })
+    }
 
     if (myId === post.get('created_by')) {
       items.push({
@@ -77,21 +91,35 @@ class HOCPostView extends PureComponent {
 
     const delegate = {
       onItemAction: (item) => {
-        confirm(Object.assign({}, options, {
-          title: item.title,
-          message: 'This cannot be undone. Are you sure?',
-        }), (i) => {
-          if (i === 1) {
-            this.setLoading('threedots');
-            switch (item.id) {
-              case 'archive': {
-                return this.onThreeDotsAction({
-                  post_id: post.get('id')
-                })(archivePost);
-              }
+        if (item.id !== 'archive') {
+          this.setLoading('threedots');
+          
+          switch (item.id) {
+            case 'unfollow': {
+              return this.onThreeDotsAction({
+                post_id: post.get('id')
+              })(unfollowPost);
             }
-          }
-        });
+            case 'follow': {
+              return this.onThreeDotsAction({
+                post_id: post.get('id')
+              })(followPost);
+            }
+          }          
+        } else {
+          confirm(Object.assign({}, options, {
+            title: item.title,
+            message: 'This cannot be undone. Are you sure?',
+          }), (i) => {
+            if (i === 1) {
+              this.setLoading('threedots');
+
+              return this.onThreeDotsAction({
+                post_id: post.get('id')
+              })(archivePost);
+            }
+          });
+        }
       },
     };
 
@@ -132,5 +160,7 @@ export default navWrapper(connect((state, props) => ({
   browser: mainActions.browser,
   confirm: menuActions.confirm,
   contextMenu: mainActions.contextMenu,
+  followPost: ca.posts.follow,
+  unfollowPost: ca.posts.unfollow,
   archivePost: ca.posts.archive,
 })(HOCPostView));
