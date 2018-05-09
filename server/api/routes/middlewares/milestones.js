@@ -79,11 +79,7 @@ const milestonesInsert = valLocals('milestonesInsert', {
   } = res.locals;
 
   dbMilestonesInsertSingle({ milestone })
-    .then((obj) => {
-      setLocals({
-        eventType: 'milestone_created',
-      });
-
+    .then(() => {
       return next();
     })
     .catch((err) => {
@@ -198,21 +194,25 @@ const milestonesUpdateSingle = valLocals('milestonesUpdateSingle', {
 });
 const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
   user_id: string.require(),
+  organization_id: string.require(),
   milestone: object.as({
     id: string.require(),
   }).require(),
-  eventType: string.require(),
+  milestone_order: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    organization_id,
     milestone,
-    eventType,
+    milestone_order,
   } = res.locals;
   const milestone_id = milestone.id;
   const queueMessage = {
     user_id,
+    organization_id,
     milestone_id,
-    event_type: eventType,
+    milestone_order,
+    event_type: 'milestone_created',
   };
 
   setLocals({
@@ -224,18 +224,24 @@ const milestonesCreateQueueMessage = valLocals('milestonesCreateQueueMessage', {
 });
 const milestonesOpenCloseQueueMessage = valLocals('milestonesOpenCloseQueueMessage', {
   user_id: string.require(),
+  organization_id: string.require(),
+  milestone_order: array.require(),
   milestone_id: string.require(),
   eventType: string.require(),
   goal_ids: array,
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    organization_id,
+    milestone_order,
     milestone_id,
     eventType,
     goal_ids = [],
   } = res.locals;
   const queueMessage = {
     user_id,
+    organization_id,
+    milestone_order,
     milestone_id,
     goal_ids,
     event_type: eventType,
@@ -485,16 +491,22 @@ const milestonesDelete = valLocals('milestonesDelete', {
 });
 const milestonesDeleteQueueMessage = valLocals('milestonesDeleteQueueMessage', {
   user_id: string.require(),
+  organization_id: string.require(),
+  milestone_order: array.require(),
   milestone_id: string.require(),
   goal_ids: array.of(string).require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
+    organization_id,
+    milestone_order,
     milestone_id,
     goal_ids,
   } = res.locals;
   const queueMessage = {
     user_id,
+    organization_id,
+    milestone_order,
     milestone_id,
     goal_ids,
     event_type: 'milestone_deleted',

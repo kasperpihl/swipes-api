@@ -2,6 +2,7 @@ import express from 'express';
 import {
   string,
   object,
+  array,
   any,
 } from 'valjs';
 import MiddlewareComposer from './middleware_composer';
@@ -34,6 +35,8 @@ import {
   organizationsAddPendingUsers,
   organizationsUsersInvitedUserQueueMessage,
   organizationsUserJoinedQueueMessage,
+  organizationsMilestoneReorder,
+  organizationsMilestoneReorderQueueMessage,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
@@ -397,6 +400,21 @@ authed.all(
     user: object.require(),
     invitation_token: string.require(),
     organization: object,
+  }),
+);
+
+authed.all(
+  '/organizations.milestoneReorder',
+  valBody({
+    organization_id: string.require(),
+    milestone_order: array.require(),
+  }),
+  organizationsMilestoneReorder,
+  organizationsMilestoneReorderQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization_id: string.require(),
+    milestone_order: array.require(),
   }),
 );
 

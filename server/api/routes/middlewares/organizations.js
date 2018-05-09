@@ -21,6 +21,9 @@ import {
   dbOrganizationsUpdateStripeSubscriptionPlan,
   dbOrganizationsAddPendingUser,
   dbOrganizationsActivateUser,
+  dbOrganizationsMilestoneReorder,
+  dbOrganizationsMilestoneAdd,
+  dbOrganizationsMilestoneRemove,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -53,6 +56,7 @@ const organizationsCreate = valLocals('organizationsCreate', {
     owner_id: user_id,
     admins: [],
     active_users: [user_id],
+    milestone_order: [],
     created_at: r.now(),
     updated_at: r.now(),
     trial: {
@@ -873,6 +877,112 @@ const organizationsUsersInvitedUserQueueMessage = valLocals('organizationsUsersI
 
   return next();
 });
+const organizationsMilestoneReorder = valLocals('organizationsMilestoneReorder', {
+  organization_id: string.require(),
+  milestone_order: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    milestone_order,
+  } = res.locals;
+
+  return dbOrganizationsMilestoneReorder({
+    organization_id,
+    milestone_order,
+  })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        milestone_order: organization.milestone_order,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsMilestoneReorderQueueMessage = valLocals('organizationsMilestoneReorderQueueMessage', {
+  user_id: string.require(),
+  organization_id: string.require(),
+  milestone_order: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization_id,
+    milestone_order,
+  } = res.locals;
+
+  const queueMessage = {
+    user_id,
+    organization_id,
+    milestone_order,
+    event_type: 'organization_milestone_reordered',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: organization_id,
+  });
+
+  return next();
+});
+const organizationsAddMilestone = valLocals('organizationsAddMilestone', {
+  organization_id: string.require(),
+  milestone_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    milestone_id,
+  } = res.locals;
+
+  return dbOrganizationsMilestoneAdd({
+    organization_id,
+    milestone_id,
+  })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        milestone_order: organization.milestone_order,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsRemoveMilestone = valLocals('organizationsRemoveMilestone', {
+  organization_id: string.require(),
+  milestone_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    milestone_id,
+  } = res.locals;
+
+  return dbOrganizationsMilestoneRemove({
+    organization_id,
+    milestone_id,
+  })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        milestone_order: organization.milestone_order,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
 export {
   organizationsCreate,
@@ -903,4 +1013,8 @@ export {
   organizationsChangeStripeCustomerEmail,
   organizationsDeletedQueueMessage,
   organizationsUserJoinedQueueMessage,
+  organizationsMilestoneReorder,
+  organizationsMilestoneReorderQueueMessage,
+  organizationsAddMilestone,
+  organizationsRemoveMilestone,
 };

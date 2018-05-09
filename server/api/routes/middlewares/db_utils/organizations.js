@@ -345,6 +345,88 @@ const dbOrganizationsUpdateStripeSubscriptionPlan = funcWrap([
 
   return db.rethinkQuery(q);
 });
+const dbOrganizationsMilestoneReorder = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    milestone_order: array.require(),
+  }).require(),
+], (err, { organization_id, milestone_order }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsReorder: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update((o) => {
+        // not overwriting by adding and preserving the order
+        // only of the elements that are presented in both arrays/sets
+        // adding new elements and removing elements
+        // from this array is happening by different endpoints
+        // this is imporant if couple of clients are
+        // adding/removing and reordering at the same time
+        return o.merge({
+          milestone_order:
+            o('milestone_order')
+            // if there is something new and milestone_order has old information
+            // is filtered out and put on the top
+            // that way we can apply the new order from milestone_order
+            // otherwise the order is preserved how it is in the database
+            // and we don't want that
+              .filter(id => o('milestone_order').contains(id).not())
+              .setUnion(o('milestone_order').setIntersection(milestone_order)),
+          updated_at: r.now(),
+        });
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
+const dbOrganizationsMilestoneAdd = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    milestone_id: string.require(),
+  }).require(),
+], (err, { organization_id, milestone_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsMilestoneAdd: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        milestone_order: r.row('milestone_order').prepend(milestone_id).setInsert(milestone_id),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
+const dbOrganizationsMilestoneRemove = funcWrap([
+  object.as({
+    organization_id: string.require(),
+    milestone_id: string.require(),
+  }).require(),
+], (err, { organization_id, milestone_id }) => {
+  if (err) {
+    throw new SwipesError(`dbOrganizationsMilestoneAdd: ${err}`);
+  }
+
+  const q =
+    r.table('organizations')
+      .get(organization_id)
+      .update({
+        milestone_order: r.row('milestone_order').setDifference([milestone_id]),
+        updated_at: r.now(),
+      }, {
+        returnChanges: true,
+      });
+
+  return db.rethinkQuery(q);
+});
 
 export {
   dbOrganizationsCreate,
@@ -361,4 +443,7 @@ export {
   dbOrganizationsUpdateStripeSubscriptionPlan,
   dbOrganizationsActivateUser,
   dbOrganizationsDisableAllUsers,
+  dbOrganizationsMilestoneReorder,
+  dbOrganizationsMilestoneAdd,
+  dbOrganizationsMilestoneRemove,
 };

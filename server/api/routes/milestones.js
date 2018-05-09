@@ -34,6 +34,10 @@ import {
   goalsGetSingle,
 } from './middlewares/goals';
 import {
+  organizationsAddMilestone,
+  organizationsRemoveMilestone,
+} from './middlewares/organizations';
+import {
   notificationsPushToQueue,
 } from './middlewares/notifications';
 import MiddlewareComposer from './middleware_composer';
@@ -49,15 +53,21 @@ const notAuthed = express.Router();
 authed.all(
   '/milestones.create',
   valBody({
-    title: string.require(),
     organization_id: string.require(),
+    title: string.require(),
     due_date: string.format('iso8601'),
   }),
   milestonesCreate,
   milestonesInsert,
+  mapLocals(locals => ({
+    milestone_id: locals.milestone.id,
+  })),
+  organizationsAddMilestone,
   milestonesCreateQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
+    organization_id: string.require(),
+    milestone_order: array.require(),
     milestone: object.require(),
   }),
 );
@@ -65,12 +75,16 @@ authed.all(
 authed.all(
   '/milestones.delete',
   valBody({
+    organization_id: string.require(),
     milestone_id: string.require(),
   }),
   milestonesDelete,
+  organizationsRemoveMilestone,
   milestonesDeleteQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
+    organization_id: string.require(),
+    milestone_order: array.require(),
     milestone_id: string.require(),
     goal_ids: array.of(string),
   }),
@@ -79,6 +93,7 @@ authed.all(
 authed.all(
   '/milestones.close',
   valBody({
+    organization_id: string.require(),
     milestone_id: string.require(),
     migrate_to_milestone_id: string,
   }),
@@ -86,9 +101,12 @@ authed.all(
   milestonesRemoveGoal,
   milestonesClose,
   milestonesUpdateSingle,
+  organizationsRemoveMilestone,
   milestonesOpenCloseQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
+    organization_id: string.require(),
+    milestone_order: array.require(),
     milestone_id: string.require(),
     closed_at: date.require(),
     goal_order: object.require(),
@@ -99,13 +117,17 @@ authed.all(
 authed.all(
   '/milestones.open',
   valBody({
+    organization_id: string.require(),
     milestone_id: string.require(),
   }),
   milestonesOpen,
   milestonesUpdateSingle,
+  organizationsAddMilestone,
   milestonesOpenCloseQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
+    organization_id: string.require(),
+    milestone_order: array.require(),
     milestone_id: string.require(),
   }),
 );

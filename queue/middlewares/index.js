@@ -157,7 +157,7 @@ const milestone_closed = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const milestones_opened = notifyWrapper([
+const milestone_opened = notifyWrapper([
   milestones.milestonesGetSingle,
   milestones.milestoneOpenCloseWithHistoryNotificationData,
   notify.notifyAllInCompany,
@@ -347,6 +347,21 @@ const organization_deleted = [
   notify.notifyMultipleUsers,
   notify.notifyCommonRethinkdb,
 ];
+
+const organization_milestone_reordered = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
+  organizations.organizationsMilestoneReorderNotificationData,
+  notify.notifyAllInCompany,
+]);
 
 const post_created = notifyWrapper([
   users.usersGetSingleWithFields,
@@ -596,7 +611,7 @@ export {
   step_incompleted,
   milestone_created,
   milestone_closed,
-  milestones_opened,
+  milestone_opened,
   milestone_goal_added,
   milestone_goal_removed,
   milestone_renamed,
@@ -632,6 +647,7 @@ export {
   organization_user_invited,
   organization_user_joined,
   organization_deleted,
+  organization_milestone_reordered,
   post_created,
   post_edited,
   post_comment_added,
