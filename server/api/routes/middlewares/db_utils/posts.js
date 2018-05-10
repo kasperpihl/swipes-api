@@ -35,7 +35,7 @@ const dbPostsEditSingle = funcWrap([
   post_id, message, attachments, tagged_users,
 }) => {
   if (err) {
-    throw new SwipesError(`dbPostsFollow: ${err}`);
+    throw new SwipesError(`dbPostsEditSingle: ${err}`);
   }
 
   const q = r.table('posts').get(post_id).update({
@@ -103,7 +103,6 @@ const dbPostsArchiveSingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
-
 const dbPostsAddComment = funcWrap([
   object.as({
     user_id: string.require(),
@@ -128,6 +127,39 @@ const dbPostsAddComment = funcWrap([
         followers: r.row('followers').default([]).setUnion([user_id, ...mention_ids]),
         updated_at: r.now(),
       });
+
+  return db.rethinkQuery(q);
+});
+const dbPostsEditComment = funcWrap([
+  object.as({
+    post_id: string.require(),
+    comment_id: string.require(),
+    message: string.min(1).require(),
+    attachments: array.of(object).require(),
+    mention_ids: array.of(string).require(),
+  }).require(),
+], (err, {
+  post_id, comment_id, message, attachments, mention_ids,
+}) => {
+  if (err) {
+    throw new SwipesError(`dbPostsEditComment: ${err}`);
+  }
+
+  const q = r.table('posts').get(post_id).update((p) => {
+    return p.merge({
+      comments: p('comments').merge({
+        [comment_id]: {
+          message,
+          attachments,
+          updated_at: r.now(),
+        },
+      }),
+      followers: p('followers').default([]).setUnion(mention_ids),
+      updated_at: r.now(),
+    });
+  }, {
+    returnChanges: true,
+  });
 
   return db.rethinkQuery(q);
 });
@@ -263,6 +295,7 @@ export {
   dbPostsInsertSingle,
   dbPostsEditSingle,
   dbPostsAddComment,
+  dbPostsEditComment,
   dbPostsAddReaction,
   dbPostsRemoveReaction,
   dbPostsCommentAddReaction,

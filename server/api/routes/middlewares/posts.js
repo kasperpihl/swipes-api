@@ -7,6 +7,7 @@ import {
   dbPostsInsertSingle,
   dbPostsEditSingle,
   dbPostsAddComment,
+  dbPostsEditComment,
   dbPostsAddReaction,
   dbPostsRemoveReaction,
   dbPostsCommentAddReaction,
@@ -386,6 +387,41 @@ const postsAddComment = valLocals('postsAddComment', {
       return next(err);
     });
 });
+const postsEditComment = valLocals('postsEditComment', {
+  post_id: string.require(),
+  comment_id: string.require(),
+  message: string.min(1).require(),
+  mention_ids: array.require(),
+  attachments: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    post_id,
+    comment_id,
+    message,
+    mention_ids,
+    attachments,
+  } = res.locals;
+
+  dbPostsEditComment({
+    post_id, comment_id, message, mention_ids, attachments,
+  })
+    .then((results) => {
+      const changes = results.changes[0];
+      const updatedPost = changes.new_val || changes.old_val;
+      const followers = updatedPost.followers;
+      const comment = updatedPost.comments[comment_id];
+
+      setLocals({
+        followers,
+        comment,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 const postsMentionsParseComment = valLocals('postsMentionsParseComment', {
   comment: object.require(),
 }, (req, res, next, setLocals) => {
@@ -482,6 +518,32 @@ const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
     mention_ids,
     notification_id_sufix: `${post_id}-${event_type}`,
     comment_id: comment.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
+const postsEditCommentQueueMessage = valLocals('postsEditCommentQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+  } = res.locals;
+  const event_type = 'post_comment_edited';
+  const queueMessage = {
+    user_id,
+    post_id,
+    comment_id,
+    event_type,
+    notification_id_sufix: `${post_id}-${event_type}`,
   };
 
   setLocals({
@@ -739,7 +801,9 @@ export {
   postsEditedPushNotificationQueueMessage,
   postsCreateComment,
   postsAddComment,
+  postsEditComment,
   postsAddCommentQueueMessage,
+  postsEditCommentQueueMessage,
   postsArchiveComment,
   postsArchiveCommentQueueMessage,
   postsCreateReaction,

@@ -484,7 +484,6 @@ const post_archived = notifyWrapper([
   posts.postArchivedNotificationData,
   notify.notifySendEventToAllInCompany,
 ]);
-
 const post_comment_added = notifyWrapper([
   users.usersGetSingleWithFields,
   (req, res, next) => {
@@ -510,6 +509,21 @@ const post_comment_added = notifyWrapper([
     return next();
   },
   notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_comment_edited = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
+  posts.postsGetSingle,
+  posts.postCommentEditedNotificationData,
   notify.notifySendEventToAllInCompany,
 ]);
 const post_comment_archived = notifyWrapper([
@@ -651,6 +665,7 @@ export {
   post_created,
   post_edited,
   post_comment_added,
+  post_comment_edited,
   post_comment_archived,
   post_reaction_added,
   post_reaction_removed,

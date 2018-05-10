@@ -13,10 +13,12 @@ import {
   postsEditedPushNotificationQueueMessage,
   postsCreateComment,
   postsAddComment,
+  postsEditComment,
   postsArchiveComment,
   postsArchiveCommentQueueMessage,
   postsMentionsParseComment,
   postsAddCommentQueueMessage,
+  postsEditCommentQueueMessage,
   postsCreateReaction,
   postsAddReaction,
   postsAddReactionQueueMessage,
@@ -44,6 +46,7 @@ import {
 import {
   valBody,
   valResponseAndSend,
+  mapLocals,
 } from '../utils';
 
 const authed = express.Router();
@@ -150,6 +153,36 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     post_id: string.require(),
+    comment: object.require(),
+  }),
+);
+
+authed.all(
+  '/posts.editComment',
+  valBody({
+    post_id: string.require(),
+    comment_id: string.require(),
+    message: string.min(1).require(),
+    attachments: array.require(),
+  }),
+  mapLocals((locals) => {
+    const {
+      message,
+    } = locals;
+
+    return {
+      comment: {
+        message,
+      },
+    };
+  }),
+  postsMentionsParseComment,
+  postsEditComment,
+  postsEditCommentQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    post_id: string.require(),
+    followers: array.require(),
     comment: object.require(),
   }),
 );
