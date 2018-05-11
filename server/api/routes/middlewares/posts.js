@@ -408,8 +408,11 @@ const postsEditComment = valLocals('postsEditComment', {
     .then((results) => {
       const changes = results.changes[0];
       const updatedPost = changes.new_val || changes.old_val;
-      const followers = updatedPost.followers;
-      const comment = updatedPost.comments[comment_id];
+      const {
+        followers,
+        comments,
+      } = updatedPost;
+      const comment = comments[comment_id];
 
       setLocals({
         followers,
