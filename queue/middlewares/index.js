@@ -454,10 +454,10 @@ const post_edited = notifyWrapper([
   (req, res, next) => {
     const {
       user_id,
-      tagged_users_diff,
+      followers_diff,
     } = res.locals;
 
-    res.locals.user_ids = tagged_users_diff.filter((userId) => { return userId !== user_id; });
+    res.locals.user_ids = followers_diff.filter((userId) => { return userId !== user_id; });
 
     return next();
   },
@@ -471,10 +471,10 @@ const post_edited_push_notification = [
   (req, res, next) => {
     const {
       user_id,
-      tagged_users_diff,
+      followers_diff,
     } = res.locals;
 
-    res.locals.user_ids = tagged_users_diff.filter((userId) => { return userId !== user_id; });
+    res.locals.user_ids = followers_diff.filter((userId) => { return userId !== user_id; });
 
     return next();
   },

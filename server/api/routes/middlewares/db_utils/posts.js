@@ -28,11 +28,12 @@ const dbPostsEditSingle = funcWrap([
   object.as({
     post_id: string.require(),
     message: string.min(1).require(),
-    attachments: array.of(object).require(),
-    tagged_users: array.of(string).require(),
+    attachments: array.require(),
+    tagged_users: array.require(),
+    mention_ids: array.require(),
   }).require(),
 ], (err, {
-  post_id, message, attachments, tagged_users,
+  post_id, message, attachments, tagged_users, mention_ids,
 }) => {
   if (err) {
     throw new SwipesError(`dbPostsEditSingle: ${err}`);
@@ -42,7 +43,7 @@ const dbPostsEditSingle = funcWrap([
     message,
     attachments,
     tagged_users,
-    followers: r.row('followers').default([]).setDifference(r.row('tagged_users')).setUnion(tagged_users),
+    followers: r.row('followers').default([]).setUnion([...tagged_users, ...mention_ids]),
     updated_at: r.now(),
   }, {
     returnChanges: true,

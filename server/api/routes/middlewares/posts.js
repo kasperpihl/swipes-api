@@ -28,6 +28,7 @@ const postsCreate = valLocals('postsCreate', {
   message: string.min(1).require(),
   attachments: array.of(object),
   tagged_users: array.of(string),
+  mention_ids: array.of(string),
   context: object,
   reactions: array.of(object),
 }, (req, res, next, setLocals) => {
@@ -37,6 +38,7 @@ const postsCreate = valLocals('postsCreate', {
     message,
     attachments = [],
     tagged_users = [],
+    mention_ids = [],
     context = {},
     reactions = [],
   } = res.locals;
@@ -53,7 +55,7 @@ const postsCreate = valLocals('postsCreate', {
     updated_at: new Date(),
     created_by: user_id,
     archived: false,
-    followers: [...new Set([...[user_id], ...tagged_users])],
+    followers: [...new Set([...[user_id], ...tagged_users, ...mention_ids])],
     comments: {},
   };
 
@@ -98,14 +100,16 @@ const postsFollow = valLocals('postsFollow', {
 const postsEdit = valLocals('postsEdit', {
   post_id: string.require(),
   message: string.min(1).require(),
-  attachments: array.of(object).require(),
-  tagged_users: array.of(string).require(),
+  attachments: array.require(),
+  tagged_users: array.require(),
+  mention_ids: array.of(string),
 }, (req, res, next, setLocals) => {
   const {
     post_id,
     message,
     attachments,
     tagged_users,
+    mention_ids = [],
   } = res.locals;
 
   dbPostsEditSingle({
@@ -113,19 +117,20 @@ const postsEdit = valLocals('postsEdit', {
     message,
     attachments,
     tagged_users,
+    mention_ids,
   })
     .then((results) => {
       const changes = results.changes[0];
       const newPost = changes.new_val;
       const oldPost = changes.old_val;
-      const newTaggedUsers = newPost.tagged_users;
-      const oldTaggedUsers = oldPost.tagged_users;
-      const diffTaggedUsers = newTaggedUsers.filter(a => !oldTaggedUsers.find(b => b === a));
+      const newFollowers = newPost.followers;
+      const oldFollowers = oldPost.followers;
+      const diffFollowers = newFollowers.filter(a => !oldFollowers.find(b => b === a));
 
       setLocals({
         post: newPost,
         organization_id: newPost.organization_id,
-        tagged_users_diff: diffTaggedUsers,
+        followers_diff: diffFollowers,
       });
 
       return next();
@@ -217,18 +222,18 @@ const postsCreatedPushNotificationQueueMessage = valLocals('postsCreatedPushNoti
 const postsEditedQueueMessage = valLocals('postsEditedQueueMessage', {
   user_id: string.require(),
   post: object.require(),
-  tagged_users_diff: array.require(),
+  followers_diff: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post,
-    tagged_users_diff,
+    followers_diff,
   } = res.locals;
   const event_type = 'post_edited';
   const queueMessage = {
     user_id,
     event_type,
-    tagged_users_diff,
+    followers_diff,
     notification_id_sufix: `${post.id}-${event_type}`,
     post_id: post.id,
   };
@@ -244,19 +249,19 @@ const postsEditedPushNotificationQueueMessage = valLocals('postsEditedPushNotifi
   organization_id: string.require(),
   user_id: string.require(),
   post: object.require(),
-  tagged_users_diff: array.require(),
+  followers_diff: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     organization_id,
     user_id,
     post,
-    tagged_users_diff,
+    followers_diff,
   } = res.locals;
   const event_type = 'post_created_push_notification';
   const queueMessage = {
     organization_id,
     user_id,
-    tagged_users_diff,
+    followers_diff,
     event_type,
     post_id: post.id,
   };
