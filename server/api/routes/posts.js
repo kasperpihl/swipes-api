@@ -46,7 +46,6 @@ import {
 import {
   valBody,
   valResponseAndSend,
-  mapLocals,
 } from '../utils';
 
 const authed = express.Router();
