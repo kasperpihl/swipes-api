@@ -16,7 +16,7 @@ import {
   postsEditComment,
   postsArchiveComment,
   postsArchiveCommentQueueMessage,
-  postsMentionsParseComment,
+  postsMentionsParse,
   postsAddCommentQueueMessage,
   postsEditCommentQueueMessage,
   postsCreateReaction,
@@ -143,7 +143,7 @@ authed.all(
     attachments: array.of(object),
   }),
   postsCreateComment,
-  postsMentionsParseComment,
+  postsMentionsParse,
   postsAddComment,
   postsAddCommentQueueMessage,
   notificationsPushToQueue,
@@ -165,18 +165,7 @@ authed.all(
     message: string.min(1).require(),
     attachments: array.require(),
   }),
-  mapLocals((locals) => {
-    const {
-      message,
-    } = locals;
-
-    return {
-      comment: {
-        message,
-      },
-    };
-  }),
-  postsMentionsParseComment,
+  postsMentionsParse,
   postsEditComment,
   postsEditCommentQueueMessage,
   notificationsPushToQueue,

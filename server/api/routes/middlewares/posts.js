@@ -425,17 +425,17 @@ const postsEditComment = valLocals('postsEditComment', {
       return next(err);
     });
 });
-const postsMentionsParseComment = valLocals('postsMentionsParseComment', {
-  comment: object.require(),
+const postsMentionsParse = valLocals('postsMentionsParse', {
+  message: string.require(),
 }, (req, res, next, setLocals) => {
   const {
-    comment,
+    message,
   } = res.locals;
   const regex = /<!(U[A-Z0-9]*)\|/gi;
   const mention_ids = [];
   let tempMatches = [];
 
-  while ((tempMatches = regex.exec(comment.message)) !== null) {
+  while ((tempMatches = regex.exec(message)) !== null) {
     mention_ids.push(tempMatches[1]);
   }
 
@@ -824,7 +824,7 @@ export {
   postsUnfollowQueueMessage,
   postsFollow,
   postsFollowQueueMessage,
-  postsMentionsParseComment,
+  postsMentionsParse,
   postsCreatedPushNotificationQueueMessage,
   postsAddCommentFollowersPushNotificationQueueMessage,
   postsAddCommentMentionsPushNotificationQueueMessage,
