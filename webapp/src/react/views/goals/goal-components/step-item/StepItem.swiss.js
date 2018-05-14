@@ -23,9 +23,14 @@ export default styleSheet('StepItem', {
   DragWrapper: {
     _flex: 'center',
     _size: '36px',
+    display: 'none',
+    flex: 'none',
     cursor: 'row-resize',
     '& *': {
       cursor: 'row-resize',
+    },
+    show: {
+      display: 'block',
     }
   }
 });

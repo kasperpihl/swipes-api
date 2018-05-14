@@ -24,6 +24,9 @@ class StepItem extends PureComponent {
     setupLoading(this);
     this.state = {};
   }
+  componentWillUnmount() {
+    this.unmounted = true;
+  }
   onChange = (editorState) => {
     this.editorState = editorState;
     this.setState({
@@ -86,7 +89,9 @@ class StepItem extends PureComponent {
   }
   onAssign(assignees) {
     const { assignStep, goalId, step } = this.props;
+    this.setState({ tempAssignees: assignees });
     assignStep(goalId, step.get('id'), assignees.toJS()).then((res) => {
+      !this.unmounted && this.setState({ tempAssignees: null });
       if(res.ok){
         window.analytics.sendEvent('Step assigned', {
           'Number of assignees': assignees.size,
@@ -100,13 +105,9 @@ class StepItem extends PureComponent {
       step,
       goalId,
       editMode,
-      dragProvided,
     } = this.props;
-    if(editMode) {
-      return (
-          <Icon icon="reorder" />
-      )
-    }
+    if(editMode) return null;
+
     return (
       <StepComplete
         number={number}
@@ -138,6 +139,7 @@ class StepItem extends PureComponent {
       editMode,
       step,
     } = this.props;
+    const { tempAssignees } = this.state;
     if(editMode) {
       return (
         <Button
@@ -150,7 +152,7 @@ class StepItem extends PureComponent {
     return (
       <AssignWrapper noAssignees={!step.get('assignees').size}>
         <HOCAssigning
-          assignees={step.get('assignees')}
+          assignees={tempAssignees || step.get('assignees')}
           maxImages={3}
           size={24}
           delegate={this}
@@ -159,15 +161,16 @@ class StepItem extends PureComponent {
     )
   }
   render() {
-    const { dragProvided } = this.props;
+    const { dragProvided, editMode } = this.props;
     return (
       <Wrapper
         innerRef={dragProvided.innerRef}
         {...dragProvided.draggableProps}
         className="step-complete-hover assign-hover">
-        <DragWrapper {...dragProvided.dragHandleProps}>
-          {this.renderLeftSide()}
+        <DragWrapper show={!!editMode} {...dragProvided.dragHandleProps}>
+          <Icon icon="reorder" />
         </DragWrapper>
+        {this.renderLeftSide()}
         {this.renderMiddle()}
         {this.renderRightSide()}
       </Wrapper>
