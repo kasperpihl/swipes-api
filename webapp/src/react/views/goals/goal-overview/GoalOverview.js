@@ -85,7 +85,6 @@ class GoalOverview extends PureComponent {
                 passHandle
                 key={step.get('id')}>
                 {(provided, snapshot) => {
-                  console.log(provided);
                   return (
                   <StepItem
                     goalId={helper.getId()}

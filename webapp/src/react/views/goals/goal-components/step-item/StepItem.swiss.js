@@ -13,6 +13,7 @@ export default styleSheet('StepItem', {
     },
   },
   AssignWrapper: {
+    opacity: 1,
     'noAssignees': {
       opacity: 0,
       '.assign-hover:hover &': {

@@ -57,7 +57,6 @@ class StepItem extends PureComponent {
   onStepRename() {
     const { goalId, renameStep, step } = this.props;
     const { plainText } = this.state;
-    console.log('renaming', plainText);
 
     if(!plainText || step.get('title') === plainText){
       if(!plainText) {
@@ -140,6 +139,7 @@ class StepItem extends PureComponent {
       step,
     } = this.props;
     const { tempAssignees } = this.state;
+    const assignees = tempAssignees || step.get('assignees');
     if(editMode) {
       return (
         <Button
@@ -150,9 +150,9 @@ class StepItem extends PureComponent {
       )
     }
     return (
-      <AssignWrapper noAssignees={!step.get('assignees').size}>
+      <AssignWrapper noAssignees={!assignees.size}>
         <HOCAssigning
-          assignees={tempAssignees || step.get('assignees')}
+          assignees={assignees}
           maxImages={3}
           size={24}
           delegate={this}

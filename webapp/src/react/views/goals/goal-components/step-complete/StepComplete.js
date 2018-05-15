@@ -18,22 +18,25 @@ class StepComplete extends PureComponent {
     super(props);
     this.state = {};
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   onComplete = () => {
     const { completeStep, goalId, stepId, successGradient } = this.props;
-    this.setState({ loading: true });
+    this.setState({ tempState: true });
+    successGradient();
     completeStep(goalId, stepId).then((res) => {
-      this.setState({ loading: false });
+      !this._unmounted && this.setState({ tempState: null });
       if (res && res.ok) {
-        successGradient();
         window.analytics.sendEvent('Step completed', {});
       }
     });
   }
   onIncomplete = () => {
     const { incompleteStep, goalId, stepId } = this.props;
-    this.setState({ loading: true });
+    this.setState({ tempState: false });
     incompleteStep(goalId, stepId).then((res) => {
-      this.setState({ loading: false });
+      !this._unmounted && this.setState({ tempState: null });
       if (res && res.ok) {
         window.analytics.sendEvent('Step incompleted', {});
       }
@@ -41,19 +44,19 @@ class StepComplete extends PureComponent {
   }
   render() {
     const { className, isComplete } = this.props;
-    const { loading } = this.state;
+    const { tempState } = this.state;
     const hoverClass = this.props.hoverClass || '.step-complete-hover';
 
+    const completeState = (typeof tempState === 'boolean') ? tempState : isComplete;
     return (
       <SwissProvider
         hoverClass={hoverClass}
-        isComplete={isComplete}
-        loading={loading}>
+        isComplete={completeState}>
         <Wrapper
-          onClick={isComplete ? this.onIncomplete : this.onComplete}
+          onClick={completeState ? this.onIncomplete : this.onComplete}
           className={`sc-wrapper ${className || ''}`.trim()}>
           <Text>{this.props.number}</Text>
-          <StyledIcon icon={isComplete ? 'Iteration' : 'Checkmark'} />
+          <StyledIcon icon={completeState ? 'Iteration' : 'Checkmark'} />
         </Wrapper>
       </SwissProvider>
     );

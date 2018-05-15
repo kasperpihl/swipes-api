@@ -10,7 +10,7 @@ export default styleSheet('StepComplete', {
       background: '$green',
       '&:hover': {
         background: 'rgba($green, .7)',
-      }
+      },
     },
     '!isComplete': {
       '#{hoverClass}:hover &, &:hover': {
@@ -20,21 +20,12 @@ export default styleSheet('StepComplete', {
         background: '$sw3',
       }
     },
-    loading: {
-      '!isComplete': {
-        background: '$green !important',
-      },
-      animation: 'button-loader 1.0s infinite ease-in-out',
-    }
   },
   Text: {
     _font: ['12px', '18px', 400],
     color: '$sw1',
     isComplete: {
       color: '$sw5',
-    },
-    loading: {
-      display: 'none',
     },
     '#{hoverClass}:hover &, .sc-wrapper:hover &': {
       display: 'none',
@@ -45,10 +36,8 @@ export default styleSheet('StepComplete', {
     display: 'none',
     _size: '24px',
     _svgColor: '$sw1',
-    '!loading': {
-      '#{hoverClass}:hover &, .sc-wrapper:hover &': {
-        display: 'block',
-      },
+    '#{hoverClass}:hover &, .sc-wrapper:hover &': {
+      display: 'block',
     },
     isComplete: {
       _svgColor: '$sw5',
