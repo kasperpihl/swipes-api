@@ -71,7 +71,7 @@ export default class NotificationsGenerator {
       case 'organization_user_joined': {
         if (meta.get('is_me')) {
           text.push(boldText('name', 'You', boldStyle));
-          text.push(' have joined the ');
+          text.push(' has joined the ');
           text.push(boldText('org', meta.get('organization_name'), boldStyle));
           text.push(' team. Welcome!');
         } else {
