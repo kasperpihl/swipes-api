@@ -805,6 +805,36 @@ const organizationsUpdateStripeSubscriptionPlan = valLocals('organizationsUpdate
     return next(e);
   }
 });
+const organizationsUpdateStripeCardDetails = valLocals('organizationsUpdateStripeCardDetails', {
+  organization: object.require(),
+  stripe_token: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization,
+    stripe_token,
+  } = res.locals;
+
+  if (!organization) {
+    return next();
+  }
+
+  const {
+    stripe_customer_id,
+  } = organization;
+
+  if (!stripe_customer_id) {
+    return next();
+  }
+
+  return stripe.customers.update(stripe_customer_id, {
+    source: stripe_token,
+  })
+    .then(() => {
+      return next();
+    }).catch((err) => {
+      return next(new SwipesError(err));
+    });
+});
 const organizationsCancelSubscription = valLocals('organizationsCancelSubscription', {
   organization: object,
 }, (req, res, next, setLocals) => {
@@ -1004,6 +1034,7 @@ export {
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionQuantity,
   organizationsUpdateStripeSubscriptionPlan,
+  organizationsUpdateStripeCardDetails,
   organizationsCancelSubscription,
   organizationsAddPendingUsers,
   organizationsCreatedQueueMessage,

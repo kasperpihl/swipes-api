@@ -2,7 +2,7 @@
   "extends": "airbnb",
   "env": {
     "browser": true,
-    "node": true,
+    "node": true
   },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
@@ -14,10 +14,10 @@
     "no-underscore-dangle": 0,
     "prefer-rest-params": 0,
     "no-param-reassign": 0,
-    "no-console": ["error", { allow: ["warn", "error"] }],
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-alert": 0,
     "import/no-unresolved": 0,
     "import/extensions": 0,
-    "import/no-extraneous-dependencies": 0,
+    "import/no-extraneous-dependencies": 0
   }
 }

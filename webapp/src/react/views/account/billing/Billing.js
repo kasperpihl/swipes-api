@@ -31,7 +31,7 @@ class Billing extends PureComponent {
     this.state = {
       errorMessage: '',
     };
-    setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage');
+    setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage', 'onCardDetails');
     bindAll(this, ['onChange', 'onSubmit']);
   }
   getShowPrice() {
@@ -61,7 +61,6 @@ class Billing extends PureComponent {
   }
   onSubmit(e) {
     e.preventDefault();
-    const { cardState } = this.state;
     const { stripe, setLoading, clearLoading } = this.props;
 
     setLoading('submit');
@@ -164,6 +163,12 @@ class Billing extends PureComponent {
             <div className="payment-status__label">Your subscription status is:</div>
             <div className="payment-status__status payment-status__status--active">Active</div>
           </div>
+          <Button
+            text="Change card details"
+            className="bottom-section__button"
+            primary
+            onClick={this.onCardDetails}
+          />
         </div>
       </div>
     );
@@ -184,6 +189,7 @@ class Billing extends PureComponent {
             </div>
             <Button
               text="Manage team"
+              className="payment__button"
               primary
               onClick={this.onManage}
             />

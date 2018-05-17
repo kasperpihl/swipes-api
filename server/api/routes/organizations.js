@@ -27,6 +27,7 @@ import {
   organizationsCreateSubscriptionCustomer,
   organizationsUpdateSubscriptionQuantity,
   organizationsUpdateStripeSubscriptionPlan,
+  organizationsUpdateStripeCardDetails,
   organizationsCancelSubscription,
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
@@ -317,6 +318,20 @@ authed.all(
   valResponseAndSend({
     organization: object.require(),
   }),
+);
+
+authed.all(
+  '/organizations.updateStripeCardDetails',
+  valBody({
+    organization_id: string.require(),
+    stripe_token: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsUpdateStripeCardDetails,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend(),
 );
 
 authed.all(

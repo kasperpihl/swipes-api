@@ -8,6 +8,7 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Billing from './Billing';
 import HOCChangeBillingPlan from './HOCChangeBillingPlan';
+import HOCChangeCardDetailsModal from './HOCChangeCardDetailsModal';
 
 class HOCBilling extends PureComponent {
   constructor(props) {
@@ -59,9 +60,22 @@ class HOCBilling extends PureComponent {
       title: 'Manage team',
     });
   }
+  onCardDetails() {
+    const { openModal } = this.props;
+
+    openModal({
+      component: HOCChangeCardDetailsModal,
+      title: 'Change card details',
+      position: 'center',
+      props: {},
+    });
+  }
   render() {
     const { billingStatus } = this.state;
     const { organization, users } = this.props;
+
+    // if we need to change the token this is not the only instance of it
+    // we need to fix that
     let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
 
     if (process.env.NODE_ENV !== 'production' || window.location.hostname === 'staging.swipesapp.com') {

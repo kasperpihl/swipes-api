@@ -54,3 +54,8 @@ export const changeBillingPlan = plan => (d, getState) => d(ca.api.request('orga
   plan_to_change: plan,
 }));
 
+export const changeCardDetails = token => (d, getState) => d(ca.api.request('organizations.updateStripeCardDetails', {
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  stripe_token: token,
+}));
+

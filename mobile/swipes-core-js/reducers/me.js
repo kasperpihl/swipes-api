@@ -66,6 +66,9 @@ export default function meReducer(state = initialState, action) {
     case types.RESET_STATE: {
       return initialState;
     }
+    case 'organizations.updateStripeCardDetails': {
+      return state;
+    }
     default:
       return state;
   }
