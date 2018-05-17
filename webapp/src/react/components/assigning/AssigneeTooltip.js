@@ -1,55 +1,56 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { styleElement, styleSheet } from 'react-swiss';
+import AssigneeImage from './AssigneeImage';
 
-import './styles/assignee-tooltip.scss';
+const styles = styleSheet('AssigneeTooltip', {
+  Wrapper: {
+    _size: ['180px', 'auto'],
+    boxShadow: '0 1px 20px 3px rgba($sw1  ,0.1)',
+    backgroundColor: '$sw5',
+    overflowY: 'auto',
+    padding: '9px 0',
+    maxHeight: '400px',
+  },
+  Item: {
+    _flex: ['row', 'left', 'center'],
+    padding: '6px',
+    _size: ['100%', '36px'],
+  },
+  ImageWrapper: {
+    _flex: 'center',
+    _size: '24px',
+    background: '$sw2',
+    borderRadius: '12px',
+    overflow: 'hidden',
+  },
+  Name: {
+    _font: ['12px', '18px', 500],
+    _truncateString: '',
+    paddingLeft: '15px',
+  },
+});
 
-class AssigneeTooltip extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  renderProfilePic(person) {
-    const pic = msgGen.users.getPhoto(person);
+const Wrapper = styleElement('div', styles.Wrapper);
+const Item = styleElement('div', styles.Item);
+const ImageWrapper = styleElement('div', styles.ImageWrapper);
+const Name = styleElement('div', styles.Name);
 
-    if (pic) {
-      return (
-        <div className="tooltip__image">
-          <img src={pic} alt="" />
-        </div>
-      );
-    } else {
-      const firstLetter = msgGen.users.getInitials(person);
+export default (props) => {
+  const {
+    assignees,
+    size,
+  } = props;
 
-      return <div className="tooltip__initial">{firstLetter}</div>;
-    }
-  }
-  renderPeople() {
-    const { assignees } = this.props;
-
-    if (assignees.size) {
-      return assignees.map((a, i) => (
-        <div className="tooltip__item" key={i}>
-          {this.renderProfilePic(a)}
-          <div className="tooltip__name">
-            {msgGen.users.getFullName(a)}
-          </div>
-        </div>
-      ));
-    } else {
-      return (
-        <div className="tooltip__item">
-          <div className="tooltip__name">Assign someone.</div>
-        </div>
-      );
-    }
-  }
-  render() {
-    return (
-      <div className="tooltip">
-        {this.renderPeople()}
-      </div>
-    );
-  }
-}
-
-export default AssigneeTooltip;
+  return (
+    <Wrapper>
+      {assignees.map((user, i) => (
+        <Item key={i}>
+          <ImageWrapper>
+            <AssigneeImage user={user} size={size} />
+          </ImageWrapper>
+          <Name>{msgGen.users.getFullName(user)}</Name>
+        </Item> 
+      ))}
+    </Wrapper>
+  );
+};

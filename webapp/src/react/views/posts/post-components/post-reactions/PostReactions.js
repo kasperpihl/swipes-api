@@ -5,7 +5,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import AssigneeTooltip from 'components/assigning/AssigneeTooltip';
+import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
 import Icon from 'Icon';
 import styles from './PostReactions.swiss';
 

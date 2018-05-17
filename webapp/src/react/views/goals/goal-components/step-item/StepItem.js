@@ -7,7 +7,7 @@ import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
-import HOCAssigning from 'components/assigning/HOCAssigning2';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import StepComplete from '../step-complete/StepComplete';
 import Button from 'src/react/components/button/Button2';
 import Icon from 'Icon';
@@ -17,6 +17,7 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const Drag = styleElement('div', styles.Drag);
 const AssignWrapper = styleElement('div', styles.AssignWrapper);
 const DragWrapper = styleElement('div', styles.DragWrapper);
+const DragIcon = styleElement(Icon, styles.DragIcon);
 
 class StepItem extends PureComponent {
   constructor(props) {
@@ -80,7 +81,11 @@ class StepItem extends PureComponent {
     this.inputRef.blur();
     return 'handled';
   }
+  onFocus = () => {
+    this.setState({ focused: true });
+  }
   onBlur = () => {
+    this.setState({ focused: false });
     this.onStepRename();
   }
   onAssigningClose(assignees) {
@@ -127,6 +132,7 @@ class StepItem extends PureComponent {
         initialValue={step.get('title')}
         handleReturn={this.onReturn}
         onAutoCompleteSelect={this.onAutoCompleteSelect}
+        onFocus={this.onFocus}
         onBlur={this.onBlur}
         reset={resetDate}
         clearMentions
@@ -138,7 +144,10 @@ class StepItem extends PureComponent {
       editMode,
       step,
     } = this.props;
-    const { tempAssignees } = this.state;
+    const {
+      tempAssignees,
+      focused,
+    } = this.state;
     const assignees = tempAssignees || step.get('assignees');
     if(editMode) {
       return (
@@ -150,7 +159,7 @@ class StepItem extends PureComponent {
       )
     }
     return (
-      <AssignWrapper noAssignees={!assignees.size}>
+      <AssignWrapper show={focused || assignees.size}>
         <HOCAssigning
           assignees={assignees}
           maxImages={3}
@@ -168,7 +177,7 @@ class StepItem extends PureComponent {
         {...dragProvided.draggableProps}
         className="step-complete-hover assign-hover">
         <DragWrapper show={!!editMode} {...dragProvided.dragHandleProps}>
-          <Icon icon="reorder" />
+          <DragIcon icon="Reorder" />
         </DragWrapper>
         {this.renderLeftSide()}
         {this.renderMiddle()}

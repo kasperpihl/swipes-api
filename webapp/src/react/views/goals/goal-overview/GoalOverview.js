@@ -6,7 +6,7 @@ import Dragger from 'src/react/components/draggable-list/Dragger';
 
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import SWView from 'SWView';
-import HOCAttachButton from 'components/attachments/HOCAttachButton';
+import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
 import Button from 'src/react/components/button/Button2';
 import './styles/goal-overview.scss';
 import styles from './GoalOverview.swiss';

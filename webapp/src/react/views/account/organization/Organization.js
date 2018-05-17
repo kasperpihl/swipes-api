@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import HOCAssigning from 'components/assigning/HOCAssigning2';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import Button from 'Button';
 import Section from 'components/section/Section';
 import FloatingFormInput from './FloatingFormInput';

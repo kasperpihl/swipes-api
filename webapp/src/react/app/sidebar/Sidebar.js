@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'Icon';
-import HOCAssigning from 'components/assigning/HOCAssigning2';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import { setupCachedCallback } from 'react-delegate';
 import HOCNotifications from 'src/react/views/notifications/HOCNotifications';
 import * as mainActions from 'src/redux/main/mainActions';

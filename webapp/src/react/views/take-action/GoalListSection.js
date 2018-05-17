@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 
 import Icon from 'Icon';
-import HOCAssigning from 'components/assigning/HOCAssigning2';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import './styles/goal-list-section.scss';
 
 class GoalListSection extends PureComponent {

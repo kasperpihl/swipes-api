@@ -13,12 +13,12 @@ export default styleSheet('StepItem', {
     },
   },
   AssignWrapper: {
-    opacity: 1,
-    'noAssignees': {
-      opacity: 0,
-      '.assign-hover:hover &': {
-        opacity: 1,
-      }
+    opacity: 0,
+    '.assign-hover:hover &': {
+      opacity: 1,
+    },
+    'show': {
+      opacity: 1,
     }
   },
   DragWrapper: {
@@ -31,7 +31,11 @@ export default styleSheet('StepItem', {
       cursor: 'row-resize',
     },
     show: {
-      display: 'block',
+      display: 'flex',
     }
+  },
+  DragIcon: {
+    _svgColor: '$sw1',
+    _size: '24px',
   }
 });

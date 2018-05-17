@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as linkActions from 'src/redux/link/linkActions';
-import * as goalActions from 'src/redux/goal/goalActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 
@@ -69,21 +68,10 @@ class HOCPostCreate extends PureComponent {
       input.focus()
     }
   }
-  onAssign(i, e) {
-    const options = this.getOptionsForE(e);
-    const { selectAssignees } = this.props;
-
-    const existingAssignees = this.state.post.get('taggedUsers').toJS();
-
-
-    selectAssignees(Object.assign({
-      onClose: this.onFocus,
-    }, options), existingAssignees, (assignees) => {
-      let { post } = this.state;
-      if (assignees) {
-        this.updatePost(post.set('taggedUsers', fromJS(assignees)));
-      }
-    });
+  onAssigningClose(assignees) {
+    if(assignees) {
+      this.updatePost(this.state.post.set('taggedUsers', assignees));
+    }
   }
 
   onContextClick() {
@@ -168,7 +156,6 @@ export default navWrapper(connect(state => ({
   myId: state.getIn(['me', 'id']),
 }), {
   openSecondary: navigationActions.openSecondary,
-  selectAssignees: goalActions.selectAssignees,
   contextMenu: mainActions.contextMenu,
   preview: linkActions.preview,
   createPost: ca.posts.create,

@@ -2,11 +2,9 @@ import React, { PureComponent } from 'react';
 
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
-import * as goalActions from 'src/redux/goal/goalActions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import camelCaseToUnderscore from 'swipes-core-js/utils/camelCaseToUnderscore';
 import { fromJS } from 'immutable';
-import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import RotateLoader from 'components/loaders/RotateLoader';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
@@ -23,7 +21,6 @@ class HOCAddGoalItem extends PureComponent {
       addFocus: false,
     };
 
-    setupDelegate(this, 'onAddGoalItemInputChange');
     setupLoading(this);
   }
   onFocus = () => {
@@ -49,25 +46,13 @@ class HOCAddGoalItem extends PureComponent {
       }
     });
   }
-  onAssign(i, e) {
-    const options = this.getOptionsForE(e);
-    const { selectAssignees } = this.props;
-    const { assignees } = this.state;
-    let overrideAssignees;
-    options.onClose = () => {
-      this.refs.autocomplete.refs.input.focus();
-      if (overrideAssignees) {
-        this.setState({ assignees: fromJS(overrideAssignees) });
-      }
+  onAssigningClose(assignees) {
+    this.inputRef.focus();
+    if(assignees) {
+      this.setState({ assignees });
     }
-    selectAssignees(options, assignees.toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      }
-    });
-    e.stopPropagation();
   }
-  onAutoCompleteSelect(item) {
+  onAutoCompleteSelect = (item) => {
     let { assignees, title } = this.state;
     if (!assignees.contains(item.id)) {
       assignees = assignees.push(item.id);
@@ -77,52 +62,25 @@ class HOCAddGoalItem extends PureComponent {
     this.setState({ title, assignees });
   }
   onChange = (e) => {
-    const value = e.target.value;
-    this.setState({ title: value });
-
-    this.onAddGoalItemInputChange(value);
-  }
-  getOptionsForE(e) {
-    return {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
   }
   render() {
     const { placeholder } = this.props;
-    const { title, assignees, addFocus } = this.state;
+    const { title, assignees } = this.state;
     let value = title;
 
-    let addClass = 'add-goal-item';
-
-    if (addFocus || title.length) {
-      addClass += ' add-goal-item--focused';
-    }
-
-    if (title.length && !this.isLoading('add')) {
-      addClass += ' add-goal-item--active'
-    }
-
-    if (this.isLoading('add')) {
-      addClass += ' add-goal-item--loading';
-      value = this.getLoading('add').loading;
-    }
-
     return (
-      <div className={addClass}>
+      <div className="add-goal-item">
+        <div className="add-goal-item__indicator" />
         <AutoCompleteInput
-          ref="autocomplete"
-          value={value}
+          onAutoCompleteSelect={this.onAutoCompleteSelect}
+          innerRef={c => this.inputRef = c}
           onChange={this.onChange}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           placeholder={placeholder || 'Add a new goal'}
+          clearMentions
         />
-        <div className="add-goal-item__indicator">
-          <div className="add-goal-item__loader">
-            <RotateLoader size={30} />
-          </div>
-        </div>
+        
         <div className="add-goal-item__assignees">
           <HOCAssigning
             assignees={assignees}
@@ -140,6 +98,5 @@ class HOCAddGoalItem extends PureComponent {
 }
 
 export default connect(null, {
-  selectAssignees: goalActions.selectAssignees,
   createGoal: ca.goals.create,
 })(HOCAddGoalItem);

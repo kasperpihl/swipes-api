@@ -56,6 +56,7 @@ export { default as OrderedList } from './svgs/ordered-list.svg';
 export { default as Person } from './svgs/person.svg';
 export { default as Plus } from './svgs/plus.svg';
 export { default as Reload } from './svgs/reload.svg';
+export { default as Reorder } from './svgs/reorder.svg';
 export { default as Save } from './svgs/save.svg';
 export { default as ThreeDots } from './svgs/three-dots.svg';
 export { default as ToFullscreen } from './svgs/to-fullscreen.svg';

@@ -4,8 +4,8 @@ import { styleElement } from 'react-swiss';
 import { fromJS } from 'immutable';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import * as ca from 'swipes-core-js/actions';
-import HOCAssigning from 'components/assigning/HOCAssigning2';
-import HOCAttachButton from 'components/attachments/HOCAttachButton';
+import HOCAssigning from 'components/assigning/HOCAssigning';
+import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
 import Button from 'src/react/components/button/Button2';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 

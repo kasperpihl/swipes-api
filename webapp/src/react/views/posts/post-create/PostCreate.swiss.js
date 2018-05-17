@@ -50,7 +50,8 @@ export default styleSheet({
     background: '$sw3',
   },
   AssignSection: {
-    _flex: ['row', 'left', 'center'],
+    _flex: ['row', 'center', 'center'],
+    minHeight: '36px',
     paddingRight: '6px',
   },
   AttachSection: {

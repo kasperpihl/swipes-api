@@ -3,10 +3,10 @@ import { styleElement } from 'react-swiss';
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Button from 'src/react/components/button/Button2';
-import HOCAttachButton from 'components/attachments/HOCAttachButton';
+import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
-import HOCAssigning from 'src/react/components/assigning/HOCAssigning2';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import styles from './PostCreate.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
@@ -62,20 +62,22 @@ class PostCreate extends PureComponent {
   renderActionBar() {
     const { getLoading, delegate, post } = this.props;
     const hasAssignees = post.get('taggedUsers') && !!post.get('taggedUsers').size;
-    const hasAttachments = post.get('context') || post.get('attachments').size
+    const buttonProps = hasAssignees ? {
+      compact: true,
+    } : {
+      sideLabel: 'Assign',
+    };
+    const hasAttachments = post.get('context') || post.get('attachments').size;
+
     return (
       <ActionBar>
         <AssignSection>
-          {hasAssignees && (<HOCAssigning
+          <HOCAssigning
             assignees={post.get('taggedUsers')}
             delegate={delegate}
             size={24}
-          />)}
-          <Button
-            sideLabel={!hasAssignees && 'Assign'}
-            icon="Person"
-            onClick={this.onAssignCached('0')}
-            compact={hasAssignees}
+            buttonProps={buttonProps}
+            maxImages={9}
           />
         </AssignSection>
         <Seperator />

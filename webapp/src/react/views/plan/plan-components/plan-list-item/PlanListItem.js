@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import HOCAssigning from 'components/assigning/HOCAssigning';
 import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
 import Icon from 'Icon';
 import styles from './PlanListItem.swiss';

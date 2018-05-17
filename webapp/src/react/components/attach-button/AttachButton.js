@@ -1,20 +1,19 @@
-import React, { PureComponent } from 'react';
-
+import React, { PureComponent, Fragment } from 'react';
+import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
-import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button2';
 import { fromJS } from 'immutable';
-import {
-  EditorState,
-  convertToRaw,
-} from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 
-import './styles/attach-button.scss';
+import styles from './AttachButton.swiss';
 
-class HOCAttachButton extends PureComponent {
+const HiddenInput = styleElement('input', styles.HiddenInput);
+
+class AttachButton extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,9 +21,8 @@ class HOCAttachButton extends PureComponent {
     };
     setupDelegate(this, 'onAddedAttachment', 'onAttachButtonCloseOverlay');
     setupLoading(this);
-    bindAll(this, ['onChooseAttachment', 'onChangeFiles']);
   }
-  onChangeFiles(e) {
+  onChangeFiles = (e) => {
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
   }
@@ -40,13 +38,14 @@ class HOCAttachButton extends PureComponent {
       }
     });
   }
-  onChooseAttachment(e) {
+  onChooseAttachment = (e) => {
     const { chooseAttachmentType, inputMenu, createNote } = this.props;
     const options = this.getOptionsForE(e);
     options.onClose = this.onAttachButtonCloseOverlay;
     chooseAttachmentType(options).then((item) => {
       if (item.id === 'upload') {
-        this.refs.upload.click();
+        console.log(this.hiddenInput);
+        this.hiddenInput.click();
         return;
       }
       options.buttonLabel = 'Add';
@@ -124,21 +123,20 @@ class HOCAttachButton extends PureComponent {
     } = this.props;
 
     return (
-      <div className={`attach-button ${className||''}`}>
+      <Fragment>
         <Button
           onClick={this.onChooseAttachment}
           {...this.getLoading('attach')}
           icon="Attach"
           {...rest}
         />
-        <input
-          className="attach-button__hidden-input"
+        <HiddenInput
           value={fileVal}
-          ref="upload"
+          innerRef={c => this.hiddenInput = c}
           type="file"
           onChange={this.onChangeFiles}
         />
-      </div>
+      </Fragment>
     );
   }
 }
@@ -151,4 +149,4 @@ export default connect(state => ({
   createLink: ca.links.create,
   createNote: ca.notes.create,
   createFile: ca.files.create,
-})(HOCAttachButton);
+})(AttachButton);

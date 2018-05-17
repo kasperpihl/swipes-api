@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import HOCAssigning from 'components/assigning/HOCAssigning2';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
 import './styles/goal-result.scss';
 

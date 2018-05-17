@@ -1,7 +1,7 @@
 import React from 'react';
 import { styleElement } from 'react-swiss';
 import styles from './PostHeader.swiss';
-import HOCAssigning from 'components/assigning/HOCAssigning2';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 
 const PostHeaderWrapper = styleElement('div', styles.PostHeaderWrapper);

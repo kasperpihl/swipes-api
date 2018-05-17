@@ -106,7 +106,7 @@ class HOCGoalOverview extends PureComponent {
       assignGoal(goal.get('id'), assignees.toJS()).then((res) => {
         if (res.ok) {
          window.analytics.sendEvent('Goal assigned', {
-            'Number of assignees': overrideAssignees.length,
+            'Number of assignees': assignees.size,
           });
        }
       });
