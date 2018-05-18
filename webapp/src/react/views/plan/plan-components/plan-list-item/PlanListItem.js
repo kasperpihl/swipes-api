@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
 import Icon from 'Icon';
 import styles from './PlanListItem.swiss';
 
@@ -26,27 +25,6 @@ class PlanListItem extends PureComponent {
     this.setState({
       goals: this.getFilteredGoals(nextProps.plan),
     });
-  }
-  onMouseEnter = (e) => {
-    const { tooltip } = this.props;
-    const data = {
-      component: PlanProgressTooltip,
-      props: {
-        numberOfGoals: 1,
-        numberOfSteps: 2
-      },
-      options: {
-        boundingRect: e.target.getBoundingClientRect(),
-        position: 'right',
-      },
-    };
-
-    tooltip(data);
-  }
-  onMouseLeave = () => {
-    const { tooltip } = this.props;
-
-    tooltip(null);
   }
   getFilteredGoals(plan) {
     return msgGen.milestones.getGoals(plan);
