@@ -74,7 +74,6 @@ class PlanListItem extends PureComponent {
         />
         <TextWrapper>
           <Title>{plan.get('title')}</Title>
-          <Subtitle>0% completed, 5 people</Subtitle>
         </TextWrapper>
       </Wrapper>
     );

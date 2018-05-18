@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { withOptimist } from 'react-optimist';
 import { DragDropContext } from 'react-beautiful-dnd';
 import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import { fromJS, List, Map } from 'immutable';
@@ -120,40 +121,23 @@ class HOCGoalOverview extends PureComponent {
     this.onEditMilestone(options);
   }
   onDragStart() {
-    document.body.classList.add("no-select");
+    document.body.classList.add('no-select');
   }
 
   onDragEnd = (result) => {
-    document.body.classList.remove("no-select");
+    document.body.classList.remove('no-select');
     if (!result.destination) {
       return;
     }
-    const { goal } = this.props;
+    const { goal, optimist } = this.props;
     const type = result.type;
-    const order = this.state[`${type}Order`] || goal.get(`${type}_order`);
+    const order = optimist.get(`${type}_order`, goal.get(`${type}_order`));
 
     const newOrder = getNewOrderFromResult(order, result);
-    this.setState({ [`${type}Order`]: newOrder });
-    this.onNextReorder(type, newOrder.toJS());
-  }
-  onNextReorder(type, order) {
-    const { stepReorder, goal } = this.props;
+
     const reorderFunc = this.props[`${type}Reorder`];
-
-    this[`next-${type}`] = order;
-    if(this[`running-${type}`]) return;
-
-    this[`next-${type}`] = null;
-    this[`running-${type}`] = true;
-
-    reorderFunc(goal.get('id'), order).then((res) => {
-      this[`running-${type}`] = false;
-      if(!res.ok || !this[`next-${type}`]) {
-        this[`next-${type}`] = null;
-        !this._unmounted && this.setState({ [`${type}Order`]: null });
-      } else if(this[`next-${type}`]) {
-        this.onNextReorder(type, this[`next-${type}`]);
-      }
+    optimist.push(`${type}_order`, newOrder, (next) => {
+      reorderFunc(goal.get('id'), newOrder.toJS()).then((res) => next());
     });
   }
   viewDidLoad(stepList) {
@@ -198,7 +182,6 @@ class HOCGoalOverview extends PureComponent {
 
   render() {
     const { goal, me, viewWidth } = this.props;
-    const { stepOrder, attachmentOrder } = this.state;
 
     return (
       <DragDropContext
@@ -209,8 +192,6 @@ class HOCGoalOverview extends PureComponent {
           myId={me.get('id')}
           delegate={this}
           viewWidth={viewWidth}
-          stepOrder={stepOrder}
-          attachmentOrder={attachmentOrder}
           {...this.bindLoading()}
         />
       </DragDropContext>
@@ -236,4 +217,4 @@ export default connect((state, props) => ({
   removeGoalFromMilestone: ca.milestones.removeGoal,
   confirm: menuActions.confirm,
   inputMenu: menuActions.input,
-})(navWrapper(HOCGoalOverview));
+})(navWrapper(withOptimist(HOCGoalOverview)));

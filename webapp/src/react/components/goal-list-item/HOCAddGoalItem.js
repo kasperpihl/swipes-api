@@ -87,6 +87,7 @@ class HOCAddGoalItem extends PureComponent {
             delegate={this}
             rounded
             size={30}
+            enableTooltip
           />
         </div>
         <div className="add-goal-item__button" onClick={this.onGoalAdd} >

@@ -8,6 +8,8 @@ import Icon from 'Icon';
 import Button from 'src/react/components/button/Button2';
 import PlanListItem from '../plan-components/plan-list-item/PlanListItem';
 import InfoButton from 'components/info-button/InfoButton';
+import Dropper from 'src/react/components/draggable-list/Dropper';
+import Dragger from 'src/react/components/draggable-list/Dragger';
 import styles from './PlanList.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
@@ -68,13 +70,23 @@ class PlanList extends PureComponent {
   renderList() {
     const { plans, delegate, tabIndex, limit } = this.props;
     let i = 0;
-    return plans.map(p => (i++ <= limit) ? (
-      <PlanListItem
-        key={p.get('id')}
-        plan={p}
-        delegate={delegate}
-      />
-    ) : null).toArray();
+
+    return (
+      <Dropper droppableId="attachments" type="attachment">
+        {plans.map((p => (i++ <= limit) ? (
+          <Dragger
+            draggableId={p.get('id')}
+            index={i - 1}
+            key={p.get('id')}>
+              <PlanListItem
+                plan={p}
+                delegate={delegate}
+              />
+            </Dragger>
+          ) : null
+        )).toArray()}
+      </Dropper>
+    )
   }
 
   render() {

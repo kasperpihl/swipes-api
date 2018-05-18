@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
+import { DragDropContext } from 'react-beautiful-dnd';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
@@ -14,7 +15,7 @@ const DISTANCE = 200;
 
 class HOCPlanList extends PureComponent {
   static  sizes() {
-    return [654, 954];
+    return [654];
   }
   constructor(props) {
     super(props);
@@ -79,6 +80,16 @@ class HOCPlanList extends PureComponent {
     });
     
   }
+  onDragStart() {
+    document.body.classList.add('no-select');
+  }
+
+  onDragEnd = (result) => {
+    document.body.classList.remove('no-select');
+    if (!result.destination) {
+      return;
+    }
+  }
   saveState() {
     const { saveState } = this.props;
     const { limit, tabIndex } = this.state;
@@ -111,21 +122,25 @@ class HOCPlanList extends PureComponent {
     const { tabs, tabIndex, limit, initialScroll } = this.state;
 
     return (
-      <PlanList
-        delegate={this}
-        limit={limit}
-        initialScroll={initialScroll}
-        plans={plans.get(tabs[tabIndex])}
-        tabs={tabs.map((t) => {
-          const size = plans.get(t).size;
-          if (size) {
-            t += ` (${size})`;
-          }
-          return t;
-        })}
-        tabIndex={tabIndex}
-        {...this.bindLoading() }
-      />
+      <DragDropContext
+        onDragStart={this.onDragStart}
+        onDragEnd={this.onDragEnd}>
+        <PlanList
+          delegate={this}
+          limit={limit}
+          initialScroll={initialScroll}
+          plans={plans.get(tabs[tabIndex])}
+          tabs={tabs.map((t) => {
+            const size = plans.get(t).size;
+            if (size) {
+              t += ` (${size})`;
+            }
+            return t;
+          })}
+          tabIndex={tabIndex}
+          {...this.bindLoading() }
+        />
+      </DragDropContext>
     );
   }
 }

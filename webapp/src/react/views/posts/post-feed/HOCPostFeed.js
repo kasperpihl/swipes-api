@@ -6,11 +6,8 @@ import HOCPostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
 import PostFeed from './PostFeed';
 
 class HOCPostFeed extends PureComponent {
-  static maxWidth() {
-    return 600;
-  }
-  static minWidth() {
-    return 540;
+  static sizes() {
+    return [654];
   }
   constructor(props) {
     super(props);

@@ -61,6 +61,7 @@ class GoalHeader extends PureComponent {
             maxImages={5}
             size={30}
             tooltipAlign="bottom"
+            enableTooltip
           />
           <HOCDiscussButton
             context={{

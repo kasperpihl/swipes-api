@@ -165,6 +165,7 @@ class StepItem extends PureComponent {
           maxImages={3}
           size={24}
           delegate={this}
+          enableTooltip
         />
       </AssignWrapper>
     )

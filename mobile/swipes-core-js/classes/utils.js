@@ -157,8 +157,8 @@ export function navForContext(id) {
     };
   } else if (id.startsWith('M')) {
     return {
-      id: 'MilestoneOverview',
-      title: 'Milestone overview',
+      id: 'PlanOverview',
+      title: 'Plan overview',
       props: {
         milestoneId: id,
       },

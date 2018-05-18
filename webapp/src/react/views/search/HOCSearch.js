@@ -3,11 +3,8 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Search from './Search';
 
 class HOCSearch extends PureComponent {
-  static minWidth() {
-    return 600;
-  }
-  static maxWidth() {
-    return 660;
+  static sizes() {
+    return [654];
   }
   constructor(props) {
     super(props);

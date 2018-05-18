@@ -35,7 +35,6 @@ class PostCreate extends PureComponent {
         icon={miniIconForId(post.getIn(['context', 'id']))}
         title={post.getIn(['context', 'title'])}
         onClick={this.onContextClick}
-        onClose={this.onContextClose}
         isContext
       />
     );

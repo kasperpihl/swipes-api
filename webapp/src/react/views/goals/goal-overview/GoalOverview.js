@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { styleElement } from 'react-swiss';
-
+import { withOptimist } from 'react-optimist';
 import Dropper from 'src/react/components/draggable-list/Dropper';
 import Dragger from 'src/react/components/draggable-list/Dragger';
 
@@ -69,10 +69,10 @@ class GoalOverview extends PureComponent {
     );
   }
   renderSteps() {
-    const { stepOrder } = this.props;
+    const { optimist } = this.props;
     const { editMode } = this.state;
     const helper = this.getHelper();
-    const order = stepOrder || helper.getStepOrder();
+    const order = optimist.get('step_order', helper.getStepOrder())
     return (
       <Fragment>
         <Dropper droppableId="steps" type="step">
@@ -107,10 +107,9 @@ class GoalOverview extends PureComponent {
   }
 
   renderAttachments() {
-    const { attachmentOrder } = this.props;
+    const { optimist } = this.props;
     const helper = this.getHelper();
-
-    const order = attachmentOrder || helper.getAttachmentOrder();
+    const order = optimist.get('attachment_order', helper.getAttachmentOrder());
     return (
       <Dropper droppableId="attachments" type="attachment">
         {order.map((attId, i) => {
@@ -178,4 +177,4 @@ class GoalOverview extends PureComponent {
   }
 }
 
-export default GoalOverview;
+export default withOptimist(GoalOverview);

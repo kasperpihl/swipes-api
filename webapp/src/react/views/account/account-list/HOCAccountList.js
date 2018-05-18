@@ -9,11 +9,8 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import AccountList from './AccountList';
 
 class HOCAccountList extends PureComponent {
-  static minWidth() {
-    return 600;
-  }
-  static maxWidth() {
-    return 700;
+  static sizes() {
+    return [654];
   }
   constructor(props) {
     super(props);

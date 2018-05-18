@@ -65,11 +65,12 @@ class HOCGoalListItem extends PureComponent {
         delegate={this}
         rounded
         size={30}
+        enableTooltip
       />
     );
   }
   render() {
-    const { goal, fromMilestone, loading, inTakeAction } = this.props;
+    const { goal, fromMilestone, loading } = this.props;
     let { status } = this.props;
 
     if(!status) {
@@ -81,7 +82,6 @@ class HOCGoalListItem extends PureComponent {
       <Wrapper className="goal-item" onClick={this.onGoalClick}>
         <StatusDot status={status} />
         <Title
-          inTakeAction={inTakeAction}
           status={status}
           hoverRef=".goal-item"
         >

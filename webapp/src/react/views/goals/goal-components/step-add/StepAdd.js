@@ -162,6 +162,7 @@ class StepAdd extends PureComponent {
               delegate={this}
               maxImages={3}
               size={24}
+              enableTooltip
             />
           </AssigneesWrapper>
           <SubmitWrapper hidden={!textLength}>
