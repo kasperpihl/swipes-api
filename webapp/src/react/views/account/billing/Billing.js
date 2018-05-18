@@ -6,6 +6,7 @@ import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'Button';
+import CardSection from './CardSection';
 
 import './styles/billing.scss';
 
@@ -117,41 +118,18 @@ class Billing extends PureComponent {
       </div>
     );
   }
-  renderBilling() {
-    const { cardState } = this.state;
-    let { errorMessage } = this.state;
-
-    errorMessage = errorMessage || (cardState && cardState.error && cardState.error.message);
-
-    return (
-      <div className="billing">
-        <div className="form-row">
-          <label htmlFor="card-element">
-            Credit or debit card
-          </label>
-          <div id="card-element">
-            <CardElement hidePostalCode style={style} onChange={this.onChange} />
-          </div>
-          <div id="card-errors" role="alert">{errorMessage}</div>
-        </div>
-      </div>
-    );
-  }
   renderBottomSection() {
-    const { cardState } = this.state;
     const { organization, users, billingStatus, getLoading } = this.props;
-    const isReady = cardState && cardState.complete;
     const hasStripe = organization.get('stripe_subscription_id');
     const className = `payment__bottom-section ${hasStripe ? 'payment__bottom-section--success' : ''}`;
 
     return (
       <div className={className}>
         <div className="top-section">
-          {this.renderBilling()}
+          <CardSection label="Credit or debit card" />
           <Button
             {...getLoading('submit')}
             primary
-            disabled={!isReady}
             text="Submit Payment"
             onClick={this.onSubmit}
           />
