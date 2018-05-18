@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 import PropTypes from 'prop-types';
 
 const { string, func, number } = PropTypes;
@@ -53,6 +54,7 @@ const wrap = (ComponentToWrap) => {
       )
     }
   }
+  hoistNonReactStatics(NavWrapper, ComponentToWrap);
   NavWrapper.contextTypes = {
     target: string,
     viewWidth: number,
