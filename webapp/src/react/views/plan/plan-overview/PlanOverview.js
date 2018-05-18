@@ -15,6 +15,7 @@ const Footer = styleElement('div', styles.Footer);
 const Title = styleElement('div', styles.Title);
 const Section = styleElement('div', styles.Section);
 const SectionTitle = styleElement('div', styles.SectionTitle);
+const SectionTabLikeTitle = styleElement('div', styles.SectionTabLikeTitle);
 const Text = styleElement('div', styles.Text);
 const Spacer = styleElement('div', styles.Spacer);
 const EmptyStateWrapper = styleElement('div', styles.EmptyStateWrapper);
@@ -26,9 +27,8 @@ class PlanOverview extends PureComponent {
     super(props);
     this.state = {
       emptyStateOpacity: 1,
-      tabs: ['Later', 'Now', 'Done'],
-      tabLeftIndex: 0,
-      tabRightIndex: 1,
+      tabs: ['Later', 'Done'],
+      activeTabIndex: 1,
     };
     this.renderEmptyStateCached = setupCachedCallback(this.renderEmptyState, this);
     setupDelegate(this, 'onAddGoals', 'onContext', 'onDiscuss', 'onScroll', 'onStepSort');
@@ -45,14 +45,11 @@ class PlanOverview extends PureComponent {
   }
   tabDidChange(key, i) {
     if(i !== this.state[key]) {
-      const reverseKey = key === 'tabLeftIndex' ? 'tabRightIndex' : 'tabLeftIndex';
-      let reverseI = this.state[reverseKey];
-      if(i === reverseI) {
-        reverseI = (i === 0) ? 2 : i - 1;
-      }
+      const activeTabIndex = i; 
+
       this.setState({
+        activeTabIndex,
         [key]: i,
-        [reverseKey]: reverseI,
       });
     }
   }
@@ -112,8 +109,12 @@ class PlanOverview extends PureComponent {
 
     return undefined;
   }
-  renderDroppableList(section, renderSection) {
+  renderDroppableList(section, options = {}) {
     const { order, delegate, milestone } = this.props;
+    const {
+      renderSection = true,
+      rebderTabLikeSection = false,
+    } = options;
     const id = section.toLowerCase();
     const goalProps = {
       delegate,
@@ -143,8 +144,17 @@ class PlanOverview extends PureComponent {
       )
     }
 
+    if (rebderTabLikeSection) {
+      return (
+        <Section>
+          <SectionTabLikeTitle>{section}</SectionTabLikeTitle>
+          {droppableGoalList}
+        </Section>        
+      )
+    }
+
     return (
-      <Section>
+      <Section withTabs>
         {droppableGoalList}
       </Section>
     )
@@ -156,20 +166,18 @@ class PlanOverview extends PureComponent {
       return undefined;
     }
 
-    const { tabs, tabRightIndex, tabLeftIndex } = this.state;
-    const lef = { tabDidChange: (i) => this.tabDidChange('tabLeftIndex', i) };
-    const rig = { tabDidChange: (i) => this.tabDidChange('tabRightIndex', i) };
+    const { tabs, activeTabIndex } = this.state;
+    const delegate = { tabDidChange: (i) => this.tabDidChange('activeTabIndex', i) };
 
     return (
       <TabWrapper>
         <Wrapper>
-          <TabBar tabs={tabs} delegate={lef} activeTab={tabLeftIndex} />
-          {this.renderDroppableList(tabs[tabLeftIndex], false)}
+          {this.renderDroppableList('Now', {renderSection: false, rebderTabLikeSection: true})}
         </Wrapper>
         <Spacer />
-        <Wrapper>
-          <TabBar tabs={tabs} delegate={rig} activeTab={tabRightIndex} />
-          {this.renderDroppableList(tabs[tabRightIndex], false)}
+        <Wrapper withTabs>
+          <TabBar tabs={tabs} delegate={delegate} activeTab={activeTabIndex} />
+          {this.renderDroppableList(tabs[activeTabIndex], {renderSection: false})}
         </Wrapper>
       </TabWrapper>
     )
@@ -183,11 +191,11 @@ class PlanOverview extends PureComponent {
 
     return (
       <TabWrapper>
-        {this.renderDroppableList('Later', true)}
+        {this.renderDroppableList('Later')}
         <Spacer />
-        {this.renderDroppableList('Now', true)}
+        {this.renderDroppableList('Now')}
         <Spacer />
-        {this.renderDroppableList('Done', true)}
+        {this.renderDroppableList('Done')}
       </TabWrapper>
     );
   }
