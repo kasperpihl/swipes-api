@@ -4,7 +4,7 @@ import styles from './PostHeader.swiss';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 
-const PostHeaderWrapper = styleElement('div', styles.PostHeaderWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const NameWrapper = styleElement('div', styles.NameWrapper);
 const NameTitle = styleElement('div', styles.NameTitle);
 const Subtitle = styleElement('div', styles.Subtitle);
@@ -27,7 +27,7 @@ const PostHeader = (props) => {
   }
 
   return (
-    <PostHeaderWrapper>
+    <Wrapper>
       <LeftSide>
         <HOCAssigning assignees={[post.get('created_by')]} size={42} />
       </LeftSide>
@@ -40,7 +40,7 @@ const PostHeader = (props) => {
         /></Subtitle>
         {children}
       </RightSide>
-    </PostHeaderWrapper>
+    </Wrapper>
   )
 };
 

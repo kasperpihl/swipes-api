@@ -2,7 +2,7 @@ import { styleSheet } from 'react-swiss';
 
 const containerWidth = '390px';
 
-export default styleSheet({
+export default styleSheet('Confirmation', {
   Wrapper: {
     _size: [containerWidth, 'auto'],
     background: '$sw5',

@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('CompatibleButton', {
   ATag: {
     _size: ['250px', '36px'],
     _font: ['12px', '36px', 500],

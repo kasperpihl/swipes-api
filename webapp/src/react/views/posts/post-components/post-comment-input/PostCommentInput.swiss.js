@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('PostCommentInput', {
   Container: {
     _flex: ['row', 'left', 'top'],
     marginTop: '12px',

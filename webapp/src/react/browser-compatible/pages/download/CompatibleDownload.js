@@ -6,7 +6,7 @@ import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
 import styles from './CompatibleDownload.swiss';
 
-const DownloadPageWrapper = styleElement('div', styles.DownloadPageWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const Section = styleElement('div', styles.Section);
 const SectionTitle = styleElement('div', styles.SectionTitle);
 const DeviceWrapper = styleElement('div', styles.DeviceWrapper);
@@ -165,11 +165,11 @@ class CompatibleDownload extends PureComponent {
   render() {
     return (
       <CompatibleCard>
-        <DownloadPageWrapper>
+        <Wrapper>
           <CompatibleHeader title="Download the Workspace" subtitle="Start working with your team from anywhere" />
           {this.renderDownloadSections()}
           {this.renderWebSection()}
-        </DownloadPageWrapper>
+        </Wrapper>
       </CompatibleCard>
     );
   }

@@ -26,14 +26,15 @@ class PlanList extends PureComponent {
       <HeaderWrapper>
         <HOCHeaderTitle
           title="Plan"
-          subtitle="Organize and see progress on your company's plans."
-        />
+          subtitle="Organize and see progress on your company's plans.">
+          <InfoButton delegate={delegate} />
+        </HOCHeaderTitle>
         <TabBar key="2" delegate={delegate} tabs={tabs} activeTab={tabIndex} />
       </HeaderWrapper>
     );
   }
   renderFooter() {
-    const { delegate, getLoading } = this.props;
+    const { getLoading } = this.props;
 
     return (
       <Footer>
@@ -42,9 +43,6 @@ class PlanList extends PureComponent {
           sideLabel="Create new plan"
           onClick={this.onAddPlan}
           {...getLoading('add')}
-        />
-        <InfoButton
-          delegate={delegate}
         />
       </Footer>
     )

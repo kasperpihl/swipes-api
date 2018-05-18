@@ -1,7 +1,7 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
-  GradientWrapper: {
+export default styleSheet('Gradient', {
+  Wrapper: {
     _size: '100%',
     backgroundColor: 'rgba(56,149,252, 1)',
     left: 0,
@@ -9,7 +9,7 @@ export default styleSheet({
     position: 'fixed',
     zIndex: -1,
   },
-  SuccessGradient: {
+  Success: {
     _size: '100%',
     opacity: 0,
     transition: '0.9s ease-in',

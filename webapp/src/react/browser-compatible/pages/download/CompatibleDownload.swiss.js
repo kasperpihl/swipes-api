@@ -1,7 +1,7 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
-  DownloadPageWrapper: {
+export default styleSheet('CompatibleDownload', {
+  Wrapper: {
     padding: '30px 0',
   },
   Section: {

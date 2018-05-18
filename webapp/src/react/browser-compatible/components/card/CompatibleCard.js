@@ -2,17 +2,17 @@ import React from 'react';
 import { styleElement } from 'react-swiss';
 import styles from './CompatibleCard.swiss';
 
-const CardWrapper = styleElement('div', styles.CardWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const Card = styleElement('div', styles.Card);
 
 const CompatibleCard = ({ children }) => {
 
   return (
-    <CardWrapper>
+    <Wrapper>
       <Card>
         {children}
       </Card>
-    </CardWrapper>
+    </Wrapper>
   );
 };
 

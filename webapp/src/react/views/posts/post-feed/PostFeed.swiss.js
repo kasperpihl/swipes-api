@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('PostFeed', {
   Container: {
     _size: ['100%', 'auto'],
     paddingBottom: '30px',

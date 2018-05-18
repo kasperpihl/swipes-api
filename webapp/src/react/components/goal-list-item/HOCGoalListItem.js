@@ -11,8 +11,8 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import styles from './GoalListItem.swiss';
 /* global msgGen */
 
-const GoalItem = styleElement('div', styles.GoalItem);
-const GoalTitle = styleElement('div', styles.GoalTitle);
+const Wrapper = styleElement('div', styles.Wrapper);
+const Title = styleElement('div', styles.Title);
 const StatusDot = styleElement('div', styles.StatusDot);
 
 class HOCGoalListItem extends PureComponent {
@@ -78,17 +78,17 @@ class HOCGoalListItem extends PureComponent {
     }
 
     return (
-      <GoalItem className="goal-item" onClick={this.onGoalClick}>
+      <Wrapper className="goal-item" onClick={this.onGoalClick}>
         <StatusDot status={status} />
-        <GoalTitle
+        <Title
           inTakeAction={inTakeAction}
           status={status}
           hoverRef=".goal-item"
         >
           {loading || goal.get('title')}
-        </GoalTitle>
+        </Title>
         {this.renderAssignees()}
-      </GoalItem>
+      </Wrapper>
     );
   }
 }

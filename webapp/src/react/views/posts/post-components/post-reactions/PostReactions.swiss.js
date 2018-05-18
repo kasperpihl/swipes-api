@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('PostReactions', {
   Container: {
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',

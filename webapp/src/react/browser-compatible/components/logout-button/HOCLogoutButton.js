@@ -8,7 +8,7 @@ import RotateLoader from 'components/loaders/RotateLoader';
 import Icon from 'Icon';
 import styles from './LogoutButton.swiss';
 
-const LogoutButtonWrapper = styleElement('div', styles.LogoutButtonWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const Label = styleElement('div', styles.Label);
 const Loader = styleElement('div', styles.Loader);
 
@@ -48,12 +48,12 @@ class HOCLogoutButton extends PureComponent {
 
     return (
       <SwissProvider loading={this.isLoading('loggingout')}>
-        <LogoutButtonWrapper onClick={this.onLogout}>
+        <Wrapper onClick={this.onLogout}>
           <Loader>
             <RotateLoader size={36} />
           </Loader>
           <Label>Log out</Label>
-        </LogoutButtonWrapper>
+        </Wrapper>
       </SwissProvider>
     )
   }

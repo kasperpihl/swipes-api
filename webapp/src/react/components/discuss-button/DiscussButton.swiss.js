@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('DiscussButton', {
   Wrapper: {
     _size: ['auto', '36px'],
     _flex: 'row',

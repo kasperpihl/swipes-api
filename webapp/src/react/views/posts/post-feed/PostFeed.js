@@ -74,18 +74,18 @@ class PostFeed extends PureComponent {
 
     return (
       <Div>
-        <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={!tabs} />
+        <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={!tabs}>
+          <InfoButton delegate={delegate} />
+        </HOCHeaderTitle>
         {this.renderTabbar()}
       </Div>
 
     )
   }
   renderFooter() {
-    const { delegate } = this.props;
     return (
       <Footer>
         <Button icon="Plus" onClick={this.onNewPost} sideLabel="Create new post" />
-        <InfoButton delegate={delegate} />
       </Footer>
     )
   }

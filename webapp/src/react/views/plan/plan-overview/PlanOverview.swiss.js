@@ -53,13 +53,4 @@ export default styleSheet('PlanOverview', {
     borderBottom: '1px solid $sw3',
     marginBottom: '24px',
   },
-  Footer: {
-    _size: ['100%', '54px'],
-    borderTop: '1px solid $sw3',
-    _flex: ['row', 'right', 'center'],
-    padding: '9px 12px',
-    '& > *:not(:last-child)': {
-      marginRight: '12px',
-    },
-  },
 });

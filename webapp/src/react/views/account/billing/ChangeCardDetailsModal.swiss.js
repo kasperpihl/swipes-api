@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('ChangeCardDetailsModal', {
   Wrapper: {
     boxShadow: '0 1px 20px 3px rgba($sw1  ,0.1)',
     background: '$sw5',

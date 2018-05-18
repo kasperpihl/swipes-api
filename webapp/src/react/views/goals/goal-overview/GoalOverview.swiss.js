@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('GoalOverview', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'top'],

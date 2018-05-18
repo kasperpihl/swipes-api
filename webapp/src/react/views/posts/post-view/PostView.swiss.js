@@ -1,14 +1,14 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
-  PostMessage: {
+export default styleSheet('PostView', {
+  Message: {
     _size: ['100%', 'auto'],
     _font: ['15px', '24px', 300],
     marginTop: '12px',
     maxWidth: '420px',
     color: '$sw1'
   },
-  PostActions: {
+  Actions: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'center'],
     paddingLeft: '9px',
@@ -24,7 +24,7 @@ export default styleSheet({
   ActionSpacer: {
     width: '100%',
   },
-  PostAttachments: {
+  Attachments: {
     _flex: ['row', 'left', 'center'],
     flexWrap: 'wrap',
     marginTop: '6px',

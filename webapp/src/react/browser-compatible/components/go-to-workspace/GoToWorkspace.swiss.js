@@ -1,10 +1,10 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
-  ToWorkspaceWrapper: {
+export default styleSheet('GoToWorkspace', {
+  Wrapper: {
     _size: ['100%', 'auto'],
   },
-  ToWorkspace: {
+  ATag: {
     _size: ['100%', '150px'],
     _borderRadius: '6px',
     marginTop: '15px',

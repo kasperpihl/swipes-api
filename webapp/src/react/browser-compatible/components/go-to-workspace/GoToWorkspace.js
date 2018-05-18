@@ -5,8 +5,8 @@ import Icon from 'Icon';
 import styles from './GoToWorkspace.swiss';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 
-const ToWorkspaceWrapper = styleElement('div', styles.ToWorkspaceWrapper);
-const ToWorkspace = styleElement(Link, styles.ToWorkspace);
+const Wrapper = styleElement('div', styles.Wrapper);
+const ATag = styleElement(Link, styles.ATag);
 const SVG = styleElement(Icon, styles.SVG);
 
 class GoToWorkspace extends PureComponent {
@@ -15,13 +15,13 @@ class GoToWorkspace extends PureComponent {
     const { noTitle, to } = this.props;
 
     return (
-      <ToWorkspaceWrapper>
+      <Wrapper>
         {!noTitle && <CompatibleSubHeader title="Go to the workspace" />}
-        <ToWorkspace to={to || '/'} className="svg-hover">
+        <ATag to={to || '/'} className="svg-hover">
           <SVG icon="SwipesLogoEmpty"/>
           <p>Go to your Workspace</p>
-        </ToWorkspace>
-      </ToWorkspaceWrapper>
+        </ATag>
+      </Wrapper>
     );
   }
 }

@@ -5,7 +5,7 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import styles from './FloatingInput.swiss';
 
-const FloatingInputWrapper = styleElement('div', styles.FloatingInputWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 
 class FloatingInput extends PureComponent {
   constructor(props) {
@@ -48,7 +48,7 @@ class FloatingInput extends PureComponent {
     const { visiblePassword, float, floatValue } = this.state;
 
     return (
-      <FloatingInputWrapper active={!!float} standBy={floatValue > 0}>
+      <Wrapper active={!!float} standBy={floatValue > 0}>
         <input
           ref="floatingInput"
           type={type}
@@ -61,7 +61,7 @@ class FloatingInput extends PureComponent {
           {...props}
         />
         <label htmlFor={inputKey}>{placeholder}</label>
-      </FloatingInputWrapper>
+      </Wrapper>
     );
   }
 }

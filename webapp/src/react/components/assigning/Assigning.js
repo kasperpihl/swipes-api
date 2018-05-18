@@ -17,7 +17,7 @@ const ExtraNumber = styleElement('div', styles.ExtraNumber);
 class Assigning extends PureComponent {
   onMouseEnter = (e) => {
     const { tooltip, tooltipAlign, enableTooltip, assignees } = this.props;
-    if(enableTooltip) {
+    if(!enableTooltip) {
       return;
     }
 

@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('Button', {
   GlobalStyles: {
     '@keyframes button-loader': {
       '0%': { 

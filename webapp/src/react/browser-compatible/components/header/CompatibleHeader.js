@@ -4,7 +4,7 @@ import { styleElement } from 'react-swiss';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
 import styles from './CompatibleHeader.swiss';
 
-const HeaderWrapper = styleElement('div', styles.HeaderWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const TitleContainer = styleElement('div', styles.TitleContainer);
 
 const CompatibleHeader = (props) => {
@@ -16,13 +16,13 @@ const CompatibleHeader = (props) => {
   } = props;
 
   return (
-    <HeaderWrapper className={center ? 'center' : ''}>
+    <Wrapper className={center ? 'center' : ''}>
       <TitleContainer>
         {assignee && <CompatibleAssignees assignee={assignee} float="right" />}
         <h1>{title}</h1>
         <h3>{subtitle}</h3>
       </TitleContainer>
-    </HeaderWrapper>
+    </Wrapper>
   );
 };
 

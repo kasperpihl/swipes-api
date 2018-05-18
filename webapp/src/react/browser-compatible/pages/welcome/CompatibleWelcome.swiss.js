@@ -1,7 +1,7 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
-  CompatibleWelcomeWrapper: {
+export default styleSheet('CompatibleWelcome', {
+  Wrapper: {
     padding: '30px 0',
     paddingBottom: '60px',
     overflow: 'hidden',

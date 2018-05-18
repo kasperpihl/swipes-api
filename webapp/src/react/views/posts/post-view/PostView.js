@@ -4,7 +4,6 @@ import { URL_REGEX, attachmentIconForService, miniIconForId } from 'swipes-core-
 import { setupDelegate } from 'react-delegate';
 import { List } from 'immutable';
 import SWView from 'SWView';
-import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
 import PostCommentInput from '../post-components/post-comment-input/PostCommentInput';
 import CommentView from './CommentView';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
@@ -14,10 +13,10 @@ import Icon from 'Icon';
 import PostHeader from '../post-components/post-header/PostHeader';
 import styles from './PostView.swiss';
 
-const PostMessage = styleElement('div', styles.PostMessage);
-const PostActions = styleElement('div', styles.PostActions);
+const Message = styleElement('div', styles.Message);
+const Actions = styleElement('div', styles.Actions);
 const ActionSpacer = styleElement('div', styles.ActionSpacer);
-const PostAttachments = styleElement('div', styles.PostAttachments);
+const Attachments = styleElement('div', styles.Attachments);
 
 const MAX_COMMENTS_FEED = 3;
 
@@ -75,12 +74,12 @@ class PostView extends PureComponent {
         post={post}>
         {this.renderMessage()}
         {(!!post.get('context') || !!post.get('attachments').size) && (
-          <PostAttachments>
+          <Attachments>
             {post.get('context') && this.renderContext()}
             {this.renderAttachments()}
-          </PostAttachments>
+          </Attachments>
         )}
-        <PostActions>
+        <Actions>
           <PostReactions
             reactions={post.get('reactions')}
             postId={post.get('id')}
@@ -98,7 +97,7 @@ class PostView extends PureComponent {
             onClick={this.onThreeDots}
             {...getLoading('threedots')}
           />
-        </PostActions>
+        </Actions>
         {this.renderComments()}
         {this.renderCommentInput()}
       </PostHeader>
@@ -132,9 +131,9 @@ class PostView extends PureComponent {
 
 
       return (
-        <PostMessage>
+        <Message>
           {message}
-        </PostMessage>
+        </Message>
       )
     }
 
@@ -170,7 +169,7 @@ class PostView extends PureComponent {
     }
   }
   renderComments() {
-    const { post, fromFeed } = this.props;
+    const { post, fromFeed, delegate } = this.props;
 
     if(!post.get('comments') || !post.get('comments').size) {
       return null;

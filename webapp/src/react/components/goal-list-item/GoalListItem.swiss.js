@@ -1,7 +1,7 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
-  GoalItem: {
+export default styleSheet('GoalListItem', {
+  Wrapper: {
     _flex: ['row', 'left', 'center'],
     _size: ['100%', 'auto'],
     // backgroundColor: 'white',
@@ -10,7 +10,7 @@ export default styleSheet({
     overflow: 'hidden',
     padding: '12px',
   },
-  GoalTitle: {
+  Title: {
     _size: ['100%', 'auto'],
     _font: ['15px', '24px', '400'],
     color: '$sw1',

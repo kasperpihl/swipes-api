@@ -36,7 +36,6 @@ class HOCPostView extends PureComponent {
   }
   onAttachmentClick(i, att) {
     const { preview, target } = this.props;
-
     preview(target, att);
   }
   onContextClick() {

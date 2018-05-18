@@ -1,7 +1,7 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
-  HeaderWrapper: {
+export default styleSheet('CompatibleHeader',{
+  Wrapper: {
     _size: ['100%', 'auto'],
     '& .center': {
       textAlign: 'center',

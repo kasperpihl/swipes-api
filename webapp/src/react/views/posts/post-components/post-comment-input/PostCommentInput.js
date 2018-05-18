@@ -33,7 +33,6 @@ class PostCommentInput extends PureComponent {
   }
   onReturn = (e) => {
     if(!e.shiftKey) {
-      console.log('send!');
       this.onAddComment();
       return 'handled';
     }

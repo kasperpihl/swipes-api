@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('PostAttachment', {
   ATag: {
     background: '$sw4',
     maxWidth: '200px',

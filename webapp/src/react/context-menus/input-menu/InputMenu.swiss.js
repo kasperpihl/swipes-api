@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('InputMenu', {
   Wrapper: {
     _size: ['auto', '90px'],
     _flex: ['row', 'left', 'center'],

@@ -10,7 +10,7 @@ import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssig
 import { Link } from 'react-router-dom';
 import styles from './CompatibleWelcome.swiss';
 
-const CompatibleWelcomeWrapper = styleElement('div', styles.CompatibleWelcomeWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const Hint = styleElement('div', styles.Hint);
 const Table = styleElement('div', styles.Table);
 const TableHeader = styleElement('div', styles.TableHeader);
@@ -158,7 +158,7 @@ class CompatibleWelcome extends PureComponent {
     const hint = `Hint: If you haven’t received an invitation for ${me.get('email')} yet, ask your Account Admin for one. 😉`;
 
     return (
-      <CompatibleWelcomeWrapper>
+      <Wrapper>
         {this.renderHeader()}
         <Hint>{hint}</Hint>
         <CompatibleSubHeader subtitle="If your company does not have a Workspace account yet, create one below and invite your team." />
@@ -166,7 +166,7 @@ class CompatibleWelcome extends PureComponent {
         <CompatibleSubHeader title="Create a new organization" />
         {this.renderCreateOrg()}
         <HOCLogoutButton />
-      </CompatibleWelcomeWrapper>
+      </Wrapper>
     );
   }
 }

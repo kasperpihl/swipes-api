@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('Tooltip', {
   Wrapper: {
     _size: '100%',
     left: 0,

@@ -1,6 +1,6 @@
 import { styleSheet } from 'react-swiss';
 
-export default styleSheet({
+export default styleSheet('Modal', {
   Container: {
     _size: '100%',
     position: 'absolute',

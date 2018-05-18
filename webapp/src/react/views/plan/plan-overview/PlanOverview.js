@@ -65,8 +65,19 @@ class PlanOverview extends PureComponent {
         <HOCHeaderTitle
           title={title || m.get('title')}
           delegate={delegate}
-          border={showLine}
-        />
+          border={showLine}>
+          <HOCDiscussButton
+            context={{
+              id: m.get('id'),
+              title: m.get('title'),
+            }}
+            relatedFilter={msgGen.milestones.getRelatedFilter(m)}
+          />
+          <InfoButton
+            delegate={delegate}
+            {...getLoading('dots')}
+          />
+        </HOCHeaderTitle>
       </Wrapper>
     );
   }
@@ -180,25 +191,6 @@ class PlanOverview extends PureComponent {
       </TabWrapper>
     );
   }
-  renderFooter() {
-    const { milestone: m, getLoading, delegate } = this.props;
-
-    return (
-      <Footer>
-        <HOCDiscussButton
-          context={{
-            id: m.get('id'),
-            title: m.get('title'),
-          }}
-          relatedFilter={msgGen.milestones.getRelatedFilter(m)}
-        />
-        <InfoButton
-          delegate={delegate}
-          {...getLoading('dots')}
-        />
-      </Footer>
-    )
-  }
   render() {
     const { milestone } = this.props;
 
@@ -207,7 +199,6 @@ class PlanOverview extends PureComponent {
     return (
       <SWView
         header={this.renderHeader()}
-        footer={this.renderFooter()}
         onScroll={this.onScroll}>
         {this.renderThreeSections()}
         {this.renderDualTabs()}

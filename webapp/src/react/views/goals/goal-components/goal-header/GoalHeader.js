@@ -30,11 +30,10 @@ class GoalHeader extends PureComponent {
   }
   onTitleClick(e) {
     const { goal, renameGoal, inputMenu } = this.props;
+
     inputMenu({
-      options: {
-        boundingRect: e.target.getBoundingClientRect(),
-        alignX: 'right',
-      },
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
       text: goal.get('title'),
       buttonLabel: 'Rename',
     }, (title) => {
