@@ -27,8 +27,7 @@ class PlanListItem extends PureComponent {
       goals: this.getFilteredGoals(nextProps.plan),
     });
   }
-  onMouseEnter = (e) => {
-    console.log('WTF?!?!?!');
+  showTooltip = (e) => {
     const { tooltip } = this.props;
     const data = {
       component: PlanProgressTooltip,
@@ -40,12 +39,13 @@ class PlanListItem extends PureComponent {
       options: {
         boundingRect: e.target.getBoundingClientRect(),
         position: 'top',
+        delay: 100,
       }
     }
 
     tooltip(data);
   }
-  onMouseLeave = () => {
+  hideTooltip = () => {
     const { tooltip } = this.props;
 
     tooltip(null);
@@ -93,8 +93,9 @@ class PlanListItem extends PureComponent {
     return (
       <Wrapper onClick={this.onOpenMilestone} className="hover-class">
         <ProgressBar
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
+          onClick={this.hideTooltip}
+          onMouseEnter={this.showTooltip}
+          onMouseLeave={this.hideTooltip}
           goalPercentage={goalPercentage}
           stepPercentage={stepPercentage}
         />

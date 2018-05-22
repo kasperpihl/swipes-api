@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
 import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
-import prefixAll from 'inline-style-prefixer/static';
 import styles from './Tooltip.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
-const Content = styleElement('div', styles.Content);
 const SPACING = 20;
 
 class Tooltip extends PureComponent {
@@ -13,15 +11,41 @@ class Tooltip extends PureComponent {
     super(props);
     this.state = {
       styles: {},
+      shown: false,
     };
+    this.timeout = null;
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.tooltip !== this.props.tooltip) {
-      this.setState({ styles: this.getStyles(nextProps.tooltip) });
+      this.setState({
+        styles: this.getStyles(nextProps.tooltip),
+      });
+      this.showWithDelay(nextProps.tooltip);
     }
   }
   componentDidUpdate() {
     this.fitToScreen();
+  }
+  showWithDelay(tooltip) {
+    if (tooltip) {
+      const {
+        options
+      } = tooltip;
+      let {
+        delay = 0
+      } = options;
+
+      this.timeout = setTimeout(() => {
+        this.setState({
+          shown: true
+        });
+      }, delay);
+    } else {
+      clearTimeout(this.timeout);
+      this.setState({
+        shown: false,
+      })
+    }
   }
   getStyles(tooltip) {
     const styles = {};
@@ -149,20 +173,24 @@ class Tooltip extends PureComponent {
       return undefined;
     }
 
+    const {
+      props,
+    } = tooltip;
     const Comp = tooltip.component;
-    const props = tooltip.props || {};
+    const Content = styleElement('div', Object.assign({}, styles.Content, this.state.styles));
 
     return (
-      <Content 
-        style={prefixAll(this.state.styles)} 
+      <Content
         innerRef={(r) => { this.tooltipRef = r; }}>
         <Comp {...props} />
       </Content>
     );
   }
   render() {
+    const { shown } = this.state;
+
     return (
-      <Wrapper shown={!!this.props.tooltip}>
+      <Wrapper shown={shown}>
         {this.renderTooltip()}
       </Wrapper>
     );
