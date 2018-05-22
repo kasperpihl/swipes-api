@@ -6,7 +6,7 @@ export default styleSheet('PlanList', {
   },
   HeaderWrapper: {
     _size: ['100%', 'auto'],
-    borderBottom: '1px solid $sw3',
+    borderBottom: '1px solid $sw4',
     paddingBottom: '24px',
   },
   Footer: {

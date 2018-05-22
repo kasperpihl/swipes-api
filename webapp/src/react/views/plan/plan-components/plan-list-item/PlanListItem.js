@@ -3,8 +3,9 @@ import { styleElement } from 'react-swiss';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
-import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
 import styles from './PlanListItem.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
@@ -25,6 +26,29 @@ class PlanListItem extends PureComponent {
     this.setState({
       goals: this.getFilteredGoals(nextProps.plan),
     });
+  }
+  onMouseEnter = (e) => {
+    console.log('WTF?!?!?!');
+    const { tooltip } = this.props;
+    const data = {
+      component: PlanProgressTooltip,
+      props: {
+        numberOfGoals: this.numberOfGoals,
+        numberOfCompletedGoals: this.numberOfCompletedGoals,
+        numberOfStepsLeft: this.numberOfStepsLeft,
+      },
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        position: 'top',
+      }
+    }
+
+    tooltip(data);
+  }
+  onMouseLeave = () => {
+    const { tooltip } = this.props;
+
+    tooltip(null);
   }
   getFilteredGoals(plan) {
     return msgGen.milestones.getGoals(plan);
@@ -55,8 +79,10 @@ class PlanListItem extends PureComponent {
 
     const stepPercentage = numberOfSteps ? parseInt((numberOfCompletedSteps / numberOfSteps) * 100, 10) : 0;
 
-    this.goalPercentage = percentage;
-    this.stepPercentage = stepPercentage;
+    this.numberOfCompletedGoals = numberOfCompletedGoals;
+    this.numberOfGoals = numberOfGoals;
+    this.numberOfStepsLeft = numberOfSteps - numberOfCompletedSteps;
+
     
     return [percentage, stepPercentage];
 

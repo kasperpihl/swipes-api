@@ -5,7 +5,7 @@ export default styleSheet('PlanListItem', {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'center'],
     padding: '12px',
-    borderBottom: '1px solid $sw3',
+    borderBottom: '1px solid $sw4',
   },
   TextWrapper: {
     _flex: ['column', 'left', 'top'],
@@ -35,7 +35,7 @@ export default styleSheet('PlanListItem', {
       height: '18px',
       background: '$green',
       zIndex: 2,
-      width: ({ goalPercentage }) => `${Math.max(goalPercentage, 4)}%`,
+      width: ({ goalPercentage }) => `${goalPercentage}%`,
     },
     '&:after': {
       content: '',
@@ -45,7 +45,7 @@ export default styleSheet('PlanListItem', {
       left: 0,
       width: ({ stepPercentage, goalPercentage }) => {
         if(!stepPercentage) return '0%';
-        const remainingPercentage = 100 - Math.max(goalPercentage, 4);
+        const remainingPercentage = 100 - goalPercentage;
         const extraWidth = (remainingPercentage / 100) * stepPercentage;
         return `${goalPercentage + extraWidth}%`;
       },
