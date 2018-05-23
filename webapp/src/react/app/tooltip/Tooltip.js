@@ -36,7 +36,7 @@ export default class Tooltip extends PureComponent {
       const {
         options
       } = tooltip;
-      let {
+      const {
         delay = 0
       } = options;
 
