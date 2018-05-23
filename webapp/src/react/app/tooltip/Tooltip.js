@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styles from './Tooltip.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
+const Content = styleElement('div', styles.Content);
 const SPACING = 20;
 
 class Tooltip extends PureComponent {
@@ -157,10 +158,10 @@ class Tooltip extends PureComponent {
         }
       }
 
-      if (newStyles.left || newStyles.right || newStyles.top || newStyles.bottom) {
-        if (newStyles.top !== styles.top || newStyles.bottom !== styles.bottom) {
+      if (newStyles.left || newStyles.top) {
+        if (newStyles.top !== styles.top) {
           this.setState({ styles: Object.assign({}, styles, newStyles) });
-        } else if (newStyles.left !== styles.left || newStyles.right !== styles.right) {
+        } else if (newStyles.left !== styles.left) {
           this.setState({ styles: Object.assign({}, styles, newStyles) });
         }
       }
@@ -177,11 +178,12 @@ class Tooltip extends PureComponent {
       props,
     } = tooltip;
     const Comp = tooltip.component;
-    const Content = styleElement('div', Object.assign({}, styles.Content, this.state.styles));
 
     return (
       <Content
-        innerRef={(r) => { this.tooltipRef = r; }}>
+        innerRef={(r) => { this.tooltipRef = r; }}
+        {...this.state.styles}
+      >
         <Comp {...props} />
       </Content>
     );

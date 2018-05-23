@@ -19,5 +19,8 @@ export default styleSheet('Tooltip', {
   Content: {
     _size: 'auto',
     position: 'absolute',
+    top: '#{top}',
+    left: '#{left}',
+    transform: '#{transform}',
   },
 });
