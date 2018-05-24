@@ -7,7 +7,14 @@ import { fromJS } from 'immutable';
 import CompatibleInvite from './CompatibleInvite';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-class HOCCompatibleInvite extends PureComponent {
+@connect(state => ({
+  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
+  readyInOrg: state.getIn(['connection', 'readyInOrg']),
+}), {
+  sendInvite: ca.organizations.inviteUser,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { 
@@ -89,11 +96,3 @@ class HOCCompatibleInvite extends PureComponent {
     );
   }
 }
-
-
-export default connect(state => ({
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-  readyInOrg: state.getIn(['connection', 'readyInOrg']),
-}), {
-  sendInvite: ca.organizations.inviteUser,
-})(HOCCompatibleInvite);

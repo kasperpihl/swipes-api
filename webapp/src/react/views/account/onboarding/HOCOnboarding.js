@@ -5,7 +5,17 @@ import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Onboarding from './Onboarding';
 
-class HOCOnboarding extends PureComponent {
+@navWrapper
+@connect(state => ({
+  me: state.get('me'),
+  hasOrg: state.getIn(['me', 'has_organization']),
+  onboarding: state.get('onboarding'),
+  userOnboarding: state.getIn(['me', 'settings', 'onboarding']),
+}), {
+  complete: ca.onboarding.complete,
+  browser: mainActions.browser,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -81,13 +91,3 @@ class HOCOnboarding extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  me: state.get('me'),
-  hasOrg: state.getIn(['me', 'has_organization']),
-  onboarding: state.get('onboarding'),
-  userOnboarding: state.getIn(['me', 'settings', 'onboarding']),
-}), {
-  complete: ca.onboarding.complete,
-  browser: mainActions.browser,
-})(navWrapper(HOCOnboarding));

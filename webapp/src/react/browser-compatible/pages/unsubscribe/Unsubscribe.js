@@ -8,7 +8,11 @@ import styles from './Unsubscribe.swiss';
 const Wrapper = styleElement('div', styles.Wrapper);
 const Text = styleElement('div', styles.Text);
 
-class Unsubscribe extends PureComponent {
+@connect(null, {
+  request: ca.api.request,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);
@@ -41,7 +45,3 @@ class Unsubscribe extends PureComponent {
     );
   }
 }
-
-export default connect(null, {
-  request: ca.api.request,
-})(Unsubscribe);

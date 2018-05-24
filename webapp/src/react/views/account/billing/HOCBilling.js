@@ -10,7 +10,14 @@ import Billing from './Billing';
 import HOCChangeBillingPlan from './HOCChangeBillingPlan';
 import HOCChangeCardDetailsModal from './HOCChangeCardDetailsModal';
 
-class HOCBilling extends PureComponent {
+@navWrapper
+@connect(state => ({
+  organization: state.getIn(['me', 'organizations', 0]),
+  users: cs.users.getAllButSofi(state),
+}), {
+  createStripeCustomer: ca.organizations.createStripeCustomer,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,10 +104,3 @@ class HOCBilling extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  organization: state.getIn(['me', 'organizations', 0]),
-  users: cs.users.getAllButSofi(state),
-}), {
-  createStripeCustomer: ca.organizations.createStripeCustomer,
-})(HOCBilling));

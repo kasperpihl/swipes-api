@@ -17,7 +17,12 @@ const Content = styleElement('div', styles.Content);
 const Actions = styleElement('div', styles.Actions);
 const Attachments = styleElement('div', styles.Attachments);
 
-class PostCommentInput extends PureComponent {
+@connect(state => ({
+  myId: state.getIn(['me', 'id']),
+}), {
+  addComment: ca.posts.addComment,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -103,9 +108,3 @@ class PostCommentInput extends PureComponent {
     )
   }
 }
-
-export default connect(state => ({
-  myId: state.getIn(['me', 'id']),
-}), {
-  addComment: ca.posts.addComment,
-})(PostCommentInput);

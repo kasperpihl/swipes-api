@@ -22,7 +22,10 @@ const LoaderCircle = styleElement('div', styles.LoaderCircle);
 const ReuploadWrapper = styleElement('div', styles.ReuploadWrapper);
 const ErrorLabel = styleElement('div', styles.ErrorLabel);
 
-class StepAdd extends PureComponent {
+@connect(null, {
+  addStep: ca.steps.add,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -174,7 +177,3 @@ class StepAdd extends PureComponent {
     );
   }
 }
-
-export default connect(null, {
-  addStep: ca.steps.add,
-})(StepAdd);

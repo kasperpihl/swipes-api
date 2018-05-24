@@ -13,7 +13,12 @@ const Title = styleElement('div', styles.Title);
 const Seperator = styleElement('div', styles.Seperator);
 const CrumbIcon = styleElement(Icon, styles.Icon);
 
-class HOCBreadCrumbs extends Component {
+@connect((state, props) => ({
+  history: state.getIn(['navigation', props.target, 'stack']),
+}), {
+  pop: navigationActions.pop,
+})
+export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -59,9 +64,3 @@ class HOCBreadCrumbs extends Component {
     );
   }
 }
-
-export default connect((state, props) => ({
-  history: state.getIn(['navigation', props.target, 'stack']),
-}), {
-  pop: navigationActions.pop,
-})(HOCBreadCrumbs);

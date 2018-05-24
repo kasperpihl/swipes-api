@@ -5,7 +5,11 @@ import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import * as ca from 'swipes-core-js/actions';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-class CompatibleConfirm extends PureComponent {
+@connect(null, {
+  confirmEmail: ca.users.confirmEmail,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { 
@@ -45,7 +49,3 @@ class CompatibleConfirm extends PureComponent {
     );
   }
 }
-
-export default connect(null, {
-  confirmEmail: ca.users.confirmEmail,
-})(CompatibleConfirm);

@@ -9,7 +9,25 @@ import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Organization from './Organization';
 
-class HOCOrganization extends PureComponent {
+@navWrapper
+@connect(state => ({
+  users: cs.users.getAllButSofi(state),
+  me: state.get('me'),
+  organization: state.getIn(['me', 'organizations', 0]),
+}), {
+  invite: ca.organizations.inviteUser,
+  confirm: menuActions.confirm,
+  deleteOrg: ca.organizations.deleteOrg,
+  leaveOrg: ca.organizations.leave,
+  completeOnboarding: ca.onboarding.complete,
+  demoteAnAdmin: ca.organizations.demoteAnAdmin,
+  disableUser: ca.organizations.disableUser,
+  enableUser: ca.organizations.enableUser,
+  promoteToAdmin: ca.organizations.promoteToAdmin,
+  contextMenu: mainActions.contextMenu,
+})
+
+export default class extends PureComponent {
   static minWidth() {
     return 900;
   }
@@ -286,20 +304,3 @@ class HOCOrganization extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  users: cs.users.getAllButSofi(state),
-  me: state.get('me'),
-  organization: state.getIn(['me', 'organizations', 0]),
-}), {
-  invite: ca.organizations.inviteUser,
-  confirm: menuActions.confirm,
-  deleteOrg: ca.organizations.deleteOrg,
-  leaveOrg: ca.organizations.leave,
-  completeOnboarding: ca.onboarding.complete,
-  demoteAnAdmin: ca.organizations.demoteAnAdmin,
-  disableUser: ca.organizations.disableUser,
-  enableUser: ca.organizations.enableUser,
-  promoteToAdmin: ca.organizations.promoteToAdmin,
-  contextMenu: mainActions.contextMenu,
-})(HOCOrganization));

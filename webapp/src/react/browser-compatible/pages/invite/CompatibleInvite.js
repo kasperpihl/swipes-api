@@ -12,7 +12,8 @@ import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import { Link } from 'react-router-dom';
 import './styles/compatible-invite.scss';
 
-class CompatibleInvite extends PureComponent {
+@withRouter
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     setupDelegate(this, 'onSendInvites');
@@ -64,5 +65,3 @@ class CompatibleInvite extends PureComponent {
     );
   }
 }
-
-export default withRouter(CompatibleInvite)

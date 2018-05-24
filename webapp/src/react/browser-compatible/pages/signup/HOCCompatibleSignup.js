@@ -9,7 +9,15 @@ import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
 import './styles/signup.scss';
 
-class HOCCompatibleSignup extends PureComponent {
+@connect(state => ({
+  token: state.getIn(['connection', 'token']),
+}), {
+  request: ca.api.request,
+  signup: ca.users.signup,
+  setUrl: navigationActions.url,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -135,11 +143,3 @@ class HOCCompatibleSignup extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  token: state.getIn(['connection', 'token']),
-}), {
-  request: ca.api.request,
-  signup: ca.users.signup,
-  setUrl: navigationActions.url,
-})(HOCCompatibleSignup);

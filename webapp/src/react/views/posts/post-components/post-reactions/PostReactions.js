@@ -15,7 +15,18 @@ const HeartButton = styleElement('div', styles.HeartButton);
 const HeartSvg = styleElement(Icon, styles.HeartSvg);
 const LikeString = styleElement('div', styles.LikeString);
 
-class Reactions extends PureComponent {
+@withOptimist
+@connect(state => ({
+  myId: state.getIn(['me', 'id']),
+}), {
+  successGradient: mainActions.successGradient,
+  tooltip: mainActions.tooltip,
+  addReaction: ca.posts.addReaction,
+  commentAddReaction: ca.posts.commentAddReaction,
+  commentRemoveReaction: ca.posts.commentRemoveReaction,
+  removeReaction: ca.posts.removeReaction,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     props.optimist.identify(`${props.postId}${props.commentId || ''}`);
@@ -168,14 +179,3 @@ class Reactions extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  myId: state.getIn(['me', 'id']),
-}), {
-  successGradient: mainActions.successGradient,
-  tooltip: mainActions.tooltip,
-  addReaction: ca.posts.addReaction,
-  commentAddReaction: ca.posts.commentAddReaction,
-  commentRemoveReaction: ca.posts.commentRemoveReaction,
-  removeReaction: ca.posts.removeReaction,
-})(withOptimist(Reactions));

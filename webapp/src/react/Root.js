@@ -25,7 +25,18 @@ import Gradient from 'src/react/app/gradient/Gradient';
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
 
-class Root extends PureComponent {
+@hot(module)
+@withRouter
+@connect(state => ({
+  isHydrated: state.getIn(['main', 'isHydrated']),
+  isMaximized: state.getIn(['main', 'isMaximized']),
+  isFullscreen: state.getIn(['main', 'isFullscreen']),
+  platform: state.getIn(['globals', 'platform']),
+  status: state.getIn(['connection', 'status']),
+  hasConnected: state.getIn(['connection', 'hasConnected']),
+  readyInOrg: state.getIn(['connection', 'readyInOrg']),
+}))
+export default class extends PureComponent {
   renderRoutes() {
     const { status, hasConnected, isHydrated } = this.props;
     if(!isHydrated || (!hasConnected && status === 'connecting')) {
@@ -70,13 +81,3 @@ class Root extends PureComponent {
   }
 }
 
-export default withRouter(connect(state => ({
-  isHydrated: state.getIn(['main', 'isHydrated']),
-  isMaximized: state.getIn(['main', 'isMaximized']),
-  isFullscreen: state.getIn(['main', 'isFullscreen']),
-  platform: state.getIn(['globals', 'platform']),
-  status: state.getIn(['connection', 'status']),
-  hasConnected: state.getIn(['connection', 'hasConnected']),
-  readyInOrg: state.getIn(['connection', 'readyInOrg']),
-}))(hot(module)(Root)));
- 

@@ -14,7 +14,13 @@ const TextWrapper = styleElement('div', styles.TextWrapper);
 const Title = styleElement('div', styles.Title);
 const Subtitle = styleElement('div', styles.Subtitle);
 
-class PlanListItem extends PureComponent {
+@connect(state => ({
+  goals: state.get('goals'),
+}), {
+  tooltip: mainActions.tooltip,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -106,9 +112,3 @@ class PlanListItem extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  goals: state.get('goals'),
-}), {
-  tooltip: mainActions.tooltip,
-})(PlanListItem);

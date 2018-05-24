@@ -12,7 +12,14 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const Label = styleElement('div', styles.Label);
 const Loader = styleElement('div', styles.Loader);
 
-class HOCLogoutButton extends PureComponent {
+@connect(state => ({
+  isElectron: state.getIn(['globals', 'isElectron']),
+}), {
+  confirm: menuActions.confirm,
+  signout: mainActions.signout,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);
@@ -58,10 +65,3 @@ class HOCLogoutButton extends PureComponent {
     )
   }
 }
-
-export default connect(state => ({
-  isElectron: state.getIn(['globals', 'isElectron']),
-}), {
-  confirm: menuActions.confirm,
-  signout: mainActions.signout,
-})(HOCLogoutButton);

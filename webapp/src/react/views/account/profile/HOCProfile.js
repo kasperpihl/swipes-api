@@ -5,7 +5,15 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Profile from './Profile';
 
-class HOCProfile extends PureComponent {
+@navWrapper
+@connect(state => ({
+  me: state.get('me'),
+}), {
+  updateProfile: ca.me.updateProfile,
+  uploadProfilePhoto: ca.me.uploadProfilePhoto,
+  completeOnboarding: ca.onboarding.complete,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -89,11 +97,3 @@ class HOCProfile extends PureComponent {
     />);
   }
 }
-
-export default navWrapper(connect(state => ({
-  me: state.get('me'),
-}), {
-  updateProfile: ca.me.updateProfile,
-  uploadProfilePhoto: ca.me.uploadProfilePhoto,
-  completeOnboarding: ca.onboarding.complete,
-})(HOCProfile));

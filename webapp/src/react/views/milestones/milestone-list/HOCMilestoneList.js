@@ -11,7 +11,14 @@ import MilestoneList from './MilestoneList';
 const emptyList = List();
 const DISTANCE = 200;
 
-class HOCMilestoneList extends PureComponent {
+
+@navWrapper
+@connect(state => ({
+  milestones: cs.milestones.getGrouped(state),
+}), {
+  createMilestone: ca.milestones.create,
+})
+export default class extends PureComponent {
   static sizes() {
     return [654, 954];
   }
@@ -119,9 +126,3 @@ class HOCMilestoneList extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  milestones: cs.milestones.getGrouped(state),
-}), {
-  createMilestone: ca.milestones.create,
-})(HOCMilestoneList));

@@ -7,7 +7,16 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import NotSupported from './NotSupported';
 
-class HOCNotSupported extends PureComponent {
+@connect(state => ({
+  me: state.get('me'),
+  organization: state.getIn(['me', 'organizations', 0]),
+}), {
+  confirm: menuActions.confirm,
+  deleteOrg: ca.organizations.deleteOrg,
+  leaveOrg: ca.organizations.leave,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -57,12 +66,3 @@ class HOCNotSupported extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  me: state.get('me'),
-  organization: state.getIn(['me', 'organizations', 0]),
-}), {
-  confirm: menuActions.confirm,
-  deleteOrg: ca.organizations.deleteOrg,
-  leaveOrg: ca.organizations.leave,
-})(HOCNotSupported);

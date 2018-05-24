@@ -6,7 +6,14 @@ import * as ca from 'swipes-core-js/actions';
 import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
 import Notifications from './Notifications';
 
-class HOCNotifications extends PureComponent {
+@connect(state => ({
+  notifications: state.get('notifications'),
+}), {
+  openSecondary: navigationActions.openSecondary,
+  markNotifications: ca.notifications.mark,
+  setLastReadTs: ca.notifications.setLastReadTs,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { limit: 10 };
@@ -68,11 +75,3 @@ class HOCNotifications extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  notifications: state.get('notifications'),
-}), {
-  openSecondary: navigationActions.openSecondary,
-  markNotifications: ca.notifications.mark,
-  setLastReadTs: ca.notifications.setLastReadTs,
-})(HOCNotifications);

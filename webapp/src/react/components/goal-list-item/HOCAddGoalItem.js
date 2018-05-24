@@ -11,7 +11,10 @@ import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput'
 import Button from 'src/react/components/button/Button2';
 import './styles/add-goal-item.scss';
 
-class HOCAddGoalItem extends PureComponent {
+@connect(null, {
+  createGoal: ca.goals.create,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,7 +100,3 @@ class HOCAddGoalItem extends PureComponent {
     );
   }
 }
-
-export default connect(null, {
-  createGoal: ca.goals.create,
-})(HOCAddGoalItem);

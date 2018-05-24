@@ -15,7 +15,19 @@ const authSuccess = [
   'https://live.swipesapp.com',
 ].map(o => `${o}/oauth-success.html`);
 
-class Services extends Component {
+
+@navWrapper
+@connect(state => ({
+  services: state.get('services'),
+  myServices: state.getIn(['me', 'services']),
+}), {
+  browser: mainActions.browser,
+  handleOAuthSuccess: ca.me.handleOAuthSuccess,
+  disconnectService: ca.me.disconnectService,
+  confirm: menuActions.confirm,
+})
+
+export default class extends Component {
   constructor(props) {
     super(props);
     bindAll(this, ['clickedDisconnect', 'clickedConnect']);
@@ -141,14 +153,3 @@ class Services extends Component {
     );
   }
 }
-
-const ConnectedServices = navWrapper(connect(state => ({
-  services: state.get('services'),
-  myServices: state.getIn(['me', 'services']),
-}), {
-  browser: mainActions.browser,
-  handleOAuthSuccess: ca.me.handleOAuthSuccess,
-  disconnectService: ca.me.disconnectService,
-  confirm: menuActions.confirm,
-})(Services));
-export default ConnectedServices;

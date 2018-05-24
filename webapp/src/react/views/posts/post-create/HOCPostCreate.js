@@ -19,7 +19,17 @@ import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostCreate from './PostCreate';
 
-class HOCPostCreate extends PureComponent {
+@navWrapper
+@connect(state => ({
+  myId: state.getIn(['me', 'id']),
+}), {
+  openSecondary: navigationActions.openSecondary,
+  contextMenu: mainActions.contextMenu,
+  preview: linkActions.preview,
+  createPost: ca.posts.create,
+})
+
+export default class extends PureComponent {
   static maxWidth() {
     return 600;
   }
@@ -152,11 +162,3 @@ class HOCPostCreate extends PureComponent {
   }
 }
 
-export default navWrapper(connect(state => ({
-  myId: state.getIn(['me', 'id']),
-}), {
-  openSecondary: navigationActions.openSecondary,
-  contextMenu: mainActions.contextMenu,
-  preview: linkActions.preview,
-  createPost: ca.posts.create,
-})(HOCPostCreate));

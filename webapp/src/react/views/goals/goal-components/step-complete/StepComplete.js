@@ -13,7 +13,12 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const Text = styleElement('div', styles.Text);
 const StyledIcon = styleElement(Icon, styles.Icon);
 
-class StepComplete extends PureComponent {
+@connect(null, {
+  successGradient: mainActions.successGradient,
+  completeStep: ca.goals.completeStep,
+  incompleteStep: ca.goals.incompleteStep,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -62,9 +67,3 @@ class StepComplete extends PureComponent {
     );
   }
 }
-
-export default connect(null, {
-  successGradient: mainActions.successGradient,
-  completeStep: ca.goals.completeStep,
-  incompleteStep: ca.goals.incompleteStep,
-})(StepComplete);

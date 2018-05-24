@@ -13,7 +13,14 @@ import getTextToSearchInSelection from 'src/utils/draft-js/getTextToSearchInSele
 import setupDraftExtensions from 'src/utils/draft-js/setupDraftExtensions';
 import Mention from './Mention';
 
-class AutoCompleteInput extends PureComponent {
+@connect(state => ({
+  results: state.getIn(['autoComplete', 'results']),
+  string: state.getIn(['autoComplete', 'string']),
+}), {
+  search: ca.autoComplete.search,
+  clear: ca.autoComplete.clear,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.plugins = setupDraftExtensions(this, {
@@ -134,11 +141,3 @@ class AutoCompleteInput extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  results: state.getIn(['autoComplete', 'results']),
-  string: state.getIn(['autoComplete', 'string']),
-}), {
-  search: ca.autoComplete.search,
-  clear: ca.autoComplete.clear,
-})(AutoCompleteInput)

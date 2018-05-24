@@ -6,7 +6,12 @@ import NoMilestoneOverview from './NoMilestoneOverview';
 
 const DISTANCE = 100;
 
-class HOCNoMilestoneOverview extends PureComponent {
+@navWrapper
+@connect(state => ({
+  goals: cs.goals.withoutMilestone(state),
+  myId: state.getIn(['me', 'id']),
+}))
+export default class extends PureComponent {
   static maxWidth() {
     return 654;
   }
@@ -64,7 +69,3 @@ class HOCNoMilestoneOverview extends PureComponent {
   }
 }
 
-export default navWrapper(connect(state => ({
-  goals: cs.goals.withoutMilestone(state),
-  myId: state.getIn(['me', 'id']),
-}))(HOCNoMilestoneOverview));

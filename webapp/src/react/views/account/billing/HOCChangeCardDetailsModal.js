@@ -6,7 +6,11 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import ChangeCardDetailsModal from './ChangeCardDetailsModal';
 
-class HOCChangeCardDetailsModal extends PureComponent {
+@navWrapper
+@connect(null, {
+  changeCardDetails: ca.organizations.changeCardDetails,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -49,9 +53,3 @@ class HOCChangeCardDetailsModal extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  // state
-}), {
-  changeCardDetails: ca.organizations.changeCardDetails,
-})(HOCChangeCardDetailsModal));

@@ -7,7 +7,12 @@ import {
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import ChangeBillingPlan from './ChangeBillingPlan';
 
-class HOCChangeBillingPlan extends PureComponent {
+@navWrapper
+@connect(null, {
+  changeBillingPlan: ca.organizations.changeBillingPlan,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,9 +52,3 @@ class HOCChangeBillingPlan extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  // state to props
-}), {
-  changeBillingPlan: ca.organizations.changeBillingPlan,
-})(HOCChangeBillingPlan));

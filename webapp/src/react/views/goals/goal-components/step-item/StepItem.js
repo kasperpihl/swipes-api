@@ -19,7 +19,13 @@ const AssignWrapper = styleElement('div', styles.AssignWrapper);
 const DragWrapper = styleElement('div', styles.DragWrapper);
 const DragIcon = styleElement(Icon, styles.DragIcon);
 
-class StepItem extends PureComponent {
+@connect(null, {
+  confirm: menuActions.confirm,
+  removeStep: ca.steps.remove,
+  renameStep: ca.steps.rename,
+  assignStep: ca.steps.assign,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);
@@ -187,10 +193,3 @@ class StepItem extends PureComponent {
     );
   }
 }
-
-export default connect(null, {
-  confirm: menuActions.confirm,
-  removeStep: ca.steps.remove,
-  renameStep: ca.steps.rename,
-  assignStep: ca.steps.assign,
-})(StepItem);

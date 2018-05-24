@@ -10,7 +10,13 @@ import styles from './GoalFooter.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 
-class GoalFooter extends PureComponent {
+@connect((state) => ({
+}), {
+  completeGoal: ca.goals.complete,
+  incompleteGoal: ca.goals.incomplete,
+  successGradient: mainActions.successGradient,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);
@@ -54,10 +60,3 @@ class GoalFooter extends PureComponent {
     )
   }
 }
-
-export default connect((state) => ({
-}), {
-  completeGoal: ca.goals.complete,
-  incompleteGoal: ca.goals.incomplete,
-  successGradient: mainActions.successGradient,
-})(GoalFooter);

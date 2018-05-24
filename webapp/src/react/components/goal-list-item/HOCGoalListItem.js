@@ -15,7 +15,12 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const Title = styleElement('div', styles.Title);
 const StatusDot = styleElement('div', styles.StatusDot);
 
-class HOCGoalListItem extends PureComponent {
+@connect((state, props) => ({
+  goal: state.getIn(['goals', props.goalId]),
+}), {
+  assignGoal: ca.goals.assign,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -92,9 +97,3 @@ class HOCGoalListItem extends PureComponent {
     );
   }
 }
-
-export default connect((state, props) => ({
-  goal: state.getIn(['goals', props.goalId]),
-}), {
-  assignGoal: ca.goals.assign,
-})(HOCGoalListItem);

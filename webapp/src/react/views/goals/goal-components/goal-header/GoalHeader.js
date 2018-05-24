@@ -16,7 +16,13 @@ import styles from './GoalHeader.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 
-class GoalHeader extends PureComponent {
+@connect(state => ({
+  myId: state.getIn(['me', 'id']),
+}), {
+  renameGoal: ca.goals.rename,
+  inputMenu: menuActions.input,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -80,10 +86,3 @@ class GoalHeader extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  myId: state.getIn(['me', 'id']),
-}), {
-  renameGoal: ca.goals.rename,
-  inputMenu: menuActions.input,
-})(GoalHeader)

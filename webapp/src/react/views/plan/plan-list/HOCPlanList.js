@@ -13,7 +13,14 @@ import PlanList from './PlanList';
 const emptyList = List();
 const DISTANCE = 200;
 
-class HOCPlanList extends PureComponent {
+@navWrapper
+@connect(state => ({
+  plans: cs.milestones.getGrouped(state),
+}), {
+  inputMenu: menuActions.input,
+  createPlan: ca.milestones.create,
+})
+export default class extends PureComponent {
   static  sizes() {
     return [654];
   }
@@ -145,9 +152,3 @@ class HOCPlanList extends PureComponent {
   }
 }
 
-export default navWrapper(connect(state => ({
-  plans: cs.milestones.getGrouped(state),
-}), {
-  inputMenu: menuActions.input,
-  createPlan: ca.milestones.create,
-})(HOCPlanList));

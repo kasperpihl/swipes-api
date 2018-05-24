@@ -9,7 +9,15 @@ import getParentByClass from 'swipes-core-js/utils/getParentByClass';
 
 import Assigning from './Assigning';
 
-class HOCAssigning extends PureComponent {
+@connect(state => ({
+  myId: state.getIn(['me', 'id']),
+  users: state.get('users'),
+}), {
+  tooltip: mainActions.tooltip,
+  selectAssignees: goalActions.selectAssignees,
+})
+
+export default class HOCAssigning extends PureComponent {
   constructor(props) {
     super(props);
     const assignees = List(props.assignees);
@@ -73,11 +81,3 @@ class HOCAssigning extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  myId: state.getIn(['me', 'id']),
-  users: state.get('users'),
-}), {
-  tooltip: mainActions.tooltip,
-  selectAssignees: goalActions.selectAssignees,
-})(HOCAssigning);

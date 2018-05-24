@@ -20,7 +20,29 @@ import GoalOverview from './GoalOverview';
 
 /* global msgGen */
 
-class HOCGoalOverview extends PureComponent {
+@connect((state, props) => ({
+  goal: state.getIn(['goals', props.goalId]),
+  me: state.get('me'),
+}), {
+  addAttachment: ca.attachments.add,
+  archive: ca.goals.archive,
+  contextMenu: mainActions.contextMenu,
+  assignGoal: ca.goals.assign,
+  loadWay: wayActions.load,
+  goalLoadWay: ca.goals.loadWay,
+  createWay: ca.ways.create,
+  selectMilestone: menuActions.selectMilestone,
+  stepReorder: ca.goals.stepsReorder,
+  attachmentReorder: ca.goals.attachmentsReorder,
+  addGoalToMilestone: ca.milestones.addGoal,
+  removeGoalFromMilestone: ca.milestones.removeGoal,
+  confirm: menuActions.confirm,
+  inputMenu: menuActions.input,
+})
+@navWrapper
+@withOptimist
+
+export default class extends PureComponent {
   static sizes() {
     return [825, 930];
   }
@@ -203,23 +225,3 @@ class HOCGoalOverview extends PureComponent {
     );
   }
 }
-
-export default connect((state, props) => ({
-  goal: state.getIn(['goals', props.goalId]),
-  me: state.get('me'),
-}), {
-  addAttachment: ca.attachments.add,
-  archive: ca.goals.archive,
-  contextMenu: mainActions.contextMenu,
-  assignGoal: ca.goals.assign,
-  loadWay: wayActions.load,
-  goalLoadWay: ca.goals.loadWay,
-  createWay: ca.ways.create,
-  selectMilestone: menuActions.selectMilestone,
-  stepReorder: ca.goals.stepsReorder,
-  attachmentReorder: ca.goals.attachmentsReorder,
-  addGoalToMilestone: ca.milestones.addGoal,
-  removeGoalFromMilestone: ca.milestones.removeGoal,
-  confirm: menuActions.confirm,
-  inputMenu: menuActions.input,
-})(navWrapper(withOptimist(HOCGoalOverview)));

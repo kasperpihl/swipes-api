@@ -10,7 +10,22 @@ import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostView from './PostView';
 
-class HOCPostView extends PureComponent {
+@navWrapper
+@connect((state, props) => ({
+  myId: state.getIn(['me', 'id']),
+  post: state.getIn(['posts', props.postId]),
+}), {
+  openSecondary: navigationActions.openSecondary,
+  preview: linkActions.preview,
+  browser: mainActions.browser,
+  confirm: menuActions.confirm,
+  contextMenu: mainActions.contextMenu,
+  followPost: ca.posts.follow,
+  unfollowPost: ca.posts.unfollow,
+  archivePost: ca.posts.archive,
+})
+
+export default class extends PureComponent {
   static maxWidth() {
     return 600;
   }
@@ -150,18 +165,3 @@ class HOCPostView extends PureComponent {
     );
   }
 }
-
-
-export default navWrapper(connect((state, props) => ({
-  myId: state.getIn(['me', 'id']),
-  post: state.getIn(['posts', props.postId]),
-}), {
-  openSecondary: navigationActions.openSecondary,
-  preview: linkActions.preview,
-  browser: mainActions.browser,
-  confirm: menuActions.confirm,
-  contextMenu: mainActions.contextMenu,
-  followPost: ca.posts.follow,
-  unfollowPost: ca.posts.unfollow,
-  archivePost: ca.posts.archive,
-})(HOCPostView));

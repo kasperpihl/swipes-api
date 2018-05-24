@@ -8,7 +8,11 @@ import BrowserWebview from './BrowserWebview';
 
 import './styles/browser';
 
-class Browser extends PureComponent {
+@navWrapper
+@connect(state => ({
+  me: state.get('me'),
+}))
+export default class extends PureComponent {
   static minWidth() {
     return 800;
   }
@@ -130,7 +134,3 @@ class Browser extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  me: state.get('me'),
-}))(Browser));

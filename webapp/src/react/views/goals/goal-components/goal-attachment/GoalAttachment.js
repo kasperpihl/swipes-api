@@ -21,8 +21,16 @@ const LeftIcon = styleElement(Icon, styles.LeftIcon);
 const Title = styleElement('div', styles.Title);
 const RightButton = styleElement(Button, styles.RightButton);
 
-
-class GoalAttachment extends PureComponent {
+@navWrapper
+@connect(null, {
+  removeAttachment: ca.attachments.remove,
+  renameAttachment: ca.attachments.rename,
+  contextMenu: mainActions.contextMenu,
+  inputMenu: menuActions.input,
+  confirm: menuActions.confirm,
+  previewLink: linkActions.preview,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -136,12 +144,3 @@ class GoalAttachment extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(null, {
-  removeAttachment: ca.attachments.remove,
-  renameAttachment: ca.attachments.rename,
-  contextMenu: mainActions.contextMenu,
-  inputMenu: menuActions.input,
-  confirm: menuActions.confirm,
-  previewLink: linkActions.preview,
-})(GoalAttachment));

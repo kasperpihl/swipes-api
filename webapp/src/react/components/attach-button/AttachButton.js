@@ -13,7 +13,17 @@ import styles from './AttachButton.swiss';
 
 const HiddenInput = styleElement('input', styles.HiddenInput);
 
-class AttachButton extends PureComponent {
+@connect(state => ({
+  myId: state.getIn(['me', 'id']),
+}), {
+  inputMenu: menuActions.input,
+  chooseAttachmentType: menuActions.chooseAttachmentType,
+  createLink: ca.links.create,
+  createNote: ca.notes.create,
+  createFile: ca.files.create,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -140,13 +150,3 @@ class AttachButton extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  myId: state.getIn(['me', 'id']),
-}), {
-  inputMenu: menuActions.input,
-  chooseAttachmentType: menuActions.chooseAttachmentType,
-  createLink: ca.links.create,
-  createNote: ca.notes.create,
-  createFile: ca.files.create,
-})(AttachButton);

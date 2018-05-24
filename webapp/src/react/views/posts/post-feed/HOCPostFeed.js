@@ -5,7 +5,19 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import HOCPostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
 import PostFeed from './PostFeed';
 
-class HOCPostFeed extends PureComponent {
+const makeMapStateToProps = () => {
+  const getFilteredList = cs.posts.makeGetFilteredList();
+  const getRelatedList = cs.posts.makeGetRelatedList();
+  return (state, props) => ({
+    posts: getFilteredList(state, props),
+    relatedPosts: getRelatedList(state, props),
+  });
+}
+
+
+@navWrapper
+@connect(makeMapStateToProps)
+export default class extends PureComponent {
   static sizes() {
     return [654];
   }
@@ -95,14 +107,3 @@ class HOCPostFeed extends PureComponent {
     );
   }
 }
-
-const makeMapStateToProps = () => {
-  const getFilteredList = cs.posts.makeGetFilteredList();
-  const getRelatedList = cs.posts.makeGetRelatedList();
-  return (state, props) => ({
-    posts: getFilteredList(state, props),
-    relatedPosts: getRelatedList(state, props),
-  });
-}
-
-export default navWrapper(connect(makeMapStateToProps)(HOCPostFeed));

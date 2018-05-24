@@ -10,7 +10,21 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const ButtonSide = styleElement('div', styles.ButtonSide);
 const Seperator = styleElement('div', styles.Seperator);
 
-class HOCDiscussButton extends PureComponent {
+const makeMapStateToProps = () => {
+  const getFilteredList = cs.posts.makeGetFilteredList();
+  const getRelatedList = cs.posts.makeGetRelatedList();
+  return (state, props) => {
+    let counter = getFilteredList(state, props).size;
+    if(props.relatedFilter) {
+      counter += getRelatedList(state, props).size;
+    }
+    return { counter };
+  }
+}
+
+@navWrapper
+@connect(makeMapStateToProps)
+export default class extends PureComponent {
   onFeed = () => {
     const { openSecondary, context, relatedFilter } = this.props;
     openSecondary({
@@ -45,18 +59,3 @@ class HOCDiscussButton extends PureComponent {
     );
   }
 }
-
-const makeMapStateToProps = () => {
-  const getFilteredList = cs.posts.makeGetFilteredList();
-  const getRelatedList = cs.posts.makeGetRelatedList();
-  return (state, props) => {
-    let counter = getFilteredList(state, props).size;
-    if(props.relatedFilter) {
-      counter += getRelatedList(state, props).size;
-    }
-    return { counter };
-  }
-}
-
-export default navWrapper(connect(makeMapStateToProps, {
-})(HOCDiscussButton));
