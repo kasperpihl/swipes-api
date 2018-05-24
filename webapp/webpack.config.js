@@ -23,7 +23,7 @@ module.exports = {
     modules: [ path.join(__dirname, 'node_modules') ],
     alias: {
       // 'swiss-react': path.resolve(__dirname, '../../opensource/swiss-react/dist/es'),
-      'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
+      // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
       src: path.resolve(__dirname, 'src'),
       compatible: path.resolve(__dirname, 'src/react/browser-compatible'),
       components: path.resolve(__dirname, 'src/react/components'),
@@ -126,7 +126,7 @@ module.exports = {
           'postcss-loader'
         ],
       }
-      
+
     ]
   },
   devServer: {
