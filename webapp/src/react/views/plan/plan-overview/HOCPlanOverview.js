@@ -12,7 +12,23 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 import PlanOverview from './PlanOverview';
 
-class HOCPlanOverview extends PureComponent {
+@navWrapper
+@connect((state, props) => ({
+  goals: state.get('goals'),
+  milestone: state.getIn(['milestones', props.milestoneId]),
+}), {
+  contextMenu: mainActions.contextMenu,
+  successGradient: mainActions.successGradient,
+  inputMenu: menuActions.input,
+  closeMilestone: ca.milestones.close,
+  openMilestone: ca.milestones.open,
+  reorderGoals: ca.milestones.reorderGoals,
+  deleteMilestone: ca.milestones.deleteMilestone,
+  renameMilestone: ca.milestones.rename,
+  confirm: menuActions.confirm,
+})
+@withOptimist
+export default class HOCPlanOverview extends PureComponent {
   static sizes() {
     return [750, 1100];
   }
@@ -221,18 +237,3 @@ class HOCPlanOverview extends PureComponent {
     );
   }
 }
-
-export default connect((state, props) => ({
-  goals: state.get('goals'),
-  milestone: state.getIn(['milestones', props.milestoneId]),
-}), {
-  contextMenu: mainActions.contextMenu,
-  successGradient: mainActions.successGradient,
-  inputMenu: menuActions.input,
-  closeMilestone: ca.milestones.close,
-  openMilestone: ca.milestones.open,
-  reorderGoals: ca.milestones.reorderGoals,
-  deleteMilestone: ca.milestones.deleteMilestone,
-  renameMilestone: ca.milestones.rename,
-  confirm: menuActions.confirm,
-})(navWrapper(withOptimist(HOCPlanOverview)));

@@ -7,7 +7,11 @@ import styles from './Gradient.swiss';
 const Wrapper = styleElement('div', styles.Wrapper);
 const Success = styleElement('div', styles.Success);
 
-class Gradient extends PureComponent {
+@connect(state => ({
+  successState: state.getIn(['main', 'successState']),
+  successColor: state.getIn(['main', 'successColor']),
+}))
+export default class Gradient extends PureComponent {
   constructor(props) {
     super(props);
     const gradientPos = gradient.getGradientPos();
@@ -61,8 +65,3 @@ class Gradient extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  successState: state.getIn(['main', 'successState']),
-  successColor: state.getIn(['main', 'successColor']),
-}), null)(Gradient);

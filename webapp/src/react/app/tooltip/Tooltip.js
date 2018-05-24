@@ -7,7 +7,11 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const Content = styleElement('div', styles.Content);
 const SPACING = 20;
 
-class Tooltip extends PureComponent {
+@connect(state => ({
+  tooltip: state.getIn(['main', 'tooltip']),
+}))
+
+export default class Tooltip extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -198,7 +202,3 @@ class Tooltip extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  tooltip: state.getIn(['main', 'tooltip']),
-}), {})(Tooltip);

@@ -9,7 +9,16 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 import './styles/sidebar.scss';
 
-class Sidebar extends PureComponent {
+@connect(state => ({
+  me: state.get('me'),
+  navId: state.getIn(['navigation', 'primary', 'id']),
+  notificationCounter: state.getIn(['connection', 'notificationCounter']),
+}), {
+  navSet: navigationActions.set,
+  contextMenu: mainActions.contextMenu,
+})
+
+export default class Sidebar extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -168,13 +177,3 @@ class Sidebar extends PureComponent {
     );
   }
 }
-
-
-export default connect(state => ({
-  me: state.get('me'),
-  navId: state.getIn(['navigation', 'primary', 'id']),
-  notificationCounter: state.getIn(['connection', 'notificationCounter']),
-}), {
-  navSet: navigationActions.set,
-  contextMenu: mainActions.contextMenu,
-})(Sidebar);

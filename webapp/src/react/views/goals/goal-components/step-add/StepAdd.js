@@ -109,7 +109,6 @@ class StepAdd extends PureComponent {
     this.setState({ queue }, this.runQueue);
   } 
   renderPending() {
-
     return this.state.queue.map((row, i) => (
       <Wrapper key={row.get('id')}>
         {row.get('status') != 'error' && <LoaderCircle />}

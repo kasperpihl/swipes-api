@@ -17,7 +17,18 @@ const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 15;
 const OVERLAY_LEFT_MIN = 90;
 
-class HOCViewController extends PureComponent {
+@connect(state => ({
+  navigation: state.get('navigation'),
+}), {
+  pop: navigationActions.pop,
+  push: navigationActions.push,
+  modal: mainActions.modal,
+  toggleLock: navigationActions.toggleLock,
+  openSecondary: navigationActions.openSecondary,
+  saveState: navigationActions.saveState,
+  navSet: navigationActions.set,
+})
+export default class HOCViewController extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -285,15 +296,3 @@ class HOCViewController extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  navigation: state.get('navigation'),
-}), {
-  pop: navigationActions.pop,
-  push: navigationActions.push,
-  modal: mainActions.modal,
-  toggleLock: navigationActions.toggleLock,
-  openSecondary: navigationActions.openSecondary,
-  saveState: navigationActions.saveState,
-  navSet: navigationActions.set,
-})(HOCViewController);

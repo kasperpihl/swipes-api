@@ -5,7 +5,17 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 import Button from 'Button';
 import './styles/trial.scss';
 
-class Trial extends PureComponent {
+@connect(state => ({
+  me: state.get('me'),
+  subscribed: state.getIn(['me', 'organizations', 0, 'stripe_subscription_id']),
+  organization: state.getIn(['me', 'organizations']),
+  trial: state.getIn(['me', 'organizations', 0, 'trial']),
+  isAccount: (state.getIn(['navigation', 'primary', 'id']) === 'AccountList')
+}), {
+  navSet: navigationActions.set,
+  navPush: navigationActions.push,
+})
+export default class Trial extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -145,14 +155,3 @@ class Trial extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  me: state.get('me'),
-  subscribed: state.getIn(['me', 'organizations', 0, 'stripe_subscription_id']),
-  organization: state.getIn(['me', 'organizations']),
-  trial: state.getIn(['me', 'organizations', 0, 'trial']),
-  isAccount: (state.getIn(['navigation', 'primary', 'id']) === 'AccountList')
-}), {
-  navSet: navigationActions.set,
-  navPush: navigationActions.push,
-})(Trial);

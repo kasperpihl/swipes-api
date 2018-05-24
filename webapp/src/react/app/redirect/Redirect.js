@@ -4,7 +4,19 @@ import { withRouter, Redirect as RedirectDOM } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 
-class Redirect extends PureComponent {
+@withRouter
+@connect(state => ({
+  hasOrg: state.getIn(['me', 'has_organization']),
+  isHydrated: state.getIn(['main', 'isHydrated']),
+  token: state.getIn(['connection', 'token']),
+  hasConnected: state.getIn(['connection', 'hasConnected']),
+  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
+  goToUrl: state.getIn(['navigation', 'url']),
+}), {
+  setUrl: navigationActions.url,
+})
+
+export default class Redirect extends PureComponent {
   componentDidMount() {
     this.checkRedirects();
   }
@@ -66,14 +78,3 @@ class Redirect extends PureComponent {
     return null;
   }
 }
-
-export default withRouter(connect(state => ({
-  hasOrg: state.getIn(['me', 'has_organization']),
-  isHydrated: state.getIn(['main', 'isHydrated']),
-  token: state.getIn(['connection', 'token']),
-  hasConnected: state.getIn(['connection', 'hasConnected']),
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-  goToUrl: state.getIn(['navigation', 'url']),
-}), {
-  setUrl: navigationActions.url,
-})(Redirect));

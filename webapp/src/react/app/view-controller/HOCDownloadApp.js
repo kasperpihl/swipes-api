@@ -4,7 +4,10 @@ import Icon from 'Icon';
 import { Link } from 'react-router-dom';
 import './styles/download-app.scss'
 
-class HOCDownloadApp extends PureComponent {
+@connect((state) => ({
+  isElectron: state.getIn(['globals', 'isElectron'])
+})
+export default class HOCDownloadApp extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +40,3 @@ class HOCDownloadApp extends PureComponent {
     );
   }
 }
-
-export default connect((state) => ({
-  isElectron: state.getIn(['globals', 'isElectron'])
-}, {})(HOCDownloadApp);

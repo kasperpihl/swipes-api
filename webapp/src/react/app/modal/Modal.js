@@ -8,7 +8,12 @@ import styles from './Modal.swiss';
 const Container = styleElement('div', styles.Container);
 const Content = styleElement('div', styles.Content);
 
-class HOCModal extends PureComponent {
+@connect((state, props) => ({
+  modal: state.getIn(['main', 'modals', props.target]),
+}), {
+  clear: mainActions.modal,
+})
+export default class HOCModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -43,9 +48,3 @@ class HOCModal extends PureComponent {
     );
   }
 }
-
-export default connect((state, props) => ({
-  modal: state.getIn(['main', 'modals', props.target]),
-}), {
-  clear: mainActions.modal,
-})(HOCModal);

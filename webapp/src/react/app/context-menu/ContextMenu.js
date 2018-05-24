@@ -10,7 +10,12 @@ import styles from './ContextMenu.swiss';
 const Wrapper = styleElement('div', styles.Wrapper);
 const Content = styleElement('div', styles.Content);
 
-class ContextMenu extends PureComponent {
+@connect(state => ({
+  contextMenu: state.getIn(['main', 'contextMenu']),
+}), {
+  hide: mainActions.contextMenu,
+})
+export default class ContextMenu extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { styles: {} };
@@ -203,9 +208,3 @@ class ContextMenu extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  contextMenu: state.getIn(['main', 'contextMenu']),
-}), {
-  hide: mainActions.contextMenu,
-})(ContextMenu);

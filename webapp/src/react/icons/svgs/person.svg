@@ -1,7 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <g>
-    <rect width="24" height="24" transform="translate(0 24) rotate(-90)" fill="transparent" stroke="transparent" opacity="0"/>
-    <path d="M19,18H5a5,5,0,0,1,5-5h4a5,5,0,0,1,5,5Z" stroke="transparent"/>
-    <path d="M12,12h0A2.99994,2.99994,0,0,1,9,9H9a2.99994,2.99994,0,0,1,3-3h0a2.99994,2.99994,0,0,1,3,3h0A2.99994,2.99994,0,0,1,12,12Z" stroke="transparent"/>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Group-8" transform="translate(5.000000, 3.000000)" stroke="transparent">
+      <polygon points="5.18696197e-13 16 14 16 14 14 5.18696197e-13 14" stroke="transparent"></polygon>
+      <path d="M7,0 C3.691,0 1,2.691 1,6 C1,9.309 3.691,12 7,12 C10.309,12 13,9.309 13,6 C13,2.691 10.309,0 7,0 M7,2 C9.209,2 11,3.791 11,6 C11,8.209 9.209,10 7,10 C4.791,10 3,8.209 3,6 C3,3.791 4.791,2 7,2" stroke="transparent"></path>
   </g>
 </svg>
