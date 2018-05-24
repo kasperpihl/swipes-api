@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { styleElement } from 'swiss-react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';

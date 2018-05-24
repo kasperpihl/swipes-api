@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import styles from './ChangeBillingPlan.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);

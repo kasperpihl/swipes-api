@@ -5,7 +5,7 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 import Icon from 'Icon';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import PlanListItem from '../plan-components/plan-list-item/PlanListItem';
 import InfoButton from 'components/info-button/InfoButton';
 import Dropper from 'src/react/components/draggable-list/Dropper';

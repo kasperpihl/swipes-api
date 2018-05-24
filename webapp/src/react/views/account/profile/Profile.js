@@ -6,7 +6,7 @@ import ReactTextarea from 'react-textarea-autosize';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Icon from 'Icon';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 
 import './styles/profile.scss';
 
@@ -81,7 +81,7 @@ class Profile extends PureComponent {
 
     return (
       <HOCHeaderTitle title="Profile">
-        <Button text={editing ? 'Done' : 'Edit'} onClick={this.handleEditState} />
+        <Button title={editing ? 'Done' : 'Edit'} onClick={this.handleEditState} />
       </HOCHeaderTitle>
     );
   }

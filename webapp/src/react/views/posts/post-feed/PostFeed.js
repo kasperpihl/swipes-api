@@ -4,7 +4,7 @@ import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback, typeForId, miniIconForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import TabBar from 'components/tab-bar/TabBar';
 import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';

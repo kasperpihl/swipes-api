@@ -9,7 +9,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as linkActions from 'src/redux/link/linkActions';
 
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import Icon from 'Icon';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';

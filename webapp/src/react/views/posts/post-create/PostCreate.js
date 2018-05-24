@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';

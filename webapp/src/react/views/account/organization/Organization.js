@@ -3,7 +3,7 @@ import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import Section from 'components/section/Section';
 import FloatingFormInput from './FloatingFormInput';
 import TabBar from 'components/tab-bar/TabBar';
@@ -104,10 +104,8 @@ class Organization extends PureComponent {
 
         <Button
           onClick={this.onInvite}
-          text="Invite"
-          className="organization__cta"
+          title="Invite"
           {...getLoading('invite')}
-          primary
         />
       </div>
     );

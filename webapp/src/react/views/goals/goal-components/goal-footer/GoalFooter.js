@@ -5,7 +5,7 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 
 import * as ca from 'swipes-core-js/actions';
 import * as mainActions from 'src/redux/main/mainActions';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import styles from './GoalFooter.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);

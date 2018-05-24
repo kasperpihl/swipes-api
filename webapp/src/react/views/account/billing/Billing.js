@@ -5,7 +5,7 @@ import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import CardSection from './CardSection';
 
 import './styles/billing.scss';
@@ -129,8 +129,7 @@ class Billing extends PureComponent {
           <CardSection label="Credit or debit card" />
           <Button
             {...getLoading('submit')}
-            primary
-            text="Submit Payment"
+            title="Submit Payment"
             onClick={this.onSubmit}
           />
           <div className="payment__cta-subtitle">You will be billed ${this.getPrice()}.</div>
@@ -142,9 +141,7 @@ class Billing extends PureComponent {
             <div className="payment-status__status payment-status__status--active">Active</div>
           </div>
           <Button
-            text="Change card details"
-            className="bottom-section__button"
-            primary
+            title="Change card details"
             onClick={this.onCardDetails}
           />
         </div>
@@ -166,9 +163,7 @@ class Billing extends PureComponent {
 
             </div>
             <Button
-              text="Manage team"
-              className="payment__button"
-              primary
+              title="Manage team"
               onClick={this.onManage}
             />
           </div>

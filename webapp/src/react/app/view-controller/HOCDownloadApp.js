@@ -7,7 +7,7 @@ import './styles/download-app.scss'
 @connect((state) => ({
   isElectron: state.getIn(['globals', 'isElectron'])
 })
-export default class HOCDownloadApp extends PureComponent {
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

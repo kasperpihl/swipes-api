@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { styleElement, SwissProvider } from 'swiss-react';
 import { List } from 'immutable';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import AssigneeImage from './AssigneeImage';
 import AssigneeTooltip from './AssigneeTooltip';
 
@@ -34,8 +34,10 @@ class Assigning extends PureComponent {
     });
   }
   onMouseLeave = () => {
-    const { tooltip } = this.props;
-
+    const { tooltip, enableTooltip } = this.props;
+    if(!enableTooltip) {
+      return;
+    }
     tooltip(null);
   }
   render() {

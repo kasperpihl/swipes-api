@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'Icon';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import { setupCachedCallback } from 'react-delegate';
 import './styles/result-item.scss';
 

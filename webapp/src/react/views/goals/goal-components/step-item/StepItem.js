@@ -9,7 +9,7 @@ import * as ca from 'swipes-core-js/actions';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import StepComplete from '../step-complete/StepComplete';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import Icon from 'Icon';
 import styles from './StepItem.swiss';
 

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { styleElement } from 'swiss-react';
 import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import {
   convertToRaw,
   convertFromRaw,

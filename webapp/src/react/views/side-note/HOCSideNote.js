@@ -11,7 +11,7 @@ import {
   convertToRaw,
   EditorState,
 } from 'draft-js';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
@@ -225,9 +225,8 @@ export default class HOCSideNote extends PureComponent {
       subtitle[0] = `CONFLICT. Updated by ${name} `;
       buttonHtml = (
         <Button
-          primary
           {...this.getLoading('conflict')}
-          text="Resolve now"
+          title="Resolve now"
           onClick={this.onResolveConflict}
         />
       );

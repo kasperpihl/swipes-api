@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as views from 'src/react/views';
@@ -28,7 +28,7 @@ const OVERLAY_LEFT_MIN = 90;
   saveState: navigationActions.saveState,
   navSet: navigationActions.set,
 })
-export default class HOCViewController extends PureComponent {
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -194,31 +194,25 @@ export default class HOCViewController extends PureComponent {
     const { navigation } = this.props;
     const closeButton = (target !== 'primary' && !navigation.get('locked')) ? (
       <Button
-        small
-        frameless
+        compact
         onClick={this.onClose}
         icon="CloseSmall"
-        className="view-container__close-button"
         key="close-button"
       />
     ) : undefined;
     const lockButton = (target !== 'primary') ? (
       <Button
-        small
-        frameless
+        compact
         onClick={this.onToggleLock}
         icon={navigation.get('locked') ? 'WindowLock' : 'WindowUnlock'}
-        className="view-container__lock-button"
         key="lock-button"
       />
     ) : undefined;
     const fullscreenButton = (canFullscreen) ? (
       <Button
-        small
-        frameless
+        compact
         onClick={this.onFullscreenCached(target)}
         icon={fullscreen === target ? 'FromFullscreen' : 'ToFullscreen'}
-        className="view-container__fullscreen-button"
         key="fullscreen-button"
       />
     ) : undefined;

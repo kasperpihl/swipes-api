@@ -7,7 +7,7 @@ import SWView from 'SWView';
 import PostCommentInput from '../post-components/post-comment-input/PostCommentInput';
 import CommentView from './CommentView';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
-import Button from 'components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import PostReactions from '../post-components/post-reactions/PostReactions';
 import Icon from 'Icon';
 import PostHeader from '../post-components/post-header/PostHeader';

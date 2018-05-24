@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { setupCachedCallback } from 'react-delegate';
 
 import Icon from 'Icon';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import './topbar.scss';
 
 @connect(state => ({
@@ -117,17 +117,17 @@ export default class Topbar extends PureComponent {
   }
   renderDownloadBtn() {
     return (
-      <Button primary small text="download" onClick={this.onDownload} className="topbar__retry-btn" />
+      <Button title="download" onClick={this.onDownload} />
     );
   }
   renderRetryBtn() {
     return (
-      <Button primary small text="Retry now" onClick={this.onRetry} className="topbar__retry-btn" />
+      <Button title="Retry now" onClick={this.onRetry} />
     );
   }
   renderReloadBtn() {
     return (
-      <Button primary small text="Reload" onClick={this.onReload} className="topbar__retry-btn" />
+      <Button title="Reload" onClick={this.onReload} />
     );
   }
   renderWindowsActions() {

@@ -6,7 +6,7 @@ import * as ca from 'swipes-core-js/actions';
 import { fromJS } from 'immutable';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 
 import styles from './GoalAdd.swiss';
 const Wrapper = styleElement('div', styles.Wrapper);

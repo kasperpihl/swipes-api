@@ -33,7 +33,6 @@ module.exports = {
       actions: path.resolve(__dirname, 'src/actions'),
       Icon: path.resolve(__dirname, 'src/react/icons/Icon'),
       SWView: path.resolve(__dirname, 'src/react/app/view-controller/SWView'),
-      Button: path.resolve(__dirname, 'src/react/components/button/Button'),
     },
     extensions: ['.js', '.scss']
   },

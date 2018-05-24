@@ -1,7 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+const { string, element, func, number } = PropTypes;
 
-class ContextWrapper extends Component {
+export default class extends Component {
+  static childContextTypes = {
+    target: string,
+    viewWidth: number,
+    navPop: func,
+    navPush: func,
+    openModal: func,
+    saveState: func,
+    openSecondary: func,
+    popSecondary: func,
+  }
+  static propTypes = {
+    target: string,
+    children: element,
+  }
   getChildContext() {
     const {
       target,
@@ -29,22 +44,3 @@ class ContextWrapper extends Component {
     return children;
   }
 }
-
-export default ContextWrapper;
-
-const { string, element, func, number } = PropTypes;
-
-ContextWrapper.childContextTypes = {
-  target: string,
-  viewWidth: number,
-  navPop: func,
-  navPush: func,
-  openModal: func,
-  saveState: func,
-  openSecondary: func,
-  popSecondary: func,
-};
-ContextWrapper.propTypes = {
-  target: string,
-  children: element,
-};

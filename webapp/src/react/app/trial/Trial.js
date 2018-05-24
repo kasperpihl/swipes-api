@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import './styles/trial.scss';
 
 @connect(state => ({
@@ -121,17 +121,16 @@ export default class Trial extends PureComponent {
           <div className="trial-popup__paragraph">⭐&nbsp;&nbsp;Your progress is saved. {actionLbl}</div>
           <div className="trial-popup__actions">
             {(daysLeft > -7) ? <Button
-              text="Dismiss"
+              title="Dismiss"
               onClick={this.onDismiss}
             /> : null}
             {isAdmin ? <Button
-              text="Request extension"
+              title="Request extension"
               onClick={this.onExtend}
             /> : null}
             {isAdmin ? (
               <Button
-                text="Add billing info"
-                primary
+                title="Add billing info"
                 onClick={this.onUnpaid}
               />
             ) : null}

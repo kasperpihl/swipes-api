@@ -3,7 +3,7 @@ import { setupDelegate } from 'react-delegate';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Icon from 'Icon';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 
 import './styles/account-list.scss';
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
 import { setupCachedCallback } from 'react-delegate';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import styles from './Confirmation.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
@@ -37,7 +37,7 @@ class Confirmation extends Component {
 
       const isLast = (actions.length - 1) === i;
 
-      return <Button primary={isLast} {...props} key={i} onClick={this.onClickCached(i)} />;
+      return <Button {...props} key={i} onClick={this.onClickCached(i)} />;
     });
 
     return (

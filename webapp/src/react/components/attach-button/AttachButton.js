@@ -5,7 +5,7 @@ import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import { fromJS } from 'immutable';
 import { EditorState, convertToRaw } from 'draft-js';
 

@@ -8,7 +8,7 @@ import { fromJS } from 'immutable';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import RotateLoader from 'components/loaders/RotateLoader';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import './styles/add-goal-item.scss';
 
 @connect(null, {

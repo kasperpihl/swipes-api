@@ -8,6 +8,16 @@ const DEFAULT_MAX_WIDTH = 800;
 
 const wrap = (ComponentToWrap) => {
   class NavWrapper extends Component {
+    static contextTypes = {
+      target: string,
+      viewWidth: number,
+      navPop: func,
+      navPush: func,
+      saveState: func,
+      openSecondary: func,
+      popSecondary: func,
+      openModal: func,
+    }
     static maxWidth() {
       if(typeof ComponentToWrap.maxWidth === 'function') {
         return ComponentToWrap.maxWidth();
@@ -55,16 +65,6 @@ const wrap = (ComponentToWrap) => {
     }
   }
   hoistNonReactStatics(NavWrapper, ComponentToWrap);
-  NavWrapper.contextTypes = {
-    target: string,
-    viewWidth: number,
-    navPop: func,
-    navPush: func,
-    saveState: func,
-    openSecondary: func,
-    popSecondary: func,
-    openModal: func,
-  };
   return NavWrapper;
 }
 

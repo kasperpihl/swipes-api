@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import randomString from 'swipes-core-js/utils/randomString';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import TabBar from 'components/tab-bar/TabBar';
 import ResultList from './ResultList';
 
@@ -135,7 +135,7 @@ class TabMenu extends Component {
           onChange={this.onChangeQuery}
           value={query}
         />
-        <Button icon="Close" className="tab-menu__close" frameless onClick={this.emptySearch} />
+        <Button icon="Close" className="tab-menu__close" compact onClick={this.emptySearch} />
       </div>
     );
   }
@@ -215,7 +215,7 @@ class TabMenu extends Component {
           {actionStatus}
         </div>
         <div className="tab-menu__actions">
-          <Button text={actionLabel} primary onClick={this.handleClick} />
+          <Button title={actionLabel} onClick={this.handleClick} />
         </div>
       </div>
     );

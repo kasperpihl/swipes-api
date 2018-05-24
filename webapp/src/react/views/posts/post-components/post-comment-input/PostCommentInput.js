@@ -6,7 +6,7 @@ import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput'
 import * as ca from 'swipes-core-js/actions';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
-import Button from 'src/react/components/button/Button2';
+import Button from 'src/react/components/button/Button';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 
 import styles from './PostCommentInput.swiss';
