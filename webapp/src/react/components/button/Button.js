@@ -13,7 +13,6 @@ const LoaderCircle = styleElement('div', styles.LoaderCircle);
 
 addGlobalStyles(styles.GlobalStyles);
 
-console.log('hi');
 export default class extends PureComponent {
   renderIcon(status) {
     let { icon } = this.props;
@@ -25,7 +24,7 @@ export default class extends PureComponent {
     if(status === 'success') icon = 'ChecklistCheckmark';
 
     let innerEl = <IconComp icon={icon} />;
-    
+
     // Add loader/success/error icons if needed
     if(status === 'loading') {
       innerEl = <LoaderCircle />;
@@ -55,7 +54,7 @@ export default class extends PureComponent {
 
     // Show loading/success/error if needed
     const label = loading || error || success || sideLabel;
-    
+
     return sideLabel && (
       <SideLabel>{label}</SideLabel>
     )
