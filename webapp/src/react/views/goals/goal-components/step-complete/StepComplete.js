@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import * as mainActions from 'src/redux/main/mainActions';
 
-import { styleElement, SwissProvider } from 'react-swiss';
+import { styleElement, SwissProvider } from 'swiss-react';
 import styles from './StepComplete.swiss';
 
 import Icon from 'Icon';

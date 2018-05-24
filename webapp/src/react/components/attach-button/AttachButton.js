@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement, SwissProvider } from 'react-swiss';
+import { styleElement, SwissProvider } from 'swiss-react';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';

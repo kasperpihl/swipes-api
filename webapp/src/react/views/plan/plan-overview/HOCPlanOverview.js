@@ -18,6 +18,10 @@ class HOCPlanOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
+    props.optimist.identify(props.milestone.get('id'));
+    props.optimist.setDefaultOptions({
+      serial: true,
+    });
     this.state = {
       showLine: false,
     };
@@ -68,7 +72,7 @@ class HOCPlanOverview extends PureComponent {
       return;
     }
     const { milestone, reorderGoals, successGradient, optimist } = this.props;
-    let order = optimist.get(`${milestone.get('id')}_order`, milestone.get('goal_order'));
+    let order = optimist.get('order', milestone.get('goal_order'));
 
     const { droppableId: source, index: sourceI } = result.source;
     const { droppableId: dest, index: destI } = result.destination;
@@ -79,14 +83,18 @@ class HOCPlanOverview extends PureComponent {
     order = order.deleteIn([source, sourceI]);
     order = order.updateIn([dest], (arr) => arr.insert(destI, goalId));
 
-    optimist.queue(`${milestone.get('id')}_order`, order, (next) => {
-      reorderGoals(milestone.get('id'), goalId, dest, destI).then((res) => {
-        if(res.ok) {
-          next();
-        } else {
-          next('something went wrong');
-        }
-      });
+    optimist.set({
+      key: 'order',
+      value: order,
+      handler: (next) => {
+        reorderGoals(milestone.get('id'), goalId, dest, destI).then((res) => {
+          if(res.ok) {
+            next();
+          } else {
+            next('something went wrong');
+          }
+        });
+      }
     });
   }
 
@@ -202,7 +210,7 @@ class HOCPlanOverview extends PureComponent {
         onDragStart={this.onDragStart}
         onDragEnd={this.onDragEnd}>
         <PlanOverview
-          order={optimist.get(`${milestone.get('id')}_order`, milestone.get('goal_order'))}
+          order={optimist.get('order', milestone.get('goal_order'))}
           {...this.bindLoading()}
           milestone={milestone}
           delegate={this}

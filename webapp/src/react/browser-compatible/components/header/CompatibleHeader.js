@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
 import styles from './CompatibleHeader.swiss';
 

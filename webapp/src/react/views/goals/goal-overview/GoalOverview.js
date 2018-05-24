@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { withOptimist } from 'react-optimist';
 import Dropper from 'src/react/components/draggable-list/Dropper';
 import Dragger from 'src/react/components/draggable-list/Dragger';
@@ -31,6 +31,7 @@ const GreenIcon = styleElement(Icon, styles.GreenIcon);
 class GoalOverview extends PureComponent {
   constructor(props) {
     super(props);
+    props.optimist.identify(props.goal.get('id'));
     this.state = {
       editMode: false,
       showLine: false,

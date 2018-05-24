@@ -22,8 +22,8 @@ module.exports = {
   resolve: {
     modules: [ path.join(__dirname, 'node_modules') ],
     alias: {
-      // 'react-swiss': path.resolve(__dirname, '../../opensource/react-swiss/dist/es'),
-      // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
+      // 'swiss-react': path.resolve(__dirname, '../../opensource/swiss-react/dist/es'),
+      'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
       src: path.resolve(__dirname, 'src'),
       compatible: path.resolve(__dirname, 'src/react/browser-compatible'),
       components: path.resolve(__dirname, 'src/react/components'),

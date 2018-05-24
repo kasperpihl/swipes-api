@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { URL_REGEX, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import unescaper from 'swipes-core-js/utils/unescaper';

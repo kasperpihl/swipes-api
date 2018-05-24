@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import loadPage from 'src/react/pages/load';
 import { bindAll, getURLParameter } from 'swipes-core-js/classes/utils';
 import NoteEditor from 'components/note-editor/NoteEditor';

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
 import Button from 'Button';
 import { bindAll } from 'swipes-core-js/classes/utils';

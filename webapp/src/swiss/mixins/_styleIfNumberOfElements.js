@@ -1,4 +1,4 @@
-import { addMixin } from 'react-swiss';
+import { addMixin } from 'swiss-react';
 
 addMixin('styleIfNumberOfElements', (getProp, target='oneoftype' ,number=1, content={}) => {
   if (number === 1) {

@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import createCachedSelector from 're-reselect';
 import { searchSelectorFromKeys } from '../classes/utils';
 
 const getRelatedFilter = (state, props) => props.relatedFilter;

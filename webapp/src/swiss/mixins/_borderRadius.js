@@ -1,4 +1,4 @@
-import { addMixin } from 'react-swiss';
+import { addMixin } from 'swiss-react';
 
 addMixin('borderRadius', (getProp, ...args) => {
   const amountOfArguments = args.length;

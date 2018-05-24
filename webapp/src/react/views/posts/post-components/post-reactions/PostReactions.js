@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
+import { withOptimist } from 'react-optimist';
 import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
 import Icon from 'Icon';
 import styles from './PostReactions.swiss';
@@ -17,6 +18,7 @@ const LikeString = styleElement('div', styles.LikeString);
 class Reactions extends PureComponent {
   constructor(props) {
     super(props);
+    props.optimist.identify(`${props.postId}${props.commentId || ''}`);
     this.state = {};
   }
   componentWillMount() {
@@ -29,35 +31,61 @@ class Reactions extends PureComponent {
     clearTimeout(this.tooltipDelay);
   }
   onAddReaction = () => {
-    const { postId, commentId, addReaction, commentAddReaction, successGradient } = this.props;
+    const {
+      optimist,
+      postId,
+      commentId,
+      addReaction,
+      commentAddReaction,
+      successGradient,
+    } = this.props;
     const runFunc = commentId ? commentAddReaction : addReaction;
 
     successGradient('red');
-    this.setState({ iLike: true });
-    runFunc({
-      post_id: postId,
-      reaction: 'like',
-      comment_id: commentId || null,
-    }).then((res) => {
-      if (res.ok) {
-        window.analytics.sendEvent('Reaction added', {
-          Where: commentId ? 'Comment' : 'Post',
+    optimist.set({
+      key: 'like',
+      value: true,
+      handler: (next) => {
+        runFunc({
+          post_id: postId,
+          reaction: 'like',
+          comment_id: commentId || null,
+        }).then((res) => {
+          next();
+          if (res.ok) {
+            window.analytics.sendEvent('Reaction added', {
+              Where: commentId ? 'Comment' : 'Post',
+            });
+          }
         });
       }
     });
+    
   }
   onRemoveReaction = () => {
-    const { postId, commentId, removeReaction, commentRemoveReaction } = this.props;
+    const {
+      optimist,
+      postId,
+      commentId,
+      removeReaction,
+      commentRemoveReaction,
+    } = this.props;
     const runFunc = commentId ? commentRemoveReaction : removeReaction;
 
-    this.setState({ iLike: false });
-    runFunc({
-      post_id: postId,
-      comment_id: commentId,
-    }).then((res) => {
-      if (res.ok) {
-        window.analytics.sendEvent('Reaction removed', {
-          Where: commentId ? 'Comment' : 'Post',
+    optimist.set({
+      key: 'like',
+      value: true,
+      handler: (next) => {
+        runFunc({
+          post_id: postId,
+          comment_id: commentId,
+        }).then((res) => {
+          next();
+          if (res.ok) {
+            window.analytics.sendEvent('Reaction removed', {
+              Where: commentId ? 'Comment' : 'Post',
+            });
+          }
         });
       }
     });
@@ -97,19 +125,17 @@ class Reactions extends PureComponent {
   }
   updateILike(nextReactions) {
     const { reactions, myId } = this.props;
-    const { iLike } = this.state;
 
-    if (typeof iLike === 'undefined' || reactions !== nextReactions) {
+    if (reactions !== nextReactions) {
       const newILike = !!nextReactions.find(r => r.get('created_by') === myId);
-
-      if (iLike !== newILike) {
+      if (this.state.iLike !== newILike) {
         this.setState({ iLike: newILike });
       }
     }
   }
   renderButton() {
-    const { iLike } = this.state;
-    const { alignRight } = this.props;
+    const { alignRight, optimist } = this.props;
+    const iLike = optimist.get('like', this.state.iLike);
     const onClick = iLike ? this.onRemoveReaction : this.onAddReaction;
 
     return (
@@ -119,12 +145,12 @@ class Reactions extends PureComponent {
     )
   }
   renderString() {
-    const { iLike } = this.state;
-    const { reactions } = this.props;
+    const { reactions, optimist } = this.props;
+    const iLike = optimist.get('like', this.state.iLike);
 
     return (
       <LikeString 
-        show={reactions && !!reactions.size}
+        show={reactions && !!reactions.size }
         liked={iLike}>
         {reactions && reactions.size}
       </LikeString>
@@ -152,4 +178,4 @@ export default connect(state => ({
   commentAddReaction: ca.posts.commentAddReaction,
   commentRemoveReaction: ca.posts.commentRemoveReaction,
   removeReaction: ca.posts.removeReaction,
-})(Reactions);
+})(withOptimist(Reactions));

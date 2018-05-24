@@ -1,4 +1,4 @@
-import { addMixin } from 'react-swiss';
+import { addMixin } from 'swiss-react';
 
 addMixin('font', (getProp, fz=null, lh=null, fw=null) => ({
   fontSize: fz || 'initial',

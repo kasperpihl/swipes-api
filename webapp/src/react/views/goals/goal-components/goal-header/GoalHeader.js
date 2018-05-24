@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 

@@ -1,4 +1,4 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
 const navbarH = '48px';
 

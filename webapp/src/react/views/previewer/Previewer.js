@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';
 import Button from 'src/react/components/button/Button2';

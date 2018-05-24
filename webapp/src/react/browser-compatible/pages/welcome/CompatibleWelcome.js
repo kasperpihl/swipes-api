@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-import { styleElement, SwissProvider } from 'react-swiss';
+import { styleElement, SwissProvider } from 'swiss-react';
 import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';

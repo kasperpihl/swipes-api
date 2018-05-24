@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import Measure from 'react-measure';
 import * as mainActions from 'src/redux/main/mainActions';

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import DraggableGoal from './DraggableGoal';
 import styles from './DroppableGoalList.swiss';
 

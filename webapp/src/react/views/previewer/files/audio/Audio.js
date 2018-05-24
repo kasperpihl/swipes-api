@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 
 import styles from './Audio.swiss';
 

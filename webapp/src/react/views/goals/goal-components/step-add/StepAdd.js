@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import randomString from 'swipes-core-js/utils/randomString';
 import * as ca from 'swipes-core-js/actions';
@@ -61,11 +61,9 @@ class StepAdd extends PureComponent {
     })
   }
   onFocus = () => {
-    console.log('focused');
     this.setState({ isFocused: true });
   }
   onBlur = () => {
-    console.log('blurred');
     this.setState({ isFocused: false });
   }
   onReturn = () => {

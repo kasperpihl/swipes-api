@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import prefixAll from 'inline-style-prefixer/static';
 import ResultItem from 'src/react/components/result-item/ResultItem';
 import AutoCompleteItem from './AutoCompleteItem';

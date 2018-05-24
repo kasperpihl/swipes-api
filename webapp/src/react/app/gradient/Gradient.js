@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import gradient from 'swipes-core-js/classes/gradient';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './Gradient.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);

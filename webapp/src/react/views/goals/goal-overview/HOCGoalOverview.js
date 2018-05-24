@@ -30,6 +30,7 @@ class HOCGoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     propsOrPop(this, 'goal');
+    props.optimist.identify(props.goal.get('id'));
     this.state = {
       showLine: false,
     };
@@ -136,8 +137,12 @@ class HOCGoalOverview extends PureComponent {
     const newOrder = getNewOrderFromResult(order, result);
 
     const reorderFunc = this.props[`${type}Reorder`];
-    optimist.push(`${type}_order`, newOrder, (next) => {
-      reorderFunc(goal.get('id'), newOrder.toJS()).then((res) => next());
+    optimist.set({
+      key: `${type}_order`,
+      value: newOrder,
+      handler: (next) => {
+        reorderFunc(goal.get('id'), newOrder.toJS()).then((res) => next());
+      },
     });
   }
   viewDidLoad(stepList) {

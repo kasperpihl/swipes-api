@@ -1,4 +1,4 @@
-import { addVariables } from 'react-swiss';
+import { addVariables } from 'swiss-react';
 
 addVariables({
   sw1: '#1A2844',

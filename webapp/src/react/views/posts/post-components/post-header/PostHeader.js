@@ -1,5 +1,5 @@
 import React from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './PostHeader.swiss';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { styleElement, styleSheet } from 'react-swiss';
+import { styleElement, styleSheet } from 'swiss-react';
 import { Droppable } from 'react-beautiful-dnd';
 
 const styles = styleSheet('Dropper', {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import Icon from 'Icon';
 import { setupCachedCallback } from 'react-delegate';

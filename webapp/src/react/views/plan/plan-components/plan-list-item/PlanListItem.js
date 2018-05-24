@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
@@ -9,7 +9,7 @@ import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
 import styles from './PlanListItem.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
-const ProgressBar = styleElement('div', styles.ProgressBar).debug();
+const ProgressBar = styleElement('div', styles.ProgressBar);
 const TextWrapper = styleElement('div', styles.TextWrapper);
 const Title = styleElement('div', styles.Title);
 const Subtitle = styleElement('div', styles.Subtitle);

@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './DraggableGoal.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);

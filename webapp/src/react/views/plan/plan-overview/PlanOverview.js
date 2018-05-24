@@ -4,10 +4,11 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
+import GoalAdd from '../../goals/goal-components/goal-add/GoalAdd';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import InfoButton from 'components/info-button/InfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './PlanOverview.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
@@ -128,7 +129,7 @@ class PlanOverview extends PureComponent {
         goalProps={goalProps}
       >
         {section === 'Now' && (
-          <HOCAddGoalItem delegate={delegate} milestoneId={milestone.get('id')} />
+          <GoalAdd delegate={delegate} milestoneId={milestone.get('id')} />
         )}
       </DroppableGoalList>
     );

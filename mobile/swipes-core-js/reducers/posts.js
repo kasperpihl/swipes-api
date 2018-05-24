@@ -87,6 +87,7 @@ export default function posts(state = initialState, action) {
     case 'posts.commentRemoveReaction':
     case 'post_comment_reaction_removed': {
       const { post_id, user_id, comment_id } = payload;
+
       if (!state.get(post_id)) {
         return state;
       }

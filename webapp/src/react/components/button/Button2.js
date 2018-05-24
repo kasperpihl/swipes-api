@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement, addGlobalStyles, SwissProvider } from 'react-swiss';
+import { styleElement, addGlobalStyles, SwissProvider } from 'swiss-react';
 import Icon from 'Icon';
 import styles from './Button.swiss';
 

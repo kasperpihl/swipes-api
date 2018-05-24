@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import Icon from 'Icon';
 import styles from './GoToWorkspace.swiss';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';

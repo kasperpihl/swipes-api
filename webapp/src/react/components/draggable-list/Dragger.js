@@ -1,6 +1,6 @@
 import React, { cloneElement } from 'react';
 import { createPortal } from 'react-dom';
-import { styleElement, styleSheet } from 'react-swiss';
+import { styleElement, styleSheet } from 'swiss-react';
 import { Draggable } from 'react-beautiful-dnd';
 
 const styles = styleSheet('Dragger', {

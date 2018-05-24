@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button2';
 import styles from './ChangeBillingPlan.swiss';

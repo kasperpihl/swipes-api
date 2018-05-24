@@ -211,7 +211,6 @@ class HOCSideNote extends PureComponent {
         <HOCHeaderTitle
           title={title}
           target={target}
-          titleIcon="Note"
           subtitle={subtitle}
         >
           {buttonHtml}

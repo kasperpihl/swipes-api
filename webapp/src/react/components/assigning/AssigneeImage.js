@@ -1,5 +1,5 @@
 import React from 'react';
-import { styleElement, styleSheet } from 'react-swiss';
+import { styleElement, styleSheet } from 'swiss-react';
 
 const styles = styleSheet('AssigneeImage', {
   Image: {

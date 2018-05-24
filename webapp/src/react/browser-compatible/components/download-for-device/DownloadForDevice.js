@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import Icon from 'Icon';
 import { Link } from 'react-router-dom';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './DownloadForDevice.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);

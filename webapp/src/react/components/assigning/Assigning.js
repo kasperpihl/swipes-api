@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import { styleElement, SwissProvider } from 'react-swiss';
+import { styleElement, SwissProvider } from 'swiss-react';
 import { List } from 'immutable';
 import Button from 'src/react/components/button/Button2';
 import AssigneeImage from './AssigneeImage';

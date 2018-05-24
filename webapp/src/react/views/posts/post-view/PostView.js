@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { URL_REGEX, attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import { List } from 'immutable';

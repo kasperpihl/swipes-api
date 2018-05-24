@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindAll, traverseElement } from 'swipes-core-js/classes/utils';

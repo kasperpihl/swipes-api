@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { styleElement, SwissProvider } from 'react-swiss';
+import { styleElement, SwissProvider } from 'swiss-react';
 
 import styles from './Image.swiss';
 

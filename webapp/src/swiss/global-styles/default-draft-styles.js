@@ -1,4 +1,4 @@
-import { addGlobalStyles } from 'react-swiss';
+import { addGlobalStyles } from 'swiss-react';
 
 addGlobalStyles({
   '.DraftEditor-editorContainer,.DraftEditor-root,.public-DraftEditor-content': {
