@@ -30,7 +30,34 @@ const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
 /* global msgGen */
 
-class HOCSideNote extends PureComponent {
+const mapStateToProps = (state, props) => {
+  let cachedText = state.getIn(['notes', 'cache', props.id, 'text']);
+  if (!cachedText) {
+    cachedText = state.getIn(['notes', 'cache', props.id, '_savingText']);
+  }
+
+  const note = state.getIn(['notes', 'server', props.id]);
+  let serverOrg = state.getIn(['notes', 'cache', props.id, 'serverOrg']);
+  serverOrg = serverOrg || note;
+  const latestRev = serverOrg.get('rev') || 1;
+
+  return {
+    organizationId: state.getIn(['me', 'organizations', 0, 'id']),
+    note,
+    latestRev,
+    serverOrg,
+    cachedText,
+  };
+}
+
+@navWrapper
+@connect(mapStateToProps, {
+  saveNote: ca.notes.save,
+  cacheNote: ca.notes.cache,
+  browser: mainActions.browser,
+})
+
+export default class HOCSideNote extends PureComponent {
   static sizes() {
     return [600, 900];
   }
@@ -260,29 +287,3 @@ class HOCSideNote extends PureComponent {
     );
   }
 }
-
-function mapStateToProps(state, props) {
-  let cachedText = state.getIn(['notes', 'cache', props.id, 'text']);
-  if (!cachedText) {
-    cachedText = state.getIn(['notes', 'cache', props.id, '_savingText']);
-  }
-
-  const note = state.getIn(['notes', 'server', props.id]);
-  let serverOrg = state.getIn(['notes', 'cache', props.id, 'serverOrg']);
-  serverOrg = serverOrg || note;
-  const latestRev = serverOrg.get('rev') || 1;
-
-  return {
-    organizationId: state.getIn(['me', 'organizations', 0, 'id']),
-    note,
-    latestRev,
-    serverOrg,
-    cachedText,
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
-  saveNote: ca.notes.save,
-  cacheNote: ca.notes.cache,
-  browser: mainActions.browser,
-})(HOCSideNote));

@@ -7,7 +7,7 @@ import StyledText from 'components/styled-text/StyledText';
 import TextParser from 'components/text-parser/TextParser';
 import './styles/post-result.scss';
 
-class PostResult extends PureComponent {
+export default class extends PureComponent {
 
   renderProfileImage() {
     const { result } = this.props;
@@ -129,5 +129,3 @@ class PostResult extends PureComponent {
     )
   }
 }
-
-export default PostResult

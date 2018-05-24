@@ -7,7 +7,11 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Icon from 'Icon';
 import SearchResult from './SearchResult';
 
-class HOCSearchResults extends PureComponent {
+@navWrapper
+@connect((state, props) => ({
+  results: cs.global.search(state, props),
+}))
+export default class HOCSearchResults extends PureComponent {
   constructor(props) {
     super(props);
     setupDelegate(this, 'willOpenResult');
@@ -89,7 +93,3 @@ class HOCSearchResults extends PureComponent {
   }
 }
 
-
-export default navWrapper(connect((state, props) => ({
-  results: cs.global.search(state, props),
-}))(HOCSearchResults));

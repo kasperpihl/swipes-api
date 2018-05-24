@@ -26,7 +26,16 @@ const NoPreviewText = styleElement('div', styles.NoPreviewText);
 const Footer = styleElement('div', styles.Footer);
 const FooterButton = styleElement(Button, styles.FooterButton);
 
-class HOCPreviewModal extends PureComponent {
+@navWrapper
+@connect(null, {
+  request: ca.api.request,
+  addAttachment: ca.attachments.add,
+  browser: mainActions.browser,
+})
+export default class extends PureComponent {
+  static contextTypes = {
+    target: PropTypes.string,
+  }
   static minWidth() {
     return 750;
   }
@@ -305,14 +314,3 @@ class HOCPreviewModal extends PureComponent {
     );
   }
 }
-
-HOCPreviewModal.contextTypes = {
-  target: PropTypes.string,
-};
-
-
-export default navWrapper(connect(null, {
-  request: ca.api.request,
-  addAttachment: ca.attachments.add,
-  browser: mainActions.browser,
-})(HOCPreviewModal));
