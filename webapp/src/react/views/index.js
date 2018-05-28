@@ -3,7 +3,6 @@ import AccountList from './account/account-list/HOCAccountList';
 import Billing from './account/billing/HOCBilling';
 import Organization from './account/organization/HOCOrganization';
 import Profile from './account/profile/HOCProfile';
-import Services from './account/services/Services';
 import Onboarding from './account/onboarding/HOCOnboarding';
 import Browser from './browser/Browser';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
@@ -38,7 +37,6 @@ export {
   Profile,
   Organization,
   Search,
-  Services,
   SideNote,
   SwipesIntro,
   TakeAction,
