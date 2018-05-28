@@ -22,10 +22,10 @@ class Confirmation extends Component {
     if (!actions) {
       actions = [
         {
-          text: 'No',
+          title: 'No',
         },
         {
-          text: 'Yes',
+          title: 'Yes',
         },
       ];
     }
