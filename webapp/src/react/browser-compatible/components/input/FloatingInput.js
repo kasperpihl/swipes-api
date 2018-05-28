@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
+import { styleElement, SwissProvider } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import styles from './FloatingInput.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
+const Input = styleElement('input', styles.Input);
+const Label = styleElement('label', styles.Label);
 
 class FloatingInput extends PureComponent {
   constructor(props) {
@@ -15,12 +16,11 @@ class FloatingInput extends PureComponent {
       floatValue: 0 || props.value.length,
       visiblePassword: false,
     };
-    bindAll(this, ['floatFocus', 'floatBlur']);
     setupDelegate(this, 'onClick', 'onChange');
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.focus !== this.props.focus && !this.props.focus) {
-      this.refs.floatingInput.focus();
+      this.input.focus();
       this.setState({ float: true });
     }
 
@@ -28,14 +28,13 @@ class FloatingInput extends PureComponent {
       this.setState({ floatValue: nextProps.value.length });
     }
   }
-  floatFocus() {
+  floatFocus = () => {
     if (!this.state.float) {
       this.setState({ float: !this.state.float });
     }
   }
-  floatBlur() {
-    const input = this.refs.floatingInput;
-    const inputVal = input.value.length;
+  floatBlur = () => {
+    const inputVal = this.input.value.length;
 
     if (this.state.float) {
       this.setState({ float: !this.state.float });
@@ -48,20 +47,22 @@ class FloatingInput extends PureComponent {
     const { visiblePassword, float, floatValue } = this.state;
 
     return (
-      <Wrapper active={!!float} standBy={floatValue > 0}>
-        <input
-          ref="floatingInput"
-          type={type}
-          value={value}
-          id={inputKey}
-          onFocus={this.floatFocus}
-          onBlur={this.floatBlur}
-          onChange={this.onChangeCached(inputKey)}
-          autoComplete="off"
-          {...props}
-        />
-        <label htmlFor={inputKey}>{placeholder}</label>
-      </Wrapper>
+      <SwissProvider active={!!float} standBy={floatValue > 0}>
+        <Wrapper>
+          <Input
+            innerRef={c => this.input = c}
+            type={type}
+            value={value}
+            id={inputKey}
+            onFocus={this.floatFocus}
+            onBlur={this.floatBlur}
+            onChange={this.onChangeCached(inputKey)}
+            autoComplete="off"
+            {...props}
+          />
+          <Label htmlFor={inputKey}>{placeholder}</Label>
+        </Wrapper>
+      </SwissProvider>
     );
   }
 }
