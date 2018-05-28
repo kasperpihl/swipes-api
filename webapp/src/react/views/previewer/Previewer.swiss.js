@@ -44,27 +44,3 @@ export default styleSheet('Previewer', {
 
 });
 
-// .preview-content {
-//   $b: &;
-
-//   &__column {
-
-//     &--main {
-//       @include size(calc(100% - 270px - 10%), auto);
-//       margin-right: 10%;
-//     }
-
-//     &--side {
-//       @include size(270px, auto);
-//       @include flex(none);
-//     }
-//   }
-
-//   &__section {
-
-//     &:not(:first-child) {
-//       margin-top: 60px;
-//     }
-//   }
-// }
-

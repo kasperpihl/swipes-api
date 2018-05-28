@@ -8,13 +8,10 @@ import Button from 'src/react/components/button/Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import Section from 'components/section/Section';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import * as Files from './files';
-import * as Rows from './rows';
-// import './preview.scss';
 import styles from './Previewer.swiss';
 
 const ContentWrapper = styleElement('div', styles.ContentWrapper);
@@ -87,21 +84,6 @@ export default class extends PureComponent {
   onFileLoaded = () => {
     this.setState({ fileLoading: false });
   }
-  onAttach = () => {
-    const {
-      targetId,
-      loadPreview,
-      addAttachment,
-    } = this.props;
-    this.setLoading('attach');
-    addAttachment(targetId, loadPreview.toJS()).then((res) => {
-      if (res && res.ok) {
-        this.clearLoading('attach', 'Successfully attached');
-      } else {
-        this.clearLoading('attach', '!Something went wrong');
-      }
-    });
-  }
   getDefaultState() {
     return {
       loading: true,
@@ -110,14 +92,6 @@ export default class extends PureComponent {
       fileLoading: false,
       fileError: false,
     };
-  }
-  getComponentForRow(row) {
-    const Comp = Rows[row.type];
-    if (!Comp) {
-      console.warn(`Unsupported row type: ${row.type}`);
-      return null;
-    }
-    return Comp;
   }
   getComponentForFile(file) {
     const Comp = Object.entries(Files).find(([k, f]) => {
@@ -209,40 +183,6 @@ export default class extends PureComponent {
       <HOCHeaderTitle title={renderedTitle} subtitle={subtitle} />
     );
   }
-  renderRow(row) {
-    const Comp = this.getComponentForRow(row);
-    if (!Comp) {
-      return undefined;
-    }
-    return (
-      <Comp
-        {...row}
-      />
-    );
-  }
-  renderCols(cols) {
-    return (
-      <div className="preview-content">
-        {cols.map(([col, obj]) => (
-          <div key={col} className={`preview-content__column preview-content__column--${col}`}>
-            {obj.sections.map((s, sI) => (
-              <div key={sI} className="preview-content__section">
-                <Section
-                  title={s.title}
-                  progress={s.progress}
-                />
-                {s.rows.map((r, rI) => (
-                  <div key={rI} className="preview-content__row">
-                    {this.renderRow(r, rI)}
-                  </div>
-              ))}
-              </div>
-          ))}
-          </div>
-        ))}
-      </div>
-    );
-  }
   renderFile(file) {
     const Comp = this.getComponentForFile(file);
 
@@ -270,13 +210,6 @@ export default class extends PureComponent {
       return this.renderFile(preview.file);
     }
 
-    if (preview.main) {
-      const cols = [['main', preview.main]];
-      if (preview.side) {
-        cols.push(['side', preview.side]);
-      }
-      return this.renderCols(cols);
-    }
     return this.renderError();
   }
 
