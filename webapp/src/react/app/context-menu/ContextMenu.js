@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Measure from 'react-measure';
 import * as mainActions from 'src/redux/main/mainActions';
 import debounce from 'swipes-core-js/utils/debounce';
-import prefixAll from 'inline-style-prefixer/static';
 import styles from './ContextMenu.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
@@ -183,12 +182,11 @@ export default class ContextMenu extends PureComponent {
     const Comp = contextMenu.component;
     const props = contextMenu.props || {};
     const key = contextMenu.id;
-    const styles = this.state.styles;
     return (
       <Measure onMeasure={this.bouncedResize}>
         <Content
           innerRef={(c) => { this.menuRef = c; }}
-          style={prefixAll(styles)}>
+          {...this.state.styles}>
           <Comp hide={this.hideContextMenu} {...props} />
         </Content>
       </Measure>
