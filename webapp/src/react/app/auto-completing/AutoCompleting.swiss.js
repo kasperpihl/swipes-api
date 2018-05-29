@@ -11,6 +11,8 @@ export default styleSheet('AutoCompleting', {
     visibility: 'hidden',
     pointerEvents: 'none',
     overflowY: 'scroll',
+    showOnTop: {},
+    boundingRect: {},
     show: {
       visibility: 'visible',
       pointerEvents: 'all',
