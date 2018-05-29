@@ -199,7 +199,7 @@ class PostView extends PureComponent {
 
     return (
       <SWView
-        noframe
+        noframe={fromFeed}
         disableScroll={fromFeed}
         scrollToBottom={!fromFeed}
       >
