@@ -11,6 +11,7 @@ export default styleSheet('GoalAttachment', {
     },
   },
   Title: {
+    _truncateString: '',
     _font: ['15px', '24px', 400],
     padding: '12px',
     width: '100%',

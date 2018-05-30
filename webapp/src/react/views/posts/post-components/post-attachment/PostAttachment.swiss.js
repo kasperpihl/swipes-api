@@ -30,11 +30,11 @@ export default styleSheet('PostAttachment', {
       }
     },
     '!hasCloseIcon': {
-      '.attachment-container:hover &': {    
+      '.attachment-container:hover &': {
         _svgColor: '$blue',
       }
     },
-    
+
     hasCloseIcon: {
       '.icon-container:hover &': {
         _svgColor: '$blue',
@@ -42,12 +42,10 @@ export default styleSheet('PostAttachment', {
     }
   },
   Text: {
+    _truncateString: '',
     color: '$sw2',
     fontSize: '12px',
     lineHeight: '18px',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
     fontWeight: 400,
     '.attachment-container:hover &': {
       color: '$blue',
