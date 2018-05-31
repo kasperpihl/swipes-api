@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import { setupDelegate } from 'react-delegate';
 import PropTypes from 'prop-types';
 
 import './styles/view-controller.scss';
 
 class SWView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
   componentDidMount() {
     const { initialScroll, scrollToBottom } = this.props;
 

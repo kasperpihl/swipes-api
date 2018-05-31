@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Document, setOptions } from 'react-pdf/dist/entry.webpack';
-import { Page } from 'react-pdf';
+import { Document, setOptions, Page } from 'react-pdf/dist/entry.webpack';
 
 setOptions({
   workerSrc: '/js/pdf.worker.js',
