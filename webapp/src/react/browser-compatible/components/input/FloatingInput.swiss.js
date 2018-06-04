@@ -74,6 +74,10 @@ export default styleSheet('FloatingInput', {
         color: '$sw2',
         backgroundColor: 'white',
         padding: '4px',
+
+        '@media $max800': {
+          top: '-9px',
+        },
       },
     },
 
@@ -88,6 +92,10 @@ export default styleSheet('FloatingInput', {
         top: '-10px',
         backgroundColor: 'white',
         padding: '4px',
+
+        '@media $max800': {
+          top: '-9px',
+        },
       },
     },
 
