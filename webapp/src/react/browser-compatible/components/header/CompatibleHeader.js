@@ -16,7 +16,7 @@ const CompatibleHeader = (props) => {
   } = props;
 
   return (
-    <Wrapper className={center ? 'center' : ''}>
+    <Wrapper center={center}>
       <TitleContainer>
         {assignee && <CompatibleAssignees assignee={assignee} float="right" />}
         <h1>{title}</h1>

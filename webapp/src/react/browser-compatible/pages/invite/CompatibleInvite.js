@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router-dom';
-
+import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
@@ -10,30 +10,35 @@ import CompatibleInviteForm from './CompatibleInviteForm';
 import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import { Link } from 'react-router-dom';
-import './styles/compatible-invite.scss';
+import styles from './styles/CompatibleInvite.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const Form = styleElement('div', styles.Form);
+const SendButton = styleElement('div', styles.SendButton);
+const Hint = styleElement('div', styles.Hint);
 
 @withRouter
 export default class extends PureComponent {
   constructor(props) {
     super(props);
-    setupDelegate(this, 'onSendInvites');
-  } 
-  
+    setupDelegate(this, 'onSendInvites', 'onNameChange');
+  }
+
   renderInviteForm() {
     const { delegate, bindLoading, invites } = this.props;
 
     return (
-      <div className="form">
-        <CompatibleInviteForm 
-          invites={invites} 
+      <Form>
+        <CompatibleInviteForm
+          invites={invites}
           delegate={delegate}
           {...bindLoading()}
         />
-        <div className="form__send-button">
+        <SendButton>
           <CompatibleButton onClick={this.onSendInvites} title="Send Invites" />
-        </div>
+        </SendButton>
         <div className="clearfix"></div>
-      </div>
+      </Form>
     )
   }
   renderGoToWorkspace() {
@@ -57,11 +62,11 @@ export default class extends PureComponent {
     const { location } = this.props;
 
     return (
-      <div className="compatible-invite">
+      <Wrapper>
         <CompatibleHeader title="Your Workspace is ready!" subtitle="Invite your team to join in or download the app below." />
         {this.renderInviteForm()}
         {this.renderGoToWorkspace()}
-      </div>
+      </Wrapper>
     );
   }
 }

@@ -20,5 +20,5 @@ export default styleSheet('InputMenu', {
     '&::-webkit-input-placeholder': {
       color: '$sw2',
     },
-  }
+  },
 });

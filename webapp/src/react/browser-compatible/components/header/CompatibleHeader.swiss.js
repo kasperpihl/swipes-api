@@ -3,7 +3,9 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('CompatibleHeader',{
   Wrapper: {
     _size: ['100%', 'auto'],
-    '& .center': {
+    paddingTop: '21px',
+
+    'center': {
       textAlign: 'center',
     },
     '@media $maxH800': {
@@ -27,6 +29,8 @@ export default styleSheet('CompatibleHeader',{
     '& h3': {
       _font: ['15px', '24px', '400'],
       color: '$sw2',
+      marginTop: '10px',
+
       '@media $max600': {
         display: 'block',
         textAlign: 'center',

@@ -16,7 +16,6 @@ class FloatingInput extends PureComponent {
       floatValue: 0 || props.value.length,
       visiblePassword: false,
     };
-    setupDelegate(this, 'onClick', 'onChange');
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.focus !== this.props.focus && !this.props.focus) {
@@ -43,12 +42,13 @@ class FloatingInput extends PureComponent {
     this.setState({ floatValue: inputVal });
   }
   render() {
-    const { inputKey, type, placeholder, value, props } = this.props;
-    const { visiblePassword, float, floatValue } = this.state;
+    const { inputKey, type, placeholder, value, inviteFormField, inputError, inputProps } = this.props;
 
+    const { visiblePassword, float, floatValue } = this.state;
+    console.log(inputError);
     return (
-      <SwissProvider active={!!float} standBy={floatValue > 0}>
-        <Wrapper>
+      <SwissProvider active={!!float} standBy={floatValue > 0} inviteFormField={inviteFormField} inputError={inputError} >
+        <Wrapper className={this.props.className}>
           <Input
             innerRef={c => this.input = c}
             type={type}
@@ -56,11 +56,11 @@ class FloatingInput extends PureComponent {
             id={inputKey}
             onFocus={this.floatFocus}
             onBlur={this.floatBlur}
-            onChange={this.onChangeCached(inputKey)}
+            onChange={this.props.onChange}
             autoComplete="off"
-            {...props}
+            {...inputProps}
           />
-          <Label htmlFor={inputKey}>{placeholder}</Label>
+          <Label htmlFor={inputKey}>{inputError || placeholder}</Label>
         </Wrapper>
       </SwissProvider>
     );
