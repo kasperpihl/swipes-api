@@ -39,8 +39,8 @@ export default styleSheet('NotSupported', {
   },
 
   Description: {
-    _font: ['15px', '18px', '500'],
+    _font: ['15px', '18px', '300'],
     padding: '21px 0',
-    color: '$blue20',
+    color: '$sw1',
   },
 })

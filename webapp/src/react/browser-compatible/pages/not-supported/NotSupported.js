@@ -55,7 +55,7 @@ class NotSupported extends PureComponent {
             {`Invite more people to ${organization.get('name')}. Gather your whole team.`}
           </Description>
           <OptionTitle>
-            <Link to="/invite" className="not-supported__link">Invite people</Link>
+            <StyledLink to="/invite">Invite people</StyledLink>
           </OptionTitle>
         </div>
         {this.renderLeaveOrDelete()}
