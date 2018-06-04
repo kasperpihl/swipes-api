@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import Tabs from 'components/tabs/Tabs';
 import Icon from 'Icon';
 import { colors, viewSize } from 'globalStyles';
@@ -106,9 +106,9 @@ class HOCHeader extends PureComponent {
           <Text selectable={true} style={styles.subtitle}>{subtitle}</Text>
         </View>
       )
-    } else {
+    } 
       return subtitle;
-    }
+    
   }
   renderTabs() {
     const { tabs } = this.props;
@@ -118,7 +118,7 @@ class HOCHeader extends PureComponent {
     }
 
     const renderTabs = tabs.map((t, i) => (
-      <Text selectable={true} name={i} key={i} style={styles.tabTitle}>{t}</Text>
+      <Text selectable name={i} key={i} style={styles.tabTitle}>{t}</Text>
     ));
 
     return (
@@ -154,16 +154,16 @@ class HOCHeader extends PureComponent {
         marginTop: 6,
         borderRadius: 2,
         flex: 0,
-      }} >
+      }}
+      >
         <Icon icon={icon} width="24" height="24" fill={colors.deepBlue80} />
       </View>
-    )
+    );
   }
   renderTitle() {
-
     return (
       <Text style={styles.title}>{this.props.title}</Text>
-    )
+    );
   }
   render() {
     const { headerHeight } = this.state;

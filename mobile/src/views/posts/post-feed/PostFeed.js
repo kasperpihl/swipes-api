@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import ImmutableVirtualizedList from 'react-native-immutable-list-view';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 import HOCHeader from 'HOCHeader';
 import WaitForUI from 'WaitForUI';
@@ -31,7 +31,7 @@ class PostFeed extends PureComponent {
     this.onHeaderTap = this.onHeaderTap.bind(this);
   }
   onHeaderTap() {
-    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
+    this.refs.scrollView.scrollTo({ x: 0, y: 0, animated: true });
   }
   onChangeTab(index) {
     this.onChangeTabs(index);
@@ -42,9 +42,9 @@ class PostFeed extends PureComponent {
 
     if (tabs) {
       tabObj = {
-        tabs: tabs,
-        currentTab: tabIndex
-      }
+        tabs,
+        currentTab: tabIndex,
+      };
     }
 
     return (
@@ -64,7 +64,7 @@ class PostFeed extends PureComponent {
   renderFeedItem(post) {
     const { delegate } = this.props;
 
-    return <PostFeedItem post={post} delegate={delegate} />
+    return <PostFeedItem post={post} delegate={delegate} />;
   }
   renderListLoader() {
     return (
@@ -77,19 +77,18 @@ class PostFeed extends PureComponent {
     return <EmptyListFooter />;
   }
   renderEmptyState() {
-
     return (
-      <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-        <Icon icon="ESDiscussion" width="290" height="300"  />
-        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Start a discussion or share an idea</Text>
+      <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+        <Icon icon="ESDiscussion" width="290" height="300" />
+        <Text selectable style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center' }}>Start a discussion or share an idea</Text>
       </View>
-    )
+    );
   }
   renderList() {
     const { posts, relatedPosts, tabIndex } = this.props;
-    
+
     if (!posts.size) {
-      return this.renderEmptyState()
+      return this.renderEmptyState();
     }
 
     const renderPosts = (tabIndex === 1) ? relatedPosts : posts;
@@ -104,7 +103,7 @@ class PostFeed extends PureComponent {
           renderFooter={this.renderFooter}
         />
       </WaitForUI>
-    )
+    );
   }
   render() {
     return (

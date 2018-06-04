@@ -1,42 +1,43 @@
-import React, { PureComponent } from "react";
-import { View, Text, StyleSheet, Image, ScrollView, Platform, Keyboard, UIManager, LayoutAnimation, InteractionManager } from "react-native";
-import ParsedText from "react-native-parsed-text";
-import { List } from "immutable";
-import { setupDelegate, iconForId, attachmentIconForService, bindAll } from "swipes-core-js/classes/utils";
+import React, { PureComponent } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, Platform, Keyboard, UIManager, LayoutAnimation, InteractionManager } from 'react-native';
+import ParsedText from 'react-native-parsed-text';
+import { List } from 'immutable';
+import { setupDelegate } from 'react-delegate';
+import { iconForId, attachmentIconForService, bindAll } from 'swipes-core-js/classes/utils';
 import timeAgo from 'swipes-core-js/utils/time/timeAgo';
-import { colors, viewSize, statusbarHeight } from "globalStyles";
-import HOCHeader from "HOCHeader";
-import StyledText from "components/styled-text/StyledText";
-import Icon from "Icon";
+import { colors, viewSize, statusbarHeight } from 'globalStyles';
+import HOCHeader from 'HOCHeader';
+import StyledText from 'components/styled-text/StyledText';
+import Icon from 'Icon';
 import * as gs from 'styles';
-import RippleButton from "RippleButton";
-import Reactions from "components/reactions/Reactions";
-import CommentView from "components/comment-view/CommentView";
+import RippleButton from 'RippleButton';
+import Reactions from 'components/reactions/Reactions';
+import CommentView from 'components/comment-view/CommentView';
 import WaitForUI from 'WaitForUI';
 import PostFooter from './PostFooter';
 
 const styles = StyleSheet.create({
   container: {
     ...gs.mixins.size(1),
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
   },
   header: {
     ...gs.mixins.flex('row'),
     ...gs.mixins.padding(50, 15, 11, 15),
     ...gs.mixins.border(1, gs.colors.deepBlue20, 'bottom'),
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
   },
   headerSide: {
     ...gs.mixins.size(1),
-    paddingLeft: 12
+    paddingLeft: 12,
   },
   profilePicWrapper: {
     ...gs.mixins.size(54),
-    borderRadius: 54 / 2
+    borderRadius: 54 / 2,
   },
   profilePic: {
     ...gs.mixins.size(54),
-    borderRadius: 54 / 2
+    borderRadius: 54 / 2,
   },
   initials: {
     ...gs.mixins.size(54),
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   },
   initialsLabel: {
     ...gs.mixins.font(28, 'white'),
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   textStyle: {
     ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     ...gs.mixins.flex('row', 'left', 'center'),
-    paddingTop: 5
+    paddingTop: 5,
   },
   subtitleLabel: {
     ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
@@ -74,16 +75,16 @@ const styles = StyleSheet.create({
   },
   actions: {
     ...gs.mixins.flex('row', 'right'),
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     height: 54,
     paddingRight: 15,
   },
   actionsSeperator: {
     ...gs.mixins.size(viewSize.width - 30, 1),
     backgroundColor: colors.deepBlue10,
-    position: "absolute",
+    position: 'absolute',
     left: 15,
-    top: 0
+    top: 0,
   },
   comments: {
     ...gs.mixins.padding(0, 15, 21, 15),
@@ -129,14 +130,14 @@ class PostView extends PureComponent {
       headerHeight: 0,
     };
 
-    bindAll(this, ['onHeaderTap', 'keyboardShow', 'keyboardHide', 'scrollToBottom'])
+    bindAll(this, ['onHeaderTap', 'keyboardShow', 'keyboardHide', 'scrollToBottom']);
     setupDelegate(this, 'onOpenUrl', 'onAddReaction', 'onNavigateToContext', 'onAttachmentClick');
 
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
-  componentWillMount () {
+  componentWillMount() {
     if (this.props.initialScrollToBottom) {
       this.shouldScrollToBottom = true;
     }
@@ -162,10 +163,10 @@ class PostView extends PureComponent {
     this.keyboardShowListener.remove();
     this.keyboardHideListener.remove();
   }
-  keyboardShow () {
+  keyboardShow() {
     this.setState({ collapseHeader: true });
   }
-  keyboardHide () {
+  keyboardHide() {
     this.setState({ collapseHeader: false });
   }
   measureView(event) {
@@ -183,39 +184,39 @@ class PostView extends PureComponent {
     this.interactionHandle = InteractionManager.runAfterInteractions(() => {
       if (this.shouldScrollToBottom && this.refs.scrollView) {
         this.shouldScrollToBottom = false;
-        this.refs.scrollView.scrollToEnd({animated: true});
+        this.refs.scrollView.scrollToEnd({ animated: true });
       }
     });
   }
   onHeaderTap() {
-    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
+    this.refs.scrollView.scrollTo({ x: 0, y: 0, animated: true });
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
 
-    const type = post.get("type");
+    const type = post.get('type');
 
-    let string = [
+    const string = [
       {
-        id: post.get("created_by"),
-        string: msgGen.users.getFirstName(post.get("created_by")),
-        boldStyle: styles.boldStyle
+        id: post.get('created_by'),
+        string: msgGen.users.getFirstName(post.get('created_by')),
+        boldStyle: styles.boldStyle,
       },
-      " ",
-      msgGen.posts.getPostTypeTitle(type)
+      ' ',
+      msgGen.posts.getPostTypeTitle(type),
     ];
 
-    const taggedUsers = post.get("tagged_users");
+    const taggedUsers = post.get('tagged_users');
     if (taggedUsers.size) {
-      string.push(" and tagged ");
+      string.push(' and tagged ');
       taggedUsers.forEach((id, i) => {
         if (i > 0) {
-          string.push(i === taggedUsers.size - 1 ? " and " : ", ");
+          string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');
         }
         string.push({
           id,
           string: msgGen.users.getFirstName(id),
-          boldStyle: styles.boldStyle
+          boldStyle: styles.boldStyle,
         });
       });
     }
@@ -224,13 +225,13 @@ class PostView extends PureComponent {
   }
   renderProfilePic() {
     const { post } = this.props;
-    const image = msgGen.users.getPhoto(post.get("created_by"));
-    const initials = msgGen.users.getInitials(post.get("created_by"));
+    const image = msgGen.users.getPhoto(post.get('created_by'));
+    const initials = msgGen.users.getInitials(post.get('created_by'));
 
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text selectable={true} style={styles.initialsLabel}>
+          <Text selectable style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>
@@ -245,27 +246,27 @@ class PostView extends PureComponent {
   }
   renderHeaderSubtitle() {
     const { post } = this.props;
-    const timeStamp = timeAgo(post.get("created_at"), true);
-    const seperator = post.get("context")
-      ? <Text selectable={true} style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text>
+    const timeStamp = timeAgo(post.get('created_at'), true);
+    const seperator = post.get('context')
+      ? <Text selectable style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text>
       : undefined;
-    const contextTitle = post.get("context")
-      ? <Text selectable={true} style={styles.subtitleLabel}>
-        {post.getIn(["context", "title"])}
-      </Text>
+    const contextTitle = post.get('context')
+      ? (<Text selectable style={styles.subtitleLabel}>
+        {post.getIn(['context', 'title'])}
+      </Text>)
       : undefined;
-    const icon = post.get("context")
-      ? <Icon icon={iconForId(post.getIn(["context", "id"]))} width="12" height="12" fill={colors.deepBlue40} />
+    const icon = post.get('context')
+      ? <Icon icon={iconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} />
       : undefined;
-    const padding = post.get("context") ? 5 : 0;
+    const padding = post.get('context') ? 5 : 0;
 
     return (
       <View style={styles.subtitle}>
         {icon}
-        <Text selectable={true} style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
+        <Text selectable style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
           {contextTitle}
           {seperator}
-          <Text selectable={true} style={styles.subtitleLabel}>
+          <Text selectable style={styles.subtitleLabel}>
             {timeStamp}
           </Text>
         </Text>
@@ -304,19 +305,19 @@ class PostView extends PureComponent {
   }
   renderMessage() {
     const { post, delegate } = this.props;
-    const message = post.get("message");
+    const message = post.get('message');
 
     return (
       <View style={styles.messageWrapper}>
         <ParsedText
           style={styles.message}
-          parse={[{ type: "url", style: styles.url, onPress: this.onOpenUrl }]}
+          parse={[{ type: 'url', style: styles.url, onPress: this.onOpenUrl }]}
         >
           {message}
         </ParsedText>
         <View style={styles.reactionWrapper}>
           <Reactions
-            reactions={post.get("reactions")}
+            reactions={post.get('reactions')}
             post={post}
             delegate={delegate}
           />
@@ -340,36 +341,36 @@ class PostView extends PureComponent {
             height="24"
             fill={colors.deepBlue80}
           />
-          <Text selectable={true} style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+          <Text selectable style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
         </View>
       </RippleButton>
-    ))
+    ));
 
     return (
       <View style={styles.attachments}>
         {attachments}
       </View>
-    )
+    );
   }
   renderOpenContextButton() {
     const { post } = this.props;
-    const context = post.get("context");
+    const context = post.get('context');
 
     if (!context) {
       return undefined;
     }
 
     const title = context.get('title');
-    const newTitle = title.length > 10 ? title.slice(0, 9) + '...' : title;
+    const newTitle = title.length > 10 ? `${title.slice(0, 9) }...` : title;
 
     return (
       <RippleButton style={styles.navButton} onPress={this.onNavigateToContext}>
         <View style={styles.navButton}>
-          <Text selectable={true} style={styles.navButtonLabel}>Open "{newTitle}"</Text>
+          <Text selectable style={styles.navButtonLabel}>Open "{newTitle}"</Text>
           <Icon icon="ArrowRightLine" width="24" height="24" fill={colors.deepBlue50} />
         </View>
       </RippleButton>
-    )
+    );
   }
   renderActions() {
     const { post, delegate } = this.props;
@@ -383,20 +384,20 @@ class PostView extends PureComponent {
   }
   renderComments() {
     const { post, delegate } = this.props;
-    const comments = post.get("comments");
+    const comments = post.get('comments');
 
-    let renderComments = undefined;
+    let renderComments;
 
     if (comments && comments.size) {
-      let sortedComments = comments.toList().sort((a, b) => a.get("created_at").localeCompare(b.get("created_at")));
+      const sortedComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at')));
 
       renderComments = sortedComments.map((c, i) =>
-        <CommentView
+        (<CommentView
           isLast={i === comments.size - 1}
           comment={c}
-          key={c.get("id")}
+          key={c.get('id')}
           delegate={delegate}
-        />
+        />),
       ).toArray();
     }
 
@@ -409,8 +410,8 @@ class PostView extends PureComponent {
   renderContent() {
     return (
       <WaitForUI onRendered={this.scrollToBottom}>
-        <ScrollView 
-          style={{ flex: 1 }} 
+        <ScrollView
+          style={{ flex: 1 }}
           ref="scrollView"
           onContentSizeChange={() => {
             this.shouldScrollToBottom = true;
@@ -427,24 +428,23 @@ class PostView extends PureComponent {
           {this.renderComments()}
         </ScrollView>
       </WaitForUI>
-    )
+    );
   }
   render() {
     const { delegate, bindLoading } = this.props;
-
 
 
     return (
       <View style={styles.container}>
         {this.renderPostHeader()}
         {this.renderContent()}
-        <PostFooter 
-          ref="postFooter" 
+        <PostFooter
+          ref="postFooter"
           navPush={this.props.navPush}
-          onFocus={this.scrollToBottom} 
-          delegate={delegate} 
-          placeholder="Write a comment…" 
-          {...bindLoading()} 
+          onFocus={this.scrollToBottom}
+          delegate={delegate}
+          placeholder="Write a comment…"
+          {...bindLoading()}
         />
       </View>
     );
