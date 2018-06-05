@@ -4,6 +4,7 @@ import { setupDelegate } from 'react-delegate';
 import { styleElement, SwissProvider } from 'swiss-react';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import Icon from 'Icon';
+import styles from './CompatibleInviteForm.swiss';
 
 const InviteForm = styleElement('div', styles.InviteForm);
 const RowWrapper = styleElement('div', styles.RowWrapper);
@@ -20,7 +21,6 @@ const Success = styleElement(Icon, styles.Success);
 class CompatibleInviteForm extends PureComponent {
   constructor(props) {
     super(props);
-    this.state =  {};
     setupDelegate(this, 'onNameChange', 'onEmailChange', 'onAddInput');
     // this.callDelegate.bindAll('onLala');
   }

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { styleElement } from 'swiss-react';
+import { setupDelegate } from 'react-delegate';
 import ResultItem from 'src/react/components/result-item/ResultItem';
 import AutoCompleteItem from './AutoCompleteItem';
-
 import styles from './AutoCompleting.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
