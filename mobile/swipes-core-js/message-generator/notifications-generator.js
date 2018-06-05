@@ -99,15 +99,15 @@ export default class NotificationsGenerator {
       }
       case 'post_reaction_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
-        text.push(` liked your ${meta.get('type')}: "${this.parseMessage(meta.get('message'))}"`);
+        text.push(` liked your post}: "${this.parseMessage(meta.get('message'))}"`);
         break;
       }
       case 'post_comment_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
-        const byMe = meta.get('created_by') === users.getUser('me');
-        const preFix = byMe ? 'your ' : posts.getPrefixForType();
-        const followString = byMe ? '' : ' you follow';
-        text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${this.parseMessage(meta.get('message'))}"`);
+        const byMe = meta.get('post_created_by') === users.getUser('me').get('id');
+        const preFix = byMe ? 'your' : posts.getPrefixForType();
+        const followString = byMe ? '' : 'you follow';
+        text.push(` commented on ${preFix} post ${followString}: "${this.parseMessage(meta.get('post_message'))}"`);
         break;
       }
       case 'post_comment_reaction_added': {

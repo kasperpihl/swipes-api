@@ -128,6 +128,7 @@ const postCommentAddedNotificationData = (req, res, next) => {
       comment_message: comment.message.replace(cutTextRegExp, '$1'),
       context: post.context,
       created_by: comment.created_by,
+      post_created_by: post.created_by,
       push: true,
     },
   };
