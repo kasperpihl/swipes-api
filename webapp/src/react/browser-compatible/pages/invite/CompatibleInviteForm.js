@@ -4,7 +4,6 @@ import { setupDelegate } from 'react-delegate';
 import { styleElement, SwissProvider } from 'swiss-react';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import Icon from 'Icon';
-import styles from './styles/CompatibleInviteForm.swiss';
 
 const InviteForm = styleElement('div', styles.InviteForm);
 const RowWrapper = styleElement('div', styles.RowWrapper);

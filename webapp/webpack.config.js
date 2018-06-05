@@ -132,7 +132,6 @@ module.exports = {
   devServer: {
     publicPath: '/',
     port: 3000,
-    host: '0.0.0.0',
     contentBase: './dist',
     inline: true,
     hot: !isProd,
