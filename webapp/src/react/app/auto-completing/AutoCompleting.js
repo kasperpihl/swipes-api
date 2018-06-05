@@ -8,6 +8,10 @@ import styles from './AutoCompleting.swiss';
 const Wrapper = styleElement('div', styles.Wrapper);
 
 class AutoCompleting extends PureComponent {
+  constructor(props) {
+    super(props);
+    setupDelegate(this, 'onSelectRow');
+  }
   renderResults() {
     const { selectedIndex, alignToTop, autoComplete } = this.props;
 
@@ -21,6 +25,7 @@ class AutoCompleting extends PureComponent {
         >
           <ResultItem
             {...r.resultItem}
+            onMouseDown={this.onSelectRowCached(i)}
           />
         </AutoCompleteItem>
       )

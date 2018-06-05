@@ -156,7 +156,7 @@ export default class extends PureComponent {
               clearMentions
             />
           </InputWrapper>
-          <AssigneesWrapper shown={isFocused || textLength}>
+          <AssigneesWrapper shown={assignees.size || isFocused || textLength}>
             <HOCAssigning
               assignees={assignees}
               delegate={this}

@@ -7,8 +7,6 @@ import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-import './styles/signup.scss';
-
 @connect(state => ({
   token: state.getIn(['connection', 'token']),
 }), {
@@ -63,7 +61,7 @@ export default class extends PureComponent {
   onSignup() {
     const { formData, invitationToken, me } = this.state;
     const { signup, createOrgRequest, setUrl } = this.props;
-    
+
     if (this.isLoading('signupButton')) {
       return;
     }
@@ -113,7 +111,7 @@ export default class extends PureComponent {
     } = this.state;
 
     const { token } = this.props;
-    
+
     if (this.isLoading('signup')) {
       return (
         <div className="compatible-signup__loader">

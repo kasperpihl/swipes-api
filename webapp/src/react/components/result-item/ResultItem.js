@@ -15,7 +15,6 @@ class ResultItem extends Component {
   }
   onClick(side, e) {
     const { onClick, disabled } = this.props;
-
     if (onClick && !disabled) {
       e.stopPropagation();
       onClick(side, e);
@@ -102,7 +101,7 @@ class ResultItem extends Component {
     return <div className="result__subtitle">{subtitle}</div>;
   }
   render() {
-    const { disabled, selected } = this.props;
+    const { disabled, selected, onMouseDown } = this.props;
     let className = 'result';
 
     if (disabled) {
@@ -114,7 +113,7 @@ class ResultItem extends Component {
     }
 
     return (
-      <div className={className} onClick={this.onClickCached('row')}>
+      <div className={className} onMouseDown={onMouseDown} onClick={this.onClickCached('row')}>
         {this.renderLeftIcon()}
         <div className="result__data">
           {this.renderTitle()}

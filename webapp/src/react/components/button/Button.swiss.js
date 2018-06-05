@@ -3,7 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('Button', {
   GlobalStyles: {
     '@keyframes button-loader': {
-      '0%': { 
+      '0%': {
         WebkitTransform: 'scale(0)',
       },
       '100%': {

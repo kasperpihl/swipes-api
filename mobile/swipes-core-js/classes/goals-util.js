@@ -103,6 +103,9 @@ export default class GoalsUtil {
     return numberOfCompleted;
   }
   getNumberOfSteps() {
+    if (!this.goal) {
+      return undefined;
+    }
     return this.goal.get('step_order').size;
   }
   getStepTitleFromId(id) {

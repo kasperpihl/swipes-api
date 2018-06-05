@@ -1,115 +1,119 @@
 import React, { PureComponent } from 'react';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
+import { styleElement, SwissProvider } from 'swiss-react';
+import FloatingInput from 'compatible/components/input/FloatingInput';
 import Icon from 'Icon';
-import './styles/compatible-invite-form.scss';
+
+const InviteForm = styleElement('div', styles.InviteForm);
+const RowWrapper = styleElement('div', styles.RowWrapper);
+const InputRow = styleElement('div', styles.InputRow);
+const StyledFloatingInput = styleElement(FloatingInput, styles.StyledFloatingInput);
+const Separator = styleElement('div', styles.Separator);
+const Wrapper = styleElement('div', styles.Wrapper);
+const AddButton = styleElement('div', styles.AddButton);
+const AddSVG = styleElement(Icon, styles.AddSVG);
+const States = styleElement('div', styles.States);
+const Loader = styleElement(Icon, styles.Loader);
+const Success = styleElement(Icon, styles.Success);
 
 class CompatibleInviteForm extends PureComponent {
   constructor(props) {
     super(props);
-
+    this.state =  {};
     setupDelegate(this, 'onNameChange', 'onEmailChange', 'onAddInput');
     // this.callDelegate.bindAll('onLala');
   }
+
   renderLoader(isLoading, success) {
 
     if (isLoading) {
       return (
-        <div className="input-row__states">
-          <Icon icon="darkloader" width="12" height="12" className="input-row__loader" />
-        </div>
+        <States>
+          <Loader icon="darkloader"/>
+        </States>
       )
     }
 
     if (success) {
       return (
-        <div className="input-row__states">
-          <Icon icon="ChecklistCheckmark" className="input-row__success" />
-        </div>
+        <States>
+          <Success icon="ChecklistCheckmark" />
+        </States>
       )
     }
 
     return undefined;
   }
+
   renderInput(i, obj) {
-    const { getLoading } = this.props;
+    const { getLoading, invites } = this.props;
     const lState = getLoading(i);
     const nameError = getLoading(i + 'name').error;
     const emailError = getLoading(i + 'email').error;
     const isLoading = !!lState.loading;
     const success = lState.success;
     const isDisabled = !!(lState.loading || lState.success);
-
     const labelTargetForName = `compatible-invite-name-${i}`;
     const labelTargetForEmail = `compatible-invite-email-${i}`;
+
     let className = 'input-row';
 
-    if (nameError) className += ' input-row--error input-row--name-error';
-    if (emailError) className += ' input-row--error input-row--email-error';
-
-    const nameLabel = nameError ? nameError : 'First name';
-    const emailLabel = emailError ? emailError : 'name@company.com';
+    const nameLabel = 'First name';
+    const emailLabel = 'name@company.com';
 
     return (
-      <div className={className} key={i}>
-        <div className="input-row__wrapper">
-          <label htmlFor={labelTargetForName}>
-            <div className="input-row__inner-wrapper">
-              <input 
-                type="text" 
-                id={labelTargetForName} 
-                className="compatible-invite-form__input" 
-                placeholder=" " 
-                autoFocus={i === 0} 
-                disabled={isDisabled}
-                value={obj.get('firstName')}
-                onChange={this.onNameChangeCached(i)}
-              />
-              <div className="compatible-invite-form__input-label">{nameLabel}</div>
-            </div>
-          </label>
-        </div>
-
-        <div className="input-row__wrapper">
-          <div className="input-row__seperator"></div>
-          <label htmlFor={labelTargetForEmail}>
-            <div className="input-row__inner-wrapper">
-              <input 
-                type="email"
-                id={labelTargetForEmail}
-                className="compatible-invite-form__input"
-                placeholder=" "
-                disabled={isDisabled}
-                value={obj.get('email')}
-                onChange={this.onEmailChangeCached(i)}
-              />
-              <div className="compatible-invite-form__input-label">{emailLabel}</div>
-            </div>
-          </label>
-        </div>
+      <InputRow key={i}>
+        <RowWrapper>
+                <StyledFloatingInput
+                  leftfield
+                  inviteFormField
+                  inputError={nameError}
+                  placeholder={nameLabel}
+                  value={obj.get('firstName')}
+                  inputKey={`name${i}`}
+                  type='text'
+                  autoFocus={i === 0}
+                  onChange={this.onNameChangeCached(i)}
+                />
+        </RowWrapper>
+        <Separator></Separator>
+        <RowWrapper>
+              <StyledFloatingInput
+                  rightfield
+                  inviteFormField
+                  placeholder={emailLabel}
+                  inputError={emailError}
+                  value={obj.get('email')}
+                  inputKey={`email${i}`}
+                  type='text'
+                  autoFocus={i === 0}
+                  onChange={this.onEmailChangeCached(i)}
+                />
+        </RowWrapper>
 
         {this.renderLoader(isLoading, success)}
-      </div>
+      </InputRow>
     )
   }
   renderInputs() {
     const { invites } = this.props;
 
     return (
-      <div className="compatible-invite-form__input-wrapper">
+      <Wrapper>
         {invites.map((obj, i) => this.renderInput(i, obj))}
-        <div className="compatible-invite-form__add-button" onClick={this.onAddInput}>
-          <Icon icon="Plus" className="compatible-invite-form__add-svg" />
+        <AddButton onClick={this.onAddInput}>
+          <AddSVG icon="Plus" />
           Add more people
-        </div>
-      </div>
+        </AddButton>
+      </Wrapper>
     );
   }
   render() {
     return (
-      <div className="compatible-invite-form">
+      <InviteForm>
         {this.renderInputs()}
-      </div>
+      </InviteForm>
     );
   }
 }

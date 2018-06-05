@@ -12,6 +12,7 @@ const SectionTitle = styleElement('div', styles.SectionTitle);
 const DeviceWrapper = styleElement('div', styles.DeviceWrapper);
 const Device = styleElement('a', styles.Device);
 const DeviceSVG = styleElement(Icon, styles.DeviceSVG);
+const DeviceName = styleElement('p', styles.DeviceName);
 
 const downloadLinks = {
   darwin: 'http://swipesapp.com/download-mac',
@@ -34,7 +35,7 @@ class CompatibleDownload extends PureComponent {
     if(isLinux){
       return 'renderLinux';
     }
-    
+
     return 'renderWindows';
   }
   mobileCheck() {
@@ -67,7 +68,7 @@ class CompatibleDownload extends PureComponent {
     return (
       <Device href={downloadLinks.win32} className="device-hover" target="_blank">
         <DeviceSVG icon="WindowsDevice" />
-        <p>Windows</p>
+        <DeviceName>Windows</DeviceName>
       </Device>
     );
   }
@@ -78,7 +79,7 @@ class CompatibleDownload extends PureComponent {
     return (
       <Device href={downloadLinks.darwin} className="device-hover" target="_blank">
         <DeviceSVG icon="MacDevice" />
-        <p>MacOS</p>
+        <DeviceName>MacOS</DeviceName>
       </Device>
     );
   }
@@ -89,7 +90,7 @@ class CompatibleDownload extends PureComponent {
     return (
       <Device href={downloadLinks.linux} className="device-hover" target="_blank">
         <DeviceSVG icon="LinuxDevice"/>
-        <p>Linux</p>
+        <DeviceName>Linux</DeviceName>
       </Device>
     );
   }
@@ -115,11 +116,11 @@ class CompatibleDownload extends PureComponent {
           <DeviceWrapper>
             <Device href={downloadLinks.ios} className="device-hover" target="_blank">
               <DeviceSVG icon="IphoneDevice" />
-              <p>iOS</p>
+              <DeviceName>iOS</DeviceName>
             </Device>
             <Device href={downloadLinks.android} className="device-hover" target="_blank">
               <DeviceSVG icon="AndroidDevice" />
-              <p>Android</p>
+              <DeviceName>Android</DeviceName>
             </Device>
           </DeviceWrapper>
         </Section>,
@@ -140,11 +141,11 @@ class CompatibleDownload extends PureComponent {
         <DeviceWrapper>
           <Device href={downloadLinks.ios} className="device-hover" target="_blank">
             <DeviceSVG icon="IphoneDevice" />
-            <p>iOS</p>
+            <DeviceName>iOS</DeviceName>
           </Device>
           <Device href={downloadLinks.android} className="device-hover" target="_blank">
             <DeviceSVG icon="AndroidDevice" />
-            <p>Android</p>
+            <DeviceName>Android</DeviceName>
           </Device>
         </DeviceWrapper>
       </Section>

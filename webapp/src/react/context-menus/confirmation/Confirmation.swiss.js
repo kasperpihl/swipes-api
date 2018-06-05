@@ -13,11 +13,11 @@ export default styleSheet('Confirmation', {
   },
   Title: {
     _font: ['21px', '27px', 500],
-    color: '$sw2',
+    color: '$sw1',
   },
   Message: {
     _font: ['15px', '27px'],
-    color: '$sw2',
+    color: '$sw1',
   },
   Actions: {
     _size: ['100%', 'auto'],

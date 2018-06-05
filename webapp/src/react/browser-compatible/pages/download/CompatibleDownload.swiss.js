@@ -39,13 +39,6 @@ export default styleSheet('CompatibleDownload', {
       backgroundColor: '$blue20',
       transition: '.35s ease',
     },
-    '&>p': {
-      _font: ['12px', '24px', 500],
-      color: '$blue',
-      margin: 0,
-      padding: 0,
-      transition: '.35s ease',
-    },
     '@media $max600': {
       _size: ['100%', 'auto'],
       boxSizing: 'border-box',
@@ -64,6 +57,18 @@ export default styleSheet('CompatibleDownload', {
     '.device-hover:hover &': {
         _svgColor: '$blue',
         transition: '.35s ease',
+        transform: 'translateY(-6px)',
     }
-  }
+  },
+  DeviceName: {
+    _font: ['12px', '24px', '500'],
+    color: '$blue',
+    margin: '0',
+    padding: '0',
+    transition: '.35s ease',
+    '.device-hover:hover &': {
+      transition: '.35s ease',
+      transform: 'translateY(-6px)',
+    },
+  },
 });
