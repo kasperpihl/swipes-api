@@ -35,6 +35,18 @@ export default function meReducer(state = initialState, action) {
     case 'organization_updated': {
       return state.mergeIn(['organizations', 0], fromJS(payload.organization));
     }
+    case 'milestones.create':
+    case 'milestone_created':
+    case 'milestones.open':
+    case 'milestone_opened':
+    case 'milestones.close':
+    case 'milestone_closed':
+    case 'milestones.delete':
+    case 'milestone_deleted':
+    case 'organizations.milestoneReorder':
+    case 'organization_milestone_reordered': {
+      return state.setIn(['organizations', 0, 'milestone_order'], fromJS(payload.milestone_order));
+    }
     case 'service_added': {
       const service = fromJS(payload);
       return state.updateIn(['services'], services => services.push(service));

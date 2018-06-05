@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { setupDelegate, bindAll } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import { colors } from 'globalStyles';
 
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     marginTop: 3,
   },
-})
+});
 
 class HOCReactions extends PureComponent {
   constructor(props) {
@@ -45,9 +46,9 @@ class HOCReactions extends PureComponent {
     const { iLike } = this.state;
 
     if (iLike) {
-      this.onRemoveReaction(post, cId)
+      this.onRemoveReaction(post, cId);
     } else {
-      this.onAddReaction(post, cId)
+      this.onAddReaction(post, cId);
     }
   }
   updateILike(nextReactions) {
@@ -72,7 +73,7 @@ class HOCReactions extends PureComponent {
       <View style={styles.likeButton}>
         <Icon icon="Heart" width="24" height="24" fill={heartFill} stroke={heartStroke} />
       </View>
-    )
+    );
   }
   renderLikers() {
     const { reactions, commentId } = this.props;
@@ -88,15 +89,15 @@ class HOCReactions extends PureComponent {
     return (
 
       <View style={styles.likers}>
-        <Text selectable={true} style={[styles.likeButtonLabel, { color: labelColor }]}>
+        <Text selectable style={[styles.likeButtonLabel, { color: labelColor }]}>
           {likeString}
         </Text>
       </View>
-    )
+    );
   }
   render() {
     const { children, height } = this.props;
-    const heightStyles = height ? { height: height } : {};
+    const heightStyles = height ? { height } : {};
 
     return (
       <TouchableOpacity onPress={this.handleLike}>

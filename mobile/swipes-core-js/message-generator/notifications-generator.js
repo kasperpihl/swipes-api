@@ -91,7 +91,7 @@ export default class NotificationsGenerator {
       }
       case 'post_created': {
         text.push(boldText('send', users.getName(meta.get('created_by'), { capitalize: true }), boldStyle));
-        text.push(` ${posts.getPostTypeTitle(meta.get('type'))}`);
+        text.push(` ${posts.getPostTypeTitle()}`);
         text.push(' and tagged ');
         text.push(boldText('users', 'you', boldStyle));
         text.push(`: "${this.parseMessage(meta.get('message'))}"'`);
@@ -105,7 +105,7 @@ export default class NotificationsGenerator {
       case 'post_comment_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
         const byMe = meta.get('created_by') === users.getUser('me');
-        const preFix = byMe ? 'your ' : posts.getPrefixForType(meta.get('type'));
+        const preFix = byMe ? 'your ' : posts.getPrefixForType();
         const followString = byMe ? '' : ' you follow';
         text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${this.parseMessage(meta.get('message'))}"`);
         break;

@@ -33,7 +33,7 @@ export default class extends PureComponent {
         className: 'post-result__styled-button',
       },
       ' ',
-      msgGen.posts.getPostTypeTitle(type)
+      msgGen.posts.getPostTypeTitle()
     ];
 
     const taggedUsers = item.tagged_users;

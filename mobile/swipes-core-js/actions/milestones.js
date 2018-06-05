@@ -7,13 +7,11 @@ import { valAction } from '../classes/utils';
 
 export const create = valAction('milestones.create', [
   string.min(1).max(155).require(),
-], (title) => (d, getState) => {
-  return d(a.api.request('milestones.create', {
-    title,
-    restricted: false,
-    organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
-  }));
-});
+], title => (d, getState) => d(a.api.request('milestones.create', {
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  title,
+  restricted: false,
+})));
 
 export const addGoal = valAction('milestones.addGoal', [
   string.require(),
@@ -31,13 +29,11 @@ export const addGoal = valAction('milestones.addGoal', [
 export const removeGoal = valAction('milestones.removeGoal', [
   string.require(),
   string.require(),
-], (milestoneId, goalId) => (d, getState) => {
-  return d(a.api.request('milestones.removeGoal', {
-    goal_id: goalId,
-    milestone_id: milestoneId,
-    organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
-  }));
-});
+], (milestoneId, goalId) => (d, getState) => d(a.api.request('milestones.removeGoal', {
+  goal_id: goalId,
+  milestone_id: milestoneId,
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+})));
 
 export const reorderGoals = (milestoneId, goalId, destination, position) => a.api.request('milestones.goalsReorder', {
   milestone_id: milestoneId,
@@ -57,20 +53,21 @@ export const rename = valAction('milestones.rename', [
 
 export const deleteMilestone = valAction('milestones.delete', [
   string.require(),
-], (milestoneId) => (d, getState) => d(a.api.request('milestones.delete', {
-  milestone_id: milestoneId
+], milestoneId => (d, getState) => d(a.api.request('milestones.delete', {
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  milestone_id: milestoneId,
 })));
 
 export const open = valAction('milestones.open', [
   string.require(),
-], (milestoneId) => (d, getState) => d(a.api.request('milestones.open', {
-  milestone_id: milestoneId,
+], milestoneId => (d, getState) => d(a.api.request('milestones.open', {
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  milestone_id: milestoneId,
 })));
 
 export const close = valAction('milestones.close', [
   string.require(),
-], (milestoneId) => (d, getState) => d(a.api.request('milestones.close', {
-  milestone_id: milestoneId,
+], milestoneId => (d, getState) => d(a.api.request('milestones.close', {
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  milestone_id: milestoneId,
 })));

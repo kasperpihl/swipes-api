@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
 import {
   View,
   Text,
@@ -6,15 +6,13 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Keyboard,
   Platform,
 } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
-import { setupDelegate, attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
-import { colors, viewSize } from 'globalStyles';
-import HOCHeader from 'HOCHeader'
-import RippleButton from 'RippleButton';
+import { setupDelegate } from 'react-delegate';
+import { miniIconForId } from 'swipes-core-js/classes/utils';
+import { colors } from 'globalStyles';
 import StyledText from 'components/styled-text/StyledText';
 import Icon from 'Icon';
 
@@ -122,15 +120,15 @@ const styles = StyleSheet.create({
     color: colors.deepBlue80,
     fontWeight: '500',
     paddingLeft: 12,
-  }
-})
+  },
+});
 
 class PostCreate extends PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       inputHeight: 21,
-    }
+    };
 
     setupDelegate(this, 'onMessageChange', 'onAttachmentClick');
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
@@ -139,7 +137,7 @@ class PostCreate extends PureComponent {
     const { inputHeight } = this.state;
 
     if (inputHeight !== e.nativeEvent.contentSize.height && e.nativeEvent.contentSize.height > 21) {
-      this.setState({ inputHeight: e.nativeEvent.contentSize.height })
+      this.setState({ inputHeight: e.nativeEvent.contentSize.height });
     }
   }
   renderContext() {
@@ -151,17 +149,16 @@ class PostCreate extends PureComponent {
     }
 
     return (
-      [<Icon key="icon" icon={miniIconForId(post.getIn(['context', 'id']))} width="18" height="18" fill={colors.deepBlue40} style={{marginTop: -2 }} />,
-      <Text selectable={true} key="title" style={[styles.subtitle, {paddingHorizontal: 3, marginTop: -2 }]}>{post.getIn(['context', 'title'])}</Text>]
-    )
+      [<Icon key="icon" icon={miniIconForId(post.getIn(['context', 'id']))} width="18" height="18" fill={colors.deepBlue40} style={{ marginTop: -2 }} />,
+        <Text selectable key="title" style={[styles.subtitle, { paddingHorizontal: 3, marginTop: -2 }]}>{post.getIn(['context', 'title'])}</Text>]
+    );
   }
   renderHeader() {
-
     return (
       <View style={styles.header}>
         {this.renderProfilePic()}
       </View>
-    )
+    );
   }
   renderProfilePic() {
     const { myId } = this.props;
@@ -171,24 +168,24 @@ class PostCreate extends PureComponent {
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text selectable={true} style={styles.initialsLabel}>
+          <Text selectable style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>
-      )
+      );
     }
 
     return (
       <View style={styles.profilePicWrapper}>
         <Image source={{ uri: image }} style={styles.profilePic} />
       </View>
-    )
+    );
   }
   renderTextArea() {
-    const { myId, post } = this.props;
-    const { inputHeight} = this.state;
+    const { post } = this.props;
+    const { inputHeight } = this.state;
     const placeholder = 'What\'s on your mind?';
-    const lineNumbers = parseInt(inputHeight / 21);
+    const lineNumbers = parseInt(inputHeight / 21, 10);
     const iOSInputHeight = Platform.OS === 'ios' ? { height: inputHeight } : {};
 
     return (
@@ -206,22 +203,14 @@ class PostCreate extends PureComponent {
         onContentSizeChange={this.onContentSizeChange}
         scrollEnabled={false}
       />
-    )
+    );
   }
   renderStyledText() {
-    const { post, delegate } = this.props;
-
-    const type = post.get('type');
-
-    let string = ['— ', {
-      id: 'type',
-      string: msgGen.posts.getPostComposeTypeTitle(type),
-      boldStyle: styles.boldStyle
-    }];
-
+    const { post } = this.props;
+    const string = [];
     const taggedUsers = post.get('taggedUsers');
     if (taggedUsers.size) {
-      string.push(' and tag ');
+      string.push(' You tagged ');
       taggedUsers.forEach((id, i) => {
         if (i > 0) {
           string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');
@@ -229,7 +218,7 @@ class PostCreate extends PureComponent {
         string.push({
           id,
           string: msgGen.users.getFirstName(id),
-          boldStyle: styles.boldStyle
+          boldStyle: styles.boldStyle,
         });
       });
     }
@@ -246,24 +235,24 @@ class PostCreate extends PureComponent {
           />
         </View>
       </View>
-    )
+    );
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps='never'>
-          <View style={[styles.createHeader, { paddingTop: 44}]}>
+        <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="never">
+          <View style={[styles.createHeader, { paddingTop: 44 }]}>
             {this.renderProfilePic()}
             {this.renderTextArea()}
           </View>
           {this.renderStyledText()}
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 
-export default PostCreate
+export default PostCreate;
 // const { string } = PropTypes;
 PostCreate.propTypes = {};
