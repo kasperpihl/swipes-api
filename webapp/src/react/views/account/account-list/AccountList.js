@@ -1,11 +1,19 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
+import { styleElement } from 'swiss-react';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import Button from 'src/react/components/button/Button';
+import styles from './styles/AccountList.swiss';
 
-import './styles/account-list.scss';
+const Wrapper = styleElement('div', styles.Wrapper);
+const AccountButton = styleElement(Button, styles.AccountButton);
+const AccountItem = styleElement('div', styles.AccountItem);
+const Header = styleElement('div', styles.Header);
+const CardTitle = styleElement('div', styles.CardTitle);
+const Description = styleElement('div', styles.Description);
+const StyledSVG = styleElement(Icon, styles.StyledSVG);
 
 class AccountList extends PureComponent {
   constructor(props) {
@@ -15,22 +23,23 @@ class AccountList extends PureComponent {
   }
   renderHeader() {
     return (
-      <div className="account-list__header">
+      <Header>
         <HOCHeaderTitle title={msgGen.users.getFullName('me')} subtitle={msgGen.me.getOrg().get('name')}/>
-      </div>
+      </Header>
     );
   }
+
   renderSections() {
     const { sections } = this.props;
 
     return sections.map((s, i) => (
-      <div className="account-item" key={i} onClick={this.onClickCached(i)}>
-        <div className="account-item__title">
+      <AccountItem key={i} onClick={this.onClickCached(i)} className='accountItem'>
+        <CardTitle>
           {s.title}
-          <Icon icon="ArrowRightLong" className="account-item__svg" />
-        </div>
-        <div className="account-item__description">{s.subtitle}</div>
-      </div>
+          <StyledSVG icon="ArrowRightLong"/>
+        </CardTitle>
+        <Description>{s.subtitle}</Description>
+      </AccountItem>
     ));
   }
   render() {
@@ -38,13 +47,12 @@ class AccountList extends PureComponent {
 
     return (
       <SWView noframe header={this.renderHeader()}>
-        <div className="account-list">
+        <Wrapper>
           {this.renderSections()}
-        </div>
-        <Button
+        </Wrapper>
+        <AccountButton
           icon="Logout"
           {...getLoading('logout')}
-          className="account-button"
           onClick={this.onLogout}
         />
       </SWView>
