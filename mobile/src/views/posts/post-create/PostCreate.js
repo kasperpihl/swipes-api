@@ -6,16 +6,13 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Keyboard,
   Platform,
 } from 'react-native';
 // import PropTypes from 'prop-types';
 // import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
-import { attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
-import { colors, viewSize } from 'globalStyles';
-import HOCHeader from 'HOCHeader';
-import RippleButton from 'RippleButton';
+import { miniIconForId } from 'swipes-core-js/classes/utils';
+import { colors } from 'globalStyles';
 import StyledText from 'components/styled-text/StyledText';
 import Icon from 'Icon';
 
@@ -185,10 +182,10 @@ class PostCreate extends PureComponent {
     );
   }
   renderTextArea() {
-    const { myId, post } = this.props;
+    const { post } = this.props;
     const { inputHeight } = this.state;
     const placeholder = 'What\'s on your mind?';
-    const lineNumbers = parseInt(inputHeight / 21);
+    const lineNumbers = parseInt(inputHeight / 21, 10);
     const iOSInputHeight = Platform.OS === 'ios' ? { height: inputHeight } : {};
 
     return (
@@ -209,19 +206,11 @@ class PostCreate extends PureComponent {
     );
   }
   renderStyledText() {
-    const { post, delegate } = this.props;
-
-    const type = post.get('type');
-
-    const string = ['— ', {
-      id: 'type',
-      string: msgGen.posts.getPostComposeTypeTitle(type),
-      boldStyle: styles.boldStyle,
-    }];
-
+    const { post } = this.props;
+    const string = [];
     const taggedUsers = post.get('taggedUsers');
     if (taggedUsers.size) {
-      string.push(' and tag ');
+      string.push(' You tagged ');
       taggedUsers.forEach((id, i) => {
         if (i > 0) {
           string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');

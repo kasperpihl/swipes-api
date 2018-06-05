@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   header: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('row'),
-    ...gs.mixins.padding(0 , 15),
+    ...gs.mixins.padding(0, 15),
   },
   headerSide: {
     ...gs.mixins.size(1),
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: gs.colors.deepBlue10,
     position: 'absolute',
     left: 15,
-bottom: 0,
+    bottom: 0,
   },
   commentsButton: {
     ...gs.mixins.flex('center'),
@@ -110,17 +110,6 @@ bottom: 0,
     ...gs.mixins.font(12, gs.colors.deepBlue80, '500'),
     paddingLeft: 12,
   },
-  typeWrapper: {
-    alignSelf: 'stretch',
-    alignItems: 'flex-end',
-    marginBottom: 6,
-    paddingRight: 15,
-  },
-  typeLabel: {
-    ...gs.mixins.padding(4, 12),
-    ...gs.mixins.font(11, 'white', 'bold'),
-    ...gs.mixins.borderRadius(100, 0, 0, 100),
-  },
 });
 
 class PostFeed extends PureComponent {
@@ -140,37 +129,8 @@ class PostFeed extends PureComponent {
       this.onOpenPost(post.get('id'));
     }
   }
-  getInfoForType(type) {
-    switch (type) {
-      case 'announcement':
-        return { label: 'Announcement', color: '#ffb337' };
-      case 'question':
-        return { label: 'Question', color: '#7900ff' };
-      case 'information':
-        return { label: 'Information', color: '#007aff' };
-      case 'post':
-      default:
-        return { label: 'Post', color: '#1cc05d' };
-    }
-  }
-  renderType() {
-    const { post } = this.props;
-    const type = post.get('type');
-    const typeInfo = this.getInfoForType(type);
-
-    return (
-      <View style={styles.typeWrapper}>
-        <View>
-          <Text style={[styles.typeLabel, { backgroundColor: typeInfo.color }]}>{typeInfo.label.toUpperCase()}</Text>
-        </View>
-      </View>
-    );
-  }
   renderGeneratedTitle() {
-    const { post, delegate } = this.props;
-
-    const type = post.get('type');
-
+    const { post } = this.props;
     const string = [
       {
         id: post.get('created_by'),
@@ -178,7 +138,7 @@ class PostFeed extends PureComponent {
         boldStyle: styles.boldStyle,
       },
       ' ',
-      msgGen.posts.getPostTypeTitle(type),
+      msgGen.posts.getPostTypeTitle(),
     ];
 
     const taggedUsers = post.get('tagged_users');
@@ -340,7 +300,7 @@ class PostFeed extends PureComponent {
       <View style={styles.container}>
         <RippleButton onPress={this.handleOpenPost}>
           <View>
-            {this.renderType()}
+            {/* {this.renderType()} */}
             {this.renderHeader()}
           </View>
         </RippleButton>

@@ -193,9 +193,6 @@ class PostView extends PureComponent {
   }
   renderGeneratedTitle() {
     const { post, delegate } = this.props;
-
-    const type = post.get('type');
-
     const string = [
       {
         id: post.get('created_by'),
@@ -203,7 +200,7 @@ class PostView extends PureComponent {
         boldStyle: styles.boldStyle,
       },
       ' ',
-      msgGen.posts.getPostTypeTitle(type),
+      msgGen.posts.getPostTypeTitle(),
     ];
 
     const taggedUsers = post.get('tagged_users');
@@ -361,7 +358,7 @@ class PostView extends PureComponent {
     }
 
     const title = context.get('title');
-    const newTitle = title.length > 10 ? `${title.slice(0, 9) }...` : title;
+    const newTitle = title.length > 10 ? `${title.slice(0, 9)}...` : title;
 
     return (
       <RippleButton style={styles.navButton} onPress={this.onNavigateToContext}>
