@@ -2,6 +2,7 @@ import './variables/colors';
 import './variables/screenSizes';
 
 import './plugins/hexToRGB';
+import './plugins/minify';
 
 import './mixins/_size';
 import './mixins/_font';
