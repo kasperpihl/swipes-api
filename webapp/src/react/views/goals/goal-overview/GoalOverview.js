@@ -54,14 +54,19 @@ class GoalOverview extends PureComponent {
   }
   renderCompletedState() {
     const helper = this.getHelper();
-    const lastComplete = helper.getLastActivityByType('goal_completed');
-    if(!helper.getIsCompleted() || !lastComplete) {
-      return undefined;
+    const assigneeIds = helper.getAssignees();
+    const firstNames = [];
 
-    }
+    assigneeIds.forEach((userId, i) => {
+      if (i > 0) {
+        firstNames.push(i === assigneeIds.size - 1 ? ' and ' : ', ');
+      }
 
-    const firstName = msgGen.users.getFirstName(lastComplete.get('done_by'));
-    const completionText = `${firstName} completed this goal`;
+      firstNames.push(msgGen.users.getFirstName(userId));
+    })
+
+    const completionText = `${firstNames.join('')} completed this goal`;
+
     return (
       <CompletedWrapper>
         <GreenIcon icon="Checkmark" />
