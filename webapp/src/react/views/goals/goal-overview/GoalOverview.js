@@ -54,6 +54,12 @@ class GoalOverview extends PureComponent {
   }
   renderCompletedState() {
     const helper = this.getHelper();
+    const lastComplete = helper.getLastActivityByType('goal_completed');
+
+    if (!helper.getIsCompleted() || !lastComplete) {
+      return undefined;
+    }
+
     const assigneeIds = helper.getAssignees();
     const firstNames = [];
 
