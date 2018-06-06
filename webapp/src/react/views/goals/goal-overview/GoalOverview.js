@@ -57,7 +57,7 @@ class GoalOverview extends PureComponent {
     const lastComplete = helper.getLastActivityByType('goal_completed');
     if(!helper.getIsCompleted() || !lastComplete) {
       return undefined;
-      
+
     }
 
     const firstName = msgGen.users.getFirstName(lastComplete.get('done_by'));
@@ -97,7 +97,7 @@ class GoalOverview extends PureComponent {
                   )
                 }
                 }
-                
+
               </Dragger>
             )
           }).toArray()}
@@ -156,7 +156,7 @@ class GoalOverview extends PureComponent {
             <Section>
               STEPS
               {!!this.getHelper().getStepOrder().size && (
-                <Button 
+                <Button
                   title={editMode ? 'Done' : 'Edit'}
                   onClick={this.onEdit}
                 />

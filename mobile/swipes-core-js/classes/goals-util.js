@@ -1,7 +1,6 @@
 import { fromJS } from 'immutable';
 
 export default class GoalsUtil {
-
   constructor(goal, myId) {
     this.goal = goal;
     this.id = myId;
@@ -42,14 +41,12 @@ export default class GoalsUtil {
     }
     return this.goal.getIn(['steps', id]);
   }
-
   getIsStepCompleted(s) {
     if (typeof s === 'string') {
       s = this.goal.getIn(['steps', s]);
     }
     return s.get('completed_at');
   }
-
   getIsCompleted() {
     return !!(this.goal && this.goal.get('completed_at')) || false;
   }
@@ -63,7 +60,6 @@ export default class GoalsUtil {
     }
     return !!step.get('assignees').find(a => (a === this.id));
   }
-
   getNewStepOrder(oldIndex, newIndex) {
     const movedId = this.goal.getIn(['step_order', oldIndex]);
     return this.goal.get('step_order').delete(oldIndex).insert(newIndex, movedId);
@@ -71,7 +67,6 @@ export default class GoalsUtil {
   getOrderedSteps() {
     return this.goal.get('step_order').map(id => this.goal.getIn(['steps', id]));
   }
-
   getAttachmentById(id) {
     if (!this.goal) {
       return undefined;
@@ -81,7 +76,6 @@ export default class GoalsUtil {
   getAttachmentOrder() {
     return this.goal.get('attachment_order');
   }
-
   getOrderedAttachments() {
     return this.getAttachmentOrder().map(id => this.goal.getIn(['attachments', id]));
   }
@@ -89,7 +83,6 @@ export default class GoalsUtil {
     flags = fromJS(flags || []);
     return flags.map(fId => (this.goal.getIn(['attachments', fId]))).filter(v => !!v);
   }
-
   getNumberOfCompletedSteps() {
     if (this.getIsCompleted()) {
       return this.goal.get('step_order').size;
@@ -114,19 +107,8 @@ export default class GoalsUtil {
   getAssignees() {
     return this.goal.get('assignees') || fromJS([]);
   }
-
   getAssigneesButMe() {
     return this.getAssignees().filter(aId => aId !== this.id);
-  }
-  getAssignees() {
-    return this.goal.get('assignees') || fromJS([]);
-    const assignees = new Set();
-    this.getOrderedSteps().forEach((s) => {
-      if (!this.getIsStepCompleted(s)) {
-        s.get('assignees').forEach(aId => assignees.add(aId));
-      }
-    });
-    return fromJS([...assignees]);
   }
   getAssigneesForStepId(id) {
     const stepIndex = this.getStepIndexForId(id);
@@ -139,7 +121,6 @@ export default class GoalsUtil {
     }
     return step.get('assignees');
   }
-
   getActivityByIndex(index) {
     return this.goal.getIn(['history', index]);
   }
@@ -152,13 +133,11 @@ export default class GoalsUtil {
   getLastActivityIndex() {
     return this.goal.get('history').size - 1;
   }
-
   hasIRepliedToHistory(hE) {
     const history = this.goal.get('history');
     const index = history.findIndex(h => h.get('group_id') === hE.get('group_id'));
     return history.find(h => h.get('reply_to') === index);
   }
-
   getObjectForWay() {
     return {
       title: this.goal.get('title'),
