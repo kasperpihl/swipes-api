@@ -1,4 +1,4 @@
 import { addPlugin } from 'swiss-react';
 import stylis from 'stylis';
 
-addPlugin('', rawCss => stylis(rawCss));
+addPlugin('parseRawCss', rawCss => stylis('', rawCss));
