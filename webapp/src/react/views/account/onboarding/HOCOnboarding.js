@@ -78,7 +78,6 @@ export default class extends PureComponent {
   }
   render() {
     const { onboarding, userOnboarding, hasOrg, me, completed } = this.props;
-    console.log(onboarding.toJS(), userOnboarding.toJS(), me.toJS())
     if(!hasOrg) {
       return null;
     }
