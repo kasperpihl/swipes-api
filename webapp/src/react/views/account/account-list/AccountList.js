@@ -9,7 +9,7 @@ import styles from './styles/AccountList.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const AccountButton = styleElement(Button, styles.AccountButton);
-const AccountItem = styleElement('div', styles.AccountItem);
+const AccountItem = styleElement('div', styles.AccountItem).debug();
 const Header = styleElement('div', styles.Header);
 const CardTitle = styleElement('div', styles.CardTitle);
 const Description = styleElement('div', styles.Description);

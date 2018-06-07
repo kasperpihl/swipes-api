@@ -1,11 +1,27 @@
 import React, { PureComponent } from 'react';
+import { setupDelegate } from 'react-delegate';
+import { styleElement, SwissProvider } from 'swiss-react';
 import SWView from 'SWView';
 import Icon from 'Icon';
+import PropTypes from 'prop-types';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import { setupDelegate } from 'react-delegate';
-import './styles/onboarding.scss';
+import styles from './styles/Onboarding.swiss';
 
-const CIRCLE_LENGTH = 190;
+const Wrapper = styleElement('div', styles.Wrapper);
+const Item = styleElement('div', styles.Item);
+const TutorialSection = styleElement('div', styles.TutorialSection);
+const Content = styleElement('div', styles.Content);
+const Title = styleElement('div', styles.Title);
+const Subtitle = styleElement('div', styles.Subtitle);
+const TutorialImage = styleElement('img', styles.TutorialImage);
+const Indicator = styleElement('div', styles.Indicator);
+const Button = styleElement('div', styles.Button);
+const Progress = styleElement('div', styles.Progress);
+const ProgressNumber = styleElement('div', styles.ProgressNumber);
+const Splash = styleElement('div', styles.Splash);
+const Checkmark = styleElement(Icon, styles.Checkmark);
+const ArrowRight = styleElement(Icon, styles.ArrowRight);
+const ProgressBar = styleElement(Icon, styles.ProgressBar);
 
 class Onboarding extends PureComponent {
   constructor(props) {
@@ -14,33 +30,26 @@ class Onboarding extends PureComponent {
     setupDelegate(this, 'onClick', 'onClickTutorial', 'onClickBlog');
   }
   renderProgressBar() {
-    const { items } = this.props;
-    const completedItems = items.filter(i => i.get('completed'));
-    const numberOfAllItems = items.size;
-    const numberOfCompletedItems = completedItems.size;
-    const completedPercentage = parseInt((numberOfCompletedItems * 100) / numberOfAllItems, 10);
-    const svgDashOffset = CIRCLE_LENGTH - ((CIRCLE_LENGTH * completedPercentage) / 100);
-    let className = 'onboarding__progress';
+    const { items, svgDashOffset, completedPercentage, completedItems, numberOfAllItems, numberOfCompletedItems, CIRCLE_LENGTH } = this.props;
 
-    if (completedPercentage === 100) {
-      className += ' onboarding__progress--completed';
-    }
 
     return (
-      <div className={className}>
-        <Icon
-          icon="Circle"
-          className="onboarding__svg"
-          strokeDasharray={CIRCLE_LENGTH}
-          strokeDashoffset={svgDashOffset}
-        />
-        <div className="onboarding__progress-number">{completedPercentage}%</div>
-        <div className="onboarding__splash">
-          <div className="onboarding__progress-number">{completedPercentage}%</div>
-        </div>
-      </div>
+      <SwissProvider completed={completedPercentage === 100 ? true : undefined}>
+        <Progress>
+          <ProgressBar
+            icon="Circle"
+            strokeDasharray={CIRCLE_LENGTH}
+            strokeDashoffset={svgDashOffset}
+          />
+          <ProgressNumber>{completedPercentage}%</ProgressNumber>
+          <Splash>
+            <ProgressNumber>{completedPercentage}%</ProgressNumber>
+          </Splash>
+        </Progress>
+      </SwissProvider>
     );
   }
+
   renderHeader() {
     const title = `Let's get started, ${msgGen.users.getName('me', { disableYou: true })}`;
     return (
@@ -52,48 +61,42 @@ class Onboarding extends PureComponent {
       </HOCHeaderTitle>
     );
   }
+
   renderItems() {
     const { items } = this.props;
-
     const itemsHTML = items.map((item, i) => {
-      let className = 'onboarding__item';
-
-      if (item.get('completed')) {
-        className += ' onboarding__item--completed';
-      }
-
       return (
-        <div className={className} key={`onboarding-${i}`} onClick={this.onClickCached(i, item)}>
-          <div className="onboarding__indicator">
-            <Icon icon="Checkmark" className="onboarding__svg" />
-          </div>
-          <div className="onboarding__content">
-            <div className="onboarding__title">{item.get('title')}</div>
-            <div className="onboarding__subtitle">{item.get('subtitle')}</div>
-          </div>
-          <div className="onboarding__button">
-            <Icon icon="ArrowRightLine" className="onboarding__svg" />
-          </div>
-        </div>
+        <Item className='item' key={`onboarding-${i}`} onClick={this.onClickCached(i, item)}>
+          <Indicator completed={item.get('completed') ? true : undefined}>
+            <Checkmark icon="Checkmark" completed={item.get('completed') ? true : undefined} />
+          </Indicator>
+          <Content>
+            <Title>{item.get('title')}</Title>
+            <Subtitle >{item.get('subtitle')}</Subtitle>
+          </Content>
+          <Button>
+            <ArrowRight icon="ArrowRightLine"/>
+          </Button>
+        </Item>
       );
     });
 
     return (
-      <div className="onboarding">
+      <Wrapper>
         {itemsHTML}
-        <div className="onboarding__tutorial_section">
+        <TutorialSection>
           <div>
-            <div className="onboarding__title">Watch a full tutorial</div>
-            <div className="onboarding__subtitle">Take a deep dive into the Workspace</div>
-            <img width='350' className="onboarding__tutorial_image" src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding-long-tutorial-video.png" onClick={this.onClickTutorialCached()} />
+            <Title>Watch a full tutorial</Title>
+            <Subtitle>Take a deep dive into the Workspace</Subtitle>
+            <TutorialImage width='350' src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding-long-tutorial-video.png" onClick={this.onClickTutorialCached()} />
           </div>
           <div>
-            <div className="onboarding__title">Go to our blog</div>
-            <div className="onboarding__subtitle">Read more about the intent behind our work</div>
-            <img width='350' className="onboarding__tutorial_image" src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding_go_to_blog.jpg" onClick={this.onClickBlogCached()} />
+            <Title>Go to our blog</Title>
+            <Subtitle>Read more about the intent behind our work</Subtitle>
+            <TutorialImage width='350' src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding_go_to_blog.jpg" onClick={this.onClickBlogCached()} />
           </div>
-        </div>
-      </div>
+        </TutorialSection>
+      </Wrapper>
     );
   }
   render() {
@@ -106,3 +109,7 @@ class Onboarding extends PureComponent {
 }
 
 export default Onboarding;
+
+Onboarding.propTypes = {
+  completed: PropTypes.bool,
+};
