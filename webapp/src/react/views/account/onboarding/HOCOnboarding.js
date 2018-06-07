@@ -5,7 +5,7 @@ import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Onboarding from './Onboarding';
 
-const CIRCLE_LENGTH = 190;
+
 
 @navWrapper
 @connect(state => ({
@@ -89,14 +89,12 @@ export default class extends PureComponent {
     const numberOfAllItems = items.size;
     const numberOfCompletedItems = completedItems.size;
     const completedPercentage = parseInt((numberOfCompletedItems * 100) / numberOfAllItems, 10);
-    const svgDashOffset = CIRCLE_LENGTH - ((CIRCLE_LENGTH * completedPercentage) / 100);
+
     return (
       <Onboarding
         items={items}
         delegate={this}
         completedPercentage={completedPercentage}
-        svgDashOffset={svgDashOffset}
-        CIRCLE_LENGTH={CIRCLE_LENGTH}
       />
     );
   }

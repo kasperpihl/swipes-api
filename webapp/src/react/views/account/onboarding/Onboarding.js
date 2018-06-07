@@ -23,6 +23,8 @@ const Checkmark = styleElement(Icon, styles.Checkmark);
 const ArrowRight = styleElement(Icon, styles.ArrowRight);
 const ProgressBar = styleElement(Icon, styles.ProgressBar);
 
+const CIRCLE_LENGTH = 190;
+
 class Onboarding extends PureComponent {
   constructor(props) {
     super(props);
@@ -30,9 +32,9 @@ class Onboarding extends PureComponent {
     setupDelegate(this, 'onClick', 'onClickTutorial', 'onClickBlog');
   }
   renderProgressBar() {
-    const { items, svgDashOffset, completedPercentage, completedItems, numberOfAllItems, numberOfCompletedItems, CIRCLE_LENGTH } = this.props;
+    const { items, completedPercentage } = this.props;
 
-
+    const svgDashOffset = CIRCLE_LENGTH - ((CIRCLE_LENGTH * completedPercentage) / 100);
     return (
       <SwissProvider completed={completedPercentage === 100 ? true : undefined}>
         <Progress>
