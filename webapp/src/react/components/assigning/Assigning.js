@@ -48,13 +48,13 @@ class Assigning extends PureComponent {
       onClick,
       buttonProps,
     } = this.props;
-    
+
     if(!assignees.size) return <Button icon="Person" onClick={onClick} {...buttonProps} />
-    
+
     const extraNumber = Math.max(assignees.size - maxImages, 0);
 
     return (
-      <SwissProvider size={size} images={Math.min(assignees.size, maxImages)}>
+      <SwissProvider size={size} blackAndWhite={this.props.blackAndWhite} images={Math.min(assignees.size, maxImages)}>
         <Wrapper
           onClick={onClick}
           onMouseEnter={this.onMouseEnter}
@@ -63,18 +63,17 @@ class Assigning extends PureComponent {
             {assignees.map((user, i) => (i < maxImages) ? (
               <Fragment key={i}>
                 <WhiteBackground index={i} />
-                <ImageWrapper index={i}>
-                  <AssigneeImage user={user} size={size}/>
+                <ImageWrapper isPic={msgGen.users.getPhoto(user)}  index={i}>
+                  <AssigneeImage user={user} size={size} blackAndWhite={this.props.blackAndWhite}/>
                 </ImageWrapper>
               </Fragment>
             ) : null)}
           </AbsoluteWrapper>
-          
+
           {!!extraNumber && (
             <ExtraNumber>+{extraNumber}</ExtraNumber>
           )}
         </Wrapper>
-        
       </SwissProvider>
     );
   }

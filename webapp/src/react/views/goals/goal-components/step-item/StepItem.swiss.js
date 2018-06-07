@@ -10,6 +10,9 @@ export default styleSheet('StepItem', {
     borderTop: '1px solid $sw3',
     '& .public-DraftEditor-content, & .public-DraftEditorPlaceholder-root': {
       padding: '12px 6px 12px 18px',
+      'completed': {
+        color: '$sw2',
+      },
     },
   },
   AssignWrapper: {

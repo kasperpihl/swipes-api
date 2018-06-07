@@ -101,6 +101,7 @@ class GoalOverview extends PureComponent {
                   <StepItem
                     goalId={helper.getId()}
                     step={step}
+                    completed={!!step.get('completed_at')}
                     number={i + 1}
                     editMode={editMode}
                     dragProvided={provided}

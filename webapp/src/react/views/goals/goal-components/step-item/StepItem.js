@@ -155,7 +155,8 @@ export default class extends PureComponent {
       focused,
     } = this.state;
     const assignees = tempAssignees || step.get('assignees');
-    if(editMode) {
+
+    if (editMode) {
       return (
         <Button
           icon="Close"
@@ -164,6 +165,7 @@ export default class extends PureComponent {
         />
       )
     }
+
     return (
       <AssignWrapper show={focused || assignees.size}>
         <HOCAssigning
@@ -171,16 +173,19 @@ export default class extends PureComponent {
           maxImages={3}
           size={24}
           delegate={this}
+          blackAndWhite={!!step.get('completed_at')}
           enableTooltip
         />
       </AssignWrapper>
     )
   }
   render() {
-    const { dragProvided, editMode } = this.props;
+    const { dragProvided, editMode, completed } = this.props;
+
     return (
       <Wrapper
         innerRef={dragProvided.innerRef}
+        completed={completed}
         {...dragProvided.draggableProps}
         className="step-complete-hover assign-hover">
         <DragWrapper show={!!editMode} {...dragProvided.dragHandleProps}>

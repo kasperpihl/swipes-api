@@ -27,6 +27,12 @@ export default styleSheet('Assigning', {
     _flex: 'center',
     overflow: 'hidden',
     borderRadius: props => `${props.size/2}px`,
+    blackAndWhite: {
+      background: '$sw2',
+    },
+    isPic: {
+      background: '$sw5',
+    }
   },
   ExtraNumber: {
     _font: ['11px', '18px', 500],
@@ -40,5 +46,5 @@ export default styleSheet('Assigning', {
     letterSpacing: '-0.3px',
     marginRight: '6px',
   },
- 
+
 });
