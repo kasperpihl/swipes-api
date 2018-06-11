@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assignees/HOCAssigning';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
@@ -77,7 +77,7 @@ class ActionModalItem extends Component {
 
     return (
       <View style={[styles.titleWrapper, extraTitleStyles]}>
-        <Text selectable={true} style={styles.title}>{item.get('title')}</Text>
+        <Text selectable style={styles.title}>{item.get('title')}</Text>
       </View>
     );
   }
@@ -90,7 +90,7 @@ class ActionModalItem extends Component {
       const backgroundColor = isSelected ? colors.blue100 : colors.bgColor;
 
       return (
-        <View style={[styles.selector, { borderColor: selectedBorder, backgroundColor: backgroundColor }]} />
+        <View style={[styles.selector, { borderColor: selectedBorder, backgroundColor }]} />
       );
     }
 

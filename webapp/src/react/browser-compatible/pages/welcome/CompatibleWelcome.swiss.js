@@ -1,7 +1,7 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
-  CompatibleWelcomeWrapper: {
+export default styleSheet('CompatibleWelcome', {
+  Wrapper: {
     padding: '30px 0',
     paddingBottom: '60px',
     overflow: 'hidden',
@@ -9,13 +9,13 @@ export default styleSheet({
   Table: {
     _borderRadius: '6px',
     width: '100%',
-    border: '1px solid $sw4',
+    border: '1px solid $sw3',
     overflow: 'hidden',
     marginTop: '30px',
   },
   TableHeader: {
     _size: ['100%', '60px'],
-    borderBottom: '1px solid $sw4',
+    borderBottom: '1px solid $sw3',
     display: 'table',
     paddingLeft: '15px',
   },
@@ -33,10 +33,10 @@ export default styleSheet({
     display: 'table',
     transition: '.15s ease',
     '&:not(:last-child)': {
-      borderBottom: '1px solid $sw4',
+      borderBottom: '1px solid $sw3',
     },
     '&:hover': {
-      backgroundColor: '$sw4',
+      backgroundColor: '$sw3',
       transition: '.15s ease'
     }
   },
@@ -87,7 +87,7 @@ export default styleSheet({
     _font: ['15px', '25px'],
     _borderRadius: '6px',
     color: '$sw2',
-    border: '1px solid $sw4',
+    border: '1px solid $sw3',
     padding: '0 15px',
     transition: '.2s ease',
     '&::-webkit-input-placeholder': {
@@ -122,7 +122,7 @@ export default styleSheet({
     position: 'absolute',
     top: '0',
     right: '0',
-    borderLeft: '1px solid $sw4',
+    borderLeft: '1px solid $sw3',
     transition: '.2s ease',
     'loading': {
       backgroundColor: '$blue',
@@ -131,7 +131,7 @@ export default styleSheet({
     },
     '!loading': {
       '&:hover': {
-        backgroundColor: '$sw4',
+        backgroundColor: '$sw3',
         transition: '.2s ease',
       },
     },

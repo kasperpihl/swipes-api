@@ -7,15 +7,21 @@ import { fromJS } from 'immutable';
 import CompatibleInvite from './CompatibleInvite';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-class HOCCompatibleInvite extends PureComponent {
+@connect(state => ({
+  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
+  readyInOrg: state.getIn(['connection', 'readyInOrg']),
+}), {
+  sendInvite: ca.organizations.inviteUser,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       invites: fromJS([
         { firstName: '', email: '' },
         { firstName: '', email: '' },
-        // { firstName: '', email: '' },
-      ]) 
+      ])
     };
     setupLoading(this);
   }
@@ -24,6 +30,7 @@ class HOCCompatibleInvite extends PureComponent {
     invites = invites.setIn([i, 'firstName'], e.target.value);
     this.setState({ invites });
   }
+
   onEmailChange(i, e) {
     let { invites } = this.state;
     invites = invites.setIn([i, 'email'], e.target.value);
@@ -44,7 +51,7 @@ class HOCCompatibleInvite extends PureComponent {
       if(!email.length && !firstName.length) return;
 
       if(this.isLoading(i) || this.getLoading(i).success) return;
-      
+
       let emailError;
       let nameError;
 
@@ -56,13 +63,13 @@ class HOCCompatibleInvite extends PureComponent {
       if(string.format('email').test(email)) {
         emailError = '!Invalid email';
       }
-      
+
       this.clearLoading(i+'email', emailError);
       this.clearLoading(i+'name', nameError);
-      if(emailError || nameError) { 
+      if(emailError || nameError) {
         return;
       }
-      
+
       this.setLoading(i);
       sendInvite(firstName, email).then((res) => {
         if(res.ok) {
@@ -81,7 +88,7 @@ class HOCCompatibleInvite extends PureComponent {
     return (
       <CompatibleCard>
         <CompatibleInvite
-          delegate={this} 
+          delegate={this}
           invites={invites}
           {...this.bindLoading()}
         />
@@ -89,11 +96,3 @@ class HOCCompatibleInvite extends PureComponent {
     );
   }
 }
-
-
-export default connect(state => ({
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-  readyInOrg: state.getIn(['connection', 'readyInOrg']),
-}), {
-  sendInvite: ca.organizations.inviteUser,
-})(HOCCompatibleInvite);

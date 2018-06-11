@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, ScrollView, Platform } from 'react-native';
 import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from 'globalStyles';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 

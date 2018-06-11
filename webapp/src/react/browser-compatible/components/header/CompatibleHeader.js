@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
 import styles from './CompatibleHeader.swiss';
 
-const HeaderWrapper = styleElement('div', styles.HeaderWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const TitleContainer = styleElement('div', styles.TitleContainer);
 
 const CompatibleHeader = (props) => {
@@ -16,13 +16,13 @@ const CompatibleHeader = (props) => {
   } = props;
 
   return (
-    <HeaderWrapper className={center ? 'center' : ''}>
+    <Wrapper center={center}>
       <TitleContainer>
         {assignee && <CompatibleAssignees assignee={assignee} float="right" />}
         <h1>{title}</h1>
         <h3>{subtitle}</h3>
       </TitleContainer>
-    </HeaderWrapper>
+    </Wrapper>
   );
 };
 

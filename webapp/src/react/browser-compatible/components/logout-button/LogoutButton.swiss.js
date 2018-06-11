@@ -1,7 +1,7 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
-  LogoutButtonWrapper: {
+export default styleSheet('LogoutButton', {
+  Wrapper: {
     _size: ['auto', '36px'],
     _borderRadius: '18px',
     border: '1px solid $sw3',

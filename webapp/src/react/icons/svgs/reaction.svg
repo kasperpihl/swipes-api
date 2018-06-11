@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <g>
-    <path d="M12,4a8,8,0,1,1-8,8,8.00917,8.00917,0,0,1,8-8m0-2A10,10,0,1,0,22,12,10.00018,10.00018,0,0,0,12,2Z" stroke="transparent"/>
-    <path d="M16,14a4,4,0,0,1-8,0Z" stroke="transparent"/>
-    <circle cx="9" cy="10" r="2" stroke="transparent"/>
-    <circle cx="15" cy="10" r="2" stroke="transparent"/>
-  </g>
-</svg>

@@ -157,7 +157,7 @@ const milestone_closed = notifyWrapper([
   notify.notifyAllInCompany,
 ]);
 
-const milestones_opened = notifyWrapper([
+const milestone_opened = notifyWrapper([
   milestones.milestonesGetSingle,
   milestones.milestoneOpenCloseWithHistoryNotificationData,
   notify.notifyAllInCompany,
@@ -348,6 +348,21 @@ const organization_deleted = [
   notify.notifyCommonRethinkdb,
 ];
 
+const organization_milestone_reordered = notifyWrapper([
+  users.usersGetSingleWithFields,
+  (req, res, next) => {
+    const {
+      userWithFields,
+    } = res.locals;
+
+    res.locals.organization_id = userWithFields.organizations[0];
+
+    return next();
+  },
+  organizations.organizationsMilestoneReorderNotificationData,
+  notify.notifyAllInCompany,
+]);
+
 const post_created = notifyWrapper([
   users.usersGetSingleWithFields,
   (req, res, next) => {
@@ -388,6 +403,25 @@ const post_created_push_notification = [
   },
   notify.notifySendPushNotification,
 ];
+const post_comment_followers_push_notification = [
+  users.usersGetSingleWithOrganizations,
+  posts.postsGetSingle,
+  posts.postAddCommentFollowersPushNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      mention_ids,
+      post,
+    } = res.locals;
+
+    res.locals.user_ids = post.followers.filter((follower_id) => {
+      return follower_id !== user_id && !mention_ids.includes(follower_id);
+    });
+
+    return next();
+  },
+  notify.notifySendPushNotification,
+];
 const post_comment_mention_push_notification = [
   users.usersGetSingleWithOrganizations,
   posts.postsGetSingle,
@@ -404,23 +438,43 @@ const post_comment_mention_push_notification = [
   },
   notify.notifySendPushNotification,
 ];
-const post_comment_created_by_push_notification = [
-  users.usersGetSingleWithOrganizations,
-  posts.postsGetSingle,
-  posts.postAddCommentCreatedByPushNotificationData,
+const post_edited = notifyWrapper([
+  users.usersGetSingleWithFields,
   (req, res, next) => {
     const {
-      mention_ids,
-      user_id,
-      post,
+      userWithFields,
     } = res.locals;
-    const user_ids = [];
 
-    if (user_id !== post.created_by && !mention_ids.includes(post.created_by)) {
-      user_ids.push(post.created_by);
-    }
+    res.locals.organization_id = userWithFields.organizations[0];
 
-    res.locals.user_ids = user_ids;
+    return next();
+  },
+  posts.postsGetSingle,
+  posts.postEditedNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      followers_diff,
+    } = res.locals;
+
+    res.locals.user_ids = followers_diff.filter((userId) => { return userId !== user_id; });
+
+    return next();
+  },
+  notify.notifyMultipleUsers,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_edited_push_notification = [
+  users.usersGetSingleWithOrganizations,
+  posts.postsGetSingle,
+  posts.postEditedPushNotificationData,
+  (req, res, next) => {
+    const {
+      user_id,
+      followers_diff,
+    } = res.locals;
+
+    res.locals.user_ids = followers_diff.filter((userId) => { return userId !== user_id; });
 
     return next();
   },
@@ -430,7 +484,6 @@ const post_archived = notifyWrapper([
   posts.postArchivedNotificationData,
   notify.notifySendEventToAllInCompany,
 ]);
-
 const post_comment_added = notifyWrapper([
   users.usersGetSingleWithFields,
   (req, res, next) => {
@@ -448,19 +501,17 @@ const post_comment_added = notifyWrapper([
     const {
       user_id,
       post,
-      mention_ids,
     } = res.locals;
 
-    res.locals.user_ids = post.followers.filter((userId) => {
-      return userId !== user_id && !mention_ids.includes(userId);
-    });
+
+    res.locals.user_ids = post.followers.filter(userId => userId !== user_id);
 
     return next();
   },
   notify.notifyMultipleUsers,
   notify.notifySendEventToAllInCompany,
 ]);
-const post_comment_mention = notifyWrapper([
+const post_comment_edited = notifyWrapper([
   users.usersGetSingleWithFields,
   (req, res, next) => {
     const {
@@ -472,18 +523,12 @@ const post_comment_mention = notifyWrapper([
     return next();
   },
   posts.postsGetSingle,
-  posts.postCommentMentionNotificationData,
-  (req, res, next) => {
-    const {
-      user_id,
-      mention_ids,
-    } = res.locals;
-
-    res.locals.user_ids = mention_ids.filter(userId => userId !== user_id);
-
-    return next();
-  },
-  notify.notifyMultipleUsers,
+  posts.postCommentEditedNotificationData,
+  notify.notifySendEventToAllInCompany,
+]);
+const post_comment_archived = notifyWrapper([
+  users.usersGetSingleWithFields,
+  posts.postCommentArchivedNotificationData,
   notify.notifySendEventToAllInCompany,
 ]);
 
@@ -580,7 +625,7 @@ export {
   step_incompleted,
   milestone_created,
   milestone_closed,
-  milestones_opened,
+  milestone_opened,
   milestone_goal_added,
   milestone_goal_removed,
   milestone_renamed,
@@ -616,8 +661,12 @@ export {
   organization_user_invited,
   organization_user_joined,
   organization_deleted,
+  organization_milestone_reordered,
   post_created,
+  post_edited,
   post_comment_added,
+  post_comment_edited,
+  post_comment_archived,
   post_reaction_added,
   post_reaction_removed,
   post_comment_reaction_added,
@@ -625,8 +674,8 @@ export {
   post_archived,
   post_unfollowed,
   post_followed,
-  post_comment_mention,
   post_created_push_notification,
+  post_edited_push_notification,
+  post_comment_followers_push_notification,
   post_comment_mention_push_notification,
-  post_comment_created_by_push_notification,
 };

@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import Icon from 'Icon';
 import { Link } from 'react-router-dom';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './DownloadForDevice.swiss';
 
-const DownloadForDeviceWrapper = styleElement('div', styles.DownloadForDeviceWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const Device = styleElement('a', styles.Device);
 const DeviceSVG = styleElement(Icon, styles.DeviceSVG);
 const AllDevices = styleElement('p', styles.AllDevices);
@@ -107,12 +107,12 @@ class DownloadForDevice extends PureComponent {
     const type = mobileType ? mobileType : desktopType;
 
     return (
-      <DownloadForDeviceWrapper>
+      <Wrapper>
         {this.renderFirst(type)}
         <AllDevices>
           <AllDevicesLink to="/download">See all available platforms</AllDevicesLink>
         </AllDevices>
-      </DownloadForDeviceWrapper>
+      </Wrapper>
     );
   }
 }

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { List } from 'immutable';
 import GoalsUtil from '../classes/goals-util';
-import { timeAgo } from '../classes/time-utils';
+import timeAgo from '../utils/time/timeAgo';
 
 export default class Goals {
   constructor(store, parent) {

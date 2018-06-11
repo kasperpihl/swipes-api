@@ -57,25 +57,6 @@ $topbarSize: 38px;
     @include font(12px, $deepBlue-100, 18px, 500);
   }
 
-  &__retry-btn {
-    @include font($c: $deepBlue-100);
-    margin-left: 9px;
-    -webkit-app-region: no-drag;
-    border-color: $deepBlue-100;
-    background-color: transparent;
-
-    & > * {
-      @include font($c: $deepBlue-100 !important);
-    }
-
-    &:hover {
-      background-color: $deepBlue-100;
-
-      & > * {
-        @include font($c: $bg !important);
-      }
-    }
-  }
 }
 
 // Windows window actions

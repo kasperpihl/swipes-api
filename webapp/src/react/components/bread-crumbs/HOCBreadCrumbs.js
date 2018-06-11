@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import Icon from 'Icon';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 import styles from './BreadCrumbs.swiss';
@@ -13,7 +13,12 @@ const Title = styleElement('div', styles.Title);
 const Seperator = styleElement('div', styles.Seperator);
 const CrumbIcon = styleElement(Icon, styles.Icon);
 
-class HOCBreadCrumbs extends Component {
+@connect((state, props) => ({
+  history: state.getIn(['navigation', props.target, 'stack']),
+}), {
+  pop: navigationActions.pop,
+})
+export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -59,9 +64,3 @@ class HOCBreadCrumbs extends Component {
     );
   }
 }
-
-export default connect((state, props) => ({
-  history: state.getIn(['navigation', props.target, 'stack']),
-}), {
-  pop: navigationActions.pop,
-})(HOCBreadCrumbs);

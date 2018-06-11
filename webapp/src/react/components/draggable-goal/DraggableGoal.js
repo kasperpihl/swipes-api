@@ -2,15 +2,15 @@ import React, { PureComponent, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './DraggableGoal.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const _dragEl = document.getElementById('draggable');
 
 class DraggableGoal extends PureComponent {
-  renderOrNotPortal(styles, element) {
-    if(styles.position === 'fixed') {
+  renderOrNotPortal(usePortal, element) {
+    if(usePortal) {
       return createPortal(
         element,
         _dragEl,
@@ -28,26 +28,19 @@ class DraggableGoal extends PureComponent {
 
     return (
       <Draggable draggableId={item} {...rest}>
-        {(provided, snapshot) => {
-          return (
-            <Fragment>
-              {this.renderOrNotPortal(provided.draggableProps.style, (
-                <Wrapper
-                  innerRef={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                >
-                  <HOCGoalListItem
-                    goalId={item}
-                    delegate={delegate}
-                    status={status} 
-                  />
-                </Wrapper>
-              ))}
-              {provided.placeholder}
-            </Fragment>
-          );
-        }}
+        {(provided, snapshot) => this.renderOrNotPortal(snapshot.isDragging, (
+            <Wrapper
+              innerRef={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+            >
+              <HOCGoalListItem
+                goalId={item}
+                delegate={delegate}
+                status={status} 
+              />
+            </Wrapper>
+          ))}
       </Draggable>
     );
   }

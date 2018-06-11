@@ -47,11 +47,3 @@ export const remove = valAction('attachments.remove', [
   target_id: targetId,
   attachment_id: attachmentId,
 })));
-
-export const reorder = valAction('attachments.reorder', [
-  string.require(),
-  array.of(string).require(),
-], (targetId, attachmentOrder) => (d) => d(a.api.request('attachments.reorder', {
-  target_id: targetId,
-  attachment_order: attachmentOrder,
-})));

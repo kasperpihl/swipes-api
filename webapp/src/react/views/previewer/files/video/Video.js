@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { styleElement, addGlobalStyles } from 'react-swiss';
+import { styleElement, addGlobalStyles } from 'swiss-react';
 
 import styles from './Video.swiss';
 

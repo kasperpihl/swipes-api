@@ -1,10 +1,10 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
 export default styleSheet('PlanListItem', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'center'],
-    padding: '18px 12px',
+    padding: '12px',
     borderBottom: '1px solid $sw4',
   },
   TextWrapper: {
@@ -19,13 +19,8 @@ export default styleSheet('PlanListItem', {
       color: '$blue',
     }
   },
-  Subtitle: {
-    _font: ['12px', '18px', 400],
-    color: '$sw2',
-    marginTop: '6px',
-  },
   ProgressBar: {
-    _size: ['120px', '24px'],
+    _size: ['120px', '18px'],
     background: 'rgba($green, 0.1)',
     borderRadius: '12px',
     overflow: 'hidden',
@@ -37,10 +32,10 @@ export default styleSheet('PlanListItem', {
       position: 'absolute',
       top: 0,
       left: 0,
-      height: '24px',
+      height: '18px',
       background: '$green',
       zIndex: 2,
-      width: ({ goalPercentage }) => `${Math.max(goalPercentage, 4)}%`,
+      width: ({ goalPercentage }) => `${goalPercentage}%`,
     },
     '&:after': {
       content: '',
@@ -50,11 +45,11 @@ export default styleSheet('PlanListItem', {
       left: 0,
       width: ({ stepPercentage, goalPercentage }) => {
         if(!stepPercentage) return '0%';
-        const remainingPercentage = 100 - Math.max(goalPercentage, 4);
+        const remainingPercentage = 100 - goalPercentage;
         const extraWidth = (remainingPercentage / 100) * stepPercentage;
         return `${goalPercentage + extraWidth}%`;
       },
-      height: '24px',
+      height: '18px',
       background: 'rgba($green, 0.3)',
     }
   },

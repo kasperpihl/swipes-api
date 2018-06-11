@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 import PropTypes from 'prop-types';
 
 const { string, func, number } = PropTypes;
@@ -7,6 +8,16 @@ const DEFAULT_MAX_WIDTH = 800;
 
 const wrap = (ComponentToWrap) => {
   class NavWrapper extends Component {
+    static contextTypes = {
+      target: string,
+      viewWidth: number,
+      navPop: func,
+      navPush: func,
+      saveState: func,
+      openSecondary: func,
+      popSecondary: func,
+      openModal: func,
+    }
     static maxWidth() {
       if(typeof ComponentToWrap.maxWidth === 'function') {
         return ComponentToWrap.maxWidth();
@@ -53,16 +64,7 @@ const wrap = (ComponentToWrap) => {
       )
     }
   }
-  NavWrapper.contextTypes = {
-    target: string,
-    viewWidth: number,
-    navPop: func,
-    navPush: func,
-    saveState: func,
-    openSecondary: func,
-    popSecondary: func,
-    openModal: func,
-  };
+  hoistNonReactStatics(NavWrapper, ComponentToWrap);
   return NavWrapper;
 }
 

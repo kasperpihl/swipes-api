@@ -1,19 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { styleElement } from 'react-swiss';
-import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
-import Button from 'src/react/components/button/Button2';
+import { styleElement } from 'swiss-react';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
+import Button from 'src/react/components/button/Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import Section from 'components/section/Section';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import * as Files from './files';
-import * as Rows from './rows';
-// import './preview.scss';
 import styles from './Previewer.swiss';
 
 const ContentWrapper = styleElement('div', styles.ContentWrapper);
@@ -25,7 +23,16 @@ const NoPreviewText = styleElement('div', styles.NoPreviewText);
 const Footer = styleElement('div', styles.Footer);
 const FooterButton = styleElement(Button, styles.FooterButton);
 
-class HOCPreviewModal extends PureComponent {
+@navWrapper
+@connect(null, {
+  request: ca.api.request,
+  addAttachment: ca.attachments.add,
+  browser: mainActions.browser,
+})
+export default class extends PureComponent {
+  static contextTypes = {
+    target: PropTypes.string,
+  }
   static minWidth() {
     return 750;
   }
@@ -47,7 +54,6 @@ class HOCPreviewModal extends PureComponent {
     }
 
     this.onClickButtonCached = setupCachedCallback(this.onClickButton, this);
-    bindAll(this, ['onFileLoaded', 'onFileError', 'onAttach']);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.loadPreview !== this.props.loadPreview) {
@@ -69,29 +75,14 @@ class HOCPreviewModal extends PureComponent {
     }
     e.target.blur();
   }
-  onFileError() {
+  onFileError = () => {
     this.setState({
       fileLoading: false,
       fileError: true,
     });
   }
-  onFileLoaded() {
+  onFileLoaded = () => {
     this.setState({ fileLoading: false });
-  }
-  onAttach() {
-    const {
-      targetId,
-      loadPreview,
-      addAttachment,
-    } = this.props;
-    this.setLoading('attach');
-    addAttachment(targetId, loadPreview.toJS()).then((res) => {
-      if (res && res.ok) {
-        this.clearLoading('attach', 'Successfully attached');
-      } else {
-        this.clearLoading('attach', '!Something went wrong');
-      }
-    });
   }
   getDefaultState() {
     return {
@@ -101,14 +92,6 @@ class HOCPreviewModal extends PureComponent {
       fileLoading: false,
       fileError: false,
     };
-  }
-  getComponentForRow(row) {
-    const Comp = Rows[row.type];
-    if (!Comp) {
-      console.warn(`Unsupported row type: ${row.type}`);
-      return null;
-    }
-    return Comp;
   }
   getComponentForFile(file) {
     const Comp = Object.entries(Files).find(([k, f]) => {
@@ -200,40 +183,6 @@ class HOCPreviewModal extends PureComponent {
       <HOCHeaderTitle title={renderedTitle} subtitle={subtitle} />
     );
   }
-  renderRow(row) {
-    const Comp = this.getComponentForRow(row);
-    if (!Comp) {
-      return undefined;
-    }
-    return (
-      <Comp
-        {...row}
-      />
-    );
-  }
-  renderCols(cols) {
-    return (
-      <div className="preview-content">
-        {cols.map(([col, obj]) => (
-          <div key={col} className={`preview-content__column preview-content__column--${col}`}>
-            {obj.sections.map((s, sI) => (
-              <div key={sI} className="preview-content__section">
-                <Section
-                  title={s.title}
-                  progress={s.progress}
-                />
-                {s.rows.map((r, rI) => (
-                  <div key={rI} className="preview-content__row">
-                    {this.renderRow(r, rI)}
-                  </div>
-              ))}
-              </div>
-          ))}
-          </div>
-        ))}
-      </div>
-    );
-  }
   renderFile(file) {
     const Comp = this.getComponentForFile(file);
 
@@ -261,13 +210,6 @@ class HOCPreviewModal extends PureComponent {
       return this.renderFile(preview.file);
     }
 
-    if (preview.main) {
-      const cols = [['main', preview.main]];
-      if (preview.side) {
-        cols.push(['side', preview.side]);
-      }
-      return this.renderCols(cols);
-    }
     return this.renderError();
   }
 
@@ -305,14 +247,3 @@ class HOCPreviewModal extends PureComponent {
     );
   }
 }
-
-HOCPreviewModal.contextTypes = {
-  target: PropTypes.string,
-};
-
-
-export default navWrapper(connect(null, {
-  request: ca.api.request,
-  addAttachment: ca.attachments.add,
-  browser: mainActions.browser,
-})(HOCPreviewModal));

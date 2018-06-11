@@ -4,7 +4,14 @@ import * as cs from 'swipes-core-js/selectors';
 import * as ca from 'swipes-core-js/actions';
 import AutoCompleting from './AutoCompleting';
 
-class HOCAutoCompleting extends PureComponent {
+@connect(state => ({
+  autoComplete: state.get('autoComplete'),
+}), {
+  clear: ca.autoComplete.clear,
+  blockIdentifier: ca.autoComplete.blockIdentifier,
+  search: ca.autoComplete.search,
+})
+export default class HOCAutoCompleting extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -101,11 +108,3 @@ class HOCAutoCompleting extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  autoComplete: state.get('autoComplete'),
-}), {
-  clear: ca.autoComplete.clear,
-  blockIdentifier: ca.autoComplete.blockIdentifier,
-  search: ca.autoComplete.search,
-})(HOCAutoCompleting);

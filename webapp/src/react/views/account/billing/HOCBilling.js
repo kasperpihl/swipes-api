@@ -7,9 +7,17 @@ import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Billing from './Billing';
-import ChangeCyclePopup from './ChangeCyclePopup';
+import HOCChangeBillingPlan from './HOCChangeBillingPlan';
+import HOCChangeCardDetailsModal from './HOCChangeCardDetailsModal';
 
-class HOCBilling extends PureComponent {
+@navWrapper
+@connect(state => ({
+  organization: state.getIn(['me', 'organizations', 0]),
+  users: cs.users.getAllButSofi(state),
+}), {
+  createStripeCustomer: ca.organizations.createStripeCustomer,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,6 +25,11 @@ class HOCBilling extends PureComponent {
     };
 
     setupLoading(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.organization.get('plan') !== this.state.billingStatus) {
+      this.setState({ billingStatus: nextProps.organization.get('plan') });
+    }
   }
   onSubmitSuccess(token) {
     const { createStripeCustomer } = this.props;
@@ -35,12 +48,15 @@ class HOCBilling extends PureComponent {
     const { organization, openModal } = this.props;
     if (!organization.get('stripe_subscription_id')) {
       this.setState({ billingStatus: plan });
-    } else {
+    } else if (this.state.billingStatus !== plan) {
       openModal({
-        component: ChangeCyclePopup,
-        title: 'Change stuff',
+        component: HOCChangeBillingPlan,
+        title: 'Change billing plan',
         position: 'center',
-        props: {},
+        props: {
+          plan,
+          currentPlan: this.state.billingStatus
+        },
       });
     }
   }
@@ -51,14 +67,28 @@ class HOCBilling extends PureComponent {
       title: 'Manage team',
     });
   }
+  onCardDetails() {
+    const { openModal } = this.props;
+
+    openModal({
+      component: HOCChangeCardDetailsModal,
+      title: 'Change card details',
+      position: 'center',
+      props: {},
+    });
+  }
   render() {
     const { billingStatus } = this.state;
     const { organization, users } = this.props;
 
+    // if we need to change the token this is not the only instance of it
+    // we need to fix that
     let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
+
     if (process.env.NODE_ENV !== 'production' || window.location.hostname === 'staging.swipesapp.com') {
       token = 'pk_test_0pUn7s5EyQy7GeAg93QrsJl9';
     }
+
     return (
       <StripeProvider apiKey={token}>
         <Elements>
@@ -74,10 +104,3 @@ class HOCBilling extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  organization: state.getIn(['me', 'organizations', 0]),
-  users: cs.users.getAllButSofi(state),
-}), {
-  createStripeCustomer: ca.organizations.createStripeCustomer,
-})(HOCBilling));

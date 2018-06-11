@@ -1,7 +1,7 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
-  DownloadForDeviceWrapper: {
+export default styleSheet('DownloadForDevice', {
+  Wrapper: {
     _size: ['100%', 'auto'],
     marginTop: '24px',
     textAlign: 'center',

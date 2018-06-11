@@ -2,18 +2,6 @@ import * as navigationActions from '../navigation/navigationActions';
 import * as mainActions from '../main/mainActions';
 
 // ======================================================
-// Open find
-// ======================================================
-export const openFind = (from, targetId) => d => d(navigationActions.openSecondary(from, {
-  id: 'Find',
-  placeholder: 'Search across Dropbox, Asana, Slack...',
-  title: 'Find',
-  props: {
-    targetId,
-  },
-}));
-
-// ======================================================
 // Preview attacment
 // ======================================================
 export const preview = (from, att, targetId) => (d) => {

@@ -3,7 +3,6 @@ import AccountList from './account/account-list/HOCAccountList';
 import Billing from './account/billing/HOCBilling';
 import Organization from './account/organization/HOCOrganization';
 import Profile from './account/profile/HOCProfile';
-import Services from './account/services/Services';
 import Onboarding from './account/onboarding/HOCOnboarding';
 import Browser from './browser/Browser';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
@@ -12,8 +11,8 @@ import PlanOverview from './plan/plan-overview/HOCPlanOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
 import NotFound from './not-found/NotFound';
 import Notifications from './notifications/HOCNotifications';
-import PostFeed from './discuss/post-feed/HOCPostFeed';
-import PostView from './discuss/post-view/HOCPostView';
+import PostFeed from './posts/post-feed/HOCPostFeed';
+import PostView from './posts/post-view/HOCPostView';
 import Previewer from './previewer/Previewer';
 import Search from './search/HOCSearch';
 import SideNote from './side-note/HOCSideNote';
@@ -38,7 +37,6 @@ export {
   Profile,
   Organization,
   Search,
-  Services,
   SideNote,
   SwipesIntro,
   TakeAction,

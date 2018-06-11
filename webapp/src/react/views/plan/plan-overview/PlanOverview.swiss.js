@@ -1,8 +1,11 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
 export default styleSheet('PlanOverview', {
   Wrapper: {
     _size: ['100%', 'auto'],
+    withTabs: {
+      paddingTop: '18px',
+    }
   },
   Title: {
     _font: ['11px', '18px', 'bold'],
@@ -44,22 +47,24 @@ export default styleSheet('PlanOverview', {
     _size: ['100%', 'auto'],
     _flex: ['column', 'left', 'top'],
     paddingTop: '24px',
+    withTabs: {
+      paddingTop: '18px',
+    }
   },
   SectionTitle: {
     _size: ['100%', '42px'],
     flex: 'none',
     _font: ['12px', '18px', 500],
     color: '$sw1',
-    borderBottom: '1px solid $sw4',
+    borderBottom: '1px solid $sw3',
     marginBottom: '24px',
   },
-  Footer: {
-    _size: ['100%', '54px'],
-    borderTop: '1px solid $sw4',
-    _flex: ['row', 'right', 'center'],
-    padding: '9px 12px',
-    '& > *:not(:last-child)': {
-      marginRight: '12px',
-    },
+  SectionTabLikeTitle: {
+    _size: ['100%', '42px'],
+    flex: 'none',
+    _font: ['12px', '18px', 500],
+    color: '$sw1',
+    letterSpacing: '0.5px',
+    textTransform: 'uppercase',
   },
 });

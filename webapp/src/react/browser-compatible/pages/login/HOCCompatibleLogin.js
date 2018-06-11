@@ -9,7 +9,14 @@ import { Map } from 'immutable';
 import CompatibleLogin from './CompatibleLogin';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-class HOCCompatibleLogin extends PureComponent {
+@connect(null, {
+  inputMenu: menuActions.input,
+  alert: menuActions.alert,
+  request: ca.api.request,
+  setUrl: navigationActions.url,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,10 +104,3 @@ class HOCCompatibleLogin extends PureComponent {
     );
   }
 }
-
-export default connect(null, {
-  inputMenu: menuActions.input,
-  alert: menuActions.alert,
-  request: ca.api.request,
-  setUrl: navigationActions.url,
-})(HOCCompatibleLogin);

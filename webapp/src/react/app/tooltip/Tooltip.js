@@ -1,27 +1,56 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
-import prefixAll from 'inline-style-prefixer/static';
 import styles from './Tooltip.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const Content = styleElement('div', styles.Content);
 const SPACING = 20;
 
-class Tooltip extends PureComponent {
+@connect(state => ({
+  tooltip: state.getIn(['main', 'tooltip']),
+}))
+
+export default class Tooltip extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       styles: {},
+      shown: false,
     };
+    this.timeout = null;
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.tooltip !== this.props.tooltip) {
-      this.setState({ styles: this.getStyles(nextProps.tooltip) });
+      this.setState({
+        styles: this.getStyles(nextProps.tooltip),
+      });
+      this.showWithDelay(nextProps.tooltip);
     }
   }
   componentDidUpdate() {
     this.fitToScreen();
+  }
+  showWithDelay(tooltip) {
+    if (tooltip) {
+      const {
+        options
+      } = tooltip;
+      const {
+        delay = 0
+      } = options;
+
+      this.timeout = setTimeout(() => {
+        this.setState({
+          shown: true
+        });
+      }, delay);
+    } else {
+      clearTimeout(this.timeout);
+      this.setState({
+        shown: false,
+      })
+    }
   }
   getStyles(tooltip) {
     const styles = {};
@@ -133,10 +162,10 @@ class Tooltip extends PureComponent {
         }
       }
 
-      if (newStyles.left || newStyles.right || newStyles.top || newStyles.bottom) {
-        if (newStyles.top !== styles.top || newStyles.bottom !== styles.bottom) {
+      if (newStyles.left || newStyles.top) {
+        if (newStyles.top !== styles.top) {
           this.setState({ styles: Object.assign({}, styles, newStyles) });
-        } else if (newStyles.left !== styles.left || newStyles.right !== styles.right) {
+        } else if (newStyles.left !== styles.left) {
           this.setState({ styles: Object.assign({}, styles, newStyles) });
         }
       }
@@ -149,33 +178,27 @@ class Tooltip extends PureComponent {
       return undefined;
     }
 
+    const {
+      props,
+    } = tooltip;
     const Comp = tooltip.component;
-    const props = tooltip.props || {};
 
     return (
-      <Content 
-        style={prefixAll(this.state.styles)} 
-        innerRef={(r) => { this.tooltipRef = r; }}>
+      <Content
+        innerRef={(r) => { this.tooltipRef = r; }}
+        {...this.state.styles}
+      >
         <Comp {...props} />
       </Content>
     );
   }
   render() {
-    const { tooltip } = this.props;
-    let className = 'g-tooltip';
-
-    if (tooltip) {
-      className += ' g-tooltip--shown';
-    }
+    const { shown } = this.state;
 
     return (
-      <Wrapper shown={!!this.props.tooltip}>
+      <Wrapper shown={shown}>
         {this.renderTooltip()}
       </Wrapper>
     );
   }
 }
-
-export default connect(state => ({
-  tooltip: state.getIn(['main', 'tooltip']),
-}), {})(Tooltip);

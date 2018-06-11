@@ -7,9 +7,15 @@ import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-import './styles/signup.scss';
+@connect(state => ({
+  token: state.getIn(['connection', 'token']),
+}), {
+  request: ca.api.request,
+  signup: ca.users.signup,
+  setUrl: navigationActions.url,
+})
 
-class HOCCompatibleSignup extends PureComponent {
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,7 +61,7 @@ class HOCCompatibleSignup extends PureComponent {
   onSignup() {
     const { formData, invitationToken, me } = this.state;
     const { signup, createOrgRequest, setUrl } = this.props;
-    
+
     if (this.isLoading('signupButton')) {
       return;
     }
@@ -105,7 +111,7 @@ class HOCCompatibleSignup extends PureComponent {
     } = this.state;
 
     const { token } = this.props;
-    
+
     if (this.isLoading('signup')) {
       return (
         <div className="compatible-signup__loader">
@@ -135,11 +141,3 @@ class HOCCompatibleSignup extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  token: state.getIn(['connection', 'token']),
-}), {
-  request: ca.api.request,
-  signup: ca.users.signup,
-  setUrl: navigationActions.url,
-})(HOCCompatibleSignup);

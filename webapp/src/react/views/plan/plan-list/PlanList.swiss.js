@@ -1,4 +1,4 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
 export default styleSheet('PlanList', {
   Wrapper: {
@@ -13,6 +13,6 @@ export default styleSheet('PlanList', {
     _size: ['100%', '54px'],
     _flex: ['row', 'between', 'center'],
     padding: '9px 12px',
-    borderTop: '1px solid $sw4',
+    borderTop: '1px solid $sw3',
   },
 });

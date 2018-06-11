@@ -2,12 +2,10 @@ import React, { PureComponent } from 'react';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Search from './Search';
 
-class HOCSearch extends PureComponent {
-  static minWidth() {
-    return 600;
-  }
-  static maxWidth() {
-    return 660;
+@navWrapper
+export default class HOCSearch extends PureComponent {
+  static sizes() {
+    return [654];
   }
   constructor(props) {
     super(props);
@@ -51,5 +49,3 @@ class HOCSearch extends PureComponent {
     );
   }
 }
-
-export default navWrapper(HOCSearch);

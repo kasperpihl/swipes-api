@@ -2,14 +2,23 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import HOCNotifications from 'src/react/views/notifications/HOCNotifications';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 import './styles/sidebar.scss';
 
-class Sidebar extends PureComponent {
+@connect(state => ({
+  me: state.get('me'),
+  navId: state.getIn(['navigation', 'primary', 'id']),
+  notificationCounter: state.getIn(['connection', 'notificationCounter']),
+}), {
+  navSet: navigationActions.set,
+  contextMenu: mainActions.contextMenu,
+})
+
+export default class Sidebar extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +54,6 @@ class Sidebar extends PureComponent {
       { id: 'PlanList', svg: 'Milestones' },
       { id: 'TakeAction', svg: 'Goals' },
       { id: 'PostFeed', svg: 'Messages' },
-      // { id: 'Find', svg: 'Find' },
     ].filter(v => !!v);
   }
   getTitleForId(id) {
@@ -109,7 +117,7 @@ class Sidebar extends PureComponent {
     let image = <Icon icon={item.svg} className="sidebar__icon" />;
 
     if (item.id === 'AccountList') {
-      image = <HOCAssigning assignees={[item.personId]} rounded size={30} />;
+      image = <HOCAssigning assignees={[item.personId]} size={30} />;
     }
 
     return (
@@ -162,20 +170,10 @@ class Sidebar extends PureComponent {
           </div>
         </div>
         <div className="sidebar__bottom-section">
-          {this.renderItem({ id: 'Search', svg: 'Find' })}
+          {this.renderItem({ id: 'Search', svg: 'Search' })}
           {this.renderProfile()}
         </div>
       </div>
     );
   }
 }
-
-
-export default connect(state => ({
-  me: state.get('me'),
-  navId: state.getIn(['navigation', 'primary', 'id']),
-  notificationCounter: state.getIn(['connection', 'notificationCounter']),
-}), {
-  navSet: navigationActions.set,
-  contextMenu: mainActions.contextMenu,
-})(Sidebar);

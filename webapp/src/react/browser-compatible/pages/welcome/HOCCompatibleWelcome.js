@@ -7,7 +7,17 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import CompatibleWelcome from './CompatibleWelcome';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-class HOCCompatibleWelcome extends PureComponent {
+@connect(state => ({
+  me: state.get('me'),
+  isElectron: state.getIn(['globals', 'isElectron']),
+  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
+}), {
+  createOrg: ca.organizations.create,
+  joinOrg: ca.organizations.join,
+  setUrl: navigationActions.url,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -81,13 +91,3 @@ class HOCCompatibleWelcome extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  me: state.get('me'),
-  isElectron: state.getIn(['globals', 'isElectron']),
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-}), {
-  createOrg: ca.organizations.create,
-  joinOrg: ca.organizations.join,
-  setUrl: navigationActions.url,
-})(HOCCompatibleWelcome);

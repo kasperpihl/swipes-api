@@ -10,14 +10,14 @@ import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';
 import DefaultBlocks from './blocks/default/DefaultBlocks';
 import MediumEditor from './medium-editor/MediumEditor';
-import DraftExt from './draft-ext';
+import setupDraftExtensions from 'src/utils/draft-js/setupDraftExtensions';
 
 class NoteEditor extends Component {
   constructor(props) {
     super(props);
 
     setupDelegate(this, 'onLinkClick', 'setEditorState');
-    this.plugins = DraftExt(this, {
+    this.plugins = setupDraftExtensions(this, {
       decorators: [
         NoteLink,
       ],
@@ -32,15 +32,14 @@ class NoteEditor extends Component {
   componentDidMount() {
     const { editorState, rawState } = this.props;
     if (!editorState && rawState) {
-      this.setEditorState(this.plugins.getEditorStateWithDecorators(convertFromRaw(rawState)));
+      this.setEditorState(this.plugins.createEditorState(rawState));
     }
   }
   componentDidUpdate() {
     const { rawState } = this.props;
     if (rawState) {
-      const raw = convertFromRaw(rawState);
       this.refs.editor.blur();
-      this.setEditorState(this.plugins.getEditorStateWithDecorators(raw), true);
+      this.setEditorState(this.plugins.createEditorState(rawState), true);
     }
   }
   componentDidCatch(error, info) {

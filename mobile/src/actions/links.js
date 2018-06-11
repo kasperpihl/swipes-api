@@ -10,8 +10,7 @@ import {
 // ======================================================
 
 export const browser = url => () => {
-
-  console.log('url', url)
+  console.log('url', url);
 
   if (Platform.OS === 'android') {
     CustomTabs.openURL(url, {

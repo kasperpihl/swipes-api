@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-
+import {styleElement} from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
@@ -7,14 +7,23 @@ import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import { Link } from 'react-router-dom';
-import './styles/login.scss';
+import styles from './styles/CompatibleLogin.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const Form = styleElement('div', styles.Form);
+const Footer = styleElement('div', styles.Footer);
+const ErrorLabel = styleElement('div', styles.ErrorLabel);
+const ResetPassword = styleElement('div', styles.ResetPassword);
+const Switch = styleElement('div', styles.Switch);
+const SwitchLink = styleElement(Link, styles.SwitchLink);
+const Illustration = styleElement(Icon, styles.Illustration);
 
 class CompatibleLogin extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
 
-    setupDelegate(this, 'onSignin', 'onResetPassword');
+    setupDelegate(this, 'onSignin', 'onResetPassword', 'onChange');
     bindAll(this, ['handleKeyDown']);
   }
   handleKeyDown(e) {
@@ -26,10 +35,10 @@ class CompatibleLogin extends PureComponent {
     const { inviter } = this.props;
     const title = 'Welcome to your Workspace';
     const subtitle = 'This is the place for your team to communicate and create great work together.';
-    
+
     return ([
       <CompatibleHeader title={title} key="title"/>,
-      <Icon icon="ESWelcome" className="compatible-login__illustration" key="illus"/>,
+      <Illustration icon="ESWelcome" className="compatible-login__illustration" key="illus"/>,
       <CompatibleHeader subtitle={subtitle} key="subtitle"/>
     ])
   }
@@ -39,11 +48,12 @@ class CompatibleLogin extends PureComponent {
 
     return (
       <FloatingInput
+        inviteFormField={false}
         key={key}
         inputKey={key}
         type={type}
         placeholder={placeholder}
-        delegate={delegate}
+        onChange={this.onChangeCached(key)}
         value={value}
         props={props}
       />
@@ -51,42 +61,42 @@ class CompatibleLogin extends PureComponent {
   }
   renderForm() {
     return (
-      <div className="form">
+      <Form>
         {this.renderInputField('email', 'email', 'Email', { autoFocus: true })}
         {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
-      </div>
+      </Form>
     )
   }
   renderFormError() {
     const { getLoading } = this.props;
 
     return (
-      <div className="footer__error-label">{getLoading('signInButton').error}</div>
+      <ErrorLabel>{getLoading('signInButton').error}</ErrorLabel>
     )
   }
   renderFooter() {
     const { isLoading, getLoading } = this.props;
 
     return (
-      <div className="footer">
+      <Footer>
         {getLoading('signInButton').error && this.renderFormError()}
         <CompatibleButton title="Log in" onClick={this.onSignin} {...getLoading('signInButton')}/>
-        <p className="footer__switch">
-          Don't have an account yet? <Link to="/register" className="footer__switch-button">Sign up now</Link>
-        </p>
-        <div className="footer__reset-password">
+        <Switch>
+          Don't have an account yet? <SwitchLink to="/register">Sign up now</SwitchLink>
+        </Switch>
+        <ResetPassword>
           <a href="" onClick={this.onResetPassword}>Reset password</a>
-        </div>
-      </div>
+        </ResetPassword>
+      </Footer>
     );
   }
   render() {
     return (
-      <div className="compatible-login">
+      <Wrapper>
         {this.renderHeader()}
         {this.renderForm()}
         {this.renderFooter()}
-      </div>
+      </Wrapper>
     );
   }
 }

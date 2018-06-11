@@ -75,6 +75,20 @@ const organizationsUserJoinedNotificationData = (req, res, next) => {
 
   return next();
 };
+const organizationsMilestoneReorderNotificationData = (req, res, next) => {
+  const {
+    organization_id,
+    milestone_order,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = {
+    organization_id,
+    milestone_order,
+  };
+
+  return next();
+};
 
 export {
   organizationsGetSingle,
@@ -82,4 +96,5 @@ export {
   organizationsUsersInvitedNotificationData,
   organizationsDeletedNotificationData,
   organizationsUserJoinedNotificationData,
+  organizationsMilestoneReorderNotificationData,
 };

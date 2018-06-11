@@ -1,6 +1,6 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
+export default styleSheet('ContextMenu', {
   Wrapper: {
     _size: '100%',
     top: 0,
@@ -18,5 +18,10 @@ export default styleSheet({
   Content: {
     _size: 'auto',
     position: 'absolute',
+    top: '#{top}',
+    bottom: '#{bottom}',
+    left: '#{left}',
+    right: '#{right}',
+    transform: '#{transform}',
   },
 });

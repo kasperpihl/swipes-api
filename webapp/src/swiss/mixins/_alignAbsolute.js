@@ -1,4 +1,4 @@
-import { addMixin } from 'react-swiss';
+import { addMixin } from 'swiss-react';
 
 addMixin('alignAbsolute', (getProp, x=null, y=null) => {
   const res = {

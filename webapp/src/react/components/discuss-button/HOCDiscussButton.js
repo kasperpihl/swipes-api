@@ -1,16 +1,30 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import * as cs from 'swipes-core-js/selectors';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import PostCreate from 'src/react/views/discuss/post-create/HOCPostCreate';
+import PostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
 import styles from './DiscussButton.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const ButtonSide = styleElement('div', styles.ButtonSide);
 const Seperator = styleElement('div', styles.Seperator);
 
-class HOCDiscussButton extends PureComponent {
+const makeMapStateToProps = () => {
+  const getFilteredList = cs.posts.makeGetFilteredList();
+  const getRelatedList = cs.posts.makeGetRelatedList();
+  return (state, props) => {
+    let counter = getFilteredList(state, props).size;
+    if(props.relatedFilter) {
+      counter += getRelatedList(state, props).size;
+    }
+    return { counter };
+  }
+}
+
+@navWrapper
+@connect(makeMapStateToProps)
+export default class extends PureComponent {
   onFeed = () => {
     const { openSecondary, context, relatedFilter } = this.props;
     openSecondary({
@@ -45,18 +59,3 @@ class HOCDiscussButton extends PureComponent {
     );
   }
 }
-
-const makeMapStateToProps = () => {
-  const getFilteredList = cs.posts.makeGetFilteredList();
-  const getRelatedList = cs.posts.makeGetRelatedList();
-  return (state, props) => {
-    let counter = getFilteredList(state, props).size;
-    if(props.relatedFilter) {
-      counter += getRelatedList(state, props).size;
-    }
-    return { counter };
-  }
-}
-
-export default navWrapper(connect(makeMapStateToProps, {
-})(HOCDiscussButton));

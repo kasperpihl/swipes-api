@@ -5,7 +5,9 @@ import {
 } from 'valjs';
 import {
   dbPostsInsertSingle,
+  dbPostsEditSingle,
   dbPostsAddComment,
+  dbPostsEditComment,
   dbPostsAddReaction,
   dbPostsRemoveReaction,
   dbPostsCommentAddReaction,
@@ -13,6 +15,7 @@ import {
   dbPostsArchiveSingle,
   dbPostsUnfollow,
   dbPostsFollow,
+  dbPostsArchiveComment,
 } from './db_utils/posts';
 import {
   generateSlackLikeId,
@@ -25,6 +28,7 @@ const postsCreate = valLocals('postsCreate', {
   message: string.min(1).require(),
   attachments: array.of(object),
   tagged_users: array.of(string),
+  mention_ids: array.of(string),
   context: object,
   reactions: array.of(object),
 }, (req, res, next, setLocals) => {
@@ -34,6 +38,7 @@ const postsCreate = valLocals('postsCreate', {
     message,
     attachments = [],
     tagged_users = [],
+    mention_ids = [],
     context = {},
     reactions = [],
   } = res.locals;
@@ -50,7 +55,7 @@ const postsCreate = valLocals('postsCreate', {
     updated_at: new Date(),
     created_by: user_id,
     archived: false,
-    followers: [...new Set([...[user_id], ...tagged_users])],
+    followers: [...new Set([...[user_id], ...tagged_users, ...mention_ids])],
     comments: {},
   };
 
@@ -86,6 +91,48 @@ const postsFollow = valLocals('postsFollow', {
 
   dbPostsFollow({ user_id, post_id })
     .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const postsEdit = valLocals('postsEdit', {
+  post_id: string.require(),
+  message: string.min(1).require(),
+  attachments: array.require(),
+  tagged_users: array.require(),
+  mention_ids: array.of(string),
+}, (req, res, next, setLocals) => {
+  const {
+    post_id,
+    message,
+    attachments,
+    tagged_users,
+    mention_ids = [],
+  } = res.locals;
+
+  dbPostsEditSingle({
+    post_id,
+    message,
+    attachments,
+    tagged_users,
+    mention_ids,
+  })
+    .then((results) => {
+      const changes = results.changes[0];
+      const newPost = changes.new_val;
+      const oldPost = changes.old_val;
+      const newFollowers = newPost.followers;
+      const oldFollowers = oldPost.followers;
+      const diffFollowers = newFollowers.filter(a => !oldFollowers.find(b => b === a));
+
+      setLocals({
+        post: newPost,
+        organization_id: newPost.organization_id,
+        followers_diff: diffFollowers,
+      });
+
       return next();
     })
     .catch((err) => {
@@ -161,6 +208,60 @@ const postsCreatedPushNotificationQueueMessage = valLocals('postsCreatedPushNoti
   const queueMessage = {
     organization_id,
     user_id,
+    event_type,
+    post_id: post.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post.id,
+  });
+
+  return next();
+});
+const postsEditedQueueMessage = valLocals('postsEditedQueueMessage', {
+  user_id: string.require(),
+  post: object.require(),
+  followers_diff: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post,
+    followers_diff,
+  } = res.locals;
+  const event_type = 'post_edited';
+  const queueMessage = {
+    user_id,
+    event_type,
+    followers_diff,
+    notification_id_sufix: `${post.id}-${event_type}`,
+    post_id: post.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post.id,
+  });
+
+  return next();
+});
+const postsEditedPushNotificationQueueMessage = valLocals('postsEditedPushNotificationQueueMessage', {
+  organization_id: string.require(),
+  user_id: string.require(),
+  post: object.require(),
+  followers_diff: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    user_id,
+    post,
+    followers_diff,
+  } = res.locals;
+  const event_type = 'post_created_push_notification';
+  const queueMessage = {
+    organization_id,
+    user_id,
+    followers_diff,
     event_type,
     post_id: post.id,
   };
@@ -272,14 +373,18 @@ const postsAddComment = valLocals('postsAddComment', {
   user_id: string.require(),
   post_id: string.require(),
   comment: object.require(),
+  mention_ids: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post_id,
     comment,
+    mention_ids,
   } = res.locals;
 
-  dbPostsAddComment({ user_id, post_id, comment })
+  dbPostsAddComment({
+    user_id, post_id, comment, mention_ids,
+  })
     .then(() => {
       return next();
     })
@@ -287,17 +392,55 @@ const postsAddComment = valLocals('postsAddComment', {
       return next(err);
     });
 });
-const postsMentionsParseComment = valLocals('postsMentionsParseComment', {
-  comment: object.require(),
+const postsEditComment = valLocals('postsEditComment', {
+  post_id: string.require(),
+  comment_id: string.require(),
+  message: string.min(1).require(),
+  mention_ids: array.require(),
+  attachments: array.require(),
 }, (req, res, next, setLocals) => {
   const {
-    comment,
+    post_id,
+    comment_id,
+    message,
+    mention_ids,
+    attachments,
+  } = res.locals;
+
+  dbPostsEditComment({
+    post_id, comment_id, message, mention_ids, attachments,
+  })
+    .then((results) => {
+      const changes = results.changes[0];
+      const updatedPost = changes.new_val || changes.old_val;
+      const {
+        followers,
+        comments,
+      } = updatedPost;
+      const comment = comments[comment_id];
+
+      setLocals({
+        followers,
+        comment,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const postsMentionsParse = valLocals('postsMentionsParse', {
+  message: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    message,
   } = res.locals;
   const regex = /<!(U[A-Z0-9]*)\|/gi;
   const mention_ids = [];
   let tempMatches = [];
 
-  while ((tempMatches = regex.exec(comment.message)) !== null) {
+  while ((tempMatches = regex.exec(message)) !== null) {
     mention_ids.push(tempMatches[1]);
   }
 
@@ -307,7 +450,7 @@ const postsMentionsParseComment = valLocals('postsMentionsParseComment', {
 
   return next();
 });
-const postsMestionsQueueMessage = valLocals('postsMestionsQueueMessage', {
+const postsAddCommentFollowersPushNotificationQueueMessage = valLocals('postsAddCommentFollowersPushNotificationQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
   comment: object.require(),
@@ -319,13 +462,12 @@ const postsMestionsQueueMessage = valLocals('postsMestionsQueueMessage', {
     comment,
     mention_ids,
   } = res.locals;
-  const event_type = 'post_comment_mention';
+  const event_type = 'post_comment_followers_push_notification';
   const queueMessage = {
     user_id,
     post_id,
     event_type,
     mention_ids,
-    notification_id_sufix: `${post_id}-${comment.id}-${event_type}`,
     comment_id: comment.id,
   };
 
@@ -336,7 +478,7 @@ const postsMestionsQueueMessage = valLocals('postsMestionsQueueMessage', {
 
   return next();
 });
-const postsAddCommentPushNotificationQueueMessage = valLocals('postsAddCommentPushNotificationQueueMessage', {
+const postsAddCommentMentionsPushNotificationQueueMessage = valLocals('postsAddCommentMentionsPushNotificationQueueMessage', {
   user_id: string.require(),
   post_id: string.require(),
   comment: object.require(),
@@ -349,34 +491,6 @@ const postsAddCommentPushNotificationQueueMessage = valLocals('postsAddCommentPu
     mention_ids,
   } = res.locals;
   const event_type = 'post_comment_mention_push_notification';
-  const queueMessage = {
-    user_id,
-    post_id,
-    event_type,
-    mention_ids,
-    comment_id: comment.id,
-  };
-
-  setLocals({
-    queueMessage,
-    messageGroupId: post_id,
-  });
-
-  return next();
-});
-const postsAddCommentPushNotificationToCreatedByQueueMessage = valLocals('postsAddCommentPushNotificationToCreatedByQueueMessage', {
-  user_id: string.require(),
-  post_id: string.require(),
-  comment: object.require(),
-  mention_ids: array.require(),
-}, (req, res, next, setLocals) => {
-  const {
-    user_id,
-    post_id,
-    comment,
-    mention_ids,
-  } = res.locals;
-  const event_type = 'post_comment_created_by_push_notification';
   const queueMessage = {
     user_id,
     post_id,
@@ -412,6 +526,76 @@ const postsAddCommentQueueMessage = valLocals('postsAddCommentQueueMessage', {
     mention_ids,
     notification_id_sufix: `${post_id}-${event_type}`,
     comment_id: comment.id,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
+const postsEditCommentQueueMessage = valLocals('postsEditCommentQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+  } = res.locals;
+  const event_type = 'post_comment_edited';
+  const queueMessage = {
+    user_id,
+    post_id,
+    comment_id,
+    event_type,
+    notification_id_sufix: `${post_id}-${event_type}`,
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: post_id,
+  });
+
+  return next();
+});
+const postsArchiveComment = valLocals('postsArchiveComment', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+  } = res.locals;
+
+  dbPostsArchiveComment({ user_id, post_id, comment_id })
+    .then(() => {
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const postsArchiveCommentQueueMessage = valLocals('postsArchiveCommentQueueMessage', {
+  user_id: string.require(),
+  post_id: string.require(),
+  comment_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    post_id,
+    comment_id,
+  } = res.locals;
+  const event_type = 'comment_archived';
+  const queueMessage = {
+    user_id,
+    post_id,
+    comment_id,
+    event_type,
   };
 
   setLocals({
@@ -536,8 +720,8 @@ const postsCommentAddReaction = valLocals('postsCommentAddReaction', {
   } = res.locals;
 
   dbPostsCommentAddReaction({
- user_id, post_id, comment_id, reaction 
-})
+    user_id, post_id, comment_id, reaction,
+  })
     .then(() => {
       return next();
     })
@@ -620,9 +804,16 @@ export {
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,
+  postsEdit,
+  postsEditedQueueMessage,
+  postsEditedPushNotificationQueueMessage,
   postsCreateComment,
   postsAddComment,
+  postsEditComment,
   postsAddCommentQueueMessage,
+  postsEditCommentQueueMessage,
+  postsArchiveComment,
+  postsArchiveCommentQueueMessage,
   postsCreateReaction,
   postsAddReaction,
   postsAddReactionQueueMessage,
@@ -638,9 +829,8 @@ export {
   postsUnfollowQueueMessage,
   postsFollow,
   postsFollowQueueMessage,
-  postsMentionsParseComment,
-  postsMestionsQueueMessage,
+  postsMentionsParse,
   postsCreatedPushNotificationQueueMessage,
-  postsAddCommentPushNotificationQueueMessage,
-  postsAddCommentPushNotificationToCreatedByQueueMessage,
+  postsAddCommentFollowersPushNotificationQueueMessage,
+  postsAddCommentMentionsPushNotificationQueueMessage,
 };

@@ -7,7 +7,7 @@ import Icon from 'Icon';
 import './styles/search.scss';
 import HOCSearchResults from './HOCSearchResults';
 
-class Search extends PureComponent {
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     setupDelegate(this, 'onChange', 'onScroll');
@@ -52,5 +52,3 @@ class Search extends PureComponent {
     );
   }
 }
-
-export default Search

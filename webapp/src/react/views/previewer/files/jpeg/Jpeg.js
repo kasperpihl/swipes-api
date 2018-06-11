@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import loadImage from 'blueimp-load-image';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 
 import styles from './Jpeg.swiss';
 

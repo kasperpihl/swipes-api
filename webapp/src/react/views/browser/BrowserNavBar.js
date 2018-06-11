@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { setupDelegate } from 'react-delegate';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 
 class BrowserNavBar extends Component {
   constructor(props) {
@@ -19,24 +19,21 @@ class BrowserNavBar extends Component {
       <Button
         key="back"
         icon="ArrowLeftLine"
-        className="browser-nav__btn"
-        frameless
+        compact
         disabled={!backEnabled}
         onClick={this.navbarActionCached('back')}
       />,
       <Button
         key="forward"
         icon="ArrowRightLine"
-        className="browser-nav__btn"
-        frameless
+        compact
         disabled={!forwardEnabled}
         onClick={this.navbarActionCached('forward')}
       />,
       <Button
         key="reload"
         icon="Reload"
-        className="browser-nav__btn"
-        frameless
+        compact
         onClick={this.navbarActionCached('reload')}
       />,
     ];
@@ -57,8 +54,7 @@ class BrowserNavBar extends Component {
       <Button
         key="browser"
         icon="Earth"
-        className="browser-nav__btn"
-        frameless
+        compact
         onClick={this.navbarActionCached('browser')}
       />,
     ];

@@ -1,4 +1,4 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
 export default styleSheet('TabBar', {
   Wrapper: {
@@ -29,6 +29,11 @@ export default styleSheet('TabBar', {
         opacity: 1,
         transition: 'opacity .25s .1s',
       }
+    },
+    '!active': {
+      '&:hover': {
+        color: '$sw1',
+      },
     },
     '&:not(:last-child)': {
       marginRight: '24px',

@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import ReactTextarea from 'react-textarea-autosize';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Icon from 'Icon';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 
 import './styles/profile.scss';
 
@@ -68,7 +69,7 @@ class Profile extends PureComponent {
     } else if (getLoading(key).success) {
       return (
         <div className="profile__success-icon">
-          <Icon icon="ActivityCheckmark" className="profile__svg" />
+          <Icon icon="ChecklistCheckmark" className="profile__svg" />
         </div>
       );
     }
@@ -80,7 +81,7 @@ class Profile extends PureComponent {
 
     return (
       <HOCHeaderTitle title="Profile">
-        <Button text={editing ? 'Done' : 'Edit'} onClick={this.handleEditState} />
+        <Button title={editing ? 'Done' : 'Edit'} onClick={this.handleEditState} />
       </HOCHeaderTitle>
     );
   }

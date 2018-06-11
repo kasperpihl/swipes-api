@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'Icon';
-import Button from 'Button';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import Button from 'src/react/components/button/Button';
+import { setupCachedCallback } from 'react-delegate';
 import './styles/result-item.scss';
 
 // now use events as onClick:
@@ -15,7 +15,6 @@ class ResultItem extends Component {
   }
   onClick(side, e) {
     const { onClick, disabled } = this.props;
-
     if (onClick && !disabled) {
       e.stopPropagation();
       onClick(side, e);
@@ -102,7 +101,7 @@ class ResultItem extends Component {
     return <div className="result__subtitle">{subtitle}</div>;
   }
   render() {
-    const { disabled, selected } = this.props;
+    const { disabled, selected, onMouseDown } = this.props;
     let className = 'result';
 
     if (disabled) {
@@ -114,7 +113,7 @@ class ResultItem extends Component {
     }
 
     return (
-      <div className={className} onClick={this.onClickCached('row')}>
+      <div className={className} onMouseDown={onMouseDown} onClick={this.onClickCached('row')}>
         {this.renderLeftIcon()}
         <div className="result__data">
           {this.renderTitle()}

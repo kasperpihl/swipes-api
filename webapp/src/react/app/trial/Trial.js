@@ -2,10 +2,20 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import './styles/trial.scss';
 
-class Trial extends PureComponent {
+@connect(state => ({
+  me: state.get('me'),
+  subscribed: state.getIn(['me', 'organizations', 0, 'stripe_subscription_id']),
+  organization: state.getIn(['me', 'organizations']),
+  trial: state.getIn(['me', 'organizations', 0, 'trial']),
+  isAccount: (state.getIn(['navigation', 'primary', 'id']) === 'AccountList')
+}), {
+  navSet: navigationActions.set,
+  navPush: navigationActions.push,
+})
+export default class Trial extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -111,17 +121,16 @@ class Trial extends PureComponent {
           <div className="trial-popup__paragraph">⭐&nbsp;&nbsp;Your progress is saved. {actionLbl}</div>
           <div className="trial-popup__actions">
             {(daysLeft > -7) ? <Button
-              text="Dismiss"
+              title="Dismiss"
               onClick={this.onDismiss}
             /> : null}
             {isAdmin ? <Button
-              text="Request extension"
+              title="Request extension"
               onClick={this.onExtend}
             /> : null}
             {isAdmin ? (
               <Button
-                text="Add billing info"
-                primary
+                title="Add billing info"
                 onClick={this.onUnpaid}
               />
             ) : null}
@@ -145,14 +154,3 @@ class Trial extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  me: state.get('me'),
-  subscribed: state.getIn(['me', 'organizations', 0, 'stripe_subscription_id']),
-  organization: state.getIn(['me', 'organizations']),
-  trial: state.getIn(['me', 'organizations', 0, 'trial']),
-  isAccount: (state.getIn(['navigation', 'primary', 'id']) === 'AccountList')
-}), {
-  navSet: navigationActions.set,
-  navPush: navigationActions.push,
-})(Trial);

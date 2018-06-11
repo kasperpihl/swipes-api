@@ -1,7 +1,7 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
-  CardWrapper: {
+export default styleSheet('CompatibleCard',{
+  Wrapper: {
     _size: ['100%'],
     overflowY: 'auto',
     paddingTop: '30px',

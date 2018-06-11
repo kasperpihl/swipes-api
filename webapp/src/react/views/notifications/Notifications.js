@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import Icon from 'Icon';
 import NotificationItem from './NotificationItem';
 import './styles/notifications.scss';
@@ -30,11 +30,9 @@ class Notifications extends PureComponent {
       <div className="notifications__header">
         <div className="notifications__title">Notifications</div>
         <Button
-          text="Mark all as read"
-          frameless
-          small
+          title="Mark all as read"
+          compact
           onClick={this.onMarkAll}
-          className="notifications__mark-all"
           {...getLoading('marking')}
         />
       </div>

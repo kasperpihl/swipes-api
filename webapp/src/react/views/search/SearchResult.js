@@ -7,7 +7,7 @@ import GoalResult from './GoalResult';
 import PostResult from './PostResult';
 import './styles/search-result.scss';
 
-class SearchResult extends PureComponent {
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     setupDelegate(this, 'onClick');
@@ -46,5 +46,3 @@ class SearchResult extends PureComponent {
     );
   }
 }
-
-export default SearchResult;

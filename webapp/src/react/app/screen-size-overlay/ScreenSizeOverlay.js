@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 
 import styles from './ScreenSizeOverlay.swiss';
 
@@ -12,7 +12,10 @@ const CurrentSize = styleElement('div', styles.CurrentSize);
 const MIN_WIDTH = 1000;
 const MIN_HEIGHT = 600;
 
-class ScreenSizeOverlay extends PureComponent {
+@connect(state => ({
+  isDev: state.getIn(['globals', 'isDev']),
+}))
+export default class ScreenSizeOverlay extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,8 +64,4 @@ class ScreenSizeOverlay extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  isDev: state.getIn(['globals', 'isDev']),
-}))(ScreenSizeOverlay);
 

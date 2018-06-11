@@ -4,6 +4,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import { Provider } from 'react-redux';
+import { OptimistProvider } from 'react-optimist';
 import { BrowserRouter } from 'react-router-dom';
 import { createLocation } from 'history';
 
@@ -45,7 +46,9 @@ init(store, delegate);
 render(
   <Provider store={store}>
     <BrowserRouter forceRefresh={false}>
-      <Root />
+      <OptimistProvider>
+        <Root />
+      </OptimistProvider>
     </BrowserRouter>
   </Provider>
   , document.getElementById('content'),

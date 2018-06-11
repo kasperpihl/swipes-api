@@ -8,12 +8,18 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import AccountList from './AccountList';
 
-class HOCAccountList extends PureComponent {
-  static minWidth() {
-    return 600;
-  }
-  static maxWidth() {
-    return 700;
+@navWrapper
+@connect(state => ({
+  me: state.get('me'),
+}), {
+  signout: mainActions.signout,
+  browser: mainActions.browser,
+  confirm: menuActions.confirm,
+})
+
+export default class extends PureComponent {
+  static sizes() {
+    return [654];
   }
   constructor(props) {
     super(props);
@@ -95,11 +101,3 @@ class HOCAccountList extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  me: state.get('me'),
-}), {
-  signout: mainActions.signout,
-  browser: mainActions.browser,
-  confirm: menuActions.confirm,
-})(HOCAccountList));

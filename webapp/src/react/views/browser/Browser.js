@@ -1,14 +1,18 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import SWView from 'SWView';
-import Webview from 'components/webview/Webview';
 import Loader from 'components/loaders/Loader';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import BrowserNavBar from './BrowserNavBar';
+import BrowserWebview from './BrowserWebview';
 
 import './styles/browser';
 
-class Browser extends PureComponent {
+@navWrapper
+@connect(state => ({
+  me: state.get('me'),
+}))
+export default class extends PureComponent {
   static minWidth() {
     return 800;
   }
@@ -112,7 +116,7 @@ class Browser extends PureComponent {
     return (
       <SWView noframe>
 
-        <Webview
+        <BrowserWebview
           className="browser-overlay__webview-container"
           url={url}
           persistId={`browser${me.get('id')}`}
@@ -130,7 +134,3 @@ class Browser extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  me: state.get('me'),
-}))(Browser));

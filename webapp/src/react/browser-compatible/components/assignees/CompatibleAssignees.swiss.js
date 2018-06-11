@@ -1,7 +1,7 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
-  CompatibleAssigneesWrapper: {
+export default styleSheet('CompatibleAssignees', {
+  Wrapper: {
     _size: ['auto', '48px'],
     marginLeft: '15px',
     display: 'table-cell',

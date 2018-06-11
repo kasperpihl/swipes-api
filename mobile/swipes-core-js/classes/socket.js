@@ -1,5 +1,4 @@
 import { fromJS } from 'immutable';
-import { setupDelegate } from 'react-delegate';
 import * as types from '../constants';
 
 import { bindAll } from './utils';

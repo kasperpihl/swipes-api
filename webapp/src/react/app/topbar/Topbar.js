@@ -1,13 +1,25 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 
 import Icon from 'Icon';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import './topbar.scss';
 
-
-class Topbar extends PureComponent {
+@connect(state => ({
+  me: state.get('me'),
+  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
+  isElectron: state.getIn(['globals', 'isElectron']),
+  nextRetry: state.getIn(['connection', 'nextRetry']),
+  versionInfo: state.getIn(['connection', 'versionInfo']),
+  reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),
+  isMaximized: state.getIn(['main', 'isMaximized']),
+  isFullscreen: state.getIn(['main', 'isFullscreen']),
+  ready: state.getIn(['connection', 'readyInOrg']),
+  status: state.getIn(['connection', 'status']),
+  token: state.getIn(['connection', 'token']),
+}))
+export default class Topbar extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -105,17 +117,17 @@ class Topbar extends PureComponent {
   }
   renderDownloadBtn() {
     return (
-      <Button primary small text="download" onClick={this.onDownload} className="topbar__retry-btn" />
+      <Button title="download" onClick={this.onDownload} />
     );
   }
   renderRetryBtn() {
     return (
-      <Button primary small text="Retry now" onClick={this.onRetry} className="topbar__retry-btn" />
+      <Button title="Retry now" onClick={this.onRetry} />
     );
   }
   renderReloadBtn() {
     return (
-      <Button primary small text="Reload" onClick={this.onReload} className="topbar__retry-btn" />
+      <Button title="Reload" onClick={this.onReload} />
     );
   }
   renderWindowsActions() {
@@ -171,18 +183,3 @@ class Topbar extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({
-  me: state.get('me'),
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-  isElectron: state.getIn(['globals', 'isElectron']),
-  nextRetry: state.getIn(['connection', 'nextRetry']),
-  versionInfo: state.getIn(['connection', 'versionInfo']),
-  reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),
-  isMaximized: state.getIn(['main', 'isMaximized']),
-  isFullscreen: state.getIn(['main', 'isFullscreen']),
-  ready: state.getIn(['connection', 'readyInOrg']),
-  status: state.getIn(['connection', 'status']),
-  token: state.getIn(['connection', 'token']),
-}))(Topbar);
-

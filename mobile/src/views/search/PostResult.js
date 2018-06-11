@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import StyledText from 'components/styled-text/StyledText';
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   initialsLabel: {
     fontSize: 28,
     color: 'white',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   textStyle: {
     fontSize: 12,
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#7900ff',
   },
   Green: {
-    backgroundColor: '#1cc05d'
+    backgroundColor: '#1cc05d',
   },
   typeLabel: {
     fontSize: 11,
@@ -132,14 +132,14 @@ class PostResult extends PureComponent {
 
     switch (type) {
       case 'announcement':
-        return { label: 'Announcement', color: 'Yellow' }
+        return { label: 'Announcement', color: 'Yellow' };
       case 'question':
-        return { label: 'Question', color: 'Purple' }
+        return { label: 'Question', color: 'Purple' };
       case 'information':
-        return { label: 'Information', color: 'Blue' }
+        return { label: 'Information', color: 'Blue' };
       case 'post':
       default:
-        return { label: 'Post', color: 'Green' }
+        return { label: 'Post', color: 'Green' };
     }
   }
   renderProfileImage() {
@@ -149,7 +149,7 @@ class PostResult extends PureComponent {
     const initials = msgGen.users.getInitials(userId);
 
     if (image) {
-      return <Image style={styles.profilePic}  source={{ uri: image }}  />
+      return <Image style={styles.profilePic} source={{ uri: image }} />;
     }
 
     return (
@@ -158,21 +158,20 @@ class PostResult extends PureComponent {
           {initials}
         </Text>
       </View>
-    )
+    );
   }
   renderGeneratedTitle() {
     const { result } = this.props;
     const { item } = result;
-    const type = item.type;
 
-    let string = [
+    const string = [
       {
         id: item.created_by,
-        string: msgGen.users.getFirstName(item.created_by, ),
-        boldStyle: styles.boldStyle
+        string: msgGen.users.getFirstName(item.created_by),
+        boldStyle: styles.boldStyle,
       },
       ' ',
-      msgGen.posts.getPostTypeTitle(type)
+      msgGen.posts.getPostTypeTitle(),
     ];
 
     const taggedUsers = item.tagged_users;
@@ -181,7 +180,6 @@ class PostResult extends PureComponent {
       string.push(' and tagged ');
 
       taggedUsers.forEach((id, i) => {
-
         if (i > 0) {
           string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');
         }
@@ -189,7 +187,7 @@ class PostResult extends PureComponent {
         string.push({
           id,
           string: msgGen.users.getFirstName(id),
-          boldStyle: styles.boldStyle
+          boldStyle: styles.boldStyle,
         });
       });
     }
@@ -199,27 +197,27 @@ class PostResult extends PureComponent {
         text={string}
         textStyle={styles.textStyle}
       />
-    )
+    );
   }
   renderSubtitle() {
     const { result } = this.props;
     const { item: post } = result;
     const timeStamp = timeAgo(post.created_at, true);
-    const seperator = post.context ? <Text selectable={true} style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
-    const contextTitle = post.context ? <Text selectable={true} style={styles.subtitleLabel}>{post.context.title}</Text> : undefined;
+    const seperator = post.context ? <Text selectable style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
+    const contextTitle = post.context ? <Text selectable style={styles.subtitleLabel}>{post.context.title}</Text> : undefined;
     const icon = post.context ? <Icon icon={miniIconForId(post.context.id)} width="18" height="18" fill={colors.deepBlue40} /> : undefined;
     const padding = post.context ? 5 : 0;
 
     return (
       <View style={styles.subtitle}>
         {icon}
-        <Text selectable={true} style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
+        <Text selectable style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
           {contextTitle}
           {seperator}
-          <Text selectable={true} style={styles.subtitleLabel}>{timeStamp}</Text>
+          <Text selectable style={styles.subtitleLabel}>{timeStamp}</Text>
         </Text>
       </View>
-    )
+    );
   }
   renderType() {
     const type = this.getType();
@@ -229,10 +227,9 @@ class PostResult extends PureComponent {
       <View style={[styles.typeWrapper, typeStyleColor]}>
         <Text style={styles.typeLabel}>{type.label.toUpperCase()}</Text>
       </View>
-    )
+    );
   }
   renderHeader() {
-
     return (
       <View style={styles.header}>
         <View style={styles.titles}>
@@ -241,7 +238,7 @@ class PostResult extends PureComponent {
         </View>
         {this.renderType()}
       </View>
-    )
+    );
   }
   renderMessage() {
     const { result } = this.props;
@@ -261,7 +258,7 @@ class PostResult extends PureComponent {
         </ParsedText>
 
       </View>
-    )
+    );
   }
   render() {
     return (
@@ -278,7 +275,7 @@ class PostResult extends PureComponent {
   }
 }
 
-export default PostResult
+export default PostResult;
 
 // const { string } = PropTypes;
 

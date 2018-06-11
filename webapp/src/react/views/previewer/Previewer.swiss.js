@@ -1,11 +1,11 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
 export default styleSheet('Previewer', {
   Footer: {
     _size: ['100%', '60px'],
     _flex: ['row', 'right', 'center'],
     backgroundColor: '$sw5',
-    borderTop: '1px solid $sw4',
+    borderTop: '1px solid $sw3',
     padding: '0 30px',
   },
   FooterButton: {
@@ -43,28 +43,4 @@ export default styleSheet('Previewer', {
   },
 
 });
-
-// .preview-content {
-//   $b: &;
-
-//   &__column {
-
-//     &--main {
-//       @include size(calc(100% - 270px - 10%), auto);
-//       margin-right: 10%;
-//     }
-
-//     &--side {
-//       @include size(270px, auto);
-//       @include flex(none);
-//     }
-//   }
-
-//   &__section {
-
-//     &:not(:first-child) {
-//       margin-top: 60px;
-//     }
-//   }
-// }
 

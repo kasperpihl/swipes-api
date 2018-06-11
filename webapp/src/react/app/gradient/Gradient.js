@@ -1,13 +1,17 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import gradient from 'swipes-core-js/classes/gradient';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './Gradient.swiss';
 
-const GradientWrapper = styleElement('div', styles.GradientWrapper);
-const SuccessGradient = styleElement('div', styles.SuccessGradient);
+const Wrapper = styleElement('div', styles.Wrapper);
+const Success = styleElement('div', styles.Success);
 
-class Gradient extends PureComponent {
+@connect(state => ({
+  successState: state.getIn(['main', 'successState']),
+  successColor: state.getIn(['main', 'successColor']),
+}))
+export default class Gradient extends PureComponent {
   constructor(props) {
     super(props);
     const gradientPos = gradient.getGradientPos();
@@ -55,14 +59,9 @@ class Gradient extends PureComponent {
     }
 
     return (
-      <GradientWrapper style={styles}>
-        <SuccessGradient color={successColor} show={show}/>
-      </GradientWrapper>
+      <Wrapper style={styles}>
+        <Success color={successColor} show={show}/>
+      </Wrapper>
     );
   }
 }
-
-export default connect(state => ({
-  successState: state.getIn(['main', 'successState']),
-  successColor: state.getIn(['main', 'successColor']),
-}), null)(Gradient);

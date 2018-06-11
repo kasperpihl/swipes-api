@@ -1,6 +1,6 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
+export default styleSheet('Tooltip', {
   Wrapper: {
     _size: '100%',
     left: 0,
@@ -19,5 +19,8 @@ export default styleSheet({
   Content: {
     _size: 'auto',
     position: 'absolute',
+    top: '#{top}',
+    left: '#{left}',
+    transform: '#{transform}',
   },
 });

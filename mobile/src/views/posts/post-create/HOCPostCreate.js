@@ -4,14 +4,13 @@ import { Keyboard } from 'react-native';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-import { 
-  setupLoading, 
-  convertObjToUnderscore, 
-  navForContext, 
+import {
+  setupLoading,
   typeForId,
   bindAll,
-  getDeep,
 } from 'swipes-core-js/classes/utils';
+import convertObjectKeysToUnderscore from 'swipes-core-js/utils/convertObjectKeysToUnderscore';
+import getDeep from 'swipes-core-js/utils/getDeep';
 
 import { fromJS, List } from 'immutable';
 import PostCreate from './PostCreate';
@@ -22,7 +21,6 @@ class HOCPostCreate extends PureComponent {
     this.state = {
       post: fromJS({
         message: props.message || '',
-        type: props.type || 'message',
         attachments: props.attachments || [],
         taggedUsers: props.taggedUsers || [],
         context: props.context || null,
@@ -31,30 +29,26 @@ class HOCPostCreate extends PureComponent {
 
     bindAll(this, [
       'onModalTag',
-      'onModalChangeType',
       'onActionButton',
       'onFocusTextarea',
       'handleAttach',
       'onChooseAttachmentTypeToAdd',
-      'onAddAttachment'
+      'onAddAttachment',
     ]);
 
     setupLoading(this);
   }
   componentDidMount() {
-    console.log('mount');
     this.renderActionButtons();
   }
   componentDidUpdate(prevProps, prevState) {
-    if(this.props.isActive) {
-      if(!prevProps.isActive) this.onFocusTextarea();
+    if (this.props.isActive) {
+      if (!prevProps.isActive) this.onFocusTextarea();
 
       const { post } = this.state;
       const prevPost = prevState.post;
-      if(!prevProps.isActive ||
-          prevPost.get('type') !== post.get('type') || 
+      if (!prevProps.isActive ||
           prevPost.get('attachments').size !== post.get('attachments').size) {
-        console.log('on update');
         this.renderActionButtons();
       }
     }
@@ -66,32 +60,27 @@ class HOCPostCreate extends PureComponent {
     if (i === 0) {
       this.onTag();
     } else if (i === 1) {
-      this.onChangeType();
-    } else if (i === 2) {
       this.onChooseAttachmentTypeToAdd();
-    } else if (i === 3) {
+    } else if (i === 2) {
       if (this.isLoading('posting')) {
 
       } else {
         this.setLoading('posting');
         this.renderActionButtons();
-        createPost(convertObjToUnderscore(post.toJS())).then((res) => {
+        createPost(convertObjectKeysToUnderscore(post.toJS())).then((res) => {
           this.clearLoading('posting');
           this.renderActionButtons();
           if (res.ok) {
             window.analytics.sendEvent('Post created', {
-              'Type': post.get('type'),
               'Tagged people': post.get('taggedUsers').size,
-              'Attachments': post.get('attachments').size,
+              Attachments: post.get('attachments').size,
               'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
             });
             navPop();
           }
-        })
+        });
       }
-
     }
-
   }
   onMessageChange(text) {
     const { post } = this.state;
@@ -101,13 +90,9 @@ class HOCPostCreate extends PureComponent {
     const { post } = this.state;
     this.updatePost(post.setIn(['taggedUsers'], selectedIds));
   }
-  onModalChangeType(id) {
-    const { post } = this.state;
-    this.updatePost(post.set('type', id));
-  }
   onFocusTextarea() {
     const input = getDeep(this, 'refs.postCreate.refs.input');
-    if(input) {
+    if (input) {
       input.focus();
     }
   }
@@ -120,20 +105,6 @@ class HOCPostCreate extends PureComponent {
       actionLabel: 'Tag',
       selectedIds: post.get('taggedUsers'),
       onActionPress: this.onModalTag,
-    }, { onDidClose: this.onFocusTextarea });
-  }
-  onChangeType() {
-    const { actionModal } = this.props;
-    Keyboard.dismiss();
-    actionModal({
-      title: 'Change type',
-      onItemPress: this.onModalChangeType,
-      items: fromJS([
-        { id: 'message', title: 'Make a post' },
-        { id: 'question', title: 'Ask a question' },
-        { id: 'announcement', title: 'Make an announcement' },
-        { id: 'information', title: 'Share information' },
-      ]),
     }, { onDidClose: this.onFocusTextarea });
   }
   onAttachmentClick(i) {
@@ -153,7 +124,7 @@ class HOCPostCreate extends PureComponent {
         title: 'Attachment',
         props: {
           delegate: this,
-          initialAttachments: attachments
+          initialAttachments: attachments,
         },
       });
     } else {
@@ -175,23 +146,12 @@ class HOCPostCreate extends PureComponent {
   }
   handleAttach(att) {
     const { post } = this.state;
-    this.setState({ post: post.updateIn(['attachments'], (atts) => atts.push(att)) });
+    this.setState({ post: post.updateIn(['attachments'], atts => atts.push(att)) });
     this.onFocusTextarea();
   }
 
   updatePost(post) {
     this.setState({ post });
-  }
-  getIconForType() {
-    const type = this.state.post.get('type');
-
-    switch (type) {
-      case 'message': return 'MessageMono';
-      case 'question': return 'QuestionMono';
-      case 'announcement': return 'AnnouncementMono';
-      case 'information': return 'InformationMono';
-      default: return 'MessageColored';
-    }
   }
   renderActionButtons() {
     const { post } = this.state;
@@ -201,7 +161,6 @@ class HOCPostCreate extends PureComponent {
 
     actionButtons = [
       { icon: 'Assign' },
-      { icon: this.getIconForType() },
       size ? { number: size } : { icon: 'Attachment' },
       { icon: sendIcon, seperator: 'left', staticSize: true },
     ];

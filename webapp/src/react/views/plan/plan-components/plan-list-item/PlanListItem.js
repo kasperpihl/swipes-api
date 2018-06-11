@@ -1,21 +1,26 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
-import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import HOCAssigning from 'components/assigning/HOCAssigning';
-import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
 import Icon from 'Icon';
+import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
 import styles from './PlanListItem.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
-const ProgressBar = styleElement('div', styles.ProgressBar).debug();
+const ProgressBar = styleElement('div', styles.ProgressBar);
 const TextWrapper = styleElement('div', styles.TextWrapper);
 const Title = styleElement('div', styles.Title);
 const Subtitle = styleElement('div', styles.Subtitle);
 
-class PlanListItem extends PureComponent {
+@connect(state => ({
+  goals: state.get('goals'),
+}), {
+  tooltip: mainActions.tooltip,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,23 +33,25 @@ class PlanListItem extends PureComponent {
       goals: this.getFilteredGoals(nextProps.plan),
     });
   }
-  onMouseEnter = (e) => {
+  showTooltip = (e) => {
     const { tooltip } = this.props;
     const data = {
       component: PlanProgressTooltip,
       props: {
-        numberOfGoals: 1,
-        numberOfSteps: 2
+        numberOfGoals: this.numberOfGoals,
+        numberOfCompletedGoals: this.numberOfCompletedGoals,
+        numberOfStepsLeft: this.numberOfStepsLeft,
       },
       options: {
         boundingRect: e.target.getBoundingClientRect(),
-        position: 'right',
-      },
-    };
+        position: 'top',
+        delay: 100,
+      }
+    }
 
     tooltip(data);
   }
-  onMouseLeave = () => {
+  hideTooltip = () => {
     const { tooltip } = this.props;
 
     tooltip(null);
@@ -78,8 +85,10 @@ class PlanListItem extends PureComponent {
 
     const stepPercentage = numberOfSteps ? parseInt((numberOfCompletedSteps / numberOfSteps) * 100, 10) : 0;
 
-    this.goalPercentage = percentage;
-    this.stepPercentage = stepPercentage;
+    this.numberOfCompletedGoals = numberOfCompletedGoals;
+    this.numberOfGoals = numberOfGoals;
+    this.numberOfStepsLeft = numberOfSteps - numberOfCompletedSteps;
+
     
     return [percentage, stepPercentage];
 
@@ -90,22 +99,16 @@ class PlanListItem extends PureComponent {
     return (
       <Wrapper onClick={this.onOpenMilestone} className="hover-class">
         <ProgressBar
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
+          onClick={this.hideTooltip}
+          onMouseEnter={this.showTooltip}
+          onMouseLeave={this.hideTooltip}
           goalPercentage={goalPercentage}
           stepPercentage={stepPercentage}
         />
         <TextWrapper>
           <Title>{plan.get('title')}</Title>
-          <Subtitle>0% completed, 5 people</Subtitle>
         </TextWrapper>
       </Wrapper>
     );
   }
 }
-
-export default connect(state => ({
-  goals: state.get('goals'),
-}), {
-  tooltip: mainActions.tooltip,
-})(PlanListItem);

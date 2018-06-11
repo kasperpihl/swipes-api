@@ -1,9 +1,9 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
+export default styleSheet('DraggableGoal', {
   Wrapper: {
     _size: 'auto',
-    background: '$sw4',
+    background: '$sw3',
     borderRadius: '3px',
     marginBottom: '3px',
   }

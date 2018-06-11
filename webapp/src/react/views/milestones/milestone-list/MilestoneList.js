@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
-import Button from 'Button';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
 import Icon from 'Icon';

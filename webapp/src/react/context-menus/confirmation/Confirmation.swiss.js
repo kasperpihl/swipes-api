@@ -1,8 +1,8 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
 const containerWidth = '390px';
 
-export default styleSheet({
+export default styleSheet('Confirmation', {
   Wrapper: {
     _size: [containerWidth, 'auto'],
     background: '$sw5',
@@ -13,11 +13,11 @@ export default styleSheet({
   },
   Title: {
     _font: ['21px', '27px', 500],
-    color: '$sw2',
+    color: '$sw1',
   },
   Message: {
     _font: ['15px', '27px'],
-    color: '$sw2',
+    color: '$sw1',
   },
   Actions: {
     _size: ['100%', 'auto'],

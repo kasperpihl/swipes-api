@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput, StyleSheet, Keyboard, Platform, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
-import { setupDelegate, bindAll, getDeep } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
+import { bindAll } from 'swipes-core-js/classes/utils';
+import getDeep from 'swipes-core-js/utils/getDeep';
 import { fromJS } from 'immutable';
 import { colors, viewSize } from 'globalStyles';
 import * as gs from 'styles';
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
     ...gs.mixins.border(1, gs.colors.deepBlue10),
     ...gs.mixins.flex('row', 'left', 'center'),
     ...gs.mixins.padding(12, 0, 12, 18),
-    alignSelf: 'stretch', 
+    alignSelf: 'stretch',
     minHeight: 54 - (6 * 2),
     borderRadius: 25,
   },
@@ -59,17 +61,17 @@ const styles = StyleSheet.create({
     minWidth: 54,
     maxWidth: 54,
     minHeight: 54,
-  }
+  },
 });
 
 class HOCPostFooter extends PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       text: '',
       attachments: fromJS([]),
       isLoadingComment: false,
-    }
+    };
     setupDelegate(this, 'onAddComment', 'onNavigateBack', 'onAutoFocus');
     bindAll(this, ['handleAddComment', 'handleAttach', 'focusInput', 'onChooseAttachmentTypeToAdd', 'onAddAttachment']);
   }
@@ -83,7 +85,7 @@ class HOCPostFooter extends PureComponent {
         title: 'Attachment',
         props: {
           delegate: this,
-          initialAttachments: attachments
+          initialAttachments: attachments,
         },
       });
     } else {
@@ -107,12 +109,12 @@ class HOCPostFooter extends PureComponent {
     const { attachments } = this.state;
 
     this.setState({
-      attachments: attachments.push(att)
-    })
+      attachments: attachments.push(att),
+    });
   }
   handleAddComment() {
     const { text, attachments } = this.state;
-    if(!text || !text.length) {
+    if (!text || !text.length) {
       return;
     }
     this.onAddComment(text, attachments);
@@ -139,18 +141,17 @@ class HOCPostFooter extends PureComponent {
           <Icon icon="ArrowLeftLine" width="24" height="24" fill={colors.deepBlue80} />
         </View>
       </RippleButton>
-    )
+    );
   }
   renderSendButton() {
     const { isLoading } = this.props;
-  
-    if (isLoading('commenting')) {
 
+    if (isLoading('commenting')) {
       return (
         <View style={styles.iconButton}>
           <ActivityIndicator color={colors.blue100} />
         </View>
-      )
+      );
     }
 
     return (
@@ -159,7 +160,7 @@ class HOCPostFooter extends PureComponent {
           <Icon icon="Send" width="24" height="24" fill={gs.colors.blue100} />
         </View>
       </RippleButton>
-    )
+    );
   }
 
 
@@ -175,21 +176,21 @@ class HOCPostFooter extends PureComponent {
             <View style={styles.inputBorder}>
               <ExpandingTextInput
                 ref="input"
-                onChangeText={(text) => this.setState({ text })}
+                onChangeText={text => this.setState({ text })}
                 style={styles.input}
                 underlineColorAndroid="transparent"
                 autoCapitalize="sentences"
-                autoCorrect={true}
+                autoCorrect
                 placeholder={placeholder}
                 minRows={1}
                 maxRows={4}
                 value={this.state.text}
-                onFocus={() => { this.isFocused = true }}
-                onBlur={() => { this.isFocused = false }}
+                onFocus={() => { this.isFocused = true; }}
+                onBlur={() => { this.isFocused = false; }}
               />
-              <AttachButton 
-                numberOfAttachments={attachments.size} 
-                delegate={this} 
+              <AttachButton
+                numberOfAttachments={attachments.size}
+                delegate={this}
               />
             </View>
           </View>
@@ -198,10 +199,10 @@ class HOCPostFooter extends PureComponent {
           {this.renderSendButton()}
         </View>
       </View>
-    )
+    );
   }
 }
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {

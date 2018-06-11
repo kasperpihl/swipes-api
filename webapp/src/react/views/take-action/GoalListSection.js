@@ -34,9 +34,9 @@ class GoalListSection extends PureComponent {
 
     return (
       <HOCAssigning
+        enableTooltip
         assignees={assignees}
         maxImages={5}
-        rounded
         size={26}
       />
     );

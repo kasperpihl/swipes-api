@@ -1,8 +1,8 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
 const navbarH = '48px';
 
-export default styleSheet({
+export default styleSheet('BreadCrumbs', {
   Wrapper: {
     _size: ['100%', navbarH],
     _flex: '',

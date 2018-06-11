@@ -11,13 +11,16 @@ import {
   convertToRaw,
   EditorState,
 } from 'draft-js';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import diff from 'src/classes/draft-util';
+import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
 
-import { bindAll, debounce, randomString, setupLoading } from 'swipes-core-js/classes/utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import randomString from 'swipes-core-js/utils/randomString';
+import debounce from 'swipes-core-js/utils/debounce';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
+
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 
@@ -27,7 +30,34 @@ const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
 /* global msgGen */
 
-class HOCSideNote extends PureComponent {
+const mapStateToProps = (state, props) => {
+  let cachedText = state.getIn(['notes', 'cache', props.id, 'text']);
+  if (!cachedText) {
+    cachedText = state.getIn(['notes', 'cache', props.id, '_savingText']);
+  }
+
+  const note = state.getIn(['notes', 'server', props.id]);
+  let serverOrg = state.getIn(['notes', 'cache', props.id, 'serverOrg']);
+  serverOrg = serverOrg || note;
+  const latestRev = serverOrg.get('rev') || 1;
+
+  return {
+    organizationId: state.getIn(['me', 'organizations', 0, 'id']),
+    note,
+    latestRev,
+    serverOrg,
+    cachedText,
+  };
+}
+
+@navWrapper
+@connect(mapStateToProps, {
+  saveNote: ca.notes.save,
+  cacheNote: ca.notes.cache,
+  browser: mainActions.browser,
+})
+
+export default class HOCSideNote extends PureComponent {
   static sizes() {
     return [600, 900];
   }
@@ -40,7 +70,6 @@ class HOCSideNote extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ['bouncedSaveNote', 'onBeforeUnload', 'onResolveConflict']);
     this.bouncedSaveNote = debounce(this.bouncedSaveNote, 3000);
     setupLoading(this);
   }
@@ -68,19 +97,28 @@ class HOCSideNote extends PureComponent {
     window.removeEventListener('beforeunload', this.onBeforeUnload);
     this.saveToCache();
   }
+  bouncedSaveNote = () => {
+    const { editorState } = this.state;
+    if (this._needSave && !this._unmounted) {
+      // Generating the data to save!
+      const text = convertToRaw(editorState.getCurrentContent());
+
+      this.saveNote(text);
+    }
+  }
   onLinkClick(url) {
     const { browser, target } = this.props;
     browser(target, url);
   }
-  onBeforeUnload() {
+  onBeforeUnload = () => {
     const { editorState } = this.state;
     this.saveToCache(editorState);
   }
-  onResolveConflict() {
+  onResolveConflict = () => {
     const { editorState } = this.state;
     const { serverOrg, note } = this.props;
     const rawText = convertToRaw(editorState.getCurrentContent());
-    const diffObj = diff((serverOrg.get('text') || emptyState).toJS(), note.get('text').toJS(), rawText);
+    const diffObj = getDiffServerClient((serverOrg.get('text') || emptyState).toJS(), note.get('text').toJS(), rawText);
     this.setLoading('conflict');
     this.saveNote(diffObj.editorState, note.get('rev')).then((res) => {
       if (res && res.ok) {
@@ -171,15 +209,6 @@ class HOCSideNote extends PureComponent {
       });
     });
   }
-  bouncedSaveNote() {
-    const { editorState } = this.state;
-    if (this._needSave && !this._unmounted) {
-      // Generating the data to save!
-      const text = convertToRaw(editorState.getCurrentContent());
-
-      this.saveNote(text);
-    }
-  }
 
   renderHeader() {
     const { target, note, latestRev, title } = this.props;
@@ -196,9 +225,8 @@ class HOCSideNote extends PureComponent {
       subtitle[0] = `CONFLICT. Updated by ${name} `;
       buttonHtml = (
         <Button
-          primary
           {...this.getLoading('conflict')}
-          text="Resolve now"
+          title="Resolve now"
           onClick={this.onResolveConflict}
         />
       );
@@ -209,7 +237,6 @@ class HOCSideNote extends PureComponent {
         <HOCHeaderTitle
           title={title}
           target={target}
-          titleIcon="Note"
           subtitle={subtitle}
         >
           {buttonHtml}
@@ -259,29 +286,3 @@ class HOCSideNote extends PureComponent {
     );
   }
 }
-
-function mapStateToProps(state, props) {
-  let cachedText = state.getIn(['notes', 'cache', props.id, 'text']);
-  if (!cachedText) {
-    cachedText = state.getIn(['notes', 'cache', props.id, '_savingText']);
-  }
-
-  const note = state.getIn(['notes', 'server', props.id]);
-  let serverOrg = state.getIn(['notes', 'cache', props.id, 'serverOrg']);
-  serverOrg = serverOrg || note;
-  const latestRev = serverOrg.get('rev') || 1;
-
-  return {
-    organizationId: state.getIn(['me', 'organizations', 0, 'id']),
-    note,
-    latestRev,
-    serverOrg,
-    cachedText,
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
-  saveNote: ca.notes.save,
-  cacheNote: ca.notes.cache,
-  browser: mainActions.browser,
-})(HOCSideNote));

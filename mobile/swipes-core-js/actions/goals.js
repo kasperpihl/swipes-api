@@ -10,16 +10,14 @@ export const create = valAction('goals.create', [
   string.min(1).max(155).require(),
   string,
   array.of(string),
-], (title, milestoneId, assignees) => (d, getState) => {
-  return d(a.api.request('goals.create', {
-    goal: {
-      title,
-      assignees: assignees || [],
-    },
-    milestone_id: milestoneId,
-    organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
-  }));
-});
+], (title, milestoneId, assignees) => (d, getState) => d(a.api.request('goals.create', {
+  goal: {
+    title,
+    assignees: assignees || [],
+  },
+  milestone_id: milestoneId,
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+})));
 
 
 export const loadWay = valAction('goals.loadWay', [
@@ -64,3 +62,18 @@ export const incomplete = gId => a.api.request('goals.incomplete', {
 });
 
 export const archive = goalId => a.api.request('goals.archive', { goal_id: goalId });
+
+
+export const attachmentsReorder = valAction('goals.attachmentsReorder', [
+  string.require(),
+  array.of(string).require(),
+], (goalId, attachmentOrder) => d => d(a.api.request('attachments.reorder', {
+  target_id: goalId,
+  attachment_order: attachmentOrder,
+})));
+
+export const stepsReorder = (goalId, stepOrder) => a.api.request('goals.stepsReorder', {
+  goal_id: goalId,
+  step_order: stepOrder,
+});
+

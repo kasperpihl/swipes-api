@@ -1,6 +1,6 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
+export default styleSheet('DroppableGoalList', {
   ListContainer: {
     _size: '100%',
   }

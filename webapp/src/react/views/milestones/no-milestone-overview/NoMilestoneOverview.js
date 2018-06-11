@@ -13,17 +13,8 @@ class NoMilestoneOverview extends PureComponent {
     super(props);
     this.state = {
       showLine: false,
-      emptyStateOpacity: 1,
     };
     setupDelegate(this, 'onScroll');
-  }
-  onAddGoalItemInputChange(title) {
-    const { emptyStateOpacity } = this.state;
-    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
-
-    if (emptyStateOpacity !== newEmptyStateOpacity) {
-      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
-    }
   }
   renderHeader() {
     return (
@@ -40,7 +31,7 @@ class NoMilestoneOverview extends PureComponent {
 
     if (!goals.size) {
       return (
-        <div className="no-milestone-overview__empty-state" style={{ opacity: this.state.emptyStateOpacity }}>
+        <div className="no-milestone-overview__empty-state">
           <div className="no-milestone-overview__empty-arrow">
             <Icon icon="ESArrow" className="no-milestone-overview__empty-arrow-svg" />
           </div>

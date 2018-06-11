@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { bindAll } from '../classes/utils';
-import { timeAgo } from '../classes/time-utils';
+import timeAgo from '../utils/time/timeAgo';
 
 const MAX = 5000;
 const MIN = 3000;
@@ -55,7 +53,3 @@ class TimeAgo extends PureComponent {
 }
 
 export default TimeAgo
-
-// const { string } = PropTypes;
-
-TimeAgo.propTypes = {};

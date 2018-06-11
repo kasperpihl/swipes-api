@@ -35,26 +35,7 @@ export default class HOCHeaderTitle extends Component {
       />
     );
   }
-  renderTitleIcon() {
-    const { titleIcon } = this.props;
-
-    if (!titleIcon) {
-      return undefined;
-    }
-
-    return (
-      <div className="header-title__title-icon">
-        <Icon icon={titleIcon} className="header-title__title-svg" />
-      </div>
-    )
-  }
-  renderLeftChildren() {
-    const { leftChildren } = this.props;
-
-    if (leftChildren) return leftChildren;
-
-    return undefined;
-  }
+ 
   renderSubtitle() {
     const { subtitle } = this.props;
 
@@ -96,8 +77,6 @@ export default class HOCHeaderTitle extends Component {
 
     return (
       <div className={className}>
-        {this.renderTitleIcon()}
-        {this.renderLeftChildren()}
         {this.renderContent()}
         <div className="header-title__actions">
           {children}

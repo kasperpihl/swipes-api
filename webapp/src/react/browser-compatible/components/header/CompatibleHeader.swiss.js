@@ -1,9 +1,11 @@
-import { styleSheet } from 'react-swiss';
+import { styleSheet } from 'swiss-react';
 
-export default styleSheet({
-  HeaderWrapper: {
+export default styleSheet('CompatibleHeader',{
+  Wrapper: {
     _size: ['100%', 'auto'],
-    '& .center': {
+    paddingTop: '21px',
+
+    'center': {
       textAlign: 'center',
     },
     '@media $maxH800': {
@@ -27,6 +29,8 @@ export default styleSheet({
     '& h3': {
       _font: ['15px', '24px', '400'],
       color: '$sw2',
+      marginTop: '10px',
+
       '@media $max600': {
         display: 'block',
         textAlign: 'center',

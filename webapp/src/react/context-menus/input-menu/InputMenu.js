@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import styles from './InputMenu.swiss';
 
@@ -52,8 +52,7 @@ class InputMenu extends Component {
           innerRef={(c) => this.input = c}
         />
         <Button
-          primary
-          text={buttonLabel}
+          title={buttonLabel}
           disabled={allowEmpty ? false : !text.length}
           icon={buttonIcon}
           onClick={this.onAdd}

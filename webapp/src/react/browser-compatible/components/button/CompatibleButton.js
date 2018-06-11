@@ -1,5 +1,5 @@
 import React from 'react';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import Icon from 'Icon';
 import styles from './CompatibleButton.swiss';
 

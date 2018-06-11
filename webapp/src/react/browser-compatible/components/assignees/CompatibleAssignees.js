@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styleElement } from 'react-swiss';
+import { styleElement } from 'swiss-react';
 import styles from './CompatibleAssignees.swiss';
 
-const CompatibleAssigneesWrapper = styleElement('div', styles.CompatibleAssigneesWrapper);
+const Wrapper = styleElement('div', styles.Wrapper);
 const Assignee = styleElement('div', styles.Assignee);
 const ProfilePic = styleElement('img', styles.ProfilePic);
 const Initials = styleElement('p', styles.Initials);
@@ -17,7 +17,7 @@ const CompatibleAssignees = (props) => {
   const assigneeInitials = msgGen.users.getInitials(assignee);
 
   return (
-    <CompatibleAssigneesWrapper>
+    <Wrapper>
       <Assignee float={float}>
         {photoSrc ? (
           <ProfilePic src={photoSrc} />
@@ -25,7 +25,7 @@ const CompatibleAssignees = (props) => {
           <Initials>{assigneeInitials}</Initials>
         )}
       </Assignee>
-    </CompatibleAssigneesWrapper>
+    </Wrapper>
   );
 };
 

@@ -9,7 +9,15 @@ import {
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import TakeAction from './TakeAction';
 
-class HOCTakeAction extends PureComponent {
+@navWrapper
+@connect(state => ({
+  goals: cs.goals.assignedGroupedByMilestone(state),
+  myId: state.getIn(['me', 'id']),
+}), {
+  saveCache: ca.cache.save,
+})
+
+export default class HOCTakeAction extends PureComponent {
   static maxWidth() {
     return 654;
   }
@@ -91,10 +99,3 @@ class HOCTakeAction extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  goals: cs.goals.assignedGroupedByMilestone(state),
-  myId: state.getIn(['me', 'id']),
-}), {
-  saveCache: ca.cache.save,
-})(HOCTakeAction));

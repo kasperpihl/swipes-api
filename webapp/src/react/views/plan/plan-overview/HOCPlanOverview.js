@@ -1,27 +1,46 @@
 import React, { PureComponent } from 'react';
-
+import { withOptimist } from 'react-optimist';
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
-import { propsOrPop } from 'swipes-core-js/classes/react-utils';
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 import PlanOverview from './PlanOverview';
 
-class HOCPlanOverview extends PureComponent {
+@navWrapper
+@connect((state, props) => ({
+  goals: state.get('goals'),
+  milestone: state.getIn(['milestones', props.milestoneId]),
+}), {
+  contextMenu: mainActions.contextMenu,
+  successGradient: mainActions.successGradient,
+  inputMenu: menuActions.input,
+  closeMilestone: ca.milestones.close,
+  openMilestone: ca.milestones.open,
+  reorderGoals: ca.milestones.reorderGoals,
+  deleteMilestone: ca.milestones.deleteMilestone,
+  renameMilestone: ca.milestones.rename,
+  confirm: menuActions.confirm,
+})
+@withOptimist
+export default class HOCPlanOverview extends PureComponent {
   static sizes() {
     return [750, 1100];
   }
   constructor(props) {
     super(props);
+    props.optimist.identify(props.milestone.get('id'));
+    props.optimist.setDefaultOptions({
+      serial: true,
+    });
     this.state = {
       showLine: false,
     };
-    this.reorderQueue = [];
     propsOrPop(this, 'milestone');
     bindAll(this, ['onDragStart', 'onDragEnd']);
     setupLoading(this);
@@ -68,9 +87,8 @@ class HOCPlanOverview extends PureComponent {
     if (!result.destination) {
       return;
     }
-    const { tempOrder } = this.state;
-    const { milestone, reorderGoals, successGradient } = this.props;
-    let order = tempOrder || milestone.get('goal_order');
+    const { milestone, reorderGoals, successGradient, optimist } = this.props;
+    let order = optimist.get('order', milestone.get('goal_order'));
 
     const { droppableId: source, index: sourceI } = result.source;
     const { droppableId: dest, index: destI } = result.destination;
@@ -81,23 +99,17 @@ class HOCPlanOverview extends PureComponent {
     order = order.deleteIn([source, sourceI]);
     order = order.updateIn([dest], (arr) => arr.insert(destI, goalId));
 
-    this.setState({ tempOrder: order });
-    this.reorderQueue.push([milestone.get('id'), goalId, dest, destI]);
-    this.onNextReorder();
-  }
-  onNextReorder() {
-    if(this.isReordering) {
-      return;
-    }
-    const { reorderGoals } = this.props;
-    this.isReordering = true;
-    const args = this.reorderQueue.shift();
-    reorderGoals(...args).then((res) => {
-      this.isReordering = false;
-      if(!res.ok || !this.reorderQueue.length) {
-        !this._unmounted && this.setState({ tempOrder: null });
-      } else if(this.reorderQueue.length) {
-        this.onNextReorder();
+    optimist.set({
+      key: 'order',
+      value: order,
+      handler: (next) => {
+        reorderGoals(milestone.get('id'), goalId, dest, destI).then((res) => {
+          if(res.ok) {
+            next();
+          } else {
+            next('something went wrong');
+          }
+        });
       }
     });
   }
@@ -206,15 +218,15 @@ class HOCPlanOverview extends PureComponent {
     }
   }
   render() {
-    const { milestone, viewWidth } = this.props;
-    const { showLine, tempOrder } = this.state;
+    const { milestone, viewWidth, optimist } = this.props;
+    const { showLine } = this.state;
     
     return (
       <DragDropContext
         onDragStart={this.onDragStart}
         onDragEnd={this.onDragEnd}>
         <PlanOverview
-          order={tempOrder || milestone.get('goal_order')}
+          order={optimist.get('order', milestone.get('goal_order'))}
           {...this.bindLoading()}
           milestone={milestone}
           delegate={this}
@@ -225,18 +237,3 @@ class HOCPlanOverview extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect((state, props) => ({
-  goals: state.get('goals'),
-  milestone: state.getIn(['milestones', props.milestoneId]),
-}), {
-  contextMenu: mainActions.contextMenu,
-  successGradient: mainActions.successGradient,
-  inputMenu: menuActions.input,
-  closeMilestone: ca.milestones.close,
-  openMilestone: ca.milestones.open,
-  reorderGoals: ca.milestones.reorderGoals,
-  deleteMilestone: ca.milestones.deleteMilestone,
-  renameMilestone: ca.milestones.rename,
-  confirm: menuActions.confirm,
-})(HOCPlanOverview));

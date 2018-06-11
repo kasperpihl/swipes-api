@@ -5,7 +5,11 @@ import Icon from 'Icon';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import './styles/no-milestone.scss';
 
-class HOCNoMilestone extends PureComponent {
+@navWrapper
+@connect(state => ({
+  counter: cs.goals.withoutMilestone(state).size,
+}))
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -55,7 +59,3 @@ class HOCNoMilestone extends PureComponent {
     );
   }
 }
-
-export default navWrapper(connect(state => ({
-  counter: cs.goals.withoutMilestone(state).size,
-}))(HOCNoMilestone));

@@ -20,18 +20,6 @@ const uniqueCommentUserIds = (comments) => {
 
   return Array.from(new Set(userIds));
 };
-const getPrefixForType = (type) => {
-  switch (type) {
-    case 'information':
-      return '';
-    case 'announcement':
-      return 'an ';
-    case 'question':
-    case 'post':
-    default:
-      return 'a ';
-  }
-};
 const postsGetSingle = (req, res, next) => {
   const {
     post_id,
@@ -75,7 +63,29 @@ const postCreatedNotificationData = (req, res, next) => {
     },
     meta: {
       created_by: user_id,
-      type: post.type,
+      message: post.message.replace(cutTextRegExp, '$1'),
+      context: post.context,
+      push: true,
+    },
+  };
+  res.locals.eventData = {
+    post,
+  };
+
+  return next();
+};
+const postEditedNotificationData = (req, res, next) => {
+  const {
+    user_id,
+    post,
+  } = res.locals;
+
+  res.locals.notificationData = {
+    target: {
+      id: post.id,
+    },
+    meta: {
+      created_by: user_id,
       message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
       push: true,
@@ -103,6 +113,7 @@ const postCommentAddedNotificationData = (req, res, next) => {
   const {
     post,
     comment_id,
+    mention_ids,
   } = res.locals;
   const comment = post.comments[comment_id];
 
@@ -111,42 +122,52 @@ const postCommentAddedNotificationData = (req, res, next) => {
       id: post.id,
     },
     meta: {
+      mention_ids,
       user_ids: uniqueCommentUserIds(post.comments),
-      message: post.message.replace(cutTextRegExp, '$1'),
-      context: post.context,
-      type: post.type,
-      created_by: comment.created_by,
-    },
-  };
-  res.locals.eventData = {
-    post_id: post.id,
-    comment: post.comments[comment_id],
-  };
-
-  return next();
-};
-const postCommentMentionNotificationData = (req, res, next) => {
-  const {
-    post,
-    comment_id,
-  } = res.locals;
-  const comment = post.comments[comment_id];
-
-  res.locals.notificationData = {
-    target: {
-      id: post.id,
-    },
-    meta: {
       post_message: post.message.replace(cutTextRegExp, '$1'),
       comment_message: comment.message.replace(cutTextRegExp, '$1'),
-      mentioned_by: comment.created_by,
+      context: post.context,
+      created_by: comment.created_by,
+      post_created_by: post.created_by,
       push: true,
     },
   };
   res.locals.eventData = {
+    comment,
     post_id: post.id,
-    comment: post.comments[comment_id],
   };
+
+  return next();
+};
+const postCommentEditedNotificationData = (req, res, next) => {
+  const {
+    post_id,
+    comment_id,
+    post,
+  } = res.locals;
+  const {
+    followers,
+    comments,
+  } = post;
+  const comment = comments[comment_id];
+
+  res.locals.notificationData = null;
+  res.locals.eventData = {
+    post_id,
+    followers,
+    comment,
+  };
+
+  return next();
+};
+const postCommentArchivedNotificationData = (req, res, next) => {
+  const {
+    post_id,
+    comment_id,
+  } = res.locals;
+
+  res.locals.notificationData = null;
+  res.locals.eventData = { post_id, comment_id };
 
   return next();
 };
@@ -173,7 +194,6 @@ const postReactionAddedNotificationData = (req, res, next) => {
       user_ids: post.reactions.map(r => r.created_by),
       message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
-      type: post.type,
     },
   };
   res.locals.eventData = {
@@ -273,7 +293,37 @@ const postCreatedPushNotificationData = (req, res, next) => {
 
   res.locals.pushMessage = {
     contents: { en: post.message },
-    headings: { en: `${user.profile.first_name} tagged you on ${getPrefixForType(post.type)}${post.type}` },
+    headings: { en: `${user.profile.first_name} tagged you on a post` },
+  };
+  res.locals.pushTargetId = post.id;
+
+  return next();
+};
+const postEditedPushNotificationData = (req, res, next) => {
+  const {
+    user,
+    post,
+  } = res.locals;
+
+  res.locals.pushMessage = {
+    contents: { en: post.message },
+    headings: { en: `${user.profile.first_name} tagged you on a post` },
+  };
+  res.locals.pushTargetId = post.id;
+
+  return next();
+};
+const postAddCommentFollowersPushNotificationData = (req, res, next) => {
+  const {
+    user,
+    post,
+    comment_id,
+  } = res.locals;
+  const comment = post.comments[comment_id];
+
+  res.locals.pushMessage = {
+    contents: { en: comment.message.replace(/<![A-Z0-9]*\|(.*?)>/gi, '$1') },
+    headings: { en: `${user.profile.first_name} wrote a new comment` },
   };
   res.locals.pushTargetId = post.id;
 
@@ -295,36 +345,23 @@ const postAddCommentMentionPushNotificationData = (req, res, next) => {
 
   return next();
 };
-const postAddCommentCreatedByPushNotificationData = (req, res, next) => {
-  const {
-    user,
-    post,
-    comment_id,
-  } = res.locals;
-  const comment = post.comments[comment_id];
-
-  res.locals.pushMessage = {
-    contents: { en: comment.message.replace(/<![A-Z0-9]*\|(.*?)>/gi, '$1') },
-    headings: { en: `${user.profile.first_name} commented on your ${post.type}` },
-  };
-  res.locals.pushTargetId = post.id;
-
-  return next();
-};
 
 export {
   postsGetSingle,
   postsGetSingleCommentFollowers,
   postCreatedNotificationData,
+  postEditedNotificationData,
   postCommentAddedNotificationData,
+  postCommentEditedNotificationData,
+  postCommentArchivedNotificationData,
   postReactionAddedNotificationData,
   postReactionRemovedNotificationData,
   postCommentReactionAddedNotificationData,
   postCommentReactionRemovedNotificationData,
   postArchivedNotificationData,
   postFollowedUnfollowedNotificationData,
-  postCommentMentionNotificationData,
   postCreatedPushNotificationData,
+  postEditedPushNotificationData,
+  postAddCommentFollowersPushNotificationData,
   postAddCommentMentionPushNotificationData,
-  postAddCommentCreatedByPushNotificationData,
 };
