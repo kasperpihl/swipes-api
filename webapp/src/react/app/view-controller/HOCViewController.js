@@ -89,7 +89,7 @@ export default class extends PureComponent {
     toggleLock();
   }
   getSizeForView(View, hasTwoViews) {
-    
+
     if(typeof View === 'undefined') {
       return 0;
     }
@@ -196,7 +196,7 @@ export default class extends PureComponent {
       <Button
         compact
         onClick={this.onClose}
-        icon="CloseSmall"
+        icon="CloseThick"
         key="close-button"
       />
     ) : undefined;
