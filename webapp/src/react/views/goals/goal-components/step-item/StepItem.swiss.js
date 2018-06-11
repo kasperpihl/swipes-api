@@ -18,7 +18,9 @@ export default styleSheet('StepItem', {
   AssignWrapper: {
     opacity: 0,
     '.assign-hover:hover &': {
+      _borderRadius: '100%',
       opacity: 1,
+      background: '$sw5',
     },
     'show': {
       opacity: 1,
