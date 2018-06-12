@@ -45,7 +45,6 @@ class FloatingInput extends PureComponent {
     const { inputKey, type, placeholder, value, inviteFormField, inputError, inputProps } = this.props;
 
     const { visiblePassword, float, floatValue } = this.state;
-    console.log(inputError);
     return (
       <SwissProvider active={!!float} standBy={floatValue > 0} inviteFormField={inviteFormField} inputError={inputError} >
         <Wrapper className={this.props.className}>

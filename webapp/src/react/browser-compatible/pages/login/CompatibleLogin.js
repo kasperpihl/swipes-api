@@ -7,7 +7,7 @@ import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import { Link } from 'react-router-dom';
-import styles from './styles/CompatibleLogin.swiss';
+import styles from './CompatibleLogin.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const Form = styleElement('div', styles.Form);
@@ -26,11 +26,13 @@ class CompatibleLogin extends PureComponent {
     setupDelegate(this, 'onSignin', 'onResetPassword', 'onChange');
     bindAll(this, ['handleKeyDown']);
   }
+
   handleKeyDown(e) {
     if (e.keyCode === 13) {
-      this.onSignin();
+      this.onSigninCached();
     }
   }
+
   renderHeader() {
     const { inviter } = this.props;
     const title = 'Welcome to your Workspace';
