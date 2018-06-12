@@ -63,13 +63,13 @@ export default styleSheet('Profile', {
     _size: ['144px'],
     backgroundColor: '$blue',
     opacity: '0',
-    pointerEvents: 'cursor',
     position: 'absolute',
     top: '-50%',
 
     '&:hover': {
       opacity: '0.6',
       transition: '.25s ease',
+      pointerEvents: 'cursor',
     },
   },
 
