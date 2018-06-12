@@ -29,6 +29,7 @@ const FormRow = styleElement('div', styles.FormRow);
 const FormLoader = styleElement('div', styles.FormLoader);
 const FormTitle = styleElement('div', styles.FormTitle);
 const FormInput = styleElement('input', styles.FormInput);
+const EmailField = styleElement('div', styles.EmailField);
 const FormTextArea = styleElement(ReactTextarea, styles.FormTextArea);
 const FormCounter = styleElement('div', styles.FormCounter);
 const Spinner = styleElement('svg', styles.Spinner);
@@ -235,14 +236,7 @@ class Profile extends PureComponent {
         </FormRow>
         <FormRow>
           <FormTitle>EMAIL</FormTitle>
-          <FormInput
-            type="email"
-            value={email}
-            onChange={this.onChangeCached('email')}
-            onBlur={this.onBlurCached('email')}
-            placeholder="stefan@swipesapp.com"
-            disabled={disabled}
-          />
+          <EmailField>{email}</EmailField>
         </FormRow>
       </Form>
     );

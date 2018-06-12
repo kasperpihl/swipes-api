@@ -185,6 +185,15 @@ export default styleSheet('Profile', {
     },
   },
 
+  EmailField: {
+    _size: ['100%', '36px'],
+    _font: ['12px', '18px'],
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+
   FormCounter: {
     _font: ['11px', '18px', 'bold'],
     position: 'absolute',
