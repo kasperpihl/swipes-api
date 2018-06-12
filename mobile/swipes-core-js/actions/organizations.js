@@ -59,3 +59,8 @@ export const changeCardDetails = token => (d, getState) => d(ca.api.request('org
   stripe_token: token,
 }));
 
+export const reorderPlans = order => (d, getState) => d(ca.api.request('organizations.milestoneReorder', {
+  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  milestone_order: order,
+}));
+

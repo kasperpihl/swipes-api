@@ -14,12 +14,12 @@ import Svg, {
   Symbol,
   Use,
   Defs,
-  Stop
+  Stop,
 } from 'react-native-svg';
 import { connect } from 'react-redux';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import RippleButton from 'RippleButton';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from 'globalStyles';
 
 const PROGRESS_DASH = 320.4876403808594;
@@ -35,7 +35,7 @@ class HOCMilestoneItem extends PureComponent {
     setupDelegate(this, 'onOpenMilestone');
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ goals: this.getFilteredGoals(nextProps.milestone) })
+    this.setState({ goals: this.getFilteredGoals(nextProps.milestone) });
   }
   getFilteredGoals(milestone) {
     return msgGen.milestones.getGoals(milestone);
@@ -51,7 +51,7 @@ class HOCMilestoneItem extends PureComponent {
     const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
 
     return (
-      <Text selectable={true} style={styles.subtitle}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
+      <Text selectable style={styles.subtitle}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
     );
   }
   renderHeader() {
@@ -59,9 +59,9 @@ class HOCMilestoneItem extends PureComponent {
 
     return (
       <View style={styles.titleWrapper}>
-        <Text selectable={true} style={styles.title}>{milestone.get('title')}</Text>
+        <Text selectable style={styles.title}>{milestone.get('title')}</Text>
       </View>
-    )
+    );
   }
   renderProgressCounter() {
     const { goals } = this.state;
@@ -70,9 +70,9 @@ class HOCMilestoneItem extends PureComponent {
 
     return (
       <View style={styles.counterWrapper}>
-        <Text selectable={true} style={styles.counter}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
+        <Text selectable style={styles.counter}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
       </View>
-    )
+    );
   }
   renderProgressWheel() {
     const { goals } = this.state;
@@ -105,12 +105,11 @@ class HOCMilestoneItem extends PureComponent {
             />
           </Svg>
         </View>
-        <View style={styles.progressDot}></View>
+        <View style={styles.progressDot} />
       </View>
-    )
+    );
   }
   render() {
-
     return (
       <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.button} onPress={this.openMilestone}>
         <View style={styles.button}>
@@ -123,7 +122,7 @@ class HOCMilestoneItem extends PureComponent {
           <View style={styles.border} />
         </View>
       </RippleButton>
-    )
+    );
   }
 }
 const mapStateToProps = (state, ownProps) => ({
@@ -145,7 +144,8 @@ const styles = StyleSheet.create({
     width: viewSize.width - 30,
     height: 1,
     position: 'absolute',
-    left: 0, bottom: 0,
+    left: 0,
+bottom: 0,
     backgroundColor: colors.deepBlue5,
     marginHorizontal: 15,
   },
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   counter: {
     fontSize: 12,
     lineHeight: 18,
-    fontWeight: '500', 
+    fontWeight: '500',
     color: colors.deepBlue50,
   },
   shadowWheel: {
@@ -183,21 +183,21 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     height: 90,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   progressWheel: {
     width: 90,
     height: 90,
     borderRadius: 90 / 2,
     transform: [
-      { rotateY: '180deg' }
-    ]
+      { rotateY: '180deg' },
+    ],
   },
   progressDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
     backgroundColor: colors.deepBlue100,
-    position: 'absolute'
-  }
+    position: 'absolute',
+  },
 });

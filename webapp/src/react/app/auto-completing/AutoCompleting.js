@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import { styleElement } from 'swiss-react';
-import { setupDelegate } from 'react-delegate';
-import prefixAll from 'inline-style-prefixer/static';
+import { setupDelegate } from 'react-delegate';
 import ResultItem from 'src/react/components/result-item/ResultItem';
 import AutoCompleteItem from './AutoCompleteItem';
-
 import styles from './AutoCompleting.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
@@ -40,23 +38,16 @@ class AutoCompleting extends PureComponent {
   render() {
     const { autoComplete } = this.props;
     const boundingRect = autoComplete.getIn(['options', 'boundingRect']);
-
-    const style = {};
+    const showOnTop = autoComplete.getIn(['options', 'showOnTop']);
     const show = (autoComplete.get('results') && boundingRect);
-    if(show) {
-      style.width = 360 + 'px';
-      style.height = 250 + 'px';
-      style.top = (boundingRect.bottom) + 'px';
-      const wh = window.outerHeight;
-      
-      if(autoComplete.getIn(['options', 'showOnTop'])) {
-        style.top = (boundingRect.top - 250) + 'px';
-      }
-      style.left = boundingRect.left + 'px';
-    }
 
     return (
-      <Wrapper className="auto-completing" show={show} style={prefixAll(style)}>
+      <Wrapper
+        className="auto-completing"
+        show={show}
+        boundingRect={boundingRect}
+        showOnTop={showOnTop}
+      >
         {show && this.renderResults()}
       </Wrapper>
     )

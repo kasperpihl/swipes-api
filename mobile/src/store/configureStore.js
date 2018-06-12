@@ -30,7 +30,7 @@ export default function configureStore(preloadedState) {
 
   window.persistor = persistStore(store, {
     storage: Platform.OS === 'android' ? FilesystemStorage : AsyncStorage,
-    blacklist: ['notes', 'navigation',  'main',  'autoComplete', 'infoTab', 'globals'],
+    blacklist: ['notes', 'navigation', 'main', 'autoComplete', 'infoTab', 'globals'],
   });
 
   return store;

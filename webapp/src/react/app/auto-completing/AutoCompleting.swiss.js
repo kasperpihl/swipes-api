@@ -11,9 +11,23 @@ export default styleSheet('AutoCompleting', {
     visibility: 'hidden',
     pointerEvents: 'none',
     overflowY: 'scroll',
+    showOnTop: {},
+    boundingRect: {},
     show: {
       visibility: 'visible',
       pointerEvents: 'all',
+      width: '360px',
+      height: '250px',
+      top: ({ boundingRect, showOnTop }) => {
+        if (showOnTop) {
+          return `${boundingRect.top - 250}px`;
+        }
+
+        return `${boundingRect.bottom}px`;
+      },
+      left: ({ boundingRect }) => {
+        return `${boundingRect.left}px`;
+      },
     }
   },
   Item: {

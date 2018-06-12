@@ -16,6 +16,10 @@ const EmptySpaceBlock = styleElement('div', styles.EmptySpaceBlock);
 const OptionTitle = styleElement('div', styles.OptionTitle);
 const StyledLink = styleElement('a', styles.StyledLink);
 const Description = styleElement('div', styles.Description);
+<<<<<<< HEAD
+=======
+const NewLink = styleElement(Link, styles.NewLink);
+>>>>>>> development
 
 class NotSupported extends PureComponent {
   constructor(props) {
@@ -55,7 +59,11 @@ class NotSupported extends PureComponent {
             {`Invite more people to ${organization.get('name')}. Gather your whole team.`}
           </Description>
           <OptionTitle>
+<<<<<<< HEAD
             <StyledLink to="/invite">Invite people</StyledLink>
+=======
+            <NewLink to="/invite">Invite people</NewLink>
+>>>>>>> development
           </OptionTitle>
         </div>
         {this.renderLeaveOrDelete()}

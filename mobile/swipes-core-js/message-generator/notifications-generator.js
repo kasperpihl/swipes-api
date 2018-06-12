@@ -91,7 +91,7 @@ export default class NotificationsGenerator {
       }
       case 'post_created': {
         text.push(boldText('send', users.getName(meta.get('created_by'), { capitalize: true }), boldStyle));
-        text.push(` ${posts.getPostTypeTitle(meta.get('type'))}`);
+        text.push(` ${posts.getPostTypeTitle()}`);
         text.push(' and tagged ');
         text.push(boldText('users', 'you', boldStyle));
         text.push(`: "${this.parseMessage(meta.get('message'))}"'`);
@@ -99,15 +99,15 @@ export default class NotificationsGenerator {
       }
       case 'post_reaction_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
-        text.push(` liked your ${meta.get('type')}: "${this.parseMessage(meta.get('message'))}"`);
+        text.push(` liked your post}: "${this.parseMessage(meta.get('message'))}"`);
         break;
       }
       case 'post_comment_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
-        const byMe = meta.get('created_by') === users.getUser('me');
-        const preFix = byMe ? 'your ' : posts.getPrefixForType(meta.get('type'));
-        const followString = byMe ? '' : ' you follow';
-        text.push(` commented on ${preFix}${meta.get('type')}${followString}: "${this.parseMessage(meta.get('message'))}"`);
+        const byMe = meta.get('post_created_by') === users.getUser('me').get('id');
+        const preFix = byMe ? 'your' : posts.getPrefixForType();
+        const followString = byMe ? '' : 'you follow';
+        text.push(` commented on ${preFix} post ${followString}: "${this.parseMessage(meta.get('post_message'))}"`);
         break;
       }
       case 'post_comment_reaction_added': {

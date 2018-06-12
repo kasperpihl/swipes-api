@@ -15,6 +15,7 @@ export default function milestonesReducer(state = initialState, action) {
       if (payload.milestone_id && payload.goal_order) {
         state = state.setIn([payload.milestone_id, 'goal_order'], fromJS(payload.goal_order));
       }
+
       return state.setIn([payload.milestone_id, 'closed_at'], payload.closed_at);
     }
     case 'milestones.open':

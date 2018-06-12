@@ -11,5 +11,5 @@ export {
   modals,
   links,
   main,
-  infotab
+  infotab,
 };

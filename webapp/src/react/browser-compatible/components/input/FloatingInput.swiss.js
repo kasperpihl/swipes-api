@@ -64,7 +64,11 @@ export default styleSheet('FloatingInput', {
 
     standBy: {
       _font: ['11px'],
+<<<<<<< HEAD
       color: '$sw2',
+=======
+      color: '$sw3',
+>>>>>>> development
       top: '25px',
       transition: '.2s ease-in-out',
 

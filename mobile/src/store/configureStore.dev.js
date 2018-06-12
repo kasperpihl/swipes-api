@@ -1,41 +1,41 @@
-import { createLogger } from 'redux-logger'
+// import { createLogger } from 'redux-logger';
 
-const ignoredActions = ['API_REQUEST', 'API_SUCCESS']; // Ignore actions from Logger
-let cacheImmutable = null;
-let cacheObject = null;
-const transformState = (state) => {
-  if (!cacheImmutable) {
-    cacheImmutable = state;
-    cacheObject = state.toJS();
-    return cacheObject;
-  }
-  state.forEach((section, sectKey) => {
-    const cachedSect = cacheImmutable.get(sectKey);
-    if (section !== cachedSect) {
-      section.forEach((indexValue, indexKey) => {
-        const cachedValue = cachedSect.get(indexKey);
-        if (indexValue !== cachedValue) {
-          if (indexValue && typeof indexValue.toJS === 'function') {
-            cacheObject[sectKey][indexKey] = indexValue.toJS();
-          } else {
-            cacheObject[sectKey][indexKey] = indexValue;
-          }
-        }
-      });
-    }
-  });
-  cacheImmutable = state;
-  return cacheObject;
-};
+// const ignoredActions = ['API_REQUEST', 'API_SUCCESS']; // Ignore actions from Logger
+// const cacheImmutable = null;
+// const cacheObject = null;
+// const transformState = (state) => {
+//   if (!cacheImmutable) {
+//     cacheImmutable = state;
+//     cacheObject = state.toJS();
+//     return cacheObject;
+//   }
+//   state.forEach((section, sectKey) => {
+//     const cachedSect = cacheImmutable.get(sectKey);
+//     if (section !== cachedSect) {
+//       section.forEach((indexValue, indexKey) => {
+//         const cachedValue = cachedSect.get(indexKey);
+//         if (indexValue !== cachedValue) {
+//           if (indexValue && typeof indexValue.toJS === 'function') {
+//             cacheObject[sectKey][indexKey] = indexValue.toJS();
+//           } else {
+//             cacheObject[sectKey][indexKey] = indexValue;
+//           }
+//         }
+//       });
+//     }
+//   });
+//   cacheImmutable = state;
+//   return cacheObject;
+// };
 
-const logger = store => next => action => {
-  if(action.type !== 'pong') {
+const logger = store => next => (action) => {
+  if (action.type !== 'pong') {
     console.info(action.type, action);
   }
-  let result = next(action)
+  const result = next(action);
 
-  return result
-}
+  return result;
+};
 
 export default {
   middlewares: [

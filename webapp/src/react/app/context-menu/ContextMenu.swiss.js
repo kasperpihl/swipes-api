@@ -18,5 +18,10 @@ export default styleSheet('ContextMenu', {
   Content: {
     _size: 'auto',
     position: 'absolute',
+    top: '#{top}',
+    bottom: '#{bottom}',
+    left: '#{left}',
+    right: '#{right}',
+    transform: '#{transform}',
   },
 });

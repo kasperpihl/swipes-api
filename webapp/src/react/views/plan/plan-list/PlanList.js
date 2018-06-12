@@ -24,7 +24,7 @@ class PlanList extends PureComponent {
   }
   renderHeader() {
     const { tabs, tabIndex, delegate } = this.props;
-    return ( 
+    return (
       <HeaderWrapper>
         <HOCHeaderTitle
           title="Plan"
@@ -67,24 +67,64 @@ class PlanList extends PureComponent {
       </div>
     )
   }
-  renderList() {
-    const { plans, delegate, tabIndex, limit } = this.props;
+  renderOrderedPlanList() {
+    const {
+      plans,
+      plansOrder,
+      optimist,
+      limit,
+      delegate,
+    } = this.props;
+    const order = optimist.get('milestone_order', plansOrder);
     let i = 0;
 
-    return (
-      <Dropper droppableId="attachments" type="attachment">
-        {plans.map((p => (i++ <= limit) ? (
+    return order.map((planId) => {
+      if (i++ <= limit) {
+        const plan = plans.find(p => p.get('id') === planId);
+
+        return (
           <Dragger
-            draggableId={p.get('id')}
+            draggableId={plan.get('id')}
             index={i - 1}
-            key={p.get('id')}>
+            key={plan.get('id')}>
               <PlanListItem
-                plan={p}
+                plan={plan}
                 delegate={delegate}
               />
-            </Dragger>
-          ) : null
-        )).toArray()}
+          </Dragger>
+        )
+      } else {
+        return null;
+      }
+    }).toArray()
+}
+  renderArchivedPlanList() {
+    const {
+      plans,
+      limit,
+      delegate,
+    } = this.props;
+    let i = 0;
+
+    return plans.map((p => (i++ <= limit) ? (
+      <PlanListItem
+        key={p.get('id')}
+        plan={p}
+        delegate={delegate}
+      />
+      ) : null
+    )).toArray()
+  }
+  renderList() {
+    const { tabIndex } = this.props;
+
+    return (
+      <Dropper droppableId="plans" type="plan">
+        {
+          tabIndex === 0 ?
+            this.renderOrderedPlanList() :
+            this.renderArchivedPlanList()
+        }
       </Dropper>
     )
   }

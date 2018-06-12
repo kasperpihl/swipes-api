@@ -34,6 +34,18 @@ export default styleSheet('NotSupported', {
     },
   },
 
+<<<<<<< HEAD
+=======
+  NewLink: {
+    color: '$blue',
+    paddingRight: '9px',
+
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+
+>>>>>>> development
   DescriptionWrapper: {
     padding: ''
   },
