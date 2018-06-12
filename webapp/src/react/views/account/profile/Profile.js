@@ -14,6 +14,7 @@ const MainWrapper = styleElement('div', styles.MainWrapper);
 const ProfileWrapper = styleElement('div', styles.ProfileWrapper);
 const Header = styleElement('div', styles.Header);
 const ProfileImage = styleElement('div', styles.ProfileImage);
+const Picture = styleElement('img', styles.Picture);
 const UploadOverlay = styleElement('div', styles.UploadOverlay);
 const OverlaySVG = styleElement(Icon, styles.OverlaySVG);
 const HeaderInitials = styleElement('div', styles.HeaderInitials);
@@ -122,20 +123,19 @@ class Profile extends PureComponent {
       <ProfileImage>
 
         { profilePic ? (
-          <img src={profilePic} role="presentation" className='initials'/>
+          <Picture src={profilePic} role="presentation" className='initials'/>
         ) : (
           <HeaderInitials className='initials'>{initials}</HeaderInitials>
         )}
 
-        <UploadOverlay onClick={this.onUploadClick}>
-          <OverlaySVG icon="Plus" />
-        </UploadOverlay>
         <HeaderFileInput
+            className='fileInput'
             onChange={this.onImageChange}
             type="file"
             accept="image/x-png,image/jpeg"
             innerRef={(c) => this.imageUpload = c}
         />
+        <OverlaySVG icon="Plus" />
         <HeaderLoading>
           <Spinner viewBox="0 0 50 50">
             <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />

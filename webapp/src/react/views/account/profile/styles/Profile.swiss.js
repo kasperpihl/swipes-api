@@ -35,28 +35,35 @@ export default styleSheet('', {
     },
   },
 
-  UploadOverlay: {
-    _size: ['100%'],
-    _flex: ['row', 'center', 'center'],
-    borderRadius: '50%',
-    backgroundColor: 'rgba($blue, .6)',
-    position: 'absolute',
-    left: '0',
-    top: '0',
-    opacity: '0',
-    transition: '.25s ease',
-    pointerEvents: 'none',
-
-    '.initials:hover + &': {
-        opacity: '1',
-        transition: '.25s ease',
-        pointerEvents: 'all',
-    },
+  Picture: {
   },
+
+  // UploadOverlay: {
+  //   _size: ['100%'],
+  //   _flex: ['row', 'center', 'center'],
+  //   borderRadius: '50%',
+  //   backgroundColor: 'rgba($blue, .6)',
+  //   position: 'absolute',
+  //   left: '0',
+  //   top: '0',
+  //   opacity: '0',
+  //   transition: '.25s ease',
+  //   pointerEvents: 'none',
+
+
+  // },
 
   OverlaySVG: {
     _size: ['24px'],
     _svgColor: 'white',
+    opacity: '0',
+    position: 'absolute',
+
+    '.fileInput:hover + &': {
+      opacity: '1',
+      transition: '.25s ease',
+      pointerEvents: 'none',
+    },
   },
 
   HeaderInitials: {
@@ -68,11 +75,17 @@ export default styleSheet('', {
   },
 
   HeaderFileInput: {
+    _size: ['144px'],
+    backgroundColor: '$blue',
     opacity: '0',
-    width: '0',
-    height: '0',
-    pointerEvents: 'none',
+    pointerEvents: 'cursor',
     position: 'absolute',
+    top: '-50%',
+
+    '&:hover': {
+      opacity: '0.6',
+      transition: '.25s ease',
+    },
   },
 
   HeaderLoading: {
