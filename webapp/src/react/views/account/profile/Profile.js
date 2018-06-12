@@ -8,7 +8,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import Button from 'src/react/components/button/Button';
-import styles from './styles/Profile.swiss';
+import styles from './Profile.swiss';
 
 const MainWrapper = styleElement('div', styles.MainWrapper);
 const ProfileWrapper = styleElement('div', styles.ProfileWrapper);
