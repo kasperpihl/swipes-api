@@ -10,7 +10,6 @@ import HOCHeader from 'HOCHeader';
 import { colors, viewSize } from 'globalStyles';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import WaitForUI from 'WaitForUI';
-import CreateNewItemModal from 'modals/CreateNewItemModal';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
 import HOCMilestoneItem from './HOCMilestoneItem';
@@ -23,26 +22,14 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
-  noMilestoneWrapper: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    flex: 1,
-    height: 126,
-    paddingHorizontal: 15,
-    paddingVertical: 18,
-  },
   border: {
     width: viewSize.width - 30,
     height: 1,
     position: 'absolute',
-    left: 0, bottom: 0,
+    left: 0,
+    bottom: 0,
     backgroundColor: colors.deepBlue5,
     marginHorizontal: 15,
-  },
-  noMilestoneTitle: {
-    flex: 1,
-    flexDirection: 'column',
-    paddingLeft: 24,
   },
   title: {
     fontSize: 18,
@@ -52,30 +39,9 @@ const styles = StyleSheet.create({
   counter: {
     fontSize: 12,
     lineHeight: 18,
-    fontWeight: '500', 
+    fontWeight: '500',
     color: colors.deepBlue50,
     paddingTop: 6,
-  },
-  noMilestoneSVG:{
-    width: 90,
-    height: 90,
-  },
-  noMilestoneCircle:{
-    width: 32,
-    height: 32,
-    position: 'absolute',
-    left: 45 - (32 / 2), top: 45 - (32 / 2),
-    backgroundColor: 'white',
-    borderRadius: 32 / 2, 
-  },
-  noMilestoneDot:{
-    width: 6,
-    height: 6,
-    position: 'absolute',
-    borderRadius: 3,
-    backgroundColor: colors.deepBlue100,
-    position: 'absolute',
-    left: 16 - 3, top: 16 - 3,
   },
 });
 
@@ -93,7 +59,6 @@ class HOCMilestones extends PureComponent {
     this.openCreateMilestoneModal = this.openCreateMilestoneModal.bind(this);
     this.onHeaderTap = this.onHeaderTap.bind(this);
     this.renderListFooter = this.renderListFooter.bind(this);
-    this.onOpenNoMilestone = this.onOpenNoMilestone.bind(this);
   }
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
@@ -101,19 +66,7 @@ class HOCMilestones extends PureComponent {
     }
   }
   onHeaderTap() {
-    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
-  }
-  onOpenNoMilestone() {
-    const { navPush } = this.props;
-
-    const overview = {
-      id: 'NoMilestoneOverview',
-      title: 'Goals without a plan',
-      props: {
-      },
-    };
-
-    navPush(overview);
+    this.refs.scrollView.scrollTo({ x: 0, y: 0, animated: true });
   }
   onOpenMilestone(milestone) {
     const { navPush } = this.props;
@@ -143,11 +96,11 @@ class HOCMilestones extends PureComponent {
       title: 'CreateNewItemModal',
       props: {
         title: '',
-        placeholder: "Add a new plan",
-        actionLabel: "Add plan",
-        delegate: this
-      }
-    })
+        placeholder: 'Add a new plan',
+        actionLabel: 'Add plan',
+        delegate: this,
+      },
+    });
   }
   renderHeader() {
     const { tabIndex, tabs } = this.state;
@@ -181,47 +134,20 @@ class HOCMilestones extends PureComponent {
       <HOCMilestoneItem milestoneId={milestone.get('id')} delegate={this} />
     );
   }
-  renderNoMilestoneItems() {
-    const { counter } = this.props;
-    const { tabIndex } = this.state;
-
-    if( tabIndex !== 0) {
-      return null;
-    }
-
-    return (
-      <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.noMilestoneWrapper} onPress={this.onOpenNoMilestone}>
-        <View style={styles.noMilestoneWrapper}>
-          <View style={styles.noMilestoneSVG}>
-            <Icon icon="NoMilestone" width="90" height="90" fill={colors.deepBlue5} />
-            <View style={styles.noMilestoneCircle}><View style={styles.noMilestoneDot} /></View>
-          </View>
-          <View style={styles.noMilestoneTitle}>
-            <Text style={styles.title}>Goals without a plan</Text>
-            <Text style={styles.counter}>{counter}</Text>
-          </View>
-          <View style={styles.border} />
-        </View>
-      </RippleButton>
-    )
-  }
   renderListFooter() {
-
     return (
       <View style={{ flex: 1 }}>
-        {this.renderNoMilestoneItems()}
         <EmptyListFooter />
       </View>
-    )
+    );
   }
   renderEmptyState() {
-
     return (
-      <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-        <Icon icon="ESPlan" width="193" height="200"  />
-        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center'  }}>Create your team's first plan</Text>
+      <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+        <Icon icon="ESPlan" width="193" height="200" />
+        <Text selectable style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24, textAlign: 'center' }}>Create your team's first plan</Text>
       </View>
-    )
+    );
   }
   renderList() {
     const { tabIndex, tabs } = this.state;
@@ -257,7 +183,7 @@ class HOCMilestones extends PureComponent {
 function mapStateToProps(state) {
   return {
     milestones: cs.milestones.getGrouped(state),
-    counter: cs.goals.withoutMilestone(state).size
+    counter: cs.goals.withoutMilestone(state).size,
   };
 }
 
