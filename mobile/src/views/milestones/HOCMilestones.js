@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import { ImmutableListView } from 'react-native-immutable-list-view';
-import * as a from 'actions';
 import * as cs from 'swipes-core-js/selectors';
 import * as ca from 'swipes-core-js/actions';
 import HOCHeader from 'HOCHeader';
@@ -149,6 +148,20 @@ class HOCMilestones extends PureComponent {
       </View>
     );
   }
+  orderMilestones() {
+    const {
+      tabIndex,
+      tabs,
+    } = this.state;
+    const {
+      milestones,
+      milestoneOrder,
+    } = this.props;
+    const unorderedMap = milestones.get(tabs[tabIndex]);
+    const orderedList = milestoneOrder.map(milestoneId => unorderedMap.get(milestoneId));
+
+    return orderedList;
+  }
   renderList() {
     const { tabIndex, tabs } = this.state;
     const { milestones } = this.props;
@@ -157,12 +170,20 @@ class HOCMilestones extends PureComponent {
       return this.renderEmptyState();
     }
 
+    let milestoneList;
+
+    if (tabIndex === 0) {
+      milestoneList = this.orderMilestones();
+    } else {
+      milestoneList = milestones.get(tabs[tabIndex]);
+    }
+
     return (
       <WaitForUI waitIndex={tabIndex}>
         <ImmutableListView
           ref="scrollView"
           style={styles.list}
-          immutableData={milestones.get(tabs[tabIndex])}
+          immutableData={milestoneList}
           renderRow={this.renderMilestoneItem}
           renderFooter={this.renderListFooter}
           windowSize={2}
@@ -182,6 +203,7 @@ class HOCMilestones extends PureComponent {
 
 function mapStateToProps(state) {
   return {
+    milestoneOrder: state.getIn(['me', 'organizations', 0, 'milestone_order']),
     milestones: cs.milestones.getGrouped(state),
     counter: cs.goals.withoutMilestone(state).size,
   };
