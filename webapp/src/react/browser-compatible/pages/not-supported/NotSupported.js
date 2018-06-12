@@ -16,10 +16,7 @@ const EmptySpaceBlock = styleElement('div', styles.EmptySpaceBlock);
 const OptionTitle = styleElement('div', styles.OptionTitle);
 const StyledLink = styleElement('a', styles.StyledLink);
 const Description = styleElement('div', styles.Description);
-<<<<<<< HEAD
-=======
 const NewLink = styleElement(Link, styles.NewLink);
->>>>>>> development
 
 class NotSupported extends PureComponent {
   constructor(props) {

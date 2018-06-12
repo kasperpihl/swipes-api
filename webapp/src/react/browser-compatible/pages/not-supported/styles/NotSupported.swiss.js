@@ -34,8 +34,6 @@ export default styleSheet('NotSupported', {
     },
   },
 
-<<<<<<< HEAD
-=======
   NewLink: {
     color: '$blue',
     paddingRight: '9px',
@@ -45,7 +43,6 @@ export default styleSheet('NotSupported', {
     },
   },
 
->>>>>>> development
   DescriptionWrapper: {
     padding: ''
   },

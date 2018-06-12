@@ -10,11 +10,7 @@ import CompatibleInviteForm from './CompatibleInviteForm';
 import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import { Link } from 'react-router-dom';
-<<<<<<< HEAD
-import styles from './styles/CompatibleInvite.swiss';
-=======
 import styles from './CompatibleInvite.swiss';
->>>>>>> development
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const Form = styleElement('div', styles.Form);

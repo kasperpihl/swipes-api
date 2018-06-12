@@ -21,10 +21,6 @@ export default class extends PureComponent {
       invites: fromJS([
         { firstName: '', email: '' },
         { firstName: '', email: '' },
-<<<<<<< HEAD
-        // { firstName: '', email: '' },
-=======
->>>>>>> development
       ])
     };
     setupLoading(this);
