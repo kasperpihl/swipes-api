@@ -28,8 +28,8 @@ class CompatibleLogin extends PureComponent {
   }
 
   handleKeyDown(e) {
-    if (e.keyCode === 13) {
-      this.onSigninCached();
+    if (e.key === 'Enter') {
+      this.onSignin();
     }
   }
 
@@ -45,7 +45,7 @@ class CompatibleLogin extends PureComponent {
     ])
   }
   renderInputField(key, type, placeholder, props) {
-    const { delegate } = this.props;
+    const { delegate, onKeyDown } = this.props;
     const value = this.props.formData.get(key) || '';
 
     return (
@@ -63,9 +63,9 @@ class CompatibleLogin extends PureComponent {
   }
   renderForm() {
     return (
-      <Form>
+      <Form onKeyDown={this.handleKeyDown}>
         {this.renderInputField('email', 'email', 'Email', { autoFocus: true })}
-        {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
+        {this.renderInputField('password', 'password', 'Password')}
       </Form>
     )
   }
