@@ -99,7 +99,7 @@ export default class NotificationsGenerator {
       }
       case 'post_reaction_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
-        text.push(` liked your post}: "${this.parseMessage(meta.get('message'))}"`);
+        text.push(` liked your post: "${this.parseMessage(meta.get('message'))}"`);
         break;
       }
       case 'post_comment_added': {
