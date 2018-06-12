@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('', {
+export default styleSheet('Profile', {
   MainWrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'center', 'top'],
@@ -37,21 +37,6 @@ export default styleSheet('', {
 
   Picture: {
   },
-
-  // UploadOverlay: {
-  //   _size: ['100%'],
-  //   _flex: ['row', 'center', 'center'],
-  //   borderRadius: '50%',
-  //   backgroundColor: 'rgba($blue, .6)',
-  //   position: 'absolute',
-  //   left: '0',
-  //   top: '0',
-  //   opacity: '0',
-  //   transition: '.25s ease',
-  //   pointerEvents: 'none',
-
-
-  // },
 
   OverlaySVG: {
     _size: ['24px'],
@@ -98,6 +83,10 @@ export default styleSheet('', {
     position: 'absolute',
     left: '0',
     top: '0',
+
+    isLoading: {
+      opacity: '1',
+    },
   },
 
   HeaderForm: {
@@ -127,11 +116,6 @@ export default styleSheet('', {
     padding: '0',
     paddingLeft: '15px',
     transition: '.2s ease',
-
-    // '&::-webkit-input-placeholder': {
-    //   _font: ['27px', '36px', '800'],
-    //   color: '$blue20',
-    // },
 
     '&:disabled': {
       pointerEvents: 'all !important',
@@ -176,11 +160,6 @@ export default styleSheet('', {
     padding: '0 15px',
     transition: '.2s ease',
 
-    // '&::-webkit-input-placeholder': {
-    //   _font: ['12px', '18px'],
-    //   color: '$blue20'
-    // },
-
     '&:disabled': {
       backgroundColor: 'transparent',
       transition: '.2s ease',
@@ -199,11 +178,6 @@ export default styleSheet('', {
     resize: 'none',
     cursor: 'text',
     transition: '.2s ease',
-
-    // '&::-webkit-input-placeholder': {
-    //   _font: ['12px', '18px'],
-    //   color: '$blue20'
-    // },
 
     disabled: {
       backgroundColor: 'transparent',
@@ -294,7 +268,19 @@ export default styleSheet('', {
   },
 
   Spinner: {
-    _size: ['25px'],
+    _size: ['24px'],
+    _svgColor: '$blue',
+    animation: 'rotateSpinner 2s linear infinite',
+
+    '@keyframes rotateSpinner': {
+      '100%': {
+        transform: 'rotate(360deg)',
+      }
+    }
+  },
+
+  LoadingIcon: {
+    _size: ['50px'],
     _svgColor: '$blue',
     animation: 'rotateSpinner 2s linear infinite',
 

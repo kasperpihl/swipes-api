@@ -37,6 +37,7 @@ const ErrorSVG = styleElement(Icon, styles.ErrorSVG);
 const SpinnerPath = styleElement('circle', styles.SpinnerPath);
 const SuccessIcon = styleElement('div', styles.SuccessIcon);
 const SuccessSVG = styleElement(Icon, styles.SuccessSVG);
+const LoadingIcon = styleElement('svg', styles.LoadingIcon);
 
 class Profile extends PureComponent {
   constructor(props) {
@@ -136,10 +137,10 @@ class Profile extends PureComponent {
             innerRef={(c) => this.imageUpload = c}
         />
         <OverlaySVG icon="Plus" />
-        <HeaderLoading>
-          <Spinner viewBox="0 0 50 50">
-            <circle className="spinner__path" cx="25" cy="25" r="20" fill="none" />
-          </Spinner>
+        <HeaderLoading isLoading={isLoading('uploadImage') ? true : ''}>
+          <LoadingIcon viewBox="0 0 50 50">
+            <SpinnerPath cx="25" cy="25" r="20" fill="none" />
+          </LoadingIcon>
         </HeaderLoading>
       </ProfileImage>
     );
