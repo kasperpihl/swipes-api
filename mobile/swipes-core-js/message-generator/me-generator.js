@@ -4,9 +4,9 @@ export default class Me {
   }
   beta(flag) {
     const me = this.getMe();
-    if(me) {
+    if (me) {
       const org = me.getIn(['organizations', 0]);
-      if(org.get('beta_flags') && org.get('beta_flags').contains(flag)) {
+      if (org.get('beta_flags') && org.get('beta_flags').contains(flag)) {
         return true;
       }
     }
@@ -15,14 +15,14 @@ export default class Me {
   getOrg() {
     return this.getMe().getIn(['organizations', 0]);
   }
-  getMe(){
+  getMe() {
     return this.store.getState().get('me');
   }
   isPaying() {
     const me = this.getMe();
-    if(me) {
+    if (me) {
       const org = me.getIn(['organizations', 0]);
-      if(org && org.get('stripe_subscription_id')) {
+      if (org && org.get('stripe_subscription_id')) {
         return true;
       }
     }
@@ -30,10 +30,10 @@ export default class Me {
   }
   isAdmin() {
     const me = this.getMe();
-    if(me) {
+    if (me) {
       const uId = me.get('id');
       const org = me.getIn(['organizations', 0]);
-      if(org) {
+      if (org) {
         return org.get('admins').contains(uId) || org.get('owner_id') === uId;
       }
     }

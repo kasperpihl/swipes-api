@@ -55,13 +55,24 @@ class GoalOverview extends PureComponent {
   renderCompletedState() {
     const helper = this.getHelper();
     const lastComplete = helper.getLastActivityByType('goal_completed');
-    if(!helper.getIsCompleted() || !lastComplete) {
+
+    if (!helper.getIsCompleted() || !lastComplete) {
       return undefined;
-      
     }
 
-    const firstName = msgGen.users.getFirstName(lastComplete.get('done_by'));
-    const completionText = `${firstName} completed this goal`;
+    const assigneeIds = helper.getAssignees();
+    const firstNames = [];
+
+    assigneeIds.forEach((userId, i) => {
+      if (i > 0) {
+        firstNames.push(i === assigneeIds.size - 1 ? ' and ' : ', ');
+      }
+
+      firstNames.push(msgGen.users.getFirstName(userId));
+    })
+
+    const completionText = `${firstNames.join('')} completed this goal`;
+
     return (
       <CompletedWrapper>
         <GreenIcon icon="Checkmark" />
@@ -90,6 +101,7 @@ class GoalOverview extends PureComponent {
                   <StepItem
                     goalId={helper.getId()}
                     step={step}
+                    completed={!!step.get('completed_at')}
                     number={i + 1}
                     editMode={editMode}
                     dragProvided={provided}
@@ -97,7 +109,7 @@ class GoalOverview extends PureComponent {
                   )
                 }
                 }
-                
+
               </Dragger>
             )
           }).toArray()}
@@ -156,7 +168,7 @@ class GoalOverview extends PureComponent {
             <Section>
               STEPS
               {!!this.getHelper().getStepOrder().size && (
-                <Button 
+                <Button
                   title={editMode ? 'Done' : 'Edit'}
                   onClick={this.onEdit}
                 />

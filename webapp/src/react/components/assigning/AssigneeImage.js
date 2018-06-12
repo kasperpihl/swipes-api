@@ -4,6 +4,9 @@ import { styleElement, styleSheet } from 'swiss-react';
 const styles = styleSheet('AssigneeImage', {
   Image: {
     _size: '100%',
+    blackAndWhite: {
+      filter: 'grayscale(100%)',
+    }
   },
   Initials: {
     _font: ['10px', '18px', 500],
@@ -19,13 +22,13 @@ const Image = styleElement('img', styles.Image);
 const Initials = styleElement('div', styles.Initials);
 
 export default (props) => {
-  const { user } = props;
+  const { user, blackAndWhite } = props;
   const pic = msgGen.users.getPhoto(user);
   const fullName = msgGen.users.getFullName(user);
   const initials = msgGen.users.getInitials(user);
 
   if(pic) return (
-    <Image src={pic} alt={fullName} />
+    <Image src={pic} alt={fullName} blackAndWhite={blackAndWhite} />
   );
   return (
     <Initials>{initials}</Initials>

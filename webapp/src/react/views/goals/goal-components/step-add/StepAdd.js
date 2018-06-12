@@ -55,7 +55,7 @@ export default class extends PureComponent {
       assignees: fromJS([]),
       queue,
     }, this.runQueue);
-    
+
   }
   onChange = (editorState) => {
     this.editorState = editorState;
@@ -100,7 +100,7 @@ export default class extends PureComponent {
       this.running = false;
       let queue = this.state.queue.setIn([index, 'status'], 'error');
       if(res.ok){
-        queue = queue.splice(index, 1);  
+        queue = queue.splice(index, 1);
         window.analytics.sendEvent('Step added', {});
       }
       this.setState({ queue }, this.runQueue);
@@ -110,7 +110,7 @@ export default class extends PureComponent {
     let { queue } = this.state;
     queue = queue.setIn([i, 'status'], 'ready');
     this.setState({ queue }, this.runQueue);
-  } 
+  }
   renderPending() {
     return this.state.queue.map((row, i) => (
       <Wrapper key={row.get('id')}>

@@ -13,6 +13,7 @@ export default styleSheet('StepComplete', {
       },
     },
     '!isComplete': {
+      background: '$sw5',
       '#{hoverClass}:hover &, &:hover': {
         border: '1px solid $sw3',
       },
@@ -30,7 +31,7 @@ export default styleSheet('StepComplete', {
     '#{hoverClass}:hover &, .sc-wrapper:hover &': {
       display: 'none',
     },
-    
+
   },
   Icon: {
     display: 'none',
@@ -41,6 +42,11 @@ export default styleSheet('StepComplete', {
     },
     isComplete: {
       _svgColor: '$sw5',
+    },
+    '!isComplete': {
+      '.sc-wrapper:hover &': {
+        _svgColor: '$blue',
+      }
     }
   },
 });

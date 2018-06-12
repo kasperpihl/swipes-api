@@ -15,7 +15,7 @@
   padding-top: 21px;
 
   ::selection {
-    @include font($c: $deepBlue-100); 
+    @include font($c: $deepBlue-100);
     background: $yellow-color; /* WebKit/Blink Browsers */
   }
 }

@@ -23,25 +23,28 @@ import Mention from './Mention';
 export default class extends PureComponent {
   constructor(props) {
     super(props);
+
     this.plugins = setupDraftExtensions(this, {
       decorators: [
         Mention,
       ],
     });
+
     this.state = {
-      editorState: this.plugins.createEditorState(props.initialValue)
+      editorState: this.plugins.createEditorState(props.initialValue),
     };
     this.onChange = this.setEditorState;
-    if(props.autoFocus) {
+
+    if (props.autoFocus) {
       this.shouldFocus = true;
     }
   }
   componentWillReceiveProps(nextProps) {
     if(nextProps.reset && nextProps.reset !== this.props.reset) {
       this.setState({
-        editorState: this.plugins.createEditorState(nextProps.initialValue)
+        editorState: this.plugins.createEditorState(nextProps.initialValue),
       });
-      if(nextProps.autoFocus) {
+      if (nextProps.autoFocus) {
         this.shouldFocus = true;
       }
     }
@@ -71,11 +74,11 @@ export default class extends PureComponent {
   }
   onAutoCompleteSelect(item, i) {
     let { editorState } = this.state;
-    
+
     if(this.props.clearMentions) {
       editorState = clearSearchInSelection(editorState, '@')
     } else {
-      editorState = insertMentionInSelection(editorState, '@', item.id); 
+      editorState = insertMentionInSelection(editorState, '@', item.id);
     }
 
     this.setEditorState(editorState);

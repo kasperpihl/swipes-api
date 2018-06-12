@@ -16,7 +16,6 @@ import Assigning from './Assigning';
   tooltip: mainActions.tooltip,
   selectAssignees: goalActions.selectAssignees,
 })
-
 export default class HOCAssigning extends PureComponent {
   constructor(props) {
     super(props);
@@ -51,7 +50,7 @@ export default class HOCAssigning extends PureComponent {
       return;
     }
     const { assignees } = this.state;
-    
+
     let overrideAssignees;
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
