@@ -99,7 +99,7 @@ class HOCMilestoneItem extends PureComponent {
     let stepPercentage = numberOfSteps ? parseInt((numberOfCompletedSteps / numberOfSteps) * 100, 10) : 0;
 
     if (!stepPercentage) {
-      stepPercentage = '0%';
+      stepPercentage = '0';
     } else {
       const remainingPercentage = 100 - goalPercentage;
       const extraWidth = (remainingPercentage / 100) * stepPercentage;
@@ -123,7 +123,6 @@ class HOCMilestoneItem extends PureComponent {
   }
   renderProgressBar() {
     const [goalPercentage, stepPercentage] = this.getProgress();
-
     const stylesGoalProgress = StyleSheet.flatten([styles.goalProgress, { width: `${goalPercentage}%` }]);
     const stylesStepProgress = StyleSheet.flatten([styles.stepProgress, { width: `${stepPercentage}%` }]);
 
