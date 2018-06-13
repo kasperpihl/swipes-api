@@ -14,6 +14,8 @@ Peter: UFXDWRVSU
 const now = new Date();
 const subtract = (m) => new Date(now.getTime() + m * 60000).toISOString();
 const Wrapper = styleElement('div', styles.Wrapper);
+const Title = styleElement('h5', styles.Title);
+
 const items = [
   {
     sent_by: 'URU3EUPOE',
@@ -56,6 +58,7 @@ export default class extends PureComponent {
     return (
       <Wrapper>
         <PingComposer />
+        <Title>Pings Received</Title>
         {this.renderItems()}
       </Wrapper>
     );

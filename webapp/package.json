@@ -23,6 +23,7 @@
     "draft-js-multidecorators": "1.0.0",
     "draft-js-prism": "^1.0.6",
     "exif-js": "2.3.0",
+    "fbemitter": "^2.1.1",
     "fuse.js": "3.2.0",
     "hoist-non-react-statics": "^2.5.0",
     "immutable": "3.8.2",

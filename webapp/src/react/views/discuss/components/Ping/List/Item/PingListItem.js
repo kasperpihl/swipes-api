@@ -10,6 +10,7 @@ const Wrapper = styleElement('div', styles.Wrapper);
 const Message = styleElement('div', styles.Message);
 const Time = styleElement(TimeAgo, styles.Time);
 const Sender = styleElement('div', styles.Sender);
+const ButtonWrapper = styleElement('div', styles.ButtonWrapper).debug();
 
 export default class extends PureComponent {
   render() {
@@ -18,7 +19,7 @@ export default class extends PureComponent {
     let sendString = msgGen.users.getFirstName(item.sent_by);
     sendString += ` pinged you`;
     return (
-      <Wrapper>
+      <Wrapper className="ButtonWrapper-hover">
         <HOCAssigning
           assignees={[item.sent_by]}
           size={36}
@@ -30,10 +31,16 @@ export default class extends PureComponent {
           </Sender>
           {item.message}
         </Message>
-        <Button
-          icon="ThreeDots"
-          compact
-        />
+        <ButtonWrapper>
+          <Button
+            icon="reply"
+            compact
+          />
+          <Button
+            icon="ThreeDots"
+            compact
+          />
+        </ButtonWrapper>
       </Wrapper>
     );
   }

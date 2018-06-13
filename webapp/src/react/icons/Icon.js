@@ -22,7 +22,7 @@ class Icon extends PureComponent {
       return <img src={Images[icon] || icon} {...other} role="presentation" />;
     }
     return (
-      <i className="material-icons" {...other}>{icon}</i>
+      <i {...other} className={`material-icons ${this.props.className || ''}`.trim()}>{icon}</i>
     );
   }
 }
