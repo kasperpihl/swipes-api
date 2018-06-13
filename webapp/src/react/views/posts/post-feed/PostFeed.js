@@ -3,12 +3,12 @@ import { styleElement} from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback, typeForId, miniIconForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import HOCHeaderTitle from 'src/react/components/header-title/HOCHeaderTitle';
 import Button from 'src/react/components/button/Button';
-import TabBar from 'components/tab-bar/TabBar';
-import TextParser from 'components/text-parser/TextParser';
+import TabBar from 'src/react/components/tab-bar/TabBar';
+import TextParser from 'src/react/components/text-parser/TextParser';
 import Icon from 'Icon';
-import InfoButton from 'components/info-button/InfoButton';
+import InfoButton from 'src/react/components/info-button/InfoButton';
 import styles from './PostFeed.swiss';
 import HOCPostView from '../post-view/HOCPostView';
 

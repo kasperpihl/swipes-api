@@ -2,7 +2,7 @@ import {styleSheet} from 'swiss-react';
 
 export default styleSheet('Invite', {
   Wrapper: {
-    padding: '30px 0'
+    padding: '30px 0',
   },
 
   FormWrapper: {

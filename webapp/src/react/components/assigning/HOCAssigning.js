@@ -36,8 +36,8 @@ export default class HOCAssigning extends PureComponent {
   getUsersFromAssignees(users, assignees) {
     const { myId } = this.props;
     let filteredUsers = assignees;
-    if (filteredUsers.contains(myId)) {
-      filteredUsers = filteredUsers.filter(uId => uId !== myId).insert(0, myId);
+    if (filteredUsers.contains(myId) || filteredUsers.contains('me')) {
+      filteredUsers = filteredUsers.filter(uId => uId !== myId && uId !== 'me').insert(0, myId);
     }
     filteredUsers = filteredUsers.map(aId => users.get(aId)).filter(v => !!v);
 
@@ -56,7 +56,7 @@ export default class HOCAssigning extends PureComponent {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
       onClose: () => {
-        this.onAssigningClose(List(overrideAssignees));
+        this.onAssigningClose(overrideAssignees && List(overrideAssignees));
       },
     };
     selectAssignees(options, assignees.toJS(), (newAssignees) => {

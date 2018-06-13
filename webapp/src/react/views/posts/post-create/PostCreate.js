@@ -110,7 +110,7 @@ class PostCreate extends PureComponent {
           />
           <InputWrapper>
             <AutoCompleteInput
-              wrapperRef={(c) => { this.input = c; }}
+              innerRef={(c) => { this.input = c; }}
               onChange={this.onMessageChange}
               placeholder={placeholder}
               onAutoCompleteSelect={this.onAutoCompleteSelect}
