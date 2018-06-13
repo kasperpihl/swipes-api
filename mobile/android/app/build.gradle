@@ -103,7 +103,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.swipes"
+        applicationId "com.swipesapp"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 17

@@ -1,4 +1,4 @@
-package com.swipes;
+package com.swipesapp;
 
 import android.app.Application;
 
