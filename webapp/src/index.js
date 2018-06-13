@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 
 import { Provider } from 'react-redux';
 import { OptimistProvider } from 'react-optimist';
+import EmitterProvider from 'src/react/components/emitter/EmitterProvider';
 import { BrowserRouter } from 'react-router-dom';
 import { createLocation } from 'history';
 
@@ -46,9 +47,11 @@ init(store, delegate);
 render(
   <Provider store={store}>
     <BrowserRouter forceRefresh={false}>
-      <OptimistProvider>
-        <Root />
-      </OptimistProvider>
+      <EmitterProvider>
+        <OptimistProvider>
+          <Root />
+        </OptimistProvider>
+      </EmitterProvider>
     </BrowserRouter>
   </Provider>
   , document.getElementById('content'),

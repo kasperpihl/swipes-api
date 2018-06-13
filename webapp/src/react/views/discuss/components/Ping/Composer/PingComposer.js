@@ -12,7 +12,7 @@ import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoComp
 import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
 
 import Button from 'src/react/components/button/Button';
-import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
+import AttachButton from 'src/react/components/attach-button/AttachButton';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 
 const AbsoluteWrapper = styleElement('div', styles.AbsoluteWrapper);
@@ -49,21 +49,29 @@ export default class extends PureComponent {
     }
     this.input.focus();
   }
+  onAddAssignee = (id) => { 
+    let { receivers } = this.state;
+    if(!receivers.contains(id)) {
+      this.setState({ receivers: receivers.push(id) });
+    }
+    this.input.focus();
+  }
+  onAttachButtonCloseOverlay = () => {
+    this.input.focus();
+  }
   onAttachmentClose = (i) => {
     this.setState({ attachments: this.state.attachments.delete(i) });
+    this.input.focus();
   }
   onAddedAttachment(att) {
-    this.setState({ attachments: this.state.attachments.push(att) })
+    this.setState({ attachments: this.state.attachments.push(att) });
   }
   onAttachmentClick = (i) => {
     const { preview, target } = this.props;
     preview(target, this.state.attachments.get(i));
   }
   onAutoCompleteSelect = (item) => {
-    let { receivers } = this.state;
-    if(!receivers.contains(item.id)) {
-      this.setState({ receivers: receivers.push(item.id) });
-    }
+    this.onAddAssignee(item.id);
   }
   onUserClick = (id) => {
     this.setState({ receivers: this.state.receivers.push(id) });
@@ -122,6 +130,14 @@ export default class extends PureComponent {
 
     return (
       <BarWrapper>
+        <Column none>
+          <HOCAssigning
+            assignees={receivers}
+            size={36}
+            maxImages={3}
+            delegate={this}
+          />
+        </Column>
         <Column>
           <AutoCompleteInput
             innerRef={c => this.input = c}
@@ -133,17 +149,9 @@ export default class extends PureComponent {
           />
         </Column>
         <Column none>
-          <HOCAttachButton
+          <AttachButton
             delegate={this}
             compact
-          />
-        </Column>
-        <Column none>
-          <HOCAssigning
-            assignees={receivers}
-            size={36}
-            maxImages={5}
-            delegate={this}
           />
         </Column>
         <Column none hidden={!receivers.size}>

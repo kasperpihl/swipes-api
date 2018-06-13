@@ -54,7 +54,6 @@ export default class extends PureComponent {
     options.onClose = this.onAttachButtonCloseOverlay;
     chooseAttachmentType(options).then((item) => {
       if (item.id === 'upload') {
-        console.log(this.hiddenInput);
         this.hiddenInput.click();
         return;
       }

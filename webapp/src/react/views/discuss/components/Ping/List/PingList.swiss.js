@@ -5,7 +5,7 @@ export default styleSheet('PingList', {
     _size: '100%',
   },
   Title: {
-    paddingLeft: '12px',
+    paddingLeft: '60px',
     paddingTop: '18px',
     paddingBottom: '6px',
   },

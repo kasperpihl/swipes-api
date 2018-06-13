@@ -24,7 +24,7 @@ const items = [
   },
   {
     sent_by: 'USTFL9YVE',
-    message: 'Check this commit I did earlier: https://github.com/swipesapp/swipes-api/commit/e22786d22d6d2272444d4b6f90d22e37a9d0cae1',
+    message: '<3 Check this commit I did earlier: https://github.com/swipesapp/swipes-api/commit/e22786d22d6d2272444d4b6f90d22e37a9d0cae1',
     sent_at: subtract(-10),
   },
   {
@@ -32,8 +32,7 @@ const items = [
     message: `Today I read these articles:
 https://medium.com/@skovy/writing-maintainable-styles-and-components-with-css-modules-308a9216a6c2
 https://hackernoon.com/tips-on-react-for-large-scale-projects-3f9ece85983d
-And they were really awesome!
-`,
+And they were really awesome!`,
     sent_at: subtract(-20),
   },
   {

@@ -26,7 +26,7 @@ export default styleSheet('Button', {
     _flex: ['row', 'left', 'center'],
     borderRadius: '18px',
     '!compact': {
-      border: '1px solid $sw3',
+      boxShadow: '0 0 0 1px $sw3',
       '.gl-button:hover &': {
         background: '$sw3',
       },
