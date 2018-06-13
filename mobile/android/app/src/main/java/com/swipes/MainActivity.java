@@ -1,9 +1,6 @@
-package com.swipesapp;
+package com.swipes;
 
 import com.facebook.react.ReactActivity;
-import com.github.droibit.android.reactnative.customtabs.CustomTabsPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
-import com.horcrux.svg.SvgPackage;
 
 public class MainActivity extends ReactActivity {
 

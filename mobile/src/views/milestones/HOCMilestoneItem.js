@@ -137,9 +137,11 @@ class HOCMilestoneItem extends PureComponent {
   render() {
     return (
       <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.button} onPress={this.openMilestone}>
-        {this.renderProgressBar()}
-        {this.renderHeader()}
-        <View style={styles.border} />
+        <View style={styles.button}>
+          {this.renderProgressBar()}
+          {this.renderHeader()}
+          <View style={styles.border} />
+        </View>
       </RippleButton>
     );
   }

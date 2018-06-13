@@ -51,7 +51,4 @@
   [self.window makeKeyAndVisible];
   return YES;
 }
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification {
-  [RCTOneSignal didReceiveRemoteNotification:notification];
-}
 @end
