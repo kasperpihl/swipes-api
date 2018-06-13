@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   title: {
-    width: viewSize.width - 90 - 30,
+    width: viewSize.width - 90 - 40,
     fontSize: 18,
     lineHeight: 24,
     color: colors.deepBlue100,
