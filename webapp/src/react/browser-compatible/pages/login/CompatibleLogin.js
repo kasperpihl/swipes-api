@@ -7,7 +7,7 @@ import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import { Link } from 'react-router-dom';
-import styles from './styles/CompatibleLogin.swiss';
+import styles from './CompatibleLogin.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const Form = styleElement('div', styles.Form);
@@ -27,7 +27,7 @@ class CompatibleLogin extends PureComponent {
     bindAll(this, ['handleKeyDown']);
   }
   handleKeyDown(e) {
-    if (e.keyCode === 13) {
+    if (e.key === 'Enter') {
       this.onSignin();
     }
   }
@@ -61,9 +61,9 @@ class CompatibleLogin extends PureComponent {
   }
   renderForm() {
     return (
-      <Form>
+       <Form onKeyDown={this.handleKeyDown}>
         {this.renderInputField('email', 'email', 'Email', { autoFocus: true })}
-        {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
+        {this.renderInputField('password', 'password', 'Password')}
       </Form>
     )
   }
