@@ -54,6 +54,8 @@ export const colors = {
   red160: '#652438',
   greenColor: '#3ADA8B',
   tishoGreen: '#78F4B0',
+  green: '#1DD465',
+  greenWithOpacity: opacity => `rgba(29, 212, 101, ${opacity})`,
   redColor: '#FC461E',
   yellowColor: '#FFD776',
   bgColor: '#ffffff',
