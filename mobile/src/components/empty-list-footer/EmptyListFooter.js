@@ -4,7 +4,7 @@ import { viewSize } from 'globalStyles';
 
 class EmptyListFooter extends PureComponent {
   render() {
-    return <View style={styles.footer}></View>;
+    return <View style={styles.footer} />;
   }
 }
 

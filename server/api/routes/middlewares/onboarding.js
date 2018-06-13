@@ -4,6 +4,9 @@ import {
   array,
 } from 'valjs';
 import {
+  organizationsAddMilestone,
+} from './organizations';
+import {
   milestonesCreate,
   milestonesInsert,
   milestonesAddGoal,
@@ -716,6 +719,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     milestone_id: locals.milestone.id,
   })),
+  organizationsAddMilestone,
   // Goal one
   onboardingGoalThreeData,
   goalsCreate,

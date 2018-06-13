@@ -34,6 +34,8 @@ export const red140 = '#97313E';
 export const red160 = '#652438';
 export const greenColor = '#3ADA8B';
 export const tishoGreen = '#78F4B0';
+export const green = '#1DD465';
+export const greenWithOpacity = opacity => `rgba(29, 212, 101, ${opacity})`;
 export const redColor = '#FC461E';
 export const yellowColor = '#FFD776';
 export const bgColor = '#ffffff';
