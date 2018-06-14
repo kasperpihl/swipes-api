@@ -1,14 +1,6 @@
 import React from 'react';
-import { styleElement, styleSheet } from 'swiss-react';
 import { Droppable } from 'react-beautiful-dnd';
-
-const styles = styleSheet('Dropper', {
-  DefaultWrapper: {
-    _size: '100%',
-  }
-});
-
-const DefaultWrapper = styleElement('div', styles.DefaultWrapper).pure();
+import SW from './Dropper.swiss';
 
 export default (props) => {
   const {
@@ -20,10 +12,10 @@ export default (props) => {
   return  (
     <Droppable {...rest}>
       {(provided) => (
-        <EL innerRef={provided.innerRef} {...provided.droppableProps}>
+        <SW.EL innerRef={provided.innerRef} {...provided.droppableProps}>
           {children}
           {provided.placeholder}
-        </EL>
+        </SW.EL>
       )}
     </Droppable>
   )

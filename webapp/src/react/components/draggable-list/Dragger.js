@@ -1,16 +1,8 @@
 import React, { cloneElement } from 'react';
 import { createPortal } from 'react-dom';
-import { styleElement, styleSheet } from 'swiss-react';
 import { Draggable } from 'react-beautiful-dnd';
+import SW from './Dragger.swiss';
 
-const styles = styleSheet('Dragger', {
-  DefaultWrapper: {
-    _size: 'auto',
-    background: '$sw5',
-  }
-});
-
-const DefaultWrapper = styleElement('div', styles.DefaultWrapper).pure();
 const _dragEl = document.getElementById('draggable');
 
 export default (props) => {
@@ -21,22 +13,22 @@ export default (props) => {
   } = props;
 
   const EL = wrapperEl || DefaultWrapper;
-  
+
   return (
     <Draggable {...rest}>
       {(provided, snapshot) => {
         let child = (
-          <EL
+          <SW.EL
             innerRef={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}>
             {children}
-          </EL>
+          </SW.EL>
         )
         if(typeof children === 'function') {
           child = children(provided, snapshot);
         }
-    
+
         if(snapshot.isDragging) {
           return createPortal(child, _dragEl);
         }
