@@ -14,6 +14,7 @@ export default styleSheet('FloatingInput', {
   },
 
   Input: {
+    _el: 'input',
     _size: ['inherit', 'auto'],
     _font: ['16px', '27px', '400'],
     color: '$sw1',
@@ -45,6 +46,7 @@ export default styleSheet('FloatingInput', {
   },
 
   Label: {
+    _el: 'label',
     _font: ['15px', '21px', '400'],
     position: 'absolute',
     left: '0',

@@ -1,12 +1,7 @@
 import React, { PureComponent } from 'react';
-import { styleElement, SwissProvider } from 'swiss-react';
+import { SwissProvider } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
-import Icon from 'Icon';
-import styles from './FloatingInput.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Input = styleElement('input', styles.Input);
-const Label = styleElement('label', styles.Label);
+import SW from './FloatingInput.swiss';
 
 class FloatingInput extends PureComponent {
   constructor(props) {
@@ -47,8 +42,8 @@ class FloatingInput extends PureComponent {
     const { visiblePassword, float, floatValue } = this.state;
     return (
       <SwissProvider active={!!float} standBy={floatValue > 0} inviteFormField={inviteFormField} inputError={inputError} >
-        <Wrapper className={this.props.className}>
-          <Input
+        <SW.Wrapper className={this.props.className}>
+          <SW.Input
             innerRef={c => this.input = c}
             type={type}
             value={value}
@@ -59,8 +54,8 @@ class FloatingInput extends PureComponent {
             autoComplete="off"
             {...inputProps}
           />
-          <Label htmlFor={inputKey}>{inputError || placeholder}</Label>
-        </Wrapper>
+          <SW.Label htmlFor={inputKey}>{inputError || placeholder}</SW.Label>
+        </SW.Wrapper>
       </SwissProvider>
     );
   }
