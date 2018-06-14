@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import { Link } from 'react-router-dom';
 
 export default styleSheet('NotSupported', {
   Wrapper: {
@@ -7,6 +8,7 @@ export default styleSheet('NotSupported', {
   },
 
   Illustration: {
+    _el: 'img',
     _size: ['50%', 'auto'],
     marginLeft: '50%',
     transform: 'translateX(-50%)',
@@ -26,6 +28,7 @@ export default styleSheet('NotSupported', {
   },
 
   StyledLink: {
+    _el: 'a',
     color: '$blue',
     paddingRight: '9px',
 
@@ -35,6 +38,7 @@ export default styleSheet('NotSupported', {
   },
 
   NewLink: {
+    _el: Link,
     color: '$blue',
     paddingRight: '9px',
 

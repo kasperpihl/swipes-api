@@ -1,29 +1,17 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import { styleElement } from 'swiss-react';
-import { Link } from 'react-router-dom';
-import Icon from 'Icon';
 import RotateLoader from 'components/loaders/RotateLoader';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import DownloadForDevice from 'compatible/components/download-for-device/DownloadForDevice';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
-import styles from './styles/NotSupported.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Illustration = styleElement('img', styles.Illustration);
-const EmptySpaceBlock = styleElement('div', styles.EmptySpaceBlock);
-const OptionTitle = styleElement('div', styles.OptionTitle);
-const StyledLink = styleElement('a', styles.StyledLink);
-const Description = styleElement('div', styles.Description);
-const NewLink = styleElement(Link, styles.NewLink);
+import SW from './styles/NotSupported.swiss';
 
 class NotSupported extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
     setupDelegate(this, 'onLeaveOrg');
-    // this.callDelegate.bindAll('onLala');
   }
   renderLeaveOrDelete() {
     const { me, organization, isLoading } = this.props;
@@ -38,11 +26,11 @@ class NotSupported extends PureComponent {
 
     return (
       <div className="not-supported__option-wrapper">
-        <Description>{desc}</Description>
-        <OptionTitle>
-          <StyledLink onClick={this.onLeaveOrg}>{buttonTitle}</StyledLink>
+        <SW.Description>{desc}</SW.Description>
+        <SW.OptionTitle>
+          <SW.StyledLink onClick={this.onLeaveOrg}>{buttonTitle}</SW.StyledLink>
           {isLoading && isLoading('delete') && <RotateLoader size={19} />}
-        </OptionTitle>
+        </SW.OptionTitle>
       </div>
     )
   }
@@ -52,12 +40,12 @@ class NotSupported extends PureComponent {
     return (
       <div className="not-supported__actions">
         <div className="not-supported__option-wrapper">
-          <Description>
+          <SW.Description>
             {`Invite more people to ${organization.get('name')}. Gather your whole team.`}
-          </Description>
-          <OptionTitle>
-            <NewLink to="/invite">Invite people</NewLink>
-          </OptionTitle>
+          </SW.Description>
+          <SW.OptionTitle>
+            <SW.NewLink to="/invite">Invite people</SW.NewLink>
+          </SW.OptionTitle>
         </div>
         {this.renderLeaveOrDelete()}
       </div>
@@ -65,14 +53,14 @@ class NotSupported extends PureComponent {
   }
   render() {
     return (
-      <Wrapper>
+      <SW.Wrapper>
         <CompatibleHeader title="Please download our apps to get started."/>
         <DownloadForDevice />
         <EmptySpaceBlock />
         <CompatibleSubHeader title="What else can I do?" />
         {this.renderActions()}
         <HOCLogoutButton />
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
