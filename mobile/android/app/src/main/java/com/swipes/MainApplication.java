@@ -1,25 +1,24 @@
 package com.swipesapp;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.facebook.react.ReactApplication;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.horcrux.svg.SvgPackage;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.kevinejohn.RNMixpanel.RNMixpanel;
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.robinpowered.react.Intercom.IntercomPackage;
 import io.intercom.android.sdk.Intercom;
-import com.reactlibrary.RNReactNativeDocViewerPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.wix.autogrowtextinput.AutoGrowTextInputPackage;
 import com.microsoft.codepush.react.CodePush;
-import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
-import com.horcrux.svg.SvgPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
+import com.reactlibrary.RNReactNativeDocViewerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.github.droibit.android.reactnative.customtabs.CustomTabsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,17 +42,22 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNFetchBlobPackage(),
+            new SvgPackage(),
+            new ReactNativeOneSignalPackage(),
+            new RNMixpanel(),
+            new LinearGradientPackage(),
+            new IntercomPackage(),
             new ImagePickerPackage(),
             new RNDeviceInfo(),
-            new RNMixpanel(),
-            new IntercomPackage(),
-            new CodePush(BuildConfig.CODEPUSH_KEY, MainApplication.this, BuildConfig.DEBUG),
-            new RNReactNativeDocViewerPackage(),
-            new ReactNativeOneSignalPackage(),
-            new SvgPackage(),
-            new LinearGradientPackage(),
-            new CustomTabsPackage()
+            new AutoGrowTextInputPackage(),
+            new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
+            new RNReactNativeDocViewerPackage()
       );
+    }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
     }
   };
 

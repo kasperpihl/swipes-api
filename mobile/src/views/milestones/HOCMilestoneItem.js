@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   title: {
-    width: viewSize.width - 90 - 30,
+    width: viewSize.width - 90 - 40,
     fontSize: 18,
     lineHeight: 24,
     color: colors.deepBlue100,
@@ -99,7 +99,7 @@ class HOCMilestoneItem extends PureComponent {
     let stepPercentage = numberOfSteps ? parseInt((numberOfCompletedSteps / numberOfSteps) * 100, 10) : 0;
 
     if (!stepPercentage) {
-      stepPercentage = '0%';
+      stepPercentage = '0';
     } else {
       const remainingPercentage = 100 - goalPercentage;
       const extraWidth = (remainingPercentage / 100) * stepPercentage;
@@ -123,7 +123,6 @@ class HOCMilestoneItem extends PureComponent {
   }
   renderProgressBar() {
     const [goalPercentage, stepPercentage] = this.getProgress();
-
     const stylesGoalProgress = StyleSheet.flatten([styles.goalProgress, { width: `${goalPercentage}%` }]);
     const stylesStepProgress = StyleSheet.flatten([styles.stepProgress, { width: `${stepPercentage}%` }]);
 
@@ -136,10 +135,12 @@ class HOCMilestoneItem extends PureComponent {
   }
   render() {
     return (
-      <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.button} onPress={this.openMilestone}>
-        {this.renderProgressBar()}
-        {this.renderHeader()}
-        <View style={styles.border} />
+      <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} onPress={this.openMilestone}>
+        <View style={styles.button}>
+          {this.renderProgressBar()}
+          {this.renderHeader()}
+          <View style={styles.border} />
+        </View>
       </RippleButton>
     );
   }
