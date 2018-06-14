@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import { styleElement } from 'swiss-react';
 import { SwissProvider } from 'swiss-react';
 import PropTypes from 'prop-types';
-import Icon from 'Icon';
-import styles from './FloatingFormInput.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Input = styleElement('input', styles.Input);
-const Label = styleElement('label', styles.Label);
+import SW from './FloatingFormInput.swiss';
 
 class FloatingInput extends Component {
   constructor(props) {
@@ -59,8 +53,8 @@ class FloatingInput extends Component {
 
     return (
       <SwissProvider active={!!float} standBy={floatValue > 0}>
-        <Wrapper>
-          <Input
+        <SW.Wrapper>
+          <SW.Input
             innerRef={c => this.input = c}
             value={value}
             id={id}
@@ -70,8 +64,8 @@ class FloatingInput extends Component {
             onKeyDown={this.props.onKeyDown}
             onChange={this.onChange}
           />
-          <Label htmlFor={id}>{label}</Label>
-        </Wrapper>
+          <SW.Label htmlFor={id}>{label}</SW.Label>
+        </SW.Wrapper>
       </SwissProvider>
     );
   }

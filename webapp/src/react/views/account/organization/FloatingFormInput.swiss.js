@@ -6,6 +6,7 @@ export default styleSheet('FloatingInput', {
   },
 
   Input: {
+    _el: 'input',
     _size: ['100%'],
     _font: ['16px', '27px', '400'],
     color: '$sw2',
@@ -19,6 +20,7 @@ export default styleSheet('FloatingInput', {
   },
 
   Label: {
+    _el: 'label',
     _font: ['15px', '21px', '400'],
     color: '$sw2',
     padding: '0 6px',
