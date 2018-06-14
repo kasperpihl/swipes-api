@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
+import groovy.json.JsonSlurper
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -94,6 +95,16 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+def getVersion() {
+    def slurper = new JsonSlurper()
+    def version = slurper.parse(file('../../package.json'))
+
+    return version;
+}
+
+def updatedVersionName = getVersion().androidVersionName
+def updatedVersionCode = getVersion().androidVersionCode
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -106,8 +117,8 @@ android {
         applicationId "com.swipesapp"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 17
-        versionName "17"
+        versionCode updatedVersionCode
+        versionName updatedVersionName
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -120,10 +131,48 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
-    buildTypes {
+    signingConfigs {
         release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            resValue "string", "app_name", "SwipesDev"
+            buildConfigField "String", "CODEPUSH_KEY", '""'
+            manifestPlaceholders = [
+                onesignal_app_id: "db8f2558-a836-4e95-b22b-089e8e85f6e9",
+                onesignal_google_project_number: "814416993959"
+            ]
+        }
+        releaseStaging {
+            applicationIdSuffix '.androidstaging'
+            resValue "string", "app_name", "Swipes Staging"
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "CODEPUSH_KEY", '"wJtyg-kSw5R0NoHoTFvj6MqP06QxNyuqwmYWX"'
+            manifestPlaceholders = [
+                onesignal_app_id: "db8f2558-a836-4e95-b22b-089e8e85f6e9",
+                onesignal_google_project_number: "814416993959"
+            ]
+        }
+        release {
+            resValue "string", "app_name", "Swipes"
+            applicationIdSuffix '.release'            
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "CODEPUSH_KEY", '"ZcwuUupyV_lvtHEsxo4rLdLZwX6xNyuqwmYWX"'
+            manifestPlaceholders = [
+                onesignal_app_id: "420ca44f-378a-4ce5-adb7-18cef4b689c0",
+                onesignal_google_project_number: "410470964842"
+            ]
         }
     }
     // applicationVariants are e.g. debug, release
