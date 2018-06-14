@@ -1,4 +1,6 @@
 import {styleSheet} from 'swiss-react';
+import { Link } from 'react-router-dom';
+import Icon from 'Icon';
 
 export default styleSheet('Login', {
   Wrapper: {
@@ -6,6 +8,7 @@ export default styleSheet('Login', {
   },
 
   Illustration: {
+    _el: Icon,
     _size: ['60%', 'auto'],
     margin: '30px 0',
     marginLeft: '50%',
@@ -85,6 +88,7 @@ export default styleSheet('Login', {
   },
 
   SwitchLink: {
+      _el: Link,
       _font: ['12px', '18px', '500'],
       cursor: 'pointer',
       color: '$blue',

@@ -1,22 +1,11 @@
 import React, { PureComponent } from 'react';
-import {styleElement} from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import Icon from 'Icon';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
-import { Link } from 'react-router-dom';
-import styles from './CompatibleLogin.swiss';
+import SW from './CompatibleLogin.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
-const Form = styleElement('div', styles.Form);
-const Footer = styleElement('div', styles.Footer);
-const ErrorLabel = styleElement('div', styles.ErrorLabel);
-const ResetPassword = styleElement('div', styles.ResetPassword);
-const Switch = styleElement('div', styles.Switch);
-const SwitchLink = styleElement(Link, styles.SwitchLink);
-const Illustration = styleElement(Icon, styles.Illustration);
 
 class CompatibleLogin extends PureComponent {
   constructor(props) {
@@ -38,7 +27,7 @@ class CompatibleLogin extends PureComponent {
 
     return ([
       <CompatibleHeader title={title} key="title"/>,
-      <Illustration icon="ESWelcome" className="compatible-login__illustration" key="illus"/>,
+      <SW.Illustration icon="ESWelcome" className="compatible-login__illustration" key="illus"/>,
       <CompatibleHeader subtitle={subtitle} key="subtitle"/>
     ])
   }
@@ -61,42 +50,42 @@ class CompatibleLogin extends PureComponent {
   }
   renderForm() {
     return (
-       <Form onKeyDown={this.handleKeyDown}>
+       <SW.Form onKeyDown={this.handleKeyDown}>
         {this.renderInputField('email', 'email', 'Email', { autoFocus: true })}
         {this.renderInputField('password', 'password', 'Password')}
-      </Form>
+      </SW.Form>
     )
   }
   renderFormError() {
     const { getLoading } = this.props;
 
     return (
-      <ErrorLabel>{getLoading('signInButton').error}</ErrorLabel>
+      <SW.ErrorLabel>{getLoading('signInButton').error}</SW.ErrorLabel>
     )
   }
   renderFooter() {
     const { isLoading, getLoading } = this.props;
 
     return (
-      <Footer>
+      <SW.Footer>
         {getLoading('signInButton').error && this.renderFormError()}
         <CompatibleButton title="Log in" onClick={this.onSignin} {...getLoading('signInButton')}/>
-        <Switch>
-          Don't have an account yet? <SwitchLink to="/register">Sign up now</SwitchLink>
-        </Switch>
+        <SW.Switch>
+          Don't have an account yet? <SW.SwitchLink to="/register">Sign up now</SW.SwitchLink>
+        </SW.Switch>
         <ResetPassword>
           <a href="" onClick={this.onResetPassword}>Reset password</a>
         </ResetPassword>
-      </Footer>
+      </SW.Footer>
     );
   }
   render() {
     return (
-      <Wrapper>
+      <SW.Wrapper>
         {this.renderHeader()}
         {this.renderForm()}
         {this.renderFooter()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
