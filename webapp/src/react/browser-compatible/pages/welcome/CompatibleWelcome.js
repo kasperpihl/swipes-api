@@ -1,31 +1,13 @@
 import React, { PureComponent } from 'react';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-import { styleElement, SwissProvider } from 'swiss-react';
+import { SwissProvider } from 'swiss-react';
 import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
-import { Link } from 'react-router-dom';
-import styles from './CompatibleWelcome.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Hint = styleElement('div', styles.Hint);
-const Table = styleElement('div', styles.Table);
-const TableHeader = styleElement('div', styles.TableHeader);
-const TableCol = styleElement('div', styles.TableCol);
-const ClearFix = styleElement('div', styles.ClearFix);
-const TableRow = styleElement('div', styles.TableRow);
-const RowItemName = styleElement('div', styles.RowItemName);
-const RowItemButton = styleElement('div', styles.RowItemButton);
-const CreateOrganization = styleElement('div', styles.CreateOrganization);
-const InputWrapper = styleElement('div', styles.InputWrapper);
-const Input = styleElement('input', styles.Input);
-const Label = styleElement('div', styles.Label);
-const Button = styleElement('div', styles.Button);
-const Loader = styleElement(Icon, styles.Loader);
-const SVG = styleElement(Icon, styles.SVG);
+import SW from './CompatibleWelcome.swiss';
 
 class CompatibleWelcome extends PureComponent {
   constructor(props) {
@@ -83,22 +65,22 @@ class CompatibleWelcome extends PureComponent {
     const name = org.get('name');
 
     return (
-      <TableRow key={id} className="row-hover" onClick={this.onOrganizationJoinCached(id)}>
-        <RowItemName>{name}</RowItemName>
-        <RowItemButton>
+      <SW.TableRow key={id} className="row-hover" onClick={this.onOrganizationJoinCached(id)}>
+        <SW.RowItemName>{name}</SW.RowItemName>
+        <SW.RowItemButton>
           {isLoading(id) ? (
             <Icon icon="darkloader" width="12" height="12" />
           ) : (
             'Join'
           )}
-        </RowItemButton>
-      </TableRow>
+        </SW.RowItemButton>
+      </SW.TableRow>
     )
   }
   renderJoinOrg() {
     const { me } = this.props;
     const pendingOrgs = me.get('pending_organizations');
-    
+
     if(!pendingOrgs || !pendingOrgs.size) {
       return undefined;
     }
@@ -107,13 +89,13 @@ class CompatibleWelcome extends PureComponent {
 
     return ([
       <CompatibleSubHeader title="If your company does not have a Workspace account yet, create one below and invite your team." key="1" />,
-      <Table key="2">
-        <TableHeader>
-          <TableCol>Pending invitations:</TableCol>
-          <ClearFix></ClearFix>
-        </TableHeader>
+      <SW.Table key="2">
+        <SW.TableHeader>
+          <SW.TableCol>Pending invitations:</SW.TableCol>
+          <SW.ClearFix></SW.ClearFix>
+        </SW.TableHeader>
         {renderRows}
-      </Table>
+      </SW.Table>
     ])
   }
   renderCreateOrg() {
@@ -123,20 +105,20 @@ class CompatibleWelcome extends PureComponent {
     return (
 
       <SwissProvider loading={isLoading('creating')} focused={focused} float={float}>
-        <CreateOrganization>
+        <SW.CreateOrganization>
           <label htmlFor="create-org-input">
-            <InputWrapper>
-              <Input 
+            <SW.InputWrapper>
+              <SW.Input
                 id="create-org-input"
-                type="text" 
-                className="input-focus" 
+                type="text"
+                className="input-focus"
                 placeholder=""
                 onKeyDown={this.onKeyDown}
-                value={createText} 
+                value={createText}
                 ref="floatingInput"
-                onChange={this.onChange} 
-                onFocus={this.onFocus} 
-                onBlur={this.onBlur} 
+                onChange={this.onChange}
+                onFocus={this.onFocus}
+                onBlur={this.onBlur}
               />
               <Label>Name of company</Label>
               <Button className="button-hover" onClick={this.onCreate}>
@@ -146,9 +128,9 @@ class CompatibleWelcome extends PureComponent {
                   <SVG icon="ArrowRightLong" />
                 )}
               </Button>
-            </InputWrapper>
+            </SW.InputWrapper>
           </label>
-        </CreateOrganization>
+        </SW.CreateOrganization>
       </SwissProvider>
     )
   }
@@ -158,15 +140,15 @@ class CompatibleWelcome extends PureComponent {
     const hint = `Hint: If you haven’t received an invitation for ${me.get('email')} yet, ask your Account Admin for one. 😉`;
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         {this.renderHeader()}
-        <Hint>{hint}</Hint>
+        <SW.Hint>{hint}</SW.Hint>
         <CompatibleSubHeader subtitle="If your company does not have a Workspace account yet, create one below and invite your team." />
         {this.renderJoinOrg()}
         <CompatibleSubHeader title="Create a new organization" />
         {this.renderCreateOrg()}
         <HOCLogoutButton />
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

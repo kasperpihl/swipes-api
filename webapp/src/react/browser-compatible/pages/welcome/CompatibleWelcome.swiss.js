@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('CompatibleWelcome', {
   Wrapper: {
@@ -83,6 +84,7 @@ export default styleSheet('CompatibleWelcome', {
     _size: ['100%', '45px'],
   },
   Input: {
+    _el: 'input',
     _size: ['100%', '45px'],
     _font: ['15px', '25px'],
     _borderRadius: '6px',
@@ -148,6 +150,7 @@ export default styleSheet('CompatibleWelcome', {
     }
   },
   SVG: {
+    _el: Icon,
     _size: '24px',
     _svgColor: '$sw3',
     position: 'absolute',
@@ -166,6 +169,7 @@ export default styleSheet('CompatibleWelcome', {
     },
   },
   Loader: {
+    _el: Icon,
     _size: '12px',
     position: 'absolute',
     left: '23px',
