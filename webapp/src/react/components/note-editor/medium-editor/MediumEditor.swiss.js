@@ -12,14 +12,14 @@ export default styleSheet('MediumEditor', {
     '& .DraftEditor-root *': {
       cursor: 'text',
     },
-    
+
     '& .DraftEditor-editorContainer': {
       height: 'inherit',
       position: 'relative',
       textAlign: 'initial',
       zIndex: 1,
     },
-    
+
     '& .public-DraftEditor-content': {
       _font: ['15px', '24px'],
       width: '100%',
@@ -47,7 +47,7 @@ export default styleSheet('MediumEditor', {
     '& ol': {
       paddingLeft: '3px',
     },
-    
+
     '& .public-DraftEditorPlaceholder-root': {
       _font: ['15px', '24px'],
       position: 'absolute',
@@ -55,7 +55,7 @@ export default styleSheet('MediumEditor', {
       left: '1px',
       top: '21px',
     },
-    
+
     '& ::selection': {
       background: '$yellow',
     },

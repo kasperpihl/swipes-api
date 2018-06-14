@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindAll, traverseElement } from 'swipes-core-js/classes/utils';
@@ -8,9 +7,8 @@ import {
 } from 'draft-js';
 import ControlPanel from './ControlPanel';
 import prefixAll from 'inline-style-prefixer/static';
-import styles from './MediumEditor.swiss';
+import SW from './MediumEditor.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
 const SPACING = 10;
 
 
@@ -249,7 +247,7 @@ class MediumEditor extends PureComponent {
   render() {
     const { children } = this.props;
     return (
-      <Wrapper
+      <SW.Wrapper
         innerRef={(c) => { this.container = c; }}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
@@ -258,7 +256,7 @@ class MediumEditor extends PureComponent {
       >
         {this.renderControlPanel()}
         {children}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
