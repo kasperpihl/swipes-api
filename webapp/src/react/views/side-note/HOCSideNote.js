@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
-import { styleElement } from 'swiss-react';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
@@ -21,10 +20,8 @@ import debounce from 'swipes-core-js/utils/debounce';
 import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
-import styles from  './HOCSideNote.swiss';
+import SW from  './HOCSideNote.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
-const Header = styleElement('div', styles.Header);
 
 const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
@@ -233,7 +230,7 @@ export default class HOCSideNote extends PureComponent {
     }
 
     return (
-      <Header className="side-note__header">
+      <SW.Header>
         <HOCHeaderTitle
           title={title}
           target={target}
@@ -250,7 +247,7 @@ export default class HOCSideNote extends PureComponent {
             delegate={this}
           />
         </HOCHeaderTitle>
-      </Header>
+      </SW.Header>
     );
   }
 
@@ -271,7 +268,7 @@ export default class HOCSideNote extends PureComponent {
 
     return (
       <SWView header={this.renderHeader()} maxWidth={maxWidth}>
-        <Wrapper>
+        <SW.Wrapper>
           <NoteEditor
             mediumEditor
             rawState={rawState}
@@ -281,7 +278,7 @@ export default class HOCSideNote extends PureComponent {
             delegate={this}
             disabled={this.isLoading('conflict')}
           />
-        </Wrapper>
+        </SW.Wrapper>
       </SWView>
     );
   }
