@@ -1,12 +1,8 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
-import styles from './Modal.swiss';
-
-const Container = styleElement('div', styles.Container);
-const Content = styleElement('div', styles.Content);
+import SW from './Modal.swiss';
 
 @connect((state, props) => ({
   modal: state.getIn(['main', 'modals', props.target]),
@@ -36,15 +32,15 @@ export default class HOCModal extends PureComponent {
     const props = modal && modal.props || {};
 
     return (
-      <Container
+      <SW.Container
         className="modal"
         position={modal && modal.position || 'center'}
         show={modal && !!modal.component}
         onClick={this.clickedBackground}>
-        <Content position={modal && modal.position || 'center'}>
+        <SW.Content position={modal && modal.position || 'center'}>
           {Comp && <Comp hideModal={this.hideModal} {...props} />}
-        </Content>
-      </Container>
+        </SW.Content>
+      </SW.Container>
     );
   }
 }

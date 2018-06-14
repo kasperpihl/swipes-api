@@ -1,9 +1,6 @@
 import React from 'react';
-import { styleElement } from 'swiss-react';
 import Icon from 'Icon';
-import styles from './CompatibleButton.swiss';
-
-const ATag = styleElement('div', styles.ATag);
+import SW from './CompatibleButton.swiss';
 
 const CompatibleButton = (props) => {
   const {
@@ -15,7 +12,7 @@ const CompatibleButton = (props) => {
   } = props;
 
   return (
-    <ATag onClick={onClick}>
+    <SW.ATag onClick={onClick}>
       {
         loading ? (
           <Icon icon="loader" width="12" height="12" />
@@ -23,7 +20,7 @@ const CompatibleButton = (props) => {
           title
         )
       }
-    </ATag>
+    </SW.ATag>
   );
 };
 

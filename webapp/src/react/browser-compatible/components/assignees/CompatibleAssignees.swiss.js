@@ -23,10 +23,12 @@ export default styleSheet('CompatibleAssignees', {
     float: '#{float}',
   },
   ProfilePic: {
+    _el: 'img',
     _size: ['30px'],
     borderRadius: '50%',
   },
   Initials: {
+    _el: 'p',
     _size: ['30px'],
     _font: ['12px', '30px', 500],
     color: '$sw5',

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { styleElement } from 'swiss-react';
 
-import styles from './Audio.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
+import SW from './Audio.swiss';
 
 class Audio extends Component {
   static supportContentType(contentType) {
@@ -20,7 +17,7 @@ class Audio extends Component {
     const { file } = this.props;
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         <audio
           autoPlay
           onLoadedData={this.props.onLoad}
@@ -28,7 +25,7 @@ class Audio extends Component {
           src={file.url}
           controls
         />
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

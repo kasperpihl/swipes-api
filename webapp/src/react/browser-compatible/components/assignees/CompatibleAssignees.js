@@ -1,14 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { styleElement } from 'swiss-react';
-import styles from './CompatibleAssignees.swiss';
+import SW from './CompatibleAssignees.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
-const Assignee = styleElement('div', styles.Assignee);
-const ProfilePic = styleElement('img', styles.ProfilePic);
-const Initials = styleElement('p', styles.Initials);
-
-const CompatibleAssignees = (props) => {
+export default (props) => {
   const {
     assignee,
     float = '',
@@ -17,23 +10,14 @@ const CompatibleAssignees = (props) => {
   const assigneeInitials = msgGen.users.getInitials(assignee);
 
   return (
-    <Wrapper>
-      <Assignee float={float}>
+    <SW.Wrapper>
+      <SW.Assignee float={float}>
         {photoSrc ? (
-          <ProfilePic src={photoSrc} />
+          <SW.ProfilePic src={photoSrc} />
         ) : (
-          <Initials>{assigneeInitials}</Initials>
+          <SW.Initials>{assigneeInitials}</SW.Initials>
         )}
-      </Assignee>
-    </Wrapper>
+      </SW.Assignee>
+    </SW.Wrapper>
   );
-};
-
-export default CompatibleAssignees;
-
-const { string, object, func } = PropTypes;
-
-CompatibleAssignees.propTypes = {
-  assignee: object,
-  float: string,
 };

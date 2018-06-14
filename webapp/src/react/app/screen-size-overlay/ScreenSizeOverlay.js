@@ -1,13 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 
-import styles from './ScreenSizeOverlay.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Title = styleElement('div', styles.Title);
-const Subtitle = styleElement('div', styles.Subtitle);
-const CurrentSize = styleElement('div', styles.CurrentSize);
+import SW from './ScreenSizeOverlay.swiss';
 
 const MIN_WIDTH = 1000;
 const MIN_HEIGHT = 600;
@@ -50,17 +44,17 @@ export default class ScreenSizeOverlay extends PureComponent {
     }
 
     return (
-      <Wrapper>
-        <Title>
+      <SW.Wrapper>
+        <SW.Title>
           Your browser window is too small :(
-        </Title>
-        <Subtitle>
+        </SW.Title>
+        <SW.Subtitle>
           The minimum supported size is {MIN_WIDTH}x{MIN_HEIGHT} pixels
-        </Subtitle>
-        <CurrentSize>
+        </SW.Subtitle>
+        <SW.CurrentSize>
           {`${width}x${height}`}
-        </CurrentSize>
-      </Wrapper>
+        </SW.CurrentSize>
+      </SW.Wrapper>
     );
   }
 }

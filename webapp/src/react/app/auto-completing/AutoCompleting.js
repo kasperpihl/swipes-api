@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import ResultItem from 'src/react/components/result-item/ResultItem';
 import AutoCompleteItem from './AutoCompleteItem';
-import styles from './AutoCompleting.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
+import SW from './AutoCompleting.swiss';
 
 class AutoCompleting extends PureComponent {
   constructor(props) {
@@ -42,14 +39,14 @@ class AutoCompleting extends PureComponent {
     const show = (autoComplete.get('results') && boundingRect);
 
     return (
-      <Wrapper
+      <SW.Wrapper
         className="auto-completing"
         show={show}
         boundingRect={boundingRect}
         showOnTop={showOnTop}
       >
         {show && this.renderResults()}
-      </Wrapper>
+      </SW.Wrapper>
     )
   }
 }

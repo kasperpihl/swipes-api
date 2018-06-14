@@ -1,14 +1,6 @@
 import React, { PureComponent } from 'react';
-import Icon from 'Icon';
-import { Link } from 'react-router-dom';
-import { styleElement } from 'swiss-react';
-import styles from './DownloadForDevice.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
-const Device = styleElement('a', styles.Device);
-const DeviceSVG = styleElement(Icon, styles.DeviceSVG);
-const AllDevices = styleElement('p', styles.AllDevices);
-const AllDevicesLink = styleElement(Link, styles.AllDevicesLink);
+import SW from './DownloadForDevice.swiss';
 
 const downloadLinks = {
   darwin: 'http://swipesapp.com/download-mac',
@@ -53,19 +45,19 @@ class DownloadForDevice extends PureComponent {
   renderAndroid() {
     
     return (
-      <Device href={downloadLinks.android} target="_blank" className="svg-hover">
-        <DeviceSVG icon="AndroidDevice" />
+      <SW.Device href={downloadLinks.android} target="_blank" className="svg-hover">
+        <SW.DeviceSVG icon="AndroidDevice" />
         <p>Android</p>
-      </Device>
+      </SW.Device>
     )
   }
   renderIos() {
     
     return (
-      <Device href={downloadLinks.ios} target="_blank" className="svg-hover">
-        <DeviceSVG icon="AndroidDevice" />
+      <SW.Device href={downloadLinks.ios} target="_blank" className="svg-hover">
+        <SW.DeviceSVG icon="AndroidDevice" />
         <p>iOS</p>
-      </Device>
+      </SW.Device>
     )
   }
   renderWindows(firstType) {
@@ -73,10 +65,10 @@ class DownloadForDevice extends PureComponent {
       return undefined;
     }
     return (
-      <Device href={downloadLinks.win32} target="_blank" className="svg-hover">
-        <DeviceSVG icon="WindowsDevice" />
+      <SW.Device href={downloadLinks.win32} target="_blank" className="svg-hover">
+        <SW.DeviceSVG icon="WindowsDevice" />
         <p>Download for Windows</p>
-      </Device>
+      </SW.Device>
     );
   }
   renderMac(firstType) {
@@ -84,10 +76,10 @@ class DownloadForDevice extends PureComponent {
       return undefined;
     }
     return (
-      <Device href={downloadLinks.darwin} target="_blank" className="svg-hover">
-        <DeviceSVG icon="MacDevice" />
+      <SW.Device href={downloadLinks.darwin} target="_blank" className="svg-hover">
+        <SW.DeviceSVG icon="MacDevice" />
         <p>Download for macOS</p>
-      </Device>
+      </SW.Device>
     );
   }
   renderLinux(firstType) {
@@ -95,10 +87,10 @@ class DownloadForDevice extends PureComponent {
       return undefined;
     }
     return (
-      <Device href={downloadLinks.linux} target="_blank" className="svg-hover">
-        <DeviceSVG icon="LinuxDevice" />
+      <SW.Device href={downloadLinks.linux} target="_blank" className="svg-hover">
+        <SW.DeviceSVG icon="LinuxDevice" />
         <p>Download for Linux</p>
-      </Device>
+      </SW.Device>
     );
   }
   render() {
@@ -107,12 +99,12 @@ class DownloadForDevice extends PureComponent {
     const type = mobileType ? mobileType : desktopType;
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         {this.renderFirst(type)}
-        <AllDevices>
-          <AllDevicesLink to="/download">See all available platforms</AllDevicesLink>
-        </AllDevices>
-      </Wrapper>
+        <SW.AllDevices>
+          <SW.AllDevicesLink to="/download">See all available platforms</SW.AllDevicesLink>
+        </SW.AllDevices>
+      </SW.Wrapper>
     );
   }
 }

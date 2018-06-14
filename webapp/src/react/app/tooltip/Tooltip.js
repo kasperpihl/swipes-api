@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
-import styles from './Tooltip.swiss';
+import SW from './Tooltip.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
-const Content = styleElement('div', styles.Content);
 const SPACING = 20;
 
 @connect(state => ({
@@ -184,21 +181,21 @@ export default class Tooltip extends PureComponent {
     const Comp = tooltip.component;
 
     return (
-      <Content
+      <SW.Content
         innerRef={(r) => { this.tooltipRef = r; }}
         {...this.state.styles}
       >
         <Comp {...props} />
-      </Content>
+      </SW.Content>
     );
   }
   render() {
     const { shown } = this.state;
 
     return (
-      <Wrapper shown={shown}>
+      <SW.Wrapper shown={shown}>
         {this.renderTooltip()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

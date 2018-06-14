@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import { styleElement, addGlobalStyles } from 'swiss-react';
 
-import styles from './Video.swiss';
-
-addGlobalStyles(styles.GlobalStyles);
-const Wrapper = styleElement('div', styles.Wrapper);
-const Player = styleElement('video', styles.Player);
+import SW from './Video.swiss';
 
 class Video extends Component {
   static supportContentType(contentType) {
@@ -21,15 +16,15 @@ class Video extends Component {
     const className = 'preview-video';
 
     return (
-      <Wrapper>
-        <Player
+      <SW.Wrapper>
+        <SW.Player
           autoPlay
           onLoadedData={this.props.onLoad}
           onError={this.props.onError}
           src={file.url}
           controls
         />
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

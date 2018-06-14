@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import loadImage from 'blueimp-load-image';
-import { styleElement } from 'swiss-react';
 
-import styles from './Jpeg.swiss';
-
-const Image = styleElement('div', styles.Image);
+import SW from './Jpeg.swiss';
 
 class Jpeg extends Component {
   static supportContentType(contentType) {
@@ -39,7 +36,7 @@ class Jpeg extends Component {
     const { fullSize } = this.state;
 
     return (
-      <Image
+      <SW.Image
         innerRef={(c) => { this.cont = c; }}
         onClick={this.onToggle}
         fullSize={fullSize}

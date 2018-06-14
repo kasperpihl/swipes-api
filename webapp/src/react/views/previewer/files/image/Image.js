@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { styleElement, SwissProvider } from 'swiss-react';
+import { SwissProvider } from 'swiss-react';
 
-import styles from './Image.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Img = styleElement('img', styles.Img);
+import SW from './Image.swiss';
 
 class Image extends Component {
   static supportContentType(contentType) {
@@ -29,15 +26,15 @@ class Image extends Component {
 
     return (
       <SwissProvider fullSize={fullSize}>
-        <Wrapper>
-          <Img
+        <SW.Wrapper>
+          <SW.Img
             onLoad={this.props.onLoad}
             onError={this.props.onError}
             onClick={this.onToggle}
             src={file.url}
             role="presentation"
           />
-        </Wrapper>
+        </SW.Wrapper>
       </SwissProvider>
     );
   }

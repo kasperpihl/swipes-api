@@ -1,13 +1,9 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import Measure from 'react-measure';
 import * as mainActions from 'src/redux/main/mainActions';
 import debounce from 'swipes-core-js/utils/debounce';
-import styles from './ContextMenu.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Content = styleElement('div', styles.Content);
+import SW from './ContextMenu.swiss';
 
 @connect(state => ({
   contextMenu: state.getIn(['main', 'contextMenu']),
@@ -195,11 +191,11 @@ export default class ContextMenu extends PureComponent {
     const key = contextMenu.id;
     return (
       <Measure onMeasure={this.bouncedResize}>
-        <Content
+        <SW.Content
           innerRef={(c) => { this.menuRef = c; }}
           {...this.state.styles}>
           <Comp hide={this.hideContextMenu} {...props} />
-        </Content>
+        </SW.Content>
       </Measure>
     );
   }
@@ -207,13 +203,13 @@ export default class ContextMenu extends PureComponent {
     const { contextMenu } = this.props;
 
     return (
-      <Wrapper
+      <SW.Wrapper
         className="context-menu"
         shown={contextMenu}
         onClick={this.clickedBackground}
       >
         {this.renderContextMenu(contextMenu)}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

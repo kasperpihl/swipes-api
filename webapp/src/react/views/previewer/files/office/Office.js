@@ -1,9 +1,6 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 
-import styles from './Office.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
+import SW from './Office.swiss';
 
 class Office extends PureComponent {
   static supportContentType(contentType) {
@@ -19,14 +16,14 @@ class Office extends PureComponent {
   render() {
     const { file } = this.props;
     return (
-      <Wrapper>
+      <SW.Wrapper>
         <iframe
           src={`https://view.officeapps.live.com/op/embed.aspx?src=${file.url}`}
           frameBorder="0"
           onLoad={this.props.onLoad}
           onError={this.props.onError}
         />
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

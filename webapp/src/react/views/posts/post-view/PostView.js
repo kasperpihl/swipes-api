@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { styleElement } from 'swiss-react';
 import { URL_REGEX, attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import { List } from 'immutable';
@@ -11,12 +10,7 @@ import Button from 'src/react/components/button/Button';
 import PostReactions from '../post-components/post-reactions/PostReactions';
 import Icon from 'Icon';
 import PostHeader from '../post-components/post-header/PostHeader';
-import styles from './PostView.swiss';
-
-const Message = styleElement('div', styles.Message);
-const Actions = styleElement('div', styles.Actions);
-const ActionSpacer = styleElement('div', styles.ActionSpacer);
-const Attachments = styleElement('div', styles.Attachments);
+import SW from './PostView.swiss';
 
 const MAX_COMMENTS_FEED = 3;
 
@@ -74,12 +68,12 @@ class PostView extends PureComponent {
         post={post}>
         {this.renderMessage()}
         {(!!post.get('context') || !!post.get('attachments').size) && (
-          <Attachments>
+          <SW.Attachments>
             {post.get('context') && this.renderContext()}
             {this.renderAttachments()}
-          </Attachments>
+          </SW.Attachments>
         )}
-        <Actions>
+        <SW.Actions>
           <PostReactions
             reactions={post.get('reactions')}
             postId={post.get('id')}
@@ -90,14 +84,14 @@ class PostView extends PureComponent {
             onClick={this.onComment}
             sideLabel={commentTitle}
           />
-          <ActionSpacer />
+          <SW.ActionSpacer />
           <Button
             icon="ThreeDots"
             compact
             onClick={this.onThreeDots}
             {...getLoading('threedots')}
           />
-        </Actions>
+        </SW.Actions>
         {this.renderComments()}
         {this.renderCommentInput()}
       </PostHeader>
@@ -131,9 +125,9 @@ class PostView extends PureComponent {
 
 
       return (
-        <Message>
+        <SW.Message>
           {message}
-        </Message>
+        </SW.Message>
       )
     }
 

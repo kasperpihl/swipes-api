@@ -1,4 +1,6 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
+import { Link } from 'react-router-dom';
 
 export default styleSheet('DownloadForDevice', {
   Wrapper: {
@@ -8,6 +10,7 @@ export default styleSheet('DownloadForDevice', {
     overflow: 'hidden',
   },
   Device: {
+    _el: 'a',
     _size: ['100%', '150px'],
     _borderRadius:'6px',
     backgroundColor: '$blue5',
@@ -28,6 +31,7 @@ export default styleSheet('DownloadForDevice', {
     },
   },
   DeviceSVG: {
+    _el: Icon,
     _size: '100px',
     _svgColor: '$blue60',
     margin: '0',
@@ -39,9 +43,11 @@ export default styleSheet('DownloadForDevice', {
     },
   },
   AllDevices: {
+    _el: 'p',
     paddingTop: '15px',
   },
   AllDevicesLink: {
+    _el: Link,
     _font: ['12px', '$blue'],
     cursor: 'pointer',
   },

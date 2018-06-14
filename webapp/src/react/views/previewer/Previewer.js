@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';
-import Button from 'src/react/components/button/Button';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -12,16 +10,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import * as Files from './files';
-import styles from './Previewer.swiss';
-
-const ContentWrapper = styleElement('div', styles.ContentWrapper);
-const FileWrapper = styleElement('div', styles.FileWrapper);
-const LoaderWrapper = styleElement('div', styles.LoaderWrapper);
-const NoPreviewWrapper = styleElement('div', styles.NoPreviewWrapper);
-const NoPreviewHeader = styleElement('div', styles.NoPreviewHeader);
-const NoPreviewText = styleElement('div', styles.NoPreviewText);
-const Footer = styleElement('div', styles.Footer);
-const FooterButton = styleElement(Button, styles.FooterButton);
+import SW from './Previewer.swiss';
 
 @navWrapper
 @connect(null, {
@@ -151,14 +140,14 @@ export default class extends PureComponent {
   }
   renderNoPreview() {
     return (
-      <NoPreviewWrapper>
-        <NoPreviewHeader>Can’t display preview</NoPreviewHeader>
-        <NoPreviewText>
+      <SW.NoPreviewWrapper>
+        <SW.NoPreviewHeader>Can’t display preview</SW.NoPreviewHeader>
+        <SW.NoPreviewText>
           Unfortunately this file format is not supported yet. You can: <br />
           1. Click “Open in Browser” to see preview in browser <br />
           2. Click “Download” to save the file to your computer <br />
-        </NoPreviewText>
-      </NoPreviewWrapper>
+        </SW.NoPreviewText>
+      </SW.NoPreviewWrapper>
     );
   }
   renderLoader() {
@@ -167,9 +156,9 @@ export default class extends PureComponent {
       return undefined;
     }
     return (
-      <LoaderWrapper>
+      <SW.LoaderWrapper>
         <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
-      </LoaderWrapper>
+      </SW.LoaderWrapper>
     );
   }
   renderHeader() {
@@ -187,14 +176,14 @@ export default class extends PureComponent {
     const Comp = this.getComponentForFile(file);
 
     return (
-      <FileWrapper hidden={!!this.state.fileLoading}>
+      <SW.FileWrapper hidden={!!this.state.fileLoading}>
         <Comp
           file={file}
           onLoad={this.onFileLoaded}
           onError={this.onFileError}
           delegate={this}
         />
-      </FileWrapper>
+      </SW.FileWrapper>
     );
   }
   renderContent() {
@@ -222,9 +211,9 @@ export default class extends PureComponent {
     }
 
     return (
-      <Footer>
+      <SW.Footer>
         {buttons.map((b, i) => (
-          <FooterButton
+          <SW.FooterButton
             key={i}
             download={b.force_download}
             href={b.force_download ? b.url : undefined}
@@ -232,7 +221,7 @@ export default class extends PureComponent {
             onClick={b.force_download ? undefined : this.onClickButtonCached(i)}
           />
         ))}
-      </Footer>
+      </SW.Footer>
     );
   }
   render() {

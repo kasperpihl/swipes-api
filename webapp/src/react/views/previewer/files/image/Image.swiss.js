@@ -34,6 +34,7 @@ export default styleSheet('Image', {
     }
   },
   Img: {
+    _el: 'img',
     _size: 'auto',
     position: 'absolute',
     left: '50%',
