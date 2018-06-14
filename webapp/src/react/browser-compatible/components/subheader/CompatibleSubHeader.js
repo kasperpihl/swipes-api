@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { styleElement } from 'swiss-react';
-import styles from './CompatibleSubHeader.swiss';
+import SW from './CompatibleSubHeader.swiss';
 
-const Wrapper = styleElement('h4', styles.Wrapper);
 
 const CompatibleSubHeader = (props) => {
   const {
@@ -11,9 +9,9 @@ const CompatibleSubHeader = (props) => {
   } = props;
 
   return (
-    <Wrapper>
+    <SW.funcWrapper>
       {title}
-    </Wrapper>
+    </SW.funcWrapper>
   );
 };
 
