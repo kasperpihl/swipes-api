@@ -1,14 +1,11 @@
 import React, { PureComponent } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import { styleElement } from 'swiss-react';
 import DraggableGoal from './DraggableGoal';
-import styles from './DroppableGoalList.swiss';
-
-const ListContainer = styleElement('div', styles.ListContainer);
+import SW from './DroppableGoalList.swiss';
 
 class DroppableGoalList extends PureComponent {
   render() {
-    const { 
+    const {
       items,
       children,
       goalProps,
@@ -19,21 +16,21 @@ class DroppableGoalList extends PureComponent {
     return (
       <Droppable {...rest}>
         {(provided, snapshot) => (
-          <ListContainer
+          <SW.ListContainer
             innerRef={provided.innerRef}
             {...provided.droppableProps}>
             {items.map((item, index) => (
               <DraggableGoal
                 key={item}
                 index={index}
-                item={item} 
+                item={item}
                 {...goalProps}
               />
             ))}
             {provided.placeholder}
             {renderEmptyState && renderEmptyState(snapshot.isDraggingOver)}
             {children}
-          </ListContainer>
+          </SW.ListContainer>
         )}
       </Droppable>
     );
