@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('Button', {
   GlobalStyles: {
@@ -13,6 +14,7 @@ export default styleSheet('Button', {
     }
   },
   ATag: {
+    _el: 'a',
     userSelect: 'none',
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',
@@ -42,7 +44,8 @@ export default styleSheet('Button', {
       _size: '30px',
     },
   },
-  Icon: {
+  IconComp: {
+    _el: Icon,
     _svgColor: '$sw1',
     'status=success': {
       _svgColor: '$green'

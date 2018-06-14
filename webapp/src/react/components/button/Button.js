@@ -1,15 +1,6 @@
 import React, { PureComponent } from 'react';
-import { styleElement, addGlobalStyles, SwissProvider } from 'swiss-react';
-import Icon from 'Icon';
-import styles from './Button.swiss';
-
-const ATag = styleElement('a', styles.ATag);
-const Title = styleElement('div', styles.Title);
-const Background = styleElement('div', styles.Background);
-const IconContainer = styleElement('div', styles.IconContainer);
-const SideLabel = styleElement('div', styles.SideLabel);
-const IconComp = styleElement(Icon, styles.Icon);
-const LoaderCircle = styleElement('div', styles.LoaderCircle);
+import { addGlobalStyles, SwissProvider } from 'swiss-react';
+import SW from './Button.swiss';
 
 addGlobalStyles(styles.GlobalStyles);
 
@@ -23,17 +14,17 @@ export default class extends PureComponent {
     if(status === 'error') icon = 'Close';
     if(status === 'success') icon = 'ChecklistCheckmark';
 
-    let innerEl = <IconComp icon={icon} />;
+    let innerEl = <SW.IconComp icon={icon} />;
 
     // Add loader/success/error icons if needed
     if(status === 'loading') {
-      innerEl = <LoaderCircle />;
+      innerEl = <SW.LoaderCircle />;
     }
 
     return (
-      <IconContainer>
+      <SW.IconContainer>
         {innerEl}
-      </IconContainer>
+      </SW.IconContainer>
     )
   }
   renderTitle() {
@@ -45,7 +36,7 @@ export default class extends PureComponent {
     const label = loading || error || success || title;
 
     return (
-      <Title>{label}</Title>
+      <SW.Title>{label}</SW.Title>
     );
   }
   renderSideLabel() {
@@ -56,7 +47,7 @@ export default class extends PureComponent {
     const label = loading || error || success || sideLabel;
 
     return sideLabel && (
-      <SideLabel>{label}</SideLabel>
+      <SW.SideLabel>{label}</SW.SideLabel>
     )
   }
   render() {
@@ -82,13 +73,13 @@ export default class extends PureComponent {
         hasIcon={status !== 'default' || !!icon}
         compact={compact}
         status={status}>
-        <ATag className={`gl-button ${className || ''}`.trim()} {...rest}>
-          <Background>
+        <SW.ATag className={`gl-button ${className || ''}`.trim()} {...rest}>
+          <SW.Background>
             {this.renderIcon(status)}
             {this.renderTitle(status)}
-          </Background>
+          </SW.Background>
           {this.renderSideLabel(status)}
-        </ATag>
+        </SW.ATag>
       </SwissProvider>
     );
   }
