@@ -7,7 +7,7 @@ export default styleSheet('NoteDiffTester', {
     background: 'white',
     _size: '100%',
     _flex: '',
-  }
+  },
   Note: {
     _size: '100%',
     border: '1px solid gray',

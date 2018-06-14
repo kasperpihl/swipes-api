@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
 import Button from 'src/react/components/button/Button';
@@ -9,12 +8,7 @@ import {
   EditorState,
 } from 'draft-js';
 import NoteEditor from './NoteEditor';
-
-import styles from './NodeDiffTester.js';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Note = styleElement('div', styles.Note);
-const Middle = styleElement('div', styles.Middle);
+import SW from './NodeDiffTester.js';
 
 class NoteDiffTester extends PureComponent {
   constructor(props) {
@@ -101,22 +95,22 @@ class NoteDiffTester extends PureComponent {
   }
   render() {
     return (
-      <Wrapper>
-        <Note>
+      <SW.Wrapper>
+        <SW.Note>
           {this.renderServerOriginal()}
-        </Note>
-        <Middle>
-          <Note inMiddle>
+        </SW.Note>
+        <SW.Middle>
+          <SW.Note inMiddle>
             {this.renderServerModified()}
-          </Note>
-          <Note inMiddle>
+          </SW.Note>
+          <SW.Note inMiddle>
             {this.renderClientModified()}
-          </Note>
-        </Middle>
-        <Note>
+          </SW.Note>
+        </SW.Middle>
+        <SW.Note>
           {this.renderCalculatedDiff()}
-        </Note>
-      </Wrapper>
+        </SW.Note>
+      </SW.Wrapper>
     );
   }
 }
