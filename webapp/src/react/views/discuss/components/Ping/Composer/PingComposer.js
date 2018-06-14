@@ -5,6 +5,7 @@ import { fromJS } from 'immutable';
 import { setupCachedCallback } from 'react-delegate';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import * as linkActions from 'src/redux/link/linkActions';
+import withEmitter from 'src/react/components/emitter/withEmitter';
 
 import styles from './PingComposer.swiss';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -29,6 +30,7 @@ const UserName = styleElement('span', styles.UserName);
 }), {
   preview: linkActions.preview,
 })
+@withEmitter
 export default class extends PureComponent {
   constructor(props) {
     super(props);
@@ -39,6 +41,8 @@ export default class extends PureComponent {
     this.onUserClickCached = setupCachedCallback(this.onUserClick);
     this.onAttachmentClickCached = setupCachedCallback(this.onAttachmentClick);
     this.onAttachmentCloseCached = setupCachedCallback(this.onAttachmentClose);
+
+    props.addListener('ping-add-assignee', this.onAddAssignee);
   }
   onMessageChange = (editorState) => {
     this.editorState = editorState;
@@ -156,7 +160,7 @@ export default class extends PureComponent {
         </Column>
         <Column none hidden={!receivers.size}>
           <Button
-            title="Send"
+            title="Ping"
           />
         </Column>
       </BarWrapper>
