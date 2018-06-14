@@ -1,12 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
-import Icon from 'Icon';
-import styles from './PostAttachment.swiss';
-
-const ATag = styleElement('a', styles.ATag);
-const Text = styleElement('div', styles.Text);
-const IconContainer = styleElement('div', styles.IconContainer);
-const IconComp = styleElement(Icon, styles.Icon);
+import SW from './PostAttachment.swiss';
 
 class PostAttachment extends PureComponent {
   constructor(props) {
@@ -42,21 +35,21 @@ class PostAttachment extends PureComponent {
     const { showCloseIcon } = this.state;
 
     return (
-      <ATag 
+      <SW.ATag 
         className="attachment-container"
         onClick={this.onClick}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >
-        <IconContainer className="icon-container" onClick={this.onClose}>
-          <IconComp
+        <SW.IconContainer className="icon-container" onClick={this.onClose}>
+          <SW.Icon
             icon={showCloseIcon || this.props.icon}
             isContext={!!this.props.isContext}
             hasCloseIcon={!!showCloseIcon}
           />
-        </IconContainer>
-        <Text hasCloseIcon={!!showCloseIcon}>{this.props.title}</Text>
-      </ATag>
+        </SW.IconContainer>
+        <SW.Text hasCloseIcon={!!showCloseIcon}>{this.props.title}</SW.Text>
+      </SW.ATag>
     );
   }
 }

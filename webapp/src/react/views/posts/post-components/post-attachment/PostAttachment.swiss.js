@@ -1,7 +1,9 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('PostAttachment', {
   ATag: {
+    _el: 'a',
     background: '$sw4',
     maxWidth: '200px',
     borderRadius: '15px',
@@ -21,6 +23,7 @@ export default styleSheet('PostAttachment', {
     _flex: 'center',
   },
   Icon: {
+    _el: Icon,
     _svgColor: '$sw2',
     _size: '24px',
     isContext: {

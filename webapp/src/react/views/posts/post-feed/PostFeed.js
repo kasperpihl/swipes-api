@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { styleElement} from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback, typeForId, miniIconForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
@@ -7,22 +6,9 @@ import HOCHeaderTitle from 'src/react/components/header-title/HOCHeaderTitle';
 import Button from 'src/react/components/button/Button';
 import TabBar from 'src/react/components/tab-bar/TabBar';
 import TextParser from 'src/react/components/text-parser/TextParser';
-import Icon from 'Icon';
 import InfoButton from 'src/react/components/info-button/InfoButton';
-import styles from './PostFeed.swiss';
+import SW from './PostFeed.swiss';
 import HOCPostView from '../post-view/HOCPostView';
-
-const Container = styleElement('div', styles.Container);
-const PostItem = styleElement('div', styles.PostItem);
-const SubtitleWrapper = styleElement('div', styles.SubtitleWrapper);
-const SubtitleIcon = styleElement(Icon, styles.SubtitleIcon);
-const EmptyState = styleElement('div', styles.EmptyState);
-const EmptyIllustration = styleElement('div', styles.EmptyIllustration);
-const EmptySvg = styleElement(Icon, styles.EmptySvg);
-const EmptyTitle = styleElement('div', styles.EmptyTitle);
-const EmptyText = styleElement('div', styles.EmptyText);
-const Footer = styleElement('div', styles.Footer);
-const Div = styleElement('div');
 
 const DISTANCE = 200;
 class PostFeed extends PureComponent {
@@ -56,10 +42,10 @@ class PostFeed extends PureComponent {
       const icon = miniIconForId(context.get('id'));
 
       return (
-        <SubtitleWrapper>
-          <SubtitleIcon icon={icon} />
+        <SW.SubtitleWrapper>
+          <SW.SubtitleIcon icon={icon} />
           <div className="header-title__subtitle">{context.get('title')}</div>
-        </SubtitleWrapper>
+        </SW.SubtitleWrapper>
       )
     }
 
@@ -73,20 +59,20 @@ class PostFeed extends PureComponent {
     subtitle = subtitle || 'Talk with your team and share the latest and greatest.';
 
     return (
-      <Div>
+      <div>
         <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={!tabs}>
           <InfoButton delegate={delegate} />
         </HOCHeaderTitle>
         {this.renderTabbar()}
-      </Div>
+      </div>
 
     )
   }
   renderFooter() {
     return (
-      <Footer>
+      <SW.Footer>
         <Button icon="Plus" onClick={this.onNewPost} sideLabel="Create new post" />
-      </Footer>
+      </SW.Footer>
     )
   }
   renderTabbar() {
@@ -114,16 +100,16 @@ class PostFeed extends PureComponent {
     }
 
     return (
-      <EmptyState>
-        <EmptyIllustration>
-          <EmptySvg icon="ESMilestoneAchieved" />
-        </EmptyIllustration>
-        <EmptyTitle>
+      <SW.EmptyState>
+        <SW.EmptyIllustration>
+          <SW.EmptySvg icon="ESMilestoneAchieved" />
+        </SW.EmptyIllustration>
+        <SW.EmptyTitle>
           start a discussion
-        </EmptyTitle>
-        <EmptyText><TextParser>{text}</TextParser></EmptyText>
+        </SW.EmptyTitle>
+        <SW.EmptyText><TextParser>{text}</TextParser></SW.EmptyText>
         <Button onClick={this.onNewPost} title="Create a post" />
-      </EmptyState>
+      </SW.EmptyState>
     )
   }
   renderPosts() {
@@ -138,9 +124,9 @@ class PostFeed extends PureComponent {
         return undefined;
       }
       return (
-        <PostItem key={p.get('id')}>
+        <SW.PostItem key={p.get('id')}>
           <HOCPostView postId={p.get('id')} fromFeed />
-        </PostItem>
+        </SW.PostItem>
       )
     }).toArray();
   }
@@ -153,9 +139,9 @@ class PostFeed extends PureComponent {
         footer={this.renderFooter()}
         onScroll={this.onScroll}
       >
-        <Container empty={!posts.size}>
+        <SW.Container empty={!posts.size}>
           {this.renderPosts()}
-        </Container>
+        </SW.Container>
       </SWView>
     )
   }

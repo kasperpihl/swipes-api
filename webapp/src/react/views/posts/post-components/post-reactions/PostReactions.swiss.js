@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('PostReactions', {
   Container: {
@@ -22,6 +23,7 @@ export default styleSheet('PostReactions', {
     },
   },
   HeartSvg: {
+    _el: Icon,
     _size: '24px',
     stroke: '$sw1',
     fill: 'transparent',

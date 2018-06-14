@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('GoalOverview', {
   Wrapper: {
@@ -28,6 +29,7 @@ export default styleSheet('GoalOverview', {
     paddingRight: '60px',
   },
   GreenIcon: {
+    _el: Icon,
     _size: '120px',
     _svgColor: '$green',
   },

@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('StepAdd', {
   Wrapper: {
@@ -7,6 +8,7 @@ export default styleSheet('StepAdd', {
     borderTop: '1px solid $sw3',
   },
   LeftIcon: {
+    _el: Icon,
     _size: '24px',
     _svgColor: '$sw1',
     margin: '12px',

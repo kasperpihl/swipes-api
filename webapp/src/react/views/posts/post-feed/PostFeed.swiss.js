@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('PostFeed', {
   Container: {
@@ -31,6 +32,7 @@ export default styleSheet('PostFeed', {
     _size: ['100%', 'auto'],
   },
   SubtitleIcon: {
+    _el: Icon,
     _size: '18px',
     _svgColor: '$sw2',
     flex: 'none',
@@ -49,6 +51,7 @@ export default styleSheet('PostFeed', {
     opacity: 0.8,
   },
   EmptySvg: {
+    _el: Icon,
     _size: ['auto', '100%'],
     maxWidth: '360px',
   },

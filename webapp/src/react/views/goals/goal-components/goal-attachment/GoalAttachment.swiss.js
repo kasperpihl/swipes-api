@@ -1,4 +1,6 @@
 import { styleSheet } from 'swiss-react';
+import Button from 'src/react/components/button/Button';
+import Icon from 'Icon';
 
 export default styleSheet('GoalAttachment', {
   Wrapper: {
@@ -17,11 +19,13 @@ export default styleSheet('GoalAttachment', {
     width: '100%',
   },
   LeftIcon: {
+    _el: Icon,
     flex: 'none',
     _size: '24px',
     _svgColor: '$sw1',
   },
   RightButton: {
+    _el: Button,
     flex: 'none',
     opacity: 0,
     '.right-button-hover:hover &': {

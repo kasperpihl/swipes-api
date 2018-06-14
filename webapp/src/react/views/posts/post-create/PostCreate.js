@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Button from 'src/react/components/button/Button';
@@ -7,17 +6,7 @@ import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-import styles from './PostCreate.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const ComposerWrapper = styleElement('div', styles.ComposerWrapper);
-const TypeWrapper = styleElement('div', styles.TypeWrapper);
-const ActionBar = styleElement('div', styles.ActionBar);
-const InputWrapper = styleElement('div', styles.InputWrapper);
-const AssignSection = styleElement('div', styles.AssignSection);
-const AttachSection = styleElement('div', styles.AttachSection);
-const Seperator = styleElement('div', styles.Seperator);
-
+import SW from './PostCreate.swiss';
 
 class PostCreate extends PureComponent {
   constructor(props) {
@@ -69,8 +58,8 @@ class PostCreate extends PureComponent {
     const hasAttachments = post.get('context') || post.get('attachments').size;
 
     return (
-      <ActionBar>
-        <AssignSection>
+      <SW.ActionBar>
+        <SW.AssignSection>
           <HOCAssigning
             assignees={post.get('taggedUsers')}
             delegate={delegate}
@@ -78,9 +67,9 @@ class PostCreate extends PureComponent {
             buttonProps={buttonProps}
             maxImages={9}
           />
-        </AssignSection>
-        <Seperator />
-        <AttachSection notEmpty={hasAttachments}>
+        </SW.AssignSection>
+        <SW.Seperator />
+        <SW.AttachSection notEmpty={hasAttachments}>
           {this.renderContext()}
           {this.renderAttachments()}
           <HOCAttachButton
@@ -88,13 +77,13 @@ class PostCreate extends PureComponent {
             sideLabel={!hasAttachments && 'Attach'}
             compact={hasAttachments}
           />
-        </AttachSection>
+        </SW.AttachSection>
         <Button
           title="Post"
           onClick={this.onPostClick}
           {...getLoading('post') }
         />
-      </ActionBar>
+      </SW.ActionBar>
     )
   }
   render() {
@@ -102,13 +91,13 @@ class PostCreate extends PureComponent {
     const placeholder = `What do you want to discuss, ${msgGen.users.getFirstName(myId)}?`;
 
     return (
-      <Wrapper>
-        <ComposerWrapper>
+      <SW.Wrapper>
+        <SW.ComposerWrapper>
           <HOCAssigning
             assignees={[myId]}
             size={36}
           />
-          <InputWrapper>
+          <SW.InputWrapper>
             <AutoCompleteInput
               innerRef={(c) => { this.input = c; }}
               onChange={this.onMessageChange}
@@ -116,10 +105,10 @@ class PostCreate extends PureComponent {
               onAutoCompleteSelect={this.onAutoCompleteSelect}
               autoFocus
             />
-          </InputWrapper>
-        </ComposerWrapper>
+          </SW.InputWrapper>
+        </SW.ComposerWrapper>
         {this.renderActionBar()}
-      </Wrapper>
+      </SW.Wrapper>
     )
   }
 }

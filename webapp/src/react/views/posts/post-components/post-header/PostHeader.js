@@ -1,15 +1,7 @@
 import React from 'react';
-import { styleElement } from 'swiss-react';
-import styles from './PostHeader.swiss';
-import HOCAssigning from 'components/assigning/HOCAssigning';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const NameWrapper = styleElement('div', styles.NameWrapper);
-const NameTitle = styleElement('div', styles.NameTitle);
-const Subtitle = styleElement('div', styles.Subtitle);
-const LeftSide = styleElement('div', styles.LeftSide);
-const RightSide = styleElement('div', styles.RightSide);
+import HOCAssigning from 'components/assigning/HOCAssigning';
+import SW from './PostHeader.swiss';
 
 const PostHeader = (props) => {
   const {
@@ -27,20 +19,20 @@ const PostHeader = (props) => {
   }
 
   return (
-    <Wrapper>
-      <LeftSide>
+    <SW.Wrapper>
+      <SW.LeftSide>
         <HOCAssigning assignees={[post.get('created_by')]} size={42} />
-      </LeftSide>
-      <RightSide>
-        <NameWrapper>
-          <NameTitle>{msgGen.users.getFullName(post.get('created_by'))}</NameTitle>
-        </NameWrapper>
-        <Subtitle clickable={!!onSubtitleClick} onClick={onSubtitleClick}>
+      </SW.LeftSide>
+      <SW.RightSide>
+        <SW.NameWrapper>
+          <SW.NameTitle>{msgGen.users.getFullName(post.get('created_by'))}</SW.NameTitle>
+        </SW.NameWrapper>
+        <SW.Subtitle clickable={!!onSubtitleClick} onClick={onSubtitleClick}>
           {subtitle} — <TimeAgo simple date={post.get('created_at')}
-        /></Subtitle>
+        /></SW.Subtitle>
         {children}
-      </RightSide>
-    </Wrapper>
+      </SW.RightSide>
+    </SW.Wrapper>
   )
 };
 

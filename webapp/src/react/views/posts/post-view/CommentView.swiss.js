@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import TimeAgo from 'swipes-core-js/components/TimeAgo';
 
 export default styleSheet('CommentView', {
   Container: {
@@ -25,6 +26,7 @@ export default styleSheet('CommentView', {
     color: '$sw1',
   },
   Timestamp: {
+    _el: TimeAgo,
     _font: ['12px', '18px', 400],
     color: '$sw2',
   },

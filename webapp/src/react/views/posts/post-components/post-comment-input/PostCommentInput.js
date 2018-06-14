@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 import { fromJS } from 'immutable';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import * as ca from 'swipes-core-js/actions';
@@ -9,13 +8,7 @@ import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
 import Button from 'src/react/components/button/Button';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 
-import styles from './PostCommentInput.swiss';
-
-const Container = styleElement('div', styles.Container);
-const Picture = styleElement('div', styles.Picture);
-const Content = styleElement('div', styles.Content);
-const Actions = styleElement('div', styles.Actions);
-const Attachments = styleElement('div', styles.Attachments);
+import SW from './PostCommentInput.swiss';
 
 @connect(state => ({
   myId: state.getIn(['me', 'id']),
@@ -91,11 +84,11 @@ export default class extends PureComponent {
     const placeholder = 'Write a comment';
 
     return (
-      <Container>
-        <Picture>
+      <SW.Container>
+        <SW.Picture>
           <HOCAssigning assignees={[myId]} size={36} />
-        </Picture>
-        <Content>
+        </SW.Picture>
+        <SW.Content>
           <AutoCompleteInput
             innerRef={c => this.textarea = c}
             placeholder={placeholder}
@@ -103,8 +96,8 @@ export default class extends PureComponent {
             onChange={this.onChange}
             reset={this.state.resetDate}
           />
-        </Content>
-      </Container>
+        </SW.Content>
+      </SW.Container>
     )
   }
 }

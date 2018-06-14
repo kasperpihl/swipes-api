@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import { styleElement } from 'swiss-react';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
@@ -10,11 +9,7 @@ import PlanListItem from '../plan-components/plan-list-item/PlanListItem';
 import InfoButton from 'components/info-button/InfoButton';
 import Dropper from 'src/react/components/draggable-list/Dropper';
 import Dragger from 'src/react/components/draggable-list/Dragger';
-import styles from './PlanList.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const HeaderWrapper = styleElement('div', styles.HeaderWrapper);
-const Footer = styleElement('div', styles.Footer);
+import SW from './PlanList.swiss';
 
 class PlanList extends PureComponent {
   constructor(props) {
@@ -25,28 +20,28 @@ class PlanList extends PureComponent {
   renderHeader() {
     const { tabs, tabIndex, delegate } = this.props;
     return (
-      <HeaderWrapper>
+      <SW.HeaderWrapper>
         <HOCHeaderTitle
           title="Plan"
           subtitle="Organize and see progress on your company's plans.">
           <InfoButton delegate={delegate} />
         </HOCHeaderTitle>
         <TabBar key="2" delegate={delegate} tabs={tabs} activeTab={tabIndex} />
-      </HeaderWrapper>
+      </SW.HeaderWrapper>
     );
   }
   renderFooter() {
     const { getLoading } = this.props;
 
     return (
-      <Footer>
+      <SW.Footer>
         <Button
           icon="Plus"
           sideLabel="Create new plan"
           onClick={this.onAddPlan}
           {...getLoading('add')}
         />
-      </Footer>
+      </SW.Footer>
     )
   }
   renderEmptyState() {
@@ -139,9 +134,9 @@ class PlanList extends PureComponent {
         onScroll={this.onScroll}
         initialScroll={initialScroll}
       >
-        <Wrapper>
+        <SW.Wrapper>
           {this.renderList()}
-        </Wrapper>
+        </SW.Wrapper>
       </SWView>
     );
   }

@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('StepItem', {
   Wrapper: {
@@ -40,6 +41,7 @@ export default styleSheet('StepItem', {
     }
   },
   DragIcon: {
+    _el: Icon,
     _svgColor: '$sw1',
     _size: '24px',
   }

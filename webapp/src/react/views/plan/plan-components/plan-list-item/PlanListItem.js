@@ -1,18 +1,11 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
-import styles from './PlanListItem.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const ProgressBar = styleElement('div', styles.ProgressBar);
-const TextWrapper = styleElement('div', styles.TextWrapper);
-const Title = styleElement('div', styles.Title);
-const Subtitle = styleElement('div', styles.Subtitle);
+import SW from './PlanListItem.swiss';
 
 @connect(state => ({
   goals: state.get('goals'),
@@ -97,18 +90,18 @@ export default class extends PureComponent {
     const { plan } = this.props;
     const [goalPercentage, stepPercentage] = this.getProgress();
     return (
-      <Wrapper onClick={this.onOpenMilestone} className="hover-class">
-        <ProgressBar
+      <SW.Wrapper onClick={this.onOpenMilestone} className="hover-class">
+        <SW.ProgressBar
           onClick={this.hideTooltip}
           onMouseEnter={this.showTooltip}
           onMouseLeave={this.hideTooltip}
           goalPercentage={goalPercentage}
           stepPercentage={stepPercentage}
         />
-        <TextWrapper>
-          <Title>{plan.get('title')}</Title>
-        </TextWrapper>
-      </Wrapper>
+        <SW.TextWrapper>
+          <SW.Title>{plan.get('title')}</SW.Title>
+        </SW.TextWrapper>
+      </SW.Wrapper>
     );
   }
 }

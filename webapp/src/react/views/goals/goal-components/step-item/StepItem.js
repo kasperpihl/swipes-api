@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 
@@ -10,14 +9,7 @@ import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoComp
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import StepComplete from '../step-complete/StepComplete';
 import Button from 'src/react/components/button/Button';
-import Icon from 'Icon';
-import styles from './StepItem.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Drag = styleElement('div', styles.Drag);
-const AssignWrapper = styleElement('div', styles.AssignWrapper);
-const DragWrapper = styleElement('div', styles.DragWrapper);
-const DragIcon = styleElement(Icon, styles.DragIcon);
+import SW from './StepItem.swiss';
 
 @connect(null, {
   confirm: menuActions.confirm,
@@ -167,7 +159,7 @@ export default class extends PureComponent {
     }
 
     return (
-      <AssignWrapper show={focused || assignees.size}>
+      <SW.AssignWrapper show={focused || assignees.size}>
         <HOCAssigning
           assignees={assignees}
           maxImages={3}
@@ -176,25 +168,25 @@ export default class extends PureComponent {
           blackAndWhite={!!step.get('completed_at')}
           enableTooltip
         />
-      </AssignWrapper>
+      </SW.AssignWrapper>
     )
   }
   render() {
     const { dragProvided, editMode, completed } = this.props;
 
     return (
-      <Wrapper
+      <SW.Wrapper
         innerRef={dragProvided.innerRef}
         completed={completed}
         {...dragProvided.draggableProps}
         className="step-complete-hover assign-hover">
-        <DragWrapper show={!!editMode} {...dragProvided.dragHandleProps}>
-          <DragIcon icon="Reorder" />
-        </DragWrapper>
+        <SW.DragWrapper show={!!editMode} {...dragProvided.dragHandleProps}>
+          <SW.DragIcon icon="Reorder" />
+        </SW.DragWrapper>
         {this.renderLeftSide()}
         {this.renderMiddle()}
         {this.renderRightSide()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

@@ -5,13 +5,7 @@ import * as ca from 'swipes-core-js/actions';
 import * as mainActions from 'src/redux/main/mainActions';
 
 import { styleElement, SwissProvider } from 'swiss-react';
-import styles from './StepComplete.swiss';
-
-import Icon from 'Icon';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Text = styleElement('div', styles.Text);
-const StyledIcon = styleElement(Icon, styles.Icon);
+import SW from './StepComplete.swiss';
 
 @connect(null, {
   successGradient: mainActions.successGradient,
@@ -57,12 +51,12 @@ export default class extends PureComponent {
       <SwissProvider
         hoverClass={hoverClass}
         isComplete={completeState}>
-        <Wrapper
+        <SW.Wrapper
           onClick={completeState ? this.onIncomplete : this.onComplete}
           className={`sc-wrapper ${className || ''}`.trim()}>
-          <Text>{this.props.number}</Text>
-          <StyledIcon icon={completeState ? 'Iteration' : 'Checkmark'} />
-        </Wrapper>
+          <SW.Text>{this.props.number}</SW.Text>
+          <SW.Icon icon={completeState ? 'Iteration' : 'Checkmark'} />
+        </SW.Wrapper>
       </SwissProvider>
     );
   }

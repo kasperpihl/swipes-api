@@ -1,19 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { withOptimist } from 'react-optimist';
 import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
-import Icon from 'Icon';
-import styles from './PostReactions.swiss';
-
-const Container = styleElement('div', styles.Container);
-const HeartButton = styleElement('div', styles.HeartButton);
-const HeartSvg = styleElement(Icon, styles.HeartSvg);
-const LikeString = styleElement('div', styles.LikeString);
+import SW from './PostReactions.swiss';
 
 @withOptimist
 @connect(state => ({
@@ -150,9 +143,9 @@ export default class extends PureComponent {
     const onClick = iLike ? this.onRemoveReaction : this.onAddReaction;
 
     return (
-      <HeartButton alignRight={!!alignRight} className="heart-button" onClick={onClick}>
-        <HeartSvg icon="Heart" liked={iLike}/>
-      </HeartButton>
+      <SW.HeartButton alignRight={!!alignRight} className="heart-button" onClick={onClick}>
+        <SW.HeartSvg icon="Heart" liked={iLike}/>
+      </SW.HeartButton>
     )
   }
   renderString() {
@@ -160,11 +153,11 @@ export default class extends PureComponent {
     const iLike = optimist.get('like', this.state.iLike);
 
     return (
-      <LikeString 
+      <SW.LikeString 
         show={reactions && !!reactions.size }
         liked={iLike}>
         {reactions && reactions.size}
-      </LikeString>
+      </SW.LikeString>
     )
   }
   
@@ -172,10 +165,10 @@ export default class extends PureComponent {
     const { alignRight } = this.props;
 
     return (
-      <Container onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
+      <SW.Container onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
         {alignRight ? this.renderString() : this.renderButton()}
         {alignRight ? this.renderButton() : this.renderString()}
-      </Container>
+      </SW.Container>
     );
   }
 }

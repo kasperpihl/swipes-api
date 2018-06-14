@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 
@@ -12,9 +11,7 @@ import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import InfoButton from 'components/info-button/InfoButton';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 
-import styles from './GoalHeader.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
+import SW from './GoalHeader.swiss';
 
 @connect(state => ({
   myId: state.getIn(['me', 'id']),
@@ -56,7 +53,7 @@ export default class extends PureComponent {
     const { tempTitle } = this.state;
     const helper = this.getHelper();
     return (
-      <Wrapper showLine={showLine}>
+      <SW.Wrapper showLine={showLine}>
         <HOCHeaderTitle
           title={tempTitle || goal.get('title')}
           delegate={this}
@@ -82,7 +79,7 @@ export default class extends PureComponent {
             {...dotsLoading}
           />
         </HOCHeaderTitle>
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

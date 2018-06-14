@@ -1,5 +1,4 @@
 import React, { PureComponent, Fragment } from 'react';
-import { styleElement } from 'swiss-react';
 import { withOptimist } from 'react-optimist';
 import Dropper from 'src/react/components/draggable-list/Dropper';
 import Dragger from 'src/react/components/draggable-list/Dragger';
@@ -9,23 +8,13 @@ import SWView from 'SWView';
 import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
 import Button from 'src/react/components/button/Button';
 import './styles/goal-overview.scss';
-import styles from './GoalOverview.swiss';
-import Icon from 'Icon';
+import SW from './GoalOverview.swiss';
 import StepAdd from '../goal-components/step-add/StepAdd';
 import StepItem from '../goal-components/step-item/StepItem';
 import GoalHeader from '../goal-components/goal-header/GoalHeader';
 
 import GoalFooter from '../goal-components/goal-footer/GoalFooter';
 import GoalAttachment from '../goal-components/goal-attachment/GoalAttachment';
-
-const Header = styleElement('div', styles.Header);
-const Wrapper = styleElement('div', styles.Wrapper);
-const Section = styleElement('div', styles.Section);
-
-const Side = styleElement('div', styles.Side);
-const CompletedWrapper = styleElement('div', styles.CompletedWrapper);
-const CompletedText = styleElement('div', styles.CompletedText);
-const GreenIcon = styleElement(Icon, styles.GreenIcon);
 
 /* global msgGen */
 class GoalOverview extends PureComponent {
@@ -74,10 +63,10 @@ class GoalOverview extends PureComponent {
     const completionText = `${firstNames.join('')} completed this goal`;
 
     return (
-      <CompletedWrapper>
-        <GreenIcon icon="Checkmark" />
-        <CompletedText>{completionText}</CompletedText>
-      </CompletedWrapper>
+      <SW.CompletedWrapper>
+        <SW.GreenIcon icon="Checkmark" />
+        <SW.CompletedText>{completionText}</SW.CompletedText>
+      </SW.CompletedWrapper>
     );
   }
   renderSteps() {
@@ -163,9 +152,9 @@ class GoalOverview extends PureComponent {
         )}
         onScroll={this.onScroll}
         footer={<GoalFooter goal={goal} />}>
-        <Wrapper>
-          <Side>
-            <Section>
+        <SW.Wrapper>
+          <SW.Side>
+            <SW.Section>
               STEPS
               {!!this.getHelper().getStepOrder().size && (
                 <Button
@@ -173,18 +162,18 @@ class GoalOverview extends PureComponent {
                   onClick={this.onEdit}
                 />
               )}
-            </Section>
+            </SW.Section>
             {this.renderCompletedState()}
             {this.renderSteps()}
-          </Side>
-          <Side viewWidth={viewWidth} right>
-            <Section>
+          </SW.Side>
+          <SW.Side viewWidth={viewWidth} right>
+            <SW.Section>
               ATTACHMENTS
               <HOCAttachButton delegate={delegate} />
-            </Section>
+            </SW.Section>
             {this.renderAttachments()}
-          </Side>
-        </Wrapper>
+          </SW.Side>
+        </SW.Wrapper>
       </SWView>
     );
   }

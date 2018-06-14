@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('StepComplete', {
   Wrapper: {
@@ -34,6 +35,7 @@ export default styleSheet('StepComplete', {
 
   },
   Icon: {
+    _el: Icon,
     display: 'none',
     _size: '24px',
     _svgColor: '$sw1',

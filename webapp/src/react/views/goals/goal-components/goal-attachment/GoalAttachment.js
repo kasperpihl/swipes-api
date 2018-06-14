@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
-
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 
 import * as ca from 'swipes-core-js/actions';
@@ -9,17 +7,10 @@ import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as linkActions from 'src/redux/link/linkActions';
 
-import Button from 'src/react/components/button/Button';
-import Icon from 'Icon';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 
-import styles from './GoalAttachment.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const LeftIcon = styleElement(Icon, styles.LeftIcon);
-const Title = styleElement('div', styles.Title);
-const RightButton = styleElement(Button, styles.RightButton);
+import SW from './GoalAttachment.swiss';
 
 @navWrapper
 @connect(null, {
@@ -132,15 +123,15 @@ export default class extends PureComponent {
     const { attachment: at } = this.props;
     const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
     return (
-      <Wrapper onClick={this.onPreview} className="right-button-hover">
-        <LeftIcon icon={icon} />
-        <Title>{tempTitle || at.get('title')}</Title>
-        <RightButton
+      <SW.Wrapper onClick={this.onPreview} className="right-button-hover">
+        <SW.LeftIcon icon={icon} />
+        <SW.Title>{tempTitle || at.get('title')}</SW.Title>
+        <SW.RightButton
           icon="ThreeDots"
           onClick={this.onContextMenu}
           compact
         />
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

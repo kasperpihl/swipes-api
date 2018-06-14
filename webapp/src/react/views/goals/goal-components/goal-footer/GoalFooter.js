@@ -1,14 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 
 import * as ca from 'swipes-core-js/actions';
 import * as mainActions from 'src/redux/main/mainActions';
 import Button from 'src/react/components/button/Button';
-import styles from './GoalFooter.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
+import SW from './GoalFooter.swiss';
 
 @connect((state) => ({
 }), {
@@ -49,14 +46,14 @@ export default class extends PureComponent {
     const isComplete = !!goal.get('completed_at');
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         <Button
           icon={isComplete ? 'Iteration' : 'Checkmark'}
           sideLabel={isComplete ? 'Incomplete goal' : 'Complete goal'}
           {...this.getLoading('completing')}
           onClick={isComplete ? this.onIncompleteGoal : this.onCompleteGoal}
         />
-      </Wrapper>
+      </SW.Wrapper>
     )
   }
 }

@@ -1,26 +1,14 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
-import { styleElement } from 'swiss-react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import randomString from 'swipes-core-js/utils/randomString';
 import * as ca from 'swipes-core-js/actions';
 
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-import Icon from 'Icon';
 import Button from 'src/react/components/button/Button';
-import styles from './StepAdd.swiss';
-
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const AssigneesWrapper = styleElement('div', styles.AssigneesWrapper);
-const SubmitWrapper = styleElement('div', styles.SubmitWrapper);
-const LeftIcon = styleElement(Icon, styles.LeftIcon);
-const InputWrapper = styleElement('div', styles.InputWrapper);
-const LoaderCircle = styleElement('div', styles.LoaderCircle);
-const ReuploadWrapper = styleElement('div', styles.ReuploadWrapper);
-const ErrorLabel = styleElement('div', styles.ErrorLabel);
+import SW from './StepAdd.swiss';
 
 @connect(null, {
   addStep: ca.steps.add,
@@ -113,27 +101,27 @@ export default class extends PureComponent {
   }
   renderPending() {
     return this.state.queue.map((row, i) => (
-      <Wrapper key={row.get('id')}>
+      <SW.Wrapper key={row.get('id')}>
         {row.get('status') != 'error' && <LoaderCircle />}
         {row.get('status') === 'error' && (
-          <ReuploadWrapper>
+          <SW.ReuploadWrapper>
             <Button icon="cloud_upload" onClick={this.onClick.bind(this, i)} />
-          </ReuploadWrapper>
+          </SW.ReuploadWrapper>
         )}
 
-        <InputWrapper>
+        <SW.InputWrapper>
           <AutoCompleteInput
             initialValue={row.get('title')}
           />
-        </InputWrapper>
-        <AssigneesWrapper>
+        </SW.InputWrapper>
+        <SW.AssigneesWrapper>
           <HOCAssigning
             assignees={row.get('assignees')}
             maxImages={3}
             size={24}
           />
-        </AssigneesWrapper>
-      </Wrapper>
+        </SW.AssigneesWrapper>
+      </SW.Wrapper>
     )).toArray();
   }
   render() {
@@ -141,9 +129,9 @@ export default class extends PureComponent {
     return (
       <Fragment>
         {this.renderPending()}
-        <Wrapper>
-          <LeftIcon icon="Plus" />
-          <InputWrapper>
+        <SW.Wrapper>
+          <SW.LeftIcon icon="Plus" />
+          <SW.InputWrapper>
             <AutoCompleteInput
               onChange={this.onChange}
               placeholder="Add new step"
@@ -155,8 +143,8 @@ export default class extends PureComponent {
               autoFocus
               clearMentions
             />
-          </InputWrapper>
-          <AssigneesWrapper shown={assignees.size || isFocused || textLength}>
+          </SW.InputWrapper>
+          <SW.AssigneesWrapper shown={assignees.size || isFocused || textLength}>
             <HOCAssigning
               assignees={assignees}
               delegate={this}
@@ -164,15 +152,15 @@ export default class extends PureComponent {
               size={24}
               enableTooltip
             />
-          </AssigneesWrapper>
-          <SubmitWrapper hidden={!textLength}>
+          </SW.AssigneesWrapper>
+          <SW.SubmitWrapper hidden={!textLength}>
             <Button
               icon="Enter"
               compact
               onClick={this.onAdd}
             />
-          </SubmitWrapper>
-        </Wrapper>
+          </SW.SubmitWrapper>
+        </SW.Wrapper>
       </Fragment>
     );
   }

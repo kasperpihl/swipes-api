@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Button from 'src/react/components/button/Button';
 
 export default styleSheet('Previewer', {
   Footer: {
@@ -9,6 +10,7 @@ export default styleSheet('Previewer', {
     padding: '0 30px',
   },
   FooterButton: {
+    _el: Button,
     marginLeft: '15px',
   },
   LoaderWrapper: {
@@ -36,10 +38,6 @@ export default styleSheet('Previewer', {
     hidden: {
       opacity: 0,
     }
-  },
-  ContentWrapper: {
-    _size: ['100%', 'auto'],
-    display: 'flex',
   },
 
 });

@@ -8,20 +8,7 @@ import GoalAdd from '../../goals/goal-components/goal-add/GoalAdd';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import InfoButton from 'components/info-button/InfoButton';
 import DroppableGoalList from 'components/draggable-goal/DroppableGoalList';
-import { styleElement } from 'swiss-react';
-import styles from './PlanOverview.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Footer = styleElement('div', styles.Footer);
-const Title = styleElement('div', styles.Title);
-const Section = styleElement('div', styles.Section);
-const SectionTitle = styleElement('div', styles.SectionTitle);
-const SectionTabLikeTitle = styleElement('div', styles.SectionTabLikeTitle);
-const Text = styleElement('div', styles.Text);
-const Spacer = styleElement('div', styles.Spacer);
-const EmptyStateWrapper = styleElement('div', styles.EmptyStateWrapper);
-const DroppableWrapper = styleElement('div', styles.DroppableWrapper);
-const TabWrapper = styleElement('div', styles.TabWrapper);
+import SW from './PlanOverview.swiss';
 
 class PlanOverview extends PureComponent {
   constructor(props) {
@@ -59,7 +46,7 @@ class PlanOverview extends PureComponent {
     const title = getLoading('title').loading;
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         <HOCHeaderTitle
           title={title || m.get('title')}
           delegate={delegate}
@@ -76,7 +63,7 @@ class PlanOverview extends PureComponent {
             {...getLoading('dots')}
           />
         </HOCHeaderTitle>
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
   renderEmptyState(group, isDraggingOver) {
@@ -84,27 +71,27 @@ class PlanOverview extends PureComponent {
 
     if (group === 'Later' && !order.get('later').size) {
       return (
-        <EmptyStateWrapper hidden={isDraggingOver}>
-          <Title>
+        <SW.EmptyStateWrapper hidden={isDraggingOver}>
+          <SW.Title>
             Set for later
-          </Title>
-          <Text>
+          </SW.Title>
+          <SW.Text>
             Move goals that need to be done later <br />  from this week into here.
-          </Text>
-        </EmptyStateWrapper>
+          </SW.Text>
+        </SW.EmptyStateWrapper>
       )
     }
 
     if (group === 'Done' && !order.get('done').size) {
       return (
-        <EmptyStateWrapper hidden={isDraggingOver}>
-          <Title>
+        <SW.EmptyStateWrapper hidden={isDraggingOver}>
+          <SW.Title>
             TRACK PROGRESS
-          </Title>
-          <Text>
+          </SW.Title>
+          <SW.Text>
             You will see the progress of all completed <br /> goals here
-          </Text>
-        </EmptyStateWrapper>
+          </SW.Text>
+        </SW.EmptyStateWrapper>
       )
     }
 
@@ -137,27 +124,27 @@ class PlanOverview extends PureComponent {
     if (renderSection) {
       return (
         <DroppableWrapper>
-          <Section>
-            <SectionTitle>{section}</SectionTitle>
+          <SW.Section>
+            <SW.SectionTitle>{section}</SW.SectionTitle>
             {droppableGoalList}
-          </Section>
+          </SW.Section>
         </DroppableWrapper>
       )
     }
 
     if (rebderTabLikeSection) {
       return (
-        <Section>
-          <SectionTabLikeTitle>{section}</SectionTabLikeTitle>
+        <SW.Section>
+          <SW.SectionTabLikeTitle>{section}</SW.SectionTabLikeTitle>
           {droppableGoalList}
-        </Section>        
+        </SW.Section>        
       )
     }
 
     return (
-      <Section withTabs>
+      <SW.Section withTabs>
         {droppableGoalList}
-      </Section>
+      </SW.Section>
     )
   }
   renderDualTabs() {
@@ -171,16 +158,16 @@ class PlanOverview extends PureComponent {
     const delegate = { tabDidChange: (i) => this.tabDidChange('activeTabIndex', i) };
 
     return (
-      <TabWrapper>
-        <Wrapper>
+      <SW.TabWrapper>
+        <SW.Wrapper>
           {this.renderDroppableList('Now', {renderSection: false, rebderTabLikeSection: true})}
-        </Wrapper>
-        <Spacer />
-        <Wrapper withTabs>
+        </SW.Wrapper>
+        <SW.Spacer />
+        <SW.Wrapper withTabs>
           <TabBar tabs={tabs} delegate={delegate} activeTab={activeTabIndex} />
           {this.renderDroppableList(tabs[activeTabIndex], {renderSection: false})}
-        </Wrapper>
-      </TabWrapper>
+        </SW.Wrapper>
+      </SW.TabWrapper>
     )
   }
   renderThreeSections() {
@@ -191,13 +178,13 @@ class PlanOverview extends PureComponent {
     }
 
     return (
-      <TabWrapper>
+      <SW.TabWrapper>
         {this.renderDroppableList('Later')}
-        <Spacer />
+        <SW.Spacer />
         {this.renderDroppableList('Now')}
-        <Spacer />
+        <SW.Spacer />
         {this.renderDroppableList('Done')}
-      </TabWrapper>
+      </SW.TabWrapper>
     );
   }
   render() {

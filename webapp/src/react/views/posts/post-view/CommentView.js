@@ -1,23 +1,13 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { URL_REGEX, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import unescaper from 'swipes-core-js/utils/unescaper';
-import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import PostReactions from '../post-components/post-reactions/PostReactions';
-import styles from './CommentView.swiss';
+import SW from './CommentView.swiss';
 import plainMentionToContentState from 'src/utils/draft-js/plainMentionToContentState';
 
-const Container = styleElement('div', styles.Container);
-const Picture = styleElement('div', styles.Picture);
-const Content = styleElement('div', styles.Content);
-const Actions = styleElement('div', styles.Actions);
-const Name = styleElement('div', styles.Name);
-const Timestamp = styleElement(TimeAgo, styles.Timestamp);
-const Message = styleElement('div', styles.Message);
-const Attachments = styleElement('div', styles.Attachments);
 
 class CommentView extends PureComponent {
   constructor(props) {
@@ -76,9 +66,9 @@ class CommentView extends PureComponent {
     });
 
     return (
-      <Message>
+      <SW.Message>
         {message}
-      </Message>
+      </SW.Message>
     );
   }
   renderAttachments() {
@@ -88,7 +78,7 @@ class CommentView extends PureComponent {
       return undefined;
     }
     return (
-      <Attachments>
+      <SW.Attachments>
         {comment.get('attachments').map((att, i) => {
           const icon = attachmentIconForService(att.getIn(['link', 'service']));
           return (
@@ -100,7 +90,7 @@ class CommentView extends PureComponent {
             />
           );
         })}
-      </Attachments>
+      </SW.Attachments>
     )
   }
   render() {
@@ -109,29 +99,29 @@ class CommentView extends PureComponent {
     const name = msgGen.users.getFullName(comment.get('created_by'));
 
     return (
-      <Container onClick={() => {
+      <SW.Container onClick={() => {
         plainMentionToContentState(this.props.comment.get('message'));
       }}>
-        <Picture>
+        <SW.Picture>
           <HOCAssigning assignees={[comment.get('created_by')]} size={36} />
-        </Picture>
-        <Content>
-          <Name>
+        </SW.Picture>
+        <SW.Content>
+          <SW.Name>
             {name}
-            <Timestamp prefix=" — " simple date={comment.get('created_at')} />
-          </Name>
+            <SW.Timestamp prefix=" — " simple date={comment.get('created_at')} />
+          </SW.Name>
           {this.renderMessage()}
           {this.renderAttachments()}
-        </Content>
-        <Actions>
+        </SW.Content>
+        <SW.Actions>
           <PostReactions
             alignRight
             reactions={comment.get('reactions')}
             postId={postId}
             commentId={comment.get('id')}
           />
-        </Actions>
-      </Container>
+        </SW.Actions>
+      </SW.Container>
     )
   }
 }
