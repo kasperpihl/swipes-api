@@ -1,4 +1,6 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
+import Button from 'src/react/components/button/Button';
 
 export default styleSheet('AccountList', {
 
@@ -14,6 +16,7 @@ export default styleSheet('AccountList', {
   },
 
   AccountButton: {
+    _el: Button,
     right: '30px',
     bottom: '30px',
     position: 'fixed',
@@ -81,6 +84,7 @@ export default styleSheet('AccountList', {
   },
 
   StyledSVG: {
+    _el: Icon,
     _size: ['24px'],
     opacity: '0',
     transition: '.3s ease',

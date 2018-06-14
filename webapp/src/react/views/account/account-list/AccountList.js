@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import { styleElement } from 'swiss-react';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
-import Icon from 'Icon';
-import Button from 'src/react/components/button/Button';
-import styles from './AccountList.swiss';
+import SW from './AccountList.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const AccountButton = styleElement(Button, styles.AccountButton);
@@ -23,9 +20,9 @@ class AccountList extends PureComponent {
   }
   renderHeader() {
     return (
-      <Header>
+      <SW.Header>
         <HOCHeaderTitle title={msgGen.users.getFullName('me')} subtitle={msgGen.me.getOrg().get('name')}/>
-      </Header>
+      </SW.Header>
     );
   }
 
@@ -33,13 +30,13 @@ class AccountList extends PureComponent {
     const { sections } = this.props;
 
     return sections.map((s, i) => (
-      <AccountItem key={i} onClick={this.onClickCached(i)} className='accountItem'>
-        <CardTitle>
+      <SW.AccountItem key={i} onClick={this.onClickCached(i)}>
+        <SW.CardTitle>
           {s.title}
-          <StyledSVG icon="ArrowRightLong"/>
-        </CardTitle>
-        <Description>{s.subtitle}</Description>
-      </AccountItem>
+          <SW.StyledSVG icon="ArrowRightLong"/>
+        </SW.CardTitle>
+        <SW.Description>{s.subtitle}</SW.Description>
+      </SW.AccountItem>
     ));
   }
   render() {
@@ -47,10 +44,10 @@ class AccountList extends PureComponent {
 
     return (
       <SWView noframe header={this.renderHeader()}>
-        <Wrapper>
+        <SW.Wrapper>
           {this.renderSections()}
-        </Wrapper>
-        <AccountButton
+        </SW.Wrapper>
+        <SW.AccountButton
           icon="Logout"
           {...getLoading('logout')}
           onClick={this.onLogout}
