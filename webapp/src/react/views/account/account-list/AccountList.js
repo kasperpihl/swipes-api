@@ -4,14 +4,6 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import SW from './AccountList.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
-const AccountButton = styleElement(Button, styles.AccountButton);
-const AccountItem = styleElement('div', styles.AccountItem);
-const Header = styleElement('div', styles.Header);
-const CardTitle = styleElement('div', styles.CardTitle);
-const Description = styleElement('div', styles.Description);
-const StyledSVG = styleElement(Icon, styles.StyledSVG);
-
 class AccountList extends PureComponent {
   constructor(props) {
     super(props);
