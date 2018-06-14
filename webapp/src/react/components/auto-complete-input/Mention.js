@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import { styleElement, styleSheet } from 'swiss-react';
-
-const styles = styleSheet('Mention', {
-  Text: {
-    background: 'rgba($blue, 0.2)',
-  }
-})
-
-const Text = styleElement('span', styles.Text);
+import SW from './Mention.swiss';
 
 class Mention extends Component {
   static strategy(contentBlock, callback, contentState) {
@@ -26,9 +18,9 @@ class Mention extends Component {
     const { children } = this.props;
 
     return (
-      <Text>
+      <SW.Text>
         {children}
-      </Text>
+      </SW.Text>
     );
   }
 }
