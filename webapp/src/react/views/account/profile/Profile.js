@@ -2,43 +2,10 @@ import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';
-import { styleElement } from 'swiss-react';
-import ReactTextarea from 'react-textarea-autosize';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
-import Icon from 'Icon';
 import Button from 'src/react/components/button/Button';
-import styles from './Profile.swiss';
-
-const MainWrapper = styleElement('div', styles.MainWrapper);
-const ProfileWrapper = styleElement('div', styles.ProfileWrapper);
-const Header = styleElement('div', styles.Header);
-const ProfileImage = styleElement('div', styles.ProfileImage);
-const Picture = styleElement('img', styles.Picture);
-const UploadOverlay = styleElement('div', styles.UploadOverlay);
-const OverlaySVG = styleElement(Icon, styles.OverlaySVG);
-const HeaderInitials = styleElement('div', styles.HeaderInitials);
-const HeaderFileInput = styleElement('input', styles.HeaderFileInput);
-const HeaderLoading = styleElement('div', styles.HeaderLoading);
-const HeaderForm = styleElement('div', styles.HeaderForm);
-const HeaderInput = styleElement('input', styles.HeaderInput);
-const HeaderRow = styleElement('div', styles.HeaderRow);
-const HeaderLoader = styleElement('div', styles.HeaderLoader);
-const Form = styleElement('div', styles.Form);
-const FormRow = styleElement('div', styles.FormRow);
-const FormLoader = styleElement('div', styles.FormLoader);
-const FormTitle = styleElement('div', styles.FormTitle);
-const FormInput = styleElement('input', styles.FormInput);
-const EmailField = styleElement('div', styles.EmailField);
-const FormTextArea = styleElement(ReactTextarea, styles.FormTextArea);
-const FormCounter = styleElement('div', styles.FormCounter);
-const Spinner = styleElement('svg', styles.Spinner);
-const ErrorIcon = styleElement('div', styles.ErrorIcon);
-const ErrorSVG = styleElement(Icon, styles.ErrorSVG);
-const SpinnerPath = styleElement('circle', styles.SpinnerPath);
-const SuccessIcon = styleElement('div', styles.SuccessIcon);
-const SuccessSVG = styleElement(Icon, styles.SuccessSVG);
-const LoadingIcon = styleElement('svg', styles.LoadingIcon);
+import SW from './Profile.swiss';
 
 class Profile extends PureComponent {
   constructor(props) {
@@ -87,21 +54,21 @@ class Profile extends PureComponent {
 
     if (isLoading(key)) {
       return (
-        <Spinner viewBox="0 0 50 50">
-          <SpinnerPath cx="25" cy="25" r="20" fill="none" />
-        </Spinner>
+        <SW.Spinner viewBox="0 0 50 50">
+          <SW.SpinnerPath cx="25" cy="25" r="20" fill="none" />
+        </SW.Spinner>
       );
     } else if (getLoading(key).error) {
       return (
-        <ErrorIcon data-error={getLoading(key).error}>
-          <ErrorSVG icon="Close" />
-        </ErrorIcon>
+        <SW.ErrorIcon data-error={getLoading(key).error}>
+          <SW.ErrorSVG icon="Close" />
+        </SW.ErrorIcon>
       );
     } else if (getLoading(key).success) {
       return (
-        <SuccessIcon>
-          <SuccessSVG icon="ChecklistCheckmark"/>
-        </SuccessIcon>
+        <SW.SuccessIcon>
+          <SW.SuccessSVG icon="ChecklistCheckmark"/>
+        </SW.SuccessIcon>
       );
     }
 
@@ -122,28 +89,28 @@ class Profile extends PureComponent {
     const profilePic = msgGen.users.getPhoto(me);
 
     return (
-      <ProfileImage>
+      <SW.ProfileImage>
 
         { profilePic ? (
-          <Picture src={profilePic} role="presentation" className='initials'/>
+          <SW.Picture src={profilePic} role="presentation" className='initials'/>
         ) : (
-          <HeaderInitials className='initials'>{initials}</HeaderInitials>
+          <SW.HeaderInitials className='initials'>{initials}</SW.HeaderInitials>
         )}
 
-        <HeaderFileInput
+        <SW.HeaderFileInput
             className='fileInput'
             onChange={this.onImageChange}
             type="file"
             accept="image/x-png,image/jpeg"
             innerRef={(c) => this.imageUpload = c}
         />
-        <OverlaySVG icon="Plus" />
-        <HeaderLoading isLoading={isLoading('uploadImage') ? true : ''}>
-          <LoadingIcon viewBox="0 0 50 50">
-            <SpinnerPath cx="25" cy="25" r="20" fill="none" />
-          </LoadingIcon>
-        </HeaderLoading>
-      </ProfileImage>
+        <SW.OverlaySVG icon="Plus" />
+        <SW.HeaderLoading isLoading={isLoading('uploadImage') ? true : ''}>
+          <SW.LoadingIcon viewBox="0 0 50 50">
+            <SW.SpinnerPath cx="25" cy="25" r="20" fill="none" />
+          </SW.LoadingIcon>
+        </SW.HeaderLoading>
+      </SW.ProfileImage>
     );
   }
   renderProfileHeader() {
@@ -157,11 +124,11 @@ class Profile extends PureComponent {
 
 
     return (
-      <Header>
+      <SW.Header>
         {this.renderProfileImage()}
-        <HeaderForm>
-          <HeaderRow onClick={this.onEditCached('firstNameInput')}>
-            <HeaderInput
+        <SW.HeaderForm>
+          <SW.HeaderRow onClick={this.onEditCached('firstNameInput')}>
+            <SW.HeaderInput
               innerRef={(c) => this.firstNameInput = c}
               type="text"
               value={firstName}
@@ -170,12 +137,12 @@ class Profile extends PureComponent {
               onBlur={this.onBlurCached('firstName')}
               disabled={disabled}
             />
-            <HeaderLoader>
+            <SW.HeaderLoader>
               {this.renderLoaderForKey('firstName')}
-            </HeaderLoader>
-          </HeaderRow>
-          <HeaderRow onClick={this.onEditCached('lastNameInput')}>
-            <HeaderInput
+            </SW.HeaderLoader>
+          </SW.HeaderRow>
+          <SW.HeaderRow onClick={this.onEditCached('lastNameInput')}>
+            <SW.HeaderInput
               innerRef={(c) => this.lastNameInput = c}
               type="text"
               value={lastName}
@@ -184,12 +151,12 @@ class Profile extends PureComponent {
               placeholder="Last name"
               disabled={disabled}
             />
-            <HeaderLoader>
+            <SW.HeaderLoader>
               {this.renderLoaderForKey('lastName')}
-            </HeaderLoader>
-          </HeaderRow>
-        </HeaderForm>
-      </Header>
+            </SW.HeaderLoader>
+          </SW.HeaderRow>
+        </SW.HeaderForm>
+      </SW.Header>
     );
   }
   renderForm() {
@@ -202,10 +169,10 @@ class Profile extends PureComponent {
     }
 
     return (
-      <Form>
-        <FormRow onClick={this.onEditCached('roleInput')}>
-          <FormTitle>ROLE</FormTitle>
-          <FormInput
+      <SW.Form>
+        <SW.FormRow onClick={this.onEditCached('roleInput')}>
+          <SW.FormTitle>ROLE</SW.FormTitle>
+          <SW.FormInput
             innerRef={(c) => this.roleInput = c}
             type="text"
             value={role}
@@ -214,13 +181,13 @@ class Profile extends PureComponent {
             placeholder={`What is your role at ${msgGen.users.getOrganizationName(me)}?`}
             disabled={disabled}
           />
-          <FormLoader>
+          <SW.FormLoader>
             {this.renderLoaderForKey('role')}
-          </FormLoader>
-        </FormRow>
-        <FormRow onClick={this.onEditCached('bioInput')}>
-          <FormTitle>BIO</FormTitle>
-          <FormTextArea
+          </SW.FormLoader>
+        </SW.FormRow>
+        <SW.FormRow onClick={this.onEditCached('bioInput')}>
+          <SW.FormTitle>BIO</SW.FormTitle>
+          <SW.FormTextArea
             minRows={1}
             maxRows={6}
             value={bio}
@@ -229,16 +196,16 @@ class Profile extends PureComponent {
             placeholder="Share with the team a bit about yourself - What are you working on? What do you love doing?"
             disabled={disabled}
           />
-          <FormLoader>
+          <SW.FormLoader>
             {this.renderLoaderForKey('bio')}
-          </FormLoader>
-          <FormCounter disabled={disabled}>{bioCounter}</FormCounter>
-        </FormRow>
-        <FormRow>
-          <FormTitle>EMAIL</FormTitle>
-          <EmailField>{email}</EmailField>
-        </FormRow>
-      </Form>
+          </SW.FormLoader>
+          <SW.FormCounter disabled={disabled}>{bioCounter}</SW.FormCounter>
+        </SW.FormRow>
+        <SW.FormRow>
+          <SW.FormTitle>EMAIL</SW.FormTitle>
+          <SW.EmailField>{email}</SW.EmailField>
+        </SW.FormRow>
+      </SW.Form>
     );
   }
   render() {
@@ -246,12 +213,12 @@ class Profile extends PureComponent {
 
     return (
       <SWView header={this.renderHeader()}>
-        <MainWrapper>
-          <ProfileWrapper>
+        <SW.MainWrapper>
+          <SW.ProfileWrapper>
             {this.renderProfileHeader()}
             {this.renderForm()}
-          </ProfileWrapper>
-        </MainWrapper>
+          </SW.ProfileWrapper>
+        </SW.MainWrapper>
       </SWView>
     );
   }

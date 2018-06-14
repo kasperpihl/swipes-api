@@ -1,4 +1,6 @@
 import { styleSheet } from 'swiss-react';
+import ReactTextarea from 'react-textarea-autosize';
+import Icon from 'Icon';
 
 export default styleSheet('Profile', {
   MainWrapper: {
@@ -36,6 +38,7 @@ export default styleSheet('Profile', {
   },
 
   Picture: {
+    _el: 'img',
   },
 
   OverlaySVG: {
@@ -60,6 +63,7 @@ export default styleSheet('Profile', {
   },
 
   HeaderFileInput: {
+    _el: 'input',
     _size: ['144px'],
     backgroundColor: '$blue',
     opacity: '0',
@@ -109,6 +113,7 @@ export default styleSheet('Profile', {
   },
 
   HeaderInput: {
+    _el: 'input',
     _size: ['100%', 'auto'],
     _font: ['27px', '36px', '800'],
     color: 'black',
@@ -152,6 +157,7 @@ export default styleSheet('Profile', {
   },
 
   FormInput: {
+    _el: 'input',
     _size: ['100%', '36px'],
     _font: ['12px', '18px'],
     backgroundColor: '$sw3',
@@ -167,6 +173,7 @@ export default styleSheet('Profile', {
   },
 
   FormTextArea: {
+    _el: ReactTextarea,
     _size: ['100%', 'auto'],
     _font: ['12px', '18px'],
     color: 'black',
@@ -261,6 +268,7 @@ export default styleSheet('Profile', {
   },
 
   ErrorSVG: {
+    _el: Icon,
     _size: ['24px'],
     _svgColor: '$red',
   },
@@ -272,11 +280,13 @@ export default styleSheet('Profile', {
   },
 
   SuccessSVG: {
+    _el: Icon,
     _size: ['24px'],
     _svgColor: '$green',
   },
 
   Spinner: {
+    _el: 'svg',
     _size: ['24px'],
     _svgColor: '$blue',
     animation: 'rotateSpinner 2s linear infinite',
@@ -301,6 +311,7 @@ export default styleSheet('Profile', {
   },
 
   SpinnerPath: {
+    _el: 'circle',
     strokeLinecap: 'round',
     animation: 'dashSpinner 1.5s ease infinite',
     strokeWidth: '4',
