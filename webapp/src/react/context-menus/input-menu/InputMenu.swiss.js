@@ -11,6 +11,7 @@ export default styleSheet('InputMenu', {
     paddingRight: '21px',
   },
   Input: {
+    _el: 'input',
     _size: ['274px', 'auto'],
     _font: ['12px', '15px'],
     borderBottom: '1px solid $sw3',

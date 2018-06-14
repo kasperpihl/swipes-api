@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
 import Button from 'src/react/components/button/Button';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import styles from './InputMenu.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Input = styleElement('input', styles.Input);
+import SW from './InputMenu.swiss';
 
 class InputMenu extends Component {
   constructor(props) {
@@ -41,8 +37,8 @@ class InputMenu extends Component {
     const { text } = this.state;
 
     return (
-      <Wrapper>
-        <Input
+      <SW.Wrapper>
+        <SW.Input
           value={text}
           onChange={this.onChange}
           placeholder={placeholder}
@@ -57,7 +53,7 @@ class InputMenu extends Component {
           icon={buttonIcon}
           onClick={this.onAdd}
         />
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
