@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
-import Icon from 'Icon';
 import { setupCachedCallback } from 'react-delegate';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
+import SW from './BreadCrumbs.swiss';
 
-import styles from './BreadCrumbs.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Crumb = styleElement('div', styles.Crumb);
-const Title = styleElement('div', styles.Title);
-const Seperator = styleElement('div', styles.Seperator);
-const CrumbIcon = styleElement(Icon, styles.Icon);
 
 @connect((state, props) => ({
   history: state.getIn(['navigation', props.target, 'stack']),
@@ -41,26 +33,26 @@ export default class extends Component {
       }
       const disableClick = history.size === (i + 1);
       return (
-        <Crumb
-          key={i} 
-          className="crumb" 
+        <SW.Crumb
+          key={i}
+          className="crumb"
           disableClick={disableClick}
           onClick={this.onClickCached(i)}>
           {(i > 0) && (
-          <Seperator>
-            <CrumbIcon disableClick={disableClick} icon="Breadcrumb" />
-          </Seperator>
+          <SW.Seperator>
+            <SW.CrumbIcon disableClick={disableClick} icon="Breadcrumb" />
+          </SW.Seperator>
           )}
-          <Title disableClick={disableClick}>{crumb.get('title')}</Title>
-        </Crumb>
+          <SW.Title disableClick={disableClick}>{crumb.get('title')}</SW.Title>
+        </SW.Crumb>
       )
     }).toArray().filter(v => !!v);
   }
   render() {
     return (
-      <Wrapper>
+      <SW.Wrapper>
         {this.renderBreadCrumbs()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

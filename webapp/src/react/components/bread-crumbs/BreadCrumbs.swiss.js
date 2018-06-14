@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 const navbarH = '48px';
 
@@ -20,7 +21,8 @@ export default styleSheet('BreadCrumbs', {
     _flex: 'center',
     margin: '0 3px',
   },
-  Icon: {
+  CrumbIcon: {
+    _el: Icon,
     _svgColor: '$sw2',
     _size: '24px',
     '.crumb:hover &': {
