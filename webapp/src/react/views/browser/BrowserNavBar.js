@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { setupDelegate } from 'react-delegate';
+import { styleElement } from 'swiss-react';
 import Button from 'src/react/components/button/Button';
+import styles from './Browser.swiss';
+
+const Title = styleElement('div', styles.Title);
+const BrowserNav = styleElement('div', styles.BrowserNav);
+const Left = styleElement('div', styles.Left);
+const Right = styleElement('div', styles.Right);
 
 class BrowserNavBar extends Component {
   constructor(props) {
@@ -44,9 +51,9 @@ class BrowserNavBar extends Component {
     } = this.props;
 
     return (
-      <div className="browser-nav__title">
+      <Title>
         {title}
-      </div>
+      </Title>
     );
   }
   renderRightActions() {
@@ -61,15 +68,15 @@ class BrowserNavBar extends Component {
   }
   render() {
     return (
-      <div className="browser-nav">
-        <div className="browser-nav__left">
+      <BrowserNav>
+        <Left>
           {this.renderNavigation()}
-        </div>
+        </Left>
         {this.renderTitleURL()}
-        <div className="browser-nav__right">
+        <Right>
           {this.renderRightActions()}
-        </div>
-      </div>
+        </Right>
+      </BrowserNav>
     );
   }
 }
