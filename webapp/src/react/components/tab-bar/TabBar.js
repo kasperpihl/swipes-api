@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
-import styles from './TabBar.swiss';
-
-const TabWrapper = styleElement('div', styles.Wrapper);
-const TabItem = styleElement('div', styles.Item);
+import SW from './TabBar.swiss';
 
 class TabBar extends Component {
   constructor(props) {
@@ -20,16 +16,16 @@ class TabBar extends Component {
     const { tabs, activeTab } = this.props;
 
     return (
-      <TabWrapper>
+      <SW.TabWrapper>
         {tabs.map((tab, i) => (
-          <TabItem
+          <SW.TabItem
             active={i === activeTab}
             key={`tab-${i}`}
             onClick={this.tabDidChangeCached(i)}>
             {tab}
-          </TabItem>  
+          </SW.TabItem>
         ))}
-      </TabWrapper>
+      </SW.TabWrapper>
     );
   }
 }
