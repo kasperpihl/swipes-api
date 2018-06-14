@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
 import { setupCachedCallback } from 'react-delegate';
 import Button from 'src/react/components/button/Button';
-import styles from './Confirmation.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Title = styleElement('div', styles.Title);
-const Message = styleElement('div', styles.Message);
-const Actions = styleElement('div', styles.Actions);
+import SW from './Confirmation.swiss';
 
 class Confirmation extends Component {
   constructor(props) {
@@ -41,19 +35,19 @@ class Confirmation extends Component {
     });
 
     return (
-      <Actions>
+      <SW.Actions>
         {renderButtons}
-      </Actions>
+      </SW.Actions>
     );
   }
   render() {
     const { title, message } = this.props;
     return (
-      <Wrapper>
-        {title && <Title>{title}</Title>}
-        {message && <Message>{message}</Message>}
+      <SW.Wrapper>
+        {title && <SW.Title>{title}</SW.Title>}
+        {message && <SW.Message>{message}</SW.Message>}
         {this.renderActions()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
