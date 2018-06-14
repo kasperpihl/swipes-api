@@ -1,21 +1,9 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import { styleElement } from 'swiss-react';
-import Icon from 'Icon';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
-import { Link } from 'react-router-dom';
-import styles from './styles/CompatibleSignup.swiss'
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Form = styleElement('form', styles.Form);
-const Illustration = styleElement(Icon, styles.Illustration);
-const Footer = styleElement('div', styles.Footer);
-const ErrorLabel = styleElement('div', styles.ErrorLabel);
-const Switch = styleElement('div', styles.Switch);
-const LinkButton = styleElement(Link, styles.LinkButton);
-const FooterSentence = styleElement('div', styles.FooterSentence);
+import SW from './styles/CompatibleSignup.swiss'
 
 class CompatibleSignup extends PureComponent {
   constructor(props) {
@@ -52,7 +40,7 @@ class CompatibleSignup extends PureComponent {
 
     return ([
       <CompatibleHeader center title={this.generateTitle()} assignee={inviter} key="title" />,
-      <Illustration icon="ESMilestoneAchieved"  key="illustration" />,
+        <SW.Illustration icon="ESMilestoneAchieved"  key="illustration" />,
       <CompatibleHeader subtitle={this.getSubtitle()} key="subtitle" />
     ])
   }
@@ -74,44 +62,44 @@ class CompatibleSignup extends PureComponent {
   }
   renderForm() {
     return (
-      <Form>
+      <SW.Form>
         {this.renderInputField('email', 'email', 'Email', { autoFocus: true })}
         {this.renderInputField('firstName', 'text', 'First name')}
         {this.renderInputField('lastName', 'text', 'Last name')}
         {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
-      </Form>
+      </SW.Form>
     );
   }
   renderFormError() {
     const { getLoading } = this.props;
 
     return (
-      <ErrorLabel>{getLoading('signupButton').error}</ErrorLabel>
+      <SW.ErrorLabel>{getLoading('signupButton').error}</SW.ErrorLabel>
     )
   }
   renderFooter() {
     const { inviter, isLoading, getLoading } = this.props;
 
     return (
-      <Footer>
+      <SW.Footer>
         {getLoading('signupButton').error && this.renderFormError()}
         <CompatibleButton title="Sign up" onClick={this.onSignup} {...getLoading('signupButton')}/>
-        <Switch>
-          Already have an account? <LinkButton to="/login" className="footer__switch-button">Sign in here</LinkButton>
-        </Switch>
-        <FooterSentence>
+        <SW.Switch>
+          Already have an account? <SW.LinkButton to="/login" className="footer__switch-button">Sign in here</SW.LinkButton>
+        </SW.Switch>
+        <SW.FooterSentence>
           By signing up you agree to the <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">Terms of service</a>
-        </FooterSentence>
-      </Footer>
+        </SW.FooterSentence>
+      </SW.Footer>
     );
   }
   render() {
     return (
-      <Wrapper>
+      <SW.Wrapper>
         {this.renderHeader()}
         {this.renderForm()}
         {this.renderFooter()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
