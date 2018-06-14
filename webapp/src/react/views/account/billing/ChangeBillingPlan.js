@@ -1,12 +1,7 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button';
-import styles from './ChangeBillingPlan.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const ComposerWrapper = styleElement('div', styles.ComposerWrapper);
-const ActionBar = styleElement('div', styles.ActionBar);
+import SW from './ChangeBillingPlan.swiss';
 
 class ChangeBillingPlan extends PureComponent {
   constructor(props) {
@@ -17,17 +12,17 @@ class ChangeBillingPlan extends PureComponent {
     const { getLoading, content } = this.props;
 
     return (
-      <Wrapper>
-        <ComposerWrapper>
+      <SW.Wrapper>
+        <SW.ComposerWrapper>
           {content}
-        </ComposerWrapper>
-        <ActionBar>
+        </SW.ComposerWrapper>
+        <SW.ActionBar>
           <Button
             title="Confirm"
             onClick={this.onConfirm}
             {...getLoading('confirm') } />
-        </ActionBar>
-      </Wrapper>
+        </SW.ActionBar>
+      </SW.Wrapper>
     )
   }
 }

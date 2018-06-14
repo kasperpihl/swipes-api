@@ -1,27 +1,10 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import { styleElement, SwissProvider } from 'swiss-react';
+import { SwissProvider } from 'swiss-react';
 import SWView from 'SWView';
-import Icon from 'Icon';
 import PropTypes from 'prop-types';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import styles from './Onboarding.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Item = styleElement('div', styles.Item);
-const TutorialSection = styleElement('div', styles.TutorialSection);
-const Content = styleElement('div', styles.Content);
-const Title = styleElement('div', styles.Title);
-const Subtitle = styleElement('div', styles.Subtitle);
-const TutorialImage = styleElement('img', styles.TutorialImage);
-const Indicator = styleElement('div', styles.Indicator);
-const Button = styleElement('div', styles.Button);
-const Progress = styleElement('div', styles.Progress);
-const ProgressNumber = styleElement('div', styles.ProgressNumber);
-const Splash = styleElement('div', styles.Splash);
-const Checkmark = styleElement(Icon, styles.Checkmark);
-const ArrowRight = styleElement(Icon, styles.ArrowRight);
-const ProgressBar = styleElement(Icon, styles.ProgressBar);
+import SW from './Onboarding.swiss';
 
 const CIRCLE_LENGTH = 190;
 
@@ -37,17 +20,17 @@ class Onboarding extends PureComponent {
     const svgDashOffset = CIRCLE_LENGTH - ((CIRCLE_LENGTH * completedPercentage) / 100);
     return (
       <SwissProvider completed={completedPercentage === 100 ? true : undefined}>
-        <Progress>
-          <ProgressBar
+        <SW.Progress>
+          <SW.ProgressBar
             icon="Circle"
             strokeDasharray={CIRCLE_LENGTH}
             strokeDashoffset={svgDashOffset}
           />
-          <ProgressNumber>{completedPercentage}%</ProgressNumber>
-          <Splash>
-            <ProgressNumber>{completedPercentage}%</ProgressNumber>
-          </Splash>
-        </Progress>
+          <SW.ProgressNumber>{completedPercentage}%</SW.ProgressNumber>
+          <SW.Splash>
+            <SW.ProgressNumber>{completedPercentage}%</SW.ProgressNumber>
+          </SW.Splash>
+        </SW.Progress>
       </SwissProvider>
     );
   }
@@ -68,37 +51,37 @@ class Onboarding extends PureComponent {
     const { items } = this.props;
     const itemsHTML = items.map((item, i) => {
       return (
-        <Item className='item' key={`onboarding-${i}`} onClick={this.onClickCached(i, item)}>
-          <Indicator completed={item.get('completed') ? true : undefined}>
-            <Checkmark icon="Checkmark" completed={item.get('completed') ? true : undefined} />
-          </Indicator>
-          <Content>
-            <Title>{item.get('title')}</Title>
-            <Subtitle >{item.get('subtitle')}</Subtitle>
-          </Content>
-          <Button>
-            <ArrowRight icon="ArrowRightLine"/>
-          </Button>
-        </Item>
+        <SW.Item className='item' key={`onboarding-${i}`} onClick={this.onClickCached(i, item)}>
+          <SW.Indicator completed={item.get('completed') ? true : undefined}>
+            <SW.Checkmark icon="Checkmark" completed={item.get('completed') ? true : undefined} />
+          </SW.Indicator>
+          <SW.Content>
+            <SW.Title>{item.get('title')}</SW.Title>
+            <SW.Subtitle >{item.get('subtitle')}</SW.Subtitle>
+          </SW.Content>
+          <SW.Button>
+            <SW.ArrowRight icon="ArrowRightLine"/>
+          </SW.Button>
+        </SW.Item>
       );
     });
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         {itemsHTML}
-        <TutorialSection>
+        <SW.TutorialSection>
           <div>
-            <Title>Watch a full tutorial</Title>
-            <Subtitle>Take a deep dive into the Workspace</Subtitle>
-            <TutorialImage width='350' src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding-long-tutorial-video.png" onClick={this.onClickTutorialCached()} />
+            <SW.Title>Watch a full tutorial</SW.Title>
+            <SW.Subtitle>Take a deep dive into the Workspace</SW.Subtitle>
+            <SW.TutorialImage width='350' src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding-long-tutorial-video.png" onClick={this.onClickTutorialCached()} />
           </div>
           <div>
-            <Title>Go to our blog</Title>
-            <Subtitle>Read more about the intent behind our work</Subtitle>
-            <TutorialImage width='350' src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding_go_to_blog.jpg" onClick={this.onClickBlogCached()} />
+            <SW.Title>Go to our blog</SW.Title>
+            <SW.Subtitle>Read more about the intent behind our work</SW.Subtitle>
+            <SW.TutorialImage width='350' src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding_go_to_blog.jpg" onClick={this.onClickBlogCached()} />
           </div>
-        </TutorialSection>
-      </Wrapper>
+        </SW.TutorialSection>
+      </SW.Wrapper>
     );
   }
   render() {

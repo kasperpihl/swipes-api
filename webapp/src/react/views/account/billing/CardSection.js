@@ -1,15 +1,6 @@
 import React from 'react';
-import { CardElement } from 'react-stripe-elements';
-import { styleElement } from 'swiss-react';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import styles from './CardSection.swiss';
-import styleSheet from 'swiss-react/dist/cjs/helpers/styleSheet';
-
-const Billing = styleElement('div', styles.Billing);
-const FormRowLabel = styleElement('div', styles.FormRowLabel);
-const ElementWrapper = styleElement('label', styles.ElementWrapper);
-const CardError = styleElement('div', styles.CardError);
-const StripeElement = styleElement(CardElement, styles.StripeElement);
+import SW from './CardSection.swiss';
 
 const style = {
   base: {
@@ -47,17 +38,17 @@ class CardSection extends React.Component {
     errorMessage = errorMessage || (cardState && cardState.error && cardState.error.message);
 
     return (
-      <Billing>
+      <SW.Billing>
         <div>
-          <FormRowLabel htmlFor="card-element">
+          <SW.FormRowLabel htmlFor="card-element">
             {label}
-          </FormRowLabel>
-          <ElementWrapper>
-            <StripeElement hidePostalCode style={style} onChange={this.onChange} />
-          </ElementWrapper>
-          <CardError role="alert">{errorMessage}</CardError>
+          </SW.FormRowLabel>
+          <SW.ElementWrapper>
+            <SW.StripeElement hidePostalCode style={style} onChange={this.onChange} />
+          </SW.ElementWrapper>
+          <SW.CardError role="alert">{errorMessage}</SW.CardError>
         </div>
-      </Billing>
+      </SW.Billing>
     );
   }
 }

@@ -1,15 +1,10 @@
 import React, { PureComponent } from 'react';
-import {injectStripe} from 'react-stripe-elements';
-import { styleElement } from 'swiss-react';
+import { injectStripe } from 'react-stripe-elements';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import CardSection from './CardSection';
-import styles from './ChangeCardDetailsModal.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const ComposerWrapper = styleElement('div', styles.ComposerWrapper);
-const ActionBar = styleElement('div', styles.ActionBar);
+import SW from './ChangeCardDetailsModal.swiss';
 
 class ChangeCardDetailsModal extends PureComponent {
   constructor(props) {
@@ -37,17 +32,17 @@ class ChangeCardDetailsModal extends PureComponent {
     const { getLoading } = this.props;
 
     return (
-      <Wrapper>
-        <ComposerWrapper>
+      <SW.Wrapper>
+        <SW.ComposerWrapper>
           <CardSection label="Change card details" />
-        </ComposerWrapper>
-        <ActionBar>
+        </SW.ComposerWrapper>
+        <SW.ActionBar>
           <Button
             title="Change"
             onClick={this.onSubmit}
             {...getLoading('changeCardNumber') } />
-        </ActionBar>
-      </Wrapper>
+        </SW.ActionBar>
+      </SW.Wrapper>
     )
   }
 }

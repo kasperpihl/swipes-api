@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import { CardElement } from 'react-stripe-elements';
 
 export default styleSheet('CardSection', {
   Billing: {
@@ -12,11 +13,13 @@ export default styleSheet('CardSection', {
   },
 
   ElementWrapper: {
+    _el: 'label',
     _size: ['100%', 'auto'],
     paddingTop: '9px',
   },
 
   StripeElement: {
+    _el: CardElement,
     _size: ['100%', 'auto'],
     backgroundColor: 'white',
     padding: '8px 12px',

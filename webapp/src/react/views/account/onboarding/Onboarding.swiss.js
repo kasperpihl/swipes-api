@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('Onboarding', {
   Wrapper: {
@@ -76,6 +77,7 @@ export default styleSheet('Onboarding', {
   },
 
   ProgressBar: {
+    _el: Icon,
     _size: ['66px'],
     _svgColor: '$green',
     transform: 'rotate(-90deg)',
@@ -119,6 +121,7 @@ export default styleSheet('Onboarding', {
   },
 
   Checkmark: {
+    _el: Icon,
     opacity: '0',
 
     completed:{
@@ -143,6 +146,7 @@ export default styleSheet('Onboarding', {
   },
 
   ArrowRight: {
+    _el: Icon,
     opacity: '0',
     transform: 'translateX(-10px)',
     transition: '.2s ease',
@@ -169,6 +173,7 @@ export default styleSheet('Onboarding', {
   },
 
   TutorialImage: {
+    _el: 'img',
     marginTop: '20px',
     opacity: '0.6',
     transform: 'translateY(0px)',

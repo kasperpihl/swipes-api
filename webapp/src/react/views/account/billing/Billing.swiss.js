@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Button from 'src/react/components/button/Button';
 
 export default styleSheet('Billing', {
 
@@ -22,14 +23,17 @@ export default styleSheet('Billing', {
   },
 
   ManageButton: {
+    _el: Button,
     marginTop: '10px',
   },
 
   SubmitButton: {
+    _el: Button,
     marginTop: '20px',
   },
 
   ChangeDetails: {
+    _el: Button,
     marginTop: '20px',
   },
 
@@ -179,6 +183,7 @@ export default styleSheet('Billing', {
   },
 
   SaveLabel: {
+    _el: 'span',
     backgroundColor: '$yellow !important',
     color: 'black',
   },
