@@ -42,6 +42,7 @@ export default styleSheet('Profile', {
   },
 
   OverlaySVG: {
+    _el: 'svg',
     _size: ['24px'],
     _svgColor: 'white',
     opacity: '0',
@@ -99,9 +100,9 @@ export default styleSheet('Profile', {
   },
 
   HeaderRow: {
-      _size: ['100%', '40px'],
-      borderRadius: '3px, 3px, 0px, 0px',
-      transition: '.2s ease',
+    _size: ['100%', '40px'],
+    borderRadius: '3px, 3px, 0px, 0px',
+    transition: '.2s ease',
   },
 
   HeaderLoader: {
