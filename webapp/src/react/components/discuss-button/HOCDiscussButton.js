@@ -1,14 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 import * as cs from 'swipes-core-js/selectors';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import PostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
-import styles from './DiscussButton.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const ButtonSide = styleElement('div', styles.ButtonSide);
-const Seperator = styleElement('div', styles.Seperator);
+import SW from './DiscussButton.swiss';
 
 const makeMapStateToProps = () => {
   const getFilteredList = cs.posts.makeGetFilteredList();
@@ -51,11 +46,11 @@ export default class extends PureComponent {
   render() {
     const { counter } = this.props;
     return (
-      <Wrapper className="discuss-wrapper">
-        <ButtonSide left onClick={this.onDiscuss}>Discuss</ButtonSide>
-        <Seperator />
-        <ButtonSide right onClick={this.onFeed}>{counter}</ButtonSide>
-      </Wrapper>
+      <SW.Wrapper className="discuss-wrapper">
+        <SW.ButtonSide left onClick={this.onDiscuss}>Discuss</SW.ButtonSide>
+        <SW.Seperator />
+        <SW.ButtonSide right onClick={this.onFeed}>{counter}</SW.ButtonSide>
+      </SW.Wrapper>
     );
   }
 }
