@@ -1,14 +1,36 @@
 import React, { PureComponent } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-
+import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import Button from 'src/react/components/button/Button';
 import CardSection from './CardSection';
+import styles from './Billing.swiss';
+import { SwissProvider } from 'swiss-react/dist/cjs/components/SwissProviders';
 
-import './styles/billing.scss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const PaymentToggle = styleElement('div', styles.PaymentToggle);
+const ToggleSubtitle = styleElement('div', styles.ToggleSubtitle);
+const Status = styleElement('div', styles.Status);
+const Toggle = styleElement('div', styles.Toggle);
+const ToggleSection = styleElement('div', styles.ToggleSection);
+const TogglePrice = styleElement('div', styles.TogglePrice);
+const ToggleLabel = styleElement('div', styles.ToggleLabel);
+const ToggleSubLabel = styleElement('div', styles.ToggleSubLabel);
+const SaveLabel = styleElement('span', styles.SaveLabel);
+const PaymentSection = styleElement('div', styles.PaymentSection);
+const TopSection = styleElement('div', styles.TopSection);
+const BottomSection = styleElement('div', styles.BottomSection);
+const BottomSectionTitle = styleElement('div', styles.BottomSectionTitle);
+const PaymentStatus = styleElement('div', styles.PaymentStatus);
+const PaymentStatusLabel = styleElement('div', styles.PaymentStatusLabel);
+const SubmitButtonSubtitle = styleElement('div', styles.SubmitButtonSubtitle);
+const SubmitButton = styleElement(Button, styles.SubmitButton);
+const ManageButton = styleElement(Button, styles.ManageButton);
+const ChangeDetails = styleElement(Button, styles.ChangeDetails);
 
 const style = {
   base: {
@@ -82,40 +104,36 @@ class Billing extends PureComponent {
     const { organization } = this.props;
     const hasStripe = organization.get('stripe_subscription_id');
     const status = !hasStripe ? 'Inactive' : 'Active';
-    const className = !hasStripe ? 'payment-status__status payment-status__status--inactive' : 'payment-status__status payment-status__status--active';
 
     return (
       <HOCHeaderTitle title="Payment">
-        <div className="payment-status">
-          <div className="payment-status__label">Your subscription status is:</div>
-          <div className={className}>{status}</div>
-        </div>
+        <PaymentStatus>
+          <PaymentStatusLabel>Your subscription status is:</PaymentStatusLabel>
+          <Status active={!hasStripe ? false : true }>{status}</Status>
+        </PaymentStatus>
       </HOCHeaderTitle>
     );
   }
   renderToggle() {
     const { billingStatus } = this.props;
-    let className = 'toggle';
-
-    if (billingStatus === 'monthly') {
-      className += ' toggle--first';
-    } else {
-      className += ' toggle--second';
-    }
 
     return (
-      <div className={className}>
-        <div className="toggle__section" onClick={this.onSwitchPlanCached('monthly')}>
-          <div className="toggle__price">$9</div>
-          <div className="toggle__label">per user a month</div>
-          <div className="toggle__sublabel">billed monthly</div>
-        </div>
-        <div className="toggle__section" onClick={this.onSwitchPlanCached('yearly')}>
-          <div className="toggle__price">$6</div>
-          <div className="toggle__label">per user a month</div>
-          <div className="toggle__sublabel">billed anually <span>You save 33%</span></div>
-        </div>
-      </div>
+        <Toggle>
+          <ToggleSection
+          first={billingStatus === 'monthly' ? true : false}
+          onClick={this.onSwitchPlanCached('monthly')}>
+            <TogglePrice>$9</TogglePrice>
+            <ToggleLabel>per user a month</ToggleLabel>
+            <ToggleSubLabel>billed monthly</ToggleSubLabel>
+          </ToggleSection>
+          <ToggleSection
+          first={billingStatus === 'monthly' ? true : false}
+          onClick={this.onSwitchPlanCached('yearly')}>
+            <TogglePrice>$6</TogglePrice>
+            <ToggleLabel>per user a month</ToggleLabel>
+            <ToggleSubLabel>billed anually <SaveLabel className='save'>You save 33%</SaveLabel></ToggleSubLabel>
+          </ToggleSection>
+        </Toggle>
     );
   }
   renderBottomSection() {
@@ -124,28 +142,28 @@ class Billing extends PureComponent {
     const className = `payment__bottom-section ${hasStripe ? 'payment__bottom-section--success' : ''}`;
 
     return (
-      <div className={className}>
-        <div className="top-section">
+      <PaymentSection >
+        <TopSection success={hasStripe ? true : ''}>
           <CardSection label="Credit or debit card" />
-          <Button
+          <SubmitButton
             {...getLoading('submit')}
             title="Submit Payment"
             onClick={this.onSubmit}
           />
-          <div className="payment__cta-subtitle">You will be billed ${this.getPrice()}.</div>
-        </div>
-        <div className="bottom-section">
-          <div className="bottom-section__title">Thank you for your purchase.</div>
-          <div className="payment-status">
-            <div className="payment-status__label">Your subscription status is:</div>
-            <div className="payment-status__status payment-status__status--active">Active</div>
-          </div>
-          <Button
+          <SubmitButtonSubtitle>You will be billed ${this.getPrice()}.</SubmitButtonSubtitle>
+        </TopSection>
+        <BottomSection success={hasStripe ? true : ''}>
+          <BottomSectionTitle>Thank you for your purchase.</BottomSectionTitle>
+          <PaymentStatus>
+            <PaymentStatusLabel>Your subscription status is:</PaymentStatusLabel>
+            <Status active={!hasStripe ? false : true }>Active</Status>
+          </PaymentStatus>
+          <ChangeDetails
             title="Change card details"
             onClick={this.onCardDetails}
           />
-        </div>
-      </div>
+        </BottomSection>
+      </PaymentSection>
     );
   }
   render() {
@@ -155,20 +173,20 @@ class Billing extends PureComponent {
       <SWView
         header={this.renderHeader()}
       >
-        <div className="payment">
-          <div className="payment__toggle">
+        <Wrapper>
+          <PaymentToggle>
             {this.renderToggle()}
-            <div className="payment__toggle-subtitle">
+            <ToggleSubtitle>
               You have {numberOfUsers} users in {organization.get('name')}. {`That's ${this.getShowPrice()}`}
 
-            </div>
-            <Button
+            </ToggleSubtitle>
+            <ManageButton
               title="Manage team"
               onClick={this.onManage}
             />
-          </div>
+          </PaymentToggle>
           {this.renderBottomSection()}
-        </div>
+        </Wrapper>
       </SWView>
     );
   }

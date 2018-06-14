@@ -5,6 +5,8 @@ import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Onboarding from './Onboarding';
 
+
+
 @navWrapper
 @connect(state => ({
   me: state.get('me'),
@@ -75,18 +77,24 @@ export default class extends PureComponent {
     browser(target, 'https://swipesapp.com/blog');
   }
   render() {
-    const { onboarding, userOnboarding, hasOrg, me } = this.props;
-    console.log(onboarding.toJS(), userOnboarding.toJS(), me.toJS())
+    const { onboarding, userOnboarding, hasOrg, me, completed } = this.props;
     if(!hasOrg) {
       return null;
     }
     const items = userOnboarding.get('order').map(
       (id) => onboarding.get(id).set('completed', !!userOnboarding.getIn(['completed',id]))
     );
+
+    const completedItems = items.filter(i => i.get('completed'));
+    const numberOfAllItems = items.size;
+    const numberOfCompletedItems = completedItems.size;
+    const completedPercentage = parseInt((numberOfCompletedItems * 100) / numberOfAllItems, 10);
+
     return (
       <Onboarding
         items={items}
         delegate={this}
+        completedPercentage={completedPercentage}
       />
     );
   }

@@ -29,12 +29,14 @@ export default class extends PureComponent {
     let { invites } = this.state;
     invites = invites.setIn([i, 'firstName'], e.target.value);
     this.setState({ invites });
+    console.log('Test');
   }
 
   onEmailChange(i, e) {
     let { invites } = this.state;
     invites = invites.setIn([i, 'email'], e.target.value);
     this.setState({ invites });
+    console.log('Test Email');
   }
   onAddInput() {
     let { invites } = this.state;

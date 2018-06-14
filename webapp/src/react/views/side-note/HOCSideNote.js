@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
+import { styleElement } from 'swiss-react';
 import NoteEditor from 'components/note-editor/NoteEditor';
 import SWView from 'SWView';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
@@ -12,19 +13,18 @@ import {
   EditorState,
 } from 'draft-js';
 import Button from 'src/react/components/button/Button';
-
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
-
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import randomString from 'swipes-core-js/utils/randomString';
 import debounce from 'swipes-core-js/utils/debounce';
 import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
-
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
+import styles from  './HOCSideNote.swiss';
 
-import './styles/side-note';
+const Wrapper = styleElement('div', styles.Wrapper);
+const Header = styleElement('div', styles.Header);
 
 const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
@@ -233,7 +233,7 @@ export default class HOCSideNote extends PureComponent {
     }
 
     return (
-      <div className="side-note__header">
+      <Header className="side-note__header">
         <HOCHeaderTitle
           title={title}
           target={target}
@@ -250,7 +250,7 @@ export default class HOCSideNote extends PureComponent {
             delegate={this}
           />
         </HOCHeaderTitle>
-      </div>
+      </Header>
     );
   }
 
@@ -271,7 +271,7 @@ export default class HOCSideNote extends PureComponent {
 
     return (
       <SWView header={this.renderHeader()} maxWidth={maxWidth}>
-        <div className="side-note">
+        <Wrapper>
           <NoteEditor
             mediumEditor
             rawState={rawState}
@@ -281,7 +281,7 @@ export default class HOCSideNote extends PureComponent {
             delegate={this}
             disabled={this.isLoading('conflict')}
           />
-        </div>
+        </Wrapper>
       </SWView>
     );
   }

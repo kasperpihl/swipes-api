@@ -4,7 +4,12 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
+<<<<<<< HEAD
 import SW from './CompatibleLogin.swiss';
+=======
+import { Link } from 'react-router-dom';
+import styles from './CompatibleLogin.swiss';
+>>>>>>> AccountPages
 
 
 class CompatibleLogin extends PureComponent {
@@ -15,11 +20,13 @@ class CompatibleLogin extends PureComponent {
     setupDelegate(this, 'onSignin', 'onResetPassword', 'onChange');
     bindAll(this, ['handleKeyDown']);
   }
+
   handleKeyDown(e) {
     if (e.key === 'Enter') {
       this.onSignin();
     }
   }
+
   renderHeader() {
     const { inviter } = this.props;
     const title = 'Welcome to your Workspace';
@@ -32,7 +39,7 @@ class CompatibleLogin extends PureComponent {
     ])
   }
   renderInputField(key, type, placeholder, props) {
-    const { delegate } = this.props;
+    const { delegate, onKeyDown } = this.props;
     const value = this.props.formData.get(key) || '';
 
     return (

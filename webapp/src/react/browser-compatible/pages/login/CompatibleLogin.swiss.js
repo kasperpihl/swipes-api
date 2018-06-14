@@ -73,8 +73,9 @@ export default styleSheet('Login', {
      '&:active': {
       color: '$sw2',
      },
+
      '&:visited': {
-       color: '$sw2',
+       color: '$sw2'
      },
     }
   },
