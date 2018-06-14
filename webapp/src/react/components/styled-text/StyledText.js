@@ -1,17 +1,13 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
-
-import styles from './StyledText.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
+import SW from './StyledText.swiss';
 
 class StyledText extends PureComponent {
   render() {
     const { text, textStyle, className } = this.props;
 
     return (
-      <Wrapper className={className} style={textStyle}>
+      <SW.Wrapper className={className} style={textStyle}>
         {text.map((t, i) => {
           if (typeof t === 'string') {
             return t;
@@ -32,7 +28,7 @@ class StyledText extends PureComponent {
             </button>
           );
         })}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
