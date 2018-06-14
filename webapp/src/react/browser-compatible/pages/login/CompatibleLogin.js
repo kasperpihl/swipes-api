@@ -4,12 +4,7 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
-<<<<<<< HEAD
 import SW from './CompatibleLogin.swiss';
-=======
-import { Link } from 'react-router-dom';
-import styles from './CompatibleLogin.swiss';
->>>>>>> AccountPages
 
 
 class CompatibleLogin extends PureComponent {
