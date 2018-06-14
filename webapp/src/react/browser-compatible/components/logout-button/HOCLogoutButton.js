@@ -1,16 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement, SwissProvider } from 'swiss-react';
+import { SwissProvider } from 'swiss-react';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
 import RotateLoader from 'components/loaders/RotateLoader';
-import Icon from 'Icon';
-import styles from './LogoutButton.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Label = styleElement('div', styles.Label);
-const Loader = styleElement('div', styles.Loader);
+import SW from './LogoutButton.swiss';
 
 @connect(state => ({
   isElectron: state.getIn(['globals', 'isElectron']),
@@ -55,12 +50,12 @@ export default class extends PureComponent {
 
     return (
       <SwissProvider loading={this.isLoading('loggingout')}>
-        <Wrapper onClick={this.onLogout}>
-          <Loader>
+        <SW.Wrapper onClick={this.onLogout}>
+          <SW.Loader>
             <RotateLoader size={36} />
-          </Loader>
-          <Label>Log out</Label>
-        </Wrapper>
+          </SW.Loader>
+          <SW.Label>Log out</SW.Label>
+        </SW.Wrapper>
       </SwissProvider>
     )
   }
