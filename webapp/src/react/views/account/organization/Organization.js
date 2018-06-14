@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import { styleElement } from 'swiss-react';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';
@@ -8,17 +7,7 @@ import Button from 'src/react/components/button/Button';
 import Section from 'components/section/Section';
 import FloatingFormInput from './FloatingFormInput';
 import TabBar from 'components/tab-bar/TabBar';
-import styles from './Organization.swiss';
-
-const User = styleElement('div', styles.User);
-const UserImage = styleElement('div', styles.UserImage);
-const UserName = styleElement('div', styles.UserName);
-const UserEmail = styleElement('div', styles.UserEmail);
-const UserType = styleElement('div', styles.UserType);
-const Form = styleElement('div', styles.Form);
-const InputWrapper = styleElement('div', styles.InputWrapper);
-const Input = styleElement('div', styles.Input);
-const CTA = styleElement(Button, styles.CTA);
+import SW from './Organization.swiss';
 
 class Organization extends PureComponent {
   constructor(props) {
@@ -56,21 +45,21 @@ class Organization extends PureComponent {
       }
 
       return (
-        <User className="organization__user" key={u.get('id')}>
-          <UserImage className="organization__user-image">
+        <SW.User key={u.get('id')}>
+          <SW.UserImage>
             <HOCAssigning assignees={[u.get('id')]} size={30} />
-          </UserImage>
-          <UserName className="organization__user-name">
+          </SW.UserImage>
+          <SW.UserName>
             {msgGen.users.getFullName(u)}{u.get('pending') ? ' (pending)' : null}
-          </UserName>
-          <UserEmail className="organization__user-email">
+          </SW.UserName>
+          <SW.UserEmail>
             {msgGen.users.getEmail(u)}
-          </UserEmail>
-          <UserType className="organization__user-type">
+          </SW.UserEmail>
+          <SW.UserType>
             {userLevel}
-          </UserType>
+          </SW.UserType>
           {this.renderActionButton(u)}
-        </User>
+        </SW.User>
       );
     }).toArray();
 
@@ -86,10 +75,10 @@ class Organization extends PureComponent {
       return undefined;
     }
     return (
-      <Form className="organization__form">
+      <SW.Form>
 
-        <InputWrapper className="organization__input-wrapper">
-          <Input className="organization__input">
+        <SW.InputWrapper>
+          <SW.Input>
             <FloatingFormInput
               id="org-first-name"
               label="First name"
@@ -98,8 +87,8 @@ class Organization extends PureComponent {
               value={firstNameVal}
               onChange={this.onChangeCached('firstNameVal')}
             />
-          </Input>
-          <Input className="organization__input">
+          </SW.Input>
+          <SW.Input>
             <FloatingFormInput
               id="org-email"
               label="name@company.com"
@@ -109,15 +98,15 @@ class Organization extends PureComponent {
               onKeyDown={this.onKeyDown}
               onChange={this.onChangeCached('emailVal')}
             />
-          </Input>
-        </InputWrapper>
+          </SW.Input>
+        </SW.InputWrapper>
 
-        <CTA
+        <SW.CTA
           onClick={this.onInvite}
           title="Invite"
           {...getLoading('invite')}
         />
-      </Form>
+      </SW.Form>
     );
   }
   renderHeader() {

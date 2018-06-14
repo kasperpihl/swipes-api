@@ -1,5 +1,5 @@
 import { styleSheet} from 'swiss-react';
-
+import Button from 'src/react/components/button/Button';
 export default styleSheet('Organization', {
 
   UserList: {
@@ -85,6 +85,7 @@ export default styleSheet('Organization', {
   },
 
   CTA: {
+    _el: Button,
     marginLeft: '15px',
   },
 
