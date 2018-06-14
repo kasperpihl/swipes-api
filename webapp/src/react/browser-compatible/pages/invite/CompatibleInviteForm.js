@@ -1,22 +1,7 @@
 import React, { PureComponent } from 'react';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-import { styleElement, SwissProvider } from 'swiss-react';
-import FloatingInput from 'compatible/components/input/FloatingInput';
-import Icon from 'Icon';
-import styles from './CompatibleInviteForm.swiss';
-
-const InviteForm = styleElement('div', styles.InviteForm);
-const RowWrapper = styleElement('div', styles.RowWrapper);
-const InputRow = styleElement('div', styles.InputRow);
-const StyledFloatingInput = styleElement(FloatingInput, styles.StyledFloatingInput);
-const Separator = styleElement('div', styles.Separator);
-const Wrapper = styleElement('div', styles.Wrapper);
-const AddButton = styleElement('div', styles.AddButton);
-const AddSVG = styleElement(Icon, styles.AddSVG);
-const States = styleElement('div', styles.States);
-const Loader = styleElement(Icon, styles.Loader);
-const Success = styleElement(Icon, styles.Success);
+import SW from './CompatibleInviteForm.swiss';
 
 class CompatibleInviteForm extends PureComponent {
   constructor(props) {
@@ -29,17 +14,17 @@ class CompatibleInviteForm extends PureComponent {
 
     if (isLoading) {
       return (
-        <States>
-          <Loader icon="darkloader"/>
-        </States>
+        <SW.States>
+          <SW.Loader icon="darkloader"/>
+        </SW.States>
       )
     }
 
     if (success) {
       return (
-        <States>
-          <Success icon="ChecklistCheckmark" />
-        </States>
+        <SW.States>
+          <Sw.Success icon="ChecklistCheckmark" />
+        </SW.States>
       )
     }
 
@@ -63,9 +48,9 @@ class CompatibleInviteForm extends PureComponent {
     const emailLabel = 'name@company.com';
 
     return (
-      <InputRow key={i}>
-        <RowWrapper>
-                <StyledFloatingInput
+      <SW.InputRow key={i}>
+        <SW.RowWrapper>
+                <SW.StyledFloatingInput
                   leftfield
                   inviteFormField
                   inputError={nameError}
@@ -76,10 +61,10 @@ class CompatibleInviteForm extends PureComponent {
                   autoFocus={i === 0}
                   onChange={this.onNameChangeCached(i)}
                 />
-        </RowWrapper>
-        <Separator></Separator>
-        <RowWrapper>
-              <StyledFloatingInput
+        </SW.RowWrapper>
+        <SW.Separator></SW.Separator>
+        <SW.RowWrapper>
+              <SW.StyledFloatingInput
                   rightfield
                   inviteFormField
                   placeholder={emailLabel}
@@ -90,30 +75,30 @@ class CompatibleInviteForm extends PureComponent {
                   autoFocus={i === 0}
                   onChange={this.onEmailChangeCached(i)}
                 />
-        </RowWrapper>
+        </SW.RowWrapper>
 
         {this.renderLoader(isLoading, success)}
-      </InputRow>
+      </SW.InputRow>
     )
   }
   renderInputs() {
     const { invites } = this.props;
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         {invites.map((obj, i) => this.renderInput(i, obj))}
-        <AddButton onClick={this.onAddInput}>
-          <AddSVG icon="Plus" />
+        <SW.AddButton onClick={this.onAddInput}>
+          <SW.AddSVG icon="Plus" />
           Add more people
-        </AddButton>
-      </Wrapper>
+        </SW.AddButton>
+      </SW.Wrapper>
     );
   }
   render() {
     return (
-      <InviteForm>
+      <SW.InviteForm>
         {this.renderInputs()}
-      </InviteForm>
+      </SW.InviteForm>
     );
   }
 }

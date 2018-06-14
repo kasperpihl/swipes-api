@@ -1,4 +1,6 @@
 import {styleSheet} from 'swiss-react';
+import Icon from 'Icon';
+import FloatingInput from 'compatible/components/input/FloatingInput';
 
 export default styleSheet('InviteForm', {
   InviteForm: {
@@ -32,6 +34,7 @@ export default styleSheet('InviteForm', {
   },
 
   AddSVG: {
+    _el: Icon,
     _size: ['24px'],
     _svgColor: '$sw2',
     float: 'right',
@@ -104,6 +107,7 @@ export default styleSheet('InviteForm', {
   },
 
   Loader: {
+    _el: Icon,
     _size: ['12px'],
     position: 'absolute',
     left: '6px',
@@ -111,10 +115,15 @@ export default styleSheet('InviteForm', {
   },
 
   Success: {
+    _el: Icon,
     _size: ['18px'],
     _svgColor: '$green',
     position: 'absolute',
     left: '3px',
     top: '3px',
-  }
+  },
+
+  StyledFloatingInput: {
+    _el: FloatingInput,
+  },
 })

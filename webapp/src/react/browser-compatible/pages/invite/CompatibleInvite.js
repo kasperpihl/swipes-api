@@ -1,21 +1,13 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router-dom';
-import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
-import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import CompatibleInviteForm from './CompatibleInviteForm';
 import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
-import { Link } from 'react-router-dom';
-import styles from './CompatibleInvite.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Form = styleElement('div', styles.Form);
-const SendButton = styleElement('div', styles.SendButton);
-const Hint = styleElement('div', styles.Hint);
+import SW from './CompatibleInvite.swiss';
 
 @withRouter
 export default class extends PureComponent {
@@ -34,9 +26,9 @@ export default class extends PureComponent {
           delegate={delegate}
           {...bindLoading()}
         />
-        <SendButton>
+        <SW.SendButton>
           <CompatibleButton onClick={this.onSendInvites} title="Send Invites" />
-        </SendButton>
+        </SW.SendButton>
         <div className="clearfix"></div>
       </Form>
     )
@@ -62,11 +54,11 @@ export default class extends PureComponent {
     const { location } = this.props;
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         <CompatibleHeader title="Your Workspace is ready!" subtitle="Invite your team to join in or download the app below." />
         {this.renderInviteForm()}
         {this.renderGoToWorkspace()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
