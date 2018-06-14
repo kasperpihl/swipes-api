@@ -1,12 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
-import styles from './Unsubscribe.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Text = styleElement('div', styles.Text);
+import SW from './Unsubscribe.swiss';
 
 @connect(null, {
   request: ca.api.request,
@@ -35,13 +31,13 @@ export default class extends PureComponent {
   }
   render() {
     return (
-      <Wrapper>
-        <Text>
+      <SW.Wrapper>
+        <SW.Text>
           {this.getLoading('unsubscribe').loading}
           {this.getLoading('unsubscribe').success}
           {this.getLoading('unsubscribe').error}
-        </Text>
-      </Wrapper>
+        </SW.Text>
+      </SW.Wrapper>
     );
   }
 }
