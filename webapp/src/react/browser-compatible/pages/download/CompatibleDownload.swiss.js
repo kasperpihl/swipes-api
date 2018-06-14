@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('CompatibleDownload', {
   Wrapper: {
@@ -25,6 +26,7 @@ export default styleSheet('CompatibleDownload', {
     },
   },
   Device: {
+    _el: 'a',
     _size: '150px',
     _borderRadius: '6px',
     backgroundColor: '$blue5',
@@ -49,6 +51,7 @@ export default styleSheet('CompatibleDownload', {
     },
   },
   DeviceSVG: {
+    _el: Icon,
     _size: '100px',
     _svgColor: '$blue60',
     margin: '0',
@@ -61,6 +64,7 @@ export default styleSheet('CompatibleDownload', {
     }
   },
   DeviceName: {
+    _el: 'p',
     _font: ['12px', '24px', '500'],
     color: '$blue',
     margin: '0',

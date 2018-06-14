@@ -1,18 +1,8 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
-import Icon from 'Icon';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
-import styles from './CompatibleDownload.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Section = styleElement('div', styles.Section);
-const SectionTitle = styleElement('div', styles.SectionTitle);
-const DeviceWrapper = styleElement('div', styles.DeviceWrapper);
-const Device = styleElement('a', styles.Device);
-const DeviceSVG = styleElement(Icon, styles.DeviceSVG);
-const DeviceName = styleElement('p', styles.DeviceName);
+import SW from './CompatibleDownload.swiss';
 
 const downloadLinks = {
   darwin: 'http://swipesapp.com/download-mac',
@@ -66,10 +56,10 @@ class CompatibleDownload extends PureComponent {
       return undefined;
     }
     return (
-      <Device href={downloadLinks.win32} className="device-hover" target="_blank">
-        <DeviceSVG icon="WindowsDevice" />
-        <DeviceName>Windows</DeviceName>
-      </Device>
+      <SW.Device href={downloadLinks.win32} target="_blank">
+        <SW.DeviceSVG icon="WindowsDevice" />
+        <SW.DeviceName>Windows</SW.DeviceName>
+      </SW.Device>
     );
   }
   renderMac(firstType) {
@@ -77,10 +67,10 @@ class CompatibleDownload extends PureComponent {
       return undefined;
     }
     return (
-      <Device href={downloadLinks.darwin} className="device-hover" target="_blank">
-        <DeviceSVG icon="MacDevice" />
-        <DeviceName>MacOS</DeviceName>
-      </Device>
+      <SW.Device href={downloadLinks.darwin} target="_blank">
+        <SW.DeviceSVG icon="MacDevice" />
+        <SW.DeviceName>MacOS</SW.DeviceName>
+      </SW.Device>
     );
   }
   renderLinux(firstType) {
@@ -88,22 +78,22 @@ class CompatibleDownload extends PureComponent {
       return undefined;
     }
     return (
-      <Device href={downloadLinks.linux} className="device-hover" target="_blank">
-        <DeviceSVG icon="LinuxDevice"/>
-        <DeviceName>Linux</DeviceName>
-      </Device>
+      <SW.Device href={downloadLinks.linux} target="_blank">
+        <SW.DeviceSVG icon="LinuxDevice"/>
+        <SW.DeviceName>Linux</SW.DeviceName>
+      </SW.Device>
     );
   }
   renderDesktopDownloads() {
     const type = this.desktopCheck();
 
     return (
-      <DeviceWrapper>
+      <SW.DeviceWrapper>
         {this.renderFirst(type)}
         {this.renderMac(type)}
         {this.renderWindows(type)}
         {this.renderLinux(type)}
-      </DeviceWrapper>
+      </SW.DeviceWrapper>
     );
   }
   renderDownloadSections() {
@@ -112,17 +102,17 @@ class CompatibleDownload extends PureComponent {
     if (isMobile) {
       return ([
         <Section key="mobile">
-          <SectionTitle className="section-title">Mobile (In beta)</SectionTitle>
-          <DeviceWrapper>
-            <Device href={downloadLinks.ios} className="device-hover" target="_blank">
-              <DeviceSVG icon="IphoneDevice" />
-              <DeviceName>iOS</DeviceName>
-            </Device>
-            <Device href={downloadLinks.android} className="device-hover" target="_blank">
-              <DeviceSVG icon="AndroidDevice" />
-              <DeviceName>Android</DeviceName>
-            </Device>
-          </DeviceWrapper>
+          <SectionTitle>Mobile (In beta)</SectionTitle>
+          <SW.DeviceWrapper>
+            <SW.Device href={downloadLinks.ios} target="_blank">
+              <SW.DeviceSVG icon="IphoneDevice" />
+              <SW.DeviceName>iOS</SW.DeviceName>
+            </SW.Device>
+            <SW.Device href={downloadLinks.android} target="_blank">
+              <SW.DeviceSVG icon="AndroidDevice" />
+              <SW.DeviceName>Android</SW.DeviceName>
+            </SW.Device>
+          </SW.DeviceWrapper>
         </Section>,
         <Section key="desktop">
           <SectionTitle>Desktop</SectionTitle>
@@ -138,16 +128,16 @@ class CompatibleDownload extends PureComponent {
       </Section>,
       <Section key="mobile">
         <SectionTitle>Mobile</SectionTitle>
-        <DeviceWrapper>
-          <Device href={downloadLinks.ios} className="device-hover" target="_blank">
-            <DeviceSVG icon="IphoneDevice" />
-            <DeviceName>iOS</DeviceName>
-          </Device>
-          <Device href={downloadLinks.android} className="device-hover" target="_blank">
-            <DeviceSVG icon="AndroidDevice" />
-            <DeviceName>Android</DeviceName>
-          </Device>
-        </DeviceWrapper>
+        <SW.DeviceWrapper>
+          <SW.Device href={downloadLinks.ios} target="_blank">
+            <SW.DeviceSVG icon="IphoneDevice" />
+            <SW.DeviceName>iOS</SW.DeviceName>
+          </SW.Device>
+          <SW.Device href={downloadLinks.android} target="_blank">
+            <SW.DeviceSVG icon="AndroidDevice" />
+            <SW.DeviceName>Android</SW.DeviceName>
+          </SW.Device>
+        </SW.DeviceWrapper>
       </Section>
     ])
   }
