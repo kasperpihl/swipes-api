@@ -55,6 +55,7 @@ export default styleSheet('PingComposer', {
     paddingRight: '6px',
   },
   UserWrapper: {
+    _el: 'span',
     _flex: ['row', 'left', 'center'],
     flex: 'none',
     padding: '0px 6px',

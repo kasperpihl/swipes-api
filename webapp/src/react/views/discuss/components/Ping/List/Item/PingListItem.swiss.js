@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import TimeAgo from 'swipes-core-js/components/TimeAgo';
 
 export default styleSheet('PingListItem', {
   Wrapper: {
@@ -17,6 +18,7 @@ export default styleSheet('PingListItem', {
     _font: ['12px', '18px', 500],
   },
   Time: {
+    _el: TimeAgo,
     _font: ['12px', '18px', 500],
     color: '$sw2',
   },

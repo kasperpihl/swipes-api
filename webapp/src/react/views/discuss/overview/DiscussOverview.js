@@ -1,18 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { styleElement } from 'swiss-react';
-import styles from './DiscussOverview.swiss';
+import SW from './DiscussOverview.swiss';
 import { setupCachedCallback } from 'react-delegate';
 
 import PingList from '../components/Ping/List/PingList';
 
 import SWView from 'SWView';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const SidebarWrapper = styleElement('div', styles.SidebarWrapper);
-const ContentWrapper = styleElement('div', styles.ContentWrapper);
-const Section = styleElement('div', styles.Section);
-const Item = styleElement('div', styles.Item);
-const Notification = styleElement('div', styles.Notification);
 
 const sections = [
   {
@@ -51,35 +44,35 @@ export default class extends PureComponent {
     const { activeIndex } = this.state;
     return sections.map(({ title, items }, i) => (
       <Fragment key={i}>
-        <Section>{title}</Section>
+        <SW.Section>{title}</SW.Section>
         {items.map((item, j) => (
-          <Item
+          <SW.Item
             key={j}
             unread={j === 0}
             onClick={this.onClickCached(`${i}-${j}`)}
             active={activeIndex === `${i}-${j}`}>
             {item}
-            <Notification>{j === 0 ? '1' : undefined}</Notification>
-          </Item>
+            <SW.Notification>{j === 0 ? '1' : undefined}</SW.Notification>
+          </SW.Item>
         ))}
       </Fragment>
     ))
   }
   renderContent() {
     return (
-      <ContentWrapper>
+      <SW.ContentWrapper>
         <PingList />
-      </ContentWrapper>
+      </SW.ContentWrapper>
     )
   }
   render() {
     return (
-      <Wrapper>
-        <SidebarWrapper>
+      <SW.Wrapper>
+        <SW.SidebarWrapper>
           {this.renderSidebar()}
-        </SidebarWrapper>
+        </SW.SidebarWrapper>
         {this.renderContent()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

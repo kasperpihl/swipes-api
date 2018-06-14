@@ -1,23 +1,14 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import parseNewLines from 'src/utils/parseNewLines';
 import parseLinks from 'src/utils/parseLinks';
 import Button from 'src/react/components/button/Button';
-import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import withEmitter from 'src/react/components/emitter/withEmitter';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import * as mainActions from 'src/redux/main/mainActions';
 
-
-import styles from './PingListItem.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Message = styleElement('div', styles.Message);
-const Time = styleElement(TimeAgo, styles.Time);
-const Sender = styleElement('div', styles.Sender);
-const ButtonWrapper = styleElement('div', styles.ButtonWrapper).debug();
+import SW from './PingListItem.swiss';
 
 @connect(null, {
   contextMenu: mainActions.contextMenu,
@@ -71,22 +62,22 @@ export default class extends PureComponent {
     sendString += ` pinged you`;
 
     return (
-      <Wrapper className="ButtonWrapper-hover">
+      <SW.Wrapper className="ButtonWrapper-hover">
         <HOCAssigning
           onClick={this.onClick}
           assignees={[item.sent_by]}
           size={36}
         />
-        <Message>
-          <Sender>
+        <SW.Message>
+          <SW.Sender>
             {sendString}
-            <Time prefix=" - " date={item.sent_at} simple />
-          </Sender>
+            <SW.Time prefix=" - " date={item.sent_at} simple />
+          </SW.Sender>
           <div>
             {parseLinks(parseNewLines(item.message))}
           </div>
-        </Message>
-        <ButtonWrapper>
+        </SW.Message>
+        <SW.ButtonWrapper>
           <Button
             icon="reply"
             onClick={this.onReply}
@@ -96,8 +87,8 @@ export default class extends PureComponent {
             icon="ThreeDots"
             compact
           />
-        </ButtonWrapper>
-      </Wrapper>
+        </SW.ButtonWrapper>
+      </SW.Wrapper>
     );
   }
 }

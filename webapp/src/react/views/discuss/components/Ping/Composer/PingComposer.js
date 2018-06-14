@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { setupCachedCallback } from 'react-delegate';
@@ -7,7 +6,7 @@ import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import * as linkActions from 'src/redux/link/linkActions';
 import withEmitter from 'src/react/components/emitter/withEmitter';
 
-import styles from './PingComposer.swiss';
+import SW from './PingComposer.swiss';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
@@ -15,14 +14,6 @@ import PostAttachment from 'src/react/views/posts/post-components/post-attachmen
 import Button from 'src/react/components/button/Button';
 import AttachButton from 'src/react/components/attach-button/AttachButton';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-
-const AbsoluteWrapper = styleElement('div', styles.AbsoluteWrapper);
-const BarWrapper = styleElement('div', styles.BarWrapper);
-const QuickAddWrapper = styleElement('div', styles.QuickAddWrapper);
-const Column = styleElement('div', styles.Column);
-const Label = styleElement('div', styles.Label);
-const UserWrapper = styleElement('div', styles.UserWrapper);
-const UserName = styleElement('span', styles.UserName);
 
 @navWrapper
 @connect((state) => ({
@@ -88,8 +79,8 @@ export default class extends PureComponent {
     }
 
     return (
-      <BarWrapper>
-        <Label>Attachments</Label>
+      <SW.BarWrapper>
+        <SW.Label>Attachments</SW.Label>
         {attachments.map((att, i) => {
           const icon = attachmentIconForService(att.getIn(['link', 'service']));
           return (
@@ -102,7 +93,7 @@ export default class extends PureComponent {
             />
           )
         })}
-      </BarWrapper>
+      </SW.BarWrapper>
     );
   }
   renderQuickAddBar() {
@@ -112,10 +103,10 @@ export default class extends PureComponent {
       return null;
     }
     return (
-      <QuickAddWrapper>
-        <Label>Quick add</Label>
+      <SW.QuickAddWrapper>
+        <SW.Label>Quick add</SW.Label>
         {users.map((u, i) => (
-          <UserWrapper
+          <SW.UserWrapper
             className="user-name-hover"
             key={i}
             onClick={this.onUserClickCached(u.get('id'))}>
@@ -123,26 +114,26 @@ export default class extends PureComponent {
               assignees={[u.get('id')]}
               size={30}
             />
-            <UserName>{msgGen.users.getFirstName(u)}</UserName>
-          </UserWrapper>
+            <SW.UserName>{msgGen.users.getFirstName(u)}</SW.UserName>
+          </SW.UserWrapper>
         )).toArray().slice(0, 5)}
-      </QuickAddWrapper>
+      </SW.QuickAddWrapper>
     )
   }
   renderComposeBar() {
     const { receivers, attachments } = this.state;
 
     return (
-      <BarWrapper>
-        <Column none>
+      <SW.BarWrapper>
+        <SW.Column none>
           <HOCAssigning
             assignees={receivers}
             size={36}
             maxImages={3}
             delegate={this}
           />
-        </Column>
-        <Column>
+        </SW.Column>
+        <SW.Column>
           <AutoCompleteInput
             innerRef={c => this.input = c}
             onChange={this.onMessageChange}
@@ -151,28 +142,28 @@ export default class extends PureComponent {
             autoFocus
             clearMentions
           />
-        </Column>
-        <Column none>
+        </SW.Column>
+        <SW.Column none>
           <AttachButton
             delegate={this}
             compact
           />
-        </Column>
-        <Column none hidden={!receivers.size}>
+        </SW.Column>
+        <SW.Column none hidden={!receivers.size}>
           <Button
             title="Ping"
           />
-        </Column>
-      </BarWrapper>
+        </SW.Column>
+      </SW.BarWrapper>
     );
   }
   render() {
     return (
-      <AbsoluteWrapper className="quick-add-hover">
+      <SW.AbsoluteWrapper className="quick-add-hover">
         {this.renderComposeBar()}
         {this.renderAttachments()}
         {this.renderQuickAddBar()}
-      </AbsoluteWrapper>
+      </SW.AbsoluteWrapper>
     )
   }
 }

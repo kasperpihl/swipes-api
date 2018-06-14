@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
-import { styleElement } from 'swiss-react';
 import PingComposer from '../Composer/PingComposer';
 import PingListItem from './Item/PingListItem';
-import styles from './PingList.swiss';
+import SW from './PingList.swiss';
 /*
 Yana: UB9BXJ1JB
 Stefan: URU3EUPOE
@@ -13,8 +12,6 @@ Peter: UFXDWRVSU
 
 const now = new Date();
 const subtract = (m) => new Date(now.getTime() + m * 60000).toISOString();
-const Wrapper = styleElement('div', styles.Wrapper);
-const Title = styleElement('h5', styles.Title);
 
 const items = [
   {
@@ -55,11 +52,11 @@ export default class extends PureComponent {
   }
   render() {
     return (
-      <Wrapper>
+      <SW.Wrapper>
         <PingComposer />
-        <Title>Pings Received</Title>
+        <SW.Title>Pings Received</SW.Title>
         {this.renderItems()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }

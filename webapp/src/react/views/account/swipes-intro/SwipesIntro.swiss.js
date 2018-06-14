@@ -6,6 +6,7 @@ export default styleSheet('SwipesIntro', {
     padding: '30px 0',
   },
   Img: {
+    _el: 'img',
     _size: ['100%', 'auto'],
   },
 });

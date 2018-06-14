@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { styleElement, SwissProvider } from 'swiss-react';
+import { SwissProvider } from 'swiss-react';
 import { connect } from 'react-redux';
 import { withOptimist } from 'react-optimist';
 import * as ca from 'swipes-core-js/actions';
@@ -8,12 +8,7 @@ import HOCAssigning from 'components/assigning/HOCAssigning';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
 import Button from 'src/react/components/button/Button';
 
-import styles from './GoalAdd.swiss';
-const Wrapper = styleElement('div', styles.Wrapper);
-const Indicator = styleElement('div', styles.Indicator);
-const InputWrapper = styleElement('div', styles.InputWrapper);
-const AssigneesWrapper = styleElement('div', styles.AssigneesWrapper);
-const SubmitWrapper = styleElement('div', styles.SubmitWrapper);
+import SW from './GoalAdd.swiss';
 
 @connect(null, {
   createGoal: ca.goals.create,
@@ -85,9 +80,9 @@ export default class GoalAdd extends PureComponent {
 
     return (
       <SwissProvider hasContent={hasContent} isFocused={isFocused}>
-        <Wrapper>
-          <Indicator />
-          <InputWrapper>
+        <SW.Wrapper>
+          <SW.Indicator />
+          <SW.InputWrapper>
             <AutoCompleteInput
               onAutoCompleteSelect={this.onAutoCompleteSelect}
               innerRef={c => this.inputRef = c}
@@ -99,8 +94,8 @@ export default class GoalAdd extends PureComponent {
               placeholder={placeholder || 'Add a new goal'}
               clearMentions
             />
-          </InputWrapper>
-          <AssigneesWrapper hasAssignees={!!assignees.size}>
+          </SW.InputWrapper>
+          <SW.AssigneesWrapper hasAssignees={!!assignees.size}>
             <HOCAssigning
               assignees={assignees}
               delegate={this}
@@ -108,11 +103,11 @@ export default class GoalAdd extends PureComponent {
               size={30}
               enableTooltip
             />
-          </AssigneesWrapper>
-          <SubmitWrapper>
+          </SW.AssigneesWrapper>
+          <SW.SubmitWrapper>
             <Button icon="Enter" compact onClick={this.onGoalAdd} />
-          </SubmitWrapper>
-        </Wrapper>
+          </SW.SubmitWrapper>
+        </SW.Wrapper>
       </SwissProvider>
     );
   }
