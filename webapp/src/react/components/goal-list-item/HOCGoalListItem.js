@@ -1,19 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import * as ca from 'swipes-core-js/actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 
-import styles from './GoalListItem.swiss';
-/* global msgGen */
+import SW from './GoalListItem.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
-const Title = styleElement('div', styles.Title);
-const StatusDot = styleElement('div', styles.StatusDot);
 
 @connect((state, props) => ({
   goal: state.getIn(['goals', props.goalId]),
@@ -84,16 +78,16 @@ export default class extends PureComponent {
     }
 
     return (
-      <Wrapper className="goal-item" onClick={this.onGoalClick}>
-        <StatusDot status={status} />
-        <Title
+      <SW.Wrapper className="goal-item" onClick={this.onGoalClick}>
+        <SW.StatusDot status={status} />
+        <SW.Title
           status={status}
           hoverRef=".goal-item"
         >
           {loading || goal.get('title')}
-        </Title>
+        </SW.Title>
         {this.renderAssignees()}
-      </Wrapper>
+      </SW.Wrapper>
     );
   }
 }
