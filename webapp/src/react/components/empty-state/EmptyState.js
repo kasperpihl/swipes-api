@@ -1,11 +1,8 @@
 import React from 'react';
-import { styleElement } from 'swiss-react';
-import styles from './EmptyState.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
+import SW from './EmptyState.swiss';
 
 export default (props) => {
   return (
-    <Wrapper />
+    <SW.Wrapper />
   );
 };
