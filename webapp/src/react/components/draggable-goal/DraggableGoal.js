@@ -2,10 +2,8 @@ import React, { PureComponent, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import { styleElement } from 'swiss-react';
-import styles from './DraggableGoal.swiss';
+import SW from './DraggableGoal.swiss';
 
-const Wrapper = styleElement('div', styles.Wrapper);
 const _dragEl = document.getElementById('draggable');
 
 class DraggableGoal extends PureComponent {
@@ -29,7 +27,7 @@ class DraggableGoal extends PureComponent {
     return (
       <Draggable draggableId={item} {...rest}>
         {(provided, snapshot) => this.renderOrNotPortal(snapshot.isDragging, (
-            <Wrapper
+            <SW.Wrapper
               innerRef={provided.innerRef}
               {...provided.draggableProps}
               {...provided.dragHandleProps}
@@ -37,7 +35,7 @@ class DraggableGoal extends PureComponent {
               <HOCGoalListItem
                 goalId={item}
                 delegate={delegate}
-                status={status} 
+                status={status}
               />
             </Wrapper>
           ))}
