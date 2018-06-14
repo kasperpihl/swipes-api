@@ -1,5 +1,4 @@
 import React, { PureComponent, Fragment } from 'react';
-import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
@@ -8,10 +7,7 @@ import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button';
 import { fromJS } from 'immutable';
 import { EditorState, convertToRaw } from 'draft-js';
-
-import styles from './AttachButton.swiss';
-
-const HiddenInput = styleElement('input', styles.HiddenInput);
+import SW from './AttachButton.swiss';
 
 @connect(state => ({
   myId: state.getIn(['me', 'id']),
@@ -139,7 +135,7 @@ export default class extends PureComponent {
           icon="Attach"
           {...rest}
         />
-        <HiddenInput
+        <SW.HiddenInput
           value={fileVal}
           innerRef={c => this.hiddenInput = c}
           type="file"
