@@ -3,7 +3,7 @@ import { setupDelegate } from 'react-delegate';
 import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
-import SW from './styles/CompatibleSignup.swiss'
+import SW from './CompatibleSignup.swiss'
 
 class CompatibleSignup extends PureComponent {
   constructor(props) {
