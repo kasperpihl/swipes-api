@@ -1,18 +1,10 @@
 import React, { PureComponent, Fragment } from 'react';
-import { styleElement, SwissProvider } from 'swiss-react';
+import { SwissProvider } from 'swiss-react';
 import { List } from 'immutable';
 import Button from 'src/react/components/button/Button';
 import AssigneeImage from './AssigneeImage';
 import AssigneeTooltip from './AssigneeTooltip';
-
-import styles from './Assigning.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const AbsoluteWrapper = styleElement('div', styles.AbsoluteWrapper);
-const WhiteBackground = styleElement('div', styles.WhiteBackground);
-const ImageWrapper = styleElement('div', styles.ImageWrapper);
-const ExtraNumber = styleElement('div', styles.ExtraNumber);
-
+import SW from './Assigning.swiss';
 
 class Assigning extends PureComponent {
   onMouseEnter = (e) => {
@@ -55,25 +47,25 @@ class Assigning extends PureComponent {
 
     return (
       <SwissProvider size={size} blackAndWhite={this.props.blackAndWhite} images={Math.min(assignees.size, maxImages)}>
-        <Wrapper
+        <SW.Wrapper
           onClick={onClick}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}>
-          <AbsoluteWrapper>
+          <SW.AbsoluteWrapper>
             {assignees.map((user, i) => (i < maxImages) ? (
               <Fragment key={i}>
-                <WhiteBackground index={i} />
-                <ImageWrapper isPic={msgGen.users.getPhoto(user)}  index={i}>
+                <SW.WhiteBackground index={i} />
+                <SW.ImageWrapper isPic={msgGen.users.getPhoto(user)}  index={i}>
                   <AssigneeImage user={user} size={size} blackAndWhite={this.props.blackAndWhite}/>
-                </ImageWrapper>
+                </SW.ImageWrapper>
               </Fragment>
             ) : null)}
-          </AbsoluteWrapper>
+          </SW.AbsoluteWrapper>
 
           {!!extraNumber && (
-            <ExtraNumber>+{extraNumber}</ExtraNumber>
+            <SW.ExtraNumber>+{extraNumber}</SW.ExtraNumber>
           )}
-        </Wrapper>
+        </SW.Wrapper>
       </SwissProvider>
     );
   }

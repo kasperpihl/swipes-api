@@ -1,25 +1,5 @@
 import React from 'react';
-import { styleElement, styleSheet } from 'swiss-react';
-
-const styles = styleSheet('AssigneeImage', {
-  Image: {
-    _size: '100%',
-    blackAndWhite: {
-      filter: 'grayscale(100%)',
-    }
-  },
-  Initials: {
-    _font: ['10px', '18px', 500],
-    'size>=30': {
-      _font: ['12px', '18px', 500],
-    },
-    color: '$sw5',
-    textTransform: 'uppercase',
-  },
-});
-
-const Image = styleElement('img', styles.Image);
-const Initials = styleElement('div', styles.Initials);
+import SW from './AssigneeImage.swiss';
 
 export default (props) => {
   const { user, blackAndWhite } = props;
@@ -28,9 +8,9 @@ export default (props) => {
   const initials = msgGen.users.getInitials(user);
 
   if(pic) return (
-    <Image src={pic} alt={fullName} blackAndWhite={blackAndWhite} />
+    <SW.Image src={pic} alt={fullName} blackAndWhite={blackAndWhite} />
   );
   return (
-    <Initials>{initials}</Initials>
+    <SW.Initials>{initials}</SW.Initials>
   );
 };
