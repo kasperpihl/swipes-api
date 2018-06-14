@@ -1,19 +1,8 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
-import { styleElement } from 'swiss-react';
 import timeAgo from 'swipes-core-js/utils/time/timeAgo';
-import StyledText from 'components/styled-text/StyledText';
-import styles from './Notificationitem.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const NotificationImage = styleElement('img', styles.NotificationImage);
-const Initials = styleElement('div', styles.Initials);
-const Content = styleElement('div', styles.Content);
-const TimeStamp = styleElement('div', styles.TimeStamp);
-const Message = styleElement('div', styles.Message);
-const Text = styleElement(StyledText, styles.Text);
-const StyledButton = styleElement('div', styles.StyledButton);
+import SW from './Notificationitem.swiss';
 
 class NotificationItem extends PureComponent {
   constructor(props) {
@@ -29,10 +18,10 @@ class NotificationItem extends PureComponent {
     const initials = msgGen.users.getInitials(userId);
 
     if (image) {
-      return <NotificationImage src={image} />
+      return <SW.NotificationImage src={image} />
     }
 
-    return <Initials>{initials}</Initials>
+    return <SW.Initials>{initials}</SW.Initials>
   }
   render() {
     const { notification: n } = this.props;
@@ -40,15 +29,15 @@ class NotificationItem extends PureComponent {
     const text = msgGen.notifications.getStyledTextForNotification(n);
 
     return (
-      <Wrapper unread={!n.get('seen_at') ? true : ''} onClick={this.onNotificationOpenCached(n)}>
+      <SW.Wrapper unread={!n.get('seen_at') ? true : ''} onClick={this.onNotificationOpenCached(n)}>
         {this.renderProfilePic()}
-        <Content>
-          <Message>
-            <Text text={text}/>
-          </Message>
-          <TimeStamp>{timestamp}</TimeStamp>
-        </Content>
-      </Wrapper>
+        <SW.Content>
+          <SW.Message>
+            <SW.Text text={text}/>
+          </SW.Message>
+          <SW.TimeStamp>{timestamp}</SW.TimeStamp>
+        </SW.Content>
+      </SW.Wrapper>
     )
   }
 }

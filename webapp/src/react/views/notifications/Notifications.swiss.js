@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('Notifications', {
   Wrapper: {
@@ -34,6 +35,7 @@ export default styleSheet('Notifications', {
   },
 
   EmptySVG: {
+    _el: Icon,
     _size: ['300px'],
   },
 

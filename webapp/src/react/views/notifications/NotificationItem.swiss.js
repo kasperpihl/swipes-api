@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import StyledText from 'components/styled-text/StyledText';
 
 export default styleSheet('NotificationItem', {
   Wrapper: {
@@ -13,6 +14,7 @@ export default styleSheet('NotificationItem', {
   },
 
   NotificationImage: {
+    _el: 'img',
     _size: ['54px'],
     borderRadius: '3px'
   },
@@ -42,6 +44,7 @@ export default styleSheet('NotificationItem', {
   },
 
   Text: {
+    _el: StyledText,
     _font: ['11px', '15px'],
     color: 'black',
   },

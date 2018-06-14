@@ -1,20 +1,9 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
-import { styleElement } from 'swiss-react';
 import SWView from 'SWView';
 import Button from 'src/react/components/button/Button';
-import Icon from 'Icon';
 import NotificationItem from './NotificationItem';
-import styles from './Notifications.swiss';
-
-const Wrapper = styleElement('div', styles.Wrapper);
-const Header = styleElement('div', styles.Header);
-const Title = styleElement('div', styles.Title);
-const EmptyState = styleElement('div', styles.EmptyState);
-const EmptyIllustration = styleElement('div', styles.EmptyIllustration);
-const EmptySVG = styleElement(Icon, styles.EmptySVG);
-const EmptyTitle = styleElement('div', styles.EmptyTitle);
-const EmptyText = styleElement('div', styles.EmptyText);
+import SW from './Notifications.swiss';
 
 const DISTANCE = 50;
 
@@ -37,31 +26,31 @@ class Notifications extends PureComponent {
   renderHeader() {
     const { getLoading } = this.props;
     return (
-      <Header>
-        <Title>Notifications</Title>
+      <SW.Header>
+        <SW.Title>Notifications</SW.Title>
         <Button
           title="Mark all as read"
           compact
           onClick={this.onMarkAll}
           {...getLoading('marking')}
         />
-      </Header>
+      </SW.Header>
     )
   }
   renderEmptyState() {
 
     return (
-      <EmptyState>
-        <EmptyIllustration>
-          <EmptySVG icon="ESNotifications"/>
-        </EmptyIllustration>
-        <EmptyTitle>
+      <SW.EmptyState>
+        <SW.EmptyIllustration>
+          <SW.EmptySVG icon="ESNotifications"/>
+        </SW.EmptyIllustration>
+        <SW.EmptyTitle>
           It’s still and quiet
-        </EmptyTitle>
-        <EmptyText>
+        </SW.EmptyTitle>
+        <SW.EmptyText>
           You will be notified here when there’s <br /> something new.
-        </EmptyText>
-      </EmptyState>
+        </SW.EmptyText>
+      </SW.EmptyState>
     )
   }
   renderNotifications() {
@@ -78,7 +67,7 @@ class Notifications extends PureComponent {
   render() {
 
     return (
-      <Wrapper>
+      <SW.Wrapper>
         <SWView
           noframe
           header={this.renderHeader()}
@@ -86,7 +75,7 @@ class Notifications extends PureComponent {
         >
           {this.renderNotifications()}
         </SWView>
-      </Wrapper>
+      </SW.Wrapper>
     )
   }
 }
