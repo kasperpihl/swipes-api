@@ -1,10 +1,12 @@
 import { styleSheet } from 'swiss-react';
-
+import Icon from 'Icon';
+import { Link } from 'react-router-dom';
 export default styleSheet('GoToWorkspace', {
   Wrapper: {
     _size: ['100%', 'auto'],
   },
   ATag: {
+    _el: Link,
     _size: ['100%', '150px'],
     _borderRadius: '6px',
     marginTop: '15px',
@@ -27,6 +29,7 @@ export default styleSheet('GoToWorkspace', {
     }
   },
   SVG: {
+    _el: Icon,
     _size: ['100px'],
     _svgColor: '$blue60',
     margin: '0',
