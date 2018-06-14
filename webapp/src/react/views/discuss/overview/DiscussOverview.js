@@ -1,5 +1,4 @@
 import React, { PureComponent, Fragment } from 'react';
-import { styleElement } from 'swiss-react';
 import SW from './DiscussOverview.swiss';
 import { setupCachedCallback } from 'react-delegate';
 
