@@ -5,7 +5,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import Button from 'src/react/components/button/Button';
-import styles from './styles/AccountList.swiss';
+import styles from './AccountList.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const AccountButton = styleElement(Button, styles.AccountButton);

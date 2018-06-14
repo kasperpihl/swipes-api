@@ -5,7 +5,7 @@ import SWView from 'SWView';
 import Icon from 'Icon';
 import PropTypes from 'prop-types';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import styles from './styles/Onboarding.swiss';
+import styles from './Onboarding.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
 const Item = styleElement('div', styles.Item);
