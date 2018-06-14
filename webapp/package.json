@@ -53,7 +53,7 @@
     "redux-thunk": "2.2.0",
     "reselect": "3.0.1",
     "stylis": "^3.5.0",
-    "swiss-react": "^0.2.29",
+    "swiss-react": "^0.3.0",
     "valjs": "0.0.28",
     "whatwg-fetch": "^2.0.4"
   },

@@ -7,7 +7,6 @@ const SPACING = 20;
 @connect(state => ({
   tooltip: state.getIn(['main', 'tooltip']),
 }))
-
 export default class Tooltip extends PureComponent {
   constructor(props) {
     super(props);

@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
-import { addGlobalStyles, SwissProvider } from 'swiss-react';
+import { SwissProvider } from 'swiss-react';
 import SW from './Button.swiss';
 
-addGlobalStyles(styles.GlobalStyles);
 
 export default class extends PureComponent {
   renderIcon(status) {

@@ -8,14 +8,14 @@ export default (props) => {
     wrapperEl,
     ...rest,
   } = props;
-  const EL = wrapperEl || DefaultWrapper;
+  const EL = wrapperEl || SW.DefaultWrapper;
   return  (
     <Droppable {...rest}>
       {(provided) => (
-        <SW.EL innerRef={provided.innerRef} {...provided.droppableProps}>
+        <EL innerRef={provided.innerRef} {...provided.droppableProps}>
           {children}
           {provided.placeholder}
-        </SW.EL>
+        </EL>
       )}
     </Droppable>
   )

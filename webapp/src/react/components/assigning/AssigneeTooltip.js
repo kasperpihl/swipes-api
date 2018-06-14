@@ -13,7 +13,7 @@ export default (props) => {
       {assignees.map((user, i) => (
         <SW.Item key={i}>
           <SW.ImageWrapper>
-            <SW.AssigneeImage user={user} size={size} />
+            <AssigneeImage user={user} size={size} />
           </SW.ImageWrapper>
           <SW.Name>{msgGen.users.getFullName(user)}</SW.Name>
         </SW.Item>

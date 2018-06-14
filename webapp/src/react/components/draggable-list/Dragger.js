@@ -12,18 +12,18 @@ export default (props) => {
     ...rest,
   } = props;
 
-  const EL = wrapperEl || DefaultWrapper;
+  const EL = wrapperEl || SW.DefaultWrapper;
 
   return (
     <Draggable {...rest}>
       {(provided, snapshot) => {
         let child = (
-          <SW.EL
+          <EL
             innerRef={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}>
             {children}
-          </SW.EL>
+          </EL>
         )
         if(typeof children === 'function') {
           child = children(provided, snapshot);

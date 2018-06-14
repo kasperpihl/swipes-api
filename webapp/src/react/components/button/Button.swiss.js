@@ -1,18 +1,17 @@
-import { styleSheet } from 'swiss-react';
+import { styleSheet, addGlobalStyles } from 'swiss-react';
 import Icon from 'Icon';
-
-export default styleSheet('Button', {
-  GlobalStyles: {
-    '@keyframes button-loader': {
-      '0%': {
-        WebkitTransform: 'scale(0)',
-      },
-      '100%': {
-        WebkitTransform: 'scale(1.0)',
-        opacity: 0,
-      }
+addGlobalStyles({
+  '@keyframes button-loader': {
+    '0%': {
+      WebkitTransform: 'scale(0)',
+    },
+    '100%': {
+      WebkitTransform: 'scale(1.0)',
+      opacity: 0,
     }
-  },
+  }
+})
+export default styleSheet('Button', {
   ATag: {
     _el: 'a',
     userSelect: 'none',

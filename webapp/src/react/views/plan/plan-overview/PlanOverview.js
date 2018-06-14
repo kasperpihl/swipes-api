@@ -123,12 +123,12 @@ class PlanOverview extends PureComponent {
 
     if (renderSection) {
       return (
-        <DroppableWrapper>
+        <SW.DroppableWrapper>
           <SW.Section>
             <SW.SectionTitle>{section}</SW.SectionTitle>
             {droppableGoalList}
           </SW.Section>
-        </DroppableWrapper>
+        </SW.DroppableWrapper>
       )
     }
 

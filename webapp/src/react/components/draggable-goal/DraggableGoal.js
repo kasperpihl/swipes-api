@@ -37,7 +37,7 @@ class DraggableGoal extends PureComponent {
                 delegate={delegate}
                 status={status}
               />
-            </Wrapper>
+            </SW.Wrapper>
           ))}
       </Draggable>
     );

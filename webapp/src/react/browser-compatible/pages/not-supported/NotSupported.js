@@ -5,7 +5,7 @@ import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import DownloadForDevice from 'compatible/components/download-for-device/DownloadForDevice';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
-import SW from './styles/NotSupported.swiss';
+import SW from './NotSupported.swiss';
 
 class NotSupported extends PureComponent {
   constructor(props) {

@@ -16,16 +16,16 @@ class TabBar extends Component {
     const { tabs, activeTab } = this.props;
 
     return (
-      <SW.TabWrapper>
+      <SW.Wrapper>
         {tabs.map((tab, i) => (
-          <SW.TabItem
+          <SW.Item
             active={i === activeTab}
             key={`tab-${i}`}
             onClick={this.tabDidChangeCached(i)}>
             {tab}
-          </SW.TabItem>
+          </SW.Item>
         ))}
-      </SW.TabWrapper>
+      </SW.Wrapper>
     );
   }
 }

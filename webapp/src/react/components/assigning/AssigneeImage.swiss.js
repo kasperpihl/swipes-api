@@ -1,8 +1,8 @@
 import { styleSheet } from 'swiss-react';
 
 export default styleSheet('AssigneeImage', {
-    Image: {
-      _el: 'img'
+  Image: {
+    _el: 'img',
     _size: '100%',
     blackAndWhite: {
       filter: 'grayscale(100%)',
