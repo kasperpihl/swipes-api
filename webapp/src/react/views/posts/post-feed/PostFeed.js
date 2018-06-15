@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback, typeForId, miniIconForId } from 'swipes-core-js/classes/utils';
+import EmptyState from '../../../components/empty-state/EmptyState';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'src/react/components/header-title/HOCHeaderTitle';
 import Button from 'src/react/components/button/Button';
@@ -51,7 +52,7 @@ class PostFeed extends PureComponent {
 
 
     return undefined;
-    
+
   }
   renderHeader() {
     const { context, delegate, tabs } = this.props;
@@ -93,23 +94,19 @@ class PostFeed extends PureComponent {
   renderEmptyState() {
     const { tabs } = this.props;
 
-    let text = 'This is a great place to share ideas and keep each\nother up to date';
     if (tabs) {
       const contextType = this.getContextType();
-      text = `There are no discussions about this ${contextType} yet.\nYou can be the first to start one.`;
+      text = ``;
     }
 
     return (
-      <SW.EmptyState>
-        <SW.EmptyIllustration>
-          <SW.EmptySvg icon="ESMilestoneAchieved" />
-        </SW.EmptyIllustration>
-        <SW.EmptyTitle>
-          start a discussion
-        </SW.EmptyTitle>
-        <SW.EmptyText><TextParser>{text}</TextParser></SW.EmptyText>
+      <EmptyState
+        icon="ESMilestoneAchieved"
+        title="Start a discussion"
+        description={`There are no discussions about this ${contextType} yet.\nYou can be the first to start one.`}
+      >
         <Button onClick={this.onNewPost} title="Create a post" />
-      </SW.EmptyState>
+      </EmptyState>
     )
   }
   renderPosts() {

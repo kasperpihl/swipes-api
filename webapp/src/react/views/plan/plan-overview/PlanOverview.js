@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate, setupCachedCallback } from 'react-delegate';
+import EmptyState from '../../../components/empty-state/EmptyState';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
@@ -33,7 +34,7 @@ class PlanOverview extends PureComponent {
   }
   tabDidChange(key, i) {
     if(i !== this.state[key]) {
-      const activeTabIndex = i; 
+      const activeTabIndex = i;
 
       this.setState({
         activeTabIndex,
@@ -71,27 +72,19 @@ class PlanOverview extends PureComponent {
 
     if (group === 'Later' && !order.get('later').size) {
       return (
-        <SW.EmptyStateWrapper hidden={isDraggingOver}>
-          <SW.Title>
-            Set for later
-          </SW.Title>
-          <SW.Text>
-            Move goals that need to be done later <br />  from this week into here.
-          </SW.Text>
-        </SW.EmptyStateWrapper>
+        <EmptyState
+          title="SET FOR LATER"
+          description={`Move goals that need to be done later \n from this week into here.`}
+        />
       )
     }
 
     if (group === 'Done' && !order.get('done').size) {
       return (
-        <SW.EmptyStateWrapper hidden={isDraggingOver}>
-          <SW.Title>
-            TRACK PROGRESS
-          </SW.Title>
-          <SW.Text>
-            You will see the progress of all completed <br /> goals here
-          </SW.Text>
-        </SW.EmptyStateWrapper>
+        <EmptyState
+          title="TRACK PROGRESS"
+          description={`You will see the progress of all completed \n goals here.`}
+        />
       )
     }
 
@@ -137,7 +130,7 @@ class PlanOverview extends PureComponent {
         <SW.Section>
           <SW.SectionTabLikeTitle>{section}</SW.SectionTabLikeTitle>
           {droppableGoalList}
-        </SW.Section>        
+        </SW.Section>
       )
     }
 

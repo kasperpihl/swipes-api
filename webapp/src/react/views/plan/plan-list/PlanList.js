@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
+import EmptyState from '../../../components/empty-state/EmptyState';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
@@ -44,24 +45,7 @@ class PlanList extends PureComponent {
       </SW.Footer>
     )
   }
-  renderEmptyState() {
 
-    return (
-      <div className="milestone-list__empty-state">
-        <div className="milestone-list__empty-illustration">
-          <Icon icon="ESMilestoneAchieved" className="milestone-list__empty-svg"/>
-        </div>
-        <div className="milestone-list__empty-title">
-          the hall of fame
-        </div>
-        <div className="milestone-list__empty-text">
-          Seems like your team is sweating on getting their <br />
-          first plan completed. <br />
-          All completed plans can be found here.
-        </div>
-      </div>
-    )
-  }
   renderOrderedPlanList() {
     const {
       plans,
@@ -107,7 +91,12 @@ class PlanList extends PureComponent {
         plan={p}
         delegate={delegate}
       />
-      ) : null
+      ) :
+      <EmptyState
+        icon = 'ESMilestoneAchieved'
+        title="The hall of fame!"
+        description={`Seems like your team is sweating on getting their \n first plan completed. \n All completed plans can be found here.`}
+      />
     )).toArray()
   }
   renderList() {

@@ -75,9 +75,9 @@ class CompatibleLogin extends PureComponent {
         <SW.Switch>
           Don't have an account yet? <SW.SwitchLink to="/register">Sign up now</SW.SwitchLink>
         </SW.Switch>
-        <ResetPassword>
+        <SW.ResetPassword>
           <a href="" onClick={this.onResetPassword}>Reset password</a>
-        </ResetPassword>
+        </SW.ResetPassword>
       </SW.Footer>
     );
   }

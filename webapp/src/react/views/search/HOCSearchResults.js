@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { setupDelegate } from 'react-delegate';
 import * as cs from 'swipes-core-js/selectors';
 import { navForContext } from 'swipes-core-js/classes/utils';
+import EmptyState from '../../components/empty-state/EmptyState';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Icon from 'Icon';
 import SearchResult from './SearchResult';
@@ -21,41 +22,6 @@ export default class HOCSearchResults extends PureComponent {
     this.willOpenResult(id);
     openSecondary(navForContext(id));
   }
-  renderEmptyState(type) {
-    let emptyIcon = 'ESSearch';
-    let emptyTitle = (
-      <div className="search-results__empty-title">LOOKING FOR SOMETHING?</div>
-    );
-    let emptyText = (
-      <div className="search-results__empty-text">
-        Search for plans, goals or
-        <br />
-        discussions by keywords.
-      </div>
-    );
-
-    if (type === 'noresults') {
-      emptyIcon = 'ESNoResults';
-      emptyTitle = (
-        <div className="search-results__empty-title">Oops! Nothing found.</div>
-      );
-      emptyText = (
-        <div className="search-results__empty-text">
-          We even searched our pockets but no results.
-        </div>
-      );
-    }
-
-    return (
-      <div className="search-results__empty-state">
-        <div className="search-results__empty-illustration">
-          <Icon icon={emptyIcon} className="search-results__empty-svg" />
-        </div>
-        {emptyTitle}
-        {emptyText}
-      </div>
-    )
-  }
   renderResults() {
     const { results, limit } = this.props;
 
@@ -70,11 +36,23 @@ export default class HOCSearchResults extends PureComponent {
     }
 
     if (!results) {
-      return this.renderEmptyState('nosearch')
+      return (
+        <EmptyState
+          icon = 'ESSearch'
+          title="Looking for something?"
+          description={`Search for plans, goals or \n discussions by keywords.`}
+        />
+      )
     }
 
     if (results && !results.length) {
-      return this.renderEmptyState('noresults')
+      return (
+        <EmptyState
+          icon = 'ESNoResults'
+          title="Oops! Nothing found."
+          description={`We even searched our pockets but no results.`}
+        />
+      )
     }
   }
   render() {

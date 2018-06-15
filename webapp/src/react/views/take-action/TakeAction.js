@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { setupDelegate } from 'react-delegate';
+import EmptyState from '../../components/empty-state/EmptyState';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import GoalListSection from './GoalListSection';
@@ -9,8 +9,8 @@ import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 import InfoButton from 'components/info-button/InfoButton';
 import Icon from 'Icon';
-
 import './styles/take-action.scss';
+
 
 class TakeAction extends Component {
   constructor(props) {
@@ -70,17 +70,11 @@ class TakeAction extends Component {
 
     if (goals.size === 1 && !goals.get('none').size) {
       return (
-         <div className="take-action__empty-state">
-          <div className="take-action__empty-arrow">
-            <Icon icon="ESArrow" className="take-action__empty-arrow-svg" />
-          </div>
-          <div className="take-action__empty-title">
-            Add a new goal
-          </div>
-          <div className="take-action__empty-text">
-            Add new goals for everything that needs <br /> to be done.
-          </div>
-        </div>
+         <EmptyState
+          icon="ESArrow"
+          title="ADD A NEW GOAL"
+          description={`Add new goals for everything that needs \n to be done.`}
+         />
        );
     }
 

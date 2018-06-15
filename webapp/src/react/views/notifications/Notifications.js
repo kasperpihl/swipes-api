@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
+import EmptyState from '../../components/empty-state/EmptyState';
 import SWView from 'SWView';
 import Button from 'src/react/components/button/Button';
 import NotificationItem from './NotificationItem';
@@ -40,17 +41,11 @@ class Notifications extends PureComponent {
   renderEmptyState() {
 
     return (
-      <SW.EmptyState>
-        <SW.EmptyIllustration>
-          <SW.EmptySVG icon="ESNotifications"/>
-        </SW.EmptyIllustration>
-        <SW.EmptyTitle>
-          It’s still and quiet
-        </SW.EmptyTitle>
-        <SW.EmptyText>
-          You will be notified here when there’s <br /> something new.
-        </SW.EmptyText>
-      </SW.EmptyState>
+      <EmptyState
+        icon="ESNotifications"
+        title="IT’S STILL AND QUIET"
+        description={`You will be notified here when there’s \n something new.`}
+      />
     )
   }
   renderNotifications() {

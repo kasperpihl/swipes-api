@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-
+import EmptyState from '../../../components/empty-state/EmptyState';
 import Icon from 'Icon';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
@@ -31,17 +31,11 @@ class NoMilestoneOverview extends PureComponent {
 
     if (!goals.size) {
       return (
-        <div className="no-milestone-overview__empty-state">
-          <div className="no-milestone-overview__empty-arrow">
-            <Icon icon="ESArrow" className="no-milestone-overview__empty-arrow-svg" />
-          </div>
-          <div className="no-milestone-overview__empty-title">
-            Add a new goal
-          </div>
-          <div className="no-milestone-overview__empty-text">
-            Add new goals for everything that needs <br /> to be done.
-          </div>
-        </div>
+        <EmptyState
+          icon="ESArrow"
+          title="ADD A NEW GOAL"
+          description={`Add new goals for everything that needs \n to be done.`}
+         />
       )
     }
 
