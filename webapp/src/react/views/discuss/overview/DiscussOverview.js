@@ -3,6 +3,7 @@ import SW from './DiscussOverview.swiss';
 import { setupCachedCallback } from 'react-delegate';
 
 import PingList from '../components/Ping/List/PingList';
+import DiscussionList from '../components/Discussion/List/DiscussionList';
 
 import SWView from 'SWView';
 
@@ -28,41 +29,45 @@ export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      activeIndex: '0-0',
+      activeType: 0,
+      activeItem: 0,
     };
     this.onClickCached = setupCachedCallback(this.onClick);
   }
-  onClick = (index) => {
-    if(index !== this.state.activeIndex) {
+  onClick = (uS, typeI, itemI) => {
+    if(
+      itemI !== this.state.activeItem ||
+      typeI !== this.state.activeType
+    ) {
       this.setState({
-        activeIndex: index,
+        activeType: typeI,
+        activeItem: itemI
       });
     }
   }
   renderSidebar() {
-    const { activeIndex } = this.state;
-    return sections.map(({ title, items }, i) => (
-      <Fragment key={i}>
+    const { activeType, activeItem } = this.state;
+    return sections.map(({ title, items }, typeI) => (
+      <Fragment key={typeI}>
         <SW.Section>{title}</SW.Section>
-        {items.map((item, j) => (
+        {items.map((item, itemI) => (
           <SW.Item
-            key={j}
-            unread={j === 0}
-            onClick={this.onClickCached(`${i}-${j}`)}
-            active={activeIndex === `${i}-${j}`}>
+            key={itemI}
+            onClick={this.onClickCached(`${typeI}-${itemI}`, typeI, itemI)}
+            active={activeType === typeI && activeItem === itemI}>
             {item}
-            <SW.Notification>{j === 0 ? '1' : undefined}</SW.Notification>
+            <SW.Notification>{itemI === 0 ? '1' : undefined}</SW.Notification>
           </SW.Item>
         ))}
       </Fragment>
     ))
   }
   renderContent() {
-    return (
-      <SW.ContentWrapper>
-        <PingList />
-      </SW.ContentWrapper>
-    )
+    const { activeType, activeItem } = this.state;
+    if(activeType === 0) {
+      return <PingList activeItem={activeItem} />
+    }
+    return <DiscussionList activeItem={activeItem} />
   }
   render() {
     return (

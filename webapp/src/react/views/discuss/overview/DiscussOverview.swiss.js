@@ -14,9 +14,6 @@ export default styleSheet('DiscussOverview', {
     paddingTop: '12px',
     borderRight: '1px solid $sw3',
   },
-  ContentWrapper: {
-    _size: '100%',
-  },
   Section: {
     _font: ['12px', '18px', 500],
     color: '$sw2',
