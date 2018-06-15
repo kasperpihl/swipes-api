@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Document, setOptions, Page } from 'react-pdf/dist/entry.webpack';
 
-setOptions({
-  workerSrc: '/js/pdf.worker.js',
-});
+// setOptions({
+//   workerSrc: '/js/pdf.worker.js',
+// });
 
 class PDFRender extends PureComponent {
   constructor(props) {
