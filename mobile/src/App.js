@@ -18,6 +18,7 @@ import * as a from 'actions';
 import HOCModal from 'components/modal/HOCModal';
 import HOCLoading from 'components/loading/HOCLoading';
 import HOCViewController from './navigation/view-controller/HOCViewController';
+import getGlobals from 'utils/globals';
 
 const styles = StyleSheet.create({
   app: {
@@ -47,12 +48,24 @@ class App extends PureComponent {
     this.onOpened = this.onOpened.bind(this);
   }
   componentWillMount() {
+    // Temp fix for Android
+    // Fix for next release - make it as in documentation for ios and android
+    if (Platform.OS === 'android') {
+      let key = '420ca44f-378a-4ce5-adb7-18cef4b689c0';
+
+      if (getGlobals().isDev) {
+        key = 'db8f2558-a836-4e95-b22b-089e8e85f6e9';
+      }
+
+      OneSignal.init(key);
+    }
+
     OneSignal.addEventListener('ids', this.onIds);
     OneSignal.addEventListener('opened', this.onOpened);
     OneSignal.inFocusDisplaying(2);
   }
   componentDidMount() {
-    //this.checkTagsAndUpdate();
+    // this.checkTagsAndUpdate();
   }
   componentDidUpdate(prevProps) {
     if (this.props.ready && this.forwardToIndex) {
@@ -60,7 +73,6 @@ class App extends PureComponent {
         this.props.sliderChange(this.forwardToIndex);
         this.forwardToIndex = undefined;
       }, 1);
-
     }
 
     if (prevProps.myId !== this.props.myId) {
@@ -85,7 +97,7 @@ class App extends PureComponent {
         receivedTags = {};
       }
       if (isHydrated && !myId && receivedTags.swipesUserId) {
-        OneSignal.deleteTag("swipesUserId");
+        OneSignal.deleteTag('swipesUserId');
       } else if (isHydrated && myId && !receivedTags.swipesUserId) {
         OneSignal.sendTag('swipesUserId', myId);
       }
@@ -101,7 +113,7 @@ class App extends PureComponent {
   }
   renderLoader() {
     const { isHydrated, hasConnected, status } = this.props;
-    if(!isHydrated || (!hasConnected && status === 'connecting')) {
+    if (!isHydrated || (!hasConnected && status === 'connecting')) {
       return (
         <LinearGradient
           start={{ x: 0.0, y: 0.0 }}
@@ -122,7 +134,7 @@ class App extends PureComponent {
       return undefined;
     }
 
-    return <HOCLoginFlow />
+    return <HOCLoginFlow />;
   }
   renderBackButton() {
     if (Platform.OS === 'android') {
@@ -145,7 +157,7 @@ class App extends PureComponent {
       return undefined;
     }
 
-    return <HOCNoOrg />
+    return <HOCNoOrg />;
   }
   renderApp() {
     const { token, readyInOrg, isHydrated } = this.props;
@@ -160,7 +172,7 @@ class App extends PureComponent {
         <View style={styles.wrapper}>
           <HOCViewController />
         </View>
-        <HOCInfoTab/>
+        <HOCInfoTab />
         <HOCTabNavigation />
         {this.renderBackButton()}
         {this.renderKeyboardSpacer()}

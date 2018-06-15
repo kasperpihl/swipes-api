@@ -64,12 +64,15 @@ export default styleSheet('Login', {
       },
      '&:hover': {
       '&:after': {
-        backgroundColor: 'rgba($sw1, 1)',
+        backgroundColor: 'rgba($blue, 1)',
       }
      },
      '&:active': {
       color: '$sw2',
-     }
+     },
+     '&:visited': {
+       color: '$sw2',
+     },
     }
   },
 

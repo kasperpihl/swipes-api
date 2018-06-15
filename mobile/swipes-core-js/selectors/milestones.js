@@ -1,31 +1,29 @@
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
+import { List } from 'immutable';
 import GoalsUtil from '../classes/goals-util';
 import { searchSelectorFromKeys } from '../classes/utils';
 
 const getMilestone = (state, props) => state.getIn(['milestones', props.milestoneId]);
-const getAllGoals = (state) => state.get('goals');
-const getMilestones = (state) => state.get('milestones');
+const getAllGoals = state => state.get('goals');
+const getMilestones = state => state.get('milestones');
 
 export const getGoals = createSelector(
-  [ getMilestone, getAllGoals ],
+  [getMilestone, getAllGoals],
   (milestone, goals) => {
-    if(!milestone) {
+    if (!milestone) {
       return List();
     }
     return msgGen.milestones.getGoals(milestone, goals);
-  }
-)
+  },
+);
 
 export const getGroupedGoals = createSelector(
-  [ getMilestone, getAllGoals ],
-  (m, goals) => {
-    return m.get('goal_order').map(l => l.map(gId => goals.get(gId)));
-  }
-)
+  [getMilestone, getAllGoals],
+  (m, goals) => m.get('goal_order').map(l => l.map(gId => goals.get(gId))),
+);
 
 export const getGrouped = createSelector(
-  [ getMilestones ],
+  [getMilestones],
   (milestones) => {
     let gm = milestones.sort((a, b) => {
       if (a.get('closed_at') && b.get('closed_at')) {
@@ -34,18 +32,16 @@ export const getGrouped = createSelector(
         return a.get('closed_at') ? 1 : -1;
       }
       return b.get('created_at').localeCompare(a.get('created_at'));
-    }).groupBy(m => m.get('closed_at') ? 'Achieved' : 'Current Milestones');
+    }).groupBy(m => (m.get('closed_at') ? 'Achieved' : 'Current Milestones'));
     gm = gm.set('Achieved', gm.get('Achieved') || List());
     gm = gm.set('Current plans', gm.get('Current Milestones') || List());
     return gm;
-  }
+  },
 );
 
 export const getCurrent = createSelector(
-  [ getMilestones ],
-  (milestones) => milestones.filter(m => !m.get('closed_at')).sort((m1, m2) => {
-    return msgGen.milestones.getName(m1).localeCompare(msgGen.milestones.getName(m2));
-  }),
+  [getMilestones],
+  milestones => milestones.filter(m => !m.get('closed_at')).sort((m1, m2) => msgGen.milestones.getName(m1).localeCompare(msgGen.milestones.getName(m2))),
 );
 
 export const search = searchSelectorFromKeys([
