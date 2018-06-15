@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
-import { setupDelegate, miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import { setupDelegate } from 'react-delegate';
+import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors, viewSize } from 'globalStyles';
 import * as gs from 'styles';
 import HOCHeader from 'HOCHeader';
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
   header: {
     ...gs.mixins.size(1),
     ...gs.mixins.flex('row'),
-    ...gs.mixins.padding(0 ,15),
+    ...gs.mixins.padding(0, 15),
   },
   headerSide: {
     ...gs.mixins.size(1),
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
   },
   initialsLabel: {
     ...gs.mixins.font(28, gs.colors.bgColor),
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   textStyle: {
     ...gs.mixins.font(13, gs.colors.deepBlue40, 18),
@@ -76,7 +77,8 @@ const styles = StyleSheet.create({
     ...gs.mixins.size(viewSize.width - 30, 1),
     backgroundColor: gs.colors.deepBlue10,
     position: 'absolute',
-    left: 15, bottom: 0,
+    left: 15,
+    bottom: 0,
   },
   commentsButton: {
     ...gs.mixins.flex('center'),
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
     height: 54,
   },
   commentsButtonLabel: {
-    ...gs.mixins.font(13, gs.colors.deepBlue100, '500')
+    ...gs.mixins.font(13, gs.colors.deepBlue100, '500'),
   },
   reactionWrapper: {
     ...gs.mixins.size(75, 54),
@@ -108,17 +110,6 @@ const styles = StyleSheet.create({
     ...gs.mixins.font(12, gs.colors.deepBlue80, '500'),
     paddingLeft: 12,
   },
-  typeWrapper: {
-    alignSelf: 'stretch',
-    alignItems: 'flex-end',
-    marginBottom: 6,
-    paddingRight: 15,
-  },
-  typeLabel: {
-    ...gs.mixins.padding(4, 12),
-    ...gs.mixins.font(11, 'white', 'bold'),
-    ...gs.mixins.borderRadius(100, 0, 0, 100),
-  }
 });
 
 class PostFeed extends PureComponent {
@@ -133,65 +124,34 @@ class PostFeed extends PureComponent {
     const { post } = this.props;
 
     if (type === 'comments') {
-     this.onOpenPost(post.get('id'), true)
+      this.onOpenPost(post.get('id'), true);
     } else {
-     this.onOpenPost(post.get('id'))
+      this.onOpenPost(post.get('id'));
     }
-  }
-  getInfoForType(type) {
-
-    switch (type) {
-      case 'announcement':
-        return { label: 'Announcement', color: '#ffb337' }
-      case 'question':
-        return { label: 'Question', color: '#7900ff' }
-      case 'information':
-        return { label: 'Information', color: '#007aff' }
-      case 'post':
-      default:
-        return { label: 'Post', color: '#1cc05d' }
-    }
-  }
-  renderType() {
-    const { post } = this.props;
-    const type = post.get('type');
-    const typeInfo = this.getInfoForType(type);
-
-    return (
-      <View style={styles.typeWrapper}>
-        <View>
-          <Text style={[styles.typeLabel, {backgroundColor: typeInfo.color }]}>{typeInfo.label.toUpperCase()}</Text>
-        </View>
-      </View>
-    )
   }
   renderGeneratedTitle() {
-    const { post, delegate } = this.props;
-
-    const type = post.get('type');
-
-    let string = [
+    const { post } = this.props;
+    const string = [
       {
         id: post.get('created_by'),
         string: msgGen.users.getFirstName(post.get('created_by')),
-        boldStyle: styles.boldStyle
+        boldStyle: styles.boldStyle,
       },
       ' ',
-      msgGen.posts.getPostTypeTitle(type)
+      msgGen.posts.getPostTypeTitle(),
     ];
 
     const taggedUsers = post.get('tagged_users');
     if (taggedUsers.size) {
       string.push(' to ');
       taggedUsers.forEach((id, i) => {
-
         if (i > 0) {
           string.push(i === taggedUsers.size - 1 ? ' and ' : ', ');
         }
         string.push({
           id,
           string: msgGen.users.getFirstName(id),
-          boldStyle: styles.boldStyle
+          boldStyle: styles.boldStyle,
         });
       });
     }
@@ -211,40 +171,39 @@ class PostFeed extends PureComponent {
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text selectable={true} style={styles.initialsLabel}>
+          <Text selectable style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>
-      )
+      );
     }
 
     return (
       <View style={styles.profilePicWrapper}>
         <Image source={{ uri: image }} style={styles.profilePic} />
       </View>
-    )
+    );
   }
   renderHeaderSubtitle() {
     const { post } = this.props;
     const timeStamp = timeAgo(post.get('created_at'), true);
-    const seperator = post.get('context') ? <Text selectable={true} style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
-    const contextTitle = post.get('context') ? <Text selectable={true} style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text> : undefined;
-    const icon = post.get('context') ? <Icon name={miniIconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
+    const seperator = post.get('context') ? <Text selectable style={styles.subtitleLabel}>&nbsp;•&nbsp;</Text> : undefined;
+    const contextTitle = post.get('context') ? <Text selectable style={styles.subtitleLabel}>{post.getIn(['context', 'title'])}</Text> : undefined;
+    const icon = post.get('context') ? <Icon icon={miniIconForId(post.getIn(['context', 'id']))} width="12" height="12" fill={colors.deepBlue40} /> : undefined;
     const padding = post.get('context') ? 5 : 0;
 
     return (
       <View style={styles.subtitle}>
         {icon}
-        <Text selectable={true} style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
+        <Text selectable style={[styles.subtitleTextWrapper, { paddingLeft: padding }]}>
           {contextTitle}
           {seperator}
-          <Text selectable={true} style={styles.subtitleLabel}>{timeStamp}</Text>
+          <Text selectable style={styles.subtitleLabel}>{timeStamp}</Text>
         </Text>
       </View>
-    )
+    );
   }
   renderHeader() {
-
     return (
       <View style={styles.header}>
         {this.renderProfilePic()}
@@ -253,7 +212,7 @@ class PostFeed extends PureComponent {
           {this.renderHeaderSubtitle()}
         </View>
       </View>
-    )
+    );
   }
   renderMessage() {
     const { post, delegate } = this.props;
@@ -262,18 +221,18 @@ class PostFeed extends PureComponent {
     return (
       <View style={styles.messageWrapper}>
         <RippleButton onPress={this.handleOpenPost} style={{ flex: 1 }}>
-         <View style={{ flex: 1, alignSelf: 'stretch', ...gs.mixins.flex('row', 'left', 'center') }}>
-          <ParsedText
-            style={styles.message}
-            parse={
-              [
-                { type: 'url', style: styles.url, onPress: this.onOpenUrl },
-              ]
-            }
-          >
-            {message}
-          </ParsedText>
-         </View> 
+          <View style={{ flex: 1, alignSelf: 'stretch', ...gs.mixins.flex('row', 'left', 'center') }}>
+            <ParsedText
+              style={styles.message}
+              parse={
+                [
+                  { type: 'url', style: styles.url, onPress: this.onOpenUrl },
+                ]
+              }
+            >
+              {message}
+            </ParsedText>
+          </View>
         </RippleButton>
         <View style={styles.reactionWrapper}>
           <Reactions
@@ -283,7 +242,7 @@ class PostFeed extends PureComponent {
           />
         </View>
       </View>
-    )
+    );
   }
   renderComments() {
     const { post } = this.props;
@@ -301,7 +260,7 @@ class PostFeed extends PureComponent {
           <Text style={styles.commentsButtonLabel}>{commentsString}</Text>
         </View>
       </RippleButton>
-    )
+    );
   }
   renderActions() {
     const { post, delegate } = this.props;
@@ -311,7 +270,7 @@ class PostFeed extends PureComponent {
         {this.renderComments()}
         <View style={styles.actionsSeperator} />
       </View>
-    )
+    );
   }
   renderAttachments() {
     const { post } = this.props;
@@ -320,28 +279,28 @@ class PostFeed extends PureComponent {
       <RippleButton onPress={this.onAttachmentClickCached(i, post)} key={i}>
         <View style={styles.attachment}>
           <Icon
-            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            icon={attachmentIconForService(att.getIn(['link', 'service']))}
             width="24"
             height="24"
             fill={colors.deepBlue80}
           />
-          <Text selectable={true} style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+          <Text selectable style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
         </View>
       </RippleButton>
-    ))
+    ));
 
     return (
       <View style={styles.attachments}>
         {attachments}
       </View>
-    )
+    );
   }
   render() {
     return (
       <View style={styles.container}>
         <RippleButton onPress={this.handleOpenPost}>
           <View>
-            {this.renderType()}
+            {/* {this.renderType()} */}
             {this.renderHeader()}
           </View>
         </RippleButton>

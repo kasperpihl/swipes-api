@@ -4,6 +4,9 @@ import {
   array,
 } from 'valjs';
 import {
+  organizationsAddMilestone,
+} from './organizations';
+import {
   milestonesCreate,
   milestonesInsert,
   milestonesAddGoal,
@@ -19,6 +22,7 @@ import {
   postsInsertSingle,
   postsCreateComment,
   postsAddComment,
+  postsMentionsParse,
 } from './posts';
 import {
   notesCreate,
@@ -715,6 +719,7 @@ const onboardingGetMiddlewares = [
   mapLocals(locals => ({
     milestone_id: locals.milestone.id,
   })),
+  organizationsAddMilestone,
   // Goal one
   onboardingGoalThreeData,
   goalsCreate,
@@ -790,6 +795,7 @@ const onboardingGetMiddlewares = [
   // Create comments for post
   onboardingCommentsPost_1_1,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   // Create second post
   onboardingPost_2,
@@ -798,9 +804,11 @@ const onboardingGetMiddlewares = [
   // Create comments for second post
   onboardingCommentsPost_2_1,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   onboardingCommentsPost_2_2,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   // Goal two
   onboardingGoalTwoData,
@@ -866,6 +874,7 @@ const onboardingGetMiddlewares = [
   onboardingNotificationPost,
   onboardingCommentsPost_8_1,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   // Goals three
   onboardingGoalOneData,
@@ -957,6 +966,7 @@ const onboardingGetMiddlewares = [
   }),
   onboardingCommentsPost_4_1,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   // Create Post
   onboardingPost_5,
@@ -967,6 +977,7 @@ const onboardingGetMiddlewares = [
   // Add comments to post
   onboardingCommentsPost_5_1,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   // Goals four
   onboardingGoalFourData,
@@ -1044,18 +1055,22 @@ const onboardingGetMiddlewares = [
   // Create comments for post
   onboardingCommentsPost_6_1,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   onboardingCommentsPost_6_2,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   onboardingCommentsPost_6_3,
   postsCreateComment,
   postsAddComment,
   onboardingCommentsPost_6_4,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   onboardingCommentsPost_6_5,
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
   // Create post
   onboardingPost_7,

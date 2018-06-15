@@ -1,25 +1,30 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
+import { styleElement, SwissProvider } from 'swiss-react';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import RotateLoader from 'components/loaders/RotateLoader';
 import Icon from 'Icon';
-import './styles/logout-button.scss'
+import styles from './LogoutButton.swiss';
 
-class HOCLogoutButton extends PureComponent {
+const Wrapper = styleElement('div', styles.Wrapper);
+const Label = styleElement('div', styles.Label);
+const Loader = styleElement('div', styles.Loader);
+
+@connect(state => ({
+  isElectron: state.getIn(['globals', 'isElectron']),
+}), {
+  confirm: menuActions.confirm,
+  signout: mainActions.signout,
+})
+
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);
 
     bindAll(this, ['onLogout']);
-  }
-  componentDidMount() {
   }
   onLogout(e) {
     const { isElectron, confirm } = this.props;
@@ -47,29 +52,16 @@ class HOCLogoutButton extends PureComponent {
     return <div>Loading</div>;
   }
   render() {
-    let className = 'compatible-logout';
-
-    if (this.isLoading('loggingout')) className += ' compatible-logout--loading'
 
     return (
-      <div className={className} onClick={this.onLogout}>
-        <div className="compatible-logout__loader">
-          <RotateLoader size={36} />
-        </div>  
-        <div className="compatible-logout__label">Log out</div>
-      </div>
+      <SwissProvider loading={this.isLoading('loggingout')}>
+        <Wrapper onClick={this.onLogout}>
+          <Loader>
+            <RotateLoader size={36} />
+          </Loader>
+          <Label>Log out</Label>
+        </Wrapper>
+      </SwissProvider>
     )
   }
 }
-// const { string } = PropTypes;
-
-HOCLogoutButton.propTypes = {};
-
-const mapStateToProps = (state) => ({
-  isElectron: state.getIn(['globals', 'isElectron']),
-});
-
-export default connect(mapStateToProps, {
-  confirm: a.menus.confirm,
-  signout: a.main.signout,
-})(HOCLogoutButton);

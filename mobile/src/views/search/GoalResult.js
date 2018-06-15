@@ -74,7 +74,7 @@ class GoalResult extends PureComponent {
     if (isCompleted) {
       return (
         <View style={styles.completedIndicator} >
-          <Icon name="ChecklistCheckmark" width="18" height="18" fill="white" />
+          <Icon icon="ChecklistCheckmark" width="18" height="18" fill="white" />
         </View>
       )
     }

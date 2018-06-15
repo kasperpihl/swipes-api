@@ -1,28 +1,56 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Svg, {
-  Circle,
-  Ellipse,
-  G,
-  LinearGradient,
-  RadialGradient,
-  Line,
-  Path,
-  Polygon,
-  Polyline,
-  Rect,
-  Symbol,
-  Use,
-  Defs,
-  Stop
-} from 'react-native-svg';
 import { connect } from 'react-redux';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import RippleButton from 'RippleButton';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from 'globalStyles';
 
-const PROGRESS_DASH = 320.4876403808594;
+const styles = StyleSheet.create({
+  button: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: 15,
+    paddingVertical: 18,
+    width: viewSize.width - 30,
+  },
+  border: {
+    width: viewSize.width - 30,
+    height: 1,
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    backgroundColor: colors.deepBlue5,
+    marginHorizontal: 15,
+  },
+  title: {
+    width: viewSize.width - 90 - 40,
+    fontSize: 18,
+    lineHeight: 24,
+    color: colors.deepBlue100,
+    paddingLeft: 15,
+  },
+  progressBar: {
+    width: 90,
+    height: 16,
+    borderRadius: 12,
+    backgroundColor: colors.greenWithOpacity(0.1),
+    alignSelf: 'center',
+    overflow: 'hidden',
+  },
+  goalProgress: {
+    position: 'absolute',
+    zIndex: 2,
+    height: 16,
+    backgroundColor: colors.green,
+  },
+  stepProgress: {
+    position: 'absolute',
+    zIndex: 1,
+    height: 16,
+    backgroundColor: colors.greenWithOpacity(0.3),
+  },
+});
 
 class HOCMilestoneItem extends PureComponent {
   constructor(props) {
@@ -35,95 +63,86 @@ class HOCMilestoneItem extends PureComponent {
     setupDelegate(this, 'onOpenMilestone');
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ goals: this.getFilteredGoals(nextProps.milestone) })
+    this.setState({ goals: this.getFilteredGoals(nextProps.milestone) });
   }
   getFilteredGoals(milestone) {
     return msgGen.milestones.getGoals(milestone);
+  }
+  getProgress() {
+    const { milestone } = this.props;
+
+    if (milestone.get('closed_at')) {
+      return [100, 100];
+    }
+
+    const { goals } = this.state;
+    const numberOfGoals = goals.size;
+    let numberOfSteps = 0;
+    let numberOfCompletedSteps = 0;
+    const numberOfCompletedGoals = goals.filter((g) => {
+      const goal = new GoalsUtil(g);
+      if (!goal.getIsCompleted()) {
+        const dSteps = goal.getNumberOfSteps();
+
+        if (dSteps) {
+          numberOfSteps += dSteps;
+          numberOfCompletedSteps += goal.getNumberOfCompletedSteps();
+        } else {
+          numberOfSteps += 1;
+        }
+      }
+
+      return goal.getIsCompleted();
+    }).size;
+
+    const goalPercentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
+    let stepPercentage = numberOfSteps ? parseInt((numberOfCompletedSteps / numberOfSteps) * 100, 10) : 0;
+
+    if (!stepPercentage) {
+      stepPercentage = '0';
+    } else {
+      const remainingPercentage = 100 - goalPercentage;
+      const extraWidth = (remainingPercentage / 100) * stepPercentage;
+
+      stepPercentage = `${goalPercentage + extraWidth}`;
+    }
+
+    return [goalPercentage, stepPercentage];
   }
   openMilestone() {
     const { milestone } = this.props;
 
     this.onOpenMilestone(milestone);
   }
-  renderProgress() {
-    const { goals } = this.state;
-    const numberOfGoals = goals.size;
-    const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
-
-    return (
-      <Text selectable={true} style={styles.subtitle}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
-    );
-  }
   renderHeader() {
     const { milestone } = this.props;
 
     return (
-      <View style={styles.titleWrapper}>
-        <Text selectable={true} style={styles.title}>{milestone.get('title')}</Text>
-      </View>
-    )
+      <Text selectable style={styles.title}>{milestone.get('title')}</Text>
+    );
   }
-  renderProgressCounter() {
-    const { goals } = this.state;
-    const numberOfGoals = goals.size;
-    const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
+  renderProgressBar() {
+    const [goalPercentage, stepPercentage] = this.getProgress();
+    const stylesGoalProgress = StyleSheet.flatten([styles.goalProgress, { width: `${goalPercentage}%` }]);
+    const stylesStepProgress = StyleSheet.flatten([styles.stepProgress, { width: `${stepPercentage}%` }]);
 
     return (
-      <View style={styles.counterWrapper}>
-        <Text selectable={true} style={styles.counter}>{numberOfCompletedGoals}/{numberOfGoals}</Text>
+      <View style={styles.progressBar} >
+        <View style={stylesGoalProgress} />
+        <View style={stylesStepProgress} />
       </View>
-    )
-  }
-  renderProgressWheel() {
-    const { goals } = this.state;
-    const numberOfGoals = goals.size;
-    const numberOfCompletedGoals = goals.filter(g => new GoalsUtil(g).getIsCompleted()).size;
-    const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
-    const svgDashOffset = PROGRESS_DASH - ((PROGRESS_DASH * percentage) / 100);
-
-    return (
-      <View style={styles.progressWheelContainer}>
-        <View style={styles.shadowWheel}>
-          <Svg viewBox="0 0 150 150" width="90" height="90" >
-            <Path
-              d="M75,24a51,51,0,1,0,51,51A51,51,0,0,0,75,24"
-              stroke={colors.deepBlue5}
-              fill="none"
-              strokeWidth="48"
-            />
-          </Svg>
-        </View>
-        <View style={styles.progressWheel}>
-          <Svg viewBox="0 0 150 150" width="90" height="90" >
-            <Path
-              d="M75,24a51,51,0,1,0,51,51A51,51,0,0,0,75,24"
-              stroke={colors.tishoGreen}
-              fill="none"
-              strokeWidth="48"
-              strokeDasharray={[PROGRESS_DASH]}
-              strokeDashoffset={svgDashOffset}
-            />
-          </Svg>
-        </View>
-        <View style={styles.progressDot}></View>
-      </View>
-    )
+    );
   }
   render() {
-
     return (
-      <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} style={styles.button} onPress={this.openMilestone}>
+      <RippleButton rippleColor={colors.deepBlue60} rippleOpacity={0.8} onPress={this.openMilestone}>
         <View style={styles.button}>
-          {this.renderProgressWheel()}
-          <View style={styles.container}>
-            {this.renderHeader()}
-            {this.renderProgressCounter()}
-          </View>
-
+          {this.renderProgressBar()}
+          {this.renderHeader()}
           <View style={styles.border} />
         </View>
       </RippleButton>
-    )
+    );
   }
 }
 const mapStateToProps = (state, ownProps) => ({
@@ -131,75 +150,4 @@ const mapStateToProps = (state, ownProps) => ({
   goals: state.get('goals'),
 });
 
-export default connect(mapStateToProps, {
-
-})(HOCMilestoneItem);
-
-const styles = StyleSheet.create({
-  button: {
-    flex: 1,
-    flexDirection: 'row',
-    height: 126,
-    paddingHorizontal: 15,
-    paddingVertical: 18,
-  },
-  border: {
-    width: viewSize.width - 30,
-    height: 1,
-    position: 'absolute',
-    left: 0, bottom: 0,
-    backgroundColor: colors.deepBlue5,
-    marginHorizontal: 15,
-  },
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    paddingLeft: 24,
-  },
-  titleWrapper: {
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 18,
-    lineHeight: 24,
-    color: colors.deepBlue100,
-  },
-  counterWrapper: {
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    paddingTop: 6,
-  },
-  counter: {
-    fontSize: 12,
-    lineHeight: 18,
-    fontWeight: '500', 
-    color: colors.deepBlue50,
-  },
-  shadowWheel: {
-    width: 90,
-    height: 90,
-    position: 'absolute',
-  },
-  progressWheelContainer: {
-    alignSelf: 'stretch',
-    height: 90,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  progressWheel: {
-    width: 90,
-    height: 90,
-    borderRadius: 90 / 2,
-    transform: [
-      { rotateY: '180deg' }
-    ]
-  },
-  progressDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.deepBlue100,
-    position: 'absolute'
-  }
-});
+export default connect(mapStateToProps, {})(HOCMilestoneItem);

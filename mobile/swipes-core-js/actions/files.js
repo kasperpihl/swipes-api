@@ -3,7 +3,6 @@ import * as a from './';
 const sendFile = (presignedURL, file, callback) => {
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
-    console.log(xhr);
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
         callback({ ok: true });
@@ -17,7 +16,7 @@ const sendFile = (presignedURL, file, callback) => {
   xhr.send(file);
 };
 
-export const uploadToS3 = (files) => (d, getState) => new Promise((resolve) => {
+export const uploadToS3 = files => (d, getState) => new Promise((resolve) => {
   const file = files[0];
   const fileName = file.name;
   const orgId = getState().getIn(['me', 'organizations', 0, 'id']);
@@ -39,10 +38,10 @@ export const uploadToS3 = (files) => (d, getState) => new Promise((resolve) => {
         resolve({ ok: false });
       }
     });
-  })
-})
+  });
+});
 
-export const create = (files) => (d, getState) => new Promise((resolve) => {
+export const create = files => (d, getState) => new Promise((resolve) => {
   // First do S3 upload
   const file = files[0];
   const fileName = file.name;
@@ -56,8 +55,8 @@ export const create = (files) => (d, getState) => new Promise((resolve) => {
       organization_id: orgId,
       file_name: fileName,
       s3_url: s3res.s3Url,
-    }))
+    }));
   }).then((localRes) => {
     resolve(localRes);
-  })
+  });
 });

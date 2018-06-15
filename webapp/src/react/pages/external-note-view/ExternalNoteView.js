@@ -1,12 +1,7 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
+import { styleElement } from 'swiss-react';
 import loadPage from 'src/react/pages/load';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { bindAll, getURLParameter } from 'swipes-core-js/classes/utils';
-// import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
-
 import NoteEditor from 'components/note-editor/NoteEditor';
 import './styles/external-note-view.scss';
 
@@ -18,8 +13,6 @@ class ExternalNoteView extends PureComponent {
   }
   componentWillMount() {
     this.loadNote();
-  }
-  componentDidMount() {
   }
   setEditorState(editorState) {
     if(!this.state.editorState) {
@@ -95,7 +88,3 @@ class ExternalNoteView extends PureComponent {
 }
 
 loadPage(ExternalNoteView);
-
-// const { string } = PropTypes;
-
-ExternalNoteView.propTypes = {};

@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
-// import { map, list } from 'react-immutable-proptypes';
+import { styleElement, SwissProvider } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
-import './styles/floating-input.scss';
+import styles from './FloatingInput.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const Input = styleElement('input', styles.Input);
+const Label = styleElement('label', styles.Label);
 
 class FloatingInput extends PureComponent {
   constructor(props) {
@@ -13,12 +16,10 @@ class FloatingInput extends PureComponent {
       floatValue: 0 || props.value.length,
       visiblePassword: false,
     };
-    bindAll(this, ['floatFocus', 'floatBlur', 'showPassword', 'hidePassword']);
-    setupDelegate(this, 'onClick', 'onChange');
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.focus !== this.props.focus && !this.props.focus) {
-      this.refs.floatingInput.focus();
+      this.input.focus();
       this.setState({ float: true });
     }
 
@@ -26,14 +27,13 @@ class FloatingInput extends PureComponent {
       this.setState({ floatValue: nextProps.value.length });
     }
   }
-  floatFocus() {
+  floatFocus = () => {
     if (!this.state.float) {
       this.setState({ float: !this.state.float });
     }
   }
-  floatBlur() {
-    const input = this.refs.floatingInput;
-    const inputVal = input.value.length;
+  floatBlur = () => {
+    const inputVal = this.input.value.length;
 
     if (this.state.float) {
       this.setState({ float: !this.state.float });
@@ -41,71 +41,30 @@ class FloatingInput extends PureComponent {
 
     this.setState({ floatValue: inputVal });
   }
-  showPassword() {
-    const { visiblePassword } = this.state;
-
-    if (!visiblePassword) {
-      this.setState({ visiblePassword: true });
-    }
-  }
-  hidePassword() {
-    const { visiblePassword } = this.state;
-
-    if (visiblePassword) {
-      this.setState({ visiblePassword: false });
-    }
-  }
   render() {
-    const { inputKey, type, placeholder, value, props } = this.props;
+    const { inputKey, type, placeholder, value, inviteFormField, inputError, inputProps } = this.props;
+
     const { visiblePassword, float, floatValue } = this.state;
-    let floatingClass = 'floating-input';
-    let iconClass = 'floating-input__icon';
-    let newType = type;
-
-    if (float) {
-      floatingClass += ' floating-input--active';
-    }
-
-    if (floatValue > 0) {
-      floatingClass += ' floating-input--standby';
-    }
-
-    if (type === 'password' && value.length > 0) {
-      iconClass += ' floating-input__icon--visible';
-      newType = visiblePassword ? 'text' : type;
-    }
-
+    console.log(inputError);
     return (
-      <div className={floatingClass}>
-        <input
-          ref="floatingInput"
-          type={newType}
-          value={value}
-          id={inputKey}
-          onFocus={this.floatFocus}
-          onBlur={this.floatBlur}
-          onChange={this.onChangeCached(inputKey)}
-          className="floating-input__input"
-          autoComplete="off"
-          {...props}
-        />
-        <label htmlFor={inputKey}>{placeholder}</label>
-
-        <div
-          className={iconClass}
-          onMouseDown={this.showPassword}
-          onMouseUp={this.hidePassword}
-          onMouseLeave={this.hidePassword}
-        >
-          <Icon icon="Eye" className="floating-input__svg" />
-        </div>
-      </div>
+      <SwissProvider active={!!float} standBy={floatValue > 0} inviteFormField={inviteFormField} inputError={inputError} >
+        <Wrapper className={this.props.className}>
+          <Input
+            innerRef={c => this.input = c}
+            type={type}
+            value={value}
+            id={inputKey}
+            onFocus={this.floatFocus}
+            onBlur={this.floatBlur}
+            onChange={this.props.onChange}
+            autoComplete="off"
+            {...inputProps}
+          />
+          <Label htmlFor={inputKey}>{inputError || placeholder}</Label>
+        </Wrapper>
+      </SwissProvider>
     );
   }
 }
 
 export default FloatingInput;
-
-// const { string } = PropTypes;
-
-FloatingInput.propTypes = {};

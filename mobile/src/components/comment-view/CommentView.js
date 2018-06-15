@@ -1,14 +1,14 @@
-import React, { PureComponent } from "react";
-import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback } from "react-native";
-import ParsedText from "react-native-parsed-text";
+import React, { PureComponent } from 'react';
+import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback } from 'react-native';
+import ParsedText from 'react-native-parsed-text';
 
-import { setupDelegate, attachmentIconForService } from "swipes-core-js/classes/utils";
-import { timeAgo } from "swipes-core-js/classes/time-utils";
-import { colors, viewSize } from "globalStyles";
+import { setupDelegate, attachmentIconForService } from 'react-delegate';
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
+import { colors, viewSize } from 'globalStyles';
 import * as gs from 'styles';
-import Icon from "Icon";
-import RippleButton from "RippleButton";
-import Reactions from "../reactions/Reactions";
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
+import Reactions from '../reactions/Reactions';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   message: {
     ...gs.mixins.font(13, gs.colors.deepBlue100, 18),
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   url: {
     ...gs.mixins.font(12, gs.colors.blue100, 15),
@@ -98,42 +98,42 @@ const styles = StyleSheet.create({
   timestampLabel: {
     ...gs.mixins.font(12, colors.deepBlue50),
     ...gs.mixins.padding(9, 6),
-  }
+  },
 });
 
 class CommentView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      commentActive: false
+      commentActive: false,
     };
 
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
     this.handleActiveState = this.handleActiveState.bind(this);
     this.disableActiveState = this.disableActiveState.bind(this);
 
-    setupDelegate(this, 'onOpenUrl', 'onAttachmentClick')
+    setupDelegate(this, 'onOpenUrl', 'onAttachmentClick');
   }
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    // LayoutAnimation.easeInEaseOut();
   }
   disableActiveState() {
     const { commentActive } = this.state;
 
-    if (commentActive) this.setState({ commentActive: false })
+    if (commentActive) this.setState({ commentActive: false });
   }
   handleActiveState() {
     const { commentActive } = this.state;
 
-    this.setState({ commentActive: !commentActive })
+    this.setState({ commentActive: !commentActive });
   }
   renderProfilePic() {
     const { comment } = this.props;
-    const image = msgGen.users.getPhoto(comment.get("created_by"));
-    const initials = msgGen.users.getInitials(comment.get("created_by"));
+    const image = msgGen.users.getPhoto(comment.get('created_by'));
+    const initials = msgGen.users.getInitials(comment.get('created_by'));
 
     if (!image) {
       return (
@@ -153,11 +153,11 @@ class CommentView extends PureComponent {
   }
   renderName() {
     const { comment } = this.props;
-    const name = msgGen.users.getFullName(comment.get("created_by"));
+    const name = msgGen.users.getFullName(comment.get('created_by'));
 
     return (
       <View style={styles.nameWrapper}>
-        <Text selectable={true} style={styles.nameLabel}>
+        <Text selectable style={styles.nameLabel}>
           {name}
         </Text>
       </View>
@@ -169,24 +169,24 @@ class CommentView extends PureComponent {
   renderMessage() {
     const { comment } = this.props;
     const { commentActive } = this.state;
-    const name = msgGen.users.getFullName(comment.get("created_by"));
-    const message = `<!${comment.get("created_by")}|${name}> ` + comment.get("message");
+    const name = msgGen.users.getFullName(comment.get('created_by'));
+    const message = `<!${comment.get("created_by")}|${name}> ${  comment.get("message")}`;
     let extraStyles = {};
 
     if (commentActive) {
       extraStyles = {
-        backgroundColor: colors.deepBlue20
-      }
+        backgroundColor: colors.deepBlue20,
+      };
     }
 
     return (
       <View style={[styles.messageWrapper, extraStyles]}>
         <ParsedText
           style={styles.message}
-          selectable={true}
+          selectable
           parse={[
-            { type: "url", style: styles.url, onPress: this.onOpenUrl },
-            { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText},
+            { type: 'url', style: styles.url, onPress: this.onOpenUrl },
+            { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText },
           ]}
         >
           {message}
@@ -198,7 +198,7 @@ class CommentView extends PureComponent {
   renderTimestamp() {
     const { comment } = this.props;
     const { commentActive } = this.state;
-    const timestamp = timeAgo(comment.get("created_at"), true);
+    const timestamp = timeAgo(comment.get('created_at'), true);
 
     if (commentActive) {
       return (
@@ -207,11 +207,10 @@ class CommentView extends PureComponent {
             {timestamp}
           </Text>
         </View>
-      )
+      );
     }
 
     return undefined;
-
   }
   renderReactions() {
     const { comment, delegate } = this.props;
@@ -219,13 +218,13 @@ class CommentView extends PureComponent {
     return (
       <View style={styles.reactionsWrapper} >
         <Reactions
-          reactions={comment.get("reactions")}
+          reactions={comment.get('reactions')}
           delegate={delegate}
-          commentId={comment.get("id")}
+          commentId={comment.get('id')}
           height={42}
         />
       </View>
-    )
+    );
   }
   renderAttachments() {
     const { comment } = this.props;
@@ -238,21 +237,21 @@ class CommentView extends PureComponent {
       <RippleButton onPress={this.onAttachmentClickCached(i, comment)} key={i}>
         <View style={styles.attachment}>
           <Icon
-            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            icon={attachmentIconForService(att.getIn(['link', 'service']))}
             width="24"
             height="24"
             fill={colors.deepBlue80}
           />
-          <Text selectable={true} style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
+          <Text selectable style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
         </View>
       </RippleButton>
-    ))
+    ));
 
     return (
       <View style={styles.attachments}>
         {attachments}
       </View>
-    )
+    );
   }
   renderSubLine() {
     const { comment, delegate, loadingReaction } = this.props;
@@ -260,14 +259,13 @@ class CommentView extends PureComponent {
     return (
       <View style={styles.actions}>
         <Reactions
-          reactions={comment.get("reactions")}
+          reactions={comment.get('reactions')}
           delegate={delegate}
-          commentId={comment.get("id")}
-        >
-        </Reactions>
+          commentId={comment.get('id')}
+         />
         <View>
-          <Text selectable={true} style={styles.timestamp}>
-            {"  "} • {"  "}{timestamp}
+          <Text selectable style={styles.timestamp}>
+            {'  '} • {'  '}{timestamp}
           </Text>
         </View>
       </View>
@@ -287,7 +285,7 @@ class CommentView extends PureComponent {
           {this.renderTimestamp()}
         </View>
       </TouchableWithoutFeedback>
-    )
+    );
   }
 }
 

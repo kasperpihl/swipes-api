@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
-import './styles/compatible-subheader.scss';
+import { styleElement } from 'swiss-react';
+import styles from './CompatibleSubHeader.swiss';
+
+const Wrapper = styleElement('h4', styles.Wrapper);
 
 const CompatibleSubHeader = (props) => {
   const {
@@ -14,9 +11,9 @@ const CompatibleSubHeader = (props) => {
   } = props;
 
   return (
-    <h4 className="compatible-subheader">
+    <Wrapper>
       {title}
-    </h4>
+    </Wrapper>
   );
 };
 

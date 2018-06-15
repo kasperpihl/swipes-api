@@ -1,13 +1,10 @@
 import React, { PureComponent } from "react";
-// import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import * as a from "actions";
 import * as ca from "swipes-core-js/actions";
-import { getDeep } from 'swipes-core-js/classes/utils';
+import getDeep from 'swipes-core-js/utils/getDeep';
 import { mobileNavForContext } from 'utils/utils';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import PostView from "./PostView";
 
 class HOCPostView extends PureComponent {

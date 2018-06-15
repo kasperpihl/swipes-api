@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import Section from 'components/section/Section';
 import FloatingFormInput from './FloatingFormInput';
 import TabBar from 'components/tab-bar/TabBar';
@@ -49,7 +48,7 @@ class Organization extends PureComponent {
       return (
         <div className="organization__user" key={u.get('id')}>
           <div className="organization__user-image">
-            <HOCAssigning assignees={[u.get('id')]} rounded size={30} />
+            <HOCAssigning assignees={[u.get('id')]} size={30} />
           </div>
           <div className="organization__user-name">
             {msgGen.users.getFullName(u)}{u.get('pending') ? ' (pending)' : null}
@@ -105,10 +104,8 @@ class Organization extends PureComponent {
 
         <Button
           onClick={this.onInvite}
-          text="Invite"
-          className="organization__cta"
+          title="Invite"
           {...getLoading('invite')}
-          primary
         />
       </div>
     );
@@ -143,7 +140,3 @@ class Organization extends PureComponent {
 }
 
 export default Organization;
-
-// const { string } = PropTypes;
-
-Organization.propTypes = {};

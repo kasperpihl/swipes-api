@@ -1,5 +1,4 @@
 import { fromJS } from 'immutable';
-import { setupDelegate } from 'react-delegate';
 import * as types from '../constants';
 
 import { bindAll } from './utils';
@@ -17,6 +16,10 @@ export default class Socket {
     // Send in the current version. We use this to check if its different from last open
     store.dispatch({ type: types.SET_LAST_VERSION, payload: { version } });
     store.subscribe(this.storeChange);
+
+    if (window.addEventListener) {
+      window.addEventListener('beforeunload', () => this.forceClose(true));
+    }
   }
   storeChange() {
     const state = this.store.getState();
@@ -32,7 +35,7 @@ export default class Socket {
     }
   }
   forceClose(killSocket) {
-    if(this.ws && killSocket) {
+    if (this.ws && killSocket) {
       this.ws.close();
     } else {
       this.onCloseHandler();
@@ -55,7 +58,7 @@ export default class Socket {
     this.changeStatus('offline', nextRetry);
   }
   timedConnect(time) {
-    if(this.isConnecting || this.hasTimer) { 
+    if (this.isConnecting || this.hasTimer) {
       return;
     }
     clearTimeout(this.timer);
@@ -65,7 +68,7 @@ export default class Socket {
   connect() {
     const { getState } = this.store;
     let url = getState().getIn(['globals', 'apiUrl']);
-    
+
     if (!url) {
       console.warn('Socket requires globals reducer to have apiUrl to be set');
       return;
@@ -82,14 +85,13 @@ export default class Socket {
     this.changeStatus('connecting');
 
     this.openSocket(url);
-    
   }
   openSocket(url) {
-    if(!window.WebSocket || this.isSocketConnected) {
+    if (!window.WebSocket || this.isSocketConnected) {
       return this.fetchInit();
     }
 
-    if(this.forceConnectUrl) {
+    if (this.forceConnectUrl) {
       url = this.forceConnectUrl;
       this.forceConnectUrl = null;
     }
@@ -104,7 +106,7 @@ export default class Socket {
         this.sendPing();
       }, 5000);
       this.fetchInit();
-    }
+    };
 
     this.ws.onmessage = this.message;
 
@@ -113,11 +115,11 @@ export default class Socket {
       this.isSocketConnected = false;
       clearInterval(this._pingTimer);
       this.onCloseHandler();
-    }
+    };
   }
   fetchInit() {
     this.store.dispatch(a.me.init()).then((res) => {
-      if(res.redirectUrl) {
+      if (res.redirectUrl) {
         // The api was redirected. Connect to staging
         this.forceConnectUrl = 'https://staging.swipesapp.com';
       }
@@ -127,14 +129,14 @@ export default class Socket {
         this.reconnect_attempts = 0;
         this.changeStatus('online');
       } else if (res && res.error) {
-        if(['reload_required', 'update_required'].indexOf(res.error.message) > -1) {
+        if (['reload_required', 'update_required'].indexOf(res.error.message) > -1) {
           this.forceOffline = true;
         }
         this.forceClose();
       }
     });
   }
-  
+
   changeStatus(status, nextRetry) {
     this.status = status;
     this.store.dispatch({
@@ -156,10 +158,10 @@ export default class Socket {
     if (!type || (!this.isConnected && type !== 'pong')) {
       return;
     }
-    if(type === 'pong') {
+    if (type === 'pong') {
       this.lastPong = new Date().getTime();
     }
-    if(type === 'token_revoked') {
+    if (type === 'token_revoked') {
       const currToken = this.store.getState().getIn(['connection', 'token']);
       if (payload.token_to_revoke === currToken) {
         return this.store.disatch({ type: types.RESET_STATE });
@@ -180,7 +182,7 @@ export default class Socket {
       if (window && window.ipcListener && window.msgGen) {
         const n = fromJS(payload.notification_data);
         const nToSend = window.msgGen.notifications.getDesktopNotification(n);
-        if(nToSend) {
+        if (nToSend) {
           window.ipcListener.sendNotification(nToSend);
         }
       }
@@ -189,7 +191,7 @@ export default class Socket {
   sendPing() {
     if (this.ws && this.ws.readyState == this.ws.OPEN) {
       const now = new Date().getTime();
-      if(this.lastPong && (now - this.lastPong > EXPECTED_PONG)) {
+      if (this.lastPong && (now - this.lastPong > EXPECTED_PONG)) {
         this.forceClose(true);
       } else {
         this.ws.send(JSON.stringify({
@@ -197,12 +199,11 @@ export default class Socket {
           id: 1,
         }));
       }
-      
     }
   }
   timerForAttempt() {
     const maintenance = this.store.getState().getIn(['connection', 'versionInfo', 'maintenance']);
-    if(maintenance) return 180000;
+    if (maintenance) return 180000;
     switch (this.reconnect_attempts) {
       case 0: return 0;
       case 1:

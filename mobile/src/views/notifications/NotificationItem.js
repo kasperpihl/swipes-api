@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
-import { timeAgo } from 'swipes-core-js/classes/time-utils';
+import { setupDelegate } from 'react-delegate';
+import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors, viewSize } from 'globalStyles';
 import RippleButton from 'RippleButton';
 import StyledText from 'components/styled-text/StyledText';
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     paddingLeft: 3,
     color: colors.deepBlue40,
-  }
+  },
 });
 
 class NotificationItem extends PureComponent {
@@ -92,18 +92,18 @@ class NotificationItem extends PureComponent {
     if (!image) {
       return (
         <View style={styles.initials}>
-          <Text selectable={true} style={styles.initialsLabel}>
+          <Text selectable style={styles.initialsLabel}>
             {initials}
           </Text>
         </View>
-      )
+      );
     }
 
     return (
       <View style={styles.profilePicWrapper}>
         <Image source={{ uri: image }} style={styles.profilePic} />
       </View>
-    )
+    );
   }
   renderMessage() {
     const { notification: n } = this.props;
@@ -113,19 +113,19 @@ class NotificationItem extends PureComponent {
       <View>
         <StyledText text={text} textStyle={styles.textStyle} />
       </View>
-    )
+    );
   }
   renderTimestamp() {
     const { notification: n } = this.props;
-    const timestamp = timeAgo(n.get('created_at'), true)
+    const timestamp = timeAgo(n.get('created_at'), true);
     const icon = this.getIconForType(n);
 
     return (
       <View style={styles.timestampWrapper}>
-        <Icon name={icon} width="24" height="24" />
-        <Text selectable={true} style={styles.timestampLabel}>{timestamp}</Text>
+        <Icon icon={icon} width="24" height="24" />
+        <Text selectable style={styles.timestampLabel}>{timestamp}</Text>
       </View>
-    )
+    );
   }
   renderContent() {
     const { notification: n } = this.props;

@@ -1,11 +1,19 @@
 import * as ca from './';
 
-// ======================================================
-// Create post
-// ======================================================
-
 export const create = payload => (dp, getState) => dp(ca.api.request('posts.create', {
   organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  ...payload,
+}));
+
+export const follow = payload => (dp, getState) => dp(ca.api.request('posts.follow', {
+  ...payload,
+}));
+
+export const unfollow = payload => (dp, getState) => dp(ca.api.request('posts.unfollow', {
+  ...payload,
+}));
+
+export const archive = payload => (dp, getState) => dp(ca.api.request('posts.archive', {
   ...payload,
 }));
 

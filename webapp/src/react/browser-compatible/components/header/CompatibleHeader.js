@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { setupDelegate } from 'react-delegate';
+import { styleElement } from 'swiss-react';
 import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
-import './styles/header.scss';
+import styles from './CompatibleHeader.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const TitleContainer = styleElement('div', styles.TitleContainer);
 
 const CompatibleHeader = (props) => {
   const {
@@ -15,22 +16,22 @@ const CompatibleHeader = (props) => {
   } = props;
 
   return (
-    <div className={center ? 'compatible-header compatible-header--center' : 'compatible-header'}>
-      <div className="compatible-header__title-container">
+    <Wrapper center={center}>
+      <TitleContainer>
         {assignee && <CompatibleAssignees assignee={assignee} float="right" />}
-        <h1 className="compatible-header__title">{title}</h1>
-      </div>
-      <h3 className="compatible-header__subtitle">{subtitle}</h3>
-    </div>
+        <h1>{title}</h1>
+        <h3>{subtitle}</h3>
+      </TitleContainer>
+    </Wrapper>
   );
 };
 
 export default CompatibleHeader;
 
-const { string, func } = PropTypes;
+const { string, object, func } = PropTypes;
 
 CompatibleHeader.propTypes = {
-  assignee: string,
+  assignee: object,
   title: string,
   subtitle: string,
 };

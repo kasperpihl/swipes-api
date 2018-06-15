@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as gs from 'styles';
-// import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
 
@@ -33,7 +32,7 @@ class AttachButton extends PureComponent {
     const { numberOfAttachments } = this.props;
     
     if (!numberOfAttachments) {
-      return <Icon name="Attachment" width="24" height="24" fill={gs.colors.blue100} />
+      return <Icon icon="Attachment" width="24" height="24" fill={gs.colors.blue100} />
     }
     
     return (
@@ -53,8 +52,4 @@ class AttachButton extends PureComponent {
   }
 }
 
-export default AttachButton
-
-// const { string } = PropTypes;
-
-AttachButton.propTypes = {};
+export default AttachButton;

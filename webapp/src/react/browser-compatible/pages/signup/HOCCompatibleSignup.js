@@ -1,16 +1,21 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
 import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-import './styles/signup.scss';
+@connect(state => ({
+  token: state.getIn(['connection', 'token']),
+}), {
+  request: ca.api.request,
+  signup: ca.users.signup,
+  setUrl: navigationActions.url,
+})
 
-class HOCCompatibleSignup extends PureComponent {
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,7 +61,7 @@ class HOCCompatibleSignup extends PureComponent {
   onSignup() {
     const { formData, invitationToken, me } = this.state;
     const { signup, createOrgRequest, setUrl } = this.props;
-    
+
     if (this.isLoading('signupButton')) {
       return;
     }
@@ -106,7 +111,7 @@ class HOCCompatibleSignup extends PureComponent {
     } = this.state;
 
     const { token } = this.props;
-    
+
     if (this.isLoading('signup')) {
       return (
         <div className="compatible-signup__loader">
@@ -136,18 +141,3 @@ class HOCCompatibleSignup extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
-
-HOCCompatibleSignup.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    token: state.getIn(['connection', 'token']),
-  };
-}
-
-export default connect(mapStateToProps, {
-  request: ca.api.request,
-  signup: ca.users.signup,
-  setUrl: a.navigation.url,
-})(HOCCompatibleSignup);

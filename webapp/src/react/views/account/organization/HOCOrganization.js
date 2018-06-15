@@ -1,16 +1,33 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { fromJS } from 'immutable';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Organization from './Organization';
 
-class HOCOrganization extends PureComponent {
+@navWrapper
+@connect(state => ({
+  users: cs.users.getAllButSofi(state),
+  me: state.get('me'),
+  organization: state.getIn(['me', 'organizations', 0]),
+}), {
+  invite: ca.organizations.inviteUser,
+  confirm: menuActions.confirm,
+  deleteOrg: ca.organizations.deleteOrg,
+  leaveOrg: ca.organizations.leave,
+  completeOnboarding: ca.onboarding.complete,
+  demoteAnAdmin: ca.organizations.demoteAnAdmin,
+  disableUser: ca.organizations.disableUser,
+  enableUser: ca.organizations.enableUser,
+  promoteToAdmin: ca.organizations.promoteToAdmin,
+  contextMenu: mainActions.contextMenu,
+})
+
+export default class extends PureComponent {
   static minWidth() {
     return 900;
   }
@@ -23,8 +40,6 @@ class HOCOrganization extends PureComponent {
       tabIndex: 0,
     };
     setupLoading(this);
-  }
-  componentDidMount() {
   }
   onChange(key, val) {
     this.setState({ [key]: val});
@@ -123,8 +138,8 @@ class HOCOrganization extends PureComponent {
     const options = this.getOptionsForE(e);
     const isOwner = organization.get('owner_id') === me.get('id');
     const items = [{
-      title: 'Delete organization',
-      subtitle: 'All users will be thrown out and your subscription will be cancelled',
+      title: 'Delete account',
+      subtitle: 'Your account will be closed and all users removed. Any subscription will be canceled.',
     }];
     if(!isOwner) {
       items[0].title = 'Leave organization';
@@ -289,27 +304,3 @@ class HOCOrganization extends PureComponent {
     );
   }
 }
-// const { string } = PropTypes;
-
-HOCOrganization.propTypes = {};
-
-function mapStateToProps(state) {
-  return {
-    users: cs.users.getAllButSofi(state),
-    me: state.get('me'),
-    organization: state.getIn(['me', 'organizations', 0]),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
-  invite: ca.organizations.inviteUser,
-  confirm: a.menus.confirm,
-  deleteOrg: ca.organizations.deleteOrg,
-  leaveOrg: ca.organizations.leave,
-  completeOnboarding: ca.onboarding.complete,
-  demoteAnAdmin: ca.organizations.demoteAnAdmin,
-  disableUser: ca.organizations.disableUser,
-  enableUser: ca.organizations.enableUser,
-  promoteToAdmin: ca.organizations.promoteToAdmin,
-  contextMenu: a.main.contextMenu,
-})(HOCOrganization));

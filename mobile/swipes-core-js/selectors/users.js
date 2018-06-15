@@ -24,26 +24,26 @@ const nameSort = (a, b) => {
 
 export const getSorted = createSelector(
   [getUsers],
-  (users) => users.sort(nameSort),
+  users => users.sort(nameSort),
 );
 
 export const getAllButSofi = createSelector(
   [getSorted],
-  (users) => users.filter(u => !u.get('is_sofi')),
+  users => users.filter(u => !u.get('is_sofi')),
 );
 
 export const getActive = createSelector(
   [getSorted],
-  (users) => users.filter(u => !u.get('disabled')),
+  users => users.filter(u => !u.get('disabled')),
 );
 export const getActiveArray = createSelector(
   [getActive],
-  (users) => users.toList().toJS(),
+  users => users.toList().toJS(),
 );
 
 export const getDisabled = createSelector(
   [getSorted],
-  (users) => users.filter(u => !!u.get('disabled')),
+  users => users.filter(u => !!u.get('disabled')),
 );
 
 export const search = searchSelectorFromKeys([
@@ -55,14 +55,14 @@ export const search = searchSelectorFromKeys([
 export const autoComplete = createSelector(
   [getActiveArray, getAutoCompleteString],
   (list, autoCompleteString) => {
-    let fuse = new Fuse(list, options); // "list" is the item array
+    const fuse = new Fuse(list, options); // "list" is the item array
     return fuse.search(autoCompleteString || '').map((res) => {
       const { item } = res;
       const user = msgGen.users.getUser(item.id);
       const profilePic = msgGen.users.getPhoto(user);
       res.resultItem = {
         title: msgGen.users.getFullName(user),
-      }
+      };
       if (profilePic) {
         res.resultItem.leftIcon = {
           src: profilePic,

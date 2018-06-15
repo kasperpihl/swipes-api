@@ -1,57 +1,30 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
-import { URL_REGEX } from 'swipes-core-js/classes/utils';
+import { URL_REGEX, attachmentIconForService } from 'swipes-core-js/classes/utils';
+import unescaper from 'swipes-core-js/utils/unescaper';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
-import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
-// import SWView from 'SWView';
-// import Button from 'Button';
-// import Icon from 'Icon';
-import HOCReactions from 'components/reactions/HOCReactions';
-import './styles/comment-view.scss';
+import HOCAssigning from 'components/assigning/HOCAssigning';
+import PostAttachment from '../post-components/post-attachment/PostAttachment';
+import PostReactions from '../post-components/post-reactions/PostReactions';
+import styles from './CommentView.swiss';
+import plainMentionToContentState from 'src/utils/draft-js/plainMentionToContentState';
+
+const Container = styleElement('div', styles.Container);
+const Picture = styleElement('div', styles.Picture);
+const Content = styleElement('div', styles.Content);
+const Actions = styleElement('div', styles.Actions);
+const Name = styleElement('div', styles.Name);
+const Timestamp = styleElement(TimeAgo, styles.Timestamp);
+const Message = styleElement('div', styles.Message);
+const Attachments = styleElement('div', styles.Attachments);
 
 class CommentView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
 
-    this.openReactions = this.openReactions.bind(this);
-    setupDelegate(this, 'onLinkClick', 'shouldScroll');
-  }
-  componentDidMount() {
-  }
-  openReactions() {
-
-  }
-  renderProfilePic() {
-    const { comment } = this.props;
-    const image = msgGen.users.getPhoto(comment.get('created_by')); 
-    const initials = msgGen.users.getInitials(comment.get('created_by'));
-
-    if (!image) {
-      return (
-        <div className="comment__profile-initials">
-          {initials}
-        </div>
-      );
-    }
-
-    return (
-      <div className="comment__profile-pic">
-        <img src={image} />
-      </div>
-    );
-  }
-  renderName() {
-    const { comment } = this.props;
-    const name = msgGen.users.getFullName(comment.get('created_by'));
-
-    return (
-      <span className="comment__name">
-        {name}
-      </span>
-    );
+    setupDelegate(this, 'onLinkClick', 'shouldScroll', 'onAttachmentClick');
   }
   renderStuff(regex, inputArray, renderMethod) {
     let resArray = [];
@@ -78,7 +51,7 @@ class CommentView extends PureComponent {
   renderMessage() {
     const { comment } = this.props;
 
-    const newLinesArray = comment.get('message').split('\n');
+    const newLinesArray = unescaper(comment.get('message')).split('\n');
     const newLinesCount = newLinesArray.length - 1;
     const message = newLinesArray.map((item, key) => {
       const newLine = newLinesCount === key ? null : (<br />);
@@ -103,63 +76,64 @@ class CommentView extends PureComponent {
     });
 
     return (
-      <span className="comment__content">
+      <Message>
         {message}
-      </span>
+      </Message>
     );
   }
   renderAttachments() {
     const { comment } = this.props;
-    const attachments = comment.get('attachments');
-    if(!attachments || !attachments.size) {
+
+    if(!comment.get('attachments') || !comment.get('attachments').size) {
       return undefined;
     }
     return (
-      <div className="comment__attachments">
-        {attachments.map((att, i) => (
-          <HOCAttachmentItem attachment={att} key={i} noClose />
-        ))}
-      </div>
+      <Attachments>
+        {comment.get('attachments').map((att, i) => {
+          const icon = attachmentIconForService(att.getIn(['link', 'service']));
+          return (
+            <PostAttachment
+              title={att.get('title')}
+              key={i}
+              onClick={this.onAttachmentClickCached(i, att)}
+              icon={icon}
+            />
+          );
+        })}
+      </Attachments>
     )
   }
-  renderReaction() {
-    const { comment, postId } = this.props;
-
-    return (
-      <HOCReactions
-        reactions={comment.get('reactions')}
-        postId={postId}
-        commentId={comment.get('id')}
-      />
-    );
-  }
   render() {
-    const { comment } = this.props;
+    const { comment, postId } = this.props;
+    const attachments = comment.get('attachments');
+    const name = msgGen.users.getFullName(comment.get('created_by'));
 
     return (
-      <div className="comment" ref="comment">
-        {this.renderProfilePic()}
-        <div className="comment__side">
-          <div className="comment__section">
-            {this.renderName()}
-            {this.renderMessage()}
-            <TimeAgo
-              className="comment__timestamp"
-              prefix=" — "
-              simple
-              date={comment.get('created_at')}
-            />
-          </div>
+      <Container onClick={() => {
+        plainMentionToContentState(this.props.comment.get('message'));
+      }}>
+        <Picture>
+          <HOCAssigning assignees={[comment.get('created_by')]} size={36} />
+        </Picture>
+        <Content>
+          <Name>
+            {name}
+            <Timestamp prefix=" — " simple date={comment.get('created_at')} />
+          </Name>
+          {this.renderMessage()}
           {this.renderAttachments()}
-        </div>
-        <div className="comment__reactions">
-          {this.renderReaction()}
-        </div>
-      </div>
-    );
+        </Content>
+        <Actions>
+          <PostReactions
+            alignRight
+            reactions={comment.get('reactions')}
+            postId={postId}
+            commentId={comment.get('id')}
+          />
+        </Actions>
+      </Container>
+    )
   }
 }
 
 export default CommentView;
-// const { string } = PropTypes;
-CommentView.propTypes = {};

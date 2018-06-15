@@ -11,7 +11,7 @@ import WaitForUI from 'WaitForUI';
 import * as cs from 'swipes-core-js/selectors';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import { colors, viewSize } from 'globalStyles';
 import HOCGoalItem from './HOCGoalItem';
 
@@ -119,7 +119,7 @@ class HOCGoalList extends PureComponent {
       >
         <RippleButton onPress={this.openCreateGoalModal}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+            <Icon icon="Plus" width="24" height="24" fill={colors.deepBlue80} />
           </View>
         </RippleButton>
       </HOCHeader>
@@ -133,7 +133,7 @@ class HOCGoalList extends PureComponent {
       <RippleButton onPress={this.navigateToMilestoneCached(sectionId)}>
         <View style={styles.sectionWrapper}>
           <View style={{flexDirection: 'row'}}>
-            <Icon name={sectionIcon} fill={colors.deepBlue100} width="18" height="18" />
+            <Icon icon={sectionIcon} fill={colors.deepBlue100} width="18" height="18" />
             <Text selectable={true} style={[styles.sectionTitle, { paddingLeft: 6 }]}>{sectionTitle}</Text>
           </View>
         </View>
@@ -153,7 +153,7 @@ class HOCGoalList extends PureComponent {
 
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-        <Icon name="ESTakeAction" width="290" height="300"  />
+        <Icon icon="ESTakeAction" width="290" height="300"  />
         <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24 }}>Add your first goal</Text>
       </View>
     )

@@ -1,41 +1,29 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-// import Button from 'Button';
 import { Link } from 'react-router-dom';
+import { styleElement } from 'swiss-react';
 import Icon from 'Icon';
+import styles from './GoToWorkspace.swiss';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
-import './styles/go-to-workspace.scss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const ATag = styleElement(Link, styles.ATag);
+const SVG = styleElement(Icon, styles.SVG);
 
 class GoToWorkspace extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
-  }
+
   render() {
     const { noTitle, to } = this.props;
 
     return (
-      <div className="to-workspace">
+      <Wrapper>
         {!noTitle && <CompatibleSubHeader title="Go to the workspace" />}
-        <Link to={to || '/'} className="to-workspace__wrapper">
-          <Icon icon="SwipesLogoEmpty" className="to-workspace__svg" />
+        <ATag to={to || '/'} className="svg-hover">
+          <SVG icon="SwipesLogoEmpty"/>
           <p>Go to your Workspace</p>
-        </Link>
-      </div>
+        </ATag>
+      </Wrapper>
     );
   }
 }
 
 export default GoToWorkspace;
-
-// const { string } = PropTypes;
-
-GoToWorkspace.propTypes = {};

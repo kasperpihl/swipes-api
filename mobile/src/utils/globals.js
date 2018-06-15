@@ -1,12 +1,12 @@
-import { Platform } from 'react-native';
+import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 export default function getGlobals() {
   let apiUrl = 'https://workspace.swipesapp.com';
-  if( window.__DEV__ || 
-    DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging' || 
+  if (window.__DEV__ ||
+    DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging' ||
     DeviceInfo.getBundleId() === 'com.swipesapp.androidstaging') {
-      apiUrl = 'https://staging.swipesapp.com';
+    apiUrl = 'https://staging.swipesapp.com';
   }
   const pre = `sw-${Platform.OS}`;
 
@@ -20,6 +20,6 @@ export default function getGlobals() {
       'sw-platform': Platform.OS,
       [`${pre}-version`]: DeviceInfo.getVersion(),
       [`${pre}-build-number`]: DeviceInfo.getBuildNumber(),
-    }
+    },
   };
 }

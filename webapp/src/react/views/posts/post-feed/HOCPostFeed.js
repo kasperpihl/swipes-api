@@ -1,21 +1,25 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
-// import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import HOCPostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
 import PostFeed from './PostFeed';
 
-class HOCPostFeed extends PureComponent {
-  static maxWidth() {
-    return 600;
-  }
-  static minWidth() {
-    return 540;
+const makeMapStateToProps = () => {
+  const getFilteredList = cs.posts.makeGetFilteredList();
+  const getRelatedList = cs.posts.makeGetRelatedList();
+  return (state, props) => ({
+    posts: getFilteredList(state, props),
+    relatedPosts: getRelatedList(state, props),
+  });
+}
+
+
+@navWrapper
+@connect(makeMapStateToProps)
+export default class extends PureComponent {
+  static sizes() {
+    return [654];
   }
   constructor(props) {
     super(props);
@@ -34,8 +38,9 @@ class HOCPostFeed extends PureComponent {
     const { openModal, context } = this.props;
 
     openModal({
-      id: 'CreatePost',
+      component: HOCPostCreate,
       title: 'New post',
+      position: 'center',
       props: {
         context: context || null,
       },
@@ -102,17 +107,3 @@ class HOCPostFeed extends PureComponent {
     );
   }
 }
-
-// const { string } = PropTypes;
-HOCPostFeed.propTypes = {};
-const makeMapStateToProps = () => {
-  const getFilteredList = cs.posts.makeGetFilteredList();
-  const getRelatedList = cs.posts.makeGetRelatedList();
-  return (state, props) => ({
-    posts: getFilteredList(state, props),
-    relatedPosts: getRelatedList(state, props),
-  });
-}
-
-export default navWrapper(connect(makeMapStateToProps, {
-})(HOCPostFeed));

@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-// import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { setupLoading } from 'swipes-core-js/classes/utils';
@@ -12,7 +11,14 @@ import MilestoneList from './MilestoneList';
 const emptyList = List();
 const DISTANCE = 200;
 
-class HOCMilestoneList extends PureComponent {
+
+@navWrapper
+@connect(state => ({
+  milestones: cs.milestones.getGrouped(state),
+}), {
+  createMilestone: ca.milestones.create,
+})
+export default class extends PureComponent {
   static sizes() {
     return [654, 954];
   }
@@ -36,8 +42,6 @@ class HOCMilestoneList extends PureComponent {
       tabIndex: initialTabIndex,
     });
   }
-  componentDidMount() {
-  }
   onScroll(e) {
     this._scrollTop = e.target.scrollTop;
     if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
@@ -51,7 +55,7 @@ class HOCMilestoneList extends PureComponent {
     const { navPush } = this.props;
     this.saveState();
     navPush({
-      id: 'MilestoneOverview',
+      id: 'PlanOverview',
       title: 'Plan overview',
       props: {
         milestoneId,
@@ -122,13 +126,3 @@ class HOCMilestoneList extends PureComponent {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    milestones: cs.milestones.getGrouped(state),
-  };
-}
-
-export default navWrapper(connect(mapStateToProps, {
-  createMilestone: ca.milestones.create,
-})(HOCMilestoneList));

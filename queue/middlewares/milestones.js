@@ -33,16 +33,20 @@ const milestonesGoalAddedRemovedNotificationData = (req, res, next) => {
 };
 const milestonesGeneralWithHistoryNotificationData = (req, res, next) => {
   const {
+    organization_id,
     milestone,
+    milestone_order,
   } = res.locals;
 
   res.locals.notificationData = null;
-  res.locals.eventData = { milestone };
+  res.locals.eventData = { organization_id, milestone, milestone_order };
 
   return next();
 };
 const milestoneOpenCloseWithHistoryNotificationData = (req, res, next) => {
   const {
+    organization_id,
+    milestone_order,
     milestone,
     milestone_id,
     goal_ids,
@@ -50,6 +54,8 @@ const milestoneOpenCloseWithHistoryNotificationData = (req, res, next) => {
 
   res.locals.notificationData = null;
   res.locals.eventData = {
+    organization_id,
+    milestone_order,
     milestone_id,
     closed_at: milestone.closed_at,
     goal_order: milestone.goal_order,
@@ -88,12 +94,16 @@ const milestonesGoalsReorderedNotificationData = (req, res, next) => {
 };
 const milestonesDeletedNotificationData = (req, res, next) => {
   const {
+    organization_id,
+    milestone_order,
     milestone_id,
     goal_ids,
   } = res.locals;
 
   res.locals.notificationData = null;
   res.locals.eventData = {
+    organization_id,
+    milestone_order,
     milestone_id,
     goal_ids,
   };

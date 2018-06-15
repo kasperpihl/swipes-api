@@ -17,8 +17,4 @@ class HOCPlanCSVExporter extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => ({
-});
-
-export default connect(mapStateToProps, {
-})(HOCPlanCSVExporter);
+export default HOCPlanCSVExporter;

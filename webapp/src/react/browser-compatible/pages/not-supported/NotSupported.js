@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-// import Button from 'Button';
+import { styleElement } from 'swiss-react';
 import { Link } from 'react-router-dom';
 import Icon from 'Icon';
 import RotateLoader from 'components/loaders/RotateLoader';
@@ -12,7 +8,15 @@ import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import DownloadForDevice from 'compatible/components/download-for-device/DownloadForDevice';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
-import './styles/not-supported.scss';
+import styles from './styles/NotSupported.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const Illustration = styleElement('img', styles.Illustration);
+const EmptySpaceBlock = styleElement('div', styles.EmptySpaceBlock);
+const OptionTitle = styleElement('div', styles.OptionTitle);
+const StyledLink = styleElement('a', styles.StyledLink);
+const Description = styleElement('div', styles.Description);
+const NewLink = styleElement(Link, styles.NewLink);
 
 class NotSupported extends PureComponent {
   constructor(props) {
@@ -21,13 +25,11 @@ class NotSupported extends PureComponent {
     setupDelegate(this, 'onLeaveOrg');
     // this.callDelegate.bindAll('onLala');
   }
-  componentDidMount() {
-  }
   renderLeaveOrDelete() {
     const { me, organization, isLoading } = this.props;
     const isOwner = me.get('id') === organization.get('owner_id');
     let desc = `Leave the organization: ${organization.get('name')}. You will be available to join a new organization.`;
-    let buttonTitle = 'Leave organization'; 
+    let buttonTitle = 'Leave organization';
 
     if(isOwner) {
       desc = `Delete your organization ${organization.get('name')}. This will throw out all the current users from the organization as well.`;
@@ -36,11 +38,11 @@ class NotSupported extends PureComponent {
 
     return (
       <div className="not-supported__option-wrapper">
-        <div className="not-supported__desc">{desc}</div>
-        <div className="not-supported__option-title">
-          <a className="not-supported__link" onClick={this.onLeaveOrg}>{buttonTitle}</a>
+        <Description>{desc}</Description>
+        <OptionTitle>
+          <StyledLink onClick={this.onLeaveOrg}>{buttonTitle}</StyledLink>
           {isLoading && isLoading('delete') && <RotateLoader size={19} />}
-        </div>
+        </OptionTitle>
       </div>
     )
   }
@@ -50,12 +52,12 @@ class NotSupported extends PureComponent {
     return (
       <div className="not-supported__actions">
         <div className="not-supported__option-wrapper">
-          <div className="not-supported__desc">
+          <Description>
             {`Invite more people to ${organization.get('name')}. Gather your whole team.`}
-          </div>
-          <div className="not-supported__option-title">
-            <Link to="/invite" className="not-supported__link">Invite people</Link>
-          </div>
+          </Description>
+          <OptionTitle>
+            <NewLink to="/invite">Invite people</NewLink>
+          </OptionTitle>
         </div>
         {this.renderLeaveOrDelete()}
       </div>
@@ -63,20 +65,16 @@ class NotSupported extends PureComponent {
   }
   render() {
     return (
-      <div className="not-supported">
+      <Wrapper>
         <CompatibleHeader title="Please download our apps to get started."/>
         <DownloadForDevice />
-        <div className="not-supported__empty-space-block" />
+        <EmptySpaceBlock />
         <CompatibleSubHeader title="What else can I do?" />
         {this.renderActions()}
         <HOCLogoutButton />
-      </div>
+      </Wrapper>
     );
   }
 }
 
-export default NotSupported
-
-// const { string } = PropTypes;
-
-NotSupported.propTypes = {};
+export default NotSupported;

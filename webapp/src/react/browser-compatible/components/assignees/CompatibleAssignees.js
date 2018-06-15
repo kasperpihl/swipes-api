@@ -1,39 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { setupDelegate } from 'react-delegate';
-import './styles/assignees.scss';
+import { styleElement } from 'swiss-react';
+import styles from './CompatibleAssignees.swiss';
+
+const Wrapper = styleElement('div', styles.Wrapper);
+const Assignee = styleElement('div', styles.Assignee);
+const ProfilePic = styleElement('img', styles.ProfilePic);
+const Initials = styleElement('p', styles.Initials);
 
 const CompatibleAssignees = (props) => {
   const {
     assignee,
-    float
+    float = '',
   } = props;
   const photoSrc = msgGen.users.getPhoto(assignee);
-  let className = 'compatible-assignees';
-
-  if (float && typeof float === 'string') {
-    className += ` compatible-assignees--${float}`
-  }
+  const assigneeInitials = msgGen.users.getInitials(assignee);
 
   return (
-    <div className={className}>
-      <div className="assignee">
+    <Wrapper>
+      <Assignee float={float}>
         {photoSrc ? (
-          <img src={photoSrc} className="assignee__profile-pic" />
+          <ProfilePic src={photoSrc} />
         ) : (
-          <p className="assignee__initials">{msgGen.users.getInitials(assignee)}</p>
+          <Initials>{assigneeInitials}</Initials>
         )}
-      </div>
-    </div>
+      </Assignee>
+    </Wrapper>
   );
 };
 
 export default CompatibleAssignees;
 
-const { string, func } = PropTypes;
+const { string, object, func } = PropTypes;
 
 CompatibleAssignees.propTypes = {
-  assignee: string,
+  assignee: object,
+  float: string,
 };

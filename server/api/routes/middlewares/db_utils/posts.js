@@ -2,6 +2,7 @@ import r from 'rethinkdb';
 import {
   string,
   object,
+  array,
   funcWrap,
 } from 'valjs';
 import db from '../../../../db';
@@ -19,6 +20,34 @@ const dbPostsInsertSingle = funcWrap([
   }
 
   const q = r.table('posts').insert(post);
+
+  return db.rethinkQuery(q);
+});
+
+const dbPostsEditSingle = funcWrap([
+  object.as({
+    post_id: string.require(),
+    message: string.min(1).require(),
+    attachments: array.require(),
+    tagged_users: array.require(),
+    mention_ids: array.require(),
+  }).require(),
+], (err, {
+  post_id, message, attachments, tagged_users, mention_ids,
+}) => {
+  if (err) {
+    throw new SwipesError(`dbPostsEditSingle: ${err}`);
+  }
+
+  const q = r.table('posts').get(post_id).update({
+    message,
+    attachments,
+    tagged_users,
+    followers: r.row('followers').default([]).setUnion([...tagged_users, ...mention_ids]),
+    updated_at: r.now(),
+  }, {
+    returnChanges: true,
+  });
 
   return db.rethinkQuery(q);
 });
@@ -75,14 +104,16 @@ const dbPostsArchiveSingle = funcWrap([
 
   return db.rethinkQuery(q);
 });
-
 const dbPostsAddComment = funcWrap([
   object.as({
     user_id: string.require(),
     post_id: string.require(),
     comment: object.require(),
+    mention_ids: array.require(),
   }).require(),
-], (err, { user_id, post_id, comment }) => {
+], (err, {
+  user_id, post_id, comment, mention_ids,
+}) => {
   if (err) {
     throw new SwipesError(`dbPostsAddComment: ${err}`);
   }
@@ -94,12 +125,74 @@ const dbPostsAddComment = funcWrap([
         comments: r.row('comments').merge({
           [comment.id]: comment,
         }),
-        followers: r.row('followers').default([]).setUnion([user_id]),
+        followers: r.row('followers').default([]).setUnion([user_id, ...mention_ids]),
         updated_at: r.now(),
       });
 
   return db.rethinkQuery(q);
 });
+const dbPostsEditComment = funcWrap([
+  object.as({
+    post_id: string.require(),
+    comment_id: string.require(),
+    message: string.min(1).require(),
+    attachments: array.of(object).require(),
+    mention_ids: array.of(string).require(),
+  }).require(),
+], (err, {
+  post_id, comment_id, message, attachments, mention_ids,
+}) => {
+  if (err) {
+    throw new SwipesError(`dbPostsEditComment: ${err}`);
+  }
+
+  const q = r.table('posts').get(post_id).update((p) => {
+    return p.merge({
+      comments: p('comments').merge({
+        [comment_id]: {
+          message,
+          attachments,
+          updated_at: r.now(),
+        },
+      }),
+      followers: p('followers').default([]).setUnion(mention_ids),
+      updated_at: r.now(),
+    });
+  }, {
+    returnChanges: true,
+  });
+
+  return db.rethinkQuery(q);
+});
+const dbPostsArchiveComment = funcWrap([
+  object.as({
+    user_id: string.require(),
+    post_id: string.require(),
+    comment_id: string.require(),
+  }).require(),
+], (err, { user_id, post_id, comment_id }) => {
+  if (err) {
+    throw new SwipesError(`dbPostsArchiveComment: ${err}`);
+  }
+
+  const q =
+    r.db('swipes')
+      .table('posts')
+      .get(post_id)
+      .update({
+        comments: {
+          [comment_id]: {
+            archived: true,
+            updated_at: r.now(),
+            updated_by: user_id,
+          },
+        },
+        updated_at: r.now(),
+      });
+
+  return db.rethinkQuery(q);
+});
+
 const dbPostsAddReaction = funcWrap([
   object.as({
     user_id: string.require(),
@@ -148,7 +241,9 @@ const dbPostsCommentAddReaction = funcWrap([
     comment_id: string.require(),
     reaction: object.require(),
   }).require(),
-], (err, { user_id, post_id, comment_id, reaction }) => {
+], (err, {
+  user_id, post_id, comment_id, reaction,
+}) => {
   if (err) {
     throw new SwipesError(`dbPostsCommentAddReaction: ${err}`);
   }
@@ -159,11 +254,9 @@ const dbPostsCommentAddReaction = funcWrap([
       .update((post) => {
         return post.merge({
           comments: {
-            [comment_id]: post('comments')(comment_id).merge(
-              {
-                reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)).prepend(reaction),
-              },
-            ),
+            [comment_id]: post('comments')(comment_id).merge({
+              reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)).prepend(reaction),
+            }),
           },
           updated_at: r.now(),
         });
@@ -188,11 +281,9 @@ const dbPostsCommentRemoveReaction = funcWrap([
       .update((post) => {
         return post.merge({
           comments: {
-            [comment_id]: post('comments')(comment_id).merge(
-              {
-                reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)),
-              },
-            ),
+            [comment_id]: post('comments')(comment_id).merge({
+              reactions: post('comments')(comment_id)('reactions').filter(r => r('created_by').ne(user_id)),
+            }),
           },
           updated_at: r.now(),
         });
@@ -203,7 +294,9 @@ const dbPostsCommentRemoveReaction = funcWrap([
 
 export {
   dbPostsInsertSingle,
+  dbPostsEditSingle,
   dbPostsAddComment,
+  dbPostsEditComment,
   dbPostsAddReaction,
   dbPostsRemoveReaction,
   dbPostsCommentAddReaction,
@@ -211,4 +304,5 @@ export {
   dbPostsArchiveSingle,
   dbPostsUnfollow,
   dbPostsFollow,
+  dbPostsArchiveComment,
 };

@@ -62,7 +62,7 @@ class AttachmentView extends PureComponent {
       >
         <RippleButton onPress={this.onChooseAttachmentTypeToAdd}>
           <View style={styles.addAttachmentButton}>
-            <Icon name="Plus" width="24" height="24" fill={gs.colors.deepBlue80} />
+            <Icon icon="Plus" width="24" height="24" fill={gs.colors.deepBlue80} />
           </View>
         </RippleButton>
       </HOCHeader>
@@ -79,7 +79,7 @@ class AttachmentView extends PureComponent {
       <RippleButton onPress={this.onAttachmentPressCached(att)} key={i}>
         <View style={styles.attachment}>
           <Icon
-            name={attachmentIconForService(att.getIn(['link', 'service']))}
+            icon={attachmentIconForService(att.getIn(['link', 'service']))}
             width="24"
             height="24"
             fill={gs.colors.deepBlue80}

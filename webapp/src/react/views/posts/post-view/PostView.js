@@ -1,76 +1,107 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-import {
-  bindAll,
-  setupDelegate,
-  setupCachedCallback,
-  URL_REGEX,
-  attachmentIconForService,
-} from 'swipes-core-js/classes/utils';
+import { styleElement } from 'swiss-react';
+import { URL_REGEX, attachmentIconForService, miniIconForId } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import { List } from 'immutable';
 import SWView from 'SWView';
-import HOCAttachmentItem from 'components/attachments/HOCAttachmentItem';
-import HOCAssigning from 'components/assigning/HOCAssigning';
-import CommentInput from 'components/comment-input/CommentInput';
-import PostHeader from 'components/post-header/PostHeader';
-import HOCReactions from 'components/reactions/HOCReactions';
+import PostCommentInput from '../post-components/post-comment-input/PostCommentInput';
 import CommentView from './CommentView';
-// import Button from 'Button';
+import PostAttachment from '../post-components/post-attachment/PostAttachment';
+import Button from 'src/react/components/button/Button';
+import PostReactions from '../post-components/post-reactions/PostReactions';
 import Icon from 'Icon';
-import './styles/post-view.scss';
+import PostHeader from '../post-components/post-header/PostHeader';
+import styles from './PostView.swiss';
+
+const Message = styleElement('div', styles.Message);
+const Actions = styleElement('div', styles.Actions);
+const ActionSpacer = styleElement('div', styles.ActionSpacer);
+const Attachments = styleElement('div', styles.Attachments);
 
 const MAX_COMMENTS_FEED = 3;
 
 class PostView extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {};
 
-    setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick');
+    setupDelegate(this, 'onLinkClick', 'onOpenPost', 'onAttachmentClick', 'onContextClick', 'onThreeDots');
   }
-  renderProfilePic() {
+  onComment = () => {
+    const { post } = this.props;
+    if(!post.get('comments').size) {
+      this.setState({ forceInput: true });
+    } else {
+      this.onOpenPost();
+    }
+  }
+  renderContext() {
     const { post } = this.props;
-    const image = msgGen.users.getPhoto(post.get('created_by'));
-    const initials = msgGen.users.getInitials(post.get('created_by'));
+    return (
+      <PostAttachment
+        icon={miniIconForId(post.getIn(['context', 'id']))}
+        title={post.getIn(['context', 'title'])}
+        onClick={this.onContextClick}
+        isContext
+      />
+    );
+  }
+  renderAttachments() {
+    const { post } = this.props;
 
-    if (!image) {
+    return post.get('attachments').map((att, i) => {
+      const icon = attachmentIconForService(att.getIn(['link', 'service']));
       return (
-        <div className="post__profile-initials">
-          {initials}
-        </div>
+        <PostAttachment
+          title={att.get('title')}
+          key={i}
+          onClick={this.onAttachmentClickCached(i, att)}
+          icon={icon}
+        />
       )
+    });
+  }
+  renderHeader() {
+    const { post, delegate, fromFeed, getLoading } = this.props;
+    let commentTitle = post.get('comments').size || 'Write a comment';
+    if(post.get('comments').size > MAX_COMMENTS_FEED) {
+      commentTitle = `See all ${post.get('comments').size} comments`;
     }
 
     return (
-      <div className="post__profile-pic">
-        <img src={image} />
-      </div>
+      <PostHeader
+        onSubtitleClick={fromFeed && this.onOpenPost}
+        post={post}>
+        {this.renderMessage()}
+        {(!!post.get('context') || !!post.get('attachments').size) && (
+          <Attachments>
+            {post.get('context') && this.renderContext()}
+            {this.renderAttachments()}
+          </Attachments>
+        )}
+        <Actions>
+          <PostReactions
+            reactions={post.get('reactions')}
+            postId={post.get('id')}
+          />
+          <Button
+            icon="Comment"
+            compact
+            onClick={this.onComment}
+            sideLabel={commentTitle}
+          />
+          <ActionSpacer />
+          <Button
+            icon="ThreeDots"
+            compact
+            onClick={this.onThreeDots}
+            {...getLoading('threedots')}
+          />
+        </Actions>
+        {this.renderComments()}
+        {this.renderCommentInput()}
+      </PostHeader>
     )
-  }
-  renderHeader() {
-    const { post, delegate } = this.props;
-
-    return (
-      <div className="post__header">
-        <div className="post__left">
-          {this.renderProfilePic()}
-        </div>
-        <div className="post__right">
-          <PostHeader post={post} delegate={delegate} />
-          <div className="post__message-wrapper">
-            {this.renderMessage()}
-            {this.renderPostActions()}
-          </div>
-          {this.renderAttachments()}
-        </div>
-      </div>
-    )
-  }
-  renderFooter() {
-    const { delegate, myId } = this.props;
-
-    return <CommentInput myId={myId} delegate={delegate} />
   }
   renderMessage() {
     const { post } = this.props;
@@ -87,7 +118,6 @@ class PostView extends PureComponent {
             item.splice(1 + i + i, 0, (
               <a
                 onClick={this.onLinkClickCached(url)}
-                className="notification__link"
                 key={'link' + i}
               >
                 {url}
@@ -101,35 +131,12 @@ class PostView extends PureComponent {
 
 
       return (
-        <div className="post__message">
+        <Message>
           {message}
-        </div>
+        </Message>
       )
     }
 
-  }
-  renderAttachments() {
-    const { post } = this.props;
-
-    return (
-      <div className="post__attachments">
-        {post.get('attachments').map((att, i) => (
-          <HOCAttachmentItem attachment={att} key={i} noClose />
-        ))}
-      </div>
-    )
-  }
-  renderPostActions() {
-    const { post } = this.props;
-
-    return (
-      <div className="post__actions">
-        <HOCReactions
-          reactions={post.get('reactions')}
-          postId={post.get('id')}
-        />
-      </div>
-    )
   }
   renderViewMoreComments() {
     const { fromFeed, post } = this.props;
@@ -145,64 +152,61 @@ class PostView extends PureComponent {
       </div>
     )
   }
+  renderCommentInput() {
+    const { delegate, myId, post } = this.props;
+    const { forceInput } = this.state;
+
+    if(post.get('comments').size || forceInput) {
+
+      return (
+        <PostCommentInput
+          myId={myId}
+          postId={post.get('id')}
+          autoFocus={forceInput}
+          delegate={delegate}
+        />
+      )
+    }
+  }
   renderComments() {
-    const { post, delegate, myId, fromFeed, aCSearch, aCClear } = this.props;
+    const { post, fromFeed, delegate } = this.props;
+
+    if(!post.get('comments') || !post.get('comments').size) {
+      return null;
+    }
     const comments = post.get('comments');
     let renderComments = undefined;
 
-    if (comments && comments.size) {
-      let sortedComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at')));
+    let sortedComments = comments.toList().sort((a, b) => a.get('created_at').localeCompare(b.get('created_at')));
 
-      if (fromFeed && comments.size > MAX_COMMENTS_FEED) {
-        sortedComments = sortedComments.slice(-MAX_COMMENTS_FEED + 1)
-      }
-
-      renderComments = sortedComments.map((c, i) => (
-        <CommentView
-          isLast={i === comments.size - 1}
-          comment={c}
-          postId={post.get('id')}
-          key={c.get('id')}
-          delegate={delegate}
-        />
-      )).toArray();
+    if (fromFeed && comments.size > MAX_COMMENTS_FEED) {
+      sortedComments = sortedComments.slice(-MAX_COMMENTS_FEED + 1)
     }
 
-    let className = 'post__comments';
-
-    if (!fromFeed) {
-      className += ' post__comments--single'
-    }
-
-    return (
-      <div className={className}>
-        {this.renderViewMoreComments()}
-        {renderComments}
-        <CommentInput
-          myId={myId}
-          delegate={delegate}
-          aCSearch={aCSearch}
-          aCClear={aCClear}
-        />
-      </div>
-    );
+    return sortedComments.map((c, i) => (
+      <CommentView
+        isLast={i === comments.size - 1}
+        comment={c}
+        postId={post.get('id')}
+        key={c.get('id')}
+        delegate={delegate}
+      />
+    )).toArray();
   }
+
   render() {
-    const { fromFeed } = this.props;
+    const { delegate, myId, fromFeed } = this.props;
+
     return (
       <SWView
-        noframe
+        noframe={fromFeed}
         disableScroll={fromFeed}
         scrollToBottom={!fromFeed}
       >
-
         {this.renderHeader()}
-        {this.renderComments()}
       </SWView>
     )
   }
 }
 
 export default PostView
-// const { string } = PropTypes;
-PostView.propTypes = {};

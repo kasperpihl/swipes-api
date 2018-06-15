@@ -3,8 +3,8 @@ import { View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
 import { setupLoading, bindAll } from 'swipes-core-js/classes/utils';
-import { propsOrPop } from 'swipes-core-js/classes/react-utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import * as a from 'actions';
@@ -234,8 +234,8 @@ class HOCGoalOverview extends PureComponent {
 
     return (
       <RippleButton onPress={this.handleCompleteGoal}>
-        <View style={[ extraStyles, { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 36 / 2, marginRight: 12, marginTop: 5 }]}>
-          <Icon name="ChecklistCheckmark" width="18" height="18" fill={iconColor} style={{ marginLeft: -6, marginTop: -6 }} />
+        <View style={[ extraStyles, { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 36 / 2, marginRight: 12, marginTop: 5, paddingRight: 6, paddingBottom: 6 }]}>
+          <Icon icon="ChecklistCheckmark" width="18" height="18" fill={iconColor} />
         </View>
       </RippleButton>
     )

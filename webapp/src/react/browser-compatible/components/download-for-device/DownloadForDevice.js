@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll } from 'swipes-core-js/classes/utils';
-// import { setupDelegate } from 'react-delegate';
-// import SWView from 'SWView';
-// import Button from 'Button';
 import Icon from 'Icon';
 import { Link } from 'react-router-dom';
-import './styles/download-for-device.scss';
+import { styleElement } from 'swiss-react';
+import styles from './DownloadForDevice.swiss';
 
+const Wrapper = styleElement('div', styles.Wrapper);
+const Device = styleElement('a', styles.Device);
+const DeviceSVG = styleElement(Icon, styles.DeviceSVG);
+const AllDevices = styleElement('p', styles.AllDevices);
+const AllDevicesLink = styleElement(Link, styles.AllDevicesLink);
 
 const downloadLinks = {
   darwin: 'http://swipesapp.com/download-mac',
@@ -19,14 +19,6 @@ const downloadLinks = {
 };
 
 class DownloadForDevice extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLala');
-  }
-  componentDidMount() {
-  }
   desktopCheck() {
     var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 
@@ -61,19 +53,19 @@ class DownloadForDevice extends PureComponent {
   renderAndroid() {
     
     return (
-      <a href={downloadLinks.android} target="_blank" className="download-for-device__device">
-        <Icon icon="AndroidDevice" className="download-for-device__device-svg" />
+      <Device href={downloadLinks.android} target="_blank" className="svg-hover">
+        <DeviceSVG icon="AndroidDevice" />
         <p>Android</p>
-      </a>
+      </Device>
     )
   }
   renderIos() {
     
     return (
-      <a href={downloadLinks.ios} target="_blank" className="download-for-device__device">
-        <Icon icon="AndroidDevice" className="download-for-device__device-svg" />
+      <Device href={downloadLinks.ios} target="_blank" className="svg-hover">
+        <DeviceSVG icon="AndroidDevice" />
         <p>iOS</p>
-      </a>
+      </Device>
     )
   }
   renderWindows(firstType) {
@@ -81,10 +73,10 @@ class DownloadForDevice extends PureComponent {
       return undefined;
     }
     return (
-      <a href={downloadLinks.win32} target="_blank" className="download-for-device__device">
-        <Icon icon="WindowsDevice" className="download-for-device__device-svg" />
+      <Device href={downloadLinks.win32} target="_blank" className="svg-hover">
+        <DeviceSVG icon="WindowsDevice" />
         <p>Download for Windows</p>
-      </a>
+      </Device>
     );
   }
   renderMac(firstType) {
@@ -92,10 +84,10 @@ class DownloadForDevice extends PureComponent {
       return undefined;
     }
     return (
-      <a href={downloadLinks.darwin} target="_blank" className="download-for-device__device">
-        <Icon icon="MacDevice" className="download-for-device__device-svg" />
+      <Device href={downloadLinks.darwin} target="_blank" className="svg-hover">
+        <DeviceSVG icon="MacDevice" />
         <p>Download for macOS</p>
-      </a>
+      </Device>
     );
   }
   renderLinux(firstType) {
@@ -103,10 +95,10 @@ class DownloadForDevice extends PureComponent {
       return undefined;
     }
     return (
-      <a href={downloadLinks.linux} target="_blank" className="download-for-device__device">
-        <Icon icon="LinuxDevice" className="download-for-device__device-svg" />
+      <Device href={downloadLinks.linux} target="_blank" className="svg-hover">
+        <DeviceSVG icon="LinuxDevice" />
         <p>Download for Linux</p>
-      </a>
+      </Device>
     );
   }
   render() {
@@ -115,18 +107,14 @@ class DownloadForDevice extends PureComponent {
     const type = mobileType ? mobileType : desktopType;
 
     return (
-      <div className="download-for-device">
+      <Wrapper>
         {this.renderFirst(type)}
-        <p className="download-for-device__all-devices">
-          <Link to="/download" className="download-for-device__all-devices-link">See all available platforms</Link>
-        </p>
-      </div>
+        <AllDevices>
+          <AllDevicesLink to="/download">See all available platforms</AllDevicesLink>
+        </AllDevices>
+      </Wrapper>
     );
   }
 }
 
-export default DownloadForDevice
-
-// const { string } = PropTypes;
-
-DownloadForDevice.propTypes = {};
+export default DownloadForDevice;

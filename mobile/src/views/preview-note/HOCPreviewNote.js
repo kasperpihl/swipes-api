@@ -2,12 +2,8 @@ import React, { PureComponent } from 'react';
 import { View, WebView, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import * as a from 'actions';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-// import * as ca from 'swipes-core-js/actions';
-// import { setupLoading } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
-// import { fromJS } from 'immutable';
 import HOCHeader from 'HOCHeader';
 import { colors } from 'globalStyles';
 
@@ -34,7 +30,7 @@ class HOCPreviewNote extends PureComponent {
       showingInfoTab: false,
     };
 
-    bindAll(this, ['onWebviewMessage', 'renderLoading', 'onActionButton', 'onActionPress', 'onInfoTabClose'])
+    bindAll(this, ['onWebviewMessage', 'renderLoading', 'onActionButton', 'onActionPress', 'onInfoTabClose']);
   }
   componentDidMount() {
     this.renderActionButtons();
@@ -53,7 +49,7 @@ class HOCPreviewNote extends PureComponent {
     }
   }
   onActionPress(index) {
-    console.warn('infotab action', index)
+    console.warn('infotab action', index);
   }
   onInfoTabClose() {
     if (this.state.showingInfoTab) {
@@ -72,33 +68,31 @@ class HOCPreviewNote extends PureComponent {
     if (showingInfoTab) {
       if (i === 0) {
         toggleInfoTab();
-        this.setState({ showingInfoTab: false })
+        this.setState({ showingInfoTab: false });
       }
-    } else {
-      if (i === 0) {
-        navPush({
-          id: 'PostFeed',
-          title: 'Discussions',
-          props: {
-            context: {
-              title: noteTitle,
-              id: noteId,
-            }
+    } else if (i === 0) {
+      navPush({
+        id: 'PostFeed',
+        title: 'Discussions',
+        props: {
+          context: {
+            title: noteTitle,
+            id: noteId,
           },
-        });
-      } else if (i === 1) {
-        // const createdLbl = `${dayStringForDate(note.get('created_at'))} by ${msgGen.users.getFullName(note.get('created_by'))}`
-        this.setState({ showingInfoTab: true });
+        },
+      });
+    } else if (i === 1) {
+      // const createdLbl = `${dayStringForDate(note.get('created_at'))} by ${msgGen.users.getFullName(note.get('created_by'))}`
+      this.setState({ showingInfoTab: true });
 
-        toggleInfoTab({
-          onPress: this.onActionPress,
-          onClose: this.onInfoTabClose,
-          about: {
-            title: 'What is a note',
-            text: 'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text with your mouse and the options will appear.',
-          },
-        })
-      }
+      toggleInfoTab({
+        onPress: this.onActionPress,
+        onClose: this.onInfoTabClose,
+        about: {
+          title: 'What is a note',
+          text: 'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text with your mouse and the options will appear.',
+        },
+      });
     }
   }
   renderActionButtons(showingInfoTab) {
@@ -106,7 +100,7 @@ class HOCPreviewNote extends PureComponent {
       this.props.setActionButtons({
         onClick: this.onActionButton,
         buttons: [
-          { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true }
+          { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true },
         ],
         hideBackButton: true,
       });
@@ -115,7 +109,7 @@ class HOCPreviewNote extends PureComponent {
         onClick: this.onActionButton,
         buttons: [
           { text: 'Discussions' },
-          { icon: 'Info', seperator: 'left', staticSize: true }
+          { icon: 'Info', seperator: 'left', staticSize: true },
         ],
       });
     }
@@ -146,7 +140,7 @@ class HOCPreviewNote extends PureComponent {
         scalesPageToFit
         style={styles.webviewStyles}
         onMessage={this.onWebviewMessage}
-        startInLoadingState={true}
+        startInLoadingState
       />
     );
   }

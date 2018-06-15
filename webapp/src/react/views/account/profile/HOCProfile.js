@@ -1,14 +1,19 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { map } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-// import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Profile from './Profile';
 
-class HOCProfile extends PureComponent {
+@navWrapper
+@connect(state => ({
+  me: state.get('me'),
+}), {
+  updateProfile: ca.me.updateProfile,
+  uploadProfilePhoto: ca.me.uploadProfilePhoto,
+  completeOnboarding: ca.onboarding.complete,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -92,23 +97,3 @@ class HOCProfile extends PureComponent {
     />);
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    me: state.get('me'),
-  };
-}
-
-// const { func, string } = PropTypes;
-
-HOCProfile.propTypes = {
-  me: map,
-};
-
-const ConnectedHOCProfile = navWrapper(connect(mapStateToProps, {
-  updateProfile: ca.me.updateProfile,
-  uploadProfilePhoto: ca.me.uploadProfilePhoto,
-  completeOnboarding: ca.onboarding.complete,
-})(HOCProfile));
-
-export default ConnectedHOCProfile;

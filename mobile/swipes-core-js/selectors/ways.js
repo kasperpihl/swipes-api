@@ -1,14 +1,14 @@
 import { createSelector } from 'reselect';
 import { searchSelectorFromKeys } from '../classes/utils';
 
-const getWays = (state) => state.get('ways');
+const getWays = state => state.get('ways');
 
 export const getSorted = createSelector(
-  [ getWays ],
+  [getWays],
   ways => ways.sort((b, c) => b.get('title').localeCompare(c.get('title'))),
 );
 
 export const search = searchSelectorFromKeys([
   'title',
-  'description'
+  'description',
 ], getWays);

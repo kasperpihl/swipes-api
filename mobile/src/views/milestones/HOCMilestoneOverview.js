@@ -6,8 +6,8 @@ import { ImmutableListView } from 'react-native-immutable-list-view';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
-import { propsOrPop } from 'swipes-core-js/classes/react-utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import HOCHeader from 'HOCHeader';
 import WaitForUI from 'WaitForUI';
@@ -52,13 +52,12 @@ class HOCMilestoneOverview extends PureComponent {
     };
 
     propsOrPop(this, 'milestone');
-    bindAll(this, ['onActionButton', 'renderGoal', 'openCreateGoalModal', 'onHeaderTap', 'onActionPress', 'onInfoTabClose',]);
+    bindAll(this, ['onActionButton', 'renderGoal', 'openCreateGoalModal', 'onHeaderTap', 'onActionPress', 'onInfoTabClose']);
   }
   componentDidMount() {
     this.renderActionButtons();
   }
   componentWillUpdate(nextProps, nextState) {
-
     if (!this.props.isActive && nextProps.isActive || this.state.showingInfoTab !== nextState.showingInfoTab) {
       this.renderActionButtons(nextState.showingInfoTab);
     }
@@ -74,11 +73,11 @@ class HOCMilestoneOverview extends PureComponent {
     navPush(goalOverview);
   }
   onActionPress(index) {
-    const { 
-      milestone, 
-      openMilestone, 
-      closeMilestone, 
-      deleteMilestone, 
+    const {
+      milestone,
+      openMilestone,
+      closeMilestone,
+      deleteMilestone,
       toggleInfoTab,
       alertModal,
     } = this.props;
@@ -91,16 +90,15 @@ class HOCMilestoneOverview extends PureComponent {
         closeMilestone(milestone.get('id'));
         toggleInfoTab();
       }
-
     } else if (index === 1) {
       alertModal({
         title: 'Delete plan',
         message: 'This will delete this plan and all goals in it. Are you sure?',
         onConfirmPress: () => {
-          deleteMilestone(milestone.get('id')); 
+          deleteMilestone(milestone.get('id'));
           toggleInfoTab();
         },
-      })
+      });
     }
   }
   onInfoTabClose() {
@@ -115,52 +113,50 @@ class HOCMilestoneOverview extends PureComponent {
     if (showingInfoTab) {
       if (i === 0) {
         toggleInfoTab();
-        this.setState({ showingInfoTab: false })
+        this.setState({ showingInfoTab: false });
       }
-    } else {
-      if (i === 0) {
-        navPush({
-          id: 'PostFeed',
-          title: 'Discussions',
-          props: {
-            context: {
-              title: milestone.get('title'),
-              id: milestone.get('id'),
-            },
-            relatedFilter: msgGen.milestones.getRelatedFilter(milestone)
+    } else if (i === 0) {
+      navPush({
+        id: 'PostFeed',
+        title: 'Discussions',
+        props: {
+          context: {
+            title: milestone.get('title'),
+            id: milestone.get('id'),
           },
-        });
-      } else if (i === 1) {
-        let achieveLbl = 'Mark plan as achieved';
-        let achieveIcon = 'MilestoneAchieve';
-        let complete = true;
-        if (milestone.get('closed_at')) {
-          complete = false,
-          achieveIcon = 'Milestone';
-          achieveLbl = 'Move plan to current';
-        }
-        const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`
-        this.setState({ showingInfoTab: true });
+          relatedFilter: msgGen.milestones.getRelatedFilter(milestone),
+        },
+      });
+    } else if (i === 1) {
+      let achieveLbl = 'Mark plan as achieved';
+      let achieveIcon = 'MilestoneAchieve';
+      let complete = true;
+      if (milestone.get('closed_at')) {
+        complete = false,
+        achieveIcon = 'Milestone';
+        achieveLbl = 'Move plan to current';
+      }
+      const createdLbl = `${dayStringForDate(milestone.get('created_at'))} by ${msgGen.users.getFullName(milestone.get('created_by'))}`;
+      this.setState({ showingInfoTab: true });
 
-        toggleInfoTab({
-          onPress: this.onActionPress,
-          onClose: this.onInfoTabClose,
-          actions: [
-            { title: achieveLbl, complete, icon: achieveIcon },
-            { title: 'Delete plan', icon: 'Delete', danger: true },
-          ],
-          info: [
-            { title: 'Created', text: createdLbl },
-          ],
-          about: {
-            title: 'What is a plan',
-            text: 'A Plan is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Plan.\n\nTo keep your work organized, categorize goals for your Plan with This week, Later or Completed.'
-          },
-        })
-      }
+      toggleInfoTab({
+        onPress: this.onActionPress,
+        onClose: this.onInfoTabClose,
+        actions: [
+          { title: achieveLbl, complete, icon: achieveIcon },
+          { title: 'Delete plan', icon: 'Delete', danger: true },
+        ],
+        info: [
+          { title: 'Created', text: createdLbl },
+        ],
+        about: {
+          title: 'What is a plan',
+          text: 'A Plan is where everything begins. It is a project, objective or ongoing activity. You can add goals to reach a Plan.\n\nTo keep your work organized, categorize goals for your Plan with This week, Later or Completed.',
+        },
+      });
     }
   }
-  onModalCreateAction(title, assignees, milestoneId ) {
+  onModalCreateAction(title, assignees, milestoneId) {
     const { createGoal } = this.props;
 
     if (title.length > 0) {
@@ -169,7 +165,7 @@ class HOCMilestoneOverview extends PureComponent {
     }
   }
   onHeaderTap() {
-    this.refs.scrollView.listViewRef.scrollTo({x: 0, y: 0, animated: true})
+    this.refs.scrollView.listViewRef.scrollTo({ x: 0, y: 0, animated: true });
   }
   openCreateGoalModal() {
     const { navPush, milestone } = this.props;
@@ -180,20 +176,19 @@ class HOCMilestoneOverview extends PureComponent {
       props: {
         title: '',
         defAssignees: [this.props.myId],
-        placeholder: "Add a new goal to a plan",
-        actionLabel: "Add goal",
+        placeholder: 'Add a new goal to a plan',
+        actionLabel: 'Add goal',
         milestoneId: milestone.get('id'),
-        delegate: this
-      }
-    })
+        delegate: this,
+      },
+    });
   }
   renderActionButtons(showingInfoTab) {
-
     if (showingInfoTab) {
       this.props.setActionButtons({
         onClick: this.onActionButton,
         buttons: [
-          { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true }
+          { icon: 'Close', seperator: 'left', staticSize: true, alignEnd: true },
         ],
         hideBackButton: true,
       });
@@ -202,7 +197,7 @@ class HOCMilestoneOverview extends PureComponent {
         onClick: this.onActionButton,
         buttons: [
           { text: 'Discussions' },
-          { icon: 'Info', seperator: 'left', staticSize: true }
+          { icon: 'Info', seperator: 'left', staticSize: true },
         ],
       });
     }
@@ -220,7 +215,7 @@ class HOCMilestoneOverview extends PureComponent {
       >
         <RippleButton onPress={this.openCreateGoalModal}>
           <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="Plus" width="24" height="24" fill={colors.deepBlue80} />
+            <Icon icon="Plus" width="24" height="24" fill={colors.deepBlue80} />
           </View>
         </RippleButton>
       </HOCHeader>
@@ -230,12 +225,12 @@ class HOCMilestoneOverview extends PureComponent {
     return <HOCGoalItem goalId={goal.get('id')} delegate={this} />;
   }
   renderListFooter() {
-    return <EmptyListFooter />
+    return <EmptyListFooter />;
   }
   renderEmptyState(group) {
     let title;
     let text;
-    
+
     if (group === 'Now') {
       title = 'Add a new goal';
       text = 'Add new goals for everything that needs \n to be done to achieve this plan.';
@@ -249,10 +244,10 @@ class HOCMilestoneOverview extends PureComponent {
 
     return (
       <View style={styles.emptyState}>
-        <Text selectable={true} style={styles.emptyTitle}>{title.toUpperCase()}</Text>
-        <Text selectable={true} style={styles.emptyText}>{text}</Text>
+        <Text selectable style={styles.emptyTitle}>{title.toUpperCase()}</Text>
+        <Text selectable style={styles.emptyText}>{text}</Text>
       </View>
-    )    
+    );
   }
   renderList() {
     const { tabs, tabIndex } = this.state;
@@ -261,7 +256,7 @@ class HOCMilestoneOverview extends PureComponent {
     const goalList = groupedGoals.get(tab.toLowerCase());
 
     if (!goalList.size) {
-      return this.renderEmptyState(tab)
+      return this.renderEmptyState(tab);
     }
 
     return (

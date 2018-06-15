@@ -8,10 +8,17 @@ import {
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,
+  postsEdit,
+  postsEditedQueueMessage,
+  postsEditedPushNotificationQueueMessage,
   postsCreateComment,
   postsAddComment,
-  postsMentionsParseComment,
+  postsEditComment,
+  postsArchiveComment,
+  postsArchiveCommentQueueMessage,
+  postsMentionsParse,
   postsAddCommentQueueMessage,
+  postsEditCommentQueueMessage,
   postsCreateReaction,
   postsAddReaction,
   postsAddReactionQueueMessage,
@@ -27,10 +34,9 @@ import {
   postsUnfollowQueueMessage,
   postsFollow,
   postsFollowQueueMessage,
-  postsMestionsQueueMessage,
   postsCreatedPushNotificationQueueMessage,
-  postsAddCommentPushNotificationQueueMessage,
-  postsAddCommentPushNotificationToCreatedByQueueMessage,
+  postsAddCommentFollowersPushNotificationQueueMessage,
+  postsAddCommentMentionsPushNotificationQueueMessage,
 } from './middlewares/posts';
 import {
 } from './middlewares/users';
@@ -50,7 +56,6 @@ authed.all(
   valBody({
     organization_id: string.require(),
     message: string.min(1).require(),
-    type: string.require(),
     attachments: array.of(object),
     tagged_users: array.of(string),
     context: object.as({
@@ -59,11 +64,31 @@ authed.all(
     }),
     reactions: array.of(object),
   }),
+  postsMentionsParse,
   postsCreate,
   postsInsertSingle,
   postsCreatedQueueMessage,
   notificationsPushToQueue,
   postsCreatedPushNotificationQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    post: object.require(),
+  }),
+);
+
+authed.all(
+  '/posts.edit',
+  valBody({
+    post_id: string.require(),
+    message: string.min(1).require(),
+    attachments: array.require(),
+    tagged_users: array.require(),
+  }),
+  postsMentionsParse,
+  postsEdit,
+  postsEditedQueueMessage,
+  notificationsPushToQueue,
+  postsEditedPushNotificationQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     post: object.require(),
@@ -119,19 +144,51 @@ authed.all(
     attachments: array.of(object),
   }),
   postsCreateComment,
+  postsMentionsParse,
   postsAddComment,
-  postsMentionsParseComment,
   postsAddCommentQueueMessage,
   notificationsPushToQueue,
-  postsMestionsQueueMessage,
+  postsAddCommentFollowersPushNotificationQueueMessage,
   notificationsPushToQueue,
-  postsAddCommentPushNotificationQueueMessage,
-  notificationsPushToQueue,
-  postsAddCommentPushNotificationToCreatedByQueueMessage,
+  postsAddCommentMentionsPushNotificationQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     post_id: string.require(),
     comment: object.require(),
+  }),
+);
+
+authed.all(
+  '/posts.editComment',
+  valBody({
+    post_id: string.require(),
+    comment_id: string.require(),
+    message: string.min(1).require(),
+    attachments: array.require(),
+  }),
+  postsMentionsParse,
+  postsEditComment,
+  postsEditCommentQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    post_id: string.require(),
+    followers: array.require(),
+    comment: object.require(),
+  }),
+);
+
+authed.all(
+  '/posts.archiveComment',
+  valBody({
+    post_id: string.require(),
+    comment_id: string.require(),
+  }),
+  postsArchiveComment,
+  postsArchiveCommentQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    post_id: string.require(),
+    comment_id: string.require(),
   }),
 );
 

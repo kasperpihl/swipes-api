@@ -1,27 +1,16 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
-// import { bindAll, setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Icon from 'Icon';
 import './styles/goal-result.scss';
 
 class GoalResult extends PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {}
-    // setupDelegate(this);
-    // this.callDelegate.bindAll('onLinkClick')
-  }
-  componentDidMount() {
-  }
   renderAssignees() {
     const { result } = this.props;
     const assignees = msgGen.goals.getAssignees(result.item.id);
 
     return (
       <div className="goal-result__assignees">
-        <HOCAssigning assignees={assignees} rounded size={30} />
+        <HOCAssigning assignees={assignees} size={30} />
       </div>
     )
   }
@@ -45,6 +34,4 @@ class GoalResult extends PureComponent {
   }
 }
 
-export default GoalResult
-// const { string } = PropTypes;
-GoalResult.propTypes = {};
+export default GoalResult;

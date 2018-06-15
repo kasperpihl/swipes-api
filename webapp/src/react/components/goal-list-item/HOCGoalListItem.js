@@ -1,58 +1,46 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
+import { styleElement } from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import FlexWrapper from 'swiss-components/FlexWrapper';
-import Flex from 'swiss-components/Flex';
-import Wrapper from 'swiss-components/Wrapper';
 
+import styles from './GoalListItem.swiss';
 /* global msgGen */
 
-import GoalItem from './styles/GoalItem.swiss';
-import GoalTitle from './styles/GoalTitle.swiss';
-import StatusDot from './styles/StatusDot.swiss';
+const Wrapper = styleElement('div', styles.Wrapper);
+const Title = styleElement('div', styles.Title);
+const StatusDot = styleElement('div', styles.StatusDot);
 
-class HOCGoalListItem extends PureComponent {
+@connect((state, props) => ({
+  goal: state.getIn(['goals', props.goalId]),
+}), {
+  assignGoal: ca.goals.assign,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
     setupDelegate(this, 'onGoalClick').setGlobals(props.goalId);
     bindAll(this, ['onClick']);
   }
-  onAssign(i, e) {
-    const options = this.getOptionsForE(e);
-    const { selectAssignees, assignGoal, goal, inTakeAction } = this.props;
-
-    let overrideAssignees;
-    options.onClose = () => {
-      if (overrideAssignees) {
-        assignGoal(goal.get('id'), overrideAssignees).then((res) => {
-          if(res.ok){
-            window.analytics.sendEvent('Goal assigned', {
-              'Number of assignees': overrideAssignees.length,
-            });
-          }
-        });
-      }
+  onAssigningClose(assignees) {
+    const { assignGoal, goal } = this.props
+    if(assignees) {
+      assignGoal(goal.get('id'), assignees.toJS()).then((res) => {
+        if(res.ok){
+          window.analytics.sendEvent('Goal assigned', {
+            'Number of assignees': assignees.length,
+          });
+        }
+      });
     }
-    selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      }
-    });
-    e.stopPropagation();
   }
   onClick(e) {
     const selection = window.getSelection();
-
-    console.log('hi mofo')
 
     if (selection.toString().length === 0) {
       this.onGoalClick(e);
@@ -61,12 +49,6 @@ class HOCGoalListItem extends PureComponent {
   getHelper() {
     const { goal } = this.props;
     return new GoalsUtil(goal);
-  }
-  getOptionsForE(e) {
-    return {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
   }
   renderAssignees() {
     const { goal, inTakeAction } = this.props;
@@ -87,12 +69,13 @@ class HOCGoalListItem extends PureComponent {
         maxImages={1}
         delegate={this}
         rounded
-        size={26}
+        size={30}
+        enableTooltip
       />
     );
   }
   render() {
-    const { goal, fromMilestone, loading, inTakeAction } = this.props;
+    const { goal, fromMilestone, loading } = this.props;
     let { status } = this.props;
 
     if(!status) {
@@ -101,35 +84,16 @@ class HOCGoalListItem extends PureComponent {
     }
 
     return (
-      <GoalItem expand={FlexWrapper} vertical="center" onClick={this.onGoalClick}>
-        <StatusDot expand={Flex} status={status} flexNone />
-        <GoalTitle
-          inTakeAction={inTakeAction}
-          expand={Wrapper}
+      <Wrapper className="goal-item" onClick={this.onGoalClick}>
+        <StatusDot status={status} />
+        <Title
           status={status}
-          hoverRef={GoalItem.ref}
+          hoverRef=".goal-item"
         >
           {loading || goal.get('title')}
-        </GoalTitle>
+        </Title>
         {this.renderAssignees()}
-      </GoalItem>
+      </Wrapper>
     );
   }
 }
-
-const { object } = PropTypes;
-
-HOCGoalListItem.propTypes = {
-  goal: map,
-  delegate: object,
-  filter: map,
-};
-
-const mapStateToProps = (state, ownProps) => ({
-  goal: state.getIn(['goals', ownProps.goalId]),
-});
-
-export default connect(mapStateToProps, {
-  selectAssignees: a.goals.selectAssignees,
-  assignGoal: ca.goals.assign,
-})(HOCGoalListItem);

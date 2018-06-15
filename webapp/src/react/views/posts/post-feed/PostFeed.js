@@ -1,18 +1,28 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+import { styleElement} from 'swiss-react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback, typeForId, miniIconForId } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import TabBar from 'components/tab-bar/TabBar';
 import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';
-import HOCInfoButton from 'components/info-button/HOCInfoButton';
-
+import InfoButton from 'components/info-button/InfoButton';
+import styles from './PostFeed.swiss';
 import HOCPostView from '../post-view/HOCPostView';
-import './styles/post-feed.scss';
+
+const Container = styleElement('div', styles.Container);
+const PostItem = styleElement('div', styles.PostItem);
+const SubtitleWrapper = styleElement('div', styles.SubtitleWrapper);
+const SubtitleIcon = styleElement(Icon, styles.SubtitleIcon);
+const EmptyState = styleElement('div', styles.EmptyState);
+const EmptyIllustration = styleElement('div', styles.EmptyIllustration);
+const EmptySvg = styleElement(Icon, styles.EmptySvg);
+const EmptyTitle = styleElement('div', styles.EmptyTitle);
+const EmptyText = styleElement('div', styles.EmptyText);
+const Footer = styleElement('div', styles.Footer);
+const Div = styleElement('div');
 
 const DISTANCE = 200;
 class PostFeed extends PureComponent {
@@ -24,8 +34,6 @@ class PostFeed extends PureComponent {
       showLine: false,
     };
     this.lastEnd = 0;
-  }
-  componentDidMount() {
   }
   onScroll(e) {
     if (e.target.scrollTop > e.target.scrollHeight - e.target.clientHeight - DISTANCE) {
@@ -41,17 +49,17 @@ class PostFeed extends PureComponent {
 
     return contextType;
   }
-  renderHeaderSubtitle(title) {
+  renderSubtitleWithContext(title) {
     const { context } = this.props;
 
     if (context && context.get('title') && context.get('id')) {
       const icon = miniIconForId(context.get('id'));
 
       return (
-        <div className="post-feed__subtitle-wrapper">
-          <Icon icon={icon} className="post-feed__subtitle-icon" />
+        <SubtitleWrapper>
+          <SubtitleIcon icon={icon} />
           <div className="header-title__subtitle">{context.get('title')}</div>
-        </div>
+        </SubtitleWrapper>
       )
     }
 
@@ -61,18 +69,24 @@ class PostFeed extends PureComponent {
   }
   renderHeader() {
     const { context, delegate, tabs } = this.props;
-    let subtitle = context && context.get('title') && this.renderHeaderSubtitle();
+    let subtitle = context && context.get('title') && this.renderSubtitleWithContext();
     subtitle = subtitle || 'Talk with your team and share the latest and greatest.';
 
     return (
-      <div className="post-feed__header">
+      <Div>
         <HOCHeaderTitle title="Discuss" subtitle={subtitle} border={!tabs}>
-          <Button primary text="Create a post" onClick={this.onNewPost} />
-          <HOCInfoButton delegate={delegate} />
+          <InfoButton delegate={delegate} />
         </HOCHeaderTitle>
         {this.renderTabbar()}
-      </div>
+      </Div>
 
+    )
+  }
+  renderFooter() {
+    return (
+      <Footer>
+        <Button icon="Plus" onClick={this.onNewPost} sideLabel="Create new post" />
+      </Footer>
     )
   }
   renderTabbar() {
@@ -100,16 +114,16 @@ class PostFeed extends PureComponent {
     }
 
     return (
-      <div className="post-feed__empty-state">
-        <div className="post-feed__empty-illustration">
-          <Icon icon="ESMilestoneAchieved" className="post-feed__empty-svg"/>
-        </div>
-        <div className="post-feed__empty-title">
+      <EmptyState>
+        <EmptyIllustration>
+          <EmptySvg icon="ESMilestoneAchieved" />
+        </EmptyIllustration>
+        <EmptyTitle>
           start a discussion
-        </div>
-        <div className="post-feed__empty-text"><TextParser>{text}</TextParser></div>
-        <Button primary text="Create a post" onClick={this.onNewPost} />
-      </div>
+        </EmptyTitle>
+        <EmptyText><TextParser>{text}</TextParser></EmptyText>
+        <Button onClick={this.onNewPost} title="Create a post" />
+      </EmptyState>
     )
   }
   renderPosts() {
@@ -124,35 +138,27 @@ class PostFeed extends PureComponent {
         return undefined;
       }
       return (
-        <div className="post-feed__item" key={p.get('id')}>
+        <PostItem key={p.get('id')}>
           <HOCPostView postId={p.get('id')} fromFeed />
-        </div>
+        </PostItem>
       )
     }).toArray();
   }
   render() {
     const { posts } = this.props;
-    let className = 'post-feed';
-
-    if (!posts.size) {
-      className += ' post-feed--empty-state';
-    }
 
     return (
       <SWView
         header={this.renderHeader()}
+        footer={this.renderFooter()}
         onScroll={this.onScroll}
       >
-        <div className={className}>
+        <Container empty={!posts.size}>
           {this.renderPosts()}
-        </div>
+        </Container>
       </SWView>
     )
   }
 }
 
-export default PostFeed
-
-// const { string } = PropTypes;
-
-PostFeed.propTypes = {};
+export default PostFeed;

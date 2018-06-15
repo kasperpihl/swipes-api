@@ -1,21 +1,20 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-// import * s from 'selectors';
-// import * as cs from 'swipes-core-js/selectors';
-import { setupLoading, bindAll, toUnderscore } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import camelCaseToUnderscore from 'swipes-core-js/utils/camelCaseToUnderscore';
 import { fromJS } from 'immutable';
-import { setupDelegate } from 'react-delegate';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import RotateLoader from 'components/loaders/RotateLoader';
 import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import './styles/add-goal-item.scss';
 
-class HOCAddGoalItem extends PureComponent {
+@connect(null, {
+  createGoal: ca.goals.create,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,26 +24,15 @@ class HOCAddGoalItem extends PureComponent {
       addFocus: false,
     };
 
-    this.acOptions = {
-      types: ['users'],
-      delegate: this,
-      trigger: "@",
-    };
-
-    bindAll(this, ['onChange', 'onKeyDown', 'onFocus', 'onBlur', 'onGoalAdd']);
-    setupDelegate(this, 'onAddGoalItemInputChange');
     setupLoading(this);
   }
-  componentDidMount() {
-  }
-  onFocus() {
+  onFocus = () => {
     this.setState({ addFocus: true });
   }
-  onBlur(i) {
+  onBlur = (i) => {
     this.setState({ addFocus: false });
   }
-  onGoalAdd() {
-    console.log('add me!');
+  onGoalAdd = () => {
     const { createGoal } = this.props;
     const { title, assignees, milestoneId } = this.state;
 
@@ -61,25 +49,13 @@ class HOCAddGoalItem extends PureComponent {
       }
     });
   }
-  onAssign(i, e) {
-    const options = this.getOptionsForE(e);
-    const { selectAssignees } = this.props;
-    const { assignees } = this.state;
-    let overrideAssignees;
-    options.onClose = () => {
-      this.refs.autocomplete.refs.input.focus();
-      if (overrideAssignees) {
-        this.setState({ assignees: fromJS(overrideAssignees) });
-      }
+  onAssigningClose(assignees) {
+    this.inputRef.focus();
+    if(assignees) {
+      this.setState({ assignees });
     }
-    selectAssignees(options, assignees.toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      }
-    });
-    e.stopPropagation();
   }
-  onAutoCompleteSelect(item) {
+  onAutoCompleteSelect = (item) => {
     let { assignees, title } = this.state;
     if (!assignees.contains(item.id)) {
       assignees = assignees.push(item.id);
@@ -88,87 +64,39 @@ class HOCAddGoalItem extends PureComponent {
     title = msgArr.slice(0, -1).join('@');
     this.setState({ title, assignees });
   }
-  onChange(e) {
-    const value = e.target.value;
-    this.setState({ title: value });
-
-    this.onAddGoalItemInputChange(value);
-  }
-  onKeyDown(e) {
-    if (e.keyCode === 13 && e.target.value.length > 0) {
-      this.onGoalAdd();
-    }
-  }
-  getOptionsForE(e) {
-    return {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-    };
+  onChange = (e) => {
   }
   render() {
     const { placeholder } = this.props;
-    const { title, assignees, addFocus } = this.state;
+    const { title, assignees } = this.state;
     let value = title;
 
-    let addClass = 'add-goal-item';
-
-    if (addFocus || title.length) {
-      addClass += ' add-goal-item--focused';
-    }
-
-    if (title.length && !this.isLoading('add')) {
-      addClass += ' add-goal-item--active'
-    }
-
-    if (this.isLoading('add')) {
-      addClass += ' add-goal-item--loading';
-      value = this.getLoading('add').loading;
-    }
-
     return (
-      <div className={addClass}>
+      <div className="add-goal-item">
+        <div className="add-goal-item__indicator" />
         <AutoCompleteInput
-          nodeType="input"
-          type="text"
-          ref="autocomplete"
-          className="add-goal-item__input"
-          value={value}
+          onAutoCompleteSelect={this.onAutoCompleteSelect}
+          innerRef={c => this.inputRef = c}
           onChange={this.onChange}
-          onKeyDown={this.onKeyDown}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           placeholder={placeholder || 'Add a new goal'}
-          options={this.acOptions}
+          clearMentions
         />
-        <div className="add-goal-item__indicator">
-          <div className="add-goal-item__loader">
-            <RotateLoader size={24} />
-          </div>
-        </div>
+        
         <div className="add-goal-item__assignees">
           <HOCAssigning
             assignees={assignees}
             delegate={this}
             rounded
-            size={26}
+            size={30}
+            enableTooltip
           />
         </div>
         <div className="add-goal-item__button" onClick={this.onGoalAdd} >
-          <Button icon="subdirectory_arrow_left" small frameless/>
+          <Button icon="subdirectory_arrow_left" compact />
         </div>
       </div>
     );
   }
 }
-// const { string } = PropTypes;
-
-HOCAddGoalItem.propTypes = {};
-
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps, {
-  selectAssignees: a.goals.selectAssignees,
-  createGoal: ca.goals.create,
-})(HOCAddGoalItem);

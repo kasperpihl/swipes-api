@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
-import Button from 'Button';
+import { setupCachedCallback } from 'react-delegate';
+import Button from 'src/react/components/button/Button';
+import styles from './Confirmation.swiss';
 
-import './styles/confirmation.scss';
+const Wrapper = styleElement('div', styles.Wrapper);
+const Title = styleElement('div', styles.Title);
+const Message = styleElement('div', styles.Message);
+const Actions = styleElement('div', styles.Actions);
 
 class Confirmation extends Component {
   constructor(props) {
@@ -11,34 +16,16 @@ class Confirmation extends Component {
     this.state = {};
     this.onClickCached = setupCachedCallback(props.onClick, this);
   }
-  renderTitle() {
-    const { title } = this.props;
-
-    if (!title) {
-      return undefined;
-    }
-
-    return <div className="confirmation__title">{title}</div>;
-  }
-  renderMessage() {
-    const { message } = this.props;
-
-    if (!message) {
-      return undefined;
-    }
-
-    return <div className="confirmation__message">{message}</div>;
-  }
   renderActions() {
     let { actions } = this.props;
 
     if (!actions) {
       actions = [
         {
-          text: 'No',
+          title: 'No',
         },
         {
-          text: 'Yes',
+          title: 'Yes',
         },
       ];
     }
@@ -50,22 +37,23 @@ class Confirmation extends Component {
 
       const isLast = (actions.length - 1) === i;
 
-      return <Button primary={isLast} {...props} key={i} onClick={this.onClickCached(i)} className="confirmation__button" />;
+      return <Button {...props} key={i} onClick={this.onClickCached(i)} />;
     });
 
     return (
-      <div className="confirmation__actions">
+      <Actions>
         {renderButtons}
-      </div>
+      </Actions>
     );
   }
   render() {
+    const { title, message } = this.props;
     return (
-      <div className="confirmation">
-        {this.renderTitle()}
-        {this.renderMessage()}
+      <Wrapper>
+        {title && <Title>{title}</Title>}
+        {message && <Message>{message}</Message>}
         {this.renderActions()}
-      </div>
+      </Wrapper>
     );
   }
 }

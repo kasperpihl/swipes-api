@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'components/loaders/Loader';
 import { setupDelegate } from 'react-delegate';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import ResultItem from 'components/result-item/ResultItem';
 
 
@@ -14,11 +14,15 @@ class ResultList extends Component {
     this.onActionCached = setupCachedCallback(this.onAction, this);
     setupDelegate(this, 'onItemAction');
   }
-  componentDidMount() {
-  }
   onAction(i, side, e) {
-    const { results } = this.props;
-    this.onItemAction(results[i], side, e);
+    const { results, hide } = this.props;
+    const item = results[i];
+
+    this.onItemAction(item, side, e);
+
+    if (item.hideAfterClick === true) {
+      hide();
+    }
   }
   renderResults() {
     const { results } = this.props;

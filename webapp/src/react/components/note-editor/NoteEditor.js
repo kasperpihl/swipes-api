@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   Editor,
   getDefaultKeyBinding,
@@ -10,23 +9,19 @@ import { setupDelegate } from 'react-delegate';
 import NoteLink from './decorators/link/NoteLink';
 import ChecklistBlock from './blocks/checklist/ChecklistBlock';
 import DefaultBlocks from './blocks/default/DefaultBlocks';
-// import CodeBlock from './blocks/code/CodeBlock';
 import MediumEditor from './medium-editor/MediumEditor';
-import DraftExt from './draft-ext';
-
-import './styles/note-editor.scss';
+import setupDraftExtensions from 'src/utils/draft-js/setupDraftExtensions';
 
 class NoteEditor extends Component {
   constructor(props) {
     super(props);
 
     setupDelegate(this, 'onLinkClick', 'setEditorState');
-    this.plugins = DraftExt(this, {
+    this.plugins = setupDraftExtensions(this, {
       decorators: [
         NoteLink,
       ],
       blocks: [
-        // CodeBlock,
         ChecklistBlock,
         DefaultBlocks,
       ],
@@ -37,15 +32,14 @@ class NoteEditor extends Component {
   componentDidMount() {
     const { editorState, rawState } = this.props;
     if (!editorState && rawState) {
-      this.setEditorState(this.plugins.getEditorStateWithDecorators(convertFromRaw(rawState)));
+      this.setEditorState(this.plugins.createEditorState(rawState));
     }
   }
   componentDidUpdate() {
     const { rawState } = this.props;
     if (rawState) {
-      const raw = convertFromRaw(rawState);
       this.refs.editor.blur();
-      this.setEditorState(this.plugins.getEditorStateWithDecorators(raw), true);
+      this.setEditorState(this.plugins.createEditorState(rawState), true);
     }
   }
   componentDidCatch(error, info) {
@@ -115,14 +109,3 @@ class NoteEditor extends Component {
 }
 
 export default NoteEditor;
-
-const { bool, func, object } = PropTypes;
-
-NoteEditor.propTypes = {
-  onBlur: func,
-  rawState: object,
-  delegate: object,
-  editorState: object,
-  mediumEditor: bool,
-  readOnly: bool,
-};

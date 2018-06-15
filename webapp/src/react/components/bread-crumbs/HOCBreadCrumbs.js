@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { styleElement } from 'swiss-react';
 import { connect } from 'react-redux';
-import { list } from 'react-immutable-proptypes';
 import Icon from 'Icon';
-import * as a from 'actions';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 
-import './styles/bread-crumbs.scss';
+import styles from './BreadCrumbs.swiss';
 
-class HOCBreadCrumbs extends Component {
+const Wrapper = styleElement('div', styles.Wrapper);
+const Crumb = styleElement('div', styles.Crumb);
+const Title = styleElement('div', styles.Title);
+const Seperator = styleElement('div', styles.Seperator);
+const CrumbIcon = styleElement(Icon, styles.Icon);
+
+@connect((state, props) => ({
+  history: state.getIn(['navigation', props.target, 'stack']),
+}), {
+  pop: navigationActions.pop,
+})
+export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -18,30 +28,6 @@ class HOCBreadCrumbs extends Component {
     const { target, pop } = this.props;
     pop(target, i);
   }
-  renderCrumb(crumb, i) {
-    const title = crumb.get('title');
-
-    return (
-      <div className="bread-crumbs__crumb" key={i} onClick={this.onClickCached(i)}>
-        <div className="bread-crumbs__title">
-          {title}
-        </div>
-        <div className="bread-crumbs__seperator">
-          <Icon icon="Breadcrumb" className="bread-crumbs__icon" />
-        </div>
-      </div>
-    );
-  }
-  renderTitle(crumb) {
-    const title = crumb.get('title');
-    return (
-      <div className="bread-crumbs__crumb" key="title">
-        <div className="bread-crumbs__title no-click">
-          {title}
-        </div>
-      </div>
-    );
-  }
   renderBreadCrumbs() {
     const { history } = this.props;
 
@@ -49,50 +35,32 @@ class HOCBreadCrumbs extends Component {
       return undefined;
     }
 
-    const breadCrumbsHTML = [];
-
-    history.forEach((crumb, i) => {
-      if ((i + 1) < history.size) {
-        breadCrumbsHTML.push(this.renderCrumb(crumb, i));
+    return history.map((crumb, i) => {
+      if(history.size === 1 && !crumb.get('showTitleInCrumb') || history.size > 1 && i === (history.size - 1)) {
+        return null;
       }
-    });
-    if (history.size === 1 && history.last().get('showTitleInCrumb')) {
-      breadCrumbsHTML.push(this.renderTitle(history.last()));
-    }
-
-
-    return breadCrumbsHTML;
+      const disableClick = history.size === (i + 1);
+      return (
+        <Crumb
+          key={i} 
+          className="crumb" 
+          disableClick={disableClick}
+          onClick={this.onClickCached(i)}>
+          {(i > 0) && (
+          <Seperator>
+            <CrumbIcon disableClick={disableClick} icon="Breadcrumb" />
+          </Seperator>
+          )}
+          <Title disableClick={disableClick}>{crumb.get('title')}</Title>
+        </Crumb>
+      )
+    }).toArray().filter(v => !!v);
   }
   render() {
-    const { hidden } = this.props;
-    let className = 'bread-crumbs';
-
-    if (hidden) {
-      className += ' bread-crumbs--small';
-    }
     return (
-      <div className={className}>
+      <Wrapper>
         {this.renderBreadCrumbs()}
-      </div>
+      </Wrapper>
     );
   }
 }
-
-const { func, string } = PropTypes;
-
-HOCBreadCrumbs.propTypes = {
-  target: string.isRequired,
-  history: list,
-  pop: func,
-};
-
-function mapStateToProps(state, ownProps) {
-  return {
-    history: state.getIn(['navigation', ownProps.target, 'stack']),
-  };
-}
-
-
-export default connect(mapStateToProps, {
-  pop: a.navigation.pop,
-})(HOCBreadCrumbs);

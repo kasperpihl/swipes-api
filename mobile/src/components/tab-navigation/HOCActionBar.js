@@ -5,9 +5,9 @@ import {
   Text,
   StyleSheet,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'react-delegate';
 import * as a from 'actions';
 import * as gs from 'styles';
 import Icon from 'Icon';
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     color: colors.blue100,
     fontWeight: 'bold',
     includeFontPadding: false,
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
   numberContainer: {
     ...gs.mixins.padding(4, 8, 3, 8),
@@ -102,7 +102,7 @@ class HOCActionBar extends PureComponent {
       >
         <View style={styles.textButton}>
           {button.seperator && button.seperator === 'left' ? <View style={styles.verticalSeperatorLeft} /> : undefined}
-          <Text selectable={true} style={styles.textButtonLabel}>
+          <Text selectable style={styles.textButtonLabel}>
             {text}
           </Text>
           {button.seperator && button.seperator === 'right' ? <View style={styles.verticalSeperatorRight} /> : undefined}
@@ -129,7 +129,7 @@ class HOCActionBar extends PureComponent {
 
     let renderedContent = (
       <Icon
-        name={button.icon}
+        icon={button.icon}
         width="24"
         height="24"
         fill={colors.deepBlue50}
@@ -141,13 +141,13 @@ class HOCActionBar extends PureComponent {
         <View style={styles.numberContainer}>
           <Text style={styles.numberLabel}>{button.number}</Text>
         </View>
-      )
+      );
     }
 
     if (button.icon === 'loading') {
       renderedContent = (
         <ActivityIndicator color={colors.blue100} size="small" />
-      )
+      );
     }
 
     return (
@@ -166,6 +166,9 @@ class HOCActionBar extends PureComponent {
   }
   renderLeftIcon() {
     const { activeRoutes, actionButtons } = this.props;
+
+
+    console.log('actionButtons', actionButtons);
 
     if (actionButtons.get('hideBackButton')) return undefined;
 

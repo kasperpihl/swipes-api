@@ -73,7 +73,7 @@ export const request = (options, data) => (d, getState) => {
     body = new FormData();
     values.forEach(([k, v]) => {
       body.append(k, v);
-    })
+    });
   }
 
   const serData = {
@@ -85,7 +85,7 @@ export const request = (options, data) => (d, getState) => {
   return new Promise((resolve, reject) => {
     fetch(apiUrl + command, serData)
       .then((r) => {
-        if(r && r.url && !apiUrl.startsWith('https://staging') && r.url.startsWith('https://staging')) {
+        if (r && r.url && !apiUrl.startsWith('https://staging') && r.url.startsWith('https://staging')) {
           redirectUrl = r.url;
         }
         if (r && r.ok) return r.json();
@@ -94,7 +94,7 @@ export const request = (options, data) => (d, getState) => {
         state = getState();
         handleUpdatesNeeded(res, state, d);
         if (res && res.ok) {
-          if(redirectUrl) {
+          if (redirectUrl) {
             res.redirectUrl = redirectUrl;
           }
           d({
@@ -102,7 +102,6 @@ export const request = (options, data) => (d, getState) => {
             payload: res,
           });
         } else {
-
           if (res.error === 'not_authed') {
             d({ type: types.RESET_STATE });
           }
@@ -113,6 +112,7 @@ export const request = (options, data) => (d, getState) => {
         resolve(res);
       }).catch((e) => {
         console.log(JSON.stringify(e));
+        console.log('error', JSON.stringify(e));
         if (getState().getIn(['globals', 'isDev'])) {
           console.warn(command, e);
         }

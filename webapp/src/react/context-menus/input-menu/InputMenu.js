@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
+import { styleElement } from 'swiss-react';
 import PropTypes from 'prop-types';
-import Button from 'Button';
+import Button from 'src/react/components/button/Button';
 import { bindAll } from 'swipes-core-js/classes/utils';
+import styles from './InputMenu.swiss';
 
-import './styles/input-menu.scss';
+const Wrapper = styleElement('div', styles.Wrapper);
+const Input = styleElement('input', styles.Input);
 
 class InputMenu extends Component {
   constructor(props) {
     super(props);
     this.state = { text: props.text || '' };
     bindAll(this, ['onAdd', 'onHandleKeyUp', 'onChange']);
+  }
+  componentDidMount() {
+    this.input.focus();
   }
   onHandleKeyUp(e) {
     if (e.keyCode === 13) {
@@ -35,27 +41,23 @@ class InputMenu extends Component {
     const { text } = this.state;
 
     return (
-      <div className="input-menu">
-        <input
-          key="input"
+      <Wrapper>
+        <Input
           value={text}
           onChange={this.onChange}
-          className="input-menu__input"
           placeholder={placeholder}
           onKeyUp={this.onHandleKeyUp}
           type="text"
           autoFocus
+          innerRef={(c) => this.input = c}
         />
         <Button
-          primary
-          key="butt"
-          text={buttonLabel}
+          title={buttonLabel}
           disabled={allowEmpty ? false : !text.length}
           icon={buttonIcon}
           onClick={this.onAdd}
-          className="input-menu__button"
         />
-      </div>
+      </Wrapper>
     );
   }
 }

@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-// import Button from 'Button';
+
 import Icon from 'Icon';
-// import './styles/NoMilestoneOverview.scss';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 import './styles/no-milestone-overview.scss';
@@ -16,17 +13,8 @@ class NoMilestoneOverview extends PureComponent {
     super(props);
     this.state = {
       showLine: false,
-      emptyStateOpacity: 1,
     };
     setupDelegate(this, 'onScroll');
-  }
-  onAddGoalItemInputChange(title) {
-    const { emptyStateOpacity } = this.state;
-    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
-
-    if (emptyStateOpacity !== newEmptyStateOpacity) {
-      this.setState({ emptyStateOpacity: newEmptyStateOpacity })
-    }
   }
   renderHeader() {
     return (
@@ -43,7 +31,7 @@ class NoMilestoneOverview extends PureComponent {
 
     if (!goals.size) {
       return (
-        <div className="no-milestone-overview__empty-state" style={{ opacity: this.state.emptyStateOpacity }}>
+        <div className="no-milestone-overview__empty-state">
           <div className="no-milestone-overview__empty-arrow">
             <Icon icon="ESArrow" className="no-milestone-overview__empty-arrow-svg" />
           </div>
@@ -95,8 +83,4 @@ class NoMilestoneOverview extends PureComponent {
   }
 }
 
-export default NoMilestoneOverview
-
-// const { string } = PropTypes;
-
-NoMilestoneOverview.propTypes = {};
+export default NoMilestoneOverview;

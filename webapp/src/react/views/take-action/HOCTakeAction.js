@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import * as cs from 'swipes-core-js/selectors';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import {
   EditorState,
   convertToRaw,
@@ -12,7 +9,15 @@ import {
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import TakeAction from './TakeAction';
 
-class HOCTakeAction extends PureComponent {
+@navWrapper
+@connect(state => ({
+  goals: cs.goals.assignedGroupedByMilestone(state),
+  myId: state.getIn(['me', 'id']),
+}), {
+  saveCache: ca.cache.save,
+})
+
+export default class HOCTakeAction extends PureComponent {
   static maxWidth() {
     return 654;
   }
@@ -56,7 +61,7 @@ class HOCTakeAction extends PureComponent {
       return;
     }
     navPush({
-      id: 'MilestoneOverview',
+      id: 'PlanOverview',
       title: 'Plan overview',
       props: {
         milestoneId,
@@ -94,22 +99,3 @@ class HOCTakeAction extends PureComponent {
     );
   }
 }
-
-const { func, object } = PropTypes;
-HOCTakeAction.propTypes = {
-  goals: map,
-  savedState: object,
-  saveState: func,
-  openSecondary: func,
-  navPush: func,
-  delegate: object,
-};
-
-const mapStateToProps = state => ({
-  goals: cs.goals.assignedGroupedByMilestone(state),
-  myId: state.getIn(['me', 'id']),
-});
-
-export default navWrapper(connect(mapStateToProps, {
-  saveCache: ca.cache.save,
-})(HOCTakeAction));

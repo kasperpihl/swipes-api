@@ -48,12 +48,13 @@
     "accessKey": "AKIAJ7OR4Q4MA5VBPTKA",
     "secretKey": "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",
     "bucketName": "staging.swipesapp.com",
+    "region": "us-west-2",
     "url": "https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/"
   },
-  "loggly": {
-    "token": "a760d2ee-d576-466b-a8ff-53826455a13d",
-    "tags": "swipesapp-staging-nodejs-errors",
-    "subdomain": "swipesapp"
+  "awsCloudWatch": {
+    "accessKey": "AKIAJ7OR4Q4MA5VBPTKA",
+    "secretKey": "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",
+    "region": "us-west-2"
   },
   "stripe": {
     "publishableKey": "pk_test_0pUn7s5EyQy7GeAg93QrsJl9",

@@ -56,6 +56,19 @@ const dbInit = funcWrap([
               .filter((post) => {
                 return post('archived').eq(false).or(post('archived').eq(!full_fetch));
               })
+              .map((post) => {
+                return post.merge({
+                  // Taking the keys so we can filter the object
+                  // and then make it again in a object after the map function
+                  // https://rethinkdb.com/api/javascript/#object
+                  comments: r.expr(post('comments').keys().filter((comment_id) => {
+                    return post('comments')(comment_id)('archived').ne(true);
+                  })
+                    .map((comment_id) => {
+                      return [comment_id, post('comments')(comment_id)];
+                    })).coerceTo('OBJECT'),
+                });
+              })
               .coerceTo('ARRAY'),
         });
       })

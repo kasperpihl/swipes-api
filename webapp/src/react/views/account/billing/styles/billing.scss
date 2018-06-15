@@ -37,6 +37,10 @@
     margin-top: 9px;
   }
 
+  &__button {
+    margin-top: 20px;
+  }
+
   &__bottom-section {
     @include size(420px, auto);
     @include flexContainer('column', center);
@@ -61,6 +65,10 @@
         @include font(27px, $deepBlue-100, 36px);
         text-align: center;
         padding-bottom: 12px;
+      }
+
+      &__button {
+        margin-top: 20px;
       }
     }
 

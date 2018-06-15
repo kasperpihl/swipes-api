@@ -1,8 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <g>
-    <rect width="24" height="24" transform="translate(0 24) rotate(-90)" fill="transparent" stroke="transparent"/>
-    <circle cx="12" cy="12" r="2" stroke="transparent"/>
-    <circle cx="5" cy="12" r="2" stroke="transparent"/>
-    <circle cx="19" cy="12" r="2" stroke="transparent"/>
-  </g>
+  <rect x="11" y="11" width="2" height="2" stroke="transparent"/>
+  <rect x="6" y="11" width="2" height="2" stroke="transparent"/>
+  <rect x="16" y="11" width="2" height="2" stroke="transparent"/>
 </svg>

@@ -13,7 +13,10 @@ fs.readdirSync('node_modules')
 module.exports = {
   context: __dirname,
   devtool: 'eval',
-  entry: './index',
+  entry: [
+    'regenerator-runtime/runtime',
+    './index',
+  ],
   target: 'node',
   externals: nodeModules,
   output: {

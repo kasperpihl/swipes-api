@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-// import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import Button from 'Button';
-// import Icon from 'Icon';
+import Button from 'src/react/components/button/Button';
+import CardSection from './CardSection';
+
 import './styles/billing.scss';
 
 const style = {
@@ -31,12 +31,9 @@ class Billing extends PureComponent {
     super(props);
     this.state = {
       errorMessage: '',
-      successState: true,
     };
-    setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage');
+    setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage', 'onCardDetails');
     bindAll(this, ['onChange', 'onSubmit']);
-  }
-  componentDidMount() {
   }
   getShowPrice() {
     const { billingStatus, users } = this.props;
@@ -65,7 +62,6 @@ class Billing extends PureComponent {
   }
   onSubmit(e) {
     e.preventDefault();
-    const { cardState } = this.state;
     const { stripe, setLoading, clearLoading } = this.props;
 
     setLoading('submit');
@@ -122,42 +118,18 @@ class Billing extends PureComponent {
       </div>
     );
   }
-  renderBilling() {
-    const { cardState } = this.state;
-    let { errorMessage } = this.state;
-
-    errorMessage = errorMessage || (cardState && cardState.error && cardState.error.message);
-
-    return (
-      <div className="billing">
-        <div className="form-row">
-          <label htmlFor="card-element">
-            Credit or debit card
-          </label>
-          <div id="card-element">
-            <CardElement hidePostalCode style={style} onChange={this.onChange} />
-          </div>
-          <div id="card-errors" role="alert">{errorMessage}</div>
-        </div>
-      </div>
-    );
-  }
   renderBottomSection() {
-    const { cardState } = this.state;
     const { organization, users, billingStatus, getLoading } = this.props;
-    const isReady = cardState && cardState.complete;
     const hasStripe = organization.get('stripe_subscription_id');
     const className = `payment__bottom-section ${hasStripe ? 'payment__bottom-section--success' : ''}`;
 
     return (
       <div className={className}>
         <div className="top-section">
-          {this.renderBilling()}
+          <CardSection label="Credit or debit card" />
           <Button
             {...getLoading('submit')}
-            primary
-            disabled={!isReady}
-            text="Submit Payment"
+            title="Submit Payment"
             onClick={this.onSubmit}
           />
           <div className="payment__cta-subtitle">You will be billed ${this.getPrice()}.</div>
@@ -168,6 +140,10 @@ class Billing extends PureComponent {
             <div className="payment-status__label">Your subscription status is:</div>
             <div className="payment-status__status payment-status__status--active">Active</div>
           </div>
+          <Button
+            title="Change card details"
+            onClick={this.onCardDetails}
+          />
         </div>
       </div>
     );
@@ -187,8 +163,7 @@ class Billing extends PureComponent {
 
             </div>
             <Button
-              text="Manage team"
-              primary
+              title="Manage team"
               onClick={this.onManage}
             />
           </div>
@@ -200,7 +175,3 @@ class Billing extends PureComponent {
 }
 
 export default injectStripe(Billing);
-
-// const {string} = PropTypes;
-
-Billing.propTypes = {};

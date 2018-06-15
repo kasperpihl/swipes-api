@@ -11,13 +11,13 @@ const getState = state => state;
 export const search = createCachedSelector(
   [getSearchString, searchGoals, searchMilestones, searchPosts],
   (searchString, foundGoals, foundMilestones, foundPosts) => {
-    if(!searchString || !searchString.length) {
+    if (!searchString || !searchString.length) {
       return null;
     }
     return foundGoals.concat(foundMilestones).concat(foundPosts).sort(
-      (a,b) => (a.score > b.score) ? 1 : ((b.score > a.score) ? -1 : 0)
+      (a, b) => ((a.score > b.score) ? 1 : ((b.score > a.score) ? -1 : 0)),
     );
   },
 )(
-  (state, props) => getSearchString(state, props) || ''
+  (state, props) => getSearchString(state, props) || '',
 );

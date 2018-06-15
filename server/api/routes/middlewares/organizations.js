@@ -18,8 +18,12 @@ import {
   dbOrganizationsEnableUser,
   dbOrganizationsUpdateStripeCustomerIdAndPlan,
   dbOrganizationsUpdateStripeSubscriptionId,
+  dbOrganizationsUpdateStripeSubscriptionPlan,
   dbOrganizationsAddPendingUser,
   dbOrganizationsActivateUser,
+  dbOrganizationsMilestoneReorder,
+  dbOrganizationsMilestoneAdd,
+  dbOrganizationsMilestoneRemove,
 } from './db_utils/organizations';
 import {
   dbUsersAddOrganization,
@@ -52,6 +56,7 @@ const organizationsCreate = valLocals('organizationsCreate', {
     owner_id: user_id,
     admins: [],
     active_users: [user_id],
+    milestone_order: [],
     created_at: r.now(),
     updated_at: r.now(),
     trial: {
@@ -585,7 +590,9 @@ const organizationsCreateStripeCustomer = valLocals('organizationsCreateStripeCu
     stripe_token,
     plan,
   } = res.locals;
-  const email = ownerUser.email;
+  const {
+    email,
+  } = ownerUser;
 
   const args = [];
   let funcName = 'create';
@@ -686,14 +693,12 @@ const organizationsCreateSubscriptionCustomer = valLocals('organizationsCreateSu
       return next(new SwipesError(err));
     });
 });
-const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSubscriptionCustomer', {
+const organizationsUpdateSubscriptionQuantity = valLocals('organizationsUpdateSubscriptionQuantity', {
   organization: object,
 }, (req, res, next, setLocals) => {
   const {
     organization,
   } = res.locals;
-
-  console.log(organization);
 
   if (!organization) {
     return next();
@@ -738,6 +743,94 @@ const organizationsUpdateSubscriptionCustomer = valLocals('organizationsUpdateSu
         .catch((err) => {
           return next(err);
         });
+    }).catch((err) => {
+      return next(new SwipesError(err));
+    });
+});
+const organizationsUpdateStripeSubscriptionPlan = valLocals('organizationsUpdateStripeSubscriptionPlan', {
+  organization_id: string.require(),
+  plan_to_change: string.require(),
+  organization: object,
+}, async (req, res, next, setLocals) => {
+  try {
+    const {
+      organization_id,
+      plan_to_change,
+      organization,
+    } = res.locals;
+
+    if (!organization) {
+      return next();
+    }
+
+    const mappedPlan = plan_to_change === 'yearly' ? stripeConfig.yearlyPlanId : stripeConfig.monthlyPlanId;
+    const {
+      plan,
+      stripe_subscription_id,
+    } = organization;
+
+    if (mappedPlan === plan) {
+      // Can't change the plan to the current one.
+      return next(new SwipesError(`You are already on the ${plan} plan.`));
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(stripe_subscription_id);
+
+    await stripe.subscriptions.update(stripe_subscription_id, {
+      items: [{
+        id: subscription.items.data[0].id,
+        plan: mappedPlan,
+        quantity: organization.active_users.length,
+      }],
+    });
+
+    return dbOrganizationsUpdateStripeSubscriptionPlan({
+      organization_id,
+      plan: plan_to_change,
+    })
+      .then((result) => {
+        const changes = result.changes[0];
+        const organization = changes.new_val || changes.old_val;
+
+        setLocals({
+          organization,
+        });
+
+        return next();
+      })
+      .catch((err) => {
+        return next(err);
+      });
+  } catch (e) {
+    return next(e);
+  }
+});
+const organizationsUpdateStripeCardDetails = valLocals('organizationsUpdateStripeCardDetails', {
+  organization: object.require(),
+  stripe_token: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization,
+    stripe_token,
+  } = res.locals;
+
+  if (!organization) {
+    return next();
+  }
+
+  const {
+    stripe_customer_id,
+  } = organization;
+
+  if (!stripe_customer_id) {
+    return next();
+  }
+
+  return stripe.customers.update(stripe_customer_id, {
+    source: stripe_token,
+  })
+    .then(() => {
+      return next();
     }).catch((err) => {
       return next(new SwipesError(err));
     });
@@ -814,6 +907,112 @@ const organizationsUsersInvitedUserQueueMessage = valLocals('organizationsUsersI
 
   return next();
 });
+const organizationsMilestoneReorder = valLocals('organizationsMilestoneReorder', {
+  organization_id: string.require(),
+  milestone_order: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    milestone_order,
+  } = res.locals;
+
+  return dbOrganizationsMilestoneReorder({
+    organization_id,
+    milestone_order,
+  })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        milestone_order: organization.milestone_order,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsMilestoneReorderQueueMessage = valLocals('organizationsMilestoneReorderQueueMessage', {
+  user_id: string.require(),
+  organization_id: string.require(),
+  milestone_order: array.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    user_id,
+    organization_id,
+    milestone_order,
+  } = res.locals;
+
+  const queueMessage = {
+    user_id,
+    organization_id,
+    milestone_order,
+    event_type: 'organization_milestone_reordered',
+  };
+
+  setLocals({
+    queueMessage,
+    messageGroupId: organization_id,
+  });
+
+  return next();
+});
+const organizationsAddMilestone = valLocals('organizationsAddMilestone', {
+  organization_id: string.require(),
+  milestone_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    milestone_id,
+  } = res.locals;
+
+  return dbOrganizationsMilestoneAdd({
+    organization_id,
+    milestone_id,
+  })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        milestone_order: organization.milestone_order,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
+const organizationsRemoveMilestone = valLocals('organizationsRemoveMilestone', {
+  organization_id: string.require(),
+  milestone_id: string.require(),
+}, (req, res, next, setLocals) => {
+  const {
+    organization_id,
+    milestone_id,
+  } = res.locals;
+
+  return dbOrganizationsMilestoneRemove({
+    organization_id,
+    milestone_id,
+  })
+    .then((result) => {
+      const changes = result.changes[0];
+      const organization = changes.new_val || changes.old_val;
+
+      setLocals({
+        milestone_order: organization.milestone_order,
+      });
+
+      return next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
 export {
   organizationsCreate,
@@ -833,7 +1032,9 @@ export {
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
   organizationsCreateSubscriptionCustomer,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
+  organizationsUpdateStripeSubscriptionPlan,
+  organizationsUpdateStripeCardDetails,
   organizationsCancelSubscription,
   organizationsAddPendingUsers,
   organizationsCreatedQueueMessage,
@@ -843,4 +1044,8 @@ export {
   organizationsChangeStripeCustomerEmail,
   organizationsDeletedQueueMessage,
   organizationsUserJoinedQueueMessage,
+  organizationsMilestoneReorder,
+  organizationsMilestoneReorderQueueMessage,
+  organizationsAddMilestone,
+  organizationsRemoveMilestone,
 };

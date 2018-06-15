@@ -1,23 +1,50 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
-import { propsOrPop } from 'swipes-core-js/classes/react-utils';
+import { withOptimist } from 'react-optimist';
+import { DragDropContext } from 'react-beautiful-dnd';
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import { fromJS, List, Map } from 'immutable';
-import { bindAll, setupCachedCallback, setupLoading } from 'swipes-core-js/classes/utils';
-import { dayStringForDate } from 'swipes-core-js/classes/time-utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import * as a from 'actions';
+import getNewOrderFromResult from 'swipes-core-js/utils/getNewOrderFromResult';
+
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
+import * as wayActions from 'src/redux/way/wayActions';
+
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import TabMenu from 'context-menus/tab-menu/TabMenu';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import GoalOverview from './GoalOverview';
 
 /* global msgGen */
 
-class HOCGoalOverview extends PureComponent {
+@connect((state, props) => ({
+  goal: state.getIn(['goals', props.goalId]),
+  me: state.get('me'),
+}), {
+  addAttachment: ca.attachments.add,
+  archive: ca.goals.archive,
+  contextMenu: mainActions.contextMenu,
+  assignGoal: ca.goals.assign,
+  loadWay: wayActions.load,
+  goalLoadWay: ca.goals.loadWay,
+  createWay: ca.ways.create,
+  selectMilestone: menuActions.selectMilestone,
+  stepReorder: ca.goals.stepsReorder,
+  attachmentReorder: ca.goals.attachmentsReorder,
+  addGoalToMilestone: ca.milestones.addGoal,
+  removeGoalFromMilestone: ca.milestones.removeGoal,
+  confirm: menuActions.confirm,
+  inputMenu: menuActions.input,
+})
+@navWrapper
+@withOptimist
+
+export default class extends PureComponent {
   static sizes() {
-    return [840, 900];
+    return [825, 930];
   }
   static fullscreen() {
     return false;
@@ -25,128 +52,16 @@ class HOCGoalOverview extends PureComponent {
   constructor(props) {
     super(props);
     propsOrPop(this, 'goal');
+    props.optimist.identify(props.goal.get('id'));
     this.state = {
       showLine: false,
-      editMode: false,
-      handoff: null,
-      emptyStateOpacity: 1,
     };
     setupLoading(this);
-
-    this.clearCB = setupCachedCallback(this.clearLoadingForStep, this);
   }
-  onScroll(e) {
-    const { showLine } = this.state;
-    const newShowLine = e.target.scrollTop > 0;
-
-    if (showLine !== newShowLine) {
-      this.setState({ showLine: newShowLine });
-    }
-  }
-  onEditSteps() {
-    this.setState({ editMode: !this.state.editMode });
-  }
-  onCreatePost(props) {
-    const { goal, openModal } = this.props;
-    props = props || {};
-    props.context = {
-      id: goal.get('id'),
-      title: goal.get('title'),
-    };
-
-    openModal({
-      id: 'CreatePost',
-      title: 'Create Post',
-      props,
-    });
-  }
-  onSeeAll() {
-    const { openSecondary, goal, contextMenu } = this.props;
-    contextMenu();
-    openSecondary({
-      id: 'ActivityFeed',
-      title: 'ActivityFeed',
-      props: {
-        goalId: goal.get('id'),
-      },
-    });
-  }
-  onClickURL(nI, url) {
-    const { browser, target } = this.props;
-    browser(target, url);
-  }
-  onTitleClick(e) {
-    const options = this.getOptionsForE(e);
-    const { goal, renameGoal, inputMenu } = this.props;
-    inputMenu({
-      ...options,
-      text: goal.get('title'),
-      buttonLabel: 'Rename',
-    }, (title) => {
-      if (title !== goal.get('title') && title.length) {
-        this.setLoading('title', 'Renaming...');
-        renameGoal(goal.get('id'), title).then(() => {
-          this.clearLoading('title');
-        });
-      }
-    });
-  }
-  onGoalCheckboxClick() {
-    const { incompleteGoal, completeGoal, successGradient } = this.props;
-    const helper = this.getHelper();
-    const actionFunc = helper.getIsCompleted() ? incompleteGoal : completeGoal;
-    this.setLoading('completing');
-    actionFunc(helper.getId()).then((res) => {
-      if (res && res.ok) {
-        if (!helper.getIsCompleted()) {
-          successGradient();
-        }
-        this.setState({
-          handoff: {
-            completed: !helper.getIsCompleted(),
-          },
-        });
-        this.clearLoading('completing');
-      } else {
-        this.clearLoading('completing', '!Something went wrong');
-      }
-    });
+  componentWillUnmount() {
+    this._unmounted = true;
   }
 
-  onHandoffMessage(handoff) {
-    const helper = this.getHelper();
-    const assignees = helper.getAssigneesButMe();
-
-    this.onCreatePost({
-      taggedUsers: assignees.toArray(),
-    });
-  }
-
-  onStepDidComplete(handoff) {
-    const { successGradient } = this.props;
-    if (handoff.completed) {
-      successGradient();
-    }
-    this.clearLoading('completing');
-    this.setState({ handoff });
-  }
-  onCloseHandoff() {
-    this.setState({ handoff: null });
-  }
-  onHandoff() {
-    const { handoff } = this.state;
-    const { me } = this.props;
-
-    if (handoff) {
-      const helper = this.getHelper();
-      const taggedUsers = helper.getAssigneesButMe();
-
-      this.onCreatePost({
-        taggedUsers: taggedUsers.toArray(),
-      });
-      this.setState({ handoff: null });
-    }
-  }
   onArchive(options) {
     const { goal, confirm, archive } = this.props;
     confirm(Object.assign({}, options, {
@@ -195,64 +110,31 @@ class HOCGoalOverview extends PureComponent {
       }
     });
   }
-  onSaveWay(options) {
-    const { createWay, inputMenu } = this.props;
-    const helper = this.getHelper();
-    inputMenu({
-      ...options,
-      placeholder: 'What should we call the way?',
-      buttonLabel: 'Save',
-    }, (title) => {
-      if (title && title.length) {
-        this.setLoading('dots');
-        createWay(title, helper.getObjectForWay()).then((res) => {
-          if (res.ok) {
-            this.clearLoading('dots', 'Saved way', 3000);
-          } else {
-            this.clearLoading('dots', '!Something went wrong', 3000);
-          }
+  onAddedAttachment(att, clearLoading) {
+    const { goal, addAttachment } = this.props;
+    addAttachment(goal.get('id'), att.get('link').toJS(), att.get('title')).then((res) => {
+      clearLoading();
+      if (res.ok) {
+        window.analytics.sendEvent('Attachment added', {
+          Type: att.getIn(['link', 'service', 'type']),
+          Service: 'swipes',
         });
       }
     });
+    return false;
   }
-  onLoadWay(options) {
-    const { loadWay, goalLoadWay } = this.props;
-    const helper = this.getHelper();
-    loadWay(options, (way) => {
-      if (way) {
-        this.setLoading('dots');
-        goalLoadWay(helper.getId(), way.get('id')).then((res) => {
-          if (res.ok) {
-            this.clearLoading('dots', 'Loaded way', 3000);
-          } else {
-            this.clearLoading('dots', '!Something went wrong', 3000);
-          }
-        });
-      }
-    });
-  }
-  onAssign(i, e) {
-    const options = this.getOptionsForE(e);
-    const { selectAssignees, assignGoal, goal } = this.props;
+  onAssigningClose(assignees) {
+    const { assignGoal, goal } = this.props;
 
-    let overrideAssignees;
-    options.onClose = () => {
-      if (overrideAssignees) {
-        assignGoal(goal.get('id'), overrideAssignees).then((res) => {
-          if (res.ok) {
-           window.analytics.sendEvent('Goal assigned', {
-              'Number of assignees': overrideAssignees.length,
-            });
-         }
-        });
-      }
-    };
-    selectAssignees(options, goal.get('assignees').toJS(), (newAssignees) => {
-      if (newAssignees) {
-        overrideAssignees = newAssignees;
-      }
-    });
-    e.stopPropagation();
+    if(assignees) {
+      assignGoal(goal.get('id'), assignees.toJS()).then((res) => {
+        if (res.ok) {
+         window.analytics.sendEvent('Goal assigned', {
+            'Number of assignees': assignees.size,
+          });
+       }
+      });
+    }
   }
   onInfoTabAction(i, options, e) {
     const items = ['onLoadWay', 'onSaveWay', 'onArchive'];
@@ -261,13 +143,29 @@ class HOCGoalOverview extends PureComponent {
   onInfoTabInfo(i, options, e) {
     this.onEditMilestone(options);
   }
-  onAddStepItemInputChange(title) {
-    const { emptyStateOpacity } = this.state;
-    const newEmptyStateOpacity = Math.max((10 - title.length) / 10, 0);
+  onDragStart() {
+    document.body.classList.add('no-select');
+  }
 
-    if (emptyStateOpacity !== newEmptyStateOpacity) {
-      this.setState({ emptyStateOpacity: newEmptyStateOpacity });
+  onDragEnd = (result) => {
+    document.body.classList.remove('no-select');
+    if (!result.destination) {
+      return;
     }
+    const { goal, optimist } = this.props;
+    const type = result.type;
+    const order = optimist.get(`${type}_order`, goal.get(`${type}_order`));
+
+    const newOrder = getNewOrderFromResult(order, result);
+
+    const reorderFunc = this.props[`${type}Reorder`];
+    optimist.set({
+      key: `${type}_order`,
+      value: newOrder,
+      handler: (next) => {
+        reorderFunc(goal.get('id'), newOrder.toJS()).then((res) => next());
+      },
+    });
   }
   viewDidLoad(stepList) {
     this.stepList = stepList;
@@ -310,62 +208,20 @@ class HOCGoalOverview extends PureComponent {
   }
 
   render() {
-    const { goal, me } = this.props;
-    const { editMode, handoff, showLine, emptyStateOpacity } = this.state;
+    const { goal, me, viewWidth } = this.props;
 
     return (
-      <GoalOverview
-        goal={goal}
-        editMode={editMode}
-        handoff={handoff}
-        myId={me.get('id')}
-        delegate={this}
-        showLine={showLine}
-        emptyStateOpacity={emptyStateOpacity}
-        {...this.bindLoading()}
-      />
+      <DragDropContext
+        onDragStart={this.onDragStart}
+        onDragEnd={this.onDragEnd}>
+        <GoalOverview
+          goal={goal}
+          myId={me.get('id')}
+          delegate={this}
+          viewWidth={viewWidth}
+          {...this.bindLoading()}
+        />
+      </DragDropContext>
     );
   }
 }
-
-const { func } = PropTypes;
-
-HOCGoalOverview.propTypes = {
-  goal: map,
-  confirm: func,
-  me: map,
-  navPop: func,
-  inputMenu: func,
-  archive: func,
-  openSecondary: func,
-  renameGoal: func,
-  contextMenu: func,
-};
-
-function mapStateToProps(state, ownProps) {
-  return {
-    goal: state.getIn(['goals', ownProps.goalId]),
-    me: state.get('me'),
-  };
-}
-
-export default connect(mapStateToProps, {
-  archive: ca.goals.archive,
-  contextMenu: a.main.contextMenu,
-  assignGoal: ca.goals.assign,
-  renameGoal: ca.goals.rename,
-  completeGoal: ca.goals.complete,
-  incompleteGoal: ca.goals.incomplete,
-  loadWay: a.ways.load,
-  goalLoadWay: ca.goals.loadWay,
-  createWay: ca.ways.create,
-  selectAssignees: a.goals.selectAssignees,
-  selectMilestone: a.menus.selectMilestone,
-  addGoalToMilestone: ca.milestones.addGoal,
-  removeGoalFromMilestone: ca.milestones.removeGoal,
-  successGradient: a.main.successGradient,
-  confirm: a.menus.confirm,
-  inputMenu: a.menus.input,
-  preview: a.links.preview,
-  browser: a.main.browser,
-})(navWrapper(HOCGoalOverview));

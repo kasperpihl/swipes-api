@@ -1,5 +1,5 @@
-@import '~styles/_vars.scss/';
-@import '~styles/_mixins.scss/';
+@import '~styles/_vars.scss';
+@import '~styles/_mixins.scss';
 @import '~styles/_functions.scss/';
 
 $contentOverflowPadding: 30px;
@@ -55,7 +55,6 @@ section.view-container {
     @include flexContainer();
     position: absolute;
     right: 0; top: 0;
-    padding-top:  9px;
   }
 }
 

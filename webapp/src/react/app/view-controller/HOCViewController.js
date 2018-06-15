@@ -1,27 +1,38 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'react-immutable-proptypes';
 import { Map } from 'immutable';
-import Button from 'Button';
-import * as a from 'actions';
-import * as views from 'views';
-import { setupCachedCallback, debounce, bindAll } from 'swipes-core-js/classes/utils';
+import Button from 'src/react/components/button/Button';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
+import * as views from 'src/react/views';
+import { setupCachedCallback } from 'react-delegate';
+import debounce from 'swipes-core-js/utils/debounce';
 import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
-import HOCModal from './HOCModal';
+import Modal from 'src/react/app/modal/Modal';
 import prefixAll from 'inline-style-prefixer/static';
 
 const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 15;
 const OVERLAY_LEFT_MIN = 90;
 
-class HOCViewController extends PureComponent {
+@connect(state => ({
+  navigation: state.get('navigation'),
+}), {
+  pop: navigationActions.pop,
+  push: navigationActions.push,
+  modal: mainActions.modal,
+  toggleLock: navigationActions.toggleLock,
+  openSecondary: navigationActions.openSecondary,
+  saveState: navigationActions.saveState,
+  navSet: navigationActions.set,
+})
+export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      appWidth: 1200,
+      appWidth: -1,
       onTop: 'secondary',
       fullscreen: null,
     };
@@ -32,7 +43,6 @@ class HOCViewController extends PureComponent {
     this.onSaveState = setupCachedCallback(props.saveState, this);
     this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
     this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
-    bindAll(this, ['onClose', 'updateAppWidth', 'onToggleLock']);
     this.bouncedUpdateAppWidth = debounce(this.updateAppWidth, 50);
   }
   componentDidMount() {
@@ -54,7 +64,7 @@ class HOCViewController extends PureComponent {
     this._unmounted = true;
     window.removeEventListener('resize', this.bouncedUpdate);
   }
-  onClose() {
+  onClose = () => {
     const { navSet } = this.props;
     const { fullscreen } = this.state;
     if (fullscreen) {
@@ -74,12 +84,12 @@ class HOCViewController extends PureComponent {
       this.setState({ fullscreen: target });
     }
   }
-  onToggleLock() {
+  onToggleLock = () => {
     const { toggleLock } = this.props;
     toggleLock();
   }
   getSizeForView(View, hasTwoViews) {
-    
+
     if(typeof View === 'undefined') {
       return 0;
     }
@@ -109,7 +119,7 @@ class HOCViewController extends PureComponent {
     return appWidth - SPACING - sizes.reduce((c, b) => c + b);
   }
 
-  updateAppWidth() {
+  updateAppWidth = () => {
     if (!this._unmounted) {
       this.setState({ appWidth: this.refs.controller.clientWidth });
     }
@@ -117,6 +127,8 @@ class HOCViewController extends PureComponent {
   renderViewControllers() {
     const { navigation } = this.props;
     const { appWidth, onTop, fullscreen } = this.state;
+    if(appWidth === -1) return null;
+
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
@@ -182,40 +194,32 @@ class HOCViewController extends PureComponent {
     const { navigation } = this.props;
     const closeButton = (target !== 'primary' && !navigation.get('locked')) ? (
       <Button
-        small
-        frameless
+        compact
         onClick={this.onClose}
-        icon="CloseSmall"
-        className="view-container__close-button"
+        icon="CloseThick"
         key="close-button"
       />
     ) : undefined;
     const lockButton = (target !== 'primary') ? (
       <Button
-        small
-        frameless
+        compact
         onClick={this.onToggleLock}
         icon={navigation.get('locked') ? 'WindowLock' : 'WindowUnlock'}
-        className="view-container__lock-button"
         key="lock-button"
       />
     ) : undefined;
     const fullscreenButton = (canFullscreen) ? (
       <Button
-        small
-        frameless
+        compact
         onClick={this.onFullscreenCached(target)}
         icon={fullscreen === target ? 'FromFullscreen' : 'ToFullscreen'}
-        className="view-container__fullscreen-button"
         key="fullscreen-button"
       />
     ) : undefined;
 
-    const hideBreadCrumbs = !closeButton && !lockButton && !fullscreenButton;
-
     return (
       <div className="view-container__header">
-        <HOCBreadCrumbs target={target} hidden={hideBreadCrumbs} />
+        <HOCBreadCrumbs target={target} />
         <div className="view-container__actions">
           {fullscreenButton}
           {lockButton}
@@ -272,7 +276,7 @@ class HOCViewController extends PureComponent {
             key={navigation.getIn([target, 'id']) + navigation.getIn([target, 'stack']).size}
             {...props}
           />
-          <HOCModal target={target} />
+          <Modal target={target} />
         </section>
       </ContextWrapper>
     );
@@ -286,31 +290,3 @@ class HOCViewController extends PureComponent {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    navigation: state.get('navigation'),
-  };
-}
-
-const { func } = PropTypes;
-HOCViewController.propTypes = {
-  navigation: map,
-  saveState: func,
-  openSecondary: func,
-  toggleLock: func,
-  push: func,
-  navSet: func,
-  pop: func,
-};
-
-const ConnectedHOCViewController = connect(mapStateToProps, {
-  pop: a.navigation.pop,
-  push: a.navigation.push,
-  modal: a.main.modal,
-  toggleLock: a.navigation.toggleLock,
-  openSecondary: a.navigation.openSecondary,
-  saveState: a.navigation.saveState,
-  navSet: a.navigation.set,
-})(HOCViewController);
-export default ConnectedHOCViewController;

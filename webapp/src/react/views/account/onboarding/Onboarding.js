@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { list } from 'react-immutable-proptypes';
 import SWView from 'SWView';
 import Icon from 'Icon';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -13,7 +11,7 @@ class Onboarding extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    setupDelegate(this, 'onClick');
+    setupDelegate(this, 'onClick', 'onClickTutorial', 'onClickBlog');
   }
   renderProgressBar() {
     const { items } = this.props;
@@ -83,6 +81,18 @@ class Onboarding extends PureComponent {
     return (
       <div className="onboarding">
         {itemsHTML}
+        <div className="onboarding__tutorial_section">
+          <div>
+            <div className="onboarding__title">Watch a full tutorial</div>
+            <div className="onboarding__subtitle">Take a deep dive into the Workspace</div>
+            <img width='350' className="onboarding__tutorial_image" src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding-long-tutorial-video.png" onClick={this.onClickTutorialCached()} />
+          </div>
+          <div>
+            <div className="onboarding__title">Go to our blog</div>
+            <div className="onboarding__subtitle">Read more about the intent behind our work</div>
+            <img width='350' className="onboarding__tutorial_image" src="https://s3.amazonaws.com/cdn.swipesapp.com/swipes_content/onboarding_go_to_blog.jpg" onClick={this.onClickBlogCached()} />
+          </div>
+        </div>
       </div>
     );
   }
@@ -96,10 +106,3 @@ class Onboarding extends PureComponent {
 }
 
 export default Onboarding;
-
-const { object } = PropTypes;
-
-Onboarding.propTypes = {
-  delegate: object,
-  items: list,
-};

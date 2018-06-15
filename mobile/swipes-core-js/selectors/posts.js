@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import createCachedSelector from 're-reselect';
 import { searchSelectorFromKeys } from '../classes/utils';
 
 const getRelatedFilter = (state, props) => props.relatedFilter;
@@ -7,39 +6,35 @@ const getContext = (state, props) => props.context;
 const getPosts = state => state.get('posts');
 
 export const getSorted = createSelector(
-  [ getPosts ],
-  (posts) => {
-    return posts.toList().sort((a, b) => {
-      return b.get('created_at').localeCompare(a.get('created_at'));
-    });
-  }
-)
+  [getPosts],
+  posts => posts.toList().sort((a, b) => b.get('created_at').localeCompare(a.get('created_at'))),
+);
 
 export const makeGetRelatedList = () => createSelector(
-  [ getSorted, getRelatedFilter ],
-  (posts, fs) => posts.filter(p => (fs && fs.indexOf(p.getIn(['context', 'id'])) > -1)),
+  [getSorted, getRelatedFilter],
+  (posts, fs) => posts.filter(p => (fs && fs.indexOf(p.getIn(['context', 'id'])) > -1)),
 );
 
 export const makeGetFilteredList = () => createSelector(
   getSorted,
   getContext,
   (posts, context) => {
-    if(context && context.id) {
-      return posts.filter(p => p.getIn(['context', 'id']) === context.id)
+    if (context && context.id) {
+      return posts.filter(p => p.getIn(['context', 'id']) === context.id);
     } else if (context && context.get('id')) {
       return posts.filter(p => p.getIn(['context', 'id']) === context.get('id'));
     }
     return posts;
-  }
+  },
 );
 /*
 
 */
 
 export const searchablePosts = createSelector(
-  [ getPosts ],
-  posts => posts.map(p => p.set('comments', p.get('comments').toList())).toList()
-)
+  [getPosts],
+  posts => posts.map(p => p.set('comments', p.get('comments').toList())).toList(),
+);
 
 export const search = searchSelectorFromKeys([
   'message',

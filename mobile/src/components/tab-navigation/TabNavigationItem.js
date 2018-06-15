@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
-import { 
+import {
   View,
   Text,
   StyleSheet,
 } from 'react-native';
-import { setupDelegate } from 'swipes-core-js/classes/utils';
+import { setupDelegate } from 'react-delegate';
 import { colors, viewSize } from 'globalStyles';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
@@ -57,7 +57,7 @@ class TabNavigationItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      icon: props.icon
+      icon: props.icon,
     };
 
     setupDelegate(this, 'handlePress');
@@ -67,8 +67,8 @@ class TabNavigationItem extends PureComponent {
       this.setState({ icon: undefined });
 
       this.iconChangeTimeout = setTimeout(() => {
-        this.setState({ icon: nextProps.icon })
-      }, 1)
+        this.setState({ icon: nextProps.icon });
+      }, 1);
     }
   }
   componentWillUnmount() {
@@ -83,9 +83,9 @@ class TabNavigationItem extends PureComponent {
 
     return (
       <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, left: 0, alignItems: 'center', justifyContent: 'center' }}>
-        <Icon name={icon} width="24" height="24" fill={iconFill} />
+        <Icon icon={icon} width="24" height="24" fill={iconFill} />
       </View>
-    )
+    );
   }
   renderCounter() {
     const { counter } = this.props;
@@ -96,7 +96,7 @@ class TabNavigationItem extends PureComponent {
 
     return (
       <View style={styles.counter}>
-        <Text selectable={true} style={styles.counterLabel}>{counter}</Text>
+        <Text selectable style={styles.counterLabel}>{counter}</Text>
       </View>
     );
   }
@@ -107,7 +107,7 @@ class TabNavigationItem extends PureComponent {
     return (
       <View style={{ width: (viewSize.width / 5), height: 54, position: 'absolute', top: 0, right: 0, alignItems: 'flex-end' }}>
         <View style={sideIconStyles}>
-          <Icon name={icon} width="18" height="18" fill={fill} />
+          <Icon icon={icon} width="18" height="18" fill={fill} />
         </View>
       </View>
     );

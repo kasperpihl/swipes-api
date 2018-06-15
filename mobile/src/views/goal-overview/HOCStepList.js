@@ -6,7 +6,7 @@ import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { ImmutableListView } from 'react-native-immutable-list-view';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
-import { setupDelegate, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupDelegate, setupCachedCallback } from 'react-delegate';
 import HOCAssigning from 'components/assignees/HOCAssigning';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
 import { colors, viewSize } from 'globalStyles';
@@ -105,10 +105,9 @@ class HOCStepList extends PureComponent {
 
       assignModal({
         selectedIds: assignees,
-        onActionPress: (selectedIds) => assignStep(goal.get('id'), step.get('id'), selectedIds.toJS()),
+        onActionPress: selectedIds => assignStep(goal.get('id'), step.get('id'), selectedIds.toJS()),
       });
     }
-
   }
   onPress(stepId, step) {
     const { actionModal, goal } = this.props;
@@ -130,7 +129,7 @@ class HOCStepList extends PureComponent {
       ]),
     });
   }
-  onModalCreateAction(title, assignees, milestoneId ) {
+  onModalCreateAction(title, assignees, milestoneId) {
     const { addStep, goal } = this.props;
 
     addStep(goal.get('id'), title, assignees).then((res) => {});
@@ -143,12 +142,12 @@ class HOCStepList extends PureComponent {
       title: 'CreateNewItemModal',
       props: {
         title: '',
-          defAssignees: [this.props.myId],
-          placeholder: "Add a new step",
-          actionLabel: "Add step",
-          delegate: this
-      }
-    })
+        defAssignees: [this.props.myId],
+        placeholder: 'Add a new step',
+        actionLabel: 'Add step',
+        delegate: this,
+      },
+    });
   }
   onStepAdd() {
 
@@ -177,10 +176,10 @@ class HOCStepList extends PureComponent {
       <RippleButton rippleColor={colors.deepBlue40} rippleOpacity={0.8} onPress={this.onPressCached(step.get('id'), step)}>
         <View style={styles.step}>
           <View style={[styles.indicator, indicatorStyles]}>
-            <Text selectable={true} style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
+            <Text selectable style={[styles.indicatorLabel, indicatorLabelStyles]}>{i + 1}</Text>
           </View>
           <View style={styles.title}>
-            <Text selectable={true} style={[styles.titleLabel, titleStyles]}>{title}</Text>
+            <Text style={[styles.titleLabel, titleStyles]}>{title}</Text>
           </View>
           <View style={[styles.assignees, { opacity }]}>
             <HOCAssigning assignees={step.get('assignees')} maxImages={1} />
@@ -190,24 +189,22 @@ class HOCStepList extends PureComponent {
     );
   }
   renderEmpty() {
-
-    return <View />
+    return <View />;
   }
   renderListFooter() {
-
     return (
       <View>
         <RippleButton onPress={this.handleModalState}>
-          <View style={{width: viewSize.width - 30, height: 60, flexDirection: 'row', marginHorizontal: 15, alignItems: 'center'}}>
+          <View style={{ width: viewSize.width - 30, height: 60, flexDirection: 'row', marginHorizontal: 15, alignItems: 'center' }}>
             <View style={styles.indicator}>
-              <Text selectable={true} style={styles.indicatorLabel}>{this.props.steps.size + 1}</Text>
+              <Text selectable style={styles.indicatorLabel}>{this.props.steps.size + 1}</Text>
             </View>
-            <Text selectable={true} style={{ paddingLeft: 22, fontSize: 15, lineHeight: 24, color: colors.deepBlue50 }}>Add a step</Text>
+            <Text selectable style={{ paddingLeft: 22, fontSize: 15, lineHeight: 24, color: colors.deepBlue50 }}>Add a step</Text>
           </View>
         </RippleButton>
         <EmptyListFooter />
       </View>
-    )
+    );
   }
   render() {
     const { steps, isLoading, getLoading } = this.props;

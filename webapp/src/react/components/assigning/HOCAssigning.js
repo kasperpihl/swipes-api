@@ -1,25 +1,41 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { map, list } from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import * as a from 'actions';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as goalActions from 'src/redux/goal/goalActions';
 import { setupDelegate } from 'react-delegate';
-import GoalsUtil from 'swipes-core-js/classes/goals-util';
+import getParentByClass from 'swipes-core-js/utils/getParentByClass';
+
+
 import Assigning from './Assigning';
 
-class HOCAssigning extends PureComponent {
+@connect(state => ({
+  myId: state.getIn(['me', 'id']),
+  users: state.get('users'),
+}), {
+  tooltip: mainActions.tooltip,
+  selectAssignees: goalActions.selectAssignees,
+})
+export default class HOCAssigning extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { users: this.getUsersFromAssignees(props.users, props.assignees) };
-    setupDelegate(this, 'onAssign');
+    const assignees = List(props.assignees);
+    this.state = {
+      assignees,
+      filteredUsers: this.getUsersFromAssignees(props.users, assignees)
+    };
+    setupDelegate(this, 'onAssigningClose')
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ users: this.getUsersFromAssignees(nextProps.users, nextProps.assignees) });
+    const assignees = List(nextProps.assignees);
+    this.setState({
+      assignees,
+      filteredUsers: this.getUsersFromAssignees(nextProps.users, assignees),
+    });
   }
   getUsersFromAssignees(users, assignees) {
     const { myId } = this.props;
-    let filteredUsers = List(assignees);
+    let filteredUsers = assignees;
     if (filteredUsers.contains(myId)) {
       filteredUsers = filteredUsers.filter(uId => uId !== myId).insert(0, myId);
     }
@@ -27,52 +43,40 @@ class HOCAssigning extends PureComponent {
 
     return filteredUsers;
   }
+
+  onClick = (e) => {
+    const { delegate, selectAssignees } = this.props;
+    if(!delegate) {
+      return;
+    }
+    const { assignees } = this.state;
+
+    let overrideAssignees;
+    const options = {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+      onClose: () => {
+        this.onAssigningClose(List(overrideAssignees));
+      },
+    };
+    selectAssignees(options, assignees.toJS(), (newAssignees) => {
+      if (newAssignees) {
+        overrideAssignees = newAssignees;
+      }
+    });
+    e.stopPropagation();
+  }
   render() {
-    const {
-      maxImages,
-      index,
-      rounded,
-      tooltip,
-      size,
-      tooltipAlign,
-    } = this.props;
-    const { users } = this.state;
+    const { filteredUsers } = this.state;
 
     return (
       <Assigning
-        maxImages={maxImages}
-        assignees={users}
-        onClick={this.onAssignCached(index)}
-        rounded={rounded}
-        tooltip={tooltip}
-        size={size}
-        tooltipAlign={tooltipAlign}
+        onClick={this.onClick}
+        {...this.props}
+        assignees={filteredUsers}
+        size={this.props.size||24}
+        maxImages={this.props.maxImages || 1}
       />
     );
   }
 }
-
-function mapStateToProps(state, ownProps) {
-  return {
-    myId: state.getIn(['me', 'id']),
-    users: state.get('users'),
-  }
-}
-
-const { object, oneOfType, number, string, bool, array, func } = PropTypes;
-
-HOCAssigning.propTypes = {
-  tooltip: func,
-  myId: string,
-  users: map,
-  assignees: oneOfType([list, array]).isRequired,
-  index: oneOfType([number, string]),
-  delegate: object,
-  maxImages: number,
-  rounded: bool,
-  size: number,
-};
-
-export default connect(mapStateToProps, {
-  tooltip: a.main.tooltip,
-})(HOCAssigning);

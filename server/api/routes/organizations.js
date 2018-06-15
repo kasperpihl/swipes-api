@@ -2,6 +2,8 @@ import express from 'express';
 import {
   string,
   object,
+  array,
+  any,
 } from 'valjs';
 import MiddlewareComposer from './middleware_composer';
 import {
@@ -23,7 +25,9 @@ import {
   organizationsCheckOwnerDisabledUser,
   organizationsCheckIsDisableValid,
   organizationsCreateSubscriptionCustomer,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
+  organizationsUpdateStripeSubscriptionPlan,
+  organizationsUpdateStripeCardDetails,
   organizationsCancelSubscription,
   organizationsCreatedQueueMessage,
   organizationsActivateUser,
@@ -32,6 +36,8 @@ import {
   organizationsAddPendingUsers,
   organizationsUsersInvitedUserQueueMessage,
   organizationsUserJoinedQueueMessage,
+  organizationsMilestoneReorder,
+  organizationsMilestoneReorderQueueMessage,
 } from './middlewares/organizations';
 import {
   usersCheckIfInOrganization,
@@ -115,7 +121,7 @@ authed.all(
   usersCheckIfInOrganization,
   organizationsActivateUser,
   organizationsAddToUser,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
   userActivatedUserSignUpQueueMessage,
   notificationsPushToQueue,
   mapLocals(locals => ({
@@ -141,7 +147,7 @@ authed.all(
     user_to_disable_id: locals.user_id,
   })),
   organizationsDisableUser,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),
@@ -240,7 +246,7 @@ authed.all(
   organizationsCheckOwnerDisabledUser,
   organizationsCheckAdminRights,
   organizationsDisableUser,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),
@@ -266,7 +272,7 @@ authed.all(
   usersGetByIdWithFields,
   organizationsCheckAdminRights,
   organizationsEnableUser,
-  organizationsUpdateSubscriptionCustomer,
+  organizationsUpdateSubscriptionQuantity,
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),
@@ -307,6 +313,35 @@ authed.all(
   mapLocals(locals => ({
     organization: organizationConcatUsers(locals),
   })),
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization: object.require(),
+  }),
+);
+
+authed.all(
+  '/organizations.updateStripeCardDetails',
+  valBody({
+    organization_id: string.require(),
+    stripe_token: string.require(),
+  }),
+  organizationsGetSingle,
+  organizationsCheckAdminRights,
+  organizationsUpdateStripeCardDetails,
+  organizationsUpdatedQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend(),
+);
+
+authed.all(
+  '/organizations.changeStripeSubscriptionPlan',
+  valBody({
+    organization_id: string.require(),
+    plan_to_change: any.of('monthly', 'yearly').require(),
+  }),
+  organizationsGetSingle,
+  organizationsUpdateStripeSubscriptionPlan,
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
@@ -380,6 +415,21 @@ authed.all(
     user: object.require(),
     invitation_token: string.require(),
     organization: object,
+  }),
+);
+
+authed.all(
+  '/organizations.milestoneReorder',
+  valBody({
+    organization_id: string.require(),
+    milestone_order: array.require(),
+  }),
+  organizationsMilestoneReorder,
+  organizationsMilestoneReorderQueueMessage,
+  notificationsPushToQueue,
+  valResponseAndSend({
+    organization_id: string.require(),
+    milestone_order: array.require(),
   }),
 );
 
