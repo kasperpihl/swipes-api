@@ -64,7 +64,7 @@ class PostCreate extends PureComponent {
     const buttonProps = hasAssignees ? {
       compact: true,
     } : {
-      sideLabel: 'Assign',
+      sideLabel: 'Tag',
     };
     const hasAttachments = post.get('context') || post.get('attachments').size;
 
