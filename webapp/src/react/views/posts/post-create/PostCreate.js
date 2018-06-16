@@ -113,7 +113,6 @@ class PostCreate extends PureComponent {
               wrapperRef={(c) => { this.input = c; }}
               onChange={this.onMessageChange}
               placeholder={placeholder}
-              onAutoCompleteSelect={this.onAutoCompleteSelect}
               autoFocus
             />
           </InputWrapper>
