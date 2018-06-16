@@ -14,18 +14,20 @@ class AutoCompleting extends PureComponent {
   }
   renderResults() {
     const { selectedIndex, alignToTop, autoComplete } = this.props;
+    console.log(selectedIndex);
 
     let resultHtml = autoComplete.get('results').map((r, i) => {
       return (
         <AutoCompleteItem
           key={autoComplete.get('string') + i}
           item={r.item}
-          selected={(i === selectedIndex)}
+          selected={i === selectedIndex}
           alignToTop={alignToTop}
         >
           <ResultItem
-            {...r.resultItem}
+            selected={i === selectedIndex}
             onMouseDown={this.onSelectRowCached(i)}
+            {...r.resultItem}
           />
         </AutoCompleteItem>
       )

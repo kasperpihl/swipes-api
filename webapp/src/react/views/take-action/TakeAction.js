@@ -6,7 +6,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import SWView from 'SWView';
 import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
+import GoalAdd from '../goals/goal-components/goal-add/GoalAdd';
 import InfoButton from 'components/info-button/InfoButton';
 import Icon from 'Icon';
 
@@ -37,7 +37,7 @@ class TakeAction extends Component {
   renderList() {
     const { goals, delegate, myId } = this.props;
     const addGoal = (
-      <HOCAddGoalItem
+      <GoalAdd
         key="add"
         defAssignees={[myId]}
       />

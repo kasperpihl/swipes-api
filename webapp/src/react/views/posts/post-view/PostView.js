@@ -64,6 +64,7 @@ class PostView extends PureComponent {
   renderHeader() {
     const { post, delegate, fromFeed, getLoading } = this.props;
     let commentTitle = post.get('comments').size || 'Write a comment';
+
     if(post.get('comments').size > MAX_COMMENTS_FEED) {
       commentTitle = `See all ${post.get('comments').size} comments`;
     }

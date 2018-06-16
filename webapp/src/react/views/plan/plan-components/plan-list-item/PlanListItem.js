@@ -78,7 +78,7 @@ export default class extends PureComponent {
         } else {
           numberOfSteps += 1;
         }
-      } 
+      }
       return goal.getIsCompleted();
     }).size;
     const percentage = numberOfGoals ? parseInt((numberOfCompletedGoals / numberOfGoals) * 100, 10) : 0;
@@ -89,7 +89,7 @@ export default class extends PureComponent {
     this.numberOfGoals = numberOfGoals;
     this.numberOfStepsLeft = numberOfSteps - numberOfCompletedSteps;
 
-    
+
     return [percentage, stepPercentage];
 
   }

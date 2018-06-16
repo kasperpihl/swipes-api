@@ -21,6 +21,9 @@ export default styleSheet('PlanListItem', {
   },
   ProgressBar: {
     _size: ['120px', '18px'],
+    // That fixes a bug in Chromium where.. well remove it and you will see
+    // You have to have enough plans so you can scroll to see the bug
+    transform: 'translateZ(0)',
     background: 'rgba($green, 0.1)',
     borderRadius: '12px',
     overflow: 'hidden',
@@ -30,6 +33,9 @@ export default styleSheet('PlanListItem', {
     '&:before': {
       content: '',
       position: 'absolute',
+      // That fixes a bug in Chromium where.. well remove it and you will see
+      // You have to have enough plans so you can scroll to see the bug
+      transform: 'translateZ(0)',
       top: 0,
       left: 0,
       height: '18px',
@@ -40,6 +46,9 @@ export default styleSheet('PlanListItem', {
     '&:after': {
       content: '',
       position: 'absolute',
+      // That fixes a bug in Chromium where.. well remove it and you will see
+      // You have to have enough plans so you can scroll to see the bug
+      transform: 'translateZ(0)',
       zIndex: 1,
       bottom: 0,
       left: 0,

@@ -64,7 +64,7 @@ class PostCreate extends PureComponent {
     const buttonProps = hasAssignees ? {
       compact: true,
     } : {
-      sideLabel: 'Assign',
+      sideLabel: 'Tag',
     };
     const hasAttachments = post.get('context') || post.get('attachments').size;
 
@@ -113,7 +113,6 @@ class PostCreate extends PureComponent {
               wrapperRef={(c) => { this.input = c; }}
               onChange={this.onMessageChange}
               placeholder={placeholder}
-              onAutoCompleteSelect={this.onAutoCompleteSelect}
               autoFocus
             />
           </InputWrapper>
