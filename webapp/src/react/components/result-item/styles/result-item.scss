@@ -29,6 +29,10 @@
 
   &__title {
     @include font(15px, $deepBlue-50, 21px);
+
+    &:hover {
+      @include font($c: $blue-100);
+    }
   }
 
   &__subtitle {
@@ -38,14 +42,14 @@
   &--selected {
     & .result__title {
       @include font(15px, $deepBlue-100, 21px);
+
+      &:hover {
+        @include font(15px, $deepBlue-100, 21px);
+      }
     }
 
     & .result__subtitle {
       @include font(12px, $deepBlue-80, 15px);
-    }
-
-    &:before {
-      background-color: $blue-5;
     }
   }
 
@@ -68,12 +72,6 @@
   }
 
 
-  &:hover {
-
-    .result__title {
-      @include font($c: $blue-100);
-    }
-  }
   &__icon {
     @include flex(none);
     position: relative;
