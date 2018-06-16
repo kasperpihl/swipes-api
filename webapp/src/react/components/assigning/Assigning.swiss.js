@@ -19,19 +19,22 @@ export default styleSheet('Assigning', {
     right: ({ index, size }) => `${index * (size - 6) - 1}px`,
   },
   ImageWrapper: {
+    _size: '#{size}px',
+    _flex: 'center',
+    _borderRadius: props => `${props.size/2}px`,
     position: 'absolute',
     right: ({ index, size }) => `${index * (size - 6)}px`,
     top: 0,
     background: '$sw1',
-    _size: '#{size}px',
-    _flex: 'center',
     overflow: 'hidden',
-    borderRadius: props => `${props.size/2}px`,
     blackAndWhite: {
       background: '$sw2',
     },
     isPic: {
       background: '$sw5',
+    },
+    '> img': {
+      _borderRadius: '50%',
     }
   },
   ExtraNumber: {

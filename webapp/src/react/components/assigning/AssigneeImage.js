@@ -4,6 +4,7 @@ import { styleElement, styleSheet } from 'swiss-react';
 const styles = styleSheet('AssigneeImage', {
   Image: {
     _size: '100%',
+    _borderRadius: '50%',
     blackAndWhite: {
       filter: 'grayscale(100%)',
     }
