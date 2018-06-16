@@ -4,6 +4,7 @@ import { styleElement, styleSheet } from 'swiss-react';
 const styles = styleSheet('AssigneeImage', {
   Image: {
     _size: '100%',
+    _borderRadius: '50%',
     // Fixes wierd bug where in the plan view if the user drags and item from the first column
     // it can see glitches in the photos in the second column
     transform: 'translateZ(0)',
