@@ -129,9 +129,9 @@
       .result__initials {
         @include size();
         @include flex();
-        @include font(15px, $bg, 500);
+        @include font(12px, $bg, 300);
         background-color: $deepBlue-100;
-        border-radius: 6px;
+        border-radius: 50%;
       }
     }
 
