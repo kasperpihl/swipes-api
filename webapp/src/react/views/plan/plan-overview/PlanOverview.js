@@ -3,7 +3,6 @@ import { setupDelegate, setupCachedCallback } from 'react-delegate';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import TabBar from 'components/tab-bar/TabBar';
-import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
 import GoalAdd from '../../goals/goal-components/goal-add/GoalAdd';
 import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
 import InfoButton from 'components/info-button/InfoButton';
@@ -12,7 +11,6 @@ import { styleElement } from 'swiss-react';
 import styles from './PlanOverview.swiss';
 
 const Wrapper = styleElement('div', styles.Wrapper);
-const Footer = styleElement('div', styles.Footer);
 const Title = styleElement('div', styles.Title);
 const Section = styleElement('div', styles.Section);
 const SectionTitle = styleElement('div', styles.SectionTitle);
@@ -46,7 +44,7 @@ class PlanOverview extends PureComponent {
   }
   tabDidChange(key, i) {
     if(i !== this.state[key]) {
-      const activeTabIndex = i; 
+      const activeTabIndex = i;
 
       this.setState({
         activeTabIndex,
@@ -150,7 +148,7 @@ class PlanOverview extends PureComponent {
         <Section>
           <SectionTabLikeTitle>{section}</SectionTabLikeTitle>
           {droppableGoalList}
-        </Section>        
+        </Section>
       )
     }
 
