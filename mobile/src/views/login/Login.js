@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import codePush from 'react-native-code-push';
-import { 
+import {
   View,
   TextInput,
   StyleSheet,
@@ -9,17 +9,16 @@ import {
   ScrollView,
   Platform,
   UIManager,
-  LayoutAnimation,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator 
+  ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import RippleButton from 'RippleButton';
 import Icon from 'Icon';
 import { setupDelegate } from 'react-delegate';
-import { colors, viewSize, statusbarHeight } from 'globalStyles';
+import { colors, viewSize } from 'globalStyles';
 import { api } from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import * as gs from 'styles';
@@ -32,7 +31,8 @@ const styles = StyleSheet.create({
   errorWrapper: {
     ...gs.mixins.padding(15, 30),
     position: 'absolute',
-    left: 0, bottom: 0,
+    left: 0,
+    bottom: 0,
     backgroundColor: colors.deepBlue100,
     width: viewSize.width,
   },
@@ -96,13 +96,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   resetButton: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   resetLabel: {
     ...gs.mixins.font(12, 'white'),
     ...gs.mixins.padding(22, 0),
     textAlign: 'center',
-  }
+  },
 });
 
 class Login extends PureComponent {
@@ -116,7 +116,7 @@ class Login extends PureComponent {
       errorMessage: '',
     };
 
-    setupDelegate(this, 'onShowWelcome', 'onOpenResetModal')
+    setupDelegate(this, 'onShowWelcome', 'onOpenResetModal');
     setupLoading(this);
 
     codePush.getUpdateMetadata().then((pack) => {
@@ -163,14 +163,14 @@ class Login extends PureComponent {
     const { request } = this.props;
     const { email, password } = this.state;
 
-    this.setState({ errorMessage: '' })
+    this.setState({ errorMessage: '' });
     this.setLoading('loging');
 
     request('users.signin', {
       email: email.toLowerCase(),
       password,
     }).then((res) => {
-      console.log('res sigin', res)
+      console.log('res sigin', res);
       this.clearLoading('loging');
 
       if (res.error && res.error.message) {
@@ -180,7 +180,7 @@ class Login extends PureComponent {
           label = 'Not a valid email';
         }
 
-        this.setState({ errorMessage: label })
+        this.setState({ errorMessage: label });
       }
     });
   }
@@ -194,37 +194,35 @@ class Login extends PureComponent {
     if (keyboardOpen) {
       extraButtonStyles = {
         ...gs.mixins.margin(15, 0, 15, 15),
-      }
+      };
     }
 
-    
+
     if (this.isLoading('loging')) {
       return (
         <View style={[styles.button, extraButtonStyles]}>
-          <ActivityIndicator color='white' />
+          <ActivityIndicator color="white" />
         </View>
-      )
+      );
     }
 
     return (
       <RippleButton onPress={this.signIn}>
         <View style={[styles.button, extraButtonStyles]}>
-          <Text selectable={true} style={styles.buttonLabel}>Sign in</Text>
+          <Text selectable style={styles.buttonLabel}>Sign in</Text>
         </View>
       </RippleButton>
-    )
+    );
   }
   renderGradient() {
-
     return (
       <LinearGradient
         start={{ x: 0.0, y: 0.0 }}
         end={{ x: 1.0, y: 0.5 }}
         colors={[colors.bgGradientFrom, colors.bgGradientTo]}
         style={styles.gradient}
-      >
-      </LinearGradient>
-    )
+      />
+    );
   }
   renderKeyboardSpacer() {
     if (Platform.OS === 'ios') {
@@ -242,12 +240,11 @@ class Login extends PureComponent {
 
     return (
       <View style={styles.errorWrapper}>
-        <Text selectable={true} style={styles.errorLabel}>{errorMessage}</Text>
+        <Text selectable style={styles.errorLabel}>{errorMessage}</Text>
       </View>
-    )
+    );
   }
   renderBackButton() {
-
     if (Platform.OS === 'android') return undefined;
 
     return (
@@ -256,7 +253,7 @@ class Login extends PureComponent {
           <Icon icon="ArrowLeftLine" width="24" height="24" fill="white" />
         </View>
       </RippleButton>
-    )
+    );
   }
   renderTitle() {
     const { keyboardOpen } = this.state;
@@ -268,12 +265,11 @@ class Login extends PureComponent {
     return (
       <View style={[styles.titleWrapper, { flexDirection: 'row' }]}>
         {this.renderBackButton()}
-        <Text selectable={true} style={styles.titleLabel}>Sign in to your Workspace</Text>
+        <Text selectable style={styles.titleLabel}>Sign in to your Workspace</Text>
       </View>
-    )
+    );
   }
   renderResetPassword() {
-
     return (
       <RippleButton onPress={this.onOpenResetModal} style={styles.resetButton}>
         <View style={styles.resetButton}>
@@ -282,7 +278,7 @@ class Login extends PureComponent {
           </Text>
         </View>
       </RippleButton>
-    )
+    );
   }
   renderForm() {
     const { keyboardOpen } = this.state;
@@ -290,8 +286,8 @@ class Login extends PureComponent {
 
     if (keyboardOpen) {
       extraFormStyles = {
-        marginTop: 33
-      }
+        marginTop: 33,
+      };
     }
 
     return (
@@ -328,27 +324,27 @@ class Login extends PureComponent {
           />
         </View>
       </View>
-    )
+    );
   }
   render() {
     const { version, keyboardOpen } = this.state;
 
     let scrollViewWrapperStyles = {
       flex: 1,
-    }
+    };
 
     if (keyboardOpen) {
       scrollViewWrapperStyles = {
         ...gs.mixins.flex('column', 'left', 'center'),
         flex: 1,
-      }
+      };
     }
 
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {this.renderGradient()}
-          <View style={{flex: 1 }}>
+          <View style={{ flex: 1 }}>
             <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={scrollViewWrapperStyles}>
               <View style={scrollViewWrapperStyles}>
                 {this.renderTitle()}

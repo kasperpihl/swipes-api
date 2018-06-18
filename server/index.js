@@ -53,7 +53,6 @@ app.use('/v1', (req, res, next) => {
         shouldRedirect = true;
       }
     });
-
     if (shouldRedirect) {
       return res.redirect(307, `https://staging.swipesapp.com/v1${req.path}`);
     }

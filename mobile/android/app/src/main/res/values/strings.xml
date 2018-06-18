@@ -1,4 +1,3 @@
 <resources>
     <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">8fw5E4sQ2P9DD9WRmRZsTW0bBF00NyuqwmYWX</string>
-    <string name="app_name">swipes</string>
 </resources>

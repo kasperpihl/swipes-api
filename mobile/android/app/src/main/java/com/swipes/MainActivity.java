@@ -1,4 +1,4 @@
-package com.swipesapp;
+package com.swipes;
 
 import com.facebook.react.ReactActivity;
 
