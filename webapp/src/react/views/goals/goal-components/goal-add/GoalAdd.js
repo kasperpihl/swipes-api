@@ -70,9 +70,12 @@ export default class GoalAdd extends PureComponent {
   }
   onChange = (editorState) => {
     this.editorState = editorState;
-    this.setState({
-      hasContent: !!editorState.getCurrentContent().getPlainText().length
-    })
+    const hasContent = !!editorState.getCurrentContent().getPlainText().length;
+    if(hasContent !== this.state.hasContent) {
+      this.setState({
+        hasContent,
+      });
+    }
   }
   render() {
     const { placeholder } = this.props;
