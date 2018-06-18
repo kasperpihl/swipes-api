@@ -4,8 +4,10 @@ import Icon from 'Icon';
 export default styleSheet('EmptyState', {
   Wrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['column', 'center', 'top'],
-    transform: 'translateY(50%)',
+    _flex: ['column', 'center', 'center'],
+    fill: {
+      height: '100%',
+    }
   },
 
   ImgWrapper: {

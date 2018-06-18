@@ -41,6 +41,7 @@ export default class HOCSearchResults extends PureComponent {
           icon = 'ESSearch'
           title="Looking for something?"
           description={`Search for plans, goals or \n discussions by keywords.`}
+          fill
         />
       )
     }
@@ -51,6 +52,7 @@ export default class HOCSearchResults extends PureComponent {
           icon = 'ESNoResults'
           title="Oops! Nothing found."
           description={`We even searched our pockets but no results.`}
+          fill
         />
       )
     }

@@ -94,16 +94,17 @@ class PostFeed extends PureComponent {
   renderEmptyState() {
     const { tabs } = this.props;
 
+    let text = 'There are no discussions yet. You can start the first.';
     if (tabs) {
-      const contextType = this.getContextType();
-      text = ``;
+      text = `There are no discussions about ${this.getContextType()} yet.\nYou can start the first.`;
     }
 
     return (
       <EmptyState
         icon="ESMilestoneAchieved"
         title="Start a discussion"
-        description={`There are no discussions about this ${contextType} yet.\nYou can be the first to start one.`}
+        description={text}
+        fill
       >
         <Button onClick={this.onNewPost} title="Create a post" />
       </EmptyState>

@@ -85,19 +85,23 @@ class PlanList extends PureComponent {
     } = this.props;
     let i = 0;
 
-    return plans.map((p => (i++ <= limit) ? (
+    if(!plans.size || true) {
+      return (
+        <EmptyState
+          icon = 'ESMilestoneAchieved'
+          title="The hall of fame!"
+          description={`Seems like your team is sweating on getting their \n first plan completed. \n All completed plans can be found here.`}
+        />
+      )
+    }
+
+    return plans.map(p => (i++ <= limit) ? (
       <PlanListItem
         key={p.get('id')}
         plan={p}
         delegate={delegate}
       />
-      ) :
-      <EmptyState
-        icon = 'ESMilestoneAchieved'
-        title="The hall of fame!"
-        description={`Seems like your team is sweating on getting their \n first plan completed. \n All completed plans can be found here.`}
-      />
-    )).toArray()
+    ) : null).toArray()
   }
   renderList() {
     const { tabIndex } = this.props;
