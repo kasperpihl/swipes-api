@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { SwissProvider } from 'swiss-react';
 import parseLinks from 'src/utils/parseLinks';
 import parseNewLines from 'src/utils/parseNewLines';
