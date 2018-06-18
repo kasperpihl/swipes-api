@@ -130,11 +130,7 @@ class PlanOverview extends PureComponent {
         <SW.Section>
           <SW.SectionTabLikeTitle>{section}</SW.SectionTabLikeTitle>
           {droppableGoalList}
-<<<<<<< HEAD
         </SW.Section>
-=======
-        </Section>
->>>>>>> development
       )
     }
 
