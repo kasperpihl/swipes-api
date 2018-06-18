@@ -72,6 +72,7 @@ export default class extends PureComponent {
     this.setState({
       resetDate: new Date(),
       attachments: fromJS([]),
+      hasContent: false,
     });
 
     addComment({
