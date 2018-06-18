@@ -85,7 +85,7 @@ class PlanList extends PureComponent {
     } = this.props;
     let i = 0;
 
-    if(!plans.size || true) {
+    if(!plans.size) {
       return (
         <EmptyState
           icon = 'ESMilestoneAchieved'
