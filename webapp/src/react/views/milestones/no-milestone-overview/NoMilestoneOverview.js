@@ -5,7 +5,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import EmptyState from '../../../components/empty-state/EmptyState';
 import Icon from 'Icon';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import HOCAddGoalItem from 'components/goal-list-item/HOCAddGoalItem';
+import GoalAdd from '../../goals/goal-components/goal-add/GoalAdd';
 import './styles/no-milestone-overview.scss';
 
 class NoMilestoneOverview extends PureComponent {
@@ -51,10 +51,9 @@ class NoMilestoneOverview extends PureComponent {
         key={goal.get('id')}
       />
     ) : null).toArray().concat([
-      <HOCAddGoalItem
+      <GoalAdd
         key="add"
         defAssignees={[myId]}
-        delegate={this}
       />
     ])
   }

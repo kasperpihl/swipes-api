@@ -54,13 +54,6 @@ export default class extends PureComponent {
   componentWillUnmount() {
     this.throttledSaveState.clear();
   }
-  onAutoCompleteSelect(item) {
-    let { post } = this.state;
-    if(!post.get('taggedUsers').contains(item.id)) {
-      post = post.updateIn(['taggedUsers'], (taggedUsers) => taggedUsers.push(item.id));
-    }
-    this.updatePost(post);
-  }
   onAttachmentClick(i) {
     const { preview, target } = this.props;
     const { post } = this.state;

@@ -10,12 +10,13 @@ const PostHeader = (props) => {
     children,
   } = props;
 
-  let subtitle = 'posted';
+  let subtitle = 'tagged';
+
   if(post.get('tagged_users') && post.get('tagged_users').size) {
     let names = msgGen.users.getNames(post.get('tagged_users'), {
       number: 100,
     });
-    subtitle += ` to ${names}`;
+    subtitle += ` ${names}`;
   }
 
   return (
