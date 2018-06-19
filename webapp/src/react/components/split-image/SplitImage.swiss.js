@@ -3,12 +3,11 @@ import AssigneeImage from '../assigning/AssigneeImage';
 
 export default styleSheet('SplitImage', {
   Container: {
-    _size: ['50px'],
+    _size: ['#{size=50}px'],
     _flex: ['row', 'center'],
-    backgroundColor: 'white',
-    borderRadius: '50px',
+    backgroundColor: '$sw5',
+    borderRadius: props => `${(props.size || 50)/2}px`,
     border: 'none',
-    marginLeft: '100px',
     overflow: 'hidden',
   },
 
@@ -18,7 +17,7 @@ export default styleSheet('SplitImage', {
     'numberOfImages>1': {
       borderRight: '1px solid $sw5',
     },
-    'numberOfImages<3': {
+    'numberOfImages=2': {
       _size: ['50%', '100%'],
     },
     'numberOfImages=3': {
@@ -33,7 +32,7 @@ export default styleSheet('SplitImage', {
   },
 
   ImageBox: {
-    _size: '25px',
+    _size: props => `${(props.size || 50)/2}px`,
     _flex: ['center'],
     'numberOfImages<3': {
       _size: '100%',
