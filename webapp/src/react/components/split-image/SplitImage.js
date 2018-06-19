@@ -19,10 +19,10 @@ import SW from './SplitImage.swiss';
 
 class SplitImage extends Component {
   render () {
-    const { users } = this.props;
+    const { users, size } = this.props;
     console.log(users);
       return (
-        <SwissProvider numberOfImages={users.length}>
+        <SwissProvider numberOfImages={users.length} size={size}>
           <SW.Container>
             <SW.Left>
               <SW.Image
