@@ -1,13 +1,16 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
+import SplitImage from 'src/react/components/split-image/SplitImage';
 
 class Parent extends PureComponent {
   render() {
     return (
-      <div>
-        test me
-      </div>
+        <SplitImage
+          users={['UKCRY3TDG', 'UBPAE5SGS', 'UX2UAZKZW']}
+        />
     );
   }
 }
-
 export default Parent;
+
+// With images 'URU3EUPOE','USOFI', 'ULNPYMEGU'
+// Only initials 'UKCRY3TDG', 'UBPAE5SGS', 'UX2UAZKZW'
