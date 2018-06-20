@@ -11,6 +11,7 @@ import TakeAction from './TakeAction';
 
 @navWrapper
 @connect(state => ({
+  organization: state.getIn(['me', 'organizations', 0]),
   goals: cs.goals.assignedGroupedByMilestone(state),
   myId: state.getIn(['me', 'id']),
 }), {
@@ -85,12 +86,13 @@ export default class HOCTakeAction extends PureComponent {
   }
 
   render() {
-    const { savedState, goals, myId } = this.props;
+    const { savedState, goals, organization, myId } = this.props;
     const { showLine } = this.state;
 
     return (
       <TakeAction
         goals={goals}
+        plansOrder={organization.get('milestone_order')}
         savedState={savedState}
         delegate={this}
         myId={myId}

@@ -35,35 +35,39 @@ class TakeAction extends Component {
     );
   }
   renderList() {
-    const { goals, delegate, myId } = this.props;
+    const { goals, plansOrder, delegate, myId } = this.props;
     const addGoal = (
       <GoalAdd
         key="add"
         defAssignees={[myId]}
       />
     );
+    const filteredPlans = plansOrder.filter(planId => goals.get(planId)).push('none');
 
-    return goals.map((lGoals, section) => (
-      <GoalListSection
-        delegate={delegate}
-        id={section}
-        title={msgGen.milestones.getName(section)}
-        milestoneId={section}
-        icon={section === 'none' ? 'MiniNoMilestone' : 'MiniMilestone'}
-        key={section}
-      >
-        {lGoals.toArray().map(goal => (
-          <HOCGoalListItem
-            goalId={goal.get('id')}
-            key={goal.get('id')}
-            inTakeAction={true}
+    return filteredPlans.map((planId) => {
+      const planGoals = goals.get(planId);
+
+      return (
+          <GoalListSection
             delegate={delegate}
-          />
-        ))}
-        {section === 'none' ? addGoal : null}
-      </GoalListSection>
-
-    )).toArray();
+            id={planId}
+            title={msgGen.milestones.getName(planId)}
+            milestoneId={planId}
+            icon={planId === 'none' ? 'MiniNoMilestone' : 'MiniMilestone'}
+            key={planId}
+          >
+          {planGoals.toArray().map(goal => (
+            <HOCGoalListItem
+              goalId={goal.get('id')}
+              key={goal.get('id')}
+              inTakeAction={true}
+              delegate={delegate}
+            />
+          ))}
+          {planId === 'none' ? addGoal : null}
+        </GoalListSection>
+      )
+    }).toArray();
   }
   renderEmptyState() {
     const { goals } = this.props;
