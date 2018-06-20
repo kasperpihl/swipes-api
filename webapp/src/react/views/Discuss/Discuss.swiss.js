@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('DiscussOverview', {
+export default styleSheet('Discuss', {
   Wrapper: {
     _flex: ['row', 'left', 'top'],
     _size: '100%',
@@ -8,7 +8,8 @@ export default styleSheet('DiscussOverview', {
     borderTop: '1px solid $sw3',
   },
   SidebarWrapper: {
-    _size: ['160px', '100%'],
+    _size: ['140px', '100%'],
+    flex: 'none',
     minHeight: '100%',
     paddingRight: '6px',
     paddingTop: '12px',

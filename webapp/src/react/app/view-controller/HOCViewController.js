@@ -64,6 +64,9 @@ export default class extends PureComponent {
     this._unmounted = true;
     window.removeEventListener('resize', this.bouncedUpdate);
   }
+  componentDidCatch(e) {
+    console.log('hi', e);
+  }
   onClose = () => {
     const { navSet } = this.props;
     const { fullscreen } = this.state;

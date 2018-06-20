@@ -1,9 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
-import SW from './DiscussOverview.swiss';
+import SW from './Discuss.swiss';
 import { setupCachedCallback } from 'react-delegate';
 
-import PingList from '../components/Ping/List/PingList';
-import DiscussionList from '../components/Discussion/List/DiscussionList';
+import PingList from 'src/react/views/Ping/List/PingList';
+import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 
 import SWView from 'SWView';
 
@@ -20,12 +20,12 @@ const sections = [
     items: [
       'Following',
       'All other',
-      'Created by me',
+      'By me',
     ]
   }
 ];
 
-export default class extends PureComponent {
+export default class Discuss extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

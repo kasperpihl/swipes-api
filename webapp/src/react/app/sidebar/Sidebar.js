@@ -47,20 +47,18 @@ export default class Sidebar extends PureComponent {
     navSet(target, {
       id,
       title: this.getTitleForId(id),
-      showTitleInCrumb: id === 'DiscussOverview',
+      showTitleInCrumb: id === 'Discuss',
     });
   }
   getNavItems() {
     return [
       { id: 'PlanList', svg: 'Milestones' },
       { id: 'TakeAction', svg: 'Goals' },
-      { id: 'DiscussOverview', svg: 'Messages' },
+      { id: 'Discuss', svg: 'Messages' },
     ].filter(v => !!v);
   }
   getTitleForId(id) {
     switch (id) {
-      case 'DiscussOverview':
-        return 'Discuss';
       case 'PlanList':
         return 'Plan';
       case 'TakeAction':

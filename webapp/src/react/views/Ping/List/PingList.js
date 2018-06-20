@@ -54,7 +54,6 @@ export default class extends PureComponent {
     return (
       <SW.Wrapper>
         <PingComposer />
-        <SW.Title>Pings Received</SW.Title>
         {this.renderItems()}
       </SW.Wrapper>
     );
