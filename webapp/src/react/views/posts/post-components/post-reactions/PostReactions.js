@@ -33,7 +33,7 @@ export default class extends PureComponent {
     this.state = {};
   }
   componentWillMount() {
-    this.updateILike(this.props.reactions);
+    this.updateILike();
   }
   componentWillReceiveProps(nextProps) {
     this.updateILike(nextProps.reactions);
@@ -71,7 +71,7 @@ export default class extends PureComponent {
         });
       }
     });
-    
+
   }
   onRemoveReaction = () => {
     const {
@@ -138,7 +138,9 @@ export default class extends PureComponent {
     const { reactions, myId } = this.props;
 
     if (reactions !== nextReactions) {
-      const newILike = !!nextReactions.find(r => r.get('created_by') === myId);
+      const reactionsToUse = nextReactions ? nextReactions : reactions;
+      const newILike = !!reactionsToUse.find(r => r.get('created_by') === myId);
+
       if (this.state.iLike !== newILike) {
         this.setState({ iLike: newILike });
       }
@@ -160,14 +162,14 @@ export default class extends PureComponent {
     const iLike = optimist.get('like', this.state.iLike);
 
     return (
-      <LikeString 
+      <LikeString
         show={reactions && !!reactions.size }
         liked={iLike}>
         {reactions && reactions.size}
       </LikeString>
     )
   }
-  
+
   render() {
     const { alignRight } = this.props;
 

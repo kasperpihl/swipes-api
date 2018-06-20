@@ -9,7 +9,6 @@ import CommentView from './CommentView';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import Button from 'src/react/components/button/Button';
 import PostReactions from '../post-components/post-reactions/PostReactions';
-import Icon from 'Icon';
 import PostHeader from '../post-components/post-header/PostHeader';
 import styles from './PostView.swiss';
 
