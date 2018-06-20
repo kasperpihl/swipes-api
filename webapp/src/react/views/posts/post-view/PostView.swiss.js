@@ -8,6 +8,10 @@ export default styleSheet('PostView', {
     maxWidth: '420px',
     color: '$sw1'
   },
+  Link: {
+    color: '$blue',
+    cursor: 'pointer',
+  },
   Actions: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'left', 'center'],

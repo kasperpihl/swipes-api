@@ -18,6 +18,7 @@ const Name = styleElement('div', styles.Name);
 const Timestamp = styleElement(TimeAgo, styles.Timestamp);
 const Message = styleElement('div', styles.Message);
 const Attachments = styleElement('div', styles.Attachments);
+const Link = styleElement('a', styles.Link);
 
 class CommentView extends PureComponent {
   constructor(props) {
@@ -62,13 +63,13 @@ class CommentView extends PureComponent {
         return <b key={`mention${i}`}>{name}</b>;
       });
       item = this.renderStuff(URL_REGEX, item, (url, i) => (
-        <a
+        <Link
           onClick={this.onLinkClickCached(url)}
           className="notification__link"
           key={`link${i}`}
         >
           {url}
-        </a>
+        </Link>
       ));
       return (
         <span key={key}>{item}{newLine}</span>

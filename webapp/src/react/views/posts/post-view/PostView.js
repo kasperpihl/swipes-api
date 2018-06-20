@@ -14,6 +14,7 @@ import PostHeader from '../post-components/post-header/PostHeader';
 import styles from './PostView.swiss';
 
 const Message = styleElement('div', styles.Message);
+const Link = styleElement('a', styles.Link);
 const Actions = styleElement('div', styles.Actions);
 const ActionSpacer = styleElement('div', styles.ActionSpacer);
 const Attachments = styleElement('div', styles.Attachments);
@@ -104,6 +105,28 @@ class PostView extends PureComponent {
       </PostHeader>
     )
   }
+  renderStuff(regex, inputArray, renderMethod) {
+    let resArray = [];
+    if(typeof inputArray === 'string') {
+      inputArray = [inputArray];
+    }
+    inputArray.forEach((string) => {
+      if(typeof string !== 'string'){
+        return resArray.push(string);
+      }
+      const matches = string.match(regex);
+      if(matches) {
+        let innerSplits = string.split(regex);
+        matches.forEach((match, i) => {
+          innerSplits.splice(1 + i + i, 0, renderMethod.call(null, match, i));
+        });
+        resArray = resArray.concat(innerSplits);
+      } else {
+        resArray.push(string);
+      }
+    });
+    return resArray;
+  }
   renderMessage() {
     const { post } = this.props;
 
@@ -112,20 +135,22 @@ class PostView extends PureComponent {
       let message = post.get('message');
 
       message = message.split('\n').map((item, key) => {
-        const urls = item.match(URL_REGEX);
-        if (urls) {
-          item = item.split(URL_REGEX);
-          urls.forEach((url, i) => {
-            item.splice(1 + i + i, 0, (
-              <a
-                onClick={this.onLinkClickCached(url)}
-                key={'link' + i}
-              >
-                {url}
-              </a>
-            ));
-          })
-        }
+        item = this.renderStuff(URL_REGEX, item, (url, i) => (
+          <Link
+            onClick={this.onLinkClickCached(url)}
+            className="notification__link"
+            key={`link${i}`}
+          >
+            {url}
+          </Link>
+        ));
+
+        item = this.renderStuff(/<![A-Z0-9]*\|.*?>/gi, item, (mention, i) => {
+          const index = mention.indexOf('|');
+          const id = mention.substring(2, index - 1);
+          const name = mention.substr(index + 1, mention.length - index - 2);
+          return <b key={`mention${i}`}>{name}</b>;
+        });
 
         return <span key={key}>{item}<br /></span>;
       });

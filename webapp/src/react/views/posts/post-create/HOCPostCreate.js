@@ -4,6 +4,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import * as linkActions from 'src/redux/link/linkActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
+import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 
 import {
   setupLoading,
@@ -86,9 +87,13 @@ export default class extends PureComponent {
   onPostClick(e) {
     const { createPost, navPop, hideModal } = this.props;
     let { post } = this.state;
+
     if(!this.editorState) return;
-    const message = this.editorState.getCurrentContent().getPlainText();
+
+    const message = editorStateToPlainMention(this.editorState);
+
     if(!message.length) return;
+
     post = post.set('message', message);
     this.setLoading('post');
 
