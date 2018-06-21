@@ -46,14 +46,14 @@ class CompatibleLogin extends PureComponent {
         placeholder={placeholder}
         onChange={this.onChangeCached(key)}
         value={value}
-        props={props}
+        inputProps={props}
       />
     );
   }
   renderForm() {
     return (
        <SW.Form onKeyDown={this.handleKeyDown}>
-        {this.renderInputField('email', 'email', 'Email', { autoFocus: true })}
+        {this.renderInputField('email', 'email', 'Email', { autoFocus: true, autoComplete: 'email' })}
         {this.renderInputField('password', 'password', 'Password')}
       </SW.Form>
     )
@@ -73,7 +73,7 @@ class CompatibleLogin extends PureComponent {
         {getLoading('signInButton').error && this.renderFormError()}
         <CompatibleButton title="Log in" onClick={this.onSignin} {...getLoading('signInButton')}/>
         <SW.Switch>
-          Don't have an account yet? <SW.SwitchLink to="/register">Sign up now</SW.SwitchLink>
+          Don't have an account yet? <SW.SwitchLink href="/register">Sign up now</SW.SwitchLink>
         </SW.Switch>
         <SW.ResetPassword>
           <a href="" onClick={this.onResetPassword}>Reset password</a>

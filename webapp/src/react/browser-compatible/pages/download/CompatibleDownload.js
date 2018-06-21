@@ -101,8 +101,8 @@ class CompatibleDownload extends PureComponent {
 
     if (isMobile) {
       return ([
-        <Section key="mobile">
-          <SectionTitle>Mobile (In beta)</SectionTitle>
+        <SW.Section key="mobile">
+          <SW.SectionTitle>Mobile (In beta)</SW.SectionTitle>
           <SW.DeviceWrapper>
             <SW.Device href={downloadLinks.ios} target="_blank">
               <SW.DeviceSVG icon="IphoneDevice" />
@@ -113,21 +113,21 @@ class CompatibleDownload extends PureComponent {
               <SW.DeviceName>Android</SW.DeviceName>
             </SW.Device>
           </SW.DeviceWrapper>
-        </Section>,
-        <Section key="desktop">
-          <SectionTitle>Desktop</SectionTitle>
+        </SW.Section>,
+        <SW.Section key="desktop">
+          <SW.SectionTitle>Desktop</SW.SectionTitle>
           {this.renderDesktopDownloads()}
-        </Section>
+        </SW.Section>
       ])
     }
 
     return ([
-      <Section key="desktop">
-        <SectionTitle>Desktop</SectionTitle>
+      <SW.Section key="desktop">
+        <SW.SectionTitle>Desktop</SW.SectionTitle>
         {this.renderDesktopDownloads()}
-      </Section>,
-      <Section key="mobile">
-        <SectionTitle>Mobile</SectionTitle>
+      </SW.Section>,
+      <SW.Section key="mobile">
+        <SW.SectionTitle>Mobile</SW.SectionTitle>
         <SW.DeviceWrapper>
           <SW.Device href={downloadLinks.ios} target="_blank">
             <SW.DeviceSVG icon="IphoneDevice" />
@@ -138,7 +138,7 @@ class CompatibleDownload extends PureComponent {
             <SW.DeviceName>Android</SW.DeviceName>
           </SW.Device>
         </SW.DeviceWrapper>
-      </Section>
+      </SW.Section>
     ])
   }
   renderWebSection() {
@@ -147,20 +147,20 @@ class CompatibleDownload extends PureComponent {
     if (isMobile) return null;
 
     return (
-      <Section className="section">
-        <SectionTitle>Web version</SectionTitle>
+      <SW.Section className="section">
+        <SW.SectionTitle>Web version</SW.SectionTitle>
         <GoToWorkspace noTitle={true} />
-      </Section>
+      </SW.Section>
     )
   }
   render() {
     return (
       <CompatibleCard>
-        <Wrapper>
+        <SW.Wrapper>
           <CompatibleHeader title="Download the Workspace" subtitle="Start working with your team from anywhere" />
           {this.renderDownloadSections()}
           {this.renderWebSection()}
-        </Wrapper>
+        </SW.Wrapper>
       </CompatibleCard>
     );
   }

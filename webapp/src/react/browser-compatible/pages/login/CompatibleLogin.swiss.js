@@ -1,5 +1,4 @@
 import {styleSheet} from 'swiss-react';
-import { Link } from 'react-router-dom';
 import Icon from 'Icon';
 
 export default styleSheet('Login', {
@@ -89,7 +88,7 @@ export default styleSheet('Login', {
   },
 
   SwitchLink: {
-      _el: Link,
+      _el: 'a',
       _font: ['12px', '18px', '500'],
       cursor: 'pointer',
       color: '$blue',

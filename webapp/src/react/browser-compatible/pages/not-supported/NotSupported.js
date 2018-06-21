@@ -56,7 +56,7 @@ class NotSupported extends PureComponent {
       <SW.Wrapper>
         <CompatibleHeader title="Please download our apps to get started."/>
         <DownloadForDevice />
-        <EmptySpaceBlock />
+        <SW.EmptySpaceBlock />
         <CompatibleSubHeader title="What else can I do?" />
         {this.renderActions()}
         <HOCLogoutButton />

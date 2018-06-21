@@ -7,7 +7,6 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import SWView from 'SWView';
 import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
 import Button from 'src/react/components/button/Button';
-import './styles/goal-overview.scss';
 import SW from './GoalOverview.swiss';
 import StepAdd from '../goal-components/step-add/StepAdd';
 import StepItem from '../goal-components/step-item/StepItem';

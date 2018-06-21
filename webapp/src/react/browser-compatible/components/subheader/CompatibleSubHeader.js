@@ -9,9 +9,9 @@ const CompatibleSubHeader = (props) => {
   } = props;
 
   return (
-    <SW.funcWrapper>
+    <SW.Wrapper>
       {title}
-    </SW.funcWrapper>
+    </SW.Wrapper>
   );
 };
 

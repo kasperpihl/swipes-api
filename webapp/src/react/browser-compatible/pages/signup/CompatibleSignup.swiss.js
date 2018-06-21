@@ -1,5 +1,4 @@
 import {styleSheet} from 'swiss-react';
-import { Link } from 'react-router-dom';
 export default styleSheet('SignUp', {
   Wrapper: {
     paddingTop: '30px',
@@ -71,7 +70,7 @@ export default styleSheet('SignUp', {
   },
 
   LinkButton: {
-    _el: Link,
+    _el: 'a',
     color: '$blue',
   },
 

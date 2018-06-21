@@ -13,7 +13,7 @@ const sections = [
     items: [
       'Received',
       'Sent',
-    ]
+    ],
   },
   {
     title: 'Discussions',
@@ -21,8 +21,8 @@ const sections = [
       'Following',
       'All other',
       'By me',
-    ]
-  }
+    ],
+  },
 ];
 
 export default class Discuss extends PureComponent {

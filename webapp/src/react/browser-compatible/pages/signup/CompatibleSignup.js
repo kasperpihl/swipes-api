@@ -56,16 +56,19 @@ class CompatibleSignup extends PureComponent {
         placeholder={placeholder}
         onChange={this.onChangeCached(key)}
         value={value}
-        props={props}
+        inputProps={props}
       />
     );
   }
   renderForm() {
     return (
       <SW.Form>
-        {this.renderInputField('email', 'email', 'Email', { autoFocus: true })}
-        {this.renderInputField('firstName', 'text', 'First name')}
-        {this.renderInputField('lastName', 'text', 'Last name')}
+        {this.renderInputField('email', 'email', 'Email', {
+          autoFocus: true,
+          autoComplete: 'email'
+        })}
+        {this.renderInputField('firstName', 'text', 'First name', { autoComplete: 'given-name' })}
+        {this.renderInputField('lastName', 'text', 'Last name', {autoComplete: 'family-name'})}
         {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
       </SW.Form>
     );
@@ -85,7 +88,7 @@ class CompatibleSignup extends PureComponent {
         {getLoading('signupButton').error && this.renderFormError()}
         <CompatibleButton title="Sign up" onClick={this.onSignup} {...getLoading('signupButton')}/>
         <SW.Switch>
-          Already have an account? <SW.LinkButton to="/login" className="footer__switch-button">Sign in here</SW.LinkButton>
+          Already have an account? <SW.LinkButton href="/login">Sign in here</SW.LinkButton>
         </SW.Switch>
         <SW.FooterSentence>
           By signing up you agree to the <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">Terms of service</a>

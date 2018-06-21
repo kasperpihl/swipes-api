@@ -4,7 +4,6 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Button from 'src/react/components/button/Button';
-import Section from 'components/section/Section';
 import FloatingFormInput from './FloatingFormInput';
 import TabBar from 'components/tab-bar/TabBar';
 import SW from './Organization.swiss';

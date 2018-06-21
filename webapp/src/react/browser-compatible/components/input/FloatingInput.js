@@ -51,7 +51,7 @@ class FloatingInput extends PureComponent {
             onFocus={this.floatFocus}
             onBlur={this.floatBlur}
             onChange={this.props.onChange}
-            autoComplete="off"
+            autoComplete='off'
             {...inputProps}
           />
           <SW.Label htmlFor={inputKey}>{inputError || placeholder}</SW.Label>

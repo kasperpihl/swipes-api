@@ -20,7 +20,7 @@ export default class extends PureComponent {
     const { delegate, bindLoading, invites } = this.props;
 
     return (
-      <Form>
+      <SW.FormWrapper>
         <CompatibleInviteForm
           invites={invites}
           delegate={delegate}
@@ -30,7 +30,7 @@ export default class extends PureComponent {
           <CompatibleButton onClick={this.onSendInvites} title="Send Invites" />
         </SW.SendButton>
         <div className="clearfix"></div>
-      </Form>
+      </SW.FormWrapper>
     )
   }
   renderGoToWorkspace() {
