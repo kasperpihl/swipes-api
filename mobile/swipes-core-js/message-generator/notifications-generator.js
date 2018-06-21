@@ -104,10 +104,18 @@ export default class NotificationsGenerator {
       }
       case 'post_comment_added': {
         text.push(this.getUserStringMeta(meta, boldStyle));
-        const byMe = meta.get('post_created_by') === users.getUser('me').get('id');
+        const myId = users.getUser('me').get('id');
+        const byMe = meta.get('post_created_by') === myId;
         const preFix = byMe ? 'your' : posts.getPrefixForType();
         const followString = byMe ? '' : 'you follow';
-        text.push(` commented on ${preFix} post ${followString}: "${this.parseMessage(meta.get('post_message'))}"`);
+        const mentioned = meta.get('mention_ids').find(id => id === myId);
+
+        if (mentioned) {
+          text.push(` mentioned you in a comment: "${this.parseMessage(meta.get('comment_message'))}"`);
+        } else {
+          text.push(` commented on ${preFix} post ${followString}: "${this.parseMessage(meta.get('post_message'))}"`);
+        }
+
         break;
       }
       case 'post_comment_reaction_added': {
