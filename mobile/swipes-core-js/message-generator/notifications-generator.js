@@ -129,6 +129,8 @@ export default class NotificationsGenerator {
   }
   getDesktopNotification(n) {
     const meta = n.get('meta');
+    const myId = n.get('user_id');
+
     if (!meta.get('push')) {
       return undefined;
     }
@@ -143,9 +145,16 @@ export default class NotificationsGenerator {
         notif.message = this.parseMessage(meta.get('message'));
         break;
       }
-      case 'post_comment_mention': {
-        const name = this.parent.users.getName(meta.get('mentioned_by'), { capitalize: true });
-        notif.title = `${name} mentioned you in a comment`;
+      case 'post_comment_added': {
+        const name = this.parent.users.getName(meta.get('created_by'), { capitalize: true });
+        const mentioned = meta.get('mention_ids').find(id => id === myId);
+
+        if (mentioned) {
+          notif.title = `${name} mentioned you in a comment`;
+        } else {
+          notif.title = `${name} commented on a post you follow`;
+        }
+
         notif.message = this.parseMessage(meta.get('comment_message'));
         break;
       }
