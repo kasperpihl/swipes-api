@@ -174,15 +174,18 @@ const postsArchiveSingle = valLocals('postsArchiveSingle', {
 const postsCreatedQueueMessage = valLocals('postsCreatedQueueMessage', {
   user_id: string.require(),
   post: object.require(),
+  mention_ids: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     user_id,
     post,
+    mention_ids,
   } = res.locals;
   const event_type = 'post_created';
   const queueMessage = {
     user_id,
     event_type,
+    mention_ids,
     notification_id_sufix: `${post.id}-${event_type}`,
     post_id: post.id,
   };
@@ -198,17 +201,20 @@ const postsCreatedPushNotificationQueueMessage = valLocals('postsCreatedPushNoti
   organization_id: string.require(),
   user_id: string.require(),
   post: object.require(),
+  mention_ids: array.require(),
 }, (req, res, next, setLocals) => {
   const {
     organization_id,
     user_id,
     post,
+    mention_ids,
   } = res.locals;
   const event_type = 'post_created_push_notification';
   const queueMessage = {
     organization_id,
     user_id,
     event_type,
+    mention_ids,
     post_id: post.id,
   };
 

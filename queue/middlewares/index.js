@@ -378,10 +378,11 @@ const post_created = notifyWrapper([
   posts.postCreatedNotificationData,
   (req, res, next) => {
     const {
+      user_id,
       post,
     } = res.locals;
 
-    res.locals.user_ids = post.tagged_users;
+    res.locals.user_ids = post.followers.filter(id => id !== user_id);
 
     return next();
   },
@@ -394,10 +395,11 @@ const post_created_push_notification = [
   posts.postCreatedPushNotificationData,
   (req, res, next) => {
     const {
+      user_id,
       post,
     } = res.locals;
 
-    res.locals.user_ids = post.tagged_users;
+    res.locals.user_ids = post.followers.filter(id => id !== user_id);
 
     return next();
   },

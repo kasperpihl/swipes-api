@@ -92,7 +92,16 @@ export default class NotificationsGenerator {
       case 'post_created': {
         text.push(boldText('send', users.getName(meta.get('created_by'), { capitalize: true }), boldStyle));
         text.push(` ${posts.getPostTypeTitle()}`);
-        text.push(' and tagged ');
+
+        const myId = users.getUser('me').get('id');
+        const mentioned = meta.get('mention_ids').find(id => id === myId);
+
+        if (mentioned) {
+          text.push(' and mentioned ');
+        } else {
+          text.push(' and tagged ');
+        }
+
         text.push(boldText('users', 'you', boldStyle));
         text.push(`: "${this.parseMessage(meta.get('message'))}"'`);
         break;
@@ -149,7 +158,14 @@ export default class NotificationsGenerator {
     switch (meta.get('event_type')) {
       case 'post_created': {
         const name = this.parent.users.getName(meta.get('created_by'), { capitalize: true });
-        notif.title = `${name} mentioned you in a post`;
+        const mentioned = meta.get('mention_ids').find(id => id === myId);
+
+        if (mentioned) {
+          notif.title = `${name} mentioned you in a post`;
+        } else {
+          notif.title = `${name} tagged you on a post`;
+        }
+
         notif.message = this.parseMessage(meta.get('message'));
         break;
       }

@@ -55,6 +55,7 @@ const postCreatedNotificationData = (req, res, next) => {
   const {
     user_id,
     post,
+    mention_ids,
   } = res.locals;
 
   res.locals.notificationData = {
@@ -62,6 +63,7 @@ const postCreatedNotificationData = (req, res, next) => {
       id: post.id,
     },
     meta: {
+      mention_ids,
       created_by: user_id,
       message: post.message.replace(cutTextRegExp, '$1'),
       context: post.context,
@@ -293,7 +295,7 @@ const postCreatedPushNotificationData = (req, res, next) => {
 
   res.locals.pushMessage = {
     contents: { en: post.message },
-    headings: { en: `${user.profile.first_name} tagged you on a post` },
+    headings: { en: `${user.profile.first_name} mentioned you on a post` },
   };
   res.locals.pushTargetId = post.id;
 
