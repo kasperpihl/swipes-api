@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import OpenFile from 'react-native-doc-viewer';
 import ImagePicker from 'react-native-image-picker';
 import { fromJS } from 'immutable';
@@ -131,13 +132,26 @@ export const preview = att => (d, getState) => {
       d(ca.api.request('links.preview', {
         short_url: permission.get('short_url'),
       })).then((res) => {
-        OpenFile.openDoc([{
-          url: res.preview.file.url,
-          fileName: res.preview.header.title,
+        if (Platform.OS === 'ios') {
+          OpenFile.openDoc([{
+            url: res.preview.file.url,
+            fileName: res.preview.header.title,
+          }], (error, url) => {
+            d(a.main.loading(false));
+          });
+        } else {
+          // Android
+          const fileType = res.preview.header.title.split('.').pop();
 
-        }], (error, url) => {
-          d(a.main.loading(false));
-        });
+          OpenFile.openDoc([{
+            fileType,
+            url: res.preview.file.url,
+            fileName: res.preview.header.title,
+            cache: false,
+          }], (error, url) => {
+            d(a.main.loading(false));
+          });
+        }
       });
     }
   }
