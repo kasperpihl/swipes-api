@@ -73,6 +73,9 @@ const styles = StyleSheet.create({
   url: {
     ...gs.mixins.font(15, gs.colors.blue100, 21),
   },
+  nameLabel: {
+    ...gs.mixins.font(13, gs.colors.deepBlue100, 18, '500'),
+  },
   actions: {
     ...gs.mixins.flex('row', 'right'),
     alignSelf: 'stretch',
@@ -274,16 +277,11 @@ class PostView extends PureComponent {
     const { headerHeight, collapseHeader } = this.state;
 
     let marginTop = 0;
-    // let opacity = 1;
     let paddingBottom = 0;
 
     if (collapseHeader) {
       marginTop = -headerHeight + statusbarHeight;
       paddingBottom = statusbarHeight;
-
-      if (Platform.OS === 'ios') {
-        // opacity = 0;
-      }
     }
 
     return (
@@ -300,6 +298,9 @@ class PostView extends PureComponent {
       </View>
     );
   }
+  renderText(matchingString, matches) {
+    return matches[2];
+  }
   renderMessage() {
     const { post, delegate } = this.props;
     const message = post.get('message');
@@ -308,7 +309,10 @@ class PostView extends PureComponent {
       <View style={styles.messageWrapper}>
         <ParsedText
           style={styles.message}
-          parse={[{ type: 'url', style: styles.url, onPress: this.onOpenUrl }]}
+          parse={[
+            { type: 'url', style: styles.url, onPress: this.onOpenUrl },
+            { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText },
+          ]}
         >
           {message}
         </ParsedText>
