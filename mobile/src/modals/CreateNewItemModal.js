@@ -164,11 +164,13 @@ class CreateNewItemModal extends PureComponent {
     }
 
     return (
-      <RippleButton style={styles.assigneeWrapper} onPress={this.handleAssigning}>
-        <View style={styles.assigneeTextWrapper}>
-          <Text selectable style={styles.assigneeText}>Assignees:</Text>
+      <RippleButton onPress={this.handleAssigning}>
+        <View style={styles.assigneeWrapper}>
+          <View style={styles.assigneeTextWrapper}>
+            <Text selectable style={styles.assigneeText}>Assignees:</Text>
+          </View>
+          <HOCAssigning assignees={assignees} />
         </View>
-        <HOCAssigning assignees={assignees} />
       </RippleButton>
     );
   }
