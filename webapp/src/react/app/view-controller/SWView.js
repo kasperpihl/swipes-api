@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import './styles/view-controller.scss';
 
-class SWView extends Component {
+export default class SWView extends Component {
   componentDidMount() {
     const { initialScroll, scrollToBottom } = this.props;
 
@@ -69,16 +68,3 @@ class SWView extends Component {
     );
   }
 }
-
-export default SWView;
-
-const { element, number, bool, arrayOf, oneOfType, func } = PropTypes;
-
-SWView.propTypes = {
-  onScroll: func,
-  header: element,
-  footer: element,
-  children: oneOfType([element, arrayOf(element)]),
-  noframe: bool,
-  disableScroll: bool,
-};

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
 import { bindAll, getURLParameter } from 'swipes-core-js/classes/utils';
 import NoteEditor from 'components/note-editor/NoteEditor';
-import './styles/external-note-view.scss';
+import SW from './ExternalNoteView.swiss';
 
 class ExternalNoteView extends PureComponent {
   constructor(props) {
@@ -57,7 +57,7 @@ class ExternalNoteView extends PureComponent {
     }
 
     return (
-      <div className="loading">Loading</div>
+      <SW.Loading>Loading</SW.Loading>
     )
   }
   renderEditor() {
@@ -78,10 +78,10 @@ class ExternalNoteView extends PureComponent {
   }
   render() {
     return (
-      <div className="external-note-view">
+      <SW.Wrapper>
         {this.renderLoading()}
         {this.renderEditor()}
-      </div>
+      </SW.Wrapper>
     )
   }
 }

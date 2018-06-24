@@ -1,17 +1,7 @@
-import PDF from './pdf/PDF';
-import Audio from './audio/Audio';
-import Image from './image/Image';
-import Jpeg from './jpeg/Jpeg';
-import Office from './office/Office';
-import SVG from './svg/SVG';
-import Video from './video/Video';
-
-export {
-  PDF,
-  Audio,
-  Image,
-  Jpeg,
-  Office,
-  SVG,
-  Video,
-};
+export { default as PDF } from './pdf/PDF';
+export { default as Audio } from './audio/Audio';
+export { default as Image } from './image/Image';
+export { default as Jpeg } from './jpeg/Jpeg';
+export { default as Office } from './office/Office';
+export { default as SVG } from './svg/SVG';
+export { default as Video } from './video/Video';

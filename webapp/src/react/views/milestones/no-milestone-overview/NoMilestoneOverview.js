@@ -6,7 +6,6 @@ import EmptyState from '../../../components/empty-state/EmptyState';
 import Icon from 'Icon';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import GoalAdd from '../../goals/goal-components/goal-add/GoalAdd';
-import './styles/no-milestone-overview.scss';
 
 class NoMilestoneOverview extends PureComponent {
   constructor(props) {
@@ -18,12 +17,10 @@ class NoMilestoneOverview extends PureComponent {
   }
   renderHeader() {
     return (
-      <div className="no-milestone-overview__header">
-        <HOCHeaderTitle
-          title="Goals without a plan"
-          border
-        />
-      </div>
+      <HOCHeaderTitle
+        title="Goals without a plan"
+        border
+      />
     );
   }
   renderEmptyState() {
@@ -67,10 +64,8 @@ class NoMilestoneOverview extends PureComponent {
         onScroll={this.onScroll}
         initialScroll={initialScroll}
       >
-        <div className="no-milestone-overview">
-          {this.renderList()}
-          {this.renderEmptyState()}
-        </div>
+        {this.renderList()}
+        {this.renderEmptyState()}
       </SWView>
     );
   }

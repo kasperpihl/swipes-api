@@ -59,7 +59,6 @@ export default class extends PureComponent {
     const { item } = this.props;
 
     let sendString = msgGen.users.getFirstName(item.sent_by);
-    sendString += ` pinged you`;
 
     return (
       <SW.Wrapper className="ButtonWrapper-hover">
@@ -68,15 +67,14 @@ export default class extends PureComponent {
           assignees={[item.sent_by]}
           size={36}
         />
-        <SW.Message>
-          <SW.Sender>
-            {sendString}
-            <SW.Time prefix=" - " date={item.sent_at} simple />
-          </SW.Sender>
-          <div>
+        <SW.MessageWrapper>
+          <SW.Message>
             {parseLinks(parseNewLines(item.message))}
-          </div>
-        </SW.Message>
+          </SW.Message>
+          <SW.Sender>
+            <SW.Time prefix={`${sendString} - `} date={item.sent_at} simple />
+          </SW.Sender>
+        </SW.MessageWrapper>
         <SW.ButtonWrapper>
           <Button
             icon="reply"
