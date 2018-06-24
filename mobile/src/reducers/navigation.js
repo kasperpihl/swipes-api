@@ -86,12 +86,16 @@ export default function navigation(state = initialState, action) {
       return state.set('sliderIndex', payload.sliderIndex);
     }
     case types.NAVIGATION_PUSH: {
+      if (!payload.scene) {
+        return state;
+      }
+
       state = state.set('collapsed', false).set('actionButtons', initialState.get('actionButtons'));
       return state.updateIn(['sliders', payload.sliderIndex, 'routes'], routes => routes.push(Map(payload.scene)));
     }
     case types.NAVIGATION_POP: {
       const { targetIndex, sliderIndex } = payload;
-      if(state.getIn(['sliders', sliderIndex, 'routes']).size === 1) {
+      if (state.getIn(['sliders', sliderIndex, 'routes']).size === 1) {
         return state;
       }
       state = state.set('collapsed', false).set('actionButtons', initialState.get('actionButtons'));

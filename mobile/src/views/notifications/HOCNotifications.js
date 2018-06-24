@@ -15,10 +15,9 @@ class HOCNotifications extends PureComponent {
   }
   componentDidMount() {
     const { setLastReadTs, notifications } = this.props;
-    if(notifications && notifications.size) {
+    if (notifications && notifications.size) {
       setLastReadTs(notifications.getIn([0, 'created_at']));
     }
-
   }
   onMark(ids) {
     const { markNotifications } = this.props;
@@ -28,17 +27,17 @@ class HOCNotifications extends PureComponent {
   onMarkAll() {
     const { notifications } = this.props;
     const nToMark = notifications.toArray().filter(n => !n.get('seen_at')).map(n => n.get('id'));
-    this.onMark(nToMark)
+    this.onMark(nToMark);
   }
   onNotificationOpen(n) {
     const { navPush } = this.props;
     const nav = navForContext(n.get('target'));
-    this.onMark([n.get('id')])
+    this.onMark([n.get('id')]);
     navPush(nav);
   }
   render() {
     const { notifications } = this.props;
-    const sortedNotifications = notifications; //.filter(n => !!n.get('event_type'));
+    const sortedNotifications = notifications; // .filter(n => !!n.get('event_type'));
 
     return (
       <Notifications
