@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
     ...gs.mixins.borderRadius(54 / 2),
     backgroundColor: gs.colors.deepBlue100,
   },
+  nameLabel: {
+    ...gs.mixins.font(13, gs.colors.deepBlue100, 18, '500'),
+  },
   initialsLabel: {
     ...gs.mixins.font(28, gs.colors.bgColor),
     backgroundColor: 'transparent',
@@ -214,6 +217,9 @@ class PostFeed extends PureComponent {
       </View>
     );
   }
+  renderText(matchingString, matches) {
+    return matches[2];
+  }
   renderMessage() {
     const { post, delegate } = this.props;
     const message = post.get('message');
@@ -227,6 +233,7 @@ class PostFeed extends PureComponent {
               parse={
                 [
                   { type: 'url', style: styles.url, onPress: this.onOpenUrl },
+                  { pattern: /<!([A-Z0-9]*)\|(.*?)>/i, style: styles.nameLabel, renderText: this.renderText },
                 ]
               }
             >

@@ -1,11 +1,9 @@
-import React, { PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableWithoutFeedback, Platform, UIManager, LayoutAnimation, Keyboard } from 'react-native';
 import { setupDelegate } from 'react-delegate';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import * as a from 'actions';
-import * as cs from 'swipes-core-js/selectors';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 import HOCAssigning from 'components/assignees/HOCAssigning';
@@ -18,16 +16,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pressableOverlay: {
-    position: 'absolute',
-    left: 0, top: 0, right: 0, bottom: 0,
-    backgroundColor: 'rgba(0,12,47, .5)'
-  },
   modalWrapper: {
     backgroundColor: 'white',
     elevation: 4,
     borderRadius: 6,
-    overflow: 'hidden', 
+    overflow: 'hidden',
   },
   inputWrapper: {
     alignSelf: 'stretch',
@@ -46,16 +39,16 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   contentWrapper: {
-    flex: 1,
+    flexDirection: 'column',
   },
   assigneeWrapper: {
     alignSelf: 'stretch',
-    flex: 1,
     maxHeight: 60,
     alignItems: 'center',
     flexDirection: 'row',
     borderBottomColor: colors.deepBlue10,
     borderBottomWidth: 1,
+    paddingVertical: 15,
     paddingHorizontal: 15,
   },
   assigneeTextWrapper: {
@@ -64,11 +57,11 @@ const styles = StyleSheet.create({
   assigneeText: {
     fontSize: 15,
     lineHeight: 18,
-    color: colors.deepBlue80
+    color: colors.deepBlue80,
   },
   actionWrapper: {
     alignSelf: 'stretch',
-    flex: 1,
+    paddingVertical: 15,
     maxHeight: 70,
     alignItems: 'center',
     flexDirection: 'row',
@@ -80,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 21,
-  }
+  },
 });
 
 class CreateNewItemModal extends PureComponent {
@@ -111,17 +104,17 @@ class CreateNewItemModal extends PureComponent {
 
     if (title.length) {
       this.onModalCreateAction(title, assignees, milestoneId);
-      
+
       setTimeout(() => {
         navPop();
-      }, 1)
+      }, 1);
     }
   }
   onCloseModal() {
     const { navPop } = this.props;
     setTimeout(() => {
-      navPop()
-    }, 1)
+      navPop();
+    }, 1);
   }
   handleAssigning() {
     const { assignModal } = this.props;
@@ -129,13 +122,13 @@ class CreateNewItemModal extends PureComponent {
     Keyboard.dismiss();
     assignModal({
       selectedIds: assignees,
-      onActionPress: (selectedIds) => this.setState({assignees: selectedIds}),
+      onActionPress: selectedIds => this.setState({ assignees: selectedIds }),
     }, {
       onDidClose: () => {
         console.log('closed from callback!');
         this.refs.textInput.focus();
-      }
-    })
+      },
+    });
   }
   isActive() {
     const { title } = this.state;
@@ -144,23 +137,23 @@ class CreateNewItemModal extends PureComponent {
   }
   renderInput() {
     const { placeholder } = this.props;
-    let inputBg = this.isActive() ? colors.blue5 : 'white';
+    const inputBg = this.isActive() ? colors.blue5 : 'white';
 
     return (
       <View style={[styles.inputWrapper, { backgroundColor: inputBg }]}>
         <TextInput
           ref="textInput"
           style={styles.input}
-          onChangeText={(text) => this.setState({title: text})}
+          onChangeText={text => this.setState({ title: text })}
           underlineColorAndroid="transparent"
           value={this.state.title}
           placeholder={placeholder}
-          autoFocus={true}
+          autoFocus
           onSubmitEditing={this.onActionClick}
           returnKeyType="send"
         />
       </View>
-    )
+    );
   }
   renderAssignees() {
     const { assignees } = this.state;
@@ -172,43 +165,39 @@ class CreateNewItemModal extends PureComponent {
 
     return (
       <RippleButton style={styles.assigneeWrapper} onPress={this.handleAssigning}>
-        <View style={styles.assigneeWrapper}>
-          <View style={styles.assigneeTextWrapper}>
-            <Text selectable={true} style={styles.assigneeText}>Assignees:</Text>
-          </View>
-          <HOCAssigning assignees={assignees} />
+        <View style={styles.assigneeTextWrapper}>
+          <Text selectable style={styles.assigneeText}>Assignees:</Text>
         </View>
+        <HOCAssigning assignees={assignees} />
       </RippleButton>
-    )
+    );
   }
   renderActions() {
-    const { title, assignees, milestoneId } = this.state;
     const { actionLabel } = this.props;
 
     return (
       <View style={styles.actionWrapper}>
-        <RippleButton rippleColor={'#FFFFFF'} rippleOpacity={.5} style={styles.actionButton} onPress={this.onCloseModal}>
-          <View style={[styles.actionButton, {backgroundColor: colors.deepBlue40}]}>
-            <Text selectable={true} style={[styles.actionButtonLabel, { color: colors.deepBlue100 }]}>Cancel</Text>
+        <RippleButton rippleColor={'#FFFFFF'} rippleOpacity={0.5} onPress={this.onCloseModal}>
+          <View style={[styles.actionButton, { backgroundColor: colors.deepBlue40 }]}>
+            <Text selectable style={[styles.actionButtonLabel, { color: colors.deepBlue100 }]}>Cancel</Text>
           </View>
         </RippleButton>
-        <RippleButton  rippleColor={'#FFFFFF'} rippleOpacity={.5} style={styles.actionButton} onPress={this.onActionClick}>
-          <View style={[styles.actionButton, {backgroundColor: colors.blue100}]}>
-            <Text selectable={true} style={[styles.actionButtonLabel, { color: 'white' }]}>{actionLabel}</Text>
+        <RippleButton rippleColor={'#FFFFFF'} rippleOpacity={0.5} onPress={this.onActionClick}>
+          <View style={[styles.actionButton, { backgroundColor: colors.blue100 }]}>
+            <Text selectable style={[styles.actionButtonLabel, { color: 'white' }]}>{actionLabel}</Text>
           </View>
         </RippleButton>
       </View>
-    )
+    );
   }
   renderContent() {
-
     if (this.isActive()) {
       return (
         <View style={styles.contentWrapper}>
           {this.renderAssignees()}
           {this.renderActions()}
         </View>
-      )
+      );
     }
 
     return undefined;
@@ -221,17 +210,17 @@ class CreateNewItemModal extends PureComponent {
     let modalSize = {
       width: viewSize.width / 1.5,
       height: 45,
-    }
+    };
 
     if (this.isActive()) {
       modalSize = {
-        width: viewSize.width * .95,
+        width: viewSize.width * 0.95,
         height: defAssignees ? 175 : 115,
-      }
+      };
     }
 
     return (
-      <View style={{ flex: 1, backgroundColor: colors.deepBlue100  }}>
+      <View style={{ flex: 1, backgroundColor: colors.deepBlue100 }}>
         <View style={styles.createActionWrapper}>
           <View style={[styles.modalWrapper, modalSize]}>
             {this.renderInput()}
@@ -239,7 +228,7 @@ class CreateNewItemModal extends PureComponent {
           </View>
         </View>
       </View>
-    )
+    );
   }
 }
 

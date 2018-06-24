@@ -8,7 +8,6 @@ import PostReactions from '../post-components/post-reactions/PostReactions';
 import SW from './CommentView.swiss';
 import plainMentionToContentState from 'src/utils/draft-js/plainMentionToContentState';
 
-
 class CommentView extends PureComponent {
   constructor(props) {
     super(props);
@@ -52,13 +51,13 @@ class CommentView extends PureComponent {
         return <b key={`mention${i}`}>{name}</b>;
       });
       item = this.renderStuff(URL_REGEX, item, (url, i) => (
-        <a
+        <Link
           onClick={this.onLinkClickCached(url)}
           className="notification__link"
           key={`link${i}`}
         >
           {url}
-        </a>
+        </Link>
       ));
       return (
         <span key={key}>{item}{newLine}</span>

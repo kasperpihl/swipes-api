@@ -37,4 +37,8 @@ export default styleSheet('CommentView', {
   Attachments: {
     marginTop: '6px',
   },
+  Link: {
+    color: '$blue',
+    cursor: 'pointer',
+  },
 });

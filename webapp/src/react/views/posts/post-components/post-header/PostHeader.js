@@ -10,13 +10,16 @@ const PostHeader = (props) => {
     children,
   } = props;
 
-  let subtitle = 'tagged';
+  let subtitle = '';
 
   if(post.get('tagged_users') && post.get('tagged_users').size) {
+    subtitle = 'tagged';
+
     let names = msgGen.users.getNames(post.get('tagged_users'), {
       number: 100,
     });
-    subtitle += ` ${names}`;
+
+    subtitle += ` ${names} - `;
   }
 
   return (
@@ -29,7 +32,8 @@ const PostHeader = (props) => {
           <SW.NameTitle>{msgGen.users.getFullName(post.get('created_by'))}</SW.NameTitle>
         </SW.NameWrapper>
         <SW.Subtitle clickable={!!onSubtitleClick} onClick={onSubtitleClick}>
-          {subtitle} — <TimeAgo simple date={post.get('created_at')}
+          {subtitle}
+          <TimeAgo simple date={post.get('created_at')}
         /></SW.Subtitle>
         {children}
       </SW.RightSide>

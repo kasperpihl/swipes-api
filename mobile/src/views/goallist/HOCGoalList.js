@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, ActivityIndicator, Modal, TextInput } from 'react-native';
+import { fromJS, OrderedMap } from 'immutable';
+import { View, Text, StyleSheet } from 'react-native';
 import { ImmutableListView } from 'react-native-immutable-list-view';
 import HOCHeader from 'HOCHeader';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 import EmptyListFooter from 'components/empty-list-footer/EmptyListFooter';
-import CreateNewItemModal from 'modals/CreateNewItemModal';
 import WaitForUI from 'WaitForUI';
 import * as cs from 'swipes-core-js/selectors';
 import * as a from 'actions';
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     fontWeight: 'bold',
-    color: colors.deepBlue100
+    color: colors.deepBlue100,
   },
 });
 
@@ -58,7 +58,7 @@ class HOCGoalList extends PureComponent {
 
     navPush(route);
   }
-  onModalCreateAction(title, assignees, milestoneId ) {
+  onModalCreateAction(title, assignees, milestoneId) {
     const { createGoal } = this.props;
 
     if (title.length > 0) {
@@ -70,7 +70,7 @@ class HOCGoalList extends PureComponent {
     }
   }
   onHeaderTap() {
-    this.refs.scrollView.scrollTo({x: 0, y: 0, animated: true})
+    this.refs.scrollView.scrollTo({ x: 0, y: 0, animated: true });
   }
   navigateToMilestone(milestoneId) {
     const { navPush } = this.props;
@@ -80,7 +80,7 @@ class HOCGoalList extends PureComponent {
         id: 'MilestoneOverview',
         title: 'Milestone overview',
         props: {
-          milestoneId: milestoneId,
+          milestoneId,
         },
       };
 
@@ -104,14 +104,13 @@ class HOCGoalList extends PureComponent {
       props: {
         title: '',
         defAssignees: [this.props.myId],
-        placeholder: "Add a new goal",
-        actionLabel: "Add goal",
-        delegate: this
-      }
-    })
+        placeholder: 'Add a new goal',
+        actionLabel: 'Add goal',
+        delegate: this,
+      },
+    });
   }
   renderHeader() {
-
     return (
       <HOCHeader
         title="Take Action"
@@ -126,19 +125,19 @@ class HOCGoalList extends PureComponent {
     );
   }
   renderSectionHeader(v1, sectionId) {
-    let sectionTitle = sectionId === 'none' ? 'No plan' : msgGen.milestones.getName(sectionId);
-    let sectionIcon = sectionId === 'none' ? 'MiniNoMilestone' : 'MiniMilestone';
+    const sectionTitle = sectionId === 'none' ? 'No plan' : msgGen.milestones.getName(sectionId);
+    const sectionIcon = sectionId === 'none' ? 'MiniNoMilestone' : 'MiniMilestone';
 
     return (
       <RippleButton onPress={this.navigateToMilestoneCached(sectionId)}>
         <View style={styles.sectionWrapper}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <Icon icon={sectionIcon} fill={colors.deepBlue100} width="18" height="18" />
-            <Text selectable={true} style={[styles.sectionTitle, { paddingLeft: 6 }]}>{sectionTitle}</Text>
+            <Text selectable style={[styles.sectionTitle, { paddingLeft: 6 }]}>{sectionTitle}</Text>
           </View>
         </View>
       </RippleButton>
-    )
+    );
   }
   renderGoal(g) {
     const gId = g.get('id');
@@ -146,34 +145,36 @@ class HOCGoalList extends PureComponent {
     return <HOCGoalItem goalId={gId} key={gId} delegate={this} inTakeAction />;
   }
   renderListFooter() {
-
-    return <EmptyListFooter />
+    return <EmptyListFooter />;
   }
   renderEmptyState() {
-
     return (
-      <View style={{flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-        <Icon icon="ESTakeAction" width="290" height="300"  />
-        <Text selectable={true} style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24 }}>Add your first goal</Text>
+      <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+        <Icon icon="ESTakeAction" width="290" height="300" />
+        <Text selectable style={{ fontSize: 15, lineHeight: 21, color: colors.deepBlue50, paddingTop: 24 }}>Add your first goal</Text>
       </View>
-    )
+    );
   }
   renderList() {
-    const { goals } = this.props;
+    const { goals, organization } = this.props;
 
     if (goals.size === 1 && !goals.get('none').size) {
       return this.renderEmptyState();
     }
+
+    const plansOrder = organization.get('milestone_order');
+    const filteredPlans = plansOrder.filter(planId => goals.get(planId)).push('none');
+    const orderedGoals = new OrderedMap(filteredPlans.map(id => [id, goals.get(id)]));
 
     return (
       <WaitForUI>
         <ImmutableListView
           ref="scrollView"
           style={styles.list}
-          immutableData={goals}
+          immutableData={orderedGoals}
           renderRow={this.renderGoal}
           renderSectionHeader={this.renderSectionHeader}
-          stickySectionHeadersEnabled={true}
+          stickySectionHeadersEnabled
           renderFooter={this.renderListFooter}
         />
       </WaitForUI>
@@ -183,9 +184,9 @@ class HOCGoalList extends PureComponent {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
-          <View style={styles.list}>
-            {this.renderList()}
-          </View>
+        <View style={styles.list}>
+          {this.renderList()}
+        </View>
       </View>
     );
   }
@@ -193,6 +194,7 @@ class HOCGoalList extends PureComponent {
 
 function mapStateToProps(state) {
   return {
+    organization: state.getIn(['me', 'organizations', 0]),
     goals: cs.goals.assignedGroupedByMilestone(state),
     myId: state.getIn(['me', 'id']),
   };
