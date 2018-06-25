@@ -21,7 +21,7 @@ import Tooltip from 'src/react/app/tooltip/Tooltip';
 import Topbar from 'src/react/app/topbar/Topbar';
 import ContextMenu from 'src/react/app/context-menu/ContextMenu';
 import Gradient from 'src/react/app/gradient/Gradient';
-
+import DragAndDrop from 'src/react/components/drag-and-drop/DragAndDrop';
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
 
@@ -68,13 +68,15 @@ export default class extends PureComponent {
     return (
       <div id="app" className={className}>
         <div id="draggable"></div>
-        <Topbar />
         <Redirect />
         <Gradient />
         <ContextMenu />
         <HOCAutoCompleting />
         <Tooltip />
+        <DragAndDrop>
+        <Topbar />
         {this.renderRoutes()}
+        </DragAndDrop>
         <Route path="/" component={Trial} />
       </div>
     )
