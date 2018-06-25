@@ -4,7 +4,7 @@ import TimeAgo from 'swipes-core-js/components/TimeAgo';
 export default styleSheet('PingListItem', {
   Wrapper: {
     width: '100%',
-    _flex: ['row', 'left', 'top'],
+    _flex: ['row', 'left', 'center'],
     paddingTop: '12px',
     paddingLeft: '12px',
     paddingRight: '3px',
@@ -16,10 +16,10 @@ export default styleSheet('PingListItem', {
   },
   Message: {
     _el: 'div',
-    _font: ['14px', '18px', 400],
+    _font: ['13px', '18px', 400],
   },
   Sender: {
-    _font: ['12px', '18px', 500],
+    _font: ['13px', '18px', 500],
   },
   Time: {
     _el: TimeAgo,
@@ -29,9 +29,11 @@ export default styleSheet('PingListItem', {
   ButtonWrapper: {
     position: 'absolute',
     right: 0,
+    background: '$sw5',
     top: 0,
-    width: '60px',
-    height: '30px',
+    width: '72px',
+    height: '42px',
+    padding: '6px',
     _flex: ['row', 'left', 'center'],
     visibility: 'hidden',
     '.ButtonWrapper-hover:hover &': {

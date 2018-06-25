@@ -5,6 +5,7 @@ export default styleSheet('SplitImage', {
   Container: {
     _size: ['#{size=50}px'],
     _flex: ['row', 'center'],
+    flex: 'none',
     backgroundColor: '$sw5',
     borderRadius: props => `${(props.size || 50)/2}px`,
     border: 'none',

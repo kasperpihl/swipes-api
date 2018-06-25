@@ -67,14 +67,9 @@ export default class extends PureComponent {
           assignees={[item.sent_by]}
           size={36}
         />
-        <SW.MessageWrapper>
-          <SW.Message>
-            {parseLinks(parseNewLines(item.message))}
-          </SW.Message>
-          <SW.Sender>
-            <SW.Time prefix={`${sendString} - `} date={item.sent_at} simple />
-          </SW.Sender>
-        </SW.MessageWrapper>
+        <SW.Message>
+          {parseLinks(parseNewLines(item.message))}
+        </SW.Message>
         <SW.ButtonWrapper>
           <Button
             icon="reply"
