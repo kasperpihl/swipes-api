@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SW from './DragAndDrop.swiss';
-import { SwissProvider } from 'swiss-react/dist/cjs/components/SwissProviders';
+
 
 class DragAndDrop extends Component {
   constructor(props){
@@ -15,7 +15,10 @@ class DragAndDrop extends Component {
 
   handleDragEnter = (e) => {
     e.preventDefault();
-    this.setState({hoverActive: true})
+    let dt = e.dataTransfer;
+    if (dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))) {
+      this.setState({hoverActive: true})
+    }
   }
 
   handleDragLeave = (e) => {
