@@ -1,6 +1,6 @@
 import {
   version,
-} from '../package.json';
+} from '../../package.json';
 
 import {
   SwipesError,

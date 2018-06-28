@@ -4,9 +4,10 @@
   ],
   "plugins": [
     "transform-object-rest-spread",
-    "transform-async-to-generator",
-    ["babel-plugin-transform-builtin-extend", {
-      "globals": ["Error", "Array"]
+    // "transform-async-to-generator",
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": true
     }]
   ]
 }

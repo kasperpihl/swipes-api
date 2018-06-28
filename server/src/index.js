@@ -16,6 +16,8 @@ import {
   swipesErrorMiddleware,
 } from './middlewares/swipes-error';
 import * as routes from './api/routes';
+import endpoints from './endpoints/endpoints';
+
 import logger from './logger';
 
 const env = config.get('env');
@@ -65,6 +67,7 @@ app.use('/v1', (req, res, next) => {
   return next();
 });
 // No authed routes goes here
+app.use('/v1', endpoints.notAuthed);
 app.use('/v1', routes.v1NotAuthed);
 // Checking for updates
 app.use('/v1', checkForUpdates);
@@ -72,30 +75,33 @@ app.use('/v1', checkForUpdates);
 app.use('/v1', authParseToken, authCheckToken);
 // Logging input to aws
 app.use((req, res, next) => {
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  const allowed = ['token', 'password', 'text', 'title'];
-  const filteredBody = Object.keys(req.body)
-    .filter(key => !allowed.includes(key))
-    .reduce((obj, key) => {
-      return {
-        ...obj,
-        [key]: req.body[key],
-      };
-    }, {});
+  if(req.body) {
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const allowed = ['token', 'password', 'text', 'title'];
+    const filteredBody = Object.keys(req.body)
+      .filter(key => !allowed.includes(key))
+      .reduce((obj, key) => {
+        return {
+          ...obj,
+          [key]: req.body[key],
+        };
+      }, {});
 
-  logger.log('info', {
-    ip,
-    user_id: res.locals.user_id,
-    headers: req.headers,
-    params: req.params,
-    query: req.query,
-    body: filteredBody,
-    route: req.originalUrl,
-  });
+    logger.log('info', {
+      ip,
+      user_id: res.locals.user_id,
+      headers: req.headers,
+      params: req.params,
+      query: req.query,
+      body: filteredBody,
+      route: req.originalUrl,
+    });
+  }
 
   return next();
 });
 // Authed routes goes here
+app.use('/v1', endpoints.authed);
 app.use('/v1', routes.v1Authed);
 
 // // ========================================================================
