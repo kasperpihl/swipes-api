@@ -36,7 +36,6 @@
     "shortid": "^2.2.6",
     "slug": "^0.9.1",
     "stripe": "^4.25.0",
-    "swiss-react": "^0.2.28",
     "underscore": "1.8.x",
     "valjs": "0.0.28",
     "winston": "^2.3.1",
@@ -69,12 +68,12 @@
   },
   "scripts": {
     "build": "webpack --progress",
-    "watch": "webpack --progress --watch",
+    "watch": "babel src -d dist --watch --skip-initial-build",
     "staging": "pm2 reload pm2_config.json --env staging && pm2 save",
     "production": "pm2 reload pm2_config.json --env production && pm2 save",
-    "server": "nodemon ./dist/index.js",
-    "start2": "babel src -d dist --watch",
-    "start": "npm-run-all --parallel server watch",
+    "dev": "nodemon ./dist/index.js",
+    "prestart": "rimraf ./dist",
+    "start": "babel src -d dist && npm-run-all --parallel dev watch",
     "test": "jest --env=node"
   },
   "jest": {
