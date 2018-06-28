@@ -118,7 +118,6 @@ export default class extends PureComponent {
 
   render() {
     const { hasContent } = this.state;
-    console.log(hasContent);
     const { myId } = this.props;
     const placeholder = 'Write a comment';
 

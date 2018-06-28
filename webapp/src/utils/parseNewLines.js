@@ -1,4 +1,4 @@
-import React, { Fragment }  from 'react';
+import React from 'react';
 
 export default function (string)  {
   if(typeof string === 'string' && string.indexOf('\n') === -1) {
@@ -9,12 +9,12 @@ export default function (string)  {
     string = [string];
   }
   const finalArr = [];
-  string.forEach(s => {
+  string.forEach((s, i) => {
 
     if(typeof s === 'string') {
-      s.split('\n').forEach((item, i) => {
-        if(i > 0) {
-          finalArr.push(<br key={`new-line-br-${i}`} />);
+      s.split('\n').forEach((item, j) => {
+        if(j > 0) {
+          finalArr.push(<br key={`new-line-br-${i}-${j}`} />);
         }
         finalArr.push(item);
       });

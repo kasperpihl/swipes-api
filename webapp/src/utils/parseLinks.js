@@ -1,4 +1,4 @@
-import React, { Fragment }  from 'react';
+import React from 'react';
 import { URL_REGEX } from 'swipes-core-js/classes/utils';
 import { addGlobalStyles } from 'swiss-react';
 addGlobalStyles({
@@ -34,15 +34,11 @@ export default function (string)  {
         });
         s = s.filter(sI => sI !== '');
         finalArr = finalArr.concat(s);
-      } else {
-        finalArr.push(s);
+        return;
       }
-    } else {
-      finalArr.push(s);
     }
+    finalArr.push(s);
   })
-  if(finalArr.length === 1) {
-    return finalArr[0];
-  }
-  return finalArr;
+  
+  return finalArr.length === 1 ? finalArr[0] : finalArr;
 }

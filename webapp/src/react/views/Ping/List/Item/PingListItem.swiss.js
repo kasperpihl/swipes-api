@@ -16,6 +16,7 @@ export default styleSheet('PingListItem', {
   },
   Message: {
     _el: 'div',
+    paddingLeft: '12px',
     _font: ['13px', '18px', 400],
   },
   Sender: {
