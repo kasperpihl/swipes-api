@@ -4,7 +4,19 @@ import SW from './DragAndDrop.swiss';
 class DragAndDrop extends Component {
 
   render() {
-    const { children, hoverActive, showMenu, handleDragEnter, handleDragLeave, handleDrop, handleDragOver, closeOverlay, handleItemClick, onDiscuss } = this.props;
+    const {
+      children,
+      hoverActive,
+      showMenu,
+      handleDragEnter,
+      handleDragLeave,
+      handleDrop,
+      handleDragOver,
+      closeOverlay,
+      handleItemClick,
+      onDiscuss
+    } = this.props;
+
     return (
       <SW.Wrapper
       onDragEnter={handleDragEnter}
