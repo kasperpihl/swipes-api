@@ -16,7 +16,7 @@ export default styleSheet('DragAndDrop', {
     position: 'absolute',
     top: '0',
     left: '0',
-    _size: '100%',
+    _size: ['100vw', '100vh'],
     pointerEvents: 'none',
     visibility: 'hidden',
     zIndex: '99999999999',

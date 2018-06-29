@@ -21,7 +21,7 @@ import Tooltip from 'src/react/app/tooltip/Tooltip';
 import Topbar from 'src/react/app/topbar/Topbar';
 import ContextMenu from 'src/react/app/context-menu/ContextMenu';
 import Gradient from 'src/react/app/gradient/Gradient';
-import DragAndDrop from 'src/react/components/drag-and-drop/DragAndDrop';
+import HOCDragAndDrop from 'src/react/components/drag-and-drop/HOCDragAndDrop';
 import 'src/react/global-styles/reset.scss';
 import 'src/react/global-styles/app.scss';
 
@@ -73,10 +73,10 @@ export default class extends PureComponent {
         <ContextMenu />
         <HOCAutoCompleting />
         <Tooltip />
-        <DragAndDrop>
+        <HOCDragAndDrop>
         <Topbar />
         {this.renderRoutes()}
-        </DragAndDrop>
+        </HOCDragAndDrop>
         <Route path="/" component={Trial} />
       </div>
     )

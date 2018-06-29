@@ -1,8 +1,10 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import Confirmation from 'src/react/context-menus/confirmation/Confirmation';
 import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
+import PostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
 import * as cs from 'swipes-core-js/selectors';
 import * as mainActions from '../main/mainActions';
+import * as navigationActions from '../navigation/navigationActions';
 
 export const confirm = (options, callback) => (d, getState) => {
   const isBrowserSupported = getState().getIn(['globals', 'isBrowserSupported']);
@@ -84,13 +86,13 @@ export const selectMilestone = (options, callback) => (d, getState) => {
 
   const defItems = [];
   defItems.push({ id: 'none', title: 'No plan' });
-  
+
   const allMilestones = () => defItems.concat(
     cs.milestones.getCurrent(getState()).map(m => resultForMilestone(m.get('id'))).toArray()
   );
 
-  const searchForMilestone = q => cs.milestones.searchCurrent(getState(), { 
-    searchString: q 
+  const searchForMilestone = q => cs.milestones.searchCurrent(getState(), {
+    searchString: q
   }).map(res => resultForMilestone(res.item.id));
 
   const delegate = {
@@ -140,6 +142,95 @@ export const chooseAttachmentType = (options) => (d, getState) => new Promise((r
     },
   };
   d(mainActions.contextMenu({
+    options,
+    component: TabMenu,
+    props: {
+      ...options,
+      delegate,
+      items,
+    },
+  }));
+})
+
+export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new Promise((resolve) => {
+
+  const primary = getState().getIn(['main', 'dragAndDrop', 'primary']);
+  const secondary = getState().getIn(['main', 'dragAndDrop', 'secondary']);
+
+  const items = [
+    primary.size ? {
+      id: 'primary',
+      title: 'Left side',
+      leftIcon: {icon: 'Note'},
+      subtitle: 'Attach to left side',
+    } : null,
+
+    secondary.size ? {
+      id: 'secondary',
+      title: 'Right side',
+      leftIcon: {icon: 'Note'},
+      subtitle: 'Attach to right side',
+    } : null,
+
+    {
+      id: 'discussion',
+      title: 'New discussion',
+      leftIcon: { icon: 'Note' },
+      subtitle: 'Create a new discussion'
+    },
+    {
+      id: 'ping',
+      title: 'New ping',
+      leftIcon: { icon: 'Note' },
+      subtitle: 'Create a new ping'
+    },
+
+  ].filter(i => !!i);
+
+  const delegate = {
+    onItemAction: (item) => {
+      dispatch(mainActions.contextMenu(null));
+      if(item.id === 'primary') {
+        primary.last()(files);
+      }
+      if(item.id === 'secondary') {
+        secondary.last()(files);
+      }
+      if(item.id === 'discussion') {
+        dispatch(navigationActions.set('primary',{
+          id: 'Discuss',
+          showTitleInCrumb: true,
+          title: 'Discuss',
+        }))
+        dispatch(mainActions.modal('primary',{
+          component: PostCreate,
+          title: 'Create Post',
+          position: 'center',
+        }))
+        setTimeout(() => {
+          const lastPrimary = getState().getIn(['main', 'dragAndDrop', 'primary']).last();
+          if(lastPrimary) {
+            lastPrimary(files);
+          }
+        }, 1)
+      }
+      if(item.id === 'ping') {
+        dispatch(navigationActions.set('primary',{
+          id: 'Discuss',
+          showTitleInCrumb: true,
+          title: 'Discuss',
+        }))
+        setTimeout(() => {
+          const lastPrimary = getState().getIn(['main', 'dragAndDrop', 'primary']).last();
+          if(lastPrimary) {
+            lastPrimary(files);
+          }
+        }, 100)
+      }
+      resolve(item);
+    },
+  };
+  dispatch(mainActions.contextMenu({
     options,
     component: TabMenu,
     props: {

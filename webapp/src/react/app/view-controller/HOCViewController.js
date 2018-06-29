@@ -64,7 +64,7 @@ export default class extends PureComponent {
     this._unmounted = true;
     window.removeEventListener('resize', this.bouncedUpdate);
   }
-  componentDidCatch(e) {
+  componentDidCatch(e) {
     console.log('hi', e);
   }
   onClose = () => {
@@ -112,7 +112,7 @@ export default class extends PureComponent {
     }
 
     let maxWidth = DEFAULT_MAX_WIDTH;
-    if(typeof View.maxWidth === 'function') {
+    if(typeof View.maxWidth === 'function'){
       maxWidth = View.maxWidth();
     }
     return Math.min(maxWidth, appWidth - spacing);
@@ -286,9 +286,10 @@ export default class extends PureComponent {
   }
 
   render() {
+    const target = 'primary';
     return (
       <div ref="controller" className="view-controller">
-        {this.renderViewControllers()}
+          {this.renderViewControllers()}
       </div>
     );
   }

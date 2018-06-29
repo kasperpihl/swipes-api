@@ -74,8 +74,10 @@ class PostCreate extends PureComponent {
           {this.renderAttachments()}
           <HOCAttachButton
             delegate={delegate}
-            sideLabel={!hasAttachments && 'Attach'}
-            compact={hasAttachments}
+            buttonProps={{
+              sideLabel: !hasAttachments && 'Attach',
+              compact: hasAttachments,
+            }}
           />
         </SW.AttachSection>
         <Button

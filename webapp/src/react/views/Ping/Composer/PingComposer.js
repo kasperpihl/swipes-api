@@ -44,7 +44,7 @@ export default class extends PureComponent {
     }
     this.input.focus();
   }
-  onAddAssignee = (id) => { 
+  onAddAssignee = (id) => {
     let { receivers } = this.state;
     if(!receivers.contains(id)) {
       this.setState({ receivers: receivers.push(id) });
@@ -110,7 +110,7 @@ export default class extends PureComponent {
             className="user-name-hover"
             key={i}
             onClick={this.onUserClickCached(u.get('id'))}>
-            <HOCAssigning 
+            <HOCAssigning
               assignees={[u.get('id')]}
               size={30}
             />
@@ -146,7 +146,7 @@ export default class extends PureComponent {
         <SW.Column none>
           <AttachButton
             delegate={this}
-            compact
+            buttonProps={{compact: true}}
           />
         </SW.Column>
         <SW.Column none hidden={!receivers.size}>

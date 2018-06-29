@@ -17,7 +17,28 @@ export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 export function modal(target, modal) {
   return { type: types.NAVIGATION_MODAL, payload: { modal, target } };
 }
+// ======================================================
+// DragAndDrop
+// ======================================================
+export function subscribeToDrop(target, handler) {
+  return {
+    type: types.SUBSCRIBE_TO_DROP,
+    payload: {
+      handler,
+      target
+    }
+  }
+}
 
+export function unsubscribeFromDrop(target, handler) {
+  return {
+    type: types.UNSUBSCRIBE_FROM_DROP,
+    payload: {
+      target,
+      handler
+    },
+  }
+}
 // ======================================================
 // Context Menu
 // ======================================================

@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
+import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
@@ -8,7 +9,9 @@ import Button from 'src/react/components/button/Button';
 import { fromJS } from 'immutable';
 import { EditorState, convertToRaw } from 'draft-js';
 import SW from './AttachButton.swiss';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
+@navWrapper
 @connect(state => ({
   myId: state.getIn(['me', 'id']),
 }), {
@@ -17,6 +20,8 @@ import SW from './AttachButton.swiss';
   createLink: ca.links.create,
   createNote: ca.notes.create,
   createFile: ca.files.create,
+  subscribeToDrop: mainActions.subscribeToDrop,
+  unsubscribeFromDrop: mainActions.unsubscribeFromDrop,
 })
 
 export default class extends PureComponent {
@@ -25,9 +30,21 @@ export default class extends PureComponent {
     this.state = {
       fileVal: '',
     };
+
     setupDelegate(this, 'onAddedAttachment', 'onAttachButtonCloseOverlay');
     setupLoading(this);
   }
+
+  componentDidMount() {
+    const { subscribeToDrop, target } = this.props;
+    subscribeToDrop(target, this.onDropFiles);
+  }
+
+  componentWillUnmount() {
+    const { unsubscribeFromDrop, target } = this.props;
+    unsubscribeFromDrop(target, this.onDropFiles);
+  }
+
   onChangeFiles = (e) => {
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
@@ -113,18 +130,16 @@ export default class extends PureComponent {
       }
     });
   }
+
+  onDropFiles = (files) => {
+    this.onUploadFiles(files);
+    console.log('Attached files', files);
+  }
+
   render() {
     const { fileVal } = this.state;
     const {
-      className,
-      delegate,
-      myId,
-      inputMenu,
-      chooseAttachmentType,
-      createLink,
-      createNote,
-      createFile,
-      ...rest,
+      buttonProps
     } = this.props;
 
     return (
@@ -133,7 +148,7 @@ export default class extends PureComponent {
           onClick={this.onChooseAttachment}
           {...this.getLoading('attach')}
           icon="Attach"
-          {...rest}
+          {...buttonProps}
         />
         <SW.HiddenInput
           value={fileVal}

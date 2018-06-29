@@ -50,7 +50,7 @@ export default class extends PureComponent {
         hasContent,
       });
     }
-    
+
   }
   onAddComment = () => {
     const { attachments } = this.state;
@@ -94,7 +94,7 @@ export default class extends PureComponent {
   onAttachButtonCloseOverlay() {
     this.textarea.focus();
   }
-  
+
   renderAttachments() {
     const { attachments } = this.state;
     if(!attachments.size) {
@@ -137,7 +137,7 @@ export default class extends PureComponent {
             />
             <HOCAttachButton
               delegate={this}
-              compact
+              buttonProps={{compact: true}}
             />
             <SW.SubmitButton
               onClick={this.onAddComment}

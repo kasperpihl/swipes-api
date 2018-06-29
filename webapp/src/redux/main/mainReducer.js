@@ -11,6 +11,11 @@ const initialState = fromJS({
     primary: null,
     secondary: null,
   },
+  dragAndDrop: {
+    global: [],
+    primary: [],
+    secondary: [],
+  },
 });
 
 export default function main(state = initialState, action) {
@@ -44,6 +49,16 @@ export default function main(state = initialState, action) {
       return state.setIn(['modals', payload.target], payload.modal || null);
     }
 
+    // ======================================================
+    // DragAndDrop
+    // ======================================================
+    case types.SUBSCRIBE_TO_DROP: {
+      return state.updateIn(['dragAndDrop', payload.target ||'global'], s => s.push(payload.handler));
+    }
+
+    case types.UNSUBSCRIBE_FROM_DROP: {
+      return state.updateIn(['dragAndDrop', payload.target ||'global'], s => s.filter(o => o !== payload.handler));
+    }
     // ======================================================
     // Context Menu
     // ======================================================
