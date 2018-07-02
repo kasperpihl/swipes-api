@@ -8,15 +8,13 @@ export default styleSheet('CompatibleHeader',{
     'center': {
       textAlign: 'center',
     },
-    '@media $maxH800': {
-      paddingTop: '21px',
-    }
-  },
-  TitleContainer: {
-    _size: ['100%', 'auto'],
+
     '@media $maxH800': {
       paddingTop: '21px',
     },
+  },
+  TitleContainer: {
+    _size: ['100%', 'auto'],
     '& h1': {
       _font: ['36px', '48px', '300'],
       color: '$sw1',

@@ -4,6 +4,10 @@ import Icon from 'Icon';
 export default styleSheet('Login', {
   Wrapper: {
     paddingTop: '30px',
+
+    '@media $max1600': {
+      padding: '0',
+    }
   },
 
   Illustration: {
@@ -27,7 +31,11 @@ export default styleSheet('Login', {
 
     '@media $max800': {
       marginTop: '30px',
-    }
+    },
+
+    '@media $max1600': {
+      marginTop: '0',
+    },
   },
 
   Footer: {
@@ -37,6 +45,10 @@ export default styleSheet('Login', {
 
     '@media $max800': {
       padding: '42px 0',
+    },
+
+    '@media $max1600': {
+      padding: '35px 0',
     },
   },
 
