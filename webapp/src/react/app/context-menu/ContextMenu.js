@@ -136,7 +136,6 @@ export default class ContextMenu extends PureComponent {
     const styles = { transform: '' };
     const ww = window.innerWidth;
     const wh = window.innerHeight;
-    console.log('wh', wh);
     const { boundingRect: bR } = options;
     const {
       alignX,
@@ -178,7 +177,6 @@ export default class ContextMenu extends PureComponent {
       styles.top = `${bR.top + exH}px`;
     }
 
-    console.log('styles', styles);
     return styles;
   }
   renderContextMenu(contextMenu) {

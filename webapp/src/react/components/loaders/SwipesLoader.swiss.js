@@ -18,7 +18,7 @@ export default styleSheet('SwipesLoader', {
 
     '@keyframes pulsateLoader': {
       '50%': {
-        opacity: '.5',
+        opacity: '0.5',
       },
     },
   },
