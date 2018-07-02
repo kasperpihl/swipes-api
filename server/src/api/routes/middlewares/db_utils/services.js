@@ -4,7 +4,7 @@ import {
   bool,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -26,7 +26,7 @@ const servicesGetAll = funcWrap([
         return service('hidden').eq(false).or(service('hidden').eq(!full_fetch));
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const getServiceByName = funcWrap([
   string.require(),
@@ -40,7 +40,7 @@ const getServiceByName = funcWrap([
     .nth(0)
     .default(null);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

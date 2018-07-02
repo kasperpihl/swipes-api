@@ -5,7 +5,7 @@ import {
   array,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -26,7 +26,7 @@ const dbUsersGetService = funcWrap([
       })
       .nth(0);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersRemoveService = funcWrap([
   string.require(),
@@ -47,7 +47,7 @@ const dbUsersRemoveService = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersAddSevice = funcWrap([
   object.as({
@@ -75,7 +75,7 @@ const dbUsersAddSevice = funcWrap([
     };
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersGetServiceWithAuth = funcWrap([
   object.as({
@@ -103,7 +103,7 @@ const dbUsersGetServiceWithAuth = funcWrap([
     .without([{ right: 'id' }, { right: 'title' }])
     .zip();
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersGetSingleWithOrganizations = funcWrap([
   object.as({
@@ -125,7 +125,7 @@ const dbUsersGetSingleWithOrganizations = funcWrap([
             .coerceTo('ARRAY'),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersGetByEmailWithFields = funcWrap([
   object.as({
@@ -145,7 +145,7 @@ const dbUsersGetByEmailWithFields = funcWrap([
     q = q.pluck(...fields);
   }
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersGetByEmailWithoutFields = funcWrap([
   object.as({
@@ -165,7 +165,7 @@ const dbUsersGetByEmailWithoutFields = funcWrap([
     q = q.without(fields);
   }
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersAddOrganization = funcWrap([
   object.as({
@@ -186,7 +186,7 @@ const dbUsersAddOrganization = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersCreate = funcWrap([
   object.as({
@@ -199,7 +199,7 @@ const dbUsersCreate = funcWrap([
 
   const q = r.table('users').insert(user, { returnChanges: true });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersActivateAfterSignUp = funcWrap([
   object.as({
@@ -221,7 +221,7 @@ const dbUsersActivateAfterSignUp = funcWrap([
     returnChanges: 'always',
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersConfirmEmail = funcWrap([
   object.as({
@@ -237,7 +237,7 @@ const dbUsersConfirmEmail = funcWrap([
     updated_at: r.now(),
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersAddPendingOrganization = funcWrap([
   object.as({
@@ -269,7 +269,7 @@ const dbUsersAddPendingOrganization = funcWrap([
       });
     });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersGetByEmail = funcWrap([
   object.as({
@@ -282,7 +282,7 @@ const dbUsersGetByEmail = funcWrap([
 
   const q = r.table('users').getAll(email, { index: 'email' });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersResetPassword = funcWrap([
   object.as({
@@ -299,7 +299,7 @@ const dbUsersResetPassword = funcWrap([
     updated_at: r.now(),
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbUsersGetByIdWithFields = funcWrap([
   object.as({
@@ -317,7 +317,7 @@ const dbUsersGetByIdWithFields = funcWrap([
     q = q.pluck(...fields);
   }
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

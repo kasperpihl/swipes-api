@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
 import _ from 'underscore';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const types = {
   added: 'service_added',
@@ -58,7 +58,7 @@ const userServices = (socket, userId) => {
       })('services')
       .changes();
 
-  db.rethinkQuery(listenQ, { feed: true, socket })
+  dbRunQuery(listenQ, { feed: true, socket })
     .then((cursor) => {
       cursor.each((err, row) => {
         if (err) {

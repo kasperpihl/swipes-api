@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 import Promise from 'bluebird';
 import contentDisposition from 'content-disposition';
-import db from '../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import mapApiMethod from './api_map';
 import {
   createClient,
@@ -45,7 +45,7 @@ const refreshAccessToken = (auth_data, user) => {
             }),
           });
 
-        db.rethinkQuery(query)
+        dbRunQuery(query)
         .then(() => {
           resolve(newAuthData);
         })

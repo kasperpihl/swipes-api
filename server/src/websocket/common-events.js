@@ -5,7 +5,7 @@
 
 import r from 'rethinkdb';
 import _ from 'underscore';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 // Add types of events to the specialEvents array
 // that are not common and we want to ignore them here
@@ -19,7 +19,7 @@ const commonEvents = (socket, userId) => {
       })
       .changes();
 
-  db.rethinkQuery(listenQ, { feed: true, socket })
+  dbRunQuery(listenQ, { feed: true, socket })
     .then((cursor) => {
       cursor.each((err, row) => {
         if (err) {

@@ -1,14 +1,13 @@
 import r from 'rethinkdb';
-import Promise from 'bluebird';
 import createClient from './utils';
 import mapApiMethod from './api_map';
-import db from '../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../middlewares/swipes-error';
 
 const refreshAccessToken = (auth_data, user) => {
-  return new Promise((resolve, reject) => {
+  return Promise((resolve, reject) => {
     const now = new Date().getTime() / 1000;
     const expires_in = auth_data.expires_in - 30; // 30 seconds margin of error
     const ts_last_token = auth_data.ts_last_token;
@@ -41,7 +40,7 @@ const refreshAccessToken = (auth_data, user) => {
               }),
             });
 
-          return db.rethinkQuery(query);
+          return dbRunQuery(query);
         })
         .then(() => {
           resolve(accessToken);

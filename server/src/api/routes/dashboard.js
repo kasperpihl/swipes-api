@@ -1,6 +1,6 @@
 import express from 'express';
 import r from 'rethinkdb';
-import db from '../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -14,7 +14,7 @@ notAuthed.all('/dashboardd_awesome_cat_rainbow',
       sw.table('organizations').count(),
       sw.table('goals').count(),
       sw.table('milestones').count(),
-    ].map(q => db.rethinkQuery(q));
+    ].map(q => dbRunQuery(q));
 
     Promise.all(promises).then((results) => {
       res.json({
@@ -32,7 +32,7 @@ notAuthed.all('/update_attachments',
   (req, res, next) => {
     const q = r.table('goals').count();
 
-    db.rethinkQuery(q)
+    dbRunQuery(q)
     .then((count) => {
       res.locals.count = count;
 
@@ -53,7 +53,7 @@ notAuthed.all('/update_attachments',
           .slice((pageNum - 1) * itemsPerPage, pageNum * itemsPerPage)
           .pluck('attachments', 'attachment_order', 'id');
 
-      promises.push(db.rethinkQuery(q));
+      promises.push(dbRunQuery(q));
 
       pageNum += 1;
       pages -= 1;
@@ -134,7 +134,7 @@ notAuthed.all('/update_attachments',
         nonAtomic: true,
       });
 
-      promises.push(db.rethinkQuery(q));
+      promises.push(dbRunQuery(q));
     });
 
     Promise.all(promises)

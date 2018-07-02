@@ -4,7 +4,7 @@ import {
   object,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -20,7 +20,7 @@ const dbOnboardingGetAll = funcWrap([
     return item('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOnboardingAddSingleNotification = funcWrap([
   object.as({
@@ -33,7 +33,7 @@ const dbOnboardingAddSingleNotification = funcWrap([
 
   const q = r.table('notifications').insert(notification);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

@@ -4,7 +4,7 @@ import {
   object,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -20,7 +20,7 @@ const dbWaysGetSingle = funcWrap([
 
   const q = r.table('ways').get(way_id);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbWaysInsertSingle = funcWrap([
   object.as({
@@ -33,7 +33,7 @@ const dbWaysInsertSingle = funcWrap([
 
   const q = r.table('ways').insert(way);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbWaysUpdateSingle = funcWrap([
   object.as({
@@ -49,7 +49,7 @@ const dbWaysUpdateSingle = funcWrap([
 
   const q = r.table('ways').get(id).update(properties);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

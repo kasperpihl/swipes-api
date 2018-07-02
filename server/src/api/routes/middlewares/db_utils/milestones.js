@@ -7,7 +7,7 @@ import {
   any,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -43,7 +43,7 @@ const dbMilestonesGetNoClosedByUserId = funcWrap([
       });
     });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbMilestonesInsertSingle = funcWrap([
   object.as({
@@ -56,7 +56,7 @@ const dbMilestonesInsertSingle = funcWrap([
 
   const q = r.table('milestones').insert(milestone);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbMilestonesUpdateSingle = funcWrap([
   object.as({
@@ -72,7 +72,7 @@ const dbMilestonesUpdateSingle = funcWrap([
 
   const q = r.table('milestones').get(milestone_id).update(properties);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbMilestonesAddGoal = funcWrap([
   object.as({
@@ -106,7 +106,7 @@ const dbMilestonesAddGoal = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbMilestonesRemoveGoal = funcWrap([
   object.as({
@@ -132,7 +132,7 @@ const dbMilestonesRemoveGoal = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbMilestonesMigrateIncompleteGoals = funcWrap([
   object.as({
@@ -171,7 +171,7 @@ const dbMilestonesMigrateIncompleteGoals = funcWrap([
         });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbMilestonesGoalsReorder = funcWrap([
   object.as({
@@ -214,7 +214,7 @@ const dbMilestonesGoalsReorder = funcWrap([
         returnChanges: 'always',
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbMilestonesDelete = funcWrap([
   object.as({
@@ -246,7 +246,7 @@ const dbMilestonesDelete = funcWrap([
           });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

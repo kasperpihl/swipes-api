@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const updateCursors = ({ user_id, accountId, cursors }) => {
   const query = r.table('users').get(user_id)
@@ -15,7 +15,7 @@ const updateCursors = ({ user_id, accountId, cursors }) => {
         ),
     });
 
-  db.rethinkQuery(query)
+  dbRunQuery(query)
     .then(() => {
       console.log('Cursor updated!');
     })
@@ -36,7 +36,7 @@ const insertEvent = ({ user_id, eventData }) => {
 
   const query = r.table('events').insert(eventData);
 
-  db.rethinkQuery(query)
+  dbRunQuery(query)
     .then(() => {
       console.log('event inserted', eventData);
     })

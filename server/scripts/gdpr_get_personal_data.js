@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 // const dbConfig = null;
 // const dbConfig = {
@@ -29,7 +29,7 @@ const usersQ = r.table('users').get(user_id);
 
 console.log('Picking information!');
 
-db.rethinkQuery(usersQ, { dbConfig })
+dbRunQuery(usersQ, { dbConfig })
   .then((results) => {
     const {
       profile,

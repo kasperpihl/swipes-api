@@ -5,7 +5,7 @@ import {
   array,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -32,7 +32,7 @@ const dbNotesInsertWithConflictHandling = funcWrap([
         },
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbNotesInsertBatch = funcWrap([
   object.as({
@@ -45,7 +45,7 @@ const dbNotesInsertBatch = funcWrap([
 
   const q = r.table('notes').insert(notes);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbNotesGetSingle = funcWrap([
   object.as({
@@ -59,7 +59,7 @@ const dbNotesGetSingle = funcWrap([
 
   const q = r.db('swipes').table('notes').getAll([note_id, organization_id], { index: 'id_organization' });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbNotesGetMultiple = funcWrap([
   object.as({
@@ -82,7 +82,7 @@ const dbNotesGetMultiple = funcWrap([
 
   const q = r.db('swipes').table('notes').getAll(...compoundIndexArgs, { index: 'id_organization' });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

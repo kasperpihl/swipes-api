@@ -5,7 +5,7 @@ import {
   array,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   goalFullMoreStrict,
 } from '../../../validators';
@@ -24,7 +24,7 @@ const dbGoalsInsertSingle = funcWrap([
 
   const q = r.table('goals').insert(goal, { returnChanges: true });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbGoalsCompleteGoal = funcWrap([
   object.as({
@@ -64,7 +64,7 @@ const dbGoalsCompleteGoal = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbGoalsIncompleteGoal = funcWrap([
   object.as({
@@ -100,7 +100,7 @@ const dbGoalsIncompleteGoal = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbGoalsUpdateSingle = funcWrap([
   object.as({
@@ -121,7 +121,7 @@ const dbGoalsUpdateSingle = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbGoalsGetSingle = funcWrap([
   object.as({
@@ -134,7 +134,7 @@ const dbGoalsGetSingle = funcWrap([
 
   const q = r.table('goals').get(goal_id);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbGoalsCompleteStep = funcWrap([
   object.as({
@@ -194,7 +194,7 @@ const dbGoalsCompleteStep = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 const dbGoalsIncompleteStep = funcWrap([
@@ -241,7 +241,7 @@ const dbGoalsIncompleteStep = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbGoalsAppendWayToGoal = funcWrap([
   object.as({
@@ -274,7 +274,7 @@ const dbGoalsAppendWayToGoal = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbGoalsAssign = funcWrap([
   object.as({
@@ -309,7 +309,7 @@ const dbGoalsAssign = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

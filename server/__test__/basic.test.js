@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 import Promise from 'bluebird';
 import rp from 'request-promise';
-import db from '../db/';
+import dbRunQuery from 'src/utils/db/dbRunQuery'
 
 const rpap = rp.defaults({
   // baseUrl: 'https://staging.swipesapp.com/v1',
@@ -41,13 +41,13 @@ const clearDatabase = () => {
   const clearMilestonesQ = r.table('milestones').filter({ organization_id }).delete();
   const clearGoalsQ = r.table('goals').filter({ organization_id }).delete();
   const promises = [
-    db.rethinkQuery(clearUserQ),
-    db.rethinkQuery(clearUser2Q),
-    db.rethinkQuery(clearUser3Q),
-    db.rethinkQuery(clearOrganizationQ),
-    db.rethinkQuery(clearPostsQ),
-    db.rethinkQuery(clearMilestonesQ),
-    db.rethinkQuery(clearGoalsQ),
+    dbRunQuery(clearUserQ),
+    dbRunQuery(clearUser2Q),
+    dbRunQuery(clearUser3Q),
+    dbRunQuery(clearOrganizationQ),
+    dbRunQuery(clearPostsQ),
+    dbRunQuery(clearMilestonesQ),
+    dbRunQuery(clearGoalsQ),
   ];
 
   console.log('CLEANING');

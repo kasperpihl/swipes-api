@@ -2,7 +2,7 @@
 
 import r from 'rethinkdb';
 import Promise from 'bluebird';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 // const dbConfig = null;
 const dbConfig = {
@@ -32,14 +32,14 @@ const postsQ = r.table('posts').getAll(organization_id, { index: 'organization_i
 console.log('Picking information!');
 
 const promiseArrayQ = [
-  db.rethinkQuery(organizationQ),
-  db.rethinkQuery(usersQ),
-  db.rethinkQuery(goalsQ),
-  db.rethinkQuery(filesQ),
-  db.rethinkQuery(milestonesQ),
-  db.rethinkQuery(notesQ),
-  db.rethinkQuery(waysQ),
-  db.rethinkQuery(postsQ),
+  dbRunQuery(organizationQ),
+  dbRunQuery(usersQ),
+  dbRunQuery(goalsQ),
+  dbRunQuery(filesQ),
+  dbRunQuery(milestonesQ),
+  dbRunQuery(notesQ),
+  dbRunQuery(waysQ),
+  dbRunQuery(postsQ),
 ];
 const link_ids = [];
 let links = [];
@@ -83,7 +83,7 @@ Promise.all(promiseArrayQ)
 
     const linksQ = r.table('links').getAll(...link_ids).coerceTo('ARRAY');
 
-    return db.rethinkQuery(linksQ);
+    return dbRunQuery(linksQ);
   })
   .then((linksRes) => {
     console.log(linksRes.length);
@@ -92,7 +92,7 @@ Promise.all(promiseArrayQ)
     const permissionsQ = [];
 
     links.forEach((link) => {
-      permissionsQ.push(db.rethinkQuery(r.table('links_permissions').filter({ link_id: link.checksum }).nth(0)));
+      permissionsQ.push(dbRunQuery(r.table('links_permissions').filter({ link_id: link.checksum }).nth(0)));
     });
 
     return Promise.all(permissionsQ);
@@ -115,14 +115,14 @@ Promise.all(promiseArrayQ)
     // const postsQ = r.table('posts').getAll(organization_id, { index: 'organization_id' }).delete();
 
     const promiseArrayQ = [
-      db.rethinkQuery(organizationQ, { dbConfig }),
-      db.rethinkQuery(usersQ, { dbConfig }),
-      db.rethinkQuery(goalsQ, { dbConfig }),
-      db.rethinkQuery(filesQ, { dbConfig }),
-      db.rethinkQuery(milestonesQ, { dbConfig }),
-      db.rethinkQuery(notesQ, { dbConfig }),
-      db.rethinkQuery(waysQ, { dbConfig }),
-      db.rethinkQuery(postsQ, { dbConfig }),
+      dbRunQuery(organizationQ, { dbConfig }),
+      dbRunQuery(usersQ, { dbConfig }),
+      dbRunQuery(goalsQ, { dbConfig }),
+      dbRunQuery(filesQ, { dbConfig }),
+      dbRunQuery(milestonesQ, { dbConfig }),
+      dbRunQuery(notesQ, { dbConfig }),
+      dbRunQuery(waysQ, { dbConfig }),
+      dbRunQuery(postsQ, { dbConfig }),
     ];
 
     return Promise.all(promiseArrayQ);
@@ -146,16 +146,16 @@ Promise.all(promiseArrayQ)
     });
 
     const promiseArrayQ = [
-      db.rethinkQuery(organizationQ),
-      db.rethinkQuery(usersQ),
-      db.rethinkQuery(goalsQ),
-      db.rethinkQuery(filesQ),
-      db.rethinkQuery(milestonesQ),
-      db.rethinkQuery(notesQ),
-      db.rethinkQuery(waysQ),
-      db.rethinkQuery(postsQ),
-      db.rethinkQuery(linksQ),
-      db.rethinkQuery(linksPermisstionsQ),
+      dbRunQuery(organizationQ),
+      dbRunQuery(usersQ),
+      dbRunQuery(goalsQ),
+      dbRunQuery(filesQ),
+      dbRunQuery(milestonesQ),
+      dbRunQuery(notesQ),
+      dbRunQuery(waysQ),
+      dbRunQuery(postsQ),
+      dbRunQuery(linksQ),
+      dbRunQuery(linksPermisstionsQ),
     ];
 
     return Promise.all(promiseArrayQ);

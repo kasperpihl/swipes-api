@@ -4,7 +4,7 @@ import {
   object,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -27,7 +27,7 @@ const dbMeUpdateSettings = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbMeUpdateProfile = funcWrap([
   object.as({
@@ -47,7 +47,7 @@ const dbMeUpdateProfile = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

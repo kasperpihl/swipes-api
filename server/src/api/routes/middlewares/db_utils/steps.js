@@ -5,7 +5,7 @@ import {
   object,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -40,7 +40,7 @@ const dbStepsAdd = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbStepsRename = funcWrap([
   object.as({
@@ -69,7 +69,7 @@ const dbStepsRename = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbStepsDelete = funcWrap([
   object.as({
@@ -136,7 +136,7 @@ const dbStepsDelete = funcWrap([
 
   console.log(q.toString());
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbStepsReorder = funcWrap([
   object.as({
@@ -181,7 +181,7 @@ const dbStepsReorder = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbStepsAssign = funcWrap([
   object.as({
@@ -213,7 +213,7 @@ const dbStepsAssign = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

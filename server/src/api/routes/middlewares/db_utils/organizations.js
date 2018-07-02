@@ -5,7 +5,7 @@ import {
   array,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -23,7 +23,7 @@ const dbOrganizationsCreate = funcWrap([
     returnChanges: 'always',
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsAddPendingUser = funcWrap([
   object.as({
@@ -45,7 +45,7 @@ const dbOrganizationsAddPendingUser = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsGetInfoFromInvitationToken = funcWrap([
   object.as({
@@ -69,7 +69,7 @@ const dbOrganizationsGetInfoFromInvitationToken = funcWrap([
         });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsGetSingle = funcWrap([
   object.as({
@@ -82,7 +82,7 @@ const dbOrganizationsGetSingle = funcWrap([
 
   const q = r.table('organizations').get(organization_id);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsPromoteToAdmin = funcWrap([
   object.as({
@@ -104,7 +104,7 @@ const dbOrganizationsPromoteToAdmin = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsDemoteAnAdmin = funcWrap([
   object.as({
@@ -126,7 +126,7 @@ const dbOrganizationsDemoteAnAdmin = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsTransferOwnership = funcWrap([
   object.as({
@@ -150,7 +150,7 @@ const dbOrganizationsTransferOwnership = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsDisableUser = funcWrap([
   object.as({
@@ -184,7 +184,7 @@ const dbOrganizationsDisableUser = funcWrap([
         });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsDisableAllUsers = funcWrap([
   object.as({
@@ -218,7 +218,7 @@ const dbOrganizationsDisableAllUsers = funcWrap([
           });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsActivateUser = funcWrap([
   object.as({
@@ -242,7 +242,7 @@ const dbOrganizationsActivateUser = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsEnableUser = funcWrap([
   object.as({
@@ -275,7 +275,7 @@ const dbOrganizationsEnableUser = funcWrap([
         });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsUpdateStripeCustomerIdAndPlan = funcWrap([
   object.as({
@@ -299,7 +299,7 @@ const dbOrganizationsUpdateStripeCustomerIdAndPlan = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsUpdateStripeSubscriptionId = funcWrap([
   object.as({
@@ -321,7 +321,7 @@ const dbOrganizationsUpdateStripeSubscriptionId = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsUpdateStripeSubscriptionPlan = funcWrap([
   object.as({
@@ -343,7 +343,7 @@ const dbOrganizationsUpdateStripeSubscriptionPlan = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsMilestoneReorder = funcWrap([
   object.as({
@@ -381,7 +381,7 @@ const dbOrganizationsMilestoneReorder = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsMilestoneAdd = funcWrap([
   object.as({
@@ -403,7 +403,7 @@ const dbOrganizationsMilestoneAdd = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbOrganizationsMilestoneRemove = funcWrap([
   object.as({
@@ -425,7 +425,7 @@ const dbOrganizationsMilestoneRemove = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

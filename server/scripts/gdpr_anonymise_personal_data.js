@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 import aws from 'aws-sdk';
 import config from 'config';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 // const dbConfig = null;
 // const dbConfig = {
@@ -54,7 +54,7 @@ const usersUpdateQ = r.table('users').get(user_id).update({
   },
 });
 
-db.rethinkQuery(usersQ, { dbConfig })
+dbRunQuery(usersQ, { dbConfig })
   .then((results) => {
     const {
       profile,
@@ -75,7 +75,7 @@ db.rethinkQuery(usersQ, { dbConfig })
     return Promise.all(s3PromiseArray);
   })
   .then(() => {
-    return db.rethinkQuery(usersUpdateQ, { dbConfig });
+    return dbRunQuery(usersUpdateQ, { dbConfig });
   })
   .then(() => {
     console.log('Done!');

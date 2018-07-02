@@ -1,7 +1,1 @@
-import {
-  preview,
-} from './preview';
-
-export {
-  preview,
-};
+export { default as preview } from './preview';

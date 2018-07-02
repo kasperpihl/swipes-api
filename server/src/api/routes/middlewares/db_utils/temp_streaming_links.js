@@ -4,7 +4,7 @@ import {
   object,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -22,7 +22,7 @@ const dbCreateTempStreamingLink = funcWrap([
 
   const q = r.table('temp_streaming_links').insert(insert_doc, { returnChanges: 'always' });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 const dbGetSingleTempStreamingLink = funcWrap([
@@ -36,7 +36,7 @@ const dbGetSingleTempStreamingLink = funcWrap([
 
   const q = r.table('temp_streaming_links').get(id);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

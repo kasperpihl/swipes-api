@@ -4,7 +4,7 @@ import {
   object,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -23,7 +23,7 @@ const dbFilesGetSingle = funcWrap([
       .table('files')
       .get(id);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbFilesAdd = funcWrap([
   object.as({
@@ -54,7 +54,7 @@ const dbFilesAdd = funcWrap([
         returnChanges: true,
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

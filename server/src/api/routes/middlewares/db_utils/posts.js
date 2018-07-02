@@ -5,7 +5,7 @@ import {
   array,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -21,7 +21,7 @@ const dbPostsInsertSingle = funcWrap([
 
   const q = r.table('posts').insert(post);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 const dbPostsEditSingle = funcWrap([
@@ -49,7 +49,7 @@ const dbPostsEditSingle = funcWrap([
     returnChanges: true,
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 const dbPostsFollow = funcWrap([
@@ -67,7 +67,7 @@ const dbPostsFollow = funcWrap([
     updated_at: r.now(),
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 const dbPostsUnfollow = funcWrap([
@@ -85,7 +85,7 @@ const dbPostsUnfollow = funcWrap([
     updated_at: r.now(),
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 const dbPostsArchiveSingle = funcWrap([
@@ -102,7 +102,7 @@ const dbPostsArchiveSingle = funcWrap([
     updated_at: r.now(),
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbPostsAddComment = funcWrap([
   object.as({
@@ -129,7 +129,7 @@ const dbPostsAddComment = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbPostsEditComment = funcWrap([
   object.as({
@@ -162,7 +162,7 @@ const dbPostsEditComment = funcWrap([
     returnChanges: true,
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbPostsArchiveComment = funcWrap([
   object.as({
@@ -190,7 +190,7 @@ const dbPostsArchiveComment = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 const dbPostsAddReaction = funcWrap([
@@ -212,7 +212,7 @@ const dbPostsAddReaction = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbPostsRemoveReaction = funcWrap([
   object.as({
@@ -232,7 +232,7 @@ const dbPostsRemoveReaction = funcWrap([
         updated_at: r.now(),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbPostsCommentAddReaction = funcWrap([
   object.as({
@@ -262,7 +262,7 @@ const dbPostsCommentAddReaction = funcWrap([
         });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbPostsCommentRemoveReaction = funcWrap([
   object.as({
@@ -289,7 +289,7 @@ const dbPostsCommentRemoveReaction = funcWrap([
         });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

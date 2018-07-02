@@ -10,7 +10,7 @@ import {
 import {
   valLocals,
 } from '../../utils';
-import db from '../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import * as services from '../../services';
 
 const xendoConfig = config.get('xendo');
@@ -22,7 +22,7 @@ const xendoUserCredentials = valLocals('xendoUserCredentials', {
   } = res.locals;
   const query = r.table('users').get(user_id);
 
-  db.rethinkQuery(query)
+  dbRunQuery(query)
     .then((result) => {
       if (!result) {
         return next('Invalid user_id :/');
@@ -107,7 +107,7 @@ const xendoSearchMapResults = valLocals('xendoSearchMapResults', {
       })
       .coerceTo('object');
 
-  db.rethinkQuery(xendoServicesQ)
+  dbRunQuery(xendoServicesQ)
     .then((userServices) => {
       const mappedResults = result.response.docs.filter((doc) => {
         return userServices[doc.service_id] !== undefined;

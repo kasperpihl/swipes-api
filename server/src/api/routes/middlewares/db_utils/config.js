@@ -1,10 +1,10 @@
 import r from 'rethinkdb';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const dbConfigGet = () => {
   const q = r.table('config');
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 };
 
 export {

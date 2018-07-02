@@ -6,7 +6,7 @@ import {
   array,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -24,7 +24,7 @@ const findLinkPermissionsById = funcWrap([
       .eqJoin('link_id', r.table('links'))
       .zip();
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const findLinksFromIds = funcWrap([
   string.require(),
@@ -43,7 +43,7 @@ const findLinksFromIds = funcWrap([
       }))
       .zip()
       .without('permission', 'checksum', 'user_id');
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const addPermissionsToALink = funcWrap([
   object.as({
@@ -67,7 +67,7 @@ const addPermissionsToALink = funcWrap([
     returnChanges: true,
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const addPermissionsToALinks = funcWrap([
   object.as({
@@ -94,7 +94,7 @@ const addPermissionsToALinks = funcWrap([
     returnChanges: true,
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const createLink = funcWrap([
   object.as({
@@ -128,7 +128,7 @@ const createLink = funcWrap([
         ),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const createLinkBatch = funcWrap([
   object.as({
@@ -152,7 +152,7 @@ const createLinkBatch = funcWrap([
         returnChanges: 'always',
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

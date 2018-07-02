@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const notes = (socket, userId) => {
   const organizationIdQ =
@@ -8,7 +8,7 @@ const notes = (socket, userId) => {
       .get(userId)('organizations')
       .nth(0);
 
-  db.rethinkQuery(organizationIdQ)
+  dbRunQuery(organizationIdQ)
     .then((organization_id) => {
       const q =
         r.db('swipes')
@@ -16,7 +16,7 @@ const notes = (socket, userId) => {
           .getAll(organization_id, { index: 'organization_id' })
           .changes();
 
-      db.rethinkQuery(q, { feed: true, socket })
+      dbRunQuery(q, { feed: true, socket })
         .then((cursor) => {
           cursor.each((err, row) => {
             if (err) {

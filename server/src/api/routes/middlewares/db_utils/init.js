@@ -4,7 +4,7 @@ import {
   bool,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -161,7 +161,7 @@ const dbInit = funcWrap([
         });
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbInitWithoutOrganization = funcWrap([
   string.require(),
@@ -182,7 +182,7 @@ const dbInitWithoutOrganization = funcWrap([
             .coerceTo('ARRAY'),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

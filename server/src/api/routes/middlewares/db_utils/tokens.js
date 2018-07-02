@@ -4,7 +4,7 @@ import {
   object,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -22,7 +22,7 @@ const dbCheckToken = funcWrap([
   // It's a query with compoud index from user_id, token, revoked
   const q = r.table('tokens').getAll([user_id, token, false], { index: 'check_token' });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbTokensRevoke = funcWrap([
   object.as({
@@ -40,7 +40,7 @@ const dbTokensRevoke = funcWrap([
       .getAll([user_id, token, false], { index: 'check_token' })
       .update({ revoked: true });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbTokensInsertSingle = funcWrap([
   object.as({
@@ -64,7 +64,7 @@ const dbTokensInsertSingle = funcWrap([
     ...tokenInfo,
   });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 const dbTokensGetByUserId = funcWrap([
   object.as({
@@ -81,7 +81,7 @@ const dbTokensGetByUserId = funcWrap([
       .filter({ revoked: false })
       .without('token');
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {

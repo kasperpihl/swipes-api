@@ -3,7 +3,7 @@ import {
   object,
   funcWrap,
 } from 'valjs';
-import db from '../../../../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   SwipesError,
 } from '../../../../middlewares/swipes-error';
@@ -19,7 +19,7 @@ const commonMultipleEvents = funcWrap([
 
   const q = r.table('events_multiple').insert(objToInsert);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 });
 
 export {
