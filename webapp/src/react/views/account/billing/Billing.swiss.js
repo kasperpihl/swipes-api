@@ -201,4 +201,17 @@ export default styleSheet('Billing', {
     textAlign: 'left',
     marginTop: '20px',
   },
+
+  Link: {
+    _el: 'a',
+
+    '&:visited': {
+      color: '$blue',
+    },
+
+    '&:hover': {
+      textDecoration: 'underline',
+      cursor: 'pointer',
+    },
+  },
 })

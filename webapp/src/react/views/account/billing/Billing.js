@@ -121,7 +121,7 @@ class Billing extends PureComponent {
           <SW.CardSectionSubtitle>
             Your subscription will automatically renew every month. You can always cancel your account by writing to us on help@swipesapp.com.
             <br/><br/>
-            By Clicking the 'Submit Payment' button above, you are agreeing to our Terms of Service.
+            By Clicking the 'Submit Payment' button above, you are agreeing to our <SW.Link href="https://s3.amazonaws.com/cdn.swipesapp.com/downloads/Policies.pdf">Terms of Service</SW.Link>.
           </SW.CardSectionSubtitle>
           <SW.SubmitButton
             {...getLoading('submit')}
