@@ -23,7 +23,7 @@ const auth = (token) => {
   return false;
 };
 
-const websocketStart = (server) => {
+export default (server) => {
   const WebSocketServer = ws.Server;
   const wss = new WebSocketServer({ server, path: '/ws' });
 
@@ -73,5 +73,3 @@ const websocketStart = (server) => {
 
   console.log('ws server is online');
 };
-
-export { websocketStart as default };

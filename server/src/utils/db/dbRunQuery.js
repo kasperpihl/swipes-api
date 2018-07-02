@@ -7,7 +7,7 @@ const isCursor = (obj) => {
   return obj != null && obj._conn != null;
 };
 const handleCursors = (results) => {
-  return Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (isCursor(results)) {
       return results.toArray()
         .then((array) => {
@@ -31,7 +31,7 @@ const handleCursors = (results) => {
   // feed: true/false (to handle change feeds - don't close the connection)
   // returnConnection: return the cursor and the connection in an array
   // dbConfig: pass a config object for connection to the db
-export default (query, options = {}) => Promise((resolve, reject) => {
+export default (query, options = {}) => new Promise((resolve, reject) => {
   let conn;
 
   if (options.dbConfig) {

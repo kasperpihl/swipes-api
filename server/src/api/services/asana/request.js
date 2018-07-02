@@ -7,7 +7,7 @@ import {
 } from '../../../middlewares/swipes-error';
 
 const refreshAccessToken = (auth_data, user) => {
-  return Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const now = new Date().getTime() / 1000;
     const expires_in = auth_data.expires_in - 30; // 30 seconds margin of error
     const ts_last_token = auth_data.ts_last_token;

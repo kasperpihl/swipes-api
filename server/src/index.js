@@ -19,7 +19,7 @@ import {
 import * as routes from './api/routes';
 import endpoints from './endpoints/endpoints';
 
-import logger from './logger';
+import logger from 'src/utils/logger';
 
 const env = config.get('env');
 
