@@ -6,9 +6,7 @@ import {
   funcWrap,
 } from 'valjs';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
-import {
-  SwipesError,
-} from '../../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const dbAttachmentsAdd = funcWrap([
   object.as({

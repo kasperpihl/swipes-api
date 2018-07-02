@@ -2,9 +2,7 @@ import config from 'config';
 import randomstring from 'randomstring';
 import valjs, { string, func, object, array, any } from 'valjs';
 import jwt from 'jwt-simple';
-import {
-  SwipesError,
-} from '../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const getDownloadLinks = () => {
   // if (config.get('env') === 'staging') {

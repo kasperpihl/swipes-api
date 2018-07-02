@@ -1,10 +1,6 @@
-import {
-  version,
-} from '../../package.json';
+import { version } from '../../package.json';
 
-import {
-  SwipesError,
-} from './swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 import {
   getDownloadLinks,
 } from '../api/utils';
@@ -63,7 +59,7 @@ const makeUpdateHandler = (res, next) => {
 }
 
 
-const checkForUpdates = (req, res, next) => {
+export default (req, res, next) => {
   const { versions } = res.locals.config;
 
   const handleUpdate = makeUpdateHandler(res, next);
@@ -122,5 +118,3 @@ const checkForUpdates = (req, res, next) => {
 
   return handleUpdate.next();
 };
-
-export default checkForUpdates;

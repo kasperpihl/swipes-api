@@ -9,9 +9,7 @@ import dbRunQuery from 'src/utils/db/dbRunQuery';
 import {
   goalFullMoreStrict,
 } from '../../../validators';
-import {
-  SwipesError,
-} from '../../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const dbGoalsInsertSingle = funcWrap([
   object.as({

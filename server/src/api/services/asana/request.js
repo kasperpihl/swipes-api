@@ -2,9 +2,7 @@ import r from 'rethinkdb';
 import createClient from './utils';
 import mapApiMethod from './api_map';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const refreshAccessToken = (auth_data, user) => {
   return new Promise((resolve, reject) => {

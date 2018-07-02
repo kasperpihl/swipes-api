@@ -1,4 +1,4 @@
-const handleJsonError = (err, req, res, next) => {
+export default (err, req, res, next) => {
   if (err) {
     // T_TODO log this one to cloud watch
     console.log(err);
@@ -7,5 +7,3 @@ const handleJsonError = (err, req, res, next) => {
     next();
   }
 };
-
-export default handleJsonError;

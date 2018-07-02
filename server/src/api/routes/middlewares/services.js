@@ -10,9 +10,7 @@ import {
   dbUsersAddSevice,
   dbUsersGetServiceWithAuth,
 } from './db_utils/users';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 import {
   valLocals,
 } from '../../utils';

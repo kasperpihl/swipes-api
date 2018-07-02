@@ -2,9 +2,7 @@ import mapApiMethod from './api_map';
 import {
   createClient,
 } from './utils';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const request = ({ auth_data, method, params = {} }, callback) => {
   const [url, username, password] = auth_data.access_token.split('|');

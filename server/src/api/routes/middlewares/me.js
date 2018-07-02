@@ -24,9 +24,7 @@ import {
   createTokens,
   parseToken,
 } from '../../utils';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const s3Config = config.get('awsS3');
 

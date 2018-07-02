@@ -9,9 +9,7 @@ import {
   valLocals,
   parseToken,
 } from '../../utils';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const tokensGetByUserId = valLocals('tokensGetByUserId', {
   user_id: string.require(),

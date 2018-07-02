@@ -5,20 +5,18 @@ import {
   valLocals,
 } from '../api/utils';
 
-const getConfig = valLocals('getConfig', {}, (req, res, next, setLocals) => {
+export default (req, res, next) => {
   const config = {};
   dbConfigGet().then((results) => {
     results.forEach(({ id, value }) => {
       config[id] = value;
     })
-    setLocals({
-      config,
-    });
+    res.locals.config = config;
 
     return next();
   }).catch((err) => {
     return next(err);
   });
-});
+};
 
 export default getConfig;

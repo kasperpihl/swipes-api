@@ -27,9 +27,7 @@ import {
   generateSlackLikeId,
   valLocals,
 } from '../../utils';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const goalsCreate = valLocals('goalsCreate', {
   user_id: string.require(),

@@ -1,8 +1,6 @@
 import config from 'config';
 import google from 'googleapis';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const googleConfig = config.get('google');
 const createClient = () => {

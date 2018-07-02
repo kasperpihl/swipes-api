@@ -8,9 +8,7 @@ import {
 import {
   generateSlackLikeId,
 } from '../../utils';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 
 const attachmentsCreateAttachment = funcWrap([
   object.as({

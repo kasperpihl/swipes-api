@@ -1,6 +1,4 @@
-import SwipesError from './swipes-error';
-
-const swipesErrorMiddleware = (err, req, res, next) => {
+export default (err, req, res, next) => {
   if (typeof err === 'object' && err.name === 'SwipesError') {
     if (typeof err.extra === 'string') {
       err.extra = {
@@ -15,9 +13,4 @@ const swipesErrorMiddleware = (err, req, res, next) => {
   }
 
   return next(err);
-};
-
-export {
-  swipesErrorMiddleware,
-  SwipesError,
 };

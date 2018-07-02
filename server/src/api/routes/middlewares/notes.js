@@ -6,9 +6,7 @@ import {
   array,
   any,
 } from 'valjs';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 import {
   dbNotesInsertWithConflictHandling,
   dbNotesGetSingle,

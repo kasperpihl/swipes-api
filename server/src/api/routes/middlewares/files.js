@@ -8,9 +8,7 @@ import {
 import {
   dbFilesAdd,
 } from './db_utils/files';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 import {
   valLocals,
   generateSlackLikeId,

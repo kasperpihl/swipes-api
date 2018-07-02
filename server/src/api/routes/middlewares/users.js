@@ -16,9 +16,7 @@ import {
   createTokens,
 } from '../../utils';
 import * as services from '../../services';
-import {
-  SwipesError,
-} from '../../../middlewares/swipes-error';
+import SwipesError from 'src/utils/SwipesError';
 import {
   dbUsersGetService,
   dbUsersRemoveService,
