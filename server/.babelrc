@@ -3,8 +3,16 @@
     "es2015"
   ],
   "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["."],
+        "alias": {
+          "src": "./src"
+        }
+      }
+    ],
     "transform-object-rest-spread",
-    // "transform-async-to-generator",
     ["transform-runtime", {
       "polyfill": false,
       "regenerator": true
