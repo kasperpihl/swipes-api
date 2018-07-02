@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { setupDelegate } from 'react-delegate';
 import Icon from 'Icon';
-
-import './styles/header-title.scss';
+import SW from './HOCHeaderTitle.swiss';
 
 export default class HOCHeaderTitle extends Component {
   constructor(props) {
@@ -26,32 +25,31 @@ export default class HOCHeaderTitle extends Component {
     } = this.props;
 
     return (
-      <input
+      <SW.Input
         type="text"
         ref="input"
         {...rest}
-        className="header-title__input"
         key="header-input"
       />
     );
   }
- 
+
   renderSubtitle() {
     const { subtitle } = this.props;
 
     if (!subtitle) return undefined;
 
-    return <div className="header-title__subtitle">{subtitle}</div>;
+    return <SW.Subtitle>{subtitle}</SW.Subtitle>;
 
   }
   renderTitle() {
     const { title, subtitleElement } = this.props;
 
     return (
-      <div className="header-title__title" key="header-title" onClick={this.onTitleClick}>
+      <SW.Title key="header-title" onClick={this.onTitleClick}>
         {title}
         {this.renderSubtitle()}
-      </div>
+      </SW.Title>
     );
   }
   renderContent() {
@@ -64,24 +62,15 @@ export default class HOCHeaderTitle extends Component {
     return this.renderTitle();
   }
   render() {
-    const { children, subtitle, border} = this.props;
-    let className = 'header-title';
-
-    if (!subtitle) {
-      className += ' header-title--no-subtitle';
-    }
-
-    if (border) {
-      className += ' header-title--border';
-    }
+    const { children, subtitle, border } = this.props;
 
     return (
-      <div className={className}>
+      <SW.Wrapper noSubtitle={!subtitle ? true : undefined} Border={border ? true : undefined}>
         {this.renderContent()}
-        <div className="header-title__actions">
+        <SW.Actions>
           {children}
-        </div>
-      </div>
+        </SW.Actions>
+      </SW.Wrapper>
     );
   }
 }
