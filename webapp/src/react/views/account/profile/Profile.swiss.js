@@ -39,6 +39,7 @@ export default styleSheet('Profile', {
 
   Picture: {
     _el: 'img',
+    _size: ['72px'],
   },
 
   OverlaySVG: {
@@ -81,7 +82,7 @@ export default styleSheet('Profile', {
   HeaderLoading: {
     _size: ['72px'],
     _flex: ['row', 'center', 'center'],
-    backgroundColor: 'rgba($blue, .6)',
+    backgroundColor: 'rgba($sw1, .6)',
     borderRadius: '50%',
     opacity: '0',
     pointerEvents: 'none',
@@ -300,6 +301,7 @@ export default styleSheet('Profile', {
   },
 
   LoadingIcon: {
+    _el: 'svg',
     _size: ['50px'],
     _svgColor: '$blue',
     animation: 'rotateSpinner 2s linear infinite',
