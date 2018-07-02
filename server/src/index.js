@@ -1,3 +1,4 @@
+import 'src/polyfills/asyncSupport';
 import http from 'http';
 import express from 'express';
 import config from 'config';

@@ -51,6 +51,7 @@ const makeUpdateHandler = (res, next) => {
       return next(new SwipesError(`${prefix}_required`, _locals));
     }
 
+    res.locals.__updatesAvailable = _locals;
     Object.entries(_locals).forEach(([key, value]) => {
       res.locals[key] = value;
     });
