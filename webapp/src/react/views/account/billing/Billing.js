@@ -4,7 +4,6 @@ import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import CardSection from './CardSection';
 import SW from './Billing.swiss';
 
 const style = {
@@ -119,6 +118,11 @@ class Billing extends PureComponent {
       <SW.PaymentSection>
         <SW.TopSection success={hasStripe ? true : ''}>
           <SW.CardSection label="Credit or debit card" />
+          <SW.CardSectionSubtitle>
+            Your subscription will automatically renew every month. You can always cancel your account by writing to us on help@swipesapp.com.
+            <br/><br/>
+            By Clicking the 'Submit Payment' button above, you are agreeing to our Terms of Service.
+          </SW.CardSectionSubtitle>
           <SW.SubmitButton
             {...getLoading('submit')}
             title="Submit Payment"

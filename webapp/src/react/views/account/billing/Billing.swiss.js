@@ -1,5 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/components/button/Button';
+import CardSection from './CardSection';
 
 export default styleSheet('Billing', {
 
@@ -186,5 +187,18 @@ export default styleSheet('Billing', {
     _el: 'span',
     backgroundColor: '$yellow !important',
     color: 'black',
+  },
+
+  CardSection: {
+    _el: CardSection,
+  },
+
+  CardSectionSubtitle: {
+    _el: 'p',
+    _font: ['12px', '18px'],
+    fontStyle: 'italic',
+    color: '$sw2',
+    textAlign: 'left',
+    marginTop: '20px',
   },
 })
