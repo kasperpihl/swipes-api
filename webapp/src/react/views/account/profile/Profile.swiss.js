@@ -42,7 +42,7 @@ export default styleSheet('Profile', {
   },
 
   OverlaySVG: {
-    _el: 'svg',
+    _el: Icon,
     _size: ['24px'],
     _svgColor: 'white',
     opacity: '0',
@@ -66,7 +66,7 @@ export default styleSheet('Profile', {
   HeaderFileInput: {
     _el: 'input',
     _size: ['144px'],
-    backgroundColor: '$blue',
+    backgroundColor: '$sw1',
     opacity: '0',
     position: 'absolute',
     top: '-50%',
