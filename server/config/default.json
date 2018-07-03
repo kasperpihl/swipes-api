@@ -6,15 +6,6 @@
     "user": "swipes",
     "password": "sw1py@staging"
   },
-  "xendo": {
-    "clientId": "99965e447026eb281dfc",
-    "clientSecret": "2ffed44df0b40c81845780baa74ba57cc0a6f06c",
-    "accessTokenEndpoint": "https://xen.do/oauth2/access_token",
-    "addUserEndpoint": "https://xen.do/api/v1/provisioning/user/",
-    "addServiceToUserEndpoint": "https://xen.do/api/v1/provisioning/service/",
-    "searchEndpoint": "https://xen.do/api/v1/search/",
-    "userServiceEndpoint": "https://xen.do/api/v1/user-service/"
-  },
   "dropbox": {
     "appId": "qhkw8akehpocer3",
     "appSecret": "gjocjcvalr8xena",
@@ -44,6 +35,16 @@
     "secretAccessKey": "ERXLaiG3AUZIPWQeOMQKcGjpcY7lnyXcGcfpaOhj",
     "queueHost": "http://localhost:6000"
   },
+  "mandrill": {
+    "apiKey": "HUs9tnqPhIvJgEXDFAXgrw"
+  },
+  "mailchimp": {
+    "apiKey": "ecf74584af1de945beeb71c8918ed5a7-us7"
+  },
+  "onesignal": {
+    "appId": "db8f2558-a836-4e95-b22b-089e8e85f6e9",
+    "restKey": "ZmE3NTUwNzQtMzI3Zi00YzI2LTg3Y2QtNWI5NWNlNzU1NGIy"
+  },
   "awsS3": {
     "accessKey": "AKIAJ7OR4Q4MA5VBPTKA",
     "secretKey": "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",
@@ -64,8 +65,10 @@
   },
   "valjs_debug": true,
   "origin": "http://localhost",
+  "host": "https://staging.swipesapp.com/",
   "webhooksHost": "https://swipesdev.ngrok.io/",
   "apiPort": 5000,
+  "queuePort": 6000,
   "clientPort" :3000,
   "protocol": "http://",
   "cors": "*",

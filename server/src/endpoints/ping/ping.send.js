@@ -3,18 +3,22 @@ import { object, array, string } from 'valjs';
 import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import endpointCreate from 'src/utils/endpointCreate';
+import queueSendJob from 'src/utils/queue/queueSendJob';
+
+const expectedInput = {
+  receivers: array.of(string).require(),
+  message: string.min(1).require(),
+  attachments: array.of(object),
+  organization_id: string.require(),
+};
+const expectedOutput = {
+  ping: object.require(),
+};
 
 export default endpointCreate({
   endpoint: '/ping.send',
-  expectedInput: {
-    receivers: array.of(string).require(),
-    message: string.min(1).require(),
-    attachments: array.of(object),
-    organization_id: string.require(),
-  },
-  expectedOutput: {
-    ping: object.require()
-  }
+  expectedInput,
+  expectedOutput,
 }, async (req, res, next) => {
   const input = res.locals.input;
 
@@ -45,6 +49,7 @@ export default endpointCreate({
   // Execute the ping_receivers query 
   const pingReceiverResult = await dbRunQuery(pingReceiverQuery);
 
+  await queueSendJob('ping_send', { hello: true });
   // Create response data.
   res.locals.responseData = {
     ping,

@@ -6,7 +6,7 @@ import commonEvents from './common-events';
 import commonEventsMultiple from './common-events-multiple';
 import {
   parseToken,
-} from '../api/utils';
+} from 'src/legacy-api/utils';
 
 const auth = (token) => {
   if (token) {
@@ -71,5 +71,5 @@ export default (server) => {
     commonEventsMultiple(socket, user_id);
   });
 
-  console.log('ws server is online');
+  console.log('websocket server is online');
 };

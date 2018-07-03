@@ -4,6 +4,9 @@ import valjs, {
 import SwipesError from 'src/utils/SwipesError';
 
 export default schema => (req, res, next) => {
+  if(res.locals.__skipValResponse) {
+    return next();
+  }
   let responseData = res.locals.responseData;
   if(typeof responseData !== 'object') {
     return next(new SwipesError(`${req.route.path} valResponseAndSend: expects res.locals.responseData to be set. (and an object)`));

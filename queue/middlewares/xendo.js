@@ -11,7 +11,7 @@ import {
 import {
   valLocals,
 } from '../utils';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const xendoConfig = config.get('xendo');
 const xendoRefreshSwipesToken = valLocals('xendoRefreshSwipesToken', {
@@ -45,7 +45,7 @@ const xendoRefreshSwipesToken = valLocals('xendoRefreshSwipesToken', {
         xendoSwipesCredentials: newConfig,
       });
 
-      return db.rethinkQuery(query);
+      return dbRunQuery(query);
     })
     .then(() => {
       return next();
@@ -57,7 +57,7 @@ const xendoRefreshSwipesToken = valLocals('xendoRefreshSwipesToken', {
 const xendoSwipesCredentials = (req, res, next) => {
   const query = r.table('config').getAll('xendo', { index: 'key' }).nth(0);
 
-  db.rethinkQuery(query)
+  dbRunQuery(query)
     .then((result) => {
       if (!result) {
         return next('Need to add credentials to the db!!!');
@@ -106,7 +106,7 @@ const xendoUserSignUp = valLocals('xendoUserSignUp', {
       xendoCredentials: JSON.parse(xendoResult),
     });
 
-    return db.rethinkQuery(updateSwipesUserQ);
+    return dbRunQuery(updateSwipesUserQ);
   })
   .then(() => {
     return next();
@@ -154,7 +154,7 @@ const xendoAddServiceToUser = valLocals('xendoAddServiceToUser', {
       r.table('xendo_user_services')
         .getAll(xendoResult.service_id, { index: 'service_id' });
 
-    return db.rethinkQuery(checkXendoUserServiceQ);
+    return dbRunQuery(checkXendoUserServiceQ);
   })
   .then((xendoService) => {
     if (xendoService.length > 0) {
@@ -170,7 +170,7 @@ const xendoAddServiceToUser = valLocals('xendoAddServiceToUser', {
       r.table('xendo_user_services')
         .insert(newXendoService);
 
-    return db.rethinkQuery(insertXendoUserServiceQ);
+    return dbRunQuery(insertXendoUserServiceQ);
   })
   .then(() => {
     return next();

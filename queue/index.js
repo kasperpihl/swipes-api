@@ -1,3 +1,6 @@
+import 'src/polyfills/asyncSupport';
+import 'src/polyfills/uncaughtException';
+
 import config from 'config';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -5,10 +8,10 @@ import http from 'http';
 import express from 'express';
 import MiddlewareComposer from './middleware_composer';
 import * as middlewares from './middlewares';
-import {
-  swipesErrorMiddleware,
-  SwipesError,
-} from './swipes-error';
+import jobs from 'src/jobs/jobs'; // Server folder
+
+import SwipesError from 'src/utils/SwipesError';
+import errorSwipes from 'src/middlewares/error/errorSwipes';
 
 // process.env.PORT - this is set by default from elastic beanstalk
 const port = process.env.PORT || config.get('port');
@@ -24,7 +27,11 @@ app.use('/health', (req, res) => {
   return res.sendStatus(200);
 });
 
-app.use('/process', bodyParser.json(), (originalReq, originalRes, originalNext) => {
+app.use('/process', bodyParser.json())
+
+app.use('/process', jobs); // Imported from server/src/jobs folder
+
+app.use('/process', (originalReq, originalRes, originalNext) => {
   const {
     event_type,
   } = originalReq.body.payload;
@@ -48,14 +55,7 @@ app.use('/process', bodyParser.json(), (originalReq, originalRes, originalNext) 
   return composer.run();
 });
 
-app.use(swipesErrorMiddleware);
-
-// Log out any uncaught exceptions, but making sure to kill the process after!
-process.on('uncaughtException', (err) => {
-  console.error(`${(new Date()).toUTCString()} uncaughtException:`, err.message);
-  console.error(err.stack);
-  process.exit(1);
-});
+app.use(errorSwipes);
 
 const server = http.createServer(app);
 

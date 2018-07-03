@@ -1,9 +1,9 @@
 import {
   dbConfigGet,
-} from '../api/routes/middlewares/db_utils/config';
+} from 'src/legacy-api/routes/middlewares/db_utils/config';
 import {
   valLocals,
-} from '../api/utils';
+} from 'src/legacy-api/utils';
 
 export default (req, res, next) => {
   const config = {};
@@ -18,5 +18,3 @@ export default (req, res, next) => {
     return next(err);
   });
 };
-
-export default getConfig;

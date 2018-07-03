@@ -8,7 +8,7 @@
       {
         "root": ["."],
         "alias": {
-          "src": "./src",
+          "src": "../server/src",
           "swipes-core-js": "../mobile/swipes-core-js"
         }
       }

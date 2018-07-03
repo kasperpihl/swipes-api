@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import db from '../db';
+import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const dbUsersGetSingleWithOrganizations = ({ user_id }) => {
   const q =
@@ -13,7 +13,7 @@ const dbUsersGetSingleWithOrganizations = ({ user_id }) => {
             .coerceTo('ARRAY'),
       });
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 };
 const dbUsersGetMultipleWithFields = ({ user_ids, fields }) => {
   const q =
@@ -21,7 +21,7 @@ const dbUsersGetMultipleWithFields = ({ user_ids, fields }) => {
       .getAll(...user_ids)
       .pluck(...fields);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 };
 const dbUsersGetSingleWithFields = ({ user_id, fields }) => {
   const q =
@@ -29,7 +29,7 @@ const dbUsersGetSingleWithFields = ({ user_id, fields }) => {
       .get(user_id)
       .pluck(...fields);
 
-  return db.rethinkQuery(q);
+  return dbRunQuery(q);
 };
 
 export {

@@ -1,9 +1,10 @@
-import { version } from '../../package.json';
+import { version } from 'src/../package.json';
 
 import SwipesError from 'src/utils/SwipesError';
 import {
   getDownloadLinks,
-} from '../api/utils';
+} from 'src/legacy-api/utils';
+console.log(version);
 
 const newerVersionExist = (client, server) => {
   server = server || '0';

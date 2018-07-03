@@ -6,10 +6,6 @@
     "user": "SW_DATABASE_USER",
     "password": "SW_DATABASE_PASSWORD"
   },
-  "xendo": {
-    "clientId": "SW_XENDO_CLIENT_ID",
-    "clientSecret": "SW_XENDO_CLIENT_SECRET"
-  },
   "dropbox": {
     "appId": "SW_DROPBOX_APP_ID",
     "appSecret": "SW_DROPBOX_APP_SECRET",
@@ -33,6 +29,16 @@
   "jira": {
     "authUrl": "SW_JIRA_AUTH_URL",
     "redirectUri": "SW_JIRA_REDIRECT_URI"
+  },
+  "mandrill": {
+    "apiKey": "SW_MANDRILL_API_KEY"
+  },
+  "mailchimp": {
+    "apiKey": "SW_MAILCHIMP_API_KEY"
+  },
+  "onesignal": {
+    "appId": "SW_ONESIGNAL_APP_ID",
+    "restKey": "SW_ONESIGNAL_REST_KEY"
   },
   "amazonQueue": {
     "accessKeyId": "SW_AMAZON_QUEUE_ACCESS_KEY_ID",
@@ -58,8 +64,10 @@
     "monthlyPlanId": "SW_STRIPE_MONTHLY_PLAN_ID"
   },
   "valjs_debug": "SW_VALJS_DEBUG",
+  "host": "SW_HOST",
   "origin": "SW_ORIGIN",
   "apiPort": "SW_API_PORT",
+  "queuePort": "SW_QUEUE_PORT",
   "clientPort": "SW_CLIENT_PORT",
   "webhooksHost": "SW_WEBHOOKS_HOST",
   "env": "SW_ENV",
