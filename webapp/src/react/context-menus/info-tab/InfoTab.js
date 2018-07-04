@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { setupDelegate, setupCachedCallback } from 'react-delegate';
-
-import TextParser from 'components/text-parser/TextParser';
-import Icon from 'Icon';
-import './styles/info-tab.scss';
+import SW from './InfoTab.swiss';
 
 class InfoTab extends PureComponent {
   constructor(props) {
@@ -25,12 +22,12 @@ class InfoTab extends PureComponent {
     hide();
     this.onInfoTabInfo(i, __options, e);
   }
-  renderActionIcon(icon, iconClass) {
+  renderActionIcon(icon, danger, complete) {
     if (!icon) {
       return undefined;
     }
 
-    return <Icon icon={icon} className={iconClass} />
+    return <SW.ActionIcon icon={icon} danger={danger} complete={complete} />
   }
   renderActions() {
     const { actions } = this.props;
@@ -41,30 +38,31 @@ class InfoTab extends PureComponent {
 
     const actionsHTML = actions.map((act, i) => {
       console.log(act);
-      let iconClass = 'info-tab__action-icon';
+      let danger = '';
+      let complete = '';
 
       if (act.danger) {
-        iconClass += ' info-tab__action-icon--danger';
+        danger = true;
       }
 
       if (act.complete) {
-        iconClass += ' info-tab__action-icon--complete';
+        complete = true;
       }
 
       return (
-        <div className="info-tab__action" key={i} onClick={this.onActionClickCached(i)}>
-          <div className="info-tab__action-icon-wrapper">
-            {this.renderActionIcon(act.icon, iconClass)}
-          </div>
-          <div className="info-tab__action-title">{act.title}</div>
-        </div>
+        <SW.Action key={i} onClick={this.onActionClickCached(i)}>
+          <SW.ActionIconWrapper>
+            {this.renderActionIcon(act.icon, danger, complete)}
+          </SW.ActionIconWrapper>
+          <SW.ActionTitle>{act.title}</SW.ActionTitle>
+        </SW.Action>
       )
     })
 
     return (
-      <div className="info-tab__actions">
+      <SW.ActionWrapper>
         {actionsHTML}
-      </div>
+      </SW.ActionWrapper>
     )
   }
   renderInfo() {
@@ -76,51 +74,51 @@ class InfoTab extends PureComponent {
 
     const infoHTML = info.map((info, i) => {
       return (
-        <div className="info-tab__info-row"  key={info.title + i}>
-          <div className="info-tab__info-title-wrapper">
-            <div className="info-tab__info-title">{info.title}</div>
-            <div className="info-tab__info-action" onClick={this.onInfoClickCached(i)}>
+        <SW.InfoRow key={info.title + i}>
+          <SW.InfoTitleWrapper>
+            <SW.InfoTitle>{info.title}</SW.InfoTitle>
+            <SW.InfoAction onClick={this.onInfoClickCached(i)}>
               {info.actionLabel}
-            </div>
-          </div>
-          <div className="info-tab__info-text">
+            </SW.InfoAction>
+          </SW.InfoTitleWrapper>
+          <SW.InfoText>
             {info.icon ? (
-              <Icon icon={info.icon} className="info-tab__info-svg" />
+              <SW.InfoSVG icon={info.icon}/>
             ) : null}
             {info.text}
-          </div>
-        </div>
+          </SW.InfoText>
+        </SW.InfoRow>
       )
     })
 
     return (
-      <div className="info-tab__info">
+      <SW.Info>
         {infoHTML}
-      </div>
+      </SW.Info>
     )
   }
   renderAbout() {
     const { about } = this.props;
 
     return (
-      <div className="info-tab__about">
-        <div className="info-tab__about-header">
-          <Icon icon="Question" className="info-tab__about-icon" />
-          <div className="info-tab__about-title">{about.title}</div>
-        </div>
-        <TextParser className="info-tab__about-text">
+      <SW.About>
+        <SW.AboutHeader>
+          <SW.AboutIcon icon="Question"/>
+          <SW.AboutTitle>{about.title}</SW.AboutTitle>
+        </SW.AboutHeader>
+        <SW.AboutText>
           {about.text}
-        </TextParser>
-      </div>
+        </SW.AboutText>
+      </SW.About>
     )
   }
   render() {
     return (
-      <div className="info-tab">
+      <SW.Wrapper>
         {this.renderActions()}
         {this.renderInfo()}
         {this.renderAbout()}
-      </div>
+      </SW.Wrapper>
     );
   }
 }
