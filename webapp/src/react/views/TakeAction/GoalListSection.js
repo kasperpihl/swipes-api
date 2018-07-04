@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
-
-import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import './styles/goal-list-section.scss';
+import SW from './GoalListSection.swiss';
 
 class GoalListSection extends PureComponent {
   constructor(props) {
@@ -15,17 +13,17 @@ class GoalListSection extends PureComponent {
     const { icon, title, id } = this.props;
 
     return (
-      <div className="goal-list-section__side" onClick={this.onGoalSectionClickCached(id)}>
-        <Icon className="goal-list-section__mini-svg" icon={icon} />
-        <div className="goal-list-section__title">
+      <SW.Side onClick={this.onGoalSectionClickCached(id)}>
+        <SW.MiniSVG icon={icon} className='miniSVG'/>
+        <SW.Title className='title'>
           {title}
-        </div>
-      </div>
+        </SW.Title>
+      </SW.Side>
     )
   }
   renderRightSide() {
     const { milestoneId } = this.props;
-    
+
     if (milestoneId === 'none') return null;
 
     const assignees = msgGen.milestones.getAssignees(milestoneId);
@@ -45,20 +43,20 @@ class GoalListSection extends PureComponent {
     const { children } = this.props;
 
     return (
-      <div className="goal-list-section__children">
+      <SW.Children>
         {children}
-      </div>
+      </SW.Children>
     )
   }
   render() {
     return (
-      <div className="goal-list-section">
-        <div className="goal-list-section__header">
+      <SW.Wrapper>
+        <SW.Header>
           {this.renderLeftSide()}
           {this.renderRightSide()}
-        </div>
+        </SW.Header>
         {this.renderGoals()}
-      </div>
+      </SW.Wrapper>
     )
   }
 }

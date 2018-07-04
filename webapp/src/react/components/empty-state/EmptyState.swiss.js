@@ -10,11 +10,11 @@ export default styleSheet('EmptyState', {
     }
   },
 
-  ImgWrapper: {
+  ImageWrapper: {
     paddingBottom: '30px',
   },
 
-  Img: {
+  Image: {
     _el: Icon,
     _size: ['150px', 'auto'],
 

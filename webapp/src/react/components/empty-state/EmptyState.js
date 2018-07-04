@@ -9,9 +9,9 @@ const EmptyState = (props) => {
     <SwissProvider large={!!props.large} fill={!!props.fill}>
       <SW.Wrapper>
         {props.icon && (
-          <SW.ImgWrapper>
-            <SW.Img icon={props.icon}/>
-          </SW.ImgWrapper>
+          <SW.ImageWrapper>
+            <SW.Image icon={props.icon}/>
+          </SW.ImageWrapper>
         )}
         <SW.Title>
           {props.title}
