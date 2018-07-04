@@ -1,12 +1,14 @@
 import r from 'rethinkdb';
-import { string } from 'valjs';
+import { string, date } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const expectedInput = {
   receiver_id: string.require(),
 };
-const expectedOutput = {};
+const expectedOutput = {
+  thanked_at: date.require(),
+};
 
 export default endpointCreate({
   endpoint: '/ping.sayThanks',
@@ -20,11 +22,23 @@ export default endpointCreate({
                   .get(input.receiver_id)
                   .update(receiver => r.branch(
                     receiver('received_by').eq(res.locals.user_id),
-                    { thanked_at: r.now() },
+                    {
+                      thanked_at: r.now(),
+                      updated_at: r.now(),
+                    },
                     receiver,
-                  ));
+                  ), {
+                    returnChanges: true,
+                  });
 
   const result = await dbRunQuery(query);
+
+  if(result.unchanged) {
+    throw Error('Unauthorized access');
+  }
+
   // Create response data.
-  res.locals.responseData = { result };
+  res.locals.responseData = {
+    thanked_at: result.changes[0].new_val.thanked_at,
+  };
 });
