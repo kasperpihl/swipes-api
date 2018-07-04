@@ -21,31 +21,37 @@ export default endpointCreate({
   // Get inputs
   const input = res.locals.input;
   
+  const skip = input.skip || 0;
+  const limit = input.limit || 20;
   let query = r.table(input.type === 'sent' ? 'pings' : 'ping_receivers')
                 .orderBy({ index: r.desc('sent_at') })
-                .skip(input.skip || 0)
-                .limit(input.limit || 20);
 
   if(input.type === 'sent') {
-    query = query.filter({
-      created_by: res.locals.user_id,
-      organization_id: input.organization_id,
-    });
+    query = query.slice(skip, skip + limit)
+                  .filter({
+                    created_by: res.locals.user_id,
+                    organization_id: input.organization_id,
+                  });
   } else {
-    query = query.filter({
-      received_by: 'hello',
-      organization_id: input.organization_id,
-    }).eqJoin('ping_id', r.table('pings')).map((obj) => obj('right').merge({
-      receiver: obj('left'),
-    }));
+    // OMG RETHINKDB : A join counts on the skip, so we have to double for received..........
+    query = query.slice(skip * 2, skip * 2 + limit * 2)
+                  .filter({
+                    received_by: 'hello',
+                    organization_id: input.organization_id,
+                  })
+                  .eqJoin('ping_id', r.table('pings'), { ordered: true })
+                  .map((obj) => obj('right').merge({
+                    receiver: obj('left'),
+                  }))
+                  .pluck('sent_at');
   }
 
   const pings = await dbRunQuery(query);
 
-
-
   // Create response data.
   res.locals.responseData = {
+    skip,
+    limit,
     pings
   };
 });
