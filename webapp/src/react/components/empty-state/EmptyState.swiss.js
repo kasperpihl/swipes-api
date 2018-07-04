@@ -7,7 +7,13 @@ export default styleSheet('EmptyState', {
     _flex: ['column', 'center', 'center'],
     fill: {
       height: '100%',
-    }
+    },
+
+    takeAction: {
+      transform: 'translateY(-38px)',
+      pointerEvents: 'none',
+      transition: '.15s ease',
+    },
   },
 
   ImageWrapper: {
@@ -21,6 +27,11 @@ export default styleSheet('EmptyState', {
     large: {
       _size: ['300px', 'auto'],
     },
+
+    takeAction: {
+      _size: ['54px', '114px'],
+      transform: 'translateX(calc(-50% + 6px))',
+    },
   },
 
   Title: {
@@ -30,6 +41,10 @@ export default styleSheet('EmptyState', {
 
     large: {
       _font: ['18px', '24px'],
+    },
+
+    takeAction: {
+      color: '$sw1',
     },
   },
 

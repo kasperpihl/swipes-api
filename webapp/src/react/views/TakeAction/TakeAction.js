@@ -75,7 +75,7 @@ class TakeAction extends Component {
     if (goals.size === 1 && !goals.get('none').size) {
       return (
          <EmptyState
-          className='takeAction'
+          takeAction
           icon="ESArrow"
           title="ADD A NEW GOAL"
           description={`Add new goals for everything that needs \n to be done.`}
