@@ -1,7 +1,7 @@
 import queueCreateJob from 'src/utils/queue/queueCreateJob';
 
 const testing = () => new Promise((resolve, reject) => {
-  reject('hi');
+  throw Error('hi');
 })
 
 export default queueCreateJob({

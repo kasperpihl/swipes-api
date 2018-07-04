@@ -34,9 +34,7 @@ export default endpointCreate({
   const result = await dbRunQuery(query);
 
   if(result.unchanged || result.skipped) {
-    throw Error('Unauthorized access').info({
-      test: true
-    }).code(500);
+    throw Error('Unauthorized access');
   }
 
   // Create response data.
