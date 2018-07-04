@@ -4,6 +4,7 @@ import { fromJS } from 'immutable';
 import { setupCachedCallback } from 'react-delegate';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import * as linkActions from 'src/redux/link/linkActions';
+import * as ca from 'swipes-core-js/actions';
 import withEmitter from 'src/react/components/emitter/withEmitter';
 
 import SW from './PingComposer.swiss';
@@ -18,8 +19,10 @@ import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 @navWrapper
 @connect((state) => ({
   users: state.get('users'),
+  orgId: state.getIn(['me', 'organizations', 0, 'id'])
 }), {
   preview: linkActions.preview,
+  request: ca.api.request,
 })
 @withEmitter
 export default class extends PureComponent {
@@ -67,6 +70,21 @@ export default class extends PureComponent {
   }
   onAutoCompleteSelect = (item) => {
     this.onAddAssignee(item.id);
+  }
+  onSendPing = () => {
+    const { request, orgId } = this.props;
+    const message = this.editorState.getCurrentContent().getPlainText();
+    if(!message) {
+      return;
+    }
+    request('ping.send', {
+      receivers: this.state.receivers.toJS(),
+      organization_id: orgId,
+      attachments: this.state.attachments.toJS(),
+      message, 
+    }).then(res => {
+      console.log(res);
+    })
   }
   onUserClick = (id) => {
     this.setState({ receivers: this.state.receivers.push(id) });
@@ -138,6 +156,7 @@ export default class extends PureComponent {
             innerRef={c => this.input = c}
             onChange={this.onMessageChange}
             placeholder="Pass on a quick message"
+            handleReturn={this.onReturn}
             onAutoCompleteSelect={this.onAutoCompleteSelect}
             autoFocus
             clearMentions
@@ -152,6 +171,7 @@ export default class extends PureComponent {
         <SW.Column none hidden={!receivers.size}>
           <Button
             title="Ping"
+            onClick={this.onSendPing}
           />
         </SW.Column>
       </SW.BarWrapper>

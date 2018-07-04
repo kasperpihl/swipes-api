@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import SW from './Discuss.swiss';
 import { setupCachedCallback } from 'react-delegate';
 
-import PingList from 'src/react/views/Ping/List/PingList';
+import PingList from 'src/react/views/Ping/List/HOCPingList';
 import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 
 import SWView from 'SWView';

@@ -46,7 +46,7 @@ And they were really awesome!`,
 
 export default class extends PureComponent {
   renderItems() {
-    return items.map((item, i) => (
+    return this.props.items.map((item, i) => (
       <PingListItem item={item} key={i}/>
     ));
   }

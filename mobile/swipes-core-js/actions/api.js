@@ -88,12 +88,11 @@ export const request = (options, data) => (d, getState) => {
         if (r && r.url && !apiUrl.startsWith('https://staging') && r.url.startsWith('https://staging')) {
           redirectUrl = r.url;
         }
-        if (r && r.ok) return r.json();
-        return Promise.reject({ message: r.statusText, code: r.status });
+        return r.json();
       }).then((res) => {
         state = getState();
-        handleUpdatesNeeded(res, state, d);
         if (res && res.ok) {
+          handleUpdatesNeeded(res, state, d);
           if (redirectUrl) {
             res.redirectUrl = redirectUrl;
           }
@@ -111,12 +110,10 @@ export const request = (options, data) => (d, getState) => {
         // Let's return a promise for convenience.
         resolve(res);
       }).catch((e) => {
-        console.log(JSON.stringify(e));
-        console.log('error', JSON.stringify(e));
         if (getState().getIn(['globals', 'isDev'])) {
           console.warn(command, e);
         }
-        resolve({ ok: false, error: e });
+        resolve({ ok: false, error: e.message || 'unknown error' });
       });
   });
 };

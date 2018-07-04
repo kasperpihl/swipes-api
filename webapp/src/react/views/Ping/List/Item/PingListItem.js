@@ -20,7 +20,7 @@ export default class extends PureComponent {
     const items = [
       {
         id: 'ping',
-        title: `Ping back ${msgGen.users.getFirstName(item.sent_by)}`,
+        title: `Ping back ${msgGen.users.getFirstName(item.created_by)}`,
         leftIcon: { icon: 'reply' },
       },
       {
@@ -34,7 +34,7 @@ export default class extends PureComponent {
     const delegate = {
       onItemAction: (item) => {
         if(item.id === 'ping') {
-          this.props.emit('ping-add-assignee', this.props.item.sent_by);
+          this.props.emit('ping-add-assignee', this.props.item.created_by);
         }
         contextMenu(null);
       },
@@ -58,13 +58,13 @@ export default class extends PureComponent {
   render() {
     const { item } = this.props;
 
-    let sendString = msgGen.users.getFirstName(item.sent_by);
+    let sendString = msgGen.users.getFirstName(item.created_by);
 
     return (
       <SW.Wrapper className="ButtonWrapper-hover">
         <HOCAssigning
           onClick={this.onClick}
-          assignees={[item.sent_by]}
+          assignees={[item.created_by]}
           size={36}
         />
         <SW.Message>
