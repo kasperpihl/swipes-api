@@ -24,7 +24,7 @@ export default endpointCreate({
   const skip = input.skip || 0;
   const limit = input.limit || 20;
   let query = r.table(input.type === 'sent' ? 'pings' : 'ping_receivers')
-                .orderBy({ index: r.desc('sent_at') })
+                .orderBy({ index: r.desc('sent_at') });
 
   if(input.type === 'sent') {
     query = query.slice(skip, skip + limit)

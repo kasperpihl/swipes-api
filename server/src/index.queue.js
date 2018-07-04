@@ -8,7 +8,7 @@ import http from 'http';
 import express from 'express';
 import MiddlewareComposer from 'src/legacy-queue/middleware_composer';
 import * as middlewares from 'src/legacy-queue/middlewares';
-import jobs from 'src/jobs/jobs'; // Server folder
+import jobs from 'src/jobs/jobs';
 
 import SwipesError from 'src/utils/SwipesError';
 import errorSwipes from 'src/middlewares/error/errorSwipes';
@@ -56,7 +56,7 @@ app.use('/process', (originalReq, originalRes, originalNext) => {
   return composer.run();
 });
 
-app.use('/process', jobs); // Imported from server/src/jobs folder
+app.use('/process', jobs);
 
 app.use(errorSwipes);
 app.use(errorUnhandledServer);
