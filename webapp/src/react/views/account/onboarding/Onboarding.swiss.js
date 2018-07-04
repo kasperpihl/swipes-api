@@ -94,20 +94,6 @@ export default styleSheet('Onboarding', {
     marginRight: '21px',
     borderRadius: '50%',
 
-    completed: {
-      transition: '.3s ease',
-
-      '&:after': {
-        backgroundColor: '$green',
-        borderRadius: '50%',
-        content: '',
-        left: '0',
-        top: '0',
-        position: 'absolute',
-        transition: '.3s .3s ease',
-      },
-    },
-
     '&:after': {
       _size: ['36px'],
       backgroundColor: '$blue5',
@@ -118,15 +104,30 @@ export default styleSheet('Onboarding', {
       position: 'absolute',
       transition: '.3s .3s ease',
     },
+
+    completed: {
+      transition: '.3s ease',
+
+      '&:after': {
+        backgroundColor: '#1DD465',
+        borderRadius: '50%',
+        content: '',
+        left: '0',
+        top: '0',
+        position: 'absolute',
+        transition: '.3s .3s ease',
+      },
+    },
   },
 
   Checkmark: {
     _el: Icon,
     opacity: '0',
+    _svgColor: '$sw1',
 
     completed:{
       _size: ['24px'],
-      _svgColor: 'white',
+      _svgColor: '$sw5',
       opacity: '1',
       left: '3px',
       strokeDasharray: '18.48540687561035',

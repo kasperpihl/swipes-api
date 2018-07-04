@@ -118,17 +118,25 @@ class Billing extends PureComponent {
       <SW.PaymentSection>
         <SW.TopSection success={hasStripe ? true : ''}>
           <SW.CardSection label="Credit or debit card" />
-          <SW.CardSectionSubtitle>
-            Your subscription will automatically renew every month. You can always cancel your account by writing to us on help@swipesapp.com.
-            <br/><br/>
-            By Clicking the 'Submit Payment' button above, you are agreeing to our <SW.Link href="https://s3.amazonaws.com/cdn.swipesapp.com/downloads/Policies.pdf">Terms of Service</SW.Link>.
-          </SW.CardSectionSubtitle>
           <SW.SubmitButton
             {...getLoading('submit')}
             title="Submit Payment"
             onClick={this.onSubmit}
           />
           <SW.SubmitButtonSubtitle>You will be billed ${this.getPrice()}.</SW.SubmitButtonSubtitle>
+          {billingStatus === 'monthly' ?
+          <SW.CardSectionSubtitle>
+            Your subscription will automatically renew every month. You can always cancel your account by writing to us on help@swipesapp.com.
+            <br/><br/>
+            By Clicking the 'Submit Payment' button above, you are agreeing to our <SW.Link href="https://s3.amazonaws.com/cdn.swipesapp.com/downloads/Policies.pdf">Terms of Service
+            </SW.Link>.
+          </SW.CardSectionSubtitle> :
+          <SW.CardSectionSubtitle>
+            Your subscription will automatically renew every year. You can always cancel your account by writing to us on help@swipesapp.com.
+            <br/><br/>
+            By Clicking the 'Submit Payment' button above, you are agreeing to our <SW.Link href="https://s3.amazonaws.com/cdn.swipesapp.com/downloads/Policies.pdf">Terms of Service
+            </SW.Link>.
+          </SW.CardSectionSubtitle>}
         </SW.TopSection>
         <SW.BottomSection success={hasStripe ? true : ''}>
           <SW.BottomSectionTitle>Thank you for your purchase.</SW.BottomSectionTitle>

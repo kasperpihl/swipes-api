@@ -95,6 +95,7 @@ export default styleSheet('Billing', {
   PaymentStatusLabel: {
     _font: ['12px', '21px', '500'],
     color: '$sw2',
+    _size: ['160px', 'auto'],
   },
 
   Status: {
