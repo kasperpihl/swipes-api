@@ -123,7 +123,6 @@ export default styleSheet('Onboarding', {
   Checkmark: {
     _el: Icon,
     opacity: '0',
-    _svgColor: '$sw1',
 
     completed:{
       _size: ['24px'],
