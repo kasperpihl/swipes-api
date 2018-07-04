@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { setupDelegate } from 'react-delegate';
-import EmptyState from '../../components/empty-state/EmptyState';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import EmptyState from '../../components/empty-state/EmptyState';
 import SWView from 'SWView';
 import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import GoalAdd from '../goals/goal-components/goal-add/GoalAdd';
 import InfoButton from 'components/info-button/InfoButton';
 import Icon from 'Icon';
-import './styles/take-action.scss';
+import SW from './TakeAction.swiss';
 
 
 class TakeAction extends Component {
@@ -22,7 +22,7 @@ class TakeAction extends Component {
     const { delegate, showLine } = this.props;
 
     return (
-      <div className="goals-list__header">
+      <SW.Header>
         <HOCHeaderTitle
           title="Take Action"
           subtitle="See all your responsibilities and work on the most important goals."
@@ -31,7 +31,7 @@ class TakeAction extends Component {
             delegate={delegate}
           />
         </HOCHeaderTitle>
-      </div>
+      </SW.Header>
     );
   }
   renderList() {
@@ -75,6 +75,7 @@ class TakeAction extends Component {
     if (goals.size === 1 && !goals.get('none').size) {
       return (
          <EmptyState
+          className='takeAction'
           icon="ESArrow"
           title="ADD A NEW GOAL"
           description={`Add new goals for everything that needs \n to be done.`}
@@ -94,10 +95,10 @@ class TakeAction extends Component {
         onScroll={this.onScroll}
         initialScroll={initialScroll}
       >
-        <div className="take-action">
+        <SW.Wrapper>
           {this.renderList()}
           {this.renderEmptyState()}
-        </div>
+        </SW.Wrapper>
       </SWView>
     );
   }
