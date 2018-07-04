@@ -42,8 +42,7 @@ export default endpointCreate({
                   .eqJoin('ping_id', r.table('pings'), { ordered: true })
                   .map((obj) => obj('right').merge({
                     receiver: obj('left'),
-                  }))
-                  .pluck('sent_at');
+                  }));
   }
 
   const pings = await dbRunQuery(query);
