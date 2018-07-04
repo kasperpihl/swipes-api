@@ -5,7 +5,7 @@ export default (err, req, res, next) => {
         message: err.extra,
       };
     }
-    return res.status(200).json({
+    return res.status(400).json({
       ok: false,
       error: err.message,
       ...err.extra,
