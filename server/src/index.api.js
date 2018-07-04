@@ -1,10 +1,10 @@
 import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
+import 'src/polyfills/errorPrototypes';
 
 import http from 'http';
 import express from 'express';
 import config from 'config';
-import cors from 'cors';
 import bodyParser from 'body-parser';
 import websocketStart from './websocket';
 
@@ -14,27 +14,20 @@ import authCheckToken from 'src/middlewares/auth/authCheckToken'
 import checkUpdates from 'src/middlewares/checkUpdates';
 import fetchConfig from 'src/middlewares/fetchConfig';
 import redirectToStaging from 'src/middlewares/redirectToStaging';
+import corsHandler from 'src/middlewares/corsHandler';
 import logToAws from 'src/middlewares/logToAws';
 
-import errorJson from 'src/middlewares/error/errorJson';
+import errorInvalidJson from 'src/middlewares/error/errorInvalidJson';
 import errorSwipes from 'src/middlewares/error/errorSwipes';
-import errorUnhandledServer from 'src/middlewares/error/errorUnhandledServer';
-import errorDebug from 'src/middlewares/error/errorDebug';
+import errorHandler from 'src/middlewares/error/errorHandler';
 
-import * as routes from './legacy-api/routes';
+import * as routes from './_legacy-api/routes';
 import endpoints from './endpoints/endpoints';
-
-const env = config.get('env');
 
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
 
-app.use(cors({
-  origin: config.get('cors'),
-  methods: 'HEAD, GET, POST',
-  allowedHeader: 'Content-Type, Range, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
-  exposedHeaders: 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range',
-}));
+app.use(corsHandler);
 
 // Webhooks route
 app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */);
@@ -42,7 +35,7 @@ app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webh
 app.use('/v1', routes.v1Multipart);
 
 // Everything on v1 path (which is not multipart form data) is parsed as json
-app.use('/v1', bodyParser.json(), errorJson);
+app.use('/v1', bodyParser.json(), errorInvalidJson);
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {
   res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
@@ -68,11 +61,8 @@ app.use('/v1', routes.v1Authed);
 // // Error handlers / they should be at the end of the middleware stack
 // // ========================================================================
 
-if (env === 'dev') {
-  app.use(errorDebug);
-}
 app.use(errorSwipes);
-app.use(errorUnhandledServer);
+app.use(errorHandler);
 
 const server = http.createServer(app);
 

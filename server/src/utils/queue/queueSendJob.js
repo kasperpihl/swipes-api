@@ -50,10 +50,6 @@ export default (options, payload) => {
           eventName: options.eventName,
           payload,
         },
-      }, (err, response, body) => {
-        if(response.statusCode !== 200) {
-          console.warn('queue error', options.eventName, body);
-        }
       })
     }
   })

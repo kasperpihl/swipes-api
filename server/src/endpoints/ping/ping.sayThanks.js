@@ -14,7 +14,7 @@ export default endpointCreate({
   endpoint: '/ping.sayThanks',
   expectedInput,
   expectedOutput,
-}, async (req, res, next) => {
+}, async (req, res) => {
   // Get inputs
   const input = res.locals.input;
 
@@ -33,8 +33,10 @@ export default endpointCreate({
 
   const result = await dbRunQuery(query);
 
-  if(result.unchanged) {
-    throw Error('Unauthorized access');
+  if(result.unchanged || result.skipped) {
+    throw Error('Unauthorized access').info({
+      test: true
+    }).code(500);
   }
 
   // Create response data.

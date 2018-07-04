@@ -19,7 +19,7 @@ export default endpointCreate({
   endpoint: '/ping.send',
   expectedInput,
   expectedOutput,
-}, async (req, res, next) => {
+}, async (req, res) => {
   const input = res.locals.input;
 
   // Generate insert query to pings table
@@ -50,6 +50,7 @@ export default endpointCreate({
   const pingReceiverResult = await dbRunQuery(pingReceiverQuery);
 
   await queueSendJob('ping_send', { hello: true });
+  
   // Create response data.
   res.locals.responseData = {
     ping,

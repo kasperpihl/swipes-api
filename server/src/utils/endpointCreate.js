@@ -2,7 +2,8 @@ import valInput from 'src/middlewares/val/valInput';
 import valResponseAndSend from 'src/middlewares/val/valResponseAndSend';
 
 export default (options, middleware) => {
-  return (routers) => {
+  // FUNCTION MUST BE NAMED endpointCreate. Dont change!
+  return function endpointCreate(routers) {
     if(typeof options !== 'object') {
       options = { endpoint: options };
     }

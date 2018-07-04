@@ -1,29 +1,26 @@
 import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
+import 'src/polyfills/errorPrototypes';
 
 import config from 'config';
-import cors from 'cors';
+
 import bodyParser from 'body-parser';
 import http from 'http';
 import express from 'express';
-import MiddlewareComposer from 'src/legacy-queue/middleware_composer';
-import * as middlewares from 'src/legacy-queue/middlewares';
+import MiddlewareComposer from 'src/_legacy-queue/middleware_composer';
+import * as middlewares from 'src/_legacy-queue/middlewares';
 import jobs from 'src/jobs/jobs';
 
-import SwipesError from 'src/utils/SwipesError';
+import corsHandler from 'src/middlewares/corsHandler';
 import errorSwipes from 'src/middlewares/error/errorSwipes';
-import errorUnhandledServer from 'src/middlewares/error/errorUnhandledServer';
+import errorHandler from 'src/middlewares/error/errorHandler';
 
 const env = config.get('env');
 // process.env.PORT - this is set by default from elastic beanstalk
 const port = process.env.PORT || config.get('queuePort');
 const app = express();
 
-app.use(cors({
-  origin: config.get('cors'),
-  methods: 'HEAD, GET, POST',
-  allowedHeader: 'Content-Type, Accept, X-Requested-With, Session, Content-Length, X-Requested-With',
-}));
+app.use(corsHandler);
 
 app.use('/health', (req, res) => {
   return res.sendStatus(200);
@@ -38,7 +35,6 @@ app.use('/process', (originalReq, originalRes, originalNext) => {
 
   if (!middlewares[event_type]) {
     return originalNext();
-    return originalNext(new SwipesError(`There is no event_type with the name - ${event_type}`));
   }
 
   const composer = new MiddlewareComposer(
@@ -59,7 +55,7 @@ app.use('/process', (originalReq, originalRes, originalNext) => {
 app.use('/process', jobs);
 
 app.use(errorSwipes);
-app.use(errorUnhandledServer);
+app.use(errorHandler);
 
 const server = http.createServer(app);
 

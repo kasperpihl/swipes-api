@@ -9,10 +9,6 @@ const routers = {
 
 // Recursively read through subfolders
 const readFileOrDir = (pathname) => {
-  // Ignore this file....
-  if(pathname === 'endpoints.js') {
-    return;
-  }
   // Check if it's a folder
   if(fs.statSync(pathname).isDirectory()) {
     // Then read and iterate through each item
@@ -21,9 +17,9 @@ const readFileOrDir = (pathname) => {
       readFileOrDir(path.join(pathname, file));
     });
   } else {
-    // If it's a file, require it and see if it's a function
+    // If it's a file, require it and see if it's a function endpointCreate
     const route = require(pathname).default;
-    if(typeof route === 'function') {
+    if(typeof route === 'function' && route.name === 'endpointCreate') {
       // Then call the function with the different routers.
       route(routers);
     }

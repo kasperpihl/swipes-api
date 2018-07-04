@@ -1,4 +1,4 @@
-import { parseToken } from 'src/legacy-api/utils';
+import { parseToken } from 'src/_legacy-api/utils';
 
 export default (req, res, next) => {
   const { token } = res.locals;

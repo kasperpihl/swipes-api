@@ -2,7 +2,8 @@ import valInput from 'src/middlewares/val/valInput';
 // import valResponseAndSend from 'src/middlewares/val/valResponseAndSend';
 
 export default (options, middleware) => {
-  return (router) => {
+  // FUNCTION MUST BE NAMED queueCreateJob. Dont change!
+  return function queueCreateJob(router) {
     if(typeof options !== 'object') {
       options = { eventName: options };
     }

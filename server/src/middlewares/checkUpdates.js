@@ -1,10 +1,8 @@
 import { version } from 'src/../package.json';
 
-import SwipesError from 'src/utils/SwipesError';
 import {
   getDownloadLinks,
-} from 'src/legacy-api/utils';
-console.log(version);
+} from 'src/_legacy-api/utils';
 
 const newerVersionExist = (client, server) => {
   server = server || '0';
@@ -45,7 +43,7 @@ const makeUpdateHandler = (res, next) => {
     if(url) _locals[`${prefix}_url`] = url;
     if(isRequired) {
       _locals[`${prefix}_required`] = true;
-      return next(new SwipesError(`${prefix}_required`, _locals));
+      return next(Error(`${prefix}_required`, _locals));
     }
 
     res.locals.__updatesAvailable = _locals;

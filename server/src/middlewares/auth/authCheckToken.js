@@ -1,4 +1,4 @@
-import { dbCheckToken } from 'src/legacy-api/routes/middlewares/db_utils/tokens';
+import { dbCheckToken } from 'src/_legacy-api/routes/middlewares/db_utils/tokens';
 
 export default (req, res, next) => {
   const {

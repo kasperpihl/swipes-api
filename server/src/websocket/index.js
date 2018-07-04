@@ -6,7 +6,7 @@ import commonEvents from './common-events';
 import commonEventsMultiple from './common-events-multiple';
 import {
   parseToken,
-} from 'src/legacy-api/utils';
+} from 'src/_legacy-api/utils';
 
 const auth = (token) => {
   if (token) {

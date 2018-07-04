@@ -1,13 +1,13 @@
 import {
   dbConfigGet,
-} from 'src/legacy-api/routes/middlewares/db_utils/config';
+} from 'src/_legacy-api/routes/middlewares/db_utils/config';
 import {
   valLocals,
-} from 'src/legacy-api/utils';
+} from 'src/_legacy-api/utils';
 
 export default (req, res, next) => {
-  const config = {};
   dbConfigGet().then((results) => {
+    const config = {};
     results.forEach(({ id, value }) => {
       config[id] = value;
     })

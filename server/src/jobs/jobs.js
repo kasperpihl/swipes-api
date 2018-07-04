@@ -6,10 +6,6 @@ const router = express.Router();
 
 // Recursively read through subfolders
 const readFileOrDir = (pathname) => {
-  // Ignore this file....
-  if(pathname === 'jobs.js') {
-    return;
-  }
   // Check if it's a folder
   if(fs.statSync(pathname).isDirectory()) {
     // Then read and iterate through each item
@@ -20,7 +16,7 @@ const readFileOrDir = (pathname) => {
   } else {
     // If it's a file, require it and see if it's a function
     const route = require(pathname).default;
-    if(typeof route === 'function') {
+    if(typeof route === 'function' && route.name === 'queueCreateJob') {
       // Then call the function with the different routers.
       route(router);
     }
