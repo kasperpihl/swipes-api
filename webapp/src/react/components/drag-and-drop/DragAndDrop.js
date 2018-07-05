@@ -28,55 +28,8 @@ class DragAndDrop extends Component {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         >
+        <SW.OverlayTitle>Drop anywhere.</SW.OverlayTitle>
         </SW.Overlay>
-        <SW.MenuWrapper showMenu={showMenu}>
-          <SW.MenuList>
-            <SW.ListItem onClick={onDiscuss}>
-              <SW.ItemIcon icon='ESArrow' />
-              <SW.Description>
-                <SW.Title>
-                Start a discussion
-                </SW.Title>
-                <SW.Subtitle>
-                Start a discussion with the attached file.
-              </SW.Subtitle>
-              </SW.Description>
-            </SW.ListItem>
-            <SW.ListItem onClick={handleItemClick}>
-              <SW.ItemIcon icon='ESArrow' />
-              <SW.Description>
-                <SW.Title>
-                Attach file
-                </SW.Title>
-                <SW.Subtitle>
-                Attach file to current goal/step/plan
-              </SW.Subtitle>
-              </SW.Description>
-            </SW.ListItem>
-            <SW.ListItem onClick={handleItemClick}>
-              <SW.ItemIcon icon='ESArrow' />
-              <SW.Description>
-                <SW.Title>
-                Start a discussion
-                </SW.Title>
-                <SW.Subtitle>
-                Start a discussion with the attached file.
-              </SW.Subtitle>
-              </SW.Description>
-            </SW.ListItem>
-            <SW.ListItem onClick={handleItemClick}>
-              <SW.ItemIcon icon='ESArrow' />
-              <SW.Description>
-                <SW.Title>
-                Start a discussion
-                </SW.Title>
-                <SW.Subtitle>
-                Start a discussion with the attached file.
-              </SW.Subtitle>
-              </SW.Description>
-            </SW.ListItem>
-          </SW.MenuList>
-        </SW.MenuWrapper>
         {children}
       </SW.Wrapper>
     )

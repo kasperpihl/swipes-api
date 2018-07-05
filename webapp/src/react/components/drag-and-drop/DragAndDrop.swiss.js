@@ -17,16 +17,28 @@ export default styleSheet('DragAndDrop', {
     top: '0',
     left: '0',
     _size: ['100vw', '100vh'],
+    _flex: ['column', 'center', 'center'],
     pointerEvents: 'none',
     visibility: 'hidden',
     zIndex: '99999999999',
     transition: '.2s ease-in',
     shown: {
       visibility: 'visible',
-      backgroundColor: '$sw3',
-      opacity: '0.4',
+      backgroundColor: '#000c2f',
+      opacity: '0.6',
       pointerEvents: 'all',
     },
+  },
+
+  OverlayTitle: {
+    _el: 'h1',
+    _font: '48px',
+    fontWeight: '200',
+    color: '#ffffff',
+    textAlign: 'center',
+    opacity: '1',
+    marginTop: '-18px',
+    pointerEvents: 'none',
   },
 
   MenuWrapper: {
