@@ -160,16 +160,14 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
   const items = [
     primary.size ? {
       id: 'primary',
-      title: 'Left side',
+      title: 'Attach to left card',
       leftIcon: {icon: 'Note'},
-      subtitle: 'Attach to left side',
     } : null,
 
     secondary.size ? {
       id: 'secondary',
-      title: 'Right side',
+      title: 'Attach to right card',
       leftIcon: {icon: 'Note'},
-      subtitle: 'Attach to right side',
     } : null,
 
     {

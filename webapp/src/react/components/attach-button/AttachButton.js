@@ -63,6 +63,7 @@ export default class extends PureComponent {
   }
   onChooseAttachment = (e) => {
     const { chooseAttachmentType, inputMenu, createNote } = this.props;
+    console.log(this.props.chooseAttachmentType);
     const options = this.getOptionsForE(e);
     options.onClose = this.onAttachButtonCloseOverlay;
     chooseAttachmentType(options).then((item) => {
