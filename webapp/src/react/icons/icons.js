@@ -38,6 +38,7 @@ export { default as HeaderOne } from './svgs/header-one.svg';
 export { default as HeaderTwo } from './svgs/header-two.svg';
 export { default as Heart } from './svgs/heart.svg';
 export { default as Hyperlink } from './svgs/hyperlink.svg';
+export { default as IconDiscuss } from './svgs/icon-discuss.svg';
 export { default as Information } from './svgs/information.svg';
 export { default as Itallic } from './svgs/itallic.svg';
 export { default as Iteration } from './svgs/iteration.svg';
