@@ -176,7 +176,7 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
     {
       id: 'discussion',
       title: 'Start a discussion',
-      leftIcon: { icon: 'Messages' },
+      leftIcon: { icon: 'Comment' },
     },
     {
       id: 'ping',
