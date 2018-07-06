@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
 import SW from './Modal.swiss';
+import * as views from 'src/react/views';
 
 @connect((state, props) => ({
   modal: state.getIn(['main', 'modals', props.target]),
@@ -28,7 +29,11 @@ export default class HOCModal extends PureComponent {
   render() {
     const { modal } = this.props;
     
-    const Comp = modal && modal.component || null;
+    let Comp = modal && modal.component || null;
+    if(typeof Comp === 'string') {
+      Comp = views[Comp];
+    }
+    console.log(Comp);
     const props = modal && modal.props || {};
 
     return (
