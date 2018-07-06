@@ -49,7 +49,10 @@ export default endpointCreate({
   // Execute the ping_receivers query 
   const pingReceiverResult = await dbRunQuery(pingReceiverQuery);
 
-  await queueSendJob('ping_send', { hello: true });
+  await queueSendJob('pingSend', {
+    ping_id: ping.id,
+    organization_id: input.organization_id,
+  });
   
   // Create response data.
   res.locals.responseData = {

@@ -8,6 +8,8 @@ export default (error, req, res, next) => {
   } else {
     console.log(`--- ERROR ${req.originalUrl} ---`)
     console.error(error);
+    error.errorInfo && console.log('--- ERROR INFO ---')
+    error.errorInfo && console.log(error.errorInfo);
     console.log(`--- ERROR END ---`)
   }
 

@@ -32,7 +32,6 @@ export default class HOCPingList extends PureComponent {
             results: res.pings,
           });
         }
-        console.log(res);
       });
     }
   }

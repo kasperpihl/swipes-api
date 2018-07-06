@@ -1,7 +1,6 @@
 import valjs, {
   object,
 } from 'valjs';
-import SwipesError from 'src/utils/SwipesError';
 
 export default schema => (req, res, next) => {
   if(res.locals.__skipValResponse) {
@@ -16,7 +15,9 @@ export default schema => (req, res, next) => {
     const error = valjs(responseData, object.as(schema));
 
     if (error) {
-      return next(new SwipesError(`${req.route.path} valResponseAndSend: ${error}`));
+      return next(Error(`${req.route.path} valResponseAndSend: ${error}`).info({
+        expectedOutput: schema.toString(),
+      }));
     }
   }
   
