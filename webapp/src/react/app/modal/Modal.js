@@ -33,7 +33,7 @@ export default class HOCModal extends PureComponent {
     if(typeof Comp === 'string') {
       Comp = views[Comp];
     }
-    console.log(Comp);
+
     const props = modal && modal.props || {};
 
     return (

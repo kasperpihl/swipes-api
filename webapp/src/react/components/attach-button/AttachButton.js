@@ -10,8 +10,7 @@ import { fromJS } from 'immutable';
 import { EditorState, convertToRaw } from 'draft-js';
 import SW from './AttachButton.swiss';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-console.log(menuActions);
-console.log(menuActions.chooseAttachmentType);
+
 @navWrapper
 @connect(state => ({
   myId: state.getIn(['me', 'id']),
