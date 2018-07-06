@@ -231,6 +231,7 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
   };
   dispatch(mainActions.contextMenu({
     options,
+    showBackground: true,
     component: TabMenu,
     props: {
       ...options,

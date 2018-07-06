@@ -14,6 +14,9 @@ export default styleSheet('ContextMenu', {
       transition: 'visibility 0s 0s, opacity .15s',
       visibility: 'visible',
     },
+    showBackground: {
+      background: 'rgba($sw1, .8)',
+    },
   },
   Content: {
     _size: 'auto',

@@ -204,6 +204,7 @@ export default class ContextMenu extends PureComponent {
       <SW.Wrapper
         className="context-menu"
         shown={contextMenu}
+        showBackground={!!(contextMenu && contextMenu.showBackground)}
         onClick={this.clickedBackground}
       >
         {this.renderContextMenu(contextMenu)}
