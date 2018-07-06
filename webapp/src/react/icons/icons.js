@@ -9,6 +9,9 @@ export { default as ArrowRightLong } from './svgs/arrow-right-long.svg';
 export { default as Attach } from './svgs/attach.svg';
 export { default as Bold } from './svgs/bold.svg';
 export { default as Breadcrumb } from './svgs/breadcrumb.svg';
+export { default as CardLeft } from './svgs/card-left.svg';
+export { default as CardRight } from './svgs/card-right.svg';
+export { default as CardSingle } from './svgs/card-single.svg';
 export { default as Checklist } from './svgs/checklist.svg';
 export { default as ChecklistCheckmark } from './svgs/checklist-checkmark.svg';
 export { default as Checkmark } from './svgs/checkmark.svg';
@@ -54,6 +57,7 @@ export { default as NoMilestone } from './svgs/no-milestone.svg';
 export { default as Onboarding } from './svgs/onboarding.svg';
 export { default as OrderedList } from './svgs/ordered-list.svg';
 export { default as Person } from './svgs/person.svg';
+export { default as Ping } from './svgs/ping.svg'
 export { default as Plus } from './svgs/plus.svg';
 export { default as Reload } from './svgs/reload.svg';
 export { default as Reorder } from './svgs/reorder.svg';

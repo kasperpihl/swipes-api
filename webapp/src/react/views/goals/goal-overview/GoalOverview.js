@@ -5,7 +5,7 @@ import Dragger from 'src/react/components/draggable-list/Dragger';
 
 import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import SWView from 'SWView';
-import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
+import AttachButton from 'src/react/components/attach-button/AttachButton';
 import Button from 'src/react/components/button/Button';
 import SW from './GoalOverview.swiss';
 import StepAdd from '../goal-components/step-add/StepAdd';
@@ -168,7 +168,7 @@ class GoalOverview extends PureComponent {
           <SW.Side viewWidth={viewWidth} right>
             <SW.Section>
               ATTACHMENTS
-              <HOCAttachButton delegate={delegate} />
+              <AttachButton delegate={delegate} dropTitle={goal.get('title')}/>
             </SW.Section>
             {this.renderAttachments()}
           </SW.Side>

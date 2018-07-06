@@ -156,31 +156,33 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
 
   const primary = getState().getIn(['main', 'dragAndDrop', 'primary']);
   const secondary = getState().getIn(['main', 'dragAndDrop', 'secondary']);
+  const secCardActive = getState().getIn(['navigation', 'secondary', 'stack']).size;
 
+  console.log(primary.toJS(), secondary.toJS);
   const items = [
     primary.size ? {
       id: 'primary',
-      title: 'Attach to left card',
-      leftIcon: {icon: 'Note'},
+      title: `Attach to: ${primary.get(0).title}`,
+      subtitle: secCardActive ? 'Left side' : null,
+      leftIcon: {icon: secCardActive ? 'CardLeft' : 'CardSingle'}
     } : null,
 
     secondary.size ? {
       id: 'secondary',
-      title: 'Attach to right card',
-      leftIcon: {icon: 'Note'},
+      title: `Attach to: ${secondary.get(0).title}`,
+      subtitle: 'Right side',
+      leftIcon: {icon: 'CardRight'},
     } : null,
 
     {
       id: 'discussion',
-      title: 'New discussion',
-      leftIcon: { icon: 'Note' },
-      subtitle: 'Create a new discussion'
+      title: 'Start a discussion',
+      leftIcon: { icon: 'Messages' },
     },
     {
       id: 'ping',
-      title: 'New ping',
-      leftIcon: { icon: 'Note' },
-      subtitle: 'Create a new ping'
+      title: 'Ping someone',
+      leftIcon: { icon: 'Ping' },
     },
 
   ].filter(i => !!i);
@@ -189,10 +191,10 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
     onItemAction: (item) => {
       dispatch(mainActions.contextMenu(null));
       if(item.id === 'primary') {
-        primary.last()(files);
+        primary.last().handler(files);
       }
       if(item.id === 'secondary') {
-        secondary.last()(files);
+        secondary.last().handler(files);
       }
       if(item.id === 'discussion') {
         dispatch(navigationActions.set('primary',{
@@ -208,7 +210,7 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
         setTimeout(() => {
           const lastPrimary = getState().getIn(['main', 'dragAndDrop', 'primary']).last();
           if(lastPrimary) {
-            lastPrimary(files);
+            lastPrimary.handler(files);
           }
         }, 1)
       }

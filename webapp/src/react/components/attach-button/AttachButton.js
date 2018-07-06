@@ -10,7 +10,8 @@ import { fromJS } from 'immutable';
 import { EditorState, convertToRaw } from 'draft-js';
 import SW from './AttachButton.swiss';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-
+console.log(menuActions);
+console.log(menuActions.chooseAttachmentType);
 @navWrapper
 @connect(state => ({
   myId: state.getIn(['me', 'id']),
@@ -36,8 +37,8 @@ export default class extends PureComponent {
   }
 
   componentDidMount() {
-    const { subscribeToDrop, target } = this.props;
-    subscribeToDrop(target, this.onDropFiles);
+    const { subscribeToDrop, target, dropTitle } = this.props;
+    subscribeToDrop(target, this.onDropFiles, dropTitle);
   }
 
   componentWillUnmount() {
@@ -63,7 +64,6 @@ export default class extends PureComponent {
   }
   onChooseAttachment = (e) => {
     const { chooseAttachmentType, inputMenu, createNote } = this.props;
-    console.log(this.props.chooseAttachmentType);
     const options = this.getOptionsForE(e);
     options.onClose = this.onAttachButtonCloseOverlay;
     chooseAttachmentType(options).then((item) => {

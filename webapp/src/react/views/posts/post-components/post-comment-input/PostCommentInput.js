@@ -7,7 +7,7 @@ import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput'
 import * as linkActions from 'src/redux/link/linkActions';
 import * as ca from 'swipes-core-js/actions';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
+import AttachButton from 'src/react/components/attach-button/AttachButton';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 import PostAttachment from '../post-attachment/PostAttachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -135,9 +135,10 @@ export default class extends PureComponent {
               onChange={this.onChange}
               reset={this.state.resetDate}
             />
-            <HOCAttachButton
+            <AttachButton
               delegate={this}
               buttonProps={{compact: true}}
+              dropTitle={'New Comment'}
             />
             <SW.SubmitButton
               onClick={this.onAddComment}

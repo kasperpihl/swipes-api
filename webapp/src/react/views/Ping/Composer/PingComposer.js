@@ -81,7 +81,7 @@ export default class extends PureComponent {
       receivers: this.state.receivers.toJS(),
       organization_id: orgId,
       attachments: this.state.attachments.toJS(),
-      message, 
+      message,
     }).then(res => {
       console.log(res);
     })
@@ -166,6 +166,7 @@ export default class extends PureComponent {
           <AttachButton
             delegate={this}
             buttonProps={{compact: true}}
+            dropTitle={'New Ping'}
           />
         </SW.Column>
         <SW.Column none hidden={!receivers.size}>

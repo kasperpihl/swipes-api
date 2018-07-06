@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     ...gs.mixins.padding(4, 8, 3, 8),
     ...gs.mixins.flex('center'),
     backgroundColor: '#007AFF',
-    borderRadius: 24 / 2,
+  borderRadius: 24 / 2,
   },
   numberOfAttachmentsLabel: {
     ...gs.mixins.font(13, 'white'),

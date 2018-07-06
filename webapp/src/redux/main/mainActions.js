@@ -20,12 +20,13 @@ export function modal(target, modal) {
 // ======================================================
 // DragAndDrop
 // ======================================================
-export function subscribeToDrop(target, handler) {
+export function subscribeToDrop(target, handler, title) {
   return {
     type: types.SUBSCRIBE_TO_DROP,
     payload: {
       handler,
-      target
+      target,
+      title
     }
   }
 }

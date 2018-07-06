@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Button from 'src/react/components/button/Button';
-import HOCAttachButton from 'src/react/components/attach-button/AttachButton';
+import AttachButton from 'src/react/components/attach-button/AttachButton';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import PostAttachment from '../post-components/post-attachment/PostAttachment';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
@@ -72,12 +72,13 @@ class PostCreate extends PureComponent {
         <SW.AttachSection notEmpty={hasAttachments}>
           {this.renderContext()}
           {this.renderAttachments()}
-          <HOCAttachButton
+          <AttachButton
             delegate={delegate}
             buttonProps={{
               sideLabel: !hasAttachments && 'Attach',
               compact: hasAttachments,
             }}
+            dropTitle={'New Post'}
           />
         </SW.AttachSection>
         <Button
