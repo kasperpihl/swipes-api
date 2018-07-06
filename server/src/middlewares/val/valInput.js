@@ -1,7 +1,6 @@
 import valjs, {
   object,
 } from 'valjs';
-import SwipesError from 'src/utils/SwipesError';
 
 export default function valInput(schema){
   return (req, res, next) => {
@@ -16,7 +15,9 @@ export default function valInput(schema){
     }
 
     if (error) {
-      return next(new SwipesError(`${req.route.path} valBody: ${error}`));
+      return next(new Error(`${req.route.path} valBody: ${error}`).info({
+        expectedInput: object.as(schema).toString()
+      }));
     }
 
     res.locals.input = params;

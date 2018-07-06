@@ -88,6 +88,9 @@ export const request = (options, data) => (d, getState) => {
         if (r && r.url && !apiUrl.startsWith('https://staging') && r.url.startsWith('https://staging')) {
           redirectUrl = r.url;
         }
+        if(!r.headers.get('Content-Type')) {
+          return Promise.reject(Error('No server response'));
+        }
         return r.json();
       }).then((res) => {
         state = getState();

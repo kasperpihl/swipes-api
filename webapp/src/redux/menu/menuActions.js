@@ -1,7 +1,6 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import Confirmation from 'src/react/context-menus/confirmation/Confirmation';
 import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
-import PostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
 import * as cs from 'swipes-core-js/selectors';
 import * as mainActions from '../main/mainActions';
 import * as navigationActions from '../navigation/navigationActions';
@@ -203,7 +202,7 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
           title: 'Discuss',
         }))
         dispatch(mainActions.modal('primary',{
-          component: PostCreate,
+          component: 'PostCreate',
           title: 'Create Post',
           position: 'center',
         }))

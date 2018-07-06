@@ -32,7 +32,6 @@ app.use('/process', (originalReq, originalRes, originalNext) => {
   const {
     event_type,
   } = originalReq.body.payload;
-
   if (!middlewares[event_type]) {
     return originalNext();
   }

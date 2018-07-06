@@ -2,6 +2,7 @@ import r from 'rethinkdb';
 import { string, date } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
+import pushSend from 'src/utils/push/pushSend';
 
 const expectedInput = {
   receiver_id: string.require(),
@@ -17,6 +18,7 @@ export default endpointCreate({
 }, async (req, res) => {
   // Get inputs
   const input = res.locals.input;
+  await pushSend({});
 
   const query = r.table('ping_receivers')
                   .get(input.receiver_id)
