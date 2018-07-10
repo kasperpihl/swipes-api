@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import Icon from 'Icon';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import { setupCachedCallback } from 'react-delegate';
 import HOCNotifications from 'src/react/views/notifications/HOCNotifications';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-
-import './styles/sidebar.scss';
+import SW from './Sidebar.swiss';
+import { SwissProvider } from '../../../../node_modules/swiss-react';
 
 @connect(state => ({
   me: state.get('me'),
@@ -96,42 +95,35 @@ export default class Sidebar extends PureComponent {
   }
   renderItem(item) {
     const { navId, notificationCounter } = this.props;
-    const { isOpenNotifications: isOpen } = this.state
+    const { isOpenNotifications: isOpen } = this.state;
+
     let counter = 0;
     if (item.id === 'Onboarding') {
       counter = this.getRemainingOnboarding();
     } else if (item.id === 'Notifications') {
       counter = notificationCounter;
     }
-    let className = 'sidebar__item';
+
+    let active = null;
     if (isOpen && item.id === 'Notifications' || !isOpen && item.id === navId) {
-      className += ' sidebar__item--active';
-    }
-
-    let notif = null;
-    if (counter) {
-      notif = <div className="sidebar__notification">{counter}</div>;
-    }
-
-    let image = <Icon icon={item.svg} className="sidebar__icon" />;
-
-    if (item.id === 'AccountList') {
-      image = <HOCAssigning assignees={[item.personId]} size={30} />;
+      active = true;
     }
 
     return (
-      <div
-        onClick={this.onClickCached(item.id, 'primary')}
-        onContextMenu={this.onRightClickCached(item.id, 'secondary')}
-        onMouseDown={this.onMouseDownCached(item.id)}
-        className={className}
-        key={item.id}
-        data-id={item.id}
-        data-title={this.getTitleForId(item.id)}
-      >
-        {image}
-        {notif}
-      </div>
+      <SwissProvider active={active} key={item.id}>
+        <SW.Item
+          onClick={this.onClickCached(item.id, 'primary')}
+          onContextMenu={this.onRightClickCached(item.id, 'secondary')}
+          onMouseDown={this.onMouseDownCached(item.id)}
+          key={item.id}
+          data-id={item.id}
+          className='item'
+        >
+        <SW.Description className='description'>{this.getTitleForId(item.id)}</SW.Description>
+          {item.id === 'AccountList' ? <HOCAssigning assignees={[item.personId]} size={30} /> : <SW.Icon icon={item.svg} className='icon'/>}
+          {counter ? <SW.NotificationCounter>{counter}</SW.NotificationCounter> : null}
+        </SW.Item>
+      </SwissProvider>
     );
   }
 
@@ -158,21 +150,21 @@ export default class Sidebar extends PureComponent {
   }
   render() {
     return (
-      <div className="sidebar">
-        <div className="sidebar__top-section">
+      <SW.Wrapper>
+        <SW.TopSection>
           {this.renderItem({ id: 'Notifications', svg: 'Notification' })}
           {this.getRemainingOnboarding() ? this.renderItem({ id: 'Onboarding', svg: 'Onboarding' }) : null}
-        </div>
-        <div className="sidebar__middle-section">
-          <div className="sidebar__section">
+        </SW.TopSection>
+        <SW.MiddleSection>
+          <SW.Section>
             {this.renderMiddleSection()}
-          </div>
-        </div>
-        <div className="sidebar__bottom-section">
+          </SW.Section>
+        </SW.MiddleSection>
+        <SW.BottomSection>
           {this.renderItem({ id: 'Search', svg: 'Search' })}
           {this.renderProfile()}
-        </div>
-      </div>
+        </SW.BottomSection>
+      </SW.Wrapper>
     );
   }
 }
