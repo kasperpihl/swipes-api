@@ -63,7 +63,7 @@ export default endpointCreate({
   const pings = await dbRunQuery(query);
 
   // Create response data.
-  res.locals.responseData = {
+  res.locals.output = {
     skip,
     limit,
     pings
