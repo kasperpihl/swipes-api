@@ -40,6 +40,7 @@ export default endpointCreate({
 
   // Create ping_receiver object as a multi insert query
   const pingReceiverQuery = dbInsertQuery('ping_receivers', input.receivers.map((rId) => ({
+    id: `${ping.id}-${rId}`,
     ping_id: ping.id,
     sent_at: ping.sent_at,
     received_by: rId,

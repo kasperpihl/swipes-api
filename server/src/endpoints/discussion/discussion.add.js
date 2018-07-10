@@ -1,3 +1,4 @@
+import r from 'rethinkdb';
 import { object, array, string, any } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
@@ -30,13 +31,16 @@ export default endpointCreate({
     created_by: res.locals.user_id,
     topic: input.topic,
     context: input.context || null,
+    last_comment_at: null,
     privacy: input.privacy || 'public',
   });
 
   const discussionResult = await dbRunQuery(discussionQuery);
   const discussion = discussionResult.changes[0].new_val;
 
-  const discussionFollowersQuery = dbInsertQuery('discussion_followers', followers.map((userId) => ({
+  const discussionFollowersQuery = dbInsertQuery('discussion_followers',
+    followers.map((userId) => ({
+    id: `${discussion.id}-${userId}`,
     user_id: userId,
     discussion_id: discussion.id,
     read_at: null,
@@ -45,5 +49,5 @@ export default endpointCreate({
   const followersRes = await dbRunQuery(discussionFollowersQuery);
 
   // Create response data.
-  res.locals.output = { discussion, followers: followersRes };
+  res.locals.output = { discussion, followers: followersRes.changes.map(o => o.new_val) };
 });
