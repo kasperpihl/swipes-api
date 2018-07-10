@@ -1,15 +1,13 @@
 import React, { PureComponent } from 'react'
-
-import Icon from 'Icon';
-import './styles/milestone-result.scss';
+import SW from './MilestoneResult.swiss';
 
 export default (props) => {
   return (
-    <div className="milestone-result">
-      <div className="milestone-result__icon">
-        <Icon icon="MiniMilestone" className="milestone-result__svg" />
-      </div>
-      <div className="milestone-result__title">{props.result.item.title}</div>
-    </div>
+    <SW.Wrapper>
+      <SW.IconWrapper>
+        <SW.Icon icon="MiniMilestone"/>
+      </SW.IconWrapper>
+      <SW.Title className='title'>{props.result.item.title}</SW.Title>
+    </SW.Wrapper>
   );
 };

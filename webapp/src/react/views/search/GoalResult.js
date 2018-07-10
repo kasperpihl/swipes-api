@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react'
+import { SwissProvider } from '../../../../node_modules/swiss-react';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import Icon from 'Icon';
-import './styles/goal-result.scss';
+import SW from './GoalResult.swiss';
+
 
 class GoalResult extends PureComponent {
   renderAssignees() {
@@ -9,27 +10,29 @@ class GoalResult extends PureComponent {
     const assignees = msgGen.goals.getAssignees(result.item.id);
 
     return (
-      <div className="goal-result__assignees">
+      <SW.Assignees>
         <HOCAssigning assignees={assignees} size={30} />
-      </div>
+      </SW.Assignees>
     )
   }
   render() {
     const { result } = this.props;
-    let className = 'goal-result';
+    let completed = undefined;
 
     if (result.item.completed_at) {
-      className += ' goal-result--completed';
+      completed = true
     }
 
     return (
-      <div className={className}>
-        <div className="goal-result__circle">
-          <Icon icon="ChecklistCheckmark" className="goal-result__svg" />
-        </div>
-        <div className="goal-result__title">{result.item.title}</div>
-        {this.renderAssignees()}
-      </div>
+      <SwissProvider completed={completed}>
+        <SW.Wrapper >
+          <SW.Circle>
+            <SW.Icon icon="ChecklistCheckmark"/>
+          </SW.Circle>
+          <SW.Title className="title">{result.item.title}</SW.Title>
+          {this.renderAssignees()}
+        </SW.Wrapper>
+      </SwissProvider>
     )
   }
 }

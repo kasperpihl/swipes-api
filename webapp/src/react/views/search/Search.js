@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
-
+import HOCSearchResults from './HOCSearchResults';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
-
-import Icon from 'Icon';
-import './styles/search.scss';
-import HOCSearchResults from './HOCSearchResults';
+import SW from './Search.swiss';
 
 export default class extends PureComponent {
   constructor(props) {
@@ -16,14 +13,15 @@ export default class extends PureComponent {
     const { searchString } = this.props;
 
     return (
-      <div className="search__field">
-        <input type="text"
+      <SW.SearchField>
+        <SW.Input
+          type="text"
           autoFocus
           placeholder="Search for plans, goals and posts"
           value={searchString}
           onChange={this.onChange}
         />
-      </div>
+      </SW.SearchField>
     )
 
   }

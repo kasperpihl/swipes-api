@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
-
 import { setupDelegate } from 'react-delegate';
 import { iconForId } from 'swipes-core-js/classes/utils';
 import MileStoneResult from './MilestoneResult';
 import GoalResult from './GoalResult';
 import PostResult from './PostResult';
-import './styles/search-result.scss';
+import SW from './SearchResult.swiss';
 
 export default class extends PureComponent {
   constructor(props) {
@@ -40,9 +39,9 @@ export default class extends PureComponent {
     const { result } = this.props;
 
     return (
-      <div className="search-result" onClick={this.onClickCached(result.item.id, result)}>
+      <SW.SearchResult onClick={this.onClickCached(result.item.id, result)}>
         {this.renderContent()}
-      </div>
+      </SW.SearchResult>
     );
   }
 }

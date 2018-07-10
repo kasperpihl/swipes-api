@@ -6,7 +6,7 @@ import SW from './EmptyState.swiss';
 
 const EmptyState = (props) => {
   return (
-    <SwissProvider large={!!props.large} fill={!!props.fill} takeAction={props.takeAction}>
+    <SwissProvider large={!!props.large} fill={!!props.fill} takeAction={props.takeAction} searchResult={props.searchResult}>
       <SW.Wrapper>
         {props.icon && (
           <SW.ImageWrapper>

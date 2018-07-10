@@ -7,6 +7,7 @@ import EmptyState from '../../components/empty-state/EmptyState';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Icon from 'Icon';
 import SearchResult from './SearchResult';
+import SW from './SearchResult.swiss';
 
 @navWrapper
 @connect((state, props) => ({
@@ -42,6 +43,7 @@ export default class HOCSearchResults extends PureComponent {
           title="Looking for something?"
           description={`Search for plans, goals or \n discussions by keywords.`}
           fill
+          searchResult
         />
       )
     }
@@ -53,22 +55,23 @@ export default class HOCSearchResults extends PureComponent {
           title="Oops! Nothing found."
           description={`We even searched our pockets but no results.`}
           fill
+          searchResult
         />
       )
     }
   }
   render() {
     const { results } = this.props;
-    let className = 'search-results';
+    let emptyState = undefined;
 
     if (!results || results && !results.length) {
-      className += ' search-results--empty-state'
+      emptyState = true
     }
 
     return (
-      <div className={className}>
+      <SW.SearchResult emptyState={emptyState}>
         {this.renderResults()}
-      </div>
+      </SW.SearchResult>
     );
   }
 }

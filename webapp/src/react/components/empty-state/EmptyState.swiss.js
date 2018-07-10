@@ -18,6 +18,12 @@ export default styleSheet('EmptyState', {
 
   ImageWrapper: {
     paddingBottom: '30px',
+
+    searchResult: {
+      _size: ['100%', 'auto'],
+      _flex: ['column', 'center', 'center'],
+      marginBotton: '12px',
+    },
   },
 
   Image: {
@@ -32,6 +38,12 @@ export default styleSheet('EmptyState', {
       _size: ['54px', '114px'],
       transform: 'translateX(calc(-50% + 6px))',
     },
+
+    searchResult: {
+      _size: ['auto', '100%'],
+      maxWidth: '360px',
+      opacity: '0.8',
+    },
   },
 
   Title: {
@@ -45,6 +57,12 @@ export default styleSheet('EmptyState', {
 
     takeAction: {
       color: '$sw1',
+    },
+
+    searchResult: {
+      _font: ['11px', '18px', 'bold'],
+      textTransform: 'uppercase',
+      pointerEvents: 'all',
     },
   },
 

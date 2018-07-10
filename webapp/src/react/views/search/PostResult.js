@@ -1,11 +1,7 @@
 import React, { PureComponent } from 'react'
-
 import { miniIconForId } from 'swipes-core-js/classes/utils';
-import Icon from 'Icon';
-import TimeAgo from 'swipes-core-js/components/TimeAgo';
-import StyledText from 'components/styled-text/StyledText';
 import TextParser from 'components/text-parser/TextParser';
-import './styles/post-result.scss';
+import SW from './PostResult.swiss';
 
 export default class extends PureComponent {
 
@@ -16,10 +12,10 @@ export default class extends PureComponent {
     const initials = msgGen.users.getInitials(userId);
 
     if (image) {
-      return <img src={image} className="post-result__image" />
+      return <SW.Image src={image}/>
     }
 
-    return <div className="post-result__initials">{initials}</div>
+    return <SW.Initials>{initials}</SW.Initials>
   }
   renderGeneratedTitle() {
     const { result } = this.props;
@@ -30,7 +26,6 @@ export default class extends PureComponent {
       {
         id: item.created_by,
         string: msgGen.users.getFirstName(item.created_by, ),
-        className: 'post-result__styled-button',
       },
       ' ',
       msgGen.posts.getPostTypeTitle()
@@ -50,19 +45,17 @@ export default class extends PureComponent {
         string.push({
           id,
           string: msgGen.users.getFirstName(id),
-          className: 'post-result__styled-button',
         });
       });
     }
 
     return (
-      <div className="post-result__title">
-        <StyledText
+      <SW.TitleText>
+        <SW.StyledText
           text={string}
           delegate={delegate}
-          className="post-result__styled-text"
         />
-      </div>
+      </SW.TitleText>
     )
   }
   renderSubtitle() {
@@ -73,34 +66,33 @@ export default class extends PureComponent {
     let icon;
 
     if (post.context) {
-      icon = <Icon className="post-result__svg" icon={miniIconForId(post.context.id)} />;
+      icon = <SW.Icon icon={miniIconForId(post.context.id)} />;
     }
 
     return (
-      <div className="post-result__subtitle">
+      <SW.Subtitle>
         {icon}
-        <span className="post-result__span-link">
+        <SW.SpanLink>
           {contextTitle}
-        </span>
+        </SW.SpanLink>
         {seperator}
-        <TimeAgo
-          className="post-result__timestamp"
+        <SW.TimeAgo
           simple
           date={post.created_at}
         />
-      </div>
+      </SW.Subtitle>
     );
   }
 
   renderHeader() {
 
     return (
-      <div className="post-result__header">
-        <div className="post-result__titles">
+      <SW.Header>
+        <SW.Titles>
           {this.renderGeneratedTitle()}
           {this.renderSubtitle()}
-        </div>
-      </div>
+        </SW.Titles>
+      </SW.Header>
     )
   }
   renderMessage() {
@@ -108,24 +100,24 @@ export default class extends PureComponent {
     const { item } = result;
 
     return (
-      <div className="post-result__message">
+      <SW.Message>
         <TextParser>
           {item.message}
         </TextParser>
-      </div>
+      </SW.Message>
     )
   }
   render() {
     return (
-      <div className="post-result">
-        <div className="post-result__profile-image">
+      <SW.Wrapper>
+        <SW.ProfileImage>
           {this.renderProfileImage()}
-        </div>
-        <div className="post-result__right">
+        </SW.ProfileImage>
+        <SW.Right>
           {this.renderHeader()}
           {this.renderMessage()}
-        </div>
-      </div>
+        </SW.Right>
+      </SW.Wrapper>
     )
   }
 }
