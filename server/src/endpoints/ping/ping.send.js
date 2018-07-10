@@ -4,6 +4,7 @@ import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import endpointCreate from 'src/utils/endpointCreate';
 import queueSendJob from 'src/utils/queue/queueSendJob';
+import idGenerate from 'src/utils/idGenerate';
 
 const expectedInput = {
   receivers: array.of(string).require(),
@@ -24,6 +25,7 @@ export default endpointCreate({
 
   // Generate insert query to pings table
   const pingQuery = dbInsertQuery('pings', {
+    id: idGenerate('P', 15),
     created_by: res.locals.user_id,
     sent_at: r.now(),
     receivers: input.receivers,
@@ -38,6 +40,7 @@ export default endpointCreate({
 
   // Create ping_receiver object as a multi insert query
   const pingReceiverQuery = dbInsertQuery('ping_receivers', input.receivers.map((rId) => ({
+    id: `${ping.id}-${rId}`,
     ping_id: ping.id,
     sent_at: ping.sent_at,
     received_by: rId,
@@ -55,7 +58,7 @@ export default endpointCreate({
   });
   
   // Create response data.
-  res.locals.responseData = {
+  res.locals.output = {
     ping,
   };
 })

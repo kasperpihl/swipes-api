@@ -40,7 +40,7 @@ export default endpointCreate({
   }
 
   // Create response data.
-  res.locals.responseData = {
+  res.locals.output = {
     thanked_at: result.changes[0].new_val.thanked_at,
   };
 });
