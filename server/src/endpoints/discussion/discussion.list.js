@@ -23,7 +23,7 @@ export default endpointCreate({
           .orderBy({ index: r.desc('last_comment_at') });
 
   const skip = input.skip || 0;
-  const limit = input.limit || 2;
+  const limit = input.limit || 20;
 
   if(input.type === 'by me') {
     q = q.filter({
@@ -52,7 +52,14 @@ export default endpointCreate({
           )
         );
   }
-  q = q.slice(skip, skip + limit);
+  q = q.slice(skip, skip + limit)
+      .merge(obj => ({
+        followers: r.table('discussion_followers')
+                    .getAll(obj('id'), { index: 'discussion_id' })
+                    .limit(4)
+                    .map(u => u('user_id'))
+                    .coerceTo('array')
+      }));
 
 
 

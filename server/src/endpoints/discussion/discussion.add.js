@@ -28,6 +28,7 @@ export default endpointCreate({
 
   const discussionQuery = dbInsertQuery('discussions', {
     id: idGenerate('D', 15),
+    created_at: r.now(),
     created_by: res.locals.user_id,
     topic: input.topic,
     context: input.context || null,
