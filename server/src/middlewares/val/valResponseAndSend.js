@@ -8,7 +8,7 @@ export default schema => (req, res, next) => {
   }
   const output = res.locals.output;
   if(typeof output !== 'object') {
-    return next(new SwipesError(`${req.route.path} valResponseAndSend: expects res.locals.output to be set. (and an object)`));
+    return next(new Error(`${req.route.path} valResponseAndSend: expects res.locals.output to be set. (and an object)`));
   }
 
   if (schema) {

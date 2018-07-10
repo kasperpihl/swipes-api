@@ -31,8 +31,9 @@ export default endpointCreate({
     created_by: res.locals.user_id,
     topic: input.topic,
     context: input.context || null,
-    last_comment_at: null,
+    last_comment_at: r.now(),
     privacy: input.privacy || 'public',
+    organization_id: input.organization_id,
   });
 
   const discussionResult = await dbRunQuery(discussionQuery);
@@ -44,6 +45,7 @@ export default endpointCreate({
     user_id: userId,
     discussion_id: discussion.id,
     read_at: null,
+    organization_id: input.organization_id,
   })));
 
   const followersRes = await dbRunQuery(discussionFollowersQuery);
