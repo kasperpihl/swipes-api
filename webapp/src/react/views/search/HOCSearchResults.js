@@ -69,7 +69,7 @@ export default class HOCSearchResults extends PureComponent {
     }
 
     return (
-      <SW.SearchResult emptyState={emptyState}>
+      <SW.SearchResult>
         {this.renderResults()}
       </SW.SearchResult>
     );

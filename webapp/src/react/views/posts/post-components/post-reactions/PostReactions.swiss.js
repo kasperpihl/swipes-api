@@ -10,12 +10,12 @@ export default styleSheet('PostReactions', {
         opacity: 0,
         '.#{hoverClass} &': {
           opacity: 1
-        },  
+        },
       },
     }
   },
   HeartButton: {
-    _size: ['30px', '36px'],
+    _size: ['36px', '36px'],
     _flex: ['row', 'left', 'center'],
     alignRight: {
       _size: ['36px', '36px'],
@@ -28,6 +28,7 @@ export default styleSheet('PostReactions', {
     stroke: '$sw1',
     fill: 'transparent',
     transition: '.2s ease',
+    webkitBackfaceVisibility: 'hidden',
     '.heart-button:hover &': {
       stroke: '$red',
     },

@@ -14,6 +14,10 @@ export default styleSheet('EmptyState', {
       pointerEvents: 'none',
       transition: '.15s ease',
     },
+
+    searchResult: {
+      transform: 'translateY(140px)',
+    },
   },
 
   ImageWrapper: {

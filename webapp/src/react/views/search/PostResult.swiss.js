@@ -87,7 +87,6 @@ export default styleSheet('PostResult', {
     _size: ['360px', 'auto'],
     _font: ['15px', '21px'],
     color: '$sw1',
-    _clampString: '9',
     marginTop: '12px',
   },
 
