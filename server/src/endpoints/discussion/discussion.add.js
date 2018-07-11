@@ -52,5 +52,8 @@ export default endpointCreate({
   const followersRes = await dbRunQuery(discussionFollowersQuery);
 
   // Create response data.
-  res.locals.output = { discussion, followers: followersRes.changes.map(o => o.new_val) };
+  res.locals.output = {
+    discussion,
+    followers: followersRes.changes.map(o => o.new_val), 
+  };
 });

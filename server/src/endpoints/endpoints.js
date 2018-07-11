@@ -5,6 +5,7 @@ import path from 'path';
 const routers = {
   authed: express.Router(),
   notAuthed: express.Router(),
+  queue: express.Router(),
 }
 
 // Recursively read through subfolders
@@ -22,6 +23,9 @@ const readFileOrDir = (pathname) => {
     if(typeof route === 'function' && route.name === 'endpointCreate') {
       // Then call the function with the different routers.
       route(routers);
+      if(typeof route.queueJob === 'function') {
+        route.queueJob(routers.queue);
+      }
     }
   }
 }
