@@ -1,1 +1,5 @@
-export { preview as preview } from './preview';
+import { preview } from './preview';
+
+export {
+  preview,
+};
