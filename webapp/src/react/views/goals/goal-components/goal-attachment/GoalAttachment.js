@@ -120,7 +120,12 @@ export default class extends PureComponent {
     if(deleted) {
       return null;
     }
+
     const { attachment: at } = this.props;
+    if(!at) {
+      return null;
+    }
+
     const icon = attachmentIconForService(at.getIn(['link', 'service']) || at);
     return (
       <SW.Wrapper onClick={this.onPreview} className="right-button-hover">

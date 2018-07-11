@@ -1,6 +1,4 @@
-import React from 'react';
-
-export default function(ctx, ...propNames) {
+export default function (ctx, ...propNames) {
   let hasPopped = false;
   const currCWM = ctx.componentWillMount;
   const currCWRP = ctx.componentWillReceiveProps;
@@ -8,30 +6,30 @@ export default function(ctx, ...propNames) {
 
   const checkProps = (pop, props) => {
     const propsToCheck = props || ctx.props;
-    const missing = propNames.find((key) => !propsToCheck[key]);
+    const missing = propNames.find(key => !propsToCheck[key]);
     if (missing && typeof ctx.props.navPop === 'function') {
-      if(pop && !hasPopped){
+      if (pop && !hasPopped) {
         ctx.props.navPop();
         hasPopped = true;
-      } 
+      }
       return false;
     }
     return true;
-  }
+  };
   ctx.componentWillMount = () => {
-    if(checkProps(true) && currCWM) {
+    if (checkProps(true) && currCWM) {
       currCWM.bind(ctx)();
     }
-  }
+  };
   ctx.componentWillReceiveProps = (nextProps) => {
-    if(checkProps(true, nextProps) && currCWRP) {
+    if (checkProps(true, nextProps) && currCWRP) {
       currCWRP.bind(ctx)(nextProps);
     }
-  }
+  };
   ctx.render = () => {
-    if(!checkProps()) {
+    if (!checkProps()) {
       return null;
     }
     return currRender.bind(ctx)();
-  }
+  };
 }

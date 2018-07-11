@@ -34,13 +34,17 @@ export default class HOCPlanOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    props.optimist.identify(props.milestone.get('id'));
-    props.optimist.setDefaultOptions({
-      serial: true,
-    });
+    if (props.milestone) {
+      props.optimist.identify(props.milestone.get('id'));
+      props.optimist.setDefaultOptions({
+        serial: true,
+      });
+    }
+
     this.state = {
       showLine: false,
     };
+
     propsOrPop(this, 'milestone');
     bindAll(this, ['onDragStart', 'onDragEnd']);
     setupLoading(this);
@@ -220,7 +224,7 @@ export default class HOCPlanOverview extends PureComponent {
   render() {
     const { milestone, viewWidth, optimist } = this.props;
     const { showLine } = this.state;
-    
+
     return (
       <DragDropContext
         onDragStart={this.onDragStart}
