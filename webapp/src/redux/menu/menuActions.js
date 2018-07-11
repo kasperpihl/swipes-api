@@ -178,11 +178,11 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
       title: 'Start a discussion',
       leftIcon: { icon: 'IconDiscuss' },
     },
-    {
-      id: 'ping',
-      title: 'Ping someone',
-      leftIcon: { icon: 'Ping' },
-    },
+    // {
+    //   id: 'ping',
+    //   title: 'Ping someone',
+    //   leftIcon: { icon: 'Ping' },
+    // },
 
   ].filter(i => !!i);
 
@@ -197,8 +197,8 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
       }
       if(item.id === 'discussion') {
         dispatch(navigationActions.set('primary',{
-          id: 'Discuss',
-          showTitleInCrumb: true,
+          id: 'PostFeed',
+          // showTitleInCrumb: true,
           title: 'Discuss',
         }))
         dispatch(mainActions.modal('primary',{

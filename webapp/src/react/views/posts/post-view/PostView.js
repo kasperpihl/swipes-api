@@ -128,13 +128,13 @@ class PostView extends PureComponent {
 
       message = message.split('\n').map((item, key) => {
         item = this.renderStuff(URL_REGEX, item, (url, i) => (
-          <Link
+          <SW.Link
             onClick={this.onLinkClickCached(url)}
             className="notification__link"
             key={`link${i}`}
           >
             {url}
-          </Link>
+          </SW.Link>
         ));
 
         item = this.renderStuff(/<![A-Z0-9]*\|.*?>/gi, item, (mention, i) => {

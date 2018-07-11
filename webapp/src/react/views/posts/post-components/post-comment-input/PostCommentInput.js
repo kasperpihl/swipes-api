@@ -139,6 +139,7 @@ export default class extends PureComponent {
               delegate={this}
               buttonProps={{compact: true}}
               dropTitle={'New Comment'}
+              noDragDrop
             />
             <SW.SubmitButton
               onClick={this.onAddComment}

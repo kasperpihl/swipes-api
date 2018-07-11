@@ -36,8 +36,10 @@ export default class extends PureComponent {
   }
 
   componentDidMount() {
-    const { subscribeToDrop, target, dropTitle } = this.props;
-    subscribeToDrop(target, this.onDropFiles, dropTitle);
+    const { subscribeToDrop, target, dropTitle, noDragDrop } = this.props;
+    if(!noDragDrop) {
+      subscribeToDrop(target, this.onDropFiles, dropTitle);
+    }
   }
 
   componentWillUnmount() {
