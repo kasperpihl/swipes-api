@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as linkActions from 'src/redux/link/linkActions';
@@ -34,6 +35,7 @@ export default class extends PureComponent {
   }
   constructor(props) {
     super(props);
+    propsOrPop(this, 'post');
     this.state = {};
 
     setupLoading(this);
