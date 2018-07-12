@@ -27,7 +27,7 @@ class PlanCSVExporter extends PureComponent {
       const a = document.createElement('a');
       a.href = url;
       a.download = "plans.csv";
-      a.click();  
+      a.click();
     })
     .catch((err) => {
       console.log('ERROR', err);
