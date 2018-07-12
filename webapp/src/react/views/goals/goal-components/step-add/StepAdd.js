@@ -102,7 +102,7 @@ export default class extends PureComponent {
   renderPending() {
     return this.state.queue.map((row, i) => (
       <SW.Wrapper key={row.get('id')}>
-        {row.get('status') != 'error' && <LoaderCircle />}
+        {row.get('status') != 'error' && <SW.LoaderCircle />}
         {row.get('status') === 'error' && (
           <SW.ReuploadWrapper>
             <Button icon="cloud_upload" onClick={this.onClick.bind(this, i)} />
