@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'Icon';
-import Button from 'src/react/components/button/Button';
 import { setupCachedCallback } from 'react-delegate';
-import './styles/result-item.scss';
+import SW from './ResultItem.swiss';
 
 // now use events as onClick:
 
@@ -21,25 +19,25 @@ class ResultItem extends Component {
     }
   }
   renderIcon(obj, side) {
-    let className = 'result__icon';
+    let className = '';
     let children;
 
     if (obj.src) {
-      className += ' result__icon--img';
-      children = <img role="presentation" src={obj.src} />;
+      className += 'img';
+      children = <SW.Image role="presentation" src={obj.src} />;
     } else if (obj.icon) {
-      className += ' result__icon--svg';
-      children = <Icon {...obj} />;
+      className += 'svg';
+      children = <SW.Icon {...obj} />;
     } else if (obj.button) {
-      className += ' result__icon--btn';
+      className += 'btn';
       children = (
-        <Button
+        <SW.Button
           {...obj.button}
           onClick={this.onClickCached(side)}
         />
         );
     } else if (obj.label) {
-      className += ' result__icon--label';
+      className += 'label';
       children = obj.label;
     } else if (obj.initials) {
       const styles = {};
@@ -52,16 +50,16 @@ class ResultItem extends Component {
         styles.backgroundColor = obj.initials.backgroundColor;
       }
 
-      className += ' result__icon--initials';
-      children = <div className="result__initials" style={styles}>{obj.initials.letters}</div>;
+      className += 'initials';
+      children = <SW.Initials className="result__initials" style={styles}>{obj.initials.letters}</SW.Initials>;
     }
 
-    className += ` result__icon--${side}`;
+    className += ` ${side}`;
 
     return (
-      <div className={className}>
+      <SW.IconWrapper className={className}>
         {children}
-      </div>
+      </SW.IconWrapper>
     );
   }
   renderLeftIcon() {
@@ -89,7 +87,7 @@ class ResultItem extends Component {
       return undefined;
     }
 
-    return <div className="result__title">{title}</div>;
+    return <SW.Title className='title'>{title}</SW.Title>;
   }
   renderSubtitle() {
     const { subtitle } = this.props;
@@ -98,29 +96,32 @@ class ResultItem extends Component {
       return undefined;
     }
 
-    return <div className="result__subtitle">{subtitle}</div>;
+    return <SW.Subtitle className='subtitle'>{subtitle}</SW.Subtitle>;
   }
   render() {
     const { disabled, selected, onMouseDown } = this.props;
-    let className = 'result';
+    let className = '';
 
     if (disabled) {
-      className += ' result--disabled';
+      className += ' disabled';
     }
 
     if (selected) {
-      className += ' result--selected';
+      className += ' selected';
     }
 
     return (
-      <div className={className} onMouseDown={onMouseDown} onClick={this.onClickCached('row')}>
+      <SW.Wrapper
+      className={className}
+      onMouseDown={onMouseDown}
+      onClick={this.onClickCached('row')}>
         {this.renderLeftIcon()}
-        <div className="result__data">
+        <SW.Data className='data'>
           {this.renderTitle()}
           {this.renderSubtitle()}
-        </div>
+        </SW.Data>
         {this.renderRightIcon()}
-      </div>
+      </SW.Wrapper>
     );
   }
 }

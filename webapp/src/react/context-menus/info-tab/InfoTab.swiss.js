@@ -24,7 +24,7 @@ export default styleSheet('InfoTab', {
   Action: {
     _size: ['100%', '43px'],
     _flex: ['row', 'left', 'center'],
-    borderBottom: '1px solid $blue80',
+    borderBottom: '1px solid #333D59',
     transition: '.2s ease',
 
     '&:hover': {
@@ -64,7 +64,7 @@ export default styleSheet('InfoTab', {
 
   Info: {
     _size: ['100%', 'auto'],
-    borderBottom: '1px solid $blue80',
+    borderBottom: '1px solid #333D59',
     paddingBottom: '18px',
     paddingTop: '6px',
     marginBottom: '12px',
@@ -93,7 +93,7 @@ export default styleSheet('InfoTab', {
 
   InfoAction: {
     _font: ['10px', '18px', '600'],
-    color: '$sw3',
+    color: '$sw2',
     marginLeft: '6px',
     opacity: '0',
     transition: '.15s ease',

@@ -27,6 +27,11 @@ class HOCDragAndDrop extends Component {
     }
   }
 
+  closeOverlay = (e) => {
+    e.preventDefault();
+    this.setState({hoverActive: false});
+  }
+
   handleDragLeave = (e) => {
     e.preventDefault();
     this.setState({hoverActive: false});
@@ -59,6 +64,7 @@ class HOCDragAndDrop extends Component {
         handleDragOver={this.handleDragOver}
         handleDrop={this.handleDrop}
         hoverActive={hoverActive}
+        closeOverlay={this.closeOverlay}
       >
         {children}
       </DragAndDrop>

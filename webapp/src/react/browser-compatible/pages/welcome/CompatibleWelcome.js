@@ -120,14 +120,14 @@ class CompatibleWelcome extends PureComponent {
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
               />
-              <Label>Name of company</Label>
-              <Button className="button-hover" onClick={this.onCreate}>
+              <SW.Label>Name of company</SW.Label>
+              <SW.Button className="button-hover" onClick={this.onCreate}>
                 {isLoading('creating') ? (
-                  <Loader icon="loader" width="12" height="12" />
+                  <SW.Loader icon="loader" width="12" height="12" />
                 ) : (
-                  <SVG icon="ArrowRightLong" />
+                  <SW.SVG icon="ArrowRightLong" />
                 )}
-              </Button>
+              </SW.Button>
             </SW.InputWrapper>
           </label>
         </SW.CreateOrganization>
