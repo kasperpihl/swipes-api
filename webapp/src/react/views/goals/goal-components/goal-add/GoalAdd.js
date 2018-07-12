@@ -37,13 +37,14 @@ export default class GoalAdd extends PureComponent {
     if(!title) {
       return;
     }
-    createGoal(title, milestoneId, assignees.toJS()).then((res) => {
 
+    this.setState({
+      resetDate: new Date(),
+      assignees: fromJS(this.props.defAssignees || []),
+    });
+
+    createGoal(title, milestoneId, assignees.toJS()).then((res) => {
       if (res.ok) {
-        this.setState({
-          resetDate: new Date(),
-          assignees: fromJS(this.props.defAssignees || []),
-        });
       }
     });
   }

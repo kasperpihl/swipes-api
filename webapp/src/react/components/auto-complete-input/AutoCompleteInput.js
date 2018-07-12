@@ -44,9 +44,11 @@ export default class extends PureComponent {
       this.setState({
         editorState: this.plugins.createEditorState(nextProps.initialValue),
       });
-      if (nextProps.autoFocus) {
-        this.shouldFocus = true;
-      }
+
+      // force autofocus on the input because otherwise is not working correctly
+      // for some reason if we don't do it and the user hit enter it will do the last op again
+      // tho the input in visually empty
+      this.shouldFocus = true;
     }
   }
   componentDidMount() {
