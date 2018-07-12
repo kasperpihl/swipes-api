@@ -58,7 +58,7 @@ export default styleSheet('InfoTab', {
 
   ActionTitle: {
     _size: ['100%', 'auto'],
-    _font: ['12px', '18px', '500'],
+    _font: ['12px', '18px', '300'],
     color: '$sw5',
   },
 
@@ -112,7 +112,7 @@ export default styleSheet('InfoTab', {
   },
 
   InfoText: {
-    _font: ['12px', '18px', '500'],
+    _font: ['12px', '18px', '300'],
     color: '$sw2',
     _flex: ['row', 'left', 'center'],
     marginTop: '3px',
@@ -129,7 +129,7 @@ export default styleSheet('InfoTab', {
   },
 
   AboutTitle: {
-    _font: ['15px', '24px', '500'],
+    _font: ['15px', '24px', '300'],
     color: '$sw5',
     paddingLeft: '6px',
   },
@@ -142,7 +142,7 @@ export default styleSheet('InfoTab', {
 
   AboutText: {
     _el: TextParser,
-    _font: ['12px', '18px', '500'],
+    _font: ['12px', '18px', '300'],
     color: '$sw2',
   },
 })
