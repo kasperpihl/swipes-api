@@ -52,7 +52,11 @@ export default class extends PureComponent {
   constructor(props) {
     super(props);
     propsOrPop(this, 'goal');
-    props.optimist.identify(props.goal.get('id'));
+
+    if (props.goal) {
+      props.optimist.identify(props.goal.get('id'));
+    }
+
     this.state = {
       showLine: false,
     };

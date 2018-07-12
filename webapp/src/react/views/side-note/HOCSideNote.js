@@ -36,7 +36,7 @@ const mapStateToProps = (state, props) => {
   const note = state.getIn(['notes', 'server', props.id]);
   let serverOrg = state.getIn(['notes', 'cache', props.id, 'serverOrg']);
   serverOrg = serverOrg || note;
-  const latestRev = serverOrg.get('rev') || 1;
+  const latestRev = serverOrg ? serverOrg.get('rev') : 1;
 
   return {
     organizationId: state.getIn(['me', 'organizations', 0, 'id']),

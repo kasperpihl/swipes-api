@@ -16,21 +16,22 @@ export default class Goals {
   }
   getRelatedFilter(goalId) {
     const goal = this.getGoal(goalId);
-    if(!goal) {
+    if (!goal) {
       return [];
     }
     const helper = new GoalsUtil(goal);
-    return helper.getOrderedAttachments().toList().filter(
-      a => a.getIn(['link', 'service', 'name']) === 'swipes' && a.getIn(['link', 'service', 'type']) === 'note'
-    ).map(a => a.getIn(['link', 'service', 'id'])).toJS();
 
+    return helper.getOrderedAttachments().toList().filter(
+      a => a && a.getIn(['link', 'service', 'name']) === 'swipes' && a.getIn(['link', 'service', 'type']) === 'note',
+    ).map(a => a.getIn(['link', 'service', 'id']))
+      .toJS();
   }
   getStatus(goalId) {
     const goal = this.getGoal(goalId);
-    if(!goal) {
+    if (!goal) {
       return 'now';
     }
-    if(goal.get('milestone_id')) {
+    if (goal.get('milestone_id')) {
       return this.parent.milestones.getStatusForGoalId(goal.get('milestone_id'), goal.get('id'));
     }
     const helper = new GoalsUtil(goal);
@@ -38,11 +39,10 @@ export default class Goals {
   }
   getAssignees(goalId) {
     const goal = this.getGoal(goalId);
-    if(!goal) {
+    if (!goal) {
       return List([]);
     }
     const helper = new GoalsUtil(goal);
     return helper.getAssignees();
   }
-
 }
