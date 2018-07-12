@@ -103,7 +103,7 @@ export default styleSheet('CompatibleWelcome', {
   },
   Label: {
     _font: ['15px', '25px'],
-    color: '$sw3',
+    color: '$sw2',
     top: '50%',
     transform: 'translateY(-50%)',
     left: '9px',
@@ -113,7 +113,7 @@ export default styleSheet('CompatibleWelcome', {
     transition: '.2s ease',
     'float': {
       _font: ['11px', '15px'],
-      color: '$sw3',
+      color: '$blue',
       top: '0',
       transition: '.2s ease',
     }

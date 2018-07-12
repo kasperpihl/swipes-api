@@ -120,7 +120,7 @@ class CompatibleWelcome extends PureComponent {
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
               />
-              <SW.Label>Name of company</SW.Label>
+              <SW.Label float={float}>Name of company</SW.Label>
               <SW.Button className="button-hover" onClick={this.onCreate}>
                 {isLoading('creating') ? (
                   <SW.Loader icon="loader" width="12" height="12" />

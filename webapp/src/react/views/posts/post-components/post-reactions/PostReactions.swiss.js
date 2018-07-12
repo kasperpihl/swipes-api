@@ -15,7 +15,7 @@ export default styleSheet('PostReactions', {
     }
   },
   HeartButton: {
-    _size: ['36px', '36px'],
+    _size: ['30px', '36px'],
     _flex: ['row', 'left', 'center'],
     alignRight: {
       _size: ['36px', '36px'],

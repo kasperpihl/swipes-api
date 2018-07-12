@@ -78,7 +78,7 @@ export default class extends PureComponent {
     }
 
     return (
-      <SW.Wrapper className="goal-item" onClick={this.onGoalClick}>
+      <SW.Wrapper onClick={this.onGoalClick}>
         <SW.StatusDot status={status} />
         <SW.Title
           status={status}
