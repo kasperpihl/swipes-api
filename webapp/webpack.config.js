@@ -140,7 +140,7 @@ module.exports = {
       '/v1/**': {
         target: 'http://localhost:5000',
         secure: false,
-        xfwd: false
+        xfwd: false,
       }
     },
     historyApiFallback: true
