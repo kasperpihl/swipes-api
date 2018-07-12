@@ -3,11 +3,10 @@ import {
   dbPostsGetSingleCommentFollowers,
 } from '../db_utils/posts';
 
-// const MAX_LENGHT = 50;
 const cutTextRegExp = new RegExp(/^(.{50}[^\s]*).*/);
 const uniqueCommentUserIds = (comments) => {
   const userIds = [];
-  const commentsArray = Object.keys(comments).map(key => obj[key]);
+  const commentsArray = Object.keys(comments).map(key => comments[key]);
 
   commentsArray.sort((a, b) => {
     return b.created_at - a.created_at;
