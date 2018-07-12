@@ -10,7 +10,7 @@ export default styleSheet('HOCHeaderTitle', {
     },
 
     Border: {
-      borderBottom: '1px solid $sw1',
+      borderBottom: '1px solid $sw3',
     },
   },
 

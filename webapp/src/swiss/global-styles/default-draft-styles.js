@@ -5,7 +5,7 @@ addGlobalStyles({
     textAlign: 'initial',
     width: '100%',
     height: 'auto',
-    
+
   },
   '.public-DraftEditor-content[contenteditable=true]': {
     WebkitUserModify: 'read-write-plaintext-only',
@@ -175,5 +175,5 @@ addGlobalStyles({
   '.public-DraftStyleDefault-depth4.public-DraftStyleDefault-reset': {
     counterReset: 'ol4',
   },
-  
+
 });
