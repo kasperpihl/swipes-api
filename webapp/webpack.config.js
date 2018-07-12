@@ -138,7 +138,7 @@ module.exports = {
     hot: !isProd,
     proxy: {
       '/v1/**': {
-        target: '127.0.0.1:5000',
+        target: 'http://localhost:5000',
         secure: false,
         xfwd: false,
       }
