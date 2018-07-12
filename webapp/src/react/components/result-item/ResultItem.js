@@ -40,18 +40,8 @@ class ResultItem extends Component {
       className += 'label';
       children = obj.label;
     } else if (obj.initials) {
-      const styles = {};
-
-      if (obj.initials.color) {
-        styles.color = obj.initials.color;
-      }
-
-      if (obj.initials.backgroundColor) {
-        styles.backgroundColor = obj.initials.backgroundColor;
-      }
-
       className += 'initials';
-      children = <SW.Initials className="result__initials" style={styles}>{obj.initials.letters}</SW.Initials>;
+      children = <SW.Initials>{obj.initials.letters}</SW.Initials>;
     }
 
     className += ` ${side}`;

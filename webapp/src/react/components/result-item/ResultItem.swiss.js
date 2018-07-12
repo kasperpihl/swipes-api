@@ -108,8 +108,9 @@ export default styleSheet('ResultItem', {
   },
 
   Initials: {
-    _size: '30px',
-    _font: '12px',
+    _size: '24px',
+    _font: '11px',
+    _flex: ['column', 'center', 'center'],
     fontWeight: '300',
     color: '$sw5',
     backgroundColor: '$sw1',
