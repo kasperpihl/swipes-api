@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import timeAgo from 'swipes-core-js/utils/time/timeAgo';
-import SW from './Notificationitem.swiss';
+import SW from './NotificationItem.swiss';
 
 class NotificationItem extends PureComponent {
   constructor(props) {
