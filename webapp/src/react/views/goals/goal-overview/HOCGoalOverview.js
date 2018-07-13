@@ -65,7 +65,42 @@ export default class extends PureComponent {
   componentWillUnmount() {
     this._unmounted = true;
   }
-
+  onSaveWay(options) {
+    const { createWay, inputMenu } = this.props;
+    const helper = this.getHelper();
+    inputMenu({
+      ...options,
+      placeholder: 'What should we call the way?',
+      buttonLabel: 'Save',
+    }, (title) => {
+      if (title && title.length) {
+        this.setLoading('dots');
+        createWay(title, helper.getObjectForWay()).then((res) => {
+          if (res.ok) {
+            this.clearLoading('dots', 'Saved way', 3000);
+          } else {
+            this.clearLoading('dots', '!Something went wrong', 3000);
+          }
+        });
+      }
+    });
+  }
+  onLoadWay(options) {
+    const { loadWay, goalLoadWay } = this.props;
+    const helper = this.getHelper();
+    loadWay(options, (way) => {
+      if (way) {
+        this.setLoading('dots');
+        goalLoadWay(helper.getId(), way.get('id')).then((res) => {
+          if (res.ok) {
+            this.clearLoading('dots', 'Loaded way', 3000);
+          } else {
+            this.clearLoading('dots', '!Something went wrong', 3000);
+          }
+        });
+      }
+    });
+  }
   onArchive(options) {
     const { goal, confirm, archive } = this.props;
     confirm(Object.assign({}, options, {
