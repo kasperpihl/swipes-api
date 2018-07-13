@@ -1,9 +1,12 @@
 import valInput from 'src/middlewares/val/valInput';
 import valResponseAndSend from 'src/middlewares/val/valResponseAndSend';
+import queueSendJob from 'src/utils/queue/queueSendJob';
+import queueCreateJob from 'src/utils/queue/queueCreateJob';
 
 export default (options, middleware) => {
   // FUNCTION MUST BE NAMED endpointCreate. Dont change!
-  return function endpointCreate(routers) {
+  let addToQueue = false;
+  function endpointCreate(routers) {
     if(typeof options !== 'object') {
       options = { endpoint: options };
     }
@@ -24,7 +27,20 @@ export default (options, middleware) => {
       options.endpoint,
       valInput(options.expectedInput),
       middleware,
+      async (req, res, next) => {
+        if(addToQueue) {
+          await queueSendJob(options.endpoint, res.locals.backgroundInput || {});
+        }
+        next();
+      },
       valResponseAndSend(options.expectedOutput),
     );
   }
+
+  endpointCreate.background = function(mw) {
+    endpointCreate.queueJob = queueCreateJob({ eventName: options.endpoint }, mw);
+    addToQueue = true;
+    return endpointCreate;
+  }
+  return endpointCreate;
 }

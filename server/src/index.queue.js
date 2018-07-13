@@ -9,7 +9,7 @@ import http from 'http';
 import express from 'express';
 import MiddlewareComposer from 'src/_legacy-queue/middleware_composer';
 import * as middlewares from 'src/_legacy-queue/middlewares';
-import jobs from 'src/jobs/jobs';
+import endpoints from 'src/endpoints/endpoints';
 
 import corsHandler from 'src/middlewares/corsHandler';
 import errorSwipes from 'src/middlewares/error/errorSwipes';
@@ -51,7 +51,7 @@ app.use('/process', (originalReq, originalRes, originalNext) => {
   return composer.run();
 });
 
-app.use('/process', jobs);
+app.use('/process', endpoints.queue);
 
 app.use(errorSwipes);
 app.use(errorHandler);

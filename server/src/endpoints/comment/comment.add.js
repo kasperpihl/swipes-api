@@ -59,4 +59,5 @@ export default endpointCreate({
     follower,
     discussion,
   };
+
 });

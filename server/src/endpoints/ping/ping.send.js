@@ -4,6 +4,8 @@ import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import endpointCreate from 'src/utils/endpointCreate';
 import queueSendJob from 'src/utils/queue/queueSendJob';
+import dbSendEvents from 'src/utils/db/dbSendEvents';
+import pushSend from 'src/utils/push/pushSend';
 import idGenerate from 'src/utils/idGenerate';
 
 const expectedInput = {
@@ -52,13 +54,54 @@ export default endpointCreate({
   // Execute the ping_receivers query 
   const pingReceiverResult = await dbRunQuery(pingReceiverQuery);
 
-  await queueSendJob('pingSend', {
+  res.locals.backgroundInput = {
     ping_id: ping.id,
     organization_id: input.organization_id,
-  });
+  };
   
   // Create response data.
   res.locals.output = {
     ping,
   };
+}).background(async (req, res, next) => {
+  // Get inputs
+  const input = res.locals.input;
+
+  // Fetch the ping object
+  const ping = await dbRunQuery(
+    r.table('pings').get(input.ping_id)
+  );
+
+  // Send events to both sender and receivers
+  await dbSendEvents([{
+    user_ids: [ping.created_by],
+    type: 'ping_sent',
+    data: {
+      ping_id: input.ping_id,
+    },
+  }, {
+    user_ids: ping.receivers,
+    type: 'ping_received',
+    data: {
+      ping_id: input.ping_id,
+    }
+  }]);
+
+  // Fetch sender (to have the name)
+  const sender = await dbRunQuery(
+    r.table('users')
+      .get(ping.created_by)
+      .pluck('profile')
+  );
+
+  // Fire push to all the receivers.
+  await pushSend({
+    orgId: input.organization_id,
+    users: ping.receivers,
+    targetId: ping.id,
+    targetType: 'ping',
+  }, {
+    content: ping.message,
+    heading: `${sender.profile.first_name} pinged you`,
+  });
 })
