@@ -1,7 +1,7 @@
 {
   "apps" : [{
     "name"        : "swipes-server",
-    "script"      : "dist/api-index.js",
+    "script"      : "dist/index.api.js",
     "watch"       : "./dist/",
     "node_args"   : ["--harmony"],
     "instances" : 0,
