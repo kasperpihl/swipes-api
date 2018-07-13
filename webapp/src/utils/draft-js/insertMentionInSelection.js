@@ -18,7 +18,7 @@ export default (editorState, triggerKey, id) => {
 
   contentState = contentState.createEntity(
     'MENTION',
-    'IMMUTABLE',
+    'IMMUTABLE',[]
     {
       apiString,
     },
@@ -31,7 +31,7 @@ export default (editorState, triggerKey, id) => {
     null,
     contentState.getLastCreatedEntityKey()
   );
-  
+
   editorState = EditorState.set(editorState, { currentContent: contentState });
 
 
