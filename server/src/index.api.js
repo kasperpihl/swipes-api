@@ -57,9 +57,9 @@ app.use(logToAws);
 app.use('/v1', endpoints.authed);
 app.use('/v1', routes.v1Authed);
 
-// // ========================================================================
-// // Error handlers / they should be at the end of the middleware stack
-// // ========================================================================
+// ========================================================================
+// Error handlers / they should be at the end of the middleware stack
+// ========================================================================
 
 app.use(errorSwipes);
 app.use(errorHandler);
