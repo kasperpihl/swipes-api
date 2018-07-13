@@ -6,8 +6,7 @@ import randomString from 'swipes-core-js/utils/randomString';
 import Button from 'src/react/components/button/Button';
 import TabBar from 'components/tab-bar/TabBar';
 import ResultList from './ResultList';
-
-import './styles/tab-menu.scss';
+import SW from './TabMenu.swiss';
 
 class TabMenu extends Component {
   constructor(props) {
@@ -28,7 +27,7 @@ class TabMenu extends Component {
     this.onTabMenuLoad(this);
     const { search } = this.props;
     if (search) {
-      this.refs.search.focus();
+      this.search.focus();
     }
     this.reload();
   }
@@ -125,18 +124,17 @@ class TabMenu extends Component {
     }
 
     return (
-      <div className="tab-menu__search">
-        <input
+      <SW.Search>
+        <SW.Input
           type="text"
-          ref="search"
-          className="tab-menu__input"
+          innerRef={(c) => {this.search = c}}
           placeholder={search}
           onKeyDown={this.onKeyDown}
           onChange={this.onChangeQuery}
           value={query}
         />
-        <Button icon="Close" className="tab-menu__close" compact onClick={this.emptySearch} />
-      </div>
+        <SW.Button icon="Close" className='close' compact onClick={this.emptySearch} />
+      </SW.Search>
     );
   }
   renderTabBar() {
@@ -192,14 +190,14 @@ class TabMenu extends Component {
   }
   renderHeader() {
     return (
-      <div className="tab-menu__header">
-        <div className="tab-menu__section">
+      <SW.Header>
+        <SW.Section>
           {this.renderSearchField()}
-        </div>
-        <div className="tab-menu__section tab-menu__section--tab-bar">
+        </SW.Section>
+        <div className="tabBar">
           {this.renderTabBar()}
         </div>
-      </div>
+      </SW.Header>
     );
   }
   renderFooter() {
@@ -210,37 +208,35 @@ class TabMenu extends Component {
     }
 
     return (
-      <div className="tab-menu__footer">
-        <div className="tab-menu__status">
+      <SW.Footer>
+        <SW.Status>
           {actionStatus}
-        </div>
-        <div className="tab-menu__actions">
+        </SW.Status>
+        <SW.Actions>
           <Button title={actionLabel} onClick={this.handleClick} />
-        </div>
-      </div>
+        </SW.Actions>
+      </SW.Footer>
     );
   }
   render() {
     const { search, style, className: cN } = this.props;
     const { query } = this.state;
-    let className = `tab-menu ${cN}`;
+    let searching;
+    let dynamicHeight;
 
-    if (query.length) {
-      className += ' tab-menu--is-searching';
-    }
+    { query.length ? searching = true : undefined }
 
     this.numberOfTabs = this.getNumberOfTabs();
 
-    if (typeof this.numberOfTabs !== 'number' && !search) {
-      className += ' tab-menu--dynamic-height';
+    { typeof this.numberOfTabs !== 'number' && !search ? dynamicHeight = true : undefined
     }
 
     return (
-      <div className={className} style={style}>
+      <SW.Wrapper searching={searching} dynamicHeight={dynamicHeight}>
         {this.renderHeader()}
         {this.renderResultList()}
         {this.renderFooter()}
-      </div>
+      </SW.Wrapper>
     );
   }
 }

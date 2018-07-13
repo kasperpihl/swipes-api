@@ -4,6 +4,7 @@ import Loader from 'components/loaders/Loader';
 import { setupDelegate } from 'react-delegate';
 import { setupCachedCallback } from 'react-delegate';
 import ResultItem from 'components/result-item/ResultItem';
+import SW from './TabMenu.swiss';
 
 
 // now use events as onClick:
@@ -44,10 +45,10 @@ class ResultList extends Component {
   }
   render() {
     return (
-      <div className="tab-menu__list">
+      <SW.List>
         {this.renderResults()}
         {this.renderLoader()}
-      </div>
+      </SW.List>
     );
   }
 }
