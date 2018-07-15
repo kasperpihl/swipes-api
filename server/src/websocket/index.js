@@ -57,6 +57,10 @@ export default (server) => {
         }));
       }
     });
+    socket.on('error', (err) => {
+      // Don't crash the server when a connection breaks unexpected
+      console.log('Socket client error', err);
+    })
 
     socket.send(JSON.stringify({ type: 'hello', payload: 'world' }), (error) => {
       if (error) {
