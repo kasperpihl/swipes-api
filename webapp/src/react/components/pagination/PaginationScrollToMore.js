@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { styleSheet } from 'swiss-react';
 import withPagination from './withPagination';
 import Loader from 'src/react/components/loaders/Loader';
+import Button from 'src/react/components/button/Button';
 
 const SW = styleSheet('PaginationScrollToMore', {
   Wrapper: {
@@ -14,6 +15,10 @@ const SW = styleSheet('PaginationScrollToMore', {
   LoadLabel: {
     paddingLeft: '12px',
   },
+  ErrorLabel: {
+    // color: '$red',
+    paddingRight: '12px',
+  }
 });
 
 @withPagination
@@ -29,10 +34,14 @@ export default class PaginationScrollToMore extends PureComponent {
     this.checkForMore();
   }
   checkForMore = () => {
-    const { loading, results, hasMore, loadMore } = this.props.pagination;
-    if(!loading && hasMore && this.isElementOnScreen()) {
+    const { loading, results, hasMore, loadMore, error } = this.props.pagination;
+    if(!loading && hasMore && !error && this.isElementOnScreen()) {
       loadMore();
     }
+  }
+  onReload = () => {
+    const { loadMore } = this.props.pagination;
+    loadMore();
   }
   isElementOnScreen() {
     if(!this.wrapper) {
@@ -59,8 +68,15 @@ export default class PaginationScrollToMore extends PureComponent {
             <SW.LoadLabel>Loading...</SW.LoadLabel>
           </SW.LoadWrapper>
         )}
+        {pagination.error && (
+          <SW.LoadWrapper>
+            <SW.ErrorLabel>
+              {this.props.errorLabel || 'Something went wrong'}
+            </SW.ErrorLabel>
+            <Button icon="Reload" onClick={this.onReload} />
+          </SW.LoadWrapper>
+        )}
           
-        
       </SW.Wrapper>
     );
   }

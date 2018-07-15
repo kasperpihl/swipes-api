@@ -20,6 +20,7 @@ export default class PaginationProvider extends PureComponent {
       results: null,
       loadMore: this.loadMore,
       loading: false,
+      error: false,
       hasMore: false,
     };
   }
@@ -53,7 +54,7 @@ export default class PaginationProvider extends PureComponent {
     const fetchId = randomString(8);
     this.fetchId = fetchId;
     const limit = options.limit || DEFAULT_LIMIT;
-    this.setState({ loading: true });
+    this.setState({ loading: true, error: false });
     request(options.url, {
       skip: results ? results.length : 0,
       limit,
@@ -68,7 +69,7 @@ export default class PaginationProvider extends PureComponent {
           hasMore: newResults.length === limit,
           loading: false,
         });
-      } else this.setState({ loading: false });
+      } else this.setState({ loading: false, error: true });
     })
   }
   render() {
