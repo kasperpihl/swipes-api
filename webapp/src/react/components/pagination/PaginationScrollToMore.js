@@ -1,12 +1,19 @@
 import React, { PureComponent } from 'react';
 import { styleSheet } from 'swiss-react';
 import withPagination from './withPagination';
+import Loader from 'src/react/components/loaders/Loader';
 
 const SW = styleSheet('PaginationScrollToMore', {
   Wrapper: {
-    background: 'red',
-    height: '10px',
-  }
+    minHeight: '54px',
+  },
+  LoadWrapper: {
+    padding: '12px',
+    _flex: ['row', 'left', 'center'],
+  },
+  LoadLabel: {
+    paddingLeft: '12px',
+  },
 });
 
 @withPagination
@@ -28,6 +35,10 @@ export default class PaginationScrollToMore extends PureComponent {
     }
   }
   isElementOnScreen() {
+    if(!this.wrapper) {
+      return false;
+      console.log()
+    }
     const rect = this.wrapper.getBoundingClientRect();
 
     return (
@@ -38,8 +49,20 @@ export default class PaginationScrollToMore extends PureComponent {
     );
   }
   render() {
+    const { pagination } = this.props;
+
     return (
-      <SW.Wrapper innerRef={(e) => this.wrapper = e}/>
+      <SW.Wrapper
+        innerRef={(e) => this.wrapper = e}>
+        {pagination.loading && (
+          <SW.LoadWrapper>
+            <Loader mini size={30} />
+            <SW.LoadLabel>Loading...</SW.LoadLabel>
+          </SW.LoadWrapper>
+        )}
+          
+        
+      </SW.Wrapper>
     );
   }
 }
