@@ -1,52 +1,16 @@
 import React, { PureComponent } from 'react';
 import PingComposer from '../Composer/PingComposer';
 import PingListItem from './Item/PingListItem';
+import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
+import withPagination from 'src/react/components/pagination/withPagination';
 import SW from './PingList.swiss';
-/*
-Yana: UB9BXJ1JB
-Stefan: URU3EUPOE
-Kasper: UVZWCJDHK
-Tisho: U3TXFTNCL / USTFL9YVE
-Peter: UFXDWRVSU 
-*/
 
-const now = new Date();
-const subtract = (m) => new Date(now.getTime() + m * 60000).toISOString();
-
-const items = [
-  {
-    sent_by: 'URU3EUPOE',
-    message: 'Here are the designs',
-    sent_at: subtract(-2),
-  },
-  {
-    sent_by: 'USTFL9YVE',
-    message: '<3 Check this commit I did earlier: https://github.com/swipesapp/swipes-api/commit/e22786d22d6d2272444d4b6f90d22e37a9d0cae1',
-    sent_at: subtract(-10),
-  },
-  {
-    sent_by: 'UFXDWRVSU',
-    message: `Today I read these articles:
-https://medium.com/@skovy/writing-maintainable-styles-and-components-with-css-modules-308a9216a6c2
-https://hackernoon.com/tips-on-react-for-large-scale-projects-3f9ece85983d
-And they were really awesome!`,
-    sent_at: subtract(-20),
-  },
-  {
-    sent_by: 'UB9BXJ1JB',
-    message: 'Check this note I just wrote',
-    sent_at: subtract(-45),
-  },
-  {
-    sent_by: 'UVZWCJDHK',
-    message: 'Reminder to self: Make pings epic.',
-    sent_at: subtract(-150),
-  },
-];
-
+@withPagination
 export default class extends PureComponent {
   renderItems() {
-    return this.props.items.map((item, i) => (
+    const { results } = this.props.pagination;
+    if(!results) return 'Loading...';
+    return this.props.pagination.results.map((item, i) => (
       <PingListItem item={item} key={i}/>
     ));
   }
@@ -54,7 +18,10 @@ export default class extends PureComponent {
     return (
       <SW.Wrapper>
         <PingComposer />
-        {this.renderItems()}
+        <SW.ItemWrapper>
+          {this.renderItems()}
+          <PaginationScrollToMore />
+        </SW.ItemWrapper>
       </SW.Wrapper>
     );
   }

@@ -53,7 +53,7 @@ export default class Sidebar extends PureComponent {
     return [
       { id: 'PlanList', svg: 'Milestones' },
       { id: 'TakeAction', svg: 'Goals' },
-      { id: 'PostFeed', svg: 'Messages' },
+      { id: 'Discuss', svg: 'Messages' },
     ].filter(v => !!v);
   }
   getTitleForId(id) {

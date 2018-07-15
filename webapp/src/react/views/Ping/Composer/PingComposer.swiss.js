@@ -3,6 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('PingComposer', {
   AbsoluteWrapper: {
     width: '100%',
+    flex: 'none',
     _flex: ['column', 'left', 'top'],
   },
   BarWrapper: {

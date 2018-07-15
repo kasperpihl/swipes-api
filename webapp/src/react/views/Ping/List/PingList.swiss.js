@@ -3,11 +3,10 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('PingList', {
   Wrapper: {
     _size: '100%',
+    _flex: ['column'],
   },
-  Title: {
-    _el: 'h5',
-    paddingLeft: '60px',
-    paddingTop: '18px',
-    paddingBottom: '6px',
+  ItemWrapper: {
+    overflowY: 'scroll',
+    _size: '100%',
   },
 });
