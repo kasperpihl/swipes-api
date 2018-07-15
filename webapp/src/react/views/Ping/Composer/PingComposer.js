@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { setupCachedCallback } from 'react-delegate';
-import { attachmentIconForService } from 'swipes-core-js/classes/utils';
+import { attachmentIconForService, setupLoading } from 'swipes-core-js/classes/utils';
 import * as linkActions from 'src/redux/link/linkActions';
 import * as ca from 'swipes-core-js/actions';
 import withEmitter from 'src/react/components/emitter/withEmitter';
@@ -35,7 +35,7 @@ export default class extends PureComponent {
     this.onUserClickCached = setupCachedCallback(this.onUserClick);
     this.onAttachmentClickCached = setupCachedCallback(this.onAttachmentClick);
     this.onAttachmentCloseCached = setupCachedCallback(this.onAttachmentClose);
-
+    setupLoading(this);
     props.addListener('ping-add-assignee', this.onAddAssignee);
   }
   onMessageChange = (editorState) => {
@@ -72,18 +72,30 @@ export default class extends PureComponent {
     this.onAddAssignee(item.id);
   }
   onSendPing = () => {
-    const { request, orgId } = this.props;
+    const { request, orgId, setActiveItem } = this.props;
     const message = this.editorState.getCurrentContent().getPlainText();
     if(!message) {
       return;
     }
+    this.setLoading('ping', 'Sending');
+    setActiveItem(1);
     request('ping.send', {
       receivers: this.state.receivers.toJS(),
       organization_id: orgId,
       attachments: this.state.attachments.toJS(),
       message,
     }).then(res => {
-      console.log(res);
+      if(res.ok) {
+        this.clearLoading('ping', 'Sent', 3000);
+        this.setState({
+          resetDate: new Date(),
+          receivers: fromJS([]),
+          attachments: fromJS([]),
+        });
+      } else {
+        this.clearLoading('ping', '!Error');
+      }
+      
     })
   }
   onUserClick = (id) => {
@@ -139,8 +151,7 @@ export default class extends PureComponent {
     )
   }
   renderComposeBar() {
-    const { receivers, attachments } = this.state;
-
+    const { receivers, attachments, resetDate } = this.state;
     return (
       <SW.BarWrapper>
         <SW.Column none>
@@ -156,6 +167,7 @@ export default class extends PureComponent {
             innerRef={c => this.input = c}
             onChange={this.onMessageChange}
             placeholder="Pass on a quick message"
+            reset={resetDate}
             handleReturn={this.onReturn}
             onAutoCompleteSelect={this.onAutoCompleteSelect}
             autoFocus
@@ -169,9 +181,10 @@ export default class extends PureComponent {
             dropTitle={'New Ping'}
           />
         </SW.Column>
-        <SW.Column none hidden={!receivers.size}>
+        <SW.Column none hidden={!receivers.size && !this.getLoading('ping').success}>
           <Button
             title="Ping"
+            {...this.getLoading('ping')}
             onClick={this.onSendPing}
           />
         </SW.Column>

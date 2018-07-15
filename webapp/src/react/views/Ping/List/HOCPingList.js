@@ -46,7 +46,7 @@ export default class HOCPingList extends PureComponent {
         resPath: 'pings',
         limit: 3,
       }}>
-        <PingList />
+        <PingList setActiveItem={this.props.setActiveItem}/>
       </PaginationProvider>
     );
   }

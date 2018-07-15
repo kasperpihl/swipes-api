@@ -37,7 +37,6 @@ export default class PaginationScrollToMore extends PureComponent {
   isElementOnScreen() {
     if(!this.wrapper) {
       return false;
-      console.log()
     }
     const rect = this.wrapper.getBoundingClientRect();
 

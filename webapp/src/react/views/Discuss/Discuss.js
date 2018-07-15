@@ -44,6 +44,16 @@ export default class Discuss extends PureComponent {
       });
     }
   }
+  setActiveType = (i) => {
+    this.setState({
+      activeType: i
+    });
+  }
+  setActiveItem = (i) => {
+    this.setState({
+      activeItem: i
+    });
+  }
   renderSidebar() {
     const { activeType, activeItem } = this.state;
     return sections.map(({ title, items }, typeI) => (
@@ -63,10 +73,14 @@ export default class Discuss extends PureComponent {
   }
   renderContent() {
     const { activeType, activeItem } = this.state;
-    if(activeType === 0) {
-      return <PingList activeItem={activeItem} />
-    }
-    return <DiscussionList activeItem={activeItem} />
+    const Comp = activeType === 0 ? PingList : DiscussionList;
+    return (
+      <Comp
+        activeItem={activeItem}
+        setActiveType={this.setActiveType}
+        setActiveItem={this.setActiveItem}
+      />
+    )
   }
   render() {
     return (

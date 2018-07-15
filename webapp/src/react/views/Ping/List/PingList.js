@@ -9,15 +9,14 @@ import SW from './PingList.swiss';
 export default class extends PureComponent {
   renderItems() {
     const { results } = this.props.pagination;
-    if(!results) return 'Loading...';
-    return this.props.pagination.results.map((item, i) => (
+    return (results || []).map((item, i) => (
       <PingListItem item={item} key={i}/>
     ));
   }
   render() {
     return (
       <SW.Wrapper>
-        <PingComposer />
+        <PingComposer setActiveItem={this.props.setActiveItem}/>
         <SW.ItemWrapper>
           {this.renderItems()}
           <PaginationScrollToMore />

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import getDeep from 'swipes-core-js/utils/getDeep';
+import randomString from 'swipes-core-js/utils/randomString';
 import * as ca from 'swipes-core-js/actions';
 import { Provider } from './PaginationContext';
 
@@ -30,9 +31,11 @@ export default class PaginationProvider extends PureComponent {
   }
   componentDidUpdate(prevProps) {
     if(this.props.options.body !== prevProps.options.body) {
+      this.fetchId = null;
       this.setState({
         results: null,
         hasMore: false,
+        loading: false,
       }, this.fetchResults);
     }
   }
@@ -47,6 +50,8 @@ export default class PaginationProvider extends PureComponent {
     const { orgId, request, options } = this.props;
     const { results, loading } = this.state;
     if(loading) return;
+    const fetchId = randomString(8);
+    this.fetchId = fetchId;
     const limit = options.limit || DEFAULT_LIMIT;
     this.setState({ loading: true });
     request(options.url, {
@@ -55,6 +60,7 @@ export default class PaginationProvider extends PureComponent {
       ...options.body,
       organization_id: orgId,
     }).then((res) => {
+      if(this.fetchId !== fetchId) return;
       if(res && res.ok) {
         const newResults = getDeep(res, options.resPath || 'results');
         this.setState({
