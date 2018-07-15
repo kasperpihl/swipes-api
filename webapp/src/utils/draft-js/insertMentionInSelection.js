@@ -31,7 +31,7 @@ export default (editorState, triggerKey, id) => {
     null,
     contentState.getLastCreatedEntityKey()
   );
-  
+
   editorState = EditorState.set(editorState, { currentContent: contentState });
 
 
