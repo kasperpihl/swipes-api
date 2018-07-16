@@ -20,9 +20,13 @@ function isAsync(fn) {
 };
 
 function wrapAsync(fn) {
-  return (req, res, next = noop) => {
-    fn(req, res, noop)
-      .then(() => !res.finished && next())
+  return (req, res, next) => {
+    let passErr;
+    const fakeNext = (error) => {
+      passErr = error;
+    }
+    fn(req, res, fakeNext)
+      .then(() => !res.finished && next(passErr))
       .catch(next);
   }
 };
