@@ -101,5 +101,7 @@ export default styleSheet('Browser', {
       color: '$sw1',
       margin: ' 20px 0',
       textAlign: 'center',
+      pointerEvents: 'none',
+      userSelect: 'none',
   },
 })
