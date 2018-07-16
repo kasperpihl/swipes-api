@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import * as cs from 'swipes-core-js/selectors';
+import DiscussionComposer from '../Composer/DiscussionComposer';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import PostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
-import SW from './DiscussButton.swiss';
-import DiscussionComposer from '../../views/Discussion/Composer/DiscussionComposer';
+import SW from './ActionBar.swiss';
+
 
 const makeMapStateToProps = () => {
   const getFilteredList = cs.posts.makeGetFilteredList();
@@ -14,24 +14,13 @@ const makeMapStateToProps = () => {
     if(props.relatedFilter) {
       counter += getRelatedList(state, props).size;
     }
-    return { counter };
+  return { counter };
   }
 }
 
 @navWrapper
 @connect(makeMapStateToProps)
-export default class extends PureComponent {
-  onFeed = () => {
-    const { openSecondary, context, relatedFilter } = this.props;
-    openSecondary({
-      id: 'PostFeed',
-      title: 'Discussions',
-      props: {
-        context,
-        relatedFilter,
-      },
-    });
-  }
+class ActionBar extends Component {
   onDiscuss = () => {
     const { context, taggedUsers, openModal } = this.props;
     openModal({
@@ -45,13 +34,15 @@ export default class extends PureComponent {
     });
   }
   render() {
-    const { counter } = this.props;
     return (
-      <SW.Wrapper className="discuss-wrapper">
-        <SW.ButtonSide left onClick={this.onDiscuss}>Discuss</SW.ButtonSide>
-        <SW.Seperator />
-        <SW.ButtonSide right onClick={this.onFeed}>{counter}</SW.ButtonSide>
+      <SW.Wrapper>
+        <SW.Button
+          onClick={this.onDiscuss}
+          icon="Plus"
+          sideLabel="Start a new discussion" />
       </SW.Wrapper>
-    );
+    )
   }
 }
+
+export default ActionBar;

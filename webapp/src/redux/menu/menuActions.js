@@ -157,7 +157,6 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
   const secondary = getState().getIn(['main', 'dragAndDrop', 'secondary']);
   const secCardActive = getState().getIn(['navigation', 'secondary', 'stack']).size;
 
-  console.log(primary.toJS(), secondary.toJS);
   const items = [
     primary.size ? {
       id: 'primary',
@@ -173,11 +172,11 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
       leftIcon: {icon: 'CardRight'},
     } : null,
 
-    {
-      id: 'discussion',
-      title: 'Start a discussion',
-      leftIcon: { icon: 'IconDiscuss' },
-    },
+    primary.size === 0 && secondary.size === 0 ? {
+      id: 'error',
+      title: 'No drop zone available. Open a goal and try again.'
+    } : null,
+
     // {
     //   id: 'ping',
     //   title: 'Ping someone',
@@ -187,6 +186,7 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
   ].filter(i => !!i);
 
   const delegate = {
+
     onItemAction: (item) => {
       dispatch(mainActions.contextMenu(null));
       if(item.id === 'primary') {
@@ -194,24 +194,6 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
       }
       if(item.id === 'secondary') {
         secondary.last().handler(files);
-      }
-      if(item.id === 'discussion') {
-        dispatch(navigationActions.set('primary',{
-          id: 'PostFeed',
-          // showTitleInCrumb: true,
-          title: 'Discuss',
-        }))
-        dispatch(mainActions.modal('primary',{
-          component: 'PostCreate',
-          title: 'Create Post',
-          position: 'center',
-        }))
-        setTimeout(() => {
-          const lastPrimary = getState().getIn(['main', 'dragAndDrop', 'primary']).last();
-          if(lastPrimary) {
-            lastPrimary.handler(files);
-          }
-        }, 1)
       }
       if(item.id === 'ping') {
         dispatch(navigationActions.set('primary',{

@@ -4,4 +4,7 @@ export default styleSheet('DiscussionList', {
   Wrapper: {
     _size: '100%',
   },
+  ActonBar: {
+    _size: ['100%', '60px'],
+  },
 });

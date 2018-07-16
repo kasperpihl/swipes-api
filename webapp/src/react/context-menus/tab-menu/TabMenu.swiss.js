@@ -101,4 +101,8 @@ export default styleSheet('TabMenu', {
     transition: '.25s ease-in-out',
     zIndex: '12',
   },
+
+  Button: {
+    _el: Button,
+  },
 })

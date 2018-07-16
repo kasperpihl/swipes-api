@@ -19,10 +19,16 @@ class HOCDragAndDrop extends Component {
     };
   }
 
+  // && primary.size > 0 && secondary.size > 0 || primary.size > 0 && secondary.size === 0 || primary.size === 0 && secondary.size > 0
+
   handleDragEnter = (e) => {
+    const primary = getState().getIn(['main', 'dragAndDrop', 'primary']);
+    const secondary = getState().getIn(['main', 'dragAndDrop', 'secondary']);
     e.preventDefault();
     let dt = e.dataTransfer;
-    if (dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))) {
+    if (
+      dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))
+    ) {
       this.setState({hoverActive: true})
     }
   }

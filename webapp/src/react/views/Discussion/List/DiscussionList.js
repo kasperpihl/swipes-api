@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
-import DiscussionComposer from '../Composer/DiscussionComposer';
 import DiscussionListItem from './Item/DiscussionListItem';
 import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
 import withPagination from 'src/react/components/pagination/withPagination';
 
 import SW from './DiscussionList.swiss';
+import ActionBar from './ActionBar';
 
 const now = new Date();
 const subtract = (m) => new Date(now.getTime() + m * 60000).toISOString();
@@ -66,9 +66,9 @@ export default class extends PureComponent {
   render() {
     return (
       <SW.Wrapper>
-        <DiscussionComposer />
         {this.renderItems()}
         <PaginationScrollToMore errorLabel="Couldn't get discussions." />
+        <ActionBar />
       </SW.Wrapper>
     );
   }
