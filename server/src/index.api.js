@@ -51,7 +51,7 @@ app.use('/v1', routes.v1NotAuthed);
 // Checking for updates
 app.use('/v1', checkUpdates);
 // Validation of user's token
-app.use('/v1', authParseToken, authCheckToken);
+app.use('/v1', authParseToken, authCheckToken, authCheckIfPartOfOrganization);
 // Logging input to aws
 app.use(logToAws);
 // Authed routes goes here

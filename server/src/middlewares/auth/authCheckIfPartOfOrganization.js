@@ -17,7 +17,7 @@ export default async (req, res, next) => {
   const partOfOrganization = await dbRunQuery(query);
 
   if (partOfOrganization === false) {
-    return res.status(200).json({ ok: false, error: 'not_authed' });
+    throw Error('not_authed');
   }
 
   return next();

@@ -21,7 +21,7 @@ function isAsync(fn) {
 
 function wrapAsync(fn) {
   return (req, res, next = noop) => {
-    fn(req, res, next)
+    fn(req, res, noop)
       .then(() => !res.finished && next())
       .catch(next);
   }
