@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import SW from './Browser.swiss';
 
 class Webview extends PureComponent {
 
@@ -11,7 +12,7 @@ class Webview extends PureComponent {
     }
   }
   getWebview() {
-    return this.refs.container.childNodes[0];
+    return this.container.childNodes[0];
   }
   getWebviewHtml(url, persistId, preloadUrl) {
     let html = `<webview src="${url}" class="webview" `;
@@ -34,8 +35,8 @@ class Webview extends PureComponent {
     } = this.props;
     const wHtml = this.getWebviewHtml(url, persistId, preloadUrl);
     return (
-      <div
-        ref="container"
+      <SW.BrowserWebView
+        innerRef={(c) => this.container = c}
         dangerouslySetInnerHTML={{ __html: wHtml }}
         {...rest}
       />

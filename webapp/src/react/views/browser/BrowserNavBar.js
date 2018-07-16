@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { setupDelegate } from 'react-delegate';
-import { styleElement } from 'swiss-react';
-import Button from 'src/react/components/button/Button';
-import styles from './Browser.swiss';
-
-const Title = styleElement('div', styles.Title);
-const BrowserNav = styleElement('div', styles.BrowserNav);
-const Left = styleElement('div', styles.Left);
-const Right = styleElement('div', styles.Right);
+import SW from './Browser.swiss';
 
 class BrowserNavBar extends Component {
   constructor(props) {
@@ -23,21 +16,21 @@ class BrowserNavBar extends Component {
       forwardEnabled,
     } = this.props;
     return [
-      <Button
+      <SW.BackButton
         key="back"
         icon="ArrowLeftLine"
         compact
         disabled={!backEnabled}
         onClick={this.navbarActionCached('back')}
       />,
-      <Button
+      <SW.ForwardButton
         key="forward"
         icon="ArrowRightLine"
         compact
         disabled={!forwardEnabled}
         onClick={this.navbarActionCached('forward')}
       />,
-      <Button
+      <SW.ReloadButton
         key="reload"
         icon="Reload"
         compact
@@ -51,14 +44,16 @@ class BrowserNavBar extends Component {
     } = this.props;
 
     return (
-      <Title>
-        {title}
-      </Title>
+      <SW.TitleWrapper className='wrapper'>
+        <SW.Title className='title'>
+          {title}
+        </SW.Title>
+      </SW.TitleWrapper>
     );
   }
   renderRightActions() {
     return [
-      <Button
+      <SW.BrowserButton
         key="browser"
         icon="Earth"
         compact
@@ -68,15 +63,15 @@ class BrowserNavBar extends Component {
   }
   render() {
     return (
-      <BrowserNav>
-        <Left>
+      <SW.BrowserNavBar>
+        <SW.Left>
           {this.renderNavigation()}
-        </Left>
+        </SW.Left>
         {this.renderTitleURL()}
-        <Right>
+        <SW.Right>
           {this.renderRightActions()}
-        </Right>
-      </BrowserNav>
+        </SW.Right>
+      </SW.BrowserNavBar>
     );
   }
 }

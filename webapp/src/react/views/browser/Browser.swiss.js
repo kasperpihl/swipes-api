@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Button from 'src/react/components/button/Button';
 
 export default styleSheet('Browser', {
   BrowserLoader: {
@@ -13,15 +14,14 @@ export default styleSheet('Browser', {
     overflow: 'hidden',
   },
 
-  WebViewContainer: {
-    height: 'calc(100% - 60px)',
-    _size: ['100%', '60px'],
+  BrowserWebView: {
+    _size: ['100%', 'calc(100% - 60px)'],
     paddingTop: '5px',
   },
 
-  BrowserNav: {
+  BrowserNavBar: {
     _size: ['100%', '60px'],
-    _flex: ['center', 'between'],
+    _flex: ['row','center', 'center'],
     background: 'white',
     padding: '0 30px',
     position: 'relative',
@@ -37,19 +37,36 @@ export default styleSheet('Browser', {
   },
 
   Left: {
-
   },
 
   Right: {
-
   },
 
-  Btn: {
+  BackButton: {
+    _el: Button,
     zIndex: '9',
     margin: '0 6px',
   },
 
-  Title: {
+  ForwardButton: {
+    _el: Button,
+    zIndex: '9',
+    margin: '0 6px',
+  },
+
+  ReloadButton: {
+    _el: Button,
+    zIndex: '9',
+    margin: '0 6px',
+  },
+
+  BrowserButton: {
+    _el: Button,
+    zIndex: '9',
+    margin: '0 6px',
+  },
+
+  TitleWrapper: {
     _size: ['auto', '100%'],
     _font: ['12px', '15px', '500'],
     color: '$sw2',
@@ -76,9 +93,13 @@ export default styleSheet('Browser', {
       transform: 'translateY(-50%)',
       backgroundColor: '$sw3',
     },
+  },
 
-    '&:hover': {
-      color: 'black',
-    },
+  Title: {
+      _size: ['100%'],
+      _font: ['16px', '18px', '400'],
+      color: '$sw1',
+      margin: ' 20px 0',
+      textAlign: 'center',
   },
 })

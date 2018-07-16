@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { styleElement } from 'swiss-react';
 import SWView from 'SWView';
 import Loader from 'components/loaders/Loader';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import BrowserNavBar from './BrowserNavBar';
 import BrowserWebview from './BrowserWebview';
-import styles from './Browser.swiss';
+import SW from './Browser.swiss';
 
-const BrowserLoader = styleElement('div', styles.BrowserLoader);
 
 @navWrapper
 @connect(state => ({
@@ -102,9 +100,9 @@ export default class extends PureComponent {
       return undefined;
     }
     return (
-      <BrowserLoader className="browser-loader">
+      <SW.BrowserLoader>
         <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
-      </BrowserLoader>
+      </SW.BrowserLoader>
     );
   }
   render() {
@@ -119,7 +117,6 @@ export default class extends PureComponent {
       <SWView noframe>
 
         <BrowserWebview
-          className="browser-overlay__webview-container"
           url={url}
           persistId={`browser${me.get('id')}`}
           onLoad={this.onLoad}
