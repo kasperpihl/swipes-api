@@ -9,12 +9,12 @@ export default (req, res, next) => {
   dbCheckToken({ user_id, token: dbToken })
     .then((results) => {
       if (results.length === 0) {
-        return res.status(200).json({ ok: false, error: 'not_authed' });
+        throw Error('not_authed');
       }
 
       return next();
     })
     .catch((e) => {
-      return res.status(200).json({ ok: false, error: 'database_error' });
+      throw Error('database_error');
     });
 };
