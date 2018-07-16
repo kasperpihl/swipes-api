@@ -4,7 +4,7 @@ import Billing from './account/billing/HOCBilling';
 import Organization from './account/organization/HOCOrganization';
 import Profile from './account/profile/HOCProfile';
 import Onboarding from './account/onboarding/HOCOnboarding';
-import Discuss from './Discuss/HOCDiscuss';
+import Discuss from './Discuss/Discuss';
 import DiscussionOverview from './Discussion/Overview/DiscussionOverview';
 import Browser from './browser/Browser';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';

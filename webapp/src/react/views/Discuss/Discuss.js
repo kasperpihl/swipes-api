@@ -24,12 +24,16 @@ const sections = [
   },
 ];
 
+
 export default class Discuss extends PureComponent {
+  static sizes() {
+    return [654];
+  }
   constructor(props) {
     super(props);
     this.state = {
-      activeType: 0,
-      activeItem: 0,
+      activeType: props.initialType || 0,
+      activeItem: props.initialItem || 0,
     };
     this.onClickCached = setupCachedCallback(this.onClick);
   }
