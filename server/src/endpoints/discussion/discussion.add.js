@@ -39,6 +39,7 @@ export default endpointCreate({
     created_by: user_id,
     last_comment_at: r.now(),
     privacy: privacy || 'public',
+    archived: false,
   });
   const discussionFollowersQuery = dbInsertQuery(
     'discussion_followers',
