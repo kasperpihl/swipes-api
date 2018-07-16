@@ -19,7 +19,7 @@ export default class extends PureComponent {
         <PingComposer setActiveItem={this.props.setActiveItem}/>
         <SW.ItemWrapper>
           {this.renderItems()}
-          <PaginationScrollToMore />
+          <PaginationScrollToMore errorLabel="Couldn't get pings." />
         </SW.ItemWrapper>
       </SW.Wrapper>
     );

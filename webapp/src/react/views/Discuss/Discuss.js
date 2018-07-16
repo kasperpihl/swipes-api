@@ -1,12 +1,19 @@
 import React, { PureComponent, Fragment } from 'react';
 import SW from './Discuss.swiss';
 import { setupCachedCallback } from 'react-delegate';
-// import PingList from 'src/react/views/Ping/List/HOCPingList';
+import PingList from 'src/react/views/Ping/List/HOCPingList';
 import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 
 import SWView from 'SWView';
 
 const sections = [
+  {
+    title: 'Pings',
+    items: [
+      'Received',
+      'Sent',
+    ],
+  },
   {
     title: 'Discussions',
     items: [
@@ -70,9 +77,10 @@ export default class Discuss extends PureComponent {
   }
   renderContent() {
     const { activeType, activeItem } = this.state;
-    // const Comp = activeType === 0 ? PingList : DiscussionList;
+    const Comp = activeType === 0 ? PingList : DiscussionList;
+    // const Comp = DiscussionList;
     return (
-      <DiscussionList
+      <Comp
         activeItem={activeItem}
         setActiveType={this.setActiveType}
         setActiveItem={this.setActiveItem}
