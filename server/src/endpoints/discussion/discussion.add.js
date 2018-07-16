@@ -18,42 +18,45 @@ export default endpointCreate({
   endpoint: '/discussion.add',
   expectedInput,
   expectedOutput,
-}, async (req, res, next) => {
+}, async (req, res, next) => {
   // Get inputs
-  const input = res.locals.input;
-  const followers = input.followers || [];
-  if(followers.indexOf(res.locals.user_id) === -1) {
-    followers.push(res.locals.user_id);
-  }
-
+  const { input, user_id } = res.locals;
+  const {
+    topic,
+    context,
+    privacy,
+    organization_id,
+    followers,
+  } = input;
+  const uniqueFollowers = [...new Set(followers).add(user_id)];
+  const discussionId = idGenerate('D', 15);
   const discussionQuery = dbInsertQuery('discussions', {
-    id: idGenerate('D', 15),
+    topic,
+    context,
+    organization_id,
+    id: discussionId,
     created_at: r.now(),
-    created_by: res.locals.user_id,
-    topic: input.topic,
-    context: input.context || null,
+    created_by: user_id,
     last_comment_at: r.now(),
-    privacy: input.privacy || 'public',
-    organization_id: input.organization_id,
+    privacy: privacy || 'public',
   });
-
+  const discussionFollowersQuery = dbInsertQuery(
+    'discussion_followers',
+    uniqueFollowers.map(userId => ({
+      id: `${discussionId}-${userId}`,
+      user_id: userId,
+      discussion_id: discussionId,
+      read_at: null,
+      organization_id,
+    })),
+  );
   const discussionResult = await dbRunQuery(discussionQuery);
   const discussion = discussionResult.changes[0].new_val;
-
-  const discussionFollowersQuery = dbInsertQuery('discussion_followers',
-    followers.map((userId) => ({
-    id: `${discussion.id}-${userId}`,
-    user_id: userId,
-    discussion_id: discussion.id,
-    read_at: null,
-    organization_id: input.organization_id,
-  })));
-
   const followersRes = await dbRunQuery(discussionFollowersQuery);
 
   // Create response data.
   res.locals.output = {
     discussion,
-    followers: followersRes.changes.map(o => o.new_val), 
+    followers: followersRes.changes.map(o => o.new_val),
   };
 });
