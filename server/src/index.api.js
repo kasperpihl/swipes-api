@@ -9,7 +9,8 @@ import bodyParser from 'body-parser';
 import websocketStart from './websocket';
 
 import authParseToken from 'src/middlewares/auth/authParseToken';
-import authCheckToken from 'src/middlewares/auth/authCheckToken'
+import authCheckToken from 'src/middlewares/auth/authCheckToken';
+import authCheckIfPartOfOrganization from 'src/middlewares/auth/authCheckIfPartOfOrganization';
 
 import checkUpdates from 'src/middlewares/checkUpdates';
 import fetchConfig from 'src/middlewares/fetchConfig';
