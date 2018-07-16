@@ -54,6 +54,8 @@ export default endpointCreate({
   }
   q = q.slice(skip, skip + limit)
       .merge(obj => ({
+        status: r.table('discussion_followers')
+                  .get(obj('id').add(`-${res.locals.user_id}`)),
         followers: r.table('discussion_followers')
                     .getAll(obj('id'), { index: 'discussion_id' })
                     .limit(4)
@@ -63,8 +65,8 @@ export default endpointCreate({
 
 
 
-  const results = await dbRunQuery(q);
+  const discussions = await dbRunQuery(q);
 
   // Create response data.
-  res.locals.output = { results };
+  res.locals.output = { discussions };
 });

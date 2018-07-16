@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
 import DiscussionComposer from '../Composer/DiscussionComposer';
 import DiscussionListItem from './Item/DiscussionListItem';
+import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
+import withPagination from 'src/react/components/pagination/withPagination';
+
 import SW from './DiscussionList.swiss';
 
 const now = new Date();
@@ -52,9 +55,11 @@ const items = [
   },
 ];
 
+@withPagination
 export default class extends PureComponent {
   renderItems() {
-    return items.map((item, i) => (
+    const { results } = this.props.pagination;
+    return (results || []).map((item, i) => (
       <DiscussionListItem item={item} key={i}/>
     ));
   }
@@ -63,6 +68,7 @@ export default class extends PureComponent {
       <SW.Wrapper>
         <DiscussionComposer />
         {this.renderItems()}
+        <PaginationScrollToMore errorLabel="Couldn't get discussions." />
       </SW.Wrapper>
     );
   }

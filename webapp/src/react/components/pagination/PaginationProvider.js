@@ -40,6 +40,9 @@ export default class PaginationProvider extends PureComponent {
       }, this.fetchResults);
     }
   }
+  componentWillUnmount() {
+    this._unmounted = true;
+  }
   mergeResults(newResults) {
     const { results } = this.state;
     if(results) {
@@ -61,7 +64,7 @@ export default class PaginationProvider extends PureComponent {
       ...options.body,
       organization_id: orgId,
     }).then((res) => {
-      if(this.fetchId !== fetchId) return;
+      if(this.fetchId !== fetchId || this._unmounted) return;
       if(res && res.ok) {
         const newResults = getDeep(res, options.resPath || 'results');
         this.setState({

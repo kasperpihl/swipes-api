@@ -37,7 +37,7 @@ export default styleSheet('DiscussionListItem', {
     paddingTop: '15px',
     _flex: ['column', 'right', 'top'],
   },
-  Title: {
+  Topic: {
     _font: ['15px', '24px', 400],
     minWidth: 0,
     maxWidth: '370px',

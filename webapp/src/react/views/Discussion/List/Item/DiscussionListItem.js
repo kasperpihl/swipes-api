@@ -24,32 +24,30 @@ export default class DiscussionListItem extends PureComponent {
   }
   render() {
     const {
-      group,
-      title,
-      last_at,
-      last_by,
-      last_message,
+      followers,
+      topic,
+      last_comment_at,
       unread,
     } = this.props.item;
 
-    const subtitle = `${msgGen.users.getName(last_by, {
-      capitalize: true,
-    })}: ${last_message}`;
-
+    // const subtitle = `${msgGen.users.getName(last_by, {
+    //   capitalize: true,
+    // })}: ${last_message}`;
+    console.log(this.props.item);
     return (
       <SwissProvider unread={unread}>
         <SW.Wrapper className="Button-hover" onClick={this.onClick}>
           <SW.LeftWrapper>
-            <SplitImage size={48} users={group} />
+            <SplitImage size={48} users={followers} />
           </SW.LeftWrapper>
           <SW.MiddleWrapper>
-            <SW.Title>
-              {title}
-            </SW.Title>
-            <SW.Subtitle>{subtitle}</SW.Subtitle>
+            <SW.Topic>
+              {topic}
+            </SW.Topic>
+            {/*<SW.Subtitle>{subtitle}</SW.Subtitle>*/}
           </SW.MiddleWrapper>
           <SW.RightWrapper>
-            <SW.Time>{moment(last_at).format('LT')}</SW.Time>
+            <SW.Time>{moment(last_comment_at).format('LT')}</SW.Time>
             <SW.Button icon="ThreeDots" compact />
           </SW.RightWrapper>
         </SW.Wrapper>
