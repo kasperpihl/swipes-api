@@ -4,7 +4,7 @@ import endpointCreate from 'src/utils/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
-//    "UVZWCJDHK"
+
 const expectedInput = {
   topic: string.min(1).require(),
   context: object,

@@ -27,7 +27,7 @@ export default class DiscussionListItem extends PureComponent {
       followers,
       topic,
       last_comment_at,
-      unread,
+      status,
     } = this.props.item;
 
     // const subtitle = `${msgGen.users.getName(last_by, {
