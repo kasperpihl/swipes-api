@@ -15,41 +15,50 @@ export default endpointCreate({
   endpoint: '/comment.add',
   expectedInput,
   expectedOutput,
-}, async (req, res, next) => {
+}, async (req, res, next) => {
   // Get inputs
-  const input = res.locals.input;
-
+  const {
+    input,
+    user_id,
+  } = res.locals;
+  const {
+    discussion_id,
+    message,
+    attachments,
+    organization_id,
+  } = input;
+  const sent_at = new Date();
   // Inserting the comment object.
   const commentQ = dbInsertQuery('comments', {
-    discussion_id: input.discussion_id,
-    message: input.message,
-    attachments: input.attachments || [],
-    sent_at: r.now(),
-    sent_by: res.locals.user_id,
-    organization_id: input.organization_id,
+    discussion_id,
+    message,
+    sent_at,
+    attachments: attachments || [],
+    sent_by: user_id,
+    organization_id,
   });
-
-  const commentRes = await dbRunQuery(commentQ);
-  const comment = commentRes.changes[0].new_val;
-  
   // Updating read_at to be newest comment.
   // Also ensuring that user follows discussion
   const followerQ = dbInsertQuery('discussion_followers', {
-    id: `${input.discussion_id}-${res.locals.user_id}`,
-    user_id: res.locals.user_id,
-    discussion_id: input.discussion_id,
-    read_at: comment.sent_at,
-    organization_id: input.organization_id,
+    user_id,
+    id: `${discussion_id}-${user_id}`,
+    discussion_id,
+    read_at: sent_at,
+    organization_id,
   }, {
     conflict: 'update',
   });
-
+  // T_TODO: update only if comment.sent_at is greater than existing value
   const discQ = r.table('discussions')
-                  .get(input.discussion_id)
-                  .update({
-                    last_comment_at: comment.sent_at
-                  })
-                  // T_TODO: update only if comment.sent_at is greater than existing value
+    .get(discussion_id)
+    .update({
+      last_comment_at: sent_at,
+    });
+
+  // T_TODO would be nice if we can run some of those together
+  const commentRes = await dbRunQuery(commentQ);
+  const comment = commentRes.changes[0].new_val;
+  // T_TODO what exactly we want to return here
   const follower = await dbRunQuery(followerQ);
   const discussion = await dbRunQuery(discQ);
 
@@ -59,5 +68,4 @@ export default endpointCreate({
     follower,
     discussion,
   };
-
 });
