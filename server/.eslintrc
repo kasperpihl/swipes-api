@@ -1,4 +1,11 @@
 {
+  "settings": {
+    "import/resolver": {
+      "babel-module": {
+        "root": ["./src"]
+      }
+    }
+  },
   "extends": "airbnb-base",
   "rules": {
     "no-console": 0,
