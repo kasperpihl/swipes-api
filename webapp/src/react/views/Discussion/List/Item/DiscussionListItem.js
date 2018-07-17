@@ -34,6 +34,7 @@ export default class DiscussionListItem extends PureComponent {
     //   capitalize: true,
     // })}: ${last_message}`;
     console.log(this.props.item);
+    const unread = status ? (!status.read_at || status.read_at < last_comment_at) : false;
     return (
       <SwissProvider unread={unread}>
         <SW.Wrapper className="Button-hover" onClick={this.onClick}>

@@ -22,8 +22,8 @@ import errorInvalidJson from 'src/middlewares/error/errorInvalidJson';
 import errorSwipes from 'src/middlewares/error/errorSwipes';
 import errorHandler from 'src/middlewares/error/errorHandler';
 
-import * as routes from './_legacy-api/routes';
-import endpoints from './endpoints/endpoints';
+import * as routes from 'src/_legacy-api/routes';
+import endpoints from 'src/endpoints/endpoints';
 
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
