@@ -27,9 +27,6 @@ import SW from './DiscussionComposer.swiss';
   orgId: state.getIn(['me', 'organizations', 0, 'id']),
 }), {
   openSecondary: navigationActions.openSecondary,
-  contextMenu: mainActions.contextMenu,
-  preview: linkActions.preview,
-  createPost: ca.posts.create,
   request: ca.api.request,
 })
 
@@ -58,18 +55,11 @@ export default class DiscussionComposer extends PureComponent {
   onContextClose() {
     this.updatePost(this.state.discussion.set('context', null));
   }
-  onFocus = () => {
-    const input = getDeep(this, 'refs.create.refs.composer.refs.textarea.refs.textarea');
-    if(input) {
-      input.focus()
-    }
-  }
   onAssigningClose(assignees) {
     if(assignees) {
       this.updatePost(this.state.discussion.set('taggedUsers', assignees));
     }
   }
-
   onContextClick() {
     const { openSecondary, target } = this.props;
     const { discussion } = this.state;
@@ -77,7 +67,8 @@ export default class DiscussionComposer extends PureComponent {
   }
 
   onPostSubmit = () => {
-    const { request, orgId } = this.props;
+    const { request, orgId, hideModal, navPop } = this.props;
+    const { discussion } = this.state;
     const topic = this.editorState.getCurrentContent().getPlainText();
 
     if(!topic){
@@ -92,13 +83,19 @@ export default class DiscussionComposer extends PureComponent {
       followers: this.state.discussion.toJS().taggedUsers,
     }).then(res => {
       if(res.ok) {
-        this.clearLoading('discussion', 'Created', 3000);
-        this.setState({
-          taggedUsers: props.taggedUsers || [],
-          context: props.context || null,
-        })
+        this.clearLoading('discussion', 'Posted', 1500, () => {
+          if(hideModal) {
+            hideModal();
+          } else {
+            navPop();
+          }
+        });
+        window.analytics.sendEvent('Discussion created', {
+          'Tagged people': discussion.get('taggedUsers').size,
+          'Context type': discussion.get('context') ? typeForId(discussion.getIn(['context', 'id'])) : 'No context',
+        });
       } else {
-        this.clearLoading('discussion', '!Error');
+        this.clearLoading('discussion', '!Error', 3000);
       }
     })
   }
@@ -106,7 +103,7 @@ export default class DiscussionComposer extends PureComponent {
   onMessageChange = (editorState) =>  {
     this.editorState = editorState;
   }
-  updatePost(post) {
+  updatePost(discussion) {
     this.setState({ discussion }, () => {
       this.throttledSaveState();
     });
