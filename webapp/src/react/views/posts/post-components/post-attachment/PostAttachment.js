@@ -10,8 +10,10 @@ class PostAttachment extends PureComponent {
   }
   onClick = (e) => {
     const { onClick } = this.props;
-    e.stopPropagation();
-    onClick(e);
+    if(typeof onClick === 'function') {
+      e.stopPropagation();
+      onClick(e);
+    }
   }
   onClose = (e) => {
     const { onClose } = this.props;
