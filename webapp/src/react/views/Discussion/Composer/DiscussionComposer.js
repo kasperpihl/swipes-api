@@ -24,11 +24,13 @@ import SW from './DiscussionComposer.swiss';
 @navWrapper
 @connect(state => ({
   myId: state.getIn(['me', 'id']),
+  orgId: state.getIn(['me', 'organizations', 0, 'id']),
 }), {
   openSecondary: navigationActions.openSecondary,
   contextMenu: mainActions.contextMenu,
   preview: linkActions.preview,
   createPost: ca.posts.create,
+  request: ca.api.request,
 })
 
 export default class DiscussionComposer extends PureComponent {
@@ -41,8 +43,7 @@ export default class DiscussionComposer extends PureComponent {
     const savedState = props.savedState && props.savedState.get('post');
 
     this.state = {
-      post: savedState || fromJS({
-        message: props.message || '',
+      discussion: savedState || fromJS({
         taggedUsers: props.taggedUsers || [],
         context: props.context || null,
       }),
@@ -55,7 +56,7 @@ export default class DiscussionComposer extends PureComponent {
     this.throttledSaveState.clear();
   }
   onContextClose() {
-    this.updatePost(this.state.post.set('context', null));
+    this.updatePost(this.state.discussion.set('context', null));
   }
   onFocus = () => {
     const input = getDeep(this, 'refs.create.refs.composer.refs.textarea.refs.textarea');
@@ -65,65 +66,60 @@ export default class DiscussionComposer extends PureComponent {
   }
   onAssigningClose(assignees) {
     if(assignees) {
-      this.updatePost(this.state.post.set('taggedUsers', assignees));
+      this.updatePost(this.state.discussion.set('taggedUsers', assignees));
     }
   }
 
   onContextClick() {
     const { openSecondary, target } = this.props;
-    const { post } = this.state;
-    openSecondary(target, navForContext(post.get('context')));
+    const { discussion } = this.state;
+    openSecondary(target, navForContext(discussion.get('context')));
   }
 
-  onPostClick(e) {
-    const { createPost, navPop, hideModal } = this.props;
-    let { post } = this.state;
+  onPostSubmit = () => {
+    const { request, orgId } = this.props;
+    const topic = this.editorState.getCurrentContent().getPlainText();
 
-    if(!this.editorState) return;
-
-    const message = editorStateToPlainMention(this.editorState);
-
-    if(!message.length) return;
-
-    post = post.set('message', message);
-    this.setLoading('post');
-
-    createPost(convertObjectKeysToUnderscore(post.toJS())).then((res) => {
-      if (res.ok) {
-        this.clearLoading('post', 'Posted', 1500, () => {
-          if(hideModal) {
-            hideModal();
-          } else {
-            navPop();
-          }
-        });
-        window.analytics.sendEvent('Post created', {
-          'Tagged people': post.get('taggedUsers').size,
-          'Attachments': post.get('attachments').size,
-          'Context type': post.get('context') ? typeForId(post.getIn(['context', 'id'])) : 'No context',
-        });
+    if(!topic){
+      return;
+    }
+    this.setLoading('discussion', 'Creating');
+    request('discussion.add', {
+      context: this.state.discussion.toJS().context,
+      organization_id: orgId,
+      topic,
+      privacy: 'public',
+      followers: this.state.discussion.toJS().taggedUsers,
+    }).then(res => {
+      if(res.ok) {
+        this.clearLoading('discussion', 'Created', 3000);
+        this.setState({
+          taggedUsers: props.taggedUsers || [],
+          context: props.context || null,
+        })
       } else {
-        this.clearLoading('post', '!Error', 3000);
+        this.clearLoading('discussion', '!Error');
       }
     })
   }
+
   onMessageChange = (editorState) =>  {
     this.editorState = editorState;
   }
   updatePost(post) {
-    this.setState({ post }, () => {
+    this.setState({ discussion }, () => {
       this.throttledSaveState();
     });
   }
   saveState() {
-    const { post } = this.state;
+    const { discussion } = this.state;
     const { saveState } = this.props;
-    saveState({ post });
+    saveState({ discussion });
   }
 
   renderActionBar() {
-    const { post } = this.state;
-    const hasAssignees = post.get('taggedUsers') && !!post.get('taggedUsers').size;
+    const { discussion } = this.state;
+    const hasAssignees = discussion.get('taggedUsers') && !!discussion.get('taggedUsers').size;
     const buttonProps = hasAssignees ? {
       compact: true,
     } : {
@@ -134,7 +130,7 @@ export default class DiscussionComposer extends PureComponent {
       <SW.ActionBar>
         <SW.AssignSection>
           <HOCAssigning
-            assignees={post.get('taggedUsers')}
+            assignees={discussion.get('taggedUsers')}
             delegate={this}
             size={24}
             buttonProps={buttonProps}
@@ -144,7 +140,8 @@ export default class DiscussionComposer extends PureComponent {
         <SW.Seperator />
         <SW.PostButton
           title="Post"
-          onClick={this.onPostClick}
+          onClick={this.onPostSubmit}
+          {...this.getLoading('discussion')}
         />
       </SW.ActionBar>
     )

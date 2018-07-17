@@ -12,7 +12,9 @@ const expectedInput = {
   followers: array.of(string),
   organization_id: string.min(1).require(),
 };
-const expectedOutput = {};
+const expectedOutput = {
+  discussion: object.require(),
+};
 
 export default endpointCreate({
   endpoint: '/discussion.add',

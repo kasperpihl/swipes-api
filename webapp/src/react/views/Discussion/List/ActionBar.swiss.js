@@ -8,6 +8,7 @@ export default styleSheet('ActionBar', {
     position: 'absolute',
     bottom: '0',
     padding: '9px 12px',
+    backgroundColor: '$sw5',
   },
 
   Button: {

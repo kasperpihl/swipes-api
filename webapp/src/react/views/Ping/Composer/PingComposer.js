@@ -55,7 +55,7 @@ export default class extends PureComponent {
     this.input.focus();
   }
   onAttachButtonCloseOverlay = () => {
-    this.input.focus();
+    this.input.focus(); 
   }
   onAttachmentClose = (i) => {
     this.setState({ attachments: this.state.attachments.delete(i) });
@@ -95,7 +95,6 @@ export default class extends PureComponent {
       } else {
         this.clearLoading('ping', '!Error');
       }
-      
     })
   }
   onUserClick = (id) => {
