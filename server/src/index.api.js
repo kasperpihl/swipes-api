@@ -1,29 +1,24 @@
-import 'src/polyfills/asyncSupport';
-import 'src/polyfills/uncaughtException';
-import 'src/polyfills/errorPrototypes';
-
 import http from 'http';
 import express from 'express';
 import config from 'config';
 import bodyParser from 'body-parser';
-import websocketStart from './websocket';
-
+import 'src/polyfills/asyncSupport';
+import 'src/polyfills/uncaughtException';
+import 'src/polyfills/errorPrototypes';
 import authParseToken from 'src/middlewares/auth/authParseToken';
 import authCheckToken from 'src/middlewares/auth/authCheckToken';
 import authCheckIfPartOfOrganization from 'src/middlewares/auth/authCheckIfPartOfOrganization';
-
 import checkUpdates from 'src/middlewares/checkUpdates';
 import fetchConfig from 'src/middlewares/fetchConfig';
 import redirectToStaging from 'src/middlewares/redirectToStaging';
 import corsHandler from 'src/middlewares/corsHandler';
 import logToAws from 'src/middlewares/logToAws';
-
 import errorInvalidJson from 'src/middlewares/error/errorInvalidJson';
 import errorSwipes from 'src/middlewares/error/errorSwipes';
 import errorHandler from 'src/middlewares/error/errorHandler';
-
 import * as routes from 'src/_legacy-api/routes';
 import endpoints from 'src/endpoints/endpoints';
+import websocketStart from './websocket';
 
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
