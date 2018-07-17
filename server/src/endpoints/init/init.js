@@ -4,6 +4,7 @@ import endpointCreate from 'src/utils/endpointCreate';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import sofiCreate from 'src/utils/sofiCreate';
 
+const defTs = new Date(1970, 1, 1).toISOString();
 
 const expectedInput = {
   timestamp: string.format('iso8601'),
@@ -33,7 +34,7 @@ export default endpointCreate({
   const { user_id } = res.locals;
   
   const {
-    timestamp = new Date(1970, 1, 1).toISOString(),
+    timestamp = defTs,
     organization_id,
     without_notes = false,
   } = res.locals.input;
@@ -43,7 +44,7 @@ export default endpointCreate({
   // Fetch user first to see what the situation is
   const userQ = r.table('users')
                   .get(user_id)
-                  .pluck('organizations');
+                  .pluck('organizations', 'settings');
 
   const user = await dbRunQuery(userQ);
 
@@ -183,16 +184,46 @@ export default endpointCreate({
       .orderBy(r.desc('updated_at'))
       .limit(100);
 
+  const discussionTs = user.settings.discussion_counter_ts || defTs;
+  const discussionCounterQ = r.table('discussions')
+                              .orderBy({ index: r.desc('last_comment_at') })
+                              .filter(disc =>
+                                disc('organization_id')
+                                  .eq(organization_id)
+                                  .and(r.table('discussion_followers')
+                                    .get(disc('id').add(`-${user_id}`)))
+                                  .and(disc('archived').eq(false))
+                                  .and(disc('last_comment_at').gt(r.ISO8601(discussionTs))))
+                              .pluck('id')
+                              .limit(10);
+
+  const notificationTs = defTs;
+  const notificationCounterQ = r.table('notifications')
+      .getAll([user_id, organization_id], { index: 'user_id_organization_id' })
+      .filter((notification) => {
+        return notification('updated_at').gt(r.ISO8601(notificationTs));
+      })
+      .pluck('id')
+      .limit(10);
+
   const now = new Date().toISOString();
+
+
   const result = await Promise.all([
     dbRunQuery(initQ),
     dbRunQuery(servicesQ),
-    dbRunQuery(notificationsQ)
+    dbRunQuery(notificationsQ),
+    dbRunQuery(discussionCounterQ),
+    dbRunQuery(notificationCounterQ)
   ]);
 
   const me = result[0];
   const services = result[1];
   const notifications = result[2];
+  const counters = {
+    discussions: result[3],
+    notifications: result[4],
+  }
   let users = [];
   if (me.organizations.length > 0) {
     users = me.organizations[0].active_users_real;
@@ -230,6 +261,7 @@ export default endpointCreate({
     ways,
     services,
     notifications,
+    counters,
     notes,
     sofi: sofiCreate(),
     full_fetch,
