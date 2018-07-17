@@ -1,13 +1,14 @@
-import r from 'rethinkdb';
 import { object, array, string, any } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
+import shorten from 'src/utils/shorten';
 
 const expectedInput = {
-  topic: string.min(1).require(),
+  message: string.require(),
   context: object,
+  attachments: array.of(object),
   privacy: any.of('public', 'private'),
   followers: array.of(string),
   organization_id: string.min(1).require(),
@@ -24,22 +25,25 @@ export default endpointCreate({
   // Get inputs
   const { input, user_id } = res.locals;
   const {
-    topic,
+    message,
     context,
+    attachments,
     privacy,
     organization_id,
     followers,
   } = input;
   const uniqueFollowers = [...new Set(followers).add(user_id)];
   const discussionId = idGenerate('D', 15);
+  const created_at = new Date();
   const discussionQuery = dbInsertQuery('discussions', {
-    topic,
     context,
     organization_id,
+    created_at,
     id: discussionId,
-    created_at: r.now(),
+    topic: null,
+    title: shorten(message, 280),
     created_by: user_id,
-    last_comment_at: r.now(),
+    last_comment_at: created_at,
     privacy: privacy || 'public',
     archived: false,
   });
@@ -49,17 +53,27 @@ export default endpointCreate({
       id: `${discussionId}-${userId}`,
       user_id: userId,
       discussion_id: discussionId,
-      read_at: null,
+      read_at: userId === user_id ? created_at : null,
       organization_id,
     })),
   );
+  // Inserting the comment object.
+  const commentQuery = dbInsertQuery('comments', {
+    message,
+    discussion_id: discussionId,
+    sent_at: created_at,
+    attachments: attachments || [],
+    sent_by: user_id,
+    organization_id,
+  });
   const discussionResult = await dbRunQuery(discussionQuery);
   const discussion = discussionResult.changes[0].new_val;
-  const followersRes = await dbRunQuery(discussionFollowersQuery);
+  const followersResult = await dbRunQuery(discussionFollowersQuery);
+  const commentResult = await dbRunQuery(commentQuery);
 
   // Create response data.
   res.locals.output = {
     discussion,
-    followers: followersRes.changes.map(o => o.new_val),
+    followers: followersResult.changes.map(o => o.new_val),
   };
 });
