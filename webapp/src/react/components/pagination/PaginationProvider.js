@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import getDeep from 'swipes-core-js/utils/getDeep';
 import randomString from 'swipes-core-js/utils/randomString';
 import * as ca from 'swipes-core-js/actions';
-import { Provider } from './PaginationContext';
+import { Provider, Consumer } from './PaginationContext';
 
 const DEFAULT_LIMIT = 20;
 
@@ -75,10 +75,22 @@ export default class PaginationProvider extends PureComponent {
       } else this.setState({ loading: false, error: true });
     })
   }
+  renderChildren() {
+    const { children } = this.props;
+    if(typeof children !== 'function') {
+      return children;
+    }
+
+    return (
+      <Consumer>
+        {pagination => children(pagination)}
+      </Consumer>
+    )
+  }
   render() {
     return (
       <Provider value={Object.assign({}, this.state)}>
-        {this.props.children}
+        {this.renderChildren()}
       </Provider>
     );
   }
