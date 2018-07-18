@@ -141,7 +141,8 @@ export default class extends PureComponent {
   render() {
     const { fileVal } = this.state;
     const {
-      buttonProps
+      buttonProps,
+      className,
     } = this.props;
 
     return (
@@ -151,6 +152,7 @@ export default class extends PureComponent {
           {...this.getLoading('attach')}
           icon="Attach"
           {...buttonProps}
+          className={className}
         />
         <SW.HiddenInput
           value={fileVal}
