@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
-import Notifications from './Notifications';
+import NotificationList from './NotificationList';
 
 @connect(state => ({
   notifications: state.get('notifications'),
@@ -13,7 +13,7 @@ import Notifications from './Notifications';
   markNotifications: ca.notifications.mark,
   setLastReadTs: ca.notifications.setLastReadTs,
 })
-export default class extends PureComponent {
+export default class HOCNotificationList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { limit: 10 };
@@ -66,7 +66,7 @@ export default class extends PureComponent {
     const { limit } = this.state;
 
     return (
-      <Notifications
+      <NotificationList
         limit={limit}
         delegate={this}
         notifications={sortedNotifications}

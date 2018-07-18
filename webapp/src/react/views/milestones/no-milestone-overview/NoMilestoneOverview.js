@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import SWView from 'SWView';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import EmptyState from '../../../components/empty-state/EmptyState';
+import HOCHeaderTitle from 'src/react/components/header-title/HOCHeaderTitle';
+import EmptyState from 'src/react/components/empty-state/EmptyState';
 import Icon from 'Icon';
-import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
-import GoalAdd from '../../goals/goal-components/goal-add/GoalAdd';
+import HOCGoalListItem from 'src/react/components/goal-list-item/HOCGoalListItem';
+import GoalAdd from 'src/react/views/goals/goal-components/goal-add/GoalAdd';
 
 class NoMilestoneOverview extends PureComponent {
   constructor(props) {

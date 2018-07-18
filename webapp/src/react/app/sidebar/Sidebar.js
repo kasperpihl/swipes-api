@@ -6,7 +6,7 @@ import HOCNotifications from 'src/react/views/notifications/HOCNotifications';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Sidebar.swiss';
-import { SwissProvider } from '../../../../node_modules/swiss-react';
+import { SwissProvider } from 'swiss-react';
 
 @connect(state => ({
   me: state.get('me'),
@@ -38,7 +38,7 @@ export default class Sidebar extends PureComponent {
     if(e.which === 2 || e.which === 4) {
       target = 'secondary';
     }
-    if (id === 'Notifications') {
+    if (id === 'NotificationList') {
       this.openNotifications(e);
       return;
     }
@@ -66,7 +66,7 @@ export default class Sidebar extends PureComponent {
         return 'Take Action';
       case 'AccountList':
         return 'Account';
-      case 'Notifications':
+      case 'NotificationList':
         return 'Notifications';
       default:
         return id;
@@ -154,7 +154,7 @@ export default class Sidebar extends PureComponent {
     return (
       <SW.Wrapper>
         <SW.TopSection>
-          {this.renderItem({ id: 'Notifications', svg: 'Notification' })}
+          {this.renderItem({ id: 'NotificationList', svg: 'Notification' })}
           {this.getRemainingOnboarding() ? this.renderItem({ id: 'Onboarding', svg: 'Onboarding' }) : null}
         </SW.TopSection>
         <SW.MiddleSection>

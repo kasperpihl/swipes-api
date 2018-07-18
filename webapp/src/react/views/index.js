@@ -12,7 +12,7 @@ import PlanList from './plan/plan-list/HOCPlanList';
 import PlanOverview from './plan/plan-overview/HOCPlanOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
 import NotFound from './not-found/NotFound';
-import Notifications from './notifications/HOCNotifications';
+import NotificationList from './Notification/List/HOCNotificationList';
 import PostFeed from './posts/post-feed/HOCPostFeed';
 import PostView from './posts/post-view/HOCPostView';
 import PostCreate from './posts/post-create/HOCPostCreate';
@@ -33,7 +33,7 @@ export {
   DiscussionOverview,
   NoMilestoneOverview,
   NotFound,
-  Notifications,
+  NotificationList,
   PlanList,
   PlanOverview,
   PostCreate,

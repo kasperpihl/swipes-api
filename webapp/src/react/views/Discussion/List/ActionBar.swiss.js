@@ -1,4 +1,4 @@
-import {styleSheet } from 'swiss-react';
+import { styleSheet } from 'swiss-react';
 import Button from 'src/react/components/button/Button';
 
 export default styleSheet('ActionBar', {

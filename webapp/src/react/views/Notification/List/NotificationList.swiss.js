@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Icon from 'Icon';
 
-export default styleSheet('Notifications', {
+export default styleSheet('NotificationList', {
   Wrapper: {
     _size: ['360px', '540px'],
     backgroundColor: 'white',

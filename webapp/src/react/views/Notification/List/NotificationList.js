@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react'
 import { setupDelegate } from 'react-delegate';
-import EmptyState from '../../components/empty-state/EmptyState';
+import EmptyState from 'src/react/components/empty-state/EmptyState';
 import SWView from 'SWView';
 import Button from 'src/react/components/button/Button';
-import NotificationItem from './NotificationItem';
-import SW from './Notifications.swiss';
+import NotificationItem from '../Item/NotificationItem';
+import SW from './NotificationList.swiss';
 
 const DISTANCE = 50;
 
-class Notifications extends PureComponent {
+export default class NotificationList extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
@@ -74,5 +74,3 @@ class Notifications extends PureComponent {
     )
   }
 }
-
-export default Notifications;
