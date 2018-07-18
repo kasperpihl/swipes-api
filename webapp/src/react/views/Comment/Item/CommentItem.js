@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { withDelegate } from 'react-delegate';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import PostAttachment from '../post-components/post-attachment/PostAttachment';
-import PostReactions from '../post-components/post-reactions/PostReactions';
+import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
+import CommentReaction from '../Reaction/CommentReaction';
 import SW from './CommentItem.swiss';
 
 @withDelegate(['onAttachmentClick'])
@@ -11,17 +11,17 @@ export default class CommentItem extends PureComponent {
   renderAttachments() {
     const { comment, onAttachmentClickCached } = this.props;
 
-    if(!comment.get('attachments') || !comment.get('attachments').size) {
+    if(!comment.attachments || !comment.attachments.length) {
       return undefined;
     }
     return (
       <SW.Attachments>
-        {comment.get('attachments').map((att, i) => (
+        {comment.attachments.map((att, i) => (
           <PostAttachment
-            title={att.get('title')}
+            title={att.title}
             key={i}
             onClick={onAttachmentClickCached(i, att)}
-            icon={attachmentIconForService(att.getIn(['link', 'service']))}
+            icon={attachmentIconForService(att.link.service)}
           />
         ))}
       </SW.Attachments>
@@ -29,30 +29,30 @@ export default class CommentItem extends PureComponent {
   }
   render() {
     const { comment, postId } = this.props;
-    const attachments = comment.get('attachments');
-    const name = msgGen.users.getFullName(comment.get('created_by'));
+    const attachments = comment.attachments;
+    const name = msgGen.users.getFullName(comment.sent_by);
 
     return (
       <SW.Container>
         <SW.Picture>
-          <HOCAssigning assignees={[comment.get('created_by')]} size={36} />
+          <HOCAssigning assignees={[comment.sent_by]} size={36} />
         </SW.Picture>
         <SW.Content>
           <SW.Name>
             {name}
-            <SW.Timestamp prefix=" — " simple date={comment.get('created_at')} />
+            <SW.Timestamp prefix=" — " simple date={comment.sent_at} />
           </SW.Name>
           <SW.Message>
-            {comment.get('message')}
+            {comment.message}
           </SW.Message>
           {this.renderAttachments()}
         </SW.Content>
         <SW.Actions>
-          <PostReactions
+          <CommentReaction
             alignRight
-            reactions={comment.get('reactions')}
+            reactions={comment.reactions || []}
             postId={postId}
-            commentId={comment.get('id')}
+            commentId={comment.id}
           />
         </SW.Actions>
       </SW.Container>

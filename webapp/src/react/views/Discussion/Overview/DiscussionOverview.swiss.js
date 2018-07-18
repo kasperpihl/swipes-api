@@ -5,5 +5,8 @@ export default styleSheet('DiscussionOverview', {
     marginLeft: '30px',
     marginRight: '30px',
     borderTop: '1px solid $sw3',
-  }
+  },
+  CommentWrapper: {
+    
+  },
 });
