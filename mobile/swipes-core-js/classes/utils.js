@@ -203,7 +203,8 @@ export function iconForService(service) {
 }
 
 export function attachmentIconForService(service) {
-  switch (service.get('type')) {
+  const type = (typeof service.get === 'function') ? service.get('type') : service.type;
+  switch (type) {
     case 'url':
       return 'Hyperlink';
     case 'note':
