@@ -40,7 +40,7 @@ export default endpointCreate({
     organization_id,
     created_at,
     id: discussionId,
-    topic: shorten(message, 280),
+    topic: shorten(message, 60),
     created_by: user_id,
     last_comment_at: created_at,
     privacy: privacy || 'public',
