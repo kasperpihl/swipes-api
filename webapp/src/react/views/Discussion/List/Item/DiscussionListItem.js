@@ -14,11 +14,12 @@ import SW from './DiscussionListItem.swiss';
 })
 export default class DiscussionListItem extends PureComponent {
   onClick = () => {
-    const { openSecondary, target } = this.props;
+    const { openSecondary, target, item } = this.props;
     openSecondary(target, {
       id: 'DiscussionOverview',
       title: 'Discussion',
       props: {
+        discussionId: item.id,
       },
     });
   }
@@ -33,7 +34,6 @@ export default class DiscussionListItem extends PureComponent {
     // const subtitle = `${msgGen.users.getName(last_by, {
     //   capitalize: true,
     // })}: ${last_message}`;
-    console.log(this.props.item);
     const unread = status ? (!status.read_at || status.read_at < last_comment_at) : false;
     return (
       <SwissProvider unread={unread}>
