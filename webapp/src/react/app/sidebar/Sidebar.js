@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import { setupCachedCallback } from 'react-delegate';
-import HOCNotifications from 'src/react/views/notifications/HOCNotifications';
+import HOCNotificationList from 'src/react/views/Notification/List/HOCNotificationList';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Sidebar.swiss';
@@ -90,7 +90,7 @@ export default class Sidebar extends PureComponent {
     };
     this.setState({ isOpenNotifications: true });
     contextMenu({
-      component: HOCNotifications,
+      component: HOCNotificationList,
       onClose: () => { this.setState({ isOpenNotifications: false }); },
       options,
     })
