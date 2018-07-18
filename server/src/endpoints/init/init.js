@@ -186,16 +186,20 @@ export default endpointCreate({
 
   const discussionTs = user.settings.discussion_counter_ts || defTs;
   const discussionCounterQ = r.table('discussions')
-                              .orderBy({ index: r.desc('last_comment_at') })
-                              .filter(disc =>
-                                disc('organization_id')
-                                  .eq(organization_id)
-                                  .and(r.table('discussion_followers')
-                                    .get(disc('id').add(`-${user_id}`)))
-                                  .and(disc('archived').eq(false))
-                                  .and(disc('last_comment_at').gt(r.ISO8601(discussionTs))))
-                              .pluck('id')
-                              .limit(10);
+      .orderBy({ index: r.desc('last_comment_at') })
+      .filter(disc =>
+        disc('organization_id')
+          .eq(organization_id)
+          .and(r.table('discussion_followers')
+            .get(disc('id').add(`-${user_id}`)))
+          .and(disc('archived').eq(false))
+          .and(disc('last_comment_at').gt(r.ISO8601(discussionTs))))
+      .pluck('id', 'last_comment_at')
+      .map(obj => ({
+        id: obj('id'),
+        ts: obj('last_comment_at')
+      }))
+      .limit(10);
 
   const notificationTs = defTs;
   const notificationCounterQ = r.table('notifications')
@@ -203,7 +207,11 @@ export default endpointCreate({
       .filter((notification) => {
         return notification('updated_at').gt(r.ISO8601(notificationTs));
       })
-      .pluck('id')
+      .pluck('id', 'updated_at')
+      .map(obj => ({
+        id: obj('id'),
+        ts: obj('updated_at')
+      }))
       .limit(10);
 
   const now = new Date().toISOString();
@@ -242,8 +250,8 @@ export default endpointCreate({
 
   const goals = me.goals || [];
   const milestones = me.milestones || [];
-  const ways = me.ways || [];
   const notes = me.notes || [];
+  const ways = me.ways || [];
 
   delete me.goals;
   delete me.milestones;
