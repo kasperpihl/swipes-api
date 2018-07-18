@@ -47,6 +47,7 @@ export const request = (options, data) => (d, getState) => {
 
   let body = Object.assign({}, {
     token: getState().getIn(['connection', 'token']),
+    organization_id: getState().getIn(['me', 'organizations', 0, 'id']) || null,
   }, data);
   let state = getState();
   const updateRequired = state.getIn(['connection', 'versionInfo', 'updateRequired']);
