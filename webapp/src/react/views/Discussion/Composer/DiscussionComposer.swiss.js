@@ -55,6 +55,19 @@ export default styleSheet('DiscussionComposer', {
     minHeight: '36px',
     paddingRight: '6px',
   },
+  AttachSection: {
+    width: '100%',
+    _flex: ['row', 'left', 'top'],
+    flexWrap: 'wrap',
+    '& > *:not(:last-child)': {
+      marginRight: '6px',
+    },
+    notEmpty: {
+      '& > *': {
+        marginTop: '3px',
+      }
+    }
+  },
   PostButton: {
     _el: Button,
     marginLeft: 'auto',

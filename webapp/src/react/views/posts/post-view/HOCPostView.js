@@ -83,7 +83,7 @@ export default class extends PureComponent {
     const options = this.getOptionsForE(e);
     const items = [];
 
-    if (post.get('followers').includes(myId)) {
+    if (post.get('followers').includes(myId)) { 
       items.push({
         id: 'unfollow',
         hideAfterClick: true,

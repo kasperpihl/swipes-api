@@ -1,18 +1,33 @@
 import React, { PureComponent } from 'react';
 import { SwissProvider } from 'swiss-react';
 import { connect } from 'react-redux';
-import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import * as mainActions from 'src/redux/main/mainActions';
+import * as menuActions from 'src/redux/menu/menuActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
+import * as ca from 'swipes-core-js/actions';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SplitImage from 'src/react/components/split-image/SplitImage';
+import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import moment from 'moment';
-
 import SW from './DiscussionListItem.swiss';
 
 @navWrapper
-@connect(null, {
+@connect(state => ({
+  myId: state.getIn(['me', 'id']),
+}),{
   openSecondary: navigationActions.openSecondary,
+  contextMenu: mainActions.contextMenu,
+  confirm: menuActions.confirm,
+  request: ca.api.request,
 })
 export default class DiscussionListItem extends PureComponent {
+  constructor(props){
+    super(props);
+    this.state = {};
+
+    setupLoading(this);
+  }
   onClick = () => {
     const { openSecondary, target, item } = this.props;
     openSecondary(target, {
@@ -23,12 +38,109 @@ export default class DiscussionListItem extends PureComponent {
       },
     });
   }
-  render() {
+  getOptionsForE(e) {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+    };
+  }
+  onThreeDotsAction = (action, options) =>  {
+    const {request} = this.props;
+    this.setLoading('threedots');
+    request(action, options).then((res) => {
+      if(!res.ok) {
+        this.clearLoading('threedots', '!Something went wrong');
+      } else {
+        this.clearLoading('threedots');
+      }
+    })
+  }
+  onThreeDots = (e) => {
+    const { contextMenu, confirm, myId } = this.props;
+    const options = this.getOptionsForE(e);
     const {
+      id,
       followers,
       topic,
       last_comment_at,
       status,
+      created_by,
+    } = this.props.item;
+
+    const items = [];
+
+    if(created_by === myId) {
+      items.push({
+        id: 'archive',
+        title: 'Delete discussion',
+        subtitle: 'The discussion will no longer be vissible to anyone in the organization.',
+        action: 'discussion.archive',
+        options: {
+          discussion_id: id,
+        },
+        confirm: 'This cannot be undone. Are you sure?',
+      })
+    }
+
+    if(followers.includes(myId)) {
+      items.push({
+        id: 'unfollow',
+        hideAfterClick: true,
+        title: 'Unfollow',
+        subtitle: 'You will no longer receive notifications about this discussion',
+        action: 'discussion.unfollow',
+        options: {
+          discussion_id: id,
+        }
+      })
+    } else {
+      items.push({
+        id: 'follow',
+        hideAfterClick: true,
+        title: 'Follow',
+        subtitle: 'You will start receiving notifications about this discussion',
+        action: 'discussion.follow',
+        options: {
+          discussion_id: id,
+        }
+      })
+    }
+
+    const delegate = {
+      onItemAction: (item) => {
+        if(item.confirm) {
+          return confirm(Object.assign({}, options, {
+            title: item.title,
+            messege: item.confirm,
+          }), (i) => {
+            if (i === 1) {
+              this.onThreeDotsAction(item.action, item.options)
+            }
+          });
+        }
+        this.onThreeDotsAction(item.action, item.options)
+      }
+    }
+    contextMenu({
+      options,
+      component: TabMenu,
+      props: {
+        delegate,
+        items,
+        style: {
+          width: '360px',
+        }
+      }
+    });
+  }
+  render() {
+    const {
+      id,
+      followers,
+      topic,
+      last_comment_at,
+      status,
+      created_by
     } = this.props.item;
 
     // const subtitle = `${msgGen.users.getName(last_by, {
@@ -49,7 +161,7 @@ export default class DiscussionListItem extends PureComponent {
           </SW.MiddleWrapper>
           <SW.RightWrapper>
             <SW.Time>{moment(last_comment_at).format('LT')}</SW.Time>
-            <SW.Button icon="ThreeDots" compact />
+            <SW.Button icon="ThreeDots" compact onClick={this.onThreeDots} />
           </SW.RightWrapper>
         </SW.Wrapper>
       </SwissProvider>
