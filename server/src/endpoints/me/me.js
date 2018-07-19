@@ -19,6 +19,10 @@ export default endpointCreate({
                 .get(user_id)
                 .without(['password', { services: 'auth_data' }])
                 .merge({
+                  organizations:
+                    r.table('organizations')
+                      .getAll(r.args(r.row('organizations')))
+                      .coerceTo('ARRAY'),
                   pending_organizations:
                     r.table('organizations')
                       .getAll(r.args(r.row('pending_organizations').default([])))

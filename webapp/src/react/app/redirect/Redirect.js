@@ -6,7 +6,7 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 @withRouter
 @connect(state => ({
-  hasOrg: state.getIn(['me', 'has_organization']),
+  hasOrg: !!state.getIn(['me', 'organizations', 0]),
   isHydrated: state.getIn(['main', 'isHydrated']),
   token: state.getIn(['connection', 'token']),
   hasConnected: state.getIn(['connection', 'hasConnected']),

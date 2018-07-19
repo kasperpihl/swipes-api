@@ -10,6 +10,7 @@ export default function meReducer(state = initialState, action) {
   } = action;
 
   switch (type) {
+    case 'me':
     case 'init': {
       return fromJS(payload.me);
     }
@@ -60,7 +61,7 @@ export default function meReducer(state = initialState, action) {
       }));
     }
     case 'user_disabled': {
-      return state.set('organizations', fromJS([])).set('has_organization', false);
+      return state.set('organizations', fromJS([]));
     }
     case 'user_invited': {
       const pendings = state.get('pending_organizations');

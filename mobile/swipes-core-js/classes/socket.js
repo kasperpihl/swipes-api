@@ -77,6 +77,10 @@ export default class Socket {
     if (url.includes('localhost')) {
       url = 'http://localhost:5000';
     }
+
+    this.fetchMe(url);
+  }
+  fetchMe(url) {
     if (this.isConnecting || this.forceOffline) {
       return;
     }
@@ -84,9 +88,21 @@ export default class Socket {
     this.isConnecting = true;
     this.changeStatus('connecting');
 
-    this.openSocket(url);
+    this.store.dispatch(a.api.request('me')).then((res) => {
+      if (res.redirectUrl) {
+        // The api was redirected. Connect to staging
+        this.forceConnectUrl = 'https://staging.swipesapp.com';
+      }
+      if(res.ok) {
+        this.hasOrg = !!res.me.organizations.length;
+        this.openSocket(url);
+      } else {
+        this.onCloseHandler();
+      }
+    });
   }
   openSocket(url) {
+
     if (!window.WebSocket || this.isSocketConnected) {
       return this.fetchInit();
     }
@@ -118,11 +134,14 @@ export default class Socket {
     };
   }
   fetchInit() {
+    if(!this.hasOrg) {
+      this.isConnecting = false;
+      this.isConnected = true;
+      this.reconnect_attempts = 0;
+      this.changeStatus('online');
+      return;
+    }
     this.store.dispatch(a.me.init()).then((res) => {
-      if (res.redirectUrl) {
-        // The api was redirected. Connect to staging
-        this.forceConnectUrl = 'https://staging.swipesapp.com';
-      }
       this.isConnecting = false;
       this.isConnected = true;
       if (res && res.ok) {
@@ -136,7 +155,6 @@ export default class Socket {
       }
     });
   }
-
   changeStatus(status, nextRetry) {
     this.status = status;
     this.store.dispatch({

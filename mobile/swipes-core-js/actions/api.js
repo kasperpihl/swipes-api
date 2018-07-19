@@ -100,6 +100,7 @@ export const request = (options, data) => (d, getState) => {
           if (redirectUrl) {
             res.redirectUrl = redirectUrl;
           }
+          command = command === 'init2' ? 'init' : command;
           d({
             type: command,
             payload: res,

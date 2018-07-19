@@ -5,11 +5,12 @@ const notes = (socket, userId) => {
   const organizationIdQ =
     r.db('swipes')
       .table('users')
-      .get(userId)('organizations')
-      .nth(0);
+      .get(userId)('organizations');
 
   dbRunQuery(organizationIdQ)
-    .then((organization_id) => {
+    .then((organizations) => {
+      const organization_id = organizations[0];
+      if(!organization_id) return;
       const q =
         r.db('swipes')
           .table('notes')

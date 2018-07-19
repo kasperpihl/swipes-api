@@ -25,11 +25,16 @@ export default function connectionReducer(state = initialState, action) {
   } = action;
 
   switch (type) {
-    case ('init'): {
+    case 'init': {
       return state.set('lastConnect', payload.timestamp)
                   .set('forceFullFetch', false)
                   .set('hasConnected', true)
-                  .set('readyInOrg', payload.me.has_organization);
+                  .set('readyInOrg', !!payload.me.organizations.length);
+    }
+    case 'me': {
+      if(!payload.me.organizations.length) {
+        return state.set('hasConnected', true);
+      }
     }
     case REHYDRATE:
       if (action && action.payload && action.payload.connection) {

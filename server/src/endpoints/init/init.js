@@ -184,6 +184,10 @@ export default endpointCreate({
       .orderBy(r.desc('updated_at'))
       .limit(100);
 
+  const onboadingQ = r.table('onboarding').filter((item) => {
+    return item('updated_at').during(r.ISO8601(timestamp).sub(3600), r.now().add(3600));
+  });
+
   const discussionTs = user.settings.discussion_counter_ts || defTs;
   const discussionCounterQ = r.table('discussions')
       .orderBy({ index: r.desc('last_comment_at') })
@@ -221,16 +225,18 @@ export default endpointCreate({
     dbRunQuery(initQ),
     dbRunQuery(servicesQ),
     dbRunQuery(notificationsQ),
+    dbRunQuery(onboadingQ),
     dbRunQuery(discussionCounterQ),
-    dbRunQuery(notificationCounterQ)
+    dbRunQuery(notificationCounterQ),
   ]);
 
   const me = result[0];
   const services = result[1];
   const notifications = result[2];
+  const onboarding = result[3];
   const counters = {
-    discussions: result[3],
-    notifications: result[4],
+    discussions: result[4],
+    notifications: result[5],
   }
   let users = [];
   if (me.organizations.length > 0) {
@@ -258,8 +264,6 @@ export default endpointCreate({
   delete me.ways;
   delete me.notes;
 
-  me.has_organization = true;
-
   // Create response data.
   res.locals.output = {
     me,
@@ -269,6 +273,7 @@ export default endpointCreate({
     ways,
     services,
     notifications,
+    onboarding,
     counters,
     notes,
     sofi: sofiCreate(),
