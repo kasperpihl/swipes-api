@@ -1,4 +1,3 @@
-import * as init from './init';
 import * as users from './users';
 import * as links from './links';
 import * as services from './services';
@@ -29,7 +28,6 @@ const v1NotAuthed = [
   me.notAuthed,
 ];
 const v1Authed = [
-  init.authed,
   links.authed,
   services.authed,
   users.authed,
