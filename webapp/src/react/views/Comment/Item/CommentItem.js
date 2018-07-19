@@ -50,7 +50,7 @@ export default class CommentItem extends PureComponent {
         <SW.Actions>
           <CommentReaction
             alignRight
-            reactions={comment.reactions || []}
+            reactions={comment.reactions}
             postId={postId}
             commentId={comment.id}
           />

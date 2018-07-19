@@ -17,34 +17,39 @@ import SW from './CommentReaction.swiss';
 export default class CommentReaction extends PureComponent {
   constructor(props) {
     super(props);
-    props.optimist.identify(`${props.postId}${props.commentId || ''}`);
+    props.optimist.identify(props.commentId);
     this.state = {};
   }
   componentWillMount() {
-    this.updateILike();
+    this.size = Object.keys(this.props.reactions).length;
   }
   componentWillReceiveProps(nextProps) {
-    this.updateILike(nextProps.reactions);
+    if(nextProps.reactions !== this.props.reactions) {
+      this.size = Object.keys(nextProps.reactions).length;
+    }
   }
   componentWillUnmount() {
     clearTimeout(this.tooltipDelay);
+  }
+  doILike = () => {
+    const { optimist, reactions, myId } = this.props;
+    return optimist.get('like', !!reactions[myId]);
   }
   onReaction = () => {
     const {
       optimist,
       commentId,
+      request,
       successGradient,
     } = this.props;
-
-    const iLike = optimist.get('like', this.state.iLike);
 
     successGradient('red');
     optimist.set({
       key: 'like',
-      value: true,
+      value: !this.doILike(),
       handler: (next) => {
         request('comment.react', {
-          reaction: iLike ? null : 'like',
+          reaction: this.doILike() ? 'like' : null,
           comment_id: commentId,
         }).then((res) => {
           next();
@@ -59,9 +64,7 @@ export default class CommentReaction extends PureComponent {
 
   }
   onEnter = (e) => {
-    const { reactions } = this.props;
-
-    if (!reactions || !reactions.size) {
+    if (!this.size) {
       return;
     }
 
@@ -69,7 +72,7 @@ export default class CommentReaction extends PureComponent {
     this.tooltipDelay = setTimeout(() => {
       const { tooltip, reactions } = this.props;
       const position = 'top';
-      const userIds = reactions.map(r => r.get('created_by'));
+      const userIds = Object.keys(reactions);
 
       const data = {
         component: AssigneeTooltip,
@@ -91,37 +94,21 @@ export default class CommentReaction extends PureComponent {
     clearTimeout(this.tooltipDelay);
     tooltip(null);
   }
-  updateILike(nextReactions) {
-    const { reactions, myId } = this.props;
-
-    if (reactions !== nextReactions) {
-      const reactionsToUse = nextReactions ? nextReactions : reactions;
-      const newILike = !!reactionsToUse.find(r => r.get('created_by') === myId);
-
-      if (this.state.iLike !== newILike) {
-        this.setState({ iLike: newILike });
-      }
-    }
-  }
   renderButton() {
-    const { alignRight, optimist } = this.props;
-    const iLike = optimist.get('like', this.state.iLike);
+    const { alignRight } = this.props;
 
     return (
       <SW.HeartButton alignRight={!!alignRight} className="heart-button" onClick={this.onReaction}>
-        <SW.HeartSvg icon="Heart" liked={iLike}/>
+        <SW.HeartSvg icon="Heart" liked={this.doILike()}/>
       </SW.HeartButton>
     )
   }
   renderString() {
-    const { reactions, optimist } = this.props;
-    const iLike = optimist.get('like', this.state.iLike);
-
     return (
       <SW.LikeString 
-        show={reactions && !!reactions.size }
-        liked={iLike}>
-        {reactions && reactions.size}
+        show={!!this.size}
+        liked={this.doILike()}>
+        {this.size}
       </SW.LikeString>
     )
   }
