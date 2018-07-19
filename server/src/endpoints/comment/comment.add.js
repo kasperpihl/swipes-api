@@ -35,6 +35,7 @@ export default endpointCreate({
     sent_at,
     attachments: attachments || [],
     sent_by: user_id,
+    reactions: {},
     organization_id,
   });
   // Updating read_at to be newest comment.
