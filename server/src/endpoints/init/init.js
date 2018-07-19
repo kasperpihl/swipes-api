@@ -27,7 +27,7 @@ const expectedOutput = {
 };
 
 export default endpointCreate({
-  endpoint: '/init2', // K_TODO: Change this over to init
+  endpoint: '/init',
   expectedInput,
   expectedOutput,
 }, async (req, res, next) => {

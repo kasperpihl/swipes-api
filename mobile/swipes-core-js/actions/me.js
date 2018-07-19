@@ -14,7 +14,7 @@ export const init = () => (d, getState) => {
     options.timestamp = lastConnect;
   }
 
-  return d(request('init2', options));
+  return d(request('init', options));
 }
 
 export const disconnectService = aId => request('users.serviceDisconnect', { account_id: aId });
