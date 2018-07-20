@@ -13,7 +13,7 @@ export default endpointCreate({
   endpoint: '/comment.react',
   expectedInput,
   expectedOutput,
-}, async (req, res, next) => {
+}, async (req, res) => {
   // Get inputs
   const { user_id } = res.locals;
   const {
@@ -29,7 +29,9 @@ export default endpointCreate({
               }
             }))
   await dbRunQuery(q);
-  
+
   // Create response data.
   res.locals.output = {};
+}).background(async (req, res) => {
+  // K_TODO: Send event to followers
 });

@@ -107,11 +107,13 @@ export default class extends PureComponent {
       step,
       goalId,
       editMode,
+      areAllStepsCompleted,
     } = this.props;
     if(editMode) return null;
 
     return (
       <StepComplete
+        areAllStepsCompleted={areAllStepsCompleted}
         number={number}
         goalId={goalId}
         stepId={step.get('id')}

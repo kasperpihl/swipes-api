@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { withOptimist } from 'react-optimist';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 
 import * as ca from 'swipes-core-js/actions';
@@ -13,37 +14,38 @@ import SW from './GoalFooter.swiss';
   incompleteGoal: ca.goals.incomplete,
   successGradient: mainActions.successGradient,
 })
+@withOptimist
 export default class extends PureComponent {
   constructor(props) {
     super(props);
+    props.optimist.identify(props.goal.get('id'));
     setupLoading(this);
   }
   onIncompleteGoal = () => {
-    const { incompleteGoal, completeGoal, successGradient, goal } = this.props;
-    this.setLoading('completing', 'Incompleting goal...');
-    incompleteGoal(goal.get('id')).then((res) => {
-      if (res && res.ok) {
-        this.clearLoading('completing');
-      } else {
-        this.clearLoading('completing', '!Something went wrong');
-      }
-    });
+    const { incompleteGoal, goal, optimist } = this.props;
+    optimist.set({
+      key: 'completed',
+      value: false,
+      handler: next => incompleteGoal(goal.get('id')).then((res) => {
+        next();
+      })
+    })
   }
   onCompleteGoal = () => {
-    const { completeGoal, successGradient, goal } = this.props;
-    this.setLoading('completing', 'Completing goal...');
-    completeGoal(goal.get('id')).then((res) => {
-      if (res && res.ok) {
-        successGradient();
-        this.clearLoading('completing');
-      } else {
-        this.clearLoading('completing', '!Something went wrong');
-      }
-    });
+    const { completeGoal, successGradient, goal, optimist } = this.props;
+    successGradient();
+    optimist.set({
+      key: 'completed',
+      value: true,
+      handler: next => completeGoal(goal.get('id')).then((res) => {
+        next();
+      })
+    })
+    // this.setLoading('completing', 'Completing goal...'); 
   }
   render() {
-    const { goal } = this.props;
-    const isComplete = !!goal.get('completed_at');
+    const { goal, optimist } = this.props;
+    const isComplete = optimist.get('completed', !!goal.get('completed_at'));
 
     return (
       <SW.Wrapper>

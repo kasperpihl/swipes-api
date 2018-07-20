@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import { withOptimist } from 'react-optimist';
+import { withOptimist } from 'react-optimist';
 import Dropper from 'src/react/components/draggable-list/Dropper';
 import Dragger from 'src/react/components/draggable-list/Dragger';
 
@@ -16,6 +16,7 @@ import GoalFooter from '../goal-components/goal-footer/GoalFooter';
 import GoalAttachment from '../goal-components/goal-attachment/GoalAttachment';
 
 /* global msgGen */
+@withOptimist
 class GoalOverview extends PureComponent {
   constructor(props) {
     super(props);
@@ -40,11 +41,18 @@ class GoalOverview extends PureComponent {
       this.setState({ showLine: newShowLine });
     }
   }
-  renderCompletedState() {
-    const helper = this.getHelper();
-    const lastComplete = helper.getLastActivityByType('goal_completed');
+  areAllStepsCompleted = () => {
+    const { goal, optimist } = this.props;
+    const completedSteps = goal.get('step_order')
+          .filter(o => optimist.get(`${o}-completed`, !!goal.getIn(['steps', o, 'completed_at'])));
 
-    if (!helper.getIsCompleted() || !lastComplete) {
+    return (goal.get('step_order').size === completedSteps.size);
+  }
+  renderCompletedState() {
+    const { optimist } = this.props;
+    const helper = this.getHelper();
+
+    if (!optimist.get('completed', helper.getIsCompleted())) {
       return undefined;
     }
 
@@ -69,7 +77,7 @@ class GoalOverview extends PureComponent {
     );
   }
   renderSteps() {
-    const { optimist } = this.props;
+    const { optimist, goal } = this.props;
     const { editMode } = this.state;
     const helper = this.getHelper();
     const order = optimist.get('step_order', helper.getStepOrder())
@@ -88,6 +96,7 @@ class GoalOverview extends PureComponent {
                   return (
                   <StepItem
                     goalId={helper.getId()}
+                    areAllStepsCompleted={this.areAllStepsCompleted}
                     step={step}
                     completed={!!step.get('completed_at')}
                     number={i + 1}
@@ -178,4 +187,4 @@ class GoalOverview extends PureComponent {
   }
 }
 
-export default withOptimist(GoalOverview);
+export default GoalOverview;
