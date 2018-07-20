@@ -59,7 +59,7 @@ export default class DiscussionComposer extends PureComponent {
     const { discussion } = this.state;
     openSecondary(target, navForContext(discussion.get('context')));
   }
-  onAttachmentClick(i) {
+  onAttachmentClick = (i) => {
     const { preview, target } = this.props;
     const { discussion } = this.state;
     preview(target, discussion.getIn(['attachments', i]));
@@ -144,8 +144,8 @@ export default class DiscussionComposer extends PureComponent {
         <PostAttachment
           title={att.get('title')}
           key={i}
-          onClick={this.onAttachmentClick}
-          onClose={this.onAttachmentClose}
+          onClick={() => this.onAttachmentClick(i)}
+          onClose={() => this.onAttachmentClose(i)}
           icon={icon}
         />
       )
