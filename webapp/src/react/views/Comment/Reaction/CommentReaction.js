@@ -105,7 +105,7 @@ export default class CommentReaction extends PureComponent {
   }
   renderString() {
     return (
-      <SW.LikeString 
+      <SW.LikeString
         show={!!this.size}
         liked={this.doILike()}>
         {this.size}

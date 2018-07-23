@@ -135,7 +135,6 @@ export default class extends PureComponent {
 
   onDropFiles = (files) => {
     this.onUploadFiles(files);
-    console.log('Attached files', files);
   }
 
   render() {

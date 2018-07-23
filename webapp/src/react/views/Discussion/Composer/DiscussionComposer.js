@@ -28,7 +28,7 @@ import SW from './DiscussionComposer.swiss';
   request: ca.api.request,
   preview: linkActions.preview,
 })
-export default class DiscussionComposer extends PureComponent {
+class DiscussionComposer extends PureComponent {
   static maxWidth() {
     return 600;
   }
@@ -88,16 +88,16 @@ export default class DiscussionComposer extends PureComponent {
   onPostSubmit = () => {
     const { request, orgId, hideModal, navPop } = this.props;
     const { discussion } = this.state;
-    const topic = this.editorState.getCurrentContent().getPlainText();
+    const message = this.editorState.getCurrentContent().getPlainText();
 
-    if(!topic){
+    if(!message){
       return;
     }
     this.setLoading('discussion', 'Creating');
     request('discussion.add', {
       context: this.state.discussion.toJS().context,
       organization_id: orgId,
-      topic,
+      message,
       privacy: 'public',
       followers: this.state.discussion.toJS().taggedUsers,
       attachments: this.state.discussion.toJS().attachments,
@@ -234,3 +234,5 @@ export default class DiscussionComposer extends PureComponent {
     )
   }
 }
+
+export default DiscussionComposer

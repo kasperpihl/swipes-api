@@ -19,7 +19,6 @@ export default class DiscussionOverview extends PureComponent {
     )
   }
   renderComments = (pagination) => {
-    console.log('comments' , pagination);
     return (
       <SW.CommentWrapper>
         {(pagination.results || []).map((comment, i) => (

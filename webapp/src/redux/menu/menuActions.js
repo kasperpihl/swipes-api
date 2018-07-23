@@ -1,6 +1,7 @@
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
 import Confirmation from 'src/react/context-menus/confirmation/Confirmation';
 import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
+import DiscussionComposer from 'src/react/views/Discussion/Composer/DiscussionComposer.js';
 import * as cs from 'swipes-core-js/selectors';
 import * as mainActions from '../main/mainActions';
 import * as navigationActions from '../navigation/navigationActions';
@@ -164,19 +165,17 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
       subtitle: secCardActive ? 'Left side' : null,
       leftIcon: {icon: secCardActive ? 'CardLeft' : 'CardSingle'}
     } : null,
-
     secondary.size ? {
       id: 'secondary',
       title: `Attach to: ${secondary.get(0).title}`,
       subtitle: 'Right side',
       leftIcon: {icon: 'CardRight'},
     } : null,
-
-    primary.size === 0 && secondary.size === 0 ? {
-      id: 'error',
-      title: 'No drop zone available. Open a goal and try again.'
-    } : null,
-
+    {
+      id: 'discussion',
+      title: 'Start a discussion',
+      leftIcon: { icon: 'IconDiscuss' },
+    },
     // {
     //   id: 'ping',
     //   title: 'Ping someone',
@@ -195,18 +194,22 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
       if(item.id === 'secondary') {
         secondary.last().handler(files);
       }
-      if(item.id === 'ping') {
+      if(item.id === 'discussion') {
         dispatch(navigationActions.set('primary',{
           id: 'Discuss',
-          showTitleInCrumb: true,
           title: 'Discuss',
+        }))
+        dispatch(mainActions.modal('primary',{
+          component: DiscussionComposer,
+          title: 'Create a discussion',
+          position: 'center',
         }))
         setTimeout(() => {
           const lastPrimary = getState().getIn(['main', 'dragAndDrop', 'primary']).last();
           if(lastPrimary) {
-            lastPrimary(files);
+            lastPrimary.handler(files);
           }
-        }, 100)
+        }, 1)
       }
       resolve(item);
     },
