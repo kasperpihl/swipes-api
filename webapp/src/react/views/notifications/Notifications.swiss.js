@@ -5,7 +5,6 @@ export default styleSheet('Notifications', {
   Wrapper: {
     _size: ['360px', '540px'],
     backgroundColor: 'white',
-    border: '1px solid $sw2',
     borderRadius: '6px',
     overflow: 'hidden',
     boxShadow: '0 3px 6px 0 rgba(0,12,47, 0.3)'

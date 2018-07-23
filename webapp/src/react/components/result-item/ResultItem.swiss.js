@@ -12,11 +12,11 @@ export default styleSheet('ResultItem', {
     _flex: ['row', 'left', 'center'],
 
     '&:before': {
-      _size: ['110%', '100%'],
+      _size: ['120%', '100%'],
       backgroundColor: 'transparent',
       borderRadius: '3px',
       content: '',
-      left: '-5%',
+      left: '-10%',
       top: '0',
       position: 'absolute',
       transition: '.15s ease-in-out',
@@ -58,7 +58,7 @@ export default styleSheet('ResultItem', {
 
     '&:hover': {
       '&:before': {
-        backgroundColor: '$blue5',
+        backgroundColor: '$blue20',
       },
 
       '& > .data > .title': {
