@@ -7,10 +7,8 @@ export default async (req, res, next) => {
     organization_id,
   } = res.locals;
 
-  // if we still have some endpoint that does not require organization_id
-  // but they should!
-  if (!organization_id) {
-    return next();
+  if (!organization_id || typeof organization_id !== 'string' || !organization_id.startsWith('O')) {
+    throw Error('not_authed');
   }
 
   const query = r.table('organizations').get(organization_id)('active_users').contains(user_id);

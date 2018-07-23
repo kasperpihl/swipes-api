@@ -12,23 +12,24 @@ export default endpointCreate({
   endpoint: '/me',
   expectedInput,
   expectedOutput,
-}, async (req, res, next) => {
+  type: 'noOrg',
+}, async (req, res, next) => {
   // Get inputs
   const { user_id } = res.locals;
   const meQ = r.table('users')
-                .get(user_id)
-                .without(['password', { services: 'auth_data' }])
-                .merge({
-                  organizations:
-                    r.table('organizations')
-                      .getAll(r.args(r.row('organizations')))
-                      .coerceTo('ARRAY'),
-                  pending_organizations:
-                    r.table('organizations')
-                      .getAll(r.args(r.row('pending_organizations').default([])))
-                      .pluck('id', 'name')
-                      .coerceTo('ARRAY'),
-                });
+    .get(user_id)
+    .without(['password', { services: 'auth_data' }])
+    .merge({
+      organizations:
+        r.table('organizations')
+          .getAll(r.args(r.row('organizations')))
+          .coerceTo('ARRAY'),
+      pending_organizations:
+        r.table('organizations')
+          .getAll(r.args(r.row('pending_organizations').default([])))
+          .pluck('id', 'name')
+          .coerceTo('ARRAY'),
+    });
 
   const me = await dbRunQuery(meQ);
 
