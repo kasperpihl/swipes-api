@@ -37,7 +37,7 @@ export default function configureStore(preloadedState) {
 
   persistStore(store, {
     storage: localForage,
-    blacklist: ['main', 'filters', 'autoComplete', 'globals'],
+    blacklist: ['main', 'cache', 'filters', 'autoComplete', 'globals'],
   });
   window.getState = store.getState;
   window.localForage = localForage;
