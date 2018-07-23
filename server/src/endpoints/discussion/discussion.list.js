@@ -61,7 +61,6 @@ export default endpointCreate({
         .get(obj('id').add(`-${user_id}`)),
       followers: r.table('discussion_followers')
         .getAll(obj('id'), { index: 'discussion_id' })
-        .limit(4)
         .map(u => u('user_id'))
         .coerceTo('array'),
     }));

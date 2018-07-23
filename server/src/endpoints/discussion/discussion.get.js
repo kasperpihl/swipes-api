@@ -16,10 +16,19 @@ export default endpointCreate({
   expectedOutput,
 }, async (req, res, next) => {
   // Get inputs
-  const input = res.locals.input;
+  const { user_id } = res.locals;
+  const { discussion_id } = res.locals.input;
 
   const q = r.table('discussions')
-            .get(input.discussion_id)
+            .get(discussion_id)
+            .merge(obj => ({
+              status: r.table('discussion_followers')
+                .get(obj('id').add(`-${user_id}`)),
+              followers: r.table('discussion_followers')
+                .getAll(obj('id'), { index: 'discussion_id' })
+                .map(u => u('user_id'))
+                .coerceTo('array'),
+            }));
 
   const discussion = await dbRunQuery(q);
   // Create response data.
