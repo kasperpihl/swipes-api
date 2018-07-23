@@ -2,11 +2,12 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
+import shorten from 'src/utils/shorten';
 
 const expectedInput = {
   organization_id: string.require(),
   discussion_id: string.require(),
-  topic: string.require(),
+  topic: string.min(1).require(),
 };
 const expectedOutput = {
   discussion_id: string.require(),
@@ -25,7 +26,7 @@ export default endpointCreate({
     topic,
   } = input;
   const discussionQuery = dbUpdateQuery('discussions', discussion_id, {
-    topic,
+    topic: shorten(topic, 60),
   });
 
   await dbRunQuery(discussionQuery);
