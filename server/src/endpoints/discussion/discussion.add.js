@@ -56,6 +56,7 @@ export default endpointCreate({
       organization_id,
     })),
   );
+
   // Inserting the comment object.
   const commentQuery = dbInsertQuery('comments', {
     message,

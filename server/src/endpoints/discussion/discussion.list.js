@@ -1,4 +1,3 @@
-// "UB9BXJ1JB"
 import r from 'rethinkdb';
 import { string, any, number } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
@@ -69,5 +68,10 @@ export default endpointCreate({
   const discussions = await dbRunQuery(q);
 
   // Create response data.
-  res.locals.output = { discussions };
+  res.locals.output = {
+    discussions,
+    type,
+    skip,
+    limit,
+  };
 });

@@ -7,8 +7,9 @@ import { Provider, Consumer } from './PaginationContext';
 
 const DEFAULT_LIMIT = 20;
 
-@connect(state => ({
-  orgId: state.getIn(['me', 'organizations', 0, 'id'])
+@connect((state, props) => ({
+  orgId: state.getIn(['me', 'organizations', 0, 'id']),
+  results: !!props.selector && props.selector(state, props),
 }), {
   request: ca.api.request,
 })
@@ -17,7 +18,7 @@ export default class PaginationProvider extends PureComponent {
     super(props);
     const { options } = props;
     this.state = {
-      results: null,
+      results: props.results,
       loadMore: this.loadMore,
       loading: false,
       error: false,
@@ -30,11 +31,15 @@ export default class PaginationProvider extends PureComponent {
   loadMore = () => {
     this.fetchResults();
   }
+  componentWillReceiveProps(nextProps) {
+    if(this.props.results !== nextProps.results) {
+      this.setState({ results: nextProps.results });
+    }
+  }
   componentDidUpdate(prevProps) {
     if(this.props.options.body !== prevProps.options.body) {
       this.fetchId = null;
       this.setState({
-        results: null,
         hasMore: false,
         loading: false,
       }, this.fetchResults);
@@ -68,7 +73,6 @@ export default class PaginationProvider extends PureComponent {
       if(res && res.ok) {
         const newResults = getDeep(res, options.resPath || 'results');
         this.setState({
-          results: this.mergeResults(newResults),
           hasMore: newResults.length === limit,
           loading: false,
         });
@@ -88,6 +92,7 @@ export default class PaginationProvider extends PureComponent {
     )
   }
   render() {
+    console.log('res', this.state.results);
     return (
       <Provider value={Object.assign({}, this.state)}>
         {this.renderChildren()}

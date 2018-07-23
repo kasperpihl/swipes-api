@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import DiscussionList from './DiscussionList';
+import { discussionList } from 'src/redux/cache/cacheSelectors';
 import PaginationProvider from 'src/react/components/pagination/PaginationProvider';
 
 export default class HOCDiscussionList extends PureComponent {
@@ -10,7 +11,7 @@ export default class HOCDiscussionList extends PureComponent {
     else if(activeItem === 2) type = 'by me';
 
     return (
-      <PaginationProvider options={{
+      <PaginationProvider selector={discussionList} options={{
         body: {
           type,
         },
