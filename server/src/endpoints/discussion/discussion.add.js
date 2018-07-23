@@ -62,6 +62,7 @@ export default endpointCreate({
     discussion_id: discussionId,
     sent_at: created_at,
     attachments: attachments || [],
+    reactions: {},
     sent_by: user_id,
     organization_id,
   });
