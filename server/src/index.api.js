@@ -46,12 +46,23 @@ app.use('/v1', routes.v1NotAuthed);
 // Checking for updates
 app.use('/v1', checkUpdates);
 // Validation of user's token
-app.use('/v1', authParseToken, authCheckToken, authCheckIfPartOfOrganization);
-// Logging input to aws
+app.use('/v1', authParseToken, authCheckToken);
+
+// Logging input to aws, including user id.
 app.use(logToAws);
-// Authed routes goes here
-app.use('/v1', endpoints.authed);
+
+// Keeping old authed endpoints here, for not being sure if we rely on no org id.
 app.use('/v1', routes.v1Authed);
+
+// Endpoints that needs to be authed, but not part of an org.
+app.use('/v1', endpoints.noOrg);
+
+// Ensure that organization_id passed is valid
+app.use('/v1', authCheckIfPartOfOrganization);
+
+// Authed routes goes here (with org)
+app.use('/v1', endpoints.authed);
+
 
 // ========================================================================
 // Error handlers / they should be at the end of the middleware stack

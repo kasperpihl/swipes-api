@@ -5,6 +5,7 @@ import path from 'path';
 const routers = {
   authed: express.Router(),
   notAuthed: express.Router(),
+  noOrg: express.Router(),
   queue: express.Router(),
 }
 
