@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-
-import Button from 'src/react/components/button/Button';
-import './styles/trial.scss';
+import SW from './Trial.swiss';
+import { SwissProvider } from '../../../../node_modules/swiss-react';
 
 @connect(state => ({
   me: state.get('me'),
@@ -82,18 +81,20 @@ export default class Trial extends PureComponent {
 
     const { daysLeft } = this.state;
 
-    let text = `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left in trial`;
+    let text = `${daysLeft} day${daysLeft !== 1 ? 's': ''} left in trial`;
+    let expired = undefined;
 
     if (daysLeft < 0) {
       text = 'Unpaid subscription. Add billing info.';
+      expired = true
     }
 
     return (
-      <div className={`trial__indicator ${daysLeft < 0 ? 'trial__indicator--expired': ''}`} >
-        <span className="trial__indicator-label" onClick={this.onUnpaid}>
+      <SW.Indicator expired={expired}>
+        <SW.Label onClick={this.onUnpaid}>
           {text}
-        </span>
-      </div>
+        </SW.Label>
+      </SW.Indicator>
     );
   }
   renderTrialPopup() {
@@ -108,35 +109,39 @@ export default class Trial extends PureComponent {
     let actionLbl = 'Add billing info to continue the service for your team.';
     const name = msgGen.users.getFirstName(me.get('id'));
     const isAdmin = msgGen.me.isAdmin();
+    let displayActions = undefined;
 
     if(!isAdmin) {
       actionLbl = 'Contact your admin to continue the service for your team';
+      displayActions = false
     }
 
     return (
-      <div className="trial__popup">
-        <div className="trial-popup">
-          <div className="trial-popup__title">Dear {name}, your free trial has expired.</div>
-          <div className="trial-popup__paragraph">Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</div>
-          <div className="trial-popup__paragraph">⭐&nbsp;&nbsp;Your progress is saved. {actionLbl}</div>
-          <div className="trial-popup__actions">
-            {(daysLeft > -7) ? <Button
-              title="Dismiss"
-              onClick={this.onDismiss}
-            /> : null}
-            {isAdmin ? <Button
-              title="Request extension"
-              onClick={this.onExtend}
-            /> : null}
-            {isAdmin ? (
-              <Button
-                title="Add billing info"
-                onClick={this.onUnpaid}
-              />
-            ) : null}
-          </div>
-        </div>
-      </div>
+      <SwissProvider displayActions={displayActions}>
+        <SW.PopupWrapper>
+          <SW.Popup>
+            <SW.Title>Dear {name}, your free trial has expired.</SW.Title>
+            <SW.Paragraph>Subscribe and unite the work of your team in a single place - your project goals, files, and communication.</SW.Paragraph>
+            <SW.Paragraph>⭐&nbsp;&nbsp;Your progress is saved. {actionLbl}</SW.Paragraph>
+            <SW.Actions >
+              {(daysLeft > -7) ? <SW.Button
+                title="Dismiss"
+                onClick={this.onDismiss}
+              /> : null}
+              {isAdmin ? <SW.Button
+                title="Request extension"
+                onClick={this.onExtend}
+              /> : null}
+              {isAdmin ? (
+                <SW.Button
+                  title="Add billing info"
+                  onClick={this.onUnpaid}
+                />
+              ) : null}
+            </SW.Actions>
+          </SW.Popup>
+        </SW.PopupWrapper>
+      </SwissProvider>
     )
   }
   render() {
@@ -147,10 +152,10 @@ export default class Trial extends PureComponent {
     }
 
     return (
-      <div className="trial">
+      <SW.Wrapper >
         {this.renderTrialIndicator()}
         {this.renderTrialPopup()}
-      </div>
+      </SW.Wrapper>
     );
   }
 }
