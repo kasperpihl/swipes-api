@@ -14,6 +14,7 @@ export default styleSheet('DiscussionHeader', {
   },
   Title: {
     _font: ['16px', '22px', 400],
+    cursor: 'text',
   },
   Subtitle: {
     _font: ['12px', '18px', 400],

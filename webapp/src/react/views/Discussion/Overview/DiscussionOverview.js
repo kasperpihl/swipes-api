@@ -11,10 +11,10 @@ export default class DiscussionOverview extends PureComponent {
     return [654];
   }
   renderFooter() {
-    const { discussionId } = this.props;
+    const { id } = this.props;
     return (
       <SW.FooterWrapper>
-        <CommentComposer discussionId={discussionId}/>
+        <CommentComposer discussionId={id}/>
       </SW.FooterWrapper>
     )
   }
@@ -29,10 +29,10 @@ export default class DiscussionOverview extends PureComponent {
     return <div>comments</div>
   }
   render() {
-    const { discussionId } = this.props;
+    const { id, topic, followers, privacy } = this.props;
     const options = {
       body: {
-        discussion_id: discussionId,
+        discussion_id: id,
       },
       url: 'comment.list',
       resPath: 'comments',
@@ -41,7 +41,12 @@ export default class DiscussionOverview extends PureComponent {
 
     return (
       <SWView
-        header={<DiscussionHeader />}
+        header={<DiscussionHeader
+          topic={topic}
+          id={id}
+          followers={followers}
+          privacy={privacy}
+        />}
         footer={this.renderFooter()}
       >
         <PaginationProvider options={options}>

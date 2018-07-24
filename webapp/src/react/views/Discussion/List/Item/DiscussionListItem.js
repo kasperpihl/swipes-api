@@ -29,12 +29,21 @@ export default class DiscussionListItem extends PureComponent {
     setupLoading(this);
   }
   onClick = () => {
-    const { openSecondary, target, item } = this.props;
+    const { openSecondary, target } = this.props;
+    const {
+      id,
+      followers,
+      topic,
+      privacy,
+    } = this.props.item
     openSecondary(target, {
       id: 'DiscussionOverview',
       title: 'Discussion',
       props: {
-        discussionId: item.id,
+        topic: topic,
+        followers: followers,
+        id: id,
+        privacy: privacy,
       },
     });
   }
@@ -65,6 +74,7 @@ export default class DiscussionListItem extends PureComponent {
       last_comment_at,
       status,
       created_by,
+      privacy,
     } = this.props.item;
 
     const items = [];

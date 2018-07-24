@@ -1,4 +1,10 @@
 import React, { PureComponent, Fragment } from 'react';
+import {
+  setupLoading,
+} from 'swipes-core-js/classes/utils';
+import { connect } from 'react-redux';
+import * as menuActions from 'src/redux/menu/menuActions';
+import * as ca from 'swipes-core-js/actions';
 import SW from './DiscussionHeader.swiss';
 import SplitImage from 'src/react/components/split-image/SplitImage';
 import InfoButton from 'src/react/components/info-button/InfoButton';
@@ -7,7 +13,18 @@ import PostAttachment from 'src/react/views/posts/post-components/post-attachmen
 
 const users = ['URU3EUPOE', 'UFXDWRVSU', 'UB9BXJ1JB'];
 
+@connect(state => ({
+  orgId: state.getIn(['me', 'organizations', 0, 'id']),
+}), {
+  inputMenu: menuActions.input,
+  request: ca.api.request,
+})
 export default class DiscussionHeader extends PureComponent {
+  constructor(props){
+    super(props);
+
+    setupLoading(this);
+  }
   getInfoTabProps() {
     return {
       actions: [
@@ -21,17 +38,44 @@ export default class DiscussionHeader extends PureComponent {
       },
     };
   }
+  onTitleClick = (e) => {
+    const { inputMenu, topic, id, orgId, request } = this.props;
+
+    this.setLoading('title', 'Renaming')
+    inputMenu({
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+      text: topic,
+      buttonLabel: 'Rename',
+    }, (text) => {
+      if (text !== topic && text.length) {
+        request('discussion.rename', {
+          organization_id: orgId,
+          discussion_id: id,
+          topic: text,
+        }).then(res => {
+          if(res.ok) {
+            this.clearLoading('title', 'Renamed', 1500);
+          }
+        })
+      } else {
+        this.clearLoading('title', '!Error', 3000);
+      }
+    })
+  }
+
   render() {
+    const { followers, privacy, topic } = this.props
     return (
       <Fragment>
         <SW.Wrapper>
-          <SplitImage size={48} users={users} />
+          <SplitImage size={48} users={followers} />
           <SW.TitleWrapper>
-            <SW.Title>Design Discussion</SW.Title>
-            <SW.Subtitle>Public - 6 followers</SW.Subtitle>
+            <SW.Title onClick={this.onTitleClick}>{topic}</SW.Title>
+            <SW.Subtitle>{privacy} - {followers.size} {followers.size === 1 ? 'follower' : 'followers'}</SW.Subtitle>
           </SW.TitleWrapper>
           <SW.Actions>
-            <Button 
+            <Button
               title="Follow"
             />
             <InfoButton
