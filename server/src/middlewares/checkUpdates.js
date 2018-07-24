@@ -9,40 +9,41 @@ const newerVersionExist = (client, server) => {
   client = client || '0';
 
   let newerVersion = false;
-  if(server.indexOf('.') > -1) {
-
+  if (server.indexOf('.') > -1) {
     const serverVals = server.split('.');
     const clientVals = client.split('.');
     let isBigger = false;
     serverVals.forEach((serverVal, i) => {
-
       const clientVal = parseInt(clientVals[i] || '0', 10);
       serverVal = parseInt(serverVal || '0', 10);
-      if(clientVal > serverVal) {
+      if (clientVal > serverVal) {
         isBigger = true;
       }
-      if(serverVal > clientVal && !isBigger) {
+      if (serverVal > clientVal && !isBigger) {
         newerVersion = true;
       }
-    })
+    });
   } else {
     newerVersion = (parseInt(server, 10) > parseInt(client, 10));
   }
 
   return newerVersion;
-} 
+};
 
 const makeUpdateHandler = (res, next) => {
   let didRun = false;
 
-  const updateHandler = (prefix, isRequired, version,  url) => {
-    if(didRun) return;
+  const updateHandler = (prefix, isRequired, version, url) => {
+    if (didRun) return;
+
     didRun = true;
 
-    const _locals = { [`${prefix}_available`]: version }
-    if(url) _locals[`${prefix}_url`] = url;
-    if(isRequired) {
+    const _locals = { [`${prefix}_available`]: version };
+    if (url) _locals[`${prefix}_url`] = url;
+
+    if (isRequired) {
       _locals[`${prefix}_required`] = true;
+
       return next(Error(`${prefix}_required`, _locals));
     }
 
@@ -52,10 +53,10 @@ const makeUpdateHandler = (res, next) => {
     });
 
     return next();
-  }
+  };
   updateHandler.next = () => !didRun && next();
   return updateHandler;
-}
+};
 
 
 export default (req, res, next) => {
@@ -72,26 +73,27 @@ export default (req, res, next) => {
       const newestServerVersion = versions[`newest-${header}`];
       const requiredServerVersion = versions[`required-${header}`];
 
-      if(newerVersionExist(clientVersion, newestServerVersion)) {
+      if (newerVersionExist(clientVersion, newestServerVersion)) {
         hasNewerVersion = true;
-        if(!version) {
+        if (!version) {
           version = newestServerVersion;
         }
       }
-      if(newerVersionExist(clientVersion, requiredServerVersion)) {
+
+      if (newerVersionExist(clientVersion, requiredServerVersion)) {
         required = true;
       }
     });
-    if(hasNewerVersion) {
+    if (hasNewerVersion) {
       handleUpdate(prefix, required, version, url);
-    };
+    }
   };
   const testReload = (...args) => testHeaders('reload', ...args);
   const testUpdate = (...args) => testHeaders('update', ...args);
 
-  
+
   const platform = req.header('sw-platform');
-  switch(platform) {
+  switch (platform) {
     case 'ios': {
       testUpdate('itms-apps://itunes.apple.com/app/apple-store/id1250630942?mt=8', 'ios-build-number');
       testReload(null, 'ios-code-push-version');

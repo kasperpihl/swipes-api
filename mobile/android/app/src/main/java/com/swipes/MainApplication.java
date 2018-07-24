@@ -3,6 +3,17 @@ package com.swipes;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+import com.kevinejohn.RNMixpanel.RNMixpanel;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.robinpowered.react.Intercom.IntercomPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.reactlibrary.RNReactNativeDocViewerPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.microsoft.codepush.react.CodePush;
+import com.wix.autogrowtextinput.AutoGrowTextInputPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.horcrux.svg.SvgPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
@@ -41,17 +52,17 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNFetchBlobPackage(),
             new SvgPackage(),
             new ReactNativeOneSignalPackage(),
             new RNMixpanel(),
             new LinearGradientPackage(),
             new IntercomPackage(),
             new ImagePickerPackage(),
+            new RNFetchBlobPackage(),
+            new RNReactNativeDocViewerPackage(),
             new RNDeviceInfo(),
-            new AutoGrowTextInputPackage(),
             new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
-            new RNReactNativeDocViewerPackage()
+            new AutoGrowTextInputPackage()
       );
     }
 

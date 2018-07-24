@@ -13,10 +13,10 @@ const initialState = fromJS({
   status: 'offline',
   versionInfo: {},
 });
-const forceRefresh = (state) => state.set('lastConnect', null)
-                                    .set('forceFullFetch', true)
-                                    .set('hasConnected', false)
-                                    .set('readyInOrg', false);
+const forceRefresh = state => state.set('lastConnect', null)
+  .set('forceFullFetch', true)
+  .set('hasConnected', false)
+  .set('readyInOrg', false);
 
 export default function connectionReducer(state = initialState, action) {
   const {
@@ -27,12 +27,12 @@ export default function connectionReducer(state = initialState, action) {
   switch (type) {
     case 'init': {
       return state.set('lastConnect', payload.timestamp)
-                  .set('forceFullFetch', false)
-                  .set('hasConnected', true)
-                  .set('readyInOrg', !!payload.me.organizations.length);
+        .set('forceFullFetch', false)
+        .set('hasConnected', true)
+        .set('readyInOrg', !!payload.me.organizations.length);
     }
     case 'me': {
-      if(!payload.me.organizations.length) {
+      if (!payload.me.organizations.length) {
         return state.set('hasConnected', true);
       }
     }
@@ -40,19 +40,18 @@ export default function connectionReducer(state = initialState, action) {
       if (action && action.payload && action.payload.connection) {
         const { connection } = action.payload;
         let newState = initialState.set('lastVersion', state.get('lastVersion'));
-        if(connection.get('token')) {
+        if (connection.get('token')) {
           newState = initialState.set('token', connection.get('token'))
             .set('lastConnect', connection.get('lastConnect'))
             .set('lastVersion', state.get('lastVersion'))
             .set('hasConnected', connection.get('hasConnected'))
             .set('readyInOrg', connection.get('readyInOrg'));
           // Check if the stored version is different for the one that's loaded on open
-          if(state.get('lastVersion') !== connection.get('lastVersion')) {
+          if (state.get('lastVersion') !== connection.get('lastVersion')) {
             newState = forceRefresh(newState);
           }
         }
         return newState;
-        
       }
       return state;
     case types.SET_LAST_VERSION: {
@@ -73,7 +72,7 @@ export default function connectionReducer(state = initialState, action) {
     // Authorization methods
     // ======================================================
     case 'organization_updated': {
-      if(state.get('readyInOrg')) {
+      if (state.get('readyInOrg')) {
         return state;
       }
       return forceRefresh(state);
