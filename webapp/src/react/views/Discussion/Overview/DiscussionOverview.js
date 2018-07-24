@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import SW from './DiscussionOverview.swiss';
+import EmptyState from 'src/react/components/empty-state/EmptyState'
 import DiscussionHeader from '../Header/DiscussionHeader';
 import CommentComposer from 'src/react/views/Comment/Composer/CommentComposer';
 import CommentItem from 'src/react/views/Comment/Item/CommentItem';
@@ -19,14 +20,25 @@ export default class DiscussionOverview extends PureComponent {
     )
   }
   renderComments = (pagination) => {
+    console.log(pagination.results)
+    if(pagination.results) {
+      return (
+        <SW.CommentWrapper>
+          {(pagination.results || []).map((comment, i) => (
+            <CommentItem key={i} comment={comment} />
+          ))}
+        </SW.CommentWrapper>
+      )
+    } else {
     return (
-      <SW.CommentWrapper>
-        {(pagination.results || []).map((comment, i) => (
-          <CommentItem key={i} comment={comment} />
-        ))}
-      </SW.CommentWrapper>
-    )
-    return <div>comments</div>
+        <EmptyState
+        icon="ESNotifications"
+        title="IT’S STILL AND QUIET"
+        description={`Whenever someone comments on this discussion \n it will show up here.`}
+        page='Discussions'
+        />
+      )
+    }
   }
   render() {
     const { id, topic, followers, privacy } = this.props;

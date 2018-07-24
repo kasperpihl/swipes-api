@@ -212,7 +212,7 @@ class DiscussionComposer extends PureComponent {
   render() {
     const { myId, hideModal } = this.props;
     const placeholder = `What topic do you want to discuss, ${msgGen.users.getFirstName(myId)}?`;
-    console.log(this.props);
+
     return (
       <SW.Wrapper>
         <SW.ComposerWrapper>

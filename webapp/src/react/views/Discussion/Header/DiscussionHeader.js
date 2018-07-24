@@ -23,6 +23,10 @@ export default class DiscussionHeader extends PureComponent {
   constructor(props){
     super(props);
 
+    this.state = {
+      followStatus: false,
+    }
+
     setupLoading(this);
   }
   getInfoTabProps() {
@@ -55,28 +59,43 @@ export default class DiscussionHeader extends PureComponent {
           topic: text,
         }).then(res => {
           if(res.ok) {
-            this.clearLoading('title', 'Renamed', 1500);
+            console.log('Renamed Discussion')
           }
         })
       } else {
-        this.clearLoading('title', '!Error', 3000);
+        console.log('Error renaming discussion')
       }
     })
   }
-
+  onFollowClick = () => {
+    const { id, request } = this.props
+    request('discussion.follow', {
+      discussion_id: id,
+    }).then(res => {
+      if(res.ok) {
+        console.log('Post Followed')
+        this.setState({ followStatus: !followStatus})
+      } else {
+        console.log('Error following post')
+      }
+    })
+  }
   render() {
     const { followers, privacy, topic } = this.props
+    const { followStatus } = this.state
+    const followersArr = followers.toJS()
     return (
       <Fragment>
         <SW.Wrapper>
-          <SplitImage size={48} users={followers} />
+          <SplitImage size={48} users={followersArr} />
           <SW.TitleWrapper>
             <SW.Title onClick={this.onTitleClick}>{topic}</SW.Title>
             <SW.Subtitle>{privacy} - {followers.size} {followers.size === 1 ? 'follower' : 'followers'}</SW.Subtitle>
           </SW.TitleWrapper>
           <SW.Actions>
             <Button
-              title="Follow"
+              title={followStatus ? 'Unfollow' : 'Follow'}
+              onClick={this.onFollowClick}
             />
             <InfoButton
               delegate={this}

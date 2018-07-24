@@ -5,18 +5,22 @@ export default styleSheet('EmptyState', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'center', 'center'],
+    pointerEvents: 'none',
     fill: {
       height: '100%',
     },
 
-    takeAction: {
+    'page=takeAction': {
       transform: 'translateY(-38px)',
-      pointerEvents: 'none',
       transition: '.15s ease',
     },
 
-    searchResult: {
+    'page=searchResult': {
       transform: 'translateY(140px)',
+    },
+
+    'page=Discussions': {
+      transform: 'translateY(100%)',
     },
   },
 
@@ -38,7 +42,7 @@ export default styleSheet('EmptyState', {
       _size: ['300px', 'auto'],
     },
 
-    takeAction: {
+    'page=takeAction': {
       _size: ['54px', '114px'],
       transform: 'translateX(calc(-50% + 6px))',
     },
@@ -59,7 +63,7 @@ export default styleSheet('EmptyState', {
       _font: ['18px', '24px'],
     },
 
-    takeAction: {
+    'page=takeAction': {
       color: '$sw1',
     },
 
