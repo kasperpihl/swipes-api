@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 import DiscussionListItem from './Item/DiscussionListItem';
 import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
 
-import withPagination from 'src/react/components/pagination/withPagination';
+import withPagination from 'swipes-core-js/components/pagination/withPagination';
 import SW from './DiscussionList.swiss';
 import ActionBar from './ActionBar';
 

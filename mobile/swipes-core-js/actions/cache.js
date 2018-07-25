@@ -3,8 +3,28 @@ import * as types from '../constants';
 // ======================================================
 // Simple persistent cache
 // ======================================================
-export const save = (index, data) => ({ type: types.CACHE_SAVE, payload: { index, data } });
 
-export const remove = index => ({ type: types.CACHE_REMOVE, payload: { index } });
+export const getSelector = (selector, props) => (d, getState) => {
+  return selector(getState(), props);
+}
 
-export const clear = () => ({ type: types.CACHE_CLEAR });
+export const save = (path, data) => {
+  if(!Array.isArray(path)) path = [path];
+  return { 
+    type: types.CACHE_SAVE,
+    payload: { 
+      path,
+      data,
+    }
+  }
+};
+
+export const clear = (path) => {
+  if(!Array.isArray(path)) path = [path];
+  return {
+    type: types.CACHE_CLEAR,
+    payload: {
+      path,
+    }
+  }
+};

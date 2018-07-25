@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { styleSheet } from 'swiss-react';
-import withPagination from './withPagination';
+import withPagination from 'swipes-core-js/components/pagination/withPagination';
 import Loader from 'src/react/components/loaders/Loader';
 import Button from 'src/react/components/button/Button';
 

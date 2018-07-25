@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
 import { fromJS } from 'immutable';
 import { connect } from 'react-redux';
-import getDeep from 'swipes-core-js/utils/getDeep';
-import randomString from 'swipes-core-js/utils/randomString';
-import * as ca from 'swipes-core-js/actions';
-import * as cacheActions from 'src/redux/cache/cacheActions';
-import createCacheSelector from 'src/utils/createCacheSelector';
+import getDeep from '../../utils/getDeep';
+import randomString from '../../utils/randomString';
+import createCacheSelector from '../../utils/createCacheSelector';
+import * as ca from '../../actions';
 import PaginationResults from './PaginationResults';
 const DEFAULT_LIMIT = 1;
 
@@ -13,8 +12,8 @@ const DEFAULT_LIMIT = 1;
   isOnline: state.getIn(['connection', 'status']) === 'online',
 }), {
   apiRequest: ca.api.request,
-  cacheSave: cacheActions.save,
-  cacheGetSelector: cacheActions.getSelector,
+  cacheSave: ca.cache.save,
+  cacheGetSelector: ca.cache.getSelector,
 })
 export default class PaginationProvider extends PureComponent {
   constructor(props) {

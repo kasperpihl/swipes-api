@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import DiscussionList from './DiscussionList';
-import { discussionList } from 'src/redux/cache/cacheSelectors';
-import PaginationProvider from 'src/react/components/pagination/PaginationProvider';
+import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import { connect } from 'react-redux';
 
 @connect(state => ({

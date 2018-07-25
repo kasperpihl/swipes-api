@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import * as ca from 'swipes-core-js/actions';
-import * as cacheActions from 'src/redux/cache/cacheActions';
 
 export default options => WrappedComponent => {
   const getCachePath = (cache, props) => {
@@ -30,7 +29,7 @@ export default options => WrappedComponent => {
     }
     return res;
   }, {
-    cacheSave: cacheActions.save,
+    cacheSave: ca.cache.save,
     apiRequest: ca.api.request,
   })
   class withRequests extends PureComponent {

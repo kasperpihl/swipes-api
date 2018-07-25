@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PingList from './PingList';
-import PaginationProvider from 'src/react/components/pagination/PaginationProvider';
+import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 
 export default class HOCPingList extends PureComponent {
   render() {

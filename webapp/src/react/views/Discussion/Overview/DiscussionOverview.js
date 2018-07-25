@@ -7,8 +7,7 @@ import CommentComposer from 'src/react/views/Comment/Composer/CommentComposer';
 import CommentItem from 'src/react/views/Comment/Item/CommentItem';
 import SWView from 'SWView';
 import withRequests from 'src/react/hocs/withRequests';
-import { commentList, discussionGet } from 'src/redux/cache/cacheSelectors';
-import PaginationProvider from 'src/react/components/pagination/PaginationProvider';
+import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 
 @withRequests({
   discussion: {
@@ -84,7 +83,6 @@ export default class DiscussionOverview extends PureComponent {
         footer={this.renderFooter()}
       >
         <PaginationProvider
-          selector={commentList}
           options={options}
         >
           {this.renderComments}
