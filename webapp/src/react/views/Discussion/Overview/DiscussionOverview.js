@@ -20,7 +20,6 @@ export default class DiscussionOverview extends PureComponent {
     )
   }
   renderComments = (pagination) => {
-    console.log(pagination.results)
     if(pagination.results) {
       return (
         <SW.CommentWrapper>

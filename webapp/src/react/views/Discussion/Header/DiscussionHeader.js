@@ -14,6 +14,7 @@ import PostAttachment from 'src/react/views/posts/post-components/post-attachmen
 const users = ['URU3EUPOE', 'UFXDWRVSU', 'UB9BXJ1JB'];
 
 @connect(state => ({
+  myId: state.getIn(['me', 'id']),
   orgId: state.getIn(['me', 'organizations', 0, 'id']),
 }), {
   inputMenu: menuActions.input,
@@ -22,10 +23,6 @@ const users = ['URU3EUPOE', 'UFXDWRVSU', 'UB9BXJ1JB'];
 export default class DiscussionHeader extends PureComponent {
   constructor(props){
     super(props);
-
-    this.state = {
-      followStatus: false,
-    }
 
     setupLoading(this);
   }
@@ -68,21 +65,28 @@ export default class DiscussionHeader extends PureComponent {
     })
   }
   onFollowClick = () => {
-    const { id, request } = this.props
-    request('discussion.follow', {
-      discussion_id: id,
-    }).then(res => {
-      if(res.ok) {
-        console.log('Post Followed')
-        this.setState({ followStatus: !followStatus})
-      } else {
-        console.log('Error following post')
-      }
-    })
+    const { id, request, followers, myId } = this.props
+
+    if(followers.includes(myId)) {
+      request('discussion.unfollow',{
+        discussion_id: id,
+      }).then(res => {
+        if(res.ok) {
+          console.log('Post Unfollowed')
+        }
+      })
+    } else {
+      request('discussion.follow', {
+        discussion_id: id,
+      }).then(res => {
+        if(res.ok) {
+          console.log('Post Followed')
+        }
+      })
+    }
   }
   render() {
-    const { followers, privacy, topic } = this.props
-    const { followStatus } = this.state
+    const { followers, privacy, topic, myId } = this.props
     const followersArr = followers.toJS()
     return (
       <Fragment>
@@ -94,7 +98,7 @@ export default class DiscussionHeader extends PureComponent {
           </SW.TitleWrapper>
           <SW.Actions>
             <Button
-              title={followStatus ? 'Unfollow' : 'Follow'}
+              title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
               onClick={this.onFollowClick}
             />
             <InfoButton

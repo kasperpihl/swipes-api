@@ -152,7 +152,6 @@ export default class DiscussionListItem extends PureComponent {
       status,
       created_by
     } = this.props.item;
-
     // const subtitle = `${msgGen.users.getName(last_by, {
     //   capitalize: true,
     // })}: ${last_message}`;
