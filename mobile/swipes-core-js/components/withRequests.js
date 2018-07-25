@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
+import { fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import hoistNonReactStatics from 'hoist-non-react-statics';
-import * as ca from 'swipes-core-js/actions';
+import * as ca from '../actions';
 
 export default options => WrappedComponent => {
   const getCachePath = (cache, props) => {
@@ -14,7 +15,7 @@ export default options => WrappedComponent => {
       if(!Array.isArray(statePath)) 
         statePath = [statePath];
       
-      return ['cache', ...statePath];
+      return statePath;
     }
   }
   @connect((state, props) => {
@@ -24,7 +25,7 @@ export default options => WrappedComponent => {
     for(let propName in options) {
       const cachePath = getCachePath(options[propName].cache, props);
       if(cachePath) {
-        res[propName] = state.getIn(cachePath);
+        res[propName] = state.getIn(['cache', ...cachePath]);
       }
     }
     return res;
@@ -81,7 +82,7 @@ export default options => WrappedComponent => {
           } else {
             const cachePath = getCachePath(cache, this.props);
             if(cachePath) {
-              cacheSave(cachePath, res[resPath]);
+              cacheSave(cachePath, fromJS(res[resPath]));
             }
           }
         })
@@ -98,7 +99,6 @@ export default options => WrappedComponent => {
       if(!this.state.ready) {
         return renderLoader ? renderLoader(this.props) : null;
       }
-      console.log(this.props);
       
       const {
         request,

@@ -11,17 +11,17 @@ export default class CommentItem extends PureComponent {
   renderAttachments() {
     const { comment, onAttachmentClickCached } = this.props;
 
-    if(!comment.attachments || !comment.attachments.length) {
+    if(!comment.get('attachments') || !comment.get('attachments').size) {
       return undefined;
     }
     return (
       <SW.Attachments>
-        {comment.attachments.map((att, i) => (
+        {comment.get('attachments').map((att, i) => (
           <PostAttachment
-            title={att.title}
+            title={att.get('title')}
             key={i}
             onClick={onAttachmentClickCached(i, att)}
-            icon={attachmentIconForService(att.link.service)}
+            icon={attachmentIconForService(att.getIn(['link', 'service']))}
           />
         ))}
       </SW.Attachments>
@@ -29,30 +29,29 @@ export default class CommentItem extends PureComponent {
   }
   render() {
     const { comment, postId } = this.props;
-    const attachments = comment.attachments;
-    const name = msgGen.users.getFullName(comment.sent_by);
+    const name = msgGen.users.getFullName(comment.get('sent_by'));
 
     return (
       <SW.Container>
         <SW.Picture>
-          <HOCAssigning assignees={[comment.sent_by]} size={36} />
+          <HOCAssigning assignees={[comment.get('sent_by')]} size={36} />
         </SW.Picture>
         <SW.Content>
           <SW.Name>
             {name}
-            <SW.Timestamp prefix=" — " simple date={comment.sent_at} />
+            <SW.Timestamp prefix=" — " simple date={comment.get('sent_at')} />
           </SW.Name>
           <SW.Message>
-            {comment.message}
+            {comment.get('message')}
           </SW.Message>
           {this.renderAttachments()}
         </SW.Content>
         <SW.Actions>
           <CommentReaction
             alignRight
-            reactions={comment.reactions}
+            reactions={comment.get('reactions')}
             postId={postId}
-            commentId={comment.id}
+            commentId={comment.get('id')}
           />
         </SW.Actions>
       </SW.Container>

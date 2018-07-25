@@ -17,7 +17,7 @@ export default class HOCDiscussionList extends PureComponent {
     }
     else if(activeItem === 2) {
       type = 'by me';
-      filter = d => d.get('sent_by') === myId
+      filter = d => d.get('created_by') === myId
     }
     return (
       <PaginationProvider

@@ -37,43 +37,46 @@ export default class DiscussionHeader extends PureComponent {
     };
   }
   onTitleClick = (e) => {
-    const { inputMenu, topic, id, request } = this.props;
+    const { inputMenu, discussion, request } = this.props;
 
     this.setLoading('title', 'Renaming')
     inputMenu({
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
-      text: topic,
+      text: discussion.get('topic'),
       buttonLabel: 'Rename',
     }, (text) => {
-      if (text !== topic && text.length) {
+      if (text !== discussion.get('topic') && text.length) {
         request('discussion.rename', {
-          discussion_id: id,
+          discussion_id: discussion.get('id'),
           topic: text,
         })
       }
     })
   }
   onFollowClick = () => {
-    const { id, request, followers, myId } = this.props
+    const { request, myId, discussion } = this.props
 
-    if(followers.includes(myId)) {
+    if(discussion.get('followers').includes(myId)) {
       request('discussion.unfollow',{
-        discussion_id: id,
+        discussion_id: discussion.get('id'),
       })
     } else {
       request('discussion.follow', {
-        discussion_id: id,
+        discussion_id: discussion.get('id'),
       })
     }
   }
   render() {
-    const { followers, privacy, topic, myId } = this.props
-    const followersArr = followers.toJS()
+    const { discussion, myId } = this.props;
+    const followers = discussion.get('followers');
+    const topic = discussion.get('topic');
+    const privacy = discussion.get('privacy');
+
     return (
       <Fragment>
         <SW.Wrapper>
-          <SplitImage size={48} users={followersArr} />
+          <SplitImage size={48} users={followers.toJS()} />
           <SW.TitleWrapper>
             <SW.Title onClick={this.onTitleClick}>{topic}</SW.Title>
             <SW.Subtitle>{privacy} - {followers.size} {followers.size === 1 ? 'follower' : 'followers'}</SW.Subtitle>

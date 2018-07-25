@@ -21,11 +21,11 @@ export default class CommentReaction extends PureComponent {
     this.state = {};
   }
   componentWillMount() {
-    this.size = Object.keys(this.props.reactions).length;
+    this.size = this.props.reactions.size;
   }
   componentWillReceiveProps(nextProps) {
     if(nextProps.reactions !== this.props.reactions) {
-      this.size = Object.keys(nextProps.reactions).length;
+      this.size = nextProps.reactions.size;
     }
   }
   componentWillUnmount() {
@@ -33,7 +33,7 @@ export default class CommentReaction extends PureComponent {
   }
   doILike = () => {
     const { optimist, reactions, myId } = this.props;
-    return optimist.get('like', !!reactions[myId]);
+    return optimist.get('like', !!reactions.get(myId));
   }
   onReaction = () => {
     const {
@@ -72,7 +72,7 @@ export default class CommentReaction extends PureComponent {
     this.tooltipDelay = setTimeout(() => {
       const { tooltip, reactions } = this.props;
       const position = 'top';
-      const userIds = Object.keys(reactions);
+      const userIds = reactions.keys();
 
       const data = {
         component: AssigneeTooltip,

@@ -67,7 +67,7 @@ export default class PaginationProvider extends PureComponent {
   fetchResults = () => {
     const { isOnline, apiRequest, request, cache, cacheSave, cacheGetSelector } = this.props;
     const { loading } = this.state;
-    console.log(isOnline, loading);
+
     if(loading || !isOnline) return;
     const fetchId = randomString(8);
     this.fetchId = fetchId;
@@ -83,7 +83,9 @@ export default class PaginationProvider extends PureComponent {
         this.forceSkip = undefined;
         const newResults = getDeep(res, request.resPath || 'results');
         newResults.forEach((r) => {
-          cacheSave([cache.path, r.id], fromJS(r))
+          let path = cache.path;
+          if(!Array.isArray(path)) path = [path]; 
+          cacheSave([...path, r.id], fromJS(r))
         });
         if(newResults.length) {
           let orderKey = cache.orderBy;

@@ -6,7 +6,8 @@ import DiscussionHeader from '../Header/DiscussionHeader';
 import CommentComposer from 'src/react/views/Comment/Composer/CommentComposer';
 import CommentItem from 'src/react/views/Comment/Item/CommentItem';
 import SWView from 'SWView';
-import withRequests from 'src/react/hocs/withRequests';
+import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
+import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 
 @withRequests({
@@ -27,14 +28,11 @@ export default class DiscussionOverview extends PureComponent {
   static sizes() {
     return [654];
   }
-  constructor(props) {
-    super(props);
-  }
   renderFooter() {
-    const { id } = this.props;
+    const { discussion } = this.props;
     return (
       <SW.FooterWrapper>
-        <CommentComposer discussionId={id}/>
+        <CommentComposer discussionId={discussion.get('id')}/>
       </SW.FooterWrapper>
     )
   }
@@ -45,45 +43,43 @@ export default class DiscussionOverview extends PureComponent {
           {(pagination.results || fromJS([])).map((comment, i) => (
             <CommentItem key={i} comment={comment} />
           )).toArray()}
+          <PaginationScrollToMore errorLabel="Couldn't get discussions." />
+
         </SW.CommentWrapper>
       )
     }
     return (
       <EmptyState
-      icon="ESNotifications"
-      title="IT’S STILL AND QUIET"
-      description={`Whenever someone comments on this discussion \n it will show up here.`}
-      page='Discussions'
+        icon="ESNotifications"
+        title="IT’S STILL AND QUIET"
+        description={`Whenever someone comments on this discussion \n it will show up here.`}
+        page='Discussions'
       />
     )
   }
   render() {
-    const { discussion_id, discussion } = this.props;
-    if(discussion) {
-      return <div>found it</div>
-    } else {
+    const { discussion } = this.props;
+    if(!discussion) {
       return <div>not found yet</div>
     }
-    const options = {
-      body: {
-        discussion_id,
-      },
-      url: 'comment.list',
-      resPath: 'comments',
-    };
 
     return (
       <SWView
-        header={<DiscussionHeader
-          topic={"Test"}
-          id={id}
-          followers={followers}
-          privacy={privacy}
-        />}
+        header={<DiscussionHeader discussion={discussion} />}
         footer={this.renderFooter()}
       >
         <PaginationProvider
-          options={options}
+          request={{
+            body: {
+              discussion_id: discussion.get('id'),
+            },
+            url: 'comment.list',
+            resPath: 'comments',
+          }}
+          cache={{
+            path: ['comments', discussion.get('id')],
+            orderBy: '-sent_at',
+          }}
         >
           {this.renderComments}
         </PaginationProvider>

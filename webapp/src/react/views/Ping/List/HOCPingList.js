@@ -5,14 +5,15 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
 export default class HOCPingList extends PureComponent {
   render() {
     return (
-      <PaginationProvider options={{
-        body: {
-          type: this.props.activeItem === 1 ? 'sent' : 'received',
-        },
-        url: 'ping.list',
-        resPath: 'pings',
-        limit: 10,
-      }}>
+      <PaginationProvider
+        request={{
+          body: {
+            type: this.props.activeItem === 1 ? 'sent' : 'received',
+          },
+          url: 'ping.list',
+          resPath: 'pings',
+        }}
+      >
         <PingList setActiveItem={this.props.setActiveItem}/>
       </PaginationProvider>
     );
