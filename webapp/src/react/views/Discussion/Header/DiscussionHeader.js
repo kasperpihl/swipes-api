@@ -54,13 +54,7 @@ export default class DiscussionHeader extends PureComponent {
           organization_id: orgId,
           discussion_id: id,
           topic: text,
-        }).then(res => {
-          if(res.ok) {
-            console.log('Renamed Discussion')
-          }
         })
-      } else {
-        console.log('Error renaming discussion')
       }
     })
   }
@@ -70,18 +64,10 @@ export default class DiscussionHeader extends PureComponent {
     if(followers.includes(myId)) {
       request('discussion.unfollow',{
         discussion_id: id,
-      }).then(res => {
-        if(res.ok) {
-          console.log('Post Unfollowed')
-        }
       })
     } else {
       request('discussion.follow', {
         discussion_id: id,
-      }).then(res => {
-        if(res.ok) {
-          console.log('Post Followed')
-        }
       })
     }
   }
