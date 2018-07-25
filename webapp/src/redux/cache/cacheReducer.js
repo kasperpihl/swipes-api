@@ -1,9 +1,8 @@
 import { fromJS } from 'immutable';
-
 import * as types from '../constants';
+
 const initialState = fromJS({
-  'discussion.list': {},
-  'discussion.get': {}
+  'discussion': {},
 });
 
 const updateKeyPath = (state, keyPath, data) => {
@@ -17,24 +16,19 @@ const updateKeyPath = (state, keyPath, data) => {
 export default function cacheReducer (state = initialState, action) {
   const {
     payload,
-    type
+    type,
   } = action;
 
   switch (type) {
-    case 'discussion.list': {
-      payload.discussions.forEach((d) => {
-        state = state.setIn([type, payload.type, d.id], fromJS(d));
-      })
+    case types.CACHE_SAVE: {
+      return state.setIn(payload.path, payload.data);
+    }
+    case types.CACHE_CLEAR: {
       return state;
     }
     case 'update': {
       payload.updates.forEach(({ type, data, id }) => {
-        if(type === 'discussion'){
-          state.get('discussion.list').forEach((v, key) => {
-            state = updateKeyPath(state, ['discussion.list', key, id], data);
-          });
-          state = updateKeyPath(state, ['discussion.get', id], data);
-        }
+        state = updateKeyPath(state, [type, ...id.split('-')], data);
       })
       return state;
     }

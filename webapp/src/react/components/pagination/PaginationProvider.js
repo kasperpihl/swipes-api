@@ -1,24 +1,26 @@
 import React, { PureComponent } from 'react';
+import { fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import getDeep from 'swipes-core-js/utils/getDeep';
 import randomString from 'swipes-core-js/utils/randomString';
 import * as ca from 'swipes-core-js/actions';
-import { Provider, Consumer } from './PaginationContext';
+import * as cacheActions from 'src/redux/cache/cacheActions';
+import createCacheSelector from 'src/utils/createCacheSelector';
+import PaginationResults from './PaginationResults';
+const DEFAULT_LIMIT = 1;
 
-const DEFAULT_LIMIT = 20;
-
-@connect((state, props) => ({
-  orgId: state.getIn(['me', 'organizations', 0, 'id']),
-  results: !!props.selector && props.selector(state, props),
+@connect(state => ({
+  isOnline: state.getIn(['connection', 'status']) === 'online',
 }), {
-  request: ca.api.request,
+  apiRequest: ca.api.request,
+  cacheSave: cacheActions.save,
+  cacheGetSelector: cacheActions.getSelector,
 })
 export default class PaginationProvider extends PureComponent {
   constructor(props) {
     super(props);
     const { options } = props;
     this.state = {
-      results: props.results,
       loadMore: this.loadMore,
       loading: false,
       error: false,
@@ -28,16 +30,24 @@ export default class PaginationProvider extends PureComponent {
   componentDidMount() {
     this.fetchResults();
   }
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props.isOnline, nextProps.isOnline);
+    if(!this.props.isOnline && nextProps.isOnline !== this.props.isOnline) {
+      this.forceRefresh = true;
+    }
+  }
   loadMore = () => {
     this.fetchResults();
   }
-  componentWillReceiveProps(nextProps) {
-    if(this.props.results !== nextProps.results) {
-      this.setState({ results: nextProps.results });
-    }
-  }
   componentDidUpdate(prevProps) {
-    if(this.props.options.body !== prevProps.options.body) {
+    const { selector, request} = this.props;
+    if(this.forceRefresh || request.body !== prevProps.request.body) {
+      if(!this.forceRefresh) {
+        this.selector = null;
+      } else {
+        this.forceSkip = true;
+      }
+      this.forceRefresh = false;
       this.fetchId = null;
       this.setState({
         hasMore: false,
@@ -56,22 +66,31 @@ export default class PaginationProvider extends PureComponent {
     return newResults;
   }
   fetchResults = () => {
-    const { orgId, request, options } = this.props;
-    const { results, loading } = this.state;
-    if(loading) return;
+    const { isOnline, apiRequest, request, cache, cacheSave, cacheGetSelector } = this.props;
+    const { loading } = this.state;
+    console.log(isOnline, loading);
+    if(loading || !isOnline) return;
     const fetchId = randomString(8);
     this.fetchId = fetchId;
-    const limit = options.limit || DEFAULT_LIMIT;
+    const limit = this.props.limit || DEFAULT_LIMIT;
     this.setState({ loading: true, error: false });
-    request(options.url, {
-      skip: results ? results.length : 0,
+    apiRequest(request.url, {
+      skip: (this.selector && !this.forceSkip) ? cacheGetSelector(this.selector, this.props).size : 0,
       limit,
-      ...options.body,
-      organization_id: orgId,
+      ...request.body,
     }).then((res) => {
       if(this.fetchId !== fetchId || this._unmounted) return;
       if(res && res.ok) {
-        const newResults = getDeep(res, options.resPath || 'results');
+        this.forceSkip = undefined;
+        const newResults = getDeep(res, request.resPath || 'results');
+        newResults.forEach((r) => {
+          cacheSave([cache.path, r.id], fromJS(r))
+        });
+        if(newResults.length) {
+          let orderKey = cache.orderBy;
+          if(orderKey.startsWith('-')) orderKey = orderKey.slice(1);
+          this.selector = createCacheSelector(cache, newResults[newResults.length - 1][orderKey])
+        }
         this.setState({
           hasMore: newResults.length === limit,
           loading: false,
@@ -79,24 +98,9 @@ export default class PaginationProvider extends PureComponent {
       } else this.setState({ loading: false, error: true });
     })
   }
-  renderChildren() {
-    const { children } = this.props;
-    if(typeof children !== 'function') {
-      return children;
-    }
-
-    return (
-      <Consumer>
-        {pagination => children(pagination)}
-      </Consumer>
-    )
-  }
   render() {
-    console.log('res', this.state.results);
     return (
-      <Provider value={Object.assign({}, this.state)}>
-        {this.renderChildren()}
-      </Provider>
+      <PaginationResults pagination={this.state} selector={this.selector} {...this.props}/>
     );
   }
 }

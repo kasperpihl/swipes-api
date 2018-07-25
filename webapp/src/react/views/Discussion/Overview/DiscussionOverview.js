@@ -1,15 +1,35 @@
 import React, { PureComponent } from 'react';
+import { fromJS } from 'immutable';
 import SW from './DiscussionOverview.swiss';
 import EmptyState from 'src/react/components/empty-state/EmptyState'
 import DiscussionHeader from '../Header/DiscussionHeader';
 import CommentComposer from 'src/react/views/Comment/Composer/CommentComposer';
 import CommentItem from 'src/react/views/Comment/Item/CommentItem';
 import SWView from 'SWView';
+import withRequests from 'src/react/hocs/withRequests';
+import { commentList, discussionGet } from 'src/redux/cache/cacheSelectors';
 import PaginationProvider from 'src/react/components/pagination/PaginationProvider';
 
+@withRequests({
+  discussion: {
+    request: {
+      url: 'discussion.get',
+      body: props => ({
+        discussion_id: props.discussionId,
+      }),
+      resPath: 'discussion',
+    },
+    cache: {
+      path: props => ['discussion', props.discussionId],
+    },
+  },
+})
 export default class DiscussionOverview extends PureComponent {
   static sizes() {
     return [654];
+  }
+  constructor(props) {
+    super(props);
   }
   renderFooter() {
     const { id } = this.props;
@@ -23,44 +43,50 @@ export default class DiscussionOverview extends PureComponent {
     if(pagination.results) {
       return (
         <SW.CommentWrapper>
-          {(pagination.results || []).map((comment, i) => (
+          {(pagination.results || fromJS([])).map((comment, i) => (
             <CommentItem key={i} comment={comment} />
-          ))}
+          )).toArray()}
         </SW.CommentWrapper>
       )
-    } else {
-    return (
-        <EmptyState
-        icon="ESNotifications"
-        title="IT’S STILL AND QUIET"
-        description={`Whenever someone comments on this discussion \n it will show up here.`}
-        page='Discussions'
-        />
-      )
     }
+    return (
+      <EmptyState
+      icon="ESNotifications"
+      title="IT’S STILL AND QUIET"
+      description={`Whenever someone comments on this discussion \n it will show up here.`}
+      page='Discussions'
+      />
+    )
   }
   render() {
-    const { id, topic, followers, privacy } = this.props;
+    const { discussion_id, discussion } = this.props;
+    if(discussion) {
+      return <div>found it</div>
+    } else {
+      return <div>not found yet</div>
+    }
     const options = {
       body: {
-        discussion_id: id,
+        discussion_id,
       },
       url: 'comment.list',
       resPath: 'comments',
-      limit: 10,
     };
 
     return (
       <SWView
         header={<DiscussionHeader
-          topic={topic}
+          topic={"Test"}
           id={id}
           followers={followers}
           privacy={privacy}
         />}
         footer={this.renderFooter()}
       >
-        <PaginationProvider options={options}>
+        <PaginationProvider
+          selector={commentList}
+          options={options}
+        >
           {this.renderComments}
         </PaginationProvider>
       </SWView>

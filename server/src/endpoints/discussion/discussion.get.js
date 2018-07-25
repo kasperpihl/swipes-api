@@ -22,7 +22,7 @@ export default endpointCreate({
   const q = r.table('discussions')
             .get(discussion_id)
             .merge(obj => ({
-              status: r.table('discussion_followers')
+              subscription: r.table('discussion_followers')
                 .get(obj('id').add(`-${user_id}`)),
               followers: r.table('discussion_followers')
                 .getAll(obj('id'), { index: 'discussion_id' })

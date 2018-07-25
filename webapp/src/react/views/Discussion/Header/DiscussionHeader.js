@@ -11,11 +11,8 @@ import InfoButton from 'src/react/components/info-button/InfoButton';
 import Button from 'src/react/components/button/Button';
 import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
 
-const users = ['URU3EUPOE', 'UFXDWRVSU', 'UB9BXJ1JB'];
-
 @connect(state => ({
   myId: state.getIn(['me', 'id']),
-  orgId: state.getIn(['me', 'organizations', 0, 'id']),
 }), {
   inputMenu: menuActions.input,
   request: ca.api.request,
@@ -40,7 +37,7 @@ export default class DiscussionHeader extends PureComponent {
     };
   }
   onTitleClick = (e) => {
-    const { inputMenu, topic, id, orgId, request } = this.props;
+    const { inputMenu, topic, id, request } = this.props;
 
     this.setLoading('title', 'Renaming')
     inputMenu({
@@ -51,7 +48,6 @@ export default class DiscussionHeader extends PureComponent {
     }, (text) => {
       if (text !== topic && text.length) {
         request('discussion.rename', {
-          organization_id: orgId,
           discussion_id: id,
           topic: text,
         })

@@ -7,6 +7,10 @@ export const UPDATE_RECENT_ASSIGNEES = 'UPDATE_RECENT_ASSIGNEES';
 export const CONTEXT_MENU = 'CONTEXT_MENU';
 export const SUCCESS_GRADIENT = 'SUCCESS_GRADIENT';
 
+// Cache
+export const CACHE_SAVE = 'CACHE_SAVE';
+export const CACHE_CLEAR = 'CACHE_CLEAR';
+
 // Navigation
 export const NAVIGATION_URL = 'NAVIGATION_URL';
 export const NAVIGATION_SET = 'NAVIGATION_SET';

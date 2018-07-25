@@ -56,7 +56,7 @@ export default endpointCreate({
   }
   q = q.slice(skip, skip + limit)
     .merge(obj => ({
-      status: r.table('discussion_followers')
+      subscription: r.table('discussion_followers')
         .get(obj('id').add(`-${user_id}`)),
       followers: r.table('discussion_followers')
         .getAll(obj('id'), { index: 'discussion_id' })

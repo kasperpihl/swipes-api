@@ -15,7 +15,31 @@ const getDiscussionList = (state, props) =>
     getDeep(props, 'options.body.type') || 'following'
   ]);
 
+const getDiscussion = (state, props) => 
+  state.getIn([
+    'cache',
+    'discussion.get',
+    props.discussionId,
+  ]);
+
+const getCommentList = (state, props) =>
+  state.getIn([
+    'cache',
+    'comment.list',
+    getDeep(props, 'options.body.discussion_id'),
+  ]);
+
 export const discussionList = createSelector(
   [getDiscussionList],
   sorterDesc('last_comment_at'),
+);
+
+export const discussionGet = createSelector(
+  [getDiscussion],
+  (discussion) => discussion,
+)
+
+export const commentList = createSelector(
+  [getCommentList],
+  sorterDesc('sent_at'),
 );
