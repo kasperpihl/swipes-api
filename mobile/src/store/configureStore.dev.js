@@ -1,53 +1,24 @@
-// import { createLogger } from 'redux-logger';
+import { createLogger } from 'redux-logger';
 
-// const ignoredActions = ['API_REQUEST', 'API_SUCCESS']; // Ignore actions from Logger
-// const cacheImmutable = null;
-// const cacheObject = null;
-// const transformState = (state) => {
-//   if (!cacheImmutable) {
-//     cacheImmutable = state;
-//     cacheObject = state.toJS();
-//     return cacheObject;
-//   }
-//   state.forEach((section, sectKey) => {
-//     const cachedSect = cacheImmutable.get(sectKey);
-//     if (section !== cachedSect) {
-//       section.forEach((indexValue, indexKey) => {
-//         const cachedValue = cachedSect.get(indexKey);
-//         if (indexValue !== cachedValue) {
-//           if (indexValue && typeof indexValue.toJS === 'function') {
-//             cacheObject[sectKey][indexKey] = indexValue.toJS();
-//           } else {
-//             cacheObject[sectKey][indexKey] = indexValue;
-//           }
-//         }
-//       });
-//     }
-//   });
-//   cacheImmutable = state;
-//   return cacheObject;
-// };
-
-const logger = store => next => (action) => {
-  if (action.type !== 'pong') {
-    console.info(action.type, action);
-  }
-  const result = next(action);
-
-  return result;
+const transformState = (state) => {
+  const parsedState = {};
+  
+  Object.keys(state).forEach((key) => {
+    if(typeof state[key].toJS === 'function') {
+      parsedState[key] = state[key].toJS();
+    } else {
+      parsedState[key] = state[key];
+    }
+    
+  });
+  return parsedState;
 };
 
-export default {
-  middlewares: [
-    logger,
-    // createLogger(
-    //   {
-    //     stateTransformer: transformState, // state => state.toJS(),
-    //     collapsed: true,
-    //     duration: true,
-    //     // diff: true,
-    //     predicate: (getState, action) => (ignoredActions.indexOf(action.type) === -1),
-    //   },
-    // ),
-  ],
-};
+export default (config) => {
+  config.middlewares.push(createLogger({
+    stateTransformer: transformState,
+    collapsed: true,
+    duration: true,
+  }));
+  return config;
+}

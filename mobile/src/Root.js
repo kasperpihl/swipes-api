@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { version } from '../package.json';
 import DeviceInfo from 'react-native-device-info';
 
+import { PersistGate } from 'redux-persist/es/integration/react'
 import App from './App';
 import configureStore from './store/configureStore';
 import { init } from 'swipes-core-js';
@@ -12,7 +13,7 @@ import Analytics from 'utils/analytics';
 import codePush from 'react-native-code-push';
 import * as a from 'actions';
 
-const store = configureStore({
+const { store, persistor } = configureStore({
   globals: getGlobals(),
 });
 codePush.getUpdateMetadata().then(pkg => pkg && store.dispatch({ 
@@ -84,7 +85,9 @@ class Root extends PureComponent {
   render() {
     return (
       <Provider store={store}>
-        <App />
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     );
   }

@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux-immutable';
+import { combineReducers } from 'redux';
 import * as coreReducers from 'swipes-core-js/reducers';
 import main from './main';
 import navigation from './navigation';

@@ -1,37 +1,42 @@
-import { compose, applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist'
+import immutableTransform from 'redux-persist-transform-immutable'
 import { AsyncStorage, Platform } from 'react-native';
-import FilesystemStorage from 'redux-persist-filesystem-storage';
 
-import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import thunk from 'redux-thunk';
-import { fromJS } from 'immutable';
 import rootReducer from '../reducers';
-import dev from './configureStore.dev';
+import devConf from './configureStore.dev';
 
-const isProd = !__DEV__;
-const middlewares = isProd ? [] : dev.middlewares;
+let config = {
+  middlewares: [
+    thunk,
+  ],
+  persistConfig: {
+    transforms: [immutableTransform()],
+    blacklist: ['notes', 'navigation', 'main', 'autoComplete', 'infoTab', 'globals'],
+    key: 'root',
+    storage: AsyncStorage,
+  }
+};
 
-export default function configureStore(preloadedState) {
-  preloadedState = fromJS(preloadedState || {});
+if(__DEV__) {
+  config = devConf(config);
+}
 
-  const enhancer = compose(
-    applyMiddleware(
-      thunk,
-      ...middlewares,
-    ),
-    autoRehydrate(),
-  );
+export default function configureStore(preloadedState = {}) {
 
   const store = createStore(
-    rootReducer,
+    persistReducer(config.persistConfig, rootReducer),
     preloadedState,
-    enhancer,
+    applyMiddleware(
+      ...config.middlewares,
+    ),
   );
 
-  window.persistor = persistStore(store, {
-    storage: Platform.OS === 'android' ? FilesystemStorage : AsyncStorage,
-    blacklist: ['notes', 'navigation', 'main', 'autoComplete', 'infoTab', 'globals'],
-  });
+  const persistor = persistStore(store);
 
-  return store;
+  return {
+    persistor,
+    store,
+  };
 }
