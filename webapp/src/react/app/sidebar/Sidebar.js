@@ -9,9 +9,9 @@ import SW from './Sidebar.swiss';
 import { SwissProvider } from 'swiss-react';
 
 @connect(state => ({
-  me: state.get('me'),
-  navId: state.getIn(['navigation', 'primary', 'id']),
-  notificationCounter: state.getIn(['connection', 'notificationCounter']),
+  me: state.me,
+  navId: state.navigation.getIn(['primary', 'id']),
+  notificationCounter: state.connection.get('notificationCounter'),
 }), {
   navSet: navigationActions.set,
   contextMenu: mainActions.contextMenu,

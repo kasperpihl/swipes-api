@@ -6,7 +6,7 @@ import SW from './Modal.swiss';
 import * as views from 'src/react/views';
 
 @connect((state, props) => ({
-  modal: state.getIn(['main', 'modals', props.target]),
+  modal: state.main.getIn(['modals', props.target]),
 }), {
   clear: mainActions.modal,
 })

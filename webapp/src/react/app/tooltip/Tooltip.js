@@ -5,7 +5,7 @@ import SW from './Tooltip.swiss';
 const SPACING = 20;
 
 @connect(state => ({
-  tooltip: state.getIn(['main', 'tooltip']),
+  tooltip: state.main.get('tooltip'),
 }))
 export default class Tooltip extends PureComponent {
   constructor(props) {

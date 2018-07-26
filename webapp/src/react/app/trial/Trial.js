@@ -5,11 +5,11 @@ import SW from './Trial.swiss';
 import { SwissProvider } from '../../../../node_modules/swiss-react';
 
 @connect(state => ({
-  me: state.get('me'),
-  subscribed: state.getIn(['me', 'organizations', 0, 'stripe_subscription_id']),
-  organization: state.getIn(['me', 'organizations']),
-  trial: state.getIn(['me', 'organizations', 0, 'trial']),
-  isAccount: (state.getIn(['navigation', 'primary', 'id']) === 'AccountList')
+  me: state.me,
+  subscribed: state.me.getIn(['organizations', 0, 'stripe_subscription_id']),
+  organization: state.me.get('organizations'),
+  trial: state.me.get(['organizations', 0, 'trial']),
+  isAccount: (state.navigation.getIn(['primary', 'id']) === 'AccountList')
 }), {
   navSet: navigationActions.set,
   navPush: navigationActions.push,

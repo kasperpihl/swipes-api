@@ -5,7 +5,7 @@ import ScreenSizeOverlay from './screen-size-overlay/ScreenSizeOverlay';
 import Sidebar from './sidebar/Sidebar';
 
 @connect(state => ({
-  ready: !!state.getIn(['me', 'organizations', 0]),
+  ready: !!state.me.getIn(['organizations', 0]),
 }))
 
 export default class App extends PureComponent {

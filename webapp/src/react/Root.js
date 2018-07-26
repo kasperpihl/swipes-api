@@ -27,13 +27,13 @@ import 'src/react/global-styles/app.scss';
 
 @withRouter
 @connect(state => ({
-  isHydrated: state.getIn(['main', 'isHydrated']),
-  isMaximized: state.getIn(['main', 'isMaximized']),
-  isFullscreen: state.getIn(['main', 'isFullscreen']),
-  platform: state.getIn(['globals', 'platform']),
-  status: state.getIn(['connection', 'status']),
-  hasConnected: state.getIn(['connection', 'hasConnected']),
-  readyInOrg: state.getIn(['connection', 'readyInOrg']),
+  isHydrated: state.main.get('isHydrated'),
+  isMaximized: state.main.get('isMaximized'),
+  isFullscreen: state.main.get('isFullscreen'),
+  platform: state.globals.get('platform'),
+  status: state.connection.get('status'),
+  hasConnected: state.connection.get('hasConnected'),
+  readyInOrg: state.connection.get('readyInOrg'),
 }))
 @hot(module)
 export default class extends PureComponent {

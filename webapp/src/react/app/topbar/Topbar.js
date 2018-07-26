@@ -7,17 +7,17 @@ import Button from 'src/react/components/button/Button';
 import './topbar.scss';
 
 @connect(state => ({
-  me: state.get('me'),
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-  isElectron: state.getIn(['globals', 'isElectron']),
-  nextRetry: state.getIn(['connection', 'nextRetry']),
-  versionInfo: state.getIn(['connection', 'versionInfo']),
-  reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),
-  isMaximized: state.getIn(['main', 'isMaximized']),
-  isFullscreen: state.getIn(['main', 'isFullscreen']),
-  ready: state.getIn(['connection', 'readyInOrg']),
-  status: state.getIn(['connection', 'status']),
-  token: state.getIn(['connection', 'token']),
+  me: state.me,
+  isBrowserSupported: state.globals.get('isBrowserSupported'),
+  isElectron: state.globals.get('isElectron'),
+  nextRetry: state.connection.get('nextRetry'),
+  versionInfo: state.connection.get('versionInfo'),
+  reconnectAttempt: state.connection.get('reconnectAttempt'),
+  isMaximized: state.main.get('isMaximized'),
+  isFullscreen: state.main.get('isFullscreen'),
+  ready: state.connection.get('readyInOrg'),
+  status: state.connection.get('status'),
+  token: state.connection.get('token'),
 }))
 export default class Topbar extends PureComponent {
   constructor(props) {

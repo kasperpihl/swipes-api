@@ -6,12 +6,12 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 @withRouter
 @connect(state => ({
-  hasOrg: !!state.getIn(['me', 'organizations', 0]),
-  isHydrated: state.getIn(['main', 'isHydrated']),
-  token: state.getIn(['connection', 'token']),
-  hasConnected: state.getIn(['connection', 'hasConnected']),
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-  goToUrl: state.getIn(['navigation', 'url']),
+  hasOrg: !!state.me.getIn(['organizations', 0]),
+  isHydrated: state.main.get('isHydrated'),
+  token: state.connection.get('token'),
+  hasConnected: state.connection.get('hasConnected'),
+  isBrowserSupported: state.globals.get('isBrowserSupported'),
+  goToUrl: state.navigation.get('url'),
 }), {
   setUrl: navigationActions.url,
 })

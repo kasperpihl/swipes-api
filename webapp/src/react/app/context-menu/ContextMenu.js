@@ -6,7 +6,7 @@ import debounce from 'swipes-core-js/utils/debounce';
 import SW from './ContextMenu.swiss';
 
 @connect(state => ({
-  contextMenu: state.getIn(['main', 'contextMenu']),
+  contextMenu: state.main.get('contextMenu'),
 }), {
   hide: mainActions.contextMenu,
 })

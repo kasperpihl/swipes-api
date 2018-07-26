@@ -5,7 +5,7 @@ import * as ca from 'swipes-core-js/actions';
 import AutoCompleting from './AutoCompleting';
 
 @connect(state => ({
-  autoComplete: state.get('autoComplete'),
+  autoComplete: state.autoComplete,
 }), {
   clear: ca.autoComplete.clear,
   blockIdentifier: ca.autoComplete.blockIdentifier,

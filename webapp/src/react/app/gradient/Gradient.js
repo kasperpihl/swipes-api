@@ -4,8 +4,8 @@ import gradient from 'swipes-core-js/classes/gradient';
 import SW from './Gradient.swiss';
 
 @connect(state => ({
-  successState: state.getIn(['main', 'successState']),
-  successColor: state.getIn(['main', 'successColor']),
+  successState: state.main.get('successState'),
+  successColor: state.main.get('successColor'),
 }))
 export default class Gradient extends PureComponent {
   constructor(props) {
