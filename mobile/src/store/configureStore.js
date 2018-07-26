@@ -13,7 +13,7 @@ let config = {
   ],
   persistConfig: {
     transforms: [immutableTransform()],
-    blacklist: ['notes', 'navigation', 'main', 'autoComplete', 'infoTab', 'globals'],
+    blacklist: ['notes', 'cache', 'navigation', 'main', 'autoComplete', 'infoTab', 'globals'],
     key: 'root',
     storage: AsyncStorage,
   }
