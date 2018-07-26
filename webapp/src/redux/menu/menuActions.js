@@ -7,7 +7,7 @@ import * as mainActions from '../main/mainActions';
 import * as navigationActions from '../navigation/navigationActions';
 
 export const confirm = (options, callback) => (d, getState) => {
-  const isBrowserSupported = getState().getIn(['globals', 'isBrowserSupported']);
+  const isBrowserSupported = getState().globals.get('isBrowserSupported');
   if(!isBrowserSupported) {
     const res = window.confirm(options.message || options.title);
     return callback(res ? 1 : 0);
@@ -30,7 +30,7 @@ export const confirm = (options, callback) => (d, getState) => {
 };
 
 export const alert = (options, callback) => (d, getState) => {
-  const isBrowserSupported = getState().getIn(['globals', 'isBrowserSupported']);
+  const isBrowserSupported = getState().globals.get('isBrowserSupported');
   if(!isBrowserSupported) {
     return window.alert(options.message || options.title);
   }
@@ -52,7 +52,7 @@ export const alert = (options, callback) => (d, getState) => {
 }
 
 export const input = (options, callback) => (d, getState) => {
-  const isBrowserSupported = getState().getIn(['globals', 'isBrowserSupported']);
+  const isBrowserSupported = getState().globals.get('isBrowserSupported');
   if(!isBrowserSupported) {
     const res = window.prompt(options.placeholder, options.text);
     return callback(res);
@@ -154,9 +154,9 @@ export const chooseAttachmentType = (options) => (d, getState) => new Promise((r
 
 export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new Promise((resolve) => {
 
-  const primary = getState().getIn(['main', 'dragAndDrop', 'primary']);
-  const secondary = getState().getIn(['main', 'dragAndDrop', 'secondary']);
-  const secCardActive = getState().getIn(['navigation', 'secondary', 'stack']).size;
+  const primary = getState().main.getIn(['dragAndDrop', 'primary']);
+  const secondary = getState().main.getIn(['dragAndDrop', 'secondary']);
+  const secCardActive = getState().navigation.getIn(['secondary', 'stack']).size;
 
   const items = [
     primary.size ? {
@@ -205,7 +205,7 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) => new
           position: 'center',
         }))
         setTimeout(() => {
-          const lastPrimary = getState().getIn(['main', 'dragAndDrop', 'primary']).last();
+          const lastPrimary = getState().main.getIn(['dragAndDrop', 'primary']).last();
           if(lastPrimary) {
             lastPrimary.handler(files);
           }

@@ -2,13 +2,13 @@ import * as types from '../constants';
 import randomString from 'swipes-core-js/utils/randomString';
 
 export const url = (url, options) => (d, getState) => {
-  if(getState().getIn(['navigation', 'url']) === url) return;
+  if(getState().navigation.get('url') === url) return;
   d({ type: types.NAVIGATION_URL, payload: { url, options } });
 }
 
 export function set(target, obj) {
   return (dispatch, getState) => {
-    const isLocked = getState().getIn(['navigation', 'locked']);
+    const isLocked = getState().navigation.get('locked');
     target = isLocked ? 'primary' : target;
     const payload = {
       id: target === 'primary' ? obj.id : randomString(5),
@@ -33,7 +33,7 @@ export function push(target, obj) {
   return { type: types.NAVIGATION_PUSH, payload };
 }
 export const openSecondary = (from, obj) => (d, getState) => {
-  const isLocked = getState().getIn(['navigation', 'locked']);
+  const isLocked = getState().navigation.get('locked');
   if (isLocked) {
     return d(push('primary', obj));
   }

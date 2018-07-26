@@ -7,8 +7,8 @@ class PlanCSVExporter extends PureComponent {
     super(props);
   }
   componentDidMount() {
-    const apiUrl = `${getState().getIn(['globals', 'apiUrl'])}/v1/`;
-    const token = getState().getIn(['connection', 'token']);
+    const apiUrl = `${getState().globals.get('apiUrl')}/v1/`;
+    const token = getState().connection.get('token');
 
     fetch(`${apiUrl}csvexporter.plans`, {
       method: 'post',

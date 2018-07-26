@@ -22,8 +22,8 @@ class HOCDragAndDrop extends Component {
   // && primary.size > 0 && secondary.size > 0 || primary.size > 0 && secondary.size === 0 || primary.size === 0 && secondary.size > 0
 
   handleDragEnter = (e) => {
-    const primary = getState().getIn(['main', 'dragAndDrop', 'primary']);
-    const secondary = getState().getIn(['main', 'dragAndDrop', 'secondary']);
+    const primary = getState().main.getIn(['dragAndDrop', 'primary']);
+    const secondary = getState().main.getIn(['dragAndDrop', 'secondary']);
     e.preventDefault();
     let dt = e.dataTransfer;
     if (

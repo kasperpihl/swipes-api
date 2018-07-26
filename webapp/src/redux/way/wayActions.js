@@ -7,7 +7,7 @@ export const load = (options, callback) => (d, getState) => {
   const deletingIds = {};
   const resultForWay = (way) => {
     if(typeof way === 'string') {
-      way = getState().getIn(['ways', way]);
+      way = getState().ways.get(way);
     }
     const obj = {
       id: way.get('id'),
@@ -47,7 +47,7 @@ export const load = (options, callback) => (d, getState) => {
         });
         tabMenu.reload();
       } else {
-        const way = getState().getIn(['ways', obj.id]);
+        const way = getState().ways.get(obj.id);
         callback(way);
         d(mainActions.contextMenu(null));
       }

@@ -7,7 +7,8 @@ const blockedMixpanelEvents = [
 
 export default class Analytics {
   constructor(store) {
-    this.enable = !store.getState().getIn(['globals', 'isDev']);
+    console.log(store.getState());
+    this.enable = !store.getState().globals.get('isDev');
     // this.enable = true; // for testing on dev. turn off when done.
     if(this.enable){
       mixpanel.init("a1b6f31fc988c7e4a7f40c267e315f5d");
@@ -22,11 +23,11 @@ export default class Analytics {
 
   }
   getDefaultEventProps() {
-    const state = this.store.getState();
-    const isElectron = state.getIn(['globals', 'isElectron']);
-    const version = state.getIn(['globals', 'version']);
-    const platform = state.getIn(['globals', 'platform']);
-    const electronVersion = state.getIn(['globals', 'sw-electron-version']);
+    const { globals } = this.store.getState();
+    const isElectron = globals.get('isElectron');
+    const version = globals.get('version');
+    const platform = globals.get('platform');
+    const electronVersion = globals.get('sw-electron-version');
     const defs = {
       _Client: isElectron ? 'Electron' : 'Web',
       '_Web version': version,
@@ -58,8 +59,7 @@ export default class Analytics {
 
   }
   storeChange() {
-    const state = this.store.getState();
-    const me = state.get('me');
+    const { me } = this.store.getState();
 
     if (me && me.get('id') && me.get('id') !== this.userId) {
 

@@ -44,7 +44,7 @@ export function unsubscribeFromDrop(target, handler) {
 // Context Menu
 // ======================================================
 export const contextMenu = payload => (dp, getState) => {
-  const cMenu = getState().getIn(['main', 'contextMenu']);
+  const cMenu = getState().main.get('contextMenu');
   if (cMenu && typeof cMenu.onClose === 'function') {
     cMenu.onClose();
   }
@@ -58,7 +58,7 @@ export const contextMenu = payload => (dp, getState) => {
 // Browser
 // ======================================================
 export const browser = (from, url, onLoad) => (dp, getState) => {
-  if (!getState().getIn(['globals', 'isElectron'])) {
+  if (!getState().globals.get('isElectron')) {
     return window.open(url);
   }
   return dp(navigationActions.openSecondary(from, {
