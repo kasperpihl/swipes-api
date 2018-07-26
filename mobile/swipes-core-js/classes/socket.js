@@ -22,10 +22,10 @@ export default class Socket {
     }
   }
   storeChange() {
-    const state = this.store.getState();
-    this.token = state.getIn(['connection', 'token']);
+    const { connection } = this.store.getState();
+    this.token = connection.get('token');
 
-    const forceFullFetch = state.getIn(['connection', 'forceFullFetch']);
+    const forceFullFetch = connection.get('forceFullFetch');
 
     if (this.isConnected && (!this.token || forceFullFetch)) {
       this.forceClose(true);

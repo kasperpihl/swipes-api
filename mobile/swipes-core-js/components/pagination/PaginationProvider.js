@@ -9,7 +9,7 @@ import PaginationResults from './PaginationResults';
 const DEFAULT_LIMIT = 1;
 
 export default @connect(state => ({
-  isOnline: state.getIn(['connection', 'status']) === 'online',
+  isOnline: state.connection.get('status') === 'online',
 }), {
   apiRequest: ca.api.request,
   cacheSave: ca.cache.save,

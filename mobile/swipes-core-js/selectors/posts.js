@@ -3,7 +3,7 @@ import { searchSelectorFromKeys } from '../classes/utils';
 
 const getRelatedFilter = (state, props) => props.relatedFilter;
 const getContext = (state, props) => props.context;
-const getPosts = state => state.get('posts');
+const getPosts = state => state.posts;
 
 export const getSorted = createSelector(
   [getPosts],

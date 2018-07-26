@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import * as cs from './';
 
-const getAutoComplete = state => state.get('autoComplete');
+const getAutoComplete = state => state.autoComplete;
 const getState = state => state;
 
 export const getResults = createSelector(

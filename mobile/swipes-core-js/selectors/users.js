@@ -8,8 +8,8 @@ const options = getFuzzyOptionsWithKeys([
   'profile.last_name',
 ]);
 
-const getAutoCompleteString = state => state.getIn(['autoComplete', 'string']);
-const getUsers = state => state.get('users');
+const getAutoCompleteString = state => state.autoComplete.get('string');
+const getUsers = state => state.users;
 
 const nameSort = (a, b) => {
   const f1 = msgGen.users.getFirstName(a);

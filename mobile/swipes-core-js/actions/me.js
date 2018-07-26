@@ -1,10 +1,9 @@
 import { request } from './api';
 export const init = () => (d, getState) => {
-  const state = getState();
-  const forceFullFetch = state.getIn(['connection', 'forceFullFetch']);
-  const withoutNotes = state.getIn(['globals', 'withoutNotes']);
-  const lastConnect = state.getIn(['connection', 'lastConnect']);
-  const me = state.get('me');
+  const { me, connection, globals } = getState();
+  const forceFullFetch = connection.get('forceFullFetch');
+  const withoutNotes = globals.get('withoutNotes');
+  const lastConnect = connection.get('lastConnect');
 
   const options = {
     without_notes: withoutNotes,

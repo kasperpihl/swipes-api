@@ -9,8 +9,8 @@ export default class Milestones {
   }
   getMilestone(milestone) {
     if (typeof milestone === 'string') {
-      const state = this.store.getState();
-      return state.getIn(['milestones', milestone]);
+      const { milestones } = this.store.getState();
+      return milestones.get(milestone);
     }
     return milestone;
   }
@@ -72,7 +72,7 @@ export default class Milestones {
   }
   getGoals(milestoneId, overrideGoals) { 
     const state = this.store.getState();
-    const goals = overrideGoals || state.get('goals');
+    const goals = overrideGoals || state.goals;
     return this.getGoalIds(milestoneId, overrideGoals).map(gId => goals.get(gId));
   }
 }

@@ -6,10 +6,9 @@ export default class Users {
   }
   getUser(user) {
     if (typeof user === 'string') {
-      const state = this.store.getState();
-      const users = state.get('users');
-      if (user === 'me' || state.getIn(['me', 'id']) === user) {
-        return state.get('me');
+      const { users, me } = this.store.getState();
+      if (user === 'me' || me.get('id') === user) {
+        return me;
       }
       return users.get(user);
     }
@@ -100,8 +99,7 @@ export default class Users {
   }
   getName(userId, options) {
     options = options || {};
-    const state = this.store.getState();
-    const me = state.get('me');
+    const { me } = this.store.getState();
 
     if (userId === 'none') {
       return 'no one';
@@ -126,8 +124,8 @@ export default class Users {
   getNames(userIds, options) {
     options = options || {};
 
-    const state = this.store.getState();
-    const me = state.get('me');
+    const { me } = this.store.getState();
+
     const {
       preferId = me.get('id'),
       number = 1,

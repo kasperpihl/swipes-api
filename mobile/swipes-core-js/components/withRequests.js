@@ -20,12 +20,12 @@ export default options => WrappedComponent => {
   }
   @connect((state, props) => {
     const res = {
-      isOnline: state.getIn(['connection', 'status']) === 'online',
+      isOnline: state.connection.get('status') === 'online',
     };
     for(let propName in options) {
       const cachePath = getCachePath(options[propName].cache, props);
       if(cachePath) {
-        res[propName] = state.getIn(['cache', ...cachePath]);
+        res[propName] = state.cache.getIn(cachePath);
       }
     }
     return res;

@@ -3,9 +3,9 @@ import { List } from 'immutable';
 import { searchSelectorFromKeys } from '../classes/utils';
 import GoalsUtil from '../classes/goals-util';
 
-const getGoals = state => state.get('goals');
-const getMilestones = state => state.get('milestones');
-const getMyId = state => state.getIn(['me', 'id']);
+const getGoals = state => state.goals;
+const getMilestones = state => state.milestones;
+const getMyId = state => state.me.get('id');
 
 export const withoutMilestone = createSelector(
   [getGoals],

@@ -4,12 +4,13 @@ const handleUpdatesNeeded = (payload, state, dispatch) => {
   if (!payload) {
     return;
   }
-  const updateRequired = state.getIn(['connection', 'versionInfo', 'updateRequired']);
-  const updateAvailable = state.getIn(['connection', 'versionInfo', 'updateAvailable']);
-  const updateUrl = state.getIn(['connection', 'versionInfo', 'updateUrl']);
-  const reloadAvailable = state.getIn(['connection', 'versionInfo', 'reloadAvailable']);
-  const reloadRequired = state.getIn(['connection', 'versionInfo', 'reloadRequired']);
-  const maintenance = state.getIn(['connection', 'versionInfo', 'maintenance']);
+  const { connection } = state;
+  const updateRequired = connection.getIn(['versionInfo', 'updateRequired']);
+  const updateAvailable = connection.getIn(['versionInfo', 'updateAvailable']);
+  const updateUrl = connection.getIn(['versionInfo', 'updateUrl']);
+  const reloadAvailable = connection.getIn(['versionInfo', 'reloadAvailable']);
+  const reloadRequired = connection.getIn(['versionInfo', 'reloadRequired']);
+  const maintenance = connection.getIn(['versionInfo', 'maintenance']);
 
   if (
     payload.update_required !== updateRequired ||
@@ -45,13 +46,13 @@ export const request = (options, data) => (d, getState) => {
 
   options = options || {};
 
+  const { connection, me, globals } = getState();
   let body = Object.assign({}, {
-    token: getState().connection.getIn('token'),
-    organization_id: getState().me.getIn(['organizations', 0, 'id']) || null,
+    token: connection.get('token'),
+    organization_id: me.getIn(['organizations', 0, 'id']) || null,
   }, data);
-  let state = getState();
-  const updateRequired = state.getIn(['connection', 'versionInfo', 'updateRequired']);
-  const reloadRequired = state.getIn(['connection', 'versionInfo', 'reloadRequired']);
+  const updateRequired = connection.getIn(['versionInfo', 'updateRequired']);
+  const reloadRequired = connection.getIn(['versionInfo', 'reloadRequired']);
   if (updateRequired || reloadRequired) {
     return Promise.resolve({
       ok: false,
@@ -59,7 +60,7 @@ export const request = (options, data) => (d, getState) => {
       reload_required: reloadRequired,
     });
   }
-  const apiHeaders = getState().globals.get('apiHeaders');
+  const apiHeaders = globals.get('apiHeaders');
   const extraHeaders = (apiHeaders && apiHeaders.toJS()) || {};
 
   const headers = new Headers({
@@ -94,9 +95,8 @@ export const request = (options, data) => (d, getState) => {
         }
         return r.json();
       }).then((res) => {
-        state = getState();
         if (res && res.ok) {
-          handleUpdatesNeeded(res, state, d);
+          handleUpdatesNeeded(res, getState(), d);
           if (redirectUrl) {
             res.redirectUrl = redirectUrl;
           }

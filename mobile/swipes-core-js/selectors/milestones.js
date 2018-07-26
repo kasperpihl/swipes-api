@@ -3,9 +3,9 @@ import { List } from 'immutable';
 import GoalsUtil from '../classes/goals-util';
 import { searchSelectorFromKeys } from '../classes/utils';
 
-const getMilestone = (state, props) => state.getIn(['milestones', props.milestoneId]);
-const getAllGoals = state => state.get('goals');
-const getMilestones = state => state.get('milestones');
+const getMilestone = (state, props) => state.milestones.get(props.milestoneId);
+const getAllGoals = state => state.goals;
+const getMilestones = state => state.milestones;
 
 export const getGoals = createSelector(
   [getMilestone, getAllGoals],

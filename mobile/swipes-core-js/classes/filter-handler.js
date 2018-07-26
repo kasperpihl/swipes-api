@@ -10,10 +10,10 @@ export default class FilterHandler {
   }
   storeChange() {
     const state = this.store.getState();
-    this.myId = state.getIn(['me', 'id']);
+    this.myId = state.me.get('id');
 
-    const notifications = state.get('notifications');
-    const lastReadTs = state.getIn(['me', 'settings', 'last_read_ts']);
+    const notifications = state.notifications;
+    const lastReadTs = state.me.getIn(['settings', 'last_read_ts']);
     if (notifications !== this.prevNotifications || lastReadTs !== this.prevLastReadTs) {
       this.prevNotifications = this.prevNotifications || List();
       let counter = 0;
@@ -23,7 +23,7 @@ export default class FilterHandler {
           counter += 1;
         }
       });
-      const currUnread = state.getIn(['connection', 'notificationCounter']);
+      const currUnread = state.connection.get('notificationCounter');
 
       this.prevNotifications = notifications;
       this.prevLastReadTs = lastReadTs;

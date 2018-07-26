@@ -6,11 +6,11 @@ import * as types from '../constants';
 // ======================================================
 const getServerOrg = (id, getState, include) => {
   const state = getState();
-  const serverOrg = state.getIn(['notes', 'cache', id, 'serverOrg']);
+  const serverOrg = state.notes.getIn(['cache', id, 'serverOrg']);
   if (serverOrg) {
     return include ? serverOrg : undefined;
   }
-  return state.getIn(['notes', 'server', id]);
+  return state.notes.getIn(['server', id]);
 };
 
 export const create = (text, oId) => (dp, getState) => dp(a.api.request('notes.create', {

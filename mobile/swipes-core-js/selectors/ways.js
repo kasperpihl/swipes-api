@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { searchSelectorFromKeys } from '../classes/utils';
 
-const getWays = state => state.get('ways');
+const getWays = state => state.ways;
 
 export const getSorted = createSelector(
   [getWays],

@@ -10,7 +10,7 @@ const sorterAsc = key => l => l && l.sort(
 export default (cache, lastValue) => {
   let { orderBy, path, filter } = cache;
   if(!Array.isArray(path)) path = [path];
-  const getCachePath = state => state.getIn(['cache', ...path])
+  const getCachePath = state => state.cache.getIn(path)
   return createSelector(
     [getCachePath],
     (objects) => {
