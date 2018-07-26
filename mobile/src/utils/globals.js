@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { fromJS } from 'immutable';
 
 export default function getGlobals() {
   let apiUrl = 'https://workspace.swipesapp.com';
@@ -10,7 +11,7 @@ export default function getGlobals() {
   }
   const pre = `sw-${Platform.OS}`;
 
-  return {
+  return fromJS({
     apiUrl,
     isDev: window.__DEV__,
     version: DeviceInfo.getReadableVersion(),
@@ -21,5 +22,5 @@ export default function getGlobals() {
       [`${pre}-version`]: DeviceInfo.getVersion(),
       [`${pre}-build-number`]: DeviceInfo.getBuildNumber(),
     },
-  };
+  });
 }
