@@ -9,7 +9,7 @@ const blockedMixpanelEvents = [
 
 export default class Analytics {
   constructor(store) {
-    this.enable = !store.getState().getIn(['globals', 'isDev']);
+    this.enable = !store.getState().globals.get('isDev');
 
     // this.enable = true; // for testing on dev. turn off when done.
     if(this.enable){

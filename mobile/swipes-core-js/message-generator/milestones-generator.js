@@ -27,7 +27,7 @@ export default class Milestones {
   getAssignees(milestoneId) {
     let goals = this.getGoals(milestoneId);
     if(milestoneId === 'none') {
-      goals = this.store.getState().get('goals').filter(g => !g.get('milestone_id'));
+      goals = this.store.getState().goals.filter(g => !g.get('milestone_id'));
     }
     if(!goals) {
       return List();

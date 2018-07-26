@@ -19,7 +19,7 @@ const sendFile = (presignedURL, file, callback) => {
 export const uploadToS3 = files => (d, getState) => new Promise((resolve) => {
   const file = files[0];
   const fileName = file.name;
-  const orgId = getState().getIn(['me', 'organizations', 0, 'id']);
+  const orgId = getState().me.getIn(['organizations', 0, 'id']);
   let s3Url = '';
   d(a.api.request('files.signedUrl', {
     organization_id: orgId,
@@ -45,7 +45,7 @@ export const create = files => (d, getState) => new Promise((resolve) => {
   // First do S3 upload
   const file = files[0];
   const fileName = file.name;
-  const orgId = getState().getIn(['me', 'organizations', 0, 'id']);
+  const orgId = getState().me.getIn(['organizations', 0, 'id']);
 
   d(uploadToS3(files)).then((s3res) => {
     if (!s3res.ok) {

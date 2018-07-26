@@ -10,7 +10,7 @@ export default class Goals {
   }
   getGoal(goal) {
     if (typeof goal === 'string') {
-      return this.store.getState().getIn(['goals', goal]);
+      return this.store.getState().goals.get(goal);
     }
     return goal;
   }

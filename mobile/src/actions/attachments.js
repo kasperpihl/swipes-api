@@ -12,7 +12,7 @@ import * as ca from 'swipes-core-js/actions';
 // Upload attacment
 // ======================================================
 export const upload = (type, successCB, errCB) => (d, getState) => {
-  const myId = getState().getIn(['me', 'id']);
+  const myId = getState().me.get('id');
 
   const getSwipesLinkObj = (type, id, title) => ({
     service: {
@@ -108,7 +108,7 @@ export const preview = att => (d, getState) => {
   const meta = link.get('meta') || link;
   const permission = link.get('permission') || link;
   const title = att.get('title') || meta.get('title');
-  const activeSliderIndex = getState().getIn(['navigation', 'sliderIndex']);
+  const activeSliderIndex = getState().navigation.get('sliderIndex');
 
   window.analytics.sendEvent('Attachment opened', {
     Type: service.get('type'),

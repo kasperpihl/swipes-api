@@ -14,7 +14,7 @@ const getServerOrg = (id, getState, include) => {
 };
 
 export const create = (text, oId) => (dp, getState) => dp(a.api.request('notes.create', {
-  organization_id: oId || getState().getIn(['me', 'organizations', 0, 'id']),
+  organization_id: oId || getState().me.getIn(['organizations', 0, 'id']),
   text: text,
 }));
 

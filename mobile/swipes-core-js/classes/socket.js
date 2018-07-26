@@ -12,7 +12,7 @@ export default class Socket {
     this.store = store;
     this.reconnect_attempts = 0;
     bindAll(this, ['message', 'changeStatus', 'storeChange', 'onCloseHandler']);
-    const version = store.getState().getIn(['globals', 'version']);
+    const version = store.getState().globals.get('version');
     // Send in the current version. We use this to check if its different from last open
     store.dispatch({ type: types.SET_LAST_VERSION, payload: { version } });
     store.subscribe(this.storeChange);
@@ -67,7 +67,7 @@ export default class Socket {
   }
   connect() {
     const { getState } = this.store;
-    let url = getState().getIn(['globals', 'apiUrl']);
+    let url = getState().globals.get('apiUrl');
 
     if (!url) {
       console.warn('Socket requires globals reducer to have apiUrl to be set');
@@ -180,7 +180,7 @@ export default class Socket {
       this.lastPong = new Date().getTime();
     }
     if (type === 'token_revoked') {
-      const currToken = this.store.getState().getIn(['connection', 'token']);
+      const currToken = this.store.getState().connection.get('token');
       if (payload.token_to_revoke === currToken) {
         return this.store.disatch({ type: types.RESET_STATE });
       }
@@ -220,7 +220,7 @@ export default class Socket {
     }
   }
   timerForAttempt() {
-    const maintenance = this.store.getState().getIn(['connection', 'versionInfo', 'maintenance']);
+    const maintenance = this.store.getState().connection.getIn(['versionInfo', 'maintenance']);
     if (maintenance) return 180000;
     switch (this.reconnect_attempts) {
       case 0: return 0;

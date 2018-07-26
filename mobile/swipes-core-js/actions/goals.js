@@ -16,7 +16,7 @@ export const create = valAction('goals.create', [
     assignees: assignees || [],
   },
   milestone_id: milestoneId,
-  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  organization_id: getState().me.getIn(['organizations', 0, 'id']),
 })));
 
 

@@ -22,11 +22,11 @@ export const search = valAction('autoComplete.search', [
   }).require(),
 ], (string, options) => (d, getState) => {
   let results = null;
-  const blockedIdentifier = getState().getIn(['autoComplete', 'blockedIdentifier']);
+  const blockedIdentifier = getState().autoComplete.get('blockedIdentifier');
   if(blockedIdentifier === options.identifier) {
     return;
   }
-  if(string && string !== getState().getIn(['autoComplete', 'string'])) {
+  if(string && string !== getState().autoComplete.get('string')) {
     d({ type: constants.AUTO_COMPLETE_SET_STRING, payload: { 
       string,
       options: Map(options),

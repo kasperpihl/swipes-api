@@ -8,7 +8,7 @@ export const mark = payload => dp => dp(ca.api.request('notifications.markAsSeen
 }));
 
 export const setLastReadTs = (ts) => (d, getState) => {
-  const lastReadTs = getState().getIn(['me', 'settings', 'last_read_ts']);
+  const lastReadTs = getState().me.getIn(['settings', 'last_read_ts']);
 
   if(!lastReadTs || lastReadTs < ts) {
     d(ca.me.updateSettings({ last_read_ts: ts }));

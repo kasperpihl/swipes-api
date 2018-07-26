@@ -16,7 +16,7 @@ export default class Me {
     return this.getMe().getIn(['organizations', 0]);
   }
   getMe() {
-    return this.store.getState().get('me');
+    return this.store.getState().me;
   }
   isPaying() {
     const me = this.getMe();

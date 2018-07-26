@@ -33,7 +33,7 @@ export const handleOAuthSuccess = (serviceName, query) => {
 };
 
 export const uploadProfilePhoto = photo => (d, getState) => {
-  const token = getState().getIn(['connection', 'token']);
+  const token = getState().connection.get('token');
   const formData = new FormData();
   formData.append('token', token);
   formData.append('photo', photo);
@@ -50,7 +50,7 @@ export const updateSettings = s => request('me.updateSettings', { settings: s })
 export const updateProfile = p => request('me.updateProfile', { profile: p });
 
 export const togglePinGoal = gId => (d, getState) => {
-  let stars = getState().getIn(['me', 'settings', 'starred_goals']);
+  let stars = getState().me.getIn(['settings', 'starred_goals']);
   if(stars.contains(gId)){
     stars = stars.filter((p => p !== gId));
   } else {

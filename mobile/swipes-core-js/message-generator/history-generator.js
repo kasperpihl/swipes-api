@@ -7,10 +7,10 @@ export default class HistoryGenerator {
     this.parent = parent;
   }
   _getGoal(goalId) {
-    return this.store.getState().getIn(['goals', goalId]);
+    return this.store.getState().goals.get(goalId);
   }
   _getHelper(goalId) {
-    const me = this.store.getState().get('me');
+    const me = this.store.getState().me;
     const goal = this._getGoal(goalId);
     return new GoalsUtil(goal, me.get('id'));
   }
@@ -37,7 +37,7 @@ export default class HistoryGenerator {
     });
   }
   getTitle(id, h) {
-    const me = this.store.getState().get('me');
+    const me = this.store.getState().me;
     let from = this.parent.users.getName(h.get('done_by'));
     from = from.charAt(0).toUpperCase() + from.slice(1);
     const helper = this._getHelper(id);

@@ -12,7 +12,7 @@ export const create = valAction('ways.create', [
 ], (title, goal) => (d, getState) => d(a.api.request('ways.create', {
   title,
   goal,
-  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  organization_id: getState().me.getIn(['organizations', 0, 'id']),
 })),
 );
 

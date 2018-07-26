@@ -1,7 +1,7 @@
 import * as ca from './';
 
 export const complete = (id) => (d, getState) => {
-  const orgOnboarding = getState().getIn(['me', 'settings', 'onboarding']);
+  const orgOnboarding = getState().me.getIn(['settings', 'onboarding']);
   let onboarding = orgOnboarding;
   onboarding = onboarding.updateIn(['completed'], (completed) => {
     if(!completed.get(id)){

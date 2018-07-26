@@ -34,7 +34,7 @@ const handleUpdatesNeeded = (payload, state, dispatch) => {
 };
 
 export const request = (options, data) => (d, getState) => {
-  const apiUrl = `${getState().getIn(['globals', 'apiUrl'])}/v1/`;
+  const apiUrl = `${getState().globals.get('apiUrl')}/v1/`;
   let command;
   if (typeof options !== 'object') {
     command = `${options}`;
@@ -46,8 +46,8 @@ export const request = (options, data) => (d, getState) => {
   options = options || {};
 
   let body = Object.assign({}, {
-    token: getState().getIn(['connection', 'token']),
-    organization_id: getState().getIn(['me', 'organizations', 0, 'id']) || null,
+    token: getState().connection.getIn('token'),
+    organization_id: getState().me.getIn(['organizations', 0, 'id']) || null,
   }, data);
   let state = getState();
   const updateRequired = state.getIn(['connection', 'versionInfo', 'updateRequired']);
@@ -59,7 +59,7 @@ export const request = (options, data) => (d, getState) => {
       reload_required: reloadRequired,
     });
   }
-  const apiHeaders = getState().getIn(['globals', 'apiHeaders']);
+  const apiHeaders = getState().globals.get('apiHeaders');
   const extraHeaders = (apiHeaders && apiHeaders.toJS()) || {};
 
   const headers = new Headers({
@@ -114,7 +114,7 @@ export const request = (options, data) => (d, getState) => {
         // Let's return a promise for convenience.
         resolve(res);
       }).catch((e) => {
-        if (getState().getIn(['globals', 'isDev'])) {
+        if (getState().globals.get('isDev')) {
           console.warn(command, e);
         }
         resolve({ ok: false, error: e.message || 'unknown error' });

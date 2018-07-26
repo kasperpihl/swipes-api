@@ -1,7 +1,7 @@
 import * as ca from './';
 
 export const create = payload => (dp, getState) => dp(ca.api.request('posts.create', {
-  organization_id: getState().getIn(['me', 'organizations', 0, 'id']),
+  organization_id: getState().me.getIn(['organizations', 0, 'id']),
   ...payload,
 }));
 
