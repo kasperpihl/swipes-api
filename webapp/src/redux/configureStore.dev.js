@@ -1,41 +1,24 @@
 import { createLogger } from 'redux-logger';
 
-let cacheImmutable = null;
-let cacheObject = null;
 const transformState = (state) => {
-  if (!cacheImmutable) {
-    cacheImmutable = state;
-    cacheObject = state.toJS();
-    return cacheObject;
-  }
-  state.forEach((section, sectKey) => {
-    const cachedSect = cacheImmutable.get(sectKey);
-    if (section !== cachedSect) {
-      section.forEach((indexValue, indexKey) => {
-        const cachedValue = cachedSect.get(indexKey);
-        if (indexValue !== cachedValue) {
-          if (indexValue && typeof indexValue.toJS === 'function') {
-            const sectObj = Object.assign({}, cacheObject[sectKey], { [indexKey]: indexValue.toJS() });
-            cacheObject = Object.assign({}, cacheObject, { [sectKey]: sectObj });
-          } else {
-            const sectObj = Object.assign({}, cacheObject[sectKey], { [indexKey]: indexValue });
-            cacheObject = Object.assign({}, cacheObject, { [sectKey]: sectObj });
-          }
-        }
-      });
+  const parsedState = {};
+  
+  Object.keys(state).forEach((key) => {
+    if(typeof state[key].toJS === 'function') {
+      parsedState[key] = state[key].toJS();
+    } else {
+      parsedState[key] = state[key];
     }
+    
   });
-  cacheImmutable = state;
-  return cacheObject;
+  return parsedState;
 };
-export default {
-  middlewares: [
-    createLogger(
-      {
-        stateTransformer: transformState, // state => state.toJS(),
-        collapsed: true,
-        duration: true,
-      },
-    ),
-  ],
-};
+
+export default (config) => {
+  config.middlewares.push(createLogger({
+    stateTransformer: transformState,
+    collapsed: true,
+    duration: true,
+  }));
+  return config;
+}

@@ -1,49 +1,51 @@
-import { compose, applyMiddleware, createStore } from 'redux';
-import { persistStore, autoRehydrate } from 'redux-persist-immutable';
-import { combineReducers } from 'redux-immutable';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import immutableTransform from 'redux-persist-transform-immutable'
+
 import thunk from 'redux-thunk';
-import Immutable, { fromJS } from 'immutable';
 import localForage from "localforage";
+
 import * as reducers from './reducers';
 import * as coreReducers from 'swipes-core-js/reducers';
 
-import dev from './configureStore.dev';
+import devConf from './configureStore.dev';
 
 const rootReducer = combineReducers({
   ...coreReducers,
   ...reducers,
 });
 
+let config = {
+  middlewares: [
+    thunk,
+  ],
+  persistConfig: {
+    transforms: [immutableTransform()],
+    blacklist: ['main', 'cache', 'filters', 'autoComplete', 'globals'],
+    key: 'root',
+    storage: localForage,
+  }
+};
 
-const isProd = (process.env.NODE_ENV === 'production');
-const middlewares = isProd ? [] : dev.middlewares;
+if(process.env.NODE_ENV !== 'production') {
+  config = devConf(config);
+}
 
-export default function configureStore(preloadedState) {
-  preloadedState = fromJS(preloadedState || {});
-
-  const enhancer = compose(
-    applyMiddleware(
-      thunk,
-      ...middlewares,
-    ),
-    autoRehydrate(),
-  );
+export default function configureStore(preloadedState = {}) {
 
   const store = createStore(
-    rootReducer,
+    persistReducer(config.persistConfig, rootReducer),
     preloadedState,
-    enhancer,
+    applyMiddleware(
+      ...config.middlewares,
+    ),
   );
 
-  persistStore(store, {
-    storage: localForage,
-    blacklist: ['main', 'cache', 'filters', 'autoComplete', 'globals'],
-  });
+  const persistor = persistStore(store);
   window.getState = store.getState;
-  window.localForage = localForage;
-  if (!isProd) {
-    window.dispatch = store.dispatch;
-    window.Immutable = Immutable;
-  }
-  return store;
+
+  return {
+    persistor,
+    store,
+  };
 }

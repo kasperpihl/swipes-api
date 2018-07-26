@@ -5,6 +5,8 @@ import { render } from 'react-dom';
 
 import { Provider } from 'react-redux';
 import { OptimistProvider } from 'react-optimist';
+import { PersistGate } from 'redux-persist/es/integration/react'
+
 import EmitterProvider from 'src/react/components/emitter/EmitterProvider';
 import { BrowserRouter } from 'react-router-dom';
 import { createLocation } from 'history';
@@ -21,7 +23,7 @@ import Root from './react/Root';
 
 import './swiss';
 
-const store = configureStore({
+const { store, persistor } = configureStore({
   globals: getGlobals()
 });
 if (process.env.NODE_ENV !== 'production') {
@@ -46,13 +48,15 @@ init(store, delegate);
 
 render(
   <Provider store={store}>
-    <BrowserRouter forceRefresh={false}>
-      <EmitterProvider>
-        <OptimistProvider>
-          <Root />
-        </OptimistProvider>
-      </EmitterProvider>
-    </BrowserRouter>
+    <PersistGate persistor={persistor}>
+      <BrowserRouter forceRefresh={false}>
+        <EmitterProvider>
+          <OptimistProvider>
+            <Root />
+          </OptimistProvider>
+        </EmitterProvider>
+      </BrowserRouter>
+    </PersistGate>
   </Provider>
   , document.getElementById('content'),
 );
