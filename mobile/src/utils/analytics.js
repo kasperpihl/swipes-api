@@ -23,8 +23,8 @@ export default class Analytics {
   }
   getDefaultEventProps() {
     const state = this.store.getState();
-    const version = state.getIn(['globals', 'version']);
-    const platform = state.getIn(['globals', 'platform']);
+    const version = state.globals.get('version');
+    const platform = state.globals.get('platform');
     const defs = {
       _Client: 'ReactNative',
       '_Version': version,
@@ -53,8 +53,7 @@ export default class Analytics {
 
   }
   storeChange() {
-    const state = this.store.getState();
-    const me = state.get('me');
+    const { me } = this.store.getState();
 
     if (me && me.get('id') && me.get('id') !== this.userId) {
       const org = me.getIn(['organizations', 0]);

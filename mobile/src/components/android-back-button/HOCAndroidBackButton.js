@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { BackHandler } from 'react-native';
 import { connect } from 'react-redux';
-import { list } from 'react-immutable-proptypes';
 import * as a from 'actions';
 
 class HOCAndroidBackButton extends PureComponent {
@@ -47,10 +46,10 @@ class HOCAndroidBackButton extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    activeSliderIndex: state.getIn(['navigation', 'sliderIndex']),
-    sliders: state.getIn(['navigation', 'sliders']),
-    infoTab: state.get('infoTab'),
-    modal: state.getIn(['main', 'modal'])
+    activeSliderIndex: state.navigation.get('sliderIndex'),
+    sliders: state.navigation.get('sliders'),
+    infoTab: state.infoTab,
+    modal: state.main.get('modal')
   };
 }
 

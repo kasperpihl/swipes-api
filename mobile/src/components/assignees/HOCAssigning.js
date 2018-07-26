@@ -50,9 +50,9 @@ class HOCAssigning extends PureComponent {
 
 function mapStateToProps(state, ownProps) {
   return {
-    goal: state.getIn(['goals', ownProps.goalId]),
-    users: state.get('users'),
-    me: state.get('me'),
+    goal: state.goals.get(ownProps.goalId),
+    users: state.users,
+    me: state.me,
   };
 }
 

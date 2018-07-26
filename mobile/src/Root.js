@@ -34,12 +34,12 @@ window.onScroll = (function (store) {
   let collapsed = false;
   store.subscribe(() => {
     const state = store.getState();
-    if (collapsed && !state.getIn(['navigation', 'collapsed'])) {
+    if (collapsed && !state.navigation.get('collapsed')) {
       posY = undefined;
       compareY = undefined;
       direction = undefined;
       collapsed = false;
-    } else if (!collapsed && state.getIn(['navigation', 'collapsed'])) {
+    } else if (!collapsed && state.navigation.get('collapsed')) {
       collapsed = true;
     }
   });

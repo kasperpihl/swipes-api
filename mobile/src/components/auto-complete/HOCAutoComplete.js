@@ -37,8 +37,8 @@ class HOCAutoComplete extends PureComponent {
 };
 
 export default connect(state => ({
-  autoComplete: state.get('autoComplete'),
-  results: state.getIn(['autoComplete', 'string']) && cs.autoComplete.getResults(state),
+  autoComplete: state.autoComplete,
+  results: state.autoComplete.get('string') && cs.autoComplete.getResults(state),
 }), {
   clear: ca.autoComplete.clear,
   search: ca.autoComplete.search,

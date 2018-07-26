@@ -212,12 +212,12 @@ class HOCActionBar extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  const sliderIndex = state.getIn(['navigation', 'sliderIndex']);
+  const sliderIndex = state.navigation.get('sliderIndex');
 
   return {
-    actionButtons: state.getIn(['navigation', 'actionButtons']),
+    actionButtons: state.navigation.get('actionButtons'),
     activeSliderIndex: sliderIndex,
-    activeRoutes: state.getIn(['navigation', 'sliders', sliderIndex, 'routes']),
+    activeRoutes: state.navigation.getIn(['sliders', sliderIndex, 'routes']),
   };
 }
 

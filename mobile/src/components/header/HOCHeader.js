@@ -216,7 +216,7 @@ class HOCHeader extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    collapsed: state.getIn(['navigation', 'collapsed']),
+    collapsed: state.navigation.get('collapsed'),
   };
 }
 

@@ -65,7 +65,7 @@ class HOCLoading extends PureComponent {
 HOCLoading.propTypes = {};
 
 const mapStateToProps = (state) => ({
-  loading: state.getIn(['main', 'loading']),
+  loading: state.main.get('loading'),
 });
 
 export default connect(mapStateToProps, {

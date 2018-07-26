@@ -156,9 +156,9 @@ class HOCPreviewNote extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    token: state.getIn(['connection', 'token']),
-    orgId: state.getIn(['me', 'organizations', 0, 'id']),
-    apiUrl: state.getIn(['globals', 'apiUrl']),
+    token: state.connection.get('token'),
+    orgId: state.me.getIn(['organizations', 0, 'id']),
+    apiUrl: state.globals.get('apiUrl'),
   };
 }
 

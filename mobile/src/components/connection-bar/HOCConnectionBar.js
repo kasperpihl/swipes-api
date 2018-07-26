@@ -131,12 +131,12 @@ class HOCConnectionBar extends PureComponent {
 HOCConnectionBar.propTypes = {};
 
 const mapStateToProps = (state) => ({
-  nextRetry: state.getIn(['connection', 'nextRetry']),
-  versionInfo: state.getIn(['connection', 'versionInfo']),
-  reconnectAttempt: state.getIn(['connection', 'reconnectAttempt']),
-  ready: state.getIn(['connection', 'ready']),
-  status: state.getIn(['connection', 'status']),
-  token: state.getIn(['connection', 'token']),
+  nextRetry: state.connection.get('nextRetry'),
+  versionInfo: state.connection.get('versionInfo'),
+  reconnectAttempt: state.connection.get('reconnectAttempt'),
+  ready: state.connection.get('ready'),
+  status: state.connection.get('status'),
+  token: state.connection.get('token'),
 });
 
 export default connect(mapStateToProps, {

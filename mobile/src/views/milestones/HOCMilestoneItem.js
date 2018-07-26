@@ -146,8 +146,8 @@ class HOCMilestoneItem extends PureComponent {
   }
 }
 const mapStateToProps = (state, ownProps) => ({
-  milestone: state.getIn(['milestones', ownProps.milestoneId]),
-  goals: state.get('goals'),
+  milestone: state.milestones.get(ownProps.milestoneId),
+  goals: state.goals,
 });
 
 export default connect(mapStateToProps, {})(HOCMilestoneItem);

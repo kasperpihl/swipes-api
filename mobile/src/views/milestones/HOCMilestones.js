@@ -203,7 +203,7 @@ class HOCMilestones extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    milestoneOrder: state.getIn(['me', 'organizations', 0, 'milestone_order']),
+    milestoneOrder: state.me.getIn(['organizations', 0, 'milestone_order']),
     milestones: cs.milestones.getGrouped(state),
     counter: cs.goals.withoutMilestone(state).size,
   };

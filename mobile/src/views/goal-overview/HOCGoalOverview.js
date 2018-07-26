@@ -328,8 +328,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state, ownProps) {
   return {
-    goal: state.getIn(['goals', ownProps.goalId]),
-    me: state.get('me'),
+    goal: state.goals.get(ownProps.goalId),
+    me: state.me,
   };
 }
 export default connect(mapStateToProps, {

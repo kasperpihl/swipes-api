@@ -57,7 +57,7 @@ class HOCUpdate extends PureComponent {
 HOCUpdate.propTypes = {};
 
 const mapStateToProps = (state) => ({
-  versionInfo: state.getIn(['connection', 'versionInfo']),
+  versionInfo: state.connection.get('versionInfo'),
 });
 
 export default connect(mapStateToProps, {

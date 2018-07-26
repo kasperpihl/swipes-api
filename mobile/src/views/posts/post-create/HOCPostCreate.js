@@ -191,7 +191,7 @@ HOCPostCreate.propTypes = {};
 
 function mapStateToProps(state) {
   return {
-    myId: state.getIn(['me', 'id']),
+    myId: state.me.get('id'),
   };
 }
 

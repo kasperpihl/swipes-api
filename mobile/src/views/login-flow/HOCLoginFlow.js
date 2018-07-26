@@ -146,8 +146,8 @@ class HOCLoginFlow extends PureComponent {
 HOCLoginFlow.propTypes = {};
 
 const mapStateToProps = (state) => ({
-  apiUrl: state.getIn(['globals', 'apiUrl']),
-  modal: state.getIn(['main', 'modal']),
+  apiUrl: state.globals.get('apiUrl'),
+  modal: state.main.get('modal'),
 });
 
 export default connect(mapStateToProps, {

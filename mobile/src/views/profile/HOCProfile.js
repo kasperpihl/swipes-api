@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    me: state.get('me'),
+    me: state.me,
   };
 }
 

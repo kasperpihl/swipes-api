@@ -103,7 +103,7 @@ class HOCModal extends PureComponent {
 HOCModal.propTypes = {};
 
 const mapStateToProps = (state) => ({
-  modal: state.getIn(['main', 'modal']),
+  modal: state.main.get('modal'),
 });
 
 export default connect(mapStateToProps, {

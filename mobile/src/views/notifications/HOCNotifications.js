@@ -52,7 +52,7 @@ class HOCNotifications extends PureComponent {
 HOCNotifications.propTypes = {};
 function mapStateToProps(state) {
   return {
-    notifications: state.get('notifications'),
+    notifications: state.notifications,
   };
 }
 export default connect(mapStateToProps, {

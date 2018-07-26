@@ -196,7 +196,7 @@ class HOCGoalItem extends PureComponent {
 
 function mapStateToProps(state, ownProps) {
   return {
-    goal: state.getIn(['goals', ownProps.goalId]),
+    goal: state.goals.get(ownProps.goalId),
   };
 }
 

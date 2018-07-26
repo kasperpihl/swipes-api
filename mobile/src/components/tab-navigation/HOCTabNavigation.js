@@ -236,14 +236,14 @@ class HOCTabNavigation extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  const activeSliderIndex = state.getIn(['navigation', 'sliderIndex']);
+  const activeSliderIndex = state.navigation.get('sliderIndex');
 
   return {
-    actionButtons: state.getIn(['navigation', 'actionButtons']),
+    actionButtons: state.navigation.get('actionButtons'),
     activeSliderIndex,
-    routes: state.getIn(['navigation', 'sliders', activeSliderIndex, 'routes']),
-    counter: state.getIn(['connection', 'notificationCounter']),
-    versionInfo: state.getIn(['connection', 'versionInfo']),
+    routes: state.navigation.getIn(['sliders', activeSliderIndex, 'routes']),
+    counter: state.connection.get('notificationCounter'),
+    versionInfo: state.connection.get('versionInfo'),
   };
 }
 

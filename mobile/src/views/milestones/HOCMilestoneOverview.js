@@ -286,9 +286,9 @@ class HOCMilestoneOverview extends PureComponent {
 
 function mapStateToProps(state, ownProps) {
   return {
-    milestone: state.getIn(['milestones', ownProps.milestoneId]),
+    milestone: state.milestones.get(ownProps.milestoneId),
     groupedGoals: cs.milestones.getGroupedGoals(state, ownProps),
-    myId: state.getIn(['me', 'id']),
+    myId: state.me.get('id'),
   };
 }
 

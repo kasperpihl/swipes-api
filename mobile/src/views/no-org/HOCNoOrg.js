@@ -122,7 +122,7 @@ class HOCNoOrg extends PureComponent {
 HOCNoOrg.propTypes = {};
 
 const mapStateToProps = (state) => ({
-  apiUrl: state.getIn(['globals', 'apiUrl'])
+  apiUrl: state.globals.get('apiUrl')
 });
 
 export default connect(mapStateToProps, {

@@ -194,9 +194,9 @@ class HOCGoalList extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    organization: state.getIn(['me', 'organizations', 0]),
+    organization: state.me.getIn(['organizations', 0]),
     goals: cs.goals.assignedGroupedByMilestone(state),
-    myId: state.getIn(['me', 'id']),
+    myId: state.me.get('id'),
   };
 }
 

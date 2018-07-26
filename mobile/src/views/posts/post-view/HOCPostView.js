@@ -136,8 +136,8 @@ HOCPostView.propTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
-    myId: state.getIn(["me", "id"]),
-    post: state.getIn(["posts", ownProps.postId])
+    myId: state.me.get('id'),
+    post: state.posts.get(ownProps.postId)
   };
 }
 

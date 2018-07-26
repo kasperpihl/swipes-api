@@ -89,11 +89,11 @@ class HOCViewController extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  const activeSliderIndex = state.getIn(['navigation', 'sliderIndex']);
+  const activeSliderIndex = state.navigation.get('sliderIndex');
 
   return {
     activeSliderIndex,
-    routes: state.getIn(['navigation', 'sliders', activeSliderIndex, 'routes']),
+    routes: state.navigation.getIn(['sliders', activeSliderIndex, 'routes']),
   };
 }
 
