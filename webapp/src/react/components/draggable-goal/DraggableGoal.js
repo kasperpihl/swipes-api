@@ -4,10 +4,11 @@ import { Draggable } from 'react-beautiful-dnd';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import SW from './DraggableGoal.swiss';
 
-const _dragEl = document.getElementById('draggable');
+
 
 class DraggableGoal extends PureComponent {
   renderOrNotPortal(usePortal, element) {
+    const _dragEl = document.getElementById('draggable');
     if(usePortal) {
       return createPortal(
         element,

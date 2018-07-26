@@ -15,11 +15,13 @@ const rootReducer = combineReducers({
   ...reducers,
 });
 
+
 let config = {
   middlewares: [
     thunk,
   ],
   persistConfig: {
+    version: 1,
     transforms: [immutableTransform()],
     blacklist: ['main', 'cache', 'filters', 'autoComplete', 'globals'],
     key: 'root',

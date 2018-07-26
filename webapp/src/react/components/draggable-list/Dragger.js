@@ -3,9 +3,8 @@ import { createPortal } from 'react-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import SW from './Dragger.swiss';
 
-const _dragEl = document.getElementById('draggable');
-
 export default (props) => {
+  const _dragEl = document.getElementById('draggable');
   const {
     children,
     wrapperEl,

@@ -90,7 +90,6 @@ class GoalOverview extends PureComponent {
               <Dragger
                 draggableId={step.get('id')}
                 index={i}
-                passHandle
                 key={step.get('id')}>
                 {(provided, snapshot) => {
                   return (
