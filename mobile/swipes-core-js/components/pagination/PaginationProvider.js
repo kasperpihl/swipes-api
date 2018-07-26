@@ -8,14 +8,14 @@ import * as ca from '../../actions';
 import PaginationResults from './PaginationResults';
 const DEFAULT_LIMIT = 1;
 
-@connect(state => ({
+export default @connect(state => ({
   isOnline: state.getIn(['connection', 'status']) === 'online',
 }), {
   apiRequest: ca.api.request,
   cacheSave: ca.cache.save,
   cacheGetSelector: ca.cache.getSelector,
 })
-export default class PaginationProvider extends PureComponent {
+class PaginationProvider extends PureComponent {
   constructor(props) {
     super(props);
     const { options } = props;
