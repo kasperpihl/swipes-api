@@ -14,7 +14,7 @@ import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import SW from './GoalHeader.swiss';
 
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }), {
   renameGoal: ca.goals.rename,
   inputMenu: menuActions.input,

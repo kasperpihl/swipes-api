@@ -21,8 +21,8 @@ import GoalOverview from './GoalOverview';
 /* global msgGen */
 
 @connect((state, props) => ({
-  goal: state.getIn(['goals', props.goalId]),
-  me: state.get('me'),
+  goal: state.goals.get(props.goalId),
+  me: state.me,
 }), {
   addAttachment: ca.attachments.add,
   archive: ca.goals.archive,

@@ -8,8 +8,8 @@ import CompatibleInvite from './CompatibleInvite';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
 @connect(state => ({
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
-  readyInOrg: state.getIn(['connection', 'readyInOrg']),
+  isBrowserSupported: state.globals.get('isBrowserSupported'),
+  readyInOrg: state.connection.get('readyInOrg'),
 }), {
   sendInvite: ca.organizations.inviteUser,
 })

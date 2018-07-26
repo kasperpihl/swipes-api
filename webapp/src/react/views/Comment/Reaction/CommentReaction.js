@@ -8,7 +8,7 @@ import SW from './CommentReaction.swiss';
 
 @withOptimist
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }), {
   successGradient: mainActions.successGradient,
   tooltip: mainActions.tooltip,

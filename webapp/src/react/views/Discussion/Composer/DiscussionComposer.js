@@ -21,8 +21,8 @@ import SW from './DiscussionComposer.swiss';
 
 @navWrapper
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
-  orgId: state.getIn(['me', 'organizations', 0, 'id']),
+  myId: state.me.get('id'),
+  orgId: state.me.getIn(['organizations', 0, 'id']),
 }), {
   openSecondary: navigationActions.openSecondary,
   request: ca.api.request,

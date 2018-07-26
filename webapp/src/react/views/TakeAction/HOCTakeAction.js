@@ -11,9 +11,9 @@ import TakeAction from './TakeAction';
 
 @navWrapper
 @connect(state => ({
-  organization: state.getIn(['me', 'organizations', 0]),
+  organization: state.me.getIn(['organizations', 0]),
   goals: cs.goals.assignedGroupedByMilestone(state),
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }), {
   saveCache: ca.cache.save,
 })

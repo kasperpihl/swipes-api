@@ -4,7 +4,7 @@ import * as menuActions from 'src/redux/menu/menuActions';
 import DragAndDrop from 'src/react/components/drag-and-drop/DragAndDrop';
 
 @connect(state => ({
-  navigation: state.get('navigation'),
+  navigation: state.navigation,
 }), {
   chooseDragAndDrop: menuActions.chooseDragAndDrop,
 })

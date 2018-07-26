@@ -28,18 +28,18 @@ const maxWidth = 820;
 /* global msgGen */
 
 const mapStateToProps = (state, props) => {
-  let cachedText = state.getIn(['notes', 'cache', props.id, 'text']);
+  let cachedText = state.notes.getIn(['cache', props.id, 'text']);
   if (!cachedText) {
-    cachedText = state.getIn(['notes', 'cache', props.id, '_savingText']);
+    cachedText = state.notes.getIn(['cache', props.id, '_savingText']);
   }
 
-  const note = state.getIn(['notes', 'server', props.id]);
-  let serverOrg = state.getIn(['notes', 'cache', props.id, 'serverOrg']);
+  const note = state.notes.getIn(['server', props.id]);
+  let serverOrg = state.notes.getIn(['cache', props.id, 'serverOrg']);
   serverOrg = serverOrg || note;
   const latestRev = serverOrg ? serverOrg.get('rev') : 1;
 
   return {
-    organizationId: state.getIn(['me', 'organizations', 0, 'id']),
+    organizationId: state.me.getIn(['organizations', 0, 'id']),
     note,
     latestRev,
     serverOrg,

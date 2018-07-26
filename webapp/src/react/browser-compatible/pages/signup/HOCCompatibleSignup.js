@@ -8,7 +8,7 @@ import CompatibleSignup from './CompatibleSignup';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
 @connect(state => ({
-  token: state.getIn(['connection', 'token']),
+  token: state.connection.get('token'),
 }), {
   request: ca.api.request,
   signup: ca.users.signup,

@@ -12,7 +12,7 @@ import HOCChangeCardDetailsModal from './HOCChangeCardDetailsModal';
 
 @navWrapper
 @connect(state => ({
-  organization: state.getIn(['me', 'organizations', 0]),
+  organization: state.me.getIn(['organizations', 0]),
   users: cs.users.getAllButSofi(state),
 }), {
   createStripeCustomer: ca.organizations.createStripeCustomer,

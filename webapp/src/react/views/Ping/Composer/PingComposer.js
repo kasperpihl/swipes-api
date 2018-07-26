@@ -18,8 +18,8 @@ import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 
 @navWrapper
 @connect((state) => ({
-  users: state.get('users'),
-  orgId: state.getIn(['me', 'organizations', 0, 'id'])
+  users: state.users,
+  orgId: state.me.getIn(['organizations', 0, 'id'])
 }), {
   preview: linkActions.preview,
   request: ca.api.request,

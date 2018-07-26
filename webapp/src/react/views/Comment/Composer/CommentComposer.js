@@ -16,7 +16,7 @@ import SW from './CommentComposer.swiss';
 
 @navWrapper
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }), {
   request: ca.api.request,
   preview: linkActions.preview,

@@ -6,7 +6,7 @@ import SW from './BreadCrumbs.swiss';
 
 
 @connect((state, props) => ({
-  history: state.getIn(['navigation', props.target, 'stack']),
+  history: state.navigation.getIn([props.target, 'stack']),
 }), {
   pop: navigationActions.pop,
 })

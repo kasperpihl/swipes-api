@@ -12,7 +12,7 @@ import Button from 'src/react/components/button/Button';
 import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
 
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }), {
   inputMenu: menuActions.input,
   request: ca.api.request,

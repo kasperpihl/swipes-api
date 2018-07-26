@@ -8,7 +8,7 @@ import PlanProgressTooltip from '../plan-progress-tooltip/PlanProgressTooltip';
 import SW from './PlanListItem.swiss';
 
 @connect(state => ({
-  goals: state.get('goals'),
+  goals: state.goals,
 }), {
   tooltip: mainActions.tooltip,
 })

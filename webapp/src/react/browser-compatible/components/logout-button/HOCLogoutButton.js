@@ -8,7 +8,7 @@ import RotateLoader from 'components/loaders/RotateLoader';
 import SW from './LogoutButton.swiss';
 
 @connect(state => ({
-  isElectron: state.getIn(['globals', 'isElectron']),
+  isElectron: state.globals.get('isElectron'),
 }), {
   confirm: menuActions.confirm,
   signout: mainActions.signout,

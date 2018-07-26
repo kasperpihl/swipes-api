@@ -13,8 +13,8 @@ import PostView from './PostView';
 
 @navWrapper
 @connect((state, props) => ({
-  myId: state.getIn(['me', 'id']),
-  post: state.getIn(['posts', props.postId]),
+  myId: state.me.get('id'),
+  post: state.posts.get(props.postId),
 }), {
   openSecondary: navigationActions.openSecondary,
   preview: linkActions.preview,

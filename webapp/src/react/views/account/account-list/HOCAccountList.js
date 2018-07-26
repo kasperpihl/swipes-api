@@ -10,7 +10,7 @@ import AccountList from './AccountList';
 
 @navWrapper
 @connect(state => ({
-  me: state.get('me'),
+  me: state.me,
 }), {
   signout: mainActions.signout,
   browser: mainActions.browser,

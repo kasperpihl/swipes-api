@@ -12,7 +12,7 @@ const BrowserLoader = styleElement('div', styles.BrowserLoader);
 
 @navWrapper
 @connect(state => ({
-  me: state.get('me'),
+  me: state.me,
 }))
 export default class extends PureComponent {
   static minWidth() {

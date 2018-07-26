@@ -16,7 +16,7 @@ import SW from './PostCommentInput.swiss';
 
 @navWrapper
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }), {
   addComment: ca.posts.addComment,
   preview: linkActions.preview,

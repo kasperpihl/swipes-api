@@ -22,7 +22,7 @@ import PostCreate from './PostCreate';
 
 @navWrapper
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }), {
   openSecondary: navigationActions.openSecondary,
   contextMenu: mainActions.contextMenu,

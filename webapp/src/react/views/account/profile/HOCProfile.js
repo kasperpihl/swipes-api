@@ -7,7 +7,7 @@ import Profile from './Profile';
 
 @navWrapper
 @connect(state => ({
-  me: state.get('me'),
+  me: state.me,
 }), {
   updateProfile: ca.me.updateProfile,
   uploadProfilePhoto: ca.me.uploadProfilePhoto,

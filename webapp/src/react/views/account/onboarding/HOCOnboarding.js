@@ -9,10 +9,10 @@ import Onboarding from './Onboarding';
 
 @navWrapper
 @connect(state => ({
-  me: state.get('me'),
-  hasOrg: !!state.getIn(['me', 'organizations', 0]),
-  onboarding: state.get('onboarding'),
-  userOnboarding: state.getIn(['me', 'settings', 'onboarding']),
+  me: state.me,
+  hasOrg: !!state.me.getIn(['organizations', 0]),
+  onboarding: state.onboarding,
+  userOnboarding: state.me.getIn(['settings', 'onboarding']),
 }), {
   complete: ca.onboarding.complete,
   browser: mainActions.browser,

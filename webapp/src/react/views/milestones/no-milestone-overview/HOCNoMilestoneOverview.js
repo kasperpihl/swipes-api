@@ -9,7 +9,7 @@ const DISTANCE = 100;
 @navWrapper
 @connect(state => ({
   goals: cs.goals.withoutMilestone(state),
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }))
 export default class extends PureComponent {
   static maxWidth() {

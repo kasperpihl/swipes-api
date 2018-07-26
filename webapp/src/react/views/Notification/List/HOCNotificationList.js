@@ -7,7 +7,7 @@ import { setupLoading, navForContext } from 'swipes-core-js/classes/utils';
 import NotificationList from './NotificationList';
 
 @connect(state => ({
-  notifications: state.get('notifications'),
+  notifications: state.notifications,
 }), {
   openSecondary: navigationActions.openSecondary,
   markNotifications: ca.notifications.mark,

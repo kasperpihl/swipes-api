@@ -16,7 +16,7 @@ const emptyList = List();
 const DISTANCE = 200;
 
 @connect(state => ({
-  organization: state.getIn(['me', 'organizations', 0]),
+  organization: state.me.getIn(['organizations', 0]),
   plans: cs.milestones.getGrouped(state),
 }), {
   inputMenu: menuActions.input,

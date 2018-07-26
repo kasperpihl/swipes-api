@@ -14,8 +14,8 @@ import setupDraftExtensions from 'src/utils/draft-js/setupDraftExtensions';
 import Mention from './Mention';
 
 @connect(state => ({
-  results: state.getIn(['autoComplete', 'results']),
-  string: state.getIn(['autoComplete', 'string']),
+  results: state.autoComplete.get('results'),
+  string: state.autoComplete.get('string'),
 }), {
   search: ca.autoComplete.search,
   clear: ca.autoComplete.clear,

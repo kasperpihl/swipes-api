@@ -8,9 +8,9 @@ import CompatibleWelcome from './CompatibleWelcome';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
 @connect(state => ({
-  me: state.get('me'),
-  isElectron: state.getIn(['globals', 'isElectron']),
-  isBrowserSupported: state.getIn(['globals', 'isBrowserSupported']),
+  me: state.me,
+  isElectron: state.globals.get('isElectron'),
+  isBrowserSupported: state.globals.get('isBrowserSupported'),
 }), {
   createOrg: ca.organizations.create,
   joinOrg: ca.organizations.join,

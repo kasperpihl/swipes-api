@@ -10,7 +10,7 @@ import SW from './GoalListItem.swiss';
 
 
 @connect((state, props) => ({
-  goal: state.getIn(['goals', props.goalId]),
+  goal: state.goals.get(props.goalId),
 }), {
   assignGoal: ca.goals.assign,
 })

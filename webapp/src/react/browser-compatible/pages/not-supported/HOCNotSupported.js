@@ -8,8 +8,8 @@ import CompatibleCard from 'compatible/components/card/CompatibleCard';
 import NotSupported from './NotSupported';
 
 @connect(state => ({
-  me: state.get('me'),
-  organization: state.getIn(['me', 'organizations', 0]),
+  me: state.me,
+  organization: state.me.getIn(['organizations', 0]),
 }), {
   confirm: menuActions.confirm,
   deleteOrg: ca.organizations.deleteOrg,

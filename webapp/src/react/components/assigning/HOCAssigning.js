@@ -10,8 +10,8 @@ import getParentByClass from 'swipes-core-js/utils/getParentByClass';
 import Assigning from './Assigning';
 
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
-  users: state.get('users'),
+  myId: state.me.get('id'),
+  users: state.users,
 }), {
   tooltip: mainActions.tooltip,
   selectAssignees: goalActions.selectAssignees,

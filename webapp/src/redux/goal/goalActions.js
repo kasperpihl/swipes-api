@@ -8,10 +8,10 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   assignees = assignees || [];
 
   const state = getState();
-  let currentRecent = state.getIn(['cache', 'recentAssignees']) || [];
+  let currentRecent = state.cache.get('recentAssignees') || [];
   if (typeof currentRecent.size !== 'undefined') {
     currentRecent = currentRecent.toJS();
-    const disabledUsers = state.getIn(['me', 'organizations', 0, 'disabled_users']) || fromJS([]);
+    const disabledUsers = state.me.getIn(['organizations', 0, 'disabled_users']) || fromJS([]);
     currentRecent = currentRecent.filter(r => !disabledUsers.contains(r));
   }
 
@@ -55,7 +55,7 @@ export const selectAssignees = (options, assignees, callback) => (d, getState) =
   };
 
   const resultForUserId = (userId) => {
-    const user = state.getIn(['users', userId]);
+    const user = state.users.get(userId);
     return resultForUser(user);
   };
 

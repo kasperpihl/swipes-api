@@ -14,8 +14,8 @@ import PlanOverview from './PlanOverview';
 
 @navWrapper
 @connect((state, props) => ({
-  goals: state.get('goals'),
-  milestone: state.getIn(['milestones', props.milestoneId]),
+  goals: state.goals,
+  milestone: state.milestones.get(props.milestoneId),
 }), {
   contextMenu: mainActions.contextMenu,
   successGradient: mainActions.successGradient,

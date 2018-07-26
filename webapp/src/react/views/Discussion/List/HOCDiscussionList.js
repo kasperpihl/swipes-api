@@ -4,7 +4,7 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
 import { connect } from 'react-redux';
 
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }))
 export default class HOCDiscussionList extends PureComponent {
   render() {

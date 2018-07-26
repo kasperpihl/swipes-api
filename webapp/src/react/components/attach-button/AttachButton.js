@@ -13,7 +13,7 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 @navWrapper
 @connect(state => ({
-  myId: state.getIn(['me', 'id']),
+  myId: state.me.get('id'),
 }), {
   inputMenu: menuActions.input,
   chooseAttachmentType: menuActions.chooseAttachmentType,

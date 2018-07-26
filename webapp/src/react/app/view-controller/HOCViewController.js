@@ -18,7 +18,7 @@ const SPACING = 15;
 const OVERLAY_LEFT_MIN = 90;
 
 @connect(state => ({
-  navigation: state.get('navigation'),
+  navigation: state.navigation,
 }), {
   pop: navigationActions.pop,
   push: navigationActions.push,

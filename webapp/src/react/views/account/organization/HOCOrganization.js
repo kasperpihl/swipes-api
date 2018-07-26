@@ -12,8 +12,8 @@ import Organization from './Organization';
 @navWrapper
 @connect(state => ({
   users: cs.users.getAllButSofi(state),
-  me: state.get('me'),
-  organization: state.getIn(['me', 'organizations', 0]),
+  me: state.me,
+  organization: state.me.getIn(['organizations', 0]),
 }), {
   invite: ca.organizations.inviteUser,
   confirm: menuActions.confirm,

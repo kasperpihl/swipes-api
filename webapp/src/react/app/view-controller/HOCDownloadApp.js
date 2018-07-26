@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import './styles/download-app.scss'
 
 @connect((state) => ({
-  isElectron: state.getIn(['globals', 'isElectron'])
+  isElectron: state.globals.get('isElectron')
 })
 export default class extends PureComponent {
   constructor(props) {
