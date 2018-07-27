@@ -57,7 +57,7 @@ export default class DiscussionHeader extends PureComponent {
   onFollowClick = () => {
     const { request, myId, discussion } = this.props
 
-    if(discussion.get('followers').includes(myId)) {
+    if(discussion.get('followers').find(o => o.get('user_id') === myId)) {
       request('discussion.unfollow',{
         discussion_id: discussion.get('id'),
       })
@@ -69,7 +69,7 @@ export default class DiscussionHeader extends PureComponent {
   }
   render() {
     const { discussion, myId } = this.props;
-    const followers = discussion.get('followers');
+    const followers = discussion.get('followers').map(o => o.get('user_id'));
     const topic = discussion.get('topic');
     const privacy = discussion.get('privacy');
 

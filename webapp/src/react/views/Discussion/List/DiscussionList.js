@@ -12,7 +12,7 @@ export default class DiscussionList extends PureComponent {
   renderItems() {
     const { results } = this.props.pagination;
     return (results || fromJS([])).map((item, i) => (
-      <DiscussionListItem item={item.toJS()} key={i}/>
+      <DiscussionListItem item={item} key={i}/>
     )).toArray();
   }
   render() {

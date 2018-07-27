@@ -54,19 +54,31 @@ export default endpointCreate({
     .get(discussion_id)
     .update({
       last_comment_at: sent_at,
-    });
+      last_comment: message.slice(0, 100),
+      last_comment_by: user_id,
+    }, {
+      return_changes: true,
+    })
+
+  const followersQ = r.table('discussion_followers')
+                      .getAll(discussion_id, { index: 'discussion_id' })
+                      .pluck('user_id', 'read_at')
 
   // T_TODO would be nice if we can run some of those together
   const commentRes = await dbRunQuery(commentQ);
-  const comment = commentRes.changes[0].new_val;
   // T_TODO what exactly we want to return here
-  const follower = await dbRunQuery(followerQ);
-  const discussion = await dbRunQuery(discQ);
+  await dbRunQuery(followerQ);
+  const discussionRes = await dbRunQuery(discQ);
+
+  const followersRes = await dbRunQuery(followersQ);
+
+  const comment = commentRes.changes[0].new_val;
+  const discussion = discussionRes.changes[0].new_val;
+  discussion.followers = followersRes;
 
   // Create response data.
   res.locals.output = {
     comment,
-    follower,
-    discussion,
+    discussion: discussion,
   };
 });

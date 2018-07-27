@@ -56,11 +56,9 @@ export default endpointCreate({
   }
   q = q.slice(skip, skip + limit)
     .merge(obj => ({
-      subscription: r.table('discussion_followers')
-        .get(obj('id').add(`-${user_id}`)),
       followers: r.table('discussion_followers')
         .getAll(obj('id'), { index: 'discussion_id' })
-        .map(u => u('user_id'))
+        .pluck('user_id', 'read_at')
         .coerceTo('array'),
     }));
 

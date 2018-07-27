@@ -10,10 +10,10 @@ export default class HOCDiscussionList extends PureComponent {
   render() {
     const { activeItem, myId } = this.props;
     let type = 'following';
-    let filter = (d) => d.get('subscription');
+    let filter = (d) => d.get('followers').find(o => o.get('user_id') === myId);
     if(activeItem === 1) {
       type = 'all other';
-      filter = d => !d.get('subscription');
+      filter = d => !d.get('followers').find(o => o.get('user_id') === myId);
     }
     else if(activeItem === 2) {
       type = 'by me';

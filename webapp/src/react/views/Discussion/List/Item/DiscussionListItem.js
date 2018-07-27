@@ -56,34 +56,25 @@ export default class DiscussionListItem extends PureComponent {
     })
   }
   onThreeDots = (e) => {
-    const { contextMenu, confirm, myId } = this.props;
+    const { contextMenu, confirm, myId, item } = this.props;
     const options = this.getOptionsForE(e);
-    const {
-      id,
-      followers,
-      topic,
-      last_comment_at,
-      status,
-      created_by,
-      privacy,
-    } = this.props.item;
 
     const items = [];
 
-    if(created_by === myId) {
+    if(item.get('created_by') === myId) {
       items.push({
         id: 'archive',
         title: 'Delete discussion',
         subtitle: 'The discussion will no longer be vissible to anyone in the organization.',
         action: 'discussion.archive',
         options: {
-          discussion_id: id,
+          discussion_id: item.get('id'),
         },
         confirm: 'This cannot be undone. Are you sure?',
       })
     }
 
-    if(followers.includes(myId)) {
+    if(item.get('followers').find(o => o.get('user_id') === myId)) {
       items.push({
         id: 'unfollow',
         hideAfterClick: true,
@@ -91,7 +82,7 @@ export default class DiscussionListItem extends PureComponent {
         subtitle: 'You will no longer receive notifications about this discussion',
         action: 'discussion.unfollow',
         options: {
-          discussion_id: id,
+          discussion_id: item.get('id'),
         }
       })
     } else {
@@ -102,7 +93,7 @@ export default class DiscussionListItem extends PureComponent {
         subtitle: 'You will start receiving notifications about this discussion',
         action: 'discussion.follow',
         options: {
-          discussion_id: id,
+          discussion_id: item.get('id'),
         }
       })
     }
@@ -135,32 +126,27 @@ export default class DiscussionListItem extends PureComponent {
     });
   }
   render() {
-    const {
-      id,
-      followers,
-      topic,
-      last_comment_at,
-      status,
-      created_by
-    } = this.props.item;
-    // const subtitle = `${msgGen.users.getName(last_by, {
-    //   capitalize: true,
-    // })}: ${last_message}`;
-    const unread = status ? (!status.read_at || status.read_at < last_comment_at) : false;
+    const { item } = this.props;
+    
+    const subtitle = `${msgGen.users.getName(item.get('last_comment_by'), {
+      capitalize: true,
+    })}: ${item.get('last_comment')}`;
+    
+    const unread = false;
     return (
       <SwissProvider unread={unread}>
         <SW.Wrapper className="Button-hover" onClick={this.onClick}>
           <SW.LeftWrapper>
-            <SplitImage size={48} users={followers} />
+            <SplitImage size={48} users={item.get('followers').map(o => o.get('user_id')).toJS()} />
           </SW.LeftWrapper>
           <SW.MiddleWrapper>
             <SW.Topic>
-              {topic}
+              {item.get('topic')}
             </SW.Topic>
-            {/*<SW.Subtitle>{subtitle}</SW.Subtitle>*/}
+            <SW.Subtitle>{subtitle}</SW.Subtitle>
           </SW.MiddleWrapper>
           <SW.RightWrapper>
-            <SW.Time>{moment(last_comment_at).format('LT')}</SW.Time>
+            <SW.Time>{moment(item.get('last_comment_at')).format('LT')}</SW.Time>
             <SW.Button icon="ThreeDots" compact onClick={this.onThreeDots} />
           </SW.RightWrapper>
         </SW.Wrapper>

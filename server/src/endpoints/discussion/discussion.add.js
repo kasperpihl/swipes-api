@@ -38,11 +38,12 @@ export default endpointCreate({
   const discussionQuery = dbInsertQuery('discussions', {
     context,
     organization_id,
-    created_at,
     id: discussionId,
     topic: shorten(message, 60),
     created_by: user_id,
     last_comment_at: created_at,
+    last_comment: message,
+    last_comment_by: user_id,
     privacy: privacy || 'public',
     archived: false,
   });

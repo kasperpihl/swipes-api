@@ -22,11 +22,9 @@ export default endpointCreate({
   const q = r.table('discussions')
             .get(discussion_id)
             .merge(obj => ({
-              subscription: r.table('discussion_followers')
-                .get(obj('id').add(`-${user_id}`)),
               followers: r.table('discussion_followers')
                 .getAll(obj('id'), { index: 'discussion_id' })
-                .map(u => u('user_id'))
+                .pluck('user_id', 'read_at')
                 .coerceTo('array'),
             }));
 
