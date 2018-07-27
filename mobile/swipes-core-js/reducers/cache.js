@@ -4,10 +4,6 @@ import * as types from '../constants';
 const initialState = fromJS({});
 
 const updateKeyPath = (state, keyPath, data) => {
-  if(!state.getIn(keyPath)) {
-    return state;
-  }
-
   return state.mergeIn(keyPath, data);
 }
 
@@ -25,8 +21,8 @@ export default function cacheReducer (state = initialState, action) {
       return state.deleteIn(payload.path);
     }
     case 'update': {
-      payload.updates.forEach(({ type, data, id }) => {
-        state = updateKeyPath(state, [type, ...id.split('-')], data);
+      payload.updates.forEach(({ type, data }) => {
+        state = updateKeyPath(state, [type, ...data.id.split('-')], data);
       })
       return state;
     }

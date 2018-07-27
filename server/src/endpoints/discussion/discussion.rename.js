@@ -62,8 +62,8 @@ export default endpointCreate({
       updates: [
         {
           type: 'discussion',
-          id: discussion_id,
           data: {
+            id: discussion_id,
             topic,
           }
         }

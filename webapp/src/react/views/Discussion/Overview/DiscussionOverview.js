@@ -76,8 +76,9 @@ export default class DiscussionOverview extends PureComponent {
             url: 'comment.list',
             resPath: 'comments',
           }}
+          limit={10}
           cache={{
-            path: ['comments', discussion.get('id')],
+            path: ['comment', discussion.get('id')],
             orderBy: '-sent_at',
           }}
         >

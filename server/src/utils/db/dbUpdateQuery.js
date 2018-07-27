@@ -5,5 +5,6 @@ export default (table, id, obj, options = {}) => {
     options.return_changes = true;
   }
 
+  obj.updated_at = r.now();
   return r.table(table).get(id).update(obj, options);
 };

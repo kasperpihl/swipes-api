@@ -44,7 +44,7 @@ export default styleSheet('DiscussionListItem', {
     _truncateString: '',
   },
   Subtitle: {
-    _font: ['12px', '18px', 400],
+    _font: ['12px', '18px', 300],
     color: '$sw2',
     minWidth: 0,
     maxWidth: '400px',

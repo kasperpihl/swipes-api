@@ -104,6 +104,12 @@ export const request = (options, data) => (d, getState) => {
             type: command,
             payload: res,
           });
+          if(res.updates) {
+            d({
+              type: 'update',
+              payload: { updates: res.updates },
+            })
+          }
         } else {
           if (res.error === 'not_authed') {
             d({ type: types.RESET_STATE });

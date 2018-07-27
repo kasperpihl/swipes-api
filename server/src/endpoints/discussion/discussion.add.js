@@ -60,6 +60,7 @@ export default endpointCreate({
 
   // Inserting the comment object.
   const commentQuery = dbInsertQuery('comments', {
+    id: `${discussionId}-${idGenerate('C', 7)}`,
     message,
     discussion_id: discussionId,
     sent_at: created_at,
