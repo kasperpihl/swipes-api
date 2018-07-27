@@ -34,7 +34,7 @@ export default class DiscussionListItem extends PureComponent {
       id: 'DiscussionOverview',
       title: 'Discussion',
       props: {
-        discussionId: item.id,
+        discussionId: item.get('id'),
       },
     });
   }
