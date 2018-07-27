@@ -79,6 +79,6 @@ export default endpointCreate({
   // Create response data.
   res.locals.output = {
     comment,
-    discussion: discussion,
+    discussion,
   };
 });
