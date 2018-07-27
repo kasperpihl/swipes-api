@@ -1,20 +1,24 @@
 import React, { PureComponent } from 'react';
 import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { connect } from 'react-redux';
 import PaginationProvider from '@swipesapp/core/dist/components/pagination/PaginationProvider';
 
+@connect((state) => ({
+  myId: state.me.get('id'),
+}))
 export default class DiscussionsList extends PureComponent {
   render() {
-    const { activeItem, myId } = this.props;
+    const { activeItem, myId } = this.props;
     let type = 'following';
-    let filter = (d) => d.get('followers').find(o => o.get('user_id') === myId);
-    if(activeItem === 1) {
+    let filter = d => d.get('followers').find(o => o.get('user_id') === myId);
+    if (activeItem === 1) {
       type = 'all other';
       filter = d => !d.get('followers').find(o => o.get('user_id') === myId);
-    }
-    else if(activeItem === 2) {
+    } else if (activeItem === 2) {
       type = 'by me';
-      filter = d => d.get('created_by') === myId
+      filter = d => d.get('created_by') === myId;
     }
+
     return (
       <View>
         <PaginationProvider
@@ -27,15 +31,20 @@ export default class DiscussionsList extends PureComponent {
             path: 'discussion',
             filter,
             orderBy: '-last_comment_at',
-          }}>
-          {pagination => (
-            <FlatList
-              onEndReached={this.onEndReached}
-              onEndReachedThreshold={0.1}
-              data={pagination.results}
-              renderItem={({ item }) => <Text style={styles.item}>{item.key}</Text>}
-            />
-          )}
+          }}
+        >
+          {(p) => {
+            console.log(p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []);
+            return (
+              <FlatList
+                onEndReached={this.onEndReached}
+                onEndReachedThreshold={0.1}
+                data={p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []}
+                renderItem={({ item }) => { console.log(item); return <Text style={styles.item}>{item.title}</Text>; }}
+              />
+            );
+          }
+          }
         </PaginationProvider>
       </View>
     );

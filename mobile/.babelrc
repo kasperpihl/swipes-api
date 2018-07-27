@@ -1,7 +1,7 @@
 {
   "presets": ["react-native"],
   "plugins": [
-    "transform-decorators",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
     "transform-class-properties",
     ["module-resolver", {
       "cwd": "babelrc",
