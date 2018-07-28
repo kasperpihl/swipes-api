@@ -28,7 +28,7 @@ module.exports = {
       compatible: path.resolve(__dirname, 'src/react/browser-compatible'),
       components: path.resolve(__dirname, 'src/react/components'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),
-      'swipes-core-js': path.resolve(__dirname, 'src/../../mobile/swipes-core-js'),
+      'swipes-core-js': '@swipesapp/core/dist',
       icons: path.resolve(__dirname, 'src/react/icons'),
       actions: path.resolve(__dirname, 'src/actions'),
       Icon: path.resolve(__dirname, 'src/react/icons/Icon'),
