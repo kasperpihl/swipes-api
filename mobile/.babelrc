@@ -11,7 +11,7 @@
         "Icon": "./src/components/icons/Icon",
         "HOCHeader": "./src/components/header/HOCHeader",
         "RippleButton": "./src/components/ripple-button/RippleButton",
-        "swipes-core-js": "./swipes-core-js",
+        "swipes-core-js": "@swipesapp/core/dist",
         "components": "./src/components/",
         "globalStyles": "./src/utils/globalStyles",
         "styles": "./src/utils/styles",

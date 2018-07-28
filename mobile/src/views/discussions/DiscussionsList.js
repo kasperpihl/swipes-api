@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, FlatList, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
-import PaginationProvider from '@swipesapp/core/dist/components/pagination/PaginationProvider';
+import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 
 @connect((state) => ({
   myId: state.me.get('id'),
