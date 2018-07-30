@@ -234,9 +234,12 @@ export default endpointCreate({
   const services = result[1];
   const notifications = result[2];
   const onboarding = result[3];
-  const counters = {
-    discussions: result[4],
-    notifications: result[5],
+  const counter = {
+    discussion: result[4],
+    notification: result[5],
+    discussionTs: user.settings.discussion_counter_ts || null,
+    notificationTs: user.settings.notification_counter_ts || null,
+    myId: user_id,
   }
   let users = [];
   if (me.organizations.length > 0) {
@@ -274,7 +277,7 @@ export default endpointCreate({
     services,
     notifications,
     onboarding,
-    counters,
+    counter,
     notes,
     sofi: sofiCreate(),
     full_fetch,

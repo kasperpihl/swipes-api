@@ -1,27 +1,71 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
+import * as ca from 'swipes-core-js/actions';
 import DiscussionListItem from './Item/DiscussionListItem';
 import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
 
-import withPagination from 'swipes-core-js/components/pagination/withPagination';
+import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import SW from './DiscussionList.swiss';
 import ActionBar from './ActionBar';
 
-@withPagination
+@connect(state => ({
+  counter: state.counter.get('discussion'),
+  myId: state.me.get('id'),
+}), {
+  apiRequest: ca.api.request,
+})
 export default class DiscussionList extends PureComponent {
-  renderItems() {
-    const { results } = this.props.pagination;
+  onInitialLoad = () => {
+    const { activeItem, apiRequest, counter } = this.props;
+    console.log('HI', counter.toJS());
+    if(activeItem === 0 && counter) {
+      apiRequest('me.clearCounter', {
+        type: 'discussion',
+        cleared_at: counter.size ? counter.first().get('ts') : null,
+      });
+    }
+  }
+  renderItems(pagination) {
+    const { results } = pagination;
     return (results || fromJS([])).map((item, i) => (
       <DiscussionListItem item={item} key={i}/>
     )).toArray();
   }
   render() {
+    const { activeItem, myId } = this.props;
+    let type = 'following';
+    let filter = (d) => d.get('followers').find(o => o.get('user_id') === myId);
+    if(activeItem === 1) {
+      type = 'all other';
+      filter = d => !d.get('followers').find(o => o.get('user_id') === myId);
+    }
+    else if(activeItem === 2) {
+      type = 'by me';
+      filter = d => d.get('created_by') === myId
+    }
+
     return (
-      <SW.Wrapper>
-        {this.renderItems()}
-        <PaginationScrollToMore errorLabel="Couldn't get discussions." />
-        <ActionBar />
-      </SW.Wrapper>
+      <PaginationProvider
+        request={{
+          body: { type },
+          url: 'discussion.list',
+          resPath: 'discussions',
+        }}
+        onInitialLoad={this.onInitialLoad}
+        cache={{
+          path: 'discussion',
+          filter,
+          orderBy: '-last_comment_at',
+        }}>
+        {pagination => (
+          <SW.Wrapper>
+            {this.renderItems(pagination)}
+            <PaginationScrollToMore errorLabel="Couldn't get discussions." />
+            <ActionBar />
+          </SW.Wrapper>
+        )}
+      </PaginationProvider>
     );
   }
 }

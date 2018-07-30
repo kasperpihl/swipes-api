@@ -23,7 +23,7 @@ let config = {
   persistConfig: {
     version: 1,
     transforms: [immutableTransform()],
-    blacklist: ['main', 'cache', 'filters', 'autoComplete', 'globals'],
+    blacklist: ['counter', 'main', 'cache', 'filters', 'autoComplete', 'globals'],
     key: 'root',
     storage: localForage,
   }

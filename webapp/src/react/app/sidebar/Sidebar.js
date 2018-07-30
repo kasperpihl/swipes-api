@@ -12,6 +12,7 @@ import { SwissProvider } from 'swiss-react';
   me: state.me,
   navId: state.navigation.getIn(['primary', 'id']),
   notificationCounter: state.connection.get('notificationCounter'),
+  counter: state.counter,
 }), {
   navSet: navigationActions.set,
   contextMenu: mainActions.contextMenu,
@@ -96,14 +97,19 @@ export default class Sidebar extends PureComponent {
     })
   }
   renderItem(item) {
-    const { navId, notificationCounter } = this.props;
+    const { navId, notificationCounter, counter } = this.props;
     const { isOpenNotifications: isOpen } = this.state;
 
-    let counter = 0;
+    let count = 0;
     if (item.id === 'Onboarding') {
-      counter = this.getRemainingOnboarding();
+      count = this.getRemainingOnboarding();
     } else if (item.id === 'Notifications') {
-      counter = notificationCounter;
+      count = notificationCounter;
+    } else if(item.id === 'Discuss') {
+      count = counter && counter.get('discussion').size || 0
+    }
+    if(count > 9) {
+      count = '9+';
     }
 
     let active = null;
@@ -123,7 +129,7 @@ export default class Sidebar extends PureComponent {
         >
         <SW.Description className='description'>{this.getTitleForId(item.id)}</SW.Description>
           {item.id === 'AccountList' ? <HOCAssigning assignees={[item.personId]} size={30} /> : <SW.Icon icon={item.svg} className='icon'/>}
-          {counter ? <SW.NotificationCounter>{counter}</SW.NotificationCounter> : null}
+          {count ? <SW.NotificationCounter>{count}</SW.NotificationCounter> : null}
         </SW.Item>
       </SwissProvider>
     );

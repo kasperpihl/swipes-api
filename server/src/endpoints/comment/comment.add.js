@@ -5,7 +5,7 @@ import dbRunQuery from 'src/utils/db/dbRunQuery';
 import idGenerate from 'src/utils/idGenerate';
 import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
-
+import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 
 const expectedInput = {
   discussion_id: string.require(),

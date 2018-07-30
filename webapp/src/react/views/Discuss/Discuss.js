@@ -1,8 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import SW from './Discuss.swiss';
+import { connect } from 'react-redux';
 import { setupCachedCallback } from 'react-delegate';
 // import HOCPingList from 'src/react/views/Ping/List/HOCPingList';
-import HOCDiscussionList from 'src/react/views/Discussion/List/HOCDiscussionList';
+import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 
 import SWView from 'SWView';
 
@@ -24,7 +25,9 @@ const sections = [
   },
 ];
 
-
+@connect(state => ({
+  discussionCounter: state.counter.get('discussion'),
+}))
 export default class Discuss extends PureComponent {
   static sizes() {
     return [654];
@@ -59,6 +62,9 @@ export default class Discuss extends PureComponent {
     });
   }
   renderSidebar() {
+    const { discussionCounter } = this.props;
+    let count = discussionCounter.size;
+    if(count > 9) count = '9+';
     const { activeType, activeItem } = this.state;
     return sections.map(({ title, items }, typeI) => (
       <Fragment key={typeI}>
@@ -69,7 +75,9 @@ export default class Discuss extends PureComponent {
             onClick={this.onClickCached(`${typeI}-${itemI}`, typeI, itemI)}
             active={activeType === typeI && activeItem === itemI}>
             {item}
-            <SW.Notification>{itemI === 0 ? '1' : undefined}</SW.Notification>
+            <SW.Notification>
+              {itemI === 0 ? count : undefined}
+            </SW.Notification>
           </SW.Item>
         ))}
       </Fragment>
@@ -77,8 +85,8 @@ export default class Discuss extends PureComponent {
   }
   renderContent() {
     const { activeType, activeItem } = this.state;
-    // const Comp = activeType === 0 ? HOCPingList : HOCDiscussionList;
-    const Comp = HOCDiscussionList;
+    // const Comp = activeType === 0 ? HOCPingList : DiscussionList;
+    const Comp = DiscussionList;
     return (
       <Comp
         activeItem={activeItem}
