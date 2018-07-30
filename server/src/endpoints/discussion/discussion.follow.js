@@ -9,13 +9,10 @@ import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 const expectedInput = {
   discussion_id: string.require(),
 };
-const expectedOutput = {};
-
 
 export default endpointCreate({
   endpoint: '/discussion.follow',
   expectedInput,
-  expectedOutput,
 }, async (req, res) => {
   // Get inputs
   const { user_id } = res.locals;

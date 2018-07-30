@@ -12,12 +12,10 @@ const expectedInput = {
   message: string.require(),
   attachments: array.of(object),
 };
-const expectedOutput = {};
 
 export default endpointCreate({
   endpoint: '/comment.add',
   expectedInput,
-  expectedOutput,
 }, async (req, res, next) => {
   // Get inputs
   const {

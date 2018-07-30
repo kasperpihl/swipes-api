@@ -4,7 +4,6 @@ import endpointCreate from 'src/utils/endpointCreate';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
-import dbGetActiveUserIds from 'src/utils/db/dbGetActiveUserIds';
 import shorten from 'src/utils/shorten';
 
 const expectedInput = {

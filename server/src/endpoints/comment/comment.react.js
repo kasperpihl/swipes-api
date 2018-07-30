@@ -2,7 +2,6 @@ import r from 'rethinkdb';
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
-import dbGetActiveUserIds from 'src/utils/db/dbGetActiveUserIds';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 
@@ -23,10 +22,11 @@ export default endpointCreate({
   } = res.locals.input;
 
   const q = dbUpdateQuery('comments', comment_id, {
-              reactions: {
-                [user_id]: reaction ? reaction : r.literal()
-              }
-            });
+    reactions: {
+      [user_id]: reaction ? reaction : r.literal()
+    }
+  });
+
   const commentRes = await dbRunQuery(q);
 
   // Create response data.

@@ -9,12 +9,10 @@ const expectedInput = {
   discussion_id: string.min(1).require(),
   organization_id: string.min(1).require(),
 };
-const expectedOutput = {};
 
 export default endpointCreate({
   endpoint: '/discussion.archive',
   expectedInput,
-  expectedOutput,
 }, async (req, res, next) => {
   // Get inputs
   const { input } = res.locals;

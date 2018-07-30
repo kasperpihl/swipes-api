@@ -9,12 +9,10 @@ const expectedInput = {
   limit: number.gte(1).lte(100),
   organization_id: string.require(),
 };
-const expectedOutput = {};
 
 export default endpointCreate({
   endpoint: '/discussion.list',
   expectedInput,
-  expectedOutput,
 }, async (req, res, next) => {
   // Get inputs
   const { input, user_id } = res.locals;
