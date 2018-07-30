@@ -11,11 +11,10 @@
     "prestart": "npm run clean-and-copy",
     "start": "webpack-dev-server --progress",
     "prebuild": "npm run clean-and-copy",
-    "build": "webpack --progress",
-    "postinstall": "cd ../mobile/swipes-core-js; npm install"
+    "build": "webpack --progress"
   },
   "dependencies": {
-    "@swipesapp/core": "0.0.3",
+    "@swipesapp/core": "0.0.4",
     "babel-polyfill": "6.26.0",
     "blueimp-load-image": "^2.19.0",
     "deep-equal": "1.0.1",
