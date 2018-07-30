@@ -36,27 +36,22 @@ export default class DiscussionOverview extends PureComponent {
       </SW.FooterWrapper>
     )
   }
-  renderComments = (pagination) => {
-    if(pagination.results) {
-      return (
-        <SW.CommentWrapper>
-          {(pagination.results || fromJS([])).map((comment, i) => (
-            <CommentItem key={i} comment={comment} />
-          )).toArray()}
-          <PaginationScrollToMore errorLabel="Couldn't get discussions." />
-
-        </SW.CommentWrapper>
-      )
-    }
-    return (
-      <EmptyState
-        icon="ESNotifications"
-        title="IT’S STILL AND QUIET"
-        description={`Whenever someone comments on this discussion \n it will show up here.`}
-        page='Discussions'
-      />
-    )
-  }
+  renderComments = (pagination) => (
+    <SW.CommentWrapper>
+      {(pagination.results || fromJS([])).map((comment, i) => (
+        <CommentItem key={i} comment={comment} />
+      )).toArray()}
+      <PaginationScrollToMore errorLabel="Couldn't get discussions." />
+      {pagination.results && !pagination.results.size && (
+        <EmptyState
+          icon="ESNotifications"
+          title="IT’S STILL AND QUIET"
+          description={`Whenever someone comments on this discussion \n it will show up here.`}
+          page='Discussions'
+        />
+      )}
+    </SW.CommentWrapper>
+  )
   render() {
     const { discussion } = this.props;
     if(!discussion) {

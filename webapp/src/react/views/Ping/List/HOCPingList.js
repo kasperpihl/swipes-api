@@ -13,6 +13,10 @@ export default class HOCPingList extends PureComponent {
           url: 'ping.list',
           resPath: 'pings',
         }}
+        cache={{
+          path: 'ping',
+          orderby: '-sent_at'
+        }}
       >
         <PingList setActiveItem={this.props.setActiveItem}/>
       </PaginationProvider>
