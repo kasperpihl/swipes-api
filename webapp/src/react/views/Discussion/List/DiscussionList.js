@@ -18,11 +18,10 @@ import ActionBar from './ActionBar';
 export default class DiscussionList extends PureComponent {
   onInitialLoad = () => {
     const { activeItem, apiRequest, counter } = this.props;
-    console.log('HI', counter.toJS());
-    if(activeItem === 0 && counter) {
+    if(activeItem === 0 && counter && counter.size) {
       apiRequest('me.clearCounter', {
         type: 'discussion',
-        cleared_at: counter.size ? counter.first().get('ts') : null,
+        cleared_at: counter.first().get('ts'),
       });
     }
   }

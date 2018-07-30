@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import { fromJS } from 'immutable';
+import * as ca from 'swipes-core-js/actions';
+import { connect } from 'react-redux';
 import SW from './DiscussionOverview.swiss';
 import EmptyState from 'src/react/components/empty-state/EmptyState'
 import DiscussionHeader from '../Header/DiscussionHeader';
@@ -24,9 +26,27 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
     },
   },
 })
+@connect(state => ({
+  myId: state.me.get('id'),
+}), {
+  apiRequest: ca.api.request,
+})
 export default class DiscussionOverview extends PureComponent {
   static sizes() {
     return [654];
+  }
+  onInitialLoad = () => {
+    const { discussion, myId, apiRequest } = this.props;
+    const sub = discussion.get('followers').find(f => f.get('user_id') === myId);
+    if(sub &&
+      (!sub.get('read_at') || 
+        sub.get('read_at') < discussion.get('last_comment_at'))
+    ) {
+      apiRequest('discussion.markAsRead', {
+        read_at: discussion.get('last_comment_at'),
+        discussion_id: discussion.get('id'),
+      });
+    }
   }
   renderFooter() {
     const { discussion } = this.props;
@@ -72,6 +92,7 @@ export default class DiscussionOverview extends PureComponent {
             resPath: 'comments',
           }}
           limit={10}
+          onInitialLoad={this.onInitialLoad}
           cache={{
             path: ['comment', discussion.get('id')],
             orderBy: '-sent_at',
