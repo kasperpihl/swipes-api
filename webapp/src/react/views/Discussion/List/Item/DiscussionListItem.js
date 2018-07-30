@@ -126,13 +126,17 @@ export default class DiscussionListItem extends PureComponent {
     });
   }
   render() {
-    const { item } = this.props;
+    const { item, myId } = this.props;
     
     const subtitle = `${msgGen.users.getName(item.get('last_comment_by'), {
       capitalize: true,
     })}: ${item.get('last_comment')}`;
     
-    const unread = false;
+    let unread = false;
+    const subscriber = item.get('followers').find(f => f.get('user_id') === myId);
+    if(subscriber && (!subscriber.get('read_at') || subscriber.get('read_at') < item.get('last_comment_at'))) {
+      unread = true;
+    }
     return (
       <SwissProvider unread={unread}>
         <SW.Wrapper className="Button-hover" onClick={this.onClick}>
