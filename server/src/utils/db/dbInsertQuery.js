@@ -9,7 +9,6 @@ export default (table, obj, options = {}) => {
   }
   obj.forEach((o) => {
     o.updated_at = r.now();
-    o.created_at = r.now();
   });
 
   return r.table(table).insert(obj, options);

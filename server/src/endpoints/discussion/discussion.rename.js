@@ -11,15 +11,10 @@ const expectedInput = {
   discussion_id: string.require(),
   topic: string.min(1).require(),
 };
-const expectedOutput = {
-  discussion_id: string.require(),
-  topic: string.require(),
-};
 
 export default endpointCreate({
   endpoint: '/discussion.rename',
   expectedInput,
-  expectedOutput,
 }, async (req, res, next) => {
   // Get inputs
   const { organization_id } = res.locals;
@@ -31,25 +26,27 @@ export default endpointCreate({
     topic: shorten(topic, 60),
   });
 
-  await dbRunQuery(discussionQuery);
+  const discussionRes = await dbRunQuery(discussionQuery);
 
   // Create response data.
   res.locals.output = {
-    discussion_id,
-    topic,
+    updates: [
+      {
+        type: 'discussion',
+        data: discussionRes.changes[0].new_val,
+      }
+    ]
   };
 
   res.locals.backgroundInput = {
+    updates: res.locals.output.updates,
     organization_id,
-    discussion_id,
-    topic,
   };
 
 }).background(async (req, res) => {
 
   const {
-    discussion_id,
-    topic,
+    updates,
     organization_id
   } = res.locals.input;
 
@@ -59,15 +56,7 @@ export default endpointCreate({
     user_ids,
     type: 'update',
     data: {
-      updates: [
-        {
-          type: 'discussion',
-          data: {
-            id: discussion_id,
-            topic,
-          }
-        }
-      ]
+      updates,
     },
   })
 });

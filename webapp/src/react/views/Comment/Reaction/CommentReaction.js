@@ -72,7 +72,8 @@ export default class CommentReaction extends PureComponent {
     this.tooltipDelay = setTimeout(() => {
       const { tooltip, reactions } = this.props;
       const position = 'top';
-      const userIds = reactions.keys();
+      const userIds = reactions.keys().toArray();
+      console.log(userIds, reactions);
 
       const data = {
         component: AssigneeTooltip,

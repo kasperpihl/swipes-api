@@ -13,26 +13,27 @@ export default endpointCreate({
   endpoint: '/discussion.follow',
   expectedInput,
   expectedOutput,
-}, async (req, res, next) => {
+}, async (req, res) => {
   // Get inputs
-  const input = res.locals.input;
+  const { user_id } = res.locals;
+  const {
+    discussion_id,
+  } = res.locals.input;
 
   // Do queries and stuff here on the endpoint
   const followQ = dbInsertQuery('discussion_followers', {
-    id: `${input.discussion_id}-${res.locals.user_id}`,
+    id: `${discussion_id}-${user_id}`,
     user_id: res.locals.user_id,
-    discussion_id: input.discussion_id,
-    read_at: r.table('discussions').get(input.discussion_id)('last_comment_at'),
+    discussion_id: discussion_id,
+    read_at: r.table('discussions').get(discussion_id)('last_comment_at'),
   }, {
     conflict: 'update',
   });
   
-  const follower = await dbRunQuery(followQ);
+  await dbRunQuery(followQ);
   // Things to the background
   res.locals.backgroundInput = {};
 
   // Create response data.
-  res.locals.output = {
-    follower: follower.changes[0].new_val,
-  };
+  res.locals.output = {};
 });
