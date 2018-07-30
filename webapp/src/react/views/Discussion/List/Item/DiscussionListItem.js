@@ -9,7 +9,7 @@ import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SplitImage from 'src/react/components/split-image/SplitImage';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
-import moment from 'moment';
+import timeGetDayOrTime from 'src/utils/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
 
 @navWrapper
@@ -150,7 +150,7 @@ export default class DiscussionListItem extends PureComponent {
             <SW.Subtitle>{subtitle}</SW.Subtitle>
           </SW.MiddleWrapper>
           <SW.RightWrapper>
-            <SW.Time>{moment(item.get('last_comment_at')).format('LT')}</SW.Time>
+            <SW.Time>{timeGetDayOrTime(item.get('last_comment_at'))}</SW.Time>
             <SW.Button icon="ThreeDots" compact onClick={this.onThreeDots} />
           </SW.RightWrapper>
         </SW.Wrapper>
