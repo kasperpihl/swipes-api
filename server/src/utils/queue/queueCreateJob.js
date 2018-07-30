@@ -1,7 +1,3 @@
-import valjs, { object } from 'valjs';
-import valInput from 'src/middlewares/val/valInput';
-// import valResponseAndSend from 'src/middlewares/val/valResponseAndSend';
-
 export default (options, middleware) => {
   // FUNCTION MUST BE NAMED queueCreateJob. Dont change!
   return function queueCreateJob(router) {
@@ -21,15 +17,11 @@ export default (options, middleware) => {
         if(!req.body.eventName || req.body.eventName !== options.eventName) {
           return next();
         }
-        if(options.expectedInput) {
-          const error = valjs(req.body.payload, object.as(options.expectedInput));
-          if (error) {
-            return next(Error(`queueJob error ${options.eventName}: ${error}`).info({
-              expectedInput: object.as(options.expectedInput).toString()
-            }));
-          }
-        }
-        res.locals.input = req.body.payload;
+
+        res.locals = {
+          ...res.locals,
+          ...req.body.payload,
+        };
         await middleware(req, res, next);
 
         res.sendStatus(200);

@@ -3,7 +3,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import dbGetActiveUserIds from 'src/utils/db/dbGetActiveUserIds';
-import dbSendEvents from 'src/utils/db/dbSendEvents';
+import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 
 const expectedInput = {
@@ -38,25 +38,6 @@ export default endpointCreate({
       }
     ]
   };
-  res.locals.backgroundInput = {
-    updates: res.locals.output.updates,
-    organization_id: organization_id,
-  };
 }).background(async (req, res) => {
-  // K_TODO: Send event to followers
-
-  const {
-    updates,
-    organization_id,
-  } = res.locals.input;
-
-  const user_ids = await dbGetActiveUserIds(organization_id);
-  
-  dbSendEvents({
-    user_ids,
-    type: 'update',
-    data: {
-      updates,
-    },
-  })
+  dbSendUpdates(res.locals);
 });

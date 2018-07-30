@@ -3,6 +3,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
+import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 
 const expectedInput = {
   discussion_id: string.min(1).require(),
@@ -23,13 +24,15 @@ export default endpointCreate({
   } = input;
   const discussionQuery = dbUpdateQuery('discussions', discussion_id, {
     archived: true,
-    updated_at: r.now(),
   });
   const discussionResult = await dbRunQuery(discussionQuery);
 
   // Create response data.
   res.locals.output = {
-    discussion_id,
-    organization_id,
+    updates: [
+      { type: 'discussion', data: discussionResult.changes[0].new_val },
+    ],
   };
+}).background(async (req, res) => {
+  dbSendUpdates(res.locals);
 });

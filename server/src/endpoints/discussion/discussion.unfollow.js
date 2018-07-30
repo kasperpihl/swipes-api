@@ -2,25 +2,52 @@ import r from 'rethinkdb';
 import { object, array, string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
+import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 
 const expectedInput = {
   discussion_id: string.require(),
 };
-const expectedOutput = {};
 
 export default endpointCreate({
   endpoint: '/discussion.unfollow',
   expectedInput,
-  expectedOutput,
 }, async (req, res, next) => {
   // Get inputs
-  const input = res.locals.input;
+  const { user_id } = res.locals;
+  const {
+    discussion_id
+  } = res.locals.input;
 
-  const q = r.table('discussion_followers')
-              .get(`${input.discussion_id}-${res.locals.user_id}`)
+  const removeFollowerQ = r.table('discussion_followers')
+              .get(`${discussion_id}-${user_id}`)
               .delete();
 
-  await dbRunQuery(q);
+  const updateDiscussionQ = dbUpdateQuery('discussions', discussion_id)
+
+
+  await Promise.all([
+    dbRunQuery(removeFollowerQ),
+    dbRunQuery(updateDiscussionQ)
+  ])
+
+  const q = r.table('discussions')
+            .get(discussion_id)
+            .merge(obj => ({
+              followers: r.table('discussion_followers')
+                .getAll(obj('id'), { index: 'discussion_id' })
+                .pluck('user_id', 'read_at')
+                .coerceTo('array'),
+            }));
+
+  const discussion = await dbRunQuery(q);
+
   // Create response data.
-  res.locals.output = {};
+  res.locals.output = {
+    updates: [
+      { type: 'discussion', data: discussion },
+    ]
+  };
+}).background(async (req, res) => {
+  dbSendUpdates(res.locals);
 });

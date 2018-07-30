@@ -29,7 +29,12 @@ export default (options, middleware) => {
       middleware,
       async (req, res, next) => {
         if(addToQueue) {
-          await queueSendJob(options.endpoint, res.locals.backgroundInput || {});
+          await queueSendJob(options.endpoint, {
+            output: res.locals.output,
+            organization_id: res.locals.organization_id,
+            user_id: res.locals.user_id,
+            input: res.locals.backgroundInput,
+          });
         }
         next();
       },

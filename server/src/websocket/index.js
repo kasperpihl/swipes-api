@@ -24,8 +24,7 @@ const auth = (token) => {
 };
 
 export default (server) => {
-  const WebSocketServer = ws.Server;
-  const wss = new WebSocketServer({ server, path: '/ws' });
+  const wss = new ws.Server({ server, path: '/ws' });
 
   wss.on('connection', (socket, req) => {
     // you might use location.query.token to authenticate or share sessions

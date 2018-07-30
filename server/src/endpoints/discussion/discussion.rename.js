@@ -1,8 +1,9 @@
 import { string } from 'valjs';
+import r from 'rethinkdb';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
-import dbSendEvents from 'src/utils/db/dbSendEvents';
+import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import dbGetActiveUserIds from 'src/utils/db/dbGetActiveUserIds';
 import shorten from 'src/utils/shorten';
 
@@ -26,37 +27,29 @@ export default endpointCreate({
     topic: shorten(topic, 60),
   });
 
-  const discussionRes = await dbRunQuery(discussionQuery);
+  await dbRunQuery(discussionQuery);
+
+  const q = r.table('discussions')
+            .get(discussion_id)
+            .merge(obj => ({
+              followers: r.table('discussion_followers')
+                .getAll(obj('id'), { index: 'discussion_id' })
+                .pluck('user_id', 'read_at')
+                .coerceTo('array'),
+            }));
+
+  const discussion = await dbRunQuery(q);
 
   // Create response data.
   res.locals.output = {
     updates: [
       {
         type: 'discussion',
-        data: discussionRes.changes[0].new_val,
+        data: discussion,
       }
     ]
   };
 
-  res.locals.backgroundInput = {
-    updates: res.locals.output.updates,
-    organization_id,
-  };
-
 }).background(async (req, res) => {
-
-  const {
-    updates,
-    organization_id
-  } = res.locals.input;
-
-  const user_ids = await dbGetActiveUserIds(organization_id);
-
-  dbSendEvents({
-    user_ids,
-    type: 'update',
-    data: {
-      updates,
-    },
-  })
+  dbSendUpdates(res.locals);
 });

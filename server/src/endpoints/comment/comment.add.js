@@ -87,7 +87,6 @@ export default endpointCreate({
       { type: 'discussion', data: discussion },
     ],
   };
-  res.locals.backgroundInput = res.locals.output;
 }).background(async (req, res) => {
-  
+  dbSendUpdates(res.locals);
 });
