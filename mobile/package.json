@@ -12,7 +12,7 @@
     "build:android": "cd android && gradlew clean && gradlew assembleRelease"
   },
   "dependencies": {
-    "@swipesapp/core": "0.0.9",
+    "@swipesapp/core": "0.0.10",
     "babel-register": "^6.26.0",
     "get-ip": "^2.0.0",
     "immutable": "^3.8.2",
