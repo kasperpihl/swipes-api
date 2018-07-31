@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
 import { navForContext } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
+
 // import { fromJS } from 'immutable';
 import Notifications from './Notifications';
 

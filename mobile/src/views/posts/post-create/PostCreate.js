@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 // import PropTypes from 'prop-types';
-// import { map, list } from 'react-immutable-proptypes';
+
 import { setupDelegate } from 'react-delegate';
 import { miniIconForId } from 'swipes-core-js/classes/utils';
 import { colors } from 'globalStyles';

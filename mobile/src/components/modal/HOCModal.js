@@ -7,7 +7,7 @@ import * as a from 'actions';
 // import * s from 'selectors';
 // import * as cs from 'swipes-core-js/selectors';
 import { bindAll } from 'swipes-core-js/classes/utils';
-// import { map, list } from 'react-immutable-proptypes';
+
 // import { fromJS } from 'immutable';
 import { viewSize, statusbarHeight } from 'globalStyles';
 import * as gs from 'styles';

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { setupCachedCallback } from 'react-delegate';
-// import { map, list } from 'react-immutable-proptypes';
+
 // import { fromJS } from 'immutable';
 import ReactTextarea from 'react-textarea-autosize';
 import ContentEditable from 'components/content-editable/ContentEditable';
