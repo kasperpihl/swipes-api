@@ -45,9 +45,10 @@ export default class DiscussionOverview extends PureComponent {
       });
     }
   }
-  renderComments = (pagination) => (
+  renderComments(pagination) {
+    // T_TODO: Check for pagination.results and your comments should be there.
     return null;
-  )
+  }
   render() {
     const { discussion } = this.props;
     if(!discussion) {
