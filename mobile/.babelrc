@@ -5,7 +5,7 @@
     "transform-class-properties",
     ["module-resolver", {
       "cwd": "babelrc",
-      "root": ["./src"],
+      "root": ["."],
       "alias": {
         "WaitForUI": "./src/components/wait-for-ui/WaitForUI",
         "Icon": "./src/components/icons/Icon",

@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
+    "clean": "yarn cache clean && watchman watch-del-all && rm -fr $TMPDIR/metro*",
     "prebuild:android": "node increment_version_code.js",
     "build:android": "cd android && gradlew clean && gradlew assembleRelease"
   },
@@ -18,7 +19,6 @@
     "prop-types": "^15.5.10",
     "react": "^16.4",
     "react-delegate": "^1.0.3",
-    "react-immutable-proptypes": "^2.1.0",
     "react-native": "^0.56.0",
     "react-native-autogrow-textinput": "5.0.0",
     "react-native-browser": "0.6.2",
@@ -35,17 +35,17 @@
     "react-native-mime-types": "2.2.0",
     "react-native-mixpanel": "0.0.16",
     "react-native-navigation-experimental-compat": "1.1.0",
-    "react-native-onesignal": "3.2.4",
+    "react-native-onesignal": "^3.2.5",
     "react-native-parsed-text": "0.0.20",
-    "react-native-svg": "6.0.0",
-    "react-native-svg-icon": "0.7.0",
+    "react-native-svg": "^6.5.1",
+    "react-native-svg-icon": "^0.8.1",
     "react-redux": "5.0.6",
-    "redux": "^3.7.2",
+    "redux": "^4.0.0",
     "redux-logger": "3.0.6",
     "redux-persist": "^5.10.0",
     "redux-persist-transform-immutable": "^5.0.0",
-    "redux-thunk": "2.2.0",
-    "swiss-react": "^0.3.0"
+    "redux-thunk": "^2.3.0",
+    "swiss-react": "^0.3.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "7.0.0-beta.47",
