@@ -9,7 +9,7 @@ import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SplitImage from 'src/react/components/split-image/SplitImage';
 import TabMenu from 'src/react/context-menus/tab-menu/TabMenu';
-import timeGetDayOrTime from 'src/utils/timeGetDayOrTime';
+import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
 
 @navWrapper
