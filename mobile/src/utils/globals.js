@@ -1,14 +1,13 @@
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { fromJS } from 'immutable';
-import getIp from 'get-ip';
 
 export default function getGlobals() {
   let apiUrl = 'https://workspace.swipesapp.com';
   if (window.__DEV__ ||
     DeviceInfo.getBundleId() === 'com.swipesapp.iosstaging' ||
     DeviceInfo.getBundleId() === 'com.swipesapp.androidstaging') {
-    apiUrl = `http://${getIp()}:5000`;
+    apiUrl = `http://172.20.10.4:5000`;
   }
   const pre = `sw-${Platform.OS}`;
 
