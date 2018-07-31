@@ -35,6 +35,23 @@ const styles = StyleSheet.create({
   },
 });
 
+export default @connect((state) => {
+  const activeSliderIndex = state.navigation.get('sliderIndex');
+
+  return {
+    actionButtons: state.navigation.get('actionButtons'),
+    activeSliderIndex,
+    routes: state.navigation.getIn(['sliders', activeSliderIndex, 'routes']),
+    notificationCounter: state.connection.get('notificationCounter'),
+    discussionCounter: state.counter.get('discussion').size,
+    versionInfo: state.connection.get('versionInfo'),
+  };
+}, {
+  browser: a.links.browser,
+  sliderChange: a.navigation.sliderChange,
+  navPush: a.navigation.push,
+})
+
 class HOCTabNavigation extends PureComponent {
   constructor(props) {
     super(props);
@@ -44,7 +61,7 @@ class HOCTabNavigation extends PureComponent {
       rootRoutes: [
         {
           icon: 'Notification',
-          counter: props.counter,
+          counter: props.notificationCounter,
         },
         {
           icon: 'Milestones',
@@ -54,6 +71,7 @@ class HOCTabNavigation extends PureComponent {
         },
         {
           icon: 'Messages',
+          counter: props.discussionCounter,
         },
         {
           icon: 'NavSwap',
@@ -79,8 +97,12 @@ class HOCTabNavigation extends PureComponent {
 
     LayoutAnimation.easeInEaseOut();
 
-    if (nextProps.counter !== this.props.counter) {
-      rootRoutes[0].counter = nextProps.counter;
+    if (nextProps.notificationCounter !== this.props.notificationCounter) {
+      rootRoutes[0].counter = nextProps.notificationCounter;
+      this.setState({ rootRoutes });
+    }
+    if(nextProps.discussionCounter !== this.props.discussionCounter) {
+      rootRoutes[3].counter = nextProps.discussionCounter;
       this.setState({ rootRoutes });
     }
 
@@ -234,21 +256,3 @@ class HOCTabNavigation extends PureComponent {
     );
   }
 }
-
-function mapStateToProps(state) {
-  const activeSliderIndex = state.navigation.get('sliderIndex');
-
-  return {
-    actionButtons: state.navigation.get('actionButtons'),
-    activeSliderIndex,
-    routes: state.navigation.getIn(['sliders', activeSliderIndex, 'routes']),
-    counter: state.connection.get('notificationCounter'),
-    versionInfo: state.connection.get('versionInfo'),
-  };
-}
-
-export default connect(mapStateToProps, {
-  browser: a.links.browser,
-  sliderChange: a.navigation.sliderChange,
-  navPush: a.navigation.push,
-})(HOCTabNavigation);

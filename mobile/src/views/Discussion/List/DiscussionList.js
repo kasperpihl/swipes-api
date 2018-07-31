@@ -12,9 +12,10 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
 })
 export default class DiscussionList extends PureComponent {
   onInitialLoad = () => {
-    // T_TODO: change activeItem to a tabIndex.
-    const { activeItem, apiRequest, counter } = this.props;
-    if(activeItem === 0 && counter && counter.size) {
+    // T_TODO: tabIndex should probably not be static.
+    const { apiRequest, counter } = this.props;
+    const tabIndex = 0;
+    if(tabIndex === 0 && counter && counter.size) {
       apiRequest('me.clearCounter', {
         type: 'discussion',
         cleared_at: counter.first().get('ts'),
@@ -22,14 +23,15 @@ export default class DiscussionList extends PureComponent {
     }
   }
   render() {
-    // T_DODO: activeItem should be some tabIndex I guess :)
-    const { activeItem, myId } = this.props;
+    // T_DODO: tabIndex should probably not be static.
+    const { myId } = this.props;
+    const tabIndex = 0;
     let type = 'following';
     let filter = d => d.get('followers').find(o => o.get('user_id') === myId);
-    if (activeItem === 1) {
+    if (tabIndex === 1) {
       type = 'all other';
       filter = d => !d.get('followers').find(o => o.get('user_id') === myId);
-    } else if (activeItem === 2) {
+    } else if (tabIndex === 2) {
       type = 'by me';
       filter = d => d.get('created_by') === myId;
     }
