@@ -56,15 +56,16 @@ export default class DiscussionHeader extends PureComponent {
   onFollowClick = () => {
     const { request, myId, discussion } = this.props
 
+    this.setLoading('following');
+    let endpoint = 'discussion.follow';
     if(discussion.get('followers').find(o => o.get('user_id') === myId)) {
-      request('discussion.unfollow',{
-        discussion_id: discussion.get('id'),
-      })
-    } else {
-      request('discussion.follow', {
-        discussion_id: discussion.get('id'),
-      })
+      endpoint = 'discussion.unfollow';
     }
+    request(endpoint, {
+      discussion_id: discussion.get('id'),
+    }).then((res) => {
+      this.clearLoading('following');
+    })
   }
   render() {
     const { discussion, myId } = this.props;
@@ -90,6 +91,7 @@ export default class DiscussionHeader extends PureComponent {
             <Button
               title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
               onClick={this.onFollowClick}
+              {...this.getLoading('following')}
             />
             <InfoButton
               delegate={this}
