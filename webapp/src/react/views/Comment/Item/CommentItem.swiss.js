@@ -4,7 +4,7 @@ import TimeAgo from 'swipes-core-js/components/TimeAgo';
 export default styleSheet('CommentItem', {
   Container: {
     _flex: ['row', 'left', 'top'],
-    marginTop: '12px',
+    paddingTop: '12px',
     width: '100%',
   },
   Picture: {

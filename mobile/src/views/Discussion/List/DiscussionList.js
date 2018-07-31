@@ -54,7 +54,7 @@ export default class DiscussionList extends PureComponent {
             resPath: 'discussions',
           }}
           onInitialLoad={this.onInitialLoad}
-          limit={1}
+          limit={11}
           cache={{
             path: 'discussion',
             filter,
