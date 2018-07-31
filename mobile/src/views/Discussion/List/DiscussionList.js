@@ -1,13 +1,28 @@
 import React, { PureComponent } from 'react';
 import { View, FlatList, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
+import * as ca from 'swipes-core-js/actions';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 
-@connect((state) => ({
+@connect(state => ({
+  counter: state.counter.get('discussion'),
   myId: state.me.get('id'),
-}))
+}), {
+  apiRequest: ca.api.request,
+})
 export default class DiscussionList extends PureComponent {
+  onInitialLoad = () => {
+    // T_TODO: change activeItem to a tabIndex.
+    const { activeItem, apiRequest, counter } = this.props;
+    if(activeItem === 0 && counter && counter.size) {
+      apiRequest('me.clearCounter', {
+        type: 'discussion',
+        cleared_at: counter.first().get('ts'),
+      });
+    }
+  }
   render() {
+    // T_DODO: activeItem should be some tabIndex I guess :)
     const { activeItem, myId } = this.props;
     let type = 'following';
     let filter = d => d.get('followers').find(o => o.get('user_id') === myId);
@@ -27,6 +42,7 @@ export default class DiscussionList extends PureComponent {
             url: 'discussion.list',
             resPath: 'discussions',
           }}
+          onInitialLoad={this.onInitialLoad}
           cache={{
             path: 'discussion',
             filter,
