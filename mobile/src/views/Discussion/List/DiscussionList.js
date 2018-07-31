@@ -25,8 +25,9 @@ export default class DiscussionList extends PureComponent {
     }
   }
 
-  onEndReached() {
-    console.log('echo');
+  onEndReached(p) {
+    console.log('end of list');
+    console.log(p);
   }
 
   render() {
@@ -53,7 +54,7 @@ export default class DiscussionList extends PureComponent {
             resPath: 'discussions',
           }}
           onInitialLoad={this.onInitialLoad}
-          limit={20}
+          limit={1}
           cache={{
             path: 'discussion',
             filter,
@@ -64,8 +65,8 @@ export default class DiscussionList extends PureComponent {
             // console.log(p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []);
             return (
               <FlatList
-                onEndReached={this.onEndReached}
-                onEndReachedThreshold={0.1}
+                onEndReached={() => this.onEndReached(p)}
+                onEndReachedThreshold={0}
                 data={p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []}
                 renderItem={({ item }) => <SW.ListItem>{item.topic}</SW.ListItem>}
               />
@@ -77,10 +78,3 @@ export default class DiscussionList extends PureComponent {
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 22,
-//   },
-// });

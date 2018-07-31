@@ -5,7 +5,7 @@ export default styleSheet('DiscussionList', {
   ListItem: {
     _el: Text,
     padding: '10',
-    fontSize: '18',
+    fontSize: '12',
     height: '44',
   },
 });

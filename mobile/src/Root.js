@@ -12,12 +12,10 @@ import Analytics from 'utils/analytics';
 import codePush from 'react-native-code-push';
 import * as a from 'actions';
 
-setOption('defaultEl', View);
-
 import App from './App';
 import configureStore from './store/configureStore';
 
-
+setOption('defaultEl', View);
 
 const { store, persistor } = configureStore({
   globals: getGlobals(),
