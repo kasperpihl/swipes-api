@@ -62,6 +62,7 @@ export default class DiscussionList extends PureComponent {
           }}
         >
           {(p) => {
+            console.log(p)
             // console.log(p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []);
             return (
               <FlatList

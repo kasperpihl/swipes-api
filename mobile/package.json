@@ -14,6 +14,7 @@
   "dependencies": {
     "@swipesapp/core": "0.0.9",
     "babel-register": "^6.26.0",
+    "get-ip": "^2.0.0",
     "immutable": "^3.8.2",
     "moment": "^2.20.1",
     "prop-types": "^15.5.10",
