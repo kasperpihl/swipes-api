@@ -39,7 +39,6 @@ export default class DiscussionHeader extends PureComponent {
   onTitleClick = (e) => {
     const { inputMenu, discussion, request } = this.props;
 
-    this.setLoading('title', 'Renaming')
     inputMenu({
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'right',
@@ -82,6 +81,12 @@ export default class DiscussionHeader extends PureComponent {
             <SW.Subtitle>{privacy} - {followers.size} {followers.size === 1 ? 'follower' : 'followers'}</SW.Subtitle>
           </SW.TitleWrapper>
           <SW.Actions>
+            {!discussion.get('topic_set') && (
+              <Button
+                title="Set topic"
+                onClick={this.onTitleClick}
+              />
+            )}
             <Button
               title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
               onClick={this.onFollowClick}

@@ -23,6 +23,7 @@ export default endpointCreate({
     topic,
   } = res.locals.input;
   const discussionQuery = dbUpdateQuery('discussions', discussion_id, {
+    topic_set: true,
     topic: shorten(topic, 60),
   });
 

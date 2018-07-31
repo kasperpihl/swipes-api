@@ -41,6 +41,7 @@ export default endpointCreate({
     organization_id,
     id: discussionId,
     topic: shorten(message, 60),
+    topic_set: false,
     created_by: user_id,
     last_comment_at: created_at,
     last_comment: message,
