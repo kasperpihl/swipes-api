@@ -105,7 +105,7 @@ export default endpointCreate({
   // Fire push to all the receivers.
   await pushSend({
     orgId: organization_id,
-    users: discussion.followers.map(f => f.user_id),
+    users: discussion.followers.map(f => f.user_id).filter(f => f !== user_id),
     targetId: discussion.id,
     targetType: 'discussion',
   }, {

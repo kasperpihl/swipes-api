@@ -30,7 +30,7 @@ export default endpointCreate({
                 organization_id: input.organization_id,
                 discussion_id: input.discussion_id,
               })
-              .slice(skip, skip + limit)
+              .slice(skip, skip + limit + 1)
 
   let comments = await dbRunQuery(q);
   let has_more = false;
