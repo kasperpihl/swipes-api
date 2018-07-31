@@ -32,7 +32,17 @@ export default endpointCreate({
               })
               .slice(skip, skip + limit)
 
-  const comments = await dbRunQuery(q);
+  let comments = await dbRunQuery(q);
+  let has_more = false;
+  if(comments.length >= limit + 1) {
+    has_more = true;
+    comments = comments.slice(0, limit);
+  }
   // Create response data.
-  res.locals.output = { comments };
+  res.locals.output = {
+    comments,
+    skip,
+    limit,
+    has_more,
+  };
 });

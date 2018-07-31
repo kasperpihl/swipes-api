@@ -52,7 +52,7 @@ export default endpointCreate({
           .not())
         .and(disc('archived').eq(false)));
   }
-  q = q.slice(skip, skip + limit)
+  q = q.slice(skip, skip + limit + 1)
     .merge(obj => ({
       followers: r.table('discussion_followers')
         .getAll(obj('id'), { index: 'discussion_id' })
@@ -61,11 +61,17 @@ export default endpointCreate({
     }));
 
 
-  const discussions = await dbRunQuery(q);
+  let discussions = await dbRunQuery(q);
+  let has_more = false;
+  if(discussions.length >= limit + 1) {
+    has_more = true;
+    discussions = discussions.slice(0, limit);
+  }
 
   // Create response data.
   res.locals.output = {
     discussions,
+    has_more,
     type,
     skip,
     limit,
