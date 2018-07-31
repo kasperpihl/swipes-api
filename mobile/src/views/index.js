@@ -7,7 +7,7 @@ import MilestoneOverview from './milestones/HOCMilestoneOverview';
 import NoMilestoneOverview from './no-milestone-overview/HOCNoMilestoneOverview';
 import PreviewNote from './preview-note/HOCPreviewNote';
 import PostFeed from './posts/post-feed/HOCPostFeed';
-import DiscussionsList from './discussions/DiscussionsList';
+import DiscussionList from './Discussion/List/DiscussionList';
 import PostView from './posts/post-view/HOCPostView';
 import PostCreate from './posts/post-create/HOCPostCreate';
 import Notifications from './notifications/HOCNotifications';
@@ -31,5 +31,5 @@ export {
   Search,
   CreateNewItemModal,
   AttachmentView,
-  DiscussionsList,
+  DiscussionList,
 };

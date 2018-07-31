@@ -6,7 +6,7 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
 @connect((state) => ({
   myId: state.me.get('id'),
 }))
-export default class DiscussionsList extends PureComponent {
+export default class DiscussionList extends PureComponent {
   render() {
     const { activeItem, myId } = this.props;
     let type = 'following';

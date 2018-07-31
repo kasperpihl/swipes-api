@@ -36,7 +36,7 @@ const initialState = fromJS({
     {
       routes: [
         {
-          id: 'DiscussionsList',
+          id: 'DiscussionList',
           title: 'Discuss',
           icon: 'Messages',
         },
