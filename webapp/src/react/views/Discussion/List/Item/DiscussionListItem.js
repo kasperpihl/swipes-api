@@ -58,7 +58,7 @@ export default class DiscussionListItem extends PureComponent {
   onThreeDots = (e) => {
     const { contextMenu, confirm, myId, item } = this.props;
     const options = this.getOptionsForE(e);
-
+    e.stopPropagation();
     const items = [];
 
     if(item.get('created_by') === myId) {
