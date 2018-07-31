@@ -1,25 +1,28 @@
 import React, { PureComponent } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Provider } from 'react-redux';
-import { version } from '../package.json';
-import DeviceInfo from 'react-native-device-info';
+// import { version } from '../package.json';
+// import DeviceInfo from 'react-native-device-info';
 
-import { PersistGate } from 'redux-persist/es/integration/react'
-import App from './App';
-import configureStore from './store/configureStore';
+import { setOption } from 'swiss-react';
+import { PersistGate } from 'redux-persist/es/integration/react';
 import { init } from 'swipes-core-js';
 import getGlobals from 'utils/globals';
 import Analytics from 'utils/analytics';
 import codePush from 'react-native-code-push';
 import * as a from 'actions';
+import App from './App';
+import configureStore from './store/configureStore';
+
+setOption('defaultEl', View);
 
 const { store, persistor } = configureStore({
   globals: getGlobals(),
 });
-codePush.getUpdateMetadata().then(pkg => pkg && store.dispatch({ 
-  type: 'UPDATE_API_HEADERS', 
+codePush.getUpdateMetadata().then(pkg => pkg && store.dispatch({
+  type: 'UPDATE_API_HEADERS',
   payload: { [`sw-${Platform.OS}-code-push-version`]: pkg.label.substr(1) },
-}))
+}));
 
 window.analytics = new Analytics(store);
 

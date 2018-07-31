@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
+import SW from './DiscussionList.swiss';
 
 @connect(state => ({
   counter: state.counter.get('discussion'),
@@ -15,6 +16,7 @@ export default class DiscussionList extends PureComponent {
     // T_TODO: tabIndex should probably not be static.
     const { apiRequest, counter } = this.props;
     const tabIndex = 0;
+
     if(tabIndex === 0 && counter && counter.size) {
       apiRequest('me.clearCounter', {
         type: 'discussion',
@@ -22,12 +24,18 @@ export default class DiscussionList extends PureComponent {
       });
     }
   }
+
+  onEndReached() {
+    console.log('echo');
+  }
+
   render() {
     // T_DODO: tabIndex should probably not be static.
     const { myId } = this.props;
     const tabIndex = 0;
     let type = 'following';
     let filter = d => d.get('followers').find(o => o.get('user_id') === myId);
+
     if (tabIndex === 1) {
       type = 'all other';
       filter = d => !d.get('followers').find(o => o.get('user_id') === myId);
@@ -45,6 +53,7 @@ export default class DiscussionList extends PureComponent {
             resPath: 'discussions',
           }}
           onInitialLoad={this.onInitialLoad}
+          limit={20}
           cache={{
             path: 'discussion',
             filter,
@@ -52,13 +61,13 @@ export default class DiscussionList extends PureComponent {
           }}
         >
           {(p) => {
-            console.log(p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []);
+            // console.log(p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []);
             return (
               <FlatList
                 onEndReached={this.onEndReached}
                 onEndReachedThreshold={0.1}
                 data={p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []}
-                renderItem={({ item }) => { console.log(item); return <Text style={styles.item}>{item.title}</Text>; }}
+                renderItem={({ item }) => <SW.ListItem>{item.topic}</SW.ListItem>}
               />
             );
           }
@@ -69,14 +78,9 @@ export default class DiscussionList extends PureComponent {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 22,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingTop: 22,
+//   },
+// });

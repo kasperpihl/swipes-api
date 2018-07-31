@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Platform, StatusBar, Text } from 'react-native';
+import { View, StyleSheet, Platform, StatusBar } from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import codePush from 'react-native-code-push';
 import LinearGradient from 'react-native-linear-gradient';
@@ -90,6 +90,14 @@ class App extends PureComponent {
     }
     // console.log('Device info: ', device);
   }
+  onOpened() {
+    const { ready, sliderChange } = this.props;
+    if (ready) {
+      sliderChange(0);
+    } else {
+      this.forwardToIndex = 0;
+    }
+  }
   checkTagsAndUpdate() {
     OneSignal.getTags((receivedTags) => {
       const { myId, isHydrated } = this.props;
@@ -102,14 +110,6 @@ class App extends PureComponent {
         OneSignal.sendTag('swipesUserId', myId);
       }
     });
-  }
-  onOpened(openResult) {
-    const { isHydrated, token, ready, sliderChange } = this.props;
-    if (ready) {
-      sliderChange(0);
-    } else {
-      this.forwardToIndex = 0;
-    }
   }
   renderLoader() {
     const { isHydrated, hasConnected, status } = this.props;
