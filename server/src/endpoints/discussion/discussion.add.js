@@ -1,3 +1,4 @@
+import r from 'rethinkdb';
 import { object, array, string, any } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
@@ -5,6 +6,7 @@ import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import shorten from 'src/utils/shorten';
+import pushSend from 'src/utils/push/pushSend';
 
 const expectedInput = {
   message: string.require(),
@@ -87,4 +89,27 @@ export default endpointCreate({
   };
 }).background(async (req, res) => {
   dbSendUpdates(res.locals);
+
+  const { organization_id, user_id } = res.locals;
+  const { updates } = res.locals.output;
+
+  const discussion = updates[0].data;
+  const comment = updates[1].data;
+  // Fetch sender (to have the name)
+  const sender = await dbRunQuery(
+    r.table('users')
+      .get(user_id)
+      .pluck('profile')
+  );
+
+  // Fire push to all the receivers.
+  await pushSend({
+    orgId: organization_id,
+    users: discussion.followers.map(f => f.user_id),
+    targetId: discussion.id,
+    targetType: 'discussion',
+  }, {
+    content: comment.message,
+    heading: `${sender.profile.first_name} started a discussion`,
+  });
 });

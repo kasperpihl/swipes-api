@@ -6,6 +6,7 @@ import idGenerate from 'src/utils/idGenerate';
 import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+import pushSend from 'src/utils/push/pushSend';
 
 const expectedInput = {
   discussion_id: string.require(),
@@ -81,10 +82,32 @@ export default endpointCreate({
   // Create response data.
   res.locals.output = {
     updates: [
-      { type: 'comment', data: comment },
       { type: 'discussion', data: discussion },
+      { type: 'comment', data: comment },
     ],
   };
 }).background(async (req, res) => {
   dbSendUpdates(res.locals);
+  const { organization_id, user_id } = res.locals;
+  const { updates } = res.locals.output;
+
+  const discussion = updates[0].data;
+  const comment = updates[1].data;
+  // Fetch sender (to have the name)
+  const sender = await dbRunQuery(
+    r.table('users')
+      .get(user_id)
+      .pluck('profile')
+  );
+
+  // Fire push to all the receivers.
+  await pushSend({
+    orgId: organization_id,
+    users: discussion.followers.map(f => f.user_id),
+    targetId: discussion.id,
+    targetType: 'discussion',
+  }, {
+    content: `${sender.profile.first_name}: ${comment.message}`,
+    heading: discussion.topic,
+  });
 });
