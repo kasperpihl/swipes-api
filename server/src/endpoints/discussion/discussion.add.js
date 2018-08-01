@@ -46,7 +46,7 @@ export default endpointCreate({
     topic_set: false,
     created_by: user_id,
     last_comment_at: created_at,
-    last_comment: mentionsClean(message),
+    last_comment: mentionsClean(message).slice(0, 100),
     last_comment_by: user_id,
     privacy: privacy || 'public',
     archived: false,
@@ -112,7 +112,7 @@ export default endpointCreate({
     targetId: discussion.id,
     targetType: 'discussion',
   }, {
-    content: comment.message,
+    content: mentionsClean(comment.message),
     heading: `${sender.profile.first_name} started a discussion`,
   });
 });

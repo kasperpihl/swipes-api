@@ -6,6 +6,8 @@ import idGenerate from 'src/utils/idGenerate';
 import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+import mentionsGetArray from 'src/utils/mentions/mentionsGetArray';
+import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
 
 const expectedInput = {
@@ -61,7 +63,7 @@ export default endpointCreate({
   // And update the discussion to include latest comment.
   const updateDiscussionQ = dbUpdateQuery('discussions', discussion_id, {
     last_comment_at: comment.sent_at,
-    last_comment: message.slice(0, 100),
+    last_comment: mentionsClean(message).slice(0, 100),
     last_comment_by: user_id,
   });
 
@@ -100,14 +102,16 @@ export default endpointCreate({
       .pluck('profile')
   );
 
+  const followers = [...new Set(discussion.followers.map(f => f.user_id).concat(mentionsGetArray(comment.message)))];
+  
   // Fire push to all the receivers.
   await pushSend({
     orgId: organization_id,
-    users: discussion.followers.map(f => f.user_id).filter(f => f !== user_id),
+    users: followers.filter(f => f !== user_id),
     targetId: discussion.id,
     targetType: 'discussion',
   }, {
-    content: `${sender.profile.first_name}: ${comment.message}`,
+    content: `${sender.profile.first_name}: ${mentionsClean(comment.message)}`,
     heading: discussion.topic,
   });
 });
