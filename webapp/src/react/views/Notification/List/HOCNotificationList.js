@@ -57,7 +57,10 @@ export default class HOCNotificationList extends PureComponent {
     if(!n.get('seen_at')){
       this.onMark([n.get('id')]);
     }
-    openSecondary('secondary', nav);
+    if(nav) {
+      openSecondary('secondary', nav);
+    }
+    
     hide();
   }
   render() {

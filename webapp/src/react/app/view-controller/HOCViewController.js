@@ -62,7 +62,7 @@ export default class extends PureComponent {
   }
   componentWillUnmount() {
     this._unmounted = true;
-    window.removeEventListener('resize', this.bouncedUpdate);
+    window.removeEventListener('resize', this.bouncedUpdateAppWidth);
   }
   componentDidCatch(e) {
     console.log('hi', e);

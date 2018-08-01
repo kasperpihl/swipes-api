@@ -4,6 +4,7 @@ import EmptyState from 'src/react/components/empty-state/EmptyState';
 import SWView from 'SWView';
 import Button from 'src/react/components/button/Button';
 import NotificationItem from '../Item/NotificationItem';
+import NotificationItemNew from '../ItemNew/NotificationItemNew';
 import SW from './NotificationList.swiss';
 
 const DISTANCE = 50;
@@ -55,9 +56,11 @@ export default class NotificationList extends PureComponent {
       return this.renderEmptyState()
     }
 
-    return notifications.map((n, i) => (
-      (i < limit) ? <NotificationItem notification={n} key={i} delegate={delegate}/> : null
-    )).toArray();
+    return notifications.map((n, i) => {
+      const Comp = n.get('title') ? NotificationItemNew : NotificationItem;
+      return (i < limit) ? <Comp notification={n} key={i} delegate={delegate}/> : null
+      
+    }).toArray();
   }
   render() {
 
