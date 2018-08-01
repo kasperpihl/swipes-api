@@ -3,6 +3,12 @@ import { withDelegate } from 'react-delegate';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
+
+import chain from 'src/utils/chain';
+import parseNewLines from 'src/utils/parseNewLines';
+import parseLinks from 'src/utils/parseLinks';
+import parseMentions from 'src/utils/parseMentions';
+
 import CommentReaction from '../Reaction/CommentReaction';
 import SW from './CommentItem.swiss';
 
@@ -42,7 +48,7 @@ export default class CommentItem extends PureComponent {
             <SW.Timestamp prefix=" — " simple date={comment.get('sent_at')} />
           </SW.Name>
           <SW.Message>
-            {comment.get('message')}
+            {chain(parseNewLines, parseMentions, parseLinks)(comment.get('message'))}
           </SW.Message>
           {this.renderAttachments()}
         </SW.Content>
