@@ -5,6 +5,7 @@ import Organization from './account/organization/HOCOrganization';
 import Profile from './account/profile/HOCProfile';
 import Onboarding from './account/onboarding/HOCOnboarding';
 import Discuss from './Discuss/Discuss';
+import DiscussionComposer from './Discussion/Composer/DiscussionComposer';
 import DiscussionOverview from './Discussion/Overview/DiscussionOverview';
 import Browser from './browser/Browser';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
@@ -30,6 +31,7 @@ export {
   GoalOverview,
   Onboarding,
   Discuss,
+  DiscussionComposer,
   DiscussionOverview,
   NoMilestoneOverview,
   NotFound,
