@@ -6,6 +6,8 @@ import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import shorten from 'src/utils/shorten';
+import mentionsGetArray from 'src/utils/mentions/mentionsGetArray';
+import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
 
 const expectedInput = {
@@ -29,10 +31,10 @@ export default endpointCreate({
     attachments,
     privacy,
     organization_id,
-    followers,
+    followers = [],
   } = res.locals.input;
 
-  const uniqueFollowers = [...new Set(followers).add(user_id)];
+  const uniqueFollowers = [...new Set(followers.concat(mentionsGetArray(message))).add(user_id)];
   const discussionId = idGenerate('D', 15);
   const created_at = new Date();
 
@@ -40,11 +42,11 @@ export default endpointCreate({
     context,
     organization_id,
     id: discussionId,
-    topic: shorten(message, 60),
+    topic: shorten(mentionsClean(message), 60),
     topic_set: false,
     created_by: user_id,
     last_comment_at: created_at,
-    last_comment: message,
+    last_comment: mentionsClean(message),
     last_comment_by: user_id,
     privacy: privacy || 'public',
     archived: false,

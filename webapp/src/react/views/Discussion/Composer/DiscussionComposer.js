@@ -7,6 +7,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import * as linkActions from 'src/redux/link/linkActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
+import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 import {
   setupLoading,
   navForContext,
@@ -88,7 +89,7 @@ class DiscussionComposer extends PureComponent {
   onPostSubmit = () => {
     const { request, orgId, hideModal, navPop } = this.props;
     const { discussion } = this.state;
-    const message = this.editorState.getCurrentContent().getPlainText();
+    const message = editorStateToPlainMention(this.editorState);
 
     if(!message){
       return;
