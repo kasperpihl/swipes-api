@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, ScrollView, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Platform, UIManager, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { setupDelegate } from 'react-delegate';
 import Tabs from 'components/tabs/Tabs';
@@ -79,7 +79,6 @@ class HOCHeader extends PureComponent {
     this.setState({ page: nextProps.currentTab });
   }
   componentWillUpdate() {
-    // LayoutAnimation.easeInEaseOut();
   }
   onSelect(el) {
     this.onChangeTab(el.props.name);
@@ -103,12 +102,11 @@ class HOCHeader extends PureComponent {
     if (typeof subtitle === 'string') {
       return (
         <View style={{ alignSelf: 'stretch', height: 21 }} >
-          <Text selectable={true} style={styles.subtitle}>{subtitle}</Text>
+          <Text selectable style={styles.subtitle}>{subtitle}</Text>
         </View>
-      )
-    } 
-      return subtitle;
-    
+      );
+    }
+    return subtitle;
   }
   renderTabs() {
     const { tabs } = this.props;

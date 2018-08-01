@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
+import HOCHeader from 'HOCHeader';
 import SW from './DiscussionList.swiss';
 
 @connect(state => ({
@@ -12,10 +13,18 @@ import SW from './DiscussionList.swiss';
   apiRequest: ca.api.request,
 })
 export default class DiscussionList extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      tabs: ['Following', 'All other', 'By me'],
+      tabIndex: 0,
+      initLoading: true,
+    };
+  }
   onInitialLoad = () => {
-    // T_TODO: tabIndex should probably not be static.
+    const { tabIndex } = this.state;
     const { apiRequest, counter } = this.props;
-    const tabIndex = 0;
 
     if(tabIndex === 0 && counter && counter.size) {
       apiRequest('me.clearCounter', {
@@ -23,17 +32,59 @@ export default class DiscussionList extends PureComponent {
         cleared_at: counter.first().get('ts'),
       });
     }
+
+    this.setState({
+      initLoading: false,
+    })
+  }
+
+  onChangeTab(index) {
+    if (index !== this.state.tabIndex) {
+      this.setState({
+        tabIndex: index,
+        initLoading: true,
+      });
+    }
   }
 
   onEndReached(p) {
-    console.log('end of list');
-    console.log(p);
+    if (p.hasMore === true) {
+      p.loadMore();
+    }
   }
 
+  renderHeader() {
+    const { tabIndex, tabs } = this.state;
+
+    return (
+      <HOCHeader
+        title="Discuss"
+        delegate={this}
+        tabs={tabs}
+        currentTab={tabIndex}
+      >
+        {/* <RippleButton onPress={this.onNewPost}>
+          <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="Plus" width="24" height="24" fill={colors.deepBlue80} />
+          </View>
+        </RippleButton> */}
+      </HOCHeader>
+    );
+  }
+
+  renderListFooter = (loading) => {
+    if (!loading) return null;
+
+    return (
+      <SW.LoaderContainer>
+        <ActivityIndicator size="small" color="#007AFF" />
+      </SW.LoaderContainer>
+    );
+  };
+
   render() {
-    // T_DODO: tabIndex should probably not be static.
+    const { tabIndex, initLoading } = this.state;
     const { myId } = this.props;
-    const tabIndex = 0;
     let type = 'following';
     let filter = d => d.get('followers').find(o => o.get('user_id') === myId);
 
@@ -46,36 +97,46 @@ export default class DiscussionList extends PureComponent {
     }
 
     return (
-      <View>
-        <PaginationProvider
-          request={{
-            body: { type },
-            url: 'discussion.list',
-            resPath: 'discussions',
-          }}
-          onInitialLoad={this.onInitialLoad}
-          limit={11}
-          cache={{
-            path: 'discussion',
-            filter,
-            orderBy: '-last_comment_at',
-          }}
-        >
-          {(p) => {
-            console.log(p)
-            // console.log(p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []);
-            return (
-              <FlatList
-                onEndReached={() => this.onEndReached(p)}
-                onEndReachedThreshold={0}
-                data={p.results ? p.results.map(o => o.set('key', o.get('id'))).toList().toJS() : []}
-                renderItem={({ item }) => <SW.ListItem>{item.topic}</SW.ListItem>}
-              />
-            );
-          }
-          }
-        </PaginationProvider>
-      </View>
+      <SW.Wrapper>
+        {this.renderHeader()}
+        <SW.List>
+          <PaginationProvider
+            request={{
+              body: { type },
+              url: 'discussion.list',
+              resPath: 'discussions',
+            }}
+            limit={5}
+            onInitialLoad={this.onInitialLoad}
+            cache={{
+              path: 'discussion',
+              filter,
+              orderBy: '-last_comment_at',
+            }}
+          >
+            {(p) => {
+              if (initLoading) {
+                return (
+                  <SW.LoaderContainer>
+                    <ActivityIndicator size="large" color="#007AFF" />
+                  </SW.LoaderContainer>
+                )
+              }
+
+              return (
+                <FlatList
+                  data={p.results ? p.results.toList().toJS() : []}
+                  onEndReached={() => this.onEndReached(p)}
+                  onEndReachedThreshold={0}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => <SW.ListItem>{item.topic}</SW.ListItem>}
+                  ListFooterComponent={() => this.renderListFooter(p.loading)}
+                />
+              );
+            }}
+          </PaginationProvider>
+        </SW.List>
+      </SW.Wrapper>
     );
   }
 }
