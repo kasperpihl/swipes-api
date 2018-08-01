@@ -23,4 +23,11 @@ export default styleSheet('DiscussionList', {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  PlusButtonContainer: {
+    _el: View,
+    width: '44',
+    height: '44',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

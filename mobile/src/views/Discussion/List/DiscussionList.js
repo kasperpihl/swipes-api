@@ -1,10 +1,15 @@
 import React, { PureComponent } from 'react';
-import { View, FlatList, ActivityIndicator } from 'react-native';
+import { FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import HOCHeader from 'HOCHeader';
+import Icon from 'Icon';
+import RippleButton from 'RippleButton';
 import SW from './DiscussionList.swiss';
+import {
+  bindAll,
+} from 'swipes-core-js/classes/utils';
 
 @connect(state => ({
   counter: state.counter.get('discussion'),
@@ -21,6 +26,10 @@ export default class DiscussionList extends PureComponent {
       tabIndex: 0,
       initLoading: true,
     };
+
+    bindAll(this, [
+      'onNewPost'
+    ]);
   }
   onInitialLoad = () => {
     const { tabIndex } = this.state;
@@ -53,6 +62,15 @@ export default class DiscussionList extends PureComponent {
     }
   }
 
+  onNewPost() {
+    const { navPush } = this.props;
+
+    navPush({
+      id: 'PostCreate',
+      title: 'Create a Post',
+    })
+  }
+
   renderHeader() {
     const { tabIndex, tabs } = this.state;
 
@@ -63,11 +81,11 @@ export default class DiscussionList extends PureComponent {
         tabs={tabs}
         currentTab={tabIndex}
       >
-        {/* <RippleButton onPress={this.onNewPost}>
-          <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="Plus" width="24" height="24" fill={colors.deepBlue80} />
-          </View>
-        </RippleButton> */}
+        <RippleButton onPress={this.onNewPost}>
+          <SW.PlusButtonContainer>
+            <Icon icon="Plus" width="24" height="24" fill="#333D59" />
+          </SW.PlusButtonContainer>
+        </RippleButton>
       </HOCHeader>
     );
   }
