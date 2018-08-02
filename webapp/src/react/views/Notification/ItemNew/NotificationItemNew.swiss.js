@@ -39,13 +39,12 @@ export default styleSheet('NotificationItemNew', {
   },
 
   Message: {
-    overflow: 'hidden',
-    maxHeight: '31px',
+    lineHeight: 1,
   },
 
   Text: {
     _el: 'span',
-    _font: ['11px', '15px'],
+    _font: ['12px', '12px'],
     color: 'black',
   },
 

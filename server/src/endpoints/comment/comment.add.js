@@ -108,7 +108,7 @@ export default endpointCreate({
     id: `${m}-${comment.id}-mention`,
     user_id: m,
     organization_id,
-    title: `${sender.profile.first_name} mentioned you in a comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
+    title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
     done_by: [ user_id ],
     target: {
       id: comment.discussion_id,
