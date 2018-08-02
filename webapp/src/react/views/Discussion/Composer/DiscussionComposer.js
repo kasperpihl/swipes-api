@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { miniIconForId, attachmentIconForService } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import * as mainActions from 'src/redux/main/mainActions';
@@ -10,6 +9,8 @@ import * as ca from 'swipes-core-js/actions';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 import {
   setupLoading,
+  miniIconForId,
+  attachmentIconForService,
   navForContext,
   typeForId
 } from 'swipes-core-js/classes/utils';
@@ -106,13 +107,7 @@ class DiscussionComposer extends PureComponent {
       if(res.ok) {
         const { openSecondary, target } = this.props;
         hideModal();
-        openSecondary(target,{
-          id: 'DiscussionOverview',
-          title: 'Discussion',
-          props: {
-            discussionId: res.updates[0].data.id,
-          },
-        });
+        openSecondary(target, navForContext({ id: res.updates[0].data.id }));
         window.analytics.sendEvent('Discussion created', {
           'Tagged people': discussion.get('taggedUsers').size,
           'Context type': discussion.get('context') ? typeForId(discussion.getIn(['context', 'id'])) : 'No context',
