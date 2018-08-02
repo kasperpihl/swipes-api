@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Icon from 'Icon';
 
-export default styleSheet('PostAttachment', {
+export default styleSheet('Attachment', {
   ATag: {
     _el: 'a',
     background: '$sw4',

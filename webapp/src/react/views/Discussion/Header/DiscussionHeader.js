@@ -11,7 +11,7 @@ import * as ca from 'swipes-core-js/actions';
 import SW from './DiscussionHeader.swiss';
 import SplitImage from 'src/react/components/split-image/SplitImage';
 import Button from 'src/react/components/button/Button';
-import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
+import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 @navWrapper
@@ -97,7 +97,7 @@ export default class DiscussionHeader extends PureComponent {
         </SW.Wrapper>
         {discussion.get('context') && (
           <SW.ContextWrapper>
-            <PostAttachment
+            <Attachment
               icon={miniIconForId(discussion.getIn(['context', 'id']))}
               title={discussion.getIn(['context', 'title'])}
               onClick={this.onContextClick}

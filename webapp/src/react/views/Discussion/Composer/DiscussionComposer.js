@@ -18,7 +18,7 @@ import throttle from 'swipes-core-js/utils/throttle';
 import { fromJS } from 'immutable';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import AttachButton from 'src/react/components/attach-button/AttachButton';
-import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
+import Attachment from 'src/react/components/attachment/Attachment';
 import SW from './DiscussionComposer.swiss';
 
 @navWrapper
@@ -139,7 +139,7 @@ class DiscussionComposer extends PureComponent {
     return discussion.get('attachments').map((att, i) => {
       const icon = attachmentIconForService(att.getIn(['link', 'service']));
       return (
-        <PostAttachment
+        <Attachment
           title={att.get('title')}
           key={i}
           onClick={() => this.onAttachmentClick(i)}
@@ -156,7 +156,7 @@ class DiscussionComposer extends PureComponent {
     }
 
     return (
-      <PostAttachment
+      <Attachment
         icon={miniIconForId(discussion.getIn(['context', 'id']))}
         title={discussion.getIn(['context', 'title'])}
         onClick={this.onContextClick}

@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
-import SW from './PostAttachment.swiss';
+import SW from './Attachment.swiss';
 
-class PostAttachment extends PureComponent {
+export default
+class Attachment extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,5 +56,3 @@ class PostAttachment extends PureComponent {
     );
   }
 }
-
-export default PostAttachment;

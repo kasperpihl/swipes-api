@@ -9,7 +9,7 @@ import * as ca from 'swipes-core-js/actions';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import AttachButton from 'src/react/components/attach-button/AttachButton';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
-import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
+import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 import SW from './CommentComposer.swiss';
@@ -99,7 +99,7 @@ export default class CommentComposer extends PureComponent {
     return (
       <SW.Attachments>
         {attachments.map((att, i) => (
-          <PostAttachment
+          <Attachment
             title={att.get('title')}
             key={i}
             onClick={this.onAttachmentClickCached(i)}

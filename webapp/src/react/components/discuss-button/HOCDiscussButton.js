@@ -1,41 +1,14 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import * as cs from 'swipes-core-js/selectors';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import PostCreate from 'src/react/views/posts/post-create/HOCPostCreate';
 import SW from './DiscussButton.swiss';
-import DiscussionComposer from '../../views/Discussion/Composer/DiscussionComposer';
-
-const makeMapStateToProps = () => {
-  const getFilteredList = cs.posts.makeGetFilteredList();
-  const getRelatedList = cs.posts.makeGetRelatedList();
-  return (state, props) => {
-    let counter = getFilteredList(state, props).size;
-    if(props.relatedFilter) {
-      counter += getRelatedList(state, props).size;
-    }
-    return { counter };
-  }
-}
+import Button from 'src/react/components/button/Button';
 
 @navWrapper
-@connect(makeMapStateToProps)
 export default class extends PureComponent {
-  onFeed = () => {
-    const { openSecondary, context, relatedFilter } = this.props;
-    openSecondary({
-      id: 'PostFeed',
-      title: 'Discussions',
-      props: {
-        context,
-        relatedFilter,
-      },
-    });
-  }
   onDiscuss = () => {
     const { context, taggedUsers, openModal } = this.props;
     openModal({
-      component: DiscussionComposer,
+      component: 'DiscussionComposer',
       title: 'Create Post',
       position: 'center',
       props: {
@@ -46,11 +19,12 @@ export default class extends PureComponent {
   }
   render() {
     const { counter } = this.props;
+    return <Button onClick={this.onDiscuss} title="Discuss" />
     return (
       <SW.Wrapper className="discuss-wrapper">
         <SW.ButtonSide left onClick={this.onDiscuss}>Discuss</SW.ButtonSide>
         <SW.Seperator />
-        <SW.ButtonSide right onClick={this.onFeed}>{counter}</SW.ButtonSide>
+        <SW.ButtonSide right>{counter}</SW.ButtonSide>
       </SW.Wrapper>
     );
   }

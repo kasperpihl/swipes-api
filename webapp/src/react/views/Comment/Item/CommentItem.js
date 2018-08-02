@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { withDelegate } from 'react-delegate';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import HOCAssigning from 'components/assigning/HOCAssigning';
-import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
+import Attachment from 'src/react/components/attachment/Attachment';
 
 import chain from 'src/utils/chain';
 import parseNewLines from 'src/utils/parseNewLines';
@@ -23,7 +23,7 @@ export default class CommentItem extends PureComponent {
     return (
       <SW.Attachments>
         {comment.get('attachments').map((att, i) => (
-          <PostAttachment
+          <Attachment
             title={att.get('title')}
             key={i}
             onClick={onAttachmentClickCached(i, att)}

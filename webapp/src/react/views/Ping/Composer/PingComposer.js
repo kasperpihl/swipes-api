@@ -10,7 +10,7 @@ import withEmitter from 'src/react/components/emitter/withEmitter';
 import SW from './PingComposer.swiss';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
-import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
+import Attachment from 'src/react/components/attachment/Attachment';
 
 import Button from 'src/react/components/button/Button';
 import AttachButton from 'src/react/components/attach-button/AttachButton';
@@ -113,7 +113,7 @@ export default class extends PureComponent {
         {attachments.map((att, i) => {
           const icon = attachmentIconForService(att.getIn(['link', 'service']));
           return (
-            <PostAttachment
+            <Attachment
               title={att.get('title')}
               key={i}
               onClick={this.onAttachmentClickCached(i)}
