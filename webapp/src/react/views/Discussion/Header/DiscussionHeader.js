@@ -78,7 +78,11 @@ export default class DiscussionHeader extends PureComponent {
         <SW.Wrapper>
           <SplitImage size={48} users={followers.toJS()} />
           <SW.TitleWrapper>
-            <SW.Title onClick={this.onTitleClick}>{topic}</SW.Title>
+            <SW.Title 
+              hasTopic={!!discussion.get('topic_set')} 
+              onClick={this.onTitleClick}>
+              {topic}
+            </SW.Title>
             <SW.Subtitle>{privacy} - {followers.size} {followers.size === 1 ? 'follower' : 'followers'}</SW.Subtitle>
           </SW.TitleWrapper>
           <SW.Actions>

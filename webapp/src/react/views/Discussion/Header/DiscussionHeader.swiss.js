@@ -15,6 +15,11 @@ export default styleSheet('DiscussionHeader', {
   Title: {
     _font: ['16px', '22px', 400],
     cursor: 'text',
+    maxWidth: '300px',
+    _truncateString: '',
+    hasTopic: {
+      maxWidth: '396px',
+    }
   },
   Subtitle: {
     _font: ['12px', '18px', 400],

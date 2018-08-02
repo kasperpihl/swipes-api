@@ -5,6 +5,7 @@ export default styleSheet('DiscussionListItem', {
   Wrapper: {
     borderBottom: '1px solid $sw3',
     width: '100%',
+    padding: '3px 0',
     _flex: ['row', 'left', 'center'],
     '&:hover': {
       background: '$sw4',
@@ -40,14 +41,14 @@ export default styleSheet('DiscussionListItem', {
   Topic: {
     _font: ['15px', '24px', 400],
     minWidth: 0,
-    maxWidth: '370px',
+    maxWidth: '350px',
     _truncateString: '',
   },
   Subtitle: {
     _font: ['12px', '18px', 300],
     color: '$sw2',
     minWidth: 0,
-    maxWidth: '400px',
+    maxWidth: '380px',
     _truncateString: '',
   },
   Time: {
