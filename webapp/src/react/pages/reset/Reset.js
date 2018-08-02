@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
+import FloatingFormInput from 'src/react/views/account/organization/FloatingFormInput.js';
 import apiRequest from 'swipes-core-js/utils/apiRequest';
-import FloatingInput from 'src/react/browser-compatible/components/input/FloatingInput';
 import Icon from 'Icon';
-
-import './styles/reset.scss';
+import SW from './Reset.swiss';
+// import './styles/reset.scss';
 
 class Reset extends PureComponent {
   constructor(props) {
@@ -59,7 +59,7 @@ class Reset extends PureComponent {
       return undefined;
     }
     return (
-      <div className="loading">Loading</div>
+      <SW.Loading className="loading">Loading</SW.Loading>
     )
   }
   renderForm() {
@@ -68,26 +68,27 @@ class Reset extends PureComponent {
       return undefined;
     }
     return (
-      <div className="form">
-        <h6>Reset password Swipes Workspace</h6>
+      <SW.Form className="form">
+        <SW.FormTitle>Reset password Swipes Workspace</SW.FormTitle>
         {this.renderInputField()}
         {this.renderButton()}
-      </div>
+      </SW.Form>
     )
   }
   renderInputField() {
     const { newPass } = this.state;
 
     return (
-      <FloatingInput
+      <FloatingFormInput
+        comp="resetPassword"
         type="password"
-        placeholder="Your new password"
+        label="Your new password"
         delegate={this}
         value={newPass}
+        onChange={this.onChange}
         inputKey="password"
         props={{
           onKeyDown: this.onKeyDown,
-          autoFocus: true,
         }}
       />
     );
@@ -95,7 +96,7 @@ class Reset extends PureComponent {
   renderButton() {
 
     return (
-      <div className="button" ref="button" onClick={this.onReset}>
+      <SW.Button className="button" ref="button" onClick={this.onReset}>
         {
           this.isLoading('reset') ? (
             <Icon icon="loader" width="12" height="12" />
@@ -103,7 +104,7 @@ class Reset extends PureComponent {
             'Reset'
           )
         }
-      </div>
+      </SW.Button>
     )
   }
   renderSuccess() {
@@ -118,11 +119,11 @@ class Reset extends PureComponent {
 
   render() {
     return (
-      <div className="reset">
+      <SW.Wrapper className="reset">
         {this.renderLoading()}
         {this.renderForm()}
         {this.renderSuccess()}
-      </div>
+      </SW.Wrapper>
     )
   }
 }

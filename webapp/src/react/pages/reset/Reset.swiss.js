@@ -1,49 +1,55 @@
 import { styleSheet } from 'swiss-react';
 
+
 export default styleSheet('Reset', {
   Wrapper: {
     position: 'absolute',
     left: '50%',
     top: '50%',
-    width: '360px',
+    _size: ['70%', 'auto'],
     transform: 'translateY(-50%) translateX(-50%)',
+    maxWidth: '720px',
+
+    '@media $min600': {
+      minWidth: '560px',
+    }
   },
+
   Loading: {
     textAlign: 'center',
   },
+
+  Form: {
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'flex-start', 'flex-start'],
+  },
+
+  FormTitle: {
+    _el: 'h6',
+    _font: ['36px', '48px', '300'],
+    color: '$sw1',
+    paddingBottom: '36px',
+
+    '@media $max600': {
+      _font: ['18px', '24px', '300'],
+    },
+  },
+
   Button: {
-    marginTop: '10px',
-    height: '36px',
-  }
+    marginTop: '24px',
+    _size: ['auto', '36px'],
+    _font: ['12px', '36px', '500'],
+    color: 'white',
+    backgroundColor: '$blue',
+    borderRadius: '100px',
+    padding: '0 12px',
+    float: 'right',
+    cursor: 'pointer',
+    zIndex: '2',
+    alignSelf: 'flex-end',
+
+    '&:hover': {
+      backgroundColor: '$blue80',
+    },
+  },
 });
-
-
-.reset {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 360px;
-  transform: translateY(-50%) translateX(-50%);
-
-
-  .loading {
-    text-align: center;
-  }
-
-  .button {
-    margin-top: 10px;
-    @include size(auto, 36px);
-    @include font(12px, white, 36px, 500);
-    background-color: $blue-100;
-    border-radius: 100px;
-    padding: 0 12px;
-    float: right;
-    margin-top: 10px;
-    cursor: pointer;
-    z-index: 2;
-
-    &:hover {
-      background-color: $blue-80;
-    }
-  }
-}

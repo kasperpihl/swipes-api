@@ -48,11 +48,11 @@ class FloatingInput extends Component {
   }
 
   render() {
-    const { label, type, id, error, value } = this.props;
+    const { label, type, id, error, value, comp } = this.props;
     const { float, floatValue } = this.state;
 
     return (
-      <SwissProvider active={!!float} standBy={floatValue > 0}>
+      <SwissProvider active={!!float} standBy={floatValue > 0} comp={comp}>
         <SW.Wrapper>
           <SW.Input
             innerRef={c => this.input = c}
