@@ -7,6 +7,6 @@ export default styleSheet('DiscussionOverview', {
     borderTop: '1px solid $sw3',
   },
   CommentWrapper: {
-    
+    paddingBottom: '6px',
   },
 });

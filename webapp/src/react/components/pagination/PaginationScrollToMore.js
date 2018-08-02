@@ -6,7 +6,6 @@ import Button from 'src/react/components/button/Button';
 
 const SW = styleSheet('PaginationScrollToMore', {
   Wrapper: {
-    minHeight: '54px',
   },
   LoadWrapper: {
     padding: '12px',

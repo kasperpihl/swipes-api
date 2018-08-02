@@ -4,15 +4,10 @@ import './styles/view-controller.scss';
 
 export default class SWView extends Component {
   componentDidMount() {
-    const { initialScroll, scrollToBottom } = this.props;
+    const { initialScroll } = this.props;
 
     if (initialScroll > 0) {
-      this.refs.scroller.scrollTop = initialScroll;
-    }
-
-    if (scrollToBottom) {
-      const scroller = this.refs.scroller;
-      scroller.scrollTop = scroller.scrollHeight;
+      this.scroller.scrollTop = initialScroll;
     }
   }
   renderHeader() {
@@ -56,7 +51,15 @@ export default class SWView extends Component {
     return (
       <div className={className}>
         {this.renderHeader()}
-        <div className="sw-view__scroll" ref="scroller" onScroll={onScroll}>
+        <div 
+          className="sw-view__scroll" 
+          ref={(c) => {
+            this.scroller = c;
+            if(typeof this.props.scrollRef === 'function') {
+              this.props.scrollRef(c);
+            }
+          }} 
+          onScroll={onScroll}>
           <div className="sw-view__container">
             <div className="sw-view__content">
               {children}
