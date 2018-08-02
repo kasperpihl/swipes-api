@@ -17,11 +17,22 @@ export default styleSheet('FloatingInput', {
     '&:focus': {
       outline: 'none',
     },
+
+    'comp=resetPassword': {
+      minHeight: '32px',
+      color: '$sw1',
+      borderBottom: '1px solid $sw2',
+      transition: '.2s ease-in-out',
+
+      '&:focus': {
+        borderBottom: '1px solid $blue',
+      }
+    },
   },
 
   Label: {
     _el: 'label',
-    _font: ['15px', '21px', '400'],
+    _font: ['15px', '24px', '400'],
     color: '$sw2',
     padding: '0 6px',
     position: 'absolute',
@@ -46,6 +57,27 @@ export default styleSheet('FloatingInput', {
       transition: '.2s ease-in-out',
       top: '-10px',
       padding: '4px',
+    },
+
+    'comp=resetPassword': {
+      left: '0',
+      top: '4px',
+      padding: '0',
+
+      standBy: {
+        _font: ['11px'],
+        color: '$sw2',
+        backgroundColor: 'white',
+        top: '-12px',
+      },
+
+      active: {
+        _font: ['11px'],
+        color: '$blue',
+        backgroundColor: 'white',
+        transition: '.2s ease-in-out',
+        top: '-12px',
+      },
     },
   }
 })

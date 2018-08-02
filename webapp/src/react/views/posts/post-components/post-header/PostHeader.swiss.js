@@ -13,6 +13,7 @@ export default styleSheet('PostHeader', {
     width: '100%',
     _flex: ['column', 'left', 'top'],
     paddingLeft: '18px',
+    marginBottom: '40px',
   },
   NameWrapper: {
     _flex: ['row', 'between', 'top'],
@@ -31,6 +32,6 @@ export default styleSheet('PostHeader', {
         color: '$blue',
       }
     }
-    
+
   },
 });

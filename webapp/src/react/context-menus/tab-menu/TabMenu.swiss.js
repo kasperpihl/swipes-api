@@ -100,6 +100,7 @@ export default styleSheet('TabMenu', {
     padding: '0 16px 0 16px',
     transition: '.25s ease-in-out',
     zIndex: '12',
+    overflowX: 'hidden',
   },
 
   Button: {

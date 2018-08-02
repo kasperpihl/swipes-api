@@ -33,7 +33,7 @@ export default styleSheet('AutoCompleting', {
   Item: {
     padding: '0 18px',
     selected: {
-      backgroundColor: '$blue',
+      backgroundColor: '$sw3',
     },
   }
 });

@@ -60,7 +60,7 @@ export default class HOCNotificationList extends PureComponent {
     if(nav) {
       openSecondary('secondary', nav);
     }
-    
+
     hide();
   }
   render() {
