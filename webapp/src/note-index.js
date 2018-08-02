@@ -7,6 +7,8 @@ import ExternalNoteView from './react/external-note-view/ExternalNoteView';
 import './react/global-styles/reset.scss';
 import './react/global-styles/app.scss';
 
+import 'src/swiss';
+
 const regeneratorRuntime = require('babel-runtime/regenerator'); // eslint-disable-line
 if (!regeneratorRuntime.default) {
   regeneratorRuntime.default = regeneratorRuntime;
