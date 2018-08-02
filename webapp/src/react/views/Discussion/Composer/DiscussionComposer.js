@@ -87,7 +87,7 @@ class DiscussionComposer extends PureComponent {
     }
   }
   onPostSubmit = () => {
-    const { request, orgId, hideModal, navPop } = this.props;
+    const { request, orgId, hideModal } = this.props;
     const { discussion } = this.state;
     const message = editorStateToPlainMention(this.editorState);
 
@@ -104,12 +104,14 @@ class DiscussionComposer extends PureComponent {
       attachments: this.state.discussion.toJS().attachments,
     }).then(res => {
       if(res.ok) {
-        this.clearLoading('discussion', 'Posted', 1500, () => {
-          if(hideModal) {
-            hideModal();
-          } else {
-            navPop();
-          }
+        const { openSecondary, target } = this.props;
+        hideModal();
+        openSecondary(target,{
+          id: 'DiscussionOverview',
+          title: 'Discussion',
+          props: {
+            discussionId: res.updates[0].data.id,
+          },
         });
         window.analytics.sendEvent('Discussion created', {
           'Tagged people': discussion.get('taggedUsers').size,
