@@ -107,7 +107,7 @@ class DiscussionComposer extends PureComponent {
       if(res.ok) {
         const { openSecondary, target } = this.props;
         hideModal();
-        openSecondary(target, navForContext({ id: res.updates[0].data.id }));
+        openSecondary(target, navForContext(fromJS({ id: res.updates[0].data.id })));
         window.analytics.sendEvent('Discussion created', {
           'Tagged people': discussion.get('taggedUsers').size,
           'Context type': discussion.get('context') ? typeForId(discussion.getIn(['context', 'id'])) : 'No context',

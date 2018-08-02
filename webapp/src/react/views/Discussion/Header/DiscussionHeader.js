@@ -1,19 +1,25 @@
 import React, { PureComponent, Fragment } from 'react';
 import {
   setupLoading,
+  miniIconForId,
+  navForContext,
 } from 'swipes-core-js/classes/utils';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 import SW from './DiscussionHeader.swiss';
 import SplitImage from 'src/react/components/split-image/SplitImage';
 import Button from 'src/react/components/button/Button';
 import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
+@navWrapper
 @connect(state => ({
   myId: state.me.get('id'),
 }), {
   inputMenu: menuActions.input,
+  openSecondary: navigationActions.openSecondary,
   request: ca.api.request,
 })
 export default class DiscussionHeader extends PureComponent {
@@ -38,6 +44,10 @@ export default class DiscussionHeader extends PureComponent {
         })
       }
     })
+  }
+  onContextClick = () => {
+    const { openSecondary, discussion, target } = this.props;
+    openSecondary(target, navForContext(discussion.get('context')));
   }
   onFollowClick = () => {
     const { request, myId, discussion } = this.props
@@ -85,12 +95,17 @@ export default class DiscussionHeader extends PureComponent {
             />
           </SW.Actions>
         </SW.Wrapper>
-        <SW.ContextWrapper>
-          <PostAttachment
-            title="Design note"
-            icon="Note"
-          />
-        </SW.ContextWrapper>
+        {discussion.get('context') && (
+          <SW.ContextWrapper>
+            <PostAttachment
+              icon={miniIconForId(discussion.getIn(['context', 'id']))}
+              title={discussion.getIn(['context', 'title'])}
+              onClick={this.onContextClick}
+              isContext
+            />
+          </SW.ContextWrapper>
+        )}
+        
       </Fragment>
     );
   }
