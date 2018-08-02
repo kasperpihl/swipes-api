@@ -34,7 +34,7 @@ export default class extends PureComponent {
     super(props);
     const { savedState } = props;
     const initialScroll = (savedState && savedState.get('scrollTop')) || 0;
-    const initialLimit = (savedState && savedState.get('limit')) || 15;
+    const initialLimit = (savedState && savedState.get('limit')) || 60;
     this.state = {
       limit: initialLimit,
       initialScroll,
