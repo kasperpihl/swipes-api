@@ -32,7 +32,6 @@ export default class DiscussionOverview extends PureComponent {
       if(scrollPos > 0) {
         this.shouldScrollToBottom = false;
         const first = props.pagination.results.first();
-        console.log(first.get('message'));
         if(first && first.get('id') !== this.oldestElementId) {
           this.oldestElementId = props.pagination.results.getIn([0, 'id']);
           this.lastHeight = scrollHeight;
