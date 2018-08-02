@@ -102,7 +102,8 @@ export default endpointCreate({
       .pluck('profile')
   );
 
-  const followers = [...new Set(discussion.followers.map(f => f.user_id).concat(mentionsGetArray(comment.message)))];
+  const mentions = mentionsGetArray(comment.message);
+  const followers = [...new Set(discussion.followers.map(f => f.user_id).concat(mentions))];
   
   // Fire push to all the receivers.
   await pushSend({

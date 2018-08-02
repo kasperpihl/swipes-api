@@ -12,7 +12,6 @@ export default async (notificationIds) => {
   });
 
   const res = await dbRunQuery(q);
-  console.log('hi there', res);
 
   dbSendEvents(res.changes.map(({ old_val }) => ({
     user_ids: [ old_val.user_id ],

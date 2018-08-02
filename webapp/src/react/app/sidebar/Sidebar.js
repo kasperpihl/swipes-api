@@ -103,7 +103,7 @@ export default class Sidebar extends PureComponent {
     let count = 0;
     if (item.id === 'Onboarding') {
       count = this.getRemainingOnboarding();
-    } else if (item.id === 'Notifications') {
+    } else if (item.id === 'NotificationList') {
       count = notificationCounter;
     } else if(item.id === 'Discuss') {
       count = counter && counter.get('discussion').size || 0

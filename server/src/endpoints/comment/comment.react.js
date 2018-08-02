@@ -51,25 +51,23 @@ export default endpointCreate({
   const reactionists = Object.keys(comment.reactions);
 
   if(!reactionists.length) {
-    dbClearNotifications(`${comment.sent_by}-${comment.id}-reaction`);
-  } else {
-    const mentionString = mentionsMultiString(reactionists, {
-      number: 2,
-      preferId: user_id,
-    });
-
-    dbSendNotifications({
-      id: `${comment.sent_by}-${comment.id}-reaction`,
-      user_id: comment.sent_by,
-      organization_id,
-      title: `${mentionString} loved your comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
-      done_by: [user_id].concat(reactionists.filter(u => u !== user_id)),
-      target: {
-        id: comment.discussion_id,
-        item_id: comment.id,
-      },
-    });
+    return dbClearNotifications(`${comment.sent_by}-${comment.id}-reaction`);
   }
 
-  
+  const mentionString = mentionsMultiString(reactionists, {
+    number: 2,
+    preferId: user_id,
+  });
+
+  dbSendNotifications({
+    id: `${comment.sent_by}-${comment.id}-reaction`,
+    user_id: comment.sent_by,
+    organization_id,
+    title: `${mentionString} loved your comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
+    done_by: [user_id].concat(reactionists.filter(u => u !== user_id)),
+    target: {
+      id: comment.discussion_id,
+      item_id: comment.id,
+    },
+  });
 });

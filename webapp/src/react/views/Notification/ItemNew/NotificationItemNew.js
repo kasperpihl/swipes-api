@@ -5,10 +5,16 @@ import SplitImage from 'src/react/components/split-image/SplitImage';
 import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import SW from './NotificationItemNew.swiss';
 
+const parseUserIds = message => (dispatch, getState) => {
+  return message.replace(/<!([A-Z0-9]*)>/gi, (full, uId) => getState().users.getIn([uId, 'profile', 'first_name']));
+};
+ 
 export default
 @connect(state => ({
   myId: state.me.get('id'),
-}))
+}), {
+  parseUserIds,
+})
 class NotificationItem extends PureComponent {
   constructor(props) {
     super(props)
@@ -22,9 +28,9 @@ class NotificationItem extends PureComponent {
     return <SplitImage size={48} users={users && users.toJS() || [myId]} />
   }
   render() {
-    const { notification } = this.props;
+    const { notification, parseUserIds } = this.props;
     const timestamp = timeAgo(notification.get('created_at'), true)
-    const text = notification.get('title');
+    const text = parseUserIds(notification.get('title'));
 
     return (
       <SW.Wrapper unread={!!notification.get('seen_at')} onClick={this.onNotificationOpenCached(notification)}>
