@@ -7,7 +7,6 @@ import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import SW from './DiscussionHeader.swiss';
 import SplitImage from 'src/react/components/split-image/SplitImage';
-import InfoButton from 'src/react/components/info-button/InfoButton';
 import Button from 'src/react/components/button/Button';
 import PostAttachment from 'src/react/views/posts/post-components/post-attachment/PostAttachment';
 
@@ -22,19 +21,6 @@ export default class DiscussionHeader extends PureComponent {
     super(props);
 
     setupLoading(this);
-  }
-  getInfoTabProps() {
-    return {
-      actions: [
-        { title: 'Load a way', icon: 'Download' },
-        { title: 'Save as a way', icon: 'Save' },
-        { title: 'Delete goal', icon: 'Delete', danger: true },
-      ],
-      about: {
-        title: 'What is a goal',
-        text: 'A Goal is where work happens. Something needs to be done or delivered. Goals can be broken down into steps to show the next action.\n\nAll important links, documents, and notes can be attached to the goal so everyone is on the same page. You can discuss a goal or post an update via "Discuss".',
-      },
-    };
   }
   onTitleClick = (e) => {
     const { inputMenu, discussion, request } = this.props;
@@ -96,9 +82,6 @@ export default class DiscussionHeader extends PureComponent {
               title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
               onClick={this.onFollowClick}
               {...this.getLoading('following')}
-            />
-            <InfoButton
-              delegate={this}
             />
           </SW.Actions>
         </SW.Wrapper>

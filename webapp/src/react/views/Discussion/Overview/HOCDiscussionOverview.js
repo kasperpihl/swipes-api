@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
+import Loader from 'src/react/components/loaders/Loader';
 import DiscussionOverview from './DiscussionOverview';
 
 export default 
@@ -44,9 +45,9 @@ class HOCDiscussionOverview extends PureComponent {
     }
   }
   render() {
-    const { discussion } = this.props;
-    if(!discussion) {
-      return <div>not found yet</div>
+    const { requestReady, requestError, discussion } = this.props;
+    if(!requestReady) {
+      return <Loader center size={54} text="Loading" />
     }
 
     return (
@@ -58,7 +59,7 @@ class HOCDiscussionOverview extends PureComponent {
           url: 'comment.list',
           resPath: 'comments',
         }}
-        limit={3}
+        limit={40}
         onInitialLoad={this.onInitialLoad}
         cache={{
           path: ['comment', discussion.get('id')],
