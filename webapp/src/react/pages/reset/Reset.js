@@ -69,7 +69,7 @@ class Reset extends PureComponent {
     }
     return (
       <SW.Form className="form">
-        <SW.FormTitle>Reset password Swipes Workspace</SW.FormTitle>
+        <SW.FormTitle>Reset your password </SW.FormTitle>
         {this.renderInputField()}
         {this.renderButton()}
       </SW.Form>
