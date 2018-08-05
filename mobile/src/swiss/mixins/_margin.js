@@ -1,6 +1,6 @@
 import { addMixin } from 'swiss-react';
 
-addMixin('margin', function margin(...args) {
+addMixin('margin', function margin(props, ...args) {
   const amountOfArguments = args.length;
 
   if (!amountOfArguments) {

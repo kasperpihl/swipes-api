@@ -1,6 +1,6 @@
 import { addMixin } from 'swiss-react';
 
-addMixin('flex', function flex(direction, directionHorizontal, directionVertical) {
+addMixin('flex', function flex(props, direction, directionHorizontal, directionVertical) {
   let flexContainer = {};
 
   if (direction === 'center') {

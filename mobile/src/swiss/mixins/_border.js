@@ -1,6 +1,6 @@
 import { addMixin } from 'swiss-react';
 
-addMixin('border', function border(size, color, side) {
+addMixin('border', function border(props, size, color, side) {
   if (side) {
     if (typeof side === 'string') {
       const uppercaseSide = side.charAt(0).toUpperCase() + side.slice(1);

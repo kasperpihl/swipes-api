@@ -6,10 +6,8 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
 import HOCHeader from 'HOCHeader';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
+import DiscussionListItem from './Item/DiscussionListItem';
 import SW from './DiscussionList.swiss';
-import {
-  bindAll,
-} from 'swipes-core-js/classes/utils';
 
 @connect(state => ({
   counter: state.counter.get('discussion'),
@@ -27,9 +25,6 @@ export default class DiscussionList extends PureComponent {
       initLoading: true,
     };
 
-    bindAll(this, [
-      'onNewPost'
-    ]);
   }
   onInitialLoad = () => {
     const { tabIndex } = this.state;
@@ -62,7 +57,7 @@ export default class DiscussionList extends PureComponent {
     }
   }
 
-  onNewPost() {
+  onNewPost = () => {
     const { navPush } = this.props;
 
     navPush({
@@ -147,7 +142,13 @@ export default class DiscussionList extends PureComponent {
                   onEndReached={() => this.onEndReached(p)}
                   onEndReachedThreshold={0}
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => <SW.ListItem>{item.topic}</SW.ListItem>}
+                  renderItem={({ item }) => (
+                    <DiscussionListItem
+                      discussion={item}
+                      key={item.id}
+                      navPush={this.props.navPush}
+                    />
+                  )}
                   ListFooterComponent={() => this.renderListFooter(p.loading)}
                 />
               );

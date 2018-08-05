@@ -2,9 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { fromJS } from 'immutable';
 import * as ca from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
-import DiscussionHeader from 'src/react/views/Discussion/Header/DiscussionHeader';
-import CommentComposer from 'src/react/views/Comment/Composer/CommentComposer';
-import CommentItem from 'src/react/views/Comment/Item/CommentItem';
+import DiscussionHeader from 'src/views/Discussion/Header/DiscussionHeader';
 
 import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';

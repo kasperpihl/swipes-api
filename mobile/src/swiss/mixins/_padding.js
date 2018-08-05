@@ -1,8 +1,7 @@
 import { addMixin } from 'swiss-react';
 
-addMixin('padding', function padding(...args) {
+addMixin('padding', function padding(props, ...args) {
   const amountOfArguments = args.length;
-
   if (!amountOfArguments) {
     return {
       paddingHorizontal: 0,

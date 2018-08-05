@@ -1,6 +1,6 @@
 import { addMixin } from 'swiss-react';
 
-addMixin('borderRadius', function borderRadius(...args) {
+addMixin('borderRadius', function borderRadius(props, ...args) {
   const amountOfArguments = args.length;
 
   if (amountOfArguments === 1) {

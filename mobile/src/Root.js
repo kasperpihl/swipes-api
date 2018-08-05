@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 // import { version } from '../package.json';
 // import DeviceInfo from 'react-native-device-info';
 
-import { setOption } from 'swiss-react';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { init } from 'swipes-core-js';
 import getGlobals from 'utils/globals';
@@ -16,8 +15,6 @@ import './swiss/init';
 
 import App from './App';
 import configureStore from './store/configureStore';
-
-setOption('defaultEl', View);
 
 const { store, persistor } = configureStore({
   globals: getGlobals(),
