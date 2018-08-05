@@ -12,6 +12,8 @@ import Analytics from 'utils/analytics';
 import codePush from 'react-native-code-push';
 import * as a from 'actions';
 
+import './swiss/init';
+
 import App from './App';
 import configureStore from './store/configureStore';
 
