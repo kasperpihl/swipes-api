@@ -19,4 +19,18 @@ export default styleSheet('DiscussionList', {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  EmptyStateWrapper: {
+    _el: View,
+    flex: '1',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  EmptyStateText: {
+    _el: Text,
+    fontSize: '15',
+    lineHeight: '21',
+    color: '#7F8596',
+    paddingTop: '24',
+    textAlign: 'center',
+  },
 });

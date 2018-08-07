@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { FlatList, ActivityIndicator } from 'react-native';
+import { Text,FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
@@ -95,6 +95,15 @@ export default class DiscussionList extends PureComponent {
     );
   };
 
+  renderEmptyState() {
+    return (
+      <SW.EmptyStateWrapper>
+        <Icon icon="ESDiscussion" width="290" height="300" />
+        <SW.EmptyStateText selectable>Start a discussion or share an idea</SW.EmptyStateText>
+      </SW.EmptyStateWrapper>
+    );
+  }
+
   render() {
     const { tabIndex, initLoading } = this.state;
     const { myId } = this.props;
@@ -134,6 +143,10 @@ export default class DiscussionList extends PureComponent {
                     <ActivityIndicator size="large" color="#007AFF" />
                   </SW.LoaderContainer>
                 )
+              }
+
+              if (p.results && p.results.size > 0) {
+                return this.renderEmptyState();
               }
 
               return (
