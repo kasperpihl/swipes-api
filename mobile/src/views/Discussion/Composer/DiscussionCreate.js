@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class PostCreate extends PureComponent {
+class DiscussionCreate extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -252,6 +252,4 @@ class PostCreate extends PureComponent {
   }
 }
 
-export default PostCreate;
-// const { string } = PropTypes;
-PostCreate.propTypes = {};
+export default DiscussionCreate;

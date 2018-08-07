@@ -117,16 +117,26 @@ class HOCMilestoneOverview extends PureComponent {
       }
     } else if (i === 0) {
       navPush({
-        id: 'PostFeed',
-        title: 'Discussions',
+        id: 'HOCDiscussionCreate',
+        title: 'Create a Discussion',
         props: {
           context: {
             title: milestone.get('title'),
             id: milestone.get('id'),
           },
-          relatedFilter: msgGen.milestones.getRelatedFilter(milestone),
         },
       });
+      // navPush({
+      //   id: 'PostFeed',
+      //   title: 'Discussions',
+      //   props: {
+      //     context: {
+      //       title: milestone.get('title'),
+      //       id: milestone.get('id'),
+      //     },
+      //     relatedFilter: msgGen.milestones.getRelatedFilter(milestone),
+      //   },
+      // });
     } else if (i === 1) {
       let achieveLbl = 'Mark plan as achieved';
       let achieveIcon = 'MilestoneAchieve';
@@ -196,7 +206,7 @@ class HOCMilestoneOverview extends PureComponent {
       this.props.setActionButtons({
         onClick: this.onActionButton,
         buttons: [
-          { text: 'Discussions' },
+          { text: 'Open discussion' },
           { icon: 'Info', seperator: 'left', staticSize: true },
         ],
       });

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { setupCachedCallback } from 'react-delegate';
 import throttle from 'swipes-core-js/utils/throttle';
-import * as views from '../../views';
+import * as views from 'views';
 import { viewSize } from 'globalStyles';
 
 const styles = StyleSheet.create({
@@ -27,6 +27,9 @@ class SceneRenderer extends PureComponent {
   }
   render() {
     const { activeSliderIndex, routes, setActionButtons, route, navPush, isActive } = this.props;
+
+    // ROUTES ARE DEFINED IN src/views/index.js FILE
+    // thanks for hiding this in 10000 abstractions to make life simpler
     const Comp = views[route.id];
     const sliderIndex = `${activeSliderIndex}`;
 

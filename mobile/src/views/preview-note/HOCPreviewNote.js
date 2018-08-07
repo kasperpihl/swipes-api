@@ -72,8 +72,8 @@ class HOCPreviewNote extends PureComponent {
       }
     } else if (i === 0) {
       navPush({
-        id: 'PostFeed',
-        title: 'Discussions',
+        id: 'HOCDiscussionCreate',
+        title: 'Create a Discussion',
         props: {
           context: {
             title: noteTitle,
@@ -81,6 +81,16 @@ class HOCPreviewNote extends PureComponent {
           },
         },
       });
+      // navPush({
+      //   id: 'PostFeed',
+      //   title: 'Discussions',
+      //   props: {
+      //     context: {
+      //       title: noteTitle,
+      //       id: noteId,
+      //     },
+      //   },
+      // });
     } else if (i === 1) {
       // const createdLbl = `${dayStringForDate(note.get('created_at'))} by ${msgGen.users.getFullName(note.get('created_by'))}`
       this.setState({ showingInfoTab: true });
@@ -108,7 +118,7 @@ class HOCPreviewNote extends PureComponent {
       this.props.setActionButtons({
         onClick: this.onActionButton,
         buttons: [
-          { text: 'Discussions' },
+          { text: 'Open discussion' },
           { icon: 'Info', seperator: 'left', staticSize: true },
         ],
       });

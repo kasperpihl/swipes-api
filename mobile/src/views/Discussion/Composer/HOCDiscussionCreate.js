@@ -12,7 +12,7 @@ import convertObjectKeysToUnderscore from 'swipes-core-js/utils/convertObjectKey
 import getDeep from 'swipes-core-js/utils/getDeep';
 
 import { fromJS } from 'immutable';
-import PostCreate from './PostCreate';
+import DiscussionCreate from './DiscussionCreate';
 
 @connect(state => ({
   myId: state.me.get('id'),
@@ -26,7 +26,7 @@ import PostCreate from './PostCreate';
   promptModal: a.modals.prompt,
   preview: a.attachments.preview,
 })
-class HOCPostCreate extends PureComponent {
+class HOCDiscussionCreate extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -105,7 +105,7 @@ class HOCPostCreate extends PureComponent {
     this.updatePost(post.setIn(['followers'], selectedIds));
   }
   onFocusTextarea() {
-    const input = getDeep(this, 'refs.postCreate.refs.input');
+    const input = getDeep(this, 'refs.DiscussionCreate.refs.input');
     if (input) {
       input.focus();
     }
@@ -189,8 +189,8 @@ class HOCPostCreate extends PureComponent {
     const { post } = this.state;
 
     return (
-      <PostCreate
-        ref="postCreate"
+      <DiscussionCreate
+        ref="DiscussionCreate"
         post={post}
         myId={myId}
         delegate={this}
@@ -199,6 +199,4 @@ class HOCPostCreate extends PureComponent {
   }
 }
 
-HOCPostCreate.propTypes = {};
-
-export default HOCPostCreate;
+export default HOCDiscussionCreate;

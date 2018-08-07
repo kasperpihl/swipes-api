@@ -61,8 +61,8 @@ export default class DiscussionList extends PureComponent {
     const { navPush } = this.props;
 
     navPush({
-      id: 'PostCreate',
-      title: 'Create a Post',
+      id: 'HOCDiscussionCreate',
+      title: 'Create a Discussion',
     })
   }
 

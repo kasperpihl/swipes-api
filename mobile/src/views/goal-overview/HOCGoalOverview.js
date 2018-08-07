@@ -130,16 +130,26 @@ class HOCGoalOverview extends PureComponent {
       }
     } else if (i === 0) {
       navPush({
-        id: 'PostFeed',
-        title: 'Discussions',
+        id: 'HOCDiscussionCreate',
+        title: 'Create a Discussion',
         props: {
           context: {
             title: goal.get('title'),
             id: goal.get('id'),
           },
-          relatedFilter: msgGen.goals.getRelatedFilter(goal),
         },
       });
+      // navPush({
+      //   id: 'PostFeed',
+      //   title: 'Discussions',
+      //   props: {
+      //     context: {
+      //       title: goal.get('title'),
+      //       id: goal.get('id'),
+      //     },
+      //     relatedFilter: msgGen.goals.getRelatedFilter(goal),
+      //   },
+      // });
     } else if (i === 1) {
       const createdLbl = `${dayStringForDate(goal.get('created_at'))} by ${msgGen.users.getFullName(goal.get('created_by'))}`;
       const mileLbl = msgGen.milestones.getName(goal.get('milestone_id'));
@@ -192,7 +202,7 @@ class HOCGoalOverview extends PureComponent {
       this.props.setActionButtons({
         onClick: this.onActionButton,
         buttons: [
-          { text: 'Discussions' },
+          { text: 'Open discussion' },
           { icon: 'Info', seperator: 'left', staticSize: true },
         ],
       });
