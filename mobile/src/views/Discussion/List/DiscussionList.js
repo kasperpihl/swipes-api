@@ -6,7 +6,6 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
 import HOCHeader from 'HOCHeader';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
-import DiscussionListItem from './Item/DiscussionListItem';
 import SW from './DiscussionList.swiss';
 import DiscussionListItem from './Item/DiscussionListItem';
 
