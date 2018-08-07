@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import GoalsUtil from 'swipes-core-js/classes/goals-util';

@@ -1,27 +1,35 @@
 import React, { PureComponent } from 'react';
-import { TouchableHighlight } from 'react-native';
+import { connect } from 'react-redux';
+import * as ca from 'swipes-core-js/actions';
+import SplitImage from 'components/SplitImage/SplitImage';
+import RippleButton from 'RippleButton';
 import SW from './DiscussionListItem.swiss';
 
+@connect(state => ({
+  myId: state.me.get('id'),
+}), {
+  apiRequest: ca.api.request,
+})
 export default class DiscussionListItem extends PureComponent {
-  onTap = () => {
-    const { navPush, discussion } = this.props;
-    const overview = {
-      id: 'DiscussionOverview',
-      title: 'Discussion overview',
-      props: {
-        discussionId: discussion.id,
-      },
+  constructor(props) {
+    super(props);
+
+    this.state = {
     };
-    navPush(overview);
   }
+
   render() {
-    const { discussion } = this.props;
+    const { followers, topic, timestamp } = this.props;
+
     return (
-      <TouchableHighlight onPress={this.onTap}>
-        <SW.Wrapper >
-          {discussion.topic}
-        </SW.Wrapper>
-      </TouchableHighlight>
+      <SW.Wrapper>
+        <SW.LeftSide>
+          <SplitImage followers={followers}></SplitImage>
+        </SW.LeftSide>
+        {/* <SW.RightSide>
+          {topic}
+        </SW.RightSide> */}
+      </SW.Wrapper>
     );
   }
 }

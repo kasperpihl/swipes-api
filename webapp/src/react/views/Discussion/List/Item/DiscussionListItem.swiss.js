@@ -22,7 +22,6 @@ export default styleSheet('DiscussionListItem', {
     padding: '6px',
     paddingLeft: '12px',
   },
-
   MiddleWrapper: {
     _flex: ['column', 'left', 'top'],
     width: '100%',

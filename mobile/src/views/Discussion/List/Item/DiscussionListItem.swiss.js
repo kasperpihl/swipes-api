@@ -1,11 +1,18 @@
-import { Text } from 'react-native';
 import { styleSheet } from 'swiss-react';
+import { View, Text } from 'react-native';
 
 export default styleSheet('DiscussionListItem', {
   Wrapper: {
-    _el: Text,
+    _el: View,
+    flex: '1',
+    flexDirection: 'column',
+  },
+  LeftSide: {
+    _el: View,
     padding: '10',
     fontSize: '12',
-    height: '44',
+  },
+  RightSide: {
+    _el: Text,
   },
 });

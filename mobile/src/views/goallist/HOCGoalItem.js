@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Alert, Vibration } from 'react-native';
+import { View, Text, StyleSheet, Vibration } from 'react-native';
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import * as ca from 'swipes-core-js/actions';
@@ -10,6 +10,7 @@ import GoalsUtil from 'swipes-core-js/classes/goals-util';
 import HOCAssigning from 'components/assignees/HOCAssigning';
 import RippleButton from 'RippleButton';
 import { viewSize } from 'globalStyles';
+
 const DOT_SIZE = 10;
 
 const styles = StyleSheet.create({
@@ -28,12 +29,12 @@ const styles = StyleSheet.create({
     backgroundColor: gs.colors.greenColor,
     borderRadius: DOT_SIZE / 2,
   },
-  nowDot:{
+  nowDot: {
     ...gs.mixins.size(DOT_SIZE),
     backgroundColor: gs.colors.yellowColor,
     borderRadius: DOT_SIZE / 2,
   },
-  laterDot:{
+  laterDot: {
     ...gs.mixins.size(DOT_SIZE),
     backgroundColor: gs.colors.deepBlue50,
     borderRadius: DOT_SIZE / 2,
@@ -42,7 +43,8 @@ const styles = StyleSheet.create({
     ...gs.mixins.size(viewSize.width - 40, 1),
     backgroundColor: gs.colors.deepBlue5,
     position: 'absolute',
-    left: 15, bottom: 0,
+    left: 15,
+    bottom: 0,
   },
   assignees: {
     justifyContent: 'center',
@@ -99,25 +101,25 @@ class HOCGoalItem extends PureComponent {
     const { actionModal, goal, inTakeAction } = this.props;
     const status = msgGen.goals.getStatus(goal);
 
-    let items = [{
+    const items = [{
       title: 'Delete',
       id: 'delete',
     }];
 
     if (!inTakeAction && goal.get('milestone_id')) {
-      if(status !== 'later') {
+      if (status !== 'later') {
         items.push({
           title: 'Move to later',
           id: 'later',
         });
       }
-      if(status !== 'now') {
+      if (status !== 'now') {
         items.push({
           title: 'Move to now',
           id: 'now',
         });
       }
-      if(status !== 'done') {
+      if (status !== 'done') {
         items.push({
           title: 'Move to done',
           id: 'done',
@@ -155,10 +157,10 @@ class HOCGoalItem extends PureComponent {
       <View style={styles.dotWrapper}>
         <View style={dotStyles} />
       </View>
-    )
+    );
   }
   renderContent() {
-    const { goal, filter } = this.props;
+    const { goal } = this.props;
 
     return (
       <View style={styles.content}>
@@ -178,8 +180,7 @@ class HOCGoalItem extends PureComponent {
     );
   }
   render() {
-    const { goal } = this.props;
-    let rowStyles = styles.row;
+    const rowStyles = styles.row;
 
     return (
       <RippleButton onPress={this.openOverview} onLongPress={this.onLongPress}>

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text,FlatList, ActivityIndicator } from 'react-native';
+import { FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import * as ca from 'swipes-core-js/actions';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
@@ -8,6 +8,7 @@ import Icon from 'Icon';
 import RippleButton from 'RippleButton';
 import DiscussionListItem from './Item/DiscussionListItem';
 import SW from './DiscussionList.swiss';
+import DiscussionListItem from './Item/DiscussionListItem';
 
 @connect(state => ({
   counter: state.counter.get('discussion'),
@@ -145,7 +146,7 @@ export default class DiscussionList extends PureComponent {
                 )
               }
 
-              if (p.results && p.results.size > 0) {
+              if (p.results && !p.results.size) {
                 return this.renderEmptyState();
               }
 
@@ -155,13 +156,7 @@ export default class DiscussionList extends PureComponent {
                   onEndReached={() => this.onEndReached(p)}
                   onEndReachedThreshold={0}
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
-                    <DiscussionListItem
-                      discussion={item}
-                      key={item.id}
-                      navPush={this.props.navPush}
-                    />
-                  )}
+                  renderItem={({ item }) => <DiscussionListItem {...item}></DiscussionListItem>}
                   ListFooterComponent={() => this.renderListFooter(p.loading)}
                 />
               );
