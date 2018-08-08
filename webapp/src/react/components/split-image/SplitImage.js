@@ -1,20 +1,5 @@
-/*
-  props:
-  users: [id, id, id]
-  No size for now. But think easy to make for later.
-
-  [] Use msgGen.users.getProfileImage etc. See AssigneeImage.js
-
-  Things to test for:
-  - Users without an image
-  - Working with 1, 2 and 3 images.
-  - Positioning of images (look and inspect messengers...)
-
-*/
-
 import React, {Component} from 'react';
 import { SwissProvider } from 'swiss-react';
-import AssigneeImage from 'src/react/components/assigning/AssigneeImage';
 import SW from './SplitImage.swiss';
 
 class SplitImage extends Component {
