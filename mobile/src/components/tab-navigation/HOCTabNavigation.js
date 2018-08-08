@@ -49,7 +49,6 @@ export default @connect((state) => {
 }, {
   browser: a.links.browser,
   sliderChange: a.navigation.sliderChange,
-  navPush: a.navigation.push,
 })
 
 class HOCTabNavigation extends PureComponent {
@@ -131,8 +130,7 @@ class HOCTabNavigation extends PureComponent {
     this.setState({ showNavChanger: false, navChangerActive: false });
   }
   onNavChangeAction(type) {
-    const { sliderChange, navPush, browser } = this.props;
-    const { rootRoutes } = this.state;
+    const { browser } = this.props;
 
     if (type === 'Update') {
       this.handleNavChange(6, type);
