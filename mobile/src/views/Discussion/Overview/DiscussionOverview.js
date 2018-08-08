@@ -55,7 +55,7 @@ export default class DiscussionOverview extends PureComponent {
 
     return (
       <Fragment>
-        <DiscussionHeader discussion={discussion} />
+        <DiscussionHeader {...discussion.toJS()} />
         <PaginationProvider
           request={{
             body: {

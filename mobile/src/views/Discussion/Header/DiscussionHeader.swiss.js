@@ -1,5 +1,4 @@
 import { styleSheet } from 'swiss-react';
-import { Image } from 'react-native';
 
 export default styleSheet('DiscussionHeader', {
   Wrapper: {
@@ -16,9 +15,4 @@ export default styleSheet('DiscussionHeader', {
     _size: 1,
     paddingLeft: 12,
   },
-  ProfilePic: {
-    _el: Image,
-    _size: 54,
-    borderRadius: 54 / 2,
-  }
 });

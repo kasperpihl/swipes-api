@@ -1,31 +1,16 @@
 import React, { PureComponent } from 'react';
+import SplitImage from 'components/SplitImage/SplitImage';
 import SW from './DiscussionHeader.swiss';
 
 export default class DiscussionHeader extends PureComponent {
-  renderProfilePic() {
-    const { discussion } = this.props;
-    const image = msgGen.users.getPhoto(discussion.get('created_by'));
-    const initials = msgGen.users.getInitials(discussion.get('created_by'));
-
-    if (!image) {
-      return null;
-    }
-
-    return (
-      <SW.LeftSide>
-        <SW.ProfilePic source={{ uri: image }} />
-      </SW.LeftSide>
-    );
-  }
   render() {
+    const { followers } = this.props;
 
     return (
       <SW.Wrapper>
-        <SW.LeftSide>
-          {this.renderProfilePic()}
-        </SW.LeftSide>
-        <SW.RightSide>
-        </SW.RightSide>
+        <SW.LeftSide />
+        <SplitImage followers={followers} size={40} />
+        <SW.RightSide />
       </SW.Wrapper>
     );
   }
