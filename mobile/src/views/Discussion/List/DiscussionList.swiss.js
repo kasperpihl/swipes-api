@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import { Text } from 'react-native';
 
 export default styleSheet('DiscussionList', {
   Wrapper: {
@@ -20,7 +21,6 @@ export default styleSheet('DiscussionList', {
     justifyContent: 'center',
   },
   EmptyStateWrapper: {
-    _el: View,
     flex: '1',
     alignItems: 'center',
     flexDirection: 'column',
