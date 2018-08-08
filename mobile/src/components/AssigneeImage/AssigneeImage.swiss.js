@@ -22,6 +22,9 @@ export default styleSheet('AssigneeImage', {
     'size>=30': {
       fontSize: '14',
     },
+    'numberOfImages>1': {
+      fontSize: '10',
+    },
     textTransform: 'uppercase',
   },
 });
