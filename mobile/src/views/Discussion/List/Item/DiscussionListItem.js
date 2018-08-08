@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as ca from 'swipes-core-js/actions';
+// import * as ca from 'swipes-core-js/actions';
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
 import SplitImage from 'components/SplitImage/SplitImage';
 import RippleButton from 'RippleButton';
@@ -9,7 +9,6 @@ import SW from './DiscussionListItem.swiss';
 @connect(state => ({
   myId: state.me.get('id'),
 }), {
-  // apiRequest: ca.api.request,
 })
 export default class DiscussionListItem extends PureComponent {
   constructor(props) {
@@ -17,6 +16,18 @@ export default class DiscussionListItem extends PureComponent {
 
     this.state = {
     };
+  }
+
+  onNewPost = () => {
+    const { navPush, id: discussionId } = this.props;
+
+    navPush({
+      id: 'DiscussionOverview',
+      title: 'Discussion overview',
+      props: {
+        discussionId,
+      },
+    })
   }
 
   render() {
@@ -36,6 +47,7 @@ export default class DiscussionListItem extends PureComponent {
     }
 
     return (
+      <RippleButton onPress={this.onNewPost}>
         <SW.Wrapper>
           <SW.LeftSide>
             <SplitImage followers={followers} size={40}></SplitImage>
@@ -54,6 +66,7 @@ export default class DiscussionListItem extends PureComponent {
             </SW.LineOfText>
           </SW.RightSide>
         </SW.Wrapper>
+      </RippleButton>
     );
   }
 }

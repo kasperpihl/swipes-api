@@ -106,7 +106,7 @@ export default class DiscussionList extends PureComponent {
 
   render() {
     const { tabIndex, initLoading } = this.state;
-    const { myId } = this.props;
+    const { myId, navPush } = this.props;
     let type = 'following';
     let filter = d => d.get('followers').find(o => o.get('user_id') === myId);
 
@@ -155,7 +155,7 @@ export default class DiscussionList extends PureComponent {
                   onEndReached={() => this.onEndReached(p)}
                   onEndReachedThreshold={0}
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => <DiscussionListItem {...item}></DiscussionListItem>}
+                  renderItem={({ item }) => <DiscussionListItem navPush={navPush} {...item}></DiscussionListItem>}
                   ListFooterComponent={() => this.renderListFooter(p.loading)}
                 />
               );
