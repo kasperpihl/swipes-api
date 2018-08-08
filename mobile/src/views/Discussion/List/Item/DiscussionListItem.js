@@ -24,7 +24,7 @@ export default class DiscussionListItem extends PureComponent {
     return (
       <SW.Wrapper>
         <SW.LeftSide>
-          <SplitImage followers={followers}></SplitImage>
+          <SplitImage followers={followers} size={40}></SplitImage>
         </SW.LeftSide>
         {/* <SW.RightSide>
           {topic}

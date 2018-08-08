@@ -12,11 +12,11 @@ export default class SplitImage extends PureComponent {
   }
 
   render() {
-    const { followers } = this.props;
+    const { followers, size } = this.props;
     const user_ids = followers.map(u => u.user_id);
 
     return (
-      <SwissProvider numberOfImages={followers.length} size={50} >
+      <SwissProvider numberOfImages={followers.length} size={size || 50} >
         <SW.Container>
           <SW.Left>
             <AssigneeImage userId={user_ids[0]} />
