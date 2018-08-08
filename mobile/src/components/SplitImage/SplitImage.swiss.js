@@ -1,9 +1,7 @@
 import { styleSheet } from 'swiss-react';
-import { View } from 'react-native';
 
 export default styleSheet('SplitImage', {
   Container: {
-    _el: View,
     flexDirection: 'row',
     width: '#{size=50}',
     height: '#{size=50}',
@@ -14,7 +12,6 @@ export default styleSheet('SplitImage', {
     backgroundColor: 'white',
   },
   Left: {
-    _el: View,
     width: '100%',
     height: '100%',
     overflow: 'hidden',
@@ -26,7 +23,6 @@ export default styleSheet('SplitImage', {
     },
   },
   Right: {
-    _el: View,
     width: '50%',
     height: '100%',
     overflow: 'hidden',
@@ -35,7 +31,6 @@ export default styleSheet('SplitImage', {
     justifyContent: 'center',
   },
   ImageBox: {
-    _el: View,
     width: '100%',
     height: '50%',
     'numberOfImages<3': {

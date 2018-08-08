@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import { View, Text, Image } from 'react-native';
+import { Text, Image } from 'react-native';
 
 export default styleSheet('AssigneeImage', {
   Image: {
@@ -8,7 +8,6 @@ export default styleSheet('AssigneeImage', {
     height: '100%',
   },
   InitialWrapper: {
-    _el: View,
     width: '100%',
     height: '100%',
     backgroundColor: '#000C2F',
