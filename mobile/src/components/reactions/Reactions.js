@@ -1,37 +1,20 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import * as a from 'actions';
-import { setupDelegate } from 'react-delegate';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'Icon';
 import { colors } from 'globalStyles';
+import * as ca from 'swipes-core-js/actions';
+import SW from './Reactions.swiss';
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    height: 54,
-    paddingHorizontal: 15,
-  },
-  likeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  likeButtonLabel: {
-    paddingHorizontal: 5,
-    fontSize: 12,
-    includeFontPadding: false,
-    marginTop: 3,
-  },
-});
-
+@connect(state => ({
+  myId: state.me.get('id'),
+}), {
+  request: ca.api.request,
+})
 class HOCReactions extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-
-    setupDelegate(this, 'onAddReaction', 'onRemoveReaction');
 
     this.handleLike = this.handleLike.bind(this);
   }
@@ -42,22 +25,26 @@ class HOCReactions extends PureComponent {
     this.updateILike(nextProps.reactions);
   }
   handleLike() {
-    const { post, commentId: cId } = this.props;
+    const { commentId, request } = this.props;
     const { iLike } = this.state;
 
-    if (iLike) {
-      this.onRemoveReaction(post, cId);
-    } else {
-      this.onAddReaction(post, cId);
-    }
+    request('comment.react', {
+      reaction: !iLike ? 'like' : null,
+      comment_id: commentId,
+    }).then((res) => {
+      if (res.ok) {
+        window.analytics.sendEvent('Reaction added', {
+          Where: 'Comment',
+        });
+      }
+    });
   }
   updateILike(nextReactions) {
-    const { reactions } = this.props;
-    const myId = msgGen.users.getUser('me').get('id');
+    const { reactions, myId } = this.props;
     const { iLike } = this.state;
 
     if (typeof iLike === 'undefined' || reactions !== nextReactions) {
-      const newILike = !!nextReactions.find(r => r.get('created_by') === myId);
+      const newILike = !!Object.keys(nextReactions).find(r => r === myId);
 
       if (iLike !== newILike) {
         this.setState({ iLike: newILike });
@@ -70,54 +57,41 @@ class HOCReactions extends PureComponent {
     const heartStroke = iLike ? colors.red80 : colors.deepBlue40;
 
     return (
-      <View style={styles.likeButton}>
+      <SW.LikeButton>
         <Icon icon="Heart" width="24" height="24" fill={heartFill} stroke={heartStroke} />
-      </View>
+      </SW.LikeButton>
     );
   }
   renderLikers() {
-    const { reactions, commentId } = this.props;
+    const { reactions } = this.props;
     const { iLike } = this.state;
+    const size = Object.keys(reactions).length;
 
-    if (!reactions || !reactions.size) {
+    if (!size) {
       return undefined;
     }
 
-    const likeString = `${reactions.size}`;
-    const labelColor = iLike ? colors.red80 : colors.deepBlue40;
+    const likeString = `${size}`;
 
     return (
-
-      <View style={styles.likers}>
-        <Text selectable style={[styles.likeButtonLabel, { color: labelColor }]}>
-          {likeString}
-        </Text>
-      </View>
+      <SW.LikeButtonLabel selectable iLike={iLike}>
+        {likeString}
+      </SW.LikeButtonLabel>
     );
   }
   render() {
-    const { children, height } = this.props;
-    const heightStyles = height ? { height } : {};
+    const { children} = this.props;
 
     return (
       <TouchableOpacity onPress={this.handleLike}>
-        <View style={[styles.container, heightStyles]}>
+        <SW.Container>
           {this.renderLikers()}
           {this.renderButton()}
           {children}
-        </View>
+        </SW.Container>
       </TouchableOpacity>
     );
   }
 }
 
-// const { string } = PropTypes;
-
-HOCReactions.propTypes = {};
-
-function mapStateToProps() {
-  return {};
-}
-export default connect(mapStateToProps, {
-
-})(HOCReactions);
+export default HOCReactions;

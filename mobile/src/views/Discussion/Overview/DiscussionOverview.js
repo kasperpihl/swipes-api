@@ -1,11 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
-import { fromJS } from 'immutable';
+import { Text, FlatList, ActivityIndicator } from 'react-native';
 import * as ca from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
 import DiscussionHeader from 'src/views/Discussion/Header/DiscussionHeader';
-
 import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
+import SW from './DiscussionOverview.swiss';
+import CommentItem from 'views/Comment/Item/CommentItem';
 
 @withRequests({
   discussion: {
@@ -30,9 +31,17 @@ export default class DiscussionOverview extends PureComponent {
   static sizes() {
     return [654];
   }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      initLoading: true,
+    }
+  }
   onInitialLoad = () => {
     const { discussion, myId, apiRequest } = this.props;
     const sub = discussion.get('followers').find(f => f.get('user_id') === myId);
+
     if(sub &&
       (!sub.get('read_at') || 
         sub.get('read_at') < discussion.get('last_comment_at'))
@@ -42,13 +51,29 @@ export default class DiscussionOverview extends PureComponent {
         discussion_id: discussion.get('id'),
       });
     }
+
+    this.setState({
+      initLoading: false,
+    })
   }
-  renderComments(pagination) {
-    // T_TODO: Check for pagination.results and your comments should be there.
-    return null;
+  onEndReached(p) {
+    if (p.hasMore === true) {
+      p.loadMore();
+    }
   }
+  renderListFooter = (loading) => {
+    if (!loading) return null;
+
+    return (
+      <SW.LoaderContainer>
+        <ActivityIndicator size="small" color="#007AFF" />
+      </SW.LoaderContainer>
+    );
+  };
   render() {
     const { discussion } = this.props;
+    const { initLoading } = this.state;
+
     if(!discussion) {
       return null;
     }
@@ -64,14 +89,36 @@ export default class DiscussionOverview extends PureComponent {
             url: 'comment.list',
             resPath: 'comments',
           }}
-          limit={10}
+          limit={2}
           onInitialLoad={this.onInitialLoad}
           cache={{
             path: ['comment', discussion.get('id')],
             orderBy: '-sent_at',
           }}
         >
-          {pagination => this.renderComments(pagination)}
+          {(p) => {
+            if (initLoading) {
+              return (
+                <SW.LoaderContainer>
+                  <ActivityIndicator size="large" color="#007AFF" />
+                </SW.LoaderContainer>
+              )
+            }
+
+            console.log(p.results ? p.results.toList().toJS() : []);
+
+            return (
+              <FlatList
+                data={p.results ? p.results.toList().toJS() : []}
+                onEndReached={() => this.onEndReached(p)}
+                onEndReachedThreshold={0}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <CommentItem {...item}></CommentItem>}
+                ListFooterComponent={() => this.renderListFooter(p.loading)}
+                inverted={true}
+              />
+            );
+          }}
         </PaginationProvider>
       </Fragment>
     );

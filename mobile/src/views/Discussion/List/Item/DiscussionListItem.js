@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-// import * as ca from 'swipes-core-js/actions';
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
 import SplitImage from 'components/SplitImage/SplitImage';
 import RippleButton from 'RippleButton';
