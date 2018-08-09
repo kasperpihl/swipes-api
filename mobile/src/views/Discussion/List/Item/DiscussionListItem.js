@@ -18,7 +18,7 @@ export default class DiscussionListItem extends PureComponent {
     };
   }
 
-  onNewPost = () => {
+  onTap = () => {
     const { navPush, id: discussionId } = this.props;
 
     navPush({
@@ -47,7 +47,7 @@ export default class DiscussionListItem extends PureComponent {
     }
 
     return (
-      <RippleButton onPress={this.onNewPost}>
+      <RippleButton onPress={this.onTap}>
         <SW.Wrapper>
           <SW.LeftSide>
             <SplitImage followers={followers} size={40}></SplitImage>

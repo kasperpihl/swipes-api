@@ -1,6 +1,6 @@
 import { addMixin } from 'swiss-react';
 
-addMixin('padding', function padding(props, ...args) {
+addMixin('padding', (props, ...args) => {
   const amountOfArguments = args.length;
   if (!amountOfArguments) {
     return {
