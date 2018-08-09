@@ -26,10 +26,9 @@ class SceneRenderer extends PureComponent {
     this.navPopCached = setupCachedCallback(throttle(props.navPop, 350, true));
   }
   render() {
-    const { activeSliderIndex, routes, setActionButtons, route, navPush, isActive } = this.props;
+    const { activeSliderIndex, setActionButtons, route, isActive } = this.props;
 
     // ROUTES ARE DEFINED IN src/views/index.js FILE
-    // thanks for hiding this in 10000 abstractions to make life simpler
     const Comp = views[route.id];
     const sliderIndex = `${activeSliderIndex}`;
 
@@ -38,8 +37,7 @@ class SceneRenderer extends PureComponent {
         <View style={styles.content}>
           <Comp
             // Don't try to just import navPush from actions because it's not going to work
-            // you should use this modified version of it for some reason
-            // so the whole purpose of importing actions from everywhere is broken in that case
+            // you should use this modified version of it
             // and you should pass navPush from the main component down as a prop
             navPush={this.navPushCached(sliderIndex)}
             navPop={this.navPopCached(activeSliderIndex)}
