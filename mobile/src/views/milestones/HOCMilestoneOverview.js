@@ -126,23 +126,12 @@ class HOCMilestoneOverview extends PureComponent {
           },
         },
       });
-      // navPush({
-      //   id: 'PostFeed',
-      //   title: 'Discussions',
-      //   props: {
-      //     context: {
-      //       title: milestone.get('title'),
-      //       id: milestone.get('id'),
-      //     },
-      //     relatedFilter: msgGen.milestones.getRelatedFilter(milestone),
-      //   },
-      // });
     } else if (i === 1) {
       let achieveLbl = 'Mark plan as achieved';
       let achieveIcon = 'MilestoneAchieve';
       let complete = true;
       if (milestone.get('closed_at')) {
-        complete = false,
+        complete = false;
         achieveIcon = 'Milestone';
         achieveLbl = 'Move plan to current';
       }

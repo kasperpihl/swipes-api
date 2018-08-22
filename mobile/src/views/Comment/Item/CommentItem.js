@@ -5,7 +5,6 @@ import { StyleSheet, Platform, UIManager, TouchableWithoutFeedback } from 'react
 import * as a from 'actions';
 import ParsedText from 'react-native-parsed-text';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
-import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors } from 'globalStyles';
 import * as gs from 'styles';
 import Icon from 'Icon';

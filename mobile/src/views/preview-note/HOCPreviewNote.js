@@ -81,16 +81,6 @@ class HOCPreviewNote extends PureComponent {
           },
         },
       });
-      // navPush({
-      //   id: 'PostFeed',
-      //   title: 'Discussions',
-      //   props: {
-      //     context: {
-      //       title: noteTitle,
-      //       id: noteId,
-      //     },
-      //   },
-      // });
     } else if (i === 1) {
       // const createdLbl = `${dayStringForDate(note.get('created_at'))} by ${msgGen.users.getFullName(note.get('created_by'))}`
       this.setState({ showingInfoTab: true });

@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Platform, Keyboard, UIManager, LayoutAnimation, InteractionManager } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
-import { List } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import { iconForId, attachmentIconForService, bindAll } from 'swipes-core-js/classes/utils';
 import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors, viewSize, statusbarHeight } from 'globalStyles';
-import HOCHeader from 'HOCHeader';
 import StyledText from 'components/styled-text/StyledText';
 import Icon from 'Icon';
 import * as gs from 'styles';

@@ -139,17 +139,6 @@ class HOCGoalOverview extends PureComponent {
           },
         },
       });
-      // navPush({
-      //   id: 'PostFeed',
-      //   title: 'Discussions',
-      //   props: {
-      //     context: {
-      //       title: goal.get('title'),
-      //       id: goal.get('id'),
-      //     },
-      //     relatedFilter: msgGen.goals.getRelatedFilter(goal),
-      //   },
-      // });
     } else if (i === 1) {
       const createdLbl = `${dayStringForDate(goal.get('created_at'))} by ${msgGen.users.getFullName(goal.get('created_by'))}`;
       const mileLbl = msgGen.milestones.getName(goal.get('milestone_id'));

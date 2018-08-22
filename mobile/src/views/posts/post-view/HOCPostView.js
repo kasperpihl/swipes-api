@@ -1,11 +1,11 @@
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
-import * as a from "actions";
-import * as ca from "swipes-core-js/actions";
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import * as a from 'actions';
+import * as ca from 'swipes-core-js/actions';
 import getDeep from 'swipes-core-js/utils/getDeep';
 import { mobileNavForContext } from 'utils/utils';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-import PostView from "./PostView";
+import PostView from './PostView';
 
 class HOCPostView extends PureComponent {
   constructor(props) {
@@ -38,11 +38,11 @@ class HOCPostView extends PureComponent {
     const { setActionButtons } = this.props;
 
     setActionButtons({
-      hide: true
+      hide: true,
     });
   }
   onAutoFocus() {
-    this.shouldAutoFocus = true
+    this.shouldAutoFocus = true;
   }
   onOpenUrl(url) {
     const { browser } = this.props;
@@ -59,13 +59,13 @@ class HOCPostView extends PureComponent {
     const runFunc = commentId ? commentAddReaction : addReaction;
 
     runFunc({
-      post_id: post.get("id"),
-      reaction: "like",
-      comment_id: commentId || null
-    }).then(res => {
-      if(res.ok) {
+      post_id: post.get('id'),
+      reaction: 'like',
+      comment_id: commentId || null,
+    }).then((res) => {
+      if (res.ok) {
         window.analytics.sendEvent('Reaction added', {
-          'Where': commentId ? 'Comment' : 'Post',
+          Where: commentId ? 'Comment' : 'Post',
         });
       }
     });
@@ -75,12 +75,12 @@ class HOCPostView extends PureComponent {
     const runFunc = commentId ? commentRemoveReaction : removeReaction;
 
     runFunc({
-      post_id: post.get("id"),
-      comment_id: commentId
-    }).then(res => {
-      if(res.ok) {
+      post_id: post.get('id'),
+      comment_id: commentId,
+    }).then((res) => {
+      if (res.ok) {
         window.analytics.sendEvent('Reaction removed', {
-          'Where': commentId ? 'Comment' : 'Post',
+          Where: commentId ? 'Comment' : 'Post',
         });
       }
     });
@@ -93,7 +93,7 @@ class HOCPostView extends PureComponent {
       post_id: postId,
       message,
       attachments,
-    }).then(res => {
+    }).then((res) => {
       if (res.ok) {
         this.clearLoading('commenting');
         window.analytics.sendEvent('Comment added', {});
@@ -112,21 +112,21 @@ class HOCPostView extends PureComponent {
     const context = post.get('context');
 
     if (context) {
-      navPush(mobileNavForContext(context))
+      navPush(mobileNavForContext(context));
     }
   }
   render() {
     const { myId, post, scrollToBottom } = this.props;
 
-    return <PostView
-              ref="postView"
-              myId={myId}
-              post={post}
-              delegate={this}
-              {...this.bindLoading()}
-              initialScrollToBottom={scrollToBottom}
-              navPush={this.props.navPush} 
-            />;
+    return (<PostView
+      ref="postView"
+      myId={myId}
+      post={post}
+      delegate={this}
+      {...this.bindLoading()}
+      initialScrollToBottom={scrollToBottom}
+      navPush={this.props.navPush}
+    />);
   }
 }
 
@@ -137,7 +137,7 @@ HOCPostView.propTypes = {};
 function mapStateToProps(state, ownProps) {
   return {
     myId: state.me.get('id'),
-    post: state.posts.get(ownProps.postId)
+    post: state.posts.get(ownProps.postId),
   };
 }
 
@@ -148,5 +148,5 @@ export default connect(mapStateToProps, {
   addReaction: ca.posts.addReaction,
   commentAddReaction: ca.posts.commentAddReaction,
   commentRemoveReaction: ca.posts.commentRemoveReaction,
-  removeReaction: ca.posts.removeReaction
+  removeReaction: ca.posts.removeReaction,
 })(HOCPostView);

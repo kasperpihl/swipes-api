@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
-import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import * as a from "actions";
+import * as a from 'actions';
 import Search from './Search';
 import WaitForUI from 'WaitForUI';
 
@@ -10,7 +9,7 @@ class HOCSearch extends PureComponent {
     super(props);
     this.state = {
       searchString: '',
-      toSearchString: ''
+      toSearchString: '',
     };
 
     this.onOpenSearchResult = this.onOpenSearchResult.bind(this);
@@ -19,16 +18,16 @@ class HOCSearch extends PureComponent {
     const { setActionButtons } = this.props;
 
     setActionButtons({
-      hide: true
-    })
+      hide: true,
+    });
   }
   componentWillUpdate(nextProps) {
     const { setActionButtons } = this.props;
 
     if (nextProps.isActive && !this.props.isActive) {
       setActionButtons({
-        hide: true
-      })
+        hide: true,
+      });
     }
   }
   onChange(value) {
@@ -36,7 +35,7 @@ class HOCSearch extends PureComponent {
   }
   onSearch() {
     const { searchString } = this.state;
-    this.setState({ toSearchString: searchString })
+    this.setState({ toSearchString: searchString });
   }
   onOpenSearchResult(id, res) {
     const { navPush } = this.props;
@@ -48,7 +47,7 @@ class HOCSearch extends PureComponent {
         props: {
           milestoneId: id,
         },
-      })
+      });
     } else if (id.startsWith('G')) {
       navPush({
         id: 'GoalOverview',
@@ -56,15 +55,7 @@ class HOCSearch extends PureComponent {
         props: {
           goalId: id,
         },
-      })
-    } else if (id.startsWith('P')) {
-      navPush({
-        id: 'PostView',
-        title: 'Post',
-        props: {
-          postId: id
-        }
-      })
+      });
     }
   }
   onPopNav() {
@@ -75,11 +66,11 @@ class HOCSearch extends PureComponent {
   render() {
     const { searchString, toSearchString }  = this.state;
 
-    return <WaitForUI><Search searchString={searchString} toSearchString={toSearchString} delegate={this} /></WaitForUI>
+    return <WaitForUI><Search searchString={searchString} toSearchString={toSearchString} delegate={this} /></WaitForUI>;
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {

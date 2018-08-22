@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Text, FlatList, ActivityIndicator } from 'react-native';
+import { FlatList, ActivityIndicator } from 'react-native';
 import * as ca from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
 import DiscussionHeader from 'src/views/Discussion/Header/DiscussionHeader';
@@ -7,6 +7,8 @@ import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import SW from './DiscussionOverview.swiss';
 import CommentItem from 'views/Comment/Item/CommentItem';
+import CommentComposer from 'views/Comment/Composer/CommentComposer';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 
 @withRequests({
   discussion: {
@@ -36,6 +38,16 @@ export default class DiscussionOverview extends PureComponent {
 
     this.state = {
       initLoading: true,
+    }
+
+    setupLoading(this);
+  }
+  componentDidMount() {
+    this.hideActionBar();
+  }
+  componentWillUpdate(nextProps) {
+    if (nextProps.isActive && !this.props.isActive) {
+      this.hideActionBar();
     }
   }
   onInitialLoad = () => {
@@ -70,8 +82,15 @@ export default class DiscussionOverview extends PureComponent {
       </SW.LoaderContainer>
     );
   };
+  hideActionBar() {
+    const { setActionButtons } = this.props;
+
+    setActionButtons({
+      hide: true
+    });
+  }
   render() {
-    const { discussion } = this.props;
+    const { discussion, navPush, navPop} = this.props;
     const { initLoading } = this.state;
 
     if(!discussion) {
@@ -105,8 +124,6 @@ export default class DiscussionOverview extends PureComponent {
               )
             }
 
-            console.log(p.results ? p.results.toList().toJS() : []);
-
             return (
               <FlatList
                 data={p.results ? p.results.toList().toJS() : []}
@@ -120,6 +137,14 @@ export default class DiscussionOverview extends PureComponent {
             );
           }}
         </PaginationProvider>
+        <CommentComposer
+          navPush={navPush}
+          navPop={navPop}
+          discussionId={discussion.get('id')}
+          // onFocus={this.scrollToBottom}
+          placeholder="Write a comment…"
+          {...this.bindLoading()}
+        />
       </Fragment>
     );
   }
