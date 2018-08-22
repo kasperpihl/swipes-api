@@ -126,6 +126,8 @@ export default class DiscussionOverview extends PureComponent {
 
             return (
               <FlatList
+                ref={ref => this.flatList = ref}
+                onLayout={() => this.flatList.scrollToEnd({animated: true})}
                 data={p.results ? p.results.toList().toJS() : []}
                 onEndReached={() => this.onEndReached(p)}
                 onEndReachedThreshold={0}

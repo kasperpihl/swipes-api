@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Keyboard, Platform, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
-import { setupDelegate } from 'react-delegate';
+import { StyleSheet, Keyboard, Platform, ActivityIndicator } from 'react-native';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import getDeep from 'swipes-core-js/utils/getDeep';
 import { fromJS } from 'immutable';
 import { colors } from 'globalStyles';
 import * as gs from 'styles';
@@ -36,19 +34,8 @@ export default class CommentComposer extends PureComponent {
       message: '',
       attachments: fromJS([]),
     };
-    setupDelegate(this, 'onAutoFocus');
-    bindAll(this, ['handleAddComment', 'handleAttach', 'focusInput', 'onChooseAttachmentTypeToAdd', 'onAddAttachment', 'onNavigateBack']);
+    bindAll(this, ['handleAddComment', 'handleAttach', 'onChooseAttachmentTypeToAdd', 'onAddAttachment', 'onNavigateBack']);
   }
-  // componentDidUpdate(prevProps) {
-  //   if (!prevProps.isActive && this.props.isActive && this.shouldAutoFocus) {
-  //     this.shouldAutoFocus = false;
-  //     const input = getDeep(this, 'refs.postView.refs.postFooter.refs.input.refs.expandingTextInput');
-
-  //     if (input && input.focus) {
-  //       input.focus();
-  //     }
-  //   }
-  // }
   onNavigateBack() {
     const { navPop } = this.props;
 
@@ -79,13 +66,10 @@ export default class CommentComposer extends PureComponent {
       }, { onDidClose: this.onFocusTextarea });
     }
   }
-  // onAutoFocus() {
-  //   this.shouldAutoFocus = true
-  // }
   onAddAttachment(id) {
     const { uploadAttachment } = this.props;
 
-    uploadAttachment(id, this.handleAttach, this.focusInput);
+    uploadAttachment(id, this.handleAttach);
   }
   handleAttach(att) {
     const { attachments } = this.state;
@@ -118,13 +102,6 @@ export default class CommentComposer extends PureComponent {
 
     this.setState({ message: '', attachments: fromJS([]) });
     Keyboard.dismiss();
-  }
-  focusInput() {
-    const input = getDeep(this, 'refs.input.refs.expandingTextInput');
-
-    if (!this.isFocused && input) {
-      input.focus();
-    }
   }
   renderBackButton() {
     if (Platform.OS === 'android') {
@@ -169,30 +146,26 @@ export default class CommentComposer extends PureComponent {
     return (
       <SW.Wrapper>
         {this.renderBackButton()}
-        <TouchableWithoutFeedback onPress={this.focusInput}>
-          <SW.InputWrapper>
-            <SW.InputBorder>
-              <ExpandingTextInput
-                ref="input"
-                onChangeText={message => this.setState({ message })}
-                style={styles.input}
-                underlineColorAndroid="transparent"
-                autoCapitalize="sentences"
-                autoCorrect
-                placeholder={placeholder}
-                minRows={1}
-                maxRows={4}
-                value={this.state.message}
-                onFocus={() => { this.isFocused = true; }}
-                onBlur={() => { this.isFocused = false; }}
-              />
-              <AttachButton
-                numberOfAttachments={attachments.size}
-                delegate={this}
-              />
-            </SW.InputBorder>
-          </SW.InputWrapper>
-        </TouchableWithoutFeedback>
+        <SW.InputWrapper>
+          <SW.InputBorder>
+            <ExpandingTextInput
+              ref={ref => this.input = ref}
+              onChangeText={message => this.setState({ message })}
+              style={styles.input}
+              underlineColorAndroid="transparent"
+              autoCapitalize="sentences"
+              autoCorrect
+              placeholder={placeholder}
+              minRows={1}
+              maxRows={4}
+              value={this.state.message}
+            />
+            <AttachButton
+              numberOfAttachments={attachments.size}
+              delegate={this}
+            />
+          </SW.InputBorder>
+        </SW.InputWrapper>
         <SW.Actions>
           {this.renderSendButton()}
         </SW.Actions>

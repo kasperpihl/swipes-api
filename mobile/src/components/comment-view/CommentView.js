@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Image, Platform, UIManager, LayoutAnimation, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, Image, Platform, UIManager, TouchableWithoutFeedback } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
 
 import { setupDelegate } from 'react-delegate';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import timeAgo from 'swipes-core-js/utils/time/timeAgo';
-import { colors, viewSize } from 'globalStyles';
+import { colors } from 'globalStyles';
 import * as gs from 'styles';
 import Icon from 'Icon';
 import RippleButton from 'RippleButton';
@@ -171,7 +171,7 @@ class CommentView extends PureComponent {
     const { comment } = this.props;
     const { commentActive } = this.state;
     const name = msgGen.users.getFullName(comment.get('created_by'));
-    const message = `<!${comment.get("created_by")}|${name}> ${  comment.get("message")}`;
+    const message = `<!${comment.get('created_by')}|${name}> ${comment.get('message')}`;
     let extraStyles = {};
 
     if (commentActive) {
@@ -263,7 +263,7 @@ class CommentView extends PureComponent {
           reactions={comment.get('reactions')}
           delegate={delegate}
           commentId={comment.get('id')}
-         />
+        />
         <View>
           <Text selectable style={styles.timestamp}>
             {'  '} • {'  '}{timestamp}
