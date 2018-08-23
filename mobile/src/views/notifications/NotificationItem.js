@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { setupDelegate } from 'react-delegate';
 import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import { colors, viewSize } from 'globalStyles';
 import RippleButton from 'RippleButton';
+import SplitImage from 'components/SplitImage/SplitImage';
 import StyledText from 'components/styled-text/StyledText';
 import Icon from 'Icon';
 
@@ -66,74 +68,55 @@ const styles = StyleSheet.create({
   },
 });
 
+const parseUserIds = message => (dispatch, getState) => {
+  return message.replace(/<!([A-Z0-9]*)>/gi, (full, uId) => getState().users.getIn([uId, 'profile', 'first_name']));
+};
+
+
+@connect(null, {
+  parseUserIds,
+})
 class NotificationItem extends PureComponent {
   constructor(props) {
     super(props);
 
     setupDelegate(this, 'onNotificationOpen');
   }
-  getIconForType(n) {
-    const type = n.getIn(['meta', 'type']);
-
-    switch (type) {
-      case 'message': return 'MessageColored';
-      case 'question': return 'QuestionColored';
-      case 'announcement': return 'AnnouncementColored';
-      case 'information': return 'InformationColored';
-      default: return 'MessageColored';
-    }
-  }
   renderProfilePic() {
     const { notification: n } = this.props;
-    const userId = msgGen.notifications.getImportantUserIdFromMeta(n.get('meta'));
-    const image = msgGen.users.getPhoto(userId);
-    const initials = msgGen.users.getInitials(userId);
+    let users = [n.get('done_by')];
+    if(!n.get('title')) {
+      users = [msgGen.notifications.getImportantUserIdFromMeta(n.get('meta'))];
+    }
 
-    if (!image) {
+    return <SplitImage followers={users} size={40} />
+  }
+  renderMessage() {
+    const { notification: n, parseUserIds } = this.props;
+    let text = n.get('title');
+    if(n.get('title')) {
+      const text = parseUserIds(n.get('title'));
       return (
-        <View style={styles.initials}>
-          <Text selectable style={styles.initialsLabel}>
-            {initials}
-          </Text>
+        <View>
+          <Text style={styles.textStyle}>{text}</Text>
+        </View>
+      )
+    } else {
+      const text = msgGen.notifications.getStyledTextForNotification(n, styles.boldStyle);
+      return (
+        <View>
+          <StyledText text={text} textStyle={styles.textStyle} />
         </View>
       );
     }
-
-    return (
-      <View style={styles.profilePicWrapper}>
-        <Image source={{ uri: image }} style={styles.profilePic} />
-      </View>
-    );
-  }
-  renderMessage() {
-    const { notification: n } = this.props;
-    const text = msgGen.notifications.getStyledTextForNotification(n, styles.boldStyle);
-
-    return (
-      <View>
-        <StyledText text={text} textStyle={styles.textStyle} />
-      </View>
-    );
   }
   renderTimestamp() {
     const { notification: n } = this.props;
     const timestamp = timeAgo(n.get('created_at'), true);
-    const icon = this.getIconForType(n);
 
     return (
       <View style={styles.timestampWrapper}>
-        <Icon icon={icon} width="24" height="24" />
         <Text selectable style={styles.timestampLabel}>{timestamp}</Text>
-      </View>
-    );
-  }
-  renderContent() {
-    const { notification: n } = this.props;
-
-    return (
-      <View style={styles.content}>
-        {this.renderMessage()}
-        {this.renderTimestamp()}
       </View>
     );
   }
@@ -146,7 +129,10 @@ class NotificationItem extends PureComponent {
         <RippleButton onPress={this.onNotificationOpenCached(n)}>
           <View style={[styles.topSection, { backgroundColor }]}>
             {this.renderProfilePic()}
-            {this.renderContent()}
+            <View style={styles.content}>
+              {this.renderMessage()}
+              {this.renderTimestamp()}
+            </View>
           </View>
         </RippleButton>
       </View>
