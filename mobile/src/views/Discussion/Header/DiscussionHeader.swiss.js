@@ -1,5 +1,6 @@
-import { Text } from 'react-native';
 import { styleSheet } from 'swiss-react';
+import { Text } from 'react-native';
+import Icon from 'Icon';
 
 export default styleSheet('DiscussionHeader', {
   Wrapper: {
@@ -11,12 +12,20 @@ export default styleSheet('DiscussionHeader', {
     _size: 54,
     _padding: [7],
   },
-  RightSide: {
+  MiddleSide: {
     flex: 1,
     _size: '100%',
     paddingTop: 8,
-    // temp
     paddingRight: 7,
+  },
+  RightSide: {
+    _size: 54,
+    _padding: [7],
+    _flex: 'center',
+  },
+  ArrowRight: {
+    _el: Icon,
+    _size: 24,
   },
   LineOfText: {
     _el: Text,

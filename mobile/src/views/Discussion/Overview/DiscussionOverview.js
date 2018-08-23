@@ -99,7 +99,7 @@ export default class DiscussionOverview extends PureComponent {
 
     return (
       <Fragment>
-        <DiscussionHeader {...discussion.toJS()} />
+        <DiscussionHeader {...discussion.toJS()} {...this.bindLoading()} />
         <PaginationProvider
           request={{
             body: {
@@ -126,8 +126,6 @@ export default class DiscussionOverview extends PureComponent {
 
             return (
               <FlatList
-                ref={ref => this.flatList = ref}
-                onLayout={() => this.flatList.scrollToEnd({animated: true})}
                 data={p.results ? p.results.toList().toJS() : []}
                 onEndReached={() => this.onEndReached(p)}
                 onEndReachedThreshold={0}
@@ -143,7 +141,6 @@ export default class DiscussionOverview extends PureComponent {
           navPush={navPush}
           navPop={navPop}
           discussionId={discussion.get('id')}
-          // onFocus={this.scrollToBottom}
           placeholder="Write a comment…"
           {...this.bindLoading()}
         />
