@@ -21,7 +21,6 @@ export default class DiscussionHeader extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.onHeaderPressed = this.onHeaderPressed.bind(this);
     bindAll(this, [
       'onHeaderPressed',
       'onItemPress'

@@ -2,13 +2,15 @@ import React, { PureComponent, Fragment } from 'react';
 import { FlatList, ActivityIndicator } from 'react-native';
 import * as ca from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
-import DiscussionHeader from 'src/views/Discussion/Header/DiscussionHeader';
+import DiscussionHeader from 'views/Discussion/Header/DiscussionHeader';
+import ContextButton from 'views/Discussion/ContextButton/ContextButton';
 import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import SW from './DiscussionOverview.swiss';
 import CommentItem from 'views/Comment/Item/CommentItem';
 import CommentComposer from 'views/Comment/Composer/CommentComposer';
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import { mobileNavForContext } from 'utils/utils';
 
 @withRequests({
   discussion: {
@@ -41,6 +43,7 @@ export default class DiscussionOverview extends PureComponent {
     }
 
     setupLoading(this);
+    this.onNavigateToContext = this.onNavigateToContext.bind(this);
   }
   componentDidMount() {
     this.hideActionBar();
@@ -89,6 +92,14 @@ export default class DiscussionOverview extends PureComponent {
       hide: true
     });
   }
+  onNavigateToContext() {
+    const { discussion, navPush } = this.props;
+    const context = discussion.get('context');
+
+    if (context) {
+      navPush(mobileNavForContext(context));
+    }
+  }
   render() {
     const { discussion, navPush, navPop} = this.props;
     const { initLoading } = this.state;
@@ -100,6 +111,7 @@ export default class DiscussionOverview extends PureComponent {
     return (
       <Fragment>
         <DiscussionHeader {...discussion.toJS()} {...this.bindLoading()} />
+        <ContextButton {...discussion.toJS()} onNavigateToContext={this.onNavigateToContext} />
         <PaginationProvider
           request={{
             body: {
