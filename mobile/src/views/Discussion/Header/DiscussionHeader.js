@@ -84,12 +84,13 @@ export default class DiscussionHeader extends PureComponent {
   render() {
     const { followers, topic, isLoading } = this.props;
     const followersLabel = followers.length > 1 ? 'followers' : 'follower';
+    const userIds = followers.map((o) => o.user_id);
 
     return (
       <RippleButton onPress={this.onHeaderPressed}>
         <SW.Wrapper>
           <SW.LeftSide>
-            <SplitImage followers={followers} size={40} />
+            <SplitImage userIds={userIds} size={40} />
           </SW.LeftSide>
           <SW.MiddleSide>
             <SW.LineOfText numberOfLines={1} topic>

@@ -38,9 +38,11 @@ export default class DiscussionListItem extends PureComponent {
       last_comment_by,
       myId,
     } = this.props;
+    const userIds = followers.map((o) => o.user_id);
     const lastCommentByFirstName = msgGen.users.getFirstName(last_comment_by);
     let unread = false;
     const subscriber = followers.find(f => f.user_id === myId);
+
     if(subscriber && (!subscriber.read_at || subscriber.read_at < last_comment_at)) {
       unread = true;
     }
@@ -49,7 +51,7 @@ export default class DiscussionListItem extends PureComponent {
       <RippleButton onPress={this.onTap}>
         <SW.Wrapper>
           <SW.LeftSide>
-            <SplitImage followers={followers} size={40}></SplitImage>
+            <SplitImage userIds={userIds} size={40}></SplitImage>
           </SW.LeftSide>
           <SW.Middle>
             <SW.LineOfText numberOfLines={1} topic unread={unread}>

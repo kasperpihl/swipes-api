@@ -149,7 +149,7 @@ class CommentItem extends PureComponent {
       <TouchableWithoutFeedback onPress={this.toggleActiveState}>
         <SW.Wrapper>
           <SW.Container>
-            <SplitImage followers={[{ user_id: sent_by }]} size={30} />
+            <SplitImage userIds={[sent_by]} size={30} />
             {this.renderMessage()}
             {this.renderReactions()}
           </SW.Container>

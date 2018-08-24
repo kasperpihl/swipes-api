@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { setupDelegate } from 'react-delegate';
 import timeAgo from 'swipes-core-js/utils/time/timeAgo';
-import { colors, viewSize } from 'globalStyles';
+import { colors } from 'globalStyles';
 import RippleButton from 'RippleButton';
 import SplitImage from 'components/SplitImage/SplitImage';
 import StyledText from 'components/styled-text/StyledText';
-import Icon from 'Icon';
 
 const styles = StyleSheet.create({
   container: {
@@ -84,16 +83,19 @@ class NotificationItem extends PureComponent {
   }
   renderProfilePic() {
     const { notification: n } = this.props;
-    let users = [n.get('done_by')];
-    if(!n.get('title')) {
+    let users;
+
+    if(n.get('title')) {
+      users = n.get('done_by').toJS();
+    } else {
       users = [msgGen.notifications.getImportantUserIdFromMeta(n.get('meta'))];
     }
 
-    return <SplitImage followers={users} size={40} />
+    return <SplitImage userIds={users} size={40} />
   }
   renderMessage() {
     const { notification: n, parseUserIds } = this.props;
-    let text = n.get('title');
+
     if(n.get('title')) {
       const text = parseUserIds(n.get('title'));
       return (
