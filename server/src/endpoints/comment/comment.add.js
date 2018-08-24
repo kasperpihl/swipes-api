@@ -100,7 +100,7 @@ export default endpointCreate({
   const sender = await dbRunQuery(
     r.table('users')
       .get(user_id)
-      .pluck('profile')
+      .pluck('profile', 'id')
   );
 
   const mentions = mentionsGetArray(comment.message);
