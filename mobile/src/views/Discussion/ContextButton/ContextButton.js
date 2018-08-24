@@ -6,6 +6,11 @@ import SW from './ContextButton.swiss';
 export default class ContextButton extends PureComponent {
   render() {
     const { context, onNavigateToContext } = this.props;
+
+    if (!context) {
+      return null;
+    }
+
     const {
       id,
       title,
