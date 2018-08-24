@@ -20,6 +20,9 @@ export default async (notifications) => {
   if(!Array.isArray(notifications)) {
     notifications = [notifications];
   }
+  if(!notifications.length) {
+    return;
+  }
   notifications.forEach((notification) => {
     const err = notificationSchema.test(notification)
     if(err) {
