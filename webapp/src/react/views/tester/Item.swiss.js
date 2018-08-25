@@ -4,7 +4,7 @@ import Icon from 'Icon';
 export default styleSheet('Item', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
-    marginLeft: ({ indent }) => `${indent * 32}px`,
+    marginLeft: ({ indent }) => `${indent * 24}px`,
   },
   Input: {
     _el: 'input',
@@ -18,6 +18,7 @@ export default styleSheet('Item', {
   CollapseWrapper: {
     _size: ['24px', '24px'],
     _flex: ['row', 'center', 'center'],
+    flex: 'none',
   },
   CollapseIcon: {
     _el: Icon,
@@ -26,6 +27,9 @@ export default styleSheet('Item', {
     opacity: '.5',
     '&:hover': {
       opacity: 1,
+    },
+    collapsed: {
+      transform: 'rotate(90deg)',
     }
   },
   CheckboxWrapper: {
@@ -37,5 +41,8 @@ export default styleSheet('Item', {
     _size: '18px',
     border: '2px solid $sw3',
     borderRadius: '3px',
+    '&:hover': {
+      border: '2px solid $blue',
+    }
   },
 });

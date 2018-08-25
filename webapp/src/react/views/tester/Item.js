@@ -45,6 +45,10 @@ export default class Item extends PureComponent {
       onDownArrow(id, e.target.selectionStart);
     }
   }
+  onCollapseClick = () => {
+    const { onCollapse, item } = this.props;
+    onCollapse && onCollapse(item.get('id'));
+  }
   
   checkFocus() {
     const { focus, selectionStart, item } = this.props;
@@ -59,12 +63,14 @@ export default class Item extends PureComponent {
     }
   }
   render() {
-    const { item } = this.props;
+    const { item, orderItem } = this.props;
 
     return (
-      <SW.Wrapper indent={item.get('indent')}>
-        <SW.CollapseWrapper>
-          <SW.CollapseIcon icon="ArrowRightFull" />
+      <SW.Wrapper indent={orderItem.get('indent')}>
+        <SW.CollapseWrapper onClick={this.onCollapseClick}>
+          {orderItem.get('hasChildren') && (
+            <SW.CollapseIcon icon="ArrowRightFull" collapsed={orderItem.get('collapsed')} />
+          )}
         </SW.CollapseWrapper>
         <SW.CheckboxWrapper>
           <SW.Checkbox />
