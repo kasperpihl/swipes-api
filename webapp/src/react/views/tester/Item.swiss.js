@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'Icon';
 
 export default styleSheet('Item', {
   Wrapper: {
@@ -9,12 +10,26 @@ export default styleSheet('Item', {
     _el: 'input',
     _font: ['15px', '24px', 400],
     width: '100%',
+    paddingLeft: '6px',
     '&:focus': {
       // border: '1px solid red',
     }
   },
+  CollapseWrapper: {
+    _size: ['24px', '24px'],
+    _flex: ['row', 'center', 'center'],
+  },
+  CollapseIcon: {
+    _el: Icon,
+    _size: '24px',
+    _svgColor: '$sw2',
+    opacity: '.5',
+    '&:hover': {
+      opacity: 1,
+    }
+  },
   CheckboxWrapper: {
-    _size: ['36px', '24px'],
+    _size: ['24px', '24px'],
     _flex: 'center',
     flex: 'none',
   },

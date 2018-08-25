@@ -64,7 +64,7 @@ export default class Item extends PureComponent {
     return (
       <SW.Wrapper indent={item.get('indent')}>
         <SW.CollapseWrapper>
-          <SW.CollapseIcon />
+          <SW.CollapseIcon icon="ArrowRightFull" />
         </SW.CollapseWrapper>
         <SW.CheckboxWrapper>
           <SW.Checkbox />

@@ -18,6 +18,7 @@ export default class Tester extends PureComponent {
           title: 'Hello',
           type: 'task',
           indent: 0,
+          children: [],
         },
       ])
     }
