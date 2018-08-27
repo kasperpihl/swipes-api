@@ -7,7 +7,7 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
 import Loader from 'src/react/components/loaders/Loader';
 import DiscussionOverview from './DiscussionOverview';
 
-export default 
+export default
 @withRequests({
   discussion: {
     request: {
@@ -35,7 +35,7 @@ class HOCDiscussionOverview extends PureComponent {
     const { discussion, myId, apiRequest } = this.props;
     const sub = discussion.get('followers').find(f => f.get('user_id') === myId);
     if(sub &&
-      (!sub.get('read_at') || 
+      (!sub.get('read_at') ||
         sub.get('read_at') < discussion.get('last_comment_at'))
     ) {
       apiRequest('discussion.markAsRead', {
@@ -48,6 +48,11 @@ class HOCDiscussionOverview extends PureComponent {
     const { requestReady, requestError, discussion } = this.props;
     if(!requestReady) {
       return <Loader center size={54} text="Loading" />
+    }
+
+    // @kasper how I should fix this
+    if (!discussion) {
+      return null;
     }
 
     return (
