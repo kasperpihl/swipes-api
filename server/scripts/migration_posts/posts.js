@@ -1,5 +1,6 @@
 import r from 'rethinkdb';
 import Promise from 'bluebird';
+import BlueBirdQueue from 'bluebird-queue';
 import idGenerate from '../../src/utils/idGenerate';
 import shorten from '../../src/utils/shorten';
 import mentionsClean from '../../src/utils/mentions/mentionsClean';
@@ -19,12 +20,21 @@ if (!dbConfig) {
   process.exit();
 }
 
-const pageItems = 500;
+
+const queue = new BlueBirdQueue({
+  concurrency: 1,
+});
+const pageItems = 100;
 let item = 0;
-let offset = 500;
-const promises = [];
+let offset = 100;
 
 console.log('Picking information!');
+
+const totals = {
+  discussions: 0,
+  comments: 0,
+  followers: 0,
+};
 
 const pagination = (resolve, reject) => {
   const posts = r.table('posts').orderBy('created_at').slice(item, offset);
@@ -105,10 +115,11 @@ const pagination = (resolve, reject) => {
           const followersQ = r.table('discussion_followers').insert(followers);
           const commentsQ = r.table('comments').insert(comments);
 
-          promises.push(
-            dbRunQuery(followersQ, { dbConfig }),
-            dbRunQuery(commentsQ, { dbConfig }),
-          );
+          queue.add(dbRunQuery(followersQ, { dbConfig }));
+          queue.add(dbRunQuery(commentsQ, { dbConfig }));
+
+          totals.comments += comments.length;
+          totals.followers += followers.length;
 
           // DISCUSSION
           return {
@@ -127,10 +138,14 @@ const pagination = (resolve, reject) => {
 
         const discussionsQ = r.table('discussions').insert(discussions);
 
-        promises.push(dbRunQuery(discussionsQ, { dbConfig }));
+        queue.add(dbRunQuery(discussionsQ, { dbConfig }));
+
+        totals.discussions += discussions.length;
 
         return pagination(resolve, reject);
       }
+
+      console.log(totals);
 
       return resolve();
     })
@@ -148,7 +163,7 @@ const wrapperPromise = () => new Promise((resolve, reject) => {
 wrapperPromise()
   .then(() => {
     console.log('Waiting for queries to execute');
-    return Promise.all(promises);
+    return queue.start();
   })
   .then(() => {
     console.log('Done!');
