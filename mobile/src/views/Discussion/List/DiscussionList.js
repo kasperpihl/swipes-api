@@ -26,6 +26,7 @@ export default class DiscussionList extends PureComponent {
     };
 
   }
+
   onInitialLoad = () => {
     const { tabIndex } = this.state;
     const { apiRequest, counter } = this.props;
