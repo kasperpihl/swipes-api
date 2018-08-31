@@ -24,7 +24,7 @@ export default class Item extends PureComponent {
     const id = item.get('id');
 
     if(e.keyCode === 8) { // Backspace
-      if(e.target.selectionStart === 0 && onDelete) {
+      if(e.target.selectionStart === 0 && e.target.selectionEnd === 0 && onDelete) {
         e.preventDefault();
         onDelete(id);
       }

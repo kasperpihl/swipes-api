@@ -1,7 +1,14 @@
-import { styleSheet } from 'swiss-react';
+import { styleSheet } from "swiss-react";
 
-export default styleSheet('Tester', {
+export default styleSheet("Tester", {
   Wrapper: {
-    _flex: ['column'],
+    overflowY: "scroll"
   },
-})
+  Header: {
+    _flex: ["row", "between", "center"],
+    padding: "10px 24px"
+  },
+  HeaderTitle: {
+    _el: "h1"
+  }
+});
