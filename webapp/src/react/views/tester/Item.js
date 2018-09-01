@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import HOCAssigning from 'components/assigning/HOCAssigning';
 import SW from './Item.swiss';
 
 export default class Item extends PureComponent {
@@ -8,11 +9,11 @@ export default class Item extends PureComponent {
   componentDidUpdate() {
     this.checkFocus();
   }
-  onChange = (e) => {
+  onChange = e => {
     const { onChange, item } = this.props;
     onChange(item.get('id'), e.target.value);
-  }
-  onKeyDown = (e) => {
+  };
+  onKeyDown = e => {
     const {
       item,
       onEnter,
@@ -23,38 +24,44 @@ export default class Item extends PureComponent {
     } = this.props;
     const id = item.get('id');
 
-    if(e.keyCode === 8) { // Backspace
-      if(e.target.selectionStart === 0 && e.target.selectionEnd === 0 && onDelete) {
+    if (e.keyCode === 8) {
+      // Backspace
+      if (
+        e.target.selectionStart === 0 &&
+        e.target.selectionEnd === 0 &&
+        onDelete
+      ) {
         e.preventDefault();
         onDelete(id);
       }
-    }
-    else if(e.keyCode === 9 && onTab) { // Tab
+    } else if (e.keyCode === 9 && onTab) {
+      // Tab
       e.preventDefault();
-      onTab(id, e)
-    }
-    else if(e.keyCode === 13 && onEnter) { // Enter
+      onTab(id, e);
+    } else if (e.keyCode === 13 && onEnter) {
+      // Enter
       e.preventDefault();
       onEnter(id, e.target.selectionStart);
-    }
-    else if(e.keyCode === 38 && onUpArrow) { // Up arrow
+    } else if (e.keyCode === 38 && onUpArrow) {
+      // Up arrow
       e.preventDefault();
       onUpArrow(id, e.target.selectionStart);
-    } else if(e.keyCode === 40 && onDownArrow) { // Down arrow
+    } else if (e.keyCode === 40 && onDownArrow) {
+      // Down arrow
       e.preventDefault();
       onDownArrow(id, e.target.selectionStart);
     }
-  }
+  };
   onCollapseClick = () => {
     const { onCollapse, item } = this.props;
     onCollapse && onCollapse(item.get('id'));
-  }
-  
+  };
+
   checkFocus() {
     const { focus, selectionStart, item } = this.props;
-    if(focus) {
+    if (focus) {
       this.inputRef.focus();
-      if(typeof selectionStart === 'number') {
+      if (typeof selectionStart === 'number') {
         const selI = Math.min(item.get('title').length, selectionStart);
         console.log('setting', selI);
 
@@ -69,7 +76,10 @@ export default class Item extends PureComponent {
       <SW.Wrapper indent={orderItem.get('indent')}>
         <SW.CollapseWrapper onClick={this.onCollapseClick}>
           {orderItem.get('hasChildren') && (
-            <SW.CollapseIcon icon="ArrowRightFull" collapsed={orderItem.get('collapsed')} />
+            <SW.CollapseIcon
+              icon="ArrowRightFull"
+              collapsed={orderItem.get('collapsed')}
+            />
           )}
         </SW.CollapseWrapper>
         <SW.CheckboxWrapper>
@@ -80,8 +90,13 @@ export default class Item extends PureComponent {
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           placeholder="Add title"
-          innerRef={(c) => { this.inputRef = c}}
-        />          
+          innerRef={c => {
+            this.inputRef = c;
+          }}
+        />
+        <SW.AssigneeWrapper>
+          <HOCAssigning assignees={['me']} size={24} />
+        </SW.AssigneeWrapper>
       </SW.Wrapper>
     );
   }

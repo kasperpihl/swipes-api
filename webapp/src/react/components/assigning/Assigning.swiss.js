@@ -14,16 +14,16 @@ export default styleSheet('Assigning', {
     _size: ({ size }) => `${size + 2}px`,
     position: 'absolute',
     background: '$sw5',
-    borderRadius: props => `${(props.size + 2)/2}px`,
+    borderRadius: props => `${(props.size + 2) / 2}px`,
     top: '-1px',
-    right: ({ index, size }) => `${index * (size - 6) - 1}px`,
+    right: ({ index, size }) => `${index * (size - 6) - 1}px`,
   },
   ImageWrapper: {
     _size: '#{size}px',
     _flex: 'center',
-    _borderRadius: props => `${props.size/2}px`,
+    _borderRadius: props => `${props.size / 2}px`,
     position: 'absolute',
-    right: ({ index, size }) => `${index * (size - 6)}px`,
+    right: ({ index, size }) => `${index * (size - 6)}px`,
     top: 0,
     background: '$sw1',
     overflow: 'hidden',
@@ -35,7 +35,7 @@ export default styleSheet('Assigning', {
     },
     '> img': {
       _borderRadius: '50%',
-    }
+    },
   },
   ExtraNumber: {
     _font: ['11px', '18px', 500],
@@ -49,5 +49,4 @@ export default styleSheet('Assigning', {
     letterSpacing: '-0.3px',
     marginRight: '6px',
   },
-
 });

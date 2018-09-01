@@ -1,13 +1,11 @@
-import React, { PureComponent } from "react";
-import { fromJS } from "immutable";
-import randomString from "swipes-core-js/utils/randomString";
-import SW from "./Tester.swiss";
-import indentWithChildren from "./indentWithChildren";
-import updateHasChildrenForItem from "./updateHasChildrenForItem";
-import Slider from "rc-slider/lib/Slider";
-import "rc-slider/assets/index.css";
-import data from "./data";
-import Item from "./Item";
+import React, { PureComponent } from 'react';
+import { fromJS } from 'immutable';
+import randomString from 'swipes-core-js/utils/randomString';
+import SW from './Tester.swiss';
+import indentWithChildren from './indentWithChildren';
+import updateHasChildrenForItem from './updateHasChildrenForItem';
+import data from './data';
+import Item from './Item';
 
 export default class Tester extends PureComponent {
   static sizes() {
@@ -17,7 +15,7 @@ export default class Tester extends PureComponent {
     super(props);
     this.state = {
       sliderValue: 0,
-      ...data
+      ...data,
     };
   }
   onTab = (id, e) => {
@@ -29,18 +27,18 @@ export default class Tester extends PureComponent {
 
     if (newOrder !== order) {
       this.setState({
-        order: newOrder
+        order: newOrder,
       });
     }
   };
   onChangeTitle = (id, title) => {
     let { itemsById } = this.state;
-    itemsById = itemsById.setIn([id, "title"], title);
+    itemsById = itemsById.setIn([id, 'title'], title);
     this.setState({ itemsById });
   };
   onUpArrow = (id, selectionStart) => {
     const { order } = this.state;
-    const i = order.findIndex(item => item.get("id") === id);
+    const i = order.findIndex(item => item.get('id') === id);
     if (i > 0) {
       this.focusI = i - 1;
       this.selectionStart = selectionStart;
@@ -49,7 +47,7 @@ export default class Tester extends PureComponent {
   };
   onDownArrow = (id, selectionStart) => {
     const { order } = this.state;
-    const i = order.findIndex(item => item.get("id") === id);
+    const i = order.findIndex(item => item.get('id') === id);
     if (i < order.size - 1) {
       this.focusI = i + 1;
       this.selectionStart = selectionStart;
@@ -59,18 +57,18 @@ export default class Tester extends PureComponent {
   onDelete = id => {
     let { itemsById, order } = this.state;
 
-    const i = order.findIndex(item => item.get("id") === id);
-    const currentTitle = itemsById.getIn([id, "title"]);
+    const i = order.findIndex(item => item.get('id') === id);
+    const currentTitle = itemsById.getIn([id, 'title']);
     if (i > 0) {
       order = order.delete(i);
       itemsById = itemsById.delete(id);
       this.focusI = Math.max(i - 1, 0);
-      const prevId = order.getIn([i - 1, "id"]);
+      const prevId = order.getIn([i - 1, 'id']);
       if (currentTitle) {
-        const prevTitle = itemsById.getIn([prevId, "title"]);
+        const prevTitle = itemsById.getIn([prevId, 'title']);
         this.selectionStart = prevTitle.length;
         itemsById = itemsById.setIn(
-          [order.getIn([i - 1, "id"]), "title"],
+          [order.getIn([i - 1, 'id']), 'title'],
           prevTitle + currentTitle
         );
       }
@@ -81,14 +79,14 @@ export default class Tester extends PureComponent {
   };
   onEnter = (id, selectionStart) => {
     let { itemsById, order } = this.state;
-    const i = order.findIndex(item => item.get("id") === id);
+    const i = order.findIndex(item => item.get('id') === id);
     const currentItem = itemsById.get(id);
-    let currTitle = currentItem.get("title");
-    let nextTitle = "";
-    if (selectionStart < currentItem.get("title").length) {
+    let currTitle = currentItem.get('title');
+    let nextTitle = '';
+    if (selectionStart < currentItem.get('title').length) {
       nextTitle = currTitle.slice(selectionStart);
       currTitle = currTitle.slice(0, selectionStart);
-      itemsById = itemsById.setIn([id, "title"], currTitle);
+      itemsById = itemsById.setIn([id, 'title'], currTitle);
     }
     const newId = randomString(5);
     itemsById = itemsById.set(
@@ -96,14 +94,14 @@ export default class Tester extends PureComponent {
       fromJS({
         id: newId,
         title: nextTitle,
-        type: "task"
+        type: 'task',
       })
     );
     order = order.insert(
       i + 1,
       fromJS({
         id: newId,
-        indent: order.getIn([i, "indent"])
+        indent: order.getIn([i, 'indent']),
       })
     );
     order = updateHasChildrenForItem(order, i + 1);
@@ -114,14 +112,14 @@ export default class Tester extends PureComponent {
     }
     this.setState({
       itemsById,
-      order
+      order,
     });
   };
   onCollapse = id => {
     const { order } = this.state;
-    const i = order.findIndex(item => item.get("id") === id);
+    const i = order.findIndex(item => item.get('id') === id);
     this.setState({
-      order: order.setIn([i, "collapsed"], !order.getIn([i, "collapsed"]))
+      order: order.setIn([i, 'collapsed'], !order.getIn([i, 'collapsed'])),
     });
   };
   onSliderChange = e => {
@@ -129,15 +127,15 @@ export default class Tester extends PureComponent {
 
     let { order } = this.state;
     order = order.map(item =>
-      item.set("collapsed", item.get("indent") < depth)
+      item.set('collapsed', item.get('indent') < depth)
     );
     this.setState({
       sliderValue: e.target.value,
-      order
+      order,
     });
   };
   componentDidUpdate() {
-    if (typeof this.focusI === "number") {
+    if (typeof this.focusI === 'number') {
       this.focusI = undefined;
       this.selectionStart = undefined;
     }
@@ -146,7 +144,7 @@ export default class Tester extends PureComponent {
     const { order, itemsById } = this.state;
     let blockUntilNextIndent = -1;
     return order.map((item, i) => {
-      const indent = item.get("indent");
+      const indent = item.get('indent');
       if (blockUntilNextIndent > -1) {
         if (indent > blockUntilNextIndent) {
           return null;
@@ -154,16 +152,16 @@ export default class Tester extends PureComponent {
           blockUntilNextIndent = -1;
         }
       }
-      if (item.get("hasChildren") && !item.get("collapsed")) {
+      if (item.get('hasChildren') && !item.get('collapsed')) {
         blockUntilNextIndent = indent;
       }
       return (
         <Item
           focus={i === this.focusI}
           selectionStart={i === this.focusI && this.selectionStart}
-          item={itemsById.get(item.get("id"))}
+          item={itemsById.get(item.get('id'))}
           orderItem={item}
-          key={item.get("id")}
+          key={item.get('id')}
           onUpArrow={this.onUpArrow}
           onDownArrow={this.onDownArrow}
           onEnter={this.onEnter}
