@@ -36,6 +36,19 @@ export default class Tester extends PureComponent {
     itemsById = itemsById.setIn([id, 'title'], title);
     this.setState({ itemsById });
   };
+  onAttachmentAdd = (id, attachment) => {
+    let { itemsById } = this.state;
+    itemsById = itemsById.setIn([id, 'type'], 'attachment');
+    itemsById = itemsById.setIn([id, 'title'], attachment.get('title'));
+    itemsById = itemsById.setIn([id, 'attachment'], attachment);
+    this.setState({ itemsById });
+  };
+  onChangeAssignees = (id, assignees) => {
+    let { itemsById } = this.state;
+    itemsById = itemsById.setIn([id, 'assignees'], assignees);
+    console.log(id, assignees, itemsById.get(id).toJS());
+    this.setState({ itemsById });
+  };
   onUpArrow = (id, selectionStart) => {
     const { order } = this.state;
     const i = order.findIndex(item => item.get('id') === id);
@@ -167,7 +180,9 @@ export default class Tester extends PureComponent {
           onEnter={this.onEnter}
           onDelete={this.onDelete}
           onTab={this.onTab}
-          onChange={this.onChangeTitle}
+          onAttachmentAdd={this.onAttachmentAdd}
+          onChangeTitle={this.onChangeTitle}
+          onChangeAssignees={this.onChangeAssignees}
           onCollapse={this.onCollapse}
         />
       );

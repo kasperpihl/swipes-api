@@ -5,6 +5,7 @@ export default styleSheet('Item', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
     marginLeft: ({ indent }) => `${indent * 24}px`,
+    paddingRight: '6px',
   },
   Input: {
     _el: 'input',
@@ -48,9 +49,15 @@ export default styleSheet('Item', {
     },
   },
   AssigneeWrapper: {
-    _size: '24px',
+    height: '30px',
     overflow: 'hidden',
     _flex: 'center',
     flex: 'none',
+    hide: {
+      visibility: 'hidden',
+      '.item-class:hover &': {
+        visibility: 'visible',
+      },
+    },
   },
 });
