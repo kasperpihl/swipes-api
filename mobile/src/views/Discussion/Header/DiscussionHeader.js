@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Keyboard, ActivityIndicator } from 'react-native';
+import { Keyboard, ActivityIndicator, Platform } from 'react-native';
 import { fromJS } from 'immutable';
 import RippleButton from 'RippleButton';
 import * as a from 'actions';
@@ -85,10 +85,11 @@ export default class DiscussionHeader extends PureComponent {
     const { followers, topic, isLoading } = this.props;
     const followersLabel = followers.length > 1 ? 'followers' : 'follower';
     const userIds = followers.map((o) => o.user_id);
+    const isAndroid = Platform.OS === 'android';
 
     return (
       <RippleButton onPress={this.onHeaderPressed}>
-        <SW.Wrapper>
+        <SW.Wrapper isAndroid={isAndroid}>
           <SW.LeftSide>
             <SplitImage userIds={userIds} size={40} />
           </SW.LeftSide>
