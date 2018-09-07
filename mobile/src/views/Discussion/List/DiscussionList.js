@@ -1,53 +1,55 @@
-import React, { PureComponent } from 'react';
-import { FlatList, ActivityIndicator } from 'react-native';
-import { connect } from 'react-redux';
-import * as ca from 'swipes-core-js/actions';
-import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
-import HOCHeader from 'HOCHeader';
-import Icon from 'Icon';
-import RippleButton from 'RippleButton';
-import SW from './DiscussionList.swiss';
-import DiscussionListItem from './Item/DiscussionListItem';
+import React, { PureComponent } from "react";
+import { FlatList, ActivityIndicator } from "react-native";
+import { connect } from "react-redux";
+import * as ca from "swipes-core-js/actions";
+import PaginationProvider from "swipes-core-js/components/pagination/PaginationProvider";
+import HOCHeader from "HOCHeader";
+import Icon from "Icon";
+import RippleButton from "RippleButton";
+import SW from "./DiscussionList.swiss";
+import DiscussionListItem from "./Item/DiscussionListItem";
 
-@connect(state => ({
-  counter: state.counter.get('discussion'),
-  myId: state.me.get('id'),
-}), {
-  apiRequest: ca.api.request,
-})
+@connect(
+  state => ({
+    counter: state.counter.get("discussion"),
+    myId: state.me.get("id")
+  }),
+  {
+    apiRequest: ca.api.request
+  }
+)
 export default class DiscussionList extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      tabs: ['Following', 'All other', 'By me'],
+      tabs: ["Following", "All other", "By me"],
       tabIndex: 0,
-      initLoading: true,
+      initLoading: true
     };
-
   }
 
   onInitialLoad = () => {
     const { tabIndex } = this.state;
     const { apiRequest, counter } = this.props;
 
-    if(tabIndex === 0 && counter && counter.size) {
-      apiRequest('me.clearCounter', {
-        type: 'discussion',
-        cleared_at: counter.first().get('ts'),
+    if (tabIndex === 0 && counter && counter.size) {
+      apiRequest("me.clearCounter", {
+        type: "discussion",
+        cleared_at: counter.first().get("ts")
       });
     }
 
     this.setState({
-      initLoading: false,
-    })
-  }
+      initLoading: false
+    });
+  };
 
   onChangeTab(index) {
     if (index !== this.state.tabIndex) {
       this.setState({
         tabIndex: index,
-        initLoading: true,
+        initLoading: true
       });
     }
   }
@@ -62,10 +64,10 @@ export default class DiscussionList extends PureComponent {
     const { navPush } = this.props;
 
     navPush({
-      id: 'HOCDiscussionCreate',
-      title: 'Create a Discussion',
-    })
-  }
+      id: "HOCDiscussionCreate",
+      title: "Create a Discussion"
+    });
+  };
 
   renderHeader() {
     const { tabIndex, tabs } = this.state;
@@ -86,7 +88,7 @@ export default class DiscussionList extends PureComponent {
     );
   }
 
-  renderListFooter = (loading) => {
+  renderListFooter = loading => {
     if (!loading) return null;
 
     return (
@@ -100,7 +102,9 @@ export default class DiscussionList extends PureComponent {
     return (
       <SW.EmptyStateWrapper>
         <Icon icon="ESDiscussion" width="290" height="300" />
-        <SW.EmptyStateText selectable>Start a discussion or share an idea</SW.EmptyStateText>
+        <SW.EmptyStateText selectable>
+          Start a discussion or share an idea
+        </SW.EmptyStateText>
       </SW.EmptyStateWrapper>
     );
   }
@@ -108,15 +112,15 @@ export default class DiscussionList extends PureComponent {
   render() {
     const { tabIndex, initLoading } = this.state;
     const { myId, navPush } = this.props;
-    let type = 'following';
-    let filter = d => d.get('followers').find(o => o.get('user_id') === myId);
+    let type = "following";
+    let filter = d => d.get("followers").find(o => o.get("user_id") === myId);
 
     if (tabIndex === 1) {
-      type = 'all other';
-      filter = d => !d.get('followers').find(o => o.get('user_id') === myId);
+      type = "all other";
+      filter = d => !d.get("followers").find(o => o.get("user_id") === myId);
     } else if (tabIndex === 2) {
-      type = 'by me';
-      filter = d => d.get('created_by') === myId;
+      type = "by me";
+      filter = d => d.get("created_by") === myId;
     }
 
     return (
@@ -126,24 +130,23 @@ export default class DiscussionList extends PureComponent {
           <PaginationProvider
             request={{
               body: { type },
-              url: 'discussion.list',
-              resPath: 'discussions',
+              url: "discussion.list",
+              resPath: "discussions"
             }}
-            limit={5}
             onInitialLoad={this.onInitialLoad}
             cache={{
-              path: 'discussion',
+              path: "discussion",
               filter,
-              orderBy: '-last_comment_at',
+              orderBy: "-last_comment_at"
             }}
           >
-            {(p) => {
+            {p => {
               if (initLoading) {
                 return (
                   <SW.LoaderContainer>
                     <ActivityIndicator size="large" color="#007AFF" />
                   </SW.LoaderContainer>
-                )
+                );
               }
 
               if (p.results && !p.results.size) {
@@ -155,8 +158,10 @@ export default class DiscussionList extends PureComponent {
                   data={p.results ? p.results.toList().toJS() : []}
                   onEndReached={() => this.onEndReached(p)}
                   onEndReachedThreshold={0}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => <DiscussionListItem navPush={navPush} {...item}></DiscussionListItem>}
+                  keyExtractor={item => item.id}
+                  renderItem={({ item }) => (
+                    <DiscussionListItem navPush={navPush} {...item} />
+                  )}
                   ListFooterComponent={() => this.renderListFooter(p.loading)}
                 />
               );
