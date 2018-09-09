@@ -9,6 +9,7 @@ import DiscussionComposer from './Discussion/Composer/DiscussionComposer';
 import DiscussionOverview from './Discussion/Overview/HOCDiscussionOverview';
 import Browser from './browser/Browser';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
+import ProjectOverview from './Project/Overview/ProjectOverview';
 import PlanList from './plan/plan-list/HOCPlanList';
 import PlanOverview from './plan/plan-overview/HOCPlanOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
@@ -37,6 +38,7 @@ export {
   PlanOverview,
   Previewer,
   Profile,
+  ProjectOverview,
   Organization,
   Search,
   SideNote,

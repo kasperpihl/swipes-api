@@ -8,16 +8,18 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Sidebar.swiss';
 import { SwissProvider } from 'swiss-react';
 
-@connect(state => ({
-  me: state.me,
-  navId: state.navigation.getIn(['primary', 'id']),
-  notificationCounter: state.connection.get('notificationCounter'),
-  counter: state.counter,
-}), {
-  navSet: navigationActions.set,
-  contextMenu: mainActions.contextMenu,
-})
-
+@connect(
+  state => ({
+    me: state.me,
+    navId: state.navigation.getIn(['primary', 'id']),
+    notificationCounter: state.connection.get('notificationCounter'),
+    counter: state.counter,
+  }),
+  {
+    navSet: navigationActions.set,
+    contextMenu: mainActions.contextMenu,
+  }
+)
 export default class Sidebar extends PureComponent {
   constructor(props) {
     super(props);
@@ -29,14 +31,14 @@ export default class Sidebar extends PureComponent {
     this.onMouseDownCached = setupCachedCallback(this.onMouseDown, this);
   }
   onMouseDown(id, e) {
-    if(e.button === 1) {
+    if (e.button === 1) {
       this.onClick(id, 'secondary', e);
     }
   }
   onClick(id, target, e) {
     const { navSet } = this.props;
 
-    if(e.which === 2 || e.which === 4) {
+    if (e.which === 2 || e.which === 4) {
       target = 'secondary';
     }
     if (id === 'NotificationList') {
@@ -52,13 +54,14 @@ export default class Sidebar extends PureComponent {
   }
   getNavItems() {
     return [
-      { id: 'PlanList', svg: 'Milestones' },
-      { id: 'TakeAction', svg: 'Goals' },
+      { id: 'ProjectOverview', svg: 'Milestones' },
       { id: 'Discuss', svg: 'Messages' },
     ].filter(v => !!v);
   }
   getTitleForId(id) {
     switch (id) {
+      case 'ProjectOverview':
+        return 'Projects';
       case 'PostFeed':
         return 'Discuss';
       case 'PlanList':
@@ -87,14 +90,15 @@ export default class Sidebar extends PureComponent {
       alignX: 'left',
       excludeX: true,
       positionX: 12,
-
     };
     this.setState({ isOpenNotifications: true });
     contextMenu({
       component: HOCNotificationList,
-      onClose: () => { this.setState({ isOpenNotifications: false }); },
+      onClose: () => {
+        this.setState({ isOpenNotifications: false });
+      },
       options,
-    })
+    });
   }
   renderItem(item) {
     const { navId, notificationCounter, counter } = this.props;
@@ -105,15 +109,18 @@ export default class Sidebar extends PureComponent {
       count = this.getRemainingOnboarding();
     } else if (item.id === 'NotificationList') {
       count = notificationCounter;
-    } else if(item.id === 'Discuss') {
-      count = counter && counter.get('discussion').size || 0
+    } else if (item.id === 'Discuss') {
+      count = (counter && counter.get('discussion').size) || 0;
     }
-    if(count > 9) {
+    if (count > 9) {
       count = '9+';
     }
 
     let active = null;
-    if (isOpen && item.id === 'Notifications' || !isOpen && item.id === navId) {
+    if (
+      (isOpen && item.id === 'Notifications') ||
+      (!isOpen && item.id === navId)
+    ) {
       active = true;
     }
 
@@ -125,11 +132,19 @@ export default class Sidebar extends PureComponent {
           onMouseDown={this.onMouseDownCached(item.id)}
           key={item.id}
           data-id={item.id}
-          className='item'
+          className="item"
         >
-        <SW.Description className='description'>{this.getTitleForId(item.id)}</SW.Description>
-          {item.id === 'AccountList' ? <HOCAssigning assignees={[item.personId]} size={30} /> : <SW.Icon icon={item.svg} className='icon'/>}
-          {count ? <SW.NotificationCounter>{count}</SW.NotificationCounter> : null}
+          <SW.Description className="description">
+            {this.getTitleForId(item.id)}
+          </SW.Description>
+          {item.id === 'AccountList' ? (
+            <HOCAssigning assignees={[item.personId]} size={30} />
+          ) : (
+            <SW.Icon icon={item.svg} className="icon" />
+          )}
+          {count ? (
+            <SW.NotificationCounter>{count}</SW.NotificationCounter>
+          ) : null}
         </SW.Item>
       </SwissProvider>
     );
@@ -161,12 +176,12 @@ export default class Sidebar extends PureComponent {
       <SW.Wrapper>
         <SW.TopSection>
           {this.renderItem({ id: 'NotificationList', svg: 'Notification' })}
-          {this.getRemainingOnboarding() ? this.renderItem({ id: 'Onboarding', svg: 'Onboarding' }) : null}
+          {this.getRemainingOnboarding()
+            ? this.renderItem({ id: 'Onboarding', svg: 'Onboarding' })
+            : null}
         </SW.TopSection>
         <SW.MiddleSection>
-          <SW.Section>
-            {this.renderMiddleSection()}
-          </SW.Section>
+          <SW.Section>{this.renderMiddleSection()}</SW.Section>
         </SW.MiddleSection>
         <SW.BottomSection>
           {this.renderItem({ id: 'Search', svg: 'Search' })}
