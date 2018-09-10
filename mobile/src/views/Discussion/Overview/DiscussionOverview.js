@@ -148,7 +148,7 @@ export default class DiscussionOverview extends PureComponent {
               <FlatList
                 data={p.results ? p.results.toList().toJS() : []}
                 onEndReached={() => this.onEndReached(p)}
-                onEndReachedThreshold={0}
+                onEndReachedThreshold={10}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => <CommentItem {...item} />}
                 ListFooterComponent={() => this.renderListFooter(p.loading)}

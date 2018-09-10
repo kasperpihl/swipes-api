@@ -17,9 +17,9 @@ const expectedInput = {
 export default endpointCreate({
   endpoint: '/comment.react',
   expectedInput,
-}, async (req, res) => {
+}, async (req, res) => {
   // Get inputs
-  const { user_id, organization_id } = res.locals;
+  const { user_id } = res.locals;
   const {
     comment_id,
     reaction,
@@ -27,8 +27,8 @@ export default endpointCreate({
 
   const q = dbUpdateQuery('comments', comment_id, {
     reactions: {
-      [user_id]: reaction ? reaction : r.literal()
-    }
+      [user_id]: reaction || r.literal(),
+    },
   });
 
   const commentRes = await dbRunQuery(q);
@@ -39,8 +39,8 @@ export default endpointCreate({
       {
         type: 'comment',
         data: commentRes.changes[0].new_val,
-      }
-    ]
+      },
+    ],
   };
 }).background(async (req, res) => {
   dbSendUpdates(res.locals);
@@ -50,7 +50,7 @@ export default endpointCreate({
 
   const reactionists = Object.keys(comment.reactions);
 
-  if(!reactionists.length) {
+  if (!reactionists.length) {
     return dbClearNotifications(`${comment.sent_by}-${comment.id}-reaction`);
   }
 
@@ -58,7 +58,7 @@ export default endpointCreate({
     number: 2,
     preferId: user_id,
   });
-  if(reactionists.indexOf(user_id) > -1) {
+  if (reactionists.indexOf(user_id) > -1) {
     [user_id].concat(reactionists.filter(u => u !== user_id));
   }
 

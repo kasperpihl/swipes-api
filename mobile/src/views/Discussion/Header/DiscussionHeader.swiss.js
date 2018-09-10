@@ -7,6 +7,9 @@ export default styleSheet('DiscussionHeader', {
     _flex: 'row',
     _border: [1, '$sw3', 'bottom'],
     alignSelf: 'stretch',
+    isAndroid: {
+      paddingTop: 20,
+    },
   },
   LeftSide: {
     _size: 54,

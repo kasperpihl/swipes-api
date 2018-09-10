@@ -1,6 +1,4 @@
 import * as ca from 'swipes-core-js/actions';
-import { fromJS } from 'immutable';
-import randomString from 'swipes-core-js/utils/randomString';
 import * as types from 'constants/ActionTypes';
 
 // ======================================================
@@ -12,7 +10,9 @@ export const signout = cb => dp => dp(ca.api.request('users.signout')).then((res
     cb(res);
   }
   if (res && res.ok) {
-    window.persistor.purge();
+    if (window.persistor) {
+      window.persistor.purge();
+    }
     dp({ type: types.RESET_STATE });
   }
 });
