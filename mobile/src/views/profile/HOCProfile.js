@@ -57,7 +57,7 @@ class HOCProfile extends PureComponent {
 
     return (
       <View style={styles.initialsView}>
-        <Text selectable={true} style={styles.initialsLetters}>{initials}</Text>
+        <Text selectable style={styles.initialsLetters}>{initials}</Text>
       </View>
     );
   }
@@ -69,13 +69,13 @@ class HOCProfile extends PureComponent {
         {this.renderHeader()}
         <View style={styles.profile}>
           {this.renderProfile()}
-          <Text selectable={true} style={styles.name}>{msgGen.users.getFullName(me)}</Text>
+          <Text selectable style={styles.name}>{msgGen.users.getFullName(me)}</Text>
           <View style={styles.seperator} />
-          <Text selectable={true} style={styles.orgName}>{me.getIn(['organizations', 0, 'name'])}</Text>
+          <Text selectable style={styles.orgName}>{me.getIn(['organizations', 0, 'name'])}</Text>
 
           <RippleButton style={styles.logOutButton} onPress={this.onLogOut}>
             <View style={styles.logOut}>
-              <Text selectable={true} style={styles.logOutLabel}>Log out</Text>
+              <Text selectable style={styles.logOutLabel}>Log out</Text>
             </View>
           </RippleButton>
         </View>
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   logOutLabel: {
     paddingVertical: 15,
     paddingHorizontal: 30,
-  }
+  },
 });
 
 function mapStateToProps(state) {
@@ -150,5 +150,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  signout: a.main.signout
+  signout: a.main.signout,
 })(HOCProfile);
