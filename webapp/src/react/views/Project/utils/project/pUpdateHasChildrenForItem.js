@@ -11,7 +11,7 @@ export default (order, idOrI) => {
     if (hasChildren !== prev.get('hasChildren')) {
       order = order
         .setIn([i - 1, 'hasChildren'], hasChildren)
-        .setIn([i - 1, 'collapsed'], !!hasChildren);
+        .setIn([i - 1, 'expanded'], !!hasChildren);
     }
   }
   let hasChildren = false;
@@ -21,7 +21,7 @@ export default (order, idOrI) => {
   if (hasChildren !== curr.get('hasChildren')) {
     order = order
       .setIn([i, 'hasChildren'], hasChildren)
-      .setIn([i, 'collapsed'], !!hasChildren);
+      .setIn([i, 'expanded'], !!hasChildren);
   }
   return order;
 };

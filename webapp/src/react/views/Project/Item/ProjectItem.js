@@ -20,33 +20,39 @@ export default class ProjectItem extends PureComponent {
     this.checkFocus();
   }
   onFocus = e => {
+    const { item, stateManager } = this.props;
+    // onFocus(item.get('id'), e);
+    stateManager.selectHandler.selectWithId(item.get('id'));
     this.setState({ isFocused: true });
   };
   onChange = e => {
-    const { onChangeTitle, item } = this.props;
-    onChangeTitle(item.get('id'), e.target.value);
+    const { stateManager, item } = this.props;
+    stateManager.editHandler.updateTitle(item.get('id'), e.target.value);
   };
   onBlur = e => {
+    const { stateManager, item } = this.props;
+    stateManager.selectHandler.deselectId(item.get('id'));
+    // onBlur(item.get('id'), e);
     this.setState({ isFocused: false });
   };
-  onAddedAttachment(att) {
-    const { onAttachmentAdd, item } = this.props;
-    onAttachmentAdd(item.get('id'), att);
+  onAddedAttachment(attachment) {
+    const { stateManager, item } = this.props;
+    stateManager.editHandler.addAttachment(item.get('id'), attachment);
   }
   onExpandClick = () => {
-    const { onExpand, item } = this.props;
-    onExpand && onExpand(item.get('id'));
+    const { stateManager, item } = this.props;
+    stateManager.expandHandler.toggleExpandForId(item.get('id'));
   };
   onAssigningClose(assignees) {
-    const { onChangeAssignees, item } = this.props;
+    const { stateManager, item } = this.props;
     if (!this._unmounted && assignees && onChangeAssignees) {
-      onChangeAssignees(item.get('id'), assignees);
+      stateManager.editHandler.updateAssignees(item.get('id'), assignees);
     }
   }
   checkFocus() {
     const { focus, selectionStart, item } = this.props;
-    if (focus && this.didCheckFocus !== focus) {
-      this.didCheckFocus = focus;
+    const { isFocused } = this.state;
+    if (focus && !isFocused) {
       this.inputRef.focus();
       if (typeof selectionStart === 'number') {
         const selI = Math.min(item.get('title').length, selectionStart);
@@ -71,10 +77,11 @@ export default class ProjectItem extends PureComponent {
     return <SW.Checkbox />;
   }
   render() {
-    const { item, orderItem, selected } = this.props;
+    const { item, orderItem } = this.props;
+    const { isFocused } = this.state;
 
     return (
-      <SwissProvider selected={selected}>
+      <SwissProvider selected={isFocused}>
         <SW.Wrapper indent={orderItem.get('indent')} className="item-class">
           <SW.ExpandWrapper onClick={this.onExpandClick}>
             {item.get('type') !== 'attachment' &&

@@ -16,7 +16,7 @@ export default class PStateManager {
       order,
       visibleOrder: pGenerateVisibleOrder(order),
       itemsById,
-      selectedIndex: 0,
+      selectedIndex: -1,
       sliderValue: 0,
     };
     this.onStateChange = onStateChange;
@@ -60,4 +60,6 @@ export default class PStateManager {
   _idFromVisibleI = i => this.state.visibleOrder.getIn([i, 'id']);
   _iFromId = id => this.state.order.findIndex(o => o.get('id') === id);
   _iFromVisibleI = i => this._iFromId(this._idFromVisibleI(i));
+  _visibleIFromId = id =>
+    this.state.visibleOrder.findIndex(o => o.get('id') === id);
 }

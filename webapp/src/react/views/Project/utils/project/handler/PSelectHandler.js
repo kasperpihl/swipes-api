@@ -6,6 +6,7 @@ export default class PSelectHandler {
   selectNext = e => {
     const { visibleOrder, selectedIndex } = this.state;
     let nextIndex = selectedIndex + 1;
+    console.log(nextIndex);
     if (nextIndex >= visibleOrder.size) nextIndex = 0;
     this.stateManager.update({ selectedIndex: nextIndex });
   };
@@ -14,6 +15,20 @@ export default class PSelectHandler {
     let prevIndex = selectedIndex - 1;
     if (prevIndex < 0) prevIndex = visibleOrder.size - 1;
     this.stateManager.update({ selectedIndex: prevIndex });
+  };
+  selectWithId = id => {
+    const { selectedIndex } = this.state;
+    const visibleI = this.stateManager._visibleIFromId(id);
+    if (selectedIndex !== visibleI) {
+      this.stateManager.update({ selectedIndex: visibleI });
+    }
+  };
+  deselectId = id => {
+    const { selectedIndex } = this.state;
+    const visibleI = this.stateManager._visibleIFromId(id);
+    if (selectedIndex === visibleI) {
+      this.stateManager.update({ selectedIndex: -1 });
+    }
   };
   // stateManager will set this, once an update happens.
   setState = state => {

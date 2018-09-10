@@ -13,16 +13,20 @@ export default class PKeyHandler {
       else this.stateManager.indentHandler.indent();
     } else if (e.keyCode === 37) {
       // Left arrow
-      e.preventDefault();
-      this.stateManager.expandHandler.collapse();
+      if (e.metaKey || e.ctrlKey) {
+        e.preventDefault();
+        this.stateManager.expandHandler.collapse();
+      }
     } else if (e.keyCode === 38) {
       // Up arrow
       e.preventDefault();
       this.stateManager.selectHandler.selectPrev(e);
     } else if (e.keyCode === 39) {
       // Right arrow
-      e.preventDefault();
-      this.stateManager.expandHandler.expand();
+      if (e.metaKey || e.ctrlKey) {
+        e.preventDefault();
+        this.stateManager.expandHandler.expand();
+      }
     } else if (e.keyCode === 40) {
       // Down arrow
       e.preventDefault();

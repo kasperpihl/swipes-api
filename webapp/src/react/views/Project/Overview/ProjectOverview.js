@@ -24,18 +24,6 @@ export default class Tester extends PureComponent {
     this.stateManager.destroy();
   }
   onStateChange = state => this.setState(state);
-  onChangeTitle = (id, title) => {
-    this.stateManager.editHandler.updateTitle(id, title);
-  };
-  onAttachmentAdd = (id, attachment) => {
-    this.stateManager.editHandler.addAttachment(id, attachment);
-  };
-  onChangeAssignees = (id, assignees) => {
-    this.stateManager.editHandler.updateAssignees(id, assignees);
-  };
-  onExpand = id => {
-    this.stateManager.expandHandler.toggleExpandForId(id);
-  };
   onSliderChange = e => {
     const depth = parseInt(e.target.value, 10);
     this.stateManager.indentHandler.enforceIndention(depth);
@@ -50,16 +38,12 @@ export default class Tester extends PureComponent {
     const { visibleOrder, itemsById } = this.state;
     return visibleOrder.map((item, i) => (
       <ProjectItem
-        focus={i === this.focusI && this.focusI}
-        selected={i === this.state.selectedIndex}
+        focus={i === this.state.selectedIndex}
         selectionStart={i === this.focusI && this.selectionStart}
         item={itemsById.get(item.get('id'))}
         orderItem={item}
         key={item.get('id')}
-        onAttachmentAdd={this.onAttachmentAdd}
-        onChangeTitle={this.onChangeTitle}
-        onChangeAssignees={this.onChangeAssignees}
-        onExpand={this.onExpand}
+        stateManager={this.stateManager}
       />
     ));
   }
