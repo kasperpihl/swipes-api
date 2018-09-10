@@ -43,8 +43,10 @@ export default class PEditHandler {
       this.setState({ itemsById, order });
     }
   };
-  onEnter = (id, selectionStart) => {
-    let { itemsById, order } = this.state;
+  onEnter = e => {
+    let { itemsById, order, selectedIndex } = this.state;
+    const selectionStart = e.target.selectionStart;
+    const id = this.stateManager._idFromVisibleI(selectedIndex);
     const i = order.findIndex(item => item.get('id') === id);
     const currentItem = itemsById.get(id);
     let currTitle = currentItem.get('title');

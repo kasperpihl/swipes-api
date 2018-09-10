@@ -11,6 +11,9 @@ export default class PKeyHandler {
       e.preventDefault();
       if (e.shiftKey) this.stateManager.indentHandler.outdent();
       else this.stateManager.indentHandler.indent();
+    } else if (e.keyCode === 13) {
+      e.preventDefault();
+      this.stateManager.editHandler.onEnter(e);
     } else if (e.keyCode === 37) {
       // Left arrow
       if (e.metaKey || e.ctrlKey) {
