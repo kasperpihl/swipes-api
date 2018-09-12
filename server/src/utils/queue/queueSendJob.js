@@ -11,7 +11,7 @@ const {
 } = config.get('amazonQueue');
 
 
-export default (options, payload) => {
+export default (options, payload, messageGroupId = null) => {
   return new Promise((resolve, reject) => {
     if(typeof options !== 'object') {
       options = { eventName: options };

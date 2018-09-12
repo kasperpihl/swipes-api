@@ -34,7 +34,7 @@ export default (options, middleware) => {
             organization_id: res.locals.organization_id,
             user_id: res.locals.user_id,
             input: res.locals.backgroundInput,
-          });
+          }, res.locals.messageGroupId);
         }
         next();
       },
