@@ -8,7 +8,6 @@ import GoalListSection from './GoalListSection';
 import HOCGoalListItem from 'components/goal-list-item/HOCGoalListItem';
 import GoalAdd from '../goals/goal-components/goal-add/GoalAdd';
 import InfoButton from 'components/info-button/InfoButton';
-import Icon from 'Icon';
 import SW from './TakeAction.swiss';
 
 
@@ -19,7 +18,7 @@ class TakeAction extends Component {
     setupDelegate(this, 'onScroll');
   }
   renderHeader() {
-    const { delegate, showLine } = this.props;
+    const { delegate } = this.props;
 
     return (
       <SW.Header>
