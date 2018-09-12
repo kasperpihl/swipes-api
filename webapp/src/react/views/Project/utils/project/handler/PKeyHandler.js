@@ -5,15 +5,20 @@ export default class PKeyHandler {
     window.addEventListener('keydown', this.onKeyDown);
   }
   onKeyDown = e => {
-    console.log(e.target);
-    if (e.keyCode === 9) {
+    if (e.keyCode === 8) {
+      // Backspace
+      if (e.target.selectionStart === 0 && e.target.selectionEnd === 0) {
+        e.preventDefault();
+        this.stateManager.editHandler.delete(e);
+      }
+    } else if (e.keyCode === 9) {
       // Tab
       e.preventDefault();
       if (e.shiftKey) this.stateManager.indentHandler.outdent();
       else this.stateManager.indentHandler.indent();
     } else if (e.keyCode === 13) {
       e.preventDefault();
-      this.stateManager.editHandler.onEnter(e);
+      this.stateManager.editHandler.enter(e);
     } else if (e.keyCode === 37) {
       // Left arrow
       if (e.metaKey || e.ctrlKey) {
@@ -34,38 +39,6 @@ export default class PKeyHandler {
       // Down arrow
       e.preventDefault();
       this.stateManager.selectHandler.selectNext(e);
-    }
-  };
-  onInputKeyDown = e => {
-    // NOT WIRED UP YET
-    const id = item.get('id');
-
-    if (e.keyCode === 8) {
-      // Backspace
-      if (
-        e.target.selectionStart === 0 &&
-        e.target.selectionEnd === 0 &&
-        onDelete
-      ) {
-        e.preventDefault();
-        onDelete(id);
-      }
-    } else if (e.keyCode === 9 && onTab) {
-      // Tab
-      e.preventDefault();
-      onTab(id, e);
-    } else if (e.keyCode === 13 && onEnter) {
-      // Enter
-      e.preventDefault();
-      onEnter(id, e.target.selectionStart);
-    } else if (e.keyCode === 38 && onUpArrow) {
-      // Up arrow
-      e.preventDefault();
-      onUpArrow(id, e.target.selectionStart);
-    } else if (e.keyCode === 40 && onDownArrow) {
-      // Down arrow
-      e.preventDefault();
-      onDownArrow(id, e.target.selectionStart);
     }
   };
   // stateManager will set this, once an update happens.

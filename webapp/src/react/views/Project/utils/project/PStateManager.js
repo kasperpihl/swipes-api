@@ -39,8 +39,16 @@ export default class PStateManager {
   };
   getState = () => this.state;
   update = state => {
+    // Whenever we update order, make sure to update what is visible
     if (state.order) {
       state.visibleOrder = pGenerateVisibleOrder(state.order);
+    }
+    // If I select a new row, but do not set selectionStart, make sure old is not used
+    if (
+      typeof state.selectedIndex === 'number' &&
+      typeof state.selectionStart !== 'number'
+    ) {
+      state.selectionStart = null;
     }
     this.state = Object.assign(this.state, state);
     this.onStateChange(this.state);

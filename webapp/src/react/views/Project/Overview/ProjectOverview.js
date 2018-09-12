@@ -35,11 +35,16 @@ export default class Tester extends PureComponent {
     }
   }
   renderItems() {
-    const { visibleOrder, itemsById } = this.state;
+    const {
+      visibleOrder,
+      itemsById,
+      selectedIndex,
+      selectionStart,
+    } = this.state;
     return visibleOrder.map((item, i) => (
       <ProjectItem
-        focus={i === this.state.selectedIndex}
-        selectionStart={i === this.focusI && this.selectionStart}
+        focus={i === selectedIndex}
+        selectionStart={i === selectedIndex && selectionStart}
         item={itemsById.get(item.get('id'))}
         orderItem={item}
         key={item.get('id')}

@@ -1,3 +1,8 @@
+import randomString from 'swipes-core-js/utils/randomString';
+import pIndentItemAndChildren from '../pIndentItemAndChildren';
+import pUpdateHasChildrenForItem from '../pUpdateHasChildrenForItem';
+import { fromJS } from 'immutable';
+
 export default class PEditHandler {
   constructor(stateManager, state) {
     this.stateManager = stateManager;
@@ -20,31 +25,39 @@ export default class PEditHandler {
     itemsById = itemsById.setIn([id, 'assignees'], assignees);
     this.stateManager.update({ itemsById });
   };
-  onDelete = id => {
-    let { itemsById, order } = this.state;
-
+  delete = e => {
+    let { itemsById, order, selectedIndex, visibleOrder } = this.state;
+    const id = this.stateManager._idFromVisibleI(selectedIndex);
     const i = order.findIndex(item => item.get('id') === id);
     const currentTitle = itemsById.getIn([id, 'title']);
-    if (i > 0) {
-      order = order.delete(i);
-      itemsById = itemsById.delete(id);
-      this.focusI = Math.max(i - 1, 0);
-      const prevId = order.getIn([i - 1, 'id']);
-      if (currentTitle) {
-        const prevTitle = itemsById.getIn([prevId, 'title']);
-        this.selectionStart = prevTitle.length;
-        itemsById = itemsById.setIn(
-          [order.getIn([i - 1, 'id']), 'title'],
-          prevTitle + currentTitle
-        );
-      }
-      order = indentWithChildren(order, i - 1);
-      order = updateHasChildrenForItem(order, i - 1);
-      this.setState({ itemsById, order });
+    if (i === 0) {
+      return;
     }
+
+    order = order.delete(i);
+    itemsById = itemsById.delete(id);
+    selectedIndex = selectedIndex - 1;
+
+    let selectionStart = null;
+
+    const prevId = visibleOrder.getIn([selectedIndex, 'id']);
+    const prevI = this.stateManager._iFromVisibleI(selectedIndex);
+    if (currentTitle) {
+      const prevTitle = itemsById.getIn([prevId, 'title']);
+      selectionStart = prevTitle.length;
+      itemsById = itemsById.setIn([prevId, 'title'], prevTitle + currentTitle);
+    }
+    order = pIndentItemAndChildren(order, prevI);
+    order = pUpdateHasChildrenForItem(order, prevI);
+    this.stateManager.update({
+      itemsById,
+      order,
+      selectedIndex,
+      selectionStart,
+    });
   };
-  onEnter = e => {
-    let { itemsById, order, selectedIndex } = this.state;
+  enter = e => {
+    let { itemsById, order, selectedIndex, visibleOrder } = this.state;
     const selectionStart = e.target.selectionStart;
     const id = this.stateManager._idFromVisibleI(selectedIndex);
     const i = order.findIndex(item => item.get('id') === id);
@@ -65,22 +78,32 @@ export default class PEditHandler {
         type: 'task',
       })
     );
+
+    let nextI = this.stateManager._iFromVisibleI(selectedIndex + 1);
+    let newIndent = order.getIn([i, 'indent']);
+    if (nextI === -1) {
+      nextI = order.size;
+    } else {
+      newIndent = Math.max(
+        order.getIn([nextI, 'indent']),
+        order.getIn([i, 'indent'])
+      );
+    }
+    console.log(nextI);
+
     order = order.insert(
-      i + 1,
+      nextI,
       fromJS({
         id: newId,
-        indent: order.getIn([i, 'indent']),
+        indent: newIndent,
       })
     );
-    order = updateHasChildrenForItem(order, i + 1);
-    this.focusI = i + 1;
-    this.selectionStart = 0;
-    if (selectionStart === 0 && !currTitle && nextTitle) {
-      this.focusI = i;
-    }
-    this.setState({
+    order = pUpdateHasChildrenForItem(order, i + 1);
+    this.stateManager.update({
       itemsById,
       order,
+      selectedIndex: selectedIndex + 1,
+      selectionStart: 0,
     });
   };
   // stateManager will set this, once an update happens.
