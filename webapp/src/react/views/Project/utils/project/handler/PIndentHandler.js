@@ -1,5 +1,6 @@
 import pIndentItemAndChildren from '../pIndentItemAndChildren';
 import pUpdateHasChildrenForItem from '../pUpdateHasChildrenForItem';
+import pForceParentExpandedForItem from '../pForceParentExpandedForItem';
 
 export default class PIndentHandler {
   constructor(stateManager, state) {
@@ -14,24 +15,25 @@ export default class PIndentHandler {
       order,
     });
   };
-  indent = iOrId => {
-    const { order } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(iOrId);
-    const modifier = 1;
-
-    let newOrder = pIndentItemAndChildren(order, i, modifier);
+  indent = id => {
+    const { order, selectedIndex } = this.state;
+    const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
+    id = this.stateManager._idFromI(i);
+    let newOrder = pIndentItemAndChildren(order, i, 1);
     newOrder = pUpdateHasChildrenForItem(newOrder, i);
+    newOrder = pForceParentExpandedForItem(newOrder, i);
 
+    // Use selectedId, cause if we force expand parent, selected index gets messed up
     this.stateManager.update({
+      selectedId: id,
       order: newOrder,
     });
   };
-  outdent = iOrId => {
-    const { order } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(iOrId);
-    const modifier = -1;
+  outdent = id => {
+    const { order, selectedIndex } = this.state;
+    const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
 
-    let newOrder = pIndentItemAndChildren(order, i, modifier);
+    let newOrder = pIndentItemAndChildren(order, i, -1);
     newOrder = pUpdateHasChildrenForItem(newOrder, i);
     this.stateManager.update({
       order: newOrder,

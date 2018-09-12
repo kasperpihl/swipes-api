@@ -57,7 +57,7 @@ export default class PEditHandler {
     });
   };
   enter = e => {
-    let { itemsById, order, selectedIndex, visibleOrder } = this.state;
+    let { itemsById, order, selectedIndex } = this.state;
     const selectionStart = e.target.selectionStart;
     const id = this.stateManager._idFromVisibleI(selectedIndex);
     const i = order.findIndex(item => item.get('id') === id);
@@ -89,7 +89,6 @@ export default class PEditHandler {
         order.getIn([i, 'indent'])
       );
     }
-    console.log(nextI);
 
     order = order.insert(
       nextI,
@@ -104,6 +103,30 @@ export default class PEditHandler {
       order,
       selectedIndex: selectedIndex + 1,
       selectionStart: 0,
+    });
+  };
+  add = () => {
+    let { itemsById, order, visibleOrder } = this.state;
+    const newId = randomString(5);
+    itemsById = itemsById.set(
+      newId,
+      fromJS({
+        id: newId,
+        title: '',
+        type: 'task',
+      })
+    );
+    order = order.push(
+      fromJS({
+        id: newId,
+        indent: 0,
+      })
+    );
+
+    this.stateManager.update({
+      itemsById,
+      order,
+      selectedIndex: visibleOrder.size,
     });
   };
   // stateManager will set this, once an update happens.

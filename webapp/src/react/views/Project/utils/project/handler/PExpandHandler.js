@@ -11,16 +11,16 @@ export default class PExpandHandler {
     }
     return this.expand(id);
   };
-  expand = iOrId => {
-    let { order } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(iOrId);
+  expand = id => {
+    let { order, selectedIndex } = this.state;
+    const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
     if (!order.getIn([i, 'hasChildren'])) return;
 
     this.stateManager.update({ order: order.setIn([i, 'expanded'], true) });
   };
-  collapse = iOrId => {
-    let { order } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(iOrId);
+  collapse = id => {
+    let { order, selectedIndex } = this.state;
+    const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
     if (!order.getIn([i, 'hasChildren'])) return;
 
     this.stateManager.update({ order: order.setIn([i, 'expanded'], false) });

@@ -28,6 +28,9 @@ export default class Tester extends PureComponent {
     const depth = parseInt(e.target.value, 10);
     this.stateManager.indentHandler.enforceIndention(depth);
   };
+  onAdd = () => {
+    this.stateManager.editHandler.add();
+  };
   componentDidUpdate() {
     if (typeof this.focusI === 'number') {
       this.focusI = undefined;
@@ -67,6 +70,12 @@ export default class Tester extends PureComponent {
           />
         </SW.Header>
         {this.renderItems()}
+        <SW.AddButton
+          onClick={this.onAdd}
+          title="Add item"
+          icon="Plus"
+          compact
+        />
       </SW.Wrapper>
     );
   }

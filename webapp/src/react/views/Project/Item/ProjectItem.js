@@ -84,13 +84,12 @@ export default class ProjectItem extends PureComponent {
       <SwissProvider selected={isFocused}>
         <SW.Wrapper indent={orderItem.get('indent')} className="item-class">
           <SW.ExpandWrapper onClick={this.onExpandClick}>
-            {item.get('type') !== 'attachment' &&
-              orderItem.get('hasChildren') && (
-                <SW.ExpandIcon
-                  icon="ArrowRightFull"
-                  expanded={orderItem.get('expanded')}
-                />
-              )}
+            {orderItem.get('hasChildren') && (
+              <SW.ExpandIcon
+                icon="ArrowRightFull"
+                expanded={orderItem.get('expanded')}
+              />
+            )}
           </SW.ExpandWrapper>
           <SW.CheckboxWrapper>{this.renderType()}</SW.CheckboxWrapper>
           <SW.Input

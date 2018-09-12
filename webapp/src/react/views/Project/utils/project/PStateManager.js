@@ -43,6 +43,13 @@ export default class PStateManager {
     if (state.order) {
       state.visibleOrder = pGenerateVisibleOrder(state.order);
     }
+    // If selection is by id, ensure correct visible i
+    if (state.selectedId) {
+      state.selectedIndex = state.visibleOrder.findIndex(
+        o => o.get('id') === state.selectedId
+      );
+      delete state.selectedId;
+    }
     // If I select a new row, but do not set selectionStart, make sure old is not used
     if (
       typeof state.selectedIndex === 'number' &&
@@ -50,19 +57,17 @@ export default class PStateManager {
     ) {
       state.selectionStart = null;
     }
-    this.state = Object.assign(this.state, state);
+
+    this.state = Object.assign({}, this.state, state);
     this.onStateChange(this.state);
     this.callHandlers('setState', this.state);
   };
   destroy = () => this.callHandlers('destroy');
   _iFromVisibleIOrId = iOrId => {
-    const { selectedIndex } = this.state;
-    if (typeof iOrId === 'string') {
-      return this._iFromId(iOrId);
-    } else if (typeof iOrId === 'number') {
+    if (typeof iOrId === 'number') {
       return this._iFromVisibleI(iOrId);
     }
-    return this._iFromVisibleI(selectedIndex);
+    return this._iFromId(iOrId);
   };
   _idFromI = i => this.state.order.getIn([i, 'id']);
   _idFromVisibleI = i => this.state.visibleOrder.getIn([i, 'id']);

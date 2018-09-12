@@ -1,8 +1,4 @@
-export default (order, idOrI) => {
-  const i =
-    typeof idOrI === 'number'
-      ? idOrI
-      : order.findIndex(item => item.get('id') === idOrI);
+export default (order, i) => {
   const curr = order.get(i);
   const prev = order.get(i - 1);
   const next = order.get(i + 1);

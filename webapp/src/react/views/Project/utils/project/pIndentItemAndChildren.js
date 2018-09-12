@@ -1,11 +1,8 @@
-export default (order, idOrI, modifier) => {
+export default (order, i, modifier) => {
   modifier = modifier || 0;
 
-  let i =
-    typeof idOrI === 'number'
-      ? idOrI
-      : order.findIndex(item => item.get('id') === idOrI);
-  const newIndent = order.getIn([i, 'indent']) + modifier;
+  const originalIndent = order.getIn([i, 'indent']);
+  const newIndent = originalIndent + modifier;
   if (
     (i === 0 && modifier !== 0) ||
     newIndent < 0 ||
@@ -15,21 +12,19 @@ export default (order, idOrI, modifier) => {
   }
   order = order.setIn([i, 'indent'], newIndent);
 
-  if (modifier <= 0) {
-    let foundNextSiblingOrLess = false;
-    while (!foundNextSiblingOrLess) {
-      const prevIndent = order.getIn([i, 'indent']);
-      i++;
-      const item = order.get(i);
-      if (!item || item.get('indent') <= newIndent) {
-        foundNextSiblingOrLess = true;
-      } else {
-        const targetIndent = order.getIn([i, 'indent']) + modifier;
-        order = order.setIn(
-          [i, 'indent'],
-          Math.min(prevIndent + 1, targetIndent)
-        );
-      }
+  let foundNextSiblingOrLess = false;
+  while (!foundNextSiblingOrLess) {
+    const prevIndent = order.getIn([i, 'indent']);
+    i++;
+    const item = order.get(i);
+    if (!item || item.get('indent') <= originalIndent) {
+      foundNextSiblingOrLess = true;
+    } else {
+      const targetIndent = order.getIn([i, 'indent']) + modifier;
+      order = order.setIn(
+        [i, 'indent'],
+        Math.min(prevIndent + 1, targetIndent)
+      );
     }
   }
 

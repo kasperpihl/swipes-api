@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Button from 'src/react/components/button/Button';
 
 export default styleSheet('ProjectOverview', {
   Wrapper: {
@@ -6,7 +7,11 @@ export default styleSheet('ProjectOverview', {
   },
   Header: {
     _flex: ['row', 'between', 'center'],
-    padding: '10px 24px',
+    padding: '12px 24px',
+  },
+  AddButton: {
+    _el: Button,
+    marginLeft: '22px',
   },
   HeaderTitle: {
     _el: 'h1',
