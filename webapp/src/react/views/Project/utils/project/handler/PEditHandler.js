@@ -11,7 +11,7 @@ export default class PEditHandler {
   updateTitle = (id, title) => {
     let { itemsById } = this.state;
     itemsById = itemsById.setIn([id, 'title'], title);
-    this.stateManager.update({ itemsById });
+    this.stateManager.update({ itemsById }, `${id}-title`);
   };
   addAttachment = (id, attachment) => {
     let { itemsById } = this.state;

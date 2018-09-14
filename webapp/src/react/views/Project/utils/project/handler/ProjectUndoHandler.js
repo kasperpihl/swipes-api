@@ -7,13 +7,28 @@ export default class PKeyHandler {
     this.redoStack = fromJS([]);
     this.undoStack = fromJS([]);
   }
+  revertToState = state => {
+    state.selectedIndex = -1;
+    delete state.selectedId;
+    delete state.selectionStart;
+    this.stateManager._updateState(state);
+  };
+  pushToUndoStack(undoString) {
+    if (undoString === false) return;
+    if (typeof undoString === 'string') {
+      if (undoString === this.currentUndoString) return;
+      this.currentUndoString = undoString;
+    } else {
+      this.currentUndoString = undefined;
+    }
+    this.undoStack = this.undoStack.push(this.state).takeLast(10);
+  }
   undo = () => {
     const lastState = this.undoStack.last();
     if (lastState) {
       this.redoStack = this.redoStack.push(this.state);
       this.undoStack = this.undoStack.butLast();
-      this.didTheUpdate = true;
-      this.stateManager._updateState(lastState);
+      this.revertToState(lastState);
     }
   };
   redo = () => {
@@ -21,16 +36,11 @@ export default class PKeyHandler {
     if (lastState) {
       this.undoStack = this.undoStack.push(this.state);
       this.redoStack = this.redoStack.butLast();
-      this.didTheUpdate = true;
-      this.stateManager._updateState(lastState);
+      this.revertToState(lastState);
     }
   };
   // stateManager will set this, once an update happens.
   setState = state => {
-    if (!this.didTheUpdate) {
-      this.undoStack = this.undoStack.push(this.state).takeLast(10);
-    }
-    this.didTheUpdate = undefined;
     this.state = state;
   };
 }

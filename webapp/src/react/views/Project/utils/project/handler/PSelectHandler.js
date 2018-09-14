@@ -12,9 +12,7 @@ export default class PSelectHandler {
         selectedIndex: nextIndex,
         selectionStart: e.target.selectionStart,
       },
-      {
-        dontTrackUndo: true,
-      }
+      false
     );
   };
   selectPrev = e => {
@@ -26,35 +24,21 @@ export default class PSelectHandler {
         selectedIndex: prevIndex,
         selectionStart: e.target.selectionStart,
       },
-      {
-        dontTrackUndo: true,
-      }
+      false
     );
   };
   selectWithId = id => {
     const { selectedIndex } = this.state;
     const visibleI = this.stateManager._visibleIFromId(id);
     if (selectedIndex !== visibleI) {
-      this.stateManager.update(
-        {
-          selectedIndex: visibleI,
-        },
-        {
-          dontTrackUndo: true,
-        }
-      );
+      this.stateManager.update({ selectedIndex: visibleI }, false);
     }
   };
   deselectId = id => {
     const { selectedIndex } = this.state;
     const visibleI = this.stateManager._visibleIFromId(id);
     if (selectedIndex === visibleI) {
-      this.stateManager.update(
-        { selectedIndex: -1 },
-        {
-          dontTrackUndo: true,
-        }
-      );
+      this.stateManager.update({ selectedIndex: -1 }, false);
     }
   };
   // stateManager will set this, once an update happens.

@@ -59,6 +59,8 @@ export default class ProjectItem extends PureComponent {
 
         this.inputRef.setSelectionRange(selI, selI);
       }
+    } else if (!focus && isFocused) {
+      this.inputRef.blur();
     }
   }
   renderType() {

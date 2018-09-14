@@ -40,7 +40,7 @@ export default class PStateManager {
     }
   };
   getState = () => this.state;
-  update = (state, undoOptions = {}) => {
+  update = (state, undoString = true) => {
     // Whenever we update order, make sure to update what is visible
     if (state.order) {
       state.visibleOrder = pGenerateVisibleOrder(state.order);
@@ -59,7 +59,9 @@ export default class PStateManager {
     ) {
       state.selectionStart = null;
     }
-    this._updateState(Object.assign({}, this.state, state));
+    const newState = Object.assign({}, this.state, state);
+    this.undoHandler.pushToUndoStack(undoString);
+    this._updateState(newState);
   };
   _updateState(state) {
     this.state = state;
