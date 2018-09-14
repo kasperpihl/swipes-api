@@ -3,6 +3,7 @@ import PExpandHandler from './handler/PExpandHandler';
 import PIndentHandler from './handler/PIndentHandler';
 import PKeyHandler from './handler/PKeyHandler';
 import PSelectHandler from './handler/PSelectHandler';
+import ProjectUndoHandler from './handler/ProjectUndoHandler';
 
 import pGenerateVisibleOrder from './pGenerateVisibleOrder';
 
@@ -27,6 +28,7 @@ export default class PStateManager {
       indentHandler: new PIndentHandler(this),
       keyHandler: new PKeyHandler(this),
       selectHandler: new PSelectHandler(this),
+      undoHandler: new ProjectUndoHandler(this),
     };
     this.callHandlers('setState', this.state);
     Object.assign(this, this.handlers);
@@ -38,7 +40,7 @@ export default class PStateManager {
     }
   };
   getState = () => this.state;
-  update = state => {
+  update = (state, undoOptions = {}) => {
     // Whenever we update order, make sure to update what is visible
     if (state.order) {
       state.visibleOrder = pGenerateVisibleOrder(state.order);
@@ -57,11 +59,13 @@ export default class PStateManager {
     ) {
       state.selectionStart = null;
     }
-
-    this.state = Object.assign({}, this.state, state);
+    this._updateState(Object.assign({}, this.state, state));
+  };
+  _updateState(state) {
+    this.state = state;
     this.onStateChange(this.state);
     this.callHandlers('setState', this.state);
-  };
+  }
   destroy = () => this.callHandlers('destroy');
   _iFromVisibleIOrId = iOrId => {
     if (typeof iOrId === 'number') {

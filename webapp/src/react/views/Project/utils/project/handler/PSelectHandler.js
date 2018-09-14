@@ -6,36 +6,55 @@ export default class PSelectHandler {
   selectNext = e => {
     const { visibleOrder, selectedIndex } = this.state;
     let nextIndex = selectedIndex + 1;
-    console.log(nextIndex);
     if (nextIndex >= visibleOrder.size) nextIndex = 0;
-    this.stateManager.update({
-      selectedIndex: nextIndex,
-      selectionStart: e.target.selectionStart,
-    });
+    this.stateManager.update(
+      {
+        selectedIndex: nextIndex,
+        selectionStart: e.target.selectionStart,
+      },
+      {
+        dontTrackUndo: true,
+      }
+    );
   };
   selectPrev = e => {
     const { visibleOrder, selectedIndex } = this.state;
     let prevIndex = selectedIndex - 1;
     if (prevIndex < 0) prevIndex = visibleOrder.size - 1;
-    this.stateManager.update({
-      selectedIndex: prevIndex,
-      selectionStart: e.target.selectionStart,
-    });
+    this.stateManager.update(
+      {
+        selectedIndex: prevIndex,
+        selectionStart: e.target.selectionStart,
+      },
+      {
+        dontTrackUndo: true,
+      }
+    );
   };
   selectWithId = id => {
     const { selectedIndex } = this.state;
     const visibleI = this.stateManager._visibleIFromId(id);
     if (selectedIndex !== visibleI) {
-      this.stateManager.update({
-        selectedIndex: visibleI,
-      });
+      this.stateManager.update(
+        {
+          selectedIndex: visibleI,
+        },
+        {
+          dontTrackUndo: true,
+        }
+      );
     }
   };
   deselectId = id => {
     const { selectedIndex } = this.state;
     const visibleI = this.stateManager._visibleIFromId(id);
     if (selectedIndex === visibleI) {
-      this.stateManager.update({ selectedIndex: -1 });
+      this.stateManager.update(
+        { selectedIndex: -1 },
+        {
+          dontTrackUndo: true,
+        }
+      );
     }
   };
   // stateManager will set this, once an update happens.

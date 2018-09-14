@@ -39,6 +39,13 @@ export default class PKeyHandler {
       // Down arrow
       e.preventDefault();
       this.stateManager.selectHandler.selectNext(e);
+    } else if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      if (e.shiftKey) {
+        this.stateManager.undoHandler.redo();
+      } else {
+        this.stateManager.undoHandler.undo();
+      }
     }
   };
   // stateManager will set this, once an update happens.
