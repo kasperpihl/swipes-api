@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
 import data from './data';
-import PStateManager from '../utils/project/PStateManager';
+import ProjectStateManager from '../utils/project/ProjectStateManager';
 import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
 
 export default class Tester extends PureComponent {
@@ -13,7 +13,7 @@ export default class Tester extends PureComponent {
     this.state = {};
   }
   componentWillMount() {
-    this.stateManager = new PStateManager(
+    this.stateManager = new ProjectStateManager(
       data.order,
       data.itemsById,
       this.onStateChange

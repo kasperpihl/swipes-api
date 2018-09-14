@@ -1,11 +1,11 @@
-import PEditHandler from './handler/PEditHandler';
-import PExpandHandler from './handler/PExpandHandler';
-import PIndentHandler from './handler/PIndentHandler';
-import PKeyHandler from './handler/PKeyHandler';
-import PSelectHandler from './handler/PSelectHandler';
+import ProjectEditHandler from './handler/ProjectEditHandler';
+import ProjectExpandHandler from './handler/ProjectExpandHandler';
+import ProjectIndentHandler from './handler/ProjectIndentHandler';
+import ProjectKeyHandler from './handler/ProjectKeyHandler';
+import ProjectSelectHandler from './handler/ProjectSelectHandler';
 import ProjectUndoHandler from './handler/ProjectUndoHandler';
 
-import pGenerateVisibleOrder from './pGenerateVisibleOrder';
+import projectGenerateVisibleOrder from './projectGenerateVisibleOrder';
 
 /*
 The responsibility of State Manager is to handle 
@@ -15,7 +15,7 @@ export default class PStateManager {
   constructor(order, itemsById, onStateChange) {
     this.state = {
       order,
-      visibleOrder: pGenerateVisibleOrder(order),
+      visibleOrder: projectGenerateVisibleOrder(order),
       itemsById,
       selectedIndex: -1,
       sliderValue: 0,
@@ -23,11 +23,11 @@ export default class PStateManager {
     this.onStateChange = onStateChange;
 
     this.handlers = {
-      editHandler: new PEditHandler(this),
-      expandHandler: new PExpandHandler(this),
-      indentHandler: new PIndentHandler(this),
-      keyHandler: new PKeyHandler(this),
-      selectHandler: new PSelectHandler(this),
+      editHandler: new ProjectEditHandler(this),
+      expandHandler: new ProjectExpandHandler(this),
+      indentHandler: new ProjectIndentHandler(this),
+      keyHandler: new ProjectKeyHandler(this),
+      selectHandler: new ProjectSelectHandler(this),
       undoHandler: new ProjectUndoHandler(this),
     };
     this.callHandlers('setState', this.state);
@@ -43,7 +43,7 @@ export default class PStateManager {
   update = (state, undoString = true) => {
     // Whenever we update order, make sure to update what is visible
     if (state.order) {
-      state.visibleOrder = pGenerateVisibleOrder(state.order);
+      state.visibleOrder = projectGenerateVisibleOrder(state.order);
     }
     // If selection is by id, ensure correct visible i
     if (state.selectedId) {

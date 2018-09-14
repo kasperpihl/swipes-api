@@ -1,6 +1,6 @@
 import randomString from 'swipes-core-js/utils/randomString';
-import pIndentItemAndChildren from '../pIndentItemAndChildren';
-import pUpdateHasChildrenForItem from '../pUpdateHasChildrenForItem';
+import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
+import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
 import { fromJS } from 'immutable';
 
 export default class PEditHandler {
@@ -47,8 +47,8 @@ export default class PEditHandler {
       selectionStart = prevTitle.length;
       itemsById = itemsById.setIn([prevId, 'title'], prevTitle + currentTitle);
     }
-    order = pIndentItemAndChildren(order, prevI);
-    order = pUpdateHasChildrenForItem(order, prevI);
+    order = projectIndentItemAndChildren(order, prevI);
+    order = projectUpdateHasChildrenForItem(order, prevI);
     this.stateManager.update({
       itemsById,
       order,
@@ -97,7 +97,7 @@ export default class PEditHandler {
         indent: newIndent,
       })
     );
-    order = pUpdateHasChildrenForItem(order, i + 1);
+    order = projectUpdateHasChildrenForItem(order, i + 1);
     this.stateManager.update({
       itemsById,
       order,

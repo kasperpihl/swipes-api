@@ -1,6 +1,6 @@
-import pIndentItemAndChildren from '../pIndentItemAndChildren';
-import pUpdateHasChildrenForItem from '../pUpdateHasChildrenForItem';
-import pForceParentExpandedForItem from '../pForceParentExpandedForItem';
+import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
+import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
+import projectForceParentExpandedForItem from '../projectForceParentExpandedForItem';
 
 export default class PIndentHandler {
   constructor(stateManager, state) {
@@ -19,9 +19,9 @@ export default class PIndentHandler {
     const { order, selectedIndex } = this.state;
     const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
     id = this.stateManager._idFromI(i);
-    let newOrder = pIndentItemAndChildren(order, i, 1);
-    newOrder = pUpdateHasChildrenForItem(newOrder, i);
-    newOrder = pForceParentExpandedForItem(newOrder, i);
+    let newOrder = projectIndentItemAndChildren(order, i, 1);
+    newOrder = projectUpdateHasChildrenForItem(newOrder, i);
+    newOrder = projectForceParentExpandedForItem(newOrder, i);
 
     // Use selectedId, cause if we force expand parent, selected index gets messed up
     this.stateManager.update({
@@ -33,8 +33,8 @@ export default class PIndentHandler {
     const { order, selectedIndex } = this.state;
     const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
 
-    let newOrder = pIndentItemAndChildren(order, i, -1);
-    newOrder = pUpdateHasChildrenForItem(newOrder, i);
+    let newOrder = projectIndentItemAndChildren(order, i, -1);
+    newOrder = projectUpdateHasChildrenForItem(newOrder, i);
     this.stateManager.update({
       order: newOrder,
     });
