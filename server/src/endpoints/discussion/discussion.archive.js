@@ -18,7 +18,6 @@ export default endpointCreate({
   const { input } = res.locals;
   const {
     discussion_id,
-    organization_id,
   } = input;
   const discussionQuery = dbUpdateQuery('discussions', discussion_id, {
     archived: true,
@@ -31,6 +30,7 @@ export default endpointCreate({
       { type: 'discussion', data: discussionResult.changes[0].new_val },
     ],
   };
+  res.locals.messageGroupId = discussion_id;
 }).background(async (req, res) => {
   dbSendUpdates(res.locals);
 });
