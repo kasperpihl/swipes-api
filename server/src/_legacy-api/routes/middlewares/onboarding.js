@@ -18,19 +18,6 @@ import {
   goalsCompleteGoal,
 } from './goals';
 import {
-  postsCreate,
-  postsInsertSingle,
-  postsCreateComment,
-  postsAddComment,
-  postsMentionsParse,
-} from './posts';
-import {
-  discussionAdd,
-} from '../../../endpoints/discussion/discussion.add';
-import {
-  commentAdd,
-} from '../../../endpoints/comment/comment.add';
-import {
   notesCreate,
 } from './notes';
 import {
@@ -67,9 +54,11 @@ import {
   mapLocals,
   getSwipesLinkObj,
 } from '../../utils';
+import { discussionAddMiddlewareWithNext } from '../../../endpoints/discussion/discussion.add';
+import { commentAddMiddlewareWithNext } from '../../../endpoints/comment/comment.add';
 
 const SOFI_ID = 'USOFI';
-const MAX_LENGHT = 50;
+// const MAX_LENGHT = 50;
 const onboardingMilestoneData = valLocals('onboardingMilestoneData', {
   organization_id: string.require(),
 }, (req, res, next, setLocals) => {
@@ -215,7 +204,8 @@ const onboardingPost_1 = valLocals('onboardingPost_1', {
   //   tagged_users: [original_user_id],
   // });
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: 'USOFI',
     context: {
       id: goal.id,
@@ -223,7 +213,7 @@ const onboardingPost_1 = valLocals('onboardingPost_1', {
     },
     message,
     followers: [original_user_id],
-  });
+  };
 
   return next();
 });
@@ -236,11 +226,12 @@ const onboardingCommentsPost_1_1 = valLocals('onboardingCommentsPost_1_1', {
     original_user_id,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     discussion_id: discussion.id,
     message: 'Great progress, SOFI. I\'ve added the color scheme in the goal and I\'ll be working on the next steps for the rest of the day 😊',
-  });
+  };
 
   return next();
 });
@@ -254,7 +245,8 @@ const onboardingPost_2 = valLocals('onboardingPost_2', {
   } = res.locals;
   const message = 'Done with the moodboard. S.O.F.I, I\'ve scheduled a photoshoot with cookies for the main website photo.';
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     context: {
       id: goal.id,
@@ -262,7 +254,7 @@ const onboardingPost_2 = valLocals('onboardingPost_2', {
     },
     message,
     followers: ['USOFI'],
-  });
+  };
 
   return next();
 });
@@ -273,11 +265,12 @@ const onboardingCommentsPost_2_1 = valLocals('onboardingCommentsPost_2_1', {
     discussion,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: 'USOFI',
     discussion_id: discussion.id,
     message: 'Wonderful! I\'m all in on helping eat the cookies after the photoshoot',
-  });
+  };
 
   return next();
 });
@@ -290,11 +283,12 @@ const onboardingCommentsPost_2_2 = valLocals('onboardingCommentsPost_2_2', {
     original_user_id,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     discussion_id: discussion.id,
     message: '😆 me too!',
-  });
+  };
 
   return next();
 });
@@ -310,12 +304,13 @@ const onboardingPost_3 = valLocals('onboardingPost_3', {
   } = res.locals;
   const message = `${user.profile.first_name}, can you please help me fill in the messaging plan? My hands are full with the social media campaign and really need your help!`;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: 'USOFI',
     context,
     message,
     followers: [original_user_id],
-  });
+  };
 
   return next();
 });
@@ -357,7 +352,8 @@ const onboardingPost_4 = valLocals('onboardingPost_4', {
   } = res.locals;
   const message = 'Hey S.O.F.I. see this new campaign we made around a new chocolate recipe. I\'m a big fan. You?';
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     context: {
       id: goal.id,
@@ -366,7 +362,7 @@ const onboardingPost_4 = valLocals('onboardingPost_4', {
     message,
     followers: ['USOFI'],
     attachments,
-  });
+  };
 
   return next();
 });
@@ -379,11 +375,12 @@ const onboardingCommentsPost_4_1 = valLocals('onboardingCommentsPost_4_1', {
     user,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: 'USOFI',
     discussion_id: discussion.id,
     message: `That's a great post ${user.profile.first_name}. I love how you engaged our fans into a discussion. Good job on that!`,
-  });
+  };
 
   return next();
 });
@@ -401,7 +398,8 @@ const onboardingPost_5 = valLocals('onboardingPost_5', {
   
   Can we get her to join in and help out?`;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: 'USOFI',
     context: {
       id: goal.id,
@@ -409,7 +407,7 @@ const onboardingPost_5 = valLocals('onboardingPost_5', {
     },
     message,
     followers: [original_user_id],
-  });
+  };
 
   return next();
 });
@@ -422,11 +420,12 @@ const onboardingCommentsPost_5_1 = valLocals('onboardingCommentsPost_5_1', {
     discussion,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     discussion_id: discussion.id,
     message: 'Sure, I\'m adding her to the conversation.',
-  });
+  };
 
   return next();
 });
@@ -470,7 +469,8 @@ const onboardingPost_6 = valLocals('onboardingPost_6', {
   
   What are your initial thoughts? How can we improve it?`;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     context: {
       id: goal.id,
@@ -479,7 +479,7 @@ const onboardingPost_6 = valLocals('onboardingPost_6', {
     message,
     followers: ['USOFI'],
     attachments,
-  });
+  };
 
   return next();
 });
@@ -492,11 +492,12 @@ const onboardingCommentsPost_6_1 = valLocals('onboardingCommentsPost_6_1', {
     user,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: 'USOFI',
     discussion_id: discussion.id,
     message: `Nice work, ${user.profile.first_name}! It was so much fun to follow the storyline of the content and scroll along. You and the designer have done great work incorporating the mascots and building content & scenarious around them. I suggest we make the first section focus on Title & product images and keep the stories for the Product details page. What do you think about that?`,
-  });
+  };
 
   return next();
 });
@@ -509,11 +510,12 @@ const onboardingCommentsPost_6_2 = valLocals('onboardingCommentsPost_6_2', {
     discussion,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     discussion_id: discussion.id,
     message: 'Sure! That sounds good. I\'ll make a change and send you a new version.',
-  });
+  };
 
   return next();
 });
@@ -526,11 +528,12 @@ const onboardingCommentsPost_6_3 = valLocals('onboardingCommentsPost_6_3', {
     discussion,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     discussion_id: discussion.id,
     message: 'S.O.F.I., I simplified the content and focused the main page on showcasing the new product line. What do you think about this version',
-  });
+  };
 
   return next();
 });
@@ -544,11 +547,12 @@ const onboardingCommentsPost_6_4 = valLocals('onboardingCommentsPost_6_4', {
     user,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: 'USOFI',
     discussion_id: discussion.id,
     message: `Wow, that's exactly as I imagined it as well. Great work, ${user.profile.first_name}! Let's move ahead with it and get the development team to update it!`,
-  });
+  };
 
   return next();
 });
@@ -561,11 +565,12 @@ const onboardingCommentsPost_6_5 = valLocals('onboardingCommentsPost_6_5', {
     discussion,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     discussion_id: discussion.id,
     message: '👏 Sounds great! Thanks for all the help!',
-  });
+  };
 
   return next();
 });
@@ -580,7 +585,8 @@ const onboardingPost_7 = valLocals('onboardingPost_7', {
   const message = `The goal is completed! Thanks S.O.F.I. for the help! 
   Can't wait to see it updated on the website!`;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     context: {
       id: goal.id,
@@ -588,7 +594,7 @@ const onboardingPost_7 = valLocals('onboardingPost_7', {
     },
     message,
     followers: ['USOFI'],
-  });
+  };
 
   return next();
 });
@@ -606,12 +612,13 @@ const onboardingPost_8 = valLocals('onboardingPost_8', {
   
   Can you please send them to me so I can update my part?`;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: 'USOFI',
     context,
     message,
     followers: [original_user_id],
-  });
+  };
 
   return next();
 });
@@ -624,11 +631,12 @@ const onboardingCommentsPost_8_1 = valLocals('onboardingCommentsPost_8_1', {
     discussion,
   } = res.locals;
 
-  setLocals({
+  res.locals.input = {
+    organization_id: res.locals.organization_id,
     user_id: original_user_id,
     discussion_id: discussion.id,
     message: 'Sure, S.O.F.I. I\'ve added all the design requirements to the bottom of the doc. :)',
-  });
+  };
 
   return next();
 });
@@ -752,7 +760,7 @@ const onboardingGetMiddlewares = [
     return { attachments };
   }),
   onboardingPost_1,
-  discussionAdd,
+  discussionAddMiddlewareWithNext,
   mapLocals((locals) => {
     return {
       discussion: locals.output.updates[0].data,
@@ -761,10 +769,10 @@ const onboardingGetMiddlewares = [
   }),
   // Create comments for post
   onboardingCommentsPost_1_1,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   // Create second post
   onboardingPost_2,
-  discussionAdd,
+  discussionAddMiddlewareWithNext,
   mapLocals((locals) => {
     return {
       discussion: locals.output.updates[0].data,
@@ -772,9 +780,9 @@ const onboardingGetMiddlewares = [
   }),
   // Create comments for second post
   onboardingCommentsPost_2_1,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   onboardingCommentsPost_2_2,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   // Goal two
   onboardingGoalTwoData,
   goalsCreate,
@@ -834,7 +842,7 @@ const onboardingGetMiddlewares = [
   waysModifyNotesContentInWayAttachments,
   goalsAppendWayToGoal,
   onboardingPost_8,
-  discussionAdd,
+  discussionAddMiddlewareWithNext,
   mapLocals((locals) => {
     return {
       discussion: locals.output.updates[0].data,
@@ -842,7 +850,7 @@ const onboardingGetMiddlewares = [
   }),
   // onboardingNotificationPost,
   onboardingCommentsPost_8_1,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   // Goals three
   onboardingGoalOneData,
   goalsCreate,
@@ -902,7 +910,7 @@ const onboardingGetMiddlewares = [
   goalsAppendWayToGoal,
   // Create Post
   onboardingPost_3,
-  discussionAdd,
+  discussionAddMiddlewareWithNext,
   // Create notification
   // onboardingNotificationPost,
   // Create Post
@@ -923,7 +931,7 @@ const onboardingGetMiddlewares = [
     return { attachments };
   }),
   onboardingPost_4,
-  discussionAdd,
+  discussionAddMiddlewareWithNext,
   mapLocals((locals) => {
     return {
       discussion: locals.output.updates[0].data,
@@ -931,10 +939,10 @@ const onboardingGetMiddlewares = [
     };
   }),
   onboardingCommentsPost_4_1,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   // Create Post
   onboardingPost_5,
-  discussionAdd,
+  discussionAddMiddlewareWithNext,
   mapLocals((locals) => {
     return {
       discussion: locals.output.updates[0].data,
@@ -944,7 +952,7 @@ const onboardingGetMiddlewares = [
   // onboardingNotificationPost,
   // Add comments to post
   onboardingCommentsPost_5_1,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   // Goals four
   onboardingGoalFourData,
   goalsCreate,
@@ -1011,7 +1019,7 @@ const onboardingGetMiddlewares = [
     return { attachments };
   }),
   onboardingPost_6,
-  discussionAdd,
+  discussionAddMiddlewareWithNext,
   mapLocals((locals) => {
     return {
       discussion: locals.output.updates[0].data,
@@ -1020,19 +1028,33 @@ const onboardingGetMiddlewares = [
   }),
   // Create comments for post
   onboardingCommentsPost_6_1,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   onboardingCommentsPost_6_2,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   onboardingCommentsPost_6_3,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   onboardingCommentsPost_6_4,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   onboardingCommentsPost_6_5,
-  commentAdd,
+  commentAddMiddlewareWithNext,
   // Create post
   onboardingPost_7,
-  discussionAdd,
+  discussionAddMiddlewareWithNext,
 ];
+
+// const testing = valLocals('testing', {
+// }, (req, res, next, setLocals) => {
+//   console.log('OH MY GOD!!!!');
+//   console.log(discussionAddMiddlewareWithNext);
+//   // console.log(commentAddMiddlewareWithNext);
+//   console.log(endpoints);
+
+//   return next();
+// });
+
+// const onboardingGetMiddlewares = [
+//   testing,
+// ];
 
 export {
   onboardingGetMiddlewares,

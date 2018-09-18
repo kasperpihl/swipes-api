@@ -26,7 +26,7 @@ app.use('/health', (req, res) => {
   return res.sendStatus(200);
 });
 
-app.use('/process', bodyParser.json())
+app.use('/process', bodyParser.json());
 
 app.use('/process', (originalReq, originalRes, originalNext) => {
   const {

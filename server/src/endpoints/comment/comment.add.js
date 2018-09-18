@@ -17,10 +17,7 @@ const expectedInput = {
   attachments: array.of(object),
 };
 
-export default endpointCreate({
-  endpoint: '/comment.add',
-  expectedInput,
-}, async (req, res, next) => {
+const commentAddMiddleware = async (req, res, next) => {
   // Get inputs
   const {
     input,
@@ -90,7 +87,18 @@ export default endpointCreate({
     ],
   };
   res.locals.messageGroupId = discussion.id;
-}).background(async (req, res) => {
+};
+
+const commentAddMiddlewareWithNext = async (req, res, next) => {
+  await commentAddMiddleware(req, res, next);
+
+  return next();
+};
+
+export default endpointCreate({
+  endpoint: '/comment.add',
+  expectedInput,
+}, commentAddMiddleware).background(async (req, res) => {
   dbSendUpdates(res.locals);
   const { organization_id, user_id } = res.locals;
   const { updates } = res.locals.output;
@@ -128,3 +136,8 @@ export default endpointCreate({
     heading: discussion.topic,
   });
 });
+
+export {
+  commentAddMiddleware,
+  commentAddMiddlewareWithNext,
+};

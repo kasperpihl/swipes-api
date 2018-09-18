@@ -19,10 +19,7 @@ const expectedInput = {
   organization_id: string.min(1).require(),
 };
 
-export default endpointCreate({
-  endpoint: '/discussion.add',
-  expectedInput,
-}, async (req, res, next) => {
+const discussionAddMiddleware = async (req, res, next) => {
   // Get inputs
   const { user_id } = res.locals;
   const {
@@ -92,7 +89,18 @@ export default endpointCreate({
     ],
   };
   res.locals.messageGroupId = discussion.id;
-}).background(async (req, res) => {
+};
+
+const discussionAddMiddlewareWithNext = async (req, res, next) => {
+  await discussionAddMiddleware(req, res, next);
+
+  return next();
+};
+
+export default endpointCreate({
+  endpoint: '/discussion.add',
+  expectedInput,
+}, discussionAddMiddleware).background(async (req, res) => {
   dbSendUpdates(res.locals);
 
   const { organization_id, user_id } = res.locals;
@@ -116,3 +124,8 @@ export default endpointCreate({
     heading: `${sender.profile.first_name} started a discussion`,
   });
 });
+
+export {
+  discussionAddMiddleware,
+  discussionAddMiddlewareWithNext,
+};
