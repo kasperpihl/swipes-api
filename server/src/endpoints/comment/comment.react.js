@@ -42,6 +42,7 @@ export default endpointCreate({
       },
     ],
   };
+  res.locals.messageGroupId = comment_id;
 }).background(async (req, res) => {
   dbSendUpdates(res.locals);
 

@@ -3,9 +3,11 @@ import SW from './Discuss.swiss';
 import { connect } from 'react-redux';
 import { setupCachedCallback } from 'react-delegate';
 // import HOCPingList from 'src/react/views/Ping/List/HOCPingList';
+// import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
+// import InfoButton from 'components/info-button/InfoButton';
 
-import SWView from 'SWView';
+// import SWView from 'SWView';
 
 const sections = [
   // {
@@ -16,7 +18,7 @@ const sections = [
   //   ],
   // },
   {
-    title: 'Discussions',
+    title: '',
     items: [
       'Following',
       'All other',

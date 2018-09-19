@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import { object, array, string } from 'valjs';
+import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
@@ -16,29 +16,29 @@ export default endpointCreate({
   // Get inputs
   const { user_id } = res.locals;
   const {
-    discussion_id
+    discussion_id,
   } = res.locals.input;
 
   const removeFollowerQ = r.table('discussion_followers')
-              .get(`${discussion_id}-${user_id}`)
-              .delete();
+    .get(`${discussion_id}-${user_id}`)
+    .delete();
 
-  const updateDiscussionQ = dbUpdateQuery('discussions', discussion_id)
+  const updateDiscussionQ = dbUpdateQuery('discussions', discussion_id);
 
 
   await Promise.all([
     dbRunQuery(removeFollowerQ),
-    dbRunQuery(updateDiscussionQ)
-  ])
+    dbRunQuery(updateDiscussionQ),
+  ]);
 
   const q = r.table('discussions')
-            .get(discussion_id)
-            .merge(obj => ({
-              followers: r.table('discussion_followers')
-                .getAll(obj('id'), { index: 'discussion_id' })
-                .pluck('user_id', 'read_at')
-                .coerceTo('array'),
-            }));
+    .get(discussion_id)
+    .merge(obj => ({
+      followers: r.table('discussion_followers')
+        .getAll(obj('id'), { index: 'discussion_id' })
+        .pluck('user_id', 'read_at')
+        .coerceTo('array'),
+    }));
 
   const discussion = await dbRunQuery(q);
 
@@ -46,8 +46,9 @@ export default endpointCreate({
   res.locals.output = {
     updates: [
       { type: 'discussion', data: discussion },
-    ]
+    ],
   };
+  res.locals.messageGroupId = discussion_id;
 }).background(async (req, res) => {
   dbSendUpdates(res.locals);
 });

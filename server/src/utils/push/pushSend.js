@@ -1,7 +1,7 @@
 import config from 'config';
 import request from 'request';
 import valUtil from 'src/utils/val/valUtil';
-import { object, string, array } from 'valjs';
+import { object, string, array } from 'valjs';
 
 const oneSignalConfig = config.get('onesignal');
 
@@ -16,8 +16,8 @@ export default valUtil([
     content: string.require(),
     heading: string.require(),
   }).require(),
-], (options, pushMessage) => {
-  return new Promise((resolve, reject) => {
+], (options, pushMessage) => {
+  return new Promise((resolve, reject) => {
     const filters = [];
 
     options.users.forEach((userId, i) => {
@@ -70,5 +70,6 @@ export default valUtil([
       }
       return resolve();
     });
-  })
-})
+  });
+});
+

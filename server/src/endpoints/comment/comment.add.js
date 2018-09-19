@@ -17,10 +17,7 @@ const expectedInput = {
   attachments: array.of(object),
 };
 
-export default endpointCreate({
-  endpoint: '/comment.add',
-  expectedInput,
-}, async (req, res, next) => {
+const commentAddMiddleware = async (req, res, next) => {
   // Get inputs
   const {
     input,
@@ -47,7 +44,7 @@ export default endpointCreate({
 
   const commentRes = await dbRunQuery(insertCommentQ);
   const comment = commentRes.changes[0].new_val;
-  
+
   // Updating read_at to be newest comment.
   // Also ensuring that user follows discussion
   const updateFollowerQ = dbInsertQuery('discussion_followers', {
@@ -59,7 +56,7 @@ export default endpointCreate({
   }, {
     conflict: 'update',
   });
-  
+
   // T_TODO: update only if comment.sent_at is greater than existing value
   // And update the discussion to include latest comment.
   const updateDiscussionQ = dbUpdateQuery('discussions', discussion_id, {
@@ -70,15 +67,15 @@ export default endpointCreate({
 
   const result = await Promise.all([
     dbRunQuery(updateFollowerQ),
-    dbRunQuery(updateDiscussionQ)
+    dbRunQuery(updateDiscussionQ),
   ]);
 
   const discussion = result[1].changes[0].new_val;
 
   // Fetch the latest followers to ensure they're up to date.
   const followersQ = r.table('discussion_followers')
-                      .getAll(discussion_id, { index: 'discussion_id' })
-                      .pluck('user_id', 'read_at')
+    .getAll(discussion_id, { index: 'discussion_id' })
+    .pluck('user_id', 'read_at');
 
   discussion.followers = await dbRunQuery(followersQ);
 
@@ -86,22 +83,32 @@ export default endpointCreate({
   res.locals.output = {
     updates: [
       { type: 'discussion', data: discussion },
-      { type: 'comment', data: comment },
+      { type: 'comment', data: comment },
     ],
   };
-}).background(async (req, res) => {
+  res.locals.messageGroupId = discussion.id;
+};
+
+const commentAddMiddlewareWithNext = async (req, res, next) => {
+  await commentAddMiddleware(req, res, next);
+
+  return next();
+};
+
+export default endpointCreate({
+  endpoint: '/comment.add',
+  expectedInput,
+}, commentAddMiddleware).background(async (req, res) => {
   dbSendUpdates(res.locals);
   const { organization_id, user_id } = res.locals;
-  const { updates } = res.locals.output;
+  const { updates } = res.locals.output;
 
   const discussion = updates[0].data;
   const comment = updates[1].data;
   // Fetch sender (to have the name)
-  const sender = await dbRunQuery(
-    r.table('users')
-      .get(user_id)
-      .pluck('profile', 'id')
-  );
+  const sender = await dbRunQuery(r.table('users')
+    .get(user_id)
+    .pluck('profile', 'id'));
 
   const mentions = mentionsGetArray(comment.message);
   await dbSendNotifications(mentions.map(m => ({
@@ -109,7 +116,7 @@ export default endpointCreate({
     user_id: m,
     organization_id,
     title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
-    done_by: [ user_id ],
+    done_by: [user_id],
     target: {
       id: comment.discussion_id,
       item_id: comment.id,
@@ -117,7 +124,7 @@ export default endpointCreate({
   })));
 
   const followers = [...new Set(discussion.followers.map(f => f.user_id).concat(mentions))];
-  
+
   // Fire push to all the receivers.
   await pushSend({
     orgId: organization_id,
@@ -129,3 +136,8 @@ export default endpointCreate({
     heading: discussion.topic,
   });
 });
+
+export {
+  commentAddMiddleware,
+  commentAddMiddlewareWithNext,
+};

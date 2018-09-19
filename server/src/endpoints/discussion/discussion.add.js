@@ -19,10 +19,7 @@ const expectedInput = {
   organization_id: string.min(1).require(),
 };
 
-export default endpointCreate({
-  endpoint: '/discussion.add',
-  expectedInput,
-}, async (req, res, next) => {
+const discussionAddMiddleware = async (req, res, next) => {
   // Get inputs
   const { user_id } = res.locals;
   const {
@@ -83,27 +80,38 @@ export default endpointCreate({
   const discussion = discussionRes.changes[0].new_val;
 
   discussion.followers = followersRes.changes.map(o => o.new_val);
+
   // Create response data.
   res.locals.output = {
     updates: [
       { type: 'discussion', data: discussion },
-      { type: 'comment', data: commentRes.changes[0].new_val }
+      { type: 'comment', data: commentRes.changes[0].new_val },
     ],
   };
-}).background(async (req, res) => {
+  res.locals.messageGroupId = discussion.id;
+};
+
+const discussionAddMiddlewareWithNext = async (req, res, next) => {
+  await discussionAddMiddleware(req, res, next);
+
+  return next();
+};
+
+export default endpointCreate({
+  endpoint: '/discussion.add',
+  expectedInput,
+}, discussionAddMiddleware).background(async (req, res) => {
   dbSendUpdates(res.locals);
 
   const { organization_id, user_id } = res.locals;
-  const { updates } = res.locals.output;
+  const { updates } = res.locals.output;
 
   const discussion = updates[0].data;
   const comment = updates[1].data;
   // Fetch sender (to have the name)
-  const sender = await dbRunQuery(
-    r.table('users')
-      .get(user_id)
-      .pluck('profile')
-  );
+  const sender = await dbRunQuery(r.table('users')
+    .get(user_id)
+    .pluck('profile'));
 
   // Fire push to all the receivers.
   await pushSend({
@@ -116,3 +124,8 @@ export default endpointCreate({
     heading: `${sender.profile.first_name} started a discussion`,
   });
 });
+
+export {
+  discussionAddMiddleware,
+  discussionAddMiddlewareWithNext,
+};

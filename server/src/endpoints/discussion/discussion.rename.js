@@ -17,7 +17,6 @@ export default endpointCreate({
   expectedInput,
 }, async (req, res, next) => {
   // Get inputs
-  const { organization_id } = res.locals;
   const {
     discussion_id,
     topic,
@@ -30,13 +29,13 @@ export default endpointCreate({
   await dbRunQuery(discussionQuery);
 
   const q = r.table('discussions')
-            .get(discussion_id)
-            .merge(obj => ({
-              followers: r.table('discussion_followers')
-                .getAll(obj('id'), { index: 'discussion_id' })
-                .pluck('user_id', 'read_at')
-                .coerceTo('array'),
-            }));
+    .get(discussion_id)
+    .merge(obj => ({
+      followers: r.table('discussion_followers')
+        .getAll(obj('id'), { index: 'discussion_id' })
+        .pluck('user_id', 'read_at')
+        .coerceTo('array'),
+    }));
 
   const discussion = await dbRunQuery(q);
 
@@ -46,10 +45,10 @@ export default endpointCreate({
       {
         type: 'discussion',
         data: discussion,
-      }
-    ]
+      },
+    ],
   };
-
+  res.locals.messageGroupId = discussion_id;
 }).background(async (req, res) => {
   dbSendUpdates(res.locals);
 });

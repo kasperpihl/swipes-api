@@ -27,6 +27,7 @@ export default styleSheet('Discuss', {
     padding: '6px 6px 6px 12px',
     _font: ['14px', '18px', 400],
     _flex: ['row', 'between', 'center'],
+    marginTop: '3px',
     borderRadius: '15px',
     '!active': {
       '&:hover': {
