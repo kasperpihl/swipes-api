@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import SW from './CompatibleSignup.swiss';
@@ -52,18 +51,17 @@ class CompatibleSignup extends PureComponent {
     ];
   }
   renderInputField(key, type, placeholder, props) {
-    const { delegate } = this.props;
     const value = this.props.formData.get(key) || '';
 
     return (
-      <FloatingInput
-        key={key}
-        inputKey={key}
+      <SW.Input
         type={type}
         placeholder={placeholder}
-        onChange={this.onChangeCached(key)}
+        onKeyDown={this.onKeyDown}
         value={value}
-        inputProps={props}
+        onChange={(e) => {
+          this.onChange(key, e.target.value);
+        }}
       />
     );
   }

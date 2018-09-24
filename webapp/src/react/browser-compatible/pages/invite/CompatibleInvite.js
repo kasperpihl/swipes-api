@@ -2,8 +2,6 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router-dom';
 import { setupDelegate } from 'react-delegate';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
-import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
-import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
 import CompatibleInviteForm from './CompatibleInviteForm';
 import GoToWorkspace from 'compatible/components/go-to-workspace/GoToWorkspace';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';

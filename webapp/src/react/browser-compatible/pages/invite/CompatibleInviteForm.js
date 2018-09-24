@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
 import SW from './CompatibleInviteForm.swiss';
 
@@ -32,49 +31,43 @@ class CompatibleInviteForm extends PureComponent {
   }
 
   renderInput(i, obj) {
-    const { getLoading, invites } = this.props;
+    const { getLoading } = this.props;
     const lState = getLoading(i);
     const nameError = getLoading(i + 'name').error;
     const emailError = getLoading(i + 'email').error;
     const isLoading = !!lState.loading;
     const success = lState.success;
-    const isDisabled = !!(lState.loading || lState.success);
-    const labelTargetForName = `compatible-invite-name-${i}`;
-    const labelTargetForEmail = `compatible-invite-email-${i}`;
-
-    let className = 'input-row';
-
     const nameLabel = 'First name';
     const emailLabel = 'name@company.com';
 
     return (
       <SW.InputRow key={i}>
         <SW.RowWrapper>
-                <SW.StyledFloatingInput
-                  leftfield
-                  inviteFormField
-                  inputError={nameError}
-                  placeholder={nameLabel}
-                  value={obj.get('firstName')}
-                  inputKey={`name${i}`}
-                  type='text'
-                  autoFocus={i === 0}
-                  onChange={this.onNameChangeCached(i)}
-                />
+          <SW.StyledFloatingInput
+            leftfield
+            inviteFormField
+            inputError={nameError}
+            placeholder={nameLabel}
+            value={obj.get('firstName')}
+            inputKey={`name${i}`}
+            type='text'
+            autoFocus={i === 0}
+            onChange={this.onNameChangeCached(i)}
+          />
         </SW.RowWrapper>
         <SW.Separator></SW.Separator>
         <SW.RowWrapper>
-              <SW.StyledFloatingInput
-                  rightfield
-                  inviteFormField
-                  placeholder={emailLabel}
-                  inputError={emailError}
-                  value={obj.get('email')}
-                  inputKey={`email${i}`}
-                  type='text'
-                  autoFocus={i === 0}
-                  onChange={this.onEmailChangeCached(i)}
-                />
+          <SW.StyledFloatingInput
+              rightfield
+              inviteFormField
+              placeholder={emailLabel}
+              inputError={emailError}
+              value={obj.get('email')}
+              inputKey={`email${i}`}
+              type='text'
+              autoFocus={i === 0}
+              onChange={this.onEmailChangeCached(i)}
+            />
         </SW.RowWrapper>
 
         {this.renderLoader(isLoading, success)}

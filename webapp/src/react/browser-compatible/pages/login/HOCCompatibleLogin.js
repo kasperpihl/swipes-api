@@ -24,9 +24,9 @@ export default class extends PureComponent {
     };
     setupLoading(this);
   }
-  onChange(key, e) {
+  onChange(key, value) {
     const { formData } = this.state;
-    this.setState({ formData: formData.set(key, e.target.value) });
+    this.setState({ formData: formData.set(key, value) });
   }
   onSignin() {
     const { request, setUrl } = this.props;
@@ -35,7 +35,7 @@ export default class extends PureComponent {
     if (this.isLoading('signInButton')) {
       return;
     }
-    
+
     this.setLoading('signInButton');
 
     request('users.signin', {
@@ -87,7 +87,7 @@ export default class extends PureComponent {
         });
       }
     });
-      
+
     return false;
   }
   render() {

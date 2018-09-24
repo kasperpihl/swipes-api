@@ -92,4 +92,19 @@ export default styleSheet('SignUp', {
       },
     },
   },
+
+  Input: {
+    _el: 'input',
+    _size: ['100%', '45px'],
+    _font: ['15px', '25px'],
+    marginTop: '15px',
+    color: '$sw2',
+    transition: '.2s ease',
+    borderBottom: '1px solid $sw3',
+    '&:focus': {
+      borderBottom: '1px solid $blue',
+      transition: '.2s ease',
+      color: '$sw1',
+    },
+  },
 });

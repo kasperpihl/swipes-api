@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
 import SW from './CompatibleLogin.swiss';
@@ -22,7 +21,6 @@ class CompatibleLogin extends PureComponent {
   }
 
   renderHeader() {
-    const { inviter } = this.props;
     const title = 'Welcome to your Workspace';
     const subtitle =
       'This is the place for your team to communicate and create great work together.';
@@ -41,15 +39,14 @@ class CompatibleLogin extends PureComponent {
     const value = this.props.formData.get(key) || '';
 
     return (
-      <FloatingInput
-        inviteFormField={false}
-        key={key}
-        inputKey={key}
+      <SW.Input
         type={type}
         placeholder={placeholder}
-        onChange={this.onChangeCached(key)}
+        onKeyDown={this.onKeyDown}
         value={value}
-        inputProps={props}
+        onChange={(e) => {
+          this.onChange(key, e.target.value);
+        }}
       />
     );
   }
@@ -70,7 +67,7 @@ class CompatibleLogin extends PureComponent {
     return <SW.ErrorLabel>{getLoading('signInButton').error}</SW.ErrorLabel>;
   }
   renderFooter() {
-    const { isLoading, getLoading } = this.props;
+    const { getLoading } = this.props;
 
     return (
       <SW.Footer>

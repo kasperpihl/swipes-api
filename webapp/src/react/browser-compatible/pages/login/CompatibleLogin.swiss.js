@@ -20,7 +20,7 @@ export default styleSheet('Login', {
   },
 
   Form: {
-    marginTop: '40px',
+    marginTop: '15px',
 
     '&': {
       color: '$sw2',
@@ -32,10 +32,6 @@ export default styleSheet('Login', {
 
     '@media $max800': {
       marginTop: '30px',
-    },
-
-    '@media $max1600': {
-      marginTop: '0',
     },
   },
 
@@ -108,6 +104,20 @@ export default styleSheet('Login', {
 
     '&:hover': {
       textDecoration: 'underline',
+    },
+  },
+
+  Input: {
+    _el: 'input',
+    _size: ['100%', '45px'],
+    _font: ['15px', '25px'],
+    color: '$sw2',
+    transition: '.2s ease',
+    borderBottom: '1px solid $sw3',
+    '&:focus': {
+      borderBottom: '1px solid $blue',
+      transition: '.2s ease',
+      color: '$sw1',
     },
   },
 });
