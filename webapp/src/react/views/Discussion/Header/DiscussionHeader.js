@@ -15,54 +15,60 @@ import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 @navWrapper
-@connect(state => ({
-  myId: state.me.get('id'),
-}), {
-  inputMenu: menuActions.input,
-  openSecondary: navigationActions.openSecondary,
-  request: ca.api.request,
-})
+@connect(
+  state => ({
+    myId: state.me.get('id'),
+  }),
+  {
+    inputMenu: menuActions.input,
+    openSecondary: navigationActions.openSecondary,
+    request: ca.api.request,
+  }
+)
 export default class DiscussionHeader extends PureComponent {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     setupLoading(this);
   }
-  onTitleClick = (e) => {
+  onTitleClick = e => {
     const { inputMenu, discussion, request } = this.props;
 
-    inputMenu({
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-      text: discussion.get('topic'),
-      buttonLabel: 'Rename',
-    }, (text) => {
-      if (text !== discussion.get('topic') && text.length) {
-        request('discussion.rename', {
-          discussion_id: discussion.get('id'),
-          topic: text,
-        })
+    inputMenu(
+      {
+        boundingRect: e.target.getBoundingClientRect(),
+        alignX: 'right',
+        text: discussion.get('topic'),
+        buttonLabel: 'Rename',
+      },
+      text => {
+        if (text !== discussion.get('topic') && text.length) {
+          request('discussion.rename', {
+            discussion_id: discussion.get('id'),
+            topic: text,
+          });
+        }
       }
-    })
-  }
+    );
+  };
   onContextClick = () => {
     const { openSecondary, discussion, target } = this.props;
     openSecondary(target, navForContext(discussion.get('context')));
-  }
+  };
   onFollowClick = () => {
-    const { request, myId, discussion } = this.props
+    const { request, myId, discussion } = this.props;
 
     this.setLoading('following');
     let endpoint = 'discussion.follow';
-    if(discussion.get('followers').find(o => o.get('user_id') === myId)) {
+    if (discussion.get('followers').find(o => o.get('user_id') === myId)) {
       endpoint = 'discussion.unfollow';
     }
     request(endpoint, {
       discussion_id: discussion.get('id'),
-    }).then((res) => {
+    }).then(res => {
       this.clearLoading('following');
-    })
-  }
+    });
+  };
   render() {
     const { discussion, myId } = this.props;
     const followers = discussion.get('followers').map(o => o.get('user_id'));
@@ -74,19 +80,20 @@ export default class DiscussionHeader extends PureComponent {
         <SW.Wrapper>
           <SplitImage size={48} users={followers.toJS()} />
           <SW.TitleWrapper>
-            <SW.Title 
-              hasTopic={!!discussion.get('topic_set')} 
-              onClick={this.onTitleClick}>
+            <SW.Title
+              hasTopic={!!discussion.get('topic_set')}
+              onClick={this.onTitleClick}
+            >
               {topic}
             </SW.Title>
-            <SW.Subtitle>{privacy} - {followers.size} {followers.size === 1 ? 'follower' : 'followers'}</SW.Subtitle>
+            <SW.Subtitle>
+              {followers.size} {followers.size === 1 ? 'follower' : 'followers'}
+            </SW.Subtitle>
+            {/* <SW.Subtitle>{privacy} - {followers.size} {followers.size === 1 ? 'follower' : 'followers'}</SW.Subtitle> */}
           </SW.TitleWrapper>
           <SW.Actions>
             {!discussion.get('topic_set') && (
-              <Button
-                title="Set topic"
-                onClick={this.onTitleClick}
-              />
+              <Button title="Set topic" onClick={this.onTitleClick} />
             )}
             <Button
               title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
@@ -105,7 +112,6 @@ export default class DiscussionHeader extends PureComponent {
             />
           </SW.ContextWrapper>
         )}
-        
       </Fragment>
     );
   }
