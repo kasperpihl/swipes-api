@@ -3,7 +3,6 @@ import { setupDelegate } from 'react-delegate';
 import { iconForId } from 'swipes-core-js/classes/utils';
 import MileStoneResult from './MilestoneResult';
 import GoalResult from './GoalResult';
-import PostResult from './PostResult';
 import SW from './SearchResult.swiss';
 
 export default class extends PureComponent {
@@ -28,11 +27,9 @@ export default class extends PureComponent {
     const { id } = item;
 
     if (id.startsWith('M')) {
-      return <MileStoneResult result={result} />
+      return <MileStoneResult result={result} />;
     } else if (id.startsWith('G')) {
-      return <GoalResult result={result} />
-    } else if (id.startsWith('P')) {
-      return <PostResult result={result} />
+      return <GoalResult result={result} />;
     }
   }
   render() {

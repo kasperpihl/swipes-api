@@ -1,44 +1,38 @@
-import React from 'react';
-import { URL_REGEX } from 'swipes-core-js/classes/utils';
-import { addGlobalStyles } from 'swiss-react';
-addGlobalStyles({
-  '.links': {
-    color: '$blue',
-    '&:hover': {
-      textDecoration: 'underline',
-    }
-  }
-})
+import React from 'react';
+// import { URL_REGEX } from 'swipes-core-js/classes/utils';
+const URL_REGEX = /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/g;
+import Link from 'src/react/components/Link/Link';
 
-export default function (string)  {
-  if(!Array.isArray(string)) {
+export default function(string) {
+  if (!Array.isArray(string)) {
     string = [string];
   }
   let finalArr = [];
   string.forEach((s, j) => {
-    if(typeof s === 'string') {
+    if (typeof s === 'string') {
       const urls = s.match(URL_REGEX);
       if (urls) {
-        s = s.split(URL_REGEX);
+        const splitUrlWithText = [];
+        let runningIndex = 0;
         urls.forEach((url, i) => {
-          s.splice(1 + i + i, 0, (
-            <a
-              className="links"
-              href={url}
-              key={`parse-link-${j}-${i}`}
-              target="_blank"
-            >
-              {url}
-            </a>
-          ));
+          const index = s.indexOf(url, runningIndex);
+          if (index > runningIndex) {
+            splitUrlWithText.push(s.substr(runningIndex, index - runningIndex));
+          }
+          splitUrlWithText.push(
+            <Link key={`parse-link-${j}-${i}`} url={url} />
+          );
+          runningIndex = index + url.length;
+          if (i === urls.length - 1 && runningIndex < s.length - 1) {
+            splitUrlWithText.push(s.substr(runningIndex));
+          }
         });
-        s = s.filter(sI => sI !== '');
-        finalArr = finalArr.concat(s);
+        finalArr = finalArr.concat(splitUrlWithText);
         return;
       }
     }
     finalArr.push(s);
-  })
-  
+  });
+
   return finalArr.length === 1 ? finalArr[0] : finalArr;
 }
