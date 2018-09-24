@@ -29,9 +29,7 @@ app.use('/health', (req, res) => {
 app.use('/process', bodyParser.json());
 
 app.use('/process', (originalReq, originalRes, originalNext) => {
-  const {
-    event_type,
-  } = originalReq.body.payload;
+  const { event_type } = originalReq.body.payload;
   if (!middlewares[event_type]) {
     return originalNext();
   }
@@ -45,13 +43,16 @@ app.use('/process', (originalReq, originalRes, originalNext) => {
     (err, req, res, next) => {
       console.log(originalReq.body.payload);
       return originalNext(err);
-    },
+    }
   );
 
   return composer.run();
 });
 
 app.use('/process', endpoints.queue);
+app.use('/process', (req, res, next) => {
+  return res.status(200).json({ ok: true });
+});
 
 app.use(errorSwipes);
 app.use(errorHandler);
