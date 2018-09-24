@@ -17,7 +17,7 @@ export default class extends PureComponent {
   }
 
   renderInviteForm() {
-    const { delegate, bindLoading, invites } = this.props;
+    const { delegate, bindLoading, invites } = this.props;
 
     return (
       <SW.FormWrapper>
@@ -29,25 +29,25 @@ export default class extends PureComponent {
         <SW.SendButton>
           <CompatibleButton onClick={this.onSendInvites} title="Send Invites" />
         </SW.SendButton>
-        <div className="clearfix"></div>
+        <div className="clearfix" />
       </SW.FormWrapper>
-    )
+    );
   }
   renderGoToWorkspace() {
     const { location } = this.props;
-    if(!location.state || !location.state.goTo) {
+    if (!location.state || !location.state.goTo) {
       return null;
     }
     const to = {
       pathname: location.state.goTo,
     };
-    if(location.state.goTo !== '/') {
+    if (location.state.goTo !== '/') {
       to.state = { goTo: '/' };
     }
     return [
       <br key="1" />,
       <br key="2" />,
-      <GoToWorkspace noTitle to={to} key="3" />
+      <GoToWorkspace noTitle to={to} key="3" />,
     ];
   }
   render() {
@@ -55,7 +55,10 @@ export default class extends PureComponent {
 
     return (
       <SW.Wrapper>
-        <CompatibleHeader title="Your Workspace is ready!" subtitle="Invite your team to join in or download the app below." />
+        <CompatibleHeader
+          title="Your Workspace is ready!"
+          subtitle="Invite your team to join in or download the app below."
+        />
         {this.renderInviteForm()}
         {this.renderGoToWorkspace()}
       </SW.Wrapper>

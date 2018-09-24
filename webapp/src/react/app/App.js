@@ -7,11 +7,10 @@ import Sidebar from './sidebar/Sidebar';
 @connect(state => ({
   ready: !!state.me.getIn(['organizations', 0]),
 }))
-
 export default class App extends PureComponent {
   render() {
     const { ready } = this.props;
-    if(!ready) {
+    if (!ready) {
       return null;
     }
 
@@ -26,4 +25,3 @@ export default class App extends PureComponent {
     );
   }
 }
-

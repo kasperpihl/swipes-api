@@ -2,41 +2,52 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8">
-    <title>Swipes</title>
-    <meta name="description" content="Swipes Workspace">
-    <meta name="viewport" content="width=device-width">
-    <meta http-equiv="expires" content="0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" href="/favicon.png?v=2" />
-    <script type="text/javascript">
-      // Doing this because of electron and webpack don't like each other
-      // so when we want to require something in electron we should use nodeRequire
-      // to fool webpack
-      if (window.process && window.process.versions.electron) {
-        window.nodeRequire = require;
-        delete window.require;
-        delete window.exports;
-        delete window.module;
-      }
-      else{
-        window.nodeRequire = function(){};
-      }
-    </script>
-    <script src="https://js.stripe.com/v3/"></script>
-  </head>
-  <body>
-    <!--[if lt IE 8]>
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title>Swipes</title>
+  <meta name="description" content="Swipes Workspace">
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="expires" content="0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="/favicon.png?v=2" />
+  <script type="text/javascript">
+    // Doing this because of electron and webpack don't like each other
+    // so when we want to require something in electron we should use nodeRequire
+    // to fool webpack
+    if (window.process && window.process.versions.electron) {
+      window.nodeRequire = require;
+      delete window.require;
+      delete window.exports;
+      delete window.module;
+    }
+    else {
+      window.nodeRequire = function () { };
+    }
+  </script>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+  <!--[if lt IE 8]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <script>
-      var APP_ID = "q8xibmac";
-      (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;
-      s.src='https://widget.intercom.io/widget/' + APP_ID;
-      var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
-    </script>
-    <div id="content"></div>
-  </body>
+  <script>
+    var APP_ID = "q8xibmac";
+    (function () {
+      var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', intercomSettings); } else {
+        var d = document; var i = function () { i.c(arguments) }; i.q = []; i.c = function (args) { i.q.push(args) }; w.Intercom = i; function l() {
+          var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true;
+          s.src = 'https://widget.intercom.io/widget/' + APP_ID;
+          var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+        } if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); }
+      }
+    })()
+  </script>
+  <div id="content"></div>
+</body>
+
 </html>

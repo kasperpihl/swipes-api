@@ -15,7 +15,7 @@ export default styleSheet('GoalOverview', {
       marginLeft: '36px',
       'viewWidth>825': {
         marginLeft: '54px',
-      }
+      },
     },
   },
   CompletedWrapper: {
