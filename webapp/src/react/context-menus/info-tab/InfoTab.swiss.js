@@ -1,5 +1,4 @@
 import { styleSheet } from 'swiss-react';
-import TextParser from 'components/text-parser/TextParser';
 import Icon from 'Icon';
 
 export default styleSheet('InfoTab', {
@@ -141,8 +140,8 @@ export default styleSheet('InfoTab', {
   },
 
   AboutText: {
-    _el: TextParser,
+    _el: 'div',
     _font: ['12px', '18px', '300'],
     color: '$sw2',
   },
-})
+});

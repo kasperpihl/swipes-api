@@ -2,12 +2,14 @@ import React, { PureComponent } from 'react';
 import * as ca from 'swipes-core-js/actions';
 import { connect } from 'react-redux';
 
+import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
 import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import Loader from 'src/react/components/loaders/Loader';
 import DiscussionOverview from './DiscussionOverview';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
-export default
+@navWrapper
 @withRequests({
   discussion: {
     request: {
@@ -22,19 +24,29 @@ export default
     },
   },
 })
-@connect(state => ({
-  myId: state.me.get('id'),
-}), {
-  apiRequest: ca.api.request,
-})
-class HOCDiscussionOverview extends PureComponent {
+@connect(
+  state => ({
+    myId: state.me.get('id'),
+  }),
+  {
+    apiRequest: ca.api.request,
+  }
+)
+export default class HOCDiscussionOverview extends PureComponent {
   static sizes() {
     return [654];
   }
+  constructor(props) {
+    super(props);
+    propsOrPop(this, 'discussion');
+  }
   onInitialLoad = () => {
     const { discussion, myId, apiRequest } = this.props;
-    const sub = discussion.get('followers').find(f => f.get('user_id') === myId);
-    if(sub &&
+    const sub = discussion
+      .get('followers')
+      .find(f => f.get('user_id') === myId);
+    if (
+      sub &&
       (!sub.get('read_at') ||
         sub.get('read_at') < discussion.get('last_comment_at'))
     ) {
@@ -43,11 +55,11 @@ class HOCDiscussionOverview extends PureComponent {
         discussion_id: discussion.get('id'),
       });
     }
-  }
+  };
   render() {
-    const { requestReady, requestError, discussion } = this.props;
-    if(!requestReady) {
-      return <Loader center size={54} text="Loading" />
+    const { requestReady, requestError, discussion } = this.props;
+    if (!requestReady) {
+      return <Loader center size={54} text="Loading" />;
     }
 
     // @kasper how I should fix this

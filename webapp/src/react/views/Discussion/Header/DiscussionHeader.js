@@ -13,6 +13,7 @@ import SplitImage from 'src/react/components/split-image/SplitImage';
 import Button from 'src/react/components/button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import InfoButton from 'components/info-button/InfoButton';
 
 @navWrapper
 @connect(
@@ -21,6 +22,7 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
   }),
   {
     inputMenu: menuActions.input,
+    confirm: menuActions.confirm,
     openSecondary: navigationActions.openSecondary,
     request: ca.api.request,
   }
@@ -30,6 +32,16 @@ export default class DiscussionHeader extends PureComponent {
     super(props);
 
     setupLoading(this);
+  }
+  getInfoTabProps() {
+    return {
+      actions: [{ title: 'Delete', icon: 'Delete' }],
+      about: {
+        title: 'What is a discussion',
+        text:
+          'A discussion is used to get aligned with your team. Create them and tag people.',
+      },
+    };
   }
   onTitleClick = e => {
     const { inputMenu, discussion, request } = this.props;
@@ -51,6 +63,34 @@ export default class DiscussionHeader extends PureComponent {
       }
     );
   };
+  onInfoTabAction(i, options, e) {
+    this.onArchive(options);
+  }
+  onArchive(options) {
+    const { discussion, confirm, request } = this.props;
+    confirm(
+      Object.assign({}, options, {
+        title: 'Delete discussion',
+        message:
+          'This will delete the discussion permanently and cannot be undone.',
+      }),
+      i => {
+        if (i === 1) {
+          this.setLoading('dots');
+          request('discussion.archive', {
+            discussion_id: discussion.get('id'),
+          }).then(res => {
+            if (res.ok) {
+              window.analytics.sendEvent('Discussion archived', {});
+            }
+            if (!res || !res.ok) {
+              this.clearLoading('dots', '!Something went wrong');
+            }
+          });
+        }
+      }
+    );
+  }
   onContextClick = () => {
     const { openSecondary, discussion, target } = this.props;
     openSecondary(target, navForContext(discussion.get('context')));
@@ -100,6 +140,7 @@ export default class DiscussionHeader extends PureComponent {
               onClick={this.onFollowClick}
               {...this.getLoading('following')}
             />
+            <InfoButton delegate={this} {...this.getLoading('dots')} />
           </SW.Actions>
         </SW.Wrapper>
         {discussion.get('context') && (
