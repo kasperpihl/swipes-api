@@ -37,26 +37,45 @@ import 'src/react/global-styles/app.scss';
 }))
 @hot(module)
 export default class extends PureComponent {
+  componentDidMount() {
+    this.unlisten = this.props.history.listen(location => {
+      this.setState({
+        location,
+      });
+    });
+  }
+  componentWillUnmount() {
+    this.unlisten();
+  }
   renderRoutes() {
     const { status, hasConnected, isHydrated } = this.props;
-    if(!isHydrated || (!hasConnected && status === 'connecting')) {
+    if (!isHydrated || (!hasConnected && status === 'connecting')) {
       return <SwipesLoader center text="Loading" size={90} />;
     }
     return [
-      <Route key="1" path="/" exact render={() => {
-        const { readyInOrg } = this.props;
-        const Comp = require('src/react/app/App').default;
-        return (readyInOrg && <Comp />) || null;
-      }} />,
+      <Route
+        key="1"
+        path="/"
+        exact
+        render={() => {
+          const { readyInOrg } = this.props;
+          const Comp = require('src/react/app/App').default;
+          return (readyInOrg && <Comp />) || null;
+        }}
+      />,
       <Route key="2" path="/notsupported" component={HOCNotSupported} />,
       <Route key="3" path="/unsubscribe" component={Unsubscribe} />,
       <Route key="4" path="/download" component={CompatibleDownload} />,
-      <Route key="5" path="/plan-csv-exporter" component={HOCPlanCSVExporter} />,
+      <Route
+        key="5"
+        path="/plan-csv-exporter"
+        component={HOCPlanCSVExporter}
+      />,
       <Route key="6" path="/login" component={HOCCompatibleLogin} />,
       <Route key="7" path="/register" component={HOCCompatibleSignup} />,
       <Route key="8" path="/invite" component={HOCCompatibleInvite} />,
       <Route key="9" path="/welcome" component={HOCCompatibleWelcome} />,
-      <Route key="10" path="/confirm" component={CompatibleConfirm} />,
+      <Route key="10" path="/confirm" component={CompatibleConfirm} />,
     ];
   }
   render() {
@@ -67,19 +86,18 @@ export default class extends PureComponent {
 
     return (
       <div id="app" className={className}>
-        <div id="draggable"></div>
+        <div id="draggable" />
         <Redirect />
         <Gradient />
         <ContextMenu />
         <HOCAutoCompleting />
         <Tooltip />
         <HOCDragAndDrop>
-        <Topbar />
-        {this.renderRoutes()}
+          <Topbar />
+          {this.renderRoutes()}
         </HOCDragAndDrop>
         <Route path="/" component={Trial} />
       </div>
-    )
+    );
   }
 }
-
