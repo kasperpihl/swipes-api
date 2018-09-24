@@ -78,7 +78,7 @@ class Organization extends PureComponent {
         <SW.InputWrapper>
           <SW.Input
             type="text"
-            placeholder="First Name"
+            placeholder="First name"
             onKeyDown={this.onKeyDown}
             value={firstNameVal}
             disabled={isLoading('invite')}
@@ -107,7 +107,7 @@ class Organization extends PureComponent {
     );
   }
   renderHeader() {
-    const { organization, tabIndex, delegate, tabs, getLoading } = this.props;
+    const { tabIndex, delegate, tabs, getLoading } = this.props;
     const title = `Team account`;
 
     return (

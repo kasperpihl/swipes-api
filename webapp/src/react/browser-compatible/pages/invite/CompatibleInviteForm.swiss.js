@@ -1,6 +1,5 @@
 import {styleSheet} from 'swiss-react';
 import Icon from 'Icon';
-import FloatingInput from 'compatible/components/input/FloatingInput';
 
 export default styleSheet('InviteForm', {
   InviteForm: {
@@ -123,7 +122,16 @@ export default styleSheet('InviteForm', {
     top: '3px',
   },
 
-  StyledFloatingInput: {
-    _el: FloatingInput,
+  Input: {
+    _el: 'input',
+    _size: ['100%', '45px'],
+    _font: ['15px', '25px'],
+    color: '$sw2',
+    padding: '0 15px',
+    transition: '.2s ease',
+    '&:focus': {
+      transition: '.2s ease',
+      color: '$sw1',
+    },
   },
 })
