@@ -50,9 +50,6 @@ app.use('/process', (originalReq, originalRes, originalNext) => {
 });
 
 app.use('/process', endpoints.queue);
-app.use('/process', (req, res, next) => {
-  return res.status(200).json({ ok: true });
-});
 
 app.use(errorSwipes);
 app.use(errorHandler);

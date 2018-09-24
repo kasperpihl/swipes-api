@@ -31,7 +31,9 @@ const discussionAddMiddleware = async (req, res, next) => {
     followers = [],
   } = res.locals.input;
 
-  const uniqueFollowers = [...new Set(followers.concat(mentionsGetArray(message))).add(user_id)];
+  const uniqueFollowers = [
+    ...new Set(followers.concat(mentionsGetArray(message))).add(user_id),
+  ];
   const discussionId = idGenerate('D', 15);
   const created_at = new Date();
 
@@ -56,7 +58,7 @@ const discussionAddMiddleware = async (req, res, next) => {
       discussion_id: discussionId,
       read_at: userId === user_id ? created_at : null,
       organization_id,
-    })),
+    }))
   );
 
   // Inserting the comment object.
@@ -97,10 +99,13 @@ const discussionAddMiddlewareWithNext = async (req, res, next) => {
   return next();
 };
 
-export default endpointCreate({
-  endpoint: '/discussion.add',
-  expectedInput,
-}, discussionAddMiddleware).background(async (req, res) => {
+export default endpointCreate(
+  {
+    endpoint: '/discussion.add',
+    expectedInput,
+  },
+  discussionAddMiddleware
+).background(async (req, res) => {
   dbSendUpdates(res.locals);
 
   const { organization_id, user_id } = res.locals;
@@ -109,23 +114,31 @@ export default endpointCreate({
   const discussion = updates[0].data;
   const comment = updates[1].data;
   // Fetch sender (to have the name)
-  const sender = await dbRunQuery(r.table('users')
-    .get(user_id)
-    .pluck('profile'));
+  const sender = await dbRunQuery(
+    r
+      .table('users')
+      .get(user_id)
+      .pluck('profile')
+  );
 
   // Fire push to all the receivers.
-  await pushSend({
-    orgId: organization_id,
-    users: discussion.followers.map(f => f.user_id).filter(f => f !== user_id),
-    targetId: discussion.id,
-    targetType: 'discussion',
-  }, {
-    content: mentionsClean(comment.message),
-    heading: `${sender.profile.first_name} started a discussion`,
-  });
+  const receivers = discussion.followers
+    .map(f => f.user_id)
+    .filter(f => f !== user_id);
+  if (receivers.length) {
+    await pushSend(
+      {
+        orgId: organization_id,
+        users: receivers,
+        targetId: discussion.id,
+        targetType: 'discussion',
+      },
+      {
+        content: mentionsClean(comment.message),
+        heading: `${sender.profile.first_name} started a discussion`,
+      }
+    );
+  }
 });
 
-export {
-  discussionAddMiddleware,
-  discussionAddMiddlewareWithNext,
-};
+export { discussionAddMiddleware, discussionAddMiddlewareWithNext };
