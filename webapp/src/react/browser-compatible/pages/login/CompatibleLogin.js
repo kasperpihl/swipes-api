@@ -38,7 +38,6 @@ class CompatibleLogin extends PureComponent {
     ];
   }
   renderInputField(key, type, placeholder, props) {
-    const { delegate, onKeyDown } = this.props;
     const value = this.props.formData.get(key) || '';
 
     return (

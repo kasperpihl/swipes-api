@@ -35,6 +35,22 @@ export default styleSheet('Reset', {
     },
   },
 
+  Input: {
+    _el: 'input',
+    _size: ['100%', '45px'],
+    _font: ['15px', '25px'],
+    _borderRadius: '6px',
+    color: '$sw2',
+    border: '1px solid $sw3',
+    padding: '0 15px',
+    transition: '.2s ease',
+    '&:focus': {
+      border: '1px solid $blue',
+      transition: '.2s ease',
+      color: '$sw1',
+    }
+  },
+
   Button: {
     marginTop: '24px',
     _size: ['auto', '36px'],

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { SwissProvider } from 'swiss-react';
-import { setupDelegate } from 'react-delegate';
 import SW from './FloatingInput.swiss';
 
 class FloatingInput extends PureComponent {
@@ -9,7 +8,6 @@ class FloatingInput extends PureComponent {
     this.state = {
       float: false,
       floatValue: 0 || props.value.length,
-      visiblePassword: false,
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -39,7 +37,7 @@ class FloatingInput extends PureComponent {
   render() {
     const { inputKey, type, placeholder, value, inviteFormField, inputError, inputProps } = this.props;
 
-    const { visiblePassword, float, floatValue } = this.state;
+    const { float, floatValue } = this.state;
     return (
       <SwissProvider active={!!float} standBy={floatValue > 0} inviteFormField={inviteFormField} inputError={inputError} >
         <SW.Wrapper className={this.props.className}>

@@ -1,18 +1,11 @@
 import React, { PureComponent } from 'react';
 import { View, BackHandler, Platform, UIManager, LayoutAnimation, ScrollView, StyleSheet } from 'react-native';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { viewSize } from 'globalStyles';
-import * as a from "actions";
+import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
-import Login from 'views/login/Login';
 import SignupIntro from './SignupIntro';
 import WelcomeScreen from './WelcomeScreen';
-
-const styles = StyleSheet.create({
-  scroller: {
-    flex: 1,
-  }
-})
 
 class HOCLoginFlow extends PureComponent {
   constructor(props) {
@@ -40,18 +33,18 @@ class HOCLoginFlow extends PureComponent {
   }
   onBackPress() {
     const { showLogin, showSignupIntro } = this.state;
-    
-    if (showLogin || showSignupIntro)  {
+
+    if (showLogin || showSignupIntro) {
       this.onShowWelcome();
 
       return true;
     }
   }
-  onShowWelcome() { 
+  onShowWelcome() {
     this.refs.scrollView.scrollTo({
       y: 0,
       x: 0,
-      animated: true
+      animated: true,
     });
 
     this.setState({ showLogin: false, showSignupIntro: false });
@@ -62,7 +55,7 @@ class HOCLoginFlow extends PureComponent {
     this.refs.scrollView.scrollTo({
       y: 0,
       x: viewSize.width,
-      animated: true
+      animated: true,
     });
   }
   onShowSignupIntro() {
@@ -71,7 +64,7 @@ class HOCLoginFlow extends PureComponent {
     this.refs.scrollView.scrollTo({
       y: 0,
       x: viewSize.width,
-      animated: true
+      animated: true,
     });
   }
   onShowSignup() {
@@ -88,8 +81,8 @@ class HOCLoginFlow extends PureComponent {
       keyboardType: 'email-address',
       onConfirmPress: (e, email) => {
         this.handleResetPassword(email);
-      }
-    })
+      },
+    });
   }
   handleResetPassword(resetEmail) {
     const { alertModal, request } = this.props;
@@ -102,28 +95,26 @@ class HOCLoginFlow extends PureComponent {
         message: 'We will send you an email to change your password.',
       });
     });
-    
   }
   renderSecondScreen() {
     const { showLogin, showSignupIntro } = this.state;
     const { modal } = this.props;
 
     if (showLogin || showSignupIntro) {
-
       if (showLogin) {
-        return <Login  delegate={this} modalOpen={!!modal}/>;
+        return <Login delegate={this} modalOpen={!!modal} />;
       }
 
       return <SignupIntro delegate={this} />;
     }
-    
+
     return undefined;
   }
   render() {
     return (
       <ScrollView
-        horizontal={true}
-        pagingEnabled={true}
+        horizontal
+        pagingEnabled
         scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
         style={{ flex: 1 }}
@@ -138,14 +129,14 @@ class HOCLoginFlow extends PureComponent {
           {this.renderSecondScreen()}
         </View>
       </ScrollView>
-    )
+    );
   }
 }
 // const { string } = PropTypes;
 
 HOCLoginFlow.propTypes = {};
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   apiUrl: state.globals.get('apiUrl'),
   modal: state.main.get('modal'),
 });
