@@ -94,8 +94,6 @@ export default styleSheet('InfoTab', {
     _font: ['10px', '18px', '600'],
     color: '$sw2',
     marginLeft: '6px',
-    opacity: '0',
-    transition: '.15s ease',
 
     '&:hover': {
       textDecoration: 'underline',
