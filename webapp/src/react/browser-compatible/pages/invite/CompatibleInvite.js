@@ -33,13 +33,10 @@ export default class extends PureComponent {
   }
   renderGoToWorkspace() {
     const { location } = this.props;
-    if (!location.state || !location.state.goTo) {
-      return null;
-    }
     const to = {
-      pathname: location.state.goTo,
+      pathname: (location.state && location.state.goTo) || '/',
     };
-    if (location.state.goTo !== '/') {
+    if (location.state && location.state.goTo !== '/') {
       to.state = { goTo: '/' };
     }
     return [
