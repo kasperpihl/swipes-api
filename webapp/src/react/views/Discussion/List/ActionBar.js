@@ -1,6 +1,4 @@
-import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import * as cs from 'swipes-core-js/selectors';
+import React, { Component } from 'react';
 import DiscussionComposer from '../Composer/DiscussionComposer';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SW from './ActionBar.swiss';
@@ -15,19 +13,20 @@ class ActionBar extends Component {
       position: 'center',
       props: {
         context,
-        taggedUsers
+        taggedUsers,
       },
     });
-  }
+  };
   render() {
     return (
       <SW.Wrapper>
         <SW.Button
           onClick={this.onDiscuss}
           icon="Plus"
-          sideLabel="Start a new discussion" />
+          sideLabel="Start a new discussion"
+        />
       </SW.Wrapper>
-    )
+    );
   }
 }
 
