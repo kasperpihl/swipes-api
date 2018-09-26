@@ -145,10 +145,10 @@ export default class extends PureComponent {
       items[0].title = 'Leave organization';
       items[0].subtitle = 'Leave ' + organization.get('name') + ' to be part of another organization';
     } else {
-      items.push({ 
-        title: 'Leave organization', 
-        disabled: true, 
-        subtitle: 'The owner cannot leave the organization' 
+      items.push({
+        title: 'Leave organization',
+        disabled: true,
+        subtitle: 'The owner cannot leave the organization'
       });
     }
     const delegate = {

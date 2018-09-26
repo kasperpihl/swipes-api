@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
-import FloatingFormInput from 'src/react/views/account/organization/FloatingFormInput.js';
 import apiRequest from 'swipes-core-js/utils/apiRequest';
 import Icon from 'Icon';
 import SW from './Reset.swiss';
-// import './styles/reset.scss';
 
 class Reset extends PureComponent {
   constructor(props) {
@@ -51,7 +49,7 @@ class Reset extends PureComponent {
       console.log(res);
     })
   }
-  onChange = (key, e) => {
+  onChange = (e) => {
     this.setState({newPass: e.target.value});
   }
   renderLoading() {
@@ -79,17 +77,13 @@ class Reset extends PureComponent {
     const { newPass } = this.state;
 
     return (
-      <FloatingFormInput
-        comp="resetPassword"
+      <SW.Input
         type="password"
-        label="Your new password"
-        delegate={this}
+        className="input-focus"
+        placeholder="Your new password"
+        onKeyDown={this.onKeyDown}
         value={newPass}
         onChange={this.onChange}
-        inputKey="password"
-        props={{
-          onKeyDown: this.onKeyDown,
-        }}
       />
     );
   }

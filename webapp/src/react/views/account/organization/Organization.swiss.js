@@ -62,26 +62,23 @@ export default styleSheet('Organization', {
   },
 
   Input: {
-    boxSizing: 'content-box',
-    padding: '0 18px',
-
+    _el: 'input',
+    _size: ['100%', '45px'],
+    _font: ['15px', '25px'],
+    color: '$sw2',
+    padding: '0 15px',
+    transition: '.2s ease',
+    '&:focus': {
+      transition: '.2s ease',
+      color: '$sw1',
+    },
     '&:first-child': {
       _size: ['60%', '100%'],
+      borderRight: '1px solid $sw3',
     },
-
     '&:last-child': {
       _size: ['100%'],
-
-      '&:after': {
-        _size: ['1px', '42px'],
-        content: '',
-        position: 'absolute',
-        left: '0',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        backgroundColor: '$sw3',
-      },
-    },
+    }
   },
 
   CTA: {

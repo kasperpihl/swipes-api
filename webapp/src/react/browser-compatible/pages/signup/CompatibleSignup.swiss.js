@@ -1,4 +1,6 @@
-import {styleSheet} from 'swiss-react';
+import { styleSheet } from 'swiss-react';
+import { Link } from 'react-router-dom';
+
 export default styleSheet('SignUp', {
   Wrapper: {
     paddingTop: '30px',
@@ -15,7 +17,7 @@ export default styleSheet('SignUp', {
 
     '@media $max800': {
       marginTop: '30px',
-    }
+    },
   },
 
   Illustration: {
@@ -32,7 +34,7 @@ export default styleSheet('SignUp', {
       _widthSpecifications: ['initial', '100%'],
       left: '50%',
       transform: 'translateX(-50% !important)',
-    }
+    },
   },
 
   Footer: {
@@ -65,12 +67,12 @@ export default styleSheet('SignUp', {
       cursor: 'pointer',
       '&:hover': {
         textDecoration: 'underline',
-      }
-    }
+      },
+    },
   },
 
   LinkButton: {
-    _el: 'a',
+    _el: Link,
     color: '$blue',
   },
 
@@ -88,6 +90,21 @@ export default styleSheet('SignUp', {
       '&:hover': {
         textDecoration: 'underline',
       },
-    }
+    },
   },
-})
+
+  Input: {
+    _el: 'input',
+    _size: ['100%', '45px'],
+    _font: ['15px', '25px'],
+    marginTop: '15px',
+    color: '$sw2',
+    transition: '.2s ease',
+    borderBottom: '1px solid $sw3',
+    '&:focus': {
+      borderBottom: '1px solid $blue',
+      transition: '.2s ease',
+      color: '$sw1',
+    },
+  },
+});

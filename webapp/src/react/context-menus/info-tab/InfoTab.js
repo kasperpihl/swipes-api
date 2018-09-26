@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react';
 
-import { setupDelegate, setupCachedCallback } from 'react-delegate';
+import { setupDelegate, setupCachedCallback } from 'react-delegate';
+import chain from 'src/utils/chain';
+import parseNewLines from 'src/utils/parseNewLines';
+import parseLinks from 'src/utils/parseLinks';
+import parseMentions from 'src/utils/parseMentions';
 import SW from './InfoTab.swiss';
 
 class InfoTab extends PureComponent {
@@ -27,12 +31,12 @@ class InfoTab extends PureComponent {
       return undefined;
     }
 
-    return <SW.ActionIcon icon={icon} danger={danger} complete={complete} />
+    return <SW.ActionIcon icon={icon} danger={danger} complete={complete} />;
   }
   renderActions() {
-    const { actions } = this.props;
+    const { actions } = this.props;
 
-    if(!actions) {
+    if (!actions) {
       return undefined;
     }
 
@@ -56,19 +60,15 @@ class InfoTab extends PureComponent {
           </SW.ActionIconWrapper>
           <SW.ActionTitle>{act.title}</SW.ActionTitle>
         </SW.Action>
-      )
-    })
+      );
+    });
 
-    return (
-      <SW.ActionWrapper>
-        {actionsHTML}
-      </SW.ActionWrapper>
-    )
+    return <SW.ActionWrapper>{actionsHTML}</SW.ActionWrapper>;
   }
-  renderInfo() {
-    const { info } = this.props;
+  renderInfo() {
+    const { info } = this.props;
 
-    if(!info) {
+    if (!info) {
       return undefined;
     }
 
@@ -82,35 +82,29 @@ class InfoTab extends PureComponent {
             </SW.InfoAction>
           </SW.InfoTitleWrapper>
           <SW.InfoText>
-            {info.icon ? (
-              <SW.InfoSVG icon={info.icon}/>
-            ) : null}
+            {info.icon ? <SW.InfoSVG icon={info.icon} /> : null}
             {info.text}
           </SW.InfoText>
         </SW.InfoRow>
-      )
-    })
+      );
+    });
 
-    return (
-      <SW.Info>
-        {infoHTML}
-      </SW.Info>
-    )
+    return <SW.Info>{infoHTML}</SW.Info>;
   }
-  renderAbout() {
-    const { about } = this.props;
+  renderAbout() {
+    const { about } = this.props;
 
     return (
       <SW.About>
         <SW.AboutHeader>
-          <SW.AboutIcon icon="Question"/>
+          <SW.AboutIcon icon="Question" />
           <SW.AboutTitle>{about.title}</SW.AboutTitle>
         </SW.AboutHeader>
         <SW.AboutText>
-          {about.text}
+          {chain(parseNewLines, parseMentions, parseLinks)(about.text)}
         </SW.AboutText>
       </SW.About>
-    )
+    );
   }
   render() {
     return (

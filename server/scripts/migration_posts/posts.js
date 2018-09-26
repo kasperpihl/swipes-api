@@ -69,9 +69,11 @@ const pagination = (resolve, reject) => {
             discussion_id: discussionId,
             sent_at: row.created_at,
             attachments: row.attachments || [],
-            reactions: row.reactions.map((r) => {
-              return { [r.created_by]: r.reaction };
-            }),
+            reactions: {
+              ...row.reactions.map((r) => {
+                return { [r.created_by]: r.reaction };
+              }),
+            },
             sent_by: row.created_by,
             organization_id: row.organization_id,
             updated_at: row.updated_at,
@@ -88,9 +90,11 @@ const pagination = (resolve, reject) => {
                 discussion_id: discussionId,
                 sent_at: comment.created_at,
                 attachments: comment.attachments || [],
-                reactions: comment.reactions.map((r) => {
-                  return { [r.created_by]: r.reaction };
-                }),
+                reactions: {
+                  ...comment.reactions.map((r) => {
+                    return { [r.created_by]: r.reaction };
+                  }),
+                },
                 sent_by: comment.created_by,
                 organization_id: row.organization_id,
                 updated_at: comment.updated_at,

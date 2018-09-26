@@ -6,7 +6,6 @@ import Icon from 'Icon';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import HOCLogoutButton from 'compatible/components/logout-button/HOCLogoutButton';
 import CompatibleSubHeader from 'compatible/components/subheader/CompatibleSubHeader';
-import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
 import SW from './CompatibleWelcome.swiss';
 
 class CompatibleWelcome extends PureComponent {
@@ -15,7 +14,6 @@ class CompatibleWelcome extends PureComponent {
     this.state = {
       createText: '',
       focused: false,
-      float: false,
     };
     setupDelegate(this, 'onOrganizationCreate', 'onOrganizationJoin');
     bindAll(this, ['onKeyDown', 'onChange', 'onCreate', 'onFocus', 'onBlur']);
@@ -36,19 +34,13 @@ class CompatibleWelcome extends PureComponent {
     }
   }
   onFocus() {
-    const input = this.refs.floatingInput;
-
     this.setState({
       focused: !this.state.focused,
-      float: input.props.value.length > 0 ? this.state.float : !this.state.float,
     });
   }
   onBlur() {
-    const input = this.refs.floatingInput;
-
     this.setState({
       focused: !this.state.focused,
-      float: input.props.value.length > 0 ? this.state.float : !this.state.float,
     });
   }
   renderHeader() {
@@ -100,11 +92,10 @@ class CompatibleWelcome extends PureComponent {
   }
   renderCreateOrg() {
     const { isLoading } = this.props;
-    const { createText, focused, float } = this.state;
+    const { createText, focused } = this.state;
 
     return (
-
-      <SwissProvider loading={isLoading('creating')} focused={focused} float={float}>
+      <SwissProvider loading={isLoading('creating')} focused={focused}>
         <SW.CreateOrganization>
           <label htmlFor="create-org-input">
             <SW.InputWrapper>
@@ -112,15 +103,13 @@ class CompatibleWelcome extends PureComponent {
                 id="create-org-input"
                 type="text"
                 className="input-focus"
-                placeholder=""
+                placeholder="Name of company"
                 onKeyDown={this.onKeyDown}
                 value={createText}
-                ref="floatingInput"
                 onChange={this.onChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
               />
-              <SW.Label float={float}>Name of company</SW.Label>
               <SW.Button className="button-hover" onClick={this.onCreate}>
                 {isLoading('creating') ? (
                   <SW.Loader icon="loader" width="12" height="12" />

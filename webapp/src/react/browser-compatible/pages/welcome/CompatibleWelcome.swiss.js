@@ -92,30 +92,10 @@ export default styleSheet('CompatibleWelcome', {
     border: '1px solid $sw3',
     padding: '0 15px',
     transition: '.2s ease',
-    '&::-webkit-input-placeholder': {
-      _font: ['11px', '15px'],
-      color: '$sw3',
-    },
     '&:focus': {
       border: '1px solid $blue',
       transition: '.2s ease',
-    }
-  },
-  Label: {
-    _font: ['15px', '25px'],
-    color: '$sw2',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    left: '9px',
-    position: 'absolute',
-    backgroundColor: '$sw5',
-    padding: '0 6px',
-    transition: '.2s ease',
-    'float': {
-      _font: ['11px', '15px'],
-      color: '$blue',
-      top: '0',
-      transition: '.2s ease',
+      color: '$sw1',
     }
   },
   Button: {

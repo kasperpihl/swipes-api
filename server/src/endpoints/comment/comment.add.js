@@ -19,16 +19,8 @@ const expectedInput = {
 
 const commentAddMiddleware = async (req, res, next) => {
   // Get inputs
-  const {
-    input,
-    user_id,
-  } = res.locals;
-  const {
-    discussion_id,
-    message,
-    attachments,
-    organization_id,
-  } = input;
+  const { input, user_id } = res.locals;
+  const { discussion_id, message, attachments, organization_id } = input;
   // Inserting the comment object.
   const insertCommentQ = dbInsertQuery('comments', {
     id: `${discussion_id}-${idGenerate('C', 7)}`,
@@ -41,21 +33,24 @@ const commentAddMiddleware = async (req, res, next) => {
     organization_id,
   });
 
-
   const commentRes = await dbRunQuery(insertCommentQ);
   const comment = commentRes.changes[0].new_val;
 
   // Updating read_at to be newest comment.
   // Also ensuring that user follows discussion
-  const updateFollowerQ = dbInsertQuery('discussion_followers', {
-    user_id,
-    id: `${discussion_id}-${user_id}`,
-    discussion_id,
-    read_at: comment.sent_at,
-    organization_id,
-  }, {
-    conflict: 'update',
-  });
+  const updateFollowerQ = dbInsertQuery(
+    'discussion_followers',
+    {
+      user_id,
+      id: `${discussion_id}-${user_id}`,
+      discussion_id,
+      read_at: comment.sent_at,
+      organization_id,
+    },
+    {
+      conflict: 'update',
+    }
+  );
 
   // T_TODO: update only if comment.sent_at is greater than existing value
   // And update the discussion to include latest comment.
@@ -73,7 +68,8 @@ const commentAddMiddleware = async (req, res, next) => {
   const discussion = result[1].changes[0].new_val;
 
   // Fetch the latest followers to ensure they're up to date.
-  const followersQ = r.table('discussion_followers')
+  const followersQ = r
+    .table('discussion_followers')
     .getAll(discussion_id, { index: 'discussion_id' })
     .pluck('user_id', 'read_at');
 
@@ -95,10 +91,13 @@ const commentAddMiddlewareWithNext = async (req, res, next) => {
   return next();
 };
 
-export default endpointCreate({
-  endpoint: '/comment.add',
-  expectedInput,
-}, commentAddMiddleware).background(async (req, res) => {
+export default endpointCreate(
+  {
+    endpoint: '/comment.add',
+    expectedInput,
+  },
+  commentAddMiddleware
+).background(async (req, res) => {
   dbSendUpdates(res.locals);
   const { organization_id, user_id } = res.locals;
   const { updates } = res.locals.output;
@@ -106,38 +105,52 @@ export default endpointCreate({
   const discussion = updates[0].data;
   const comment = updates[1].data;
   // Fetch sender (to have the name)
-  const sender = await dbRunQuery(r.table('users')
-    .get(user_id)
-    .pluck('profile', 'id'));
+  const sender = await dbRunQuery(
+    r
+      .table('users')
+      .get(user_id)
+      .pluck('profile', 'id')
+  );
 
   const mentions = mentionsGetArray(comment.message);
-  await dbSendNotifications(mentions.map(m => ({
-    id: `${m}-${comment.id}-mention`,
-    user_id: m,
-    organization_id,
-    title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
-    done_by: [user_id],
-    target: {
-      id: comment.discussion_id,
-      item_id: comment.id,
-    },
-  })));
+  await dbSendNotifications(
+    mentions.map(m => ({
+      id: `${m}-${comment.id}-mention`,
+      user_id: m,
+      organization_id,
+      title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(
+        comment.message
+      ).slice(0, 60)}...`,
+      done_by: [user_id],
+      target: {
+        id: comment.discussion_id,
+        item_id: comment.id,
+      },
+    }))
+  );
 
-  const followers = [...new Set(discussion.followers.map(f => f.user_id).concat(mentions))];
+  const followers = [
+    ...new Set(discussion.followers.map(f => f.user_id).concat(mentions)),
+  ];
 
   // Fire push to all the receivers.
-  await pushSend({
-    orgId: organization_id,
-    users: followers.filter(f => f !== user_id),
-    targetId: discussion.id,
-    targetType: 'discussion',
-  }, {
-    content: `${sender.profile.first_name}: ${mentionsClean(comment.message)}`,
-    heading: discussion.topic,
-  });
+  const receivers = followers.filter(f => f !== user_id);
+  if (receivers.length) {
+    await pushSend(
+      {
+        orgId: organization_id,
+        users: receivers,
+        targetId: discussion.id,
+        targetType: 'discussion',
+      },
+      {
+        content: `${sender.profile.first_name}: ${mentionsClean(
+          comment.message
+        )}`,
+        heading: discussion.topic,
+      }
+    );
+  }
 });
 
-export {
-  commentAddMiddleware,
-  commentAddMiddlewareWithNext,
-};
+export { commentAddMiddleware, commentAddMiddlewareWithNext };

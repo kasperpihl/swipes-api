@@ -4,7 +4,6 @@ import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Button from 'src/react/components/button/Button';
-import FloatingFormInput from './FloatingFormInput';
 import TabBar from 'components/tab-bar/TabBar';
 import SW from './Organization.swiss';
 
@@ -77,26 +76,25 @@ class Organization extends PureComponent {
       <SW.Form>
 
         <SW.InputWrapper>
-          <SW.Input>
-            <FloatingFormInput
-              id="org-first-name"
-              label="First name"
-              type="text"
-              disabled={isLoading('invite')}
-              value={firstNameVal}
-              onChange={this.onChangeCached('firstNameVal')}
-            />
+          <SW.Input
+            type="text"
+            placeholder="First name"
+            onKeyDown={this.onKeyDown}
+            value={firstNameVal}
+            disabled={isLoading('invite')}
+            onChange={(e) => {
+              this.onChange('firstNameVal', e.target.value);
+            }}>
           </SW.Input>
-          <SW.Input>
-            <FloatingFormInput
-              id="org-email"
-              label="name@company.com"
-              type="email"
-              value={emailVal}
-              disabled={isLoading('invite')}
-              onKeyDown={this.onKeyDown}
-              onChange={this.onChangeCached('emailVal')}
-            />
+          <SW.Input
+            type="text"
+            placeholder="Email"
+            onKeyDown={this.onKeyDown}
+            value={emailVal}
+            disabled={isLoading('invite')}
+            onChange={(e) => {
+              this.onChange('emailVal', e.target.value);
+            }}>
           </SW.Input>
         </SW.InputWrapper>
 
@@ -109,7 +107,7 @@ class Organization extends PureComponent {
     );
   }
   renderHeader() {
-    const { organization, tabIndex, delegate, tabs, getLoading } = this.props;
+    const { tabIndex, delegate, tabs, getLoading } = this.props;
     const title = `Team account`;
 
     return (

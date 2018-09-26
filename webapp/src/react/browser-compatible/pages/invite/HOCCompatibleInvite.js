@@ -25,18 +25,16 @@ export default class extends PureComponent {
     };
     setupLoading(this);
   }
-  onNameChange(i, e) {
+  onNameChange(i, value) {
     let { invites } = this.state;
-    invites = invites.setIn([i, 'firstName'], e.target.value);
+    invites = invites.setIn([i, 'firstName'], value);
     this.setState({ invites });
-    console.log('Test');
   }
 
-  onEmailChange(i, e) {
+  onEmailChange(i, value) {
     let { invites } = this.state;
-    invites = invites.setIn([i, 'email'], e.target.value);
+    invites = invites.setIn([i, 'email'], value);
     this.setState({ invites });
-    console.log('Test Email');
   }
   onAddInput() {
     let { invites } = this.state;
@@ -84,8 +82,6 @@ export default class extends PureComponent {
   }
   render() {
     const { invites } = this.state;
-    const { readyInOrg, isBrowserSupported } = this.props;
-    // if(!readyInOrg) return null;
 
     return (
       <CompatibleCard>

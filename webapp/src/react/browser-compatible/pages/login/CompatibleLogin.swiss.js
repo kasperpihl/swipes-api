@@ -1,4 +1,5 @@
-import {styleSheet} from 'swiss-react';
+import { styleSheet } from 'swiss-react';
+import { Link } from 'react-router-dom';
 import Icon from 'Icon';
 
 export default styleSheet('Login', {
@@ -7,7 +8,7 @@ export default styleSheet('Login', {
 
     '@media $max1600': {
       padding: '0',
-    }
+    },
   },
 
   Illustration: {
@@ -19,7 +20,7 @@ export default styleSheet('Login', {
   },
 
   Form: {
-    marginTop: '40px',
+    marginTop: '15px',
 
     '&': {
       color: '$sw2',
@@ -31,10 +32,6 @@ export default styleSheet('Login', {
 
     '@media $max800': {
       marginTop: '30px',
-    },
-
-    '@media $max1600': {
-      marginTop: '0',
     },
   },
 
@@ -57,7 +54,7 @@ export default styleSheet('Login', {
     marginBottom: '15px',
     marginTop: '-30px',
     textAlign: 'center',
-    color: '$red'
+    color: '$red',
   },
 
   ResetPassword: {
@@ -76,23 +73,23 @@ export default styleSheet('Login', {
         bottom: '0',
         position: 'absolute',
       },
-     '&:hover': {
-      '&:after': {
-        backgroundColor: 'rgba($blue, 1)',
-      }
-     },
-     '&:active': {
-      color: '$sw2',
-     },
+      '&:hover': {
+        '&:after': {
+          backgroundColor: 'rgba($blue, 1)',
+        },
+      },
+      '&:active': {
+        color: '$sw2',
+      },
 
-     '&:visited': {
-       color: '$sw2'
-     },
-    }
+      '&:visited': {
+        color: '$sw2',
+      },
+    },
   },
 
   Switch: {
-    _font: ['12px', '18px','500'],
+    _font: ['12px', '18px', '500'],
     textAlign: 'center',
     marginTop: '9px',
     padding: '0 15px',
@@ -100,13 +97,27 @@ export default styleSheet('Login', {
   },
 
   SwitchLink: {
-      _el: 'a',
-      _font: ['12px', '18px', '500'],
-      cursor: 'pointer',
-      color: '$blue',
+    _el: Link,
+    _font: ['12px', '18px', '500'],
+    cursor: 'pointer',
+    color: '$blue',
 
-      '&:hover':{
-        textDecoration: 'underline',
-      }
-    }
-})
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+
+  Input: {
+    _el: 'input',
+    _size: ['100%', '45px'],
+    _font: ['15px', '25px'],
+    color: '$sw2',
+    transition: '.2s ease',
+    borderBottom: '1px solid $sw3',
+    '&:focus': {
+      borderBottom: '1px solid $blue',
+      transition: '.2s ease',
+      color: '$sw1',
+    },
+  },
+});

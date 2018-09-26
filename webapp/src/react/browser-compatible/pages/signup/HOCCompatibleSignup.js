@@ -54,9 +54,9 @@ export default class extends PureComponent {
   componentWillUnmount(){
     this._unmounted = true;
   }
-  onChange(key, e) {
+  onChange(key, value) {
     const { formData } = this.state;
-    this.setState({ formData: formData.set(key, e.target.value) });
+    this.setState({ formData: formData.set(key, value) });
   }
   onSignup() {
     const { formData, invitationToken, me } = this.state;

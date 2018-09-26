@@ -14,13 +14,13 @@ module.exports = {
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name: 'common',
-          chunks: 'all'
-        }
-      }
-    }
+          chunks: 'all',
+        },
+      },
+    },
   },
   resolve: {
-    modules: [ path.join(__dirname, 'node_modules') ],
+    modules: [path.join(__dirname, 'node_modules')],
     alias: {
       // 'swiss-react': path.resolve(__dirname, '../../opensource/swiss-react/dist/es'),
       // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
@@ -29,13 +29,16 @@ module.exports = {
       components: path.resolve(__dirname, 'src/react/components'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),
       'swipes-core-js': '@swipesapp/core/dist',
-      // 'swipes-core-js': path.resolve(__dirname, '../../packages/swipes-core-js/dist'),
+      // 'swipes-core-js': path.resolve(
+      //   __dirname,
+      //   '../../packages/swipes-core-js/dist'
+      // ),
       icons: path.resolve(__dirname, 'src/react/icons'),
       actions: path.resolve(__dirname, 'src/actions'),
       Icon: path.resolve(__dirname, 'src/react/icons/Icon'),
       SWView: path.resolve(__dirname, 'src/react/app/view-controller/SWView'),
     },
-    extensions: ['.js', '.scss']
+    extensions: ['.js', '.scss'],
   },
   entry: {
     app: './src/index',
@@ -44,25 +47,25 @@ module.exports = {
     // vendor: Object.keys(require("./package.json").dependencies),
   },
   output: {
-      path: path.join(__dirname, 'dist'),
-      filename: isProd ? 'js/[name].[chunkhash:8].js' : 'js/[name].[hash:8].js',
-      chunkFilename: 'js/[name].[chunkhash:8].js',
-      publicPath: '/'
+    path: path.join(__dirname, 'dist'),
+    filename: isProd ? 'js/[name].[chunkhash:8].js' : 'js/[name].[hash:8].js',
+    chunkFilename: 'js/[name].[chunkhash:8].js',
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'statics/page.html',
       chunks: ['reset', 'common'],
-      filename: 'reset.html'
+      filename: 'reset.html',
     }),
     new HtmlWebpackPlugin({
       template: 'statics/page.html',
       chunks: ['note', 'common'],
-      filename: 'note.html'
+      filename: 'note.html',
     }),
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
-      chunks: ['app', 'common']
+      chunks: ['app', 'common'],
     }),
     !isProd ? new webpack.HotModuleReplacementPlugin() : null,
   ].filter(v => !!v),
@@ -73,37 +76,47 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-          }
+          },
         ],
-        include: [ path.join(__dirname, 'src'), path.resolve(__dirname, '../mobile/swipes-core-js')]
+        include: [
+          path.join(__dirname, 'src'),
+          path.resolve(__dirname, '../mobile/swipes-core-js'),
+        ],
       },
       {
         test: /\.svg(\?.*)?$/,
-        use: [ 'babel-loader', {
-          loader: 'react-svg-loader',
-          options: {
-            jsx: true
-          }
-        } ]
+        use: [
+          'babel-loader',
+          {
+            loader: 'react-svg-loader',
+            options: {
+              jsx: true,
+            },
+          },
+        ],
       },
       {
         test: /\.(woff)$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 65000
-          }
-        }]
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 65000,
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpg|jpeg|gif)?$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 50000,
-            name: 'img/[name]-[hash:6].[ext]'
-          }
-        }]
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 50000,
+              name: 'img/[name]-[hash:6].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.scss$/,
@@ -115,20 +128,15 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               outputStyle: 'expanded',
-            }
-          }
+            },
+          },
         ],
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'postcss-loader'
-        ],
-      }
-
-    ]
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+      },
+    ],
   },
   devServer: {
     publicPath: '/',
@@ -142,8 +150,8 @@ module.exports = {
         target: 'http://localhost:5000',
         secure: false,
         xfwd: false,
-      }
+      },
     },
-    historyApiFallback: true
-  }
+    historyApiFallback: true,
+  },
 };

@@ -13,5 +13,5 @@ export default styleSheet('ActionBar', {
 
   Button: {
     _el: Button,
-  }
-})
+  },
+});

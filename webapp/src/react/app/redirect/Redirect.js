@@ -5,29 +5,44 @@ import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 @withRouter
-@connect(state => ({
-  hasOrg: !!state.me.getIn(['organizations', 0]),
-  isHydrated: state.main.get('isHydrated'),
-  token: state.connection.get('token'),
-  hasConnected: state.connection.get('hasConnected'),
-  isBrowserSupported: state.globals.get('isBrowserSupported'),
-  goToUrl: state.navigation.get('url'),
-}), {
-  setUrl: navigationActions.url,
-})
-
+@connect(
+  state => ({
+    hasOrg: !!state.me.getIn(['organizations', 0]),
+    isHydrated: state.main.get('isHydrated'),
+    token: state.connection.get('token'),
+    hasConnected: state.connection.get('hasConnected'),
+    isBrowserSupported: state.globals.get('isBrowserSupported'),
+    goToUrl: state.navigation.get('url'),
+  }),
+  {
+    setUrl: navigationActions.url,
+  }
+)
 export default class Redirect extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { location: props.location };
+  }
   componentDidMount() {
+    // We have to do this because redux (@connect) and react-router (@withRouter) does not play well together
+    this.unlisten = this.props.history.listen(location => {
+      this.setState({
+        location,
+      });
+    });
     this.checkRedirects();
   }
   componentDidUpdate() {
     this.checkRedirects();
-  } 
+  }
+  componentWillUnmount() {
+    this.unlisten();
+  }
   checkRedirects() {
-    // Reset if any 
-    const { 
+    // Reset if any
+    const { location } = this.state;
+    const {
       goToUrl,
-      location,
       token,
       isHydrated,
       setUrl,
@@ -36,44 +51,43 @@ export default class Redirect extends PureComponent {
       hasConnected,
     } = this.props;
 
-    if(goToUrl && location.pathname === (goToUrl.to.pathname || goToUrl.to)) {
+    if (goToUrl && location.pathname === (goToUrl.to.pathname || goToUrl.to)) {
       setUrl(null);
     }
 
     const path = location.pathname;
 
-    if(isHydrated && !token) {
+    if (isHydrated && !token) {
       if (['/', '/welcome', '/invite', '/notsupported'].indexOf(path) > -1) {
         setUrl('/login');
       }
     }
-    if(isHydrated && hasConnected) {
-      if(['/login', '/register'].indexOf(path) > -1) {
+    if (isHydrated && hasConnected) {
+      if (['/login', '/register'].indexOf(path) > -1) {
         setUrl('/');
       }
-      if(path === '/notsupported' && isBrowserSupported) {
+      if (path === '/notsupported' && isBrowserSupported) {
         setUrl('/');
       }
-      if(path === '/' && !hasOrg) {
+      if (path === '/' && !hasOrg) {
         setUrl('/welcome');
-      } else if(path === '/' && !isBrowserSupported) {
+      } else if (path === '/' && !isBrowserSupported) {
         setUrl('/notsupported');
       }
-      if(path === '/welcome' && hasOrg) {
-        if(isBrowserSupported) {
+      if (path === '/welcome' && hasOrg) {
+        if (isBrowserSupported) {
           setUrl('/');
         } else {
           setUrl('/notsupported');
         }
-        
       }
     }
-
   }
   render() {
-    const { location, goToUrl } = this.props;
-    if(goToUrl && location.pathname !== (goToUrl.to.pathname || goToUrl.to)) {
-      return <RedirectDOM {...goToUrl} />
+    const { location } = this.state;
+    const { goToUrl } = this.props;
+    if (goToUrl && location.pathname !== (goToUrl.to.pathname || goToUrl.to)) {
+      return <RedirectDOM {...goToUrl} />;
     }
     return null;
   }

@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import FloatingInput from 'compatible/components/input/FloatingInput';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
 import CompatibleButton from 'compatible/components/button/CompatibleButton';
-import SW from './CompatibleSignup.swiss'
+import SW from './CompatibleSignup.swiss';
 
 class CompatibleSignup extends PureComponent {
   constructor(props) {
@@ -33,30 +32,36 @@ class CompatibleSignup extends PureComponent {
       return 'Get Started';
     }
 
-    return `Join ${msgGen.users.getFirstName(inviter)} and the ${organization.get('name')} team`;
+    return `Join ${msgGen.users.getFirstName(
+      inviter
+    )} and the ${organization.get('name')} team`;
   }
   renderHeader() {
     const { inviter } = this.props;
 
-    return ([
-      <CompatibleHeader center title={this.generateTitle()} assignee={inviter} key="title" />,
-        <SW.Illustration icon="ESMilestoneAchieved"  key="illustration" />,
-      <CompatibleHeader subtitle={this.getSubtitle()} key="subtitle" />
-    ])
+    return [
+      <CompatibleHeader
+        center
+        title={this.generateTitle()}
+        assignee={inviter}
+        key="title"
+      />,
+      <SW.Illustration icon="ESMilestoneAchieved" key="illustration" />,
+      <CompatibleHeader subtitle={this.getSubtitle()} key="subtitle" />,
+    ];
   }
   renderInputField(key, type, placeholder, props) {
-    const { delegate } = this.props;
     const value = this.props.formData.get(key) || '';
 
     return (
-      <FloatingInput
-        key={key}
-        inputKey={key}
+      <SW.Input
         type={type}
         placeholder={placeholder}
-        onChange={this.onChangeCached(key)}
+        onKeyDown={this.onKeyDown}
         value={value}
-        inputProps={props}
+        onChange={(e) => {
+          this.onChange(key, e.target.value);
+        }}
       />
     );
   }
@@ -65,20 +70,24 @@ class CompatibleSignup extends PureComponent {
       <SW.Form>
         {this.renderInputField('email', 'email', 'Email', {
           autoFocus: true,
-          autoComplete: 'email'
+          autoComplete: 'email',
         })}
-        {this.renderInputField('firstName', 'text', 'First name', { autoComplete: 'given-name' })}
-        {this.renderInputField('lastName', 'text', 'Last name', {autoComplete: 'family-name'})}
-        {this.renderInputField('password', 'password', 'Password', { onKeyDown: this.handleKeyDown })}
+        {this.renderInputField('firstName', 'text', 'First name', {
+          autoComplete: 'given-name',
+        })}
+        {this.renderInputField('lastName', 'text', 'Last name', {
+          autoComplete: 'family-name',
+        })}
+        {this.renderInputField('password', 'password', 'Password', {
+          onKeyDown: this.handleKeyDown,
+        })}
       </SW.Form>
     );
   }
   renderFormError() {
     const { getLoading } = this.props;
 
-    return (
-      <SW.ErrorLabel>{getLoading('signupButton').error}</SW.ErrorLabel>
-    )
+    return <SW.ErrorLabel>{getLoading('signupButton').error}</SW.ErrorLabel>;
   }
   renderFooter() {
     const { inviter, isLoading, getLoading } = this.props;
@@ -86,12 +95,20 @@ class CompatibleSignup extends PureComponent {
     return (
       <SW.Footer>
         {getLoading('signupButton').error && this.renderFormError()}
-        <CompatibleButton title="Sign up" onClick={this.onSignup} {...getLoading('signupButton')}/>
+        <CompatibleButton
+          title="Sign up"
+          onClick={this.onSignup}
+          {...getLoading('signupButton')}
+        />
         <SW.Switch>
-          Already have an account? <SW.LinkButton href="/login">Sign in here</SW.LinkButton>
+          Already have an account?{' '}
+          <SW.LinkButton to="/login">Sign in here</SW.LinkButton>
         </SW.Switch>
         <SW.FooterSentence>
-          By signing up you agree to the <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">Terms of service</a>
+          By signing up you agree to the{' '}
+          <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">
+            Terms of service
+          </a>
         </SW.FooterSentence>
       </SW.Footer>
     );
