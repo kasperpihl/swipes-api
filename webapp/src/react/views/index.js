@@ -10,6 +10,7 @@ import DiscussionOverview from './Discussion/Overview/HOCDiscussionOverview';
 import Browser from './browser/Browser';
 import GoalOverview from './goals/goal-overview/HOCGoalOverview';
 import ProjectOverview from './Project/Overview/ProjectOverview';
+import PlanCreate from './Plan/Create/PlanCreate';
 import PlanList from './plan-legacy/plan-list/HOCPlanList';
 import PlanOverview from './plan-legacy/plan-overview/HOCPlanOverview';
 import NoMilestoneOverview from './milestones/no-milestone-overview/HOCNoMilestoneOverview';
@@ -34,6 +35,7 @@ export {
   NoMilestoneOverview,
   NotFound,
   NotificationList,
+  PlanCreate,
   PlanList,
   PlanOverview,
   Previewer,

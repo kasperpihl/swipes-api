@@ -26,7 +26,10 @@ const app = express();
 app.use(corsHandler);
 
 // Webhooks route
-app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */);
+app.use(
+  '/webhooks',
+  bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */
+);
 
 app.use('/v1', routes.v1Multipart);
 
@@ -63,7 +66,9 @@ app.use('/v1', authCheckIfPartOfOrganization);
 // Authed routes goes here (with org)
 app.use('/v1', endpoints.authed);
 
-
+app.use('/v1', (req, res, next) => {
+  res.sendStatus(404);
+});
 // ========================================================================
 // Error handlers / they should be at the end of the middleware stack
 // ========================================================================

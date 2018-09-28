@@ -55,13 +55,16 @@ export default class Sidebar extends PureComponent {
   getNavItems() {
     return [
       { id: 'ProjectOverview', svg: 'Milestones' },
+      { id: 'PlanCreate', svg: 'Goals' },
       { id: 'Discuss', svg: 'Messages' },
     ].filter(v => !!v);
   }
   getTitleForId(id) {
     switch (id) {
       case 'ProjectOverview':
-        return 'Projects';
+        return 'Organize';
+      case 'PlanCreate':
+        return 'Plan';
       case 'PostFeed':
         return 'Discuss';
       case 'PlanList':
