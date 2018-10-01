@@ -17,8 +17,8 @@ import HOCConnectionBar from 'components/connection-bar/HOCConnectionBar';
 import * as a from 'actions';
 import HOCModal from 'components/modal/HOCModal';
 import HOCLoading from 'components/loading/HOCLoading';
-import HOCViewController from './navigation/view-controller/HOCViewController';
 import getGlobals from 'utils/globals';
+import HOCViewController from './navigation/view-controller/HOCViewController';
 
 const styles = StyleSheet.create({
   app: {
