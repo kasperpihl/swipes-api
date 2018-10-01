@@ -36,7 +36,6 @@ export default styleSheet('SplitImage', {
     'numberOfImages<3': {
       height: '100%',
     },
-    backgroundColor: 'red',
 
     border: {
       borderTopWidth: 1,
