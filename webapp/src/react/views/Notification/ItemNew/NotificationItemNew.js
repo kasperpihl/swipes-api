@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
@@ -9,48 +9,55 @@ import timeAgo from 'swipes-core-js/utils/time/timeAgo';
 import SW from './NotificationItemNew.swiss';
 
 const parseUserIds = message => (dispatch, getState) => {
-  return message.replace(/<!([A-Z0-9]*)>/gi, (full, uId) => getState().users.getIn([uId, 'profile', 'first_name']));
+  return message.replace(/<!([A-Z0-9]*)>/gi, (full, uId) =>
+    getState().users.getIn([uId, 'profile', 'first_name'])
+  );
 };
- 
-export default
-@connect(state => ({
-  myId: state.me.get('id'),
-}), {
-  parseUserIds,
-  apiRequest: ca.api.request,
-  openSecondary: navigationActions.openSecondary,
-})
-class NotificationItem extends PureComponent {
+
+@connect(
+  state => ({
+    myId: state.me.get('id'),
+  }),
+  {
+    parseUserIds,
+    apiRequest: ca.api.request,
+    openSecondary: navigationActions.openSecondary,
+  }
+)
+export default class NotificationItem extends PureComponent {
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
     setupDelegate(this, 'onNotificationOpen');
   }
   onClick = () => {
     const { notification, apiRequest, openSecondary } = this.props;
     const nav = navForContext(notification.get('target'));
-    if(!notification.get('seen_at')){
+    if (!notification.get('seen_at')) {
       apiRequest('notifications.markAsSeen', {
         notification_ids: payload,
-      })
+      });
     }
-    if(nav) {
+    if (nav) {
       openSecondary('secondary', nav);
     }
-  }
+  };
   renderProfilePic() {
     const { notification } = this.props;
 
     const users = notification.get('done_by');
-    return <SplitImage size={48} users={users && users.toJS() || [myId]} />
+    return <SplitImage size={48} users={(users && users.toJS()) || [myId]} />;
   }
   render() {
     const { notification, parseUserIds } = this.props;
-    const timestamp = timeAgo(notification.get('created_at'), true)
+    const timestamp = timeAgo(notification.get('created_at'), true);
     const text = parseUserIds(notification.get('title'));
 
     return (
-      <SW.Wrapper unread={!!notification.get('seen_at')} onClick={this.onNotificationOpenCached(notification)}>
+      <SW.Wrapper
+        unread={!notification.get('seen_at')}
+        onClick={this.onNotificationOpenCached(notification)}
+      >
         {this.renderProfilePic()}
         <SW.Content>
           <SW.Message>
@@ -59,6 +66,6 @@ class NotificationItem extends PureComponent {
           <SW.TimeStamp>{timestamp}</SW.TimeStamp>
         </SW.Content>
       </SW.Wrapper>
-    )
+    );
   }
 }
