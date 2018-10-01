@@ -26,7 +26,7 @@ $topbarSize: 38px;
 
   &__status {
     @include size(100%, 100%);
-    background-color: rgba($bg, .7);
+    background-color: rgba($bg, 0.7);
     display: none;
 
     &--shown {
@@ -41,10 +41,10 @@ $topbarSize: 38px;
     padding-bottom: 23px;
   }
 
-
   &__unpaid {
     position: absolute;
-    right: 5px; top: 5px;
+    right: 5px;
+    top: 5px;
   }
 }
 
@@ -56,7 +56,6 @@ $topbarSize: 38px;
   &__title {
     @include font(12px, $deepBlue-100, 18px, 500);
   }
-
 }
 
 // Windows window actions
@@ -69,7 +68,9 @@ $topbarSize: 38px;
     display: none;
 
     position: absolute;
-    right: 0; top: 0;
+    right: 0;
+    top: 0;
+    z-index: 999999999999999999;
     -webkit-app-region: no-drag;
   }
 
@@ -78,15 +79,16 @@ $topbarSize: 38px;
     -webkit-app-region: no-drag;
 
     &--minimize {
-
       #{$b}__svg {
-        left: 50%; top: auto; bottom: 0;
+        left: 50%;
+        top: auto;
+        bottom: 0;
         transform: translateX(-50%) translateY(0%);
       }
     }
 
     &:hover {
-      background-color: rgba($bg, .3);
+      background-color: rgba($bg, 0.3);
     }
   }
 
@@ -94,7 +96,8 @@ $topbarSize: 38px;
     @include size(24px);
     @include svg-color($bg);
     position: absolute;
-    left: 50%; top: 50%;
+    left: 50%;
+    top: 50%;
     transform: translateX(-50%) translateY(-50%);
   }
 }
