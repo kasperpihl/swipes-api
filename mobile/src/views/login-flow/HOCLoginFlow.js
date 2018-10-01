@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { viewSize } from 'globalStyles';
 import * as a from 'actions';
 import * as ca from 'swipes-core-js/actions';
+import Login from 'views/login/Login';
 import SignupIntro from './SignupIntro';
 import WelcomeScreen from './WelcomeScreen';
 
