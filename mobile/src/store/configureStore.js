@@ -1,7 +1,7 @@
-import { applyMiddleware, createStore, combineReducers } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist'
-import immutableTransform from 'redux-persist-transform-immutable'
-import { AsyncStorage, Platform } from 'react-native';
+import { applyMiddleware, createStore } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import immutableTransform from 'redux-persist-transform-immutable';
+import storage from 'redux-persist/lib/storage';
 
 import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
@@ -12,19 +12,18 @@ let config = {
     thunk,
   ],
   persistConfig: {
+    storage,
     transforms: [immutableTransform()],
-    blacklist: ['counter', 'notes', 'cache', 'navigation', 'main', 'autoComplete', 'infoTab', 'globals'],
-    key: 'root',
-    storage: AsyncStorage,
-  }
+    whitelist: ['auth'],
+    key: 'root2',
+  },
 };
 
-if(__DEV__) {
+if (__DEV__) {
   config = devConf(config);
 }
 
 export default function configureStore(preloadedState = {}) {
-
   const store = createStore(
     persistReducer(config.persistConfig, rootReducer),
     preloadedState,

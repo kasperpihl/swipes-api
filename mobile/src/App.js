@@ -205,7 +205,7 @@ class App extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    token: state.connection.get('token'),
+    token: state.auth.get('token'),
     myId: state.me.get('id'),
     readyInOrg: state.connection.get('readyInOrg'),
     hasConnected: state.connection.get('hasConnected'),

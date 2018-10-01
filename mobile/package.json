@@ -7,12 +7,12 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "clean": "watchman watch-del-all && rm -rf $TMPDIR/metro* && rm -rf node_modules && npm install && rm -rf /tmp/metro-bundler-cache-* && rm -rf /tmp/haste-map-react-native-packager-*",
+    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && npm cache clean --force && npm install && npm start -- --reset-cache",
     "prebuild:android": "node increment_version_code.js",
     "build:android": "cd android && ./gradlew clean && ./gradlew assembleRelease"
   },
   "dependencies": {
-    "@swipesapp/core": "0.0.15",
+    "@swipesapp/core": "0.0.22",
     "babel-register": "^6.26.0",
     "immutable": "^3.8.2",
     "moment": "^2.20.1",

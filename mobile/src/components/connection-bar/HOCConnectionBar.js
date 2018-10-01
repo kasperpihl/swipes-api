@@ -135,7 +135,7 @@ const mapStateToProps = state => ({
   reconnectAttempt: state.connection.get('reconnectAttempt'),
   ready: state.connection.get('ready'),
   status: state.connection.get('status'),
-  token: state.connection.get('token'),
+  token: state.auth.get('token'),
 });
 
 export default connect(mapStateToProps, {
