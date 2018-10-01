@@ -7,14 +7,16 @@ import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-@connect(state => ({
-  token: state.connection.get('token'),
-}), {
-  request: ca.api.request,
-  signup: ca.users.signup,
-  setUrl: navigationActions.url,
-})
-
+@connect(
+  state => ({
+    token: state.auth.get('token'),
+  }),
+  {
+    request: ca.api.request,
+    signup: ca.users.signup,
+    setUrl: navigationActions.url,
+  }
+)
 export default class extends PureComponent {
   constructor(props) {
     super(props);
@@ -29,12 +31,12 @@ export default class extends PureComponent {
     window.analytics.sendEvent('Signup opened', {});
     const { request } = this.props;
     const { formData, invitationToken } = this.state;
-    if(invitationToken) {
+    if (invitationToken) {
       this.setLoading('signup');
 
       request('organizations.getInfoFromInvitationToken', {
         invitation_token: invitationToken,
-      }).then((res) => {
+      }).then(res => {
         if (res && res.ok && res.me && !this._unmounted) {
           const me = fromJS(res.me);
           window.analytics.sendEvent('Invitation opened', {});
@@ -51,7 +53,7 @@ export default class extends PureComponent {
       });
     }
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     this._unmounted = true;
   }
   onChange(key, value) {
@@ -66,7 +68,6 @@ export default class extends PureComponent {
       return;
     }
 
-
     this.setLoading('signupButton');
     signup({
       first_name: formData.get('firstName'),
@@ -74,11 +75,11 @@ export default class extends PureComponent {
       email: formData.get('email'),
       password: formData.get('password'),
       invitation_token: invitationToken || null,
-    }).then((res) => {
+    }).then(res => {
       if (res.ok) {
         this.clearLoading('signupButton');
         window.analytics.sendEvent('Signed up', {});
-        if(me && me.get('invited_by')) {
+        if (me && me.get('invited_by')) {
           window.analytics.sendEvent('Invitation accepted', {
             distinct_id: me.get('invited_by'),
             // 'Minutes since invite':
@@ -92,7 +93,11 @@ export default class extends PureComponent {
           label = '!' + res.error.message;
 
           if (label.startsWith('!body /users.signup: Invalid object')) {
-            let invalidProp = label.split('[')[1].split(']')[0].replace('\'', '').replace('\'', '');
+            let invalidProp = label
+              .split('[')[1]
+              .split(']')[0]
+              .replace("'", '')
+              .replace("'", '');
 
             label = `!Not a valid ${invalidProp}`;
           }
@@ -103,19 +108,17 @@ export default class extends PureComponent {
     });
   }
   renderContent() {
-    const {
-      formData,
-      organization,
-      invitedBy,
-      invitationToken,
-    } = this.state;
+    const { formData, organization, invitedBy, invitationToken } = this.state;
 
     const { token } = this.props;
 
     if (this.isLoading('signup')) {
       return (
         <div className="compatible-signup__loader">
-          <img src="https://media.giphy.com/media/cZDRRGVuNMLOo/giphy.gif" alt="" />
+          <img
+            src="https://media.giphy.com/media/cZDRRGVuNMLOo/giphy.gif"
+            alt=""
+          />
         </div>
       );
     }
@@ -134,10 +137,6 @@ export default class extends PureComponent {
   render() {
     const { token } = this.props;
 
-    return (
-      <CompatibleCard>
-        {this.renderContent()}
-      </CompatibleCard>
-    );
+    return <CompatibleCard>{this.renderContent()}</CompatibleCard>;
   }
 }
