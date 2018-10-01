@@ -12,7 +12,7 @@ import HOCDiscussionCreate from './Discussion/Composer/HOCDiscussionCreate';
 import Notifications from './notifications/HOCNotifications';
 import Update from './update/HOCUpdate';
 import Search from './search/HOCSearch';
-import AttachmentView from './posts/post-view/HOCAttachmentView';
+import AttachmentView from './Attachment/HOCAttachmentView';
 
 export {
   GoalOverview,
