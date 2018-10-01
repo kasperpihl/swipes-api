@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
       android: {
         height: 48,
         paddingTop: 24,
-      }
+      },
     }),
     marginBottom: Platform.OS === 'ios' ? -20 : -24,
     zIndex: 9999,
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
   statusMessage: {
     fontSize: 12,
     color: 'white',
-  }
-})
+  },
+});
 
 class HOCConnectionBar extends PureComponent {
   constructor(props) {
@@ -91,7 +91,7 @@ class HOCConnectionBar extends PureComponent {
     if (status === 'connecting') {
       message = 'Connecting...';
       color = colors.yellowColor;
-    } else  if (versionInfo && versionInfo.get('maintenance')) {
+    } else if (versionInfo && versionInfo.get('maintenance')) {
       message = 'Offline - under maintenance';
       color = colors.red80;
     } else if (versionInfo && (versionInfo.get('updateRequired') || versionInfo.get('reloadRequired'))) {
@@ -112,7 +112,6 @@ class HOCConnectionBar extends PureComponent {
   }
   render() {
     const { token } = this.props;
-    const { statusColor } = this.state;
     const status = this.getStatusMessage();
 
     if (!status.message || !token) {
@@ -120,8 +119,8 @@ class HOCConnectionBar extends PureComponent {
     }
 
     return (
-      <View style={[styles.container, {backgroundColor: status.color}]}>
-        <Text selectable={true} style={styles.statusMessage}>{status.message}</Text>
+      <View style={[styles.container, { backgroundColor: status.color }]}>
+        <Text selectable style={styles.statusMessage}>{status.message}</Text>
       </View>
     );
   }
@@ -130,7 +129,7 @@ class HOCConnectionBar extends PureComponent {
 
 HOCConnectionBar.propTypes = {};
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   nextRetry: state.connection.get('nextRetry'),
   versionInfo: state.connection.get('versionInfo'),
   reconnectAttempt: state.connection.get('reconnectAttempt'),
