@@ -54,11 +54,11 @@ const discussionAddMiddleware = async (req, res, next) => {
   const discussionFollowersQuery = dbInsertQuery(
     'discussion_followers',
     uniqueFollowers.map(userId => ({
+      organization_id,
       id: `${discussionId}-${userId}`,
       user_id: userId,
       discussion_id: discussionId,
       read_at: userId === user_id ? created_at : null,
-      organization_id,
     })),
   );
 
