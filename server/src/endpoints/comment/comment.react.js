@@ -46,11 +46,9 @@ export default endpointCreate(
         comment.discussion_id,
         {
           last_comment_at: comment.updated_at,
-          last_comment: `loved the comment: ${mentionsClean(
-            comment.message
-          ).slice(0, 60)}...`,
+          last_comment: `loved the comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
           last_comment_by: user_id,
-        }
+        },
       );
       // Updating read_at to be newest comment.
       // Also ensuring that user follows discussion
@@ -65,7 +63,7 @@ export default endpointCreate(
         },
         {
           conflict: 'update',
-        }
+        },
       );
       const result = await Promise.all([
         dbRunQuery(updateFollowerQ),
@@ -93,7 +91,7 @@ export default endpointCreate(
       updates,
     };
     res.locals.messageGroupId = comment_id;
-  }
+  },
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
 });
