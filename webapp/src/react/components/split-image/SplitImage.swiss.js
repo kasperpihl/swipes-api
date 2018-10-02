@@ -1,52 +1,32 @@
 import { styleSheet } from 'swiss-react';
-import AssigneeImage from '../assigning/AssigneeImage';
 
 export default styleSheet('SplitImage', {
   Container: {
-    _size: ['#{size=50}px'],
-    _flex: ['row', 'center'],
-    flex: 'none',
-    backgroundColor: '$sw5',
-    borderRadius: props => `${(props.size || 50)/2}px`,
-    border: 'none',
-    overflow: 'hidden',
+    width: '#{size}px',
+    height: '#{size}px',
+    position: 'relative',
   },
 
   Left: {
-    _size:'100%',
+    _size: '100%',
     overflow: 'hidden',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 0,
+    borderRadius: '50%',
     'numberOfImages>1': {
-      borderRight: '1px solid $sw5',
-    },
-    'numberOfImages=2': {
-      _size: ['50%', '100%'],
-    },
-    'numberOfImages=3': {
-      _size: ['75%', '100%'],
+      _size: '67%',
     },
   },
 
   Right: {
-    _size: ['50%', '100%'],
-    _flex: ['column', 'center'],
+    _size: '67%',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    zIndex: 1,
+    borderRadius: '50%',
     overflow: 'hidden',
-  },
-
-  ImageBox: {
-    _size: props => `${(props.size || 50)/2}px`,
-    _flex: ['center'],
-    'numberOfImages<3': {
-      _size: '100%',
-    },
-
-    border: {
-      borderTop: '1px solid $sw5',
-    },
-  },
-
-  Image: {
-    _el: AssigneeImage,
-    backgroundColor: '$sw1',
-    objectFit: 'cover',
   },
 })

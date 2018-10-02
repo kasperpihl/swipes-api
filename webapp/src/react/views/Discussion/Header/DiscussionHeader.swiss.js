@@ -6,11 +6,14 @@ export default styleSheet('DiscussionHeader', {
     borderBottom: '1px solid $sw3',
     paddingBottom: '12px',
   },
+  SplitImageWrapper: {
+    flex: 'none',
+  },
   TitleWrapper: {
     paddingTop: '3px',
     width: '100%',
     paddingLeft: '12px',
-    _flex: ['column',]
+    _flex: ['column'],
   },
   Title: {
     _font: ['16px', '22px', 400],
@@ -34,9 +37,9 @@ export default styleSheet('DiscussionHeader', {
     },
   },
   ContextWrapper: {
+    _flex: ['row', 'left', 'center'],
     borderBottom: '1px solid $sw3',
     padding: '6px 0',
-    _flex: ['row', 'left', 'center'],
     width: '100%',
   },
   Label: {

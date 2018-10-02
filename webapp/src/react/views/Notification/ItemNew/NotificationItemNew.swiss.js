@@ -13,17 +13,8 @@ export default styleSheet('NotificationItemNew', {
     },
   },
 
-  NotificationImage: {
-    _el: 'img',
-    _size: ['54px'],
-    borderRadius: '3px'
-  },
-
-  Initials: {
-    _size: ['54px'],
-    _flex: ['row', 'center', 'center'],
-    backgroundColor: '$sw2',
-    borderRadius: '3px',
+  SplitImageWrapper: {
+    flex: 'none',
   },
 
   Content: {
@@ -47,10 +38,4 @@ export default styleSheet('NotificationItemNew', {
     _font: ['12px', '12px'],
     color: 'black',
   },
-
-  StyledButton: {
-    _font: ['12px', '15px', '500'],
-    color: 'black',
-  },
-
 })

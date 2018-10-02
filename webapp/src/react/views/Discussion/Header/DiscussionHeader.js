@@ -118,7 +118,9 @@ export default class DiscussionHeader extends PureComponent {
     return (
       <Fragment>
         <SW.Wrapper>
-          <SplitImage size={48} users={followers.toJS()} />
+          <SW.SplitImageWrapper>
+            <SplitImage size={48} users={followers.toJS()} />
+          </SW.SplitImageWrapper>
           <SW.TitleWrapper>
             <SW.Title
               hasTopic={!!discussion.get('topic_set')}
