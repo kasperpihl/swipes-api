@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { setupDelegate } from 'react-delegate';
 import * as a from 'actions';
-import AttachmentView from './AttachmentView'
+import AttachmentView from './AttachmentView';
 
 class HOCAttachmentView extends PureComponent {
   constructor(props) {
@@ -35,8 +35,8 @@ class HOCAttachmentView extends PureComponent {
       this.handleAttach(att);
 
       this.setState({
-        attachments: attachments.push(att)
-      })
+        attachments: attachments.push(att),
+      });
     });
   }
   onAttachmentPress(att) {
@@ -56,7 +56,7 @@ class HOCAttachmentView extends PureComponent {
 
 HOCAttachmentView.propTypes = {};
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = state => ({});
 
 export default connect(mapStateToProps, {
   uploadAttachment: a.attachments.upload,

@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     ...gs.mixins.font(12, gs.colors.deepBlue80),
     fontWeight: '500',
     paddingLeft: 12,
-  }
-})
+  },
+});
 
 class AttachmentView extends PureComponent {
   constructor(props) {
@@ -49,24 +49,23 @@ class AttachmentView extends PureComponent {
   }
   componentDidMount() {
     const { attachments } = this.props;
-    
+
     if (!attachments.size) {
       this.onChooseAttachmentTypeToAdd();
     }
   }
   renderHeader() {
-
     return (
-       <HOCHeader
-        title="Attachments"
-      >
-        <RippleButton onPress={this.onChooseAttachmentTypeToAdd}>
+      <HOCHeader
+         title="Attachments"
+       >
+         <RippleButton onPress={this.onChooseAttachmentTypeToAdd}>
           <View style={styles.addAttachmentButton}>
             <Icon icon="Plus" width="24" height="24" fill={gs.colors.deepBlue80} />
           </View>
         </RippleButton>
-      </HOCHeader>
-    )
+       </HOCHeader>
+    );
   }
   renderAttachments() {
     const { attachments } = this.props;
@@ -87,13 +86,13 @@ class AttachmentView extends PureComponent {
           <Text style={styles.attachmentLabel} numberOfLines={1} ellipsizeMode="tail">{att.get('title')}</Text>
         </View>
       </RippleButton>
-    ))
+    ));
 
     return (
       <View style={styles.attachments}>
         {attachmentsRender}
       </View>
-    )
+    );
   }
   render() {
     return (
@@ -109,7 +108,7 @@ class AttachmentView extends PureComponent {
   }
 }
 
-export default AttachmentView
+export default AttachmentView;
 
 // const { string } = PropTypes;
 

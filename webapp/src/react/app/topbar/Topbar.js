@@ -17,7 +17,7 @@ import './topbar.scss';
   isFullscreen: state.main.get('isFullscreen'),
   ready: state.connection.get('readyInOrg'),
   status: state.connection.get('status'),
-  token: state.connection.get('token'),
+  token: state.auth.get('token'),
 }))
 export default class Topbar extends PureComponent {
   constructor(props) {
@@ -40,8 +40,10 @@ export default class Topbar extends PureComponent {
   }
   onDownload = () => {
     const { versionInfo } = this.props;
-    window.open(versionInfo.get('updateUrl') || 'https://workspace.swipesapp.com/download');
-  }
+    window.open(
+      versionInfo.get('updateUrl') || 'https://workspace.swipesapp.com/download'
+    );
+  };
   onReload() {
     window.ipcListener.reload();
   }
@@ -52,7 +54,7 @@ export default class Topbar extends PureComponent {
     nextRetry = nextRetry || this.props.nextRetry;
     const secUnrounded = this.secondsToTime(nextRetry) / 1000;
     const secRounded = parseInt(secUnrounded, 10);
-    const remainder = Math.max(((secUnrounded - secRounded) * 1000) + 1, 10);
+    const remainder = Math.max((secUnrounded - secRounded) * 1000 + 1, 10);
     if (this.state.secondsLeft !== secRounded) {
       this.setState({ secondsLeft: secRounded });
     }
@@ -76,12 +78,10 @@ export default class Topbar extends PureComponent {
 
     if (status === 'connecting') {
       statusMessage = 'Connecting...';
-    }
-    else if (versionInfo && versionInfo.get('maintenance')) {
+    } else if (versionInfo && versionInfo.get('maintenance')) {
       statusMessage = 'Offline - under maintenance.';
       btn = this.renderRetryBtn();
-    }
-    else if (versionInfo && versionInfo.get('updateRequired')) {
+    } else if (versionInfo && versionInfo.get('updateRequired')) {
       statusMessage = 'Offline - new version required';
       btn = this.renderDownloadBtn();
     } else if (versionInfo && versionInfo.get('updateAvailable')) {
@@ -107,32 +107,24 @@ export default class Topbar extends PureComponent {
     return (
       <div className={className}>
         <div className="topbar__header">
-          <div className="topbar__title">
-            {statusMessage}
-          </div>
+          <div className="topbar__title">{statusMessage}</div>
           {btn}
         </div>
       </div>
     );
   }
   renderDownloadBtn() {
-    return (
-      <Button title="download" onClick={this.onDownload} />
-    );
+    return <Button title="download" onClick={this.onDownload} />;
   }
   renderRetryBtn() {
-    return (
-      <Button title="Retry now" onClick={this.onRetry} />
-    );
+    return <Button title="Retry now" onClick={this.onRetry} />;
   }
   renderReloadBtn() {
-    return (
-      <Button title="Reload" onClick={this.onReload} />
-    );
+    return <Button title="Reload" onClick={this.onReload} />;
   }
   renderWindowsActions() {
     const { isMaximized, isFullscreen, isElectron } = this.props;
-    if(!isElectron) { 
+    if (!isElectron) {
       return null;
     }
     let toggleMaximizeIcon = 'WindowsMaximize';

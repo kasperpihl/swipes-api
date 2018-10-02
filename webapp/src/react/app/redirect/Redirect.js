@@ -9,7 +9,7 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
   state => ({
     hasOrg: !!state.me.getIn(['organizations', 0]),
     isHydrated: state.main.get('isHydrated'),
-    token: state.connection.get('token'),
+    token: state.auth.get('token'),
     hasConnected: state.connection.get('hasConnected'),
     isBrowserSupported: state.globals.get('isBrowserSupported'),
     goToUrl: state.navigation.get('url'),

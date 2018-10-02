@@ -17,8 +17,8 @@ import HOCConnectionBar from 'components/connection-bar/HOCConnectionBar';
 import * as a from 'actions';
 import HOCModal from 'components/modal/HOCModal';
 import HOCLoading from 'components/loading/HOCLoading';
-import HOCViewController from './navigation/view-controller/HOCViewController';
 import getGlobals from 'utils/globals';
+import HOCViewController from './navigation/view-controller/HOCViewController';
 
 const styles = StyleSheet.create({
   app: {
@@ -205,7 +205,7 @@ class App extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    token: state.connection.get('token'),
+    token: state.auth.get('token'),
     myId: state.me.get('id'),
     readyInOrg: state.connection.get('readyInOrg'),
     hasConnected: state.connection.get('hasConnected'),

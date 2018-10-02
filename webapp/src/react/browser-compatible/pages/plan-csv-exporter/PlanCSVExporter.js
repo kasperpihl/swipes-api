@@ -8,7 +8,7 @@ class PlanCSVExporter extends PureComponent {
   }
   componentDidMount() {
     const apiUrl = `${getState().globals.get('apiUrl')}/v1/`;
-    const token = getState().connection.get('token');
+    const token = getState().auth.get('token');
 
     fetch(`${apiUrl}csvexporter.plans`, {
       method: 'post',
@@ -17,27 +17,30 @@ class PlanCSVExporter extends PureComponent {
         'Content-Type': 'application/json',
       }),
     })
-    .then((res) => {
-      if (res.ok) {
-        return res.blob()
-      }
-    })
-    .then((blob) => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "plans.csv";
-      a.click();
-    })
-    .catch((err) => {
-      console.log('ERROR', err);
-    })
+      .then(res => {
+        if (res.ok) {
+          return res.blob();
+        }
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'plans.csv';
+        a.click();
+      })
+      .catch(err => {
+        console.log('ERROR', err);
+      });
   }
   render() {
     return (
       <CompatibleCard>
         <div className="download-page">
-          <CompatibleHeader title="Plan exporter" subtitle="Exporting your plan data in csv. Please wait..." />
+          <CompatibleHeader
+            title="Plan exporter"
+            subtitle="Exporting your plan data in csv. Please wait..."
+          />
         </div>
       </CompatibleCard>
     );

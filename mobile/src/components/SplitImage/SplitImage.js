@@ -22,14 +22,7 @@ export default class SplitImage extends PureComponent {
           </SW.Left>
           {userIds[1] && (
             <SW.Right>
-              <SW.ImageBox>
-                <AssigneeImage userId={userIds[1]} />
-              </SW.ImageBox>
-              {userIds[2] && (
-                <SW.ImageBox border>
-                  <AssigneeImage userId={userIds[2]} />
-                </SW.ImageBox>
-              )}
+              <AssigneeImage userId={userIds[1]} />
             </SW.Right>
           )}
         </SW.Container>

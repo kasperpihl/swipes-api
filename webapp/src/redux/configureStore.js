@@ -1,9 +1,9 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import immutableTransform from 'redux-persist-transform-immutable'
+import immutableTransform from 'redux-persist-transform-immutable';
+import storage from 'redux-persist/lib/storage';
 
 import thunk from 'redux-thunk';
-import localForage from "localforage";
 
 import * as reducers from './reducers';
 import * as coreReducers from 'swipes-core-js/reducers';
@@ -15,32 +15,26 @@ const rootReducer = combineReducers({
   ...reducers,
 });
 
-
 let config = {
-  middlewares: [
-    thunk,
-  ],
+  middlewares: [thunk],
   persistConfig: {
-    version: 1,
+    version: 2,
     transforms: [immutableTransform()],
-    blacklist: ['counter', 'main', 'cache', 'filters', 'autoComplete', 'globals'],
+    whitelist: ['navigation', 'auth'],
     key: 'root',
-    storage: localForage,
-  }
+    storage,
+  },
 };
 
-if(process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   config = devConf(config);
 }
 
 export default function configureStore(preloadedState = {}) {
-
   const store = createStore(
     persistReducer(config.persistConfig, rootReducer),
     preloadedState,
-    applyMiddleware(
-      ...config.middlewares,
-    ),
+    applyMiddleware(...config.middlewares)
   );
 
   const persistor = persistStore(store);

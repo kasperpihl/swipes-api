@@ -6,16 +6,13 @@ import Milestones from './milestones/HOCMilestones';
 import MilestoneOverview from './milestones/HOCMilestoneOverview';
 import NoMilestoneOverview from './no-milestone-overview/HOCNoMilestoneOverview';
 import PreviewNote from './preview-note/HOCPreviewNote';
-import PostFeed from './posts/post-feed/HOCPostFeed';
 import DiscussionList from './Discussion/List/DiscussionList';
 import DiscussionOverview from './Discussion/Overview/DiscussionOverview';
 import HOCDiscussionCreate from './Discussion/Composer/HOCDiscussionCreate';
-import PostView from './posts/post-view/HOCPostView';
-import PostCreate from './posts/post-create/HOCPostCreate';
 import Notifications from './notifications/HOCNotifications';
 import Update from './update/HOCUpdate';
 import Search from './search/HOCSearch';
-import AttachmentView from './posts/post-view/HOCAttachmentView';
+import AttachmentView from './Attachment/HOCAttachmentView';
 
 export {
   GoalOverview,
@@ -24,9 +21,6 @@ export {
   Milestones,
   MilestoneOverview,
   PreviewNote,
-  PostFeed,
-  PostView,
-  PostCreate,
   Notifications,
   NoMilestoneOverview,
   Update,

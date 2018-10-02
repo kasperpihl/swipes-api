@@ -1,16 +1,18 @@
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
 import DragAndDrop from 'src/react/components/drag-and-drop/DragAndDrop';
 
-@connect(state => ({
-  navigation: state.navigation,
-}), {
-  chooseDragAndDrop: menuActions.chooseDragAndDrop,
-})
-
-class HOCDragAndDrop extends Component {
-  constructor(props){
+@connect(
+  state => ({
+    navigation: state.navigation,
+  }),
+  {
+    chooseDragAndDrop: menuActions.chooseDragAndDrop,
+  }
+)
+class HOCDragAndDrop extends PureComponent {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -21,44 +23,47 @@ class HOCDragAndDrop extends Component {
 
   // && primary.size > 0 && secondary.size > 0 || primary.size > 0 && secondary.size === 0 || primary.size === 0 && secondary.size > 0
 
-  handleDragEnter = (e) => {
+  handleDragEnter = e => {
     const primary = getState().main.getIn(['dragAndDrop', 'primary']);
     const secondary = getState().main.getIn(['dragAndDrop', 'secondary']);
     e.preventDefault();
     let dt = e.dataTransfer;
     if (
-      dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))
+      dt.types &&
+      (dt.types.indexOf
+        ? dt.types.indexOf('Files') != -1
+        : dt.types.contains('Files'))
     ) {
-      this.setState({hoverActive: true})
+      this.setState({ hoverActive: true });
     }
-  }
+  };
 
-  closeOverlay = (e) => {
+  closeOverlay = e => {
     e.preventDefault();
-    this.setState({hoverActive: false});
-  }
+    this.setState({ hoverActive: false });
+  };
 
-  handleDragLeave = (e) => {
+  handleDragLeave = e => {
     e.preventDefault();
-    this.setState({hoverActive: false});
-  }
+    this.setState({ hoverActive: false });
+  };
 
-  handleDragOver = (e) => {
+  handleDragOver = e => {
     e.preventDefault();
-  }
+  };
 
-  handleDrop = (e) => {
+  handleDrop = e => {
     e.preventDefault();
     e.stopPropagation();
-    const {chooseDragAndDrop} = this.props;
+    const { chooseDragAndDrop } = this.props;
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'center',
       alignY: 'center',
     };
     chooseDragAndDrop(e.dataTransfer.files, options);
-    this.setState({hoverActive: false});
-  }
+    this.setState({ hoverActive: false });
+  };
 
   render() {
     const { hoverActive } = this.state;
@@ -74,9 +79,8 @@ class HOCDragAndDrop extends Component {
       >
         {children}
       </DragAndDrop>
-    )
+    );
   }
 }
 
 export default HOCDragAndDrop;
-
