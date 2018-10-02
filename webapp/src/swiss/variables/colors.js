@@ -1,10 +1,10 @@
 import { addVariables } from 'swiss-react';
 
 addVariables({
-  sw1: '#1A2844',
-  sw2: '#808591',
-  sw3: '#E9EBF0',
-  sw4: '#F5F7FC',
+  sw1: '#151D2E',
+  sw2: '#54565C',
+  sw3: '#D7D9DE',
+  sw4: '#EDF0F5',
   sw5: 'white',
 
   blue: '#0070E0',

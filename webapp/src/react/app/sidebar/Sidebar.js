@@ -49,7 +49,6 @@ export default class Sidebar extends PureComponent {
     navSet(target, {
       id,
       title: this.getTitleForId(id),
-      showTitleInCrumb: id === 'Discuss',
     });
   }
   getNavItems() {

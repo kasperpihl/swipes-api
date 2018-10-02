@@ -2,15 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindAll, traverseElement } from 'swipes-core-js/classes/utils';
-import {
-  getVisibleSelectionRect,
-} from 'draft-js';
+import { getVisibleSelectionRect } from 'draft-js';
 import ControlPanel from './ControlPanel';
 import prefixAll from 'inline-style-prefixer/static';
 import SW from './MediumEditor.swiss';
 
 const SPACING = 10;
-
 
 class MediumEditor extends PureComponent {
   constructor(props) {
@@ -28,7 +25,10 @@ class MediumEditor extends PureComponent {
       if (sel !== selection) {
         clearTimeout(this._shiftTimer);
       }
-      if (!this.getHasSelected(sel) || this.getHasSelectionChanged(sel, selection)) {
+      if (
+        !this.getHasSelected(sel) ||
+        this.getHasSelectionChanged(sel, selection)
+      ) {
         showPanel = false;
       }
       selection = sel;
@@ -54,7 +54,6 @@ class MediumEditor extends PureComponent {
     }
   }
 
-
   onMouseUp(e) {
     const br = this.container.getBoundingClientRect();
     const scrollTop = this.getScrollTop();
@@ -71,10 +70,9 @@ class MediumEditor extends PureComponent {
     }, 1);
   }
   getScrollTop() {
-
     let scrollTop = 0;
     if (this.container) {
-      traverseElement(this.container, (el) => {
+      traverseElement(this.container, el => {
         if (el.scrollTop) {
           scrollTop = el.scrollTop;
           return true;
@@ -86,7 +84,6 @@ class MediumEditor extends PureComponent {
     return scrollTop;
   }
   getSelectionPosition() {
-
     const selectionRect = getVisibleSelectionRect(window);
     if (selectionRect && this.container) {
       const br = this.container.getBoundingClientRect();
@@ -116,11 +113,11 @@ class MediumEditor extends PureComponent {
     return (
       sel &&
       (sel.get('anchorKey') !== sel.get('focusKey') ||
-      sel.get('anchorOffset') !== sel.get('focusOffset'))
+        sel.get('anchorOffset') !== sel.get('focusOffset'))
     );
   }
   getCenterFromX(x, w) {
-    return x - (w / 2);
+    return x - w / 2;
   }
   getControlPanelSize() {
     const def = {
@@ -167,7 +164,7 @@ class MediumEditor extends PureComponent {
     const position = this.getSelectionPosition();
     const { w, h } = this.getControlPanelSize();
 
-    styles = styles.set('left', (position.left + (position.width / 2)) - (w / 2));
+    styles = styles.set('left', position.left + position.width / 2 - w / 2);
     if (selection.get('isBackward')) {
       styles = styles.set('top', position.top - h - SPACING);
     } else {
@@ -184,9 +181,15 @@ class MediumEditor extends PureComponent {
     if (mousePos) {
       styles = styles.set('left', this.getCenterFromX(mousePos.x, w));
       if (selection.get('isBackward')) {
-        styles = styles.set('top', Math.min(mousePos.y, position.top) - h - SPACING);
+        styles = styles.set(
+          'top',
+          Math.min(mousePos.y, position.top) - h - SPACING
+        );
       } else {
-        styles = styles.set('top', Math.max(mousePos.y, (position.top + position.height)) + SPACING);
+        styles = styles.set(
+          'top',
+          Math.max(mousePos.y, position.top + position.height) + SPACING
+        );
       }
     }
 
@@ -203,7 +206,7 @@ class MediumEditor extends PureComponent {
     const selBottomY = position.top + position.height;
 
     if (topY < 0 || bottomY > wh || (bottomY > selTopY && topY < selBottomY)) {
-      if ((selTopY - h - SPACING) >= SPACING) {
+      if (selTopY - h - SPACING >= SPACING) {
         styles = styles.set('top', selTopY - h - SPACING);
       } else {
         styles = styles.set('top', selBottomY + SPACING);
@@ -219,12 +222,12 @@ class MediumEditor extends PureComponent {
 
     if (styles.get('left') < SPACING) {
       styles = styles.set('left', SPACING);
-    } else if ((styles.get('left') + w) > ww - SPACING) {
+    } else if (styles.get('left') + w > ww - SPACING) {
       styles = styles.set('left', ww - SPACING - w);
     }
     if (styles.get('top') < SPACING) {
       styles = styles.set('top', SPACING);
-    } else if ((styles.get('top') + h) > wh - SPACING) {
+    } else if (styles.get('top') + h > wh - SPACING) {
       styles = styles.set('top', wh - SPACING - h);
     }
 
@@ -248,7 +251,9 @@ class MediumEditor extends PureComponent {
     const { children } = this.props;
     return (
       <SW.Wrapper
-        innerRef={(c) => { this.container = c; }}
+        innerRef={c => {
+          this.container = c;
+        }}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
         onMouseMove={this.onMouseMove}

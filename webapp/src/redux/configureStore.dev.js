@@ -16,7 +16,7 @@ const transformState = state => {
 export default config => {
   config.middlewares.push(
     createLogger({
-      // stateTransformer: transformState,
+      stateTransformer: transformState,
       collapsed: true,
       duration: true,
     })

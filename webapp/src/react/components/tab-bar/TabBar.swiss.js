@@ -9,34 +9,17 @@ export default styleSheet('TabBar', {
     _flex: 'center',
     _font: ['12px', '18px', 500],
     padding: '6px 0',
-    color: '$sw2',
+    color: '$sw3',
     letterSpacing: '0.5px',
     textTransform: 'uppercase',
-    '&:after': {
-      position: 'absolute',
-      content: '',
-      left: 0,
-      bottom: 0,
-      height: '1px',
-      width: '100%',
-      background: '$sw1',
-      opacity: 0,
-      transition: 'opacity .1s',
+    '&:hover': {
+      color: '$sw1',
     },
     active: {
       color: '$sw1',
-      '&:after': {
-        opacity: 1,
-        transition: 'opacity .25s .1s',
-      }
-    },
-    '!active': {
-      '&:hover': {
-        color: '$sw1',
-      },
     },
     '&:not(:last-child)': {
       marginRight: '24px',
-    }
-  }
+    },
+  },
 });

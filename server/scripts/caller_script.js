@@ -6,7 +6,7 @@ const exec = require('child_process').exec;
 process.chdir('../');
 console.log(process.cwd());
 
-exec('babel-node ./scripts/migration_posts/posts.js', (error, stdout, stderr) => {
+exec('babel-node ./scripts/migration_posts/fix_reactions.js', (error, stdout, stderr) => {
   if (error) {
     console.log(error);
     // console.log(error.code);

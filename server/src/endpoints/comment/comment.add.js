@@ -20,7 +20,9 @@ const expectedInput = {
 const commentAddMiddleware = async (req, res, next) => {
   // Get inputs
   const { input, user_id } = res.locals;
-  const { discussion_id, message, attachments, organization_id } = input;
+  const {
+    discussion_id, message, attachments, organization_id,
+  } = input;
   // Inserting the comment object.
   const insertCommentQ = dbInsertQuery('comments', {
     id: `${discussion_id}-${idGenerate('C', 7)}`,
@@ -49,7 +51,7 @@ const commentAddMiddleware = async (req, res, next) => {
     },
     {
       conflict: 'update',
-    }
+    },
   );
 
   // T_TODO: update only if comment.sent_at is greater than existing value
@@ -58,6 +60,9 @@ const commentAddMiddleware = async (req, res, next) => {
     last_comment_at: comment.sent_at,
     last_comment: mentionsClean(message).slice(0, 100),
     last_comment_by: user_id,
+    last_two_comments_by: r.row('last_two_comments_by').setUnion([user_id]).do((a) => {
+      return r.branch(a.count().gt(2), a.deleteAt(0), a);
+    }),
   });
 
   const result = await Promise.all([
@@ -96,7 +101,7 @@ export default endpointCreate(
     endpoint: '/comment.add',
     expectedInput,
   },
-  commentAddMiddleware
+  commentAddMiddleware,
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
   const { organization_id, user_id } = res.locals;
@@ -105,29 +110,23 @@ export default endpointCreate(
   const discussion = updates[0].data;
   const comment = updates[1].data;
   // Fetch sender (to have the name)
-  const sender = await dbRunQuery(
-    r
-      .table('users')
-      .get(user_id)
-      .pluck('profile', 'id')
-  );
+  const sender = await dbRunQuery(r
+    .table('users')
+    .get(user_id)
+    .pluck('profile', 'id'));
 
   const mentions = mentionsGetArray(comment.message);
-  await dbSendNotifications(
-    mentions.map(m => ({
-      id: `${m}-${comment.id}-mention`,
-      user_id: m,
-      organization_id,
-      title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(
-        comment.message
-      ).slice(0, 60)}...`,
-      done_by: [user_id],
-      target: {
-        id: comment.discussion_id,
-        item_id: comment.id,
-      },
-    }))
-  );
+  await dbSendNotifications(mentions.map(m => ({
+    id: `${m}-${comment.id}-mention`,
+    user_id: m,
+    organization_id,
+    title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
+    done_by: [user_id],
+    target: {
+      id: comment.discussion_id,
+      item_id: comment.id,
+    },
+  })));
 
   const followers = [
     ...new Set(discussion.followers.map(f => f.user_id).concat(mentions)),
@@ -144,11 +143,9 @@ export default endpointCreate(
         targetType: 'discussion',
       },
       {
-        content: `${sender.profile.first_name}: ${mentionsClean(
-          comment.message
-        )}`,
+        content: `${sender.profile.first_name}: ${mentionsClean(comment.message)}`,
         heading: discussion.topic,
-      }
+      },
     );
   }
 });

@@ -58,7 +58,9 @@ export default class NotificationItem extends PureComponent {
         unread={!notification.get('seen_at')}
         onClick={this.onNotificationOpenCached(notification)}
       >
-        {this.renderProfilePic()}
+        <SW.SplitImageWrapper>
+          {this.renderProfilePic()}
+        </SW.SplitImageWrapper>
         <SW.Content>
           <SW.Message>
             <SW.Text>{text}</SW.Text>
