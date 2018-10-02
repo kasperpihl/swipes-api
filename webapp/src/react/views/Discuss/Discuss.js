@@ -29,11 +29,19 @@ export default class Discuss extends PureComponent {
       });
     }
   }
-  onSelectItemId = id => {
+  onSelectItemId = (id, results) => {
     const { optimist } = this.props;
     const { selectedId } = this.state;
-
-    if (id !== selectedId) {
+    let newId = id;
+    if (selectedId && !results.filter(r => r.get('id') === selectedId).size) {
+      newId = null;
+      if (results && results.size) {
+        newId = results.first().get('id');
+      }
+    } else if (results && selectedId) {
+      return;
+    }
+    if (newId !== selectedId) {
       this.setState({ selectedId: id }, () => {
         optimist.set('discussSelectedId', id);
       });
@@ -63,7 +71,6 @@ export default class Discuss extends PureComponent {
           >
             <DiscussionList
               tabIndex={tabIndex}
-              selectedId={selectedId}
               onSelectItemId={this.onSelectItemId}
             />
           </SWView>

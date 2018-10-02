@@ -28,14 +28,16 @@ export default class DiscussionList extends PureComponent {
     }
   };
   renderItems(pagination, type) {
-    const { onSelectItemId, selectedId } = this.props;
+    const { onSelectItemId } = this.props;
     const { results } = pagination;
-    console.log('render items', selectedId, results && results.size, type);
-    if (!selectedId && results && results.size) {
-      setTimeout(() => {
-        onSelectItemId(results.first().get('id'));
-      }, 0);
+    console.log('render items', results && results.size, type);
+    let newSelectedId = null;
+    if (results && results.size) {
+      newSelectedId = results.first().get('id');
     }
+    setTimeout(() => {
+      onSelectItemId(newSelectedId, results);
+    }, 0);
     return (results || fromJS([]))
       .map((item, i) => (
         <DiscussionListItem
