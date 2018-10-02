@@ -14,6 +14,7 @@ import Button from 'src/react/components/button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import InfoButton from 'components/info-button/InfoButton';
+import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 
 @navWrapper
 @connect(
@@ -117,34 +118,17 @@ export default class DiscussionHeader extends PureComponent {
 
     return (
       <Fragment>
-        <SW.Wrapper>
-          <SW.SplitImageWrapper>
-            <SplitImage size={48} users={followers.toJS()} />
-          </SW.SplitImageWrapper>
-          <SW.TitleWrapper>
-            <SW.Title
-              hasTopic={!!discussion.get('topic_set')}
-              onClick={this.onTitleClick}
-            >
-              {topic}
-            </SW.Title>
-            <SW.Subtitle>
-              {followers.size} {followers.size === 1 ? 'follower' : 'followers'}
-            </SW.Subtitle>
-            {/* <SW.Subtitle>{privacy} - {followers.size} {followers.size === 1 ? 'follower' : 'followers'}</SW.Subtitle> */}
-          </SW.TitleWrapper>
-          <SW.Actions>
-            {!discussion.get('topic_set') && (
-              <Button title="Set topic" onClick={this.onTitleClick} />
-            )}
-            <Button
-              title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
-              onClick={this.onFollowClick}
-              {...this.getLoading('following')}
-            />
-            <InfoButton delegate={this} {...this.getLoading('dots')} />
-          </SW.Actions>
-        </SW.Wrapper>
+        <HOCHeaderTitle title={topic}>
+          {!discussion.get('topic_set') && (
+            <Button title="Set topic" onClick={this.onTitleClick} />
+          )}
+          <Button
+            title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
+            onClick={this.onFollowClick}
+            {...this.getLoading('following')}
+          />
+          <InfoButton delegate={this} {...this.getLoading('dots')} />
+        </HOCHeaderTitle>
         {discussion.get('context') && (
           <SW.ContextWrapper>
             <Attachment

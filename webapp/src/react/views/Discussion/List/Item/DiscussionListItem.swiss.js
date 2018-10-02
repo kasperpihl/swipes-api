@@ -10,11 +10,8 @@ export default styleSheet('DiscussionListItem', {
     '&:hover': {
       background: '$sw4',
     },
-    unread: {
-      background: 'rgba($blue, 0.15)',
-      '&:hover': {
-        background: 'rgba($blue, 0.2)',
-      },
+    selected: {
+      background: '$sw4',
     },
   },
   LeftWrapper: {
@@ -62,5 +59,5 @@ export default styleSheet('DiscussionListItem', {
     '.Button-hover:hover &': {
       visibility: 'visible',
     },
-  }
+  },
 });
