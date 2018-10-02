@@ -154,8 +154,7 @@ export default class DiscussionListItem extends PureComponent {
             <SplitImage
               size={48}
               users={item
-                .get('followers')
-                .map(o => o.get('user_id'))
+                .get('last_two_comments_by')
                 .toJS()}
             />
           </SW.LeftWrapper>
