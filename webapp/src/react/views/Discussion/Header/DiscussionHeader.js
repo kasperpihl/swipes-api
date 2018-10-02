@@ -9,7 +9,6 @@ import * as menuActions from 'src/redux/menu/menuActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 import SW from './DiscussionHeader.swiss';
-import SplitImage from 'src/react/components/split-image/SplitImage';
 import Button from 'src/react/components/button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';

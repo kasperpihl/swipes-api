@@ -153,6 +153,7 @@ export default class DiscussionListItem extends PureComponent {
           <SW.LeftWrapper>
             <SplitImage
               size={48}
+              blackAndWhite={!unread}
               users={item
                 .get('last_two_comments_by')
                 .toJS()}
