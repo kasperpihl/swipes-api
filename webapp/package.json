@@ -41,7 +41,7 @@
     "react-dom": "^16.4.1",
     "react-markdown": "^3.4.1",
     "react-measure": "1.4.7",
-    "react-optimist": "^0.1.1",
+    "react-optimist": "^0.1.4",
     "react-pdf": "^3.0.5",
     "react-redux": "^5.0.7",
     "react-router-dom": "4.3.1",

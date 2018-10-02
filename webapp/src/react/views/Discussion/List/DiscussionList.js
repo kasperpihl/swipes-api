@@ -32,7 +32,6 @@ export default class DiscussionList extends PureComponent {
     const { results } = pagination;
     console.log('render items', selectedId, results && results.size, type);
     if (!selectedId && results && results.size) {
-      console.log();
       setTimeout(() => {
         onSelectItemId(results.first().get('id'));
       }, 0);
