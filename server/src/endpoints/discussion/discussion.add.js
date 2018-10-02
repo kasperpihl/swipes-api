@@ -47,6 +47,7 @@ const discussionAddMiddleware = async (req, res, next) => {
     last_comment_at: created_at,
     last_comment: mentionsClean(message).slice(0, 100),
     last_comment_by: user_id,
+    last_two_comments_by: [user_id],
     privacy: privacy || 'public',
     archived: false,
   });

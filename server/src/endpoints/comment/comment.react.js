@@ -48,6 +48,9 @@ export default endpointCreate(
           last_comment_at: comment.updated_at,
           last_comment: `loved the comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
           last_comment_by: user_id,
+          last_two_comments_by: r.row('last_two_comments_by').setUnion([user_id]).do((a) => {
+            return r.branch(a.count().gt(2), a.deleteAt(0), a);
+          }),
         },
       );
       // Updating read_at to be newest comment.
