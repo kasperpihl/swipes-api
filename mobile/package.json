@@ -2,7 +2,7 @@
   "name": "swipes",
   "version": "0.0.1",
   "androidVersionName": "1.0.3",
-  "androidVersionCode": 26,
+  "androidVersionCode": 28,
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
