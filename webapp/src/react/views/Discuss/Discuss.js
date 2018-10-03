@@ -33,7 +33,10 @@ export default class Discuss extends PureComponent {
     const { optimist } = this.props;
     const { selectedId } = this.state;
     let newId = id;
-    if (selectedId && !results.filter(r => r.get('id') === selectedId).size) {
+    if (
+      selectedId &&
+      (!results || !results.filter(r => r.get('id') === selectedId).size)
+    ) {
       newId = null;
       if (results && results.size) {
         newId = results.first().get('id');

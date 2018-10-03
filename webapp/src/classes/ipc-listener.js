@@ -1,8 +1,8 @@
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-import { fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import * as ca from 'swipes-core-js/actions';
-import { navForContext } from 'swipes-core-js/classes/utils';
+import { navForContext } from 'swipes-core-js/classes/utils';
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
@@ -23,10 +23,13 @@ if (isElectron) {
 export default class IpcListener {
   constructor(store) {
     this.store = store;
+    store.subscribe(this.storeChange);
     if (isElectron) {
       remote.getCurrentWindow().removeAllListeners();
       ipcRenderer.on('oauth-success', (event, arg) => {
-        store.dispatch(ca.me.handleOAuthSuccess(arg.serviceName, arg.queryString));
+        store.dispatch(
+          ca.me.handleOAuthSuccess(arg.serviceName, arg.queryString)
+        );
       });
 
       // Deal with windows maximize stuff
@@ -37,10 +40,12 @@ export default class IpcListener {
         store.dispatch(mainActions.setMaximized(true));
       });
       remWin.on('toggle-find', () => {
-        this.store.dispatch(navigationActions.set('primary', {
-          id: 'Search',
-          title: 'Search',
-        }))
+        this.store.dispatch(
+          navigationActions.set('primary', {
+            id: 'Search',
+            title: 'Search',
+          })
+        );
       });
       remWin.on('clear', () => {
         localForage.clear();
@@ -72,24 +77,45 @@ export default class IpcListener {
     });
 
     desktopNotification.onclick = () => {
-      this.store.dispatch(navigationActions.openSecondary('primary', navForContext(fromJS(notification.target))));
+      this.store.dispatch(
+        navigationActions.openSecondary(
+          'primary',
+          navForContext(fromJS(notification.target))
+        )
+      );
       this.store.dispatch(ca.notifications.mark([notification.id]));
       const remWin = remote.getCurrentWindow();
       remWin.focus();
     };
   }
+  storeChange() {
+    const state = this.store.getState();
+    let counter = state.connection.get('notificationCounter') || 0;
+    counter += state.counter.get('discussion').size;
+    if (typeof this.badgeCount === 'undefined' || counter !== this.badgeCount) {
+      this.badgeCount = counter;
+      this.setBadgeCount(`${counter || ''}`);
+    }
+  }
   preloadUrl(script) {
     if (!isElectron) {
       return script;
     }
-    let preloadUrl = `file://${path.join(app.getAppPath(), `preload/${script}.js`)}`;
+    let preloadUrl = `file://${path.join(
+      app.getAppPath(),
+      `preload/${script}.js`
+    )}`;
     if (os.platform() === 'win32') {
       preloadUrl = path.resolve(`preload/${script}.js`);
     }
     return preloadUrl;
   }
   setBadgeCount(count) {
-    if (isElectron) {
+    if (
+      isElectron &&
+      (typeof this.badgeCount === 'undefined' || count !== this.badgeCount)
+    ) {
+      this.badgeCount = count;
       if (typeof count === 'number') {
         app.setBadgeCount(count);
       }
