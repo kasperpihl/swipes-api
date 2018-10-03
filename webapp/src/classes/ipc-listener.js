@@ -23,7 +23,7 @@ if (isElectron) {
 export default class IpcListener {
   constructor(store) {
     this.store = store;
-    store.subscribe(this.storeChange);
+    store.subscribe(this.storeChange.bind(this));
     if (isElectron) {
       remote.getCurrentWindow().removeAllListeners();
       ipcRenderer.on('oauth-success', (event, arg) => {
@@ -91,7 +91,7 @@ export default class IpcListener {
   storeChange() {
     const state = this.store.getState();
     let counter = state.connection.get('notificationCounter') || 0;
-    counter += state.counter.get('discussion').size;
+    counter = counter + state.counter.get('discussion').size;
     if (typeof this.badgeCount === 'undefined' || counter !== this.badgeCount) {
       this.badgeCount = counter;
       this.setBadgeCount(`${counter || ''}`);
@@ -111,11 +111,7 @@ export default class IpcListener {
     return preloadUrl;
   }
   setBadgeCount(count) {
-    if (
-      isElectron &&
-      (typeof this.badgeCount === 'undefined' || count !== this.badgeCount)
-    ) {
-      this.badgeCount = count;
+    if (isElectron) {
       if (typeof count === 'number') {
         app.setBadgeCount(count);
       }
