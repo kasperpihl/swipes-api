@@ -40,6 +40,7 @@ class DiscussionComposer extends PureComponent {
     const savedState = props.savedState && props.savedState.get('discussion');
 
     this.state = {
+      topicValue: '',
       discussion: savedState || fromJS({
         taggedUsers: props.taggedUsers || [],
         context: props.context || null,
@@ -89,7 +90,7 @@ class DiscussionComposer extends PureComponent {
   }
   onPostSubmit = () => {
     const { request, orgId, hideModal } = this.props;
-    const { discussion } = this.state;
+    const { discussion, topicValue } = this.state;
     const message = editorStateToPlainMention(this.editorState);
 
     if(!message){
@@ -97,9 +98,10 @@ class DiscussionComposer extends PureComponent {
     }
     this.setLoading('discussion', 'Creating');
     request('discussion.add', {
+      message,
       context: this.state.discussion.toJS().context,
       organization_id: orgId,
-      message,
+      topic: topicValue,
       privacy: 'public',
       followers: this.state.discussion.toJS().taggedUsers,
       attachments: this.state.discussion.toJS().attachments,
@@ -119,6 +121,11 @@ class DiscussionComposer extends PureComponent {
   }
   onMessageChange = (editorState) =>  {
     this.editorState = editorState;
+  }
+  onTopicChange = (e) => {
+    this.setState({
+      topicValue: e.target.value,
+    })
   }
   updatePost(discussion) {
     this.setState({ discussion }, () => {
@@ -208,8 +215,10 @@ class DiscussionComposer extends PureComponent {
   }
 
   render() {
-    const { myId, hideModal } = this.props;
-    const placeholder = `What topic do you want to discuss, ${msgGen.users.getFirstName(myId)}?`;
+    const { myId } = this.props;
+    const { topicValue } = this.state;
+    const topicPlaceholder = 'Topic';
+    const placeholder = 'Message';
 
     return (
       <SW.Wrapper>
@@ -219,11 +228,17 @@ class DiscussionComposer extends PureComponent {
             size={36}
           />
           <SW.InputWrapper>
+            <SW.Input
+              value={topicValue}
+              onChange={this.onTopicChange}
+              placeholder={topicPlaceholder}
+              type="text"
+              autoFocus
+            />
             <AutoCompleteInput
               innerRef={(c) => { this.input = c; }}
               onChange={this.onMessageChange}
               placeholder={placeholder}
-              autoFocus
             />
           </SW.InputWrapper>
         </SW.ComposerWrapper>
