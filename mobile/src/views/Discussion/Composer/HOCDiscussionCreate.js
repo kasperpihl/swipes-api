@@ -34,6 +34,7 @@ class HOCDiscussionCreate extends PureComponent {
       post: fromJS({
         organization_id: props.orgId,
         message: props.message || '',
+        topic: props.topic || '',
         attachments: props.attachments || [],
         followers: props.taggedUsers || [],
         context: props.context || null,
@@ -95,6 +96,10 @@ class HOCDiscussionCreate extends PureComponent {
         });
       }
     }
+  }
+  onTopicChange(text) {
+    const { post } = this.state;
+    this.updatePost(post.set('topic', text));
   }
   onMessageChange(text) {
     const { post } = this.state;

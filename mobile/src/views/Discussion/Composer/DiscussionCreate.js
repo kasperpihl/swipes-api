@@ -126,17 +126,16 @@ class DiscussionCreate extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      inputHeight: 21,
+      topicInputHeight: 25,
+      messageInputHeight: 21,
     };
 
-    setupDelegate(this, 'onMessageChange', 'onAttachmentClick');
+    setupDelegate(this, 'onMessageChange', 'onTopicChange', 'onAttachmentClick');
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
   }
-  onContentSizeChange(e) {
-    const { inputHeight } = this.state;
-
-    if (inputHeight !== e.nativeEvent.contentSize.height && e.nativeEvent.contentSize.height > 21) {
-      this.setState({ inputHeight: e.nativeEvent.contentSize.height });
+  onContentSizeChange(e, inputName) {
+    if (this.state[`${inputName}InputHeight`] !== e.nativeEvent.contentSize.height && e.nativeEvent.contentSize.height > 21) {
+      this.setState({ [`${inputName}InputHeight`]: e.nativeEvent.contentSize.height });
     }
   }
   renderContext() {
@@ -180,10 +179,10 @@ class DiscussionCreate extends PureComponent {
       </View>
     );
   }
-  renderTextArea() {
+  renderTopicInput() {
     const { post } = this.props;
     const { inputHeight } = this.state;
-    const placeholder = 'What\'s on your mind?';
+    const placeholder = 'Topic';
     const lineNumbers = parseInt(inputHeight / 21, 10);
     const iOSInputHeight = Platform.OS === 'ios' ? { height: inputHeight } : {};
 
@@ -193,13 +192,40 @@ class DiscussionCreate extends PureComponent {
         numberOfLines={lineNumbers}
         multiline
         autoFocus
+        onChangeText={this.onTopicChange}
+        value={post.get('topic')}
+        autoCapitalize="sentences"
+        style={[styles.input, iOSInputHeight, { paddingTop: 10, fontSize: 22, lineHeight: 25 }]}
+        underlineColorAndroid="transparent"
+        placeholder={placeholder}
+        onContentSizeChange={(e) => {
+          this.onContentSizeChange(e, 'topic');
+        }}
+        scrollEnabled={false}
+      />
+    );
+  }
+  renderTextArea() {
+    const { post } = this.props;
+    const { inputHeight } = this.state;
+    const placeholder = 'Message';
+    const lineNumbers = parseInt(inputHeight / 21, 10);
+    const iOSInputHeight = Platform.OS === 'ios' ? { height: inputHeight } : {};
+
+    return (
+      <TextInput
+        ref="input"
+        numberOfLines={lineNumbers}
+        multiline
         onChangeText={this.onMessageChange}
         value={post.get('message')}
         autoCapitalize="sentences"
-        style={[styles.input, iOSInputHeight]}
+        style={[styles.input, iOSInputHeight, { paddingTop: 20 }]}
         underlineColorAndroid="transparent"
         placeholder={placeholder}
-        onContentSizeChange={this.onContentSizeChange}
+        onContentSizeChange={(e) => {
+          this.onContentSizeChange(e, 'message');
+        }}
         scrollEnabled={false}
       />
     );
@@ -243,7 +269,10 @@ class DiscussionCreate extends PureComponent {
         <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="never">
           <View style={[styles.createHeader, { paddingTop: 44 }]}>
             {this.renderProfilePic()}
-            {this.renderTextArea()}
+            <View style={[{ flex: 1 }]}>
+              {this.renderTopicInput()}
+              {this.renderTextArea()}
+            </View>
           </View>
           {this.renderStyledText()}
         </ScrollView>
