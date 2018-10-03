@@ -117,10 +117,7 @@ export default class DiscussionHeader extends PureComponent {
 
     return (
       <Fragment>
-        <HOCHeaderTitle title={topic}>
-          {!discussion.get('topic_set') && (
-            <Button title="Set topic" onClick={this.onTitleClick} />
-          )}
+        <HOCHeaderTitle title={topic} delegate={this}>
           <Button
             title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
             onClick={this.onFollowClick}
