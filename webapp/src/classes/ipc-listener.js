@@ -66,6 +66,46 @@ export default class IpcListener {
       });
     }
   }
+  handleDesktopNotifications(payload) {
+    const myId = this.store.getState().me.get('id');
+    let discussion;
+    let comment;
+    payload.updates.forEach(({ type, data }) => {
+      if (
+        type === 'comment' &&
+        data.sent_by !== myId &&
+        data.sent_at === data.updated_at
+      ) {
+        comment = data;
+      } else if (type === 'discussion') {
+        discussion = data;
+      }
+    });
+    // Make sure discussion and comment belong together
+    if (discussion && comment && discussion.id === comment.discussion_id) {
+      // Ensure I'm following the discussion.
+      if (
+        !discussion.followers.filter(({ user_id }) => user_id === myId).length
+      ) {
+        return;
+      }
+
+      const strippedMessage = comment.message.replace(
+        /<![A-Z0-9]*\|(.*?)>/gi,
+        (full, name) => name
+      );
+      this.sendNotification({
+        id: comment.id,
+        target: {
+          id: comment.discussion_id,
+        },
+        title: discussion.topic,
+        message: `${msgGen.users.getFirstName(
+          comment.sent_by
+        )}: ${strippedMessage}`,
+      });
+    }
+  }
   sendNotification(notification) {
     if (!isElectron) {
       return;

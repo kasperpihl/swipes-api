@@ -30,7 +30,6 @@ export default class DiscussionList extends PureComponent {
   renderItems(pagination, type) {
     const { onSelectItemId } = this.props;
     const { results } = pagination;
-    console.log('render items', results && results.size, type);
     let newSelectedId = null;
     if (results && results.size) {
       newSelectedId = results.first().get('id');
