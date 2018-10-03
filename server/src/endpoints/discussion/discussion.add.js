@@ -44,7 +44,6 @@ const discussionAddMiddleware = async (req, res, next) => {
     organization_id,
     id: discussionId,
     topic,
-    topic_set: true,
     created_by: user_id,
     last_comment_at: created_at,
     last_comment: mentionsClean(message).slice(0, 100),
@@ -61,7 +60,7 @@ const discussionAddMiddleware = async (req, res, next) => {
       user_id: userId,
       discussion_id: discussionId,
       read_at: userId === user_id ? created_at : null,
-    }))
+    })),
   );
 
   // Inserting the comment object.
@@ -107,7 +106,7 @@ export default endpointCreate(
     endpoint: '/discussion.add',
     expectedInput,
   },
-  discussionAddMiddleware
+  discussionAddMiddleware,
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
 
@@ -117,12 +116,10 @@ export default endpointCreate(
   const discussion = updates[0].data;
   const comment = updates[1].data;
   // Fetch sender (to have the name)
-  const sender = await dbRunQuery(
-    r
+  const sender = await dbRunQuery(r
       .table('users')
       .get(user_id)
-      .pluck('profile')
-  );
+      .pluck('profile'),);
 
   // Fire push to all the receivers.
   const receivers = discussion.followers
@@ -139,7 +136,7 @@ export default endpointCreate(
       {
         content: mentionsClean(comment.message),
         heading: `${sender.profile.first_name} started a discussion`,
-      }
+      },
     );
   }
 });

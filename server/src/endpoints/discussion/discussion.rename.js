@@ -47,7 +47,6 @@ export default endpointCreate({
   const comment = commentRes.changes[0].new_val;
 
   const discussionQuery = dbUpdateQuery('discussions', discussion_id, {
-    topic_set: true,
     topic: shorten(topic, 60),
     last_comment_at: comment.sent_at,
     last_comment: mentionsClean(comment.message).slice(0, 100),
