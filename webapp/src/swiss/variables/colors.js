@@ -7,13 +7,13 @@ addVariables({
   sw4: '#EDF0F5',
   sw5: 'white',
 
-  blue: '#0070E0',
+  blue: '#007AFF',
   blue5: '#F0F7FF',
   blue20: '#CCE4FF',
   blue60: '#66AFFF',
   blue80: '#3394FF',
 
   red: '#FD6150',
-  green: '#1DD465',
+  green: '#22D664',
   yellow: '#FFB038',
 });
