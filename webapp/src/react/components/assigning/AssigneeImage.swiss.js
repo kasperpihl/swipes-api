@@ -1,6 +1,12 @@
 import { styleSheet } from 'swiss-react';
 
 export default styleSheet('AssigneeImage', {
+  Wrapper: {
+    _size: '100%',
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: '50%',
+  },
   Image: {
     _el: 'img',
     _size: '100%',
@@ -24,7 +30,7 @@ export default styleSheet('AssigneeImage', {
   Text: {
     _el: 'span',
 
-    'numberOfImages=3':{
+    'numberOfImages=3': {
       top: {
         paddingTop: '5px',
       },
@@ -33,4 +39,4 @@ export default styleSheet('AssigneeImage', {
       },
     },
   },
-})
+});

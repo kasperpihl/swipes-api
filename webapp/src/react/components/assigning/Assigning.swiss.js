@@ -33,10 +33,8 @@ export default styleSheet('Assigning', {
     isPic: {
       background: '$sw5',
     },
-    '> img': {
-      _borderRadius: '50%',
-    },
   },
+
   ExtraNumber: {
     _font: ['11px', '18px', 500],
     'size>=30': {
