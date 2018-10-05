@@ -58,6 +58,24 @@ export default endpointCreate({
 
   await dbRunQuery(discussionQuery);
 
+  // Updating read_at to be newest comment.
+  // Also ensuring that user follows discussion
+  const updateFollowerQ = dbInsertQuery(
+    'discussion_followers',
+    {
+      user_id,
+      id: `${discussion_id}-${user_id}`,
+      discussion_id,
+      read_at: comment.sent_at,
+      organization_id,
+    },
+    {
+      conflict: 'update',
+    },
+  );
+
+  await dbRunQuery(updateFollowerQ);
+
   const q = r.table('discussions')
     .get(discussion_id)
     .merge(obj => ({
