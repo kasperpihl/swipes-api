@@ -12,7 +12,7 @@ export default styleSheet('ScreenSizeOverlay', {
     zIndex: 99999999,
   },
   Title: {
-    _font: ['36px', '48px', 300],
+    _font: ['36px', '48px', 400],
     display: 'block',
     color: 'white',
     textAlign: 'center',
@@ -34,5 +34,5 @@ export default styleSheet('ScreenSizeOverlay', {
     right: 0,
     top: 0,
     padding: '9px 15px',
-  }
+  },
 });

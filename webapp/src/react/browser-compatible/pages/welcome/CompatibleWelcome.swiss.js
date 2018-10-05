@@ -38,8 +38,8 @@ export default styleSheet('CompatibleWelcome', {
     },
     '&:hover': {
       backgroundColor: '$sw3',
-      transition: '.15s ease'
-    }
+      transition: '.15s ease',
+    },
   },
   RowItemName: {
     _font: ['13px', '60px'],
@@ -67,13 +67,11 @@ export default styleSheet('CompatibleWelcome', {
   Hint: {
     _font: ['15px', '24px', '400'],
     color: '$sw2',
-    fontStyle: 'italic',
     marginTop: '12px',
   },
   ClearFix: {
     clear: 'both',
   },
-
 
   // Input
   CreateOrganization: {
@@ -96,7 +94,7 @@ export default styleSheet('CompatibleWelcome', {
       border: '1px solid $blue',
       transition: '.2s ease',
       color: '$sw1',
-    }
+    },
   },
   Button: {
     _size: ['60px', '44px'],
@@ -106,7 +104,7 @@ export default styleSheet('CompatibleWelcome', {
     right: '0',
     borderLeft: '1px solid $sw3',
     transition: '.2s ease',
-    'loading': {
+    loading: {
       backgroundColor: '$blue',
       borderLeft: '1px solid $blue',
       transition: '.2s ease',
@@ -117,7 +115,7 @@ export default styleSheet('CompatibleWelcome', {
         transition: '.2s ease',
       },
     },
-    'focused': {
+    focused: {
       backgroundColor: '$blue',
       borderLeft: '1px solid $blue',
       transition: '.2s ease',
@@ -125,9 +123,9 @@ export default styleSheet('CompatibleWelcome', {
         '&:hover': {
           backgroundColor: '$blue80',
           transition: '.2s ease',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   SVG: {
     _el: Icon,
@@ -141,9 +139,9 @@ export default styleSheet('CompatibleWelcome', {
       '.button-hover:hover &': {
         _svgColor: '$sw1',
         transition: '.2s ease',
-      }
+      },
     },
-    'focused': {
+    focused: {
       _svgColor: 'white',
       transition: '.2s ease',
     },
@@ -154,5 +152,5 @@ export default styleSheet('CompatibleWelcome', {
     position: 'absolute',
     left: '23px',
     top: '15px',
-  }
+  },
 });

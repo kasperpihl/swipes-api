@@ -43,14 +43,14 @@ export default styleSheet('DiscussionListItem', {
   },
   Topic: {
     _truncateString: '',
-    _font: ['13px', '18px', 400],
+    _textStyle: 'item',
     minWidth: 0,
     maxWidth: '350px',
+    paddingBottom: '1px',
   },
   Subtitle: {
     _el: LinesEllipsis,
-    _font: ['12px', '18px', 300],
-    color: '$sw2',
+    _textStyle: 'bodySubtitle',
     width: '100%',
   },
   Time: {
@@ -69,9 +69,9 @@ export default styleSheet('DiscussionListItem', {
     backgroundColor: '$blue',
     unread: {
       display: 'block',
-    }
+    },
   },
   AttachmentWrapper: {
-    marginTop: '5px'
-  }
+    marginTop: '5px',
+  },
 });

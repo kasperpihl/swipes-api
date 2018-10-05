@@ -29,19 +29,19 @@ export default styleSheet('Attachment', {
       _size: '18px',
       hasCloseIcon: {
         _size: '24px',
-      }
+      },
     },
     '!hasCloseIcon': {
       '.attachment-container:hover &': {
         _svgColor: '$blue',
-      }
+      },
     },
 
     hasCloseIcon: {
       '.icon-container:hover &': {
         _svgColor: '$blue',
-      }
-    }
+      },
+    },
   },
   Text: {
     _truncateString: '',
@@ -52,7 +52,7 @@ export default styleSheet('Attachment', {
     hasCloseIcon: {
       '.icon-container:hover + &': {
         color: '$sw1',
-      }
-    }
-  }
+      },
+    },
+  },
 });

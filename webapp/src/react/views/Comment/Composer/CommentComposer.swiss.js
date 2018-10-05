@@ -22,7 +22,6 @@ export default styleSheet('CommentComposer', {
     '& .public-DraftEditorPlaceholder-root': {
       color: '$sw2',
       _font: ['13px', '18px'],
-      fontStyle: 'italic',
     },
   },
   Actions: {
@@ -47,7 +46,7 @@ export default styleSheet('CommentComposer', {
     width: '100%',
     '& .gl-button': {
       marginTop: '12px',
-    }
+    },
   },
   SubmitButton: {
     _el: Button,

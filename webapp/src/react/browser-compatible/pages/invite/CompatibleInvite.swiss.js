@@ -1,4 +1,4 @@
-import {styleSheet} from 'swiss-react';
+import { styleSheet } from 'swiss-react';
 
 export default styleSheet('Invite', {
   Wrapper: {
@@ -13,7 +13,6 @@ export default styleSheet('Invite', {
     _font: ['15px', '24px', '400'],
     color: '$blue20',
     marginTop: '12px',
-    fontStyle: 'italic',
   },
 
   SendButton: {
@@ -24,6 +23,6 @@ export default styleSheet('Invite', {
     '@media $max600': {
       width: '100%',
       margin: '9px auto',
-    }
-  }
-})
+    },
+  },
+});
