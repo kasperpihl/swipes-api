@@ -5,7 +5,7 @@ import AssigneeImage from '../assigning/AssigneeImage';
 
 class SplitImage extends Component {
   render () {
-    const { users, size, blackAndWhite } = this.props;
+    const { users, size } = this.props;
 
     if(!users) return null;
 
@@ -13,11 +13,11 @@ class SplitImage extends Component {
       <SwissProvider numberOfImages={users.length} size={size}>
         <SW.Container>
           <SW.Left>
-            <AssigneeImage blackAndWhite={blackAndWhite} user={users[0]} />
+            <AssigneeImage user={users[0]} />
           </SW.Left>
           {users[1] && (
             <SW.Right>
-              <AssigneeImage blackAndWhite={blackAndWhite} user={users[1]} />
+              <AssigneeImage user={users[1]} />
             </SW.Right>
           )}
         </SW.Container>
