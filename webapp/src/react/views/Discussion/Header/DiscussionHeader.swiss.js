@@ -15,15 +15,6 @@ export default styleSheet('DiscussionHeader', {
     paddingLeft: '12px',
     _flex: ['column'],
   },
-  Title: {
-    _font: ['16px', '22px', 400],
-    cursor: 'text',
-    maxWidth: '300px',
-    _truncateString: '',
-    hasTopic: {
-      maxWidth: '396px',
-    }
-  },
   Subtitle: {
     _font: ['12px', '18px', 400],
     color: '$sw2',

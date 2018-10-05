@@ -16,6 +16,7 @@ addMixin('textStyle', (props, style = 'item') => {
       return {
         _font: ['13px', '18px', 400],
         color: '$sw2',
+        textTransform: 'uppercase',
       };
     case 'caption':
       return {
@@ -36,11 +37,13 @@ addMixin('textStyle', (props, style = 'item') => {
       return {
         _font: ['11px', '24px', 500],
         color: '$sw1',
+        textTransform: 'uppercase',
       };
     case 'tabInactive':
       return {
         _font: ['11px', '24px', 500],
         color: '$sw2',
+        textTransform: 'uppercase',
       };
     default:
       console.warn(

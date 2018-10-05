@@ -1,4 +1,4 @@
-import {styleSheet} from 'swiss-react';
+import { styleSheet } from 'swiss-react';
 
 export default styleSheet('HOCHeaderTitle', {
   Wrapper: {
@@ -16,14 +16,14 @@ export default styleSheet('HOCHeaderTitle', {
 
   Title: {
     _size: ['100%', 'auto'],
-    _font: ['30px', '42px', '300'],
+    _textStyle: 'cardTitle',
     color: 'black',
     _truncateString: '',
     letterSpacing: '-.6px',
 
     '&:hover': {
       cursor: 'text',
-    }
+    },
   },
 
   Subtitle: {
@@ -65,4 +65,4 @@ export default styleSheet('HOCHeaderTitle', {
       marginLeft: '12px',
     },
   },
-})
+});

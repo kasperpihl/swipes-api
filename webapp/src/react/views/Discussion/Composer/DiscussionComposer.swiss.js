@@ -27,14 +27,12 @@ export default styleSheet('DiscussionComposer', {
 
     width: '100%',
     '& .public-DraftEditor-content': {
-      _font: ['15px', '24px', 400],
-      color: '$sw1',
+      _textStyle: 'body',
       padding: '6px',
       paddingLeft: '12px',
     },
     '& .public-DraftEditorPlaceholder-root': {
-      _font: ['15px', '24px', 400],
-      color: '$sw2',
+      _textStyle: 'bodySubtitle',
       padding: '6px',
       paddingLeft: '12px',
     },
@@ -44,7 +42,7 @@ export default styleSheet('DiscussionComposer', {
     _el: 'input',
     _flex: ['row', 'center', 'center'],
     _size: ['100%', 'auto'],
-    _font: ['15px', '24px', 400],
+    _font: ['15px', '24px', 500],
     color: '$sw1',
     marginLeft: '22px',
     paddingTop: '5px',
@@ -82,8 +80,8 @@ export default styleSheet('DiscussionComposer', {
     notEmpty: {
       '& > *': {
         marginTop: '3px',
-      }
-    }
+      },
+    },
   },
   PostButton: {
     _el: Button,
