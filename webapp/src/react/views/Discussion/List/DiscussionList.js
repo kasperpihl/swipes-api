@@ -33,7 +33,7 @@ export default class DiscussionList extends PureComponent {
     }
   };
   renderItems(pagination, type) {
-    const { onSelectItemId, optimist } = this.props;
+    const { onSelectItemId, optimist, compact } = this.props;
     const { results } = pagination;
     let newSelectedId = null;
     if (results && results.size) {
@@ -57,10 +57,12 @@ export default class DiscussionList extends PureComponent {
           <DiscussionListItem
             onSelectItemId={onSelectItemId}
             selected={selected}
+            compact={compact}
             siblingToSelectedItem={siblingToSelectedItem}
             item={item}
             key={item.get('id')}
-          />)
+          />
+        );
       })
       .toArray();
   }

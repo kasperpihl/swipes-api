@@ -20,16 +20,22 @@ export default styleSheet('DiscussionListItem', {
     },
     siblingToSelectedItem: {
       borderTop: 'none',
-    }
+    },
   },
   LeftWrapper: {
     _flex: 'none',
+    compact: {
+      display: 'none',
+    },
   },
   MiddleWrapper: {
     _flex: ['column', 'left', 'top'],
     width: '100%',
     paddingLeft: '10px',
     paddingRight: '25px',
+    compact: {
+      paddingLeft: '0px',
+    },
   },
   RightWrapper: {
     _flex: 'none',
@@ -63,6 +69,6 @@ export default styleSheet('DiscussionListItem', {
     backgroundColor: '$blue',
     unread: {
       display: 'block',
-    }
-  }
+    },
+  },
 });

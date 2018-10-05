@@ -7,9 +7,15 @@ export default styleSheet('Discuss', {
   },
   LeftSide: {
     height: '100%',
-    width: '408px',
     flex: 'none',
     borderRight: '1px solid $sw4',
+    width: '348px',
+    'viewWidth=910': {
+      width: '378px',
+    },
+    'viewWidth>=1080': {
+      width: '408px',
+    },
   },
   RightSide: {
     _flex: ['center'],

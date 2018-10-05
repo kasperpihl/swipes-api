@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import SW from './Discuss.swiss';
+import { SwissProvider } from 'swiss-react';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
 import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 import HOCDiscussionOverview from 'src/react/views/Discussion/Overview/HOCDiscussionOverview';
@@ -7,11 +8,13 @@ import ActionBar from 'src/react/views/Discussion/List/ActionBar';
 import TabBar from 'components/tab-bar/TabBar';
 import { withOptimist } from 'react-optimist';
 import SWView from 'SWView';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
+@navWrapper
 @withOptimist
 export default class Discuss extends PureComponent {
   static sizes() {
-    return [800, 910, 1080];
+    return [800, 910, 1080, 1200];
   }
   constructor(props) {
     super(props);
@@ -64,27 +67,34 @@ export default class Discuss extends PureComponent {
   }
   render() {
     const { tabIndex, selectedId } = this.state;
+    const { viewWidth } = this.props;
     return (
-      <SW.ParentWrapper>
-        <SW.LeftSide>
-          <SWView
-            header={this.renderLeftHeader()}
-            footer={this.renderLeftFooter()}
-            noframe
-          >
-            <DiscussionList
-              tabIndex={tabIndex}
-              onSelectItemId={this.onSelectItemId}
-            />
-          </SWView>
-        </SW.LeftSide>
-        <SW.RightSide>
-          {(selectedId && (
-            <HOCDiscussionOverview key={selectedId} discussionId={selectedId} />
-          )) ||
-            'Loading'}
-        </SW.RightSide>
-      </SW.ParentWrapper>
+      <SwissProvider viewWidth={viewWidth}>
+        <SW.ParentWrapper>
+          <SW.LeftSide>
+            <SWView
+              header={this.renderLeftHeader()}
+              footer={this.renderLeftFooter()}
+              noframe
+            >
+              <DiscussionList
+                tabIndex={tabIndex}
+                onSelectItemId={this.onSelectItemId}
+                compact={viewWidth === 800}
+              />
+            </SWView>
+          </SW.LeftSide>
+          <SW.RightSide>
+            {(selectedId && (
+              <HOCDiscussionOverview
+                key={selectedId}
+                discussionId={selectedId}
+              />
+            )) ||
+              'Loading'}
+          </SW.RightSide>
+        </SW.ParentWrapper>
+      </SwissProvider>
     );
   }
 }

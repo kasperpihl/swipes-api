@@ -31,7 +31,7 @@ export default class DiscussionListItem extends PureComponent {
     onSelectItemId(item.get('id'));
   };
   render() {
-    const { item, myId, selected, siblingToSelectedItem } = this.props;
+    const { item, myId, selected, siblingToSelectedItem, compact } = this.props;
     const subtitle = `${msgGen.users.getName(item.get('last_comment_by'), {
       capitalize: true,
     })}: ${item.get('last_comment')}`;
@@ -54,24 +54,23 @@ export default class DiscussionListItem extends PureComponent {
         selected={selected}
         unread={unread}
         siblingToSelectedItem={siblingToSelectedItem}
+        compact={compact}
       >
         <SW.Wrapper onClick={this.onClick}>
           <SW.LeftWrapper>
             <SplitImage
               size={44}
               blackAndWhite={!unread}
-              users={item
-                .get('last_two_comments_by')
-                .toJS()}
+              users={item.get('last_two_comments_by').toJS()}
             />
           </SW.LeftWrapper>
           <SW.MiddleWrapper>
             <SW.Topic>{item.get('topic')}</SW.Topic>
             <SW.Subtitle
               text={subtitle}
-              maxLine='2'
-              ellipsis='...'
-              basedOn='letters'
+              maxLine="2"
+              ellipsis="..."
+              basedOn="letters"
             />
           </SW.MiddleWrapper>
           <SW.RightWrapper>
