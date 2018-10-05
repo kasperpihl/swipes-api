@@ -1,63 +1,68 @@
 import { styleSheet } from 'swiss-react';
-import TimeAgo from 'swipes-core-js/components/TimeAgo';
-import Button from 'src/react/components/button/Button';
+import LinesEllipsis from 'react-lines-ellipsis';
+
 export default styleSheet('DiscussionListItem', {
   Wrapper: {
-    borderBottom: '1px solid $sw3',
-    width: '100%',
-    padding: '3px 0',
-    _flex: ['row', 'left', 'center'],
-    '&:hover': {
-      background: '$sw4',
-    },
+    _flex: ['row', 'left', 'top'],
+    borderTop: '1px solid $sw4',
+    width: 'auto',
+    padding: '10px 0',
+    marginLeft: '25px',
+    marginRight: '25px',
     selected: {
+      width: '100%',
       background: '$sw4',
+      marginLeft: '0',
+      marginRight: '0',
+      paddingLeft: '25px',
+      paddingRight: '25px',
+      borderBottom: '1px solid $sw4',
     },
+    siblingToSelectedItem: {
+      borderTop: 'none',
+    }
   },
   LeftWrapper: {
-    flex: 'none',
-    padding: '6px',
-    paddingLeft: '12px',
+    _flex: 'none',
   },
   MiddleWrapper: {
     _flex: ['column', 'left', 'top'],
     width: '100%',
-    padding: '6px',
-    paddingRight: '54px',
+    paddingLeft: '10px',
+    paddingRight: '25px',
   },
   RightWrapper: {
-    position: 'absolute',
-    width: 'auto',
-    height: '100%',
-    top: 0,
-    right: 0,
-    paddingTop: '15px',
-    _flex: ['column', 'right', 'top'],
+    _flex: 'none',
+    whiteSpace: 'nowrap',
   },
   Topic: {
-    _font: ['15px', '24px', 400],
+    _truncateString: '',
+    _font: ['13px', '18px', 400],
     minWidth: 0,
     maxWidth: '350px',
-    _truncateString: '',
   },
   Subtitle: {
+    _el: LinesEllipsis,
     _font: ['12px', '18px', 300],
     color: '$sw2',
-    minWidth: 0,
-    maxWidth: '380px',
-    _truncateString: '',
+    width: '100%',
   },
   Time: {
     _el: 'span',
-    _font: ['12px', '12px', 400],
+    _font: ['11px', '18px', 400],
     color: '$sw2',
-    paddingRight: '6px',
   },
-  Button: {
-    _el: Button,
-    visibility: 'hidden',
-    '.Button-hover:hover &': {
-      visibility: 'visible',
-    },
-  },
+  UnreadCircle: {
+    display: 'none',
+    position: 'absolute',
+    top: '6px',
+    left: '-12px',
+    width: '6px',
+    height: '6px',
+    borderRadius: '50%',
+    backgroundColor: '$blue',
+    unread: {
+      display: 'block',
+    }
+  }
 });

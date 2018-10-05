@@ -4,10 +4,11 @@ import { fromJS } from 'immutable';
 import * as ca from 'swipes-core-js/actions';
 import DiscussionListItem from './Item/DiscussionListItem';
 import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
-
+import { withOptimist } from 'react-optimist';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import SW from './DiscussionList.swiss';
 
+@withOptimist
 @connect(
   state => ({
     counter: state.counter.get('discussion'),
@@ -18,6 +19,10 @@ import SW from './DiscussionList.swiss';
   }
 )
 export default class DiscussionList extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.isPreviouslySelected = false;
+  }
   onInitialLoad = () => {
     const { tabIndex, apiRequest, counter } = this.props;
     if (tabIndex === 0 && counter && counter.size) {
@@ -28,7 +33,7 @@ export default class DiscussionList extends PureComponent {
     }
   };
   renderItems(pagination, type) {
-    const { onSelectItemId } = this.props;
+    const { onSelectItemId, optimist } = this.props;
     const { results } = pagination;
     let newSelectedId = null;
     if (results && results.size) {
@@ -38,13 +43,25 @@ export default class DiscussionList extends PureComponent {
       onSelectItemId(newSelectedId, results);
     }, 0);
     return (results || fromJS([]))
-      .map((item, i) => (
-        <DiscussionListItem
-          onSelectItemId={onSelectItemId}
-          item={item}
-          key={item.get('id')}
-        />
-      ))
+      .map((item, i) => {
+        const selected = optimist.get('discussSelectedId') === item.get('id');
+        let siblingToSelectedItem = false;
+
+        if (this.isPreviouslySelected) {
+          siblingToSelectedItem = true;
+        }
+
+        this.isPreviouslySelected = selected;
+
+        return (
+          <DiscussionListItem
+            onSelectItemId={onSelectItemId}
+            selected={selected}
+            siblingToSelectedItem={siblingToSelectedItem}
+            item={item}
+            key={item.get('id')}
+          />)
+      })
       .toArray();
   }
   render() {
