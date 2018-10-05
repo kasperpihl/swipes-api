@@ -1,14 +1,21 @@
 import React, { PureComponent } from 'react';
 import { SwissProvider } from 'swiss-react';
 import { connect } from 'react-redux';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import {
+  setupLoading,
+  miniIconForId,
+  navForContext
+} from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as ca from 'swipes-core-js/actions';
 import SplitImage from 'src/react/components/split-image/SplitImage';
+import Attachment from 'src/react/components/attachment/Attachment';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
 
+@navWrapper
 @connect(
   state => ({
     myId: state.me.get('id'),
@@ -29,6 +36,10 @@ export default class DiscussionListItem extends PureComponent {
   onClick = () => {
     const { onSelectItemId, item } = this.props;
     onSelectItemId(item.get('id'));
+  };
+  onContextClick = () => {
+    const { openSecondary, item } = this.props;
+    openSecondary(navForContext(item.get('context')));
   };
   render() {
     const { item, myId, selected, siblingToSelectedItem, compact } = this.props;
@@ -60,8 +71,9 @@ export default class DiscussionListItem extends PureComponent {
           <SW.LeftWrapper>
             <SplitImage
               size={44}
-              blackAndWhite={!unread}
-              users={item.get('last_two_comments_by').toJS()}
+              users={item
+                .get('last_two_comments_by')
+                .toJS()}
             />
           </SW.LeftWrapper>
           <SW.MiddleWrapper>
@@ -72,6 +84,16 @@ export default class DiscussionListItem extends PureComponent {
               ellipsis="..."
               basedOn="letters"
             />
+          {item.get('context') && (
+            <SW.AttachmentWrapper>
+              <Attachment
+                icon={miniIconForId(item.getIn(['context', 'id']))}
+                title={item.getIn(['context', 'title'])}
+                onClick={this.onContextClick}
+                isContext
+              />
+            </SW.AttachmentWrapper>
+          )}
           </SW.MiddleWrapper>
           <SW.RightWrapper>
             <SW.Time>

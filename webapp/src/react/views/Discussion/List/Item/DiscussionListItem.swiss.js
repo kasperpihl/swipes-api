@@ -69,6 +69,9 @@ export default styleSheet('DiscussionListItem', {
     backgroundColor: '$blue',
     unread: {
       display: 'block',
-    },
+    }
   },
+  AttachmentWrapper: {
+    marginTop: '5px'
+  }
 });

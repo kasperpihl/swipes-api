@@ -4,18 +4,17 @@ import Icon from 'Icon';
 export default styleSheet('Attachment', {
   ATag: {
     _el: 'a',
-    background: '$sw4',
+    background: '$sw5',
     maxWidth: '200px',
-    borderRadius: '15px',
+    borderRadius: '12px',
+    border: '1px solid $sw3',
     paddingLeft: '6px',
     paddingRight: '12px',
     userSelect: 'none',
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',
     width: 'auto',
-    '&:hover': {
-      opacity: .7,
-    }
+    height: '25px',
   },
   IconContainer: {
     _size: '30px',
@@ -24,7 +23,7 @@ export default styleSheet('Attachment', {
   },
   Icon: {
     _el: Icon,
-    _svgColor: '$sw2',
+    _svgColor: '$sw1',
     _size: '24px',
     isContext: {
       _size: '18px',
@@ -46,16 +45,13 @@ export default styleSheet('Attachment', {
   },
   Text: {
     _truncateString: '',
-    color: '$sw2',
-    fontSize: '12px',
-    lineHeight: '18px',
-    fontWeight: 400,
+    _textStyle: 'item',
     '.attachment-container:hover &': {
       color: '$blue',
     },
     hasCloseIcon: {
       '.icon-container:hover + &': {
-        color: '$sw2',
+        color: '$sw1',
       }
     }
   }

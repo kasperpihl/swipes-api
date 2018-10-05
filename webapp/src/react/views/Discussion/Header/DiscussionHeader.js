@@ -23,7 +23,6 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
   {
     inputMenu: menuActions.input,
     confirm: menuActions.confirm,
-    openSecondary: navigationActions.openSecondary,
     request: ca.api.request,
   }
 )
@@ -96,8 +95,8 @@ export default class DiscussionHeader extends PureComponent {
     );
   }
   onContextClick = () => {
-    const { openSecondary, discussion, target } = this.props;
-    openSecondary(target, navForContext(discussion.get('context')));
+    const { openSecondary, discussion } = this.props;
+    openSecondary(navForContext(discussion.get('context')));
   };
   onFollowClick = () => {
     const { request, myId, discussion } = this.props;
