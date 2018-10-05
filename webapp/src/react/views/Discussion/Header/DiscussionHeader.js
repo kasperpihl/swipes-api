@@ -6,14 +6,16 @@ import {
 } from 'swipes-core-js/classes/utils';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
+import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 import SW from './DiscussionHeader.swiss';
 import Button from 'src/react/components/button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import InfoButton from 'components/info-button/InfoButton';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import InfoButton from 'src/react/components/info-button/InfoButton';
+import HOCHeaderTitle from 'src/react/components/header-title/HOCHeaderTitle';
+import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
 
 @navWrapper
 @connect(
@@ -21,6 +23,7 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
     myId: state.me.get('id'),
   }),
   {
+    tooltip: mainActions.tooltip,
     inputMenu: menuActions.input,
     confirm: menuActions.confirm,
     request: ca.api.request,
@@ -32,6 +35,27 @@ export default class DiscussionHeader extends PureComponent {
 
     setupLoading(this);
   }
+  onMouseEnter = e => {
+    const { tooltip, discussion } = this.props;
+    if (!discussion.get('followers').size) return;
+    console.log(discussion.get('followers').toJS());
+    tooltip({
+      component: AssigneeTooltip,
+      props: {
+        assignees: discussion.get('followers').map(f => f.get('user_id')),
+        size: 24,
+      },
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        position: 'bottom',
+      },
+    });
+  };
+  onMouseLeave = () => {
+    const { tooltip, discussion } = this.props;
+    if (!discussion.get('followers').size) return;
+    tooltip(null);
+  };
   getInfoTabProps() {
     const { myId, discussion } = this.props;
     return {
@@ -128,16 +152,23 @@ export default class DiscussionHeader extends PureComponent {
           />
           <InfoButton delegate={this} {...this.getLoading('dots')} />
         </HOCHeaderTitle>
-        {discussion.get('context') && (
-          <SW.ContextWrapper>
+
+        <SW.ContextWrapper>
+          <SW.FollowerLabel
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+          >
+            {`${followers.size} follower${followers.size === 1 ? '' : 's'}`}
+          </SW.FollowerLabel>
+          {discussion.get('context') && (
             <Attachment
               icon={miniIconForId(discussion.getIn(['context', 'id']))}
               title={discussion.getIn(['context', 'title'])}
               onClick={this.onContextClick}
               isContext
             />
-          </SW.ContextWrapper>
-        )}
+          )}
+        </SW.ContextWrapper>
       </Fragment>
     );
   }

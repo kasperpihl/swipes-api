@@ -33,6 +33,10 @@ export default styleSheet('DiscussionHeader', {
     padding: '6px 0',
     width: '100%',
   },
+  FollowerLabel: {
+    _textStyle: 'item',
+    paddingRight: '12px',
+  },
   Label: {
     _font: ['12px', '12px', 500],
     color: '$sw2',
