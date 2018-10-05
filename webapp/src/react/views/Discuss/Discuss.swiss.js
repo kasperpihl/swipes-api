@@ -5,6 +5,10 @@ export default styleSheet('Discuss', {
     _flex: ['row', 'left', 'top'],
     _size: '100%',
   },
+  LeftHeaderWrapper: {
+    paddingLeft: '25px',
+    borderBottom: '1px solid $sw4',
+  },
   LeftSide: {
     height: '100%',
     flex: 'none',

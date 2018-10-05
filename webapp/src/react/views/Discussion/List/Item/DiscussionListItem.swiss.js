@@ -18,6 +18,9 @@ export default styleSheet('DiscussionListItem', {
       paddingRight: '25px',
       borderBottom: '1px solid $sw4',
     },
+    first: {
+      borderTop: 'none',
+    },
     siblingToSelectedItem: {
       borderTop: 'none',
     },
@@ -55,8 +58,7 @@ export default styleSheet('DiscussionListItem', {
   },
   Time: {
     _el: 'span',
-    _font: ['11px', '18px', 400],
-    color: '$sw2',
+    _textStyle: 'caption',
   },
   UnreadCircle: {
     display: 'none',

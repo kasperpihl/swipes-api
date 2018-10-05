@@ -56,10 +56,10 @@ export default class Discuss extends PureComponent {
   renderLeftHeader() {
     const { tabs, tabIndex } = this.state;
     return (
-      <Fragment>
-        <HOCHeaderTitle title="Discuss" />
+      <SW.LeftHeaderWrapper>
+        <HOCHeaderTitle title="Discussions" />
         <TabBar tabs={tabs} delegate={this} activeTab={tabIndex} />
-      </Fragment>
+      </SW.LeftHeaderWrapper>
     );
   }
   renderLeftFooter() {

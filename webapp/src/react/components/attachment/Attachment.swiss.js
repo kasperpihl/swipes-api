@@ -45,7 +45,7 @@ export default styleSheet('Attachment', {
   },
   Text: {
     _truncateString: '',
-    _textStyle: 'item',
+    _textStyle: 'body',
     '.attachment-container:hover &': {
       color: '$blue',
     },

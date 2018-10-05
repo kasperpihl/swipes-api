@@ -43,7 +43,7 @@ export default class DiscussionList extends PureComponent {
       onSelectItemId(newSelectedId, results);
     }, 0);
     return (results || fromJS([]))
-      .map((item, i) => {
+      .map((item) => {
         const selected = optimist.get('discussSelectedId') === item.get('id');
         let siblingToSelectedItem = false;
 
@@ -58,6 +58,7 @@ export default class DiscussionList extends PureComponent {
             onSelectItemId={onSelectItemId}
             selected={selected}
             compact={compact}
+            first={results.first().get('id') === item.get('id')}
             siblingToSelectedItem={siblingToSelectedItem}
             item={item}
             key={item.get('id')}

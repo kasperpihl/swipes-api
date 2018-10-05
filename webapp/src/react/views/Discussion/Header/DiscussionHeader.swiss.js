@@ -35,6 +35,7 @@ export default styleSheet('DiscussionHeader', {
   },
   FollowerLabel: {
     _textStyle: 'item',
+    lineHeight: '24px',
     paddingRight: '12px',
   },
   Label: {
