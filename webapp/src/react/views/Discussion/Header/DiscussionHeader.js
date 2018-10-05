@@ -34,8 +34,12 @@ export default class DiscussionHeader extends PureComponent {
     setupLoading(this);
   }
   getInfoTabProps() {
+    const { myId, discussion } = this.props;
     return {
-      actions: [{ title: 'Delete', icon: 'Delete' }],
+      actions:
+        discussion.get('created_by') === myId
+          ? [{ title: 'Delete', icon: 'Delete', danger: true }]
+          : null,
       about: {
         title: 'What is a discussion',
         text:
