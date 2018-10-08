@@ -6,15 +6,16 @@ import {
 } from 'swipes-core-js/classes/utils';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
+import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as ca from 'swipes-core-js/actions';
 import SW from './DiscussionHeader.swiss';
-import SplitImage from 'src/react/components/split-image/SplitImage';
 import Button from 'src/react/components/button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import InfoButton from 'components/info-button/InfoButton';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import InfoButton from 'src/react/components/info-button/InfoButton';
+import HOCHeaderTitle from 'src/react/components/header-title/HOCHeaderTitle';
+import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
 
 @navWrapper
 @connect(
@@ -22,9 +23,9 @@ import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
     myId: state.me.get('id'),
   }),
   {
+    tooltip: mainActions.tooltip,
     inputMenu: menuActions.input,
     confirm: menuActions.confirm,
-    openSecondary: navigationActions.openSecondary,
     request: ca.api.request,
   }
 )
@@ -34,9 +35,34 @@ export default class DiscussionHeader extends PureComponent {
 
     setupLoading(this);
   }
+  onMouseEnter = e => {
+    const { tooltip, discussion } = this.props;
+    if (!discussion.get('followers').size) return;
+    console.log(discussion.get('followers').toJS());
+    tooltip({
+      component: AssigneeTooltip,
+      props: {
+        assignees: discussion.get('followers').map(f => f.get('user_id')),
+        size: 24,
+      },
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        position: 'bottom',
+      },
+    });
+  };
+  onMouseLeave = () => {
+    const { tooltip, discussion } = this.props;
+    if (!discussion.get('followers').size) return;
+    tooltip(null);
+  };
   getInfoTabProps() {
+    const { myId, discussion } = this.props;
     return {
-      actions: [{ title: 'Delete', icon: 'Delete' }],
+      actions:
+        discussion.get('created_by') === myId
+          ? [{ title: 'Delete', icon: 'Delete', danger: true }]
+          : null,
       about: {
         title: 'What is a discussion',
         text:
@@ -93,8 +119,8 @@ export default class DiscussionHeader extends PureComponent {
     );
   }
   onContextClick = () => {
-    const { openSecondary, discussion, target } = this.props;
-    openSecondary(target, navForContext(discussion.get('context')));
+    const { openSecondary, discussion } = this.props;
+    openSecondary(navForContext(discussion.get('context')));
   };
   onFollowClick = () => {
     const { request, myId, discussion } = this.props;
@@ -118,10 +144,7 @@ export default class DiscussionHeader extends PureComponent {
 
     return (
       <Fragment>
-        <HOCHeaderTitle title={topic}>
-          {!discussion.get('topic_set') && (
-            <Button title="Set topic" onClick={this.onTitleClick} />
-          )}
+        <HOCHeaderTitle title={topic} delegate={this}>
           <Button
             title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
             onClick={this.onFollowClick}
@@ -129,16 +152,23 @@ export default class DiscussionHeader extends PureComponent {
           />
           <InfoButton delegate={this} {...this.getLoading('dots')} />
         </HOCHeaderTitle>
-        {discussion.get('context') && (
-          <SW.ContextWrapper>
+
+        <SW.ContextWrapper>
+          <SW.FollowerLabel
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+          >
+            {`${followers.size} follower${followers.size === 1 ? '' : 's'}`}
+          </SW.FollowerLabel>
+          {discussion.get('context') && (
             <Attachment
               icon={miniIconForId(discussion.getIn(['context', 'id']))}
               title={discussion.getIn(['context', 'title'])}
               onClick={this.onContextClick}
               isContext
             />
-          </SW.ContextWrapper>
-        )}
+          )}
+        </SW.ContextWrapper>
       </Fragment>
     );
   }

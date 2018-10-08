@@ -7,16 +7,14 @@ export default styleSheet('TabBar', {
   },
   Item: {
     _flex: 'center',
-    _font: ['12px', '18px', 500],
+    _textStyle: 'tabInactive',
     padding: '6px 0',
-    color: '$sw3',
-    letterSpacing: '0.5px',
     textTransform: 'uppercase',
     '&:hover': {
-      color: '$sw1',
+      _textStyle: 'tabActive'
     },
     active: {
-      color: '$sw1',
+      _textStyle: 'tabActive'
     },
     '&:not(:last-child)': {
       marginRight: '24px',

@@ -165,7 +165,7 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField "String", "CODEPUSH_KEY", '"wJtyg-kSw5R0NoHoTFvj6MqP06QxNyuqwmYWX"'
-            // matchingFallbacks = ['debug']
+            matchingFallbacks = ['debug']
         }
         release {
             resValue "string", "app_name", "Swipes"
@@ -174,7 +174,7 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField "String", "CODEPUSH_KEY", '"ZcwuUupyV_lvtHEsxo4rLdLZwX6xNyuqwmYWX"'
-            // matchingFallbacks = ['debug']
+            matchingFallbacks = ['debug']
         }
     }
     // applicationVariants are e.g. debug, release

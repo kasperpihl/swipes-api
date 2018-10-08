@@ -5,11 +5,21 @@ export default styleSheet('Discuss', {
     _flex: ['row', 'left', 'top'],
     _size: '100%',
   },
+  LeftHeaderWrapper: {
+    paddingLeft: '25px',
+    borderBottom: '1px solid $sw4',
+  },
   LeftSide: {
     height: '100%',
-    width: '408px',
     flex: 'none',
     borderRight: '1px solid $sw4',
+    width: '348px',
+    'viewWidth=910': {
+      width: '378px',
+    },
+    'viewWidth>=1080': {
+      width: '408px',
+    },
   },
   RightSide: {
     _flex: ['center'],

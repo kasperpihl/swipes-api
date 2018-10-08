@@ -29,6 +29,7 @@ export default class Analytics {
       _Client: isElectron ? 'Electron' : 'Web',
       '_Web version': version,
       _Platform: platform,
+      Organization: this.orgId || 'No org',
     };
     if (electronVersion) {
       defs['_Electron version'] = electronVersion;
@@ -58,6 +59,7 @@ export default class Analytics {
 
     if (me && me.get('id') && me.get('id') !== this.userId) {
       this.userId = me.get('id');
+      this.orgId = me.getIn(['organizations', 0, 'id']);
       if (this.enable) {
         const intercomObj = {
           name: msgGen.users.getFullName(me),

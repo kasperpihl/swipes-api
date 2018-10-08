@@ -4,9 +4,7 @@ import Intercom from 'react-native-intercom';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import DeviceInfo from 'react-native-device-info';
 
-const blockedMixpanelEvents = [
-
-];
+const blockedMixpanelEvents = [];
 
 export default class Analytics {
   constructor(store) {
@@ -29,6 +27,7 @@ export default class Analytics {
       _Client: 'ReactNative',
       _Version: version,
       _Platform: platform,
+      Organization: this.orgId || 'No org',
     };
     return defs;
   }
@@ -56,6 +55,7 @@ export default class Analytics {
     if (me && me.get('id') && me.get('id') !== this.userId) {
       const org = me.getIn(['organizations', 0]);
       const orgId = me.getIn(['organizations', 0, 'id']);
+      this.orgId = orgId;
       const orgName = me.getIn(['organizations', 0, 'name']);
       this.userId = me.get('id');
       if (this.enable) {

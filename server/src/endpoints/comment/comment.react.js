@@ -6,6 +6,7 @@ import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
+import pushSend from 'src/utils/push/pushSend';
 
 const expectedInput = {
   comment_id: string.require(),
@@ -48,11 +49,12 @@ export default endpointCreate(
           last_comment_at: comment.updated_at,
           last_comment: `loved the comment: ${mentionsClean(
             comment.message
-          ).slice(0, 60)}...`,
+          ).slice(0, 60)}`,
           last_comment_by: user_id,
           last_two_comments_by: r
             .row('last_two_comments_by')
-            .setUnion([user_id])
+            .filter(a => a.ne(user_id))
+            .append(user_id)
             .do(a => {
               return r.branch(a.count().gt(2), a.deleteAt(0), a);
             }),
@@ -97,9 +99,43 @@ export default endpointCreate(
     // Create response data.
     res.locals.output = {
       updates,
+      reaction,
     };
     res.locals.messageGroupId = comment_id;
   }
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
+  const { organization_id, user_id } = res.locals;
+  const { updates, reaction } = res.locals.output;
+
+  // Fire push to all the commenter.
+  if (reaction) {
+    const discussion = updates[0].data;
+    const comment = updates[1].data;
+    if (comment.created_by === user_id) {
+      return;
+    }
+    // Fetch sender (to have the name)
+    const sender = await dbRunQuery(
+      r
+        .table('users')
+        .get(user_id)
+        .pluck('profile', 'id')
+    );
+
+    await pushSend(
+      {
+        orgId: organization_id,
+        users: [comment.sent_by],
+        targetId: discussion.id,
+        targetType: 'discussion',
+      },
+      {
+        content: `${
+          sender.profile.first_name
+        } loved your comment: ${mentionsClean(comment.message).slice(0, 60)}`,
+        heading: discussion.topic,
+      }
+    );
+  }
 });

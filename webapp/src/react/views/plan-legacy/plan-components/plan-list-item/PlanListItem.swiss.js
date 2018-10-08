@@ -13,11 +13,11 @@ export default styleSheet('PlanListItem', {
     width: '100%',
   },
   Title: {
-    _font: ['15px', '24px', 300],
+    _font: ['15px', '24px', 400],
     color: '$sw1',
     '.hover-class:hover &': {
       color: '$blue',
-    }
+    },
   },
   ProgressBar: {
     _size: ['120px', '18px'],
@@ -28,7 +28,7 @@ export default styleSheet('PlanListItem', {
     borderRadius: '12px',
     overflow: 'hidden',
     '.hover-class:hover &': {
-      opacity: .9
+      opacity: 0.9,
     },
     '&:before': {
       content: '',
@@ -53,13 +53,13 @@ export default styleSheet('PlanListItem', {
       bottom: 0,
       left: 0,
       width: ({ stepPercentage, goalPercentage }) => {
-        if(!stepPercentage) return '0%';
+        if (!stepPercentage) return '0%';
         const remainingPercentage = 100 - goalPercentage;
         const extraWidth = (remainingPercentage / 100) * stepPercentage;
         return `${goalPercentage + extraWidth}%`;
       },
       height: '18px',
       background: 'rgba($green, 0.3)',
-    }
+    },
   },
 });

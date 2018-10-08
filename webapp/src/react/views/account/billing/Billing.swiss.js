@@ -3,7 +3,6 @@ import Button from 'src/react/components/button/Button';
 import CardSection from './CardSection';
 
 export default styleSheet('Billing', {
-
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'center'],
@@ -197,7 +196,6 @@ export default styleSheet('Billing', {
   CardSectionSubtitle: {
     _el: 'p',
     _font: ['12px', '18px'],
-    fontStyle: 'italic',
     color: '$sw2',
     textAlign: 'left',
     marginTop: '20px',
@@ -215,4 +213,4 @@ export default styleSheet('Billing', {
       cursor: 'pointer',
     },
   },
-})
+});

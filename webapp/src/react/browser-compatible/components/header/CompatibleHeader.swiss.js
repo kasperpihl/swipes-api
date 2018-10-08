@@ -1,11 +1,11 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('CompatibleHeader',{
+export default styleSheet('CompatibleHeader', {
   Wrapper: {
     _size: ['100%', 'auto'],
     paddingTop: '21px',
 
-    'center': {
+    center: {
       textAlign: 'center',
     },
 
@@ -19,7 +19,7 @@ export default styleSheet('CompatibleHeader',{
       _font: ['36px', '48px', '300'],
       color: '$sw1',
       '@media $max600': {
-        _font: ['30px', '39px', 300],
+        _font: ['30px', '39px', 400],
         display: 'block',
         textAlign: 'center',
       },
@@ -35,4 +35,4 @@ export default styleSheet('CompatibleHeader',{
       },
     },
   },
-})
+});

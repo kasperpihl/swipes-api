@@ -25,14 +25,14 @@ const commentAddMiddleware = async (req, res, next) => {
   } = input;
   // Inserting the comment object.
   const insertCommentQ = dbInsertQuery('comments', {
-    id: `${discussion_id}-${idGenerate('C', 7)}`,
     discussion_id,
     message,
+    organization_id,
+    id: `${discussion_id}-${idGenerate('C', 7)}`,
     sent_at: r.now(),
     attachments: attachments || [],
     sent_by: user_id,
     reactions: {},
-    organization_id,
   });
 
   const commentRes = await dbRunQuery(insertCommentQ);
@@ -60,7 +60,7 @@ const commentAddMiddleware = async (req, res, next) => {
     last_comment_at: comment.sent_at,
     last_comment: mentionsClean(message).slice(0, 100),
     last_comment_by: user_id,
-    last_two_comments_by: r.row('last_two_comments_by').setUnion([user_id]).do((a) => {
+    last_two_comments_by: r.row('last_two_comments_by').filter(a => a.ne(user_id)).append(user_id).do((a) => {
       return r.branch(a.count().gt(2), a.deleteAt(0), a);
     }),
   });

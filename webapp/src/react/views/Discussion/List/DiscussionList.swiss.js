@@ -6,7 +6,4 @@ export default styleSheet('DiscussionList', {
     overflowX: 'hidden',
     paddingBottom: '55px',
   },
-  ActonBar: {
-    _size: ['100%', '60px'],
-  },
 });

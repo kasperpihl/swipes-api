@@ -21,14 +21,14 @@ export default styleSheet('StepAdd', {
     paddingRight: '6px',
     shown: {
       opacity: 1,
-    }
+    },
   },
   SubmitWrapper: {
     _size: '36px',
     flex: 'none',
     hidden: {
       display: 'none',
-    }
+    },
   },
   InputWrapper: {
     _flex: ['column'],
@@ -45,7 +45,6 @@ export default styleSheet('StepAdd', {
   ErrorLabel: {
     color: '$red',
     _font: ['12px', '18px', 400],
-    fontStyle: 'italic',
   },
   LoaderCircle: {
     flex: 'none',

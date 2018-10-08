@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
+import timeGetTimeString from 'swipes-core-js/utils/time/timeGetTimeString';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import Attachment from 'src/react/components/attachment/Attachment';
 import * as linkActions from 'src/redux/link/linkActions';
@@ -56,10 +57,9 @@ export default class CommentItem extends PureComponent {
           <HOCAssigning assignees={[comment.get('sent_by')]} size={36} />
         </SW.Picture>
         <SW.Content>
-          <SW.Name>
-            {name}
-            <SW.Timestamp prefix=" — " simple date={comment.get('sent_at')} />
-          </SW.Name>
+          <SW.Name>{`${name} - ${timeGetTimeString(
+            comment.get('sent_at')
+          )}`}</SW.Name>
           <SW.Message>
             {chain(parseNewLines, parseMentions, parseLinks)(
               comment.get('message')

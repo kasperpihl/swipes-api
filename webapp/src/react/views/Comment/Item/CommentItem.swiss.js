@@ -22,17 +22,10 @@ export default styleSheet('CommentItem', {
     _flex: ['column', 'center', 'top'],
   },
   Name: {
-    _font: ['12px', '18px', 500],
-    color: '$sw1',
-  },
-  Timestamp: {
-    _el: TimeAgo,
-    _font: ['12px', '18px', 400],
-    color: '$sw2',
+    _textStyle: 'caption',
   },
   Message: {
-    _font: ['12px', '18px', 300],
-    color: '$sw1',
+    _textStyle: 'body',
   },
   Attachments: {
     marginTop: '6px',
