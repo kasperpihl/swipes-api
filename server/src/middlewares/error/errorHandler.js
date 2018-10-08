@@ -7,7 +7,7 @@ export default (error, req, res, next) => {
     logger.log('error', error);
   } else {
     console.log(`--- ERROR ${req.originalUrl} ---`);
-    console.log('--- input ---');
+    console.log('--- res.locals ---');
     console.error(JSON.stringify(res.locals, null, 2));
     console.log('--- trace ---');
     console.error(error);
