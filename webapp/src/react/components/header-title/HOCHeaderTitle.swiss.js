@@ -3,7 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('HOCHeaderTitle', {
   Wrapper: {
     _size: ['100%', '99px'],
-    _flex: ['row', 'left', 'top'],
+    _flex: ['row', 'between', 'top'],
 
     noSubtitle: {
       height: '75px',
@@ -15,10 +15,10 @@ export default styleSheet('HOCHeaderTitle', {
   },
 
   Title: {
-    _size: ['100%', 'auto'],
-    _textStyle: 'cardTitle',
-    color: 'black',
     _truncateString: '',
+    _textStyle: 'cardTitle',
+    _size: ['100%', 'auto'],
+    color: 'black',
     letterSpacing: '-.6px',
 
     '&:hover': {
@@ -27,10 +27,10 @@ export default styleSheet('HOCHeaderTitle', {
   },
 
   Subtitle: {
+    _truncateString: '',
     _size: ['100%', 'auto'],
     _font: ['12px', '18px'],
     color: '$sw1',
-    _truncateString: '',
     letterSpacing: '.1px',
     marginTop: '6px',
   },
