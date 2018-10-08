@@ -23,9 +23,18 @@ export default styleSheet('Discuss', {
   },
   RightSide: {
     _flex: ['center'],
-    width: '100%',
     height: '100%',
     fontSize: '24px',
+    width: '452px',
+    'viewWidth=910': {
+      width: '532px',
+    },
+    'viewWidth=1080': {
+      width: '672px',
+    },
+    'viewWidth=1200': {
+      width: '792px',
+    },
   },
   Wrapper: {
     _flex: ['row', 'left', 'top'],
