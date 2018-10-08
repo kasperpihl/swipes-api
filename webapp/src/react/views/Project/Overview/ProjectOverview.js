@@ -4,7 +4,7 @@ import data from './data';
 import ProjectStateManager from '../utils/project/ProjectStateManager';
 import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
 
-export default class Tester extends PureComponent {
+export default class ProjectOverview extends PureComponent {
   static sizes() {
     return [654];
   }
