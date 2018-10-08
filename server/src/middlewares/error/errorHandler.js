@@ -8,7 +8,10 @@ export default (error, req, res, next) => {
   } else {
     console.log(`--- ERROR ${req.originalUrl} ---`);
     console.log('--- res.locals ---');
-    console.error(JSON.stringify(res.locals, null, 2));
+    const localsCopy = Object.assign({}, res.locals);
+    delete localsCopy.config;
+    delete localsCopy.token;
+    console.error(JSON.stringify(localsCopy, null, 2));
     console.log('--- trace ---');
     console.error(error);
     error.errorInfo && console.log('--- info ---');
