@@ -85,13 +85,12 @@ export default class Discuss extends PureComponent {
             </SWView>
           </SW.LeftSide>
           <SW.RightSide>
-            {(selectedId && (
+            {selectedId && (
               <HOCDiscussionOverview
                 key={selectedId}
                 discussionId={selectedId}
               />
-            )) ||
-              'Loading'}
+            )}
           </SW.RightSide>
         </SW.ParentWrapper>
       </SwissProvider>
