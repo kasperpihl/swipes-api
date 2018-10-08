@@ -74,6 +74,7 @@ export default class IpcListener {
       if (
         type === 'comment' &&
         data.sent_by !== myId &&
+        data.sent_by !== 'USOFI' &&
         data.sent_at === data.updated_at
       ) {
         comment = data;
