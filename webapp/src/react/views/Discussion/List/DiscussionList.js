@@ -33,15 +33,18 @@ export default class DiscussionList extends PureComponent {
     }
   };
   renderItems(pagination, type) {
-    const { onSelectItemId, optimist, compact } = this.props;
+    const { onSelectItemId, optimist, compact, viewWidth } = this.props;
     const { results } = pagination;
     let newSelectedId = null;
+
     if (results && results.size) {
       newSelectedId = results.first().get('id');
     }
+
     setTimeout(() => {
       onSelectItemId(newSelectedId, results);
     }, 0);
+
     return (results || fromJS([]))
       .map((item) => {
         const selected = optimist.get('discussSelectedId') === item.get('id');
@@ -62,6 +65,7 @@ export default class DiscussionList extends PureComponent {
             siblingToSelectedItem={siblingToSelectedItem}
             item={item}
             key={item.get('id')}
+            viewWidth={viewWidth}
           />
         );
       })

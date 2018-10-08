@@ -42,7 +42,7 @@ export default class DiscussionListItem extends PureComponent {
     openSecondary(navForContext(item.get('context')));
   };
   render() {
-    const { item, myId, selected, siblingToSelectedItem, compact, first } = this.props;
+    const { item, myId, selected, siblingToSelectedItem, compact, first, viewWidth } = this.props;
     const subtitle = `${msgGen.users.getName(item.get('last_comment_by'), {
       capitalize: true,
     })}: ${item.get('last_comment')}`;
@@ -67,6 +67,7 @@ export default class DiscussionListItem extends PureComponent {
         siblingToSelectedItem={siblingToSelectedItem}
         first={first}
         compact={compact}
+        viewWidth={viewWidth}
       >
         <SW.Wrapper onClick={this.onClick}>
           <SW.LeftWrapper>

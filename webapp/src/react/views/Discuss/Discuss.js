@@ -81,6 +81,7 @@ export default class Discuss extends PureComponent {
                 tabIndex={tabIndex}
                 onSelectItemId={this.onSelectItemId}
                 compact={viewWidth === 800}
+                viewWidth={viewWidth}
               />
             </SWView>
           </SW.LeftSide>
