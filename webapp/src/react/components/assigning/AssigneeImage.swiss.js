@@ -25,6 +25,7 @@ export default styleSheet('AssigneeImage', {
     },
     textTransform: 'uppercase',
     color: '$sw5',
+    backgroundColor: '$sw1',
   },
 
   Text: {
