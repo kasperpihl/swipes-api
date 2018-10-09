@@ -57,7 +57,7 @@ export default class DiscussionList extends PureComponent {
       return (
         <SW.EmptyState>
           <SW.Label>
-          There is still nothing here.
+          There’s nothing here, yet.
           </SW.Label>
           <Button
             title="Start a new discussion"
