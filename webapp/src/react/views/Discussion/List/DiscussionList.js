@@ -6,8 +6,12 @@ import DiscussionListItem from './Item/DiscussionListItem';
 import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
 import { withOptimist } from 'react-optimist';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
+import Button from 'src/react/components/button/Button';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import DiscussionComposer from 'src/react/views/Discussion/Composer/DiscussionComposer';
 import SW from './DiscussionList.swiss';
 
+@navWrapper
 @withOptimist
 @connect(
   state => ({
@@ -23,6 +27,18 @@ export default class DiscussionList extends PureComponent {
     super(props);
     this.isPreviouslySelected = false;
   }
+  onDiscuss = () => {
+    const { context, taggedUsers, openModal } = this.props;
+    openModal({
+      component: DiscussionComposer,
+      title: 'Create Post',
+      position: 'center',
+      props: {
+        context,
+        taggedUsers,
+      },
+    });
+  };
   onInitialLoad = () => {
     const { tabIndex, apiRequest, counter } = this.props;
     if (tabIndex === 0 && counter && counter.size) {
@@ -36,6 +52,19 @@ export default class DiscussionList extends PureComponent {
     const { onSelectItemId, optimist, compact, viewWidth } = this.props;
     const { results } = pagination;
     let newSelectedId = null;
+
+    if (!results || results.size === 0) {
+      return (
+        <SW.EmptyState>
+          <SW.Label>
+          There is still nothing here.
+          </SW.Label>
+          <Button
+            title="Start a new discussion"
+            onClick={this.onDiscuss} />
+        </SW.EmptyState>
+      )
+    }
 
     if (results && results.size) {
       newSelectedId = results.first().get('id');
