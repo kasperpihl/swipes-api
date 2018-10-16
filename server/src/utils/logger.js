@@ -1,13 +1,13 @@
 import config from 'config';
-import winston from 'winston';
+import { transports, createLogger } from 'winston';
 import CloudWatchTransport from 'winston-aws-cloudwatch';
 
 const env = config.get('env');
 const cloudWatchConfig = config.get('awsCloudWatch');
-const logger = new winston.Logger();
+const logger = createLogger();
 
 if (env === 'dev') {
-  logger.add(winston.transports.Console, {
+  logger.add(new transports.Console(), {
     timestamp: true,
     colorize: true,
   });
@@ -23,14 +23,14 @@ const logConfig = {
     secretAccessKey: cloudWatchConfig.secretKey,
     region: cloudWatchConfig.region,
   },
-  formatLog: (item) => {
+  formatLog: item => {
     return `${item.level}: ${item.message} ${JSON.stringify(item.meta)}`;
   },
 };
 
 // put a check for the dev
 if (env !== 'dev') {
-  logger.add(CloudWatchTransport, logConfig);
+  logger.add(new CloudWatchTransport(logConfig));
 }
 
 logger.level = process.env.LOG_LEVEL || 'silly';
