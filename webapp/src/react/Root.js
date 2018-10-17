@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
-
 import Unsubscribe from 'compatible/pages/unsubscribe/Unsubscribe';
 import CompatibleDownload from 'compatible/pages/download/CompatibleDownload';
 import HOCPlanCSVExporter from 'compatible/pages/plan-csv-exporter/HOCPlanCSVExporter';
@@ -12,7 +11,6 @@ import HOCCompatibleInvite from 'compatible/pages/invite/HOCCompatibleInvite';
 import HOCCompatibleWelcome from 'compatible/pages/welcome/HOCCompatibleWelcome';
 import CompatibleConfirm from 'compatible/pages/confirm/CompatibleConfirm';
 import HOCNotSupported from 'compatible/pages/not-supported/HOCNotSupported';
-
 import SwipesLoader from 'src/react/components/loaders/SwipesLoader';
 import Redirect from 'src/react/app/redirect/Redirect';
 import HOCAutoCompleting from 'src/react/app/auto-completing/HOCAutoCompleting';

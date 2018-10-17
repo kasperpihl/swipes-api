@@ -102,7 +102,7 @@ export default class Trial extends PureComponent {
     );
   }
   renderTrialPopup() {
-    const { daysLeft, dismissed } = this.state;
+    const { daysLeft } = this.state;
     const { me } = this.props;
     const show = this.shouldShowPopup();
 
@@ -150,13 +150,14 @@ export default class Trial extends PureComponent {
   }
   render() {
     const { subscribed, organization } = this.props;
+    const show = this.shouldShowPopup();
 
     if (subscribed || !organization || !organization.size) {
       return null;
     }
 
     return (
-      <SW.Wrapper>
+      <SW.Wrapper show={show}>
         {this.renderTrialIndicator()}
         {this.renderTrialPopup()}
       </SW.Wrapper>
