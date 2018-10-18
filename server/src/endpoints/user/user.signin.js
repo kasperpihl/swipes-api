@@ -6,7 +6,7 @@ const expectedInput = {};
 
 export default endpointCreate(
   {
-    endpoint: '/user.signin',
+    endpoint: '/user.signup',
     expectedInput,
     type: 'notAuthed',
   },
@@ -17,8 +17,6 @@ export default endpointCreate(
     const dbres = await dbPool.query('SELECT $1::text as message', [
       'Hello world!',
     ]);
-
-    console.log(dbres, 'dbres');
 
     // Create response data.
     res.locals.output = {
