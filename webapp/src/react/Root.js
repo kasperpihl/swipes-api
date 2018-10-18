@@ -35,16 +35,6 @@ import 'src/react/global-styles/app.scss';
 }))
 @hot(module)
 export default class extends PureComponent {
-  componentDidMount() {
-    this.unlisten = this.props.history.listen(location => {
-      this.setState({
-        location,
-      });
-    });
-  }
-  componentWillUnmount() {
-    this.unlisten();
-  }
   renderRoutes() {
     const { status, hasConnected, isHydrated } = this.props;
     if (!isHydrated || (!hasConnected && status === 'connecting')) {

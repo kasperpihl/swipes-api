@@ -19,28 +19,15 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
   }
 )
 export default class Redirect extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = { location: props.location };
-  }
   componentDidMount() {
-    // We have to do this because redux (@connect) and react-router (@withRouter) does not play well together
-    this.unlisten = this.props.history.listen(location => {
-      this.setState({
-        location,
-      });
-    });
     this.checkRedirects();
   }
   componentDidUpdate() {
     this.checkRedirects();
   }
-  componentWillUnmount() {
-    this.unlisten();
-  }
   checkRedirects() {
     // Reset if any
-    const { location } = this.state;
+    const { location } = this.props;
     const {
       goToUrl,
       token,
@@ -84,8 +71,7 @@ export default class Redirect extends PureComponent {
     }
   }
   render() {
-    const { location } = this.state;
-    const { goToUrl } = this.props;
+    const { goToUrl, location } = this.props;
     if (goToUrl && location.pathname !== (goToUrl.to.pathname || goToUrl.to)) {
       return <RedirectDOM {...goToUrl} />;
     }
