@@ -10,11 +10,11 @@ const routers = {
 };
 
 // Recursively read through subfolders
-const readFileOrDir = (pathname) => {
+const readFileOrDir = pathname => {
   // Check if it's a folder
-  if (fs.statSync(pathname).isDirectory()) {
-    // Then read and iterate through each item
-    fs.readdirSync(pathname).forEach((file) => {
+  if (fs.statSync(pathname).isDirectory()) {
+    // Then read and iterate through each item
+    fs.readdirSync(pathname).forEach(file => {
       // And call recursively
       readFileOrDir(path.join(pathname, file));
     });
