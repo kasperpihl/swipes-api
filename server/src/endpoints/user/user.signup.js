@@ -10,20 +10,20 @@ const expectedInput = {
   email: string.format('email').require(),
   password: string.min(1).require(),
   first_name: string.max(32).require(),
-  last_name: string.max(32).require(),
+  last_name: string.max(32).require()
 };
 
 export default endpointCreate(
   {
     endpoint: '/user.signup',
     expectedInput,
-    type: 'notAuthed',
+    type: 'notAuthed'
   },
   async (req, res, next) => {
     const { password, first_name, last_name } = res.locals.input;
     const profile = {
       first_name,
-      last_name,
+      last_name
     };
     const passwordSha1 = sha1(password);
     let { email } = res.locals.input;
@@ -35,7 +35,7 @@ export default endpointCreate(
     // check if this user is available
     const checkUserQ = await dbPool.query(
       'SELECT email FROM users WHERE email=$1',
-      [email],
+      [email]
     );
     const user = checkUserQ.rows[0];
 
@@ -50,30 +50,30 @@ export default endpointCreate(
     const ip = getClientIp(req);
     const tokenInfo = {
       platform,
-      ip,
+      ip
     };
 
     // Creating the actual tokens
     const tokens = createTokens({
-      iss: userId,
+      iss: userId
     });
 
     await dbPool.query(
       'INSERT INTO tokens (timestamp, token, user_id, info, revoked) VALUES ($1, $2, $3, $4, $5)',
-      [new Date(), tokens.token, userId, tokenInfo, false],
+      [new Date(), tokens.token, userId, tokenInfo, false]
     );
 
     // creating a new user from scratch
     await dbPool.query(
       `INSERT INTO users (id, email, profile, password, created_at, updated_at, activated) 
         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [userId, email, profile, passwordSha1, new Date(), new Date(), true],
+      [userId, email, profile, passwordSha1, new Date(), new Date(), true]
     );
 
     // Create response data.
     res.locals.output = {
       user_id: userId,
-      token: tokens.shortToken,
+      token: tokens.shortToken
     };
-  },
+  }
 ).background(async (req, res) => {});
