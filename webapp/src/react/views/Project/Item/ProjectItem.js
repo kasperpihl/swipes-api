@@ -79,12 +79,16 @@ export default class ProjectItem extends PureComponent {
     return <SW.Checkbox />;
   }
   render() {
-    const { item, orderItem } = this.props;
+    const { item, orderItem, isDone } = this.props;
     const { isFocused } = this.state;
 
     return (
       <SwissProvider selected={isFocused}>
-        <SW.Wrapper indent={orderItem.get('indent')} className="item-class">
+        <SW.Wrapper
+          done={isDone}
+          indent={orderItem.get('indent')}
+          className="item-class"
+        >
           <SW.ExpandWrapper onClick={this.onExpandClick}>
             {orderItem.get('hasChildren') && (
               <SW.ExpandIcon

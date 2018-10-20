@@ -47,6 +47,7 @@ export default class ProjectOverview extends PureComponent {
     return visibleOrder.map((item, i) => (
       <ProjectItem
         focus={i === selectedIndex}
+        isDone={i % 2 === 0}
         selectionStart={i === selectedIndex && selectionStart}
         item={itemsById.get(item.get('id'))}
         orderItem={item}

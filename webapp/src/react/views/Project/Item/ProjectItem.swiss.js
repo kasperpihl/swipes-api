@@ -9,6 +9,15 @@ export default styleSheet('ProjectItem', {
     selected: {
       background: '$blue',
     },
+    done: {
+      opacity: 0.4,
+      selected: {
+        opacity: 1,
+      },
+      '&:hover': {
+        opacity: 1,
+      },
+    },
   },
   Input: {
     _el: 'input',
