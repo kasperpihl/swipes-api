@@ -1,10 +1,14 @@
-import { styleSheet } from 'swiss-react'
+import { styleSheet } from 'swiss-react';
 import Button from 'src/react/components/button/Button';
+
 export default styleSheet('trial', {
   Wrapper: {
-    _size: '100%',
+    _size: ['100%', 'auto'],
     userSelect: 'none',
     position: 'absolute',
+    show: {
+      _size: '100%',
+    },
   },
 
   Popup: {
@@ -23,8 +27,8 @@ export default styleSheet('trial', {
 
     displayActions: {
       paddingBottom: '0',
-      _flex: ['column', 'center', 'center']
-    }
+      _flex: ['column', 'center', 'center'],
+    },
   },
 
   Indicator: {
@@ -73,7 +77,7 @@ export default styleSheet('trial', {
 
     displayActions: {
       paddingTop: '0',
-    }
+    },
   },
 
   Paragraph: {
@@ -88,7 +92,7 @@ export default styleSheet('trial', {
 
     displayActions: {
       display: 'none',
-    }
+    },
   },
 
   Button: {
@@ -96,6 +100,6 @@ export default styleSheet('trial', {
 
     '&:not(:last-child)': {
       marginRight: '20px',
-    }
-  }
-})
+    },
+  },
+});

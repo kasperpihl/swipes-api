@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { setupDelegate } from 'react-delegate';
-import Icon from 'Icon';
 import SW from './HOCHeaderTitle.swiss';
 
 export default class HOCHeaderTitle extends Component {
@@ -43,7 +41,7 @@ export default class HOCHeaderTitle extends Component {
 
   }
   renderTitle() {
-    const { title, subtitleElement } = this.props;
+    const { title } = this.props;
 
     return (
       <SW.Title key="header-title" onClick={this.onTitleClick}>
@@ -53,7 +51,7 @@ export default class HOCHeaderTitle extends Component {
     );
   }
   renderContent() {
-    const { title, placeholder } = this.props;
+    const { placeholder } = this.props;
 
     if (placeholder) {
       return this.renderInputTitle(placeholder);

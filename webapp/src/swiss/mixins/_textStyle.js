@@ -42,7 +42,7 @@ addMixin('textStyle', (props, style = 'item') => {
     case 'tabInactive':
       return {
         _font: ['11px', '24px', 500],
-        color: '$sw2',
+        color: '$sw3',
         textTransform: 'uppercase',
       };
     default:

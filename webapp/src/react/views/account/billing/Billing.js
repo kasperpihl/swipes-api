@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { CardElement, injectStripe } from 'react-stripe-elements';
+import { injectStripe } from 'react-stripe-elements';
 import { setupDelegate } from 'react-delegate';
 import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'SWView';
@@ -31,30 +31,20 @@ class Billing extends PureComponent {
     setupDelegate(this, 'onSwitchPlan', 'onSubmitSuccess', 'onManage', 'onCardDetails');
     bindAll(this, ['onChange', 'onSubmit']);
   }
-  getShowPrice() {
+  getPrice(hasPostfix) {
     const { billingStatus, users } = this.props;
     const numberOfUsers = users.filter(u => u.get('active')).size;
+    let price = 7.5;
+    let months = 1;
+    let postfix = hasPostfix ? ' monthly' : '';
 
-    let price = 9;
-    let months = 1;
-    let postfix = ' monthly';
     if (billingStatus === 'yearly') {
       price = 6;
       months = 12;
-      postfix = ` annually ($${price * numberOfUsers}/month)`;
+      postfix = hasPostfix ? ` annually ($${price * numberOfUsers}/month)` : '';
     }
-    return `$${price * months * numberOfUsers}${postfix}`;
-  }
-  getPrice() {
-    const { billingStatus, users } = this.props;
-    const numberOfUsers = users.filter(u => u.get('active')).size;
-    let price = 9;
-    let months = 1;
-    if (billingStatus === 'yearly') {
-      price = 6;
-      months = 12;
-    }
-    return price * months * numberOfUsers;
+
+    return `$${(price * months * numberOfUsers).toFixed(2)}${postfix}`;
   }
   onSubmit(e) {
     e.preventDefault();
@@ -96,7 +86,7 @@ class Billing extends PureComponent {
           <SW.ToggleSection
           first={billingStatus === 'monthly' ? true : false}
           onClick={this.onSwitchPlanCached('monthly')}>
-            <SW.TogglePrice>$9</SW.TogglePrice>
+            <SW.TogglePrice>$7.50</SW.TogglePrice>
             <SW.ToggleLabel>per user a month</SW.ToggleLabel>
             <SW.ToggleSubLabel>billed monthly</SW.ToggleSubLabel>
           </SW.ToggleSection>
@@ -105,7 +95,7 @@ class Billing extends PureComponent {
           onClick={this.onSwitchPlanCached('yearly')}>
             <SW.TogglePrice>$6</SW.TogglePrice>
             <SW.ToggleLabel>per user a month</SW.ToggleLabel>
-            <SW.ToggleSubLabel>billed anually <SW.SaveLabel className='save'>You save 33%</SW.SaveLabel></SW.ToggleSubLabel>
+            <SW.ToggleSubLabel>billed anually <SW.SaveLabel className='save'>You save 20%</SW.SaveLabel></SW.ToggleSubLabel>
           </SW.ToggleSection>
         </SW.Toggle>
     );
@@ -123,7 +113,7 @@ class Billing extends PureComponent {
             title="Submit Payment"
             onClick={this.onSubmit}
           />
-          <SW.SubmitButtonSubtitle>You will be billed ${this.getPrice()}.</SW.SubmitButtonSubtitle>
+          <SW.SubmitButtonSubtitle>You will be billed {this.getPrice()}.</SW.SubmitButtonSubtitle>
           {billingStatus === 'monthly' ?
           <SW.CardSectionSubtitle>
             Your subscription will automatically renew every month. You can always cancel your account by writing to us on help@swipesapp.com.
@@ -163,8 +153,7 @@ class Billing extends PureComponent {
           <SW.PaymentToggle>
             {this.renderToggle()}
             <SW.ToggleSubtitle>
-              You have {numberOfUsers} users in {organization.get('name')}. {`That's ${this.getShowPrice()}`}
-
+              You have {numberOfUsers} users in {organization.get('name')}. {`That's ${this.getPrice(true)}`}
             </SW.ToggleSubtitle>
             <SW.ManageButton
               title="Manage team"

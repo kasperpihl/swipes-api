@@ -41,24 +41,21 @@ export default endpointCreate(
 
     if (reaction) {
       // Show like in the recent history.
-
       const updateDiscussionQ = dbUpdateQuery(
         'discussions',
         comment.discussion_id,
         {
           last_comment_at: comment.updated_at,
-          last_comment: `loved the comment: ${mentionsClean(
-            comment.message
-          ).slice(0, 60)}`,
+          last_comment: `loved the comment: ${mentionsClean(comment.message).slice(0, 60)}`,
           last_comment_by: user_id,
           last_two_comments_by: r
             .row('last_two_comments_by')
             .filter(a => a.ne(user_id))
             .append(user_id)
-            .do(a => {
+            .do((a) => {
               return r.branch(a.count().gt(2), a.deleteAt(0), a);
             }),
-        }
+        },
       );
       // Updating read_at to be newest comment.
       // Also ensuring that user follows discussion
@@ -73,7 +70,7 @@ export default endpointCreate(
         },
         {
           conflict: 'update',
-        }
+        },
       );
       const result = await Promise.all([
         dbRunQuery(updateFollowerQ),
@@ -102,7 +99,7 @@ export default endpointCreate(
       reaction,
     };
     res.locals.messageGroupId = comment_id;
-  }
+  },
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
   const { organization_id, user_id } = res.locals;
@@ -116,12 +113,10 @@ export default endpointCreate(
       return;
     }
     // Fetch sender (to have the name)
-    const sender = await dbRunQuery(
-      r
-        .table('users')
-        .get(user_id)
-        .pluck('profile', 'id')
-    );
+    const sender = await dbRunQuery(r
+      .table('users')
+      .get(user_id)
+      .pluck('profile', 'id'));
 
     await pushSend(
       {
@@ -135,7 +130,7 @@ export default endpointCreate(
           sender.profile.first_name
         } loved your comment: ${mentionsClean(comment.message).slice(0, 60)}`,
         heading: discussion.topic,
-      }
+      },
     );
   }
 });

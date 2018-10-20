@@ -48,8 +48,11 @@ export default styleSheet('DiscussionListItem', {
     _truncateString: '',
     _textStyle: 'item',
     minWidth: 0,
-    maxWidth: '350px',
+    maxWidth: '180px',
     paddingBottom: '1px',
+    'viewWidth>=1080': {
+      maxWidth: '210px',
+    },
   },
   Subtitle: {
     _el: LinesEllipsis,

@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "0.31.0",
+  "version": "0.32.1",
   "description": "Swipes Webapp",
   "author": "Swipes Team",
   "license": "MIT",
@@ -42,7 +42,7 @@
     "react-lines-ellipsis": "0.13.2",
     "react-markdown": "^3.4.1",
     "react-measure": "1.4.7",
-    "react-optimist": "^0.1.4",
+    "react-optimist": "^0.1.5",
     "react-pdf": "^3.0.5",
     "react-redux": "^5.0.7",
     "react-router-dom": "4.3.1",
