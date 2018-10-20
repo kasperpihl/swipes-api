@@ -1,6 +1,6 @@
 import config from 'config';
 import randomstring from 'randomstring';
-import valjs, { string, func, object, array, any } from 'valjs';
+import valjs, { string, func, object } from 'valjs';
 import jwt from 'jwt-simple';
 import SwipesError from 'src/utils/SwipesError';
 
@@ -19,20 +19,24 @@ const generateSlackLikeId = (type = '', number = 8) => {
 
   return type.toUpperCase() + id;
 };
-const camelCaseToUnderscore = (word) => {
+const camelCaseToUnderscore = word => {
   // http://stackoverflow.com/questions/30521224/javascript-convert-camel-case-to-underscore-case
-  return word.replace(/([A-Z]+)/g, (x, y) => { return `_${y.toLowerCase()}`; }).replace(/^_/, '');
+  return word
+    .replace(/([A-Z]+)/g, (x, y) => {
+      return `_${y.toLowerCase()}`;
+    })
+    .replace(/^_/, '');
 };
-const getClientIp = (req) => {
-  const ip = req.headers['x-forwarded-for'] ?
-    req.headers['x-forwarded-for'].split(',')[0] :
-    req.connection.remoteAddress;
+const getClientIp = req => {
+  const ip = req.headers['x-forwarded-for']
+    ? req.headers['x-forwarded-for'].split(',')[0]
+    : req.connection.remoteAddress;
 
   return ip;
 };
 
 const getSwipesLinkObj = ({
-  type, id, title, account_id,
+ type, id, title, account_id 
 }) => {
   return {
     service: {
@@ -49,12 +53,15 @@ const getSwipesLinkObj = ({
   };
 };
 
-const createTokens = (tokenContent) => {
+const createTokens = tokenContent => {
   const content = Object.assign({}, tokenContent, {
     r: generateSlackLikeId('', 3),
   });
   const token = jwt.encode(content, config.get('jwtTokenSecret'));
-  const shortToken = token.split('.').splice(1, 2).join('.');
+  const shortToken = token
+    .split('.')
+    .splice(1, 2)
+    .join('.');
   const prefix = 'sw.';
 
   return {
@@ -62,10 +69,13 @@ const createTokens = (tokenContent) => {
     shortToken: `${prefix}${shortToken}`,
   };
 };
-const parseToken = (token) => {
+const parseToken = token => {
   const jwtHead = config.get('jwtTokenHead');
   // removing the sw. in the beggining of the token
-  const tokenWithoutSw = token.split('.').splice(1, 2).join('.');
+  const tokenWithoutSw = token
+    .split('.')
+    .splice(1, 2)
+    .join('.');
   const constructedToken = `${jwtHead}.${tokenWithoutSw}`;
   const dbToken = `sw.${constructedToken}`;
 
@@ -119,7 +129,6 @@ const valResponseAndSend = schema => (req, res, next) => {
   return sendResponse(req, res);
 };
 
-
 const setLocals = (name, res, next, state) => {
   const error = valjs(state, object.require());
 
@@ -141,9 +150,12 @@ const setLocals = (name, res, next, state) => {
 
 const mapLocals = handler => (req, res, next) => {
   // let's validate the params #inception! :D
-  const error = valjs({ handler }, object.as({
-    handler: func.require(),
-  }));
+  const error = valjs(
+    { handler },
+    object.as({
+      handler: func.require(),
+    }),
+  );
 
   if (error) {
     return next(new SwipesError(`middleware input mapLocals: ${error}`));
@@ -157,11 +169,14 @@ const mapLocals = handler => (req, res, next) => {
 
 const valLocals = (name, schema, middleware) => (req, res, next) => {
   // let's validate the params #inception! :D
-  let error = valjs({ name, schema, middleware }, object.as({
-    name: string.require(),
-    schema: object.require(),
-    middleware: func,
-  }));
+  let error = valjs(
+    { name, schema, middleware },
+    object.as({
+      name: string.require(),
+      schema: object.require(),
+      middleware: func,
+    }),
+  );
 
   if (!error) {
     error = valjs(res.locals, object.as(schema));
@@ -180,10 +195,14 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
 
 const valBody = (schema, middleware) => (req, res, next) => {
   // let's validate the params #inception! :D
-  let error = valjs({ schema, middleware }, object.as({
-    schema: object.require(),
-    middleware: func,
-  }), true);
+  let error = valjs(
+    { schema, middleware },
+    object.as({
+      schema: object.require(),
+      middleware: func,
+    }),
+    true,
+  );
 
   const params = Object.assign({}, req.params, req.query, req.body, req.file);
 

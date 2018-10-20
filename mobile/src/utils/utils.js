@@ -1,5 +1,5 @@
 export function mobileNavForContext(id) {
-  let obj = undefined;
+  let obj;
   if (typeof id === 'object') {
     obj = id;
     id = id.get('id');
@@ -26,10 +26,9 @@ export function mobileNavForContext(id) {
       title: 'Post',
       props: {
         postId: id,
-      }
-    }
+      },
+    };
   } else if (id.startsWith('N')) {
-
     if (obj) {
       return {
         id: 'PreviewNote',
@@ -40,7 +39,6 @@ export function mobileNavForContext(id) {
         },
       };
     }
-
   } else if (id.startsWith('F')) {
     return 'MiniFile';
   }
