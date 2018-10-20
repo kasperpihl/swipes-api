@@ -26,7 +26,7 @@ app.use('/test', (req, res) => {
   pub.publish(
     'global',
     JSON.stringify({
-      type: 'forceDisconnect',
+      type: 'forceDisconnect'
     })
   );
   pub.quit();

@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+import { Pool } from 'pg';
 
 const pool = new Pool({
   host: 'workspace.cuaunhcnlbha.us-east-1.rds.amazonaws.com',
@@ -8,6 +8,4 @@ const pool = new Pool({
   database: 'workspace',
 });
 
-module.exports = {
-  query: (text, params) => pool.query(text, params),
-};
+export const query = (text, params) => pool.query(text, params);
