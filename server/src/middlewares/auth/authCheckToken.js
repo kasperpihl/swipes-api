@@ -1,4 +1,4 @@
-import db from 'src/utils/db/dbPool';
+import db from 'src/utils/db/db';
 
 export default async (req, res, next) => {
   const { user_id, dbToken } = res.locals;

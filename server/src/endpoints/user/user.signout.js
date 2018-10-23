@@ -1,6 +1,6 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
-import db from 'src/utils/db/dbPool';
+import db from 'src/utils/db/db';
 
 const expectedInput = {
   user_id: string.require()

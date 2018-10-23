@@ -1,7 +1,7 @@
 import sha1 from 'sha1';
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
-import db from 'src/utils/db/dbPool';
+import db from 'src/utils/db/db';
 import getClientIp from 'src/utils/getClientIp';
 import createTokens from 'src/utils/auth/createTokens';
 
