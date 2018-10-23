@@ -5,7 +5,7 @@ const pool = new Pool({
   port: 5432,
   user: 'postgres',
   password: 'GAze0UGQyj',
-  database: 'workspace',
+  database: 'workspace'
 });
 
-export const query = (text, params) => pool.query(text, params);
+export default (text, params) => pool.query(text, params);
