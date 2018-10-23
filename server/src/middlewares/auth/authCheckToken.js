@@ -1,20 +1,17 @@
-import { dbCheckToken } from 'src/_legacy-api/routes/middlewares/db_utils/tokens';
+import db from 'src/utils/db/dbPool';
 
-export default (req, res, next) => {
-  const {
-    user_id,
-    dbToken,
-  } = res.locals;
+export default async (req, res, next) => {
+  const { user_id, dbToken } = res.locals;
 
-  dbCheckToken({ user_id, token: dbToken })
-    .then((results) => {
-      if (results.length === 0) {
-        throw Error('not_authed');
-      }
+  // Check user token
+  const token = await db(
+    'SELECT token FROM tokens WHERE user_id=$1 AND token=$2 AND revoked=$3',
+    [user_id, dbToken, false]
+  );
 
-      return next();
-    })
-    .catch((e) => {
-      throw Error('database_error');
-    });
+  if (token.rows.length === 0) {
+    throw Error('not_authed');
+  }
+
+  return next();
 };

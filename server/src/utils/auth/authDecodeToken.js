@@ -17,7 +17,7 @@ export default token => {
     return {
       constructedToken,
       dbToken,
-      content,
+      content
     };
   } catch (err) {
     return null;

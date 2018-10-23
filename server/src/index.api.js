@@ -7,7 +7,6 @@ import 'src/polyfills/uncaughtException';
 import 'src/polyfills/errorPrototypes';
 import authParseToken from 'src/middlewares/auth/authParseToken';
 import authCheckToken from 'src/middlewares/auth/authCheckToken';
-import authCheckIfPartOfOrganization from 'src/middlewares/auth/authCheckIfPartOfOrganization';
 import checkUpdates from 'src/middlewares/checkUpdates';
 import fetchConfig from 'src/middlewares/fetchConfig';
 import redirectToStaging from 'src/middlewares/redirectToStaging';
@@ -59,9 +58,6 @@ app.use('/v1', routes.v1Authed);
 
 // Endpoints that needs to be authed, but not part of an org.
 app.use('/v1', endpoints.noOrg);
-
-// Ensure that organization_id passed is valid
-app.use('/v1', authCheckIfPartOfOrganization);
 
 // Authed routes goes here (with org)
 app.use('/v1', endpoints.authed);
