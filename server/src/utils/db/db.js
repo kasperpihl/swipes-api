@@ -8,4 +8,44 @@ const pool = new Pool({
   database: 'workspace'
 });
 
-export default (text, params) => pool.query(text, params);
+export default (text, params) => {
+  if (typeof text === 'object' && text.text && text.values) {
+    return pool.query(text.text, text.values);
+  }
+  return pool.query(text, params);
+};
+
+export const transaction = async queries => {
+  if (!Array.isArray(queries)) {
+    throw 'db.transaction expects an array of queries';
+  }
+  // note: we don't try/catch this because if connecting throws an exception
+  // we don't need to dispose of the client (it will be undefined)
+  const client = await pool.connect();
+  const results = [];
+  try {
+    await client.query('BEGIN');
+
+    for (let i = 0; i < queries.length; i++) {
+      let query = queries[i];
+      if (typeof query === 'function') {
+        query = query(results);
+      }
+      let text = query;
+      let values;
+      if (typeof text === 'object') {
+        text = query.text;
+        values = query.values;
+      }
+      const res = await client.query(text, values);
+      results.push(res);
+    }
+    await client.query('COMMIT');
+  } catch (e) {
+    await client.query('ROLLBACK');
+    throw e;
+  } finally {
+    client.release();
+  }
+  return results;
+};
