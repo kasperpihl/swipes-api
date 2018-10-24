@@ -31,7 +31,6 @@ import 'src/react/global-styles/app.scss';
   platform: state.globals.get('platform'),
   status: state.connection.get('status'),
   hasConnected: state.connection.get('hasConnected'),
-  readyInOrg: state.connection.get('readyInOrg'),
 }))
 @hot(module)
 export default class extends PureComponent {
@@ -46,9 +45,8 @@ export default class extends PureComponent {
         path="/"
         exact
         render={() => {
-          const { readyInOrg } = this.props;
           const Comp = require('src/react/app/App').default;
-          return (readyInOrg && <Comp />) || null;
+          return <Comp />;
         }}
       />,
       <Route key="2" path="/notsupported" component={HOCNotSupported} />,

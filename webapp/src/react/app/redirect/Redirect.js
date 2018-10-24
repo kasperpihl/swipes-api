@@ -7,7 +7,6 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 @withRouter
 @connect(
   state => ({
-    hasOrg: !!state.me.getIn(['organizations', 0]),
     isHydrated: state.main.get('isHydrated'),
     token: state.auth.get('token'),
     hasConnected: state.connection.get('hasConnected'),
@@ -33,7 +32,6 @@ export default class Redirect extends PureComponent {
       token,
       isHydrated,
       setUrl,
-      hasOrg,
       isBrowserSupported,
       hasConnected,
     } = this.props;
@@ -45,7 +43,7 @@ export default class Redirect extends PureComponent {
     const path = location.pathname;
 
     if (isHydrated && !token) {
-      if (['/', '/welcome', '/invite', '/notsupported'].indexOf(path) > -1) {
+      if (['/', '/invite', '/notsupported'].indexOf(path) > -1) {
         setUrl('/login');
       }
     }
@@ -56,17 +54,8 @@ export default class Redirect extends PureComponent {
       if (path === '/notsupported' && isBrowserSupported) {
         setUrl('/');
       }
-      if (path === '/' && !hasOrg) {
-        setUrl('/welcome');
-      } else if (path === '/' && !isBrowserSupported) {
+      if (path === '/' && !isBrowserSupported) {
         setUrl('/notsupported');
-      }
-      if (path === '/welcome' && hasOrg) {
-        if (isBrowserSupported) {
-          setUrl('/');
-        } else {
-          setUrl('/notsupported');
-        }
       }
     }
   }

@@ -124,7 +124,6 @@ export default class IpcListener {
           navForContext(fromJS(notification.target))
         )
       );
-      this.store.dispatch(ca.notifications.mark([notification.id]));
       const remWin = remote.getCurrentWindow();
       remWin.focus();
     };

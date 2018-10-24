@@ -9,13 +9,15 @@ import { Map } from 'immutable';
 import CompatibleLogin from './CompatibleLogin';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
 
-@connect(null, {
-  inputMenu: menuActions.input,
-  alert: menuActions.alert,
-  request: ca.api.request,
-  setUrl: navigationActions.url,
-})
-
+@connect(
+  null,
+  {
+    inputMenu: menuActions.input,
+    alert: menuActions.alert,
+    request: ca.api.request,
+    setUrl: navigationActions.url,
+  }
+)
 export default class extends PureComponent {
   constructor(props) {
     super(props);
@@ -38,10 +40,10 @@ export default class extends PureComponent {
 
     this.setLoading('signInButton');
 
-    request('users.signin', {
+    request('user.signin', {
       email: formData.get('email'),
-      password: formData.get('password')
-    }).then((res) => {
+      password: formData.get('password'),
+    }).then(res => {
       if (!res.ok) {
         let label = '!Something went wrong :/';
 
@@ -49,7 +51,11 @@ export default class extends PureComponent {
           label = '!' + res.error.message;
 
           if (label.startsWith('!body /users.signin: Invalid object[')) {
-            let invalidProp = label.split('[')[1].split(']')[0].replace('\'', '').replace('\'', '');
+            let invalidProp = label
+              .split('[')[1]
+              .split(']')[0]
+              .replace("'", '')
+              .replace("'", '');
 
             label = `!Not a valid ${invalidProp}`;
           }
@@ -69,24 +75,27 @@ export default class extends PureComponent {
     const { formData } = this.state;
 
     const options = { boundingRect: e.target.getBoundingClientRect() };
-    inputMenu({
-      ...options,
-      placeholder: 'Enter your email',
-      text: formData.get('email'),
-      buttonLabel: 'Reset',
-    }, (resetEmail) => {
-      if (resetEmail && resetEmail.length) {
-        request('me.sendResetEmail', {
-          email: resetEmail,
-        }).then((res) => {
-          alert({
-            ...options,
-            title: 'Reset password',
-            message: 'We will send you an email to change your password.',
+    inputMenu(
+      {
+        ...options,
+        placeholder: 'Enter your email',
+        text: formData.get('email'),
+        buttonLabel: 'Reset',
+      },
+      resetEmail => {
+        if (resetEmail && resetEmail.length) {
+          request('me.sendResetEmail', {
+            email: resetEmail,
+          }).then(res => {
+            alert({
+              ...options,
+              title: 'Reset password',
+              message: 'We will send you an email to change your password.',
+            });
           });
-        });
+        }
       }
-    });
+    );
 
     return false;
   }

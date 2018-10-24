@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import { setupCachedCallback } from 'react-delegate';
-import HOCNotificationList from 'src/react/views/Notification/List/HOCNotificationList';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Sidebar.swiss';
@@ -12,7 +11,6 @@ import { SwissProvider } from 'swiss-react';
   state => ({
     me: state.me,
     navId: state.navigation.getIn(['primary', 'id']),
-    notificationCounter: state.connection.get('notificationCounter'),
     counter: state.counter,
   }),
   {
@@ -41,10 +39,6 @@ export default class Sidebar extends PureComponent {
     if (e.which === 2 || e.which === 4) {
       target = 'secondary';
     }
-    if (id === 'NotificationList') {
-      this.openNotifications(e);
-      return;
-    }
 
     navSet(target, {
       id,
@@ -72,59 +66,23 @@ export default class Sidebar extends PureComponent {
         return 'Take Action';
       case 'AccountList':
         return 'Account';
-      case 'NotificationList':
-        return 'Notifications';
       default:
         return id;
     }
   }
-  getRemainingOnboarding() {
-    const { me } = this.props;
-    const order = me.getIn(['settings', 'onboarding', 'order']);
-    const completed = me.getIn(['settings', 'onboarding', 'completed']);
-    return order.filter(id => !completed.get(id)).size;
-  }
-  openNotifications(e) {
-    const { contextMenu } = this.props;
-    const options = {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignY: 'top',
-      alignX: 'left',
-      excludeX: true,
-      positionX: 12,
-    };
-    this.setState({ isOpenNotifications: true });
-    contextMenu({
-      component: HOCNotificationList,
-      onClose: () => {
-        this.setState({ isOpenNotifications: false });
-      },
-      options,
-    });
-  }
+
   renderItem(item) {
-    const { navId, notificationCounter, counter } = this.props;
-    const { isOpenNotifications: isOpen } = this.state;
+    const { navId, counter } = this.props;
 
     let count = 0;
-    if (item.id === 'Onboarding') {
-      count = this.getRemainingOnboarding();
-    } else if (item.id === 'NotificationList') {
-      count = notificationCounter;
-    } else if (item.id === 'Discuss') {
+    if (item.id === 'Discuss') {
       count = (counter && counter.get('discussion').size) || 0;
     }
     if (count > 9) {
       count = '9+';
     }
 
-    let active = null;
-    if (
-      (isOpen && item.id === 'Notifications') ||
-      (!isOpen && item.id === navId)
-    ) {
-      active = true;
-    }
+    const active = item.id === navId;
 
     return (
       <SwissProvider active={active} key={item.id}>
@@ -176,12 +134,7 @@ export default class Sidebar extends PureComponent {
   render() {
     return (
       <SW.Wrapper>
-        <SW.TopSection>
-          {this.renderItem({ id: 'NotificationList', svg: 'Notification' })}
-          {this.getRemainingOnboarding()
-            ? this.renderItem({ id: 'Onboarding', svg: 'Onboarding' })
-            : null}
-        </SW.TopSection>
+        <SW.TopSection />
         <SW.MiddleSection>
           <SW.Section>{this.renderMiddleSection()}</SW.Section>
         </SW.MiddleSection>

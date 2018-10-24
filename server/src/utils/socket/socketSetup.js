@@ -13,7 +13,8 @@ export default server => {
     let userId;
     const decodedToken = token && parseToken(token);
     if (decodedToken) {
-      userId = decodedToken.content.iss;
+      console.log(decodedToken);
+      userId = decodedToken.tokenContent.iss;
     }
     console.log(userId);
 

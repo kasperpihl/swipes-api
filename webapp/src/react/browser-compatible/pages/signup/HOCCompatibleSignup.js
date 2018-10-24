@@ -13,7 +13,6 @@ import CompatibleCard from 'compatible/components/card/CompatibleCard';
   }),
   {
     request: ca.api.request,
-    signup: ca.users.signup,
     setUrl: navigationActions.url,
   }
 )
@@ -62,14 +61,14 @@ export default class extends PureComponent {
   }
   onSignup() {
     const { formData, invitationToken, me } = this.state;
-    const { signup, createOrgRequest, setUrl } = this.props;
+    const { request, createOrgRequest, setUrl } = this.props;
 
     if (this.isLoading('signupButton')) {
       return;
     }
 
     this.setLoading('signupButton');
-    signup({
+    request('user.signup', {
       first_name: formData.get('firstName'),
       last_name: formData.get('lastName'),
       email: formData.get('email'),

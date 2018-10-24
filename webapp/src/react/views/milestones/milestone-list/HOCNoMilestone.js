@@ -14,7 +14,6 @@ export default class extends PureComponent {
     super(props);
     this.state = {};
     this.onClick = this.onClick.bind(this);
-    // setupLoading(this);
   }
   onClick() {
     const { navPush } = this.props;
@@ -24,7 +23,6 @@ export default class extends PureComponent {
     });
   }
   renderHeader() {
-
     return (
       <div className="header">
         <div className="header__left">
@@ -34,7 +32,7 @@ export default class extends PureComponent {
           <Icon icon="ArrowRightLong" className="header__svg" />
         </div>
       </div>
-    )
+    );
   }
   renderBody() {
     const { counter } = this.props;
@@ -47,7 +45,7 @@ export default class extends PureComponent {
           <div className="no-milestone-item__dot" />
         </div>
       </div>
-    )
+    );
   }
   render() {
     const { counter } = this.props;

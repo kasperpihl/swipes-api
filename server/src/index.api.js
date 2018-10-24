@@ -17,7 +17,6 @@ import errorSwipes from 'src/middlewares/error/errorSwipes';
 import errorHandler from 'src/middlewares/error/errorHandler';
 import * as routes from 'src/_legacy-api/routes';
 import endpoints from 'src/endpoints/endpoints';
-import websocketStart from './websocket';
 
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
@@ -73,9 +72,6 @@ app.use(errorSwipes);
 app.use(errorHandler);
 
 const server = http.createServer(app);
-
-// start websocket server
-websocketStart(server);
 
 // start api rest server
 server.listen(port);
