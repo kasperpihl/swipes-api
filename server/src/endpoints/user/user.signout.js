@@ -1,10 +1,7 @@
-import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import db from 'src/utils/db/db';
 
-const expectedInput = {
-  user_id: string.require()
-};
+const expectedInput = {};
 
 export default endpointCreate(
   {
@@ -12,13 +9,12 @@ export default endpointCreate(
     expectedInput
   },
   async (req, res, next) => {
-    const { dbToken } = res.locals;
-    const { user_id } = res.locals.input;
+    const { user_id, token } = res.locals;
 
     // Revoke user's token
     await db('UPDATE tokens SET revoked=true WHERE user_id=$1 AND token=$2', [
       user_id,
-      dbToken
+      token
     ]);
 
     // Create response data.

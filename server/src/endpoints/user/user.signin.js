@@ -3,7 +3,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import db from 'src/utils/db/db';
 import getClientIp from 'src/utils/getClientIp';
-import createTokens from 'src/utils/auth/createTokens';
+import createToken from 'src/utils/auth/createToken';
 
 const expectedInput = {
   email: string.format('email').require(),
@@ -45,18 +45,18 @@ export default endpointCreate(
     };
 
     // Creating the actual tokens
-    const tokens = createTokens({
+    const token = createToken({
       iss: user.id
     });
 
     await db(
       'INSERT INTO tokens (timestamp, token, user_id, info, revoked) VALUES ($1, $2, $3, $4, $5)',
-      [new Date(), tokens.token, user.id, tokenInfo, false]
+      [new Date(), token, user.id, tokenInfo, false]
     );
 
     // Create response data.
     res.locals.output = {
-      token: tokens.shortToken
+      token
     };
   }
 ).background(async (req, res) => {});

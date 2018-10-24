@@ -1,6 +1,6 @@
 import url from 'url';
 import ws from 'ws';
-import authDecodeToken from 'src/utils/auth/authDecodeToken';
+import parseToken from 'src/utils/auth/parseToken';
 import socketPongInterval from 'src/utils/socket/socketPongInterval';
 
 import redis from 'redis';
@@ -11,7 +11,7 @@ export default server => {
     const parsedUrl = url.parse(req.url, true);
     const { token } = parsedUrl.query;
     let userId;
-    const decodedToken = token && authDecodeToken(token);
+    const decodedToken = token && parseToken(token);
     if (decodedToken) {
       userId = decodedToken.content.iss;
     }

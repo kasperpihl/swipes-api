@@ -69,10 +69,9 @@
   "webhooksHost": "https://swipesdev.ngrok.io/",
   "apiPort": 5000,
   "queuePort": 6000,
-  "clientPort" :3000,
+  "clientPort": 3000,
   "protocol": "http://",
   "cors": "*",
   "jwtTokenSecret": "swipy the dinocat",
-  "env": "dev",
-  "jwtTokenHead": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
+  "env": "dev"
 }
