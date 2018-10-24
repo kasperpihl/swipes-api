@@ -15,7 +15,6 @@ export default token => {
       tokenContent
     };
   } catch (err) {
-    console.log(err);
     return null;
   }
 };
