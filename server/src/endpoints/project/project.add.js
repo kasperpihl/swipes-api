@@ -10,8 +10,13 @@ export default endpointCreate(
     expectedInput
   },
   async (req, res, next) => {
+    const { user_id } = res.locals;
+
     // Add new project
-    await db('INSERT INTO projects (id) VALUES ($1)', [idGenerate('P')]);
+    await db('INSERT INTO projects (id, created_by) VALUES ($1, $2)', [
+      idGenerate('P'),
+      user_id
+    ]);
 
     // Create response data.
     res.locals.output = {};
