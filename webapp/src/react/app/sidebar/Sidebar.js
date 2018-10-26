@@ -48,7 +48,6 @@ export default class Sidebar extends PureComponent {
   getNavItems() {
     return [
       { id: 'ProjectOverview', svg: 'Milestones' },
-      { id: 'PlanCreate', svg: 'Goals' },
       { id: 'Discuss', svg: 'Messages' },
     ].filter(v => !!v);
   }
@@ -56,14 +55,6 @@ export default class Sidebar extends PureComponent {
     switch (id) {
       case 'ProjectOverview':
         return 'Organize';
-      case 'PlanCreate':
-        return 'Plan';
-      case 'PostFeed':
-        return 'Discuss';
-      case 'PlanList':
-        return 'Plan';
-      case 'TakeAction':
-        return 'Take Action';
       case 'AccountList':
         return 'Account';
       default:
@@ -138,10 +129,7 @@ export default class Sidebar extends PureComponent {
         <SW.MiddleSection>
           <SW.Section>{this.renderMiddleSection()}</SW.Section>
         </SW.MiddleSection>
-        <SW.BottomSection>
-          {this.renderItem({ id: 'Search', svg: 'Search' })}
-          {this.renderProfile()}
-        </SW.BottomSection>
+        <SW.BottomSection>{this.renderProfile()}</SW.BottomSection>
       </SW.Wrapper>
     );
   }
