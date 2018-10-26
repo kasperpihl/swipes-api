@@ -13,10 +13,8 @@ export default server => {
     let userId;
     const decodedToken = token && parseToken(token);
     if (decodedToken) {
-      console.log(decodedToken);
       userId = decodedToken.tokenContent.iss;
     }
-    console.log(userId);
 
     const redisOptions = {};
     if (process.env.REDIS_URL) {
@@ -37,10 +35,13 @@ export default server => {
           socket.terminate();
         }
       } else {
-        console.log('mes', action);
         socket.send(JSON.stringify(action), e => e && socket.terminate());
       }
     });
+    socket.send(
+      JSON.stringify({ type: 'hello' }),
+      e => e && socket.terminate()
+    );
     // When the socket closes, make sure to close connection to redis
     socket.on('close', err => {
       redisClient.unsubscribe();

@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 import { bool, string, object } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
-import db from 'src/utils/db/db';
+import { query } from 'src/utils/db/db';
 import sofiCreate from 'src/utils/sofiCreate';
 
 const defTs = new Date(1970, 1, 1).toISOString();
@@ -29,7 +29,7 @@ export default endpointCreate(
 
     const full_fetch = timestamp.startsWith('1970');
 
-    const meRes = await db(`
+    const meRes = await query(`
       SELECT created_at, updated_at, id, email, profile, activated, settings from users WHERE id = '${user_id}'
     `);
 

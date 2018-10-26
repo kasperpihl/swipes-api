@@ -1,7 +1,7 @@
 import sha1 from 'sha1';
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
-import db from 'src/utils/db/db';
+import { query } from 'src/utils/db/db';
 import idGenerate from 'src/utils/idGenerate';
 import getClientIp from 'src/utils/getClientIp';
 import createToken from 'src/utils/auth/createToken';
@@ -33,7 +33,7 @@ export default endpointCreate(
     email = email.toLowerCase();
 
     // check if this user is available
-    const checkUserQ = await db(
+    const checkUserQ = await query(
       'SELECT email, activated FROM users WHERE email=$1',
       [email]
     );
@@ -58,13 +58,13 @@ export default endpointCreate(
       iss: userId
     });
 
-    await db(
+    await query(
       'INSERT INTO tokens (timestamp, token, user_id, info, revoked) VALUES ($1, $2, $3, $4, $5)',
       [new Date(), token, userId, tokenInfo, false]
     );
 
     // creating a new user from scratch
-    await db(
+    await query(
       `INSERT INTO users (id, email, profile, password, created_at, updated_at, activated) 
         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [userId, email, profile, passwordSha1, new Date(), new Date(), true]

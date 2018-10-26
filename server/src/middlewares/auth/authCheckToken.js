@@ -1,10 +1,10 @@
-import db from 'src/utils/db/db';
+import { query } from 'src/utils/db/db';
 
 export default async (req, res, next) => {
   const { user_id, token } = res.locals;
 
   // Check user token
-  const tokenQ = await db(
+  const tokenQ = await query(
     'SELECT token FROM tokens WHERE user_id=$1 AND token=$2 AND revoked=$3',
     [user_id, token, false]
   );
