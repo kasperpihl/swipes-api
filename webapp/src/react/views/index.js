@@ -8,7 +8,6 @@ import DiscussionComposer from './Discussion/Composer/DiscussionComposer';
 import DiscussionOverview from './Discussion/Overview/HOCDiscussionOverview';
 import Browser from './browser/Browser';
 import ProjectOverview from './Project/Overview/ProjectOverview';
-import PlanCreate from './Plan/Create/PlanCreate';
 import NotFound from './not-found/NotFound';
 import Previewer from './previewer/Previewer';
 import Search from './search/HOCSearch';
@@ -23,7 +22,6 @@ export {
   DiscussionComposer,
   DiscussionOverview,
   NotFound,
-  PlanCreate,
   Previewer,
   Profile,
   ProjectOverview,
