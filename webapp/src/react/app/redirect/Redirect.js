@@ -10,7 +10,6 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
     isHydrated: state.main.get('isHydrated'),
     token: state.auth.get('token'),
     hasConnected: state.connection.get('hasConnected'),
-    isBrowserSupported: state.globals.get('isBrowserSupported'),
     goToUrl: state.navigation.get('url'),
   }),
   {
@@ -27,14 +26,7 @@ export default class Redirect extends PureComponent {
   checkRedirects() {
     // Reset if any
     const { location } = this.props;
-    const {
-      goToUrl,
-      token,
-      isHydrated,
-      setUrl,
-      isBrowserSupported,
-      hasConnected,
-    } = this.props;
+    const { goToUrl, token, isHydrated, setUrl, hasConnected } = this.props;
 
     if (goToUrl && location.pathname === (goToUrl.to.pathname || goToUrl.to)) {
       setUrl(null);
@@ -43,19 +35,13 @@ export default class Redirect extends PureComponent {
     const path = location.pathname;
 
     if (isHydrated && !token) {
-      if (['/', '/invite', '/notsupported'].indexOf(path) > -1) {
+      if (['/'].indexOf(path) > -1) {
         setUrl('/login');
       }
     }
     if (isHydrated && hasConnected) {
       if (['/login', '/register'].indexOf(path) > -1) {
         setUrl('/');
-      }
-      if (path === '/notsupported' && isBrowserSupported) {
-        setUrl('/');
-      }
-      if (path === '/' && !isBrowserSupported) {
-        setUrl('/notsupported');
       }
     }
   }
