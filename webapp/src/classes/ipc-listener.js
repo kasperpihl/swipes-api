@@ -48,7 +48,7 @@ export default class IpcListener {
         );
       });
       remWin.on('clear', () => {
-        localForage.clear();
+        localStorage.clear();
       });
       remWin.on('unmaximize', () => {
         store.dispatch(mainActions.setMaximized(false));

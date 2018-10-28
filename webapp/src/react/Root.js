@@ -6,7 +6,6 @@ import Unsubscribe from 'compatible/pages/unsubscribe/Unsubscribe';
 import HOCCompatibleLogin from 'compatible/pages/login/HOCCompatibleLogin';
 import HOCCompatibleSignup from 'compatible/pages/signup/HOCCompatibleSignup';
 import CompatibleConfirm from 'compatible/pages/confirm/CompatibleConfirm';
-import HOCNotSupported from 'compatible/pages/not-supported/HOCNotSupported';
 import SwipesLoader from 'src/react/components/loaders/SwipesLoader';
 import Redirect from 'src/react/app/redirect/Redirect';
 import HOCAutoCompleting from 'src/react/app/auto-completing/HOCAutoCompleting';
@@ -45,7 +44,6 @@ export default class extends PureComponent {
           return <Comp />;
         }}
       />,
-      <Route key="2" path="/notsupported" component={HOCNotSupported} />,
       <Route key="3" path="/unsubscribe" component={Unsubscribe} />,
       <Route key="6" path="/login" component={HOCCompatibleLogin} />,
       <Route key="7" path="/register" component={HOCCompatibleSignup} />,

@@ -9,7 +9,7 @@ import { SwissProvider } from '../../../../node_modules/swiss-react';
     me: state.me,
     subscribed: state.me.getIn(['organizations', 0, 'stripe_subscription_id']),
     organization: state.me.get('organizations'),
-    trial: state.me.get(['organizations', 0, 'trial']),
+    trial: state.me.getIn(['organizations', 0, 'trial']),
     isAccount: state.navigation.getIn(['primary', 'id']) === 'AccountList',
   }),
   {

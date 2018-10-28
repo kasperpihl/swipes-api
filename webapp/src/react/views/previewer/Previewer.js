@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-import { setupCachedCallback } from 'react-delegate';
+import { setupCachedCallback } from 'react-delegate';
 import Loader from 'components/loaders/Loader';
 import SWView from 'SWView';
 import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
@@ -13,15 +12,15 @@ import * as Files from './files';
 import SW from './Previewer.swiss';
 
 @navWrapper
-@connect(null, {
-  request: ca.api.request,
-  addAttachment: ca.attachments.add,
-  browser: mainActions.browser,
-})
-export default class extends PureComponent {
-  static contextTypes = {
-    target: PropTypes.string,
+@connect(
+  null,
+  {
+    request: ca.api.request,
+    addAttachment: ca.attachments.add,
+    browser: mainActions.browser,
   }
+)
+export default class extends PureComponent {
   static minWidth() {
     return 750;
   }
@@ -35,7 +34,7 @@ export default class extends PureComponent {
     super(props);
     this.state = this.getDefaultState();
     setupLoading(this);
-    if(props.preview) {
+    if (props.preview) {
       this.state.preview = props.preview.toJS();
       this.state.loading = false;
     } else {
@@ -59,7 +58,7 @@ export default class extends PureComponent {
     const button = buttons[i];
     if (button.url && !button.force_external) {
       browser(target, button.url);
-    } else if(button.url && button.force_external){
+    } else if (button.url && button.force_external) {
       window.open(button.url);
     }
     e.target.blur();
@@ -69,10 +68,10 @@ export default class extends PureComponent {
       fileLoading: false,
       fileError: true,
     });
-  }
+  };
   onFileLoaded = () => {
     this.setState({ fileLoading: false });
-  }
+  };
   getDefaultState() {
     return {
       loading: true,
@@ -107,7 +106,7 @@ export default class extends PureComponent {
       params = params.toJS();
       console.log('preview', params);
     }
-    request(endpoint, params).then((res) => {
+    request(endpoint, params).then(res => {
       if (this._unmounted) {
         return;
       }
@@ -134,9 +133,7 @@ export default class extends PureComponent {
     });
   }
   renderError() {
-    return (
-      <div>Some error happened :(</div>
-    );
+    return <div>Some error happened :(</div>;
   }
   renderNoPreview() {
     return (
@@ -157,20 +154,22 @@ export default class extends PureComponent {
     }
     return (
       <SW.LoaderWrapper>
-        <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
+        <Loader
+          center
+          text="Loading"
+          textStyle={{ color: '#333D59', marginTop: '9px' }}
+        />
       </SW.LoaderWrapper>
     );
   }
   renderHeader() {
-    const { title:propTitle } = this.props;
+    const { title: propTitle } = this.props;
     const { preview } = this.state;
     const { header } = preview || {};
     const { title, subtitle } = header || {};
 
     const renderedTitle = propTitle || title;
-    return (
-      <HOCHeaderTitle title={renderedTitle} subtitle={subtitle} />
-    );
+    return <HOCHeaderTitle title={renderedTitle} subtitle={subtitle} />;
   }
   renderFile(file) {
     const Comp = this.getComponentForFile(file);
@@ -226,10 +225,7 @@ export default class extends PureComponent {
   }
   render() {
     return (
-      <SWView
-        header={this.renderHeader()}
-        footer={this.renderFooter()}
-      >
+      <SWView header={this.renderHeader()} footer={this.renderFooter()}>
         {this.renderLoader()}
         {this.renderContent()}
       </SWView>
