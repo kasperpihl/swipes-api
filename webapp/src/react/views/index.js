@@ -10,7 +10,6 @@ import Browser from './browser/Browser';
 import ProjectOverview from './Project/Overview/ProjectOverview';
 import NotFound from './not-found/NotFound';
 import Previewer from './previewer/Previewer';
-import Search from './search/HOCSearch';
 import SideNote from './side-note/HOCSideNote';
 import Tester from './tester/Tester';
 
@@ -26,7 +25,6 @@ export {
   Profile,
   ProjectOverview,
   Organization,
-  Search,
   SideNote,
   Tester,
 };
