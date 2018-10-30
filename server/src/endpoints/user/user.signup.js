@@ -8,9 +8,7 @@ import createToken from 'src/utils/auth/createToken';
 
 const expectedInput = {
   email: string.format('email').require(),
-  password: string.min(1).require(),
-  first_name: string.max(32).require(),
-  last_name: string.max(32).require()
+  password: string.min(1).require()
 };
 
 export default endpointCreate(
@@ -20,11 +18,7 @@ export default endpointCreate(
     type: 'notAuthed'
   },
   async (req, res, next) => {
-    const { password, first_name, last_name } = res.locals.input;
-    const profile = {
-      first_name,
-      last_name
-    };
+    const { password } = res.locals.input;
     const passwordSha1 = sha1(password);
     let { email } = res.locals.input;
     let userId;
@@ -65,9 +59,9 @@ export default endpointCreate(
 
     // creating a new user from scratch
     await query(
-      `INSERT INTO users (id, email, profile, password, created_at, updated_at, activated) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [userId, email, profile, passwordSha1, new Date(), new Date(), true]
+      `INSERT INTO users (id, email, password, created_at, updated_at, activated) 
+        VALUES ($1, $2, $3, $4, $5, $6)`,
+      [userId, email, passwordSha1, new Date(), new Date(), true]
     );
 
     // Create response data.
