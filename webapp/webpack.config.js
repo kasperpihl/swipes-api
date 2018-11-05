@@ -14,10 +14,10 @@ module.exports = {
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name: 'common',
-          chunks: 'all',
-        },
-      },
-    },
+          chunks: 'all'
+        }
+      }
+    }
   },
   resolve: {
     modules: [path.join(__dirname, 'node_modules')],
@@ -37,38 +37,38 @@ module.exports = {
       icons: path.resolve(__dirname, 'src/react/icons'),
       actions: path.resolve(__dirname, 'src/actions'),
       Icon: path.resolve(__dirname, 'src/react/icons/Icon'),
-      SWView: path.resolve(__dirname, 'src/react/app/view-controller/SWView'),
+      SWView: path.resolve(__dirname, 'src/react/app/view-controller/SWView')
     },
-    extensions: ['.js', '.scss'],
+    extensions: ['.js', '.scss']
   },
   entry: {
     app: './src/index',
     note: './src/react/pages/external-note-view/ExternalNoteView',
-    reset: './src/react/pages/reset/Reset',
+    reset: './src/react/pages/reset/Reset'
     // vendor: Object.keys(require("./package.json").dependencies),
   },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: isProd ? 'js/[name].[chunkhash:8].js' : 'js/[name].[hash:8].js',
     chunkFilename: 'js/[name].[chunkhash:8].js',
-    publicPath: '/',
+    publicPath: '/'
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'statics/page.html',
       chunks: ['reset', 'common'],
-      filename: 'reset.html',
+      filename: 'reset.html'
     }),
     new HtmlWebpackPlugin({
       template: 'statics/page.html',
       chunks: ['note', 'common'],
-      filename: 'note.html',
+      filename: 'note.html'
     }),
     new HtmlWebpackPlugin({
       template: 'statics/index.html',
-      chunks: ['app', 'common'],
+      chunks: ['app', 'common']
     }),
-    !isProd ? new webpack.HotModuleReplacementPlugin() : null,
+    !isProd ? new webpack.HotModuleReplacementPlugin() : null
   ].filter(v => !!v),
   module: {
     rules: [
@@ -76,13 +76,13 @@ module.exports = {
         test: /\.js$/,
         use: [
           {
-            loader: 'babel-loader',
-          },
+            loader: 'babel-loader'
+          }
         ],
         include: [
           path.join(__dirname, 'src'),
-          path.resolve(__dirname, '../mobile/swipes-core-js'),
-        ],
+          path.resolve(__dirname, '../../workspace-mobile')
+        ]
       },
       {
         test: /\.svg(\?.*)?$/,
@@ -91,10 +91,10 @@ module.exports = {
           {
             loader: 'react-svg-loader',
             options: {
-              jsx: true,
-            },
-          },
-        ],
+              jsx: true
+            }
+          }
+        ]
       },
       {
         test: /\.(woff)$/,
@@ -102,10 +102,10 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 65000,
-            },
-          },
-        ],
+              limit: 65000
+            }
+          }
+        ]
       },
       {
         test: /\.(png|jpg|jpeg|gif)?$/,
@@ -114,10 +114,10 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 50000,
-              name: 'img/[name]-[hash:6].[ext]',
-            },
-          },
-        ],
+              name: 'img/[name]-[hash:6].[ext]'
+            }
+          }
+        ]
       },
       {
         test: /\.scss$/,
@@ -128,16 +128,16 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              outputStyle: 'expanded',
-            },
-          },
-        ],
+              outputStyle: 'expanded'
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
-      },
-    ],
+        use: ['style-loader', 'css-loader', 'postcss-loader']
+      }
+    ]
   },
   devServer: {
     publicPath: '/',
@@ -150,9 +150,9 @@ module.exports = {
       '/v1/**': {
         target: 'http://localhost:5000',
         secure: false,
-        xfwd: false,
-      },
+        xfwd: false
+      }
     },
-    historyApiFallback: true,
-  },
+    historyApiFallback: true
+  }
 };
