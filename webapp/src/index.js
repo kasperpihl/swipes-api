@@ -14,25 +14,32 @@ import configureStore from 'src/redux/configureStore';
 import Analytics from 'src/classes/analytics';
 import IpcListener from 'src/classes/ipc-listener';
 
+import { setStore } from 'swipes-core-js/utils/store/storeGet';
 import Socket from 'swipes-core-js/classes/Socket';
+
+// Init core!
+const { store, persistor } = configureStore({
+  global: getGlobals()
+});
+
+setStore(store); // Make store accessible from core
+window.socket = new Socket(store);
+// END Init core
+
 import Root from './react/Root';
 
 import './swiss';
 
-const { store, persistor } = configureStore({
-  globals: getGlobals(),
-});
 if (process.env.NODE_ENV !== 'production') {
   window.openTester = () => {
     store.dispatch({
-      type: 'DEV_OPEN_TESTER',
+      type: 'DEV_OPEN_TESTER'
     });
   };
 }
 
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
-window.socket = new Socket(store);
 
 render(
   <Provider store={store}>

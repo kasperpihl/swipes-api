@@ -5,11 +5,11 @@ import * as navigationActions from '../navigation/navigationActions';
 
 export const setMaximized = toggle => ({
   type: types.SET_MAXIMIZED,
-  payload: { toggle },
+  payload: { toggle }
 });
 export const setFullscreen = toggle => ({
   type: types.SET_FULLSCREEN,
-  payload: { toggle },
+  payload: { toggle }
 });
 
 // ======================================================
@@ -32,8 +32,8 @@ export function subscribeToDrop(target, handler, title) {
     payload: {
       handler,
       target,
-      title,
-    },
+      title
+    }
   };
 }
 
@@ -42,8 +42,8 @@ export function unsubscribeFromDrop(target, handler) {
     type: types.UNSUBSCRIBE_FROM_DROP,
     payload: {
       target,
-      handler,
-    },
+      handler
+    }
   };
 }
 // ======================================================
@@ -64,7 +64,7 @@ export const contextMenu = payload => (dp, getState) => {
 // Browser
 // ======================================================
 export const browser = (from, url, onLoad) => (dp, getState) => {
-  if (!getState().globals.get('isElectron')) {
+  if (!getState().global.get('isElectron')) {
     return window.open(url);
   }
   return dp(
@@ -74,8 +74,8 @@ export const browser = (from, url, onLoad) => (dp, getState) => {
       title: 'Browser',
       props: {
         url,
-        onLoad,
-      },
+        onLoad
+      }
     })
   );
 };

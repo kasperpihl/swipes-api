@@ -11,11 +11,11 @@ import Assigning from './Assigning';
 @connect(
   state => ({
     myId: state.me.get('id'),
-    users: state.users,
+    users: state.users
   }),
   {
     tooltip: mainActions.tooltip,
-    selectAssignees: menuActions.selectAssignees,
+    selectAssignees: menuActions.selectAssignees
   }
 )
 export default class HOCAssigning extends PureComponent {
@@ -24,7 +24,7 @@ export default class HOCAssigning extends PureComponent {
     const assignees = List(props.assignees);
     this.state = {
       assignees,
-      filteredUsers: this.getUsersFromAssignees(props.users, assignees),
+      filteredUsers: this.getUsersFromAssignees(props.users, assignees)
     };
     setupDelegate(this, 'onAssigningClose');
   }
@@ -32,7 +32,7 @@ export default class HOCAssigning extends PureComponent {
     const assignees = List(nextProps.assignees);
     this.setState({
       assignees,
-      filteredUsers: this.getUsersFromAssignees(nextProps.users, assignees),
+      filteredUsers: this.getUsersFromAssignees(nextProps.users, assignees)
     });
   }
   getUsersFromAssignees(users, assignees) {
@@ -61,7 +61,7 @@ export default class HOCAssigning extends PureComponent {
       alignX: 'right',
       onClose: () => {
         this.onAssigningClose(overrideAssignees && List(overrideAssignees));
-      },
+      }
     };
     selectAssignees(options, assignees.toJS(), newAssignees => {
       if (newAssignees) {

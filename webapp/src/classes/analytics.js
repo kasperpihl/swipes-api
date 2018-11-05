@@ -5,13 +5,13 @@ const blockedMixpanelEvents = [];
 
 export default class Analytics {
   constructor(store) {
-    this.enable = !store.getState().globals.get('isDev');
+    this.enable = !store.getState().global.get('isDev');
     // this.enable = true; // for testing on dev. turn off when done.
     if (this.enable) {
       // amplitude.getInstance().init("fea8942630d7141403673df1c646ecc7");
       mixpanel.init('a1b6f31fc988c7e4a7f40c267e315f5d');
       Intercom('boot', {
-        app_id: 'q8xibmac',
+        app_id: 'q8xibmac'
       });
     }
     this.store = store;
@@ -29,7 +29,7 @@ export default class Analytics {
       _Client: isElectron ? 'Electron' : 'Web',
       '_Web version': version,
       _Platform: platform,
-      Organization: this.orgId || 'No org',
+      Organization: this.orgId || 'No org'
     };
     if (electronVersion) {
       defs['_Electron version'] = electronVersion;
@@ -67,7 +67,7 @@ export default class Analytics {
           'Is paying': msgGen.me.isPaying(),
           user_id: me.get('id'),
           email: msgGen.users.getEmail(me),
-          created_at: me.get('created_at'),
+          created_at: me.get('created_at')
         };
         const org = me.getIn(['organizations', 0]);
 
@@ -75,7 +75,7 @@ export default class Analytics {
           intercomObj.company = {
             id: org.get('id'),
             name: org.get('name'),
-            created_at: org.get('created_at'),
+            created_at: org.get('created_at')
           };
         }
         Intercom('update', intercomObj);

@@ -10,7 +10,7 @@ export default class ProjectItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      isFocused: false,
+      isFocused: false
     };
   }
   componentDidMount() {
@@ -114,7 +114,7 @@ export default class ProjectItem extends PureComponent {
               <SW.AssigneeWrapper
                 hide={!item.get('assignees') || !item.get('assignees').size}
               >
-                <HOCAssigning
+                {/* <HOCAssigning
                   assignees={item.get('assignees')}
                   maxImages={5}
                   size={24}
@@ -123,7 +123,7 @@ export default class ProjectItem extends PureComponent {
                   buttonProps={{
                     compact: true,
                   }}
-                />
+                /> */}
               </SW.AssigneeWrapper>
             )}
           {!item.get('title') && (

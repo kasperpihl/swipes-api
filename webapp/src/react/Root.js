@@ -9,7 +9,7 @@ import CompatibleConfirm from 'compatible/pages/confirm/CompatibleConfirm';
 import SwipesLoader from 'src/react/components/loaders/SwipesLoader';
 import Redirect from 'src/react/app/redirect/Redirect';
 // import HOCAutoCompleting from 'src/react/app/auto-completing/HOCAutoCompleting';
-import Trial from 'src/react/app/trial/Trial';
+// import Trial from 'src/react/app/trial/Trial';
 import Tooltip from 'src/react/app/tooltip/Tooltip';
 import Topbar from 'src/react/app/topbar/Topbar';
 import ContextMenu from 'src/react/app/context-menu/ContextMenu';
@@ -23,9 +23,9 @@ import 'src/react/global-styles/app.scss';
   isHydrated: state.main.get('isHydrated'),
   isMaximized: state.main.get('isMaximized'),
   isFullscreen: state.main.get('isFullscreen'),
-  platform: state.globals.get('platform'),
+  platform: state.global.get('platform'),
   status: state.connection.get('status'),
-  lastConnect: state.connection.get('lastConnect'),
+  lastConnect: state.connection.get('lastConnect')
 }))
 @hot(module)
 export default class extends PureComponent {
@@ -47,7 +47,7 @@ export default class extends PureComponent {
       <Route key="3" path="/unsubscribe" component={Unsubscribe} />,
       <Route key="6" path="/login" component={HOCCompatibleLogin} />,
       <Route key="7" path="/register" component={HOCCompatibleSignup} />,
-      <Route key="10" path="/confirm" component={CompatibleConfirm} />,
+      <Route key="10" path="/confirm" component={CompatibleConfirm} />
     ];
   }
   render() {
@@ -68,7 +68,7 @@ export default class extends PureComponent {
           <Topbar />
           {this.renderRoutes()}
         </HOCDragAndDrop>
-        <Route path="/" component={Trial} />
+        {/* <Route path="/" component={Trial} /> */}
       </div>
     );
   }

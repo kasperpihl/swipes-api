@@ -11,18 +11,18 @@ import { SwissProvider } from 'swiss-react';
   state => ({
     me: state.me,
     navId: state.navigation.getIn(['primary', 'id']),
-    counter: state.counter,
+    counter: state.counter
   }),
   {
     navSet: navigationActions.set,
-    contextMenu: mainActions.contextMenu,
+    contextMenu: mainActions.contextMenu
   }
 )
 export default class Sidebar extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      isOpenNotifications: false,
+      isOpenNotifications: false
     };
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onRightClickCached = setupCachedCallback(this.onClick, this);
@@ -42,13 +42,13 @@ export default class Sidebar extends PureComponent {
 
     navSet(target, {
       id,
-      title: this.getTitleForId(id),
+      title: this.getTitleForId(id)
     });
   }
   getNavItems() {
     return [
       { id: 'ProjectOverview', svg: 'Milestones' },
-      { id: 'Discuss', svg: 'Messages' },
+      { id: 'Discuss', svg: 'Messages' }
     ].filter(v => !!v);
   }
   getTitleForId(id) {
@@ -88,9 +88,7 @@ export default class Sidebar extends PureComponent {
           <SW.Description className="description">
             {this.getTitleForId(item.id)}
           </SW.Description>
-          {item.id === 'AccountList' ? (
-            <HOCAssigning assignees={[item.personId]} size={30} />
-          ) : (
+          {item.id === 'AccountList' ? null : ( //<HOCAssigning assignees={[item.personId]} size={30} />
             <SW.Icon icon={item.svg} className="icon" />
           )}
           {count ? (

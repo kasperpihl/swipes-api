@@ -32,30 +32,30 @@ export const selectAssignees = (options, assignees, callback) => (
       subtitle: user.get('job_title'),
       rightIcon: {
         button: {
-          icon: 'Person',
-        },
-      },
+          icon: 'Person'
+        }
+      }
     };
     if (assignees.indexOf(user.get('id')) !== -1) {
       obj.selected = true;
       obj.rightIcon = {
         button: {
-          icon: 'Close',
-        },
+          icon: 'Close'
+        }
       };
     }
     const profilePic = msgGen.users.getPhoto(user);
     if (profilePic) {
       obj.leftIcon = {
-        src: profilePic,
+        src: profilePic
       };
     } else {
       obj.leftIcon = {
         initials: {
           color: 'white',
           backgroundColor: '#000C2F',
-          letters: msgGen.users.getInitials(user),
-        },
+          letters: msgGen.users.getInitials(user)
+        }
       };
     }
     return obj;
@@ -118,7 +118,7 @@ export const selectAssignees = (options, assignees, callback) => (
         return allUsers();
       }
       return [];
-    },
+    }
   };
   let initialTabIndex = 2;
   if (currentRecent.length) {
@@ -146,14 +146,14 @@ export const selectAssignees = (options, assignees, callback) => (
         search: 'Search for name or email',
         delegate,
         initialTabIndex,
-        ...options,
-      },
+        ...options
+      }
     })
   );
 };
 
 export const confirm = (options, callback) => (d, getState) => {
-  const isBrowserSupported = getState().globals.get('isBrowserSupported');
+  const isBrowserSupported = getState().global.get('isBrowserSupported');
   if (!isBrowserSupported) {
     const res = window.confirm(options.message || options.title);
     return callback(res ? 1 : 0);
@@ -171,14 +171,14 @@ export const confirm = (options, callback) => (d, getState) => {
           if (callback) {
             callback(i);
           }
-        },
-      },
+        }
+      }
     })
   );
 };
 
 export const alert = (options, callback) => (d, getState) => {
-  const isBrowserSupported = getState().globals.get('isBrowserSupported');
+  const isBrowserSupported = getState().global.get('isBrowserSupported');
   if (!isBrowserSupported) {
     return window.alert(options.message || options.title);
   }
@@ -195,14 +195,14 @@ export const alert = (options, callback) => (d, getState) => {
           if (callback) {
             callback(i);
           }
-        },
-      },
+        }
+      }
     })
   );
 };
 
 export const input = (options, callback) => (d, getState) => {
-  const isBrowserSupported = getState().globals.get('isBrowserSupported');
+  const isBrowserSupported = getState().global.get('isBrowserSupported');
   if (!isBrowserSupported) {
     const res = window.prompt(options.placeholder, options.text);
     return callback(res);
@@ -218,8 +218,8 @@ export const input = (options, callback) => (d, getState) => {
           if (callback) {
             callback(title);
           }
-        },
-      },
+        }
+      }
     })
   );
 };
@@ -231,27 +231,27 @@ export const chooseAttachmentType = options => (d, getState) =>
         id: 'note',
         title: 'New note',
         leftIcon: { icon: 'Note' },
-        subtitle: 'Create a note to share more details',
+        subtitle: 'Create a note to share more details'
       },
       {
         id: 'url',
         title: 'Add URL',
         leftIcon: { icon: 'Hyperlink' },
-        subtitle: 'Share links to useful information from the web',
+        subtitle: 'Share links to useful information from the web'
       },
       {
         id: 'upload',
         title: 'Upload a file',
         leftIcon: { icon: 'File' },
-        subtitle: 'Add documents, presentations or photos.',
-      },
+        subtitle: 'Add documents, presentations or photos.'
+      }
     ];
 
     const delegate = {
       onItemAction: item => {
         d(mainActions.contextMenu(null));
         resolve(item);
-      },
+      }
     };
     d(
       mainActions.contextMenu({
@@ -260,8 +260,8 @@ export const chooseAttachmentType = options => (d, getState) =>
         props: {
           ...options,
           delegate,
-          items,
-        },
+          items
+        }
       })
     );
   });
@@ -279,7 +279,7 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) =>
             id: 'primary',
             title: `Attach to: ${primary.get(0).title}`,
             subtitle: secCardActive ? 'Left side' : null,
-            leftIcon: { icon: secCardActive ? 'CardLeft' : 'CardSingle' },
+            leftIcon: { icon: secCardActive ? 'CardLeft' : 'CardSingle' }
           }
         : null,
       secondary.size
@@ -287,14 +287,14 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) =>
             id: 'secondary',
             title: `Attach to: ${secondary.get(0).title}`,
             subtitle: 'Right side',
-            leftIcon: { icon: 'CardRight' },
+            leftIcon: { icon: 'CardRight' }
           }
         : null,
       {
         id: 'discussion',
         title: 'Start a discussion',
-        leftIcon: { icon: 'IconDiscuss' },
-      },
+        leftIcon: { icon: 'IconDiscuss' }
+      }
     ].filter(i => !!i);
 
     const delegate = {
@@ -310,14 +310,14 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) =>
           dispatch(
             navigationActions.set('primary', {
               id: 'Discuss',
-              title: 'Discuss',
+              title: 'Discuss'
             })
           );
           dispatch(
             mainActions.modal('primary', {
               component: 'DiscussionComposer',
               title: 'Create a discussion',
-              position: 'center',
+              position: 'center'
             })
           );
           setTimeout(() => {
@@ -330,7 +330,7 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) =>
           }, 1);
         }
         resolve(item);
-      },
+      }
     };
     dispatch(
       mainActions.contextMenu({
@@ -340,8 +340,8 @@ export const chooseDragAndDrop = (files, options) => (dispatch, getState) =>
         props: {
           ...options,
           delegate,
-          items,
-        },
+          items
+        }
       })
     );
   });

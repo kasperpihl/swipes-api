@@ -7,13 +7,13 @@ const MIN_WIDTH = 1000;
 const MIN_HEIGHT = 500;
 
 @connect(state => ({
-  isDev: state.globals.get('isDev'),
+  isDev: state.global.get('isDev')
 }))
 export default class ScreenSizeOverlay extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tooSmall: false,
+      tooSmall: false
     };
   }
   componentDidMount() {

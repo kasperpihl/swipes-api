@@ -8,8 +8,8 @@ import './topbar.scss';
 
 @connect(state => ({
   me: state.me,
-  isBrowserSupported: state.globals.get('isBrowserSupported'),
-  isElectron: state.globals.get('isElectron'),
+  isBrowserSupported: state.global.get('isBrowserSupported'),
+  isElectron: state.global.get('isElectron'),
   nextRetry: state.connection.get('nextRetry'),
   versionInfo: state.connection.get('versionInfo'),
   reconnectAttempt: state.connection.get('reconnectAttempt'),
