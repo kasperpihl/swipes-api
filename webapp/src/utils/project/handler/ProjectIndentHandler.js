@@ -2,7 +2,7 @@ import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
 import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
 import projectForceParentExpandedForItem from '../projectForceParentExpandedForItem';
 
-export default class PIndentHandler {
+export default class ProjectIndentHandler {
   constructor(stateManager, state) {
     this.stateManager = stateManager;
     this.state = state;
@@ -12,7 +12,7 @@ export default class PIndentHandler {
     order = order.map(item => item.set('expanded', item.get('indent') < depth));
     this.stateManager.update({
       sliderValue: depth,
-      order,
+      order
     });
   };
   indent = id => {
@@ -26,7 +26,7 @@ export default class PIndentHandler {
     // Use selectedId, cause if we force expand parent, selected index gets messed up
     this.stateManager.update({
       selectedId: id,
-      order: newOrder,
+      order: newOrder
     });
   };
   outdent = id => {
@@ -36,7 +36,7 @@ export default class PIndentHandler {
     let newOrder = projectIndentItemAndChildren(order, i, -1);
     newOrder = projectUpdateHasChildrenForItem(newOrder, i);
     this.stateManager.update({
-      order: newOrder,
+      order: newOrder
     });
   };
   // stateManager will set this, once an update happens.

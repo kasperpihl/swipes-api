@@ -1,4 +1,4 @@
-export default class PKeyHandler {
+export default class ProjectKeyHandler {
   constructor(stateManager, state) {
     this.stateManager = stateManager;
     this.state = state;

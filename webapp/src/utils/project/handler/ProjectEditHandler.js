@@ -3,7 +3,7 @@ import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
 import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
 import { fromJS } from 'immutable';
 
-export default class PEditHandler {
+export default class ProjectEditHandler {
   constructor(stateManager, state) {
     this.stateManager = stateManager;
     this.state = state;
@@ -53,7 +53,7 @@ export default class PEditHandler {
       itemsById,
       order,
       selectedIndex,
-      selectionStart,
+      selectionStart
     });
   };
   enter = e => {
@@ -75,7 +75,7 @@ export default class PEditHandler {
       fromJS({
         id: newId,
         title: nextTitle,
-        type: 'task',
+        type: 'task'
       })
     );
 
@@ -94,7 +94,7 @@ export default class PEditHandler {
       nextI,
       fromJS({
         id: newId,
-        indent: newIndent,
+        indent: newIndent
       })
     );
     order = projectUpdateHasChildrenForItem(order, i + 1);
@@ -102,7 +102,7 @@ export default class PEditHandler {
       itemsById,
       order,
       selectedIndex: selectedIndex + 1,
-      selectionStart: 0,
+      selectionStart: 0
     });
   };
   add = () => {
@@ -113,20 +113,20 @@ export default class PEditHandler {
       fromJS({
         id: newId,
         title: '',
-        type: 'task',
+        type: 'task'
       })
     );
     order = order.push(
       fromJS({
         id: newId,
-        indent: 0,
+        indent: 0
       })
     );
 
     this.stateManager.update({
       itemsById,
       order,
-      selectedIndex: visibleOrder.size,
+      selectedIndex: visibleOrder.size
     });
   };
   // stateManager will set this, once an update happens.

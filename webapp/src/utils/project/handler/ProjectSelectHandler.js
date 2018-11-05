@@ -1,4 +1,4 @@
-export default class PSelectHandler {
+export default class ProjectSelectHandler {
   constructor(stateManager, state) {
     this.stateManager = stateManager;
     this.state = state;
@@ -10,7 +10,7 @@ export default class PSelectHandler {
     this.stateManager.update(
       {
         selectedIndex: nextIndex,
-        selectionStart: e.target.selectionStart,
+        selectionStart: e.target.selectionStart
       },
       false
     );
@@ -22,7 +22,7 @@ export default class PSelectHandler {
     this.stateManager.update(
       {
         selectedIndex: prevIndex,
-        selectionStart: e.target.selectionStart,
+        selectionStart: e.target.selectionStart
       },
       false
     );

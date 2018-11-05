@@ -1,4 +1,4 @@
-export default class PExpandHandler {
+export default class ProjectExpandHandler {
   constructor(stateManager, state) {
     this.stateManager = stateManager;
     this.state = state;
