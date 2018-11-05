@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-import * as ca from 'swipes-core-js/actions';
+import request from 'swipes-core-js/utils/request';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
 import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
@@ -12,7 +12,6 @@ import CompatibleCard from 'compatible/components/card/CompatibleCard';
     token: state.auth.get('token'),
   }),
   {
-    request: ca.api.request,
     setUrl: navigationActions.url,
   }
 )
@@ -61,7 +60,7 @@ export default class extends PureComponent {
   }
   onSignup() {
     const { formData, invitationToken, me } = this.state;
-    const { request, createOrgRequest, setUrl } = this.props;
+    const { createOrgRequest, setUrl } = this.props;
 
     if (this.isLoading('signupButton')) {
       return;

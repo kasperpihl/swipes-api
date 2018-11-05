@@ -8,7 +8,7 @@ import HOCCompatibleSignup from 'compatible/pages/signup/HOCCompatibleSignup';
 import CompatibleConfirm from 'compatible/pages/confirm/CompatibleConfirm';
 import SwipesLoader from 'src/react/components/loaders/SwipesLoader';
 import Redirect from 'src/react/app/redirect/Redirect';
-import HOCAutoCompleting from 'src/react/app/auto-completing/HOCAutoCompleting';
+// import HOCAutoCompleting from 'src/react/app/auto-completing/HOCAutoCompleting';
 import Trial from 'src/react/app/trial/Trial';
 import Tooltip from 'src/react/app/tooltip/Tooltip';
 import Topbar from 'src/react/app/topbar/Topbar';
@@ -25,13 +25,13 @@ import 'src/react/global-styles/app.scss';
   isFullscreen: state.main.get('isFullscreen'),
   platform: state.globals.get('platform'),
   status: state.connection.get('status'),
-  hasConnected: state.connection.get('hasConnected'),
+  lastConnect: state.connection.get('lastConnect'),
 }))
 @hot(module)
 export default class extends PureComponent {
   renderRoutes() {
-    const { status, hasConnected, isHydrated } = this.props;
-    if (!isHydrated || (!hasConnected && status === 'connecting')) {
+    const { status, lastConnect, isHydrated } = this.props;
+    if (!isHydrated || (!lastConnect && status === 'connecting')) {
       return <SwipesLoader center text="Loading" size={90} />;
     }
     return [
@@ -62,7 +62,7 @@ export default class extends PureComponent {
         <Redirect />
         <Gradient />
         <ContextMenu />
-        <HOCAutoCompleting />
+        {/* <HOCAutoCompleting /> */}
         <Tooltip />
         <HOCDragAndDrop>
           <Topbar />

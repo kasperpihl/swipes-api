@@ -16,7 +16,6 @@ import SW from './Previewer.swiss';
   null,
   {
     request: ca.api.request,
-    addAttachment: ca.attachments.add,
     browser: mainActions.browser,
   }
 )

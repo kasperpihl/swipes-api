@@ -14,8 +14,7 @@ import configureStore from 'src/redux/configureStore';
 import Analytics from 'src/classes/analytics';
 import IpcListener from 'src/classes/ipc-listener';
 
-import { init } from 'swipes-core-js';
-import * as mainActions from 'src/redux/main/mainActions';
+import Socket from 'swipes-core-js/classes/Socket';
 import Root from './react/Root';
 
 import './swiss';
@@ -33,19 +32,12 @@ if (process.env.NODE_ENV !== 'production') {
 
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
-
-const delegate = {
-  forceLogout: () => {
-    store.dispatch(mainActions.forceLogout);
-  },
-  sendEvent: analytics.sendEvent,
-};
-init(store, delegate);
+window.socket = new Socket(store);
 
 render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <BrowserRouter forceRefresh={false}>
+      <BrowserRouter>
         <OptimistProvider>
           <Root />
         </OptimistProvider>

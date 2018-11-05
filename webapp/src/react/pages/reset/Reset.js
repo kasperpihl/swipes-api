@@ -1,68 +1,69 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
-import apiRequest from 'swipes-core-js/utils/apiRequest';
+import request from 'swipes-core-js/utils/request';
 import Icon from 'Icon';
 import SW from './Reset.swiss';
 
 class Reset extends PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       newPass: '',
-    }
+    };
     setupLoading(this);
   }
   componentWillMount() {
     this.setLoading('verify');
-    apiRequest('me.verifyResetToken', {
-      token: getURLParameter('token')
-    }).then((res) => {
-      if(res && res.ok) {
+    request('me.verifyResetToken', {
+      token: getURLParameter('token'),
+    }).then(res => {
+      if (res && res.ok) {
         this.clearLoading('verify');
       } else {
-        this.clearLoading('verify',);
+        this.clearLoading('verify');
         this.clearLoading('reset', 'This token is no longer valid');
       }
-    })
+    });
   }
-  onKeyDown = (e) => {
-    if(e.keyCode === 13) {
+  onKeyDown = e => {
+    if (e.keyCode === 13) {
       this.onReset();
     }
-  }
+  };
   onReset = () => {
     const { newPass } = this.state;
-    if(!newPass.length) {
+    if (!newPass.length) {
       return;
     }
     this.setLoading('reset');
     apiRequest('me.resetPassword', {
       token: getURLParameter('token'),
       password: newPass,
-    }).then((res) => {
-      if(res && res.ok) {
-        this.clearLoading('reset', 'Your password has been reset. Try login again now.');
+    }).then(res => {
+      if (res && res.ok) {
+        this.clearLoading(
+          'reset',
+          'Your password has been reset. Try login again now.'
+        );
       } else {
         this.clearLoading('reset', 'Something went wrong');
       }
       console.log(res);
-    })
-  }
-  onChange = (e) => {
-    this.setState({newPass: e.target.value});
-  }
+    });
+  };
+  onChange = e => {
+    this.setState({ newPass: e.target.value });
+  };
   renderLoading() {
-    if(!this.isLoading('verify')){
+    if (!this.isLoading('verify')) {
       return undefined;
     }
-    return (
-      <SW.Loading className="loading">Loading</SW.Loading>
-    )
+    return <SW.Loading className="loading">Loading</SW.Loading>;
   }
   renderForm() {
     const success = this.getLoading('reset').success;
-    if(this.isLoading('verify') || success){
+    if (this.isLoading('verify') || success) {
       return undefined;
     }
     return (
@@ -71,7 +72,7 @@ class Reset extends PureComponent {
         {this.renderInputField()}
         {this.renderButton()}
       </SW.Form>
-    )
+    );
   }
   renderInputField() {
     const { newPass } = this.state;
@@ -88,27 +89,22 @@ class Reset extends PureComponent {
     );
   }
   renderButton() {
-
     return (
       <SW.Button className="button" ref="button" onClick={this.onReset}>
-        {
-          this.isLoading('reset') ? (
-            <Icon icon="loader" width="12" height="12" />
-          ) : (
-            'Reset'
-          )
-        }
+        {this.isLoading('reset') ? (
+          <Icon icon="loader" width="12" height="12" />
+        ) : (
+          'Reset'
+        )}
       </SW.Button>
-    )
+    );
   }
   renderSuccess() {
     const success = this.getLoading('reset').success;
-    if(!success) {
+    if (!success) {
       return undefined;
     }
-    return (
-      <div className="success">{success}</div>
-    )
+    return <div className="success">{success}</div>;
   }
 
   render() {
@@ -118,7 +114,7 @@ class Reset extends PureComponent {
         {this.renderForm()}
         {this.renderSuccess()}
       </SW.Wrapper>
-    )
+    );
   }
 }
 

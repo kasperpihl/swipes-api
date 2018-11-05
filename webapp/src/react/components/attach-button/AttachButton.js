@@ -2,8 +2,10 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as mainActions from 'src/redux/main/mainActions';
-import * as ca from 'swipes-core-js/actions';
+import * as fileActions from 'swipes-core-js/redux/file/fileActions';
+import * as noteActions from 'swipes-core-js/redux/note/noteActions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import request from 'swipes-core-js/utils/request';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button';
 import { fromJS } from 'immutable';
@@ -12,18 +14,20 @@ import SW from './AttachButton.swiss';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 @navWrapper
-@connect(state => ({
-  myId: state.me.get('id'),
-}), {
-  inputMenu: menuActions.input,
-  chooseAttachmentType: menuActions.chooseAttachmentType,
-  createLink: ca.links.create,
-  createNote: ca.notes.create,
-  createFile: ca.files.create,
-  subscribeToDrop: mainActions.subscribeToDrop,
-  unsubscribeFromDrop: mainActions.unsubscribeFromDrop,
-})
-
+@connect(
+  state => ({
+    myId: state.me.get('id'),
+  }),
+  {
+    inputMenu: menuActions.input,
+    chooseAttachmentType: menuActions.chooseAttachmentType,
+    // createLink: linkActions.create,
+    createNote: noteActions.create,
+    createFile: fileActions.create,
+    subscribeToDrop: mainActions.subscribeToDrop,
+    unsubscribeFromDrop: mainActions.unsubscribeFromDrop,
+  }
+)
 export default class extends PureComponent {
   constructor(props) {
     super(props);
@@ -37,7 +41,7 @@ export default class extends PureComponent {
 
   componentDidMount() {
     const { subscribeToDrop, target, dropTitle, noDragDrop } = this.props;
-    if(!noDragDrop) {
+    if (!noDragDrop) {
       subscribeToDrop(target, this.onDropFiles, dropTitle);
     }
   }
@@ -47,27 +51,31 @@ export default class extends PureComponent {
     unsubscribeFromDrop(target, this.onDropFiles);
   }
 
-  onChangeFiles = (e) => {
+  onChangeFiles = e => {
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
-  }
+  };
   onUploadFiles(files) {
     const { createFile } = this.props;
     this.setLoading('attach');
-    createFile(files).then((res) => {
+    createFile(files).then(res => {
       if (res.ok) {
-        this.createLinkFromTypeIdTitle('file', res.file.id, res.file.original_title);
+        this.createLinkFromTypeIdTitle(
+          'file',
+          res.file.id,
+          res.file.original_title
+        );
         this.setState({ fileVal: '' });
       } else {
         this.clearLoading('attach', '!Something went wrong');
       }
     });
   }
-  onChooseAttachment = (e) => {
+  onChooseAttachment = e => {
     const { chooseAttachmentType, inputMenu, createNote } = this.props;
     const options = this.getOptionsForE(e);
     options.onClose = this.onAttachButtonCloseOverlay;
-    chooseAttachmentType(options).then((item) => {
+    chooseAttachmentType(options).then(item => {
       if (item.id === 'upload') {
         this.hiddenInput.click();
         return;
@@ -78,13 +86,15 @@ export default class extends PureComponent {
       } else if (item.id === 'url') {
         options.placeholder = 'http://';
       }
-      inputMenu(options, (title) => {
+      inputMenu(options, title => {
         if (title && title.length) {
           this.setLoading('attach');
           if (item.id === 'url') {
             this.createLinkFromTypeIdTitle(item.id, title, title);
           } else {
-            createNote(convertToRaw(EditorState.createEmpty().getCurrentContent())).then((res) => {
+            createNote(
+              convertToRaw(EditorState.createEmpty().getCurrentContent())
+            ).then(res => {
               if (res && res.ok) {
                 this.createLinkFromTypeIdTitle(item.id, res.note.id, title);
               } else {
@@ -94,8 +104,8 @@ export default class extends PureComponent {
           }
         }
       });
-    })
-  }
+    });
+  };
   getSwipesLinkObj(type, id, title) {
     const { myId } = this.props;
     return {
@@ -116,33 +126,32 @@ export default class extends PureComponent {
     return {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'center',
-    }
+    };
   }
   createLinkFromTypeIdTitle(type, id, title) {
     const link = this.getSwipesLinkObj(type, id, title);
-    const { createLink } = this.props;
-    createLink(link).then((res) => {
+    request('links.create', { link }).then(res => {
       let clear = undefined;
       if (res.ok) {
         const att = fromJS({ link: res.link, title });
-        clear = this.onAddedAttachment(att, this.clearLoading.bind(null, 'attach'));
+        clear = this.onAddedAttachment(
+          att,
+          this.clearLoading.bind(null, 'attach')
+        );
       }
-      if(clear === undefined){
+      if (clear === undefined) {
         this.clearLoading('attach');
       }
     });
   }
 
-  onDropFiles = (files) => {
+  onDropFiles = files => {
     this.onUploadFiles(files);
-  }
+  };
 
   render() {
-    const { fileVal } = this.state;
-    const {
-      buttonProps,
-      className,
-    } = this.props;
+    const { fileVal } = this.state;
+    const { buttonProps, className } = this.props;
 
     return (
       <Fragment>
@@ -155,7 +164,7 @@ export default class extends PureComponent {
         />
         <SW.HiddenInput
           value={fileVal}
-          innerRef={c => this.hiddenInput = c}
+          innerRef={c => (this.hiddenInput = c)}
           type="file"
           onChange={this.onChangeFiles}
         />

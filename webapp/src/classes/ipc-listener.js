@@ -1,7 +1,7 @@
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import { fromJS } from 'immutable';
-import * as ca from 'swipes-core-js/actions';
+// import * as ca from 'swipes-core-js/actions';
 import { navForContext } from 'swipes-core-js/classes/utils';
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
@@ -27,9 +27,9 @@ export default class IpcListener {
     if (isElectron) {
       remote.getCurrentWindow().removeAllListeners();
       ipcRenderer.on('oauth-success', (event, arg) => {
-        store.dispatch(
-          ca.me.handleOAuthSuccess(arg.serviceName, arg.queryString)
-        );
+        // store.dispatch(
+        //   ca.me.handleOAuthSuccess(arg.serviceName, arg.queryString)
+        // );
       });
 
       // Deal with windows maximize stuff

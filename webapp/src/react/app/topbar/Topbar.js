@@ -15,15 +15,14 @@ import './topbar.scss';
   reconnectAttempt: state.connection.get('reconnectAttempt'),
   isMaximized: state.main.get('isMaximized'),
   isFullscreen: state.main.get('isFullscreen'),
-  ready: state.connection.get('readyInOrg'),
   status: state.connection.get('status'),
-  token: state.auth.get('token'),
+  token: state.auth.get('token')
 }))
 export default class Topbar extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      secondsLeft: 0,
+      secondsLeft: 0
     };
     this.onWinClickCached = setupCachedCallback(this.onWinClick, this);
   }

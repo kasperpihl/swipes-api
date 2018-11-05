@@ -1,10 +1,16 @@
 import * as types from '../constants';
-import * as ca from 'swipes-core-js/actions';
-import * as coreTypes from 'swipes-core-js/constants';
+import request from 'swipes-core-js/utils/request';
+import * as coreTypes from 'swipes-core-js/redux/constants';
 import * as navigationActions from '../navigation/navigationActions';
 
-export const setMaximized = toggle => ({ type: types.SET_MAXIMIZED, payload: { toggle } });
-export const setFullscreen = toggle => ({ type: types.SET_FULLSCREEN, payload: { toggle } });
+export const setMaximized = toggle => ({
+  type: types.SET_MAXIMIZED,
+  payload: { toggle },
+});
+export const setFullscreen = toggle => ({
+  type: types.SET_FULLSCREEN,
+  payload: { toggle },
+});
 
 // ======================================================
 // Tooltips
@@ -26,9 +32,9 @@ export function subscribeToDrop(target, handler, title) {
     payload: {
       handler,
       target,
-      title
-    }
-  }
+      title,
+    },
+  };
 }
 
 export function unsubscribeFromDrop(target, handler) {
@@ -36,9 +42,9 @@ export function unsubscribeFromDrop(target, handler) {
     type: types.UNSUBSCRIBE_FROM_DROP,
     payload: {
       target,
-      handler
+      handler,
     },
-  }
+  };
 }
 // ======================================================
 // Context Menu
@@ -61,15 +67,17 @@ export const browser = (from, url, onLoad) => (dp, getState) => {
   if (!getState().globals.get('isElectron')) {
     return window.open(url);
   }
-  return dp(navigationActions.openSecondary(from, {
-    id: 'Browser',
-    showTitleInCrumb: true,
-    title: 'Browser',
-    props: {
-      url,
-      onLoad,
-    },
-  }));
+  return dp(
+    navigationActions.openSecondary(from, {
+      id: 'Browser',
+      showTitleInCrumb: true,
+      title: 'Browser',
+      props: {
+        url,
+        onLoad,
+      },
+    })
+  );
 };
 
 // ======================================================
@@ -82,17 +90,17 @@ export function successGradient(color) {
 // ======================================================
 // Account related
 // ======================================================
-export const forceLogout = (dp) => {
+export const forceLogout = dp => {
   window.analytics.logout();
   dp({ type: coreTypes.RESET_STATE });
 };
 
-export const signout = cb => dp => dp(ca.api.request('users.signout')).then((res) => {
-  if (cb) {
-    cb(res);
-  }
-  if (res && res.ok) {
-    dp(forceLogout);
-  }
-});
-
+export const signout = cb => dp =>
+  request('users.signout').then(res => {
+    if (cb) {
+      cb(res);
+    }
+    if (res && res.ok) {
+      dp(forceLogout);
+    }
+  });

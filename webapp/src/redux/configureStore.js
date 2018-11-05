@@ -6,7 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 
 import * as reducers from './reducers';
-import * as coreReducers from 'swipes-core-js/reducers';
+import * as coreReducers from 'swipes-core-js/redux/reducers';
 
 import devConf from './configureStore.dev';
 

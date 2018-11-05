@@ -4,8 +4,8 @@ import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
 import * as mainActions from '../main/mainActions';
 import * as navigationActions from '../navigation/navigationActions';
 import { fromJS } from 'immutable';
-import { cache } from 'swipes-core-js/actions';
-import * as cs from 'swipes-core-js/selectors';
+import * as cacheActions from 'swipes-core-js/redux/cache/cacheActions';
+// import * as cs from 'swipes-core-js/selectors';
 
 export const selectAssignees = (options, assignees, callback) => (
   d,
@@ -66,16 +66,16 @@ export const selectAssignees = (options, assignees, callback) => (
     return resultForUser(user);
   };
 
-  const allUsers = () =>
-    cs.users
-      .getActive(state)
-      .map(u => resultForUser(u))
-      .toArray();
+  // const allUsers = () =>
+  //   cs.users
+  //     .getActive(state)
+  //     .map(u => resultForUser(u))
+  //     .toArray();
 
-  const searchForUser = q =>
-    cs.users.search(state, { searchString: q }).map(res => {
-      return resultForUserId(res.item.id);
-    });
+  // const searchForUser = q =>
+  //   cs.users.search(state, { searchString: q }).map(res => {
+  //     return resultForUserId(res.item.id);
+  //   });
 
   const getRecent = () => currentRecent.map(uId => resultForUserId(uId));
   const getAssignees = () => assignees.map(uId => resultForUserId(uId));
@@ -135,7 +135,7 @@ export const selectAssignees = (options, assignees, callback) => (
       onClose: () => {
         if (recent.length) {
           d(
-            cache.save(
+            cacheActions.save(
               'recentAssignees',
               fromJS([...new Set(recent.concat(currentRecent))])
             )

@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-import * as ca from 'swipes-core-js/actions';
+import request from 'swipes-core-js/utils/request';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import { Map } from 'immutable';
 import CompatibleLogin from './CompatibleLogin';
@@ -14,7 +14,6 @@ import CompatibleCard from 'compatible/components/card/CompatibleCard';
   {
     inputMenu: menuActions.input,
     alert: menuActions.alert,
-    request: ca.api.request,
     setUrl: navigationActions.url,
   }
 )
@@ -31,7 +30,7 @@ export default class extends PureComponent {
     this.setState({ formData: formData.set(key, value) });
   }
   onSignin() {
-    const { request, setUrl } = this.props;
+    const { setUrl } = this.props;
     const { formData } = this.state;
 
     if (this.isLoading('signInButton')) {

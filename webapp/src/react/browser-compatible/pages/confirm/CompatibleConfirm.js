@@ -1,39 +1,33 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
 import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
-import * as ca from 'swipes-core-js/actions';
+import request from 'swipes-core-js/utils/request';
 import CompatibleCard from 'compatible/components/card/CompatibleCard';
-
-@connect(null, {
-  confirmEmail: ca.users.confirmEmail,
-})
 
 export default class extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       confirmationToken: getURLParameter('confirmation_token'),
     };
     setupLoading(this);
   }
   componentWillMount() {
     const { confirmationToken } = this.state;
-    const { confirmEmail } = this.props;
 
-    if(!confirmationToken) {
+    if (!confirmationToken) {
       return this.clearLoading('confirm', '!Missing confirmation token');
     }
     this.setLoading('confirm', 'Confirming...');
-    confirmEmail(confirmationToken).then((res) => {
-      if(res.ok) {
+    request('users.confirm', confirmationToken).then(res => {
+      if (res.ok) {
         this.clearLoading('confirm', 'Successfully confirmed the email');
       } else {
         this.clearLoading('confirm', '!Something went wrong.');
       }
-    })
+    });
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     this._unmounted = true;
   }
   render() {
