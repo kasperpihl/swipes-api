@@ -29,6 +29,7 @@ module.exports = {
       components: path.resolve(__dirname, 'src/react/components'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),
       // 'swipes-core-js': '@swipesapp/core/dist',
+      'workspace-mobile': path.resolve(__dirname, '../../workspace-mobile/src'),
       'swipes-core-js': path.resolve(
         __dirname,
         '../../packages/swipes-core-js/dist'

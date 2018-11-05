@@ -1,5 +1,23 @@
 import { fromJS } from 'immutable';
 
+/*
+Syncing strategy:
+
+v1: No conflict resolution
+# On add task
+Client: Send socket event with task details
+
+# On complete/indent
+Client: Send socket event with full new order, complete and indention arrays.
+Server: Override database and send an event with updated project_row
+Client: Always override with events from server
+
+# On task title edit
+Client: Send socket event with new title
+Server: Override database and send an event with updated project_task row
+Client: Always override with events from server
+*/
+
 export default {
   order: fromJS([
     { id: 'AFIAS', indent: 0, expanded: false, hasChildren: true },

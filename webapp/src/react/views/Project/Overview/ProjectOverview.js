@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
 import data from './data';
-import ProjectStateManager from '../utils/project/ProjectStateManager';
+import ProjectStateManager from 'workspace-mobile/utils/project/ProjectStateManager';
 import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
 
 export default class ProjectOverview extends PureComponent {
@@ -47,7 +47,6 @@ export default class ProjectOverview extends PureComponent {
     return visibleOrder.map((item, i) => (
       <ProjectItem
         focus={i === selectedIndex}
-        isDone={i % 2 === 0}
         selectionStart={i === selectedIndex && selectionStart}
         item={itemsById.get(item.get('id'))}
         orderItem={item}
