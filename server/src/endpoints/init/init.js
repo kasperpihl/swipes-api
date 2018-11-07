@@ -1,10 +1,7 @@
-import r from 'rethinkdb';
 import { bool, string, object } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import { query } from 'src/utils/db/db';
 import sofiCreate from 'src/utils/sofiCreate';
-
-const defTs = new Date(1970, 1, 1).toISOString();
 
 const expectedInput = {
   timestamp: string.format('iso8601')
@@ -18,16 +15,15 @@ const expectedOutput = {
 
 export default endpointCreate(
   {
-    endpoint: '/init',
     expectedInput,
     expectedOutput
   },
   async (req, res) => {
     const { user_id } = res.locals;
 
-    const { timestamp = defTs } = res.locals.input;
+    const { timestamp } = res.locals.input;
 
-    const full_fetch = timestamp.startsWith('1970');
+    const full_fetch = !timestamp;
 
     const meRes = await query(`
       SELECT created_at, updated_at, id, email, profile, activated, settings from users WHERE id = '${user_id}'

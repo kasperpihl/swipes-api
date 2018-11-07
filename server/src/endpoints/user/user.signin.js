@@ -12,7 +12,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/user.signin',
     expectedInput,
     type: 'notAuthed'
   },

@@ -1,7 +1,6 @@
 export default class ProjectKeyHandler {
-  constructor(stateManager, state) {
+  constructor(stateManager) {
     this.stateManager = stateManager;
-    this.state = state;
     window.addEventListener('keydown', this.onKeyDown);
   }
   onKeyDown = e => {

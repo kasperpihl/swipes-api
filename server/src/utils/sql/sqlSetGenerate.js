@@ -1,9 +1,4 @@
-export default (tableName, mapping, options = { returning: true }) => {
-  if (typeof tableName !== 'string') {
-    throw 'dbInsertQuery expects tableName as first parameter';
-  }
-  const mappingArr = Array.isArray(mapping) ? mapping : [mapping];
-
+export default mapping => {
   // Prepare for dynamic support of adding values
   const values = [];
   const insertVariable = value => {
@@ -11,7 +6,7 @@ export default (tableName, mapping, options = { returning: true }) => {
     return `$${values.length}`;
   };
 
-  let text = `INSERT INTO ${tableName}`;
+  let text = '';
 
   // Create keys mapping
   const firstObjKeys = Object.keys(mappingArr[0]);
@@ -31,15 +26,8 @@ export default (tableName, mapping, options = { returning: true }) => {
         })})`
     )
     .join(', ');
-  if (options.upsert) {
-    text += `ON CONFLICT ON CONSTRAINT ${options.upsert} DO UPDATE SET `;
-    const setStatements = [];
-    firstObjKeys.forEach(key => {
-      setStatements.push(`${key} = excluded.${key}`);
-    });
-    text += setStatements.join(', ');
-  }
-  if (typeof options.returning === 'undefined' || options.returning) {
+
+  if (options.returning) {
     text += `
       RETURNING ${
         typeof options.returning === 'string' ? options.returning : '*'

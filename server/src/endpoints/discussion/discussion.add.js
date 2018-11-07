@@ -34,7 +34,6 @@ export default endpointCreate(
       organization_id,
       followers = []
     } = res.locals.input;
-    console.log('hello');
     const uniqueFollowers = [
       ...new Set(followers.concat(mentionsGetArray(message))).add(user_id)
     ];

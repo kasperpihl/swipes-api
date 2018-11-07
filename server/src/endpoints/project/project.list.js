@@ -8,13 +8,7 @@ export default endpointCreate(
     expectedInput
   },
   async (req, res, next) => {
-    const { user_id, token } = res.locals;
-
-    // Revoke user's token
-    await query(
-      'UPDATE tokens SET revoked=true WHERE user_id=$1 AND token=$2',
-      [user_id, token]
-    );
+    const { user_id } = res.locals;
 
     // Create response data.
     res.locals.output = {};

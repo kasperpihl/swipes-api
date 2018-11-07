@@ -6,7 +6,6 @@ const expectedInput = {};
 
 export default endpointCreate(
   {
-    endpoint: '/project.add',
     expectedInput
   },
   async (req, res, next) => {

@@ -1,9 +1,26 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
-import data from './data';
+import withRequests from 'swipes-core-js/components/withRequests';
 import ProjectStateManager from 'src/utils/project/ProjectStateManager';
 import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
 
+@withRequests(
+  {
+    project: {
+      request: {
+        url: 'project.get',
+        body: props => ({
+          project_id: 'A123131'
+        }),
+        resPath: 'result'
+      },
+      cache: {
+        path: props => ['project', 'A123131']
+      }
+    }
+  },
+  { renderLoader: () => <div>loading</div> }
+)
 export default class ProjectOverview extends PureComponent {
   static sizes() {
     return [654];
@@ -14,8 +31,7 @@ export default class ProjectOverview extends PureComponent {
   }
   componentWillMount() {
     this.stateManager = new ProjectStateManager(
-      data.order,
-      data.itemsById,
+      this.props.project,
       this.onStateChange
     );
     this.setState(this.stateManager.getState());
@@ -38,18 +54,12 @@ export default class ProjectOverview extends PureComponent {
     }
   }
   renderItems() {
-    const {
-      visibleOrder,
-      itemsById,
-      selectedIndex,
-      selectionStart
-    } = this.state;
+    const { visibleOrder, selectedIndex, selectionStart } = this.state;
     return visibleOrder.map((item, i) => (
       <ProjectItem
         focus={i === selectedIndex}
         selectionStart={i === selectedIndex && selectionStart}
-        item={itemsById.get(item.get('id'))}
-        orderItem={item}
+        item={item}
         key={item.get('id')}
         stateManager={this.stateManager}
       />

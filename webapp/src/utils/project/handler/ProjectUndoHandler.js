@@ -1,9 +1,8 @@
 import { fromJS } from 'immutable';
 
 export default class ProjectKeyHandler {
-  constructor(stateManager, state) {
+  constructor(stateManager) {
     this.stateManager = stateManager;
-    this.state = state;
     this.redoStack = fromJS([]);
     this.undoStack = fromJS([]);
   }

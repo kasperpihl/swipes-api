@@ -1,7 +1,6 @@
 export default class ProjectExpandHandler {
-  constructor(stateManager, state) {
+  constructor(stateManager) {
     this.stateManager = stateManager;
-    this.state = state;
   }
   toggleExpandForId = id => {
     const { order } = this.state;

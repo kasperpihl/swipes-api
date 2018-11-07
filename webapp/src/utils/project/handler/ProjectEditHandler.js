@@ -4,10 +4,12 @@ import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem'
 import { fromJS } from 'immutable';
 
 export default class ProjectEditHandler {
-  constructor(stateManager, state) {
+  constructor(stateManager) {
     this.stateManager = stateManager;
-    this.state = state;
   }
+  updateProjectName = name => {
+    this.stateManager.update({ name });
+  };
   updateTitle = (id, title) => {
     let { itemsById } = this.state;
     itemsById = itemsById.setIn([id, 'title'], title);

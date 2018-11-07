@@ -3,22 +3,27 @@ import ProjectExpandHandler from './handler/ProjectExpandHandler';
 import ProjectIndentHandler from './handler/ProjectIndentHandler';
 import ProjectKeyHandler from './handler/ProjectKeyHandler';
 import ProjectSelectHandler from './handler/ProjectSelectHandler';
+import ProjectSyncHandler from './handler/ProjectSyncHandler';
 import ProjectUndoHandler from './handler/ProjectUndoHandler';
 
-import projectGenerateVisibleOrder from './projectGenerateVisibleOrder';
+import projectConvertServerToLocal from './projectConvertServerToLocal';
+import projectGenerateVisibleRows from './projectGenerateVisibleRows';
+import { fromJS } from 'immutable';
 
 /*
 The responsibility of State Manager is to handle 
 the full state for a ProjectOverview, it achieves this with help from
 */
 export default class ProjectStateManager {
-  constructor(order, itemsById, onStateChange) {
+  constructor(serverState, onStateChange) {
+    const [order, itemsById] = projectConvertServerToLocal(serverState);
     this.state = {
+      name: '',
       order,
-      visibleOrder: projectGenerateVisibleOrder(order),
+      visibleOrder: projectGenerateVisibleRows(order, itemsById),
       itemsById,
       selectedIndex: -1,
-      sliderValue: 0,
+      sliderValue: 0
     };
     this.onStateChange = onStateChange;
 
@@ -28,8 +33,10 @@ export default class ProjectStateManager {
       indentHandler: new ProjectIndentHandler(this),
       keyHandler: new ProjectKeyHandler(this),
       selectHandler: new ProjectSelectHandler(this),
-      undoHandler: new ProjectUndoHandler(this),
+      syncHandler: new ProjectSyncHandler(this),
+      undoHandler: new ProjectUndoHandler(this)
     };
+    this.callHandlers('setRawServerState', serverState);
     this.callHandlers('setState', this.state);
     Object.assign(this, this.handlers);
   }
@@ -40,10 +47,14 @@ export default class ProjectStateManager {
     }
   };
   getState = () => this.state;
+  parseServerData = () => {};
   update = (state, undoString = true) => {
     // Whenever we update order, make sure to update what is visible
-    if (state.order) {
-      state.visibleOrder = projectGenerateVisibleOrder(state.order);
+    if (state.order || state.itemsById) {
+      state.visibleOrder = projectGenerateVisibleRows(
+        state.order || this.state.order,
+        state.itemsById || this.state.itemsById
+      );
     }
     // If selection is by id, ensure correct visible i
     if (state.selectedId) {

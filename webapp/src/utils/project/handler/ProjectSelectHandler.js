@@ -1,7 +1,6 @@
 export default class ProjectSelectHandler {
-  constructor(stateManager, state) {
+  constructor(stateManager) {
     this.stateManager = stateManager;
-    this.state = state;
   }
   selectNext = e => {
     const { visibleOrder, selectedIndex } = this.state;

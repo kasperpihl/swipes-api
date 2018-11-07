@@ -55,7 +55,10 @@ export default class ProjectItem extends PureComponent {
     if (focus && !isFocused) {
       this.inputRef.focus();
       if (typeof selectionStart === 'number') {
-        const selI = Math.min(item.get('title').length, selectionStart);
+        const selI = Math.min(
+          item.getIn(['meta', 'title']).length,
+          selectionStart
+        );
 
         this.inputRef.setSelectionRange(selI, selI);
       }
@@ -64,36 +67,25 @@ export default class ProjectItem extends PureComponent {
     }
   }
   renderType() {
-    const { item } = this.props;
-
-    if (item.get('type') === 'attachment') {
-      return (
-        <SW.AttachmentIcon
-          icon={attachmentIconForService(
-            item.getIn(['attachment', 'link', 'service'])
-          )}
-        />
-      );
-    }
-
     return <SW.Checkbox />;
   }
   render() {
-    const { item, orderItem, isDone } = this.props;
+    const { item, isDone } = this.props;
     const { isFocused } = this.state;
 
+    const title = item.getIn(['meta', 'title']);
     return (
       <SwissProvider selected={isFocused}>
         <SW.Wrapper
           done={isDone}
-          indent={orderItem.get('indent')}
+          indent={item.get('indent')}
           className="item-class"
         >
           <SW.ExpandWrapper onClick={this.onExpandClick}>
-            {orderItem.get('hasChildren') && (
+            {item.get('hasChildren') && (
               <SW.ExpandIcon
                 icon="ArrowRightFull"
-                expanded={orderItem.get('expanded')}
+                expanded={item.get('expanded')}
               />
             )}
           </SW.ExpandWrapper>
@@ -101,7 +93,7 @@ export default class ProjectItem extends PureComponent {
           <SW.Input
             onFocus={this.onFocus}
             onBlur={this.onBlur}
-            value={item.get('title')}
+            value={title}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
             placeholder="# title, +attach"
@@ -109,26 +101,6 @@ export default class ProjectItem extends PureComponent {
               this.inputRef = c;
             }}
           />
-          {item.get('type') !== 'attachment' &&
-            item.get('title') && (
-              <SW.AssigneeWrapper
-                hide={!item.get('assignees') || !item.get('assignees').size}
-              >
-                {/* <HOCAssigning
-                  assignees={item.get('assignees')}
-                  maxImages={5}
-                  size={24}
-                  delegate={this}
-                  enableTooltip
-                  buttonProps={{
-                    compact: true,
-                  }}
-                /> */}
-              </SW.AssigneeWrapper>
-            )}
-          {!item.get('title') && (
-            <AttachButton delegate={this} buttonProps={{ compact: true }} />
-          )}
         </SW.Wrapper>
       </SwissProvider>
     );

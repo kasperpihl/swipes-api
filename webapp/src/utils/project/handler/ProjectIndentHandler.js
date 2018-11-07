@@ -3,9 +3,8 @@ import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem'
 import projectForceParentExpandedForItem from '../projectForceParentExpandedForItem';
 
 export default class ProjectIndentHandler {
-  constructor(stateManager, state) {
+  constructor(stateManager) {
     this.stateManager = stateManager;
-    this.state = state;
   }
   enforceIndention = depth => {
     let { order } = this.state;
