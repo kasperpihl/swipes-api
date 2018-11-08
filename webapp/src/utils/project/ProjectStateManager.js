@@ -1,3 +1,4 @@
+import ProjectCompleteHandler from './handler/ProjectCompleteHandler';
 import ProjectEditHandler from './handler/ProjectEditHandler';
 import ProjectExpandHandler from './handler/ProjectExpandHandler';
 import ProjectIndentHandler from './handler/ProjectIndentHandler';
@@ -28,6 +29,7 @@ export default class ProjectStateManager {
     this.onStateChange = onStateChange;
 
     this.handlers = {
+      completeHandler: new ProjectCompleteHandler(this),
       editHandler: new ProjectEditHandler(this),
       expandHandler: new ProjectExpandHandler(this),
       indentHandler: new ProjectIndentHandler(this),

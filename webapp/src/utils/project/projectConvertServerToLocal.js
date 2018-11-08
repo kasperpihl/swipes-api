@@ -21,7 +21,8 @@ export default server => {
         id: itemId,
         indent,
         hasChildren: false,
-        expanded: false
+        expanded: false,
+        completed: server.getIn(['project', 'completion', itemId]) || null
       })
     );
   });
