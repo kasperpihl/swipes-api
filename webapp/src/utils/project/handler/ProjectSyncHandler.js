@@ -13,21 +13,25 @@ export default class ProjectKeyHandler {
     serverKeys.forEach(key => (server[key] = {}));
 
     order.forEach((o, i) => {
-      if (this.serverState.getIn(['project', 'order', o.get('id')]) !== i) {
-        server.order[o.get('id')] = i;
+      const id = o.get('id');
+      if (this.serverState.getIn(['project', 'order', id]) !== i) {
+        server.order[id] = i;
       }
       if (
-        this.serverState.getIn(['project', 'indent', o.get('id')]) !==
-        o.get('indent')
+        this.serverState.getIn(['project', 'indent', id]) !== o.get('indent')
       ) {
-        server.indent[o.get('id')] = o.get('indent');
+        server.indent[id] = o.get('indent');
       }
       if (
-        this.serverState.getIn(['itemsById', o.get('id')]) !==
-        itemsById.get(o.get('id'))
+        this.serverState.getIn(['project', 'completion', id]) !==
+        o.get('completion')
       ) {
-        server.items[o.get('id')] = {
-          title: itemsById.get(o.get('id')).get('title')
+        server.completion[id];
+      }
+
+      if (this.serverState.getIn(['itemsById', id]) !== itemsById.get(id)) {
+        server.items[id] = {
+          title: itemsById.get(id).get('title')
         };
       }
     });
