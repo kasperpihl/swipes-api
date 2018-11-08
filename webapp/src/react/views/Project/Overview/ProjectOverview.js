@@ -3,7 +3,6 @@ import SW from './ProjectOverview.swiss';
 import withRequests from 'swipes-core-js/components/withRequests';
 import ProjectStateManager from 'src/utils/project/ProjectStateManager';
 import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
-import StepSlider from 'src/react/components/step-slider/StepSlider';
 
 @withRequests(
   {
@@ -57,7 +56,7 @@ export default class ProjectOverview extends PureComponent {
   renderItems() {
     const { visibleOrder, selectedIndex, selectionStart } = this.state;
     return visibleOrder.map((item, i) => (
-      <ProjectItem  
+      <ProjectItem
         focus={i === selectedIndex}
         selectionStart={i === selectedIndex && selectionStart}
         item={item}
@@ -66,29 +65,18 @@ export default class ProjectOverview extends PureComponent {
       />
     ));
   }
-
-  decreaseSliderValue = () => {
-    const { sliderValue } = this.state
-    this.setState({ sliderValue: sliderValue - 1 })
-  }
-
-  increaseSliderValue = () => {
-    const { sliderValue } = this.state
-    this.setState({ sliderValue: sliderValue + 1 })
-  }
   render() {
     const { sliderValue } = this.state;
     return (
       <SW.Wrapper>
         <SW.Header>
           <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
-          <StepSlider
+          <input
+            type="range"
+            onChange={this.onSliderChange}
             min={0}
             max={4}
-            onSliderChange={this.onSliderChange}
-            decreaseSliderValue={this.decreaseSliderValue}
-            increaseSliderValue={this.increaseSliderValue}
-            sliderValue={sliderValue}
+            value={sliderValue}
           />
         </SW.Header>
         {this.renderItems()}
@@ -98,8 +86,6 @@ export default class ProjectOverview extends PureComponent {
           icon="Plus"
           compact
         />
-
-        {/*Progress bar here */}
       </SW.Wrapper>
     );
   }
