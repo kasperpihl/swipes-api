@@ -3,6 +3,7 @@ import SW from './ProjectOverview.swiss';
 import withRequests from 'swipes-core-js/components/withRequests';
 import ProjectStateManager from 'src/utils/project/ProjectStateManager';
 import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
+import StepSlider from 'src/react/components/step-slider/StepSlider';
 
 @withRequests(
   {
@@ -71,12 +72,11 @@ export default class ProjectOverview extends PureComponent {
       <SW.Wrapper>
         <SW.Header>
           <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
-          <input
-            type="range"
-            onChange={this.onSliderChange}
+          <StepSlider 
             min={0}
             max={4}
-            value={sliderValue}
+            sliderValue={sliderValue}
+            onSliderChange={this.onSliderChange}
           />
         </SW.Header>
         {this.renderItems()}
