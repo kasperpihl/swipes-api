@@ -15,7 +15,7 @@
     "start:server": "cd ../server && npm run start"
   },
   "dependencies": {
-    "@swipesapp/core": "0.0.26",
+    "@swipesapp/core": "^1.0.11",
     "babel-polyfill": "6.26.0",
     "blueimp-load-image": "^2.19.0",
     "deep-equal": "1.0.1",
