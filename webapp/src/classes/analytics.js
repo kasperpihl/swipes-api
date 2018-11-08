@@ -20,11 +20,11 @@ export default class Analytics {
     store.subscribe(this.storeChange);
   }
   getDefaultEventProps() {
-    const { globals } = this.store.getState();
-    const isElectron = globals.get('isElectron');
-    const version = globals.get('version');
-    const platform = globals.get('platform');
-    const electronVersion = globals.get('sw-electron-version');
+    const { global } = this.store.getState();
+    const isElectron = global.get('isElectron');
+    const version = global.get('version');
+    const platform = global.get('platform');
+    const electronVersion = global.get('sw-electron-version');
     const defs = {
       _Client: isElectron ? 'Electron' : 'Web',
       '_Web version': version,
