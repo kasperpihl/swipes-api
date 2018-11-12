@@ -53,7 +53,23 @@ export default styleSheet('StepSlider', {
         height: '9px',
         width: '1px',
         backgroundColor: '#2E2E2D',
+      },
+
+      deactivated: {
+        '&:before': {
+          opacity: '0.5',
+        },
+
+        '&:after': {
+          opacity: '0.5',
+        }
       }
+    },
+
+    deactivated: {
+      '&:before': {
+        opacity: '0.5',
+      },
     }
   },
 

@@ -8,7 +8,7 @@ export default class stepSlider extends Component {
     } = this.props;
     return (
       <SW.InputPackage>
-        <SW.InputButton></SW.InputButton>
+        <SW.InputButton deactivated={sliderValue === min} disabled={sliderValue === min}/>
         <SW.Input
           type="range"
           onChange={onSliderChange}
@@ -16,7 +16,7 @@ export default class stepSlider extends Component {
           max={max}
           value={sliderValue}
         />
-        <SW.InputButton right></SW.InputButton>
+        <SW.InputButton right deactivated={sliderValue === max} disabled={sliderValue === max} />
       </SW.InputPackage>
     )
   }
