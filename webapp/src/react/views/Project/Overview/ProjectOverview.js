@@ -4,6 +4,7 @@ import withRequests from 'swipes-core-js/components/withRequests';
 import ProjectStateManager from 'src/utils/project/ProjectStateManager';
 import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
 import StepSlider from 'src/react/components/step-slider/StepSlider';
+import ProgreessCircle from 'src/react/components/progress-circle/ProgressCircle';
 
 @withRequests(
   {
@@ -86,6 +87,7 @@ export default class ProjectOverview extends PureComponent {
           icon="Plus"
           compact
         />
+        <ProgreessCircle progress={45}/>
       </SW.Wrapper>
     );
   }
