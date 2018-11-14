@@ -1,23 +1,10 @@
-export default (order, indexToComplete, shouldComplete) => {
-  const completionStamp = new Date();
-  const orgIndent = order.getIn([indexToComplete, 'indent']);
-  let deltaIndex = indexToComplete;
-  let deltaIndent = order.getIn([indexToComplete, 'indent']);
-  let newOrder = order;
-  do {
-    // Set all children and grandchildren
-    newOrder = newOrder.setIn([deltaIndex, 'completed'], shouldComplete);
-    deltaIndex++;
-    deltaIndent = order.getIn([deltaIndex, 'indent']);
-  } while (deltaIndent > orgIndent && deltaIndex < order.size);
-
+export default order => {
   // Verify
   const allCompletedForLevel = {};
   let currentIndent = -1;
-  let nextI = newOrder.size - 1;
-  while (nextI >= 0) {
-    const indent = newOrder.getIn([nextI, 'indent']);
-    const completed = !!newOrder.getIn([nextI, 'completed']);
+  for (let index = order.size - 1; index >= 0; index--) {
+    const indent = order.getIn([index, 'indent']);
+    const completed = !!order.getIn([index, 'completed']);
     const key = '' + indent; // Make sure key is a string
 
     // set the allCompleted for this level, if it does not exist.
@@ -34,7 +21,7 @@ export default (order, indexToComplete, shouldComplete) => {
 
       // assign child value to the parent element if needed.
       if (childCompleted !== completed) {
-        newOrder = newOrder.setIn([nextI, 'completed'], childCompleted);
+        order = order.setIn([index, 'completed'], childCompleted);
         completed = childCompleted;
       }
 
@@ -49,14 +36,7 @@ export default (order, indexToComplete, shouldComplete) => {
 
     // Make sure to update indent level
     currentIndent = indent;
-    nextI--;
   }
 
-  console.log('____TESTING____');
-  newOrder.forEach((o, i) => {
-    let indentChar = '';
-    for (let i = 0; i < o.get('indent'); i++) indentChar += '  ';
-    console.log(`-${i}-`, indentChar, o.get('completed'));
-  });
-  return newOrder;
+  return order;
 };

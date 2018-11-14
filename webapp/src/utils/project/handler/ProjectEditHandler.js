@@ -38,6 +38,7 @@ export default class ProjectEditHandler {
 
     order = order.delete(i);
     itemsById = itemsById.delete(id);
+    this.stateManager.syncHandler.delete(id);
     selectedIndex = selectedIndex - 1;
 
     let selectionStart = null;

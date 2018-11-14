@@ -25,6 +25,14 @@ export default class ProjectItem extends PureComponent {
     stateManager.selectHandler.selectWithId(item.get('id'));
     this.setState({ isFocused: true });
   };
+  onComplete = e => {
+    const { item, stateManager } = this.props;
+    if (item.get('completed')) {
+      stateManager.completeHandler.incomplete(item.get('id'));
+    } else {
+      stateManager.completeHandler.complete(item.get('id'));
+    }
+  };
   onChange = e => {
     const { stateManager, item } = this.props;
     stateManager.editHandler.updateTitle(item.get('id'), e.target.value);
@@ -67,17 +75,21 @@ export default class ProjectItem extends PureComponent {
     }
   }
   renderType() {
-    return <SW.Checkbox />;
+    const { item } = this.props;
+
+    return (
+      <SW.Checkbox checked={item.get('completed')} onClick={this.onComplete} />
+    );
   }
   render() {
-    const { item, isDone } = this.props;
+    const { item } = this.props;
     const { isFocused } = this.state;
 
     const title = item.getIn(['meta', 'title']);
     return (
       <SwissProvider selected={isFocused}>
         <SW.Wrapper
-          done={isDone}
+          done={item.get('completed')}
           indent={item.get('indent')}
           className="item-class"
         >

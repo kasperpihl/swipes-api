@@ -2,6 +2,7 @@ import endpointCreate from 'src/utils/endpointCreate';
 import { transaction } from 'src/utils/db/db';
 import { string, object, array, number } from 'valjs';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import randomstring from 'randomstring';
 
 const expectedInput = {
   project_id: string.require(),
@@ -13,7 +14,8 @@ const expectedInput = {
   ),
   order: object.of(number),
   indent: object.of(number),
-  completion: string
+  completion: object.of(string),
+  update_identifier: string
 };
 
 export default endpointCreate(
@@ -22,7 +24,14 @@ export default endpointCreate(
   },
   async (req, res, next) => {
     const { user_id } = res.locals;
-    const { project_id, order, indent, completion, items } = res.locals.input;
+    const {
+      project_id,
+      order,
+      indent,
+      completion,
+      items,
+      update_identifier = randomstring(8)
+    } = res.locals.input;
 
     // Prepare for dynamic support of adding values
     const values = [];
@@ -33,32 +42,20 @@ export default endpointCreate(
 
     let text = 'UPDATE projects SET "updated_at" = now(), "rev" = "rev" + 1';
     let returning = [];
-    console.log(JSON.stringify(order));
-    if (order) {
-      text += `, "order" = jsonb_merge_recurse("order", ${insertVariable(
-        JSON.stringify(order)
+    Object.entries({ order, indent, completion }).forEach(([key, value]) => {
+      if (!value) return;
+      text += `, "${key}" = jsonb_merge("${key}", ${insertVariable(
+        JSON.stringify(value)
       )})`;
-      returning.push('"order"');
-    }
-    if (indent) {
-      text += `, "indent" = jsonb_merge_recurse("indent", ${insertVariable(
-        JSON.stringify(indent)
-      )})`;
-      returning.push('"indent"');
-    }
-    if (completion) {
-      text += `, "completion" = jsonb_merge_recurse("completion", ${insertVariable(
-        JSON.stringify(completion)
-      )})`;
-      returning.push('"completion"');
-    }
+      returning.push(`"${key}"`);
+    });
 
     const queries = [];
     let addProjectQuery = false;
 
     if (returning.length) {
       addProjectQuery = true;
-      returning.push('"updated_at"', '"project_id"');
+      returning.push('updated_at', 'project_id', 'rev');
     }
 
     text += ` WHERE "project_id"=${insertVariable(
@@ -69,23 +66,26 @@ export default endpointCreate(
       queries.push({ text, values });
     }
 
-    // console.log(text);
-    // Add new project
     if (items) {
       for (let item_id in items) {
+        let keys = items[item_id];
+        if (!keys) keys = { deleted: true };
         queries.push(
           sqlInsertQuery(
             'project_items',
             {
               project_id,
               item_id,
-              ...items[item_id]
+              ...keys
             },
             {
               upsert: 'project_items_pkey',
-              returning: ['updated_at', ...Object.keys(items[item_id])].join(
-                ', '
-              )
+              returning: [
+                'project_id',
+                'item_id',
+                'updated_at',
+                ...Object.keys(keys)
+              ].join(', ')
             }
           )
         );
@@ -93,15 +93,23 @@ export default endpointCreate(
     }
 
     const response = await transaction(queries);
-    const result = {};
+    const updates = [];
     if (addProjectQuery) {
-      result.project = response.shift().rows[0];
+      updates.push({
+        type: 'project',
+        data: response.shift().rows[0]
+      });
     }
     if (response.length) {
-      result.items = response.map(res => res.rows[0]);
+      updates.push(
+        ...response.map(res => ({
+          type: 'item',
+          data: res.rows[0]
+        }))
+      );
     }
 
     // Create response data.
-    res.locals.output = { result };
+    res.locals.output = { update_identifier, updates2: updates };
   }
 );

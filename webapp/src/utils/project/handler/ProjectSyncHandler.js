@@ -1,9 +1,11 @@
 import debounce from 'swipes-core-js/utils/debounce';
 import request from 'swipes-core-js/utils/request';
+import randomString from 'swipes-core-js/utils/randomString';
 
 export default class ProjectKeyHandler {
   constructor(stateManager) {
     this.stateManager = stateManager;
+    this.deletedIds = [];
   }
   // stateManager will set this, once an update happens.
   convertToServerState() {
@@ -35,15 +37,27 @@ export default class ProjectKeyHandler {
         };
       }
     });
+
+    this.deletedIds.forEach(id => {
+      server.items[id] = null;
+      server.indent[id] = null;
+      server.order[id] = null;
+      server.completion[id] = null;
+    });
+
     serverKeys.forEach(
       key => !Object.keys(server[key]).length && delete server[key]
     );
     console.log(server);
     if (Object.keys(server).length) {
       server.project_id = 'A123131';
+      server.update_identifier = randomString(6);
       request('project.sync', server);
     }
   }
+  delete = id => {
+    this.deletedIds.push(id);
+  };
   checkForChanges = () => {
     this.convertToServerState();
   };

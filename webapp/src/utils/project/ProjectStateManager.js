@@ -26,6 +26,7 @@ export default class ProjectStateManager {
       selectedIndex: -1,
       sliderValue: 0
     };
+
     this.onStateChange = onStateChange;
 
     this.handlers = {
