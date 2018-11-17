@@ -3,9 +3,11 @@ import { transaction } from 'src/utils/db/db';
 import { string, object, array, number } from 'valjs';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import randomstring from 'randomstring';
+import redisPubClient from 'src/utils/redis/redisPubClient';
 
 const expectedInput = {
   project_id: string.require(),
+  rev: number.require(),
   items: object.of(
     object.as({
       title: string,
@@ -30,7 +32,8 @@ export default endpointCreate(
       indent,
       completion,
       items,
-      update_identifier = randomstring(8)
+      rev,
+      update_identifier = randomstring.generate(8)
     } = res.locals.input;
 
     // Prepare for dynamic support of adding values
@@ -63,7 +66,19 @@ export default endpointCreate(
     )} RETURNING ${returning.join(', ')}`;
 
     if (addProjectQuery) {
-      queries.push({ text, values });
+      queries.push({
+        text,
+        values,
+        onSuccess: result => {
+          if (result.rows[0].rev !== rev + 1) {
+            throw Error('out_of_sync')
+              .code(400)
+              .info(
+                `rev did not match current revision (${result.rows[0].rev - 1})`
+              );
+          }
+        }
+      });
     }
 
     if (items) {
@@ -108,7 +123,7 @@ export default endpointCreate(
         }))
       );
     }
-
+    await redisPubClient.publish(user_id, JSON.stringify(updates));
     // Create response data.
     res.locals.output = { update_identifier, updates2: updates };
   }

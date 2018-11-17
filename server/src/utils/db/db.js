@@ -31,13 +31,19 @@ export const transaction = async queries => {
       if (typeof query === 'function') {
         query = query(results);
       }
+
       let text = query;
       let values;
       if (typeof text === 'object') {
         text = query.text;
         values = query.values;
       }
+
       const res = await client.query(text, values);
+
+      if (typeof query.onSuccess === 'function') {
+        query.onSuccess(res);
+      }
       results.push(res);
     }
     await client.query('COMMIT');

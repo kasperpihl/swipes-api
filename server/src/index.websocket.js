@@ -19,20 +19,6 @@ const app = express();
 
 app.use(corsHandler);
 
-app.use('/test', (req, res) => {
-  const pub = redis.createClient({
-    // url: 'ws-redis-staging.zfbm04.0001.use1.cache.amazonaws.com',
-  });
-  pub.publish(
-    'global',
-    JSON.stringify({
-      type: 'forceDisconnect'
-    })
-  );
-  pub.quit();
-  res.send('published');
-});
-
 app.use(errorSwipes);
 app.use(errorHandler);
 

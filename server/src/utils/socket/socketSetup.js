@@ -2,8 +2,7 @@ import url from 'url';
 import ws from 'ws';
 import parseToken from 'src/utils/auth/parseToken';
 import socketPongInterval from 'src/utils/socket/socketPongInterval';
-
-import redis from 'redis';
+import redisCreateClient from 'src/utils/redis/redisCreateClient';
 
 export default server => {
   const wss = new ws.Server({ server });
@@ -16,25 +15,22 @@ export default server => {
       userId = decodedToken.tokenContent.iss;
     }
 
-    const redisOptions = {};
-    if (process.env.REDIS_URL) {
-      // Allow EB envs to include elasticache urls :)
-      redisOptions.url = process.env.REDIS_URL;
-    }
-
-    const redisClient = redis.createClient(redisOptions);
+    const redisClient = redisCreateClient();
 
     redisClient.subscribe('global');
     redisClient.subscribe(userId);
+    console.log(userId);
     // TODO: Subscribe to all organizations that user is part of.
 
     redisClient.on('message', (channel, actionString) => {
       const action = JSON.parse(actionString);
+      console.log('action', action);
       if (channel === 'global') {
         if (action.type === 'forceDisconnect') {
           socket.terminate();
         }
       } else {
+        console.log('sending.....');
         socket.send(JSON.stringify(action), e => e && socket.terminate());
       }
     });
