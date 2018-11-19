@@ -5,7 +5,7 @@ export default (order, indexToComplete, shouldComplete) => {
   let newOrder = order;
   do {
     // Set all children and grandchildren
-    newOrder = newOrder.setIn([deltaIndex, 'completed'], !!shouldComplete);
+    newOrder = newOrder.setIn([deltaIndex, 'completion'], !!shouldComplete);
     deltaIndex++;
     deltaIndent = order.getIn([deltaIndex, 'indent']);
   } while (deltaIndent > orgIndent && deltaIndex < order.size);

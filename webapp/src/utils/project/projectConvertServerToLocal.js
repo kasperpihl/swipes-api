@@ -22,7 +22,7 @@ export default server => {
         indent,
         hasChildren: false,
         expanded: false,
-        completed: server.getIn(['project', 'completion', itemId]) || null
+        completion: server.getIn(['project', 'completion', itemId]) || null
       })
     );
   });

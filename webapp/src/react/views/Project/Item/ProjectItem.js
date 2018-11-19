@@ -27,7 +27,7 @@ export default class ProjectItem extends PureComponent {
   };
   onComplete = e => {
     const { item, stateManager } = this.props;
-    if (item.get('completed')) {
+    if (item.get('completion')) {
       stateManager.completeHandler.incomplete(item.get('id'));
     } else {
       stateManager.completeHandler.complete(item.get('id'));
@@ -78,7 +78,7 @@ export default class ProjectItem extends PureComponent {
     const { item } = this.props;
 
     return (
-      <SW.Checkbox checked={item.get('completed')} onClick={this.onComplete} />
+      <SW.Checkbox checked={item.get('completion')} onClick={this.onComplete} />
     );
   }
   render() {
@@ -89,7 +89,7 @@ export default class ProjectItem extends PureComponent {
     return (
       <SwissProvider selected={isFocused}>
         <SW.Wrapper
-          done={item.get('completed')}
+          done={item.get('completion')}
           indent={item.get('indent')}
           className="item-class"
         >

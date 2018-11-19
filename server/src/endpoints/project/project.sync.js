@@ -1,6 +1,6 @@
 import endpointCreate from 'src/utils/endpointCreate';
 import { transaction } from 'src/utils/db/db';
-import { string, object, array, number } from 'valjs';
+import { string, object, array, number, bool } from 'valjs';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import randomstring from 'randomstring';
 import redisPubClient from 'src/utils/redis/redisPubClient';
@@ -16,7 +16,7 @@ const expectedInput = {
   ),
   order: object.of(number),
   indent: object.of(number),
-  completion: object.of(string),
+  completion: object.of(bool),
   update_identifier: string
 };
 
@@ -44,7 +44,8 @@ export default endpointCreate(
     };
 
     let text = 'UPDATE projects SET "updated_at" = now(), "rev" = "rev" + 1';
-    let returning = [];
+    let returning = ['updated_at', 'project_id', 'rev'];
+
     Object.entries({ order, indent, completion }).forEach(([key, value]) => {
       if (!value) return;
       text += `, "${key}" = jsonb_merge("${key}", ${insertVariable(
@@ -53,20 +54,12 @@ export default endpointCreate(
       returning.push(`"${key}"`);
     });
 
-    const queries = [];
-    let addProjectQuery = false;
-
-    if (returning.length) {
-      addProjectQuery = true;
-      returning.push('updated_at', 'project_id', 'rev');
-    }
-
     text += ` WHERE "project_id"=${insertVariable(
       project_id
     )} RETURNING ${returning.join(', ')}`;
 
-    if (addProjectQuery) {
-      queries.push({
+    const queries = [
+      {
         text,
         values,
         onSuccess: result => {
@@ -78,8 +71,8 @@ export default endpointCreate(
               );
           }
         }
-      });
-    }
+      }
+    ];
 
     if (items) {
       for (let item_id in items) {
@@ -109,12 +102,10 @@ export default endpointCreate(
 
     const response = await transaction(queries);
     const updates = [];
-    if (addProjectQuery) {
-      updates.push({
-        type: 'project',
-        data: response.shift().rows[0]
-      });
-    }
+    updates.push({
+      type: 'project',
+      data: response.shift().rows[0]
+    });
     if (response.length) {
       updates.push(
         ...response.map(res => ({

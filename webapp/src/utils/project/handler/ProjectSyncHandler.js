@@ -16,19 +16,20 @@ export default class ProjectKeyHandler {
 
     order.forEach((o, i) => {
       const id = o.get('id');
-      if (this.serverState.getIn(['project', 'order', id]) !== i) {
+
+      // Server values
+      const sOrder = this.serverState.getIn(['project', 'order', id]);
+      const sIndent = this.serverState.getIn(['project', 'indent', id]);
+      const sCompletion = this.serverState.getIn(['project', 'completion', id]);
+
+      if (sOrder !== i) {
         server.order[id] = i;
       }
-      if (
-        this.serverState.getIn(['project', 'indent', id]) !== o.get('indent')
-      ) {
+      if (sIndent !== o.get('indent')) {
         server.indent[id] = o.get('indent');
       }
-      if (
-        this.serverState.getIn(['project', 'completion', id]) !==
-        o.get('completion')
-      ) {
-        server.completion[id];
+      if (sCompletion !== o.get('completion')) {
+        server.completion[id] = o.get('completion');
       }
 
       if (this.serverState.getIn(['itemsById', id]) !== itemsById.get(id)) {
@@ -51,6 +52,7 @@ export default class ProjectKeyHandler {
     console.log(server);
     if (Object.keys(server).length) {
       server.project_id = 'A123131';
+      server.rev = this.serverState.getIn(['project', 'rev']);
       server.update_identifier = randomString(6);
       request('project.sync', server);
     }

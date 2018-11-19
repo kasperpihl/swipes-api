@@ -4,7 +4,7 @@ export default order => {
   let currentIndent = -1;
   for (let index = order.size - 1; index >= 0; index--) {
     const indent = order.getIn([index, 'indent']);
-    const completed = !!order.getIn([index, 'completed']);
+    const completed = !!order.getIn([index, 'completion']);
     const key = '' + indent; // Make sure key is a string
 
     // set the allCompleted for this level, if it does not exist.
@@ -21,7 +21,7 @@ export default order => {
 
       // assign child value to the parent element if needed.
       if (childCompleted !== completed) {
-        order = order.setIn([index, 'completed'], childCompleted);
+        order = order.setIn([index, 'completion'], childCompleted);
         completed = childCompleted;
       }
 

@@ -15,7 +15,7 @@ export default endpointCreate(
     const { project_id } = res.locals.input;
 
     const projectRes = await query(
-      `SELECT "project_id", "name", "discussion_id", "due_date", "order", "indent", "completion" from projects WHERE project_id = $1 AND deleted = FALSE`,
+      `SELECT "project_id", "name", "discussion_id", "due_date", "order", "indent", "completion", "rev" from projects WHERE project_id = $1 AND deleted = FALSE`,
       [project_id]
     );
 
