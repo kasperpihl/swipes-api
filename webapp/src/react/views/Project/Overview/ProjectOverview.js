@@ -29,7 +29,9 @@ export default class ProjectOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      sliderTestValue: 0,
+    };
   }
   componentWillMount() {
     this.stateManager = new ProjectStateManager(
@@ -55,6 +57,14 @@ export default class ProjectOverview extends PureComponent {
       this.selectionStart = undefined;
     }
   }
+  increaseSlider = () => {
+    const { sliderTestValue } = this.state;
+    this.setState({ sliderTestValue: sliderTestValue + 1})
+  }
+  decreaseSlider = () => {
+    const { sliderTestValue } = this.state;
+    this.setState({ sliderTestValue: sliderTestValue - 1})
+  }
   renderItems() {
     const { visibleOrder, selectedIndex, selectionStart } = this.state;
     return visibleOrder.map((item, i) => (
@@ -68,7 +78,8 @@ export default class ProjectOverview extends PureComponent {
     ));
   }
   render() {
-    const { sliderValue } = this.state;
+    const { sliderTestValue } = this.state;
+    console.log(this.state);
     return (
       <SW.Wrapper>
         <SW.Header>
@@ -76,8 +87,10 @@ export default class ProjectOverview extends PureComponent {
           <StepSlider 
             min={0}
             max={4}
-            sliderValue={sliderValue}
+            sliderValue={sliderTestValue}
             onSliderChange={this.onSliderChange}
+            increase={this.increaseSlider}
+            decrease={this.decreaseSlider}
           />
         </SW.Header>
         {this.renderItems()}

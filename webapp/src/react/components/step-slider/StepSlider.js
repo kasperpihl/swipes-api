@@ -4,11 +4,11 @@ import SW from './StepSlider.swiss';
 export default class stepSlider extends Component {
   render() {
     const { 
-       sliderValue, onSliderChange, min, max
+       sliderValue, onSliderChange, min, max, increase, decrease
     } = this.props;
     return (
       <SW.InputPackage>
-        <SW.InputButton deactivated={sliderValue === min} disabled={sliderValue === min}/>
+        <SW.InputButton deactivated={sliderValue === min} disabled={sliderValue === min} onClick={decrease}/>
         <SW.Input
           type="range"
           onChange={onSliderChange}
@@ -16,7 +16,7 @@ export default class stepSlider extends Component {
           max={max}
           value={sliderValue}
         />
-        <SW.InputButton right deactivated={sliderValue === max} disabled={sliderValue === max} />
+        <SW.InputButton right deactivated={sliderValue === max} disabled={sliderValue === max} onClick={increase}/>
       </SW.InputPackage>
     )
   }
