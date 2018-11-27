@@ -28,6 +28,9 @@ export default styleSheet('Button', {
   },
   Background: {
     _flex: ['row', 'left', 'center'],
+    selected: {
+      background: '$sw2',
+    },
     '.gl-button:hover &': {
       background: '$sw3',
     },
@@ -80,6 +83,17 @@ export default styleSheet('Button', {
       padding: '0',
       paddingRight: '12px',
     },
+    'textOutside=true': {
+      display: 'initial',
+      padding: '0 12px',
+
+      '.gl-button:hover &': {
+        color: 'initial',
+      },
+    },
+    'textOutside=false': {
+      display: 'none',
+    }
   },
   SideLabel: {
     _font: ['12px', '18px', 400],
@@ -105,4 +119,20 @@ export default styleSheet('Button', {
     borderRadius: '100%',
     animation: 'button-loader 1.0s infinite ease-in-out',
   },
+  PopupBox: {
+    display: 'none',
+    _size: ['120px', '36px'],
+    background: 'white',
+    boxShadow: '0 6px 12px 1px rgba(0, 12, 47, 0.3)',
+    show: {
+      _flex: ['row', 'around', 'center'],
+      position: 'absolute',
+      top: '0',
+      left: '0',
+    }
+  },
+  PopupText: {
+    _el: 'p',
+    _font: ['12px', '18px', 400],
+  }
 });

@@ -106,12 +106,14 @@ export default class ProjectOverview extends PureComponent {
           title="Add item"
           icon="Plus"
         />
-        <ProgreessCircle progress={44}/>
+        <ProgreessCircle progress={6}/>
         <Button  
-          onClick={this.testClick} 
+          onMouseOver={this.testClick}
           icon='Trash'
-          title='Start new plan' 
+          title='Start new plan'
+          popupText='Start new plan' 
           size='large'
+          selected={true}
           rounded={true}
           loading={test} 
         />
@@ -127,14 +129,7 @@ export default class ProjectOverview extends PureComponent {
           onClick={this.testClick}
           icon='Trash'
           title='Start new plan' 
-          size='large'
-          rounded={false}
-          error={test} 
-        />
-        <Button  
-          onClick={this.testClick}
-          icon='Trash'
-          title='Start new plan' 
+          textOutside={true}
           size='small'
           rounded={false}
           loading={test} 
