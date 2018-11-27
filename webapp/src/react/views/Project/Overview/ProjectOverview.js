@@ -106,7 +106,7 @@ export default class ProjectOverview extends PureComponent {
           title="Add item"
           icon="Plus"
         />
-        <ProgreessCircle progress={1}/>
+        <ProgreessCircle progress={44}/>
         <Button  
           onClick={this.testClick} 
           icon='Trash'
