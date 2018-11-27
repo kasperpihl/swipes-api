@@ -68,11 +68,18 @@ export default styleSheet('ProjectItem', {
   },
   Checkbox: {
     _size: '18px',
+    _flex: ['column', 'center', 'center'],
     border: '2px solid $sw3',
     borderRadius: '3px',
+
     '&:hover': {
       border: '2px solid $blue',
     },
+
+    checked: {
+      background: '#05A851',
+      border: 'none',
+    }
   },
   AssigneeWrapper: {
     height: '30px',

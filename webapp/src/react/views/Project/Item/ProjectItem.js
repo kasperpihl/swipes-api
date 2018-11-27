@@ -3,6 +3,7 @@ import { SwissProvider } from 'swiss-react';
 import HOCAssigning from 'components/assigning/HOCAssigning';
 import AttachButton from 'src/react/components/attach-button/AttachButton';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
+import Icon from 'src/react/icons/Icon';
 
 import SW from './ProjectItem.swiss';
 
@@ -76,9 +77,11 @@ export default class ProjectItem extends PureComponent {
   }
   renderType() {
     const { item } = this.props;
-
+    
     return (
-      <SW.Checkbox checked={item.get('completion')} onClick={this.onComplete} />
+      <SW.Checkbox checked={item.get('completion')} onClick={this.onComplete} >
+        <Icon icon="Checkmark" fill={item.get('completion') ? `#FFFFFF`: `#000000`} width="18" />
+      </SW.Checkbox>
     );
   }
   render() {
