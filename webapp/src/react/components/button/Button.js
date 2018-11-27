@@ -31,29 +31,27 @@ export default class extends PureComponent {
 
     return <SW.Title>{label}</SW.Title>;
   }
-  renderSideLabel() {
-    const { sideLabel, loading, error, success } = this.props;
+  renderSideLabel(status) {
+    const { sideLabel } = this.props;
     if (!sideLabel) return null;
 
-    // Show loading/success/error if needed
-    const label = loading || error || success || sideLabel;
-
-    return sideLabel && <SW.SideLabel>{label}</SW.SideLabel>;
+    return sideLabel && <SW.SideLabel>{status}</SW.SideLabel>;
   }
   render() {
     const {
       title,
       sideLabel,
-      compact,
       icon,
       loading,
       error,
       success,
       className,
+      size,
+      rounded,
       ...rest
     } = this.props;
 
-    let status = 'default';
+    let status = '';
     if (loading) status = 'loading';
     if (success) status = 'success';
     if (error) status = 'error';
@@ -61,13 +59,14 @@ export default class extends PureComponent {
     return (
       <SwissProvider
         hasIcon={status !== 'default' || !!icon}
-        compact={compact}
         status={status}
+        rounded={rounded}
+        size={size}
       >
         <SW.ATag className={`gl-button ${className || ''}`.trim()} {...rest}>
           <SW.Background>
             {this.renderIcon(status)}
-            {this.renderTitle(status)}
+            {this.renderTitle()}
           </SW.Background>
           {this.renderSideLabel(status)}
         </SW.ATag>

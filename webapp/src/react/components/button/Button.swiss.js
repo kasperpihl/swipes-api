@@ -14,34 +14,34 @@ addGlobalStyles({
 export default styleSheet('Button', {
   ATag: {
     _el: 'a',
-    userSelect: 'none',
+    _size: ['auto', '36px'],
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',
     flex: 'none',
-    width: 'auto',
     'status=loading|success|error': {
       pointerEvents: 'none',
     },
+    userSelect: 'none',
+    'rounded=false': {
+      _size: ['auto', '30px'],
+    }
   },
   Background: {
     _flex: ['row', 'left', 'center'],
-    borderRadius: '18px',
-    '!compact': {
+    '.gl-button:hover &': {
+      background: '$sw3',
+    },
+    'rounded': {
+      borderRadius: '18px',
       boxShadow: '0 0 0 1px $sw3',
-      '.gl-button:hover &': {
-        background: '$sw3',
-      },
-    },
-    compact: {
-      background: 'none',
-    },
+    }
   },
   IconContainer: {
     _size: '36px',
     _flex: 'center',
-    compact: {
+    'rounded=false': {
       _size: '30px',
-    },
+    }
   },
   IconComp: {
     _el: Icon,
@@ -60,7 +60,7 @@ export default styleSheet('Button', {
   Title: {
     _font: ['12px', '18px', 400],
     color: '$sw1',
-    padding: '9px 18px',
+    padding: '9px 12px',
     'status=success': {
       color: '$green'
     },
@@ -72,6 +72,13 @@ export default styleSheet('Button', {
     },
     '.gl-button:hover &': {
       color: '$blue',
+    },
+    'size=small': {
+      display: 'none',
+    },
+    'rounded=false': {
+      padding: '0',
+      paddingRight: '12px',
     },
   },
   SideLabel: {
@@ -85,12 +92,12 @@ export default styleSheet('Button', {
     'status=error': {
       color: '$red'
     },
-    compact: {
-      paddingLeft: 0,
-    },
     '.gl-button:hover &': {
       color: '$blue',
     },
+    'size=small': {
+      display: 'none',
+    }
   },
   LoaderCircle: {
     _size: '30px',

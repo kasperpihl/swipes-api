@@ -5,6 +5,7 @@ import ProjectStateManager from 'src/utils/project/ProjectStateManager';
 import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
 import StepSlider from 'src/react/components/step-slider/StepSlider';
 import ProgreessCircle from 'src/react/components/progress-circle/ProgressCircle';
+import Button from 'src/react/components/button/Button';
 
 @withRequests(
   {
@@ -31,6 +32,7 @@ export default class ProjectOverview extends PureComponent {
     super(props);
     this.state = {
       sliderTestValue: 0,
+      test: false,
     };
   }
   componentWillMount() {
@@ -77,9 +79,14 @@ export default class ProjectOverview extends PureComponent {
       />
     ));
   }
+
+  testClick = () => {
+    this.setState({ test: true })
+  }
+
   render() {
-    const { sliderTestValue } = this.state;
-    console.log(this.state);
+    const { sliderTestValue, test } = this.state;
+    
     return (
       <SW.Wrapper>
         <SW.Header>
@@ -98,9 +105,40 @@ export default class ProjectOverview extends PureComponent {
           onClick={this.onAdd}
           title="Add item"
           icon="Plus"
-          compact
         />
-        <ProgreessCircle progress={45}/>
+        <ProgreessCircle progress={1}/>
+        <Button  
+          onClick={this.testClick} 
+          icon='Trash'
+          title='Start new plan' 
+          size='large'
+          rounded={true}
+          loading={test} 
+        />
+        <Button  
+          onClick={this.testClick}
+          icon='Trash'
+          title='Start new plan' 
+          size='small'
+          rounded={true}
+          success={test} 
+        />
+        <Button  
+          onClick={this.testClick}
+          icon='Trash'
+          title='Start new plan' 
+          size='large'
+          rounded={false}
+          error={test} 
+        />
+        <Button  
+          onClick={this.testClick}
+          icon='Trash'
+          title='Start new plan' 
+          size='small'
+          rounded={false}
+          loading={test} 
+        />
       </SW.Wrapper>
     );
   }

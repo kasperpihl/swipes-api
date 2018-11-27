@@ -4,7 +4,7 @@ import SW from './ProgressCircle.swiss';
 const ProgressCircle = (props) => {
   return (
     <SW.Wrapper>
-      <SW.Fill prog={22}/> 
+      <SW.Fill prog={props.progress}/> 
     </SW.Wrapper>
   )
 }
