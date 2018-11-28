@@ -16,4 +16,13 @@ export default styleSheet('ProjectOverview', {
   HeaderTitle: {
     _el: 'h1',
   },
+  Div: {
+    marginLeft: '40%',
+
+    '&:before': {
+      _size: '100%',
+      display: 'block',
+      backgroundColor: 'green',
+    }
+  }
 });

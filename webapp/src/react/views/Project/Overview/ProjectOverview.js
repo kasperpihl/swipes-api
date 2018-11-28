@@ -33,6 +33,7 @@ export default class ProjectOverview extends PureComponent {
     this.state = {
       sliderTestValue: 0,
       test: false,
+      height: 0,
     };
   }
   componentWillMount() {
@@ -80,8 +81,14 @@ export default class ProjectOverview extends PureComponent {
     ));
   }
 
-  testClick = () => {
-    this.setState({ test: true })
+  testClick = (e) => {
+    this.timeout = setTimeout(() => {
+      this.setState({ test: true });
+    }, 700)
+  }
+  undoClick = (e) => {
+    clearTimeout(this.timeout);
+    this.setState({ test: false });
   }
 
   render() {
@@ -107,33 +114,19 @@ export default class ProjectOverview extends PureComponent {
           icon="Plus"
         />
         <ProgreessCircle progress={6}/>
-        <Button  
-          onMouseOver={this.testClick}
-          icon='Trash'
-          title='Start new plan'
-          popupText='Start new plan' 
-          size='large'
-          selected={true}
-          rounded={true}
-          loading={test} 
-        />
-        <Button  
-          onClick={this.testClick}
-          icon='Trash'
-          title='Start new plan' 
-          size='small'
-          rounded={true}
-          success={test} 
-        />
-        <Button  
-          onClick={this.testClick}
-          icon='Trash'
-          title='Start new plan' 
-          textOutside={true}
-          size='small'
-          rounded={false}
-          loading={test} 
-        />
+        <SW.Div>
+          <Button  
+            onMouseEnter={this.testClick}
+            onMouseLeave={this.undoClick}
+            icon='Trash'
+            title='Start new plan'
+            popupText='Testing popup again and again'
+            size='large'
+            rounded={false}
+            test={test} 
+            height={this.state.height}
+          />
+        </SW.Div>
       </SW.Wrapper>
     );
   }

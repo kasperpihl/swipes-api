@@ -9,7 +9,7 @@ export default styleSheet('Tooltip', {
     visibility: 'hidden',
     zIndex: 10,
     opacity: 0,
-    pointerEvents: 'none',
+    // pointerEvents: 'none',
     shown :{
       visibility: 'visible',
       opacity: 1,

@@ -37,7 +37,7 @@ export default styleSheet('Button', {
     'rounded': {
       borderRadius: '18px',
       boxShadow: '0 0 0 1px $sw3',
-    }
+    },
   },
   IconContainer: {
     _size: '36px',
@@ -121,14 +121,17 @@ export default styleSheet('Button', {
   },
   PopupBox: {
     display: 'none',
-    _size: ['120px', '36px'],
+    _size: 'auto',
+    minWidth: '120px',
     background: 'white',
     boxShadow: '0 6px 12px 1px rgba(0, 12, 47, 0.3)',
+    padding: '0 12px',
     show: {
-      _flex: ['row', 'around', 'center'],
+      _flex: ['row', 'center', 'center'],
       position: 'absolute',
-      top: '0',
-      left: '0',
+      top: (props) => `calc(-110% + ${props.height}px)`,
+      left: '50%',
+      transform: 'translateX(-50%)',
     }
   },
   PopupText: {

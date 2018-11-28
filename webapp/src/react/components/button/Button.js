@@ -3,9 +3,6 @@ import { SwissProvider } from 'swiss-react';
 import SW from './Button.swiss';
 
 export default class extends PureComponent {
-  state = {
-    showPopup: false,
-  }
   renderIcon(status) {
     let { icon } = this.props;
     if (!icon && status === 'default') {
@@ -40,12 +37,6 @@ export default class extends PureComponent {
 
     return sideLabel && <SW.SideLabel>{status}</SW.SideLabel>;
   }
-  showPopupText = (e) => {
-    e.preventDefault();
-    setTimout(() => {
-      this.setState({ showPopup: true });
-    }, 700)
-  }
   render() {
     const {
       title,
@@ -59,7 +50,9 @@ export default class extends PureComponent {
       rounded,
       textOutside,
       selected,
+      test,
       popupText,
+      height,
       ...rest
     } = this.props;
 
@@ -75,19 +68,19 @@ export default class extends PureComponent {
         rounded={rounded}
         size={size}
         selected={selected}
-        
+        test={test}
       >
-        <SW.ATag className={`gl-button ${className || ''}`.trim()} {...rest} onClick={this.showPopupText}>
+        <SW.ATag className={`gl-button ${className || ''}`.trim()} {...rest}>
           <SW.Background>
             {this.renderIcon(status)}
             {this.renderTitle()}
           </SW.Background>
           {this.renderSideLabel(status)}
           <SW.Title textOutside={!!textOutside}>Text</SW.Title>
+          <SW.PopupBox show={test} height={height}>
+            <SW.PopupText>{popupText}</SW.PopupText>
+          </SW.PopupBox>
         </SW.ATag>
-        <SW.PopupBox show={this.state.showPopup}>
-          <SW.PopupText>{popupText}</SW.PopupText>
-        </SW.PopupBox>
       </SwissProvider>
     );
   }
