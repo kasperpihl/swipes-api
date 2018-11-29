@@ -121,18 +121,21 @@ export default styleSheet('Button', {
   },
   PopupBox: {
     display: 'none',
-    _size: 'auto',
-    minWidth: '120px',
+    _size: ['120px', 'auto'],
     background: 'white',
     boxShadow: '0 6px 12px 1px rgba(0, 12, 47, 0.3)',
     padding: '0 12px',
     show: {
       _flex: ['row', 'center', 'center'],
       position: 'absolute',
-      top: (props) => `calc(-110% + ${props.height}px)`,
+      top: (props) => `calc(-${props.numberOfLines}*18px - 18px)`,
       left: '50%',
       transform: 'translateX(-50%)',
-    }
+
+      rounded: {
+        borderRadius: '18px',
+      }
+    },
   },
   PopupText: {
     _el: 'p',

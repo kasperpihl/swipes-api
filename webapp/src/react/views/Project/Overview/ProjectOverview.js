@@ -32,8 +32,7 @@ export default class ProjectOverview extends PureComponent {
     super(props);
     this.state = {
       sliderTestValue: 0,
-      test: false,
-      height: 0,
+      showPopupText: false,
     };
   }
   componentWillMount() {
@@ -81,18 +80,18 @@ export default class ProjectOverview extends PureComponent {
     ));
   }
 
-  testClick = (e) => {
+  showPopupText = (e) => {
     this.timeout = setTimeout(() => {
-      this.setState({ test: true });
+      this.setState({ showPopupText: true });
     }, 700)
   }
-  undoClick = (e) => {
+  hidePopupText = (e) => {
     clearTimeout(this.timeout);
-    this.setState({ test: false });
+    this.setState({ showPopupText: false });
   }
 
   render() {
-    const { sliderTestValue, test } = this.state;
+    const { sliderTestValue, showPopupText } = this.state;
     
     return (
       <SW.Wrapper>
@@ -116,15 +115,15 @@ export default class ProjectOverview extends PureComponent {
         <ProgreessCircle progress={6}/>
         <SW.Div>
           <Button  
-            onMouseEnter={this.testClick}
-            onMouseLeave={this.undoClick}
+            onMouseEnter={this.showPopupText}
+            onMouseLeave={this.hidePopupText}
             icon='Trash'
             title='Start new plan'
-            popupText='Testing popup again and again'
+            popupText='Testing popup'
             size='large'
-            rounded={false}
-            test={test} 
-            height={this.state.height}
+            rounded={true}
+            showPopupText={showPopupText} 
+            numberOfLines={1}
           />
         </SW.Div>
       </SW.Wrapper>

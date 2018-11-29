@@ -50,9 +50,9 @@ export default class extends PureComponent {
       rounded,
       textOutside,
       selected,
-      test,
+      showPopupText,
       popupText,
-      height,
+      numberOfLines,
       ...rest
     } = this.props;
 
@@ -68,18 +68,17 @@ export default class extends PureComponent {
         rounded={rounded}
         size={size}
         selected={selected}
-        test={test}
       >
         <SW.ATag className={`gl-button ${className || ''}`.trim()} {...rest}>
+          <SW.PopupBox show={showPopupText} numberOfLines={numberOfLines}>
+            <SW.PopupText>{popupText}</SW.PopupText>
+          </SW.PopupBox>
           <SW.Background>
             {this.renderIcon(status)}
             {this.renderTitle()}
           </SW.Background>
           {this.renderSideLabel(status)}
           <SW.Title textOutside={!!textOutside}>Text</SW.Title>
-          <SW.PopupBox show={test} height={height}>
-            <SW.PopupText>{popupText}</SW.PopupText>
-          </SW.PopupBox>
         </SW.ATag>
       </SwissProvider>
     );
