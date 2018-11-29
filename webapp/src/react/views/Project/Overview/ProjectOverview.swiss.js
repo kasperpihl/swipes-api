@@ -18,11 +18,6 @@ export default styleSheet('ProjectOverview', {
   },
   Div: {
     marginLeft: '40%',
-
-    '&:before': {
-      _size: '100%',
-      display: 'block',
-      backgroundColor: 'green',
-    }
+    marginBottom: '50px',
   }
 });

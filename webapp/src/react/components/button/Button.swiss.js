@@ -133,7 +133,7 @@ export default styleSheet('Button', {
       transform: 'translateX(-50%)',
 
       rounded: {
-        borderRadius: '18px',
+        borderRadius: '6px',
       }
     },
   },
