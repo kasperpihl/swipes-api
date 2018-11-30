@@ -17,7 +17,11 @@ export default styleSheet('ProjectOverview', {
     _el: 'h1',
   },
   Div: {
-    marginLeft: '40%',
+    _size: ['500px', 'auto'],
+    _flex: ['column', 'center', 'between'],
+    position: 'absolute', 
+    top: '10%',
+    left: '20%',
     marginBottom: '50px',
   }
 });

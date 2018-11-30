@@ -6,6 +6,7 @@ import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
 import StepSlider from 'src/react/components/step-slider/StepSlider';
 import ProgreessCircle from 'src/react/components/progress-circle/ProgressCircle';
 import Button from 'src/react/components/button/Button';
+import Dropdown from 'src/react/components/dropdown/Dropdown';
 
 @withRequests(
   {
@@ -97,6 +98,14 @@ export default class ProjectOverview extends PureComponent {
       <SW.Wrapper>
         <SW.Header>
           <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
+        </SW.Header>
+        {this.renderItems()}
+        <SW.AddButton
+          onClick={this.onAdd}
+          title="Add item"
+          icon="Plus"
+        />
+        <SW.Div>
           <StepSlider 
             min={0}
             max={4}
@@ -105,15 +114,7 @@ export default class ProjectOverview extends PureComponent {
             increase={this.increaseSlider}
             decrease={this.decreaseSlider}
           />
-        </SW.Header>
-        {this.renderItems()}
-        <SW.AddButton
-          onClick={this.onAdd}
-          title="Add item"
-          icon="Plus"
-        />
-        <ProgreessCircle progress={6}/>
-        <SW.Div>
+          <ProgreessCircle progress={6}/>
           <Button  
             onMouseEnter={this.showPopupText}
             onMouseLeave={this.hidePopupText}
@@ -124,6 +125,9 @@ export default class ProjectOverview extends PureComponent {
             rounded={true}
             showPopupText={showPopupText} 
             numberOfLines={1}
+          />
+          <Dropdown 
+            rounded={false}
           />
         </SW.Div>
       </SW.Wrapper>
