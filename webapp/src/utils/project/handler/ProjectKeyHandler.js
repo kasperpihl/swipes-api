@@ -4,17 +4,20 @@ export default class ProjectKeyHandler {
     window.addEventListener('keydown', this.onKeyDown);
   }
   onKeyDown = e => {
+    const { localState } = this.state;
+    const selectedId = localState.get('selectedId');
+    if (!selectedId) return;
     if (e.keyCode === 8) {
       // Backspace
       if (e.target.selectionStart === 0 && e.target.selectionEnd === 0) {
         e.preventDefault();
-        this.stateManager.editHandler.delete(e);
+        this.stateManager.editHandler.delete(selectedId);
       }
     } else if (e.keyCode === 9) {
       // Tab
       e.preventDefault();
-      if (e.shiftKey) this.stateManager.indentHandler.outdent();
-      else this.stateManager.indentHandler.indent();
+      if (e.shiftKey) this.stateManager.indentHandler.outdent(selectedId);
+      else this.stateManager.indentHandler.indent(selectedId);
     } else if (e.keyCode === 13) {
       e.preventDefault();
       this.stateManager.editHandler.enter(e);
@@ -27,7 +30,7 @@ export default class ProjectKeyHandler {
     } else if (e.keyCode === 38) {
       // Up arrow
       e.preventDefault();
-      this.stateManager.selectHandler.selectPrev(e);
+      this.stateManager.selectHandler.selectPrev(e.target.selectionStart);
     } else if (e.keyCode === 39) {
       // Right arrow
       if (e.metaKey || e.ctrlKey) {
@@ -37,7 +40,7 @@ export default class ProjectKeyHandler {
     } else if (e.keyCode === 40) {
       // Down arrow
       e.preventDefault();
-      this.stateManager.selectHandler.selectNext(e);
+      this.stateManager.selectHandler.selectNext(e.target.selectionStart);
     } else if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       if (e.shiftKey) {

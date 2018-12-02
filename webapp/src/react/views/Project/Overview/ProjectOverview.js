@@ -60,21 +60,24 @@ export default class ProjectOverview extends PureComponent {
   }
   increaseSlider = () => {
     const { sliderTestValue } = this.state;
+    this.stateManager.indentHandler.enforceIndention(sliderTestValue + 1);
     this.setState({ sliderTestValue: sliderTestValue + 1 });
   };
   decreaseSlider = () => {
     const { sliderTestValue } = this.state;
+    this.stateManager.indentHandler.enforceIndention(sliderTestValue - 1);
     this.setState({ sliderTestValue: sliderTestValue - 1 });
   };
   renderItems() {
     const { localState, clientState } = this.state;
 
-    const selectedIndex = localState.get('selectedIndex');
+    const selectedId = localState.get('selectedId');
     const selectionStart = localState.get('selectionStart');
+
     return localState.get('visibleOrder').map((taskId, i) => (
       <ProjectItem
-        focus={i === selectedIndex}
-        selectionStart={i === selectedIndex && selectionStart}
+        focus={taskId === selectedId}
+        selectionStart={taskId === selectedId && selectionStart}
         item={fromJS({
           indent: clientState.getIn(['indent', taskId]),
           completion: clientState.getIn(['completion', taskId]),
@@ -125,7 +128,6 @@ export default class ProjectOverview extends PureComponent {
             size="large"
             rounded={true}
             showPopupText={showPopupText}
-            numberOfLines={1}
           />
           <Dropdown rounded={false} />
         </SW.Div>

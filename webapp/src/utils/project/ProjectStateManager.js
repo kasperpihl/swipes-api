@@ -59,21 +59,6 @@ export default class ProjectStateManager {
   getState = () => this.state;
   parseServerData = () => {};
   update = (state, undoString = true) => {
-    // Whenever we update order, make sure to update what is visible
-    // If selection is by id, ensure correct visible i
-    if (state.selectedId) {
-      state.selectedIndex = state.visibleOrder.findIndex(
-        o => o.get('id') === state.selectedId
-      );
-      delete state.selectedId;
-    }
-    // If I select a new row, but do not set selectionStart, make sure old is not used
-    if (
-      typeof state.selectedIndex === 'number' &&
-      typeof state.selectionStart !== 'number'
-    ) {
-      state.selectionStart = null;
-    }
     const newState = Object.assign({}, this.state, state);
     this.undoHandler.pushToUndoStack(undoString);
     this._updateState(newState);

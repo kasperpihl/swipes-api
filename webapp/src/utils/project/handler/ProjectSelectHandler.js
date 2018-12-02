@@ -2,44 +2,40 @@ export default class ProjectSelectHandler {
   constructor(stateManager) {
     this.stateManager = stateManager;
   }
-  selectNext = e => {
-    const { visibleOrder, selectedIndex } = this.state;
-    let nextIndex = selectedIndex + 1;
-    if (nextIndex >= visibleOrder.size) nextIndex = 0;
-    this.stateManager.update(
-      {
-        selectedIndex: nextIndex,
-        selectionStart: e.target.selectionStart
-      },
-      false
-    );
+  selectNext = (selectionStart = null) => {
+    this._selectWithModifier(1, selectionStart);
   };
-  selectPrev = e => {
-    const { visibleOrder, selectedIndex } = this.state;
-    let prevIndex = selectedIndex - 1;
-    if (prevIndex < 0) prevIndex = visibleOrder.size - 1;
-    this.stateManager.update(
-      {
-        selectedIndex: prevIndex,
-        selectionStart: e.target.selectionStart
-      },
-      false
-    );
+  selectPrev = (selectionStart = null) => {
+    this._selectWithModifier(-1, selectionStart);
   };
-  selectWithId = id => {
-    const { selectedIndex } = this.state;
-    const visibleI = this.stateManager._visibleIFromId(id);
-    if (selectedIndex !== visibleI) {
-      this.stateManager.update({ selectedIndex: visibleI }, false);
+  _selectWithModifier = (modifier, selectionStart) => {
+    let { localState } = this.state;
+    const selectedId = localState.get('selectedId');
+    const visibleOrder = localState.get('visibleOrder');
+    const visibleI = visibleOrder.findIndex(taskId => taskId === selectedId);
+    const nextI = (visibleI + modifier) % visibleOrder.size;
+
+    localState = localState
+      .set('selectedId', visibleOrder.get(nextI))
+      .set('selectionStart', selectionStart);
+    console.log(selectionStart);
+
+    this.stateManager.update({ localState }, false);
+  };
+  select = id => {
+    this._selectValue(id);
+  };
+  deselect = () => {
+    this._selectValue(null);
+  };
+  _selectValue = value => {
+    let { localState } = this.state;
+    if (localState.get('selectedId') !== value) {
+      localState = localState.set('selectedId', value);
+      this.stateManager.update({ localState }, false);
     }
   };
-  deselectId = id => {
-    const { selectedIndex } = this.state;
-    const visibleI = this.stateManager._visibleIFromId(id);
-    if (selectedIndex === visibleI) {
-      this.stateManager.update({ selectedIndex: -1 }, false);
-    }
-  };
+
   // stateManager will set this, once an update happens.
   setState = state => {
     this.state = state;

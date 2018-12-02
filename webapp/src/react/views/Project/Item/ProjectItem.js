@@ -20,10 +20,10 @@ export default class ProjectItem extends PureComponent {
   componentDidUpdate() {
     this.checkFocus();
   }
-  onFocus = e => {
+  onFocus = () => {
     const { item, stateManager } = this.props;
     // onFocus(item.get('item_id'), e);
-    stateManager.selectHandler.selectWithId(item.get('item_id'));
+    stateManager.selectHandler.select(item.get('item_id'));
     this.setState({ isFocused: true });
   };
   onComplete = e => {
@@ -39,10 +39,9 @@ export default class ProjectItem extends PureComponent {
     const { stateManager, item } = this.props;
     stateManager.editHandler.updateTitle(item.get('item_id'), e.target.value);
   };
-  onBlur = e => {
-    const { stateManager, item } = this.props;
-    stateManager.selectHandler.deselectId(item.get('item_id'));
-    // onBlur(item.get('item_id'), e);
+  onBlur = () => {
+    const { stateManager } = this.props;
+    stateManager.selectHandler.deselect();
     this.setState({ isFocused: false });
   };
   onExpandClick = () => {

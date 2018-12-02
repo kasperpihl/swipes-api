@@ -7,35 +7,34 @@ export default class ProjectIndentHandler {
     this.stateManager = stateManager;
   }
   enforceIndention = depth => {
-    let { order } = this.state;
-    order = order.map(item => item.set('expanded', item.get('indent') < depth));
+    let { localState, clientState } = this.state;
+    clientState.get('sortedOrder').forEach(taskId => {
+      const indent = localState.getIn(['indent', taskId]);
+      const shouldBeExpanded = indent < depth;
+      if (localState.getIn(['expanded', taskId]) !== shouldBeExpanded) {
+        localState = localState.setIn(['expanded', taskId], shouldBeExpanded);
+      }
+    });
     this.stateManager.update({
       sliderValue: depth,
-      order
+      localState
     });
   };
   indent = id => {
-    const { order, selectedIndex } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
-    id = this.stateManager._idFromI(i);
-    let newOrder = projectIndentItemAndChildren(order, i, 1);
-    newOrder = projectUpdateHasChildrenForItem(newOrder, i);
-    newOrder = projectForceParentExpandedForItem(newOrder, i);
-
-    // Use selectedId, cause if we force expand parent, selected index gets messed up
-    this.stateManager.update({
-      selectedId: id,
-      order: newOrder
-    });
+    this._indentWithModifier(id, 1);
   };
   outdent = id => {
-    const { order, selectedIndex } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
+    this._indentWithModifier(id, -1);
+  };
+  _indentWithModifier = (id, modifier) => {
+    let { clientState, localState } = this.state;
+    clientState = projectIndentItemAndChildren(clientState, id, modifier);
+    localState = projectUpdateHasChildrenForItem(clientState, localState, id);
+    localState = projectForceParentExpandedForItem(clientState, localState, id);
 
-    let newOrder = projectIndentItemAndChildren(order, i, -1);
-    newOrder = projectUpdateHasChildrenForItem(newOrder, i);
     this.stateManager.update({
-      order: newOrder
+      clientState,
+      localState
     });
   };
   // stateManager will set this, once an update happens.

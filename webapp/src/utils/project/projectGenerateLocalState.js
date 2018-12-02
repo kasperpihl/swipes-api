@@ -4,7 +4,7 @@ import projectGenerateVisibleOrder from './projectGenerateVisibleOrder';
 export default clientState => {
   let localState = fromJS({
     hasChildren: {},
-    selectedIndex: -1,
+    selectedId: null,
     sliderValue: 0,
     expanded: {}
   });

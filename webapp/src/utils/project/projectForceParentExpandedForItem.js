@@ -1,10 +1,19 @@
-export default (order, i) => {
-  const indent = order.getIn([i, 'indent']);
-  const parentI = order.findLastIndex(
-    (val, key) => key < i && val.get('indent') < indent
-  );
-  if (parentI > -1 && !order.getIn([parentI, 'expanded'])) {
-    order = order.setIn([parentI, 'expanded'], true);
+export default (clientState, localState, id) => {
+  const itemIndent = clientState.getIn(['indent', id]);
+  const sortedOrder = clientState.get('sortedOrder');
+  let parentId;
+  let deltaI = clientState.getIn(['order', id]) - 1;
+
+  while (typeof parentId === 'undefined' && deltaI >= 0) {
+    const id = sortedOrder.get(deltaI);
+    const indent = clientState.getIn(['indent', id]);
+    if (indent < itemIndent) {
+      parentId = id;
+    }
+    deltaI--;
   }
-  return order;
+  if (parentId && !localState.getIn(['expanded', parentId])) {
+    localState = localState.setIn(['expanded', parentId], true);
+  }
+  return localState;
 };

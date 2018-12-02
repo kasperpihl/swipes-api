@@ -1,23 +1,23 @@
-export default (order, i) => {
-  const curr = order.get(i);
-  const prev = order.get(i - 1);
-  const next = order.get(i + 1);
-  if (prev) {
-    const hasChildren = curr.get('indent') > prev.get('indent');
-    if (hasChildren !== prev.get('hasChildren')) {
-      order = order
-        .setIn([i - 1, 'hasChildren'], hasChildren)
-        .setIn([i - 1, 'expanded'], !!hasChildren);
+export default (clientState, localState, id) => {
+  const sortedOrder = clientState.get('sortedOrder');
+  const i = clientState.getIn(['order', id]);
+  const currId = sortedOrder.get(i);
+  const prevId = sortedOrder.get(i - 1);
+  const nextId = sortedOrder.get(i + 1);
+  const currIndent = clientState.getIn(['indent', currId]);
+  if (prevId) {
+    const prevIndent = clientState.getIn(['indent', prevId]);
+    const hasChildren = currIndent > prevIndent;
+    if (hasChildren !== localState.getIn(['hasChildren', prevId])) {
+      localState = localState.setIn(['hasChildren', prevId], hasChildren);
+      localState = localState.setIn(['expanded', prevId], hasChildren);
     }
   }
-  let hasChildren = false;
-  if (next) {
-    hasChildren = next.get('indent') > curr.get('indent');
+  const hasChildren = (clientState.getIn(['indent', nextId]) || 0) > currIndent;
+
+  if (hasChildren !== clientState.getIn(['hasChildren', currId])) {
+    localState = localState.setIn(['hasChildren', currId], hasChildren);
+    localState = localState.setIn(['expanded', currId], hasChildren);
   }
-  if (hasChildren !== curr.get('hasChildren')) {
-    order = order
-      .setIn([i, 'hasChildren'], hasChildren)
-      .setIn([i, 'expanded'], !!hasChildren);
-  }
-  return order;
+  return localState;
 };
