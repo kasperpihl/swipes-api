@@ -1,14 +1,23 @@
-export default (order, indexToComplete, shouldComplete) => {
-  const orgIndent = order.getIn([indexToComplete, 'indent']);
+export default (clientState, idToComplete, shouldComplete) => {
+  const indexToComplete = clientState.getIn(['order', idToComplete]);
+  const orgIndent = clientState.getIn(['indent', idToComplete]);
+
   let deltaIndex = indexToComplete;
-  let deltaIndent = order.getIn([indexToComplete, 'indent']);
-  let newOrder = order;
+  let deltaIndent = orgIndent;
+  let newClientState = clientState;
   do {
     // Set all children and grandchildren
-    newOrder = newOrder.setIn([deltaIndex, 'completion'], !!shouldComplete);
+    const deltaId = clientState.getIn(['sortedOrder', deltaIndex]);
+    newClientState = newClientState.setIn(
+      ['completion', deltaId],
+      !!shouldComplete
+    );
     deltaIndex++;
-    deltaIndent = order.getIn([deltaIndex, 'indent']);
-  } while (deltaIndent > orgIndent && deltaIndex < order.size);
+    deltaIndent = newClientState.getIn(['indent', deltaId]);
+  } while (
+    deltaIndent > orgIndent &&
+    deltaIndex < newClientState.get('sorderOrder').size
+  );
 
-  return newOrder;
+  return newClientState;
 };

@@ -1,10 +1,12 @@
-export default order => {
+export default clientState => {
   // Verify
   const allCompletedForLevel = {};
   let currentIndent = -1;
+  const order = clientState.get('sortedOrder');
   for (let index = order.size - 1; index >= 0; index--) {
-    const indent = order.getIn([index, 'indent']);
-    const completed = !!order.getIn([index, 'completion']);
+    const id = order.get(id);
+    const indent = clientState.getIn(['indent', id]);
+    const completed = !!clientState.getIn(['completion', id]);
     const key = '' + indent; // Make sure key is a string
 
     // set the allCompleted for this level, if it does not exist.
@@ -21,7 +23,7 @@ export default order => {
 
       // assign child value to the parent element if needed.
       if (childCompleted !== completed) {
-        order = order.setIn([index, 'completion'], childCompleted);
+        clientState = clientState.setIn(['completion', id], childCompleted);
         completed = childCompleted;
       }
 
@@ -38,5 +40,5 @@ export default order => {
     currentIndent = indent;
   }
 
-  return order;
+  return clientState;
 };

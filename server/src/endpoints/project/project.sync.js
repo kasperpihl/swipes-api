@@ -8,7 +8,7 @@ import redisPubClient from 'src/utils/redis/redisPubClient';
 const expectedInput = {
   project_id: string.require(),
   rev: number.require(),
-  items: object.of(
+  itemsById: object.of(
     object.as({
       title: string,
       assignees: array.of(string)
@@ -31,7 +31,7 @@ export default endpointCreate(
       order,
       indent,
       completion,
-      items,
+      itemsById,
       rev,
       update_identifier = randomstring.generate(8)
     } = res.locals.input;
@@ -74,9 +74,9 @@ export default endpointCreate(
       }
     ];
 
-    if (items) {
-      for (let item_id in items) {
-        let keys = items[item_id];
+    if (itemsById) {
+      for (let item_id in itemsById) {
+        let keys = itemsById[item_id];
         if (!keys) keys = { deleted: true };
         queries.push(
           sqlInsertQuery(
@@ -101,20 +101,16 @@ export default endpointCreate(
     }
 
     const response = await transaction(queries);
-    const updates = [];
-    updates.push({
-      type: 'project',
-      data: response.shift().rows[0]
+    const updates = [{ type: 'project', data: response.shift().rows[0] }];
+
+    updates[0].data.itemsById = {};
+    response.forEach(res => {
+      const item = res.rows[0];
+      updates[0].data.itemsById[item.id] = item;
     });
-    if (response.length) {
-      updates.push(
-        ...response.map(res => ({
-          type: 'item',
-          data: res.rows[0]
-        }))
-      );
-    }
+
     await redisPubClient.publish(user_id, JSON.stringify(updates));
+
     // Create response data.
     res.locals.output = { update_identifier, updates2: updates };
   }

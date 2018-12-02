@@ -34,7 +34,7 @@ export default endpointCreate(
       itemsById[item.item_id] = item;
     });
     res.locals.output = {
-      result: { project: projectRes.rows[0], itemsById }
+      result: { ...projectRes.rows[0], itemsById }
     };
   }
 );

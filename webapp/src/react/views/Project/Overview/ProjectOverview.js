@@ -7,6 +7,7 @@ import StepSlider from 'src/react/components/step-slider/StepSlider';
 import ProgreessCircle from 'src/react/components/progress-circle/ProgressCircle';
 import Button from 'src/react/components/button/Button';
 import Dropdown from 'src/react/components/dropdown/Dropdown';
+import { fromJS } from 'immutable';
 
 @withRequests(
   {
@@ -33,7 +34,7 @@ export default class ProjectOverview extends PureComponent {
     super(props);
     this.state = {
       sliderTestValue: 0,
-      showPopupText: false,
+      showPopupText: false
     };
   }
   componentWillMount() {
@@ -62,51 +63,55 @@ export default class ProjectOverview extends PureComponent {
   }
   increaseSlider = () => {
     const { sliderTestValue } = this.state;
-    this.setState({ sliderTestValue: sliderTestValue + 1})
-  }
+    this.setState({ sliderTestValue: sliderTestValue + 1 });
+  };
   decreaseSlider = () => {
     const { sliderTestValue } = this.state;
-    this.setState({ sliderTestValue: sliderTestValue - 1})
-  }
+    this.setState({ sliderTestValue: sliderTestValue - 1 });
+  };
   renderItems() {
-    const { visibleOrder, selectedIndex, selectionStart } = this.state;
-    return visibleOrder.map((item, i) => (
+    const { localState, clientState } = this.state;
+
+    const selectedIndex = localState.get('selectedIndex');
+    const selectionStart = localState.get('selectionStart');
+    return localState.get('visibleOrder').map((taskId, i) => (
       <ProjectItem
         focus={i === selectedIndex}
         selectionStart={i === selectedIndex && selectionStart}
-        item={item}
-        key={item.get('id')}
+        item={fromJS({
+          indent: clientState.getIn(['indent']),
+          completion: clientState.getIn(['completion', taskId]),
+          hasChildren: localState.getIn(['hasChildren', taskId]),
+          expanded: localState.getIn(['expanded', taskId])
+        }).merge(clientState.getIn(['itemsById', taskId]))}
+        key={taskId}
         stateManager={this.stateManager}
       />
     ));
   }
 
-  showPopupText = (e) => {
+  showPopupText = e => {
     this.timeout = setTimeout(() => {
       this.setState({ showPopupText: true });
-    }, 700)
-  }
-  hidePopupText = (e) => {
+    }, 700);
+  };
+  hidePopupText = e => {
     clearTimeout(this.timeout);
     this.setState({ showPopupText: false });
-  }
+  };
 
   render() {
     const { sliderTestValue, showPopupText } = this.state;
-    
+
     return (
       <SW.Wrapper>
         <SW.Header>
           <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
         </SW.Header>
         {this.renderItems()}
-        <SW.AddButton
-          onClick={this.onAdd}
-          title="Add item"
-          icon="Plus"
-        />
+        <SW.AddButton onClick={this.onAdd} title="Add item" icon="Plus" />
         <SW.Div>
-          <StepSlider 
+          <StepSlider
             min={0}
             max={4}
             sliderValue={sliderTestValue}
@@ -114,21 +119,19 @@ export default class ProjectOverview extends PureComponent {
             increase={this.increaseSlider}
             decrease={this.decreaseSlider}
           />
-          <ProgreessCircle progress={6}/>
-          <Button  
+          <ProgreessCircle progress={6} />
+          <Button
             onMouseEnter={this.showPopupText}
             onMouseLeave={this.hidePopupText}
-            icon='Trash'
-            title='Start new plan'
-            popupText='Testing popup'
-            size='large'
+            icon="Trash"
+            title="Start new plan"
+            popupText="Testing popup"
+            size="large"
             rounded={true}
-            showPopupText={showPopupText} 
+            showPopupText={showPopupText}
             numberOfLines={1}
           />
-          <Dropdown 
-            rounded={false}
-          />
+          <Dropdown rounded={false} />
         </SW.Div>
       </SW.Wrapper>
     );

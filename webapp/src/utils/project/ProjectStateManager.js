@@ -7,9 +7,7 @@ import ProjectSelectHandler from './handler/ProjectSelectHandler';
 import ProjectSyncHandler from './handler/ProjectSyncHandler';
 import ProjectUndoHandler from './handler/ProjectUndoHandler';
 
-import projectConvertServerToLocal from './projectConvertServerToLocal';
-import projectGenerateVisibleRows from './projectGenerateVisibleRows';
-import { fromJS } from 'immutable';
+import projectGenerateLocalState from './projectGenerateLocalState';
 
 /*
 The responsibility of State Manager is to handle 
@@ -17,14 +15,23 @@ the full state for a ProjectOverview, it achieves this with help from
 */
 export default class ProjectStateManager {
   constructor(serverState, onStateChange) {
-    const [order, itemsById] = projectConvertServerToLocal(serverState);
+    const clientState = serverState.set(
+      'sortedOrder',
+      serverState
+        .get('order')
+        .sort((a, b) => {
+          if (a < b) return -1;
+          if (a > b) return 1;
+          return 0;
+        })
+        .keySeq()
+        .toList()
+    );
+    const localState = projectGenerateLocalState(clientState);
+    console.log(localState.toJS(), clientState.toJS());
     this.state = {
-      name: '',
-      order,
-      visibleOrder: projectGenerateVisibleRows(order, itemsById),
-      itemsById,
-      selectedIndex: -1,
-      sliderValue: 0
+      clientState,
+      localState
     };
 
     this.onStateChange = onStateChange;
@@ -39,7 +46,7 @@ export default class ProjectStateManager {
       syncHandler: new ProjectSyncHandler(this),
       undoHandler: new ProjectUndoHandler(this)
     };
-    this.callHandlers('setRawServerState', serverState);
+    this.callHandlers('setRawServerState', clientState);
     this.callHandlers('setState', this.state);
     Object.assign(this, this.handlers);
   }

@@ -15,13 +15,6 @@ export default class ProjectEditHandler {
     itemsById = itemsById.setIn([id, 'title'], title);
     this.stateManager.update({ itemsById }, `${id}-title`);
   };
-  addAttachment = (id, attachment) => {
-    let { itemsById } = this.state;
-    itemsById = itemsById.setIn([id, 'type'], 'attachment');
-    itemsById = itemsById.setIn([id, 'title'], attachment.get('title'));
-    itemsById = itemsById.setIn([id, 'attachment'], attachment);
-    this.stateManager.update({ itemsById });
-  };
   updateAssignees = (id, assignees) => {
     let { itemsById } = this.state;
     itemsById = itemsById.setIn([id, 'assignees'], assignees);
@@ -77,8 +70,7 @@ export default class ProjectEditHandler {
       newId,
       fromJS({
         id: newId,
-        title: nextTitle,
-        type: 'task'
+        title: nextTitle
       })
     );
 
@@ -115,8 +107,7 @@ export default class ProjectEditHandler {
       newId,
       fromJS({
         id: newId,
-        title: '',
-        type: 'task'
+        title: ''
       })
     );
     order = order.push(

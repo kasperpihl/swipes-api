@@ -22,40 +22,41 @@ export default class ProjectItem extends PureComponent {
   }
   onFocus = e => {
     const { item, stateManager } = this.props;
-    // onFocus(item.get('id'), e);
-    stateManager.selectHandler.selectWithId(item.get('id'));
+    // onFocus(item.get('item_id'), e);
+    stateManager.selectHandler.selectWithId(item.get('item_id'));
     this.setState({ isFocused: true });
   };
   onComplete = e => {
     const { item, stateManager } = this.props;
+    console.log('complete', item.get('item_id'));
     if (item.get('completion')) {
-      stateManager.completeHandler.incomplete(item.get('id'));
+      stateManager.completeHandler.incomplete(item.get('item_id'));
     } else {
-      stateManager.completeHandler.complete(item.get('id'));
+      stateManager.completeHandler.complete(item.get('item_id'));
     }
   };
   onChange = e => {
     const { stateManager, item } = this.props;
-    stateManager.editHandler.updateTitle(item.get('id'), e.target.value);
+    stateManager.editHandler.updateTitle(item.get('item_id'), e.target.value);
   };
   onBlur = e => {
     const { stateManager, item } = this.props;
-    stateManager.selectHandler.deselectId(item.get('id'));
-    // onBlur(item.get('id'), e);
+    stateManager.selectHandler.deselectId(item.get('item_id'));
+    // onBlur(item.get('item_id'), e);
     this.setState({ isFocused: false });
   };
   onAddedAttachment(attachment) {
     const { stateManager, item } = this.props;
-    stateManager.editHandler.addAttachment(item.get('id'), attachment);
+    stateManager.editHandler.addAttachment(item.get('item_id'), attachment);
   }
   onExpandClick = () => {
     const { stateManager, item } = this.props;
-    stateManager.expandHandler.toggleExpandForId(item.get('id'));
+    stateManager.expandHandler.toggleExpandForId(item.get('item_id'));
   };
   onAssigningClose(assignees) {
     const { stateManager, item } = this.props;
     if (!this._unmounted && assignees && onChangeAssignees) {
-      stateManager.editHandler.updateAssignees(item.get('id'), assignees);
+      stateManager.editHandler.updateAssignees(item.get('item_id'), assignees);
     }
   }
   checkFocus() {
@@ -64,10 +65,7 @@ export default class ProjectItem extends PureComponent {
     if (focus && !isFocused) {
       this.inputRef.focus();
       if (typeof selectionStart === 'number') {
-        const selI = Math.min(
-          item.getIn(['meta', 'title']).length,
-          selectionStart
-        );
+        const selI = Math.min(item.get('title').length, selectionStart);
 
         this.inputRef.setSelectionRange(selI, selI);
       }
@@ -77,10 +75,12 @@ export default class ProjectItem extends PureComponent {
   }
   renderType() {
     const { item } = this.props;
-    
+
     return (
-      <SW.Checkbox checked={item.get('completion')} onClick={this.onComplete} >
-        <Icon icon="Checkmark" fill={item.get('completion') ? `#FFFFFF`: `#000000`} width="18" />
+      <SW.Checkbox checked={item.get('completion')} onClick={this.onComplete}>
+        {item.get('completion') && (
+          <Icon icon="Checkmark" fill="#FFFFFF" width="18" />
+        )}
       </SW.Checkbox>
     );
   }
@@ -88,7 +88,7 @@ export default class ProjectItem extends PureComponent {
     const { item } = this.props;
     const { isFocused } = this.state;
 
-    const title = item.getIn(['meta', 'title']);
+    const title = item.get('title');
     return (
       <SwissProvider selected={isFocused}>
         <SW.Wrapper

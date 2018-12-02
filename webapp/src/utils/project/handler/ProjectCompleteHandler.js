@@ -1,26 +1,21 @@
-import randomString from 'swipes-core-js/utils/randomString';
 import projectCompleteItemWithChildren from 'src/utils/project/projectCompleteItemWithChildren';
 import projectValidateCompletion from 'src/utils/project/projectValidateCompletion';
-
-import { fromJS } from 'immutable';
 
 export default class ProjectCompleteHandler {
   constructor(stateManager) {
     this.stateManager = stateManager;
   }
   complete = id => {
-    let { order } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(id);
-    order = projectCompleteItemWithChildren(order, i, true);
-    order = projectValidateCompletion(order);
-    this.stateManager.update({ order });
+    let { clientState } = this.state;
+    clientState = projectCompleteItemWithChildren(clientState, id, true);
+    clientState = projectValidateCompletion(clientState);
+    this.stateManager.update({ clientState });
   };
   incomplete = id => {
-    let { order } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(id);
-    order = projectCompleteItemWithChildren(order, i, false);
-    order = projectValidateCompletion(order);
-    this.stateManager.update({ order });
+    let { clientState } = this.state;
+    clientState = projectCompleteItemWithChildren(clientState, id, false);
+    clientState = projectValidateCompletion(clientState);
+    this.stateManager.update({ clientState });
   };
 
   // stateManager will set this, once an update happens.
