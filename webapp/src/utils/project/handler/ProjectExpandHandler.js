@@ -1,28 +1,24 @@
+import projectGenerateVisibleOrder from '../projectGenerateVisibleOrder';
+
 export default class ProjectExpandHandler {
   constructor(stateManager) {
     this.stateManager = stateManager;
   }
-  toggleExpandForId = id => {
-    const { order } = this.state;
-    const i = this.stateManager._iFromId(id);
-    if (order.getIn([i, 'expanded'])) {
-      return this.collapse(id);
-    }
-    return this.expand(id);
-  };
   expand = id => {
-    let { order, selectedIndex } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
-    if (!order.getIn([i, 'hasChildren'])) return;
-
-    this.stateManager.update({ order: order.setIn([i, 'expanded'], true) });
+    this._expandById(id, true);
   };
   collapse = id => {
-    let { order, selectedIndex } = this.state;
-    const i = this.stateManager._iFromVisibleIOrId(id || selectedIndex);
-    if (!order.getIn([i, 'hasChildren'])) return;
-
-    this.stateManager.update({ order: order.setIn([i, 'expanded'], false) });
+    this._expandById(id, false);
+  };
+  _expandById = (id, expand) => {
+    let { localState, clientState } = this.state;
+    if (!localState.getIn(['hasChildren', id])) return;
+    localState = localState.setIn(['expanded', id], expand);
+    localState = localState.set(
+      'visibleOrder',
+      projectGenerateVisibleOrder(clientState, localState)
+    );
+    this.stateManager.update({ localState });
   };
   // stateManager will set this, once an update happens.
   setState = state => {

@@ -45,13 +45,11 @@ export default class ProjectItem extends PureComponent {
     // onBlur(item.get('item_id'), e);
     this.setState({ isFocused: false });
   };
-  onAddedAttachment(attachment) {
-    const { stateManager, item } = this.props;
-    stateManager.editHandler.addAttachment(item.get('item_id'), attachment);
-  }
   onExpandClick = () => {
     const { stateManager, item } = this.props;
-    stateManager.expandHandler.toggleExpandForId(item.get('item_id'));
+    stateManager.expandHandler[item.get('expanded') ? 'collapse' : 'expand'](
+      item.get('item_id')
+    );
   };
   onAssigningClose(assignees) {
     const { stateManager, item } = this.props;
@@ -111,7 +109,7 @@ export default class ProjectItem extends PureComponent {
             value={title}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
-            placeholder="# title, +attach"
+            placeholder="Write a task"
             innerRef={c => {
               this.inputRef = c;
             }}

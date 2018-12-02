@@ -11,14 +11,14 @@ export default class ProjectEditHandler {
     this.stateManager.update({ name });
   };
   updateTitle = (id, title) => {
-    let { itemsById } = this.state;
-    itemsById = itemsById.setIn([id, 'title'], title);
-    this.stateManager.update({ itemsById }, `${id}-title`);
+    let { clientState } = this.state;
+    clientState = clientState.setIn(['itemsById', id, 'title'], title);
+    this.stateManager.update({ clientState }, `${id}-title`);
   };
   updateAssignees = (id, assignees) => {
-    let { itemsById } = this.state;
-    itemsById = itemsById.setIn([id, 'assignees'], assignees);
-    this.stateManager.update({ itemsById });
+    let { clientState } = this.state;
+    clientState = clientState.setIn(['itemsById', id, 'assignees'], assignees);
+    this.stateManager.update({ clientState });
   };
   delete = e => {
     let { itemsById, order, selectedIndex, visibleOrder } = this.state;
@@ -98,29 +98,6 @@ export default class ProjectEditHandler {
       order,
       selectedIndex: selectedIndex + 1,
       selectionStart: 0
-    });
-  };
-  add = () => {
-    let { itemsById, order, visibleOrder } = this.state;
-    const newId = randomString(5);
-    itemsById = itemsById.set(
-      newId,
-      fromJS({
-        id: newId,
-        title: ''
-      })
-    );
-    order = order.push(
-      fromJS({
-        id: newId,
-        indent: 0
-      })
-    );
-
-    this.stateManager.update({
-      itemsById,
-      order,
-      selectedIndex: visibleOrder.size
     });
   };
   // stateManager will set this, once an update happens.

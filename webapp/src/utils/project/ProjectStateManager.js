@@ -60,12 +60,6 @@ export default class ProjectStateManager {
   parseServerData = () => {};
   update = (state, undoString = true) => {
     // Whenever we update order, make sure to update what is visible
-    if (state.order || state.itemsById) {
-      state.visibleOrder = projectGenerateVisibleRows(
-        state.order || this.state.order,
-        state.itemsById || this.state.itemsById
-      );
-    }
     // If selection is by id, ensure correct visible i
     if (state.selectedId) {
       state.selectedIndex = state.visibleOrder.findIndex(

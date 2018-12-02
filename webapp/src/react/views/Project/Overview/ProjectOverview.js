@@ -52,9 +52,6 @@ export default class ProjectOverview extends PureComponent {
     const depth = parseInt(e.target.value, 10);
     this.stateManager.indentHandler.enforceIndention(depth);
   };
-  onAdd = () => {
-    this.stateManager.editHandler.add();
-  };
   componentDidUpdate() {
     if (typeof this.focusI === 'number') {
       this.focusI = undefined;
@@ -79,7 +76,7 @@ export default class ProjectOverview extends PureComponent {
         focus={i === selectedIndex}
         selectionStart={i === selectedIndex && selectionStart}
         item={fromJS({
-          indent: clientState.getIn(['indent']),
+          indent: clientState.getIn(['indent', taskId]),
           completion: clientState.getIn(['completion', taskId]),
           hasChildren: localState.getIn(['hasChildren', taskId]),
           expanded: localState.getIn(['expanded', taskId])
@@ -109,7 +106,6 @@ export default class ProjectOverview extends PureComponent {
           <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
         </SW.Header>
         {this.renderItems()}
-        <SW.AddButton onClick={this.onAdd} title="Add item" icon="Plus" />
         <SW.Div>
           <StepSlider
             min={0}
