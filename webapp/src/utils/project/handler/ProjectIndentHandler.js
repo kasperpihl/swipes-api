@@ -7,20 +7,6 @@ export default class ProjectIndentHandler {
   constructor(stateManager) {
     this.stateManager = stateManager;
   }
-  enforceIndention = depth => {
-    let { localState, clientState } = this.state;
-    clientState.get('sortedOrder').forEach(taskId => {
-      const indent = localState.getIn(['indent', taskId]);
-      const shouldBeExpanded = indent < depth;
-      if (localState.getIn(['expanded', taskId]) !== shouldBeExpanded) {
-        localState = localState.setIn(['expanded', taskId], shouldBeExpanded);
-      }
-    });
-    this.stateManager.update({
-      sliderValue: depth,
-      localState
-    });
-  };
   indent = id => {
     this._indentWithModifier(id, 1);
   };

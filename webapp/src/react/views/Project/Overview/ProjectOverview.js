@@ -50,16 +50,17 @@ export default class ProjectOverview extends PureComponent {
   onStateChange = state => this.setState(state);
   onSliderChange = e => {
     const depth = parseInt(e.target.value, 10);
-    this.stateManager.indentHandler.enforceIndention(depth);
+    this.stateManager.expandHandler.setDepth(depth);
+    this.setState({ sliderTestValue: depth });
   };
   increaseSlider = () => {
     const { sliderTestValue } = this.state;
-    this.stateManager.indentHandler.enforceIndention(sliderTestValue + 1);
+    this.stateManager.expandHandler.setDepth(sliderTestValue + 1);
     this.setState({ sliderTestValue: sliderTestValue + 1 });
   };
   decreaseSlider = () => {
     const { sliderTestValue } = this.state;
-    this.stateManager.indentHandler.enforceIndention(sliderTestValue - 1);
+    this.stateManager.expandHandler.setDepth(sliderTestValue - 1);
     this.setState({ sliderTestValue: sliderTestValue - 1 });
   };
   renderItems() {

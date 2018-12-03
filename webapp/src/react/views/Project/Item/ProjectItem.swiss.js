@@ -61,7 +61,6 @@ export default styleSheet('ProjectItem', {
     cursor: 'pointer'
   },
   Checkbox: {
-    _debug: true,
     _size: '18px',
     _flex: ['column', 'center', 'center'],
     border: '2px solid $sw3',
