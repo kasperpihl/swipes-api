@@ -9,40 +9,43 @@ export default class ProjectKeyHandler {
   }
   // stateManager will set this, once an update happens.
   convertToServerState() {
-    const { order, itemsById, name } = this.state;
+    const { clientState } = this.state;
     const serverKeys = ['order', 'indent', 'completion', 'itemsById'];
     const server = {};
 
-    if (name !== this.serverState.getIn(['project', 'name'])) {
+    if (clientState.get('name') !== this.currentServerState.get('name')) {
       server.name = name;
     }
     serverKeys.forEach(key => (server[key] = {}));
 
-    order.forEach((o, i) => {
-      const id = o.get('id');
+    clientState.get('sortedOrder').forEach(taskId => {
+      // Client values
+      const cOrder = clientState.getIn(['order', taskId]);
+      const cIndent = clientState.getIn(['indent', taskId]);
+      const cCompletion = clientState.getIn(['completion', taskId]);
+      const cItem = clientState.getIn(['itemsById', taskId]);
 
       // Server values
-      const sOrder = this.serverState.getIn(['project', 'order', id]);
-      const sIndent = this.serverState.getIn(['project', 'indent', id]);
-      const sCompletion = this.serverState.getIn(['project', 'completion', id]);
+      const sOrder = this.currentServerState.getIn(['order', taskId]);
+      const sIndent = this.currentServerState.getIn(['indent', taskId]);
+      const sCompletion = this.currentServerState.getIn(['completion', taskId]);
+      const sItem = this.currentServerState.getIn(['itemsById', taskId]);
 
-      if (sOrder !== i) {
-        server.order[id] = i;
+      if (sOrder !== cOrder) {
+        server.order[taskId] = cOrder;
       }
-      if (sIndent !== o.get('indent')) {
-        server.indent[id] = o.get('indent');
+      if (sIndent !== cIndent) {
+        server.indent[taskId] = cIndent;
       }
       if (
-        (typeof sCompletion === 'undefined' && o.get('completion')) ||
-        (sCompletion && !o.get('completion'))
+        (typeof sCompletion === 'undefined' && cCompletion) ||
+        (sCompletion && !cCompletion)
       ) {
-        server.completion[id] = o.get('completion');
+        server.completion[taskId] = cCompletion;
       }
 
-      if (this.serverState.getIn(['itemsById', id]) !== itemsById.get(id)) {
-        server.itemsById[id] = {
-          title: itemsById.get(id).get('title')
-        };
+      if (sItem !== cItem) {
+        server.itemsById[taskId] = cItem.toJS();
       }
     });
 
@@ -59,13 +62,13 @@ export default class ProjectKeyHandler {
     console.log(server);
     if (Object.keys(server).length) {
       server.project_id = 'A123131';
-      server.rev = this.serverState.getIn(['project', 'rev']);
+      server.rev = this.currentServerState.get('rev');
       server.update_identifier = randomString(6);
-      request('project.sync', server).then(res => {
-        if (res.ok) {
-          this.mergeNewServerVersion(res.updates2[0], server);
-        }
-      });
+      // request('project.sync', server).then(res => {
+      //   if (res.ok) {
+      //     this.mergeNewServerVersion(res.updates2[0], server);
+      //   }
+      // });
     }
   }
   mergeNewServerVersion(newServerState, localChanges) {
@@ -95,7 +98,7 @@ export default class ProjectKeyHandler {
     this.deletedIds.push(id);
   };
   checkForChanges = () => {
-    // this.convertToServerState();
+    this.convertToServerState();
   };
   bouncedCheckForChanges = debounce(this.checkForChanges, 5000);
   setState = state => {
