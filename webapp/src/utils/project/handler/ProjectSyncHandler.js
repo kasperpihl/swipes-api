@@ -37,10 +37,7 @@ export default class ProjectKeyHandler {
       if (sIndent !== cIndent) {
         server.indent[taskId] = cIndent;
       }
-      if (
-        (typeof sCompletion === 'undefined' && cCompletion) ||
-        (sCompletion && !cCompletion)
-      ) {
+      if ((!sCompletion && cCompletion) || (sCompletion && !cCompletion)) {
         server.completion[taskId] = cCompletion;
       }
 
@@ -59,16 +56,16 @@ export default class ProjectKeyHandler {
     serverKeys.forEach(
       key => !Object.keys(server[key]).length && delete server[key]
     );
-    console.log(server);
+
     if (Object.keys(server).length) {
       server.project_id = 'A123131';
       server.rev = this.currentServerState.get('rev');
       server.update_identifier = randomString(6);
-      // request('project.sync', server).then(res => {
-      //   if (res.ok) {
-      //     this.mergeNewServerVersion(res.updates2[0], server);
-      //   }
-      // });
+      request('project.sync', server).then(res => {
+        if (res.ok) {
+          this.currentServerState = clientState.set('rev', server.rev + 1);
+        }
+      });
     }
   }
   mergeNewServerVersion(newServerState, localChanges) {
