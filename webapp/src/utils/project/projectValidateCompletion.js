@@ -1,13 +1,13 @@
 export default clientState => {
   // Verify
   const allCompletedForLevel = {};
-  let currentIndent = -1;
+  let currentIndention = -1;
   const order = clientState.get('sortedOrder');
   for (let index = order.size - 1; index >= 0; index--) {
     const id = order.get(index);
-    const indent = clientState.getIn(['indent', id]);
+    const indention = clientState.getIn(['indention', id]);
     const completed = !!clientState.getIn(['completion', id]);
-    const key = '' + indent; // Make sure key is a string
+    const key = '' + indention; // Make sure key is a string
 
     // set the allCompleted for this level, if it does not exist.
     if (typeof allCompletedForLevel[key] === 'undefined') {
@@ -15,8 +15,8 @@ export default clientState => {
     }
 
     // If we hit a lower indention
-    if (indent < currentIndent) {
-      const childLevelKey = `${indent + 1}`; // Make sure key is a string
+    if (indention < currentIndention) {
+      const childLevelKey = `${indention + 1}`; // Make sure key is a string
 
       // check if all of it's children are completed or incomplete
       const childCompleted = allCompletedForLevel[childLevelKey];
@@ -36,7 +36,7 @@ export default clientState => {
     }
 
     // Make sure to update indent level
-    currentIndent = indent;
+    currentIndention = indention;
   }
 
   return clientState;

@@ -1,6 +1,6 @@
 export default (clientState, idToComplete, shouldComplete) => {
-  const indexToComplete = clientState.getIn(['order', idToComplete]);
-  const orgIndent = clientState.getIn(['indent', idToComplete]);
+  const indexToComplete = clientState.getIn(['ordering', idToComplete]);
+  const orgIndent = clientState.getIn(['indention', idToComplete]);
 
   let deltaIndex = indexToComplete;
   let deltaIndent = orgIndent;
@@ -14,7 +14,7 @@ export default (clientState, idToComplete, shouldComplete) => {
     );
     deltaIndex++;
     deltaId = clientState.getIn(['sortedOrder', deltaIndex]);
-    deltaIndent = newClientState.getIn(['indent', deltaId]);
+    deltaIndent = newClientState.getIn(['indention', deltaId]);
   } while (
     deltaIndent > orgIndent &&
     deltaIndex < newClientState.get('sortedOrder').size

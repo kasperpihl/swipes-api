@@ -14,8 +14,8 @@ const expectedInput = {
       assignees: array.of(string)
     })
   ),
-  order: object.of(number),
-  indent: object.of(number),
+  ordering: object.of(number),
+  indention: object.of(number),
   completion: object.of(bool),
   update_identifier: string
 };
@@ -28,8 +28,8 @@ export default endpointCreate(
     const { user_id } = res.locals;
     const {
       project_id,
-      order,
-      indent,
+      ordering,
+      indention,
       completion,
       itemsById,
       rev,
@@ -46,13 +46,15 @@ export default endpointCreate(
     let text = 'UPDATE projects SET "updated_at" = now(), "rev" = "rev" + 1';
     let returning = ['updated_at', 'project_id', 'rev'];
 
-    Object.entries({ order, indent, completion }).forEach(([key, value]) => {
-      if (!value) return;
-      text += `, "${key}" = jsonb_merge("${key}", ${insertVariable(
-        JSON.stringify(value)
-      )})`;
-      returning.push(`"${key}"`);
-    });
+    Object.entries({ ordering, indention, completion }).forEach(
+      ([key, value]) => {
+        if (!value) return;
+        text += `, "${key}" = jsonb_merge("${key}", ${insertVariable(
+          JSON.stringify(value)
+        )})`;
+        returning.push(`"${key}"`);
+      }
+    );
 
     text += ` WHERE "project_id"=${insertVariable(
       project_id

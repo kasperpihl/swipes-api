@@ -77,7 +77,7 @@ export default class ProjectItem extends PureComponent {
     const title = item.get('title');
     return (
       <SwissProvider selected={isFocused} done={item.get('completion')}>
-        <SW.Wrapper indent={item.get('indent')} className="js-item-class">
+        <SW.Wrapper indention={item.get('indention')} className="js-item-class">
           <SW.ExpandWrapper onClick={this.onExpandClick}>
             {item.get('hasChildren') && (
               <SW.ExpandIcon

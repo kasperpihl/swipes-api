@@ -1,32 +1,38 @@
 export default (clientState, id, modifier = 0) => {
-  const originalIndent = clientState.getIn(['indent', id]);
-  const index = clientState.getIn(['order', id]);
+  const originalIndention = clientState.getIn(['indention', id]);
+  const index = clientState.getIn(['ordering', id]);
   const prevId = clientState.getIn(['sortedOrder', index - 1]);
-  const maxIndent = prevId ? clientState.getIn(['indent', prevId]) + 1 : 0;
-  const newIndent = originalIndent + modifier;
+  const maxIndent = prevId ? clientState.getIn(['indention', prevId]) + 1 : 0;
+  const newIndent = originalIndention + modifier;
   if (newIndent > maxIndent || newIndent < 0) {
     return clientState;
   }
-  clientState = clientState.setIn(['indent', id], newIndent);
+  clientState = clientState.setIn(['indention', id], newIndent);
 
   let foundNextSiblingOrLess = false;
   let i = index;
   while (!foundNextSiblingOrLess) {
-    const prevIndent = clientState.getIn([
-      'indent',
+    const prevIndention = clientState.getIn([
+      'indention',
       clientState.getIn(['sortedOrder', i])
     ]);
 
     i++;
     const currId = clientState.getIn(['sortedOrder', i]);
-    const currIndent = clientState.getIn(['indent', currId]);
+    const currIndention = clientState.getIn(['indention', currId]);
 
-    if (typeof currIndent === 'undefined' || currIndent <= originalIndent) {
+    if (
+      typeof currIndention === 'undefined' ||
+      currIndention <= originalIndention
+    ) {
       foundNextSiblingOrLess = true;
     } else {
-      const targetIndent = Math.min(prevIndent + 1, currIndent + modifier);
-      if (currIndent !== targetIndent) {
-        clientState = clientState.setIn(['indent', currId], targetIndent);
+      const targetIndent = Math.min(
+        prevIndention + 1,
+        currIndention + modifier
+      );
+      if (currIndention !== targetIndent) {
+        clientState = clientState.setIn(['indention', currId], targetIndent);
       }
     }
   }

@@ -7,15 +7,14 @@ export default class ProjectExpandHandler {
   setDepth = depth => {
     let { localState, clientState } = this.state;
     clientState.get('sortedOrder').forEach(taskId => {
-      const indent = clientState.getIn(['indent', taskId]);
-      const shouldBeExpanded = indent < depth;
+      const indention = clientState.getIn(['indention', taskId]);
+      const shouldBeExpanded = indention < depth;
       if (localState.getIn(['expanded', taskId]) !== shouldBeExpanded) {
         localState = localState.setIn(['expanded', taskId], shouldBeExpanded);
       }
     });
     localState = projectGenerateVisibleOrder(clientState, localState);
     this.stateManager.update({
-      sliderValue: depth,
       localState
     });
   };

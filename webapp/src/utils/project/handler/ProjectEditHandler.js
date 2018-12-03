@@ -40,9 +40,9 @@ export default class ProjectEditHandler {
       'sortedOrder',
       clientState.get('sortedOrder').filter(taskId => taskId !== id)
     );
-    clientState = clientState.deleteIn(['order', id]);
+    clientState = clientState.deleteIn(['ordering', id]);
     clientState = clientState.deleteIn(['completion', id]);
-    clientState = clientState.deleteIn(['indent', id]);
+    clientState = clientState.deleteIn(['indention', id]);
     clientState = clientState.deleteIn(['itemsById', id]);
 
     this.stateManager.syncHandler.delete(id);
@@ -99,14 +99,14 @@ export default class ProjectEditHandler {
     localState = localState.set('selectedId', newId);
     localState = localState.set('selectionStart', 0);
 
-    const nextIndex = clientState.getIn(['order', id]) + 1;
+    const nextIndex = clientState.getIn(['ordering', id]) + 1;
     const nextId = clientState.getIn(['sortedOrder', nextIndex]);
-    const currentIndent = clientState.getIn(['indent', id]);
-    const nextIndent = clientState.getIn(['indent', nextId]) || 0;
+    const currentIndention = clientState.getIn(['indention', id]);
+    const nextIndention = clientState.getIn(['indention', nextId]) || 0;
 
     clientState = clientState.setIn(
-      ['indent', newId],
-      Math.max(currentIndent, nextIndent)
+      ['indention', newId],
+      Math.max(currentIndention, nextIndention)
     );
 
     clientState = clientState.set(

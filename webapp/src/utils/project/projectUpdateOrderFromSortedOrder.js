@@ -1,5 +1,5 @@
 export default clientState => {
-  const origOrder = clientState.get('order');
+  const origOrder = clientState.get('ordering');
   let newOrder = origOrder;
 
   clientState.get('sortedOrder').forEach((taskId, index) => {
@@ -7,5 +7,5 @@ export default clientState => {
       newOrder = newOrder.set(taskId, index);
     }
   });
-  return clientState.set('order', newOrder);
+  return clientState.set('ordering', newOrder);
 };

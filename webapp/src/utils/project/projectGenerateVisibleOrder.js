@@ -1,21 +1,21 @@
 export default (clientState, localState) => {
-  let blockIndentMoreThan = -1;
+  let blockIndentionMoreThan = -1;
 
   return localState.set(
     'visibleOrder',
     clientState.get('sortedOrder').filter((taskId, i) => {
-      const indent = clientState.getIn(['indent', taskId]);
-      if (blockIndentMoreThan > -1 && indent > blockIndentMoreThan) {
+      const indention = clientState.getIn(['indention', taskId]);
+      if (blockIndentionMoreThan > -1 && indention > blockIndentionMoreThan) {
         return false;
       }
-      if (blockIndentMoreThan > -1 && indent <= blockIndentMoreThan) {
-        blockIndentMoreThan = -1;
+      if (blockIndentionMoreThan > -1 && indention <= blockIndentionMoreThan) {
+        blockIndentionMoreThan = -1;
       }
       if (
         localState.getIn(['hasChildren', taskId]) &&
         !localState.getIn(['expanded', taskId])
       ) {
-        blockIndentMoreThan = indent;
+        blockIndentionMoreThan = indention;
       }
       return true;
     })

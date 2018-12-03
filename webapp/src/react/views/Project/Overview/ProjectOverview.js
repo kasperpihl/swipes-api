@@ -73,7 +73,7 @@ export default class ProjectOverview extends PureComponent {
         focus={taskId === selectedId}
         selectionStart={taskId === selectedId && selectionStart}
         item={fromJS({
-          indent: clientState.getIn(['indent', taskId]),
+          indention: clientState.getIn(['indention', taskId]),
           completion: clientState.getIn(['completion', taskId]),
           hasChildren: localState.getIn(['hasChildren', taskId]),
           expanded: localState.getIn(['expanded', taskId])

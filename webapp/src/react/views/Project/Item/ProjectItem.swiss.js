@@ -4,7 +4,7 @@ import Icon from 'Icon';
 export default styleSheet('ProjectItem', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
-    paddingLeft: ({ indent }) => `${indent * 24}px`,
+    paddingLeft: ({ indention }) => `${indention * 24}px`,
     paddingRight: '6px',
     selected: {
       background: '$blue'

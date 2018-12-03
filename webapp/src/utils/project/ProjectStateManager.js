@@ -18,7 +18,7 @@ export default class ProjectStateManager {
     const clientState = serverState.set(
       'sortedOrder',
       serverState
-        .get('order')
+        .get('ordering')
         .sort((a, b) => {
           if (a < b) return -1;
           if (a > b) return 1;

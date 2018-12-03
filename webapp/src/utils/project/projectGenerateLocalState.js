@@ -10,15 +10,18 @@ export default clientState => {
   });
 
   clientState.get('sortedOrder').forEach((taskId, i) => {
-    const indent = clientState.getIn(['indent', taskId]);
+    const indention = clientState.getIn(['indention', taskId]);
 
-    const nextIndent =
+    const nextIndention =
       clientState.getIn([
-        'indent',
+        'indention',
         clientState.getIn(['sortedOrder', i + 1])
       ]) || -1;
 
-    localState = localState.setIn(['hasChildren', taskId], indent < nextIndent);
+    localState = localState.setIn(
+      ['hasChildren', taskId],
+      indention < nextIndention
+    );
     localState = localState.setIn(['expanded', taskId], false);
   });
 

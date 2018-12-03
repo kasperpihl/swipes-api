@@ -6,11 +6,12 @@ export default class ProjectKeyHandler {
   constructor(stateManager) {
     this.stateManager = stateManager;
     this.deletedIds = [];
+    this.myUpdates = {};
   }
   // stateManager will set this, once an update happens.
   convertToServerState() {
     const { clientState } = this.state;
-    const serverKeys = ['order', 'indent', 'completion', 'itemsById'];
+    const serverKeys = ['ordering', 'indention', 'completion', 'itemsById'];
     const server = {};
 
     if (clientState.get('name') !== this.currentServerState.get('name')) {
@@ -20,14 +21,14 @@ export default class ProjectKeyHandler {
 
     clientState.get('sortedOrder').forEach(taskId => {
       // Client values
-      const cOrder = clientState.getIn(['order', taskId]);
-      const cIndent = clientState.getIn(['indent', taskId]);
+      const cOrder = clientState.getIn(['ordering', taskId]);
+      const cIndent = clientState.getIn(['indention', taskId]);
       const cCompletion = clientState.getIn(['completion', taskId]);
       const cItem = clientState.getIn(['itemsById', taskId]);
 
       // Server values
-      const sOrder = this.currentServerState.getIn(['order', taskId]);
-      const sIndent = this.currentServerState.getIn(['indent', taskId]);
+      const sOrder = this.currentServerState.getIn(['ordering', taskId]);
+      const sIndent = this.currentServerState.getIn(['indention', taskId]);
       const sCompletion = this.currentServerState.getIn(['completion', taskId]);
       const sItem = this.currentServerState.getIn(['itemsById', taskId]);
 
@@ -61,6 +62,7 @@ export default class ProjectKeyHandler {
       server.project_id = 'A123131';
       server.rev = this.currentServerState.get('rev');
       server.update_identifier = randomString(6);
+      this.myUpdates[server.update_identifier] = true;
       request('project.sync', server).then(res => {
         if (res.ok) {
           this.currentServerState = clientState.set('rev', server.rev + 1);
@@ -68,28 +70,14 @@ export default class ProjectKeyHandler {
       });
     }
   }
-  mergeNewServerVersion(newServerState, localChanges) {
-    // 1. Get a merged server state
-    // 2. Get local server changes based on merged server state
-    // 3. Generate new local state based on merged server state and local changes
-    // 4. Save merged server state as this.serverState
-    // 5. If local changes, save them!
-    if (newServerState.rev > this.serverState.rev) {
-      // this.serverState.rev = newServerState.rev;
+  mergeNewServerVersion(newServerState, updateIdentifier) {
+    if (this.myUpdates[updateIdentifier]) {
+      return delete this.myUpdates[updateIdentifier];
     }
-    Object.assign(this.serverState.order, newServerState.order);
-    Object.assign(this.serverState.completion, newServerState.completion);
-    Object.assign(this.serverState.indent, newServerState.indent);
-    for (let key in newServerState.itemsById) {
-      const item = newServerState.itemsById[key];
-      if (item.deleted) {
-        delete this.serverState.order[key];
-        delete this.serverState.indent[key];
-        delete this.serverState.completion[key];
-        delete this.serverState.itemsById[key];
-      }
-    }
-    console.log(newServerState);
+    this.currentServerState = this.currentServerState.mergeDeep(newServerState);
+    let { clientState } = this.state;
+    clientState = clientState.mergeDeep(newServerState);
+    this.stateManager.update({ clientState });
   }
   delete = id => {
     this.deletedIds.push(id);
