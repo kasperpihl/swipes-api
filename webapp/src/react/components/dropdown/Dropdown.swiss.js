@@ -25,18 +25,22 @@ export default styleSheet('Dropdown', {
     hasIcon: {
       paddingLeft: '0px',
     },
-    '&:hover': {
-      color: '$blue',
-    },
   },
 
   Icon: {
     _el: Icon,
-    transform: 'rotate(-90deg)',
-    transition: '.2s ease-in-out all',
 
-    show: {
-      transform: 'rotate(90deg)',
+    arrow: {
+      transform: 'rotate(-90deg)',
+      transition: '.2s ease-in-out all',
+
+      show: {
+        transform: 'rotate(90deg)',
+      },
+    },
+
+    row: {
+      // marginRight: '6px',
     }
   },
 
@@ -46,9 +50,27 @@ export default styleSheet('Dropdown', {
     transition: '.4s ease-in-out all',
 
     show: {
-      _size: ['100%', '150px'],
+      _size: ['auto', '216px'],
+      minWidth: '100%',
       overflowY: 'scroll',
       boxShadow: '0 6px 12px 1px rgba(0,12,47,0.3)',
     }
   },
+
+  Row: {
+    _size: ['100%', 'auto'],
+    _flex: ['row', 'flex-start', 'center'],
+    minHeight: '36px',
+    padding: '0 6px',
+    flexWrap: 'nowrap',
+  },
+
+  RowText: {
+    _el: 'p',
+    _font: ['12px', '18px', 400],
+    color: '$deepBlue120',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+  }
 })
