@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Icon from 'src/react/icons/Icon';
 import SW from './Dropdown.swiss';
 import { SwissProvider } from 'swiss-react';
 
@@ -24,7 +23,7 @@ export default class Dropdown extends Component {
         <SW.Wrapper>
           <SW.Background onClick={this.toggleDropdown}>
             <SW.Text>Text</SW.Text>
-            <Icon icon='ThreeDots' width='24' />
+            <SW.Icon icon='ArrowLeftLine' width='24' show={this.state.showDropdown} />
           </SW.Background>
           <SW.DropdownBox show={this.state.showDropdown}>
             here

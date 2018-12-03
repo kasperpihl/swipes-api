@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('Dropdown', {
   Wrapper: { 
@@ -29,10 +30,14 @@ export default styleSheet('Dropdown', {
     },
   },
 
-  ArrowButton: {
-    _el: 'button',
-    _size: '24px',
-    background: 'black',
+  Icon: {
+    _el: Icon,
+    transform: 'rotate(-90deg)',
+    transition: '.2s ease-in-out all',
+
+    show: {
+      transform: 'rotate(90deg)',
+    }
   },
 
   DropdownBox: {
@@ -45,5 +50,5 @@ export default styleSheet('Dropdown', {
       overflowY: 'scroll',
       boxShadow: '0 6px 12px 1px rgba(0,12,47,0.3)',
     }
-  }
+  },
 })

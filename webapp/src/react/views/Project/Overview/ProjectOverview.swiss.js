@@ -3,7 +3,7 @@ import Button from 'src/react/components/button/Button';
 
 export default styleSheet('ProjectOverview', {
   Wrapper: {
-    overflowY: 'scroll',
+    // overflowY: 'scroll',
   },
   Header: {
     _flex: ['row', 'between', 'center'],

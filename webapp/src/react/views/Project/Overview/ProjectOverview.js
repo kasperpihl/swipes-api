@@ -105,12 +105,12 @@ export default class ProjectOverview extends PureComponent {
 
     return (
       <SW.Wrapper>
-        <SW.Header>
+        {/* <SW.Header>
           <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
-        </SW.Header>
-        {this.renderItems()}
+        </SW.Header> */}
+        {/* {this.renderItems()} */}
         <SW.Div>
-          <StepSlider
+          {/* <StepSlider
             min={0}
             max={4}
             sliderValue={sliderTestValue}
@@ -128,7 +128,7 @@ export default class ProjectOverview extends PureComponent {
             size="large"
             rounded={true}
             showPopupText={showPopupText}
-          />
+          /> */}
           <Dropdown rounded={false} />
         </SW.Div>
       </SW.Wrapper>
