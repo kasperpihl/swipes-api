@@ -63,12 +63,20 @@ export default styleSheet('Dropdown', {
     minHeight: '36px',
     padding: '0 6px',
     flexWrap: 'nowrap',
+
+    '&:hover': {
+      backgroundColor: '$sw3',
+    },
+
+    selected: {
+      backgroundColor: '$sw3',
+    },
   },
 
   RowText: {
     _el: 'p',
     _font: ['12px', '18px', 400],
-    color: '$deepBlue120',
+    color: 'black',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
