@@ -18,7 +18,6 @@ export default class ProjectSelectHandler {
     localState = localState
       .set('selectedId', visibleOrder.get(nextI))
       .set('selectionStart', selectionStart);
-    console.log(selectionStart);
 
     this.stateManager.update({ localState }, false);
   };

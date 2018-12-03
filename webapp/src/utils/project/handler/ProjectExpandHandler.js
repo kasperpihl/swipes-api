@@ -14,10 +14,7 @@ export default class ProjectExpandHandler {
     let { localState, clientState } = this.state;
     if (!localState.getIn(['hasChildren', id])) return;
     localState = localState.setIn(['expanded', id], expand);
-    localState = localState.set(
-      'visibleOrder',
-      projectGenerateVisibleOrder(clientState, localState)
-    );
+    localState = projectGenerateVisibleOrder(clientState, localState);
     this.stateManager.update({ localState });
   };
   // stateManager will set this, once an update happens.
