@@ -1,4 +1,4 @@
-import projectCompleteItemWithChildren from 'src/utils/project/projectCompleteItemWithChildren';
+import projectCompleteTaskWithChildren from 'src/utils/project/projectCompleteTaskWithChildren';
 import projectValidateCompletion from 'src/utils/project/projectValidateCompletion';
 
 export default class ProjectCompleteHandler {
@@ -13,7 +13,7 @@ export default class ProjectCompleteHandler {
   };
   _completeById = (id, complete) => {
     let { clientState } = this.state;
-    clientState = projectCompleteItemWithChildren(clientState, id, complete);
+    clientState = projectCompleteTaskWithChildren(clientState, id, complete);
     clientState = projectValidateCompletion(clientState);
     this.stateManager.update({ clientState });
   };

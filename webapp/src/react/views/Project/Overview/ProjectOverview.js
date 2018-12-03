@@ -68,20 +68,22 @@ export default class ProjectOverview extends PureComponent {
 
     const selectedId = localState.get('selectedId');
     const selectionStart = localState.get('selectionStart');
-    return localState.get('visibleOrder').map((taskId, i) => (
-      <ProjectItem
-        focus={taskId === selectedId}
-        selectionStart={taskId === selectedId && selectionStart}
-        item={fromJS({
-          indention: clientState.getIn(['indention', taskId]),
-          completion: clientState.getIn(['completion', taskId]),
-          hasChildren: localState.getIn(['hasChildren', taskId]),
-          expanded: localState.getIn(['expanded', taskId])
-        }).merge(clientState.getIn(['itemsById', taskId]))}
-        key={taskId}
-        stateManager={this.stateManager}
-      />
-    ));
+    return localState
+      .get('visibleOrder')
+      .map((taskId, i) => (
+        <ProjectItem
+          key={taskId}
+          taskId={taskId}
+          title={clientState.getIn(['tasksById', taskId, 'title'])}
+          focus={taskId === selectedId}
+          selectionStart={taskId === selectedId && selectionStart}
+          indention={clientState.getIn(['indention', taskId])}
+          completion={clientState.getIn(['completion', taskId])}
+          hasChildren={localState.getIn(['hasChildren', taskId])}
+          expanded={localState.getIn(['expanded', taskId])}
+          stateManager={this.stateManager}
+        />
+      ));
   }
 
   showPopupText = e => {

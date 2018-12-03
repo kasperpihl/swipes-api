@@ -21,48 +21,45 @@ export default class ProjectItem extends PureComponent {
     this.checkFocus();
   }
   onFocus = () => {
-    const { item, stateManager } = this.props;
-    // onFocus(item.get('item_id'), e);
-    stateManager.selectHandler.select(item.get('item_id'));
+    const { taskId, stateManager } = this.props;
+    // onFocus(taskId, e);
+    stateManager.selectHandler.select(taskId);
     this.setState({ isFocused: true });
   };
   onComplete = e => {
-    const { item, stateManager } = this.props;
-    console.log('complete', item.get('item_id'));
-    if (item.get('completion')) {
-      stateManager.completeHandler.incomplete(item.get('item_id'));
+    const { taskId, completion, stateManager } = this.props;
+    if (completion) {
+      stateManager.completeHandler.incomplete(taskId);
     } else {
-      stateManager.completeHandler.complete(item.get('item_id'));
+      stateManager.completeHandler.complete(taskId);
     }
   };
   onChange = e => {
-    const { stateManager, item } = this.props;
-    stateManager.editHandler.updateTitle(item.get('item_id'), e.target.value);
+    const { stateManager, taskId } = this.props;
+    stateManager.editHandler.updateTitle(taskId, e.target.value);
   };
   onBlur = () => {
-    const { stateManager, item } = this.props;
-    stateManager.selectHandler.deselect(item.get('item_id'));
+    const { stateManager, taskId } = this.props;
+    stateManager.selectHandler.deselect(taskId);
     this.setState({ isFocused: false });
   };
   onExpandClick = () => {
-    const { stateManager, item } = this.props;
-    stateManager.expandHandler[item.get('expanded') ? 'collapse' : 'expand'](
-      item.get('item_id')
-    );
+    const { stateManager, taskId, expanded } = this.props;
+    stateManager.expandHandler[expanded ? 'collapse' : 'expand'](taskId);
   };
   onAssigningClose(assignees) {
-    const { stateManager, item } = this.props;
+    const { stateManager, taskId } = this.props;
     if (!this._unmounted && assignees && onChangeAssignees) {
-      stateManager.editHandler.updateAssignees(item.get('item_id'), assignees);
+      stateManager.editHandler.updateAssignees(taskId, assignees);
     }
   }
   checkFocus() {
-    const { focus, selectionStart, item } = this.props;
+    const { focus, selectionStart, title } = this.props;
     const { isFocused } = this.state;
     if (focus && !isFocused) {
       this.inputRef.focus();
       if (typeof selectionStart === 'number') {
-        const selI = Math.min(item.get('title').length, selectionStart);
+        const selI = Math.min(title.length, selectionStart);
 
         this.inputRef.setSelectionRange(selI, selI);
       }
@@ -71,27 +68,23 @@ export default class ProjectItem extends PureComponent {
     }
   }
   render() {
-    const { item } = this.props;
+    const { title, completion, indention, hasChildren, expanded } = this.props;
     const { isFocused } = this.state;
 
-    const title = item.get('title');
     return (
-      <SwissProvider selected={isFocused} done={item.get('completion')}>
-        <SW.Wrapper indention={item.get('indention')} className="js-item-class">
+      <SwissProvider selected={isFocused} done={completion}>
+        <SW.Wrapper indention={indention} className="js-item-class">
           <SW.ExpandWrapper onClick={this.onExpandClick}>
-            {item.get('hasChildren') && (
-              <SW.ExpandIcon
-                icon="ArrowRightFull"
-                expanded={item.get('expanded')}
-              />
+            {hasChildren && (
+              <SW.ExpandIcon icon="ArrowRightFull" expanded={expanded} />
             )}
           </SW.ExpandWrapper>
           <SW.CheckboxWrapper
             className="js-checkbox-wrapper"
             onClick={this.onComplete}
           >
-            <SW.Checkbox checked={item.get('completion')}>
-              {item.get('completion') && (
+            <SW.Checkbox checked={completion}>
+              {completion && (
                 <Icon icon="Checkmark" fill="#FFFFFF" width="18" />
               )}
             </SW.Checkbox>

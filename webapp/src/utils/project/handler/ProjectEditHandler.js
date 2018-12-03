@@ -1,6 +1,6 @@
 import randomString from 'swipes-core-js/utils/randomString';
-import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
-import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
+import projectIndentTaskAndChildren from '../projectIndentTaskAndChildren';
+import projectUpdateHasChildrenForTask from '../projectUpdateHasChildrenForTask';
 import { fromJS } from 'immutable';
 import projectGenerateVisibleOrder from '../projectGenerateVisibleOrder';
 import projectUpdateOrderFromSortedOrder from '../projectUpdateOrderFromSortedOrder';
@@ -15,12 +15,12 @@ export default class ProjectEditHandler {
   };
   updateTitle = (id, title) => {
     let { clientState } = this.state;
-    clientState = clientState.setIn(['itemsById', id, 'title'], title);
+    clientState = clientState.setIn(['tasksById', id, 'title'], title);
     this.stateManager.update({ clientState }, `${id}-title`);
   };
   updateAssignees = (id, assignees) => {
     let { clientState } = this.state;
-    clientState = clientState.setIn(['itemsById', id, 'assignees'], assignees);
+    clientState = clientState.setIn(['tasksById', id, 'assignees'], assignees);
     this.stateManager.update({ clientState });
   };
   delete = id => {
@@ -33,7 +33,7 @@ export default class ProjectEditHandler {
       return;
     }
 
-    const currentTitle = clientState.getIn(['itemsById', id, 'title']);
+    const currentTitle = clientState.getIn(['tasksById', id, 'title']);
     const prevId = visibleOrder.get(visibleIndex - 1);
 
     clientState = clientState.set(
@@ -43,7 +43,7 @@ export default class ProjectEditHandler {
     clientState = clientState.deleteIn(['ordering', id]);
     clientState = clientState.deleteIn(['completion', id]);
     clientState = clientState.deleteIn(['indention', id]);
-    clientState = clientState.deleteIn(['itemsById', id]);
+    clientState = clientState.deleteIn(['tasksById', id]);
 
     this.stateManager.syncHandler.delete(id);
 
@@ -53,16 +53,16 @@ export default class ProjectEditHandler {
     localState = localState.set('selectionStart', null);
 
     if (currentTitle) {
-      const prevTitle = clientState.getIn(['itemsById', prevId, 'title']);
+      const prevTitle = clientState.getIn(['tasksById', prevId, 'title']);
       localState = localState.set('selectionStart', prevTitle.length);
       clientState = clientState.setIn(
-        ['itemsById', prevId, 'title'],
+        ['tasksById', prevId, 'title'],
         prevTitle + currentTitle
       );
     }
 
-    clientState = projectIndentItemAndChildren(clientState, prevId);
-    localState = projectUpdateHasChildrenForItem(
+    clientState = projectIndentTaskAndChildren(clientState, prevId);
+    localState = projectUpdateHasChildrenForTask(
       clientState,
       localState,
       prevId
@@ -74,7 +74,7 @@ export default class ProjectEditHandler {
   };
   enter = (id, selectionStart = null) => {
     let { clientState, localState } = this.state;
-    let currTitle = clientState.getIn(['itemsById', id, 'title']);
+    let currTitle = clientState.getIn(['tasksById', id, 'title']);
     if (typeof selectionStart !== 'number') {
       selectionStart = currTitle.length;
     }
@@ -82,14 +82,14 @@ export default class ProjectEditHandler {
     if (selectionStart < currTitle.length) {
       nextTitle = currTitle.slice(selectionStart);
       currTitle = currTitle.slice(0, selectionStart);
-      clientState = clientState.setIn(['itemsById', id, 'title'], currTitle);
+      clientState = clientState.setIn(['tasksById', id, 'title'], currTitle);
     }
 
     const newId = randomString(5);
     clientState = clientState.setIn(
-      ['itemsById', newId],
+      ['tasksById', newId],
       fromJS({
-        item_id: newId,
+        task_id: newId,
         title: nextTitle,
         due_date: null
       })
@@ -115,7 +115,7 @@ export default class ProjectEditHandler {
     );
 
     clientState = projectUpdateOrderFromSortedOrder(clientState);
-    localState = projectUpdateHasChildrenForItem(
+    localState = projectUpdateHasChildrenForTask(
       clientState,
       localState,
       newId

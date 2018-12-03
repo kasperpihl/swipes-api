@@ -23,18 +23,18 @@ export default endpointCreate(
       throw Error('project_not_found');
     }
 
-    const itemsRes = await query(
-      `SELECT "item_id", "title", "due_date" from project_items WHERE "project_id" = $1 AND deleted = FALSE`,
+    const tasksRes = await query(
+      `SELECT "task_id", "title", "due_date" from project_tasks WHERE "project_id" = $1 AND deleted = FALSE`,
       [project_id]
     );
 
     // Create response data.
-    const itemsById = {};
-    itemsRes.rows.forEach(item => {
-      itemsById[item.item_id] = item;
+    const tasksById = {};
+    tasksRes.rows.forEach(task => {
+      tasksById[task.task_id] = task;
     });
     res.locals.output = {
-      result: { ...projectRes.rows[0], itemsById }
+      result: { ...projectRes.rows[0], tasksById }
     };
   }
 );

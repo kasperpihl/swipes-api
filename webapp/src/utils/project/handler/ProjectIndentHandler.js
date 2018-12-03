@@ -1,6 +1,6 @@
-import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
-import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
-import projectForceParentExpandedForItem from '../projectForceParentExpandedForItem';
+import projectIndentTaskAndChildren from '../projectIndentTaskAndChildren';
+import projectUpdateHasChildrenForTask from '../projectUpdateHasChildrenForTask';
+import projectForceParentExpandedForTask from '../projectForceParentExpandedForTask';
 import projectValidateCompletion from '../projectValidateCompletion';
 
 export default class ProjectIndentHandler {
@@ -15,9 +15,9 @@ export default class ProjectIndentHandler {
   };
   _indentWithModifier = (id, modifier) => {
     let { clientState, localState } = this.state;
-    clientState = projectIndentItemAndChildren(clientState, id, modifier);
-    localState = projectUpdateHasChildrenForItem(clientState, localState, id);
-    localState = projectForceParentExpandedForItem(clientState, localState, id);
+    clientState = projectIndentTaskAndChildren(clientState, id, modifier);
+    localState = projectUpdateHasChildrenForTask(clientState, localState, id);
+    localState = projectForceParentExpandedForTask(clientState, localState, id);
     clientState = projectValidateCompletion(clientState);
     this.stateManager.update({
       clientState,
