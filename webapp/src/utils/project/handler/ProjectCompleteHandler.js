@@ -6,14 +6,14 @@ export default class ProjectCompleteHandler {
     this.stateManager = stateManager;
   }
   complete = id => {
-    let { clientState } = this.state;
-    clientState = projectCompleteItemWithChildren(clientState, id, true);
-    clientState = projectValidateCompletion(clientState);
-    this.stateManager.update({ clientState });
+    this._completeById(id, true);
   };
   incomplete = id => {
+    this._completeById(id, false);
+  };
+  _completeById = (id, complete) => {
     let { clientState } = this.state;
-    clientState = projectCompleteItemWithChildren(clientState, id, false);
+    clientState = projectCompleteItemWithChildren(clientState, id, complete);
     clientState = projectValidateCompletion(clientState);
     this.stateManager.update({ clientState });
   };

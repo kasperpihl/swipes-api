@@ -7,16 +7,17 @@ export default (clientState, idToComplete, shouldComplete) => {
   let newClientState = clientState;
   do {
     // Set all children and grandchildren
-    const deltaId = clientState.getIn(['sortedOrder', deltaIndex]);
+    let deltaId = clientState.getIn(['sortedOrder', deltaIndex]);
     newClientState = newClientState.setIn(
       ['completion', deltaId],
       !!shouldComplete
     );
     deltaIndex++;
+    deltaId = clientState.getIn(['sortedOrder', deltaIndex]);
     deltaIndent = newClientState.getIn(['indent', deltaId]);
   } while (
     deltaIndent > orgIndent &&
-    deltaIndex < newClientState.get('sorderOrder').size
+    deltaIndex < newClientState.get('sortedOrder').size
   );
 
   return newClientState;

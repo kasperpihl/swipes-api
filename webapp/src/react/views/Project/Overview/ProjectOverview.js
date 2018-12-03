@@ -67,7 +67,6 @@ export default class ProjectOverview extends PureComponent {
 
     const selectedId = localState.get('selectedId');
     const selectionStart = localState.get('selectionStart');
-    console.log('sel id render', selectedId);
     return localState.get('visibleOrder').map((taskId, i) => (
       <ProjectItem
         focus={taskId === selectedId}
@@ -102,7 +101,7 @@ export default class ProjectOverview extends PureComponent {
         {/* <SW.Header>
           <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
         </SW.Header> */}
-        {/* {this.renderItems()} */}
+        {this.renderItems()}
         <SW.Div>
           {/* <StepSlider
             min={0}

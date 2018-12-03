@@ -4,7 +4,7 @@ export default clientState => {
   let currentIndent = -1;
   const order = clientState.get('sortedOrder');
   for (let index = order.size - 1; index >= 0; index--) {
-    const id = order.get(id);
+    const id = order.get(index);
     const indent = clientState.getIn(['indent', id]);
     const completed = !!clientState.getIn(['completion', id]);
     const key = '' + indent; // Make sure key is a string
@@ -20,7 +20,6 @@ export default clientState => {
 
       // check if all of it's children are completed or incomplete
       const childCompleted = allCompletedForLevel[childLevelKey];
-
       // assign child value to the parent element if needed.
       if (childCompleted !== completed) {
         clientState = clientState.setIn(['completion', id], childCompleted);
