@@ -70,25 +70,14 @@ export default class ProjectItem extends PureComponent {
       this.inputRef.blur();
     }
   }
-  renderType() {
-    const { item } = this.props;
-
-    return (
-      <SW.Checkbox checked={item.get('completion')} onClick={this.onComplete}>
-        {item.get('completion') && (
-          <Icon icon="Checkmark" fill="#FFFFFF" width="18" />
-        )}
-      </SW.Checkbox>
-    );
-  }
   render() {
     const { item } = this.props;
     const { isFocused } = this.state;
 
     const title = item.get('title');
     return (
-      <SwissProvider selected={isFocused}>
-        <SW.Wrapper done={item.get('completion')} indent={item.get('indent')}>
+      <SwissProvider selected={isFocused} done={item.get('completion')}>
+        <SW.Wrapper indent={item.get('indent')} className="js-item-class">
           <SW.ExpandWrapper onClick={this.onExpandClick}>
             {item.get('hasChildren') && (
               <SW.ExpandIcon
@@ -97,7 +86,16 @@ export default class ProjectItem extends PureComponent {
               />
             )}
           </SW.ExpandWrapper>
-          <SW.CheckboxWrapper>{this.renderType()}</SW.CheckboxWrapper>
+          <SW.CheckboxWrapper
+            className="js-checkbox-wrapper"
+            onClick={this.onComplete}
+          >
+            <SW.Checkbox checked={item.get('completion')}>
+              {item.get('completion') && (
+                <Icon icon="Checkmark" fill="#FFFFFF" width="18" />
+              )}
+            </SW.Checkbox>
+          </SW.CheckboxWrapper>
           <SW.Input
             onFocus={this.onFocus}
             onBlur={this.onBlur}
