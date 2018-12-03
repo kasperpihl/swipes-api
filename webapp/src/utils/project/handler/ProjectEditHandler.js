@@ -2,6 +2,7 @@ import randomString from 'swipes-core-js/utils/randomString';
 import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
 import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
 import { fromJS } from 'immutable';
+import projectGenerateVisibleOrder from '../projectGenerateVisibleOrder';
 
 export default class ProjectEditHandler {
   constructor(stateManager) {
@@ -20,37 +21,54 @@ export default class ProjectEditHandler {
     clientState = clientState.setIn(['itemsById', id, 'assignees'], assignees);
     this.stateManager.update({ clientState });
   };
-  delete = e => {
-    let { itemsById, order, selectedIndex, visibleOrder } = this.state;
-    const id = this.stateManager._idFromVisibleI(selectedIndex);
-    const i = order.findIndex(item => item.get('id') === id);
-    const currentTitle = itemsById.getIn([id, 'title']);
-    if (i === 0) {
+  delete = id => {
+    let { clientState, localState } = this.state;
+
+    const visibleOrder = localState.get('visibleOrder');
+    const visibleIndex = visibleOrder.findIndex(taskId => taskId === id);
+
+    if (visibleIndex === 0) {
       return;
     }
 
-    order = order.delete(i);
-    itemsById = itemsById.delete(id);
+    const currentTitle = clientState.getIn(['itemsById', id, 'title']);
+    const prevId = visibleOrder.get(visibleIndex - 1);
+    console.log(clientState.get('sortedOrder').toJS());
+    clientState = clientState.set(
+      'sortedOrder',
+      clientState.get('sortedOrder').filter(taskId => taskId !== id)
+    );
+    console.log(clientState.get('sortedOrder').toJS());
+
+    clientState = clientState.deleteIn(['completion', id]);
+    clientState = clientState.deleteIn(['order', id]);
+    clientState = clientState.deleteIn(['indent', id]);
+    clientState = clientState.deleteIn(['itemsById', id]);
+    localState = localState.deleteIn(['expanded', id]);
+    localState = localState.deleteIn(['clientState', id]);
+    localState = localState.set('selectedId', prevId);
+    localState = localState.set('selectionStart', null);
+
     this.stateManager.syncHandler.delete(id);
-    selectedIndex = selectedIndex - 1;
 
-    let selectionStart = null;
-
-    const prevId = visibleOrder.getIn([selectedIndex, 'id']);
-    const prevI = this.stateManager._iFromVisibleI(selectedIndex);
     if (currentTitle) {
-      const prevTitle = itemsById.getIn([prevId, 'title']);
-      selectionStart = prevTitle.length;
-      itemsById = itemsById.setIn([prevId, 'title'], prevTitle + currentTitle);
+      const prevTitle = clientState.getIn(['itemsById', prevId, 'title']);
+      localState = localState.set('selectionStart', prevTitle.length);
+      clientState = clientState.setIn(
+        ['itemsById', prevId, 'title'],
+        prevTitle + currentTitle
+      );
     }
-    order = projectIndentItemAndChildren(order, prevI);
-    order = projectUpdateHasChildrenForItem(order, prevI);
-    this.stateManager.update({
-      itemsById,
-      order,
-      selectedIndex,
-      selectionStart
-    });
+
+    clientState = projectIndentItemAndChildren(clientState, prevId);
+    localState = projectUpdateHasChildrenForItem(
+      clientState,
+      localState,
+      prevId
+    );
+    localState = projectGenerateVisibleOrder(clientState, localState);
+    console.log(id, localState.get('visibleOrder').size);
+    this.stateManager.update({ localState, clientState });
   };
   enter = e => {
     let { itemsById, order, selectedIndex } = this.state;

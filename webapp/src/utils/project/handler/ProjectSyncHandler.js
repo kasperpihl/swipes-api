@@ -97,17 +97,12 @@ export default class ProjectKeyHandler {
   checkForChanges = () => {
     // this.convertToServerState();
   };
-  setRawServerState = serverState => {
-    if (!this.serverState) {
-      this.serverState = serverState;
-    }
-  };
   bouncedCheckForChanges = debounce(this.checkForChanges, 5000);
   setState = state => {
-    this.state = state;
-    if (!this.prevState) {
-      this.prevState = state;
+    if (!this.state) {
+      this.currentServerState = state.clientState;
     }
+    this.state = state;
     this.bouncedCheckForChanges();
   };
 }

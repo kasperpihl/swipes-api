@@ -10,14 +10,14 @@ export default (clientState, localState, id) => {
     const hasChildren = currIndent > prevIndent;
     if (hasChildren !== localState.getIn(['hasChildren', prevId])) {
       localState = localState.setIn(['hasChildren', prevId], hasChildren);
-      localState = localState.setIn(['expanded', prevId], hasChildren);
+      // localState = localState.setIn(['expanded', prevId], hasChildren);
     }
   }
   const hasChildren = (clientState.getIn(['indent', nextId]) || 0) > currIndent;
 
   if (hasChildren !== clientState.getIn(['hasChildren', currId])) {
     localState = localState.setIn(['hasChildren', currId], hasChildren);
-    localState = localState.setIn(['expanded', currId], hasChildren);
+    // localState = localState.setIn(['expanded', currId], hasChildren);
   }
   return localState;
 };

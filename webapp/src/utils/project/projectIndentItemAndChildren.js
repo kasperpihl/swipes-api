@@ -20,7 +20,7 @@ export default (clientState, id, modifier = 0) => {
     i++;
     const currId = clientState.getIn(['sortedOrder', i]);
     const currIndent = clientState.getIn(['indent', currId]);
-    console.log(i, currIndent, typeof currIndent);
+
     if (typeof currIndent === 'undefined' || currIndent <= originalIndent) {
       foundNextSiblingOrLess = true;
     } else {

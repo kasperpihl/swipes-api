@@ -25,7 +25,7 @@ export default class ProjectKeyHandler {
       // Left arrow
       if (e.metaKey || e.ctrlKey) {
         e.preventDefault();
-        this.stateManager.expandHandler.collapse();
+        this.stateManager.expandHandler.collapse(selectedId);
       }
     } else if (e.keyCode === 38) {
       // Up arrow
@@ -35,7 +35,7 @@ export default class ProjectKeyHandler {
       // Right arrow
       if (e.metaKey || e.ctrlKey) {
         e.preventDefault();
-        this.stateManager.expandHandler.expand();
+        this.stateManager.expandHandler.expand(selectedId);
       }
     } else if (e.keyCode === 40) {
       // Down arrow

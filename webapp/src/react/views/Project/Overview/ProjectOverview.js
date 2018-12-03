@@ -52,12 +52,6 @@ export default class ProjectOverview extends PureComponent {
     const depth = parseInt(e.target.value, 10);
     this.stateManager.indentHandler.enforceIndention(depth);
   };
-  componentDidUpdate() {
-    if (typeof this.focusI === 'number') {
-      this.focusI = undefined;
-      this.selectionStart = undefined;
-    }
-  }
   increaseSlider = () => {
     const { sliderTestValue } = this.state;
     this.stateManager.indentHandler.enforceIndention(sliderTestValue + 1);
@@ -73,7 +67,7 @@ export default class ProjectOverview extends PureComponent {
 
     const selectedId = localState.get('selectedId');
     const selectionStart = localState.get('selectionStart');
-
+    console.log('render', localState.get('visibleOrder').size);
     return localState.get('visibleOrder').map((taskId, i) => (
       <ProjectItem
         focus={taskId === selectedId}

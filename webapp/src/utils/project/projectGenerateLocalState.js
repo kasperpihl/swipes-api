@@ -22,9 +22,6 @@ export default clientState => {
     localState = localState.setIn(['expanded', taskId], false);
   });
 
-  localState = localState.set(
-    'visibleOrder',
-    projectGenerateVisibleOrder(clientState, localState)
-  );
+  localState = projectGenerateVisibleOrder(clientState, localState);
   return localState;
 };

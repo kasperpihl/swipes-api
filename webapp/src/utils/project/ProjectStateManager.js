@@ -28,7 +28,6 @@ export default class ProjectStateManager {
         .toList()
     );
     const localState = projectGenerateLocalState(clientState);
-    console.log(localState.toJS(), clientState.toJS());
     this.state = {
       clientState,
       localState
@@ -46,7 +45,6 @@ export default class ProjectStateManager {
       syncHandler: new ProjectSyncHandler(this),
       undoHandler: new ProjectUndoHandler(this)
     };
-    this.callHandlers('setRawServerState', clientState);
     this.callHandlers('setState', this.state);
     Object.assign(this, this.handlers);
   }
@@ -65,20 +63,8 @@ export default class ProjectStateManager {
   };
   _updateState(state) {
     this.state = state;
-    this.onStateChange(this.state);
     this.callHandlers('setState', this.state);
+    this.onStateChange(this.state);
   }
   destroy = () => this.callHandlers('destroy');
-  _iFromVisibleIOrId = iOrId => {
-    if (typeof iOrId === 'number') {
-      return this._iFromVisibleI(iOrId);
-    }
-    return this._iFromId(iOrId);
-  };
-  _idFromI = i => this.state.order.getIn([i, 'id']);
-  _idFromVisibleI = i => this.state.visibleOrder.getIn([i, 'id']);
-  _iFromId = id => this.state.order.findIndex(o => o.get('id') === id);
-  _iFromVisibleI = i => this._iFromId(this._idFromVisibleI(i));
-  _visibleIFromId = id =>
-    this.state.visibleOrder.findIndex(o => o.get('id') === id);
 }
