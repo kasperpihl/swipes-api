@@ -40,8 +40,8 @@ export default class ProjectItem extends PureComponent {
     stateManager.editHandler.updateTitle(item.get('item_id'), e.target.value);
   };
   onBlur = () => {
-    const { stateManager } = this.props;
-    stateManager.selectHandler.deselect();
+    const { stateManager, item } = this.props;
+    stateManager.selectHandler.deselect(item.get('item_id'));
     this.setState({ isFocused: false });
   };
   onExpandClick = () => {
@@ -88,11 +88,7 @@ export default class ProjectItem extends PureComponent {
     const title = item.get('title');
     return (
       <SwissProvider selected={isFocused}>
-        <SW.Wrapper
-          done={item.get('completion')}
-          indent={item.get('indent')}
-          className="item-class"
-        >
+        <SW.Wrapper done={item.get('completion')} indent={item.get('indent')}>
           <SW.ExpandWrapper onClick={this.onExpandClick}>
             {item.get('hasChildren') && (
               <SW.ExpandIcon

@@ -67,7 +67,7 @@ export default class ProjectOverview extends PureComponent {
 
     const selectedId = localState.get('selectedId');
     const selectionStart = localState.get('selectionStart');
-    console.log('render', localState.get('visibleOrder').size);
+    console.log('sel id render', selectedId);
     return localState.get('visibleOrder').map((taskId, i) => (
       <ProjectItem
         focus={taskId === selectedId}

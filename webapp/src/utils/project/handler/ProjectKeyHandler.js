@@ -20,7 +20,7 @@ export default class ProjectKeyHandler {
       else this.stateManager.indentHandler.indent(selectedId);
     } else if (e.keyCode === 13) {
       e.preventDefault();
-      this.stateManager.editHandler.enter(e);
+      this.stateManager.editHandler.enter(selectedId, e.target.selectionStart);
     } else if (e.keyCode === 37) {
       // Left arrow
       if (e.metaKey || e.ctrlKey) {

@@ -3,6 +3,8 @@ import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
 import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
 import { fromJS } from 'immutable';
 import projectGenerateVisibleOrder from '../projectGenerateVisibleOrder';
+import projectUpdateOrderFromSortedOrder from '../projectUpdateOrderFromSortedOrder';
+import projectValidateCompletion from '../projectValidateCompletion';
 
 export default class ProjectEditHandler {
   constructor(stateManager) {
@@ -33,23 +35,22 @@ export default class ProjectEditHandler {
 
     const currentTitle = clientState.getIn(['itemsById', id, 'title']);
     const prevId = visibleOrder.get(visibleIndex - 1);
-    console.log(clientState.get('sortedOrder').toJS());
+
     clientState = clientState.set(
       'sortedOrder',
       clientState.get('sortedOrder').filter(taskId => taskId !== id)
     );
-    console.log(clientState.get('sortedOrder').toJS());
-
-    clientState = clientState.deleteIn(['completion', id]);
     clientState = clientState.deleteIn(['order', id]);
+    clientState = clientState.deleteIn(['completion', id]);
     clientState = clientState.deleteIn(['indent', id]);
     clientState = clientState.deleteIn(['itemsById', id]);
+
+    this.stateManager.syncHandler.delete(id);
+
     localState = localState.deleteIn(['expanded', id]);
     localState = localState.deleteIn(['clientState', id]);
     localState = localState.set('selectedId', prevId);
     localState = localState.set('selectionStart', null);
-
-    this.stateManager.syncHandler.delete(id);
 
     if (currentTitle) {
       const prevTitle = clientState.getIn(['itemsById', prevId, 'title']);
@@ -66,57 +67,64 @@ export default class ProjectEditHandler {
       localState,
       prevId
     );
+    clientState = projectValidateCompletion(clientState);
+
     localState = projectGenerateVisibleOrder(clientState, localState);
-    console.log(id, localState.get('visibleOrder').size);
     this.stateManager.update({ localState, clientState });
   };
-  enter = e => {
-    let { itemsById, order, selectedIndex } = this.state;
-    const selectionStart = e.target.selectionStart;
-    const id = this.stateManager._idFromVisibleI(selectedIndex);
-    const i = order.findIndex(item => item.get('id') === id);
-    const currentItem = itemsById.get(id);
-    let currTitle = currentItem.get('title');
+  enter = (id, selectionStart = null) => {
+    let { clientState, localState } = this.state;
+    let currTitle = clientState.getIn(['itemsById', id, 'title']);
+    if (typeof selectionStart !== 'number') {
+      selectionStart = currTitle.length;
+    }
     let nextTitle = '';
-    if (selectionStart < currentItem.get('title').length) {
+    if (selectionStart < currTitle.length) {
       nextTitle = currTitle.slice(selectionStart);
       currTitle = currTitle.slice(0, selectionStart);
-      itemsById = itemsById.setIn([id, 'title'], currTitle);
+      clientState = clientState.setIn(['itemsById', id, 'title'], currTitle);
     }
+
     const newId = randomString(5);
-    itemsById = itemsById.set(
-      newId,
+    clientState = clientState.setIn(
+      ['itemsById', newId],
       fromJS({
-        id: newId,
-        title: nextTitle
+        item_id: newId,
+        title: nextTitle,
+        due_date: null
       })
     );
+    localState = localState.setIn(['expanded', newId], false);
+    localState = localState.setIn(['hasChildren', newId], false);
+    localState = localState.set('selectedId', newId);
+    localState = localState.set('selectionStart', 0);
 
-    let nextI = this.stateManager._iFromVisibleI(selectedIndex + 1);
-    let newIndent = order.getIn([i, 'indent']);
-    if (nextI === -1) {
-      nextI = order.size;
-    } else {
-      newIndent = Math.max(
-        order.getIn([nextI, 'indent']),
-        order.getIn([i, 'indent'])
-      );
-    }
+    const nextIndex = clientState.getIn(['order', id]) + 1;
+    const nextId = clientState.getIn(['sortedOrder', nextIndex]);
+    const currentIndent = clientState.getIn(['indent', id]);
+    const nextIndent = clientState.getIn(['indent', nextId]) || 0;
 
-    order = order.insert(
-      nextI,
-      fromJS({
-        id: newId,
-        indent: newIndent
-      })
+    clientState = clientState.setIn(
+      ['indent', newId],
+      Math.max(currentIndent, nextIndent)
     );
-    order = projectUpdateHasChildrenForItem(order, i + 1);
-    this.stateManager.update({
-      itemsById,
-      order,
-      selectedIndex: selectedIndex + 1,
-      selectionStart: 0
-    });
+
+    clientState = clientState.set(
+      'sortedOrder',
+      clientState.get('sortedOrder').insert(nextIndex, newId)
+    );
+
+    clientState = projectUpdateOrderFromSortedOrder(clientState);
+    localState = projectUpdateHasChildrenForItem(
+      clientState,
+      localState,
+      newId
+    );
+
+    clientState = projectValidateCompletion(clientState);
+    localState = projectGenerateVisibleOrder(clientState, localState);
+
+    this.stateManager.update({ clientState, localState });
   };
   // stateManager will set this, once an update happens.
   setState = state => {

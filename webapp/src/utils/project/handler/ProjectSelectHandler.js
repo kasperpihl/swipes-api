@@ -24,8 +24,10 @@ export default class ProjectSelectHandler {
   select = id => {
     this._selectValue(id);
   };
-  deselect = () => {
-    this._selectValue(null);
+  deselect = id => {
+    if (this.state.localState.get('selectedId') === id) {
+      this._selectValue(null);
+    }
   };
   _selectValue = value => {
     let { localState } = this.state;

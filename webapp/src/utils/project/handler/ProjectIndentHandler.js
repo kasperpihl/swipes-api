@@ -1,6 +1,7 @@
 import projectIndentItemAndChildren from '../projectIndentItemAndChildren';
 import projectUpdateHasChildrenForItem from '../projectUpdateHasChildrenForItem';
 import projectForceParentExpandedForItem from '../projectForceParentExpandedForItem';
+import projectValidateCompletion from '../projectValidateCompletion';
 
 export default class ProjectIndentHandler {
   constructor(stateManager) {
@@ -31,7 +32,7 @@ export default class ProjectIndentHandler {
     clientState = projectIndentItemAndChildren(clientState, id, modifier);
     localState = projectUpdateHasChildrenForItem(clientState, localState, id);
     localState = projectForceParentExpandedForItem(clientState, localState, id);
-
+    clientState = projectValidateCompletion(clientState);
     this.stateManager.update({
       clientState,
       localState
