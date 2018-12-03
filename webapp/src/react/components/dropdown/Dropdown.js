@@ -30,30 +30,6 @@ export default class Dropdown extends Component {
               <SW.Icon icon='ArrowRightLine' width='24' row/>
               <SW.RowText>Row Text Here</SW.RowText>
             </SW.Row>
-            <SW.Row>
-              <SW.Icon icon='ArrowRightLine' width='24' row/>
-              <SW.RowText>Row Text Here</SW.RowText>
-            </SW.Row>
-            <SW.Row>
-              <SW.Icon icon='ArrowRightLine' width='24' row/>
-              <SW.RowText>Row Text Here</SW.RowText>
-            </SW.Row>
-            <SW.Row>
-              <SW.Icon icon='ArrowRightLine' width='24' row/>
-              <SW.RowText>Row Text Here</SW.RowText>
-            </SW.Row>
-            <SW.Row>
-              <SW.Icon icon='ArrowRightLine' width='24' row/>
-              <SW.RowText>Row Text Here</SW.RowText>
-            </SW.Row>
-            <SW.Row>
-              <SW.Icon icon='ArrowRightLine' width='24' row/>
-              <SW.RowText>Row Text Here</SW.RowText>
-            </SW.Row>
-            <SW.Row>
-              <SW.Icon icon='ArrowRightLine' width='24' row/>
-              <SW.RowText>Row Text Here</SW.RowText>
-            </SW.Row>
           </SW.DropdownBox>
         </SW.Wrapper>
       </SwissProvider>
