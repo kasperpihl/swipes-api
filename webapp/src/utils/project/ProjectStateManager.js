@@ -17,12 +17,8 @@ the full state for a ProjectOverview, it achieves this with help from
 */
 export default class ProjectStateManager {
   constructor(serverState) {
-    const clientState = projectUpdateSortedOrderFromOrder(serverState);
-    const localState = projectGenerateLocalState(clientState);
-    this.state = {
-      clientState,
-      localState
-    };
+    this.clientState = projectUpdateSortedOrderFromOrder(serverState);
+    this.localState = projectGenerateLocalState(clientState);
 
     this.subscriptions = {};
     this.destroyHandlers = [];
@@ -49,12 +45,16 @@ export default class ProjectStateManager {
   };
   getClientState = () => this.state.clientState;
   getLocalState = () => this.state.localState;
-  _update = (state, options) => {
-    this.state = Object.assign({}, this.state, state);
-    Object.values(this.subscriptions).forEach(callback =>
-      callback(this, options)
-    );
+  destroy = () => this.destroyHandlers.forEach(callback => callback());
+  // Used by all the handlers when they want to update the state.
+  _update = (state, options = {}) => {
+    if (state.localState || state.clientState) {
+      this.localState = state.localState || this.localState;
+      this.clientState = state.clientState || this.clientState;
+      Object.values(this.subscriptions).forEach(callback =>
+        callback(this, options)
+      );
+    }
   };
   _onDestroy = callback => this.destroyHandlers.push(callback);
-  destroy = () => this.destroyHandlers.forEach(callback => callback());
 }
