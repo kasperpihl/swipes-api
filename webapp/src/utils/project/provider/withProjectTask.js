@@ -30,7 +30,7 @@ export default WrappedComponent => {
       const selectedId = localState.get('selectedId');
       const selectionStart = localState.get('selectionStart');
       this.memoizeGenerateProps(
-        clientState.getIn(['tasksById', taskId, 'title']),
+        clientState.getIn(['tasks_by_id', taskId, 'title']),
         taskId === selectedId,
         taskId === selectedId && selectionStart,
         clientState.getIn(['indention', taskId]),

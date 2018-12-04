@@ -29,12 +29,12 @@ export default endpointCreate(
     );
 
     // Create response data.
-    const tasksById = {};
+    const tasks_by_id = {};
     tasksRes.rows.forEach(task => {
-      tasksById[task.task_id] = task;
+      tasks_by_id[task.task_id] = task;
     });
     res.locals.output = {
-      result: { ...projectRes.rows[0], tasksById }
+      result: { ...projectRes.rows[0], tasks_by_id }
     };
   }
 );

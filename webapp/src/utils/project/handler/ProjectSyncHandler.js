@@ -13,7 +13,7 @@ export default class ProjectKeyHandler {
   convertToServerState = () => {
     const clientState = this.stateManager.getClientState();
 
-    const serverKeys = ['ordering', 'indention', 'completion', 'tasksById'];
+    const serverKeys = ['ordering', 'indention', 'completion', 'tasks_by_id'];
     const server = {};
 
     if (clientState.get('name') !== this.currentServerState.get('name')) {
@@ -26,13 +26,13 @@ export default class ProjectKeyHandler {
       const cOrder = clientState.getIn(['ordering', taskId]);
       const cIndent = clientState.getIn(['indention', taskId]);
       const cCompletion = clientState.getIn(['completion', taskId]);
-      const cTask = clientState.getIn(['tasksById', taskId]);
+      const cTask = clientState.getIn(['tasks_by_id', taskId]);
 
       // Server values
       const sOrder = this.currentServerState.getIn(['ordering', taskId]);
       const sIndent = this.currentServerState.getIn(['indention', taskId]);
       const sCompletion = this.currentServerState.getIn(['completion', taskId]);
-      const sTask = this.currentServerState.getIn(['tasksById', taskId]);
+      const sTask = this.currentServerState.getIn(['tasks_by_id', taskId]);
 
       if (sOrder !== cOrder) {
         server.order[taskId] = cOrder;
@@ -45,12 +45,12 @@ export default class ProjectKeyHandler {
       }
 
       if (sTask !== cTask) {
-        server.tasksById[taskId] = cTask.toJS();
+        server.tasks_by_id[taskId] = cTask.toJS();
       }
     });
 
     this.deletedIds.forEach(id => {
-      server.tasksById[id] = null;
+      server.tasks_by_id[id] = null;
       server.indent[id] = null;
       server.order[id] = null;
       server.completion[id] = null;

@@ -15,12 +15,15 @@ export default class ProjectEditHandler {
   };
   updateTitle = (id, title) => {
     let clientState = this.stateManager.getClientState();
-    clientState = clientState.setIn(['tasksById', id, 'title'], title);
+    clientState = clientState.setIn(['tasks_by_id', id, 'title'], title);
     this.stateManager._update({ clientState }, `${id}-title`);
   };
   updateAssignees = (id, assignees) => {
     let clientState = this.stateManager.getClientState();
-    clientState = clientState.setIn(['tasksById', id, 'assignees'], assignees);
+    clientState = clientState.setIn(
+      ['tasks_by_id', id, 'assignees'],
+      assignees
+    );
     this.stateManager._update({ clientState });
   };
   delete = id => {
@@ -34,7 +37,7 @@ export default class ProjectEditHandler {
       return;
     }
 
-    const currentTitle = clientState.getIn(['tasksById', id, 'title']);
+    const currentTitle = clientState.getIn(['tasks_by_id', id, 'title']);
     const prevId = visibleOrder.get(visibleIndex - 1);
 
     clientState = clientState.set(
@@ -44,7 +47,7 @@ export default class ProjectEditHandler {
     clientState = clientState.deleteIn(['ordering', id]);
     clientState = clientState.deleteIn(['completion', id]);
     clientState = clientState.deleteIn(['indention', id]);
-    clientState = clientState.deleteIn(['tasksById', id]);
+    clientState = clientState.deleteIn(['tasks_by_id', id]);
 
     this.stateManager.syncHandler.delete(id);
 
@@ -54,10 +57,10 @@ export default class ProjectEditHandler {
     localState = localState.set('selectionStart', null);
 
     if (currentTitle) {
-      const prevTitle = clientState.getIn(['tasksById', prevId, 'title']);
+      const prevTitle = clientState.getIn(['tasks_by_id', prevId, 'title']);
       localState = localState.set('selectionStart', prevTitle.length);
       clientState = clientState.setIn(
-        ['tasksById', prevId, 'title'],
+        ['tasks_by_id', prevId, 'title'],
         prevTitle + currentTitle
       );
     }
@@ -77,7 +80,7 @@ export default class ProjectEditHandler {
     let clientState = this.stateManager.getClientState();
     let localState = this.stateManager.getLocalState();
 
-    let currTitle = clientState.getIn(['tasksById', id, 'title']);
+    let currTitle = clientState.getIn(['tasks_by_id', id, 'title']);
     if (typeof selectionStart !== 'number') {
       selectionStart = currTitle.length;
     }
@@ -85,12 +88,12 @@ export default class ProjectEditHandler {
     if (selectionStart < currTitle.length) {
       nextTitle = currTitle.slice(selectionStart);
       currTitle = currTitle.slice(0, selectionStart);
-      clientState = clientState.setIn(['tasksById', id, 'title'], currTitle);
+      clientState = clientState.setIn(['tasks_by_id', id, 'title'], currTitle);
     }
 
     const newId = randomString(5);
     clientState = clientState.setIn(
-      ['tasksById', newId],
+      ['tasks_by_id', newId],
       fromJS({
         task_id: newId,
         title: nextTitle,

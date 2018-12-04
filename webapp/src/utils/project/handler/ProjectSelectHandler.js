@@ -36,7 +36,7 @@ export default class ProjectSelectHandler {
     // const clientState = this.stateManager.getClientState();
     // console.log(
     //   value
-    //     ? `selecting ${clientState.getIn(['tasksById', value, 'title'])}`
+    //     ? `selecting ${clientState.getIn(['tasks_by_id', value, 'title'])}`
     //     : 'deselecting',
     //   localState.get('selectedId')
     // );
