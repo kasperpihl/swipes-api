@@ -8,13 +8,14 @@ import ProjectSyncHandler from './handler/ProjectSyncHandler';
 import ProjectUndoHandler from './handler/ProjectUndoHandler';
 
 import projectGenerateLocalState from './projectGenerateLocalState';
+import randomString from 'swipes-core-js/utils/randomString';
 
 /*
 The responsibility of State Manager is to handle 
 the full state for a ProjectOverview, it achieves this with help from
 */
 export default class ProjectStateManager {
-  constructor(serverState, onStateChange) {
+  constructor(serverState) {
     const clientState = serverState.set(
       'sortedOrder',
       serverState
@@ -33,7 +34,7 @@ export default class ProjectStateManager {
       localState
     };
 
-    this.onStateChange = onStateChange;
+    this.subscriptions = {};
 
     this.handlers = {
       completeHandler: new ProjectCompleteHandler(this),
@@ -48,23 +49,34 @@ export default class ProjectStateManager {
     this.callHandlers('setState', this.state);
     Object.assign(this, this.handlers);
   }
+  unsubscribe = subId => {
+    delete this.subscriptions[subId];
+  };
+  subscribe = callback => {
+    const subId = randomString(6);
+    this.subscriptions[subId] = callback;
+    return this.unsubscribe.bind(null, subId);
+  };
   callHandlers = (method, ...args) => {
     for (let key in this.handlers) {
       typeof this.handlers[key][method] === 'function' &&
         this.handlers[key][method](...args);
     }
   };
-  getState = () => this.state;
+  getClientState = () => this.state.clientState;
+  getLocalState = () => this.state.localState;
   parseServerData = () => {};
   update = (state, undoString = true) => {
     const newState = Object.assign({}, this.state, state);
     this.undoHandler.pushToUndoStack(undoString);
     this._updateState(newState);
   };
-  _updateState(state) {
+  _updateState = state => {
     this.state = state;
     this.callHandlers('setState', this.state);
-    this.onStateChange(this.state);
-  }
+    for (let subId in this.subscriptions) {
+      this.subscriptions[subId](this);
+    }
+  };
   destroy = () => this.callHandlers('destroy');
 }

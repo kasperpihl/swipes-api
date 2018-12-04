@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import { SwissProvider } from 'swiss-react';
-import HOCAssigning from 'components/assigning/HOCAssigning';
-import AttachButton from 'src/react/components/attach-button/AttachButton';
-import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import Icon from 'src/react/icons/Icon';
 
 import SW from './ProjectItem.swiss';
+import withProjectTask from 'src/utils/project/provider/withProjectTask';
 
+@withProjectTask
 export default class ProjectItem extends PureComponent {
   constructor(props) {
     super(props);
@@ -22,9 +21,13 @@ export default class ProjectItem extends PureComponent {
   }
   onFocus = () => {
     const { taskId, stateManager } = this.props;
-    // onFocus(taskId, e);
     stateManager.selectHandler.select(taskId);
     this.setState({ isFocused: true });
+  };
+  onBlur = () => {
+    const { stateManager, taskId } = this.props;
+    stateManager.selectHandler.deselect(taskId);
+    this.setState({ isFocused: false });
   };
   onComplete = e => {
     const { taskId, completion, stateManager } = this.props;
@@ -38,11 +41,6 @@ export default class ProjectItem extends PureComponent {
     const { stateManager, taskId } = this.props;
     stateManager.editHandler.updateTitle(taskId, e.target.value);
   };
-  onBlur = () => {
-    const { stateManager, taskId } = this.props;
-    stateManager.selectHandler.deselect(taskId);
-    this.setState({ isFocused: false });
-  };
   onExpandClick = () => {
     const { stateManager, taskId, expanded } = this.props;
     stateManager.expandHandler[expanded ? 'collapse' : 'expand'](taskId);
@@ -54,16 +52,16 @@ export default class ProjectItem extends PureComponent {
     }
   }
   checkFocus() {
-    const { focus, selectionStart, title } = this.props;
+    const { isSelected, selectionStart, title } = this.props;
     const { isFocused } = this.state;
-    if (focus && !isFocused) {
+    if (isSelected && !isFocused) {
       this.inputRef.focus();
       if (typeof selectionStart === 'number') {
         const selI = Math.min(title.length, selectionStart);
 
         this.inputRef.setSelectionRange(selI, selI);
       }
-    } else if (!focus && isFocused) {
+    } else if (!isSelected && isFocused) {
       this.inputRef.blur();
     }
   }

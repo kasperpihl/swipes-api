@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
+import memoize from 'memoize-one';
 
 import ProjectContext from './ProjectContext';
 
@@ -7,14 +8,20 @@ export default WrappedComponent => {
   class WithProjectTask extends PureComponent {
     static contextType = ProjectContext;
     componentDidMount() {
-      const { taskId } = this.props;
       const stateManager = this.context;
-      this.unsubscribe = stateManager.subscribeTask(taskId, this.forceUpdate);
+      this.unsubscribe = stateManager.subscribe(this.checkRerender);
     }
     componentWillUnmount() {
       this.unsubscribe();
     }
-    render() {
+    checkRerender = () => {
+      this.oldProps = this.generatedProps;
+      this.generateProps();
+      if (this.oldProps !== this.generatedProps) {
+        this.forceUpdate();
+      }
+    };
+    generateProps = () => {
       const stateManager = this.context;
       const { taskId } = this.props;
       const clientState = stateManager.getClientState();
@@ -22,17 +29,46 @@ export default WrappedComponent => {
 
       const selectedId = localState.get('selectedId');
       const selectionStart = localState.get('selectionStart');
-
+      this.memoizeGenerateProps(
+        clientState.getIn(['tasksById', taskId, 'title']),
+        taskId === selectedId,
+        taskId === selectedId && selectionStart,
+        clientState.getIn(['indention', taskId]),
+        clientState.getIn(['completion', taskId]),
+        localState.getIn(['hasChildren', taskId]),
+        localState.getIn(['expanded', taskId])
+      );
+    };
+    memoizeGenerateProps = memoize(
+      (
+        title,
+        isSelected,
+        selectionStart,
+        indention,
+        completion,
+        hasChildren,
+        expanded
+      ) => {
+        this.generatedProps = {
+          title,
+          isSelected,
+          selectionStart,
+          indention,
+          completion,
+          hasChildren,
+          expanded
+        };
+      }
+    );
+    render() {
+      if (!this.generatedProps) {
+        this.generateProps();
+      }
+      const stateManager = this.context;
       return (
         <WrappedComponent
           {...this.props}
-          title={clientState.getIn(['tasksById', taskId, 'title'])}
-          isSelected={taskId === selectedId}
-          selectionStart={taskId === selectedId && selectionStart}
-          indention={clientState.getIn(['indention', taskId])}
-          completion={clientState.getIn(['completion', taskId])}
-          hasChildren={localState.getIn(['hasChildren', taskId])}
-          expanded={localState.getIn(['expanded', taskId])}
+          {...this.generatedProps}
           stateManager={stateManager}
         />
       );

@@ -8,6 +8,7 @@ import ProgreessCircle from 'src/react/components/progress-circle/ProgressCircle
 import Button from 'src/react/components/button/Button';
 import Dropdown from 'src/react/components/dropdown/Dropdown';
 import { fromJS } from 'immutable';
+import ProjectProvider from 'src/utils/project/provider/ProjectProvider';
 
 @withRequests(
   {
@@ -32,19 +33,23 @@ export default class ProjectOverview extends PureComponent {
   }
   constructor(props) {
     super(props);
+    this.stateManager = new ProjectStateManager(props.project);
     this.state = {
       sliderTestValue: 0,
-      showPopupText: false
+      showPopupText: false,
+      visibleOrder: this.stateManager.getLocalState().get('visibleOrder')
     };
   }
-  componentWillMount() {
-    this.stateManager = new ProjectStateManager(
-      this.props.project,
-      this.onStateChange
-    );
-    this.setState(this.stateManager.getState());
+  componentDidMount() {
+    this.unsubscribe = this.stateManager.subscribe(stateManager => {
+      const visibleOrder = stateManager.getLocalState().get('visibleOrder');
+      if (visibleOrder !== this.state.visibleOrder) {
+        this.setState({ visibleOrder });
+      }
+    });
   }
   componentWillUnmount() {
+    this.unsubscribe();
     this.stateManager.destroy();
   }
   onStateChange = state => this.setState(state);
@@ -64,26 +69,11 @@ export default class ProjectOverview extends PureComponent {
     this.setState({ sliderTestValue: sliderTestValue - 1 });
   };
   renderItems() {
-    const { localState, clientState } = this.state;
+    const { visibleOrder } = this.state;
 
-    const selectedId = localState.get('selectedId');
-    const selectionStart = localState.get('selectionStart');
-    return localState
-      .get('visibleOrder')
-      .map((taskId, i) => (
-        <ProjectItem
-          key={taskId}
-          taskId={taskId}
-          title={clientState.getIn(['tasksById', taskId, 'title'])}
-          focus={taskId === selectedId}
-          selectionStart={taskId === selectedId && selectionStart}
-          indention={clientState.getIn(['indention', taskId])}
-          completion={clientState.getIn(['completion', taskId])}
-          hasChildren={localState.getIn(['hasChildren', taskId])}
-          expanded={localState.getIn(['expanded', taskId])}
-          stateManager={this.stateManager}
-        />
-      ));
+    return visibleOrder.map((taskId, i) => (
+      <ProjectItem key={taskId} taskId={taskId} />
+    ));
   }
 
   showPopupText = e => {
@@ -100,34 +90,36 @@ export default class ProjectOverview extends PureComponent {
     const { sliderTestValue, showPopupText } = this.state;
 
     return (
-      <SW.Wrapper>
-        <SW.Header>
-          <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
-        </SW.Header>
-        {this.renderItems()}
-        <SW.Div>
-          <StepSlider
-            min={0}
-            max={4}
-            sliderValue={sliderTestValue}
-            onSliderChange={this.onSliderChange}
-            increase={this.increaseSlider}
-            decrease={this.decreaseSlider}
-          />
-          <ProgreessCircle progress={6} />
-          <Button
-            onMouseEnter={this.showPopupText}
-            onMouseLeave={this.hidePopupText}
-            icon="Trash"
-            title="Start new plan"
-            popupText="Testing popup"
-            size="large"
-            rounded={true}
-            showPopupText={showPopupText}
-          />
-          <Dropdown rounded={false} />
-        </SW.Div>
-      </SW.Wrapper>
+      <ProjectProvider stateManager={this.stateManager}>
+        <SW.Wrapper>
+          <SW.Header>
+            <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
+          </SW.Header>
+          {this.renderItems()}
+          <SW.Div>
+            <StepSlider
+              min={0}
+              max={4}
+              sliderValue={sliderTestValue}
+              onSliderChange={this.onSliderChange}
+              increase={this.increaseSlider}
+              decrease={this.decreaseSlider}
+            />
+            <ProgreessCircle progress={6} />
+            <Button
+              onMouseEnter={this.showPopupText}
+              onMouseLeave={this.hidePopupText}
+              icon="Trash"
+              title="Start new plan"
+              popupText="Testing popup"
+              size="large"
+              rounded={true}
+              showPopupText={showPopupText}
+            />
+            <Dropdown rounded={false} />
+          </SW.Div>
+        </SW.Wrapper>
+      </ProjectProvider>
     );
   }
 }
