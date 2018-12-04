@@ -14,10 +14,12 @@ export default class ProjectItem extends PureComponent {
     };
   }
   componentDidMount() {
-    this.checkFocus();
+    // Wait for sibling components to have re-rendered
+    setTimeout(this.checkFocus, 0);
   }
   componentDidUpdate() {
-    this.checkFocus();
+    // Wait for all components to have re-rendered
+    setTimeout(this.checkFocus, 0);
   }
   onFocus = () => {
     const { taskId, stateManager } = this.props;
@@ -51,7 +53,7 @@ export default class ProjectItem extends PureComponent {
       stateManager.editHandler.updateAssignees(taskId, assignees);
     }
   }
-  checkFocus() {
+  checkFocus = () => {
     const { isSelected, selectionStart, title } = this.props;
     const { isFocused } = this.state;
     if (isSelected && !isFocused) {
@@ -64,7 +66,7 @@ export default class ProjectItem extends PureComponent {
     } else if (!isSelected && isFocused) {
       this.inputRef.blur();
     }
-  }
+  };
   render() {
     const { title, completion, indention, hasChildren, expanded } = this.props;
     const { isFocused } = this.state;
@@ -92,7 +94,6 @@ export default class ProjectItem extends PureComponent {
             onBlur={this.onBlur}
             value={title}
             onChange={this.onChange}
-            onKeyDown={this.onKeyDown}
             placeholder="Write a task"
             innerRef={c => {
               this.inputRef = c;

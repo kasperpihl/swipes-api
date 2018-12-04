@@ -33,7 +33,13 @@ export default class ProjectSelectHandler {
   };
   _selectValue = value => {
     let localState = this.stateManager.getLocalState();
-
+    // const clientState = this.stateManager.getClientState();
+    // console.log(
+    //   value
+    //     ? `selecting ${clientState.getIn(['tasksById', value, 'title'])}`
+    //     : 'deselecting',
+    //   localState.get('selectedId')
+    // );
     if (localState.get('selectedId') !== value) {
       localState = localState.set('selectedId', value);
       this.stateManager._update({ localState }, false);

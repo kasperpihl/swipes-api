@@ -2,7 +2,6 @@ import ProjectCompleteHandler from './handler/ProjectCompleteHandler';
 import ProjectEditHandler from './handler/ProjectEditHandler';
 import ProjectExpandHandler from './handler/ProjectExpandHandler';
 import ProjectIndentHandler from './handler/ProjectIndentHandler';
-import ProjectKeyHandler from './handler/ProjectKeyHandler';
 import ProjectSelectHandler from './handler/ProjectSelectHandler';
 import ProjectSyncHandler from './handler/ProjectSyncHandler';
 import ProjectUndoHandler from './handler/ProjectUndoHandler';
@@ -30,13 +29,6 @@ export default class ProjectStateManager {
     this.selectHandler = new ProjectSelectHandler(this);
     this.syncHandler = new ProjectSyncHandler(this);
     this.undoHandler = new ProjectUndoHandler(this);
-
-    if (typeof navigator != 'undefined' && navigator.product == 'ReactNative') {
-      // I'm in react-native
-    } else {
-      // I'm in web only
-      this.keyHandler = new ProjectKeyHandler(this);
-    }
   }
   unsubscribe = subId => {
     delete this._subscriptions[subId];
@@ -46,9 +38,8 @@ export default class ProjectStateManager {
     this._subscriptions[subId] = callback;
     return this.unsubscribe.bind(null, subId);
   };
-  getClientState = () => this.clientState;
-  getLocalState = () => this.localState;
-  destroy = () => this._destroyHandlers.forEach(callback => callback());
+  getClientState = () => this._clientState;
+  getLocalState = () => this._localState;
   // Used by all the handlers when they want to update the state.
   _update = ({ localState, clientState }, options = {}) => {
     if (localState || clientState) {
@@ -59,5 +50,4 @@ export default class ProjectStateManager {
       );
     }
   };
-  _onDestroy = callback => this._destroyHandlers.push(callback);
 }

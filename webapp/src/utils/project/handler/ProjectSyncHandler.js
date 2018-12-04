@@ -10,7 +10,7 @@ export default class ProjectKeyHandler {
     this.myUpdates = {};
     stateManager.subscribe(debounce(this.convertToServerState, 5000));
   }
-  convertToServerState() {
+  convertToServerState = () => {
     const clientState = this.stateManager.getClientState();
 
     const serverKeys = ['ordering', 'indention', 'completion', 'tasksById'];
@@ -71,7 +71,7 @@ export default class ProjectKeyHandler {
         }
       });
     }
-  }
+  };
   mergeNewServerVersion(newServerState, updateIdentifier) {
     if (this.myUpdates[updateIdentifier]) {
       return delete this.myUpdates[updateIdentifier];
