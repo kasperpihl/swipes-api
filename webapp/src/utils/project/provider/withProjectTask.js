@@ -15,9 +15,9 @@ export default WrappedComponent => {
       this.unsubscribe();
     }
     checkRerender = () => {
-      this.oldProps = this.generatedProps;
+      const oldProps = this.generatedProps;
       this.generateProps();
-      if (this.oldProps !== this.generatedProps) {
+      if (oldProps !== this.generatedProps) {
         this.forceUpdate();
       }
     };
