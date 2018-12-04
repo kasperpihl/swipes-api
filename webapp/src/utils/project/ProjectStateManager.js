@@ -17,44 +17,47 @@ the full state for a ProjectOverview, it achieves this with help from
 */
 export default class ProjectStateManager {
   constructor(serverState) {
-    this.clientState = projectUpdateSortedOrderFromOrder(serverState);
-    this.localState = projectGenerateLocalState(clientState);
+    this._clientState = projectUpdateSortedOrderFromOrder(serverState);
+    this._localState = projectGenerateLocalState(this._clientState);
 
-    this.subscriptions = {};
-    this.destroyHandlers = [];
+    this._subscriptions = {};
+    this._destroyHandlers = [];
 
-    this.handlers = {
-      completeHandler: new ProjectCompleteHandler(this),
-      editHandler: new ProjectEditHandler(this),
-      expandHandler: new ProjectExpandHandler(this),
-      indentHandler: new ProjectIndentHandler(this),
-      keyHandler: new ProjectKeyHandler(this),
-      selectHandler: new ProjectSelectHandler(this),
-      syncHandler: new ProjectSyncHandler(this),
-      undoHandler: new ProjectUndoHandler(this)
-    };
-    Object.assign(this, this.handlers);
+    this.completeHandler = new ProjectCompleteHandler(this);
+    this.editHandler = new ProjectEditHandler(this);
+    this.expandHandler = new ProjectExpandHandler(this);
+    this.indentHandler = new ProjectIndentHandler(this);
+    this.selectHandler = new ProjectSelectHandler(this);
+    this.syncHandler = new ProjectSyncHandler(this);
+    this.undoHandler = new ProjectUndoHandler(this);
+
+    if (typeof navigator != 'undefined' && navigator.product == 'ReactNative') {
+      // I'm in react-native
+    } else {
+      // I'm in web only
+      this.keyHandler = new ProjectKeyHandler(this);
+    }
   }
   unsubscribe = subId => {
-    delete this.subscriptions[subId];
+    delete this._subscriptions[subId];
   };
   subscribe = callback => {
     const subId = randomString(6);
-    this.subscriptions[subId] = callback;
+    this._subscriptions[subId] = callback;
     return this.unsubscribe.bind(null, subId);
   };
-  getClientState = () => this.state.clientState;
-  getLocalState = () => this.state.localState;
-  destroy = () => this.destroyHandlers.forEach(callback => callback());
+  getClientState = () => this.clientState;
+  getLocalState = () => this.localState;
+  destroy = () => this._destroyHandlers.forEach(callback => callback());
   // Used by all the handlers when they want to update the state.
-  _update = (state, options = {}) => {
-    if (state.localState || state.clientState) {
-      this.localState = state.localState || this.localState;
-      this.clientState = state.clientState || this.clientState;
-      Object.values(this.subscriptions).forEach(callback =>
+  _update = ({ localState, clientState }, options = {}) => {
+    if (localState || clientState) {
+      this._localState = localState || this._localState;
+      this._clientState = clientState || this._clientState;
+      Object.values(this._subscriptions).forEach(callback =>
         callback(this, options)
       );
     }
   };
-  _onDestroy = callback => this.destroyHandlers.push(callback);
+  _onDestroy = callback => this._destroyHandlers.push(callback);
 }
