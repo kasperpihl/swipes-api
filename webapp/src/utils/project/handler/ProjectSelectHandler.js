@@ -9,7 +9,8 @@ export default class ProjectSelectHandler {
     this._selectWithModifier(-1, selectionStart);
   };
   _selectWithModifier = (modifier, selectionStart) => {
-    let { localState } = this.state;
+    let localState = this.stateManager.getLocalState();
+
     const selectedId = localState.get('selectedId');
     const visibleOrder = localState.get('visibleOrder');
     const visibleI = visibleOrder.findIndex(taskId => taskId === selectedId);
@@ -19,26 +20,23 @@ export default class ProjectSelectHandler {
       .set('selectedId', visibleOrder.get(nextI))
       .set('selectionStart', selectionStart);
 
-    this.stateManager.update({ localState }, false);
+    this.stateManager._update({ localState }, false);
   };
   select = id => {
     this._selectValue(id);
   };
   deselect = id => {
-    if (this.state.localState.get('selectedId') === id) {
+    const localState = this.stateManager.getLocalState();
+    if (localState.get('selectedId') === id) {
       this._selectValue(null);
     }
   };
   _selectValue = value => {
-    let { localState } = this.state;
+    let localState = this.stateManager.getLocalState();
+
     if (localState.get('selectedId') !== value) {
       localState = localState.set('selectedId', value);
-      this.stateManager.update({ localState }, false);
+      this.stateManager._update({ localState }, false);
     }
-  };
-
-  // stateManager will set this, once an update happens.
-  setState = state => {
-    this.state = state;
   };
 }

@@ -11,20 +11,21 @@ export default class ProjectEditHandler {
     this.stateManager = stateManager;
   }
   updateProjectName = name => {
-    this.stateManager.update({ name });
+    this.stateManager._update({ name });
   };
   updateTitle = (id, title) => {
-    let { clientState } = this.state;
+    let clientState = this.stateManager.getClientState();
     clientState = clientState.setIn(['tasksById', id, 'title'], title);
-    this.stateManager.update({ clientState }, `${id}-title`);
+    this.stateManager._update({ clientState }, `${id}-title`);
   };
   updateAssignees = (id, assignees) => {
-    let { clientState } = this.state;
+    let clientState = this.stateManager.getClientState();
     clientState = clientState.setIn(['tasksById', id, 'assignees'], assignees);
-    this.stateManager.update({ clientState });
+    this.stateManager._update({ clientState });
   };
   delete = id => {
-    let { clientState, localState } = this.state;
+    let clientState = this.stateManager.getClientState();
+    let localState = this.stateManager.getLocalState();
 
     const visibleOrder = localState.get('visibleOrder');
     const visibleIndex = visibleOrder.findIndex(taskId => taskId === id);
@@ -70,10 +71,12 @@ export default class ProjectEditHandler {
     clientState = projectValidateCompletion(clientState);
 
     localState = projectGenerateVisibleOrder(clientState, localState);
-    this.stateManager.update({ localState, clientState });
+    this.stateManager._update({ localState, clientState });
   };
   enter = (id, selectionStart = null) => {
-    let { clientState, localState } = this.state;
+    let clientState = this.stateManager.getClientState();
+    let localState = this.stateManager.getLocalState();
+
     let currTitle = clientState.getIn(['tasksById', id, 'title']);
     if (typeof selectionStart !== 'number') {
       selectionStart = currTitle.length;
@@ -124,10 +127,6 @@ export default class ProjectEditHandler {
     clientState = projectValidateCompletion(clientState);
     localState = projectGenerateVisibleOrder(clientState, localState);
 
-    this.stateManager.update({ clientState, localState });
-  };
-  // stateManager will set this, once an update happens.
-  setState = state => {
-    this.state = state;
+    this.stateManager._update({ clientState, localState });
   };
 }

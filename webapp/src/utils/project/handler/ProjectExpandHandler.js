@@ -5,7 +5,9 @@ export default class ProjectExpandHandler {
     this.stateManager = stateManager;
   }
   setDepth = depth => {
-    let { localState, clientState } = this.state;
+    const clientState = this.stateManager.getClientState();
+    let localState = this.stateManager.getLocalState();
+
     clientState.get('sortedOrder').forEach(taskId => {
       const indention = clientState.getIn(['indention', taskId]);
       const shouldBeExpanded = indention < depth;
@@ -14,7 +16,7 @@ export default class ProjectExpandHandler {
       }
     });
     localState = projectGenerateVisibleOrder(clientState, localState);
-    this.stateManager.update({
+    this.stateManager._update({
       localState
     });
   };
@@ -25,14 +27,12 @@ export default class ProjectExpandHandler {
     this._expandById(id, false);
   };
   _expandById = (id, expand) => {
-    let { localState, clientState } = this.state;
+    const clientState = this.stateManager.getClientState();
+    let localState = this.stateManager.getLocalState();
+
     if (!localState.getIn(['hasChildren', id])) return;
     localState = localState.setIn(['expanded', id], expand);
     localState = projectGenerateVisibleOrder(clientState, localState);
-    this.stateManager.update({ localState });
-  };
-  // stateManager will set this, once an update happens.
-  setState = state => {
-    this.state = state;
+    this.stateManager._update({ localState });
   };
 }

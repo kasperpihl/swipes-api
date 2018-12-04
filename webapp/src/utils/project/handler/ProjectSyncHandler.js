@@ -5,12 +5,14 @@ import randomString from 'swipes-core-js/utils/randomString';
 export default class ProjectKeyHandler {
   constructor(stateManager) {
     this.stateManager = stateManager;
+    this.currentServerState = stateManager.getClientState();
     this.deletedIds = [];
     this.myUpdates = {};
+    stateManager.subscribe(debounce(this.convertToServerState, 5000));
   }
-  // stateManager will set this, once an update happens.
   convertToServerState() {
-    const { clientState } = this.state;
+    const clientState = this.stateManager.getClientState();
+
     const serverKeys = ['ordering', 'indention', 'completion', 'tasksById'];
     const server = {};
 
@@ -77,20 +79,9 @@ export default class ProjectKeyHandler {
     this.currentServerState = this.currentServerState.mergeDeep(newServerState);
     let { clientState } = this.state;
     clientState = clientState.mergeDeep(newServerState);
-    this.stateManager.update({ clientState });
+    this.stateManager._update({ clientState });
   }
   delete = id => {
     this.deletedIds.push(id);
-  };
-  checkForChanges = () => {
-    this.convertToServerState();
-  };
-  bouncedCheckForChanges = debounce(this.checkForChanges, 5000);
-  setState = state => {
-    if (!this.state) {
-      this.currentServerState = state.clientState;
-    }
-    this.state = state;
-    this.bouncedCheckForChanges();
   };
 }

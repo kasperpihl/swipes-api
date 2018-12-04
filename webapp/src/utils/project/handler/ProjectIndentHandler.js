@@ -14,18 +14,16 @@ export default class ProjectIndentHandler {
     this._indentWithModifier(id, -1);
   };
   _indentWithModifier = (id, modifier) => {
-    let { clientState, localState } = this.state;
+    let clientState = this.stateManager.getClientState();
+    let localState = this.stateManager.getLocalState();
+
     clientState = projectIndentTaskAndChildren(clientState, id, modifier);
     localState = projectUpdateHasChildrenForTask(clientState, localState, id);
     localState = projectForceParentExpandedForTask(clientState, localState, id);
     clientState = projectValidateCompletion(clientState);
-    this.stateManager.update({
+    this.stateManager._update({
       clientState,
       localState
     });
-  };
-  // stateManager will set this, once an update happens.
-  setState = state => {
-    this.state = state;
   };
 }

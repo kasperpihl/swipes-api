@@ -2,9 +2,13 @@ export default class ProjectKeyHandler {
   constructor(stateManager) {
     this.stateManager = stateManager;
     window.addEventListener('keydown', this.onKeyDown);
+    stateManager._onDestroy(() => {
+      window.removeEventListener('keydown', this.onKeyDown);
+    });
   }
   onKeyDown = e => {
-    const { localState } = this.state;
+    const localState = this.stateManager.getLocalState();
+
     const selectedId = localState.get('selectedId');
     if (!selectedId) return;
     if (e.keyCode === 8) {
@@ -49,12 +53,5 @@ export default class ProjectKeyHandler {
         this.stateManager.undoHandler.undo();
       }
     }
-  };
-  // stateManager will set this, once an update happens.
-  setState = state => {
-    this.state = state;
-  };
-  destroy = () => {
-    window.removeEventListener('keydown', this.onKeyDown);
   };
 }

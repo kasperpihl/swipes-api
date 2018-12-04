@@ -9,6 +9,7 @@ import ProjectUndoHandler from './handler/ProjectUndoHandler';
 
 import projectGenerateLocalState from './projectGenerateLocalState';
 import randomString from 'swipes-core-js/utils/randomString';
+import projectUpdateSortedOrderFromOrder from './projectUpdateSortedOrderFromOrder';
 
 /*
 The responsibility of State Manager is to handle 
@@ -16,18 +17,7 @@ the full state for a ProjectOverview, it achieves this with help from
 */
 export default class ProjectStateManager {
   constructor(serverState) {
-    const clientState = serverState.set(
-      'sortedOrder',
-      serverState
-        .get('ordering')
-        .sort((a, b) => {
-          if (a < b) return -1;
-          if (a > b) return 1;
-          return 0;
-        })
-        .keySeq()
-        .toList()
-    );
+    const clientState = projectUpdateSortedOrderFromOrder(serverState);
     const localState = projectGenerateLocalState(clientState);
     this.state = {
       clientState,
@@ -35,6 +25,7 @@ export default class ProjectStateManager {
     };
 
     this.subscriptions = {};
+    this.destroyHandlers = [];
 
     this.handlers = {
       completeHandler: new ProjectCompleteHandler(this),
@@ -46,7 +37,6 @@ export default class ProjectStateManager {
       syncHandler: new ProjectSyncHandler(this),
       undoHandler: new ProjectUndoHandler(this)
     };
-    this.callHandlers('setState', this.state);
     Object.assign(this, this.handlers);
   }
   unsubscribe = subId => {
@@ -57,26 +47,14 @@ export default class ProjectStateManager {
     this.subscriptions[subId] = callback;
     return this.unsubscribe.bind(null, subId);
   };
-  callHandlers = (method, ...args) => {
-    for (let key in this.handlers) {
-      typeof this.handlers[key][method] === 'function' &&
-        this.handlers[key][method](...args);
-    }
-  };
   getClientState = () => this.state.clientState;
   getLocalState = () => this.state.localState;
-  parseServerData = () => {};
-  update = (state, undoString = true) => {
-    const newState = Object.assign({}, this.state, state);
-    this.undoHandler.pushToUndoStack(undoString);
-    this._updateState(newState);
+  _update = (state, options) => {
+    this.state = Object.assign({}, this.state, state);
+    Object.values(this.subscriptions).forEach(callback =>
+      callback(this, options)
+    );
   };
-  _updateState = state => {
-    this.state = state;
-    this.callHandlers('setState', this.state);
-    for (let subId in this.subscriptions) {
-      this.subscriptions[subId](this);
-    }
-  };
-  destroy = () => this.callHandlers('destroy');
+  _onDestroy = callback => this.destroyHandlers.push(callback);
+  destroy = () => this.destroyHandlers.forEach(callback => callback());
 }
