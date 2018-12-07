@@ -59,16 +59,11 @@
     "rimraf": "^2.5.4"
   },
   "scripts": {
-    "build": "babel src -d dist",
-    "deploy:queue": "npm run build && eb deploy",
-    "deploy-live:queue": "npm run build && eb deploy swipesqueue-live",
+    "build": "rimraf ./dist && babel src -d dist",
     "dev:api": "nodemon ./dist/index.api.js",
     "dev:queue": "nodemon ./dist/index.queue.js",
-    "prestart": "rimraf ./dist",
-    "production:api": "pm2 reload pm2_config.json --env production && pm2 save",
-    "production:queue": "node ./dist/index.queue.js",
-    "staging:api": "pm2 reload pm2_config.json --env staging && pm2 save",
-    "staging:queue": "node ./dist/index.queue.js",
+    "production:api": "node ./index.api.js",
+    "production:queue": "node ./index.queue.js",
     "start": "npm run build && npm-run-all --parallel dev:api dev:queue watch",
     "test": "jest --env=node",
     "watch": "babel src -d dist --watch --skip-initial-build"

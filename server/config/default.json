@@ -6,30 +6,6 @@
     "user": "swipes",
     "password": "sw1py@staging"
   },
-  "dropbox": {
-    "appId": "qhkw8akehpocer3",
-    "appSecret": "gjocjcvalr8xena",
-    "redirectURI": "http://localhost:3000/oauth-success.html"
-  },
-  "asana": {
-    "clientId": "93722876544112",
-    "clientSecret": "07cf42d4b1190acb4333d66229fb080b",
-    "redirectUri": "https://staging.swipesapp.com/oauth-success.html"
-  },
-  "slack": {
-    "clientId": "2345135970.9201204242",
-    "clientSecret": "306fd7099a762968aa876d53579fa694",
-    "redirectUri": "http://localhost:3000/oauth-success.html"
-  },
-  "google": {
-    "clientId": "336134475796-pab4vabvhf37tkkh82vi846e6jheq76i.apps.googleusercontent.com",
-    "clientSecret": "KittPpq9liOYxktfVptv_kYr",
-    "redirectUri": "http://localhost:3000/oauth-success.html"
-  },
-  "jira": {
-    "authUrl": "http://localhost:3000/jira-auth.html",
-    "redirectUri": "http://localhost:3000/oauth-success.html"
-  },
   "amazonQueue": {
     "accessKeyId": "AKIAJYHNP3XSVYNJK7OA",
     "secretAccessKey": "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",
@@ -69,7 +45,7 @@
   "webhooksHost": "https://swipesdev.ngrok.io/",
   "apiPort": 5000,
   "queuePort": 6000,
-  "clientPort" :3000,
+  "clientPort": 3000,
   "protocol": "http://",
   "cors": "*",
   "jwtTokenSecret": "swipy the dinocat",

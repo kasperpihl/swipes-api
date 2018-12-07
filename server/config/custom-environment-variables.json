@@ -6,30 +6,6 @@
     "user": "SW_DATABASE_USER",
     "password": "SW_DATABASE_PASSWORD"
   },
-  "dropbox": {
-    "appId": "SW_DROPBOX_APP_ID",
-    "appSecret": "SW_DROPBOX_APP_SECRET",
-    "redirectURI": "SW_DROPBOX_REDIRECT_URI"
-  },
-  "asana": {
-    "clientId": "SW_ASANA_CLIENT_ID",
-    "clientSecret": "SW_ASANA_CLIENT_SECRET",
-    "redirectUri": "SW_ASANA_REDIRECT_URI"
-  },
-  "slack": {
-    "clientId": "SW_SLACK_CLIENT_ID",
-    "clientSecret": "SW_SLACK_CLIENT_SECRET",
-    "redirectUri": "SW_SLACK_REDIRECT_URI"
-  },
-  "google": {
-    "clientId": "SW_GOOGLE_CLIENT_ID",
-    "clientSecret": "SW_GOOGLE_CLIENT_SECRET",
-    "redirectUri": "SW_GOOGLE_REDIRECT_URI"
-  },
-  "jira": {
-    "authUrl": "SW_JIRA_AUTH_URL",
-    "redirectUri": "SW_JIRA_REDIRECT_URI"
-  },
   "mandrill": {
     "apiKey": "SW_MANDRILL_API_KEY"
   },

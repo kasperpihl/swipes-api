@@ -1,5 +1,6 @@
 import http from 'http';
 import express from 'express';
+import path from 'path';
 import config from 'config';
 import bodyParser from 'body-parser';
 import 'src/polyfills/asyncSupport';
@@ -23,10 +24,17 @@ import websocketStart from './websocket';
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
 
+if (NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../../dist/public')));
+}
+
 app.use(corsHandler);
 
 // Webhooks route
-app.use('/webhooks', bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */);
+app.use(
+  '/webhooks',
+  bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */
+);
 
 app.use('/v1', routes.v1Multipart);
 
@@ -62,7 +70,6 @@ app.use('/v1', authCheckIfPartOfOrganization);
 
 // Authed routes goes here (with org)
 app.use('/v1', endpoints.authed);
-
 
 // ========================================================================
 // Error handlers / they should be at the end of the middleware stack
