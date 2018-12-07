@@ -2,8 +2,6 @@ import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
 import 'src/polyfills/errorPrototypes';
 
-import config from 'config';
-
 import bodyParser from 'body-parser';
 import http from 'http';
 import express from 'express';
@@ -15,9 +13,8 @@ import corsHandler from 'src/middlewares/corsHandler';
 import errorSwipes from 'src/middlewares/error/errorSwipes';
 import errorHandler from 'src/middlewares/error/errorHandler';
 
-const env = config.get('env');
 // process.env.PORT - this is set by default from elastic beanstalk
-const port = process.env.PORT || config.get('queuePort');
+const port = process.env.PORT || 6000;
 const app = express();
 
 app.use(corsHandler);

@@ -7,8 +7,7 @@ import { valLocals } from '../../utils';
 import { dbNotificationsMarkAsSeen } from './db_utils/notifications';
 
 const env = config.get('env');
-const { accessKeyId, secretAccessKey, region } = config.get('aws');
-const queueHost = config.get('queueHost');
+const { accessKeyId, secretAccessKey, region, queueUrl } = config.get('aws');
 
 const notificationsMarkAsSeen = valLocals(
   'notificationsMarkAsSeen',
@@ -82,7 +81,7 @@ const notificationsPushToQueue = valLocals(
       const payload = { payload: message };
       const sqsParams = {
         MessageBody: JSON.stringify(payload),
-        QueueUrl: queueHost,
+        QueueUrl: queueUrl,
         MessageGroupId: messageGroupId,
         // T
         // That's a hack right now. We should review all the event and see which one are really for FIFO
@@ -106,7 +105,7 @@ const notificationsPushToQueue = valLocals(
     } else {
       request.post(
         {
-          url: `${queueHost}/process`,
+          url: `http://localhost:6000/process`,
           method: 'POST',
           json: { payload: message },
         },

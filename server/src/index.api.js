@@ -1,7 +1,6 @@
 import http from 'http';
 import express from 'express';
 import path from 'path';
-import config from 'config';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 import 'src/polyfills/asyncSupport';
