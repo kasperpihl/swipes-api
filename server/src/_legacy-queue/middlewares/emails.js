@@ -2,8 +2,7 @@ import config from 'config';
 import mandrill from 'mandrill-api/mandrill';
 import SwipesError from 'src/utils/SwipesError';
 
-const mandrillConfig = config.get('mandrill');
-const mandrill_client = new mandrill.Mandrill(mandrillConfig.apiKey);
+const mandrill_client = new mandrill.Mandrill(config.get('mandrillKey'));
 const usersInvitationEmail = (req, res, next) => {
   const {
     email,
@@ -16,26 +15,35 @@ const usersInvitationEmail = (req, res, next) => {
   const inviterFirstName = inviter.profile.first_name;
   const host = config.get('host');
   const template_name = 'welcome-invitation';
-  const template_content = [{
-    name: '',
-    content: '',
-  }];
-  const merge_vars = [{
-    rcpt: email,
-    vars: [{
-      name: 'NAME',
-      content: first_name,
-    }, {
-      name: 'NAME_INVITER',
-      content: inviterFirstName,
-    }, {
-      name: 'COMPANY_NAME',
-      content: organization.name,
-    }, {
-      name: 'INVITATION_LINK',
-      content: `${host}register?invitation_token=${invitationToken}`,
-    }],
-  }];
+  const template_content = [
+    {
+      name: '',
+      content: '',
+    },
+  ];
+  const merge_vars = [
+    {
+      rcpt: email,
+      vars: [
+        {
+          name: 'NAME',
+          content: first_name,
+        },
+        {
+          name: 'NAME_INVITER',
+          content: inviterFirstName,
+        },
+        {
+          name: 'COMPANY_NAME',
+          content: organization.name,
+        },
+        {
+          name: 'INVITATION_LINK',
+          content: `${host}register?invitation_token=${invitationToken}`,
+        },
+      ],
+    },
+  ];
   const to = [
     {
       email,
@@ -58,38 +66,51 @@ const usersInvitationEmail = (req, res, next) => {
     merge_language: 'mailchimp',
   };
 
-  return mandrill_client.messages.sendTemplate({
-    template_name,
-    template_content,
-    message,
-  }, (result) => {
-    return next();
-  }, (e) => {
-    return next(new SwipesError(`usersInvitationEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
-  });
+  return mandrill_client.messages.sendTemplate(
+    {
+      template_name,
+      template_content,
+      message,
+    },
+    result => {
+      return next();
+    },
+    e => {
+      return next(
+        new SwipesError(
+          `usersInvitationEmail - A mandrill error occurred: ${e.name} - ${
+            e.message
+          }`
+        )
+      );
+    }
+  );
 };
 const usersWelcomeEmail = (req, res, next) => {
-  const {
-    email,
-    first_name,
-    confirmation_token,
-  } = res.locals;
+  const { email, first_name, confirmation_token } = res.locals;
   const host = config.get('host');
   const template_name = 'new-welcome-email';
-  const template_content = [{
-    name: '',
-    content: '',
-  }];
-  const merge_vars = [{
-    rcpt: email,
-    vars: [{
-      name: 'NAME',
-      content: first_name,
-    }, {
-      name: 'CONFIRMATION_LINK',
-      content: `${host}confirm?confirmation_token=${confirmation_token}`,
-    }],
-  }];
+  const template_content = [
+    {
+      name: '',
+      content: '',
+    },
+  ];
+  const merge_vars = [
+    {
+      rcpt: email,
+      vars: [
+        {
+          name: 'NAME',
+          content: first_name,
+        },
+        {
+          name: 'CONFIRMATION_LINK',
+          content: `${host}confirm?confirmation_token=${confirmation_token}`,
+        },
+      ],
+    },
+  ];
   const to = [
     {
       email,
@@ -112,38 +133,51 @@ const usersWelcomeEmail = (req, res, next) => {
     merge_language: 'mailchimp',
   };
 
-  return mandrill_client.messages.sendTemplate({
-    template_name,
-    template_content,
-    message,
-  }, (result) => {
-    return next();
-  }, (e) => {
-    return next(new SwipesError(`usersWelcomeEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
-  });
+  return mandrill_client.messages.sendTemplate(
+    {
+      template_name,
+      template_content,
+      message,
+    },
+    result => {
+      return next();
+    },
+    e => {
+      return next(
+        new SwipesError(
+          `usersWelcomeEmail - A mandrill error occurred: ${e.name} - ${
+            e.message
+          }`
+        )
+      );
+    }
+  );
 };
 const meResetPasswordEmail = (req, res, next) => {
-  const {
-    email,
-    first_name,
-    token,
-  } = res.locals;
+  const { email, first_name, token } = res.locals;
   const host = config.get('host');
   const template_name = 'reset-password';
-  const template_content = [{
-    name: '',
-    content: '',
-  }];
-  const merge_vars = [{
-    rcpt: email,
-    vars: [{
-      name: 'NAME',
-      content: first_name,
-    }, {
-      name: 'RESET_PASSWORD_URL',
-      content: `${host}reset.html?token=${token}`,
-    }],
-  }];
+  const template_content = [
+    {
+      name: '',
+      content: '',
+    },
+  ];
+  const merge_vars = [
+    {
+      rcpt: email,
+      vars: [
+        {
+          name: 'NAME',
+          content: first_name,
+        },
+        {
+          name: 'RESET_PASSWORD_URL',
+          content: `${host}reset.html?token=${token}`,
+        },
+      ],
+    },
+  ];
   const to = [
     {
       email,
@@ -166,42 +200,55 @@ const meResetPasswordEmail = (req, res, next) => {
     merge_language: 'mailchimp',
   };
 
-  return mandrill_client.messages.sendTemplate({
-    template_name,
-    template_content,
-    message,
-  }, (result) => {
-    return next();
-  }, (e) => {
-    return next(new SwipesError(`meResetPasswordEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
-  });
+  return mandrill_client.messages.sendTemplate(
+    {
+      template_name,
+      template_content,
+      message,
+    },
+    result => {
+      return next();
+    },
+    e => {
+      return next(
+        new SwipesError(
+          `meResetPasswordEmail - A mandrill error occurred: ${e.name} - ${
+            e.message
+          }`
+        )
+      );
+    }
+  );
 };
 const usersAcceptedInvitationEmail = (req, res, next) => {
-  const {
-    user,
-    usersWithFields,
-  } = res.locals;
+  const { user, usersWithFields } = res.locals;
   const template_name = 'invitation-accepted';
-  const template_content = [{
-    name: '',
-    content: '',
-  }];
+  const template_content = [
+    {
+      name: '',
+      content: '',
+    },
+  ];
   const merge_vars = [];
   const to = [];
 
-  usersWithFields.forEach((userWithFields) => {
+  usersWithFields.forEach(userWithFields => {
     merge_vars.push({
       rcpt: userWithFields.email,
-      vars: [{
-        name: 'NAME',
-        content: userWithFields.profile.first_name,
-      }, {
-        name: 'NAME_NEW_MEMBER',
-        content: user.profile.first_name,
-      }, {
-        name: 'COMPANY_NAME',
-        content: user.organizations[0].name,
-      }],
+      vars: [
+        {
+          name: 'NAME',
+          content: userWithFields.profile.first_name,
+        },
+        {
+          name: 'NAME_NEW_MEMBER',
+          content: user.profile.first_name,
+        },
+        {
+          name: 'COMPANY_NAME',
+          content: user.organizations[0].name,
+        },
+      ],
     });
 
     to.push({
@@ -225,15 +272,25 @@ const usersAcceptedInvitationEmail = (req, res, next) => {
     merge_language: 'mailchimp',
   };
 
-  return mandrill_client.messages.sendTemplate({
-    template_name,
-    template_content,
-    message,
-  }, (result) => {
-    return next();
-  }, (e) => {
-    return next(new SwipesError(`usersAcceptedInvitationEmail - A mandrill error occurred: ${e.name} - ${e.message}`));
-  });
+  return mandrill_client.messages.sendTemplate(
+    {
+      template_name,
+      template_content,
+      message,
+    },
+    result => {
+      return next();
+    },
+    e => {
+      return next(
+        new SwipesError(
+          `usersAcceptedInvitationEmail - A mandrill error occurred: ${
+            e.name
+          } - ${e.message}`
+        )
+      );
+    }
+  );
 };
 
 export {

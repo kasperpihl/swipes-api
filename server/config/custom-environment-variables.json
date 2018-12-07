@@ -1,51 +1,33 @@
 {
   "database": {
-    "host": "SW_DATABASE_HOST",
-    "port": "SW_DATABASE_PORT",
-    "db": "SW_DATABASE_NAME",
-    "user": "SW_DATABASE_USER",
-    "password": "SW_DATABASE_PASSWORD"
+    "host": "DATABASE_HOST",
+    "port": "DATABASE_PORT",
+    "db": "DATABASE_NAME",
+    "user": "DATABASE_USER",
+    "password": "DATABASE_PASSWORD"
   },
-  "mandrill": {
-    "apiKey": "SW_MANDRILL_API_KEY"
-  },
-  "mailchimp": {
-    "apiKey": "SW_MAILCHIMP_API_KEY"
-  },
+  "mandrillKey": "MANDRILL_KEY",
+  "mailchimpKey": "MAILCHIMP_KEY",
   "onesignal": {
-    "appId": "SW_ONESIGNAL_APP_ID",
-    "restKey": "SW_ONESIGNAL_REST_KEY"
+    "appId": "ONESIGNAL_APP_ID",
+    "restKey": "ONESIGNAL_REST_KEY"
   },
-  "amazonQueue": {
-    "accessKeyId": "SW_AMAZON_QUEUE_ACCESS_KEY_ID",
-    "secretAccessKey": "SW_AMAZON_QUEUE_SECRET_ACCESS_KEY",
-    "queueHost": "SW_AMAZON_QUEUE_HOST"
-  },
-  "awsS3": {
-    "accessKey": "SW_AWSS3_ACCESS_KEY",
-    "secretKey": "SW_AWSS3_SECRET_KEY",
-    "bucketName": "SW_AWSS3_BUCKET_NAME",
-    "region": "SW_AWSS3_REGION",
-    "url": "SW_AWSS3_URL"
-  },
-  "awsCloudWatch": {
-    "accessKey": "SW_AWS_CLOUD_WATCH_ACCESS_KEY",
-    "secretKey": "SW_AWSS3_CLOUD_WATCH_SECRET_KEY",
-    "region": "SW_AWSS3_CLOUD_WATCH_REGION"
+  "aws": {
+    "accessKeyId": "AWS_ACCESS_KEY_ID",
+    "secretAccessKey": "AWS_SECRET_ACCESS_KEY",
+    "region": "AWS_REGION",
+    "s3region": "AWS_S3_REGION",
+    "s3BucketName": "AWS_S3_BUCKET_NAME",
+    "s3Url": "AWS_S3_URL",
+    "queueUrl": "AWS_QUEUE_URL"
   },
   "stripe": {
-    "publishableKey": "SW_STRIPE_PUBLISHABLE_KEY",
-    "secretKey": "SW_STRIPE_SECRET_KEY",
-    "yearlyPlanId": "SW_STRIPE_YEARLY_PLAN_ID",
-    "monthlyPlanId": "SW_STRIPE_MONTHLY_PLAN_ID"
+    "publishableKey": "STRIPE_PUBLISHABLE_KEY",
+    "secretKey": "STRIPE_SECRET_KEY",
+    "yearlyPlanId": "STRIPE_YEARLY_PLAN_ID",
+    "monthlyPlanId": "STRIPE_MONTHLY_PLAN_ID"
   },
-  "valjs_debug": "SW_VALJS_DEBUG",
   "host": "SW_HOST",
-  "origin": "SW_ORIGIN",
-  "apiPort": "SW_API_PORT",
-  "queuePort": "SW_QUEUE_PORT",
-  "clientPort": "SW_CLIENT_PORT",
-  "webhooksHost": "SW_WEBHOOKS_HOST",
   "env": "SW_ENV",
-  "jwtTokenSecret": "SW_JWT_TOKEN_SECRET"
+  "jwtTokenSecret": "JWT_TOKEN_SECRET"
 }

@@ -12,7 +12,9 @@ import dbRunQuery from 'src/utils/db/dbRunQuery';
 //   password: '',
 // };
 
-const awsConfig = config.get('awsS3');
+const { s3BucketName, s3Region, secretAccessKey, accessKeyId } = config.get(
+  'aws'
+);
 const dbConfig = {
   host: 'rethinkdb-staging6110.cloudapp.net',
   port: 28015,
@@ -22,53 +24,56 @@ const dbConfig = {
 };
 
 if (!dbConfig) {
-  console.log('Don\'t you need the live config here?!?!');
+  console.log("Don't you need the live config here?!?!");
 
   process.exit();
 }
 
 aws.config.update({
-  accessKeyId: awsConfig.accessKey,
-  secretAccessKey: awsConfig.secretKey,
+  accessKeyId,
+  secretAccessKey,
 });
 
 const s3 = new aws.S3({
-  region: awsConfig.region,
+  region: s3Region,
 });
 
-const extractKeyFromUrl = (url) => {
-  return url.split(`${awsConfig.bucketName}/`)[1];
+const extractKeyFromUrl = url => {
+  return url.split(`${s3BucketName}/`)[1];
 };
 
 const user_id = 'USTFL9YVE';
 const new_email_name = `anonymous_${user_id}`;
 const usersQ = r.table('users').get(user_id);
-const usersUpdateQ = r.table('users').get(user_id).update({
-  email: new_email_name,
-  profile: {
-    bio: '',
-    role: '',
-    first_name: new_email_name,
-    last_name: '',
-    photos: null,
-  },
-});
+const usersUpdateQ = r
+  .table('users')
+  .get(user_id)
+  .update({
+    email: new_email_name,
+    profile: {
+      bio: '',
+      role: '',
+      first_name: new_email_name,
+      last_name: '',
+      photos: null,
+    },
+  });
 
 dbRunQuery(usersQ, { dbConfig })
-  .then((results) => {
-    const {
-      profile,
-    } = results;
-    const {
-      photos,
-    } = profile;
+  .then(results => {
+    const { profile } = results;
+    const { photos } = profile;
     const s3PromiseArray = [];
 
     Object.entries(photos).forEach(([key, value]) => {
-      s3PromiseArray.push(s3.deleteObject({
-        Bucket: awsConfig.bucketName,
-        Key: extractKeyFromUrl(value),
-      }).promise());
+      s3PromiseArray.push(
+        s3
+          .deleteObject({
+            Bucket: s3BucketName,
+            Key: extractKeyFromUrl(value),
+          })
+          .promise()
+      );
     });
 
     console.log('Removing pictures');
@@ -82,7 +87,7 @@ dbRunQuery(usersQ, { dbConfig })
 
     process.exit();
   })
-  .catch((err) => {
+  .catch(err => {
     console.log(err);
 
     process.exit();
