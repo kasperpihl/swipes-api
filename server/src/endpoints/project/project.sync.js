@@ -114,6 +114,7 @@ export default endpointCreate(
 
     const response = await transaction(queries);
     if (addQuery.length) {
+      // If adding the project, don't include that query in results
       response.shift();
     }
 
