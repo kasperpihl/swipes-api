@@ -6,17 +6,10 @@
     "user": "DATABASE_USER",
     "password": "DATABASE_PASSWORD"
   },
-  "mandrillKey": "MANDRILL_KEY",
   "mailchimpKey": "MAILCHIMP_KEY",
-  "onesignal": {
-    "appId": "ONESIGNAL_APP_ID",
-    "restKey": "ONESIGNAL_REST_KEY"
-  },
   "aws": {
     "accessKeyId": "AWS_ACCESS_KEY_ID",
     "secretAccessKey": "AWS_SECRET_ACCESS_KEY",
-    "region": "AWS_REGION",
-    "s3region": "AWS_S3_REGION",
     "s3BucketName": "AWS_S3_BUCKET_NAME",
     "s3Url": "AWS_S3_URL",
     "queueUrl": "AWS_QUEUE_URL"
