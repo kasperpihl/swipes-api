@@ -3,6 +3,7 @@ import AWS from 'aws-sdk';
 import randomstring from 'randomstring';
 import request from 'request';
 
+const env = config.get('env');
 const { accessKey, secretKey, region, queueUrl } = config.get('aws');
 
 export default (options, payload, messageGroupId = null) => {

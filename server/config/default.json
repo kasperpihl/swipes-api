@@ -28,7 +28,6 @@
     "monthlyPlanId": "plan_DnVQNeetpk0hx6"
   },
   "host": "https://staging.swipesapp.com/",
-  "queueHost": "http://localhost:6000",
   "cors": "*",
   "jwtTokenSecret": "swipy the dinocat",
   "env": "dev",
