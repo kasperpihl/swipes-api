@@ -2,6 +2,7 @@ import http from 'http';
 import express from 'express';
 import path from 'path';
 import config from 'config';
+import fs from 'fs';
 import bodyParser from 'body-parser';
 import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
@@ -24,8 +25,9 @@ import websocketStart from './websocket';
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
 
-if (NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../dist/public')));
+if (fs.existsSync(path.join(__dirname, './public'))) {
+  // In production when we have a public
+  app.use(express.static(path.join(__dirname, './public')));
 }
 
 app.use(corsHandler);
