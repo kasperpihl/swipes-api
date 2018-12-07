@@ -22,7 +22,9 @@ import * as routes from 'src/_legacy-api/routes';
 import endpoints from 'src/endpoints/endpoints';
 import websocketStart from './websocket';
 
-const port = Number(config.get('apiPort') || 5000);
+// Elastic beanstalk passes env.PORT to forward nginx...
+const port = Number(process.env.PORT || 5000);
+
 const app = express();
 
 if (fs.existsSync(path.join(__dirname, './public'))) {
