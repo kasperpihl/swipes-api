@@ -6,6 +6,11 @@
     "password": "DATABASE_PASSWORD"
   },
   "mailchimpKey": "MAILCHIMP_KEY",
+  "mandrillKey": "MANDRILL_KEY",
+  "onesignal": {
+    "appId": "ONESIGNAL_APP_ID",
+    "restKey": "ONESIGNAL_REST_KEY"
+  },
   "aws": {
     "accessKeyId": "AWS_ACCESS_KEY_ID",
     "secretAccessKey": "AWS_SECRET_ACCESS_KEY",
