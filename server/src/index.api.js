@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import bodyParser from 'body-parser';
+import serveStatic from 'serve-static';
 import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
 import 'src/polyfills/errorPrototypes';
@@ -28,7 +29,8 @@ const app = express();
 
 if (fs.existsSync(path.join(__dirname, './public'))) {
   // In production when we have a public
-  app.use(express.static(path.join(__dirname, './public')));
+
+  app.use(serveStatic(path.join(__dirname, './public')));
 }
 
 app.use(corsHandler);
