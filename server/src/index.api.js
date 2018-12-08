@@ -3,7 +3,6 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import bodyParser from 'body-parser';
-import serveStatic from 'serve-static';
 import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
 import 'src/polyfills/errorPrototypes';
@@ -28,9 +27,15 @@ const port = Number(process.env.PORT || 5000);
 const app = express();
 
 if (fs.existsSync(path.join(__dirname, './public'))) {
-  // In production when we have a public
-
-  app.use(serveStatic(path.join(__dirname, './public')));
+  // In production when we have a public folder, serve statics
+  app.use(express.static(path.join(__dirname, './public')));
+  app.use('/', function(req, res, next) {
+    // Serve index.html if not /v1 endpoint.
+    if (req.path.startsWith('/v1')) {
+      return next();
+    }
+    res.sendfile('public/index.html');
+  });
 }
 
 app.use(corsHandler);
@@ -47,6 +52,7 @@ app.use('/v1', routes.v1Multipart);
 app.use('/v1', bodyParser.json(), errorInvalidJson);
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {
+  console.log(req.path);
   res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
   return next();
 });
