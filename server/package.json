@@ -29,7 +29,6 @@
     "request-promise": "4.2.1",
     "rethinkdb": "^2.3.1",
     "rethinkdb-init": "0.2.2",
-    "serve-static": "^1.13.2",
     "sha1": "^1.1.1",
     "sharp": "^0.20.8",
     "shortid": "^2.2.6",
