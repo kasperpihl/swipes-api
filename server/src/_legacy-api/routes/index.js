@@ -5,7 +5,6 @@ import * as goals from './goals';
 import * as steps from './steps';
 import * as attachments from './attachments';
 import * as files from './files';
-// import * as webhooks from './webhooks';
 import * as notifications from './notifications';
 import * as notes from './notes';
 import * as find from './find';
@@ -25,7 +24,7 @@ const v1NotAuthed = [
   stream.notAuthed,
   organizations.notAuthed,
   dashboard.notAuthed,
-  me.notAuthed,
+  me.notAuthed
 ];
 const v1Authed = [
   links.authed,
@@ -44,18 +43,8 @@ const v1Authed = [
   me.authed,
   organizations.authed,
   posts.authed,
-  exporter.authed,
+  exporter.authed
 ];
-const v1Multipart = [
-  me.multipart,
-];
-// const webhooksNotAuthed = [
-//   webhooks.notAuthed,
-// ];
+const v1Multipart = [me.multipart];
 
-export {
-  v1NotAuthed,
-  v1Authed,
-  v1Multipart,
-  // webhooksNotAuthed,
-};
+export { v1NotAuthed, v1Authed, v1Multipart };
