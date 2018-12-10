@@ -8,6 +8,7 @@
 // import DiscussionComposer from './Discussion/Composer/DiscussionComposer';
 // import DiscussionOverview from './Discussion/Overview/HOCDiscussionOverview';
 import ProjectOverview from './Project/Overview/ProjectOverview';
+import ProjectList from './Project/List/ProjectList';
 import NotFound from './not-found/NotFound';
 // import Previewer from './previewer/Previewer';
 // import SideNote from './side-note/HOCSideNote';
@@ -23,7 +24,8 @@ export {
   NotFound,
   // Previewer,
   // Profile,
-  ProjectOverview,
+  ProjectList,
+  ProjectOverview
   // Organization,
   // SideNote,
   // Tester,
