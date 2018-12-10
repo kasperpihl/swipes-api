@@ -15,16 +15,36 @@ export default endpointCreate(
     const { project_id } = res.locals.input;
 
     const projectRes = await query(
-      `SELECT "project_id", "name", "discussion_id", "due_date", "ordering", "indention", "completion", "rev" from projects WHERE project_id = $1 AND deleted = FALSE`,
-      [project_id]
+      `
+        SELECT p."project_id", p."name", p."discussion_id", p."due_date", p."ordering", p."indention", p."completion", p."rev"
+        FROM project_permissions
+        AS pp
+        LEFT JOIN projects
+        AS p
+        ON pp.project_id = p.project_id
+        WHERE pp.project_id = $1
+        AND pp.granted_to = (
+          SELECT permission_id
+          FROM permissions
+          WHERE user_id = $2
+        )
+        AND deleted = FALSE
+      `,
+      [project_id, user_id]
     );
 
-    if (!projectRes) {
-      throw Error('project_not_found');
+    console.log('project', projectRes.rows.length);
+    if (!projectRes || !projectRes.rows.length) {
+      throw Error('project_not_found').code(404);
     }
 
     const tasksRes = await query(
-      `SELECT "task_id", "title", "due_date" from project_tasks WHERE "project_id" = $1 AND deleted = FALSE`,
+      `
+        SELECT "task_id", "title", "due_date"
+        FROM project_tasks
+        WHERE "project_id" = $1 
+        AND deleted = FALSE
+      `,
       [project_id]
     );
 
