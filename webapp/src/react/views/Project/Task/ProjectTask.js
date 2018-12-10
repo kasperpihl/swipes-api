@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { SwissProvider } from 'swiss-react';
 import Icon from 'src/react/icons/Icon';
 
-import SW from './ProjectItem.swiss';
+import SW from './ProjectTask.swiss';
 import withProjectTask from 'src/utils/project/provider/withProjectTask';
 
 @withProjectTask
-export default class ProjectItem extends PureComponent {
+export default class ProjectTask extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
 import withRequests from 'swipes-core-js/components/withRequests';
 import ProjectStateManager from 'src/utils/project/ProjectStateManager';
-import ProjectItem from 'src/react/views/Project/Item/ProjectItem';
+import ProjectTask from 'src/react/views/Project/Task/ProjectTask';
 import StepSlider from 'src/react/components/step-slider/StepSlider';
 import ProgreessCircle from 'src/react/components/progress-circle/ProgressCircle';
 import Button from 'src/react/components/button/Button';
@@ -121,7 +121,7 @@ export default class ProjectOverview extends PureComponent {
     const { visibleOrder } = this.state;
 
     return visibleOrder.map((taskId, i) => (
-      <ProjectItem key={taskId} taskId={taskId} />
+      <ProjectTask key={taskId} taskId={taskId} />
     ));
   }
 

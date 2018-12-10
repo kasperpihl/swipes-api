@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Icon from 'Icon';
 
-export default styleSheet('ProjectItem', {
+export default styleSheet('ProjectTask', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
     paddingLeft: ({ indention }) => `${indention * 24}px`,
