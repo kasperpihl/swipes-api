@@ -38,12 +38,6 @@ if (fs.existsSync(path.join(__dirname, './public'))) {
 
 app.use(corsHandler);
 
-// Webhooks route
-app.use(
-  '/webhooks',
-  bodyParser.raw({ type: 'application/json' }) /* routes.webhooksNotAuthed */
-);
-
 app.use('/v1', routes.v1Multipart);
 
 // Everything on v1 path (which is not multipart form data) is parsed as json
