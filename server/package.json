@@ -53,7 +53,7 @@
     "dev:queue": "nodemon ./dist/index.queue.js",
     "production:api": "node ./index.api.js",
     "production:queue": "node ./index.queue.js",
-    "start": "npm run build && npm-run-all --parallel dev:api dev:queue watch",
+    "start": "npm run build && npm-run-all --parallel dev:api dev:queue dev:websocket watch",
     "test": "jest --env=node",
     "watch": "babel src -d dist --watch --skip-initial-build"
   },

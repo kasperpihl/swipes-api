@@ -19,18 +19,15 @@ export default server => {
 
     redisClient.subscribe('global');
     redisClient.subscribe(userId);
-    console.log(userId);
     // TODO: Subscribe to all organizations that user is part of.
 
     redisClient.on('message', (channel, actionString) => {
       const action = JSON.parse(actionString);
-      console.log('action', action);
       if (channel === 'global') {
         if (action.type === 'forceDisconnect') {
           socket.terminate();
         }
       } else {
-        console.log('sending.....');
         socket.send(JSON.stringify(action), e => e && socket.terminate());
       }
     });
