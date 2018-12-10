@@ -35,9 +35,7 @@ const getClientIp = req => {
   return ip;
 };
 
-const getSwipesLinkObj = ({
- type, id, title, account_id 
-}) => {
+const getSwipesLinkObj = ({ type, id, title, account_id }) => {
   return {
     service: {
       id,
@@ -136,7 +134,7 @@ const setLocals = (name, res, next, state) => {
     return next(new SwipesError(`middleware setLocals ${name}: ${error}`));
   }
 
-  const debug = config.get('valjs_debug');
+  const debug = true;
   Object.entries(state).forEach(([key, value]) => {
     if (res.locals[key] && debug) {
       console.warn(`Warning: ${key} is reassinged in ${name}`);
@@ -154,7 +152,7 @@ const mapLocals = handler => (req, res, next) => {
     { handler },
     object.as({
       handler: func.require(),
-    }),
+    })
   );
 
   if (error) {
@@ -175,7 +173,7 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
       name: string.require(),
       schema: object.require(),
       middleware: func,
-    }),
+    })
   );
 
   if (!error) {
@@ -201,7 +199,7 @@ const valBody = (schema, middleware) => (req, res, next) => {
       schema: object.require(),
       middleware: func,
     }),
-    true,
+    true
   );
 
   const params = Object.assign({}, req.params, req.query, req.body, req.file);

@@ -7,72 +7,53 @@ import {
   dbUsersGetSingleWithFields,
 } from '../db_utils/users';
 
-const mailChimpListIds = [
-  '83f9136e88',
-  'f5a33f6905',
-];
-const mailChimpConf = config.get('mailchimp');
-const mailchimp = new Mailchimp(mailChimpConf.apiKey);
+const mailChimpListIds = ['83f9136e88', 'f5a33f6905'];
+
+const mailchimp = new Mailchimp(config.get('mailchimpKey'));
 const usersGetSingleWithOrganizations = (req, res, next) => {
-  const {
-    user_id,
-  } = res.locals;
+  const { user_id } = res.locals;
 
   return dbUsersGetSingleWithOrganizations({ user_id })
-    .then((user) => {
+    .then(user => {
       res.locals.user = user;
 
       return next();
     })
-    .catch((err) => {
+    .catch(err => {
       return next(err);
     });
 };
 const usersGetMultipleWithFields = (req, res, next) => {
-  const {
-    user_ids,
-  } = res.locals;
-  const fields = [
-    'id',
-    'email',
-    'profile',
-    'settings',
-  ];
+  const { user_ids } = res.locals;
+  const fields = ['id', 'email', 'profile', 'settings'];
 
   return dbUsersGetMultipleWithFields({ user_ids, fields })
-    .then((usersWithFields) => {
+    .then(usersWithFields => {
       res.locals.usersWithFields = usersWithFields;
 
       return next();
     })
-    .catch((err) => {
+    .catch(err => {
       return next(err);
     });
 };
 const usersGetSingleWithFields = (req, res, next) => {
-  const {
-    user_id,
-  } = res.locals;
+  const { user_id } = res.locals;
   // We can make fields more dynamic at some point
-  const fields = [
-    'profile',
-    'organizations',
-  ];
+  const fields = ['profile', 'organizations'];
 
   return dbUsersGetSingleWithFields({ user_id, fields })
-    .then((userWithFields) => {
+    .then(userWithFields => {
       res.locals.userWithFields = userWithFields;
 
       return next();
     })
-    .catch((err) => {
+    .catch(err => {
       return next(err);
     });
 };
 const usersActivatedNotificationData = (req, res, next) => {
-  const {
-    user,
-  } = res.locals;
+  const { user } = res.locals;
 
   res.locals.notificationData = null;
   res.locals.eventData = { user };
@@ -80,10 +61,7 @@ const usersActivatedNotificationData = (req, res, next) => {
   return next();
 };
 const usersInvitedNotificationData = (req, res, next) => {
-  const {
-    organization_id,
-    organization_name,
-  } = res.locals;
+  const { organization_id, organization_name } = res.locals;
 
   res.locals.notificationData = null;
   res.locals.eventData = {
@@ -94,36 +72,36 @@ const usersInvitedNotificationData = (req, res, next) => {
   return next();
 };
 const usersSubscribeToMailChimp = (req, res, next) => {
-  const {
-    email,
-  } = res.locals;
+  const { email } = res.locals;
   const promises = [];
 
-  mailChimpListIds.forEach((id) => {
-    promises.push(mailchimp.post({
-      path: `/lists/${id}`,
-      body: {
-        members: [{
-          email_address: email,
-          email_type: 'html',
-          status: 'subscribed',
-        }],
-      },
-    }));
+  mailChimpListIds.forEach(id => {
+    promises.push(
+      mailchimp.post({
+        path: `/lists/${id}`,
+        body: {
+          members: [
+            {
+              email_address: email,
+              email_type: 'html',
+              status: 'subscribed',
+            },
+          ],
+        },
+      })
+    );
   });
 
   Promise.all(promises)
     .then(() => {
       return next();
     })
-    .catch((err) => {
+    .catch(err => {
       return next(err);
     });
 };
 const organizationDisabledLeftNotificationData = (req, res, next) => {
-  const {
-    organization_id,
-  } = res.locals;
+  const { organization_id } = res.locals;
 
   res.locals.notificationData = null;
   res.locals.eventData = { organization_id };

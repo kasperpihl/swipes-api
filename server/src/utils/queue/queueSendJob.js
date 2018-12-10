@@ -4,29 +4,29 @@ import randomstring from 'randomstring';
 import request from 'request';
 
 const env = config.get('env');
-const {
-  accessKeyId,
-  secretAccessKey,
-  queueHost,
-} = config.get('amazonQueue');
-
+const { accessKey, secretKey, region, queueUrl } = config.get('aws');
 
 export default (options, payload, messageGroupId = null) => {
-  return new Promise((resolve, reject) => {
-    if(typeof options !== 'object') {
-      options = { eventName: options };
+  return new Promise((resolve, reject) => {
+    if (typeof options !== 'object') {
+      options = { eventName: options };
     }
-    if(typeof options.eventName !== 'string') {
-      return reject('queueAddJob first parameter must be eventName string or options { eventName }');
+    if (typeof options.eventName !== 'string') {
+      return reject(
+        'queueAddJob first parameter must be eventName string or options { eventName }'
+      );
     }
     if (env !== 'dev') {
-      AWS.config.update({ accessKeyId, secretAccessKey });
+      AWS.config.update({ accessKey, secretKey });
 
-      const sqs = new AWS.SQS({ region: 'us-west-2' });
-      const MessageBody = JSON.stringify({ eventName: options.eventName, payload });
+      const sqs = new AWS.SQS({ region });
+      const MessageBody = JSON.stringify({
+        eventName: options.eventName,
+        payload,
+      });
       const sqsParams = {
         MessageBody,
-        QueueUrl: queueHost,
+        QueueUrl: queueUrl,
         MessageGroupId: messageGroupId,
         // T
         // That's a hack right now. We should review all the event and see which one are really for FIFO
@@ -44,13 +44,13 @@ export default (options, payload, messageGroupId = null) => {
     } else {
       resolve(); // Resolve before calling queue, to fix the orde
       request.post({
-        url: `${queueHost}/process`,
+        url: `http://localhost:6000/process`,
         method: 'POST',
         json: {
           eventName: options.eventName,
           payload,
         },
-      })
+      });
     }
-  })
-}
+  });
+};

@@ -10,14 +10,23 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
     isHydrated: state.main.get('isHydrated'),
     token: state.auth.get('token'),
     hasConnected: state.connection.get('hasConnected'),
-    goToUrl: state.navigation.get('url'),
+    goToUrl: state.navigation.get('url')
   }),
   {
-    setUrl: navigationActions.url,
+    setUrl: navigationActions.url
   }
 )
 export default class Redirect extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { location: props.location };
+  }
   componentDidMount() {
+    this.unlisten = this.props.history.listen(location => {
+      this.setState({
+        location
+      });
+    });
     this.checkRedirects();
   }
   componentDidUpdate() {
@@ -46,7 +55,8 @@ export default class Redirect extends PureComponent {
     }
   }
   render() {
-    const { goToUrl, location } = this.props;
+    const { goToUrl } = this.props;
+    const { location } = this.state;
     if (goToUrl && location.pathname !== (goToUrl.to.pathname || goToUrl.to)) {
       return <RedirectDOM {...goToUrl} />;
     }

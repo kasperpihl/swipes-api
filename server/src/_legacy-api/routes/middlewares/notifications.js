@@ -2,135 +2,129 @@ import config from 'config';
 import request from 'request';
 import AWS from 'aws-sdk';
 import randomstring from 'randomstring';
-import {
-  string,
-  object,
-  array,
-} from 'valjs';
-import {
-  valLocals,
-} from '../../utils';
-import {
-  dbNotificationsMarkAsSeen,
-} from './db_utils/notifications';
+import { string, object, array } from 'valjs';
+import { valLocals } from '../../utils';
+import { dbNotificationsMarkAsSeen } from './db_utils/notifications';
 
 const env = config.get('env');
-const {
-  accessKeyId,
-  secretAccessKey,
-  queueHost,
-} = config.get('amazonQueue');
+const { accessKeyId, secretAccessKey, region, queueUrl } = config.get('aws');
 
-const notificationsMarkAsSeen = valLocals('notificationsMarkAsSeen', {
-  notification_ids: array.of(string).require(),
-}, (req, res, next, setLocals) => {
-  const {
-    notification_ids,
-  } = res.locals;
+const notificationsMarkAsSeen = valLocals(
+  'notificationsMarkAsSeen',
+  {
+    notification_ids: array.of(string).require(),
+  },
+  (req, res, next, setLocals) => {
+    const { notification_ids } = res.locals;
 
-  const timestamp_now = new Date().toISOString();
+    const timestamp_now = new Date().toISOString();
 
-  setLocals({
-    last_marked: timestamp_now,
-  });
-
-  dbNotificationsMarkAsSeen({ notification_ids, timestamp_now })
-    .then(() => {
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
+    setLocals({
+      last_marked: timestamp_now,
     });
-});
-const notificationsMarkAsSeenQueueMessage = valLocals('notificationsMarkAsSeenQueueMessage', {
-  user_id: string.require(),
-  notification_ids: array.of(string).require(),
-  last_marked: string.require(),
-}, (req, res, next, setLocals) => {
-  const {
-    user_id,
-    notification_ids,
-    last_marked,
-  } = res.locals;
-  const queueMessage = {
-    user_id,
-    notification_ids,
-    last_marked,
-    event_type: 'notifications_seen',
-  };
 
-  setLocals({
-    queueMessage,
-    messageGroupId: user_id,
-  });
-
-  return next();
-});
-const notificationsPushToQueue = valLocals('notificationsPushToQueue', {
-  queueMessage: object.as({
-    user_id: string,
-    event_type: string.require(),
-  }),
-  messageGroupId: string,
-}, (req, res, next, setLocals) => {
-  const {
-    queueMessage,
-    messageGroupId,
-  } = res.locals;
-
-  if (!queueMessage || !messageGroupId) {
-    return next();
+    dbNotificationsMarkAsSeen({ notification_ids, timestamp_now })
+      .then(() => {
+        return next();
+      })
+      .catch(err => {
+        return next(err);
+      });
   }
-
-  const message = queueMessage;
-
-  if (env !== 'dev') {
-    AWS.config.update({ accessKeyId, secretAccessKey });
-
-    const sqs = new AWS.SQS({ region: 'us-west-2' });
-    const payload = { payload: message };
-    const sqsParams = {
-      MessageBody: JSON.stringify(payload),
-      QueueUrl: queueHost,
-      MessageGroupId: messageGroupId,
-      // T
-      // That's a hack right now. We should review all the event and see which one are really for FIFO
-      // and which one are for regular queue and split them.
-      // Which one should be deduplicated and which one should not in interval of 5 minutes
-      MessageDeduplicationId: randomstring.generate(),
+);
+const notificationsMarkAsSeenQueueMessage = valLocals(
+  'notificationsMarkAsSeenQueueMessage',
+  {
+    user_id: string.require(),
+    notification_ids: array.of(string).require(),
+    last_marked: string.require(),
+  },
+  (req, res, next, setLocals) => {
+    const { user_id, notification_ids, last_marked } = res.locals;
+    const queueMessage = {
+      user_id,
+      notification_ids,
+      last_marked,
+      event_type: 'notifications_seen',
     };
 
-    sqs.sendMessage(sqsParams, (err, data) => {
-      if (err) {
-        console.log('AMAZON QUEUE ERR', err);
-      }
-
-      setLocals({
-        queueMessage: null,
-        messageGroupId: null,
-      });
-
-      return next();
+    setLocals({
+      queueMessage,
+      messageGroupId: user_id,
     });
-  } else {
-    request.post({
-      url: `${queueHost}/process`,
-      method: 'POST',
-      json: { payload: message },
-    }, (error) => {
-      if (error) {
-        console.log(error, 'Error pushing to queue!');
-      }
 
-      setLocals({
-        queueMessage: null,
-        messageGroupId: null,
-      });
-
-      return next();
-    });
+    return next();
   }
-});
+);
+const notificationsPushToQueue = valLocals(
+  'notificationsPushToQueue',
+  {
+    queueMessage: object.as({
+      user_id: string,
+      event_type: string.require(),
+    }),
+    messageGroupId: string,
+  },
+  (req, res, next, setLocals) => {
+    const { queueMessage, messageGroupId } = res.locals;
+
+    if (!queueMessage || !messageGroupId) {
+      return next();
+    }
+
+    const message = queueMessage;
+
+    if (env !== 'dev') {
+      AWS.config.update({ accessKeyId, secretAccessKey });
+
+      const sqs = new AWS.SQS({ region });
+      const payload = { payload: message };
+      const sqsParams = {
+        MessageBody: JSON.stringify(payload),
+        QueueUrl: queueUrl,
+        MessageGroupId: messageGroupId,
+        // T
+        // That's a hack right now. We should review all the event and see which one are really for FIFO
+        // and which one are for regular queue and split them.
+        // Which one should be deduplicated and which one should not in interval of 5 minutes
+        MessageDeduplicationId: randomstring.generate(),
+      };
+
+      sqs.sendMessage(sqsParams, (err, data) => {
+        if (err) {
+          console.log('AMAZON QUEUE ERR', err);
+        }
+
+        setLocals({
+          queueMessage: null,
+          messageGroupId: null,
+        });
+
+        return next();
+      });
+    } else {
+      request.post(
+        {
+          url: `http://localhost:6000/process`,
+          method: 'POST',
+          json: { payload: message },
+        },
+        error => {
+          if (error) {
+            console.log(error, 'Error pushing to queue!');
+          }
+
+          setLocals({
+            queueMessage: null,
+            messageGroupId: null,
+          });
+
+          return next();
+        }
+      );
+    }
+  }
+);
 
 export {
   notificationsPushToQueue,

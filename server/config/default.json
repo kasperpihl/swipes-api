@@ -6,56 +6,20 @@
     "user": "swipes",
     "password": "sw1py@staging"
   },
-  "dropbox": {
-    "appId": "qhkw8akehpocer3",
-    "appSecret": "gjocjcvalr8xena",
-    "redirectURI": "http://localhost:3000/oauth-success.html"
-  },
-  "asana": {
-    "clientId": "93722876544112",
-    "clientSecret": "07cf42d4b1190acb4333d66229fb080b",
-    "redirectUri": "https://staging.swipesapp.com/oauth-success.html"
-  },
-  "slack": {
-    "clientId": "2345135970.9201204242",
-    "clientSecret": "306fd7099a762968aa876d53579fa694",
-    "redirectUri": "http://localhost:3000/oauth-success.html"
-  },
-  "google": {
-    "clientId": "336134475796-pab4vabvhf37tkkh82vi846e6jheq76i.apps.googleusercontent.com",
-    "clientSecret": "KittPpq9liOYxktfVptv_kYr",
-    "redirectUri": "http://localhost:3000/oauth-success.html"
-  },
-  "jira": {
-    "authUrl": "http://localhost:3000/jira-auth.html",
-    "redirectUri": "http://localhost:3000/oauth-success.html"
-  },
-  "amazonQueue": {
-    "accessKeyId": "AKIAJYHNP3XSVYNJK7OA",
-    "secretAccessKey": "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",
-    "queueHost": "http://localhost:6000"
-  },
-  "mandrill": {
-    "apiKey": "HUs9tnqPhIvJgEXDFAXgrw"
-  },
-  "mailchimp": {
-    "apiKey": "ecf74584af1de945beeb71c8918ed5a7-us7"
-  },
+  "mandrillKey": "HUs9tnqPhIvJgEXDFAXgrw",
+  "mailchimpKey": "ecf74584af1de945beeb71c8918ed5a7-us7",
   "onesignal": {
     "appId": "db8f2558-a836-4e95-b22b-089e8e85f6e9",
     "restKey": "ZmE3NTUwNzQtMzI3Zi00YzI2LTg3Y2QtNWI5NWNlNzU1NGIy"
   },
-  "awsS3": {
+  "aws": {
     "accessKey": "AKIAJ7OR4Q4MA5VBPTKA",
     "secretKey": "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",
-    "bucketName": "staging.swipesapp.com",
-    "region": "us-west-2",
-    "url": "https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/"
-  },
-  "awsCloudWatch": {
-    "accessKey": "AKIAJ7OR4Q4MA5VBPTKA",
-    "secretKey": "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",
-    "region": "us-west-2"
+    "region": "us-east-1",
+    "s3Region": "us-west-2",
+    "s3BucketName": "staging.swipesapp.com",
+    "s3Url": "https://s3-us-west-2.amazonaws.com/staging.swipesapp.com/",
+    "queueUrl": "https://sqs.us-east-1.amazonaws.com/745159268654/workspace-staging.fifo"
   },
   "stripe": {
     "publishableKey": "pk_test_0pUn7s5EyQy7GeAg93QrsJl9",
@@ -63,14 +27,7 @@
     "yearlyPlanId": "swipes-yearly",
     "monthlyPlanId": "plan_DnVQNeetpk0hx6"
   },
-  "valjs_debug": true,
-  "origin": "http://localhost",
   "host": "https://staging.swipesapp.com/",
-  "webhooksHost": "https://swipesdev.ngrok.io/",
-  "apiPort": 5000,
-  "queuePort": 6000,
-  "clientPort": 3000,
-  "protocol": "http://",
   "cors": "*",
   "jwtTokenSecret": "swipy the dinocat",
   "env": "dev"

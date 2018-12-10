@@ -3,7 +3,7 @@ import { transports, createLogger } from 'winston';
 import CloudWatchTransport from 'winston-aws-cloudwatch';
 
 const env = config.get('env');
-const cloudWatchConfig = config.get('awsCloudWatch');
+const { accessKeyId, secretAccessKey, region } = config.get('aws');
 const logger = createLogger();
 
 if (env === 'dev') {
@@ -19,9 +19,9 @@ const logConfig = {
   createLogGroup: false,
   createLogStream: true,
   awsConfig: {
-    accessKeyId: cloudWatchConfig.accessKey,
-    secretAccessKey: cloudWatchConfig.secretKey,
-    region: cloudWatchConfig.region,
+    accessKeyId,
+    secretAccessKey,
+    region,
   },
   formatLog: item => {
     return `${item.level}: ${item.message} ${JSON.stringify(item.meta)}`;
