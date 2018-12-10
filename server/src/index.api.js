@@ -13,10 +13,10 @@ import fetchConfig from 'src/middlewares/fetchConfig';
 import redirectToStaging from 'src/middlewares/redirectToStaging';
 import corsHandler from 'src/middlewares/corsHandler';
 import logToAws from 'src/middlewares/logToAws';
+import * as routes from 'src/_legacy-api/routes';
 import errorInvalidJson from 'src/middlewares/error/errorInvalidJson';
 import errorSwipes from 'src/middlewares/error/errorSwipes';
 import errorHandler from 'src/middlewares/error/errorHandler';
-import * as routes from 'src/_legacy-api/routes';
 import endpoints from 'src/endpoints/endpoints';
 
 // Elastic beanstalk passes env.PORT to forward nginx...

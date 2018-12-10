@@ -5,8 +5,6 @@ import 'src/polyfills/errorPrototypes';
 import http from 'http';
 import express from 'express';
 
-import redis from 'redis';
-
 import corsHandler from 'src/middlewares/corsHandler';
 
 import errorSwipes from 'src/middlewares/error/errorSwipes';
