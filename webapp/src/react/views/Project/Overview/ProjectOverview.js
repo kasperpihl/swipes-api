@@ -4,10 +4,8 @@ import withRequests from 'swipes-core-js/components/withRequests';
 import ProjectStateManager from 'src/utils/project/ProjectStateManager';
 import ProjectTask from 'src/react/views/Project/Task/ProjectTask';
 import StepSlider from 'src/react/components/step-slider/StepSlider';
-import ProgreessCircle from 'src/react/components/progress-circle/ProgressCircle';
 import Button from 'src/react/components/button/Button';
 import Dropdown from 'src/react/components/dropdown/Dropdown';
-import { fromJS } from 'immutable';
 import ProjectProvider from 'src/utils/project/provider/ProjectProvider';
 
 @withRequests(
@@ -16,12 +14,12 @@ import ProjectProvider from 'src/utils/project/provider/ProjectProvider';
       request: {
         url: 'project.get',
         body: props => ({
-          project_id: 'A123131'
+          project_id: props.projectId
         }),
         resPath: 'result'
       },
       cache: {
-        path: props => ['project', 'A123131']
+        path: props => ['project', props.projectId]
       }
     }
   },
@@ -137,12 +135,13 @@ export default class ProjectOverview extends PureComponent {
 
   render() {
     const { sliderTestValue, showPopupText } = this.state;
+    const clientState = this.stateManager.getClientState();
 
     return (
       <ProjectProvider stateManager={this.stateManager}>
         <SW.Wrapper>
           <SW.Header>
-            <SW.HeaderTitle>Discussions Release</SW.HeaderTitle>
+            <SW.HeaderTitle>{clientState.get('name')}</SW.HeaderTitle>
           </SW.Header>
           {this.renderItems()}
           <SW.Div>
@@ -154,7 +153,6 @@ export default class ProjectOverview extends PureComponent {
               increase={this.increaseSlider}
               decrease={this.decreaseSlider}
             />
-            <ProgreessCircle progress={6} />
             <Button
               onMouseEnter={this.showPopupText}
               onMouseLeave={this.hidePopupText}

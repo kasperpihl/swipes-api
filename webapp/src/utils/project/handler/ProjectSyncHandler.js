@@ -17,8 +17,15 @@ export default class ProjectKeyHandler {
     const server = {};
 
     if (clientState.get('name') !== this.currentServerState.get('name')) {
-      server.name = name;
+      server.name = clientState.get('name');
     }
+    if (
+      clientState.get('completion_percentage') !==
+      this.currentServerState.get('completion_percentage')
+    ) {
+      server.completion_percentage = clientState.get('completion_percentage');
+    }
+
     serverKeys.forEach(key => (server[key] = {}));
 
     clientState.get('sortedOrder').forEach(taskId => {

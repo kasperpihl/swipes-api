@@ -11,15 +11,15 @@ export default endpointCreate(
     const { user_id } = res.locals;
     const projectQuery = {
       text: `
-        SELECT project_id, name, due_date
-        FROM projects 
+        SELECT project_id, name, due_date, owned_by, completion_percentage
+        FROM projects
         WHERE project_id
         IN (
           SELECT project_id
           FROM project_permissions
           WHERE granted_to
           IN (
-            SELECT permission_id
+            SELECT permission_to
             FROM permissions
             WHERE user_id = $1
           )
@@ -32,4 +32,4 @@ export default endpointCreate(
     // Create response data.
     res.locals.output = { projects: projectRes.rows };
   }
-).background(async (req, res) => {});
+);

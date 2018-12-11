@@ -1,0 +1,38 @@
+import { styleSheet } from 'swiss-react';
+
+export default styleSheet('ProjectListItem', {
+  Wrapper: {
+    _flex: ['row', 'left', 'center'],
+    '&:hover': {
+      background: '$sw4'
+    }
+  },
+  TextWrapper: {
+    _flex: ['column', 'left', 'top']
+  },
+  Title: {
+    _textStyle: 'item'
+  },
+  Subtitle: {
+    _textStyle: 'labelLight'
+  },
+  LeftSideWrapper: {
+    _size: ['60px', '54px'],
+    _flex: 'center'
+  },
+  HoverLabel: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    background: '$sw4',
+    color: '$sw1',
+    _flex: 'center',
+    _textStyle: 'tabActive',
+    display: 'none',
+    '.js-list-item-wrapper:hover &': {
+      display: 'flex'
+    }
+  }
+});

@@ -1,7 +1,12 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import SW from './ProjectList.swiss';
 import withRequests from 'swipes-core-js/components/withRequests';
+import ProjectListItem from './Item/ProjectListItem';
 
+@connect(state => ({
+  me: state.me
+}))
 @withRequests(
   {
     projects: {
@@ -18,9 +23,19 @@ import withRequests from 'swipes-core-js/components/withRequests';
 )
 export default class ProjectList extends PureComponent {
   render() {
-    const { projects } = this.props;
-    console.log('proj', projects);
+    const { projects, me } = this.props;
+    console.log('proj', projects.toJS());
 
-    return <SW.Wrapper />;
+    return (
+      <SW.Wrapper>
+        {projects.map(project => (
+          <ProjectListItem
+            key={project.get('project_id')}
+            project={project}
+            me={me}
+          />
+        ))}
+      </SW.Wrapper>
+    );
   }
 }

@@ -2,11 +2,15 @@ export default clientState => {
   // Verify
   const allCompletedForLevel = {};
   let currentIndention = -1;
+  let numberOfCompleted = 0;
   const order = clientState.get('sortedOrder');
   for (let index = order.size - 1; index >= 0; index--) {
     const id = order.get(index);
     const indention = clientState.getIn(['indention', id]);
     const completed = !!clientState.getIn(['completion', id]);
+    if (completed) {
+      numberOfCompleted++;
+    }
     const key = '' + indention; // Make sure key is a string
 
     // set the allCompleted for this level, if it does not exist.
@@ -39,5 +43,11 @@ export default clientState => {
     currentIndention = indention;
   }
 
+  const percentageCompleted = order.size
+    ? Math.ceil((numberOfCompleted / order.size) * 100)
+    : 0;
+  if (clientState.get('completion_percentage') !== percentageCompleted) {
+    clientState = clientState.set('completion_percentage', percentageCompleted);
+  }
   return clientState;
 };

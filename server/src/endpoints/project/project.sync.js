@@ -15,6 +15,7 @@ const expectedInput = {
       assignees: array.of(string)
     })
   ),
+  completion_percentage: number,
   ordering: object.of(number),
   indention: object.of(number),
   completion: object.of(bool),
@@ -32,6 +33,7 @@ export default endpointCreate(
       ordering,
       indention,
       completion,
+      completion_percentage,
       tasks_by_id,
       rev,
       update_identifier = randomstring.generate(8)
@@ -53,20 +55,27 @@ export default endpointCreate(
       return `$${values.length}`;
     };
 
-    let text = 'UPDATE projects SET "updated_at" = now(), "rev" = "rev" + 1';
+    let text = 'UPDATE projects SET updated_at = now(), rev = rev + 1';
     let returning = ['updated_at', 'project_id', 'rev'];
+
+    if (typeof completion_percentage === 'number') {
+      text += `, completion_percentage = ${insertVariable(
+        completion_percentage
+      )}`;
+      returning.push('completion_percentage');
+    }
 
     Object.entries({ ordering, indention, completion }).forEach(
       ([key, value]) => {
         if (!value) return;
-        text += `, "${key}" = jsonb_merge("${key}", ${insertVariable(
+        text += `, ${key} = jsonb_merge(${key}, ${insertVariable(
           JSON.stringify(value)
         )})`;
-        returning.push(`"${key}"`);
+        returning.push(key);
       }
     );
 
-    text += ` WHERE "project_id"=${insertVariable(
+    text += ` WHERE project_id=${insertVariable(
       project_id
     )} RETURNING ${returning.join(', ')}`;
 

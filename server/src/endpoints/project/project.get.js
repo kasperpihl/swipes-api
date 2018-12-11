@@ -16,7 +16,7 @@ export default endpointCreate(
 
     const projectRes = await query(
       `
-        SELECT p."project_id", p."name", p."discussion_id", p."due_date", p."ordering", p."indention", p."completion", p."rev"
+        SELECT p.project_id, p.name, p.discussion_id, p.due_date, p.ordering, p.indention, p.completion, p.rev, p.owned_by, p.completion_percentage
         FROM project_permissions
         AS pp
         LEFT JOIN projects
@@ -24,7 +24,7 @@ export default endpointCreate(
         ON pp.project_id = p.project_id
         WHERE pp.project_id = $1
         AND pp.granted_to = (
-          SELECT permission_id
+          SELECT permission_to
           FROM permissions
           WHERE user_id = $2
         )
