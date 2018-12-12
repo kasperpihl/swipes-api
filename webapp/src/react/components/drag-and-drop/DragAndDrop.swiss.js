@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('DragAndDrop', {
   Wrapper: {
@@ -8,8 +8,8 @@ export default styleSheet('DragAndDrop', {
 
     showMenu: {
       backgroundColor: '$sw2',
-      opacity: '0.4',
-    },
+      opacity: '0.4'
+    }
   },
 
   Overlay: {
@@ -26,8 +26,8 @@ export default styleSheet('DragAndDrop', {
       visibility: 'visible',
       backgroundColor: '#000c2f',
       opacity: '0.6',
-      pointerEvents: 'all',
-    },
+      pointerEvents: 'all'
+    }
   },
 
   OverlayTitle: {
@@ -38,7 +38,7 @@ export default styleSheet('DragAndDrop', {
     textAlign: 'center',
     opacity: '1',
     marginTop: '-18px',
-    pointerEvents: 'none',
+    pointerEvents: 'none'
   },
 
   MenuWrapper: {
@@ -55,14 +55,14 @@ export default styleSheet('DragAndDrop', {
       marginTop: '-200px',
       marginLeft: '-100px',
       zIndex: '99999999999',
-      borderRadius: '5px',
-    },
+      borderRadius: '5px'
+    }
   },
 
   MenuList: {
     width: '100%',
     _el: 'ul',
-    listStyle: 'none',
+    listStyle: 'none'
   },
 
   ListItem: {
@@ -72,20 +72,19 @@ export default styleSheet('DragAndDrop', {
     padding: '8px 5px',
 
     '&:hover': {
-      backgroundColor: '$sw4',
-    },
+      backgroundColor: '$sw4'
+    }
   },
 
   ItemIcon: {
     _el: Icon,
     _size: '36px',
     flexShrink: '0',
-    padding: '0 5px',
-
+    padding: '0 5px'
   },
 
   Description: {
-    _flex: ['column', 'center'],
+    _flex: ['column', 'center']
   },
 
   Title: {
@@ -93,13 +92,13 @@ export default styleSheet('DragAndDrop', {
     _font: ['16px', '18px'],
     width: '100%',
     color: 'black',
-    textAlign: 'left',
+    textAlign: 'left'
   },
 
   Subtitle: {
     _el: 'span',
     _font: ['12px', '14px'],
     width: '100%',
-    color: '$sw2',
-  },
-})
+    color: '$sw2'
+  }
+});

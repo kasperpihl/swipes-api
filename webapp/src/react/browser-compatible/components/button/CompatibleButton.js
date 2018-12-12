@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 import SW from './CompatibleButton.swiss';
 
 const CompatibleButton = (props) => {

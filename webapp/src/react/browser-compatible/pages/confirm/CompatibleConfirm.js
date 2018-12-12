@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
-import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
+import CompatibleHeader from 'src/react/browser-compatible/components/header/CompatibleHeader';
 import request from 'swipes-core-js/utils/request';
-import CompatibleCard from 'compatible/components/card/CompatibleCard';
+import CompatibleCard from 'src/react/browser-compatible/components/card/CompatibleCard';
 
 export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      confirmationToken: getURLParameter('confirmation_token'),
+      confirmationToken: getURLParameter('confirmation_token')
     };
     setupLoading(this);
   }

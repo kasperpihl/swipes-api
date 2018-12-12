@@ -4,7 +4,7 @@ import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import randomString from 'swipes-core-js/utils/randomString';
 import Button from 'src/react/components/button/Button';
-import TabBar from 'components/tab-bar/TabBar';
+import TabBar from 'src/react/components/tab-bar/TabBar';
 import ResultList from './ResultList';
 import SW from './TabMenu.swiss';
 
@@ -15,13 +15,20 @@ class TabMenu extends Component {
       tabIndex: -1,
       query: '',
       loading: false,
-      results: props.items || [],
+      results: props.items || []
     };
     if (typeof props.initialTabIndex === 'number') {
       this.state.tabIndex = props.initialTabIndex;
     }
     bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyDown', 'handleClick']);
-    setupDelegate(this, 'onTabMenuLoad', 'onActionClick', 'onItemAction', 'getNumberOfTabs', 'getNameForTab');
+    setupDelegate(
+      this,
+      'onTabMenuLoad',
+      'onActionClick',
+      'onItemAction',
+      'getNumberOfTabs',
+      'getNameForTab'
+    );
   }
   componentDidMount() {
     this.onTabMenuLoad(this);
@@ -72,20 +79,16 @@ class TabMenu extends Component {
     const { items } = this.props;
     if (items) {
       this.setState({
-        results: items,
+        results: items
       });
       return;
     }
-    const {
-      tabIndex,
-      query,
-      loading,
-    } = this.state;
+    const { tabIndex, query, loading } = this.state;
 
     if (!loading) {
       this.setState({
         loading: true,
-        results: [],
+        results: []
       });
     }
 
@@ -127,13 +130,20 @@ class TabMenu extends Component {
       <SW.Search>
         <SW.Input
           type="text"
-          innerRef={(c) => {this.search = c}}
+          innerRef={c => {
+            this.search = c;
+          }}
           placeholder={search}
           onKeyDown={this.onKeyDown}
           onChange={this.onChangeQuery}
           value={query}
         />
-        <SW.Button icon="Close" className='close' compact onClick={this.emptySearch} />
+        <SW.Button
+          icon="Close"
+          className="close"
+          compact
+          onClick={this.emptySearch}
+        />
       </SW.Search>
     );
   }
@@ -155,28 +165,19 @@ class TabMenu extends Component {
       tabs.push(title);
     }
 
-    return (
-      <TabBar
-        tabs={tabs}
-        activeTab={tabIndex}
-        delegate={this}
-      />
-    );
+    return <TabBar tabs={tabs} activeTab={tabIndex} delegate={this} />;
   }
   resultsCallback(qId, results) {
     if (this.qId && qId === this.qId) {
       this.setState({
         results,
-        loading: false,
+        loading: false
       });
     }
   }
 
   renderResultList() {
-    const {
-      results,
-      loading,
-    } = this.state;
+    const { results, loading } = this.state;
     const { delegate, hide } = this.props;
 
     return (
@@ -191,12 +192,8 @@ class TabMenu extends Component {
   renderHeader() {
     return (
       <SW.Header>
-        <SW.Section>
-          {this.renderSearchField()}
-        </SW.Section>
-        <div className="tabBar">
-          {this.renderTabBar()}
-        </div>
+        <SW.Section>{this.renderSearchField()}</SW.Section>
+        <div className="tabBar">{this.renderTabBar()}</div>
       </SW.Header>
     );
   }
@@ -209,9 +206,7 @@ class TabMenu extends Component {
 
     return (
       <SW.Footer>
-        <SW.Status>
-          {actionStatus}
-        </SW.Status>
+        <SW.Status>{actionStatus}</SW.Status>
         <SW.Actions>
           <Button title={actionLabel} onClick={this.handleClick} />
         </SW.Actions>
@@ -224,11 +219,16 @@ class TabMenu extends Component {
     let searching;
     let dynamicHeight;
 
-    { query.length ? searching = true : undefined }
+    {
+      query.length ? (searching = true) : undefined;
+    }
 
     this.numberOfTabs = this.getNumberOfTabs();
 
-    { typeof this.numberOfTabs !== 'number' && !search ? dynamicHeight = true : undefined
+    {
+      typeof this.numberOfTabs !== 'number' && !search
+        ? (dynamicHeight = true)
+        : undefined;
     }
 
     return (
@@ -252,5 +252,5 @@ TabMenu.propTypes = {
   initialTabIndex: number,
   items: arrayOf(object),
   delegate: object.isRequired,
-  actionLabel: string,
+  actionLabel: string
 };

@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('CommentReaction', {
   Container: {
@@ -10,8 +10,8 @@ export default styleSheet('CommentReaction', {
         opacity: 0,
         '.#{hoverClass} &': {
           opacity: 1
-        },
-      },
+        }
+      }
     }
   },
   HeartButton: {
@@ -19,8 +19,8 @@ export default styleSheet('CommentReaction', {
     _flex: ['row', 'left', 'center'],
     alignRight: {
       _size: ['36px', '36px'],
-      _flex: ['row', 'center', 'center'],
-    },
+      _flex: ['row', 'center', 'center']
+    }
   },
   HeartSvg: {
     _el: Icon,
@@ -30,29 +30,29 @@ export default styleSheet('CommentReaction', {
     transition: '.2s ease',
     webkitBackfaceVisibility: 'hidden',
     '.heart-button:hover &': {
-      stroke: '$red',
+      stroke: '$red'
     },
     liked: {
       stroke: '$red',
       fill: '$red',
       '.heart-button:hover &': {
         opacity: '.6',
-        transition: '.2s ease',
-      },
+        transition: '.2s ease'
+      }
     },
     '& path': {
-      strokeWidth: '1px',
-    },
+      strokeWidth: '1px'
+    }
   },
   LikeString: {
     opacity: 0,
     _font: ['12px', '18px', 400],
     color: '$sw1',
     show: {
-      opacity: 1,
+      opacity: 1
     },
     liked: {
-      color: '$red',
+      color: '$red'
     }
   }
 });

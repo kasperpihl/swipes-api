@@ -1,17 +1,13 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('HOCHeaderTitle', {
+export default styleSheet('CardHeader', {
   Wrapper: {
     _size: ['100%', '99px'],
     _flex: ['row', 'between', 'top'],
 
     noSubtitle: {
-      height: '75px',
-    },
-
-    Border: {
-      borderBottom: '1px solid $sw3',
-    },
+      height: '75px'
+    }
   },
 
   Title: {
@@ -22,8 +18,8 @@ export default styleSheet('HOCHeaderTitle', {
     letterSpacing: '-.6px',
 
     '&:hover': {
-      cursor: 'text',
-    },
+      cursor: 'text'
+    }
   },
 
   Subtitle: {
@@ -32,7 +28,7 @@ export default styleSheet('HOCHeaderTitle', {
     _font: ['12px', '18px'],
     color: '$sw1',
     letterSpacing: '.1px',
-    marginTop: '6px',
+    marginTop: '6px'
   },
 
   Input: {
@@ -44,12 +40,12 @@ export default styleSheet('HOCHeaderTitle', {
 
     '&::-webkit-input-placeholder': {
       _font: ['30px'],
-      color: '$sw2',
+      color: '$sw2'
     },
 
     '&:focus': {
-      borderColor: '$blue',
-    },
+      borderColor: '$blue'
+    }
   },
 
   Actions: {
@@ -58,11 +54,11 @@ export default styleSheet('HOCHeaderTitle', {
     marginLeft: '30px',
 
     '&:empty': {
-      display: 'none',
+      display: 'none'
     },
 
     '& > *:not(:first-child)': {
-      marginLeft: '12px',
-    },
-  },
+      marginLeft: '12px'
+    }
+  }
 });

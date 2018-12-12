@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
-import CompatibleButton from 'compatible/components/button/CompatibleButton';
+import CompatibleHeader from 'src/react/browser-compatible/components/header/CompatibleHeader';
+import CompatibleButton from 'src/react/browser-compatible/components/button/CompatibleButton';
 import SW from './CompatibleSignup.swiss';
 
 class CompatibleSignup extends PureComponent {
@@ -47,7 +47,7 @@ class CompatibleSignup extends PureComponent {
         key="title"
       />,
       <SW.Illustration icon="ESMilestoneAchieved" key="illustration" />,
-      <CompatibleHeader subtitle={this.getSubtitle()} key="subtitle" />,
+      <CompatibleHeader subtitle={this.getSubtitle()} key="subtitle" />
     ];
   }
   renderInputField(key, type, placeholder, props) {
@@ -59,7 +59,7 @@ class CompatibleSignup extends PureComponent {
         placeholder={placeholder}
         onKeyDown={this.onKeyDown}
         value={value}
-        onChange={(e) => {
+        onChange={e => {
           this.onChange(key, e.target.value);
         }}
       />
@@ -70,16 +70,16 @@ class CompatibleSignup extends PureComponent {
       <SW.Form>
         {this.renderInputField('email', 'email', 'Email', {
           autoFocus: true,
-          autoComplete: 'email',
+          autoComplete: 'email'
         })}
         {this.renderInputField('firstName', 'text', 'First name', {
-          autoComplete: 'given-name',
+          autoComplete: 'given-name'
         })}
         {this.renderInputField('lastName', 'text', 'Last name', {
-          autoComplete: 'family-name',
+          autoComplete: 'family-name'
         })}
         {this.renderInputField('password', 'password', 'Password', {
-          onKeyDown: this.handleKeyDown,
+          onKeyDown: this.handleKeyDown
         })}
       </SW.Form>
     );

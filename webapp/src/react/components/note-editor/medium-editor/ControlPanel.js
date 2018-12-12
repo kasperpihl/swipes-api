@@ -9,7 +9,7 @@ import {
   SelectionState,
 } from 'draft-js';
 
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 import ControlButton from './ControlButton';
 
 import './styles/control-panel.scss';

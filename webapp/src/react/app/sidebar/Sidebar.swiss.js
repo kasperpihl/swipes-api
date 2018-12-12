@@ -1,12 +1,12 @@
 import { styleSheet } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('Sidebar', {
   Wrapper: {
     _size: ['84px', '100%'],
     _flex: 'column',
     zIndex: '5',
-    paddingBottom: '22px',
+    paddingBottom: '22px'
   },
 
   TopSection: {
@@ -17,12 +17,12 @@ export default styleSheet('Sidebar', {
 
     '& > .item': {
       borderRadius: '4px !important'
-    },
+    }
   },
 
   MiddleSection: {
     _size: '100%',
-    _flex: ['column', 'center', 'center'],
+    _flex: ['column', 'center', 'center']
   },
 
   BottomSection: {
@@ -41,14 +41,14 @@ export default styleSheet('Sidebar', {
         position: 'absolute',
         zIndex: '-1',
         opacity: '1',
-        transition: '.1s ease',
-      },
-    },
+        transition: '.1s ease'
+      }
+    }
   },
 
   Section: {
     _size: ['54px', 'auto'],
-    _flex: ['column', 'center', 'center'],
+    _flex: ['column', 'center', 'center']
   },
 
   Slider: {
@@ -65,8 +65,8 @@ export default styleSheet('Sidebar', {
       left: '0',
       top: 'calc(100% - 54px)',
       opacity: '0',
-      transition: '.3s ease',
-    },
+      transition: '.3s ease'
+    }
   },
 
   Item: {
@@ -77,38 +77,37 @@ export default styleSheet('Sidebar', {
     transition: '.2s ease',
 
     '&:first-child': {
-      borderRadius: '4px 4px 0 0',
+      borderRadius: '4px 4px 0 0'
     },
 
     '&:last-child': {
-      borderRadius: '0 0 4px 4px',
+      borderRadius: '0 0 4px 4px'
     },
 
     '&:not(:first-child)': {
-      marginTop: '1px',
+      marginTop: '1px'
     },
 
     '& > *': {
-      pointerEvents: 'none',
+      pointerEvents: 'none'
     },
 
     '&:hover > .description': {
       opacity: '1',
       transform: 'translateX(100%)',
-      transition: '.2s ease',
+      transition: '.2s ease'
     },
 
     '&:hover > .icon': {
       _svgColor: '$sw1',
       opacity: '1',
-      transition: '.2s ease',
+      transition: '.2s ease'
     },
 
     active: {
       backgroundColor: 'white',
-      opacity: '1',
-    },
-
+      opacity: '1'
+    }
   },
 
   NotificationCounter: {
@@ -128,8 +127,8 @@ export default styleSheet('Sidebar', {
     active: {
       color: '$sw5',
       backgroundColor: '$sw1',
-      transition: '.2s ease',
-    },
+      transition: '.2s ease'
+    }
   },
 
   Icon: {
@@ -143,8 +142,8 @@ export default styleSheet('Sidebar', {
     active: {
       _svgColor: '$sw1',
       opacity: '1',
-      transition: '.2s ease',
-    },
+      transition: '.2s ease'
+    }
   },
 
   Description: {
@@ -162,7 +161,6 @@ export default styleSheet('Sidebar', {
     position: 'absolute',
     right: '-9px',
     transform: 'translateX(110%)',
-    transition: '.2s ease',
-
-  },
-})
+    transition: '.2s ease'
+  }
+});

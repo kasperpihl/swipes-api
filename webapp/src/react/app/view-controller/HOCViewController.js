@@ -7,7 +7,7 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as views from 'src/react/views';
 import { setupCachedCallback } from 'react-delegate';
 import debounce from 'swipes-core-js/utils/debounce';
-import HOCBreadCrumbs from 'components/bread-crumbs/HOCBreadCrumbs';
+import HOCBreadCrumbs from 'src/react/components/bread-crumbs/HOCBreadCrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
 import Modal from 'src/react/app/modal/Modal';
@@ -17,24 +17,27 @@ const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 15;
 const OVERLAY_LEFT_MIN = 90;
 
-@connect(state => ({
-  navigation: state.navigation,
-}), {
-  pop: navigationActions.pop,
-  push: navigationActions.push,
-  modal: mainActions.modal,
-  toggleLock: navigationActions.toggleLock,
-  openSecondary: navigationActions.openSecondary,
-  saveState: navigationActions.saveState,
-  navSet: navigationActions.set,
-})
+@connect(
+  state => ({
+    navigation: state.navigation
+  }),
+  {
+    pop: navigationActions.pop,
+    push: navigationActions.push,
+    modal: mainActions.modal,
+    toggleLock: navigationActions.toggleLock,
+    openSecondary: navigationActions.openSecondary,
+    saveState: navigationActions.saveState,
+    navSet: navigationActions.set
+  }
+)
 export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       appWidth: -1,
       onTop: 'secondary',
-      fullscreen: null,
+      fullscreen: null
     };
     this.onPopCached = setupCachedCallback(props.pop, this);
     this.onPushCached = setupCachedCallback(props.push, this);
@@ -53,10 +56,16 @@ export default class extends PureComponent {
     const nav = this.props.navigation;
     const nextNav = nextProps.navigation;
     const { onTop } = this.state;
-    if (onTop === 'primary' && nav.get('secondary') !== nextNav.get('secondary')) {
+    if (
+      onTop === 'primary' &&
+      nav.get('secondary') !== nextNav.get('secondary')
+    ) {
       this.setState({ onTop: 'secondary' });
     }
-    if (onTop === 'secondary' && nav.get('primary') !== nextNav.get('primary')) {
+    if (
+      onTop === 'secondary' &&
+      nav.get('primary') !== nextNav.get('primary')
+    ) {
       this.setState({ onTop: 'primary' });
     }
   }
@@ -75,7 +84,7 @@ export default class extends PureComponent {
     }
     this.setState({ onTop: 'primary' });
     navSet('secondary', null);
-  }
+  };
   onUnderlay(target) {
     this.setState({ onTop: target });
   }
@@ -90,29 +99,28 @@ export default class extends PureComponent {
   onToggleLock = () => {
     const { toggleLock } = this.props;
     toggleLock();
-  }
+  };
   getSizeForView(View, hasTwoViews) {
-
-    if(typeof View === 'undefined') {
+    if (typeof View === 'undefined') {
       return 0;
     }
 
     const { appWidth } = this.state;
     const spacing = hasTwoViews ? OVERLAY_LEFT_MIN : SPACING;
 
-    if(typeof View.sizes === 'function') {
+    if (typeof View.sizes === 'function') {
       const sizes = View.sizes();
 
-      for(let i = sizes.length - 1 ; i >= 0 ; i--) {
+      for (let i = sizes.length - 1; i >= 0; i--) {
         const size = sizes[i];
-        if((appWidth - spacing - size) >= 0) {
+        if (appWidth - spacing - size >= 0) {
           return size;
         }
       }
     }
 
     let maxWidth = DEFAULT_MAX_WIDTH;
-    if(typeof View.maxWidth === 'function'){
+    if (typeof View.maxWidth === 'function') {
       maxWidth = View.maxWidth();
     }
     return Math.min(maxWidth, appWidth - spacing);
@@ -126,44 +134,45 @@ export default class extends PureComponent {
     if (!this._unmounted) {
       this.setState({ appWidth: this.refs.controller.clientWidth });
     }
-  }
+  };
   renderViewControllers() {
     const { navigation } = this.props;
     const { appWidth, onTop, fullscreen } = this.state;
-    if(appWidth === -1) return null;
-
+    if (appWidth === -1) return null;
 
     // Primary view
     const pView = navigation.getIn(['primary', 'stack']).last();
-    const PView = views[(pView && pView.get('id'))] || views.NotFound;
+    const PView = views[pView && pView.get('id')] || views.NotFound;
 
     // Secondary view
     const sView = navigation.getIn(['secondary', 'stack']).last();
-    const SView = sView ? (views[sView.get('id')] || views.NotFound) : undefined;
+    const SView = sView ? views[sView.get('id')] || views.NotFound : undefined;
 
     const hasTwo = !!SView;
-    const sizes = [this.getSizeForView(PView, hasTwo), this.getSizeForView(SView, hasTwo)];
+    const sizes = [
+      this.getSizeForView(PView, hasTwo),
+      this.getSizeForView(SView, hasTwo)
+    ];
 
     const remainingSpace = this.getRemainingSpace(sizes);
-    const isOverlay = (SView && (remainingSpace < 0));
+    const isOverlay = SView && remainingSpace < 0;
 
     let runningX = isOverlay ? 0 : remainingSpace / 2;
     return [pView, sView].map((currentView, i) => {
-
       const width = sizes[i];
       const options = {
         view: currentView,
-        target: (i === 0) ? 'primary' : 'secondary',
+        target: i === 0 ? 'primary' : 'secondary',
         classes: [],
         width,
         styles: {
           width: `${width}px`,
           transform: `translate3d(${parseInt(runningX, 10)}px, 0px, 0px)`,
-          zIndex: 2 - i,
+          zIndex: 2 - i
         }
       };
 
-      runningX += (width + SPACING);
+      runningX += width + SPACING;
 
       if (isOverlay) {
         let top = 0;
@@ -178,7 +187,10 @@ export default class extends PureComponent {
         if (options.target === 'secondary') {
           left = appWidth - width - SPACING;
         }
-        options.styles.transform = `translate3d(${parseInt(left, 10)}px, ${top}px, 0px)`;
+        options.styles.transform = `translate3d(${parseInt(
+          left,
+          10
+        )}px, ${top}px, 0px)`;
       }
       if (fullscreen) {
         if (fullscreen === options.target) {
@@ -195,30 +207,38 @@ export default class extends PureComponent {
   renderCardHeader(target, canFullscreen) {
     const { fullscreen } = this.state;
     const { navigation } = this.props;
-    const closeButton = (target !== 'primary' && !navigation.get('locked')) ? (
-      <Button
-        compact
-        onClick={this.onClose}
-        icon="CloseThick"
-        key="close-button"
-      />
-    ) : undefined;
-    const lockButton = (target !== 'primary') ? (
-      <Button
-        compact
-        onClick={this.onToggleLock}
-        icon={navigation.get('locked') ? 'WindowLock' : 'WindowUnlock'}
-        key="lock-button"
-      />
-    ) : undefined;
-    const fullscreenButton = (canFullscreen) ? (
+    const closeButton =
+      target !== 'primary' && !navigation.get('locked') ? (
+        <Button
+          compact
+          onClick={this.onClose}
+          icon="CloseThick"
+          key="close-button"
+        />
+      ) : (
+        undefined
+      );
+    const lockButton =
+      target !== 'primary' ? (
+        <Button
+          compact
+          onClick={this.onToggleLock}
+          icon={navigation.get('locked') ? 'WindowLock' : 'WindowUnlock'}
+          key="lock-button"
+        />
+      ) : (
+        undefined
+      );
+    const fullscreenButton = canFullscreen ? (
       <Button
         compact
         onClick={this.onFullscreenCached(target)}
         icon={fullscreen === target ? 'FromFullscreen' : 'ToFullscreen'}
         key="fullscreen-button"
       />
-    ) : undefined;
+    ) : (
+      undefined
+    );
 
     return (
       <div className="view-container__header">
@@ -232,7 +252,7 @@ export default class extends PureComponent {
     );
   }
   renderContent(options) {
-    if(!options.view) {
+    if (!options.view) {
       return undefined;
     }
 
@@ -245,7 +265,9 @@ export default class extends PureComponent {
       props = options.view.get('props').toObject();
     }
 
-    const className = ['view-container', `view-container--${target}`].concat(classes).join(' ');
+    const className = ['view-container', `view-container--${target}`]
+      .concat(classes)
+      .join(' ');
 
     let canFullscreen = false;
     if (typeof View.fullscreen === 'function') {
@@ -276,7 +298,10 @@ export default class extends PureComponent {
           {this.renderCardHeader(target, canFullscreen)}
           <View
             delegate={this}
-            key={navigation.getIn([target, 'id']) + navigation.getIn([target, 'stack']).size}
+            key={
+              navigation.getIn([target, 'id']) +
+              navigation.getIn([target, 'stack']).size
+            }
             {...props}
           />
           <Modal target={target} />
@@ -289,7 +314,7 @@ export default class extends PureComponent {
     const target = 'primary';
     return (
       <div ref="controller" className="view-controller">
-          {this.renderViewControllers()}
+        {this.renderViewControllers()}
       </div>
     );
   }

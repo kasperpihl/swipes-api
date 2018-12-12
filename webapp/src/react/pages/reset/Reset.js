@@ -2,21 +2,21 @@ import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 import SW from './Reset.swiss';
 
 class Reset extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      newPass: '',
+      newPass: ''
     };
     setupLoading(this);
   }
   componentWillMount() {
     this.setLoading('verify');
     request('me.verifyResetToken', {
-      token: getURLParameter('token'),
+      token: getURLParameter('token')
     }).then(res => {
       if (res && res.ok) {
         this.clearLoading('verify');
@@ -39,7 +39,7 @@ class Reset extends PureComponent {
     this.setLoading('reset');
     apiRequest('me.resetPassword', {
       token: getURLParameter('token'),
-      password: newPass,
+      password: newPass
     }).then(res => {
       if (res && res.ok) {
         this.clearLoading(

@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CompatibleAssignees from 'compatible/components/assignees/CompatibleAssignees';
+import CompatibleAssignees from 'src/react/browser-compatible/components/assignees/CompatibleAssignees';
 import SW from './CompatibleHeader.swiss';
 
-const CompatibleHeader = (props) => {
-  const {
-    assignee,
-    title,
-    subtitle,
-    center
-  } = props;
+const CompatibleHeader = props => {
+  const { assignee, title, subtitle, center } = props;
 
   return (
     <SW.Wrapper center={center}>
@@ -29,5 +24,5 @@ const { string, object, func } = PropTypes;
 CompatibleHeader.propTypes = {
   assignee: object,
   title: string,
-  subtitle: string,
+  subtitle: string
 };

@@ -1,13 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import SW from './Discuss.swiss';
 import { SwissProvider } from 'swiss-react';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 import HOCDiscussionOverview from 'src/react/views/Discussion/Overview/HOCDiscussionOverview';
 import ActionBar from 'src/react/views/Discussion/List/ActionBar';
-import TabBar from 'components/tab-bar/TabBar';
+import TabBar from 'src/react/components/tab-bar/TabBar';
 import { withOptimist } from 'react-optimist';
-import SWView from 'SWView';
+import SWView from 'src/react/app/view-controller/SWView';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 @navWrapper
@@ -21,7 +21,7 @@ export default class Discuss extends PureComponent {
     this.state = {
       tabs: ['Following', 'All other', 'By me'],
       tabIndex: 0,
-      selectedId: null,
+      selectedId: null
     };
   }
   tabDidChange(i) {
@@ -57,7 +57,7 @@ export default class Discuss extends PureComponent {
     const { tabs, tabIndex } = this.state;
     return (
       <SW.LeftHeaderWrapper>
-        <HOCHeaderTitle title="Discussions" />
+        <CardHeader title="Discussions" />
         <TabBar tabs={tabs} delegate={this} activeTab={tabIndex} />
       </SW.LeftHeaderWrapper>
     );

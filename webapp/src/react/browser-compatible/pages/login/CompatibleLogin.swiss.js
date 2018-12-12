@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import { Link } from 'react-router-dom';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('Login', {
   Wrapper: {

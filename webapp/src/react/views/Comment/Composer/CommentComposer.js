@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { setupCachedCallback } from 'react-delegate';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
-import AutoCompleteInput from 'components/auto-complete-input/AutoCompleteInput';
+import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import * as linkActions from 'src/redux/link/linkActions';
 import * as ca from 'swipes-core-js/actions';
-import HOCAssigning from 'components/assigning/HOCAssigning';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import AttachButton from 'src/react/components/attach-button/AttachButton';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 import Attachment from 'src/react/components/attachment/Attachment';
@@ -17,11 +17,11 @@ import SW from './CommentComposer.swiss';
 @navWrapper
 @connect(
   state => ({
-    myId: state.me.get('id'),
+    myId: state.me.get('id')
   }),
   {
     request: ca.api.request,
-    preview: linkActions.preview,
+    preview: linkActions.preview
   }
 )
 export default class CommentComposer extends PureComponent {
@@ -29,7 +29,7 @@ export default class CommentComposer extends PureComponent {
     super(props);
     this.state = {
       attachments: fromJS([]),
-      resetDate: new Date(),
+      resetDate: new Date()
     };
     this.onAttachmentCloseCached = setupCachedCallback(this.onAttachmentClose);
     this.onAttachmentClickCached = setupCachedCallback(this.onAttachmentClick);
@@ -45,7 +45,7 @@ export default class CommentComposer extends PureComponent {
     const hasContent = !!editorState.getCurrentContent().getPlainText().length;
     if (hasContent !== this.state.hasContent) {
       this.setState({
-        hasContent,
+        hasContent
       });
     }
   };
@@ -59,13 +59,13 @@ export default class CommentComposer extends PureComponent {
     this.setState({
       resetDate: new Date(),
       attachments: fromJS([]),
-      hasContent: false,
+      hasContent: false
     });
 
     request('comment.add', {
       discussion_id: discussionId,
       attachments,
-      message,
+      message
     }).then(res => {
       if (res.ok) {
         window.analytics.sendEvent('Comment added', {});
@@ -80,7 +80,7 @@ export default class CommentComposer extends PureComponent {
   onAttachmentClose = i => {
     this.onAttachButtonCloseOverlay();
     this.setState({
-      attachments: this.state.attachments.delete(i),
+      attachments: this.state.attachments.delete(i)
     });
   };
   onAddedAttachment(att) {

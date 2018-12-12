@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('Attachment', {
   ATag: {
@@ -14,12 +14,12 @@ export default styleSheet('Attachment', {
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',
     width: 'auto',
-    height: '25px',
+    height: '25px'
   },
   IconContainer: {
     _size: '30px',
     flex: 'none',
-    _flex: 'center',
+    _flex: 'center'
   },
   Icon: {
     _el: Icon,
@@ -28,31 +28,31 @@ export default styleSheet('Attachment', {
     isContext: {
       _size: '18px',
       hasCloseIcon: {
-        _size: '24px',
-      },
+        _size: '24px'
+      }
     },
     '!hasCloseIcon': {
       '.attachment-container:hover &': {
-        _svgColor: '$blue',
-      },
+        _svgColor: '$blue'
+      }
     },
 
     hasCloseIcon: {
       '.icon-container:hover &': {
-        _svgColor: '$blue',
-      },
-    },
+        _svgColor: '$blue'
+      }
+    }
   },
   Text: {
     _truncateString: '',
     _textStyle: 'body',
     '.attachment-container:hover &': {
-      color: '$blue',
+      color: '$blue'
     },
     hasCloseIcon: {
       '.icon-container:hover + &': {
-        color: '$sw1',
-      },
-    },
-  },
+        color: '$sw1'
+      }
+    }
+  }
 });

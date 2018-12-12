@@ -8,8 +8,8 @@
 // import DiscussionComposer from './Discussion/Composer/DiscussionComposer';
 // import DiscussionOverview from './Discussion/Overview/HOCDiscussionOverview';
 import ProjectOverview from './Project/Overview/ProjectOverview';
-import ProjectList from './Project/List/ProjectList';
-import NotFound from './not-found/NotFound';
+import Organize from './Organize/Organize';
+import NotFound from './NotFound/NotFound';
 // import Previewer from './previewer/Previewer';
 // import SideNote from './side-note/HOCSideNote';
 // import Tester from './tester/Tester';
@@ -22,9 +22,9 @@ export {
   // DiscussionComposer,
   // DiscussionOverview,
   NotFound,
+  Organize,
   // Previewer,
   // Profile,
-  ProjectList,
   ProjectOverview
   // Organization,
   // SideNote,

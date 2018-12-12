@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import CompatibleHeader from 'compatible/components/header/CompatibleHeader';
-import CompatibleButton from 'compatible/components/button/CompatibleButton';
+import CompatibleHeader from 'src/react/browser-compatible/components/header/CompatibleHeader';
+import CompatibleButton from 'src/react/browser-compatible/components/button/CompatibleButton';
 import SW from './CompatibleLogin.swiss';
 
 class CompatibleLogin extends PureComponent {
@@ -32,7 +32,7 @@ class CompatibleLogin extends PureComponent {
         className="compatible-login__illustration"
         key="illus"
       />,
-      <CompatibleHeader subtitle={subtitle} key="subtitle" />,
+      <CompatibleHeader subtitle={subtitle} key="subtitle" />
     ];
   }
   renderInputField(key, type, placeholder, props) {
@@ -44,7 +44,7 @@ class CompatibleLogin extends PureComponent {
         placeholder={placeholder}
         onKeyDown={this.onKeyDown}
         value={value}
-        onChange={(e) => {
+        onChange={e => {
           this.onChange(key, e.target.value);
         }}
       />
@@ -55,7 +55,7 @@ class CompatibleLogin extends PureComponent {
       <SW.Form onKeyDown={this.handleKeyDown}>
         {this.renderInputField('email', 'email', 'Email', {
           autoFocus: true,
-          autoComplete: 'email',
+          autoComplete: 'email'
         })}
         {this.renderInputField('password', 'password', 'Password')}
       </SW.Form>

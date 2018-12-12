@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import timeGetTimeString from 'swipes-core-js/utils/time/timeGetTimeString';
-import HOCAssigning from 'components/assigning/HOCAssigning';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import Attachment from 'src/react/components/attachment/Attachment';
 import * as linkActions from 'src/redux/link/linkActions';
 
@@ -20,7 +20,7 @@ import SW from './CommentItem.swiss';
 @connect(
   null,
   {
-    preview: linkActions.preview,
+    preview: linkActions.preview
   }
 )
 export default class CommentItem extends PureComponent {
