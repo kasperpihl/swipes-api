@@ -4,12 +4,12 @@ export default styleSheet('ProgressCircle', {
   Wrapper: {
     _size: '24px',
     borderRadius: '100%',
-    border: '2px solid #05A851',
+    border: '2px solid $green',
     flex: 'none'
   },
 
   Fill: {
-    _drawProgress: ['#{prog}', 'white', '#05A851'],
+    _drawProgress: ['#{prog}', 'white', '$green'],
     _size: '18px',
     overflow: 'hidden',
     borderRadius: '50%',
@@ -19,7 +19,7 @@ export default styleSheet('ProgressCircle', {
     transform: 'translateY(-50%) translateX(-50%)',
 
     'prog>50': {
-      _drawProgress: ['#{prog}', '#05A851', 'white']
+      _drawProgress: ['#{prog}', '$green', 'white']
     },
 
     '&:before': {
