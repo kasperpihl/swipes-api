@@ -4,7 +4,6 @@ import { fromJS } from 'immutable';
 import NoteEditor from 'src/react/components/note-editor/NoteEditor';
 import SWView from 'src/react/app/view-controller/SWView';
 import HOCDiscussButton from 'src/react/components/discuss-button/HOCDiscussButton';
-import InfoButton from 'src/react/components/info-button/InfoButton';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import { convertToRaw, EditorState } from 'draft-js';
@@ -163,21 +162,6 @@ export default class HOCSideNote extends PureComponent {
       this.saveNote(text);
     }
   }
-  getInfoTabProps() {
-    const { note } = this.props;
-    const createdLbl = `${dayStringForDate(
-      note.get('created_at')
-    )} by ${msgGen.users.getFullName(note.get('created_by'))}`;
-
-    return {
-      info: [{ title: 'Created', text: createdLbl }],
-      about: {
-        title: 'What is a note',
-        text:
-          'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text with your mouse and the options will appear.'
-      }
-    };
-  }
   saveNote(text, rev) {
     const { saveNote, id, organizationId } = this.props;
 
@@ -237,7 +221,6 @@ export default class HOCSideNote extends PureComponent {
               title
             }}
           />
-          <InfoButton delegate={this} />
         </CardHeader>
       </SW.Header>
     );

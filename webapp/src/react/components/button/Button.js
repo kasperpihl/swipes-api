@@ -56,7 +56,7 @@ export default class extends PureComponent {
       ...rest
     } = this.props;
 
-    let status = '';
+    let status = 'default';
     if (loading) status = 'loading';
     if (success) status = 'success';
     if (error) status = 'error';
