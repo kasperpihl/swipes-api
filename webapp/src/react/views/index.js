@@ -1,7 +1,7 @@
 // Account
 // import AccountList from './account/account-list/HOCAccountList';
 // import Billing from './account/billing/HOCBilling';
-// import Browser from './browser/Browser';
+// import Browser from './Browser/Browser';
 // import Organization from './account/organization/HOCOrganization';
 // import Profile from './account/profile/HOCProfile';
 // import Discuss from './Discuss/Discuss';

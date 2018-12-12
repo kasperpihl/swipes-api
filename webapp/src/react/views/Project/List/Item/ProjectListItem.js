@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectListItem.swiss';
-import ProgressCircle from 'src/react/components/progress-circle/ProgressCircle';
+import ProgressCircle from 'src/react/components/ProgressCircle/ProgressCircle';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 @navWrapper

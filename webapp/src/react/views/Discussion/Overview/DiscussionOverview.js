@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { fromJS } from 'immutable';
 import SW from './DiscussionOverview.swiss';
-import EmptyState from 'src/react/components/empty-state/EmptyState';
+import EmptyState from 'src/react/components/EmptyState/EmptyState';
 import DiscussionHeader from '../Header/DiscussionHeader';
 import CommentComposer from 'src/react/views/Comment/Composer/CommentComposer';
 import CommentItem from 'src/react/views/Comment/Item/CommentItem';
