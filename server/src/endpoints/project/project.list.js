@@ -11,9 +11,11 @@ export default endpointCreate(
     const { user_id } = res.locals;
     const projectQuery = {
       text: `
-        SELECT project_id, name, due_date, owned_by, completion_percentage
-        FROM projects
-        WHERE project_id
+        SELECT p.project_id, p.name, p.due_date, p.owned_by, p.completion_percentage, p.created_at, po.opened_at
+        FROM projects p
+        LEFT OUTER JOIN project_opens as po
+        ON p.project_id = po.project_id AND po.user_id = $1
+        WHERE p.project_id
         IN (
           SELECT project_id
           FROM project_permissions
