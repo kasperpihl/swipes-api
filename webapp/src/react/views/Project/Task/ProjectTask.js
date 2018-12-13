@@ -3,7 +3,7 @@ import { SwissProvider } from 'swiss-react';
 import Icon from 'src/react/icons/Icon';
 
 import SW from './ProjectTask.swiss';
-import withProjectTask from 'src/utils/project/provider/withProjectTask';
+import withProjectTask from 'swipes-core-js/components/project/withProjectTask';
 
 @withProjectTask
 export default class ProjectTask extends PureComponent {

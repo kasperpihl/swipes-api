@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
 import withRequests from 'swipes-core-js/components/withRequests';
-import ProjectStateManager from 'src/utils/project/ProjectStateManager';
+import ProjectProvider from 'swipes-core-js/components/project/ProjectProvider';
+import ProjectStateManager from 'swipes-core-js/classes/ProjectStateManager';
 import ProjectTask from 'src/react/views/Project/Task/ProjectTask';
 import StepSlider from 'src/react/components/StepSlider/StepSlider';
 import Button from 'src/react/components/button/Button';
 import Dropdown from 'src/react/components/dropdown/Dropdown';
-import ProjectProvider from 'src/utils/project/provider/ProjectProvider';
 
 @withRequests(
   {
